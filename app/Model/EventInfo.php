@@ -23,6 +23,9 @@ class EventInfo extends Model
         'course_language_visible',
         'course_language_icon',
         'course_delivery',
+        'course_elearning_expiration',
+        'course_elearning_visible',
+        'course_elearning_icon',
         'course_inclass_city',
         'course_inclass_city_icon',
         'course_inclass_dates',
@@ -30,7 +33,7 @@ class EventInfo extends Model
         'course_inclass_times',
         'course_inclass_absences',
         'course_elearning_access',
-        'course_elearning_icon',
+        'course_elearning_access_icon',
         'course_payment_method',
         'course_payment_icon',
         'course_partner',
@@ -77,6 +80,11 @@ class EventInfo extends Model
             $data['inclass']['days'] = json_decode($infos['course_inclass_days'], true);
             $data['inclass']['times'] = json_decode($infos['course_inclass_times'], true);
 
+        }else if($this->event->is_elearning_course()){
+
+            $data['elearning']['expiration'] = (isset($infos['course_elearning_expiration']) && $infos['course_elearning_expiration'] != null) ? json_decode($infos['course_elearning_expiration'], true) : null;
+            $data['elearning']['icon'] = (isset($infos['course_elearning_icon']) && $infos['course_elearning_icon'] != null) ? json_decode($infos['course_elearning_icon'], true) : null;
+            $data['elearning']['visible'] = (isset($infos['course_elearning_visible']) && $infos['course_elearning_visible'] != null) ? json_decode($infos['course_elearning_visible'], true) : null;
         }
 
         $data['certificate']['messages']['success'] = $infos['course_certification_name_success'];

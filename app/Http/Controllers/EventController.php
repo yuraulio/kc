@@ -436,7 +436,7 @@ class EventController extends Controller
 
         $infoData = $request->course;
 
-        $event_info = $this->prepareInfo($infoData, $request->status, $request->delivery, $partner, $request->syllabus, $request->city_id);
+        $event_info = $this->prepareInfo($infoData, $request->status, $request->delivery, $partner, $request->syllabus, $request->city_id, $event);
         $this->updateEventInfo($event_info, $event->id);
 
         return redirect()->route('event.update_new',$event->id)->withStatus(__('Event successfully created.'));
@@ -681,7 +681,9 @@ class EventController extends Controller
         $data['coupons'] = Coupon::all();
         $data['activeMembers'] = 0;
         $data['sections'] = $event->sections->groupBy('section');
-        $data['info'] = $event->event_info;
+        $data['info'] = $event->event_info();
+
+        //dd($data['info']);
 
         //if elearning course (id = 143)
         $elearning_events = Delivery::with('event:id,title')->where('id',143)->whereHas('event', function ($query) {
@@ -976,9 +978,8 @@ class EventController extends Controller
 
         $infoData = $request->course;
 
-        $event_info = $this->prepareInfo($infoData, $request->status, $request->delivery, $partner, $request->syllabus, $request->city_id);
+        $event_info = $this->prepareInfo($infoData, $request->status, $request->delivery, $partner, $request->syllabus, $request->city_id, $event);
 
-        //dd($event_info);
         $this->updateEventInfo($event_info, $event->id);
 
         if($event->status == 0 && $request->old_status == 5){
@@ -1023,18 +1024,18 @@ class EventController extends Controller
 
 
 
-    public function prepareInfo($requestData, $status, $delivery, $partner, $syllabus, $cityId)
+    public function prepareInfo($requestData, $status, $deliveryId, $partner, $syllabus, $cityId, $event)
     {
         $data = [];
 
-        $delivery = Delivery::find($delivery)['name'];
+        //$delivery = Delivery::find($delivery)['name'];
         $city = City::find($cityId);
 
 
-        $data['course_inclass_absences'] = $requestData['delivery']['inclass']['absences'];
+
 
         $data['course_status'] = $status;
-        $data['course_delivery'] = $delivery;
+        $data['course_delivery'] = $deliveryId;
         $data['course_hours_text'] = $requestData['hours']['text'];
         $data['course_hours_hour'] = $requestData['hours']['hour'];
 
@@ -1043,9 +1044,15 @@ class EventController extends Controller
 
 
         // Delivery Inclass City
-        if(isset($requestData['delivery']['inclass'])){
+        if($event->is_inclass_course()){
+            $data['course_inclass_absences'] = $requestData['delivery']['inclass']['absences'];
             $data['course_inclass_city'] = ($city) ? $city->name : null;
             $data['course_inclass_city_icon'] = json_encode($requestData['delivery']['inclass']['city']['icon']);
+        }else if($event->is_elearning_course()){
+            $visible_loaded_data = $requestData['delivery']['elearning']['visible'];
+            $data['course_elearning_visible'] = json_encode($this->prepareVisibleData($visible_loaded_data));
+            $data['course_elearning_icon'] = $requestData['delivery']['elearning']['icon'] != null ?  json_encode($requestData['delivery']['elearning']['icon']) : null;
+            $data['course_elearning_expiration'] = (isset($requestData['delivery']['elearning']['expiration']) && $requestData['delivery']['elearning']['expiration'] != null) ? $requestData['delivery']['elearning']['expiration'] : null;
         }
 
 
@@ -1260,18 +1267,19 @@ class EventController extends Controller
 
         //dd($event->paymentMethod);
 
-        $info = $event->event_info;
+        $info = $event->event_info();
 
         if($info === null){
             $infos = new EventInfo();
             $infos->event_id = $event->id;
         }else{
-            $infos = $info;
+            //$infos = $info;
+            $infos = EventInfo::where('event_id', $event_id)->first();
         }
 
-        $infos->course_inclass_absences = $event_info['course_inclass_absences'];
+
+
         $infos->course_status = $event_info['course_status'];
-        $infos->course_delivery = $event_info['course_delivery'];
 
         $infos->course_hours = $event_info['course_hours_hour'];
         $infos->course_hours_text = $event_info['course_hours_text'];
@@ -1288,12 +1296,21 @@ class EventController extends Controller
         $infos->course_manager = $event_info['course_manager'];
         $infos->course_manager_icon = $event_info['course_manager_icon'];
 
+        $infos->course_delivery = $event_info['course_delivery'];
+
+
         if($event->is_inclass_course()){
+            $infos->course_inclass_absences = $event_info['course_inclass_absences'];
+
             $infos->course_inclass_city = $event_info['course_inclass_city'];
             $infos->course_inclass_city_icon = $event_info['course_inclass_city_icon'];
             $infos->course_inclass_dates = $event_info['course_inclass_dates'];
             $infos->course_inclass_times = $event_info['course_inclass_times'];
             $infos->course_inclass_days = $event_info['course_inclass_days'];
+        }else if($event->is_elearning_course()){
+            $infos->course_elearning_visible = $event_info['course_elearning_visible'];
+            $infos->course_elearning_icon = $event_info['course_elearning_icon'];
+            $infos->course_elearning_expiration = $event_info['course_elearning_expiration'];
         }
 
 

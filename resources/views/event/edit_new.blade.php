@@ -285,27 +285,25 @@
 
                                                     <span data-infowrapper="hours" class="input-group-addon input-group-append input-icon-wrapper">
                                                         <span class="btn btn-outline-primary input-icon">
-                                                            @if(isset($course_hours_icon) && $course_hours_icon != null && $course_hours_icon['path'] != null)
-                                                                <img src="{{ asset($course_hours_icon['path']) }}"/>
+                                                            @if(isset($info['hours']['icon']) && $info['hours']['icon']['path'] != null)
+                                                                <img src="{{ asset($info['hours']['icon']['path']) }}"/>
                                                             @else
                                                                 <span class="fa fa-hourglass"></span>
                                                             @endif
                                                         </span>
                                                     </span>
-                                                    <input type="hidden" value="{{ old('hours_icon_path', ($course_hours_icon != null) ? $course_hours_icon['path'] : '' ) }}" id="hours_path" name="course[{{'hours'}}][{{'icon'}}][{{'path'}}]">
-                                                    <input type="hidden" value="{{ old('hours_icon_alt_text', ($course_hours_icon != null && $course_hours_icon['alt_text'] != '') ? $course_hours_icon['alt_text'] : '' ) }}" id="hours_alt_text" name="course[{{'hours'}}][{{'icon'}}][{{'alt_text'}}]">
+                                                    <input type="hidden" value="{{ old('hours_icon_path', (isset($info['hours']['icon'])) ? $info['hours']['icon']['path'] : '' ) }}" id="hours_path" name="course[{{'hours'}}][{{'icon'}}][{{'path'}}]">
+                                                    <input type="hidden" value="{{ old('hours_icon_alt_text', (isset($info['hours']['icon']) && $info['hours']['icon']['alt_text'] != '') ? $info['hours']['icon']['alt_text'] : '' ) }}" id="hours_alt_text" name="course[{{'hours'}}][{{'icon'}}][{{'alt_text'}}]">
                                                 </div>
                                             </div>
 
-
-
                                             <div class="form-group{{ $errors->has('hours') ? ' has-danger' : '' }} col-sm-12 col-md-2 col-lg-2">
-                                                <input type="text" id="input-hours" name="course[{{'hours'}}][{{'hour'}}]" class="form-control{{ $errors->has('hours') ? ' is-invalid' : '' }}" placeholder="{{ __('Course Hours') }}" value="{{ old('hours', ($info != null && $info['course_hours']) ? $info['course_hours'] : '' ) }}" autofocus>
+                                                <input type="text" id="input-hours" name="course[{{'hours'}}][{{'hour'}}]" class="form-control{{ $errors->has('hours') ? ' is-invalid' : '' }}" placeholder="{{ __('Course Hours') }}" value="{{ old('hours', (isset($info['hours']['hour']) && $info['hours']['hour']) ? $info['hours']['hour'] : '' ) }}" autofocus>
                                                 {{--@include('alerts.feedback', ['field' => 'hours'])--}}
                                             </div>
 
                                             <div class="form-group col-sm-12 col-md-4 col-lg-3">
-                                                <input style="background:aliceblue;" type="text" name="course[{{'hours'}}][{{'text'}}]" id="input-hours-text" class="form-control" placeholder="{{ __('alphanumeric text') }}" value="{{ old('hours', ($info != null && $info['course_hours_text']) ? $info['course_hours_text'] : '' ) }}" autofocus>
+                                                <input style="background:aliceblue;" type="text" name="course[{{'hours'}}][{{'text'}}]" id="input-hours-text" class="form-control" placeholder="{{ __('alphanumeric text') }}" value="{{ old('hours_text', (isset($info['hours']['text']) && $info['hours']['text'] != null) ? $info['hours']['text'] : '' ) }}" autofocus>
                                             </div>
 
                                             <div class="form-group col-sm-12 col-md-6 col-lg-7">
@@ -317,7 +315,7 @@
                                         <div class="row">
 
                                             <?php
-                                                $visible_hours = ($info != null && $info['course_hours_visible']) ? json_decode($info['course_hours_visible'], true) : null;
+                                                $visible_hours = ($info['hours']['visible']) ? $info['hours']['visible'] : null;
                                             ?>
                                             <label class="form-control-label col-12" for="input-hours">{{ __('Visible on:') }}</label>
 
@@ -372,9 +370,8 @@
                                         <hr>
                                         <div class="row">
                                             <?php
-
-                                                if(isset($info['course_language_icon']) && $info['course_language_icon'] != null){
-                                                    $course_language_icon = json_decode($info['course_language_icon'], true);
+                                                if(isset($info['language']['icon']) && $info['language']['icon'] != null){
+                                                    $course_language_icon = $info['language']['icon'];
                                                 }else{
                                                     $course_language_icon = null;
                                                 }
@@ -395,7 +392,7 @@
 
                                                         </span>
                                                     </span>
-                                                    <input type="hidden" value="{{ old('language_icon_path', ($course_language_icon != null) ? $course_hours_icon['path'] : '' ) }}" id="language_path" name="course[{{'language'}}][{{'icon'}}][{{'path'}}]">
+                                                    <input type="hidden" value="{{ old('language_icon_path', ($course_language_icon != null) ? $course_language_icon['path'] : '' ) }}" id="language_path" name="course[{{'language'}}][{{'icon'}}][{{'path'}}]">
                                                     <input type="hidden" value="{{ old('language_icon_alt_text', ($course_language_icon != null) ? $course_language_icon['alt_text'] : '' ) }}" id="language_alt_text" name="course[{{'language'}}][{{'icon'}}][{{'alt_text'}}]">
                                                 </div>
                                             </div>
@@ -403,14 +400,14 @@
 
 
                                             <div class="form-group col-sm-12 col-md-6 col-lg-3">
-                                                <input type="text" id="input-language" name="course[{{'language'}}][{{'text'}}]" class="form-control" value="{{ old('language',  ($info != null && $info['course_language']) ? $info['course_language'] : '' )}} " placeholder="{{ __('Language') }}" autofocus>
+                                                <input type="text" id="input-language" name="course[{{'language'}}][{{'text'}}]" class="form-control" value="{{ old('language',  (isset($info['language']['text']) && $info['language']['text'] != null) ? $info['language']['text'] : '' )}} " placeholder="{{ __('Language') }}" autofocus>
                                             </div>
 
                                         </div>
 
                                         <div class="row">
                                             <?php
-                                                $visible_language = (isset($info['course_language_visible']) && $info != null && $info['course_language_visible']) ? json_decode($info['course_language_visible'], true) : null;
+                                                $visible_language = (isset($info['language']['visible'])) ? $info['language']['visible'] : null;
                                             ?>
                                             <label class="form-control-label col-12" for="input-hours">{{ __('Visible on:') }}</label>
 
@@ -477,7 +474,6 @@
 
 
                                             <div class="col-sm-12 col-md-6 col-lg-3 form-group{{ $errors->has('delivery') ? ' has-danger' : '' }}">
-
 
                                                 <select name="delivery" id="input-delivery" class="form-control" placeholder="{{ __('Delivery') }}" required>
                                                     <option disabled selected value="">Please select where this course takes place</option>
@@ -547,8 +543,9 @@
                                                 </div>
                                                 <div class="row ">
                                                     <?php
-                                                        $dates = ($info != null && isset($info['course_inclass_dates'])) ? json_decode($info['course_inclass_dates'], true) : null;
-                                                        $visible_dates = (isset($dates) && isset($dates['visible'])) ? $dates['visible'] : null;
+
+                                                        $dates = (isset($info['inclass']['dates']) && $info['inclass']['dates'] != null) ? $info['inclass']['dates'] : null;
+                                                        $visible_dates = (isset($info['inclass']['dates']['visible'])) ? $info['inclass']['dates']['visible'] : null;
                                                         //$visible_dates = (isset($dates) && isset($dates['visible'])) ? json_decode($dates['visible'], true) : null;
                                                     ?>
 
@@ -570,7 +567,8 @@
                                                                     @if($course_inclass_dates_icon != null && $course_inclass_dates_icon['path'] != null)
                                                                         <img src="{{ asset($course_inclass_dates_icon['path']) }}"/>
                                                                     @else
-                                                                        <span class="fa fa-calendar"></span>
+                                                                        <img class="replace-with-svg" width="20" src="/theme/assets/img/summary_icons/Duration_Hours.svg" alt="">
+
                                                                     @endif
                                                                 </span>
                                                             </span>
@@ -625,13 +623,13 @@
                                                 <div class="row">
                                                     <?php
 
-                                                        $days = ($info != null && isset($info['course_inclass_days'])) ? json_decode($info['course_inclass_days'], true) : null;
-                                                        $visible_days = (isset($days) && isset($days['visible'])) ? $days['visible'] : null;
+                                                        $days = (isset($info['inclass']['days']) && $info['inclass']['days'] != null) ? $info['inclass']['days'] : null;
+                                                        $visible_days = ( $days != null && isset($days['visible']) && $days['visible'] != null) ? $days['visible'] : null;
 
                                                     ?>
                                                     <?php
 
-                                                        if(isset($days['icon'])){
+                                                        if(isset($days['icon']) && $days['icon'] != null){
                                                             $course_inclass_day_icon = $days['icon'];
                                                         }else{
                                                             $course_inclass_day_icon = null;
@@ -647,7 +645,7 @@
                                                                     @if($course_inclass_day_icon != null && $course_inclass_day_icon['path'] != null)
                                                                         <img src="{{ asset($course_inclass_day_icon['path']) }}"/>
                                                                     @else
-                                                                        <i class="fas fa-calendar-day"></i>
+                                                                        <img class="replace-with-svg" width="20" src="/theme/assets/img/summary_icons/Days-Week.svg" alt="">
                                                                     @endif
                                                                 </span>
                                                             </span>
@@ -706,15 +704,15 @@
 
                                                     <?php
 
-                                                        $times = ($info != null && isset($info['course_inclass_times'])) ? json_decode($info['course_inclass_times'], true) : null;
+                                                        $times = (isset($info['inclass']['times']) && $info['inclass']['times'] != null) ? $info['inclass']['times'] : null;
 
                                                         //$visible_times = (isset($times) && isset($times['visible'])) ? json_decode($times['visible'], true) : null;
-                                                        $visible_times = (isset($times) && isset($times['visible'])) ? $times['visible'] : null;
+                                                        $visible_times = ($times != null && isset($times['visible']) && $times['visible'] != null) ? $times['visible'] : null;
                                                     ?>
 
                                                     <?php
 
-                                                        if(isset($times['icon'])){
+                                                        if(isset($times['icon']) && $times['icon'] != null){
                                                             $course_inclass_times_icon = $times['icon'];
                                                         }else{
                                                             $course_inclass_times_icon = null;
@@ -731,7 +729,7 @@
                                                                     @if($course_inclass_times_icon != null && $course_inclass_times_icon['path'] != null)
                                                                         <img src="{{ asset($course_inclass_times_icon['path']) }}"/>
                                                                     @else
-                                                                        <span class="ni ni-watch-time"></span>
+                                                                        <img class="replace-with-svg" width="20" src="/theme/assets/img/summary_icons/time.svg" alt="">
                                                                     @endif
                                                                 </span>
                                                             </span>
@@ -788,7 +786,7 @@
                                                     <div class="form-group col-sm-12 col-md-4">
                                                         <label class="form-control-label" for="input-hours">{{ __('Absences Limit(%)') }}</label>
                                                         <div class="input-group">
-                                                            <input type="text" name="course[{{'delivery'}}][{{'inclass'}}][{{'absences'}}]" id="input-absences_limit" class="form-control{{ $errors->has('Absences Limit(%)') ? ' is-invalid' : '' }}" placeholder="{{ __('absences_limit') }}" value="{{ old('$course_inclass_absences', ($info != null && $info['course_inclass_absences'] != '') ? $info['course_inclass_absences'] : 0 ) }}"autofocus>
+                                                            <input type="text" name="course[{{'delivery'}}][{{'inclass'}}][{{'absences'}}]" id="input-absences_limit" class="form-control{{ $errors->has('Absences Limit(%)') ? ' is-invalid' : '' }}" placeholder="{{ __('absences_limit') }}" value="{{ old('$course_inclass_absences', (isset($info['inclass']['absences']) && $info['inclass']['absences'] != null) ? $info['course_inclass_absences'] : 0 ) }}"autofocus>
                                                             <span class="input-group-addon input-group-append">
                                                                 <span class="btn btn-outline-primary input-icon"> <span class="fa fa-calendar d-none"></span></span>
                                                             </span>
@@ -871,16 +869,87 @@
                                             </div>
 
                                             <div id="exp_input" class="col-sm-12 col-md-6 col-lg-3 form-group{{ $errors->has('expiration') ? ' has-danger' : '' }}">
-                                                <label class="form-control-label" for="input-expiration">{{ __('Months access') }}</label>
-                                                <input type="number" min="1" name="expiration" id="input-expiration" class="form-control{{ $errors->has('expiration') ? ' is-invalid' : '' }}" placeholder="{{ __('Enter number of months') }}" value="{{ old('expiration', $event->expiration) }}"autofocus>
+                                                <?php
 
-                                                @include('alerts.feedback', ['field' => 'expiration'])
+                                                    $course_elearning_visible = (isset($info['elearning']['visible']) && $info['elearning']['visible']!= null) ? $info['elearning']['visible'] : null;
+                                                    $course_elearning_icon = (isset($info['elearning']['icon']) && $info['elearning']['icon']) ? $info['elearning']['icon'] : null;
+
+
+                                                ?>
+                                                <label class="form-control-label" for="input-expiration">{{ __('Months access') }}</label>
+                                                <div class="input-group">
+                                                    <input type="number" min="1" name="course[{{'delivery'}}][{{'elearning'}}][{{'expiration'}}]" id="input-expiration" class="form-control{{ $errors->has('expiration') ? ' is-invalid' : '' }}" placeholder="{{ __('Enter number of months') }}" value="{{ old('expiration', (isset($info['elearning']['expiration']) && $info['elearning']['expiration'] != null) ? $info['elearning']['expiration'] : '' ) }}"autofocus>
+
+                                                    <span data-infowrapper="elearning" class="input-group-addon input-group-append input-icon-wrapper-inclass">
+                                                        <span class="btn btn-outline-primary input-icon">
+
+                                                            @if(isset($course_elearning_icon) &&  $course_elearning_icon != null && $course_elearning_icon['path'] != null)
+                                                                <img src="{{ asset($course_elearning_icon['path']) }}"/>
+                                                            @else
+                                                                <img class="replace-with-svg" width="20" src="/theme/assets/img/summary_icons/Duration_Hours.svg" alt="">
+
+                                                            @endif
+                                                        </span>
+                                                    </span>
+
+                                                    <input type="hidden" value="{{ old('elearning_icon_path', ($course_elearning_icon != null && $course_elearning_icon['path'] != '') ? $course_elearning_icon['path'] : '' ) }}" id="elearning_path" name="course[{{'delivery'}}][{{'elearning'}}][{{'icon'}}][{{'path'}}]">
+                                                    <input type="hidden" value="{{ old('elearning_icon_alt_text', ($course_elearning_icon != null && $course_elearning_icon['alt_text'] != '') ? $course_elearning_icon['alt_text'] : '' ) }}" id="elearning_alt_text" id="elearning_alt_text" name="course[{{'delivery'}}][{{'elearning'}}][{{'icon'}}][{{'alt_text'}}]">
+                                                </div>
+
+
+
+
+                                                {{--@include('alerts.feedback', ['field' => 'expiration'])--}}
+                                            </div>
+                                        </div>
+                                        <?php
+                                                $visible_elearning = (isset($info['elearning']['visible'])) ? $info['elearning']['visible'] : null;
+                                            ?>
+                                        <div class="row elearning_visible_wrapper @if($event['delivery'][0]['id'] != 143) ? 'd-none' : '' @endif">
+
+                                            <label class="form-control-label col-12" for="input-delivery">{{ __('Visible on:') }}</label>
+                                            <div class="col-sm-12 col-md-6 col-lg-2">
+
+                                                <div class="custom-control custom-checkbox mb-3">
+                                                    <input class="custom-control-input" {{ ($visible_elearning != null && $visible_elearning['landing']) ? 'checked' : '' }} name="course[{{'delivery'}}][{{'elearning'}}][{{'visible'}}][{{'landing'}}]" id="input-elearning-landing" type="checkbox">
+                                                    <label class="custom-control-label" for="input-elearning-landing">Course landing page (summary)</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12 col-md-6 col-lg-2">
+                                                <div class="custom-control custom-checkbox mb-3">
+                                                    <input class="custom-control-input" {{ ($visible_elearning != null && $visible_elearning['home']) ? 'checked' : '' }} name="course[{{'delivery'}}][{{'elearning'}}][{{'visible'}}][{{'home'}}]" id="input-elearning-home" type="checkbox">
+                                                    <label class="custom-control-label" for="input-elearning-home">Course box in home page</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12 col-md-6 col-lg-2">
+                                                <div class="custom-control custom-checkbox mb-3">
+                                                    <input class="custom-control-input" {{ ($visible_elearning != null && $visible_elearning['list']) ? 'checked' : '' }} name="course[{{'delivery'}}][{{'elearning'}}][{{'visible'}}][{{'list'}}]" id="input-elearning-list" type="checkbox">
+                                                    <label class="custom-control-label" for="input-elearning-list">Course box in list page</label>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-sm-12 col-md-6 col-lg-2">
+                                                <div class="custom-control custom-checkbox mb-3">
+                                                    <input class="custom-control-input" {{ ($visible_elearning != null && $visible_elearning['invoice']) ? 'checked' : '' }} name="course[{{'delivery'}}][{{'elearning'}}][{{'visible'}}][{{'invoice'}}]" id="input-elearning-invoice" type="checkbox">
+                                                    <label class="custom-control-label" for="input-elearning-invoice">Invoice description</label>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-sm-12 col-md-6 col-lg-2">
+                                                <div class="custom-control custom-checkbox mb-3">
+                                                    <input class="custom-control-input" {{ ($visible_elearning != null && $visible_elearning['emails']) ? 'checked' : '' }} name="course[{{'delivery'}}][{{'elearning'}}][{{'visible'}}][{{'emails'}}]" id="input-elearning-emails" type="checkbox">
+                                                    <label class="custom-control-label" for="input-elearning-emails">Automated emails</label>
+                                                </div>
                                             </div>
 
 
 
-
                                         </div>
+
+
+
+
+
 
                                         <hr>
 
@@ -906,7 +975,7 @@
                                                             @if($course_payment_icon != null && $course_payment_icon['path'] != null)
                                                                 <img src="{{ asset($course_payment_icon['path']) }}"/>
                                                             @else
-                                                                <span class="fa fa-calendar"></span>
+                                                                <i class="ni ni-credit-card"></i>
                                                             @endif
                                                         </span>
                                                     </span>
@@ -1126,13 +1195,11 @@
 
                                         <hr>
 
-
                                         <div class="row course-awards-wrapper">
 
                                             <?php
-
-                                                if(isset($info['course_awards_icon']) && $info['course_awards_icon'] != null){
-                                                    $course_awards_icon = json_decode($info['course_awards_icon'], true);
+                                                if(isset($info['awards']['icon']) && $info['awards']['icon'] != null){
+                                                    $course_awards_icon = $info['awards']['icon'];
                                                 }else{
                                                     $course_awards_icon = null;
                                                 }
@@ -1142,14 +1209,14 @@
 
                                                 <div class="input-group">
                                                     <h3 class="mb-0 title">{{ __('Course awards & badges') }}</h3>
-
                                                     <span data-infowrapper="awards" class="input-group-addon input-group-append input-icon-wrapper">
                                                         <span class="btn btn-outline-primary input-icon">
-                                                            @if($course_awards_icon  != null && $course_awards_icon ['path'] != null)
-                                                                <img src="{{ asset($course_awards_icon ['path']) }}"/>
+                                                            @if($course_awards_icon != null && $course_awards_icon['path'] != null)
+                                                                <img src="{{ asset($course_awards_icon['path']) }}"/>
                                                             @else
                                                                 <span class="fa fa-calendar"></span>
                                                             @endif
+
                                                         </span>
                                                     </span>
                                                     <input type="hidden" value="{{ old('course_awards_icon_path', ($course_awards_icon != null && $course_awards_icon['path'] != '') ? $course_awards_icon['path'] : '' ) }}" id="awards_path" name="course[{{'awards'}}][{{'icon'}}][{{'path'}}]">
@@ -1159,13 +1226,13 @@
                                             <div class="form-group col-12">
                                                 <span class="toggle-btn-inline-text">Does this course have some award?</span>
                                                 <label class="custom-toggle">
-                                                    <input id="award-toggle" {{ ($info != null && $info['course_awards_text'] != null) ? 'checked' : ''}} type="checkbox">
+                                                    <input id="award-toggle" {{ (isset($info['awards']['text']) && $info['awards']['text'] != null) ? 'checked' : ''}} type="checkbox">
                                                     <span class="custom-toggle-slider rounded-circle" data-label-off="No" data-label-on="Yes"></span>
                                                 </label>
                                             </div>
 
-                                            <div class="col-sm-12 col-md-6 col-lg-3 form-group award-text {{ ($info != null && $info['course_awards_text'] != null) ? '' : 'd-none'}}">
-                                                <input style="background:aliceblue;" id="input-award-text" type="text" name="course[{{'awards'}}][{{'text'}}]" class="form-control" placeholder="{{ __('alphanumeric text') }}" value="{{ old('awards', ($info != null && $info['course_awards_text']) ? $info['course_awards_text'] : '' ) }}" autofocus>
+                                            <div class="col-sm-12 col-md-6 col-lg-3 form-group award-text {{ (isset($info['awards']['text']) && $info['awards']['text'] != null) ? '' : 'd-none'}}">
+                                                <input style="background:aliceblue;" id="input-award-text" type="text" name="course[{{'awards'}}][{{'text'}}]" class="form-control" placeholder="{{ __('alphanumeric text') }}" value="{{ old('awards', (isset($info['awards']['text']) && $info['awards']['text'] != null) ? $info['awards']['text'] : '' ) }}" autofocus>
                                             </div>
                                         </div>
 
@@ -1177,9 +1244,8 @@
                                         <div class="row course-certification-wrapper">
 
                                             <?php
-
-                                                if(isset($info['course_certification_icon']) && $info['course_certification_icon'] != null){
-                                                    $course_certification_icon = json_decode($info['course_certification_icon'], true);
+                                                if(isset($info['certificate']['icon']) && $info['certificate']['icon'] != null){
+                                                    $course_certification_icon = $info['certificate']['icon'];
                                                 }else{
                                                     $course_certification_icon = null;
                                                 }
@@ -1192,8 +1258,8 @@
 
                                                     <span data-infowrapper="certificate" class="input-group-addon input-group-append input-icon-wrapper">
                                                         <span class="btn btn-outline-primary input-icon">
-                                                            @if($course_certification_icon  != null && $course_certification_icon ['path'] != null)
-                                                                <img src="{{ asset($course_certification_icon ['path']) }}"/>
+                                                            @if($course_certification_icon  != null && $course_certification_icon['path'] != null)
+                                                                <img src="{{ asset($course_certification_icon['path']) }}"/>
                                                             @else
                                                                 {{--<span class="fa fa-calendar"></span>--}}
                                                                 <img class="replace-with-svg" width="20" src="/theme/assets/images/icons/Level.svg" alt="">
@@ -1209,14 +1275,14 @@
                                             <div class="form-group col-12">
                                                 <span class="toggle-btn-inline-text">Does this course offer a certification? </span>
                                                 <label class="custom-toggle">
-                                                    <input id="certification-toggle" {{($info != null && isset($info['course_certification_name_success'])) ? 'checked' : '' }} type="checkbox">
+                                                    <input id="certification-toggle" {{(isset($info['certificate']['messages']['success']) && $info['certificate']['messages']['success'] != null) ? 'checked' : '' }} type="checkbox">
                                                     <span class="custom-toggle-slider rounded-circle" data-label-off="No" data-label-on="Yes"></span>
                                                 </label>
                                             </div>
 
                                             <?php
 
-                                                $visible_certification = ($info != null && isset($info['course_certification_visible'])) ? json_decode($info['course_certification_visible'], true) : null;
+                                                $visible_certification = (isset($info['certificate']['visible']) && $info['certificate']['visible'] != null) ? $info['certificate']['visible'] : null;
 
                                             ?>
 
@@ -1227,7 +1293,7 @@
                                                     <div class="col-sm-12 col-md-6 form-group{{ $errors->has('fb_') ? ' has-danger' : '' }}">
                                                         <label class="form-control-label" for="input-hours">{{ __('Certificate Title') }}</label>
 
-                                                        <textarea type="text" name="course[{{'certificate'}}][{{'success_text'}}]" id="input-certificate_title" class="ckeditor form-control" placeholder="{{ __('alphanumeric text ') }}" autofocus>{{ old('certificate_title', ($info != null && isset($info['course_certification_name_success'])) ? $info['course_certification_name_success'] : '') }}</textarea>
+                                                        <textarea type="text" name="course[{{'certificate'}}][{{'success_text'}}]" id="input-certificate_title" class="ckeditor form-control" placeholder="{{ __('alphanumeric text ') }}" autofocus>{{ old('certificate_title', (isset($info['certificate']['messages']['success']) && $info['certificate']['messages']['success'] != null) ? $info['certificate']['messages']['success'] : '') }}</textarea>
 
                                                         @include('alerts.feedback', ['field' => 'certificate_title'])
                                                     </div>
@@ -1235,13 +1301,13 @@
                                                     <div class="col-sm-12 col-md-6 form-group">
                                                         <label class="form-control-label" for="input-hours">{{ __('Title of certification (in case of exams failure)') }}</label>
 
-                                                        <textarea type="text" name="course[{{'certificate'}}][{{'failure_text'}}]" id="input-certificate_text_failure" class="form-control ckeditor" placeholder="{{ __('alphanumeric text ') }}"  autofocus>{{old('certificate_failure',($info != null && isset($info['course_certification_name_failure'])) ? $info['course_certification_name_failure'] : '' )}}</textarea>
+                                                        <textarea type="text" name="course[{{'certificate'}}][{{'failure_text'}}]" id="input-certificate_text_failure" class="form-control ckeditor" placeholder="{{ __('alphanumeric text ') }}"  autofocus>{{ old('certificate_failure', (isset($info['certificate']['messages']['failure']) && $info['certificate']['messages']['failure'] != null) ? $info['certificate']['messages']['failure'] : '') }}</textarea>
 
                                                     </div>
 
                                                     <div class="col-sm-12 col-md-6 form-group">
                                                         <label class="form-control-label" for="input-hours">{{ __('Certificate type') }}</label>
-                                                        <input type="text" name="course[{{'certificate'}}][{{'type'}}]" id="input-certificate_type" class="form-control" placeholder="{{ __('alphanumeric text ') }}" value="{{old('certificate_type',($info != null && isset($info['course_certification_type'])) ? $info['course_certification_type'] : '' )}}" autofocus/>
+                                                        <input type="text" name="course[{{'certificate'}}][{{'type'}}]" id="input-certificate_type" class="form-control" placeholder="{{ __('alphanumeric text ') }}" value="{{old('certificate_type',(isset($info['certificate']['type']) && $info['certificate']['type'] != null) ? $info['certificate']['type'] : '' )}}" autofocus/>
 
                                                     </div>
                                                 </div>
@@ -1287,7 +1353,7 @@
                                                         <div class="col-sm-12 col-md-6 col-lg-2">
 
                                                             <div class="custom-control custom-checkbox mb-3">
-                                                                <input class="custom-control-input" {{ ($visible_hours != null && $visible_hours['emails']) ? 'checked' : '' }} name="course[{{'certificate'}}][{{'visible'}}][{{'emails'}}]" id="input-certificate-emails" type="checkbox">
+                                                                <input class="custom-control-input" {{ ($visible_certification != null && $visible_certification['emails']) ? 'checked' : '' }} name="course[{{'certificate'}}][{{'visible'}}][{{'emails'}}]" id="input-certificate-emails" type="checkbox">
                                                                 <label class="custom-control-label" for="input-certificate-emails">Automated emails</label>
                                                             </div>
 
@@ -1308,9 +1374,8 @@
                                         <div class="row course-student-wrapper">
 
                                             <?php
-                                            //dd($info);
-                                                if(isset($info['course_students_icon']) && $info['course_students_icon'] != null){
-                                                    $course_students_icon = json_decode($info['course_students_icon'], true);
+                                                if(isset($info['students']['icon']) && $info['students']['icon'] != null){
+                                                    $course_students_icon = $info['students']['icon'];
                                                 }else{
                                                     $course_students_icon = null;
                                                 }
@@ -1321,11 +1386,11 @@
                                                     <h3 class="mb-0 title">{{ __('Course students') }}</h3>
                                                     <span data-infowrapper="students" class="input-group-addon input-group-append input-icon-wrapper">
                                                         <span class="btn btn-outline-primary input-icon">
-                                                            @if($course_students_icon  != null && $course_students_icon ['path'] != null)
+                                                            @if($course_students_icon != null && $course_students_icon['path'] != null)
                                                                 <img src="{{ asset($course_students_icon ['path']) }}"/>
                                                             @else
-                                                                <span class="fa fa-calendar"></span>
-                                                            @endif
+                                                                <span class="fa fa-users"></span>
+                                                                {{--<img class="replace-with-svg" width="20" src="/theme/assets/images/icons/Group_User.1.svg" alt="">--}}                                                          @endif
                                                         </span>
                                                     </span>
                                                     <input type="hidden" value="{{ old('course_students_icon_path', ($course_students_icon != null && $course_students_icon['path'] != '') ? $course_students_icon['path'] : '' ) }}" id="students_path" name="course[{{'students'}}][{{'icon'}}][{{'path'}}]">
@@ -1336,12 +1401,12 @@
                                             <div calss="col-sm-12 col-md-6 col-lg-3">
                                                 <div class="form-group col-auto">
                                                     <label class="form-control-label" for="input-hours">{{ __('Student should start count from this number:') }}</label>
-                                                    <input type="text" name="course[{{'students'}}][{{'count_start'}}]" class="form-control" placeholder="{{ __('alphanumeric text') }}" value="{{ old('count_start', ($info != null && $info['course_students_number']) ? $info['course_students_number'] : '' ) }}" autofocus>
+                                                    <input type="text" name="course[{{'students'}}][{{'count_start'}}]" class="form-control" placeholder="{{ __('alphanumeric text') }}" value="{{ old('count_start', (isset($info['students']['number']) && $info['students']['number'] != null) ? $info['students']['number'] : '' ) }}" autofocus>
                                                 </div>
 
                                                 <div class="form-group col-auto">
                                                     <label class="form-control-label" for="input-hours">{{ __('Text after the number of students:') }}</label>
-                                                    <input style="background:aliceblue;" name="course[{{'students'}}][{{'text'}}]" type="text" class="form-control" placeholder="{{ __('alphanumeric text') }}" value="{{ old('count_text', ($info != null && $info['course_students_text']) ? $info['course_students_text'] : '' ) }}" autofocus>
+                                                    <input style="background:aliceblue;" name="course[{{'students'}}][{{'text'}}]" type="text" class="form-control" placeholder="{{ __('alphanumeric text') }}" value="{{ old('count_text', (isset($info['students']['text']) && $info['students']['text'] != null) ? $info['students']['text'] : '' ) }}" autofocus>
                                                 </div>
                                             </div>
 
@@ -1351,7 +1416,7 @@
                                         <div class="row">
                                             <?php
 
-                                                $visible_students = ($info != null && isset($info['course_students_visible'])) ? json_decode($info['course_students_visible'], true) : null;
+                                                $visible_students = (isset($info['students']['visible']) && $info['students']['visible'] != null) ? $info['students']['visible'] : null;
 
                                             ?>
                                             <label class="form-control-label col-12" for="input-hours">{{ __('Visible on:') }}</label>
@@ -1395,7 +1460,7 @@
                                             <div class="col-sm-12 col-md-6 col-lg-2">
 
                                                 <div class="custom-control custom-checkbox mb-3">
-                                                    <input class="custom-control-input" {{ ($visible_hours != null && $visible_hours['emails']) ? 'checked' : '' }} name="course[{{'students'}}][{{'visible'}}][{{'emails'}}]" id="input-students-emails" type="checkbox">
+                                                    <input class="custom-control-input" {{ ($visible_students != null && $visible_students['emails']) ? 'checked' : '' }} name="course[{{'students'}}][{{'visible'}}][{{'emails'}}]" id="input-students-emails" type="checkbox">
                                                     <label class="custom-control-label" for="input-students-emails">Automated emails</label>
                                                 </div>
 
@@ -2029,16 +2094,20 @@
     $( "#input-delivery" ).change(function() {
         if($(this).val() == 143){
             $('#exp_input').css('display', 'block')
+            $('.elearning_visible_wrapper').removeClass('d-none')
         }else{
             $('#exp_input').css('display', 'none')
+            $('.elearning_visible_wrapper').addClass('d-none')
         }
     });
 
     $( "#input-delivery" ).change(function() {
         if($(this).val() == 139){
             $('.delivery_child_wrapper').removeClass('d-none')
+            $('.elearning_visible_wrapper').addClass('d-none')
         }else{
             $('.delivery_child_wrapper').addClass('d-none')
+            $('.elearning_visible_wrapper').removeClass('d-none')
         }
     });
 

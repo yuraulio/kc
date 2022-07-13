@@ -728,7 +728,64 @@ class Event extends Model
 
     public function event_info()
     {
-        return $this->hasOne(EventInfo::class);
+        //return $this->hasOne(EventInfo::class);
+
+        $infos = $this->hasOne(EventInfo::class)->first();
+        $data = [];
+
+        if($infos != null){
+            $data['status'] = $infos['course_status'];
+
+            $data['hours']['hour'] = $infos['course_hours'];
+            $data['hours']['text'] = $infos['course_hours_text'];
+            $data['hours']['icon'] = $infos['course_hours_icon'] != null ? json_decode($infos['course_hours_icon'],true) : null;
+            $data['hours']['visible'] = $infos['course_hours_visible'] != null ? json_decode($infos['course_hours_visible'], true) : null;
+
+            $data['language']['text'] = $infos['course_language'];
+            $data['language']['icon'] = $infos['course_language_icon'] != null ? json_decode($infos['course_language_icon'], true) : null;
+            $data['language']['visible'] = $infos['course_language_visible'] != null ? json_decode($infos['course_language_visible'], true) : null;
+
+            //dd($infos['course_delivery']);
+            $data['delivery'] = $infos['course_delivery'];
+
+            if($this->is_inclass_course()){
+
+                //dd($infos['course_inclass_city']);
+                $data['inclass']['city']['text'] = $infos['course_inclass_city'];
+                $data['inclass']['city']['icon'] = json_decode($infos['course_inclass_city_icon'], true);
+
+
+                $data['inclass']['dates'] = ($infos['course_inclass_dates'] != null && $infos['course_inclass_dates'] != '[]') ? json_decode($infos['course_inclass_dates'], true) : null;
+                $data['inclass']['days'] = ($infos['course_inclass_days'] != null && $infos['course_inclass_days'] != '[]') ? json_decode($infos['course_inclass_days'], true) : null;
+                $data['inclass']['times'] = ($infos['course_inclass_times'] != null && $infos['course_inclass_times'] != '[]') ? json_decode($infos['course_inclass_times'], true) : null;
+
+            }else if($this->is_elearning_course()){
+                $data['elearning']['visible'] = $infos['course_elearning_visible'] != null ? json_decode($infos['course_elearning_visible'], true) : null;
+                $data['elearning']['icon'] = $infos['course_elearning_icon'] != null ? json_decode($infos['course_elearning_icon'], true) : null;
+                $data['elearning']['expiration'] = $infos['course_elearning_expiration'] != null ? $infos['course_elearning_expiration'] : null;
+            }
+
+            $data['awards']['text'] = $infos['course_awards_text'];
+            $data['awards']['icon'] = $infos['course_awards_icon'] != null ? json_decode($infos['course_awards_icon'], true) : null;
+
+
+            $data['payment_method'] = $infos['course_payment_method'];
+
+
+            $data['certificate']['messages']['success'] = $infos['course_certification_name_success'];
+            $data['certificate']['messages']['failure'] = $infos['course_certification_name_failure'];
+            $data['certificate']['type'] = $infos['course_certification_type'];
+            $data['certificate']['visible'] = $infos['course_certification_visible'] != null ? json_decode($infos['course_certification_visible'], true) : null;
+            $data['certificate']['icon'] = $infos['course_certification_icon'] != null ? json_decode($infos['course_certification_icon'], true) : null;
+
+            $data['students']['number'] = (int)$infos['course_students_number'];
+            $data['students']['text'] = $infos['course_students_text'];
+            $data['students']['visible'] = $infos['course_students_visible'] != null ? json_decode($infos['course_students_visible'], true) : null;
+            $data['students']['icon'] = $infos['course_students_icon'] != null ? json_decode($infos['course_students_icon'], true) : null;
+        }
+
+
+        return $data;
     }
 
     // Return seconds
