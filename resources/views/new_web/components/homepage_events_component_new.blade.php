@@ -116,7 +116,6 @@
 @endif
 
 @if($homepage["event_types"]->id == 2)
-<p>222222222222</p>
     <div class="row homepage-events mt-5">
         @foreach($elearningEvents as $data)
             @foreach($data['events'] as $event)

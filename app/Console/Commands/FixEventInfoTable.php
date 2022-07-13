@@ -98,17 +98,18 @@ class FixEventInfoTable extends Command
      
             }
            
-            if($paymentMethod != false){
+            
+            if($event->view_tpl == 'elearning_event' || $event->view_tpl == 'event'){
                 $payment = [
                 
                     "icon" => ["path" => null,"alt_text" => null],
                     'enabled' =>  'on'
                         
                 ];
-
+                
                 $requestData['payment'] = $payment;
             }
-
+      
             if($event->enroll){
                 $freeCourses = [
                     'icon' => ['path'=> null, 'alt_text' => null],
@@ -170,7 +171,7 @@ class FixEventInfoTable extends Command
     {
         $data = [];
 
-        switch($status){
+        /*switch($status){
             case 0:
                 $status = 'Open';
                 break;
@@ -188,7 +189,7 @@ class FixEventInfoTable extends Command
                 break;
             case 5:
                 $status = 'Waiting';
-        }
+        }*/
 
         $delivery = ($delivery = Delivery::find($delivery)) ? $delivery['name'] : null;
         $city = City::find($cityId);
@@ -285,13 +286,15 @@ class FixEventInfoTable extends Command
         }
 
         // Payment
-
+        
         if(isset($requestData['payment'])){
-            if(isset($requestData['payment']['paid'])){
+            
+            /*if(isset($requestData['payment']['paid'])){
                 $data['course_payment_method'] = 'paid';
             }else{
                 $data['course_payment_method'] = 'free';
-            }
+            }*/
+            $data['course_payment_method'] = 'paid';
         }else{
             $data['course_payment_method'] = 'free';
         }
@@ -370,7 +373,8 @@ class FixEventInfoTable extends Command
         $infos->course_inclass_dates = isset($event_info['course_inclass_dates']) ? $event_info['course_inclass_dates'] : null;
         $infos->course_inclass_times = isset($event_info['course_inclass_times']) ? $event_info['course_inclass_times'] : null;
         $infos->course_inclass_days = isset($event_info['course_inclass_days']) ? $event_info['course_inclass_days'] : null;
-        $infos->course_payment_method = (isset($event->paymentMethod) && count($event->paymentMethod) != 0) ? 'paid' : 'free';
+        //$infos->course_payment_method = (isset($event->paymentMethod) && count($event->paymentMethod) != 0) ? 'paid' : 'free';
+        $infos->course_payment_method = (isset($event_info['course_payment_method']) && $event_info['course_payment_method'] == 'paid') ? 'paid' : 'free';
         $infos->course_awards = (isset($event_info['course_awards_text']) && $event_info['course_awards_text'] != "") ? true : false;
         $infos->course_awards_text = $event_info['course_awards_text'];
         $infos->course_certification_name_failure = $event_info['course_certification_name_failure'];
