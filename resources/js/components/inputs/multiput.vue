@@ -19,17 +19,17 @@
         role="dialog">
             <div class="offcanvas-header">
                 <h5 class="offcanvas-title" id="mediaCanvasLabel"></h5>
-                <button :ref="(keyput + 'mediabtn')" type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                <button @click="$set(loadstart, (keyput + 'media'),  false)" :ref="(keyput + 'mediabtn')" type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </div> <!-- end offcanvas-header-->
 
             <div class="offcanvas-body" style="padding: 0px !important">
-                <media-manager v-if="loadstart[(keyput + 'media')]" mode="single" :loadstart="loadstart[(keyput + 'media')]" @updatedimg="updatedmedia($event,(keyput + 'media'))" :key="keyput"></media-manager>
+                <media-manager v-if="loadstart[(keyput + 'media')]" mode="single" :startingImage="value" :loadstart="loadstart[(keyput + 'media')]" @updatedimg="updatedmedia($event,(keyput + 'media'))" :key="keyput"></media-manager>
             </div> <!-- end offcanvas-body-->
         </div>
         <div class="text-center">
             <div class="d-grid text-center" v-if="value">
 
-                <img @click="$set(loadstart, (keyput + 'media'),  true)" data-bs-toggle="offcanvas" :data-bs-target="'#mediaCanvas' + keyput" :src="value.url" alt="image" class="img-fluid rounded" >
+                <img @click="$set(loadstart, (keyput + 'media'),  true)" data-bs-toggle="offcanvas" :data-bs-target="'#mediaCanvas' + keyput" :src="value.url + '?i=' + (Math.random() * 100000)" alt="image" class="img-fluid rounded" >
 
                 <i @click="removeImage()" class="mdi mdi-delete text-muted vertical-middle d-block fs-4 mt-1"></i>
 
@@ -106,7 +106,7 @@
             :height="300" 
             :id="keyput" 
             v-model="editorData"
-            api-key="a1kixngfovaz95jof9wofnkhlbcaheix0nf2uvz4zlyy26ia"
+            :api-key="tinymce"
             :init="{
                 plugins: 'preview importcss searchreplace autolink autosave save directionality code visualblocks visualchars fullscreen image link media template codesample table charmap pagebreak nonbreaking anchor insertdatetime advlist lists wordcount help charmap quickbars emoticons',
                 toolbar: 'fullscreen styles | undo redo | h1 h2 h3 h4 h5 h6 | bold italic underline strikethrough | fontfamily fontsize blocks | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | preview print | insertfile image media link anchor codesample | ltr rtl',
@@ -210,6 +210,7 @@ export default {
         return {
             loadstart: {},
             editorData: this.value,
+            tinymce: process.env.MIX_PUSHER_TINYMCE,
         };
     },
     methods: {

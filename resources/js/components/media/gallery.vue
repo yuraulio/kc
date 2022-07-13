@@ -13,11 +13,11 @@
             <h3 v-if="mainDysplayImage" class="text-truncate pb-1" :title="mainDysplayImage.name">{{mainDysplayImage.name}}</h3>
             <h3 v-else class="text-truncate pb-1" :title="opImage.name">{{opImage.name}}</h3>
         </div>
+
         <div class="col-auto">
-            <button @click="saveToClipboard()" class="btn btn-soft-primary"><i class="fa fa-clipboard" aria-hidden="true"></i></button>
-        </div>
-        <div class="col-auto">
-            <a :href="mainDysplayImage ? mainDysplayImage.url : opImage.url" target="_blank" class="btn btn-soft-primary"><i class="fa fa-arrow-right" aria-hidden="true"></i></a>
+            <button @click="switchToEdit()" class="btn btn-soft-primary">Edit</button>
+            <button @click="saveToClipboard()" class="btn btn-soft-primary">Copy URL to clipboard</button>
+            <a :href="mainDysplayImage ? mainDysplayImage.url : opImage.url" target="_blank" class="btn btn-soft-primary">Upen in new tab</a>
         </div>
     </div>
 
@@ -202,6 +202,10 @@ export default {
                 this.$modal.hide('gallery-modal');
                 this.$toast.success('New image selected!');
             }
+        },
+        switchToEdit() {
+            this.$modal.hide('gallery-modal');
+            this.$parent.$parent.setImage(this.opImage);
         },
         selectImg(img) {
             var subfiles = _.find(this.images, {

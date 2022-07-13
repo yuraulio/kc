@@ -371,6 +371,9 @@ export default {
         },
         mode: {
             default: null
+        },
+        startingImage: {
+            default: null
         }
     },
     mixins: [mediaMixin],
@@ -420,18 +423,42 @@ export default {
                 "svg",
             ],
             warning: false,
+            startingImageData: null,
         };
     },
     methods: {
         registerFile($event) {
             this.regFile = $event.target.files[0];
         },
+        setImage(image) {
+            if (image.parrent) {
+                this.userSelectedFiles(image);
+            } else {
+                axios
+                .get('/api/media_manager/getFile/' + image.id)
+                .then((response) => {
+                    if (response.status == 200) {
+                        // console.log("get file ", response.data.data);
+                        this.startingImageData = response.data.data;
+                        this.userSelectedFiles(this.startingImageData);
+                    }
+                })
+                .catch(error => {
+                    Swal.showValidationMessage(
+                        `Request failed: ${error}`
+                    )
+                })
+            }
+        }
 
     },
     mounted() {
         if (this.loadstart) {
-            // console.log('setted');
             this.getFolders();
+        }
+
+        if (this.startingImage) {
+            this.setImage(this.startingImage);
         }
     },
     beforeDestroy() {

@@ -75,6 +75,17 @@ class MediaController extends Controller
         }
     }
 
+    public function getFile(Request $request, $id)
+    {
+        try {
+            $file = MediaFile::whereId($id)->with(['user', 'subfiles', 'parrent'])->first();
+            return new MediaFileResource($file);
+        } catch (Exception $e) {
+            Log::error("Failed to get file. " . $e->getMessage());
+            return response()->json(['message' => $e->getMessage()], 400);
+        }
+    }
+
     /**
      * Add mediaFolder
      *

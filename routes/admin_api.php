@@ -71,6 +71,7 @@ Route::domain('admin.' . env('APP_DOMAIN'))->group(function () {
         Route::post('media_manager/edit_image', [MediaController::class, 'editImage']);
         Route::post('media_manager/upload_reg_file', [MediaController::class, 'uploadRegFile']);
         Route::get('media_manager/files', [MediaController::class, 'files']);
+        Route::get('media_manager/getFile/{id}', [MediaController::class, 'getFile']);
         Route::delete('media_manager/file/{id}', [MediaController::class, 'deleteFile']);
         Route::delete('media_manager/folder/{id}', [MediaController::class, 'deleteFolder']);
         Route::post('media_manager/folder/edit', [MediaController::class, 'editFolder']);
@@ -96,6 +97,7 @@ Route::group(['middleware' => ['auth.aboveauthor']], function () {
     Route::post('media_manager/edit_image', [MediaController::class, 'editImage']);
     Route::post('media_manager/upload_reg_file', [MediaController::class, 'uploadRegFile']);
     Route::get('media_manager/files', [MediaController::class, 'files']);
+    Route::get('media_manager/getFile/{id}', [MediaController::class, 'getFile']);
     Route::delete('media_manager/file/{id}', [MediaController::class, 'deleteFile']);
     Route::delete('media_manager/folder/{id}', [MediaController::class, 'deleteFolder']);
     Route::post('media_manager/folder/edit', [MediaController::class, 'editFolder']);
