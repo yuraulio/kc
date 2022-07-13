@@ -38,7 +38,7 @@
         <div class="container ps-4 pe-4">
             <div class="row">
                 @foreach ($data->columns as $column)
-                {{$column->template->key}}
+
                     <div class="col-md-{{ isset($column->width) ? ($column->width * 2) : (12 / count($data->columns)) }}">
                         {{--@includeIf("new_web.components." . $column->template->key)--}}
                         @if($column->template->key == 'course_details_component')
@@ -57,7 +57,6 @@
     </div>
 @else
     @foreach ($data->columns as $column)
-    {{'1'}}
         {{--@includeIf("new_web.components." . $column->template->key)--}}
         @if($column->template->key == 'course_details_component')
             @includeIf("new_web.components." . $column->template->key.'_new')

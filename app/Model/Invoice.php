@@ -383,44 +383,47 @@ class Invoice extends Model
 
             $data['description'] = '';
             if($this->event->first()->event_info != null){
-                $info = $this->event->first()->event_info->formedData();
-
-                $hours = $info['hours'];
-                $hours_visible = $hours['visible'];
-                $language_visible = $info['language']['visible'];
-                $certificate_visible = $info['certificate']['visible'];
-                $students_visible = $info['students']['visible'];
-
-                if(isset($info['inclass'])){
-                    $inclass_dates = $info['inclass']['dates'];
-                    $inclass_days = $info['inclass']['days'];
-                    $inclass_times = $info['inclass']['times'];
+                if($this->event->first()->event_info != null){
+                    $info = $this->event->first()->event_info->formedData();
                 }
 
-                if($hours_visible['invoice'] && $hours['hour'] != null){
+
+                $hours = isset($info['hours']) ? $info['hours'] : null;
+                $hours_visible = isset($hours['visible']) ? $hours['visible'] : null;
+                $language_visible = isset($info['language']['visible']) ? $info['language']['visible'] : null;
+                $certificate_visible = isset($info['certificate']['visible']) ? $info['certificate']['visible'] : null;
+                $students_visible = isset($info['students']['visible']) ? $info['students']['visible'] : null;
+
+                if(isset($info['inclass'])){
+                    $inclass_dates = isset($info['inclass']['dates']) ? $info['inclass']['dates'] : null;
+                    $inclass_days = isset($info['inclass']['days']) ? $info['inclass']['days'] : null;
+                    $inclass_times = isset($info['inclass']['times']) ? $info['inclass']['times'] : null;
+                }
+
+                if(isset($hours_visible['invoice']) && $hours_visible['invoice'] && isset($hours['hour']) && $hours['hour'] != null){
                     $data['description'] = $data['description'] .$hours['hour'].' '. ($hours['text'] != null ? $hours['text'] : '').', ';
                 }
 
 
-                if($language_visible['invoice'] && $info['language']['text'] != null){
+                if(isset($language_visible['invoice']) && $language_visible['invoice'] && isset($info['language']['text']) && $info['language']['text'] != null){
                     $data['description'] =  $data['description'] .$info['language']['text'].', ';
                 }
-                if($certificate_visible['invoice'] && $info['certificate']['type'] != null){
+                if(isset($certificate_visible['invoice']) && $certificate_visible['invoice'] && isset($info['certificate']['type']) && $info['certificate']['type'] != null){
                     $data['description'] =  $data['description'] . $info['certificate']['type'].', ';
                 }
 
-                if($students_visible['invoice'] && get_sum_students_course($event->category->first()) > (int)$info['students']['number']){
+                if(isset($students_visible['invoice']) && $students_visible['invoice'] && isset($info['students']['number']) && get_sum_students_course($event->category->first()) > (int)$info['students']['number']){
                     $data['description'] =  $data['description'] . get_sum_students_course($event->category->first()). ($info['students']['text'] != null ? $info['students']['text'].', ' : ', ');
                 }
 
                 if(isset($info['inclass'])){
-                    if($inclass_dates['visible']['invoice'] && $inclass_dates['text'] != null){
+                    if(isset($inclass_dates['visible']['invoice']) && $inclass_dates['visible']['invoice'] && $inclass_dates['text'] != null){
                         $data['description'] =  $data['description'] . $inclass_dates['text'] .', ';
                     }
-                    if($inclass_days['visible']['invoice'] && $inclass_days['text'] != null){
+                    if(isset($inclass_days['visible']['invoice']) && $inclass_days['visible']['invoice'] && $inclass_days['text'] != null){
                         $data['description'] =  $data['description'] . $inclass_days['text'].', ';
                     }
-                    if($inclass_times['visible']['invoice'] && $inclass_times['text'] != null){
+                    if(isset($inclass_times['visible']['invoice']) && $inclass_times['visible']['invoice'] && $inclass_times['text'] != null){
                         $data['description'] =  $data['description'] . $inclass_times['text'].', ';
                     }
 

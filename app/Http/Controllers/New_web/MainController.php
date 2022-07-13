@@ -78,7 +78,11 @@ class MainController extends Controller
                 $event = $modelSlug->slugable;
                 $page = Page::withoutGlobalScope("published")->whereType("Course page")->whereDynamic(true)->first();
                 $dynamicPageData = CMS::getEventDataNew($event);
-                $dynamicPageData['info'] = $event->event_info->formedData();
+
+                if($event->event_info != null){
+                    $dynamicPageData['info'] = $event->event_info->formedData();
+                }
+
             } elseif ($modelSlug && $modelSlug->slugable != null && get_class($modelSlug->slugable) == "App\Model\Instructor") {
                 $instructor = $modelSlug->slugable;
                 $page = Page::withoutGlobalScope("published")->whereType("Trainer page")->whereDynamic(true)->first();

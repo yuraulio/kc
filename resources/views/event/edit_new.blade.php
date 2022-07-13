@@ -285,7 +285,7 @@
 
                                                     <span data-infowrapper="hours" class="input-group-addon input-group-append input-icon-wrapper">
                                                         <span class="btn btn-outline-primary input-icon">
-                                                            @if($course_hours_icon != null && $course_hours_icon['path'] != null)
+                                                            @if(isset($course_hours_icon) && $course_hours_icon != null && $course_hours_icon['path'] != null)
                                                                 <img src="{{ asset($course_hours_icon['path']) }}"/>
                                                             @else
                                                                 <span class="fa fa-hourglass"></span>
@@ -410,7 +410,7 @@
 
                                         <div class="row">
                                             <?php
-                                                $visible_language = ($info != null && $info['course_language_visible']) ? json_decode($info['course_language_visible'], true) : null;
+                                                $visible_language = (isset($info['course_language_visible']) && $info != null && $info['course_language_visible']) ? json_decode($info['course_language_visible'], true) : null;
                                             ?>
                                             <label class="form-control-label col-12" for="input-hours">{{ __('Visible on:') }}</label>
 
@@ -527,7 +527,12 @@
                                                     </div>
                                                     <span class="col-2 input-icon-wrapper-city" data-infowrapper="inclass_city">
                                                         <span class="btn btn-outline-primary input-icon">
-                                                            <i class="fa fa-plane-departure"></i>
+
+                                                            @if(isset($course_inclass_city_icon) && $course_inclass_city_icon != null && $course_inclass_city_icon['path'] != null)
+                                                                <img src="{{ asset($course_inclass_city_icon['path']) }}"/>
+                                                            @else
+                                                                <i class="fa fa-plane-departure"></i>
+                                                            @endif
                                                         </span>
 
                                                     </span>
