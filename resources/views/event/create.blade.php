@@ -70,7 +70,7 @@
                                 </div>
                                 <div class="form-group{{ $errors->has('status') ? ' has-danger' : '' }} col-sm-12 col-md-6 col-lg-3">
 
-                                    <select name="status" id="input-status" class="form-control " placeholder="{{ __('Please select the status of this course') }}" >
+                                    <select name="status" id="input-status" class="form-control " placeholder="{{ __('Please select the status of this course') }}" required>
                                         <option selected disabled value="">Please select the status of this course</option>
                                         <option value="4">{{ __('My Account Only') }}</option>
                                         <option value="2">{{ __('Soldout') }}</option>

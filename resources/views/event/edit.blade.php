@@ -251,7 +251,7 @@
                                             <div class="form-group{{ $errors->has('status') ? ' has-danger' : '' }} col-sm-12 col-md-6 col-lg-3">
                                                 <input hidden name="old_status" value="{{$event['status']}}">
 
-                                                <select name="status" id="input-status" class="form-control " placeholder="{{ __('Please select the status of this course') }}" >
+                                                <select name="status" id="input-status" class="form-control " placeholder="{{ __('Please select the status of this course') }}" required>
                                                     <option selected disabled value="">Please select the status of this course</option>
                                                     <option <?= ($event['status'] == 4) ? "selected" : ''; ?> value="4">{{ __('My Account Only') }}</option>
                                                     <option <?= ($event['status'] == 2) ? "selected" : ''; ?> value="2">{{ __('Soldout') }}</option>
@@ -496,15 +496,16 @@
                                             <?php $eventCity = isset($event) && $event->city->first() ? $event->city->first()->id : -1 ?>
 
                                             <?php
-                                                if(isset($info['course_inclass_city_icon']) && $info['course_inclass_city_icon'] != null){
-                                                    $course_inclass_city_icon = json_decode($info['course_inclass_city_icon'], true);
+
+                                                if(isset($info['inclass']['city']['icon']) && $info['inclass']['city']['icon'] != null){
+                                                    $course_inclass_city_icon = $info['inclass']['city']['icon'];
                                                 }else{
                                                     $course_inclass_city_icon = null;
                                                 }
 
                                             ?>
 
-                                            <div class="col-12 delivery_child_wrapper <?= $event->is_inclass_course() ? '' : 'd-none' ?>">
+                                            <div class="col-12 delivery_child_wrapper <?= ($event->delivery->first()['id'] == 139 || $event->delivery->first()['id'] == 215) ? '' : 'd-none' ?>">
                                                 <div class="row delivery_city_wrapper <?= $event->delivery->first()['id'] == 215 ? 'd-none' : '' ?>">
                                                     <div style="display:flex;" class="col-9 col-sm-12 col-md-6 col-lg-3 form-group{{ $errors->has('city_id') ? ' has-danger' : '' }} ">
                                                         <!-- <div class="col-sm-12 col-md-6 col-lg-3 form-group{{ $errors->has('city_id') ? ' has-danger' : '' }} "> -->
@@ -522,7 +523,7 @@
                                                         <span class="btn btn-outline-primary input-icon">
 
                                                             @if(isset($course_inclass_city_icon) && $course_inclass_city_icon != null && $course_inclass_city_icon['path'] != null)
-                                                                <img src="{{ asset($course_inclass_city_icon['path']) }}"/>
+                                                                <img src="{{ asset($course_inclass_city_icon['path']) }}" alt="{{ $course_inclass_city_icon != null && $course_inclass_city_icon['alt_text'] != '' ? $course_inclass_city_icon['alt_text'] : '' }}"/>
                                                             @else
                                                                 <i class="fa fa-plane-departure"></i>
                                                             @endif
@@ -531,8 +532,8 @@
                                                     </span>
 
 
-                                                    <input type="hidden" value="{{ old('inclass_city_icon_path', ($course_inclass_city_icon != null && $course_inclass_city_icon['path'] != '') ? $course_hours_icon['path'] : '' ) }}" id="inclass_city_path" name="course[{{'delivery'}}][{{'inclass'}}][{{'city'}}][{{'icon'}}][{{'path'}}]">
-                                                    <input type="hidden" value="{{ old('inclass_city_icon_path', ($course_inclass_city_icon != null && $course_inclass_city_icon['alt_text'] != '') ? $course_hours_icon['alt_text'] : '' ) }}" id="inclass_city_alt_text" name="course[{{'delivery'}}][{{'inclass'}}][{{'city'}}][{{'icon'}}][{{'alt_text'}}]">
+                                                    <input type="hidden" value="{{ old('inclass_city_icon_path', ($course_inclass_city_icon != null && $course_inclass_city_icon['path'] != '') ? $course_inclass_city_icon['path'] : '' ) }}" id="inclass_city_path" name="course[{{'delivery'}}][{{'inclass'}}][{{'city'}}][{{'icon'}}][{{'path'}}]">
+                                                    <input type="hidden" value="{{ old('inclass_city_icon_alt_text', ($course_inclass_city_icon != null && $course_inclass_city_icon['alt_text'] != '') ? $course_inclass_city_icon['alt_text'] : '' ) }}" id="inclass_city_alt_text" name="course[{{'delivery'}}][{{'inclass'}}][{{'city'}}][{{'icon'}}][{{'alt_text'}}]">
 
 
 
@@ -804,11 +805,12 @@
 
                                                     <?php
 
-                                                        if(isset($info['course_free_access_icon']) && $info['course_free_access_icon'] != null){
-                                                            $course_free_access_icon = $info['course_free_access_icon'];
+                                                        if(isset($info['inclass']['elearning_access_icon']) && $info['inclass']['elearning_access_icon'] != null){
+                                                            $course_free_access_icon = $info['inclass']['elearning_access_icon'];
                                                         }else{
                                                             $course_free_access_icon = null;
                                                         }
+
                                                     ?>
 
                                                     <div class="form-group col-12">
@@ -956,8 +958,8 @@
 
                                             <?php
 
-                                                if(isset($info['course_payment_icon']) && $info['course_payment_icon'] != null){
-                                                    $course_payment_icon = json_decode($info['course_payment_icon'],true);
+                                                if(isset($info['payment_icon']) && $info['payment_icon'] != null){
+                                                    $course_payment_icon = $info['payment_icon'];
                                                 }else{
                                                     $course_payment_icon = null;
                                                 }
@@ -972,7 +974,7 @@
                                                         <span class="btn btn-outline-primary input-icon">
 
                                                             @if($course_payment_icon != null && $course_payment_icon['path'] != null)
-                                                                <img src="{{ asset($course_payment_icon['path']) }}"/>
+                                                                <img src="{{ asset($course_payment_icon['path']) }}" alt="{{ (isset($course_payment_icon['alt_text']) && $course_payment_icon['alt_text'] != null) ? $course_payment_icon['alt_text'] : '' }}"/>
                                                             @else
                                                                 <i class="ni ni-credit-card"></i>
                                                             @endif
@@ -1017,8 +1019,8 @@
 
                                             <?php
 
-                                                if(isset($info['course_partner_icon']) && $info['course_partner_icon'] != null){
-                                                    $course_partner_icon = json_decode($info['course_partner_icon'],true);
+                                                if(isset($info['partner']['icon']) && $info['partner']['icon'] != null){
+                                                    $course_partner_icon = $info['partner']['icon'];
                                                 }else{
                                                     $course_partner_icon = null;
                                                 }
@@ -1127,8 +1129,8 @@
                                         <div class="row course-manager-wrapper">
                                             <?php
 
-                                                if(isset($info['course_manager_icon']) && $info['course_manager_icon'] != null){
-                                                    $course_manager_icon = json_decode($info['course_manager_icon'], true);
+                                                if(isset($info['manager']['icon']) && $info['manager']['icon'] != null){
+                                                    $course_manager_icon = $info['manager']['icon'];
                                                 }else{
                                                     $course_manager_icon = null;
                                                 }
@@ -1140,8 +1142,8 @@
 
                                                     <span data-infowrapper="manager" class="input-group-addon input-group-append input-icon-wrapper">
                                                         <span class="btn btn-outline-primary input-icon">
-                                                            @if($course_manager_icon  != null && $course_manager_icon ['path'] != null)
-                                                                <img src="{{ asset($course_manager_icon ['path']) }}"/>
+                                                            @if($course_manager_icon != null && $course_manager_icon['path'] != null)
+                                                                <img src="{{ asset($course_manager_icon['path']) }}" alt="{{ (isset($course_manager_icon['alt_text']) && $course_manager_icon['alt_text'] != null) ? $course_manager_icon['alt_text'] : ''  }}"/>
                                                             @else
                                                                 <span class="fa fa-calendar"></span>
                                                             @endif
@@ -1243,6 +1245,7 @@
                                         <div class="row course-certification-wrapper">
 
                                             <?php
+
                                                 if(isset($info['certificate']['icon']) && $info['certificate']['icon'] != null){
                                                     $course_certification_icon = $info['certificate']['icon'];
                                                 }else{
@@ -1287,7 +1290,7 @@
 
 
 
-                                            <div class="form-group col-12 course-certification-visible-wrapper {{ ($info != null && isset($info['course_certification_name_success'])) ? '' : 'd-none' }}">
+                                            <div class="form-group col-12 course-certification-visible-wrapper {{ (isset($info['certificate']['messages']['success']) && $info['certificate']['messages']['success'] != null) ? '' : 'd-none' }}">
                                                 <div class="row">
                                                     <div class="col-sm-12 col-md-6 form-group{{ $errors->has('fb_') ? ' has-danger' : '' }}">
                                                         <label class="form-control-label" for="input-hours">{{ __('Certificate Title') }}</label>

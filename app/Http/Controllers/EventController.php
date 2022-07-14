@@ -335,6 +335,7 @@ class EventController extends Controller
         //return redirect()->route('events.index')->withStatus(__('Event successfully created.'));
     }
 
+
     /**
      * Display the specified resource.
      *
@@ -643,6 +644,8 @@ class EventController extends Controller
         //return redirect()->route('events.index')->withStatus(__('Event successfully updated.'));
     }
 
+
+
     public function calculateTotalHours($id)
     {
         $event = Event::find($id);
@@ -660,6 +663,468 @@ class EventController extends Controller
 
     }
 
+
+
+
+
+    public function prepareInfo($requestData, $status, $deliveryId, $partner, $syllabus, $cityId, $event)
+    {
+        $data = [];
+
+
+        //$delivery = Delivery::find($delivery)['name'];
+        $city = City::find($cityId);
+
+        $data['course_status'] = $status;
+        $data['course_delivery'] = $deliveryId;
+        $data['course_hours_text'] = $requestData['hours']['text'];
+        $data['course_hours_hour'] = $requestData['hours']['hour'];
+
+        $data['course_partner'] = $partner;
+        $data['course_manager'] = ($syllabus != null) ? true : false;
+
+
+        // Delivery Inclass City
+        if($deliveryId == 139){
+
+
+            //////////////////////////
+
+            if(isset($requestData['delivery']['inclass'])){
+                $data['course_inclass_absences'] = $requestData['delivery']['inclass']['absences'];
+                $data['course_inclass_city'] = ($city) ? $city->name : null;
+                $data['course_inclass_city_icon'] = json_encode($requestData['delivery']['inclass']['city']['icon']);
+
+                $dates = [];
+                $days = [];
+                $times = [];
+
+
+                // Dates
+                if(isset($requestData['delivery']['inclass']['dates'])){
+                    $dates['text'] = $requestData['delivery']['inclass']['dates']['text'];
+
+                    if(isset($requestData['delivery']['inclass']['dates']['visible'])){
+                        $visible_loaded_data = $requestData['delivery']['inclass']['dates']['visible'];
+                        $dates['visible'] = $this->prepareVisibleData($visible_loaded_data);
+                    }else{
+                        $dates['visible'] = $this->prepareVisibleData();
+                    }
+
+                    $dates['icon'] = $requestData['delivery']['inclass']['dates']['icon'];
+
+
+                }
+                $data['course_inclass_dates'] = json_encode($dates);
+
+                // Days
+                if(isset($requestData['delivery']['inclass']['day'])){
+                    $days['text'] = $requestData['delivery']['inclass']['day']['text'];
+
+                    if(isset($requestData['delivery']['inclass']['day']['visible'])){
+                        $visible_loaded_data = $requestData['delivery']['inclass']['day']['visible'];
+                        $days['visible'] = $this->prepareVisibleData($visible_loaded_data);
+                    }else{
+                        $days['visible'] = $this->prepareVisibleData();
+                    }
+
+                    $days['icon'] = $requestData['delivery']['inclass']['day']['icon'];
+                }
+                $data['course_inclass_days'] = json_encode($days);
+
+                // Times
+                if(isset($requestData['delivery']['inclass']['times'])){
+                    $times['text'] = $requestData['delivery']['inclass']['times']['text'];
+
+                    if(isset($requestData['delivery']['inclass']['times']['visible'])){
+                        $visible_loaded_data = $requestData['delivery']['inclass']['times']['visible'];
+                        $times['visible'] = $this->prepareVisibleData($visible_loaded_data);
+                    }else{
+                        $times['visible'] = $this->prepareVisibleData();
+                    }
+
+
+                    $times['icon'] = $requestData['delivery']['inclass']['times']['icon'];
+                }
+                $data['course_inclass_times'] = json_encode($times);
+            }
+
+        }else if($deliveryId == 143){
+            $visible_loaded_data = isset($requestData['delivery']['elearning']['visible']) ? $requestData['delivery']['elearning']['visible'] : null;
+            $data['course_elearning_visible'] = json_encode($this->prepareVisibleData($visible_loaded_data));
+            $data['course_elearning_icon'] = $requestData['delivery']['elearning']['icon'] != null ?  json_encode($requestData['delivery']['elearning']['icon']) : null;
+            $data['course_elearning_expiration'] = (isset($requestData['delivery']['elearning']['expiration']) && $requestData['delivery']['elearning']['expiration'] != null) ? $requestData['delivery']['elearning']['expiration'] : null;
+            $data['course_elearning_text'] = (isset($requestData['delivery']['elearning']['text']) && $requestData['delivery']['elearning']['text'] != null) ? $requestData['delivery']['elearning']['text'] : null;
+
+            if(isset($requestData['delivery']['inclass'])){
+                $data['course_inclass_absences'] = null;
+                $data['course_inclass_city'] = null;
+                $data['course_inclass_city_icon'] = json_encode($requestData['delivery']['inclass']['city']['icon']);
+
+                $dates = [];
+                $days = [];
+                $times = [];
+
+
+                // Dates
+                if(isset($requestData['delivery']['inclass']['dates'])){
+                    $dates['text'] = null;
+
+                    if(isset($requestData['delivery']['inclass']['dates']['visible'])){
+                        $visible_loaded_data = $requestData['delivery']['inclass']['dates']['visible'];
+                        $dates['visible'] = $this->prepareVisibleData($visible_loaded_data);
+                    }else{
+                        $dates['visible'] = $this->prepareVisibleData();
+                    }
+
+                    $dates['icon'] = $requestData['delivery']['inclass']['dates']['icon'];
+
+
+                }
+                $data['course_inclass_dates'] = json_encode($dates);
+
+                // Days
+                if(isset($requestData['delivery']['inclass']['day'])){
+                    $days['text'] = null;
+
+                    if(isset($requestData['delivery']['inclass']['day']['visible'])){
+                        $visible_loaded_data = $requestData['delivery']['inclass']['day']['visible'];
+                        $days['visible'] = $this->prepareVisibleData($visible_loaded_data);
+                    }else{
+                        $days['visible'] = $this->prepareVisibleData();
+                    }
+
+                    $days['icon'] = $requestData['delivery']['inclass']['day']['icon'];
+                }
+                $data['course_inclass_days'] = json_encode($days);
+
+                // Times
+                if(isset($requestData['delivery']['inclass']['times'])){
+                    $times['text'] = null;
+
+                    if(isset($requestData['delivery']['inclass']['times']['visible'])){
+                        $visible_loaded_data = $requestData['delivery']['inclass']['times']['visible'];
+                        $times['visible'] = $this->prepareVisibleData($visible_loaded_data);
+                    }else{
+                        $times['visible'] = $this->prepareVisibleData();
+                    }
+
+
+                    $times['icon'] = $requestData['delivery']['inclass']['times']['icon'];
+                }
+                $data['course_inclass_times'] = json_encode($times);
+            }
+        }else if($deliveryId == 215){
+            if(isset($requestData['delivery']['inclass'])){
+                $data['course_inclass_absences'] = $requestData['delivery']['inclass']['absences'];
+                $data['course_inclass_city'] = null;
+                $data['course_inclass_city_icon'] = json_encode($requestData['delivery']['inclass']['city']['icon']);
+
+                $dates = [];
+                $days = [];
+                $times = [];
+
+
+                // Dates
+                if(isset($requestData['delivery']['inclass']['dates'])){
+                    $dates['text'] = $requestData['delivery']['inclass']['dates']['text'];
+
+                    if(isset($requestData['delivery']['inclass']['dates']['visible'])){
+                        $visible_loaded_data = $requestData['delivery']['inclass']['dates']['visible'];
+                        $dates['visible'] = $this->prepareVisibleData($visible_loaded_data);
+                    }else{
+                        $dates['visible'] = $this->prepareVisibleData();
+                    }
+
+                    $dates['icon'] = $requestData['delivery']['inclass']['dates']['icon'];
+
+
+                }
+                $data['course_inclass_dates'] = json_encode($dates);
+
+                // Days
+                if(isset($requestData['delivery']['inclass']['day'])){
+                    $days['text'] = $requestData['delivery']['inclass']['day']['text'];
+
+                    if(isset($requestData['delivery']['inclass']['day']['visible'])){
+                        $visible_loaded_data = $requestData['delivery']['inclass']['day']['visible'];
+                        $days['visible'] = $this->prepareVisibleData($visible_loaded_data);
+                    }else{
+                        $days['visible'] = $this->prepareVisibleData();
+                    }
+
+                    $days['icon'] = $requestData['delivery']['inclass']['day']['icon'];
+                }
+                $data['course_inclass_days'] = json_encode($days);
+
+                // Times
+                if(isset($requestData['delivery']['inclass']['times'])){
+                    $times['text'] = $requestData['delivery']['inclass']['times']['text'];
+
+                    if(isset($requestData['delivery']['inclass']['times']['visible'])){
+                        $visible_loaded_data = $requestData['delivery']['inclass']['times']['visible'];
+                        $times['visible'] = $this->prepareVisibleData($visible_loaded_data);
+                    }else{
+                        $times['visible'] = $this->prepareVisibleData();
+                    }
+
+
+                    $times['icon'] = $requestData['delivery']['inclass']['times']['icon'];
+                }
+                $data['course_inclass_times'] = json_encode($times);
+            }
+        }
+
+
+        /////////////
+
+        // Course
+        if(isset($requestData['hours']['visible'])){
+
+            $visible_loaded_data = $requestData['hours']['visible'];
+            $data['course_hours_visible'] = json_encode($this->prepareVisibleData($visible_loaded_data));
+
+        }else{
+            $data['course_hours_visible'] = json_encode($this->prepareVisibleData());
+        }
+
+
+        $data['course_hours_icon'] = json_encode($requestData['hours']['icon']);
+        /////////////////
+
+
+        // Language
+        $data['course_language'] = $requestData['language']['text'];
+        if(isset($requestData['language']['visible'])){
+
+            $visible_loaded_data = $requestData['language']['visible'];
+            $data['course_language_visible'] = json_encode($this->prepareVisibleData($visible_loaded_data));
+
+        }else{
+            $data['course_language_visible'] = json_encode($this->prepareVisibleData());
+        }
+
+        $data['course_language_icon'] = json_encode($requestData['language']['icon']);
+        ///////////////
+
+        // Partner
+
+        $data['course_partner_icon'] = json_encode($requestData['partner']['icon']);
+
+
+        // Manager
+
+        $data['course_manager_icon'] = json_encode($requestData['manager']['icon']);
+
+        //////////////////////////
+
+
+        if($deliveryId == 143){
+            // Free E-learning
+            $data['course_elearning_access'] = null;
+
+            $data['course_elearning_access_icon'] = json_encode($requestData['free_courses']['icon']);
+        }else{
+            // Free E-learning
+            if(isset($requestData['free_courses']['list'])){
+                $data['course_elearning_access'] = json_encode($requestData['free_courses']['list']);
+            }else{
+                $data['course_elearning_access'] = null;
+            }
+
+            $data['course_elearning_access_icon'] = json_encode($requestData['free_courses']['icon']);
+        }
+
+
+        // Payment
+
+        if(isset($requestData['payment'])){
+            if(isset($requestData['payment']['paid'])){
+                $data['course_payment_method'] = 'paid';
+            }else{
+                $data['course_payment_method'] = 'free';
+            }
+        }else{
+            $data['course_payment_method'] = 'free';
+        }
+
+        if(isset($requestData['payment'])){
+            $data['course_payment_icon'] = json_encode($requestData['payment']['icon']);
+        }
+
+
+
+        // Award
+        if(isset($requestData['awards'])){
+
+            $data['course_awards'] = true;
+            $data['course_awards_text'] = $requestData['awards']['text'];
+
+        }else{
+            $data['course_awards'] = false;
+            $data['course_awards_text'] = null;
+        }
+
+        $data['course_awards_icon'] = json_encode($requestData['awards']['icon']);
+
+
+
+        // Certificate
+        if(isset($requestData['certificate'])){
+            $data['course_certification_name_success'] = $requestData['certificate']['success_text'];
+            $data['course_certification_name_failure'] = $requestData['certificate']['failure_text'];
+            $data['course_certification_type'] = $requestData['certificate']['type'];
+
+            if(isset($requestData['certificate']['visible'])){
+
+                $visible_loaded_data = $requestData['certificate']['visible'];
+                $data['course_certificate_visible'] = json_encode($this->prepareVisibleData($visible_loaded_data));
+
+            }else{
+                $data['course_certificate_visible'] = json_encode($this->prepareVisibleData());
+            }
+
+            //dd($requestData['certificate']);
+
+            $data['course_certificate_icon'] = json_encode($requestData['certificate']['icon']);
+        }
+
+
+
+        // Students
+        if(isset($requestData['students'])){
+            $data['course_students_number'] = $requestData['students']['count_start'];
+            $data['course_students_text'] = $requestData['students']['text'];
+
+            if(isset($requestData['students']['visible'])){
+
+                $visible_loaded_data = $requestData['students']['visible'];
+                $data['course_students_visible'] = json_encode($this->prepareVisibleData($visible_loaded_data));
+
+            }else{
+                $data['course_students_visible'] = json_encode($this->prepareVisibleData());
+            }
+
+            $data['course_students_icon'] = json_encode($requestData['students']['icon']);
+        }
+
+
+        return $data;
+
+    }
+
+    public function prepareVisibleData($data = false)
+    {
+        $visible_returned_data = ['landing' => 0, 'home' => 0, 'list' => 0, 'invoice' => 0, 'emails' => 0];
+
+        if(!$data){
+            return $visible_returned_data;
+        }
+
+        foreach($data as $key => $item){
+            if(in_array($item,$data)){
+                $visible_returned_data[$key] = 1;
+            }
+        }
+
+        return $visible_returned_data;
+    }
+    public function updateEventInfo($event_info, $event_id)
+    {
+        //dd($event_info);
+        $event = Event::find($event_id);
+
+        //dd($event->paymentMethod);
+
+        $info = $event->event_info();
+
+
+        if($info == null || $info == '[]'){
+            $infos = new EventInfo();
+            $infos->event_id = $event->id;
+        }else{
+            $infos = EventInfo::where('event_id', $event_id)->first();
+        }
+
+
+        $infos->course_status = $event_info['course_status'];
+
+        $infos->course_hours = $event_info['course_hours_hour'];
+        $infos->course_hours_text = $event_info['course_hours_text'];
+        $infos->course_hours_visible = $event_info['course_hours_visible'];
+        $infos->course_hours_icon = $event_info['course_hours_icon'];
+
+        $infos->course_language = $event_info['course_language'];
+        $infos->course_language_visible = $event_info['course_language_visible'];
+        $infos->course_language_icon = $event_info['course_language_icon'];
+
+        $infos->course_partner = $event_info['course_partner'];
+        $infos->course_partner_icon = $event_info['course_partner_icon'];
+
+        $infos->course_manager = $event_info['course_manager'];
+        $infos->course_manager_icon = $event_info['course_manager_icon'];
+
+        $infos->course_delivery = $event_info['course_delivery'];
+
+
+        // if($event->is_inclass_course()){
+        //     $infos->course_inclass_absences = $event_info['course_inclass_absences'];
+
+        //     $infos->course_inclass_city = $event_info['course_inclass_city'];
+        //     $infos->course_inclass_city_icon = $event_info['course_inclass_city_icon'];
+        //     $infos->course_inclass_dates = $event_info['course_inclass_dates'];
+        //     $infos->course_inclass_times = $event_info['course_inclass_times'];
+        //     $infos->course_inclass_days = $event_info['course_inclass_days'];
+        // }else if($event->is_elearning_course()){
+        //     $infos->course_elearning_visible = $event_info['course_elearning_visible'];
+        //     $infos->course_elearning_icon = $event_info['course_elearning_icon'];
+        //     $infos->course_elearning_expiration = $event_info['course_elearning_expiration'];
+        //     $infos->course_elearning_text = $event_info['course_elearning_text'];
+        // }
+
+        $infos->course_inclass_absences = $event_info['course_inclass_absences'];
+        $infos->course_inclass_city = $event_info['course_inclass_city'];
+        $infos->course_inclass_city_icon = $event_info['course_inclass_city_icon'];
+        $infos->course_inclass_dates = $event_info['course_inclass_dates'];
+        $infos->course_inclass_times = $event_info['course_inclass_times'];
+        $infos->course_inclass_days = $event_info['course_inclass_days'];
+        $infos->course_elearning_visible = $event_info['course_elearning_visible'];
+        $infos->course_elearning_icon = $event_info['course_elearning_icon'];
+        $infos->course_elearning_expiration = $event_info['course_elearning_expiration'];
+        $infos->course_elearning_text = $event_info['course_elearning_text'];
+
+
+        if($event->paymentMethod()->first()){
+            $infos->course_payment_method = (isset($event->paymentMethod) && count($event->paymentMethod) != 0) ? 'paid' : 'free';
+            $infos->course_payment_icon = $event_info['course_payment_icon'];
+        }
+
+
+        $infos->course_awards = (isset($event_info['course_awards_text']) && $event_info['course_awards_text'] != "") ? true : false;
+        $infos->course_awards_text = $event_info['course_awards_text'];
+        $infos->course_awards_icon = $event_info['course_awards_icon'];
+
+        $infos->course_certification_name_success = $event_info['course_certification_name_success'];
+        $infos->course_certification_name_failure = $event_info['course_certification_name_failure'];
+        $infos->course_certification_type = $event_info['course_certification_type'];
+        $infos->course_certification_visible = $event_info['course_certificate_visible'];
+        $infos->course_certification_icon = $event_info['course_certificate_icon'];
+
+        $infos->course_students_number = $event_info['course_students_number'];
+        $infos->course_students_text = $event_info['course_students_text'];
+        $infos->course_students_visible = $event_info['course_students_visible'];
+        $infos->course_students_icon = $event_info['course_students_icon'];
+
+        $infos->course_elearning_access = $event_info['course_elearning_access'];
+        $infos->course_elearning_access_icon = $event_info['course_elearning_access_icon'];
+
+        if($info == null || $info == '[]'){
+            $infos->save();
+        }else{
+            $infos->update();
+        }
+
+    }
 
     /**
      * Remove the specified resource from storage.

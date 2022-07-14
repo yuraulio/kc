@@ -764,6 +764,7 @@ class Event extends Model
                 $data['inclass']['times'] = ($infos['course_inclass_times'] != null && $infos['course_inclass_times'] != '[]') ? json_decode($infos['course_inclass_times'], true) : null;
 
                 $data['inclass']['elearning_access'] = ($infos['course_elearning_access'] != null) ? json_decode($infos['course_elearning_access'], true) : null;
+                $data['inclass']['elearning_access_icon'] = ($infos['course_elearning_access_icon'] != null) ? json_decode($infos['course_elearning_access_icon'], true) : null;
             }else if($this->is_elearning_course()){
                 $data['elearning']['visible'] = $infos['course_elearning_visible'] != null ? json_decode($infos['course_elearning_visible'], true) : null;
                 $data['elearning']['icon'] = $infos['course_elearning_icon'] != null ? json_decode($infos['course_elearning_icon'], true) : null;
@@ -776,6 +777,14 @@ class Event extends Model
 
 
             $data['payment_method'] = $infos['course_payment_method'];
+            $data['payment_icon'] = $infos['course_payment_icon'] != null ? json_decode($infos['course_payment_icon'], true) : null;
+
+
+            $data['partner']['status'] = $infos['course_partner'];
+            $data['partner']['icon'] = $infos['course_partner_icon'] != null ? json_decode($infos['course_partner_icon'], true) : null;
+
+            $data['manager']['status'] = $infos['course_manager'];
+            $data['manager']['icon'] = $infos['course_manager_icon'] != null ? json_decode($infos['course_manager_icon'], true) : null;
 
 
             $data['certificate']['messages']['success'] = $infos['course_certification_name_success'];
