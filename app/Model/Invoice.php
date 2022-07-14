@@ -382,10 +382,10 @@ class Invoice extends Model
             //$data['description'] = $this->event->first()->summary1->where('section','date')->first() ? $this->event->first()->summary1->where('section','date')->first()->title : '';
 
             $data['description'] = '';
-            if($this->event->first()->event_info != null){
-                if($this->event->first()->event_info != null){
-                    $info = $this->event->first()->event_info->formedData();
-                }
+            if($this->event->first()){
+                
+                $info = $this->event->first()->event_info();
+                
 
 
                 $hours = isset($info['hours']) ? $info['hours'] : null;

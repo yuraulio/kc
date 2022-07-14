@@ -424,17 +424,29 @@ class InfoController extends Controller
 
             if ($thisevent) {
 
+                $eventInfo = $thisevent->event_info ? $thisevent->event_info->formedData() : []; 
+
                 $paymentMethodId = $thisevent->paymentMethod->first() ? $thisevent->paymentMethod->first()->id : 0;
                 $stripe = ($thisevent->paymentMethod->first() && $thisevent->paymentMethod->first()->id !== 1);
                 if($thisevent->view_tpl === 'elearning_event'){
 
                     $elearning = true;
                     $eventslug = $thisevent->slug;
+                }else{
+                    
                 }
               //  dd($eventslug);
                 $eventname = $thisevent->title;
                 $eventcity = '';//$thisevent->categories->where('parent_id',9)->first()->name;
-                $eventdate = $thisevent->summary1->where('section','date')->first() ? $thisevent->summary1->where('section','date')->first()->title : '';
+                //$eventdate = $thisevent->summary1->where('section','date')->first() ? $thisevent->summary1->where('section','date')->first()->title : '';
+
+               
+                $visibleDates = isset($eventInfo['inclass']['dates']['visible']['emails']) ? $eventInfo['inclass']['dates']['visible']['emails'] : null;
+                if($visibleDates){
+                    $eventdate = isset($eventInfo['inclass']['dates']['text']) ? $eventInfo['inclass']['dates']['text'] : null;  
+                }
+                
+                
                 if($thisevent->city->first() != null){
                     $eventcity = $thisevent->city->first()->name;
                 }
@@ -442,7 +454,7 @@ class InfoController extends Controller
             }
             else {
                 $eventname = 'EventName';
-                $eventdate = 'EventDate';
+                $eventdate = '';
                
                 $eventcity  = 'EventCity';
             }

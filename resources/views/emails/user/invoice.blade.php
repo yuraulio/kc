@@ -18,7 +18,7 @@
                                        <td class="r4-i" style="background-color: #ffffff;">
                                           <table width="100%" cellspacing="0" cellpadding="0" border="0" role="presentation">
                                              <tr>
-                                                <th width="100%" valign="top" class="r5-c">
+                                                <th width="100%" valign="top" class="r5-c" style="font-weight: normal;">
                                                    <table cellspacing="0" cellpadding="0" border="0" role="presentation" width="100%" class="r6-o" style="table-layout: fixed; width: 100%;">
                                                       <!-- -->
                                                       <tr>
@@ -67,7 +67,7 @@
                                        <td class="r11-i" style="background-color: #ffffff;">
                                           <table width="100%" cellspacing="0" cellpadding="0" border="0" role="presentation">
                                              <tr>
-                                                <th width="100%" valign="top" class="r5-c">
+                                                <th width="100%" valign="top" class="r5-c" style="font-weight: normal;">
                                                    <table cellspacing="0" cellpadding="0" border="0" role="presentation" width="100%" class="r6-o" style="table-layout: fixed; width: 100%;">
                                                       <!-- -->
                                                       <tr>
@@ -83,7 +83,7 @@
                                                                         <tr>
                                                                            <td align="left" valign="top" class="r14-i nl2go-default-textstyle" style="color: #3b3f44; font-family: arial,helvetica,sans-serif; font-size: 16px; line-height: 1.5; text-align: left;">
                                                                               <div>
-                                                                                 <h2 class="default-heading2" style="color: #1F2D3D; font-family: arial,helvetica,sans-serif; font-size: 32px; margin: 0px;"><span style="font-family: Tahoma, geneva, sans-serif;">{{$firstName}}</span></h2>
+                                                                                 <h2 class="default-heading2" style="margin: 0; color: #1F2D3D; font-family: arial,helvetica,sans-serif; font-size: 32px;"><span style="font-family: Tahoma, geneva, sans-serif;">{{$firstName}}</span></h2>
                                                                               </div>
                                                                            </td>
                                                                         </tr>
@@ -99,7 +99,7 @@
                                                                         <tr>
                                                                            <td align="left" valign="top" class="r15-i nl2go-default-textstyle" style="color: #3b3f44; font-family: arial,helvetica,sans-serif; font-size: 16px; line-height: 1.5; text-align: left;">
                                                                               <div>
-                                                                                 <p style="margin: 0px;"><span style="font-family: Tahoma, geneva, sans-serif;">Thank you very much for your successful payment on <strong>{{$eventTitle}}</strong>. Download receipt for tax purposes.</span></p>
+                                                                                 <p style="margin: 0;"><span style="font-family: Tahoma, geneva, sans-serif;">Thank you very much for your successful payment on <strong>{{$eventTitle}}</strong>. </span><a href="{{url('/')}}/myinvoice/{{$slugInvoice}}" target="_blank" style="color: #0092ff; text-decoration: underline;"><span style="font-family: Tahoma, geneva, sans-serif;">Download your receipt</span></a><span style="font-family: Tahoma, geneva, sans-serif;"> for tax purposes.</span></p>
                                                                               </div>
                                                                            </td>
                                                                         </tr>
@@ -111,15 +111,15 @@
                                                                </tr>
                                                                <tr>
                                                                   <td class="r12-c" align="left">
-                                                                     <table cellspacing="0" cellpadding="0" border="0" role="presentation" width="280" class="r16-o" style="table-layout: fixed; width: 280px;">
+                                                                     <table cellspacing="0" cellpadding="0" border="0" role="presentation" width="290" class="r16-o" style="table-layout: fixed; width: 290px;">
                                                                         <tr class="nl2go-responsive-hide">
                                                                            <td height="15" style="font-size: 15px; line-height: 15px;">­</td>
                                                                         </tr>
                                                                         <tr>
                                                                            <td height="18" align="center" valign="top" class="r17-i nl2go-default-textstyle" style="color: #3b3f44; font-family: arial,helvetica,sans-serif; font-size: 16px; line-height: 1.5;">
-                                                                            
-                                                                              <a href="{{url('/')}}/myinvoice/{{$slugInvoice}}" class="r18-r default-button" target="_blank" data-btn="1" style="line-height: 1.15; text-decoration: none; border-style: solid; display: inline-block; -webkit-text-size-adjust: none; mso-hide: all; background-color: #c8d151; border-color: #c8d151; border-radius: 4px; border-width: 0px; color: #ffffff; font-family: arial,helvetica,sans-serif; font-size: 16px; height: 18px; padding-bottom: 12px; padding-left: 5px; padding-right: 5px; padding-top: 12px; width: 270px;">
-                                                                                 <p style="margin: 0px;"><span style="color: #000000;"><strong>Download your receipt</strong></span></p>
+                                                               
+                                                                              <a href="{{url('/')}}/myinvoice/{{$slugInvoice}}" class="r18-r default-button" target="_blank" data-btn="1" style="font-style: normal; font-weight: normal; line-height: 1.15; text-decoration: none; border-style: solid; display: inline-block; -webkit-text-size-adjust: none; mso-hide: all; background-color: #c8d151; border-color: #c8d151; border-radius: 4px; border-width: 0px; color: #ffffff; font-family: arial,helvetica,sans-serif; font-size: 16px; height: 18px; padding-bottom: 12px; padding-left: 5px; padding-right: 5px; padding-top: 12px; width: 280px;">
+                                                                                 <p style="margin: 0;"><span style="color: #000000;"><strong>Download your receipt</strong></span></p>
                                                                               </a>
                                                                               
                                                                            </td>
@@ -151,6 +151,6 @@
                   </tr>
                </table>
             </td>
-</tr>
+         </tr>
 @stop
        

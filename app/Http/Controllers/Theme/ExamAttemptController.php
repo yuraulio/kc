@@ -399,11 +399,24 @@ class ExamAttemptController extends Controller
                     }
                 }
 
+                $certificateTitle = $eventType->title;
+                //dd($certificate->event->first()->event_info()['certificate']);
+                if($eventType && isset($eventType->event_info()['certificate']['messages'])){
+                  
+                  if($success && isset($eventType->event_info()['certificate']['messages']['success'])){
+                    
+                    $certificateTitle = $eventType->event_info()['certificate']['messages']['success'];
+                  }else if(!$success && isset($eventType->event_info()['certificate']['messages']['failure'])){
+                    
+                    $certificateTitle = $eventType->event_info()['certificate']['messages']['failure'];
+                  }
+        
+                }
 
                 if( ($cert = $eventType->userHasCertificate($student->id)->first()) ){
 
                     $cert->success = $success;
-                    $cert->certificate_title = $success ? $eventType->certificate_title : $eventType->title;
+                    $cert->certificate_title = $certificateTitle;
                     //$createDate = strtotime(date('Y-m-d'));
                     ///$cert->create_date = $createDate;
                     $cert->expiration_date = strtotime(date('Y-m-d', strtotime('+24 months', strtotime(date('Y-m-d')))));
@@ -421,7 +434,7 @@ class ExamAttemptController extends Controller
                     $cert->firstname = $student->firstname;
                     $cert->lastname = $student->lastname;
                     $cert->credential = get_certifation_crendetial();
-                    $cert->certificate_title = $success ? $eventType->certificate_title : $eventType->title;
+                    $cert->certificate_title = $certificateTitle;
                     $createDate = strtotime(date('Y-m-d'));
                     $cert->create_date = $createDate;
                     $cert->expiration_date = strtotime(date('Y-m-d', strtotime('+24 months', strtotime(date('Y-m-d')))));
