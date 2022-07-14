@@ -350,7 +350,7 @@ class FixEventInfoTable extends Command
 
         //dd($event->paymentMethod);
 
-        $info = $event->event_info;
+        $info = $event->event_info1;
 
         if($info === null){
             $infos = new EventInfo();

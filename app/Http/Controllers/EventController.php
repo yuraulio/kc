@@ -1199,7 +1199,7 @@ class EventController extends Controller
         $newEvent->createSlug($newEvent->title);
         //$event->createMetas($request->all());
         //dd($event->lessons);
-        $event->load('category','faqs','sectionVideos','type','summary1','delivery','ticket','city','sections','venues','syllabus','benefits','paymentMethod','dropbox');
+        $event->load('category','faqs','sectionVideos','type','summary1','delivery','ticket','city','sections','venues','syllabus','benefits','paymentMethod','dropbox','event_info1');
 
         foreach ($event->getRelations() as $relationName => $values){
             if($relationName == 'summary1' || $relationName == 'benefits' || $relationName == 'sections'){
@@ -1232,7 +1232,12 @@ class EventController extends Controller
                     $newEvent->{$relationName}()->attach($value);
                 }
 
+            }else if($relationName == 'event_info1'){
+                $valuee = $values->replicate();
+                $valuee->push();
+                $newEvent->{$relationName}()->save($valuee);
             }else{
+
                 $newEvent->{$relationName}()->sync($values);
             }
 
