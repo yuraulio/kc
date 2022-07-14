@@ -638,8 +638,8 @@ class UserController extends Controller
         if(isset($eventInfo['delivery']) && $eventInfo['delivery'] == 143){
 
             $data['duration'] = isset($eventInfo['elearning']['visible']['emails']) && isset($eventInfo['elearning']['expiration']) && 
-                                $eventInfo['elearning']['visible']['emails'] /*&& isset($eventInfo['elearning']['course_elaerning_text'])*/ ?  
-                                            $eventInfo['elearning']['expiration'] /*. ' ' . $eventInfo['elearning']['course_elaerning_text']*/ : '';
+                                $eventInfo['elearning']['visible']['emails'] && isset($eventInfo['elearning']['text']) ?  
+                                            $eventInfo['elearning']['expiration'] . ' ' . $eventInfo['elearning']['text'] : '';
 
         }else if(isset($eventInfo['delivery']) && $eventInfo['delivery'] == 139){
 

@@ -11,6 +11,8 @@
     $is_event_paid = $dynamic_page_data["is_event_paid"] ?? null;
     $is_joined_waiting_list = $dynamic_page_data["is_joined_waiting_list"] ?? null;
     $estatus = $event->status ?? null;
+    
+    $freeEvent = isset($dynamic_page_data['info']['payment_method']) && $dynamic_page_data['info']['payment_method'] == 'free' ? true : false;
 
     function checkTabContent($tab, $dynamic_page_data, $tabs) {
         $tab = strtolower($tab);
@@ -60,7 +62,8 @@
                             </ul>
                             
                             @if ($event)
-                                @if($event->view_tpl == "elearning_free")
+                                {{--@if($event->view_tpl == "elearning_free")--}}
+                                @if($freeEvent)
                                     @if($is_event_paid==0 && !Auth::user())
                                         <a href="{{ route('cart.add-item', [ $event->id,'free', 8 ]) }}" class="btn btn--lg btn--primary  go-to-href">ENROLL FOR FREE</a>
                                     @elseif($is_event_paid==0 && Auth::user())

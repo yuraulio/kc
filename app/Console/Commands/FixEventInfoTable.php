@@ -191,7 +191,7 @@ class FixEventInfoTable extends Command
                 $status = 'Waiting';
         }*/
 
-        $delivery = ($delivery = Delivery::find($delivery)) ? $delivery['name'] : null;
+        //$delivery = ($delivery = Delivery::find($delivery)) ? $delivery['name'] : null;
         $city = City::find($cityId);
 
         $data['course_inclass_absences'] = $absences;

@@ -70,7 +70,7 @@
                                         <option <?php if($ticket['type'] == 'Alumni')  echo 'selected'; ?> value="Alumni">Alumni</option>
                                         <option <?php if($ticket['type'] == 'Regular')  echo 'selected'; ?> value="Regular">Regural</option>
                                         <option <?php if($ticket['type'] == 'Special')  echo 'selected'; ?> value="Special">Special</option>
-                                        <option <?php if($ticket['type'] == 'Sponsored')  echo 'selected'; ?> value="Special">Sponsored</option>
+                                        <option <?php if($ticket['type'] == 'Sponsored')  echo 'selected'; ?> value="Sponsored">Sponsored</option>
                                     </select>
 
                                     @include('alerts.feedback', ['field' => 'type'])

@@ -4,13 +4,7 @@
             <div class="row">
                 @foreach ($data->columns as $column)
                     <div class="col-md-{{ isset($column->width) ? ($column->width * 2) : (12 / count($data->columns)) }}">
-                        {{--@includeIf("new_web.components." . $column->template->key)--}}
-
-                        @if($column->template->key == 'course_details_component')
-                            @includeIf("new_web.components." . $column->template->key.'_new')
-                        @else
-                            @includeIf("new_web.components." . $column->template->key)
-                        @endif
+                        @includeIf("new_web.components." . $column->template->key)
                     </div>
                 @endforeach
             </div>
@@ -22,12 +16,8 @@
             <div class="row">
                 @foreach ($data->columns as $column)
                     <div class="col-md-{{ isset($column->width) ? ($column->width * 2) : (12 / count($data->columns)) }}">
-                        {{--@includeIf("new_web.components." . $column->template->key)--}}
-                        @if($column->template->key == 'course_details_component')
-                            @includeIf("new_web.components." . $column->template->key.'_new')
-                        @else
-                            @includeIf("new_web.components." . $column->template->key)
-                        @endif
+                        @includeIf("new_web.components." . $column->template->key)
+                       
                     </div>
                 @endforeach
             </div>
@@ -40,16 +30,7 @@
                 @foreach ($data->columns as $column)
 
                     <div class="col-md-{{ isset($column->width) ? ($column->width * 2) : (12 / count($data->columns)) }}">
-                        {{--@includeIf("new_web.components." . $column->template->key)--}}
-                        @if($column->template->key == 'course_details_component')
-                            @includeIf("new_web.components." . $column->template->key.'_new')
-                        @elseif($column->template->key == 'homepage_events_component')
-                            @includeIf("new_web.components.". $column->template->key .'_new')
-                        @elseif($column->template->key == 'events_list_component')
-                            @includeIf("new_web.components.". $column->template->key .'_new')
-                        @else
-                            @includeIf("new_web.components." . $column->template->key)
-                        @endif
+                        @includeIf("new_web.components." . $column->template->key)
                     </div>
                 @endforeach
             </div>
@@ -57,11 +38,6 @@
     </div>
 @else
     @foreach ($data->columns as $column)
-        {{--@includeIf("new_web.components." . $column->template->key)--}}
-        @if($column->template->key == 'course_details_component')
-            @includeIf("new_web.components." . $column->template->key.'_new')
-        @else
-            @includeIf("new_web.components." . $column->template->key)
-        @endif
+        @includeIf("new_web.components." . $column->template->key)
     @endforeach
 @endif

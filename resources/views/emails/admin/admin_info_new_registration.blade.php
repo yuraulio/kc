@@ -1,7 +1,7 @@
 <?php
 
 
-$tickettype = $extrainfo[1];
+$tickettype = isset($extrainfo[1]) ? $extrainfo[1] : null;
 
 
 if(isset($helperdetails[$user['email']])) {
@@ -163,12 +163,38 @@ else {
                                                                               </div>
                                                                            </td>
                                                                         </tr>
+                                                                       
                                                                         <tr class="nl2go-responsive-hide">
                                                                            <td height="15" style="font-size: 15px; line-height: 15px;">­</td>
                                                                         </tr>
                                                                      </table>
                                                                   </td>
                                                                </tr>
+
+                                                               <tr>
+                                                                  <td class="r12-c" align="left">
+                                                                     <table cellspacing="0" cellpadding="0" border="0" role="presentation" width="100%" class="r13-o" style="table-layout: fixed; width: 100%;">
+                                                                        <tr class="nl2go-responsive-hide">
+                                                                           <td height="15" style="font-size: 15px; line-height: 15px;">­</td>
+                                                                        </tr>
+
+                                                                        @if(isset($status) && $status == 5)
+                                                                        <tr>
+                                                                           <td align="left" valign="top" class="r15-i nl2go-default-textstyle" style="color: #3b3f44; font-family: arial,helvetica,sans-serif; font-size: 16px; line-height: 1.5; text-align: left;">
+                                                                              <div>
+                                                                                 <p style="margin: 0px;"><span style="font-family: Tahoma, geneva, sans-serif;">Waiting List</span></p>
+                                                                              </div>
+                                                                           </td>
+                                                                        </tr>
+                                                                        @endif
+
+                                                                        <tr class="nl2go-responsive-hide">
+                                                                           <td height="15" style="font-size: 15px; line-height: 15px;">­</td>
+                                                                        </tr>
+                                                                     </table>
+                                                                  </td>
+                                                               </tr>
+
                                                                <tr>
                                                                   <td class="r12-c" align="left">
                                                                      <table cellspacing="0" cellpadding="0" border="0" role="presentation" width="100%" class="r13-o" style="table-layout: fixed; width: 100%;">
@@ -247,6 +273,7 @@ else {
                                                                      </table>
                                                                   </td>
                                                                </tr>
+                                                               @if(isset($trans))
                                                                <tr>
                                                                   <td class="r12-c" align="left">
                                                                      <table cellspacing="0" cellpadding="0" border="0" role="presentation" width="100%" class="r13-o" style="table-layout: fixed; width: 100%;">
@@ -266,12 +293,14 @@ else {
                                                                      </table>
                                                                   </td>
                                                                </tr>
+                                                               @endif
                                                                <tr>
                                                                   <td class="r12-c" align="left">
                                                                      <table cellspacing="0" cellpadding="0" border="0" role="presentation" width="100%" class="r13-o" style="table-layout: fixed; width: 100%;">
                                                                         <tr class="nl2go-responsive-hide">
                                                                            <td height="15" style="font-size: 15px; line-height: 15px;">­</td>
                                                                         </tr>
+                                                                        @isset($trans)
                                                                         <tr>
                                                                            <td align="left" valign="top" class="r15-i nl2go-default-textstyle" style="color: #3b3f44; font-family: arial,helvetica,sans-serif; font-size: 16px; line-height: 1.5; text-align: left;">
                                                                               <div><strong>TICKET TYPE:</strong>  <br /><br />
@@ -292,6 +321,7 @@ else {
                                                                               </div>
                                                                            </td>
                                                                         </tr>
+                                                                        @endif
                                                                         <tr class="nl2go-responsive-hide">
                                                                            <td height="15" style="font-size: 15px; line-height: 15px;">­</td>
                                                                         </tr>
@@ -319,6 +349,7 @@ else {
                                                                   </td>
                                                                </tr>
                                                                @endif
+                                                               @if(isset($trans))
                                                                <tr>
                                                                   <td class="r12-c" align="left">
                                                                      <table cellspacing="0" cellpadding="0" border="0" role="presentation" width="100%" class="r13-o" style="table-layout: fixed; width: 100%;">
@@ -338,6 +369,7 @@ else {
                                                                      </table>
                                                                   </td>
                                                                </tr>
+                                                               @endif
                                                                <tr>
                                                                   <td class="r12-c" align="left">
                                                                      <table cellspacing="0" cellpadding="0" border="0" role="presentation" width="290" class="r16-o" style="table-layout: fixed; width: 290px;">

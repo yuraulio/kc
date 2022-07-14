@@ -524,8 +524,8 @@ class Invoice extends Model
             if(isset($eventInfo['delivery']) && $eventInfo['delivery'] == 143){
 
                 $data['description'] = isset($eventInfo['elearning']['visible']['invoice']) && isset($eventInfo['elearning']['expiration']) && 
-                                    $eventInfo['elearning']['visible']['invoice'] /*&& isset($eventInfo['elearning']['course_elaerning_text'])*/ ?  
-                                                $eventInfo['elearning']['expiration'] /*. ' ' . $eventInfo['elearning']['course_elaerning_text']*/ : '';
+                                    $eventInfo['elearning']['visible']['invoice'] && isset($eventInfo['elearning']['text']) ?  
+                                                $eventInfo['elearning']['expiration'] . ' ' . $eventInfo['elearning']['text'] : '';
         
             }else if(isset($eventInfo['delivery']) && $eventInfo['delivery'] == 139){
         

@@ -275,8 +275,8 @@ class HomeController extends Controller
         if(isset($eventInfo['delivery']) && $eventInfo['delivery'] == 143){
 
             $data['duration'] = isset($eventInfo['elearning']['visible']['emails']) && isset($eventInfo['elearning']['expiration']) && 
-                                $eventInfo['elearning']['visible']['emails'] /*&& isset($eventInfo['elearning']['course_elaerning_text'])*/ ?  
-                                            $eventInfo['elearning']['expiration'] /*. ' ' . $eventInfo['elearning']['course_elaerning_text']*/ : '';
+                                $eventInfo['elearning']['visible']['emails'] && isset($eventInfo['elearning']['text']) ?  
+                                            $eventInfo['elearning']['expiration'] . ' ' . $eventInfo['elearning']['text'] : '';
 
         }else if(isset($eventInfo['delivery']) && $eventInfo['delivery'] == 139){
 
@@ -508,8 +508,8 @@ class HomeController extends Controller
         if(isset($eventInfo['delivery']) && $eventInfo['delivery'] == 143){
 
             $data['duration'] = isset($eventInfo['elearning']['visible']['emails']) && isset($eventInfo['elearning']['expiration']) && 
-                                $eventInfo['elearning']['visible']['emails'] /*&& isset($eventInfo['elearning']['course_elaerning_text'])*/ ?  
-                                            $eventInfo['elearning']['expiration'] /*. ' ' . $eventInfo['elearning']['course_elaerning_text']*/ : '';
+                                $eventInfo['elearning']['visible']['emails'] && isset($eventInfo['elearning']['text']) ?  
+                                            $eventInfo['elearning']['expiration'] . ' ' . $eventInfo['elearning']['text'] : '';
 
         }else if(isset($eventInfo['delivery']) && $eventInfo['delivery'] == 139){
 
@@ -534,6 +534,38 @@ class HomeController extends Controller
 
 
         $data['firstName'] = $user->firstname;
+
+        $transdata = $data;
+        $transdata['trans'] = null;
+        $transdata['installments'] = null;
+        $transdata['coupon'] = null;
+        
+        $muser = [];
+        $muser['name'] = $user->firstname;
+        $muser['first'] = $user->firstname;
+        $muser['email'] = $user->email;
+        $muser['id'] = $user->id;
+        $muser['event_title'] = $content->title;
+
+        $helperdetails[$user->email] = ['kcid' => $user->kc_id, 'deid' => $user->partner_id, 'stid' => $user->student_type_id, 'jobtitle' => $user->job_title, 'company' => $user->company, 'mobile' => $user->mobile];
+
+
+        $transdata['user'] = $muser;
+        $transdata['helperdetails'] = $helperdetails;
+        $transdata['status'] = 5;
+        
+        $sentadmin = Mail::send('emails.admin.admin_info_new_registration', $transdata, function ($m)  {
+
+            $m->from('info@knowcrunch.com', 'Knowcrunch');
+            $m->to('info@knowcrunch.com', 'Knowcrunch');
+        
+            $m->subject('Knowcrunch - New Registration Waiting List');
+        });
+            
+           
+        
+
+
         $user->notify(new WelcomeEmail($user,$data));
 
 
