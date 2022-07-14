@@ -15,9 +15,9 @@
         </div>
 
         <div class="col-auto">
-            <button @click="switchToEdit()" class="btn btn-soft-primary">Edit</button>
+            <button v-if="imageExtensions.includes(opImage.extension.toLowerCase())" @click="switchToEdit()" class="btn btn-soft-primary">Edit</button>
             <button @click="saveToClipboard()" class="btn btn-soft-primary">Copy URL to clipboard</button>
-            <a :href="mainDysplayImage ? mainDysplayImage.url : opImage.url" target="_blank" class="btn btn-soft-primary">Upen in new tab</a>
+            <a :href="mainDysplayImage ? mainDysplayImage.url : opImage.url" target="_blank" class="btn btn-soft-primary">Open in new tab</a>
         </div>
     </div>
 
@@ -31,7 +31,7 @@
                                 <i class="mdi mdi-file-pdf-outline" style="font-size: 160px;"></i>
                             </div>
 
-                            <img v-else-if="imageExtensions.includes(img.extension.toLowerCase())" @click="confirmSelection(img)" :src="img.url" alt="..." class="d-block img-fluid" />
+                            <img v-else-if="imageExtensions.includes(img.extension.toLowerCase())" @click="confirmSelection(img)" :src="img.url" alt="..." class="d-block img-fluid cursor-pointer" />
 
                             <div v-else style="width: 100%; height: 300px" class=" text-secondary rounded text-center">
                                 <i class="mdi mdi-file" style="font-size: 160px;"></i>
@@ -39,7 +39,7 @@
                             
                         </template>
                         <template v-else>
-                            <img @click="confirmSelection(lodash.find(img.subfiles, {'subselected' : true}))" :src="lodash.find(img.subfiles, {'subselected' : true}).url" alt="..." class="d-block img-fluid" />
+                            <img @click="confirmSelection(lodash.find(img.subfiles, {'subselected' : true}))" :src="lodash.find(img.subfiles, {'subselected' : true}).url" alt="..." class="d-block img-fluid cursor-pointer" />
                         </template>
                     </div>
                     <a class="carousel-control-prev" href="#" role="button" @click.prevent="list('back')" data-bs-slide="prev">
@@ -57,28 +57,30 @@
         <div v-if="activeImg && activeImg.parrent == null && sidebarImages.length" class="col-md-3">
             <div class="mt-4" style="max-height: 500px; overflow: hidden; overflow-y: scroll; text-align: center; background-color:#f3f7f9 !important; padding:20px;">
                 <div v-for="(im, index) in sidebarImages" style="cursor: pointer" :key="index" class="mb-2">
-                    <template v-if="getVersion(im.version)">
-                        <h5 class="text-start">
-                            {{ getVersion(im.version).version }}
-                            <i @click="deleteFile(im)" class="mdi mdi-delete text-muted vertical-middle"></i>
-                        </h5>
-                        <p class="text-start text-muted d-block">
-                            {{ size(im.size) }}
-                        </p>
-                        <p class="text-start text-muted d-block mb-2">{{ getVersion(im.version).description }}</p>
-                    </template>
-                    <template v-else>
-                        <h5>
-                            Custom
-                            <i @click="deleteFile(im)" class="mdi mdi-delete text-muted vertical-middle"></i>
-                        </h5>
-                    </template>
+                    <template v-if="matchVersions(im.version)">
+                        <template v-if="getVersion(im.version)">
+                            <h5 class="text-start">
+                                {{ getVersion(im.version).version }}
+                                <i @click="deleteFile(im)" class="mdi mdi-delete text-muted vertical-middle"></i>
+                            </h5>
+                            <p class="text-start text-muted d-block">
+                                {{ size(im.size) }}
+                            </p>
+                            <p class="text-start text-muted d-block mb-2">{{ getVersion(im.version).description }}</p>
+                        </template>
+                        <template v-else>
+                            <h5>
+                                Custom
+                                <i @click="deleteFile(im)" class="mdi mdi-delete text-muted vertical-middle"></i>
+                            </h5>
+                        </template>
 
-                    <img @click="selectImg(im)" :src="im.url" alt="image" class="img-fluid rounded" width="200" :style="'height: 100px; width: auto; ' + (im.subselected ? ' border: 4px solid #1abc9c;' : ' border: 4px solid #f3f7f9;')">
-                    <p class="mb-0 text-truncate" :title="im.name">
-                        {{im.name}}
-                    </p>
-                    <hr class="mt-2 mb-2">
+                        <img @click="selectImg(im)" :src="im.url" alt="image" class="img-fluid rounded" width="200" :style="'height: 100px; width: auto; ' + (im.subselected ? ' border: 4px solid #1abc9c;' : ' border: 4px solid #f3f7f9;')">
+                        <p class="mb-0 text-truncate" :title="im.name">
+                            {{im.name}}
+                        </p>
+                        <hr class="mt-2 mb-2">
+                    </template>
                 </div>
             </div>
         </div>
@@ -94,6 +96,7 @@ export default {
         images: {},
         opImage: {},
         imageExtensions: [],
+        imageVersion: null,
     },
     data() {
         return {
@@ -273,6 +276,15 @@ export default {
             } else {
                 return parseFloat(size * 0.000001).toFixed(1) + " MB";
             }
+        },
+        matchVersions(version) {
+            if (this.imageVersion) {
+                if (version == this.imageVersion) {
+                    return true;
+                }
+                return false;
+            }
+            return true;
         }
     },
     mounted() {
@@ -348,5 +360,15 @@ export default {
 .carousel-caption {
     display: flex;
     align-self: flex-end;
+}
+
+.btn-soft-primary {
+    color: #6658dd!important;
+    background-color: rgba(102, 88, 221, 0.18)!important;
+    border-color: rgba(102, 88, 221, 0.12)!important;
+}
+.btn-soft-primary:hover {
+    color: #fff!important;
+    background-color: #6658dd!important;
 }
 </style>

@@ -23,17 +23,17 @@
             </div> <!-- end offcanvas-header-->
 
             <div class="offcanvas-body" style="padding: 0px !important">
-                <media-manager v-if="loadstart[(keyput + 'media')]" mode="single" :startingImage="value" :loadstart="loadstart[(keyput + 'media')]" @updatedimg="updatedmedia($event,(keyput + 'media'))" :key="keyput"></media-manager>
+                <media-manager v-if="loadstart[(keyput + 'media')]" mode="single" :startingImage="value" :imageVersion="imageVersion" :loadstart="loadstart[(keyput + 'media')]" @updatedimg="updatedmedia($event,(keyput + 'media'))" :key="keyput"></media-manager>
             </div> <!-- end offcanvas-body-->
         </div>
         <div class="text-center">
             <div class="d-grid text-center" v-if="value">
 
-                <img @click="$set(loadstart, (keyput + 'media'),  true)" data-bs-toggle="offcanvas" :data-bs-target="'#mediaCanvas' + keyput" :src="value.url + '?i=' + (Math.random() * 100000)" alt="image" class="img-fluid rounded" >
+                <img @click="$set(loadstart, (keyput + 'media'),  true)" data-bs-toggle="offcanvas" :data-bs-target="'#mediaCanvas' + keyput" :src="value.url + '?i=' + (Math.random() * 100000)" alt="image" class="img-fluid rounded cursor-pointer" >
 
                 <i @click="removeImage()" class="mdi mdi-delete text-muted vertical-middle d-block fs-4 mt-1"></i>
 
-                <div class="mt-2">
+                <div v-if="!hideAltText" class="mt-2">
                     <label class="form-label float-start">Alt Text</label>
                     <input type="text" v-model="value.alt_text" class="form-control">
                 </div>
@@ -41,12 +41,7 @@
             <div v-else>
                 <i @click="$set(loadstart, (keyput + 'media'),  true)" data-bs-toggle="offcanvas" :data-bs-target="'#mediaCanvas' + keyput" class="text-muted dripicons-photo d-none image-input-icon" style="font-size: 100px;"></i>
                 <button @click="$set(loadstart, (keyput + 'media'),  true)" type="button" data-bs-toggle="offcanvas" :data-bs-target="'#mediaCanvas' + keyput" aria-controls="offcanvasScrolling"  class="btn btn-soft-primary image-input-button">
-                    <template v-if="imageEdit">
-                        Edit Media
-                    </template>
-                    <template v-else>
-                        Add Media
-                    </template>
+                    Add Media
                 </button>
             </div>
         </div>
@@ -204,7 +199,8 @@ export default {
         fetch: {
             default: true
         },
-        imageEdit:false,
+        imageVersion: null,
+        hideAltText: false,
     },
     data() {
         return {

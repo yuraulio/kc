@@ -87,7 +87,7 @@
                     <div class="col-lg-12 d-grid mb-2">
                         <label for="jpg" class="form-label">Convert image versions to jpg format. (Reduces size.)</label>
                         <br class="d-none">
-                        <input v-model="jpg" type="checkbox" id="jpg" class="form-check-input">
+                        <input v-model="jpg" type="checkbox" id="jpg" class="form-check-input" style="position: relative;">
                     </div>
                     <div class="col-lg-12 d-flex align-items-end mt-2">
                         <template>
@@ -117,10 +117,11 @@
                                 {{ size(parrentImage.size) }}
                             </p>
                             <img @click="version='original'; selectedVersion=null; imgname=parrentImage.name; alttext=parrentImage.alt_text; link=parrentImage.link" crossorigin="anonymous" :src="parrentImage ? ('/uploads/' + parrentImage.path) : ''" alt="image" class="img-fluid rounded" />
-                            <button v-if="parentMode" @click="confirmSelection(parrentImage)" style="width: 100%" class="btn btn-primary mt-2">Select image</button>
+                            <button v-if="parentMode" @click="confirmSelection(parrentImage)" style="width: 100%" class="btn btn-soft-primary mt-2">Select image</button>
                             <hr>
 
-                            <template v-for="(version1, index) in versions">
+                            <template v-for="(version1, index) in versions" v-if="matchVersions(version1.version)">
+                                {{matchVersions(version1.version)}}
                                 <h5 :id="version1.version" class="">
                                     {{ version1.version }}
                                     <i v-if="findVersionData(version1.version)" @click="deleteFile(findVersionData(version1.version), index)" class="mdi mdi-delete text-muted vertical-middle cursor-pointer"></i>
@@ -131,7 +132,7 @@
                                 <p class="text-muted d-block mb-2">{{ version1.description }}</p>
                                 <template v-if="findVersionData(version1.version) != null">
                                     <img @click="version=version1.version; selectedVersion=version1; versionSelected();" crossorigin="anonymous" :src="'/uploads/' + findVersionData(version1.version).path + '?key=' + imageKey" alt="image" class="img-fluid rounded" :style="version == version1.version ? 'border: 4px solid #1abc9c;' : 'border: 4px solid #f3f7f9;'" />
-                                    <button v-if="parentMode" @click="confirmSelection(findVersionData(version1.version))" style="width: 100%" class="btn btn-primary mt-2">Select image</button>
+                                    <button v-if="parentMode" @click="confirmSelection(findVersionData(version1.version))" style="width: 100%" class="btn btn-soft-primary mt-2">Select image</button>
                                 </template>
                                 <template v-else>
                                     <button @click="version=version1.version; selectedVersion=version1; versionSelected();" style="width: 100%" class="btn btn-primary">Set image</button>
@@ -158,6 +159,7 @@ export default {
         prevalue: {},
         imageKey: "",
         warning: false,
+        imageVersion: null,
     },
     components: {
         VueCropper,
@@ -521,6 +523,15 @@ export default {
             } else {
                 return parseFloat(size * 0.000001).toFixed(1) + " MB";
             }
+        },
+        matchVersions(version) {
+            if (this.imageVersion) {
+                if (version == this.imageVersion) {
+                    return true;
+                }
+                return false;
+            }
+            return true;
         }
     },
     beforeDestroy() {
@@ -620,5 +631,24 @@ textarea {
 
 .cropped-image img {
     max-width: 100%;
+}
+
+.btn-soft-success {
+    color: #1abc9c!important;
+    background-color: rgba(26, 188, 156, 0.18)!important;
+    border-color: rgba(26, 188, 156, 0.12)!important;
+}
+.btn-soft-success:hover {
+    color: #fff!important;
+    background-color: #1abc9c!important;
+}
+.btn-soft-primary {
+    color: #6658dd!important;
+    background-color: rgba(102, 88, 221, 0.18)!important;
+    border-color: rgba(102, 88, 221, 0.12)!important;
+}
+.btn-soft-primary:hover {
+    color: #fff!important;
+    background-color: #6658dd!important;
 }
 </style>
