@@ -767,6 +767,7 @@ class Event extends Model
                 $data['elearning']['visible'] = $infos['course_elearning_visible'] != null ? json_decode($infos['course_elearning_visible'], true) : null;
                 $data['elearning']['icon'] = $infos['course_elearning_icon'] != null ? json_decode($infos['course_elearning_icon'], true) : null;
                 $data['elearning']['expiration'] = $infos['course_elearning_expiration'] != null ? $infos['course_elearning_expiration'] : null;
+                $data['elearning']['text'] = $infos['course_elearning_text'] != null ? $infos['course_elearning_text'] : null;
             }
 
             $data['awards']['text'] = $infos['course_awards_text'];

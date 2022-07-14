@@ -64,6 +64,19 @@
             </li>
             @endif
 
+            @if(isset($info['elearning']['visible']['landing']) && $info['elearning']['visible']['landing'] && isset($info['elearning']['expiration']) && $info['elearning']['expiration'] != null)
+            <li>
+                @if(isset($info['elearning']['icon']['path']) && $info['elearning']['icon']['path'] != null)<img class="info-icon" src="{{cdn($info['elearning']['icon']['path'])}}" width="30" onerror="this.onerror=null;this.src='/theme/assets/img/summary_icons/Days-Week.svg'" alt="{{$info['elearning']['icon']['alt_text']}}" /> @else <img class="info-icon"  src="/theme/assets/img/summary_icons/Days-Week.svg" width="30" alt="" /> @endif
+                <div class="info-text">
+                    <p>
+                        {{  $info['elearning']['expiration'] }} {{ (isset($info['elearning']['text']) && $info['elearning']['text'] != null) ? $info['elearning']['text'] : ''}}
+                        </br>
+
+                    </p>
+                </div>
+            </li>
+            @endif
+
             @if(isset($info['inclass']['dates']['visible']['landing']) && $info['inclass']['dates']['visible']['landing'] && isset($info['inclass']['dates']['text']) && $info['inclass']['dates']['text'] != null)
 
             <li>
