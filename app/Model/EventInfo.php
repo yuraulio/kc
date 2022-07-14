@@ -24,6 +24,7 @@ class EventInfo extends Model
         'course_language_icon',
         'course_delivery',
         'course_elearning_expiration',
+        'course_elearning_text',
         'course_elearning_visible',
         'course_elearning_icon',
         'course_inclass_city',

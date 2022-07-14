@@ -269,7 +269,7 @@
                             <div class="row">
 
                                 <div class="col-12 delivery_child_wrapper d-none">
-                                    <div class="row">
+                                    <div class="row delivery_city_wrapper">
                                         <div style="display:flex;" class="col-9 col-sm-12 col-md-6 col-lg-3 form-group{{ $errors->has('city_id') ? ' has-danger' : '' }} ">
                                             <select name="city_id" id="input-city_id" class="form-control" placeholder="{{ __('Please select the city of this course') }}" >
                                                 <option selected disabled value="">Please select the city of this course</option>
@@ -536,13 +536,13 @@
 
                                 </div>
 
-                                <div id="exp_input" class="col-sm-12 col-md-6 col-lg-3 form-group{{ $errors->has('expiration') ? ' has-danger' : '' }}">
+                                <div class="exp_input col-sm-12 col-md-6 col-lg-3 form-group d-none">
                                     <label class="form-control-label" for="input-expiration">{{ __('Months access') }}</label>
                                     <div class="input-group">
                                         <input type="number" min="1" name="expiration" id="input-expiration" class="form-control{{ $errors->has('expiration') ? ' is-invalid' : '' }}" placeholder="{{ __('Enter number of months') }}" value="{{ old('expiration') }}"autofocus>
                                         <span data-infowrapper="elearning" class="input-group-addon input-group-append input-icon-wrapper-inclass">
                                             <span class="btn btn-outline-primary input-icon">
-                                                <img class="replace-with-svg" width="20" src="/theme/assets/img/summary_icons/Duration_Hours.svg" alt="">
+                                                <img class="replace-with-svg" width="20" src="/theme/assets/img/summary_icons/Days-Week.svg" alt="">
                                             </span>
                                         </span>
 
@@ -550,7 +550,10 @@
                                         <input type="hidden" value="{{ old('elearning_icon_alt_text') }}" id="elearning_alt_text" id="elearning_alt_text" name="course[{{'delivery'}}][{{'elearning'}}][{{'icon'}}][{{'alt_text'}}]">
                                     </div>
 
-                                    {{--@include('alerts.feedback', ['field' => 'expiration'])--}}
+                                </div>
+                                <div class="exp_input col-sm-12 col-md-6 col-lg-3 form-group d-none">
+                                    <label class="form-control-label" for="input-test">{{ __('Months access text') }}</label>
+                                    <input type="text" name="course[{{'delivery'}}][{{'elearning'}}][{{'text'}}]" style="background:aliceblue;" class="form-control" placeholder="{{ __('alphanumeric text') }}" value="{{ old('expiration_text') }}"autofocus>
                                 </div>
                             </div>
 
@@ -1167,19 +1170,20 @@
 
 <script>
     $( "#input-delivery" ).change(function() {
-        if($(this).val() == 143){
-            $('#exp_input').css('display', 'block')
-        }else{
-            $('#exp_input').css('display', 'none')
-        }
-    });
-    $( "#input-delivery" ).change(function() {
         if($(this).val() == 139){
             $('.delivery_child_wrapper').removeClass('d-none')
+            $('.delivery_city_wrapper').removeClass('d-none')
             $('.elearning_visible_wrapper').addClass('d-none')
-        }else{
+            $('.exp_input').addClass('d-none')
+        }else if($(this).val() == 143){
             $('.delivery_child_wrapper').addClass('d-none')
             $('.elearning_visible_wrapper').removeClass('d-none')
+            $('.exp_input').removeClass('d-none')
+        }else if($(this).val() == 215){
+            $('.exp_input').addClass('d-none')
+            $('.elearning_visible_wrapper').addClass('d-none')
+            $('.delivery_child_wrapper').removeClass('d-none')
+            $('.delivery_city_wrapper').addClass('d-none')
         }
     });
 

@@ -272,7 +272,6 @@
 
 
                                                 <?php
-
                                                     if(isset($info['course_hours_icon']) && $info['course_hours_icon'] != null){
                                                         $course_hours_icon = json_decode($info['course_hours_icon'], true);
                                                     }else{
@@ -508,7 +507,7 @@
                                             ?>
 
                                             <div class="col-12 delivery_child_wrapper <?= $event->is_inclass_course() ? '' : 'd-none' ?>">
-                                                <div class="row">
+                                                <div class="row delivery_city_wrapper">
                                                     <div style="display:flex;" class="col-9 col-sm-12 col-md-6 col-lg-3 form-group{{ $errors->has('city_id') ? ' has-danger' : '' }} ">
                                                         <!-- <div class="col-sm-12 col-md-6 col-lg-3 form-group{{ $errors->has('city_id') ? ' has-danger' : '' }} "> -->
                                                         <select name="city_id" id="input-city_id" class="form-control" placeholder="{{ __('Please select the city of this course') }}" >
@@ -868,12 +867,11 @@
 
                                             </div>
 
-                                            <div id="exp_input" class="col-sm-12 col-md-6 col-lg-3 form-group{{ $errors->has('expiration') ? ' has-danger' : '' }}">
+                                            <div class="exp_input col-sm-12 col-md-6 col-lg-3 form-group">
                                                 <?php
 
                                                     $course_elearning_visible = (isset($info['elearning']['visible']) && $info['elearning']['visible']!= null) ? $info['elearning']['visible'] : null;
                                                     $course_elearning_icon = (isset($info['elearning']['icon']) && $info['elearning']['icon']) ? $info['elearning']['icon'] : null;
-
 
                                                 ?>
                                                 <label class="form-control-label" for="input-expiration">{{ __('Months access') }}</label>
@@ -886,7 +884,7 @@
                                                             @if(isset($course_elearning_icon) &&  $course_elearning_icon != null && $course_elearning_icon['path'] != null)
                                                                 <img src="{{ asset($course_elearning_icon['path']) }}"/>
                                                             @else
-                                                                <img class="replace-with-svg" width="20" src="/theme/assets/img/summary_icons/Duration_Hours.svg" alt="">
+                                                                <img class="replace-with-svg" width="20" src="/theme/assets/img/summary_icons/Days-Week.svg" alt="">
 
                                                             @endif
                                                         </span>
@@ -896,11 +894,13 @@
                                                     <input type="hidden" value="{{ old('elearning_icon_alt_text', ($course_elearning_icon != null && $course_elearning_icon['alt_text'] != '') ? $course_elearning_icon['alt_text'] : '' ) }}" id="elearning_alt_text" id="elearning_alt_text" name="course[{{'delivery'}}][{{'elearning'}}][{{'icon'}}][{{'alt_text'}}]">
                                                 </div>
 
-
-
-
-                                                {{--@include('alerts.feedback', ['field' => 'expiration'])--}}
                                             </div>
+
+                                            <div class="exp_input col-sm-12 col-md-6 col-lg-3 form-group">
+                                                <label class="form-control-label" for="input-test">{{ __('Months access text') }}</label>
+                                                <input type="text" name="course[{{'delivery'}}][{{'elearning'}}][{{'text'}}]" style="background:aliceblue;" class="form-control" placeholder="{{ __('alphanumeric text') }}" value="{{ old('expiration_text', (isset($info['elearning']['text']) && $info['elearning']['text'] != null) ? $info['elearning']['text'] : '' ) }}"autofocus>
+                                            </div>
+
                                         </div>
                                         <?php
                                                 $visible_elearning = (isset($info['elearning']['visible'])) ? $info['elearning']['visible'] : null;
@@ -2092,22 +2092,20 @@
     })
 
     $( "#input-delivery" ).change(function() {
-        if($(this).val() == 143){
-            $('#exp_input').css('display', 'block')
-            $('.elearning_visible_wrapper').removeClass('d-none')
-        }else{
-            $('#exp_input').css('display', 'none')
-            $('.elearning_visible_wrapper').addClass('d-none')
-        }
-    });
-
-    $( "#input-delivery" ).change(function() {
         if($(this).val() == 139){
             $('.delivery_child_wrapper').removeClass('d-none')
+            $('.delivery_city_wrapper').removeClass('d-none')
             $('.elearning_visible_wrapper').addClass('d-none')
-        }else{
+            $('.exp_input').addClass('d-none')
+        }else if($(this).val() == 143){
             $('.delivery_child_wrapper').addClass('d-none')
             $('.elearning_visible_wrapper').removeClass('d-none')
+            $('.exp_input').removeClass('d-none')
+        }else if($(this).val() == 215){
+            $('.exp_input').addClass('d-none')
+            $('.elearning_visible_wrapper').addClass('d-none')
+            $('.delivery_child_wrapper').removeClass('d-none')
+            $('.delivery_city_wrapper').addClass('d-none')
         }
     });
 
@@ -2202,7 +2200,7 @@
     $(function() {
 
         if($("#input-delivery").val() == 143){
-                $('#exp_input').css('display', 'block')
+                $('.exp_input').css('display', 'block')
             }
         });
 

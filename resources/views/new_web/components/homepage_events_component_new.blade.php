@@ -78,8 +78,6 @@
                                         $certificate_visible = json_decode($event['event_info1']['course_certification_visible'], true);
                                         $students_visible = json_decode($event['event_info1']['course_students_visible'], true);
 
-                                        //dd($inclass_dates);
-
                                     }
 
                                 ?>
@@ -153,7 +151,6 @@
                             ?>
 
                             <?php
-
                                 if($event['event_info1'] != null ){
 
                                     $hours_visible = json_decode($event['event_info1']['course_hours_visible'], true);
@@ -161,6 +158,12 @@
 
                                     $certificate_visible = json_decode($event['event_info1']['course_certification_visible'], true);
                                     $students_visible = json_decode($event['event_info1']['course_students_visible'], true);
+                                    $elearning_visible = json_decode($event['event_info1']['course_elearning_visible'], true);
+                                    if($elearning_visible != null){
+
+                                    }
+
+                                    //dd($elearning_visible);
 
                                 }
                             ?>
@@ -170,6 +173,12 @@
                                 <span class="hours">@if(isset($hours_visible['home']) && $hours_visible['home'] && isset($event['event_info1']['course_hours']) && $event['event_info1']['course_hours'] != null) {{ $event['event_info1']['course_hours'] }} {{ $event['event_info1']['course_hours_text'] }} @endif</span>
                                 <span class="language">@if(isset($language_visible['home']) && $language_visible['home'] && isset($event['event_info1']['course_language']) && $event['event_info1']['course_language'] != null) {{ $event['event_info1']['course_language'] }} @endif</span>
                                 <span class="certificate">@if(isset($certificate_visible['home']) && $certificate_visible['home'] && isset($event['event_info1']['course_certification_type']) && $event['event_info1']['course_certification_type'] != null) {{ $event['event_info1']['course_certification_type'] }} @endif</span>
+
+                                <span class="elearning">
+                                    @if(isset($elearning_visible['home']) && $elearning_visible['home'] && isset($event['event_info1']['course_elearning_expiration']) && $event['event_info1']['course_elearning_expiration'] != null)
+                                    {{ $event['event_info1']['course_elearning_expiration'] }} {{ (isset($event['event_info1']['course_elearning_text']) && $event['event_info1']['course_elearning_text'] != null) ? $event['event_info1']['course_elearning_text'] : '' }}
+                                    @endif
+                                </span>
 
                                 <span class="students">@if(isset($students_visible['home']) && $students_visible['home'] && isset($event['sumStudents']) && isset($event['event_info1']['course_students_number']) && $event['sumStudents'] > (int)$event['event_info1']['course_students_number']) {{ $event['sumStudents'] }} {{ ((isset($event['event_info1']['course_students_text']) && $event['event_info1']['course_students_text'] != null) ? $event['event_info1']['course_students_text'] : '')}} @endif</span>
                                 @if(isset($event['slugable']) && $event['slugable']['slug'] != '')

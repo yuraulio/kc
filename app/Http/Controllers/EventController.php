@@ -980,6 +980,7 @@ class EventController extends Controller
 
         $event_info = $this->prepareInfo($infoData, $request->status, $request->delivery, $partner, $request->syllabus, $request->city_id, $event);
 
+        dd($event_info);
         $this->updateEventInfo($event_info, $event->id);
 
         if($event->status == 0 && $request->old_status == 5){
@@ -1031,9 +1032,6 @@ class EventController extends Controller
         //$delivery = Delivery::find($delivery)['name'];
         $city = City::find($cityId);
 
-
-
-
         $data['course_status'] = $status;
         $data['course_delivery'] = $deliveryId;
         $data['course_hours_text'] = $requestData['hours']['text'];
@@ -1053,6 +1051,7 @@ class EventController extends Controller
             $data['course_elearning_visible'] = json_encode($this->prepareVisibleData($visible_loaded_data));
             $data['course_elearning_icon'] = $requestData['delivery']['elearning']['icon'] != null ?  json_encode($requestData['delivery']['elearning']['icon']) : null;
             $data['course_elearning_expiration'] = (isset($requestData['delivery']['elearning']['expiration']) && $requestData['delivery']['elearning']['expiration'] != null) ? $requestData['delivery']['elearning']['expiration'] : null;
+            $data['course_elearning_text'] = (isset($requestData['delivery']['elearning']['text']) && $requestData['delivery']['elearning']['text'] != null) ? $requestData['delivery']['elearning']['text'] : null;
         }
 
 
@@ -1311,6 +1310,7 @@ class EventController extends Controller
             $infos->course_elearning_visible = $event_info['course_elearning_visible'];
             $infos->course_elearning_icon = $event_info['course_elearning_icon'];
             $infos->course_elearning_expiration = $event_info['course_elearning_expiration'];
+            $infos->course_elearning_text = $event_info['course_elearning_text'];
         }
 
 

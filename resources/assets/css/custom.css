@@ -268,7 +268,8 @@
 .homepage-events .slide .box-text .students,
 .homepage-events .slide .box-text .dates,
 .homepage-events .slide .box-text .days,
-.homepage-events .slide .box-text .times
+.homepage-events .slide .box-text .times,
+.homepage-events .slide .box-text .elearning
 { letter-spacing: 1px; font-size: 12px; text-transform: uppercase; color: #ff9000; display: block; margin-bottom: 12px; }
 .homepage-events .slide .box-text .btn{ font-size: 13px; }
 
