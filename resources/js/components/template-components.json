@@ -15,7 +15,8 @@
                 "type": "image",
                 "key": "hero_image",
                 "label": "Image",
-                "main": true
+                "main": true,
+                "image_version": "header-image"
             },
             {
                 "type": "text_editor",

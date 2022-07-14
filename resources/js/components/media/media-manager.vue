@@ -125,7 +125,7 @@
 
     <modal name="edit-image-modal" :adaptive="true" width="70%" height="70%" :scrollable="true" class="mb-0">
         <div class="row p-4">
-            <cropperer @edit="imageEdit" @upload="imageAdded" ref="crpr" :prevalue="selectedFile" :imageKey="imageKey" :warning="warning"></cropperer>
+            <cropperer @edit="imageEdit" @upload="imageAdded" ref="crpr" :prevalue="selectedFile" :imageVersion="imageVersion" :imageKey="imageKey" :warning="warning"></cropperer>
         </div>
     </modal>
 
@@ -249,7 +249,7 @@
     </modal>
 
     <modal name="gallery-modal" ref="gmodal" :resizable="true" height="auto" :adaptive="true" :minWidth="1000" :scrollable="true">
-        <gallery ref="gals" :images="mediaFiles" :opImage="opImage" :imageExtensions="imageExtensions"></gallery>
+        <gallery ref="gals" :images="mediaFiles" :opImage="opImage" :imageExtensions="imageExtensions" :imageVersion="imageVersion"></gallery>
     </modal>
     <!-- Right Sidebar -->
     <div class="col-12">
@@ -371,6 +371,12 @@ export default {
         },
         mode: {
             default: null
+        },
+        startingImage: {
+            default: null
+        },
+        imageVersion: {
+            default: null
         }
     },
     mixins: [mediaMixin],
@@ -420,18 +426,42 @@ export default {
                 "svg",
             ],
             warning: false,
+            startingImageData: null,
         };
     },
     methods: {
         registerFile($event) {
             this.regFile = $event.target.files[0];
         },
+        setImage(image) {
+            if (image.parrent) {
+                this.userSelectedFiles(image);
+            } else {
+                axios
+                .get('/api/media_manager/getFile/' + image.id)
+                .then((response) => {
+                    if (response.status == 200) {
+                        // console.log("get file ", response.data.data);
+                        this.startingImageData = response.data.data;
+                        this.userSelectedFiles(this.startingImageData);
+                    }
+                })
+                .catch(error => {
+                    Swal.showValidationMessage(
+                        `Request failed: ${error}`
+                    )
+                })
+            }
+        }
 
     },
     mounted() {
         if (this.loadstart) {
-            // console.log('setted');
             this.getFolders();
+        }
+
+        if (this.startingImage) {
+            this.setImage(this.startingImage);
         }
     },
     beforeDestroy() {

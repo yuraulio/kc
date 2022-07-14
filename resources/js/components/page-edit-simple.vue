@@ -146,6 +146,7 @@
                                             :uuid="$uuid.v4()"
                                             :inputs="input.inputs"
                                             :class="input.main ? 'main-component-tab' : 'settings-component-tab'"
+                                            :imageVersion="input.image_version ? input.image_version : null"
                                         />
 
                                         <!-- preview -->
