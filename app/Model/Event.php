@@ -752,9 +752,10 @@ class Event extends Model
             //dd($infos['course_delivery']);
             $data['delivery'] = $infos['course_delivery'];
 
-            if($this->is_inclass_course()){
+            if($data['delivery'] == 139){
 
                 //dd($infos['course_inclass_city']);
+                $data['inclass']['absences'] = $infos['course_inclass_absences'];
                 $data['inclass']['city']['text'] = $infos['course_inclass_city'];
                 $data['inclass']['city']['icon'] = json_decode($infos['course_inclass_city_icon'], true);
 
@@ -765,11 +766,19 @@ class Event extends Model
 
                 $data['inclass']['elearning_access'] = ($infos['course_elearning_access'] != null) ? json_decode($infos['course_elearning_access'], true) : null;
                 $data['inclass']['elearning_access_icon'] = ($infos['course_elearning_access_icon'] != null) ? json_decode($infos['course_elearning_access_icon'], true) : null;
-            }else if($this->is_elearning_course()){
+            }else if($data['delivery'] == 143){
                 $data['elearning']['visible'] = $infos['course_elearning_visible'] != null ? json_decode($infos['course_elearning_visible'], true) : null;
                 $data['elearning']['icon'] = $infos['course_elearning_icon'] != null ? json_decode($infos['course_elearning_icon'], true) : null;
                 $data['elearning']['expiration'] = $infos['course_elearning_expiration'] != null ? $infos['course_elearning_expiration'] : null;
                 $data['elearning']['text'] = $infos['course_elearning_text'] != null ? $infos['course_elearning_text'] : null;
+            }else if($data['delivery'] == 215){
+                $data['inclass']['absences'] = $infos['course_inclass_absences'];
+                $data['inclass']['dates'] = ($infos['course_inclass_dates'] != null && $infos['course_inclass_dates'] != '[]') ? json_decode($infos['course_inclass_dates'], true) : null;
+                $data['inclass']['days'] = ($infos['course_inclass_days'] != null && $infos['course_inclass_days'] != '[]') ? json_decode($infos['course_inclass_days'], true) : null;
+                $data['inclass']['times'] = ($infos['course_inclass_times'] != null && $infos['course_inclass_times'] != '[]') ? json_decode($infos['course_inclass_times'], true) : null;
+
+                $data['inclass']['elearning_access'] = ($infos['course_elearning_access'] != null) ? json_decode($infos['course_elearning_access'], true) : null;
+                $data['inclass']['elearning_access_icon'] = ($infos['course_elearning_access_icon'] != null) ? json_decode($infos['course_elearning_access_icon'], true) : null;
             }
 
             $data['awards']['text'] = $infos['course_awards_text'];

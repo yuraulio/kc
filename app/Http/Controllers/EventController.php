@@ -1031,11 +1031,7 @@ class EventController extends Controller
     }
     public function updateEventInfo($event_info, $event_id)
     {
-        //dd($event_info);
         $event = Event::find($event_id);
-
-        //dd($event->paymentMethod);
-
         $info = $event->event_info();
 
 
@@ -1066,32 +1062,16 @@ class EventController extends Controller
 
         $infos->course_delivery = $event_info['course_delivery'];
 
-
-        // if($event->is_inclass_course()){
-        //     $infos->course_inclass_absences = $event_info['course_inclass_absences'];
-
-        //     $infos->course_inclass_city = $event_info['course_inclass_city'];
-        //     $infos->course_inclass_city_icon = $event_info['course_inclass_city_icon'];
-        //     $infos->course_inclass_dates = $event_info['course_inclass_dates'];
-        //     $infos->course_inclass_times = $event_info['course_inclass_times'];
-        //     $infos->course_inclass_days = $event_info['course_inclass_days'];
-        // }else if($event->is_elearning_course()){
-        //     $infos->course_elearning_visible = $event_info['course_elearning_visible'];
-        //     $infos->course_elearning_icon = $event_info['course_elearning_icon'];
-        //     $infos->course_elearning_expiration = $event_info['course_elearning_expiration'];
-        //     $infos->course_elearning_text = $event_info['course_elearning_text'];
-        // }
-
-        $infos->course_inclass_absences = $event_info['course_inclass_absences'];
-        $infos->course_inclass_city = $event_info['course_inclass_city'];
-        $infos->course_inclass_city_icon = $event_info['course_inclass_city_icon'];
-        $infos->course_inclass_dates = $event_info['course_inclass_dates'];
-        $infos->course_inclass_times = $event_info['course_inclass_times'];
-        $infos->course_inclass_days = $event_info['course_inclass_days'];
-        $infos->course_elearning_visible = $event_info['course_elearning_visible'];
-        $infos->course_elearning_icon = $event_info['course_elearning_icon'];
-        $infos->course_elearning_expiration = $event_info['course_elearning_expiration'];
-        $infos->course_elearning_text = $event_info['course_elearning_text'];
+        $infos->course_inclass_absences = isset($event_info['course_inclass_city_icon']) ? $event_info['course_inclass_absences'] : null;
+        $infos->course_inclass_city = isset($event_info['course_inclass_city_icon']) ? $event_info['course_inclass_city'] : null;
+        $infos->course_inclass_city_icon = isset($event_info['course_inclass_city_icon']) ? $event_info['course_inclass_city_icon'] : null;
+        $infos->course_inclass_dates = isset($event_info['course_inclass_dates']) ? $event_info['course_inclass_dates'] : null;
+        $infos->course_inclass_times = isset($event_info['course_inclass_times']) ? $event_info['course_inclass_times'] : null;
+        $infos->course_inclass_days = isset($event_info['course_inclass_days']) ? $event_info['course_inclass_days'] : null;
+        $infos->course_elearning_visible = isset($event_info['course_elearning_visible']) ? $event_info['course_elearning_visible'] : null;
+        $infos->course_elearning_icon = isset($event_info['course_elearning_icon']) ? $event_info['course_elearning_icon'] : null;
+        $infos->course_elearning_expiration = isset($event_info['course_elearning_expiration']) ? $event_info['course_elearning_expiration'] : null;
+        $infos->course_elearning_text = isset($event_info['course_elearning_text']) ? $event_info['course_elearning_text'] : null;
 
 
         if($event->paymentMethod()->first()){

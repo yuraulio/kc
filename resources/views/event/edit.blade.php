@@ -780,11 +780,12 @@
 
 
                                                 </div>
+
                                                 <div class="row">
                                                     <div class="form-group col-sm-12 col-md-4">
                                                         <label class="form-control-label" for="input-hours">{{ __('Absences Limit(%)') }}</label>
                                                         <div class="input-group">
-                                                            <input type="text" name="course[{{'delivery'}}][{{'inclass'}}][{{'absences'}}]" id="input-absences_limit" class="form-control{{ $errors->has('Absences Limit(%)') ? ' is-invalid' : '' }}" placeholder="{{ __('absences_limit') }}" value="{{ old('$course_inclass_absences', (isset($info['inclass']['absences']) && $info['inclass']['absences'] != null) ? $info['course_inclass_absences'] : 0 ) }}"autofocus>
+                                                            <input type="text" name="course[{{'delivery'}}][{{'inclass'}}][{{'absences'}}]" id="input-absences_limit" class="form-control{{ $errors->has('Absences Limit(%)') ? ' is-invalid' : '' }}" placeholder="{{ __('absences_limit') }}" value="{{ old('$course_inclass_absences', (isset($info['inclass']['absences']) && $info['inclass']['absences'] != null) ? $info['inclass']['absences'] : 0 ) }}"autofocus>
                                                             <span class="input-group-addon input-group-append">
                                                                 <span class="btn btn-outline-primary input-icon"> <span class="fa fa-calendar d-none"></span></span>
                                                             </span>
