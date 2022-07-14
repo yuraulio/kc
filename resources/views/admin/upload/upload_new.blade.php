@@ -38,6 +38,9 @@
     #version-btn {
         display: none;
     }
+    .bootstrap-classes.ubold.event_info #image-input-button{
+        display: none;
+    }
 </style>
 
 <?php

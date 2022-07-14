@@ -9,6 +9,7 @@
         $openlist = $data['openlist'];
         $delivery = $data['delivery'];
         $completedlist = $data['completedlist'];
+        $sumStudentsCategories = $data['sumStudentsByCategories'];
 
         $elern = false;
         $diplomas = false;
@@ -95,7 +96,7 @@
 
                                         <?php
                                             if(isset($row['category'][0])){
-                                                $sumStudents = get_sum_students_course($row['category'][0]);
+                                                $sumStudents = $sumStudentsCategories[$row['category'][0]['id']];
                                             }else{
                                                 $sumStudents = 0;
                                             }
@@ -210,7 +211,7 @@
                                         @endif
                                         <?php
                                             if(isset($row['category'][0])){
-                                                $sumStudents = get_sum_students_course($row['category'][0]);
+                                                $sumStudents = $sumStudentsCategories[$row['category'][0]['id']];
                                             }else{
                                                 $sumStudents = 0;
                                             }
@@ -357,7 +358,7 @@
 
                                         <?php
                                             if(isset($row['category'][0])){
-                                                $sumStudents = get_sum_students_course($row['category'][0]);
+                                                $sumStudents = $sumStudentsCategories[$row['category'][0]['id']];
                                             }else{
                                                 $sumStudents = 0;
                                             }
