@@ -361,10 +361,6 @@ if (!function_exists('get_certifation_crendetial')){
 
         function get_sum_students_course($category){
 
-            if(gettype($category) == 'array'){
-                $category = Category::find($category['id']);
-            }
-
             if(!$category){
                 return 0;
             }

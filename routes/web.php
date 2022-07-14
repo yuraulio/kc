@@ -53,16 +53,6 @@ Route::group(['middleware' => 'auth.aboveauthor', 'prefix' => 'admin'], function
     Route::resource('delivery', 'DeliveryController', ['except' => ['show']]);
     Route::resource('menu', 'MenuController', ['except' => ['show']]);
 
-    // New Edit Event
-    Route::get('/events/{event}/edit_new', 'EventController@edit_new')->name('event.update_new');
-    Route::post('/events/{event}/update_new', 'EventController@update_new')->name('event.update_newpost');
-
-    // New Create Event
-    Route::get('/events/create_new', 'EventController@create_new')->name('events.create_new');
-    Route::post('/events/store_new', 'EventController@store_new')->name('events.store_new');
-    Route::post('/events/{event}/update_new', 'EventController@update_new')->name('event.update_newpost');
-
-
 
     // Total hours
     Route::get('/events/totalHours/{id}', 'EventController@calculateTotalHours')->name('event.total_hours');

@@ -9,13 +9,14 @@
         $openlist = $data['openlist'];
         $delivery = $data['delivery'];
         $completedlist = $data['completedlist'];
+        $sumStudentsCategories = $data['sumStudentsByCategories'];
 
-        $elern = false; 
-        $diplomas = false; 
+        $elern = false;
+        $diplomas = false;
         $certificates = false;
 
         if ($delivery['slugable']['slug'] === 'video-on-demand-courses') {
-            $elern = true; 
+            $elern = true;
         }
     }
 @endphp
@@ -63,42 +64,81 @@
                                             $slug = '';
                                         }
                                     ?>
+                                    <?php
+
+                                        $info = $row->event_info();
+
+
+                                    ?>
                                     <h2><a href="{{env('NEW_PAGES_LINK') . '/' . $slug }}">{{ $row->title}}</a></h2>
                                     <div class="bottom">
-                                        @if ($row->summary1->where('section','date')->first() && $row->summary1->where('section','date')->first()->title)
+
+                                        {{--@if ($row->summary1->where('section','date')->first() && $row->summary1->where('section','date')->first()->title)
                                             <div class="duration"><img width="20" src="/theme/assets/images/icons/icon-calendar.svg" alt=""> {{$row->summary1->where('section','date')->first()->title}}  </div>
+                                        @endif--}}
+
+
+
+
+
+                                        @if(isset($info['hours']['visible']['list']) && $info['hours']['visible']['list'] && $info['hours']['hour'] != null)
+
+                                            <div class="expire-date">@if(isset($info['hours']['icon']['path']) && $info['hours']['icon']['path'] != null) <img class="replace-with-svg" width="20" src="{{cdn($info['hours']['icon']['path'])}}" onerror="this.onerror=null;this.src='/theme/assets/images/icons/Start-Finish.svg'" alt="{{$info['hours']['icon']['alt_text']}}"> @else<img class="replace-with-svg" width="20" src="/theme/assets/images/icons/Start-Finish.svg" alt=""> @endif{{ $info['hours']['hour'] }} {{ ($info['hours']['text'] != null) ? $info['hours']['text'] : '' }}</div>
                                         @endif
-                                        @if($row->hours)
-                                            <div class="expire-date"><img class="replace-with-svg" width="20" src="/theme/assets/images/icons/Start-Finish.svg" alt="">{{ $row->hours }}h</div>
+
+                                        @if(isset($info['language']['visible']['list']) && $info['language']['visible']['list'] && $info['language']['text'] != null)
+                                            <div class="language">@if(isset($info['language']['icon']['path']) && $info['language']['icon']['path'] != null) <img class="replace-with-svg" width="20" src="{{cdn($info['language']['icon']['path'])}}" onerror="this.onerror=null;this.src='theme/assets/images/icons/Language.svg'" alt="{{$info['language']['icon']['alt_text']}}"> @else<img class="replace-with-svg" width="20" src="theme/assets/images/icons/Language.svg" alt=""> @endif {{ $info['language']['text'] }}</div>
+                                        @endif
+
+                                        @if(isset($info['certificate']['visible']['list']) && $info['certificate']['visible']['list'] && $info['certificate'] != null && $info['certificate']['type'] != null)
+                                        <div class="certification_type">@if(isset($info['certificate']['icon']['path']) && $info['certificate']['icon']['path'] != null) <img class="replace-with-svg" width="20" src="{{cdn($info['certificate']['icon']['path'])}}" onerror="this.onerror=null;this.src='/theme/assets/images/icons/Level.svg'" alt="{{$$info['certificate']['icon']['alt_text']}}"> @else<img class="replace-with-svg" width="20" src="/theme/assets/images/icons/Level.svg" alt=""> @endif {{ $info['certificate']['type'] }}</div>
+                                        @endif
+
+                                        <?php
+                                            if(isset($row['category'][0])){
+                                                $sumStudents = $sumStudentsCategories[$row['category'][0]['id']];
+                                            }else{
+                                                $sumStudents = 0;
+                                            }
+
+                                        ?>
+
+                                        @if(isset($info['students']['visible']['list']) && $info['students']['visible']['list'] && isset($info['students']['number']) && isset($row['category'][0]) && $sumStudents > (int)$info['students']['number'])
+                                            <div class="students">@if(isset($info['students']['icon']['path']) && $info['students']['icon']['path'] != null) <img class="replace-with-svg" width="20" src="{{cdn($info['students']['icon']['path'])}}" onerror="this.onerror=null;this.src='/theme/assets/images/icons/Group_User.1.svg'" alt="{{$info['students']['icon']['alt_text']}}"> @else<img class="replace-with-svg" width="20" src="/theme/assets/images/icons/Group_User.1.svg" alt=""> @endif {{ $sumStudents }} {{ $info['students']['text'] }}</div>
+                                        @endif
+
+                                        @if(isset($info['elearning']['visible']['list']) && $info['elearning']['visible']['list'] && isset($info['elearning']['expiration']) && $info['elearning']['expiration'] != null)
+                                            <div class="elearning">@if(isset($info['elearning']['icon']['path']) && $info['elearning']['icon']['path'] != null) <img class="replace-with-svg" width="20" src="{{cdn($info['elearning']['icon']['path'])}}" onerror="this.onerror=null;this.src='/theme/assets/img/summary_icons/Days-Week.svg'" alt="{{$info['elearning']['icon']['alt_text']}}"> @else<img class="replace-with-svg" width="20" src="/theme/assets/img/summary_icons/Days-Week.svg" alt=""> @endif {{ $info['elearning']['expiration'] }} {{ (isset($info['elearning']['text']) && $info['elearning']['text'] != null) ? $info['elearning']['text'] : '' }} </div>
                                         @endif
                                     </div>
                                 </div>
                                 <div class="right">
-                                    <?php 
-                                        if (isset($row['ticket']->where('type','Early Bird')->first()->pivot->price) && 
-                                            $row['ticket']->where('type','Early Bird')->first()->pivot->price > 0 && 
+                                    <?php
+                                        if (isset($row['ticket']->where('type','Early Bird')->first()->pivot->price) &&
+                                            $row['ticket']->where('type','Early Bird')->first()->pivot->price > 0 &&
                                             $row['ticket']->where('type','Early Bird')->first()->pivot->quantity > 0 &&
                                             $row['ticket']->where('type','Early Bird')->first()->pivot->active) {
 
                                             $price = $row['ticket']->where('type','Early Bird')->first()->pivot->price;
 
-                                        } else if(isset($row['ticket']->where('type','Special')->first()->pivot->price) && 
-                                            $row['ticket']->where('type','Special')->first()->pivot->price > 0 && 
+                                        } else if(isset($row['ticket']->where('type','Special')->first()->pivot->price) &&
+                                            $row['ticket']->where('type','Special')->first()->pivot->price > 0 &&
                                             $row['ticket']->where('type','Special')->first()->pivot->quantity > 0 &&
                                             $row['ticket']->where('type','Special')->first()->pivot->active){
-                                                    
+
                                             $price = $row['ticket']->where('type','Special')->first()->pivot->price;
-                                        } else if(isset($row['ticket']->where('type','Regular')->first()->pivot->price) && 
-                                            $row['ticket']->where('type','Regular')->first()->pivot->price > 0 && 
+                                        } else if(isset($row['ticket']->where('type','Regular')->first()->pivot->price) &&
+                                            $row['ticket']->where('type','Regular')->first()->pivot->price > 0 &&
                                             $row['ticket']->where('type','Regular')->first()->pivot->quantity > 0 &&
                                             $row['ticket']->where('type','Regular')->first()->pivot->active){
-                                    
+
                                             $price = $row['ticket']->where('type','Regular')->first()->pivot->price;
-                                        } else { 
-                                            $price = 0; 
+                                        } else {
+                                            $price = 0;
                                         }
                                     ?>
-                                    @if($row->view_tpl == 'elearning_free')
+
+                                    @if(isset($info['payment_method']) && $info['payment_method'] == 'free')
                                         <div class="price">free</div>
                                         <a href="{{ $slug }}" class="btn btn--secondary btn--md">Enroll For Free</a>
                                     @elseif($row->view_tpl == 'elearning_pending')
@@ -110,7 +150,8 @@
                                     @else
                                         <div class="price">from €{{$price}}</div>
                                         <a href="{{ $slug }}" class="btn btn--secondary btn--md">Course Details</a>
-                                    @endif  
+                                    @endif
+
                                 </div>
                             </div>
                         </div>
@@ -141,6 +182,11 @@
                                             $slug = '';
                                         }
                                     ?>
+                                    <?php
+
+                                        $info = $row->event_info();
+
+                                    ?>
                                     <h2><a href="{{env('NEW_PAGES_LINK') . '/' .  $slug }}">{{ $row->title}}</a></h2>
                                     <div class="bottom">
                                         @if(isset($row['city']))
@@ -150,38 +196,75 @@
                                             @endforeach
                                         @endif
 
-                                        @if ($row->summary1->where('section','date')->first() && $row->summary1->where('section','date')->first()->title)
-                                            <div class="duration"><img width="20" src="/theme/assets/images/icons/icon-calendar.svg" alt=""> {{$row->summary1->where('section','date')->first()->title}}  </div>
+
+                                        @if(isset($info['hours']['visible']['list']) && $info['hours']['visible']['list'] && $info['hours']['hour'] != null)
+
+                                            <div class="expire-date">@if(isset($info['hours']['icon']['path']) && $info['hours']['icon']['path'] != null) <img class="replace-with-svg" width="20" src="{{cdn($info['hours']['icon']['path'])}}" onerror="this.onerror=null;this.src='/theme/assets/images/icons/Start-Finish.svg'" alt="{{$info['hours']['icon']['alt_text']}}"> @else<img class="replace-with-svg" width="20" src="/theme/assets/images/icons/Start-Finish.svg" alt=""> @endif{{ $info['hours']['hour'] }} {{ ($info['hours']['text'] != null) ? $info['hours']['text'] : '' }}</div>
                                         @endif
-                                        @if($row->hours)
-                                            <div class="expire-date"><img class="replace-with-svg" width="20" src="/theme/assets/images/icons/Start-Finish.svg" alt="">{{ $row->hours }}h</div>
+
+                                        @if(isset($info['language']['visible']['list']) && $info['language']['visible']['list'] && $info['language']['text'] != null)
+                                            <div class="language">@if(isset($info['language']['icon']['path']) && $info['language']['icon']['path'] != null) <img class="replace-with-svg" width="20" src="{{cdn($info['language']['icon']['path'])}}" onerror="this.onerror=null;this.src='theme/assets/images/icons/Language.svg'" alt="{{$info['language']['icon']['alt_text']}}"> @else<img class="replace-with-svg" width="20" src="theme/assets/images/icons/Language.svg" alt=""> @endif {{ $info['language']['text'] }}</div>
                                         @endif
+
+                                        @if(isset($info['certificate']['visible']['list']) && $info['certificate']['visible']['list'] && $info['certificate'] != null && $info['certificate']['type'] != null)
+                                        <div class="certification_type">@if(isset($info['certificate']['icon']['path']) && $info['certificate']['icon']['path'] != null) <img class="replace-with-svg" width="20" src="{{cdn($info['certificate']['icon']['path'])}}" onerror="this.onerror=null;this.src='/theme/assets/images/icons/Level.svg'" alt="{{$$info['certificate']['icon']['alt_text']}}"> @else<img class="replace-with-svg" width="20" src="/theme/assets/images/icons/Level.svg" alt=""> @endif {{ $info['certificate']['type'] }}</div>
+                                        @endif
+                                        <?php
+                                            if(isset($row['category'][0])){
+                                                $sumStudents = $sumStudentsCategories[$row['category'][0]['id']];
+                                            }else{
+                                                $sumStudents = 0;
+                                            }
+
+                                        ?>
+
+                                        @if(isset($info['students']['visible']['list']) && $info['students']['visible']['list'] && isset($info['students']['number']) && $sumStudents > (int)$info['students']['number'])
+                                            <div class="students">@if(isset($info['students']['icon']['path']) && $info['students']['icon']['path'] != null) <img class="replace-with-svg" width="20" src="{{cdn($info['students']['icon']['path'])}}" onerror="this.onerror=null;this.src='/theme/assets/images/icons/Group_User.1.svg'" alt="{{$info['students']['icon']['alt_text']}}"> @else<img class="replace-with-svg" width="20" src="/theme/assets/images/icons/Group_User.1.svg" alt=""> @endif {{ $sumStudents }} {{ $info['students']['text'] }}</div>
+                                        @endif
+
+
+
+                                        @if(isset($info['inclass']['dates']['visible']['list']) && $info['inclass']['dates']['visible']['list'] && $info['inclass']['dates']['text'] != null)
+
+                                            <div class="dates">@if(isset($info['inclass']['dates']['icon']['path']) && $info['inclass']['dates']['icon']['path'] != null) <img class="replace-with-svg" width="20" onerror="this.onerror=null;this.src='/theme/assets/img/summary_icons/Duration_Hours.svg'" src="{{cdn($info['inclass']['dates']['icon']['path'])}}" alt="{{$info['inclass']['dates']['icon']['alt_text']}}"> @else<img class="replace-with-svg" width="20" src="/theme/assets/img/summary_icons/Duration_Hours.svg" alt=""> @endif {{ $info['inclass']['dates']['text'] }}</div>
+
+                                        @endif
+                                        @if(isset($info['inclass']['days']['visible']['list']) && $info['inclass']['days']['visible']['list'] && $info['inclass']['days']['text'] != null)
+                                            <div class="days">@if(isset($info['inclass']['days']['icon']['path']) && $info['inclass']['days']['icon']['path'] != null) <img class="replace-with-svg" width="20" onerror="this.onerror=null;this.src='/theme/assets/img/summary_icons/Days-Week.svg'"  src="{{cdn($info['inclass']['days']['icon']['path'])}}" alt="{{$info['inclass']['days']['icon']['alt_text']}}"> @else<img class="replace-with-svg" width="20" src="/theme/assets/img/summary_icons/Days-Week.svg" alt=""> @endif {{ $info['inclass']['days']['text'] }}</div>
+                                        @endif
+
+                                        @if(isset($info['inclass']['times']['visible']['list']) && $info['inclass']['times']['visible']['list'] && $info['inclass']['times']['text'] != null)
+
+                                            <div class="times">@if(isset($info['inclass']['times']['icon']['path']) && $info['inclass']['times']['icon']['path'] != null) <img class="replace-with-svg" width="20" src="{{cdn($info['inclass']['times']['icon']['path'])}}" onerror="this.onerror=null;this.src='/theme/assets/img/summary_icons/time.svg'" alt="{{$info['inclass']['times']['icon']['alt_text']}}"> @else<img class="replace-with-svg" width="20" src="/theme/assets/img/summary_icons/time.svg" alt=""> @endif {{ $info['inclass']['times']['text'] }}</div>
+
+                                        @endif
+
                                     </div>
                                 </div>
                                 <div class="right">
-                                    <?php  
-                                        if (isset($row['ticket']->where('type','Early Bird')->first()->pivot->price) && 
-                                            $row['ticket']->where('type','Early Bird')->first()->pivot->price > 0 && 
+                                    <?php
+                                        if (isset($row['ticket']->where('type','Early Bird')->first()->pivot->price) &&
+                                            $row['ticket']->where('type','Early Bird')->first()->pivot->price > 0 &&
                                             $row['ticket']->where('type','Early Bird')->first()->pivot->quantity > 0 &&
                                             $row['ticket']->where('type','Early Bird')->first()->pivot->active) {
 
                                             $price = $row['ticket']->where('type','Early Bird')->first()->pivot->price;
 
-                                        }else if(isset($row['ticket']->where('type','Special')->first()->pivot->price) && 
-                                            $row['ticket']->where('type','Special')->first()->pivot->price > 0 && 
+                                        }else if(isset($row['ticket']->where('type','Special')->first()->pivot->price) &&
+                                            $row['ticket']->where('type','Special')->first()->pivot->price > 0 &&
                                             $row['ticket']->where('type','Special')->first()->pivot->quantity > 0 &&
                                             $row['ticket']->where('type','Special')->first()->pivot->active){
-                                                            
+
                                             $price = $row['ticket']->where('type','Special')->first()->pivot->price;
 
-                                        }else if(isset($row['ticket']->where('type','Regular')->first()->pivot->price) && 
-                                            $row['ticket']->where('type','Regular')->first()->pivot->price > 0 && 
+                                        }else if(isset($row['ticket']->where('type','Regular')->first()->pivot->price) &&
+                                            $row['ticket']->where('type','Regular')->first()->pivot->price > 0 &&
                                             $row['ticket']->where('type','Regular')->first()->pivot->quantity > 0 &&
                                             $row['ticket']->where('type','Regular')->first()->pivot->active){
-                                            
+
                                             $price = $row['ticket']->where('type','Regular')->first()->pivot->price;
-                                        } else { 
-                                            $price = 0; 
+                                        } else {
+                                            $price = 0;
                                         }
                                     ?>
                                     <?php $etstatus = 0 ?>
@@ -189,7 +272,8 @@
                                     @if(isset($row['status']))
                                         <?php $etstatus = $row['status']; ?>
                                     @endif
-                                    @if($row->view_tpl == 'elearning_free')
+
+                                    @if(isset($info['payment_method']) && $info['payment_method'] == 'free')
                                     <div class="price">free</div>
                                     <a href="{{ $slug }}" class="btn btn--secondary btn--md">Enroll For Free</a>
                                     @elseif($row->view_tpl == 'elearning_pending')
@@ -202,6 +286,7 @@
                                     <div class="price">from €{{$price}}</div>
                                     <a href="{{ $slug }}" class="btn btn--secondary btn--md">Course Details</a>
                                     @endif
+
                                 </div>
                             </div>
                         </div>
@@ -244,6 +329,11 @@
                                             $slug = '';
                                         }
                                     ?>
+                                    <?php
+
+                                        $info = $row->event_info();
+
+                                   ?>
                                     <h2><a href="{{ $slug }}">{{ $row->title}}</a></h2>
                                     <div class="bottom">
                                         @if(isset($row['city']))
@@ -253,35 +343,72 @@
                                             @endforeach
                                         @endif
 
-                                        @if ($row->summary1->where('section','date')->first() && $row->summary1->where('section','date')->first()->title)
-                                            <div class="duration"><img width="20" src="/theme/assets/images/icons/icon-calendar.svg" alt=""> {{$row->summary1->where('section','date')->first()->title}}  </div>
+                                        @if(isset($info['hours']['visible']['list']) && $info['hours']['visible']['list'] && $info['hours']['hour'] != null)
+
+                                            <div class="expire-date">@if(isset($info['hours']['icon']['path']) && $info['hours']['icon']['path'] != null) <img class="replace-with-svg" width="20" src="{{cdn($info['hours']['icon']['path'])}}" onerror="this.onerror=null;this.src='/theme/assets/images/icons/Start-Finish.svg'" alt="{{$info['hours']['icon']['alt_text']}}"> @else<img class="replace-with-svg" width="20" src="/theme/assets/images/icons/Start-Finish.svg" alt=""> @endif{{ $info['hours']['hour'] }} {{ ($info['hours']['text'] != null) ? $info['hours']['text'] : '' }}</div>
                                         @endif
-                                        @if($row->hours)
-                                            <div class="expire-date"><img class="replace-with-svg" width="20" src="/theme/assets/images/icons/Start-Finish.svg" alt="">{{ $row->hours }}h</div>
+
+                                        @if(isset($info['language']['visible']['list']) && $info['language']['visible']['list'] && $info['language']['text'] != null)
+                                            <div class="language">@if(isset($info['language']['icon']['path']) && $info['language']['icon']['path'] != null) <img class="replace-with-svg" width="20" src="{{cdn($info['language']['icon']['path'])}}" onerror="this.onerror=null;this.src='theme/assets/images/icons/Language.svg'" alt="{{$info['language']['icon']['alt_text']}}"> @else<img class="replace-with-svg" width="20" src="theme/assets/images/icons/Language.svg" alt=""> @endif {{ $info['language']['text'] }}</div>
                                         @endif
+
+                                        @if(isset($info['certificate']['visible']['list']) && $info['certificate']['visible']['list'] && $info['certificate'] != null && $info['certificate']['type'] != null)
+                                        <div class="certification_type">@if(isset($info['certificate']['icon']['path']) && $info['certificate']['icon']['path'] != null) <img class="replace-with-svg" width="20" src="{{cdn($info['certificate']['icon']['path'])}}" onerror="this.onerror=null;this.src='/theme/assets/images/icons/Level.svg'" alt="{{$$info['certificate']['icon']['alt_text']}}"> @else<img class="replace-with-svg" width="20" src="/theme/assets/images/icons/Level.svg" alt=""> @endif {{ $info['certificate']['type'] }}</div>
+                                        @endif
+
+                                        <?php
+                                            if(isset($row['category'][0])){
+                                                $sumStudents = $sumStudentsCategories[$row['category'][0]['id']];
+                                            }else{
+                                                $sumStudents = 0;
+                                            }
+
+                                        ?>
+
+                                        @if(isset($info['students']['visible']['list']) && $info['students']['visible']['list'] && isset($info['students']['number']) && $sumStudents > (int)$info['students']['number'])
+                                            <div class="students">@if(isset($info['students']['icon']['path']) && $info['students']['icon']['path'] != null) <img class="replace-with-svg" width="20" src="{{cdn($info['students']['icon']['path'])}}" onerror="this.onerror=null;this.src='/theme/assets/images/icons/Group_User.1.svg'" alt="{{$info['students']['icon']['alt_text']}}"> @else<img class="replace-with-svg" width="20" src="/theme/assets/images/icons/Group_User.1.svg" alt=""> @endif {{ $sumStudents }} {{ $info['students']['text'] }}</div>
+                                        @endif
+
+
+
+                                        @if(isset($info['inclass']['dates']['visible']['list']) && $info['inclass']['dates']['visible']['list'] && $info['inclass']['dates']['text'] != null)
+
+                                            <div class="dates">@if(isset($info['inclass']['dates']['icon']['path']) && $info['inclass']['dates']['icon']['path'] != null) <img class="replace-with-svg" width="20" onerror="this.onerror=null;this.src='/theme/assets/img/summary_icons/Duration_Hours.svg'" src="{{cdn($info['inclass']['dates']['icon']['path'])}}" alt="{{$info['inclass']['dates']['icon']['alt_text']}}"> @else<img class="replace-with-svg" width="20" src="/theme/assets/img/summary_icons/Duration_Hours.svg" alt=""> @endif {{ $info['inclass']['dates']['text'] }}</div>
+
+                                        @endif
+                                        @if(isset($info['inclass']['days']['visible']['list']) && $info['inclass']['days']['visible']['list'] && $info['inclass']['days']['text'] != null)
+                                            <div class="days">@if(isset($info['inclass']['days']['icon']['path']) && $info['inclass']['days']['icon']['path'] != null) <img class="replace-with-svg" width="20" onerror="this.onerror=null;this.src='/theme/assets/img/summary_icons/Days-Week.svg'"  src="{{cdn($info['inclass']['days']['icon']['path'])}}" alt="{{$info['inclass']['days']['icon']['alt_text']}}"> @else<img class="replace-with-svg" width="20" src="/theme/assets/img/summary_icons/Days-Week.svg" alt=""> @endif {{ $info['inclass']['days']['text'] }}</div>
+                                        @endif
+
+                                        @if(isset($info['inclass']['times']['visible']['list']) && $info['inclass']['times']['visible']['list'] && $info['inclass']['times']['text'] != null)
+
+                                            <div class="times">@if(isset($info['inclass']['times']['icon']['path']) && $info['inclass']['times']['icon']['path'] != null) <img class="replace-with-svg" width="20" src="{{cdn($info['inclass']['times']['icon']['path'])}}" onerror="this.onerror=null;this.src='/theme/assets/img/summary_icons/time.svg'" alt="{{$info['inclass']['times']['icon']['alt_text']}}"> @else<img class="replace-with-svg" width="20" src="/theme/assets/img/summary_icons/time.svg" alt=""> @endif {{ $info['inclass']['times']['text'] }}</div>
+
+                                        @endif
+
 
                                     </div>
                                 </div>
                                 <div class="right">
-                                    <?php  
-                                        if (isset($row['ticket']->where('type','Early Bird')->first()->pivot->price) && 
-                                        $row['ticket']->where('type','Early Bird')->first()->pivot->price > 0 && 
+                                    <?php
+                                        if (isset($row['ticket']->where('type','Early Bird')->first()->pivot->price) &&
+                                        $row['ticket']->where('type','Early Bird')->first()->pivot->price > 0 &&
                                         $row['ticket']->where('type','Early Bird')->first()->pivot->quantity > 0 &&
                                         $row['ticket']->where('type','Early Bird')->first()->pivot->active) {
                                             $price = $row['ticket']->where('type','Early Bird')->first()->pivot->price;
-                                        }else if(isset($row['ticket']->where('type','Special')->first()->pivot->price) && 
-                                        $row['ticket']->where('type','Special')->first()->pivot->price > 0 && 
+                                        }else if(isset($row['ticket']->where('type','Special')->first()->pivot->price) &&
+                                        $row['ticket']->where('type','Special')->first()->pivot->price > 0 &&
                                         $row['ticket']->where('type','Special')->first()->pivot->quantity > 0 &&
                                         $row['ticket']->where('type','Special')->first()->pivot->active){
                                             $price = $row['ticket']->where('type','Special')->first()->pivot->price;
-                                        }else if(isset($row['ticket']->where('type','Regular')->first()->pivot->price) && 
-                                        $row['ticket']->where('type','Regular')->first()->pivot->price > 0 && 
+                                        }else if(isset($row['ticket']->where('type','Regular')->first()->pivot->price) &&
+                                        $row['ticket']->where('type','Regular')->first()->pivot->price > 0 &&
                                         $row['ticket']->where('type','Regular')->first()->pivot->quantity > 0 &&
                                         $row['ticket']->where('type','Regular')->first()->pivot->active){
                                             $price = $row['ticket']->where('type','Regular')->first()->pivot->price;
                                         }
-                                        else { 
-                                            $price = 0; 
+                                        else {
+                                            $price = 0;
                                         }
                                     ?>
                                     <?php $etstatus = 0 ?>

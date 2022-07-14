@@ -38,7 +38,6 @@
                             @can('create', App\Model\User::class)
                                 <div class="col-4 text-right">
                                     <a href="{{ route('events.create') }}" class="btn btn-sm btn-primary">{{ __('Add Event') }}</a>
-                                    <a href="{{ route('events.create_new') }}" class="btn btn-sm btn-primary">{{ __('Add Event_new') }}</a>
                                 </div>
                             @endcan
                         </div>
