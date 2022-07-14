@@ -628,13 +628,43 @@ class UserController extends Controller
         $data['eventTitle'] = $elearningInvoice->event->first()->title;
 
         $data['fbGroup'] = $elearningInvoice->event->first()->fb_group;
-        $data['duration'] = $elearningInvoice->event->first()->summary1->where('section','date')->first() ? $elearningInvoice->event->first()->summary1->where('section','date')->first()->title : '';
+        $data['duration'] = '';//$elearningInvoice->event->first()->summary1->where('section','date')->first() ? $elearningInvoice->event->first()->summary1->where('section','date')->first()->title : '';
         $data['eventSlug'] = $elearningInvoice->event->first() ? url('/') . '/' . $elearningInvoice->event->first()->getSlug() : url('/');
         $data['user']['createAccount'] = false;
         $data['user']['name'] = $elearningInvoice->user->first()->firstname;
 
-        $extrainfo = ['','',$data['eventTitle']];
+        $eventInfo = $elearningInvoice->event->first() ? $elearningInvoice->event->first()->event_info() : [];
 
+        if(isset($eventInfo['delivery']) && $eventInfo['delivery'] == 143){
+
+            $data['duration'] = isset($eventInfo['elearning']['visible']['emails']) && isset($eventInfo['elearning']['expiration']) && 
+                                $eventInfo['elearning']['visible']['emails'] /*&& isset($eventInfo['elearning']['course_elaerning_text'])*/ ?  
+                                            $eventInfo['elearning']['expiration'] /*. ' ' . $eventInfo['elearning']['course_elaerning_text']*/ : '';
+
+        }else if(isset($eventInfo['delivery']) && $eventInfo['delivery'] == 139){
+
+            $data['duration'] = isset($eventInfo['inclass']['dates']['visible']['emails']) && isset($eventInfo['inclass']['text']) && 
+                                        $eventInfo['inclass']['dates']['visible']['emails'] ?  $eventInfo['inclass']['text'] : '';
+
+        }
+
+        $data['hours'] = isset($eventInfo['hours']['visible']['emails']) &&  $eventInfo['hours']['visible']['emails'] && isset($eventInfo['hours']['hour']) && 
+                        isset( $eventInfo['hours']['text']) ? $eventInfo['hours']['hour'] . ' ' . $eventInfo['hours']['text'] : '';
+
+        $data['language'] = isset($eventInfo['language']['visible']['emails']) &&  $eventInfo['language']['visible']['emails'] && isset( $eventInfo['language']['text']) ? $eventInfo['language']['text'] : '';
+
+        $data['certificate_type'] =isset($eventInfo['certificate']['visible']['emails']) &&  $eventInfo['certificate']['visible']['emails'] && 
+                    isset( $eventInfo['certificate']['type']) ? $eventInfo['certificate']['type'] : '';
+
+        $eventStudents = get_sum_students_course($elearningInvoice->event->first()->category->first());
+        $data['students_number'] = isset($eventInfo['students']['number']) ? $eventInfo['students']['number'] :  $eventStudents + 1;
+
+        $data['students'] = isset($eventInfo['students']['visible']['emails']) &&  $eventInfo['students']['visible']['emails'] && 
+                        isset( $eventInfo['students']['text']) && $data['students_number'] >= $eventStudents  ? $eventInfo['students']['text'] : '';
+
+
+
+        $extrainfo = ['','',$data['eventTitle']];
         $data['extrainfo'] = $extrainfo;
 
 		/*$sent = Mail::send('emails.admin.elearning_invoice', $data, function ($m) use ($adminemail, $muser,$pdf) {
@@ -654,6 +684,8 @@ class UserController extends Controller
         if($user->cart){
             $user->cart->delete();
         }
+
+        $data['firstName'] = $user->firstname;
 
         $user->notify(new WelcomeEmail($user,$data));
 		$user->notify(new CourseInvoice($data));

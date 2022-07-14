@@ -266,9 +266,41 @@ class HomeController extends Controller
         $data['user']['name'] = $user->firstname . ' ' . $user->lastname;
         $data['user']['email'] = $user->email;
         $data['extrainfo'] = ['','',$content->title];
-        $data['duration'] =  $content->summary1->where('section', 'date')->first() ? $content->summary1->where('section', 'date')->first()->title : '';
+        $data['duration'] =  '';//$content->summary1->where('section', 'date')->first() ? $content->summary1->where('section', 'date')->first()->title : '';
 
         $data['eventSlug'] =  url('/') . '/' . $content->getSlug();
+
+        $eventInfo = $content ? $content->event_info() : [];
+
+        if(isset($eventInfo['delivery']) && $eventInfo['delivery'] == 143){
+
+            $data['duration'] = isset($eventInfo['elearning']['visible']['emails']) && isset($eventInfo['elearning']['expiration']) && 
+                                $eventInfo['elearning']['visible']['emails'] /*&& isset($eventInfo['elearning']['course_elaerning_text'])*/ ?  
+                                            $eventInfo['elearning']['expiration'] /*. ' ' . $eventInfo['elearning']['course_elaerning_text']*/ : '';
+
+        }else if(isset($eventInfo['delivery']) && $eventInfo['delivery'] == 139){
+
+            $data['duration'] = isset($eventInfo['inclass']['dates']['visible']['emails']) && isset($eventInfo['inclass']['text']) && 
+                                        $eventInfo['inclass']['dates']['visible']['emails'] ?  $eventInfo['inclass']['text'] : '';
+
+        }
+
+        $data['hours'] = isset($eventInfo['hours']['visible']['emails']) &&  $eventInfo['hours']['visible']['emails'] && isset($eventInfo['hours']['hour']) && 
+                        isset( $eventInfo['hours']['text']) ? $eventInfo['hours']['hour'] . ' ' . $eventInfo['hours']['text'] : '';
+
+        $data['language'] = isset($eventInfo['language']['visible']['emails']) &&  $eventInfo['language']['visible']['emails'] && isset( $eventInfo['language']['text']) ? $eventInfo['language']['text'] : '';
+
+        $data['certificate_type'] =isset($eventInfo['certificate']['visible']['emails']) &&  $eventInfo['certificate']['visible']['emails'] && 
+                    isset( $eventInfo['certificate']['type']) ? $eventInfo['certificate']['type'] : '';
+
+        $eventStudents = get_sum_students_course($content->category->first());
+        $data['students_number'] = isset($eventInfo['students']['number']) ? $eventInfo['students']['number'] :  $eventStudents + 1;
+
+        $data['students'] = isset($eventInfo['students']['visible']['emails']) &&  $eventInfo['students']['visible']['emails'] && 
+                        isset( $eventInfo['students']['text']) && $data['students_number'] >= $eventStudents  ? $eventInfo['students']['text'] : '';
+
+        $data['firstName'] = $user->firstname;
+
         $user->notify(new WelcomeEmail($user, $data));
 
 
@@ -470,6 +502,38 @@ class HomeController extends Controller
         $data['duration'] =  $content->summary1->where('section','date')->first() ? $content->summary1->where('section','date')->first()->title : '';
         $data['template'] = 'join_activation';
         $data['eventSlug'] =  url('/') . '/' . $content->getSlug();
+
+        $eventInfo = $content ? $content->event_info() : [];
+
+        if(isset($eventInfo['delivery']) && $eventInfo['delivery'] == 143){
+
+            $data['duration'] = isset($eventInfo['elearning']['visible']['emails']) && isset($eventInfo['elearning']['expiration']) && 
+                                $eventInfo['elearning']['visible']['emails'] /*&& isset($eventInfo['elearning']['course_elaerning_text'])*/ ?  
+                                            $eventInfo['elearning']['expiration'] /*. ' ' . $eventInfo['elearning']['course_elaerning_text']*/ : '';
+
+        }else if(isset($eventInfo['delivery']) && $eventInfo['delivery'] == 139){
+
+            $data['duration'] = isset($eventInfo['inclass']['dates']['visible']['emails']) && isset($eventInfo['inclass']['text']) && 
+                                        $eventInfo['inclass']['dates']['visible']['emails'] ?  $eventInfo['inclass']['text'] : '';
+
+        }
+
+        $data['hours'] = isset($eventInfo['hours']['visible']['emails']) &&  $eventInfo['hours']['visible']['emails'] && isset($eventInfo['hours']['hour']) && 
+                        isset( $eventInfo['hours']['text']) ? $eventInfo['hours']['hour'] . ' ' . $eventInfo['hours']['text'] : '';
+
+        $data['language'] = isset($eventInfo['language']['visible']['emails']) &&  $eventInfo['language']['visible']['emails'] && isset( $eventInfo['language']['text']) ? $eventInfo['language']['text'] : '';
+
+        $data['certificate_type'] =isset($eventInfo['certificate']['visible']['emails']) &&  $eventInfo['certificate']['visible']['emails'] && 
+                    isset( $eventInfo['certificate']['type']) ? $eventInfo['certificate']['type'] : '';
+
+        $eventStudents = get_sum_students_course($content->category->first());
+        $data['students_number'] = isset($eventInfo['students']['number']) ? $eventInfo['students']['number'] :  $eventStudents + 1;
+
+        $data['students'] = isset($eventInfo['students']['visible']['emails']) &&  $eventInfo['students']['visible']['emails'] && 
+                        isset( $eventInfo['students']['text']) && $data['students_number'] >= $eventStudents  ? $eventInfo['students']['text'] : '';
+
+
+        $data['firstName'] = $user->firstname;
         $user->notify(new WelcomeEmail($user,$data));
 
 
@@ -498,6 +562,7 @@ class HomeController extends Controller
         $data['event']['twitter'] = urlencode("Proudly participating in ". $content->title . " by Knowcrunch. 💙");
         $data['event']['linkedin'] = urlencode(url('/') . '/' .$content->slugable->slug .'?utm_source=LinkedIn&utm_medium=Post_Student&utm_campaign=KNOWCRUNCH_BRANDING&title='."Proudly participating in ". $content->title . " by Knowcrunch. 💙");
 
+        
         Session::put('thankyouData',$data);
         return redirect('/thankyou');
         //return view('theme.cart.new_cart.thank_you_free',$data);

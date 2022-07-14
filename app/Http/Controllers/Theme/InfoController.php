@@ -424,8 +424,6 @@ class InfoController extends Controller
 
             if ($thisevent) {
 
-                $eventInfo = $thisevent->event_info ? $thisevent->event_info->formedData() : []; 
-
                 $paymentMethodId = $thisevent->paymentMethod->first() ? $thisevent->paymentMethod->first()->id : 0;
                 $stripe = ($thisevent->paymentMethod->first() && $thisevent->paymentMethod->first()->id !== 1);
                 if($thisevent->view_tpl === 'elearning_event'){
@@ -441,10 +439,10 @@ class InfoController extends Controller
                 //$eventdate = $thisevent->summary1->where('section','date')->first() ? $thisevent->summary1->where('section','date')->first()->title : '';
 
                
-                $visibleDates = isset($eventInfo['inclass']['dates']['visible']['emails']) ? $eventInfo['inclass']['dates']['visible']['emails'] : null;
+                /*$visibleDates = isset($eventInfo['inclass']['dates']['visible']['emails']) ? $eventInfo['inclass']['dates']['visible']['emails'] : null;
                 if($visibleDates){
                     $eventdate = isset($eventInfo['inclass']['dates']['text']) ? $eventInfo['inclass']['dates']['text'] : null;  
-                }
+                }*/
                 
                 
                 if($thisevent->city->first() != null){
@@ -796,9 +794,38 @@ class InfoController extends Controller
 
         $data = [];
         $data['fbGroup'] = $extrainfo[7];
-        $data['duration'] = $extrainfo[3];
+        $data['duration'] = '';//$extrainfo[3];
         
         $data['eventSlug'] = $transaction->event->first() ? url('/') . '/' . $transaction->event->first()->getSlug() : url('/');
+
+        $eventInfo = $transaction->event->first() ? $transaction->event->first()->event_info() : [];
+
+        if(isset($eventInfo['delivery']) && $eventInfo['delivery'] == 143){
+
+            $data['duration'] = isset($eventInfo['elearning']['visible']['emails']) && isset($eventInfo['elearning']['expiration']) && 
+                                $eventInfo['elearning']['visible']['emails'] /*&& isset($eventInfo['elearning']['course_elaerning_text'])*/ ?  
+                                            $eventInfo['elearning']['expiration'] /*. ' ' . $eventInfo['elearning']['course_elaerning_text']*/ : '';
+
+        }else if(isset($eventInfo['delivery']) && $eventInfo['delivery'] == 139){
+
+            $data['duration'] = isset($eventInfo['inclass']['dates']['visible']['emails']) && isset($eventInfo['inclass']['text']) && 
+                                        $eventInfo['inclass']['dates']['visible']['emails'] ?  $eventInfo['inclass']['text'] : '';
+
+        }
+
+        $data['hours'] = isset($eventInfo['hours']['visible']['emails']) &&  $eventInfo['hours']['visible']['emails'] && isset($eventInfo['hours']['hour']) && 
+                        isset( $eventInfo['hours']['text']) ? $eventInfo['hours']['hour'] . ' ' . $eventInfo['hours']['text'] : '';
+
+        $data['language'] = isset($eventInfo['language']['visible']['emails']) &&  $eventInfo['language']['visible']['emails'] && isset( $eventInfo['language']['text']) ? $eventInfo['language']['text'] : '';
+
+        $data['certificate_type'] =isset($eventInfo['certificate']['visible']['emails']) &&  $eventInfo['certificate']['visible']['emails'] && 
+                    isset( $eventInfo['certificate']['type']) ? $eventInfo['certificate']['type'] : '';
+
+        $eventStudents = get_sum_students_course($transaction->event->first()->category->first());
+        $data['students_number'] = isset($eventInfo['students']['number']) ? $eventInfo['students']['number'] :  $eventStudents + 1;
+
+        $data['students'] = isset($eventInfo['students']['visible']['emails']) &&  $eventInfo['students']['visible']['emails'] && 
+                        isset( $eventInfo['students']['text']) && $data['students_number'] >= $eventStudents  ? $eventInfo['students']['text'] : '';
 
     	foreach ($emailsCollector as $key => $muser) {
             $data['user'] = $muser;
@@ -808,7 +835,8 @@ class InfoController extends Controller
             $data['helperdetails'] = $helperdetails;
             $data['elearning'] = $elearning;
             $data['eventslug'] = $eventslug;
-           
+            
+
             if(($user = User::where('email',$muser['email'])->first())){
 
                 if($user->cart){
@@ -817,7 +845,7 @@ class InfoController extends Controller
 
                 $data['template'] = $transaction->event->first() && $user->waitingList()->where('event_id',$transaction->event->first()->id)->first() 
                                         ? 'waiting_list_welcome' : 'welcome';
-
+                $data['firstName'] = $user->firstname;
                 $user->notify(new WelcomeEmail($user,$data));
 
                 /*if($elearning){
@@ -829,7 +857,7 @@ class InfoController extends Controller
         
         if($stripe){
             
-            $data = [];  
+            //$data = [];  
             $muser = [];
             $muser['name'] = $transaction->user->first()->firstname;
             $muser['first'] = $transaction->user->first()->firstname;
@@ -837,8 +865,8 @@ class InfoController extends Controller
             $muser['id'] = $transaction->user->first()->id;
             $muser['event_title'] =$transaction->event->first()->title;
 
-            $data['firstName'] = $transaction->user->first()->firstname;
-            $data['eventTitle'] = $transaction->event->first()->title;
+            $data['firstName'] = $muser['name'];
+            $data['eventTitle'] = $muser['event_title'];
             
 
             if(Session::has('installments') && Session::get('installments') <= 1){

@@ -388,47 +388,33 @@ class Invoice extends Model
                 
 
 
-                $hours = isset($info['hours']) ? $info['hours'] : null;
-                $hours_visible = isset($hours['visible']) ? $hours['visible'] : null;
-                $language_visible = isset($info['language']['visible']) ? $info['language']['visible'] : null;
-                $certificate_visible = isset($info['certificate']['visible']) ? $info['certificate']['visible'] : null;
-                $students_visible = isset($info['students']['visible']) ? $info['students']['visible'] : null;
+                if(isset($eventInfo['delivery']) && $eventInfo['delivery'] == 143){
 
-                if(isset($info['inclass'])){
-                    $inclass_dates = isset($info['inclass']['dates']) ? $info['inclass']['dates'] : null;
-                    $inclass_days = isset($info['inclass']['days']) ? $info['inclass']['days'] : null;
-                    $inclass_times = isset($info['inclass']['times']) ? $info['inclass']['times'] : null;
+                    $data['duration'] = isset($eventInfo['elearning']['visible']['emails']) && isset($eventInfo['elearning']['expiration']) && 
+                                        $eventInfo['elearning']['visible']['emails'] /*&& isset($eventInfo['elearning']['course_elaerning_text'])*/ ?  
+                                                    $eventInfo['elearning']['expiration'] /*. ' ' . $eventInfo['elearning']['course_elaerning_text']*/ : '';
+        
+                }else if(isset($eventInfo['delivery']) && $eventInfo['delivery'] == 139){
+        
+                    $data['duration'] = isset($eventInfo['inclass']['dates']['visible']['emails']) && isset($eventInfo['inclass']['text']) && 
+                                                $eventInfo['inclass']['dates']['visible']['emails'] ?  $eventInfo['inclass']['text'] : '';
+        
                 }
-
-                if(isset($hours_visible['invoice']) && $hours_visible['invoice'] && isset($hours['hour']) && $hours['hour'] != null){
-                    $data['description'] = $data['description'] .$hours['hour'].' '. ($hours['text'] != null ? $hours['text'] : '').', ';
-                }
-
-
-                if(isset($language_visible['invoice']) && $language_visible['invoice'] && isset($info['language']['text']) && $info['language']['text'] != null){
-                    $data['description'] =  $data['description'] .$info['language']['text'].', ';
-                }
-                if(isset($certificate_visible['invoice']) && $certificate_visible['invoice'] && isset($info['certificate']['type']) && $info['certificate']['type'] != null){
-                    $data['description'] =  $data['description'] . $info['certificate']['type'].', ';
-                }
-
-                if(isset($students_visible['invoice']) && $students_visible['invoice'] && isset($info['students']['number']) && get_sum_students_course($event->category->first()) > (int)$info['students']['number']){
-                    $data['description'] =  $data['description'] . get_sum_students_course($event->category->first()). ($info['students']['text'] != null ? $info['students']['text'].', ' : ', ');
-                }
-
-                if(isset($info['inclass'])){
-                    if(isset($inclass_dates['visible']['invoice']) && $inclass_dates['visible']['invoice'] && $inclass_dates['text'] != null){
-                        $data['description'] =  $data['description'] . $inclass_dates['text'] .', ';
-                    }
-                    if(isset($inclass_days['visible']['invoice']) && $inclass_days['visible']['invoice'] && $inclass_days['text'] != null){
-                        $data['description'] =  $data['description'] . $inclass_days['text'].', ';
-                    }
-                    if(isset($inclass_times['visible']['invoice']) && $inclass_times['visible']['invoice'] && $inclass_times['text'] != null){
-                        $data['description'] =  $data['description'] . $inclass_times['text'].', ';
-                    }
-
-                }
-                $data['description'] = rtrim($data['description'], ', ');
+        
+                $data['hours'] = isset($eventInfo['hours']['visible']['emails']) &&  $eventInfo['hours']['visible']['emails'] && isset($eventInfo['hours']['hour']) && 
+                                isset( $eventInfo['hours']['text']) ? $eventInfo['hours']['hour'] . ' ' . $eventInfo['hours']['text'] : '';
+        
+                $data['language'] = isset($eventInfo['language']['visible']['emails']) &&  $eventInfo['language']['visible']['emails'] && isset( $eventInfo['language']['text']) ? $eventInfo['language']['text'] : '';
+        
+                $data['certificate_type'] =isset($eventInfo['certificate']['visible']['emails']) &&  $eventInfo['certificate']['visible']['emails'] && 
+                            isset( $eventInfo['certificate']['type']) ? $eventInfo['certificate']['type'] : '';
+        
+                $eventStudents = get_sum_students_course($content->category->first());
+                $data['students_number'] = isset($eventInfo['students']['number']) ? $eventInfo['students']['number'] :  $eventStudents + 1;
+        
+                $data['students'] = isset($eventInfo['students']['visible']['emails']) &&  $eventInfo['students']['visible']['emails'] && 
+                                isset( $eventInfo['students']['text']) && $data['students_number'] >= $eventStudents  ? $eventInfo['students']['text'] : '';
+        
 
             }
 
