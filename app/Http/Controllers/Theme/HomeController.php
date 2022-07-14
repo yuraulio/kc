@@ -280,8 +280,8 @@ class HomeController extends Controller
 
         }else if(isset($eventInfo['delivery']) && $eventInfo['delivery'] == 139){
 
-            $data['duration'] = isset($eventInfo['inclass']['dates']['visible']['emails']) && isset($eventInfo['inclass']['text']) && 
-                                        $eventInfo['inclass']['dates']['visible']['emails'] ?  $eventInfo['inclass']['text'] : '';
+            $data['duration'] = isset($eventInfo['inclass']['dates']['visible']['emails']) && isset($eventInfo['inclass']['dates']['text']) && 
+                                        $eventInfo['inclass']['dates']['visible']['emails'] ?  $eventInfo['inclass']['dates']['text'] : '';
 
         }
 
@@ -499,7 +499,7 @@ class HomeController extends Controller
         $data['user']['name'] = $user->firstname . ' ' . $user->lastname;
         $data['user']['email'] = $user->email;
         $data['extrainfo'] = ['','',$content->title];
-        $data['duration'] =  $content->summary1->where('section','date')->first() ? $content->summary1->where('section','date')->first()->title : '';
+        $data['duration'] = ''; //$content->summary1->where('section','date')->first() ? $content->summary1->where('section','date')->first()->title : '';
         $data['template'] = 'join_activation';
         $data['eventSlug'] =  url('/') . '/' . $content->getSlug();
 
@@ -513,8 +513,8 @@ class HomeController extends Controller
 
         }else if(isset($eventInfo['delivery']) && $eventInfo['delivery'] == 139){
 
-            $data['duration'] = isset($eventInfo['inclass']['dates']['visible']['emails']) && isset($eventInfo['inclass']['text']) && 
-                                        $eventInfo['inclass']['dates']['visible']['emails'] ?  $eventInfo['inclass']['text'] : '';
+            $data['duration'] = isset($eventInfo['inclass']['dates']['visible']['emails']) && isset($eventInfo['inclass']['dates']['text']) && 
+                                        $eventInfo['inclass']['dates']['visible']['emails'] ?  $eventInfo['inclass']['dates']['text'] : '';
 
         }
 

@@ -384,35 +384,35 @@ class Invoice extends Model
             $data['description'] = '';
             if($this->event->first()){
                 
-                $info = $this->event->first()->event_info();
+                $eventInfo = $this->event->first()->event_info();
                 
 
 
                 if(isset($eventInfo['delivery']) && $eventInfo['delivery'] == 143){
 
-                    $data['duration'] = isset($eventInfo['elearning']['visible']['emails']) && isset($eventInfo['elearning']['expiration']) && 
-                                        $eventInfo['elearning']['visible']['emails'] /*&& isset($eventInfo['elearning']['course_elaerning_text'])*/ ?  
+                    $data['description'] = isset($eventInfo['elearning']['visible']['invoice']) && isset($eventInfo['elearning']['expiration']) && 
+                                        $eventInfo['elearning']['visible']['invoice'] /*&& isset($eventInfo['elearning']['course_elaerning_text'])*/ ?  
                                                     $eventInfo['elearning']['expiration'] /*. ' ' . $eventInfo['elearning']['course_elaerning_text']*/ : '';
         
                 }else if(isset($eventInfo['delivery']) && $eventInfo['delivery'] == 139){
         
-                    $data['duration'] = isset($eventInfo['inclass']['dates']['visible']['emails']) && isset($eventInfo['inclass']['text']) && 
-                                                $eventInfo['inclass']['dates']['visible']['emails'] ?  $eventInfo['inclass']['text'] : '';
+                    $data['description'] = isset($eventInfo['inclass']['dates']['visible']['invoice']) && isset($eventInfo['inclass']['dates']['text']) && 
+                                                $eventInfo['inclass']['dates']['visible']['invoice'] ?  $eventInfo['inclass']['dates']['text'] : '';
         
                 }
         
-                $data['hours'] = isset($eventInfo['hours']['visible']['emails']) &&  $eventInfo['hours']['visible']['emails'] && isset($eventInfo['hours']['hour']) && 
+                $data['hours'] = isset($eventInfo['hours']['visible']['invoice']) &&  $eventInfo['hours']['visible']['invoice'] && isset($eventInfo['hours']['hour']) && 
                                 isset( $eventInfo['hours']['text']) ? $eventInfo['hours']['hour'] . ' ' . $eventInfo['hours']['text'] : '';
         
-                $data['language'] = isset($eventInfo['language']['visible']['emails']) &&  $eventInfo['language']['visible']['emails'] && isset( $eventInfo['language']['text']) ? $eventInfo['language']['text'] : '';
+                $data['language'] = isset($eventInfo['language']['visible']['invoice']) &&  $eventInfo['language']['visible']['invoice'] && isset( $eventInfo['language']['text']) ? $eventInfo['language']['text'] : '';
         
-                $data['certificate_type'] =isset($eventInfo['certificate']['visible']['emails']) &&  $eventInfo['certificate']['visible']['emails'] && 
+                $data['certificate_type'] =isset($eventInfo['certificate']['visible']['invoice']) &&  $eventInfo['certificate']['visible']['invoice'] && 
                             isset( $eventInfo['certificate']['type']) ? $eventInfo['certificate']['type'] : '';
         
-                $eventStudents = get_sum_students_course($content->category->first());
+                $eventStudents = get_sum_students_course($this->event->first()->category->first());
                 $data['students_number'] = isset($eventInfo['students']['number']) ? $eventInfo['students']['number'] :  $eventStudents + 1;
         
-                $data['students'] = isset($eventInfo['students']['visible']['emails']) &&  $eventInfo['students']['visible']['emails'] && 
+                $data['students'] = isset($eventInfo['students']['visible']['invoice']) &&  $eventInfo['students']['visible']['invoice'] && 
                                 isset( $eventInfo['students']['text']) && $data['students_number'] >= $eventStudents  ? $eventInfo['students']['text'] : '';
         
 
@@ -517,7 +517,37 @@ class Invoice extends Model
 
 
         }else{
-            $data['description'] = $this->event->first()->summary1->where('section','date')->first() ? $this->event->first()->summary1->where('section','date')->first()->title : '';
+
+
+            $eventInfo = $this->event->first()->event_info();
+                
+            if(isset($eventInfo['delivery']) && $eventInfo['delivery'] == 143){
+
+                $data['description'] = isset($eventInfo['elearning']['visible']['invoice']) && isset($eventInfo['elearning']['expiration']) && 
+                                    $eventInfo['elearning']['visible']['invoice'] /*&& isset($eventInfo['elearning']['course_elaerning_text'])*/ ?  
+                                                $eventInfo['elearning']['expiration'] /*. ' ' . $eventInfo['elearning']['course_elaerning_text']*/ : '';
+        
+            }else if(isset($eventInfo['delivery']) && $eventInfo['delivery'] == 139){
+        
+                $data['description'] = isset($eventInfo['inclass']['dates']['visible']['invoice']) && isset($eventInfo['inclass']['dates']['text']) && 
+                                            $eventInfo['inclass']['dates']['visible']['invoice'] ?  $eventInfo['inclass']['dates']['text'] : '';
+        
+            }
+        
+            $data['hours'] = isset($eventInfo['hours']['visible']['invoice']) &&  $eventInfo['hours']['visible']['invoice'] && isset($eventInfo['hours']['hour']) && 
+                            isset( $eventInfo['hours']['text']) ? $eventInfo['hours']['hour'] . ' ' . $eventInfo['hours']['text'] : '';
+        
+            $data['language'] = isset($eventInfo['language']['visible']['invoice']) &&  $eventInfo['language']['visible']['invoice'] && isset( $eventInfo['language']['text']) ? $eventInfo['language']['text'] : '';
+        
+            $data['certificate_type'] =isset($eventInfo['certificate']['visible']['invoice']) &&  $eventInfo['certificate']['visible']['invoice'] && 
+                        isset( $eventInfo['certificate']['type']) ? $eventInfo['certificate']['type'] : '';
+        
+            $eventStudents = get_sum_students_course($this->event->first()->category->first());
+            $data['students_number'] = isset($eventInfo['students']['number']) ? $eventInfo['students']['number'] :  $eventStudents + 1;
+        
+            $data['students'] = isset($eventInfo['students']['visible']['invoice']) &&  $eventInfo['students']['visible']['invoice'] && 
+                            isset( $eventInfo['students']['text']) && $data['students_number'] >= $eventStudents  ? $eventInfo['students']['text'] : '';
+
 
         }
 

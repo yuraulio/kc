@@ -808,8 +808,8 @@ class InfoController extends Controller
 
         }else if(isset($eventInfo['delivery']) && $eventInfo['delivery'] == 139){
 
-            $data['duration'] = isset($eventInfo['inclass']['dates']['visible']['emails']) && isset($eventInfo['inclass']['text']) && 
-                                        $eventInfo['inclass']['dates']['visible']['emails'] ?  $eventInfo['inclass']['text'] : '';
+            $data['duration'] = isset($eventInfo['inclass']['dates']['visible']['emails']) && isset($eventInfo['inclass']['dates']['text']) && 
+                                    $eventInfo['inclass']['dates']['visible']['emails'] ?  $eventInfo['inclass']['dates']['text'] : '';
 
         }
 
@@ -826,6 +826,7 @@ class InfoController extends Controller
 
         $data['students'] = isset($eventInfo['students']['visible']['emails']) &&  $eventInfo['students']['visible']['emails'] && 
                         isset( $eventInfo['students']['text']) && $data['students_number'] >= $eventStudents  ? $eventInfo['students']['text'] : '';
+
 
     	foreach ($emailsCollector as $key => $muser) {
             $data['user'] = $muser;
