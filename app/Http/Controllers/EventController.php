@@ -980,7 +980,6 @@ class EventController extends Controller
 
         $event_info = $this->prepareInfo($infoData, $request->status, $request->delivery, $partner, $request->syllabus, $request->city_id, $event);
 
-        dd($event_info);
         $this->updateEventInfo($event_info, $event->id);
 
         if($event->status == 0 && $request->old_status == 5){
@@ -1053,7 +1052,6 @@ class EventController extends Controller
             $data['course_elearning_expiration'] = (isset($requestData['delivery']['elearning']['expiration']) && $requestData['delivery']['elearning']['expiration'] != null) ? $requestData['delivery']['elearning']['expiration'] : null;
             $data['course_elearning_text'] = (isset($requestData['delivery']['elearning']['text']) && $requestData['delivery']['elearning']['text'] != null) ? $requestData['delivery']['elearning']['text'] : null;
         }
-
 
 
         /////////////
@@ -1268,14 +1266,13 @@ class EventController extends Controller
 
         $info = $event->event_info();
 
-        if($info === null){
+
+        if($info == null || $info == '[]'){
             $infos = new EventInfo();
             $infos->event_id = $event->id;
         }else{
-            //$infos = $info;
             $infos = EventInfo::where('event_id', $event_id)->first();
         }
-
 
 
         $infos->course_status = $event_info['course_status'];
@@ -1338,7 +1335,7 @@ class EventController extends Controller
         $infos->course_elearning_access = $event_info['course_elearning_access'];
         $infos->course_elearning_access_icon = $event_info['course_elearning_access_icon'];
 
-        if($info === null){
+        if($info == null || $info == '[]'){
             $infos->save();
         }else{
             $infos->update();

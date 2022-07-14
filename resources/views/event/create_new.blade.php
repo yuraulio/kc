@@ -539,7 +539,7 @@
                                 <div class="exp_input col-sm-12 col-md-6 col-lg-3 form-group d-none">
                                     <label class="form-control-label" for="input-expiration">{{ __('Months access') }}</label>
                                     <div class="input-group">
-                                        <input type="number" min="1" name="expiration" id="input-expiration" class="form-control{{ $errors->has('expiration') ? ' is-invalid' : '' }}" placeholder="{{ __('Enter number of months') }}" value="{{ old('expiration') }}"autofocus>
+                                        <input type="number" min="1" name="course[{{'delivery'}}][{{'elearning'}}][{{'expiration'}}]" id="input-expiration" class="form-control{{ $errors->has('expiration') ? ' is-invalid' : '' }}" placeholder="{{ __('Enter number of months') }}" value="{{ old('expiration') }}"autofocus>
                                         <span data-infowrapper="elearning" class="input-group-addon input-group-append input-icon-wrapper-inclass">
                                             <span class="btn btn-outline-primary input-icon">
                                                 <img class="replace-with-svg" width="20" src="/theme/assets/img/summary_icons/Days-Week.svg" alt="">
@@ -1179,11 +1179,13 @@
             $('.delivery_child_wrapper').addClass('d-none')
             $('.elearning_visible_wrapper').removeClass('d-none')
             $('.exp_input').removeClass('d-none')
+            $('#input-city_id').val('')
         }else if($(this).val() == 215){
             $('.exp_input').addClass('d-none')
             $('.elearning_visible_wrapper').addClass('d-none')
             $('.delivery_child_wrapper').removeClass('d-none')
             $('.delivery_city_wrapper').addClass('d-none')
+            $('#input-city_id').val('')
         }
     });
 

@@ -383,9 +383,9 @@ class Invoice extends Model
 
             $data['description'] = '';
             if($this->event->first()){
-                
+
                 $info = $this->event->first()->event_info();
-                
+
 
 
                 $hours = isset($info['hours']) ? $info['hours'] : null;

@@ -473,7 +473,6 @@
 
 
                                             <div class="col-sm-12 col-md-6 col-lg-3 form-group{{ $errors->has('delivery') ? ' has-danger' : '' }}">
-
                                                 <select name="delivery" id="input-delivery" class="form-control" placeholder="{{ __('Delivery') }}" required>
                                                     <option disabled selected value="">Please select where this course takes place</option>
                                                     @foreach ($delivery as $delivery)
@@ -507,7 +506,7 @@
                                             ?>
 
                                             <div class="col-12 delivery_child_wrapper <?= $event->is_inclass_course() ? '' : 'd-none' ?>">
-                                                <div class="row delivery_city_wrapper">
+                                                <div class="row delivery_city_wrapper <?= $event->delivery->first()['id'] == 215 ? 'd-none' : '' ?>">
                                                     <div style="display:flex;" class="col-9 col-sm-12 col-md-6 col-lg-3 form-group{{ $errors->has('city_id') ? ' has-danger' : '' }} ">
                                                         <!-- <div class="col-sm-12 col-md-6 col-lg-3 form-group{{ $errors->has('city_id') ? ' has-danger' : '' }} "> -->
                                                         <select name="city_id" id="input-city_id" class="form-control" placeholder="{{ __('Please select the city of this course') }}" >
@@ -2101,11 +2100,15 @@
             $('.delivery_child_wrapper').addClass('d-none')
             $('.elearning_visible_wrapper').removeClass('d-none')
             $('.exp_input').removeClass('d-none')
+
+            $('#input-city_id').val('')
         }else if($(this).val() == 215){
             $('.exp_input').addClass('d-none')
             $('.elearning_visible_wrapper').addClass('d-none')
             $('.delivery_child_wrapper').removeClass('d-none')
             $('.delivery_city_wrapper').addClass('d-none')
+
+            $('#input-city_id').val('')
         }
     });
 
