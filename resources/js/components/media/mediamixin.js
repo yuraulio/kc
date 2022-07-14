@@ -335,7 +335,7 @@ var mediaMixin = {
         deleteFolder(folder) {
             Swal.fire({
                 title: 'Are you sure?\n ',
-                text: "You won't be able to revert this! Delete folder?",
+                text: "You won't be able to revert this! This will delete all images in this folder and it's subfolders. Delete folder?",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonText: 'Yes, delete it!',
@@ -440,7 +440,7 @@ var mediaMixin = {
             var pagesText = "";
             var pages_count = $event.pages_count;
             if (pages_count) {
-                pagesText = pagesText + "This image is used on" + pages_count + " pages.";
+                pagesText = pagesText + "This image is used on " + pages_count + " pages.";
             }
             if ($event.parent == null) {
                 pagesText = pagesText + "This this is an original image, this action will delete all its subimages that exist.";

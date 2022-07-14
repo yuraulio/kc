@@ -303,8 +303,8 @@
                                                 </div>
                                             </div>
                                             <div class="col-auto p-0">
-                                                <i @click.stop="deleteFolder(item)" class="fa fa-times ms-1  mt-1" aria-hidden="true"></i>
-                                                <i @click.stop="renameFolderModal(item)" class="fas fa-edit ms-1  mt-1"></i>
+                                                <i @click.stop="deleteFolder(item)" class="fa fa-times ms-1  mt-1 cursor-pointer" aria-hidden="true"></i>
+                                                <i @click.stop="renameFolderModal(item)" class="fas fa-edit ms-1  mt-1 cursor-pointer"></i>
                                             </div>
                                         </div>
                                     </div>
