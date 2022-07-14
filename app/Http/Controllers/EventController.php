@@ -1191,6 +1191,8 @@ class EventController extends Controller
         $newEvent->title = $newEvent->title . ' - clone';
         $newEvent->release_date_files = null;
         $newEvent->published_at = null;
+        $newEvent->index = false;
+        $newEvent->feed = false;
         $newEvent->launch_date = null;
         $newEvent->enroll = false;
         $newEvent->push();
