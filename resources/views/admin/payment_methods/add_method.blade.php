@@ -60,6 +60,12 @@
                               <input type="text" name="method_name" id="input-title" class="form-control{{ $errors->has('title') ? ' is-invalid' : '' }}" placeholder="{{ __('Title') }}" value="{{ old('method_name',$method['method_name']) }}" required autofocus>
                               @include('alerts.feedback', ['field' => 'title'])
                            </div>
+
+                           <div class="form-group{{ $errors->has('company_name') ? ' has-danger' : '' }}">
+                              <label class="form-control-label" for="input-company_name">{{ __('Company Name') }}</label>
+                              <input type="text" name="company_name" id="input-company_name" class="form-control{{ $errors->has('company_name') ? ' is-invalid' : '' }}" placeholder="{{ __('Company Name') }}" value="{{ old('company_name',$method['company_name']) }}" required autofocus>
+                              @include('alerts.feedback', ['field' => 'company_name'])
+                           </div>
                            <div class="form-group{{ $errors->has('processor') ? ' has-danger' : '' }}">
                               <label class="form-control-label" for="input-type">{{ __('Processor') }}</label>
                               <select name="processor_id" id="input-type" class="form-control" placeholder="{{ __('Processor') }}">

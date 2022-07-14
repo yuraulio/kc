@@ -31,6 +31,7 @@ class PaymentMethod extends Model
         'footer',
         'payment_email',
         'prefix',
+        'company_name',
 
     ];
 

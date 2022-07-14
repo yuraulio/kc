@@ -407,7 +407,6 @@ if (!function_exists('get_certifation_crendetial')){
         }
     }
 
-
     if (!function_exists('generate_invoice_number')){
 
         function generate_invoice_number($paymentMethod){
@@ -420,7 +419,7 @@ if (!function_exists('get_certifation_crendetial')){
 
             $option = Option::where('name','payments_invoice')->first();
             $invNumber = json_decode($option->settings,true);
-            $invoiceNumber = $paymentMethod->prefix . date('Ymd') . $invNumber[$paymentMethod->id];
+            $invoiceNumber = $paymentMethod->prefix . $invNumber[$paymentMethod->id];
 
             $invNumber[$paymentMethod->id] = $invNumber[$paymentMethod->id] + 1;
             $option->settings = json_encode($invNumber);
