@@ -50,10 +50,14 @@
     Log::info($event);
     $image = null;
     if($event && $event['path'] != null) {
+        Log::info($event['path']);
+        Log::info($event['original_name']);
         $imageedit = "true";
         $imageURL = url(str_replace("//", "/", $event['path'].$event['original_name']));
+        Log::info($imageURL);
         $image = MediaFile::whereUrl("$imageURL")->first();
         $image = json_encode($image);
+        Log::info($image);
     }
 ?>
 
