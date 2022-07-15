@@ -328,7 +328,7 @@ export default {
                         slug: this.slug_value,
                         rows: JSON.stringify(this.rows_value),
                         content: this.template_value ? JSON.stringify(this.$refs.tc.data) : '',
-                        category_id: this.category_value,
+                        categories: this.category_value,
                         subcategories: this.subcategory_value,
                         template_id: this.template_value ? this.template_value.id : null,
                         published: this.published,
@@ -435,7 +435,6 @@ export default {
         },
         mounted() {
             if (this.data) {
-                console.log(data);
                 var data = this.data;
                 this.title_value = data.title;
                 this.template_value = data.template;
@@ -473,9 +472,11 @@ export default {
                 var subcategories = [];
                 if (this.category_value) {
                     this.category_value.forEach(function(category, index) {
-                        category.subcategories.forEach(function(subcategory, index) {
-                            subcategories.push(subcategory);
-                        });
+                        if (category.subcategories) {
+                            category.subcategories.forEach(function(subcategory, index) {
+                                subcategories.push(subcategory);
+                            });
+                        }
                     });
                     this.subcategories = subcategories;
                 }
