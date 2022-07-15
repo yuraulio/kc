@@ -46,12 +46,8 @@
     }
 
     use App\Model\Admin\MediaFile;
-    use Illuminate\Support\Facades\Log;
-    Log::info($event);
     $image = null;
     if($event && $event['path'] != null) {
-        Log::info($event['path']);
-        Log::info($event['original_name']);
         $imageedit = "true";
         $name = $event['original_name'];
         $path = str_replace("//", "/", $event['path']);
@@ -64,10 +60,8 @@
 
         $path = $str . $name;
 
-        Log::info($path);
         $image = MediaFile::wherePath($path)->first();
         $image = json_encode($image);
-        Log::info($image);
     }
 ?>
 
