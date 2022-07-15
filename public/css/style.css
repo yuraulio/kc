@@ -593,25 +593,14 @@ li.select2-results__option:empty {
 }
 
 
-/* For 1024 Resolution */
-@media only screen
-and (min-device-width : 768px)
-and (max-device-width : 1024px)
-{
-
-}
-/* For 1366 Resolution */
-@media only screen
-and (min-width: 1030px)
-and (max-width: 1366px)
-{
-
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+    .visible-label{
+        position: unset;
+    }
+    .visible-item{
+        margin-top: unset;
+    }
 }
 
-@media only screen
-and (min-width: 1370px)
-and (max-width: 1605px)
-{
-
-}
 
