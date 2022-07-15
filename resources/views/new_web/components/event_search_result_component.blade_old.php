@@ -8,8 +8,7 @@
    $search_term = $dynamic_page_data["event_search_data"]["search_term"] ?? null;
    $search_term_slug = $dynamic_page_data["event_search_data"]["search_term_slug"] ?? null;
    $instructor = $dynamic_page_data["event_search_data"]["instructor"] ?? null;
-   $sumStudentsCategories = $dynamic_page_data["event_search_data"]['sumStudentsByCategories'];
-
+   
 @endphp
 
 <div class="search-results-head">
@@ -37,9 +36,10 @@
    <div class="search-results-wrapper">
    @if (count($list) > 0)
       <div class="section section--dynamic-learning">
+
          @foreach($list as $key => $row)
          @if($row['view_tpl'] != 'elearning_event' && $row['view_tpl'] != 'elearning_greek')
-            <?php
+         <?php
 
                 $chmonth = date('m', strtotime($row['published_at']));
                 $month = date('F Y', strtotime($row['published_at']));
@@ -50,7 +50,7 @@
                 });
 
                 ?>
-            <?php
+         <?php
             $location = [];
             $eventtype = [];
             $advancedtag = 0;
@@ -85,6 +85,30 @@
            // $search4 = false;
             //dd($row);
 
+            if ($row['summary1']) {
+                foreach($row['summary1'] as $sum){
+                    if($sum['section'] == 'date'){
+                        $exp = $sum['title'];
+                    }
+                }
+            }
+
+
+            if(isset($row['hours'])){
+                $duration = $row['hours'];
+
+            }else{
+                if ($row['summary1']) {
+                    foreach($row['summary1'] as $sum){
+                        if($sum['section'] == 'duration'){
+                            $duration = explode(' hours', $sum['title']);
+                            $duration = $duration[0];
+                            //dd($duration);
+                        }
+                    }
+                }
+            }
+
             ?>
 
          <!-- ./dynamic-learning--subtitle -->
@@ -92,15 +116,11 @@
             <div class="item">
                <div class="left">
                   <h2 class="@if($search2!==false) search-highlight @endif">{{ $row['title'] }}</h2>
-                  <?php
-                        $info = $row->event_info();
-                    ?>
                   <div class="bottom">
                      @if($row['city'] && count($row['city']) != 0)   <a href="{{ $row['city'][0]['slugable']['slug'] }}" class="location" title="{{ $row['city'][0]['name'] }}">
                      <img width="20" src="/theme/assets/images/icons/marker.svg" alt=""> <span class="@if($search1!==false) search-highlight @endif"> {{ $row['city'][0]['name'] }} </span></a> @else City @endif
-
-                     @include('new_web.components.event_infos',['type' => 'inclass'])
-                        </div>
+                     <div class="duration"><img width="20" src="/theme/assets/images/icons/icon-calendar.svg" alt="">@if (isset($exp)) {{ $exp }} @else Date @endif</div>
+                     @if(isset($duration))<div class="expire-date"><img width="20" src="/theme/assets/images/icons/Times.svg" alt="">{{ $duration }} h</div>@endif                  </div>
                </div>
                <div class="right">
                 @php
@@ -132,7 +152,7 @@
 
                   @if($row['view_tpl'] == 'elearning_pending')
                      <div class="price">Pending</div>
-                  @elseif((isset($info['payment_method']) && $info['payment_method'] == 'free'))
+                  @elseif($row['view_tpl'] == 'elearning_free')
                      <div class="price">free</div>
                   @elseif($row['status'] == 0)
                      <div class="price">from €{{$price}}</div>
@@ -149,7 +169,7 @@
                <div class="item">
                   <div class="left">
                      <h2>{{ $row['title'] }}</h2>
-                     @include('new_web.components.event_infos',['type' => 'elearning'])
+                     @if(isset($duration))<div class="expire-date"><img width="20" src="/theme/assets/images/icons/Times.svg" alt="">{{ $duration }} h</div>@endif
                   </div>
                   <div class="right">
 
@@ -161,7 +181,7 @@
                         else { $price = 0; } ?>
                    @if($row['view_tpl'] == 'elearning_pending')
                      <div class="price">Pending</div>
-                  @elseif((isset($info['payment_method']) && $info['payment_method'] == 'free'))
+                  @elseif($row['view_tpl'] == 'elearning_free')
                      <div class="price">free</div>
                   @elseif($row['status'] == 0)
                      <div class="price">from €{{$price}}</div>

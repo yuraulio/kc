@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use App\Model\Event;
 
+
 class MainController extends Controller
 {
     private $fbp;
@@ -124,6 +125,7 @@ class MainController extends Controller
 
         if ($slug == "event_search") {
             $dynamicPageData = $this->eventSearch($dynamicPageData, $request);
+            //dd($dynamicPageData);
         }
 
         if ($slug == "blog_search") {
@@ -175,6 +177,8 @@ class MainController extends Controller
             ->get();
 
         $data['instructor'] = Instructor::whereStatus(1)->get();
+
+        $data['sumStudentsByCategories'] = CMS::getCategoriesWithSumStudents();
 
         $dynamicPageData["event_search_data"] = $data;
 

@@ -163,17 +163,7 @@ class CMS
 
         $data['openlist'] = [];
 
-        $categories = Category::whereHas('events', function($query) {
-            return $query->where('published',true);
-        })->get();
-
-        $newCategoriesArr = [];
-
-        foreach($categories as $key => $category){
-            $newCategoriesArr[$category['id']] = get_sum_students_course($category);
-        }
-
-        $data['sumStudentsByCategories'] = $newCategoriesArr;
+        $data['sumStudentsByCategories'] = CMS::getCategoriesWithSumStudents();
 
         foreach ($data['openlistt'] as $openlist) {
             if ($openlist->category->first() == null) {
@@ -287,7 +277,23 @@ class CMS
         $data['city'] = $city;
         $data['openlist'] = $city->event()->with('category', 'slugable', 'city', 'ticket', 'summary1')->where('published', true)->whereIn('status', [0])->orderBy('published_at', 'desc')->get();
         $data['completedlist'] = $city->event()->with('category', 'slugable', 'city', 'ticket', 'summary1')->where('published', true)->where('status', 3)->orderBy('published_at', 'desc')->get();
+        $data['sumStudentsByCategories'] = CMS::getCategoriesWithSumStudents();
 
         return $data;
+    }
+
+    public static function getCategoriesWithSumStudents()
+    {
+        $categories = Category::whereHas('events', function($query) {
+            return $query->where('published',true);
+        })->get();
+
+        $newCategoriesArr = [];
+
+        foreach($categories as $key => $category){
+            $newCategoriesArr[$category['id']] = get_sum_students_course($category);
+        }
+
+        return $newCategoriesArr;
     }
 }

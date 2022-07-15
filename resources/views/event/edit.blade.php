@@ -525,7 +525,7 @@
                                                             @if(isset($course_inclass_city_icon) && $course_inclass_city_icon != null && $course_inclass_city_icon['path'] != null)
                                                                 <img src="{{ asset($course_inclass_city_icon['path']) }}" alt="{{ $course_inclass_city_icon != null && $course_inclass_city_icon['alt_text'] != '' ? $course_inclass_city_icon['alt_text'] : '' }}"/>
                                                             @else
-                                                                <i class="fa fa-plane-departure"></i>
+                                                                <i class="fa fa-map-marker"></i>
                                                             @endif
                                                         </span>
 
@@ -574,8 +574,6 @@
                                                             <input type="hidden" value="{{ old('inclass_dates_icon_alt_text', ($course_inclass_dates_icon != null && $course_inclass_dates_icon['alt_text'] != '') ? $course_inclass_dates_icon['alt_text'] : '' ) }}" id="inclass_dates_alt_text" id="inclass_dates_alt_text" name="course[{{'delivery'}}][{{'inclass'}}][{{'dates'}}][{{'icon'}}][{{'alt_text'}}]">
                                                         </div>
                                                     </div>
-
-                                                    <!-- TEST -->
 
                                                     <div class="form-group col-sm-12 col-md-7 col-lg-10">
                                                         <div class="row">
@@ -1039,7 +1037,8 @@
                                                             @if($course_partner_icon != null && $course_partner_icon['path'] != null)
                                                                 <img src="{{ asset($course_partner_icon['path']) }}"/>
                                                             @else
-                                                                <span class="fa fa-calendar"></span>
+                                                            <i class="fa fa-handshake-o" aria-hidden="true"></i>
+
                                                             @endif
                                                         </span>
                                                     </span>
@@ -1278,7 +1277,7 @@
                                             <div class="form-group col-12">
                                                 <span class="toggle-btn-inline-text">Does this course offer a certification? </span>
                                                 <label class="custom-toggle">
-                                                    <input id="certification-toggle" {{(isset($info['certificate']['messages']['success']) && $info['certificate']['messages']['success'] != null) ? 'checked' : '' }} type="checkbox">
+                                                    <input id="certification-toggle" {{((isset($info['certificate']['messages']['success']) && ($info['certificate']['messages']['success'] != null) || (isset($info['certificate']['type']) && $info['certificate']['type'] != null))) ? 'checked' : '' }} type="checkbox">
                                                     <span class="custom-toggle-slider rounded-circle" data-label-off="No" data-label-on="Yes"></span>
                                                 </label>
                                             </div>
@@ -1291,7 +1290,7 @@
 
 
 
-                                            <div class="form-group col-12 course-certification-visible-wrapper {{ (isset($info['certificate']['messages']['success']) && $info['certificate']['messages']['success'] != null) ? '' : 'd-none' }}">
+                                            <div class="form-group col-12 course-certification-visible-wrapper {{ ((isset($info['certificate']['messages']['success']) && ($info['certificate']['messages']['success'] != null) || (isset($info['certificate']['type']) && $info['certificate']['type'] != null))) ? '' : 'd-none' }}">
                                                 <div class="row">
                                                     <div class="col-sm-12 col-md-6 form-group{{ $errors->has('fb_') ? ' has-danger' : '' }}">
                                                         <label class="form-control-label" for="input-hours">{{ __('Certificate Title') }}</label>
@@ -2242,15 +2241,13 @@
    			        url: '/admin/events/totalHours/' + "{{$event->id}}",
    			        success: function (data) {
 
-                        console.log('data:', data)
-
                         if(data.success){
                             $(".success-message p").html(data.message);
    	                        $(".success-message").show();
 
 
 
-                            $('#input-hours').val(Math.ceil(data.data/3600)+'hr')
+                            $('#input-hours').val(Math.ceil(data.data/60)+'hr')
 
                            setTimeout(function(){
                             $(".close-message").click();

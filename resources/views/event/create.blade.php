@@ -289,11 +289,11 @@
 
                                         </div>
                                         <span class="input-icon-wrapper-city col-2" data-infowrapper="inclass_city">
-                                                <span class="btn btn-outline-primary input-icon">
-                                                    <i class="fa fa-plane-departure"></i>
-                                                </span>
-
+                                            <span class="btn btn-outline-primary input-icon">
+                                                <i class="fa fa-map-marker"></i>
                                             </span>
+
+                                        </span>
 
 
                                         <input type="hidden" value="{{ old('inclass_city_icon_path') }}" id="inclass_city_path" name="course[{{'delivery'}}][{{'inclass'}}][{{'city'}}][{{'icon'}}][{{'path'}}]">

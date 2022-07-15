@@ -692,7 +692,6 @@ class Event extends Model
             $timeStarts = false;
             $timeEnds = false;
 
-
             foreach($this->lessons as $lesson){
                 $timeStarts = false;
                 $timeEnds = false;
@@ -885,7 +884,7 @@ class Event extends Model
 
         }
 
-        return $total;
+        return $total/60;
     }
 
 }

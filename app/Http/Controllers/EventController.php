@@ -653,8 +653,6 @@ class EventController extends Controller
         $totalHours = $event->getTotalHours();
 
 
-
-
         return response()->json([
             'success' => true,
             'message' => 'Calculate successfully total hours for this event!',
