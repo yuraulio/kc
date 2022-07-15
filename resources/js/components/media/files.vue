@@ -19,12 +19,12 @@
                         <tr v-for="file in mediaFiles" :key="file.id">
                             <td @click="openFile(file)" style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; cursor: pointer;">
                                 <span v-if="file.extension.toLowerCase() == 'pdf'" class="bg-light text-secondary rounded">
-                                    <i class="mdi mdi-file-pdf-outline font-28"></i>
+                                    <i class="mdi mdi-file-pdf-outline font-28" style="font-size: 28px !important;"></i>
                                 </span>
                                 <img v-else-if="imageExtensions.includes(file.extension.toLowerCase())" :src="file.url + '?key=' + Math.random().toString().substr(2, 8)" alt="image" class="img-fluid avatar-sm rounded mt-2" style="width: 100px; height: auto;" />
 
                                 <span v-else class="bg-light text-secondary rounded">
-                                    <i class="mdi mdi-file font-28"></i>
+                                    <i class="mdi mdi-file font-28" style="font-size: 28px !important;"></i>
                                 </span>
 
                             </td>
@@ -50,7 +50,7 @@
                                     </a>
                                     <div class="dropdown-menu" style="">
                                         <!-- <a class="dropdown-item" href="#"><i class="mdi mdi-link me-2 text-muted vertical-middle"></i>Get Sharable Link</a> -->
-                                        <a class="dropdown-item" href="#" @click.prevent="editFile(file)"><i class="mdi mdi-pencil me-2 text-muted vertical-middle"></i>Edit</a>
+                                        <a v-if="imageExtensions.includes(file.extension.toLowerCase())" class="dropdown-item" href="#" @click.prevent="editFile(file)"><i class="mdi mdi-pencil me-2 text-muted vertical-middle"></i>Edit</a>
                                         <a class="dropdown-item" href="#" @click.prevent="moveFile(file)">
                                             <i class="mdi mdi-file-move me-2 text-muted vertical-middle"></i>
                                             Move
@@ -95,12 +95,12 @@
 
 
                             <span v-if="file.extension.toLowerCase() == 'pdf'" class="bg-light text-secondary rounded">
-                                <i class="mdi mdi-file-pdf-outline font-28"></i>
+                                <i class="mdi mdi-file-pdf-outline font-28" style="font-size: 28px !important;"></i>
                             </span>
                             <img v-else-if="imageExtensions.includes(file.extension.toLowerCase())" :src="file.url + '?key=' + Math.random().toString().substr(2, 8)" alt="product-pic" class="img-fluid rounded" style="width:100px, object-fit: dover" />
 
                             <span v-else class="bg-light text-secondary rounded">
-                                <i class="mdi mdi-file font-28"></i>
+                                <i class="mdi mdi-file font-28" style="font-size: 28px !important;"></i>
                             </span>
                         </div>
                     </div>

@@ -75,6 +75,17 @@ class MediaController extends Controller
         }
     }
 
+    public function getFile(Request $request, $id)
+    {
+        try {
+            $file = MediaFile::whereId($id)->with(['user', 'subfiles', 'parrent'])->first();
+            return new MediaFileResource($file);
+        } catch (Exception $e) {
+            Log::error("Failed to get file. " . $e->getMessage());
+            return response()->json(['message' => $e->getMessage()], 400);
+        }
+    }
+
     /**
      * Add mediaFolder
      *
@@ -408,7 +419,12 @@ class MediaController extends Controller
         $result = Storage::disk('public')->deleteDirectory($path);
         if ($result) {
             $folder->delete();
-            MediaFile::where('folder_id', $id)->delete();
+            $files = MediaFile::where('folder_id', $id)->get();
+            foreach ($files as $file) {
+                $file->pages()->detach();
+                $file->delete();
+            }
+
             return response()->json('success', 200);
         } else {
             return response()->json('Failed to delete folder.', 400);
