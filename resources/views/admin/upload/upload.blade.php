@@ -46,7 +46,8 @@
     }
 
     use App\Model\Admin\MediaFile;
-    
+    use Illuminate\Support\Facades\Log;
+    Log::info($event);
     $image = null;
     if($event && $event['path'] != null) {
         $imageedit = "true";
