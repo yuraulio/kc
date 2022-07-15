@@ -53,9 +53,19 @@
         Log::info($event['path']);
         Log::info($event['original_name']);
         $imageedit = "true";
-        $imageURL = url(str_replace("//", "/", $event['path'].$event['original_name']));
-        Log::info($imageURL);
-        $image = MediaFile::whereUrl("$imageURL")->first();
+        $name = $event['original_name'];
+        $path = str_replace("//", "/", $event['path']);
+
+        $prefix = '/uploads';
+        $str = $path;
+        if (substr($str, 0, strlen($prefix)) == $prefix) {
+            $str = substr($str, strlen($prefix));
+        }
+
+        $path = $str . $name;
+
+        Log::info($path);
+        $image = MediaFile::wherePath($path)->first();
         $image = json_encode($image);
         Log::info($image);
     }
