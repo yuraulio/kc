@@ -62,7 +62,9 @@ class CategoriesController extends Controller
             $category->title = $request->title;
             $category->parent_id = $request->parent_id ?? null;
             $category->user_id = Auth::user()->id;
-            $category->image_id = $request->category_image["id"];
+            if ($request->category_image) {
+                $category->image_id = $request->category_image["id"];
+            }
             $category->save();
 
             $parent_id = $category->id;
