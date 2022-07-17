@@ -28,6 +28,7 @@
         $elearningFree[$key]["free"] = true;
     }
 
+    $sumStudentsByCategory = $dynamic_page_data['sumStudentsByCategories'];
     // $inclassEvents = array_merge($inclassEvents, $inclassFree);
     $elearningEvents = array_merge($elearningEvents, $elearningFree);
 @endphp
@@ -67,16 +68,17 @@
 
                                 <?php
                                     if($event['event_info1'] != null ){
+                                        $sumStudents = 0;
 
-                                        $hours_visible = json_decode($event['event_info1']['course_hours_visible'], true);
-                                        $language_visible = json_decode($event['event_info1']['course_language_visible'], true);
+                                        $hours_visible = isset($event['event_info1']['course_hours_visible']) ? json_decode($event['event_info1']['course_hours_visible'], true) : null;
+                                        $language_visible = isset($event['event_info1']['course_language_visible']) ? json_decode($event['event_info1']['course_language_visible'], true) : null;
 
-                                        $inclass_dates = json_decode($event['event_info1']['course_inclass_dates'], true);
-                                        $inclass_times = json_decode($event['event_info1']['course_inclass_times'], true);
-                                        $inclass_days = json_decode($event['event_info1']['course_inclass_days'], true);
+                                        $inclass_dates = isset($event['event_info1']['course_inclass_dates']) ? json_decode($event['event_info1']['course_inclass_dates'], true) : null;
+                                        $inclass_times = isset($event['event_info1']['course_inclass_times']) ? json_decode($event['event_info1']['course_inclass_times'], true) : null;
+                                        $inclass_days = isset($event['event_info1']['course_inclass_days']) ? json_decode($event['event_info1']['course_inclass_days'], true) : null;
 
-                                        $certificate_visible = json_decode($event['event_info1']['course_certification_visible'], true);
-                                        $students_visible = json_decode($event['event_info1']['course_students_visible'], true);
+                                        $certificate_visible = isset($event['event_info1']['course_certification_visible']) ? json_decode($event['event_info1']['course_certification_visible'], true) : null;
+                                        $students_visible = isset($event['event_info1']['course_students_visible']) ? json_decode($event['event_info1']['course_students_visible'], true) : null;
 
                                     }
 
@@ -91,7 +93,11 @@
                                 <span class="days">@if(isset($inclass_days['visible']['home']) && $inclass_days['visible']['home'] && isset($inclass_days['text']) && $inclass_days['text'] != null) {{ $inclass_days['text'] }} @endif</span>
                                 <span class="times">@if(isset($inclass_times['visible']['home']) && $inclass_times['visible']['home'] && isset($inclass_times['text']) && $inclass_times['text'] != null) {{ $inclass_times['text'] }} @endif</span>
 
-                                <span class="students">@if(isset($students_visible['home']) && $students_visible['home'] && isset($event['sumStudents']) && isset($event['event_info1']['course_students_number']) && $event['sumStudents'] > (int)$event['event_info1']['course_students_number']) {{ $event['sumStudents'] }} {{ ((isset($event['event_info1']['course_students_text']) && $event['event_info1']['course_students_text'] != null) ? $event['event_info1']['course_students_text'] : '')}} @endif</span>
+                                
+                                <?php
+                                    $sumStudents = $sumStudentsByCategory[$event['pivot']['category_id']];
+                                ?>
+                                <span class="students">@if(isset($students_visible['home']) && $students_visible['home'] && isset($event['event_info1']['course_students_number']) && $sumStudents > (int)$event['event_info1']['course_students_number']) {{ $sumStudents }} {{ ((isset($event['event_info1']['course_students_text']) && $event['event_info1']['course_students_text'] != null) ? $event['event_info1']['course_students_text'] : '')}} @endif</span>
                                 @if(isset($event['slugable']) && $event['slugable']['slug'] != '')
                                     @if (isset($event['event_info1']['course_payment_method']) && $event['event_info1']['course_payment_method'] == 'free')
                                         <a href="{{ $event['slugable']['slug'] }}" class="btn btn--sm btn--secondary">enroll for free</a>
@@ -151,14 +157,16 @@
                             ?>
 
                             <?php
+
                                 if($event['event_info1'] != null ){
+                                    $sumStudents = 0;
 
-                                    $hours_visible = json_decode($event['event_info1']['course_hours_visible'], true);
-                                    $language_visible = json_decode($event['event_info1']['course_language_visible'], true);
+                                    $hours_visible = isset($event['event_info1']['course_hours_visible']) ? json_decode($event['event_info1']['course_hours_visible'], true) : null;
+                                    $language_visible = isset($event['event_info1']['course_language_visible']) ? json_decode($event['event_info1']['course_language_visible'], true) : null;
 
-                                    $certificate_visible = json_decode($event['event_info1']['course_certification_visible'], true);
-                                    $students_visible = json_decode($event['event_info1']['course_students_visible'], true);
-                                    $elearning_visible = json_decode($event['event_info1']['course_elearning_visible'], true);
+                                    $certificate_visible = isset($event['event_info1']['course_certification_visible']) ? json_decode($event['event_info1']['course_certification_visible'], true) : null;
+                                    $students_visible = isset($event['event_info1']['course_students_visible']) ? json_decode($event['event_info1']['course_students_visible'], true) : null;
+                                    $elearning_visible = isset($event['event_info1']['course_elearning_visible']) ? json_decode($event['event_info1']['course_elearning_visible'], true) : null;
                                     if($elearning_visible != null){
 
                                     }
@@ -180,7 +188,11 @@
                                     @endif
                                 </span>
 
-                                <span class="students">@if(isset($students_visible['home']) && $students_visible['home'] && isset($event['sumStudents']) && isset($event['event_info1']['course_students_number']) && $event['sumStudents'] > (int)$event['event_info1']['course_students_number']) {{ $event['sumStudents'] }} {{ ((isset($event['event_info1']['course_students_text']) && $event['event_info1']['course_students_text'] != null) ? $event['event_info1']['course_students_text'] : '')}} @endif</span>
+                                <?php
+                                    $sumStudents = $sumStudentsByCategory[$event['pivot']['category_id']];
+                                ?>
+
+                                <span class="students">@if(isset($students_visible['home']) && $students_visible['home'] && isset($event['event_info1']['course_students_number']) && $sumStudents > (int)$event['event_info1']['course_students_number']) {{ $sumStudents }} {{ ((isset($event['event_info1']['course_students_text']) && $event['event_info1']['course_students_text'] != null) ? $event['event_info1']['course_students_text'] : '')}} @endif</span>
                                 @if(isset($event['slugable']) && $event['slugable']['slug'] != '')
                                     @if (isset($event['event_info1']['course_payment_method']) && $event['event_info1']['course_payment_method'] == 'free')
                                         <a href="{{ $event['slugable']['slug'] }}" class="btn btn--sm btn--secondary">enroll for free</a>

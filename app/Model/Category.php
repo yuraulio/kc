@@ -142,6 +142,11 @@ class Category extends Model
         return $students;
     }
 
+    public function getSumOfStudentsByCategory()
+    {
+        return get_sum_students_course($this);
+    }
+
     /*public function getEventStatus(){
 
         return $this->morphedByMany(Event::class, 'categoryable')->latest('published_at');

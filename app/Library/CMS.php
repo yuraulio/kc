@@ -191,10 +191,12 @@ class CMS
         $data['elearningFree'] = [];
         $data['inclassFree'] = [];
 
-        $categories =Category::with('slugable', 'events.slugable', 'events.city', 'events', 'events.mediable', 'events.event_info1')->orderBy('priority', 'asc')->get()->toArray();
+        $categories = Category::with('slugable', 'events.slugable', 'events.city', 'events', 'events.mediable', 'events.event_info1')->orderBy('priority', 'asc')->get()->toArray();
 
+        $newCategoriesArr = [];
         //dd($categories);
         foreach ($categories as $category) {
+            $newCategoriesArr[$category['id']] = get_sum_students_course($category);
             if (!key_exists($category['id'], $data['nonElearningEvents'])) {
                 $data['nonElearningEvents'][$category['id']]['name'] = $category['name'];
                 $data['nonElearningEvents'][$category['id']]['slug'] = isset($category['slugable']) ? $category['slugable']['slug'] : '';
@@ -228,7 +230,7 @@ class CMS
 
 
                 if ($event['view_tpl'] == 'elearning_event' || $event['view_tpl'] == 'elearning_pending' || $event['view_tpl'] == 'elearning_free') {
-                    $event['sumStudents'] = get_sum_students_course((isset($category) ? $category : null));
+                    //$event['sumStudents'] = get_sum_students_course((isset($category) ? $category : null));
 
                     $data['elearningEvents'][$category['id']]['events'][] = $event;
                     $data['elearningEvents'][$category['id']]['view_tpl'] = $event['view_tpl'];
@@ -237,13 +239,13 @@ class CMS
 
 
                 } elseif ($event['view_tpl'] == 'event_free' || $event['view_tpl'] == 'event_free_coupon') {
-                    $event['sumStudents'] = get_sum_students_course((isset($event['category']) ? $category : null));
+                    //$event['sumStudents'] = get_sum_students_course((isset($event['category']) ? $category : null));
                     $data['inclassFree'][$category['id']]['events'][] = $event;
                     //$data['inclassFree'][$category['id']]['events'][]['sumStudents'] = get_sum_students_course((isset($event['category']) ? $event['category'][0] : null));
                 } /*elseif ($event['view_tpl'] == 'elearning_free') {
                     $data['elearningFree'][$category['id']]['events'][] = $event;
                 }*/ else {
-                    $event['sumStudents'] = get_sum_students_course((isset($event['category']) ? $category : null));
+                    //$event['sumStudents'] = get_sum_students_course((isset($event['category']) ? $category : null));
                     $data['nonElearningEvents'][$category['id']]['events'][] = $event;
                     //$data['nonElearningEvents'][$category['id']]['events'][]['sumStudents'] = get_sum_students_course((isset($event['category']) ? $event['category'][0] : null));
                 }
@@ -262,7 +264,8 @@ class CMS
             }
         }
 
-        //dd($data);
+        
+        $data['sumStudentsByCategories'] = $newCategoriesArr;
 
         return $data;
     }
@@ -277,7 +280,7 @@ class CMS
         $data['city'] = $city;
         $data['openlist'] = $city->event()->with('category', 'slugable', 'city', 'ticket', 'summary1')->where('published', true)->whereIn('status', [0])->orderBy('published_at', 'desc')->get();
         $data['completedlist'] = $city->event()->with('category', 'slugable', 'city', 'ticket', 'summary1')->where('published', true)->where('status', 3)->orderBy('published_at', 'desc')->get();
-        $data['sumStudentsByCategories'] = CMS::getCategoriesWithSumStudents();
+        $data['sumStudentsByCategories'] = self::getCategoriesWithSumStudents();
 
         return $data;
     }
