@@ -208,11 +208,13 @@ class ExamController extends Controller
         $questions[] = $request->question;
         $newQ = [];
         foreach($questions as $key1 => $question){
-
-            $question['question'] = trim(str_replace(['"',"'"], "", $question['question']));
             
+            $question['question'] = trim(str_replace(['"',"'"], "", $question['question']));
+            $question['question'] = preg_replace('~^\s+|\s+$~us', '\1', $question['question']);
+
             foreach($question['answers'] as $key => $answer){
-                $question['answers'][$key] = trim(str_replace(['"',"'"], "", $answer));
+                $answer = str_replace(['"',"'"], "", $answer);
+                $question['answers'][$key] = preg_replace('~^\s+|\s+$~us', '\1', $answer);
             }
             
             $newQ[] = $question;

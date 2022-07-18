@@ -243,8 +243,8 @@ class ExamAttemptController extends Controller
                     $q_id = $exam_data['q_id'];
                     $ex_id = $exam_id;
                     $q_type_id = $exam_data['question-type'];
-                    $given_ans = $exam_data['given_ans'];
-                   
+                    $given_ans = preg_replace('~^\s+|\s+$~us', '\1', $exam_data['given_ans']);
+                    
                     $credit = 0;
 
 

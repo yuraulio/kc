@@ -56,10 +56,10 @@ class InsertExamQuestion extends Command
                 continue;
             }
             
-            $questions[] = ['question' => trim(str_replace(['"',"'"], "", $line[1])), 'answer-credit' => 1, 
-                            'answers' => [trim(str_replace(['"',"'"], "", $line[2])),trim(str_replace(['"',"'"], "", $line[3])),trim(str_replace(['"',"'"], "", $line[4])),trim(str_replace(['"',"'"], "", $line[5]))], 
+            $questions[] = ['question' => trim(str_replace(['"',"'"], "", trim($line[1]))), 'answer-credit' => 1, 
+                            'answers' => [trim(str_replace(['"',"'"], "", trim($line[2]))),trim(str_replace(['"',"'"], "", trim($line[3]))),trim(str_replace(['"',"'"], "", trim($line[4]))),trim(str_replace(['"',"'"], "", $line[5]))], 
                             'question-type' => "radio buttons", 
-                            'correct_answer' => [trim(str_replace(['"',"'"], "", $line[3]))]
+                            'correct_answer' => [trim(str_replace(['"',"'"], "", trim($line[3])))]
                         ];
                     
         }
