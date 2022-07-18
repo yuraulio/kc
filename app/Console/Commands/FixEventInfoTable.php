@@ -45,9 +45,9 @@ class FixEventInfoTable extends Command
         
         foreach($events as $event){
             $requestData = [];
-            if($event->id == 4633){
+            /*if($event->id == 4633){
                 continue;
-            }
+            }*/
 
             $delivery =  $event->delivery->first() ? $event->delivery->first()->id : -1;
             $paymentMethod = $event->paymentMethod->first() ? $event->paymentMethod->first()->id : false;
@@ -67,6 +67,9 @@ class FixEventInfoTable extends Command
             ];
 
             $requestData['hours'] = $hours;
+            //dd($event->getTotalHours());
+            //Math.ceil(data.data/60)
+            $requestData['hours']['hour'] = ceil($event->getTotalHours() / 60);
 
             $language = [
                 'icon' => ['path'=> null, 'alt_text' => null],
@@ -209,7 +212,7 @@ class FixEventInfoTable extends Command
         $data['course_inclass_absences'] = $absences;
         $data['course_status'] = $status;
         $data['course_delivery'] = $delivery;
-        $data['course_hours'] = $requestData['hours']['text'];
+        $data['course_hours'] = $requestData['hours']['hour'];
 
         $data['course_partner'] = $partner;
         $data['course_manager'] = ($syllabus != null) ? true : false;

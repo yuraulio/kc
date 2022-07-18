@@ -744,14 +744,15 @@
                                  <div id="c-info-inner{{$tab}}" class="in-tab-wrapper" style="display: block;">
                                     <div class="bottom">
                                        <?php
-                                          $summaryDate = '';
+                                   
+                                          /*$summaryDate = '';
                                           foreach($event['summary1'] as $summary){
                                              if($summary['section'] == 'date'){
                                                 $summaryDate = $summary['title'];
                                              }
-                                          }
+                                          }*/
                                           ?>
-                                       <div class="duration"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/icon-calendar.svg')}}" alt="">{{$summaryDate}}</div>
+                                       @if(isset($event['summaryDate']))<div class="duration"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/icon-calendar.svg')}}" alt="">{{$event['summaryDate']}}</div>@endif
                                        @if($event['hours'])
                                        <div class="expire-date"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Start-Finish.svg')}}" alt="">{{$event['hours']}}</div>
                                        @endif

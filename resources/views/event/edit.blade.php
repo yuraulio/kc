@@ -2247,7 +2247,8 @@
 
 
 
-                            $('#input-hours').val(Math.ceil(data.data/60)+'hr')
+                            //$('#input-hours').val(Math.ceil(data.data/60)+'hr')
+                            $('#input-hours').val(Math.ceil(data.data/60))
 
                            setTimeout(function(){
                             $(".close-message").click();

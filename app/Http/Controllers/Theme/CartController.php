@@ -109,8 +109,24 @@ class CartController extends Controller
                 $data['pay_methods'] = $ev->paymentMethod->first();
 
 
-                $data['duration'] = $ev->summary1->where('section','date')->first() ? $ev->summary1->where('section','date')->first()->title:'';
-                $data['hours'] = $ev->summary1->where('section','duration')->first() ? $ev->summary1->where('section','duration')->first()->title:'';
+                //$data['duration'] = $ev->summary1->where('section','date')->first() ? $ev->summary1->where('section','date')->first()->title:'';
+                //$data['hours'] = $ev->summary1->where('section','duration')->first() ? $ev->summary1->where('section','duration')->first()->title:'';
+                $eventInfo = $ev->event_info();
+                if(isset($eventInfo['delivery']) && $eventInfo['delivery'] == 143){
+
+                    $data['duration'] = isset($eventInfo['elearning']['visible']['emails']) && isset($eventInfo['elearning']['expiration']) && 
+                                        $eventInfo['elearning']['visible']['emails'] && isset($eventInfo['elearning']['text']) ?  
+                                                    $eventInfo['elearning']['expiration'] . ' ' . $eventInfo['elearning']['text']: '';
+        
+                }else if(isset($eventInfo['delivery']) && $eventInfo['delivery'] == 139){
+        
+                    $data['duration'] = isset($eventInfo['inclass']['dates']['visible']['emails']) && isset($eventInfo['inclass']['dates']['text']) && 
+                                            $eventInfo['inclass']['dates']['visible']['emails'] ?  $eventInfo['inclass']['dates']['text'] : '';
+        
+                }
+
+                $data['hours'] = isset($eventInfo['hours']['hour']) && isset( $eventInfo['hours']['text']) ? $eventInfo['hours']['hour'] . ' ' . $eventInfo['hours']['text'] : '';
+
                 $data['city_event'] = $ev->city->first() ? $ev->city->first()->name : '';
                 $data['coupons'] = $ev->coupons->where('price','>',0)->toArray();
                 
@@ -1040,7 +1056,21 @@ class CartController extends Controller
             $qty = $item->qty;
             $ev = Event::where('id', $item->options['event'])->first();
             $eventId = $item->options['event'];
-            $ev_date_help = $ev->summary1->where('section','date')->first() ? $ev->summary1->where('section','date')->first()->title : 'date';
+            //$ev_date_help = $ev->summary1->where('section','date')->first() ? $ev->summary1->where('section','date')->first()->title : 'date';
+            $eventInfo = $ev->event_info();
+            if(isset($eventInfo['delivery']) && $eventInfo['delivery'] == 143){
+
+                $ev_date_help = isset($eventInfo['elearning']['visible']['emails']) && isset($eventInfo['elearning']['expiration']) && 
+                                    $eventInfo['elearning']['visible']['emails'] && isset($eventInfo['elearning']['text']) ?  
+                                                $eventInfo['elearning']['expiration'] . ' ' . $eventInfo['elearning']['text']: '';
+    
+            }else if(isset($eventInfo['delivery']) && $eventInfo['delivery'] == 139){
+    
+                $ev_date_help = isset($eventInfo['inclass']['dates']['visible']['emails']) && isset($eventInfo['inclass']['dates']['text']) && 
+                                        $eventInfo['inclass']['dates']['visible']['emails'] ?  $eventInfo['inclass']['dates']['text'] : '';
+    
+            }
+
             $ev_title = $ev->title;
             $ticket_id = $item->id;
             break;
@@ -2112,7 +2142,22 @@ class CartController extends Controller
             $qty = $item->qty;
             $ev = Event::where('id', $item->options['event'])->first();
             $eventId = $item->options['event'];
-            $ev_date_help = $ev->summary1->where('section','date')->first() ? $ev->summary1->where('section','date')->first()->title : 'date';
+            //$ev_date_help = $ev->summary1->where('section','date')->first() ? $ev->summary1->where('section','date')->first()->title : 'date';
+
+            $eventInfo = $ev->event_info();
+            if(isset($eventInfo['delivery']) && $eventInfo['delivery'] == 143){
+
+                $ev_date_help = isset($eventInfo['elearning']['visible']['emails']) && isset($eventInfo['elearning']['expiration']) && 
+                                    $eventInfo['elearning']['visible']['emails'] && isset($eventInfo['elearning']['text']) ?  
+                                                $eventInfo['elearning']['expiration'] . ' ' . $eventInfo['elearning']['text']: '';
+    
+            }else if(isset($eventInfo['delivery']) && $eventInfo['delivery'] == 139){
+    
+                $ev_date_help = isset($eventInfo['inclass']['dates']['visible']['emails']) && isset($eventInfo['inclass']['dates']['text']) && 
+                                        $eventInfo['inclass']['dates']['visible']['emails'] ?  $eventInfo['inclass']['dates']['text'] : '';
+    
+            }
+
             $ev_title = $ev->title;
             $ticket_id = $item->id;
             break;

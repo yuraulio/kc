@@ -555,26 +555,34 @@ class CronjobsController extends Controller
         foreach($events as $event){
 
             $eventInfo = $event->event_info();
-            $eventDate = isset($eventInfo['inclass']['dates']['text']) ? $eventInfo['inclass']['dates']['text'] : '';
-            $expiration = isset($eventInfo['elearning']['expiration']) ? $eventInfo['elearning']['expiration'] : '';
-
+            //$eventDate = isset($eventInfo['inclass']['dates']['text']) ? $eventInfo['inclass']['dates']['text'] : '';
+            //$expiration = isset($eventInfo['elearning']['expiration']) ? $eventInfo['elearning']['expiration'] : '';
+    
             foreach($event['users'] as $user){
-
+                $eventDate = isset($eventInfo['inclass']['dates']['text']) ? $eventInfo['inclass']['dates']['text'] : '';
                 if( !$eventDate ){
                     continue;
                 }
-
+                
                 $eventDate = explode('-',$eventDate);
-                dd($eventDate);
+                
                 if(!isset($eventDate[1])){
                     continue;
                 }
 
+                $year = explode(",",$eventDate[1]);
+                $year = isset($year[1]) ? trim($year[1]) : date('Y') ;
+
+                $startDate = date('Y-m-d',strtotime($eventDate[0] . ', '. $year));
+                $startDate = date_create($startDate);
+
                 $eventDate = date('Y-m-d',strtotime($eventDate[1]));
                 $date = date_create($eventDate);
+               
+                $expiration =  date_diff($date, $startDate);
                 $date = date_diff($date, $today);
-
-                if( $date->y==0 && $date->m == ($expiration/2)  && $date->d == 0){
+               
+                if( $date->y==0 && $date->m == ($expiration->m/2)  && $date->d == 0){
 
                     // dd('edww');
                     

@@ -1179,7 +1179,7 @@ class EventController extends Controller
         $newEvent->createSlug($newEvent->title);
         //$event->createMetas($request->all());
         //dd($event->lessons);
-        $event->load('category','faqs','sectionVideos','type','summary1','delivery','ticket','city','sections','venues','syllabus','benefits','paymentMethod','dropbox','event_info1');
+        $event->load('category','faqs','sectionVideos','type','delivery','ticket','city','sections','venues','syllabus','benefits','paymentMethod','dropbox','event_info1');
 
         foreach ($event->getRelations() as $relationName => $values){
             if($relationName == 'summary1' || $relationName == 'benefits' || $relationName == 'sections'){
