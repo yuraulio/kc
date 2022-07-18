@@ -18,14 +18,19 @@ class CMS
         $data['sections'] = $event->sections->groupBy('section');
         $data['section_fullvideo'] = $event->sectionVideos->first();
         $data['faqs'] = $event->getFaqs();
-        $data['testimonials'] = isset($event->category->toArray()[0]) ? $event->category->toArray()[0]['testimonials'] : [];
+
+        $category = $event->category->first();
+
+        $data['testimonials'] = ($category != null) ? $category->toArray()['testimonials'] : [];
         shuffle($data['testimonials']);
         $data['tickets'] = $event->ticket()->where('price', '>', 0)->where('active', true)->get()->toArray();
         $data['venues'] = $event->venues->toArray();
         $data['syllabus'] = $event->syllabus->toArray();
         $data['is_event_paid'] = 0;
         $data['is_joined_waiting_list'] = 0;
-        $data['sumStudents'] = get_sum_students_course($event->category->first());//isset($event->category[0]) ? $event->category[0]->getSumOfStudents() : 0;
+        //$data['sumStudents'] = get_sum_students_course($event->category->first());//isset($event->category[0]) ? $event->category[0]->getSumOfStudents() : 0;
+        //dd($category);
+        $data['sumStudents'] = $category->getSumOfStudentsByCategory();
         $data['showSpecial'] = false;
         $data['showAlumni'] = $event->ticket()->where('type', 'Alumni')->where('active', true)->first() ? true : false;
         $data['partners'] = $event->partners;
@@ -163,7 +168,7 @@ class CMS
 
         $data['openlist'] = [];
 
-        $data['sumStudentsByCategories'] = CMS::getCategoriesWithSumStudents();
+        $data['sumStudentsByCategories'] = getCategoriesWithSumStudents();
 
         foreach ($data['openlistt'] as $openlist) {
             if ($openlist->category->first() == null) {
@@ -191,12 +196,14 @@ class CMS
         $data['elearningFree'] = [];
         $data['inclassFree'] = [];
 
-        $categories = Category::with('slugable', 'events.slugable', 'events.city', 'events', 'events.mediable', 'events.event_info1')->orderBy('priority', 'asc')->get()->toArray();
+        $categories = Category::with('slugable', 'events.slugable', 'events.city', 'events', 'events.mediable', 'events.event_info1')->orderBy('priority', 'asc')->get();
 
         $newCategoriesArr = [];
         //dd($categories);
         foreach ($categories as $category) {
-            $newCategoriesArr[$category['id']] = get_sum_students_course($category);
+
+            $newCategoriesArr[$category['id']] = $category->getSumOfStudentsByCategory();
+            //dd($newCategoriesArr);
             if (!key_exists($category['id'], $data['nonElearningEvents'])) {
                 $data['nonElearningEvents'][$category['id']]['name'] = $category['name'];
                 $data['nonElearningEvents'][$category['id']]['slug'] = isset($category['slugable']) ? $category['slugable']['slug'] : '';
@@ -264,7 +271,7 @@ class CMS
             }
         }
 
-        
+
         $data['sumStudentsByCategories'] = $newCategoriesArr;
 
         return $data;
@@ -280,23 +287,9 @@ class CMS
         $data['city'] = $city;
         $data['openlist'] = $city->event()->with('category', 'slugable', 'city', 'ticket', 'summary1')->where('published', true)->whereIn('status', [0])->orderBy('published_at', 'desc')->get();
         $data['completedlist'] = $city->event()->with('category', 'slugable', 'city', 'ticket', 'summary1')->where('published', true)->where('status', 3)->orderBy('published_at', 'desc')->get();
-        $data['sumStudentsByCategories'] = self::getCategoriesWithSumStudents();
+        $data['sumStudentsByCategories'] = getCategoriesWithSumStudents();
 
         return $data;
     }
 
-    public static function getCategoriesWithSumStudents()
-    {
-        $categories = Category::whereHas('events', function($query) {
-            return $query->where('published',true);
-        })->get();
-
-        $newCategoriesArr = [];
-
-        foreach($categories as $key => $category){
-            $newCategoriesArr[$category['id']] = get_sum_students_course($category);
-        }
-
-        return $newCategoriesArr;
-    }
 }

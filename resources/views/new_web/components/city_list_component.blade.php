@@ -136,12 +136,6 @@
                                     ?>
                                     <h2><a href="{{env('NEW_PAGES_LINK') . '/' .  $slug }}">{{ $row->title}}</a></h2>
                                     <div class="bottom">
-                                        @if(isset($row['city']))
-                                            @foreach($row['city'] as $city)
-                                                <a href="{{ env('NEW_PAGES_LINK') . '/' .  $city->slugable->slug }}" class="city " title="{{ $city->name }}">
-                                                <img width="20" class="replace-with-svg" src="/theme/assets/images/icons/marker.svg" alt="">{{ $city->name }}</a>
-                                            @endforeach
-                                        @endif
 
                                         <?php
                                             $info = $row->event_info();
@@ -238,12 +232,6 @@
                                     ?>
                                     <h2><a href="{{ $slug }}">{{ $row->title}}</a></h2>
                                     <div class="bottom">
-                                        @if(isset($row['city']))
-                                            @foreach($row['city'] as $city)
-                                                <a href="{{ $city->slugable->slug }}" class="city " title="{{ $city->name }}">
-                                                <img width="20" class="replace-with-svg" src="/theme/assets/images/icons/marker.svg" alt="">{{ $city->name }}</a>
-                                            @endforeach
-                                        @endif
 
                                         <?php
 
