@@ -19,27 +19,28 @@
         role="dialog">
             <div class="offcanvas-header">
                 <h5 class="offcanvas-title" id="mediaCanvasLabel"></h5>
-                <button :ref="(keyput + 'mediabtn')" type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                <button @click="$set(loadstart, (keyput + 'media'),  false)" :ref="(keyput + 'mediabtn')" type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </div> <!-- end offcanvas-header-->
 
             <div class="offcanvas-body" style="padding: 0px !important">
-                <media-manager v-if="loadstart[(keyput + 'media')]" mode="single" :loadstart="loadstart[(keyput + 'media')]" @updatedimg="updatedmedia($event,(keyput + 'media'))" :key="keyput"></media-manager>
+                <media-manager v-if="loadstart[(keyput + 'media')]" mode="single" :startingImage="value" :imageVersion="imageVersion" :loadstart="loadstart[(keyput + 'media')]" @updatedimg="updatedmedia($event,(keyput + 'media'))" :key="keyput"></media-manager>
             </div> <!-- end offcanvas-body-->
         </div>
         <div class="text-center">
             <div class="d-grid text-center" v-if="value">
 
-                <img @click="$set(loadstart, (keyput + 'media'),  true)" data-bs-toggle="offcanvas" :data-bs-target="'#mediaCanvas' + keyput" :src="value.url" alt="image" class="img-fluid rounded" >
+                <img @click="$set(loadstart, (keyput + 'media'),  true)" data-bs-toggle="offcanvas" :data-bs-target="'#mediaCanvas' + keyput" :src="value.url + '?i=' + (Math.random() * 100000)" alt="image" class="img-fluid rounded cursor-pointer" >
 
                 <i @click="removeImage()" class="mdi mdi-delete text-muted vertical-middle d-block fs-4 mt-1"></i>
 
-                <div class="mt-2">
+                <div v-if="!hideAltText" class="mt-2">
                     <label class="form-label float-start">Alt Text</label>
                     <input type="text" v-model="value.alt_text" class="form-control">
                 </div>
             </div>
             <div v-else>
                 <i @click="$set(loadstart, (keyput + 'media'),  true)" data-bs-toggle="offcanvas" :data-bs-target="'#mediaCanvas' + keyput" class="text-muted dripicons-photo d-none image-input-icon" style="font-size: 100px;"></i>
+<<<<<<< HEAD
                 <button @click="$set(loadstart, (keyput + 'media'),  true)" type="button" data-bs-toggle="offcanvas" :data-bs-target="'#mediaCanvas' + keyput" aria-controls="offcanvasScrolling" id="image-input-button"  class="btn btn-soft-primary image-input-button">
                     <template v-if="imageEdit">
                         Edit Media
@@ -47,6 +48,10 @@
                     <template v-else>
                         Add Media
                     </template>
+=======
+                <button @click="$set(loadstart, (keyput + 'media'),  true)" type="button" data-bs-toggle="offcanvas" :data-bs-target="'#mediaCanvas' + keyput" aria-controls="offcanvasScrolling"  class="btn btn-soft-primary image-input-button">
+                    Add Media
+>>>>>>> master
                 </button>
             </div>
         </div>
@@ -99,16 +104,22 @@
         <textarea :id="keyput" v-model="editorData" class="form-control" maxlength="10000" rows="3" placeholder=""></textarea>
     </div>
 
-    <!-- <div v-if="type == 'image'" class="">
-        <label v-if="label" :for="keyput" class="form-label">{{ label }}</label>
-        <uploadImage @updatedimage="updatedimage" :key="keyput" :prevalue="value"  :keyput="keyput"></uploadImage>
-    </div> -->
-
     <div v-if="type == 'text_editor'" class="text-editor-input">
         <label v-if="label" :for="keyput" class="form-label">{{ label }}</label>
-        <ckeditor v-if="texteditor == 'ck'" :height="300" :editor="editor" :id="keyput" v-model="editorData" :config="editorConfig"></ckeditor>
 
-        <editor-content v-if="texteditor == 'tiny'" :editor="editorT" />
+        <editor 
+            :height="300" 
+            :id="keyput" 
+            v-model="editorData"
+            :api-key="tinymce"
+            :init="{
+                plugins: 'preview importcss searchreplace autolink autosave save directionality code visualblocks visualchars fullscreen image link media template codesample table charmap pagebreak nonbreaking anchor insertdatetime advlist lists wordcount help charmap quickbars emoticons',
+                toolbar: 'fullscreen styles | undo redo | h1 h2 h3 h4 h5 h6 | bold italic underline strikethrough | fontfamily fontsize blocks | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | preview print | insertfile image media link anchor codesample | ltr rtl',
+                toolbar_sticky: true,
+                toolbar_mode: 'wrap',
+                height: 300,
+            }"
+        ></editor>
     </div>
 
     <div v-if="type == 'contentComponent'" class="">
@@ -158,22 +169,18 @@
 <script>
 
 import uploadImage from './upload-image.vue'
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import contentComponent from './content-components.vue'
-import { Editor, EditorContent } from '@tiptap/vue-2'
-import StarterKit from '@tiptap/starter-kit'
 import multidropdown from './multidropdown.vue'
 import MediaManager from '../media/media-manager.vue';
-
+import Editor from '@tinymce/tinymce-vue'
 
 export default {
     components: {
         uploadImage,
-        ClassicEditor,
         contentComponent,
-        EditorContent,
         multidropdown,
-        MediaManager
+        MediaManager,
+        Editor,
     },
     props: {
         type: {
@@ -202,56 +209,14 @@ export default {
         fetch: {
             default: true
         },
-        imageEdit:false,
+        imageVersion: null,
+        hideAltText: false,
     },
     data() {
         return {
             loadstart: {},
-            texteditor: 'ck',
-            editor: ClassicEditor,
             editorData: this.value,
-            editorT: null,
-            editorConfig: {
-                height: 300,
-                toolbar: {
-                    items: [
-                        'heading', '|',
-                        'fontfamily', 'fontsize', '|',
-                        'alignment', '|',
-                        'fontColor', 'fontBackgroundColor', '|',
-                        'bold', 'italic', 'strikethrough', 'underline', 'subscript', 'superscript', '|',
-                        'link', '|',
-                        'outdent', 'indent', '|',
-                        'bulletedList', 'numberedList', 'todoList', '|',
-                        'code', 'codeBlock', '|',
-                        'insertTable', '|',
-                        'uploadImage', 'blockQuote', '|',
-                        'undo', 'redo'
-                    ],
-                    shouldNotGroupWhenFull: true
-                },
-                heading: {
-                    options: [
-                        { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
-                        { model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
-                        { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' },
-                        { model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3' },
-                        { model: 'heading4', view: 'h4', title: 'Heading 4', class: 'ck-heading_heading4' },
-                        { model: 'heading5', view: 'h5', title: 'Heading 5', class: 'ck-heading_heading5' },
-                        {
-                            model: 'subtitle',
-                            view: {
-                                name: 'p',
-                                classes: 'editor-subtitle'
-                            },
-                            title: 'Subtitle',
-                            class: 'ck-heading_subtitle',
-                            converterPriority: 'high'
-                        }
-                    ]
-                }
-                // The configuration of the editor.
-            },
+            tinymce: process.env.MIX_PUSHER_TINYMCE,
         };
     },
     methods: {
@@ -329,44 +294,34 @@ export default {
         if (this.value) {
             this.editorData = this.value;
         }
-        this.editorT = new Editor({
-            content: this.editorData,
-            extensions: [
-                StarterKit,
-            ],
-        })
     },
     beforeDestroy() {
-        this.editorT.destroy()
     },
 }
 </script>
 
 <style>
-    .ck.ck-editor__main>.ck-editor__editable {
-        min-height: 200px;
+    .tox-statusbar__branding {
+        display: none;
     }
 
-    .page-edit-simple .ck-editor:not(:hover) .ck-editor__top{
+    .tox.tox-tinymce, .tox.tox-tinymce div {
+        border: 0px!important;
+    }
+    .tox-toolbar, .tox-menubar {
+        background: none!important;
+        background-color: #fff!important;
+    }
+    /*
+    .page-edit-simple .tox.tox-tinymce:not(:hover) .tox-editor-header {
         visibility: hidden;
     }
-    .page-edit-simple .ck-editor .ck-editor__top * {
-        border: 0px;
+    */
+    .tox-tinymce--toolbar-sticky-on .tox-editor-header {
+        top: 75px!important;
     }
-    .page-edit-simple .ck-editor .ck-toolbar {
-        background-color: transparent;
-    }
-    .page-edit-simple .ck-editor:not(:hover) .ck-content {
-        border: 0px;
-        box-shadow: none;
-    }
-    .page-edit-simple .ck-editor .ck-content {
-        border: 0px;
-    }
-    .page-edit-simple .ck.ck-editor__editable:not(.ck-editor__nested-editable).ck-focused {
-        outline: none;
-        border: 0px;
-        box-shadow: none;
+    .tox-fullscreen .navbar-custom {
+        display: none;
     }
 </style>
 

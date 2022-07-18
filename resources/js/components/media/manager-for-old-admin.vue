@@ -13,7 +13,8 @@
         @inputed="imageSelected($event)"
         :uuid="$uuid.v4()"
         mode="single"
-        :imageEdit="imageedit"
+        :value="JSON.parse(startingImage)"
+        :hideAltText="true"
     />
 
 </div>
@@ -22,7 +23,7 @@
 <script>
 export default {
     props: {
-        imageedit: false,
+        startingImage: null,
     },
     data() {
         return {

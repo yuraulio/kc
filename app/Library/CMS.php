@@ -217,11 +217,11 @@ class CMS
                 $data['elearningEvents'][$category['id']]['hours'] = $category['hours'];
                 $data['elearningEvents'][$category['id']]['events'] = [];
 
-                //$data['elearningFree'][$category['id']]['name'] = $category['name'];
-                //$data['elearningFree'][$category['id']]['slug'] = isset($category['slugable']) ? $category['slugable']['slug'] : '';
-                //$data['elearningFree'][$category['id']]['description'] = $category['description'];
-                //$data['elearningFree'][$category['id']]['hours'] = $category['hours'];
-                //$data['elearningFree'][$category['id']]['events'] = [];
+                $data['elearningFree'][$category['id']]['name'] = $category['name'];
+                $data['elearningFree'][$category['id']]['slug'] = isset($category['slugable']) ? $category['slugable']['slug'] : '';
+                $data['elearningFree'][$category['id']]['description'] = $category['description'];
+                $data['elearningFree'][$category['id']]['hours'] = $category['hours'];
+                $data['elearningFree'][$category['id']]['events'] = [];
 
                 $data['inclassFree'][$category['id']]['name'] = $category['name'];
                 $data['inclassFree'][$category['id']]['slug'] = isset($category['slugable']) ? $category['slugable']['slug'] : '';

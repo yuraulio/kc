@@ -69,7 +69,8 @@ class Kernel extends ConsoleKernel
        Commands\KCIDToUsers::class,
        Commands\LessonLinksFixed::class,
        Commands\FixEventInfoTable::class,
-       Commands\FixExamQuestion::class
+       Commands\FixExamQuestion::class,
+       Commands\FixExamQuestion::class,
     ];
 
     /**

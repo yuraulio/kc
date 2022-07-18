@@ -46,14 +46,29 @@
     }
 
     $imageedit = "false";
+    use App\Model\Admin\MediaFile;
+    $image = null;
     if($event && $event['path'] != null) {
         $imageedit = "true";
+        $name = $event['original_name'];
+        $path = str_replace("//", "/", $event['path']);
+
+        $prefix = '/uploads';
+        $str = $path;
+        if (substr($str, 0, strlen($prefix)) == $prefix) {
+            $str = substr($str, strlen($prefix));
+        }
+
+        $path = $str . $name;
+
+        $image = MediaFile::wherePath($path)->first();
+        $image = json_encode($image);
     }
 ?>
 
 <div id="app" class="bootstrap-classes ubold mt-5 mb-5 pl-lg-4">
     <manager-for-old-admin
-        imageedit="{{ $imageedit }}"
+        starting-image="{{ $image }}"
     ></manager-for-old-admin>
 </div>
 
@@ -66,10 +81,10 @@
 
     @if($event)
         <div class="form-group">
-            <img id="img-upload"  onerror="this.src='https://via.placeholder.com/400x250?text=PHOTO'" src="
+            {{-- <img id="img-upload"  onerror="this.src='https://via.placeholder.com/400x250?text=PHOTO'" src="
             <?php if($event['path'] != null) {
                 echo url($event['path'].$event['original_name']);
-            }?>">
+            }?>"> --}}
         </div>
         <input type="hidden" value="{{$event['path'].$event['original_name']}}" id="image_upload" name="image_upload">
 

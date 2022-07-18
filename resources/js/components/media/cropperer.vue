@@ -87,7 +87,7 @@
                     <div class="col-lg-12 d-grid mb-2">
                         <label for="jpg" class="form-label">Convert image versions to jpg format. (Reduces size.)</label>
                         <br class="d-none">
-                        <input v-model="jpg" type="checkbox" id="jpg" class="form-check-input">
+                        <input v-model="jpg" type="checkbox" id="jpg" class="form-check-input" style="position: relative;">
                     </div>
                     <div class="col-lg-12 d-flex align-items-end mt-2">
                         <template>
@@ -106,7 +106,7 @@
     </div>
     <div class="col-3">
         <div class="card">
-            <div class="card-body bg-light" style="max-height: 50vh; overflow: hidden; overflow-y: scroll">
+            <div id="versions" class="card-body bg-light" style="max-height: 50vh; overflow: hidden; overflow-y: scroll">
                 <div class="tab-content pt-0">
 
                     <div class="tab-pane d-block" id="profile1">
@@ -117,10 +117,12 @@
                                 {{ size(parrentImage.size) }}
                             </p>
                             <img @click="version='original'; selectedVersion=null; imgname=parrentImage.name; alttext=parrentImage.alt_text; link=parrentImage.link" crossorigin="anonymous" :src="parrentImage ? ('/uploads/' + parrentImage.path) : ''" alt="image" class="img-fluid rounded" />
+                            <button v-if="parentMode" @click="confirmSelection(parrentImage)" style="width: 100%" class="btn btn-soft-primary mt-2">Select image</button>
                             <hr>
 
-                            <template v-for="(version1, index) in versions">
-                                <h5 class="">
+                            <template v-for="(version1, index) in versions" v-if="matchVersions(version1.version)">
+                                {{matchVersions(version1.version)}}
+                                <h5 :id="version1.version" class="">
                                     {{ version1.version }}
                                     <i v-if="findVersionData(version1.version)" @click="deleteFile(findVersionData(version1.version), index)" class="mdi mdi-delete text-muted vertical-middle cursor-pointer"></i>
                                 </h5>
@@ -130,9 +132,10 @@
                                 <p class="text-muted d-block mb-2">{{ version1.description }}</p>
                                 <template v-if="findVersionData(version1.version) != null">
                                     <img @click="version=version1.version; selectedVersion=version1; versionSelected();" crossorigin="anonymous" :src="'/uploads/' + findVersionData(version1.version).path + '?key=' + imageKey" alt="image" class="img-fluid rounded" :style="version == version1.version ? 'border: 4px solid #1abc9c;' : 'border: 4px solid #f3f7f9;'" />
+                                    <button v-if="parentMode" @click="confirmSelection(findVersionData(version1.version))" style="width: 100%" class="btn btn-soft-primary mt-2">Select image</button>
                                 </template>
                                 <template v-else>
-                                    <button @click="version=version1.version; selectedVersion=version1; versionSelected();" class="btn btn-primary">Set image</button>
+                                    <button @click="version=version1.version; selectedVersion=version1; versionSelected();" style="width: 100%" class="btn btn-primary">Set image</button>
                                 </template>
                                 <hr>
                             </template>
@@ -149,16 +152,19 @@
 import VueCropper from "vue-cropperjs";
 import "cropperjs/dist/cropper.css";
 import uploadImage from "../inputs/upload-image.vue";
+import VueScrollTo from "vue-scrollto";
 
 export default {
     props: {
         prevalue: {},
         imageKey: "",
         warning: false,
+        imageVersion: null,
     },
     components: {
         VueCropper,
         uploadImage,
+        VueScrollTo,
     },
     data() {
         return {
@@ -181,6 +187,7 @@ export default {
             width_ratio: null,
             height_ratio: null,
             versionData: null,
+            parentMode: this.$parent.$parent.mode != null ? true : false,
             versions: [{
                     w: 470,
                     h: 470,
@@ -293,9 +300,30 @@ export default {
 
                 this.$forceUpdate();
             }
+
+            setTimeout(() => {
+                this.version = this.prevalue.version;
+                this.selectedVersion = this.findVersion(this.version);
+                this.versionSelected();
+                var element = document.getElementById(this.version);
+                VueScrollTo.scrollTo(element, 500, {
+                    container: "#versions",
+                });
+            }, 1000);
+
+            // this.version = this.prevalue.version;
+            // this.selectedVersion = this.findVersion(this.version);
+            // this.versionSelected();
         }
     },
     methods: {
+        confirmSelection(image) {
+            if (this.$parent.$parent.mode != null ) {
+                this.$parent.$parent.updatedMediaImage(image);
+                // this.$modal.hide('gallery-modal');
+                this.$toast.success('New image selected!');
+            }
+        },
         versionSelected() {
             if (this.selectedVersion) {
                 var image_width, image_height;
@@ -455,18 +483,31 @@ export default {
         zoom(percent) {
             this.$refs.cropper.relativeZoom(percent);
         },
+        findVersion(version1) {
+            var return_value = null;
+            this.versions.forEach(function(version2){
+                if (version2.version == version1) {
+                    return_value = version2;
+                }
+            });
+            return return_value;
+        },
         findVersionData(version){
             var return_value = null;
-            this.prevalue.subfiles.forEach(function(image){
-                if (image.version == version) {
-                    return_value = image;
-                }
-            });
-            this.prevalue.siblings.forEach(function(image){
-                if (image.version == version) {
-                    return_value = image;
-                }
-            });
+            if (this.prevalue.subfiles) {
+                this.prevalue.subfiles.forEach(function(image){
+                    if (image.version == version) {
+                        return_value = image;
+                    }
+                });
+            }
+            if(this.prevalue.siblings) {
+                this.prevalue.siblings.forEach(function(image){
+                    if (image.version == version) {
+                        return_value = image;
+                    }
+                });
+            }
             return return_value;
         },
         deleteFile(file, index) {
@@ -482,6 +523,15 @@ export default {
             } else {
                 return parseFloat(size * 0.000001).toFixed(1) + " MB";
             }
+        },
+        matchVersions(version) {
+            if (this.imageVersion) {
+                if (version == this.imageVersion) {
+                    return true;
+                }
+                return false;
+            }
+            return true;
         }
     },
     beforeDestroy() {
@@ -581,5 +631,24 @@ textarea {
 
 .cropped-image img {
     max-width: 100%;
+}
+
+.btn-soft-success {
+    color: #1abc9c!important;
+    background-color: rgba(26, 188, 156, 0.18)!important;
+    border-color: rgba(26, 188, 156, 0.12)!important;
+}
+.btn-soft-success:hover {
+    color: #fff!important;
+    background-color: #1abc9c!important;
+}
+.btn-soft-primary {
+    color: #6658dd!important;
+    background-color: rgba(102, 88, 221, 0.18)!important;
+    border-color: rgba(102, 88, 221, 0.12)!important;
+}
+.btn-soft-primary:hover {
+    color: #fff!important;
+    background-color: #6658dd!important;
 }
 </style>
