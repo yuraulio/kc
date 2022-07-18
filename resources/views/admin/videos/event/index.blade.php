@@ -18,37 +18,39 @@
         </thead>
         <?php //dd($model->videos); ?>
         <tbody class="video-body summaries-order">
+ 
+        @if($model->sectionVideos)
+            @foreach ($model->sectionVideos as $video)
+                <tr>
+                    <td id="title-{{$video->id}}" data-id="{{$video->id}}" class="video-list"><a class="edit-btn" href="#"> {{ $video->title }} </a></td>
+                    
+                    <td class="text-right">
+                       
 
-            @if($model->sectionVideos)
-                @foreach ($model->sectionVideos as $video)
-                    <tr>
-                        <td id="title-{{$video->id}}" data-id="{{$video->id}}" class="video-list"><a class="edit-btn" href="#"> {{ $video->title }} </a></td>
+                        <div class="dropdown">
+                            <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-ellipsis-v"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                                
+                                <form action="{{ route('events.video.destroy', [$event,$video]) }}" method="post">
+                                    @csrf
+                                    @method('delete')
 
-                        <td class="text-right">
+                                    <button type="button" class="dropdown-item" onclick="confirm('{{ __("Are you sure you want to remove the explainer video?") }}') ? this.parentElement.submit() : ''">
+                                        {{ __('Delete') }}
+                                    </button>
+                                </form>
 
+                                
 
-                            <div class="dropdown">
-                                <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="fas fa-ellipsis-v"></i>
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-
-                                    <form id="video_form_delete" action="{{ route('events.video.destroy', [$event,$video]) }}" method="post">
-
-                                        <a href="javascript:void(0)" data-videoid = "{{$video->id}}" id="submit-delete" class="dropdown-item">
-                                            {{ __('Delete') }}
-                                        </a>
-                                    </form>
-
-
-
-                                </div>
                             </div>
+                        </div>
 
-                        </td>
-                    </tr>
-                @endforeach
-            @endif
+                    </td>
+                </tr>
+            @endforeach
+        @endif
         </tbody>
     </table>
 </div>
@@ -71,15 +73,15 @@
                 <!-- <h6 class="heading-small text-muted mb-4">{{ __('Benefit information') }}</h6> -->
                 <div class="pl-lg-4">
                     <form>
-                        <div class="pl-lg-4">
-                            <div class="form-group">
-                                <label for="exampleFormControlSelect1">Select Video</label>
-                                <select class="form-control" id="videoFormControlSelect">
-                                    <option>-</option>
+                    <div class="pl-lg-4">
+                        <div class="form-group">
+                            <label for="exampleFormControlSelect1">Select Video</label>
+                            <select class="form-control" id="videoFormControlSelect">
+                                <option>-</option>
 
-                                </select>
-                            </div>
+                            </select>
                         </div>
+                    </div>
                     </form>
                 </div>
             </div>
@@ -95,33 +97,6 @@
 
 @push('js')
 <script>
-    let eventId = @json($event->id);
-
-
-    $(document).on('click', '#submit-delete', function() {
-
-        let videoId = $(this).data('videoid')
-
-        if(confirm('{{ __("Are you sure you want to remove the explainer video?") }}')){
-            $.ajax({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            type: 'DELETE',
-            url: '/admin/delete-explainer-video/'+eventId+'/'+videoId,
-            success: function (data) {
-
-                if(data.success){
-                    $('#title-'+videoId).parent().remove()
-                }
-
-
-            }
-        });
-        }
-
-    })
-
     $(document).on('click', '#video_save_btn',function(e) {
 
         let modelType = "{{addslashes ( get_class($model) )}}";
