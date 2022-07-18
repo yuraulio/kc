@@ -7,7 +7,7 @@
 @section('content')
     @component('layouts.headers.auth')
     @component('layouts.headers.breadcrumbs')
-
+       
 
             <li class="breadcrumb-item"><a href="{{ route('events.index') }}">{{ __('Events Management') }}</a></li>
             <li class="breadcrumb-item active" aria-current="page">{{ __('Edit Event') }}</li>
@@ -46,7 +46,7 @@
                             </button>
                         </li>
 
-
+                    
 
                         <li class="nav-item">
                             {{--<a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-2-tab" data-toggle="tab" href="#tabs-icons-text-2" role="tab" aria-controls="tabs-icons-text-2" aria-selected="false"><i class="ni ni-folder-17 mr-2"></i>Content</a>--}}
@@ -90,7 +90,7 @@
                                 <span class="btn-inner--text">XML fields</span>
                             </button>
                         </li>
-
+                      
                     </ul>
                 </div>
                 <div class="card shadow">
@@ -112,7 +112,7 @@
                                             @method('put')
                         <div class="tab-content" id="myTabContent">
                             <div class="tab-pane fade show active" id="tabs-icons-text-1" role="tabpanel" aria-labelledby="tabs-icons-text-1-tab">
-
+                          
 
                                 <div class="row">
 
@@ -130,9 +130,9 @@
                                             </div>
                                         @endif
 
+                               
 
-
-
+                                
                                         <div class="form-group">
                                             <label class="form-control-label" for="input-method">{{ __('Enroll Students to E-Learning') }}</label>
                                             <div style="margin: auto;" class="form-group">
@@ -203,7 +203,7 @@
 
                                             </div>
                                         </div>
-                                    </div>
+                                    </div>  
 
                                     <div class="col-md-6 col-sm-6">
 
@@ -219,7 +219,7 @@
 
                                             </div>
                                         </div>
-                                    </div>
+                                    </div>  
 
                                 </div>
 
@@ -235,12 +235,12 @@
                                 @endif
 
                                 <div class="form-group">
-
+                                    
 
                                     <div class="form-group{{ $errors->has('fb_') ? ' has-danger' : '' }}">
                                         <label class="form-control-label" for="input-hours">{{ __('Absences Limit(%)') }}</label>
                                         <input type="text" name="absences_limit" id="input-absences_limit" class="form-control{{ $errors->has('Absences Limit(%)') ? ' is-invalid' : '' }}" placeholder="{{ __('absences_limit') }}" value="{{ old('absences_imit', $event->absences_limit) }}"autofocus>
-
+    
                                         @include('alerts.feedback', ['field' => 'absences_imit'])
                                     </div>
 
@@ -278,18 +278,18 @@
                                     </select>
                                     @include('alerts.feedback', ['field' => 'dropbox'])
                                 </div>
-
+                              
                                 <div class="form-group">
-
+                                    
 
                                     <div class="form-group{{ $errors->has('fb_') ? ' has-danger' : '' }}">
                                         <label class="form-control-label" for="input-hours">{{ __('Certificate Title') }}</label>
                                         <textarea type="text" name="certificate_title" id="input-certificate_title" class="ckeditor form-control{{ $errors->has('certificate_title') ? ' is-invalid' : '' }}" placeholder="{{ __('Certificate Title') }}" autofocus>{{ old('certificate_title', $event->certificate_title) }}</textarea>
-
+    
                                         @include('alerts.feedback', ['field' => 'certificate_title'])
                                     </div>
 
-
+                                    
                                 </div>
 
 
@@ -364,7 +364,7 @@
                                     @include('alerts.feedback', ['field' => 'delivery'])
                                 </div>
 
-
+                                
 
                                 <div id="exp_input" class="form-group{{ $errors->has('expiration') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-expiration">{{ __('Months access') }}</label>
@@ -408,7 +408,7 @@
                                     @include('alerts.feedback', ['field' => 'hours'])
                                 </div>
 
-
+                                
                                 <div class="form-group{{ $errors->has('syllabus') ? ' has-danger' : '' }}">
                                             <label class="form-control-label" for="input-syllabus1">{{ __('Syllabus Manager') }}</label>
                                             <select name="syllabus" data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..." id="input-syllabus1" class="form-control" placeholder="{{ __('Syllabus Manager') }}">
@@ -447,12 +447,12 @@
                                         {{--<li class="nav-item">
                                             <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-8-tab_inside" data-toggle="tab" href="#metas" role="tab" aria-controls="metas" aria-selected="false"><i class="ni ni-calendar-grid-58 mr-2"></i>Metas</a>
                                         </li>--}}
-                                        {{--<li class="nav-item">
+                                        <li class="nav-item">
                                             <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-2-tab_inside" data-toggle="tab" href="#tabs-icons-text-2_inside" role="tab" aria-controls="tabs-icons-text-2_inside" aria-selected="false"><i class="ni ni-bell-55 mr-2"></i>Summary </a>
-                                        </li>--}}
-                                        {{--<li class="nav-item">
+                                        </li>
+                                        <li class="nav-item">
                                             <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-3-tab_inside" data-toggle="tab" href="#tabs-icons-text-3_inside" role="tab" aria-controls="tabs-icons-text-3_inside" aria-selected="false"><i class="ni ni-calendar-grid-58 mr-2"></i>Benefit</a>
-                                        </li>--}}
+                                        </li>
                                         <li class="nav-item">
                                             <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-4-tab_inside" data-toggle="tab" href="#tabs-icons-text-4_inside" role="tab" aria-controls="tabs-icons-text-4_inside" aria-selected="true"><i class="ni ni-cloud-upload-96 mr-2"></i>Topics</a>
                                         </li>
@@ -483,7 +483,7 @@
                                         {{--<li class="nav-item">
                                             <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-8-tab_inside" data-toggle="tab" href="#coupons" role="tab" aria-controls="metas" aria-selected="false"><i class="ni ni-calendar-grid-58 mr-2"></i>Coupons</a>
                                         </li>--}}
-
+                                      
                                         <li class="nav-item">
                                             <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-9-tab_inside" data-toggle="tab" href="#videos" role="tab" aria-controls="videos" aria-selected="false"><i class="ni ni-calendar-grid-58 mr-2"></i>Videos</a>
                                         </li>
@@ -491,7 +491,7 @@
                                         <li class="nav-item">
                                             <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-8-tab_inside" data-toggle="tab" href="#instructors-tab" role="tab" aria-controls="instructors-tab" aria-selected="false"><i class="ni ni-calendar-grid-58 mr-2"></i>Instructors</a>
                                         </li>
-
+                                       
 
                                     </ul>
                                 </div>
@@ -505,20 +505,20 @@
 
                                                     <h6 class="heading-small text-muted mb-4">{{ __('Event information') }}</h6>
                                                     <div class="pl-lg-4">
-                                                        <?php
+                                                        <?php 
 
                                                             $id = isset($sections['overview'][0]) ? $sections['overview'][0]['id'] : '';
                                                             $tab_title = isset($sections['overview'][0]) ? $sections['overview'][0]['tab_title'] : '' ;
                                                             $title = isset($sections['overview'][0]) ? $sections['overview'][0]['title'] : '' ;
                                                             $visible = true ;
 
-                                                        ?>
+                                                        ?> 
                                                         <div class="form-group">
 
-                                                            <input hidden name="sections[overview][id]" value="{{$id}}">
+                                                            <input hidden name="sections[overview][id]" value="{{$id}}"> 
 
                                                             <label class="form-control-label" for="input-title">{{ __('Tab Title') }}</label>
-                                                            <input type="text" name="sections[overview][tab_title]" class="form-control" placeholder="{{ __('Tab Title') }}" value="{{ old("sections[instructors][tab_title]", $tab_title) }}" autofocus>
+                                                            <input type="text" name="sections[overview][tab_title]" class="form-control" placeholder="{{ __('Tab Title') }}" value="{{ old("sections[instructors][tab_title]", $tab_title) }}" autofocus> 
                                                             {{--<label class="form-control-label" for="input-title">{{ __('H2 Title') }}</label>--}}
                                                             <input hidden type="text" name="sections[overview][title]" class="form-control" placeholder="{{ __('H2 Title') }}" value="{{ old("sections[instructors][title]", $title) }}" autofocus>
                                                             <input hidden type="checkbox"  name="sections[overview][visible]" @if($visible)) checked @endif>
@@ -591,10 +591,10 @@
 
 
                                             </div>
-
-                                            {{--<div class="tab-pane fade" id="tabs-icons-text-2_inside" role="tabpanel" aria-labelledby="tabs-icons-text-2-tab_inside">
+                                            
+                                            <div class="tab-pane fade" id="tabs-icons-text-2_inside" role="tabpanel" aria-labelledby="tabs-icons-text-2-tab_inside">
                                                 @include('admin.summary.summary', ['model' => $event,'sections' => $sections])
-                                            </div>--}}
+                                            </div>
                                             {{--<div class="tab-pane fade" id="metas" role="tabpanel" aria-labelledby="tabs-icons-text-8-tab_inside">
                                                 @include('admin.metas.metas',['metas' => $metas])
                                             </div>--}}
@@ -649,11 +649,11 @@
                                                 @include('admin.videos.event.index',['model' => $event])
                                             </div>
 
+                                       
 
-
-                                            {{--<div class="tab-pane fade" id="tabs-icons-text-3_inside" role="tabpanel" aria-labelledby="tabs-icons-text-3-tab_inside">
+                                            <div class="tab-pane fade" id="tabs-icons-text-3_inside" role="tabpanel" aria-labelledby="tabs-icons-text-3-tab_inside">
                                                 @include('admin.benefits.benefits',['model' => $event, 'sections' => $sections])
-                                            </div>--}}
+                                            </div>
                                             <div class="tab-pane fade show" id="tabs-icons-text-4_inside" role="tabpanel" aria-labelledby="tabs-icons-text-4-tab_inside">
                                                 @include('topics.event.instructors',['sections' => $sections])
                                             </div>
@@ -691,22 +691,22 @@
                                                 {{--@include('event.image_versions_new', ['event' => $event->medias,'versions1'=> ['social-media-sharing','instructors-testimonials', 'event-card', 'users' ,'header-image', 'instructors-small' ,'feed-image']])--}}
                                             </div>
                                             <div class="tab-pane fade" id="instructors-tab" role="tabpanel" aria-labelledby="tabs-icons-text-2-tab">
+                                               
 
-
-                                                    <?php
+                                                    <?php 
 
                                                         $id = isset($sections['instructors'][0]) ? $sections['instructors'][0]['id'] : '';
                                                         $tab_title = isset($sections['instructors'][0]) ? $sections['instructors'][0]['tab_title'] : '' ;
                                                         $title = isset($sections['instructors'][0]) ? $sections['instructors'][0]['title'] : '' ;
                                                         $visible = isset($sections['instructors'][0]) ? $sections['instructors'][0]['visible'] : false ;
 
-                                                    ?>
+                                                    ?> 
                                                     <div class="form-group">
 
-                                                       <input hidden name="sections[instructors][id]" value="{{$id}}">
+                                                       <input hidden name="sections[instructors][id]" value="{{$id}}"> 
 
                                                        <label class="form-control-label" for="input-title">{{ __('Tab Title') }}</label>
-                                                       <input type="text" name="sections[instructors][tab_title]" class="form-control" placeholder="{{ __('Tab Title') }}" value="{{ old("sections[instructors][tab_title]", $tab_title) }}" autofocus>
+                                                       <input type="text" name="sections[instructors][tab_title]" class="form-control" placeholder="{{ __('Tab Title') }}" value="{{ old("sections[instructors][tab_title]", $tab_title) }}" autofocus> 
                                                        <label class="form-control-label" for="input-title">{{ __('H2 Title') }}</label>
                                                        <input type="text" name="sections[instructors][title]" class="form-control" placeholder="{{ __('H2 Title') }}" value="{{ old("sections[instructors][title]", $title) }}" autofocus>
 
@@ -723,25 +723,25 @@
 
 
                                                     </div>
-
+                                               
                                             </div>
 
                                             <div class="tab-pane fade" id="testimonials-tab" role="tabpanel" aria-labelledby="tabs-icons-text-2-tab">
-                                                <?php
+                                                <?php 
 
                                                     $id = isset($sections['testimonials'][0]) ? $sections['testimonials'][0]['id'] : '';
                                                     $tab_title = isset($sections['testimonials'][0]) ? $sections['testimonials'][0]['tab_title'] : '' ;
                                                     $title = isset($sections['testimonials'][0]) ? $sections['testimonials'][0]['title'] : '' ;
                                                     $visible = isset($sections['testimonials'][0]) ? $sections['testimonials'][0]['visible'] : false ;
 
-                                                ?>
+                                                ?> 
 
                                                 <div class="form-group">
 
-                                                   <input hidden name="sections[testimonials][id]" value="{{$id}}">
+                                                   <input hidden name="sections[testimonials][id]" value="{{$id}}"> 
 
                                                    <label class="form-control-label" for="input-title">{{ __('Tab Title') }}</label>
-                                                   <input type="text" name="sections[testimonials][tab_title]" class="form-control" placeholder="{{ __('Tab Title') }}" value="{{ old("sections[testimonials][tab_title]", $tab_title) }}" autofocus>
+                                                   <input type="text" name="sections[testimonials][tab_title]" class="form-control" placeholder="{{ __('Tab Title') }}" value="{{ old("sections[testimonials][tab_title]", $tab_title) }}" autofocus> 
                                                    <label class="form-control-label" for="input-title">{{ __('H2 Title') }}</label>
                                                    <input type="text" name="sections[testimonials][title]" class="form-control" placeholder="{{ __('H2 Title') }}" value="{{ old("sections[testimonials][title]", $title) }}" autofocus>
 
@@ -758,7 +758,7 @@
 
 
                                                 </div>
-
+                                               
                                             </div>
 
                                         </div>
@@ -771,7 +771,7 @@
                                 @include('admin.metas.metas',['metas' => $metas])
                             </div>
 
-
+                            
                             <div class="tab-pane fade" id="tabs-icons-text-3" role="tabpanel" aria-labelledby="tabs-icons-text-3-tab">
                                 @include('event.students')
                             </div>
@@ -848,7 +848,7 @@
                             </div>
 
                             <div class="tab-pane fade" id="tabs-icons-text-5" role="tabpanel" aria-labelledby="tabs-icons-text-5-tab">
-
+                            
                                 <div class="table-responsive py-4">
                                     <table class="table align-items-center table-flush"  id="datatable-coupon">
                                         <thead class="thead-light">
@@ -891,7 +891,7 @@
                                     </table>
                                 </div>
 
-
+                       
                             </div>
 
                         </div>
@@ -1023,15 +1023,15 @@
                 return false;
 
             }else if(!start && event_type){
-
+                
                 alert('You must fill start time field')
                 return false;
-
+                
             }else if(!end && event_type){
 
                 alert('You must fill end time field')
                 return false;
-
+                
             }
 
             data = {date:date, start:start, event_id:event_id, end:end, room:room, instructor_id:instructor_id, topic_id:topic_id, lesson_id:lesson_id}
@@ -1140,7 +1140,7 @@
             topic_id = topic_id.split("_")
             const event_id = $('#topic_lessons').data('event-id')
             let instructor_id = $('#instFormControlSelect12').val()
-
+            
 
             data = {lesson_id:elem[1], topic_id:topic_id[1], event_id:event_id}
             $.ajax({
@@ -1428,7 +1428,7 @@
 
 
     $('.enroll-students').change(function(){
-
+       
         let enroll = $("#input-enroll").is(":checked") ? 1 : 0;
         console.log('dfsd');
         $.ajax({
@@ -1439,7 +1439,7 @@
             Accept: 'application/json',
             url: "/admin/enroll-to-elearning/" + "{{$event->id}}" +"/" + enroll,
             success: function(data) {
-
+            
             }
         });
 
@@ -1447,7 +1447,7 @@
 
 
     $('.index-toggle').change(function(){
-
+       
        let index = $("#input-index").is(":checked") ? 1 : 0;
 
        $.ajax({
@@ -1458,14 +1458,14 @@
            Accept: 'application/json',
            url: "/admin/change-index/" + "{{$event->id}}" +"/" + index,
            success: function(data) {
-
+           
            }
        });
 
    })
 
    $('.feed-toggle').change(function(){
-
+       
        let feed = $("#input-feed").is(":checked") ? 1 : 0;
 
        $.ajax({
@@ -1476,7 +1476,7 @@
            Accept: 'application/json',
            url: "/admin/change-feed/" + "{{$event->id}}" +"/" + feed,
            success: function(data) {
-
+           
            }
        });
 
@@ -1515,5 +1515,4 @@ var datePickerOptions = {
 </script>
 
 @endpush
-
 
