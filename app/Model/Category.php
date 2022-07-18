@@ -129,12 +129,12 @@ class Category extends Model
 
 
         }
-        
+
         return $this->morphToMany(Faq::class, 'faqable')->with('category');
     }
 
     public function getSumOfStudents(){
-        
+
         $students = 0;
         foreach($this->events as $event){
             $students += $event->users->count();
@@ -144,7 +144,40 @@ class Category extends Model
 
     public function getSumOfStudentsByCategory()
     {
-        return get_sum_students_course($this);
+        $sumStudents = $this->getSumOfStudents();
+
+        if($this['id'] == 276){
+            $category = Category::find(49);
+
+            if($category){
+                $sumStudents += $category->getSumOfStudents();
+            }
+
+        }else if($this['id'] == 219){
+            $categories = Category::whereIn('id',[104,268])->get();
+
+            foreach($categories as $category){
+                $sumStudents += $category->getSumOfStudents();
+            }
+
+        }
+        else if($this['id'] == 183){
+            $categories = Category::whereIn('id',[277])->get();
+
+            foreach($categories as $category){
+                $sumStudents += $category->getSumOfStudents();
+            }
+
+        }else if($this['id'] == 250){
+            $categories = Category::whereIn('id',[50,244])->get();
+
+            foreach($categories as $category){
+                $sumStudents += $category->getSumOfStudents();
+            }
+
+        }
+
+        return $sumStudents;
     }
 
     /*public function getEventStatus(){

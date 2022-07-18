@@ -357,6 +357,22 @@ if (!function_exists('get_certifation_crendetial')){
         }
     }
 
+    if(!function_exists('getCategoriesWithSumStudents')){
+        function getCategoriesWithSumStudents(){
+            $categories = Category::whereHas('events', function($query) {
+                return $query->where('published',true);
+            })->get();
+
+            $newCategoriesArr = [];
+
+            foreach($categories as $key => $category){
+                $newCategoriesArr[$category['id']] = get_sum_students_course($category);
+            }
+
+            return $newCategoriesArr;
+        }
+    }
+
     if (!function_exists('get_sum_students_course')){
 
         function get_sum_students_course($category){
