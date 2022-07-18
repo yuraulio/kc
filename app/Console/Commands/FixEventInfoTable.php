@@ -96,6 +96,18 @@ class FixEventInfoTable extends Command
 
                 $requestData['delivery'] = $deliveryy;
      
+            }else{
+                
+                $deliveryy = [
+                    'elearning' => [
+                         'expiration' => $event->expiration,
+                         'icon' => ['path'=> null, 'alt_text' => null],
+                         'text' => '',
+                         'visible' => $visible
+                    ]
+                ];
+
+                $requestData['delivery'] = $deliveryy;
             }
            
             
@@ -337,6 +349,12 @@ class FixEventInfoTable extends Command
                 $data['course_students_visible'] = json_encode($this->prepareVisibleData());
             }
         }
+   
+        $visible_loaded_data = isset($requestData['delivery']['elearning']['visible']) ? $requestData['delivery']['elearning']['visible'] : null;
+        $data['course_elearning_visible'] = json_encode($this->prepareVisibleData($visible_loaded_data));
+        $data['course_elearning_icon'] = isset($requestData['delivery']['elearning']['icon']) ?  json_encode($requestData['delivery']['elearning']['icon']) : null;
+        $data['course_elearning_expiration'] = (isset($requestData['delivery']['elearning']['expiration']) && $requestData['delivery']['elearning']['expiration'] != null) ? $requestData['delivery']['elearning']['expiration'] : null;
+        $data['course_elearning_text'] = (isset($requestData['delivery']['elearning']['text']) && $requestData['delivery']['elearning']['text'] != null) ? $requestData['delivery']['elearning']['text'] : null;
 
 
         return $data;
@@ -384,6 +402,11 @@ class FixEventInfoTable extends Command
         $infos->course_students_text = $event_info['course_students_text'];
         $infos->course_students_visible = $event_info['course_students_visible'];
         $infos->course_elearning_access = $event_info['course_elearning_access'];
+
+        $infos->course_elearning_visible = isset($event_info['course_elearning_visible']) ? $event_info['course_elearning_visible'] : null;
+        $infos->course_elearning_icon = isset($event_info['course_elearning_icon']) ? $event_info['course_elearning_icon'] : null;
+        $infos->course_elearning_expiration = isset($event_info['course_elearning_expiration']) ? $event_info['course_elearning_expiration'] : null;
+        $infos->course_elearning_text = isset($event_info['course_elearning_text']) ? $event_info['course_elearning_text'] : null;
         
         if($info === null){
             $infos->save();

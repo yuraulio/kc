@@ -104,7 +104,15 @@ class PaymentController extends Controller
         $paymentIntent['payment_method'] = Arr::only($paymentIntent['payment_method'] ?? [], 'id');
 
         if(!$subscriptionCheckout){
-            $duration = $event->summary1->where('section','date')->first() ? $event->summary1->where('section','date')->first()->title : 'date';
+
+            $eventInfo = $event->event_info();
+
+            if(isset($eventInfo['inclass']['dates']['text'])){
+                $duration =  $eventInfo['inclass']['dates']['text'];
+            }else if(isset($eventInfo['elearning']['expiration'])){
+                $duration =  $eventInfo['elearning']['expiration'] . ' ' . $eventInfo['elearning']['text'];
+            }
+            //$duration = $event->summary1->where('section','date')->first() ? $event->summary1->where('section','date')->first()->title : 'date';
         }
 
         $data['info']['success'] = true;

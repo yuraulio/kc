@@ -41,17 +41,18 @@ class ExamController extends Controller
         $edit = false;
         $event_edit = false;
         $liveResults = [];
+
+        $eventInfo = $event->event_info();
+        $date = '';
+        
+        if(isset($eventInfo['inclass']['dates'])){
+            $date = $eventInfo['inclass']['dates'];
+        }
+
         foreach($events as $event){
 
-            if($event->is_elearning_course() || !$event->summary1()->where('section','date')->first()){
-                $eventsData[$event->id] = trim($event->title);
+            $eventsData[$event->id] = trim($event->title . ' ' . $date);
 
-            }else{
-                $eventsData[$event->id] = trim($event->title . ' ' . $event->summary1()->where('section','date')->first()->title) ;
-
-            }
-
-            
         }
 
         return view('admin.exams.create', ['user' => $user, 'events' => $eventsData, 'edit' => $edit, 'exam' => $exam,'event_id'=>$event_edit,'liveResults' => $liveResults]);
@@ -105,14 +106,19 @@ class ExamController extends Controller
 
         foreach($events as $event){
 
-            if($event->is_elearning_course() || !$event->summary1()->where('section','date')->first()){
-                $eventsData[$event->id] = trim($event->title);
+            $eventInfo = $event->event_info();
+            $date = '';
+            
+            if(isset($eventInfo['inclass']['dates']['text'])){
+                $date = $eventInfo['inclass']['dates']['text'];
+                
+            }
+            
+            foreach($events as $event){
 
-            }else{
-                $eventsData[$event->id] = trim($event->title . ' ' . $event->summary1()->where('section','date')->first()->title) ;
+                $eventsData[$event->id] = trim($event->title . ' ' . $date);
 
             }
-
             
         }
         

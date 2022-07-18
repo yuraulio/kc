@@ -733,7 +733,7 @@ class Event extends Model
     {
         //return $this->hasOne(EventInfo::class);
 
-        $infos = $this->hasOne(EventInfo::class)->first();
+        $infos = $this->event_info1;//$this->hasOne(EventInfo::class)->first();
         $data = [];
 
         if($infos != null){

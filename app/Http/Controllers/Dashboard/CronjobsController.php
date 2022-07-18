@@ -492,7 +492,15 @@ class CronjobsController extends Controller
 
         $adminemail = 'info@knowcrunch.com';
 
-        $events = Event::has('transactions')->with('users')->where('view_tpl','elearning_event')->get();
+        //$events = Event::has('transactions')->with('users')->where('view_tpl','elearning_event')->get();
+
+        $events = Event::has('transactions')->where('published',true)->with('users')
+        
+        ->whereHas('event_info1',function($query){
+            $query->whereCourseDelivery(143);
+        })
+        ->get();
+        
         //$events = Event::has('transactions')->where('published','true')->with('users')->get();
 
         $today = date_create( date('Y/m/d'));
@@ -501,9 +509,12 @@ class CronjobsController extends Controller
 
         foreach($events as $event){
 
+            $eventInfo = $event->event_info();
+            $expiration = isset($eventInfo['elearning']['expiration']) ? $eventInfo['elearning']['expiration'] : '';
+            
             foreach($event['users'] as $user){
 
-                if(!($user->pivot->expiration >= $today1) || !$user->pivot->expiration || !$event->expiration){
+                if(!($user->pivot->expiration >= $today1) || !$user->pivot->expiration || !$expiration){
                     continue;
                 }
 
@@ -512,7 +523,7 @@ class CronjobsController extends Controller
                 $date = date_create($user->pivot->expiration);
                 $date = date_diff($date, $today);
 
-                if( $date->y==0 && $date->m == ($event->expiration/2)  && $date->d == 0){
+                if( $date->y==0 && $date->m == ($expiration/2)  && $date->d == 0){
 
                     // dd('edww');
                     
@@ -530,8 +541,12 @@ class CronjobsController extends Controller
         }
 
 
-        $events = Event::has('transactions')->where('published',true)->with('users')->where('view_tpl','event')->get();
-        //$events = Event::has('transactions')->where('published','true')->with('users')->get();
+        //$events = Event::has('transactions')->where('published',true)->with('users')->where('view_tpl','event')->get();
+        $events = Event::has('transactions')->where('published',true)->whereIn('status',[0,3])->with('users')        
+        ->whereHas('event_info1',function($query){
+            $query->where('course_delivery','!=',143);
+        })
+        ->get();
 
         $today = date_create( date('Y/m/d'));
         $today1 = date('Y-m-d');
@@ -539,14 +554,18 @@ class CronjobsController extends Controller
 
         foreach($events as $event){
 
+            $eventInfo = $event->event_info();
+            $eventDate = isset($eventInfo['inclass']['dates']['text']) ? $eventInfo['inclass']['dates']['text'] : '';
+            $expiration = isset($eventInfo['elearning']['expiration']) ? $eventInfo['elearning']['expiration'] : '';
+
             foreach($event['users'] as $user){
 
-                if( !( $eventDate = $event->summary1()->where('section','date')->first() ) || !$event->expiration ){
+                if( !$eventDate ){
                     continue;
                 }
 
-                $eventDate = explode('-',$eventDate->title);
-
+                $eventDate = explode('-',$eventDate);
+                dd($eventDate);
                 if(!isset($eventDate[1])){
                     continue;
                 }
@@ -555,7 +574,7 @@ class CronjobsController extends Controller
                 $date = date_create($eventDate);
                 $date = date_diff($date, $today);
 
-                if( $date->y==0 && $date->m == ($event->expiration/2)  && $date->d == 0){
+                if( $date->y==0 && $date->m == ($expiration/2)  && $date->d == 0){
 
                     // dd('edww');
                     
