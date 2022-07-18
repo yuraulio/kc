@@ -40,7 +40,6 @@
             </div>
             <div v-else>
                 <i @click="$set(loadstart, (keyput + 'media'),  true)" data-bs-toggle="offcanvas" :data-bs-target="'#mediaCanvas' + keyput" class="text-muted dripicons-photo d-none image-input-icon" style="font-size: 100px;"></i>
-<<<<<<< HEAD
                 <button @click="$set(loadstart, (keyput + 'media'),  true)" type="button" data-bs-toggle="offcanvas" :data-bs-target="'#mediaCanvas' + keyput" aria-controls="offcanvasScrolling" id="image-input-button"  class="btn btn-soft-primary image-input-button">
                     <template v-if="imageEdit">
                         Edit Media
@@ -48,10 +47,6 @@
                     <template v-else>
                         Add Media
                     </template>
-=======
-                <button @click="$set(loadstart, (keyput + 'media'),  true)" type="button" data-bs-toggle="offcanvas" :data-bs-target="'#mediaCanvas' + keyput" aria-controls="offcanvasScrolling"  class="btn btn-soft-primary image-input-button">
-                    Add Media
->>>>>>> master
                 </button>
             </div>
         </div>
