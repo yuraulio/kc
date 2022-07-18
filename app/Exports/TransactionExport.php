@@ -6,6 +6,7 @@ use Maatwebsite\Excel\Concerns\FromArray;
 use App\Model\Transaction;
 use Auth;
 use Maatwebsite\Excel\Concerns\WithHeadings;
+use App\Model\Event;
 
 class TransactionExport implements FromArray,WithHeadings
 {
@@ -24,7 +25,11 @@ class TransactionExport implements FromArray,WithHeadings
         $this->toDate = $request->toDate ? date('Y-m-d',strtotime($request->toDate)) : date('Y-m-d');
         $this->toDate = date('Y-m-d', strtotime($this->toDate . ' +1 day'));
         
-        $this->event = $request->event;
+        if($request->event){
+            $this->event = [$request->event];
+        }else{
+            $this->event = Event::all()->pluck('id')->toArray();
+        }
 
     }
      /**
@@ -39,7 +44,7 @@ class TransactionExport implements FromArray,WithHeadings
         $data = array();
         foreach($transactions as $transaction){
     
-            if(!$transaction->subscription->first() && $transaction->user->first() && $transaction->event->first() && $transaction->event->first()->id == $this->event){
+            if(!$transaction->subscription->first() && $transaction->user->first() && $transaction->event->first() && in_array($transaction->event->first()->id,$this->event)/*&& $transaction->event->first()->id == $this->event*/){
             
                 $category =  $transaction->event->first()->category->first() ? $transaction->event->first()->category->first()->id : -1;
             
