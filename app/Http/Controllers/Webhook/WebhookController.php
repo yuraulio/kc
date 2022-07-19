@@ -451,9 +451,26 @@ class WebhookController extends BaseWebhookController
 			$subscription->ends_at = date('Y-m-d H:i:s', $ends_at);
 			$subscription->save();
 			
-			if($user->events()->wherePivot('event_id',$eventId)->first()){
+			if($exp = $user->events()->wherePivot('event_id',$eventId)->first()){
 				
-				$user->events()->updateExistingPivot($eventId,['expiration' => date('Y-m-d', $ends_at)]);
+				$exp = $exp->pivot->expiration;
+				$exp = strtotime($exp);
+				$today = strtotime(date('Y-m-d'));
+
+				$ends_at = date('Y-m-d', $ends_at);
+				
+            	if($exp && $exp > $today){
+
+            	    $exp = date_create(date('Y-m-d',$exp));
+            	    $today = date_create(date('Y-m-d',$today));
+
+            	    $days = date_diff($exp, $today);
+
+					$ends_at = date('Y-m-d', strtotime($ends_at. ' + ' . $days->d .' days'));
+
+            	}
+
+				$user->events()->updateExistingPivot($eventId,['expiration' => $ends_at]);
 				//$user->events()->where('event_id',$eventId)->first()->pivot->expiration  = date('Y-m-d', $ends_at);
 				//$user->events()->where('event_id',$eventId)->first()->pivot->comment  = 'hello';
 				//$user->events()->where('event_id',$eventId)->first()->pivot->save();
