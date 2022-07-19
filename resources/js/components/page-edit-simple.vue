@@ -66,7 +66,7 @@
             <div class="col-md-12 align-self-center">
                 <div class="page-title-box mt-3 row">
                     <div class="col-md-6">
-                        <input @change="setSlug()" v-model="page.title" class="d-inline-block title-input mb-3">
+                        <input @input="setSlug()" v-model="page.title" class="d-inline-block title-input mb-3">
                     </div>
                     <div class="col-md-6">
                         <button :disabled="loading" @click="changeMode()" type="button" class="btn btn-soft-info waves-effect waves-light float-end ms-2 mb-3"><i class="dripicons-toggles me-1" style="transform: translateY(2px);"></i>Advanced Mode</button>
