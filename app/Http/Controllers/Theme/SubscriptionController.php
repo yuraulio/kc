@@ -379,6 +379,26 @@ class SubscriptionController extends Controller
                 $subEnds = $plan->getDays();
                 $subEnds=date('d-m-Y', strtotime("+$subEnds days"));
 
+
+                if($exp = $user->events()->wherePivot('event_id',$event->id)->first()){
+				
+                    $exp = $exp->pivot->expiration;
+                    $exp = strtotime($exp);
+                    $today = strtotime(date('Y-m-d'));
+    
+                    if($exp && $exp > $today){
+    
+                        $exp = date_create(date('Y-m-d',$exp));
+                        $today = date_create(date('Y-m-d',$today));
+    
+                        $days = date_diff($exp, $today);
+    
+                        $subEnds = date('Y-m-d', strtotime($subEnds. ' + ' . $days->d .' days'));
+    
+                    }
+    
+                }
+
                 $data['firstName'] = $user->firstname;
 
                 $data['name'] = $user->firstname . ' ' . $user->lastname;
