@@ -663,7 +663,7 @@ class StudentController extends Controller
 
                 if($expiration_event){
         
-                    $after20Days  = strtotime("+20 day");
+                    $after20Days  = strtotime("+22 day");
                 
                 }
                 
