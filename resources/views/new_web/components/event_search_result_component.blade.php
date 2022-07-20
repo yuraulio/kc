@@ -96,9 +96,6 @@
                         $info = $row->event_info();
                     ?>
                   <div class="bottom">
-                     @if($row['city'] && count($row['city']) != 0)   <a href="{{ $row['city'][0]['slugable']['slug'] }}" class="location" title="{{ $row['city'][0]['name'] }}">
-                     <img width="20" src="/theme/assets/images/icons/marker.svg" alt=""> <span class="@if($search1!==false) search-highlight @endif"> {{ $row['city'][0]['name'] }} </span></a> @else City @endif
-
                      @include('new_web.components.event_infos',['type' => 'inclass'])
                         </div>
                </div>
