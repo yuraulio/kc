@@ -206,6 +206,7 @@ export default {
         },
         imageVersion: null,
         hideAltText: false,
+        imageEdit:false,
     },
     data() {
         return {
