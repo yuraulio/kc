@@ -29,7 +29,6 @@
                 "key": "hero_small",
                 "label": "Minified",
                 "value": false,
-                "main": true,
                 "size": "col-lg-6"
             },
             {
