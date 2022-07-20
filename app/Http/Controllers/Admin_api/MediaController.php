@@ -417,18 +417,18 @@ class MediaController extends Controller
 
         $path = $folder->path;
         $result = Storage::disk('public')->deleteDirectory($path);
-        if ($result) {
-            $folder->delete();
-            $files = MediaFile::where('folder_id', $id)->get();
-            foreach ($files as $file) {
-                $file->pages()->detach();
-                $file->delete();
-            }
-
-            return response()->json('success', 200);
-        } else {
-            return response()->json('Failed to delete folder.', 400);
+        if (!$result) {
+            Log::error("Failed to delete folder form disk.");
         }
+
+        $folder->delete();
+        $files = MediaFile::where('folder_id', $id)->get();
+        foreach ($files as $file) {
+            $file->pages()->detach();
+            $file->delete();
+        }
+
+        return response()->json('success', 200);
     }
 
     public function editFolder(EditMediaFolderRequest $request)
