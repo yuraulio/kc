@@ -40,7 +40,7 @@ class MediaFolder extends Model
 
     public function children()
     {
-        return $this->hasMany(MediaFolder::class, "parent_id", "id");
+        return $this->hasMany(MediaFolder::class, "parent_id", "id")->orderBy('order');
     }
 
 

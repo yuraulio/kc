@@ -40,8 +40,9 @@ class MediaController extends Controller
 
         try {
             $folders = MediaFolder::lookForOriginal($request->filter)
-                ->with('children.children.children.children.children.children.children.children')->whereParentId($request->folder_id ?? null)
-                ->orderBy('created_at', 'desc')->get();
+                ->with('children.children.children.children.children.children.children.children')
+                ->whereParentId($request->folder_id ?? null)
+                ->get();
 
             return MediaFolderResource::collection($folders);
         } catch (Exception $e) {
@@ -105,12 +106,15 @@ class MediaController extends Controller
 
             Storage::disk('public')->makeDirectory($path);
 
+            $max = MediaFolder::max("order");
+
             $mediaFolder = new MediaFolder();
             $mediaFolder->name = $request->name;
             $mediaFolder->path = $path;
             $mediaFolder->url = config('app.url') . "/uploads" . $path;
             $mediaFolder->user_id = Auth::user()->id;
             $mediaFolder->parent_id = $parent->id;
+            $mediaFolder->order = $max + 1;
             $mediaFolder->save();
 
             return new MediaFolderResource($mediaFolder);
@@ -488,5 +492,48 @@ class MediaController extends Controller
             "mediaFolder" => $mediaFolder,
             "path" => $path
         ];
+    }
+
+    public function changeFolderOrder(Request $request)
+    {
+        // update folder orders
+        // $folders = MediaFolder::orderBy("order")->get();
+        // foreach ($folders as $folder) {
+        //     if ($folder->order !== null) {
+        //         $folder->order = $folder->order + 0.00000000001;
+        //         $folder->save();
+        //     }
+        // }
+
+        $folderMain = MediaFolder::find($request->id);
+
+        $i = 0;
+        $children = MediaFolder::whereId($folderMain->parent_id)->first()->children()->get();
+        if ($children) {
+            foreach ($children as $child) {
+                if ($child->id != $request->id) {
+                    $child->order = $i + 0.1;
+                    $child->save();
+                    $i++;
+                }
+            }
+        }
+
+
+        // set order for moved folder
+        $folderMain = MediaFolder::find($request->id);
+        $position = $request->position;
+
+        // Log::debug("folder order ". (int) $folderMain->order);
+        // Log::debug("position ". $position);
+
+
+        $position = $position;
+
+
+        $folderMain->order = $position;
+        $folderMain->save();
+
+        return response()->json('success', 200);
     }
 }
