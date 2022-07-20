@@ -117,21 +117,7 @@
 
                                         <div class="row">
 
-                                            {{--@if($event->is_inclass_course() && isset($slug))
-                                            <div class="col-md-1 col-sm-6">
-
-                                                <div class="form-group">
-                                                    <label class="form-control-label" for="input-method">{{ __('Syllabus Pdf') }}</label>
-                                                    <div class="form-group">
-
-                                                        <a target="_blank" href="/print/syllabus/{{$slug->slug}}" id="syllabus-pdf" class="btn btn-primary">Get Pdf</a>
-
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                            @endif--}}
-
+                                            
                                             <div class="col-md-2 col-sm-6 col-6">
 
                                                 <div class="form-group">
@@ -140,7 +126,19 @@
                                                                 value="{{ date('d-m-Y',strtotime(old('created_at', $event->created_at))) }}" class="form-control" disabled />
 
                                                 </div>
+
                                             </div>
+
+              
+                                            <div class="col-md-2 col-sm-6 col-6">
+                                                <div class="form-group">
+                                                        <label class="form-control-label" for="launch_date">{{ __('Launch Date') }}</label>
+                                                        <input type="text" name="launch_date" type="text" id="input-launch-input"
+                                                                    value="{{ date('d-m-Y',strtotime(old('launch_date', $event->launch_date))) }}" class="form-control datepicker" />
+
+                                                </div>
+                                            </div>
+
 
                                             <div class="col-md-2 col-sm-6 col-6" style="padding:0;">
                                                 <div style="margin: auto 0;" class="col-md-3 col-sm-3">
@@ -154,7 +152,7 @@
                                                                 <span class="custom-toggle-slider rounded-circle" data-label-off="unpublished" data-label-on="published"></span>
                                                             </label>
                                                         </div>
-                                                    @include('alerts.feedback', ['field' => 'published'])
+                                                        @include('alerts.feedback', ['field' => 'published'])
 
 
 
@@ -162,26 +160,6 @@
                                                 </div>
                                             </div>
 
-
-
-                                            {{--@if($event['published_at'] != null)
-                                            <div class="col-md-1 col-sm-2">
-
-                                                <div class="form-group col-sm-6">
-                                                    <label class="form-control-label" for="launch_date">{{ __('Launch Date') }}</label>
-                                                    <input type="text" name="launch_date" type="text" id="input-launch-input"
-                                                                value="{{ date('d-m-Y',strtotime(old('launch_date', $event->launch_date))) }}" class="form-control datepicker" />
-
-                                                </div>
-
-                                                <div class="form-group col-sm-6">
-                                                    <label class="form-control-label" for="input-published">{{ __('Published at') }}</label>
-                                                    <input type="text" name="published_at" type="text" id="input-published-input"
-                                                                value="{{ date('d-m-Y',strtotime(old('published_at', $event->published_at))) }}" class="form-control" disabled />
-
-                                                </div>
-                                            </div>
-                                            @endif--}}
 
                                             <div class="col-md-2 col-sm-6 col-6">
 
@@ -213,27 +191,8 @@
                                                 </div>
                                             </div>
 
-                                            {{--<div class="col-md-2 col-sm-6 col-6">
-                                                <div class="form-group">
-                                                    <label class="form-control-label" for="input-method">{{ __('Enroll Students to E-Learning') }}</label>
-                                                    <div style="margin: auto;" class="form-group">
 
-                                                        <label class="custom-toggle enroll-toggle enroll-students">
-                                                            <input type="checkbox" id="input-enroll" @if($event['enroll']) checked @endif>
-                                                            <span class="custom-toggle-slider rounded-circle" data-label-off="enroll" data-label-on="unroll"></span>
-                                                        </label>
-
-                                                    </div>
-                                                </div>
-
-
-                                            </div>--}}
-                                            <!-- <div class="col-md-4">
-
-                                            </div> -->
-
-
-                                            <div class="col-md-2 offset-md-2 col-sm-12 text-center form_event_btn">
+                                            <div class="col-md-2 col-sm-6 col-6 text-center form_event_btn">
                                                 <div class="save_event_btn" >@include('admin.save.save',['event' => isset($event) ? $event : null])</div>
                                                 <div class="preview_event_btn">@include('admin.preview.preview',['slug' => isset($slug) ? $slug : null])</div>
                                             </div>
@@ -1277,7 +1236,7 @@
                                             <div class="form-group col-12">
                                                 <span class="toggle-btn-inline-text">Does this course offer a certification? </span>
                                                 <label class="custom-toggle">
-                                                    <input id="certification-toggle" {{((isset($info['certificate']['messages']['success']) && ($info['certificate']['messages']['success'] != null) || (isset($info['certificate']['type']) && $info['certificate']['type'] != null))) ? 'checked' : '' }} type="checkbox">
+                                                    <input name="course[{{'certificate'}}][{{'certification'}}]" id="certification-toggle" {{isset($info['certificate']['has_certificate']) && $info['certificate']['has_certificate'] ? 'checked' : '' }} type="checkbox">
                                                     <span class="custom-toggle-slider rounded-circle" data-label-off="No" data-label-on="Yes"></span>
                                                 </label>
                                             </div>
@@ -2161,6 +2120,42 @@
         }else{
             $('.award-text').addClass('d-none');
             $('#input-award-text').val('');
+        }
+    })
+
+
+    $(document).ready(function(){
+        let status = $('#certification-toggle').prop('checked'); 
+        if(status){
+            $('.course-certification-visible-wrapper').removeClass('d-none');
+
+
+
+            if(eventInfos !== undefined){
+
+                $('#input-certificate_title').val(eventInfos.course_certification_name_success)
+                CKEDITOR.instances['input-certificate_title'].setData(eventInfos.course_certification_name_success)
+
+                CKEDITOR.instances['input-certificate_text_failure'].setData(eventInfos.course_certification_name_failure)
+                $('#input-certificate_text_failure').val(eventInfos.course_certification_name_failure)
+            }
+
+
+            $('#input-certificate_type').val('')
+        }else{
+            $('.course-certification-visible-wrapper').addClass('d-none');
+
+            //$('#input-certificate_title').val("")
+
+            CKEDITOR.instances['input-certificate_title'].setData('')
+            CKEDITOR.instances['input-certificate_text_failure'].setData('')
+            $('#input-certificate_title').val("")
+            $('#input-certificate_text_failure').val("")
+            $('#input-certificate_title').text("")
+            $('#input-certificate_text_failure').text("")
+
+            $('#input-certificate_type').val('')
+
         }
     })
 

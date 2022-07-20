@@ -52,7 +52,9 @@
                         <div style="height:100px"></div>
                     @endif
 
-                    @if($row->view_tpl == 'elearning_event' || $row->view_tpl == 'elearning_greek' || $row->view_tpl == 'elearning_free' || $row->view_tpl == 'elearning_pending')
+
+                    {{--@if($row->view_tpl == 'elearning_event' || $row->view_tpl == 'elearning_greek' || $row->view_tpl == 'elearning_free' || $row->view_tpl == 'elearning_pending')--}}
+                    @if($row->is_elearning_course())
                         <div class="dynamic-courses-wrapper">
                             <div class="item">
                                 <div class="left">
@@ -221,7 +223,10 @@
                     $lastmonth1 = '';
                 ?>
                 @foreach($completedlist as $row)
-                    @if($row->view_tpl != 'elearning_event' && $row->view_tpl != 'elearning_greek' && $row->view_tpl != 'elearning_free' && $row->view_tpl != 'elearning_pending')
+
+            
+                    {{--@if($row->view_tpl != 'elearning_event' && $row->view_tpl != 'elearning_greek' && $row->view_tpl != 'elearning_free' && $row->view_tpl != 'elearning_pending')--}}
+                    @if($row->is_inclass_course())
                         <?php
                             $pubdate = $row->launch_date  && $row->launch_date != '1970-01-01' ? $row->launch_date :  $row->published_at;
                             $chmonth = date('m', strtotime($pubdate));

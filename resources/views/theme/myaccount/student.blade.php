@@ -714,7 +714,8 @@
                      @if(isset($events) && count($events) > 0)
 
                      @foreach($events as $keyType => $event)
-                     @if($event['view_tpl'] != 'elearning_free' && $event['view_tpl'] != 'elearning_event')
+                     {{--@if($event['view_tpl'] != 'elearning_free' && $event['view_tpl'] != 'elearning_event')--}}
+                     @if($event['delivery'] != 143)
                      <div class="col12 dynamic-courses-wrapper dynamic-courses-wrapper--style2">
                         <div class="item">
                            <h2>{{ $event['title'] }}</h2>
@@ -1252,7 +1253,8 @@
                      @if(isset($mySubscriptionEvents) && count($mySubscriptionEvents) > 0)
                      <!-- subs -->
                      @foreach($mySubscriptionEvents as $keyType => $event)
-                     @if($event['view_tpl'] != 'elearning_event' && $event['view_tpl'] != 'elearning_free')
+                     {{--@if($event['view_tpl'] != 'elearning_event' && $event['view_tpl'] != 'elearning_free')--}}
+                     @if($event['delivery'] != 143)
                      @else
                      <div class="col12 dynamic-courses-wrapper">
                         <div class="item">

@@ -618,7 +618,6 @@ class EventController extends Controller
         }
 
         $infoData = $request->course;
-
         $event_info = $this->prepareInfo($infoData, $request->status, $request->delivery, $partner, $request->syllabus, $request->city_id, $event);
 
         $this->updateEventInfo($event_info, $event->id);
@@ -972,6 +971,7 @@ class EventController extends Controller
             $data['course_certification_name_success'] = $requestData['certificate']['success_text'];
             $data['course_certification_name_failure'] = $requestData['certificate']['failure_text'];
             $data['course_certification_type'] = $requestData['certificate']['type'];
+            $data['has_certificate'] = isset($requestData['certificate']['certification']) && $requestData['certificate']['certification'] == 'on';
 
             if(isset($requestData['certificate']['visible'])){
 
@@ -1071,13 +1071,15 @@ class EventController extends Controller
         $infos->course_elearning_expiration = isset($event_info['course_elearning_expiration']) ? $event_info['course_elearning_expiration'] : null;
         $infos->course_elearning_text = isset($event_info['course_elearning_text']) ? $event_info['course_elearning_text'] : null;
 
-
-        if($event->paymentMethod()->first()){
+        
+        /*if($event->paymentMethod()->first()){
             $infos->course_payment_method = (isset($event->paymentMethod) && count($event->paymentMethod) != 0) ? 'paid' : 'free';
             $infos->course_payment_icon = $event_info['course_payment_icon'];
-        }
+        }*/
 
-
+        $infos->course_payment_method = isset($event_info['course_payment_method']) && $event->paymentMethod()->first()  ? $event_info['course_payment_method'] : 'free';
+        $infos->course_payment_icon = $event_info['course_payment_icon'];
+        
         $infos->course_awards = (isset($event_info['course_awards_text']) && $event_info['course_awards_text'] != "") ? true : false;
         $infos->course_awards_text = $event_info['course_awards_text'];
         $infos->course_awards_icon = $event_info['course_awards_icon'];
@@ -1085,6 +1087,7 @@ class EventController extends Controller
         $infos->course_certification_name_success = $event_info['course_certification_name_success'];
         $infos->course_certification_name_failure = $event_info['course_certification_name_failure'];
         $infos->course_certification_type = $event_info['course_certification_type'];
+        $infos->has_certificate = $event_info['has_certificate'];
         $infos->course_certification_visible = $event_info['course_certificate_visible'];
         $infos->course_certification_icon = $event_info['course_certificate_icon'];
 

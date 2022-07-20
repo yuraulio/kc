@@ -35,6 +35,7 @@ use App\Model\Video;
 use App\Model\Certificate;
 use App\Model\WaitingList;
 use App\Model\EventInfo;
+use App\Notifications\CertificateAvaillable;
 
 class Event extends Model
 {
@@ -161,7 +162,16 @@ class Event extends Model
     public function is_inclass_course()
     {
 
-        return $this->view_tpl !== 'elearning_event' && $this->view_tpl !== 'elearning_free';
+        $eventInfo = $this->event_info();
+
+        if(isset($eventInfo['delivery']) && $eventInfo['delivery'] == 139){
+            return true;
+        }
+
+        return false;
+
+
+        //return $this->view_tpl !== 'elearning_event' && $this->view_tpl !== 'elearning_free';
 
         //if($this->delivery->first() && $this->delivery->first()->id == 139){
         //    return true;
@@ -173,7 +183,15 @@ class Event extends Model
     public function is_elearning_course()
     {
 
-        return $this->view_tpl == 'elearning_event' || $this->view_tpl == 'elearning_free';
+        $eventInfo = $this->event_info();
+
+        if(isset($eventInfo['delivery']) && $eventInfo['delivery'] == 143){
+            return true;
+        }
+
+        return false;
+
+        //return $this->view_tpl == 'elearning_event' || $this->view_tpl == 'elearning_free';
         // if($this->delivery->first() && $this->delivery->first()->id == 143){
         //     return true;
         // }else{
@@ -634,7 +652,8 @@ class Event extends Model
 
 
         $certification = count($this->certificatesByUser($user->id)) > 0;
-
+        $infos = $this->event_info();
+       
         if($this->examAccess($user,$successPer) && !$certification){
 
             $cert = new Certificate;
@@ -646,7 +665,7 @@ class Event extends Model
             $cert->firstname = $user->firstname;
             $cert->lastname = $user->lastname;
             $cert->credential = get_certifation_crendetial();
-            $cert->certificate_title =  $this->certificate_title ? $this->certificate_title : $this->title;
+            $cert->certificate_title = isset($infos['certificate']['messages']['success']) && $infos['certificate']['messages']['success'] ? $infos['certificate']['messages']['success'] : $this->title;
 
             $createDate = strtotime(date('Y-m-d'));
             $cert->create_date = $createDate;
@@ -658,6 +677,14 @@ class Event extends Model
 
             $cert->event()->save($this);
             $cert->user()->save($user);
+
+            $data['firstName'] = $user->firstname;
+            $data['eventTitle'] = $this->title;
+            $data['fbGroup'] = $this->fb_group;
+            $data['subject'] = 'Knowcrunch - ' . $data['firstName'] .' you certification is ready';
+            $data['template'] = 'emails.user.certificate';
+            $data['certUrl'] = trim(url('/') . '/mycertificate/' . base64_encode($user->email."--".$cert->id));
+            $user->notify(new CertificateAvaillable($data));
 
         }
 
@@ -800,6 +827,7 @@ class Event extends Model
             $data['certificate']['type'] = $infos['course_certification_type'];
             $data['certificate']['visible'] = $infos['course_certification_visible'] != null ? json_decode($infos['course_certification_visible'], true) : null;
             $data['certificate']['icon'] = $infos['course_certification_icon'] != null ? json_decode($infos['course_certification_icon'], true) : null;
+            $data['certificate']['has_certificate'] = $infos['has_certificate'];
 
             $data['students']['number'] = (int)$infos['course_students_number'];
             $data['students']['text'] = $infos['course_students_text'];
@@ -809,6 +837,33 @@ class Event extends Model
 
 
         return $data;
+    }
+
+
+    public function isFree(){
+        
+        $free = true;
+        $infos = $this->event_info();
+
+        if(isset($infos['payment_method']) && $infos['payment_method'] != 'free'){
+            $free = false;
+        }
+
+        return $free;
+
+    }
+
+    public function hasCertificate(){
+        
+        $hasCertificate = false;
+        $infos = $this->event_info();
+
+        if(isset($infos['certificate']['has_certificate']) && $infos['certificate']['has_certificate']){
+            $hasCertificate = true;
+        }
+
+        return $hasCertificate;
+
     }
 
     // Return seconds

@@ -58,12 +58,14 @@ class FixEventInfoTable extends Command
             $certification_title = $event->certificate_title;
             $cityId = $event->city->first() ? $event->city->first()->id : -1;
 
-            $visible = ['landing' => "on", "home"=> "on", 'list' => "on", "invoice" => "on", "emails" => "on"];
+            $visibleHours = ['landing' => "on", "home"=> "on", 'list' => "on","emails" => "on"];
+            $visible = ['landing' => "on","emails" => "on"];
+            $visibleHours2 = ['landing' => "on",'list' => "on","emails" => "on"];
            
             $hours = [
                 'icon' => ['path'=> null, 'alt_text' => null],
                 'text' => $event->summary1()->where('section','access')->first() ? $event->summary1()->where('section','access')->first()->title : null,
-                'visible' => $visible
+                'visible' => $visibleHours
             ];
 
             $requestData['hours'] = $hours;
@@ -85,14 +87,17 @@ class FixEventInfoTable extends Command
                          'dates' => [
                              'text' =>$event->summary1()->where('section','date')->first() ? $event->summary1()->where('section','date')->first()->title : null,
                              'icon' => ['path'=> null, 'alt_text' => null],
+                             'visible' => $visibleHours2,
                          ],
                          'day' => [
                              'text' =>$event->summary1()->where('section','duration')->first() ? $event->summary1()->where('section','duration')->first()->title : null,
                              'icon' => ['path'=> null, 'alt_text' => null],
+                             'visible' => $visibleHours2,
                          ],
                          'hours' => [
                              'text' =>$event->summary1()->where('section','duration')->first() ? $event->summary1()->where('section','duration')->first()->title : null,
                              'icon' => ['path'=> null, 'alt_text' => null],
+                             'visible' => $visibleHours2,
                          ]
                     ]
                 ];
@@ -156,15 +161,16 @@ class FixEventInfoTable extends Command
                 'icon' => ['path'=> null, 'alt_text' => null],
                 'failure_text' => $event->title,
                 "type" => null,
-                "visible" => $visible
+                'visible' => $visibleHours2,
             ];
 
             $requestData['certificate'] = $certificate;
-
+            $st = $event->summary1()->where('section','students')->first() ? $event->summary1()->where('section','students')->first()->title : null;
+            
             $students = [
                 'icon' => ['path'=> null, 'alt_text' => null],
                 'count_start' => 1,
-                "text" => $event->summary1()->where('section','students')->first() ? $event->summary1()->where('section','students')->first()->title : null,
+                "text" => preg_replace('/[0-9]+/', "", $st),
                 "visible" => $visible
             ];
 
@@ -402,6 +408,7 @@ class FixEventInfoTable extends Command
         $infos->course_certification_type = $event_info['course_certification_type'];
         $infos->course_certification_visible = $event_info['course_certificate_visible'];
         $infos->course_students_number = $event_info['course_students_number'];
+        $infos->has_certificate = true;
         $infos->course_students_text = $event_info['course_students_text'];
         $infos->course_students_visible = $event_info['course_students_visible'];
         $infos->course_elearning_access = $event_info['course_elearning_access'];
