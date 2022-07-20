@@ -178,7 +178,7 @@ class MainController extends Controller
 
         $data['instructor'] = Instructor::whereStatus(1)->get();
 
-        $data['sumStudentsByCategories'] = CMS::getCategoriesWithSumStudents();
+        $data['sumStudentsByCategories'] = getCategoriesWithSumStudents();
 
         $dynamicPageData["event_search_data"] = $data;
 

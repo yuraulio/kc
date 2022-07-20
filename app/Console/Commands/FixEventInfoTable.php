@@ -110,8 +110,8 @@ class FixEventInfoTable extends Command
                     'elearning' => [
                          'expiration' => $event->expiration,
                          'icon' => ['path'=> null, 'alt_text' => null],
-                         'text' => '',
-                         'visible' => $visible
+                         'text' => 'months access to videos & files',
+                         'visible' => $visibleHours
                     ]
                 ];
 
