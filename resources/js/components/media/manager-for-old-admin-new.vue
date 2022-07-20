@@ -41,7 +41,7 @@ export default {
             input_icon_wrapper = $(input_icon_wrapper).find('.input-icon')
             $(input_icon_wrapper).empty()
 
-            $(input_icon_wrapper).append(`<img src="${"/uploads" + $event.data.path}">`)
+            $(input_icon_wrapper).append(`<img class="replace-with-svg" src="${"/uploads" + $event.data.path}" width="20px"> `)
         },
     }
 }
