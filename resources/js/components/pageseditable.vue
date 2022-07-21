@@ -6,7 +6,7 @@
                 <h4 v-if="title_value" class="page-title d-inline-block">Edit page: {{title_value}}</h4>
                 <h4 v-else class="page-title d-inline-block">New page</h4>
 
-                <button :disabled="loading" @click="changeMode()" type="button" class="btn btn-soft-info waves-effect waves-light float-end">Editor Mode</button>
+                <button :disabled="loading" @click="changeMode()" type="button" class="btn btn-soft-info waves-effect waves-light float-end">Simple Mode</button>
             </div>
         </div>
 
