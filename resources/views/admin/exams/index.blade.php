@@ -63,13 +63,13 @@
                                                     <a class="dropdown-item" href="{{ route('exam.clone', $exam->id) }}">{{ __('Clone') }}</a>
                                                 </div>
 
-                                                
-                                                
-                                        
-                                            
+
+
+
+
                                             </div>
 
-                                            
+
                                         </td>
                                     </tr>
                                 @endforeach
@@ -101,6 +101,7 @@
     <script src="{{ asset('argon') }}/vendor/datatables.net-select/js/dataTables.select.min.js"></script>
     <script>
          var table = $('#datatable-basic7').DataTable({
+            order: [[1, 'desc']],
         language: {
             paginate: {
             next: '&#187;', // or '→'

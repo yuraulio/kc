@@ -605,6 +605,63 @@
 
                             </div>
 
+                            <div class="row elearning_exam_visible_wrapper d-none">
+
+                                <div class="exam_input col-sm-12 col-md-6 col-lg-3 form-group d-none">
+                                    <label class="form-control-label" for="input-expiration">{{ __('Exam') }}</label>
+                                    <div class="input-group">
+                                        <input type="text" name="course[{{'delivery'}}][{{'elearning'}}][{{'exam'}}][{{'text'}}]" id="input-exam" class="form-control" placeholder="{{ __('Alphanumeric text') }}" value="{{ old('exam') }}"autofocus>
+                                        <span data-infowrapper="elearning_exam" class="input-group-addon input-group-append input-icon-wrapper-inclass">
+                                            <span class="btn btn-outline-primary input-icon">
+                                                <img class="replace-with-svg" width="20" src="/theme/assets/img/summary_icons/messages-warning-information.svg" alt="">
+                                            </span>
+                                        </span>
+
+                                        <input type="hidden" value="{{ old('elearning_exam_icon_path') }}" id="elearning_exam_path" name="course[{{'delivery'}}][{{'elearning'}}][{{'exam'}}][{{'icon'}}][{{'path'}}]">
+                                        <input type="hidden" value="{{ old('elearning_exam_icon_alt_text') }}" id="elearning_exam_alt_text" name="course[{{'delivery'}}][{{'elearning'}}][{{'exam'}}][{{'icon'}}][{{'alt_text'}}]">
+                                    </div>
+
+                                </div>
+
+                                <label class="form-control-label col-12" for="input-delivery">{{ __('Visible on:') }}</label>
+                                <div class="col-sm-12 col-md-6 col-lg-2">
+
+                                    <div class="custom-control custom-checkbox mb-3">
+                                        <input class="custom-control-input" name="course[{{'delivery'}}][{{'elearning'}}][{{'exam'}}][{{'visible'}}][{{'landing'}}]" id="input-elearning-exam-landing" type="checkbox">
+                                        <label class="custom-control-label" for="input-elearning-exam-landing">Course landing page (summary)</label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 col-md-6 col-lg-2">
+                                    <div class="custom-control custom-checkbox mb-3">
+                                        <input class="custom-control-input" name="course[{{'delivery'}}][{{'elearning'}}][{{'exam'}}][{{'visible'}}][{{'home'}}]" id="input-elearning-exam-home" type="checkbox">
+                                        <label class="custom-control-label" for="input-elearning-exam-home">Course box in home page</label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 col-md-6 col-lg-2">
+                                    <div class="custom-control custom-checkbox mb-3">
+                                        <input class="custom-control-input" name="course[{{'delivery'}}][{{'elearning'}}][{{'exam'}}][{{'visible'}}][{{'list'}}]" id="input-elearning-exam-list" type="checkbox">
+                                        <label class="custom-control-label" for="input-elearning-exam-list">Course box in list page</label>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-12 col-md-6 col-lg-2">
+                                    <div class="custom-control custom-checkbox mb-3">
+                                        <input class="custom-control-input" name="course[{{'delivery'}}][{{'elearning'}}][{{'exam'}}][{{'visible'}}][{{'invoice'}}]" id="input-elearning-exam-invoice" type="checkbox">
+                                        <label class="custom-control-label" for="input-elearning-exam-invoice">Invoice description</label>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-12 col-md-6 col-lg-2">
+                                    <div class="custom-control custom-checkbox mb-3">
+                                        <input class="custom-control-input" name="course[{{'delivery'}}][{{'elearning'}}][{{'exam'}}][{{'visible'}}][{{'emails'}}]" id="input-elearning-exam-emails" type="checkbox">
+                                        <label class="custom-control-label" for="input-elearning-exam-emails">Automated emails</label>
+                                    </div>
+                                </div>
+
+
+
+                            </div>
+
 
 
                             <hr>
@@ -1181,15 +1238,21 @@
             $('.delivery_child_wrapper').removeClass('d-none')
             $('.delivery_city_wrapper').removeClass('d-none')
             $('.elearning_visible_wrapper').addClass('d-none')
+            $('.elearning__exam_visible_wrapper').addClass('d-none')
             $('.exp_input').addClass('d-none')
+            $('.exam_input').addClass('d-none')
         }else if($(this).val() == 143){
             $('.delivery_child_wrapper').addClass('d-none')
             $('.elearning_visible_wrapper').removeClass('d-none')
+            $('.elearning_exam_visible_wrapper').removeClass('d-none')
             $('.exp_input').removeClass('d-none')
+            $('.exam_input').removeClass('d-none')
             $('#input-city_id').val('')
         }else if($(this).val() == 215){
             $('.exp_input').addClass('d-none')
+            $('.exam_input').addClass('d-none')
             $('.elearning_visible_wrapper').addClass('d-none')
+            $('.elearning_exam_visible_wrapper').addClass('d-none')
             $('.delivery_child_wrapper').removeClass('d-none')
             $('.delivery_city_wrapper').addClass('d-none')
             $('#input-city_id').val('')

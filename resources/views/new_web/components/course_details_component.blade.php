@@ -77,6 +77,19 @@
             </li>
             @endif
 
+            @if(isset($info['elearning']['exam']['visible']['landing']) && $info['elearning']['exam']['visible']['landing'] && isset($info['elearning']['exam']['text']) && $info['elearning']['exam']['text'] != null)
+            <li>
+                @if(isset($info['elearning']['exam']['icon']['path']) && $info['elearning']['exam']['icon']['path'] != null)<img class="info-icon" src="{{cdn($info['elearning']['exam']['icon']['path'])}}" width="30" onerror="this.onerror=null;this.src='/theme/assets/img/summary_icons/messages-warning-information.svg'" alt="{{$info['elearning']['exam']['icon']['alt_text']}}" /> @else <img class="info-icon"  src="/theme/assets/img/summary_icons/messages-warning-information.svg" width="30" alt="" /> @endif
+                <div class="info-text">
+                    <p>
+                        {{  $info['elearning']['exam']['text'] }}
+                        </br>
+
+                    </p>
+                </div>
+            </li>
+            @endif
+
             @if(isset($info['inclass']['dates']['visible']['landing']) && $info['inclass']['dates']['visible']['landing'] && isset($info['inclass']['dates']['text']) && $info['inclass']['dates']['text'] != null)
 
             <li>

@@ -747,11 +747,18 @@ class EventController extends Controller
             }
 
         }else if($deliveryId == 143){
+            // Video E-learning
             $visible_loaded_data = isset($requestData['delivery']['elearning']['visible']) ? $requestData['delivery']['elearning']['visible'] : null;
             $data['course_elearning_visible'] = json_encode($this->prepareVisibleData($visible_loaded_data));
             $data['course_elearning_icon'] = $requestData['delivery']['elearning']['icon'] != null ?  json_encode($requestData['delivery']['elearning']['icon']) : null;
             $data['course_elearning_expiration'] = (isset($requestData['delivery']['elearning']['expiration']) && $requestData['delivery']['elearning']['expiration'] != null) ? $requestData['delivery']['elearning']['expiration'] : null;
             $data['course_elearning_text'] = (isset($requestData['delivery']['elearning']['text']) && $requestData['delivery']['elearning']['text'] != null) ? $requestData['delivery']['elearning']['text'] : null;
+
+            $visible_loaded_data = isset($requestData['delivery']['elearning']['exam']['visible']) ? $requestData['delivery']['elearning']['exam']['visible'] : null;
+            $data['course_elearning_exam_visible'] = json_encode($this->prepareVisibleData($visible_loaded_data));
+            $data['course_elearning_exam_icon'] = $requestData['delivery']['elearning']['exam']['icon'] != null ?  json_encode($requestData['delivery']['elearning']['exam']['icon']) : null;
+            $data['course_elearning_exam_text'] = (isset($requestData['delivery']['elearning']['exam']['text']) && $requestData['delivery']['elearning']['exam']['text'] != null) ? $requestData['delivery']['elearning']['exam']['text'] : null;
+
 
             if(isset($requestData['delivery']['inclass'])){
                 $data['course_inclass_absences'] = null;
@@ -1066,20 +1073,26 @@ class EventController extends Controller
         $infos->course_inclass_dates = isset($event_info['course_inclass_dates']) ? $event_info['course_inclass_dates'] : null;
         $infos->course_inclass_times = isset($event_info['course_inclass_times']) ? $event_info['course_inclass_times'] : null;
         $infos->course_inclass_days = isset($event_info['course_inclass_days']) ? $event_info['course_inclass_days'] : null;
+
         $infos->course_elearning_visible = isset($event_info['course_elearning_visible']) ? $event_info['course_elearning_visible'] : null;
         $infos->course_elearning_icon = isset($event_info['course_elearning_icon']) ? $event_info['course_elearning_icon'] : null;
         $infos->course_elearning_expiration = isset($event_info['course_elearning_expiration']) ? $event_info['course_elearning_expiration'] : null;
         $infos->course_elearning_text = isset($event_info['course_elearning_text']) ? $event_info['course_elearning_text'] : null;
 
-        
+
+        $infos->course_elearning_exam_visible = isset($event_info['course_elearning_exam_visible']) ? $event_info['course_elearning_exam_visible'] : null;
+        $infos->course_elearning_exam_icon = isset($event_info['course_elearning_exam_icon']) ? $event_info['course_elearning_exam_icon'] : null;
+        $infos->course_elearning_exam_text = isset($event_info['course_elearning_exam_text']) ? $event_info['course_elearning_exam_text'] : null;
+
+
         /*if($event->paymentMethod()->first()){
             $infos->course_payment_method = (isset($event->paymentMethod) && count($event->paymentMethod) != 0) ? 'paid' : 'free';
             $infos->course_payment_icon = $event_info['course_payment_icon'];
         }*/
 
         $infos->course_payment_method = isset($event_info['course_payment_method']) && $event->paymentMethod()->first()  ? $event_info['course_payment_method'] : 'free';
-        $infos->course_payment_icon = $event_info['course_payment_icon'];
-        
+        $infos->course_payment_icon = (isset($event_info['course_payment_icon']) && $event_info['course_payment_icon'] != null) ? $event_info['course_payment_icon'] : null;
+
         $infos->course_awards = (isset($event_info['course_awards_text']) && $event_info['course_awards_text'] != "") ? true : false;
         $infos->course_awards_text = $event_info['course_awards_text'];
         $infos->course_awards_icon = $event_info['course_awards_icon'];
