@@ -19,9 +19,10 @@ class MediaFolderResource extends JsonResource
             'name' => $this->name,
             'path' => $this->path,
             'size' => $this->size,
-            'children' => $this->children,
+            'children' => MediaFolderResource::collection($this->childrenAll),
             'user' => $this->when(
-                $this->user, function () {
+                $this->user,
+                function () {
                     return [
                         'firstname' => $this->user->firstname,
                         'lastname' => $this->user->lastname,

@@ -260,8 +260,8 @@
                                                     <label class="form-label mt-2">Preview</label>
                                                     <div class="text-center">
                                                         <iframe 
-                                                            :width="findInputValue(column.template.inputs, 'youtube_width') || '100%'" 
-                                                            :height="findInputValue(column.template.inputs, 'youtube_height') || '400'" 
+                                                            :width="findInputValue(column.template.inputs, 'youtube_full_width') ? '100%' : (findInputValue(column.template.inputs, 'youtube_width') || '100%')"
+                                                            :height="findInputValue(column.template.inputs, 'youtube_height') || '600'" 
                                                             :src="'https://www.youtube.com/embed/' + findInputValue(column.template.inputs, 'youtube_embed')" 
                                                             title="YouTube video player" 
                                                             frameborder="0" 

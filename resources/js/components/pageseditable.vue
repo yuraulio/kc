@@ -3,10 +3,10 @@
 
         <div class="col-sm-12 mt-3 mb-3">
             <div class="page-title-box">
-                <h4 v-if="title_value" class="page-title d-inline-block">Edit page: {{title_value}}</h4>
+                <h4 v-if="title_value" class="page-title d-inline-block">Edit page</h4>
                 <h4 v-else class="page-title d-inline-block">New page</h4>
 
-                <button :disabled="loading" @click="changeMode()" type="button" class="btn btn-soft-info waves-effect waves-light float-end">Editor Mode</button>
+                <button :disabled="loading" @click="changeMode()" type="button" class="btn btn-soft-info waves-effect waves-light float-end">Simple Mode</button>
             </div>
         </div>
 
@@ -15,7 +15,7 @@
                 <div class="card-body pb-0">
                     <text-field
                         v-if="title"
-                        title="Title"
+                        title="Administration Title"
                         @updatevalue="update_title"
                         :prop-value="title_value"
                         required=1
@@ -77,7 +77,7 @@
 
                     <button @click="collapseAll = !collapseAll" class="btn btn-sm btn-soft-secondary w-100 mb-3" type="button" data-bs-toggle="collapse" aria-expanded="false" aria-controls="collapseExample">
                         <template v-if="collapseAll == true">
-                            Collaps All
+                            Collapse All
                         </template>
                         <template v-else>
                             Expand All
