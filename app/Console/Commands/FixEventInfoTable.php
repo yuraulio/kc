@@ -64,32 +64,153 @@ class FixEventInfoTable extends Command
             
             $eventHour = ceil($event->getTotalHours() / 60);
 
-            $hourText = $event->summary1()->where('section','access')->first() ? $event->summary1()->where('section','access')->first()->title : null;
+            $keys = ['hours','dates','day','language','certificate','students'];
+            //$keys = ['hours','day','certificate','dates','times','language','students'];
+           
+            $delyveryy = [];
+            $inclass =  [];
+            /*if($event->id == 4619){
+                //dd($event->summary1()->get()->toArray());
+            }*/
+
+            foreach($event->summary1()->get()->toArray() as $key => $summary1){
+                
+                $t = [];
+                if(!isset($keys[$key])){
+                    continue;
+                }
+                /*if($event->id == 4619){
+                    echo $key . ' => ' .  $keys[$key] . ' => ' . $summary1['title'] . ' ++ ';
+                }*/
+
+                if($keys[$key] == 'hours'){
+                    $hourText = $summary1['title'];
+                    $hours = [
+                        'hour' => $eventHour,
+                        'icon' => ['path'=> null, 'alt_text' => null],
+                        'text' => $hourText,//str_replace($eventHour,"",$hourText),
+                        'visible' => $visibleHours
+                    ];
+
+                    $requestData[$keys[$key]] = $hours;
+
+                }else if($keys[$key] == 'certificate'){
+                    $t = [
+                        'icon' => ['path'=> null, 'alt_text' => null],
+                        'failure_text' => $event->title,
+                        'type' => $summary1['title'],
+                        'visible' => $visibleHours2
+                    ];
+
+                    $requestData[$keys[$key]] = $t;
+
+                }else if($keys[$key] == 'students'){
+
+                    $st = $summary1['title'];
+                    $t = [
+                        'icon' => ['path'=> null, 'alt_text' => null],
+                        'count_start' => 1,
+                        "text" => preg_replace('/[0-9]+/', "", $st),
+                        "visible" => $visible
+                    ];
+                    $requestData[$keys[$key]] = $t;
+
+                }else if($keys[$key] == 'dates'){
+
+                    if($delivery!=143){
+                        $inclass['dates'] = [
+                            
+                            'text' => $summary1['title'],
+                            'icon' => ['path'=> null, 'alt_text' => null],
+                            'visible' => $visibleHours2,
+                            
+                        ];
+                        
+                        $deliveryy['inclass'] = $inclass;
+
+                    }
+
+                }else if($keys[$key] == 'day'){
+
+                    if($delivery!=143){
+
+                        $inclass['day'] = [
+                             
+                            'text' =>$summary1['title'],
+                            'icon' => ['path'=> null, 'alt_text' => null],
+                            'visible' => $visibleHours2,
+                            
+                        ];
+                        
+                        $deliveryy['inclass'] = $inclass;
+
+                    }
+
+                }else if($keys[$key] == 'times'){
+                    //dd('gfsd');
+                    if($delivery!=143){
+
+
+                        $inclass['hour'] = [
+                            
+                            'text' => $summary1['title'],
+                            'icon' => ['path'=> null, 'alt_text' => null],
+                            'visible' => $visibleHours2,
+                            
+                        ];
+                        
+                        $deliveryy['inclass'] = $inclass;
+
+                    }
+
+                }else{
+
+                    $t = [
+                        'icon' => ['path'=> null, 'alt_text' => null],
+                        'text' => $summary1['title'],
+                        'visible' => $visible
+                    ];
+                    $requestData[$keys[$key]] = $t;
+                }
+
+            }
+
+            if($delivery == 143){
+                $deliveryy = [
+                    'elearning' => [
+                         'expiration' => $event->expiration,
+                         'icon' => ['path'=> null, 'alt_text' => null],
+                         'text' => 'months access to videos & files',
+                         'visible' => $visibleHours
+                    ]
+                ];
+            }
+
+            $requestData['delivery'] = $deliveryy;
+            /*if($event->id == 4619){
+                dd($requestData);
+            }*/
+            //dd($deliveryy);
+            
+
+
+            /*$hourText = $event->summary1()->where('section','access')->first() ? $event->summary1()->where('section','access')->first()->title : null;
             $hours = [
                 'icon' => ['path'=> null, 'alt_text' => null],
                 'text' => $hourText,//str_replace($eventHour,"",$hourText),
                 'visible' => $visibleHours
             ];
-
             $requestData['hours'] = $hours;
-            //dd($event->getTotalHours());
-            //Math.ceil(data.data/60)
-            $requestData['hours']['hour'] = $eventHour;
-            if($event->id == 4620){
-                
-                //dd(preg_replace('/[0-9]+/', "", $requestData['hours']['text']));
-                //dd($requestData);
-            }
-            //$requestData['hours']['text'] = preg_replace('/[0-9]+/', "", $hourText);
-            $language = [
+            $requestData['hours']['hour'] = $eventHour;*/
+
+            /*$language = [
                 'icon' => ['path'=> null, 'alt_text' => null],
                 'text' => $event->summary1()->where('section','language')->first() ? $event->summary1()->where('section','language')->first()->title : null,
                 'visible' => $visible
             ];
-
-            $requestData['language'] = $language;
+            $requestData['language'] = $language;*/
             
-            if($delivery!=143){
+            /*if($delivery!=143){
                 $deliveryy = [
                     'inclass' => [
                          'dates' => [
@@ -124,7 +245,7 @@ class FixEventInfoTable extends Command
                 ];
 
                 $requestData['delivery'] = $deliveryy;
-            }
+            }*/
            
             
             if($event->view_tpl == 'elearning_event' || $event->view_tpl == 'event'){
@@ -165,24 +286,22 @@ class FixEventInfoTable extends Command
 
             $requestData['manager'] = $manager;
             
-            $certificate = [
+            /*$certificate = [
                 'icon' => ['path'=> null, 'alt_text' => null],
                 'failure_text' => $event->title,
                 "type" =>  $event->summary1()->where('section','diploma')->first() ? $event->summary1()->where('section','diploma')->first()->title : null,
                 'visible' => $visibleHours2,
             ];
-
-            $requestData['certificate'] = $certificate;
-            $st = $event->summary1()->where('section','students')->first() ? $event->summary1()->where('section','students')->first()->title : null;
+            $requestData['certificate'] = $certificate;*/
             
+            /*$st = $event->summary1()->where('section','students')->first() ? $event->summary1()->where('section','students')->first()->title : null;
             $students = [
                 'icon' => ['path'=> null, 'alt_text' => null],
                 'count_start' => 1,
                 "text" => preg_replace('/[0-9]+/', "", $st),
                 "visible" => $visible
             ];
-
-            $requestData['students'] = $students;
+            $requestData['students'] = $students;*/
 
             $eventInfo = $this->prepareInfo($requestData, $status, $delivery, $absences, $partner, $syllabus, $certification_title, $cityId);
             $this->updateEventInfo($eventInfo, $event->id);

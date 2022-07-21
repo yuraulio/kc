@@ -206,7 +206,7 @@ class StudentController extends Controller
                 $data['events'][$event->id]['dropbox'] = $event->dropbox;
 
                 $data['events'][$event->id]['summaryDate'] = isset($eventInfo['inclass']['dates']['text']) ?  $eventInfo['inclass']['dates']['text'] : '';
-                $data['events'][$event->id]['summaryDate_icon'] = isset($eventInfo['elearning']['icon'])  ?  $eventInfo['elearning']['icon'] : null;
+                $data['events'][$event->id]['summaryDate_icon'] = isset($eventInfo['inclass']['dates']['icon']['path'])  ?  $eventInfo['inclass']['dates']['icon']['path'] : null;
 
 
 
@@ -301,7 +301,7 @@ class StudentController extends Controller
                 $data['events'][$event->id]['delivery'] = isset($eventInfo['delivery'])  ? $eventInfo['delivery'] : -1;
 
                 $data['events'][$event->id]['summaryDate'] = isset($eventInfo['inclass']['dates']['text']) ?  $eventInfo['inclass']['dates']['text'] : '';
-                $data['events'][$event->id]['summaryDate_icon'] = isset($eventInfo['elearning']['icon'])  ?  $eventInfo['elearning']['icon'] : null;
+                $data['events'][$event->id]['summaryDate_icon'] = isset($eventInfo['inclass']['dates']['icon']['path'])  ?  $eventInfo['inclass']['dates']['icon']['path'] : null;
 
 
             }
@@ -747,7 +747,7 @@ class StudentController extends Controller
                 $data['events'][$event->id]['delivery'] = isset($eventInfo['delivery'])  ? $eventInfo['delivery'] : -1;
 
                 $data['events'][$event->id]['summaryDate'] = isset($eventInfo['inclass']['dates']['text']) ?  $eventInfo['inclass']['dates']['text'] : '';
-                $data['events'][$event->id]['summaryDate_icon'] = isset($eventInfo['elearning']['icon'])  ?  $eventInfo['elearning']['icon'] : null;
+                $data['events'][$event->id]['summaryDate_icon'] = isset($eventInfo['inclass']['dates']['icon']['path'])  ?  $eventInfo['inclass']['dates']['icon']['path'] : null;
 
                 //$data['user']['events'][$event->id]['exam_access'] = $user->examAccess(0.8,$event->id);
 
@@ -1494,7 +1494,7 @@ class StudentController extends Controller
             }else if(isset($eventInfo['delivery']) && $eventInfo['delivery'] == 139){
     
                 $data['events'][$event->id]['summaryDate'] = isset($eventInfo['inclass']['dates']['text'])  ?  $eventInfo['inclass']['dates']['text'] : '';
-                $data['events'][$event->id]['summaryDate_icon'] = isset($eventInfo['elearning']['icon'])  ?  $eventInfo['elearning']['icon'] : null;
+                $data['events'][$event->id]['summaryDate_icon'] = isset($eventInfo['inclass']['dates']['icon']['path'])  ?  $eventInfo['inclass']['dates']['icon']['path'] : null;
 
     
             }

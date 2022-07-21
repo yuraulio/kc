@@ -2132,16 +2132,16 @@
 
 
             if(eventInfos !== undefined){
+        
+                $('#input-certificate_title').val(eventInfos.certificate.messages.success)
+                CKEDITOR.instances['input-certificate_title'].setData(eventInfos.certificate.messages.success)
 
-                $('#input-certificate_title').val(eventInfos.course_certification_name_success)
-                CKEDITOR.instances['input-certificate_title'].setData(eventInfos.course_certification_name_success)
-
-                CKEDITOR.instances['input-certificate_text_failure'].setData(eventInfos.course_certification_name_failure)
-                $('#input-certificate_text_failure').val(eventInfos.course_certification_name_failure)
+                CKEDITOR.instances['input-certificate_text_failure'].setData(eventInfos.certificate.messages.failure)
+                $('#input-certificate_text_failure').val(eventInfos.certificate.messages.failure)
             }
 
 
-            $('#input-certificate_type').val('')
+            
         }else{
             $('.course-certification-visible-wrapper').addClass('d-none');
 
