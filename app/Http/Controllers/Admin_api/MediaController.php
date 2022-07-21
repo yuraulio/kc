@@ -499,7 +499,7 @@ class MediaController extends Controller
         $folderMain = MediaFolder::find($request->id);
 
         $i = 0;
-        $children = MediaFolder::whereId($folderMain->parent_id)->first()->children()->get();
+        $children = $folderMain->parent()->first()->children()->get();
         if ($children) {
             foreach ($children as $child) {
                 if ($child->id != $request->id) {
@@ -511,7 +511,6 @@ class MediaController extends Controller
         }
 
         // set order for moved folder
-        $folderMain = MediaFolder::find($request->id);
         $position = $request->position;
 
         $folderMain->order = $position;
