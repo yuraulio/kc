@@ -800,9 +800,6 @@ export default {
         },
         getAppURL() {
             return process.env.ADMIN_URL;
-        },
-        getAdminURL() {
-            return process.env.MIX_ADMIN_URL;
         }
     },
     mounted() {
