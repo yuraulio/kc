@@ -205,7 +205,7 @@
     <div v-if="config.loadWidgets !== false">
         <div v-if="widgets" class="row">
 
-            <div class="col-lg-3 col-md-6">
+            <div v-if="widgets[0]" class="col-lg-3 col-md-6">
                 <div class="card bg-pattern mb-3">
                     <div class="card-body">
                         <div class="row">
@@ -225,7 +225,7 @@
                 </div>
             </div>
 
-            <div class="col-lg-3 col-md-6">
+            <div v-if="widgets[1]" class="col-lg-3 col-md-6">
                 <div class="card bg-pattern mb-3">
                     <div class="card-body">
                         <div class="row">
@@ -245,7 +245,7 @@
                 </div>
             </div>
 
-            <div class="col-lg-3 col-md-6">
+            <div v-if="widgets[2]" class="col-lg-3 col-md-6">
                 <div class="card bg-pattern mb-3">
                     <div class="card-body">
                         <div class="row">
@@ -265,7 +265,7 @@
                 </div>
             </div>
 
-            <div class="col-lg-3 col-md-6">
+            <div v-if="widgets[3]" class="col-lg-3 col-md-6">
                 <div class="card bg-pattern mb-3">
                     <div class="card-body">
                         <div class="row">
