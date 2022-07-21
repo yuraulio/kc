@@ -15,7 +15,7 @@
                 <div class="card-body pb-0">
                     <text-field
                         v-if="title"
-                        title="Title"
+                        title="Administration Title"
                         @updatevalue="update_title"
                         :prop-value="title_value"
                         required=1
