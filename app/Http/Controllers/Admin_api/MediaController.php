@@ -40,8 +40,8 @@ class MediaController extends Controller
 
         try {
             $folders = MediaFolder::lookForOriginal($request->filter)
-                ->with('children.children.children.children.children.children.children.children')
                 ->whereParentId($request->folder_id ?? null)
+                ->with('childrenAll')
                 ->get();
 
             return MediaFolderResource::collection($folders);

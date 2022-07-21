@@ -43,6 +43,11 @@ class MediaFolder extends Model
         return $this->hasMany(MediaFolder::class, "parent_id", "id")->orderBy('order');
     }
 
+    public function childrenAll()
+    {
+        return $this->children()->with('childrenAll');
+    }
+
     public function parent()
     {
         return $this->belongsTo(MediaFolder::class, "parent_id");
