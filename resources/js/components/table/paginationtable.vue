@@ -799,7 +799,7 @@ export default {
             return (index != -1 ? true : false);
         },
         getAppURL() {
-            return process.env.ADMIN_URL;
+            return process.env.MIX_APP_URL;
         }
     },
     mounted() {
