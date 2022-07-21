@@ -753,9 +753,9 @@
                                              }
                                           }*/
                                           ?>
-                                       @if(isset($event['summaryDate']))<div class="duration"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/icon-calendar.svg')}}" alt="">{{$event['summaryDate']}}</div>@endif
+                                       @if(isset($event['summaryDate']))<div class="duration"><img class="replace-with-svg" onerror="this.src='{{cdn('/theme/assets/images/icons/icon-calendar.svg')}}'" src="{{cdn($event['summaryDate_icon'])}}" alt="">{{$event['summaryDate']}}</div>@endif
                                        @if($event['hours'])
-                                       <div class="expire-date"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Start-Finish.svg')}}" alt="">{{$event['hours']}}</div>
+                                       <div class="expire-date"><img class="replace-with-svg" onerror="this.src='{{cdn('/theme/assets/images/icons/Start-Finish.svg')}}'"  src="{{cdn($event['hours_icon'])}}" alt="">{{$event['hours']}}h</div>
                                        @endif
                                       
                                     </div>
@@ -1051,7 +1051,7 @@
                                        <div class="expire-date exp-date"><img src="{{cdn('/theme/assets/images/icons/Days-Week.svg')}}" alt="">Expiration date: {{$event['expiration']}}</div>
                                        @endif
                                        @if (isset($event['hours']))
-                                       <div  class="duration"><img class="replace-with-svg" width="20" src="{{cdn('/theme/assets/images/icons/Start-Finish.svg')}}" alt=""> {{$event['hours']}}h </div>
+                                       <div  class="duration"><img class="replace-with-svg" width="20" onerror="this.src='{{cdn('/theme/assets/images/icons/Start-Finish.svg')}}'"  src="{{cdn($event['hours_icon'])}}" alt=""> {{$event['hours']}}h </div>
                                        @endif
                                        @if (isset($event['videos_progress']))
                                        <?php //dd($event); ?>
@@ -1279,7 +1279,7 @@
                                  <div id="c-info-inner{{$tab}}" class="in-tab-wrapper" style="display: block;">
                                     <div class="bottom">
                                        @if (isset($event['hours']) && $event['hours'])
-                                       <div  class="duration"><img class="replace-with-svg" width="20" src="{{cdn('/theme/assets/images/icons/Start-Finish.svg')}}" alt=""> {{$event['hours']}}h </div>
+                                       <div  class="duration"><img class="replace-with-svg" width="20" onerror="this.src='{{cdn('/theme/assets/images/icons/Start-Finish.svg')}}'"  src="{{cdn($event['hours_icon'])}}" alt=""> {{$event['hours']}}h </div>
                                        @endif
                                        @if (isset($event['videos_progress']))
                                        <div  class="duration"><img class="replace-with-svg" width="20" src="{{cdn('/theme/assets/images/icons/E-Learning.svg')}}" alt=""> {{$event['videos_progress']}}% </div>

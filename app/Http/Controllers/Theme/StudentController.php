@@ -170,7 +170,9 @@ class StudentController extends Controller
                 $data['events'][$event->id]['delivery'] = isset($eventInfo['delivery'])  ? $eventInfo['delivery'] : -1;
                 $data['events'][$event->id]['category'] = $event->category;
                 //$data['events'][$event->id]['summary1'] = $event->summary1;
-                $data['events'][$event->id]['hours'] = isset($eventInfo['hours']['hour']) && $eventInfo['hours']['hour'] > 0  ? $eventInfo['hours']['hour'] . ' ' . $eventInfo['hours']['text'] : '';
+                $data['events'][$event->id]['hours'] = isset($eventInfo['hours']['hour']) && $eventInfo['hours']['hour'] > 0  ? $eventInfo['hours']['hour']  : '';
+                $data['events'][$event->id]['hours_icon'] = isset($eventInfo['hours']['icon']['path'])  ? $eventInfo['hours']['icon']['path'] : null;
+
                 $data['events'][$event->id]['slugable'] = $event->slugable;
                 $data['events'][$event->id]['release_date_files'] = $event->release_date_files;
                 $data['events'][$event->id]['plans'] = [];
@@ -179,11 +181,8 @@ class StudentController extends Controller
                 $data['events'][$event->id]['expiration'] = false;
                 $data['events'][$event->id]['status'] = $event->status;
                 
-                $data['events'][$event->id]['summaryDate'] = isset($eventInfo['elearning']['expiration']) && isset($eventInfo['elearning']['text']) ? 
-                                        $eventInfo['elearning']['expiration'] . ' ' . $eventInfo['elearning']['text'] : '';
-
-                
-                
+                $data['events'][$event->id]['summaryDate'] = isset($eventInfo['elearning']['expiration'])  ? $eventInfo['elearning']['expiration'] : null;
+                $data['events'][$event->id]['summaryDate_icon'] = isset($eventInfo['elearning']['icon'])  ?  $eventInfo['elearning']['icon'] : null;
 
                 $eventSubscriptions[] = $user->eventSubscriptions()->wherePivot('event_id',$event['id'])->first() ?
                 $user->eventSubscriptions()->wherePivot('event_id',$event['id'])->first()->id : -1;
@@ -196,7 +195,9 @@ class StudentController extends Controller
                 $data['events'][$event->id]['category'] = $event['category'];
                 $data['events'][$event->id]['delivery'] = isset($eventInfo['delivery'])  ? $eventInfo['delivery'] : -1;
                 //$data['events'][$event->id]['summary1'] = $event['summary1'];
-                $data['events'][$event->id]['hours'] = isset($eventInfo['hours']['hour']) && $eventInfo['hours']['hour'] > 0  ? $eventInfo['hours']['hour'] . ' ' . $eventInfo['hours']['text'] : '';;
+                $data['events'][$event->id]['hours'] = isset($eventInfo['hours']['hour']) && $eventInfo['hours']['hour'] > 0  ? $eventInfo['hours']['hour']  : '';
+                $data['events'][$event->id]['hours_icon'] = isset($eventInfo['hours']['icon']['path'])  ? $eventInfo['hours']['icon']['path'] : null;
+
                 $data['events'][$event->id]['slugable'] = $event['slugable']->toArray();
                 $data['events'][$event->id]['title'] = $event['title'];
                 $data['events'][$event->id]['release_date_files'] = $event->release_date_files;
@@ -205,6 +206,7 @@ class StudentController extends Controller
                 $data['events'][$event->id]['dropbox'] = $event->dropbox;
 
                 $data['events'][$event->id]['summaryDate'] = isset($eventInfo['inclass']['dates']['text']) ?  $eventInfo['inclass']['dates']['text'] : '';
+                $data['events'][$event->id]['summaryDate_icon'] = isset($eventInfo['elearning']['icon'])  ?  $eventInfo['elearning']['icon'] : null;
 
 
 
@@ -244,7 +246,9 @@ class StudentController extends Controller
                 $data['events'][$event->id]['view_tpl'] = $event['view_tpl'];
                 $data['events'][$event->id]['category'] = $event['category'];
                 //$data['events'][$event->id]['summary1'] = $event['summary1'];
-                $data['events'][$event->id]['hours'] = isset($eventInfo['hours']['hour']) && $eventInfo['hours']['hour'] > 0 ? $eventInfo['hours']['hour'] . ' ' . $eventInfo['hours']['text'] : '';;
+                $data['events'][$event->id]['hours'] = isset($eventInfo['hours']['hour']) && $eventInfo['hours']['hour'] > 0 ? $eventInfo['hours']['hour']  : '';
+                $data['events'][$event->id]['hours_icon'] = isset($eventInfo['hours']['icon']['path'])  ? $eventInfo['hours']['icon']['path'] : null;
+
                 $data['events'][$event->id]['slugable'] = $event['slugable']->toArray();
                 $data['events'][$event->id]['title'] = $event['title'];
                 $data['events'][$event->id]['release_date_files'] = $event->release_date_files;
@@ -252,8 +256,9 @@ class StudentController extends Controller
                 $data['events'][$event->id]['status'] = $event->status;
                 $data['events'][$event->id]['delivery'] = isset($eventInfo['delivery'])  ? $eventInfo['delivery'] : -1;
 
-                $data['events'][$event->id]['summaryDate'] = isset($eventInfo['elearning']['expiration']) && isset($eventInfo['elearning']['text']) ? 
-                                        $eventInfo['elearning']['expiration'] . ' ' . $eventInfo['elearning']['text'] : '';
+                $data['events'][$event->id]['summaryDate'] = isset($eventInfo['elearning']['expiration'])  ? $eventInfo['elearning']['expiration'] : null;
+                $data['events'][$event->id]['summaryDate_icon'] = isset($eventInfo['elearning']['icon'])  ?  $eventInfo['elearning']['icon'] : null;
+
                 //$data['user']['events'][$event->id]['exam_results'] = $user->examAccess(0.8,$event->id);
 
                 $eventSubscriptions[] = $user->eventSubscriptions()->wherePivot('event_id',$event['id'])->first() ?
@@ -284,7 +289,9 @@ class StudentController extends Controller
                 $data['events'][$event->id]['view_tpl'] = $event['view_tpl'];
                 $data['events'][$event->id]['category'] = $event['category'];
                 //$data['events'][$event->id]['summary1'] = $event['summary1'];
-                $data['events'][$event->id]['hours'] = isset($eventInfo['hours']['hour']) && $eventInfo['hours']['hour'] > 0 ? $eventInfo['hours']['hour'] . ' ' . $eventInfo['hours']['text'] : '';;
+                $data['events'][$event->id]['hours'] = isset($eventInfo['hours']['hour']) && $eventInfo['hours']['hour'] > 0 ? $eventInfo['hours']['hour']  : '';
+                $data['events'][$event->id]['hours_icon'] = isset($eventInfo['hours']['icon']['path'])  ? $eventInfo['hours']['icon']['path'] : null;
+
                 $data['events'][$event->id]['slugable'] = $event['slugable']->toArray();
                 $data['events'][$event->id]['title'] = $event['title'];
                 $data['events'][$event->id]['release_date_files'] = $event->release_date_files;
@@ -294,7 +301,7 @@ class StudentController extends Controller
                 $data['events'][$event->id]['delivery'] = isset($eventInfo['delivery'])  ? $eventInfo['delivery'] : -1;
 
                 $data['events'][$event->id]['summaryDate'] = isset($eventInfo['inclass']['dates']['text']) ?  $eventInfo['inclass']['dates']['text'] : '';
-
+                $data['events'][$event->id]['summaryDate_icon'] = isset($eventInfo['elearning']['icon'])  ?  $eventInfo['elearning']['icon'] : null;
 
 
             }
@@ -327,9 +334,11 @@ class StudentController extends Controller
                 $data['mySubscriptionEvents'][$key]['certs'] = $event->certificatesByUser($user->id);
                 $data['mySubscriptionEvents'][$key]['mySubscription'] = $user->subscriptions()->where('id',$subEvent['id'])->first();
                 $data['mySubscriptionEvents'][$key]['delivery'] = isset($eventInfo['delivery'])  ? $eventInfo['delivery'] : -1;
+                $data['mySubscriptionEvents'][$key]['hours'] = isset($eventInfo['hours']['hour']) && $eventInfo['hours']['hour'] > 0 ? $eventInfo['hours']['hour'] : '';
+                $data['mySubscriptionEvents'][$key]['hours_icon'] = isset($eventInfo['hours']['icon']['path'])  ? $eventInfo['hours']['icon']['path'] : null;
+                $data['mySubscriptionEvents'][$key]['summaryDate'] = isset($eventInfo['elearning']['expiration'])  ? $eventInfo['elearning']['expiration'] : null;
+                $data['mySubscriptionEvents'][$key]['summaryDate_icon'] = isset($eventInfo['elearning']['icon'])  ?  $eventInfo['elearning']['icon'] : null;
 
-                $data['mySubscriptionEvents'][$key]['summaryDate'] = isset($eventInfo['elearning']['expiration']) && isset($eventInfo['elearning']['text']) ? 
-                                        $eventInfo['elearning']['expiration'] . ' ' . $eventInfo['elearning']['text'] : '';
 
                 $video_access = false;
                 $expiration_event = $event->pivot['expiration'];
@@ -662,7 +671,9 @@ class StudentController extends Controller
                 $data['events'][$event->id]['view_tpl'] = $event['view_tpl'];
                 $data['events'][$event->id]['category'] = $event['category'];
                 //$data['events'][$event->id]['summary1'] = $event['summary1'];
-                $data['events'][$event->id]['hours'] = isset($eventInfo['hours']['hour']) && $eventInfo['hours']['hour'] > 0 ? $eventInfo['hours']['hour'] . ' ' . $eventInfo['hours']['text'] : '';;
+                $data['events'][$event->id]['hours'] = isset($eventInfo['hours']['hour']) && $eventInfo['hours']['hour'] > 0 ? $eventInfo['hours']['hour']  : '';
+                $data['events'][$event->id]['hours_icon'] = isset($eventInfo['hours']['icon']['path'])  ? $eventInfo['hours']['icon']['path'] : null;
+
                 $data['events'][$event->id]['slugable'] = $event['slugable']->toArray();
                 $data['events'][$event->id]['title'] = $event['title'];
                 $data['events'][$event->id]['release_date_files'] = $event->release_date_files;
@@ -670,8 +681,9 @@ class StudentController extends Controller
                 $data['events'][$event->id]['status'] = $event->status;
                 $data['events'][$event->id]['delivery'] = isset($eventInfo['delivery'])  ? $eventInfo['delivery'] : -1;
 
-                $data['events'][$event->id]['summaryDate'] = isset($eventInfo['elearning']['expiration']) && isset($eventInfo['elearning']['text']) ? 
-                    $eventInfo['elearning']['expiration'] . ' ' . $eventInfo['elearning']['text'] : '';
+                $data['events'][$event->id]['summaryDate'] = isset($eventInfo['elearning']['expiration'])  ? $eventInfo['elearning']['expiration'] : null;
+                $data['events'][$event->id]['summaryDate_icon'] = isset($eventInfo['elearning']['icon'])  ?  $eventInfo['elearning']['icon'] : null;
+
                 //$data['user']['events'][$event->id]['exam_results'] = $user->examAccess(0.8,$event->id);
 
                 $eventSubscriptions[] = $user->eventSubscriptions()->wherePivot('event_id',$event['id'])->first() ?
@@ -724,7 +736,9 @@ class StudentController extends Controller
                 $data['events'][$event->id]['view_tpl'] = $event['view_tpl'];
                 $data['events'][$event->id]['category'] = $event['category'];
                 //$data['events'][$event->id]['summary1'] = $event['summary1'];
-                $data['events'][$event->id]['hours'] = isset($eventInfo['hours']['hour']) && $eventInfo['hours']['hour'] > 0 ? $eventInfo['hours']['hour'] . ' ' . $eventInfo['hours']['text'] : '';;
+                $data['events'][$event->id]['hours'] = isset($eventInfo['hours']['hour']) && $eventInfo['hours']['hour'] > 0 ? $eventInfo['hours']['hour'] : '';
+                $data['events'][$event->id]['hours_icon'] = isset($eventInfo['hours']['icon']['path'])  ? $eventInfo['hours']['icon']['path'] : null;
+                
                 $data['events'][$event->id]['slugable'] = $event['slugable']->toArray();
                 $data['events'][$event->id]['title'] = $event['title'];
                 $data['events'][$event->id]['release_date_files'] = $event->release_date_files;
@@ -733,6 +747,8 @@ class StudentController extends Controller
                 $data['events'][$event->id]['delivery'] = isset($eventInfo['delivery'])  ? $eventInfo['delivery'] : -1;
 
                 $data['events'][$event->id]['summaryDate'] = isset($eventInfo['inclass']['dates']['text']) ?  $eventInfo['inclass']['dates']['text'] : '';
+                $data['events'][$event->id]['summaryDate_icon'] = isset($eventInfo['elearning']['icon'])  ?  $eventInfo['elearning']['icon'] : null;
+
                 //$data['user']['events'][$event->id]['exam_access'] = $user->examAccess(0.8,$event->id);
 
             }
@@ -769,9 +785,12 @@ class StudentController extends Controller
                 $data['mySubscriptionEvents'][$key]['mySubscription'] = $user->subscriptions()->where('id',$subEvent['id'])->first();
                 $data['mySubscriptionEvents'][$key]['plans'] = $event['plans'];
                 $data['mySubscriptionEvents'][$key]['delivery'] = isset($eventInfo['delivery'])  ? $eventInfo['delivery'] : -1;
+                $data['mySubscriptionEvents'][$key]['hours'] = isset($eventInfo['hours']['hour']) && $eventInfo['hours']['hour'] > 0 ? $eventInfo['hours']['hour'] : '';
+                $data['mySubscriptionEvents'][$key]['hours_icon'] = isset($eventInfo['hours']['icon']['path'])  ? $eventInfo['hours']['icon']['path'] : null;
 
-                $data['mySubscriptionEvents'][$key]['summaryDate'] = isset($eventInfo['elearning']['expiration']) && isset($eventInfo['elearning']['text']) ? 
-                    $eventInfo['elearning']['expiration'] . ' ' . $eventInfo['elearning']['text'] : '';
+                $data['mySubscriptionEvents'][$key]['summaryDate'] = isset($eventInfo['elearning']['expiration'])  ?  $eventInfo['elearning']['expiration'] : null;
+                $data['mySubscriptionEvents'][$key]['summaryDate_icon'] = isset($eventInfo['elearning']['icon'])  ?  $eventInfo['elearning']['icon'] : null;
+                    
 
                 $video_access = false;
                 $expiration_event = $event->pivot['expiration'];
@@ -1457,7 +1476,9 @@ class StudentController extends Controller
             $data['events'][$event->id]['view_tpl'] = $event['view_tpl'];
             $data['events'][$event->id]['category'] = $event['category'];
             //$data['events'][$event->id]['summary1'] = $event['summary1'];
-            $data['events'][$event->id]['hours'] = isset($eventInfo['hours']['hour']) && $eventInfo['hours']['hour'] > 0 ? $eventInfo['hours']['hour'] . ' ' . $eventInfo['hours']['text'] : '';;
+            $data['events'][$event->id]['hours'] = isset($eventInfo['hours']['hour']) && $eventInfo['hours']['hour'] > 0 ? $eventInfo['hours']['hour']  : '';
+            $data['events'][$event->id]['hours_icon'] = isset($eventInfo['hours']['icon']['path'])  ? $eventInfo['hours']['icon']['path'] : null;
+
             $data['events'][$event->id]['slugable'] = $event['slugable']->toArray();
             $data['events'][$event->id]['title'] = $event['title'];
             $data['events'][$event->id]['release_date_files'] = '1970-01-01';
@@ -1466,12 +1487,15 @@ class StudentController extends Controller
 
             if(isset($eventInfo['delivery']) && $eventInfo['delivery'] == 143){
 
-                $data['events'][$event->id]['summaryDate'] = isset($eventInfo['elearning']['expiration']) && isset($eventInfo['elearning']['text']) ?  
-                                                $eventInfo['elearning']['expiration'] . ' ' . $eventInfo['elearning']['text']: '';
+                $data['events'][$event->id]['summaryDate'] = isset($eventInfo['elearning']['expiration'])  ?  $eventInfo['elearning']['expiration'] : null ;
+                $data['events'][$event->id]['summaryDate_icon'] = isset($eventInfo['elearning']['icon'])  ?  $eventInfo['elearning']['icon'] : null;
+
     
             }else if(isset($eventInfo['delivery']) && $eventInfo['delivery'] == 139){
     
                 $data['events'][$event->id]['summaryDate'] = isset($eventInfo['inclass']['dates']['text'])  ?  $eventInfo['inclass']['dates']['text'] : '';
+                $data['events'][$event->id]['summaryDate_icon'] = isset($eventInfo['elearning']['icon'])  ?  $eventInfo['elearning']['icon'] : null;
+
     
             }
 

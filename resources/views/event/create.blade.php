@@ -790,7 +790,7 @@
                                 <div class="form-group col-12">
                                     <span class="toggle-btn-inline-text">Does this course offer a certification? </span>
                                     <label class="custom-toggle">
-                                        <input id="certification-toggle" type="checkbox">
+                                        <input name="course[{{'certificate'}}][{{'certification'}}]" id="certification-toggle" type="checkbox">
                                         <span class="custom-toggle-slider rounded-circle" data-label-off="No" data-label-on="Yes"></span>
                                     </label>
                                 </div>

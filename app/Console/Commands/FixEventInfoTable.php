@@ -61,18 +61,26 @@ class FixEventInfoTable extends Command
             $visibleHours = ['landing' => "on", "home"=> "on", 'list' => "on","emails" => "on"];
             $visible = ['landing' => "on","emails" => "on"];
             $visibleHours2 = ['landing' => "on",'list' => "on","emails" => "on"];
-           
+            
+            $eventHour = ceil($event->getTotalHours() / 60);
+
+            $hourText = $event->summary1()->where('section','access')->first() ? $event->summary1()->where('section','access')->first()->title : null;
             $hours = [
                 'icon' => ['path'=> null, 'alt_text' => null],
-                'text' => $event->summary1()->where('section','access')->first() ? $event->summary1()->where('section','access')->first()->title : null,
+                'text' => $hourText,//str_replace($eventHour,"",$hourText),
                 'visible' => $visibleHours
             ];
 
             $requestData['hours'] = $hours;
             //dd($event->getTotalHours());
             //Math.ceil(data.data/60)
-            $requestData['hours']['hour'] = ceil($event->getTotalHours() / 60);
-
+            $requestData['hours']['hour'] = $eventHour;
+            if($event->id == 4620){
+                
+                //dd(preg_replace('/[0-9]+/', "", $requestData['hours']['text']));
+                //dd($requestData);
+            }
+            //$requestData['hours']['text'] = preg_replace('/[0-9]+/', "", $hourText);
             $language = [
                 'icon' => ['path'=> null, 'alt_text' => null],
                 'text' => $event->summary1()->where('section','language')->first() ? $event->summary1()->where('section','language')->first()->title : null,
@@ -160,7 +168,7 @@ class FixEventInfoTable extends Command
             $certificate = [
                 'icon' => ['path'=> null, 'alt_text' => null],
                 'failure_text' => $event->title,
-                "type" => null,
+                "type" =>  $event->summary1()->where('section','diploma')->first() ? $event->summary1()->where('section','diploma')->first()->title : null,
                 'visible' => $visibleHours2,
             ];
 
@@ -225,6 +233,10 @@ class FixEventInfoTable extends Command
         $data['course_certification_name_success'] = $certification_title;
         $data['course_inclass_city'] = ($city) ? $city->name : null;
 
+        //dd($requestData['hours']);
+
+        $data['course_hours_text'] = $requestData['hours']['text'];
+        
         if(isset($requestData['hours']['visible'])){
 
             $visible_loaded_data = $requestData['hours']['visible'];
@@ -400,6 +412,7 @@ class FixEventInfoTable extends Command
         $infos->course_inclass_dates = isset($event_info['course_inclass_dates']) ? $event_info['course_inclass_dates'] : null;
         $infos->course_inclass_times = isset($event_info['course_inclass_times']) ? $event_info['course_inclass_times'] : null;
         $infos->course_inclass_days = isset($event_info['course_inclass_days']) ? $event_info['course_inclass_days'] : null;
+        $infos->course_hours_text = $event_info['course_hours_text'];
         //$infos->course_payment_method = (isset($event->paymentMethod) && count($event->paymentMethod) != 0) ? 'paid' : 'free';
         $infos->course_payment_method = (isset($event_info['course_payment_method']) && $event_info['course_payment_method'] == 'paid') ? 'paid' : 'free';
         $infos->course_awards = (isset($event_info['course_awards_text']) && $event_info['course_awards_text'] != "") ? true : false;

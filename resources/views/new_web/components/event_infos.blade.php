@@ -8,7 +8,7 @@
 
     @if(isset($info['hours']['visible']['list']) && $info['hours']['visible']['list'] && $info['hours']['hour'] )
 
-        <div class="expire-date">@if(isset($info['hours']['icon']['path']) && $info['hours']['icon']['path'] ) <img class="replace-with-svg" width="20" src="{{cdn($info['hours']['icon']['path'])}}" onerror="this.onerror=null;this.src='/theme/assets/images/icons/Start-Finish.svg'" alt="{{$info['hours']['icon']['alt_text']}}"> @else<img class="replace-with-svg" width="20" src="/theme/assets/images/icons/Start-Finish.svg" alt=""> @endif{{ $info['hours']['hour'] }} h</div>
+        <div class="expire-date">@if(isset($info['hours']['icon']['path']) && $info['hours']['icon']['path'] ) <img class="replace-with-svg" width="20" src="{{cdn($info['hours']['icon']['path'])}}" onerror="this.onerror=null;this.src='/theme/assets/images/icons/Start-Finish.svg'" alt="{{$info['hours']['icon']['alt_text']}}"> @else<img class="replace-with-svg" width="20" src="/theme/assets/images/icons/Start-Finish.svg" alt=""> @endif{{ $info['hours']['hour'] }}h</div>
     @endif
 
 @elseif(isset($type) && $type == 'inclass')

@@ -6,6 +6,7 @@
     $sections = $dynamic_page_data["sections"] ?? null;
     $showAlumni = $dynamic_page_data["showAlumni"] ?? null;
     $estatus = $event->status ?? null;
+
 @endphp
 
 <?php
@@ -17,7 +18,7 @@
    }
 ?>
 
-@if ($tickets)
+@if ($tickets && !$event->isFree())
     @if ($estatus == 0 || $estatus == 2 || $estatus == 5)
         <section id="seats" class="section-tickets">
         <div class="container">
