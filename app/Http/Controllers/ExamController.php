@@ -24,7 +24,6 @@ class ExamController extends Controller
 
         $exams = Exam::all();
 
-        
         return view('admin.exams.index', ['exams' => $exams, 'user' => $user]);
     }
 
@@ -44,7 +43,7 @@ class ExamController extends Controller
 
         $eventInfo = $event->event_info();
         $date = '';
-        
+
         if(isset($eventInfo['inclass']['dates'])){
             $date = $eventInfo['inclass']['dates'];
         }
@@ -65,8 +64,8 @@ class ExamController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(ExamRequest $request, Exam $model)
-    {   
-       
+    {
+
         $input =  $request->all();
         $input['publish_time'] = date('Y-m-d H:i',strtotime($request->publish_time));
         $input['status'] = $request->status && $request->status ='on' ? true : false;
@@ -101,27 +100,27 @@ class ExamController extends Controller
         $edit = true;
         $event_edit = $exam->event->first() ? $exam->event->first()->id : -1;
 
-              
+
         $eventsData = [];
 
         foreach($events as $event){
 
             $eventInfo = $event->event_info();
             $date = '';
-            
+
             if(isset($eventInfo['inclass']['dates']['text'])){
                 $date = $eventInfo['inclass']['dates']['text'];
-                
+
             }
-            
+
             foreach($events as $event){
 
                 $eventsData[$event->id] = trim($event->title . ' ' . $date);
 
             }
-            
+
         }
-        
+
         $liveResults = [];
         $syncDatas = ExamSyncData::where('exam_id', $exam->id)->get();
 
@@ -129,11 +128,11 @@ class ExamController extends Controller
 
 
         if(count($results) < count($syncDatas) || count($results) == 0){
-            
+
             $questions = json_decode($exam->questions,true);
             foreach($syncDatas as $syncData){
                 //dd($questions);
-                
+
                 $answered = 0;
                 $allAnswers = json_decode($syncData->data,true);
                 $correct = 0;
@@ -142,17 +141,17 @@ class ExamController extends Controller
 
                         $answered += 1;
                         $correctAnswer = $questions[$answer['q_id']]['correct_answer'];
-                        if(is_array($correctAnswer) &&  
+                        if(is_array($correctAnswer) &&
                                 htmlspecialchars_decode($answer['given_ans'],ENT_QUOTES) == htmlspecialchars_decode($correctAnswer[0],ENT_QUOTES) ){
-                                
+
                                 $correct += 1;
 
                         }elseif(htmlspecialchars_decode($answer['given_ans'],ENT_QUOTES) == htmlspecialchars_decode($correctAnswer[0],ENT_QUOTES)){
                             $correct += 1;
                         }
-                        
+
                     }
-                    
+
 
                 }
 
@@ -164,8 +163,8 @@ class ExamController extends Controller
 
                 $liveResults[] = array('id'=>$syncData->id,'name'=>$syncData->student->firstname . ' ' . $syncData->student->lastname,
                 'answered' =>  $answered, 'correct' => $correct, 'totalAnswers' => count($allAnswers), 'started_at'=> $start_at[1],'finish_at' => $finish_at[1]) ;
-                
-                
+
+
             }
         }
 
@@ -208,13 +207,13 @@ class ExamController extends Controller
 
     public function addQuestion(Request $request, Exam $exam){
 
-       
+
         $questions = json_decode($exam->questions) ? json_decode($exam->questions,true) : [];
 
         $questions[] = $request->question;
         $newQ = [];
         foreach($questions as $key1 => $question){
-            
+
             $question['question'] = trim(str_replace(['"',"'"], "", $question['question']));
             $question['question'] = preg_replace('~^\s+|\s+$~us', '\1', $question['question']);
 
@@ -222,7 +221,7 @@ class ExamController extends Controller
                 $answer = str_replace(['"',"'"], "", $answer);
                 $question['answers'][$key] = preg_replace('~^\s+|\s+$~us', '\1', $answer);
             }
-            
+
             $newQ[] = $question;
         }
 
@@ -237,23 +236,23 @@ class ExamController extends Controller
 
     public function deleteQuestion(Request $request, Exam $exam){
 
-       
+
         $questions = json_decode($exam->questions) ? json_decode($exam->questions,true) : [];
 
         if(isset($questions[$request->question])){
             unset($questions[$request->question]);
-        }   
-        
+        }
+
         $exam->questions = json_encode($questions);
         $exam->save();
 
     }
 
     public function updateQuestion(Request $request, Exam $exam){
- 
+
         $oldQuestions = json_decode($exam->questions,true);
-        //dd($oldQuestion); 
-      
+        //dd($oldQuestion);
+
         $question = $request->question;
         $question['question'] = trim(str_replace(['"',"'"], "", html_entity_decode($request->question['question'])));
 
@@ -281,12 +280,12 @@ class ExamController extends Controller
 
         ksort($questionsNew);
 
-        
+
 
         foreach($questionsNew as $key => $question){
             $sortedQuestions[] = $oldQuestions[$question];
         }
-        
+
         $exam->questions = json_encode($sortedQuestions);
         $exam->save();
     }
@@ -294,7 +293,7 @@ class ExamController extends Controller
     public function cloneExam(Exam $exam){
 
         $exam = $exam->replicate();
-        
+
         $exam->status = false;
         $exam->push();
 
@@ -305,10 +304,10 @@ class ExamController extends Controller
     public function getLiveResults(Exam $exam){
         $liveResults = [];
         $syncDatas = ExamSyncData::where('exam_id', $exam->id)->get();
-        
+
         $questions = json_decode($exam->questions,true);
         foreach($syncDatas as $syncData){
-            
+
             $answered = 0;
             $allAnswers = json_decode($syncData->data,true);
             $correct = 0;
@@ -318,9 +317,9 @@ class ExamController extends Controller
                 if(trim($answer['given_ans']) != ''){
                     $answered += 1;
                     $correctAnswer = $questions[$answer['q_id']]['correct_answer'];
-                    if(is_array($correctAnswer) &&  
+                    if(is_array($correctAnswer) &&
                             htmlspecialchars_decode($answer['given_ans'],ENT_QUOTES) == htmlspecialchars_decode($correctAnswer[0],ENT_QUOTES) ){
-                            
+
                             $correct += 1;
 
                     }elseif(htmlspecialchars_decode($answer['given_ans'],ENT_QUOTES) == htmlspecialchars_decode($correctAnswer[0],ENT_QUOTES)){
@@ -338,7 +337,7 @@ class ExamController extends Controller
 
             $liveResults[] = array('id'=>$syncData->id,'name'=>$syncData->student->firstname . ' ' . $syncData->student->lastname,
                 'answered' =>  $answered, 'correct' => $correct, 'started_at'=> $start_at[1],'finish_at' => $finish_at[1]) ;
-            
+
         }
 
         [$results,$averageHour,$averageScore] = $exam->getResults();

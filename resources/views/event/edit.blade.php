@@ -117,7 +117,7 @@
 
                                         <div class="row">
 
-                                            
+
                                             <div class="col-md-2 col-sm-6 col-6">
 
                                                 <div class="form-group">
@@ -129,7 +129,7 @@
 
                                             </div>
 
-              
+
                                             <div class="col-md-2 col-sm-6 col-6">
                                                 <div class="form-group">
                                                         <label class="form-control-label" for="launch_date">{{ __('Launch Date') }}</label>
@@ -829,7 +829,6 @@
                                             <div class="exp_input col-sm-12 col-md-6 col-lg-3 form-group">
                                                 <?php
 
-                                                    $course_elearning_visible = (isset($info['elearning']['visible']) && $info['elearning']['visible']!= null) ? $info['elearning']['visible'] : null;
                                                     $course_elearning_icon = (isset($info['elearning']['icon']) && $info['elearning']['icon']) ? $info['elearning']['icon'] : null;
 
                                                 ?>
@@ -860,10 +859,12 @@
                                                 <input type="text" name="course[{{'delivery'}}][{{'elearning'}}][{{'text'}}]" style="background:aliceblue;" class="form-control" placeholder="{{ __('alphanumeric text') }}" value="{{ old('expiration_text', (isset($info['elearning']['text']) && $info['elearning']['text'] != null) ? $info['elearning']['text'] : '' ) }}"autofocus>
                                             </div>
 
+
+
                                         </div>
                                         <?php
-                                                $visible_elearning = (isset($info['elearning']['visible'])) ? $info['elearning']['visible'] : null;
-                                            ?>
+                                            $visible_elearning = (isset($info['elearning']['visible'])) ? $info['elearning']['visible'] : null;
+                                        ?>
                                         <div class="row elearning_visible_wrapper @if($event['delivery'][0]['id'] != 143) ? 'd-none' : '' @endif">
 
                                             <label class="form-control-label col-12" for="input-delivery">{{ __('Visible on:') }}</label>
@@ -904,6 +905,82 @@
 
 
                                         </div>
+
+
+
+
+                                            <?php
+                                                $visible_elearning_exam = (isset($info['elearning']['exam']['visible'])) ? $info['elearning']['exam']['visible'] : null;
+                                            ?>
+                                            <div class="row elearning_exam_visible_wrapper @if($event['delivery'][0]['id'] != 143) ? 'd-none' : '' @endif">
+
+                                                <div class="exam_input col-sm-12 col-md-6 col-lg-3 form-group">
+                                                    <?php
+
+                                                        $course_elearning_exam_icon = (isset($info['elearning']['exam']['icon']) && $info['elearning']['exam']['icon']) ? $info['elearning']['exam']['icon'] : null;
+
+                                                    ?>
+                                                    <label class="form-control-label" for="input-expiration">{{ __('Exam') }}</label>
+                                                    <div class="input-group">
+                                                        <input type="text" name="course[{{'delivery'}}][{{'elearning'}}][{{'exam'}}][{{'text'}}]" id="input-exam" class="form-control" placeholder="{{ __('alphanumeric text') }}" value="{{ old('exam', (isset($info['elearning']['exam']['text']) && $info['elearning']['exam']['text'] != null) ? $info['elearning']['exam']['text'] : '' ) }}"autofocus>
+
+                                                        <span data-infowrapper="elearning_exam" class="input-group-addon input-group-append input-icon-wrapper-inclass">
+                                                            <span class="btn btn-outline-primary input-icon">
+
+                                                                @if(isset($course_elearning_exam_icon) &&  $course_elearning_exam_icon != null && $course_elearning_exam_icon['path'] != null)
+                                                                    <img class="replace-with-svg" width="20" src="{{ asset($course_elearning_exam_icon['path']) }}"/>
+                                                                @else
+                                                                    <img class="replace-with-svg" width="20" src="/theme/assets/img/summary_icons/messages-warning-information.svg" alt="">
+
+                                                                @endif
+                                                            </span>
+                                                        </span>
+
+                                                        <input type="hidden" value="{{ old('elearning_icon_exam_path', ($course_elearning_exam_icon != null && $course_elearning_exam_icon['path'] != '') ? $course_elearning_exam_icon['path'] : '' ) }}" id="elearning_exam_path" name="course[{{'delivery'}}][{{'elearning'}}][{{'exam'}}][{{'icon'}}][{{'path'}}]">
+                                                        <input type="hidden" value="{{ old('elearning_icon_exam_alt_text', ($course_elearning_exam_icon != null && $course_elearning_exam_icon['alt_text'] != '') ? $course_elearning_exam_icon['alt_text'] : '' ) }}" id="elearning_exam_alt_text" name="course[{{'delivery'}}][{{'elearning'}}][{{'exam'}}][{{'icon'}}][{{'alt_text'}}]">
+                                                    </div>
+
+                                                </div>
+
+                                                <label class="form-control-label col-12" for="input-delivery">{{ __('Visible on:') }}</label>
+                                                <div class="col-sm-12 col-md-6 col-lg-2">
+
+                                                    <div class="custom-control custom-checkbox mb-3">
+                                                        <input class="custom-control-input" {{ ($visible_elearning_exam != null && $visible_elearning_exam['landing']) ? 'checked' : '' }} name="course[{{'delivery'}}][{{'elearning'}}][{{'exam'}}][{{'visible'}}][{{'landing'}}]" id="input-elearning-exam-landing" type="checkbox">
+                                                        <label class="custom-control-label" for="input-elearning-exam-landing">Course landing page (summary)</label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-12 col-md-6 col-lg-2">
+                                                    <div class="custom-control custom-checkbox mb-3">
+                                                        <input class="custom-control-input" {{ ($visible_elearning_exam != null && $visible_elearning_exam['home']) ? 'checked' : '' }} name="course[{{'delivery'}}][{{'elearning'}}][{{'exam'}}][{{'visible'}}][{{'home'}}]" id="input-elearning-exam-home" type="checkbox">
+                                                        <label class="custom-control-label" for="input-elearning-exam-home">Course box in home page</label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-12 col-md-6 col-lg-2">
+                                                    <div class="custom-control custom-checkbox mb-3">
+                                                        <input class="custom-control-input" {{ ($visible_elearning_exam != null && $visible_elearning_exam['list']) ? 'checked' : '' }} name="course[{{'delivery'}}][{{'elearning'}}][{{'exam'}}][{{'visible'}}][{{'list'}}]" id="input-elearning-exam-list" type="checkbox">
+                                                        <label class="custom-control-label" for="input-elearning-exam-list">Course box in list page</label>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-sm-12 col-md-6 col-lg-2">
+                                                    <div class="custom-control custom-checkbox mb-3">
+                                                        <input class="custom-control-input" {{ ($visible_elearning_exam != null && $visible_elearning_exam['invoice']) ? 'checked' : '' }} name="course[{{'delivery'}}][{{'elearning'}}][{{'exam'}}][{{'visible'}}][{{'invoice'}}]" id="input-elearning-exam-invoice" type="checkbox">
+                                                        <label class="custom-control-label" for="input-elearning-exam-invoice">Invoice description</label>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-sm-12 col-md-6 col-lg-2">
+                                                    <div class="custom-control custom-checkbox mb-3">
+                                                        <input class="custom-control-input" {{ ($visible_elearning_exam != null && $visible_elearning_exam['emails']) ? 'checked' : '' }} name="course[{{'delivery'}}][{{'elearning'}}][{{'exam'}}][{{'visible'}}][{{'emails'}}]" id="input-elearning-exam-emails" type="checkbox">
+                                                        <label class="custom-control-label" for="input-elearning-exam-emails">Automated emails</label>
+                                                    </div>
+                                                </div>
+
+
+
+                                            </div>
+
 
 
 
@@ -2057,16 +2134,21 @@
             $('.delivery_child_wrapper').removeClass('d-none')
             $('.delivery_city_wrapper').removeClass('d-none')
             $('.elearning_visible_wrapper').addClass('d-none')
+            $('.elearning_exam_visible_wrapper').addClass('d-none')
             $('.exp_input').addClass('d-none')
+            $('.exam_input').addClass('d-none')
         }else if($(this).val() == 143){
             $('.delivery_child_wrapper').addClass('d-none')
             $('.elearning_visible_wrapper').removeClass('d-none')
+            $('.elearning_exam_visible_wrapper').removeClass('d-none')
             $('.exp_input').removeClass('d-none')
+            $('.exam_input').removeClass('d-none')
 
             $('#input-city_id').val('')
         }else if($(this).val() == 215){
             $('.exp_input').addClass('d-none')
             $('.elearning_visible_wrapper').addClass('d-none')
+            $('.elearning_exam_visible_wrapper').addClass('d-none')
             $('.delivery_child_wrapper').removeClass('d-none')
             $('.delivery_city_wrapper').addClass('d-none')
 
@@ -2125,7 +2207,7 @@
 
 
     $(document).ready(function(){
-        let status = $('#certification-toggle').prop('checked'); 
+        let status = $('#certification-toggle').prop('checked');
         if(status){
             $('.course-certification-visible-wrapper').removeClass('d-none');
 
@@ -2202,12 +2284,17 @@
 
         if($("#input-delivery").val() == 143){
             $('.exp_input').css('display', 'block')
+            $('.exam_input').css('display', 'block')
         }else if($("#input-delivery").val() == 139){
             $('.exp_input').addClass('d-none')
+            $('.exam_input').addClass('d-none')
             $('.elearning_visible_wrapper').addClass('d-none')
+            $('.elearning_exam_visible_wrapper').addClass('d-none')
         }else if($("#input-delivery").val() == 215) {
             $('.exp_input').addClass('d-none')
+            $('.exam_input').addClass('d-none')
             $('.elearning_visible_wrapper').addClass('d-none')
+            $('.elearning_exam_visible_wrapper').addClass('d-none')
         }
 
     });

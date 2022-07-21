@@ -16,6 +16,14 @@
 @endcomponent
 <div class="container-fluid mt--6">
    <div class="nav-wrapper" style="margin-top: 65px;">
+        <div class="card-header">
+            <div class="row align-items-center">
+                <div class="col-8">
+                    <h3 class="mb-0 ml-1">{{ $exam->exam_name }}</h3>
+                </div>
+            </div>
+        </div>
+
       <ul class="nav nav-pills nav-fill flex-column flex-md-row" id="tabs-icons-text" role="tablist">
          <li class="nav-item">
             <a class="nav-link mb-sm-3 mb-md-0 active" id="tabs-icons-text-1-tab" data-toggle="tab" href="#settings" role="tab" aria-controls="tabs-icons-text-1" aria-selected="true"><i class="ni ni-cloud-upload-96 mr-2"></i>Settings</a>
@@ -27,7 +35,7 @@
             <li class="nav-item">
                <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-2-tab" data-toggle="tab" href="#results" role="tab" aria-controls="tabs-icons-text-2" aria-selected="false"><i class="ni ni-bell-55 mr-2"></i> Results</a>
             </li>
-            
+
             @if(count($liveResults)>0)
                <li class="nav-item">
                   <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-2-tab" data-toggle="tab" href="#live_result" role="tab" aria-controls="tabs-icons-text-2" aria-selected="false"><i class="ni ni-bell-55 mr-2"></i> Live Result</a>
@@ -179,6 +187,7 @@
          </div>
       </div>
       @if($edit)
+      <?php $counter = 1;?>
       <div class="tab-pane fade" id="questions" role="tabpanel" aria-labelledby="tabs-icons-text-2-tab">
          <div class="accordion accord_topic" id="accordionExample">
             <div class="card">
@@ -195,11 +204,12 @@
                                  <th scope="col">{{ __('Operations') }}</th>
                               </tr>
                            </thead>
+
                            <tbody id="question-body" class="question-order">
                               @foreach((array)json_decode($exam->questions,true) as $key => $question)
                               <tr id="question-{{$key}}" data-id="{{$key}}" class="question-list">
                                  <td>
-                                    {!! $question['question'] !!}
+                                 <p style="display:inline-block;">{!! $counter !!})</p> <span style="display:inline-block;">{!! $question['question'] !!}</span>
                                  </td>
                                  <td class="text-right">
                                     <div class="dropdown">
@@ -213,6 +223,7 @@
                                     </div>
                                  </td>
                               </tr>
+                              <?php $counter++; ?>
                               @endforeach
                            </tbody>
                         </table>
@@ -325,12 +336,12 @@
       <div class="tab-pane fade" id="results" role="tabpanel" aria-labelledby="tabs-icons-text-3-tab">
          <div class="row">
          <div class="col-md-6 col-sm-6 col-xs-12">
-      
+
             <div class="progress-wrapper">
               <div class="progress-info">
                 <div class="progress-label">
                   <span>The average percentage of the exam</span>
-               
+
                   <span id="avScore">{{$averageScore}}%</span>
                 </div>
               </div>
@@ -342,12 +353,12 @@
          </div>
 
          <div class="col-md-6 col-sm-6 col-xs-12">
-      
+
             <div class="progress-wrapper">
               <div class="progress-info">
                 <div class="progress-label">
                   <span>The average time of every participant</span>
-               
+
                   <span id="avHour">{{$averageHour}}</span>
                 </div>
               </div>
@@ -428,7 +439,7 @@
          <div class="tab-pane fade" id="live_result" role="tabpanel" aria-labelledby="tabs-icons-text-3-tab">
 
             <div class="row">
-                 
+
                   <div class="col-sm-12">
                      <div class="box">
                         <div class="box-header">
@@ -448,7 +459,7 @@
                                     <th>Started At</th>
                                     {{--<th>Remaining Time</th>--}}
                                     <th>Finished At</th>
-                                    
+
                                  </tr>
                               </thead>
                               <tbody>
@@ -461,21 +472,21 @@
                                     <td id="correct-{{$resultt['id']}}">{{ $resultt['correct'] }}</td>
                                     <td id="total-{{$resultt['id']}}">{{ $resultt['totalAnswers'] }}</td>
                                     <td>{{ $resultt['started_at'] }}</td>
-                                    
+
                                     <!--<input type="hidden" name="time_spent" id="time_spent{{$resultt['id']}}" value="0">
                                     <td id="remainingTime{{$resultt['id']}}">
-                                       <span id="hours{{$resultt['id']}}">{{$hours}}</span> : 
-                                       <span id="mins{{$resultt['id']}}"><?php //if($minutes<10){ echo '0'; }?>{{$minutes}}</span> : 
+                                       <span id="hours{{$resultt['id']}}">{{$hours}}</span> :
+                                       <span id="mins{{$resultt['id']}}"><?php //if($minutes<10){ echo '0'; }?>{{$minutes}}</span> :
                                        <span id="seconds{{$resultt['id']}}">00</span>
                                     </td>-->
-                                    
+
                                     <td id="finish-at{{$resultt['id']}}">{{ $resultt['finish_at'] }}</td>
-                                    
+
                                  </tr>
                                  <!--Result Delete Modal-->
-                                 
+
                                  <!-- /.modal -->
-                                 @endforeach                         
+                                 @endforeach
                               </tbody>
                               <tfoot>
                                  <tr>
@@ -491,13 +502,13 @@
                               </tfoot>
                            </table>
                         </div>
-                        <!-- /.box-body -->         
+                        <!-- /.box-body -->
                      </div>
                      <!-- /.box -->
                   </div>
                   <!-- /.col -->
             </div>
-            <!-- /.row -->                              
+            <!-- /.row -->
          </div>
       @endif
 
@@ -824,7 +835,7 @@
    })
 
    @if($edit)
-      
+
       $(".add-question").click(function(){
 
        let question = {};
@@ -918,7 +929,7 @@
             url: "{{ route ('exam.delete_question',$exam->id) }}",
             data:{'question':question},
             success: function(data) {
-               
+
             }
          });
 
@@ -932,7 +943,7 @@
 
        //question['question'] = (CKEDITOR.instances['edit-question'].getData()).replace(/[&#39;]+/g, '');
        //question['question'] =  question['question'].replace(/[quot]+/g, '');
-       
+
        question['question'] = CKEDITOR.instances['edit-question'].getData();
        question['answer-credit'] = $(".modal #answer-credit").val() ? $(".modal #answer-credit").val() : 1;
        question['question-type'] = $("#edit-question-types").val();
@@ -1144,13 +1155,13 @@
             contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
             url:'/admin/live-results/{{$exam->id}}',
             success:function(data){
-              
+
               $.each(data['liveResults'], function(key1, value1) {
-              
+
                   $('#'+value1['id']).html(value1['answered']);
                   $('#correct-'+value1['id']).html(value1['correct']);
                   $('#finish-at'+value1['id']).html(value1['finish_at']);
-                  
+
 
               })
 
@@ -1162,7 +1173,7 @@
                var t = $('#results-table').DataTable();
                t.clear();
                $.each(data['results'], function(key1, value1) {
-               
+
 
                   /*resultsHtml += `<tr><td>${key1+1}</td>
                      <td>
@@ -1199,9 +1210,9 @@
                            </div>
                         </div>
                      </td></tr>`*/
-              
-              
-                  
+
+
+
                   t.row.add([
                      key1+1,
                      value1['first_name'] + ' ' + value1['last_name'],
@@ -1220,13 +1231,13 @@
                            </div>`
                   ]).draw()
                })
-      
-               
+
+
 
                /*$('#results-table').dataTable().fnDestroy();
                table = $('#results-table').DataTable({
                    destroy: true,
-                   
+
                    language: {
                      paginate: {
                          next: '&#187;', // or '→'
@@ -1235,12 +1246,12 @@
                   }
                });
 
-               
+
 
 
                $("#resultsBody").empty();
                $("#resultsBody").append(resultsHtml)*/
-            
+
             }
     });
    },1000 * 60)
@@ -1251,13 +1262,13 @@
 function start(){
 
    @foreach($liveResults as $resultt)
-   
+
       var startTime = '<?php echo date( "Y-m-d")."T".$resultt['started_at'] ?>'
       var currentTime = '<?php echo date( "Y-m-d")."T".date( "H:i:s") ?>';
       var sTime = new Date(startTime);
       var cTime = new Date(currentTime);
       var cSeconds = (cTime.getTime() - sTime.getTime()) / 1000;
-      var sSeconds = "{{$exam->duration}}"*60; 
+      var sSeconds = "{{$exam->duration}}"*60;
       var tSeconds = sSeconds - cSeconds;
 
 
@@ -1282,8 +1293,8 @@ function intilizetimer(hrs, mins, sec,idd) {
 
    HOURS[idd]      = hrs;
    MINUTES[idd]     = mins;
-   SECONDS[idd]     = sec; 
-   
+   SECONDS[idd]     = sec;
+
    $("#hours"+idd).text(HOURS[idd]);
    if(MINUTES[idd]<10)
     $("#mins"+idd).text("0"+MINUTES[idd]);
@@ -1293,14 +1304,14 @@ function intilizetimer(hrs, mins, sec,idd) {
     $("#seconds"+idd).text("0"+SECONDS[idd]);
    else
     $("#seconds"+idd).text(SECONDS[idd]);
-  
-} 
+
+}
 
 
 
 setInterval("tictac()", 1000);
 function tictac(){
-    
+
    @foreach($liveResults as $resultt)
    if('{{$resultt["finish_at"]}}' == '00:00:00'){
       SECONDS['{{$resultt["id"]}}']--;
@@ -1315,8 +1326,8 @@ function tictac(){
          MINUTES['{{$resultt["id"]}}'] = MINUTES['{{$resultt["id"]}}'] - 1;
 
          if(MINUTES['{{$resultt["id"]}}']<1)
-         {     
-              
+         {
+
          }
          if(MINUTES['{{$resultt["id"]}}']<0)
          {

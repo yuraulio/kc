@@ -653,7 +653,7 @@ class Event extends Model
 
         $certification = count($this->certificatesByUser($user->id)) > 0;
         $infos = $this->event_info();
-       
+
         if($this->examAccess($user,$successPer) && !$certification){
 
             $cert = new Certificate;
@@ -797,6 +797,10 @@ class Event extends Model
                 $data['elearning']['icon'] = $infos['course_elearning_icon'] != null ? json_decode($infos['course_elearning_icon'], true) : null;
                 $data['elearning']['expiration'] = $infos['course_elearning_expiration'] != null ? $infos['course_elearning_expiration'] : null;
                 $data['elearning']['text'] = $infos['course_elearning_text'] != null ? $infos['course_elearning_text'] : null;
+
+                $data['elearning']['exam']['visible'] = $infos['course_elearning_exam_visible'] != null ? json_decode($infos['course_elearning_exam_visible'], true) : null;
+                $data['elearning']['exam']['icon'] = $infos['course_elearning_exam_icon'] != null ? json_decode($infos['course_elearning_exam_icon'], true) : null;
+                $data['elearning']['exam']['text'] = $infos['course_elearning_exam_text'] != null ? $infos['course_elearning_exam_text'] : null;
             }else if($data['delivery'] == 215){
                 $data['inclass']['absences'] = $infos['course_inclass_absences'];
                 $data['inclass']['dates'] = ($infos['course_inclass_dates'] != null && $infos['course_inclass_dates'] != '[]') ? json_decode($infos['course_inclass_dates'], true) : null;
@@ -841,7 +845,7 @@ class Event extends Model
 
 
     public function isFree(){
-        
+
         $free = true;
         $infos = $this->event_info();
 
@@ -854,7 +858,7 @@ class Event extends Model
     }
 
     public function hasCertificate(){
-        
+
         $hasCertificate = false;
         $infos = $this->event_info();
 

@@ -11,6 +11,10 @@
         <div class="expire-date">@if(isset($info['hours']['icon']['path']) && $info['hours']['icon']['path'] ) <img class="replace-with-svg" width="20" src="{{cdn($info['hours']['icon']['path'])}}" onerror="this.onerror=null;this.src='/theme/assets/images/icons/Start-Finish.svg'" alt="{{$info['hours']['icon']['alt_text']}}"> @else<img class="replace-with-svg" width="20" src="/theme/assets/images/icons/Start-Finish.svg" alt=""> @endif{{ $info['hours']['hour'] }}h</div>
     @endif
 
+    @if(isset($info['elearning']['exam']['visible']['list']) && $info['elearning']['exam']['visible']['list'] && isset($info['elearning']['exam']['text']) && $info['elearning']['exam']['text'] )
+        <div class="exam">@if(isset($info['elearning']['exam']['icon']['path']) && $info['elearning']['exam']['icon']['path'] ) <img class="replace-with-svg" width="20" src="{{cdn($info['elearning']['exam']['icon']['path'])}}" onerror="this.onerror=null;this.src='/theme/assets/img/summary_icons/messages-warning-information.svg'" alt="{{$info['elearning']['exam']['icon']['alt_text']}}"> @else<img class="replace-with-svg" width="20" src="/theme/assets/img/summary_icons/messages-warning-information.svg" alt=""> @endif {{ $info['elearning']['exam']['text'] }} </div>
+    @endif
+
 @elseif(isset($type) && $type == 'inclass')
 
 
@@ -28,7 +32,7 @@
 
 
 
-    
+
     @if(isset($info['inclass']['dates']['visible']['list']) && $info['inclass']['dates']['visible']['list'] && $info['inclass']['dates']['text'])
 
         <div class="dates">@if(isset($info['inclass']['dates']['icon']['path']) && $info['inclass']['dates']['icon']['path']) <img class="replace-with-svg" width="20" onerror="this.onerror=null;this.src='/theme/assets/img/summary_icons/Duration_Hours.svg'" src="{{cdn($info['inclass']['dates']['icon']['path'])}}" alt="{{$info['inclass']['dates']['icon']['alt_text']}}"> @else<img class="replace-with-svg" width="20" src="/theme/assets/img/summary_icons/Duration_Hours.svg" alt=""> @endif {{ $info['inclass']['dates']['text'] }}</div>
