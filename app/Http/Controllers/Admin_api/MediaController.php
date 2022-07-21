@@ -496,15 +496,6 @@ class MediaController extends Controller
 
     public function changeFolderOrder(Request $request)
     {
-        // update folder orders
-        // $folders = MediaFolder::orderBy("order")->get();
-        // foreach ($folders as $folder) {
-        //     if ($folder->order !== null) {
-        //         $folder->order = $folder->order + 0.00000000001;
-        //         $folder->save();
-        //     }
-        // }
-
         $folderMain = MediaFolder::find($request->id);
 
         $i = 0;
@@ -519,17 +510,9 @@ class MediaController extends Controller
             }
         }
 
-
         // set order for moved folder
         $folderMain = MediaFolder::find($request->id);
         $position = $request->position;
-
-        // Log::debug("folder order ". (int) $folderMain->order);
-        // Log::debug("position ". $position);
-
-
-        $position = $position;
-
 
         $folderMain->order = $position;
         $folderMain->save();
