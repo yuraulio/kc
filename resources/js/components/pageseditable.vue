@@ -77,7 +77,7 @@
 
                     <button @click="collapseAll = !collapseAll" class="btn btn-sm btn-soft-secondary w-100 mb-3" type="button" data-bs-toggle="collapse" aria-expanded="false" aria-controls="collapseExample">
                         <template v-if="collapseAll == true">
-                            Collaps All
+                            Collapse All
                         </template>
                         <template v-else>
                             Expand All
