@@ -12,7 +12,7 @@
                 <label class="form-label mt-3">Pick a parent folder</label>
 
                 <vue-nestable v-model="mediaFolders" class="dd-list mb-3">
-                    <vue-nestable-handle slot-scope="{ item, isChild }" :item="item">
+                    <vue-nestable-handle :draggable="false" slot-scope="{ item, isChild }" :item="item">
                         <li :key="item.id + uncolapsed.length" v-show="!isChild || uncolapsed.includes(item.id)" class="dd-item" :data-id="item.id">
                             <button
                                 @click="collapse(item); $forceUpdate();"
@@ -82,7 +82,7 @@
                 <label class="form-label">Pick a folder</label>
 
                 <vue-nestable v-model="mediaFolders" class="dd-list mb-3">
-                    <vue-nestable-handle slot-scope="{ item, isChild }" :item="item">
+                    <vue-nestable-handle :draggable="false" slot-scope="{ item, isChild }" :item="item">
                         <li :key="item.id + uncolapsed.length" v-show="!isChild || uncolapsed.includes(item.id)" class="dd-item" :data-id="item.id">
                             <button
                                 @click="collapse(item); $forceUpdate();"
@@ -136,7 +136,7 @@
                 <p>Select new folder:</p>
 
                 <vue-nestable v-model="mediaFolders" class="dd-list mb-2">
-                    <vue-nestable-handle slot-scope="{ item, isChild }" :item="item">
+                    <vue-nestable-handle :draggable="false" slot-scope="{ item, isChild }" :item="item">
                         <li :key="item.id + uncolapsed.length" v-show="!isChild || uncolapsed.includes(item.id)" class="dd-item" :data-id="item.id">
                             <button
                                 @click="collapse(item); $forceUpdate();"
@@ -211,7 +211,7 @@
                 <label class="form-label">Pick a folder</label>
 
                 <vue-nestable v-model="mediaFolders" class="dd-list mb-3">
-                    <vue-nestable-handle slot-scope="{ item, isChild }" :item="item">
+                    <vue-nestable-handle :draggable="false" slot-scope="{ item, isChild }" :item="item">
                         <li :key="item.id + uncolapsed.length" v-show="!isChild || uncolapsed.includes(item.id)" class="dd-item" :data-id="item.id">
                             <button
                                 @click="collapse(item); $forceUpdate();"
@@ -272,7 +272,8 @@
                         <a href="#" @click.prevent="getFolders(); filesView = false; folderId=null;" class="list-group-item border-0 font-14"><i class="mdi mdi-folder-outline font-18 align-middle me-1"></i>Recent Updated</a>
                         <a href="#" @click.prevent="getFiles(); filesView = true; folderId=null;" class="list-group-item border-0 font-14"><i class="mdi mdi-folder-outline font-18 align-middle me-1"></i> All Files</a>
 
-                        <vue-nestable ref="folders" v-model="mediaFolders" :maxDepth="0" class="dd-list">
+                        <vue-nestable ref="folders" v-model="mediaFolders" :threshold="10000000000000" 
+                        :hooks="{'beforeMove': validateMove}" class="dd-list" @change="saveFolderOrderMove">
                             <vue-nestable-handle slot-scope="{ item, isChild }" :item="item">
                                 <li :key="item.id + uncolapsed.length" v-show="!isChild || uncolapsed.includes(item.id)" class="dd-item" :data-id="item.id">
                                     <button
@@ -452,6 +453,26 @@ export default {
                     )
                 })
             }
+        },
+        validateMove(dragItem, pathFrom, pathTo) {
+            if (dragItem.pathFrom && dragItem.pathTo && dragItem.pathFrom.length == dragItem.pathTo.length) {
+                return true;
+            }
+            return false;
+        },
+        saveFolderOrderMove(folder, data) {
+            var formData = new FormData();
+            formData.append('id', folder.id);
+            formData.append('position', data.pathTo.slice(-1)[0]);
+            axios.post('/api/media_manager/change_folder_order', formData)
+            .then((response) => {
+                if (response.status == 200) {
+                    // this.$toast.success('Order Changed Successfully!');
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+            })
         }
 
     },
@@ -525,5 +546,6 @@ export default {
 
 .dd-handle {
     padding-left: 22px!important;
+    cursor: pointer!important;
 }
 </style>

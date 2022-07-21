@@ -40,8 +40,9 @@ class MediaController extends Controller
 
         try {
             $folders = MediaFolder::lookForOriginal($request->filter)
-                ->with('children.children.children.children.children.children.children.children')->whereParentId($request->folder_id ?? null)
-                ->orderBy('created_at', 'desc')->get();
+                ->with('children.children.children.children.children.children.children.children')
+                ->whereParentId($request->folder_id ?? null)
+                ->get();
 
             return MediaFolderResource::collection($folders);
         } catch (Exception $e) {
@@ -105,12 +106,15 @@ class MediaController extends Controller
 
             Storage::disk('public')->makeDirectory($path);
 
+            $max = MediaFolder::max("order");
+
             $mediaFolder = new MediaFolder();
             $mediaFolder->name = $request->name;
             $mediaFolder->path = $path;
             $mediaFolder->url = config('app.url') . "/uploads" . $path;
             $mediaFolder->user_id = Auth::user()->id;
             $mediaFolder->parent_id = $parent->id;
+            $mediaFolder->order = $max + 1;
             $mediaFolder->save();
 
             return new MediaFolderResource($mediaFolder);
@@ -417,18 +421,18 @@ class MediaController extends Controller
 
         $path = $folder->path;
         $result = Storage::disk('public')->deleteDirectory($path);
-        if ($result) {
-            $folder->delete();
-            $files = MediaFile::where('folder_id', $id)->get();
-            foreach ($files as $file) {
-                $file->pages()->detach();
-                $file->delete();
-            }
-
-            return response()->json('success', 200);
-        } else {
-            return response()->json('Failed to delete folder.', 400);
+        if (!$result) {
+            Log::error("Failed to delete folder form disk.");
         }
+
+        $folder->delete();
+        $files = MediaFile::where('folder_id', $id)->get();
+        foreach ($files as $file) {
+            $file->pages()->detach();
+            $file->delete();
+        }
+
+        return response()->json('success', 200);
     }
 
     public function editFolder(EditMediaFolderRequest $request)
@@ -488,5 +492,30 @@ class MediaController extends Controller
             "mediaFolder" => $mediaFolder,
             "path" => $path
         ];
+    }
+
+    public function changeFolderOrder(Request $request)
+    {
+        $folderMain = MediaFolder::find($request->id);
+
+        $i = 0;
+        $children = $folderMain->parent()->first()->children()->get();
+        if ($children) {
+            foreach ($children as $child) {
+                if ($child->id != $request->id) {
+                    $child->order = $i + 0.1;
+                    $child->save();
+                    $i++;
+                }
+            }
+        }
+
+        // set order for moved folder
+        $position = $request->position;
+
+        $folderMain->order = $position;
+        $folderMain->save();
+
+        return response()->json('success', 200);
     }
 }

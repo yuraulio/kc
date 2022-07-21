@@ -24,12 +24,14 @@ class RenameFolder implements ShouldQueue
     private $renameFolder;
     private $folderName;
 
+    public $tries = 1;
+
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($oldPath, $newPath, $folderId, $renameFolder = true, $folderName = null)
+    public function __construct($oldPath, $newPath, $folderId, $renameFolder = false, $folderName = null)
     {
         $this->oldPath = $oldPath;
         $this->newPath = $newPath;
@@ -92,7 +94,7 @@ class RenameFolder implements ShouldQueue
                 $newFullPath = public_path("/uploads/" . $this->newPath);
                 $result = rename($oldFullPath, $newFullPath);
                 if ($result) {
-                    $folder->name = Str::slug($this->folderName, '_');
+                    $folder->name = $this->folderName;
                     $folder->save();
 
                     DB::commit();
