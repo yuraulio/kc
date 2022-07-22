@@ -122,7 +122,9 @@ class CategoriesController extends Controller
             $this->authorize('update', $category, Auth::user());
 
             $category->title = $request->title;
-            $category->image_id = $request->category_image["id"];
+            if ($request->category_image) {
+                $category->image_id = $request->category_image["id"];
+            }
             $category->save();
 
             $this->syncSubcategories($category, $request->subcategories);
