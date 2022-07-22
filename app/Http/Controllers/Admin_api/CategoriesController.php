@@ -232,14 +232,14 @@ class CategoriesController extends Controller
                 "Subcategories",
                 $this->subcategoryCount($request),
             ],
-            [
-                "Popular category",
-                $this->popularCategory($request),
-            ],
-            [
-                "Popular subcategory",
-                $this->popularSubcategory($request),
-            ]
+            // [
+            //     "Popular category",
+            //     $this->popularCategory($request),
+            // ],
+            // [
+            //     "Popular subcategory",
+            //     $this->popularSubcategory($request),
+            // ]
 
         ];
     }
