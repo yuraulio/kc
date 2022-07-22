@@ -100,6 +100,7 @@ class ExamController extends Controller
         $edit = true;
         $event_edit = $exam->event->first() ? $exam->event->first()->id : -1;
 
+
         $eventsData = [];
 
         foreach($events as $event){
@@ -131,7 +132,9 @@ class ExamController extends Controller
             $questions = json_decode($exam->questions,true);
             foreach($syncDatas as $syncData){
                 //dd($questions);
-
+                if($syncData->finish_at != '0000-00-00 00:00:00'){
+                    continue;
+                }
                 $answered = 0;
                 $allAnswers = json_decode($syncData->data,true);
                 $correct = 0;
@@ -306,6 +309,10 @@ class ExamController extends Controller
 
         $questions = json_decode($exam->questions,true);
         foreach($syncDatas as $syncData){
+
+            if($syncData->finish_at != '0000-00-00 00:00:00'){
+                continue;
+            }
 
             $answered = 0;
             $allAnswers = json_decode($syncData->data,true);
