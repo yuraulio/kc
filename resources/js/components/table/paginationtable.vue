@@ -810,6 +810,20 @@ export default {
         getAppURL() {
             return process.env.MIX_APP_URL;
         },
+        getURLValues() {
+            var search = window.location.search.replace(/^\?/,'').replace(/\+/g,' ');
+            var values = {};
+
+            if (search.length) {
+                var part, parts = search.split('&');
+
+                for (var i=0, iLen=parts.length; i<iLen; i++ ) {
+                part = parts[i].split('=');
+                values[part[0]] = window.decodeURIComponent(part[1]);
+                }
+            }
+            return values;
+        },
         fixError(message, subcategoryError, subcategory) {
             return message.replace(subcategoryError, " subcategory '" + subcategory + "' ") + " (Titles through categories and subcategories must be unique.)";
         }
@@ -823,6 +837,15 @@ export default {
             this.published_value = {
                 title: 'Published',
                 id: 1
+            };
+        }
+
+        var urlValues = this.getURLValues();
+        if (urlValues["templateID"] && urlValues["templateName"]) {
+            
+            this.template_value = {
+                title: urlValues["templateName"],
+                id: urlValues["templateID"]
             };
         }
     }
