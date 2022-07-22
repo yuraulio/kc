@@ -143,10 +143,12 @@ class InfoController extends Controller
                 }
                             
                 $categoryScript = $thisevent->delivery->first() && $thisevent->delivery->first()->id == 143 ? 'Video e-learning courses' : 'In-class courses'; // $thisevent->category->first() ? 'Event > ' . $thisevent->category->first()->name : '';
-        
-                
+                $userEmail = $this->transaction && $this->transaction->user()->first() ? $this->transaction->user()->first()->email;
+
+                //hash('sha256', $userEmail)
                 $data['tigran'] = ['OrderSuccess_id' => $this->transaction['id'], 'OrderSuccess_total' => $tr_price, 'Price' =>$tr_price,'Product_id' => $thisevent->id, 'Product_SKU' => $thisevent->id,
-                        'Product_SKU' => $thisevent->id,'ProductCategory' => $categoryScript, 'ProductName' =>  $thisevent->title, 'Quantity' => $item->qty, 'TicketType'=>$stockHelper->type,'Event_ID' => 'kc_' . time() 
+                        'Product_SKU' => $thisevent->id,'ProductCategory' => $categoryScript, 'ProductName' =>  $thisevent->title, 'Quantity' => $item->qty, 'TicketType'=>$stockHelper->type,'Event_ID' => 'kc_' . time(),
+                        'Encrypted_email' => hash('sha256', $userEmail)
                 ];
 
                 /*$data['ecommerce'] = ['ecommerce' => ['transaction_id' => $this->transaction['id'], 'value' => $tr_price, 'currency' => 'EUR', 'coupon' => $transaction->coupon_code], 
@@ -877,7 +879,12 @@ class InfoController extends Controller
 
                 $pdf = $transaction->invoice->first()->generateInvoice();
 
-                $fn = date('Y-m-d') . '-Invoice-' . $transaction->invoice->first()->invoice . '.pdf';
+                $invoiceFileName = date('Y.m.d');
+		        if($paymentMethod){
+		          $invoiceFileName .= '_' . $paymentMethod->company_name;
+		        }
+		        $invoiceFileName .= '_' . $transaction->invoice->first()->invoice . '.pdf';
+                $fn = $invoiceFileName;
 
                 $pdf = $pdf->output();
                 $sent = Mail::send('emails.admin.elearning_invoice', $data, function ($m) use ($adminemail, $muser,$pdf,$billingEmail,$fn) {

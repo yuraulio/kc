@@ -427,7 +427,7 @@
                                                 <input type="text" class="form-control" value="{{ old('times')}}" name="course[{{'delivery'}}][{{'inclass'}}][{{'times'}}][{{'text'}}]" placeholder="Times(from/to)">
                                                 <span data-infowrapper="inclass_times" class="input-group-addon input-group-append input-icon-wrapper-inclass">
                                                     <span class="btn btn-outline-primary input-icon">
-                                                    <img class="replace-with-svg" width="20" src="/theme/assets/img/summary_icons/time.svg" alt="">
+                                                    <img class="replace-with-svg" width="20" src="/theme/assets/img/summary_icons/Days-Week.svg" alt="">
 
                                                     </span>
                                                 </span>

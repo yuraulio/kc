@@ -404,7 +404,7 @@ class FixEventInfoTable extends Command
         $data['course_inclass_absences'] = $absences;
         $data['course_status'] = $status;
         $data['course_delivery'] = $delivery;
-        $data['course_hours'] = $requestData['hours']['hour'];
+        $data['course_hours'] = isset($requestData['hours']['hour']) ? $requestData['hours']['hour'] : null;
 
         $data['course_partner'] = $partner;
         $data['course_manager'] = ($syllabus != null) ? true : false;
@@ -413,7 +413,7 @@ class FixEventInfoTable extends Command
 
         //dd($requestData['hours']);
 
-        $data['course_hours_text'] = $requestData['hours']['text'];
+        $data['course_hours_text'] = isset($requestData['hours']['text']) ? $requestData['hours']['text'] : null;
         
         if(isset($requestData['hours']['visible'])){
 
@@ -429,7 +429,7 @@ class FixEventInfoTable extends Command
         //end hour icon
 
         // Language
-        $data['course_language'] = $requestData['language']['text'];
+        $data['course_language'] = isset($requestData['language']['text']) ? $requestData['language']['text'] : null;
         if(isset($requestData['language']['visible'])){
 
             $visible_loaded_data = $requestData['language']['visible'];
@@ -600,14 +600,14 @@ class FixEventInfoTable extends Command
         $infos->course_payment_method = (isset($event_info['course_payment_method']) && $event_info['course_payment_method'] == 'paid') ? 'paid' : 'free';
         $infos->course_awards = (isset($event_info['course_awards_text']) && $event_info['course_awards_text'] != "") ? true : false;
         $infos->course_awards_text = $event_info['course_awards_text'];
-        $infos->course_certification_name_failure = $event_info['course_certification_name_failure'];
-        $infos->course_certification_type = $event_info['course_certification_type'];
-        $infos->course_certification_visible = $event_info['course_certificate_visible'];
-        $infos->course_students_number = $event_info['course_students_number'];
+        $infos->course_certification_name_failure = isset($event_info['course_certification_name_failure']) ? $event_info['course_certification_name_failure'] : null;
+        $infos->course_certification_type = isset($event_info['course_certification_type']) ? $event_info['course_certification_type'] : null ;
+        $infos->course_certification_visible = isset($event_info['course_certificate_visible']) ? $event_info['course_certificate_visible'] : null;
+        $infos->course_students_number = isset($event_info['course_students_number']) ? $event_info['course_students_number'] : null;
         $infos->has_certificate = true;
-        $infos->course_students_text = $event_info['course_students_text'];
-        $infos->course_students_visible = $event_info['course_students_visible'];
-        $infos->course_elearning_access = $event_info['course_elearning_access'];
+        $infos->course_students_text = isset($event_info['course_students_text']) ? $event_info['course_students_text'] : null;
+        $infos->course_students_visible = isset($event_info['course_students_visible']) ? $event_info['course_students_visible'] : null;
+        $infos->course_elearning_access = isset($event_info['course_elearning_access']) ? $event_info['course_elearning_access'] : null;
 
         $infos->course_elearning_visible = isset($event_info['course_elearning_visible']) ? $event_info['course_elearning_visible'] : null;
         $infos->course_elearning_icon = isset($event_info['course_elearning_icon']) ? $event_info['course_elearning_icon'] : null;

@@ -630,11 +630,9 @@ class EventController extends Controller
 
 
         if(isset($infoData['free_courses']['list'])){
-
             dispatch((new EnrollStudentsToElearningEvents($event->id,$infoData['free_courses']['list']))->delay(now()->addSeconds(3)));
 
         }else{
-
             dispatch((new EnrollStudentsToElearningEvents($event->id,null))->delay(now()->addSeconds(3)));
         }
 
@@ -1195,7 +1193,7 @@ class EventController extends Controller
         $newEvent->createSlug($newEvent->title);
         //$event->createMetas($request->all());
         //dd($event->lessons);
-        $event->load('category','faqs','sectionVideos','type','delivery','ticket','city','sections','venues','syllabus','benefits','paymentMethod','dropbox','event_info1');
+        $event->load('category','faqs','sectionVideos','type','delivery','ticket','city','sections','venues','syllabus','paymentMethod','dropbox','event_info1');
 
         foreach ($event->getRelations() as $relationName => $values){
             if($relationName == 'summary1' || $relationName == 'benefits' || $relationName == 'sections'){
@@ -1230,6 +1228,7 @@ class EventController extends Controller
 
             }else if($relationName == 'event_info1'){
                 $valuee = $values->replicate();
+                $valuee->course_elearning_access = null;
                 $valuee->push();
                 $newEvent->{$relationName}()->save($valuee);
             }else{

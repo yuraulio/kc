@@ -110,7 +110,7 @@
 
                         <span class="completed">The event is completed</span>
                         <p style="display:none">The best digital &amp; social media diploma with a long track record trusted by top executives, agencies, brands and corporations is completed.</p>
-                        <p >Please check all our @if(isset($location->name)) <a href="{{ $location->slug }}">upcoming events in {{ $location->name }}</a> @else upcoming events in this city @endif.</p>
+                        <p >Please check all our @if(isset($location->name)) <a href="{{ $location->slug }}">upcoming events in {{ $location->name }}.</a> @else upcoming events in this city. @endif</p>
                     </div>
                 </div>
                 </div>

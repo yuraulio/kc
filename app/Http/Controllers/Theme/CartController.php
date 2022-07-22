@@ -1969,7 +1969,8 @@ class CartController extends Controller
             $data['info']['statusClass'] = 'success';
 
             $data['tigran'] = ['OrderSuccess_id' => $transaction['id'], 'OrderSuccess_total' => 0.00, 'Price' => 0.00,'Product_id' => $content->id, 'Product_SKU' => $content->id,
-                        'ProductCategory' => $categoryScript, 'ProductName' =>  $content->title, 'Quantity' => $item->qty, 'TicketType'=>'Upon Coupon','Event_ID' => 'kc_' . time() 
+                        'ProductCategory' => $categoryScript, 'ProductName' =>  $content->title, 'Quantity' => $item->qty, 'TicketType'=>'Upon Coupon','Event_ID' => 'kc_' . time() ,
+                        'Encrypted_email' => hash('sha256', $user->email)
                 ];
 
         }

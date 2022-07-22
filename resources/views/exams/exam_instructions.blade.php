@@ -128,6 +128,8 @@ PASSWORD<br/>
             const togglePassword = document.querySelector("#togglePassword");
             const password = document.querySelector("#examPassword");
 
+            if(jQuery('#togglePassword').length){
+
             togglePassword.addEventListener("click", function () {
                 console.log(password.getAttribute("type"))
                 // toggle the type attribute
@@ -149,6 +151,7 @@ PASSWORD<br/>
                 }
 
             });
+            }
 
 
 

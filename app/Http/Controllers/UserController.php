@@ -690,7 +690,14 @@ class UserController extends Controller
         $user->notify(new WelcomeEmail($user,$data));
 		$user->notify(new CourseInvoice($data));
 
-		$fn = date('Y-m-d') . '-Invoice-' . $elearningInvoice->invoice . '.pdf';
+        
+
+		$invoiceFileName = date('Y.m.d');
+		if($paymentMethod){
+		  $invoiceFileName .= '_' . $paymentMethod->company_name;
+		}
+		$invoiceFileName .= '_' . $elearningInvoice->invoice . '.pdf';
+        $fn = $invoiceFileName;
 
 		$sent = Mail::send('emails.admin.elearning_invoice', $data, function ($m) use ($adminemail, $muser,$pdf,$fn) {
 

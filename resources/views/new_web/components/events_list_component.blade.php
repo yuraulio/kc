@@ -234,7 +234,10 @@
                             $isonCart = Cart::search(function ($cartItem, $rowId) use ($row) {
                                 return $cartItem->id === $row->id;
                             });
+
+                            $info = $row->event_info();
                         ?>
+
                         @if($chmonth != $lastmonth1)
                             <?php $lastmonth1 = $chmonth;?>
                             <div class="dynamic-learning--subtitle">
@@ -254,13 +257,7 @@
 
                                     <h2><a href="{{ $slug }}">{{ $row->title}}</a></h2>
                                     <div class="bottom">
-                                        @if(isset($row['city']))
-                                            @foreach($row['city'] as $city)
-                                                <a href="{{ $city->slugable->slug }}" class="city " title="{{ $city->name }}">
-                                                <img width="20" class="replace-with-svg" src="/theme/assets/images/icons/marker.svg" alt="">{{ $city->name }}</a>
-                                            @endforeach
-                                        @endif
-
+                                        
                                         @include('new_web.components.event_infos',['type' => 'inclass'])
 
 

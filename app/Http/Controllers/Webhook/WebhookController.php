@@ -552,7 +552,8 @@ class WebhookController extends BaseWebhookController
 				$data['tigran'] = ['OrderSuccess_id' => $transaction->id, 'OrderSuccess_total' => $tr_price, 'Price' =>$tr_price,
 									'Product_id' => $subscription->event->first()->id, 'Product_SKU' => $subscription->event->first()->id,
                         			'Product_SKU' => $subscription->event->first()->id,'ProductCategory' => 'Video e-learning courses', 
-									'ProductName' =>  $subscription->event->first()->title, 'Quantity' =>1, 'TicketType'=>'Subscription','Event_ID' => 'kc_' . time() 
+									'ProductName' =>  $subscription->event->first()->title, 'Quantity' =>1, 'TicketType'=>'Subscription','Event_ID' => 'kc_' . time(),
+									'Encrypted_email' => hash('sha256', $user->email) 
                 ];
 
 				$fbPixel = new FBPixelService;
@@ -597,8 +598,16 @@ class WebhookController extends BaseWebhookController
 			
 		});*/
 
+		$invoiceFileName = date('Y.m.d');
+
+		if($paymentMethod){
+		  $invoiceFileName .= '_' . $paymentMethod->company_name;
+		}
+
+		$invoiceFileName .= '_' . $elearningInvoice->invoice . '.pdf';
+
 		$data['slugInvoice'] = encrypt($user->id . '-' . $elearningInvoice->id . '-' . $planSubscription);
-		$fn = date('Y-m-d') . '-Invoice-' . $elearningInvoice->invoice . '.pdf';
+		$fn = $invoiceFileName;
 
 		if($billingEmail){
 			$sent = Mail::send('emails.user.invoice', $data, function ($m) use ($adminemail, $muser,$pdf,$fn, $billingEmail) {

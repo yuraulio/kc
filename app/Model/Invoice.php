@@ -208,10 +208,17 @@ class Invoice extends Model
 
           ]);
 
+          $invoiceFileName = date('Y.m.d');
+          if($paymentMethod){
+            $invoiceFileName .= '_' . $paymentMethod->company_name;
+          }
+          $invoiceFileName .= '_' . $this->invoice . '.pdf';
+
+
           $pdf->getDomPDF()->setHttpContext($contxt);
           $pdf->loadView('admin.invoices.elearning_invoice',compact('data'))->setPaper('a4', 'portrait');
          //$fn = 'myinvoice' . '.pdf';
-         $fn = date('Y-m-d',strtotime($this->created_at)) . ' - Invoice - ' . $this->invoice . '.pdf';
+         $fn = $invoiceFileName;
         return $pdf;
 
     }
@@ -515,8 +522,13 @@ class Invoice extends Model
           $pdf->getDomPDF()->setHttpContext($contxt);
           $pdf->loadView('admin.invoices.elearning_invoice',compact('data'))->setPaper('a4', 'portrait');
 
-         //$fn = 'myinvoice' . '.pdf';
-         $fn = date('Y-m-d',strtotime($this->created_at)) . '-Invoice-' . $this->invoice . '.pdf';
+        $invoiceFileName = date('Y.m.d');
+        if($paymentMethod){
+          $invoiceFileName .= '_' . $paymentMethod->company_name;
+        }
+        $invoiceFileName .= '_' . $this->invoice . '.pdf';
+        $fn =$invoiceFileName;
+
         return $pdf->stream($fn);
 
     }
@@ -629,31 +641,31 @@ class Invoice extends Model
 
 
         $contxt = stream_context_create([
-            'ssl' => [
-            'verify_peer' => FALSE,
-            'verify_peer_name' => FALSE,
-            'allow_self_signed'=> TRUE
-            ]
-          ]);
+          'ssl' => [
+          'verify_peer' => FALSE,
+          'verify_peer_name' => FALSE,
+          'allow_self_signed'=> TRUE
+          ]
+        ]);
 
-          $pdf = PDF::setOptions([
-            'isHtml5ParserEnabled'=> true,
-            'isRemoteEnabled' => true,
+        $pdf = PDF::setOptions([
+          'isHtml5ParserEnabled'=> true,
+          'isRemoteEnabled' => true,
 
-          ]);
+        ]);
 
 
-          $pdf->getDomPDF()->setHttpContext($contxt);
+        $pdf->getDomPDF()->setHttpContext($contxt);
+        $invoiceFileName = date('Y.m.d');
+        if($paymentMethod){
+          $invoiceFileName .= '_' . $paymentMethod->company_name;
+        }
+        $invoiceFileName .= '_' . $this->invoice . '.pdf';
+        $fn =$invoiceFileName;
+        $pdf->loadView('admin.invoices.elearning_invoice',compact('data'))->setPaper('a4', 'portrait')->save(public_path('invoices_folder/'.$fn))->stream($fn);
 
-          $pdf;
-
-          //$fn = 'myinvoice' . '.pdf';
-          $fn = date('Y-m-d',strtotime($this->created_at)) . '-Invoice-' . $this->invoice . '.pdf';
-          $pdf->loadView('admin.invoices.elearning_invoice',compact('data'))->setPaper('a4', 'portrait')->save(public_path('invoices_folder/'.$fn))->stream($fn);
-
-          $zip->addFile(public_path('invoices_folder/'.$fn), $fn);
-          //dd('gfdg');
-          return $invoicesNumber;
+        $zip->addFile(public_path('invoices_folder/'.$fn), $fn);
+        return $invoicesNumber;
 
     }
 

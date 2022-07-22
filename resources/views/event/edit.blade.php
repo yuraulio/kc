@@ -107,16 +107,15 @@
 
 
 
-                        </div>
-                        <form method="post" id="event_edit_form" method="POST" action="{{ route('events.update', $event) }}" autocomplete="off"
-                                            enctype="multipart/form-data">
-                                            @csrf
-                                            @method('put')
-                        <div class="tab-content" id="myTabContent">
-                            <div class="tab-pane fade show active" id="tabs-icons-text-1" role="tabpanel" aria-labelledby="tabs-icons-text-1-tab">
-                          
+                            <form id="event_edit_form" method="POST" action="{{ route('events.update', $event) }}" autocomplete="off"
+                                        enctype="multipart/form-data">
+                                                @csrf
+                                                @method('put')
+                                <div class="tab-content" id="myTabContent">
+                                    <div class="tab-pane fade show active" id="tabs-icons-text-1" role="tabpanel" aria-labelledby="tabs-icons-text-1-tab">
 
-                                        <div class="row">
+
+                                        <div class="row align-center">
 
 
                                             <div class="col-md-2 col-sm-6 col-6">
@@ -142,9 +141,9 @@
 
                                
 
-                                            <div class="col-md-2 col-sm-6 col-6" style="padding:0;">
+                                            <div class="col-md-2 col-sm-6 col-6">
                                                 <div style="margin: auto 0;" class="col-md-3 col-sm-3">
-                                                    <div style="margin: auto;" class="form-group{{ $errors->has('published') ? ' has-danger' : '' }}">
+                                                    <div class="form-group{{ $errors->has('published') ? ' has-danger' : '' }}">
                                                         <label class="form-control-label" for="input-method">{{ __('Published') }}</label>
 
 
@@ -685,7 +684,7 @@
                                                                     @if($course_inclass_times_icon != null && $course_inclass_times_icon['path'] != null)
                                                                         <img src="{{ asset($course_inclass_times_icon['path']) }}"/>
                                                                     @else
-                                                                        <img class="replace-with-svg" width="20" src="/theme/assets/img/summary_icons/time.svg" alt="">
+                                                                        <img class="replace-with-svg" width="20" src="/theme/assets/img/summary_icons/Days-Week.svg" alt="">
                                                                     @endif
                                                                 </span>
                                                             </span>
