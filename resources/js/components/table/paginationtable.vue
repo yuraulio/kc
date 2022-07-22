@@ -31,25 +31,34 @@
                 <h5>{{ type == 'edit' ? 'Edit' : 'Create'}}</h5>
             </div>
             <div class="card-body">
-                <multiput 
-                    v-for="input in (type == 'edit' ? config.editInputs : config.addInputs)" 
-                    :key="input.key" 
-                    :keyput="input.key" 
-                    :label="input.label" 
-                    :type="input.type" 
-                    :size="input.size" 
-                    :existing-value="item[input.key]" 
-                    :value="item[input.key]" 
-                    @inputed="inputed($event, input)" 
-                    :multi="input.multi"
-                    :taggable="input.taggable"
-                    :fetch="input.fetch"
-                    :route="input.route"
-                >
+                <template v-for="input in (type == 'edit' ? config.editInputs : config.addInputs)" >
+                    <multiput 
+                        :key="input.key" 
+                        :keyput="input.key" 
+                        :label="input.label" 
+                        :type="input.type" 
+                        :size="input.size" 
+                        :existing-value="item[input.key]" 
+                        :value="item[input.key]" 
+                        @inputed="inputed($event, input)" 
+                        :multi="input.multi"
+                        :taggable="input.taggable"
+                        :fetch="input.fetch"
+                        :route="input.route"
+                    >
+                    </multiput>
                     <ul v-if="errors && errors[input.key]" class="parsley-errors-list filled" id="parsley-id-7" aria-hidden="false">
                         <li class="parsley-required">{{ errors[input.key][0] }}</li>
                     </ul>
-                </multiput>
+
+                    <template v-if="errors && input.key == 'subcategories'">
+                        <template v-for="(errorInput, key) in item.subcategories">
+                            <ul v-if="errors && errors[input.key + '.' + key]" class="parsley-errors-list filled" id="parsley-id-7" aria-hidden="false">
+                                <li class="parsley-required">{{ fixError(errors[input.key + '.' + key][0], input.key + '.' + key, errorInput.title) }}</li>
+                            </ul>
+                        </template>
+                    </template>
+                </template>
             </div>
             <div class="row mt-3">
                 <div class="col-12 text-center">
@@ -800,6 +809,9 @@ export default {
         },
         getAppURL() {
             return process.env.MIX_APP_URL;
+        },
+        fixError(message, subcategoryError, subcategory) {
+            return message.replace(subcategoryError, " subcategory '" + subcategory + "' ") + " (Titles through categories and subcategories must be unique.)";
         }
     },
     mounted() {
