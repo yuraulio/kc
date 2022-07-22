@@ -34,7 +34,7 @@
            <div class="row mb-5">
                 <div class="col-lg-12 marbot">
                     @foreach($categories as $c)
-                        <a class="badgelink" href="/v2/blog?c={{$c->id}}">
+                        <a class="badgelink" href="/blog?c={{$c->id}}">
                             <label class="badge primary">{{ $c->title }}</label>
                         </a>
                     @endforeach

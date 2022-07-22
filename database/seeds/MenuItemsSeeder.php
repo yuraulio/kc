@@ -207,7 +207,7 @@ class MenuItemsSeeder extends Seeder
         $menuItem->menu_id = $menu->id;
         $menuItem->title = 'BLOG';
         $menuItem->slug = Str::slug('BLOG');
-        $menuItem->url = '/en/blog';
+        $menuItem->url = '/blog';
         $menuItem->parent_id = null;
         $menuItem->order = 1;
         $menuItem->route = null;
