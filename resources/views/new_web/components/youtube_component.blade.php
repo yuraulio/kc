@@ -25,8 +25,8 @@
 @else
     <div class="text-center mb-5 mt-5">
         <iframe 
-            width="{{ $youtube["youtube_width"] ? $youtube["youtube_width"] : '100%' }}" 
-            height="{{ $youtube["youtube_height"] ? $youtube["youtube_height"] : '400' }}" 
+            width="{{ $youtube["youtube_full_width"] ? "100%" : ($youtube["youtube_width"] ? $youtube["youtube_width"] : '100%') }}" 
+            height="{{ $youtube["youtube_height"] ? $youtube["youtube_height"] : '600' }}" 
             src="https://www.youtube.com/embed/{{ $youtube["youtube_embed"] ?? "" }}" 
             title="YouTube video player" 
             frameborder="0" 

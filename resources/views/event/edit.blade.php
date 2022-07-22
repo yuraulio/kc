@@ -9,7 +9,7 @@
 @section('content')
     @component('layouts.headers.auth')
     @component('layouts.headers.breadcrumbs')
-
+       
 
             <li class="breadcrumb-item"><a href="{{ route('events.index') }}">{{ __('Events Management') }}</a></li>
             <li class="breadcrumb-item active" aria-current="page">{{ __('Edit Event') }}</li>
@@ -107,13 +107,14 @@
 
 
 
-                            <form id="event_edit_form" method="POST" action="{{ route('events.update', $event) }}" autocomplete="off"
-                                        enctype="multipart/form-data">
-                                                @csrf
-                                                @method('put')
-                                <div class="tab-content" id="myTabContent">
-                                    <div class="tab-pane fade show active" id="tabs-icons-text-1" role="tabpanel" aria-labelledby="tabs-icons-text-1-tab">
-
+                        </div>
+                        <form method="post" id="event_edit_form" method="POST" action="{{ route('events.update', $event) }}" autocomplete="off"
+                                            enctype="multipart/form-data">
+                                            @csrf
+                                            @method('put')
+                        <div class="tab-content" id="myTabContent">
+                            <div class="tab-pane fade show active" id="tabs-icons-text-1" role="tabpanel" aria-labelledby="tabs-icons-text-1-tab">
+                          
 
                                         <div class="row">
 
@@ -139,6 +140,7 @@
                                                 </div>
                                             </div>
 
+                               
 
                                             <div class="col-md-2 col-sm-6 col-6" style="padding:0;">
                                                 <div style="margin: auto 0;" class="col-md-3 col-sm-3">
@@ -493,7 +495,6 @@
 
                                                     <input type="hidden" value="{{ old('inclass_city_icon_path', ($course_inclass_city_icon != null && $course_inclass_city_icon['path'] != '') ? $course_inclass_city_icon['path'] : '' ) }}" id="inclass_city_path" name="course[{{'delivery'}}][{{'inclass'}}][{{'city'}}][{{'icon'}}][{{'path'}}]">
                                                     <input type="hidden" value="{{ old('inclass_city_icon_alt_text', ($course_inclass_city_icon != null && $course_inclass_city_icon['alt_text'] != '') ? $course_inclass_city_icon['alt_text'] : '' ) }}" id="inclass_city_alt_text" name="course[{{'delivery'}}][{{'inclass'}}][{{'city'}}][{{'icon'}}][{{'alt_text'}}]">
-
 
 
 
@@ -1794,6 +1795,7 @@
                                                     </div>
 
 
+                                       
 
                                                     {{--<div class="tab-pane fade" id="tabs-icons-text-3_inside" role="tabpanel" aria-labelledby="tabs-icons-text-3-tab_inside">
                                                         @include('admin.benefits.benefits',['model' => $event, 'sections' => $sections])
@@ -2434,15 +2436,15 @@
                 return false;
 
             }else if(!start && event_type){
-
+                
                 alert('You must fill start time field')
                 return false;
-
+                
             }else if(!end && event_type){
 
                 alert('You must fill end time field')
                 return false;
-
+                
             }
 
             data = {date:date, start:start, event_id:event_id, end:end, room:room, instructor_id:instructor_id, topic_id:topic_id, lesson_id:lesson_id}
@@ -2551,7 +2553,7 @@
             topic_id = topic_id.split("_")
             const event_id = $('#topic_lessons').data('event-id')
             let instructor_id = $('#instFormControlSelect12').val()
-
+            
 
             data = {lesson_id:elem[1], topic_id:topic_id[1], event_id:event_id}
             $.ajax({
@@ -2842,7 +2844,7 @@
 
 
     $('.enroll-students').change(function(){
-
+       
         let enroll = $("#input-enroll").is(":checked") ? 1 : 0;
         console.log('dfsd');
         $.ajax({
@@ -2853,7 +2855,7 @@
             Accept: 'application/json',
             url: "/admin/enroll-to-elearning/" + "{{$event->id}}" +"/" + enroll,
             success: function(data) {
-
+            
             }
         });
 
@@ -2861,7 +2863,7 @@
 
 
     $('.index-toggle').change(function(){
-
+       
        let index = $("#input-index").is(":checked") ? 1 : 0;
 
        $.ajax({
@@ -2872,14 +2874,14 @@
            Accept: 'application/json',
            url: "/admin/change-index/" + "{{$event->id}}" +"/" + index,
            success: function(data) {
-
+           
            }
        });
 
    })
 
    $('.feed-toggle').change(function(){
-
+       
        let feed = $("#input-feed").is(":checked") ? 1 : 0;
 
        $.ajax({
@@ -2890,7 +2892,7 @@
            Accept: 'application/json',
            url: "/admin/change-feed/" + "{{$event->id}}" +"/" + feed,
            success: function(data) {
-
+           
            }
        });
 
@@ -2947,5 +2949,4 @@ var datePickerOptions = {
 </script>
 
 @endpush
-
 

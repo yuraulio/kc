@@ -392,7 +392,7 @@
             >
 
                 <template slot="page_title" slot-scope="props">
-                    <a :href="getAppURL() + '/' + props.rowData.slug" target="_blank">{{ props.rowData.title }}</a>
+                    <a :href="'/page/' + props.rowData.id" target="_blank">{{ props.rowData.title }}</a>
                 </template>
 
                 <template slot="visibility" slot-scope="props">
