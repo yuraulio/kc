@@ -437,12 +437,12 @@ var mediaMixin = {
             if (pages_count) {
                 pagesText = pagesText + "This image is used on " + pages_count + " pages.";
             }
-            if ($event.parent == null) {
+            if ($event.parrent == null) {
                 pagesText = pagesText + "This this is an original image, this action will delete all its subimages that exist.";
             }
             Swal.fire({
                 title: 'Are you sure?\n ' + pagesText,
-                text: "You won't be able to revert this! Delete file?",
+                text: "",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonText: 'Yes, delete it!',
