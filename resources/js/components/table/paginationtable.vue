@@ -321,17 +321,17 @@
                         </button>
                     </div>
 
-                    <div class="float-end ms-2 pt-3">
+                    <div v-if="config.showFilters" class="float-end ms-2 pt-3">
                         <b-button v-b-toggle.sidebar-right class="btn-soft-secondary">
                             <i class="fa fa-filter" aria-hidden="true"></i>
                         </b-button>
                     </div>
 
-                    <div class="btn-group dropleft multiselect-actions float-end ms-2 pt-3">
-                        <button class="btn btn-soft-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <div v-if="multiselectShow" class="btn-group dropleft multiselect-actions float-end ms-2 pt-3" role="group">
+                        <button class="btn btn-soft-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="fa fa-cog" aria-hidden="true"></i>
                         </button>
-                        <div class="dropdown-menu settings-dropdown" aria-labelledby="dropdownMenuButton">
+                        <div class="dropdown-menu settings-dropdown" aria-labelledby="dropdownMenuButton1">
                             <a class="dropdown-item" href="#" @click="deleteMultipleItems()">
                                 <i class="fas fa-trash"></i> Delete selected
                             </a>
@@ -339,10 +339,10 @@
                     </div>
 
                     <div class="btn-group dropleft multiselect-actions float-end pt-3">
-                        <button class="btn btn-soft-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <button class="btn btn-soft-secondary dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             {{perPage ? perPage : "All"}}
                         </button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
                             <a class="dropdown-item" href="#" @click="changePerPage(10)">
                                 10
                             </a>
