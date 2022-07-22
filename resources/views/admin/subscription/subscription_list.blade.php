@@ -82,7 +82,7 @@
                      </div>
                   </div>
                </div>
-              
+
                <table class="table align-items-center table-flush"  id="subscriptions_table">
                   <thead class="thead-light">
                      <tr>
@@ -112,7 +112,7 @@
                         <th scope="col">{{ __('Sub end at') }}</th>
                         <th scope="col">{{ __('Amount') }}</th>
                         <th class="" scope="col">{{ __('Create Date') }}</th>
-                        
+
                      </tr>
                   </tfoot>
                   <tbody>
@@ -160,17 +160,25 @@
 <script src="{{ asset('argon') }}/vendor/datatables-datetime/datetime.min.js"></script>
 <script>
    var minDate = null, maxDate = null;
-   
+
    $.fn.dataTable.ext.search.push(
        function( settings, data, dataIndex ) {
            var min = minDate;
            var max = maxDate;
-   
-   
+
+            if(min != null){
+                min = moment(min).format('YYYY/MM/DD')
+            }
+
+            if(max != null){
+                max = moment(max).format('YYYY/MM/DD')
+            }
+
            var date = new Date(data[6]);
-   
-           date = moment(date).format('MM/DD/YYYY')
-   
+           date = moment(date).format('YYYY/MM/DD')
+
+
+
            if (
                ( min === null && max === null ) ||
                ( min === null && date <= max ) ||
@@ -182,9 +190,9 @@
            return false;
        }
    );
-   
-   
-   
+
+
+
     function initStats(){
         let sum = 0;
         let trial = 0;
@@ -200,49 +208,49 @@
                 sum = sum + amount
             }
 
-            
+
 
             if(statuss == 'trialing'){
                 trial += 1
             }else if(statuss == 'cancelled'){
                 cancelled += 1;
             }
-        
 
-        
+
+
         } );
-   
-   
+
+
         $('#total').text('€'+sum)
         $('#cancel').text(cancelled)
         $('#trial').text(trial)
 
     }
-   
+
     function fillSelectedBox(){
         events = table.column(2).data().unique().sort()
         $.each(events, function(key, value){
             $('#col2_filter').append('<option value="'+value+'">'+value+'</option>')
         })
     }
-   
+
     function filterColumn ( i ) {
         if(i == 3){ //Status filter
             if($('#col'+i+'_filter').val() != ''){
                 status = $('#col'+i+'_filter').val()
-                
+
             }else{
                 status = ''
             }
             value = status.trim()
-   
+
         }else if(i == 2){ // Event filter
             if($('#col'+i+'_filter').val() != ''){
                 value = $('#col'+i+'_filter').val()
             }else{
                 value = ''
             }
-   
+
         }
 
         if(value.trim()){
@@ -250,13 +258,13 @@
         }else{
          table.column( i ).search(value.trim()).draw();
         }
-        
-        
+
+
         initStats();
 
     }
-   
-   
+
+
     // DataTables initialisation
     var table = $('#subscriptions_table').DataTable({
         "order": [[ 6, "desc" ]],
@@ -268,38 +276,81 @@
         }
     });
     initStats()
-   
+
     let status = '';
-   
+
     $(document).ready(function() {
         fillSelectedBox()
-   
+
         $('select.column_filter').on('change', function () {
             filterColumn( $(this).parents('div').attr('data-column') );
-   
+
         } );
-   
-   
+
+
         // Refilter the table
         $('#min, #max').on('change', function () {
             min = new Date($('#min').val());
             max = new Date($('#max').val());
             minDate = moment(min).format('MM/DD/YYYY')
             maxDate = moment(max).format('MM/DD/YYYY')
-   
-   
-            table.draw();   
+
+
+            table.draw();
             initStats();
         });
-   
-   
-   
-   
-   
-   
+
+
+
+
+
+
     });
-   
-   
-   
+
+
+
+</script>
+<script>
+    $(document).ready(function(){
+        transactionArray = []
+
+        $('#subscriptions_table_filter').append(
+            `<div class='excel-button'>
+                    <button title="export transactions to csv" class="btn btn-icon btn-primary" type="button">
+                        <span class="btn-inner--icon"><i class="ni ni-cloud-download-95"></i></span>
+                    </button>
+                </div>
+                `
+        )
+
+        let transactionIDS = table.column(0).data();
+
+        $.each(transactionIDS, function(key, value) {
+            transactionArray.push(transactionIDS[key]);
+        })
+
+    })
+
+    $(document).on("click",".excel-button",function() {
+
+        let min = $("#min").val();
+        let max = $("#max").val();
+
+        $.ajax({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            url: "{{route('subscription.export-excel')}}",
+            type: "POST",
+            data:{transaction:transactionArray,fromDate:min,toDate:max} ,
+            success: function(data) {
+
+                window.location.href = '/tmp/exports/SubscriptionsExport.xlsx'
+
+            }
+        });
+
+    });
 </script>
 @endpush
+

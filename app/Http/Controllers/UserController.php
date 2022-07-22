@@ -42,6 +42,8 @@ use App\Notifications\CourseInvoice;
 use App\Notifications\WelcomeEmail;
 use Illuminate\Http\Request;
 use App\Notifications\SendWaitingListEmail;
+use PDF;
+use App\Model\Admin\Page;
 
 class UserController extends Controller
 {
@@ -249,7 +251,7 @@ class UserController extends Controller
         $billingDetails = json_decode($user['invoice_details'],true);
         $billingDetails['billing'] = 2;
        }*/
-       
+
        $transaction = new Transaction;
        $transaction->placement_date = Carbon::now();
        $transaction->ip_address = \Request::ip();
@@ -305,7 +307,7 @@ class UserController extends Controller
         }*/
 
         $paymentMethodId = $event->paymentMethod->first() ? $event->paymentMethod->first()->id : -1;
-        
+
         $elearningInvoice = new Invoice;
         $elearningInvoice->name = isset($billingDetails['billname']) ? $billingDetails['billname'] : '';;
         $elearningInvoice->amount = $price;
@@ -362,14 +364,14 @@ class UserController extends Controller
         $user->ticket()->wherePivot('event_id', '=', $request->event_id)->wherePivot('ticket_id', '=', $request->ticket_id)->detach($request->ticket_id);
         $user->events()->wherePivot('event_id', '=', $request->event_id)->detach($request->event_id);
         //dd($user->transactions()->get());
-        
-    
+
+
         $transaction = $event->transactionsByUser($user->id)->first();
-        
+
         $transaction->event()->detach($request->event_id);
         $transaction->user()->detach($request->user_id);
         $transaction->delete();
-    
+
         //$user->ticket()->attach($ticket_id, ['event_id' => $event_id]);
         //dd($user->transactions()->get());
         $user->events()->wherePivot('event_id', '=', $request->event_id)->detach();
@@ -543,7 +545,7 @@ class UserController extends Controller
             $groupEmailLink = 'https://www.facebook.com/groups/elearningdigital/';
         }
 
-        $today = date('Y/m/d'); 
+        $today = date('Y/m/d');
         $expiration_date = '';
 
         if($content->expiration){
@@ -552,7 +554,7 @@ class UserController extends Controller
         }
 
         $extrainfo = [$tickettypedrop, $tickettypename, $eventname, $date, '-', '-', $eventcity,$groupEmailLink,$expiration_date];
-        
+
         $helperdetails[$user->email] = ['kcid' => $user->kc_id, 'deid' => $user->partner_id, 'stid' => $user->student_type_id, 'jobtitle' => $user->job_title, 'company' => $user->company, 'mobile' => $user->mobile];
 
         $adminemail = 'info@knowcrunch.com';
@@ -565,7 +567,7 @@ class UserController extends Controller
         $data['eventslug'] = $content->slug;
 
         if($content->view_tpl == 'elearning_event'){
-  
+
             $sent = Mail::send('emails.admin.info_new_registration_elearning', $data, function ($m) use ($adminemail, $muser) {
 
                 $fullname = $muser['name'];
@@ -578,7 +580,7 @@ class UserController extends Controller
             });
 
         }else{
-            
+
             $sent = Mail::send('emails.admin.info_new_registration', $data, function ($m) use ($adminemail, $muser) {
 
                 $fullname = $muser['name'];
@@ -614,8 +616,8 @@ class UserController extends Controller
 
 		//$pdf = $transaction->elearningInvoice()->first()->generateInvoice();
         $pdf = $pdf->output();
-        
-		$data = [];  
+
+		$data = [];
         $muser = [];
 
 		$user = $elearningInvoice->user->first();
@@ -637,29 +639,29 @@ class UserController extends Controller
 
         if(isset($eventInfo['delivery']) && $eventInfo['delivery'] == 143){
 
-            $data['duration'] = isset($eventInfo['elearning']['visible']['emails']) && isset($eventInfo['elearning']['expiration']) && 
-                                $eventInfo['elearning']['visible']['emails'] && isset($eventInfo['elearning']['text']) ?  
+            $data['duration'] = isset($eventInfo['elearning']['visible']['emails']) && isset($eventInfo['elearning']['expiration']) &&
+                                $eventInfo['elearning']['visible']['emails'] && isset($eventInfo['elearning']['text']) ?
                                             $eventInfo['elearning']['expiration'] . ' ' . $eventInfo['elearning']['text'] : '';
 
         }else if(isset($eventInfo['delivery']) && $eventInfo['delivery'] == 139){
 
-            $data['duration'] = isset($eventInfo['inclass']['dates']['visible']['emails']) && isset($eventInfo['inclass']['dates']['text']) && 
+            $data['duration'] = isset($eventInfo['inclass']['dates']['visible']['emails']) && isset($eventInfo['inclass']['dates']['text']) &&
                                         $eventInfo['inclass']['dates']['visible']['emails'] ?  $eventInfo['inclass']['dates']['text'] : '';
 
         }
 
-        $data['hours'] = isset($eventInfo['hours']['visible']['emails']) &&  $eventInfo['hours']['visible']['emails'] && isset($eventInfo['hours']['hour']) && 
+        $data['hours'] = isset($eventInfo['hours']['visible']['emails']) &&  $eventInfo['hours']['visible']['emails'] && isset($eventInfo['hours']['hour']) &&
                         isset( $eventInfo['hours']['text']) ? $eventInfo['hours']['hour'] . ' ' . $eventInfo['hours']['text'] : '';
 
         $data['language'] = isset($eventInfo['language']['visible']['emails']) &&  $eventInfo['language']['visible']['emails'] && isset( $eventInfo['language']['text']) ? $eventInfo['language']['text'] : '';
 
-        $data['certificate_type'] =isset($eventInfo['certificate']['visible']['emails']) &&  $eventInfo['certificate']['visible']['emails'] && 
+        $data['certificate_type'] =isset($eventInfo['certificate']['visible']['emails']) &&  $eventInfo['certificate']['visible']['emails'] &&
                     isset( $eventInfo['certificate']['type']) ? $eventInfo['certificate']['type'] : '';
 
         $eventStudents = get_sum_students_course($elearningInvoice->event->first()->category->first());
         $data['students_number'] = isset($eventInfo['students']['number']) ? $eventInfo['students']['number'] :  $eventStudents + 1;
 
-        $data['students'] = isset($eventInfo['students']['visible']['emails']) &&  $eventInfo['students']['visible']['emails'] && 
+        $data['students'] = isset($eventInfo['students']['visible']['emails']) &&  $eventInfo['students']['visible']['emails'] &&
                         isset( $eventInfo['students']['text']) && $data['students_number'] >= $eventStudents  ? $eventInfo['students']['text'] : '';
 
 
@@ -676,7 +678,7 @@ class UserController extends Controller
 			$m->to($muser['email'], $fullname);
 			$m->subject($sub);
 			$m->attachData($pdf, "invoice.pdf");
-			
+
 		});*/
 
 		$data['slugInvoice'] = encrypt($user->id . '-' . $elearningInvoice->id);
@@ -709,7 +711,7 @@ class UserController extends Controller
             //$m->to('moulopoulos@lioncode.gr', $fullname);
             $m->subject($sub);
             //$m->attachData($pdf, $fn);
-            
+
         });
 	}
 
@@ -721,9 +723,9 @@ class UserController extends Controller
 		$MM = date("m",$time);
 		$YY = date("y",$time);
 
-        
+
         $user = User::find($request->user);
-       
+
         if(!$user->kc_id){
 
             $optionKC = Option::where('abbr','website_details')->first();
@@ -740,23 +742,23 @@ class UserController extends Controller
             else {
                 $next = $next + 1;
             }
-    
+
             $optionKC->value=$next;
             $optionKC->save();
 
         }
         $user->save();
 
-       
+
 
         return back()->withStatus(__('User successfully updated.'));
     }
 
     public function createDeree(Request $request){
 
-       
 
-        
+
+
         $user = User::find($request->user);
         $option = Option::where('abbr','deree_codes')->first();
         $dereelist = json_decode($option->settings, true);
@@ -770,10 +772,10 @@ class UserController extends Controller
 
         }
 
-       
+
         $user->save();
 
-       
+
 
         return back()->withStatus(__('User successfully updated.'));
     }
@@ -806,18 +808,32 @@ class UserController extends Controller
         if(empty($data)){
             return response()->json([
                 'success' => false,
-                'message' => 'There is no data!'  
-               
+                'message' => 'There is no data!'
+
             ]);
         }
 
         return response()->json([
-            'success' => true,   
+            'success' => true,
             'data' => $data
-        
+
         ]);
 
 
+    }
+
+    public function generateConsentPdf(User $user)
+    {
+        $terms = Page::find(6);
+        $terms = json_decode($terms->content, true)[3]['columns'][0]['template']['inputs'][0]['value'];
+
+        $privacy = Page::select('content')->find(4);
+        $privacy = json_decode($privacy->content, true)[3]['columns'][0]['template']['inputs'][0]['value'];
+
+        $pdf = PDF::loadView('users.consent_pdf', compact('user', 'terms', 'privacy'));
+
+
+        return $pdf->download($user->firstname.'_'.$user->lastname.'.pdf');
     }
 
 }

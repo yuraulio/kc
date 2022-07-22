@@ -101,7 +101,7 @@
 
                             <th scope="col">{{ __('Ticket Type') }}</th>
                             <th scope="col">{{ __('Amount Paid') }}</th>
-                            
+
                             <th scope="col">{{ __('Coupon') }}</th>
                             <th class="participant_elearning none">{{ __('Video Seen') }}</th>
                             <th scope="col">{{ __('Payment date') }}</th>
@@ -139,7 +139,7 @@
                     <tbody>
                     <?php ///dd(count($transactions)); ?>
                         @foreach ($transactions as $key => $transaction)
-                        
+
                             <tr>
                                 <td><a href="{{ route('user.edit', $transaction['user_id']) }}">{{$transaction['name']}}</a></td>
                                 <td>{{$transaction['event_title']}}</td>
@@ -181,7 +181,7 @@
 @endsection
 
 @push('css')
-    
+
     {{--<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />--}}
     <link rel="stylesheet" href="{{ asset('argon') }}/vendor/datatables.net-bs4/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="{{ asset('argon') }}/vendor/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css">
@@ -353,7 +353,7 @@ $(document).ready(function() {
 
         value = value.replace("€", "")
         sum = sum + parseInt(value)
-        
+
     })
 
     // var sum = prices.reduce(function(a, b){
@@ -472,17 +472,17 @@ $(document).ready(function() {
     }
 
     function stats_non_elearning(){
-        
-        
+
+
         $(`.ticket-choices`).empty();
-     
+
 
         initCounters()
 
         let sum = 0
         //returns 'filtered' or visible rows
         table.rows({filter: 'applied'}).every( function ( rowIdx, tableLoop, rowLoop ) {
-            
+
             var coupon = this.data()[2];
             var amount = this.data()[3];
             var ticketPrice = this.data()[11];
@@ -506,7 +506,7 @@ $(document).ready(function() {
                     newTickets[coupon]['all']['count'] = 0;
 
                 }
-                if(!newTickets[coupon][amount]){   
+                if(!newTickets[coupon][amount]){
                     newTickets[coupon][amount] = {};
                     newTickets[coupon][amount]['countValue'] = 0;
                     newTickets[coupon][amount]['count'] = 0;
@@ -529,7 +529,7 @@ $(document).ready(function() {
                     newTickets[coupon]['all']['count'] = 0;
 
                 }
-                if(!newTickets[coupon][amount]){   
+                if(!newTickets[coupon][amount]){
                     newTickets[coupon][amount] = {};
                     newTickets[coupon][amount]['countValue'] = 0;
                     newTickets[coupon][amount]['count'] = 0;
@@ -552,7 +552,7 @@ $(document).ready(function() {
                     newTickets[coupon]['all']['count'] = 0;
 
                 }
-                if(!newTickets[coupon][amount]){   
+                if(!newTickets[coupon][amount]){
                     newTickets[coupon][amount] = {};
                     newTickets[coupon][amount]['countValue'] = 0;
                     newTickets[coupon][amount]['count'] = 0;
@@ -575,7 +575,7 @@ $(document).ready(function() {
                     newTickets[coupon]['all']['count'] = 0;
 
                 }
-                if(!newTickets[coupon][amount]){   
+                if(!newTickets[coupon][amount]){
                     newTickets[coupon][amount] = {};
                     newTickets[coupon][amount]['countValue'] = 0;
                     newTickets[coupon][amount]['count'] = 0;
@@ -599,7 +599,7 @@ $(document).ready(function() {
                     newTickets[coupon]['all']['count'] = 0;
 
                 }
-                if(!newTickets[coupon][amount]){   
+                if(!newTickets[coupon][amount]){
                     newTickets[coupon][amount] = {};
                     newTickets[coupon][amount]['countValue'] = 0;
                     newTickets[coupon][amount]['count'] = 0;
@@ -616,36 +616,36 @@ $(document).ready(function() {
         } );
 
 
-        
+
 
         $('#total').text('€'+sum.toLocaleString())
         $('#total-sales').text('€'+totalSales.toLocaleString())
-           
+
         $.each( newTickets, function( key, value ) {
-          
+
           actionValue = key.toLowerCase()
           html = ``;
           $.each( value, function( key1, value1 ) {
-              
+
             if(value1['countValue'] <= 0){
                 return;
             }
 
             html += `<a class="dropdown-item ticket-action" data-type='${key}' data-ticket=${key1} href="javascript:void(0)">${key1}</a>`
           });
-          actionValue = actionValue.replace(/ /g, '-');   
+          actionValue = actionValue.replace(/ /g, '-');
           $(`.${actionValue}-action`).append(html)
-          
+
       });
 
-     
+
 
 
     }
 
 
     function filterColumn ( i ) {
-        
+
         if($('#col'+i+'_filter').val() && i != 8){
             $('#participants_table').DataTable().column( i ).search(
                 '^'+$('#col'+i+'_filter').val()+'$', true,true
@@ -655,7 +655,7 @@ $(document).ready(function() {
                 $('#col'+i+'_filter').val()
             ).draw();
         }
-        
+
 
         $('.participants_info').remove()
         event = removeSpecial($('#col'+i+'_filter').val())
@@ -669,7 +669,7 @@ $(document).ready(function() {
             $('.participant_elearning').addClass('none')
         }
 
-       
+
         //console.log(removeSpecial($('#col'+i+'_filter').val()))
         stats_non_elearning()
 
@@ -682,9 +682,9 @@ $(document).ready(function() {
             })
         }
 
-        
 
-      
+
+
     }
 
     $(document).ready(function() {
@@ -733,7 +733,7 @@ $(document).ready(function() {
                         newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]]['all']['count'] = 0;
 
                     }
-                    if(!newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)]){   
+                    if(!newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)]){
                         newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)] = {};
                         newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)]['countValue'] = 0;
                         newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)]['count'] = 0;
@@ -746,7 +746,7 @@ $(document).ready(function() {
                     newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)]['count']++;
 
                 }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Regular'){
-                    
+
                     regular = regular + parseInt(value)
                     count_regular++
 
@@ -757,7 +757,7 @@ $(document).ready(function() {
                         newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]]['all']['count'] = 0;
 
                     }
-                    if(!newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)]){   
+                    if(!newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)]){
                         newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)] = {};
                         newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)]['countValue'] = 0;
                         newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)]['count'] = 0;
@@ -788,7 +788,7 @@ $(document).ready(function() {
                         newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]]['all']['count'] = 0;
 
                     }
-                    if(!newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)]){   
+                    if(!newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)]){
                         newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)] = {};
                         newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)]['countValue'] = 0;
                         newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)]['count'] = 0;
@@ -813,7 +813,7 @@ $(document).ready(function() {
                         newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]]['all']['count'] = 0;
 
                     }
-                    if(!newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)]){   
+                    if(!newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)]){
                         newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)] = {};
                         newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)]['countValue'] = 0;
                         newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)]['count'] = 0;
@@ -826,7 +826,7 @@ $(document).ready(function() {
                     newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)]['count']++;
 
 
-                }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Early Bird' || 
+                }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Early Bird' ||
                                 $('#participants_table').DataTable().column( 2 ).data()[key] == 'Early birds'){
                     early = early + parseInt(value)
                     count_early++
@@ -838,7 +838,7 @@ $(document).ready(function() {
                         newTickets['early-bird']['all']['count'] = 0;
 
                     }
-                    if(!newTickets['early-bird'][parseInt(value)]){   
+                    if(!newTickets['early-bird'][parseInt(value)]){
                         newTickets['early-bird'][parseInt(value)] = {};
                         newTickets['early-bird'][parseInt(value)]['countValue'] = 0;
                         newTickets['early-bird'][parseInt(value)]['count'] = 0;
@@ -857,15 +857,15 @@ $(document).ready(function() {
         })
         $('#total').text('€'+sum.toLocaleString())
         $('#total-sales').text('€'+totalSales.toLocaleString())
-       
+
         $.each( newTickets, function( key, value ) {
-          
+
             actionValue = key.toLowerCase()
             html = ``;
 
-        
+
             $.each( value, function( key1, value1 ) {
-                
+
                 if(value1['countValue'] <= 0){
                     return;
                 }
@@ -881,7 +881,7 @@ $(document).ready(function() {
             /*console.log(sortKeys.sort())
 
             $.each( sortKeys, function( key1, value1 ) {
-                
+
                 if(value1 <= 0){
                     return;
                 }
@@ -892,9 +892,9 @@ $(document).ready(function() {
 
             });*/
 
-            actionValue = actionValue.replace(/ /g, '-');      
+            actionValue = actionValue.replace(/ /g, '-');
             $(`.${actionValue}-action`).append(html)
-            
+
         });
 
 
@@ -962,7 +962,6 @@ $(document).ready(function() {
             let max = $("#max").val();
             let event = eventsArray[removeSpecial($("#col1_filter").val())];
 
-
             $.ajax({
                 headers: {
                     'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
@@ -972,7 +971,7 @@ $(document).ready(function() {
                 data:{event:event,fromDate:min,toDate:max} ,
                 success: function(data) {
 
-                    window.location.href = '/tmp/exports/TransactionsExport.xlsx'
+                    window.location.href = '/tmp/exports/TransactionExport.xlsx'
 
                 }
             });
@@ -983,7 +982,7 @@ $(document).ready(function() {
         $(document).on("click",".invoice-button",function() {
 
             let transactionsData = table.column(10,{filter: 'applied'}).data().unique().sort();
-            let transactions = []; 
+            let transactions = [];
             $.each(transactionsData, function(key, value){
                 transactions.push(value)
             })
@@ -996,7 +995,7 @@ $(document).ready(function() {
                 type: "POST",
                 data:{transactions:transactions} ,
                 success: function(data) {
-                    window.location.href = data.zip         
+                    window.location.href = data.zip
                 }
             });
 

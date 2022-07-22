@@ -132,7 +132,9 @@ class ExamController extends Controller
             $questions = json_decode($exam->questions,true);
             foreach($syncDatas as $syncData){
                 //dd($questions);
-
+                if($syncData->finish_at != '0000-00-00 00:00:00'){
+                    continue;
+                }
                 $answered = 0;
                 $allAnswers = json_decode($syncData->data,true);
                 $correct = 0;
@@ -307,6 +309,10 @@ class ExamController extends Controller
 
         $questions = json_decode($exam->questions,true);
         foreach($syncDatas as $syncData){
+
+            if($syncData->finish_at != '0000-00-00 00:00:00'){
+                continue;
+            }
 
             $answered = 0;
             $allAnswers = json_decode($syncData->data,true);

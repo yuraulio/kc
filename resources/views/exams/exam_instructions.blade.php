@@ -125,33 +125,26 @@ PASSWORD<br/>
 
         jQuery(document).ready(function(){
 
-            const togglePassword = document.querySelector("#togglePassword");
-            const password = document.querySelector("#examPassword");
-
             if(jQuery('#togglePassword').length){
+                const togglePassword = document.querySelector("#togglePassword");
+                const password = document.querySelector("#examPassword");
 
-            togglePassword.addEventListener("click", function () {
-                console.log(password.getAttribute("type"))
-                // toggle the type attribute
-                const type = password.getAttribute("type") === "password" ? "text" : "password";
-                password.setAttribute("type", type);
+                togglePassword.addEventListener("click", function () {
+                    // toggle the type attribute
+                    const type = password.getAttribute("type") === "password" ? "text" : "password";
+                    password.setAttribute("type", type);
 
-                // toggle the icon
-                //this.classList.toggle("fa fa-eye-slash");
+                    if(password.getAttribute("type") == 'password'){
+                        $('#togglePassword').addClass('fa-eye')
+                        $('#togglePassword').removeClass('fa-eye-slash')
+                    }else{
+                        $('#togglePassword').removeClass('fa-eye')
+                        $('#togglePassword').addClass('fa-eye-slash')
+                    }
 
-                if(password.getAttribute("type") == 'password'){
-                    console.log('show')
-                    $('#togglePassword').addClass('fa-eye')
-                    $('#togglePassword').removeClass('fa-eye-slash')
-                }else{
-                    $('#togglePassword').removeClass('fa-eye')
-                    $('#togglePassword').addClass('fa-eye-slash')
-                    console.log('hide')
-
-                }
-
-            });
+                });
             }
+
 
 
 

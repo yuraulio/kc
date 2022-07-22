@@ -794,11 +794,11 @@ class User extends Authenticatable
         $eventLimitAbsence = $event->absences_limit;
 
         $absencesByDate = [];
-       
+
         foreach ($absences->get()->groupBy('date') as $key => $absence) {
             $userM = 0;
             $eventM = 0;
-            
+
             foreach ($absence as $ab) {
                 $userM += $ab->minutes;
                 $eventM += $ab->total_minutes;
@@ -827,7 +827,7 @@ class User extends Authenticatable
         } elseif ($event->absences_limit - $userAbsencesPercent <= 2) {
             $class = 'warning-absences';
         }
-       
+
         $data['absences_by_date'] = $absencesByDate;
         $data['total_user_minutes'] = $userMinutes;
         $data['total_event_minutes'] = $eventMinutes;
