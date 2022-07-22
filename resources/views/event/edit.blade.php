@@ -920,7 +920,7 @@
                                                         $course_elearning_exam_icon = (isset($info['elearning']['exam']['icon']) && $info['elearning']['exam']['icon']) ? $info['elearning']['exam']['icon'] : null;
 
                                                     ?>
-                                                    <label class="form-control-label" for="input-expiration">{{ __('Exam') }}</label>
+                                                    <label class="form-control-label" for="input-expiration">{{ __('Online Exam') }}</label>
                                                     <div class="input-group">
                                                         <input type="text" name="course[{{'delivery'}}][{{'elearning'}}][{{'exam'}}][{{'text'}}]" id="input-exam" class="form-control" placeholder="{{ __('alphanumeric text') }}" value="{{ old('exam', (isset($info['elearning']['exam']['text']) && $info['elearning']['exam']['text'] != null) ? $info['elearning']['exam']['text'] : '' ) }}"autofocus>
 

@@ -756,7 +756,7 @@ class EventController extends Controller
 
             $visible_loaded_data = isset($requestData['delivery']['elearning']['exam']['visible']) ? $requestData['delivery']['elearning']['exam']['visible'] : null;
             $data['course_elearning_exam_visible'] = json_encode($this->prepareVisibleData($visible_loaded_data));
-            $data['course_elearning_exam_icon'] = $requestData['delivery']['elearning']['exam']['icon'] != null ?  json_encode($requestData['delivery']['elearning']['exam']['icon']) : null;
+            $data['course_elearning_exam_icon'] = isset($requestData['delivery']['elearning']['exam']['icon']) ?  json_encode($requestData['delivery']['elearning']['exam']['icon']) : null;
             $data['course_elearning_exam_text'] = (isset($requestData['delivery']['elearning']['exam']['text']) && $requestData['delivery']['elearning']['exam']['text'] != null) ? $requestData['delivery']['elearning']['exam']['text'] : null;
 
 

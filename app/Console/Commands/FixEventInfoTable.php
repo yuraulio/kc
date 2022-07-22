@@ -64,27 +64,54 @@ class FixEventInfoTable extends Command
             
             $eventHour = ceil($event->getTotalHours() / 60);
 
-            $keys = ['hours','dates','day','language','certificate','students'];
+            if($event->view_tpl == 'elearning_event'){
+                $keys = ['hours','d','language','certificate','online_exam','students'];
+            }else if($delivery == 143){
+                $keys = ['hours','language','d','d','certificate','students'];
+            }else{
+                $keys = ['hours','dates','day','language','certificate','students'];
+            }
+
+            /*if($delivery == 143){
+                $keys = ['hours','d','language','certificate','online_exam','students'];
+            }else{
+                $keys = ['hours','dates','day','language','certificate','students'];
+            }*/
+            
             //$keys = ['hours','day','certificate','dates','times','language','students'];
            
             $delyveryy = [];
             $inclass =  [];
+            $elearning =  [];
+            $examText = '';
             /*if($event->id == 4619){
                 //dd($event->summary1()->get()->toArray());
             }*/
 
             foreach($event->summary1()->get()->toArray() as $key => $summary1){
-                
+                        
                 $t = [];
                 if(!isset($keys[$key])){
                     continue;
                 }
+
+
+
                 /*if($event->id == 4619){
                     echo $key . ' => ' .  $keys[$key] . ' => ' . $summary1['title'] . ' ++ ';
                 }*/
 
                 if($keys[$key] == 'hours'){
                     $hourText = $summary1['title'];
+                    $hourText = explode(" ",$hourText);
+
+                    if(isset($hourText[1])){
+                        unset($hourText[0]);
+                        $hourText = implode(" ", $hourText);
+                    }else{
+                        $hourText = implode(" ", $hourText);
+                    }
+
                     $hours = [
                         'hour' => $eventHour,
                         'icon' => ['path'=> null, 'alt_text' => null],
@@ -95,6 +122,7 @@ class FixEventInfoTable extends Command
                     $requestData[$keys[$key]] = $hours;
 
                 }else if($keys[$key] == 'certificate'){
+
                     $t = [
                         'icon' => ['path'=> null, 'alt_text' => null],
                         'failure_text' => $event->title,
@@ -163,7 +191,21 @@ class FixEventInfoTable extends Command
 
                     }
 
-                }else{
+                }else if($keys[$key] == 'online_exam'){
+                    //dd('gfsd');
+                    
+                    $examText = $summary1['title'];
+
+                    /*$deliveryy['elearning']['exam'] = [
+                            'icon' => ['path'=> null, 'alt_text' => null],
+                            'visible' => $visible,
+                            'text' => $summary1['title']
+                        
+                    ];*/
+                    
+                   
+                }
+                else{
 
                     $t = [
                         'icon' => ['path'=> null, 'alt_text' => null],
@@ -176,18 +218,35 @@ class FixEventInfoTable extends Command
             }
 
             if($delivery == 143){
-                $deliveryy = [
+                
+                /*$deliveryy = [
                     'elearning' => [
                          'expiration' => $event->expiration,
                          'icon' => ['path'=> null, 'alt_text' => null],
                          'text' => 'months access to videos & files',
                          'visible' => $visibleHours
                     ]
+                ];*/
+
+                $deliveryy['elearning'] = [
+                     
+                    'expiration' => $event->expiration,
+                    'icon' => ['path'=> null, 'alt_text' => null],
+                    'text' => 'months access to videos & files',
+                    'visible' => $visibleHours
+                    
                 ];
+
+                $deliveryy['elearning']['exam'] = [
+                    'icon' => ['path'=> null, 'alt_text' => null],
+                    'visible' => $visible,
+                    'text' => $examText
+                ];
+
             }
 
             $requestData['delivery'] = $deliveryy;
-            /*if($event->id == 4619){
+            /*if($event->id == 2304){
                 dd($requestData);
             }*/
             //dd($deliveryy);
@@ -497,6 +556,11 @@ class FixEventInfoTable extends Command
         $data['course_elearning_text'] = (isset($requestData['delivery']['elearning']['text']) && $requestData['delivery']['elearning']['text'] != null) ? $requestData['delivery']['elearning']['text'] : null;
 
 
+        $visible_loaded_data = isset($requestData['delivery']['elearning']['exam']['visible']) ? $requestData['delivery']['elearning']['exam']['visible'] : null;
+        $data['course_elearning_exam_visible'] = json_encode($this->prepareVisibleData($visible_loaded_data));
+        $data['course_elearning_exam_icon'] = isset($requestData['delivery']['elearning']['exam']['icon']) ?  json_encode($requestData['delivery']['elearning']['exam']['icon']) : null;
+        $data['course_elearning_exam_text'] = (isset($requestData['delivery']['elearning']['exam']['text']) && $requestData['delivery']['elearning']['exam']['text'] != null) ? $requestData['delivery']['elearning']['exam']['text'] : null;
+
         return $data;
 
     }
@@ -550,6 +614,11 @@ class FixEventInfoTable extends Command
         $infos->course_elearning_expiration = isset($event_info['course_elearning_expiration']) ? $event_info['course_elearning_expiration'] : null;
         $infos->course_elearning_text = isset($event_info['course_elearning_text']) ? $event_info['course_elearning_text'] : null;
         
+        $infos->course_elearning_exam_visible = isset($event_info['course_elearning_exam_visible']) ? $event_info['course_elearning_exam_visible'] : null;
+        $infos->course_elearning_exam_icon = isset($event_info['course_elearning_exam_icon']) ? $event_info['course_elearning_exam_icon'] : null;
+        $infos->course_elearning_exam_text = isset($event_info['course_elearning_exam_text']) ? $event_info['course_elearning_exam_text'] : null;
+
+
         if($info === null){
             $infos->save();
         }else{

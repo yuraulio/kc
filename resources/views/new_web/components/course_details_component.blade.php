@@ -17,9 +17,7 @@
                 @if(isset($info['hours']['icon']) && $info['hours']['icon']['path'] ) <img class="info-icon" onerror="this.src='/theme/assets/images/icons/Start-Finish.svg'" src="{{cdn($info['hours']['icon']['path'])}}" width="30" alt="{{$info['hours']['icon']['alt_text']}}" /> @else <img class="info-icon" width="30" src="/theme/assets/images/icons/Start-Finish.svg" alt=""> @endif
                 <div class="info-text">
                         <p>
-                            {{  $info['hours']['hour'] }}
-                            </br>
-                            {!!  $info['hours']['text'] !!}
+                            {{  $info['hours']['hour'] }} {!!  $info['hours']['text'] !!}
                         </p>
                     </div>
             </li>
@@ -74,6 +72,21 @@
                 <div class="info-text">
                     <p>
                         {{  $info['language']['text'] }}
+                        </br>
+
+                    </p>
+                </div>
+            </li>
+            @endif
+
+            @if(isset($info['elearning']['exam']['visible']) && $info['elearning']['exam']['visible'] && isset($info['elearning']['exam']['text']) && $info['elearning']['exam']['text'] )
+            <li>
+            
+                <img class="info-icon" src="{{cdn($info['elearning']['exam']['icon']['path'])}}" onerror="this.src='{{cdn('/theme/assets/img/summary_icons/messages-warning-information.svg')}}'" width="30" alt="{{$info['elearning']['exam']['icon']['alt_text']}}"/> 
+                
+                <div class="info-text">
+                    <p>
+                        {{  $info['elearning']['exam']['text'] }}
                         </br>
 
                     </p>
