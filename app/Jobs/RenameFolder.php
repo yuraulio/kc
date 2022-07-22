@@ -45,8 +45,6 @@ class RenameFolder implements ShouldQueue
      */
     public function handle()
     {
-        Log::debug($this->newPath);
-
         DB::beginTransaction();
         try {
             // rename files and folder
@@ -104,7 +102,6 @@ class RenameFolder implements ShouldQueue
                 DB::commit();
             }
         } catch (Exception $e) {
-            throw $e;
             DB::rollback();
             Log::error("Failed to update files or pages when renaming folder (job). " . $e->getMessage());
         }
