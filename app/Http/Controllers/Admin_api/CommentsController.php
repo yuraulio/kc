@@ -136,17 +136,17 @@ class CommentsController extends Controller
                 $this->commentCount($request),
             ],
             [
-                "Popular page",
-                $this->popularPage($request),
-            ],
-            [
                 "Last comment",
                 $this->lastCommentCreated($request),
             ],
-            [
-                "Popular user",
-                $this->popularUser($request),
-            ]
+            // [
+            //     "Popular page",
+            //     $this->popularPage($request),
+            // ],
+            // [
+            //     "Popular user",
+            //     $this->popularUser($request),
+            // ]
 
         ];
     }

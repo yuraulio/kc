@@ -166,18 +166,18 @@ class TemplatesController extends Controller
                 "Templates",
                 $this->templatesCount($request),
             ],
-            [
-                "Popular template",
-                $this->popularTemplate($request),
-            ],
-            [
-                "Newest template",
-                $this->newestTemplate($request),
-            ],
-            [
-                "Oldest template",
-                $this->oldestTemplate($request),
-            ]
+            // [
+            //     "Popular template",
+            //     $this->popularTemplate($request),
+            // ],
+            // [
+            //     "Newest template",
+            //     $this->newestTemplate($request),
+            // ],
+            // [
+            //     "Oldest template",
+            //     $this->oldestTemplate($request),
+            // ]
 
         ];
     }

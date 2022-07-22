@@ -19,7 +19,7 @@
 				   <a title="Corporate Training" href="/corporate-training">Corporate Training</a>
 				</li>
             <li class="nav-item uppercase-item">
-                <a title="Blog" href="/en/blog">Blog</a>
+                <a title="Blog" href="/blog">Blog</a>
             </li>
             @endif
             @if (Auth::check())
