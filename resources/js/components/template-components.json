@@ -309,7 +309,7 @@
             {
                 "type": "checkbox",
                 "key": "youtube_full_width",
-                "label": "Full width (overrides width)",
+                "label": "Fit video in content",
                 "value": true,
                 "size": "col-lg-6"
             },

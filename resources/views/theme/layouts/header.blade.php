@@ -110,7 +110,7 @@
 								</li>
 
                                 <li>
-                                    <a title="Blog" href="/en/blog">Blog</a>
+                                    <a title="Blog" href="/blog">Blog</a>
                                 </li>
 								
                             @endif
