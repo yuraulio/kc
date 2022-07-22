@@ -32,12 +32,12 @@ var LOOP_AGAIN                      = 0;
 
 
 // onclick of next button
-function nextQues(mark) { 
+function nextQues(mark) {
     if (mark === undefined) {
     mark = 0;
     }
     jQuery('.prev').removeClass('hide');
-    var eJson = JSON.parse(window.examVar);  
+    var eJson = JSON.parse(window.examVar);
     list = $('#'+window.actQues+' input ');
     var showx = 0;
     var currQues = window.actQues;
@@ -50,11 +50,11 @@ function nextQues(mark) {
     var allUnansweredPlus = [];
 
 
-    jQuery.each(eJson, function(index, quest) {   
-       
+    jQuery.each(eJson, function(index, quest) {
+
         if(firstNonConfirm==0 && (quest.given_ans=="" || quest.mark_status==1))   {
             firstNonConfirm = quest.id;
-        }  
+        }
         if(showx==1 && LOOP_AGAIN ==0) {
             showSpecificQuestion(quest.id);
             showx = 0;
@@ -65,15 +65,15 @@ function nextQues(mark) {
             var arrayName = [];
             if(list!=0) {
                 list.each(function(index, value){
-                    element_type = jQuery(value).attr('type');  
+                    element_type = jQuery(value).attr('type');
                     switch(element_type)
                     {
                         case 'radio':
-                             if(jQuery(value).prop('checked')) 
-                                given_ans = jQuery(value).val(); 
+                             if(jQuery(value).prop('checked'))
+                                given_ans = jQuery(value).val();
                              break;
                         case 'checkbox':
-                             if(jQuery(value).prop('checked')) 
+                             if(jQuery(value).prop('checked'))
                              arrayName.push(jQuery(value).val());
                              break;
                     }
@@ -81,7 +81,7 @@ function nextQues(mark) {
             }
             if(given_ans=="" && arrayName.length > 0 ) {
                 //given_ans = arrayName.join("|");
-                
+
             }
             if(given_ans!="") {
                 quest.given_ans = given_ans;
@@ -91,13 +91,13 @@ function nextQues(mark) {
                     is_marked = 1;
                 }
                 else {
-                    
+
                     quest.mark_status = 2;
                     is_marked = 2;
                 }
-                
+
             }else{
-              
+
                 answer_status = 1;
                 quest.mark_status = 1;
                 is_marked = 1;
@@ -115,7 +115,7 @@ function nextQues(mark) {
 
     window.examVar = JSON.stringify(eJson);
     updateStats();
-    window.actQues = currQues; 
+    window.actQues = currQues;
     if(currQues==lastQues) {
       //  jQuery('.next').addClass('hide');
 
@@ -123,15 +123,15 @@ function nextQues(mark) {
       //  jQuery('.next').removeClass('hide');
     }
     if(finalQues==lastQues && LOOP_AGAIN==0 && mark!=5) {
-        if(firstNonConfirm==0) {            
-           // alert("You have completed the exam. Please click 'I AM FINISHED WITH MY EXAM' ");               
+        if(firstNonConfirm==0) {
+           // alert("You have completed the exam. Please click 'I AM FINISHED WITH MY EXAM' ");
         }
         else {
             showSpecificQuestion(firstNonConfirm);
             LOOP_AGAIN = 1;
             showx = 0;
-            currQues = firstNonConfirm; 
-            window.actQues = currQues;            
+            currQues = firstNonConfirm;
+            window.actQues = currQues;
         }
     }
     else if(showx==1 && mark!=5) {
@@ -139,14 +139,14 @@ function nextQues(mark) {
         var firstUnanswered = 0;
         showx = 0;
         if(allUnanswered.length==0) {
-            //  alert("You have completed the exam. Please click 'I AM FINISHED WITH MY EXAM' "); 
-              showSpecificQuestion(lastQues);           
+            //  alert("You have completed the exam. Please click 'I AM FINISHED WITH MY EXAM' ");
+              showSpecificQuestion(lastQues);
               currQues = lastQues;
-              window.actQues = currQues; 
+              window.actQues = currQues;
         }
         else {
-             jQuery.each(allUnansweredPlus, function(index, quest) { 
-         //    console.log(currQues); 
+             jQuery.each(allUnansweredPlus, function(index, quest) {
+         //    console.log(currQues);
               if(lastInArray==0) {
                 return;
               }
@@ -154,7 +154,7 @@ function nextQues(mark) {
                 firstUnanswered = quest;
               }
               if(showx==1) {
-                showSpecificQuestion(quest);            
+                showSpecificQuestion(quest);
                 currQues = quest;
                 window.actQues = currQues;
                 lastInArray = 0;
@@ -164,26 +164,26 @@ function nextQues(mark) {
               }
              });
             if(lastInArray==1) {
-                showSpecificQuestion(firstUnanswered);          
+                showSpecificQuestion(firstUnanswered);
                 currQues = firstUnanswered;
                 window.actQues = currQues;
             }
-        } 
+        }
     }
     TOTAL_NOT_ANSWERED  = jQuery(".not-answered").length;
     TOTAL_NOT_VISITED   = jQuery(".not-visited").length;
     TOTAL_MARKED = jQuery(".marked").length;
 }
 
-function prevQues() { 
+function prevQues() {
     jQuery('.next').removeClass('hide');
-    var eJson = JSON.parse( window.examVar );    
+    var eJson = JSON.parse( window.examVar );
     var showx = 0;
     var currQues = window.actQues;
     var lastQues = 0;
     //console.log(eJson)
     eJson.reverse();
-    jQuery.each(eJson, function(index, quest) {        
+    jQuery.each(eJson, function(index, quest) {
         if(showx==1) {
             showSpecificQuestion(quest.id);
             showx = 0;
@@ -209,12 +209,12 @@ function showSpecificQuestion(qid, changeactive) {
     changeactive = 0;
     }
     var eJson = JSON.parse( window.examVar );
-    jQuery.each(eJson, function(index, quest) {  
+    jQuery.each(eJson, function(index, quest) {
         lastQues = quest.id;
     });
     if(changeactive == 1)
          window.actQues = qid;
-    
+
     if(qid==lastQues) {
      //   jQuery('.next').addClass('hide');
 
@@ -222,8 +222,8 @@ function showSpecificQuestion(qid, changeactive) {
      //   jQuery('.next').removeClass('hide');
     }
     //console.log(eJson)
-    eJson.reverse();    
-    jQuery.each(eJson, function(index, quest) {  
+    eJson.reverse();
+    jQuery.each(eJson, function(index, quest) {
         lastQues = quest.id;
     });
     if(qid==lastQues) {
@@ -242,26 +242,26 @@ function showSpecificQuestion(qid, changeactive) {
 }
 
 function clearAnswer() {
-    var eJson = JSON.parse( window.examVar );  
+    var eJson = JSON.parse( window.examVar );
     list = $('#'+window.actQues + ' input ');
     answer_status = 0;
     is_marked = 0;
-    jQuery.each(eJson, function(index, quest) { 
+    jQuery.each(eJson, function(index, quest) {
         if(quest.id==window.actQues) {
             var given_ans = "";
             var arrayName = [];
             if(list!=0) {
                 list.each(function(index, value){
-                    element_type = jQuery(value).attr('type');    
-                       
+                    element_type = jQuery(value).attr('type');
+
                     switch(element_type)
                     {
                         case 'radio':
-                             jQuery(value).prop('checked', false); 
+                             jQuery(value).prop('checked', false);
                              break;
                         case 'checkbox':
-                             jQuery(value).prop('checked', false); 
-                             jQuery(value).attr('checked', false); 
+                             jQuery(value).prop('checked', false);
+                             jQuery(value).attr('checked', false);
                              break;
                     }
                 });
@@ -276,7 +276,7 @@ function clearAnswer() {
 
     window.examVar = JSON.stringify(eJson);
 
-    updateStats(); 
+    updateStats();
 }
 
 function finishExam() {
@@ -289,16 +289,16 @@ function finishExam() {
     var r = confirm("Are you sure you want to finish the exam?");
     if (r == true) {
 
-        
 
-        nextQues(5); 
+
+        nextQues(5);
         if(TOTAL_NOT_ANSWERED!=0 || TOTAL_NOT_VISITED != 0 || TOTAL_MARKED !=0) {
             prevQues();
             alert("You need to answer all questions to finish the exam!");
             return;
         }
 
-        document.getElementById("ExamFinish").disabled = true; 
+        document.getElementById("ExamFinish").disabled = true;
         window.exam_finish = 1;
         var retrievedObject = window.examVar;
         var startTime = localStorage.getItem("examStart<?php echo $exam->id;?>-{{$user_id}}");
@@ -313,7 +313,7 @@ function finishExam() {
         data: { examJson: retrievedObject, start_time: startTime, student_id: {{$user_id}}, exam_id: {{$exam->id}} },
         success: function() {
           //  alert("Exam Completed Successfully");
-            <?php if($exam->indicate_crt_incrt_answers || $exam->display_crt_answers) { 
+            <?php if($exam->indicate_crt_incrt_answers || $exam->display_crt_answers) {
             ?>
                 window.location = "{{ route('exam-results', [$exam->id,'s'=>1]) }}";
             <?php
@@ -326,16 +326,37 @@ function finishExam() {
             }
             ?>
         }
-        });   
+        });
     } else {
     }
 }
- 
+
+function outOfTime() {
+    jQuery.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+        }
+    });
+    var retrievedObject = window.examVar;
+    var startTime = localStorage.getItem("examStart<?php echo $exam->id;?>-{{$user_id}}");
+
+    jQuery.ajax({
+    method: "POST",
+    url: "{{ route('save-data') }}",
+    data: { examJson: retrievedObject, start_time: startTime, student_id: {{$user_id}}, exam_id: {{$exam->id}} },
+    success: function() {
+       // alert("Time Over. Exam Completed Successfully");
+
+       window.location = "{{ url('exam-results/' . $exam->id) }}?s=1&t=1";
+    }
+    });
+}
+
 function forceFinish() {
 
     jQuery("#endExamText").removeClass("hidden");
     jQuery(".container-fluid").addClass("hidden");
-    nextQues(5); 
+    nextQues(5);
     window.exam_finish = 1;
     var retrievedObject = window.examVar;
     var startTime = localStorage.getItem("examStart<?php echo $exam->id;?>-{{$user_id}}");
@@ -350,11 +371,11 @@ function forceFinish() {
     data: { examJson: retrievedObject, start_time: startTime, student_id: {{$user_id}}, exam_id: {{$exam->id}} },
     success: function() {
        // alert("Time Over. Exam Completed Successfully");
-            <?php if($exam->indicate_crt_incrt_answers || $exam->display_crt_answers) { 
+            <?php if($exam->indicate_crt_incrt_answers || $exam->display_crt_answers) {
             ?>
             setTimeout(function(){  window.location = "{{ route('exam-results', [$exam->id,'s'=>1]) }}"; }, 50000);
 
-               
+
             <?php
             }
             else
@@ -365,7 +386,7 @@ function forceFinish() {
             }
             ?>
     }
-    });   
+    });
 }
 
 function updateStats() {
@@ -373,7 +394,7 @@ function updateStats() {
     //Assign the appropriate clase based on the answer type
     class_name = NOT_ANSWERED;
     if(answer_status) {
-        
+
         if(is_marked == 1){
             class_name = ANSWER_MARKED;
         }else if (is_marked == 2){
@@ -411,8 +432,8 @@ function updateStats() {
 function intilizetimer(hrs, mins, sec) {
    HOURS       = hrs;
    MINUTES     = mins;
-   SECONDS     = sec; 
-   
+   SECONDS     = sec;
+
    $("#hours").text(HOURS);
    if(MINUTES<10)
     $("#mins").text("0"+MINUTES);
@@ -423,10 +444,10 @@ function intilizetimer(hrs, mins, sec) {
    else
     $("#seconds").text(SECONDS);
    startInterval();
-   setTimeout(function(){       
-      jQuery("#timerdiv").addClass('text-success'); 
+   setTimeout(function(){
+      jQuery("#timerdiv").addClass('text-success');
    }, 1000);
-} 
+}
 
 function startInterval() {
    timer= setInterval("tictac()", 1000);
@@ -434,15 +455,15 @@ function startInterval() {
 
 function stopInterval() {
    clearInterval(timer);
-} 
+}
 
 function tictac(){
-    
+
     TOTAL_NOT_VISITED   = jQuery(".not-visited").length;
 
 
     if(TOTAL_NOT_ANSWERED!=0 || TOTAL_NOT_VISITED != 0  || TOTAL_MARKED != 0){
-        document.getElementById("ExamFinish").style.display = 'none'; 
+        document.getElementById("ExamFinish").style.display = 'none';
     }else{
         document.getElementById("ExamFinish").style.display = 'inline-block';
     }
@@ -459,11 +480,11 @@ function tictac(){
         MINUTES--;
 
         if(MINUTES<1)
-        {     
+        {
             if(HOURS==0) {
             $("#timerdiv").removeClass('text-success');
             $("#timerdiv").addClass("text-danger");
-            }     
+            }
         }
         if(MINUTES<0)
         {
@@ -476,7 +497,8 @@ function tictac(){
                 return;
             }
             stopInterval();
-            forceFinish();
+            //forceFinish();
+            outOfTime();
             return;
         }
         if(MINUTES<10)
@@ -498,9 +520,9 @@ function tictac(){
 function initializeView() {
 
 
-    document.getElementById("ExamFinish").style.display = 'none'; 
+    document.getElementById("ExamFinish").style.display = 'none';
 
-    var eJson = JSON.parse( window.examVar );      
+    var eJson = JSON.parse( window.examVar );
     window.startTime = localStorage.getItem("examStart<?php echo $exam->id;?>-{{$user_id}}");
     currentTime = '<?php echo date( "Y-m-d")."T".date( "H:i:s") ?>';
     var sTime = new Date(window.startTime);
@@ -511,7 +533,7 @@ function initializeView() {
     if(tSeconds<=0) {
         setTimeout(function(){
             forceFinish();
-        }, 2000); 
+        }, 2000);
     }
     else {
         minutes = parseInt(tSeconds/60);
@@ -521,7 +543,7 @@ function initializeView() {
         intilizetimer(hours, minutes, seconds);
     }
     var firstQues = -1;
-    jQuery.each(eJson, function(index, quest) { 
+    jQuery.each(eJson, function(index, quest) {
         if(firstQues==-1)
             firstQues = quest.id;
         window.actQues = quest.id;
@@ -530,11 +552,11 @@ function initializeView() {
         list = $('#'+quest.id + ' input ');
         if(list!=0) {
             list.each(function(index, value){
-                element_type = jQuery(value).attr('type');   
+                element_type = jQuery(value).attr('type');
                 switch(element_type)
                 {
                     case 'radio':
-                            jQuery(value).prop('checked', false); 
+                            jQuery(value).prop('checked', false);
                             if(quest.given_ans!="") {
                                 jQuery("input[name="+quest.id+"]" ).each(function( index ) {
                                   var currentValue = jQuery(this).attr('value');
@@ -545,16 +567,16 @@ function initializeView() {
                                 //init edw
                                 window.answer_status = 1;
                                 window.is_marked = quest.mark_status;
-                               /* if(quest.mark_status==2){ 
+                               /* if(quest.mark_status==2){
                                     window.is_marked = 2;
 
                                 }else if(quest.mark_status==1){
-                                    
+
                                     window.is_marked = 1;
                                 }*/
 
                             }else{
-                                if(quest.mark_status==2){ 
+                                if(quest.mark_status==2){
                                     window.answer_status = 1;
                                     window.is_marked = 2;
 
@@ -565,8 +587,8 @@ function initializeView() {
                             }
                             break;
                     case 'checkbox':
-                            jQuery(value).prop('checked', false); 
-                            jQuery(value).attr('checked', false); 
+                            jQuery(value).prop('checked', false);
+                            jQuery(value).attr('checked', false);
                             if(quest.given_ans!="") {
                                 var res = quest.given_ans.split("|");
                                 jQuery.each( res, function( i, val ) {
@@ -585,12 +607,12 @@ function initializeView() {
 
                                 }else if(quest.mark_status==1){
 
-                                    
+
                                     window.is_marked = 1;
                                 }*/
 
                             }else{
-                                if(quest.mark_status==2){ 
+                                if(quest.mark_status==2){
                                     window.answer_status = 1;
                                     window.is_marked = 2;
 
@@ -620,35 +642,35 @@ if (typeof(Storage) !== "undefined") {
         localStorage.setItem("examStorage<?php echo $exam->id;?>-{{$user_id}}", examJson);
         localStorage.setItem("examStart<?php echo $exam->id;?>-{{$user_id}}", startTime);
         window.examVar = examJson;
-        setTimeout(function(){ jQuery("#overlay-loading").hide(); }, 5000);      
+        setTimeout(function(){ jQuery("#overlay-loading").hide(); }, 5000);
         <?php if($redata!=0) { ?>
             localStorage.setItem("examStart<?php echo $exam->id;?>-{{$user_id}}", '{{$redata}}');
             window.examVar = localStorage.getItem("examStorage<?php echo $exam->id;?>-{{$user_id}}");
             jQuery("#overlay-loading").show();
             jQuery(document).ready(function(){
-                setTimeout(function(){ initializeView(); }, 3000); 
+                setTimeout(function(){ initializeView(); }, 3000);
             });
-        <?php } 
+        <?php }
         else {
             ?>
             jQuery(document).ready(function(){
-                setTimeout(function(){ intilizetimer({{$hours}},{{$minutes}},{{$seconds}}); }, 1500); 
+                setTimeout(function(){ intilizetimer({{$hours}},{{$minutes}},{{$seconds}}); }, 1500);
             });
         <?php
         }
-        ?>      
+        ?>
     }
     else {
         window.examVar = localStorage.getItem("examStorage<?php echo $exam->id;?>-{{$user_id}}");
         // show popup modal
         jQuery("#overlay-loading").show();
-        setTimeout(function(){ jQuery("#overlay-loading").hide(); }, 5000); 
-        jQuery(document).ready(function(){ 
-            setTimeout(function(){ initializeView(); }, 3000);    
+        setTimeout(function(){ jQuery("#overlay-loading").hide(); }, 5000);
+        jQuery(document).ready(function(){
+            setTimeout(function(){ initializeView(); }, 3000);
         });
-    }     
+    }
 } else {
-    setTimeout(function(){ jQuery("#overlay-loading").hide(); }, 500);     
+    setTimeout(function(){ jQuery("#overlay-loading").hide(); }, 500);
     alert("Your browser does not support latest Session Storage. Please upgrade your browser to give the exam.")
     window.examVar = examJson;
     window.close('fs');
@@ -671,7 +693,7 @@ window.actQues = 0;
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-               
+
                 <div class="card-body" style="padding:0">
                     @if (session('status'))
                         <div class="alert alert-success" role="alert">
@@ -680,7 +702,7 @@ window.actQues = 0;
                     @endif
                     <form method="post" action="">
                     <input type="hidden" name="time_spent" id="time_spent" value="0">
-                                
+
                                  @foreach($ex_contents as $exam_content_id => $ex_content)
                                  <?php $last_id = $exam_content_id; ?>
                                     <div class="question_div {{$exam->id}}" name="question[{{ $exam_content_id }}]" id="{{ $exam_content_id}}" style="display:none;" value="0">
@@ -692,7 +714,7 @@ window.actQues = 0;
                                             <?php  echo $ex_content['question_description']; ?>
                                         </div>
                                         </div>
-                                   
+
                                         <div class="row">
                                         <div class="col-md-10 offset-1" style="padding-top: 2%;">
                                             <?php
@@ -700,31 +722,31 @@ window.actQues = 0;
                                                     echo '
                                                         <div class="col-md-12">
                                                             <div class="form-check form-check-inline">
-                                                               
+
                                                                 <label class="form-check-label checkradio" >
                                                                 <input class="form-check-input " type="radio" name="'.$exam_content_id.'" value="True">  <span class="checkmark"></span>
-                                                                True  
+                                                                True
                                                                 </label>
                                                             </div>
                                                             <div class="form-check form-check-inline">
-                                                               
+
                                                                 <label class="form-check-label checkradio" >
                                                                 <input class="form-check-input " type="radio" name="'.$exam_content_id.'"  value="False">  <span class="checkmark"></span>
-                                                                False  
+                                                                False
                                                                 </label>
                                                             </div>
                                                         </div>
                                                         ';
-                
-                                                } elseif($ex_content['question-type'] == 'radio buttons') { //For Multiple Choice Type                                    
-                                                    
+
+                                                } elseif($ex_content['question-type'] == 'radio buttons') { //For Multiple Choice Type
+
                                                     $unser_data = $ex_content['answers_keys'];
-                                                    
+
                                                     $opt1 = $unser_data[0];
                                                     $opt2 = $unser_data[1];
                                                     $opt3 = $unser_data[2];
                                                     $opt4 = $unser_data[3];
-                                         
+
                                                     echo '<div class="col-md-12">
                                                             <div class="form-check form-check-inline">
                                                             <label class="form-check-label checkradio" ><input class="form-check-input" type="radio" name="'.$exam_content_id.'"  value="'.$opt1.'"><span class="checkmark"></span>
@@ -752,16 +774,16 @@ window.actQues = 0;
                                                             </div>
                                                         </div>
                                                         ';
-                                    
+
                                                 } elseif($ex_content['question-type'] == 3) { //For Several Answer Type
-                                                   
+
                                                     $unser_data = $ex_content['answers_keys'];
-                                                    
+
                                                     $opt1 = $unser_data[0];
                                                     $opt2 = $unser_data[1];
                                                     $opt3 = $unser_data[2];
                                                     $opt4 = $unser_data[3];
-                                                   
+
                                                     // array_push($options, $opt1, $opt2, $opt3, $opt4);
                                                     echo '<div class="col-md-12">
                                                             <div class="form-check form-check-inline">
@@ -774,7 +796,7 @@ window.actQues = 0;
                                                             <label class="form-check-label checklabel" ><input class="form-check-input" type="checkbox" name="'.$exam_content_id.'" value="'.$opt2.'"><span class="checkmark"></span>
                                                             <div class="answeralign">'
                                                                     . $opt2 .
-                                                                '</div></label> 
+                                                                '</div></label>
                                                             </div><br/>
                                                             <div class="form-check form-check-inline">
                                                             <label class="form-check-label checklabel" ><input class="form-check-input" type="checkbox" name="'.$exam_content_id.'"  value="'.$opt3.'"><span class="checkmark"></span>
@@ -790,14 +812,14 @@ window.actQues = 0;
                                                             </div>
                                                         </div>
                                                         ';
-                                                } 
+                                                }
                                             ?>
                                         </div>
                                         </div>
                                     </div>
                                 @endforeach
                                 <br/>
-                        
+
                     </form>
                 </div>
                 <div class="card-footer text-center">
@@ -807,7 +829,7 @@ window.actQues = 0;
                         <button class="btn btn-lg btn-success button prev" type="button"  onclick="prevQues();" style="width: 186px;float:left">
                             <i class="fa fa-arrow-circle-o-left"> </i> PREVIOUS
                         </button>
-                       
+
                         <button class="btn btn-lg btn-success button next" type="button" onclick="nextQues();" style="width: 186px;float:right">
                             NEXT <i class="fa fa-arrow-circle-o-right"> </i>
                         </button>
@@ -819,7 +841,7 @@ window.actQues = 0;
                              <button class="btn btn-lg btn-dark button next" style="background: orange;border-color: orange;width: 186px;float:right" id="markbtn" type="button"  onclick="nextQues(1);" >
                              ANSWER LATER
                         </button>
-                        
+
                         </div>
                         <!--<button class="btn btn-lg btn-danger button   finish" type="submit" onclick="finishExam();">
                             Ολοκλήρωση
@@ -829,21 +851,21 @@ window.actQues = 0;
             </div>
         </div>
         <div class="col-md-4">
-            <div class="card text-center" style="margin: 0px 0px 25px 0px;">                
+            <div class="card text-center" style="margin: 0px 0px 25px 0px;">
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-12">
-                          
+
                             <div id="timerdiv" class="countdown-styled ">
-                                <span id="hours">{{$hours}}</span> : 
-                                <span id="mins"><?php if($minutes<10){ echo '0'; }?>{{$minutes}}</span> : 
+                                <span id="hours">{{$hours}}</span> :
+                                <span id="mins"><?php if($minutes<10){ echo '0'; }?>{{$minutes}}</span> :
                                 <span id="seconds">00</span>
                             </div>
-                           
+
                         </div>
                     </div>
                 </div>
-           
+
             </div>
             @if(Request::segment(1) == 'exam-start')
 
@@ -853,22 +875,22 @@ window.actQues = 0;
 
 </button>
 </div>
-@endif  
+@endif
 
             <div class="card text-center" style="margin: 0px 0px 25px 0px;">
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-12">
-                            <ul class="question-palette" id="pallete_list"> 
-                                <?php 
+                            <ul class="question-palette" id="pallete_list">
+                                <?php
                                 $i = 1;
-                                foreach($ex_contents as $exam_content_id => $ex_content) { 
-                                    if($i==1) 
+                                foreach($ex_contents as $exam_content_id => $ex_content) {
+                                    if($i==1)
                                         $activeQuestion = $exam_content_id;
                                     ?>
                                     <li class="palette pallete-elements not-visited {{ $exam_content_id }}" onclick="showSpecificQuestion({{ $exam_content_id }}, 1);">
                                         <span>{{ $i++ }}</span>
-                                    </li>                                
+                                    </li>
                                 <?php } ?>
                             </ul>
                         </div>
@@ -877,7 +899,7 @@ window.actQues = 0;
             </div>
 <!--
             <div class="card" style="margin: 0px 0px 25px 0px;">
-                <div class="card-header text-center">                        
+                <div class="card-header text-center">
                     <h5>Επισκόπηση</h5>
                 </div>
                 <div class="card-body">
@@ -899,26 +921,26 @@ window.actQues = 0;
 
     jQuery( document ).ready(function() {
         window.actQues = <?php echo $activeQuestion; ?>;
-        var eJson = JSON.parse( window.examVar );    
+        var eJson = JSON.parse( window.examVar );
         var showx = 0;
         var currQues = window.actQues;
         var firstQues = 0;
         var lastQues = 0;
         var isOnline = 1;
-        jQuery.each(eJson, function(index, quest) {        
+        jQuery.each(eJson, function(index, quest) {
             if(firstQues==0) {
                 firstQues = quest.id;
-            }        
+            }
             lastQues = quest.id;
         });
         if(currQues==firstQues) {
             jQuery('.prev').addClass('hide');
-        } 
+        }
         if(currQues==lastQues) {
          //   jQuery('.next').addClass('hide');
-        } 
-        showSpecificQuestion(<?php echo $activeQuestion; ?>);    
-        setInterval(function(){ 
+        }
+        showSpecificQuestion(<?php echo $activeQuestion; ?>);
+        setInterval(function(){
 
             var retrievedObject = localStorage.getItem('examStorage<?php echo $exam->id;?>-{{$user_id}}');
             var startTime = localStorage.getItem("examStart<?php echo $exam->id;?>-{{$user_id}}");
@@ -934,30 +956,30 @@ window.actQues = 0;
             else if(isOnline==1) {
                 isOnline = 0;
                 alert('You can continue the exam and wait until internet connection is back');
-            } 
+            }
 
             if(window.actQues=={{$last_id}}) {
-                    var eJson = JSON.parse( window.examVar );  
+                    var eJson = JSON.parse( window.examVar );
                     list = $('#'+window.actQues + ' input ');
                     var currQues = window.actQues;
                     var lastQues = 0;
                 // answer_status = 0;
                   //  is_marked = 0;
-                    jQuery.each(eJson, function(index, quest) { 
+                    jQuery.each(eJson, function(index, quest) {
                         if(quest.id==window.actQues) {
                             var given_ans = "";
                             var arrayName = [];
                             if(list!=0) {
                                 list.each(function(index, value){
-                                    element_type = jQuery(value).attr('type');         
+                                    element_type = jQuery(value).attr('type');
                                     switch(element_type)
                                     {
                                         case 'radio':
-                                             if(jQuery(value).prop('checked')) 
-                                                given_ans = jQuery(value).val(); 
+                                             if(jQuery(value).prop('checked'))
+                                                given_ans = jQuery(value).val();
                                              break;
                                         case 'checkbox':
-                                             if(jQuery(value).prop('checked')) 
+                                             if(jQuery(value).prop('checked'))
                                              arrayName.push(jQuery(value).val());
                                              break;
                                     }
@@ -965,14 +987,14 @@ window.actQues = 0;
                             }
                             if(given_ans=="" && arrayName.length > 0 ) {
                                // given_ans = arrayName.join("|");
-                                
+
                             }
                             if(given_ans!="") {
                                 quest.given_ans = given_ans;
                                 quest.mark_status = 2;
                                 answer_status = 1;
                             }
-                            
+
                         }
                         lastQues = quest.id;
                     });
@@ -980,7 +1002,7 @@ window.actQues = 0;
 
                     updateStats();
             }
-           
+
             if(window.exam_finish==0) {
                 jQuery.ajax({
                 method: "POST",
@@ -988,7 +1010,7 @@ window.actQues = 0;
                 data: { examJson: retrievedObject, start_time: startTime, student_id: {{$user_id}}, exam_id: {{$exam->id}} },
                 success: function() {
                 }
-                });          
+                });
             }
         }, 1000 * 60);
     });
@@ -998,21 +1020,21 @@ jQuery(document).ready(function(){
         mark = 0;
         var eJson = JSON.parse(window.examVar);
         list = $('#'+window.actQues+' input ');
-        jQuery.each(eJson, function(index, quest) {   
+        jQuery.each(eJson, function(index, quest) {
             if(quest.id==window.actQues) {
                 var given_ans = "";
                 var arrayName = [];
                 if(list!=0) {
                     list.each(function(index, value){
-                        element_type = jQuery(value).attr('type');         
+                        element_type = jQuery(value).attr('type');
                         switch(element_type)
                         {
                             case 'radio':
-                                 if(jQuery(value).prop('checked')) 
-                                    given_ans = jQuery(value).val(); 
+                                 if(jQuery(value).prop('checked'))
+                                    given_ans = jQuery(value).val();
                                  break;
                             case 'checkbox':
-                                 if(jQuery(value).prop('checked')) 
+                                 if(jQuery(value).prop('checked'))
                                  arrayName.push(jQuery(value).val());
                                  break;
                         }
@@ -1030,7 +1052,7 @@ jQuery(document).ready(function(){
                     }
                     else {
                         quest.mark_status = 2;
-                        is_marked = 2; 
+                        is_marked = 2;
                     }
                 }else{
 
@@ -1043,9 +1065,10 @@ jQuery(document).ready(function(){
 
         window.examVar = JSON.stringify(eJson);
 
-        updateStats();  
+        updateStats();
     });
 });
 
 </script>
 @endsection
+

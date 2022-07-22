@@ -100,7 +100,6 @@ class ExamController extends Controller
         $edit = true;
         $event_edit = $exam->event->first() ? $exam->event->first()->id : -1;
 
-
         $eventsData = [];
 
         foreach($events as $event){

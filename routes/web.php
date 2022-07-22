@@ -53,11 +53,16 @@ Route::group(['middleware' => 'auth.aboveauthor', 'prefix' => 'admin'], function
     Route::resource('delivery', 'DeliveryController', ['except' => ['show']]);
     Route::resource('menu', 'MenuController', ['except' => ['show']]);
 
+    // Download Consent PDF
+    Route::get('/user/{user}/generateConsent', 'UserController@generateConsentPdf')->name('user.generate_consent_pdf');
 
     // Total hours
     Route::get('/events/totalHours/{id}', 'EventController@calculateTotalHours')->name('event.total_hours');
 
     Route::post('/summary/update/{summary}', 'SummaryController@update')->name('summary.update');
+
+    //Subscriptions
+    Route::post('subscription/export-excel', 'SubscriptionController@exportExcel')->name('subscription.export-excel');
 
     //Participants
     Route::get('transaction/participants', 'TransactionController@participants_inside_revenue')->name('transaction.participants');

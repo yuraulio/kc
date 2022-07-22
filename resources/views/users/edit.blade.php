@@ -92,7 +92,7 @@
             <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-8-tab" data-toggle="tab" href="#consent" role="tab" aria-controls="tabs-icons-text-8" aria-selected="false"><i class="fas fa-images mr-2"></i>Consent</a>
         </li>
 
-        
+
 
     </ul>
 </div>
@@ -468,9 +468,9 @@
                                     @if($user_event->is_inclass_course())
                                     <td>
                                         <button class="absences btn btn-info btn-sm" style="margin-top:10px;" type="button"
-                                                data-user_id="{{$user_event->pivot->user_id}}" data-event_id="{{$user_event->id}}" 
+                                                data-user_id="{{$user_event->pivot->user_id}}" data-event_id="{{$user_event->id}}"
                                                 data-toggle="modal" data-target="#absences-info">Absences</button>
-                                        
+
                                     </td>
                                     @endif
 
@@ -1012,18 +1012,18 @@
             </div>
 
             <div class="tab-pane fade" id="notes" role="tabpanel" aria-labelledby="notes-tab">
-                
+
                 <div class="form-group">
                     <label for="exampleFormControlTextarea1">Notes</label>
                     <textarea name="notes" class="form-control" id="notes" rows="10">{{ $user->notes }} </textarea>
 
                     <button id="save-notes" type="button" class="btn btn-success mt-4">{{ __('Save') }}</button>
                 </div>
-               
+
             </div>
 
             <div class="tab-pane fade" id="consent" role="tabpanel" aria-labelledby="consent-tab">
-                
+
                 <div class="pl-lg-4">
 
                     <div class="form-row">
@@ -1031,16 +1031,36 @@
                         @foreach((array) json_decode($user->consent,true) as $key => $consent)
 
                         <div class="form-group{{ $errors->has('billaddress') ? ' has-danger' : '' }} col-md-4">
-                            <label class="form-control-label" >{{ $key }}</label>
-                            <input type="text" class="form-control"  value="{{$consent}}" readonly>
+
+                                @if($key == 'ip')
+                                    <label class="form-control-label" >
+                                        {{ strtoupper($key) }}
+                                    </label>
+                                    <input type="text" class="form-control"  value="{{$consent}}" readonly>
+                                @elseif($key == 'afm')
+                                <label class="form-control-label" >
+                                        {{ 'VAT Number' }}
+                                    </label>
+                                <input type="text" class="form-control"  value="{{$consent}}" readonly>
+                                @else
+                                    @if($key != 'billafm')
+                                    <label class="form-control-label" >
+                                        {{ ucfirst($key) }}
+                                    </label>
+                                    <input type="text" class="form-control"  value="{{$consent}}" readonly>
+                                    @endif
+                                @endif
+
+
 
                         </div>
                         @endforeach
 
-                       
+
                     </div>
+                    <button id="download-consent" class="btn btn-primary" type="button">Download PDF</button>
                 </div>
-               
+
             </div>
 
 
@@ -1430,17 +1450,17 @@ $(document).on('click', '.ticket-card', function () {
             url: '/admin/user/change-paid-status',
             data: {'user_id': user_id ,'event_id': event_id , 'paid': paid},
             success: function (data) {
-               
+
             }
         });
 
 
-        
+
     })
-    
+
     $(document).on('click','#save-notes',function(){
 
-        
+
         let user_id = "{{ $user['id'] }}"
         let notes =  $("textarea#notes").val();
         $.ajax({
@@ -1451,14 +1471,21 @@ $(document).on('click', '.ticket-card', function () {
             url: '/admin/user/save-notes',
             data: {'user_id': user_id , 'notes': notes},
             success: function (data) {
-            
+
             }
         });
 
 
 
     })
-    
+
+
+</script>
+
+<script>
+$(document).on('click', '#download-consent', function () {
+    window.location.href = '/admin/user/{{$user->id}}/generateConsent';
+})
 
 </script>
 
