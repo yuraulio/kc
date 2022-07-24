@@ -187,7 +187,6 @@
          </div>
       </div>
       @if($edit)
-      <?php $counter = 1;?>
       <div class="tab-pane fade" id="questions" role="tabpanel" aria-labelledby="tabs-icons-text-2-tab">
          <div class="accordion accord_topic" id="accordionExample">
             <div class="card">
@@ -200,6 +199,7 @@
                         <table class="table align-items-center table-flush"  id="datatable-basic6">
                            <thead class="thead-light">
                               <tr>
+                                 <th scope="col">{{ __('No') }}</th>
                                  <th scope="col">{{ __('Title') }}</th>
                                  <th scope="col">{{ __('Operations') }}</th>
                               </tr>
@@ -208,8 +208,9 @@
                            <tbody id="question-body" class="question-order">
                               @foreach((array)json_decode($exam->questions,true) as $key => $question)
                               <tr id="question-{{$key}}" data-id="{{$key}}" class="question-list">
+                                 <td class="sortable-number"></td>
                                  <td>
-                                 <p style="display:inline-block;">{!! $counter !!})</p> <span style="display:inline-block;">{!! $question['question'] !!}</span>
+                                 <span>{!! $question['question'] !!}</span>
                                  </td>
                                  <td class="text-right">
                                     <div class="dropdown">
@@ -223,7 +224,6 @@
                                     </div>
                                  </td>
                               </tr>
-                              <?php $counter++; ?>
                               @endforeach
                            </tbody>
                         </table>
@@ -1018,11 +1018,15 @@
 
       function orderQuestions(evt){
 
+
          let questions = {}
          $( ".question-list" ).each(function( index ) {
 
              questions[index] = $(this).data('id')
              $(this).attr('data-id',index)
+
+            var newVal = $(this).index() + 1;
+            $(this).children('.sortable-number').html(newVal);
 
          });
 
@@ -1094,10 +1098,18 @@
        });
 
        questionOrder();
-       $('#datatable-basic6').DataTable( {
+       var t = $('#datatable-basic6').DataTable( {
            "ordering": false,
            "paging": false
        });
+
+       t.on('order.dt search.dt', function () {
+        let i = 1;
+ 
+        t.cells(null, 0, { search: 'applied', order: 'applied' }).every(function (cell) {
+            this.data(i++);
+        });
+    }).draw();
 
 
    });
