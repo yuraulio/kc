@@ -192,6 +192,14 @@ class ExamAttemptController extends Controller
 
         if(isset($request->examJson) && isset($request->exam_id) && isset($request->student_id) && isset($request->start_time)){
 
+            //Pavlos
+            $saveForLaterWithOutAnswer = 0;
+            $saveForLaterWithAnswer = 0;
+            //end
+
+            //Demo var
+            $count = 0;
+            // demo end
 
             $exam_id = $request->exam_id;
             $st_id = $request->student_id;
@@ -250,16 +258,16 @@ class ExamAttemptController extends Controller
 
                     $opns_arr = array();
 
-                    if($given_ans!='') {
-
                     $getDBContents = Exam::find($exam_id)->questions;
                     $getDB = json_decode($getDBContents,true);
 
-                    //foreach($getDBContents as $getDB) {
+                    $totalCredits +=  $getDB[$q_id]['answer-credit'];
+
+                    if($given_ans!='') {
+                        //foreach($getDBContents as $getDB) {
 
                         $dbAns = $getDB[$q_id]['correct_answer'];
                         //dd($getDB[$q_id]['correct_answer']);
-                        $totalCredits +=  $getDB[$q_id]['answer-credit'];
 
                         $answers[] = ['question' => $getDB[$q_id]['question'],'correct_answer' => $getDB[$q_id]['correct_answer'],'given_answer' => $given_ans];
 
@@ -337,7 +345,6 @@ class ExamAttemptController extends Controller
 
                 //$totalQues = count(Examcontent::where('exam_id',$ex_id)->get());
                 $totalQues =$totalCredits; //Exam::where('exam_id',$ex_id)->sum('answer_credit');
-
                 $examResultData = ExamResult::where('exam_id',$ex_id)->where('user_id', $st_id)->first();
 
                 if($examResultData){
