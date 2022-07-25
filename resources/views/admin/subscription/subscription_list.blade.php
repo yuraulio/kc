@@ -55,7 +55,22 @@
 
                            </select>
                         </div>
-                        <div id="sub_datePicker" class="input-daterange datepicker">
+                        <div id="sub_datePicker">
+                            <div class="col">
+                                <label>Daterange</label>
+                                <div class="form-group">
+                                 <div class="input-group">
+                                    <div class="input-group-prepend">
+                                       <span class="input-group-text"><i class="ni ni-calendar-grid-58"></i></span>
+                                    </div>
+
+                                    <input class="form-control select2-css" type="text" name="daterange" value="" />
+                                 </div>
+                              </div>
+                            </div>
+
+                        </div>
+                        <!-- <div id="sub_datePicker" class="input-daterange datepicker">
                            <div class="col">
                               <label>From</label>
                               <div class="form-group">
@@ -78,7 +93,7 @@
                                  </div>
                               </div>
                            </div>
-                        </div>
+                        </div> -->
                      </div>
                   </div>
                </div>
@@ -145,7 +160,8 @@
 <link rel="stylesheet" href="{{ asset('argon') }}/vendor/datatables.net-bs4/css/dataTables.bootstrap4.min.css">
 <link rel="stylesheet" href="{{ asset('argon') }}/vendor/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css">
 <link rel="stylesheet" href="{{ asset('argon') }}/vendor/datatables.net-select-bs4/css/select.bootstrap4.min.css">
-<link rel="stylesheet" href="{{ asset('argon') }}/vendor/datatables-datetime/datetime.min.css">
+<!-- <link rel="stylesheet" href="{{ asset('argon') }}/vendor/datatables-datetime/datetime.min.css"> -->
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 @endpush
 @push('js')
 <script src="{{ asset('argon') }}/vendor/datatables.net/js/jquery.dataTables.min.js"></script>
@@ -156,8 +172,10 @@
 <script src="{{ asset('argon') }}/vendor/datatables.net-buttons/js/buttons.flash.min.js"></script>
 <script src="{{ asset('argon') }}/vendor/datatables.net-buttons/js/buttons.print.min.js"></script>
 <script src="{{ asset('argon') }}/vendor/datatables.net-select/js/dataTables.select.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="{{ asset('argon') }}/vendor/datatables-datetime/datetime.min.js"></script>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="{{ asset('argon') }}/vendor/datatables-datetime/datetime.min.js"></script> -->
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 <script>
    var minDate = null, maxDate = null;
 
@@ -280,27 +298,33 @@
     let status = '';
 
     $(document).ready(function() {
-        fillSelectedBox()
 
-        $('select.column_filter').on('change', function () {
-            filterColumn( $(this).parents('div').attr('data-column') );
+        $('input[name="daterange"]').daterangepicker({
 
-        } );
+            }, function(start, end, label) {
+                minDate = start.format('MM/DD/YYYY')
+                maxDate = end.format('MM/DD/YYYY')
 
+                table.draw();
+                initStats();
+            }
+        );
 
-        // Refilter the table
-        $('#min, #max').on('change', function () {
-            min = new Date($('#min').val());
-            max = new Date($('#max').val());
-            minDate = moment(min).format('MM/DD/YYYY')
-            maxDate = moment(max).format('MM/DD/YYYY')
+        $('input[name="daterange"]').on('cancel.daterangepicker', function(ev, picker) {
+            $('input[name="daterange"]').val('');
 
+            minDate = null;
+            maxDate = null;
 
             table.draw();
             initStats();
         });
 
+        fillSelectedBox()
 
+        $('select.column_filter').on('change', function () {
+            filterColumn( $(this).parents('div').attr('data-column') );
+        } );
 
 
 
@@ -333,8 +357,8 @@
 
     $(document).on("click",".excel-button",function() {
 
-        let min = $("#min").val();
-        let max = $("#max").val();
+        let min = minDate;
+        let max = maxDate;
 
         $.ajax({
             headers: {

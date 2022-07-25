@@ -78,6 +78,12 @@
                             <div class="col-sm-3 filter_col">
                                 <div class="form-group">
                                     <label>From:</label>
+                                    <input class="form-control select2-css" type="text" name="daterange" value="" />
+                                </div>
+                            </div>
+                            <!-- <div class="col-sm-3 filter_col">
+                                <div class="form-group">
+                                    <label>From:</label>
                                     <input class="select2-css" type="text" id="min" name="min">
                                 </div>
                             </div>
@@ -86,7 +92,7 @@
                                     <label>To:</label>
                                     <input class="select2-css" type="text" id="max" name="max">
                                 </div>
-                            </div>
+                            </div> -->
                             {{--<Button type="button" onclick="ClearFields();" class="btn btn-secondary btn-lg "> Clear Filter</Button>--}}
                         </div>
                     </div>
@@ -187,8 +193,8 @@
     <link rel="stylesheet" href="{{ asset('argon') }}/vendor/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css">
     <link rel="stylesheet" href="{{ asset('argon') }}/vendor/datatables.net-select-bs4/css/select.bootstrap4.min.css">
 
-    <link rel="stylesheet" href="{{ asset('argon') }}/vendor/datatables-datetime/datetime.min.css">
-
+    <!-- <link rel="stylesheet" href="{{ asset('argon') }}/vendor/datatables-datetime/datetime.min.css"> -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 @endpush
 
 @push('js')
@@ -206,6 +212,8 @@
     <script src="{{ asset('argon') }}/vendor/datatables.net-select/js/dataTables.select.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="{{ asset('argon') }}/vendor/datatables-datetime/datetime.min.js"></script>
+    <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script> -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 
     <script>
 
@@ -293,6 +301,8 @@ $.fn.dataTable.ext.search.push(
 );
 
 $(document).ready(function() {
+
+    $('input[name="daterange"]').daterangepicker();
 
     let sort_events = []
 
@@ -412,23 +422,18 @@ $(document).ready(function() {
     })
 
     //Refilter the table
-    $('#min, #max').on('change', function () {
-        //console.log('from change min!!')
+    $('input[name="daterange"]').on('apply.daterangepicker', function(ev, picker) {
+        console.log('triggerd')
+        console.log(ev)
+        console.log(picker)
+        minDate = start.format('MM/DD/YYYY')
+        maxDate = end.format('MM/DD/YYYY')
+
         table.draw();
         //console.log(table.column(1).data())
         price = $('#participants_table').DataTable().column( 3 ).data();
 
         initCounters()
-
-        min = new Date($('#min').val());
-        max = new Date($('#max').val());
-
-        minDate = new DateTime($('#min'), {
-            format: 'L'
-        });
-
-        min = moment(min).format('MM/DD/YYYY')
-        max = moment(max).format('MM/DD/YYYY')
 
         coupons = table.column(4,{filter: 'applied'}).data().unique().sort();
         $('#col4_filter').empty();
@@ -453,8 +458,52 @@ $(document).ready(function() {
 
         stats_non_elearning()
 
-
     });
+
+
+    // $('#min, #max').on('change', function () {
+    //     //console.log('from change min!!')
+    //     table.draw();
+    //     //console.log(table.column(1).data())
+    //     price = $('#participants_table').DataTable().column( 3 ).data();
+
+    //     initCounters()
+
+    //     min = new Date($('#min').val());
+    //     max = new Date($('#max').val());
+
+    //     minDate = new DateTime($('#min'), {
+    //         format: 'L'
+    //     });
+
+    //     min = moment(min).format('MM/DD/YYYY')
+    //     max = moment(max).format('MM/DD/YYYY')
+
+    //     coupons = table.column(4,{filter: 'applied'}).data().unique().sort();
+    //     $('#col4_filter').empty();
+    //     $('#col4_filter').append('<option value>-- All --</option>')
+    //     $.each(coupons, function(key, value){
+    //         $('#col4_filter').append('<option value="'+value+'">'+value+'</option>')
+    //     })
+
+    //     paymentMethods = table.column(8,{filter: 'applied'}).data().unique().sort();
+    //     $('#col8_filter').empty();
+    //     $('#col8_filter').append('<option value>-- All --</option>')
+    //     $.each(paymentMethods, function(key, value){
+    //         $('#col8_filter').append('<option value="'+value+'">'+value+'</option>')
+    //     })
+
+    //     delivery = table.column(12,{filter: 'applied'}).data().unique().sort();
+    //     $('#col12_filter').empty();
+    //     $('#col12_filter').append('<option value>-- All --</option>')
+    //     $.each(delivery, function(key, value){
+    //         $('#col12_filter').append('<option value="'+value+'">'+value+'</option>')
+    //     })
+
+    //     stats_non_elearning()
+
+
+    // });
 });
 
     function filterGlobal () {
