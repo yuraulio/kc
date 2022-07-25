@@ -434,7 +434,6 @@ class MediaController extends Controller
 
     private function editOriginalImage($id, $name, $alttext, $link)
     {
-        Log::debug("original image id: " . $id);
         $mediaFile = MediaFile::find($id);
 
         $mediaFile->name = $name;
