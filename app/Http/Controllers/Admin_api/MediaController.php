@@ -193,6 +193,11 @@ class MediaController extends Controller
     public function editImage(Request $request): JsonResponse
     {
         try {
+            if ($request->parent_id == $request->id) {
+                $image = $this->editOriginalImage($request->id, $request->imgname, $request->alttext, $request->link);
+                return response()->json(['data' => new MediaFileResource($image)], 200);
+            }
+
             $folder = $this->getFolder($request);
             $path = $folder["path"];
             $mediaFolder = $folder["mediaFolder"];
@@ -354,49 +359,7 @@ class MediaController extends Controller
                 Storage::disk('public')->move($oldPath, $mediaFile->path);
             }
 
-            // set alttext on all subfiles/siblings
-            if ($alttext && $alttext != "null") {
-                $subfiles = $mediaFile->subfiles()->get();
-                if ($subfiles) {
-                    foreach ($subfiles as $subfile) {
-                        if ($subfile->alt_text == null || $subfile->alt_text == "null") {
-                            $subfile->alt_text = $alttext;
-                            $subfile->save();
-                        }
-                    }
-                }
-                $siblings = $mediaFile->siblings()->get();
-                if ($siblings) {
-                    foreach ($siblings as $sibling) {
-                        if ($sibling->alt_text == null || $sibling->alt_text == "null") {
-                            $sibling->alt_text = $alttext;
-                            $sibling->save();
-                        }
-                    }
-                }
-            }
-
-            // set link on all subfiles/siblings
-            if ($link && $link != "null") {
-                $subfiles = $mediaFile->subfiles()->get();
-                if ($subfiles) {
-                    foreach ($subfiles as $subfile) {
-                        if ($subfile->link == null || $subfile->link == "null") {
-                            $subfile->link = $link;
-                            $subfile->save();
-                        }
-                    }
-                }
-                $siblings = $mediaFile->siblings()->get();
-                if ($siblings) {
-                    foreach ($siblings as $sibling) {
-                        if ($sibling->link == null || $sibling->link == "null") {
-                            $sibling->link = $link;
-                            $sibling->save();
-                        }
-                    }
-                }
-            }
+            $this->updateAltTextLink($mediaFile, $alttext, $link);
 
             DB::commit();
         } catch (Exception $e) {
@@ -409,6 +372,77 @@ class MediaController extends Controller
         RenameFile::dispatch($oldUrl, $url, $alttext, $link);
 
         $mediaFile->load(["pages", "siblings", "subfiles"]);
+
+        return $mediaFile;
+    }
+
+    /**
+     * updates link and alt text on subfiles or siblings if empty
+     *
+     * @param   MediaFile  $mediaFile  [$mediaFile description]
+     * @param   string  $alttext    [$alttext description]
+     * @param   string  $link       [$link description]
+     *
+     * @return  void
+     */
+    private function updateAltTextLink($mediaFile, $alttext, $link)
+    {
+        // set alttext on all subfiles/siblings
+        if ($alttext && $alttext != "null") {
+            $subfiles = $mediaFile->subfiles()->get();
+            if ($subfiles) {
+                foreach ($subfiles as $subfile) {
+                    if ($subfile->alt_text == null || $subfile->alt_text == "null") {
+                        $subfile->alt_text = $alttext;
+                        $subfile->save();
+                    }
+                }
+            }
+            $siblings = $mediaFile->siblings()->get();
+            if ($siblings) {
+                foreach ($siblings as $sibling) {
+                    if ($sibling->alt_text == null || $sibling->alt_text == "null") {
+                        $sibling->alt_text = $alttext;
+                        $sibling->save();
+                    }
+                }
+            }
+        }
+
+        // set link on all subfiles/siblings
+        if ($link && $link != "null") {
+            $subfiles = $mediaFile->subfiles()->get();
+            if ($subfiles) {
+                foreach ($subfiles as $subfile) {
+                    if ($subfile->link == null || $subfile->link == "null") {
+                        $subfile->link = $link;
+                        $subfile->save();
+                    }
+                }
+            }
+            $siblings = $mediaFile->siblings()->get();
+            if ($siblings) {
+                foreach ($siblings as $sibling) {
+                    if ($sibling->link == null || $sibling->link == "null") {
+                        $sibling->link = $link;
+                        $sibling->save();
+                    }
+                }
+            }
+        }
+    }
+
+    private function editOriginalImage($id, $name, $alttext, $link)
+    {
+        Log::debug("original image id: " . $id);
+        $mediaFile = MediaFile::find($id);
+
+        $mediaFile->name = $name;
+        $mediaFile->alt_text = $alttext;
+        $mediaFile->link = $link;
+        $mediaFile->save();
+
+        $this->updateAltTextLink($mediaFile, $alttext, $link);
 
         return $mediaFile;
     }

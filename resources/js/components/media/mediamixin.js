@@ -271,7 +271,7 @@ var mediaMixin = {
             formData.append('width_ratio', this.$refs.crpr.width_ratio);
             formData.append('height_ratio', this.$refs.crpr.height_ratio);
             formData.append('directory', this.selectedFile.folder_id);
-            formData.append('id', this.selectedFile.id);
+            formData.append('id', this.$refs.crpr.id);
             this.$refs.crpr.isUploading = true;
             axios.post('/api/media_manager/edit_image', formData, {
                 headers: {
@@ -283,10 +283,16 @@ var mediaMixin = {
                 this.$refs.crpr.isUploading = false;
                 this.imageKey = Math.random().toString().substr(2, 8);
                 // this.$modal.hide('edit-image-modal');
-
-                this.$refs.crpr.imgname = this.$refs.crpr.parrentImage.name;
-                this.$refs.crpr.alttext = this.$refs.crpr.parrentImage.alttext;
-                this.$refs.crpr.link = this.$refs.crpr.parrentImage.link;
+                if (response.data.data.version == 'original') {
+                    var image = response.data.data;
+                    this.$refs.crpr.imgname = image.name;
+                    this.$refs.crpr.alttext = image.alt_text;
+                    this.$refs.crpr.link = image.link;
+                } else {
+                    this.$refs.crpr.imgname = this.$refs.crpr.parrentImage.name;
+                    this.$refs.crpr.alttext = this.$refs.crpr.parrentImage.alttext;
+                    this.$refs.crpr.link = this.$refs.crpr.parrentImage.link;
+                }
                 this.$refs.crpr.jpg = false;
                 this.$refs.crpr.version = 'original';
             })
@@ -485,6 +491,9 @@ var mediaMixin = {
                 });
                 if (this.mediaFiles[index]) {
                     this.selectedFile = this.mediaFiles[index];
+                    setTimeout(() => {
+                        this.$refs.crpr.setupPrevalue();
+                    }, 1000);
                 }
             }
         }

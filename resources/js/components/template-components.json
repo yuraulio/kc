@@ -818,7 +818,7 @@
     },
     "city_list" : {
         "version": 2,
-        "title": "Courses list",
+        "title": "City courses list",
         "icon": "dripicons-view-list-large",
         "key": "city_list_component",
         "tab": "Content",
