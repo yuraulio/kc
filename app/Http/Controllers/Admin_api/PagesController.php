@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Ramsey\Uuid\Uuid;
+use App\Jobs\UpdateTerms;
 
 class PagesController extends Controller
 {
@@ -150,9 +151,11 @@ class PagesController extends Controller
      */
     public function update(UpdateAdminPageRequest $request, int $id)
     {
+        
         try {
+       
             $page = Page::withoutGlobalScopes()->find($id);
-
+       
             $this->authorize('update', $page, Auth::user());
 
             $old_slug = $page->slug;
@@ -169,8 +172,9 @@ class PagesController extends Controller
             $page->type_slug = Str::slug($request->type, '-');
             $page->slug = $request->slug;
             $page->uuid = $page->uuid ?? Uuid::uuid4();
+            
             $page->save();
-
+      
             $this->syncImages($page);
 
             $categories = $request->categories ?? [];
@@ -186,6 +190,10 @@ class PagesController extends Controller
                 $redirect->page_id = $page->id;
                 $redirect->old_slug = $old_slug;
                 $redirect->save();
+            }
+
+            if(isset($request->terms_val) && !$request->terms_val){
+                dispatch((new UpdateTerms($page->id))->delay(now()->addSeconds(3)));
             }
 
             return new PageResource($page);

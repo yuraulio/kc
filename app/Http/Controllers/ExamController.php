@@ -342,7 +342,7 @@ class ExamController extends Controller
                 'answered' =>  $answered . ' / ' . count($allAnswers), 'correct' => $correct . '/' . $answered  , 'started_at'=> $start_at[1],'finish_at' => $finish_at[1]) ;*/
 
             $liveResults[] = array('id'=>$syncData->id,'name'=>$syncData->student->firstname . ' ' . $syncData->student->lastname,
-                'answered' =>  $answered, 'correct' => $correct, 'started_at'=> $start_at[1],'finish_at' => $finish_at[1]) ;
+                'answered' =>  $answered, 'correct' => $correct, 'started_at'=> $start_at[1],'finish_at' => $finish_at[1],'totalAnswers' => count($allAnswers)) ;
 
         }
 

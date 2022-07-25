@@ -1167,15 +1167,30 @@
             contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
             url:'/admin/live-results/{{$exam->id}}',
             success:function(data){
+               
+               let resultsHtmll = '';
+               var tl = $('#liveResultTable').DataTable();
+               tl.clear();
+               $.each(data['liveResults'], function(key1, value1) {
 
-              $.each(data['liveResults'], function(key1, value1) {
 
-                  $('#'+value1['id']).html(value1['answered']);
-                  $('#correct-'+value1['id']).html(value1['correct']);
-                  $('#finish-at'+value1['id']).html(value1['finish_at']);
+                  tl.row.add([
+                     key1 + 1,
+                     value1['name'],
+                     value1['answered'],
+                     value1['correct'],
+                     value1['totalAnswers'],
+                     value1['started_at'],
+                     value1['finish_at']
+                                   
+                  ]).draw();
+
+                  //$('#'+value1['id']).html(value1['answered']);
+                  //$('#correct-'+value1['id']).html(value1['correct']);
+                  //$('#finish-at'+value1['id']).html(value1['finish_at']);
 
 
-              })
+               })
 
               //$('avScoreBar')
                $('#avScore').html(data['averageScore'])
