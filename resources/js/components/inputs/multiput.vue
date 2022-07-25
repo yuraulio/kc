@@ -29,7 +29,7 @@
         <div class="text-center">
             <div class="d-grid text-center" v-if="value">
 
-                <img @click="$set(loadstart, (keyput + 'media'),  true)" data-bs-toggle="offcanvas" :data-bs-target="'#mediaCanvas' + keyput" :src="value.url + '?i=' + (Math.random() * 100000)" alt="image" class="img-fluid rounded cursor-pointer" >
+                <img @click="$set(loadstart, (keyput + 'media'),  true)" data-bs-toggle="offcanvas" :data-bs-target="'#mediaCanvas' + keyput" :src="value.url + '?i=' + (Math.random() * 100000)" alt="image" class="img-fluid rounded cursor-pointer" :style="'width:' + width">
 
                 <i @click="removeImage()" class="mdi mdi-delete text-muted vertical-middle d-block fs-4 mt-1"></i>
 
@@ -183,6 +183,10 @@ export default {
         label: {},
         value: {},
         size: {
+            type: String,
+            default: ''
+        },
+        width: {
             type: String,
             default: ''
         },
