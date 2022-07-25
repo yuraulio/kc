@@ -553,7 +553,7 @@ class WebhookController extends BaseWebhookController
 									'Product_id' => $subscription->event->first()->id, 'Product_SKU' => $subscription->event->first()->id,
                         			'Product_SKU' => $subscription->event->first()->id,'ProductCategory' => 'Video e-learning courses', 
 									'ProductName' =>  $subscription->event->first()->title, 'Quantity' =>1, 'TicketType'=>'Subscription','Event_ID' => 'kc_' . time(),
-									'Encrypted_email' => hash('sha256', $user->email) 
+									//'Encrypted_email' => hash('sha256', $user->email) 
                 ];
 
 				$fbPixel = new FBPixelService;

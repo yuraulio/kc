@@ -516,7 +516,7 @@ class SubscriptionController extends Controller
                 $tr_price .= ".00";
             }
 
-            $userEmail = $transaction && $transaction->user()->first() ? $transaction->user()->first()->email;
+            $userEmail = isset($transaction['status_history'][0]['pay_seats_data']['emails'][0]) ? $transaction['status_history'][0]['pay_seats_data']['emails'][0] : null;
             $data['tigran'] = ['OrderSuccess_id' => $transaction['id'], 'OrderSuccess_total' => $tr_price, 'Price' =>$tr_price,'Product_id' => $thisevent->id, 'Product_SKU' => $thisevent->id,
                         'Product_SKU' => $thisevent->id,'ProductCategory' => $categoryScript, 'ProductName' =>  $thisevent->title, 'Quantity' => 1, 'TicketType'=>'subscription',
                         'Event_ID' => 'kc_' . time(),'Encrypted_email' => hash('sha256', $userEmail)
