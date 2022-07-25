@@ -100,7 +100,7 @@
                                </li>
 								   @endforeach
                            <li>
-                              <a title="Blog" href="/en/blog">Blog</a>
+                              <a title="Blog" href="/blog">Blog</a>
                            </li>
                         @endif
 
@@ -256,7 +256,7 @@
                     <li> <a  href='/instructors'  title = 'our instructors'> our instructors </a> </li>
                     <li> <a  href='/become-an-instructor' title = 'become an instructor'> become an instructor </a> </li>
                     <li> <a  href='/corporate-training'  title = 'corporate training'> corporate training </a> </li>
-                    <li> <a  href='/en/blog' title = 'blog'> blog </a> </li>
+                    <li> <a  href='/blog' title = 'blog'> blog </a> </li>
                     <li> <a  href='https://www.facebook.com/pg/Knowcrunch/jobs/' target='_blank' title = 'jobs'> jobs </a> </li>
                     <li> <a  href='/terms'  title = 'Terms & Conditions'> terms & conditions </a> </li>
                     <li> <a  href='/data-privacy-policy'  title = 'Data Privacy Policy'> data privacy policy </a> </li>

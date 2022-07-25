@@ -14,15 +14,17 @@
     if ($c) {
         $category = Category::find($c);
 
-        $categories = $category->subcategories()->whereHas("pages", function ($q) use ($source) {
-            $q->whereType($source);
-            if ($source == "Knowledge") {
-                $q->withoutGlobalScope("knowledge")->where("slug", "!=", "knowledge")->where("slug", "!=", "knowledge_search");
-            }
-            if (isset($search_term) && $search_term !== null) {
-                $q = $q->where('title', 'like', '%' . $search_term . '%');
-            }
-        })->get();
+        if ($category) {
+            $categories = $category->subcategories()->whereHas("pages", function ($q) use ($source) {
+                $q->whereType($source);
+                if ($source == "Knowledge") {
+                    $q->withoutGlobalScope("knowledge")->where("slug", "!=", "knowledge")->where("slug", "!=", "knowledge_search");
+                }
+                if (isset($search_term) && $search_term !== null) {
+                    $q = $q->where('title', 'like', '%' . $search_term . '%');
+                }
+            })->get();
+        }
     } else {
         $category = null;
         $categories = Category::whereNull("parent_id")->whereHas("pages", function ($q) use ($source) {
@@ -37,7 +39,7 @@
     }
 
     if ($category) {
-        $blog = $category->pages();
+        $blog = $category->pages()->whereType($source);
     } else {
         $blog = Page::whereType($source);
     }
@@ -69,7 +71,7 @@
     </div>
 </div>
 
-@if (!isset($show_categories))
+@if (!isset($show_categories) && isset($categories))
 <div class="row mb-5">
     <div class="col-lg-12 marbot">
         @foreach($categories as $c)

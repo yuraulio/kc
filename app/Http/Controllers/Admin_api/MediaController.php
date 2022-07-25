@@ -354,6 +354,50 @@ class MediaController extends Controller
                 Storage::disk('public')->move($oldPath, $mediaFile->path);
             }
 
+            // set alttext on all subfiles/siblings
+            if ($alttext && $alttext != "null") {
+                $subfiles = $mediaFile->subfiles()->get();
+                if ($subfiles) {
+                    foreach ($subfiles as $subfile) {
+                        if ($subfile->alt_text == null || $subfile->alt_text == "null") {
+                            $subfile->alt_text = $alttext;
+                            $subfile->save();
+                        }
+                    }
+                }
+                $siblings = $mediaFile->siblings()->get();
+                if ($siblings) {
+                    foreach ($siblings as $sibling) {
+                        if ($sibling->alt_text == null || $sibling->alt_text == "null") {
+                            $sibling->alt_text = $alttext;
+                            $sibling->save();
+                        }
+                    }
+                }
+            }
+
+            // set link on all subfiles/siblings
+            if ($link && $link != "null") {
+                $subfiles = $mediaFile->subfiles()->get();
+                if ($subfiles) {
+                    foreach ($subfiles as $subfile) {
+                        if ($subfile->link == null || $subfile->link == "null") {
+                            $subfile->link = $link;
+                            $subfile->save();
+                        }
+                    }
+                }
+                $siblings = $mediaFile->siblings()->get();
+                if ($siblings) {
+                    foreach ($siblings as $sibling) {
+                        if ($sibling->link == null || $sibling->link == "null") {
+                            $sibling->link = $link;
+                            $sibling->save();
+                        }
+                    }
+                }
+            }
+
             DB::commit();
         } catch (Exception $e) {
             DB::rollback();

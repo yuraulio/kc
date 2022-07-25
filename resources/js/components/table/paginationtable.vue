@@ -31,25 +31,34 @@
                 <h5>{{ type == 'edit' ? 'Edit' : 'Create'}}</h5>
             </div>
             <div class="card-body">
-                <multiput 
-                    v-for="input in (type == 'edit' ? config.editInputs : config.addInputs)" 
-                    :key="input.key" 
-                    :keyput="input.key" 
-                    :label="input.label" 
-                    :type="input.type" 
-                    :size="input.size" 
-                    :existing-value="item[input.key]" 
-                    :value="item[input.key]" 
-                    @inputed="inputed($event, input)" 
-                    :multi="input.multi"
-                    :taggable="input.taggable"
-                    :fetch="input.fetch"
-                    :route="input.route"
-                >
+                <template v-for="input in (type == 'edit' ? config.editInputs : config.addInputs)" >
+                    <multiput 
+                        :key="input.key" 
+                        :keyput="input.key" 
+                        :label="input.label" 
+                        :type="input.type" 
+                        :size="input.size" 
+                        :existing-value="item[input.key]" 
+                        :value="item[input.key]" 
+                        @inputed="inputed($event, input)" 
+                        :multi="input.multi"
+                        :taggable="input.taggable"
+                        :fetch="input.fetch"
+                        :route="input.route"
+                    >
+                    </multiput>
                     <ul v-if="errors && errors[input.key]" class="parsley-errors-list filled" id="parsley-id-7" aria-hidden="false">
                         <li class="parsley-required">{{ errors[input.key][0] }}</li>
                     </ul>
-                </multiput>
+
+                    <template v-if="errors && input.key == 'subcategories'">
+                        <template v-for="(errorInput, key) in item.subcategories">
+                            <ul v-if="errors && errors[input.key + '.' + key]" class="parsley-errors-list filled" id="parsley-id-7" aria-hidden="false">
+                                <li class="parsley-required">{{ fixError(errors[input.key + '.' + key][0], input.key + '.' + key, errorInput.title) }}</li>
+                            </ul>
+                        </template>
+                    </template>
+                </template>
             </div>
             <div class="row mt-3">
                 <div class="col-12 text-center">
@@ -205,7 +214,7 @@
     <div v-if="config.loadWidgets !== false">
         <div v-if="widgets" class="row">
 
-            <div class="col-lg-3 col-md-6">
+            <div v-if="widgets[0]" class="col-lg-3 col-md-6">
                 <div class="card bg-pattern mb-3">
                     <div class="card-body">
                         <div class="row">
@@ -225,7 +234,7 @@
                 </div>
             </div>
 
-            <div class="col-lg-3 col-md-6">
+            <div v-if="widgets[1]" class="col-lg-3 col-md-6">
                 <div class="card bg-pattern mb-3">
                     <div class="card-body">
                         <div class="row">
@@ -245,7 +254,7 @@
                 </div>
             </div>
 
-            <div class="col-lg-3 col-md-6">
+            <div v-if="widgets[2]" class="col-lg-3 col-md-6">
                 <div class="card bg-pattern mb-3">
                     <div class="card-body">
                         <div class="row">
@@ -265,7 +274,7 @@
                 </div>
             </div>
 
-            <div class="col-lg-3 col-md-6">
+            <div v-if="widgets[3]" class="col-lg-3 col-md-6">
                 <div class="card bg-pattern mb-3">
                     <div class="card-body">
                         <div class="row">
@@ -321,17 +330,17 @@
                         </button>
                     </div>
 
-                    <div class="float-end ms-2 pt-3">
+                    <div v-if="config.showFilters" class="float-end ms-2 pt-3">
                         <b-button v-b-toggle.sidebar-right class="btn-soft-secondary">
                             <i class="fa fa-filter" aria-hidden="true"></i>
                         </b-button>
                     </div>
 
-                    <div class="btn-group dropleft multiselect-actions float-end ms-2 pt-3">
-                        <button class="btn btn-soft-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <div v-if="multiselectShow" class="btn-group dropleft multiselect-actions float-end ms-2 pt-3" role="group">
+                        <button class="btn btn-soft-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="fa fa-cog" aria-hidden="true"></i>
                         </button>
-                        <div class="dropdown-menu settings-dropdown" aria-labelledby="dropdownMenuButton">
+                        <div class="dropdown-menu settings-dropdown" aria-labelledby="dropdownMenuButton1">
                             <a class="dropdown-item" href="#" @click="deleteMultipleItems()">
                                 <i class="fas fa-trash"></i> Delete selected
                             </a>
@@ -339,10 +348,10 @@
                     </div>
 
                     <div class="btn-group dropleft multiselect-actions float-end pt-3">
-                        <button class="btn btn-soft-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <button class="btn btn-soft-secondary dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             {{perPage ? perPage : "All"}}
                         </button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
                             <a class="dropdown-item" href="#" @click="changePerPage(10)">
                                 10
                             </a>
@@ -800,6 +809,23 @@ export default {
         },
         getAppURL() {
             return process.env.MIX_APP_URL;
+        },
+        getURLValues() {
+            var search = window.location.search.replace(/^\?/,'').replace(/\+/g,' ');
+            var values = {};
+
+            if (search.length) {
+                var part, parts = search.split('&');
+
+                for (var i=0, iLen=parts.length; i<iLen; i++ ) {
+                part = parts[i].split('=');
+                values[part[0]] = window.decodeURIComponent(part[1]);
+                }
+            }
+            return values;
+        },
+        fixError(message, subcategoryError, subcategory) {
+            return message.replace(subcategoryError, " subcategory '" + subcategory + "' ") + " (Titles through categories and subcategories must be unique.)";
         }
     },
     mounted() {
@@ -811,6 +837,15 @@ export default {
             this.published_value = {
                 title: 'Published',
                 id: 1
+            };
+        }
+
+        var urlValues = this.getURLValues();
+        if (urlValues["templateID"] && urlValues["templateName"]) {
+            
+            this.template_value = {
+                title: urlValues["templateName"],
+                id: urlValues["templateID"]
             };
         }
     }

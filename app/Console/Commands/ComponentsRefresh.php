@@ -96,17 +96,19 @@ class ComponentsRefresh extends Command
                 
                 if (isset($new_column->template->inputs)) {
                     foreach ($new_column->template->inputs as $input_key => $new_input) {
-                        $key = array_search($new_input->key, array_column($inputs, 'key'));
+                        if ($inputs) {
+                            $key = array_search($new_input->key, array_column($inputs, 'key'));
 
-                        if ($key !== false) {
-                            $this->info("found old value in column");
-                            if (property_exists($inputs[$key], "value")) {
-                                $old_value = $inputs[$key]->value;
-                                $new_column->template->inputs[$input_key]->value = $old_value;
+                            if ($key !== false) {
+                                $this->info("found old value in column");
+                                if (property_exists($inputs[$key], "value")) {
+                                    $old_value = $inputs[$key]->value;
+                                    $new_column->template->inputs[$input_key]->value = $old_value;
 
-                                if ($new_input->key == "tabs") {
-                                    $old_tabs = $inputs[$key]->tabs;
-                                    $new_column->template->inputs[$input_key]->tabs = $old_tabs;
+                                    if ($new_input->key == "tabs") {
+                                        $old_tabs = $inputs[$key]->tabs;
+                                        $new_column->template->inputs[$input_key]->tabs = $old_tabs;
+                                    }
                                 }
                             }
                         }

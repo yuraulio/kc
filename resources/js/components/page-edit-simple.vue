@@ -140,6 +140,7 @@
                                             :value="input.key == 'meta_slug' ? page.slug : input.value"
                                             :tabsProp="input.tabs ? input.tabs : []"
                                             :size="input.size"
+                                            :width="input.width"
                                             @inputed="inputed($event, input)"
                                             @inputedTabs="inputedTabs($event, input)"
                                             :route="input.route"

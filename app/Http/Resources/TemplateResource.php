@@ -15,6 +15,8 @@ class TemplateResource extends JsonResource
      */
     public function toArray($request)
     {
+        $pages = count($this->pages);
+
         return [
             'id' => $this->id,
             'title' => $this->title,
@@ -26,7 +28,7 @@ class TemplateResource extends JsonResource
                     return $this->user->firstname . " " . $this->user->lastname;
                 }
             ),
-            'pages' => count($this->pages),
+            'pages' => $pages > 0 ? '<a href="/pages?templateName=' . $this->title . '&templateID=' . $this->id . '">' . $pages . '</a>' : 0,
             'created_at' => Carbon::parse($this->created_at)->toFormattedDateString(),
         ];
     }

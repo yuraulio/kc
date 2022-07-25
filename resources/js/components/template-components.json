@@ -309,7 +309,7 @@
             {
                 "type": "checkbox",
                 "key": "youtube_full_width",
-                "label": "Full width (overrides width)",
+                "label": "Fit video in content",
                 "value": true,
                 "size": "col-lg-6"
             },
@@ -829,7 +829,7 @@
     },
     "inspirational_teaser" : {
         "version": 3,
-        "title": "Info & benefits",
+        "title": "Benefits",
         "icon": "dripicons-article",
         "key": "inspirational_teaser_component",
         "tab": "Content",
@@ -838,19 +838,69 @@
         "inputs": [
             {
                 "type": "image",
-                "key": "inspirational_image",
+                "key": "inspirational_image1",
                 "label": "Image",
-                "main": true
+                "main": true,
+                "width": "41px",
+                "size": "col-sm-4"
+            },
+            {
+                "type": "image",
+                "key": "inspirational_image2",
+                "label": "Image",
+                "main": true,
+                "width": "41px",
+                "size": "col-sm-4"
+            },
+            {
+                "type": "image",
+                "key": "inspirational_image3",
+                "label": "Image",
+                "main": true,
+                "width": "41px",
+                "size": "col-sm-4"
             },
             {
                 "type": "text",
-                "key": "inspiration_title",
-                "label": "Title"
+                "key": "inspiration_title1",
+                "label": "Title",
+                "main": true,
+                "size": "col-sm-4"
             },
             {
                 "type": "text",
-                "key": "inspiration_description",
-                "label": "Description"
+                "key": "inspiration_title2",
+                "label": "Title",
+                "main": true,
+                "size": "col-sm-4"
+            },
+            {
+                "type": "text",
+                "key": "inspiration_title3",
+                "label": "Title",
+                "main": true,
+                "size": "col-sm-4"
+            },
+            {
+                "type": "text",
+                "key": "inspiration_description1",
+                "label": "Description",
+                "main": true,
+                "size": "col-sm-4"
+            },
+            {
+                "type": "text",
+                "key": "inspiration_description2",
+                "label": "Description",
+                "main": true,
+                "size": "col-sm-4"
+            },
+            {
+                "type": "text",
+                "key": "inspiration_description3",
+                "label": "Description",
+                "main": true,
+                "size": "col-sm-4"
             }
         ]
     },
