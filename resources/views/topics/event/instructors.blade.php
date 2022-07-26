@@ -62,7 +62,8 @@
                             <tr>
                                 <th scope="col">{{ __('Lesson') }}</th>
                                 <th scope="col">{{ __('Instructor') }}</th>
-                                @if(count($event->type) > 0 && $isInclassCourse)
+                                {{--@if(count($event->type) > 0 && $isInclassCourse)--}}
+                                @if($isInclassCourse)
                                     <th scope="col">{{ __('Date') }}</th>
                                     <th scope="col">{{ __('Time starts') }}</th>
                                     <th scope="col">{{ __('Time ends') }}</th>
@@ -100,7 +101,8 @@
                                 }else{
                                     echo '-';
                                 } ?></td>
-                                    @if(count($event['type']) > 0 && $isInclassCourse )
+                                    {{--@if(count($event['type']) > 0 && $isInclassCourse )--}}
+                                    @if($isInclassCourse )
                                     @if($lesson->pivot->date != null)
                                     <td id="date_lesson_edit_{{$lesson['id']}}"><?php $date = strtotime($lesson->pivot->date);  ?>{{ date('d-m-Y', $date ) }} </td>
                                     <td id="start_lesson_edit_{{$lesson['id']}}"><?php if($lesson->pivot->time_starts != null){$start = strtotime($lesson->pivot->time_starts);}else{ $start = "";} ?><?php  if($start != ""){ echo date('H:i:s', $start );} ?></td>

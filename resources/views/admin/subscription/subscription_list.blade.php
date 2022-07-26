@@ -70,11 +70,7 @@
                             </div>
 
                         </div>
-<<<<<<< HEAD
-                        <div class="col-sm-3 filter_col" id="filter_col4" data-column="4">
-=======
-                        {{--<div class="col-sm-3 filter_col" id="filter_col4" data-column="11">
->>>>>>> 2abc3ebb60af630a7af4ab7bd56ecbea9c08e370
+                        {{--<div class="col-sm-3 filter_col" id="filter_col4" data-column="4">
                             <label>Delivery</label>
                             <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..." name="Name" class="column_filter" id="col4_filter" placeholder="Delivery">
                             <option selected value> -- All -- </option>
