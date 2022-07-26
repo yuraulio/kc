@@ -116,7 +116,7 @@
                                     <div :class="'row component-tabs ' + (column.tab == 'settings' ? 'settings' : 'main')">
                                         <div class="col-12">
                                             <p class="text-muted d-inline-block">{{ column.template.title }}</p>
-                                            <i v-if="column.template.removable !== false" @click="removeRow(row_index)" class="dripicons-trash text-muted float-end ms-2"></i>
+                                            <i v-if="column.template.removable !== false" @click="removeRow(row_index)" class="dripicons-trash text-muted float-end ms-2 cursor-pointer" title="Delete component"></i>
                                             <i v-if="settingsExist(column)" @click="column.tab == 'settings' ? column.tab = 'main' : column.tab = 'settings'" :class="'settings-icon text-muted float-end ms-2 ' + (column.template.simple_view_settings_icon ? column.template.simple_view_settings_icon : 'dripicons-gear')"></i>
                                             <template v-if="simpleColumnCount(row.columns) > 1">
                                                 <ul :class="'nav column-navigation d-inline-block float-end mb-0 nav-row' + row_index + ' ' + (settingsExist(column) == false ? 'column-navigation-margin' : '')">
@@ -478,7 +478,27 @@ import slugify from '@sindresorhus/slugify';
                 this.$modal.show('simple');
             },
             removeRow(index) {
-                this.$parent.content.splice(index, 1);
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "Delete component?",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonText: "Yes, delete it!",
+                    showLoaderOnConfirm: true,
+                    buttonsStyling: false,
+                    customClass: {
+                        cancelButton: "btn btn-soft-secondary",
+                        confirmButton: "btn btn-soft-danger",
+                    },
+                    preConfirm: () => {
+                        return this.$parent.content.splice(index, 1);
+                    },
+                    allowOutsideClick: () => !Swal.isLoading(),
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        Swal.fire("Delete!", "Component has been deleted.", "success");
+                    }
+                });
             },
             setSlug() {
                this.$parent.page.slug = slugify(this.page.title);
