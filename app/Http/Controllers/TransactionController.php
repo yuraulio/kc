@@ -97,8 +97,8 @@ class TransactionController extends Controller
         foreach(PaymentMethod::all() as $paymentMethod){
             $paymentMethods[$paymentMethod->id] =  $paymentMethod->method_name;
         }
-        
-        
+
+
         if($start_date && $end_date){
             $start_date = date_create($start_date);
             $start_date = date_format($start_date,"Y-m-d");
@@ -130,7 +130,7 @@ class TransactionController extends Controller
                     continue;
                 }
 
-                
+
 
                 $tickets = $transaction->user->first()['ticket']->groupBy('event_id');
                 $ticketType = isset($tickets[$transaction->event->first()->id]) ? $tickets[$transaction->event->first()->id]->first()->type : '-';
@@ -153,7 +153,7 @@ class TransactionController extends Controller
                 if($ticketType == 'Early Bird'){
                     $earlyCount += 1;
                 }
-                
+
                 $countUsers = count($transaction->user);
 
                 foreach($transaction['user'] as $u){
@@ -176,7 +176,7 @@ class TransactionController extends Controller
                                                 'coupon_code' => $transaction['coupon_code'],'videos_seen' => $this->getVideosSeen($videos),'expiration'=>$expiration,
                                                 'paymentMethod' => $paymentMethod];
                 }
-               
+
             }
 
         }
@@ -187,16 +187,16 @@ class TransactionController extends Controller
 
 
     public function participantsNew($start_date = null, $end_date = null){
-       
+
         $userRole = Auth::user()->role->pluck('id')->toArray();
 
         $paymentMethods = [];
-        
+
         foreach(PaymentMethod::all() as $paymentMethod){
             $paymentMethods[$paymentMethod->id] =  $paymentMethod->method_name;
         }
-        
-        
+
+
         if($start_date && $end_date){
             $start_date = date_create($start_date);
             $start_date = date_format($start_date,"Y-m-d");
@@ -230,7 +230,7 @@ class TransactionController extends Controller
                     continue;
                 }
 
-                
+
 
                 $tickets = $transaction->user->first()['ticket']->groupBy('event_id');
                 $ticketType = isset($tickets[$transaction->event->first()->id]) ? $tickets[$transaction->event->first()->id]->first()->type : '-';
@@ -253,9 +253,9 @@ class TransactionController extends Controller
                 if($ticketType == 'Early Bird'){
                     $earlyCount += 1;
                 }
-                
+
                 $countUsers = count($transaction->user);
-               
+
                 foreach($transaction['user'] as $u){
 
                     $statistic = $u->statisticGroupByEvent->groupBy('event_id');
@@ -268,12 +268,12 @@ class TransactionController extends Controller
                     $videos = isset($videos) ? json_decode($videos->videos,true) : null;
 
                     $paymentMethod = isset($paymentMethods[$paymentMethodId]) ? $paymentMethods[$paymentMethodId] :'Alpha Bank';
-                    
+
                     if(count($transaction->invoice) > 0 ){
-                        
+
                         foreach($transaction->invoice as $invoice){
-                            
-                        
+
+
                             $data['transactions'][] = ['id' => $transaction['id'], 'user_id' => $u['id'],'name' => $u['firstname'].' '.$u['lastname'],
                             'event_id' => $transaction->event[0]['id'],'event_title' => $transaction->event[0]['title'].' / '.date('d-m-Y', strtotime($transaction->event[0]['published_at'])),'coupon_code' => $coupon_code, 'type' => trim($ticketType),'ticketName' => $ticketName,
                             'date' => date_format($invoice['created_at'], 'Y-m-d'), 'amount' => $invoice->amount,
@@ -285,7 +285,7 @@ class TransactionController extends Controller
                         }
 
                     }else{
-                        
+
                         $data['transactions'][] = ['id' => $transaction['id'], 'user_id' => $u['id'],'name' => $u['firstname'].' '.$u['lastname'],
                         'event_id' => $transaction->event[0]['id'],'event_title' => $transaction->event[0]['title'].' / '.date('d-m-Y', strtotime($transaction->event[0]['published_at'])),'coupon_code' => $coupon_code, 'type' => trim($ticketType),'ticketName' => $ticketName,
                         'date' => date_format($transaction['created_at'], 'Y-m-d'), 'amount' => $transaction['amount'] / $countUsers,
@@ -294,11 +294,11 @@ class TransactionController extends Controller
                         'paymentMethod' => $paymentMethod, 'ticket_price' => $transaction['amount']];
 
                     }
-                    
+
                    break;
                 }
 
-                
+
             }
 
         }
@@ -306,7 +306,7 @@ class TransactionController extends Controller
         return $data;
 
     }
-    
+
 
     public function participants_inside_revenue()
     {
@@ -402,22 +402,22 @@ class TransactionController extends Controller
                 $transaction->save();
 
                 $us = User::find($request->users[$key]);
-                
+
                 if($data['status'][$key] > 0){
-                    
+
                     $us->events()->detach($request->oldevents[$key]);
                     $us->events()->attach($request->newevents[$key]);
-        
+
                     $transaction->event()->detach($request->oldevents[$key]);
                     $transaction->event()->attach($request->newevents[$key]);
 
                 }else{
-                    
+
                     $us->events()->detach($request->oldevents[$key]);
                     $transaction->event()->detach($request->oldevents[$key]);
                     $transaction->user()->detach($us);
                 }
-    
+
             }
 
         }
@@ -426,7 +426,7 @@ class TransactionController extends Controller
     }
 
     public function exportExcel(Request $request){
-        
+
         //$fromDate = date('Y-m-d',strtotime($request->fromDate));
         //$toDate = $request->toDate ? date('Y-m-d',strtotime($request->toDate)) : date('Y-m-d');
 
@@ -437,7 +437,7 @@ class TransactionController extends Controller
     public function exportInvoices(Request $request){
 
 
-      
+
         $transactions = Transaction::whereIn('id', $request->transactions)->
                                 with('user.events','user.ticket','subscription','event','event.delivery','event.category')->get();
         $userRole = Auth::user()->role->pluck('id')->toArray();
@@ -454,9 +454,9 @@ class TransactionController extends Controller
 
         $zip = new ZipArchive();
         if ($zip->open(public_path($fileName), ZipArchive::CREATE) === TRUE) {
-            
+
             foreach($transactions as $transaction){
-               
+
 
                 if(in_array(9,$userRole)){
                     continue;
@@ -465,14 +465,14 @@ class TransactionController extends Controller
 
 
                 foreach($transaction->invoice as $invoice){
-                    
+
                     $invoicesNumber = $invoice->getZipOfInvoices($zip,$planDecription = false,$invoicesNumber);
 
                    // $zip->addFile(public_path('invoices_folder/'.$invoice->getInvoice()), $invoice->getInvoice());
 
                 }
-                    
-                
+
+
 
 
             }
@@ -481,13 +481,13 @@ class TransactionController extends Controller
 
         $zip->close();
         File::deleteDirectory(public_path('invoices_folder'));
-       
+
         return response()->json(['zip' => url('/') .'/invoices.zip']);
 
         //return response()->download(public_path($fileName));
-       
+
     }
 
-   
+
 
 }

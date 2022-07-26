@@ -75,7 +75,14 @@
                                 </select>
                             </div>
 
+
                             <div class="col-sm-3 filter_col">
+                                <div class="form-group">
+                                    <label>From - To</label>
+                                    <input class="select2-css" type="text" name="daterange">
+                                </div>
+                            </div>
+                            <!-- <div class="col-sm-3 filter_col">
                                 <div class="form-group">
                                     <label>From:</label>
                                     <input class="select2-css" type="text" id="min" name="min">
@@ -86,7 +93,7 @@
                                     <label>To:</label>
                                     <input class="select2-css" type="text" id="max" name="max">
                                 </div>
-                            </div>
+                            </div> -->
                             {{--<Button type="button" onclick="ClearFields();" class="btn btn-secondary btn-lg "> Clear Filter</Button>--}}
                         </div>
                     </div>
@@ -176,6 +183,7 @@
     <link rel="stylesheet" href="{{ asset('argon') }}/vendor/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css">
     <link rel="stylesheet" href="{{ asset('argon') }}/vendor/datatables.net-select-bs4/css/select.bootstrap4.min.css">
     <link rel="stylesheet" href="{{ asset('argon') }}/vendor/datatables-datetime/datetime.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 @endpush
 
 @push('js')
@@ -189,6 +197,7 @@
     <script src="{{ asset('argon') }}/vendor/datatables.net-select/js/dataTables.select.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="{{ asset('argon') }}/vendor/datatables-datetime/datetime.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
     <script>
        var eventsArray = {};
         // DataTables initialisation
@@ -240,15 +249,15 @@
 
 
 
-var minDate, maxDate;
+let minDate = null, maxDate = null;
 
 
 // Custom filtering function which will search data in column four between two values
 $.fn.dataTable.ext.search.push(
 
     function( settings, data, dataIndex ) {
-        var min = minDate.val();
-        var max = maxDate.val();
+        var min = new Date(minDate);
+        var max = new Date(maxDate);
         var date = new Date( data[6] );
         if (
             ( min === null && max === null ) ||
@@ -265,19 +274,19 @@ $.fn.dataTable.ext.search.push(
 
 $(document).ready(function() {
 
+    $('input[name="daterange"]').daterangepicker();
+
+    $('input[name="daterange"]').val('')
+
     let sort_events = []
 
     $('#participants_info').removeClass('d-none')
 
     // Create date inputs
     //console.log($('#min'))
-    minDate = new DateTime($('#min'), {
-        format: 'L'
-    });
-    //console.log('--min: '+minDate.val())
-    maxDate = new DateTime($('#max'), {
-        format: 'L'
-    });
+    minDate = null;
+    // //console.log('--min: '+minDate.val())
+    maxDate = moment().endOf('day').format('MM/DD/YYYY')
 
 
     $('#participants_table').on( 'search.dt', function () {
@@ -382,23 +391,17 @@ $(document).ready(function() {
     })
 
     //Refilter the table
-    $('#min, #max').on('change', function () {
-        //console.log('from change min!!')
-        table.draw();
-        //console.log(table.column(1).data())
-        price = $('#participants_table').DataTable().column( 3 ).data();
+    $('input[name="daterange"]').on('apply.daterangepicker', function(ev, picker) {
 
+        price = $('#participants_table').DataTable().column( 3 ).data();
         initCounters()
 
-        min = new Date($('#min').val());
-        max = new Date($('#max').val());
+        min = picker.startDate.format('MM/DD/YYYY')
+        max = picker.endDate.format('MM/DD/YYYY')
 
-        minDate = new DateTime($('#min'), {
-            format: 'L'
-        });
-
-        min = moment(min).format('MM/DD/YYYY')
-        max = moment(max).format('MM/DD/YYYY')
+        minDate = min;
+        maxDate = max;
+        table.draw();
 
         coupons = table.column(4,{filter: 'applied'}).data().unique().sort();
         $('#col4_filter').empty();
@@ -409,7 +412,7 @@ $(document).ready(function() {
 
         paymentMethods = table.column(8,{filter: 'applied'}).data().unique().sort();
         delivery = table.column(11,{filter: 'applied'}).data().unique().sort();
-        
+
         $('#col8_filter').empty();
         $('#col8_filter').append('<option value>-- All --</option>')
         $.each(paymentMethods, function(key, value){
@@ -423,9 +426,65 @@ $(document).ready(function() {
         })
 
         stats_non_elearning()
+    });
 
+    $('input[name="daterange"]').on('cancel.daterangepicker', function(ev, picker) {
+        $('input[name="daterange"]').val('');
+
+        initCounters();
+        minDate = null;
+        maxDate = moment().endOf('day').format('MM/DD/YYYY');
+
+        table.draw()
+        stats_non_elearning();
 
     });
+
+    //Refilter the table
+    // $('#min, #max').on('change', function () {
+    //     //console.log('from change min!!')
+    //     table.draw();
+    //     //console.log(table.column(1).data())
+    //     price = $('#participants_table').DataTable().column( 3 ).data();
+
+    //     initCounters()
+
+    //     min = new Date($('#min').val());
+    //     max = new Date($('#max').val());
+
+    //     minDate = new DateTime($('#min'), {
+    //         format: 'L'
+    //     });
+
+    //     min = moment(min).format('MM/DD/YYYY')
+    //     max = moment(max).format('MM/DD/YYYY')
+
+    //     coupons = table.column(4,{filter: 'applied'}).data().unique().sort();
+    //     $('#col4_filter').empty();
+    //     $('#col4_filter').append('<option value>-- All --</option>')
+    //     $.each(coupons, function(key, value){
+    //         $('#col4_filter').append('<option value="'+value+'">'+value+'</option>')
+    //     })
+
+    //     paymentMethods = table.column(8,{filter: 'applied'}).data().unique().sort();
+    //     delivery = table.column(11,{filter: 'applied'}).data().unique().sort();
+
+    //     $('#col8_filter').empty();
+    //     $('#col8_filter').append('<option value>-- All --</option>')
+    //     $.each(paymentMethods, function(key, value){
+    //         $('#col8_filter').append('<option value="'+value+'">'+value+'</option>')
+    //     })
+
+    //     $('#col11_filter').empty();
+    //     $('#col11_filter').append('<option value>-- All --</option>')
+    //     $.each(delivery, function(key, value){
+    //         $('#col11_filter').append('<option value="'+value+'">'+value+'</option>')
+    //     })
+
+    //     stats_non_elearning()
+
+
+    // });
 });
 
     function filterGlobal () {
@@ -443,10 +502,10 @@ $(document).ready(function() {
     }
 
     function stats_non_elearning(){
-        
-        
+
+
         $(`.ticket-choices`).empty();
-     
+
 
         initCounters()
 
@@ -469,7 +528,7 @@ $(document).ready(function() {
                     newTickets[coupon]['all']['count'] = 0;
 
                 }
-                if(!newTickets[coupon][amount]){   
+                if(!newTickets[coupon][amount]){
                     newTickets[coupon][amount] = {};
                     newTickets[coupon][amount]['countValue'] = 0;
                     newTickets[coupon][amount]['count'] = 0;
@@ -492,7 +551,7 @@ $(document).ready(function() {
                     newTickets[coupon]['all']['count'] = 0;
 
                 }
-                if(!newTickets[coupon][amount]){   
+                if(!newTickets[coupon][amount]){
                     newTickets[coupon][amount] = {};
                     newTickets[coupon][amount]['countValue'] = 0;
                     newTickets[coupon][amount]['count'] = 0;
@@ -515,7 +574,7 @@ $(document).ready(function() {
                     newTickets[coupon]['all']['count'] = 0;
 
                 }
-                if(!newTickets[coupon][amount]){   
+                if(!newTickets[coupon][amount]){
                     newTickets[coupon][amount] = {};
                     newTickets[coupon][amount]['countValue'] = 0;
                     newTickets[coupon][amount]['count'] = 0;
@@ -538,7 +597,7 @@ $(document).ready(function() {
                     newTickets[coupon]['all']['count'] = 0;
 
                 }
-                if(!newTickets[coupon][amount]){   
+                if(!newTickets[coupon][amount]){
                     newTickets[coupon][amount] = {};
                     newTickets[coupon][amount]['countValue'] = 0;
                     newTickets[coupon][amount]['count'] = 0;
@@ -562,7 +621,7 @@ $(document).ready(function() {
                     newTickets[coupon]['all']['count'] = 0;
 
                 }
-                if(!newTickets[coupon][amount]){   
+                if(!newTickets[coupon][amount]){
                     newTickets[coupon][amount] = {};
                     newTickets[coupon][amount]['countValue'] = 0;
                     newTickets[coupon][amount]['count'] = 0;
@@ -591,32 +650,32 @@ $(document).ready(function() {
         $('#count_alumni').text('Alumni(all): '+count_alumni)
         $('#count_early-bird').text('Early Bird(all): '+count_early)
         $('#count_sponsored').text(+count_sponsored)
-     
+
         $.each( newTickets, function( key, value ) {
-          
+
           actionValue = key.toLowerCase()
           html = ``;
           $.each( value, function( key1, value1 ) {
-              
+
             if(value1['countValue'] <= 0){
                 return;
             }
 
             html += `<a class="dropdown-item ticket-action" data-type='${key}' data-ticket=${key1} href="javascript:void(0)">${key1}</a>`
           });
-          actionValue = actionValue.replace(/ /g, '-');   
+          actionValue = actionValue.replace(/ /g, '-');
           $(`.${actionValue}-action`).append(html)
-          
+
       });
 
-     
+
 
 
     }
 
 
     function filterColumn ( i ) {
-        
+
         if($('#col'+i+'_filter').val() && i != 8){
             $('#participants_table').DataTable().column( i ).search(
                 '^'+$('#col'+i+'_filter').val()+'$', true,true
@@ -626,7 +685,7 @@ $(document).ready(function() {
                 $('#col'+i+'_filter').val()
             ).draw();
         }
-        
+
 
         $('.participants_info').remove()
         event = removeSpecial($('#col'+i+'_filter').val())
@@ -640,7 +699,7 @@ $(document).ready(function() {
             $('.participant_elearning').addClass('none')
         }
 
-       
+
         //console.log(removeSpecial($('#col'+i+'_filter').val()))
         stats_non_elearning()
 
@@ -653,9 +712,9 @@ $(document).ready(function() {
             })
         }
 
-        
 
-      
+
+
     }
 
     $(document).ready(function() {
@@ -699,7 +758,7 @@ $(document).ready(function() {
                         newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]]['all']['count'] = 0;
 
                     }
-                    if(!newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)]){   
+                    if(!newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)]){
                         newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)] = {};
                         newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)]['countValue'] = 0;
                         newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)]['count'] = 0;
@@ -712,7 +771,7 @@ $(document).ready(function() {
                     newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)]['count']++;
 
                 }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Regular'){
-                    
+
                     regular = regular + parseInt(value)
                     count_regular++
 
@@ -723,7 +782,7 @@ $(document).ready(function() {
                         newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]]['all']['count'] = 0;
 
                     }
-                    if(!newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)]){   
+                    if(!newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)]){
                         newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)] = {};
                         newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)]['countValue'] = 0;
                         newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)]['count'] = 0;
@@ -754,7 +813,7 @@ $(document).ready(function() {
                         newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]]['all']['count'] = 0;
 
                     }
-                    if(!newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)]){   
+                    if(!newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)]){
                         newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)] = {};
                         newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)]['countValue'] = 0;
                         newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)]['count'] = 0;
@@ -779,7 +838,7 @@ $(document).ready(function() {
                         newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]]['all']['count'] = 0;
 
                     }
-                    if(!newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)]){   
+                    if(!newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)]){
                         newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)] = {};
                         newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)]['countValue'] = 0;
                         newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)]['count'] = 0;
@@ -792,7 +851,7 @@ $(document).ready(function() {
                     newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)]['count']++;
 
 
-                }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Early Bird' || 
+                }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Early Bird' ||
                                 $('#participants_table').DataTable().column( 2 ).data()[key] == 'Early birds'){
                     early = early + parseInt(value)
                     count_early++
@@ -804,7 +863,7 @@ $(document).ready(function() {
                         newTickets['early-bird']['all']['count'] = 0;
 
                     }
-                    if(!newTickets['early-bird'][parseInt(value)]){   
+                    if(!newTickets['early-bird'][parseInt(value)]){
                         newTickets['early-bird'][parseInt(value)] = {};
                         newTickets['early-bird'][parseInt(value)]['countValue'] = 0;
                         newTickets['early-bird'][parseInt(value)]['count'] = 0;
@@ -833,15 +892,15 @@ $(document).ready(function() {
         $('#count_early-bird').text('Early Bird(all): '+count_early.toLocaleString())
         $('#count_sponsored').text(+count_sponsored.toLocaleString())
 
-        
+
         $.each( newTickets, function( key, value ) {
-          
+
             actionValue = key.toLowerCase()
             html = ``;
 
-        
+
             $.each( value, function( key1, value1 ) {
-                
+
                 if(value1['countValue'] <= 0){
                     return;
                 }
@@ -857,7 +916,7 @@ $(document).ready(function() {
             /*console.log(sortKeys.sort())
 
             $.each( sortKeys, function( key1, value1 ) {
-                
+
                 if(value1 <= 0){
                     return;
                 }
@@ -868,9 +927,9 @@ $(document).ready(function() {
 
             });*/
 
-            actionValue = actionValue.replace(/ /g, '-');      
+            actionValue = actionValue.replace(/ /g, '-');
             $(`.${actionValue}-action`).append(html)
-            
+
         });
 
 
@@ -934,8 +993,8 @@ $(document).ready(function() {
 
         $(document).on("click",".excel-button",function() {
 
-            let min = $("#min").val();
-            let max = $("#max").val();
+            let min = minDate;
+            let max = maxDate;
             let event = eventsArray[removeSpecial($("#col1_filter").val())];
 
 
@@ -959,7 +1018,7 @@ $(document).ready(function() {
         $(document).on("click",".invoice-button",function() {
 
             let transactionsData = table.column(10,{filter: 'applied'}).data().unique().sort();
-            let transactions = []; 
+            let transactions = [];
             $.each(transactionsData, function(key, value){
                 transactions.push(value)
             })
@@ -972,7 +1031,7 @@ $(document).ready(function() {
                 type: "POST",
                 data:{transactions:transactions} ,
                 success: function(data) {
-                    window.location.href = data.zip         
+                    window.location.href = data.zip
                 }
             });
 

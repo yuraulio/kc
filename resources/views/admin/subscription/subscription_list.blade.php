@@ -57,7 +57,7 @@
                         </div>
                         <div id="sub_datePicker">
                             <div class="col">
-                                <label>Daterange</label>
+                                <label>From - To</label>
                                 <div class="form-group">
                                  <div class="input-group">
                                     <div class="input-group-prepend">
@@ -70,6 +70,13 @@
                             </div>
 
                         </div>
+                        <div class="col-sm-3 filter_col" id="filter_col4" data-column="11">
+                            <label>Delivery</label>
+                            <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..." name="Name" class="column_filter" id="col4_filter" placeholder="Delivery">
+                            <option selected value> -- All -- </option>
+                            </select>
+                        </div>
+
                         <!-- <div id="sub_datePicker" class="input-daterange datepicker">
                            <div class="col">
                               <label>From</label>
@@ -132,6 +139,7 @@
                   </tfoot>
                   <tbody>
                      @foreach ($subscriptions as $item)
+
                      <tr>
                         <td>
                            {{ $item['id'] }}
@@ -177,7 +185,9 @@
 <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 <script>
-   var minDate = null, maxDate = null;
+   let minDate = null, maxDate = null;
+   let transactionArray = [];
+   let delivery = [];
 
    $.fn.dataTable.ext.search.push(
        function( settings, data, dataIndex ) {
@@ -212,6 +222,7 @@
 
 
     function initStats(){
+        transactionArray = [];
         let sum = 0;
         let trial = 0;
         let cancelled = 0 ;
@@ -236,6 +247,7 @@
 
 
 
+            transactionArray.push(this.data()[0]);
         } );
 
 
@@ -250,6 +262,12 @@
         $.each(events, function(key, value){
             $('#col2_filter').append('<option value="'+value+'">'+value+'</option>')
         })
+
+        // delivery = table.column(11).data().unique().sort()
+
+        // $.each(delivery, function(key, value){
+        //     $('#col4_filter').append('<option value="'+value+'">'+value+'</option>')
+        // })
     }
 
     function filterColumn ( i ) {
@@ -299,22 +317,27 @@
 
     $(document).ready(function() {
 
-        $('input[name="daterange"]').daterangepicker({
+        $('input[name="daterange"]').daterangepicker();
+        $('input[name="daterange"]').val('')
 
-            }, function(start, end, label) {
-                minDate = start.format('MM/DD/YYYY')
-                maxDate = end.format('MM/DD/YYYY')
+        minDate = null;
+        maxDate = moment().endOf('day').format('MM/DD/YYYY');
 
-                table.draw();
-                initStats();
-            }
-        );
+
 
         $('input[name="daterange"]').on('cancel.daterangepicker', function(ev, picker) {
             $('input[name="daterange"]').val('');
 
             minDate = null;
-            maxDate = null;
+            maxDate = moment().endOf('day').format('MM/DD/YYYY');
+
+            table.draw();
+            initStats();
+        });
+
+        $('input[name="daterange"]').on('apply.daterangepicker', function(ev, picker) {
+            minDate = picker.startDate.format('MM/DD/YYYY')
+            maxDate = picker.endDate.format('MM/DD/YYYY')
 
             table.draw();
             initStats();
@@ -327,8 +350,6 @@
         } );
 
 
-
-
     });
 
 
@@ -336,7 +357,7 @@
 </script>
 <script>
     $(document).ready(function(){
-        transactionArray = []
+
 
         $('#subscriptions_table_filter').append(
             `<div class='excel-button'>
@@ -347,11 +368,7 @@
                 `
         )
 
-        let transactionIDS = table.column(0).data();
 
-        $.each(transactionIDS, function(key, value) {
-            transactionArray.push(transactionIDS[key]);
-        })
 
     })
 
