@@ -19,14 +19,20 @@ class SubscriptionController extends Controller
         $subscriptions = [];
 
         $events = Event::has('transactions')->with('category', 'delivery')->get()->groupBy('id');
-        $data['subscriptions'] = Transaction::with('user', 'subscription.event', 'subscription.event.category')->get()->sortBy('created_at');
+        $data['subscriptions'] = Transaction::with('user', 'user.events', 'subscription.event', 'subscription.event.category')->get()->sortBy('created_at');
         // $plans = Plan::all()->groupby('stripe_plan');
-        $plans = Plan::with('categories')->get()->groupBy('id');
-        //dd($plans);
+        //$plans = Plan::with('categories')->get()->groupBy('id');
+        $plans = Plan::wherePublished(1)->with('categories')->get();
+        $categories = [];
+
+        foreach($plans as $plan){
+            $categories = array_merge($plan->categories->pluck('id')->toArray(),$categories);
+        }
+
         $users = [];
 
         foreach($data['subscriptions'] as $key => $sub){
-
+            $events = [];
             if(count($sub['subscription']) != 0){
 
                 if(!isset($sub['subscription'][0]['event'][0]['title'])){
@@ -51,56 +57,30 @@ class SubscriptionController extends Controller
                 }else if(($status == 'cancelled' || $status == 'cancel' || $status == 'canceled') && $sub['trial']){
                     $status = 'cancelled';
                 }
-
+                //dd($sub['user']);
+                $registrationEvent = null;
+                foreach($sub['user'][0]['events'] as $userEvent){
+                    $category = isset($userEvent['category'][0]['id']) ? $userEvent['category'][0]['id'] : -1;
+                    if(in_array($category,$categories)){
+                        $registrationEvent = $userEvent;
+                    }
+                }
+            
                 $name = $sub['user'][0]['firstname'] . ' ' . $sub['user'][0]['lastname'];
                 $amount = '€'.number_format(intval($sub['total_amount']), 2, '.', '');
-                //$delivery = $sub['subscription'][0]['event'][0]['delivery'][0]['name'];
-
-                //dd($sub);
+                $delivery = $registrationEvent->is_inclass_course() ? 'In-Class' : 'E-Learning';
 
                 $subscriptions[$sub['subscription'][0]['stripe_id']]=['user_id' => $sub['user'][0]['id'], 'user' => $name, 'plan_id' => $sub['subscription'][0]['event'][0]['plans'][0]['id'], 'plan_name' => $sub['subscription'][0]['name'],
                     'event_title' => $sub['subscription'][0]['event'][0]['title'], 'status' => $status,'ends_at'=>$sub['ends_at'],
-                    'amount' => $amount,'created_at'=>date('Y-m-d',strtotime($sub['created_at'])),'id'=>$sub['id'], 'event_id' => $sub['subscription'][0]['event'][0]['id']];
+                    'amount' => $amount,'created_at'=>date('Y-m-d',strtotime($sub['created_at'])),'id'=>$sub['id'], 
+                    'event_id' => $sub['subscription'][0]['event'][0]['id'], 'delivery' => $delivery];
 
             }
 
-
-        }
-
-
-        foreach($users as $key => $user){
-            if(count($user) != 0){
-                $users[$key] = $user[count($user) - 1];
-            }
 
         }
 
         //dd($subscriptions);
-
-        foreach($subscriptions as $key => $sub){
-
-            $userEvent = $users[$sub['user_id']];
-
-            if(!empty($userEvent)){
-                $event = $events[$userEvent][0];
-                $category = $event['category'][0];
-
-                $hasFind = false;
-                foreach($plans[$sub['plan_id']][0]['categories'] as $plan_cat){
-                    if($plan_cat['id'] == $category['id']){
-                        $hasFind = true;
-                    }
-                }
-                if($hasFind){
-                    $subscriptions[$key]['delivery']['id'] = $event['delivery'][0]['id'];
-                    $subscriptions[$key]['delivery']['name'] = $event['delivery'][0]['name'];
-                }
-
-            }
-
-
-        }
-
         $data['subscriptions'] = $subscriptions;
 
         return view('admin.subscription.subscription_list', $data);
