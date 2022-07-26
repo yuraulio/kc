@@ -329,7 +329,7 @@
                             <template v-if="!tab_open_edit.includes(tab_item)">
                                 {{tab_item}}
                                 <div @click.stop="removeTabsTab(tab_item)" class="d-inline-block float-end ms-1">
-                                    <i class="dripicons-trash"></i>
+                                    <i class="dripicons-trash" title="Delete tab"></i>
                                 </div>
                                 <div @click="tab_open_edit.push(tab_item)" class="d-inline-block float-end">
                                     <i class="dripicons-document-edit"></i>
@@ -338,7 +338,7 @@
                             <template v-else>
                                 <input style="height: 21px;" type="text" :value="tab_item" :ref="tab_item">
                                 <div @click="tab_open_edit.splice(tab_open_edit.indexOf(tab_item), 1)" class="d-inline-block float-end ms-1">
-                                    <i class="dripicons-trash mt-1"></i>
+                                    <i class="dripicons-trash mt-1" title="Delete tab"></i>
                                 </div>
                                 <div @click="renameTab(tab_item)" class="d-inline-block float-end">
                                     <i class="dripicons-checkmark"></i>
