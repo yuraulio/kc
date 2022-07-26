@@ -789,7 +789,7 @@ class User extends Authenticatable
         }
 
         $userMinutes = $absences->sum('minutes');
-        $eventMinutes =  $event->getTotalHours();//$absences->sum('total_minutes');
+        $eventMinutes =  $event->getTotalHours() > 0 ? $event->getTotalHours() : 1;//$absences->sum('total_minutes');
         $userMinutesAbsences = $eventMinutes - $userMinutes;
         $eventLimitAbsence = $event->absences_limit;
 
