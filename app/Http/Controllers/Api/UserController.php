@@ -244,6 +244,7 @@ class UserController extends Controller
             unset($data[$key]['event']['venues']);
             unset($data[$key]['event']['event_info']);
             unset($data[$key]['event']['event_info1']);
+            unset($data[$key]['event']['absences_limit']);
         }
 
 
@@ -273,6 +274,8 @@ class UserController extends Controller
 
             $data[$key]['event'] = $event;//$event->toArray();
             $data[$key]['user_absences'] = $user->getAbsencesByEvent($event)['user_absences_percent'];
+            $data[$key]['absences_limit'] = isset($eventInfo['inclass']['absences']) ? $eventInfo['inclass']['absences'] : 0;
+            
             //$dropbox = $category['dropbox'][0];
             $dropbox = $event['dropbox'][0];
             $folders = isset($dropbox['folders'][0]) ? $dropbox['folders'][0] : [];
@@ -433,8 +436,9 @@ class UserController extends Controller
                     $date = "null";
                 }
             }*/
+
             
-            $date = isset($eventInfo['delivery']['inclass']['dates']['text']) ? $eventInfo['delivery']['inclass']['dates']['text'] : null;
+            $date = isset($eventInfo['inclass']['dates']['text']) ? $eventInfo['inclass']['dates']['text'] : null;
 
             $data[$key]['summary'][0]['title'] = $date;
             $data[$key]['summary'][0]['description'] = '';
