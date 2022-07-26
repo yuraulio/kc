@@ -97,12 +97,12 @@
                 <li class="{{ \Request::is('menus/*') ? 'menuitem-active' : ''}}">
                     <a href="#sidebarCMS" data-bs-toggle="collapse">
                         <i data-feather="airplay"></i>
-                        <span> CMS</span>
+                        <span>Website content</span>
                     </a>
                     <div class="collapse {{ \Request::is('menus/*') ? ' show' : ''}}" id="sidebarCMS">
                         <ul class="nav-second-level">
                             <li>
-                                <a href="{{route('admin-categories')}}">Categories management</a>
+                                <a href="{{route('admin-categories')}}">Content categories</a>
                             </li>
                             <li>
                                 <a href="{{route('admin-templates')}}">Template management</a>
@@ -111,10 +111,16 @@
                                 <a href="{{route('admin-pages')}}">Pages management</a>
                             </li>
                             <li>
+                                <a href="{{route('admin-pages-blog')}}">Blog articles management</a>
+                            </li>
+                            <li>
+                                <a href="{{route('admin-pages-knowledge')}}">Knowledge pages management</a>
+                            </li>
+                            <li>
                                 <a href="{{route('admin-comments')}}">Comments management</a>
                             </li>
                             <li>
-                                <a href="{{route('admin-media')}}">Assets management</a>
+                                <a href="{{route('admin-media')}}">Media management</a>
                             </li>
                             <li class="{{ \Request::is('menus/*') ? 'menuitem-active' : ''}}">
                                 <a href="{{route('admin-menu')}}">Menus management</a>
