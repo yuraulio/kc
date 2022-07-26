@@ -70,7 +70,11 @@
                             </div>
 
                         </div>
+<<<<<<< HEAD
+                        <div class="col-sm-3 filter_col" id="filter_col4" data-column="4">
+=======
                         {{--<div class="col-sm-3 filter_col" id="filter_col4" data-column="11">
+>>>>>>> 2abc3ebb60af630a7af4ab7bd56ecbea9c08e370
                             <label>Delivery</label>
                             <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..." name="Name" class="column_filter" id="col4_filter" placeholder="Delivery">
                             <option selected value> -- All -- </option>
@@ -116,6 +120,7 @@
                         {{--
                         <th scope="col">{{ __('Trials Sub end at') }}</th>
                         --}}
+                        <th scope="col">{{ __('Delivery') }}</th>
                         <th scope="col">{{ __('Sub end at') }}</th>
                         <th scope="col">{{ __('Amount') }}</th>
                         <th class="" scope="col">{{ __('Create Date') }}</th>
@@ -131,6 +136,7 @@
                         {{--
                         <th scope="col">{{ __('Trials Sub end at') }}</th>
                         --}}
+                        <th scope="col">{{ __('Delivery') }}</th>
                         <th scope="col">{{ __('Sub end at') }}</th>
                         <th scope="col">{{ __('Amount') }}</th>
                         <th class="" scope="col">{{ __('Create Date') }}</th>
@@ -145,11 +151,12 @@
                            {{ $item['id'] }}
                         </td>
                         <td>
-                           {{ $item['user'] }}
+                           <a href="{{ route('user.edit', $item['user_id']) }}">{{ $item['user'] }}</a>
                         </td>
                         {{--<td>{{$item['plan_name']}}</td>--}}
                         <td>{{ $item['event_title'] }}</td>
                         <td>{{ $item['status'] }}</td>
+                        <td>{{ (isset($item['delivery'])) ? $item['delivery']['name'] : ''}}</td>
                         <td>{{ $item['ends_at'] }}</td>
                         <td>{{ $item['amount'] }}</td>
                         <td class="">{{ $item['created_at'] }}</td>
@@ -202,7 +209,7 @@
                 max = moment(max).format('YYYY/MM/DD')
             }
 
-           var date = new Date(data[6]);
+           var date = new Date(data[7]);
            date = moment(date).format('YYYY/MM/DD')
 
 
@@ -226,10 +233,13 @@
         let sum = 0;
         let trial = 0;
         let cancelled = 0 ;
+        let inclass = 0;
+        let elearning = 0;
         //returns 'filtered' or visible rows
         table.rows({filter: 'applied'}).every( function ( rowIdx, tableLoop, rowLoop ) {
             var statuss = this.data()[3];
-            var amount = this.data()[5];
+            var amount = this.data()[6];
+            var delivery = this.data()[4]
             amount = parseInt(amount.replace("€",""))
 
             if( $("#col3_filter").val() !== 'cancelled' &&  $("#filter_col3").val() !== 'trialing' ){
@@ -245,6 +255,12 @@
                 cancelled += 1;
             }
 
+            if(delivery == ("Video e-learning courses" || "Live webinar courses")){
+                elearning += 1;
+            }else if( delivery == "In-class courses"){
+                inclass += 1;
+            }
+
 
 
             transactionArray.push(this.data()[0]);
@@ -254,6 +270,8 @@
         $('#total').text('€'+sum)
         $('#cancel').text(cancelled)
         $('#trial').text(trial)
+        $('#inclass').text(inclass)
+        $('#e-learning').text(elearning)
 
     }
 
@@ -263,11 +281,10 @@
             $('#col2_filter').append('<option value="'+value+'">'+value+'</option>')
         })
 
-        // delivery = table.column(11).data().unique().sort()
-
-        // $.each(delivery, function(key, value){
-        //     $('#col4_filter').append('<option value="'+value+'">'+value+'</option>')
-        // })
+        delivery = table.column(4).data().unique().sort()
+        $.each(delivery, function(key, value){
+            $('#col4_filter').append('<option value="'+value+'">'+value+'</option>')
+        })
     }
 
     function filterColumn ( i ) {
@@ -287,6 +304,12 @@
                 value = ''
             }
 
+        }else if(i == 4){
+            if($('#col'+i+'_filter').val() != ''){
+                value = $('#col'+i+'_filter').val()
+            }else{
+                value = ''
+            }
         }
 
         if(value.trim()){
@@ -303,7 +326,7 @@
 
     // DataTables initialisation
     var table = $('#subscriptions_table').DataTable({
-        "order": [[ 6, "desc" ]],
+        "order": [[ 7, "desc" ]],
         language: {
             paginate: {
             next: '&#187;', // or '→'

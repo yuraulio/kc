@@ -1028,7 +1028,55 @@
 
                     <div class="form-row">
 
-                        @foreach((array) json_decode($user->consent,true) as $key => $consent)
+                    <?php
+                        $consent = (array) json_decode($user->consent,true);
+                    ?>
+
+
+
+                        @if(isset($consent['firstname']))
+                        <div class="form-group{{ $errors->has('billaddress') ? ' has-danger' : '' }} col-md-4">
+                            <label class="form-control-label" >
+                                {{ __('Firstname') }}
+                            </label>
+                            <input type="text" class="form-control"  value="{{$consent['firstname']}}" readonly>
+                        </div>
+                        @endif
+                        @if(isset($consent['lastname']))
+                        <div class="form-group{{ $errors->has('billaddress') ? ' has-danger' : '' }} col-md-4">
+                            <label class="form-control-label" >
+                                {{ __('Lastname') }}
+                            </label>
+                            <input type="text" class="form-control"  value="{{$consent['lastname']}}" readonly>
+                        </div>
+                        @endif
+                        @if(isset($consent['afm']))
+                        <div class="form-group{{ $errors->has('billaddress') ? ' has-danger' : '' }} col-md-4">
+                            <label class="form-control-label" >
+                                    {{ 'VAT Number' }}
+                                </label>
+                            <input type="text" class="form-control"  value="{{$consent['afm']}}" readonly>
+                        </div>
+                        @endif
+                        @if(isset($consent['ip']))
+                        <div class="form-group{{ $errors->has('billaddress') ? ' has-danger' : '' }} col-md-4">
+                            <label class="form-control-label" >
+                                {{ __('IP') }}
+                            </label>
+                            <input type="text" class="form-control"  value="{{$consent['ip']}}" readonly>
+                        </div>
+                        @endif
+                        @if(isset($consent['date']))
+                        <div class="form-group{{ $errors->has('billaddress') ? ' has-danger' : '' }} col-md-4">
+                            <label class="form-control-label" >
+                                {{ __('Date') }}
+                            </label>
+                            <input type="text" class="form-control"  value="{{$consent['date']}}" readonly>
+                        </div>
+                        @endif
+
+
+                        {{--@foreach((array) json_decode($user->consent,true) as $key => $consent)
 
                         <div class="form-group{{ $errors->has('billaddress') ? ' has-danger' : '' }} col-md-4">
 
@@ -1054,7 +1102,7 @@
 
 
                         </div>
-                        @endforeach
+                        @endforeach--}}
 
 
                     </div>

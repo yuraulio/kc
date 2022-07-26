@@ -5,10 +5,50 @@
     <title></title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
   </head>
+  <style>
+    body{font-family: 'Foco !important';}
+  </style>
   <body>
     <table width="table">
-    <thead>
+    <?php
+        $consent = (array) json_decode($user->consent,true);
+    ?>
+
+        @if(isset($consent['firstname']))
         <tr>
+            <th>{{ __('Firstname')}}</th>
+            <td>{{ $consent['firstname'] }}</td>
+        </tr>
+        @endif
+
+        @if(isset($consent['lastname']))
+        <tr>
+            <th>{{ __('Lastname')}}</th>
+            <td>{{ $consent['lastname'] }}</td>
+        </tr>
+        @endif
+
+        @if(isset($consent['afm']))
+        <tr>
+            <th>{{ __('VAT Number')}}</th>
+            <td>{{ $consent['afm'] }}</td>
+        </tr>
+        @endif
+
+        @if(isset($consent['ip']))
+        <tr>
+            <th>{{ __('IP')}}</th>
+            <td>{{ $consent['ip'] }}</td>
+        </tr>
+        @endif
+
+        @if(isset($consent['date']))
+        <tr>
+            <th>{{ __('Date')}}</th>
+            <td>{{ $consent['date'] }}</td>
+        </tr>
+        @endif
+        {{--<tr>
             @foreach((array) json_decode($user->consent,true) as $key => $consent)
             <th scope="col">
                 @if($key == 'ip')
@@ -22,10 +62,10 @@
                 @endif
             </th>
             @endforeach
-        </tr>
+        </tr>--}}
 
-      </thead>
-      <tbody>
+
+      {{--<tbody>
         <tr>
             @foreach((array) json_decode($user->consent,true) as $key => $consent)
 
@@ -40,7 +80,7 @@
             @endforeach
         </tr>
 
-      </tbody>
+      </tbody>--}}
     </table>
 
     <hr>

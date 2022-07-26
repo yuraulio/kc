@@ -692,7 +692,7 @@ class UserController extends Controller
         $user->notify(new WelcomeEmail($user,$data));
 		$user->notify(new CourseInvoice($data));
 
-        
+
 
 		$invoiceFileName = date('Y.m.d');
 		if($paymentMethod){
