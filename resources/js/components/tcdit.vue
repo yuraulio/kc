@@ -46,7 +46,7 @@
                             <template v-if="!tab_open_edit.includes(tab_item)">
                                 {{tab_item}}
                                 <div @click.stop="removeTabsTab(tab_item)" class="d-inline-block float-end ms-1">
-                                    <i class="dripicons-cross"></i>
+                                    <i class="dripicons-trash cursor-pointer" title="Delete tab"></i>
                                 </div>
                                 <div @click="tab_open_edit.push(tab_item)" class="d-inline-block float-end ms-1">
                                     <i class="dripicons-document-edit"></i>
@@ -55,7 +55,7 @@
                             <template v-else>
                                 <input style="height: 21px;" type="text" :value="tab_item" :ref="tab_item">
                                 <div @click="tab_open_edit.splice(tab_open_edit.indexOf(tab_item), 1)" class="d-inline-block float-end ms-1">
-                                    <i class="dripicons-cross mt-1"></i>
+                                    <i class="dripicons-trash mt-1 cursor-pointer" title="Delete tab"></i>
                                 </div>
                                 <div @click="renameTab(tab_item)" class="d-inline-block float-end ms-1">
                                     <i class="dripicons-checkmark"></i>
@@ -162,9 +162,9 @@
                     </div>
                     <div v-for="(column, indr, key) in val.columns" :key="key">
 
-                        <span @click="removeRow(index)" v-if="indr == (val.columns.length - 1) && val.removable !== false" class="position-absolute top-0 start-100 close-button" style="cursor: pointer">
+                        <span @click="removeRow(index)" v-if="indr == (val.columns.length - 1) && val.removable !== false" class="position-absolute top-0 start-100 close-button" title="Delete component" style="cursor: pointer">
                             <button class="btn btn-sm btn-soft-danger" type="button">
-                                <i class="dripicons-cross"></i>
+                                <i class="dripicons-trash"></i>
                             </button>
                         </span>
 
@@ -176,7 +176,7 @@
                                             <a href="#home1" @click="setTabActive(index, ind)" data-bs-toggle="tab" aria-expanded="false" :class="'nav-link' + (v.active === true ? ' active' : '')">
                                                 {{ v.template.title }}
                                                 <div @click.stop="removeColumn(val.columns, column.id, index, ind)" class="d-inline-block float-end ms-1">
-                                                    <i class="dripicons-cross"></i>
+                                                    <i class="dripicons-trash" title="Delete column"></i>
                                                 </div>
                                                 <div @click="changeComponent(index, ind, column.template)" class="d-inline-block float-end">
                                                     <i class="dripicons-return"></i>
@@ -329,7 +329,7 @@
                             <template v-if="!tab_open_edit.includes(tab_item)">
                                 {{tab_item}}
                                 <div @click.stop="removeTabsTab(tab_item)" class="d-inline-block float-end ms-1">
-                                    <i class="dripicons-cross"></i>
+                                    <i class="dripicons-trash"></i>
                                 </div>
                                 <div @click="tab_open_edit.push(tab_item)" class="d-inline-block float-end">
                                     <i class="dripicons-document-edit"></i>
@@ -338,7 +338,7 @@
                             <template v-else>
                                 <input style="height: 21px;" type="text" :value="tab_item" :ref="tab_item">
                                 <div @click="tab_open_edit.splice(tab_open_edit.indexOf(tab_item), 1)" class="d-inline-block float-end ms-1">
-                                    <i class="dripicons-cross mt-1"></i>
+                                    <i class="dripicons-trash mt-1"></i>
                                 </div>
                                 <div @click="renameTab(tab_item)" class="d-inline-block float-end">
                                     <i class="dripicons-checkmark"></i>
@@ -435,7 +435,7 @@
                                 />
 
                             </div>
-                            <span @click="removeRow(index)" v-if="indr == (val.columns.length - 1) && val.removable !== false" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="cursor: pointer">
+                            <span @click="removeRow(index)" v-if="indr == (val.columns.length - 1) && val.removable !== false" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" title="Delete component" style="cursor: pointer">
                                 Remove
                                 <span class="visually-hidden"></span>
                             </span>
@@ -578,7 +578,27 @@ export default {
 
         },
         removeRow(index) {
-            this.data.splice(index, 1);
+            Swal.fire({
+                title: "Are you sure?",
+                text: "Delete component?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Yes, delete it!",
+                showLoaderOnConfirm: true,
+                buttonsStyling: false,
+                customClass: {
+                    cancelButton: "btn btn-soft-secondary",
+                    confirmButton: "btn btn-soft-danger",
+                },
+                preConfirm: () => {
+                    return this.data.splice(index, 1);
+                },
+                allowOutsideClick: () => !Swal.isLoading(),
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire("Deleted!", "Component has been deleted.", "success");
+                }
+            });
         },
         changeComponent(row_index, column_index, component) {
             if (component.changable !== false) {
@@ -614,18 +634,38 @@ export default {
 
         },
         removeColumn(columns, column_id, row_index, column_index) {
-            var index = columns.findIndex(function(column) {
-                return column.id == column_id;
-            });
-            columns.splice(index, 1);
+            Swal.fire({
+                title: "Are you sure?",
+                text: "Delete column?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Yes, delete it!",
+                showLoaderOnConfirm: true,
+                buttonsStyling: false,
+                customClass: {
+                    cancelButton: "btn btn-soft-secondary",
+                    confirmButton: "btn btn-soft-danger",
+                },
+                preConfirm: () => {
+                    var index = columns.findIndex(function(column) {
+                        return column.id == column_id;
+                    });
+                    columns.splice(index, 1);
 
-            // set columns width
-            var colWidth = 6 / (columns.length);
-            columns.forEach(function(column) {
-                column.width = colWidth;
-            });
+                    // set columns width
+                    var colWidth = 6 / (columns.length);
+                    columns.forEach(function(column) {
+                        column.width = colWidth;
+                    });
 
-            this.setTabActive(row_index, 0);
+                    this.setTabActive(row_index, 0);
+                },
+                allowOutsideClick: () => !Swal.isLoading(),
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire("Delete!", "Column has been deleted.", "success");
+                }
+            });
         },
         findInputValue(inputs, key){
             var index = inputs.findIndex(function(input) {
@@ -696,17 +736,37 @@ export default {
             }
         },
         removeTabsTab(tab_name) {
-            var data = this.data;
-            this.data.forEach(function(row, index) {
-                if (row.tabs_tab == tab_name) {
-                    data.splice(index, 1);
-                }
-            });
+            Swal.fire({
+                title: "Are you sure?",
+                text: "Delete tab?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Yes, delete it!",
+                showLoaderOnConfirm: true,
+                buttonsStyling: false,
+                customClass: {
+                    cancelButton: "btn btn-soft-secondary",
+                    confirmButton: "btn btn-soft-danger",
+                },
+                preConfirm: () => {
+                    var data = this.data;
+                    this.data.forEach(function(row, index) {
+                        if (row.tabs_tab == tab_name) {
+                            data.splice(index, 1);
+                        }
+                    });
 
-            var tabs = this.tabs;
-            this.tabs.forEach(function(tab, index) {
-                if (tab == tab_name) {
-                    tabs.splice(index, 1);
+                    var tabs = this.tabs;
+                    this.tabs.forEach(function(tab, index) {
+                        if (tab == tab_name) {
+                            tabs.splice(index, 1);
+                        }
+                    });
+                },
+                allowOutsideClick: () => !Swal.isLoading(),
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire("Deleted!", "Tab has been deleted.", "success");
                 }
             });
         },
