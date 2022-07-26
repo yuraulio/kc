@@ -753,7 +753,7 @@
                                              }
                                           }*/
                                           ?>
-                                       @if(isset($event['summaryDate']))<div class="duration"><img class="replace-with-svg" onerror="this.src='{{cdn('/theme/assets/images/icons/icon-calendar.svg')}}'" src="{{cdn($event['summaryDate_icon'])}}" alt="">{{$event['summaryDate']}}</div>@endif
+                                       @if(isset($event['summaryDate']))<div class="duration"><img class="replace-with-svg" onerror="this.src='{{cdn('/theme/assets/images/icons/Duration_Hours.svg')}}'" src="{{cdn($event['summaryDate_icon'])}}" alt="">{{$event['summaryDate']}}</div>@endif
                                        @if($event['hours'])
                                        <div class="expire-date"><img class="replace-with-svg" onerror="this.src='{{cdn('/theme/assets/images/icons/Start-Finish.svg')}}'"  src="{{cdn($event['hours_icon'])}}" alt="">{{$event['hours']}}h</div>
                                        @endif
@@ -794,7 +794,7 @@
                                                          <div class="category">{{$lesso['type'][0]['name']}}</div>
                                                          @endif
                                                          <!-- Feedback 18-11 changed -->
-                                                         <span class="meta-item duration"><img src="{{cdn('/theme/assets/images/icons/icon-calendar.svg')}}" alt="" /><?= date( "l d M Y", strtotime($lesso['pivot']['time_starts']) ) ?></span> <!-- Feedback 18-11 changed -->
+                                                         <span class="meta-item duration"><img src="{{cdn('/theme/assets/images/icons/Duration_Hours.svg')}}" alt="" /><?= date( "l d M Y", strtotime($lesso['pivot']['time_starts']) ) ?></span> <!-- Feedback 18-11 changed -->
                                                          <span class="meta-item duration"><img src="{{cdn('/theme/assets/images/icons/Times.svg')}}" alt="" /><?= date( "H:i", strtotime($lesso['pivot']['time_starts']) ) ?> ({{$lesso['pivot']['duration']}})</span> <!-- Feedback 18-11 changed -->
                                                          <span class="meta-item duration"><img src="{{cdn('/theme/assets/images/icons/icon-marker.svg')}}" alt="" />{{$lesso['pivot']['room']}}</span> <!-- Feedback 18-11 changed -->
                                                       </div>

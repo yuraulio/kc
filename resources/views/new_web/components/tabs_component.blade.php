@@ -6,7 +6,7 @@
             "tabs" => $input->tabs ?? "",
         ];
     }
-
+ 
     $event = $dynamic_page_data["event"] ?? null;
     $is_event_paid = $dynamic_page_data["is_event_paid"] ?? null;
     $is_joined_waiting_list = $dynamic_page_data["is_joined_waiting_list"] ?? null;
@@ -17,6 +17,11 @@
     function checkTabContent($tab, $dynamic_page_data, $tabs) {
         $tab = strtolower($tab);
         foreach ($tabs["tabs"]["value"] as $tab_content) {
+            
+            if($tab_content->tabs_tab == 'benefits'){
+                continue;
+            }
+
             if ($tab_content->tabs_tab == $tab) {
 
                 if ($tab == "faq") {

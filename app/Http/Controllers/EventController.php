@@ -308,10 +308,8 @@ class EventController extends Controller
 
         $priority = 0;
 
-
-
         if($event->category()->first() != null){
-            foreach($event->category->first()->faqs as $faq){
+            foreach($event->category->first()->faqs->unique() as $faq){
                 $event->faqs()->attach($faq,['priority'=> $priority]);
                 $priority += 1;
             }

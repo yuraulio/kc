@@ -135,13 +135,32 @@ class MainController extends Controller
         //dd(json_decode($page->content));
 
         $this->fbp->sendPageViewEvent();
-        return view('new_web.page', [
-            'content' => json_decode($page->content),
-            'page_id' => $page->id,
-            'comments' => $page->comments->take(500),
-            'page' => $page,
-            'dynamic_page_data' => $dynamicPageData,
-        ]);
+
+        if($request->has('terms')){
+
+            $terms = Page::withoutGlobalScope("published")->whereId(6)->first();
+            $contents[] = json_decode($page->content);
+            $contents[] = json_decode($terms->content);
+            
+            return view('new_web.page_consent', [
+                'contents' => $contents,
+                'page_id' => $page->id,
+                'comments' => $page->comments->take(500),
+                'page' => $page,
+                'dynamic_page_data' => $dynamicPageData,
+            ]);
+        
+        }else{
+            return view('new_web.page', [
+                'content' => json_decode($page->content),
+                'page_id' => $page->id,
+                'comments' => $page->comments->take(500),
+                'page' => $page,
+                'dynamic_page_data' => $dynamicPageData,
+            ]);
+        }
+
+        
     }
 
     private function eventSearch($dynamicPageData, Request $request)

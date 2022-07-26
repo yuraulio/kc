@@ -168,7 +168,8 @@ class CheckForSMSCoockie
                         return $next($request);
                     }
                     else {
-                        return redirect($pageSlug);
+                        //dd('fdsa');
+                        return redirect($pageSlug."?terms");
                     }
                 }else if(($user->consent == '' || $user->terms == 0) && $user->instructor->first()){
 

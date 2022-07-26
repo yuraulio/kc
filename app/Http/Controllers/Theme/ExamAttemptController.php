@@ -263,7 +263,7 @@ class ExamAttemptController extends Controller
 
                     $totalCredits +=  $getDB[$q_id]['answer-credit'];
 
-                    if($given_ans!='') {
+                    //if($given_ans!='') {
                         //foreach($getDBContents as $getDB) {
 
                         $dbAns = $getDB[$q_id]['correct_answer'];
@@ -332,8 +332,6 @@ class ExamAttemptController extends Controller
                         $total_credit+= $credit;
 
                     //}
-
-                    }
 
                 }
 

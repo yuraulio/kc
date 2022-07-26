@@ -686,26 +686,26 @@ Route::post('/summary/securee', 'Theme\CartController@securePayment')->name('pay
 Route::get('/payment/required/{id}/{event}/{paymentMethod}/{subscriptionCheckout}', '\Laravel\Cashier\Http\Controllers\PaymentController@requiredAction')->name('payment.required');
 //Route::post('/stripe/payment/required', 'Theme\CartController@requiredAction')->name('payment.required');
 
-Route::group(['prefix' => "/{locale?}/" . config('binshopsblog.blog_prefix', 'blog')], function () {
+// Route::group(['prefix' => "/{locale?}/" . config('binshopsblog.blog_prefix', 'blog')], function () {
 
-    Route::get('/', 'BinshopsReaderController@index')
-        ->name('binshopsblog.index');
+//     Route::get('/', 'BinshopsReaderController@index')
+//         ->name('binshopsblog.index');
 
-    Route::get('/categories/{category_slug?}', 'BinshopsReaderController@index')
-        ->name('binshopsblog.index');
+//     Route::get('/categories/{category_slug?}', 'BinshopsReaderController@index')
+//         ->name('binshopsblog.index');
 
-    Route::get('/search', 'BinshopsReaderController@search')
-        ->name('binshopsblog.search');
+//     Route::get('/search', 'BinshopsReaderController@search')
+//         ->name('binshopsblog.search');
 
 
-    Route::get('/category{subcategories}', 'BinshopsReaderController@view_category')->where('subcategories', '^[a-zA-Z0-9-_\/]+$')->name('binshopsblog.view_category');
+//     Route::get('/category{subcategories}', 'BinshopsReaderController@view_category')->where('subcategories', '^[a-zA-Z0-9-_\/]+$')->name('binshopsblog.view_category');
 
-    Route::get(
-        '/{blogPostSlug}',
-        'BinshopsReaderController@viewSinglePost'
-    )
-        ->name('binshopsblog.single');
-});
+//     Route::get(
+//         '/{blogPostSlug}',
+//         'BinshopsReaderController@viewSinglePost'
+//     )
+//         ->name('binshopsblog.single');
+// });
 
 Route::group(['middleware' => ['web'], 'namespace' => '\BinshopsBlog\Controllers'], function () {
     /** The main public facing blog routes - show all posts, view a category, rss feed, view a single post, also the add comment route */
