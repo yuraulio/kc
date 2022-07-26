@@ -13,7 +13,7 @@ class CMS
     {
         $data = $event->topicsLessonsInstructors();
         $data['event'] = $event;
-        $data['benefits'] = $event->benefits->toArray();
+        $data['benefits'] = [];//$event->benefits->toArray();
         //$data['summary'] = $event->summary1()->get()->toArray();
         $data['sections'] = $event->sections->groupBy('section');
         $data['section_fullvideo'] = $event->sectionVideos->first();
