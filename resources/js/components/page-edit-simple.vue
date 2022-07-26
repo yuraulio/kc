@@ -301,8 +301,7 @@ import slugify from '@sindresorhus/slugify';
                 });
             },
             edit() {
-
-                if(this.pageId == 4){
+                if(this.pageId == 4 || this.pageId == 6){
                     let user = 'users';
                   
                     Swal.fire({
@@ -330,8 +329,6 @@ import slugify from '@sindresorhus/slugify';
             },
 
             editPageUpdateTerms(terms_val) {
-
-                console.log(terms_val);
 
                 this.loading = true;
                 this.errors = null;

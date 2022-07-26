@@ -70,12 +70,12 @@
                             </div>
 
                         </div>
-                        <div class="col-sm-3 filter_col" id="filter_col4" data-column="11">
+                        {{--<div class="col-sm-3 filter_col" id="filter_col4" data-column="11">
                             <label>Delivery</label>
                             <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..." name="Name" class="column_filter" id="col4_filter" placeholder="Delivery">
                             <option selected value> -- All -- </option>
                             </select>
-                        </div>
+                        </div>--}}
 
                         <!-- <div id="sub_datePicker" class="input-daterange datepicker">
                            <div class="col">
