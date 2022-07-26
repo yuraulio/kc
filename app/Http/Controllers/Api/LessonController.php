@@ -58,6 +58,12 @@ class LessonController extends Controller
 
         $db_video_original = $user->statistic()->wherePivot('event_id',$event_id)->first();
 
+        if(!$db_video_original){
+            return response()->json([
+                'message' => '',
+            ]);
+        }
+
         $db_video = json_decode($db_video_original->pivot['videos'], true);
 
         $arr = [];
