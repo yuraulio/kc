@@ -17,7 +17,7 @@ class SubscriptionController extends Controller
     {
         $subscriptions = [];
 
-        $data['subscriptions'] = Transaction::with('user', 'subscription.event')->get()->toArray();
+        $data['subscriptions'] = Transaction::with('user', 'subscription.event', 'subscription.event.category')->get();
         //$plans = Plan::all()->groupby('stripe_plan');
 
         foreach($data['subscriptions'] as $key => $sub){
@@ -27,6 +27,23 @@ class SubscriptionController extends Controller
                 if(!isset($sub['subscription'][0]['event'][0]['title'])){
                     continue;
                 }
+
+                /*
+                $event_category = $sub['subscription'][0]['event'][0]['category'][0]['id'];
+                // 183
+                //dd($event_category);
+                $plan = $sub['subscription'][0]['event'][0]['plans']->last();
+                $plan_categories = $plan->categories;
+                //dd($plan_categories);
+                // 46, 183, 277
+
+                foreach($plan_categories as $plan_cat){
+                    if($plan_cat['id'] == $event_category){
+                        $plan_category = $plan_cat;
+                    }
+                }
+
+                */
                 $status = $sub['subscription'][0]['stripe_status'];
 
                 if($sub['trial'] && $status == 'trialing'){

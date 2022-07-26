@@ -77,8 +77,8 @@
 
                             <div class="col-sm-3 filter_col">
                                 <div class="form-group">
-                                    <label>From:</label>
-                                    <input class="form-control select2-css" type="text" name="daterange" value="" />
+                                    <label>From - To</label>
+                                    <input class="select2-css" type="text" name="daterange" value="" />
                                 </div>
                             </div>
                             <!-- <div class="col-sm-3 filter_col">
@@ -211,10 +211,8 @@
     <script src="{{ asset('argon') }}/vendor/datatables.net-buttons/js/buttons.print.min.js"></script>
     <script src="{{ asset('argon') }}/vendor/datatables.net-select/js/dataTables.select.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="{{ asset('argon') }}/vendor/datatables-datetime/datetime.min.js"></script>
-    <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script> -->
+    <!-- <script src="{{ asset('argon') }}/vendor/datatables-datetime/datetime.min.js"></script> -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
-
     <script>
 
 {{--$('input[name="min"]').daterangepicker({
@@ -229,7 +227,8 @@
 
        var eventsArray = {};
         // DataTables initialisation
-        var table = $('#participants_table').DataTable({
+        var table = null;
+        table = $('#participants_table').DataTable({
             order: [[6, 'desc']],
             language: {
                 paginate: {
@@ -277,15 +276,15 @@
         }
 
 
-var minDate, maxDate;
+let minDate = null, maxDate = null;
 
 
 // Custom filtering function which will search data in column four between two values
 $.fn.dataTable.ext.search.push(
 
     function( settings, data, dataIndex ) {
-        var min = minDate.val();
-        var max = maxDate.val();
+        var min = new Date(minDate);
+        var max = new Date(maxDate);
         var date = new Date( data[6] );
         if (
             ( min === null && max === null ) ||
@@ -302,7 +301,9 @@ $.fn.dataTable.ext.search.push(
 
 $(document).ready(function() {
 
-    $('input[name="daterange"]').daterangepicker();
+    var datepicker = $('input[name="daterange"]').daterangepicker()
+
+    $('input[name="daterange"]').val('')
 
     let sort_events = []
 
@@ -310,13 +311,18 @@ $(document).ready(function() {
 
     // Create date inputs
     //console.log($('#min'))
-    minDate = new DateTime($('#min'), {
-        format: 'L'
-    });
-    //console.log('--min: '+minDate.val())
-    maxDate = new DateTime($('#max'), {
-        format: 'L'
-    });
+    // minDate = new DateTime('2020/10/01',{
+    //     format: 'L'
+    // });
+
+    // console.log(minDate)
+    // //console.log('--min: '+minDate.val())
+    // maxDate = new DateTime('2022/10/01', {
+    //     format: 'L'
+    // });
+
+    minDate = null;
+    maxDate = moment().endOf('day').format('MM/DD/YYYY');
 
 
     $('#participants_table').on( 'search.dt', function () {
@@ -421,19 +427,17 @@ $(document).ready(function() {
         $('#col12_filter').append('<option value="'+value+'">'+value+'</option>')
     })
 
-    //Refilter the table
     $('input[name="daterange"]').on('apply.daterangepicker', function(ev, picker) {
-        console.log('triggerd')
-        console.log(ev)
-        console.log(picker)
-        minDate = start.format('MM/DD/YYYY')
-        maxDate = end.format('MM/DD/YYYY')
 
-        table.draw();
-        //console.log(table.column(1).data())
         price = $('#participants_table').DataTable().column( 3 ).data();
-
         initCounters()
+
+        min = picker.startDate.format('MM/DD/YYYY')
+        max = picker.endDate.format('MM/DD/YYYY')
+
+        minDate = min;
+        maxDate = max;
+        table.draw();
 
         coupons = table.column(4,{filter: 'applied'}).data().unique().sort();
         $('#col4_filter').empty();
@@ -460,50 +464,64 @@ $(document).ready(function() {
 
     });
 
+    $('input[name="daterange"]').on('cancel.daterangepicker', function(ev, picker) {
+        $('input[name="daterange"]').val('');
 
-    // $('#min, #max').on('change', function () {
-    //     //console.log('from change min!!')
-    //     table.draw();
-    //     //console.log(table.column(1).data())
-    //     price = $('#participants_table').DataTable().column( 3 ).data();
+        initCounters();
+        minDate = null;
+        maxDate = moment().endOf('day').format('MM/DD/YYYY');
 
-    //     initCounters()
+        table.draw()
+        stats_non_elearning();
 
-    //     min = new Date($('#min').val());
-    //     max = new Date($('#max').val());
+    });
 
-    //     minDate = new DateTime($('#min'), {
-    //         format: 'L'
-    //     });
+    /*
+    //Refilter the table
+    $('#min, #max').on('change', function () {
+        //console.log('from change min!!')
+        table.draw();
+        //console.log(table.column(1).data())
+        price = $('#participants_table').DataTable().column( 3 ).data();
 
-    //     min = moment(min).format('MM/DD/YYYY')
-    //     max = moment(max).format('MM/DD/YYYY')
+        initCounters()
 
-    //     coupons = table.column(4,{filter: 'applied'}).data().unique().sort();
-    //     $('#col4_filter').empty();
-    //     $('#col4_filter').append('<option value>-- All --</option>')
-    //     $.each(coupons, function(key, value){
-    //         $('#col4_filter').append('<option value="'+value+'">'+value+'</option>')
-    //     })
+        min = new Date($('#min').val());
+        max = new Date($('#max').val());
 
-    //     paymentMethods = table.column(8,{filter: 'applied'}).data().unique().sort();
-    //     $('#col8_filter').empty();
-    //     $('#col8_filter').append('<option value>-- All --</option>')
-    //     $.each(paymentMethods, function(key, value){
-    //         $('#col8_filter').append('<option value="'+value+'">'+value+'</option>')
-    //     })
+        minDate = new DateTime($('#min'), {
+            format: 'L'
+        });
 
-    //     delivery = table.column(12,{filter: 'applied'}).data().unique().sort();
-    //     $('#col12_filter').empty();
-    //     $('#col12_filter').append('<option value>-- All --</option>')
-    //     $.each(delivery, function(key, value){
-    //         $('#col12_filter').append('<option value="'+value+'">'+value+'</option>')
-    //     })
+        min = moment(min).format('MM/DD/YYYY')
+        max = moment(max).format('MM/DD/YYYY')
 
-    //     stats_non_elearning()
+        coupons = table.column(4,{filter: 'applied'}).data().unique().sort();
+        $('#col4_filter').empty();
+        $('#col4_filter').append('<option value>-- All --</option>')
+        $.each(coupons, function(key, value){
+            $('#col4_filter').append('<option value="'+value+'">'+value+'</option>')
+        })
+
+        paymentMethods = table.column(8,{filter: 'applied'}).data().unique().sort();
+        $('#col8_filter').empty();
+        $('#col8_filter').append('<option value>-- All --</option>')
+        $.each(paymentMethods, function(key, value){
+            $('#col8_filter').append('<option value="'+value+'">'+value+'</option>')
+        })
+
+        delivery = table.column(12,{filter: 'applied'}).data().unique().sort();
+        $('#col12_filter').empty();
+        $('#col12_filter').append('<option value>-- All --</option>')
+        $.each(delivery, function(key, value){
+            $('#col12_filter').append('<option value="'+value+'">'+value+'</option>')
+        })
+
+        stats_non_elearning()
 
 
-    // });
+    });
+    */
 });
 
     function filterGlobal () {
@@ -1007,8 +1025,8 @@ $(document).ready(function() {
 
         $(document).on("click",".excel-button",function() {
 
-            let min = $("#min").val();
-            let max = $("#max").val();
+            let min = minDate;
+            let max = maxDate;
             let event = eventsArray[removeSpecial($("#col1_filter").val())];
 
             $.ajax({
@@ -1020,7 +1038,7 @@ $(document).ready(function() {
                 data:{event:event,fromDate:min,toDate:max} ,
                 success: function(data) {
 
-                    window.location.href = '/tmp/exports/TransactionExport.xlsx'
+                    window.location.href = '/tmp/exports/TransactionsExport.xlsx'
 
                 }
             });
