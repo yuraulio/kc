@@ -49,8 +49,13 @@ mix.js('resources/js/app.js', 'public/js')
         'public/theme/assets/css/fontawesome/css/kcfonts.css',
         'public/theme/assets/css/select2.css',
         'resources/assets/css/custom.css',
+        'resources/assets/css/editor.css',
         // 'public/admin_assets/css/icons.css',
     ], 'public/theme/assets/css/style_ver_new.css');
+
+    mix.styles([
+        'resources/assets/css/editor.css',
+    ], 'public/theme/assets/css/editor.css');
 
     mix.sass('resources/assets/scss/bootstrap5/bootstrap5-grid.scss',
         'public/theme/assets/css'

@@ -108,6 +108,7 @@
                 toolbar_sticky: true,
                 toolbar_mode: 'wrap',
                 height: 300,
+                font_css: '/theme/assets/css/editor.css'
             }"
         ></editor>
     </div>
