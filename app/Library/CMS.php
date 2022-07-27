@@ -30,7 +30,7 @@ class CMS
         $data['is_joined_waiting_list'] = 0;
         //$data['sumStudents'] = get_sum_students_course($event->category->first());//isset($event->category[0]) ? $event->category[0]->getSumOfStudents() : 0;
         //dd($category);
-        $data['sumStudents'] = $category->getSumOfStudentsByCategory();
+        $data['sumStudents'] = $category ? $category->getSumOfStudentsByCategory() : 0;
         $data['showSpecial'] = false;
         $data['showAlumni'] = $event->ticket()->where('type', 'Alumni')->where('active', true)->first() ? true : false;
         $data['partners'] = $event->partners;
