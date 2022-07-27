@@ -480,7 +480,7 @@ class UserController extends Controller
                 $isElearning = true;
                 //progress here
                 $data[$key]['progress'] = intval($event->progress($user)).'%';
-
+                $data[$key]['videos_seen'] = $event->video_seen($user);
                 // Statistics
                 $statistics =  ($statistics = $user->statistic()->wherePivot('event_id',$event['id'])->first()) ?
                             $statistics->toArray() : ['pivot' => [], 'videos' => ''];
@@ -502,13 +502,19 @@ class UserController extends Controller
 
            
             $topics = [];
-
+            
             foreach($event['lessons'] as $lesson){
                 
-                if(!$lesson['instructor_id'] || !$lesson['vimeo_video']){
+              
+
+                if(!$lesson['instructor_id']){
                     continue;
                 }
 
+                if($isElearning && !$lesson['vimeo_video']){
+                    continue;
+                }
+               
                 $inst['name'] = $instructors[$lesson['instructor_id']][0]['title'].' '.$instructors[$lesson['instructor_id']][0]['subtitle'];
                 $inst['media'] = asset(get_image($instructors[$lesson['instructor_id']][0]['medias'], 'instructors-small'));
 
@@ -628,6 +634,7 @@ class UserController extends Controller
                   
 
                 }else{
+                    
                     if($lesson['pivot']['date'] != ''){
                         $arr_lesson['date'] = date_format(date_create($lesson['pivot']['date']),"d/m/Y");
 
@@ -636,7 +643,7 @@ class UserController extends Controller
                         $arr_lesson['date'] = date_format(date_create($lesson['pivot']['time_starts']),"d/m/Y");
                         
                     }
-
+                    
                     $arr_lesson['title'] = $lesson['title'];
                     $arr_lesson['time_starts'] = $lesson['pivot']['time_starts'];
                     $arr_lesson['time_ends'] = $lesson['pivot']['time_ends'];
@@ -681,13 +688,12 @@ class UserController extends Controller
 
                 }
 
-                
-
+            
                 $arr_lesson['instructor'] = $inst; 
                 array_push($topics[$topic->id]['lessons'], $arr_lesson);
 
             }
-    
+      
             $data[$key]['topics'] = [];
             foreach($topics as $key11 =>  $topic){
                 //dd($topic);
@@ -728,7 +734,6 @@ class UserController extends Controller
             
             
         }
-
         return $data;
 
     }
