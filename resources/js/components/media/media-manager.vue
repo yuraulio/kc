@@ -262,7 +262,7 @@
                             <i class="mdi mdi-plus"></i> <i class="mdi mdi-folder-plus-outline me-1"></i>
                         </button>
                         <button class="btn btn-sm btn-warning" @click.prevent="$modal.show('upload-media-modal'); move_file_to = null;">
-                            <i class="mdi mdi-plus"></i> <i class="mdi mdi-image me-1"></i>
+                            <i class="mdi mdi-plus"></i> <i class="mdi mdi-file me-1"></i>
                         </button>
                         <!--
                         <button class="btn btn-sm btn-primary" @click.prevent="$modal.show('upload-file-modal'); move_file_to = null;">
