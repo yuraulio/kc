@@ -749,6 +749,7 @@ class UserController extends Controller
         foreach($instructor['event'] as $key => $event)
         {
             
+            $eventInfo = $event->event_info();
             $data1 = [];
             $isElearning = false;
 
@@ -905,7 +906,7 @@ class UserController extends Controller
             }
     
             // Summary
-            foreach($event['summary1'] as $key_summary => $summary){
+            /*foreach($event['summary1'] as $key_summary => $summary){
                 $data[$key]['summary'][$key_summary]['title'] = $summary->title;
                 $data[$key]['summary'][$key_summary]['description'] = $summary->description;
                 $data[$key]['summary'][$key_summary]['icon'] = $summary->icon;
@@ -916,7 +917,15 @@ class UserController extends Controller
                 }else{
                     $date = "null";
                 }
-            }
+            }*/
+
+            
+            $date = isset($eventInfo['inclass']['dates']['text']) ? $eventInfo['inclass']['dates']['text'] : null;
+
+            $data[$key]['summary'][0]['title'] = $date;
+            $data[$key]['summary'][0]['description'] = '';
+            $data[$key]['summary'][0]['icon'] = null;
+            $data[$key]['summary'][0]['section'] = 'date';
             
             // is Inclass?
             if($event->is_inclass_course()){
@@ -970,7 +979,11 @@ class UserController extends Controller
            
             $topics = [];
             foreach($event->lessons as $lesson){
-                if(!$lesson['instructor_id'] || !$lesson['vimeo_video']){
+                if(!$lesson['instructor_id']){
+                    continue;
+                }
+
+                if($isElearning && !$lesson['vimeo_video']){
                     continue;
                 }
                 $sum= 0;
