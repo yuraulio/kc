@@ -496,7 +496,7 @@ class Event extends Model
 
     }
 
-    public function progress($user)
+    /*public function progress($user)
     {
         //dd($user->statistic()->wherePivot('event_id',$this['id'])->first()->pivot['videos']);
 
@@ -521,6 +521,59 @@ class Event extends Model
         }
 
         return 0 * 100;
+    }*/
+
+
+    public function progress($user)
+    {
+
+        if(!$videos = $user->statistic()->wherePivot('event_id',$this['id'])->first()){
+            return 0 * 100;
+        }
+
+        $lessons = $this->lessons;
+
+        $videos = $videos->pivot['videos'];
+
+        $totalDuration = 0;
+
+        foreach($lessons as $lesson){
+
+            if(!$lesson->instructor_id || !$lesson->vimeo_duration){
+                continue;
+            }
+
+            $duration = explode(" ",$lesson->vimeo_duration);
+            
+            if(count($duration) == 2){
+               
+                $seconds = (int)preg_replace('/[^0-9.]+/', '', $duration[0]) * 60;
+                $seconds += (int)preg_replace('/[^0-9.]+/', '', $duration[1]);
+
+                $totalDuration += $seconds;
+
+            }else{
+                
+                $seconds = (int)preg_replace('/[^0-9.]+/', '', $duration[0]);
+                $totalDuration += $seconds;
+
+            }
+
+        }
+
+        //dd($videos);
+        $seenTime = 0;
+        if($videos != ''){
+            $videos = json_decode($videos, true);
+            foreach($videos as $video){
+                $seenTime += (int)$video['stop_time'];
+            }
+            
+        }
+
+       
+
+        return $totalDuration > 0 ? $seenTime /  $totalDuration * 100 : 0;
     }
 
     public function video_seen($user)
