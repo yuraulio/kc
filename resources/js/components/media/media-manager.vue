@@ -264,9 +264,11 @@
                         <button class="btn btn-sm btn-warning" @click.prevent="$modal.show('upload-media-modal'); move_file_to = null;">
                             <i class="mdi mdi-plus"></i> <i class="mdi mdi-image me-1"></i>
                         </button>
+                        <!--
                         <button class="btn btn-sm btn-primary" @click.prevent="$modal.show('upload-file-modal'); move_file_to = null;">
                             <i class="mdi mdi-plus"></i> <i class="mdi mdi-upload me-1"></i>
                         </button>
+                        -->
                     </div>
                     <div class="mail-list mt-3">
                         <a href="#" @click.prevent="getFolders(); filesView = false; folderId=null;" class="list-group-item border-0 font-14"><i class="mdi mdi-folder-outline font-18 align-middle me-1"></i>Recent Updated</a>

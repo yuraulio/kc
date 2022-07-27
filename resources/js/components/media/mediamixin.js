@@ -120,6 +120,7 @@ var mediaMixin = {
         uploadImgFile() {
             var formData = new FormData();
             var imagefile = this.regFile;
+
             if (imagefile && this.move_file_to) {
                 this.loading = true;
                 formData.append("file", imagefile);
@@ -143,7 +144,13 @@ var mediaMixin = {
                     this.selectedFile = response.data.data[0];
                     this.getFiles(response.data.data[0].folder_id);
                     this.warning = true;
-                    this.$modal.show('edit-image-modal');
+
+                    if (imagefile.type == "image/jpeg" || imagefile.type == "image/png") {
+                        this.$modal.show('edit-image-modal');
+                    } else {
+                        this.opImage = this.selectedFile;
+                        this.$modal.show('gallery-modal');
+                    }
 
                     this.jpg = false;
                     this.alt_text = "";
@@ -152,6 +159,7 @@ var mediaMixin = {
                 .catch((error) => {
                     console.log(error)
                     this.loading = false;
+                    this.$toast.error(error.response.data.message);
                 })
             } else {
                 this.upload_error = "Pick file or folder.";
