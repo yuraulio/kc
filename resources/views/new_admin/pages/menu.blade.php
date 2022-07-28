@@ -22,7 +22,7 @@
                         </a> --}}
                     </form>
                 </div>
-                <h4 class="page-title">Menus</h4>
+                <h4 class="page-title">Menus management</h4>
             </div>
         </div>
     </div>
