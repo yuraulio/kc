@@ -127,6 +127,7 @@ class MediaController extends Controller
     public function uploadImage(Request $request): JsonResponse
     {
         $image = $request->file('file');
+
         try {
             $folder = $this->getFolder($request);
             $path = '/' . $folder["path"];
@@ -134,6 +135,18 @@ class MediaController extends Controller
 
             $image_name = $image->getClientOriginalName();
             $imgpath_original = $path . '' . $image_name;
+
+            if (Storage::disk('public')->exists($imgpath_original)) {
+                return response()->json(['message' => "File already exists at this location."], 422);
+            }
+
+            // if is non image file (or non supported image file)
+            $tmp = explode('.', $image_name);
+            $extension = end($tmp);
+            if (!in_array($extension, ["jpg", "jpeg", "png"])) {
+                return $this->uploadRegFile($request);
+            }
+
             $file = Storage::disk('public')->putFileAs($path, $image, $image_name, 'public');
             $mfile_original = $this->storeFile($image_name, "original", $imgpath_original, $mediaFolder->id, $image->getSize(), $request->parrent_id, $request->alt_text, $request->link);
 
