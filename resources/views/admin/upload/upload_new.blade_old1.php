@@ -1,6 +1,6 @@
-<!-- <link href="{{ cdn(mix('theme/assets/css/bootstrap.css')) }}" rel="stylesheet" media="all" />
+<link href="{{ cdn(mix('theme/assets/css/bootstrap.css')) }}" rel="stylesheet" media="all" />
 <link href="{{asset('admin_assets/css/icons.min.css')}}" rel="stylesheet" type="text/css" />
-<link href="{{asset('admin_assets/css/saas/app-limited.css')}} " rel="stylesheet" type="text/css"/> -->
+<link href="{{asset('admin_assets/css/saas/app-limited.css')}} " rel="stylesheet" type="text/css"/>
 
 <style>
     .ubold .form-control {
@@ -38,10 +38,9 @@
     #version-btn {
         display: none;
     }
-    .bootstrap-classes.ubold.event_info #image-input-button{
-        display: none;
-    }
 </style>
+
+
 
 <?php
 
@@ -54,7 +53,11 @@
 
 
 
-
+<div id="app1" class="bootstrap-classes ubold mt-5 mb-5 pl-lg-4 {{$from}}">
+    <manager-for-old-admin-new
+        imageedit="{{ $imageedit }}"
+    ></manager-for-old-admin-new>
+</div>
 
 
 @push('js')
