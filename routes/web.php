@@ -560,6 +560,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('/logmeout', 'Theme\StudentController@logout');
 
     Route::get('/mycertificate/{certificate}', 'Theme\CertificateController@getCertificate');
+    //Route::get('/mycertificate-image/{certificate}', 'Theme\CertificateController@getCertificateToImage');
 });
 
 Route::group(['middleware' => 'auth'], function () {

@@ -9,6 +9,7 @@ use PDF;
 use App\Model\Event;
 use ZipArchive;
 use File;
+use Imagick;
 
 class CertificateController extends Controller
 {
@@ -127,6 +128,83 @@ class CertificateController extends Controller
           
   
   }
+
+
+  public function getCertificateToImage($certificate){
+
+    //$certificate = decrypt($certificate);
+    $certificate =base64_decode($certificate);
+
+    $certificate = explode('--',$certificate)[1];
+
+    $certificate = Certificate::find($certificate);
+
+      //return view('admin.certificates.certificate',compact('certificate'));
+      /*$view = 'admin.certificates.certificate';
+      if($certificate->success){
+        $view = 'admin.certificates.certificates2021.kc_attendance';
+      }else{
+        $view = 'admin.certificates.certificates2021.kc_attendance';
+      }*/
+      
+      //dd(storage_path('fonts\Foco_Lt.ttf'));
+
+      $contxt = stream_context_create([
+        'ssl' => [
+        'verify_peer' => FALSE,
+        'verify_peer_name' => FALSE,
+        'allow_self_signed'=> TRUE
+        ]
+    ]);
+
+    $pdf = PDF::setOptions([
+        'isHtml5ParserEnabled'=> true,
+        'isRemoteEnabled' => true,
+       
+      ]);
+
+     //return view($view,compact('certificate'));
+      
+
+      $certificateTitle = $certificate->certificate_title;
+      //dd($certificate->event->first()->event_info()['certificate']);
+      if($certificate->event->first() && isset($certificate->event->first()->event_info()['certificate']['messages'])){
+        
+        if($certificate->success && isset($certificate->event->first()->event_info()['certificate']['messages']['success'])){
+          
+          $certificateTitle = $certificate->event->first()->event_info()['certificate']['messages']['success'];
+        }else if(!$certificate->success && isset($certificate->event->first()->event_info()['certificate']['messages']['failure'])){
+          
+          $certificateTitle = $certificate->event->first()->event_info()['certificate']['messages']['failure'];
+        }
+
+      }
+
+      $certificate['firstname'] = $certificate->firstname;
+      $certificate['lastname'] = $certificate->lastname;
+      $certificate['certification_date'] = $certificate->certification_date;
+      $certificate['expiration_date'] = $certificate->expiration_date ? date('F Y',$certificate->expiration_date) : null;
+      $certificate['credential'] = $certificate->credential;
+      //$certificate['certification_title'] = $certificate->certificate_title;
+      $certificate['certification_title'] = $certificateTitle;
+
+      //return view('admin.certificates.kc_diploma_2022a',compact('certificate'));
+
+      $pdf->getDomPDF()->setHttpContext($contxt);
+      $pdf->loadView('admin.certificates.'.$certificate->template,compact('certificate'))->setPaper('a4', 'landscape');
+
+      //$customPaper = array(0,0,3507,2480);
+      //$pdf->loadView('admin.certificates.'.$certificate->template,compact('certificate'))->setPaper($customPaper);
+      
+      $fn = $certificate->firstname . '-' . $certificate->lastname . '-' . $certificate->user()->first()->kc_id . '.pdf';
+
+      $image = new \Spatie\PdfToImage\Pdf($fn);
+      dd($image);
+      return $pdf->stream($fn);
+
+        
+
+}
 
   
   public function exportCertificates(Event $event){
