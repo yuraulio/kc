@@ -14,6 +14,8 @@ mix.js('resources/js/app.js', 'public/js')
     .vue({ version: 2 })
    .sass('resources/assets/scss/argon.scss', 'public/css');
 
+mix.js('resources/js/app_new_settings_icons.js', 'public/js')
+   .vue({ version: 2 });
 
    //elixir(function(mix) {
 

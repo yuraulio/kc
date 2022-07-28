@@ -104,7 +104,3 @@ Vue.use(VueClipboard)
 new Vue({
     el: '#app'
 })
-
-new Vue({
-    el: '#app1'
-})

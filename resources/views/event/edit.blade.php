@@ -1547,35 +1547,7 @@
                                             @include('alerts.feedback', ['field' => 'category_id'])
                                         </div>
 
-                                        {{--<div class="form-group{{ $errors->has('type_id') ? ' has-danger' : '' }}">
-                                            <label class="form-control-label" for="input-type_id">{{ __('Type') }}</label>
-                                            <select multiple name="type_id[]" id="input-type_id" class="form-control" placeholder="{{ __('Type') }}" required>
-                                                <option value="">-</option>
-
-                                                @foreach ($types as $type)
-                                                <?php $found = false; ?>
-                                                    <option <?php if(count($event->type) != 0){
-                                                        foreach($event->type as $selected_type){
-                                                            if($selected_type['id'] == $type['id']){
-                                                                $found = true;
-                                                            }
-                                                        }
-                                                        if($found){
-                                                            echo 'selected';
-                                                        }else{
-                                                            echo '';
-                                                        }
-                                                    }
-                                                    ?> value="{{ $type->id }}" >{{ $type->name }}</option>
-                                                @endforeach
-                                            </select>
-
-                                            @include('alerts.feedback', ['field' => 'type_id'])
-                                        </div>--}}
-
-
-
-
+                                        
 
 
                                     </div>
@@ -1587,33 +1559,18 @@
                                                 <li class="nav-item">
                                                     <a class="nav-link mb-sm-3 mb-md-0 active" id="tabs-icons-text-1-tab_inside" data-toggle="tab" href="#tabs-icons-text-1_inside" role="tab" aria-controls="tabs-icons-text-1_inside" aria-selected="true"><i class="ni ni-cloud-upload-96 mr-2"></i>Overview</a>
                                                 </li>
-                                                {{--<li class="nav-item">
-                                                    <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-8-tab_inside" data-toggle="tab" href="#metas" role="tab" aria-controls="metas" aria-selected="false"><i class="ni ni-calendar-grid-58 mr-2"></i>Metas</a>
-                                                </li>--}}
-                                                {{--<li class="nav-item">
-                                                    <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-2-tab_inside" data-toggle="tab" href="#tabs-icons-text-2_inside" role="tab" aria-controls="tabs-icons-text-2_inside" aria-selected="false"><i class="ni ni-bell-55 mr-2"></i>Summary </a>
-                                                </li>--}}
-                                                {{--<li class="nav-item">
-                                                    <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-3-tab_inside" data-toggle="tab" href="#tabs-icons-text-3_inside" role="tab" aria-controls="tabs-icons-text-3_inside" aria-selected="false"><i class="ni ni-calendar-grid-58 mr-2"></i>Benefit</a>
-                                                </li>--}}
+                                                
                                                 <li class="nav-item">
                                                     <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-4-tab_inside" data-toggle="tab" href="#tabs-icons-text-4_inside" role="tab" aria-controls="tabs-icons-text-4_inside" aria-selected="true"><i class="ni ni-cloud-upload-96 mr-2"></i>Topics</a>
                                                 </li>
                                                 <li class="nav-item">
                                                     <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-5-tab_inside" data-toggle="tab" href="#tabs-icons-text-5_inside" role="tab" aria-controls="tabs-icons-text-5_inside" aria-selected="false"><i class="ni ni-bell-55 mr-2"></i>Tickets</a>
                                                 </li>
-                                                {{--<li class="nav-item">
-                                                    <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-6-tab_inside" data-toggle="tab" href="#tabs-icons-text-6_inside" role="tab" aria-controls="tabs-icons-text-6_inside" aria-selected="false"><i class="ni ni-bell-55 mr-2"></i>City</a>
-                                                </li>--}}
+                                                
                                                 <li class="nav-item">
                                                     <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-7-tab_inside" data-toggle="tab" href="#tabs-icons-text-7_inside" role="tab" aria-controls="tabs-icons-text-7_inside" aria-selected="false"><i class="ni ni-bell-55 mr-2"></i>Venue</a>
                                                 </li>
-                                                {{--<li class="nav-item">
-                                                    <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-8-tab_inside" data-toggle="tab" href="#tabs-icons-text-8_inside" role="tab" aria-controls="tabs-icons-text-8_inside" aria-selected="false"><i class="ni ni-bell-55 mr-2"></i>Partners</a>
-                                                </li>--}}
-                                                {{--<li class="nav-item">
-                                                    <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-9-tab_inside" data-toggle="tab" href="#tabs-icons-text-9_inside" role="tab" aria-controls="tabs-icons-text-9_inside" aria-selected="false"><i class="ni ni-bell-55 mr-2"></i>Sections</a>
-                                                </li>--}}
+                                                
                                                 <li class="nav-item">
                                                     <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-10-tab_inside" data-toggle="tab" href="#tabs-icons-text-10_inside" role="tab" aria-controls="tabs-icons-text-10_inside" aria-selected="false"><i class="ni ni-bell-55 mr-2"></i>Faqs</a>
                                                 </li>
@@ -1623,10 +1580,7 @@
                                                 <li class="nav-item">
                                                     <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-11-tab_inside" data-toggle="tab" href="#testimonials-tab" role="tab" aria-controls="tabs-icons-text-11_inside" aria-selected="false"><i class="far fa-images mr-2"></i>Testimonials</a>
                                                 </li>
-                                                {{--<li class="nav-item">
-                                                    <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-8-tab_inside" data-toggle="tab" href="#coupons" role="tab" aria-controls="metas" aria-selected="false"><i class="ni ni-calendar-grid-58 mr-2"></i>Coupons</a>
-                                                </li>--}}
-
+                                                
                                                 <li class="nav-item">
                                                     <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-9-tab_inside" data-toggle="tab" href="#videos" role="tab" aria-controls="videos" aria-selected="false"><i class="ni ni-calendar-grid-58 mr-2"></i>Videos</a>
                                                 </li>
@@ -1735,59 +1689,9 @@
 
                                                     </div>
 
-                                                    {{--<div class="tab-pane fade" id="tabs-icons-text-2_inside" role="tabpanel" aria-labelledby="tabs-icons-text-2-tab_inside">
-                                                        @include('admin.summary.summary', ['model' => $event,'sections' => $sections])
-                                                    </div>}--}}
-                                                    {{--<div class="tab-pane fade" id="metas" role="tabpanel" aria-labelledby="tabs-icons-text-8-tab_inside">
-                                                        @include('admin.metas.metas',['metas' => $metas])
-                                                    </div>--}}
+                                                  
 
-                                                    {{--<div class="tab-pane fade" id="coupons" role="tabpanel" aria-labelledby="tabs-icons-text-8-tab_inside">
-
-                                                        <div class="table-responsive py-4">
-                                                            <table class="table align-items-center table-flush"  id="datatable-coupon">
-                                                                <thead class="thead-light">
-                                                                    <tr>
-                                                                        <th scope="col">{{ __('Code') }}</th>
-                                                                        <th scope="col">{{ __('Price') }}</th>
-                                                                        <th scope="col">{{ __('Status') }}</th>
-                                                                        <th scope="col">{{ __('Used') }}</th>
-                                                                        <th scope="col">{{ __('Assigned') }}</th>
-
-
-
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody>
-                                                                <?php //dd($allTopicsByCategory);
-                                                                    $eventCoupons = $event['coupons']->pluck('id')->toArray();
-                                                                    //dd($eventCoupons);
-                                                                ?>
-
-                                                                    @foreach ($coupons as $key => $coupon)
-                                                                        <tr>
-                                                                            <td>{{ $coupon['code_coupon'] }}</td>
-                                                                            <td>{{ $coupon['price'] }}</td>
-                                                                            <td>{{ $coupon['status'] }}</td>
-                                                                            <td>{{ $coupon['used'] }}</td>
-
-                                                                            <td>
-                                                                                <div class="col-2 assign-toggle" id="toggle_{{$key}}">
-                                                                                    <label class="custom-toggle">
-                                                                                        <input class="coupon-input" type="checkbox" data-status="{{in_array($coupon['id'],$eventCoupons)}}" data-event-id="{{$event['id']}}" data-coupon-id="{{$coupon['id']}}" @if(in_array($coupon['id'],$eventCoupons)) checked @endif>
-                                                                                        <span class="coupon custom-toggle-slider rounded-circle" ></span>
-                                                                                    </label>
-                                                                                </div>
-                                                                            </td>
-
-                                                                        </tr>
-                                                                    @endforeach
-                                                                </tbody>
-                                                            </table>
-                                                        </div>
-
-                                                    </div>--}}
-
+                                                    
                                                     <div class="tab-pane fade" id="videos" role="tabpanel" aria-labelledby="tabs-icons-text-9-tab_inside">
                                                         @include('admin.videos.event.index',['model' => $event])
                                                     </div>
@@ -1795,27 +1699,17 @@
 
                                        
 
-                                                    {{--<div class="tab-pane fade" id="tabs-icons-text-3_inside" role="tabpanel" aria-labelledby="tabs-icons-text-3-tab_inside">
-                                                        @include('admin.benefits.benefits',['model' => $event, 'sections' => $sections])
-                                                    </div>--}}
                                                     <div class="tab-pane fade show" id="tabs-icons-text-4_inside" role="tabpanel" aria-labelledby="tabs-icons-text-4-tab_inside">
                                                         @include('topics.event.instructors',['sections' => $sections])
                                                     </div>
                                                     <div class="tab-pane fade" id="tabs-icons-text-5_inside" role="tabpanel" aria-labelledby="tabs-icons-text-5-tab_inside">
                                                         @include('admin.ticket.index', ['model' => $event, 'sections' => $sections])
                                                     </div>
-                                                    {{--<div class="tab-pane fade" id="tabs-icons-text-6_inside" role="tabpanel" aria-labelledby="tabs-icons-text-6-tab_inside">
-                                                        @include('admin.city.event.index', ['model' => $event])
-                                                    </div>--}}
+                                                    
                                                     <div class="tab-pane fade" id="tabs-icons-text-7_inside" role="tabpanel" aria-labelledby="tabs-icons-text-7-tab_inside">
                                                         @include('admin.venue.event.index', ['model' => $event,'sections' => $sections])
                                                     </div>
-                                                    {{--<div class="tab-pane fade" id="tabs-icons-text-8_inside" role="tabpanel" aria-labelledby="tabs-icons-text-8-tab_inside">
-                                                        @include('admin.partner.event.index', ['model' => $event])
-                                                    </div>--}}
-                                                    {{--<div class="tab-pane fade" id="tabs-icons-text-9_inside" role="tabpanel" aria-labelledby="tabs-icons-text-9-tab_inside">
-                                                        @include('admin.section.index', ['model' => $event])
-                                                    </div>--}}
+                                                 
                                                     <div class="tab-pane fade" id="tabs-icons-text-10_inside" role="tabpanel" aria-labelledby="tabs-icons-text-10-tab_inside">
                                                         @include('admin.faq.index', ['model' => $event,'sections' => $sections])
                                                     </div>
@@ -2928,22 +2822,15 @@ var datePickerOptions = {
             $(".form_event_btn").show();
         }
     });
-
     $(document).on('click', '.input-icon-wrapper, .input-icon-wrapper-inclass, .input-icon-wrapper-city', function() {
-
         let btn = $(this).data('infowrapper')
-
         if(btn === undefined){
             return false;
         }
-
         document.getElementById('image-input-button').click();
-
         current_icon_input = btn+'_path';
         current_icon_input_alt_text = btn+'_alt_text';
-
     })
-
 </script>
 
 @endpush
