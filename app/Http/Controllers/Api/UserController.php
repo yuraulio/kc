@@ -479,7 +479,7 @@ class UserController extends Controller
                 $data[$key]['is_elearning'] = true;
                 $isElearning = true;
                 //progress here
-                $data[$key]['progress'] = intval($event->progress($user)).'%';
+                $data[$key]['progress'] = round($event->progress($user),2).'%';
                 $data[$key]['videos_seen'] = $event->video_seen($user);
                 // Statistics
                 $statistics =  ($statistics = $user->statistic()->wherePivot('event_id',$event['id'])->first()) ?
@@ -958,7 +958,7 @@ class UserController extends Controller
                 $data[$key]['is_elearning'] = true;
                 $isElearning = true;
                 //progress here
-                $data[$key]['progress'] = intval($event->progress($user)).'%';
+                $data[$key]['progress'] = round($event->progress($user),2).'%';
 
                 // Statistics
                 $statistics =  ($statistics = $user->statistic()->wherePivot('event_id',$event['id'])->first()) ?

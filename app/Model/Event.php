@@ -528,65 +528,38 @@ class Event extends Model
     {
 
         if(!$videos = $user->statistic()->wherePivot('event_id',$this['id'])->first()){
-            return 0 * 100;
+            return 0;
         }
-
-        $lessons = $this->lessons;
 
         $videos = $videos->pivot['videos'];
-
         $totalDuration = 0;
-
-        foreach($lessons as $lesson){
-
-            if(!$lesson->instructor_id || !$lesson->vimeo_duration){
-                continue;
-            }
-
-            $duration = explode(" ",$lesson->vimeo_duration);
-            
-            if(count($duration) == 2){
-               
-                $seconds = (int)preg_replace('/[^0-9.]+/', '', $duration[0]) * 60;
-                $seconds += (int)preg_replace('/[^0-9.]+/', '', $duration[1]);
-
-                $totalDuration += $seconds;
-
-            }else{
-                
-                $seconds = (int)preg_replace('/[^0-9.]+/', '', $duration[0]);
-                $totalDuration += $seconds;
-
-            }
-
-        }
 
         //dd($videos);
         $seenTime = 0;
         if($videos != ''){
             $videos = json_decode($videos, true);
             foreach($videos as $video){
-                $seenTime += (int)$video['stop_time'];
+                $seenTime += (float)$video['stop_time'];
+                $totalDuration += (float)$video['total_duration'];
             }
             
         }
-
-       
-
-        return $totalDuration > 0 ? $seenTime /  $totalDuration * 100 : 0;
+        
+        return $totalDuration > 0 ?  $seenTime /  $totalDuration * 100 : 0;
     }
 
     public function video_seen($user)
     {
-
         if(!$videos = $user->statistic()->wherePivot('event_id',$this['id'])->first()){
-            return '0 of 0';
+            return '0 of ' . count($this->lessons);
         }
 
         $videos = $videos->pivot['videos'];
+        $videos = json_decode($videos, true);
+        //dd($videos);
         //dd($user->statistic()->wherePivot('event_id',$this['id'])->first());
-        if($videos != ''){
-            $videos = json_decode($videos, true);
+        if($videos){
+            //$videos = json_decode($videos, true);
             //dd($videos);
             $sum = 0;
             foreach($videos as $video){
@@ -597,8 +570,9 @@ class Event extends Model
             }
             return $sum.' of '.count($videos);
         }
-
-        return '0 of 0';
+        
+        return'0 of ' . count($this->lessons);
+        //return '0 of 0';
 
     }
 
