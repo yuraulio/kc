@@ -19,7 +19,7 @@
 
     @endcomponent
 
-    @include('admin.upload.upload_new', ['from' => 'event_info'])
+    {{--@include('admin.upload.upload_new', ['from' => 'event_info'])--}}
 
     <div class="">
         <div class="row">
