@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\Model\User;
+use App\Model\Lesson;
 
 class FixStatistics extends Command
 {
@@ -49,7 +50,9 @@ class FixStatistics extends Command
                 }
                 
                 foreach($videos as $key => $video){
-                    
+                    if(!isset($video['tab'])){
+                        continue;
+                    }
                     $tab = str_replace(' ', '_', $video['tab']);
                     $tab = str_replace('-', '', $tab);
                     $tab = str_replace('&', '', $tab);
@@ -62,6 +65,14 @@ class FixStatistics extends Command
                     $newVideos[$key]['percentMinutes'] = $video['percentMinutes'];
                     $newVideos[$key]['lesson_id'] = isset($video['lesson_id']) ? $video['lesson_id'] : $video['lesson'];
                     $newVideos[$key]['tab'] = $tab;
+
+                    $lesson = Lesson::find($newVideos[$key]['lesson_id']);
+                    $newVideos[$key]['total_duration'] = $lesson ? getLessonDurationToSec($lesson['vimeo_duration']) : 0;
+
+                    if($newVideos[$key]['stop_time'] > $newVideos[$key]['total_duration']){
+                        $newVideos[$key]['stop_time'] = 0;
+                    }
+
                 }
                 $user->statistic()->wherePivot('event_id', $st->pivot->event_id)->updateExistingPivot($st->pivot->event_id, ['videos' => json_encode($newVideos)], false);
             }

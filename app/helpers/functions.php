@@ -446,6 +446,47 @@ if(!function_exists('formatBytes')){
 
         }
     }
+
+    if (!function_exists('getLessonDurationToSec')){
+        
+        function getLessonDurationToSec($vimeoDuration){
+
+            if(!$vimeoDuration){
+                return 0;
+            }
+    
+            $totalDuration = 0;
+            
+            $duration = explode(" ",$vimeoDuration);   
+            if(count($duration) == 2){
+               
+                $seconds = (float)preg_replace('/[^0-9.]+/', '', $duration[0]) * 60;
+                $seconds += (float)preg_replace('/[^0-9.]+/', '', $duration[1]);
+    
+                $totalDuration += $seconds;
+    
+            }else{
+
+                
+
+                $isMinutes = strpos($duration[0], 'm');
+                
+                if(!$isMinutes){
+                    $seconds = (float)preg_replace('/[^0-9.]+/', '', $duration[0]);
+                    $totalDuration += $seconds;
+                }else{    
+                    $seconds = (float)preg_replace('/[^0-9.]+/', '', $duration[0]) * 60;
+                    $totalDuration += $seconds;
+                }
+    
+               
+    
+            }
+    
+            return $totalDuration;
+
+        }
+    }
     
     
 

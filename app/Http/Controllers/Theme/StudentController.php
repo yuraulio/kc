@@ -153,7 +153,7 @@ class StudentController extends Controller
             if($event->is_elearning_course()){
 
                 //$data['user']['events'][$event->id]['topics'] = $event['topic']->unique()->groupBy('topic_id')->toArray();
-                $data['events'][$event->id]['videos_progress'] = 0;//intval($event->progress($user));
+                $data['events'][$event->id]['videos_progress'] = 0;//intval(round($event->progress($user),2));
                 $data['events'][$event->id]['videos_seen'] = '0/0';//$event->video_seen($user);
                 $data['events'][$event->id]['certs'] = [];
 
@@ -233,7 +233,7 @@ class StudentController extends Controller
             if($event->is_elearning_course()){
 
                 //$data['user']['events'][$event->id]['topics'] = $event['topic']->unique()->groupBy('topic_id');
-                $data['events'][$event->id]['videos_progress'] = intval($event->progress($user));
+                $data['events'][$event->id]['videos_progress'] = round($event->progress($user),2);
                 $data['events'][$event->id]['videos_seen'] = $event->video_seen($user);
                 $data['events'][$event->id]['cert'] = [];
 
@@ -325,7 +325,7 @@ class StudentController extends Controller
             if($event->is_elearning_course()){
                 //$data['mySubscriptionEvents'][$key]['topics'] = $event['topic']->unique()->groupBy('topic_id');
                 $data['mySubscriptionEvents'][$key]['title'] = $event['title'];
-                $data['mySubscriptionEvents'][$key]['videos_progress'] = intval($event->progress($user));
+                $data['mySubscriptionEvents'][$key]['videos_progress'] = round($event->progress($user),2);
                 $data['mySubscriptionEvents'][$key]['videos_seen'] = $event->video_seen($user);
                 $data['mySubscriptionEvents'][$key]['view_tpl'] = $event['view_tpl'];
 
@@ -499,7 +499,7 @@ class StudentController extends Controller
             if($event->is_elearning_course()){
 
                 //$data['user']['events'][$event->id]['topics'] = $event['topic']->unique()->groupBy('topic_id');
-                $data['events'][$event->id]['videos_progress'] = intval($event->progress($user));
+                $data['events'][$event->id]['videos_progress'] = intval(round($event->progress($user),2));
                 $data['events'][$event->id]['videos_seen'] = $event->video_seen($user);
                 $data['events'][$event->id]['cert'] = [];
 
@@ -581,7 +581,7 @@ class StudentController extends Controller
             if($event->is_elearning_course()){
                 //$data['mySubscriptionEvents'][$key]['topics'] = $event['topic']->unique()->groupBy('topic_id');
                 $data['mySubscriptionEvents'][$key]['title'] = $event['title'];
-                $data['mySubscriptionEvents'][$key]['videos_progress'] = intval($event->progress($user));
+                $data['mySubscriptionEvents'][$key]['videos_progress'] = intval(round($event->progress($user),2));
                 $data['mySubscriptionEvents'][$key]['videos_seen'] = $event->video_seen($user);
                 $data['mySubscriptionEvents'][$key]['view_tpl'] = $event['view_tpl'];
 
@@ -658,7 +658,7 @@ class StudentController extends Controller
             if($event->is_elearning_course()){
 
                 //$data['user']['events'][$event->id]['topics'] = $event['topic']->unique()->groupBy('topic_id');
-                $data['events'][$event->id]['videos_progress'] = intval($event->progress($user));
+                $data['events'][$event->id]['videos_progress'] = round($event->progress($user),2);
                 $data['events'][$event->id]['videos_seen'] = $event->video_seen($user);
                 $data['events'][$event->id]['cert'] = [];
 
@@ -774,7 +774,7 @@ class StudentController extends Controller
             if($event->is_elearning_course()){
                 //$data['mySubscriptionEvents'][$key]['topics'] = $event['topic']->unique()->groupBy('topic_id');
                 $data['mySubscriptionEvents'][$key]['title'] = $event['title'];
-                $data['mySubscriptionEvents'][$key]['videos_progress'] = intval($event->progress($user));
+                $data['mySubscriptionEvents'][$key]['videos_progress'] = round($event->progress($user),2);
                 $data['mySubscriptionEvents'][$key]['videos_seen'] = $event->video_seen($user);
                 $data['mySubscriptionEvents'][$key]['view_tpl'] = $event['view_tpl'];
 
@@ -1135,7 +1135,7 @@ class StudentController extends Controller
         //dd($data['files']);
         //dd($data['details']);
 
-        $data['videos_progress'] = $event->progress($user);
+        $data['videos_progress'] = round($event->progress($user),2);
         $data['course'] = $event['title'];
         //dd($data['course']);
 
