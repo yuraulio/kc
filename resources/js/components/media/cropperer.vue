@@ -11,65 +11,67 @@
         <div class="row">
             <div class="col-7">
                 <h4>{{version}}</h4>
-                <div v-show="imgSrc" :key="imgSrc ? imgSrc : 'emp'" class="img-cropper" style>
-                    <vue-cropper ref="cropper" :checkCrossOrigin="false" :src="imgSrc" preview=".preview"/>
-                </div>
-                <label v-show="imgSrc == null" :name="'image'" style="width: 100%; min-height: 300px">
-                    <form method="post" class="dropzone dz-clickable" id="myAwesomeDropzone" data-plugin="dropzone" data-previews-container="#file-previews" data-upload-preview-template="#uploadPreviewTemplate">
-                        <div class="dz-message needsclick" style="margin: 0 auto; min-height: 300px">
-                            <i class="h1 text-muted dripicons-cloud-upload"></i>
-                            <div class="text-center">
-                                <input ref="input" type="file" name="image" accept="image/*" @change="setImage" />
-                                <span class="font-16">Drop files here or click to upload</span>
+                <div :class="(version != 'original' && version != 'Original') ? '' : 'invisible'">
+                    <div v-show="imgSrc" :key="imgSrc ? imgSrc : 'emp'" class="img-cropper" style>
+                        <vue-cropper ref="cropper" :checkCrossOrigin="false" :src="imgSrc" preview=".preview"/>
+                    </div>
+                    <label v-show="imgSrc == null" :name="'image'" style="width: 100%; min-height: 300px">
+                        <form method="post" class="dropzone dz-clickable" id="myAwesomeDropzone" data-plugin="dropzone" data-previews-container="#file-previews" data-upload-preview-template="#uploadPreviewTemplate">
+                            <div class="dz-message needsclick" style="margin: 0 auto; min-height: 300px">
+                                <i class="h1 text-muted dripicons-cloud-upload"></i>
+                                <div class="text-center">
+                                    <input ref="input" type="file" name="image" accept="image/*" @change="setImage" />
+                                    <span class="font-16">Drop files here or click to upload</span>
+                                </div>
                             </div>
-                        </div>
-                    </form>
-                </label>
-                <div class="btn-group mb-2 mt-2">
-                    <button type="button" class="btn btn-soft-primary" @click.prevent="zoom(0.2)">
-                        <i class="mdi mdi-magnify-plus-outline"></i>
-                    </button>
-                    <button type="button" class="btn btn-soft-primary" @click.prevent="zoom(-0.2)">
-                        <i class="mdi mdi-magnify-minus-outline"></i>
-                    </button>
-                </div>
-                <div class="btn-group mb-2 mt-2">
-                    <button type="button" class="btn btn-soft-primary" @click.prevent="move(-10, 0)">
-                        <i class="mdi mdi-arrow-left"></i>
-                    </button>
-                    <button type="button" class="btn btn-soft-primary" @click.prevent="move(10, 0)">
-                        <i class="mdi mdi-arrow-right"></i>
-                    </button>
-                    <button type="button" class="btn btn-soft-primary" @click.prevent="move(0, 10)">
-                        <i class="mdi mdi-arrow-up"></i>
-                    </button>
-                    <button type="button" class="btn btn-soft-primary" @click.prevent="move(0, -10)">
-                        <i class="mdi mdi-arrow-down"></i>
-                    </button>
-                </div>
+                        </form>
+                    </label>
+                    <div class="btn-group mb-2 mt-2">
+                        <button type="button" class="btn btn-soft-primary" @click.prevent="zoom(0.2)">
+                            <i class="mdi mdi-magnify-plus-outline"></i>
+                        </button>
+                        <button type="button" class="btn btn-soft-primary" @click.prevent="zoom(-0.2)">
+                            <i class="mdi mdi-magnify-minus-outline"></i>
+                        </button>
+                    </div>
+                    <div class="btn-group mb-2 mt-2">
+                        <button type="button" class="btn btn-soft-primary" @click.prevent="move(-10, 0)">
+                            <i class="mdi mdi-arrow-left"></i>
+                        </button>
+                        <button type="button" class="btn btn-soft-primary" @click.prevent="move(10, 0)">
+                            <i class="mdi mdi-arrow-right"></i>
+                        </button>
+                        <button type="button" class="btn btn-soft-primary" @click.prevent="move(0, 10)">
+                            <i class="mdi mdi-arrow-up"></i>
+                        </button>
+                        <button type="button" class="btn btn-soft-primary" @click.prevent="move(0, -10)">
+                            <i class="mdi mdi-arrow-down"></i>
+                        </button>
+                    </div>
 
-                <div class="btn-group mb-2 mt-2">
-                    <button type="button" class="btn btn-soft-primary" @click.prevent="rotate(90)">
-                        <i class="mdi mdi-rotate-right"></i>
-                    </button>
-                    <button type="button" class="btn btn-soft-primary" @click.prevent="rotate(-90)">
-                        <i class="mdi mdi-rotate-left"></i>
-                    </button>
+                    <div class="btn-group mb-2 mt-2">
+                        <button type="button" class="btn btn-soft-primary" @click.prevent="rotate(90)">
+                            <i class="mdi mdi-rotate-right"></i>
+                        </button>
+                        <button type="button" class="btn btn-soft-primary" @click.prevent="rotate(-90)">
+                            <i class="mdi mdi-rotate-left"></i>
+                        </button>
 
-                </div>
+                    </div>
 
-                <div class="btn-group mb-2 mt-2" style="float: right">
-                    <button type="button" class="btn btn-soft-primary" @click.prevent="reset">
-                        Reset
-                    </button>
+                    <div class="btn-group mb-2 mt-2" style="float: right">
+                        <button type="button" class="btn btn-soft-primary" @click.prevent="reset">
+                            Reset
+                        </button>
+                    </div>
                 </div>
             </div>
             <div class="col-5">
-                 <div class="row mb-2">
-                <div class="col-lg-12 d-grid">
-                    <p>Preview</p>
-                    <div class="cropped-image preview" style="margin: 0px auto;"/>
-                </div>
+                <div :class="(version != 'original' && version != 'Original') ? 'row mb-2' : 'row mb-2 invisible '">
+                    <div class="col-lg-12 d-grid">
+                        <p>Preview</p>
+                        <div class="cropped-image preview" style="margin: 0px auto;"/>
+                    </div>
                 </div>
                 <div class="row mb-2">
                     <div class="col-lg-12 d-grid mb-2">
@@ -91,7 +93,7 @@
                     </div>
                     <div class="col-lg-12 d-flex align-items-end mt-2">
                         <template>
-                            <button @click="upload('edit')" class="btn btn-soft-success btn-block w-100" :disabled="isUploading || version == 'original'">
+                            <button @click="upload('edit')" class="btn btn-soft-success btn-block w-100" :disabled="isUploading">
                                 <span v-if="isUploading"><i class="fas fa-spinner fa-spin"></i> Uploading...</span>
                                 <span v-else>
                                     Update
@@ -116,12 +118,11 @@
                             <p v-if="parrentImage" class="text-start text-muted d-block">
                                 {{ size(parrentImage.size) }}
                             </p>
-                            <img @click="version='original'; selectedVersion=null; imgname=parrentImage.name; alttext=parrentImage.alt_text; link=parrentImage.link" crossorigin="anonymous" :src="parrentImage ? ('/uploads/' + parrentImage.path) : ''" alt="image" class="img-fluid rounded" />
+                            <img @click="version='original'; selectedVersion=null; imgname=parrentImage.name; alttext=parrentImage.alt_text; link=parrentImage.link; id=parrentImage.id;" crossorigin="anonymous" :src="parrentImage ? ('/uploads/' + parrentImage.path) : ''" alt="image" class="img-fluid rounded" />
                             <button v-if="parentMode" @click="confirmSelection(parrentImage)" style="width: 100%" class="btn btn-soft-primary mt-2">Select image</button>
                             <hr>
 
                             <template v-for="(version1, index) in versions" v-if="matchVersions(version1.version)">
-                                {{matchVersions(version1.version)}}
                                 <h5 :id="version1.version" class="">
                                     {{ version1.version }}
                                     <i v-if="findVersionData(version1.version)" @click="deleteFile(findVersionData(version1.version), index)" class="mdi mdi-delete text-muted vertical-middle cursor-pointer"></i>
@@ -178,6 +179,7 @@ export default {
             imgname: "",
             alttext: "",
             link: "",
+            id: null,
             jpg: false,
             cropBoxData: {},
             imgData: {},
@@ -265,23 +267,7 @@ export default {
     },
     mounted() {
         if (this.prevalue) {
-            if (this.prevalue.parrent) {
-                this.parrentImage = this.prevalue.parrent;
-                // this.version = this.prevalue.version;
-            } else {
-                this.parrentImage = this.prevalue;
-                // this.version = 'original';
-            }
-
-            this.version = 'original';
-
-            this.imgSrc = '/uploads' + this.parrentImage.path;
-            this.uploadedVersions = this.parrentImage.subfiles;
-            this.originalFile = this.prevalue;
-
-            this.imgname = this.parrentImage ? this.parrentImage.name : '';
-            this.alttext = this.parrentImage.alt_text ? this.parrentImage.alt_text : '';
-            this.link = this.parrentImage.link ? this.parrentImage.link : '';
+            this.setupPrevalue();
 
             if (typeof FileReader === "function") {
                 const reader = new FileReader();
@@ -317,6 +303,26 @@ export default {
         }
     },
     methods: {
+        setupPrevalue() {
+            if (this.prevalue.parrent) {
+                this.parrentImage = this.prevalue.parrent;
+                // this.version = this.prevalue.version;
+            } else {
+                this.parrentImage = this.prevalue;
+                // this.version = 'original';
+            }
+
+            this.version = 'original';
+
+            this.imgSrc = '/uploads' + this.parrentImage.path;
+            this.uploadedVersions = this.parrentImage.subfiles;
+            this.originalFile = this.prevalue;
+
+            this.imgname = this.parrentImage ? this.parrentImage.name : '';
+            this.alttext = this.parrentImage.alt_text ? this.parrentImage.alt_text : '';
+            this.link = this.parrentImage.link ? this.parrentImage.link : '';
+            this.id = this.parrentImage.id ? this.parrentImage.id : null;
+        },
         confirmSelection(image) {
             if (this.$parent.$parent.mode != null ) {
                 this.$parent.$parent.updatedMediaImage(image);
@@ -340,18 +346,19 @@ export default {
                 this.imgname = this.versionData ? this.versionData.name : "";
                 this.alttext = this.versionData ? this.versionData.alt_text : "";
                 this.link = this.versionData ? this.versionData.link : "";
+                this.id = this.versionData ? this.versionData.id : null;
 
-                if (this.imgname == "") {
-                    var tmp = this.parrentImage.name.split(".");
-                    var extension = tmp[tmp.length - 1];
-                    this.imgname = tmp[0] + "-" + this.version + "." + extension;
-                }
-                if (this.alttext == "") {
-                    this.alttext = this.originalFile.alt_text;
-                }
-                if (this.link == "") {
-                    this.link = this.originalFile.link;
-                }
+                // if (this.imgname == "") {
+                //     var tmp = this.parrentImage.name.split(".");
+                //     var extension = tmp[tmp.length - 1];
+                //     this.imgname = tmp[0] + "-" + this.version + "." + extension;
+                // }
+                // if (this.alttext == "") {
+                //     this.alttext = this.originalFile.alt_text;
+                // }
+                // if (this.link == "") {
+                //     this.link = this.originalFile.link;
+                // }
 
             }
         },
@@ -383,20 +390,18 @@ export default {
             return `${version} — [${description}]`
         },
         upload(event) {
-            if (this.version != 'original') {
-                this.getCropBoxData();
-                this.$refs.cropper.getCroppedCanvas({
-                    width: this.cropBoxData.width,
-                    height: this.cropBoxData.height,
-                }).toBlob(
-                    (blob) => {
-                        // blob.version = this.version;
-                        this.$emit(event, blob);
-                    },
-                    "image/jpeg",
-                    this.compression / 100
-                );
-            }
+            this.getCropBoxData();
+            this.$refs.cropper.getCroppedCanvas({
+                width: this.cropBoxData.width,
+                height: this.cropBoxData.height,
+            }).toBlob(
+                (blob) => {
+                    // blob.version = this.version;
+                    this.$emit(event, blob);
+                },
+                "image/jpeg",
+                this.compression / 100
+            );
         },
         imageAdded($event) {
             this.imgSrc = $event.url;
