@@ -7,6 +7,13 @@
                 <h4 v-else class="page-title d-inline-block">New page</h4>
 
                 <button :disabled="loading" @click="changeMode()" type="button" class="btn btn-soft-info waves-effect waves-light float-end">Simple Mode</button>
+                <button v-if="type != 'new'" @click="preview()" class="btn btn-block btn-soft-warning waves-effect waves-light me-2 float-end">Live preview</button>
+                <!--
+                <button type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions" :disabled="!template_value" @click="rearange()" class="btn btn-block btn-soft-info waves-effect waves-light me-2 float-end">Pseudo preview</button>
+                -->
+                <button v-if="type == 'new'" @click="add()" type="button" class="btn btn-soft-success waves-effect waves-light me-2 float-end" :disabled="loading"><i v-if="loading" class="fas fa-spinner fa-spin"></i> Create</button>
+                <button v-if="type == 'edit'" :disabled="loading" @click="edit()" type="button" class="btn btn-soft-success waves-effect waves-light me-2 float-end"><i v-if="loading" class="fas fa-spinner fa-spin"></i> Save</button>
+                <a href="/pages" type="button" class="btn btn-soft-secondary waves-effect waves-light me-2 float-end">Cancel</a>
             </div>
         </div>
 
@@ -169,6 +176,7 @@
                                 :prop-value="published_to_value"
                             ></datepicker-component>
 
+                            <!--
                             <div class="row mt-3">
                                 <div class="col-12 text-center mb-3 d-grid">
                                     <button v-if="type != 'new'" @click="preview()" class="btn btn-block btn-soft-warning waves-effect waves-light m-1">
@@ -181,6 +189,7 @@
                                     <a href="/pages" type="button" class="btn btn-soft-secondary waves-effect waves-light m-1"><i class="fe-x me-1"></i> Cancel</a>
                                 </div>
                             </div>
+                            -->
                         </div> <!-- end col-->
                     </div>
                 </div> <!-- end col-->
