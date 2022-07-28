@@ -437,6 +437,7 @@ export default {
             if (this.data) {
                 var data = this.data;
                 this.title_value = data.title;
+                this.type_value = data.type;
                 this.template_value = data.template;
                 this.published = data.published;
                 this.indexed = data.indexed;
