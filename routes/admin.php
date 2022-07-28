@@ -17,6 +17,8 @@ Route::domain('admin.' . env('APP_DOMAIN'))->group(function () {
         Route::get('/categories', [DashboardController::class, 'categories'])->name("admin-categories");
         Route::get('/templates', [DashboardController::class, 'templates'])->name("admin-templates");
         Route::get('/pages', [DashboardController::class, 'pages'])->name("admin-pages");
+        Route::get('/pages_blog', [DashboardController::class, 'pages'])->name("admin-pages-blog");
+        Route::get('/pages_knowledge', [DashboardController::class, 'pages'])->name("admin-pages-knowledge");
         Route::get('/comments', [DashboardController::class, 'comments'])->name("admin-comments");
 
         Route::get('/media', [DashboardController::class, 'media'])->name("admin-media");

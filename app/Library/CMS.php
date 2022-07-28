@@ -201,64 +201,63 @@ class CMS
         $newCategoriesArr = [];
         //dd($categories);
         foreach ($categories as $category) {
+            $newCategoriesArr[$category['id']] = $category ? $category->getSumOfStudentsByCategory() : 0;
+            
+            if ($category) {
+                if (!key_exists($category['id'], $data['nonElearningEvents'])) {
+                    $data['nonElearningEvents'][$category['id']]['name'] = $category['name'];
+                    $data['nonElearningEvents'][$category['id']]['slug'] = isset($category['slugable']) ? $category['slugable']['slug'] : '';
+                    $data['nonElearningEvents'][$category['id']]['description'] = $category['description'];
+                    $data['nonElearningEvents'][$category['id']]['hours'] = $category['hours'];
+                    $data['nonElearningEvents'][$category['id']]['events'] = [];
 
-            $newCategoriesArr[$category['id']] = $category->getSumOfStudentsByCategory();
-            //dd($newCategoriesArr);
-            if (!key_exists($category['id'], $data['nonElearningEvents'])) {
-                $data['nonElearningEvents'][$category['id']]['name'] = $category['name'];
-                $data['nonElearningEvents'][$category['id']]['slug'] = isset($category['slugable']) ? $category['slugable']['slug'] : '';
-                $data['nonElearningEvents'][$category['id']]['description'] = $category['description'];
-                $data['nonElearningEvents'][$category['id']]['hours'] = $category['hours'];
-                $data['nonElearningEvents'][$category['id']]['events'] = [];
+                    $data['elearningEvents'][$category['id']]['name'] = $category['name'];
+                    $data['elearningEvents'][$category['id']]['slug'] = isset($category['slugable']) ? $category['slugable']['slug'] : '';
+                    $data['elearningEvents'][$category['id']]['description'] = $category['description'];
+                    $data['elearningEvents'][$category['id']]['hours'] = $category['hours'];
+                    $data['elearningEvents'][$category['id']]['events'] = [];
 
-                $data['elearningEvents'][$category['id']]['name'] = $category['name'];
-                $data['elearningEvents'][$category['id']]['slug'] = isset($category['slugable']) ? $category['slugable']['slug'] : '';
-                $data['elearningEvents'][$category['id']]['description'] = $category['description'];
-                $data['elearningEvents'][$category['id']]['hours'] = $category['hours'];
-                $data['elearningEvents'][$category['id']]['events'] = [];
+                    $data['elearningFree'][$category['id']]['name'] = $category['name'];
+                    $data['elearningFree'][$category['id']]['slug'] = isset($category['slugable']) ? $category['slugable']['slug'] : '';
+                    $data['elearningFree'][$category['id']]['description'] = $category['description'];
+                    $data['elearningFree'][$category['id']]['hours'] = $category['hours'];
+                    $data['elearningFree'][$category['id']]['events'] = [];
 
-                $data['elearningFree'][$category['id']]['name'] = $category['name'];
-                $data['elearningFree'][$category['id']]['slug'] = isset($category['slugable']) ? $category['slugable']['slug'] : '';
-                $data['elearningFree'][$category['id']]['description'] = $category['description'];
-                $data['elearningFree'][$category['id']]['hours'] = $category['hours'];
-                $data['elearningFree'][$category['id']]['events'] = [];
-
-                $data['inclassFree'][$category['id']]['name'] = $category['name'];
-                $data['inclassFree'][$category['id']]['slug'] = isset($category['slugable']) ? $category['slugable']['slug'] : '';
-                $data['inclassFree'][$category['id']]['description'] = $category['description'];
-                $data['inclassFree'][$category['id']]['hours'] = $category['hours'];
-                $data['inclassFree'][$category['id']]['events'] = [];
-            }
-
-            foreach ($category['events'] as $event) {
-                if ($event['status'] == 1 || $event['status'] == 3 || $event['status'] == 4 || !$event['published']) {
-                    continue;
+                    $data['inclassFree'][$category['id']]['name'] = $category['name'];
+                    $data['inclassFree'][$category['id']]['slug'] = isset($category['slugable']) ? $category['slugable']['slug'] : '';
+                    $data['inclassFree'][$category['id']]['description'] = $category['description'];
+                    $data['inclassFree'][$category['id']]['hours'] = $category['hours'];
+                    $data['inclassFree'][$category['id']]['events'] = [];
                 }
 
+                foreach ($category['events'] as $event) {
+                    if ($event['status'] == 1 || $event['status'] == 3 || $event['status'] == 4 || !$event['published']) {
+                        continue;
+                    }
 
-                if ($event['view_tpl'] == 'elearning_event' || $event['view_tpl'] == 'elearning_pending' || $event['view_tpl'] == 'elearning_free') {
-                    //$event['sumStudents'] = get_sum_students_course((isset($category) ? $category : null));
 
-                    $data['elearningEvents'][$category['id']]['events'][] = $event;
-                    $data['elearningEvents'][$category['id']]['view_tpl'] = $event['view_tpl'];
+                    if ($event['view_tpl'] == 'elearning_event' || $event['view_tpl'] == 'elearning_pending' || $event['view_tpl'] == 'elearning_free') {
+                        //$event['sumStudents'] = get_sum_students_course((isset($category) ? $category : null));
+
+                        $data['elearningEvents'][$category['id']]['events'][] = $event;
+                        $data['elearningEvents'][$category['id']]['view_tpl'] = $event['view_tpl'];
 
                     //dd($event);
-
-
-                } elseif ($event['view_tpl'] == 'event_free' || $event['view_tpl'] == 'event_free_coupon') {
-                    //$event['sumStudents'] = get_sum_students_course((isset($event['category']) ? $category : null));
-                    $data['inclassFree'][$category['id']]['events'][] = $event;
+                    } elseif ($event['view_tpl'] == 'event_free' || $event['view_tpl'] == 'event_free_coupon') {
+                        //$event['sumStudents'] = get_sum_students_course((isset($event['category']) ? $category : null));
+                        $data['inclassFree'][$category['id']]['events'][] = $event;
                     //$data['inclassFree'][$category['id']]['events'][]['sumStudents'] = get_sum_students_course((isset($event['category']) ? $event['category'][0] : null));
-                } /*elseif ($event['view_tpl'] == 'elearning_free') {
-                    $data['elearningFree'][$category['id']]['events'][] = $event;
-                }*/ else {
-                    //$event['sumStudents'] = get_sum_students_course((isset($event['category']) ? $category : null));
-                    $data['nonElearningEvents'][$category['id']]['events'][] = $event;
-                    //$data['nonElearningEvents'][$category['id']]['events'][]['sumStudents'] = get_sum_students_course((isset($event['category']) ? $event['category'][0] : null));
+                    } /*elseif ($event['view_tpl'] == 'elearning_free') {
+                                $data['elearningFree'][$category['id']]['events'][] = $event;
+                            }*/ else {
+                        //$event['sumStudents'] = get_sum_students_course((isset($event['category']) ? $category : null));
+                        $data['nonElearningEvents'][$category['id']]['events'][] = $event;
+                        //$data['nonElearningEvents'][$category['id']]['events'][]['sumStudents'] = get_sum_students_course((isset($event['category']) ? $event['category'][0] : null));
+                    }
                 }
             }
-
         }
+
         foreach ($data as $key => $categories) {
             foreach ($categories as $key2 => $category) {
                 if (count($category['events']) == 0) {
@@ -291,5 +290,4 @@ class CMS
 
         return $data;
     }
-
 }

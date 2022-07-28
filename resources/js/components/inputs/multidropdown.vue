@@ -111,6 +111,14 @@
 
                             this.setMenuIds();
                             this.updateSelectedMenu();
+
+                            this.list.push(
+                                {
+                                    id: null,
+                                    name: "NONE"
+                                }
+                            );
+
                         } else {
                             var data = response.data.data;
                             this.list = data;

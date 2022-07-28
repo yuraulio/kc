@@ -5,7 +5,7 @@
 <template>
     <div>
         <div class="page-title-box mt-3 mb-3">
-            <h4 class="page-title">Templates</h4>
+            <h4 class="page-title">Templates management</h4>
         </div>
 
         <paginationtable :config="config"></paginationtable>
