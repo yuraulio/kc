@@ -1,17 +1,9 @@
-<!-- <link href="{{ cdn(mix('theme/assets/css/bootstrap.css')) }}" rel="stylesheet" media="all" />
-<link href="{{asset('admin_assets/css/icons.min.css')}}" rel="stylesheet" type="text/css" />
-<link href="{{asset('admin_assets/css/saas/app-limited.css')}} " rel="stylesheet" type="text/css"/> -->
-
-<style>
-
-</style>
-
 <?php
 
 
-    $imageedit = "false";
+    $imageedit = false;
     if(isset($event) && $event && $event['path'] != null) {
-        $imageedit = "true";
+        //$imageedit = true;
     }
 ?>
 
@@ -22,7 +14,7 @@
     ></manager-for-old-admin-new>
 </div>
 
-<script src="{{asset('js/app_new_settings_icons.js')}}"></script>
+
 
 
 @push('js')

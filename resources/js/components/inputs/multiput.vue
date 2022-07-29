@@ -6,7 +6,7 @@
         <slot></slot>
     </div>
 
-    <div v-if="type == 'image'" :key="keyput + 'media'" class="image-input">
+    <div v-if="type == 'image'" :key="keyput + 'media'" class="">
         <div
         :ref="keyput + 'media'"
         class="offcanvas offcanvas-start"
