@@ -143,6 +143,7 @@
             :fetch="fetch"
             :multi="multi"
             :taggable="taggable"
+            :placeholder="placeholder"
         ></multidropdown>
     </div>
 
@@ -200,7 +201,7 @@ export default {
         title: {},
         route: {},
         taggable: {},
-        multi: {},
+        multi: false,
         uuid: String,
         tabsProp: [],
         pseudo: Boolean,
@@ -212,6 +213,10 @@ export default {
         imageVersion: null,
         hideAltText: false,
         imageEdit:false,
+        placeholder: {
+            type: String,
+            default: "Pick some",
+        },
     },
     data() {
         return {

@@ -32,7 +32,7 @@ class CategoriesController extends Controller
 
             $categories = $this->filters($categories, $request);
 
-            $categories->with(["pages", "subcategories", "user", "image"]);
+            $categories->with(["pages", "subcategories", "user", "image", "type"]);
             $categories->tableSort($request);
             $categories = $categories->paginate($request->per_page ?? 50);
             return CategoryResource::collection($categories);
@@ -62,8 +62,9 @@ class CategoriesController extends Controller
             $category->title = $request->title;
             $category->parent_id = $request->parent_id ?? null;
             $category->user_id = Auth::user()->id;
+            $category->page_type_id = $request->type["id"] ?? null;
             if ($request->category_image) {
-                $category->image_id = $request->category_image["id"];
+                $category->image_id = $request->category_image["id"] ?? null;
             }
             $category->save();
 
@@ -122,8 +123,9 @@ class CategoriesController extends Controller
             $this->authorize('update', $category, Auth::user());
 
             $category->title = $request->title;
+            $category->page_type_id = $request->type["id"] ?? null;
             if ($request->category_image) {
-                $category->image_id = $request->category_image["id"];
+                $category->image_id = $request->category_image["id"] ?? null;
             }
             $category->save();
 
@@ -299,5 +301,9 @@ class CategoriesController extends Controller
             Log::warning("(categories widget) Failed to get most popular subcategory. " . $e->getMessage());
             return "-";
         }
+    }
+
+    public function getCategoriesForPageType($id) {
+        return response()->json(['data' => Category::where("page_type_id", $id)->with("subcategories")->get()]);
     }
 }

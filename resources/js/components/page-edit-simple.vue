@@ -229,40 +229,9 @@
                             title="Type"
                             :multi="false"
                             @updatevalue="setPageType"
-                            :fetch="false"
                             required=1
-                            :data="[
-                                {
-                                    'id': 2,
-                                    'realTitle':'Blog',
-                                    'title':'Blog (for blog pages)'
-                                },
-                                {
-                                    'id': 3,
-                                    'realTitle':'Course page',
-                                    'title':'Course page (for course pages)'
-                                },
-                                {
-                                    'id': 4,
-                                    'realTitle':'Trainer page',
-                                    'title':'Trainer page (for instructor pages)'
-                                },
-                                {
-                                    'id': 5,
-                                    'realTitle':'General',
-                                    'title':'General (for normal pages)'
-                                },
-                                {
-                                    'id': 6,
-                                    'realTitle':'Knowledge',
-                                    'title':'Knowledge (for knowledge pages)'
-                                },
-                                {
-                                    'id': 7,
-                                    'realTitle':'City page',
-                                    'title':'City page (for event city pages)'
-                                }
-                            ]"
+                            :fetch="true"
+                            route="getPageTypes"
                         ></multidropdown>
                     </div>
                 </div>
@@ -520,7 +489,7 @@ import slugify from '@sindresorhus/slugify';
                 this.setPage();
             },
             setPageType(pageType) {
-                this.pageType = pageType.realTitle;
+                this.pageType = pageType;
                 this.setPage();
             },
             setPageTitle(pageTitle) {

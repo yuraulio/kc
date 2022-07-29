@@ -32,7 +32,7 @@ class PageResource extends JsonResource
             ),
             'published' => $this->published,
             'template' => $this->template,
-            'categories' => $this->categories,
+            'categories' => $this->category(),
             'subcategories' => $this->subcategories,
             'published_from' => $this->published_from,
             'published_to' => $this->published_to,

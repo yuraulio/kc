@@ -2,16 +2,12 @@
 
 namespace App\Model\Admin;
 
-use App\Model\Instructor;
-use App\Model\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\SearchFilter;
-use App\Traits\SlugTrait;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Builder;
 use CodexShaper\Menu\Models\Menu;
-use App\Model\Slug;
 use App\Traits\PaginateTable;
 use OwenIt\Auditing\Contracts\Auditable;
 
@@ -25,7 +21,6 @@ class Page extends Model implements Auditable
 
     protected $table = 'cms_pages';
     public $asYouType = true;
-    protected $with = ['categories'];
 
     const VERSIONS = [
         [
@@ -111,7 +106,15 @@ class Page extends Model implements Auditable
         return $this->belongsToMany(MediaFile::class, 'cms_link_pages_files', 'page_id', 'file_id');
     }
 
-    public function categories()
+    public function category()
+    {
+        $pageType = PageType::whereTitle($this->type)->first();
+        $pageType_id = $pageType ? $pageType->id : null;
+        $category = Category::where("page_type_id", $pageType_id)->with("subcategories")->get();
+        return $category;
+    }
+
+    public function categories() 
     {
         return $this->belongsToMany(Category::class, 'cms_link_pages_categories', 'page_id', 'category_id')->whereNull("parent_id");
     }
