@@ -28,6 +28,7 @@ class HomeController extends Controller
      *
      * @return void
      */
+    
     public function __construct()
     {
         $this->middleware('auth');
@@ -91,8 +92,7 @@ class HomeController extends Controller
 
         $data['booking'] = $transactions;// (new SubscriptionController)->subs_for_dashboard();
 
-        
-       $data = $data + (new DashboardStatistics())->totals();
+        $data = $data + (new DashboardStatistics())->totals();
 
         return view('pages.dashboard', $data);
     }
