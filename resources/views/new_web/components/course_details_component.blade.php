@@ -107,20 +107,31 @@
             </li>
             @endif
 
-            @if(isset($info['students']['visible']['landing']) && $info['students']['visible']['landing'] && isset($info['students']['number']) && $sumStudents >= (int)$info['students']['number'])
+            {{--@if(isset($info['students']['visible']['landing']) && $info['students']['visible']['landing'] && isset($info['students']['number']) && $sumStudents >= (int)$info['students']['number'])
             <li>
                 @if(isset($info['students']['icon']['path']) && $info['students']['icon']['path'] )<img class="info-icon" src="{{cdn($info['students']['icon']['path'])}}" width="30" onerror="this.onerror=null;this.src='/theme/assets/images/icons/Group_User.1.svg'" alt="{{$info['students']['icon']['alt_text']}}" /> @else <img class="info-icon"  src="/theme/assets/images/icons/Group_User.1.svg" width="30" alt="" /> @endif
                 <div class="info-text">
                     <p>
                         {{$sumStudents}} {{  $info['students']['text'] }}fdf
                         </br>
+                        
+                    </p>
+                </div>
+            </li>
+            @endif--}}
+
+            @if( isset($info['students']['visible']['landing']) && $info['students']['visible']['landing'] )
+            <li>
+                @if(isset($info['students']['icon']['path']) && $info['students']['icon']['path'] )<img class="info-icon" src="{{cdn($info['students']['icon']['path'])}}" width="30" onerror="this.onerror=null;this.src='/theme/assets/images/icons/Group_User.1.svg'" alt="{{$info['students']['icon']['alt_text']}}" /> @else <img class="info-icon"  src="/theme/assets/images/icons/Group_User.1.svg" width="30" alt="" /> @endif
+                <div class="info-text">
+                    <p>
+                        {{$sumStudents + (int)$info['students']['number']}} {{  $info['students']['text'] }}fdf
+                        </br>
                         {{--{!!  $sum['description'] !!}--}}
                     </p>
                 </div>
             </li>
             @endif
-
-           
 
            
             @if(isset($info['inclass']['times']['visible']['landing']) && $info['inclass']['times']['visible']['landing'] && isset($info['inclass']['times']['text']) && $info['inclass']['times']['text'] )
