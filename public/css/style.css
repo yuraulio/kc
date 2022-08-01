@@ -246,7 +246,7 @@ li.select2-results__option:empty {
     color: #6bad07;
 }
 
-.form_event_btn {
+.form_event_btn, .form_event_btn_new {
     text-align: right;
 }
 

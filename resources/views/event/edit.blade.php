@@ -36,7 +36,7 @@
                         <ul class="nav nav-pills nav-fill flex-column flex-md-row event-tabs" id="tabs-icons-text" role="tablist">
                             <li class="nav-item">
                                 {{--<a class="nav-link mb-sm-3 mb-md-0 active" id="tabs-icons-text-1-tab" data-toggle="tab" href="#tabs-icons-text-1" role="tab" aria-controls="tabs-icons-text-1" aria-selected="true"><i class="ni ni-settings-gear-65 mr-2"></i>Settings</a>--}}
-                                <button class="btn btn-icon btn-primary" data-toggle="tab"  href="#tabs-icons-text-1" role="tab" type="button">
+                                <button class="btn btn-icon btn-primary settings-btn" data-toggle="tab"  href="#tabs-icons-text-1" role="tab" type="button">
                                     <span class="btn-inner--icon"><i class="ni ni-settings-gear-65"></i></span>
                                     <span class="btn-inner--text">Settings</span>
                                 </button>
@@ -104,7 +104,10 @@
                                 @include('alerts.errors')
                             </div>
 
-
+                            <div class="form_event_btn_new d-none">
+                                <div class="save_event_btn" >@include('admin.save.save',['event' => isset($event) ? $event : null])</div>
+                                <div class="preview_event_btn">@include('admin.preview.preview',['slug' => isset($slug) ? $slug : null])</div>
+                            </div>
 
                             <form id="event_edit_form" method="POST" action="{{ route('events.update', $event) }}" autocomplete="off"
                                         enctype="multipart/form-data">
@@ -2635,7 +2638,7 @@
         })
 </script>
 <script>
-        $('#submit-btn').on('click', function(){
+        $('.submit-btn').on('click', function(){
 
             if($("#input-category_id").val() != $("#old-category").val() && $("#old-category").val() != -1){
 
@@ -2818,8 +2821,12 @@ var datePickerOptions = {
     $(document).on('click','button',function(){
         if($(this).hasClass('seo')){
             $(".form_event_btn").hide();
-        }else{
+            $(".form_event_btn_new").addClass('d-none');
+        }else if($(this).hasClass('settings-btn')){
             $(".form_event_btn").show();
+            $(".form_event_btn_new").addClass('d-none');
+        }else if($(this).data( "toggle" )){
+            $(".form_event_btn_new").removeClass('d-none');
         }
     });
     $(document).on('click', '.input-icon-wrapper, .input-icon-wrapper-inclass, .input-icon-wrapper-city', function() {
