@@ -258,7 +258,7 @@ class Event extends Model
 
     public function dropbox()
     {
-        return $this->morphToMany(Dropbox::class, 'dropboxcacheable');
+        return $this->morphToMany(Dropbox::class, 'dropboxcacheable')->withPivot('selectedFolders');
     }
 
 
@@ -844,6 +844,8 @@ class Event extends Model
 
             $data['payment_method'] = $infos['course_payment_method'];
             $data['payment_icon'] = $infos['course_payment_icon'] != null ? json_decode($infos['course_payment_icon'], true) : null;
+
+            $data['files_icon'] = $infos['course_files_icon'] != null ? json_decode($infos['course_files_icon'], true) : null;
 
 
             $data['partner']['status'] = $infos['course_partner'];

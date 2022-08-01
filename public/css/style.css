@@ -150,6 +150,10 @@
     margin-top: 0.2rem;
 }
 
+#filesTreeContainer {
+    height: 350px;
+}
+
 /***** Search List *****/
 .search {
     display: block !important;

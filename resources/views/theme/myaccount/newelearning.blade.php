@@ -81,7 +81,7 @@
                      src="/theme/assets/img/new/logo-knowcrunch-seminars.svg"
                      alt="knowcruch logo"
                      /></a>
-                  
+
                </header>
                <!-- ./sidebar-header -->
                <div class="searchbar-wrapper">
@@ -125,15 +125,15 @@
                         <li class="topic @if($topic['topic_seen']) seen @endif" data-count="{{$count}}">
                            <?php $count++; ?>
                            <a href="javascript:void(0)" tabindex="0" class="topic-header">
-                             
+
                               <div class="topic-info">
-                                 
+
                                  <h3
                                     class="topic-info_title"
                                     data-title="{!! $keyTopic !!}"
                                     data-topic-slug = "{{\Illuminate\Support\Str::slug(preg_replace('/[0-9]+/', '', $keyTopic))}}"
                                     >
-                                   
+
                                     {!! $keyTopic !!}
                                  </h3>
 
@@ -144,7 +144,7 @@
 
                                     echo intval($h) . 'h ' . $m . 'm';
                                     ?>
-                                     
+
                                  </span>
                                  @if($topic['topic_seen'])
                                     <img class="topic-progress" src="{{cdn('/theme/assets/img/new/completed_lesson_icon.svg')}}">
@@ -224,7 +224,7 @@
                                        <span class="lesson-info_duration">{{$lesson['vimeo_duration']}}</span>
                                        <span class="white-separator"> | </span>
                                        @if(isset($lesson['type'][0]['name']))<span class="lesson-info_topic-type">{{$lesson['type'][0]['name']}}</span>@endif
-                                          
+
                                     </div>
                                     <!-- ./lesson-info -->
                                     <div class="lesson-teacher-wrapper">
@@ -259,7 +259,7 @@
                   </button>
 
                   {{--
-                  
+
                      <a tabindex="0" class="show-sidebar jsShowSidebar" href="#">
                         <img
                            class="jsGreenOnHover"
@@ -267,7 +267,7 @@
                            alt="show sidebar"
                            />
                      </a>
-                     
+
                   --}}
 
                   <img
@@ -276,7 +276,7 @@
                      alt="knowcruch logo"
                      title="Back to my courses"
                      />
-            
+
                   <h1 class="lesson-header-title">
                      {{$course}}
                   </h1>
@@ -416,84 +416,146 @@
                      <div class="lesson-misc resources active">
                         <!--<h3 class="lesson-misc-title">Lesson resources</h3>-->
                         <div class="lesson-resources">
-                          
+
                            @if(isset($files) && count($files) > 0 && isset($files['folders'][0]))
                            <?php
-                              
+
+                                $selectedFiles = $files['pivot']['selectedFolders'];
+                                $selectedFiles = json_decode($selectedFiles, true);
+                                //dd($selectedFiles);
+
                               $folders = $files['folders'][0];
                               if(isset($files['folders'][1])){
                                   $folders_bonus = $files['folders'][1];
                               }
-                              
+
                               if(isset($files['files'][2])){
                                  $files_bonus = $files['files'][2];
                               }
                               $files = $files['files'][1];
-                             
+
+
+
                            ?>
                            <div class="lesson-downloads">
                               <!--<h4 class="resource-list-title">Downloads</h4>-->
                               <?php //dd($folders) ?>
                               <ul class="resource-list">
                                  <?php $topicNames = []; ?>
-                               
+
                                  @foreach($folders as $key => $folder)
                                     <?php
+                                        $folderIsSelected = false;
+
+                                        if($selectedFiles['selectedAllFolders']){
+                                            $folderIsSelected = true;
+                                        }else{
+                                            foreach($selectedFiles['selectedFolders'] as $key10 => $selectedFile){
+                                                if($folder['dirname'] == $selectedFile){
+                                                    $folderIsSelected = true;
+                                                }
+                                            }
+                                        }
+
                                        $topic_name = preg_replace('/[0-9]+/', '', $folder['foldername']);
                                        $topic_name = Str::slug($topic_name, '-');
                                        //dd($topic_name);
-                             
+
                                        $id = explode('/',$folder['dirname']);
                                        //dd($id[2]);
                                        $str=substr($id[2], 0, strrpos($id[2], '-'));
                                        $str = intval($str);
                                        //dd($str);
-                                    
+
                                        $topicNames[$folder['id']] = $topic_name;
                                     ?>
                                     @foreach($files as $key11 => $file)
-                                    
+
 
                                        @if($folder['id'] == $file['fid'])
-                                       <li id="{{$folder['dirname']}}" data-folder-id="{{$topic_name}}" class="resource hidden">
-                                          <a class="download-file getdropboxlink"  data-dirname="{{ $file['dirname'] }}" data-filename="{{ $file['filename'] }}" href="javascript:void(0)" ><img
-                                             src="theme/assets/img/new/download.svg"
-                                             alt="download resource" />{{ $file['filename'] }}</a
-                                             >
-                                          {{--<span class="last-modified">Last modified:  {{$file['last_mod']}}</span>--}}
-                                       </li>
+                                            @if($folderIsSelected)
+                                                <li id="{{$folder['dirname']}}" data-folder-id="{{$topic_name}}" class="resource hidden">
+                                                    <a class="download-file getdropboxlink"  data-dirname="{{ $file['dirname'] }}" data-filename="{{ $file['filename'] }}" href="javascript:void(0)" ><img
+                                                        src="theme/assets/img/new/download.svg"
+                                                        alt="download resource" />{{ $file['filename'] }}</a
+                                                        >
+                                                    {{--<span class="last-modified">Last modified:  {{$file['last_mod']}}</span>--}}
+                                                </li>
+                                            @else
+                                                @foreach($selectedFiles['selectedFolders'] as $key10 => $selectedFile)
+                                                    @if($file['dirname'] == $selectedFile)
+                                                        <li id="{{$folder['dirname']}}" data-folder-id="{{$topic_name}}" class="resource hidden">
+                                                            <a class="download-file getdropboxlink"  data-dirname="{{ $file['dirname'] }}" data-filename="{{ $file['filename'] }}" href="javascript:void(0)" ><img
+                                                                src="theme/assets/img/new/download.svg"
+                                                                alt="download resource" />{{ $file['filename'] }}</a
+                                                                >
+                                                            {{--<span class="last-modified">Last modified:  {{$file['last_mod']}}</span>--}}
+                                                        </li>
+                                                    @endif
+                                                @endforeach
+                                            @endif
                                        @endif
                                     @endforeach
                                  @endforeach
-                                 
+
+
                                  @if(isset($files_bonus) && count($files_bonus) > 0 && isset($files) && count($files) > 0)
-                                 
+
                                     @foreach($folders as $folder)
 
                                        @foreach($folders_bonus as $folder_bonus)
 
-                                          
+
                                           @if($folder_bonus['parent'] == $folder['id'])
-                                             
+
+
+                                            <?php $folderIsSelected = false; ?>
+
+                                            @if($selectedFiles['selectedAllFolders'])
+                                                <?php $folderIsSelected = true; ?>
+                                            @else
+                                                @foreach($selectedFiles['selectedFolders'] as $key10 => $selectedFile)
+                                                    @if($folder_bonus['dirname'] == $selectedFile)
+                                                        <?php $folderIsSelected = true; ?>
+                                                    @endif
+                                                @endforeach
+                                            @endif
+
                                              @foreach($files_bonus as $file_bonus)
-                                                
-                                                @if($file_bonus['parent'] == $folder_bonus['parent']  )
-                                                   <li id="{{$folder_bonus['dirname']}}" data-folder-id="{{$topicNames[$folder_bonus['parent']]}}" class="resource bonus-files hidden">
-                                                      <a class="download-file getdropboxlink"  data-dirname="{{ $file_bonus['dirname'] }}" data-filename="{{ $file_bonus['filename'] }}" href="javascript:void(0)" ><img
-                                                         src="theme/assets/img/new/download.svg"
-                                                         alt="download resource" />{{ $file_bonus['filename'] }}</a>
-                                                   </li>
+
+                                                @if($file_bonus['fid'] == $folder_bonus['id']  && $file_bonus['parent'] == $folder['id'])
+                                                {{--@if($file_bonus['fid'] == $folder_bonus['parent']  )--}}
+                                                    @if($folderIsSelected)
+                                                        <li id="{{$folder_bonus['dirname']}}" data-folder-id="{{$topicNames[$folder_bonus['parent']]}}" class="resource bonus-files hidden">
+                                                            <a class="download-file getdropboxlink"  data-dirname="{{ $file_bonus['dirname'] }}" data-filename="{{ $file_bonus['filename'] }}" href="javascript:void(0)" ><img
+                                                                src="theme/assets/img/new/download.svg"
+                                                                alt="download resource" />{{ $file_bonus['filename'] }}</a>
+                                                        </li>
+                                                    @else
+
+                                                        @foreach($selectedFiles['selectedFolders'] as $key10 => $selectedFile)
+
+                                                            @if($file_bonus['dirname'] == $selectedFile)
+
+                                                                <li id="{{$folder_bonus['dirname']}}" data-folder-id="{{$topicNames[$folder_bonus['parent']]}}" class="resource bonus-files hidden">
+                                                                    <a class="download-file getdropboxlink"  data-dirname="{{ $file_bonus['dirname'] }}" data-filename="{{ $file_bonus['filename'] }}" href="javascript:void(0)" ><img
+                                                                        src="theme/assets/img/new/download.svg"
+                                                                        alt="download resource" />{{ $file_bonus['filename'] }}</a>
+                                                                </li>
+                                                            @endif
+                                                        @endforeach
+                                                    @endif
                                                 @endif
                                              @endforeach
                                           @endif
                                        @endforeach
-                                       
+
                                     @endforeach
                                  @endif
                               </ul>
                            </div>
                            @endif
-                          
+
                            <!-- ./lesson-downloads -->
                            <div class="lesson-links">
                               <!--<h4 class="resource-list-title">Links</h4>!-->
@@ -1212,7 +1274,7 @@
           @endif
 
           document.body.onkeydown= function(e){
-           
+
              if(e.keyCode == 32 && !noteFocus){
 
 

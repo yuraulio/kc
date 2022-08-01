@@ -40,6 +40,7 @@ class EventInfo extends Model
         'course_elearning_exam_visible',
         'course_payment_method',
         'course_payment_icon',
+        'course_files_icon',
         'course_partner',
         'course_partner_icon',
         'course_manager',

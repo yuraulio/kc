@@ -9,7 +9,7 @@
 @section('content')
     @component('layouts.headers.auth')
     @component('layouts.headers.breadcrumbs')
-       
+
 
             <li class="breadcrumb-item"><a href="{{ route('events.index') }}">{{ __('Events Management') }}</a></li>
             <li class="breadcrumb-item active" aria-current="page">{{ __('Edit Event') }}</li>
@@ -138,7 +138,7 @@
                                                 </div>
                                             </div>
 
-                               
+
 
                                             <div class="col-md-2 col-sm-6 col-6">
                                                 <div style="margin: auto 0;" class="col-md-3 col-sm-3">
@@ -1109,12 +1109,24 @@
 
                                             <div class="form-group col-12">
 
+                                                <?php
+                                                    if(isset($info['files_icon']) && $info['files_icon'] != null){
+                                                        $course_files_icon = $info['files_icon'];
+                                                    }else{
+                                                        $course_files_icon = null;
+                                                    }
+                                                ?>
+
                                                 <div class="input-group">
                                                     <h3 class="mb-0 title" for="input-hours">{{ __('Course files') }}</h3>
 
                                                     <span data-infowrapper="files" class="input-group-addon input-group-append input-icon-wrapper">
                                                         <span class="btn btn-outline-primary input-icon">
-                                                            <span class="fa fa-calendar"></span>
+                                                            @if($course_files_icon != null && $course_files_icon['path'] != null)
+                                                                <img src="{{ asset($course_files_icon['path']) }}" alt="{{ (isset($course_files_icon['alt_text']) && $course_files_icon['alt_text'] != null) ? $course_files_icon['alt_text'] : ''  }}"/>
+                                                            @else
+                                                                <span class="fa fa-file"></span>
+                                                            @endif
                                                         </span>
                                                     </span>
                                                     <input type="hidden" value="" id="files_path" name="course[{{'files'}}][{{'icon'}}][{{'path'}}]">
@@ -1122,11 +1134,12 @@
                                                 </div>
                                             </div>
 
-                                            <div class="form-group col-sm-12 col-md-6 col-lg-4">
+                                            {{--<div class="form-group col-sm-12 col-md-6 col-lg-4">
                                                 <label for="exampleFormControlSelect1">Select Dropbox Folder</label>
                                                 <select class="form-control" name="folder_name" id="folder_name">
 
                                                     @foreach($folders as $folder)
+
 
                                                         <?php $found = false; ?>
                                                         @foreach($already_assign as $ass)
@@ -1144,6 +1157,12 @@
                                                     @endforeach
                                                 </select>
                                                 @include('alerts.feedback', ['field' => 'dropbox'])
+                                            </div>--}}
+
+                                            <div class="form-group col-12">
+                                                <input type="hidden" id="selectedFiles" name="selectedFiles" value="">
+
+                                                <div id="filesTreeContainer"></div>
                                             </div>
 
                                             <div class="col-sm-12 col-md-6 col-lg-3 form-group{{ $errors->has('release_date_files') ? ' has-danger' : '' }}">
@@ -1697,7 +1716,7 @@
                                                     </div>
 
 
-                                       
+
 
                                                     <div class="tab-pane fade show" id="tabs-icons-text-4_inside" role="tabpanel" aria-labelledby="tabs-icons-text-4-tab_inside">
                                                         @include('topics.event.instructors',['sections' => $sections])
@@ -1990,6 +2009,7 @@
     <link rel="stylesheet" href="{{ asset('argon') }}/vendor/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css">
     <link rel="stylesheet" href="{{ asset('argon') }}/vendor/datatables.net-select-bs4/css/select.bootstrap4.min.css">
     <link rel="stylesheet" href="{{ asset('argon') }}/vendor/datatables-datetime/datetime.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/20.2.11/css/dx.carmine.compact.css" rel="stylesheet">
 @endpush
 
 @push('js')
@@ -1997,10 +2017,253 @@
     <script src="{{ asset('argon') }}/vendor/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
     <script src="{{ asset('argon') }}/vendor/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
     <script src="{{ asset('argon') }}/vendor/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js"></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/devextreme/20.2.11/js/dx.all.js"></script>
 
 
 <script>
+    let selectedFolders = [];
+    let selectedIds = [];
+    let loadAllFolders = [];
+    let already_assign_files = @json($already_assign);
+
+    if(already_assign_files.length != 0){
+        already_assign_files = already_assign_files[0]
+        loadAllFolders = JSON.parse(already_assign_files.pivot.selectedFolders);
+    }
+
+
+    let files = []
+    const dropFiles = JSON.parse(@json($dropbox));
+    let treeList = null;
+
+    function treeData(){
+        return new Promise(function(resolve, reject) {
+            let count   = 10000;
+            let count1  = 100000;
+            let count2  = 1000000;
+            let count3  = 10000000;
+            $.each(dropFiles,function(index, value) {
+
+                files.push({
+                    ID: value.id,
+                    Full_Name: value.folder_name,
+                    isRootFolder: true
+                })
+
+                let folders = value.folders;
+                let files1 = value.files
+
+                if(folders != null && folders[0] != null){
+                    $.each(folders[0], function(index1, value1) {
+
+                        //foreach for folders
+                        files.push({
+                            ID: count,
+                            Head_ID: value.id,
+                            Full_Name: value1.foldername,
+                            dirname: value1.dirname,
+                            dropboxFolder: value.folder_name,
+                            isRootFolder: false
+                        })
+
+                        //foreach for files
+                        if(files1[1]){
+                            $.each(files1[1], function(index22, value22) {
+                                if(value22.fid == value1.id){
+
+                                    files.push({
+                                        ID: count2,
+                                        Head_ID: count,
+                                        Full_Name: value22.filename,
+                                        dirname: value22.dirname,
+                                        dropboxFolder: value.folder_name,
+                                        isRootFolder: false
+                                    })
+                                }
+                                count2++;
+                            })
+                        }
+
+                        //Bonus folder
+                        if(folders[1] != null){
+                            //console.log('bonus folders', folders[1])
+                            $.each(folders[1], function(index11, value11) {
+                                if(value11.parent == value1.id){
+
+                                    files.push({
+                                        ID: count1,
+                                        Head_ID: count,
+                                        Full_Name: value11.foldername,
+                                        dirname: value11.dirname,
+                                        dropboxFolder: value.folder_name
+                                    })
+
+                                    if(files1[2]){
+                                        $.each(files1[2], function(index33, value33) {
+                                            if(value33.fid == value11.id && value33.parent == value1.id){
+                                                files.push({
+                                                    ID: count3,
+                                                    Head_ID: count1,
+                                                    Full_Name: value33.filename,
+                                                    dirname: value33.dirname,
+                                                    dropboxFolder: value.folder_name,
+                                                    isRootFolder: false
+                                                })
+                                            }
+                                            count3++;
+                                        })
+                                    }
+                                }
+                                count1++
+                            })
+                    }
+                        count++
+                    })
+                }
+            })
+            resolve();
+        })
+    }
+
+    function treeFiles(){
+        treeList = $('#filesTreeContainer').dxTreeList({
+            dataSource: files,
+            keyExpr: 'ID',
+            parentIdExpr: 'Head_ID',
+            allowColumnReordering: false,
+            allowColumnResizing: false,
+            showBorders: false,
+            selection: {
+                mode: 'multiple',
+                recursive: true,
+            },
+                filterRow: {
+                visible: false,
+            },
+            stateStoring: {
+                enabled: false,
+                type: 'localStorage',
+                storageKey: 'treeListStorage',
+            },
+            columns: [
+                {
+                    dataField: 'Full_Name',
+                }
+            ],
+        }).dxTreeList('instance');
+    }
+
+    function parseIdsForSelectFiles(){
+
+        if(files.length != 0 && loadAllFolders.length != 0){
+
+
+            if(loadAllFolders.selectedAllFolders){
+                $.each(files, function(index, value) {
+
+                    if(value.Full_Name == already_assign_files.folder_name){
+                        selectedIds.push(value.ID)
+                    }
+                })
+            }else{
+                $.each(files, function(index, value) {
+                    if(loadAllFolders.selectedFolders.length != 0){
+                        $.each(loadAllFolders.selectedFolders, function(index1, value1){
+
+                            if(value.dirname == value1 && already_assign_files.folder_name == value.dropboxFolder){
+                                selectedIds.push(value.ID)
+                            }
+                        })
+
+                    }
+                })
+            }
+
+
+            treeList.selectRows(selectedIds);
+
+        }
+    }
+
+    $(() => {
+
+
+
+        treeData().then(function () {
+            treeFiles()
+            parseIdsForSelectFiles()
+        })
+
+        $('#state-reset-link').on('click', () => {
+            treeList.state(null);
+        });
+
+        $("#filesTreeContainer").dxTreeList({
+            onSelectionChanged: function(e) { // Handler of the "selectionChanged" event
+                let deselectIDS = [];
+                const currentSelectedRowKeys = e.currentSelectedRowKeys[0];
+                var currentSelectedRow = [];
+                selectedFolders = [];
+                let selectedDropbox = null;
+                let selectedAllFolders = false;
+                const allSelectedRowsData = e.selectedRowsData;
+                const allSelectedRowsDataForSave = treeList.getSelectedRowsData('multiple')
+
+                $.each(files, function(index, value){
+                    if(currentSelectedRowKeys == value.ID){
+                        currentSelectedRow = value
+                    }
+                })
+
+
+                if(currentSelectedRow.isRootFolder && allSelectedRowsData.length != 1){
+
+                    allSelectedRowsData.filter(value => value.ID == currentSelectedRowKeys);
+
+                    $.each(allSelectedRowsData,function(index,value){
+                        if(value.ID != currentSelectedRowKeys){
+                            deselectIDS.push(value.ID)
+                        }
+                    })
+
+                }
+
+
+                if(!currentSelectedRow.isRootFolder && allSelectedRowsData.length != 1){
+                    $.each(allSelectedRowsData,function(index,value){
+                        if(value.isRootFolder && currentSelectedRow.Head_ID != value.ID){
+                            deselectIDS.push(value.ID)
+                        }
+                    })
+                }
+                treeList.deselectRows(deselectIDS);
+
+                let dataForSubmit = [];
+
+                $.each(allSelectedRowsDataForSave, function(index, value) {
+
+                    if(value.isRootFolder){
+                        selectedAllFolders = true;
+                        selectedDropbox = value.Full_Name;
+
+                    }else{
+                        selectedFolders.push(value.dirname)
+                        selectedDropbox = value.dropboxFolder;
+                    }
+                })
+
+                dataForSubmit = {
+                    selectedDropbox :selectedDropbox,
+                    selectedAllFolders :selectedAllFolders,
+                    selectedFolders :selectedFolders
+                };
+
+                dataForSubmit = JSON.stringify(dataForSubmit);
+                $('#selectedFiles').val(dataForSubmit);
+
+            }
+        });
+    });
 
     var eventPartners = @json($eventPartners);
     var eventInfos = @json($info)
@@ -2108,7 +2371,7 @@
 
 
             if(eventInfos !== undefined){
-        
+
                 $('#input-certificate_title').val(eventInfos.certificate.messages.success)
                 CKEDITOR.instances['input-certificate_title'].setData(eventInfos.certificate.messages.success)
 
@@ -2117,7 +2380,7 @@
             }
 
 
-            
+
         }else{
             $('.course-certification-visible-wrapper').addClass('d-none');
 
@@ -2328,15 +2591,15 @@
                 return false;
 
             }else if(!start && event_type){
-                
+
                 alert('You must fill start time field')
                 return false;
-                
+
             }else if(!end && event_type){
 
                 alert('You must fill end time field')
                 return false;
-                
+
             }
 
             data = {date:date, start:start, event_id:event_id, end:end, room:room, instructor_id:instructor_id, topic_id:topic_id, lesson_id:lesson_id}
@@ -2445,7 +2708,7 @@
             topic_id = topic_id.split("_")
             const event_id = $('#topic_lessons').data('event-id')
             let instructor_id = $('#instFormControlSelect12').val()
-            
+
 
             data = {lesson_id:elem[1], topic_id:topic_id[1], event_id:event_id}
             $.ajax({
@@ -2736,7 +2999,7 @@
 
 
     $('.enroll-students').change(function(){
-       
+
         let enroll = $("#input-enroll").is(":checked") ? 1 : 0;
         console.log('dfsd');
         $.ajax({
@@ -2747,7 +3010,7 @@
             Accept: 'application/json',
             url: "/admin/enroll-to-elearning/" + "{{$event->id}}" +"/" + enroll,
             success: function(data) {
-            
+
             }
         });
 
@@ -2755,7 +3018,7 @@
 
 
     $('.index-toggle').change(function(){
-       
+
        let index = $("#input-index").is(":checked") ? 1 : 0;
 
        $.ajax({
@@ -2766,14 +3029,14 @@
            Accept: 'application/json',
            url: "/admin/change-index/" + "{{$event->id}}" +"/" + index,
            success: function(data) {
-           
+
            }
        });
 
    })
 
    $('.feed-toggle').change(function(){
-       
+
        let feed = $("#input-feed").is(":checked") ? 1 : 0;
 
        $.ajax({
@@ -2784,7 +3047,7 @@
            Accept: 'application/json',
            url: "/admin/change-feed/" + "{{$event->id}}" +"/" + feed,
            success: function(data) {
-           
+
            }
        });
 
