@@ -60,7 +60,7 @@ class UserController extends Controller
      */
     public function index(User $model)
     {
-
+        
         $user = Auth::user();
 
         $data['all_users'] = $model::count();

@@ -101,6 +101,7 @@
                         <table class="table align-items-center table-flush"  id="datatable-basic45">
                             <thead class="thead-light">
                                 <tr>
+                                    
                                     <th scope="col">Photo</th>
                                     <th scope="col">{{ __('Name') }}</th>
                                     <th scope="col">{{ __('Lastname') }}</th>
@@ -113,6 +114,8 @@
                                     <th class="d-none" scope="col">{{ __('Event') }}</th>
                                     <th class="elearning-infos d-none" scope="col">{{ __('Video Seen') }}</th>
                                     <th class="elearning-infos d-none" scope="col">{{ __('Exams') }}</th>
+                                    <th scope="col d-none">{{ __('Job Position') }}</th>
+                                    <th scope="col d-none">{{ __('Company') }}</th>
                                     <th scope="col"></th>
                                 </tr>
                             </thead>
@@ -165,6 +168,8 @@
 
                                         <td class="elearning-infos d-none videoSeen"></td>
                                         <td class="elearning-infos d-none"></td>
+                                        <td> {{$user['job_title']}} </td>
+                                        <td> {{$user['company']}} </td>
 
                                         <td class="text-right">
                                             <div class="dropdown">
@@ -805,6 +810,8 @@
             });
             data = @json($data);
 
+            jobs =  $('#datatable-basic45').DataTable().column(12).data().unique().sort()
+            console.log(jobs);
             $.each(data.coupons, function(key, value) {
                 //console.log(value)
                 $('#col10_filter').append('<option value="'+value.code_coupon+'">'+value.code_coupon+'</option>')
