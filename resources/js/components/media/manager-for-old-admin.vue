@@ -13,7 +13,7 @@
         @inputed="imageSelected($event)"
         :uuid="$uuid.v4()"
         mode="single"
-        :value="JSON.parse(startingImage)"
+        :value="this.getStartingImage"
         :hideAltText="true"
     />
 
@@ -35,6 +35,11 @@ export default {
             $('#image_upload').val("/uploads/" + $event.data.path);
             $("#upload_form").submit();
         },
+    },
+    computed: {
+        getStartingImage() {
+            return this.startingImage ? JSON.parse(this.startingImage) : null;
+        }
     }
 }
 </script>

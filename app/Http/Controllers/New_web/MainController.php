@@ -139,8 +139,8 @@ class MainController extends Controller
         if($request->has('terms')){
 
             $terms = Page::withoutGlobalScope("published")->whereId(6)->first();
-            $contents[] = json_decode($page->content);
             $contents[] = json_decode($terms->content);
+            $contents[] = json_decode($page->content);
             
             return view('new_web.page_consent', [
                 'contents' => $contents,

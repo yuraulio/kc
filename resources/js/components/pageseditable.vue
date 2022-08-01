@@ -246,10 +246,6 @@ export default {
                 type_value: null,
                 type_list: [
                     {
-                        'id': 1,
-                        'title':'Article'
-                    },
-                    {
                         'id': 2,
                         'title':'Blog'
                     },
@@ -437,6 +433,7 @@ export default {
             if (this.data) {
                 var data = this.data;
                 this.title_value = data.title;
+                this.type_value = data.type;
                 this.template_value = data.template;
                 this.published = data.published;
                 this.indexed = data.indexed;

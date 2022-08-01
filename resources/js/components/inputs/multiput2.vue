@@ -12,7 +12,7 @@
         class="offcanvas offcanvas-start"
         data-bs-scroll="true"
         tabindex="-1"
-        :id="'mediaCanvas' + keyput"
+        :id="'mediaCanvas2' + keyput"
         aria-labelledby="mediaCanvasLabel"
         style="visibility: visible; width: 100%"
         aria-modal="true"
@@ -29,7 +29,7 @@
         <div class="text-center">
             <div class="d-grid text-center" v-if="value">
 
-                <img @click="$set(loadstart, (keyput + 'media'),  true)" data-bs-toggle="offcanvas" :data-bs-target="'#mediaCanvas' + keyput" :src="value.url + '?i=' + (Math.random() * 100000)" alt="image" class="img-fluid rounded cursor-pointer" :style="'width:' + width">
+                <img @click="$set(loadstart, (keyput + 'media'),  true)" data-bs-toggle="offcanvas" :data-bs-target="'#mediaCanvas2' + keyput" :src="value.url + '?i=' + (Math.random() * 100000)" alt="image" class="img-fluid rounded cursor-pointer" :style="'width:' + width">
 
                 <i @click="removeImage()" class="mdi mdi-delete text-muted vertical-middle d-block fs-4 mt-1"></i>
 
@@ -39,8 +39,8 @@
                 </div>
             </div>
             <div v-else>
-                <i @click="$set(loadstart, (keyput + 'media'),  true)" data-bs-toggle="offcanvas" :data-bs-target="'#mediaCanvas' + keyput" class="text-muted dripicons-photo d-none image-input-icon" style="font-size: 100px;"></i>
-                <button @click="$set(loadstart, (keyput + 'media'),  true)" type="button" data-bs-toggle="offcanvas" :data-bs-target="'#mediaCanvas' + keyput" aria-controls="offcanvasScrolling" id="image-input-button"  class="btn btn-soft-primary image-input-button">
+                <i @click="$set(loadstart, (keyput + 'media'),  true)" data-bs-toggle="offcanvas" :data-bs-target="'#mediaCanvas2' + keyput" class="text-muted dripicons-photo d-none image-input-icon" style="font-size: 100px;"></i>
+                <button  @click="$set(loadstart, (keyput + 'media'),  true)" type="button" data-bs-toggle="offcanvas" :data-bs-target="'#mediaCanvas2' + keyput" aria-controls="offcanvasScrolling" id="image-input-button"  class="btn btn-soft-primary image-input-button d-none">
                     <template v-if="imageEdit">
                         Edit Media
                     </template>
@@ -53,7 +53,7 @@
     </div>
 
     <div v-if="type == 'gallery'" :key="keyput + 'media'" class="image-input">
-            <div :ref="keyput + 'media'" class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" :id="'mediaCanvas' + keyput" aria-labelledby="mediaCanvasLabel" style="visibility: visible; width: 100%" aria-modal="true" role="dialog">
+            <div :ref="keyput + 'media'" class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" :id="'mediaCanvas2' + keyput" aria-labelledby="mediaCanvasLabel" style="visibility: visible; width: 100%" aria-modal="true" role="dialog">
             <div class="offcanvas-header">
                 <h5 class="offcanvas-title" id="mediaCanvasLabel"></h5>
                 <button :ref="(keyput + 'mediabtn')" type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -67,7 +67,7 @@
             <div class="d-grid text-center" v-if="value" style="display: block;">
                 <div class="row">
                     <div v-for="(val, index) in value" class="col-sm-3 mb-2">
-                        <img @click="$set(loadstart, (keyput + 'media'),  true)" data-bs-toggle="offcanvas" :data-bs-target="'#mediaCanvas' + keyput" :src="val.url" alt="image" class="img-fluid img-thumbnail" width="200" height="200">
+                        <img @click="$set(loadstart, (keyput + 'media'),  true)" data-bs-toggle="offcanvas" :data-bs-target="'#mediaCanvas2' + keyput" :src="val.url" alt="image" class="img-fluid img-thumbnail" width="200" height="200">
                         <p class="mb-0">
                             <code>
                                 <template v-if="val.name.length < 50">
@@ -82,14 +82,14 @@
                         </p>
                     </div>
                     <div class="col-sm-3">
-                        <i @click="$set(loadstart, (keyput + 'media'),  true)" data-bs-toggle="offcanvas" :data-bs-target="'#mediaCanvas' + keyput" class="text-muted dripicons-photo-group d-none image-input-icon" style="font-size: 100px;"></i>
-                        <button @click="$set(loadstart, (keyput + 'media'),  true)" type="button" data-bs-toggle="offcanvas" :data-bs-target="'#mediaCanvas' + keyput" aria-controls="offcanvasScrolling"  class="btn btn-soft-primary image-input-button">Add Media</button>
+                        <i @click="$set(loadstart, (keyput + 'media'),  true)" data-bs-toggle="offcanvas" :data-bs-target="'#mediaCanvas2' + keyput" class="text-muted dripicons-photo-group d-none image-input-icon" style="font-size: 100px;"></i>
+                        <button @click="$set(loadstart, (keyput + 'media'),  true)" type="button" data-bs-toggle="offcanvas" :data-bs-target="'#mediaCanvas2' + keyput" aria-controls="offcanvasScrolling"  class="btn btn-soft-primary image-input-button">Add Media</button>
                     </div>
                 </div>
             </div>
             <div v-else>
-                <i @click="$set(loadstart, (keyput + 'media'),  true)" data-bs-toggle="offcanvas" :data-bs-target="'#mediaCanvas' + keyput" class="text-muted dripicons-photo-group d-none image-input-icon" style="font-size: 100px;"></i>
-                <button @click="$set(loadstart, (keyput + 'media'),  true)" type="button" data-bs-toggle="offcanvas" :data-bs-target="'#mediaCanvas' + keyput" aria-controls="offcanvasScrolling"  class="btn btn-soft-primary image-input-button">Add Media</button>
+                <i @click="$set(loadstart, (keyput + 'media'),  true)" data-bs-toggle="offcanvas" :data-bs-target="'#mediaCanvas2' + keyput" class="text-muted dripicons-photo-group d-none image-input-icon" style="font-size: 100px;"></i>
+                <button @click="$set(loadstart, (keyput + 'media'),  true)" type="button" data-bs-toggle="offcanvas" :data-bs-target="'#mediaCanvas2' + keyput" aria-controls="offcanvasScrolling"  class="btn btn-soft-primary image-input-button">Add Media</button>
             </div>
         </div>
     </div>

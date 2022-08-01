@@ -19,7 +19,7 @@ class DashboardStatistics
 
         $results['instructors'] = Instructor::whereStatus(true)->has('event')->count();
 
-        $results['usersInclass'] = $results['usersElearning'] = User::whereHas('events', function ($q) {
+        $results['usersInclass'] = User::whereHas('events_for_user_list', function ($q) {
             $q->wherePublished(true)->where(function ($q1) {
                 $q1->doesntHave('delivery')->OrWhereHas('delivery', function ($q2) {
                     return $q2->where('deliveries.id', '<>', 143);
@@ -27,19 +27,20 @@ class DashboardStatistics
             });
         })->count();
 
-        $results['usersElearning'] = User::whereHas('events', function ($q) {
+        $results['usersElearning'] = User::whereHas('events_for_user_list', function ($q) {
             $q->wherePublished(true)->whereHas('delivery', function ($q1) {
                 return $q1->where('deliveries.id', 143);
             });
         })->count();
 
-        $results['usersGranduates'] = User::whereHas('events', function ($q) {
+        $results['usersGranduates'] = User::whereHas('events_for_user_list', function ($q) {
             $q->wherePublished(true)->whereHas('type', function ($q1) {
                 return $q1->whereIn('types.id', [13, 14]);
             });
         })->count();
 
-        $results['totalsStudents'] = User::whereHas('events', function ($q1) {
+        //$results['totalsStudents'] =  $results['usersInclass'] + $results['usersElearning'];
+        $results['totalsStudents'] = User::whereHas('events_for_user_list', function ($q1) {
             $q1->wherePublished(true);
         })->count();
 

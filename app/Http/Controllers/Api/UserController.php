@@ -217,7 +217,7 @@ class UserController extends Controller
     {
         
         $user = Auth::user();;//->with('events.summary1','events.lessons.topic','instructor.event')->first();
-        $user = User::where('id',$user->id)->with('events.dropbox','events.summary1','events','events.lessons','events.lessons.topic')->first();
+        $user = User::where('id',$user->id)->with('events.dropbox','events','events.lessons','events.lessons.topic')->first();
         $data = [];
         $instructor = count($user->instructor) > 0;
         
@@ -242,6 +242,9 @@ class UserController extends Controller
             unset($data[$key]['event']['delivery']);
             unset($data[$key]['event']['dropbox']);
             unset($data[$key]['event']['venues']);
+            unset($data[$key]['event']['event_info']);
+            unset($data[$key]['event']['event_info1']);
+            unset($data[$key]['event']['absences_limit']);
         }
 
 
@@ -261,7 +264,7 @@ class UserController extends Controller
         foreach($user['events']->whereNotIn('id',$exceptEvents) as $key => $event)
         {
             
-
+            $eventInfo = $event->event_info();
             $data1 = [];
             
             $isElearning = false;
@@ -270,6 +273,9 @@ class UserController extends Controller
             //$category = $event->category[0];
 
             $data[$key]['event'] = $event;//$event->toArray();
+            $data[$key]['user_absences'] = $user->getAbsencesByEvent($event)['user_absences_percent'];
+            $data[$key]['absences_limit'] = isset($eventInfo['inclass']['absences']) ? $eventInfo['inclass']['absences'] : 0;
+            
             //$dropbox = $category['dropbox'][0];
             $dropbox = $event['dropbox'][0];
             $folders = isset($dropbox['folders'][0]) ? $dropbox['folders'][0] : [];
@@ -418,7 +424,7 @@ class UserController extends Controller
             }
            
             // Summary
-            foreach($event['summary1'] as $key_summary => $summary){
+            /*foreach($event['summary1'] as $key_summary => $summary){
                 $data[$key]['summary'][$key_summary]['title'] = $summary->title;
                 $data[$key]['summary'][$key_summary]['description'] = $summary->description;
                 $data[$key]['summary'][$key_summary]['icon'] = $summary->icon;
@@ -429,7 +435,15 @@ class UserController extends Controller
                 }else{
                     $date = "null";
                 }
-            }
+            }*/
+
+            
+            $date = isset($eventInfo['inclass']['dates']['text']) ? $eventInfo['inclass']['dates']['text'] : null;
+
+            $data[$key]['summary'][0]['title'] = $date;
+            $data[$key]['summary'][0]['description'] = '';
+            $data[$key]['summary'][0]['icon'] = null;
+            $data[$key]['summary'][0]['section'] = 'date';
 
             // is Inclass?
             if($event->is_inclass_course()){
@@ -465,8 +479,8 @@ class UserController extends Controller
                 $data[$key]['is_elearning'] = true;
                 $isElearning = true;
                 //progress here
-                $data[$key]['progress'] = intval($event->progress($user)).'%';
-
+                $data[$key]['progress'] = round($event->progress($user),2).'%';
+                $data[$key]['videos_seen'] = $event->video_seen($user);
                 // Statistics
                 $statistics =  ($statistics = $user->statistic()->wherePivot('event_id',$event['id'])->first()) ?
                             $statistics->toArray() : ['pivot' => [], 'videos' => ''];
@@ -488,13 +502,19 @@ class UserController extends Controller
 
            
             $topics = [];
-
+            
             foreach($event['lessons'] as $lesson){
                 
-                if(!$lesson['instructor_id'] || !$lesson['vimeo_video']){
+              
+
+                if(!$lesson['instructor_id']){
                     continue;
                 }
 
+                if($isElearning && !$lesson['vimeo_video']){
+                    continue;
+                }
+               
                 $inst['name'] = $instructors[$lesson['instructor_id']][0]['title'].' '.$instructors[$lesson['instructor_id']][0]['subtitle'];
                 $inst['media'] = asset(get_image($instructors[$lesson['instructor_id']][0]['medias'], 'instructors-small'));
 
@@ -614,6 +634,7 @@ class UserController extends Controller
                   
 
                 }else{
+                    
                     if($lesson['pivot']['date'] != ''){
                         $arr_lesson['date'] = date_format(date_create($lesson['pivot']['date']),"d/m/Y");
 
@@ -622,7 +643,7 @@ class UserController extends Controller
                         $arr_lesson['date'] = date_format(date_create($lesson['pivot']['time_starts']),"d/m/Y");
                         
                     }
-
+                    
                     $arr_lesson['title'] = $lesson['title'];
                     $arr_lesson['time_starts'] = $lesson['pivot']['time_starts'];
                     $arr_lesson['time_ends'] = $lesson['pivot']['time_ends'];
@@ -667,13 +688,12 @@ class UserController extends Controller
 
                 }
 
-                
-
+            
                 $arr_lesson['instructor'] = $inst; 
                 array_push($topics[$topic->id]['lessons'], $arr_lesson);
 
             }
-    
+      
             $data[$key]['topics'] = [];
             foreach($topics as $key11 =>  $topic){
                 //dd($topic);
@@ -714,7 +734,6 @@ class UserController extends Controller
             
             
         }
-
         return $data;
 
     }
@@ -730,6 +749,7 @@ class UserController extends Controller
         foreach($instructor['event'] as $key => $event)
         {
             
+            $eventInfo = $event->event_info();
             $data1 = [];
             $isElearning = false;
 
@@ -886,7 +906,7 @@ class UserController extends Controller
             }
     
             // Summary
-            foreach($event['summary1'] as $key_summary => $summary){
+            /*foreach($event['summary1'] as $key_summary => $summary){
                 $data[$key]['summary'][$key_summary]['title'] = $summary->title;
                 $data[$key]['summary'][$key_summary]['description'] = $summary->description;
                 $data[$key]['summary'][$key_summary]['icon'] = $summary->icon;
@@ -897,7 +917,15 @@ class UserController extends Controller
                 }else{
                     $date = "null";
                 }
-            }
+            }*/
+
+            
+            $date = isset($eventInfo['inclass']['dates']['text']) ? $eventInfo['inclass']['dates']['text'] : null;
+
+            $data[$key]['summary'][0]['title'] = $date;
+            $data[$key]['summary'][0]['description'] = '';
+            $data[$key]['summary'][0]['icon'] = null;
+            $data[$key]['summary'][0]['section'] = 'date';
             
             // is Inclass?
             if($event->is_inclass_course()){
@@ -930,7 +958,7 @@ class UserController extends Controller
                 $data[$key]['is_elearning'] = true;
                 $isElearning = true;
                 //progress here
-                $data[$key]['progress'] = intval($event->progress($user)).'%';
+                $data[$key]['progress'] = round($event->progress($user),2).'%';
 
                 // Statistics
                 $statistics =  ($statistics = $user->statistic()->wherePivot('event_id',$event['id'])->first()) ?
@@ -951,7 +979,11 @@ class UserController extends Controller
            
             $topics = [];
             foreach($event->lessons as $lesson){
-                if(!$lesson['instructor_id'] || !$lesson['vimeo_video']){
+                if(!$lesson['instructor_id']){
+                    continue;
+                }
+
+                if($isElearning && !$lesson['vimeo_video']){
                     continue;
                 }
                 $sum= 0;

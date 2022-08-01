@@ -102,46 +102,54 @@ class TransactionController extends Controller
 
         }else{
             //$transactions = Transaction::with('user.statisticGroupByEvent','user.events','user.ticket','subscription','event','event.delivery','event.category')->where('status', 1)->orderBy('created_at','desc')->get();
-            $transactions = Transaction::with('user.statisticGroupByEvent','user.events','user.ticket','subscription','event','event.delivery','event.category')
-            ->where(function ($q)  {
-
-                $q
-                
-                ->has('user')
-
-                /*->whereHas('user',function($q1){
-                    return $q1->whereHas('ticket');
-                })*/
-               
-                /*->whereHas('event',function($q1){
-                    return $q1->has('category');
-                })*/
-                
-                //->doesntHave('subscription')
-                ;
-               
-            })
+            $transactions = Transaction::
+            whereDoesntHave('subscription')
+            ->whereHas('user')
+            ->with([
+                'user' => function($user){
+                    return $user->whereHas('events')->with([
+                        'statisticGroupByEvent',
+                        'events',
+                        'ticket'
+                    ]);
+                }
+            ])
             ->where('status', 1)
             ->orderBy('created_at','desc')
             ->get();
         }
 
-        dd('fdsf');
+        //dd($transactions);
 
         $earlyCount = 0;
         $data['transactions'] = [];
         foreach($transactions as $transaction){
             
-            $isElearning = $transaction->event->first()->delivery->first() && $transaction->event->first()->delivery->first()->id == 143;
-            $category =  $transaction->event->first()->category->first();
+            if(!$transaction->user->first()){
+                continue;
+            }
+
+            $eventInfo = $transaction->user->first()->events->first()->event_info();
+            //dd($eventInfo);
+
+            $isElearning = isset($eventInfo['delivery']) && $eventInfo['delivery'] == 143;
+            $category =  ($category = $transaction->user->first()->events->first()->category->first()) ? $category->id : -1; 
                 
             if(in_array(9,$userRole) &&  ($category !== 46)){
                 continue;
             }
 
-            $ticketType = $transaction->user->first()->ticket->first()->type;
-            $ticketName = $transaction->user->first()->ticket->first()->title;
-
+            //dd($transaction['user'][0]['ticket'][0]['type']);
+            if(isset($transaction['user'][0]['ticket'][0]['type'])){
+                $ticketType = $transaction['user'][0]['ticket'][0]['type'];
+                $ticketName = $transaction['user'][0]['ticket'][0]['title'];
+    
+            }else{
+                $ticketType = '-';
+                $ticketName = '-';
+    
+            }
+            
             if($transaction['coupon_code'] != ''){
                 $coupon_code = $transaction['coupon_code'];
             }else{
@@ -163,12 +171,12 @@ class TransactionController extends Controller
                 $events = $u->events->groupBy('id');
                 $expiration = isset($events[$transaction->event->first()->id]) ? $events[$transaction->event->first()->id]->first()->pivot->expiration : null;
                 $videos = isset($videos) ? json_decode($videos->videos,true) : null;
-               
+                $paymentMethod = 'Alpha Bank';
                 $data['transactions'][] = ['id' => $transaction['id'], 'user_id' => $u['id'],'name' => $u['firstname'].' '.$u['lastname'],
                                             'event_id' => $transaction->event[0]['id'],'event_title' => $transaction->event[0]['title'].' / '.date('d-m-Y', strtotime($transaction->event[0]['published_at'])),'coupon_code' => $coupon_code, 'type' => trim($ticketType),'ticketName' => $ticketName,
                                             'date' => date_format($transaction['created_at'], 'Y-m-d'), 'amount' => $transaction['amount'] / $countUsers,
                                             'is_elearning' => $isElearning,
-                                            'coupon_code' => $transaction['coupon_code'],'videos_seen' => $this->getVideosSeen($videos),'expiration'=>$expiration];
+                                            'coupon_code' => $transaction['coupon_code'],'videos_seen' => $this->getVideosSeen($videos),'expiration'=>$expiration,'paymentMethod' => $paymentMethod];
             }
 
         }

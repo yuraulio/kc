@@ -496,7 +496,7 @@ class Event extends Model
 
     }
 
-    public function progress($user)
+    /*public function progress($user)
     {
         //dd($user->statistic()->wherePivot('event_id',$this['id'])->first()->pivot['videos']);
 
@@ -521,19 +521,45 @@ class Event extends Model
         }
 
         return 0 * 100;
+    }*/
+
+
+    public function progress($user)
+    {
+
+        if(!$videos = $user->statistic()->wherePivot('event_id',$this['id'])->first()){
+            return 0;
+        }
+
+        $videos = $videos->pivot['videos'];
+        $totalDuration = 0;
+
+        //dd($videos);
+        $seenTime = 0;
+        if($videos != ''){
+            $videos = json_decode($videos, true);
+            foreach($videos as $video){
+                $seenTime += (float)$video['stop_time'];
+                $totalDuration += (float)$video['total_duration'];
+            }
+            
+        }
+        
+        return $totalDuration > 0 ?  $seenTime /  $totalDuration * 100 : 0;
     }
 
     public function video_seen($user)
     {
-
         if(!$videos = $user->statistic()->wherePivot('event_id',$this['id'])->first()){
-            return '0 of 0';
+            return '0 of ' . count($this->lessons);
         }
 
         $videos = $videos->pivot['videos'];
+        $videos = json_decode($videos, true);
+        //dd($videos);
         //dd($user->statistic()->wherePivot('event_id',$this['id'])->first());
-        if($videos != ''){
-            $videos = json_decode($videos, true);
+        if($videos){
+            //$videos = json_decode($videos, true);
             //dd($videos);
             $sum = 0;
             foreach($videos as $video){
@@ -544,8 +570,9 @@ class Event extends Model
             }
             return $sum.' of '.count($videos);
         }
-
-        return '0 of 0';
+        
+        return'0 of ' . count($this->lessons);
+        //return '0 of 0';
 
     }
 

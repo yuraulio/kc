@@ -108,10 +108,10 @@
             "@php artisan key:generate --ansi"
         ],
         "post-install-cmd": [
-            
+
         ],
         "post-update-cmd": [
-            
+
         ]
     },
     "repositories": {

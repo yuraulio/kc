@@ -70,16 +70,12 @@
                             </div>
 
                         </div>
-<<<<<<< HEAD
                         <div class="col-sm-3 filter_col" id="filter_col4" data-column="4">
-=======
-                        {{--<div class="col-sm-3 filter_col" id="filter_col4" data-column="11">
->>>>>>> 2abc3ebb60af630a7af4ab7bd56ecbea9c08e370
                             <label>Delivery</label>
                             <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..." name="Name" class="column_filter" id="col4_filter" placeholder="Delivery">
                             <option selected value> -- All -- </option>
                             </select>
-                        </div>--}}
+                        </div>
 
                         <!-- <div id="sub_datePicker" class="input-daterange datepicker">
                            <div class="col">
@@ -156,7 +152,7 @@
                         {{--<td>{{$item['plan_name']}}</td>--}}
                         <td>{{ $item['event_title'] }}</td>
                         <td>{{ $item['status'] }}</td>
-                        <td>{{ (isset($item['delivery'])) ? $item['delivery']['name'] : ''}}</td>
+                        <td>{{ (isset($item['delivery'])) ? $item['delivery'] : ''}}</td>
                         <td>{{ $item['ends_at'] }}</td>
                         <td>{{ $item['amount'] }}</td>
                         <td class="">{{ $item['created_at'] }}</td>

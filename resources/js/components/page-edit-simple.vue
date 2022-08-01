@@ -116,7 +116,7 @@
                                     <div :class="'row component-tabs ' + (column.tab == 'settings' ? 'settings' : 'main')">
                                         <div class="col-12">
                                             <p class="text-muted d-inline-block">{{ column.template.title }}</p>
-                                            <i v-if="column.template.removable !== false" @click="removeRow(row_index)" class="dripicons-trash text-muted float-end ms-2"></i>
+                                            <i v-if="column.template.removable !== false" @click="removeRow(row_index)" class="dripicons-trash text-muted float-end ms-2 cursor-pointer" title="Delete component"></i>
                                             <i v-if="settingsExist(column)" @click="column.tab == 'settings' ? column.tab = 'main' : column.tab = 'settings'" :class="'settings-icon text-muted float-end ms-2 ' + (column.template.simple_view_settings_icon ? column.template.simple_view_settings_icon : 'dripicons-gear')"></i>
                                             <template v-if="simpleColumnCount(row.columns) > 1">
                                                 <ul :class="'nav column-navigation d-inline-block float-end mb-0 nav-row' + row_index + ' ' + (settingsExist(column) == false ? 'column-navigation-margin' : '')">
@@ -206,13 +206,63 @@
                     </div>
 
                     <div class="text-center">
-                        <h3 class="mt-4">Select Template go get started</h3>
+                        <h3 class="mt-4">Select Template and Type go get started</h3>
                         
+                        <!--
+                        <text-field
+                            title="Administration Title"
+                            @updatevalue="setPageTitle"
+                            prop-value=""
+                            required=1
+                        ></text-field>
+                        -->
+
                         <multidropdown
                             title="Template"
                             :multi="false"
                             @updatevalue="setTemplate"
                             route="templates?per_page=0"
+                            required=1
+                        ></multidropdown>
+
+                        <multidropdown
+                            title="Type"
+                            :multi="false"
+                            @updatevalue="setPageType"
+                            :fetch="false"
+                            required=1
+                            :data="[
+                                {
+                                    'id': 2,
+                                    'realTitle':'Blog',
+                                    'title':'Blog (for blog pages)'
+                                },
+                                {
+                                    'id': 3,
+                                    'realTitle':'Course page',
+                                    'title':'Course page (for course pages)'
+                                },
+                                {
+                                    'id': 4,
+                                    'realTitle':'Trainer page',
+                                    'title':'Trainer page (for instructor pages)'
+                                },
+                                {
+                                    'id': 5,
+                                    'realTitle':'General',
+                                    'title':'General (for normal pages)'
+                                },
+                                {
+                                    'id': 6,
+                                    'realTitle':'Knowledge',
+                                    'title':'Knowledge (for knowledge pages)'
+                                },
+                                {
+                                    'id': 7,
+                                    'realTitle':'City page',
+                                    'title':'City page (for event city pages)'
+                                }
+                            ]"
                         ></multidropdown>
                     </div>
                 </div>
@@ -240,6 +290,9 @@ import slugify from '@sindresorhus/slugify';
             return {
                 tab: "Content",
                 loading: false,
+                template: null,
+                pageType: null,
+                pageTitle: "",
             }
         },
         methods: {
@@ -444,19 +497,35 @@ import slugify from '@sindresorhus/slugify';
                 });
                 return result;
             },
-            setTemplate(template) {
-                if (this.page) {
-                    console.log("test");
-                    this.page.template = template;
-                    this.$emit('setPage', this.page);
-                } else {
-                    var page = {
-                        content: template.rows,
-                        title: "New page",
-                        template: template
-                    };
-                    this.$emit('setPage', page);
+            setPage() {
+
+                if (this.template && this.pageType) {
+                    if (this.page) {
+                        this.page.template = this.template;
+                        this.page.type = this.pageType;
+                        this.$emit('setPage', this.page);
+                    } else {
+                        var page = {
+                            content: this.template.rows,
+                            title: "New page",
+                            template: this.template,
+                            type: this.pageType
+                        };
+                        this.$emit('setPage', page);
+                    }
                 }
+            },
+            setTemplate(template) {
+                this.template = template;
+                this.setPage();
+            },
+            setPageType(pageType) {
+                this.pageType = pageType.realTitle;
+                this.setPage();
+            },
+            setPageTitle(pageTitle) {
+                this.pageTitle = pageTitle;
+                this.setPage();
             },
             simpleColumnCount(columns) {
                 var count = 0;
@@ -478,7 +547,27 @@ import slugify from '@sindresorhus/slugify';
                 this.$modal.show('simple');
             },
             removeRow(index) {
-                this.$parent.content.splice(index, 1);
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "Delete component?",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonText: "Yes, delete it!",
+                    showLoaderOnConfirm: true,
+                    buttonsStyling: false,
+                    customClass: {
+                        cancelButton: "btn btn-soft-secondary",
+                        confirmButton: "btn btn-soft-danger",
+                    },
+                    preConfirm: () => {
+                        return this.$parent.content.splice(index, 1);
+                    },
+                    allowOutsideClick: () => !Swal.isLoading(),
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        Swal.fire("Delete!", "Component has been deleted.", "success");
+                    }
+                });
             },
             setSlug() {
                this.$parent.page.slug = slugify(this.page.title);

@@ -183,7 +183,6 @@ class CertificateController extends Controller
 
   }
 
-
   public function exportCertificates(Event $event){
 
 

@@ -713,8 +713,7 @@ class User extends Authenticatable
         foreach ($event->topicsLessonsInstructors()['topics'] as $key => $topic) {
             foreach ($topic['lessons'] as $key1 => $lesson) {
                 // if(isset($lesson) && $lesson['vimeo_video'] != null){
-                //dd($lesson);
-
+            
                 $vimeo_id = str_replace('https://vimeo.com/', '', $lesson['vimeo_video']);
                 $oldVideos[] = $vimeo_id;
                 if ($firstTime) {
@@ -724,7 +723,7 @@ class User extends Authenticatable
                 if (!isset($videos[$vimeo_id])) {
                     $change+=1;
                     $videos[$vimeo_id] = ['seen' => 0, 'tab' =>$tab.$vimeo_id, 'lesson_id' => $lesson['id'], 'stop_time' => 0,
-                                               'percentMinutes' => 0];
+                                               'percentMinutes' => 0, 'total_duration' => getLessonDurationToSec($lesson['vimeo_duration'])];
                     $notes[$vimeo_id] = '';
                 }
                 $countVideos += 1;
@@ -789,7 +788,7 @@ class User extends Authenticatable
         }
 
         $userMinutes = $absences->sum('minutes');
-        $eventMinutes =  $event->getTotalHours();//$absences->sum('total_minutes');
+        $eventMinutes =  $event->getTotalHours() > 0 ? $event->getTotalHours() : 1;//$absences->sum('total_minutes');
         $userMinutesAbsences = $eventMinutes - $userMinutes;
         $eventLimitAbsence = $event->absences_limit;
 

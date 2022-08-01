@@ -59,4 +59,42 @@ class Lesson extends Model
         $this->topic()->detach();
         $this->delete();
     }
+
+    /*public function getLessonDurationToSec(){
+        
+        if(!$this->vimeo_duration){
+            return 0;
+        }
+
+        $totalDuration = 0;
+        
+        $duration = explode(" ",$this->vimeo_duration);   
+        if(count($duration) == 2){
+           
+            $seconds = (float)preg_replace('/[^0-9.]+/', '', $duration[0]) * 60;
+            $seconds += (float)preg_replace('/[^0-9.]+/', '', $duration[1]);
+
+            $totalDuration += $seconds;
+
+        }else{
+            $isMinutes = strpos($duration[0], '');
+
+            if(!$isMinutes){
+                $seconds = (float)preg_replace('/[^0-9.]+/', '', $duration[0]);
+                $totalDuration += $seconds;
+            }else{
+
+                dd($duration[0]);
+
+                $seconds = (float)preg_replace('/[^0-9.]+/', '', $duration[0]) * 60;
+                $totalDuration += $seconds;
+            }
+
+           
+
+        }
+
+        return $totalDuration;
+
+    }*/
 }

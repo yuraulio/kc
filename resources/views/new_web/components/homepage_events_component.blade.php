@@ -77,7 +77,7 @@
                                     }
 
                                     if(isset($hours_visible['home']) && $hours_visible['home'] && isset($event['event_info1']['course_hours']) && $event['event_info1']['course_hours'] > 0){
-                                        $dateLaunch .= ', ' . $event['event_info1']['course_hours'] . 'hours';
+                                        $dateLaunch .= ', ' . $event['event_info1']['course_hours'] . ' hours';
                                     }
                                     
 

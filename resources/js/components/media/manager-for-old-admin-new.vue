@@ -5,7 +5,7 @@
 <template>
 <div>
 
-    <multiput
+    <multiput2
         key="image"
         keyput="image"
         label="Image"

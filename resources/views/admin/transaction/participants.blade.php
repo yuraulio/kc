@@ -16,7 +16,7 @@
 
             @endslot
 
-            <li class="breadcrumb-item"><a href="{{ route('transaction.participants') }}">{{ __('Revenue List') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('transaction.participants') }}">{{ __('Registrations List') }}</a></li>
             <li class="breadcrumb-item active" aria-current="page">{{ __('List') }}</li>
         @endcomponent
         @include('admin.transaction.layouts.cards')
@@ -29,7 +29,7 @@
                     <div class="card-header">
                         <div class="row align-items-center">
                             <div class="col-8">
-                                <h3 class="mb-0">{{ __('Revenue') }}</h3>
+                                <h3 class="mb-0">{{ __('Registration') }}</h3>
                             </div>
                         </div>
                     </div>
