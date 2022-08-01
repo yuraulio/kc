@@ -97,7 +97,7 @@
                             <tbody>
                                 @foreach ($events as $event)
                                     <tr>
-                                        <td><a href="{{ route('events.edit', $event) }}">{{ $event->title }}</a></td>
+                                        <td><a href="{{ route('events.edit', $event) }}">{{ $event->htmlTitle }}</a></td>
                                         <td>
                                             @if($event->published == 0)
                                                 {{'Unpublished'}}
