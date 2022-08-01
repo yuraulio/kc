@@ -154,7 +154,7 @@ class StudentController extends Controller
 
                 //$data['user']['events'][$event->id]['topics'] = $event['topic']->unique()->groupBy('topic_id')->toArray();
                 $data['events'][$event->id]['videos_progress'] = 0;//intval(round($event->progress($user),2));
-                $data['events'][$event->id]['videos_seen'] = '0/0';//$event->video_seen($user);
+                $data['events'][$event->id]['videos_seen'] = $event->video_seen($user);
                 $data['events'][$event->id]['certs'] = [];
 
                 $data['events'][$event->id]['mySubscription'] = [];
@@ -231,7 +231,7 @@ class StudentController extends Controller
             $eventInfo = $event->event_info();
 
             if($event->is_elearning_course()){
-
+                
                 //$data['user']['events'][$event->id]['topics'] = $event['topic']->unique()->groupBy('topic_id');
                 $data['events'][$event->id]['videos_progress'] = round($event->progress($user),2);
                 $data['events'][$event->id]['videos_seen'] = $event->video_seen($user);
