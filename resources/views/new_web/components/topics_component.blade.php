@@ -25,7 +25,7 @@
                             @foreach($topic['lessons'] as $lkey => $lesson)
                                 <div class="topic-wrapper-big">
                                     <div class="topic-title-meta">
-                                        <h4>{!! $lesson['title'] !!}</h4>
+                                        <h4 @if(isset($lesson['bold']) && $lesson['bold']) class="bold-topic" @endif>{!! $lesson['title'] !!}</h4>
                                         <div class="topic-meta">
                                             @if(isset($lesson['type'][0]['name']))<div class="category">{{$lesson['type'][0]['name']}}</div>@endif
                                             <?php
