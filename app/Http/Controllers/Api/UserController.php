@@ -529,9 +529,9 @@ class UserController extends Controller
                     $topics[$topic->id]['sumHour'] = 0;
                     $topics[$topic->id]['lessons'] = [];
                 }
-
                 
-                $topics[$topic->id]['name'] = $topic->title;
+                
+                $topics[$topic->id]['name'] = htmlspecialchars_decode($topic->title,ENT_QUOTES);
 
                 if($isElearning){
                     
@@ -539,8 +539,8 @@ class UserController extends Controller
                     //$h =isset($topic['topic_duration']) ? $hours = floor($topic['topic_duration'] / 3600) : 0;
                     //$arr['topic_content']['total_duration'] = intval($h) . 'h ' . $m . 'm';
 
-
-                    $arr_lesson['title'] = $lesson['title'];
+                    
+                    $arr_lesson['title'] = htmlspecialchars_decode($lesson['title'],ENT_QUOTES);
                     $arr_lesson['vimeo_video'] = $lesson['vimeo_video'];
                     $arr_lesson['vimeo_duration'] = $lesson['vimeo_duration'];
                     $arr_lesson['bold'] = $lesson['bold'];
@@ -644,7 +644,7 @@ class UserController extends Controller
                         
                     }
                     
-                    $arr_lesson['title'] = $lesson['title'];
+                    $arr_lesson['title'] = htmlspecialchars_decode($lesson['title'],ENT_QUOTES);
                     $arr_lesson['time_starts'] = $lesson['pivot']['time_starts'];
                     $arr_lesson['time_ends'] = $lesson['pivot']['time_ends'];
                     $arr_lesson['duration'] = $lesson['pivot']['duration'];
@@ -675,7 +675,7 @@ class UserController extends Controller
                         $data[$key]['calendar'][]=[
                             'time' => $date_lesson ?? '',
                             'date_time' => date_format(date_create($date_lesson), 'd/m/Y'),
-                            'title' => $lesson['title'],
+                            'title' =>  htmlspecialchars_decode($lesson['title'],ENT_QUOTES),
                             'room' => $lesson['pivot']['room'],
                             'instructor_image' => $inst['media'],
                             'instructor_name' => $inst['name'],
@@ -998,8 +998,8 @@ class UserController extends Controller
                     $topics[$topic->id]['lessons'] = [];
                 }
 
-                $topics[$topic->id]['name'] = $topic->title;
-
+                $topics[$topic->id]['name'] =  htmlspecialchars_decode($topic->title,ENT_QUOTES);
+                
                 if($isElearning){
                     
                     $arr_lesson['title'] = $lesson['title'];
@@ -1105,7 +1105,7 @@ class UserController extends Controller
                         
                     }
 
-                    $arr_lesson['title'] = $lesson['title'];
+                    $arr_lesson['title'] = htmlspecialchars_decode($lesson['title'],ENT_QUOTES);
                     $arr_lesson['time_starts'] = $lesson['pivot']['time_starts'];
                     $arr_lesson['time_ends'] = $lesson['pivot']['time_ends'];
                     $arr_lesson['duration'] = $lesson['pivot']['duration'];
@@ -1132,7 +1132,7 @@ class UserController extends Controller
                         $data[$key]['calendar'][]=[
                             'time' => $date_lesson ?? '',
                             'date_time' => date_format(date_create($date_lesson), 'd/m/Y'),
-                            'title' => $lesson['title'],
+                            'title' => htmlspecialchars_decode($lesson['title'],ENT_QUOTES),
                             'room' => $lesson['pivot']['room'],
                             'instructor_image' => asset(get_image($instructors[$lesson['instructor_id']][0]->medias, 'instructors-small')),
                             'instructor_name' => $instructors[$lesson['instructor_id']][0]['title'].' '.$instructors[$lesson['instructor_id']][0]['subtitle'],
