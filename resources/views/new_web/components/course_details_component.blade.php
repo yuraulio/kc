@@ -120,7 +120,7 @@
             </li>
             @endif--}}
 
-            @if( isset($info['students']['visible']['landing']) && $info['students']['visible']['landing'] )
+            @if( isset($info['students']['visible']['landing']) && $info['students']['visible']['landing'] && isset($info['students']['text']) && $info['students']['text'])
             <li>
                 @if(isset($info['students']['icon']['path']) && $info['students']['icon']['path'] )<img class="info-icon" src="{{cdn($info['students']['icon']['path'])}}" width="30" onerror="this.onerror=null;this.src='/theme/assets/images/icons/Group_User.1.svg'" alt="{{$info['students']['icon']['alt_text']}}" /> @else <img class="info-icon"  src="/theme/assets/images/icons/Group_User.1.svg" width="30" alt="" /> @endif
                 <div class="info-text">
