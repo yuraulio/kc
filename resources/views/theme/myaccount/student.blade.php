@@ -211,7 +211,7 @@
                                        <div class="col12">
                                           <?php $birthday = date('j F Y',strtotime($currentuser['birthday']))?>
                                           <label>Date of birth:</label>
-                                     
+
 
                                           <div class="input-group">
                                             <div class="input-group-prepend">
@@ -246,7 +246,7 @@
                                           </div>
                                        </div>
                                        <div class="col12">
-                                          
+
                                           <label>Mobile phone: <span>*</span></label>
                                           <div class="input-safe-wrapper is-flex full-width">
                                              <div class="col4">
@@ -301,7 +301,7 @@
 											               <option value="216" label="Tunisia (+216)">Tunisia</option>
 											               <option value="256" label="Uganda (+256)">Uganda</option>
 											               <option value="260" label="Zambia (+260)">Zambia</option>
-											               <option value="263" label="Zimbabwe (+263)">Zimbabwe</option>										
+											               <option value="263" label="Zimbabwe (+263)">Zimbabwe</option>
 											               <option value="1264" label="Anguilla (+1264)">Anguilla </option>
 											               <option value="595" label="Paraguay (+595)">Paraguay </option>
 											               <option value="51" label="Peru (+51)">Peru </option>
@@ -351,7 +351,7 @@
 											               <option value="84" label="U.S. Virgin Islands (+84)">U.S. Virgin Islands</option>
 											               <option value="1" label="United States (+1)">United States</option>
 											               <option value="598" label="Uruguay (+598)">Uruguay</option>
-											               <option value="58" label="Venezuela (+58)">Venezuela</option>										
+											               <option value="58" label="Venezuela (+58)">Venezuela</option>
 											               <option value="374" label="Armenia (+374)">Armenia </option>
 											               <option value="994" label="Azerbaijan (+994)">Azerbaijan</option>
 											               <option value="973" label="Bahrain (+973)">Bahrain </option>
@@ -398,7 +398,7 @@
 											               <option value="971" label="United Arab Emirates (+971)">United Arab Emirates</option>
 											               <option value="7" label="Uzbekistan (+7)">Uzbekistan</option>
 											               <option value="84" label="Vietnam (+84)">Vietnam</option>
-											               <option value="967" label="Yemen (+967)">Yemen</option>									
+											               <option value="967" label="Yemen (+967)">Yemen</option>
 											               <option value="376" label="Andorra (+376)">Andorra </option>
 											               <option value="43" label="Austria (+43)">Austria </option>
 											               <option value="375" label="Belarus (+375)">Belarus </option>
@@ -475,7 +475,7 @@
 
                                              </div>
                                           </div>
-                                          
+
 
                                        </div>
                                        {{--
@@ -500,19 +500,19 @@
                                     </form>
                                  </div>
                               </div>
-                        
+
                               <div id="billing-data" class="in-tab-wrapper">
-                                 
+
                                  <div class="form-wrapper profile-form-wrapper">
-                         
+
                                     <form action="myaccount/updrecbill" method="post" id="billing-data-form">
                                     @csrf
                                        <div >
                                           <?php $billingDetails = json_decode($user['receipt_details'],true);?>
-                                        
-                             
-                                          
-                                          
+
+
+
+
                                           <div class="col12">
                                              <label>Company or full name:</label>
                                              <div class="input-safe-wrapper">
@@ -562,7 +562,7 @@
                                                 <input  type="text" id="billstate" name="billstate" value="{{ isset($billingDetails['billstate']) ? $billingDetails['billstate'] : '' }}" >
                                              </div>
                                           </div>
-                                         
+
                                           <div class="col12">
                                              <label>Country:</label>
                                              <div class="input-safe-wrapper">
@@ -576,13 +576,13 @@
                                                 <input  type="text" id="billemail" name="billemail" value="{{ isset($billingDetails['billemail']) ? $billingDetails['billemail'] : '' }}" >
                                              </div>
                                           </div>
-                                        
+
                                           <div class="form-submit-area">
                                              <button id="save-receipt-data" type="button" class="btn btn--md btn--secondary">Update</button>
                                           </div>
-                                         
+
                                        </div>
-                                       
+
                                     </form>
                                     <?php //dd(); ?>
                                     <!-- /.form-wrapper.profile-form-wrapper -->
@@ -636,7 +636,7 @@
             @else
             <div id="courses" class="tab-content-wrapper active-tab new-tab-content-wrapper">
 
-   
+
                @if(!$masterClassAccess && $subscriptionAccess)
                     <div class="subscription-div">
                <div class="col12 dynamic-courses-wrapper subscription-card">
@@ -647,8 +647,8 @@
                         <div class="bottom">
                            <div class="left">
                               <div class="location">
-                              
-                              You are one of the selected graduates who have access to our annual subscription. Access all of our course's updated videos & files for €199/year. 
+
+                              You are one of the selected graduates who have access to our annual subscription. Access all of our course's updated videos & files for €199/year.
 
                               </div>
                            </div>
@@ -667,7 +667,7 @@
                @endif
 
 
-            
+
 
 
                @if(\Session('stripe-error'))
@@ -703,10 +703,10 @@
 
                <div class="container container-new">
                   <div class="row">
-                     
 
-                  
-               
+
+
+
 
 
                      <?php $tab = 0; ?>
@@ -745,7 +745,7 @@
                                  <div id="c-info-inner{{$tab}}" class="in-tab-wrapper" style="display: block;">
                                     <div class="bottom">
                                        <?php
-                                   
+
                                           /*$summaryDate = '';
                                           foreach($event['summary1'] as $summary){
                                              if($summary['section'] == 'date'){
@@ -757,7 +757,7 @@
                                        @if($event['hours'])
                                        <div class="expire-date"><img class="replace-with-svg" onerror="this.src='{{cdn('/theme/assets/images/icons/Start-Finish.svg')}}'"  src="{{cdn($event['hours_icon'])}}" alt="">{{$event['hours']}}h</div>
                                        @endif
-                                      
+
                                     </div>
                                     @if($event['status'] == 5)
                                        <div>
@@ -818,7 +818,7 @@
                                           </div>
                                           @endif
                                           @endforeach
-                                          
+
                                           <!-- /.accordion-wrapper -->
                                        </div>
                                        <!-- /.acc-topic-accordion -->
@@ -826,7 +826,7 @@
                                  </div>
                                  @endif
                                  <?php
-                                 
+
                                     //$dropbox = isset($event['category'][0]['dropbox'][0]) ? $event['category'][0]['dropbox'][0] : [];
                                     $dropbox = isset($event['dropbox'][0]) ? $event['dropbox'][0] : [];
                                     //dd($dropbox);
@@ -883,7 +883,7 @@
                                                       @endif
                                                    @endforeach
                                                    @if(count($fs) > 0)
-                                                   
+
                                                       @foreach($fs as $subf)
                                                          @foreach($files_bonus as $folder_bonus)
                                                          <?php
@@ -1011,7 +1011,7 @@
                                           </a>
                                         </div>
 
-                                      
+
                                        @endforeach
                                     </div>
                                  </div>
@@ -1029,15 +1029,15 @@
                                  <ul>
                                     <li class="active"><a href="#c-info-inner{{$tab}}">Info</a></li>
                                     <li><a href="#c-watch-inner{{$tab}}">Watch</a></li>
-                                  
-                                 
+
+
                                     @if(isset($event['exams']) && count($event['exams']) >0 )
                                        <li><a href="#c-exams-inner{{$tab}}">Exams</a></li>
                                     @endif
                                     @if(count($event['certs']) > 0)
                                        <li><a href="#c-cert-inner{{$tab}}">Certificate</a></li>
                                     @endif
-                                  
+
                                     @if($event['mySubscription'])
                                     <li><a href="#c-subs-inner{{$tab}}">Subscription</a></li>
                                     @endif
@@ -1184,7 +1184,7 @@
                                        </div>
                                     </div>
                                  </div>
-                                 
+
                                  @if(isset($event['exams']))
                                  <?php $nowTime = \Carbon\Carbon::now(); ?>
                                  <div id="c-exams-inner{{$tab}}" class="in-tab-wrapper">
@@ -1234,13 +1234,19 @@
                                                 &issueMonth={{date('m',$certificate->create_date)}}&expirationYear={{$expirationYear}}&expirationMonth={{$expirationMonth}}&certUrl={{$certUrl}}&certId={{$certificate->credential}}">
                                                 <img class="linkdein-image-add" src="{{cdn('theme/assets/images/icons/social/events/Linkedin.svg')}}" alt="LinkedIn Add to Profile button">
                                           </a>
+                                          <a class="facebook-post" title="Add this certification to your Facebook profile" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=YourPageLink.com&display=popup">
+                                                <img class="linkdein-image-add" src="{{cdn('theme/assets/images/icons/social/events/Facebook.svg')}}" alt="Facebook Add to Profile button">
+                                          </a>
+                                          <a class="facebook-post12" title="Add this certification to your Facebook profile" onclick="fb()" href="/mycertificate/convert-pdf-to-image/{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}">
+                                                <img class="linkdein-image-add" src="{{cdn('theme/assets/images/icons/social/events/Facebook.svg')}}" alt="Facebook Add to Profile button">
+                                          </a>
                                        </div>
 
                                        @endforeach
                                     </div>
                                  </div>
                                  @endif
-                                 
+
                               </div>
                            </div>
                            <!-- ./item -->
@@ -1284,7 +1290,7 @@
                                        @if (isset($event['videos_progress']))
                                        <div  class="duration"><img class="replace-with-svg" width="20" src="{{cdn('/theme/assets/images/icons/E-Learning.svg')}}" alt=""> {{$event['videos_progress']}}% </div>
                                        @endif
-                                       
+
                                     </div>
                                  </div>
                                  <div id="c-watch-inner{{$tab}}" class="in-tab-wrapper">
@@ -1373,7 +1379,7 @@
                                           </a>
                                         </div>
 
-                                      
+
                                        @endforeach
                                     </div>
                                  </div>
@@ -1476,7 +1482,7 @@
                         <?php $tab += 1; ?>
                         @endforeach
                      @endif
-                       
+
                      </div>
                   </div>
                </div>
@@ -1495,11 +1501,19 @@
 @section('scripts')
 
 <script src="{{cdn('theme/assets/js/validation_myaccount/jquery.validate.min.js')}}" type="text/javascript" charset="utf-8" async defer></script>
-<script src="{{cdn('theme/assets/js/validation_myaccount/additional-methods.min.js')}}" type="text/javascript" charset="utf-8" async defer></script>	
-<script src="{{cdn('theme/assets/js/validation_myaccount/validation.js')}}" type="text/javascript" charset="utf-8" async defer></script>	
+<script src="{{cdn('theme/assets/js/validation_myaccount/additional-methods.min.js')}}" type="text/javascript" charset="utf-8" async defer></script>
+<script src="{{cdn('theme/assets/js/validation_myaccount/validation.js')}}" type="text/javascript" charset="utf-8" async defer></script>
 <script src="{{ asset('argon') }}/vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
 
 <script>
+    function fb(){
+        //var imgsrc=document.getElementById("imgfb").src;
+        //var fbpopup = window.open("https://www.facebook.com/sharer/sharer.php?u="+encodeURIComponent(imgsrc), "pop", "width=600, height=400, scrollbars=no");
+        var fbpopup = window.open("http://www.facebook.com/sharer.php?u=http://static01.nyt.com/images/2015/02/19/arts/international/19iht-btnumbers19A/19iht-btnumbers19A-facebookJumbo-v2.jpg", "pop", "width=600, height=400, scrollbars=no");
+
+        return false;
+}
+
    function cvv(input) {
 
 
@@ -2027,22 +2041,22 @@
     var checkoutUrl = '/myaccount/validate-personal-info';
     var fdata = $("#update-form").serialize();
     $(".error-mobile").hide();
-	
+
 
     $.ajax({ url: checkoutUrl, type: "post",
-         
+
          headers: {
              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
          },
          data: fdata,
          success: function(data) {
-           
+
              $('#update-form').find("input[type=text]").removeClass('verror');
              if (Number(data.status) === 0) {
                  //var html = '<ul>';
                  $("#update-form").valid();
                  $.each(data.errors, function (key, row) {
-                     
+
                      $("#mobile-error1").html(row);
                      $("#mobile-error1").show()
 
@@ -2052,14 +2066,14 @@
              } else {
 
                $('#update-form').submit();
-        
+
              }
          }
-            
+
     });
 
 
-      
+
    });
 
 </script>

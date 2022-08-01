@@ -725,6 +725,12 @@
                                     </div>
                                 </div>
 
+                                <div class="form-group col-12">
+                                    <input type="hidden" id="selectedFiles" name="selectedFiles" value="">
+
+                                    <div id="filesTreeContainer"></div>
+                                </div>
+
 
                                 <div class="col-sm-12 col-md-6 col-lg-3 form-group{{ $errors->has('release_date_files') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-delivery">{{ __('Access to files until') }}</label>
@@ -1188,10 +1194,216 @@
     <script src="{{asset('admin_assets/js/vendor.min.js')}}"></script>--}}
 @endsection
 
+@push('css')
+<link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/20.2.11/css/dx.carmine.compact.css" rel="stylesheet">
+@endpush
 
 @push('js')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/devextreme/20.2.11/js/dx.all.js"></script>
 
 <script>
+
+    let files = []
+    const dropFiles = JSON.parse(@json($dropbox));
+    let treeList = null;
+
+    function treeData(){
+        return new Promise(function(resolve, reject) {
+            let count   = 10000;
+            let count1  = 100000;
+            let count2  = 1000000;
+            let count3  = 10000000;
+            $.each(dropFiles,function(index, value) {
+
+                files.push({
+                    ID: value.id,
+                    Full_Name: value.folder_name,
+                    isRootFolder: true
+                })
+
+                let folders = value.folders;
+                let files1 = value.files
+
+                if(folders != null && folders[0] != null){
+                    $.each(folders[0], function(index1, value1) {
+
+                        //foreach for folders
+                        files.push({
+                            ID: count,
+                            Head_ID: value.id,
+                            Full_Name: value1.foldername,
+                            dirname: value1.dirname,
+                            dropboxFolder: value.folder_name,
+                            isRootFolder: false
+                        })
+
+                        //foreach for files
+                        if(files1[1]){
+                            $.each(files1[1], function(index22, value22) {
+                                if(value22.fid == value1.id){
+
+                                    files.push({
+                                        ID: count2,
+                                        Head_ID: count,
+                                        Full_Name: value22.filename,
+                                        dirname: value22.dirname,
+                                        dropboxFolder: value.folder_name,
+                                        isRootFolder: false
+                                    })
+                                }
+                                count2++;
+                            })
+                        }
+
+                    //Bonus folder
+                    if(folders[1] != null){
+                        //console.log('bonus folders', folders[1])
+                        $.each(folders[1], function(index11, value11) {
+                            if(value11.parent == value1.id){
+
+                                files.push({
+                                    ID: count1,
+                                    Head_ID: count,
+                                    Full_Name: value11.foldername,
+                                    dirname: value11.dirname,
+                                    dropboxFolder: value.folder_name
+                                })
+
+                                if(files1[2]){
+                                    $.each(files1[2], function(index33, value33) {
+                                        if(value33.fid == value11.id && value33.parent == value1.id){
+                                            files.push({
+                                                ID: count3,
+                                                Head_ID: count1,
+                                                Full_Name: value33.filename,
+                                                dirname: value33.dirname,
+                                                dropboxFolder: value.folder_name,
+                                                isRootFolder: false
+                                            })
+                                        }
+                                        count3++;
+                                    })
+                                }
+                            }
+                            count1++
+                        })
+                    }
+                        count++
+                    })
+                }
+            })
+            resolve();
+        })
+    }
+
+    function treeFiles(){
+        treeList = $('#filesTreeContainer').dxTreeList({
+            dataSource: files,
+            keyExpr: 'ID',
+            parentIdExpr: 'Head_ID',
+            allowColumnReordering: false,
+            allowColumnResizing: false,
+            showBorders: false,
+            selection: {
+                mode: 'multiple',
+                recursive: true,
+            },
+                filterRow: {
+                visible: false,
+            },
+            stateStoring: {
+                enabled: false,
+                type: 'localStorage',
+                storageKey: 'treeListStorage',
+            },
+            columns: [
+                {
+                    dataField: 'Full_Name',
+                }
+            ],
+        }).dxTreeList('instance');
+    }
+
+    $(() => {
+
+
+
+        treeData().then(function () {
+            treeFiles()
+        })
+
+        $('#state-reset-link').on('click', () => {
+            treeList.state(null);
+        });
+
+        $("#filesTreeContainer").dxTreeList({
+            onSelectionChanged: function(e) { // Handler of the "selectionChanged" event
+                let deselectIDS = [];
+                const currentSelectedRowKeys = e.currentSelectedRowKeys[0];
+                var currentSelectedRow = [];
+                selectedFolders = [];
+                let selectedDropbox = null;
+                let selectedAllFolders = false;
+                const allSelectedRowsData = e.selectedRowsData;
+
+                $.each(files, function(index, value){
+                    if(currentSelectedRowKeys == value.ID){
+                        currentSelectedRow = value
+                    }
+                })
+
+
+                if(currentSelectedRow.isRootFolder && allSelectedRowsData.length != 1){
+
+                    allSelectedRowsData.filter(value => value.ID == currentSelectedRowKeys);
+
+                    $.each(allSelectedRowsData,function(index,value){
+                        if(value.ID != currentSelectedRowKeys){
+                            deselectIDS.push(value.ID)
+                        }
+                    })
+
+                }
+
+                if(!currentSelectedRow.isRootFolder && allSelectedRowsData.length != 1){
+                    $.each(allSelectedRowsData,function(index,value){
+                        if(value.isRootFolder && currentSelectedRow.Head_ID != value.ID){
+                            deselectIDS.push(value.ID)
+                        }
+                    })
+                }
+
+                treeList.deselectRows(deselectIDS);
+
+                let dataForSubmit = [];
+
+                $.each(allSelectedRowsData, function(index, value) {
+
+                    if(value.isRootFolder){
+                        selectedAllFolders = true;
+                        selectedDropbox = value.Full_Name;
+
+                    }else{
+                        selectedFolders.push(value.dirname)
+                        selectedDropbox = value.dropboxFolder;
+                    }
+
+
+
+                })
+
+                dataForSubmit = {
+                    selectedDropbox :selectedDropbox,
+                    selectedAllFolders :selectedAllFolders,
+                    selectedFolders :selectedFolders
+                };
+
+
+                dataForSubmit = JSON.stringify(dataForSubmit);
+                $('#selectedFiles').val(dataForSubmit);
+            }
+        });
+    });
 
     instructors = @json($instructors);
 

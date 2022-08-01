@@ -221,11 +221,12 @@ class EventController extends Controller
             return $query->where('published', true);
         })->first()->toArray()['event'];
 
+        $dropbox = Dropbox::all()->toArray();
 
-        $elearning_events;
+        $dropbox = json_encode($dropbox);
 
         return view('event.create', ['user' => $user, 'events' => Event::all(), 'categories' => $categories, 'types' => $types, 'delivery' =>$delivery,
-                                        'instructors' => $instructors, 'cities' => $cities,'partners'=>$partners, 'elearning_events' => $elearning_events]);
+                                        'instructors' => $instructors, 'cities' => $cities,'partners'=>$partners, 'elearning_events' => $elearning_events, 'dropbox' => $dropbox]);
     }
 
     /**
@@ -321,6 +322,22 @@ class EventController extends Controller
             $partner = true;
         }else{
             $partner = false;
+        }
+
+        $selectedFiles = null;
+        if($request->selectedFiles != null){
+            $selectedFiles = json_decode($request->selectedFiles, true);
+        }
+
+
+        if($selectedFiles != null && $selectedFiles['selectedDropbox'] != null){
+
+            $exist_dropbox = Dropbox::where('folder_name', $selectedFiles['selectedDropbox'])->first();
+            if($exist_dropbox){
+                unset($selectedFiles['selectedDropbox']);
+                $event->dropbox()->sync([$exist_dropbox->id => ['selectedFolders' => json_encode($selectedFiles)]]);
+            }
+
         }
 
         $infoData = $request->course;
@@ -442,9 +459,6 @@ class EventController extends Controller
         $data['sections'] = $event->sections->groupBy('section');
         $data['info'] = !empty($event->event_info()) ? $event->event_info() : null;
 
-
-        //dd($data['info']);
-
         //if elearning course (id = 143)
         $elearning_events = Delivery::with('event:id,title')->where('id',143)->whereHas('event', function ($query) {
             return $query->where('published', true);
@@ -473,7 +487,6 @@ class EventController extends Controller
             $folders = $li->listContents();
 
             foreach ($folders as $key => $row) {
-
                 if($row['type'] == 'dir') :
                     $data['folders'][$row['basename']] = $row['basename'];
                 endif;
@@ -482,6 +495,10 @@ class EventController extends Controller
             $data['already_assign'] = $event->dropbox;
 
         }
+
+        $dropbox = Dropbox::all()->toArray();
+
+        $data['dropbox'] = json_encode($dropbox);
 
         return view('event.edit', $data);
     }
@@ -494,7 +511,6 @@ class EventController extends Controller
      */
     public function update(Request $request, Event $event)
     {
-
         if($request->published == 'on')
         {
             $published = 1;
@@ -540,11 +556,18 @@ class EventController extends Controller
             $event->partners()->detach();
         }
 
+        $selectedFiles = null;
+        if($request->selectedFiles != null){
+            $selectedFiles = json_decode($request->selectedFiles, true);
+        }
 
-        if($request->folder_name != null){
-            $exist_dropbox = Dropbox::where('folder_name', $request->folder_name)->first();
+
+        if($selectedFiles != null && $selectedFiles['selectedDropbox'] != null){
+
+            $exist_dropbox = Dropbox::where('folder_name', $selectedFiles['selectedDropbox'])->first();
             if($exist_dropbox){
-                $event->dropbox()->sync([$exist_dropbox->id]);
+                unset($selectedFiles['selectedDropbox']);
+                $event->dropbox()->sync([$exist_dropbox->id => ['selectedFolders' => json_encode($selectedFiles)]]);
             }
 
         }
@@ -953,6 +976,9 @@ class EventController extends Controller
         }
 
 
+        if(isset($requestData['files'])){
+            $data['course_files_icon'] = json_encode($requestData['files']['icon']);
+        }
 
         // Award
         if(isset($requestData['awards'])){
@@ -1088,6 +1114,8 @@ class EventController extends Controller
 
         $infos->course_payment_method = isset($event_info['course_payment_method']) && $event->paymentMethod()->first()  ? $event_info['course_payment_method'] : 'free';
         $infos->course_payment_icon = (isset($event_info['course_payment_icon']) && $event_info['course_payment_icon'] != null) ? $event_info['course_payment_icon'] : null;
+
+        $infos->course_files_icon = (isset($event_info['course_files_icon']) && $event_info['course_files_icon'] != null) ? $event_info['course_files_icon'] : null;
 
         $infos->course_awards = (isset($event_info['course_awards_text']) && $event_info['course_awards_text'] != "") ? true : false;
         $infos->course_awards_text = $event_info['course_awards_text'];
