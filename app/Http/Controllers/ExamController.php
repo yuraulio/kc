@@ -41,16 +41,17 @@ class ExamController extends Controller
         $event_edit = false;
         $liveResults = [];
 
-        $eventInfo = $event->event_info();
-        $date = '';
-
-        if(isset($eventInfo['inclass']['dates'])){
-            $date = $eventInfo['inclass']['dates'];
-        }
-
         foreach($events as $event){
 
-            $eventsData[$event->id] = trim($event->title . ' ' . $date);
+            $eventInfo = $event->event_info();
+            $date = '';
+
+            if(isset($eventInfo['inclass']['dates']['text'])){
+                $date = $eventInfo['inclass']['dates']['text'];
+            }
+
+
+            $eventsData[$event->id] = trim($event->htmlTitle . ' ' . $date);
 
         }
 
