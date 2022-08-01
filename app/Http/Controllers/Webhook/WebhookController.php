@@ -614,7 +614,7 @@ class WebhookController extends BaseWebhookController
 
 				$fullname = $muser['name'];
 				$first = $muser['first'];
-				$sub =  'Knowcrunch |' . $first .  ' – download your receipt';
+				$sub =  'Knowcrunch | ' . $first .  ' – download your receipt';
 				$m->from('info@knowcrunch.com', 'Knowcrunch');
 				$m->to($billingEmail, $fullname);
 				//$m->to('moulopoulos@lioncode.gr', $fullname);
@@ -634,7 +634,7 @@ class WebhookController extends BaseWebhookController
 
             $fullname = $muser['name'];
             $first = $muser['first'];
-            $sub =  'Knowcrunch |' . $first .  ' – download your receipt';
+            $sub =  'Knowcrunch | ' . $first .  ' – download your receipt';
             $m->from('info@knowcrunch.com', 'Knowcrunch');
             $m->to($adminemail, $fullname);
             //$m->to('moulopoulos@lioncode.gr', $fullname);
