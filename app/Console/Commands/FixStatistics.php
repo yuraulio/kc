@@ -69,9 +69,11 @@ class FixStatistics extends Command
                     $lesson = Lesson::find($newVideos[$key]['lesson_id']);
                     $newVideos[$key]['total_duration'] = $lesson ? getLessonDurationToSec($lesson['vimeo_duration']) : 0;
 
-                    if($newVideos[$key]['stop_time'] > $newVideos[$key]['total_duration']){
-                        $newVideos[$key]['stop_time'] = 0;
+                    if($newVideos[$key]['stop_time'] >= $newVideos[$key]['total_duration']){
+                        $newVideos[$key]['stop_time'] = $newVideos[$key]['total_duration'];
                     }
+
+                    $newVideos[$key]['total_seen'] = $newVideos[$key]['stop_time'];
 
                 }
                 $user->statistic()->wherePivot('event_id', $st->pivot->event_id)->updateExistingPivot($st->pivot->event_id, ['videos' => json_encode($newVideos)], false);

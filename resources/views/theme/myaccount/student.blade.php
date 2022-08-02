@@ -1638,7 +1638,7 @@
 
 
 
-    function fb() {
+    {{--function fb() {
         var getUrl = window.location;
         var baseUrl = getUrl .protocol + "//" + getUrl.host;
         //
@@ -1658,7 +1658,7 @@
 
             }
         });
-    }
+    }--}}
 
 
    function cvv(input) {

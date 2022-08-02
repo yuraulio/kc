@@ -1225,6 +1225,11 @@ class StudentController extends Controller
 
             }
 
+            if((float)$videos[$key]['stop_time'] >= (float)$videos[$key]['total_seen']){
+
+                $videos[$key]['total_seen'] = $videos[$key]['stop_time'];
+            }
+
           }
 
             $user->statistic()->wherePivot('event_id',$request->event)->updateExistingPivot($request->event,[

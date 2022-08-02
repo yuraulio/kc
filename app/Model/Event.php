@@ -552,8 +552,8 @@ class Event extends Model
         if($videos != ''){
             $videos = json_decode($videos, true);
             foreach($videos as $video){
-                $seen = (float)$video['stop_time'];
-                $seen = $seen > (float)$video['total_duration'] ? 0 : $seen;
+                $seen = (float)$video['total_seen'];
+                //$seen = $seen > (float)$video['total_duration'] ? (float)$video['total_duration'] : $seen;
 
                 $seenTime += $seen;
                 $totalDuration += (float)$video['total_duration'];
