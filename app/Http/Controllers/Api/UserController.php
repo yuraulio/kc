@@ -235,6 +235,7 @@ class UserController extends Controller
             unset($data[$key]['event']['category']);
             unset($data[$key]['event']['slugable']);
             unset($data[$key]['event']['lessons']);
+            unset($data[$key]['event']['lessonsForElearning']);
             unset($data[$key]['event']['summary']);
             unset($data[$key]['event']['body']);
             unset($data[$key]['event']['htmlTitle']);
@@ -265,6 +266,7 @@ class UserController extends Controller
         {
             
             $eventInfo = $event->event_info();
+            //dd($event->lessons);
             $data1 = [];
             
             $isElearning = false;
@@ -277,7 +279,7 @@ class UserController extends Controller
             $data[$key]['absences_limit'] = isset($eventInfo['inclass']['absences']) ? $eventInfo['inclass']['absences'] : 0;
             
             //$dropbox = $category['dropbox'][0];
-            $dropbox = $event['dropbox'][0];
+            $dropbox = isset($event['dropbox'][0]) ? $event['dropbox'][0] : [];
             $folders = isset($dropbox['folders'][0]) ? $dropbox['folders'][0] : [];
             $folders_bonus = isset($dropbox['folders'][1]) ? $dropbox['folders'][1] : [];
             //dd($folders_bonus);
@@ -444,7 +446,7 @@ class UserController extends Controller
             $data[$key]['summary'][0]['description'] = '';
             $data[$key]['summary'][0]['icon'] = null;
             $data[$key]['summary'][0]['section'] = 'date';
-
+           
             // is Inclass?
             if($event->is_inclass_course()){
                 //dd($key);
@@ -502,10 +504,10 @@ class UserController extends Controller
 
            
             $topics = [];
-            
+           
             foreach($event['lessons'] as $lesson){
                 
-              
+                
 
                 if(!$lesson['instructor_id']){
                     continue;

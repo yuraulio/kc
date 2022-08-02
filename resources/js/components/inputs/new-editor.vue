@@ -1,11 +1,5 @@
 <template>
-<div :class="(type == 'text' && !size ? 'col-lg-6' : size) + ' mt-2'">
-    <div v-if="type == 'text'" class="">
-        <label v-if="label" :for="keyput" class="form-label">{{ label }}</label>
-        <input @input="update(editorData)" v-model="editorData" type="text" :id="keyput" class="form-control">
-        <slot></slot>
-    </div>
-
+<div :class="'col-lg-6  mt-2'">
 
     <div class="text-editor-input">
         <label v-if="label" :for="keyput" class="form-label">{{ label }}</label>
@@ -14,6 +8,7 @@
             :height="300" 
             :id="keyput" 
             v-model="editorData"
+            value="editorData"
             :api-key="tinymce"
             :init="{
                 plugins: 'preview importcss searchreplace autolink autosave save directionality code visualblocks visualchars fullscreen image link media template codesample table charmap pagebreak nonbreaking anchor insertdatetime advlist lists wordcount help charmap quickbars emoticons',
@@ -43,11 +38,11 @@ export default {
     },
     props: {
         type: {
-            required: true,
+            required: false,
             type: String
         },
         keyput: {
-            required: true
+            required: false
         },
         label: {},
         value: {},
@@ -151,12 +146,13 @@ export default {
             this.$emit('inputed', { 'data': this.editorData, 'key': this.keyput })
         },
         "value": function() {
-            this.editorData = this.value;
+            this.editorData = this.editorData;
         }
     },
     mounted() {
+        console.log(this.editorData);
         if (this.value) {
-            this.editorData = this.value;
+            this.editorData = this.editorData;
         }
     },
     beforeDestroy() {

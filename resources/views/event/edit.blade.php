@@ -1354,7 +1354,8 @@
                                                         <label class="form-control-label" for="input-hours">{{ __('Certificate Title') }}</label>
 
                                                         <textarea type="text" name="course[{{'certificate'}}][{{'success_text'}}]" id="input-certificate_title" class="ckeditor form-control" placeholder="{{ __('alphanumeric text ') }}" autofocus>{{ old('certificate_title', (isset($info['certificate']['messages']['success']) && $info['certificate']['messages']['success'] != null) ? $info['certificate']['messages']['success'] : '') }}</textarea>
-
+                                                        {{--<?php $data = isset($info['certificate']['messages']['success']) && $info['certificate']['messages']['success'] != null ? $info['certificate']['messages']['success'] : '' ?>
+                                                        @include('event.editor.editor', ['keyinput' => "input-certificate_title",'data'=> "{{$data}}"])--}}
                                                         @include('alerts.feedback', ['field' => 'certificate_title'])
                                                     </div>
 

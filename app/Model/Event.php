@@ -52,6 +52,7 @@ class Event extends Model
         'launch_date','certificate_title','fb_group','evaluate_topics','evaluate_instructors','fb_testimonial','absences_limit','xml_title','xml_description','xml_short_description'
     ];
 
+
     public function category()
     {
         return $this->morphToMany(Category::class, 'categoryable')->with('faqs','testimonials','dropbox');
@@ -130,17 +131,19 @@ class Event extends Model
 
     public function lessons()
     {
-
-        if($this->delivery->first() && $this->delivery->first()->id == 143){
+        
+        if(!$this->is_inclass_course()){
 
             return $this->belongsToMany(Lesson::class,'event_topic_lesson_instructor')->where('status',true)->select('lessons.*','topic_id','event_id', 'lesson_id','instructor_id')
             ->withPivot('event_id','topic_id','lesson_id','instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room','priority')->orderBy('event_topic_lesson_instructor.priority','asc')->with('type');//priority
         }else{
+              dd('[fsd');
             return $this->belongsToMany(Lesson::class,'event_topic_lesson_instructor')->where('status',true)->select('lessons.*','topic_id','event_id', 'lesson_id','instructor_id')
             ->withPivot('event_id','topic_id','lesson_id','instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room','priority')->orderBy('event_topic_lesson_instructor.time_starts','asc')->with('type');//priority
         }
 
     }
+
 
     public function plans(){
         return $this->belongsToMany(Plan::class,'plan_events')->where('published',true);
@@ -159,9 +162,11 @@ class Event extends Model
         return $this->belongsToMany(Summary::class, 'events_summaryevent', 'event_id', 'summary_event_id')->orderBy('priority')->with('mediable');
     }
 
+
+
     public function is_inclass_course()
     {
-
+        
         $eventInfo = $this->event_info();
 
         if(isset($eventInfo['delivery']) && $eventInfo['delivery'] == 139){
@@ -258,7 +263,7 @@ class Event extends Model
 
     public function dropbox()
     {
-        return $this->morphToMany(Dropbox::class, 'dropboxcacheable')->withPivot('selectedFolders');
+        return $this->morphToMany(Dropbox::class, 'dropboxcacheable');
     }
 
 
@@ -789,7 +794,7 @@ class Event extends Model
     public function event_info()
     {
         //return $this->hasOne(EventInfo::class);
-
+    
         $infos = $this->event_info1;//$this->hasOne(EventInfo::class)->first();
         $data = [];
 
@@ -847,8 +852,6 @@ class Event extends Model
 
             $data['payment_method'] = $infos['course_payment_method'];
             $data['payment_icon'] = $infos['course_payment_icon'] != null ? json_decode($infos['course_payment_icon'], true) : null;
-
-            $data['files_icon'] = $infos['course_files_icon'] != null ? json_decode($infos['course_files_icon'], true) : null;
 
 
             $data['partner']['status'] = $infos['course_partner'];
