@@ -43,9 +43,9 @@ return [
 
     'disks' => [
 
-        'tmp' => [
+        'cert' => [
             'driver' => 'local',
-            'root' => public_path('/tmp'),
+            'root' => public_path('/cert'),
         ],
         'local' => [
             'driver' => 'local',
