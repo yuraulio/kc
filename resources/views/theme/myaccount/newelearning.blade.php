@@ -419,10 +419,10 @@
 
                            @if(isset($files) && count($files) > 0 && isset($files['folders'][0]))
                            <?php
-
-                                $selectedFiles = $files['pivot']['selectedFolders'];
-                                $selectedFiles = json_decode($selectedFiles, true);
-                                //dd($selectedFiles);
+                                if(isset($files['pivot']) && isset($files['pivot']['selectedFolders'])){
+                                    $selectedFiles = $files['pivot']['selectedFolders'];
+                                    $selectedFiles = json_decode($selectedFiles, true);
+                                }
 
                               $folders = $files['folders'][0];
                               if(isset($files['folders'][1])){

@@ -130,24 +130,16 @@ class CertificateController extends Controller
 
     public function getCertificateImage($certificate){
 
+        $timestamp = strtotime("now");
         $data = $this->loadCertificateData($certificate);
-
-        $fn = $data['certificate']->firstname . '-' . $data['certificate']->lastname . '-' . $data['certificate']->user()->first()->kc_id . '.pdf';
-        //$pdf->stream($fn);
-        //dd($fn);
-
+        $fn = $data['certificate']->firstname . '-' . $data['certificate']->lastname.'-'. $timestamp .'.pdf';
         $content = $data['pdf']->download()->getOriginalContent();
 
-        //dd($content);
+        Storage::disk('cert')->put($fn,$content);
 
-        //Storage::put($fn,$content);
-
-        Storage::disk('tmp')->put($fn,$content);
-
-
-        //$filepath = Storage::url($fn);
-        $filepath = public_path('tmp\\'.$fn);
-        $saveImagePath = public_path('tmp\\'.$data['certificate']->firstname . '-' . $data['certificate']->lastname . '-' . $data['certificate']->user()->first()->kc_id.'.jpg');
+        $filepath = public_path('cert\\'.$fn);
+        $newFile = 'cert\\'.base64_encode($data['certificate']->firstname . '-' . $data['certificate']->lastname.'-'.$timestamp) .'.jpg';
+        $saveImagePath = public_path($newFile);
 
         $imagick = new Imagick();
         $imagick->setResolution(300, 300);
@@ -157,8 +149,9 @@ class CertificateController extends Controller
         $imagick->clear();
         $imagick->destroy();
 
+        unlink('cert\\'.$fn);
 
-        return 'tmp\\'.$data['certificate']->firstname . '-' . $data['certificate']->lastname . '-' . $data['certificate']->user()->first()->kc_id.'.jpg';
+        return $newFile;
     }
 
 
@@ -166,7 +159,7 @@ class CertificateController extends Controller
 
         $data = $this->loadCertificateData($certificate);
 
-        $fn = $data['certificate']->firstname . '-' . $data['certificate']->lastname . '-' . $data['certificate']->user()->first()->kc_id . '.pdf';
+        $fn = $data['certificate']->firstname . '-' . $data['certificate']->lastname . '-' . '.pdf';
         return $data['pdf']->stream($fn);
 
 

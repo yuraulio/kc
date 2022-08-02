@@ -1,22 +1,9 @@
 @extends('theme.layouts.master')
 @section('metas')
 <title>{{ 'My Account' }}</title>
-<meta property="og:url"           content="https://www.example.com" />
-<meta property="og:type"          content="website" />
-<meta property="og:title"         content="Your Website Title" />
-<meta property="og:description"   content="Your description" />
-<meta property="og:image"         content="http://static01.nyt.com/images/2015/02/19/arts/international/19iht-btnumbers19A/19iht-btnumbers19A-facebookJumbo-v2.jpg" />
 @endsection
 
 @section('content')
-
-<!-- Load Facebook SDK for JavaScript -->
-<div id="fb-root"></div>
-
-
-
-
-
 
 <?php $bonusFiles = ['_Bonus', 'Bonus', 'Bonus Files', 'Βonus', '_Βonus', 'Βonus', 'Βonus Files'] ?>
 <?php $currentuser = $user ?>
@@ -1377,11 +1364,6 @@
                                           <a class="facebook-post12" title="Add this certification to your Facebook profile" onclick="fb()" href="javascript:void(0)">
                                                 <img class="linkdein-image-add" src="{{cdn('theme/assets/images/icons/social/events/Facebook.svg')}}" alt="Facebook Add to Profile button">
                                           </a>
-                                              <!-- Your share button code -->
-<div class="fb-share-button"
-data-href="https://www.example1.com"
-data-layout="button_count">
-</div>
                                        </div>
 
                                        @endforeach
@@ -1668,7 +1650,7 @@ data-layout="button_count">
             success: function(data) {
 
                 data = data.replace('\\','/')
-                console.log(`${baseUrl}/${data}`)
+                console.log(`${decodeURI(baseUrl)}/${decodeURI(data)}`);
                 if(data){
                     var fbpopup = window.open(`http://www.facebook.com/sharer.php?u=${decodeURI(baseUrl)}/${decodeURI(data)}`, "pop", "width=600, height=400, scrollbars=no");
                     return false;
@@ -2302,13 +2284,5 @@ data-layout="button_count">
 
 
 </script>
-
-<script>(function(d, s, id) {
-var js, fjs = d.getElementsByTagName(s)[0];
-if (d.getElementById(id)) return;
-js = d.createElement(s); js.id = id;
-js.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.0";
-fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
 
 @stop
