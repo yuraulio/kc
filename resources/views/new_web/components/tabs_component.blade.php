@@ -125,6 +125,7 @@
     </div>
 </div>
 
+@if($event)
 <div class="code-popup-wrapper">
    <div class="code-popup">
       <a href="javascript:void(0)" class="close-btn"><img width="26" src="{{cdn('theme/assets/images/icons/icon-close.svg')}}" class="replace-with-svg" alt="Close"></a>
@@ -149,6 +150,7 @@
          <input id="code-popup-submit" type="submit"  value="Confirm">
    </div><!-- ./code-popup -->
 </div><!-- ./code-popup-wrapper -->
+@endif
 
 @push('components-scripts')
     <script type="text/javascript">
