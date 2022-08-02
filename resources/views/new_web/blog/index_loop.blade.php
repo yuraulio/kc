@@ -33,10 +33,8 @@
         </div>
         <div class="bottom">
             <div class="duration">
-                @forelse($post->categories as $category)
-                    @if(!$category->parent_id)
-                        <a href="{{env("NEW_PAGES_LINK") . "/$source?c=$category->id"}}">{{ $category->title }}</a>
-                    @endif
+                @forelse($post->subcategories as $category)
+                    <a class="me-2" href="{{env("NEW_PAGES_LINK") . "/$source?c=$category->id"}}">{{ $category->title }}</a>
                 @empty
                     Uncategorized
                 @endforelse
@@ -62,10 +60,8 @@
             <div class="col-md-6">
                 <div class="bottom">
                     <div class="duration">
-                        @forelse($post->categories as $category)
-                            @if(!$category->parent_id)
-                                <a href="{{env("NEW_PAGES_LINK") . "/$source?c=$category->id"}}">{{ $category->title }}</a>
-                            @endif
+                        @forelse($post->subcategories as $category)
+                            <a class="me-2" href="{{env("NEW_PAGES_LINK") . "/$source?c=$category->id"}}">{{ $category->title }}</a>
                         @empty
                             Uncategorized
                         @endforelse
@@ -91,10 +87,8 @@
             <div class="col">
                 <div class="bottom">
                     <div class="duration">
-                        @forelse($post->categories as $category)
-                            @if(!$category->parent_id)
-                                <a href="{{env("NEW_PAGES_LINK") . "/$source?c=$category->id"}}">{{ $category->title }}</a>
-                            @endif
+                        @forelse($post->subcategories as $category)
+                            <a class="me-2" href="{{env("NEW_PAGES_LINK") . "/$source?c=$category->id"}}">{{ $category->title }}</a>
                         @empty
                             Uncategorized
                         @endforelse

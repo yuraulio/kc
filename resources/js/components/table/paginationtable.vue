@@ -45,6 +45,7 @@
                         :taggable="input.taggable"
                         :fetch="input.fetch"
                         :route="input.route"
+                        :placeholder="input.placeholder"
                     >
                     </multiput>
                     <ul v-if="errors && errors[input.key]" class="parsley-errors-list filled" id="parsley-id-7" aria-hidden="false">
@@ -175,7 +176,7 @@
                     @updatevalue="update_category"
                     :prop-value="category_value"
                     route="categories"
-                    placeholder="All categories"
+                    placeholder="All category groups"
                     marginbottom="mb-0"
                 ></multidropdown>
             </div>

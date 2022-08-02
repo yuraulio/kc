@@ -1222,7 +1222,10 @@ class StudentController extends Controller
 
             if( (int) $video['seen'] == 1 && (int) $videos[$key]['seen'] == 0){
                 $videos[$key]['seen'] = (int) $video['seen'];
+            }
 
+            if((float)$videos[$key]['stop_time'] >= (float)$videos[$key]['total_seen']){
+                $videos[$key]['total_seen'] = $videos[$key]['stop_time'];
             }
 
             if((float)$videos[$key]['stop_time'] >= (float)$videos[$key]['total_seen']){
