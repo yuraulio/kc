@@ -309,7 +309,7 @@
                         <a @click="tab = 'Content'" :class="'nav-link ' + (tab == 'Content' ? 'active' : '')" href="#!">Content</a>
                     </li>
                     <li class="nav-item">
-                        <a @click="tab = 'Meta'" :class="'nav-link ' + (tab == 'Meta' ? 'active' : '')" href="#!">Meta</a>
+                        <a @click="tab = 'Meta'" :class="'nav-link ' + (tab == 'Meta' ? 'active' : '')" href="#!">SEO</a>
                     </li>
                 </ul>
             </div>
