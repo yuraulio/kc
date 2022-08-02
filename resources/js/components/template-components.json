@@ -9,6 +9,7 @@
         "tab": "Content",
         "dynamic": false,
         "simple_view": true,
+        "mobile": true,
         "inputs": [
             {
                 "type": "image",
@@ -48,6 +49,7 @@
         "key": "content_box_component",
         "tab": "Content",
         "simple_view": true,
+        "mobile": true,
         "inputs": [
             {
                 "type": "image",
@@ -96,6 +98,7 @@
         "tab": "Content",
         "dynamic": false,
         "simple_view": true,
+        "mobile": true,
         "inputs": [
             {
                 "type": "text_editor",
@@ -114,6 +117,7 @@
         "key": "full_sixe_image_component",
         "tab": "Content",
         "simple_view": true,
+        "mobile": true,
         "inputs": [
             {
                 "type": "image",
@@ -201,6 +205,7 @@
         "icon": "dripicons-align-justify",
         "tab": "Content",
         "simple_view": false,
+        "mobile": true,
         "inputs": [
         ]
     },
@@ -212,6 +217,7 @@
         "icon": "dripicons-web",
         "tab": "Content",
         "simple_view": false,
+        "mobile": true,
         "inputs": [
             {
                 "type": "text",
@@ -234,6 +240,7 @@
         "tab": "Content",
         "simple_view": true,
         "dynamic": false,
+        "mobile": true,
         "inputs": [
             {
                 "type": "text",
@@ -280,6 +287,7 @@
         "key": "blog_header_component",
         "tab": "Content",
         "simple_view": true,
+        "mobile": true,
         "inputs": [
             {
                 "type": "text_editor",
@@ -298,6 +306,7 @@
         "tab": "Content",
         "dynamic": false,
         "simple_view": true,
+        "mobile": true,
         "inputs": [
             {
                 "type": "number",
@@ -336,6 +345,7 @@
         "key": "html_component",
         "tab": "Content",
         "simple_view": false,
+        "mobile": true,
         "inputs": [
             {
                 "type": "textarea",
@@ -352,6 +362,7 @@
         "key": "contact_form_component",
         "tab": "Content",
         "simple_view": true,
+        "mobile": true,
         "inputs": [
             {
                 "type": "text",
@@ -404,6 +415,7 @@
         "icon": "dripicons-wrong",
         "key": "empty_component",
         "tab": "Content",
+        "mobile": true,
         "inputs": []
     },
     "horizintal_line" : {
@@ -413,6 +425,7 @@
         "icon": "dripicons-minus",
         "key": "horizontal_line_component",
         "tab": "Content",
+        "mobile": true,
         "inputs": []
     },
     "post_feature" : {
@@ -423,6 +436,7 @@
         "one_column": true,
         "tab": "Other",
         "simple_view": false,
+        "mobile": true,
         "inputs": [
             {
                 "type": "text",
@@ -559,6 +573,7 @@
         "tab": "Content",
         "width": "content",
         "simple_view": false,
+        "mobile": true,
         "inputs": [
         ]
     },
@@ -570,6 +585,7 @@
         "tab": "Content",
         "width": "content",
         "simple_view": false,
+        "mobile": true,
         "inputs": [
         ]
     },
@@ -581,6 +597,7 @@
         "tab": "Content",
         "width": "content",
         "simple_view": false,
+        "mobile": true,
         "inputs": [
         ]
     },
@@ -592,6 +609,7 @@
         "tab": "Content",
         "width": "full",
         "simple_view": false,
+        "mobile": true,
         "inputs": [
             {
                 "type": "tabs",
@@ -608,6 +626,7 @@
         "tab": "Content",
         "width": "full",
         "simple_view": false,
+        "mobile": true,
         "inputs": [
         ]
     },
@@ -619,6 +638,7 @@
         "tab": "Content",
         "width": "content",
         "simple_view": false,
+        "mobile": true,
         "inputs": [
         ]
     },
@@ -630,6 +650,7 @@
         "tab": "Content",
         "width": "content",
         "simple_view": false,
+        "mobile": true,
         "inputs": [
         ]
     },
@@ -641,6 +662,7 @@
         "tab": "Content",
         "width": "content",
         "simple_view": false,
+        "mobile": true,
         "inputs": [
         ]
     },
@@ -652,6 +674,7 @@
         "tab": "Content",
         "width": "content",
         "simple_view": false,
+        "mobile": true,
         "inputs": [
         ]
     },
@@ -663,6 +686,7 @@
         "tab": "Content",
         "width": "content",
         "simple_view": false,
+        "mobile": true,
         "inputs": [
         ]
     },
@@ -674,6 +698,7 @@
         "tab": "Content",
         "width": "content",
         "simple_view": false,
+        "mobile": true,
         "inputs": [
         ]
     },
@@ -685,6 +710,7 @@
         "tab": "Content",
         "width": "content",
         "simple_view": false,
+        "mobile": true,
         "inputs": [
         ]
     },
@@ -696,6 +722,7 @@
         "tab": "Content",
         "width": "content",
         "simple_view": false,
+        "mobile": true,
         "inputs": [
         ]
     },
@@ -707,6 +734,7 @@
         "tab": "Content",
         "width": "content",
         "simple_view": false,
+        "mobile": true,
         "inputs": [
         ]
     },
@@ -718,6 +746,7 @@
         "tab": "Content",
         "width": "content",
         "simple_view": false,
+        "mobile": true,
         "inputs": [
             {
                 "type": "multidropdown",
@@ -740,6 +769,7 @@
         "tab": "Content",
         "width": "content",
         "simple_view": false,
+        "mobile": true,
         "inputs": [
             {
                 "type": "text_editor",
@@ -779,6 +809,7 @@
         "tab": "Content",
         "width": "content",
         "simple_view": false,
+        "mobile": true,
         "inputs": [
             {
                 "type": "multidropdown",
@@ -801,6 +832,7 @@
         "tab": "Content",
         "width": "content",
         "simple_view": false,
+        "mobile": true,
         "inputs": [
             {
                 "type": "multidropdown",
@@ -823,6 +855,7 @@
         "tab": "Content",
         "width": "content",
         "simple_view": false,
+        "mobile": true,
         "inputs": [
         ]
     },
@@ -834,6 +867,7 @@
         "tab": "Content",
         "width": "content",
         "simple_view": true,
+        "mobile": true,
         "inputs": [
             {
                 "type": "image",
@@ -911,6 +945,7 @@
         "tab": "Content",
         "width": "content",
         "simple_view": true,
+        "mobile": true,
         "inputs": [
             {
                 "type": "text",
@@ -938,6 +973,7 @@
         "tab": "Content",
         "width": "full",
         "simple_view": false,
+        "mobile": true,
         "inputs": [
             {
                 "type": "multidropdown",
@@ -960,6 +996,7 @@
         "tab": "Content",
         "width": "content",
         "simple_view": false,
+        "mobile": true,
         "inputs": [
             {
                 "type": "text",
@@ -978,6 +1015,7 @@
         "tab": "Content",
         "width": "content",
         "simple_view": false,
+        "mobile": true,
         "inputs": [
         ]
     },
@@ -989,6 +1027,7 @@
         "tab": "Content",
         "width": "content",
         "simple_view": false,
+        "mobile": true,
         "inputs": [
         ]
     },
@@ -1000,6 +1039,7 @@
         "tab": "Content",
         "width": "content",
         "simple_view": false,
+        "mobile": true,
         "inputs": [
             {
                 "type": "multidropdown",
