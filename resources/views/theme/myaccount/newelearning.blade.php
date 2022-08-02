@@ -524,7 +524,7 @@
                                              @foreach($files_bonus as $file_bonus)
 
                                                 @if($file_bonus['fid'] == $folder_bonus['id']  && $file_bonus['parent'] == $folder['id'])
-                                                {{--@if($file_bonus['fid'] == $folder_bonus['parent']  )--}}
+
                                                     @if($folderIsSelected)
                                                         <li id="{{$folder_bonus['dirname']}}" data-folder-id="{{$topicNames[$folder_bonus['parent']]}}" class="resource bonus-files hidden">
                                                             <a class="download-file getdropboxlink"  data-dirname="{{ $file_bonus['dirname'] }}" data-filename="{{ $file_bonus['filename'] }}" href="javascript:void(0)" ><img

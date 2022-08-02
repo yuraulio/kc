@@ -1076,7 +1076,7 @@
                                                             @if($course_partner_icon != null && $course_partner_icon['path'] != null)
                                                                 <img src="{{ asset($course_partner_icon['path']) }}"/>
                                                             @else
-                                                            <i class="fa fa-handshake-o" aria-hidden="true"></i>
+                                                                <span class="fa fa-calendar"></span>
 
                                                             @endif
                                                         </span>
@@ -1571,7 +1571,7 @@
                                             @include('alerts.feedback', ['field' => 'category_id'])
                                         </div>
 
-                                        
+
 
 
                                     </div>
@@ -1583,18 +1583,18 @@
                                                 <li class="nav-item">
                                                     <a class="nav-link mb-sm-3 mb-md-0 active" id="tabs-icons-text-1-tab_inside" data-toggle="tab" href="#tabs-icons-text-1_inside" role="tab" aria-controls="tabs-icons-text-1_inside" aria-selected="true"><i class="ni ni-cloud-upload-96 mr-2"></i>Overview</a>
                                                 </li>
-                                                
+
                                                 <li class="nav-item">
                                                     <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-4-tab_inside" data-toggle="tab" href="#tabs-icons-text-4_inside" role="tab" aria-controls="tabs-icons-text-4_inside" aria-selected="true"><i class="ni ni-cloud-upload-96 mr-2"></i>Topics</a>
                                                 </li>
                                                 <li class="nav-item">
                                                     <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-5-tab_inside" data-toggle="tab" href="#tabs-icons-text-5_inside" role="tab" aria-controls="tabs-icons-text-5_inside" aria-selected="false"><i class="ni ni-bell-55 mr-2"></i>Tickets</a>
                                                 </li>
-                                                
+
                                                 <li class="nav-item">
                                                     <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-7-tab_inside" data-toggle="tab" href="#tabs-icons-text-7_inside" role="tab" aria-controls="tabs-icons-text-7_inside" aria-selected="false"><i class="ni ni-bell-55 mr-2"></i>Venue</a>
                                                 </li>
-                                                
+
                                                 <li class="nav-item">
                                                     <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-10-tab_inside" data-toggle="tab" href="#tabs-icons-text-10_inside" role="tab" aria-controls="tabs-icons-text-10_inside" aria-selected="false"><i class="ni ni-bell-55 mr-2"></i>Faqs</a>
                                                 </li>
@@ -1604,7 +1604,7 @@
                                                 <li class="nav-item">
                                                     <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-11-tab_inside" data-toggle="tab" href="#testimonials-tab" role="tab" aria-controls="tabs-icons-text-11_inside" aria-selected="false"><i class="far fa-images mr-2"></i>Testimonials</a>
                                                 </li>
-                                                
+
                                                 <li class="nav-item">
                                                     <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-9-tab_inside" data-toggle="tab" href="#videos" role="tab" aria-controls="videos" aria-selected="false"><i class="ni ni-calendar-grid-58 mr-2"></i>Videos</a>
                                                 </li>
@@ -1713,9 +1713,9 @@
 
                                                     </div>
 
-                                                  
 
-                                                    
+
+
                                                     <div class="tab-pane fade" id="videos" role="tabpanel" aria-labelledby="tabs-icons-text-9-tab_inside">
                                                         @include('admin.videos.event.index',['model' => $event])
                                                     </div>
@@ -1729,11 +1729,11 @@
                                                     <div class="tab-pane fade" id="tabs-icons-text-5_inside" role="tabpanel" aria-labelledby="tabs-icons-text-5-tab_inside">
                                                         @include('admin.ticket.index', ['model' => $event, 'sections' => $sections])
                                                     </div>
-                                                    
+
                                                     <div class="tab-pane fade" id="tabs-icons-text-7_inside" role="tabpanel" aria-labelledby="tabs-icons-text-7-tab_inside">
                                                         @include('admin.venue.event.index', ['model' => $event,'sections' => $sections])
                                                     </div>
-                                                 
+
                                                     <div class="tab-pane fade" id="tabs-icons-text-10_inside" role="tabpanel" aria-labelledby="tabs-icons-text-10-tab_inside">
                                                         @include('admin.faq.index', ['model' => $event,'sections' => $sections])
                                                     </div>
