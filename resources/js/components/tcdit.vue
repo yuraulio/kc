@@ -187,8 +187,12 @@
                                                 <input @click="calculateWidth(val.columns, ind, $event, index)" :value="v.width" class="w-100" type="range" maxlength="1" min="1" max="6">
                                             </div>
 
-                                            <div v-if="v.template.dynamic != null" class="d-block text-center">
+                                            <div v-if="v.template.dynamic != null" class="d-block text-center ms-2">
                                                 <span class="text-muted font-13 d-inline-block me-1" style="margin-top: 4px;">Dynamic</span><input v-model="v.template.dynamic" type="checkbox" class="form-check-input">
+                                            </div>
+
+                                            <div class="d-block text-center">
+                                                <span class="text-muted font-13 d-inline-block me-1" style="margin-top: 4px;">Show on mobile</span><input v-model="v.template.mobile" type="checkbox" class="form-check-input">
                                             </div>
 
                                             <div v-if="checkComponentVersion(v)" class="alert alert-warning m-2" role="alert">
@@ -216,8 +220,12 @@
                                                 Add column
                                             </div>
                                         </span>
-                                        <div v-if="column.template.dynamic != null" class="d-inline-block float-end">
+                                        <div v-if="column.template.dynamic != null" class="d-inline-block float-end ms-2">
                                             <span class="text-muted font-13 d-inline-block me-1" style="margin-top: 4px;">Dynamic</span><input v-model="column.template.dynamic" type="checkbox" class="form-check-input">
+                                        </div>
+
+                                        <div v-if="column.template.mobile != null" class="d-inline-block float-end">
+                                            <span class="text-muted font-13 d-inline-block me-1" style="margin-top: 4px;">Show on mobile</span><input v-model="column.template.mobile" type="checkbox" class="form-check-input">
                                         </div>
                                     </h5>
                                     <div v-if="checkComponentVersion(column)" class="alert alert-warning m-2" role="alert">

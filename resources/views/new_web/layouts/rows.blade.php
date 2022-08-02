@@ -3,7 +3,7 @@
         <div class="container-fluid">
             <div class="row">
                 @foreach ($data->columns as $column)
-                    <div class="col-md-{{ isset($column->width) ? ($column->width * 2) : (12 / count($data->columns)) }}">
+                    <div class="{{ ($column->template->mobile ?? true) ? '' : 'hide-on-mobile' }} col-md-{{ isset($column->width) ? ($column->width * 2) : (12 / count($data->columns)) }}">
                         @includeIf("new_web.components." . $column->template->key)
                     </div>
                 @endforeach
@@ -15,7 +15,7 @@
         <div class="container blogx-container">
             <div class="row">
                 @foreach ($data->columns as $column)
-                    <div class="col-md-{{ isset($column->width) ? ($column->width * 2) : (12 / count($data->columns)) }}">
+                    <div class="{{ ($column->template->mobile ?? true) ? '' : 'hide-on-mobile' }} col-md-{{ isset($column->width) ? ($column->width * 2) : (12 / count($data->columns)) }}">
                         @includeIf("new_web.components." . $column->template->key)
                        
                     </div>
@@ -29,7 +29,7 @@
             <div class="row">
                 @foreach ($data->columns as $column)
 
-                    <div class="col-md-{{ isset($column->width) ? ($column->width * 2) : (12 / count($data->columns)) }}">
+                    <div class="{{ ($column->template->mobile ?? true) ? '' : 'hide-on-mobile' }} col-md-{{ isset($column->width) ? ($column->width * 2) : (12 / count($data->columns)) }}">
                         @includeIf("new_web.components." . $column->template->key)
                     </div>
                 @endforeach
@@ -38,6 +38,8 @@
     </div>
 @else
     @foreach ($data->columns as $column)
-        @includeIf("new_web.components." . $column->template->key)
+        <div class="{{ ($column->template->mobile ?? true) ? '' : 'hide-on-mobile' }}" >
+            @includeIf("new_web.components." . $column->template->key)
+        </div>
     @endforeach
 @endif
