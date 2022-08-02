@@ -21,8 +21,8 @@
     <link href="{{asset('admin_assets/css/icons.min.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{asset('admin_assets/css/saas/app-limited.css')}} " rel="stylesheet" type="text/css"/>
     @include('admin.upload.upload_new', ['from' => 'event_info'])
-    <script src="{{asset('js/app.js')}}"></script>
-    <script src="{{asset('admin_assets/js/vendor.min.js')}}"></script>
+    {{--<script src="{{asset('js/app.js')}}"></script>--}}
+    {{--<script src="{{asset('admin_assets/js/vendor.min.js')}}"></script>--}}
 
 
     <div class="container-fluid mt--6">
@@ -863,16 +863,27 @@
                                         <div class="col-sm-12 col-md-6 form-group{{ $errors->has('fb_') ? ' has-danger' : '' }}">
                                             <label class="form-control-label" for="input-hours">{{ __('Certificate Title') }}</label>
 
-                                            <textarea type="text" name="course[{{'certificate'}}][{{'success_text'}}]" id="input-certificate_title" class="ckeditor form-control" autofocus>{{ old('certificate_title') }}</textarea>
+                                            {{--<textarea type="text" name="course[{{'certificate'}}][{{'success_text'}}]" id="input-certificate_title" class="ckeditor form-control" autofocus>{{ old('certificate_title') }}</textarea>--}}
+                                            <!-- anto's editor -->
+                                            <input class="hidden" name="course[{{'certificate'}}][{{'success_text'}}]" value="{{ old('certificate_title') }}"/>
+                                            <?php $data =  '' ?>
+                                            @include('event.editor.editor', ['keyinput' => "input-certificate_title", 'data'=> "$data", 'inputname' => "'course[certificate][success_text]'" ])
+                                            <!-- anto's editor -->
 
                                             @include('alerts.feedback', ['field' => 'certificate_title'])
+
                                         </div>
 
                                         <div class="col-sm-12 col-md-6 form-group">
                                             <label class="form-control-label" for="input-hours">{{ __('Title of certification (in case of exams failure)') }}</label>
 
-                                            <textarea type="text" name="course[{{'certificate'}}][{{'failure_text'}}]" id="input-certificate_text_failure" class="form-control ckeditor"  autofocus>{{old('certificate_failure')}}</textarea>
+                                            {{--<textarea type="text" name="course[{{'certificate'}}][{{'failure_text'}}]" id="input-certificate_text_failure" class="form-control ckeditor"  autofocus>{{old('certificate_failure')}}</textarea>--}}
 
+                                            <!-- anto's editor -->
+                                            <input class="hidden" name="course[{{'certificate'}}][{{'failure_text'}}]" value="{{ old('certificate_failure') }}"/>
+                                            <?php $data =  '' ?>
+                                            @include('event.editor.editor', ['keyinput' => "input-certificate_text_failure", 'data'=> "$data", 'inputname' => "'course[certificate][failure_text]'" ])
+                                            <!-- anto's editor -->
                                         </div>
 
                                         <div class="col-sm-12 col-md-6 form-group">
@@ -1190,8 +1201,8 @@
 
         @include('layouts.footers.auth')
     </div>
-    {{--<script src="{{asset('js/app.js')}}"></script>
-    <script src="{{asset('admin_assets/js/vendor.min.js')}}"></script>--}}
+    <script src="{{asset('js/app.js')}}"></script>
+    <script src="{{asset('admin_assets/js/vendor.min.js')}}"></script>
 @endsection
 
 @push('css')

@@ -159,22 +159,43 @@
 
                         <div class="form-group{{ $errors->has('intro_text') ? ' has-danger' : '' }}">
                            <label class="form-control-label" for="input-intro_text">{{ __('Exam Introduction Text') }}</label>
-                           <textarea name="intro_text" id="input-intro_text"  class="ckeditor form-control{{ $errors->has('intro_text') ? ' is-invalid' : '' }}" placeholder="{{ __('Replace this text as exam introduction text') }}"  required autofocus> {{old('intro_text',$exam->intro_text)}} </textarea>
-                           @include('alerts.feedback', ['field' => 'intro_text'])
+                           {{--<textarea name="intro_text" id="input-intro_text"  class="ckeditor form-control{{ $errors->has('intro_text') ? ' is-invalid' : '' }}" placeholder="{{ __('Replace this text as exam introduction text') }}"  required autofocus> {{old('intro_text',$exam->intro_text)}} </textarea>--}}
+
+                            <!-- anto's editor -->
+                            <input class="hidden" name="intro_text" value="{{ old('intro_text') }}"/>
+                            <?php $data =  '' ?>
+                            @include('event.editor.editor', ['keyinput' => "input-intro_text", 'data'=> "$data", 'inputname' => "'intro_text'" ])
+                            <!-- anto's editor -->
+
+                            @include('alerts.feedback', ['field' => 'intro_text'])
                         </div>
                         <div class="form-group{{ $errors->has('end_of_time_text') ? ' has-danger' : '' }}">
                            <label class="form-control-label" for="input-end_of_time_text">{{ __('Exam End of Time Text') }}</label>
-                           <textarea name="end_of_time_text" id=""  class="ckeditor form-control{{ $errors->has('end_of_time_text') ? ' is-invalid' : '' }}" placeholder="{{ __('Replace this text as exam end of time text') }}"  required autofocus> {{ old('end_of_time_text',$exam->end_of_time_text) }} </textarea>
-                           @include('alerts.feedback', ['field' => 'end_of_time_text'])
+                           {{--<textarea name="end_of_time_text" id=""  class="ckeditor form-control{{ $errors->has('end_of_time_text') ? ' is-invalid' : '' }}" placeholder="{{ __('Replace this text as exam end of time text') }}"  required autofocus> {{ old('end_of_time_text',$exam->end_of_time_text) }} </textarea>--}}
+
+                           <!-- anto's editor -->
+                            <input class="hidden" name="end_of_time_text" value="{{ old('end_of_time_text') }}"/>
+                            <?php $data =  '' ?>
+                            @include('event.editor.editor', ['keyinput' => "input-end_of_time_text", 'data'=> "$data", 'inputname' => "'end_of_time_text'" ])
+                            <!-- anto's editor -->
+
+                            @include('alerts.feedback', ['field' => 'end_of_time_text'])
                         </div>
                         <div class="form-group{{ $errors->has('success_text') ? ' has-danger' : '' }}">
                            <label class="form-control-label" for="input-success_text">{{ __('Exam Success Text') }}</label>
-                           <textarea name="success_text" id="input-success_text"  class="ckeditor form-control{{ $errors->has('success_text') ? ' is-invalid' : '' }}" placeholder="{{ __('Replace this text as exam success text') }}"  required autofocus>{{ old('success_text',$exam->success_text) }}</textarea>
+                           {{--<textarea name="success_text" id="input-success_text"  class="ckeditor form-control{{ $errors->has('success_text') ? ' is-invalid' : '' }}" placeholder="{{ __('Replace this text as exam success text') }}"  required autofocus>{{ old('success_text',$exam->success_text) }}</textarea>--}}
+
+                            <!-- anto's editor -->
+                            <input class="hidden" name="success_text" value="{{ old('success_text') }}"/>
+                            <?php $data =  '' ?>
+                            @include('event.editor.editor', ['keyinput' => "input-success_text", 'data'=> "$data", 'inputname' => "'success_text'" ])
+                            <!-- anto's editor -->
+
                            @include('alerts.feedback', ['field' => 'success_text'])
                         </div>
                         <div class="form-group{{ $errors->has('failure_text') ? ' has-danger' : '' }}">
                            <label class="form-control-label" for="input-failure_text">{{ __('Exam Failure Text') }}</label>
-                           <textarea name="failure_text" id="input-failure_text"  class="ckeditor form-control{{ $errors->has('failure_text') ? ' is-invalid' : '' }}" placeholder="{{ __('Replace this text as exam success text') }}"  required autofocus>{{ old('failure_text',$exam->failure_text) }}</textarea>
+                           {{--<textarea name="failure_text" id="input-failure_text"  class="ckeditor form-control{{ $errors->has('failure_text') ? ' is-invalid' : '' }}" placeholder="{{ __('Replace this text as exam success text') }}"  required autofocus>{{ old('failure_text',$exam->failure_text) }}</textarea>--}}
                            @include('alerts.feedback', ['field' => 'failure_text'])
                         </div>
                         <div class="text-center">
@@ -515,6 +536,8 @@
       @endif
    </div>
 </div>
+<script src="{{asset('js/app.js')}}"></script>
+<script src="{{asset('admin_assets/js/vendor.min.js')}}"></script>
 @endsection
 @push('css')
     <link rel="stylesheet" href="{{ asset('argon') }}/vendor/datatables.net-bs4/css/dataTables.bootstrap4.min.css">
@@ -1105,7 +1128,7 @@
 
        t.on('order.dt search.dt', function () {
         let i = 1;
- 
+
         t.cells(null, 0, { search: 'applied', order: 'applied' }).every(function (cell) {
             this.data(i++);
         });
@@ -1167,7 +1190,7 @@
             contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
             url:'/admin/live-results/{{$exam->id}}',
             success:function(data){
-               
+
                let resultsHtmll = '';
                var tl = $('#liveResultTable').DataTable();
                tl.clear();
@@ -1182,7 +1205,7 @@
                      value1['totalAnswers'],
                      value1['started_at'],
                      value1['finish_at']
-                                   
+
                   ]).draw();
 
                   //$('#'+value1['id']).html(value1['answered']);
