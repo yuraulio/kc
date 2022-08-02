@@ -2,8 +2,17 @@ const collectiveInputs = [
     {
         "type": "text",
         "key": "title",
-        "label": "Title",
+        "label": "Category group title",
         "size": "col-lg-12"
+    },
+    {
+        "type": "multidropdown",
+        "key": "type",
+        "label": "Type",
+        "size": "col-lg-12",
+        "route": "getPageTypes",
+        "fetch": true,
+        "multi": false,
     },
     {
         "type": "image",
@@ -14,12 +23,13 @@ const collectiveInputs = [
     {
         "type": "multidropdown",
         "key": "subcategories",
-        "label": "Subcategories",
+        "label": "Categories (add categories)",
         "size": "col-lg-12",
         "route": "subcategories",
         "multi": true,
         "taggable": true,
-        "fetch": false
+        "fetch": false,
+        "placeholder": "Start typing to add category"
     }
 ];
 
@@ -32,14 +42,14 @@ export default {
         },
         {
             name: 'title',
-            title: 'Title',
+            title: 'Category group',
             sortField: 'title',
             dataClass: 'align-middle',
             titleClass: ''
         },
         {
             name: 'subcategories',
-            title: 'Subcategories' + '<i title="Column cant be sorted." class="fa fa-info-circle text-muted ms-1"></i>',
+            title: 'Categories' + '<i title="Column cant be sorted." class="fa fa-info-circle text-muted ms-1"></i>',
             formatter (value) {
                 var subcategories = "";
                 if (value && value != []) {
@@ -51,6 +61,19 @@ export default {
             },
             dataClass: 'align-middle',
             titleClass: ''
+        },
+        {
+            name: 'type',
+            title: 'Page type',
+            sortField: 'type.title',
+            dataClass: 'align-middle',
+            titleClass: '',
+            formatter (value) {
+                if (value) {
+                    return value.title;
+                }
+                return "";
+            },
         },
         {
             name: 'user',

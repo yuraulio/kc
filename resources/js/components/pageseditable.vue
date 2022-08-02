@@ -95,8 +95,8 @@
                                 :multi="false"
                                 @updatevalue="update_type"
                                 :prop-value="type_value"
-                                :fetch="false"
-                                :data="type_list"
+                                :fetch="true"
+                                route="getPageTypes"
                             ></multidropdown>
 
                             <!--
@@ -110,15 +110,18 @@
                             ></multidropdown>
                             -->
 
+                            <!-- this is now category group, is hidden -->
                             <multidropdown
                                 title="Categories"
                                 @updatevalue="update_category"
                                 :prop-value="category_value"
                                 route="categories"
+                                class="visually-hidden"
                             ></multidropdown>
 
+                            <!-- this is now categories, used to be subcategories -->
                             <multidropdown
-                                title="Subcategories"
+                                title="Categories"
                                 @updatevalue="update_subcategory"
                                 :prop-value="subcategory_value"
                                 :fetch="false"
@@ -303,6 +306,7 @@ export default {
             },
             update_type(value){
                 this.type_value = value;
+                this.setCategories();
             },
             update_template(value){
                 this.template_value = value;
@@ -310,6 +314,37 @@ export default {
                     this.template_value.rows = this.data.content;
                 }
                 this.$forceUpdate();
+            },
+            setCategories(){
+                // reset categorise and subcategories
+                this.categories = [];
+                this.subcategories = [];
+                this.category_value = [];
+                this.subcategory_value = [];
+
+                // get categories and subcategories based on the page type
+                axios
+                .get('/api/category_group/' + this.type_value.id)
+                .then((response) => {
+                    this.categories = response.data.data;
+                    this.category_value = this.categories;
+
+                    var subcategories = [];
+                    if (this.category_value) {
+                    this.category_value.forEach(function(category, index) {
+                        if (category.subcategories) {
+                            category.subcategories.forEach(function(subcategory, index) {
+                                subcategories.push(subcategory);
+                            });
+                        }
+                    });
+                    this.subcategories = subcategories;
+                }
+                })
+                .catch((error) => {
+                    console.log(error)
+                });
+
             },
             rearange() {
                 this.$refs.tc.rearange(true);
@@ -441,10 +476,21 @@ export default {
                 if (data.rows){
                     this.rows_value = JSON.parse(data.rows);
                 }
-                // if (data.content){
-                //     this.template_value.rows = data.content;
-                // }
                 this.category_value = data.categories;
+                
+                var subcategories = [];
+
+                if (this.category_value) {
+                    this.category_value.forEach(function(category, index) {
+                        if (category.subcategories) {
+                            category.subcategories.forEach(function(subcategory, index) {
+                                subcategories.push(subcategory);
+                            });
+                        }
+                    });
+                    this.subcategories = subcategories;
+                }
+
                 this.subcategory_value = data.subcategories;
                 this.published_from_value = data.published_from;
                 this.published_to_value = data.published_to;
@@ -465,19 +511,19 @@ export default {
             }));
         },
         watch: {
-            "category_value": function() {
-                var subcategories = [];
-                if (this.category_value) {
-                    this.category_value.forEach(function(category, index) {
-                        if (category.subcategories) {
-                            category.subcategories.forEach(function(subcategory, index) {
-                                subcategories.push(subcategory);
-                            });
-                        }
-                    });
-                    this.subcategories = subcategories;
-                }
-            }
+            // "category_value": function() {
+            //     var subcategories = [];
+            //     if (this.category_value) {
+            //         this.category_value.forEach(function(category, index) {
+            //             if (category.subcategories) {
+            //                 category.subcategories.forEach(function(subcategory, index) {
+            //                     subcategories.push(subcategory);
+            //                 });
+            //             }
+            //         });
+            //         this.subcategories = subcategories;
+            //     }
+            // }
         }
     }
 </script>

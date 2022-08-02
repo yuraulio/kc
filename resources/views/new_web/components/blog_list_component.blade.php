@@ -27,7 +27,7 @@
         }
     } else {
         $category = null;
-        $categories = Category::whereNull("parent_id")->whereHas("pages", function ($q) use ($source) {
+        $categories = Category::whereNotNull("parent_id")->whereHas("pages", function ($q) use ($source) {
             $q->whereType($source);
             if ($source == "Knowledge") {
                 $q = $q->withoutGlobalScope("knowledge")->where("slug", "!=", "knowledge");
@@ -52,7 +52,7 @@
         $blog = $blog->where('title', 'like', '%' . $search_term . '%');
     }
 
-    $blog = $blog->paginate(10);
+    $blog = $blog->with("subcategories")->paginate(10);
     
 @endphp
 
