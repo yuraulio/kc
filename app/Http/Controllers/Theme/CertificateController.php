@@ -140,35 +140,25 @@ class CertificateController extends Controller
 
         //dd($content);
 
-        Storage::put($fn,$content);
+        //Storage::put($fn,$content);
 
-        $filepath = Storage::url($fn);
-        $saveImagePath = public_path('test.png');
-
-        $pdf = public_path('pdf\elearning\Knowcrunch-How-to-access-our-website-&-account.pdf');
+        Storage::disk('tmp')->put($fn,$content);
 
 
-        // $file = file_get_contents($pdf);
-        // $pdfbase64 = base64_encode($file);
-        // $image = str_replace('data:application/pdf;base64,', '', $pdfbase64);
-        // $image = str_replace(' ', '+', $image);
-        // //dd($pdfbase64);
-        // $imageName = str_random(10).'.'.'png';
-        // Storage::put(storage_path(). '/' . $imageName, base64_decode($image));
-
-        // dd($pdfbase64);
-
+        //$filepath = Storage::url($fn);
+        $filepath = public_path('tmp\\'.$fn);
+        $saveImagePath = public_path('tmp\\'.$data['certificate']->firstname . '-' . $data['certificate']->lastname . '-' . $data['certificate']->user()->first()->kc_id.'.jpg');
 
         $imagick = new Imagick();
+        $imagick->setResolution(300, 300);
+        $imagick->readImage($filepath);
+        $imagick->setImageFormat('jpg');
+        $imagick->writeImage($saveImagePath);
+        $imagick->clear();
+        $imagick->destroy();
 
-        $imagick->readImageFile($pdf);
 
-        $imagick->writeImages('converted.jpg', true);
-
-        dd('document has been converted');
-
-
-        // return response()->file($saveImagePath);
+        return 'tmp\\'.$data['certificate']->firstname . '-' . $data['certificate']->lastname . '-' . $data['certificate']->user()->first()->kc_id.'.jpg';
     }
 
 
