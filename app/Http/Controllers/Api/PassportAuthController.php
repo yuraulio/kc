@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\User;
+use App\Model\User;
 use Illuminate\Support\Facades\Hash;
 
 class PassportAuthController extends Controller
@@ -28,7 +28,12 @@ class PassportAuthController extends Controller
             $expire = $token_->token->expires_at->diffForHumans();
             return response()->json(['token' => $token, 'expire' => $expire,'sms'=>encrypt(Auth::user()->id.'-'.date("H:i:s"))], 200);
         } else {
-            return response()->json(['error' => 'Unauthorised'], 401);
+
+            if(!User::where('email',$data['email'])->first()){
+                return response()->json(['error' => 'Incorrect email, please try again.'], 403);
+            }
+            
+            return response()->json(['error' => 'Incorrect password, please try again.'], 403);
         }
     }
 
