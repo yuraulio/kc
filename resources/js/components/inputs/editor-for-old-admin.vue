@@ -8,7 +8,6 @@
             :height="300" 
             :id="keyput" 
             v-model="editorData"
-            value="editorData"
             :api-key="tinymce"
             :init="{
                 plugins: 'preview importcss searchreplace autolink autosave save directionality code visualblocks visualchars fullscreen image link media template codesample table charmap pagebreak nonbreaking anchor insertdatetime advlist lists wordcount help charmap quickbars emoticons',
@@ -37,6 +36,7 @@ export default {
         Editor,
     },
     props: {
+        inputname: String,
         type: {
             required: false,
             type: String
@@ -113,6 +113,9 @@ export default {
             this.$emit('inputed', { 'data': $event, 'key': this.keyput})
         },
         updated($event) {
+
+            consol.log('gdsfg');
+
             this.$emit('inputed', { 'data': $event, 'key': this.keyput})
         },
         updatedTabs($event) {
@@ -143,6 +146,7 @@ export default {
     },
     watch: {
         editorData() {
+            $('input[name='+ this.inputname +']').val(this.editorData);
             this.$emit('inputed', { 'data': this.editorData, 'key': this.keyput })
         },
         "value": function() {
@@ -150,7 +154,7 @@ export default {
         }
     },
     mounted() {
-        console.log(this.editorData);
+        
         if (this.value) {
             this.editorData = this.editorData;
         }

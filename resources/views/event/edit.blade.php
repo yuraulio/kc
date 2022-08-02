@@ -1353,16 +1353,28 @@
                                                     <div class="col-sm-12 col-md-6 form-group{{ $errors->has('fb_') ? ' has-danger' : '' }}">
                                                         <label class="form-control-label" for="input-hours">{{ __('Certificate Title') }}</label>
 
-                                                        <textarea type="text" name="course[{{'certificate'}}][{{'success_text'}}]" id="input-certificate_title" class="ckeditor form-control" placeholder="{{ __('alphanumeric text ') }}" autofocus>{{ old('certificate_title', (isset($info['certificate']['messages']['success']) && $info['certificate']['messages']['success'] != null) ? $info['certificate']['messages']['success'] : '') }}</textarea>
-                                                        {{--<?php $data = isset($info['certificate']['messages']['success']) && $info['certificate']['messages']['success'] != null ? $info['certificate']['messages']['success'] : '' ?>
-                                                        @include('event.editor.editor', ['keyinput' => "input-certificate_title",'data'=> "{{$data}}"])--}}
+                                                        {{--<textarea type="text" name="course[{{'certificate'}}][{{'success_text'}}]" id="input-certificate_title" class="ckeditor form-control" placeholder="{{ __('alphanumeric text ') }}" autofocus>{{ old('certificate_title', (isset($info['certificate']['messages']['success']) && $info['certificate']['messages']['success'] != null) ? $info['certificate']['messages']['success'] : '') }}</textarea>--}}
+                                                        
+                                                        <!-- anto's editor -->
+                                                        <input class="hidden" name="course[{{'certificate'}}][{{'success_text'}}]" value="{{ old('certificate_title', (isset($info['certificate']['messages']['success']) && $info['certificate']['messages']['success'] != null) ? $info['certificate']['messages']['success'] : '') }}"/>
+                                                        <?php $data = isset($info['certificate']['messages']['success']) && $info['certificate']['messages']['success'] != null ? $info['certificate']['messages']['success'] : '' ?>
+                                                        @include('event.editor.editor', ['keyinput' => "input-certificate_title", 'data'=> "$data", 'inputname' => "'course[certificate][success_text]'" ])
+                                                         <!-- anto's editor -->
+
                                                         @include('alerts.feedback', ['field' => 'certificate_title'])
+
                                                     </div>
 
                                                     <div class="col-sm-12 col-md-6 form-group">
                                                         <label class="form-control-label" for="input-hours">{{ __('Title of certification (in case of exams failure)') }}</label>
 
-                                                        <textarea type="text" name="course[{{'certificate'}}][{{'failure_text'}}]" id="input-certificate_text_failure" class="form-control ckeditor" placeholder="{{ __('alphanumeric text ') }}"  autofocus>{{ old('certificate_failure', (isset($info['certificate']['messages']['failure']) && $info['certificate']['messages']['failure'] != null) ? $info['certificate']['messages']['failure'] : '') }}</textarea>
+                                                        {{--<textarea type="text" name="course[{{'certificate'}}][{{'failure_text'}}]" id="input-certificate_text_failure" class="form-control ckeditor" placeholder="{{ __('alphanumeric text ') }}"  autofocus>{{ old('certificate_failure', (isset($info['certificate']['messages']['failure']) && $info['certificate']['messages']['failure'] != null) ? $info['certificate']['messages']['failure'] : '') }}</textarea>--}}
+
+                                                        <!-- anto's editor -->
+                                                        <input class="hidden" name="course[{{'certificate'}}][{{'failure_text'}}]" value="{{ old('certificate_failure', (isset($info['certificate']['messages']['failure']) && $info['certificate']['messages']['failure'] != null) ? $info['certificate']['messages']['failure'] : '') }}"/>
+                                                        <?php $data = isset($info['certificate']['messages']['failure']) && $info['certificate']['messages']['failure'] != null ? $info['certificate']['messages']['failure'] : '' ?>
+                                                        @include('event.editor.editor', ['keyinput' => "input-certificate_title_failure", 'data'=> "$data", 'inputname' => "'course[certificate][failure_text]'" ])
+                                                        <!-- anto's editor -->
 
                                                     </div>
 
