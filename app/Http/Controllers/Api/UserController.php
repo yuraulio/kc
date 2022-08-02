@@ -217,7 +217,7 @@ class UserController extends Controller
     {
         
         $user = Auth::user();;//->with('events.summary1','events.lessons.topic','instructor.event')->first();
-        $user = User::where('id',$user->id)->with('events.dropbox','events','events.lessonsForApp','events.lessonsForApp.topic')->first();
+        $user = User::where('id',$user->id)->with('events.dropbox','events','events.lessons','events.lessons.topic')->first();
         $data = [];
         $instructor = count($user->instructor) > 0;
         
@@ -235,7 +235,7 @@ class UserController extends Controller
             unset($data[$key]['event']['category']);
             unset($data[$key]['event']['slugable']);
             unset($data[$key]['event']['lessons']);
-            unset($data[$key]['event']['lessonsForApp']);
+            //unset($data[$key]['event']['lessonsForApp']);
             unset($data[$key]['event']['summary']);
             unset($data[$key]['event']['body']);
             unset($data[$key]['event']['htmlTitle']);
@@ -472,7 +472,7 @@ class UserController extends Controller
 
                 }
 
-                $eventLessons = $event['lessonsForApp']->sortBy('time_starts');
+                $eventLessons = $event['lessons']->sortBy('time_starts');
 
                 // if inclass, parse dropbox files without attach by topic
                 $data[$key]['files']['folders'] = $folders;
@@ -496,7 +496,7 @@ class UserController extends Controller
 
                 $data[$key]['lastVideoSeen'] = isset($statistics['pivot']['lastVideoSeen']) ? $statistics['pivot']['lastVideoSeen'] : -1;
 
-                $eventLessons = $event['lessonsForApp']->sortBy('priority');
+                $eventLessons = $event['lessons']->sortBy('priority');
 
             }
             else{
