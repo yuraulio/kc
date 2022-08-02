@@ -114,7 +114,7 @@
                                                 @csrf
                                                 @method('put')
                                 <div class="tab-content" id="myTabContent">
-                                
+
                                     <div class="tab-pane fade show active" id="tabs-icons-text-1" role="tabpanel" aria-labelledby="tabs-icons-text-1-tab">
 
 
@@ -1354,7 +1354,7 @@
                                                         <label class="form-control-label" for="input-hours">{{ __('Certificate Title') }}</label>
 
                                                         {{--<textarea type="text" name="course[{{'certificate'}}][{{'success_text'}}]" id="input-certificate_title" class="ckeditor form-control" placeholder="{{ __('alphanumeric text ') }}" autofocus>{{ old('certificate_title', (isset($info['certificate']['messages']['success']) && $info['certificate']['messages']['success'] != null) ? $info['certificate']['messages']['success'] : '') }}</textarea>--}}
-                                                        
+
                                                         <!-- anto's editor -->
                                                         <input class="hidden" name="course[{{'certificate'}}][{{'success_text'}}]" value="{{ old('certificate_title', (isset($info['certificate']['messages']['success']) && $info['certificate']['messages']['success'] != null) ? $info['certificate']['messages']['success'] : '') }}"/>
                                                         <?php $data = isset($info['certificate']['messages']['success']) && $info['certificate']['messages']['success'] != null ? $info['certificate']['messages']['success'] : '' ?>
@@ -2390,9 +2390,9 @@
             if(eventInfos !== undefined){
 
                 $('#input-certificate_title').val(eventInfos.certificate.messages.success)
-                CKEDITOR.instances['input-certificate_title'].setData(eventInfos.certificate.messages.success)
+                //CKEDITOR.instances['input-certificate_title'].setData(eventInfos.certificate.messages.success)
 
-                CKEDITOR.instances['input-certificate_text_failure'].setData(eventInfos.certificate.messages.failure)
+                //CKEDITOR.instances['input-certificate_text_failure'].setData(eventInfos.certificate.messages.failure)
                 $('#input-certificate_text_failure').val(eventInfos.certificate.messages.failure)
             }
 
@@ -2403,8 +2403,8 @@
 
             //$('#input-certificate_title').val("")
 
-            CKEDITOR.instances['input-certificate_title'].setData('')
-            CKEDITOR.instances['input-certificate_text_failure'].setData('')
+            //CKEDITOR.instances['input-certificate_title'].setData('')
+            //CKEDITOR.instances['input-certificate_text_failure'].setData('')
             $('#input-certificate_title').val("")
             $('#input-certificate_text_failure').val("")
             $('#input-certificate_title').text("")
@@ -2427,9 +2427,9 @@
             if(eventInfos !== undefined){
 
                 $('#input-certificate_title').val(eventInfos.course_certification_name_success)
-                CKEDITOR.instances['input-certificate_title'].setData(eventInfos.course_certification_name_success)
+                //CKEDITOR.instances['input-certificate_title'].setData(eventInfos.course_certification_name_success)
 
-                CKEDITOR.instances['input-certificate_text_failure'].setData(eventInfos.course_certification_name_failure)
+                //CKEDITOR.instances['input-certificate_text_failure'].setData(eventInfos.course_certification_name_failure)
                 $('#input-certificate_text_failure').val(eventInfos.course_certification_name_failure)
             }
 
@@ -2440,8 +2440,8 @@
 
             //$('#input-certificate_title').val("")
 
-            CKEDITOR.instances['input-certificate_title'].setData('')
-            CKEDITOR.instances['input-certificate_text_failure'].setData('')
+            //CKEDITOR.instances['input-certificate_title'].setData('')
+            //CKEDITOR.instances['input-certificate_text_failure'].setData('')
             $('#input-certificate_title').val("")
             $('#input-certificate_text_failure').val("")
             $('#input-certificate_title').text("")
@@ -3107,7 +3107,7 @@ var datePickerOptions = {
         }
     });
 
-    
+
 
     $(document).on('click', '.input-icon-wrapper, .input-icon-wrapper-inclass, .input-icon-wrapper-city', function() {
         let btn = $(this).data('infowrapper')

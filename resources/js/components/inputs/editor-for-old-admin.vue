@@ -4,9 +4,9 @@
     <div class="text-editor-input">
         <label v-if="label" :for="keyput" class="form-label">{{ label }}</label>
 
-        <editor 
-            :height="300" 
-            :id="keyput" 
+        <editor
+            :height="300"
+            :id="keyput"
             v-model="editorData"
             :api-key="tinymce"
             :init="{
@@ -32,7 +32,7 @@ import Editor from '@tinymce/tinymce-vue'
 
 export default {
     components: {
-      
+
         Editor,
     },
     props: {
@@ -154,7 +154,7 @@ export default {
         }
     },
     mounted() {
-        
+        console.log('has mounted')
         if (this.value) {
             this.editorData = this.editorData;
         }

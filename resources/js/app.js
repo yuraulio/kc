@@ -105,9 +105,11 @@ import VueClipboard from 'vue-clipboard2'
 VueClipboard.config.autoSetContainer = true // add this line
 Vue.use(VueClipboard)
 
-new Vue({
-    el: '#app'
-})
+if($("#app").length > 0) {
+    new Vue({
+        el: '#app'
+    })
+}
 
 if($("#app1").length > 0) {
     new Vue({
