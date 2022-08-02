@@ -18,7 +18,6 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use App\Model\Event;
 
-
 class MainController extends Controller
 {
     private $fbp;
@@ -80,17 +79,16 @@ class MainController extends Controller
                 $page = Page::withoutGlobalScope("published")->whereType("Course page")->whereDynamic(true)->first();
                 $dynamicPageData = CMS::getEventData($event);
 
-                if($event->event_info() != null){
+                if ($event->event_info() != null) {
                     $dynamicPageData['info'] = $event->event_info();
                 }
-
             } elseif ($modelSlug && $modelSlug->slugable != null && get_class($modelSlug->slugable) == "App\Model\Instructor") {
                 $instructor = $modelSlug->slugable;
                 $page = Page::withoutGlobalScope("published")->whereType("Trainer page")->whereDynamic(true)->first();
                 $dynamicPageData = CMS::getInstructorData($instructor);
             } elseif ($modelSlug && $modelSlug->slugable != null && get_class($modelSlug->slugable) == "App\Model\City") {
                 $city = $modelSlug->slugable;
-                $page = Page::withoutGlobalScope("published")->whereType("City page")->whereDynamic(true)->first();
+                $page = Page::whereType("City page")->whereSlug($slug)->first();
                 $dynamicPageData = CMS::getCityData($city);
             } else {
                 $page = Page::withoutGlobalScope("published")->whereSlug($slug)->first();
@@ -136,12 +134,11 @@ class MainController extends Controller
 
         $this->fbp->sendPageViewEvent();
 
-        if($request->has('terms')){
-
+        if ($request->has('terms')) {
             $terms = Page::withoutGlobalScope("published")->whereId(6)->first();
             $contents[] = json_decode($terms->content);
             $contents[] = json_decode($page->content);
-            
+
             return view('new_web.page_consent', [
                 'contents' => $contents,
                 'page_id' => $page->id,
@@ -149,8 +146,7 @@ class MainController extends Controller
                 'page' => $page,
                 'dynamic_page_data' => $dynamicPageData,
             ]);
-        
-        }else{
+        } else {
             return view('new_web.page', [
                 'content' => json_decode($page->content),
                 'page_id' => $page->id,
@@ -159,8 +155,6 @@ class MainController extends Controller
                 'dynamic_page_data' => $dynamicPageData,
             ]);
         }
-
-        
     }
 
     private function eventSearch($dynamicPageData, Request $request)

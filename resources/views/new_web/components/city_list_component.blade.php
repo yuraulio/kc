@@ -14,8 +14,10 @@
 
 @if ($openlist)
 
-    <h1 >{{ $dynamic_page_data["content"]->name }}</h1>
-    <p style="font-size: 22px; line-height: 1.36;">{{ $dynamic_page_data["content"]->description }}</p>
+    <!--
+    <h1 >{{ $dynamic_page_data["content"]->name ?? '' }}</h1>
+    <p style="font-size: 22px; line-height: 1.36;">{{ $dynamic_page_data["content"]->description ?? '' }}</p>
+    -->
 
     <div class="control-wrapper-filters">
         <div class="filters">
