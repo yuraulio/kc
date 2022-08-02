@@ -19,9 +19,6 @@
                     <li class="nav-item">
                         <a @click="tab = 'Meta'" :class="'nav-link ' + (tab == 'Meta' ? 'active' : '')" href="#!">SEO</a>
                     </li>
-                    <li class="nav-item">
-                        <a @click="tab = 'Other'" :class="'nav-link ' + (tab == 'Other' ? 'active' : '')" href="#!">Other</a>
-                    </li>
                 </ul>
             </div>
         </div>
@@ -308,9 +305,6 @@
                     </li>
                     <li class="nav-item">
                         <a @click="tab = 'Meta'" :class="'nav-link ' + (tab == 'Meta' ? 'active' : '')" href="#!">Meta</a>
-                    </li>
-                    <li class="nav-item">
-                        <a @click="tab = 'Other'" :class="'nav-link ' + (tab == 'Other' ? 'active' : '')" href="#!">Other</a>
                     </li>
                 </ul>
             </div>
