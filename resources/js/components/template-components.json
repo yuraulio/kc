@@ -308,6 +308,7 @@
                 "key": "gallery_title",
                 "label": "Title",
                 "size": "col-lg-12",
+                "simple_view": false,
                 "dynamic": true
 
             },
@@ -320,8 +321,9 @@
             {
                 "type": "multidropdown",
                 "key": "galery_type",
-                "label": "Gallery display",
+                "label": "Display gallery as",
                 "route": "getGaleryDisplayOptions",
+                "simple_view": false,
                 "value": {
                     "id": 1,
                     "title": "Grid"
@@ -331,11 +333,13 @@
             {
                 "type": "text",
                 "key": "gallery_link",
+                "simple_view": false,
                 "label": "Link"
             },
             {
                 "type": "text",
                 "key": "gallery_link_text",
+                "simple_view": false,
                 "label": "Link text"
             }
         ]
