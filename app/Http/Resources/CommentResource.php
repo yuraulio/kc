@@ -25,7 +25,7 @@ class CommentResource extends JsonResource
                     return $this->user->firstname . " " . $this->user->lastname;
                 }
             ),
-            'page' => '<a target="_blank" href="' . ($this->page->type == 'Blog' ? '/v2/blog/' : '') . $this->page->slug . '">' . $this->page->title . "</a>",
+            'page' => '<a target="_blank" href="' . ($this->page->type == 'Blog' ? '/blog/' : '') . $this->page->slug . '">' . $this->page->title . "</a>",
             'created_at_formated' => Carbon::parse($this->created_at)->format("Y-m-d G:i:s"),
             'created_at' => Carbon::parse($this->created_at)->toFormattedDateString(),
             'diffForHumans' => $this->created_at->diffForHumans(),

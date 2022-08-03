@@ -226,9 +226,58 @@
         "one_column": true,
         "icon": "dripicons-align-justify",
         "tab": "Content",
-        "simple_view": false,
         "mobile": true,
+        "simple_view": true,
         "inputs": [
+            {
+                "type": "text",
+                "key": "comments_title",
+                "label": "Title",
+                "main": true,
+                "value": "Comments"
+            },
+            {
+                "type": "text",
+                "key": "comments_no_comments",
+                "label": "No comments text",
+                "main": true,
+                "value": "No comments yet! Why don't you be the first?"
+            },
+            {
+                "type": "text",
+                "key": "comments_limit",
+                "label": "Comments limit text",
+                "main": true,
+                "value": "Only the first 500 comments are shown."
+            },
+            {
+                "type": "text",
+                "key": "comments_add_title",
+                "label": "Add comment title",
+                "main": true,
+                "value": "Add a comment"
+            },
+            {
+                "type": "text",
+                "key": "comments_button",
+                "label": "Add comment button text",
+                "main": true,
+                "value": "Add Comment"
+            },
+            {
+                "type": "text",
+                "key": "comments_placeholder",
+                "label": "Comment placeholder",
+                "main": true,
+                "value": "Write your comment here"
+            },
+            {
+                "type": "text",
+                "key": "comments_not_logged_in",
+                "label": "Not logged in message",
+                "main": true,
+                "value": "You must be logged in to comment."
+            }
         ]
     },
     "social_bar" : {
