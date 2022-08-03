@@ -504,12 +504,14 @@ export default {
                 this.published_from_value = data.published_from;
                 this.published_to_value = data.published_to;
 
-                var index = this.type_list.findIndex(function(type) {
-                    return type.title ==  data.type;
-                });
-                this.type_value = this.type_list[index];
-                this.slug_value = data.slug;
+                if (typeof this.type_value === 'string' || this.type_value instanceof String) {
+                    var index = this.type_list.findIndex(function(type) {
+                        return type.title ==  data.type;
+                    });
+                    this.type_value = this.type_list[index];
+                }
 
+                this.slug_value = data.slug;
                 this.loader = false;
             } else {
                 this.get()

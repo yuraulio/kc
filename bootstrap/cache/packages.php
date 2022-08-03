@@ -163,17 +163,6 @@
       0 => 'Laravel\\Ui\\UiServiceProvider',
     ),
   ),
-  'laravelium/feed' => 
-  array (
-    'providers' => 
-    array (
-      0 => 'Laravelium\\Feed\\FeedServiceProvider',
-    ),
-    'aliases' => 
-    array (
-      'Feed' => 'Laravelium\\Feed\\Feed',
-    ),
-  ),
   'maatwebsite/excel' => 
   array (
     'providers' => 
