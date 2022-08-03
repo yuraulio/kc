@@ -476,6 +476,7 @@
         "icon": "dripicons-wrong",
         "key": "empty_component",
         "tab": "Content",
+        "simple_view": true,
         "mobile": true,
         "inputs": []
     },
