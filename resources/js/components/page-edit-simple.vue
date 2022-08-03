@@ -192,11 +192,11 @@
             <button :disabled="loading" @click="changeMode()" type="button" class="btn btn-soft-info waves-effect waves-light"><i class="dripicons-toggles me-1" style="transform: translateY(2px);"></i>Advanced Mode</button>
         </div>
 
-        <component-modal-simple
+        <component-modal
             :row="null"
             :column="null"
             name="simple"
-        ></component-modal-simple>
+        ></component-modal>
     </div>
 
     <div v-else class="row">
