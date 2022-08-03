@@ -377,20 +377,26 @@
                 "type": "number",
                 "key": "youtube_width",
                 "label": "Video width (px)",
+                "simple_view": false,
+                "main": true,
                 "size": "col-lg-6"
             },
             {
                 "type": "checkbox",
                 "key": "youtube_full_width",
                 "label": "Fit video in content",
+                "simple_view": false,
                 "value": true,
+                "main": true,
                 "size": "col-lg-6"
             },
             {
                 "type": "number",
                 "key": "youtube_height",
                 "label": "Video height (px)",
+                "simple_view": false,
                 "size": "col-lg-6",
+                "main": true,
                 "value": 600
             },
             {
@@ -409,7 +415,7 @@
         "icon": "dripicons-code",
         "key": "html_component",
         "tab": "Content",
-        "simple_view": false,
+        "simple_view": true,
         "mobile": true,
         "inputs": [
             {
@@ -835,7 +841,7 @@
         "key": "blog_list_component",
         "tab": "Content",
         "width": "content",
-        "simple_view": false,
+        "simple_view": true,
         "mobile": true,
         "inputs": [
             {
@@ -875,7 +881,7 @@
         "key": "instructors_list_component",
         "tab": "Content",
         "width": "content",
-        "simple_view": false,
+        "simple_view": true,
         "mobile": true,
         "inputs": [
             {
@@ -898,7 +904,7 @@
         "key": "events_list_component",
         "tab": "Content",
         "width": "content",
-        "simple_view": false,
+        "simple_view": true,
         "mobile": true,
         "inputs": [
             {
@@ -921,7 +927,7 @@
         "key": "city_list_component",
         "tab": "Content",
         "width": "content",
-        "simple_view": false,
+        "simple_view": true,
         "mobile": true,
         "inputs": [
         ]
@@ -1062,7 +1068,7 @@
         "key": "terms_conditions_component",
         "tab": "Content",
         "width": "content",
-        "simple_view": false,
+        "simple_view": true,
         "mobile": true,
         "inputs": [
             {
@@ -1093,7 +1099,7 @@
         "key": "knowledge_list_component",
         "tab": "Content",
         "width": "content",
-        "simple_view": false,
+        "simple_view": true,
         "mobile": true,
         "inputs": [
         ]
