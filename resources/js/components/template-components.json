@@ -675,8 +675,8 @@
         "key": "tabs_component",
         "tab": "Content",
         "width": "full",
-        "simple_view": false,
         "mobile": true,
+        "simple_view": true,
         "inputs": [
             {
                 "type": "tabs",
