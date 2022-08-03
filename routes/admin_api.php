@@ -86,6 +86,9 @@ Route::domain('admin.' . env('APP_DOMAIN'))->group(function () {
         Route::get('templatesAll', [TemplatesController::class, 'templatesAll']);
         Route::get('getHomepageGalleryOptions', [PagesController::class, 'getHomepageGalleryOptions']);
         Route::get('getBlogSource', [PagesController::class, 'getBlogSource']);
+        Route::get('getPageTypes', [PagesController::class, 'getPageTypes']);
+
+        Route::get('category_group/{id}', [CategoriesController::class, 'getCategoriesForPageType']);
     });
 });
 

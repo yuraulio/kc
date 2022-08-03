@@ -118,6 +118,7 @@
                                             <p class="text-muted d-inline-block">{{ column.template.title }}</p>
                                             <i v-if="column.template.removable !== false" @click="removeRow(row_index)" class="dripicons-trash text-muted float-end ms-2 cursor-pointer" title="Delete component"></i>
                                             <i v-if="settingsExist(column)" @click="column.tab == 'settings' ? column.tab = 'main' : column.tab = 'settings'" :class="'settings-icon text-muted float-end ms-2 ' + (column.template.simple_view_settings_icon ? column.template.simple_view_settings_icon : 'dripicons-gear')"></i>
+                                            <i @click="column.template.mobile = !column.template.mobile" :class="'text-muted float-end ms-2 cursor-pointer ' + (column.template.mobile ? ' dripicons-device-mobile ' : ' dripicons-device-desktop ')" title="Show on mobile"></i>
                                             <template v-if="simpleColumnCount(row.columns) > 1">
                                                 <ul :class="'nav column-navigation d-inline-block float-end mb-0 nav-row' + row_index + ' ' + (settingsExist(column) == false ? 'column-navigation-margin' : '')">
                                                     <template v-for="(column, column_index) in row.columns">
@@ -207,15 +208,6 @@
 
                     <div class="text-center">
                         <h3 class="mt-4">Select Template and Type go get started</h3>
-                        
-                        <!--
-                        <text-field
-                            title="Administration Title"
-                            @updatevalue="setPageTitle"
-                            prop-value=""
-                            required=1
-                        ></text-field>
-                        -->
 
                         <multidropdown
                             title="Template"
@@ -229,40 +221,10 @@
                             title="Type"
                             :multi="false"
                             @updatevalue="setPageType"
-                            :fetch="false"
                             required=1
-                            :data="[
-                                {
-                                    'id': 2,
-                                    'realTitle':'Blog',
-                                    'title':'Blog (for blog pages)'
-                                },
-                                {
-                                    'id': 3,
-                                    'realTitle':'Course page',
-                                    'title':'Course page (for course pages)'
-                                },
-                                {
-                                    'id': 4,
-                                    'realTitle':'Trainer page',
-                                    'title':'Trainer page (for instructor pages)'
-                                },
-                                {
-                                    'id': 5,
-                                    'realTitle':'General',
-                                    'title':'General (for normal pages)'
-                                },
-                                {
-                                    'id': 6,
-                                    'realTitle':'Knowledge',
-                                    'title':'Knowledge (for knowledge pages)'
-                                },
-                                {
-                                    'id': 7,
-                                    'realTitle':'City page',
-                                    'title':'City page (for event city pages)'
-                                }
-                            ]"
+                            :fetch="true"
+                            route="getPageTypes"
+                            setlabel="description"
                         ></multidropdown>
                     </div>
                 </div>
@@ -520,7 +482,7 @@ import slugify from '@sindresorhus/slugify';
                 this.setPage();
             },
             setPageType(pageType) {
-                this.pageType = pageType.realTitle;
+                this.pageType = pageType;
                 this.setPage();
             },
             setPageTitle(pageTitle) {

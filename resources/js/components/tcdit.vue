@@ -1,17 +1,5 @@
 <template>
 <div>
-
-    <div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel" style="visibility: visible; width: 100%" aria-modal="true" role="dialog">
-        <div class="offcanvas-header">
-            <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">Rearange components</h5>
-            <button @click="preview = false" type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-        </div> <!-- end offcanvas-header-->
-
-        <div class="offcanvas-body" style="padding: 0px !important">
-            <preview v-if="spreview" :gedata="data" :pseudo="pseudo" :preview="preview"></preview>
-        </div> <!-- end offcanvas-body-->
-    </div>
-
     <div v-if="!pseudo">
 
         <div v-if="pageTitle" class="">
@@ -30,9 +18,6 @@
                     </li>
                     <li class="nav-item">
                         <a @click="tab = 'Meta'" :class="'nav-link ' + (tab == 'Meta' ? 'active' : '')" href="#!">SEO</a>
-                    </li>
-                    <li class="nav-item">
-                        <a @click="tab = 'Other'" :class="'nav-link ' + (tab == 'Other' ? 'active' : '')" href="#!">Other</a>
                     </li>
                 </ul>
             </div>
@@ -187,8 +172,12 @@
                                                 <input @click="calculateWidth(val.columns, ind, $event, index)" :value="v.width" class="w-100" type="range" maxlength="1" min="1" max="6">
                                             </div>
 
-                                            <div v-if="v.template.dynamic != null" class="d-block text-center">
+                                            <div v-if="v.template.dynamic != null" class="d-block text-center ms-2">
                                                 <span class="text-muted font-13 d-inline-block me-1" style="margin-top: 4px;">Dynamic</span><input v-model="v.template.dynamic" type="checkbox" class="form-check-input">
+                                            </div>
+
+                                            <div class="d-block text-center">
+                                                <span class="text-muted font-13 d-inline-block me-1" style="margin-top: 4px;">Show on mobile</span><input v-model="v.template.mobile" type="checkbox" class="form-check-input">
                                             </div>
 
                                             <div v-if="checkComponentVersion(v)" class="alert alert-warning m-2" role="alert">
@@ -216,8 +205,12 @@
                                                 Add column
                                             </div>
                                         </span>
-                                        <div v-if="column.template.dynamic != null" class="d-inline-block float-end">
+                                        <div v-if="column.template.dynamic != null" class="d-inline-block float-end ms-2">
                                             <span class="text-muted font-13 d-inline-block me-1" style="margin-top: 4px;">Dynamic</span><input v-model="column.template.dynamic" type="checkbox" class="form-check-input">
+                                        </div>
+
+                                        <div v-if="column.template.mobile != null" class="d-inline-block float-end">
+                                            <span class="text-muted font-13 d-inline-block me-1" style="margin-top: 4px;">Show on mobile</span><input v-model="column.template.mobile" type="checkbox" class="form-check-input">
                                         </div>
                                     </h5>
                                     <div v-if="checkComponentVersion(column)" class="alert alert-warning m-2" role="alert">
@@ -300,7 +293,6 @@
             <div class="col-sm-12 mt-3 mb-3">
                 <div class="page-title-box d-flex justify-content-between align-items-center">
                     <input :value="pageTitle" @change="updateTemplateTitle" class="d-inline-block title-input">
-                    <button type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions" @click="rearange()" class="btn btn-block btn-soft-info waves-effect waves-light m-1t ">Rearange</button>
                 </div>
             </div>
         </div>
@@ -312,10 +304,7 @@
                         <a @click="tab = 'Content'" :class="'nav-link ' + (tab == 'Content' ? 'active' : '')" href="#!">Content</a>
                     </li>
                     <li class="nav-item">
-                        <a @click="tab = 'Meta'" :class="'nav-link ' + (tab == 'Meta' ? 'active' : '')" href="#!">Meta</a>
-                    </li>
-                    <li class="nav-item">
-                        <a @click="tab = 'Other'" :class="'nav-link ' + (tab == 'Other' ? 'active' : '')" href="#!">Other</a>
+                        <a @click="tab = 'Meta'" :class="'nav-link ' + (tab == 'Meta' ? 'active' : '')" href="#!">SEO</a>
                     </li>
                 </ul>
             </div>

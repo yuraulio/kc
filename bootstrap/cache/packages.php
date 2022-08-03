@@ -25,7 +25,7 @@
     ),
     'aliases' => 
     array (
-      'PDF' => 'Barryvdh\\DomPDF\\Facade\\Pdf',
+      'PDF' => 'Barryvdh\\DomPDF\\Facade',
     ),
   ),
   'beyondcode/laravel-dump-server' => 

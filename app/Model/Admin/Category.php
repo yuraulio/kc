@@ -66,4 +66,9 @@ class Category extends Model
     {
         return $this->belongsTo(MediaFile::class, "image_id");
     }
+
+    public function type()
+    {
+        return $this->belongsTo(PageType::class, "page_type_id");
+    }
 }

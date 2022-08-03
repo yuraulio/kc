@@ -23,6 +23,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Ramsey\Uuid\Uuid;
 use App\Jobs\UpdateTerms;
+use App\Model\Admin\PageType;
 
 class PagesController extends Controller
 {
@@ -151,9 +152,7 @@ class PagesController extends Controller
      */
     public function update(UpdateAdminPageRequest $request, int $id)
     {
-        
         try {
-       
             $page = Page::withoutGlobalScopes()->find($id);
        
             $this->authorize('update', $page, Auth::user());
@@ -180,7 +179,7 @@ class PagesController extends Controller
             $categories = $request->categories ?? [];
             $subcategories = $request->subcategories ?? [];
 
-            $page->categories()->sync(collect(array_merge($categories, $subcategories) ?? [])->pluck('id')->toArray());
+            $page->categories()->sync(collect($subcategories ?? [])->pluck('id')->toArray());
 
             $page->load('template', 'categories');
 
@@ -192,7 +191,7 @@ class PagesController extends Controller
                 $redirect->save();
             }
 
-            if(isset($request->terms_val) && !$request->terms_val){
+            if (isset($request->terms_val) && !$request->terms_val) {
                 dispatch((new UpdateTerms($page->id))->delay(now()->addSeconds(3)));
             }
 
@@ -479,5 +478,12 @@ class PagesController extends Controller
             Log::warning("(pages widget) Failed to get ubpublished pages count. " . $e->getMessage());
             return "0";
         }
+    }
+
+    public function getPageTypes()
+    {
+        $data = PageType::all();
+
+        return response()->json(['data' => $data], 200);
     }
 }

@@ -16,7 +16,7 @@
         })->with("image")->get();
     } else {
         $category = null;
-        $categories = Category::whereNull("parent_id")->whereHas("pages", function ($q) {
+        $categories = Category::whereNotNull("parent_id")->whereHas("pages", function ($q) {
             $q->whereType("Knowledge");
             $q = $q->withoutGlobalScope("knowledge")->where("slug", "!=", "knowledge");
             if (isset($search_term) && $search_term !== null) {
@@ -37,7 +37,7 @@
         $blog = $blog->where('title', 'like', '%' . $search_term . '%');
     }
 
-    $blog = $blog->paginate(10);
+    $blog = $blog->with("subcategories")->paginate(10);
 
     $source = new stdClass();
     $source->title = "Knowledge";

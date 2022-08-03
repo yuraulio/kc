@@ -20,6 +20,7 @@
         :options="list"
         @tag="addedTag"
         :allowEmpty="allowEmpty"
+        tagPlaceholder="Press enter to add a category"
     >
         <template v-if="route == 'subcategories'" slot="tag" slot-scope="props">
                 <div v-if="props.option.edit == true" class="d-inline-block">
@@ -67,6 +68,9 @@
             },
             allowEmpty: {
                 default: true
+            },
+            setlabel: {
+                default: null
             },
         },
         data() {
@@ -168,6 +172,10 @@
             
             if (this.fetch) {
                 this.get();
+            }
+
+            if (this.setlabel) {
+                this.label = this.setlabel;
             }
         }
     }

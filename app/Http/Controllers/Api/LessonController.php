@@ -76,7 +76,14 @@ class LessonController extends Controller
             $db_video[$vimeo_id]['stop_time'] = $stop_time;
             $db_video[$vimeo_id]['percentMinutes'] = $progress;
 
+            if((float)$db_video[$vimeo_id]['stop_time'] >= (float)$db_video[$vimeo_id]['total_seen']){
+
+                $db_video[$vimeo_id]['total_seen'] = $db_video[$vimeo_id]['stop_time'];
+            }
+
             $db_video = json_encode($db_video);
+
+
 
             $message = 'Update video info successfully';
         }else{
@@ -84,7 +91,8 @@ class LessonController extends Controller
             $arr['seen'] = $seen;
             $arr['stop_time'] = $stop_time;
             $arr['percentMinutes'] = $progress;
-
+            $arr['total_seen'] = $stop_time;
+            
             //$arr = json_encode($arr);
             $db_video[$vimeo_id] = $arr;
             $db_video = json_encode($db_video);
