@@ -74,16 +74,16 @@
                                             @include('alerts.feedback', ['field' => 'title'])
                                         </div>
 
-                                        
+
 
                                         <div class="form-group{{ $errors->has('category_id') ? ' has-danger' : '' }}">
                                             <label class="form-control-label" for="input-category_id">{{ __('Category') }}</label>
                                             <select multiple name="category_id[]" data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..." id="input-category_id" class="form-control" placeholder="{{ __('Category') }}" required>
                                                 <option value="">-</option>
                                                 @foreach ($categories as $category)
-                                               
+
                                                     <option value="{{ $category->id }}"
-                                                    <?php 
+                                                    <?php
                                                         $testimonialsIds = $testimonial->category->pluck('id')->toArray();
                                                         if(count($testimonial->category) != 0){
                                                             if(in_array($category->id,$testimonialsIds)){
@@ -127,7 +127,13 @@
 
                                         <div class="form-group{{ $errors->has('testimonial') ? ' has-danger' : '' }}">
                                             <label class="form-control-label" for="input-testimonial">{{ __('Testimonial') }}</label>
-                                            <textarea name="testimonial" id="input-testimonial" class="ckeditor form-control{{ $errors->has('testimonial') ? ' is-invalid' : '' }}">{{ old('testimonial', $testimonial->testimonial) }}</textarea>
+                                            {{--<textarea name="testimonial" id="input-testimonial" class="ckeditor form-control{{ $errors->has('testimonial') ? ' is-invalid' : '' }}">{{ old('testimonial', $testimonial->testimonial) }}</textarea>--}}
+
+                                            <!-- anto's editor -->
+                                            <input class="hidden" name="testimonial" value="{{ old('testimonial', $testimonial->testimonial) }}"/>
+                                            <?php $data = $testimonial->testimonial?>
+                                            @include('event.editor.editor', ['keyinput' => "input-testimonial", 'data'=> "$data", 'inputname' => "'testimonial'" ])
+                                            <!-- anto's editor -->
 
                                             @include('alerts.feedback', ['field' => 'testimonial'])
                                         </div>
@@ -150,7 +156,7 @@
 
                                             if(isset($video)){
                                                 $youtube = $video;
-                                                
+
                                             }else{
                                                 $youtube = null;
                                             }

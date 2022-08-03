@@ -21,6 +21,7 @@
             $title = 'Brand';
             $data = $brands;
             $var = 'brands';
+
         }else{
             $tab_title = 'Logos';
             $title = 'Logo';
@@ -79,7 +80,7 @@
                            <input type="text" name="name" id="input-name" class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" placeholder="{{ __('Name') }}" value="{{ old('name',$page->name) }}"  required autofocus>
                            @include('alerts.feedback', ['field' => 'name'])
                         </div>
-                       
+
 
                         <div class="form-group{{ $errors->has('title') ? ' has-danger' : '' }}">
                            <label class="form-control-label" for="input-title">{{ __('Title') }}</label>
@@ -89,16 +90,25 @@
 
                         <div class="form-group{{ $errors->has('summary') ? ' has-danger' : '' }}">
                            <label class="form-control-label" for="input-summary">{{ __('Page Subtitle') }}</label>
-                           <textarea name="summary" id="input-summary"  class="ckeditor form-control{{ $errors->has('summary') ? ' is-invalid' : '' }}" placeholder="{{ __('Page summary') }}"  required autofocus>{{ old('summary',$page->summary) }}</textarea>
+                           {{--<textarea name="summary" id="input-summary"  class="ckeditor form-control{{ $errors->has('summary') ? ' is-invalid' : '' }}" placeholder="{{ __('Page summary') }}"  required autofocus>{{ old('summary',$page->summary) }}</textarea>--}}
                            {{--<input name="summary" id="input-summary"  class="form-control{{ $errors->has('summary') ? ' is-invalid' : '' }}" placeholder="{{ __('Page Subtitle') }}"  value="{{ old('summary',$page->summary) }}" autofocus>--}}
-
+                            <!-- anto's editor -->
+                            <input class="hidden" name="summary" value="{{ old('summary',$page->summary) }}"/>
+                            <?php $data1 = isset($page->summary) ? $page->summary : '' ?>
+                            @include('event.editor.editor', ['keyinput' => "input-summary", 'data'=> "$data1", 'inputname' => "'summary'" ])
+                            <!-- anto's editor -->
                            @include('alerts.feedback', ['field' => 'summary'])
                         </div>
 
-                        <div class="form-group{{ $errors->has('permissions') ? ' has-danger' : '' }}">
-                           <label class="form-control-label" for="input-permissions">{{ __('Page Editor') }}</label>
-                           <textarea name="content" id="input-content"  class="ckeditor form-control{{ $errors->has('content') ? ' is-invalid' : '' }}" placeholder="{{ __('Page editor') }}"  required autofocus>{{ old('content',$page->content) }}</textarea>
-                           @include('alerts.feedback', ['field' => 'permissions'])
+                        <div class="form-group{{ $errors->has('content') ? ' has-danger' : '' }}">
+                           <label class="form-control-label" for="input-content">{{ __('Page Editor') }}</label>
+                           {{--<textarea name="content" id="input-content"  class="ckeditor form-control{{ $errors->has('content') ? ' is-invalid' : '' }}" placeholder="{{ __('Page editor') }}"  required autofocus>{{ old('content',$page->content) }}</textarea>--}}
+                           <!-- anto's editor -->
+                            <input class="hidden" name="content" value="{{ old('content',$page->content) }}"/>
+                            <?php $data1 = $page->content; ?>
+                            @include('event.editor.editor', ['keyinput' => "input-content", 'data'=> "$data1", 'inputname' => "'content'" ])
+                            <!-- anto's editor -->
+                           @include('alerts.feedback', ['field' => 'content'])
                         </div>
 
                      </div>
@@ -199,7 +209,7 @@
                                         <td><a href="{{ route('logos.edit', $item) }}">{{ $item->name }}</td>
                                         <td>{{ $item->created_at->format('d/m/Y H:i') }}</td>
                                         <td class="text-right">
-          
+
                                         <div class="dropdown">
                                                 <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                     <i class="fas fa-ellipsis-v"></i>
@@ -238,7 +248,9 @@
 @endpush
 
 @push('js')
-<script src="{{ asset('argon') }}/vendor/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="{{asset('js/app.js')}}"></script>
+    <script src="{{asset('admin_assets/js/vendor.min.js')}}"></script>
+    <script src="{{ asset('argon') }}/vendor/datatables.net/js/jquery.dataTables.min.js"></script>
     <script src="{{ asset('argon') }}/vendor/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
     <script src="{{ asset('argon') }}/vendor/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
     <script src="{{ asset('argon') }}/vendor/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js"></script>
@@ -246,7 +258,7 @@
     <script src="{{ asset('argon') }}/vendor/datatables.net-buttons/js/buttons.flash.min.js"></script>
     <script src="{{ asset('argon') }}/vendor/datatables.net-buttons/js/buttons.print.min.js"></script>
     <script src="{{ asset('argon') }}/vendor/datatables.net-select/js/dataTables.select.min.js"></script>
-<script>
+    <script>
     var table = $('#datatable-basic101').DataTable({
         language: {
             paginate: {
@@ -280,7 +292,7 @@
           },
           type: 'delete',
           url: `/admin/logos/delete/${logo}`,
-          
+
           success: function (data) {
             if(data['success']){
                $(`tr#item-${logo}`).empty()
@@ -303,7 +315,7 @@ if (confirm('Are you sure you want to delete this {{strtolower($title)}}?')){
        },
        type: 'delete',
        url: `/admin/logos/delete/${logo}`,
-       
+
        success: function (data) {
          if(data['success']){
             $(`tr#item-${logo}`).empty()

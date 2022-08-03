@@ -108,14 +108,26 @@
 
                                 <div class="form-group{{ $errors->has('summary') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-summary">{{ __('Summary') }}</label>
-                                    <textarea name="summary" id="input-summary"  class="ckeditor form-control{{ $errors->has('summary') ? ' is-invalid' : '' }}" placeholder="{{ __('Summary') }}" required autofocus>{{ old('summary', $topic->summary) }}</textarea>
+                                    {{--<textarea name="summary" id="input-summary"  class="ckeditor form-control{{ $errors->has('summary') ? ' is-invalid' : '' }}" placeholder="{{ __('Summary') }}" required autofocus>{{ old('summary', $topic->summary) }}</textarea>--}}
+
+                                    <!-- anto's editor -->
+                                    <input class="hidden" name="summary" value="{{ old('summary',$topic->summary) }}"/>
+                                    <?php $data = $topic->summary?>
+                                    @include('event.editor.editor', ['keyinput' => "input-summary", 'data'=> "$data", 'inputname' => "'summary'" ])
+                                    <!-- anto's editor -->
 
                                     @include('alerts.feedback', ['field' => 'summary'])
                                 </div>
 
                                 <div class="form-group{{ $errors->has('body') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-body">{{ __('Body') }}</label>
-                                    <textarea name="body" id="input-body"  class="ckeditor form-control{{ $errors->has('body') ? ' is-invalid' : '' }}" placeholder="{{ __('Body') }}" required autofocus>{{ old('body', $topic->body) }}</textarea>
+                                    {{--<textarea name="body" id="input-body"  class="ckeditor form-control{{ $errors->has('body') ? ' is-invalid' : '' }}" placeholder="{{ __('Body') }}" required autofocus>{{ old('body', $topic->body) }}</textarea>--}}
+
+                                    <!-- anto's editor -->
+                                    <input class="hidden" name="body" value="{{ old('body',$topic->body) }}"/>
+                                    <?php $data = $topic->body?>
+                                    @include('event.editor.editor', ['keyinput' => "input-body", 'data'=> "$data", 'inputname' => "'body'" ])
+                                    <!-- anto's editor -->
 
                                     @include('alerts.feedback', ['field' => 'body'])
                                 </div>
@@ -138,3 +150,8 @@
         @include('layouts.footers.auth')
     </div>
 @endsection
+
+@push('js')
+<script src="{{asset('js/app.js')}}"></script>
+<script src="{{asset('admin_assets/js/vendor.min.js')}}"></script>
+@endpush

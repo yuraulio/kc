@@ -171,9 +171,9 @@ class TestimonialController extends Controller
         //    $category = Category::find($request->category_id);
         //    $testimonial->category()->sync([$category->id]);
         //}
-        
+
         $testimonial->category()->detach();
-        
+
         foreach($request->category_id as $category){
             $testimonial->category()->attach([$category]);
         }

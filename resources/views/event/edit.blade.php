@@ -1373,7 +1373,7 @@
                                                         <!-- anto's editor -->
                                                         <input class="hidden" name="course[{{'certificate'}}][{{'failure_text'}}]" value="{{ old('certificate_failure', (isset($info['certificate']['messages']['failure']) && $info['certificate']['messages']['failure'] != null) ? $info['certificate']['messages']['failure'] : '') }}"/>
                                                         <?php $data = isset($info['certificate']['messages']['failure']) && $info['certificate']['messages']['failure'] != null ? $info['certificate']['messages']['failure'] : '' ?>
-                                                        @include('event.editor.editor', ['keyinput' => "input-certificate_title_failure", 'data'=> "$data", 'inputname' => "'course[certificate][failure_text]'" ])
+                                                        @include('event.editor.editor', ['keyinput' => "input-certificate_text_failure", 'data'=> "$data", 'inputname' => "'course[certificate][failure_text]'" ])
                                                         <!-- anto's editor -->
 
                                                     </div>
@@ -1701,7 +1701,17 @@
 
                                                                 <div class="form-group{{ $errors->has('body') ? ' has-danger' : '' }}">
                                                                     <label class="form-control-label" for="input-body">{{ __('Body') }}</label>
-                                                                    <textarea name="body" id="input-body"  class="ckeditor form-control{{ $errors->has('body') ? ' is-invalid' : '' }}" placeholder="{{ __('Body') }}" required autofocus>{{ old('body', $event->body) }}</textarea>
+
+
+
+                                                                    {{--<textarea name="body" id="input-body"  class="ckeditor form-control{{ $errors->has('body') ? ' is-invalid' : '' }}" placeholder="{{ __('Body') }}" required autofocus>{{ old('body', $event->body) }}</textarea>--}}
+
+                                                                    <!-- anto's editor -->
+                                                                    <input class="hidden" name="body" value="{{ old('body',$event->body) }}"/>
+                                                                    <?php $data = $event->body?>
+                                                                    @include('event.editor.editor', ['keyinput' => "input-body", 'data'=> "$data", 'inputname' => "'body'" ])
+                                                                    <!-- anto's editor -->
+
 
                                                                     @include('alerts.feedback', ['field' => 'body'])
                                                                 </div>
@@ -2257,23 +2267,34 @@
 
                 let dataForSubmit = [];
 
-                $.each(allSelectedRowsDataForSave, function(index, value) {
+                if(allSelectedRowsDataForSave.length != 0){
 
-                    if(value.isRootFolder){
-                        selectedAllFolders = true;
-                        selectedDropbox = value.Full_Name;
+                    $.each(allSelectedRowsDataForSave, function(index, value) {
 
-                    }else{
-                        selectedFolders.push(value.dirname)
-                        selectedDropbox = value.dropboxFolder;
-                    }
-                })
+                        if(value.isRootFolder){
+                            selectedAllFolders = true;
+                            selectedDropbox = value.Full_Name;
 
-                dataForSubmit = {
-                    selectedDropbox :selectedDropbox,
-                    selectedAllFolders :selectedAllFolders,
-                    selectedFolders :selectedFolders
-                };
+                        }else{
+                            selectedFolders.push(value.dirname)
+                            selectedDropbox = value.dropboxFolder;
+                        }
+                    })
+
+                    dataForSubmit = {
+                        selectedDropbox :selectedDropbox,
+                        selectedAllFolders :selectedAllFolders,
+                        selectedFolders :selectedFolders,
+                    };
+
+                }else{
+                    dataForSubmit = {
+                        detach: true
+                    };
+                }
+
+
+
 
                 dataForSubmit = JSON.stringify(dataForSubmit);
                 $('#selectedFiles').val(dataForSubmit);

@@ -90,14 +90,26 @@
 
                                         <div class="form-group{{ $errors->has('summary') ? ' has-danger' : '' }}">
                                             <label class="form-control-label" for="input-summary">{{ __('Summary') }}</label>
-                                            <textarea name="summary" id="input-summary"  class="ckeditor form-control{{ $errors->has('summary') ? ' is-invalid' : '' }}" placeholder="{{ __('Summary') }}" required autofocus>{{ old('summary', $instructor->summary) }}</textarea>
+                                            {{--<textarea name="summary" id="input-summary"  class="ckeditor form-control{{ $errors->has('summary') ? ' is-invalid' : '' }}" placeholder="{{ __('Summary') }}" required autofocus>{{ old('summary', $instructor->summary) }}</textarea>--}}
+
+                                            <!-- anto's editor -->
+                                            <input class="hidden" name="summary" value="{{ old('summary', $instructor->summary) }}"/>
+                                            <?php $data = $instructor->summary?>
+                                            @include('event.editor.editor', ['keyinput' => "input-summary", 'data'=> "$data", 'inputname' => "'summary'" ])
+                                            <!-- anto's editor -->
 
                                             @include('alerts.feedback', ['field' => 'summary'])
                                         </div>
 
                                         <div class="form-group{{ $errors->has('body') ? ' has-danger' : '' }}">
                                             <label class="form-control-label" for="input-body">{{ __('Body') }}</label>
-                                            <textarea name="body" id="input-body"  class="ckeditor form-control{{ $errors->has('body') ? ' is-invalid' : '' }}" placeholder="{{ __('Body') }}" required autofocus>{{ old('body', $instructor->body) }}</textarea>
+                                            {{--<textarea name="body" id="input-body"  class="ckeditor form-control{{ $errors->has('body') ? ' is-invalid' : '' }}" placeholder="{{ __('Body') }}" required autofocus>{{ old('body', $instructor->body) }}</textarea>--}}
+
+                                            <!-- anto's editor -->
+                                            <input class="hidden" name="body" value="{{ old('body', $instructor->body) }}"/>
+                                            <?php $data = $instructor->body?>
+                                            @include('event.editor.editor', ['keyinput' => "input-body", 'data'=> "$data", 'inputname' => "'body'" ])
+                                            <!-- anto's editor -->
 
                                             @include('alerts.feedback', ['field' => 'body'])
                                         </div>

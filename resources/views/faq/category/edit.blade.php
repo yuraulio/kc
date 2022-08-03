@@ -49,7 +49,13 @@
 
                                 <div class="form-group{{ $errors->has('description') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-description">{{ __('Description') }}</label>
-                                    <textarea type="text" name="description" id="input-description" class="ckeditor form-control{{ $errors->has('description') ? ' is-invalid' : '' }}" placeholder="{{ __('Description') }}">{{ old('description', $category->description) }}</textarea>
+                                    {{--<textarea type="text" name="description" id="input-description" class="ckeditor form-control{{ $errors->has('description') ? ' is-invalid' : '' }}" placeholder="{{ __('Description') }}">{{ old('description', $category->description) }}</textarea>--}}
+
+                                    <!-- anto's editor -->
+                                    <input class="hidden" name="description" value="{{ old('description', $category->description) }}"/>
+                                    <?php $data = old('description', $category->description); ?>
+                                    @include('event.editor.editor', ['keyinput' => "input-description", 'data'=> "$data", 'inputname' => "'description'" ])
+                                    <!-- anto's editor -->
 
                                     @include('alerts.feedback', ['field' => 'description'])
                                 </div>
@@ -69,3 +75,8 @@
         @include('layouts.footers.auth')
     </div>
 @endsection
+
+@push('js')
+<script src="{{asset('js/app.js')}}"></script>
+<script src="{{asset('admin_assets/js/vendor.min.js')}}"></script>
+@endpush

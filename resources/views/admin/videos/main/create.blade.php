@@ -64,7 +64,14 @@
 
                         <div class="form-group{{ $errors->has('body') ? ' has-danger' : '' }}">
                            <label class="form-control-label" for="input-name">{{ __('Body') }}</label>
-                           <textarea name="body" id="input-body"  class="ckeditor form-control{{ $errors->has('body') ? ' is-invalid' : '' }}" placeholder="{{ __('Body') }}" required autofocus>{{ old('body', $video->body) }}</textarea>
+                           {{--<textarea name="body" id="input-body"  class="ckeditor form-control{{ $errors->has('body') ? ' is-invalid' : '' }}" placeholder="{{ __('Body') }}" required autofocus>{{ old('body', $video->body) }}</textarea>--}}
+
+                           <!-- anto's editor -->
+                           <input class="hidden" name="body" value="{{ old('body', $video->body) }}"/>
+                            <?php $data = old('body', $video->body); ?>
+                            @include('event.editor.editor', ['keyinput' => "input-body", 'data'=> "$data", 'inputname' => "'body'" ])
+                            <!-- anto's editor -->
+
                            @include('alerts.feedback', ['field' => 'body'])
                         </div>
 
@@ -93,6 +100,9 @@
 @stop
 
 @push('js')
+<script src="{{asset('js/app.js')}}"></script>
+<script src="{{asset('admin_assets/js/vendor.min.js')}}"></script>
+
 <script>
 
 CKEDITOR.config.allowedContent = true;

@@ -154,7 +154,6 @@ export default {
         }
     },
     mounted() {
-        console.log('has mounted')
         if (this.value) {
             this.editorData = this.editorData;
         }

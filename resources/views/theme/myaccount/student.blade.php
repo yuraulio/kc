@@ -1135,6 +1135,9 @@
                                                 &issueMonth={{date('m',$certificate->create_date)}}&expirationYear={{$expirationYear}}&expirationMonth={{$expirationMonth}}&certUrl={{$certUrl}}&certId={{$certificate->credential}}">
                                                 <img class="linkdein-image-add" src="{{cdn('theme/assets/images/icons/social/events/Linkedin.svg')}}" alt="LinkedIn Add to Profile button">
                                           </a>
+                                          <a class="facebook-post-cert" data-certid="{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" title="Add this certification to your Facebook profile" href="javascript:void(0)">
+                                                <img class="linkdein-image-add" src="{{cdn('theme/assets/images/icons/social/events/Facebook.svg')}}" alt="Facebook Add to Profile button">
+                                          </a>
 
                                         </div>
 
@@ -1367,7 +1370,7 @@
                                                 &issueMonth={{date('m',$certificate->create_date)}}&expirationYear={{$expirationYear}}&expirationMonth={{$expirationMonth}}&certUrl={{$certUrl}}&certId={{$certificate->credential}}">
                                                 <img class="linkdein-image-add" src="{{cdn('theme/assets/images/icons/social/events/Linkedin.svg')}}" alt="LinkedIn Add to Profile button">
                                           </a>
-                                          <a class="facebook-post12" title="Add this certification to your Facebook profile" onclick="fb()" href="javascript:void(0)">
+                                          <a class="facebook-post-cert" data-certid="{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" title="Add this certification to your Facebook profile" href="javascript:void(0)">
                                                 <img class="linkdein-image-add" src="{{cdn('theme/assets/images/icons/social/events/Facebook.svg')}}" alt="Facebook Add to Profile button">
                                           </a>
                                        </div>
@@ -1511,6 +1514,9 @@
                                                 &issueMonth={{date('m',$certificate->create_date)}}&expirationYear={{$expirationYear}}&expirationMonth={{$expirationMonth}}&certUrl={{$certUrl}}&certId={{$certificate->credential}}">
                                                 <img class="linkdein-image-add" src="{{cdn('theme/assets/images/icons/social/events/Linkedin.svg')}}" alt="LinkedIn Add to Profile button">
                                           </a>
+                                          <a class="facebook-post-cert" data-certid="{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" title="Add this certification to your Facebook profile" href="javascript:void(0)">
+                                                <img class="linkdein-image-add" src="{{cdn('theme/assets/images/icons/social/events/Facebook.svg')}}" alt="Facebook Add to Profile button">
+                                          </a>
                                         </div>
 
 
@@ -1643,21 +1649,17 @@
 
 
 
-
-
-    {{--function fb() {
+    $(document).on('click', '.facebook-post-cert', function() {
         var getUrl = window.location;
         var baseUrl = getUrl .protocol + "//" + getUrl.host;
-        //
-        console.log('test')
+        var certificateId = $(this).attr('data-certid');
 
         $.ajax({
             type: 'GET',
-            url: "/mycertificate/convert-pdf-to-image/{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}",
+            url: "/mycertificate/convert-pdf-to-image/"+certificateId,
             success: function(data) {
 
                 data = data.replace('\\','/')
-                console.log(`${decodeURI(baseUrl)}/${decodeURI(data)}`);
                 if(data){
                     var fbpopup = window.open(`http://www.facebook.com/sharer.php?u=${decodeURI(baseUrl)}/${decodeURI(data)}`, "pop", "width=600, height=400, scrollbars=no");
                     return false;
@@ -1665,7 +1667,8 @@
 
             }
         });
-    }--}}
+    })
+
 
 
    function cvv(input) {

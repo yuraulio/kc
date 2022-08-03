@@ -39,8 +39,6 @@ class CategoryController extends Controller
      */
     public function index(Category $model)
     {
-
-
         return view('global_settings.categories.index', ['categories' => $model->orderBy('priority','asc')->get()]);
     }
 
@@ -216,7 +214,7 @@ class CategoryController extends Controller
         }
 
         return response()->json([
-            'success' => true 
+            'success' => true
         ]);
 
     }
