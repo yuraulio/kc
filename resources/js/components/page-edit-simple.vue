@@ -69,7 +69,7 @@
                         -->
                     </div>
                     <div class="col-md-6">
-                        <button :disabled="loading" @click="changeMode()" type="button" class="btn btn-soft-info waves-effect waves-light float-end ms-2 mb-3"><i class="dripicons-toggles me-1" style="transform: translateY(2px);"></i>Advanced Mode</button>
+                        <button :disabled="loading" @click="changeMode()" type="button" class="btn btn-soft-info waves-effect waves-light float-end ms-2 mb-3"><i class="dripicons-toggles me-1" style="transform: translateY(2px);"></i>Page builder</button>
                         <button :disabled="loading" @click="type == 'new' ? add() : edit()" type="button" class="btn btn-soft-success waves-effect waves-light float-end ms-2 mb-3"><i v-if="!loading" class="mdi mdi-square-edit-outline me-1"></i><i v-else class="fas fa-spinner fa-spin"></i> Save</button>
 
                         <template v-if="type != 'new'">
@@ -185,9 +185,9 @@
 
         <div v-if="isBasicEditorEmpty() && tab != 'Meta'" class="text-center mt-3">
             <p>
-                There are no basic component to edit. Add a new basic component or switch to Advanced Mode.
+                There are no basic component to edit. Add a new basic component or switch to Page builder.
             </p>
-            <button :disabled="loading" @click="changeMode()" type="button" class="btn btn-soft-info waves-effect waves-light"><i class="dripicons-toggles me-1" style="transform: translateY(2px);"></i>Advanced Mode</button>
+            <button :disabled="loading" @click="changeMode()" type="button" class="btn btn-soft-info waves-effect waves-light"><i class="dripicons-toggles me-1" style="transform: translateY(2px);"></i>Page builder</button>
         </div>
 
         <component-modal
