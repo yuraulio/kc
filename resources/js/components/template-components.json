@@ -290,16 +290,6 @@
         "simple_view": false,
         "mobile": true,
         "inputs": [
-            {
-                "type": "text",
-                "key": "social_title",
-                "label": "Title"
-            },
-            {
-                "type": "text",
-                "key": "social_summary",
-                "label": "Summary"
-            }
         ]
     },
     "gallery" : {
