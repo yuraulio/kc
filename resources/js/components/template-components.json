@@ -169,7 +169,7 @@
             {
                 "type": "image",
                 "key": "meta_image",
-                "label": "Meta image",
+                "label": "Shareable image",
                 "main": true
             },
             {
@@ -189,6 +189,25 @@
             {
                 "type": "textarea",
                 "key": "meta_schema",
+                "label": "Meta Schema",
+                "size": "col-lg-12",
+                "main": true,
+                "simple_view": false
+            }
+        ]
+    },
+    "schema" : {
+        "version": 1,
+        "title": "Schema",
+        "icon": "dripicons-rocket",
+        "key": "schema_component",
+        "disable_color": true,
+        "tab": "Meta",
+        "simple_view": true,
+        "inputs": [
+            {
+                "type": "textarea",
+                "key": "schema_schema",
                 "label": "Meta Schema",
                 "size": "col-lg-12",
                 "main": true,

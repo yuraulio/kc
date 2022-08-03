@@ -151,6 +151,7 @@
                                             :inputs="input.inputs"
                                             :class="input.main ? 'main-component-tab' : 'settings-component-tab'"
                                             :imageVersion="input.image_version ? input.image_version : null"
+                                            :hideAltText="true"
                                         />
 
                                         <!-- preview -->
@@ -181,7 +182,7 @@
         </template>
 
         <div v-if="tab != 'Meta'" class="text-center">
-            <i @click.prevent="addCustomComponent" class="dripicons-plus add-component-icon"></i>
+            <i @click.prevent="addCustomComponent" class="dripicons-plus add-component-icon cursor-pointer"></i>
         </div>
 
         <div v-if="isBasicEditorEmpty() && tab != 'Meta'" class="text-center mt-3">
