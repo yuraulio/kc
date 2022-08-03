@@ -638,7 +638,7 @@ class StudentController extends Controller
         $data['plans'] = Plan::where('published',true)->with('events')->get();
         $data['subscriptionAccess'] = [];
         $data['mySubscriptions'] = [];
-
+        
         $data['user'] = User::find($user->id);
         $statistics = $data['user']['statistic']->groupBy('id');//$user->statistic()->get()->groupBy('id');
         //dd($statistics);
@@ -648,7 +648,7 @@ class StudentController extends Controller
         $data['mySubscriptionEvents'] = [];
 
         $eventSubscriptions = [];
-
+        $data['user']['hasExamResults'] = $data['user']->hasExamResults1();
         foreach($data['user']['events'] as $key => $event){
             $after20Days = null;
 
@@ -754,7 +754,7 @@ class StudentController extends Controller
             }
 
 
-            $find = false;
+             /*$find = false;
             $view_tpl = $event['view_tpl'];
             $find = strpos($view_tpl, 'elearning');
             //dd($find);
@@ -762,8 +762,10 @@ class StudentController extends Controller
             if($find !== false){
                 $find = true;
                 $data['elearningAccess'] = $find;
-            }
+            }*/
 
+
+            $data['elearningAccess'] = $event->is_elearning_course();
         }
 
         foreach($user['eventSubscriptions']->whereNotIn('id',$eventSubscriptions) as $key => $subEvent){
