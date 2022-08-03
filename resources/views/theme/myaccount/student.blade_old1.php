@@ -4,9 +4,11 @@
 @endsection
 
 @section('content')
+
 <?php $bonusFiles = ['_Bonus', 'Bonus', 'Bonus Files', 'Βonus', '_Βonus', 'Βonus', 'Βonus Files'] ?>
 <?php $currentuser = $user ?>
 <main  id="" role="main">
+
    <section class="section-hero section-hero-small section-hero-blue-bg">
       <div class="container">
          <div class="hero-message">
@@ -722,8 +724,8 @@
                            <div class="inside-tabs">
                               <div class="tabs-ctrl">
                                  <ul>
-                                    <li class="active"><a href="#c-info-inner{{$tab}}">Info</a></li>
-                                    @if(isset($event['topics']) && count($event['topics']) > 0)<li><a href="#c-shedule-inner{{$tab}}">Schedule </a></li>@endif
+                                    {{--<li class="active"><a href="#c-info-inner{{$tab}}">Info</a></li>--}}
+                                    @if(isset($event['topics']) && count($event['topics']) > 0)<li class="active"><a href="#c-shedule-inner{{$tab}}">Schedule </a></li>@endif
                                     <?php  $fa = strtotime(date('Y-m-d',strtotime($event['release_date_files']))) >= strtotime(date('Y-m-d'))?>
                                     {{--@if(!$instructor && isset($event['category'][0]['dropbox']) && count($event['category'][0]['dropbox']) != 0 &&--}}
                                     @if(isset($event['dropbox']) && count($event['dropbox']) != 0 &&
@@ -742,7 +744,7 @@
                                  </ul>
                               </div>
                               <div class="inside-tabs-wrapper">
-                                 <div id="c-info-inner{{$tab}}" class="in-tab-wrapper" style="display: block;">
+                                 {{--<div id="c-info-inner{{$tab}}" class="in-tab-wrapper" style="display: block;">
                                     <div class="bottom">
                                        <?php
 
@@ -764,10 +766,23 @@
                                           You are on the waiting list.
                                        </div>
                                     @endif
-                                 </div>
-                                 @if(isset($event['topics']) && count($event['topics']) > 0)
-                                 <div id="c-shedule-inner{{$tab}}" class="in-tab-wrapper">
+                                 </div>--}}
+
+                                 <div id="c-shedule-inner{{$tab}}" class="in-tab-wrapper" style="display: block;">
+                                    <div class="bottom">
+                                       @if(isset($event['summaryDate']))<div class="duration"><img class="replace-with-svg" onerror="this.src='{{cdn('/theme/assets/images/icons/Duration_Hours.svg')}}'" src="{{cdn($event['summaryDate_icon'])}}" alt="">{{$event['summaryDate']}}</div>@endif
+                                       @if($event['hours'])
+                                       <div class="expire-date"><img class="replace-with-svg" onerror="this.src='{{cdn('/theme/assets/images/icons/Start-Finish.svg')}}'"  src="{{cdn($event['hours_icon'])}}" alt="">{{$event['hours']}}h</div>
+                                       @endif
+                                       @if($event['status'] == 5)
+                                       <div>
+                                          You are on the waiting list.
+                                       </div>
+                                       @endif
+                                    </div>
+                                    @if(isset($event['topics']) && count($event['topics']) > 0)
                                     <div class="bottom tabs-bottom">
+
                                        <div class="expire-date exp-date"><img src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}" alt="">Schedule available in PDF</div>
                                        <div class="right">
                                           <a target="_blank" href="/print/syllabus/{{$event['slugable']['slug']}}" class="btn btn--secondary btn--md"> DOWNLOAD SCHEDULE </a>
@@ -793,11 +808,12 @@
                                                          @if(count($lesso['type']) >0)
                                                          <div class="category">{{$lesso['type'][0]['name']}}</div>
                                                          @endif
+
                                                          <!-- Feedback 18-11 changed -->
                                                          <span class="meta-item duration"><img src="{{cdn('/theme/assets/images/icons/Duration_Hours.svg')}}" alt="" /><?= date( "l d M Y", strtotime($lesso['pivot']['time_starts']) ) ?></span> <!-- Feedback 18-11 changed -->
                                                          <span class="meta-item duration"><img src="{{cdn('/theme/assets/images/icons/Times.svg')}}" alt="" /><?= date( "H:i", strtotime($lesso['pivot']['time_starts']) ) ?> ({{$lesso['pivot']['duration']}})</span> <!-- Feedback 18-11 changed -->
                                                          <span class="meta-item duration"><img src="{{cdn('/theme/assets/images/icons/icon-marker.svg')}}" alt="" />{{$lesso['pivot']['room']}}</span> <!-- Feedback 18-11 changed -->
-                                                      </div>
+                                                        </div>
                                                       <!-- /.topic-title-meta -->
                                                    </div>
                                                    <div class="author-img">
@@ -823,8 +839,9 @@
                                        </div>
                                        <!-- /.acc-topic-accordion -->
                                     </div>
+                                    @endif
                                  </div>
-                                 @endif
+
                                  <?php
 
                                     //$dropbox = isset($event['category'][0]['dropbox'][0]) ? $event['category'][0]['dropbox'][0] : [];
@@ -833,10 +850,19 @@
                                     $folders = isset($dropbox['folders'][0]) ? $dropbox['folders'][0] : [];
                                     //dd($folders);
 
+                                    //dd($dropbox);
+                                    if(isset($dropbox['pivot'])){
+                                        $selectedFiles = $dropbox['pivot']['selectedFolders'];
+                                        $selectedFiles = json_decode($selectedFiles, true);
+                                    }
+
+
                                     $folders_bonus = isset($dropbox['folders'][1]) ? $dropbox['folders'][1] : [];
                                     //dd($folders_bonus);
                                     $files = isset($dropbox['files'][1]) ? $dropbox['files'][1] : [];
                                     $files_bonus = isset($dropbox['files'][2]) ? $dropbox['files'][2] : [];
+
+
 
                                     //dd($files);
 
@@ -861,6 +887,17 @@
                                           @if(isset($folders) && count($folders) > 0)
                                           @foreach($folders as $folder)
                                           <?php
+                                            $folderIsSelected = false;
+                                            if($selectedFiles['selectedAllFolders']){
+                                                $folderIsSelected = true;
+                                            }else{
+                                                foreach($selectedFiles['selectedFolders'] as $key10 => $selectedFile){
+                                                    if($folder['dirname'] == $selectedFile){
+                                                        $folderIsSelected = true;
+                                                    }
+                                                }
+                                            }
+
                                              $checkedF = [];
                                              $fs = [];
                                              $fk = 1;
@@ -868,7 +905,7 @@
                                              $subfolder = [];
                                              $subfiles = [];
                                              ?>
-                                          <div class="accordion-item">
+                                          <div class="accordion-item d-none">
                                              <h3 class="accordion-title title-blue-gradient scroll-to-top"> {{ $folder['foldername'] }}</h3>
                                              <div class="accordion-content no-padding">
                                                 @if(isset($files) && count($files) > 0)
@@ -892,19 +929,52 @@
                                                             }
                                                             ?>
                                                             @if($folder_bonus['parent'] == $folder['id'])
+
+                                                            <?php $folderIsSelected = false; ?>
+
+                                                            @if($selectedFiles['selectedAllFolders'])
+                                                                <?php $folderIsSelected = true; ?>
+                                                            @else
+                                                                @foreach($selectedFiles['selectedFolders'] as $key10 => $selectedFile)
+                                                                    @if($folder_bonus['dirname'] == $selectedFile)
+                                                                        <?php $folderIsSelected = true; ?>
+                                                                    @endif
+                                                                @endforeach
+                                                            @endif
+
+
                                                             <?php $subfolder[] =  $subf['foldername']; ?>
-                                                            <div class="files-wrapper bonus-files">
+                                                            <div class="files-wrapper bonus-files d-none">
                                                                <h4 class="bonus-title">{{ $subf['foldername'] }}</h4>
                                                                <span><i class="icon-folder-open"></i>   </span>
                                                                   @foreach($files_bonus as $file_bonus)
                                                                      @if($file_bonus['fid'] == $subf['id'] && $file_bonus['parent'] == $subf['parent'] )
-                                                                     <?php $subfiles[]= $file_bonus['filename'] ?>
-                                                                     <div class="file-wrapper">
-                                                                        <h4 class="file-title">{{ $file_bonus['filename'] }}</h4>
-                                                                        <span class="last-modified">Last modified:  {{$file_bonus['last_mod']}}</span>
-                                                                        <a  class="download-file getdropboxlink"  data-dirname="{{ $file_bonus['dirname'] }}" data-filename="{{ $file_bonus['filename'] }}" href="javascript:void(0)" >
-                                                                        <img src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}"  alt="Download File"/></a>
-                                                                     </div>
+
+                                                                     @if($folderIsSelected)
+                                                                        <?php $subfiles[]= $file_bonus['filename'] ?>
+                                                                        <div class="file-wrapper">
+                                                                            <h4 class="file-title">{{ $file_bonus['filename'] }}</h4>
+                                                                            <span class="last-modified">Last modified:  {{$file_bonus['last_mod']}}</span>
+                                                                            <a  class="download-file getdropboxlink"  data-dirname="{{ $file_bonus['dirname'] }}" data-filename="{{ $file_bonus['filename'] }}" href="javascript:void(0)" >
+                                                                            <img src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}"  alt="Download File"/></a>
+                                                                        </div>
+                                                                     @else
+
+                                                                        @foreach($selectedFiles['selectedFolders'] as $key10 => $selectedFile)
+
+                                                                            @if($file_bonus['dirname'] == $selectedFile)
+                                                                            <?php $subfiles[]= $file_bonus['filename'] ?>
+                                                                                <div class="file-wrapper">
+                                                                                    <h4 class="file-title">{{ $file_bonus['filename'] }}</h4>
+                                                                                    <span class="last-modified">Last modified:  {{$file_bonus['last_mod']}}</span>
+                                                                                    <a  class="download-file getdropboxlink"  data-dirname="{{ $file_bonus['dirname'] }}" data-filename="{{ $file_bonus['filename'] }}" href="javascript:void(0)" >
+                                                                                    <img src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}"  alt="Download File"/></a>
+                                                                                </div>
+                                                                            @endif
+                                                                        @endforeach
+                                                                     @endif
+
+
                                                                      @endif
                                                                   @endforeach
                                                             </div>
@@ -914,19 +984,43 @@
                                                    @endif
                                                    @foreach($files as $file)
                                                       @if($folder['id'] == $file['fid'])
-                                                      <div class="files-wrapper">
-                                                         <div class="file-wrapper">
-                                                            <h4 class="file-title">{{ $file['filename'] }}</h4>
-                                                            <span class="last-modified">Last modified:  {{ $file['last_mod'] }}</span>
-                                                            <a  class="download-file getdropboxlink"  data-dirname="{{ $file['dirname'] }}" data-filename="{{ $file['filename'] }}" href="javascript:void(0)" >
-                                                            <img src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}"  alt="Download File"/></a>
-                                                         </div>
-                                                      </div>
-                                                      @endif
+
+                                                        @if($folderIsSelected)
+                                                            <div class="files-wrapper no-bonus">
+                                                                <div class="file-wrapper">
+                                                                    <h4 class="file-title">{{ $file['filename'] }}</h4>
+                                                                    <span class="last-modified">Last modified:  {{ $file['last_mod'] }}</span>
+                                                                    <a  class="download-file getdropboxlink"  data-dirname="{{ $file['dirname'] }}" data-filename="{{ $file['filename'] }}" href="javascript:void(0)" >
+                                                                    <img src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}"  alt="Download File"/></a>
+                                                                </div>
+                                                            </div>
+                                                        @else
+                                                            @foreach($selectedFiles['selectedFolders'] as $key10 => $selectedFile)
+                                                                @if($file['dirname'] == $selectedFile)
+                                                                    <div class="files-wrapper no-bonus">
+                                                                        <div class="file-wrapper">
+                                                                            <h4 class="file-title">{{ $file['filename'] }}</h4>
+                                                                            <span class="last-modified">Last modified:  {{ $file['last_mod'] }}</span>
+                                                                            <a  class="download-file getdropboxlink"  data-dirname="{{ $file['dirname'] }}" data-filename="{{ $file['filename'] }}" href="javascript:void(0)" >
+                                                                            <img src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}"  alt="Download File"/></a>
+                                                                        </div>
+                                                                    </div>
+                                                                @endif
+                                                            @endforeach
+                                                        @endif
+                                                        <!-- <div class="files-wrapper">
+                                                            <div class="file-wrapper">
+                                                                <h4 class="file-title">{{ $file['filename'] }}</h4>
+                                                                <span class="last-modified">Last modified:  {{ $file['last_mod'] }}</span>
+                                                                <a  class="download-file getdropboxlink"  data-dirname="{{ $file['dirname'] }}" data-filename="{{ $file['filename'] }}" href="javascript:void(0)" >
+                                                                <img src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}"  alt="Download File"/></a>
+                                                            </div>
+                                                        </div> -->
+                                                        @endif
                                                    @endforeach
                                                 @endif
                                                 @if(isset($folders_bonus) && count($folders_bonus) > 0)
-                                                <div class="files-wrapper bonus-files">
+                                                <div class="files-wrapper bonus-files d-none">
                                                    @foreach($folders_bonus as $folder_bonus)
                                                    <?php
                                                       if(in_array($folder_bonus['foldername'],$subfolder)){
@@ -934,17 +1028,46 @@
                                                       }
                                                       ?>
                                                    @if($folder_bonus['parent'] == $folder['id'])
+
+                                                        <?php $folderIsSelected = false; ?>
+                                                        @if($selectedFiles['selectedAllFolders'])
+                                                            <?php $folderIsSelected = true; ?>
+                                                        @else
+                                                            @foreach($selectedFiles['selectedFolders'] as $key10 => $selectedFile)
+                                                                @if($folder_bonus['dirname'] == $selectedFile)
+                                                                    <?php $folderIsSelected = true; ?>
+                                                                @endif
+                                                            @endforeach
+                                                        @endif
+
+
+
                                                    <h4 class="bonus-title">{{ $folder_bonus['foldername'] }}</h4>
                                                    <span><i class="icon-folder-open"></i>   </span>
                                                    @if(isset($files_bonus) && count($files_bonus) > 0)
                                                    @foreach($files_bonus as $file_bonus)
                                                    @if($file_bonus['parent'] == $folder_bonus['parent'] && !in_array($file_bonus['filename'],$subfiles))
-                                                   <div class="file-wrapper">
-                                                      <h4 class="file-title">{{ $file_bonus['filename'] }}</h4>
-                                                      <span class="last-modified">Last modified:  {{$file_bonus['last_mod']}}</span>
-                                                      <a  class="download-file getdropboxlink"  data-dirname="{{ $file_bonus['dirname'] }}" data-filename="{{ $file_bonus['filename'] }}" href="javascript:void(0)" >
-                                                      <img src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}"  alt="Download File"/></a>
-                                                   </div>
+
+                                                    @if($folderIsSelected)
+                                                        <div class="file-wrapper">
+                                                            <h4 class="file-title">{{ $file_bonus['filename'] }}</h4>
+                                                            <span class="last-modified">Last modified:  {{$file_bonus['last_mod']}}</span>
+                                                            <a  class="download-file getdropboxlink"  data-dirname="{{ $file_bonus['dirname'] }}" data-filename="{{ $file_bonus['filename'] }}" href="javascript:void(0)" >
+                                                            <img src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}"  alt="Download File"/></a>
+                                                        </div>
+                                                    @else
+                                                        @foreach($selectedFiles['selectedFolders'] as $key10 => $selectedFile)
+                                                            @if($file_bonus['dirname'] == $selectedFile)
+                                                                <div class="file-wrapper">
+                                                                    <h4 class="file-title">{{ $file_bonus['filename'] }}</h4>
+                                                                    <span class="last-modified">Last modified:  {{$file_bonus['last_mod']}}</span>
+                                                                    <a  class="download-file getdropboxlink"  data-dirname="{{ $file_bonus['dirname'] }}" data-filename="{{ $file_bonus['filename'] }}" href="javascript:void(0)" >
+                                                                    <img src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}"  alt="Download File"/></a>
+                                                                </div>
+                                                            @endif
+                                                        @endforeach
+                                                    @endif
+
                                                    @endif
                                                    @endforeach
                                                    @endif
@@ -1028,8 +1151,8 @@
                            <div class="inside-tabs">
                               <div class="tabs-ctrl">
                                  <ul>
-                                    <li class="active"><a href="#c-info-inner{{$tab}}">Info</a></li>
-                                    <li><a href="#c-watch-inner{{$tab}}">Watch</a></li>
+                                    {{--<li ><a href="#c-info-inner{{$tab}}">Info</a></li>--}}
+                                    <li class="active"><a href="#c-watch-inner{{$tab}}">Watch</a></li>
 
 
                                     @if(isset($event['exams']) && count($event['exams']) >0 )
@@ -1045,7 +1168,7 @@
                                  </ul>
                               </div>
                               <div class="inside-tabs-wrapper">
-                                 <div id="c-info-inner{{$tab}}" class="in-tab-wrapper" style="display: block;">
+                                 {{--<div id="c-info-inner{{$tab}}" class="in-tab-wrapper" style="display: block;">
                                     <div class="bottom">
                                        <?php //dd($event['videos_progress']); ?>
                                        @if($event['expiration'])
@@ -1059,7 +1182,7 @@
                                        <div  class="duration"><img class="replace-with-svg" width="20" src="{{cdn('/theme/assets/images/icons/E-Learning.svg')}}" alt=""> {{$event['videos_progress']}}% </div>
                                        @endif
                                     </div>
-                                 </div>
+                                 </div>--}}
                                  @if($event['mySubscription'])
                                  <div id="c-subs-inner{{$tab}}" class="in-tab-wrapper">
                                     <div class="bottom">
@@ -1151,8 +1274,11 @@
                                  </div>
                                  @endif
                                  <?php //dd($event); ?>
-                                 <div id="c-watch-inner{{$tab}}" class="in-tab-wrapper">
+                                 <div id="c-watch-inner{{$tab}}" class="in-tab-wrapper" style="display: block;">
                                     <div class="bottom">
+                                       @if (isset($event['hours']))
+                                       <div  class="duration"><img class="replace-with-svg" width="20" onerror="this.src='{{cdn('/theme/assets/images/icons/Start-Finish.svg')}}'"  src="{{cdn($event['hours_icon'])}}" alt=""> {{$event['hours']}}h </div>
+                                       @endif
                                        @if (isset($event['videos_progress']))
                                        <div  class="duration"><img class="replace-with-svg" width="20" src="{{cdn('/theme/assets/images/icons/E-Learning.svg')}}" alt=""> {{$event['videos_progress']}}% </div>
                                        @endif
@@ -1235,10 +1361,7 @@
                                                 &issueMonth={{date('m',$certificate->create_date)}}&expirationYear={{$expirationYear}}&expirationMonth={{$expirationMonth}}&certUrl={{$certUrl}}&certId={{$certificate->credential}}">
                                                 <img class="linkdein-image-add" src="{{cdn('theme/assets/images/icons/social/events/Linkedin.svg')}}" alt="LinkedIn Add to Profile button">
                                           </a>
-                                          <a class="facebook-post" title="Add this certification to your Facebook profile" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=YourPageLink.com&display=popup">
-                                                <img class="linkdein-image-add" src="{{cdn('theme/assets/images/icons/social/events/Facebook.svg')}}" alt="Facebook Add to Profile button">
-                                          </a>
-                                          <a class="facebook-post12" title="Add this certification to your Facebook profile" onclick="fb()" href="/mycertificate/convert-pdf-to-image/{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}">
+                                          <a class="facebook-post12" title="Add this certification to your Facebook profile" onclick="fb()" href="javascript:void(0)">
                                                 <img class="linkdein-image-add" src="{{cdn('theme/assets/images/icons/social/events/Facebook.svg')}}" alt="Facebook Add to Profile button">
                                           </a>
                                        </div>
@@ -1269,8 +1392,8 @@
                            <div class="inside-tabs">
                               <div class="tabs-ctrl">
                                  <ul>
-                                    <li class="active"><a href="#c-info-inner{{$tab}}">Info</a></li>
-                                    <li><a href="#c-watch-inner{{$tab}}">Watch</a></li>
+                                    {{--<li class="active"><a href="#c-info-inner{{$tab}}">Info</a></li>--}}
+                                    <li class="active"><a href="#c-watch-inner{{$tab}}">Watch</a></li>
                                     @if(isset($event['exams']) && count($event['exams']) >0 )
                                        <li><a href="#c-exams-inner{{$tab}}">Exams</a></li>
                                     @endif
@@ -1283,7 +1406,7 @@
                                  </ul>
                               </div>
                               <div class="inside-tabs-wrapper">
-                                 <div id="c-info-inner{{$tab}}" class="in-tab-wrapper" style="display: block;">
+                                {{-- <div id="c-info-inner{{$tab}}" class="in-tab-wrapper" style="display: block;">
                                     <div class="bottom">
                                        @if (isset($event['hours']) && $event['hours'])
                                        <div  class="duration"><img class="replace-with-svg" width="20" onerror="this.src='{{cdn('/theme/assets/images/icons/Start-Finish.svg')}}'"  src="{{cdn($event['hours_icon'])}}" alt=""> {{$event['hours']}}h </div>
@@ -1293,9 +1416,12 @@
                                        @endif
 
                                     </div>
-                                 </div>
-                                 <div id="c-watch-inner{{$tab}}" class="in-tab-wrapper">
+                                 </div>--}}
+                                 <div id="c-watch-inner{{$tab}}" class="in-tab-wrapper" style="display: block;">
                                     <div class="bottom">
+                                       @if (isset($event['hours']) && $event['hours'])
+                                       <div  class="duration"><img class="replace-with-svg" width="20" onerror="this.src='{{cdn('/theme/assets/images/icons/Start-Finish.svg')}}'"  src="{{cdn($event['hours_icon'])}}" alt=""> {{$event['hours']}}h </div>
+                                       @endif
                                        @if (isset($event['videos_progress']))
                                        <div  class="duration"><img class="replace-with-svg" width="20" src="{{cdn('/theme/assets/images/icons/E-Learning.svg')}}" alt=""> {{$event['videos_progress']}}% </div>
                                        @endif
@@ -1507,13 +1633,33 @@
 <script src="{{ asset('argon') }}/vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
 
 <script>
-    function fb(){
-        //var imgsrc=document.getElementById("imgfb").src;
-        //var fbpopup = window.open("https://www.facebook.com/sharer/sharer.php?u="+encodeURIComponent(imgsrc), "pop", "width=600, height=400, scrollbars=no");
-        var fbpopup = window.open("http://www.facebook.com/sharer.php?u=http://static01.nyt.com/images/2015/02/19/arts/international/19iht-btnumbers19A/19iht-btnumbers19A-facebookJumbo-v2.jpg", "pop", "width=600, height=400, scrollbars=no");
 
-        return false;
-}
+
+
+
+
+    {{--function fb() {
+        var getUrl = window.location;
+        var baseUrl = getUrl .protocol + "//" + getUrl.host;
+        //
+        console.log('test')
+
+        $.ajax({
+            type: 'GET',
+            url: "/mycertificate/convert-pdf-to-image/{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}",
+            success: function(data) {
+
+                data = data.replace('\\','/')
+                console.log(`${decodeURI(baseUrl)}/${decodeURI(data)}`);
+                if(data){
+                    var fbpopup = window.open(`http://www.facebook.com/sharer.php?u=${decodeURI(baseUrl)}/${decodeURI(data)}`, "pop", "width=600, height=400, scrollbars=no");
+                    return false;
+                }
+
+            }
+        });
+    }--}}
+
 
    function cvv(input) {
 
@@ -1996,6 +2142,40 @@
 </script>
 <script>
    $(document).ready(function() {
+
+    let accordions = $('.accordion-item')
+    $.each(accordions, function(index, value) {
+        let files_in_accordion = $(value).find('.files-wrapper.no-bonus')
+
+        let files_in_accordion_bonus = $(value).find('.files-wrapper.bonus-files')
+
+        if(files_in_accordion_bonus.length == 0){
+            if(files_in_accordion.length != 0){
+                $(accordions[index]).removeClass('d-none');
+            }
+        }else{
+            let files_in_accordion_bonus = $(value).find('.files-wrapper.bonus-files')[0]
+            $.each(files_in_accordion_bonus, function(index1, value1) {
+
+                let files_in_accordion = $(value).find('.file-wrapper')
+                if(files_in_accordion.length != 0 || files_in_accordion.length != 0){
+                    $(accordions[index]).removeClass('d-none');
+                }
+            })
+        }
+
+
+    })
+
+    let bonusFiles = $('.files-wrapper.bonus-files')
+    $.each(bonusFiles, function(index, value) {
+        let files_in_bonus = $(value).find('.file-wrapper');
+
+        if(files_in_bonus.length != 0){
+            $(bonusFiles[index]).removeClass('d-none');
+        }
+    })
+
 
       $("#selectCountry").select()
 
