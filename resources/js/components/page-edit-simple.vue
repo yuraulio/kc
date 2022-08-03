@@ -208,15 +208,6 @@
 
                     <div class="text-center">
                         <h3 class="mt-4">Select Template and Type go get started</h3>
-                        
-                        <!--
-                        <text-field
-                            title="Administration Title"
-                            @updatevalue="setPageTitle"
-                            prop-value=""
-                            required=1
-                        ></text-field>
-                        -->
 
                         <multidropdown
                             title="Template"
@@ -233,6 +224,7 @@
                             required=1
                             :fetch="true"
                             route="getPageTypes"
+                            setlabel="description"
                         ></multidropdown>
                     </div>
                 </div>
