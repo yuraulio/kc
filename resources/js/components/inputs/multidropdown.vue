@@ -69,6 +69,9 @@
             allowEmpty: {
                 default: true
             },
+            setlabel: {
+                default: null
+            },
         },
         data() {
             return {
@@ -169,6 +172,10 @@
             
             if (this.fetch) {
                 this.get();
+            }
+
+            if (this.setlabel) {
+                this.label = this.setlabel;
             }
         }
     }

@@ -1,12 +1,9 @@
 @php
-    //dd($dynamic_page_data);
-
-
     $data = $dynamic_page_data;
-    $sumStudentsCategories = $data['sumStudentsByCategories'];
+    $sumStudentsCategories = $data['sumStudentsByCategories'] ?? null;
 
-    $openlist = $data['openlist'];
-    $completedlist = $data['completedlist'];
+    $openlist = $data['openlist'] ?? null;
+    $completedlist = $data['completedlist'] ?? null;
 
     $diplomas = false;
     $certificates = false;
