@@ -29,14 +29,17 @@
                 "key": "hero_small",
                 "label": "Minified",
                 "value": false,
+                "main": true,
+                "simple_view": false,
                 "size": "col-lg-6"
             },
             {
                 "type": "checkbox",
                 "key": "hero_left",
-                "label": "Left half",
+                "label": "Wrap subtitle in two lines",
                 "value": false,
                 "main": true,
+                "simple_view": false,
                 "size": "col-lg-6"
             }
         ]
