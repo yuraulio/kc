@@ -586,12 +586,12 @@ class UserController extends Controller
                     continue;
                 }
 
-                $inst['name'] ='';// $instructors[$lesson['instructor_id']][0]['title'].' '.$instructors[$lesson['instructor_id']][0]['subtitle'];
-                $inst['media'] ='';// asset(get_image($instructors[$lesson['instructor_id']][0]['medias'], 'instructors-small'));
+                $inst['name'] = $instructors[$lesson['instructor_id']][0]['title'].' '.$instructors[$lesson['instructor_id']][0]['subtitle'];
+                $inst['media'] = asset(get_image($instructors[$lesson['instructor_id']][0]['medias'], 'instructors-small'));
 
                 $sum= 0;
                 $arr_lesson = array();
-                $topic = $lesson['topic'][0];
+                $topic = $lesson['topic']->first();
                 //$topic = $lesson->topic()->wherePivot('category_id',$category->id)->first();
 
                 if(!isset($topics[$topic->id])){
