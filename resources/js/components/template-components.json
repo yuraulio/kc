@@ -448,6 +448,7 @@
         "key": "horizontal_line_component",
         "tab": "Content",
         "mobile": true,
+        "simple_view": true,
         "inputs": []
     },
     "post_feature" : {

@@ -34,9 +34,7 @@
         display: inline-block;
     }
 
-    .component-tabs {
-        min-height: 300px;
-    }
+ 
     
     .column-navigation {
         min-width: unset;
