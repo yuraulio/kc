@@ -353,7 +353,7 @@
             {
                 "type": "text_editor",
                 "key": "blog_header_title",
-                "label": "Text",
+                "label": "",
                 "main": true
             }
         ]
