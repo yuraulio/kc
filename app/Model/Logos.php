@@ -13,7 +13,7 @@ class Logos extends Model
     use MediaTrait;
 
     protected $fillable = [
-        'name', 'summary','status','ext_url', 'type'
+        'name', 'summary', 'status','ext_url', 'type'
     ];
 
     public function medias()

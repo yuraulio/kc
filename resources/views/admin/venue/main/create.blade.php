@@ -56,7 +56,14 @@
                                 <div class="form-group{{ $errors->has('direction_description') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-address">{{ __('Direction description') }}</label>
                                     {{--<input type="text" name="direction_description" id="input-direction_description" class="form-control{{ $errors->has('direction_description') ? ' is-invalid' : '' }}" placeholder="{{ __('Direction description') }}" value="{{ old('direction_description', $venue->direction_description) }}" autofocus>--}}
-                                    <textarea name="direction_description" id="input-direction_description"  class="ckeditor form-control{{ $errors->has('direction_description') ? ' is-invalid' : '' }}" placeholder="{{ __('Direction description') }}" required autofocus>{{ old('direction_description') }}</textarea>
+                                    {{--<textarea name="direction_description" id="input-direction_description"  class="ckeditor form-control{{ $errors->has('direction_description') ? ' is-invalid' : '' }}" placeholder="{{ __('Direction description') }}" required autofocus>{{ old('direction_description') }}</textarea>--}}
+
+                                    <!-- anto's editor -->
+                                    <input class="hidden" name="direction_description" value="{{ old('direction_description') }}"/>
+                                    <?php $data = old('direction_description'); ?>
+                                    @include('event.editor.editor', ['keyinput' => "input-direction_description", 'data'=> "$data", 'inputname' => "'direction_description'" ])
+                                    <!-- anto's editor -->
+
                                     @include('alerts.feedback', ['field' => 'direction_description'])
                                 </div>
 
@@ -88,3 +95,7 @@
         @include('layouts.footers.auth')
     </div>
 @endsection
+@push('js')
+<script src="{{asset('js/app.js')}}"></script>
+<script src="{{asset('admin_assets/js/vendor.min.js')}}"></script>
+@endpush

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Model\Logos;
 use App\Model\Type;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\LogosRequest;
 
 class LogosController extends Controller
 {
@@ -24,7 +25,6 @@ class LogosController extends Controller
      */
     public function create(Request $request)
     {
-
         $data['logo'] = new Logos;
         $data['template'] = $request->template;
 
@@ -38,7 +38,7 @@ class LogosController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, Logos $model)
+    public function store(LogosRequest $request, Logos $model)
     {
         $input = $request->all();
         $model = $model->create($input);
@@ -58,7 +58,6 @@ class LogosController extends Controller
      */
     public function edit(Logos $logo)
     {
-
         $data['logo'] = $logo;
         $data['media'] = $logo->mediable;
         $data['template'] = $logo->type;
@@ -74,7 +73,7 @@ class LogosController extends Controller
      * @param  \App\Model\Logos  $pages
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Logos $logo)
+    public function update(LogosRequest $request, Logos $logo)
     {
         $logo->update($request->all());
 
@@ -96,7 +95,7 @@ class LogosController extends Controller
         return response()->json([
             'success' => true
         ]);
-        
+
     }
 
 }

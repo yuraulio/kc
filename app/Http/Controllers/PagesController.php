@@ -106,7 +106,7 @@ class PagesController extends Controller
      * @param  \App\Model\Pages  $pages
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Pages $page)
+    public function update(PagesRequest $request, Pages $page)
     {
         $page->update($request->all());
 

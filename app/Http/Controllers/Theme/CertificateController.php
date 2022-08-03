@@ -11,8 +11,6 @@ use ZipArchive;
 use File;
 use Imagick;
 use Illuminate\Support\Facades\Storage;
-// use Spatie\PdfToImage\Pdf as TEST;
-// use Org_Heigl\Ghostscript\Ghostscript;
 
 class CertificateController extends Controller
 {

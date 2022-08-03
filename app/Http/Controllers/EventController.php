@@ -562,7 +562,7 @@ class EventController extends Controller
         }
 
 
-        if($selectedFiles != null && $selectedFiles['selectedDropbox'] != null){
+        if($selectedFiles != null && isset($selectedFiles['selectedDropbox']) && $selectedFiles['selectedDropbox'] != null){
 
             $exist_dropbox = Dropbox::where('folder_name', $selectedFiles['selectedDropbox'])->first();
             if($exist_dropbox){
@@ -570,6 +570,8 @@ class EventController extends Controller
                 $event->dropbox()->sync([$exist_dropbox->id => ['selectedFolders' => json_encode($selectedFiles)]]);
             }
 
+        }else if($selectedFiles != null && isset($selectedFiles['detach']) && $selectedFiles['detach']){
+            $event->dropbox()->detach();
         }
 
         if($request->category_id != $request->oldCategory){

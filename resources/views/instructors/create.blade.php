@@ -39,13 +39,13 @@
                             <div class="pl-lg-4">
 
                                 <div class="form-group{{ $errors->has('status') ? ' has-danger' : '' }}">
-                                    
+
                                         <label class="custom-toggle custom-published">
                                             <input type="checkbox" name="status" id="input-status">
                                             <span class="custom-toggle-slider rounded-circle" data-label-off="unpublished" data-label-on="published"></span>
                                         </label>
                                         @include('alerts.feedback', ['field' => 'status'])
-                                    
+
                                 </div>
 
 
@@ -79,14 +79,26 @@
 
                                 <div class="form-group{{ $errors->has('summary') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-summary">{{ __('Summary') }}</label>
-                                    <textarea name="summary" id="input-summary"  class="ckeditor form-control{{ $errors->has('summary') ? ' is-invalid' : '' }}" placeholder="{{ __('Summary') }}"  required autofocus></textarea>
+                                    {{--<textarea name="summary" id="input-summary"  class="ckeditor form-control{{ $errors->has('summary') ? ' is-invalid' : '' }}" placeholder="{{ __('Summary') }}"  required autofocus></textarea>--}}
+
+                                    <!-- anto's editor -->
+                                    <input class="hidden" name="summary" value="{{ old('summary') }}"/>
+                                    <?php $data = old('summary')?>
+                                    @include('event.editor.editor', ['keyinput' => "input-summary", 'data'=> "$data", 'inputname' => "'summary'" ])
+                                    <!-- anto's editor -->
 
                                     @include('alerts.feedback', ['field' => 'summary'])
                                 </div>
 
                                 <div class="form-group{{ $errors->has('body') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-body">{{ __('Body') }}</label>
-                                    <textarea name="body" id="input-body"  class="ckeditor form-control{{ $errors->has('body') ? ' is-invalid' : '' }}" placeholder="{{ __('Body') }}"  required autofocus></textarea>
+                                    {{--<textarea name="body" id="input-body"  class="ckeditor form-control{{ $errors->has('body') ? ' is-invalid' : '' }}" placeholder="{{ __('Body') }}"  required autofocus></textarea>--}}
+
+                                    <!-- anto's editor -->
+                                    <input class="hidden" name="body" value="{{ old('body') }}"/>
+                                    <?php $data = old('body')?>
+                                    @include('event.editor.editor', ['keyinput' => "input-body", 'data'=> "$data", 'inputname' => "'body'" ])
+                                    <!-- anto's editor -->
 
                                     @include('alerts.feedback', ['field' => 'body'])
                                 </div>
@@ -131,3 +143,8 @@
         @include('layouts.footers.auth')
     </div>
 @endsection
+
+@push('js')
+<script src="{{asset('js/app.js')}}"></script>
+<script src="{{asset('admin_assets/js/vendor.min.js')}}"></script>
+@endpush

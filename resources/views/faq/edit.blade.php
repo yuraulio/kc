@@ -48,7 +48,13 @@
 
                                 <div class="form-group{{ $errors->has('answer') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-answer">{{ __('Answer') }}</label>
-                                    <textarea name="answer" id="input-answer" class="ckeditor form-control{{ $errors->has('answer') ? ' is-invalid' : '' }}" placeholder="{{ __('Faq') }}">{{ old('answer', $faq->answer) }}</textarea>
+                                    {{--<textarea name="answer" id="input-answer" class="ckeditor form-control{{ $errors->has('answer') ? ' is-invalid' : '' }}" placeholder="{{ __('Faq') }}">{{ old('answer', $faq->answer) }}</textarea>--}}
+
+                                    <!-- anto's editor -->
+                                    <input class="hidden" name="answer" value="{{ old('answer', $faq->answer) }}"/>
+                                    <?php $data = old('answer', $faq->answer); ?>
+                                    @include('event.editor.editor', ['keyinput' => "input-answer", 'data'=> "$data", 'inputname' => "'answer'" ])
+                                    <!-- anto's editor -->
 
                                     @include('alerts.feedback', ['field' => 'answer'])
                                 </div>
@@ -91,3 +97,8 @@
         @include('layouts.footers.auth')
     </div>
 @endsection
+
+@push('js')
+<script src="{{asset('js/app.js')}}"></script>
+<script src="{{asset('admin_assets/js/vendor.min.js')}}"></script>
+@endpush

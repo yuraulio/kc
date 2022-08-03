@@ -108,7 +108,13 @@
 
                                 <div class="form-group{{ $errors->has('testimonial') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-testimonial">{{ __('Testimonial') }}</label>
-                                    <textarea name="testimonial" id="input-testimonial" class="ckeditor form-control{{ $errors->has('testimonial') ? ' is-invalid' : '' }}"></textarea>
+                                    {{--<textarea name="testimonial" id="input-testimonial" class="ckeditor form-control{{ $errors->has('testimonial') ? ' is-invalid' : '' }}"></textarea>--}}
+
+                                    <!-- anto's editor -->
+                                    <input class="hidden" name="testimonial" value="{{ old('testimonial') }}"/>
+                                    <?php $data = old('testimonial'); ?>
+                                    @include('event.editor.editor', ['keyinput' => "input-testimonial", 'data'=> "$data", 'inputname' => "'testimonial'" ])
+                                    <!-- anto's editor -->
 
                                     @include('alerts.feedback', ['field' => 'testimonial'])
                                 </div>
@@ -152,6 +158,8 @@
 @endsection
 
 @push('js')
+<script src="{{asset('js/app.js')}}"></script>
+<script src="{{asset('admin_assets/js/vendor.min.js')}}"></script>
 
 <script>
 

@@ -72,7 +72,7 @@
                   <div class="card-body">
                      <h6 class="heading-small text-muted mb-4">{{ __('Page information') }}</h6>
                      <div class="pl-lg-4">
-                     
+
                         <div class="form-group{{ $errors->has('name') ? ' has-danger' : '' }}">
                            <label class="form-control-label" for="input-title">{{ __('Name') }}</label>
                            <input type="text" name="name" id="input-title" class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" placeholder="{{ __('Name') }}" value="{{ old('name',$page->name) }}"  required autofocus>
@@ -84,10 +84,15 @@
                            <input type="text" name="title" id="input-title" class="form-control{{ $errors->has('title') ? ' is-invalid' : '' }}" placeholder="{{ __('Title') }}" value="{{ old('title',$page->title) }}"  required autofocus>
                            @include('alerts.feedback', ['field' => 'title'])
                         </div>
-                        <div class="form-group{{ $errors->has('permissions') ? ' has-danger' : '' }}">
-                           <label class="form-control-label" for="input-permissions">{{ __('Page Editor') }}</label>
-                           <textarea name="content" id="input-content"  class="ckeditor form-control{{ $errors->has('content') ? ' is-invalid' : '' }}" placeholder="{{ __('Page editor') }}"  required autofocus>{{ old('content',$page->content) }}</textarea>
-                           @include('alerts.feedback', ['field' => 'permissions'])
+                        <div class="form-group{{ $errors->has('content') ? ' has-danger' : '' }}">
+                           <label class="form-control-label" for="input-content">{{ __('Page Editor') }}</label>
+                           {{--<textarea name="content" id="input-content"  class="ckeditor form-control{{ $errors->has('content') ? ' is-invalid' : '' }}" placeholder="{{ __('Page editor') }}"  required autofocus>{{ old('content',$page->content) }}</textarea>--}}
+                            <!-- anto's editor -->
+                            <input class="hidden" name="content" value="{{ old('content',$page->content) }}"/>
+                            <?php $data = $page->content?>
+                            @include('event.editor.editor', ['keyinput' => "input-content", 'data'=> "$data", 'inputname' => "'content'" ])
+                            <!-- anto's editor -->
+                           @include('alerts.feedback', ['field' => 'content'])
                         </div>
 
                      </div>
@@ -241,3 +246,9 @@
    @include('layouts.footers.auth')
 </div>
 @endsection
+
+
+@push('js')
+<script src="{{asset('js/app.js')}}"></script>
+<script src="{{asset('admin_assets/js/vendor.min.js')}}"></script>
+@endpush
