@@ -511,6 +511,8 @@ export default {
                     this.type_value = this.type_list[index];
                 }
 
+                this.setCategories();
+
                 this.slug_value = data.slug;
                 this.loader = false;
             } else {
