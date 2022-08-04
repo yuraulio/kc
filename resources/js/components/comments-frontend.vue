@@ -2,12 +2,12 @@
 
 <div  class="" id="maincommentscontainer">
 
-    <h2 >Comments</h2>
+    <h2 >{{ comments_title }}</h2>
 
     <template v-if="!loading">
 
         <div class="comment_block mb-3">
-            <template v-if="comments">
+            <template v-if="comments.length">
                 <template v-for="comment in comments">
                     <div class="single_comment">
                         <p class="single_comment_text">{{comment.comment}}</p>
@@ -24,13 +24,13 @@
             </template>
             <template v-else>
                 <div class="comment_block mt-4 mb-4">
-                    <div class="alert alert-info">No comments yet! Why don't you be the first?</div>
+                    <div class="alert alert-info">{{ comments_no_comments }}</div>
                 </div>
             </template>
         </div>
 
         <template v-if="comments.count > 500">
-            <p><em>Only the first 500 comments are shown.</em></p>
+            <p><em>{{ comments_limit }}</em></p>
         </template>
 
     </template>
@@ -41,18 +41,18 @@
 
     <template v-if="user_id">
         <div class="add_comment_area">
-            <h5 class="">Add a comment</h5>
+            <h5 class="">{{ comments_add_title }}</h5>
                 <div>
-                    <textarea v-model="message" maxlength="255" class="form-control" name="comment" required="" id="comment" placeholder="Write your comment here" rows="7"></textarea>
+                    <textarea v-model="message" maxlength="255" class="form-control" name="comment" required="" id="comment" :placeholder="comments_placeholder" rows="7"></textarea>
                 </div>
 
-                <button @click="saveComment()" type="submit" class="btn btn--md btn--secondary">Add Comment</button>
+                <button @click="saveComment()" type="submit" class="btn btn--md btn--secondary">{{ comments_button }}</button>
         </div>
     </template>
 
     <template v-else>
         <div class="comment_block mt-4 mb-4">
-            <div class="alert alert-info">You must be logged in to comment.</div>
+            <div class="alert alert-info">{{ comments_not_logged_in }}</div>
         </div>
     </template>
 
@@ -65,6 +65,27 @@
         props: {
             page_id: null,
             user_id: null,
+            comments_title: {
+                default: ""
+            },
+            comments_no_comments: {
+                default: ""
+            },
+            comments_limit: {
+                default: ""
+            },
+            comments_add_title: {
+                default: ""
+            },
+            comments_button: {
+                default: ""
+            },
+            comments_placeholder: {
+                default: ""
+            },
+            comments_not_logged_in: {
+                default: ""
+            },
         },
         data() {
             return {

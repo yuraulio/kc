@@ -23,7 +23,6 @@ use Illuminate\Support\Facades\Log;
 
 class CommentsController extends Controller
 {
-
     /**
      * Get comments
      *
@@ -103,7 +102,7 @@ class CommentsController extends Controller
 
     public function getPageComments($page_id)
     {
-        $comments = Comment::where('page_id', $page_id)->with(["page", "user"])->orderBy("created_at", "desc")->limit(500)->get();
+        $comments = Comment::with(["page", "user"])->where('page_id', $page_id)->orderBy("created_at", "desc")->limit(500)->get();
         return CommentResource::collection($comments);
     }
 
@@ -111,7 +110,7 @@ class CommentsController extends Controller
     {
         try {
             $ids = $request->selected;
-        
+
             // authorize action
             $comments = Comment::findOrFail($ids);
             foreach ($comments as $comment) {

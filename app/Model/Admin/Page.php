@@ -22,7 +22,7 @@ class Page extends Model implements Auditable
     protected $table = 'cms_pages';
     public $asYouType = true;
 
-    const VERSIONS = [
+    public const VERSIONS = [
         [
             "instructors-testimonials",
             470,
@@ -114,7 +114,7 @@ class Page extends Model implements Auditable
         return $category;
     }
 
-    public function categories() 
+    public function categories()
     {
         return $this->belongsToMany(Category::class, 'cms_link_pages_categories', 'page_id', 'category_id')->whereNull("parent_id");
     }

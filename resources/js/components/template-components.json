@@ -29,14 +29,17 @@
                 "key": "hero_small",
                 "label": "Minified",
                 "value": false,
+                "main": true,
+                "simple_view": false,
                 "size": "col-lg-6"
             },
             {
                 "type": "checkbox",
                 "key": "hero_left",
-                "label": "Left half",
+                "label": "Wrap subtitle in two lines",
                 "value": false,
                 "main": true,
+                "simple_view": false,
                 "size": "col-lg-6"
             }
         ]
@@ -169,7 +172,7 @@
             {
                 "type": "image",
                 "key": "meta_image",
-                "label": "Meta image",
+                "label": "Shareable image",
                 "main": true
             },
             {
@@ -196,6 +199,25 @@
             }
         ]
     },
+    "schema" : {
+        "version": 1,
+        "title": "Schema",
+        "icon": "dripicons-rocket",
+        "key": "schema_component",
+        "disable_color": true,
+        "tab": "Meta",
+        "simple_view": true,
+        "inputs": [
+            {
+                "type": "textarea",
+                "key": "schema_schema",
+                "label": "Meta Schema",
+                "size": "col-lg-12",
+                "main": true,
+                "simple_view": false
+            }
+        ]
+    },
     "comments" : {
         "version": 4,
         "width": "content",
@@ -204,9 +226,58 @@
         "one_column": true,
         "icon": "dripicons-align-justify",
         "tab": "Content",
-        "simple_view": false,
         "mobile": true,
+        "simple_view": true,
         "inputs": [
+            {
+                "type": "text",
+                "key": "comments_title",
+                "label": "Title",
+                "main": true,
+                "value": "Comments"
+            },
+            {
+                "type": "text",
+                "key": "comments_no_comments",
+                "label": "No comments text",
+                "main": true,
+                "value": "No comments yet! Why don't you be the first?"
+            },
+            {
+                "type": "text",
+                "key": "comments_limit",
+                "label": "Comments limit text",
+                "main": true,
+                "value": "Only the first 500 comments are shown."
+            },
+            {
+                "type": "text",
+                "key": "comments_add_title",
+                "label": "Add comment title",
+                "main": true,
+                "value": "Add a comment"
+            },
+            {
+                "type": "text",
+                "key": "comments_button",
+                "label": "Add comment button text",
+                "main": true,
+                "value": "Add Comment"
+            },
+            {
+                "type": "text",
+                "key": "comments_placeholder",
+                "label": "Comment placeholder",
+                "main": true,
+                "value": "Write your comment here"
+            },
+            {
+                "type": "text",
+                "key": "comments_not_logged_in",
+                "label": "Not logged in message",
+                "main": true,
+                "value": "You must be logged in to comment."
+            }
         ]
     },
     "social_bar" : {
@@ -219,16 +290,6 @@
         "simple_view": false,
         "mobile": true,
         "inputs": [
-            {
-                "type": "text",
-                "key": "social_title",
-                "label": "Title"
-            },
-            {
-                "type": "text",
-                "key": "social_summary",
-                "label": "Summary"
-            }
         ]
     },
     "gallery" : {
@@ -247,6 +308,7 @@
                 "key": "gallery_title",
                 "label": "Title",
                 "size": "col-lg-12",
+                "simple_view": false,
                 "dynamic": true
 
             },
@@ -259,8 +321,9 @@
             {
                 "type": "multidropdown",
                 "key": "galery_type",
-                "label": "Gallery display",
+                "label": "Display gallery as",
                 "route": "getGaleryDisplayOptions",
+                "simple_view": false,
                 "value": {
                     "id": 1,
                     "title": "Grid"
@@ -270,11 +333,13 @@
             {
                 "type": "text",
                 "key": "gallery_link",
+                "simple_view": false,
                 "label": "Link"
             },
             {
                 "type": "text",
                 "key": "gallery_link_text",
+                "simple_view": false,
                 "label": "Link text"
             }
         ]
@@ -292,7 +357,7 @@
             {
                 "type": "text_editor",
                 "key": "blog_header_title",
-                "label": "Text",
+                "label": "",
                 "main": true
             }
         ]
@@ -312,20 +377,26 @@
                 "type": "number",
                 "key": "youtube_width",
                 "label": "Video width (px)",
+                "simple_view": false,
+                "main": true,
                 "size": "col-lg-6"
             },
             {
                 "type": "checkbox",
                 "key": "youtube_full_width",
                 "label": "Fit video in content",
+                "simple_view": false,
                 "value": true,
+                "main": true,
                 "size": "col-lg-6"
             },
             {
                 "type": "number",
                 "key": "youtube_height",
                 "label": "Video height (px)",
+                "simple_view": false,
                 "size": "col-lg-6",
+                "main": true,
                 "value": 600
             },
             {
@@ -344,7 +415,7 @@
         "icon": "dripicons-code",
         "key": "html_component",
         "tab": "Content",
-        "simple_view": false,
+        "simple_view": true,
         "mobile": true,
         "inputs": [
             {
@@ -415,6 +486,7 @@
         "icon": "dripicons-wrong",
         "key": "empty_component",
         "tab": "Content",
+        "simple_view": true,
         "mobile": true,
         "inputs": []
     },
@@ -426,6 +498,7 @@
         "key": "horizontal_line_component",
         "tab": "Content",
         "mobile": true,
+        "simple_view": true,
         "inputs": []
     },
     "post_feature" : {
@@ -608,8 +681,8 @@
         "key": "tabs_component",
         "tab": "Content",
         "width": "full",
-        "simple_view": false,
         "mobile": true,
+        "simple_view": true,
         "inputs": [
             {
                 "type": "tabs",
@@ -768,7 +841,7 @@
         "key": "blog_list_component",
         "tab": "Content",
         "width": "content",
-        "simple_view": false,
+        "simple_view": true,
         "mobile": true,
         "inputs": [
             {
@@ -808,7 +881,7 @@
         "key": "instructors_list_component",
         "tab": "Content",
         "width": "content",
-        "simple_view": false,
+        "simple_view": true,
         "mobile": true,
         "inputs": [
             {
@@ -831,7 +904,7 @@
         "key": "events_list_component",
         "tab": "Content",
         "width": "content",
-        "simple_view": false,
+        "simple_view": true,
         "mobile": true,
         "inputs": [
             {
@@ -854,7 +927,7 @@
         "key": "city_list_component",
         "tab": "Content",
         "width": "content",
-        "simple_view": false,
+        "simple_view": true,
         "mobile": true,
         "inputs": [
         ]
@@ -995,7 +1068,7 @@
         "key": "terms_conditions_component",
         "tab": "Content",
         "width": "content",
-        "simple_view": false,
+        "simple_view": true,
         "mobile": true,
         "inputs": [
             {
@@ -1026,7 +1099,7 @@
         "key": "knowledge_list_component",
         "tab": "Content",
         "width": "content",
-        "simple_view": false,
+        "simple_view": true,
         "mobile": true,
         "inputs": [
         ]
