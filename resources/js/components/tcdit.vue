@@ -34,16 +34,16 @@
                                     <i class="dripicons-trash cursor-pointer" title="Delete tab"></i>
                                 </div>
                                 <div @click="tab_open_edit.push(tab_item)" class="d-inline-block float-end ms-1">
-                                    <i class="dripicons-document-edit"></i>
+                                    <i class="dripicons-document-edit" title="Rename tab"></i>
                                 </div>
                             </template>
                             <template v-else>
                                 <input style="height: 21px;" type="text" :value="tab_item" :ref="tab_item">
                                 <div @click="tab_open_edit.splice(tab_open_edit.indexOf(tab_item), 1)" class="d-inline-block float-end ms-1">
-                                    <i class="dripicons-trash mt-1 cursor-pointer" title="Delete tab"></i>
+                                    <i class="dripicons-cross mt-1 cursor-pointer" title="Cancel tab rename"></i>
                                 </div>
                                 <div @click="renameTab(tab_item)" class="d-inline-block float-end ms-1">
-                                    <i class="dripicons-checkmark"></i>
+                                    <i class="dripicons-checkmark" title="Save new tab name"></i>
                                 </div>
                             </template>
                         </a>
@@ -321,16 +321,16 @@
                                     <i class="dripicons-trash" title="Delete tab"></i>
                                 </div>
                                 <div @click="tab_open_edit.push(tab_item)" class="d-inline-block float-end">
-                                    <i class="dripicons-document-edit"></i>
+                                    <i class="dripicons-document-edit" title="Rename tab"></i>
                                 </div>
                             </template>
                             <template v-else>
                                 <input style="height: 21px;" type="text" :value="tab_item" :ref="tab_item">
                                 <div @click="tab_open_edit.splice(tab_open_edit.indexOf(tab_item), 1)" class="d-inline-block float-end ms-1">
-                                    <i class="dripicons-trash mt-1" title="Delete tab"></i>
+                                    <i class="dripicons-cross mt-1" title="Cancel tab rename"></i>
                                 </div>
                                 <div @click="renameTab(tab_item)" class="d-inline-block float-end">
-                                    <i class="dripicons-checkmark"></i>
+                                    <i class="dripicons-checkmark" title="Save new tab name"></i>
                                 </div>
                             </template>
                         </a>

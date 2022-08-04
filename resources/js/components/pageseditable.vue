@@ -6,7 +6,7 @@
                 <h4 v-if="title_value" class="page-title d-inline-block">Edit page</h4>
                 <h4 v-else class="page-title d-inline-block">New page</h4>
 
-                <button :disabled="loading" @click="changeMode()" type="button" class="btn btn-soft-info waves-effect waves-light float-end">Simple Mode</button>
+                <button :disabled="loading" @click="changeMode()" type="button" class="btn btn-soft-info waves-effect waves-light float-end">Page</button>
                 <button v-if="type != 'new'" @click="preview()" class="btn btn-block btn-soft-warning waves-effect waves-light me-2 float-end">Live preview</button>
                 <!--
                 <button type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions" :disabled="!template_value" @click="rearange()" class="btn btn-block btn-soft-info waves-effect waves-light me-2 float-end">Pseudo preview</button>
