@@ -744,7 +744,7 @@ class Admin extends Authenticatable implements Auditable
                 }
                 if (!isset($videos[$vimeo_id])) {
                     $change+=1;
-                    $videos[$vimeo_id] = ['seen' => 0, 'tab' =>$tab.$vimeo_id, 'lesson' => $lesson['id'], 'stop_time' => 0,
+                    $videos[$vimeo_id] = ['seen' => 0, 'tab' =>$tab.$vimeo_id, 'lesson_id' => $lesson['id'], 'stop_time' => 0, 'total_seen' => 0,
                                                'percentMinutes' => 0];
                     $notes[$vimeo_id] = '';
                 }
