@@ -1162,6 +1162,13 @@
     <script>
        $(document).on('shown.bs.modal', '#editModal',function(e) {
            //e.preventDefault()
+           let elem = document.getElementsByClassName('tox-editor-header');
+           elem.forEach(function(element, index){
+                elem[index].style.removeProperty('position')
+                elem[index].style.removeProperty('left')
+                elem[index].style.removeProperty('top')
+                elem[index].style.removeProperty('width')
+            })
 
 
            var link  = e.relatedTarget,

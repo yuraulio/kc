@@ -1348,7 +1348,7 @@
 
 
 
-                                            <div class="form-group col-12 course-certification-visible-wrapper {{ ((isset($info['certificate']['messages']['success']) && ($info['certificate']['messages']['success'] != null) || (isset($info['certificate']['type']) && $info['certificate']['type'] != null))) ? '' : 'd-none' }}">
+                                            <div class="form-group col-12 course-certification-visible-wrapper {{ isset($info['certificate']['has_certificate']) && $info['certificate']['has_certificate'] ? '' : 'd-none'  }}">
                                                 <div class="row">
                                                     <div class="col-sm-12 col-md-6 form-group{{ $errors->has('fb_') ? ' has-danger' : '' }}">
                                                         <label class="form-control-label" for="input-hours">{{ __('Certificate Title') }}</label>
@@ -1356,7 +1356,7 @@
                                                         {{--<textarea type="text" name="course[{{'certificate'}}][{{'success_text'}}]" id="input-certificate_title" class="ckeditor form-control" placeholder="{{ __('alphanumeric text ') }}" autofocus>{{ old('certificate_title', (isset($info['certificate']['messages']['success']) && $info['certificate']['messages']['success'] != null) ? $info['certificate']['messages']['success'] : '') }}</textarea>--}}
 
                                                         <!-- anto's editor -->
-                                                        <input class="hidden" name="course[{{'certificate'}}][{{'success_text'}}]" value="{{ old('certificate_title', (isset($info['certificate']['messages']['success']) && $info['certificate']['messages']['success'] != null) ? $info['certificate']['messages']['success'] : '') }}"/>
+                                                        <input class="hidden" id="input-certificate_title_hidden" name="course[{{'certificate'}}][{{'success_text'}}]" value="{{ old('certificate_title', (isset($info['certificate']['messages']['success']) && $info['certificate']['messages']['success'] != null) ? $info['certificate']['messages']['success'] : '') }}"/>
                                                         <?php $data = isset($info['certificate']['messages']['success']) && $info['certificate']['messages']['success'] != null ? $info['certificate']['messages']['success'] : '' ?>
                                                         @include('event.editor.editor', ['keyinput' => "input-certificate_title", 'data'=> "$data", 'inputname' => "'course[certificate][success_text]'" ])
                                                          <!-- anto's editor -->
@@ -1371,7 +1371,7 @@
                                                         {{--<textarea type="text" name="course[{{'certificate'}}][{{'failure_text'}}]" id="input-certificate_text_failure" class="form-control ckeditor" placeholder="{{ __('alphanumeric text ') }}"  autofocus>{{ old('certificate_failure', (isset($info['certificate']['messages']['failure']) && $info['certificate']['messages']['failure'] != null) ? $info['certificate']['messages']['failure'] : '') }}</textarea>--}}
 
                                                         <!-- anto's editor -->
-                                                        <input class="hidden" name="course[{{'certificate'}}][{{'failure_text'}}]" value="{{ old('certificate_failure', (isset($info['certificate']['messages']['failure']) && $info['certificate']['messages']['failure'] != null) ? $info['certificate']['messages']['failure'] : '') }}"/>
+                                                        <input class="hidden" id="input-certificate_text_failure_hidden" name="course[{{'certificate'}}][{{'failure_text'}}]" value="{{ old('certificate_failure', (isset($info['certificate']['messages']['failure']) && $info['certificate']['messages']['failure'] != null) ? $info['certificate']['messages']['failure'] : '') }}"/>
                                                         <?php $data = isset($info['certificate']['messages']['failure']) && $info['certificate']['messages']['failure'] != null ? $info['certificate']['messages']['failure'] : '' ?>
                                                         @include('event.editor.editor', ['keyinput' => "input-certificate_text_failure", 'data'=> "$data", 'inputname' => "'course[certificate][failure_text]'" ])
                                                         <!-- anto's editor -->
@@ -2215,7 +2215,6 @@
     $(() => {
 
 
-
         treeData().then(function () {
             treeFiles()
             parseIdsForSelectFiles()
@@ -2421,15 +2420,8 @@
 
         }else{
             $('.course-certification-visible-wrapper').addClass('d-none');
-
-            //$('#input-certificate_title').val("")
-
-            //CKEDITOR.instances['input-certificate_title'].setData('')
-            //CKEDITOR.instances['input-certificate_text_failure'].setData('')
-            $('#input-certificate_title').val("")
-            $('#input-certificate_text_failure').val("")
-            $('#input-certificate_title').text("")
-            $('#input-certificate_text_failure').text("")
+            tinymce.get("input-certificate_title").setContent("")
+            tinymce.get("input-certificate_text_failure").setContent("")
 
             $('#input-certificate_type').val('')
 
@@ -2441,6 +2433,17 @@
 
 
         if(status){
+
+            let elem = document.getElementsByClassName('tox-editor-header');
+
+            elem.forEach(function(element, index){
+                elem[index].style.removeProperty('position')
+                elem[index].style.removeProperty('left')
+                elem[index].style.removeProperty('top')
+                elem[index].style.removeProperty('width')
+            })
+
+
             $('.course-certification-visible-wrapper').removeClass('d-none');
 
 
@@ -2448,9 +2451,6 @@
             if(eventInfos !== undefined){
 
                 $('#input-certificate_title').val(eventInfos.course_certification_name_success)
-                //CKEDITOR.instances['input-certificate_title'].setData(eventInfos.course_certification_name_success)
-
-                //CKEDITOR.instances['input-certificate_text_failure'].setData(eventInfos.course_certification_name_failure)
                 $('#input-certificate_text_failure').val(eventInfos.course_certification_name_failure)
             }
 
@@ -2459,14 +2459,11 @@
         }else{
             $('.course-certification-visible-wrapper').addClass('d-none');
 
-            //$('#input-certificate_title').val("")
+            $("#input-certificate_title_hidden").val("")
+            $("#input-certificate_text_failure_hidden").val("")
 
-            //CKEDITOR.instances['input-certificate_title'].setData('')
-            //CKEDITOR.instances['input-certificate_text_failure'].setData('')
-            $('#input-certificate_title').val("")
-            $('#input-certificate_text_failure').val("")
-            $('#input-certificate_title').text("")
-            $('#input-certificate_text_failure').text("")
+            tinymce.get("input-certificate_title").setContent("")
+            tinymce.get("input-certificate_text_failure").setContent("")
 
             $('#input-certificate_type').val('')
 

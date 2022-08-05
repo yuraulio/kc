@@ -134,7 +134,7 @@
                                 <div class="container">
                                     <div class="alert-wrapper success-alert">
                                         <div class="alert-inner">
-                                            <p id="message-success"></p>                                   
+                                            <p id="message-success"></p>
                                         </div>
                                     </div>
                                 </div>
@@ -142,11 +142,11 @@
 
                             <label>Email <span class="required">(*)</span></label>
                             <div class="input-wrapper input-wrapper--text input-wrapper--email">
-                                <div class="input-safe-wrapper">	
-                                    <input type="email"  placeholder="" name="email" id="email-forgot" class="required"> 
+                                <div class="input-safe-wrapper">
+                                    <input type="email"  placeholder="" name="email" id="email-forgot" class="required">
                                 </div>
                             </div>
-                            
+
                             <button type="button" class="btn btn--lg btn--secondary change-password"  value="Change">Change</button>
                         </form>
                     </div>
@@ -164,7 +164,7 @@
             @else
                 @include('new_web.layouts.footer')
             @endif
-            
+
             <a href="#" class="go-top-btn"><i class="icon-up-open"></i></a>
         </div>
 
@@ -189,7 +189,7 @@
                 $('#error-mail').hide()
                 $('#success-mail').hide()
                 var email = document.getElementById('email-forgot').value
-                
+
                 if(email!=''){
                     $.ajax({ url: '/myaccount/reset', type: "post",
                         data: {"email": email},
@@ -201,7 +201,7 @@
                                 $('#error-mail').show()
                                 var p = document.getElementById('message-error').textContent = data['message'];
                             }
-                        }, 
+                        },
                     });
                 }
             });
@@ -211,12 +211,12 @@
         <script>
             $(document).on('click', '#forgot-pass', function(e){
                 $('#login-popup').hide()
-                $('#forgot-pass-input').show()    
+                $('#forgot-pass-input').show()
             })
 
             $(document).on('click', '.close-btn', function(e){
                 $('#login-popup').show()
-                $('#forgot-pass-input').hide()    
+                $('#forgot-pass-input').hide()
             })
         </script>
 
@@ -233,13 +233,13 @@
         @if(isset($tigran) && env('APP_DEBUG'))
             <script>
                 $(document).ready(function(){
-                        @foreach($tigran as $key => $ti) 
+                        @foreach($tigran as $key => $ti)
                             dataLayer.push({"{{$key}}": $.parseHTML("{{$ti}}")[0].data})
                         @endforeach
                 });
             </script>
         @endif
-        
+
         <script>
             let url = window.location.href.split('#')
             if(url[1]){

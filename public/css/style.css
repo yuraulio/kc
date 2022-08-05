@@ -154,6 +154,14 @@
     height: 350px;
 }
 
+.dx-checkbox.dx-state-hover .dx-checkbox-icon {
+    border: 1px solid #324cdd
+}
+
+.dx-checkbox.dx-state-focused .dx-checkbox-icon {
+    border: 1px solid #324cdd;
+}
+
 .dx-treelist-rowsview .dx-selection.dx-row:not(.dx-row-focused) > td,
 .dx-treelist-rowsview .dx-selection.dx-row:not(.dx-row-focused) > tr > td,
 .dx-treelist-rowsview .dx-selection.dx-row:not(.dx-row-focused):hover > td,
@@ -502,7 +510,6 @@ li.select2-results__option:empty {
     right: auto;
     left: 7px;
 }
-
 
 
 .logo {

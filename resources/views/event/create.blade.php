@@ -865,7 +865,7 @@
 
                                             {{--<textarea type="text" name="course[{{'certificate'}}][{{'success_text'}}]" id="input-certificate_title" class="ckeditor form-control" autofocus>{{ old('certificate_title') }}</textarea>--}}
                                             <!-- anto's editor -->
-                                            <input class="hidden" name="course[{{'certificate'}}][{{'success_text'}}]" value="{{ old('certificate_title') }}"/>
+                                            <input class="hidden" id="input-certificate_title_hidden" name="course[{{'certificate'}}][{{'success_text'}}]" value="{{ old('certificate_title') }}"/>
                                             <?php $data =  '' ?>
                                             @include('event.editor.editor', ['keyinput' => "input-certificate_title", 'data'=> "$data", 'inputname' => "'course[certificate][success_text]'" ])
                                             <!-- anto's editor -->
@@ -877,7 +877,7 @@
                                         <div class="col-sm-12 col-md-6 form-group">
                                             <label class="form-control-label" for="input-hours">{{ __('Title of certification (in case of exams failure)') }}</label>
 
-                                            {{--<textarea type="text" name="course[{{'certificate'}}][{{'failure_text'}}]" id="input-certificate_text_failure" class="form-control ckeditor"  autofocus>{{old('certificate_failure')}}</textarea>--}}
+                                            {{--<textarea type="text" id="input-certificate_text_failure_hidden" name="course[{{'certificate'}}][{{'failure_text'}}]" id="input-certificate_text_failure" class="form-control ckeditor"  autofocus>{{old('certificate_failure')}}</textarea>--}}
 
                                             <!-- anto's editor -->
                                             <input class="hidden" name="course[{{'certificate'}}][{{'failure_text'}}]" value="{{ old('certificate_failure') }}"/>
@@ -1528,33 +1528,29 @@
 
 
         if(status){
+            let elem = document.getElementsByClassName('tox-editor-header');
+
+            elem.forEach(function(element, index){
+                elem[index].style.removeProperty('position')
+                elem[index].style.removeProperty('left')
+                elem[index].style.removeProperty('top')
+                elem[index].style.removeProperty('width')
+            })
             $('.course-certification-visible-wrapper').removeClass('d-none');
-
-
-
-            $('#input-certificate_title').val('')
-            CKEDITOR.instances['input-certificate_title'].setData('')
-
-            CKEDITOR.instances['input-certificate_text_failure'].setData('')
-            $('#input-certificate_text_failure').val('')
-
 
             $('#input-certificate_type').val('')
         }else{
             $('.course-certification-visible-wrapper').addClass('d-none');
 
-            //$('#input-certificate_title').val("")
-
-            CKEDITOR.instances['input-certificate_title'].setData('')
-            CKEDITOR.instances['input-certificate_text_failure'].setData('')
-            $('#input-certificate_title').val("")
-            $('#input-certificate_text_failure').val("")
-            $('#input-certificate_title').text("")
-            $('#input-certificate_text_failure').text("")
-
             $('#input-certificate_type').val('')
 
+            tinymce.get("input-certificate_title").setContent("")
+            tinymce.get("input-certificate_text_failure").setContent("")
+            $("#input-certificate_title_hidden").val("")
+            $("#input-certificate_text_failure_hidden").val("")
+
         }
+
     });
 
     $('#award-toggle').change(function() {
