@@ -225,8 +225,8 @@ export default {
     },
     methods: {
         updatedmedia($event, ref) {
-            $event.siblings = null;
-            $event.subfiles = null;
+            // $event.siblings = null;
+            // $event.subfiles = null;
             this.$emit('inputed', { 'data': $event, 'key': this.keyput})
             this.$refs[ref+'btn'].click()
             this.$set(this.loadstart, ref,  false);
@@ -283,7 +283,8 @@ export default {
             this.value.splice(index, 1);
         },
         removeImage() {
-            this.value = null;
+            this.startingImage = null;
+            this.editorData = null;
         }
     },
     watch: {
