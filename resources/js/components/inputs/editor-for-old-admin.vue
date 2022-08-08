@@ -156,6 +156,7 @@ export default {
     mounted() {
         if (this.value) {
             this.editorData = this.editorData;
+            $('input[name='+ this.inputname +']').val(this.editorData);
         }
     },
     beforeDestroy() {

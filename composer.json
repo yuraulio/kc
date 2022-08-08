@@ -36,7 +36,6 @@
         "propaganistas/laravel-phone": "^4.3",
         "sentry/sentry-laravel": "^2.10",
         "spatie/flysystem-dropbox": "^1.0",
-        "spatie/pdf-to-image": "^2.2",
         "stripe/stripe-php": "^7.87",
         "teamtnt/laravel-scout-tntsearch-driver": "^11.5",
         "tinify/tinify": "^1.5",

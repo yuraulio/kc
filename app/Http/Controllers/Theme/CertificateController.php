@@ -9,7 +9,7 @@ use PDF;
 use App\Model\Event;
 use ZipArchive;
 use File;
-use Imagick;
+//use Imagick;
 use Illuminate\Support\Facades\Storage;
 
 class CertificateController extends Controller
@@ -126,22 +126,25 @@ class CertificateController extends Controller
     //$pdf->loadView('admin.certificates.'.$certificate->template,compact('certificate'))->setPaper($customPaper);
 }
 
-    public function getCertificateImage($certificate){
-
+    /*public function getCertificateImage($certificate){
+       
         $timestamp = strtotime("now");
         $data = $this->loadCertificateData($certificate);
         $fn = $data['certificate']->firstname . '-' . $data['certificate']->lastname.'-'. $timestamp .'.pdf';
+       
         $content = $data['pdf']->download()->getOriginalContent();
-
+      //dd($content);
         Storage::disk('cert')->put($fn,$content);
-
+       
         $filepath = public_path('cert\\'.$fn);
         $newFile = 'cert\\'.base64_encode($data['certificate']->firstname . '-' . $data['certificate']->lastname.'-'.$timestamp) .'.jpg';
         $saveImagePath = public_path($newFile);
-
+        
         $imagick = new Imagick();
         $imagick->setResolution(300, 300);
+        dd($filepath);
         $imagick->readImage($filepath);
+       
         $imagick->setImageFormat('jpg');
         $imagick->writeImage($saveImagePath);
         $imagick->clear();
@@ -150,8 +153,26 @@ class CertificateController extends Controller
         unlink('cert\\'.$fn);
 
         return $newFile;
-    }
+    }*/
 
+    /*public function getCertificateImage($certificate){
+
+      $timestamp = strtotime("now");
+      $data = $this->loadCertificateData($certificate);
+      $fn = $data['certificate']->firstname . '-' . $data['certificate']->lastname.'-'. $timestamp .'.pdf';
+     
+      $content = $data['pdf']->download()->getOriginalContent();
+    //dd($content);
+      Storage::disk('cert')->put($fn,$content);
+
+      $filepath = public_path('cert\\'.$fn);
+      //$newFile = 'cert\\'.base64_encode($data['certificate']->firstname . '-' . $data['certificate']->lastname.'-'.$timestamp) .'.jpg';
+      //$saveImagePath = public_path($newFile);
+
+
+      //$pdf = new \Spatie\PdfToImage\Pdf($filepath);
+      //$pdf->saveImage('cert\\');
+    }*/
 
   public function getCertificate($certificate){
 

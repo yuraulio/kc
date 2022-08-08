@@ -1112,11 +1112,11 @@ class StudentController extends Controller
 
         $has_access = false;
         $event = Event::where('title', $course)->with('slugable','category')->first();
-
-        if($user->instructor->first()){
+        if($instructor = $user->instructor->first()){
             $data['instructor_topics'] = true;
-            $eventt = $user->instructor->first()->event()->wherePivot('instructor_id', $user->instructor->first()->id)->wherePivot('event_id', $event['id'])->first();
-
+            
+            $eventt = $instructor->elearningEvents()->wherePivot('instructor_id', $instructor->id)->wherePivot('event_id', $event['id'])->first();
+        
             if(!$eventt){
                 $data['instructor_topics'] = false;
                 $eventt = $user->events()->wherePivot('event_id', $event['id'])->first() ? $user->events()->wherePivot('event_id', $event['id'])->first() :
@@ -1143,7 +1143,7 @@ class StudentController extends Controller
 
         $statistic =  ($statistic = $user->statistic()->wherePivot('event_id',$event['id'])->first()) ?
                             $statistic->toArray() : ['pivot' => [], 'videos' => ''];
-
+       
         //$this->updateUserStatistic($event,$statistic['pivot'],$user);
         $statistic = $user->updateUserStatistic($event,$statistic['pivot']);
         $data['lastVideoSeen'] = $statistic['pivot']['lastVideoSeen'];

@@ -74,9 +74,9 @@
                 $hasStudentColumn = false;
             ?>
             <div class="row">
-                @if($students_visible != null && $students_visible['landing'] && $sumStudents != null && isset($info['course_students_number']) && $sumStudents > (int)$info['course_students_number'])
+                @if($students_visible != null && $students_visible['landing'] && isset($info['course_students_number']) && $info['course_students_text'])
                 <div class="col-12 col-md-auto students">
-                    {{ $sumStudents }} {{ ((isset($info['course_students_text']) && $info['course_students_text'] != null) ? $info['course_students_text'] : '') }}
+                    {{ $sumStudents + (int)$info['course_students_number'] }} {{ ((isset($info['course_students_text']) && $info['course_students_text'] != null) ? $info['course_students_text'] : '') }}
                 </div>
                 <?php $hasStudentColumn = true; ?>
                 @endif
