@@ -7,6 +7,7 @@
     </div>
 
     <div v-if="type == 'image'" :key="keyput + 'media'" class="">
+        <label v-if="label && label == 'Shareable image'" :for="keyput" class="form-label">{{ label }}</label>
         <div
         :ref="keyput + 'media'"
         class="offcanvas offcanvas-start"
