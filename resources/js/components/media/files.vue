@@ -17,7 +17,7 @@
                     </thead>
                     <tbody>
                         <tr v-for="file in mediaFiles" :key="file.id">
-                            <td @click="openFile(file)" style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; cursor: pointer;">
+                            <td @click.prevent="editFile(file)" style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; cursor: pointer;">
                                 <span v-if="file.extension.toLowerCase() == 'pdf'" class="bg-light text-secondary rounded">
                                     <i class="mdi mdi-file-pdf-outline font-28" style="font-size: 28px !important;"></i>
                                 </span>
