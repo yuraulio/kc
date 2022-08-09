@@ -1,3 +1,15 @@
+a.cert-post:not(.btn):visited{
+    color: white;
+}
+
+a.cert-post:not(.btn):hover{
+    color: white;
+}
+
+a.cert-post{
+    color: white;
+}
+
 .login-popup-wrapper-subscription {
     transition: all .3s ease;
     opacity: 0;

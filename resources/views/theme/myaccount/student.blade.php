@@ -1139,6 +1139,9 @@
                                           <a class="facebook-post-cert" data-certid="{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" title="Add this certification to your Facebook profile" href="javascript:void(0)">
                                                 <img class="linkdein-image-add" src="{{cdn('theme/assets/images/icons/social/events/Facebook.svg')}}" alt="Facebook Add to Profile button">
                                           </a>
+                                          <a class="twitter-post-cert" data-certid="{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" title="Add this certification to your Facebook profile" href="javascript:void(0)">
+                                                <img class="linkdein-image-add" src="{{cdn('theme/assets/images/icons/social/events/Twitter.svg')}}" alt="Twitter Add to Profile button">
+                                          </a>
                                           @endif
 
                                         </div>
@@ -1368,13 +1371,16 @@
                                           ?>
                                        <div class="right">
                                           <a  class="btn btn--secondary btn--md" target="_blank" href="/mycertificate/{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" >DOWNLOAD </a>
-                                          <a class="linkedin-post" title="Add this certification to your LinkedIn profile" target="_blank" href="https://www.linkedin.com/profile/add?startTask={{urlencode(strip_tags($certificate->certificate_title))}}&name={{urlencode(strip_tags($certificate->certificate_title))}}&organizationId=3152129&issueYear={{date('Y',$certificate->create_date)}}
+                                          <a class="linkedin-post cert-post"  target="_blank" href="https://www.linkedin.com/profile/add?startTask={{urlencode(strip_tags($certificate->certificate_title))}}&name={{urlencode(strip_tags($certificate->certificate_title))}}&organizationId=3152129&issueYear={{date('Y',$certificate->create_date)}}
                                                 &issueMonth={{date('m',$certificate->create_date)}}&expirationYear={{$expirationYear}}&expirationMonth={{$expirationMonth}}&certUrl={{$certUrl}}&certId={{$certificate->credential}}">
                                                 <img class="linkdein-image-add" src="{{cdn('theme/assets/images/icons/social/events/Linkedin.svg')}}" alt="LinkedIn Add to Profile button">
                                           </a>
                                           @if($user->id == 1359)
-                                          <a class="facebook-post-cert" data-certid="{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" title="Add this certification to your Facebook profile" href="javascript:void(0)">
+                                          <a class="facebook-post-cert cert-post" data-certid="{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" title="Add this certification to your Facebook profile" href="javascript:void(0)">
                                                 <img class="linkdein-image-add" src="{{cdn('theme/assets/images/icons/social/events/Facebook.svg')}}" alt="Facebook Add to Profile button">
+                                          </a>
+                                          <a class="twitter-post-cert" data-certid="{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" title="Add this certification to your Facebook profile" href="javascript:void(0)">
+                                                <img class="linkdein-image-add" src="{{cdn('theme/assets/images/icons/social/events/Twitter.svg')}}" alt="Twitter Add to Profile button">
                                           </a>
                                           @endif
                                        </div>
@@ -1522,6 +1528,10 @@
                                           <a class="facebook-post-cert" data-certid="{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" title="Add this certification to your Facebook profile" href="javascript:void(0)">
                                                 <img class="linkdein-image-add" src="{{cdn('theme/assets/images/icons/social/events/Facebook.svg')}}" alt="Facebook Add to Profile button">
                                           </a>
+                                          <a class="twitter-post-cert" data-certid="{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" title="Add this certification to your Facebook profile" href="javascript:void(0)">
+                                                <img class="linkdein-image-add" src="{{cdn('theme/assets/images/icons/social/events/Twitter.svg')}}" alt="Twitter Add to Profile button">
+                                          </a>
+
                                           @endif
                                         </div>
 
@@ -1668,6 +1678,26 @@
               data = data.replace('\\','/')
               if(data){
                   var fbpopup = window.open(`http://www.facebook.com/sharer.php?u=${decodeURI(baseUrl)}/${decodeURI(data)}`, "pop", "width=600, height=400, scrollbars=no");
+                  return false;
+              }
+
+          }
+      });
+   })
+
+   $(document).on('click', '.twitter-post-cert', function() {
+      var getUrl = window.location;
+      var baseUrl = getUrl .protocol + "//" + getUrl.host;
+      var certificateId = $(this).attr('data-certid');
+
+      $.ajax({
+          type: 'GET',
+          url: "/mycertificate/convert-pdf-to-image/"+certificateId,
+          success: function(data) {
+
+              data = data.replace('\\','/')
+              if(data){
+                  var fbpopup = window.open(`http://twitter.com/share?url=${decodeURI(baseUrl)}/${decodeURI(data)}`, "pop", "width=600, height=400, scrollbars=no");
                   return false;
               }
 
