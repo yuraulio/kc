@@ -17,13 +17,13 @@
                     </thead>
                     <tbody>
                         <tr v-for="file in mediaFiles" :key="file.id">
-                            <td @click.prevent="editFile(file)" style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; cursor: pointer;">
-                                <span v-if="file.extension.toLowerCase() == 'pdf'" class="bg-light text-secondary rounded">
+                            <td style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; cursor: pointer;">
+                                <span v-if="file.extension.toLowerCase() == 'pdf'" @click="goTo(file.url)" class="bg-light text-secondary rounded">
                                     <i class="mdi mdi-file-pdf-outline font-28" style="font-size: 28px !important;"></i>
                                 </span>
-                                <img v-else-if="imageExtensions.includes(file.extension.toLowerCase())" :src="file.url + '?key=' + Math.random().toString().substr(2, 8)" alt="image" class="img-fluid avatar-sm rounded mt-2" style="width: 100px; height: auto;" />
+                                <img v-else-if="imageExtensions.includes(file.extension.toLowerCase())" @click.prevent="editFile(file)" :src="file.url + '?key=' + Math.random().toString().substr(2, 8)" alt="image" class="img-fluid avatar-sm rounded mt-2" style="width: 100px; height: auto;" />
 
-                                <span v-else class="bg-light text-secondary rounded">
+                                <span v-else @click="goTo(file.url)" class="bg-light text-secondary rounded">
                                     <i class="mdi mdi-file font-28" style="font-size: 28px !important;"></i>
                                 </span>
 
@@ -178,6 +178,9 @@ export default {
             } else {
                 return parseFloat(size * 0.000001).toFixed(1) + " MB";
             }
+        },
+        goTo(url) {
+            window.open(url, '_blank');
         }
     },
 };
