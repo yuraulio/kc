@@ -152,7 +152,18 @@ class MediaController extends Controller
 
             $versions = Page::VERSIONS;
 
+            $data = getimagesize($request->file);
+            $original_image_width = $data[0];
+            $original_image_height = $data[1];
+
             foreach ($versions as $version) {
+                $crop_height = $version[2];
+                $crop_width = $version[1];
+
+                if ($original_image_height < $crop_height || $original_image_width < $crop_width) {
+                    continue;
+                }
+
                 // set image name
                 $tmp = explode('.', $image_name);
                 $extension = end($tmp);
@@ -296,7 +307,7 @@ class MediaController extends Controller
         $image = $request->file('file');
 
         try {
-            $cname = $this->getRealName($request->imgname ? $request->imgname . "." . $image->extension() :  $image->getClientOriginalName());
+            $cname = $this->getRealName($request->imgname ? $request->imgname . "." . $image->extension() : $image->getClientOriginalName());
 
             $folder = $this->getFolder($request);
             $path = $folder["path"];

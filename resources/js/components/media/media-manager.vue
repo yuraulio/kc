@@ -123,10 +123,8 @@
         </div>
     </modal>
 
-    <modal name="edit-image-modal" :adaptive="true" width="70%" height="70%" :scrollable="true" class="mb-0">
-        <div class="row p-4">
-            <cropperer @edit="imageEdit" @upload="imageAdded" ref="crpr" :prevalue="selectedFile" :imageVersion="imageVersion" :imageKey="imageKey" :warning="warning"></cropperer>
-        </div>
+    <modal name="edit-image-modal" :adaptive="true" width="90%" height="90%" :scrollable="true" class="mb-0">
+        <cropperer @edit="imageEdit" @upload="imageAdded" ref="crpr" :prevalue="selectedFile" :imageVersion="imageVersion" :imageKey="imageKey" :warning="warning"></cropperer>
     </modal>
 
     <modal name="file_move_modal" :adaptive="true" :resizable="true" height="auto" :scrollable="true" class="mb-0">
@@ -248,9 +246,11 @@
         </div>
     </modal>
 
+    <!--
     <modal name="gallery-modal" ref="gmodal" :resizable="true" height="auto" :adaptive="true" :minWidth="1000" :scrollable="true">
         <gallery ref="gals" :images="mediaFiles" :opImage="opImage" :imageExtensions="imageExtensions" :imageVersion="imageVersion"></gallery>
     </modal>
+    -->
     <!-- Right Sidebar -->
     <div class="col-12">
         <div class="card">

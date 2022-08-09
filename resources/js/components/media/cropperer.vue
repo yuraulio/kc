@@ -1,149 +1,164 @@
 <template>
-<div class="row">
-
-    <div class="col-12">
-        <div v-if="warning" class="alert alert-warning mt-3" role="alert">
-            Images will be minified in up to two minutes.
-        </div>
-    </div>
-
-    <div class="col-9">
-        <div class="row">
-            <div class="col-7">
-                <h4>{{version}}</h4>
-                <div :class="(version != 'original' && version != 'Original') ? '' : 'invisible'">
-                    <div v-show="imgSrc" :key="imgSrc ? imgSrc : 'emp'" class="img-cropper" style>
-                        <vue-cropper ref="cropper" :checkCrossOrigin="false" :src="imgSrc" preview=".preview"/>
-                    </div>
-                    <label v-show="imgSrc == null" :name="'image'" style="width: 100%; min-height: 300px">
-                        <form method="post" class="dropzone dz-clickable" id="myAwesomeDropzone" data-plugin="dropzone" data-previews-container="#file-previews" data-upload-preview-template="#uploadPreviewTemplate">
-                            <div class="dz-message needsclick" style="margin: 0 auto; min-height: 300px">
-                                <i class="h1 text-muted dripicons-cloud-upload"></i>
-                                <div class="text-center">
-                                    <input ref="input" type="file" name="image" accept="image/*" @change="setImage" />
-                                    <span class="font-16">Drop files here or click to upload</span>
-                                </div>
+<div class="cropper-outer p-2">
+    <div class="row cropper-data">
+        <div class="col-sm-8">
+            <div>
+                <div v-show="imgSrc" :key="imgSrc ? imgSrc : 'emp'" class="img-cropper" style>
+                    <vue-cropper ref="cropper" :checkCrossOrigin="false" :src="imgSrc" preview=".preview"/>
+                </div>
+                <label v-show="imgSrc == null" :name="'image'" style="width: 100%; min-height: 300px">
+                    <form method="post" class="dropzone dz-clickable" id="myAwesomeDropzone" data-plugin="dropzone" data-previews-container="#file-previews" data-upload-preview-template="#uploadPreviewTemplate">
+                        <div class="dz-message needsclick" style="margin: 0 auto; min-height: 300px">
+                            <i class="h1 text-muted dripicons-cloud-upload"></i>
+                            <div class="text-center">
+                                <input ref="input" type="file" name="image" accept="image/*" @change="setImage" />
+                                <span class="font-16">Drop files here or click to upload</span>
                             </div>
-                        </form>
-                    </label>
-                    <div class="btn-group mb-2 mt-2">
-                        <button type="button" class="btn btn-soft-primary" @click.prevent="zoom(0.2)">
-                            <i class="mdi mdi-magnify-plus-outline"></i>
-                        </button>
-                        <button type="button" class="btn btn-soft-primary" @click.prevent="zoom(-0.2)">
-                            <i class="mdi mdi-magnify-minus-outline"></i>
-                        </button>
-                    </div>
-                    <div class="btn-group mb-2 mt-2">
-                        <button type="button" class="btn btn-soft-primary" @click.prevent="move(-10, 0)">
-                            <i class="mdi mdi-arrow-left"></i>
-                        </button>
-                        <button type="button" class="btn btn-soft-primary" @click.prevent="move(10, 0)">
-                            <i class="mdi mdi-arrow-right"></i>
-                        </button>
-                        <button type="button" class="btn btn-soft-primary" @click.prevent="move(0, 10)">
-                            <i class="mdi mdi-arrow-up"></i>
-                        </button>
-                        <button type="button" class="btn btn-soft-primary" @click.prevent="move(0, -10)">
-                            <i class="mdi mdi-arrow-down"></i>
-                        </button>
-                    </div>
-
-                    <div class="btn-group mb-2 mt-2">
-                        <button type="button" class="btn btn-soft-primary" @click.prevent="rotate(90)">
-                            <i class="mdi mdi-rotate-right"></i>
-                        </button>
-                        <button type="button" class="btn btn-soft-primary" @click.prevent="rotate(-90)">
-                            <i class="mdi mdi-rotate-left"></i>
-                        </button>
-
-                    </div>
-
-                    <div class="btn-group mb-2 mt-2" style="float: right">
-                        <button type="button" class="btn btn-soft-primary" @click.prevent="reset">
-                            Reset
-                        </button>
-                    </div>
+                        </div>
+                    </form>
+                </label>
+                <div class="btn-group mb-2 mt-2">
+                    <button type="button" class="btn btn-soft-primary" @click.prevent="zoom(0.2)">
+                        <i class="mdi mdi-magnify-plus-outline"></i>
+                    </button>
+                    <button type="button" class="btn btn-soft-primary" @click.prevent="zoom(-0.2)">
+                        <i class="mdi mdi-magnify-minus-outline"></i>
+                    </button>
                 </div>
-            </div>
-            <div class="col-5">
-                <div :class="(version != 'original' && version != 'Original') ? 'row mb-2' : 'row mb-2 invisible '">
-                    <div class="col-lg-12 d-grid">
-                        <p>Preview</p>
-                        <div class="cropped-image preview" style="margin: 0px auto;"/>
-                    </div>
+                <div class="btn-group mb-2 mt-2">
+                    <button type="button" class="btn btn-soft-primary" @click.prevent="move(-10, 0)">
+                        <i class="mdi mdi-arrow-left"></i>
+                    </button>
+                    <button type="button" class="btn btn-soft-primary" @click.prevent="move(10, 0)">
+                        <i class="mdi mdi-arrow-right"></i>
+                    </button>
+                    <button type="button" class="btn btn-soft-primary" @click.prevent="move(0, 10)">
+                        <i class="mdi mdi-arrow-up"></i>
+                    </button>
+                    <button type="button" class="btn btn-soft-primary" @click.prevent="move(0, -10)">
+                        <i class="mdi mdi-arrow-down"></i>
+                    </button>
                 </div>
-                <div class="row mb-2">
-                    <div class="col-lg-12 d-grid mb-2">
-                        <label class="form-label">Name</label>
-                        <input v-model="imgname" type="text" class="form-control" />
-                    </div>
-                    <div class="col-lg-12 d-grid mb-2">
-                        <label class="form-label">Alt text</label>
-                        <input v-model="alttext" type="text" class="form-control" />
-                    </div>
-                    <div class="col-lg-12 d-grid mb-2">
-                        <label class="form-label">Link</label>
-                        <input v-model="link" type="text" class="form-control" />
-                    </div>
-                    <div class="col-lg-12 d-grid mb-2">
-                        <label for="jpg" class="form-label">Convert image versions to jpg format. (Reduces size.)</label>
-                        <br class="d-none">
-                        <input v-model="jpg" type="checkbox" id="jpg" class="form-check-input" style="position: relative;">
-                    </div>
-                    <div class="col-lg-12 d-flex align-items-end mt-2">
-                        <template>
-                            <button @click="upload('edit')" class="btn btn-soft-success btn-block w-100" :disabled="isUploading">
-                                <span v-if="isUploading"><i class="fas fa-spinner fa-spin"></i> Uploading...</span>
-                                <span v-else>
-                                    Update
-                                </span>
-                            </button>
-                        </template>
-                    </div>
+
+                <div class="btn-group mb-2 mt-2">
+                    <button type="button" class="btn btn-soft-primary" @click.prevent="rotate(90)">
+                        <i class="mdi mdi-rotate-right"></i>
+                    </button>
+                    <button type="button" class="btn btn-soft-primary" @click.prevent="rotate(-90)">
+                        <i class="mdi mdi-rotate-left"></i>
+                    </button>
+
+                </div>
+
+                <div class="btn-group mb-2 mt-2" style="float: right">
+                    <button type="button" class="btn btn-soft-primary" @click.prevent="reset">
+                        Reset
+                    </button>
                 </div>
             </div>
         </div>
-
-    </div>
-    <div class="col-3">
-        <div class="card">
-            <div id="versions" class="card-body bg-light" style="max-height: 50vh; overflow: hidden; overflow-y: scroll">
-                <div class="tab-content pt-0">
-
-                    <div class="tab-pane d-block" id="profile1">
-                        <div class="col-sm-12">
-
-                            <h5>Original image</h5>
-                            <p v-if="parrentImage" class="text-start text-muted d-block">
-                                {{ size(parrentImage.size) }}
-                            </p>
-                            <img @click="version='original'; selectedVersion=null; imgname=parrentImage.name; alttext=parrentImage.alt_text; link=parrentImage.link; id=parrentImage.id;" crossorigin="anonymous" :src="parrentImage ? ('/uploads/' + parrentImage.path) : ''" alt="image" class="img-fluid rounded" />
-                            <button v-if="parentMode" @click="confirmSelection(parrentImage)" style="width: 100%" class="btn btn-soft-primary mt-2">Select image</button>
-                            <hr>
-
-                            <template v-for="(version1, index) in versions" v-if="matchVersions(version1.version)">
-                                <h5 :id="version1.version" class="">
-                                    {{ version1.version }}
-                                    <i v-if="findVersionData(version1.version)" @click="deleteFile(findVersionData(version1.version), index)" class="mdi mdi-delete text-muted vertical-middle cursor-pointer"></i>
-                                </h5>
-                                <p v-if="findVersionData(version1.version)" class="text-start text-muted d-block">
-                                    {{ size(findVersionData(version1.version).size) }}
-                                </p>
-                                <p class="text-muted d-block mb-2">{{ version1.description }}</p>
-                                <template v-if="findVersionData(version1.version) != null">
-                                    <img @click="version=version1.version; selectedVersion=version1; versionSelected();" crossorigin="anonymous" :src="'/uploads/' + findVersionData(version1.version).path + '?key=' + imageKey" alt="image" class="img-fluid rounded" :style="version == version1.version ? 'border: 4px solid #1abc9c;' : 'border: 4px solid #f3f7f9;'" />
-                                    <button v-if="parentMode" @click="confirmSelection(findVersionData(version1.version))" style="width: 100%" class="btn btn-soft-primary mt-2">Select image</button>
-                                </template>
-                                <template v-else>
-                                    <button @click="version=version1.version; selectedVersion=version1; versionSelected();" style="width: 100%" class="btn btn-primary">Set image</button>
-                                </template>
-                                <hr>
-                            </template>
-                        </div>
-                    </div>
+        <div class="col-sm-4">
+            <div class="row mb-2">
+                <div class="col-lg-12 d-grid">
+                    <input v-model="imgname" type="text" class="form-control cropper-image-name invisible-input ps-0" />
                 </div>
             </div>
+            <div class="row mb-2">
+                <div class="col-sm-4">
+                    <label class="form-label">Alt text:</label>
+                </div>
+                <div class="col">
+                    <input v-model="alttext" type="text" class="form-control invisible-input text-end" />
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-sm-4">
+                    <label class="form-label">Link:</label>
+                </div>
+                <div class="col">
+                    <input v-model="link" type="text" class="form-control invisible-input text-end" />
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-sm-4">
+                    <label class="form-label">Version:</label>
+                </div>
+                <div class="col">
+                    <span class="form-control invisible-input text-end">{{ version }}</span>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-sm-4">
+                    <label class="form-label">Date:</label>
+                </div>
+                <div class="col">
+                    <span class="form-control invisible-input text-end">{{ date }}</span>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-sm-4">
+                    <label class="form-label">User:</label>
+                </div>
+                <div class="col">
+                    <span class="form-control invisible-input text-end">{{ user ? (user.firstname + ' ' + user.lastname) : '' }}</span>
+                </div>
+            </div>
+            <div v-if="extension == 'png'" class="row mb-2">
+                <div class="col-lg-12">
+                    <input v-model="jpg" type="checkbox" id="jpg" class="form-check-input me-1" style="position: relative;">
+                    <label for="jpg" class="form-label">Convert image versions to jpg format. (Reduces size.)</label>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-lg-12">
+                    <a :href="getUrl()" target="_blank" class="btn btn-soft-warning w-100 mt-2">View</a>
+                    <button @click="resetData()" class="btn btn-soft-info btn-block w-100 mt-2">
+                        Reset
+                    </button>
+                    <button @click="close()" class="btn btn-soft-secondary btn-block w-100 mt-2">
+                        Cancel
+                    </button>
+                    <button @click="upload('edit')" class="btn btn-soft-success btn-block w-100 mt-2" :disabled="isUploading">
+                        <span v-if="isUploading"><i class="fas fa-spinner fa-spin"></i> Uploading...</span>
+                        <span v-else>
+                            Save
+                        </span>
+                    </button>
+                    <button v-if="parentMode" @click="confirmSelection(findVersionData(version))" class="btn btn-soft-primary btn-block w-100 mt-2">Use</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="versions" class="row horizontal-scroll">
+        <div class="col-12">
+            <div class="p-1">
+                <img @click="disable(); version='original'; selectedVersion=null; imgname=parrentImage.name; alttext=parrentImage.alt_text; link=parrentImage.link; id=parrentImage.id; versionData=null; versionSelected();" crossorigin="anonymous" :src="parrentImage ? ('/uploads/' + parrentImage.path) : ''" alt="image" class="img-fluid rounded" :style="version == 'original' ? 'border: 4px solid #1abc9c;' : 'border: 4px solid #f3f7f9;'"/>
+                <h5>Original image</h5>
+                <!--
+                <button v-if="parentMode" @click="confirmSelection(parrentImage)" style="width: 100%" class="btn btn-soft-primary mt-2">Select image</button>
+                -->            
+            </div>
+
+            <template v-for="(version1, index) in versions" v-if="matchVersions(version1.version)">
+                <div class="p-1">
+                    <template v-if="findVersionData(version1.version) != null">
+                        <img @click="version=version1.version; selectedVersion=version1; versionSelected();" crossorigin="anonymous" :src="'/uploads/' + findVersionData(version1.version).path + '?key=' + imageKey" alt="image" class="img-fluid rounded" :style="version == version1.version ? 'border: 4px solid #1abc9c;' : 'border: 4px solid #f3f7f9;'" />
+                        <!--
+                        <button v-if="parentMode" @click="confirmSelection(findVersionData(version1.version))" style="width: 100%" class="btn btn-soft-primary mt-2">Select image</button>
+                        -->
+                    </template>
+                    <template v-else>
+                        <button @click="version=version1.version; selectedVersion=version1; versionSelected();" style="width: 100%" class="btn btn-soft-primary ms-1 me-1">Set image</button>
+                    </template>
+                    <h5 :id="version1.version" class="">
+                        {{ version1.version }}
+                        <!--
+                        <i v-if="findVersionData(version1.version)" @click="deleteFile(findVersionData(version1.version), index)" class="mdi mdi-delete text-muted vertical-middle cursor-pointer"></i>
+                        -->
+                    </h5>
+                    <p class="text-muted d-block mb-2">{{ version1.description }}</p>
+                </div>
+            </template>  
         </div>
     </div>
 </div>
@@ -190,6 +205,9 @@ export default {
             height_ratio: null,
             versionData: null,
             parentMode: this.$parent.$parent.mode != null ? true : false,
+            date: null,
+            extension: null,
+            user: {},
             versions: [{
                     w: 470,
                     h: 470,
@@ -281,6 +299,7 @@ export default {
                         this.getData();
                         this.getCropBoxData();
                         this.setCropBoxData();
+                        this.disable();
                     }, 600);
                 };
 
@@ -291,15 +310,16 @@ export default {
                 this.version = this.prevalue.version;
                 this.selectedVersion = this.findVersion(this.version);
                 this.versionSelected();
-                var element = document.getElementById(this.version);
-                VueScrollTo.scrollTo(element, 500, {
-                    container: "#versions",
-                });
-            }, 1000);
+                // var element = document.getElementById(this.version);
+                // VueScrollTo.scrollTo(element, 500, {
+                //     container: "#versions",
+                // });
 
-            // this.version = this.prevalue.version;
-            // this.selectedVersion = this.findVersion(this.version);
-            // this.versionSelected();
+                if (this.version != 'original' || this.version != 'Original' || this.version == null) {
+                    this.disable();
+                }
+                
+            }, 1000);
         }
     },
     methods: {
@@ -322,23 +342,42 @@ export default {
             this.alttext = this.parrentImage.alt_text ? this.parrentImage.alt_text : '';
             this.link = this.parrentImage.link ? this.parrentImage.link : '';
             this.id = this.parrentImage.id ? this.parrentImage.id : null;
+            this.date = this.versionData ? this.versionData.created_at : this.parrentImage.created_at;
+            this.user = this.versionData ? this.versionData.user : this.parrentImage.user;
+            this.extension = this.versionData ? this.versionData.extension : this.parrentImage.extension;
         },
         confirmSelection(image) {
+            if (image == null) {
+                image = this.parrentImage;
+            }
             if (this.$parent.$parent.mode != null ) {
                 this.$parent.$parent.updatedMediaImage(image);
                 // this.$modal.hide('gallery-modal');
                 this.$toast.success('New image selected!');
             }
         },
+        disable() {
+            this.$refs.cropper.disable();
+        },
+        getUrl() {
+            if (this.versionData) {
+                return this.versionData.url + '?key=' + this.imageKey;
+            }
+            if (this.parrentImage) {
+                return this.parrentImage.url + '?key=' + this.imageKey;
+            }
+            return null;
+        },
         versionSelected() {
             if (this.selectedVersion) {
+                this.$refs.cropper.enable();
                 var image_width, image_height;
 
                 var img = new Image();
                 img.onload = () => {
                     image_width = img.width;
                     image_height = img.height;
-                    this.setCropBox(image_width, image_height)
+                    this.setCropBox(image_width, image_height);
                 }
                 img.src = this.parrentImage.url;
 
@@ -347,20 +386,23 @@ export default {
                 this.alttext = this.versionData ? this.versionData.alt_text : "";
                 this.link = this.versionData ? this.versionData.link : "";
                 this.id = this.versionData ? this.versionData.id : null;
-
-                // if (this.imgname == "") {
-                //     var tmp = this.parrentImage.name.split(".");
-                //     var extension = tmp[tmp.length - 1];
-                //     this.imgname = tmp[0] + "-" + this.version + "." + extension;
-                // }
-                // if (this.alttext == "") {
-                //     this.alttext = this.originalFile.alt_text;
-                // }
-                // if (this.link == "") {
-                //     this.link = this.originalFile.link;
-                // }
-
+                this.date = this.versionData ? this.versionData.created_at : '';
+                this.user = this.versionData ? this.versionData.user : '';
+                this.extension = this.versionData ? this.versionData.extension : '';
+            } else {
+                this.date = this.parrentImage.created_at ? this.parrentImage.created_at : '';
+                this.user = this.parrentImage.user ? this.parrentImage.user : '';
+                this.extension = this.parrentImage.extension ? this.parrentImage.extension : '';
             }
+        },
+        resetData() {
+            this.imgname = this.versionData ? this.versionData.name : this.parrentImage.name;
+            this.alttext = this.versionData ? this.versionData.alt_text : this.parrentImage.alt_text;
+            this.link = this.versionData ? this.versionData.link : this.parrentImage.link;
+            this.jpg = false;
+        },
+        close() {
+            this.$modal.hide('edit-image-modal');
         },
         setCropBox(image_width, image_height) {
             var cropper_height = this.$refs.cropper.$el.clientHeight;
@@ -368,6 +410,8 @@ export default {
 
             this.width_ratio = cropper_width / image_width;
             this.height_ratio = cropper_height / image_height;
+
+            this.$refs.cropper.setAspectRatio(this.selectedVersion.w / this.selectedVersion.h);
 
             this.$set(this.cropBoxData, 'width', this.selectedVersion.w * this.width_ratio);
             this.$set(this.cropBoxData, 'height', this.selectedVersion.h * this.height_ratio);
@@ -421,7 +465,6 @@ export default {
             dom.setAttribute("data-scale", scale);
         },
         getCropBoxData() {
-            //this.data = JSON.stringify(this.$refs.cropper.getCropBoxData());
             this.cropBoxData = JSON.parse(
                 JSON.stringify(this.$refs.cropper.getCropBoxData())
             );
@@ -655,5 +698,50 @@ textarea {
 .btn-soft-primary:hover {
     color: #fff!important;
     background-color: #6658dd!important;
+}
+
+.horizontal-scroll>.col-12>div {
+    height: 210px;
+    width: 200px;
+    flex-shrink: 0;
+    text-align: center;
+}
+.horizontal-scroll>.col-12 {
+    flex-direction: row;
+    display: flex;
+    overflow-x: scroll;
+}
+.horizontal-scroll img {
+    height: 100px;
+}
+.cropper-outer {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+.cropper-data {
+    flex: 1;
+}
+.cropper-data>.col-8 {
+    text-align: center;
+}
+.image-preview {
+    max-height: 650px;
+    width: 100%;
+    object-fit: contain;
+}
+
+.invisible-input {
+    background: transparent;
+    outline: none;
+    border: 0px;
+    box-shadow: none;
+}
+.cropper-image-name {
+    font-size: 23px;
+    width: 100%;
+}
+.invisible {
+    height: 0px;
 }
 </style>
