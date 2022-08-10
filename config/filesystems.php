@@ -43,6 +43,10 @@ return [
 
     'disks' => [
 
+        'cert' => [
+            'driver' => 'local',
+            'root' => public_path('/cert'),
+        ],
         'local' => [
             'driver' => 'local',
             'root' => public_path('storage/app/public'),

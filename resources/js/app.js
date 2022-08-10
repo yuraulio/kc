@@ -87,6 +87,7 @@ Vue.component('manager-for-old-admin', require('./components/media/manager-for-o
 
 Vue.component('multiput2', require('./components/inputs/multiput2.vue').default);
 Vue.component('manager-for-old-admin-new', require('./components/media/manager-for-old-admin-new.vue').default);
+Vue.component('editor-for-old-admin', require('./components/inputs/editor-for-old-admin.vue').default);
 
 import VuetableFieldCheckbox from 'vuetable-2/src/components/VuetableFieldCheckbox.vue';
 Vue.component('vuetable-field-checkbox', VuetableFieldCheckbox);
@@ -104,10 +105,23 @@ import VueClipboard from 'vue-clipboard2'
 VueClipboard.config.autoSetContainer = true // add this line
 Vue.use(VueClipboard)
 
-new Vue({
-    el: '#app'
-})
+if($("#app").length > 0) {
+    new Vue({
+        el: '#app'
+    })
+}
 
-new Vue({
-    el: '#app1'
-})
+if($("#app1").length > 0) {
+    new Vue({
+        el: '#app1'
+    })
+}
+
+$('.editor-old-admin').each(function(i, obj) {
+    new Vue({
+        el: '#' + obj.id
+    })
+});
+
+
+

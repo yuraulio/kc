@@ -52,6 +52,7 @@ class Event extends Model
         'launch_date','certificate_title','fb_group','evaluate_topics','evaluate_instructors','fb_testimonial','absences_limit','xml_title','xml_description','xml_short_description'
     ];
 
+
     public function category()
     {
         return $this->morphToMany(Category::class, 'categoryable')->with('faqs','testimonials','dropbox');
@@ -130,13 +131,13 @@ class Event extends Model
 
     public function lessons()
     {
-       
+
         if(!$this->is_inclass_course()){
 
             return $this->belongsToMany(Lesson::class,'event_topic_lesson_instructor')->where('status',true)->select('lessons.*','topic_id','event_id', 'lesson_id','instructor_id')
             ->withPivot('event_id','topic_id','lesson_id','instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room','priority')->orderBy('event_topic_lesson_instructor.priority','asc')->with('type');//priority
         }else{
-           
+
             return $this->belongsToMany(Lesson::class,'event_topic_lesson_instructor')->where('status',true)->select('lessons.*','topic_id','event_id', 'lesson_id','instructor_id')
             ->withPivot('event_id','topic_id','lesson_id','instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room','priority')->orderBy('event_topic_lesson_instructor.time_starts','asc')->with('type');//priority
         }
@@ -145,12 +146,12 @@ class Event extends Model
 
     public function lessonsForApp()
     {
-       
+
         return $this->belongsToMany(Lesson::class,'event_topic_lesson_instructor')->where('status',true)
             ->select('lessons.*','topic_id','event_id', 'lesson_id','instructor_id','event_topic_lesson_instructor.priority','event_topic_lesson_instructor.time_starts')
             ->withPivot('event_id','topic_id','lesson_id','instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room','priority')->with('type');
-     
-        
+
+
     }
 
     public function plans(){
@@ -170,9 +171,11 @@ class Event extends Model
         return $this->belongsToMany(Summary::class, 'events_summaryevent', 'event_id', 'summary_event_id')->orderBy('priority')->with('mediable');
     }
 
+
+
     public function is_inclass_course()
     {
-        
+
         $eventInfo = $this->event_info();
         if(isset($eventInfo['delivery']) && $eventInfo['delivery'] == 139){
             return true;
@@ -268,7 +271,7 @@ class Event extends Model
 
     public function dropbox()
     {
-        return $this->morphToMany(Dropbox::class, 'dropboxcacheable');
+        return $this->morphToMany(Dropbox::class, 'dropboxcacheable')->withPivot('selectedFolders');
     }
 
 
@@ -555,9 +558,9 @@ class Event extends Model
                 $seenTime += $seen;
                 $totalDuration += (float)$video['total_duration'];
             }
-            
+
         }
-        
+
         return $totalDuration > 0 ?  $seenTime /  $totalDuration * 100 : 0;
     }
 
@@ -583,7 +586,7 @@ class Event extends Model
             }
             return $sum.' of '.count($videos);
         }
-        
+
         return'0 of ' . count($this->lessons);
         //return '0 of 0';
 
@@ -634,21 +637,22 @@ class Event extends Model
         });*/
     }
 
+
     public function getExams(){
 
         $curr_date_time = date('Y-m-d G:i:00');
         $curr_date = date('Y-m-d');
-
-        $exams = $this->exam->where('status',true);
         $examsArray = [];
-
+        $exams = $this->exam->where('status',true);
+        //return $examsArray;
         foreach($exams as $exam){
-
+  
             if($exam->publish_time >  $curr_date_time){
                 $exam->exstatus = 0;
                 $exam->islive = 0;
                 $exam->isupcom = 1;
-            }else if($exam->publish_time <  $curr_date && $this->view_tpl != 'elearning_event'){
+            //}else if($exam->publish_time <  $curr_date && $this->view_tpl != 'elearning_event'){
+            }else if($exam->publish_time <  $curr_date && !$this->is_elearning_course()){
                 $exam->exstatus = 0;
                 $exam->islive = 0;
                 $exam->isupcom = 0;

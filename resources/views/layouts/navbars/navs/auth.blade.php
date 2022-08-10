@@ -147,18 +147,18 @@
         });
 
         $.ajax({
-        
+
         type: 'get',
         url: 'fb-google-csv',
-        
+
         success: function (data) {
-            
+
             window.swal({
                 title: "Finished!",
                 showConfirmButton: false,
                 timer: 2000
             });
-            
+
         },
         error: function() {
             //console.log(data);

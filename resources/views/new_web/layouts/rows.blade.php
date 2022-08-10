@@ -17,7 +17,7 @@
                 @foreach ($data->columns as $column)
                     <div class="{{ ($column->template->mobile ?? true) ? '' : 'hide-on-mobile' }} col-md-{{ isset($column->width) ? ($column->width * 2) : (12 / count($data->columns)) }}">
                         @includeIf("new_web.components." . $column->template->key)
-                       
+
                     </div>
                 @endforeach
             </div>

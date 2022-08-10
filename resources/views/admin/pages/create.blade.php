@@ -72,7 +72,7 @@
                            <input type="text" name="name" id="input-name" class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" placeholder="{{ __('Name') }}" value="{{ old('name',$page->name) }}"  required autofocus>
                            @include('alerts.feedback', ['field' => 'name'])
                         </div>
-                        
+
 
                         <div class="form-group{{ $errors->has('title') ? ' has-danger' : '' }}">
                            <label class="form-control-label" for="input-title">{{ __('Title') }}</label>
@@ -82,15 +82,31 @@
 
                         <div class="form-group{{ $errors->has('summary') ? ' has-danger' : '' }}">
                            <label class="form-control-label" for="input-summary">{{ __('Page Subtitle') }}</label>
-                           <textarea name="summary" id="input-summary"  class="ckeditor form-control{{ $errors->has('summary') ? ' is-invalid' : '' }}" placeholder="{{ __('Page summary') }}"  required autofocus>{{ old('summary',$page->summary) }}</textarea>
-                           {{--<input name="summary" id="input-summary"  class="form-control{{ $errors->has('summary') ? ' is-invalid' : '' }}" placeholder="{{ __('Page Subtitle') }}"  value="{{ old('summary',$page->summary) }}" autofocus>--}}
+                           {{--<textarea name="summary" id="input-summary"  class="ckeditor form-control{{ $errors->has('summary') ? ' is-invalid' : '' }}" placeholder="{{ __('Page summary') }}"  required autofocus>{{ old('summary',$page->summary) }}</textarea>--}}
+
+                           <!-- anto's editor -->
+                            <input class="hidden" name="summary" value="{{ old('summary',$page->summary) }}"/>
+                            <?php $data = isset($page->summary) ? $page->summary : '' ?>
+                            @include('event.editor.editor', ['keyinput' => "input-summary", 'data'=> "$data", 'inputname' => "'summary'" ])
+                            <!-- anto's editor -->
+
+                            {{--<input name="summary" id="input-summary"  class="form-control{{ $errors->has('summary') ? ' is-invalid' : '' }}" placeholder="{{ __('Page Subtitle') }}"  value="{{ old('summary',$page->summary) }}" autofocus>--}}
                            @include('alerts.feedback', ['field' => 'summary'])
                         </div>
 
-                        <div class="form-group{{ $errors->has('permissions') ? ' has-danger' : '' }}">
-                           <label class="form-control-label" for="input-permissions">{{ __('Page Editor') }}</label>
-                           <textarea name="content" id="input-content"  class="ckeditor form-control{{ $errors->has('content') ? ' is-invalid' : '' }}" placeholder="{{ __('Page editor') }}"  required autofocus>{{ old('content',$page->content) }}</textarea>
-                           @include('alerts.feedback', ['field' => 'permissions'])
+                        <div class="form-group{{ $errors->has('content') ? ' has-danger' : '' }}">
+                           <label class="form-control-label" for="input-content">{{ __('Page Editor') }}</label>
+                           {{--<textarea name="content" id="input-content"  class="ckeditor form-control{{ $errors->has('content') ? ' is-invalid' : '' }}" placeholder="{{ __('Page editor') }}"  required autofocus>{{ old('content',$page->content) }}</textarea>--}}
+
+
+                            <!-- anto's editor -->
+                            <input class="hidden" name="content" value="{{ old('content',$page->content) }}"/>
+                            <?php $data =$page->content?>
+                            @include('event.editor.editor', ['keyinput' => "input-content", 'data'=> "$data", 'inputname' => "'content'" ])
+                            <!-- anto's editor -->
+
+
+                           @include('alerts.feedback', ['field' => 'content'])
                         </div>
 
                      </div>
@@ -175,17 +191,19 @@
 
    @include('layouts.footers.auth')
 </div>
+<script src="{{asset('js/app.js')}}"></script>
+<script src="{{asset('admin_assets/js/vendor.min.js')}}"></script>
 @endsection
 
 @push('js')
 <script src="{{ asset('argon') }}/vendor/sweetalert2/dist/sweetalert2.min.js"></script>
 
 <script>
-    
+
    $(".submit-button").click(function(){
-      
+
       @if($page->id == 4753 || $page->id == 4754)
-         
+
          let user = "{{$page->id == 4753 ? 'instructors' : 'users'}}";
 
           Swal.fire({
@@ -205,10 +223,10 @@
             }else{
                $("#page-form").submit();
             }
-            
+
           })
 
-          
+
       @else
           $("#page-form").submit();
       @endif

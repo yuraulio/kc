@@ -29,6 +29,14 @@ class Instructor extends Model
         return $this->belongsToMany(Lesson::class, 'event_topic_lesson_instructor');
     }
 
+    public function elearningEvents()
+    {
+        $now = date('Y-m-d');
+        //return $this->belongsToMany(Event::class, 'event_topic_lesson_instructor')->with('summary1', 'category', 'slugable','dropbox')->wherePivot('instructor_id',$this->user()->first()->id)->wherePivot('time_starts','>=',$now)->orWhere('time_starts',null)->whereIn('status',[0,2,3])->where('published',true)->with('slugable','category','city')->distinct();
+        return $this->belongsToMany(Event::class, 'event_topic_lesson_instructor')->with('summary1', 'category', 'slugable','dropbox')->whereIn('status',[0,2,3])->where('published',true)->with('slugable','category','city')->distinct();
+    }
+
+
     public function event()
     {
         $now = date('Y-m-d');

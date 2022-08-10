@@ -71,6 +71,7 @@ class Kernel extends ConsoleKernel
        Commands\FixEventInfoTable::class,
        Commands\FixExamQuestion::class,
        Commands\FixExamQuestion::class,
+       Commands\EnableExams::class,
     ];
 
     /**

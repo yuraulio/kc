@@ -116,7 +116,7 @@ class ExamController extends Controller
 
             foreach($events as $event){
 
-                $eventsData[$event->id] = trim($event->title . ' ' . $date);
+                $eventsData[$event->id] = trim($event->htmlTitle . ' ' . $date);
 
             }
 

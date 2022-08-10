@@ -33,7 +33,7 @@
                            <h3 class="mb-0">{{ __('Plan Management') }}</h3>
                         </div>
                         <div class="col-4 text-right">
-                           <a href="{{ route('role.index') }}" class="btn btn-sm btn-primary">{{ __('Back to list') }}</a>
+                           <a href="{{ route('plans') }}" class="btn btn-sm btn-primary">{{ __('Back to list') }}</a>
                         </div>
                      </div>
                   </div>
@@ -48,10 +48,16 @@
                            @include('alerts.feedback', ['field' => 'name'])
                         </div>
 
-
                         <div class="form-group{{ $errors->has('description') ? ' has-danger' : '' }}">
                            <label class="form-control-label" for="input-title">{{ __('Description') }}</label>
-                           <textarea name="description" id="input-title" class="ckeditor form-control{{ $errors->has('description') ? ' is-invalid' : '' }}" required autofocus>{{ old('description',$plan->description) }}</textarea>
+                           {{--<textarea name="description" id="input-title" class="ckeditor form-control{{ $errors->has('description') ? ' is-invalid' : '' }}" required autofocus>{{ old('description',$plan->description) }}</textarea>--}}
+
+                            <!-- anto's editor -->
+                            <input class="hidden" name="description" value="{{ old('description', $plan->description) }}"/>
+                            <?php $data = old('description', $plan->description); ?>
+                            @include('event.editor.editor', ['keyinput' => "input-description", 'data'=> "$data", 'inputname' => "'description'" ])
+                            <!-- anto's editor -->
+
                            @include('alerts.feedback', ['field' => 'description'])
                         </div>
 
@@ -171,6 +177,8 @@
 @stop
 
 @push('js')
+<script src="{{asset('js/app.js')}}"></script>
+<script src="{{asset('admin_assets/js/vendor.min.js')}}"></script>
 <script>
 
 

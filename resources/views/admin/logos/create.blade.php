@@ -16,6 +16,10 @@
 @endcomponent
 @endcomponent
 <?php //dd($template); ?>
+<div class="col-12 mt-2">
+    @include('alerts.success')
+    @include('alerts.errors')
+</div>
 <div class="container-fluid mt--6">
     <div class="nav-wrapper" style="margin-top: 65px;">
         @if($logo->name)
@@ -93,7 +97,12 @@
 
                         <div class="form-group{{ $errors->has('summary') ? ' has-danger' : '' }}">
                            <label class="form-control-label" for="input-summary">{{ __('Logo Summary') }}</label>
-                           <textarea name="summary" id="input-summary"  class="ckeditor form-control{{ $errors->has('summary') ? ' is-invalid' : '' }}" placeholder="{{ __('Logo summary') }}"  required autofocus>{{ old('summary',$logo->summary) }}</textarea>
+                           {{--<textarea name="summary" id="input-summary"  class="ckeditor form-control{{ $errors->has('summary') ? ' is-invalid' : '' }}" placeholder="{{ __('Logo summary') }}"  required autofocus>{{ old('summary',$logo->summary) }}</textarea>--}}
+                            <!-- anto's editor -->
+                            <input class="hidden" name="summary" value="{{ old('summary',$logo->summary) }}"/>
+                            <?php $data = $logo->summary?>
+                            @include('event.editor.editor', ['keyinput' => "input-summary", 'data'=> "$data", 'inputname' => "'summary'" ])
+                            <!-- anto's editor -->
                            @include('alerts.feedback', ['field' => 'summary'])
                         </div>
 
@@ -158,3 +167,8 @@
    @include('layouts.footers.auth')
 </div>
 @endsection
+
+@push('js')
+<script src="{{asset('js/app.js')}}"></script>
+<script src="{{asset('admin_assets/js/vendor.min.js')}}"></script>
+@endpush

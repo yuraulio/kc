@@ -2,6 +2,7 @@
 @section('metas')
 <title>{{ 'My Account' }}</title>
 @endsection
+
 @section('content')
 <?php $bonusFiles = ['_Bonus', 'Bonus', 'Bonus Files', 'Βonus', '_Βonus', 'Βonus', 'Βonus Files'] ?>
 <?php $currentuser = $user ?>
@@ -85,7 +86,7 @@
       </div>
       <div class="content-wrapper">
       <div class="tabs-wrapper fixed-tab-controls">
-         <div class="tab-controls">
+         <div class="tab-controls subscription-account">
             <div class="container">
                <a href="#" class="mobile-tabs-menu">Account</a>
                <ul class="clearfix tab-controls-list">
@@ -210,9 +211,14 @@
                                        <div class="col12">
                                           <?php $birthday = date('j F Y',strtotime($currentuser['birthday']))?>
                                           <label>Date of birth:</label>
-                                          <div class="input-wrapper">
-                                             <input type="text" class="datepicker-jqui with-arrow" name="birthday" value="{{$birthday}}">
-                                          </div>
+                                     
+
+                                          <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="ni ni-calendar-grid-58"></i></span>
+                                            </div>
+                                            <input id="birthday" type="text" class="form-control datepicker" name="birthday" value="{{$birthday}}">
+                                        </div>
                                        </div>
                                        <div class="col12">
                                           <label>Company/Employer:</label>
@@ -240,228 +246,237 @@
                                           </div>
                                        </div>
                                        <div class="col12">
-                                          <span id="mobileCheck-error"></span>
+                                          
                                           <label>Mobile phone: <span>*</span></label>
                                           <div class="input-safe-wrapper is-flex full-width">
-                                             <select name="country_code" id="selectCountry" class="select2 form-control mb-3 custom-select country-select">
-                                                <option data-countryCode="DZ" value="213">DZ (+213)</option>
-                                                <option data-countryCode="AD" value="376">AD (+376)</option>
-                                                <option data-countryCode="AO" value="244">AO (+244)</option>
-                                                <option data-countryCode="AI" value="1264">AI (+1264)</option>
-                                                <option data-countryCode="AG" value="1268">AG (+1268)</option>
-                                                <option data-countryCode="AR" value="54">AR (+54)</option>
-                                                <option data-countryCode="AM" value="374">AM (+374)</option>
-                                                <option data-countryCode="AW" value="297">AW (+297)</option>
-                                                <option data-countryCode="AU" value="61">AU (+61)</option>
-                                                <option data-countryCode="AT" value="43">AT (+43)</option>
-                                                <option data-countryCode="AZ" value="994">AZ (+994)</option>
-                                                <option data-countryCode="BS" value="1242">BS (+1242)</option>
-                                                <option data-countryCode="BH" value="973">BH (+973)</option>
-                                                <option data-countryCode="BD" value="880">BD (+880)</option>
-                                                <option data-countryCode="BB" value="1246">BB (+1246)</option>
-                                                <option data-countryCode="BY" value="375">BY (+375)</option>
-                                                <option data-countryCode="BE" value="32">BE (+32)</option>
-                                                <option data-countryCode="BZ" value="501">BZ (+501)</option>
-                                                <option data-countryCode="BJ" value="229">BJ (+229)</option>
-                                                <option data-countryCode="BM" value="1441">BM (+1441)</option>
-                                                <option data-countryCode="BT" value="975">BT (+975)</option>
-                                                <option data-countryCode="BO" value="591">BO (+591)</option>
-                                                <option data-countryCode="BA" value="387">BA (+387)</option>
-                                                <option data-countryCode="BW" value="267">BW (+267)</option>
-                                                <option data-countryCode="BR" value="55">BR (+55)</option>
-                                                <option data-countryCode="BN" value="673">BN (+673)</option>
-                                                <option data-countryCode="BG" value="359">BG (+359)</option>
-                                                <option data-countryCode="BF" value="226">BF (+226)</option>
-                                                <option data-countryCode="BI" value="257">BI (+257)</option>
-                                                <option data-countryCode="KH" value="855">KH (+855)</option>
-                                                <option data-countryCode="CM" value="237">CM (+237)</option>
-                                                <option data-countryCode="CA" value="1">CA (+1)</option>
-                                                <option data-countryCode="CV" value="238">CV (+238)</option>
-                                                <option data-countryCode="KY" value="1345">KY (+1345)</option>
-                                                <option data-countryCode="CF" value="236">CF (+236)</option>
-                                                <option data-countryCode="CL" value="56">CL (+56)</option>
-                                                <option data-countryCode="CN" value="86">CN (+86)</option>
-                                                <option data-countryCode="CO" value="57">CO (+57)</option>
-                                                <option data-countryCode="KM" value="269">KM (+269)</option>
-                                                <option data-countryCode="CG" value="242">CG (+242)</option>
-                                                <option data-countryCode="CK" value="682">CK (+682)</option>
-                                                <option data-countryCode="CR" value="506">CR (+506)</option>
-                                                <option data-countryCode="HR" value="385">HR (+385)</option>
-                                                <option data-countryCode="CU" value="53">CU (+53)</option>
-                                                <option data-countryCode="CY" value="90392">CY (+90392)</option>
-                                                <option data-countryCode="CY" value="357">CY (+357)</option>
-                                                <option data-countryCode="CZ" value="420">CZ (+420)</option>
-                                                <option data-countryCode="DK" value="45">DK (+45)</option>
-                                                <option data-countryCode="DJ" value="253">DJ (+253)</option>
-                                                <option data-countryCode="DM" value="1809">DM (+1809)</option>
-                                                <option data-countryCode="DO" value="1809">DO (+1809)</option>
-                                                <option data-countryCode="EC" value="593">EC (+593)</option>
-                                                <option data-countryCode="EG" value="20">EG (+20)</option>
-                                                <option data-countryCode="SV" value="503">SV (+503)</option>
-                                                <option data-countryCode="GQ" value="240">GQ (+240)</option>
-                                                <option data-countryCode="ER" value="291">ER (+291)</option>
-                                                <option data-countryCode="EE" value="372">EE (+372)</option>
-                                                <option data-countryCode="ET" value="251">ET (+251)</option>
-                                                <option data-countryCode="FK" value="500">FK (+500)</option>
-                                                <option data-countryCode="FO" value="298">FO (+298)</option>
-                                                <option data-countryCode="FJ" value="679">FJ (+679)</option>
-                                                <option data-countryCode="FI" value="358">FI (+358)</option>
-                                                <option data-countryCode="FR" value="33">FR (+33)</option>
-                                                <option data-countryCode="GF" value="594">GF (+594)</option>
-                                                <option data-countryCode="PF" value="689">PF (+689)</option>
-                                                <option data-countryCode="GA" value="241">GA (+241)</option>
-                                                <option data-countryCode="GM" value="220">GM (+220)</option>
-                                                <option data-countryCode="GE" value="7880">GE (+7880)</option>
-                                                <option data-countryCode="DE" value="49">DE (+49)</option>
-                                                <option data-countryCode="GH" value="233">GH (+233)</option>
-                                                <option data-countryCode="GI" value="350">GI (+350)</option>
-                                                <option data-countryCode="GR" value="30" selected>GR (+30)</option>
-                                                <option data-countryCode="GL" value="299">GL (+299)</option>
-                                                <option data-countryCode="GD" value="1473">GD (+1473)</option>
-                                                <option data-countryCode="GP" value="590">GP (+590)</option>
-                                                <option data-countryCode="GU" value="671">GU (+671)</option>
-                                                <option data-countryCode="GT" value="502">GT (+502)</option>
-                                                <option data-countryCode="GN" value="224">GN (+224)</option>
-                                                <option data-countryCode="GW" value="245">GW (+245)</option>
-                                                <option data-countryCode="GY" value="592">GY (+592)</option>
-                                                <option data-countryCode="HT" value="509">HT (+509)</option>
-                                                <option data-countryCode="HN" value="504">HN (+504)</option>
-                                                <option data-countryCode="HK" value="852">HK (+852)</option>
-                                                <option data-countryCode="HU" value="36">HU (+36)</option>
-                                                <option data-countryCode="IS" value="354">IS (+354)</option>
-                                                <option data-countryCode="IN" value="91">IN (+91)</option>
-                                                <option data-countryCode="ID" value="62">ID (+62)</option>
-                                                <option data-countryCode="IR" value="98">IR (+98)</option>
-                                                <option data-countryCode="IQ" value="964">IQ (+964)</option>
-                                                <option data-countryCode="IE" value="353">IE (+353)</option>
-                                                <option data-countryCode="IL" value="972">IL (+972)</option>
-                                                <option data-countryCode="IT" value="39">IT (+39)</option>
-                                                <option data-countryCode="JM" value="1876">JM (+1876)</option>
-                                                <option data-countryCode="JP" value="81">JP (+81)</option>
-                                                <option data-countryCode="JO" value="962">JO (+962)</option>
-                                                <option data-countryCode="KZ" value="7">KZ (+7)</option>
-                                                <option data-countryCode="KE" value="254">KE (+254)</option>
-                                                <option data-countryCode="KI" value="686">KI (+686)</option>
-                                                <option data-countryCode="KP" value="850">KP (+850)</option>
-                                                <option data-countryCode="KR" value="82">KR (+82)</option>
-                                                <option data-countryCode="KW" value="965">KW (+965)</option>
-                                                <option data-countryCode="KG" value="996">KG (+996)</option>
-                                                <option data-countryCode="LA" value="856">LA (+856)</option>
-                                                <option data-countryCode="LV" value="371">LV (+371)</option>
-                                                <option data-countryCode="LB" value="961">LB (+961)</option>
-                                                <option data-countryCode="LS" value="266">LS (+266)</option>
-                                                <option data-countryCode="LR" value="231">LR (+231)</option>
-                                                <option data-countryCode="LY" value="218">LY (+218)</option>
-                                                <option data-countryCode="LI" value="417">LI (+417)</option>
-                                                <option data-countryCode="LT" value="370">LT (+370)</option>
-                                                <option data-countryCode="LU" value="352">LU (+352)</option>
-                                                <option data-countryCode="MO" value="853">MO (+853)</option>
-                                                <option data-countryCode="SK" value="389">SK (+389)</option>
-                                                <option data-countryCode="MG" value="261">MG (+261)</option>
-                                                <option data-countryCode="MW" value="265">MW (+265)</option>
-                                                <option data-countryCode="MY" value="60">MY (+60)</option>
-                                                <option data-countryCode="MV" value="960">MV (+960)</option>
-                                                <option data-countryCode="ML" value="223">ML (+223)</option>
-                                                <option data-countryCode="MT" value="356">MT (+356)</option>
-                                                <option data-countryCode="MH" value="692">MH (+692)</option>
-                                                <option data-countryCode="MQ" value="596">MQ (+596)</option>
-                                                <option data-countryCode="MR" value="222">MR (+222)</option>
-                                                <option data-countryCode="YT" value="269">YT (+269)</option>
-                                                <option data-countryCode="MX" value="52">MX (+52)</option>
-                                                <option data-countryCode="FM" value="691">FM (+691)</option>
-                                                <option data-countryCode="MD" value="373">MD (+373)</option>
-                                                <option data-countryCode="MC" value="377">MC (+377)</option>
-                                                <option data-countryCode="MN" value="976">MN (+976)</option>
-                                                <option data-countryCode="MS" value="1664">MS (+1664)</option>
-                                                <option data-countryCode="MA" value="212">MA (+212)</option>
-                                                <option data-countryCode="MZ" value="258">MZ (+258)</option>
-                                                <option data-countryCode="MN" value="95">MN (+95)</option>
-                                                <option data-countryCode="NA" value="264">NA (+264)</option>
-                                                <option data-countryCode="NR" value="674">NR (+674)</option>
-                                                <option data-countryCode="NP" value="977">NP (+977)</option>
-                                                <option data-countryCode="NL" value="31">NL (+31)</option>
-                                                <option data-countryCode="NC" value="687">NC (+687)</option>
-                                                <option data-countryCode="NZ" value="64">NZ (+64)</option>
-                                                <option data-countryCode="NI" value="505">NI (+505)</option>
-                                                <option data-countryCode="NE" value="227">NE (+227)</option>
-                                                <option data-countryCode="NG" value="234">NG (+234)</option>
-                                                <option data-countryCode="NU" value="683">NU (+683)</option>
-                                                <option data-countryCode="NF" value="672">NF (+672)</option>
-                                                <option data-countryCode="NP" value="670">NP (+670)</option>
-                                                <option data-countryCode="NO" value="47">NO (+47)</option>
-                                                <option data-countryCode="OM" value="968">OM (+968)</option>
-                                                <option data-countryCode="PW" value="680">PW (+680)</option>
-                                                <option data-countryCode="PA" value="507">PA (+507)</option>
-                                                <option data-countryCode="PG" value="675">PG (+675)</option>
-                                                <option data-countryCode="PY" value="595">PY (+595)</option>
-                                                <option data-countryCode="PE" value="51">PE (+51)</option>
-                                                <option data-countryCode="PH" value="63">PH (+63)</option>
-                                                <option data-countryCode="PL" value="48">PL (+48)</option>
-                                                <option data-countryCode="PT" value="351">PT (+351)</option>
-                                                <option data-countryCode="PR" value="1787">PR (+1787)</option>
-                                                <option data-countryCode="QA" value="974">QA (+974)</option>
-                                                <option data-countryCode="RE" value="262">RE (+262)</option>
-                                                <option data-countryCode="RO" value="40">RO (+40)</option>
-                                                <option data-countryCode="RU" value="7">RU (+7)</option>
-                                                <option data-countryCode="RW" value="250">RW (+250)</option>
-                                                <option data-countryCode="SM" value="378">SM (+378)</option>
-                                                <option data-countryCode="ST" value="239">ST (+239)</option>
-                                                <option data-countryCode="SA" value="966">SA (+966)</option>
-                                                <option data-countryCode="SN" value="221">SN (+221)</option>
-                                                <option data-countryCode="CS" value="381">CS (+381)</option>
-                                                <option data-countryCode="SC" value="248">SC (+248)</option>
-                                                <option data-countryCode="SL" value="232">SL (+232)</option>
-                                                <option data-countryCode="SG" value="65">SG (+65)</option>
-                                                <option data-countryCode="SK" value="421">SK (+421)</option>
-                                                <option data-countryCode="SI" value="386">SI (+386)</option>
-                                                <option data-countryCode="SB" value="677">SB (+677)</option>
-                                                <option data-countryCode="SO" value="252">SO (+252)</option>
-                                                <option data-countryCode="ZA" value="27">ZA (+27)</option>
-                                                <option data-countryCode="ES" value="34">ES (+34)</option>
-                                                <option data-countryCode="LK" value="94">LK (+94)</option>
-                                                <option data-countryCode="SH" value="290">SH (+290)</option>
-                                                <option data-countryCode="KN" value="1869">KN (+1869)</option>
-                                                <option data-countryCode="SC" value="1758">SC (+1758)</option>
-                                                <option data-countryCode="SD" value="249">SD (+249)</option>
-                                                <option data-countryCode="SR" value="597">SR (+597)</option>
-                                                <option data-countryCode="SZ" value="268">SZ (+268)</option>
-                                                <option data-countryCode="SE" value="46">SE (+46)</option>
-                                                <option data-countryCode="CH" value="41">CH (+41)</option>
-                                                <option data-countryCode="SI" value="963">SI (+963)</option>
-                                                <option data-countryCode="TW" value="886">TW (+886)</option>
-                                                <option data-countryCode="TJ" value="7">TJ (+7)</option>
-                                                <option data-countryCode="TH" value="66">Thailand (+66)</option>
-                                                <option data-countryCode="TG" value="228">TH (+228)</option>
-                                                <option data-countryCode="TO" value="676">TO (+676)</option>
-                                                <option data-countryCode="TT" value="1868">TT (+1868)</option>
-                                                <option data-countryCode="TN" value="216">TN (+216)</option>
-                                                <option data-countryCode="TR" value="90">TR (+90)</option>
-                                                <option data-countryCode="TM" value="7">TM (+7)</option>
-                                                <option data-countryCode="TM" value="993">TM (+993)</option>
-                                                <option data-countryCode="TC" value="1649">TC</option>
-                                                <option data-countryCode="TV" value="688">TV (+688)</option>
-                                                <option data-countryCode="UG" value="256">UG (+256)</option>
-                                                <option data-countryCode="GB" value="44">UK (+44)</option>
-                                                <option data-countryCode="UA" value="380">UA (+380)</option>
-                                                <option data-countryCode="AE" value="971">"AE (+971)</option>
-                                                <option data-countryCode="UY" value="598">UY (+598)</option>
-                                                <option data-countryCode="US" value="1">USA (+1)</option>
-                                                <option data-countryCode="UZ" value="7">UZ (+7)</option>
-                                                <option data-countryCode="VU" value="678">VU (+678)</option>
-                                                <option data-countryCode="VA" value="379">VA (+379)</option>
-                                                <option data-countryCode="VE" value="58">VE (+58)</option>
-                                                <option data-countryCode="VN" value="84">VN (+84)</option>
-                                                <option data-countryCode="VG" value="84">VG (+1284)</option>
-                                                <option data-countryCode="VI" value="84">VI (+1340)</option>
-                                                <option data-countryCode="WF" value="681">WF (+681)</option>
-                                                <option data-countryCode="YE" value="969">YE (North)(+969)</option>
-                                                <option data-countryCode="YE" value="967">YE (South)(+967)</option>
-                                                <option data-countryCode="ZM" value="260">ZM (+260)</option>
-                                                <option data-countryCode="ZW" value="263">ZW (+263)</option>
-                                             </select>
-                                             <input class="required" onkeyup="checkPhoneNumber(this)" type="text" name="mobile" id="mobile" value="{{{ old('mobile', $currentuser['mobile']) }}}" >
-                                             <input type="hidden" name="mobileCheck" id="mobileCheck" value="{{{ old('mobile', '+'.$currentuser['country_code'].$currentuser['mobile']) }}}">
+                                             <div class="col4">
+                                                <select name="country_code" id="selectCountry" class="form-control valid" aria-required="true" aria-invalid="false">
+                                                <option value="213" label="Algeria (+213)">Algeria </option>
+											               <option value="244" label="Angola (+244)">Angola </option>
+											               <option value="229" label="Benin (+229)">Benin </option>
+											               <option value="267" label="Botswana (+267)">Botswana </option>
+											               <option value="226" label="Burkina Faso (+226)">Burkina Faso </option>
+											               <option value="257" label="Burundi (+257)">Burundi </option>
+											               <option value="237" label="Cameroon (+237)">Cameroon </option>
+											               <option value="238" label="Cape Verde (+238)">Cape Verde </option>
+											               <option value="236" label="Central African Republic (+236)">Central African Republic </option>
+											               <option value="269" label="Comoros (+269)">Comoros </option>
+											               <option value="242" label="Congo - Brazzaville (+242)">Congo - Brazzaville </option>
+											               <option value="253" label="Djibouti (+253)">Djibouti </option>
+											               <option value="20" label="Egypt (+20)">Egypt </option>
+											               <option value="240" label="Equatorial Guinea (+240)">Equatorial Guinea</option>
+											               <option value="291" label="Eritrea (+291)">Eritrea </option>
+											               <option value="251" label="Ethiopia (+251)">Ethiopia </option>
+											               <option value="241" label="Gabon">Gabon</option>
+											               <option value="220" label="Gambia (+220)">Gambia </option>
+											               <option value="233" label="Ghana (+233)">Ghana </option>
+											               <option value="224" label="Guinea (+224)">Guinea </option>
+											               <option value="245" label="Guinea-Bissau (+245)">Guinea-Bissau </option>
+											               <option value="254" label="Kenya (+254)">Kenya</option>
+											               <option value="266" label="Lesotho (+266)">Lesotho</option>
+											               <option value="231" label="Liberia (+231)">Liberia</option>
+											               <option value="218" label="Libya (+218)">Libya</option>
+											               <option value="261" label="Madagascar (+261)">Madagascar</option>
+											               <option value="265" label="Malawi (+265)">Malawi</option>
+											               <option value="223" label="Mali (+223)">Mali</option>
+											               <option value="222" label="Mauritania (+222)">Mauritania</option>
+											               <option value="262" label="Mayotte (+262)">Mayotte </option>
+											               <option value="212" label="Morocco (+212)">Morocco</option>
+											               <option value="258" label="Mozambique (+258)">Mozambique</option>
+											               <option value="264" label="Namibia (+264)">Namibia</option>
+											               <option value="227" label="Niger (+227)">Niger</option>
+											               <option value="234" label="Nigeria (+234)">Nigeria</option>
+											               <option value="250" label="Rwanda (+250)">Rwanda</option>
+											               <option value="262" label="Réunion (+262)">Réunion</option>
+											               <option value="290" label="Saint Helena (+290)">Saint Helena</option>
+											               <option value="221" label="Senegal (+221)">Senegal</option>
+											               <option value="248" label="Seychelles (+248)">Seychelles</option>
+											               <option value="232" label="Sierra Leone (+232)">Sierra Leone</option>
+											               <option value="252" label="Somalia (+252)">Somalia</option>
+											               <option value="27" label="South Africa (+27)">South Africa</option>
+											               <option value="249" label="Sudan (+249)">Sudan</option>
+											               <option value="268" label="Swaziland (+268)">Swaziland</option>
+											               <option value="239" label="São Tomé and Príncipe (+239)">São Tomé and Príncipe</option>
+											               <option value="228" label="Togo (+228)">Togo</option>
+											               <option value="216" label="Tunisia (+216)">Tunisia</option>
+											               <option value="256" label="Uganda (+256)">Uganda</option>
+											               <option value="260" label="Zambia (+260)">Zambia</option>
+											               <option value="263" label="Zimbabwe (+263)">Zimbabwe</option>										
+											               <option value="1264" label="Anguilla (+1264)">Anguilla </option>
+											               <option value="595" label="Paraguay (+595)">Paraguay </option>
+											               <option value="51" label="Peru (+51)">Peru </option>
+											               <option value="1268" label="Antigua and Barbuda (+1268)">Antigua and Barbuda </option>
+											               <option value="54" label="Argentina (+54)">Argentina </option>
+											               <option value="297" label="Aruba (+297)">Aruba </option>
+											               <option value="1242" label="Bahamas (+1242)">Bahamas </option>
+											               <option value="1246" label="Barbados (+1246)">Barbados </option>
+											               <option value="501" label="Belize (+501)">Belize </option>
+											               <option value="1441" label="Bermuda (+1441)">Bermuda </option>
+											               <option value="591" label="Bolivia (+591)">Bolivia </option>
+											               <option value="55" label="Brazil (+55)">Brazil</option>
+											               <option value="84" label="British Virgin Islands (+84)">British Virgin Islands</option>
+											               <option value="1" label="Canada (+1)">Canada </option>
+											               <option value="1345" label="Cayman Islands (+1345)">Cayman Islands </option>
+											               <option value="56" label="Chile (+56)">Chile </option>
+											               <option value="57" label="Colombia (+57)">Colombia </option>
+											               <option value="506" label="Costa Rica (+506)">Costa Rica </option>
+											               <option value="53" label="Cuba (+53)">Cuba </option>
+											               <option value="90392" label="Northen Cyprus (+90392)">Northen Cyprus </option>
+											               <option value="1809" label="Dominica (+1809)">Dominica </option>
+											               <option value="1809" label="Dominican Republic (+1809)">Dominican Republic </option>
+											               <option value="593" label="Ecuador (+593)">Ecuador </option>
+											               <option value="503" label="El Salvador (+503)">El Salvador </option>
+											               <option value="500" label="Falkland Islands (+500)">Falkland Islands</option>
+											               <option value="594" label="French Guiana (+594)">French Guiana </option>
+											               <option value="299" label="Greenland (+299)">Greenland </option>
+											               <option value="1473" label="Grenada (+1473)">Grenada </option>
+											               <option value="590" label="Guadeloupe (+590)">Guadeloupe </option>
+											               <option value="502" label="Guatemala (+502)">Guatemala </option>
+											               <option value="592" label="Guyana (+592)">Guyana </option>
+											               <option value="509" label="Haiti (+509)">Haiti </option>
+											               <option value="504" label="Honduras (+504)">Honduras </option>
+											               <option value="1876" label="Jamaica (+1876)">Jamaica</option>
+											               <option value="596" label="Martinique (+596)">Martinique</option>
+											               <option value="52" label="Mexico (+52)">Mexico</option>
+											               <option value="1664" label="Montserrat (+1664)">Montserrat</option>
+											               <option value="AN" label="Netherlands Antilles">Netherlands Antilles</option>
+											               <option value="505" label="Nicaragua (+505)">Nicaragua</option>
+											               <option value="507" label="Panama (+507)">Panama</option>
+											               <option value="95" label="Myanmar (+95)">Myanmar</option>
+											               <option value="1787" label="Puerto Rico (+1787)">Puerto Rico</option>
+											               <option value="1869" label="Saint Kitts and Nevis (+1869)">Saint Kitts and Nevis</option>
+											               <option value="597" label="Suriname (+597)">Suriname</option>
+											               <option value="1868" label="Trinidad and Tobago (+1868)">Trinidad and Tobago</option>
+											               <option value="1649" label="Turks and Caicos Islands (+1649)">Turks and Caicos Islands</option>
+											               <option value="84" label="U.S. Virgin Islands (+84)">U.S. Virgin Islands</option>
+											               <option value="1" label="United States (+1)">United States</option>
+											               <option value="598" label="Uruguay (+598)">Uruguay</option>
+											               <option value="58" label="Venezuela (+58)">Venezuela</option>										
+											               <option value="374" label="Armenia (+374)">Armenia </option>
+											               <option value="994" label="Azerbaijan (+994)">Azerbaijan</option>
+											               <option value="973" label="Bahrain (+973)">Bahrain </option>
+											               <option value="880" label="Bangladesh  (+880)">Bangladesh</option>
+											               <option value="975" label="Bhutan (+975)">Bhutan </option>
+											               <option value="673" label="Brunei (+673)">Brunei </option>
+											               <option value="63" label="Philippines (+63)">Philippines  </option>
+											               <option value="855" label="Cambodia (+855)">Cambodia </option>
+											               <option value="86" label="China (+86)">China </option>
+											               <option value="7880" label="Georgia (+7880)">Georgia </option>
+											               <option value="852" label="Hong Kong SAR China (+852)">Hong Kong SAR China</option>
+											               <option value="91" label="India (+91)">India</option>
+											               <option value="62" label="Indonesia (+62)">Indonesia</option>
+											               <option value="98" label="Iran (+98)">Iran</option>
+											               <option value="964" label="Iraq (+964)">Iraq</option>
+											               <option value="972" label="Israel (+972)">Israel</option>
+											               <option value="81" label="Japan (+81)">Japan</option>
+											               <option value="962" label="Jordan (+962)">Jordan</option>
+											               <option value="7" label="Kazakhstan (+7)">Kazakhstan</option>
+											               <option value="965" label="Kuwait (+965)">Kuwait</option>
+											               <option value="856" label="Laos (+856)">Laos</option>
+											               <option value="961" label="Lebanon (+961)">Lebanon</option>
+											               <option value="853" label="Macau SAR China (+853)">Macau SAR China</option>
+											               <option value="60" label="Malaysia (+60)">Malaysia</option>
+											               <option value="960" label="Maldives (+960)">Maldives</option>
+											               <option value="976" label="Mongolia (+976)">Mongolia</option>
+											               <option value="977" label="Nepal (+977)">Nepal</option>
+											               <option value="850" label="North Korea (+850)">North Korea</option>
+											               <option value="968" label="Oman (+968)">Oman</option>
+											               <option value="PK" label="Pakistan">Pakistan</option>
+											               <option value="996" label="Kyrgyzstan (+996)"> Kyrgyzstan </option>
+											               <option value="974" label="Qatar (+974)">Qatar</option>
+											               <option value="966" label="Saudi Arabia (+966)">Saudi Arabia</option>
+											               <option value="65" label="Singapore (+65)">Singapore</option>
+											               <option value="82" label="South Korea (+82)">South Korea</option>
+											               <option value="94" label="Sri Lanka (+94)">Sri Lanka</option>
+											               <option value="963" label="Syria (+963)">Syria</option>
+											               <option value="886" label="Taiwan (+886)">Taiwan</option>
+											               <option value="389" label="Fyrom (+389)">Fyrom</option>
+											               <option value="7" label="Tajikistan (+7)">Tajikistan</option>
+											               <option value="66" label="Thailand (+6)">Thailand</option>
+											               <option value="90" label="Turkey (+90)">Turkey</option>
+											               <option value="993" label="Turkmenistan (+993)">Turkmenistan</option>
+											               <option value="971" label="United Arab Emirates (+971)">United Arab Emirates</option>
+											               <option value="7" label="Uzbekistan (+7)">Uzbekistan</option>
+											               <option value="84" label="Vietnam (+84)">Vietnam</option>
+											               <option value="967" label="Yemen (+967)">Yemen</option>									
+											               <option value="376" label="Andorra (+376)">Andorra </option>
+											               <option value="43" label="Austria (+43)">Austria </option>
+											               <option value="375" label="Belarus (+375)">Belarus </option>
+											               <option value="32" label="Belgium (+32)">Belgium </option>
+											               <option value="387" label="Bosnia and Herzegovina (+387)">Bosnia and Herzegovina </option>
+											               <option value="359" label="Bulgaria (+359)">Bulgaria </option>
+											               <option value="385" label="Croatia (+385)">Croatia </option>
+											               <option value="357" label="Cyprus (+357)">Cyprus </option>
+											               <option value="420" label="Czech Republic (+420)">Czech Republic </option>
+											               <option value="45" label="Denmark (+45)">Denmark</option>
+											               <option value="372" label="Estonia (+372)">Estonia </option>
+											               <option value="298" label="Faroe Islands  (+298)">Faroe Islands</option>
+											               <option value="358" label="Finland (+358)">Finland (+358)</option>
+											               <option value="33" label="France (+33)">France </option>
+											               <option value="49" label="Germany (+49)">Germany </option>
+											               <option value="350" label="Gibraltar (+350)">Gibraltar</option>
+											               <option selected value="30" label="Greece (+30)">Greece</option>
+											               <option value="36" label="Hungary (+36)">Hungary</option>
+											               <option value="354" label="Iceland (+354)">Iceland</option>
+											               <option value="353" label="Ireland (+353)">Ireland</option>
+											               <option value="39" label="Italy (+39)">Italy</option>
+											               <option value="371" label="Latvia (+371)">Latvia</option>
+											               <option value="417" label="Liechtenstein (+417)">Liechtenstein</option>
+											               <option value="1785" label="Saint Lucia (+1758)">Saint Lucia</option>
+											               <option value="370" label="Lithuania (+370)">Lithuania</option>
+											               <option value="352" label="Luxembourg (+352)">Luxembourg</option>
+											               <option value="356" label="Malta (+356)">Malta</option>
+											               <option value="373" label="Moldova (+373)">Moldova</option>
+											               <option value="377" label="Monaco (+377)">Monaco</option>
+											               <option value="31" label="Netherlands (+31)">Netherlands</option>
+											               <option value="47" label="Norway (+47)">Norway</option>
+											               <option value="48" label="Poland (+48)">Poland</option>
+											               <option value="351" label="Portugal (+351)">Portugal</option>
+											               <option value="40" label="Romania (+40)">Romania</option>
+											               <option value="7" label="Russia (+7)">Russia</option>
+											               <option value="378" label="San Marino (+378)">San Marino</option>
+											               <option value="381" label="Serbia and Montenegro (381)">Serbia and Montenegro</option>
+											               <option value="421" label="Slovakia (+421)">Slovakia</option>
+											               <option value="386" label="Slovenia (+386)">Slovenia</option>
+											               <option value="34" label="Spain (+34)">Spain</option>
+											               <option value="46" label="Sweden (+46)">Sweden</option>
+											               <option value="41" label="Switzerland (+41)">Switzerland</option>
+											               <option value="380" label="Ukraine (+380)">Ukraine</option>
+											               <option value="44" label="United Kingdom (+44)">United Kingdom</option>
+											               <option value="379" label="Vatican City(+379)">Vatican City</option>
+											               <option value="61" label="Australia (+61)">Australia </option>
+											               <option value="682" label="Cook Islands (+682)">Cook Islands</option>
+											               <option value="679" label="Fiji (+679)">Fiji</option>
+											               <option value="670" label="East Timor (+670)">East Timor</option>
+											               <option value="689" label="French Polynesia (+689)">French Polynesia</option>
+											               <option value="241" label="French Southern Territories (+241)">French Southern Territories</option>
+											               <option value="671" label="Guam (+671)">Guam</option>
+											               <option value="686" label="Kiribati (+686)">Kiribati</option>
+											               <option value="692" label="Marshall Islands (+692)">Marshall Islands</option>
+											               <option value="691" label="Micronesia (+691)">Micronesia</option>
+											               <option value="674" label="Nauru (+674)">Nauru</option>
+											               <option value="687" label="New Caledonia (+687)">New Caledonia</option>
+											               <option value="64" label="New Zealand (+64)">New Zealand</option>
+											               <option value="683" label="Niue (+683)">Niue</option>
+											               <option value="672" label="Norfolk Island (+672)">Norfolk Island</option>
+											               <option value="680" label="Palau (+680)">Palau</option>
+											               <option value="675" label="Papua New Guinea (+675)">Papua New Guinea</option>
+											               <option value="677" label="Solomon Islands (+677)">Solomon Islands</option>
+											               <option value="676" label="Tonga (+676)">Tonga</option>
+											               <option value="688" label="Tuvalu (+688)">Tuvalu</option>
+											               <option value="678" label="Vanuatu (+678)">Vanuatu</option>
+											               <option value="681" label="Wallis and Futuna (+681)">Wallis and Futuna</option>
+                                                </select>
+                                             </div>
+                                             <div class="col8">
+                                                <input class="required" onkeyup="checkPhoneNumber(this)" type="number" name="mobile" id="mobile" value="{{{ old('mobile', $currentuser['mobile']) }}}" >
+                                                <input type="hidden" name="mobileCheck" id="mobileCheck" value="{{{ old('mobile', '+'.$currentuser['country_code'].$currentuser['mobile']) }}}">
+                                                <label id="mobile-error1" style="display:none" class="error error-mobile" for="mobile"></label>
+
+                                             </div>
                                           </div>
+                                          
+
                                        </div>
                                        {{--
                                        <div class="checkbox-row">
@@ -619,7 +634,42 @@
                </div>
             </div>
             @else
-            <div id="courses" class="tab-content-wrapper active-tab">
+            <div id="courses" class="tab-content-wrapper active-tab new-tab-content-wrapper">
+
+   
+               @if(!$masterClassAccess && $subscriptionAccess)
+                    <div class="subscription-div">
+               <div class="col12 dynamic-courses-wrapper subscription-card">
+                     <div class="item">
+                        <h2>E-Learning Masterclass Digital & Social Media Marketing Annual Access</h2>
+
+
+                        <div class="bottom">
+                           <div class="left">
+                              <div class="location">
+                              
+                              You are one of the selected graduates who have access to our annual subscription. Access all of our course's updated videos & files for €199/year. 
+
+                              </div>
+                           </div>
+                           <div class="right subscription-button">
+                           @foreach($plans as $key => $plan)
+                              <a href="/myaccount/subscription/{{$plan->events->first()->title}}/{{ $plan->name }}" class="btn btn--primary btn--lg">GET ANNUAL ACCESS NOW</a>
+                           @endforeach
+                           </div>
+                        </div>
+
+                     </div>
+
+                  </div>
+                                    </div>
+
+               @endif
+
+
+            
+
+
                @if(\Session('stripe-error'))
                <div class="alert-outer">
                   <div class="container">
@@ -633,13 +683,39 @@
                   <!-- /.alert-outer -->
                </div>
                @endif
-               <div class="container">
+
+               @if(Session::has('opmessage'))
+                  @if(Session::get('opstatus'))
+                  <div class="alert-outer">
+                     <div class="container">
+                        <div class="alert-wrapper success-alert">
+                           <div class="alert-inner">
+                              <p><img src="{{cdn('/theme/assets/images/icons/alert-icons/icon-success-alert.svg')}}" alt="Info Alert">{{ Session::get('opmessage') }}</p>
+                              <a href="javascript:void(0)" class="close-alert"><img src="{{cdn('/theme/assets/images/icons/alert-icons/icon-close-alert.svg')}}" alt="Close Alert"/></a>
+                           </div>
+                        </div>
+                     </div>
+                     <!-- /.alert-outer -->
+                  </div>
+                  @endif
+               @endif
+
+
+               <div class="container container-new">
                   <div class="row">
+                     
+
+                  
+               
+
+
                      <?php $tab = 0; ?>
-                     <?php //dd($events[0]); ?>
+                     <?php //dd($events); ?>
                      @if(isset($events) && count($events) > 0)
+
                      @foreach($events as $keyType => $event)
-                     @if($event['view_tpl'] != 'elearning_free' && $event['view_tpl'] != 'elearning_event')
+                     {{--@if($event['view_tpl'] != 'elearning_free' && $event['view_tpl'] != 'elearning_event')--}}
+                     @if($event['delivery'] != 143)
                      <div class="col12 dynamic-courses-wrapper dynamic-courses-wrapper--style2">
                         <div class="item">
                            <h2>{{ $event['title'] }}</h2>
@@ -647,10 +723,10 @@
                               <div class="tabs-ctrl">
                                  <ul>
                                     <li class="active"><a href="#c-info-inner{{$tab}}">Info</a></li>
-                                    <li><a href="#c-shedule-inner{{$tab}}">Schedule </a></li>
+                                    @if(isset($event['topics']) && count($event['topics']) > 0)<li><a href="#c-shedule-inner{{$tab}}">Schedule </a></li>@endif
                                     <?php  $fa = strtotime(date('Y-m-d',strtotime($event['release_date_files']))) >= strtotime(date('Y-m-d'))?>
                                     {{--@if(!$instructor && isset($event['category'][0]['dropbox']) && count($event['category'][0]['dropbox']) != 0 &&--}}
-                                    @if(isset($event['category'][0]['dropbox']) && count($event['category'][0]['dropbox']) != 0 &&
+                                    @if(isset($event['dropbox']) && count($event['dropbox']) != 0 &&
                                        $event['status'] == 3 &&  $fa)
                                     <li><a href="#c-files-inner{{$tab}}">Files</a></li>
                                     @endif
@@ -669,19 +745,27 @@
                                  <div id="c-info-inner{{$tab}}" class="in-tab-wrapper" style="display: block;">
                                     <div class="bottom">
                                        <?php
-                                          $summaryDate = '';
+                                   
+                                          /*$summaryDate = '';
                                           foreach($event['summary1'] as $summary){
                                              if($summary['section'] == 'date'){
                                                 $summaryDate = $summary['title'];
                                              }
-                                          }
+                                          }*/
                                           ?>
-                                       <div class="duration"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/icon-calendar.svg')}}" alt="">{{$summaryDate}}</div>
+                                       @if(isset($event['summaryDate']))<div class="duration"><img class="replace-with-svg" onerror="this.src='{{cdn('/theme/assets/images/icons/Duration_Hours.svg')}}'" src="{{cdn($event['summaryDate_icon'])}}" alt="">{{$event['summaryDate']}}</div>@endif
                                        @if($event['hours'])
-                                       <div class="expire-date"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Start-Finish.svg')}}" alt="">{{$event['hours']}}</div>
+                                       <div class="expire-date"><img class="replace-with-svg" onerror="this.src='{{cdn('/theme/assets/images/icons/Start-Finish.svg')}}'"  src="{{cdn($event['hours_icon'])}}" alt="">{{$event['hours']}}h</div>
                                        @endif
+                                      
                                     </div>
+                                    @if($event['status'] == 5)
+                                       <div>
+                                          You are on the waiting list.
+                                       </div>
+                                    @endif
                                  </div>
+                                 @if(isset($event['topics']) && count($event['topics']) > 0)
                                  <div id="c-shedule-inner{{$tab}}" class="in-tab-wrapper">
                                     <div class="bottom tabs-bottom">
                                        <div class="expire-date exp-date"><img src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}" alt="">Schedule available in PDF</div>
@@ -693,7 +777,6 @@
                                        <div class="accordion-wrapper accordion-big">
                                           <?php $catId = -1?>
                                           <?php //dd($event['topics']); ?>
-                                          @if(isset($event['topics']) && count($event['topics']) > 0)
                                           @foreach($event['topics'] as $keyTopic => $topic)
                                           <?php //dd($keyTopic); ?>
                                           @if(isset($topic) && count($topic) != 0 )
@@ -711,7 +794,7 @@
                                                          <div class="category">{{$lesso['type'][0]['name']}}</div>
                                                          @endif
                                                          <!-- Feedback 18-11 changed -->
-                                                         <span class="meta-item duration"><img src="{{cdn('/theme/assets/images/icons/icon-calendar.svg')}}" alt="" /><?= date( "l d M Y", strtotime($lesso['pivot']['time_starts']) ) ?></span> <!-- Feedback 18-11 changed -->
+                                                         <span class="meta-item duration"><img src="{{cdn('/theme/assets/images/icons/Duration_Hours.svg')}}" alt="" /><?= date( "l d M Y", strtotime($lesso['pivot']['time_starts']) ) ?></span> <!-- Feedback 18-11 changed -->
                                                          <span class="meta-item duration"><img src="{{cdn('/theme/assets/images/icons/Times.svg')}}" alt="" /><?= date( "H:i", strtotime($lesso['pivot']['time_starts']) ) ?> ({{$lesso['pivot']['duration']}})</span> <!-- Feedback 18-11 changed -->
                                                          <span class="meta-item duration"><img src="{{cdn('/theme/assets/images/icons/icon-marker.svg')}}" alt="" />{{$lesso['pivot']['room']}}</span> <!-- Feedback 18-11 changed -->
                                                       </div>
@@ -735,14 +818,17 @@
                                           </div>
                                           @endif
                                           @endforeach
-                                          @endif
+                                          
                                           <!-- /.accordion-wrapper -->
                                        </div>
                                        <!-- /.acc-topic-accordion -->
                                     </div>
                                  </div>
+                                 @endif
                                  <?php
-                                    $dropbox = isset($event['category'][0]['dropbox'][0]) ? $event['category'][0]['dropbox'][0] : [];
+                                 
+                                    //$dropbox = isset($event['category'][0]['dropbox'][0]) ? $event['category'][0]['dropbox'][0] : [];
+                                    $dropbox = isset($event['dropbox'][0]) ? $event['dropbox'][0] : [];
                                     //dd($dropbox);
                                     $folders = isset($dropbox['folders'][0]) ? $dropbox['folders'][0] : [];
                                     //dd($folders);
@@ -919,10 +1005,11 @@
                                           ?>
                                        <div class="right">
                                           <a  class="btn btn--secondary btn--md" target="_blank" href="/mycertificate/{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" >DOWNLOAD </a>
-                                          <a class="linkedin-post" title="Add this certification to your LinkedIn profile" target="_blank" href="https://www.linkedin.com/profile/add?startTask={{urlencode($certificate->certificate_title)}}&name={{urlencode($certificate->certificate_title)}}&organizationId=3152129&issueYear={{date('Y',$certificate->create_date)}}
+                                          <a class="linkedin-post" title="Add this certification to your LinkedIn profile" target="_blank" href="https://www.linkedin.com/profile/add?startTask={{urlencode(strip_tags($certificate->certificate_title))}}&name={{urlencode(strip_tags($certificate->certificate_title))}}&organizationId=3152129&issueYear={{date('Y',$certificate->create_date)}}
                                                 &issueMonth={{date('m',$certificate->create_date)}}&expirationYear={{$expirationYear}}&expirationMonth={{$expirationMonth}}&certUrl={{$certUrl}}&certId={{$certificate->credential}}">
                                                 <img class="linkdein-image-add" src="{{cdn('theme/assets/images/icons/social/events/Linkedin.svg')}}" alt="LinkedIn Add to Profile button">
                                           </a>
+
                                         </div>
 
                                       
@@ -937,23 +1024,22 @@
                      @else
                      <div class="col12 dynamic-courses-wrapper">
                         <div class="item">
-                           <?php //dd($event['title']); ?>
                            <h2>{{ $event['title'] }}</h2>
                            <div class="inside-tabs">
                               <div class="tabs-ctrl">
                                  <ul>
                                     <li class="active"><a href="#c-info-inner{{$tab}}">Info</a></li>
                                     <li><a href="#c-watch-inner{{$tab}}">Watch</a></li>
-                                    @if($event['view_tpl'] != 'elearning_free')
-                                    <?php //']); ?>
+                                  
+                                 
                                     @if(isset($event['exams']) && count($event['exams']) >0 )
-                                    <li><a href="#c-exams-inner{{$tab}}">Exams</a></li>
+                                       <li><a href="#c-exams-inner{{$tab}}">Exams</a></li>
                                     @endif
                                     @if(count($event['certs']) > 0)
-                                    <li><a href="#c-cert-inner{{$tab}}">Certificate</a></li>
+                                       <li><a href="#c-cert-inner{{$tab}}">Certificate</a></li>
                                     @endif
-                                    @endif
-                                    @if($subscriptionAccess && count($event['plans']) > 0)
+                                  
+                                    @if($event['mySubscription'])
                                     <li><a href="#c-subs-inner{{$tab}}">Subscription</a></li>
                                     @endif
                                  </ul>
@@ -966,7 +1052,7 @@
                                        <div class="expire-date exp-date"><img src="{{cdn('/theme/assets/images/icons/Days-Week.svg')}}" alt="">Expiration date: {{$event['expiration']}}</div>
                                        @endif
                                        @if (isset($event['hours']))
-                                       <div  class="duration"><img class="replace-with-svg" width="20" src="{{cdn('/theme/assets/images/icons/Start-Finish.svg')}}" alt=""> {{$event['hours']}}h </div>
+                                       <div  class="duration"><img class="replace-with-svg" width="20" onerror="this.src='{{cdn('/theme/assets/images/icons/Start-Finish.svg')}}'"  src="{{cdn($event['hours_icon'])}}" alt=""> {{$event['hours']}}h </div>
                                        @endif
                                        @if (isset($event['videos_progress']))
                                        <?php //dd($event); ?>
@@ -974,7 +1060,7 @@
                                        @endif
                                     </div>
                                  </div>
-                                 @if($subscriptionAccess)
+                                 @if($event['mySubscription'])
                                  <div id="c-subs-inner{{$tab}}" class="in-tab-wrapper">
                                     <div class="bottom">
                                        @if($event['mySubscription'])
@@ -1031,6 +1117,7 @@
                                                          //row_status = ` style="color:red;" `;
                                                       }
                                                    ?>
+                                                @if($status !== 'Cancel')
                                                 <div class="status_switch">
                                                    <div class="onoffswitch" data-status="{{$status}}" data-id="{{$event['mySubscription']['id']}}" id="onoffswitch">
                                                       <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" tabindex="0" <?php echo $a; ?>>
@@ -1040,6 +1127,7 @@
                                                       </label>
                                                    </div>
                                                 </div>
+                                                @endif
                                              </div>
                                              @endif
                                           </div>
@@ -1092,12 +1180,12 @@
                                           @if(!$event['video_access'])
                                           {{--<a style="cursor:not-allowed; opacity: 0.5; pointer-events: none;" href="/myaccount/elearning/{{ $event['title'] }}" class="btn btn--secondary btn--md">@if((isset($event['videos_progress']) && $event['videos_progress'] == 100) || count($event['cert'])>0) WATCH AGAIN @else WATCH NOW @endif</a>--}}
                                           @else
-                                          <a href="/myaccount/elearning/{{ $event['title'] }}" class="btn btn--secondary btn--md">@if((isset($event['videos_progress']) && $event['videos_progress'] == 100) ) WATCH AGAIN @else WATCH NOW @endif</a>
+                                          <a href="/myaccount/elearning/{{ $event['title'] }}" class="btn btn--secondary btn--md">@if( (isset($event['videos_progress']) && $event['videos_progress'] == 100) ) WATCH AGAIN @else WATCH NOW @endif</a>
                                           @endif
                                        </div>
                                     </div>
                                  </div>
-                                 @if($event['view_tpl'] != 'elearning_free' )
+                                 
                                  @if(isset($event['exams']))
                                  <?php $nowTime = \Carbon\Carbon::now(); ?>
                                  <div id="c-exams-inner{{$tab}}" class="in-tab-wrapper">
@@ -1143,7 +1231,7 @@
                                           ?>
                                        <div class="right">
                                           <a  class="btn btn--secondary btn--md" target="_blank" href="/mycertificate/{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" >DOWNLOAD </a>
-                                          <a class="linkedin-post" title="Add this certification to your LinkedIn profile" target="_blank" href="https://www.linkedin.com/profile/add?startTask={{urlencode($certificate->certificate_title)}}&name={{urlencode($certificate->certificate_title)}}&organizationId=3152129&issueYear={{date('Y',$certificate->create_date)}}
+                                          <a class="linkedin-post" title="Add this certification to your LinkedIn profile" target="_blank" href="https://www.linkedin.com/profile/add?startTask={{urlencode(strip_tags($certificate->certificate_title))}}&name={{urlencode(strip_tags($certificate->certificate_title))}}&organizationId=3152129&issueYear={{date('Y',$certificate->create_date)}}
                                                 &issueMonth={{date('m',$certificate->create_date)}}&expirationYear={{$expirationYear}}&expirationMonth={{$expirationMonth}}&certUrl={{$certUrl}}&certId={{$certificate->credential}}">
                                                 <img class="linkdein-image-add" src="{{cdn('theme/assets/images/icons/social/events/Linkedin.svg')}}" alt="LinkedIn Add to Profile button">
                                           </a>
@@ -1153,7 +1241,7 @@
                                     </div>
                                  </div>
                                  @endif
-                                 @endif
+                                 
                               </div>
                            </div>
                            <!-- ./item -->
@@ -1166,7 +1254,8 @@
                      @if(isset($mySubscriptionEvents) && count($mySubscriptionEvents) > 0)
                      <!-- subs -->
                      @foreach($mySubscriptionEvents as $keyType => $event)
-                     @if($event['view_tpl'] != 'elearning_event' && $event['view_tpl'] != 'elearning_free')
+                     {{--@if($event['view_tpl'] != 'elearning_event' && $event['view_tpl'] != 'elearning_free')--}}
+                     @if($event['delivery'] != 143)
                      @else
                      <div class="col12 dynamic-courses-wrapper">
                         <div class="item">
@@ -1176,6 +1265,14 @@
                                  <ul>
                                     <li class="active"><a href="#c-info-inner{{$tab}}">Info</a></li>
                                     <li><a href="#c-watch-inner{{$tab}}">Watch</a></li>
+                                    @if(isset($event['exams']) && count($event['exams']) >0 )
+                                       <li><a href="#c-exams-inner{{$tab}}">Exams</a></li>
+                                    @endif
+
+                                    @if(count($event['certs']) > 0)
+                                       <li><a href="#c-cert-inner{{$tab}}">Certificate</a></li>
+                                    @endif
+
                                     <li><a href="#c-subs-inner{{$tab}}">Subscription</a></li>
                                  </ul>
                               </div>
@@ -1183,11 +1280,12 @@
                                  <div id="c-info-inner{{$tab}}" class="in-tab-wrapper" style="display: block;">
                                     <div class="bottom">
                                        @if (isset($event['hours']) && $event['hours'])
-                                       <div  class="duration"><img class="replace-with-svg" width="20" src="{{cdn('/theme/assets/images/icons/Start-Finish.svg')}}" alt=""> {{$event['hours']}}h </div>
+                                       <div  class="duration"><img class="replace-with-svg" width="20" onerror="this.src='{{cdn('/theme/assets/images/icons/Start-Finish.svg')}}'"  src="{{cdn($event['hours_icon'])}}" alt=""> {{$event['hours']}}h </div>
                                        @endif
                                        @if (isset($event['videos_progress']))
                                        <div  class="duration"><img class="replace-with-svg" width="20" src="{{cdn('/theme/assets/images/icons/E-Learning.svg')}}" alt=""> {{$event['videos_progress']}}% </div>
                                        @endif
+                                       
                                     </div>
                                  </div>
                                  <div id="c-watch-inner{{$tab}}" class="in-tab-wrapper">
@@ -1216,13 +1314,72 @@
                                           @endforeach
                                           @endforeach
                                           @if(!$event['video_access'])
-                                          {{--<a style="cursor:not-allowed; opacity: 0.5; pointer-events: none;" href="/myaccount/elearning/{{ $event['title'] }}" class="btn btn--secondary btn--md">@if((isset($event['videos_progress']) && $event['videos_progress'] == 100) || count($event['cert'])>0) WATCH AGAIN @else WATCH NOW @endif</a>--}}
+                                          {{--<a style="cursor:not-allowed; opacity: 0.5; pointer-events: none;" href="/myaccount/elearning/{{ $event['title'] }}" class="btn btn--secondary btn--md">@if( (isset($event['videos_progress']) && $event['videos_progress'] == 100) || count($event['cert'])>0) WATCH AGAIN @else WATCH NOW @endif</a>--}}
                                           @else
-                                          <a href="/myaccount/elearning/{{ $event['title'] }}" class="btn btn--secondary btn--md">@if((isset($event['videos_progress']) && $event['videos_progress'] == 100))>0) WATCH AGAIN @else WATCH NOW @endif</a>
+                                          <a href="/myaccount/elearning/{{ $event['title'] }}" class="btn btn--secondary btn--md">@if( isset($event['videos_progress']) && $event['videos_progress'] == 100 >0) WATCH AGAIN @else WATCH NOW @endif</a>
                                           @endif
                                        </div>
                                     </div>
                                  </div>
+
+                                 @if(isset($event['exams']))
+                                 <?php $nowTime = \Carbon\Carbon::now(); ?>
+                                 <div id="c-exams-inner{{$tab}}" class="in-tab-wrapper">
+                                    <div class="bottom">
+                                       @foreach($event['exams'] as $p)
+                                       <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Customer_Access.svg')}}" alt="">Exams activate automatically when you watch 80% </div>
+                                       <div class="right">
+                                          <!-- Feedback 8-12 changed -->
+                                          @if($event['exam_access'] && !$user->hasExamResults($p->id))
+                                          @if($p->islive == 1)
+                                          <a target="_blank" onclick="window.open('{{ route('attempt-exam', [$p->id]) }}', 'newwindow', 'width=1400,height=650'); return false;" title="{{$p['exam_name']}}" class="btn btn--secondary btn--md">TAKE EXAM</a>
+                                          @endif
+                                          @elseif($userExam = $user->hasExamResults($p->id))
+                                          @if($nowTime->diffInHours($userExam->end_time) < 48)
+                                          <a target="_blank" href="{{ url('exam-results/' . $p->id) }}?s=1" title="{{$p['exam_name']}}" class="btn btn--secondary btn--md">VIEW RESULT</a>
+                                          @else
+                                          <a target="_blank" href="{{ url('exam-results/' . $p->id) }}?s=1" title="{{$p['exam_name']}}" class="btn btn--secondary btn--md btn--completed">VIEW RESULT</a>
+                                          @endif
+                                          @else
+                                          <div class="right">
+                                             <a href="javascript:void(0)" title="{{$p['exam_name']}}" class="btn btn--secondary btn--md btn--completed">TAKE EXAM</a>
+                                          </div>
+                                          @endif
+                                       </div>
+                                       @endforeach
+                                    </div>
+                                 </div>
+                                 @endif
+
+                                 @if(count($event['certs']) > 0)
+                                 <div id="c-cert-inner{{$tab}}" class="in-tab-wrapper">
+                                    <div class="bottom">
+                                       <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}" alt="">@if(isset($newlayoutExamsEvent[$keyType]) && count($newlayoutExamsEvent[$keyType])>0)Certificate download after completing your exams. @else Your certification is ready @endif</div>
+                                       @foreach($event['certs'] as $certificate)
+                                       <?php
+                                             $expirationMonth = '';
+                                             $expirationYear = '';
+                                             $certUrl = trim(url('/') . '/mycertificate/' . base64_encode(Auth::user()->email."--".$certificate->id));
+                                             if($certificate->expiration_date){
+                                                $expirationMonth = date('m',$certificate->expiration_date);
+                                                $expirationYear = date('Y',$certificate->expiration_date);
+                                             }
+
+                                          ?>
+                                       <div class="right">
+                                          <a  class="btn btn--secondary btn--md" target="_blank" href="/mycertificate/{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" >DOWNLOAD </a>
+                                          <a class="linkedin-post" title="Add this certification to your LinkedIn profile" target="_blank" href="https://www.linkedin.com/profile/add?startTask={{urlencode(strip_tags($certificate->certificate_title))}}&name={{urlencode(strip_tags($certificate->certificate_title))}}&organizationId=3152129&issueYear={{date('Y',$certificate->create_date)}}
+                                                &issueMonth={{date('m',$certificate->create_date)}}&expirationYear={{$expirationYear}}&expirationMonth={{$expirationMonth}}&certUrl={{$certUrl}}&certId={{$certificate->credential}}">
+                                                <img class="linkdein-image-add" src="{{cdn('theme/assets/images/icons/social/events/Linkedin.svg')}}" alt="LinkedIn Add to Profile button">
+                                          </a>
+                                        </div>
+
+                                      
+                                       @endforeach
+                                    </div>
+                                 </div>
+                                 @endif
+
                                  @if($subscriptionAccess)
                                  <div id="c-subs-inner{{$tab}}" class="in-tab-wrapper">
                                     <div class="bottom">
@@ -1281,6 +1438,7 @@
                                                          //row_status = ` style="color:red;" `;
                                                       }
                                                    ?>
+                                                @if($status !== 'Cancel')
                                                 <div class="status_switch">
                                                    <div class="onoffswitch" data-status="{{$status}}" data-id="{{$event['mySubscription']['id']}}" id="onoffswitch">
                                                       <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" tabindex="0" <?php echo $a; ?>>
@@ -1290,6 +1448,7 @@
                                                       </label>
                                                    </div>
                                                 </div>
+                                                @endif
                                              </div>
                                              @endif
                                           </div>
@@ -1317,141 +1476,8 @@
                         @endif
                         <?php $tab += 1; ?>
                         @endforeach
-                        @endif
-                        @if(isset($subscriptionEvents) && count($subscriptionEvents) > 0 )
-                        <!-- subs -->
-                        @foreach($subscriptionEvents as $keyType => $event)
-                        @if($event['view_tpl'] != 'elearning_event' && $event['view_tpl'] != 'elearning_free')
-                        <div class="col12 dynamic-courses-wrapper dynamic-courses-wrapper--style2">
-                           <div class="item">
-                              <h2>{{ $event['title'] }}</h2>
-                              <div class="inside-tabs">
-                                 <div class="tabs-ctrl">
-                                    <ul>
-                                       <li class="active"><a href="#c-info-inner{{$tab}}">Info</a></li>
-                                       <li><a href="#c-shedule-inner{{$tab}}">Schedule </a></li>
-                                       @if(isset($showFiles[$keyType]) && $showFiles[$keyType])
-                                       <li><a href="#c-files-inner{{$tab}}">Files</a></li>
-                                       @endif
-                                       {{--
-                                       <li><a href="#c-subs-inner{{$tab}}">Subscription</a></li>
-                                       --}}
-                                    </ul>
-                                 </div>
-                                 <div class="inside-tabs-wrapper">
-                                    <div id="c-info-inner{{$tab}}" class="in-tab-wrapper" style="display: block;">
-                                       <div class="bottom">
-                                          <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/marker.svg')}}" alt=""><a href="{{$event['city']['slug']}}">{{$event['city']['name']}}</a></div>
-                                          <div class="duration"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/icon-calendar.svg')}}" alt="">{{$event['date']}}</div>
-                                          @if($event['hours'])
-                                          <div class="expire-date"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Start-Finish.svg')}}" alt="">{{$event['hours']}}</div>
-                                          @endif
-                                       </div>
-                                    </div>
-                                    <div id="c-shedule-inner{{$tab}}" class="in-tab-wrapper">
-                                       <div class="bottom tabs-bottom">
-                                          <div class="expire-date exp-date"><img src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}" alt="">Schedule available in PDF</div>
-                                          <div class="right">
-                                             <a target="_blank" href="/print/syllabus/{{$event['slug']}}" class="btn btn--secondary btn--md"> DOWNLOAD SCHEDULE </a>
-                                          </div>
-                                       </div>
-                                       <div class="acc-topic-accordion">
-                                          <div class="accordion-wrapper accordion-big">
-                                             <?php $catId = -1?>
-                                             @foreach($event['topics'] as $keyTopic => $topic)
-                                             <div class="accordion-item">
-                                                <h3 class="accordion-title title-blue-gradient scroll-to-top">{{$keyTopic}}</h3>
-                                                <div class="accordion-content no-padding">
-                                                   @foreach($topic as $keyLesso => $lesso)
-                                                   @foreach($lesso as $keyLesson => $lesson)
-                                                   <?php $catId = $lesson['cat_id'] ?>
-                                                   @if($lesson['type'])
-                                                   <div class="topic-wrapper-big">
-                                                      <div class="topic-title-meta">
-                                                         <h4>{{$keyLesson}}</h4>
-                                                         <!-- Feedback 18-11 changed -->
-                                                         <div class="topic-meta">
-                                                            @if($lesson['type'])
-                                                            <div class="category">{{$lesson['type']}}</div>
-                                                            @endif
-                                                            <!-- Feedback 18-11 changed -->
-                                                            <span class="meta-item duration"><img src="{{cdn('/theme/assets/images/icons/icon-calendar.svg')}}" alt="" />{{$lesson['eldate']}}</span> <!-- Feedback 18-11 changed -->
-                                                            <span class="meta-item duration"><img src="{{cdn('/theme/assets/images/icons/Times.svg')}}" alt="" />{{$lesson['eltime']}} ({{$lesson['in_class_duration']}})</span> <!-- Feedback 18-11 changed -->
-                                                            <span class="meta-item duration"><img src="{{cdn('/theme/assets/images/icons/icon-marker.svg')}}" alt="" />{{$lesson['room']}}</span> <!-- Feedback 18-11 changed -->
-                                                         </div>
-                                                         <!-- /.topic-title-meta -->
-                                                      </div>
-                                                      <div class="author-img">
-                                                         <!-- Feedback 18-11 changed -->
-                                                         <a href="{{$lesson['slug']}}">
-                                                         <span class="custom-tooltip">{{$lesson['inst']}}</span>
-                                                         <img src="{{cdn( get_image($instructors[$lesso['instructor_id']][0]['mediable'],'instructors-small') )}}" alt="{{$lesson['inst']}}"/>
-                                                         </a>
-                                                      </div>
-                                                      <!-- /.topic-wrapper-big -->
-                                                   </div>
-                                                   @endif
-                                                   @endforeach
-                                                   @endforeach
-                                                   <!-- /.accordion-content -->
-                                                </div>
-                                                <!-- /.accordion-item -->
-                                             </div>
-                                             @endforeach
-                                             <!-- /.accordion-wrapper -->
-                                          </div>
-                                          <!-- /.acc-topic-accordion -->
-                                       </div>
-                                    </div>
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
-                        @else
-                        <div class="col12 dynamic-courses-wrapper">
-                           <div class="item">
-                              <h2>{{ $event['title'] }}</h2>
-                              <div class="inside-tabs">
-                                 <div class="tabs-ctrl">
-                                    <ul>
-                                       <li class="active"><a href="#c-info-inner{{$tab}}">Info</a></li>
-                                       <li><a href="#c-subs-inner{{$tab}}">Subscription</a></li>
-                                    </ul>
-                                 </div>
-                                 <div class="inside-tabs-wrapper">
-                                    <div id="c-info-inner{{$tab}}" class="in-tab-wrapper" style="display: block;">
-                                       <div class="bottom">
-                                          @if (isset($event['hours']) && $event['hours'])
-                                          <div  class="duration"><img class="replace-with-svg" width="20" src="{{cdn('/theme/assets/images/icons/Start-Finish.svg')}}" alt=""> {{$event['hours']}}h </div>
-                                          @endif
-                                          @if (isset($event['videos_progress']))
-                                          <div  class="duration"><img class="replace-with-svg" width="20" src="{{cdn('/theme/assets/images/icons/E-Learning.svg')}}" alt=""> {{$event['videos_progress']}}% </div>
-                                          @endif
-                                       </div>
-                                    </div>
-                                    @if($subscriptionAccess)
-                                    <div id="c-subs-inner{{$tab}}" class="in-tab-wrapper">
-                                       <div class="bottom">
-                                          <div class="left">
-                                             <div  class="duration"><img class="replace-with-svg" width="20" src="{{cdn('/theme/assets/images/icons/checklist-graduate-hat.svg')}}" alt="">Get annual access to updated videos & files. 15 days free trial.</div>
-                                          </div>
-                                          <div class="right">
-                                             @foreach($event['plans'] as $key => $plan)
-                                             <a href="/myaccount/subscription/{{$event['title']}}/{{ $plan->name }}" class="btn btn--secondary btn--md">SUBSCRIBE NOW</a>
-                                             @endforeach
-                                          </div>
-                                       </div>
-                                    </div>
-                                    @endif
-                                 </div>
-                              </div>
-                              <!-- ./item -->
-                           </div>
-                        </div>
-                        @endif
-                        <?php $tab += 1; ?>
-                        @endforeach
-                        @endif
+                     @endif
+                       
                      </div>
                   </div>
                </div>
@@ -1470,172 +1496,10 @@
 @section('scripts')
 
 <script src="{{cdn('theme/assets/js/validation_myaccount/jquery.validate.min.js')}}" type="text/javascript" charset="utf-8" async defer></script>
-	<script src="{{cdn('theme/assets/js/validation_myaccount/additional-methods.min.js')}}" type="text/javascript" charset="utf-8" async defer></script>	
-	<script src="{{cdn('theme/assets/js/validation_myaccount/validation.js')}}" type="text/javascript" charset="utf-8" async defer></script>	
+<script src="{{cdn('theme/assets/js/validation_myaccount/additional-methods.min.js')}}" type="text/javascript" charset="utf-8" async defer></script>	
+<script src="{{cdn('theme/assets/js/validation_myaccount/validation.js')}}" type="text/javascript" charset="utf-8" async defer></script>	
+<script src="{{ asset('argon') }}/vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
 
-{{--<script src="https://js.stripe.com/v3/"></script>
-<script>
-   var stripeUserId = '{{ Auth::user()->createSetupIntent()->client_secret }}';
-   $(document).on('click', '#addCard', function(e){
-
-     /*$('<script>')
-      .attr('src', 'https://js.stripe.com/v3/')
-      .attr('id', 'stripe-js')
-      .appendTo('head');*/
-
-
-
-     $('#addCard').prop('disabled', true);
-     $('.msg_save_card').remove();
-     $('#container').append(`<div id="paymentMethodAdd">
-        <input id="card-holder-name" type="text">
-        <!-- Stripe Elements Placeholder -->
-        <div id="card-element"></div>
-        <button id="card-button" type="button" class="btn btn--secondary btn--sm" data-secret="${stripeUserId}">
-            Update Payment Method
-        </button></div>`)
-
-
-        $('<script>')
-      .text(`var stripe = Stripe('{{$stripe_key}}',{locale: 'en'});
-              var elements = stripe.elements();
-              var cardElement = elements.create('card',{
-                 style: {
-                    base: {
-
-                       fontSize: '18px',
-
-                    },
-                 },
-                 hidePostalCode: true,
-                 });
-              cardElement.mount('#card-element');`)
-
-      .attr('id', 'stripe-form')
-      .appendTo('head');
-
-
-
-
-   })
-
-</script>
-<script>
-   $(document).on('click',"#card-button",async (e) => {
-      var cardHolderName = document.getElementById('card-holder-name');
-      var cardButton = document.getElementById('card-button');
-      var clientSecret = cardButton.dataset.secret;
-      let { setupIntent, error } = await stripe.confirmCardSetup(
-           clientSecret, {
-               payment_method: {
-                   card: cardElement,
-                   billing_details: { name: cardHolderName.value }
-               }
-           }
-       ).then(function (result) {
-            if (result.error) {
-               console.log('error = ', result.error)
-                //$('#card-errors').text(result.error.message)
-                //$('button.pay').removeAttr('disabled')
-            } else {
-               paymentMethod = result.setupIntent.payment_method
-               $('button').prop('disabled', true);
-               $.ajax({
-                  type:'POST',
-                  url:'myaccount/card/store_from_payment_myaccount',
-                  headers: {
-                   'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
-                  },
-                  data:{ 'payment_method' : paymentMethod},
-                  success:function(data) {
-                     stripeUserId = data.id;
-                     if(data['success']){
-
-                        let defaultPaymetntID = data['defaultPaymetntId'];
-                        let defaultCard = data['default_card'];
-                        let cards = data['cards'];
-
-                        let html = ` <table  style="width:100%"><tr>
-                              <th>Brand</th>
-                              <th>Default</th>
-                              <th>Last four</th>
-                              <th>Expire Month</th>
-                              <th>Expire Year</th>
-                              <th>Actions</th>
-                           </tr>`;
-
-                        $.each( defaultCard, function( key, value ) {
-
-                           html +=`<tr><td>` + value['brand'] + `</td>` +
-                           `<td><i class="far fa-check-circle"></i>Yes</td>`+
-                                 `<td>` + value['last4'] + `</td>` +
-                                 `<td>` + value['exp_month'] + `</td>` +
-                                 `<td>` + value['exp_year'] + `</td></tr>` ;
-                        });
-
-                        $.each( cards, function( key, value ) {
-                           if(value['id'] != defaultPaymetntID){
-                              html +=`<tr><td>` + value['card']['brand'] + `</td>` +
-                              `<td><i class="far fa-check-circle"></i>no</td>`+
-                                 `<td>` + value['card']['last4'] + `</td>` +
-                                 `<td>` + value['card']['exp_month'] + `</td>` +
-                                 `<td>` + value['card']['exp_year'] + `</td>` +
-                                 `<td>
-
-                                       <form action="{{route('payment_method.update')}}" method="post" id="payment-form">
-                                          {{ csrf_field() }}
-                                          <input type="hidden" name="card_id" value="`+ value['id'] +`">
-                                          <button class="btn btn--secondary btn--sm">Set default</button>
-                                       </form>
-
-                                       <form action="{{route('payment_method.remove')}}" method="post" id="payment-form">
-                                          {{ csrf_field() }}
-                                          <input type="hidden" name="card_id" value="`+ value['id'] +`">
-                                          <button id="removebtn" class="btn btn--secondary btn--sm">Remove</button>
-                                       </form>
-                                 </td></tr>`;
-                           }
-
-                        });
-                        html += '</table>'
-                        $("#cardList").empty();
-                        $("#cardList").append(html);
-
-                        $("#stripe-form").remove();
-                        $("#stripe-js").remove();
-
-                        $('#paymentMethodAdd').children().remove();
-
-                        $('#container').append(`<p class="normal msg_save_card"> Successfully added card!!</p>`)
-                        $('#addCard').prop('disabled', false);
-                        $('button').prop('disabled', false);
-                     }else{
-                        let message = `<img src="{{cdn('theme/assets/images/icons/alert-icons/icon-error-alert.svg')}}" alt="Info Alert">` + data['message'];
-                        $("#card-message").html( message)
-
-                        var favDialogCard = document.getElementById('favDialogCardNumberFailed');
-                        favDialogCard.style.display = "block";
-
-                        $('#addCard').prop('disabled', false);
-                        $('button').prop('disabled', false);
-                        $("#stripe-form").remove();
-                     $("#stripe-js").remove();
-                     }
-
-
-
-                  },
-
-               });
-            }
-         });
-
-   })
-
-
-
-
-</script>--}}
 <script>
    function cvv(input) {
 
@@ -2119,9 +1983,7 @@
 <script>
    $(document).ready(function() {
 
-
-
-      $("#selectCountry").select2()
+      $("#selectCountry").select()
 
       @if("{{ old('country_code') }}")
 
@@ -2129,54 +1991,104 @@
 
       @endif
 
+      alphabetizeList('#selectCountry');
+
    });
 
 </script>
+
 <script>
    $("#update-personal-info").click(function(){
 
-      fdata =$("#update-form").serialize();
-      var firstError = false;
-      $.ajax({ url: "{{route('validate.personalInfo')}}", type: "post",
-            data: fdata,
-            success: function(data) {
-                //console.log(data);
-                //return;
-                $('#update-form').find("input").removeClass('verror');
-                if (Number(data.status) === 0) {
-                    //var html = '<ul>';
-                    $.each(data.errors, function (key, row) {
-                        //console.log(data.errors);
-                        var newkey = key.replace('.', '');
+      /*let val = $("#firstname").val();
+      let newVal = val.charAt(0).toUpperCase() + val.slice(1).toLowerCase();
+      $("#firstname").val(newVal)
 
-                        $('#update-form').find('input#'+newkey).addClass(['verror','validate-error']);
+      val = $("#lastname").val();
+      newVal = val.charAt(0).toUpperCase() + val.slice(1).toLowerCase();
+      $("#lastname").val(newVal)*/
 
-                        if(!firstError){
-                            elementsHeight = Math.round($('#header').outerHeight()) - document.getElementById(newkey).getBoundingClientRect().top +30
-                            firstError = true;
+      let val = ($("#firstname").val()).split(" ");
+      let newVal = '';
+      $.each(val, function( index, value ) {
+          newVal += value.charAt(0).toUpperCase() + value.slice(1).toLowerCase() + ' ';
+      });
+      $("#firstname").val(newVal.trim());
 
-                            $('html, body').animate({
-                                scrollTop: elementsHeight
-                            }, 300);
-                        }
+      val = ($("#lastname").val()).split(" ");
+      newVal = '';
+      $.each(val, function( index, value ) {
+          newVal += value.charAt(0).toUpperCase() + value.slice(1).toLowerCase() + ' ';
+      });
 
-                        $('#'+newkey+'-error').text(row[0]);
-                        //var s = $('#update-form').find('input#'+newkey).attr('placeholder');
-                        var pl =  row[0] ;
-
-                        $('#update-form').find('input#'+newkey).attr('placeholder', pl);
-
-                    });
+      $("#lastname").val(newVal.trim());
 
 
 
-                } else {
-                  $('#update-form').submit();
-                }
-            }
-        });
+    var checkoutUrl = '/myaccount/validate-personal-info';
+    var fdata = $("#update-form").serialize();
+    $(".error-mobile").hide();
+	
 
+    $.ajax({ url: checkoutUrl, type: "post",
+         
+         headers: {
+             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+         },
+         data: fdata,
+         success: function(data) {
+           
+             $('#update-form').find("input[type=text]").removeClass('verror');
+             if (Number(data.status) === 0) {
+                 //var html = '<ul>';
+                 $("#update-form").valid();
+                 $.each(data.errors, function (key, row) {
+                     
+                     $("#mobile-error1").html(row);
+                     $("#mobile-error1").show()
+
+                 });
+
+                 //$("#participant-form").valid();
+             } else {
+
+               $('#update-form').submit();
+        
+             }
+         }
+            
+    });
+
+
+      
    });
 
 </script>
+
+<script>
+
+		function alphabetizeList(listField) {
+    		var sel = $(listField);
+    		var selected = sel.val(); // cache selected value, before reordering
+    		var opts_list = sel.find('option');
+    		opts_list.sort(function (a, b) {
+    		    return $(a).text().trim() > $(b).text().trim() ? 1 : -1;
+    		});
+    		sel.html('').append(opts_list);
+    		sel.val(selected); // set cached selected value
+		}
+
+</script>
+
+<script>
+   var datePickerOptions = {
+        format: 'dd-mm-yyyy',
+        changeMonth: true,
+        changeYear: true,
+    }
+    $("#birthday").datepicker(datePickerOptions);
+
+
+</script>
+
 @stop

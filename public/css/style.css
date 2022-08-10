@@ -64,8 +64,8 @@
 
 #event_edit_form .input-icon img,
 #event_create_form .input-icon img{
-    max-width: 20px;
-    max-height: 20px;
+    width: 20px;
+    height: 20px;
 }
 
 
@@ -148,6 +148,66 @@
 
 .input-icon-wrapper-city .input-icon{
     margin-top: 0.2rem;
+}
+
+#filesTreeContainer {
+    height: 350px;
+}
+
+.dx-checkbox.dx-state-hover .dx-checkbox-icon {
+    border: 1px solid #324cdd
+}
+
+.dx-checkbox.dx-state-focused .dx-checkbox-icon {
+    border: 1px solid #324cdd;
+}
+
+.dx-treelist-rowsview .dx-selection.dx-row:not(.dx-row-focused) > td,
+.dx-treelist-rowsview .dx-selection.dx-row:not(.dx-row-focused) > tr > td,
+.dx-treelist-rowsview .dx-selection.dx-row:not(.dx-row-focused):hover > td,
+.dx-treelist-rowsview .dx-selection.dx-row:not(.dx-row-focused):hover > tr > td {
+    background-color: #324cdd !important;
+}
+
+.dx-treelist-rowsview .dx-selection.dx-row:not(.dx-row-focused):hover:not(.dx-row-lines) > td, .dx-treelist-rowsview .dx-selection.dx-row:not(.dx-row-focused):not(.dx-row-lines) > td {
+    border-bottom: 1px solid #324cdd !important;
+    border-top: 1px solid #324cdd !important;
+}
+
+.dx-treelist-rowsview .dx-selection.dx-row:not(.dx-row-focused).dx-column-lines > td,
+.dx-treelist-rowsview .dx-selection.dx-row:not(.dx-row-focused).dx-column-lines > tr > td,
+.dx-treelist-rowsview .dx-selection.dx-row:not(.dx-row-focused):hover.dx-column-lines > td,
+.dx-treelist-rowsview .dx-selection.dx-row:not(.dx-row-focused):hover.dx-column-lines > tr > td {
+    border-left-color: #324cdd !important;
+    border-right-color: #324cdd !important;
+}
+
+.dx-checkbox-checked .dx-checkbox-icon {
+    color: #324cdd !important;
+}
+
+.dx-checkbox-indeterminate .dx-checkbox-icon::before {
+    background-color: #324cdd !important;
+}
+
+.dx-checkbox-indeterminate .dx-checkbox-icon {
+    color: #324cdd !important;
+}
+
+.dx-scrollable-scroll-content {
+    background-color: #324cdd !important;
+}
+
+.dx-loadindicator-icon .dx-loadindicator-segment {
+    background: #324cdd !important;
+}
+
+.dx-widget {
+    font-size: 17px;
+}
+
+.dx-treelist-rowsview .dx-treelist-icon-container {
+    line-height: 1.5;
 }
 
 /***** Search List *****/
@@ -450,7 +510,6 @@ li.select2-results__option:empty {
     right: auto;
     left: 7px;
 }
-
 
 
 .logo {

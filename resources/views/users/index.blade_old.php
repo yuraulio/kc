@@ -82,21 +82,6 @@
                                             <option value="Super Administrator"> Super Administrator </option>
                                         </select>
                                     </div>
-
-                                    <div class="col-sm-3 filter_col" id="filter_col12" data-column="12">
-                                        <label>Job Position</label>
-                                        <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..."  name="Name" class="column_filter" id="col12_filter">
-                                        <option selected value> -- All -- </option>
-                                        </select>
-                                    </div>
-
-                                    <div class="col-sm-3 filter_col" id="filter_col13" data-column="13">
-                                        <label>Company</label>
-                                        <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..."  name="Name" class="column_filter" id="col13_filter">
-                                        <option selected value> -- All -- </option>
-                                        </select>
-                                    </div>
-
                                     <div class="col-sm-3">
                                         <div class="form-group">
                                             <label>From:</label>
@@ -116,6 +101,7 @@
                         <table class="table align-items-center table-flush"  id="datatable-basic45">
                             <thead class="thead-light">
                                 <tr>
+                                    
                                     <th scope="col">Photo</th>
                                     <th scope="col">{{ __('Name') }}</th>
                                     <th scope="col">{{ __('Lastname') }}</th>
@@ -128,8 +114,8 @@
                                     <th class="d-none" scope="col">{{ __('Event') }}</th>
                                     <th class="elearning-infos d-none" scope="col">{{ __('Video Seen') }}</th>
                                     <th class="elearning-infos d-none" scope="col">{{ __('Exams') }}</th>
-                                    <th class="d-none" scope="col">{{ __('Job Position') }}</th>
-                                    <th class="d-none" scope="col">{{ __('Company') }}</th>
+                                    <th scope="col d-none">{{ __('Job Position') }}</th>
+                                    <th scope="col d-none">{{ __('Company') }}</th>
                                     <th scope="col"></th>
                                 </tr>
                             </thead>
@@ -182,9 +168,8 @@
 
                                         <td class="elearning-infos d-none videoSeen"></td>
                                         <td class="elearning-infos d-none"></td>
-
-                                        <td class="d-none"> {{ $user['job_title'] }} </td>
-                                        <td class="d-none"> {{ $user['company'] }} </td>
+                                        <td> {{$user['job_title']}} </td>
+                                        <td> {{$user['company']}} </td>
 
                                         <td class="text-right">
                                             <div class="dropdown">
@@ -772,8 +757,6 @@
 
         function filterColumn ( i ) {
 
-            console.log('fasd = ', i);
-
             initCounters()
             if(i == 9) {
                 $('#datatable-basic45').DataTable().column( 9 ).search(
@@ -810,10 +793,6 @@
                 $('#datatable-basic45').DataTable().column( 6 ).search(
                     $('#col6_filter').val(), true,false
                 ).draw();
-            }else{
-                $('#datatable-basic45').DataTable().column( i ).search(
-                    $('#col' + i + '_filter').val(), true,false
-                ).draw();
             }
 
 
@@ -831,6 +810,8 @@
             });
             data = @json($data);
 
+            jobs =  $('#datatable-basic45').DataTable().column(12).data().unique().sort()
+            console.log(jobs);
             $.each(data.coupons, function(key, value) {
                 //console.log(value)
                 $('#col10_filter').append('<option value="'+value.code_coupon+'">'+value.code_coupon+'</option>')
@@ -847,36 +828,9 @@
             } );
 
 
-            fillFilters();
-
-
         });
 
-        function fillFilters(){
-        
-            let jobs = $('#datatable-basic45').DataTable().column(12,{filter: 'applied'}).data().unique().sort();
-            let companies = $('#datatable-basic45').DataTable().column(13,{filter: 'applied'}).data().unique().sort();
-
-            $('#col12_filter').empty();
-            $('#col12_filter').append('<option value>-- All --</option>')
-            $.each(jobs, function(key, value){
-                if(value.length > 3){
-                    $('#col12_filter').append('<option value="'+value+'">'+value+'</option>')
-                }
-            })
 
 
-            $('#col13_filter').empty();
-            $('#col13_filter').append('<option value>-- All --</option>')
-            $.each(companies, function(key, value){
-                if(value.length > 3){
-                    $('#col13_filter').append('<option value="'+value+'">'+value+'</option>')
-                }
-            })
-
-
-        }
-
-    
     </script>
 @endpush

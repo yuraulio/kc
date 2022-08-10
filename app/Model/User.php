@@ -752,6 +752,12 @@ class User extends Authenticatable
         return $this->statistic()->wherePivot('event_id', $event['id'])->first();
     }
 
+
+    public function hasExamResults1()
+    {
+        return $this->hasMany(ExamResult::class)->get()->groupBy('exam_id');
+    }
+
     public function hasExamResults($exam)
     {
         return $this->hasMany(ExamResult::class)->where('exam_id', $exam)->first();

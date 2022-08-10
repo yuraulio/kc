@@ -9,7 +9,7 @@
 @section('content')
     @component('layouts.headers.auth')
     @component('layouts.headers.breadcrumbs')
-       
+
 
             <li class="breadcrumb-item"><a href="{{ route('events.index') }}">{{ __('Events Management') }}</a></li>
             <li class="breadcrumb-item active" aria-current="page">{{ __('Edit Event') }}</li>
@@ -114,6 +114,7 @@
                                                 @csrf
                                                 @method('put')
                                 <div class="tab-content" id="myTabContent">
+
                                     <div class="tab-pane fade show active" id="tabs-icons-text-1" role="tabpanel" aria-labelledby="tabs-icons-text-1-tab">
 
 
@@ -141,7 +142,7 @@
                                                 </div>
                                             </div>
 
-                               
+
 
                                             <div class="col-md-2 col-sm-6 col-6">
                                                 <div style="margin: auto 0;" class="col-md-3 col-sm-3">
@@ -1075,7 +1076,7 @@
                                                             @if($course_partner_icon != null && $course_partner_icon['path'] != null)
                                                                 <img src="{{ asset($course_partner_icon['path']) }}"/>
                                                             @else
-                                                            <i class="fa fa-handshake-o" aria-hidden="true"></i>
+                                                                <span class="fa fa-calendar"></span>
 
                                                             @endif
                                                         </span>
@@ -1112,12 +1113,24 @@
 
                                             <div class="form-group col-12">
 
+                                                <?php
+                                                    if(isset($info['files_icon']) && $info['files_icon'] != null){
+                                                        $course_files_icon = $info['files_icon'];
+                                                    }else{
+                                                        $course_files_icon = null;
+                                                    }
+                                                ?>
+
                                                 <div class="input-group">
                                                     <h3 class="mb-0 title" for="input-hours">{{ __('Course files') }}</h3>
 
                                                     <span data-infowrapper="files" class="input-group-addon input-group-append input-icon-wrapper">
                                                         <span class="btn btn-outline-primary input-icon">
-                                                            <span class="fa fa-calendar"></span>
+                                                            @if($course_files_icon != null && $course_files_icon['path'] != null)
+                                                                <img src="{{ asset($course_files_icon['path']) }}" alt="{{ (isset($course_files_icon['alt_text']) && $course_files_icon['alt_text'] != null) ? $course_files_icon['alt_text'] : ''  }}"/>
+                                                            @else
+                                                                <span class="fa fa-file"></span>
+                                                            @endif
                                                         </span>
                                                     </span>
                                                     <input type="hidden" value="" id="files_path" name="course[{{'files'}}][{{'icon'}}][{{'path'}}]">
@@ -1125,11 +1138,12 @@
                                                 </div>
                                             </div>
 
-                                            <div class="form-group col-sm-12 col-md-6 col-lg-4">
+                                            {{--<div class="form-group col-sm-12 col-md-6 col-lg-4">
                                                 <label for="exampleFormControlSelect1">Select Dropbox Folder</label>
                                                 <select class="form-control" name="folder_name" id="folder_name">
 
                                                     @foreach($folders as $folder)
+
 
                                                         <?php $found = false; ?>
                                                         @foreach($already_assign as $ass)
@@ -1147,6 +1161,12 @@
                                                     @endforeach
                                                 </select>
                                                 @include('alerts.feedback', ['field' => 'dropbox'])
+                                            </div>--}}
+
+                                            <div class="form-group col-12">
+                                                <input type="hidden" id="selectedFiles" name="selectedFiles" value="">
+
+                                                <div id="filesTreeContainer"></div>
                                             </div>
 
                                             <div class="col-sm-12 col-md-6 col-lg-3 form-group{{ $errors->has('release_date_files') ? ' has-danger' : '' }}">
@@ -1328,20 +1348,33 @@
 
 
 
-                                            <div class="form-group col-12 course-certification-visible-wrapper {{ ((isset($info['certificate']['messages']['success']) && ($info['certificate']['messages']['success'] != null) || (isset($info['certificate']['type']) && $info['certificate']['type'] != null))) ? '' : 'd-none' }}">
+                                            <div class="form-group col-12 course-certification-visible-wrapper {{ isset($info['certificate']['has_certificate']) && $info['certificate']['has_certificate'] ? '' : 'd-none'  }}">
                                                 <div class="row">
                                                     <div class="col-sm-12 col-md-6 form-group{{ $errors->has('fb_') ? ' has-danger' : '' }}">
                                                         <label class="form-control-label" for="input-hours">{{ __('Certificate Title') }}</label>
 
-                                                        <textarea type="text" name="course[{{'certificate'}}][{{'success_text'}}]" id="input-certificate_title" class="ckeditor form-control" placeholder="{{ __('alphanumeric text ') }}" autofocus>{{ old('certificate_title', (isset($info['certificate']['messages']['success']) && $info['certificate']['messages']['success'] != null) ? $info['certificate']['messages']['success'] : '') }}</textarea>
+                                                        {{--<textarea type="text" name="course[{{'certificate'}}][{{'success_text'}}]" id="input-certificate_title" class="ckeditor form-control" placeholder="{{ __('alphanumeric text ') }}" autofocus>{{ old('certificate_title', (isset($info['certificate']['messages']['success']) && $info['certificate']['messages']['success'] != null) ? $info['certificate']['messages']['success'] : '') }}</textarea>--}}
+
+                                                        <!-- anto's editor -->
+                                                        <input class="hidden" id="input-certificate_title_hidden" name="course[{{'certificate'}}][{{'success_text'}}]" value="{{ old('certificate_title', (isset($info['certificate']['messages']['success']) && $info['certificate']['messages']['success'] != null) ? $info['certificate']['messages']['success'] : '') }}"/>
+                                                        <?php $data = isset($info['certificate']['messages']['success']) && $info['certificate']['messages']['success'] != null ? $info['certificate']['messages']['success'] : '' ?>
+                                                        @include('event.editor.editor', ['keyinput' => "input-certificate_title", 'data'=> "$data", 'inputname' => "'course[certificate][success_text]'" ])
+                                                         <!-- anto's editor -->
 
                                                         @include('alerts.feedback', ['field' => 'certificate_title'])
+
                                                     </div>
 
                                                     <div class="col-sm-12 col-md-6 form-group">
                                                         <label class="form-control-label" for="input-hours">{{ __('Title of certification (in case of exams failure)') }}</label>
 
-                                                        <textarea type="text" name="course[{{'certificate'}}][{{'failure_text'}}]" id="input-certificate_text_failure" class="form-control ckeditor" placeholder="{{ __('alphanumeric text ') }}"  autofocus>{{ old('certificate_failure', (isset($info['certificate']['messages']['failure']) && $info['certificate']['messages']['failure'] != null) ? $info['certificate']['messages']['failure'] : '') }}</textarea>
+                                                        {{--<textarea type="text" name="course[{{'certificate'}}][{{'failure_text'}}]" id="input-certificate_text_failure" class="form-control ckeditor" placeholder="{{ __('alphanumeric text ') }}"  autofocus>{{ old('certificate_failure', (isset($info['certificate']['messages']['failure']) && $info['certificate']['messages']['failure'] != null) ? $info['certificate']['messages']['failure'] : '') }}</textarea>--}}
+
+                                                        <!-- anto's editor -->
+                                                        <input class="hidden" id="input-certificate_text_failure_hidden" name="course[{{'certificate'}}][{{'failure_text'}}]" value="{{ old('certificate_failure', (isset($info['certificate']['messages']['failure']) && $info['certificate']['messages']['failure'] != null) ? $info['certificate']['messages']['failure'] : '') }}"/>
+                                                        <?php $data = isset($info['certificate']['messages']['failure']) && $info['certificate']['messages']['failure'] != null ? $info['certificate']['messages']['failure'] : '' ?>
+                                                        @include('event.editor.editor', ['keyinput' => "input-certificate_text_failure", 'data'=> "$data", 'inputname' => "'course[certificate][failure_text]'" ])
+                                                        <!-- anto's editor -->
 
                                                     </div>
 
@@ -1550,7 +1583,7 @@
                                             @include('alerts.feedback', ['field' => 'category_id'])
                                         </div>
 
-                                        
+
 
 
                                     </div>
@@ -1562,18 +1595,18 @@
                                                 <li class="nav-item">
                                                     <a class="nav-link mb-sm-3 mb-md-0 active" id="tabs-icons-text-1-tab_inside" data-toggle="tab" href="#tabs-icons-text-1_inside" role="tab" aria-controls="tabs-icons-text-1_inside" aria-selected="true"><i class="ni ni-cloud-upload-96 mr-2"></i>Overview</a>
                                                 </li>
-                                                
+
                                                 <li class="nav-item">
                                                     <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-4-tab_inside" data-toggle="tab" href="#tabs-icons-text-4_inside" role="tab" aria-controls="tabs-icons-text-4_inside" aria-selected="true"><i class="ni ni-cloud-upload-96 mr-2"></i>Topics</a>
                                                 </li>
                                                 <li class="nav-item">
                                                     <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-5-tab_inside" data-toggle="tab" href="#tabs-icons-text-5_inside" role="tab" aria-controls="tabs-icons-text-5_inside" aria-selected="false"><i class="ni ni-bell-55 mr-2"></i>Tickets</a>
                                                 </li>
-                                                
+
                                                 <li class="nav-item">
                                                     <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-7-tab_inside" data-toggle="tab" href="#tabs-icons-text-7_inside" role="tab" aria-controls="tabs-icons-text-7_inside" aria-selected="false"><i class="ni ni-bell-55 mr-2"></i>Venue</a>
                                                 </li>
-                                                
+
                                                 <li class="nav-item">
                                                     <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-10-tab_inside" data-toggle="tab" href="#tabs-icons-text-10_inside" role="tab" aria-controls="tabs-icons-text-10_inside" aria-selected="false"><i class="ni ni-bell-55 mr-2"></i>Faqs</a>
                                                 </li>
@@ -1583,7 +1616,7 @@
                                                 <li class="nav-item">
                                                     <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-11-tab_inside" data-toggle="tab" href="#testimonials-tab" role="tab" aria-controls="tabs-icons-text-11_inside" aria-selected="false"><i class="far fa-images mr-2"></i>Testimonials</a>
                                                 </li>
-                                                
+
                                                 <li class="nav-item">
                                                     <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-9-tab_inside" data-toggle="tab" href="#videos" role="tab" aria-controls="videos" aria-selected="false"><i class="ni ni-calendar-grid-58 mr-2"></i>Videos</a>
                                                 </li>
@@ -1668,7 +1701,17 @@
 
                                                                 <div class="form-group{{ $errors->has('body') ? ' has-danger' : '' }}">
                                                                     <label class="form-control-label" for="input-body">{{ __('Body') }}</label>
-                                                                    <textarea name="body" id="input-body"  class="ckeditor form-control{{ $errors->has('body') ? ' is-invalid' : '' }}" placeholder="{{ __('Body') }}" required autofocus>{{ old('body', $event->body) }}</textarea>
+
+
+
+                                                                    {{--<textarea name="body" id="input-body"  class="ckeditor form-control{{ $errors->has('body') ? ' is-invalid' : '' }}" placeholder="{{ __('Body') }}" required autofocus>{{ old('body', $event->body) }}</textarea>--}}
+
+                                                                    <!-- anto's editor -->
+                                                                    <input class="hidden" name="body" value="{{ old('body',$event->body) }}"/>
+                                                                    <?php $data = $event->body?>
+                                                                    @include('event.editor.editor', ['keyinput' => "input-body", 'data'=> "$data", 'inputname' => "'body'" ])
+                                                                    <!-- anto's editor -->
+
 
                                                                     @include('alerts.feedback', ['field' => 'body'])
                                                                 </div>
@@ -1692,15 +1735,15 @@
 
                                                     </div>
 
-                                                  
 
-                                                    
+
+
                                                     <div class="tab-pane fade" id="videos" role="tabpanel" aria-labelledby="tabs-icons-text-9-tab_inside">
                                                         @include('admin.videos.event.index',['model' => $event])
                                                     </div>
 
 
-                                       
+
 
                                                     <div class="tab-pane fade show" id="tabs-icons-text-4_inside" role="tabpanel" aria-labelledby="tabs-icons-text-4-tab_inside">
                                                         @include('topics.event.instructors',['sections' => $sections])
@@ -1708,11 +1751,11 @@
                                                     <div class="tab-pane fade" id="tabs-icons-text-5_inside" role="tabpanel" aria-labelledby="tabs-icons-text-5-tab_inside">
                                                         @include('admin.ticket.index', ['model' => $event, 'sections' => $sections])
                                                     </div>
-                                                    
+
                                                     <div class="tab-pane fade" id="tabs-icons-text-7_inside" role="tabpanel" aria-labelledby="tabs-icons-text-7-tab_inside">
                                                         @include('admin.venue.event.index', ['model' => $event,'sections' => $sections])
                                                     </div>
-                                                 
+
                                                     <div class="tab-pane fade" id="tabs-icons-text-10_inside" role="tabpanel" aria-labelledby="tabs-icons-text-10-tab_inside">
                                                         @include('admin.faq.index', ['model' => $event,'sections' => $sections])
                                                     </div>
@@ -1993,6 +2036,7 @@
     <link rel="stylesheet" href="{{ asset('argon') }}/vendor/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css">
     <link rel="stylesheet" href="{{ asset('argon') }}/vendor/datatables.net-select-bs4/css/select.bootstrap4.min.css">
     <link rel="stylesheet" href="{{ asset('argon') }}/vendor/datatables-datetime/datetime.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/20.2.11/css/dx.carmine.compact.css" rel="stylesheet">
 @endpush
 
 @push('js')
@@ -2000,10 +2044,263 @@
     <script src="{{ asset('argon') }}/vendor/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
     <script src="{{ asset('argon') }}/vendor/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
     <script src="{{ asset('argon') }}/vendor/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js"></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/devextreme/20.2.11/js/dx.all.js"></script>
 
 
 <script>
+    let selectedFolders = [];
+    let selectedIds = [];
+    let loadAllFolders = [];
+    let already_assign_files = @json($already_assign);
+
+    if(already_assign_files.length != 0){
+        already_assign_files = already_assign_files[0]
+        loadAllFolders = JSON.parse(already_assign_files.pivot.selectedFolders);
+    }
+
+
+    let files = []
+    const dropFiles = JSON.parse(@json($dropbox));
+    let treeList = null;
+
+    function treeData(){
+        return new Promise(function(resolve, reject) {
+            let count   = 10000;
+            let count1  = 100000;
+            let count2  = 1000000;
+            let count3  = 10000000;
+            $.each(dropFiles,function(index, value) {
+
+                files.push({
+                    ID: value.id,
+                    Full_Name: value.folder_name,
+                    isRootFolder: true
+                })
+
+                let folders = value.folders;
+                let files1 = value.files
+
+                if(folders != null && folders[0] != null){
+                    $.each(folders[0], function(index1, value1) {
+
+                        //foreach for folders
+                        files.push({
+                            ID: count,
+                            Head_ID: value.id,
+                            Full_Name: value1.foldername,
+                            dirname: value1.dirname,
+                            dropboxFolder: value.folder_name,
+                            isRootFolder: false
+                        })
+
+                        //foreach for files
+                        if(files1[1]){
+                            $.each(files1[1], function(index22, value22) {
+                                if(value22.fid == value1.id){
+
+                                    files.push({
+                                        ID: count2,
+                                        Head_ID: count,
+                                        Full_Name: value22.filename,
+                                        dirname: value22.dirname,
+                                        dropboxFolder: value.folder_name,
+                                        isRootFolder: false
+                                    })
+                                }
+                                count2++;
+                            })
+                        }
+
+                        //Bonus folder
+                        if(folders[1] != null){
+                            //console.log('bonus folders', folders[1])
+                            $.each(folders[1], function(index11, value11) {
+                                if(value11.parent == value1.id){
+
+                                    files.push({
+                                        ID: count1,
+                                        Head_ID: count,
+                                        Full_Name: value11.foldername,
+                                        dirname: value11.dirname,
+                                        dropboxFolder: value.folder_name
+                                    })
+
+                                    if(files1[2]){
+                                        $.each(files1[2], function(index33, value33) {
+                                            if(value33.fid == value11.id && value33.parent == value1.id){
+                                                files.push({
+                                                    ID: count3,
+                                                    Head_ID: count1,
+                                                    Full_Name: value33.filename,
+                                                    dirname: value33.dirname,
+                                                    dropboxFolder: value.folder_name,
+                                                    isRootFolder: false
+                                                })
+                                            }
+                                            count3++;
+                                        })
+                                    }
+                                }
+                                count1++
+                            })
+                    }
+                        count++
+                    })
+                }
+            })
+            resolve();
+        })
+    }
+
+    function treeFiles(){
+        treeList = $('#filesTreeContainer').dxTreeList({
+            dataSource: files,
+            keyExpr: 'ID',
+            parentIdExpr: 'Head_ID',
+            allowColumnReordering: false,
+            allowColumnResizing: false,
+            showBorders: false,
+            selection: {
+                mode: 'multiple',
+                recursive: true,
+            },
+                filterRow: {
+                visible: false,
+            },
+            stateStoring: {
+                enabled: false,
+                type: 'localStorage',
+                storageKey: 'treeListStorage',
+            },
+            columns: [
+                {
+                    dataField: 'Full_Name',
+                }
+            ],
+        }).dxTreeList('instance');
+    }
+
+    function parseIdsForSelectFiles(){
+
+        if(files.length != 0 && loadAllFolders.length != 0){
+
+
+            if(loadAllFolders.selectedAllFolders){
+                $.each(files, function(index, value) {
+
+                    if(value.Full_Name == already_assign_files.folder_name){
+                        selectedIds.push(value.ID)
+                    }
+                })
+            }else{
+                $.each(files, function(index, value) {
+                    if(loadAllFolders.selectedFolders.length != 0){
+                        $.each(loadAllFolders.selectedFolders, function(index1, value1){
+
+                            if(value.dirname == value1 && already_assign_files.folder_name == value.dropboxFolder){
+                                selectedIds.push(value.ID)
+                            }
+                        })
+
+                    }
+                })
+            }
+
+
+            treeList.selectRows(selectedIds);
+
+        }
+    }
+
+    $(() => {
+
+
+        treeData().then(function () {
+            treeFiles()
+            parseIdsForSelectFiles()
+        })
+
+        $('#state-reset-link').on('click', () => {
+            treeList.state(null);
+        });
+
+        $("#filesTreeContainer").dxTreeList({
+            onSelectionChanged: function(e) { // Handler of the "selectionChanged" event
+                let deselectIDS = [];
+                const currentSelectedRowKeys = e.currentSelectedRowKeys[0];
+                var currentSelectedRow = [];
+                selectedFolders = [];
+                let selectedDropbox = null;
+                let selectedAllFolders = false;
+                const allSelectedRowsData = e.selectedRowsData;
+                const allSelectedRowsDataForSave = treeList.getSelectedRowsData('multiple')
+
+                $.each(files, function(index, value){
+                    if(currentSelectedRowKeys == value.ID){
+                        currentSelectedRow = value
+                    }
+                })
+
+
+                if(currentSelectedRow.isRootFolder && allSelectedRowsData.length != 1){
+
+                    allSelectedRowsData.filter(value => value.ID == currentSelectedRowKeys);
+
+                    $.each(allSelectedRowsData,function(index,value){
+                        if(value.ID != currentSelectedRowKeys){
+                            deselectIDS.push(value.ID)
+                        }
+                    })
+
+                }
+
+
+                if(!currentSelectedRow.isRootFolder && allSelectedRowsData.length != 1){
+                    $.each(allSelectedRowsData,function(index,value){
+                        if(value.isRootFolder && currentSelectedRow.Head_ID != value.ID){
+                            deselectIDS.push(value.ID)
+                        }
+                    })
+                }
+                treeList.deselectRows(deselectIDS);
+
+                let dataForSubmit = [];
+
+                if(allSelectedRowsDataForSave.length != 0){
+
+                    $.each(allSelectedRowsDataForSave, function(index, value) {
+
+                        if(value.isRootFolder){
+                            selectedAllFolders = true;
+                            selectedDropbox = value.Full_Name;
+
+                        }else{
+                            selectedFolders.push(value.dirname)
+                            selectedDropbox = value.dropboxFolder;
+                        }
+                    })
+
+                    dataForSubmit = {
+                        selectedDropbox :selectedDropbox,
+                        selectedAllFolders :selectedAllFolders,
+                        selectedFolders :selectedFolders,
+                    };
+
+                }else{
+                    dataForSubmit = {
+                        detach: true
+                    };
+                }
+
+
+
+
+                dataForSubmit = JSON.stringify(dataForSubmit);
+                $('#selectedFiles').val(dataForSubmit);
+
+            }
+        });
+    });
 
     var eventPartners = @json($eventPartners);
     var eventInfos = @json($info)
@@ -2111,27 +2408,20 @@
 
 
             if(eventInfos !== undefined){
-        
-                $('#input-certificate_title').val(eventInfos.certificate.messages.success)
-                CKEDITOR.instances['input-certificate_title'].setData(eventInfos.certificate.messages.success)
 
-                CKEDITOR.instances['input-certificate_text_failure'].setData(eventInfos.certificate.messages.failure)
+                $('#input-certificate_title').val(eventInfos.certificate.messages.success)
+                //CKEDITOR.instances['input-certificate_title'].setData(eventInfos.certificate.messages.success)
+
+                //CKEDITOR.instances['input-certificate_text_failure'].setData(eventInfos.certificate.messages.failure)
                 $('#input-certificate_text_failure').val(eventInfos.certificate.messages.failure)
             }
 
 
-            
+
         }else{
             $('.course-certification-visible-wrapper').addClass('d-none');
-
-            //$('#input-certificate_title').val("")
-
-            CKEDITOR.instances['input-certificate_title'].setData('')
-            CKEDITOR.instances['input-certificate_text_failure'].setData('')
-            $('#input-certificate_title').val("")
-            $('#input-certificate_text_failure').val("")
-            $('#input-certificate_title').text("")
-            $('#input-certificate_text_failure').text("")
+            tinymce.get("input-certificate_title").setContent("")
+            tinymce.get("input-certificate_text_failure").setContent("")
 
             $('#input-certificate_type').val('')
 
@@ -2143,6 +2433,17 @@
 
 
         if(status){
+
+            let elem = document.getElementsByClassName('tox-editor-header');
+
+            elem.forEach(function(element, index){
+                elem[index].style.removeProperty('position')
+                elem[index].style.removeProperty('left')
+                elem[index].style.removeProperty('top')
+                elem[index].style.removeProperty('width')
+            })
+
+
             $('.course-certification-visible-wrapper').removeClass('d-none');
 
 
@@ -2150,9 +2451,6 @@
             if(eventInfos !== undefined){
 
                 $('#input-certificate_title').val(eventInfos.course_certification_name_success)
-                CKEDITOR.instances['input-certificate_title'].setData(eventInfos.course_certification_name_success)
-
-                CKEDITOR.instances['input-certificate_text_failure'].setData(eventInfos.course_certification_name_failure)
                 $('#input-certificate_text_failure').val(eventInfos.course_certification_name_failure)
             }
 
@@ -2161,14 +2459,11 @@
         }else{
             $('.course-certification-visible-wrapper').addClass('d-none');
 
-            //$('#input-certificate_title').val("")
+            $("#input-certificate_title_hidden").val("")
+            $("#input-certificate_text_failure_hidden").val("")
 
-            CKEDITOR.instances['input-certificate_title'].setData('')
-            CKEDITOR.instances['input-certificate_text_failure'].setData('')
-            $('#input-certificate_title').val("")
-            $('#input-certificate_text_failure').val("")
-            $('#input-certificate_title').text("")
-            $('#input-certificate_text_failure').text("")
+            tinymce.get("input-certificate_title").setContent("")
+            tinymce.get("input-certificate_text_failure").setContent("")
 
             $('#input-certificate_type').val('')
 
@@ -2331,15 +2626,15 @@
                 return false;
 
             }else if(!start && event_type){
-                
+
                 alert('You must fill start time field')
                 return false;
-                
+
             }else if(!end && event_type){
 
                 alert('You must fill end time field')
                 return false;
-                
+
             }
 
             data = {date:date, start:start, event_id:event_id, end:end, room:room, instructor_id:instructor_id, topic_id:topic_id, lesson_id:lesson_id}
@@ -2448,7 +2743,7 @@
             topic_id = topic_id.split("_")
             const event_id = $('#topic_lessons').data('event-id')
             let instructor_id = $('#instFormControlSelect12').val()
-            
+
 
             data = {lesson_id:elem[1], topic_id:topic_id[1], event_id:event_id}
             $.ajax({
@@ -2739,7 +3034,7 @@
 
 
     $('.enroll-students').change(function(){
-       
+
         let enroll = $("#input-enroll").is(":checked") ? 1 : 0;
         console.log('dfsd');
         $.ajax({
@@ -2750,7 +3045,7 @@
             Accept: 'application/json',
             url: "/admin/enroll-to-elearning/" + "{{$event->id}}" +"/" + enroll,
             success: function(data) {
-            
+
             }
         });
 
@@ -2758,7 +3053,7 @@
 
 
     $('.index-toggle').change(function(){
-       
+
        let index = $("#input-index").is(":checked") ? 1 : 0;
 
        $.ajax({
@@ -2769,14 +3064,14 @@
            Accept: 'application/json',
            url: "/admin/change-index/" + "{{$event->id}}" +"/" + index,
            success: function(data) {
-           
+
            }
        });
 
    })
 
    $('.feed-toggle').change(function(){
-       
+
        let feed = $("#input-feed").is(":checked") ? 1 : 0;
 
        $.ajax({
@@ -2787,7 +3082,7 @@
            Accept: 'application/json',
            url: "/admin/change-feed/" + "{{$event->id}}" +"/" + feed,
            success: function(data) {
-           
+
            }
        });
 
@@ -2829,6 +3124,9 @@ var datePickerOptions = {
             $(".form_event_btn_new").removeClass('d-none');
         }
     });
+
+
+
     $(document).on('click', '.input-icon-wrapper, .input-icon-wrapper-inclass, .input-icon-wrapper-city', function() {
         let btn = $(this).data('infowrapper')
         if(btn === undefined){

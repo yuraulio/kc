@@ -302,24 +302,7 @@ class UserController extends Controller
             {
                 if(isset($folders) && count($folders) > 0){
 
-                    if(isset($dropbox['pivot']) && isset($dropbox['pivot']['selectedFolders'])){
-                        $selectedFiles = $dropbox['pivot']['selectedFolders'];
-                        $selectedFiles = json_decode($selectedFiles, true);
-                    }
-
                     foreach($folders as $folder){
-
-                        $folderIsSelected = false;
-
-                        if($selectedFiles['selectedAllFolders']){
-                            $folderIsSelected = true;
-                        }else{
-                            foreach($selectedFiles['selectedFolders'] as $key10 => $selectedFile){
-                                if($folder['dirname'] == $selectedFile){
-                                    $folderIsSelected = true;
-                                }
-                            }
-                        }
 
                         $data1[$folder['id']]['subfolders'] = [];
                         $data1[$folder['id']]['id'] = $folder['id'];
@@ -358,41 +341,14 @@ class UserController extends Controller
                                     }
                                     if($folder_bonus['parent'] == $folder['id']){
 
-                                        $folderIsSelected = false;
-
-                                        if($selectedFiles['selectedAllFolders']){
-                                            $folderIsSelected = true;
-                                        }else{
-                                            foreach($selectedFiles['selectedFolders'] as $key10 => $selectedFile){
-                                                if($folder_bonus['dirname'] == $selectedFile){
-                                                    $folderIsSelected = true;
-                                                }
-                                            }
-                                        }
-
                                         $subfolder[] =  $subf['foldername'];
                                         $data1[$folder_bonus['parent']]['subfolders'][$subf['foldername']]=[];
-
                                         foreach($files_bonus as $file_bonus){
                                             if($file_bonus['fid'] == $subf['id'] && $file_bonus['parent'] == $subf['parent'] ){
+                                                $subfiles[]= $file_bonus['filename'];
 
-                                                if($folderIsSelected){
-                                                    $subfiles[]= $file_bonus['filename'];
-
-                                                    $data1[$folder_bonus['parent']]['subfolders'][$subf['foldername']][]=['fid'=>$file_bonus['parent'], 'foldername'=>$subf['foldername'], 'filename' => $file_bonus['filename'], 'dirname' => $file_bonus['dirname'],'ext' => $file_bonus['ext'], 'last_mod' => $file_bonus['last_mod']];
-
-                                                }else{
-                                                    foreach($selectedFiles['selectedFolders'] as $key10 => $selectedFile){
-
-                                                        if($file_bonus['dirname'] == $selectedFile){
-                                                            $subfiles[]= $file_bonus['filename'];
-
-                                                            $data1[$folder_bonus['parent']]['subfolders'][$subf['foldername']][]=['fid'=>$file_bonus['parent'], 'foldername'=>$subf['foldername'], 'filename' => $file_bonus['filename'], 'dirname' => $file_bonus['dirname'],'ext' => $file_bonus['ext'], 'last_mod' => $file_bonus['last_mod']];
-                                                        }
-                                                    }
-                                                }
-
-
+                                                $data1[$folder_bonus['parent']]['subfolders'][$subf['foldername']][]=['fid'=>$file_bonus['parent'], 'foldername'=>$subf['foldername'], 'filename' => $file_bonus['filename'], 'dirname' => $file_bonus['dirname'],
+                                                'ext' => $file_bonus['ext'], 'last_mod' => $file_bonus['last_mod']];
                                             }
                                         }
 
@@ -405,15 +361,8 @@ class UserController extends Controller
                         foreach($files as $file){
                             if($folder['id'] == $file['fid']){
                                 //dd($file);
-                                if($folderIsSelected){
-                                    $data1[$folder['id']]['files'][] = ['fid'=>$file['fid'], 'filename' => $file['filename'], 'dirname' => $file['dirname'],'ext' => $file['ext'], 'last_mod' => $file['last_mod']];
-                                }else{
-                                    foreach($selectedFiles['selectedFolders'] as $key10 => $selectedFile){
-                                        if($file['dirname'] == $selectedFile){
-                                            $data1[$folder['id']]['files'][] = ['fid'=>$file['fid'], 'filename' => $file['filename'], 'dirname' => $file['dirname'],'ext' => $file['ext'], 'last_mod' => $file['last_mod']];
-                                        }
-                                    }
-                                }
+                                $data1[$folder['id']]['files'][] = ['fid'=>$file['fid'], 'filename' => $file['filename'], 'dirname' => $file['dirname'],
+                                    'ext' => $file['ext'], 'last_mod' => $file['last_mod']];
 
                             }
                         }
@@ -428,34 +377,16 @@ class UserController extends Controller
 
                                 if($folder_bonus['parent'] == $folder['id']){
 
-                                    $folderIsSelected = false;
-                                    if($selectedFiles['selectedAllFolders']){
-                                        $folderIsSelected = true;
-                                    }else{
-                                        foreach($selectedFiles['selectedFolders'] as $key10 => $selectedFile){
-                                            if($folder_bonus['dirname'] == $selectedFile){
-                                                $folderIsSelected = true;
-                                            }
-                                        }
-                                    }
-
-
-
-
                                     $data1[$folder['foldername']]['bonus'] = [];
                                     if(isset($files_bonus) && count($files_bonus) > 0){
                                         foreach($files_bonus as $file_bonus){
                                             if($file_bonus['parent'] == $folder_bonus['parent'] && !in_array($file_bonus['filename'],$subfiles)){
 
-                                                if($folderIsSelected){
-                                                    $data1[$folder_bonus['parent']]['bonus'][] = ['fid'=>$file_bonus['parent'], 'filename' => $file_bonus['filename'], 'dirname' => $file_bonus['dirname'],'ext' => $file_bonus['ext'], 'last_mod' => $file_bonus['last_mod']];
-                                                }else{
-                                                    foreach($selectedFiles['selectedFolders'] as $key10 => $selectedFile){
-                                                        if($file_bonus['dirname'] == $selectedFile){
-                                                            $data1[$folder_bonus['parent']]['bonus'][] = ['fid'=>$file_bonus['parent'], 'filename' => $file_bonus['filename'], 'dirname' => $file_bonus['dirname'],'ext' => $file_bonus['ext'], 'last_mod' => $file_bonus['last_mod']];
-                                                        }
-                                                    }
-                                                }
+
+                                                $data1[$folder_bonus['parent']]['bonus'][] = ['fid'=>$file_bonus['parent'], 'filename' => $file_bonus['filename'], 'dirname' => $file_bonus['dirname'],
+                                                'ext' => $file_bonus['ext'], 'last_mod' => $file_bonus['last_mod']];
+
+
 
                                             }
                                         }
@@ -586,12 +517,12 @@ class UserController extends Controller
                     continue;
                 }
 
-                $inst['name'] = $instructors[$lesson['instructor_id']][0]['title'].' '.$instructors[$lesson['instructor_id']][0]['subtitle'];
-                $inst['media'] = asset(get_image($instructors[$lesson['instructor_id']][0]['medias'], 'instructors-small'));
+                $inst['name'] ='';// $instructors[$lesson['instructor_id']][0]['title'].' '.$instructors[$lesson['instructor_id']][0]['subtitle'];
+                $inst['media'] ='';// asset(get_image($instructors[$lesson['instructor_id']][0]['medias'], 'instructors-small'));
 
                 $sum= 0;
                 $arr_lesson = array();
-                $topic = $lesson['topic']->first();
+                $topic = $lesson['topic'][0];
                 //$topic = $lesson->topic()->wherePivot('category_id',$category->id)->first();
 
                 if(!isset($topics[$topic->id])){
@@ -810,6 +741,7 @@ class UserController extends Controller
     }
 
     private function instructorEvents($data,$user){
+
         $exceptEvents = [];
         $bonusFiles = ['_Bonus', 'Bonus', 'Bonus Files', 'Βonus', '_Βonus', 'Βonus', 'Βonus Files'];
         $instructors = Instructor::with('medias')->get()->groupby('id');
@@ -818,6 +750,7 @@ class UserController extends Controller
 
         foreach($instructor['event'] as $key => $event)
         {
+
             $eventInfo = $event->event_info();
             $data1 = [];
             $isElearning = false;
@@ -851,24 +784,7 @@ class UserController extends Controller
             {
                 if(isset($folders) && count($folders) > 0){
 
-                    if(isset($dropbox['pivot']) && isset($dropbox['pivot']['selectedFolders'])){
-                        $selectedFiles = $dropbox['pivot']['selectedFolders'];
-                        $selectedFiles = json_decode($selectedFiles, true);
-                    }
-
                     foreach($folders as $folder){
-
-                        $folderIsSelected = false;
-
-                        if($selectedFiles['selectedAllFolders']){
-                            $folderIsSelected = true;
-                        }else{
-                            foreach($selectedFiles['selectedFolders'] as $key10 => $selectedFile){
-                                if($folder['dirname'] == $selectedFile){
-                                    $folderIsSelected = true;
-                                }
-                            }
-                        }
 
                         $data1[$folder['id']]['subfolders'] = [];
                         $data1[$folder['id']]['id'] = $folder['id'];
@@ -907,40 +823,14 @@ class UserController extends Controller
                                     }
                                     if($folder_bonus['parent'] == $folder['id']){
 
-                                        $folderIsSelected = false;
-
-                                        if($selectedFiles['selectedAllFolders']){
-                                            $folderIsSelected = true;
-                                        }else{
-                                            foreach($selectedFiles['selectedFolders'] as $key10 => $selectedFile){
-                                                if($folder_bonus['dirname'] == $selectedFile){
-                                                    $folderIsSelected = true;
-                                                }
-                                            }
-                                        }
-
                                         $subfolder[] =  $subf['foldername'];
                                         $data1[$folder_bonus['parent']]['subfolders'][$subf['foldername']]=[];
                                         foreach($files_bonus as $file_bonus){
                                             if($file_bonus['fid'] == $subf['id'] && $file_bonus['parent'] == $subf['parent'] ){
+                                                $subfiles[]= $file_bonus['filename'];
 
-                                                if($folderIsSelected){
-                                                    $subfiles[]= $file_bonus['filename'];
-
-                                                    $data1[$folder_bonus['parent']]['subfolders'][$subf['foldername']][]=['fid'=>$file_bonus['parent'], 'foldername'=>$subf['foldername'], 'filename' => $file_bonus['filename'], 'dirname' => $file_bonus['dirname'],
-                                                    'ext' => $file_bonus['ext'], 'last_mod' => $file_bonus['last_mod']];
-                                                }else{
-                                                    foreach($selectedFiles['selectedFolders'] as $key10 => $selectedFile){
-                                                        if($file_bonus['dirname'] == $selectedFile){
-                                                            $subfiles[]= $file_bonus['filename'];
-
-                                                            $data1[$folder_bonus['parent']]['subfolders'][$subf['foldername']][]=['fid'=>$file_bonus['parent'], 'foldername'=>$subf['foldername'], 'filename' => $file_bonus['filename'], 'dirname' => $file_bonus['dirname'],'ext' => $file_bonus['ext'], 'last_mod' => $file_bonus['last_mod']];
-                                                        }
-                                                    }
-
-                                                }
-
-
+                                                $data1[$folder_bonus['parent']]['subfolders'][$subf['foldername']][]=['fid'=>$file_bonus['parent'], 'foldername'=>$subf['foldername'], 'filename' => $file_bonus['filename'], 'dirname' => $file_bonus['dirname'],
+                                                'ext' => $file_bonus['ext'], 'last_mod' => $file_bonus['last_mod']];
                                             }
                                         }
 
@@ -952,17 +842,9 @@ class UserController extends Controller
 
                         foreach($files as $file){
                             if($folder['id'] == $file['fid']){
-
-                                if($folderIsSelected){
-                                    $data1[$folder['id']]['files'][] = ['fid'=>$file['fid'], 'filename' => $file['filename'], 'dirname' => $file['dirname'],'ext' => $file['ext'], 'last_mod' => $file['last_mod']];
-                                }else{
-                                    foreach($selectedFiles['selectedFolders'] as $key10 => $selectedFile){
-                                        if($file['dirname'] == $selectedFile){
-                                            $data1[$folder['id']]['files'][] = ['fid'=>$file['fid'], 'filename' => $file['filename'], 'dirname' => $file['dirname'],'ext' => $file['ext'], 'last_mod' => $file['last_mod']];
-                                        }
-                                    }
-                                }
-
+                                //dd($file);
+                                $data1[$folder['id']]['files'][] = ['fid'=>$file['fid'], 'filename' => $file['filename'], 'dirname' => $file['dirname'],
+                                    'ext' => $file['ext'], 'last_mod' => $file['last_mod']];
 
                             }
                         }
@@ -977,34 +859,17 @@ class UserController extends Controller
 
                                 if($folder_bonus['parent'] == $folder['id']){
 
-
-                                    $folderIsSelected = false;
-                                    if($selectedFiles['selectedAllFolders']){
-                                        $folderIsSelected = true;
-                                    }else{
-                                        foreach($selectedFiles['selectedFolders'] as $key10 => $selectedFile){
-                                            if($folder_bonus['dirname'] == $selectedFile){
-                                                $folderIsSelected = true;
-                                            }
-                                        }
-                                    }
-
-
                                     $data1[$folder['foldername']]['bonus'] = [];
                                     if(isset($files_bonus) && count($files_bonus) > 0){
-                                        foreach($files_bonus as $keyT => $file_bonus){
+                                        foreach($files_bonus as $file_bonus){
                                             if($file_bonus['parent'] == $folder_bonus['parent'] && !in_array($file_bonus['filename'],$subfiles)){
 
-                                                if($folderIsSelected){
-                                                    $data1[$folder_bonus['parent']]['bonus'][$keyT] = ['fid'=>$file_bonus['parent'], 'filename' => $file_bonus['filename'], 'dirname' => $file_bonus['dirname'],'ext' => $file_bonus['ext'], 'last_mod' => $file_bonus['last_mod']];
-                                                }
-                                                else{
-                                                    foreach($selectedFiles['selectedFolders'] as $key10 => $selectedFile){
-                                                        if($file_bonus['dirname'] == $selectedFile){
-                                                            $data1[$folder_bonus['parent']]['bonus'][] = ['fid'=>$file_bonus['parent'], 'filename' => $file_bonus['filename'], 'dirname' => $file_bonus['dirname'],'ext' => $file_bonus['ext'], 'last_mod' => $file_bonus['last_mod']];
-                                                        }
-                                                    }
-                                                }
+
+                                                $data1[$folder_bonus['parent']]['bonus'][] = ['fid'=>$file_bonus['parent'], 'filename' => $file_bonus['filename'], 'dirname' => $file_bonus['dirname'],
+                                                'ext' => $file_bonus['ext'], 'last_mod' => $file_bonus['last_mod']];
+
+
+
                                             }
                                         }
                                     }

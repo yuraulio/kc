@@ -10,6 +10,7 @@ use App\Model\Event;
 use ZipArchive;
 use File;
 use Imagick;
+use Illuminate\Support\Facades\Storage;
 
 class CertificateController extends Controller
 {
@@ -28,9 +29,9 @@ class CertificateController extends Controller
         if($certificate->event->first()->id == 2068){
           $view = 'admin.certificates.certificate_facebook_marketing';
         }
-        
+
         //dd(storage_path('fonts\Foco_Lt.ttf'));
-  
+
         $contxt = stream_context_create([
           'ssl' => [
           'verify_peer' => FALSE,
@@ -42,91 +43,129 @@ class CertificateController extends Controller
       $pdf = PDF::setOptions([
           'isHtml5ParserEnabled'=> true,
           'isRemoteEnabled' => true,
-         
+
         ]);
 
         $pdf->getDomPDF()->setHttpContext($contxt);
         $pdf->loadView($view,compact('certificate'))->setPaper('a4', 'portrait');
           $fn = 'mycertificate' . '.pdf';
           return $pdf->stream($fn);
-  
-          
-  
+
+
+
   }*/
+
+  public function loadCertificateData($certificate){
+    //$certificate = decrypt($certificate);
+    $certificate =base64_decode($certificate);
+
+    $certificate = explode('--',$certificate)[1];
+
+    $certificate = Certificate::find($certificate);
+
+    //return view('admin.certificates.certificate',compact('certificate'));
+    /*$view = 'admin.certificates.certificate';
+    if($certificate->success){
+        $view = 'admin.certificates.certificates2021.kc_attendance';
+    }else{
+        $view = 'admin.certificates.certificates2021.kc_attendance';
+    }*/
+
+    //dd(storage_path('fonts\Foco_Lt.ttf'));
+
+    $contxt = stream_context_create([
+        'ssl' => [
+        'verify_peer' => FALSE,
+        'verify_peer_name' => FALSE,
+        'allow_self_signed'=> TRUE
+        ]
+    ]);
+
+    $pdf = PDF::setOptions([
+        'isHtml5ParserEnabled'=> true,
+        'isRemoteEnabled' => true,
+
+    ]);
+
+
+    //return view($view,compact('certificate'));
+
+
+    $certificateTitle = $certificate->certificate_title;
+    //dd($certificate->event->first()->event_info()['certificate']);
+    if($certificate->event->first() && isset($certificate->event->first()->event_info()['certificate']['messages'])){
+
+        if($certificate->success && isset($certificate->event->first()->event_info()['certificate']['messages']['success'])){
+
+        $certificateTitle = $certificate->event->first()->event_info()['certificate']['messages']['success'];
+        }else if(!$certificate->success && isset($certificate->event->first()->event_info()['certificate']['messages']['failure'])){
+
+        $certificateTitle = $certificate->event->first()->event_info()['certificate']['messages']['failure'];
+        }
+
+    }
+
+    $certificate['firstname'] = $certificate->firstname;
+    $certificate['lastname'] = $certificate->lastname;
+    $certificate['certification_date'] = $certificate->certification_date;
+    $certificate['expiration_date'] = $certificate->expiration_date ? date('F Y',$certificate->expiration_date) : null;
+    $certificate['credential'] = $certificate->credential;
+    //$certificate['certification_title'] = $certificate->certificate_title;
+    $certificate['certification_title'] = $certificateTitle;
+
+    //return view('admin.certificates.kc_diploma_2022a',compact('certificate'));
+
+    $pdf->getDomPDF()->setHttpContext($contxt);
+    $pdf->loadView('admin.certificates.'.$certificate->template,compact('certificate'))->setPaper('a4', 'landscape');
+
+    $data['pdf'] = $pdf;
+    $data['certificate'] = $certificate;
+
+    return $data;
+    //$customPaper = array(0,0,3507,2480);
+    //$pdf->loadView('admin.certificates.'.$certificate->template,compact('certificate'))->setPaper($customPaper);
+  }
+
+  public function getCertificateImage($certificate){
+       
+    $timestamp = '';//strtotime("now");
+    $data = $this->loadCertificateData($certificate);
+    $fn = $data['certificate']->firstname . '_' . $data['certificate']->lastname.'_'. $timestamp .'.pdf';
+    
+    $content = $data['pdf']->download()->getOriginalContent();
+  
+    Storage::disk('cert')->put($fn,$content);
+    
+    $filepath = public_path('cert\\'.$fn);
+    $newFile =  'cert\\'.base64_encode($data['certificate']->firstname . '-' . $data['certificate']->lastname.'-'.$timestamp) .'.jpg';
+    $saveImagePath = public_path($newFile);
+
+    $imagick = new Imagick();
+    $imagick->setResolution(300, 300);
+    //dd($filepath);
+    $imagick->readImage($filepath);
+    
+    $imagick->setImageFormat('jpg');
+
+    $imagick->writeImage($saveImagePath);
+    $imagick->clear();
+    $imagick->destroy();
+
+    unlink('cert\\'.$fn);
+
+    return $newFile;
+  }
 
   
   public function getCertificate($certificate){
 
-      //$certificate = decrypt($certificate);
-      $certificate =base64_decode($certificate);
+        $data = $this->loadCertificateData($certificate);
 
-      $certificate = explode('--',$certificate)[1];
-
-      $certificate = Certificate::find($certificate);
-
-        //return view('admin.certificates.certificate',compact('certificate'));
-        /*$view = 'admin.certificates.certificate';
-        if($certificate->success){
-          $view = 'admin.certificates.certificates2021.kc_attendance';
-        }else{
-          $view = 'admin.certificates.certificates2021.kc_attendance';
-        }*/
-        
-        //dd(storage_path('fonts\Foco_Lt.ttf'));
-  
-        $contxt = stream_context_create([
-          'ssl' => [
-          'verify_peer' => FALSE,
-          'verify_peer_name' => FALSE,
-          'allow_self_signed'=> TRUE
-          ]
-      ]);
-
-      $pdf = PDF::setOptions([
-          'isHtml5ParserEnabled'=> true,
-          'isRemoteEnabled' => true,
-         
-        ]);
+        $fn = $data['certificate']->firstname . '-' . $data['certificate']->lastname . '-' . '.pdf';
+        return $data['pdf']->stream($fn);
 
 
-       //return view($view,compact('certificate'));
-        
 
-        $certificateTitle = $certificate->certificate_title;
-        //dd($certificate->event->first()->event_info()['certificate']);
-        if($certificate->event->first() && isset($certificate->event->first()->event_info()['certificate']['messages'])){
-          
-          if($certificate->success && isset($certificate->event->first()->event_info()['certificate']['messages']['success'])){
-            
-            $certificateTitle = $certificate->event->first()->event_info()['certificate']['messages']['success'];
-          }else if(!$certificate->success && isset($certificate->event->first()->event_info()['certificate']['messages']['failure'])){
-            
-            $certificateTitle = $certificate->event->first()->event_info()['certificate']['messages']['failure'];
-          }
-
-        }
-
-        $certificate['firstname'] = $certificate->firstname;
-        $certificate['lastname'] = $certificate->lastname;
-        $certificate['certification_date'] = $certificate->certification_date;
-        $certificate['expiration_date'] = $certificate->expiration_date ? date('F Y',$certificate->expiration_date) : null;
-        $certificate['credential'] = $certificate->credential;
-        //$certificate['certification_title'] = $certificate->certificate_title;
-        $certificate['certification_title'] = $certificateTitle;
-
-        //return view('admin.certificates.kc_diploma_2022a',compact('certificate'));
-
-        $pdf->getDomPDF()->setHttpContext($contxt);
-        $pdf->loadView('admin.certificates.'.$certificate->template,compact('certificate'))->setPaper('a4', 'landscape');
-
-        //$customPaper = array(0,0,3507,2480);
-        //$pdf->loadView('admin.certificates.'.$certificate->template,compact('certificate'))->setPaper($customPaper);
-
-        $fn = $certificate->firstname . '-' . $certificate->lastname . '-' . $certificate->user()->first()->kc_id . '.pdf';
-        return $pdf->stream($fn);
-  
-          
-  
   }
 
   public function exportCertificates(Event $event){
@@ -146,14 +185,14 @@ class CertificateController extends Controller
     //dd($zip->open(public_path($fileName), ZipArchive::CREATE));
 
     if ($zip->open(public_path($fileName), ZipArchive::CREATE) === TRUE) {
-      
+
       foreach($users as $user){
-          
+
         if($user->instructor->first()){
             continue;
         }
 
-        $expda = strtotime(date('Y-m-d', strtotime('+24 months', strtotime(date('Y-m-d'))))); 
+        $expda = strtotime(date('Y-m-d', strtotime('+24 months', strtotime(date('Y-m-d')))));
 
         $template = '';
         if($paymentMethod == 1){
@@ -185,8 +224,8 @@ class CertificateController extends Controller
             $template = 'kc_diploma_2022a';
           }*/
 
-         
-        
+
+
 
           $cert = new Certificate;
           $cert->success = true;
@@ -210,7 +249,7 @@ class CertificateController extends Controller
           $cert->save();
         }
 
-        
+
 
         $certificate['firstname'] = $cert->firstname;
         $certificate['lastname'] = $cert->lastname;
@@ -230,7 +269,7 @@ class CertificateController extends Controller
         $pdf = PDF::setOptions([
           'isHtml5ParserEnabled'=> true,
           'isRemoteEnabled' => true,
-        
+
         ]);
 
         $name = $user->firstname . '_' . $user->lastname . '_' .$user->kc_id;
@@ -238,18 +277,18 @@ class CertificateController extends Controller
         $pdf->getDomPDF()->setHttpContext($contxt);
 
         $pdf->loadView('admin.certificates.'.$cert->template,compact('certificate'))->setPaper('a4', 'landscape')->save(public_path('certificates_folders/'.$fn))->stream($fn);
-        
+
         $zip->addFile(public_path('certificates_folders/'.$fn), $fn);
 
-    
+
       }
 
     }
 
     $zip->close();
     File::deleteDirectory(public_path('certificates_folders'));
-    
+
     return response()->download(public_path($fileName));
   }
-    
+
 }
