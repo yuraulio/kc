@@ -60,7 +60,7 @@
         <div class="col-sm-4">
             <div class="row mb-2">
                 <div class="col-lg-12 d-grid">
-                    <input v-model="imgname" type="text" class="form-control cropper-image-name invisible-input ps-0" />
+                    <input v-model="imgname" type="text" class="form-control cropper-image-name invisible-input ps-0" placeholder="Enter file name"/>
                 </div>
             </div>
             <div class="row mb-2">
@@ -68,7 +68,7 @@
                     <label class="form-label">Alt text:</label>
                 </div>
                 <div class="col">
-                    <input v-model="alttext" type="text" class="form-control invisible-input text-end" />
+                    <input v-model="alttext" type="text" class="form-control invisible-input text-end" placeholder="Enter alt text"/>
                 </div>
             </div>
             <div class="row mb-2">
@@ -76,7 +76,7 @@
                     <label class="form-label">Link:</label>
                 </div>
                 <div class="col">
-                    <input v-model="link" type="text" class="form-control invisible-input text-end" />
+                    <input v-model="link" type="text" class="form-control invisible-input text-end" placeholder="Enter link"/>
                 </div>
             </div>
             <div class="row mb-2">
@@ -85,6 +85,14 @@
                 </div>
                 <div class="col">
                     <span class="form-control invisible-input text-end">{{ version }}</span>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-sm-4">
+                    <label class="form-label">Size:</label>
+                </div>
+                <div class="col">
+                    <span class="form-control invisible-input text-end">{{ formatSize(size) }}</span>
                 </div>
             </div>
             <div class="row mb-2">
@@ -119,11 +127,12 @@
                         Cancel
                     </button>
                     <button @click="upload('edit')" class="btn btn-soft-success btn-block w-100 mt-2" :disabled="isUploading">
-                        <span v-if="isUploading"><i class="fas fa-spinner fa-spin"></i> Uploading...</span>
+                        <span v-if="isUploading"><i class="fas fa-spinner fa-spin"></i> Saving...</span>
                         <span v-else>
                             Save
                         </span>
                     </button>
+                    <button v-if="findVersionData(version)" @click="deleteFile(findVersionData(version))" class="btn btn-soft-danger btn-block w-100 mt-2">Delete</button>
                     <button v-if="parentMode" @click="confirmSelection(findVersionData(version))" class="btn btn-soft-primary btn-block w-100 mt-2">Use</button>
                 </div>
             </div>
@@ -206,6 +215,7 @@ export default {
             versionData: null,
             parentMode: this.$parent.$parent.mode != null ? true : false,
             date: null,
+            size: null,
             extension: null,
             user: {},
             versions: [{
@@ -343,6 +353,7 @@ export default {
             this.link = this.parrentImage.link ? this.parrentImage.link : '';
             this.id = this.parrentImage.id ? this.parrentImage.id : null;
             this.date = this.versionData ? this.versionData.created_at : this.parrentImage.created_at;
+            this.size = this.versionData ? this.versionData.size : this.parrentImage.size;
             this.user = this.versionData ? this.versionData.user : this.parrentImage.user;
             this.extension = this.versionData ? this.versionData.extension : this.parrentImage.extension;
         },
@@ -387,12 +398,20 @@ export default {
                 this.link = this.versionData ? this.versionData.link : "";
                 this.id = this.versionData ? this.versionData.id : null;
                 this.date = this.versionData ? this.versionData.created_at : '';
+                this.size = this.versionData ? this.versionData.size : '';
                 this.user = this.versionData ? this.versionData.user : '';
                 this.extension = this.versionData ? this.versionData.extension : '';
             } else {
                 this.date = this.parrentImage.created_at ? this.parrentImage.created_at : '';
+                this.size = this.parrentImage.size ? this.parrentImage.size : '';
                 this.user = this.parrentImage.user ? this.parrentImage.user : '';
                 this.extension = this.parrentImage.extension ? this.parrentImage.extension : '';
+            }
+
+            if (this.imgname == "") {
+                var tmp = this.parrentImage.name.split(".");
+                var extension = tmp[tmp.length - 1];
+                this.imgname = tmp[0] + "-" + this.version + "." + extension;
             }
         },
         resetData() {
@@ -565,7 +584,10 @@ export default {
         updateUploadedVersions() {
             this.uploadedVersions = this.parrentImage.subfiles;
         },
-        size(size){
+        formatSize(size){
+            if (!size) {
+                return '';
+            }
             if (size < 1000000) {
                 return parseFloat(size * 0.001).toFixed(1) + " kB";
             } else {
