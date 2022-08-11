@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\PagesRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Model\User;
+use App\Jobs\UpdateTerms;
 
 class PagesController extends Controller
 {
@@ -112,30 +113,9 @@ class PagesController extends Controller
 
         if($page->id == 4754){
 
-            $users = User::all();
-            foreach($users as $user){
-                if($user->instructor->first()){
-                    continue;
-                }
-                if(!$request->terms){
-                    $user->terms = $request->terms;
-                    $user->save();
-                }
-
-            }
-
+           
         }elseif($page->id == 4753){
-
-            $users = User::all();
-            foreach($users as $user){
-                if(!$user->instructor->first()){
-                    continue;
-                }
-                if(!$request->terms){
-                    $user->terms = $request->terms;
-                    $user->save();
-                }
-            }
+            dispatch((new UpdateTerms($page->id))->delay(now()->addSeconds(3)));
         }
 
         return redirect()->route('pages.edit',$page->id)->withStatus(__('Page successfully updated.'));

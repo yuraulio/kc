@@ -45,7 +45,7 @@
                         {{ $info['course_certification_type'] }}
                     </div>
                     @endif
-                    @if(isset($event['delivery'][0]))
+                    @if(isset($event['delivery'][0]['name']))
                     <div class="col-auto delivery text-center">
                         {{ $event['delivery'][0]['name'] }}
                     </div>
