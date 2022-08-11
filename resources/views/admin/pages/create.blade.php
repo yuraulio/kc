@@ -49,7 +49,7 @@
          <div class="row">
             <div class="col-xl-9 order-xl-1">
                @if($page->id == 4753 || $page->id == 4754)
-                  <input hidden name="terms" id="terms-value" value="1" >
+                  <input hidden name="terms" id="terms-value" value="0" >
                @endif
                <div class="card">
                   <div class="card-header">
@@ -218,7 +218,7 @@
           }).then((result) => {
              console.log(result)
             if (result.value) {
-               $('#terms-value').val(0)
+               $('#terms-value').val(1)
                $("#page-form").submit();
             }else{
                $("#page-form").submit();
