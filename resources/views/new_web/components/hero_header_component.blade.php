@@ -37,10 +37,10 @@
                     $certificate_visible = (isset($info['course_certification_visible']) && $info['course_certification_visible'] != null) ? json_decode($info['course_certification_visible'],true) : null;
                     $hours_visible = (isset($info['course_hours_visible']) && $info['course_hours_visible'] != null) ? json_decode($info['course_hours_visible'],true) : null;
                     $students_visible = (isset($info['course_students_visible']) && $info['course_students_visible'] != null) ? json_decode($info['course_students_visible'],true) : null;
-                    $course_enable = (isset($info['course_awards']) && $info['course_awards'] != null) ? $info['course_awards'] : false;
+                    $course_enable = (isset($info['course_awards']) && $info['course_awards']) ? $info['course_awards'] : false;
 
                     ?>
-                    @if($certificate_visible != null && $certificate_visible['landing'] && isset($info['course_certification_type']) && $info['course_certification_type'] != null)
+                    @if(isset($certificate_visible['landing']) && $certificate_visible['landing'] && isset($info['course_certification_type']) && $info['course_certification_type'] != null)
                     <div class="col-auto certificate text-center">
                         {{ $info['course_certification_type'] }}
                     </div>
@@ -50,7 +50,7 @@
                         {{ $event['delivery'][0]['name'] }}
                     </div>
                     @endif
-                    @if($hours_visible != null && $hours_visible['landing'] && isset($info['course_hours']) && $info['course_hours'] != null)
+                    @if(isset($hours_visible['landing']) && $hours_visible['landing'] && isset($info['course_hours']) && $info['course_hours'] > 0)
                     <div class="col-auto hours text-center">
                         {{ $info['course_hours'] }} hours
                     </div>
@@ -65,7 +65,7 @@
             @endif
 
             <?php
-                if($students_visible != null && $students_visible['landing'] && isset($event['category'])){
+                if(isset($students_visible['landing']) && $students_visible['landing'] && isset($event['category'][0]['id'])){
                     $sumStudents = $sumStudentsByCategory[$event['category'][0]['id']];
                 }else{
                     $sumStudents = null;
@@ -74,17 +74,17 @@
                 $hasStudentColumn = false;
             ?>
             <div class="row">
-                @if($students_visible != null && $students_visible['landing'] && isset($info['course_students_number']) && $info['course_students_text'])
+                @if(isset($students_visible['landing']) && $students_visible['landing'] && isset($info['course_students_number']) && $info['course_students_text'])
                 <div class="col-12 col-md-auto students">
                     {{ $sumStudents + (int)$info['course_students_number'] }} {{ ((isset($info['course_students_text']) && $info['course_students_text'] != null) ? $info['course_students_text'] : '') }}
                 </div>
                 <?php $hasStudentColumn = true; ?>
                 @endif
 
-                @if($course_enable && $info['course_awards_text'] != null)
+                @if($course_enable && isset($info['course_awards_text']) && $info['course_awards_text'])
                 <div class="col-12 col-md-2 @if($hasStudentColumn) offset-md-6 @else offset-md-10 @endif  awards">
                     <?php
-                    $course_awards_icon = (isset($info['course_awards_icon']) && $info['course_awards_icon'] != null) ? json_decode($info['course_awards_icon'], true) : null;
+                    $course_awards_icon = (isset($info['course_awards_icon']) && $info['course_awards_icon']) ? json_decode($info['course_awards_icon'], true) : null;
                     ?>
 
                     <div class="awards-landing-container">
