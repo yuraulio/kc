@@ -33,7 +33,7 @@ class UpdateTerms implements ShouldQueue
      */
     public function handle()
     {
-        if($this->pageId == 4){
+        if($this->pageId == 4 || $this->pageId == 6){
 
             $users = User::all();
             foreach($users as $user){
@@ -47,7 +47,7 @@ class UpdateTerms implements ShouldQueue
 
             }
 
-        }/*else if($page->id == ){
+        }else if($page->id == 4753){
 
             $users = User::all();
             foreach($users as $user){
@@ -59,6 +59,6 @@ class UpdateTerms implements ShouldQueue
                 $user->save();
                 
             }
-        }*/
+        }
     }
 }
