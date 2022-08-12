@@ -437,16 +437,9 @@
     </div>
 
 
-    <form v-if="tabs_tab || name == 'main'" @click.prevent="addCustomComponent" class="dropzone dz-clickable" style="min-height:80px; border: 2px dashed #6658dd !important" id="myAwesomeDropzone" data-plugin="dropzone" data-previews-container="#file-previews" data-upload-preview-template="#uploadPreviewTemplate">
-        <div class="dz-message needsclick" style="margin: 0px !important; color: #6658dd">
-            <i class="h1  dripicons-view-apps" style="color: #6658dd"></i>
-            <div class="text-center">
-                <span class="text-muted font-13">
-                    <strong>Click to Add Custom Component</strong>
-                </span>
-            </div>
-        </div>
-    </form>
+    <div v-if="tab != 'Meta'" class="text-center">
+        <i @click.prevent="addCustomComponent" class="dripicons-plus add-component-icon cursor-pointer"></i>
+    </div>
 
     <component-modal
         :row="row_index"
@@ -944,7 +937,7 @@ export default {
 
             setTimeout(() => {
                 window.scrollTo(0, document.body.scrollHeight);
-            }, 1000);
+            }, 500);
 
         }));
 
@@ -1016,5 +1009,9 @@ export default {
     box-shadow: none;
     font-size: 23px;
     width: 100%;
+}
+
+.add-component-icon {
+    font-size: 32px;
 }
 </style>
