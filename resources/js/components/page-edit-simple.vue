@@ -583,6 +583,11 @@ import slugify from '@sindresorhus/slugify';
                 }
 
                 this.$parent.content.push(comp);
+
+                setTimeout(() => {
+                    window.scrollTo(0, document.body.scrollHeight);
+                }, 1000);
+
             }));
 
             eventHub.$on('updateslug', ((value) => {

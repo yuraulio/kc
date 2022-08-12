@@ -941,6 +941,11 @@ export default {
             }
 
             this.data.push(comp);
+
+            setTimeout(() => {
+                window.scrollTo(0, document.body.scrollHeight);
+            }, 1000);
+
         }));
 
         eventHub.$on('component-change-' + this.name, ((data) => {
@@ -950,7 +955,7 @@ export default {
             this.data[row_index].columns[column_index].component = component;
             this.data[row_index].columns[column_index].template = JSON.parse(JSON.stringify(this.extractedComponents[component]));
 
-            this.$modal.hide("component-modal");
+            this.$modal.hide(this.name);
         }));
 
         eventHub.$on('order-changed-' + this.name, ((data) => {
