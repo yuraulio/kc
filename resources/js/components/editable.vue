@@ -55,12 +55,8 @@
             :mode="type" 
             :predata="type == 'edit' ? predata : null"
             :pageTitle="pageTitle"
+            @save="save()"
         ></tcdit>
-
-        <div class="col-lg-12 text-center mt-3 mb-3">
-            <button v-if="type == 'new' || type == 'edit'" @click="$modal.show('save-modal'); $forceUpdate()" type="button" class="btn btn-soft-success waves-effect waves-light" ><i class="fe-check-circle me-1"></i> Save</button>
-            <a href="/templates" class="btn btn-soft-secondary waves-effect waves-light"><i class="fe-x me-1"></i> Cancel</a>
-        </div>
 </div> <!-- end card-->
 
 </template>
@@ -202,6 +198,10 @@ export default {
                 .catch((error) => {
                     console.log(error)
                 });
+            },
+            save() {
+                this.$modal.show('save-modal'); 
+                $forceUpdate();
             }
         },
         mounted() {

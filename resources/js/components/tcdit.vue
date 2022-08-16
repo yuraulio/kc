@@ -291,8 +291,14 @@
 
         <div v-if="name == 'main'" class="row">
             <div class="col-sm-12 mt-3 mb-3">
-                <div class="page-title-box d-flex justify-content-between align-items-center">
-                    <input :value="pageTitle" @change="updateTemplateTitle" class="d-inline-block title-input">
+                <div class="page-title-box row">
+                    <div class="col-md-6">
+                        <input :value="pageTitle" @change="updateTemplateTitle" class="d-inline-block title-input">
+                    </div>
+                    <div class="col-md-6">
+                        <a href="/templates" class="btn btn-soft-secondary waves-effect waves-light float-end ms-2"><i class="fe-x me-1"></i> Cancel</a>
+                        <button v-if="mode == 'new' || mode == 'edit'" @click="emitTemplateSave()" type="button" class="btn btn-soft-success waves-effect waves-light float-end" ><i class="fe-check-circle me-1"></i> Save</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -788,6 +794,9 @@ export default {
         },
         updateTemplateTitle(){
             this.$parent.title_value = $('.title-input').val();
+        },
+        emitTemplateSave() {
+            this.$emit('save');
         }
     },
 
