@@ -314,92 +314,67 @@ import slugify from '@sindresorhus/slugify';
                 });
             },
             edit() {
-                if(this.pageId == 4 || this.pageId == 6){
-                    let user = 'users';
-                  
+                var hasTerms = false;
+                this.content.forEach((row) => {
+                    row.columns.forEach((column) => {
+                        if (column.component == "terms_conditions") {
+                            hasTerms = true;
+                        }
+                    });
+                });
+
+                if(hasTerms){
                     Swal.fire({
-                        title: 'Are you sure?',
-                        text: "Do you want to update " + user + "' term?",
+                        title: 'Saving page.',
+                        text: "Do you want to update users terms?",
                         icon: 'warning',
                         showCancelButton: true,
-                        confirmButtonColor: '#3085d6',
-                        cancelButtonColor: '#d33',
                         confirmButtonText: 'Yes',
-                        cancelButtonText: 'No'
+                        cancelButtonText: 'No',
+                        buttonsStyling: false,
+                        customClass: {
+                            cancelButton: "btn btn-soft-secondary",
+                            confirmButton: "btn btn-soft-success",
+                        },
                     }).then((result) => {
                         if (result.value) {
-                          this.editPageUpdateTerms(0)
+                            this.editPage("yes");
                         }else{
-                           this.editPageUpdateTerms(1)
+                            this.editPage(0);
                         }
-            
                     })
 
                 
                 }else{
-                    this.editPageNotUpdateTerms()
+                    this.editPage(0);
                 }
             },
-
-            editPageUpdateTerms(terms_val) {
-
+            editPage(terms_val) {
                 this.loading = true;
                 this.errors = null;
+
+                var data = {
+                    title: this.page.title,
+                    categories: this.page.categories,
+                    subcategories: this.page.subcategories,
+                    content: JSON.stringify(this.content),
+                    template_id: this.page.template.id,
+                    published: this.page.published,
+                    indexed: this.page.indexed,
+                    dynamic: this.page.dynamic,
+                    id: this.page.id,
+                    published_from: this.page.published_from,
+                    published_to: this.page.published_to,
+                    type: this.page.type,
+                    slug: this.page.slug,
+                }
+
+                if (terms_val == "yes") {
+                    data.terms_val = terms_val;
+                }
+
                 axios
-                .patch('/api/pages/' + this.page.id,
-                    {
-                        title: this.page.title,
-                        categories: this.page.categories,
-                        subcategories: this.page.subcategories,
-                        content: JSON.stringify(this.content),
-                        template_id: this.page.template.id,
-                        published: this.page.published,
-                        indexed: this.page.indexed,
-                        dynamic: this.page.dynamic,
-                        id: this.page.id,
-                        published_from: this.page.published_from,
-                        published_to: this.page.published_to,
-                        type: this.page.type,
-                        slug: this.page.slug,
-                        terms_val:terms_val,
-                    }
-                )
-                .then((response) => {
-                    if (response.status == 200){
-                        this.$toast.success('Saved Successfully!')
-                        this.loading = false;
-                    }
-                })
-                .catch((error) => {
-                    this.loading = false;
-                    this.errors = error.response.data.errors;
-                    this.$toast.error("Failed to save. " + this.errors[Object.keys(this.errors)[0]]);
-                });
-            },
-
-            editPageNotUpdateTerms() {
-
-                this.loading = true;
-                this.errors = null;
-                axios
-                .patch('/api/pages/' + this.page.id,
-                    {
-                        title: this.page.title,
-                        categories: this.page.categories,
-                        subcategories: this.page.subcategories,
-                        content: JSON.stringify(this.content),
-                        template_id: this.page.template.id,
-                        published: this.page.published,
-                        indexed: this.page.indexed,
-                        dynamic: this.page.dynamic,
-                        id: this.page.id,
-                        published_from: this.page.published_from,
-                        published_to: this.page.published_to,
-                        type: this.page.type,
-                        slug: this.page.slug,
-
-                    }
-                )
+                .patch('/api/pages/' + this.page.id, data)
                 .then((response) => {
                     if (response.status == 200){
                         this.$toast.success('Saved Successfully!')

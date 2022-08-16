@@ -196,8 +196,8 @@ class PagesController extends Controller
                 $redirect->save();
             }
 
-            if (isset($request->terms_val) && !$request->terms_val) {
-                dispatch((new UpdateTerms($page->id))->delay(now()->addSeconds(3)));
+            if (isset($request->terms_val) && $request->terms_val == "yes") {
+                dispatch((new UpdateTerms())->delay(now()->addSeconds(3)));
             }
 
             return new PageResource($page);

@@ -12,7 +12,10 @@ use App\Model\User;
 
 class UpdateTerms implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     /**
      * Create a new job instance.
@@ -20,10 +23,8 @@ class UpdateTerms implements ShouldQueue
      * @return void
      */
 
-    private $pageId;
-    public function __construct($pageId)
+    public function __construct()
     {
-        $this->pageId = $pageId;
     }
 
     /**
@@ -33,32 +34,14 @@ class UpdateTerms implements ShouldQueue
      */
     public function handle()
     {
-        if($this->pageId == 4 || $this->pageId == 6){
-
-            $users = User::all();
-            foreach($users as $user){
-                if($user->instructor->first()){
-                    continue;
-                }
-                
-                $user->terms = 0;
-                $user->save();
-                
-
+        $users = User::all();
+        foreach ($users as $user) {
+            if ($user->instructor->first()) {
+                continue;
             }
 
-        }else if($this->pageId == 4753){
-
-            $users = User::all();
-            foreach($users as $user){
-                if(!$user->instructor->first()){
-                    continue;
-                }
-                
-                $user->terms = 0;
-                $user->save();
-                
-            }
+            $user->terms = 0;
+            $user->save();
         }
     }
 }
