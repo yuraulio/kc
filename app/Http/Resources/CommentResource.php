@@ -22,7 +22,10 @@ class CommentResource extends JsonResource
             'user' => $this->when(
                 $this->user,
                 function () {
-                    return $this->user->firstname . " " . $this->user->lastname;
+                    return [
+                        'name' => $this->user->firstname . " " . $this->user->lastname,
+                        'image' => get_profile_image($this->user->image) ?? '/theme/assets/images/icons/user-profile-placeholder-image.png',
+                    ];
                 }
             ),
             'page' => '<a target="_blank" href="' . ($this->page->type == 'Blog' ? '/blog/' : '') . $this->page->slug . '">' . $this->page->title . "</a>",
