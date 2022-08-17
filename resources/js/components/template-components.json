@@ -1078,7 +1078,8 @@
                 "key": "terms_text",
                 "label": "Accept terms text",
                 "value": "I have read, agree & accept the data privacy policy above.",
-                "size": "col-lg-12"
+                "size": "col-lg-12",
+                "main": true
             }
         ]
     },
