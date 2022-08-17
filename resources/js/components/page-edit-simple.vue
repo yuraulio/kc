@@ -169,6 +169,16 @@
                                             </div>
                                         </template>
 
+                                        <template v-if="column.component == 'html'">
+                                            <div class="card-body row pb-0 pt-0">
+                                                <div class="col-12">
+                                                    <label class="form-label mt-2">Preview</label>
+                                                    <br>
+                                                    <p v-html="findInputValue(column.template.inputs, 'html_embed')"></p>
+                                                </div>
+                                            </div>
+                                        </template>
+
                                     </div>
                                 </div>
                             </div>

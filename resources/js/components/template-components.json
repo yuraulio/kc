@@ -421,7 +421,8 @@
             {
                 "type": "textarea",
                 "key": "html_embed",
-                "label": "Html code"
+                "label": "Html code",
+                "main": true
             }
         ]
     },
