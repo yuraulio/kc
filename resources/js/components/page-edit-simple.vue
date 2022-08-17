@@ -349,6 +349,9 @@ import slugify from '@sindresorhus/slugify';
                     this.editPage(0);
                 }
             },
+            inputedTabs($event, value) {
+                this.$set(value, 'tabs', $event.data);
+            },
             editPage(terms_val) {
                 this.loading = true;
                 this.errors = null;

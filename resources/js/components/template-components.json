@@ -687,7 +687,8 @@
             {
                 "type": "tabs",
                 "key": "tabs",
-                "label": "Tabs"
+                "label": "Tabs",
+                "main": true
             }
         ]
     },
