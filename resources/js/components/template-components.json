@@ -402,7 +402,7 @@
             {
                 "type": "text",
                 "key": "youtube_embed",
-                "label": "Video code",
+                "label": "Video code or URL",
                 "size": "col-lg-12",
                 "main": true
             }

@@ -156,10 +156,11 @@
                                             <div v-show="!column.template.dynamic" class="col-12">
                                                 <label class="form-label mt-2">Preview</label>
                                                 <div class="text-center">
+                                           
                                                     <iframe
-                                                        :width="'100%'"
-                                                        :height="'600'"
-                                                        :src="'https://www.youtube.com/embed/' + findInputValue(column.template.inputs, 'youtube_embed')"
+                                                        :width="findInputValue(column.template.inputs, 'youtube_full_width') ? '100%' : (findInputValue(column.template.inputs, 'youtube_width') || '100%')"
+                                                        :height="findInputValue(column.template.inputs, 'youtube_height') || '600'" 
+                                                        :src="'https://www.youtube.com/embed/' + getYoutubeVideoCode(findInputValue(column.template.inputs, 'youtube_embed'))"
                                                         title="YouTube video player"
                                                         frameborder="0"
                                                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -532,6 +533,29 @@ import slugify from '@sindresorhus/slugify';
                     }
                 });
                 return result;
+            },
+            validURL(str) {
+                var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
+                    '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
+                    '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
+                    '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
+                    '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
+                    '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
+                return !!pattern.test(str);
+            },
+            getYoutubeVideoCode(str) {
+                if (this.validURL(str)) {
+                    return this.getUrlVars(str)["v"];
+                } else {
+                    return str;
+                }
+            },
+            getUrlVars(url) {
+                var vars = {};
+                var parts = url.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+                    vars[key] = value;
+                });
+                return vars;
             }
         },
         computed: {
