@@ -334,13 +334,13 @@
                 "type": "text",
                 "key": "gallery_link",
                 "simple_view": false,
-                "label": "Link"
+                "label": "View more text"
             },
             {
                 "type": "text",
                 "key": "gallery_link_text",
                 "simple_view": false,
-                "label": "Link text"
+                "label": "View more page link"
             }
         ]
     },
