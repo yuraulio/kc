@@ -452,10 +452,12 @@ import slugify from '@sindresorhus/slugify';
             settingsExist(column) {
                 var result = false;
                 column.template.inputs.forEach((input) => {
-                    if (input.main !== true) {
+                    var view = input.simple_view ? input.simple_view : false;
+                    if (input.main !== true && view == true) {
                         result = true;
                     }
                 });
+                console.log(result);
                 return result;
             },
             setPage() {
