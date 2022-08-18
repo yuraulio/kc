@@ -457,7 +457,6 @@ import slugify from '@sindresorhus/slugify';
                         result = true;
                     }
                 });
-                console.log(result);
                 return result;
             },
             setPage() {
