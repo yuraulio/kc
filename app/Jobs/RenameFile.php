@@ -19,7 +19,10 @@ use Illuminate\Support\Facades\DB;
 
 class RenameFile implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     private $oldUrl;
     private $newUrl;
@@ -46,6 +49,7 @@ class RenameFile implements ShouldQueue
      */
     public function handle()
     {
+        Log::info("Rename file job - start");
         DB::beginTransaction();
         try {
             $pages = Page::withoutGlobalScopes()->get();
@@ -83,10 +87,12 @@ class RenameFile implements ShouldQueue
                 $page->save();
             }
 
+            Log::info("Rename file job - commit");
             DB::commit();
+            Log::info("Rename file job - success");
         } catch (Exception $e) {
-            DB::rollback();
             Log::error("Failed to update pages when editing file. " . $e->getMessage());
+            DB::rollback();
         }
     }
 }

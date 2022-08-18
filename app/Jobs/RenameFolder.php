@@ -16,7 +16,10 @@ use Illuminate\Support\Facades\DB;
 
 class RenameFolder implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     private $oldPath;
     private $newPath;
@@ -47,12 +50,14 @@ class RenameFolder implements ShouldQueue
      */
     public function handle()
     {
+        Log::info("Rename folder job - start");
         DB::beginTransaction();
         try {
             // rename files and folder
             $folder = MediaFolder::find($this->folderId);
             $folder->mediaFiles()->chunk(100, function ($files) {
                 foreach ($files as $file) {
+                    Log::info("Rename folder job - change db file");
                     $oldUrl = $file->url;
 
                     $file->path = Str::replaceLast($this->oldPath, $this->newPath, $file->path);
@@ -74,12 +79,14 @@ class RenameFolder implements ShouldQueue
                 }
             });
 
+            Log::info("Rename folder job - change db folder");
             $folder->path = Str::replaceLast($this->oldPath, $this->newPath, $folder->path);
             $folder->url = Str::replaceLast($this->oldPath, $this->newPath, $folder->url);
             $folder->save();
 
             // loop through subdirectories
             foreach ($folder->children()->get() as $subfolder) {
+                Log::info("Rename folder job - start new job for subfolder");
                 $subfolderName = $subfolder->name;
                 $oldPathSubfolder = $this->oldPath . "/" . $subfolderName;
                 $newPathSubfolder = $this->newPath . "/" . $subfolderName;
@@ -88,6 +95,7 @@ class RenameFolder implements ShouldQueue
             }
 
             if ($this->renameFolder) {
+                Log::info("Rename folder job - rename folder on disk");
                 $oldFullPath = public_path("/uploads/" . $this->oldPath);
                 $newFullPath = public_path("/uploads/" . $this->newPath);
                 $result = rename($oldFullPath, $newFullPath);
@@ -95,17 +103,21 @@ class RenameFolder implements ShouldQueue
                     $folder->name = $this->folderName;
                     $folder->save();
 
+                    Log::info("Rename folder job - commit");
                     DB::commit();
+                    Log::info("Rename folder job - success");
                 } else {
-                    DB::rollback();
                     Log::error("Failed to rename folder in RenameFolder job.");
+                    DB::rollback();
                 }
             } else {
+                Log::info("Rename folder job - commit");
                 DB::commit();
+                Log::info("Rename folder job - success");
             }
         } catch (Exception $e) {
-            DB::rollback();
             Log::error("Failed to update files or pages when renaming folder (job). " . $e->getMessage());
+            DB::rollback();
         }
     }
 }
