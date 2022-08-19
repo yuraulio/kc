@@ -61,6 +61,19 @@ export default {
             sortField: 'created_at',
         },
         {
+            name: 'active',
+            title: 'Active',
+            dataClass: 'text-center',
+            titleClass: 'text-center',
+            sortField: 'active',
+            formatter (value) {
+                if (value) {
+                    return '<i class="fa fa-check-circle text-success" aria-hidden="true"></i>';
+                }
+                return '<i class="fa fa-times-circle text-danger" aria-hidden="true"></i>';
+            },
+        },
+        {
             name: 'actions',
             title: 'Actions',
             titleClass: 'text-end',
