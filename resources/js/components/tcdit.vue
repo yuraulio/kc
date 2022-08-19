@@ -256,7 +256,7 @@
                                                         <iframe 
                                                             :width="findInputValue(column.template.inputs, 'youtube_full_width') ? '100%' : (findInputValue(column.template.inputs, 'youtube_width') || '100%')"
                                                             :height="findInputValue(column.template.inputs, 'youtube_height') || '600'" 
-                                                            :src="'https://www.youtube.com/embed/' + findInputValue(column.template.inputs, 'youtube_embed')" 
+                                                            :src="'https://www.youtube.com/embed/' + getYoutubeVideoCode(findInputValue(column.template.inputs, 'youtube_embed'))"
                                                             title="YouTube video player" 
                                                             frameborder="0" 
                                                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
@@ -291,8 +291,14 @@
 
         <div v-if="name == 'main'" class="row">
             <div class="col-sm-12 mt-3 mb-3">
-                <div class="page-title-box d-flex justify-content-between align-items-center">
-                    <input :value="pageTitle" @change="updateTemplateTitle" class="d-inline-block title-input">
+                <div class="page-title-box row">
+                    <div class="col-md-6">
+                        <input :value="pageTitle" @change="updateTemplateTitle" class="d-inline-block title-input">
+                    </div>
+                    <div class="col-md-6">
+                        <a href="/templates" class="btn btn-soft-secondary waves-effect waves-light float-end ms-2"><i class="fe-x me-1"></i> Cancel</a>
+                        <button v-if="mode == 'new' || mode == 'edit'" @click="emitTemplateSave()" type="button" class="btn btn-soft-success waves-effect waves-light float-end" ><i class="fe-check-circle me-1"></i> Save</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -437,16 +443,9 @@
     </div>
 
 
-    <form v-if="tabs_tab || name == 'main'" @click.prevent="addCustomComponent" class="dropzone dz-clickable" style="min-height:80px; border: 2px dashed #6658dd !important" id="myAwesomeDropzone" data-plugin="dropzone" data-previews-container="#file-previews" data-upload-preview-template="#uploadPreviewTemplate">
-        <div class="dz-message needsclick" style="margin: 0px !important; color: #6658dd">
-            <i class="h1  dripicons-view-apps" style="color: #6658dd"></i>
-            <div class="text-center">
-                <span class="text-muted font-13">
-                    <strong>Click to Add Custom Component</strong>
-                </span>
-            </div>
-        </div>
-    </form>
+    <div v-if="tab != 'Meta'" class="text-center">
+        <i @click.prevent="addCustomComponent" class="dripicons-plus add-component-icon cursor-pointer"></i>
+    </div>
 
     <component-modal
         :row="row_index"
@@ -795,6 +794,32 @@ export default {
         },
         updateTemplateTitle(){
             this.$parent.title_value = $('.title-input').val();
+        },
+        emitTemplateSave() {
+            this.$emit('save');
+        },
+        validURL(str) {
+            var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
+                '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
+                '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
+                '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
+                '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
+                '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
+            return !!pattern.test(str);
+        },
+        getYoutubeVideoCode(str) {
+            if (this.validURL(str)) {
+                return this.getUrlVars(str)["v"];
+            } else {
+                return str;
+            }
+        },
+        getUrlVars(url) {
+            var vars = {};
+            var parts = url.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+                vars[key] = value;
+            });
+            return vars;
         }
     },
 
@@ -941,6 +966,11 @@ export default {
             }
 
             this.data.push(comp);
+
+            setTimeout(() => {
+                window.scrollTo(0, document.body.scrollHeight);
+            }, 500);
+
         }));
 
         eventHub.$on('component-change-' + this.name, ((data) => {
@@ -950,7 +980,7 @@ export default {
             this.data[row_index].columns[column_index].component = component;
             this.data[row_index].columns[column_index].template = JSON.parse(JSON.stringify(this.extractedComponents[component]));
 
-            this.$modal.hide("component-modal");
+            this.$modal.hide(this.name);
         }));
 
         eventHub.$on('order-changed-' + this.name, ((data) => {
@@ -1011,5 +1041,9 @@ export default {
     box-shadow: none;
     font-size: 23px;
     width: 100%;
+}
+
+.add-component-icon {
+    font-size: 32px;
 }
 </style>

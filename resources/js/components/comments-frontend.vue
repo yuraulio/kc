@@ -13,9 +13,8 @@
                         <p class="single_comment_text">{{comment.comment}}</p>
                         <div class="single_comment_details">
                             <div class="comment_author">
-                                <!-- <img src="{{ get_profile_image(Auth::user()->image) ?? '/theme/assets/images/icons/user-profile-placeholder-image.png' }}" alt="" width="25"> -->
-                                <img src="/theme/assets/images/icons/user-profile-placeholder-image.png" alt="" width="25"> 
-                                {{comment.user}}
+                                <img :src="comment.user.image" alt="" width="25">
+                                {{comment.user.name}}
                             </div>
                             <div class="comment_date">{{comment.diffForHumans}}</div>
                         </div>

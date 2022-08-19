@@ -335,13 +335,13 @@
                 "type": "text",
                 "key": "gallery_link",
                 "simple_view": false,
-                "label": "Link"
+                "label": "View more text"
             },
             {
                 "type": "text",
                 "key": "gallery_link_text",
                 "simple_view": false,
-                "label": "Link text"
+                "label": "View more page link"
             }
         ]
     },
@@ -403,7 +403,7 @@
             {
                 "type": "text",
                 "key": "youtube_embed",
-                "label": "Video code",
+                "label": "Video code or URL",
                 "size": "col-lg-12",
                 "main": true
             }
@@ -422,7 +422,8 @@
             {
                 "type": "textarea",
                 "key": "html_embed",
-                "label": "Html code"
+                "label": "Html code",
+                "main": true
             }
         ]
     },
@@ -688,7 +689,8 @@
             {
                 "type": "tabs",
                 "key": "tabs",
-                "label": "Tabs"
+                "label": "Tabs",
+                "main": true
             }
         ]
     },
@@ -1077,7 +1079,8 @@
                 "key": "terms_text",
                 "label": "Accept terms text",
                 "value": "I have read, agree & accept the data privacy policy above.",
-                "size": "col-lg-12"
+                "size": "col-lg-12",
+                "main": true
             }
         ]
     },

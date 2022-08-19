@@ -116,7 +116,6 @@
                                             <p class="text-muted d-inline-block">{{ column.template.title }}</p>
                                             <i v-if="column.template.removable !== false" @click="removeRow(row_index)" class="dripicons-trash text-muted float-end ms-2 cursor-pointer" title="Delete component"></i>
                                             <i v-if="settingsExist(column)" @click="column.tab == 'settings' ? column.tab = 'main' : column.tab = 'settings'" :class="'settings-icon text-muted float-end ms-2 ' + (column.template.simple_view_settings_icon ? column.template.simple_view_settings_icon : 'dripicons-gear')"></i>
-                                            <i @click="column.template.mobile = !column.template.mobile" :class="'text-muted float-end ms-2 cursor-pointer ' + (column.template.mobile ? ' dripicons-device-mobile ' : ' dripicons-device-desktop ')" title="Show on mobile"></i>
                                             <template v-if="simpleColumnCount(row.columns) > 1">
                                                 <ul :class="'nav column-navigation d-inline-block float-end mb-0 nav-row' + row_index + ' ' + (settingsExist(column) == false ? 'column-navigation-margin' : '')">
                                                     <template v-for="(column, column_index) in row.columns">
@@ -157,15 +156,26 @@
                                             <div v-show="!column.template.dynamic" class="col-12">
                                                 <label class="form-label mt-2">Preview</label>
                                                 <div class="text-center">
+                                           
                                                     <iframe
-                                                        :width="'100%'"
-                                                        :height="'600'"
-                                                        :src="'https://www.youtube.com/embed/' + findInputValue(column.template.inputs, 'youtube_embed')"
+                                                        :width="findInputValue(column.template.inputs, 'youtube_full_width') ? '100%' : (findInputValue(column.template.inputs, 'youtube_width') || '100%')"
+                                                        :height="findInputValue(column.template.inputs, 'youtube_height') || '600'" 
+                                                        :src="'https://www.youtube.com/embed/' + getYoutubeVideoCode(findInputValue(column.template.inputs, 'youtube_embed'))"
                                                         title="YouTube video player"
                                                         frameborder="0"
                                                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                                         allowfullscreen
                                                     ></iframe>
+                                                </div>
+                                            </div>
+                                        </template>
+
+                                        <template v-if="column.component == 'html'">
+                                            <div class="card-body row pb-0 pt-0">
+                                                <div class="col-12">
+                                                    <label class="form-label mt-2">Preview</label>
+                                                    <br>
+                                                    <p v-html="findInputValue(column.template.inputs, 'html_embed')"></p>
                                                 </div>
                                             </div>
                                         </template>
@@ -315,92 +325,70 @@ import slugify from '@sindresorhus/slugify';
                 });
             },
             edit() {
-                if(this.pageId == 4 || this.pageId == 6){
-                    let user = 'users';
-                  
+                var hasTerms = false;
+                this.content.forEach((row) => {
+                    row.columns.forEach((column) => {
+                        if (column.component == "terms_conditions") {
+                            hasTerms = true;
+                        }
+                    });
+                });
+
+                if(hasTerms){
                     Swal.fire({
-                        title: 'Are you sure?',
-                        text: "Do you want to update " + user + "' term?",
+                        title: 'Saving page.',
+                        text: "Do you want to update users terms?",
                         icon: 'warning',
                         showCancelButton: true,
-                        confirmButtonColor: '#3085d6',
-                        cancelButtonColor: '#d33',
                         confirmButtonText: 'Yes',
-                        cancelButtonText: 'No'
+                        cancelButtonText: 'No',
+                        buttonsStyling: false,
+                        customClass: {
+                            cancelButton: "btn btn-soft-secondary",
+                            confirmButton: "btn btn-soft-success",
+                        },
                     }).then((result) => {
                         if (result.value) {
-                          this.editPageUpdateTerms(0)
+                            this.editPage("yes");
                         }else{
-                           this.editPageUpdateTerms(1)
+                            this.editPage(0);
                         }
-            
                     })
 
                 
                 }else{
-                    this.editPageNotUpdateTerms()
+                    this.editPage(0);
                 }
             },
-
-            editPageUpdateTerms(terms_val) {
-
-                this.loading = true;
-                this.errors = null;
-                axios
-                .patch('/api/pages/' + this.page.id,
-                    {
-                        title: this.page.title,
-                        categories: this.page.categories,
-                        subcategories: this.page.subcategories,
-                        content: JSON.stringify(this.content),
-                        template_id: this.page.template.id,
-                        published: this.page.published,
-                        indexed: this.page.indexed,
-                        dynamic: this.page.dynamic,
-                        id: this.page.id,
-                        published_from: this.page.published_from,
-                        published_to: this.page.published_to,
-                        type: this.page.type,
-                        slug: this.page.slug,
-                        terms_val:terms_val,
-                    }
-                )
-                .then((response) => {
-                    if (response.status == 200){
-                        this.$toast.success('Saved Successfully!')
-                        this.loading = false;
-                    }
-                })
-                .catch((error) => {
-                    this.loading = false;
-                    this.errors = error.response.data.errors;
-                    this.$toast.error("Failed to save. " + this.errors[Object.keys(this.errors)[0]]);
-                });
+            inputedTabs($event, value) {
+                this.$set(value, 'tabs', $event.data);
             },
-
-            editPageNotUpdateTerms() {
-
+            editPage(terms_val) {
                 this.loading = true;
                 this.errors = null;
-                axios
-                .patch('/api/pages/' + this.page.id,
-                    {
-                        title: this.page.title,
-                        categories: this.page.categories,
-                        subcategories: this.page.subcategories,
-                        content: JSON.stringify(this.content),
-                        template_id: this.page.template.id,
-                        published: this.page.published,
-                        indexed: this.page.indexed,
-                        dynamic: this.page.dynamic,
-                        id: this.page.id,
-                        published_from: this.page.published_from,
-                        published_to: this.page.published_to,
-                        type: this.page.type,
-                        slug: this.page.slug,
 
-                    }
-                )
+                var data = {
+                    title: this.page.title,
+                    categories: this.page.categories,
+                    subcategories: this.page.subcategories,
+                    content: JSON.stringify(this.content),
+                    template_id: this.page.template.id,
+                    published: this.page.published,
+                    indexed: this.page.indexed,
+                    dynamic: this.page.dynamic,
+                    id: this.page.id,
+                    published_from: this.page.published_from,
+                    published_to: this.page.published_to,
+                    type: this.page.type,
+                    slug: this.page.slug,
+                }
+
+                if (terms_val == "yes") {
+                    data.terms_val = terms_val;
+                }
+
+                axios
+                .patch('/api/pages/' + this.page.id, data)
                 .then((response) => {
                     if (response.status == 200){
                         this.$toast.success('Saved Successfully!')
@@ -546,6 +534,29 @@ import slugify from '@sindresorhus/slugify';
                     }
                 });
                 return result;
+            },
+            validURL(str) {
+                var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
+                    '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
+                    '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
+                    '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
+                    '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
+                    '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
+                return !!pattern.test(str);
+            },
+            getYoutubeVideoCode(str) {
+                if (this.validURL(str)) {
+                    return this.getUrlVars(str)["v"];
+                } else {
+                    return str;
+                }
+            },
+            getUrlVars(url) {
+                var vars = {};
+                var parts = url.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+                    vars[key] = value;
+                });
+                return vars;
             }
         },
         computed: {
@@ -584,6 +595,11 @@ import slugify from '@sindresorhus/slugify';
                 }
 
                 this.$parent.content.push(comp);
+
+                setTimeout(() => {
+                    window.scrollTo(0, document.body.scrollHeight);
+                }, 500);
+
             }));
 
             eventHub.$on('updateslug', ((value) => {

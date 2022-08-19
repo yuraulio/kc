@@ -310,6 +310,8 @@ export default {
             } else {
                 eventHub.$emit('component-added-' + this.name, component);
             }
+
+            this.$modal.hide(this.name);
         },
         rearange() {
             eventHub.$emit('component-rearange-' + this.name)
