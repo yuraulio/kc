@@ -758,10 +758,10 @@ class User extends Authenticatable
         return $this->hasMany(ExamResult::class)->get()->groupBy('exam_id');
     }
 
-    public function hasExamResults($exam)
+    /*public function hasExamResults($exam)
     {
         return $this->hasMany(ExamResult::class)->where('exam_id', $exam)->first();
-    }
+    }*/
 
     public function AauthAcessToken()
     {
