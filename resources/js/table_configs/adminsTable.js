@@ -28,7 +28,7 @@ const collectiveInputs = [
         "key": "password_confirmation",
         "label": "Confirm Password",
         "size": "col-lg-12"
-    },
+    }
 ];
 
 export default {
@@ -70,10 +70,15 @@ export default {
     create: true,
     edit: true,
     showFilters: false,
-    editInputs: collectiveInputs,
     loadWidgets: false,
-    addInputs: collectiveInputs.concat([
-        
+    addInputs: collectiveInputs,
+    editInputs: collectiveInputs.concat([
+        {
+            "type": "checkbox",
+            "key": "active",
+            "label": "Active",
+            "size": "col-lg-12"
+        }
     ])
 }
 

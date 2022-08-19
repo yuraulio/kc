@@ -97,10 +97,26 @@ class AdminController extends Controller
             $admin->firstname = $request->firstname;
             $admin->lastname = $request->lastname;
             $admin->email = $request->email;
+            $admin->active = $request->active;
             if ($request->password) {
                 $admin->password = Hash::make($request->password);
             }
             $admin->save();
+
+            if (!$admin->active) {
+                // get current user
+                $user = Auth::user();
+
+                if ($admin->id !== $user->id) {
+
+                    // logout user
+                    Auth::setUser($admin);
+                    Auth::logout();
+
+                    // set again current user
+                    Auth::setUser($user);
+                }
+            }
 
             return new AdminResource($admin);
         } catch (Exception $e) {
@@ -134,7 +150,7 @@ class AdminController extends Controller
     {
         try {
             $ids = $request->selected;
-        
+
             // authorize action
             $categories = Admin::findOrFail($ids);
             foreach ($categories as $category) {
