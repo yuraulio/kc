@@ -308,14 +308,15 @@
                 "key": "gallery_title",
                 "label": "Title",
                 "size": "col-lg-12",
-                "simple_view": false,
-                "dynamic": true
-
+                "simple_view": true,
+                "dynamic": true,
+                "main": true
             },
             {
                 "type": "gallery",
                 "key": "gallery",
                 "label": "Gallery",
+                "simple_view": true,
                 "main": true
             },
             {
