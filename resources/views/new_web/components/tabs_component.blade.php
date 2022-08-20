@@ -14,16 +14,12 @@
     
     $freeEvent = isset($dynamic_page_data['info']['payment_method']) && $dynamic_page_data['info']['payment_method'] == 'free' ? true : false;
 
+    /*
     function checkTabContent($tab, $dynamic_page_data, $tabs) {
         $tab = strtolower($tab);
         foreach ($tabs["tabs"]["value"] as $tab_content) {
-            
-            if($tab_content->tabs_tab == 'benefits'){
-                continue;
-            }
 
             if ($tab_content->tabs_tab == $tab) {
-
                 if ($tab == "faq") {
                     $tab = "questions";
                 }
@@ -31,8 +27,11 @@
                     return true;
                 }
                 if (isset($dynamic_page_data["sections"][$tab])) {
+                    echo($dynamic_page_data["sections"][$tab]->first()->visible);
                     if ($dynamic_page_data["sections"][$tab]->first()->visible) {
                         return true;
+                    } else {
+                        //dd($dynamic_page_data["sections"][$tab]->first());
                     }
                 } else {
                     return true;
@@ -41,6 +40,7 @@
         }
         return false;
     }
+    */
 
 @endphp
 
@@ -55,9 +55,10 @@
 
                                 @if ($estatus == 0 || $estatus == 2 || $estatus == 5)
                                     @foreach ($tabs["tabs"]["tabs"] as $index=>$tab)
-                                        @if (checkTabContent($tab, $dynamic_page_data, $tabs))
+                                        {{-- @if (checkTabContent($tab, $dynamic_page_data, $tabs))
                                             <li><a href="#{{Illuminate\Support\Str::slug($tab)}}" class="{{$index == 0 ? "active" : "" }}">{{$tab}}</a></li>
-                                        @endif
+                                        @endif --}}
+                                        <li><a href="#{{Illuminate\Support\Str::slug($tab)}}" class="{{$index == 0 ? "active" : "" }}">{{$tab}}</a></li>
                                     @endforeach
                                 @else
                                     <li><a href="#{{Illuminate\Support\Str::slug("Overview")}}" class="active">Overview</a></li>

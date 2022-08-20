@@ -16,6 +16,21 @@
 
                 <div class="col-lg-12 p4">
                     <multidropdown
+                        title="Type"
+                        :multi="false"
+                        @updatevalue="update_type"
+                        required=0
+                        :fetch="true"
+                        route="getPageTypes"
+                        setlabel="description"
+                        placeholder="Select type"
+                        :prop-value="templateType"
+                    ></multidropdown>
+                </div>
+
+                <div class="col-lg-12 p4">
+                    <multidropdown
+                        title="Dynamic"
                         :multi="false"
                         @updatevalue="update_dynamic"
                         :prop-value="dynamic"
@@ -30,7 +45,7 @@
                                 id: true
                             }
                         ]"
-                        placeholder="Select tyoe"
+                        placeholder="Select one"
                         marginbottom="mb-0"
                         :allowEmpty="false"
                     ></multidropdown>
@@ -98,6 +113,8 @@ export default {
                     title: 'Static page',
                     id: false
                 },
+                templateType: null,
+                type_list: [],
             }
         },
         methods: {
@@ -106,6 +123,9 @@ export default {
             },
             update_dynamic(value) {
                 this.dynamic = value;
+            },
+            update_type(value) {
+                this.templateType = value;
             },
             update_description(value){
                 this.description_value = value;
@@ -130,6 +150,7 @@ export default {
                     {
                         title: this.title_value,
                         dynamic: this.dynamic.id,
+                        type: this.templateType.title,
                         rows: this.$refs.tc ? JSON.stringify(this.$refs.tc.data) : null,
                     }
                 )
@@ -154,6 +175,7 @@ export default {
                     {
                         title: this.title_value,
                         dynamic: this.dynamic.id,
+                        type: this.templateType.title,
                         rows: this.$refs.tc ? JSON.stringify(this.$refs.tc.data) : null,
                         id: this.id,
                     }
@@ -178,6 +200,7 @@ export default {
                     if (response.status == 200){
                         var data = response.data.data;
                         this.title_value = data.title;
+                        this.templateType = data.type;
                         if (!data.dynamic) {
                             this.dynamic = {
                                 title: 'Static page',
@@ -192,6 +215,9 @@ export default {
                         if (data.rows){
                             this.rows_value = JSON.parse(data.rows);
                         }
+
+                        this.getTypes();
+
                         this.show = true;
                     }
                 })
@@ -202,6 +228,28 @@ export default {
             save() {
                 this.$modal.show('save-modal'); 
                 $forceUpdate();
+            },
+            getTypes() {
+                axios
+                .get('/api/getPageTypes')
+                .then((response) => {
+                    if (response.status == 200){
+                        this.type_list = response.data.data;
+                        this.setTemplateType();
+                    }
+                })
+                .catch((error) => {
+                    console.log(error)
+                });
+            },
+            setTemplateType() {
+                if (typeof this.templateType === 'string' || this.templateType instanceof String) {
+                    var title = this.templateType;
+                    var index = this.type_list.findIndex(function(type) {
+                        return type.title ==  title;
+                    });
+                    this.templateType = this.type_list[index];
+                }
             }
         },
         mounted() {
@@ -210,11 +258,14 @@ export default {
                     var data = this.data;
                     this.title_value = data.title;
                     this.description_value = data.description;
+                    this.templateType = data.type;
                     if (data.rows){
                         this.rows_value = JSON.parse(data.rows);
                     }
                     this.category_value = data.category_id;
                     this.show = true;
+
+                    this.getTypes();
                 } else {
                     this.get()
                 }

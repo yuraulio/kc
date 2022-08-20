@@ -375,16 +375,54 @@
         >
             <transition-group tag="div" >
                 <div v-for="(val, index) in data" :key="'prim'+ index" :class="'row mb-1 ' + (name == 'tabs' && tabs_tab == val.tabs_tab ? ' d-block ' : ' d-none ') + (name == 'main' && tab == val.tab ? ' d-block ' : ' d-none ')">
-                    <div v-if="val.width" class="btn-group" style="width: 20%;margin-left: 40%;margin-right: 40%;">
-                        <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                            {{ val.width == 'full' ? 'Full' : (val.width == 'content' ? 'Content' :'Blog') }} Width<i class="mdi mdi-chevron-down"></i>
-                        </button>
-                        <div class="dropdown-menu dropdown-menu-center" style="" data-popper-placement="bottom-start">
-                            <a @click.prevent="val.width = 'full'" :class="'dropdown-item ' + (val.width == 'full' ? 'active' : '')" href="#!">Full Width</a>
-                            <a @click.prevent="val.width = 'content'" :class="'dropdown-item ' + (val.width == 'content' ? 'active' : '')" href="#!">Content Width</a>
-                            <a @click.prevent="val.width = 'blog'" :class="'dropdown-item ' + (val.width == 'blog' ? 'active' : '')" href="#!">Blog Width</a>
+                    <div class="text-center">
+                        <div v-if="val.width" class="btn-group d-inline-block" style="width: 20%;">
+                            <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                {{ val.width == 'full' ? 'Full' : (val.width == 'content' ? 'Content' :'Blog') }} Width<i class="mdi mdi-chevron-down"></i>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-center" style="" data-popper-placement="bottom-start">
+                                <a @click.prevent="val.width = 'full'" :class="'dropdown-item ' + (val.width == 'full' ? 'active' : '')" href="#!">Full Width</a>
+                                <a @click.prevent="val.width = 'content'" :class="'dropdown-item ' + (val.width == 'content' ? 'active' : '')" href="#!">Content Width</a>
+                                <a @click.prevent="val.width = 'blog'" :class="'dropdown-item ' + (val.width == 'blog' ? 'active' : '')" href="#!">Blog Width</a>
+                            </div>
+                        </div>
+
+                        <div v-if="val.disable_color !== true" class="btn-group d-inline-block" style="width: 20%;">
+                            <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                <template v-if="val.color == 'white'">
+                                    White <i class="mdi mdi-chevron-down"></i>
+                                </template>
+                                <template v-if="val.color == 'blue_gradient'">
+                                    Blue gradient <i class="mdi mdi-chevron-down"></i>
+                                </template>
+                                <template v-if="val.color == 'blue'">
+                                    Blue <i class="mdi mdi-chevron-down"></i>
+                                </template>
+                                <template v-if="val.color == 'gray'">
+                                    Gray <i class="mdi mdi-chevron-down"></i>
+                                </template>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-center" style="">
+                                <a @click.prevent="val.color = 'white'" 
+                                    :class="'dropdown-item ' + (val.color == 'white' ? 'active' : '')" 
+                                    href="#!">White
+                                </a>
+                                <a @click.prevent="val.color = 'blue_gradient'" 
+                                    :class="'dropdown-item ' + (val.color == 'blue_gradient' ? 'active' : '')" 
+                                    href="#!">Blue gradient
+                                </a>
+                                <a @click.prevent="val.color = 'blue'" 
+                                    :class="'dropdown-item ' + (val.color == 'blue' ? 'active' : '')" 
+                                    href="#!">Blue
+                                </a>
+                                <a @click.prevent="val.color = 'gray'" 
+                                    :class="'dropdown-item ' + (val.color == 'gray' ? 'active' : '')" 
+                                    href="#!">Gray
+                                </a>
+                            </div>
                         </div>
                     </div>
+
                     <div v-for="(column, indr) in val.columns" :key="'column' + indr" :class="'d-inline-block col-lg-' + getColumnWidth(column, val.columns)">
                         <div class="" style="position: relative">
                             <div @click.prevent="" :key="'pseudo' + indr" class="dropzone  mb-2" style="min-height:150px">
@@ -407,27 +445,32 @@
                                             <input @click.stop="calculateWidth(val.columns, indr, $event, index)" :value="column.width" class="w-100" type="range" maxlength="1" min="1" max="6">
                                         </template>
                                     </span>
+                                    <div v-if="column.template.dynamic != null" class="d-inline-block">
+                                        <span class="text-muted font-13 d-inline-block me-1" style="margin-top: 4px;">Dynamic</span><input v-model="column.template.dynamic"  type="checkbox" class="form-check-input">
+                                    </div>
                                 </div>
 
-                                <multiput
-                                    v-for="input in column.template.inputs"
-                                    v-if="input.key == 'tabs'"
-                                    :pseudo="true"
-                                    :key="input.key"
-                                    :keyput="input.key"
-                                    :label="input.label"
-                                    :type="input.type"
-                                    :value="input.value"
-                                    :tabsProp="input.tabs ? input.tabs : []"
-                                    :size="input.size"
-                                    :width="input.width"
-                                    @inputed="inputed($event, input)"
-                                    @inputedTabs="inputedTabs($event, input)"
-                                    :route="input.route"
-                                    :multi="false"
-                                    :existingValue="input.value"
-                                    :uuid="$uuid.v4()"
-                                />
+                                <div class="row">
+                                    <multiput
+                                        v-for="input in column.template.inputs"
+                                        v-if="input.key == 'tabs' || column.component == 'menus'"
+                                        :pseudo="true"
+                                        :key="input.key"
+                                        :keyput="input.key"
+                                        :label="input.label"
+                                        :type="input.type"
+                                        :value="input.value"
+                                        :tabsProp="input.tabs ? input.tabs : []"
+                                        :size="input.size"
+                                        :width="input.width"
+                                        @inputed="inputed($event, input)"
+                                        @inputedTabs="inputedTabs($event, input)"
+                                        :route="input.route"
+                                        :multi="false"
+                                        :existingValue="input.value"
+                                        :uuid="$uuid.v4()"
+                                    />
+                                </div>
 
                             </div>
                             <span @click="removeRow(index)" v-if="indr == (val.columns.length - 1) && val.removable !== false" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" title="Delete component" style="cursor: pointer">
