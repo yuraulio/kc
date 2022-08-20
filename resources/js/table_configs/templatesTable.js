@@ -32,6 +32,19 @@ export default {
             titleClass: 'text-center'
         },
         {
+            name: 'dynamic',
+            title: 'Dinamic',
+            dataClass: 'text-center align-middle',
+            titleClass: 'text-center',
+            sortField: 'dynamic',
+            formatter (value) {
+                if (value) {
+                    return '<i class="fa fa-check-circle" aria-hidden="true"></i>';
+                }
+                return '';
+            },
+        },
+        {
             name: 'actions',
             title: 'Actions',
             titleClass: 'text-end',

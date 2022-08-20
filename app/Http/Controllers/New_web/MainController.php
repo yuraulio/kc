@@ -9,6 +9,7 @@ use App\Library\CMS;
 use App\Model\Admin\Page;
 use App\Model\Admin\Redirect;
 use App\Model\Admin\Setting;
+use App\Model\Admin\Template;
 use App\Model\Instructor;
 use App\Model\Logos;
 use App\Model\Slug;
@@ -76,7 +77,7 @@ class MainController extends Controller
 
             if ($modelSlug && $modelSlug->slugable != null && get_class($modelSlug->slugable) == "App\Model\Event") {
                 $event = $modelSlug->slugable;
-                $page = Page::withoutGlobalScope("published")->whereType("Course page")->whereDynamic(true)->first();
+                $page = Template::whereType("Course page")->whereDynamic(true)->first();
                 $dynamicPageData = CMS::getEventData($event);
 
                 if ($event->event_info() != null) {
@@ -84,7 +85,7 @@ class MainController extends Controller
                 }
             } elseif ($modelSlug && $modelSlug->slugable != null && get_class($modelSlug->slugable) == "App\Model\Instructor") {
                 $instructor = $modelSlug->slugable;
-                $page = Page::withoutGlobalScope("published")->whereType("Trainer page")->whereDynamic(true)->first();
+                $page = Template::whereType("Trainer page")->whereDynamic(true)->first();
                 $dynamicPageData = CMS::getInstructorData($instructor);
             } elseif ($modelSlug && $modelSlug->slugable != null && get_class($modelSlug->slugable) == "App\Model\City") {
                 $city = $modelSlug->slugable;
@@ -148,9 +149,9 @@ class MainController extends Controller
             ]);
         } else {
             return view('new_web.page', [
-                'content' => json_decode($page->content),
+                'content' => json_decode($page->content ? $page->content : $page->rows),
                 'page_id' => $page->id,
-                'comments' => $page->comments->take(500),
+                'comments' => $page->comments ? $page->comments->take(500) : null,
                 'page' => $page,
                 'dynamic_page_data' => $dynamicPageData,
             ]);
