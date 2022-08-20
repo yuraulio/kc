@@ -28,7 +28,7 @@ const collectiveInputs = [
         "key": "password_confirmation",
         "label": "Confirm Password",
         "size": "col-lg-12"
-    },
+    }
 ];
 
 export default {
@@ -61,6 +61,19 @@ export default {
             sortField: 'created_at',
         },
         {
+            name: 'active',
+            title: 'Active',
+            dataClass: 'text-center',
+            titleClass: 'text-center',
+            sortField: 'active',
+            formatter (value) {
+                if (value) {
+                    return '<i class="fa fa-check-circle text-success" aria-hidden="true"></i>';
+                }
+                return '<i class="fa fa-times-circle text-danger" aria-hidden="true"></i>';
+            },
+        },
+        {
             name: 'actions',
             title: 'Actions',
             titleClass: 'text-end',
@@ -70,10 +83,15 @@ export default {
     create: true,
     edit: true,
     showFilters: false,
-    editInputs: collectiveInputs,
     loadWidgets: false,
-    addInputs: collectiveInputs.concat([
-        
+    addInputs: collectiveInputs,
+    editInputs: collectiveInputs.concat([
+        {
+            "type": "checkbox",
+            "key": "active",
+            "label": "Active",
+            "size": "col-lg-12"
+        }
     ])
 }
 
