@@ -425,7 +425,7 @@
 
                     <div v-for="(column, indr) in val.columns" :key="'column' + indr" :class="'d-inline-block col-lg-' + getColumnWidth(column, val.columns)">
                         <div class="" style="position: relative">
-                            <div @click.prevent="" :key="'pseudo' + indr" class="dropzone  mb-2" style="min-height:150px">
+                            <div  :key="'pseudo' + indr" class="dropzone  mb-2" style="min-height:150px">
                                 <div class="dz-message needsclick" style="margin: 0px !important; display: flex; justify-content: center; flex-direction: column">
                                     <div @click="changeComponent(index, indr, column.template)">
                                         <i :class="'h1 handle text-muted ' + column.template.icon"></i>
