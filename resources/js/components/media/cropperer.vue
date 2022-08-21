@@ -6,6 +6,7 @@
                 <div v-show="imgSrc" :key="imgSrc ? imgSrc : 'emp'" class="img-cropper" style>
                     <vue-cropper ref="cropper" :checkCrossOrigin="false" :src="imgSrc" preview=".preview"/>
                 </div>
+                <!--
                 <label v-show="imgSrc == null" :name="'image'" style="width: 100%; min-height: 300px">
                     <form method="post" class="dropzone dz-clickable" id="myAwesomeDropzone" data-plugin="dropzone" data-previews-container="#file-previews" data-upload-preview-template="#uploadPreviewTemplate">
                         <div class="dz-message needsclick" style="margin: 0 auto; min-height: 300px">
@@ -49,6 +50,7 @@
                     </button>
 
                 </div>
+                -->
 
                 <div class="btn-group mb-2 mt-2" style="float: right">
                     <button type="button" class="btn btn-soft-primary" @click.prevent="reset">
@@ -119,19 +121,27 @@
             </div>
             <div class="row mb-2">
                 <div class="col-lg-12">
-                    <a :href="getUrl()" target="_blank" class="btn btn-soft-warning w-100 mt-2">View</a>
-                    <button @click="resetData()" class="btn btn-soft-info btn-block w-100 mt-2">
-                        Reset
-                    </button>
-                    <button @click="close()" class="btn btn-soft-secondary btn-block w-100 mt-2">
-                        Cancel
-                    </button>
                     <button @click="upload('edit')" class="btn btn-soft-success btn-block w-100 mt-2" :disabled="isUploading">
                         <span v-if="isUploading"><i class="fas fa-spinner fa-spin"></i> Saving...</span>
                         <span v-else>
                             Save
                         </span>
                     </button>
+                </div>
+                <div class="col-4">
+                    <a :href="getUrl()" target="_blank" class="btn btn-soft-warning w-100 mt-2">View</a>
+                </div>
+                <div class="col-4">
+                    <button @click="resetData()" class="btn btn-soft-info btn-block w-100 mt-2">
+                        Reset
+                    </button>
+                </div>
+                <div class="col-4">
+                    <button @click="close()" class="btn btn-soft-secondary btn-block w-100 mt-2">
+                        Cancel
+                    </button>
+                </div>
+                <div class="col-12">
                     <button v-if="findVersionData(version)" @click="deleteFile(findVersionData(version))" class="btn btn-soft-danger btn-block w-100 mt-2">Delete</button>
                     <button v-if="parentMode" @click="confirmSelection(findVersionData(version))" class="btn btn-soft-primary btn-block w-100 mt-2">Use</button>
                 </div>
