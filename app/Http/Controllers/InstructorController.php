@@ -59,7 +59,14 @@ class InstructorController extends Controller
             $status = 0;
         }
         
-        $request->request->add(['status' => $status]);
+        $link = $request->ext_url;
+        if($link){
+            $link = str_replace('https://', '', $link);
+            $link = str_replace('http://', '', $link);
+            $link = 'https://'.$link;
+        }
+
+        $request->request->add(['status' => $status, 'ext_url' => $link]);
         $isCreate = $model->create($request->all());
         if($isCreate){
             /*if($request->image_upload != null){
@@ -138,8 +145,15 @@ class InstructorController extends Controller
         {
             $status = 0;
         }
-        
-        $request->request->add(['status' => $status, 'social_media' => $social_media]);
+  
+        $link = $request->ext_url;
+        if($link){
+            $link = str_replace('https://', '', $link);
+            $link = str_replace('http://', '', $link);
+            $link = 'https://'.$link;
+        }
+
+        $request->request->add(['status' => $status, 'social_media' => $social_media, 'ext_url' => $link]);
         $isUpdate = $instructor->update($request->all());
 
         if($isUpdate){
