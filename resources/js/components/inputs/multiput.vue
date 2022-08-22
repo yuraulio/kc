@@ -98,7 +98,9 @@
     </div>
 
     <div v-if="type == 'text_editor'" class="text-editor-input">
+        <!--
         <label v-if="label" :for="keyput" class="form-label">{{ label }}</label>
+        -->
 
         <editor 
             :height="300" 

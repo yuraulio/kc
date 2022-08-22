@@ -31,7 +31,8 @@
                 "value": false,
                 "main": true,
                 "simple_view": false,
-                "size": "col-lg-6"
+                "size": "col-lg-6",
+                "hide": true
             },
             {
                 "type": "checkbox",
@@ -125,6 +126,24 @@
             {
                 "type": "image",
                 "key": "full_size_image",
+                "label": "Image",
+                "main": true
+            }
+        ]
+    },
+    "image_rounded" : {
+        "version": 3,
+        "width": "full",
+        "title": "Rounded Image",
+        "icon": "dripicons-photo",
+        "key": "image_rounded_component",
+        "tab": "Content",
+        "simple_view": true,
+        "mobile": true,
+        "inputs": [
+            {
+                "type": "image",
+                "key": "rounded_image",
                 "label": "Image",
                 "main": true
             }
