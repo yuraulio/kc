@@ -131,6 +131,24 @@
             }
         ]
     },
+    "image_rounded" : {
+        "version": 3,
+        "width": "full",
+        "title": "Rounded Image",
+        "icon": "dripicons-photo",
+        "key": "image_rounded_component",
+        "tab": "Content",
+        "simple_view": true,
+        "mobile": true,
+        "inputs": [
+            {
+                "type": "image",
+                "key": "rounded_image",
+                "label": "Image",
+                "main": true
+            }
+        ]
+    },
     "meta" : {
         "version": 7,
         "title": "Meta",
