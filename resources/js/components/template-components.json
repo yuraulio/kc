@@ -31,7 +31,8 @@
                 "value": false,
                 "main": true,
                 "simple_view": false,
-                "size": "col-lg-6"
+                "size": "col-lg-6",
+                "hide": true
             },
             {
                 "type": "checkbox",

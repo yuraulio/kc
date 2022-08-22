@@ -244,6 +244,7 @@
                                                 :uuid="$uuid.v4()"
                                                 :mode="mode"
                                                 :inputs="input.inputs"
+                                                :class="input.hide == true ? 'visually-hidden' : ''"
                                             />
                                         </div>
 
