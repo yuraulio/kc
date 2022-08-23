@@ -2160,6 +2160,7 @@
             allowColumnReordering: false,
             allowColumnResizing: false,
             showBorders: false,
+            searchPanel: { visible: true },
             selection: {
                 mode: 'multiple',
                 recursive: true,
