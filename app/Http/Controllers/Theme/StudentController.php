@@ -207,7 +207,7 @@ class StudentController extends Controller
             $eventInfo = $event->event_info();
 
             if($event->is_elearning_course()){
-                
+
                 //$data['user']['events'][$event->id]['topics'] = $event['topic']->unique()->groupBy('topic_id');
                 $data['events'][$event->id]['videos_progress'] = round($event->progress($user),2);
                 $data['events'][$event->id]['videos_seen'] = $event->video_seen($user);
@@ -614,7 +614,7 @@ class StudentController extends Controller
         $data['plans'] = Plan::where('published',true)->with('events')->get();
         $data['subscriptionAccess'] = [];
         $data['mySubscriptions'] = [];
-        
+
         $data['user'] = User::find($user->id);
         $statistics = $data['user']['statistic']->groupBy('id');//$user->statistic()->get()->groupBy('id');
         //dd($statistics);
@@ -1090,9 +1090,9 @@ class StudentController extends Controller
         $event = Event::where('title', $course)->with('slugable','category')->first();
         if($instructor = $user->instructor->first()){
             $data['instructor_topics'] = true;
-            
+
             $eventt = $instructor->elearningEvents()->wherePivot('instructor_id', $instructor->id)->wherePivot('event_id', $event['id'])->first();
-        
+
             if(!$eventt){
                 $data['instructor_topics'] = false;
                 $eventt = $user->events()->wherePivot('event_id', $event['id'])->first() ? $user->events()->wherePivot('event_id', $event['id'])->first() :
@@ -1119,7 +1119,7 @@ class StudentController extends Controller
 
         $statistic =  ($statistic = $user->statistic()->wherePivot('event_id',$event['id'])->first()) ?
                             $statistic->toArray() : ['pivot' => [], 'videos' => ''];
-       
+
         //$this->updateUserStatistic($event,$statistic['pivot'],$user);
         $statistic = $user->updateUserStatistic($event,$statistic['pivot']);
         $data['lastVideoSeen'] = $statistic['pivot']['lastVideoSeen'];
@@ -1273,10 +1273,10 @@ class StudentController extends Controller
 
                 }
 
-            
+
             //}else if( $event /*&& $event->view_tpl != 'elearning_free'*/ && !$event->isFree() && $event->hasCertificate()){
             }else if( $event && $event->hasCertificate()){
-                
+
                 $event->certification($user);
             }
 
