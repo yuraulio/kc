@@ -656,6 +656,18 @@
                     "custom_class": "Students"
                 },
                 "size": "col-lg-6"
+            },
+            {
+                "type": "multidropdown",
+                "key": "account_menu",
+                "label": "Account menu",
+                "route": "getMenus",
+                "value": {
+                    "name": "Account",
+                    "slug": "account",
+                    "custom_class": "Account"
+                },
+                "size": "col-lg-12"
             }
         ]
     },

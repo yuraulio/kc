@@ -398,5 +398,48 @@ class MenuItemsSeeder extends Seeder
         $menuItem->icon = null;
         $menuItem->custom_class = null;
         $menuItem->save();
+
+        // account menu
+        $menu = new Menu();
+        $menu->name = 'Account';
+        $menu->slug = Str::slug('Account');
+        $menu->url = '/';
+        $menu->order = 1;
+        $menu->custom_class = 'Account';
+        $menu->save();
+
+        // account menu items
+        $menuItem = new MenuItem();
+        $menuItem->menu_id = $menu->id;
+        $menuItem->title = 'ACCOUNT';
+        $menuItem->slug = Str::slug('ACCOUNT');
+        $menuItem->url = '/myaccount';
+        $menuItem->parent_id = null;
+        $menuItem->order = 1;
+        $menuItem->route = null;
+        $menuItem->params = null;
+        $menuItem->middleware = null;
+        $menuItem->controller = '\CodexShaper\Menu\Http\Controllers\MenuController@index';
+        $menuItem->target = '_self';
+        $menuItem->icon = null;
+        $menuItem->custom_class = null;
+        $menuItem->save();
+
+        // account menu items
+        $menuItem = new MenuItem();
+        $menuItem->menu_id = $menu->id;
+        $menuItem->title = 'LOGOUT';
+        $menuItem->slug = Str::slug('LOGOUT');
+        $menuItem->url = '/logout';
+        $menuItem->parent_id = null;
+        $menuItem->order = 1;
+        $menuItem->route = null;
+        $menuItem->params = null;
+        $menuItem->middleware = null;
+        $menuItem->controller = '\CodexShaper\Menu\Http\Controllers\MenuController@index';
+        $menuItem->target = '_self';
+        $menuItem->icon = null;
+        $menuItem->custom_class = null;
+        $menuItem->save();
     }
 }
