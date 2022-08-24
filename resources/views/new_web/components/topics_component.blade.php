@@ -8,6 +8,9 @@
         $title = $sections['topics']->first()->title ?? null;
         $body = $sections['topics']->first()->description ?? null;
     }
+
+    $isElearning = $event->is_elearning_course();
+
 @endphp
 
 <div class="course-full-text mt-5 mb-5">
@@ -25,7 +28,7 @@
                             @foreach($topic['lessons'] as $lkey => $lesson)
                                 <div class="topic-wrapper-big">
                                     <div class="topic-title-meta">
-                                        <h4 @if(isset($lesson['bold']) && $lesson['bold']) class="bold-topic" @endif>{!! $lesson['title'] !!}</h4>
+                                        <h4 @if(isset($lesson['bold']) && $isElearning && $lesson['bold']) class="bold-topic" @endif>{!! $lesson['title'] !!}</h4>
                                         <div class="topic-meta">
                                             @if(isset($lesson['type'][0]['name']))<div class="category">{{$lesson['type'][0]['name']}}</div>@endif
                                             <?php
