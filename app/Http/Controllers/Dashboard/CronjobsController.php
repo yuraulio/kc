@@ -189,7 +189,7 @@ class CronjobsController extends Controller
 
         
             //$img = url('/') . $event['mediable']['path'] . '/' . $event['mediable']['original_name'];
-            $img = cdn(get_image($event['mediable'],'header-image'));
+            $img = url('/') . get_image($event['mediable'],'header-image');
             $img = str_replace(' ', '%20', $img);
             fputcsv($file, array($event->id, $eventTitle, $event->xml_short_description, 'in stock', $amount . ' EUR', url('/') . '/' . $event->slugable->slug, str_replace('\"', '', $img), 'Knowcrunch',  $cat, 'new',trim($summary)));
 
@@ -234,7 +234,7 @@ class CronjobsController extends Controller
 
 
             //$img = url('/') . $event['mediable']['path'] . '/' . $event['mediable']['original_name'];
-            $img = cdn(get_image($event['mediable'],'header-image'));
+            $img = url('/') . get_image($event['mediable'],'header-image');
             $img = str_replace(' ', '%20', $img);
             $eventTitle = $event->xml_title ? $event->xml_title : $event->title;
             $summary = $event->xml_description;
