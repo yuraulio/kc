@@ -5,7 +5,7 @@
    .elearning-page-wrapper .page-content{ background-color: #fff; box-shadow: 8px 7px 24.44px 1.56px rgba(76, 76, 76, 0.23); }
    .elearning-page-wrapper .page-title{ margin-bottom: 22px; }
    .elearning-page-wrapper .page-title h1{ font-size: 42px; }
-   
+
    .content-wrapper{  }
    .content-wrapper .tabs-wrapper{  }
    .content-wrapper .tabs-wrapper.fixed-tab-controls{ padding-top: 53px; position: relative; }
@@ -23,7 +23,7 @@
    .content-wrapper .tabs-wrapper .tab-controls ul li .child-menu li{ display: block; float: none;  background-color: #3f6fb6; width: 100%; }
    .content-wrapper .tabs-wrapper .tab-controls ul li .child-menu li:not(:last-child){ border-bottom: 1px solid #ffffff; }
    .content-wrapper .tabs-wrapper .tab-controls ul li .child-menu li a{ font-size: 16px; padding: 17px 20px 15px; white-space: nowrap; }
-   
+
    .content-wrapper .tabs-wrapper .tabs-content{  }
    .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper{ padding: 0; height: 0; overflow: hidden; }
    .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper.tab-gray{ background-color: #eeeeee; }
@@ -66,7 +66,7 @@
    .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .course-tab-text .author-infos .ibox .ibox-img a img{ display: block; width: 100%; height: auto; }
    .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .video-wrapper{ margin-top: 38px; box-shadow: 13px 10px 30px 0 rgba(76, 76, 76, 0.2); }
    .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .video-wrapper .responsive-fb-video{  }
-   
+
    .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .course-tab-sidebar{ width: 30%; float: left; }
    .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .course-tab-sidebar .course-details{ padding-left: 35px; }
    .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .course-tab-sidebar .course-details ul{  }
@@ -82,7 +82,7 @@
    .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .course-tab-sidebar .course-details ul.two-column-list{ display: -ms-flexbox; display: flex; -ms-flex-wrap: wrap; flex-wrap: wrap; margin-right: -5px; margin-left: -5px; }
    .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .course-tab-sidebar .course-details ul.two-column-list li{ text-align: center; padding-top: 40px; position: relative; width: 100%; padding-right: 5px; padding-left: 5px; -ms-flex: 0 0 50%; flex: 0 0 50%; max-width: 50%; }
    .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .course-tab-sidebar .course-details ul.two-column-list li .info-icon{ top: 0; left: 50%; transform: translateX(-50%); width: 30px; }
-   
+
    .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .course-full-text{  }
    .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .course-full-text.full-w-pad{ padding: 50px 45px 15px; }
    .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .benefits-list{  }
@@ -93,7 +93,7 @@
    .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .benefits-list .benefit-box .box-icon path{ stroke-width: 0.75; }
    .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .benefits-list .benefit-box h3{ font-size: 16px; margin-bottom: 13px; text-transform: uppercase; letter-spacing: 0.07em; }
    .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .benefits-list .benefit-box p{ font-size: 18px; line-height: 1.375; }
-   
+
    .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .instructor-box{ height: 100%; padding-bottom: 20px; }
    .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .instructor-box .instructor-inner{ height: 100%; background-color: #ffffff; text-align: center; box-shadow: 5px 4px 6.5px 1.44px rgba(76, 76, 76, 0.11); padding: 20px 22px 45px; position: relative; }
    .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .instructor-box .instructor-inner .profile-img{ width: 109px; height: 109px; overflow: hidden; margin: 0 auto 15px; border-radius: 50%; background-color: #419cff; }
@@ -111,7 +111,7 @@
    .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .instructor-box .instructor-inner .social-wrapper li a path{ transition: 300ms all ease; stroke: #c8c8c8 !important; }
    .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .testimonial-box .author-infos .social-wrapper li a path{ transition: 300ms all ease; stroke: #c8c8c8 !important; }
    .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .instructor-box .instructor-inner .social-wrapper li a:hover path{ stroke: #90c524 !important; }
-   
+
    .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .video-carousel,
    .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .video-carousel-big{ width: 100%; padding: 10px 40px 45px; overflow: hidden; position: relative; }
    .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .video-carousel:before,
@@ -139,7 +139,7 @@
    .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .video-carousel-big .owl-dots button span{ width: 11px; height: 11px; display: inline-block; background: #90c524; border-radius: 50%; }
    .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .video-carousel .owl-dots button.active span,
    .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .video-carousel-big .owl-dots button.active span{ background: #b5b5b5; }
-   
+
    .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .user-testimonial-wrapper{ background: rgb(63,111,182); background: linear-gradient(90deg, rgba(63,111,182,1) 0%, rgba(65,156,255,1) 100%); padding: 98px 45px 110px; }
    .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .user-testimonial-wrapper .user-testimonial{  }
    .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .user-testimonial-wrapper .user-testimonial .slide{  }
@@ -192,7 +192,7 @@
    .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .user-testimonial-wrapper .user-testimonial .owl-dots button.active span,
    .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .user-testimonial-wrapper .user-testimonial-big .owl-dots button.active span,
    .user-testimonial-big-single .owl-dots button.active span{ background: #b5b5b5; }
-   
+
    .tab-faq-wrapper:not(:last-child){ margin-bottom: 35px; }
    .accordion-wrapper{  }
    .accordion-wrapper .accordion-item:not(.active-tab){ margin-bottom: 1px; }
@@ -210,8 +210,7 @@
    .accordion-wrapper .accordion-item .accordion-content ul li:before{ content: '•'; font-size: 16px; color: #000000; line-height: 1; top: 5px; left: 0; display: block; position: absolute; }
    .accordion-wrapper .accordion-item .accordion-content strong{ font-weight: 600; }
    .accordion-wrapper .accordion-item .accordion-content .shorten-content{ max-width: 740px; width: 100%; }
-   
-   
+
    .accordion-wrapper .accordion-item .accordion-content .topic-wrapper-big{ padding: 15px 95px 15px 52px; position: relative; }
    .accordion-wrapper .accordion-item .accordion-content .topic-wrapper-big:not(:last-child){ border-bottom: 1px solid #b7b7b7; }
    .accordion-wrapper .accordion-item .accordion-content .topic-wrapper-big .icon{ position: absolute; left: 14px; top: 17px; width: 12px; }
@@ -235,15 +234,16 @@
    .accordion-wrapper .accordion-item .accordion-content .topic-wrapper-big .author-img a:hover img{ border: 2px solid #92cc16; }
    .accordion-wrapper .accordion-item .accordion-content .topic-wrapper-big .author-img a .custom-tooltip{ position: absolute; top: 0; left: 50%; opacity: 0; visibility: hidden; transition: 300ms all ease; transform: translate(-50%,-100%); font-size: 13px; color: #000000; border-radius: 3px; margin-top: -2px; white-space: nowrap; padding: 5px 10px; background-color: #d8d8d8; line-height: 1.2; display: block; }
    .accordion-wrapper .accordion-item .accordion-content .topic-wrapper-big .author-img a:hover .custom-tooltip{ opacity: 1; visibility: visible; }
-   
-   
+
+
    .accordion-wrapper.accordion-big .accordion-item .accordion-title { font-size: 24px; padding-top: 17px; }
    .accordion-wrapper.accordion-big .accordion-item .accordion-title:after{ top: 20px; }
    .accordion-wrapper.accordion-big .accordion-item .accordion-content{ padding: 40px 95px; }
    .accordion-wrapper.accordion-big .accordion-item .accordion-content.no-padding{ padding: 0; }
    .accordion-wrapper.accordion-big .accordion-item .accordion-content .shorten-content{ max-width: 730px; width: 100%; }
-   
-   
+   .accordion-wrapper.accordion-big .accordion-item .accordion-content.accordion-content-root { padding: 1rem; }
+
+
    /* ==========================================================================
       Sidebar Styles
       ========================================================================== */
@@ -282,7 +282,7 @@
    .sidebar-wrapper .accordion-wrapper .accordion-item .accordion-content .topic-wrapper .author-img a:hover img{ border: 2px solid #92cc16; }
    .sidebar-wrapper .accordion-wrapper .accordion-item .accordion-content .topic-wrapper .author-img a .custom-tooltip{ position: absolute; top: 0; right: -25px; opacity: 0; visibility: hidden; transition: 300ms all ease; transform: translate(0,-100%); font-size: 13px; color: #000000; border-radius: 3px; margin-top: -2px; white-space: nowrap; padding: 5px 10px; background-color: #d8d8d8; line-height: 1.2; display: block; }
    .sidebar-wrapper .accordion-wrapper .accordion-item .accordion-content .topic-wrapper .author-img a:hover .custom-tooltip{ opacity: 1; visibility: visible; }
-   
+
    /* ==========================================================================
       Hero Section
       ========================================================================== */
@@ -303,8 +303,8 @@
    .section-hero .hero-message .account-infos .account-hero-info ul{  }
    .section-hero .hero-message .account-infos .account-hero-info ul li{ line-height: 1.2; color: #8fc4fc; display: inline-block; }
    .section-hero .hero-message .account-infos .account-hero-info ul li:not(:last-child){ margin-right: 36px; }
-   
-   
+
+
    /* ==========================================================================
       Text Carousel Section
       ========================================================================== */
@@ -348,7 +348,7 @@
    .section-text-carousel.section--blue-gradient .text-column .text-area .duration svg path{ stroke: #9ecdff; }
    .section-text-carousel.section--blue-gradient .text-column .text-area p{ color: #ffffff; }
    .section-text-carousel.section--blue-gradient .carousel-column .carousel-wrapper .boxes-carousel .slide .box-text:before{ background: rgb(255,120,0); background: linear-gradient(90deg, rgba(255,120,0,1) 0%, rgba(255,155,52,1) 16%, rgba(255,189,103,1) 100%); }
-   
+
    /* ==========================================================================
       Partners Section
       ========================================================================== */
@@ -358,7 +358,7 @@
    .section--partners .view-more{ margin-top: 30px; }
    .section--partners .view-more a{ font-size: 19px; }
    .section--partners hr{ border: none; height: 12px; background-color: #f2f2f2; margin: 50px 0 80px; }
-   
+
    /* ==========================================================================
       Course Register/Login
       ========================================================================== */
@@ -378,8 +378,8 @@
    .booking-login-create .tickets-wrapper .tabs-forms .tabs-content .tab-content-wrapper{ display: none; }
    .booking-login-create .tickets-wrapper .tabs-forms .tabs-content .tab-content-wrapper.active-tab{ display: block; }
    .booking-login-create .tickets-wrapper .tabs-forms .tabs-content .form-wrapper{ max-width: 600px; width: 100%; }
-   
-   
+
+
    .booking-login-create .tickets-wrapper .tabs-forms .tabs-content .form-wrapper form.login-form{ max-width: 290px; }
    .booking-login-create .tickets-wrapper .tabs-forms .tabs-content .form-wrapper form.login-form .login-form-actions{ margin-bottom: 12px; }
    .booking-login-create .tickets-wrapper .tabs-forms .tabs-content .form-wrapper form.login-form .remember-wrapper{ float: left; }
@@ -389,13 +389,13 @@
    .booking-login-create .tickets-wrapper .tabs-forms .tabs-content .form-wrapper form.login-form .forgot-pass-wrapper{ float: right; line-height: 1; }
    .booking-login-create .tickets-wrapper .tabs-forms .tabs-content .form-wrapper form.login-form .forgot-pass-wrapper a{ font-size: 14px; line-height: 1; }
    .booking-login-create .tickets-wrapper .tabs-forms .tabs-content .form-wrapper form.login-form .btn{ display: block; width: 100%; text-align: center; padding: 16px 15px 14px; }
-   
+
    .booking-login-create .tickets-wrapper .tabs-forms .tabs-content .form-wrapper form.register-form .custom-checkbox-wrapper .custom-checkbox{ width: 16px; height: 16px; margin-top: 3px; }
    .booking-login-create .tickets-wrapper .tabs-forms .tabs-content .form-wrapper form.register-form .custom-checkbox-wrapper .custom-checkbox span:after{ width: 70%; height: 70%; }
    .booking-login-create .tickets-wrapper .tabs-forms .tabs-content .form-wrapper form.register-form .custom-checkbox-wrapper label{ font-size: 18px; max-width: 480px; }
-   
-   
-   
+
+
+
    .booking-login-create .tickets-wrapper .ticket-sidebar{ max-width: 370px; float: right; padding-left: 38px; border-left: 1px solid #d7d7d7; padding-bottom: 50px; }
    .booking-login-create .tickets-wrapper .ticket-sidebar h6{ font-size: 18px; margin-bottom: 75px; }
    .booking-login-create .tickets-wrapper .ticket-sidebar h3{ font-size: 28px; margin-bottom: 20px; }
@@ -410,44 +410,44 @@
    .booking-login-create .tickets-wrapper .ticket-sidebar .remove-area svg{ display: inline-block; vertical-align: middle; width: 16px; }
    .booking-login-create .tickets-wrapper .ticket-sidebar .remove-area svg path{ stroke: #92cc16; }
    .booking-login-create .tickets-wrapper .ticket-sidebar .remove-area a{ display: inline-block; vertical-align: middle; font-size: 14px; margin-left: 3px; }
-   
+
    /* ==========================================================================
       Section Course Tabs
       ========================================================================== */
-   
+
    .section-course-tabs .content-wrapper .tabs-wrapper .tab-controls ul{ padding: 0; float: left; }
    .section-course-tabs .content-wrapper .tabs-wrapper .tab-controls ul li:not(:last-child){ margin-right: 35px; }
    .section-course-tabs .content-wrapper .tabs-wrapper .tab-controls ul li a{ padding: 16px 0 16px; font-size: 18px; }
    .section-course-tabs .content-wrapper .tabs-wrapper .tab-controls .btn{ float: right; padding: 10px 40px 10px; margin-top: 7px; }
-   
+
    .section-course-tabs .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .course-tab-text{ width: 62%; max-width: 642px; }
    .section-course-tabs .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .tab-title{ font-size: 44px; }
    .section-course-tabs .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .tab-sub-title{ font-size: 38px; margin-bottom: 5px; }
    .section-course-tabs .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper.tab-blue-gradient h2{ color: #ffffff; }
-   
+
    .section-course-tabs .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .course-tab-sidebar{ width: 38%; float: right; }
    .section-course-tabs .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .course-tab-sidebar .course-details{ padding-left: 0; }
-   
+
    .section-course-tabs .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .benefits-list{ padding: 0; max-width: 995px; margin: 62px auto 50px; }
    .section-course-tabs .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .benefits-list .benefit-box .box-icon img{ width: 70px; }
    .section-course-tabs .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .benefits-list .benefit-box .box-icon svg{ width: 70px; }
-   
+
    .section-course-tabs .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .instructors-wrapper{ margin-top: 50px; }
    .section-course-tabs .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .instructor-box .instructor-inner .profile-img{ width: 158px; height: 158px; }
    .section-course-tabs .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .instructor-box { padding-bottom: 50px; }
    .section-course-tabs .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .instructor-box .instructor-inner h3{ font-size: 18px; }
    .section-course-tabs .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .instructor-box .instructor-inner p{ font-size: 11px; }
-   
+
    .section-course-tabs .tab-faq-wrapper.topic-content .accordion-wrapper .accordion-item .accordion-content{ padding: 0; }
-   
+
    .section-course-tabs .course-full-text .topic-text-area{ text-align: center; max-width: 745px; margin: 25px auto 30px; }
    .section-course-tabs .course-full-text .topic-text-area p{ font-size: 18px; }
-   
-   
+
+
    .section-course-tabs .course-full-text .location-text{ text-align: center; max-width: 540px; width: 100%; margin: 55px auto 90px;}
    .section-course-tabs .course-full-text .location-map-wrapper{ box-shadow: 21px 18px 47.94px 3.06px rgba(76, 76, 76, 0.23); position: relative; padding-top: 48.6013%; }
    .section-course-tabs .course-full-text .location-map-wrapper > iframe{ position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
-   
+
    /* ==========================================================================
       Section Tickets
       ========================================================================== */
@@ -472,16 +472,16 @@
    .section-tickets .ticket-box-wrapper .ticket-box .ticket-box-actions .ticket-actions-wrapper .tickets-dropdown.active{ transform: translateY(0); opacity: 1; visibility: visible; }
    .section-tickets .ticket-box-wrapper .ticket-box .ticket-box-actions .ticket-actions-wrapper .tickets-dropdown li{ display: block; }
    .section-tickets .ticket-box-wrapper .ticket-box .ticket-box-actions .ticket-actions-wrapper .tickets-dropdown li a{ display: block; padding-right: 0; padding-left: 0; width: 100%; margin-top: 1px; }
-   
+
    /* ==========================================================================
       Dynamic Learning/Courses Section
       ========================================================================== */
    .section--dynamic-learning { padding-bottom: 180px; }
-   
+
    .dynamic-learning--title { margin-bottom: 50px; max-width: 600px; width: 100%; margin-top: 30px; }
    .dynamic-learning--title h1 { margin-bottom: 20px; }
    .dynamic-learning--title p { font-size: 22px; line-height: 1.36; }
-   
+
    .dynamic-learning--subtitle { margin-top: 0px; margin-bottom: 38px; }
    .control-wrapper-filters { float: right; padding-top: 5px; }
    .control-wrapper-filters .filters a { display: inline-block; color: #000; font-size: 18px; text-transform: uppercase; position: relative; text-decoration: none; }
@@ -490,10 +490,10 @@
    .control-wrapper-filters .filters a.active:after,
    .control-wrapper-filters .filters a:hover:after { width: 100%; left: 0; }
    .dynamic-learning--subtitle h2 { font-size: 42px; color: #419cff; margin: 0; }
-   
+
    .dynamic-courses-wrapper + .dynamic-learning--subtitle { margin-top: 80px; }
    .dynamic-learning--title + .dynamic-learning--subtitle { margin-top: -10px; }
-   
+
    .filters-wrapper{  }
    .filters-wrapper .filter-tab{ display: none; }
    .filters-wrapper .filter-tab.active-tab{ display: block; }
@@ -513,7 +513,7 @@
    .dynamic-courses-wrapper .item .right--no-price { padding-top: 5px; }
    .dynamic-courses-wrapper .item .left { width: 62%; }
    .dynamic-courses-wrapper .item:not(:last-child) { margin-bottom: 50px; }
-   
+
    .dynamic-courses-wrapper .item .bottom { color: #419cff; }
    .dynamic-courses-wrapper .item .bottom > * { display: inline-block; }
    .dynamic-courses-wrapper .item .bottom > *:not(:last-child) { margin-right: 25px; }
@@ -522,18 +522,18 @@
    .dynamic-courses-wrapper .item .bottom svg path { stroke: #419cff; }
    .dynamic-courses-wrapper .item .bottom .location svg { margin-right: 6px; }
    .dynamic-courses-wrapper .item .bottom .duration svg { margin-right: 8px; }
-   
+
    .dynamic-courses-wrapper--style2 .item:before { background: #4ba1ff; }
-   
+
    .dynamic-courses-wrapper + .dynamic-courses-wrapper{ margin-top: 42px; }
-   
+
    /* ==========================================================================
       Instructor Single
       ========================================================================== */
    .instructor-wrapper { padding-bottom: 100px; }
-   
+
    .instructor-area { margin-bottom: 60px; }
-   
+
    .instructor-profile .avatar-wrapper { max-width: 235px; width: 100%; }
    .instructor-profile .avatar-wrapper .avatar { margin-bottom: 25px; padding-top: 100%; border-radius: 100%; background-position: center; background-size: cover; background-repeat: no-repeat; }
    .instructor-profile .avatar-wrapper .social-links { text-align: center; }
@@ -544,13 +544,13 @@
    .instructor-profile .text-area { max-width: 520px; width: 100%; }
    .instructor-profile .text-area h1 { margin-bottom: 0; }
    .instructor-profile .text-area h2 { font-size: 30px; }
-   
+
    .instructor-studies ul li img,
    .instructor-studies ul li svg { margin-right: 15px; margin-top: -5px; }
    .instructor-studies ul li svg path, .instructor-studies ul li svg line { stroke: #419cff; }
    .instructor-studies ul li { font-size: 28px; color: #419cff; }
    .instructor-studies ul li:not(:last-child) { margin-bottom: 8px; }
-   
+
    /* ==========================================================================
       LOGIN POPUP WINDOW
       ========================================================================== */
@@ -587,7 +587,7 @@
    .login-popup .close-btn svg{ width: 26px; }
    .login-popup .close-btn svg polygon { transition: all .3s ease; fill: #d2ff00; stroke: transparent; }
    .login-popup .close-btn:hover svg polygon { stroke: #d2ff00; }
-   
+
    /* ==========================================================================
       About Page
       ========================================================================== */
@@ -599,7 +599,7 @@
    .content-text-area h2 , .content-text-area h3, .content-text-area h4, .content-text-area h5, .content-text-area h6 { margin-bottom: 13px; }
    .content-text-area p { margin-bottom: 35px; }
    .content-text-area p:last-child { margin-bottom: 0; }
-   
+
    .section-page-content.logos-sections{  }
    .section-page-content.logos-sections .section-title{ margin-top: 40px; margin-bottom: 140px; }
    .section-page-content.logos-sections .logos-area{ max-width: 697px; margin: 0 auto; }
@@ -611,7 +611,7 @@
    .section-page-content.logos-sections .logo-column:nth-child(4n+3){ text-align: right; }
    .section-page-content.logos-sections .logo-column:nth-child(4n+4){ text-align: right; }
    .section-page-content.logos-sections .logo-column:nth-child(4n+1){ text-align: left; }
-   
+
    /* ==========================================================================
       Search Results
       ========================================================================== */
@@ -624,7 +624,7 @@
    .search-results-head .search-results-text span{ color: #409bfe;  }
    .search-results-wrapper { margin-bottom: 80px; }
    .search-results-wrapper div + .instructors-results{ margin-top: 80px; }
-   
+
    .card.instructor-box{ min-height: 364px; height: 100%; padding-bottom: 20px; }
    .card.instructor-box .instructor-inner{ height: 100%; background-color: #ffffff; text-align: center; box-shadow: 5px 4px 6.5px 1.44px rgba(76, 76, 76, 0.11); padding: 20px 22px 45px; position: relative; }
    .card.instructor-box .instructor-inner .profile-img{ width: 109px; height: 109px; overflow: hidden; margin: 0 auto 15px; border-radius: 50%; }
@@ -647,9 +647,9 @@
    .section-checkout{ padding: 90px 0 97px; }
    .section-checkout h2{ margin-bottom: 40px }
    .section-checkout .checkout-proceed-action{ margin-top: 6px; }
-   
+
    .selection-section h2{ margin-top: 40px; }
-   
+
    .your-selection .item { position: relative; display: flex; justify-content: space-between; padding: 40px 50px 30px; padding-right: 40px; box-shadow: 2px 2px 18.04px 3.96px rgba(127, 127, 127, 0.14); margin-top: 40px; }
    .your-selection .item:before { position: absolute; content: ''; top: 0; left: 0; width: 9px; height: 100%; background: #4ba1ff; }
    .your-selection .item h3 { font-size: 28px; margin-bottom: 17px; }
@@ -669,7 +669,7 @@
    .your-selection .item .checkout-infos li span.label{ text-align: right; padding-right: 28px; }
    .your-selection .item .checkout-infos li span.value{ color: #000000; padding-left: 10px; text-align: left; margin-bottom: 13px; }
    .your-selection .item .checkout-infos li.total-amount span.value{ color: #419cff; font-weight: 600; }
-   
+
    .your-selection .item .bottom { color: #419cff; }
    .your-selection .item .bottom > * { display: inline-block; }
    .your-selection .item .bottom > *:not(:last-child) { margin-right: 25px; }
@@ -684,7 +684,7 @@
    .your-selection .item .remove-area a img{ display: inline-block; vertical-align: middle; width: 16px; }
    .your-selection .item .remove-area a svg{ display: inline-block; vertical-align: middle; width: 16px; }
    .your-selection .item .remove-area a path{ stroke: #92cc16; }
-   
+
    .checkout-participant .extra-participant-area{ margin-top: 47px; }
    .checkout-participant .extra-participant-area h2{ position: relative; }
    .checkout-participant .extra-participant-area h2 .remove-participant{ position: absolute; right: 0; top: 20px; display: block; vertical-align: middle; font-size: 14px; margin-left: 3px; }
@@ -696,12 +696,12 @@
    .checkout-participant .btn-add-participant img{ display: inline-block; vertical-align: middle; width: 18px; margin-right: 5px; margin-top: -2px; }
    .checkout-participant .btn-add-participant svg{ display: inline-block; vertical-align: middle; width: 18px; margin-right: 5px; margin-top: -2px; }
    .checkout-participant .btn-add-participant path{ stroke: #ffffff; }
-   
-   
+
+
    /* ==========================================================================
       MY ACCOUNT PAGE
       ========================================================================== */
-   
+
    .section-account-tabs{  }
    .section-account-tabs .content-wrapper .tabs-wrapper .tab-controls ul{ padding: 0; }
    .account-image-actions{  }
@@ -725,10 +725,10 @@
    .download-area a img{ display: inline-block; vertical-align: middle; width: 16px; margin-top: -3px; margin-right: 5px; }
    .download-area a svg{ display: inline-block; vertical-align: middle; width: 16px; margin-top: -3px; margin-right: 5px; }
    .download-area a path{ stroke: #92cc16; }
-   
+
    .account-text{ margin-bottom: 55px; }
    .account-text h2{  }
-   
+
    .inside-tabs{  }
    .inside-tabs .tabs-ctrl{ margin-bottom: 50px; }
    .inside-tabs .tabs-ctrl ul{ line-height: 1; }
@@ -746,7 +746,7 @@
    .inside-tabs .inside-tabs-wrapper .form-action-upper a svg{ display: inline-block; vertical-align: middle; width: 16px; margin-top: -3px; margin-right: 5px; }
    .inside-tabs .inside-tabs-wrapper .form-action-upper a path{ stroke: #92cc16; }
    .inside-tabs .inside-tabs-wrapper .form-action-upper a span{  }
-   
+
    .profile-form-wrapper{ max-width: 480px; }
    .profile-form-wrapper form{  }
    .profile-form-wrapper form .form-row{ position: relative; }
@@ -774,7 +774,7 @@
    .profile-form-wrapper form.password-form label small{ font-size: 16px; line-height: 1; color: #000000; }
    .profile-form-wrapper form.password-form input{ margin-bottom: 22px; }
    .profile-form-wrapper form input:focus{ background-color: #f3f3f3; }
-   
+
    .tab-content-wrapper .topic-infos{ margin-bottom: 70px; overflow: hidden; }
    .tab-content-wrapper .topic-infos .topic-title{ float: left; width: 66.5%; padding-right: 22px; }
    .tab-content-wrapper .topic-infos .topic-actions{ float: left; width: 33.5%; text-align: right; }
@@ -788,10 +788,10 @@
    .tab-content-wrapper .topic-infos .more-infos svg path { stroke: #5baaff; }
    .tab-content-wrapper .topic-infos .more-infos .location svg { margin-right: 6px; }
    .tab-content-wrapper .topic-infos .more-infos .duration svg { margin-right: 8px; }
-   
+
    .in-tab-wrapper .download-area{ width: 100%; position: absolute; margin: 0; text-align: right; left: 0; top: 0; transform: translateY(-50%); max-width: 100%; margin-top: -30px; transform: translateY(-100%); }
    .in-tab-wrapper .download-area a{  }
-   
+
    .files-wrapper{ position: relative; padding: 17px 70px 14px 50px; }
    .files-wrapper:not(:last-child){ border-bottom: 1px solid #9e9e9e; }
    .files-wrapper .file-wrapper{ position: relative; }
@@ -804,12 +804,12 @@
    .files-wrapper .bonus-title{ font-size: 20px; margin-bottom: 20px; font-weight: 600; }
    .files-wrapper.bonus-files .file-wrapper{ padding-left: 50px; }
    .files-wrapper.bonus-files .file-wrapper:not(:last-child){ margin-bottom: 24px; }
-   
+
    .profile-elearning-video-wrapper{ overflow: hidden; }
    .profile-elearning-video-wrapper .video-area{ float: left; width: 66.5%; padding-right: 22px; }
    .profile-elearning-video-wrapper .video-area .responsive-video{ box-shadow: 9px 7px 24.44px 1.56px rgba(76, 76, 76, 0.23); }
    .profile-elearning-video-wrapper .sidebar-area{ float: left; width: 33.5%; }
-   
+
    /* ==========================================================================
       FORM SECTION
       ========================================================================== */
@@ -820,7 +820,7 @@
    .form-section .form-area-wrapper .form-wrapper{ max-width: 525px; width: 100%; float: right; margin-top: -275px; margin-bottom: -85px; position: relative; z-index: 3; }
    .form-section .form-area-wrapper .form-wrapper.w-m-bottom{ margin-bottom: 160px; }
    .form-section .form-area-wrapper .form-wrapper .submit-area-custom{ text-align: right; }
-   
+
    /* ==========================================================================
       SECTION ICON TEXT COLUMNS
       ========================================================================== */
@@ -832,7 +832,7 @@
    .section-icon-text .icon-text-box .icon-wrapper svg{ display: block; width: 100%; height: auto; }
    .section-icon-text .icon-text-box h3{ font-size: 22px; margin-bottom: 30px; text-transform: uppercase; }
    .section-icon-text .icon-text-box p{ margin-bottom: 0; max-width: 260px; }
-   
+
    /* ==========================================================================
       SECTION BIG TeSTIMONILAS
       ========================================================================== */
@@ -844,7 +844,7 @@
    .section-big-testimonials .user-testimonial-big-single .owl-nav button img{  }
    .section-big-testimonials .user-testimonial-big-single .owl-nav button svg{  }
    .section-big-testimonials .user-testimonial-big-single .owl-nav button:hover svg polygon{ fill: #f2ffb7; }
-   
+
    /* ==========================================================================
       SECTION TRUSTED US
       ========================================================================== */
@@ -862,7 +862,7 @@
    .section-trusted-us .logos-carousel-wrapper .owl-nav button:hover svg polygon{ fill: #7bb401; }
    .section-trusted-us .logos-carousel-wrapper .owl-nav button.owl-prev{ left: 0; }
    .section-trusted-us .logos-carousel-wrapper .owl-nav button.owl-next{ right: 0; }
-   
+
    /* ==========================================================================
       SECTION TEXT IMAGE BLUE ( Thank you page / 404 Page )
       ========================================================================== */
@@ -879,27 +879,27 @@
    .section-text-img-blue .columns-wrapper .image-wrapper img{ display: block; }
    .section-text-img-blue .columns-wrapper .icon-wrapper img{ width: 189px; }
    .section-text-img-blue .columns-wrapper .icon-wrapper svg{ width: 189px; }
-   
+
    .ui-widget{ font-family: 'Foco'; font-size: 0.9em; }
-   
+
    /* ==========================================================================
       Media Queries
       ========================================================================== */
-   
+
    /* Tablet */
    @media only screen and (max-width: 1100px) {
-   
+
        .elearning-page-wrapper .page-title h1 { font-size: 36px; }
        .section-course-tabs .content-wrapper .tabs-wrapper .tab-controls ul li:not(:last-child) { margin-right: 20px; }
-   
+
        .booking-login-create .page-title{ margin-left: -4px; }
        .booking-login-create .tickets-wrapper .ticket-sidebar h6{ margin-bottom: 40px; }
-   
+
        .section-text-img-blue .columns-wrapper .image-wrapper{ margin: 0; }
    }
    /* Tablet Portrait */
    @media only screen and (max-width: 980px) {
-   
+
        .content-wrapper .tabs-wrapper .tabs-content { margin-bottom: 0; padding-top: 0; }
          .content-wrapper .tabs-wrapper .btn-tabs-ctr-toggle{ float: right; width: 45%; padding: 15px 20px; font-size: 18px; }
          .content-wrapper .tabs-wrapper .tab-controls { float: left; width: 55%; position: relative; }
@@ -913,30 +913,30 @@
          .content-wrapper .tabs-wrapper .tab-controls ul li:not(:last-child) a{ border-bottom: 1px solid rgba(255,255,255,.5); }
          .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper.active-tab{ padding: 55px 28px 110px; }
          .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .course-full-text.full-w-pad { padding: 55px 45px 15px; }
-   
+
          .section-course-tabs .content-wrapper .tabs-wrapper .tab-controls ul li:not(:last-child) { margin-right: 0; }
          .section-course-tabs .content-wrapper .tabs-wrapper .tab-controls ul li{ padding: 0 28px; }
-   
+
          .section-text-carousel .row-text-carousel { margin: 0; }
          .section-text-carousel .text-column { float: none; width: 100%; padding: 0; margin-bottom: 30px; }
          .section-text-carousel .carousel-column { float: none; width: 100%; padding: 0; }
-   
+
          .section--partners { padding: 80px 0; }
-   
+
          .section-hero { height: 410px; }
          .section-text-carousel .carousel-column .carousel-wrapper .boxes-carousel{  }
          .section-text-carousel .carousel-column .carousel-wrapper .boxes-carousel.less-that-trigger .owl-stage-outer{ padding-left: 0; overflow: visible; }
          .section-hero .hero-message h1{ font-size: 40px; }
          .section-hero .hero-message h2{ font-size: 40px; }
-   
+
          .booking-login-create .tickets-wrapper .tabs-forms { margin-bottom: 60px; }
          .booking-login-create .tickets-wrapper .tabs-forms .tabs-content .form-wrapper{ margin: 0 auto; width: 100%; max-width: 100%; }
          .booking-login-create .tickets-wrapper .tabs-forms .tabs-content .form-wrapper form.login-form{ max-width: 290px; }
          .booking-login-create .tickets-wrapper .ticket-sidebar{ padding: 0; border: none; margin: 0; float: none; }
          .booking-login-create .tickets-wrapper .ticket-sidebar h6{ margin-bottom: 15px; }
-   
+
          .dynamic-courses-wrapper .item h2 { font-size: 24px; }
-   
+
          .section-course-tabs .content-wrapper .tabs-wrapper .tab-controls { float: none; width: 100%; border: none; }
          .section-course-tabs .content-wrapper .tabs-wrapper .tab-controls .container{ padding: 0; }
          .section-course-tabs .content-wrapper .tabs-wrapper .tab-controls .mobile-tabs-menu{ float: left; width: 55%; letter-spacing: 1px; padding: 13px 10px 13px 28px; }
@@ -944,64 +944,64 @@
          .section-course-tabs .content-wrapper .tabs-wrapper .tabs-content{ margin-bottom: 0; padding-top: 0; }
          .section-course-tabs .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper.active-tab { padding: 55px 0 110px; }
          .section-course-tabs .content-wrapper .tabs-wrapper .tab-controls ul li a{ font-size: 18px; padding: 15px 0; }
-   
+
          .section-tickets .ticket-box-wrapper { margin-bottom: 50px; }
-   
+
          .your-selection .item { display: block; }
          .your-selection .item .right,
          .your-selection .item .left { width: 100%; text-align: left; }
          .your-selection .item .checkout-infos { margin-top: 25px; max-width: 300px; }
          .your-selection .item .checkout-infos li span.label{ width: 117px; float: left; text-align: left; padding-right: 15px; }
          .your-selection .item .checkout-infos li span.value{ margin-left: 160px; width: auto; float: none; display: block; margin-left: 117px; padding-left: 0; text-align: right; }
-   
+
          .section-account-tabs .content-wrapper .tabs-wrapper .tab-controls{ float: none; width: 100%; }
          .section-account-tabs .content-wrapper .tabs-wrapper .tab-controls .container{ padding: 0; }
          .section-account-tabs .content-wrapper .tabs-wrapper .tab-controls .mobile-tabs-menu{ background-color: #3f6fb6; }
-   
+
          .account-image-actions .acc-img{ margin: 0 0 12px; }
          .account-image-actions .actions{ margin: 0; }
          .download-area{ margin: 40px auto; max-width: 100%; }
          .download-area .download-area-inner{ margin: 0; }
-   
+
          .profile-elearning-video-wrapper .video-area{ float: none; width: 100%; padding-right: 0; margin-bottom: 45px; }
        .profile-elearning-video-wrapper .sidebar-area{ float: none; width: 100%; }
-   
+
        .form-section .form-area-wrapper .form-wrapper,
        .form-section .form-area-wrapper .form-wrapper.w-m-bottom { max-width: 100%; float: none; margin-top: 0; margin-bottom: 55px; }
        .section-hero .hero-message.pad-r-col-6 { padding-right: 0; }
-   
+
        .section-text-img-blue{ padding: 100px 0; }
        .section-text-img-blue .columns-wrapper .text-area{ margin-bottom: 40px; }
        .section-text-img-blue .columns-wrapper .icon-wrapper img{ margin: 0 auto; display: block; }
        .section-text-img-blue .columns-wrapper .icon-wrapper svg{ margin: 0 auto; display: block; }
-   
+
        .content-wrapper .tabs-wrapper.fixed-tab-controls{ padding-top: 42px; }
        .content-wrapper .tabs-wrapper.fixed-tab-controls .tab-controls.sticky-sub { top: 79px; border-top: 1px solid #fff; }
-   
+
        .section-page-content.logos-sections .logo-column:nth-child(3n+1){ text-align: left; }
        .section-page-content.logos-sections .logo-column:nth-child(3n+2){ text-align: center; }
        .section-page-content.logos-sections .logo-column:nth-child(3n+3){ text-align: right; }
-   
-   
+
+
        .profile-form-wrapper { max-width: 100%; }
-   
+
        /* Feedback 8 Dec */
-   
+
        .section-text-carousel { padding: 65px 0 55px; }
-   
+
        .section-tickets { padding: 84px 0 60px; }
        .section-tickets .ticket-box-wrapper .ticket-box{ max-width: 400px; margin: 0 auto; }
-   
+
        .section-course-tabs .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .course-tab-text{ max-width: 412px; }
-   
+
        .section-course-tabs .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .benefits-list{ margin-bottom: 0; }
        .section-course-tabs .content-wrapper .tabs-wrapper .tabs-content #benefits.tab-content-wrapper.active-tab{ padding: 55px 0; }
-   
+
        .section-course-tabs .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .instructor-box .instructor-inner{ padding-left: 40px; padding-right: 40px; }
-   
+
        .section-course-tabs .content-wrapper .tabs-wrapper .tabs-content #testimonials.tab-content-wrapper .course-full-text.full-w-pad { padding-top: 0; }
        .section-course-tabs .content-wrapper .tabs-wrapper .tabs-content #testimonials.tab-content-wrapper.active-tab{ padding-bottom: 0 }
-   
+
        .elearning-page-wrapper { padding-top: 26px; }
        .elearning-page-wrapper .container{ position: static; padding: 0; }
        .elearning-page-wrapper .content-wrapper .tabs-wrapper { position: static; }
@@ -1009,54 +1009,54 @@
        .elearning-page-wrapper .content-wrapper .tabs-wrapper .tab-controls:after { content: ''; position: fixed; top: 79px; display: block; left: 0; width: 100vw; height: 1px; background-color: #ffffff; }
        .elearning-page-wrapper .content-wrapper .tabs-wrapper .btn-tabs-ctr-toggle{ position: fixed; top: 79px; right: 0; font-size: 18px; z-index: 10; text-align: center; }
        .elearning-page-wrapper .page-title{ padding: 0 28px; }
-   
+
        .content-wrapper .tabs-wrapper .tabs-content #topics.tab-content-wrapper.active-tab { padding: 0; padding-bottom: 40px; }
        .section-course-tabs .content-wrapper .tabs-wrapper .tabs-content #topics.tab-content-wrapper.active-tab{ padding: 55px 0 90px; }
        .elearning-page-wrapper .sidebar-wrapper:not(.topics-tab){ display: none; }
-    
+
        .elearning-page-wrapper { margin-bottom: 0; }
        .elearning-page-wrapper .page-content { box-shadow: none; }
-   
+
        .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .instructor-box{ max-width: 250px; margin: 0 auto; }
        .section-course-tabs .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .instructor-box{ max-width: 100%; }
-   
+
        .section--dynamic-learning { padding-bottom: 90px; }
-   
+
        .form-section .form-area-wrapper { margin: 0 -28px; }
        .form-wrapper.blue-form form{ padding: 50px 28px 60px; }
-   
+
        .section-page-content.logos-sections .section-title{ text-align: center; }
        .section-page-content.logos-sections .logos-area-wrapper{ max-width: 540px; margin: 0 auto; }
-   
+
        .section-account-tabs .content-wrapper .tabs-wrapper .tab-controls ul { padding: 0 28px; }
-   
+
        .files-wrapper .file-wrapper .download-file{ right: -52px; }
-   
+
        .account-image-actions .actions ul{ margin: 0; }
-   
+
        .section-account-tabs .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper.active-tab{ padding-left: 0; padding-right: 0; }
-   
+
        .files-wrapper.bonus-files .file-wrapper { padding-left: 0; }
-   
+
        .form-wrapper.profile-form-wrapper form .custom-radio-box{ display: inline-block; }
        .form-wrapper.profile-form-wrapper form .custom-radio-box:not(:last-child){ margin-right: 20px; }
        .form-wrapper.profile-form-wrapper form .custom-radio-box .label-wrapper { min-width: auto; }
-   
+
        .section-course-tabs  .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .course-full-text { max-width: 575px; margin: 0 auto; }
-   
+
        .tab-content-wrapper .topic-infos .topic-title{ float: none; width: 100%; padding-right: 0; }
        .tab-content-wrapper .topic-infos .topic-actions{ float: none; width: 100%; text-align: left; margin-top: 20px; }
    }
-   
+
    /* Mobile */
    @media only screen and (max-width: 680px) {
-   
+
        p{ font-size: 19px; }
-   
+
        #main-area { margin-top: 75px; }
-   
+
        .content-wrapper .tabs-wrapper .tabs-content{ padding-top: 0; }
-   
+
          .elearning-page-wrapper .page-title h1 { font-size: 30px; }
          .content-wrapper .tabs-wrapper{ position: relative; }
          .content-wrapper .tabs-wrapper .tab-controls { position: static; width: 58%; }
@@ -1066,10 +1066,10 @@
          .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .course-tab-text{ float: none; width: 100%; margin-bottom: 30px; }
          .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .course-tab-sidebar{ float: none; width: 100%; }
          .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .course-tab-sidebar .course-details {  padding-left: 0; }
-   
+
          .elearning-page-wrapper .page-content{ margin-bottom: 0; }
          .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper.active-tab{ padding: 10px 28px 40px; }
-   
+
          .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .course-tab-sidebar .course-details ul li { position: relative; padding-left: 0; padding-top: 30px; text-align: center; }
          .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .course-tab-sidebar .course-details ul li .info-icon { position: absolute; top: 0; left: 50%; transform: translateX(-50%); }
          .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .course-tab-sidebar .course-details ul li .author-icon{ top: -2px; left: 50%; transform: translateX(-50%); }
@@ -1089,37 +1089,37 @@
          .tab-faq-wrapper .accordion-wrapper .accordion-item .accordion-title { font-size: 16px; padding: 10px 45px 8px 16px; }
          .tab-faq-wrapper .accordion-wrapper .accordion-item h3.accordion-title { font-size: 18px; padding: 15px 65px 12px 20px; margin: 0; }
          .tab-faq-wrapper .accordion-wrapper .accordion-item .accordion-content{ padding: 20px 16px; }
-   
+
          .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .benefits-list .benefit-box{ padding: 0 52px; }
          .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .benefits-list .benefit-box p br{ display: none; }
-   
+
          .section-hero{ background: #ffffff !important; height: auto; }
-   
+
          .section-text-carousel .carousel-column .carousel-wrapper { padding-right: 0; }
          .section-text-carousel .carousel-column .carousel-wrapper .boxes-carousel { padding: 0 25px; overflow: hidden; }
          .section-text-carousel .carousel-column .carousel-wrapper .boxes-carousel .owl-stage-outer{ padding-left: 0; padding-right: 0; overflow: visible; }
          .section-text-carousel .carousel-column .carousel-wrapper .boxes-carousel .slide{ width: auto; }
-   
+
          .section-hero{ margin-top: 70px; padding: 30px 0 30px; }
          .section-hero .overlay{ display: none; }
          .section-hero .hero-message{ position: relative; bottom: auto; left: auto; right: auto; }
          .section-hero .hero-message h1{ color: #000000; font-size: 30px; }
          .section-hero .hero-message h2{ font-size: 30px; }
-   
+
          .section-text-carousel { padding: 50px 0 50px; }
          .section-text-carousel .text-column .text-area h2 { font-size: 25px; }
-   
+
          .booking-login-create .tickets-wrapper .tabs-forms .tabs-content .form-wrapper form .terms-accept-area{ text-align: left; }
          .booking-login-create .tickets-wrapper .tabs-forms .tabs-content .form-wrapper form .terms-accept-area .custom-checkbox{ float: left; margin-top: 2px; }
          .booking-login-create .tickets-wrapper .tabs-forms .tabs-content .form-wrapper form .terms-accept-area label{ display: block; margin-left: 25px; }
-   
+
          .booking-login-create .tickets-wrapper .tabs-forms .tab-controls ul li:not(:last-child) { margin-right: 20px; }
          .booking-login-create .tickets-wrapper .tabs-forms .tab-controls ul li a { font-size: 16px; }
-   
+
        .section--dynamic-learning { padding-bottom: 80px; }
-   
+
        .dynamic-learning--title p { font-size: 20px; }
-   
+
        .dynamic-courses-wrapper .item { display: block; padding-left: 30px; padding-right: 20px; padding-top: 30px; padding-bottom: 40px; }
        .dynamic-courses-wrapper .item:not(:last-child) { margin-bottom: 45px; }
        .dynamic-courses-wrapper .item .right { width: 100%; text-align: left; }
@@ -1127,11 +1127,11 @@
        .dynamic-courses-wrapper .item h2,
        .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .dynamic-courses-wrapper .item h2 { font-size: 22px; margin-bottom: 10px; }
        .dynamic-courses-wrapper .item .price { font-size: 18px; }
-       .dynamic-courses-wrapper .item .expire-date, 
+       .dynamic-courses-wrapper .item .expire-date,
        .dynamic-courses-wrapper .item .bottom { font-size: 16px; }
        .dynamic-courses-wrapper .item .bottom > * { display: block; }
        .dynamic-courses-wrapper .item .right--no-price { padding-top: 0; }
-   
+
        .dynamic-learning--subtitle { margin-bottom: 30px; }
        .dynamic-learning--subtitle h2 { font-size: 24px; }
        .control-wrapper-filters { padding-top: 0; }
@@ -1140,30 +1140,30 @@
        .control-wrapper-filters .filters a:after { bottom: 0; height: 2px; }
        .control-wrapper-filters { flex-direction: column-reverse; }
        .control-wrapper-filters .filters a:not(:last-child) { margin-right: 15px; }
-   
+
        .dynamic-courses-wrapper + .dynamic-learning--subtitle { margin-top: 40px; }
-   
+
        .instructor-wrapper { padding-bottom: 20px; }
        .instructor-profile .avatar-wrapper { margin: 0 auto 30px; }
        .instructor-profile .text-area h2 { font-size: 26px; }
        .instructor-profile .text-area { max-width: 100%; }
        .instructor-studies ul li { font-size: 18px; position: relative; padding-left: 34px; }
        .instructor-studies ul li svg { max-height: 20px; margin-right: 10px; position: absolute; left: 0; top: 5px; margin-top: 0; }
-   
+
        .login-popup { padding: 40px 28px 45px; margin: 0 28px; top: 15px; }
        .login-popup .heading { margin-bottom: 35px; }
        .login-popup .close-btn { top: -35px; right: 0; }
        .login-popup .close-btn svg polygon { transition: all .3s ease; stroke: #d2ff00; stroke: transparent; }
        .login-popup .close-btn:hover svg polygon { stroke: #f2ffb7; }
-   
+
        /** Search Results **/
        .search-results-head { margin-top: 20px; margin-bottom: 45px; }
        .search-results-head.no-results { margin-bottom: 60px; }
        .search-results-head .search-results-title { margin-bottom: 20px; }
        .search-results-head .search-results-text { font-size: 18px;  }
        .search-results-wrapper { margin-bottom: 40px; }
-   
-   
+
+
        /** About Page **/
        .section-hero-small { height: auto; }
        .section-hero-blue-bg { background: #407bc9 !important; }
@@ -1172,7 +1172,7 @@
        .content-text-area blockquote { margin: 0 0 35px; padding-left: 20px; padding-right: 20px; }
        .content-text-area h2 , .content-text-area h3, .content-text-area h4, .content-text-area h5, .content-text-area h6 { margin-bottom: 10px; margin-top: 40px; }
        .content-text-area p { margin-bottom: 30px; }
-   
+
        /** In Class Page **/
        .section-course-tabs .content-wrapper .tabs-wrapper{ position: static; }
        .section-course-tabs .content-wrapper .tabs-wrapper .tab-controls{ position: absolute; top: 71px; left: 0; z-index: 2; }
@@ -1200,16 +1200,16 @@
        .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .instructor-box .instructor-inner{ padding-bottom: 60px; }
        .section-course-tabs .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .user-testimonial-wrapper{ margin-left: -28px; margin-right: -28px; }
        .section-course-tabs .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .course-full-text.full-w-pad { padding: 0; }
-       .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .user-testimonial-wrapper .user-testimonial .slide .testimonial-box, 
+       .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .user-testimonial-wrapper .user-testimonial .slide .testimonial-box,
        .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .user-testimonial-wrapper .user-testimonial-big .slide .testimonial-box { padding: 0 52px; }
-       .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .user-testimonial-wrapper .user-testimonial .slide .testimonial-box .testimonial-text p, 
+       .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .user-testimonial-wrapper .user-testimonial .slide .testimonial-box .testimonial-text p,
        .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .user-testimonial-wrapper .user-testimonial-big .slide .testimonial-box .testimonial-text p{ font-size: 18px; }
        .tab-faq-wrapper .accordion-wrapper .accordion-item .accordion-title{ font-size: 18px; }
        .section-course-tabs .tab-faq-wrapper .accordion-wrapper .accordion-item .accordion-content{ padding: 20px 16px; }
        .section-course-tabs .course-full-text .location-text{ text-align: left; margin-top: 25px; margin-bottom: 40px; }
        .section-course-tabs .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .tab-sub-title { font-size: 22px; margin-bottom: 15px; }
        .section-hero.section-after-tabs-mob{ margin-top: 113px; }
-   
+
        .section-tickets { padding: 60px 0 40px; }
        .section-tickets .section-title{ margin-bottom: 28px; font-size: 32px; }
        .section-tickets .ticket-box-wrapper .ticket-box{ padding: 27px 15px 34px; }
@@ -1222,28 +1222,28 @@
        .section-tickets .ticket-box-wrapper .ticket-box .ticket-box-price .ticket-infos{ font-size: 16px; }
        .section-tickets .ticket-box-wrapper .ticket-box .ticket-box-actions{ position: relative; bottom: auto; }
        .section-tickets .ticket-box-wrapper .ticket-box .ticket-box-actions .btn{ font-size: 18px; }
-   
-   
-   
+
+
+
        .your-selection .item h3 { font-size: 22px;}
        .your-selection .item .bottom > *{ display: block; font-size: 16px; }
        .your-selection .item .bottom > *:not(:last-child){ margin-bottom: 5px; }
        .your-selection .item .checkout-infos li span{ font-size: 18px; }
-   
+
        .section-checkout { padding: 50px 0 50px; }
-   
+
        .section-hero .hero-message .account-infos { margin-bottom: 25px; margin-top: 25px; }
        .section-hero .hero-message .account-infos .account-hero-info h2{ font-size: 28px; }
        .section-hero .hero-message .account-infos .account-hero-info ul { line-height: 1; }
        .section-hero .hero-message .account-infos .account-hero-info ul li:not(:last-child) { margin-right: 0; margin-bottom: 5px; }
        .section-hero .hero-message .account-infos .account-hero-info ul li{ line-height: 1; font-size: 14px; }
-   
+
        .inside-tabs .tabs-ctrl ul{ display: flex; }
        .inside-tabs .tabs-ctrl ul li{ display: block; }
        .inside-tabs .tabs-ctrl ul li a{ font-size: 15px; padding-bottom: 8px; }
        .inside-tabs .tabs-ctrl ul li a:after{ height: 2px; }
        .inside-tabs .tabs-ctrl ul li:not(:last-child) { margin-bottom: 0; margin-right: 30px; }
-   
+
        .profile-form-wrapper form .form-row label { width: 120px; }
        .profile-form-wrapper form .form-row input{ text-align: left; padding: 0; }
        .profile-form-wrapper form .form-row .input-wrapper{ padding-left: 120px; }
@@ -1252,10 +1252,10 @@
        .profile-form-wrapper form .checkbox-row { margin-bottom: 15px; line-height: 1; text-align: right; }
        .profile-form-wrapper form .checkbox-row .custom-checkbox{ float: none; margin-top: 2px; }
        .profile-form-wrapper form .checkbox-row label{ display: inline; margin-left: 0; padding-left: 8px; }
-   
+
        .accordion-wrapper .accordion-item .accordion-content .topic-wrapper-big { padding: 15px 70px 15px 16px; }
        .accordion-wrapper .accordion-item .accordion-content .topic-wrapper-big .author-img{ right: 18px; width: 35px; height: 35px; }
-   
+
        .accordion-wrapper .accordion-item .accordion-content .topic-wrapper-big .topic-title-meta .topic-meta .duration{ display: block; font-size: 12px; }
        .accordion-wrapper .accordion-item .accordion-content .topic-wrapper-big .topic-title-meta .topic-meta .meta-item:not(:last-child):after,
        .accordion-wrapper .accordion-item .accordion-content .topic-wrapper-big .topic-title-meta .topic-meta .category:after{ display: none; }
@@ -1263,121 +1263,121 @@
        .accordion-wrapper .accordion-item .accordion-content .topic-wrapper-big .topic-title-meta .topic-meta .category{ font-size: 12px; }
        .accordion-wrapper .accordion-item .accordion-content .topic-wrapper-big .topic-title-meta .topic-meta .duration img{ margin-top: -4px; }
        .accordion-wrapper .accordion-item .accordion-content .topic-wrapper-big .topic-title-meta .topic-meta .duration svg{ margin-top: -4px; }
-   
-   
+
+
        .files-wrapper { padding: 17px 50px 14px 15px; }
        .files-wrapper .file-wrapper .download-file{ right: -42px; }
-   
+
        .form-wrapper.blue-form form{ padding: 50px 28px 60px; }
        .form-wrapper form .custom-checkbox-wrapper{ text-align: left; }
        .form-wrapper form .custom-checkbox-wrapper label br{ display: none; }
        .form-wrapper form label{ font-size: 16px; }
-   
+
        .section-big-testimonials .user-testimonial-big-single .slide .testimonial-box .testimonial-text p{ font-size: 16px; }
        .user-testimonial-big-single .slide .testimonial-box{ padding: 0 35px; }
-   
+
        .section-icon-text { padding: 40px 0 40px; }
        .section-big-testimonials { padding: 60px 0 60px; }
        .section-trusted-us { padding: 60px 0 60px; }
        .section-trusted-us .section-title{ margin-bottom: 40px; }
-   
+
        .section-text-img-blue .columns-wrapper .text-area h2 { font-size: 28px; line-height: 1.2; }
        .section-text-img-blue .columns-wrapper .text-area p { font-size: 18px; }
-   
+
        .section-text-img-blue { padding: 45px 0 80px; }
-   
+
        .content-wrapper .tabs-wrapper.fixed-tab-controls{ padding-top: 0; }
        .section-course-tabs .content-wrapper .tabs-wrapper.fixed-tab-controls .tab-controls { position: fixed; top: 79px; border-top: none; z-index: 10; border-top: 1px solid #fff; }
        .section-course-tabs .content-wrapper .tabs-wrapper.fixed-tab-controls .tab-controls:after { content: ''; position: fixed; top: 75px; display: block; left: 0; width: 100vw; height: 1px; background-color: #ffffff; }
-   
+
        .elearning-page-wrapper{ padding-top: 26px; margin-bottom: 0; }
        .elearning-page-wrapper .page-content{ box-shadow: none; }
        .elearning-page-wrapper .page-title{ padding: 0 28px; }
        .elearning-page-wrapper .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .social-share{ display: none; }
-       
+
        .elearning-page-wrapper .content-wrapper .tabs-wrapper .tab-controls .tab-controls-list{ width: 100vw; }
        .elearning-page-wrapper .content-wrapper .tabs-wrapper .tabs-content #overview.tab-content-wrapper .course-tab-text{ margin-bottom: 0; }
        .elearning-page-wrapper .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .course-tab-sidebar .course-details ul li{ padding-top: 55px; }
        .elearning-page-wrapper .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .course-tab-sidebar .course-details ul li .info-icon{ width: 45px; }
        .elearning-page-wrapper .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .course-tab-sidebar .course-details ul li .info-icon path{ stroke-width: 1px; }
        .elearning-page-wrapper .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .course-tab-sidebar .course-details ul li .info-text p{ font-weight: 600; }
-       
+
        .elearning-page-wrapper .content-wrapper .tabs-wrapper .tabs-content #topics.tab-content-wrapper.active-tab{ padding: 0 0 40px; }
        .elearning-page-wrapper .content-wrapper .tabs-wrapper .tabs-content #topics.tab-content-wrapper .video-wrapper{ margin: 0; }
        .elearning-page-wrapper .content-wrapper .tabs-wrapper .tabs-content #overview.tab-content-wrapper.active-tab{ padding: 0 28px 40px; }
        .elearning-page-wrapper .content-wrapper .tabs-wrapper .tabs-content #overview.tab-content-wrapper .video-wrapper{ margin: 0 -28px 30px -28px; }
-   
+
        .section-icon-text .section-title{ text-align: center; }
        .section-icon-text .icon-text-box{ text-align: center; }
        .section-icon-text .icon-text-box .icon-wrapper{ margin: 0 auto 16px; }
        .section-icon-text .icon-text-box p{ margin: 0 auto; }
-   
+
        .section-course-tabs{ padding-bottom: 0; }
        .section-course-tabs .content-wrapper .tabs-wrapper .tab-controls ul li a { font-size: 18px; padding: 15px 0; }
-   
+
        .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .course-tab-text .author-infos .ibox .ibox-text p{ font-size: 18px; }
        .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .course-tab-sidebar .course-details ul.two-column-list li{ padding-top: 50px; }
        .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .course-tab-sidebar .course-details ul.two-column-list li .info-icon{ width: 40px; }
-   
+
        .section-hero .hero-message h2{ color: #419cff; }
-   
+
        .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .video-wrapper{ margin: 60px -28px 0; box-shadow: none; }
        .section-course-tabs .content-wrapper .tabs-wrapper .tabs-content #overview.tab-content-wrapper.active-tab{ padding-bottom: 0; }
        .accordion-wrapper.accordion-big .accordion-item .accordion-title:after { top: 14px; }
-   
-       .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .user-testimonial-wrapper .user-testimonial .slide .testimonial-box .author-infos .author-name, 
-       .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .user-testimonial-wrapper .user-testimonial-big .slide .testimonial-box .author-infos .author-name, 
+
+       .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .user-testimonial-wrapper .user-testimonial .slide .testimonial-box .author-infos .author-name,
+       .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .user-testimonial-wrapper .user-testimonial-big .slide .testimonial-box .author-infos .author-name,
        .user-testimonial-big-single .slide .testimonial-box .author-infos .author-name{ font-size: 22px; }
-       .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .user-testimonial-wrapper .user-testimonial .slide .testimonial-box .author-infos .author-job, 
-       .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .user-testimonial-wrapper .user-testimonial-big .slide .testimonial-box .author-infos .author-job, 
+       .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .user-testimonial-wrapper .user-testimonial .slide .testimonial-box .author-infos .author-job,
+       .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .user-testimonial-wrapper .user-testimonial-big .slide .testimonial-box .author-infos .author-job,
        .user-testimonial-big-single .slide .testimonial-box .author-infos .author-job{ font-size: 16px; }
-   
-       
-   
+
+
+
        .tab-faq-wrapper .accordion-wrapper .accordion-item .accordion-title{ padding: 15px 60px 12px 16px;}
        .accordion-wrapper .accordion-item .accordion-title:after{ top: 17px; }
-   
+
        .section-text-carousel .carousel-column .carousel-wrapper .boxes-carousel .slide .box-text{ padding: 30px 20px 22px; }
        .section-text-carousel .carousel-column .carousel-wrapper .boxes-carousel .slide .box-text h3 { font-size: 20px; }
        .section-text-carousel .carousel-column .carousel-wrapper .boxes-carousel .slide .box-text .location{ font-size: 14px; margin-bottom: 3px; }
        .section-text-carousel .carousel-column .carousel-wrapper .boxes-carousel .slide .box-text .date{ font-size: 14px; }
        .section-text-carousel .carousel-column .carousel-wrapper .boxes-carousel .slide .box-text .btn { font-size: 16px; }
-   
+
        .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .course-tab-sidebar .course-details ul li .info-text p{ font-size: 18px; }
        .sidebar-wrapper .accordion-wrapper .accordion-item .accordion-content .topic-wrapper .author-img{ top: 15px; right: 28px; }
-   
+
        .sidebar-wrapper .accordion-wrapper .accordion-item .accordion-content .topic-wrapper .topic-title-meta h3{ padding-right: 65px; }
-   
+
        .dynamic-learning--title{ margin-top: 0; }
-   
+
        .form-section .text-area { padding: 30px 0 40px; }
-   
-       
-       .form-section .form-area-wrapper .form-wrapper, 
+
+
+       .form-section .form-area-wrapper .form-wrapper,
        .form-section .form-area-wrapper .form-wrapper.w-m-bottom{ margin-bottom: 0; }
-   
-   
+
+
        .section-big-testimonials .user-testimonial-big-single .owl-nav button,
        .section-trusted-us .logos-carousel-wrapper .owl-nav button{ width: 20px; height: 40px; }
-   
+
        .user-testimonial-big-single .owl-nav button{ top: 115px; transform: translateY(0); }
-   
+
        .section-trusted-us .logos-carousel-wrapper .logos-carousel { padding: 0 30px; }
-   
-       .login-popup .close-btn img, 
+
+       .login-popup .close-btn img,
        .login-popup .close-btn svg { width: 20px; }
-   
+
        .section-page-content.logos-sections .section-title { margin-top: 10px; margin-bottom: 60px; }
        .section-page-content.logos-sections .logo-column{ margin-bottom: 50px; }
        .section-page-content.logos-sections .logo-column:nth-child(2n+1){ text-align: center; }
        .section-page-content.logos-sections .logo-column:nth-child(2n+2){ text-align: center; }
-   
+
        .content-wrapper .tabs-wrapper .tabs-content #instructors.tab-content-wrapper.active-tab{ margin-bottom: -40px; }
        .content-wrapper .tabs-wrapper .tabs-content #instructors.tab-content-wrapper.tab-blue-gradient{ background: transparent; }
        .content-wrapper .tabs-wrapper .tabs-content #instructors.tab-content-wrapper.tab-blue-gradient h2 { color: #000000; }
        .content-wrapper .tabs-wrapper .tabs-content #instructors.tab-content-wrapper .instructors-wrapper{ background: rgb(63,111,182); background: linear-gradient(90deg, rgba(63,111,182,1) 0%, rgba(65,156,255,1) 100%); padding: 50px 20px; margin: 0; }
        .content-wrapper .tabs-wrapper .tabs-content #instructors .container{ padding: 0; }
-   
+
        .content-wrapper .tabs-wrapper .tabs-content #instructors.tab-content-wrapper.active-tab{ padding-left: 0; padding-right: 0; padding-bottom: 0; padding-top: 10px; }
        .content-wrapper .tabs-wrapper .tabs-content #instructors.tab-content-wrapper.tab-gray{ background: transparent; }
        .content-wrapper .tabs-wrapper .tabs-content #instructors.tab-content-wrapper.tab-gray .course-full-text{ background: #eeeeee; }
@@ -1389,49 +1389,48 @@
        .section-course-tabs .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .instructor-box{ padding-bottom: 32px;}
        .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .instructor-box .instructor-inner h3{ font-size: 18px; }
        .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .instructor-box .instructor-inner p{ font-size: 12px; max-width: 185px; margin: 0 auto; }
-       .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .instructor-box .instructor-inner .social-wrapper li a img, 
+       .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .instructor-box .instructor-inner .social-wrapper li a img,
        .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .instructor-box .instructor-inner .social-wrapper li a svg{ width: 20px; }
-   
+
        .section-course-tabs .content-wrapper .tabs-wrapper .tabs-content #instructors.tab-content-wrapper .course-full-text{ padding: 0; }
-   
+
        .sidebar-wrapper .accordion-wrapper .accordion-item .accordion-title{ padding: 12px 95px 12px 28px; }
        .sidebar-wrapper .accordion-wrapper .accordion-item .accordion-title:after{ right: 28px; }
        .sidebar-wrapper .accordion-wrapper .accordion-item .accordion-content .topic-wrapper{ padding: 14px 28px 10px 45px; }
        .sidebar-wrapper .accordion-wrapper .accordion-item .accordion-content .topic-wrapper .icon{ left: 28px; }
-   
+
        .booking-login-create .page-title{ margin-top: 0; margin-bottom: 30px; }
        .booking-login-create .tickets-wrapper .tabs-forms .tabs-content .form-wrapper form.login-form .custom-checkbox-wrapper label{ padding-left: 0; }
-   
+
        .content-wrapper .tabs-wrapper .tabs-content #my-account.tab-content-wrapper.active-tab,
        .content-wrapper .tabs-wrapper .tabs-content #topics-tab.tab-content-wrapper.active-tab{ padding-left: 0; padding-right: 0; padding-top: 84px; }
-   
+
        .download-area .download-area-inner{ max-width: 100%; }
        .download-area .download-area-inner a{ display: block; }
        .download-area .download-area-inner a span{ display: block; }
-   
+
        .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .accordion-wrapper h3.accordion-title{ margin: 0; }
-   
+
        .content-wrapper .tabs-wrapper .tabs-content #topics-tab.tab-content-wrapper .tabs-ctrl{ margin-bottom: 30px; }
        .in-tab-wrapper .download-area{ transform: translateY(0); text-align: left; margin-top: 0; position: relative; margin-bottom: 20px; }
        .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .accordion-wrapper.accordion-big .accordion-item h3.accordion-title{ padding: 15px 60px 12px 16px; font-size: 18px; }
-   
+
        .booking-login-create .page-title{ margin-left: 0; }
-   
+
        .sidebar-wrapper.topics-tab { display: block; }
-   
+
        .section-account-tabs .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper.active-tab{  padding-top: 84px; }
-   
+
        .booking-login-create .tickets-wrapper .tabs-forms .tabs-content .form-wrapper form.login-form .custom-checkbox-wrapper .custom-checkbox{ margin-right: 8px; }
        .booking-login-create .tickets-wrapper .tabs-forms .tabs-content .form-wrapper form.register-form .custom-checkbox-wrapper label{ font-size: 15px; }
        .booking-login-create .tickets-wrapper .tabs-forms .tabs-content .form-wrapper form.register-form .custom-checkbox-wrapper .custom-checkbox{ margin-top: 0; }
-   
+
        .sidebar-wrapper .accordion-wrapper{ max-height: 100%; }
-   
+
        .content-wrapper .tabs-wrapper .tab-controls ul li .child-menu{ opacity: 1; visibility: visible; position: relative; top: auto; left: auto; width: 100%; border-top: 1px solid rgba(255,255,255,.5); }
        .content-wrapper .tabs-wrapper .tab-controls ul li .child-menu li{ background: transparent; }
        .content-wrapper .tabs-wrapper .tab-controls ul li .child-menu li:not(:last-child){ border: none; }
        .content-wrapper .tabs-wrapper .tab-controls ul li .child-menu li a{ padding: 15px 0; white-space: normal; font-size: 18px; color: #add0ff; line-height: 1.3; }
        .content-wrapper .tabs-wrapper .tab-controls ul li .child-menu li a.active{ color: #d2ff00; }
-   
+
    }
-   

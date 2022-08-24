@@ -19,7 +19,10 @@ use Illuminate\Support\Facades\DB;
 
 class MoveFile implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     private $fileId;
     private $folderId;
@@ -42,6 +45,7 @@ class MoveFile implements ShouldQueue
      */
     public function handle()
     {
+        Log::info("Move file job - start");
         DB::beginTransaction();
         try {
             $parentFile = MediaFile::find($this->fileId);
@@ -51,6 +55,7 @@ class MoveFile implements ShouldQueue
             $files->push($parentFile);
 
             foreach ($files as $file) {
+                Log::info("Move file job - move file in db");
                 $newPath = '/' . trim(rtrim('/' . $folder->path, '/'), '/') . '/' . $file->name;
 
                 $oldFileUrl = $file->url;
@@ -77,10 +82,13 @@ class MoveFile implements ShouldQueue
                 }
 
                 // move file
+                Log::info("Move file job - move file on disk");
                 Storage::disk('public')->move($oldFilePath, $newPath);
             }
 
+            Log::info("Move file job - commit");
             DB::commit();
+            Log::info("Move file job - success");
         } catch (Exception $e) {
             DB::rollback();
             Log::error("Failed to move file. " . $e->getMessage());

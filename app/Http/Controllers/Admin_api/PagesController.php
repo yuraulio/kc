@@ -65,7 +65,12 @@ class PagesController extends Controller
             $pages->wherePublished($request->published);
         }
         if ($request->type !== null) {
-            $pages->whereType($request->type);
+            $requestTypes = $request->type;
+            foreach ($requestTypes as $key => $type) {
+                $requestTypes[$key] = json_decode($type) ?? null;
+            }
+            $types = array_column($requestTypes, 'title');
+            $pages->whereIn("type", $types);
         }
         if ($request->category) {
             $pages->whereHas("categories", function ($q) use ($request) {
@@ -154,7 +159,7 @@ class PagesController extends Controller
     {
         try {
             $page = Page::withoutGlobalScopes()->find($id);
-       
+
             $this->authorize('update', $page, Auth::user());
 
             $old_slug = $page->slug;
@@ -171,9 +176,9 @@ class PagesController extends Controller
             $page->type_slug = Str::slug($request->type, '-');
             $page->slug = $request->slug;
             $page->uuid = $page->uuid ?? Uuid::uuid4();
-            
+
             $page->save();
-      
+
             $this->syncImages($page);
 
             $categories = $request->categories ?? [];
@@ -191,8 +196,8 @@ class PagesController extends Controller
                 $redirect->save();
             }
 
-            if (isset($request->terms_val) && !$request->terms_val) {
-                dispatch((new UpdateTerms($page->id))->delay(now()->addSeconds(3)));
+            if (isset($request->terms_val) && $request->terms_val == "yes") {
+                dispatch((new UpdateTerms())->delay(now()->addSeconds(3)));
             }
 
             return new PageResource($page);

@@ -15,7 +15,7 @@
             <h2>{{ $content->title }} {{ $content->subtitle }} teaches:</h2>
             <ul>
                 @foreach($instructorTeaches as $teach)
-                    <li><img width="25" src="{{cdn('/theme/assets/images/icons/graduate-hat.svg')}}" alt="">{{$teach}}</li>
+                    <li><img width="25" src="{{cdn('/theme/assets/images/icons/graduate-hat.svg')}}" alt="">{!! $teach !!}</li>
                 @endforeach
             </ul>
         </div>

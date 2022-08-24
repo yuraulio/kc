@@ -4,7 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\Model\Lesson;
-
+use App\Model\Instructor;
 
 class LessonLinksFixed extends Command
 {
@@ -68,6 +68,22 @@ class LessonLinksFixed extends Command
             $lesson->links = json_encode($newLinks);
             $lesson->save();
 
+
+        }
+
+
+        $instructors = Instructor::all();
+
+        foreach($instructors as $instructor){
+
+            $link = $instructor->ext_url;
+
+            $link = str_replace('https://', '', $link);
+            $link = str_replace('http://', '', $link);
+            $link = 'https://'.$link;
+            
+            $instructor->ext_url = $link;
+            $instructor->save();
 
         }
 

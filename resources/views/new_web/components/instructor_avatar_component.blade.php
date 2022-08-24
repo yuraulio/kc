@@ -8,11 +8,12 @@
     
     $title = $data["title"];
     $content = $data["content"];
+    $instructor = $data["instructor"];
 @endphp
 
 <div class="instructor-area instructor-profile mt-5 mb-5 ">
     <div class="avatar-wrapper">
-        <div class="avatar" alt="{{ $title }}" title="{{ $title }}"  style="background-image:url({{cdn(get_image($content['medias'],'instructors-testimonials'))}});"></div>
+        <img class="avatar2" src="{{cdn(get_image($instructor['medias'],'instructors-testimonials'))}}" alt="{{ $title }}" title="{{ $title }}">
         <div class="social-links">
             <?php $social_media = json_decode($content['social_media'], true); ?>
             @if(isset($social_media['facebook']) && $social_media['facebook'] != '')

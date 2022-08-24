@@ -17,7 +17,6 @@ use Illuminate\Support\Facades\Log;
 
 class TemplatesController extends Controller
 {
-
     /**
      * Get templates
      *
@@ -65,6 +64,7 @@ class TemplatesController extends Controller
             $template->description = $request->description;
             $template->rows = $request->rows;
             $template->user_id = Auth::user()->id;
+            $template->type = $request->type;
             $template->save();
 
             return new TemplateResource($template);
@@ -108,6 +108,7 @@ class TemplatesController extends Controller
             $template->dynamic = $request->dynamic;
             $template->description = $request->description;
             $template->rows = $request->rows;
+            $template->type = $request->type;
             $template->save();
 
             return new TemplateResource($template);

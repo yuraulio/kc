@@ -2054,8 +2054,8 @@
     let already_assign_files = @json($already_assign);
 
     if(already_assign_files.length != 0){
-        already_assign_files = already_assign_files[0]
-        loadAllFolders = JSON.parse(already_assign_files.pivot.selectedFolders);
+        already_assign_files = already_assign_files
+
     }
 
 
@@ -2183,29 +2183,36 @@
 
     function parseIdsForSelectFiles(){
 
-        if(files.length != 0 && loadAllFolders.length != 0){
 
 
-            if(loadAllFolders.selectedAllFolders){
-                $.each(files, function(index, value) {
+        if(files.length != 0 && already_assign_files.length != 0){
 
-                    if(value.Full_Name == already_assign_files.folder_name){
-                        selectedIds.push(value.ID)
-                    }
-                })
-            }else{
-                $.each(files, function(index, value) {
-                    if(loadAllFolders.selectedFolders.length != 0){
-                        $.each(loadAllFolders.selectedFolders, function(index1, value1){
+            $.each(already_assign_files, function(index11, value11) {
+                loadAllFolders = JSON.parse(value11.pivot.selectedFolders);
 
-                            if(value.dirname == value1 && already_assign_files.folder_name == value.dropboxFolder){
-                                selectedIds.push(value.ID)
-                            }
-                        })
+                if(loadAllFolders.selectedAllFolders){
+                    $.each(files, function(index, value) {
 
-                    }
-                })
-            }
+                        if(value.Full_Name == value11.folder_name){
+                            selectedIds.push(value.ID)
+                        }
+                    })
+                }else{
+                    $.each(files, function(index, value) {
+                        if(loadAllFolders.selectedFolders.length != 0){
+                            $.each(loadAllFolders.selectedFolders, function(index1, value1){
+
+                                if(value.dirname == value1 && value11.folder_name == value.dropboxFolder){
+                                    selectedIds.push(value.ID)
+                                }
+                            })
+
+                        }
+                    })
+                }
+            })
+
+
 
 
             treeList.selectRows(selectedIds);
@@ -2230,11 +2237,12 @@
                 let deselectIDS = [];
                 const currentSelectedRowKeys = e.currentSelectedRowKeys[0];
                 var currentSelectedRow = [];
-                selectedFolders = [];
+
                 let selectedDropbox = null;
                 let selectedAllFolders = false;
-                const allSelectedRowsData = e.selectedRowsData;
+                //const allSelectedRowsData = e.selectedRowsData;
                 const allSelectedRowsDataForSave = treeList.getSelectedRowsData('multiple')
+                console.log('current selected rows0', currentSelectedRowKeys)
 
                 $.each(files, function(index, value){
                     if(currentSelectedRowKeys == value.ID){
@@ -2243,29 +2251,35 @@
                 })
 
 
-                if(currentSelectedRow.isRootFolder && allSelectedRowsData.length != 1){
+                // Deselect previous rows
 
-                    allSelectedRowsData.filter(value => value.ID == currentSelectedRowKeys);
+                // if(currentSelectedRow.isRootFolder && allSelectedRowsData.length != 1){
 
-                    $.each(allSelectedRowsData,function(index,value){
-                        if(value.ID != currentSelectedRowKeys){
-                            deselectIDS.push(value.ID)
-                        }
-                    })
+                //     allSelectedRowsData.filter(value => value.ID == currentSelectedRowKeys);
 
-                }
+                //     $.each(allSelectedRowsData,function(index,value){
+                //         if(value.ID != currentSelectedRowKeys){
+                //             deselectIDS.push(value.ID)
+                //         }
+                //     })
+
+                // }
 
 
-                if(!currentSelectedRow.isRootFolder && allSelectedRowsData.length != 1){
-                    $.each(allSelectedRowsData,function(index,value){
-                        if(value.isRootFolder && currentSelectedRow.Head_ID != value.ID){
-                            deselectIDS.push(value.ID)
-                        }
-                    })
-                }
-                treeList.deselectRows(deselectIDS);
+                // if(!currentSelectedRow.isRootFolder && allSelectedRowsData.length != 1){
+                //     $.each(allSelectedRowsData,function(index,value){
+                //         if(value.isRootFolder && currentSelectedRow.Head_ID != value.ID){
+                //             deselectIDS.push(value.ID)
+                //         }
+                //     })
+                // }
+                // treeList.deselectRows(deselectIDS);
 
-                let dataForSubmit = [];
+                let dataForSubmit = {};
+                selectedFolders = [];
+
+                console.log('all selected rows data', allSelectedRowsDataForSave)
+
 
                 if(allSelectedRowsDataForSave.length != 0){
 
@@ -2276,25 +2290,33 @@
                             selectedDropbox = value.Full_Name;
 
                         }else{
-                            selectedFolders.push(value.dirname)
+                            if(selectedFolders[selectedDropbox] === undefined){
+                                selectedFolders[selectedDropbox] = [];
+                            }
+                            selectedFolders[selectedDropbox].push(value.dirname)
                             selectedDropbox = value.dropboxFolder;
                         }
+
+
+
+                        dataForSubmit[selectedDropbox] = {
+                            selectedDropbox :selectedDropbox,
+                            selectedAllFolders :selectedAllFolders,
+                            selectedFolders :selectedFolders[selectedDropbox],
+                        };
                     })
 
-                    dataForSubmit = {
-                        selectedDropbox :selectedDropbox,
-                        selectedAllFolders :selectedAllFolders,
-                        selectedFolders :selectedFolders,
-                    };
 
-                }else{
-                    dataForSubmit = {
-                        detach: true
-                    };
+
                 }
 
+                $.each(dataForSubmit, function(index, value) {
+                    if(value.selectedFolders === undefined){
+                        delete dataForSubmit[index]
+                    }
+                })
 
-
+                console.log(dataForSubmit)
 
                 dataForSubmit = JSON.stringify(dataForSubmit);
                 $('#selectedFiles').val(dataForSubmit);

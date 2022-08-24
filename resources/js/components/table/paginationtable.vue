@@ -135,7 +135,7 @@
 
             <div v-if="showFilter('type')" class="px-3 py-2">
                 <multidropdown
-                    :multi="false"
+                    :multi="true"
                     @updatevalue="update_type"
                     :prop-value="type_value"
                     :fetch="false"
@@ -188,7 +188,7 @@
                     :prop-value="subcategory_value"
                     :fetch="false"
                     :data="subcategories"
-                    placeholder="All subcategories"
+                    placeholder="All categories"
                     marginbottom="mb-0"
                 ></multidropdown>
              </div>
@@ -313,7 +313,9 @@
                         <span @click="dynamic=null, refreshTable()" v-if="dynamic && showFilter('dynamic')" class="badge bg-primary ms-1 cursor-pointer">{{dynamic.title}} <i class="fa fa-times" aria-hidden="true"></i></span>
                         <span @click="published_value=null, refreshTable()" v-if="published_value && showFilter('visibility')" class="badge bg-primary ms-1 cursor-pointer">{{published_value.title}} <i class="fa fa-times" aria-hidden="true"></i></span>
                         <span @click="template_value=null, refreshTable()" v-if="template_value && showFilter('template')" class="badge bg-primary ms-1 cursor-pointer">{{template_value.title}} <i class="fa fa-times" aria-hidden="true"></i></span>
-                        <span @click="type_value=null, refreshTable()" v-if="type_value && showFilter('type')" class="badge bg-primary ms-1 cursor-pointer">{{type_value.title}} <i class="fa fa-times" aria-hidden="true"></i></span>
+                        <template v-for="(pageType, key) in type_value">
+                            <span @click="type_value.splice(key, 1), refreshTable()" v-if="pageType && showFilter('type')" class="badge bg-primary ms-1 cursor-pointer">{{pageType.title}} <i class="fa fa-times" aria-hidden="true"></i></span>
+                        </template>
                         <span @click="category_value=null, refreshTable()" v-if="category_value && showFilter('category')" class="badge bg-primary ms-1 cursor-pointer">{{category_value.title}} <i class="fa fa-times" aria-hidden="true"></i></span>
                         <span @click="subcategory_value=null, refreshTable()" v-if="subcategory_value && showFilter('subcategory')" class="badge bg-primary ms-1 cursor-pointer">{{subcategory_value.title}} <i class="fa fa-times" aria-hidden="true"></i></span>
                     </div>
@@ -390,7 +392,7 @@
                         'dynamic': this.dynamic ? this.dynamic.id : null,
                         'published': this.published_value ? this.published_value.id : null,
                         'template': this.template_value ? this.template_value.id : null,
-                        'type': this.type_value ? this.type_value.title : null,
+                        'type': this.type_value ? this.type_value : null,
                         'category': this.category_value ? this.category_value.id : null,
                         'subcategory': this.subcategory_value ? this.subcategory_value.id : null,
                         'pagefilter': this.page_value ? this.page_value.id : null,
@@ -838,10 +840,16 @@ export default {
         }
 
         if (window.location.pathname == "/pages") {
-            this.type_value = {
-                title: 'General',
-                id: 5
-            };
+            this.type_value = [
+                {
+                    title: 'General',
+                    id: 5
+                },
+                {
+                    title: 'City page',
+                    id: 7
+                },
+            ];
         }
 
         if (window.location.pathname == "/pages_blog") {

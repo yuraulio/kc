@@ -177,7 +177,11 @@ class Event extends Model
     {
 
         $eventInfo = $this->event_info();
-        if(isset($eventInfo['delivery']) && $eventInfo['delivery'] == 139){
+        /*if(isset($eventInfo['delivery']) && $eventInfo['delivery'] == 139){
+            return true;
+        }*/
+
+        if(isset($eventInfo['delivery']) && $eventInfo['delivery'] != 143){
             return true;
         }
 

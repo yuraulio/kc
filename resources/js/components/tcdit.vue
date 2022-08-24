@@ -244,6 +244,7 @@
                                                 :uuid="$uuid.v4()"
                                                 :mode="mode"
                                                 :inputs="input.inputs"
+                                                :class="input.hide == true ? 'visually-hidden' : ''"
                                             />
                                         </div>
 
@@ -256,7 +257,7 @@
                                                         <iframe 
                                                             :width="findInputValue(column.template.inputs, 'youtube_full_width') ? '100%' : (findInputValue(column.template.inputs, 'youtube_width') || '100%')"
                                                             :height="findInputValue(column.template.inputs, 'youtube_height') || '600'" 
-                                                            :src="'https://www.youtube.com/embed/' + findInputValue(column.template.inputs, 'youtube_embed')" 
+                                                            :src="'https://www.youtube.com/embed/' + getYoutubeVideoCode(findInputValue(column.template.inputs, 'youtube_embed'))"
                                                             title="YouTube video player" 
                                                             frameborder="0" 
                                                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
@@ -291,8 +292,14 @@
 
         <div v-if="name == 'main'" class="row">
             <div class="col-sm-12 mt-3 mb-3">
-                <div class="page-title-box d-flex justify-content-between align-items-center">
-                    <input :value="pageTitle" @change="updateTemplateTitle" class="d-inline-block title-input">
+                <div class="page-title-box row">
+                    <div class="col-md-6">
+                        <input :value="pageTitle" @change="updateTemplateTitle" class="d-inline-block title-input">
+                    </div>
+                    <div class="col-md-6">
+                        <a href="/templates" class="btn btn-soft-secondary waves-effect waves-light float-end ms-2"><i class="fe-x me-1"></i> Cancel</a>
+                        <button v-if="mode == 'new' || mode == 'edit'" @click="emitTemplateSave()" type="button" class="btn btn-soft-success waves-effect waves-light float-end" ><i class="fe-check-circle me-1"></i> Save</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -369,19 +376,57 @@
         >
             <transition-group tag="div" >
                 <div v-for="(val, index) in data" :key="'prim'+ index" :class="'row mb-1 ' + (name == 'tabs' && tabs_tab == val.tabs_tab ? ' d-block ' : ' d-none ') + (name == 'main' && tab == val.tab ? ' d-block ' : ' d-none ')">
-                    <div v-if="val.width" class="btn-group" style="width: 20%;margin-left: 40%;margin-right: 40%;">
-                        <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                            {{ val.width == 'full' ? 'Full' : (val.width == 'content' ? 'Content' :'Blog') }} Width<i class="mdi mdi-chevron-down"></i>
-                        </button>
-                        <div class="dropdown-menu dropdown-menu-center" style="" data-popper-placement="bottom-start">
-                            <a @click.prevent="val.width = 'full'" :class="'dropdown-item ' + (val.width == 'full' ? 'active' : '')" href="#!">Full Width</a>
-                            <a @click.prevent="val.width = 'content'" :class="'dropdown-item ' + (val.width == 'content' ? 'active' : '')" href="#!">Content Width</a>
-                            <a @click.prevent="val.width = 'blog'" :class="'dropdown-item ' + (val.width == 'blog' ? 'active' : '')" href="#!">Blog Width</a>
+                    <div class="text-center">
+                        <div v-if="val.width" class="btn-group d-inline-block" style="width: 20%;">
+                            <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                {{ val.width == 'full' ? 'Full' : (val.width == 'content' ? 'Content' :'Blog') }} Width<i class="mdi mdi-chevron-down"></i>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-center" style="" data-popper-placement="bottom-start">
+                                <a @click.prevent="val.width = 'full'" :class="'dropdown-item ' + (val.width == 'full' ? 'active' : '')" href="#!">Full Width</a>
+                                <a @click.prevent="val.width = 'content'" :class="'dropdown-item ' + (val.width == 'content' ? 'active' : '')" href="#!">Content Width</a>
+                                <a @click.prevent="val.width = 'blog'" :class="'dropdown-item ' + (val.width == 'blog' ? 'active' : '')" href="#!">Blog Width</a>
+                            </div>
+                        </div>
+
+                        <div v-if="val.disable_color !== true" class="btn-group d-inline-block" style="width: 20%;">
+                            <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                <template v-if="val.color == 'white'">
+                                    White <i class="mdi mdi-chevron-down"></i>
+                                </template>
+                                <template v-if="val.color == 'blue_gradient'">
+                                    Blue gradient <i class="mdi mdi-chevron-down"></i>
+                                </template>
+                                <template v-if="val.color == 'blue'">
+                                    Blue <i class="mdi mdi-chevron-down"></i>
+                                </template>
+                                <template v-if="val.color == 'gray'">
+                                    Gray <i class="mdi mdi-chevron-down"></i>
+                                </template>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-center" style="">
+                                <a @click.prevent="val.color = 'white'" 
+                                    :class="'dropdown-item ' + (val.color == 'white' ? 'active' : '')" 
+                                    href="#!">White
+                                </a>
+                                <a @click.prevent="val.color = 'blue_gradient'" 
+                                    :class="'dropdown-item ' + (val.color == 'blue_gradient' ? 'active' : '')" 
+                                    href="#!">Blue gradient
+                                </a>
+                                <a @click.prevent="val.color = 'blue'" 
+                                    :class="'dropdown-item ' + (val.color == 'blue' ? 'active' : '')" 
+                                    href="#!">Blue
+                                </a>
+                                <a @click.prevent="val.color = 'gray'" 
+                                    :class="'dropdown-item ' + (val.color == 'gray' ? 'active' : '')" 
+                                    href="#!">Gray
+                                </a>
+                            </div>
                         </div>
                     </div>
+
                     <div v-for="(column, indr) in val.columns" :key="'column' + indr" :class="'d-inline-block col-lg-' + getColumnWidth(column, val.columns)">
                         <div class="" style="position: relative">
-                            <div @click.prevent="" :key="'pseudo' + indr" class="dropzone  mb-2" style="min-height:150px">
+                            <div  :key="'pseudo' + indr" class="dropzone  mb-2" style="min-height:150px">
                                 <div class="dz-message needsclick" style="margin: 0px !important; display: flex; justify-content: center; flex-direction: column">
                                     <div @click="changeComponent(index, indr, column.template)">
                                         <i :class="'h1 handle text-muted ' + column.template.icon"></i>
@@ -401,27 +446,32 @@
                                             <input @click.stop="calculateWidth(val.columns, indr, $event, index)" :value="column.width" class="w-100" type="range" maxlength="1" min="1" max="6">
                                         </template>
                                     </span>
+                                    <div v-if="column.template.dynamic != null" class="d-inline-block">
+                                        <span class="text-muted font-13 d-inline-block me-1" style="margin-top: 4px;">Dynamic</span><input v-model="column.template.dynamic"  type="checkbox" class="form-check-input">
+                                    </div>
                                 </div>
 
-                                <multiput
-                                    v-for="input in column.template.inputs"
-                                    v-if="input.key == 'tabs'"
-                                    :pseudo="true"
-                                    :key="input.key"
-                                    :keyput="input.key"
-                                    :label="input.label"
-                                    :type="input.type"
-                                    :value="input.value"
-                                    :tabsProp="input.tabs ? input.tabs : []"
-                                    :size="input.size"
-                                    :width="input.width"
-                                    @inputed="inputed($event, input)"
-                                    @inputedTabs="inputedTabs($event, input)"
-                                    :route="input.route"
-                                    :multi="false"
-                                    :existingValue="input.value"
-                                    :uuid="$uuid.v4()"
-                                />
+                                <div class="row">
+                                    <multiput
+                                        v-for="input in column.template.inputs"
+                                        v-if="input.key == 'tabs' || column.component == 'menus'"
+                                        :pseudo="true"
+                                        :key="input.key"
+                                        :keyput="input.key"
+                                        :label="input.label"
+                                        :type="input.type"
+                                        :value="input.value"
+                                        :tabsProp="input.tabs ? input.tabs : []"
+                                        :size="input.size"
+                                        :width="input.width"
+                                        @inputed="inputed($event, input)"
+                                        @inputedTabs="inputedTabs($event, input)"
+                                        :route="input.route"
+                                        :multi="false"
+                                        :existingValue="input.value"
+                                        :uuid="$uuid.v4()"
+                                    />
+                                </div>
 
                             </div>
                             <span @click="removeRow(index)" v-if="indr == (val.columns.length - 1) && val.removable !== false" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" title="Delete component" style="cursor: pointer">
@@ -437,16 +487,9 @@
     </div>
 
 
-    <form v-if="tabs_tab || name == 'main'" @click.prevent="addCustomComponent" class="dropzone dz-clickable" style="min-height:80px; border: 2px dashed #6658dd !important" id="myAwesomeDropzone" data-plugin="dropzone" data-previews-container="#file-previews" data-upload-preview-template="#uploadPreviewTemplate">
-        <div class="dz-message needsclick" style="margin: 0px !important; color: #6658dd">
-            <i class="h1  dripicons-view-apps" style="color: #6658dd"></i>
-            <div class="text-center">
-                <span class="text-muted font-13">
-                    <strong>Click to Add Custom Component</strong>
-                </span>
-            </div>
-        </div>
-    </form>
+    <div v-if="tab != 'Meta'" class="text-center">
+        <i @click.prevent="addCustomComponent" class="dripicons-plus add-component-icon cursor-pointer"></i>
+    </div>
 
     <component-modal
         :row="row_index"
@@ -795,6 +838,32 @@ export default {
         },
         updateTemplateTitle(){
             this.$parent.title_value = $('.title-input').val();
+        },
+        emitTemplateSave() {
+            this.$emit('save');
+        },
+        validURL(str) {
+            var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
+                '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
+                '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
+                '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
+                '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
+                '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
+            return !!pattern.test(str);
+        },
+        getYoutubeVideoCode(str) {
+            if (this.validURL(str)) {
+                return this.getUrlVars(str)["v"];
+            } else {
+                return str;
+            }
+        },
+        getUrlVars(url) {
+            var vars = {};
+            var parts = url.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+                vars[key] = value;
+            });
+            return vars;
         }
     },
 
@@ -941,6 +1010,11 @@ export default {
             }
 
             this.data.push(comp);
+
+            setTimeout(() => {
+                window.scrollTo(0, document.body.scrollHeight);
+            }, 500);
+
         }));
 
         eventHub.$on('component-change-' + this.name, ((data) => {
@@ -950,7 +1024,7 @@ export default {
             this.data[row_index].columns[column_index].component = component;
             this.data[row_index].columns[column_index].template = JSON.parse(JSON.stringify(this.extractedComponents[component]));
 
-            this.$modal.hide("component-modal");
+            this.$modal.hide(this.name);
         }));
 
         eventHub.$on('order-changed-' + this.name, ((data) => {
@@ -1011,5 +1085,9 @@ export default {
     box-shadow: none;
     font-size: 23px;
     width: 100%;
+}
+
+.add-component-icon {
+    font-size: 32px;
 }
 </style>

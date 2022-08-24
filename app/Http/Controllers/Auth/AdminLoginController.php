@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class AdminLoginController extends Controller
 {
@@ -36,9 +37,8 @@ class AdminLoginController extends Controller
             'password' => ['required'],
         ]);
 
-        if (Auth::guard('admin_web')->attempt($credentials)) {
+        if (Auth::guard('admin_web')->attempt(['email' => $request->email, 'password' => $request->password, 'active' => 1])) {
             $request->session()->regenerate();
-
             return redirect()->intended();
         }
 
