@@ -853,17 +853,21 @@ export default {
         }
 
         if (window.location.pathname == "/pages_blog") {
-            this.type_value = {
+            this.type_value = [
+                {
                 title: 'Blog',
                 id: 2
-            };
+                }
+            ];
         }
 
         if (window.location.pathname == "/pages_knowledge") {
-            this.type_value = {
+            this.type_value = [
+                {
                 title: 'Knowledge',
                 id: 6
-            };
+                }
+            ];
         }
 
         var urlValues = this.getURLValues();
