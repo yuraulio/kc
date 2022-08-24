@@ -30,6 +30,7 @@ class TemplateResource extends JsonResource
             ),
             'pages' => $pages > 0 ? '<a href="/pages?templateName=' . $this->title . '&templateID=' . $this->id . '">' . $pages . '</a>' : 0,
             'created_at' => Carbon::parse($this->created_at)->toFormattedDateString(),
+            'type' => $this->type,
         ];
     }
 }

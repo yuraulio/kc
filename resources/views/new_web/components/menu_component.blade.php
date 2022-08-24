@@ -15,6 +15,8 @@
     $footerMenu2Mobile = $page->getMenu($menus['footer_menu_2_mobile']->id ?? "");
     $footerMenu3Desktop = $page->getMenu($menus['footer_menu_3_desktop']->id ?? "");
     $footerMenu3Mobile = $page->getMenu($menus['footer_menu_3_mobile']->id ?? "");
+
+    $accountMenu = $page->getMenu($menus['account_menu']->id ?? "");
 @endphp
 
 {{-- main menu --}}
@@ -65,4 +67,9 @@
 @endsection
 @section('footer_menu_3_mobile')
     @menu($footerMenu3Mobile["name"])
+@endsection
+
+{{-- account menu --}}
+@section('account_menu')
+    @menu($accountMenu["name"])
 @endsection

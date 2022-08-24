@@ -2,6 +2,7 @@
 
 namespace App\Model\Admin;
 
+use CodexShaper\Menu\Models\Menu;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\SearchFilter;
@@ -38,5 +39,14 @@ class Template extends Model
     public function user()
     {
         return $this->belongsTo(Admin::class, "user_id");
+    }
+
+    public function getMenu($id)
+    {
+        $menu = Menu::find($id);
+        return [
+            'name' => $menu->name ?? "",
+            'title' => $menu->custom_class ?? "",
+        ];
     }
 }

@@ -397,28 +397,69 @@ export default {
                     this.$toast.error("Failed to create. " + this.errors[Object.keys(this.errors)[0]]);
                 });
             },
-            edit(){
+            edit() {
+                var hasTerms = false;
+                this.data.content.forEach((row) => {
+                    row.columns.forEach((column) => {
+                        if (column.component == "terms_conditions") {
+                            hasTerms = true;
+                        }
+                    });
+                });
+
+                if(hasTerms){
+                    Swal.fire({
+                        title: 'Saving page.',
+                        text: "Do you want to update users terms?",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes',
+                        cancelButtonText: 'No',
+                        buttonsStyling: false,
+                        customClass: {
+                            cancelButton: "btn btn-soft-secondary",
+                            confirmButton: "btn btn-soft-success",
+                        },
+                    }).then((result) => {
+                        if (result.value) {
+                            this.editPage("yes");
+                        }else{
+                            this.editPage(0);
+                        }
+                    })
+
+                
+                }else{
+                    this.editPage(0);
+                }
+            },
+            editPage(terms_val){
                 this.loading = true;
                 this.errors = null;
+
+                var data = {
+                    title: this.title_value,
+                    rows: JSON.stringify(this.rows_value),
+                    categories: this.category_value,
+                    subcategories: this.subcategory_value,
+                    content: this.template_value ? JSON.stringify(this.$refs.tc.data) : '',
+                    template_id: this.template_value ? this.template_value.id : null,
+                    published: this.published,
+                    indexed: this.indexed,
+                    dynamic: this.dynamic,
+                    id: this.id,
+                    published_from: this.published_from_value,
+                    published_to: this.published_to_value,
+                    type: this.type_value ? this.type_value.title : null,
+                    slug: this.slug_value,
+                };
+
+                if (terms_val == "yes") {
+                    data.terms_val = terms_val;
+                }
+
                 axios
-                .patch('/api/' + this.route + '/' + this.id,
-                    {
-                        title: this.title_value,
-                        rows: JSON.stringify(this.rows_value),
-                        categories: this.category_value,
-                        subcategories: this.subcategory_value,
-                        content: this.template_value ? JSON.stringify(this.$refs.tc.data) : '',
-                        template_id: this.template_value ? this.template_value.id : null,
-                        published: this.published,
-                        indexed: this.indexed,
-                        dynamic: this.dynamic,
-                        id: this.id,
-                        published_from: this.published_from_value,
-                        published_to: this.published_to_value,
-                        type: this.type_value ? this.type_value.title : null,
-                        slug: this.slug_value,
-                    }
-                )
+                .patch('/api/' + this.route + '/' + this.id, data)
                 .then((response) => {
                     if (response.status == 200){
                         this.route == 'categories' ? this.$emit('edited', response.data) : this.$emit('refreshcategories');
