@@ -23,8 +23,10 @@ class UpdateTerms implements ShouldQueue
      * @return void
      */
 
-    public function __construct()
+    private $pageId;
+    public function __construct($pageId)
     {
+        $this->pageId = $pageId;
     }
 
     /**
@@ -34,14 +36,32 @@ class UpdateTerms implements ShouldQueue
      */
     public function handle()
     {
-        $users = User::all();
-        foreach ($users as $user) {
-            if ($user->instructor->first()) {
-                continue;
+        if($this->pageId == 4 || $this->pageId == 6){
+
+            $users = User::all();
+            foreach($users as $user){
+                if($user->instructor->first()){
+                    continue;
+                }
+                
+                $user->terms = 0;
+                $user->save();
+                
+
             }
 
-            $user->terms = 0;
-            $user->save();
+        }else if($this->pageId == 4753){
+
+            $users = User::all();
+            foreach($users as $user){
+                if(!$user->instructor->first()){
+                    continue;
+                }
+                
+                $user->terms = 0;
+                $user->save();
+                
+            }
         }
     }
 }

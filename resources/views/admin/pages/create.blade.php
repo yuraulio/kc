@@ -216,7 +216,6 @@
             confirmButtonText: 'Yes',
             cancelButtonText: 'No'
           }).then((result) => {
-             console.log(result)
             if (result.value) {
                $('#terms-value').val(1)
                $("#page-form").submit();
