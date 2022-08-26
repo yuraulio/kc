@@ -13,9 +13,11 @@
     @section('header')
         {!! $event->metable->getMetas() !!}
 
-        <script type="application/ld+json">
-            {!! $meta['meta_schema'] ?? "" !!}
-        </script>
+        @if(isset($meta['meta_schema']) && $meta['meta_schema'])
+            <script type="application/ld+json">
+                {!! $meta['meta_schema'] ?? "" !!}
+            </script>
+        @endif
     @endsection
 @elseif ($instructor)
     @section('header')
