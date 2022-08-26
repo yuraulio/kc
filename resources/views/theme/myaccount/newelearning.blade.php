@@ -605,7 +605,7 @@
                      {{--<a href="/">Video e-learning courses</a>--}}
                   </div>
                   <!-- ./lesson-footer-links -->
-                  <span class="copyright">Knowcrunch Inc. © 2021</span>
+                  <span class="copyright">Knowcrunch Inc. © {{date('Y')}}</span>
                </footer>
                <!-- ./lesson-footer -->
             </div>

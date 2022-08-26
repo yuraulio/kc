@@ -178,7 +178,7 @@ a.ui-button:active,
 /* ==========================================================================
 	   Header
 	   ========================================================================== */
-#header{ background-color: #407bc9; padding: 30px 0 34px; position: fixed; top: 0; width: 100%; z-index: 1000; transition: 300ms all ease; }
+#header{ background-color: #245DAE; padding: 30px 0 34px; position: fixed; top: 0; width: 100%; z-index: 1000; transition: 300ms all ease; }
 #header .logo-area{ float: left; padding-top: 10px; }
 #header .logo-area .logo{ width: 157px; height: 54px; position: relative; display: block; text-indent: -9999px; }
 #header .logo-area .logo:before{ content: ''; display: block; position: absolute; width: 100%; height: 100%; display: block; background: url('/theme/assets/images/logo-knowcrunch-seminars.svg') no-repeat center; background-size: contain; transition: 300ms all ease; opacity: 1; visibility: visible; }
@@ -224,7 +224,7 @@ a.ui-button:active,
 #header .menu-area .main-menu li a:hover{ color: #d2ff00; }
 
 #header.header-transparent{ background-color: transparent; }
-#header.scroll-down{ background-color: #407bc9; padding: 22px 0 22px; }
+#header.scroll-down{ background-color: #245DAE; padding: 22px 0 22px; }
 #header.scroll-down .menu-area .header-actions{ margin-bottom: 10px; }
 #header.scroll-down .logo-area{ padding-top: 5px; }
 #header.scroll-down .logo-area .logo{ width: 121px; height: 41px; }
@@ -742,7 +742,7 @@ body.compensate-for-scrollbar { overflow: hidden; }
 		#footer .footer-row .footer-col-2{  -ms-flex: 0 0 100%; flex: 0 0 100%; max-width: 100%; margin-right: 0; }
 		#footer .footer-row .footer-col-3{  -ms-flex: 0 0 100%; flex: 0 0 100%; max-width: 100%; margin-right: 0; }
 	#footer .mobile-toggle{ padding: 25px 28px; display: none; }
-		#footer .footer-title{ display: block; background-color: #407bc9; font-size: 18px; padding: 16px 25px 13px; margin-bottom: 2px; position: relative; }
+		#footer .footer-title{ display: block; background-color: #245DAE; font-size: 18px; padding: 16px 25px 13px; margin-bottom: 2px; position: relative; }
 		#footer .footer-title:after{ content: ''; width: 20px; height: 20px; display: block; background: url('/theme/assets/images/icons/icon-arrow-down-white.svg') no-repeat center; position: absolute; top: 18px; right: 24px; pointer-events: none; transition: 300ms all ease; }
 		#footer .footer-title.active:after{ transform: rotate(180deg); }
 		#footer .mobile-toggle + .footer-title{ margin-top: 0; }
@@ -757,9 +757,9 @@ body.compensate-for-scrollbar { overflow: hidden; }
 	.mobile-menu .search-wrapper{ padding: 0 28px; margin-bottom: 20px; }
 		.mobile-menu .search-wrapper form{ position: relative; width: 100%; }
 		.mobile-menu .search-wrapper form input{ outline: none; font-size: 16px; width: 100%; height: 40px; line-height: 40px; border: none; border-radius: 4px; background-color: #7eb8f8; color: #ffffff; padding: 0 40px; }
-		.mobile-menu .search-wrapper form input::placeholder { color: #407bc9; }
-		.mobile-menu .search-wrapper form input:-ms-input-placeholder { color: #407bc9; }
-		.mobile-menu .search-wrapper form input::-ms-input-placeholderr { color: #407bc9; }
+		.mobile-menu .search-wrapper form input::placeholder { color: #245DAE; }
+		.mobile-menu .search-wrapper form input:-ms-input-placeholder { color: #245DAE; }
+		.mobile-menu .search-wrapper form input::-ms-input-placeholderr { color: #245DAE; }
 		.mobile-menu .search-wrapper form button{ position: absolute; display: block; background: transparent; left: 10px; top: 8px; padding: 0; border: none; }
 		.mobile-menu .search-wrapper form button img{ width: 21px; }
 		.mobile-menu .search-wrapper form button svg{ width: 21px; }
@@ -802,7 +802,7 @@ body.compensate-for-scrollbar { overflow: hidden; }
 	
 		#header .menu-area .main-menu{ display: none; }
 		#header .menu-area .header-actions{ display: none; }
-	#header.header-transparent{ background: #407bc9; }
+	#header.header-transparent{ background: #245DAE; }
 		.mob-menu-active #header.header-transparent{ background: transparent; }
 	
 		a.go-top-btn{ right: 10px; }

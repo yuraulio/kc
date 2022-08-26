@@ -621,7 +621,7 @@ ul.subs-page-list span {
 .onoffswitch-inner:before {
     content: "ON";
     padding-left: 10px;
-    background-color: #407BC9;
+    background-color: #245DAE;
     color: #FFFFFF;
 }
 
@@ -1223,7 +1223,7 @@ input#event-code::placeholder {
 }
 
 .subscription-div {
-    background-color: #407bc9;
+    background-color: #245DAE;
     height: 280px;
     padding-top: 55px;
     padding-bottom: 82px;

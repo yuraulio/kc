@@ -592,7 +592,7 @@
       About Page
       ========================================================================== */
    .section-hero-small { height: 366px; }
-   .section-hero-blue-bg { background: #407bc9; }
+   .section-hero-blue-bg { background: #245DAE; }
    .section-page-content { margin-top: 50px; margin-bottom: 100px;  }
    .content-text-area { max-width: 697px; margin: 0 auto; }
    .content-text-area blockquote { border-left: 5px solid #419cff; margin: 0 0 65px; padding: 20px 130px 20px 30px; font-size: 22px; }
@@ -903,10 +903,10 @@
        .content-wrapper .tabs-wrapper .tabs-content { margin-bottom: 0; padding-top: 0; }
          .content-wrapper .tabs-wrapper .btn-tabs-ctr-toggle{ float: right; width: 45%; padding: 15px 20px; font-size: 18px; }
          .content-wrapper .tabs-wrapper .tab-controls { float: left; width: 55%; position: relative; }
-         .content-wrapper .tabs-wrapper .tab-controls .mobile-tabs-menu{ display: block; padding: 15px  10px 15px 26px; background-color: #407bc9; line-height: 1; letter-spacing: 0.07em; font-size: 18px; color: #fff; text-transform: uppercase; text-decoration: none; }
+         .content-wrapper .tabs-wrapper .tab-controls .mobile-tabs-menu{ display: block; padding: 15px  10px 15px 26px; background-color: #245DAE; line-height: 1; letter-spacing: 0.07em; font-size: 18px; color: #fff; text-transform: uppercase; text-decoration: none; }
          .content-wrapper .tabs-wrapper .tab-controls .mobile-tabs-menu:after{ content: ''; width: 25px; height: 17px; margin-bottom: -3px; display: inline-block; margin-left: 18px; transition: 300ms all ease; background: url('/theme/assets/images/icons/icon-arrow-down-white.svg') no-repeat center; background-size: contain; }
          .content-wrapper .tabs-wrapper .tab-controls .mobile-tabs-menu.active:after{ transform: rotate(180deg);  }
-         .content-wrapper .tabs-wrapper .tab-controls .tab-controls-list{ display: none; width: 100%; position: absolute; top: 100%; z-index: 100; background: #407bc9; border-top: 1px solid #fff; padding: 0 28px; }
+         .content-wrapper .tabs-wrapper .tab-controls .tab-controls-list{ display: none; width: 100%; position: absolute; top: 100%; z-index: 100; background: #245DAE; border-top: 1px solid #fff; padding: 0 28px; }
          .content-wrapper .tabs-wrapper .tab-controls .tab-controls-list li{ float: none; display: block; }
          .content-wrapper .tabs-wrapper .tab-controls ul li:not(:last-child){ margin-right: 0; }
          .content-wrapper .tabs-wrapper .tab-controls ul li a{ padding: 15px 0; font-size: 18px; }
@@ -1166,7 +1166,7 @@
 
        /** About Page **/
        .section-hero-small { height: auto; }
-       .section-hero-blue-bg { background: #407bc9 !important; }
+       .section-hero-blue-bg { background: #245DAE !important; }
        .section-hero-blue-bg .hero-message h1{ color: #ffffff; }
        .section-page-content { margin-top: 30px; margin-bottom: 80px;  }
        .content-text-area blockquote { margin: 0 0 35px; padding-left: 20px; padding-right: 20px; }

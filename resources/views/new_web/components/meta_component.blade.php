@@ -22,9 +22,13 @@
         {{-- <title>{{ $instructor->title . " " . $instructor->subtitle }}</title> --}}
         {!! $instructor->metable->getMetas() !!}
 
-        <script type="application/ld+json">
-            {!! $meta['meta_schema'] ?? "" !!}
-        </script>
+            @if(isset($meta['meta_schema']) && $meta['meta_schema'])
+    
+            <script type="application/ld+json">
+                {!! $meta['meta_schema'] ?? "" !!}
+            </script>
+    
+            @endif
     @endsection
 @else
     @section('header')

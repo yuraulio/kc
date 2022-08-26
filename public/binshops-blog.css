@@ -44,7 +44,7 @@
   }
 
   .blog_pagination a.active {
-    background-color: #407bc9;
+    background-color: #245DAE;
     color: white;
   }
 
@@ -67,7 +67,7 @@
     padding-top: 12px;
     padding-bottom: 12px;
     text-align: left;
-    background-color: #407bc9;
+    background-color: #245DAE;
     color: white;
   }
 
@@ -252,14 +252,14 @@
   }
 
   .primary {
-      border: 1.5px solid #407bc9;
-      color: #407bc9;
+      border: 1.5px solid #245DAE;
+      color: #245DAE;
       background-color: #fff;
 } /* Green */
 
 .badge.primary:hover {
     color: #fff;
-    background-color: #407bc9;
+    background-color: #245DAE;
 }
 
 .badgelink {
