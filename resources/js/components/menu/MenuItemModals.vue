@@ -47,7 +47,7 @@
                             </div>
                             <div class="form-check form-switch mb-3">
                                 <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" @click="toggleMobile()" :checked="item.middleware == '1'">
-                                <label class="form-check-label" for="flexSwitchCheckChecked">Show on mobile</label>
+                                <label class="form-check-label" for="flexSwitchCheckChecked">Mobile visibility</label>
                             </div>
                             <div class="m-footer text-center">
                                 <button type="submit" id="add_menu_item_btn" class="btn btn-soft-success edit-info m-1">
@@ -121,7 +121,7 @@
                             </div>
                             <div class="form-check form-switch mb-3">
                                 <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" @click="toggleMobile()" :checked="item.middleware == '1'">
-                                <label class="form-check-label" for="flexSwitchCheckChecked">Show on mobile</label>
+                                <label class="form-check-label" for="flexSwitchCheckChecked">Mobile visibility</label>
                             </div>
                             <div class="m-footer text-center">
                                 <button type="submit" id="add_menu_item_btn" class="btn btn-soft-success edit-info m-1">
