@@ -252,7 +252,6 @@ class LessonController extends Controller
 
         if($request->end != null){
 
-
             if($request->start > $request->end){
                 $date1 = strtotime($date1);
                 $date1 = date('Y-m-d', strtotime('+1 day', $date1));
@@ -261,19 +260,22 @@ class LessonController extends Controller
 
             $end = date('Y-m-d H:i:s', strtotime($date1." ".$request->end));
             $end_response = date('H:i:s', strtotime($date1." ".$request->end));
+            $end_response;
         }else{
             $end_response = null;
         }
 
 
         $duration = null;
-        if($start_response && $end_response){
-
-            $startHour = date_create($start_response);
-            $endHour = date_create($end_response);
+        //if($start_response && $end_response){
+        if($start && $end){
+            
+            //$startHour = date_create($start_response);
+            //$endHour = date_create($end_response);
+            $startHour = date_create($start);
+            $endHour = date_create($end);
 
             $durationH = date_diff($endHour, $startHour);;
-
             if($durationH->h > 0){
                 $duration .=  $durationH->h.'h';
             }
@@ -281,7 +283,6 @@ class LessonController extends Controller
             if($durationH->i > 0){
                 $duration .= ' ' .  $durationH->i.'m';
             }
-
             $duration = trim($duration);
         }
 

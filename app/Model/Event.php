@@ -781,6 +781,7 @@ class Event extends Model
             $timeEnds = false;
 
             foreach($this->lessons as $lesson){
+
                 $timeStarts = false;
                 $timeEnds = false;
 
@@ -801,7 +802,7 @@ class Event extends Model
             $totalVimeoSeconds = $this->getSumLessonHours($lessons);
             $hours = $totalVimeoSeconds;
         }
-        //dd($hours);
+        //dd($lesson->pivot->time_starts);
         return $hours;
     }
     
