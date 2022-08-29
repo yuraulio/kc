@@ -128,7 +128,7 @@ body { font-family: 'Foco'; font-weight: 300; font-size: 18px; line-height: 1.5;
 body.mob-menu-active{ overflow: hidden; }
 .page-wrapper{ overflow: hidden; }
 .section--gray{ background-color: #f0f0f0; }
-.section--blue-gradient{ background: rgb(63,111,182); background: linear-gradient(90deg, rgba(63,111,182,1) 0%, rgba(65,156,255,1) 100%); }
+.section--blue-gradient{ background: rgb(36 93 174); background: linear-gradient(90deg, rgb(36 93 174) 0%, rgba(65,156,255,1) 100%); }
 
 .text-align-left{ text-align: left !important; }
 .text-align-center{ text-align: center !important; }
@@ -239,7 +239,7 @@ a.ui-button:active,
 /* ==========================================================================
 	   Footer
 	   ========================================================================== */
-#footer{ background: rgb(63,111,182); background: linear-gradient(0deg, rgba(63,111,182,1) 0%, rgba(65,156,255,1) 100%); padding: 102px 0 112px; }
+#footer{ background: rgb(36 93 174); background: linear-gradient(90deg, rgb(36 93 174) 0%, rgba(65,156,255,1) 100%); padding: 102px 0 112px; }
 #footer .footer-row{ display: -ms-flexbox; display: flex; -ms-flex-wrap: wrap; flex-wrap: wrap; }
 #footer .footer-row .footer-col-1{ width: 100%; -ms-flex: 0 0 19.4%; flex: 0 0 19.4%; max-width: 19.4%; margin-right: 11%; }
 #footer .footer-row .footer-col-2{ width: 100%; -ms-flex: 0 0 39.1%; flex: 0 0 39.1%; max-width: 39.1%; margin-right: 8.1%; }
@@ -752,7 +752,7 @@ body.compensate-for-scrollbar { overflow: hidden; }
 		.copyright-wrapper p{ max-width: 220px; margin: 0 auto; text-align: center; }
 		.copyright-wrapper p br{ display: none;  }
 	
-		.mobile-menu{ display: none; overflow: hidden; position: fixed; padding-top: 90px; height: 100%; width: 100%; z-index: 1000; background: rgb(63,111,182); background: linear-gradient(0deg, rgba(63,111,182,1) 0%, rgba(65,156,255,1) 100%); }
+		.mobile-menu{ display: none; overflow: hidden; position: fixed; padding-top: 90px; height: 100%; width: 100%; z-index: 1000; background: rgb(36 93 174); background: linear-gradient(90deg, rgb(36 93 174) 0%, rgba(65,156,255,1) 100%); }
 		.mobile-menu .mob-menu-inner{ overflow: auto; height: 100%; }
 	.mobile-menu .search-wrapper{ padding: 0 28px; margin-bottom: 20px; }
 		.mobile-menu .search-wrapper form{ position: relative; width: 100%; }
