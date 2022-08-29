@@ -238,6 +238,7 @@ class LessonController extends Controller
             $date = date('Y-m-d', strtotime($request->date));
 
             $date1 = date('Y-m-d', strtotime($request->date));
+            
         }else{
             $date1 = date('Y-m-d', strtotime($request->date));;
         }
@@ -250,6 +251,14 @@ class LessonController extends Controller
         }
 
         if($request->end != null){
+
+
+            if($request->start > $request->end){
+                $date1 = strtotime($date1);
+                $date1 = date('Y-m-d', strtotime('+1 day', $date1));
+                //dd($date1);
+            }
+
             $end = date('Y-m-d H:i:s', strtotime($date1." ".$request->end));
             $end_response = date('H:i:s', strtotime($date1." ".$request->end));
         }else{
@@ -291,7 +300,7 @@ class LessonController extends Controller
 
         $data['instructor'] = Instructor::with('medias')->find($request->instructor_id);
         $data['lesson_id'] = $request->lesson_id;
-        $data['date1'] = $date1;
+        $data['date1'] = $date;
         $data['start'] = $start_response;
         $data['end'] = $end_response;
         $data['room'] = $request->room;

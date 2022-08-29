@@ -738,28 +738,8 @@ class Event extends Model
 
     }
 
-    // public function getTotalHours(){
-
-    //     $timeStarts = false;
-    //     $timeEnds = false;
-    //     $hours = 0;
-
-    //     foreach($this->lessons as $lesson){
-    //         $timeStarts = false;
-    //         $timeEnds = false;
-
-    //         $timeStarts = (int) date('H', strtotime($lesson->pivot->time_starts));
-    //         $timeEnds = (int) date('H', strtotime($lesson->pivot->time_ends));
-    //         if($timeStarts && $timeEnds){
-    //             $hours += ($timeEnds - $timeStarts) * 60;
-    //         }
-
-    //     }
-    //     return $hours;
-    // }
-
-
-    public function getTotalHours(){
+    
+    /*public function getTotalHours(){
 
         $hours = 0;
         //In class
@@ -790,7 +770,41 @@ class Event extends Model
         }
 
         return $hours;
+    }*/
+
+    public function getTotalHours(){
+
+        $hours = 0;
+        //In class
+        if($this->is_inclass_course()){
+            $timeStarts = false;
+            $timeEnds = false;
+
+            foreach($this->lessons as $lesson){
+                $timeStarts = false;
+                $timeEnds = false;
+
+                $timeStarts = strtotime($lesson->pivot->time_starts);
+                $timeEnds = strtotime($lesson->pivot->time_ends);
+                if($timeStarts && $timeEnds){
+                    $hours += ($timeEnds - $timeStarts) / 60;
+                }
+
+            }
+        }else{
+            // E-learning
+
+            // Return sec
+
+            $lessons = $this->lessons->groupBy('topic_id');
+            //dd($this->lessons);
+            $totalVimeoSeconds = $this->getSumLessonHours($lessons);
+            $hours = $totalVimeoSeconds;
+        }
+        //dd($hours);
+        return $hours;
     }
+    
 
     public function getXmlDescriptionAttribute($value)
     {
