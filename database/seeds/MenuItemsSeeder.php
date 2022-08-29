@@ -42,7 +42,7 @@ class MenuItemsSeeder extends Seeder
         $menuItem->order = 1;
         $menuItem->route = null;
         $menuItem->params = null;
-        $menuItem->middleware = null;
+        $menuItem->middleware = '1';
         $menuItem->controller = '\CodexShaper\Menu\Http\Controllers\MenuController@index';
         $menuItem->target = '_self';
         $menuItem->icon = null;
@@ -58,7 +58,7 @@ class MenuItemsSeeder extends Seeder
         $menuItem->order = 1;
         $menuItem->route = null;
         $menuItem->params = null;
-        $menuItem->middleware = null;
+        $menuItem->middleware = '1';
         $menuItem->controller = '\CodexShaper\Menu\Http\Controllers\MenuController@index';
         $menuItem->target = '_self';
         $menuItem->icon = null;
@@ -74,7 +74,7 @@ class MenuItemsSeeder extends Seeder
         $menuItem->order = 1;
         $menuItem->route = null;
         $menuItem->params = null;
-        $menuItem->middleware = null;
+        $menuItem->middleware = '1';
         $menuItem->controller = '\CodexShaper\Menu\Http\Controllers\MenuController@index';
         $menuItem->target = '_self';
         $menuItem->icon = null;
@@ -90,7 +90,7 @@ class MenuItemsSeeder extends Seeder
         $menuItem->order = 1;
         $menuItem->route = null;
         $menuItem->params = null;
-        $menuItem->middleware = null;
+        $menuItem->middleware = '1';
         $menuItem->controller = '\CodexShaper\Menu\Http\Controllers\MenuController@index';
         $menuItem->target = '_self';
         $menuItem->icon = null;
@@ -116,7 +116,7 @@ class MenuItemsSeeder extends Seeder
         $menuItem->order = 1;
         $menuItem->route = null;
         $menuItem->params = null;
-        $menuItem->middleware = null;
+        $menuItem->middleware = '1';
         $menuItem->controller = '\CodexShaper\Menu\Http\Controllers\MenuController@index';
         $menuItem->target = '_self';
         $menuItem->icon = null;
@@ -132,7 +132,7 @@ class MenuItemsSeeder extends Seeder
         $menuItem->order = 1;
         $menuItem->route = null;
         $menuItem->params = null;
-        $menuItem->middleware = null;
+        $menuItem->middleware = '1';
         $menuItem->controller = '\CodexShaper\Menu\Http\Controllers\MenuController@index';
         $menuItem->target = '_self';
         $menuItem->icon = null;
@@ -148,7 +148,7 @@ class MenuItemsSeeder extends Seeder
         $menuItem->order = 1;
         $menuItem->route = null;
         $menuItem->params = null;
-        $menuItem->middleware = null;
+        $menuItem->middleware = '1';
         $menuItem->controller = '\CodexShaper\Menu\Http\Controllers\MenuController@index';
         $menuItem->target = '_self';
         $menuItem->icon = null;
@@ -164,7 +164,7 @@ class MenuItemsSeeder extends Seeder
         $menuItem->order = 1;
         $menuItem->route = null;
         $menuItem->params = null;
-        $menuItem->middleware = null;
+        $menuItem->middleware = '1';
         $menuItem->controller = '\CodexShaper\Menu\Http\Controllers\MenuController@index';
         $menuItem->target = '_self';
         $menuItem->icon = null;
@@ -180,7 +180,7 @@ class MenuItemsSeeder extends Seeder
         $menuItem->order = 1;
         $menuItem->route = null;
         $menuItem->params = null;
-        $menuItem->middleware = null;
+        $menuItem->middleware = '1';
         $menuItem->controller = '\CodexShaper\Menu\Http\Controllers\MenuController@index';
         $menuItem->target = '_self';
         $menuItem->icon = null;
@@ -196,7 +196,7 @@ class MenuItemsSeeder extends Seeder
         $menuItem->order = 1;
         $menuItem->route = null;
         $menuItem->params = null;
-        $menuItem->middleware = null;
+        $menuItem->middleware = '1';
         $menuItem->controller = '\CodexShaper\Menu\Http\Controllers\MenuController@index';
         $menuItem->target = '_self';
         $menuItem->icon = null;
@@ -212,7 +212,7 @@ class MenuItemsSeeder extends Seeder
         $menuItem->order = 1;
         $menuItem->route = null;
         $menuItem->params = null;
-        $menuItem->middleware = null;
+        $menuItem->middleware = '1';
         $menuItem->controller = '\CodexShaper\Menu\Http\Controllers\MenuController@index';
         $menuItem->target = '_self';
         $menuItem->icon = null;
@@ -228,7 +228,7 @@ class MenuItemsSeeder extends Seeder
         $menuItem->order = 1;
         $menuItem->route = null;
         $menuItem->params = null;
-        $menuItem->middleware = null;
+        $menuItem->middleware = '1';
         $menuItem->controller = '\CodexShaper\Menu\Http\Controllers\MenuController@index';
         $menuItem->target = '_self';
         $menuItem->icon = null;
@@ -244,7 +244,7 @@ class MenuItemsSeeder extends Seeder
         $menuItem->order = 1;
         $menuItem->route = null;
         $menuItem->params = null;
-        $menuItem->middleware = null;
+        $menuItem->middleware = '1';
         $menuItem->controller = '\CodexShaper\Menu\Http\Controllers\MenuController@index';
         $menuItem->target = '_self';
         $menuItem->icon = null;
@@ -260,7 +260,7 @@ class MenuItemsSeeder extends Seeder
         $menuItem->order = 1;
         $menuItem->route = null;
         $menuItem->params = null;
-        $menuItem->middleware = null;
+        $menuItem->middleware = '1';
         $menuItem->controller = '\CodexShaper\Menu\Http\Controllers\MenuController@index';
         $menuItem->target = '_self';
         $menuItem->icon = null;
@@ -276,7 +276,7 @@ class MenuItemsSeeder extends Seeder
         $menuItem->order = 1;
         $menuItem->route = null;
         $menuItem->params = null;
-        $menuItem->middleware = null;
+        $menuItem->middleware = '1';
         $menuItem->controller = '\CodexShaper\Menu\Http\Controllers\MenuController@index';
         $menuItem->target = '_self';
         $menuItem->icon = null;
@@ -292,7 +292,7 @@ class MenuItemsSeeder extends Seeder
         $menuItem->order = 1;
         $menuItem->route = null;
         $menuItem->params = null;
-        $menuItem->middleware = null;
+        $menuItem->middleware = '1';
         $menuItem->controller = '\CodexShaper\Menu\Http\Controllers\MenuController@index';
         $menuItem->target = '_self';
         $menuItem->icon = null;
@@ -318,7 +318,7 @@ class MenuItemsSeeder extends Seeder
         $menuItem->order = 1;
         $menuItem->route = null;
         $menuItem->params = null;
-        $menuItem->middleware = null;
+        $menuItem->middleware = '1';
         $menuItem->controller = '\CodexShaper\Menu\Http\Controllers\MenuController@index';
         $menuItem->target = '_self';
         $menuItem->icon = null;
@@ -334,7 +334,7 @@ class MenuItemsSeeder extends Seeder
         $menuItem->order = 1;
         $menuItem->route = null;
         $menuItem->params = null;
-        $menuItem->middleware = null;
+        $menuItem->middleware = '1';
         $menuItem->controller = '\CodexShaper\Menu\Http\Controllers\MenuController@index';
         $menuItem->target = '_self';
         $menuItem->icon = null;
@@ -360,7 +360,7 @@ class MenuItemsSeeder extends Seeder
         $menuItem->order = 1;
         $menuItem->route = null;
         $menuItem->params = null;
-        $menuItem->middleware = null;
+        $menuItem->middleware = '1';
         $menuItem->controller = '\CodexShaper\Menu\Http\Controllers\MenuController@index';
         $menuItem->target = '_self';
         $menuItem->icon = null;
@@ -376,7 +376,7 @@ class MenuItemsSeeder extends Seeder
         $menuItem->order = 1;
         $menuItem->route = null;
         $menuItem->params = null;
-        $menuItem->middleware = null;
+        $menuItem->middleware = '1';
         $menuItem->controller = '\CodexShaper\Menu\Http\Controllers\MenuController@index';
         $menuItem->target = '_self';
         $menuItem->icon = null;
@@ -392,7 +392,7 @@ class MenuItemsSeeder extends Seeder
         $menuItem->order = 1;
         $menuItem->route = null;
         $menuItem->params = null;
-        $menuItem->middleware = null;
+        $menuItem->middleware = '1';
         $menuItem->controller = '\CodexShaper\Menu\Http\Controllers\MenuController@index';
         $menuItem->target = '_self';
         $menuItem->icon = null;
@@ -418,7 +418,7 @@ class MenuItemsSeeder extends Seeder
         $menuItem->order = 1;
         $menuItem->route = null;
         $menuItem->params = null;
-        $menuItem->middleware = null;
+        $menuItem->middleware = '1';
         $menuItem->controller = '\CodexShaper\Menu\Http\Controllers\MenuController@index';
         $menuItem->target = '_self';
         $menuItem->icon = null;
@@ -435,7 +435,7 @@ class MenuItemsSeeder extends Seeder
         $menuItem->order = 1;
         $menuItem->route = null;
         $menuItem->params = null;
-        $menuItem->middleware = null;
+        $menuItem->middleware = '1';
         $menuItem->controller = '\CodexShaper\Menu\Http\Controllers\MenuController@index';
         $menuItem->target = '_self';
         $menuItem->icon = null;
