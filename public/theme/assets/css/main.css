@@ -198,7 +198,7 @@
    .accordion-wrapper .accordion-item:not(.active-tab){ margin-bottom: 1px; }
    .accordion-wrapper .accordion-item:not(:first-child) .accordion-title{ border-top: 1px solid #ffffff; }
    .accordion-wrapper .accordion-item .accordion-title{ position: relative; font-size: 20px; line-height: 1.3; padding: 17px 45px 10px 30px; background-color: #dbdbdb; cursor: pointer; margin: 0; }
-   .accordion-wrapper .accordion-item .accordion-title.title-blue-gradient{ background: rgb(36 93 174); background: linear-gradient(90deg, rgb(36 93 174) 0%, rgba(65,156,255,1) 100%) color: #ffffff; border: none; }
+   .accordion-wrapper .accordion-item .accordion-title.title-blue-gradient{ background: rgb(36 93 174); background: linear-gradient(90deg, rgb(36 93 174) 0%, rgba(65,156,255,1) 100%); color: #ffffff; border: none; }
    .accordion-wrapper .accordion-item .accordion-title:after{ content: ''; width: 21px; height: 21px; display: block; background: url('/theme/assets/images/icons/icon-arrow-down.svg') no-repeat center; position: absolute; top: 16px; right: 24px; pointer-events: none; transition: 300ms all ease; }
    .accordion-wrapper .accordion-item .accordion-title.title-blue-gradient:after{ background-image: url('/theme/assets/images/icons/icon-arrow-down-green.svg'); }
    .accordion-wrapper .accordion-item.active-tab .accordion-title:after{ transform: rotate(180deg); }
