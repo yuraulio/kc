@@ -10,7 +10,7 @@
    .content-wrapper .tabs-wrapper{  }
    .content-wrapper .tabs-wrapper.fixed-tab-controls{ padding-top: 53px; position: relative; }
    .content-wrapper .tabs-wrapper.fixed-tab-controls .tab-controls{ position: absolute; top: 0; z-index: 10; left: 0; width: 100%; border-top: 1px solid transparent; }
-   .content-wrapper .tabs-wrapper.fixed-tab-controls .tab-controls.sticky-sub{ position: fixed; top:94px;/*top: 94px;*//*lioncode*/ border-top: 1px solid #fff; }.content-wrapper .tabs-wrapper .tab-controls{ background-color: #3f6fb6; }
+   .content-wrapper .tabs-wrapper.fixed-tab-controls .tab-controls.sticky-sub{ position: fixed; top:94px;/*top: 94px;*//*lioncode*/ border-top: 1px solid #fff; }.content-wrapper .tabs-wrapper .tab-controls{ background-color: #245DAE; }
    .content-wrapper .tabs-wrapper .tab-controls .mobile-tabs-menu{ display: none; }
    .content-wrapper .tabs-wrapper .tab-controls ul{ padding: 0 35px; }
    .content-wrapper .tabs-wrapper .tab-controls ul li{ float: left; position: relative; }
@@ -20,7 +20,7 @@
    .content-wrapper .tabs-wrapper .tab-controls ul li a.active{ color: #d2ff00; }
    .content-wrapper .tabs-wrapper .tab-controls ul li .child-menu{ opacity: 0; visibility: hidden;  position: absolute; top: 100%; left: 0; width: auto; padding: 0; z-index: 2; transition: 300ms all ease; }
    .content-wrapper .tabs-wrapper .tab-controls ul li:hover .child-menu{ opacity: 1; visibility: visible; }
-   .content-wrapper .tabs-wrapper .tab-controls ul li .child-menu li{ display: block; float: none;  background-color: #3f6fb6; width: 100%; }
+   .content-wrapper .tabs-wrapper .tab-controls ul li .child-menu li{ display: block; float: none;  background-color: #245DAE; width: 100%; }
    .content-wrapper .tabs-wrapper .tab-controls ul li .child-menu li:not(:last-child){ border-bottom: 1px solid #ffffff; }
    .content-wrapper .tabs-wrapper .tab-controls ul li .child-menu li a{ font-size: 16px; padding: 17px 20px 15px; white-space: nowrap; }
 
@@ -101,7 +101,7 @@
    .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .instructor-box .instructor-inner .profile-img a:hover img{ opacity: .7; }
    .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .instructor-box .instructor-inner h3{ font-size: 16px; margin-bottom: 5px; }
    .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .instructor-box .instructor-inner h3 a{  }
-   .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .instructor-box .instructor-inner p{ font-size: 9px; color: #3f6fb6; text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 0; }
+   .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .instructor-box .instructor-inner p{ font-size: 9px; color: #245DAE; text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 0; }
    .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .instructor-box .instructor-inner .social-wrapper{ display: block; text-align: center; position: absolute; bottom: 15px; left: 0; width: 100%; }
    .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .instructor-box .instructor-inner .social-wrapper li{ display: inline-block; margin: 0 4px; }
    .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .testimonial-box .author-infos .social-wrapper li{ display: inline-block; margin: 0 4px; }
@@ -631,7 +631,7 @@
    .card.instructor-box .instructor-inner .profile-img img{ display: block; width: 100%; height: auto; }
    .card.instructor-box .instructor-inner h3{ font-size: 16px; margin-bottom: 5px; }
    .card.instructor-box .instructor-inner h3 a{  }
-   .card.instructor-box .instructor-inner p{ font-size: 9px; color: #3f6fb6; text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 0; }
+   .card.instructor-box .instructor-inner p{ font-size: 9px; color: #245DAE; text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 0; }
    .card.instructor-box .instructor-inner .social-wrapper{ display: block; text-align: center; position: absolute; bottom: 15px; left: 0; width: 100%; }
    .card.instructor-box .instructor-inner .social-wrapper li{ display: inline-block; margin: 0 4px; }
    .card.instructor-box .instructor-inner .social-wrapper li a{ display: block; width: 16px; }
@@ -956,7 +956,7 @@
 
          .section-account-tabs .content-wrapper .tabs-wrapper .tab-controls{ float: none; width: 100%; }
          .section-account-tabs .content-wrapper .tabs-wrapper .tab-controls .container{ padding: 0; }
-         .section-account-tabs .content-wrapper .tabs-wrapper .tab-controls .mobile-tabs-menu{ background-color: #3f6fb6; }
+         .section-account-tabs .content-wrapper .tabs-wrapper .tab-controls .mobile-tabs-menu{ background-color: #245DAE; }
 
          .account-image-actions .acc-img{ margin: 0 0 12px; }
          .account-image-actions .actions{ margin: 0; }
