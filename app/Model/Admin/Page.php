@@ -181,6 +181,7 @@ class Page extends Model implements Auditable
         return [
             'name' => $menu->name ?? "",
             'title' => $menu->custom_class ?? "",
+            'mobile' => $menu->url ?? "",
         ];
     }
 

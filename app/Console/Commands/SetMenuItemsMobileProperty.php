@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use CodexShaper\Menu\Models\Menu;
 use CodexShaper\Menu\Models\MenuItem;
 use Illuminate\Console\Command;
 
@@ -42,6 +43,13 @@ class SetMenuItemsMobileProperty extends Command
         foreach ($menuItems as $item) {
             $item->middleware = "1";
             $item->save();
+        }
+
+        // also setting menu mobile property (using url)
+        $menus = Menu::get();
+        foreach ($menus as $menu) {
+            $menu->url = "1";
+            $menu->save();
         }
     }
 }
