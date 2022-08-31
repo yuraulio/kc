@@ -10,6 +10,9 @@
                 <a class="dropdown-item" href="#" @click="deleteFiles()">
                     <i class="fas fa-trash"></i> Delete selected
                 </a>
+                <a class="dropdown-item" href="#" @click="moveFiles()">
+                    <i class="fa fa-arrow-right"></i> Move selected
+                </a>
             </div>
         </div>
         <div class="d-flex" style="">
@@ -37,7 +40,7 @@
                                 <span v-if="file.extension.toLowerCase() == 'pdf'" @click="goTo(file.url)" class="bg-light text-secondary rounded">
                                     <i class="mdi mdi-file-pdf-outline font-28" style="font-size: 28px !important;"></i>
                                 </span>
-                                <img v-else-if="imageExtensions.includes(file.extension.toLowerCase())" @click.prevent="editFile(file)" :src="file.url + '?key=' + Math.random().toString().substr(2, 8)" alt="image" class="img-fluid avatar-sm rounded mt-2" style="width: 100px; height: auto;" />
+                                <img v-else-if="imageExtensions.includes(file.extension.toLowerCase())" @click.prevent="editFile(file)" :src="file.url" alt="image" class="img-fluid avatar-sm rounded mt-2" style="width: 100px; height: auto;" />
 
                                 <span v-else @click="goTo(file.url)" class="bg-light text-secondary rounded">
                                     <i class="mdi mdi-file font-28" style="font-size: 28px !important;"></i>
@@ -167,6 +170,9 @@ export default {
         },
         deleteFiles() {
             this.$emit("deleteMulti", this.selectedFiles);
+        },
+        moveFiles() {
+            this.$emit("moveMulti", this.selectedFiles);
         },
         openFile(file) {
             this.$emit("open", file);

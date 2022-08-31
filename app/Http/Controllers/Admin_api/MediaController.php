@@ -21,6 +21,7 @@ use App\Http\Requests\MoveMediaFileRequest;
 use App\Http\Resources\MediaFolderResource;
 use App\Http\Requests\EditMediaFolderRequest;
 use App\Http\Requests\CreateMediaFolderRequest;
+use App\Jobs\DeleteMediaFiles;
 use App\Jobs\RenameFile;
 use App\Jobs\TinifyImage;
 use App\Model\Admin\Page;
@@ -514,9 +515,7 @@ class MediaController extends Controller
 
     public function deleteFiles(Request $request) {
         $selected = json_decode($request->selected);
-        foreach ($selected as $id) {
-            $this->deleteFile($id);
-        }
+        DeleteMediaFiles::dispatch($selected);
     }
 
     public function deleteFolder($id)
@@ -571,6 +570,18 @@ class MediaController extends Controller
         $file = json_decode($request->file);
 
         MoveFile::dispatch($file->id, $folder->id);
+
+        return response()->json('success', 200);
+    }
+
+    public function moveFiles(MoveMediaFileRequest $request)
+    {
+        $folder = json_decode($request->folder);
+        $files = json_decode($request->file);
+
+        foreach ($files as $file) {
+            MoveFile::dispatch($file, $folder->id);
+        }
 
         return response()->json('success', 200);
     }

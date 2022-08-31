@@ -77,6 +77,7 @@ Route::domain('admin.' . env('APP_DOMAIN'))->group(function () {
         Route::delete('media_manager/folder/{id}', [MediaController::class, 'deleteFolder']);
         Route::post('media_manager/folder/edit', [MediaController::class, 'editFolder']);
         Route::post('media_manager/file/move', [MediaController::class, 'moveFile']);
+        Route::post('media_manager/files/move', [MediaController::class, 'moveFiles']);
         Route::post('media_manager/change_folder_order', [MediaController::class, 'changeFolderOrder']);
 
         Route::get('getMenus', '\CodexShaper\Menu\Http\Controllers\MenuController@getMenus');
