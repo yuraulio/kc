@@ -73,6 +73,7 @@ Route::domain('admin.' . env('APP_DOMAIN'))->group(function () {
         Route::get('media_manager/files', [MediaController::class, 'files']);
         Route::get('media_manager/getFile/{id}', [MediaController::class, 'getFile']);
         Route::delete('media_manager/file/{id}', [MediaController::class, 'deleteFile']);
+        Route::post('media_manager/deleteFiles', [MediaController::class, 'deleteFiles']);
         Route::delete('media_manager/folder/{id}', [MediaController::class, 'deleteFolder']);
         Route::post('media_manager/folder/edit', [MediaController::class, 'editFolder']);
         Route::post('media_manager/file/move', [MediaController::class, 'moveFile']);

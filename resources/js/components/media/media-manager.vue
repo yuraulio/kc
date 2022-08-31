@@ -346,7 +346,19 @@
                         </div>
                     </div>
                     <div v-if="!loading && loadstart">
-                        <files :key="view" :view="view" v-if="!loading" :mediaFiles="mediaFiles" @selected="userSelectedFiles" @delete="deleteFile" @open="openFile" @move="openMoveModal" :imageExtensions="imageExtensions"></files>
+                        <files 
+                            :key="view" 
+                            :view="view" 
+                            v-if="!loading" 
+                            :mediaFiles="mediaFiles" 
+                            @selected="userSelectedFiles" 
+                            @delete="deleteFile" 
+                            @open="openFile" 
+                            @move="openMoveModal"
+                            @deleteMulti="deleteFiles"
+                            :imageExtensions="imageExtensions" 
+                            :folderId="folderId">
+                        </files>
                     </div>
                 </div>
                 <!-- end inbox-rightbar-->
@@ -475,7 +487,47 @@ export default {
             .catch((error) => {
                 console.log(error);
             })
-        }
+        },
+        deleteFiles(files) {
+            Swal.fire({
+                title: 'Are you sure?\n ' + 'Delete all selected images?',
+                text: "You won't be able to revert this! Delete files?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, delete them!',
+                showLoaderOnConfirm: true,
+                buttonsStyling: false,
+                customClass: {
+                    cancelButton: 'btn btn-soft-secondary',
+                    confirmButton: 'btn btn-soft-danger',
+                },
+                preConfirm: () => {
+                    var formData = new FormData();
+                    formData.append('selected', JSON.stringify(files));
+                    return axios
+                        .post('/api/media_manager/deleteFiles', formData)
+                        .then((response) => {
+                            if (response.status == 200) {
+                                this.getFiles(this.folderId);
+                            }
+                        })
+                        .catch(error => {
+                            Swal.showValidationMessage(
+                                `Request failed: ${error}`
+                            )
+                        })
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire(
+                        'Deleted!',
+                        'Item has been deleted.',
+                        'success'
+                    )
+                }
+            })
+        },
 
     },
     mounted() {

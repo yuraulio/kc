@@ -104,7 +104,9 @@ class MediaController extends Controller
 
             $path = str_replace("//", "/", $path);
 
-            Storage::disk('public')->makeDirectory($path);
+            $directoryCreated = Storage::disk('public')->makeDirectory($path);
+
+            throw_if($directoryCreated, new Exception, "Folder could not be created.");
 
             $max = MediaFolder::max("order");
 
@@ -485,7 +487,7 @@ class MediaController extends Controller
         return strtolower(array_pop($parts));
     }
 
-    public function deleteFile(Request $request, $id)
+    public function deleteFile($id)
     {
         $file = MediaFile::findOrFail($id);
 
@@ -508,6 +510,13 @@ class MediaController extends Controller
         $file->delete();
 
         return response()->json('success', 200);
+    }
+
+    public function deleteFiles(Request $request) {
+        $selected = json_decode($request->selected);
+        foreach ($selected as $id) {
+            $this->deleteFile($id);
+        }
     }
 
     public function deleteFolder($id)
