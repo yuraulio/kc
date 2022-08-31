@@ -1378,12 +1378,24 @@
 
                                                     </div>
 
+
                                                     <div class="col-sm-12 col-md-6 form-group">
+                                                        <label class="form-control-label" for="input-hours">{{ __('Certificate Event Title') }}</label>
+                                                        <!-- anto's editor -->
+                                                        <input class="hidden" id="input-certificate_event_title_hidden" name="course[{{'certificate'}}][{{'event_title'}}]" value="{{ old('certificate_event_title', (isset($info['certificate']['event_title']) && $info['certificate']['messages']['failure'] != null) ? $info['certificate']['messages']['failure'] : '') }}"/>
+                                                        <?php $data = isset($info['certificate']['event_title']) && $info['certificate']['event_title'] ? $info['certificate']['event_title'] : '' ?>
+                                                        @include('event.editor.editor', ['keyinput' => "input-certificate_event_title", 'data'=> "$data", 'inputname' => "'course[certificate][event_title]'" ])
+                                                        <!-- anto's editor -->
+
+                                                    </div>
+
+                                                    
+                                                </div>
+                                                <div class="col-sm-12 col-md-6 form-group">
                                                         <label class="form-control-label" for="input-hours">{{ __('Certificate type') }}</label>
                                                         <input type="text" name="course[{{'certificate'}}][{{'type'}}]" id="input-certificate_type" class="form-control" placeholder="{{ __('alphanumeric text ') }}" value="{{old('certificate_type',(isset($info['certificate']['type']) && $info['certificate']['type'] != null) ? $info['certificate']['type'] : '' )}}" autofocus/>
 
                                                     </div>
-                                                </div>
                                                     <div class="row">
                                                         <label class="form-control-label col-12" for="input-hours">{{ __('Visible on:') }}</label>
 
@@ -2165,7 +2177,7 @@
                 mode: 'multiple',
                 recursive: true,
             },
-                filterRow: {
+            filterRow: {
                 visible: false,
             },
             stateStoring: {

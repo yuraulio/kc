@@ -2278,7 +2278,7 @@
                 let dataForSubmit = {};
                 selectedFolders = [];
 
-                console.log('all selected rows data', allSelectedRowsDataForSave)
+                //console.log('all selected rows data', allSelectedRowsDataForSave)
 
 
                 if(allSelectedRowsDataForSave.length != 0){
