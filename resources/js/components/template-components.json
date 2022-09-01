@@ -424,7 +424,8 @@
                 "key": "youtube_embed",
                 "label": "Video code or URL",
                 "size": "col-lg-12",
-                "main": true
+                "main": true,
+                "simple_view": false
             }
         ]
     },
