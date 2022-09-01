@@ -2,7 +2,7 @@ Requirements:\
 Composer: 2\
 PHP: 8\
 Node Version: 15.10\
-Python2
+Python: 2
 
 # QED
 - Node: v15.5.1
