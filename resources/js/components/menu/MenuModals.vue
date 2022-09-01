@@ -15,15 +15,20 @@
                                 <input type="text" name="name" id="add_menu_title" v-bind:class="{error:errors.name}" class="form-control input-field mb-2" v-model="menu.name">
 
                             </div>
-                            <div class="form-group mb-3">
+                            <!-- <div class="form-group mb-3">
                                 <label for="add_menu_url" class="form-label">URL</label>
                                 <input type="text" name="url" id="add_menu_url" class="form-control input-field mb-2" v-model="menu.url">
 
-                            </div>
+                            </div> -->
                             <div class="form-group mb-3">
                                 <label for="add_menu_custom_class" class="form-label">Title</label>
                                 <input type="text" id="add_menu_custom_class" name="custom_class" class="form-control input-field" v-model="menu.custom_class">
 
+                            </div>
+
+                            <div class="form-check form-switch mb-3">
+                                <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" @click="toggleMobile()" :checked="menu.url == '1'">
+                                <label class="form-check-label" for="flexSwitchCheckChecked">Mobile visibility</label>
                             </div>
 
                             <div class="m-footer mt-10 text-center">
@@ -59,16 +64,22 @@
 
                             </div>
 
-                            <div class="form-group mb-3">
+                            <!-- <div class="form-group mb-3">
                                 <label for="url" class="form-label">URL</label>
                                 <input type="text" name="url" class="form-control input-field mb-2" v-model="menu.url">
 
-                            </div>
+                            </div> -->
                             <div class="form-group mb-3">
                                 <label for="url" class="form-label">Title</label>
                                 <input type="text" name="custom_class" class="form-control input-field " v-model="menu.custom_class" placeholder="Custom Class">
 
                             </div>
+
+                            <div class="form-check form-switch mb-3">
+                                <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" @click="toggleMobile()" :checked="menu.url == '1'">
+                                <label class="form-check-label" for="flexSwitchCheckChecked">Mobile visibility</label>
+                            </div>
+
                             <div class="m-footer text-center">
                                 <button type="submit" id="edit_menu_item_btn" class="btn btn-soft-success edit-info m-1">
                                     <i  class="mdi mdi-square-edit-outline me-1"></i>
@@ -99,7 +110,14 @@
         methods: {
             closeModal() {
                 $('.modal').modal('hide');
-            }
+            },
+            toggleMobile() {
+                if (this.menu.url == '1') {
+                    this.menu.url = '0';
+                } else {
+                    this.menu.url = '1';
+                }
+            },
         }
     }
 </script>

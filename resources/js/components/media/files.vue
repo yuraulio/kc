@@ -1,12 +1,28 @@
 <template>
 <div>
     <div v-if="view == 'list'" class="mt-3" style="">
-        <h5 class="mb-3">Files</h5>
+        <h5 class="mb-3 d-inline-block">Files</h5>
+        <div v-if="selectedFiles.length > 0" class="btn-group dropleft multiselect-actions float-end ms-2" role="group">
+            <button class="btn btn-soft-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fa fa-cog" aria-hidden="true"></i>
+            </button>
+            <div class="dropdown-menu settings-dropdown" aria-labelledby="dropdownMenuButton1">
+                <a class="dropdown-item" href="#" @click="deleteFiles()">
+                    <i class="fas fa-trash"></i> Delete selected
+                </a>
+                <a class="dropdown-item" href="#" @click="moveFiles()">
+                    <i class="fa fa-arrow-right"></i> Move selected
+                </a>
+            </div>
+        </div>
         <div class="d-flex" style="">
             <div class="d-flex" style="align-items: end; width: 100%;">
                 <table class="table table-centered mb-0">
                     <thead class="table-light">
                         <tr>
+                            <th class="border-0">
+                                <input class="form-check-input" type="checkbox" value="" :checked="selectAll == true" @click="toggleSelectAll()">
+                            </th>
                             <th class="border-0">Image</th>
                             <th class="border-0">Name</th>
                             <th class="border-0">Pages</th>
@@ -17,11 +33,14 @@
                     </thead>
                     <tbody>
                         <tr v-for="file in mediaFiles" :key="file.id">
+                            <td>
+                                <input class="form-check-input" type="checkbox" value="" :checked="file.selected == true" @click="toggleSelected(file)">
+                            </td>
                             <td style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; cursor: pointer;">
                                 <span v-if="file.extension.toLowerCase() == 'pdf'" @click="goTo(file.url)" class="bg-light text-secondary rounded">
                                     <i class="mdi mdi-file-pdf-outline font-28" style="font-size: 28px !important;"></i>
                                 </span>
-                                <img v-else-if="imageExtensions.includes(file.extension.toLowerCase())" @click.prevent="editFile(file)" :src="file.url + '?key=' + Math.random().toString().substr(2, 8)" alt="image" class="img-fluid avatar-sm rounded mt-2" style="width: 100px; height: auto;" />
+                                <img v-else-if="imageExtensions.includes(file.extension.toLowerCase())" @click.prevent="editFile(file)" :src="file.url" alt="image" class="img-fluid avatar-sm rounded mt-2" style="width: 100px; height: auto;" />
 
                                 <span v-else @click="goTo(file.url)" class="bg-light text-secondary rounded">
                                     <i class="mdi mdi-file font-28" style="font-size: 28px !important;"></i>
@@ -129,10 +148,14 @@ export default {
             default: "list",
         },
         imageExtensions: [],
+        folderId: Number,
     },
     data() {
         return {
             page: 2,
+            selectAll: false,
+            multiselectShow: false,
+            selectedFiles: [],
         };
     },
     methods: {
@@ -144,6 +167,12 @@ export default {
         },
         deleteFile(file) {
             this.$emit("delete", file);
+        },
+        deleteFiles() {
+            this.$emit("deleteMulti", this.selectedFiles);
+        },
+        moveFiles() {
+            this.$emit("moveMulti", this.selectedFiles);
         },
         openFile(file) {
             this.$emit("open", file);
@@ -181,6 +210,28 @@ export default {
         },
         goTo(url) {
             window.open(url, '_blank');
+        },
+        toggleSelectAll() {
+            this.selectAll = !this.selectAll;
+            var data = this.selectAll;
+            var selectedFiles = [];
+            this.mediaFiles.forEach(function(file, index) {
+                file.selected = data;
+                if (data) {
+                    selectedFiles.push(file.id);
+                }
+            });
+
+            this.selectedFiles = selectedFiles;
+        },
+        toggleSelected(file) {
+            file.selected = !file.selected;
+            if (file.selected == true) {
+                this.selectedFiles.push(file.id);
+            } else {
+                this.selectedFiles = this.selectedFiles.filter(function(e) { return e !== file.id })
+                this.selectAll = false;
+            }
         }
     },
 };

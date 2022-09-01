@@ -21,6 +21,7 @@
                                         <th width="120">Id</th>
                                         <th> Name </th>
                                         <th> Title </th>
+                                        <th> Mobile visibility </th>
                                         <th class="action-head text-end" >Actions</th>
                                     </tr>
                                 </thead>
@@ -29,6 +30,11 @@
                                         <td class="align-middle">{{ menu.id }}</td>
                                         <td class="align-middle">{{ menu.name }}</td>
                                         <td class="align-middle">{{ menu.custom_class }}</td>
+                                        <td class="align-middle">
+                                            <template v-if="menu.url == '1'">
+                                                <i class="fa fa-check-circle" aria-hidden="true"></i>
+                                            </template>
+                                        </td>
                                         <td class="action-buttons text-right align-middle">
 
                                             <a v-on:click="deleteMenu(menu.id)" :data-id="menu.id" href="javascript:void(0);" class="action-icon float-end" title="Delete menu">
@@ -222,7 +228,9 @@
                 .catch(err => console.log(err));
             },
             resetForm: function(){
-                this.menu = {};
+                this.menu = {
+                    url: '1'
+                };
             },
             closeModal: function(){
                 $('.modal').modal('hide');
