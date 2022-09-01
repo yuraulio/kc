@@ -105,9 +105,7 @@ class MediaController extends Controller
 
             $path = str_replace("//", "/", $path);
 
-            $directoryCreated = Storage::disk('public')->makeDirectory($path);
-
-            throw_if($directoryCreated, new Exception, "Folder could not be created.");
+            Storage::disk('public')->makeDirectory($path);
 
             $max = MediaFolder::max("order");
 
