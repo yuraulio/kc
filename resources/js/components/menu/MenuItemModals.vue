@@ -45,6 +45,10 @@
                                 <input type="text" name="custom_class" class="form-control input-field mb-2" id="add_menu_item_custom_class" v-model="item.custom_class">
 
                             </div>
+                            <div class="form-check form-switch mb-3">
+                                <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" @click="toggleMobile()" :checked="item.middleware == '1'">
+                                <label class="form-check-label" for="flexSwitchCheckChecked">Mobile visibility</label>
+                            </div>
                             <div class="m-footer text-center">
                                 <button type="submit" id="add_menu_item_btn" class="btn btn-soft-success edit-info m-1">
                                     <i class="mdi mdi-square-edit-outline me-1"></i>
@@ -114,6 +118,10 @@
                                 <label for="add_menu_item_custom_class" class="form-label">Custom Class</label>
                                 <input type="text" name="custom_class" class="form-control input-field mb-2" v-model="item.custom_class">
 
+                            </div>
+                            <div class="form-check form-switch mb-3">
+                                <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" @click="toggleMobile()" :checked="item.middleware == '1'">
+                                <label class="form-check-label" for="flexSwitchCheckChecked">Mobile visibility</label>
                             </div>
                             <div class="m-footer text-center">
                                 <button type="submit" id="add_menu_item_btn" class="btn btn-soft-success edit-info m-1">
@@ -216,6 +224,13 @@
         methods: {
             closeModal() {
                 $('.modal').modal('hide');
+            },
+            toggleMobile() {
+                if (this.item.middleware == "1") {
+                    this.item.middleware = "0";
+                } else {
+                    this.item.middleware = "1";
+                }
             },
             addParam: function(){
                 let paramItems = [...this.item.paramItems];

@@ -1,10 +1,17 @@
 <template>
     <ol class="dd-list">
         <li v-for="list in lists" :key="list.id" class='dd-item' :data-order="list.order" :data-id="list.id">
-            <div class='dd-handle'>
+            <div class='dd-handle' style="padding-right: 70px;">
                 <span class="item=icon" v-html="list.icon"> {{ list.icon }}</span>
                 <span class="item-title"> {{list.title}}</span>
-                <span class="item-url"> {{list.url}}</span></div>
+                <span class="item-url"> {{list.url}}</span>
+                <span v-if="list.middleware == '1'" class="ms-2 badge bg-primary">
+                   Vissible on mobile
+                </span>
+                <span v-else class="ms-2 badge bg-secondary">
+                    Hidden on mobile
+                </span>
+            </div>
             <div class='action-area'>
                 <a href="#"
                     style="margin-top: 7px"

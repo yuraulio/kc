@@ -306,7 +306,7 @@
                 this.item.params = '';
                 this.item.paramItems = [];
                 this.item.controller = '';
-                this.item.middleware = '';
+                this.item.middleware = "1";
                 this.item.target = '_self';
                 this.item.parent_id = '';
                 this.item.icon = '';
