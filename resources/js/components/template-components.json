@@ -224,16 +224,16 @@
         "icon": "dripicons-rocket",
         "key": "schema_component",
         "disable_color": true,
-        "tab": "Meta",
+        "tab": "Content",
         "simple_view": true,
         "inputs": [
             {
                 "type": "textarea",
                 "key": "schema_schema",
-                "label": "Meta Schema",
+                "label": "Schema code",
                 "size": "col-lg-12",
                 "main": true,
-                "simple_view": false
+                "simple_view": true
             }
         ]
     },
