@@ -627,6 +627,11 @@ export default {
             if (this.loadstart == true) {
                 this.getFolders();
             }
+        },
+        startingImage() {
+            if (this.startingImage) {
+                this.setImage(this.startingImage);
+            }
         }
     }
 };
