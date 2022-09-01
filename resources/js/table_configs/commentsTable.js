@@ -36,7 +36,10 @@ export default {
             title: 'User',
             sortField: 'user.firstname',
             dataClass: 'align-middle',
-            titleClass: ''
+            titleClass: '',
+            formatter (value) {
+                return value.name;
+            },
         },
         {
             name: 'actions',
