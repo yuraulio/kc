@@ -486,7 +486,7 @@ Route::group(['prefix' => 'info'], function () {
 Route::get('order-success', [
     'as' => 'info.Order.Success', 'uses' => 'Theme\InfoController@orderSuccess'
 ]);
-Route::get('thankyou', 'Theme\HomeController@thankyou');
+// Route::get('thankyou', 'Theme\HomeController@thankyou');
 Route::post('thankyou', 'Theme\HomeController@thankyouInstallments')->name('installments.thankyou');
 
 
