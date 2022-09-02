@@ -341,7 +341,9 @@ class EventController extends Controller
         }
 
         $infoData = $request->course;
-
+        if(!$infoData['certificate']['event_title']){
+            $infoData['certificate']['event_title'] = explode(',',$event->title)[0];
+        }
         $event_info = $this->prepareInfo($infoData, $request->status, $request->delivery, $partner, $request->syllabus, $request->city_id, $event);
         $this->updateEventInfo($event_info, $event->id);
 

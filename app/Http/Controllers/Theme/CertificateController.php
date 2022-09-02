@@ -127,8 +127,8 @@ class CertificateController extends Controller
   }
 
   public function getCertificateImage($certificate){
-       
-    $timestamp = '';//strtotime("now");
+    
+    $timestamp = strtotime("now");
     $data = $this->loadCertificateData($certificate);
     $fn = $data['certificate']->firstname . '_' . $data['certificate']->lastname.'_'. $timestamp .'.pdf';
     
@@ -136,8 +136,8 @@ class CertificateController extends Controller
   
     Storage::disk('cert')->put($fn,$content);
     
-    $filepath = public_path('cert\\'.$fn);
-    $newFile =  'cert\\'.base64_encode($data['certificate']->firstname . '-' . $data['certificate']->lastname.'-'.$timestamp) .'.jpg';
+    $filepath = public_path('cert/'.$fn);
+    $newFile =  'cert/'.base64_encode($data['certificate']->firstname . '-' . $data['certificate']->lastname.'-'.$timestamp) .'.jpg';
     $saveImagePath = public_path($newFile);
 
     $imagick = new Imagick();
@@ -151,7 +151,10 @@ class CertificateController extends Controller
     $imagick->clear();
     $imagick->destroy();
 
-    unlink('cert\\'.$fn);
+    unlink('cert/'.$fn);
+
+    $image1 = imagecreatefromjpeg($saveImagePath);
+    imagejpeg($image1, $saveImagePath, 40);
 
     return $newFile;
   }

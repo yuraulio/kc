@@ -25,6 +25,7 @@
 <link rel="stylesheet" href="{{ cdn('theme/assets/css/fontawesome/css/kcfonts.css') }}" />--}}
 
 <!-- <link rel="stylesheet" href="https://use.typekit.net/pfo3bjs.css"> -->
+
 <link href="{{ cdn(mix('theme/assets/css/style_ver.css')) }}" rel="stylesheet" media="all" />
 <script type="application/ld+json">
         {

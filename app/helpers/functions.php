@@ -9,6 +9,7 @@ use App\Model\Exam;
 use App\Model\Certificate;
 use App\Model\Category;
 use App\Model\PaymentMethod;
+use CodexShaper\Menu\Models\Menu as NewMenu;
 
 function get_social_media(){
     $social_media = Option::where('name', 'social_media')->get();
@@ -487,6 +488,20 @@ if(!function_exists('formatBytes')){
 
         }
     }
+
+
+
+    if (!function_exists('get_menu')){
+    function get_menu($id)
+    {
+        $menu = NewMenu::find($id);
+        return [
+            'name' => $menu->name ?? "",
+            'title' => $menu->custom_class ?? "",
+        ];
+    }
+
+}
     
     
 
