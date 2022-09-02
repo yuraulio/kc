@@ -4,7 +4,13 @@
         <div class="col-sm-8">
             <div>
                 <div v-show="imgSrc" :key="imgSrc ? imgSrc : 'emp'" class="img-cropper" style>
-                    <vue-cropper ref="cropper" :checkCrossOrigin="false" :src="imgSrc" preview=".preview"/>
+                    <vue-cropper 
+                    ref="cropper" 
+                    :checkCrossOrigin="false" 
+                    :src="imgSrc" 
+                    preview=".preview" 
+                    @zoom.prevent 
+                    :img-style="{'max-height': '680px'}"/>
                 </div>
                 <!--
                 <label v-show="imgSrc == null" :name="'image'" style="width: 100%; min-height: 300px">
@@ -50,13 +56,13 @@
                     </button>
 
                 </div>
-                -->
 
                 <div class="btn-group mb-2 mt-2" style="float: right">
                     <button type="button" class="btn btn-soft-primary" @click.prevent="reset">
                         Reset
                     </button>
                 </div>
+                -->
             </div>
         </div>
         <div class="col-sm-4">
@@ -132,7 +138,7 @@
                     <a :href="getUrl()" target="_blank" class="btn btn-soft-warning w-100 mt-2">View</a>
                 </div>
                 <div class="col-4">
-                    <button @click="resetData()" class="btn btn-soft-info btn-block w-100 mt-2">
+                    <button @click="resetData(); reset();" class="btn btn-soft-info btn-block w-100 mt-2">
                         Reset
                     </button>
                 </div>
@@ -434,16 +440,21 @@ export default {
             this.$modal.hide('edit-image-modal');
         },
         setCropBox(image_width, image_height) {
-            var cropper_height = this.$refs.cropper.$el.clientHeight;
-            var cropper_width = this.$refs.cropper.$el.clientWidth;
+            var canvas_height = this.$refs.cropper.getCanvasData().height;
+            var canvas_width = this.$refs.cropper.getCanvasData().width;
 
-            this.width_ratio = cropper_width / image_width;
-            this.height_ratio = cropper_height / image_height;
+            var container_height = this.$refs.cropper.getContainerData().height;
+            var container_width = this.$refs.cropper.getContainerData().width;
+
+            this.width_ratio = canvas_width / image_width;
+            this.height_ratio = canvas_height / image_height;
 
             this.$refs.cropper.setAspectRatio(this.selectedVersion.w / this.selectedVersion.h);
 
             this.$set(this.cropBoxData, 'width', this.selectedVersion.w * this.width_ratio);
             this.$set(this.cropBoxData, 'height', this.selectedVersion.h * this.height_ratio);
+            this.$set(this.cropBoxData, 'left', ((container_width - (this.selectedVersion.w * this.width_ratio))/2));
+            this.$set(this.cropBoxData, 'top', ((container_height - (this.selectedVersion.h * this.height_ratio))/2));
             this.setCropBoxData();
         },
         calculateRatio(num_1, num_2){
@@ -497,6 +508,9 @@ export default {
             this.cropBoxData = JSON.parse(
                 JSON.stringify(this.$refs.cropper.getCropBoxData())
             );
+
+            this.cropBoxData.left = (this.$refs.cropper.getCropBoxData().left - this.$refs.cropper.getCanvasData().left);
+            this.cropBoxData.top = (this.$refs.cropper.getCropBoxData().top - this.$refs.cropper.getCanvasData().top);
         },
         getData() {
             this.data = JSON.stringify(this.$refs.cropper.getData(), null, 4);

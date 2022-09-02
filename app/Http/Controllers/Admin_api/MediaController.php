@@ -161,9 +161,9 @@ class MediaController extends Controller
                 $crop_height = $version[2];
                 $crop_width = $version[1];
 
-                if ($original_image_height < $crop_height || $original_image_width < $crop_width) {
-                    continue;
-                }
+                // if ($original_image_height < $crop_height || $original_image_width < $crop_width) {
+                //     continue;
+                // }
 
                 // set image name
                 $tmp = explode('.', $image_name);
