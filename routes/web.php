@@ -648,6 +648,7 @@ Route::get('/sendHalfPeriod', 'Dashboard\CronjobsController@sendHalfPeriod');//i
 Route::get('/sendElearningFQ', 'Dashboard\CronjobsController@sendElearningFQ');//in
 Route::get('/sendSurveyMail', 'Dashboard\CronjobsController@sendSurveyMail');//in
 Route::get('/absences', 'Dashboard\CronjobsController@absences');//in
+Route::get('/sendInClassReminder', 'Dashboard\CronjobsController@sendInClassReminder');//in
 
 
 //SITEMAP

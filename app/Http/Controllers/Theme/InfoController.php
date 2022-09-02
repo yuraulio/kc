@@ -862,7 +862,7 @@ class InfoController extends Controller
             
             //$data = [];  
             $muser = [];
-            $muser['name'] = $transaction->user->first()->firstname;
+            $muser['name'] = $transaction->user->first()->firstname . ' ' . $transaction->user->first()->lastname;
             $muser['first'] = $transaction->user->first()->firstname;
             $muser['email'] = $transaction->user->first()->email;
             $muser['id'] = $transaction->user->first()->id;

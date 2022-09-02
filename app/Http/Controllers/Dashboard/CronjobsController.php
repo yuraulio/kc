@@ -750,6 +750,35 @@ class CronjobsController extends Controller
     }
     
 
+    public function sendInClassReminder(){
+       
+        $date = '2022-09-07';
+        $date1 = date("Y-m-d", strtotime($date . "+7 days"));
+        $date2 = date("Y-m-d", strtotime($date . "+20 days"));
+
+        //$date1 =  date("Y-m-d", strtotime("+7 days"));
+        //$date2 =  date("Y-m-d", strtotime("+20 days"));
+        
+        $dates = [$date1,$date2];
+
+        $events = Event::
+            where('published',true)
+            ->whereIn('status',[0,2])    
+            ->whereIn('launch_date',$dates)   
+            ->whereHas('event_info1',function($query){
+                $query->where('course_delivery','!=',143);
+            })
+            ->with('users') 
+            ->get();
+
+        foreach($events as $event){
+
+           
+
+        }
+
+    }
+
     public function absences(){
 
         $date = date('Y-m-d');

@@ -541,7 +541,7 @@ class HomeController extends Controller
         $transdata['coupon'] = null;
         
         $muser = [];
-        $muser['name'] = $user->firstname;
+        $muser['name'] = $user->firstname . ' ' $user->lastname;
         $muser['first'] = $user->firstname;
         $muser['email'] = $user->email;
         $muser['id'] = $user->id;
