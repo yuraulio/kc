@@ -177,6 +177,54 @@
         </div>
     </modal>
 
+    <modal name="file_move_modal_multi" :adaptive="true" :resizable="true" height="auto" :scrollable="true" class="mb-0">
+        <div class="row p-4">
+            <div class="col-12">
+                <h5>Move selected files</h5>
+                <p>Select new folder:</p>
+
+                <vue-nestable v-model="mediaFolders" class="dd-list mb-2">
+                    <vue-nestable-handle :draggable="false" slot-scope="{ item, isChild }" :item="item">
+                        <li :key="item.id + uncolapsed.length" v-show="!isChild || uncolapsed.includes(item.id)" class="dd-item" :data-id="item.id">
+                            <button
+                                @click="collapse(item); $forceUpdate();"
+                                v-if="item.children && item.children.length && !uncolapsed.includes(item.children[0].id)"
+                                class="collapse-button"
+                            >
+                                <i class="mdi mdi-plus font-18"></i>
+                            </button>
+                            <button
+                                @click="uncollapse(item)"
+                                v-if="item.children && item.children.length && uncolapsed.includes(item.children[0].id)"
+                                class="collapse-button"
+                            >
+                                <i class="mdi mdi-minus font-18"></i>
+                            </button>
+                            <div @click="move_file_to = item;" :class="'dd-handle ' + (item == move_file_to ? 'selected-folder ' : ' ')">
+                                <i class="mdi mdi-folder-outline font-18 align-middle me-"></i>
+                                {{ item.name }}
+                            </div>
+                        </li>
+                    </vue-nestable-handle>
+                </vue-nestable>
+
+                <p class="mb-2">
+                    <span class="d-inline-block" style="width: 150px;">Move selected files to: </span>{{ move_file_to ? move_file_to.path : '' }}
+                </p>
+
+                <button @click="moveFiles()" type="button" class="btn btn-success waves-effect waves-light mb-3 w-100" :disabled="loading">
+                    <i v-if="!loading" class="fe-check-circle me-1"></i>
+                    <i v-else class="fas fa-spinner fa-spin"></i>
+                    Move selected files
+                </button>
+
+                <div class="alert alert-warning" role="alert">
+                    Pages and files will update in the background in a few minutes.
+                </div>
+            </div>
+        </div>
+    </modal>
+
     <modal name="edit-folder-modal" :adaptive="true" :resizable="true" height="auto" :scrollable="true" class="mb-0">
         <div class="row p-4">
             <div class="d-grid col-lg-12">
@@ -346,7 +394,20 @@
                         </div>
                     </div>
                     <div v-if="!loading && loadstart">
-                        <files :key="view" :view="view" v-if="!loading" :mediaFiles="mediaFiles" @selected="userSelectedFiles" @delete="deleteFile" @open="openFile" @move="openMoveModal" :imageExtensions="imageExtensions"></files>
+                        <files 
+                            :key="view" 
+                            :view="view" 
+                            v-if="!loading" 
+                            :mediaFiles="mediaFiles" 
+                            @selected="userSelectedFiles" 
+                            @delete="deleteFile" 
+                            @open="openFile" 
+                            @move="openMoveModal"
+                            @moveMulti="openMoveModalMulti"
+                            @deleteMulti="deleteFiles"
+                            :imageExtensions="imageExtensions" 
+                            :folderId="folderId">
+                        </files>
                     </div>
                 </div>
                 <!-- end inbox-rightbar-->
@@ -415,6 +476,7 @@ export default {
             folder_edit_name: null,
             folder_edit_id: null,
             file_to_move: null,
+            files_to_move: null,
             move_file_to: null,
             sizes: [],
             upload_error: null,
@@ -475,7 +537,76 @@ export default {
             .catch((error) => {
                 console.log(error);
             })
-        }
+        },
+        openMoveModalMulti(file){
+            this.move_file_to = null;
+            this.files_to_move = file;
+            this.$modal.show('file_move_modal_multi');
+        },
+        moveFiles(){
+            if (this.files_to_move && this.move_file_to) {
+                var formData = new FormData();
+                formData.append('file', JSON.stringify(this.files_to_move));
+                formData.append('folder', JSON.stringify(this.move_file_to));
+                this.loading = true;
+                axios.post('/api/media_manager/files/move', formData)
+                .then((response) => {
+                    if (response.status == 200) {
+                        this.$toast.success('Move Job Started!');
+                        // _.remove(this.mediaFiles, {
+                        //     id: this.file_to_move.id
+                        // });
+                        this.$modal.hide('file_move_modal_multi');
+                    }
+                    this.loading = false;
+                    this.move_file_to = null;
+                })
+                .catch((error) => {
+                    console.log(error)
+                    this.loading = false;
+                })
+            }
+        },
+        deleteFiles(files) {
+            Swal.fire({
+                title: 'Are you sure?\n ' + 'Delete all selected files?',
+                text: "You won't be able to revert this! Delete files?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, delete them!',
+                showLoaderOnConfirm: true,
+                buttonsStyling: false,
+                customClass: {
+                    cancelButton: 'btn btn-soft-secondary',
+                    confirmButton: 'btn btn-soft-danger',
+                },
+                preConfirm: () => {
+                    var formData = new FormData();
+                    formData.append('selected', JSON.stringify(files));
+                    return axios
+                        .post('/api/media_manager/deleteFiles', formData)
+                        .then((response) => {
+                            if (response.status == 200) {
+                                // this.getFiles(this.folderId);
+                            }
+                        })
+                        .catch(error => {
+                            Swal.showValidationMessage(
+                                `Request failed: ${error}`
+                            )
+                        })
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire(
+                        'Delete job started!',
+                        'Selected files will be deleted in a few minutes.',
+                        'success'
+                    )
+                }
+            })
+        },
 
     },
     mounted() {

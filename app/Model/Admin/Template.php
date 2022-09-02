@@ -47,6 +47,7 @@ class Template extends Model
         return [
             'name' => $menu->name ?? "",
             'title' => $menu->custom_class ?? "",
+            'mobile' => $menu->url ?? "",
         ];
     }
 }
