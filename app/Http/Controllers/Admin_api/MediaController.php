@@ -149,13 +149,25 @@ class MediaController extends Controller
             }
 
             $file = Storage::disk('public')->putFileAs($path, $image, $image_name, 'public');
-            $mfile_original = $this->storeFile($image_name, "original", $imgpath_original, $mediaFolder->id, $image->getSize(), $request->parrent_id, $request->alt_text, $request->link);
-
-            $versions = Page::VERSIONS;
 
             $data = getimagesize($request->file);
             $original_image_width = $data[0];
             $original_image_height = $data[1];
+
+            $mfile_original = $this->storeFile(
+                $image_name, 
+                "original", 
+                $imgpath_original, 
+                $mediaFolder->id, 
+                $image->getSize(), 
+                $request->parrent_id, 
+                $request->alt_text, 
+                $request->link,
+                $original_image_height,
+                $original_image_width
+            );
+
+            $versions = Page::VERSIONS;
 
             foreach ($versions as $version) {
                 $crop_height = $version[2];
@@ -199,7 +211,18 @@ class MediaController extends Controller
                 $image->save(public_path("/uploads" . $path . $version_name), 50, $extension);
 
                 // save to db
-                $mfile = $this->storeFile($version_name, $version[0], $imgpath, $mediaFolder->id, $image->filesize(), $mfile_original->id, $request->alt_text, $request->link);
+                $mfile = $this->storeFile(
+                    $version_name, 
+                    $version[0], 
+                    $imgpath, 
+                    $mediaFolder->id, 
+                    $image->filesize(), 
+                    $mfile_original->id, 
+                    $request->alt_text, 
+                    $request->link,
+                    $image_height,
+                    $image_width
+                );
                 $files[] = new MediaFileResource($mfile);
 
                 TinifyImage::dispatch(public_path() . $mfile->full_path, $mfile->id);
@@ -283,6 +306,8 @@ class MediaController extends Controller
                 $image->save(public_path("/uploads" . $folderPath . "/" . $image_name), 50, $extension);
 
                 $size = $image ? $image->filesize() : null;
+                $height = $image ? $image->height() : null;
+                $width = $image ? $image->width() : null;
             }
 
             $parent_id = $request->parent_id;
@@ -290,7 +315,20 @@ class MediaController extends Controller
                 $parent_id = null;
             }
 
-            $mfile = $this->editFile($parent_id, $request->version, $image_name, $imgpath, $mediaFolder->id, $size, null, $request->alttext, $request->link, $request->id);
+            $mfile = $this->editFile(
+                $parent_id, 
+                $request->version, 
+                $image_name, 
+                $imgpath, 
+                $mediaFolder->id, 
+                $size, 
+                null, 
+                $request->alttext, 
+                $request->link, 
+                $request->id,
+                $height,
+                $width
+            );
 
             if ($request->version != 'original') {
                 TinifyImage::dispatch(public_path() . $mfile->full_path, $mfile->id);
@@ -319,7 +357,18 @@ class MediaController extends Controller
 
             $file = Storage::disk('public')->putFileAs($path, $request->file('file'), ($request->imgname ? $request->imgname . "_" . getimagesize($image)[0] . "x" . getimagesize($image)[1] . "." . $image->extension() : $image->getClientOriginalName()), 'public');
 
-            $mfile = $this->storeFile($image->getClientOriginalName(), "Original", $imgpath, $mediaFolder->id, $image->getSize(), null, null, null);
+            $mfile = $this->storeFile(
+                $image->getClientOriginalName(), 
+                "Original", 
+                $imgpath, 
+                $mediaFolder->id, 
+                $image->getSize(), 
+                null, 
+                null, 
+                null,
+                null,
+                null
+            );
             $mfile->pages = [];
 
             $url = config('app.url') . "/uploads" . $path;
@@ -330,7 +379,18 @@ class MediaController extends Controller
         }
     }
 
-    public function storeFile($name, $version, $path, $folderId, $size, $parent = null, $alt_text = null, $link = null)
+    public function storeFile(
+        $name, 
+        $version, 
+        $path, 
+        $folderId, 
+        $size, 
+        $parent = null, 
+        $alt_text = null, 
+        $link = null,
+        $height,
+        $width
+    )
     {
         $path = str_replace("//", "/", $path);
 
@@ -347,6 +407,8 @@ class MediaController extends Controller
         $mediaFile->url = config('app.url') . "/uploads" . $path;
         $mediaFile->user_id = Auth::user()->id;
         $mediaFile->version = $version;
+        $mediaFile->height = $height;
+        $mediaFile->width = $width;
         $mediaFile->save();
 
         $mediaFile->load(["pages", "siblings", "subfiles"]);
@@ -354,7 +416,20 @@ class MediaController extends Controller
         return $mediaFile;
     }
 
-    public function editFile($parent_id, $version, $name, $path, $folderId, $size, $parent = null, $alttext = "", $link = "", $id)
+    public function editFile(
+        $parent_id, 
+        $version, 
+        $name, 
+        $path, 
+        $folderId, 
+        $size, 
+        $parent = null, 
+        $alttext = "", 
+        $link = "", 
+        $id,
+        $height,
+        $width
+    )
     {
         DB::beginTransaction();
 
@@ -378,6 +453,8 @@ class MediaController extends Controller
             $mediaFile->user_id = Auth::user()->id;
             $mediaFile->version = $version;
             $mediaFile->parent_id = $parent_id;
+            $mediaFile->height = $height;
+            $mediaFile->width = $width;
             $mediaFile->save();
 
             if (!Storage::disk('public')->exists($mediaFile->path)) {

@@ -2,7 +2,7 @@
 <div class="cropper-outer p-2">
     <div class="row cropper-data">
         <div class="col-sm-8">
-            <div>
+            <div :class="version == 'original' ? 'no-cropper' : ''">
                 <div v-show="imgSrc" :key="imgSrc ? imgSrc : 'emp'" class="img-cropper" style>
                     <vue-cropper 
                     ref="cropper" 
@@ -65,15 +65,23 @@
                 -->
             </div>
         </div>
-        <div class="col-sm-4">
+        <div class="col-sm-4 image-data">
             <div class="row mb-2">
                 <div class="col-lg-12 d-grid">
-                    <input v-model="imgname" type="text" class="form-control cropper-image-name invisible-input ps-0" placeholder="Enter file name"/>
+                    <span class="cropper-image-name">{{ imgname }}</span>
                 </div>
             </div>
             <div class="row mb-2">
                 <div class="col-sm-4">
-                    <label class="form-label">Alt text:</label>
+                    <label class="form-label">Image title:</label>
+                </div>
+                <div class="col">
+                    <input v-model="imgname" type="text" class="form-control invisible-input text-end" placeholder="Enter file name"/>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-sm-4">
+                    <label class="form-label">Image alternative text:</label>
                 </div>
                 <div class="col">
                     <input v-model="alttext" type="text" class="form-control invisible-input text-end" placeholder="Enter alt text"/>
@@ -81,7 +89,7 @@
             </div>
             <div class="row mb-2">
                 <div class="col-sm-4">
-                    <label class="form-label">Link:</label>
+                    <label class="form-label">Image link:</label>
                 </div>
                 <div class="col">
                     <input v-model="link" type="text" class="form-control invisible-input text-end" placeholder="Enter link"/>
@@ -89,7 +97,7 @@
             </div>
             <div class="row mb-2">
                 <div class="col-sm-4">
-                    <label class="form-label">Version:</label>
+                    <label class="form-label">Image version name:</label>
                 </div>
                 <div class="col">
                     <span class="form-control invisible-input text-end">{{ version }}</span>
@@ -97,7 +105,7 @@
             </div>
             <div class="row mb-2">
                 <div class="col-sm-4">
-                    <label class="form-label">Size:</label>
+                    <label class="form-label">Image size:</label>
                 </div>
                 <div class="col">
                     <span class="form-control invisible-input text-end">{{ formatSize(size) }}</span>
@@ -105,7 +113,15 @@
             </div>
             <div class="row mb-2">
                 <div class="col-sm-4">
-                    <label class="form-label">Date:</label>
+                    <label class="form-label">Image dimensions:</label>
+                </div>
+                <div class="col">
+                    <span class="form-control invisible-input text-end">{{ width ? width + " x " + height : '' }}</span>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-sm-4">
+                    <label class="form-label">Date uploaded:</label>
                 </div>
                 <div class="col">
                     <span class="form-control invisible-input text-end">{{ date }}</span>
@@ -113,7 +129,7 @@
             </div>
             <div class="row mb-2">
                 <div class="col-sm-4">
-                    <label class="form-label">User:</label>
+                    <label class="form-label">Uploaded from:</label>
                 </div>
                 <div class="col">
                     <span class="form-control invisible-input text-end">{{ user ? (user.firstname + ' ' + user.lastname) : '' }}</span>
@@ -138,7 +154,7 @@
                     <a :href="getUrl()" target="_blank" class="btn btn-soft-warning w-100 mt-2">View</a>
                 </div>
                 <div class="col-4">
-                    <button @click="resetData(); reset();" class="btn btn-soft-info btn-block w-100 mt-2">
+                    <button @click="reset();" class="btn btn-soft-info btn-block w-100 mt-2">
                         Reset
                     </button>
                 </div>
@@ -148,7 +164,7 @@
                     </button>
                 </div>
                 <div class="col-12">
-                    <button v-if="findVersionData(version)" @click="deleteFile(findVersionData(version))" class="btn btn-soft-danger btn-block w-100 mt-2">Delete</button>
+                    <button v-if="findVersionData(version)" @click="deleteFile(findVersionData(version))" class="btn btn-soft-danger btn-block w-100 mt-2">Delete version</button>
                     <button v-if="parentMode" @click="confirmSelection(findVersionData(version))" class="btn btn-soft-primary btn-block w-100 mt-2">Use</button>
                 </div>
             </div>
@@ -158,10 +174,7 @@
         <div class="col-12">
             <div class="p-1">
                 <img @click="disable(); version='original'; selectedVersion=null; imgname=parrentImage.name; alttext=parrentImage.alt_text; link=parrentImage.link; id=parrentImage.id; versionData=null; versionSelected();" crossorigin="anonymous" :src="parrentImage ? ('/uploads/' + parrentImage.path) : ''" alt="image" class="img-fluid rounded" :style="version == 'original' ? 'border: 4px solid #1abc9c;' : 'border: 4px solid #f3f7f9;'"/>
-                <h5>Original image</h5>
-                <!--
-                <button v-if="parentMode" @click="confirmSelection(parrentImage)" style="width: 100%" class="btn btn-soft-primary mt-2">Select image</button>
-                -->            
+                <h5>Original image</h5>      
             </div>
 
             <template v-for="(version1, index) in versions" v-if="matchVersions(version1.version)">
@@ -173,10 +186,10 @@
                         -->
                     </template>
                     <template v-else>
-                        <button @click="version=version1.version; selectedVersion=version1; versionSelected();" style="width: 100%" class="btn btn-soft-primary ms-1 me-1">Set image</button>
+                        <button @click="version=version1.version; selectedVersion=version1; versionSelected();" style="width: 100%" class="btn btn-soft-primary ms-1 me-1">Select version</button>
                     </template>
                     <h5 :id="version1.version" class="">
-                        {{ version1.version }}
+                        {{ version1.title }}
                         <!--
                         <i v-if="findVersionData(version1.version)" @click="deleteFile(findVersionData(version1.version), index)" class="mdi mdi-delete text-muted vertical-middle cursor-pointer"></i>
                         -->
@@ -232,6 +245,8 @@ export default {
             parentMode: this.$parent.$parent.mode != null ? true : false,
             date: null,
             size: null,
+            height: null,
+            width: null,
             extension: null,
             user: {},
             versions: [{
@@ -240,7 +255,8 @@ export default {
                     q: 60,
                     fit: "crop",
                     version: "instructors-testimonials",
-                    description: "Applies to : Our Instructor Page (Footer) & Event -> Instructors",
+                    title: "Portrait image",
+                    description: "The half body image of instructors.",
                 },
                 {
                     w: 542,
@@ -248,7 +264,8 @@ export default {
                     q: 60,
                     fit: "crop",
                     version: "event-card",
-                    description: "Applies to : Homepage Events list",
+                    title: "Home page boxes",
+                    description: "The image of courses on our home page.",
                 },
                 {
                     w: 470,
@@ -256,7 +273,8 @@ export default {
                     q: 60,
                     fit: "crop",
                     version: "users",
-                    description: "Applies to : Testimonial square image",
+                    title: "Testimonial image",
+                    description: "The image of a user in testimonials.",
                 },
                 {
                     w: 2880,
@@ -264,7 +282,8 @@ export default {
                     q: 60,
                     fit: "crop",
                     version: "header-image",
-                    description: "Applies to: Event header carousel (Main event page)",
+                    title: "Top image",
+                    description: "The image on top of a page.",
                 },
                 {
                     w: 90,
@@ -272,15 +291,17 @@ export default {
                     q: 60,
                     fit: "crop",
                     version: "instructors-small",
-                    description: "Applies to : Event -> Topics (syllabus-block)",
+                    title: "Lessons image",
+                    description: "The image of an instructor next to a lesson.",
                 },
                 {
                     w: 300,
                     h: 300,
                     q: 60,
                     fit: "crop",
-                    description: "feed-image",
+                    title: "Advertising image",
                     version: "feed-image",
+                    description: "The image we send to dynamic ad creatives via feed.",
                 },
                 {
                     w: 1920,
@@ -288,7 +309,8 @@ export default {
                     q: 60,
                     fit: "crop",
                     version: "social-media-sharing",
-                    description: "Applies to: Social media sharing default image",
+                    title: "Social media posts image",
+                    description: "The image visible on social media posts.",
                 },
                 {
                     w: 680,
@@ -296,7 +318,8 @@ export default {
                     q: 60,
                     fit: "crop",
                     version: "blog-content",
-                    description: "Applies to: Blog content image",
+                    title: "Blog top image",
+                    description: "The image on top of a blog post.",
                 },
                 {
                     w: 343,
@@ -304,7 +327,8 @@ export default {
                     q: 60,
                     fit: "crop",
                     version: "blog-featured",
-                    description: "Applies to: Blog Featured image",
+                    title: "Blog boxes",
+                    description: "The image of blog article on /blog.",
                 },
             ],
         };
@@ -369,7 +393,9 @@ export default {
             this.link = this.parrentImage.link ? this.parrentImage.link : '';
             this.id = this.parrentImage.id ? this.parrentImage.id : null;
             this.date = this.versionData ? this.versionData.created_at : this.parrentImage.created_at;
-            this.size = this.versionData ? this.versionData.size : this.parrentImage.size;
+            // this.size = this.versionData ? this.versionData.size : this.parrentImage.size;
+            // this.height = this.versionData ? this.versionData.height : this.parrentImage.height;
+            // this.width = this.versionData ? this.versionData.width : this.parrentImage.width;
             this.user = this.versionData ? this.versionData.user : this.parrentImage.user;
             this.extension = this.versionData ? this.versionData.extension : this.parrentImage.extension;
         },
@@ -384,6 +410,11 @@ export default {
             }
         },
         disable() {
+            this.$set(this.cropBoxData, 'width', 0);
+            this.$set(this.cropBoxData, 'height', 0);
+            this.$set(this.cropBoxData, 'left', 0);
+            this.$set(this.cropBoxData, 'top', 0);
+            this.setCropBoxData();
             this.$refs.cropper.disable();
         },
         getUrl() {
@@ -415,11 +446,15 @@ export default {
                 this.id = this.versionData ? this.versionData.id : null;
                 this.date = this.versionData ? this.versionData.created_at : '';
                 this.size = this.versionData ? this.versionData.size : '';
+                this.height = this.versionData ? this.versionData.height : '';
+                this.width = this.versionData ? this.versionData.width : '';
                 this.user = this.versionData ? this.versionData.user : '';
                 this.extension = this.versionData ? this.versionData.extension : '';
             } else {
                 this.date = this.parrentImage.created_at ? this.parrentImage.created_at : '';
                 this.size = this.parrentImage.size ? this.parrentImage.size : '';
+                this.height = this.parrentImage.height ? this.parrentImage.height : '';
+                this.width = this.parrentImage.width ? this.parrentImage.width : '';
                 this.user = this.parrentImage.user ? this.parrentImage.user : '';
                 this.extension = this.parrentImage.extension ? this.parrentImage.extension : '';
             }
@@ -456,6 +491,7 @@ export default {
             this.$set(this.cropBoxData, 'left', ((container_width - (this.selectedVersion.w * this.width_ratio))/2));
             this.$set(this.cropBoxData, 'top', ((container_height - (this.selectedVersion.h * this.height_ratio))/2));
             this.setCropBoxData();
+            
         },
         calculateRatio(num_1, num_2){
             for(num=num_2; num>1; num--) {
@@ -523,7 +559,7 @@ export default {
         },
         reset() {
             this.$refs.cropper.reset();
-            this.versionSelected();
+            this.resetData();
             // this.getCropBoxData();
         },
         rotate(deg) {
@@ -789,5 +825,22 @@ textarea {
 }
 .invisible {
     height: 0px;
+}
+
+.image-data label {
+    margin-bottom: 0px;
+}
+.image-data>.row>div {
+    align-items: center;
+    display: flex;
+}
+.image-data>.row {
+    min-height: 35px;
+}
+</style>
+
+<style>
+.no-cropper .cropper-drag-box {
+    display: none;
 }
 </style>
