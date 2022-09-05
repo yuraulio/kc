@@ -26,6 +26,17 @@
                     </div>
                 </div>
             </div> 
+            <div v-if="settings.search_placeholder" class="row">
+                <div class="col mt-3">
+                    <h4>Search placeholder</h4>
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" aria-label="Default" v-model="settings.search_placeholder.value">
+                        <div class="input-group-append">
+                            <button @click="saveSetting(settings.search_placeholder)" class="btn btn-soft-success" type="button">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
