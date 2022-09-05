@@ -296,13 +296,21 @@ var mediaMixin = {
                     this.$refs.crpr.imgname = image.name;
                     this.$refs.crpr.alttext = image.alt_text;
                     this.$refs.crpr.link = image.link;
+                    this.$refs.crpr.size = image.size;
+                    this.$refs.crpr.height = image.height;
+                    this.$refs.crpr.width = image.width;
                 } else {
                     this.$refs.crpr.imgname = this.$refs.crpr.parrentImage.name;
                     this.$refs.crpr.alttext = this.$refs.crpr.parrentImage.alttext;
                     this.$refs.crpr.link = this.$refs.crpr.parrentImage.link;
+                    this.$refs.crpr.size = this.$refs.crpr.parrentImage.size;
+                    this.$refs.crpr.height = this.$refs.crpr.parrentImage.height;
+                    this.$refs.crpr.width = this.$refs.crpr.parrentImage.width;
                 }
                 this.$refs.crpr.jpg = false;
                 this.$refs.crpr.version = 'original';
+                this.$refs.crpr.disable();
+                this.$refs.crpr.versionData = null;
             })
             .catch((error) => {
                 console.log("edit error", error.response.data.message);

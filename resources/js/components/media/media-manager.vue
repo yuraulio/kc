@@ -123,7 +123,7 @@
         </div>
     </modal>
 
-    <modal name="edit-image-modal" :adaptive="true" width="90%" height="90%" :scrollable="true" class="mb-0">
+    <modal name="edit-image-modal" :adaptive="true" width="95%" height="95%" :scrollable="true" class="mb-0">
         <cropperer @edit="imageEdit" @upload="imageAdded" ref="crpr" :prevalue="selectedFile" :imageVersion="imageVersion" :imageKey="imageKey" :warning="warning"></cropperer>
     </modal>
 
@@ -626,6 +626,11 @@ export default {
             // console.log("watching load")
             if (this.loadstart == true) {
                 this.getFolders();
+            }
+        },
+        startingImage() {
+            if (this.startingImage) {
+                this.setImage(this.startingImage);
             }
         }
     }
