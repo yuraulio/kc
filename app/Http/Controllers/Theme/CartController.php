@@ -156,7 +156,7 @@ class CartController extends Controller
                 break;
             }
         }
-        
+    
         if(Session::get('coupon_code')){
            
             $data['price'] = Session::get('coupon_price') * $totalitems;
@@ -195,10 +195,10 @@ class CartController extends Controller
  
         if(is_numeric($data['price']) && ($data['price'] - floor($data['price'])>0)){
             $data['showPrice'] = number_format($data['price'] , 2 , '.', ',');
-            $data['oldPrice'] = number_format($data['price'] , 2 , '.', ',');
+            $data['oldPrice'] = number_format($oldPrice , 2 , '.', ',');
         }else if(is_numeric($data['price'])){
             $data['showPrice'] = number_format($data['price'] , 0 , '.', ',');
-            $data['oldPrice'] = number_format($data['price'] , 0 , '.', ',');
+            $data['oldPrice'] = number_format($oldPrice , 0 , '.', ',');
 
         }
 
@@ -1708,7 +1708,7 @@ class CartController extends Controller
                 return response()->json([
                     'success' => true,
                     'new_price' => $instOne,
-                    'savedPrice' => round($savedPrice, 2) ,
+                    'savedPrice' => round($savedPrice, 2)  * $request->totalItems,
                     'priceOf' => $priceOf,
                     'newPriceInt2' => $instTwo,
                     'newPriceInt3' => $instThree,

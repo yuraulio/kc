@@ -56,22 +56,10 @@ class CertificateController extends Controller
   }*/
 
   public function loadCertificateData($certificate){
-    //$certificate = decrypt($certificate);
+
     $certificate =base64_decode($certificate);
-
     $certificate = explode('--',$certificate)[1];
-
     $certificate = Certificate::find($certificate);
-
-    //return view('admin.certificates.certificate',compact('certificate'));
-    /*$view = 'admin.certificates.certificate';
-    if($certificate->success){
-        $view = 'admin.certificates.certificates2021.kc_attendance';
-    }else{
-        $view = 'admin.certificates.certificates2021.kc_attendance';
-    }*/
-
-    //dd(storage_path('fonts\Foco_Lt.ttf'));
 
     $contxt = stream_context_create([
         'ssl' => [
@@ -86,9 +74,6 @@ class CertificateController extends Controller
         'isRemoteEnabled' => true,
 
     ]);
-
-
-    //return view($view,compact('certificate'));
 
 
     $certificateTitle = $certificate->certificate_title;
@@ -112,9 +97,6 @@ class CertificateController extends Controller
     $certificate['credential'] = $certificate->credential;
     //$certificate['certification_title'] = $certificate->certificate_title;
     $certificate['certification_title'] = $certificateTitle;
-
-    //return view('admin.certificates.kc_diploma_2022a',compact('certificate'));
-
     $pdf->getDomPDF()->setHttpContext($contxt);
     $pdf->loadView('admin.certificates.'.$certificate->template,compact('certificate'))->setPaper('a4', 'landscape');
 
@@ -122,8 +104,7 @@ class CertificateController extends Controller
     $data['certificate'] = $certificate;
 
     return $data;
-    //$customPaper = array(0,0,3507,2480);
-    //$pdf->loadView('admin.certificates.'.$certificate->template,compact('certificate'))->setPaper($customPaper);
+    
   }
 
   public function getCertificateImage($certificate){
@@ -162,12 +143,18 @@ class CertificateController extends Controller
   
   public function getCertificate($certificate){
 
-        $data = $this->loadCertificateData($certificate);
+    $data = $this->loadCertificateData($certificate);
+    $certificate = $data['certificate'];
 
-        $fn = $data['certificate']->firstname . '-' . $data['certificate']->lastname . '-' . '.pdf';
-        return $data['pdf']->stream($fn);
+    //$customPaper = array(0,0,3507,2480);
+    //$pdf->loadView('admin.certificates.'. $data['certificate']->template,compact( $data['certificate']))->setPaper($customPaper);
 
+    //$customPaper = array(0,0,842,595);;
+    //$data['pdf']->loadView('admin.certificates.'. $data['certificate']->template,compact('certificate'))->setPaper($customPaper);
 
+    $fn = $data['certificate']->firstname . '-' . $data['certificate']->lastname . '-' . '.pdf';
+    return $data['pdf']->stream($fn);
+    //return view('admin.certificates.'.$certificate->template,compact('certificate'));
 
   }
 

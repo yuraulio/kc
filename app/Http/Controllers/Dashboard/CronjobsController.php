@@ -24,6 +24,7 @@ use App\Notifications\SubscriptionReminder;
 use App\Model\Pages;
 use App\Model\Transaction;
 use App\Model\Absence;
+use App\Notifications\InClassReminder;
 
 class CronjobsController extends Controller
 {
@@ -752,15 +753,15 @@ class CronjobsController extends Controller
 
     public function sendInClassReminder(){
        
-        $date = '2022-09-07';
-        $date1 = date("Y-m-d", strtotime($date . "+7 days"));
-        $date2 = date("Y-m-d", strtotime($date . "+20 days"));
+        //$date = '2022-09-07';
+        //$date1 = date("Y-m-d", strtotime($date . "+7 days"));
+        //$date2 = date("Y-m-d", strtotime($date . "+20 days"));
 
-        //$date1 =  date("Y-m-d", strtotime("+7 days"));
-        //$date2 =  date("Y-m-d", strtotime("+20 days"));
+        $date1 =  date("Y-m-d", strtotime("+7 days"));
+        $date2 =  date("Y-m-d", strtotime("+20 days"));
         
         $dates = [$date1,$date2];
-
+      
         $events = Event::
             where('published',true)
             ->whereIn('status',[0,2])    
@@ -773,7 +774,42 @@ class CronjobsController extends Controller
 
         foreach($events as $event){
 
-           
+            $info = $event->event_info();
+            $venues = $event->venues;
+
+            $data['duration'] = isset($info['inclass']['dates']['text']) ? $info['inclass']['dates']['text'] : '';
+            $data['course_hours'] = isset($info['inclass']['days']['text']) ? $info['inclass']['days']['text'] : '';
+            $data['venue'] = isset($venues[0]['name']) ? $venues[0]['name'] : '';
+            $data['address'] = isset($venues[0]['address']) ? $venues[0]['address'] : '';;
+            $data['faq'] = url('/') . '/' . $event->slugable->slug . '/#faq?utm_source=Knowcrunch.com&utm_medium=Registration_Email';;
+            $data['fb_group'] = $event->fb_group;;
+            $data['eventTitle'] = $event->title;
+            
+
+            foreach($event->users as $user){
+
+                $data['activateAccount'] = false;
+                $data['activate_slug'] = '';
+
+                $slug = [];
+                $slug['id'] = $user->id;
+                $slug['email'] = $user->email;
+                $slug['create'] = true;
+
+                $slug = encrypt($slug);
+
+                $data['firstname'] = $user->firstname;
+                $data['activate_slug'] = url('/') . '/create-your-password/' . $slug;
+              
+
+                if($user->statusAccount && $user->statusAccount->completed){
+                    $data['activateAccount'] = false;
+
+                }
+                
+                $user->notify(new InClassReminder($data));
+
+            }
 
         }
 

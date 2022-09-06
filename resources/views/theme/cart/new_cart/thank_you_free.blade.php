@@ -2,6 +2,7 @@
 @extends('theme.layouts.master')
 @section('metas')
 <title>Thank you</title>
+<meta name="robots" content="noindex, nofollow" />
 @endsection
 @section('content')
 

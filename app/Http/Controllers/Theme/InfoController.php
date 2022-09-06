@@ -848,6 +848,8 @@ class InfoController extends Controller
 
                 $data['template'] = $transaction->event->first() && $user->waitingList()->where('event_id',$transaction->event->first()->id)->first() 
                                         ? 'waiting_list_welcome' : 'welcome';
+
+                
                 $data['firstName'] = $user->firstname;
                 $user->notify(new WelcomeEmail($user,$data));
 
