@@ -24,7 +24,7 @@
 @endphp
 
 @if(!$column->template->dynamic && !$image) 
-    <section class="section-hero section-hero-small" style="height: 140px;">
+    <section class="section-hero section-hero-small section-hero-small-no-image">
     
     </section>
 @else
