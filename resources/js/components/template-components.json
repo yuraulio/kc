@@ -806,7 +806,15 @@
         "width": "content",
         "simple_view": false,
         "mobile": true,
+        "dynamic": false,
         "inputs": [
+            {
+                "type": "multidropdown",
+                "key": "course_video_testimonials_event",
+                "label": "Course",
+                "route": "getEvents",
+                "size": "col-lg-12"
+            }
         ]
     },
     "course_written_testimonials" : {
@@ -818,7 +826,15 @@
         "width": "content",
         "simple_view": false,
         "mobile": true,
+        "dynamic": false,
         "inputs": [
+            {
+                "type": "multidropdown",
+                "key": "course_written_testimonials_event",
+                "label": "Course",
+                "route": "getEvents",
+                "size": "col-lg-12"
+            }
         ]
     },
     "course_location" : {

@@ -24,6 +24,7 @@ use Illuminate\Support\Str;
 use Ramsey\Uuid\Uuid;
 use App\Jobs\UpdateTerms;
 use App\Model\Admin\PageType;
+use App\Model\Event;
 
 class PagesController extends Controller
 {
@@ -494,5 +495,20 @@ class PagesController extends Controller
         $data = PageType::all();
 
         return response()->json(['data' => $data], 200);
+    }
+
+    public function getEvents() {
+        $events = Event::get();
+        $data = [];
+        foreach ($events as $event) {
+            array_push(
+                $data,
+                [
+                    "id" => $event->id,
+                    "title" => $event->title
+                ]
+            );
+        }
+        return ["data" => $data];
     }
 }

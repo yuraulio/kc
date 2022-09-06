@@ -91,6 +91,8 @@ Route::domain('admin.' . env('APP_DOMAIN'))->group(function () {
         Route::get('getPageTypes', [PagesController::class, 'getPageTypes']);
 
         Route::get('category_group/{id}', [CategoriesController::class, 'getCategoriesForPageType']);
+
+        Route::get('getEvents', [PagesController::class, 'getEvents']);
     });
 });
 
