@@ -52,6 +52,7 @@
         <!--  Non-Essential, But Recommended -->
         <meta property="og:description" content="{{ $meta['meta_description'] ?? "" }}">
         <meta property="og:site_name" content="Knowcrunch’s professional diploma in digital and social media marketing">
+        <meta name="twitter:image" content="{{ $meta['meta_image']->url ?? "" }}">
         <meta name="twitter:image:alt" content="Knowcrunch’s professional diploma in digital and social media marketing">
 
         @if(isset($meta['meta_schema']) && $meta['meta_schema'])
