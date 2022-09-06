@@ -80,6 +80,9 @@
                     title: 'Created by',
                     dataClass: 'text-center',
                     titleClass: 'text-center',
+                    formatter (value) {
+                        return value.name;
+                    },
                 },
                 {
                     name: 'page',

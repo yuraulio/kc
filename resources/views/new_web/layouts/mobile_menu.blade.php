@@ -13,8 +13,8 @@
             @yield('main_menu_mobile')
 
             @if (Auth::check())
-               <li class="nav-item">
-               <li  class="account-menu"><a href="/myaccount">Account</a></li>
+
+               @yield('account_menu')
 
                <?php $cartitems = Cart::content()->count(); ?>
                @if($cartitems > 0)
@@ -25,10 +25,6 @@
                      </a>
                   </li>
                @endif
-
-               <li class="nav-item">
-                  <a href="{{ url('logout') }}">Sign out</a>
-               </li>
             @else
                <li class="account-menu">
                   <a href="javascript:void(0)" title="Superhero Login">Account</a>
