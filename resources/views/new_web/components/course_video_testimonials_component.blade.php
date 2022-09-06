@@ -2,7 +2,9 @@
     use App\Library\CMS;
     use App\Model\Event;
 
+    $title = true;
     if (!isset($dynamic_page_data["testimonials"])) {
+        $title = false;
         $video_testimonials = [];
         foreach ($column->template->inputs as $input){
             $video_testimonials[$input->key] = $input->value ?? "";
@@ -27,7 +29,7 @@
     <?php
         $title = '';
         $body = '';
-        if(isset($sections['testimonials'])){
+        if(isset($sections['testimonials']) && $title){
             $title = $sections['testimonials']->first()->title;
             $body = $sections['testimonials']->first()->description;
         }
