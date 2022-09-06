@@ -322,6 +322,10 @@ class PagesController extends Controller
                 [
                     "id" => 3,
                     "title" => "Become an instructor"
+                ],
+                [
+                    "id" => 4,
+                    "title" => "Giveaway"
                 ]
             ]
         ];
