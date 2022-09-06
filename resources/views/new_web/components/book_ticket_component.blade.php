@@ -27,6 +27,39 @@
                     <?php 
                     $early = false;
                     $index = 0;
+
+                    foreach($tickets as $key => $ticket) {
+                        $options = json_decode($ticket['pivot']['options'],true); 
+                        if($ticket['type'] == 'Early Bird' && $ticket['pivot']['quantity'] > 0){
+                            $early = true;
+                        }else if($ticket['type'] == 'Early Bird'){
+                            continue;
+                        }
+                        if($ticket['type'] == 'Special' && $early){
+                            continue;
+                        } 
+                        if($ticket['type'] == 'Sponsored'){
+                            continue;
+                        } 
+                        
+                        if($ticket['type'] == 'Alumni' && (!Auth::user() || (Auth::user() && !Auth::user()->kc_id))){  
+                            
+                            $showAlumni = false;
+                            continue;
+                        }
+                        $index = $index + 1;
+                    }
+
+                    $numberOfItems = $index;
+                    if ($index) {
+                        $columns = (12 / $index);
+                    } else {
+                        $columns = 12;
+                    }
+                    $columnClass = "col-md-" . $columns;
+
+                    $early = false;
+                    $index = 0;
                     ?>
                     @foreach($tickets as $key => $ticket)
                         <?php 
@@ -50,9 +83,17 @@
                             }
                             $index = $index + 1;
 
-                            
+                            $justifyClass = "justify-content-center";
+                            if ($numberOfItems > 1) {
+                                if ($index == 0) {
+                                    $justifyClass = 'justify-content-start-2';
+                                }
+                                if ($index == ($numberOfItems-1)) {
+                                    $justifyClass = 'justify-content-end-2';
+                                }
+                            }
                         ?>
-                        <div class="@if($showAlumni && $showSpecial) col-md-4 col-sm-12 @else col-md-6 col-sm-12 @endif d-flex book-ticket-boxes mb-4 {{ $index % 2 != 0 ? 'justify-content-end-2' : 'justify-content-start-2' }}" >
+                        <div class="{{$columnClass}} col-sm-12 d-flex book-ticket-boxes mb-4 {{$justifyClass}}" >
                             <div class="ticket-box-wrapper" style="width: 100%;">
                                 <div class="ticket-box">
                                     <h3 class="@if($ticket['type'] != 'Alumni') special-ticket @endif">{{ $ticket['type'] }} <span> €{{$ticket['pivot']['price']}} </span></h3>
