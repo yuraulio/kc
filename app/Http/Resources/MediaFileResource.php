@@ -42,6 +42,8 @@ class MediaFileResource extends JsonResource
             'version' => $this->version,
             'folder_id' => $this->folder_id,
             'selected' => false,
+            'height' => $this->height,
+            'width' => $this->width,
         ];
     }
 }

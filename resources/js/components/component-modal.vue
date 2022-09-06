@@ -108,6 +108,12 @@
                                 <span class="text-muted mt-1 ms-1 me-1">Rounded image</span>
                             </div>
                         </div>
+                        <div class="col-3">
+                            <div @click="selectComponent('schema')" class="widget-rounded-circle card bg-grey text-center d-inline-block h-100 mb-1">
+                                <i style="font-size: 20px" class="text-muted dripicons-code d-block mt-1"></i>
+                                <span class="text-muted mt-1 ms-1 me-1">Schema</span>
+                            </div>
+                        </div>
                     </div>
                 </template>
 
