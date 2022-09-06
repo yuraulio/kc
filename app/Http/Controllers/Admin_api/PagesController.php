@@ -25,6 +25,7 @@ use Ramsey\Uuid\Uuid;
 use App\Jobs\UpdateTerms;
 use App\Model\Admin\PageType;
 use App\Model\Event;
+use App\Model\Plan;
 
 class PagesController extends Controller
 {
@@ -506,6 +507,21 @@ class PagesController extends Controller
                 [
                     "id" => $event->id,
                     "title" => $event->title
+                ]
+            );
+        }
+        return ["data" => $data];
+    }
+
+    public function getPlans() {
+        $events = Plan::get();
+        $data = [];
+        foreach ($events as $event) {
+            array_push(
+                $data,
+                [
+                    "id" => $event->id,
+                    "title" => $event->name
                 ]
             );
         }

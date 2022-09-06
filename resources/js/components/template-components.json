@@ -1188,5 +1188,56 @@
                 "size": "col-lg-12"
             }
         ]
+    },
+    "subscription" : {
+        "version": 2,
+        "title": "Subscription",
+        "icon": "dripicons-download",
+        "key": "subscription_component",
+        "tab": "Content",
+        "width": "content",
+        "simple_view": true,
+        "mobile": true,
+        "inputs": [
+            {
+                "type": "multidropdown",
+                "key": "subscribe_event",
+                "label": "Event",
+                "route": "getEvents",
+                "size": "col-lg-12",
+                "main": true
+            },
+            {
+                "type": "multidropdown",
+                "key": "subscribe_plan",
+                "label": "Plan",
+                "route": "getPlans",
+                "size": "col-lg-12",
+                "main": true
+            },
+            {
+                "type": "text",
+                "key": "subscribe_title",
+                "label": "Title",
+                "value": "",
+                "size": "col-lg-12",
+                "main": true
+            },
+            {
+                "type": "text",
+                "key": "subscribe_button",
+                "label": "Button text",
+                "value": "",
+                "size": "col-lg-12",
+                "main": true
+            },
+            {
+                "type": "checkbox",
+                "key": "subscribe_overlap",
+                "label": "Overlap",
+                "value": true,
+                "size": "col-lg-6"
+            }
+        ]
     }
 }

@@ -93,6 +93,7 @@ Route::domain('admin.' . env('APP_DOMAIN'))->group(function () {
         Route::get('category_group/{id}', [CategoriesController::class, 'getCategoriesForPageType']);
 
         Route::get('getEvents', [PagesController::class, 'getEvents']);
+        Route::get('getPlans', [PagesController::class, 'getPlans']);
     });
 });
 
