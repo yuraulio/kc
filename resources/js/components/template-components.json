@@ -309,6 +309,54 @@
         "simple_view": false,
         "mobile": true,
         "inputs": [
+            {
+                "type": "checkbox",
+                "key": "social_facebook_checkbox",
+                "label": "Use Facebook",
+                "simple_view": false,
+                "value": true,
+                "main": true,
+                "size": "col-md-6"
+            },
+            {
+                "type": "image",
+                "key": "social_facebook_icon",
+                "label": "Facebook icon",
+                "main": true,
+                "size": "col-lg-3 col-md-6"
+            },
+            {
+                "type": "checkbox",
+                "key": "social_twitter_checkbox",
+                "label": "Use Twitter",
+                "simple_view": false,
+                "value": true,
+                "main": true,
+                "size": "col-md-6"
+            },
+            {
+                "type": "image",
+                "key": "social_twitter_icon",
+                "label": "Twitter icon",
+                "main": true,
+                "size": "col-lg-3 col-md-6"
+            },
+            {
+                "type": "checkbox",
+                "key": "social_linkedin_checkbox",
+                "label": "Use LinkedIn",
+                "simple_view": false,
+                "value": true,
+                "main": true,
+                "size": "col-md-6"
+            },
+            {
+                "type": "image",
+                "key": "social_linkedin_icon",
+                "label": "LinkedIn icon",
+                "main": true,
+                "size": "col-lg-3 col-md-6"
+            }
         ]
     },
     "gallery" : {
