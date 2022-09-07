@@ -884,6 +884,40 @@
             }
         ]
     },
+    "list" : {
+        "version": 2,
+        "title": "Category display",
+        "icon": "dripicons-blog",
+        "key": "list_component",
+        "tab": "Content",
+        "width": "content",
+        "simple_view": true,
+        "mobile": true,
+        "inputs": [
+            {
+                "type": "multidropdown",
+                "key": "list_source",
+                "label": "List source",
+                "route": "getListSource",
+                "value": {
+                    "id": 1,
+                    "title": "Blog"
+                },
+                "size": "col-lg-12"
+            },
+            {
+                "type": "multidropdown",
+                "key": "list_type",
+                "label": "List display",
+                "route": "getDisplayOptions",
+                "value": {
+                    "id": 2,
+                    "title": "Grid"
+                },
+                "size": "col-lg-12"
+            }
+        ]
+    },
     "blog_list" : {
         "version": 2,
         "title": "Blog list",
@@ -1157,7 +1191,7 @@
     },
     "blog_search_result" : {
         "version": 2,
-        "title": "Blog search result",
+        "title": "Search results",
         "icon": "dripicons-search",
         "key": "blog_search_result_component",
         "tab": "Content",
@@ -1169,7 +1203,7 @@
                 "type": "multidropdown",
                 "key": "blog_source",
                 "label": "Blog source",
-                "route": "getBlogSource",
+                "route": "getSearchSource",
                 "value": {
                     "id": 1,
                     "title": "Blog"

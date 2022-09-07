@@ -363,7 +363,43 @@ class PagesController extends Controller
         ];
     }
 
-    public function getBlogSource()
+    public function getListSource()
+    {
+        return [
+            "data" => [
+                [
+                    "id" => 1,
+                    "title" => "Blog"
+                ],
+                [
+                    "id" => 2,
+                    "title" => "Knowledge"
+                ],
+                [
+                    "id" => 3,
+                    "title" => "Courses"
+                ],
+                [
+                    "id" => 4,
+                    "title" => "Instructors"
+                ],
+                [
+                    "id" => 5,
+                    "title" => "City"
+                ],
+                [
+                    "id" => 6,
+                    "title" => "Homepage - in class events"
+                ],
+                [
+                    "id" => 7,
+                    "title" => "Homepage - elearning events"
+                ]
+            ]
+        ];
+    }
+
+    public function getSearchSource()
     {
         return [
             "data" => [

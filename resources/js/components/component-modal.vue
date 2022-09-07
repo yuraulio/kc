@@ -166,21 +166,9 @@
                     </div>
                     <div class="row mb-2">
                         <div class="col-3">
-                            <div @click="selectComponent('city_list')" class="widget-rounded-circle card bg-grey text-center d-inline-block h-100 mb-1">
-                                <i style="font-size: 20px" class="text-muted dripicons-view-list-large d-block mt-1"></i>
-                                <span class="text-muted mt-1 ms-1 me-1">City list</span>
-                            </div>
-                        </div>
-                        <div class="col-3">
-                            <div @click="selectComponent('events_list')" class="widget-rounded-circle card bg-grey text-center d-inline-block h-100 mb-1">
-                                <i style="font-size: 20px" class="text-muted dripicons-view-list-large d-block mt-1"></i>
-                                <span class="text-muted mt-1 ms-1 me-1">Courses list</span>
-                            </div>
-                        </div>
-                        <div class="col-3">
-                            <div @click="selectComponent('knowledge_list')" class="widget-rounded-circle card bg-grey text-center d-inline-block h-100 mb-1">
+                            <div @click="selectComponent('list')" class="widget-rounded-circle card bg-grey text-center d-inline-block h-100 mb-1">
                                 <i style="font-size: 20px" class="text-muted dripicons-blog d-block mt-1"></i>
-                                <span class="text-muted mt-1 ms-1 me-1">Knowledge list</span>
+                                <span class="text-muted mt-1 ms-1 me-1">Category display</span>
                             </div>
                         </div>
                         <div class="col-3">

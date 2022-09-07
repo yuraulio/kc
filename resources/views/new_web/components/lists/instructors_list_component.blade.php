@@ -7,7 +7,7 @@
         $instructors_display[$input->key] = $input->value ?? "";
     }
 
-    $type = $instructors_display['instructors_list']->id ?? null;
+    $type = $instructors_display['list_type']->id ?? null;
 @endphp
 
 @if(isset($instructors))
