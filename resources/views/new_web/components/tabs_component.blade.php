@@ -14,7 +14,6 @@
     
     $freeEvent = isset($dynamic_page_data['info']['payment_method']) && $dynamic_page_data['info']['payment_method'] == 'free' ? true : false;
 
-    /*
     function checkTabContent($tab, $dynamic_page_data, $tabs) {
         $tab = strtolower($tab);
         foreach ($tabs["tabs"]["value"] as $tab_content) {
@@ -27,7 +26,6 @@
                     return true;
                 }
                 if (isset($dynamic_page_data["sections"][$tab])) {
-                    echo($dynamic_page_data["sections"][$tab]->first()->visible);
                     if ($dynamic_page_data["sections"][$tab]->first()->visible) {
                         return true;
                     } else {
@@ -40,7 +38,6 @@
         }
         return false;
     }
-    */
 
 @endphp
 
@@ -55,10 +52,9 @@
 
                                 @if ($estatus == 0 || $estatus == 2 || $estatus == 5)
                                     @foreach ($tabs["tabs"]["tabs"] as $index=>$tab)
-                                        {{-- @if (checkTabContent($tab, $dynamic_page_data, $tabs))
+                                        @if(checkTabContent($tab, $dynamic_page_data, $tabs))
                                             <li><a href="#{{Illuminate\Support\Str::slug($tab)}}" class="{{$index == 0 ? "active" : "" }}">{{$tab}}</a></li>
-                                        @endif --}}
-                                        <li><a href="#{{Illuminate\Support\Str::slug($tab)}}" class="{{$index == 0 ? "active" : "" }}">{{$tab}}</a></li>
+                                        @endif
                                     @endforeach
                                 @else
                                     <li><a href="#{{Illuminate\Support\Str::slug("Overview")}}" class="active">Overview</a></li>
