@@ -95,7 +95,7 @@
 							</ul>
 						</div>
 
-						<ul class="main-menu">
+						{{--<ul class="main-menu">
 							@if (!empty($header_menus))
                                 @foreach ($header_menus['menu']['Header'] as $key => $row)
                                 <?php //dd($row['header_menus']['data']);
@@ -114,7 +114,13 @@
                                 </li>
 								
                             @endif
+						</ul>--}}
+
+						<ul class="main-menu">
+							
+							@yield('main_menu_desktop')
 						</ul>
+
 					</div>
 				</div>
 

@@ -8,7 +8,7 @@
    $search_term = $dynamic_page_data["event_search_data"]["search_term"] ?? null;
    $search_term_slug = $dynamic_page_data["event_search_data"]["search_term_slug"] ?? null;
    $instructor = $dynamic_page_data["event_search_data"]["instructor"] ?? null;
-   $sumStudentsCategories = $dynamic_page_data["event_search_data"]['sumStudentsByCategories'];
+   $sumStudentsCategories = $dynamic_page_data["event_search_data"]['sumStudentsByCategories'] ?? null;
 
 @endphp
 

@@ -342,6 +342,10 @@ class EventController extends Controller
 
         $infoData = $request->course;
 
+        if(!$infoData['certificate']['event_title']){
+            $infoData['certificate']['event_title'] = explode(',',$event->title)[0];
+        }
+     
         $event_info = $this->prepareInfo($infoData, $request->status, $request->delivery, $partner, $request->syllabus, $request->city_id, $event);
         $this->updateEventInfo($event_info, $event->id);
 
@@ -999,8 +1003,10 @@ class EventController extends Controller
 
         // Certificate
         if(isset($requestData['certificate'])){
+            
             $data['course_certification_name_success'] = $requestData['certificate']['success_text'];
             $data['course_certification_name_failure'] = $requestData['certificate']['failure_text'];
+            $data['course_certification_event_title'] = $requestData['certificate']['event_title'];
             $data['course_certification_type'] = $requestData['certificate']['type'];
             $data['has_certificate'] = isset($requestData['certificate']['certification']) && $requestData['certificate']['certification'] == 'on';
 
@@ -1125,6 +1131,7 @@ class EventController extends Controller
 
         $infos->course_certification_name_success = $event_info['course_certification_name_success'];
         $infos->course_certification_name_failure = $event_info['course_certification_name_failure'];
+        $infos->course_certification_event_title = $event_info['course_certification_event_title'];
         $infos->course_certification_type = $event_info['course_certification_type'];
         $infos->has_certificate = $event_info['has_certificate'];
         $infos->course_certification_visible = $event_info['course_certificate_visible'];

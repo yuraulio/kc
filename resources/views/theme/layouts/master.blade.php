@@ -1,4 +1,5 @@
-<?php $header_menus = get_header();?>
+@include('theme.layouts.menu_component_myaccount')
+
 <!doctype html>
 <html lang="en" class="no-js">
 <head>

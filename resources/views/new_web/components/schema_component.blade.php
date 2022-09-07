@@ -1,18 +1,15 @@
 
 @php
-    $meta = [];
+    $schema = [];
     foreach ($column->template->inputs as $input){
-        $meta[$input->key] = $input->value ?? "";
+        $schema[$input->key] = $input->value ?? "";
     }
+
 @endphp
 
-@section('header')
-
-    @if(isset($meta['meta_schema']) && $meta['meta_schema'])
-        <script type="application/ld+json">
-            {!! $meta['schema_schema'] !!}
-        </script>
-    @endif
-
-@endsection
+@if(isset($schema['schema_schema']) && $schema['schema_schema'])
+    <script type="application/ld+json">
+        {!! $schema['schema_schema'] !!}
+    </script>
+@endif
 

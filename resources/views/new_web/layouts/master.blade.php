@@ -1,4 +1,4 @@
-<?php $header_menus = get_header();?>
+<?php //$header_menus = get_header();?>
 
 <!doctype html>
 

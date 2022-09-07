@@ -6,24 +6,22 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use Carbon\Carbon;
 
-class WelcomeEmail extends Notification
+class InClassReminder extends Notification
 {
     use Queueable;
-
-    public $user;
-    public $data;
-
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($user, $data)
+
+    private $data;
+
+
+    public function __construct($data)
     {
-        $this->user = $user;
         $this->data = $data;
     }
 
@@ -46,29 +44,12 @@ class WelcomeEmail extends Notification
      */
     public function toMail($notifiable)
     {
-        $slug = [];
-        $slug['id'] = $this->user->id;
-        $slug['email'] = $this->user->email;
-        $slug['create'] = true;
         
-        
-        $slug = encrypt($slug);
-
-        $template = isset($this->data['template']) ? 'emails.user.'.$this->data['template'] : 'emails.user.welcome';
-
-        $subject = !isset($this->data['subject']) ? 'Knowcrunch - Welcome ' .  $this->user->firstname . '. Activate your account​ now' : 'Knowcrunch - Welcome ' . $this->data['subject'];
-
-        $this->data['slug'] = $this->data['user']['createAccount'] ? url('/') . '/create-your-password/' . $slug : url('/') . '/myaccount';
-
-        if($this->user->statusAccount){
-            $this->user->statusAccount->completed = true;
-            $this->user->statusAccount->completed_at = Carbon::now();
-            $this->user->statusAccount->save();
-        }
+        $template = 'emails.user.inclass_reminder';
 
         return (new MailMessage)
                     ->from('info@knowcrunch.com', 'Knowcrunch')
-                    ->subject($subject)
+                    ->subject('Knowcrunch - Welcome ' .  $this->data['firstname'] . '. Reminder about your course')
                     ->view($template,$this->data);
     }
 

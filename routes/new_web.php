@@ -28,4 +28,3 @@ Route::get('/sitemap.xml', [SitemapXmlController::class, 'index']);
 Route::get('/feed', [SitemapXmlController::class, 'index']);
 
 Route::get('/blog/{slug}', [MainController::class, 'page']);
-// Route::get('/{slug}', [MainController::class, 'page'])->name('new_general_page');

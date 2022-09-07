@@ -209,7 +209,7 @@
 
                                         <div class="row">
                                             <div class="form-group col-12">
-                                                <h3 class="mb-0 title" for="input-status">{{ __('Course Status') }}</h3>
+                                                <h3 class="mb-0 title" for="input-status">{{ __('Course Status') }} (course_status)</h3>
                                             </div>
                                             <div class="form-group{{ $errors->has('status') ? ' has-danger' : '' }} col-sm-12 col-md-6 col-lg-3">
                                                 <input hidden name="old_status" value="{{$event['status']}}">
@@ -243,7 +243,7 @@
                                                 ?>
 
                                                 <div class="input-group">
-                                                    <h3 class="mb-0 title">{{ __('Course hours') }}</h3>
+                                                    <h3 class="mb-0 title">{{ __('Course hours') }} (course_hours)</h3>
                                                     <span data-infowrapper="hours" class="input-group-addon input-group-append input-icon-wrapper">
                                                         <span class="btn btn-outline-primary input-icon">
                                                             @if(isset($info['hours']['icon']) && $info['hours']['icon']['path'] != null)
@@ -341,7 +341,7 @@
                                             <div class="form-group col-12">
 
                                                 <div class="input-group">
-                                                <h3 class="mb-0 title">{{ __('Course language') }}</h3>
+                                                <h3 class="mb-0 title">{{ __('Course language') }} (course_language)</h3>
 
                                                     <span data-infowrapper="language" class="input-group-addon input-group-append input-icon-wrapper">
                                                         <span class="btn btn-outline-primary input-icon">
@@ -427,7 +427,7 @@
                                             <div class="form-group col-12">
 
                                                 <div class="input-group">
-                                                    <h3 class="mb-0 title">{{ __('Course Delivery') }}</h3>
+                                                    <h3 class="mb-0 title">{{ __('Course Delivery') }} (course_delivery)</h3>
 
 
                                                 </div>
@@ -491,7 +491,7 @@
                                                                 <i class="fa fa-map-marker"></i>
                                                             @endif
                                                         </span>
-
+                                                        (course_inclass_city)
                                                     </span>
 
 
@@ -519,7 +519,9 @@
                                                     ?>
 
                                                     <div class="form-group col-sm-12 col-md-5 col-lg-2">
+                                                    <div>(course_inclass_dates)</div>
                                                         <div class="input-group">
+                                                        
                                                             <input type="text" class="form-control" value="{{ (isset($dates) && isset($dates['text']) ) ? $dates['text'] : '' }}" name="course[{{'delivery'}}][{{'inclass'}}][{{'dates'}}][{{'text'}}]" placeholder="Dates(from/to)">
                                                             <span data-infowrapper="inclass_dates" class="input-group-addon input-group-append input-icon-wrapper-inclass">
                                                                 <span class="btn btn-outline-primary input-icon">
@@ -595,6 +597,7 @@
                                                     ?>
 
                                                     <div class="form-group col-sm-12 col-md-5 col-lg-2">
+                                                        <div>(course_inclass_days)</div>
                                                         <div class="input-group">
                                                             <input type="text" class="form-control" value="{{ (isset($days) && isset($days['text']) ) ? $days['text'] : '' }}" name="course[{{'delivery'}}][{{'inclass'}}][{{'day'}}][{{'text'}}]" placeholder="Day" >
                                                             <span data-infowrapper="inclass_day" class="input-group-addon input-group-append input-icon-wrapper-inclass">
@@ -679,6 +682,7 @@
                                                     ?>
 
                                                     <div class="form-group col-sm-12 col-md-5 col-lg-2">
+                                                        <div>(course_inclass_times)</div>
                                                         <div class="input-group">
                                                             <input type="text" class="form-control" value="{{ old('times', (isset($times['text']) && $times['text']) ? $times['text'] : '' ) }}" name="course[{{'delivery'}}][{{'inclass'}}][{{'times'}}][{{'text'}}]" placeholder="Times(from/to)">
                                                             <span data-infowrapper="inclass_times" class="input-group-addon input-group-append input-icon-wrapper-inclass">
@@ -743,7 +747,7 @@
 
                                                 <div class="row">
                                                     <div class="form-group col-sm-12 col-md-4">
-                                                        <label class="form-control-label" for="input-hours">{{ __('Absences Limit(%)') }}</label>
+                                                        <label class="form-control-label" for="input-hours">{{ __('Absences Limit(%)') }} (course_inclass_absences)</label>
                                                         <div class="input-group">
                                                             <input type="text" name="course[{{'delivery'}}][{{'inclass'}}][{{'absences'}}]" id="input-absences_limit" class="form-control{{ $errors->has('Absences Limit(%)') ? ' is-invalid' : '' }}" placeholder="{{ __('absences_limit') }}" value="{{ old('$course_inclass_absences', (isset($info['inclass']['absences']) && $info['inclass']['absences'] != null) ? $info['inclass']['absences'] : 0 ) }}"autofocus>
                                                             <span class="input-group-addon input-group-append">
@@ -835,7 +839,7 @@
                                                     $course_elearning_icon = (isset($info['elearning']['icon']) && $info['elearning']['icon']) ? $info['elearning']['icon'] : null;
 
                                                 ?>
-                                                <label class="form-control-label" for="input-expiration">{{ __('Months access') }}</label>
+                                                <label class="form-control-label" for="input-expiration">{{ __('Months access') }} (course_elearning_expiration)</label>
                                                 <div class="input-group">
                                                     <input type="number" min="1" name="course[{{'delivery'}}][{{'elearning'}}][{{'expiration'}}]" id="input-expiration" class="form-control{{ $errors->has('expiration') ? ' is-invalid' : '' }}" placeholder="{{ __('Enter number of months') }}" value="{{ old('expiration', (isset($info['elearning']['expiration']) && $info['elearning']['expiration'] != null) ? $info['elearning']['expiration'] : '' ) }}"autofocus>
 
@@ -858,7 +862,7 @@
                                             </div>
 
                                             <div class="exp_input col-sm-12 col-md-6 col-lg-3 form-group">
-                                                <label class="form-control-label" for="input-test">{{ __('Months access text') }}</label>
+                                                <label class="form-control-label" for="input-test">{{ __('Months access text') }} (course_elearning_text)</label>
                                                 <input type="text" name="course[{{'delivery'}}][{{'elearning'}}][{{'text'}}]" style="background:aliceblue;" class="form-control" placeholder="{{ __('alphanumeric text') }}" value="{{ old('expiration_text', (isset($info['elearning']['text']) && $info['elearning']['text'] != null) ? $info['elearning']['text'] : '' ) }}"autofocus>
                                             </div>
 
@@ -923,7 +927,7 @@
                                                         $course_elearning_exam_icon = (isset($info['elearning']['exam']['icon']) && $info['elearning']['exam']['icon']) ? $info['elearning']['exam']['icon'] : null;
 
                                                     ?>
-                                                    <label class="form-control-label" for="input-expiration">{{ __('Online Exam') }}</label>
+                                                    <label class="form-control-label" for="input-expiration">{{ __('Online Exam') }} (course_elearning_exam_text)</label>
                                                     <div class="input-group">
                                                         <input type="text" name="course[{{'delivery'}}][{{'elearning'}}][{{'exam'}}][{{'text'}}]" id="input-exam" class="form-control" placeholder="{{ __('alphanumeric text') }}" value="{{ old('exam', (isset($info['elearning']['exam']['text']) && $info['elearning']['exam']['text'] != null) ? $info['elearning']['exam']['text'] : '' ) }}"autofocus>
 
@@ -1006,7 +1010,7 @@
                                             <div class="form-group col-12">
 
                                                 <div class="input-group">
-                                                    <h3 class="mb-0 title" for="input-hours">{{ __('Course payment method') }}</h3>
+                                                    <h3 class="mb-0 title" for="input-hours">{{ __('Course payment method') }} (course_payment_method)</h3>
 
                                                     <span data-infowrapper="payment" class="input-group-addon input-group-append input-icon-wrapper">
                                                         <span class="btn btn-outline-primary input-icon">
@@ -1068,7 +1072,7 @@
                                             <div class="form-group col-12">
 
                                                 <div class="input-group">
-                                                    <h3 class="mb-0 title" for="input-hours">{{ __('Course partners') }}</h3>
+                                                    <h3 class="mb-0 title" for="input-hours">{{ __('Course partners') }} (course_partner)</h3>
 
                                                     <span data-infowrapper="partner" class="input-group-addon input-group-append input-icon-wrapper">
                                                         <span class="btn btn-outline-primary input-icon">
@@ -1196,7 +1200,7 @@
                                             <div class="form-group col-12">
 
                                                 <div class="input-group">
-                                                    <h3 class="mb-0 title" >{{ __('Course manager') }}</h3>
+                                                    <h3 class="mb-0 title" >{{ __('Course manager') }} (course_manager)</h3>
 
                                                     <span data-infowrapper="manager" class="input-group-addon input-group-append input-icon-wrapper">
                                                         <span class="btn btn-outline-primary input-icon">
@@ -1267,7 +1271,7 @@
                                             <div class="form-group col-12">
 
                                                 <div class="input-group">
-                                                    <h3 class="mb-0 title">{{ __('Course awards & badges') }}</h3>
+                                                    <h3 class="mb-0 title">{{ __('Course awards & badges') }} (course_awards)</h3>
                                                     <span data-infowrapper="awards" class="input-group-addon input-group-append input-icon-wrapper">
                                                         <span class="btn btn-outline-primary input-icon">
                                                             @if($course_awards_icon != null && $course_awards_icon['path'] != null)
@@ -1351,7 +1355,7 @@
                                             <div class="form-group col-12 course-certification-visible-wrapper {{ isset($info['certificate']['has_certificate']) && $info['certificate']['has_certificate'] ? '' : 'd-none'  }}">
                                                 <div class="row">
                                                     <div class="col-sm-12 col-md-6 form-group{{ $errors->has('fb_') ? ' has-danger' : '' }}">
-                                                        <label class="form-control-label" for="input-hours">{{ __('Certificate Title') }}</label>
+                                                        <label class="form-control-label" for="input-hours">{{ __('Certificate Title') }} (course_certification_name_success)</label>
 
                                                         {{--<textarea type="text" name="course[{{'certificate'}}][{{'success_text'}}]" id="input-certificate_title" class="ckeditor form-control" placeholder="{{ __('alphanumeric text ') }}" autofocus>{{ old('certificate_title', (isset($info['certificate']['messages']['success']) && $info['certificate']['messages']['success'] != null) ? $info['certificate']['messages']['success'] : '') }}</textarea>--}}
 
@@ -1366,7 +1370,7 @@
                                                     </div>
 
                                                     <div class="col-sm-12 col-md-6 form-group">
-                                                        <label class="form-control-label" for="input-hours">{{ __('Title of certification (in case of exams failure)') }}</label>
+                                                        <label class="form-control-label" for="input-hours">{{ __('Title of certification (in case of exams failure)') }}(course_certification_name_failure)</label>
 
                                                         {{--<textarea type="text" name="course[{{'certificate'}}][{{'failure_text'}}]" id="input-certificate_text_failure" class="form-control ckeditor" placeholder="{{ __('alphanumeric text ') }}"  autofocus>{{ old('certificate_failure', (isset($info['certificate']['messages']['failure']) && $info['certificate']['messages']['failure'] != null) ? $info['certificate']['messages']['failure'] : '') }}</textarea>--}}
 
@@ -1379,11 +1383,22 @@
                                                     </div>
 
                                                     <div class="col-sm-12 col-md-6 form-group">
-                                                        <label class="form-control-label" for="input-hours">{{ __('Certificate type') }}</label>
+                                                        <label class="form-control-label" for="input-hours">{{ __('Certificate Event Title') }} (course_certification_event_title)</label>
+                                                        <!-- anto's editor -->
+                                                        <input class="hidden" id="input-certificate_event_title_hidden" name="course[{{'certificate'}}][{{'event_title'}}]" value="{{ old('certificate_event_title', (isset($info['certificate']['event_title']) && $info['certificate']['event_title'] != null) ?$info['certificate']['event_title'] : '') }}"/>
+                                                        <?php $data = isset($info['certificate']['event_title']) && $info['certificate']['event_title'] ? $info['certificate']['event_title'] : explode(',',$event->title)[0] ?>
+                                                        @include('event.editor.editor', ['keyinput' => "input-certificate_event_title", 'data'=> "$data", 'inputname' => "'course[certificate][event_title]'" ])
+                                                        <!-- anto's editor -->
+
+                                                    </div>
+
+                                                    
+                                                </div>
+                                                <div class="col-sm-12 col-md-6 form-group">
+                                                        <label class="form-control-label" for="input-hours">{{ __('Certificate type') }} (course_certification_type)</label>
                                                         <input type="text" name="course[{{'certificate'}}][{{'type'}}]" id="input-certificate_type" class="form-control" placeholder="{{ __('alphanumeric text ') }}" value="{{old('certificate_type',(isset($info['certificate']['type']) && $info['certificate']['type'] != null) ? $info['certificate']['type'] : '' )}}" autofocus/>
 
                                                     </div>
-                                                </div>
                                                     <div class="row">
                                                         <label class="form-control-label col-12" for="input-hours">{{ __('Visible on:') }}</label>
 
@@ -1456,7 +1471,7 @@
                                             <div class="form-group col-12">
 
                                                 <div class="input-group">
-                                                    <h3 class="mb-0 title">{{ __('Course students') }}</h3>
+                                                    <h3 class="mb-0 title">{{ __('Course students') }} </h3>
                                                     <span data-infowrapper="students" class="input-group-addon input-group-append input-icon-wrapper">
                                                         <span class="btn btn-outline-primary input-icon">
                                                             @if($course_students_icon != null && $course_students_icon['path'] != null)
@@ -1473,12 +1488,12 @@
 
                                             <div calss="col-sm-12 col-md-6 col-lg-3">
                                                 <div class="form-group col-auto">
-                                                    <label class="form-control-label" for="input-hours">{{ __('Student should start count from this number:') }}</label>
+                                                    <label class="form-control-label" for="input-hours">{{ __('Student should start count from this number:') }} (course_students_number)</label>
                                                     <input type="text" name="course[{{'students'}}][{{'count_start'}}]" class="form-control" placeholder="{{ __('alphanumeric text') }}" value="{{ old('count_start', (isset($info['students']['number']) && $info['students']['number'] != null) ? $info['students']['number'] : '' ) }}" autofocus>
                                                 </div>
 
                                                 <div class="form-group col-auto">
-                                                    <label class="form-control-label" for="input-hours">{{ __('Text after the number of students:') }}</label>
+                                                    <label class="form-control-label" for="input-hours">{{ __('Text after the number of students:') }} (course_students_text)</label>
                                                     <input style="background:aliceblue;" name="course[{{'students'}}][{{'text'}}]" type="text" class="form-control" placeholder="{{ __('alphanumeric text') }}" value="{{ old('count_text', (isset($info['students']['text']) && $info['students']['text'] != null) ? $info['students']['text'] : '' ) }}" autofocus>
                                                 </div>
                                             </div>

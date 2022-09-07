@@ -54,18 +54,18 @@
             <div :ref="keyput + 'media'" class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" :id="'mediaCanvas' + keyput" aria-labelledby="mediaCanvasLabel" style="visibility: visible; width: 100%" aria-modal="true" role="dialog">
             <div class="offcanvas-header">
                 <h5 class="offcanvas-title" id="mediaCanvasLabel"></h5>
-                <button :ref="(keyput + 'mediabtn')" type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                <button :ref="(keyput + 'mediabtn')" type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close" @click="startingImage=null"></button>
             </div> <!-- end offcanvas-header-->
 
             <div class="offcanvas-body" style="padding: 0px !important">
-                <media-manager v-if="loadstart[(keyput + 'media')]" mode="gallery" :loadstart="loadstart[(keyput + 'media')]" @updatedimg="updatedgallery($event,(keyput + 'media'))" :key="keyput"></media-manager>
+                <media-manager v-if="loadstart[(keyput + 'media')]" mode="gallery" :loadstart="loadstart[(keyput + 'media')]" @updatedimg="updatedgallery($event,(keyput + 'media'))" :key="keyput" :startingImage="startingImage"></media-manager>
             </div> <!-- end offcanvas-body-->
         </div>
         <div class="text-center">
             <div class="d-grid text-center" v-if="value" style="display: block;">
                 <div class="row">
                     <div v-for="(val, index) in value" class="col-sm-3 mb-2">
-                        <img @click="$set(loadstart, (keyput + 'media'),  true)" data-bs-toggle="offcanvas" :data-bs-target="'#mediaCanvas' + keyput" :src="val.url" alt="image" class="img-fluid img-thumbnail" width="200" height="200">
+                        <img @click="startingImage=val; $set(loadstart, (keyput + 'media'),  true)" data-bs-toggle="offcanvas" :data-bs-target="'#mediaCanvas' + keyput" :src="val.url" alt="image" class="img-fluid img-thumbnail" width="200" height="200">
                         <p class="mb-0">
                             <code>
                                 <template v-if="val.name.length < 50">
@@ -250,6 +250,7 @@ export default {
                 alt_text: $event.alt_text,
                 link: $event.link,
                 name: $event.name,
+                id: $event.id,
             }
             data.push(image_data);
 

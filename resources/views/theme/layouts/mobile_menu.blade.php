@@ -9,19 +9,7 @@
       </div>
       <div class="menu-wrapper">
          <ul class="mob-menu">
-            @if (!empty($header_menus))
-            @foreach ($header_menus['menu']['Header'] as $key => $row)
-            <li class="nav-item uppercase-item">
-            <a title="{{ $row['data']['name'] }}" href="{{ $row['data']['slugable']['slug'] }}">{{ $row['data']['name'] }}</a>
-            </li>
-            @endforeach
-            <li>
-				   <a title="Corporate Training" href="/corporate-training">Corporate Training</a>
-				</li>
-            <li class="nav-item uppercase-item">
-                <a title="Blog" href="/blog">Blog</a>
-            </li>
-            @endif
+         @yield('main_menu_mobile')
             @if (Auth::check())
             <li class="nav-item">
             <li  class="account-menu"><a href="/myaccount">Account</a></li>

@@ -52,7 +52,10 @@
         <!--  Non-Essential, But Recommended -->
         <meta property="og:description" content="{{ $meta['meta_description'] ?? "" }}">
         <meta property="og:site_name" content="Knowcrunch’s professional diploma in digital and social media marketing">
+        <meta name="twitter:image" content="{{ $meta['meta_image']->url ?? "" }}">
         <meta name="twitter:image:alt" content="Knowcrunch’s professional diploma in digital and social media marketing">
+
+        <meta property="fb:app_id" content="961275423898153">
 
         @if(isset($meta['meta_schema']) && $meta['meta_schema'])
             <script type="application/ld+json">

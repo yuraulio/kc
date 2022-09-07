@@ -307,22 +307,26 @@ class UserController extends Controller
         }*/
 
         $paymentMethodId = $event->paymentMethod->first() ? $event->paymentMethod->first()->id : -1;
-
-        $elearningInvoice = new Invoice;
-        $elearningInvoice->name = isset($billingDetails['billname']) ? $billingDetails['billname'] : '';;
-        $elearningInvoice->amount = $price;
-        $elearningInvoice->invoice = generate_invoice_number($paymentMethodId);;
-        $elearningInvoice->date = date('Y-m-d');//Carbon::today()->toDateString();
-        $elearningInvoice->instalments_remaining = 1;
-        $elearningInvoice->instalments = 1;
-
-        $elearningInvoice->save();
-
-
-        //$elearningInvoice->user()->save($dpuser);
-        $elearningInvoice->event()->save($event);
-        $elearningInvoice->transaction()->save($transaction);
-        $elearningInvoice->user()->save($user);
+        
+        $elearningInvoice = null;
+        if($price > 0) {
+            $elearningInvoice = new Invoice;
+            $elearningInvoice->name = isset($billingDetails['billname']) ? $billingDetails['billname'] : '';;
+            $elearningInvoice->amount = $price;
+            $elearningInvoice->invoice = generate_invoice_number($paymentMethodId);;
+            $elearningInvoice->date = date('Y-m-d');//Carbon::today()->toDateString();
+            $elearningInvoice->instalments_remaining = 1;
+            $elearningInvoice->instalments = 1;
+    
+            $elearningInvoice->save();
+    
+    
+            //$elearningInvoice->user()->save($dpuser);
+            $elearningInvoice->event()->save($event);
+            $elearningInvoice->transaction()->save($transaction);
+            $elearningInvoice->user()->save($user);
+        }
+        
 
        $response_data['ticket']['event'] = $data['event']['title'];
        $response_data['ticket']['ticket_title'] = $ticket['title'];
@@ -333,9 +337,9 @@ class UserController extends Controller
        $response_data['ticket']['type'] = $ticket['type'];;
 
 
-        $pdf = $elearningInvoice->generateInvoice();
+        $pdf = $elearningInvoice ? $elearningInvoice->generateInvoice() : null; 
 
-	    $this->sendEmail($elearningInvoice,$pdf,0);
+	    $this->sendEmail($elearningInvoice,$pdf,0,$transaction);
         //$this->sendEmails($transaction,$event,$response_data);
 
        return response()->json([
@@ -610,32 +614,32 @@ class UserController extends Controller
 
     }*/
 
-    private function sendEmail($elearningInvoice,$pdf,$paymentMethod = null){
+    private function sendEmail($elearningInvoice,$pdf,$paymentMethod = null,$transaction){
 
 		$adminemail = ($paymentMethod && $paymentMethod->payment_email) ? $paymentMethod->payment_email : 'info@knowcrunch.com';
 
 		//$pdf = $transaction->elearningInvoice()->first()->generateInvoice();
-        $pdf = $pdf->output();
+        $pdf = $pdf ? $pdf->output() : null;
 
 		$data = [];
         $muser = [];
 
-		$user = $elearningInvoice->user->first();
+		$user = $transaction->user->first();
 
-        $muser['name'] = $elearningInvoice->user->first()->firstname;
-        $muser['first'] = $elearningInvoice->user->first()->firstname;
-        $muser['email'] = $elearningInvoice->user->first()->email;
-        $muser['event_title'] = $elearningInvoice->event->first()->title;
-        $data['firstName'] = $elearningInvoice->user->first()->firstname;
-        $data['eventTitle'] = $elearningInvoice->event->first()->title;
+        $muser['name'] = $transaction->user->first()->firstname;
+        $muser['first'] = $transaction->user->first()->firstname;
+        $muser['email'] = $transaction->user->first()->email;
+        $muser['event_title'] = $transaction->event->first()->title;
+        $data['firstName'] = $transaction->user->first()->firstname;
+        $data['eventTitle'] = $transaction->event->first()->title;
 
-        $data['fbGroup'] = $elearningInvoice->event->first()->fb_group;
+        $data['fbGroup'] = $transaction->event->first()->fb_group;
         $data['duration'] = '';//$elearningInvoice->event->first()->summary1->where('section','date')->first() ? $elearningInvoice->event->first()->summary1->where('section','date')->first()->title : '';
-        $data['eventSlug'] = $elearningInvoice->event->first() ? url('/') . '/' . $elearningInvoice->event->first()->getSlug() : url('/');
+        $data['eventSlug'] = $transaction->event->first() ? url('/') . '/' . $transaction->event->first()->getSlug() : url('/');
         $data['user']['createAccount'] = false;
-        $data['user']['name'] = $elearningInvoice->user->first()->firstname;
+        $data['user']['name'] = $transaction->user->first()->firstname;
 
-        $eventInfo = $elearningInvoice->event->first() ? $elearningInvoice->event->first()->event_info() : [];
+        $eventInfo = $transaction->event->first() ? $transaction->event->first()->event_info() : [];
 
         if(isset($eventInfo['delivery']) && $eventInfo['delivery'] == 143){
 
@@ -658,7 +662,7 @@ class UserController extends Controller
         $data['certificate_type'] =isset($eventInfo['certificate']['visible']['emails']) &&  $eventInfo['certificate']['visible']['emails'] &&
                     isset( $eventInfo['certificate']['type']) ? $eventInfo['certificate']['type'] : '';
 
-        $eventStudents = get_sum_students_course($elearningInvoice->event->first()->category->first());
+        $eventStudents = get_sum_students_course($transaction->event->first()->category->first());
         $data['students_number'] = isset($eventInfo['students']['number']) ? $eventInfo['students']['number'] :  $eventStudents + 1;
 
         $data['students'] = isset($eventInfo['students']['visible']['emails']) &&  $eventInfo['students']['visible']['emails'] &&
@@ -681,8 +685,7 @@ class UserController extends Controller
 
 		});*/
 
-		$data['slugInvoice'] = encrypt($user->id . '-' . $elearningInvoice->id);
-
+		
         if($user->cart){
             $user->cart->delete();
         }
@@ -690,29 +693,31 @@ class UserController extends Controller
         $data['firstName'] = $user->firstname;
 
         $user->notify(new WelcomeEmail($user,$data));
-		$user->notify(new CourseInvoice($data));
 
+        if($elearningInvoice){
+            $data['slugInvoice'] = encrypt($user->id . '-' . $elearningInvoice->id);
 
+		    $user->notify(new CourseInvoice($data));
+		    $invoiceFileName = date('Y.m.d');
+		    if($paymentMethod){
+		      $invoiceFileName .= '_' . $paymentMethod->company_name;
+		    }
+		    $invoiceFileName .= '_' . $elearningInvoice->invoice . '.pdf';
+            $fn = $invoiceFileName;
 
-		$invoiceFileName = date('Y.m.d');
-		if($paymentMethod){
-		  $invoiceFileName .= '_' . $paymentMethod->company_name;
-		}
-		$invoiceFileName .= '_' . $elearningInvoice->invoice . '.pdf';
-        $fn = $invoiceFileName;
+		    $sent = Mail::send('emails.admin.elearning_invoice', $data, function ($m) use ($adminemail, $muser,$pdf,$fn) {
 
-		$sent = Mail::send('emails.admin.elearning_invoice', $data, function ($m) use ($adminemail, $muser,$pdf,$fn) {
+                $fullname = $muser['name'];
+                $first = $muser['first'];
+                $sub =  'Knowcrunch |' . $first . ' – Payment Successful in ' . $muser['event_title'];;
+                $m->from('info@knowcrunch.com', 'Knowcrunch');
+                $m->to($adminemail, $fullname);
+                //$m->to('moulopoulos@lioncode.gr', $fullname);
+                $m->subject($sub);
+                //$m->attachData($pdf, $fn);
 
-            $fullname = $muser['name'];
-            $first = $muser['first'];
-            $sub =  'Knowcrunch |' . $first . ' – Payment Successful in ' . $muser['event_title'];;
-            $m->from('info@knowcrunch.com', 'Knowcrunch');
-            $m->to($adminemail, $fullname);
-            //$m->to('moulopoulos@lioncode.gr', $fullname);
-            $m->subject($sub);
-            //$m->attachData($pdf, $fn);
-
-        });
+            });
+        }
 	}
 
 

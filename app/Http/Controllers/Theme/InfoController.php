@@ -848,6 +848,8 @@ class InfoController extends Controller
 
                 $data['template'] = $transaction->event->first() && $user->waitingList()->where('event_id',$transaction->event->first()->id)->first() 
                                         ? 'waiting_list_welcome' : 'welcome';
+
+                
                 $data['firstName'] = $user->firstname;
                 $user->notify(new WelcomeEmail($user,$data));
 
@@ -862,7 +864,7 @@ class InfoController extends Controller
             
             //$data = [];  
             $muser = [];
-            $muser['name'] = $transaction->user->first()->firstname;
+            $muser['name'] = $transaction->user->first()->firstname . ' ' . $transaction->user->first()->lastname;
             $muser['first'] = $transaction->user->first()->firstname;
             $muser['email'] = $transaction->user->first()->email;
             $muser['id'] = $transaction->user->first()->id;

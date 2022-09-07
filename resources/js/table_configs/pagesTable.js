@@ -45,13 +45,13 @@ export default {
                 return template;
             },
         },
-        {
-            name: 'type',
-            title: 'Type',
-            sortField: 'type',
-            dataClass: 'align-middle',
-            titleClass: ''
-        },
+        // {
+        //     name: 'type',
+        //     title: 'Type',
+        //     sortField: 'type',
+        //     dataClass: 'align-middle',
+        //     titleClass: ''
+        // },
         // {
         //     name: 'categories',
         //     title: 'Categories' + '<i title="Column cant be sorted." class="fa fa-info-circle text-muted ms-1"></i>',

@@ -28,6 +28,7 @@ use Image;
 use App\Model\Plan;
 use App\Model\Invoice;
 use App\Notifications\ExamActive;
+use Illuminate\Support\Str;
 
 class StudentController extends Controller
 {
@@ -1381,9 +1382,18 @@ class StudentController extends Controller
         $user->password = Hash::make($request->password);
         $user->save();
 
-        $user->statusAccount->completed = true;
-        $user->statusAccount->completed_at = Carbon::now();
-        $user->statusAccount->save();
+        if($user->statusAccount){
+            $user->statusAccount->completed = true;
+            $user->statusAccount->completed_at = Carbon::now();
+            $user->statusAccount->save();
+        }else{
+            Activation::create([
+                'user_id' => $user->id,
+                'code' => Str::random(40),
+                'completed' => true,
+                'completed_at' => Carbon::now()
+            ]);
+        }
 
         Auth::login($user);
 

@@ -887,6 +887,16 @@
                                         </div>
 
                                         <div class="col-sm-12 col-md-6 form-group">
+                                            <label class="form-control-label" for="input-hours">{{ __('Certificate Event Title') }}</label>
+                                            <!-- anto's editor -->
+                                            <input class="hidden" id="input-certificate_event_title_hidden" name="course[{{'certificate'}}][{{'event_title'}}]" value="{{ old('certificate_event_title') }}"/>
+                                            <?php $data = '' ?>
+                                            @include('event.editor.editor', ['keyinput' => "input-certificate_event_title", 'data'=> "$data", 'inputname' => "'course[certificate][event_title]'" ])
+                                            <!-- anto's editor -->
+
+                                        </div>
+
+                                        <div class="col-sm-12 col-md-6 form-group">
                                             <label class="form-control-label" for="input-hours">{{ __('Certificate type') }}</label>
                                             <input type="text" name="course[{{'certificate'}}][{{'type'}}]" id="input-certificate_type" class="form-control" placeholder="{{ __('alphanumeric text ') }}" value="{{old('certificate_type')}}" autofocus/>
 

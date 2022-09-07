@@ -500,7 +500,9 @@ class HomeController extends Controller
         $data['user']['email'] = $user->email;
         $data['extrainfo'] = ['','',$content->title];
         $data['duration'] = ''; //$content->summary1->where('section','date')->first() ? $content->summary1->where('section','date')->first()->title : '';
-        $data['template'] = 'join_activation';
+        //$data['template'] = 'join_activation';
+        $data['template'] = 'waiting_list_welcome';
+        $data['subject'] = 'Knowcrunch - Welcome ' .  $user->firstname;
         $data['eventSlug'] =  url('/') . '/' . $content->getSlug();
 
         $eventInfo = $content ? $content->event_info() : [];
@@ -541,7 +543,7 @@ class HomeController extends Controller
         $transdata['coupon'] = null;
         
         $muser = [];
-        $muser['name'] = $user->firstname;
+        $muser['name'] = $user->firstname . ' ' .$user->lastname;
         $muser['first'] = $user->firstname;
         $muser['email'] = $user->email;
         $muser['id'] = $user->id;

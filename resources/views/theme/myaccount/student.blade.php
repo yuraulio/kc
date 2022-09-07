@@ -910,7 +910,7 @@
                                              <div class="accordion-content no-padding">
                                                 @if(isset($files) && count($files) > 0)
                                                    @foreach($folders_bonus as $folder_bonus)
-                                                      @if($folder_bonus['parent'] == $folder['id']  && !in_array($folder_bonus['foldername'],$bonusFiles))
+                                                      @if(isset($folder_bonus['parent']) && $folder_bonus['parent'] == $folder['id']  && !in_array($folder_bonus['foldername'],$bonusFiles))
                                                       <?php
                                                          $checkedF[] = $folder_bonus['id'] + 1 ;
                                                          $fs[$folder_bonus['id']+1]=[];
@@ -928,7 +928,7 @@
                                                                continue;
                                                             }
                                                             ?>
-                                                            @if($folder_bonus['parent'] == $folder['id'])
+                                                            @if(isset($folder_bonus['parent']) && $folder_bonus['parent'] == $folder['id'])
 
                                                             <?php $folderIsSelected = false; ?>
 
@@ -948,7 +948,7 @@
                                                                <h4 class="bonus-title">{{ $subf['foldername'] }}</h4>
                                                                <span><i class="icon-folder-open"></i>   </span>
                                                                   @foreach($files_bonus as $file_bonus)
-                                                                     @if($file_bonus['fid'] == $subf['id'] && $file_bonus['parent'] == $subf['parent'] )
+                                                                     @if(isset($file_bonus['parent']) && $file_bonus['fid'] == $subf['id'] && $file_bonus['parent'] == $subf['parent'] )
 
                                                                      @if($folderIsSelected)
                                                                         <?php $subfiles[]= $file_bonus['filename'] ?>
@@ -1027,7 +1027,7 @@
                                                          continue;
                                                       }
                                                       ?>
-                                                   @if($folder_bonus['parent'] == $folder['id'])
+                                                   @if(isset($folder_bonus['parent']) && $folder_bonus['parent'] == $folder['id'])
 
                                                         <?php $folderIsSelected = false; ?>
                                                         @if($selectedFiles['selectedAllFolders'])
@@ -1046,7 +1046,7 @@
                                                    <span><i class="icon-folder-open"></i>   </span>
                                                    @if(isset($files_bonus) && count($files_bonus) > 0)
                                                    @foreach($files_bonus as $file_bonus)
-                                                   @if($file_bonus['parent'] == $folder_bonus['parent'] && !in_array($file_bonus['filename'],$subfiles))
+                                                   @if(isset($file_bonus['parent']) && $file_bonus['parent'] == $folder_bonus['parent'] && !in_array($file_bonus['filename'],$subfiles))
 
                                                     @if($folderIsSelected)
                                                         <div class="file-wrapper">
@@ -1668,16 +1668,18 @@
    $(document).on('click', '.facebook-post-cert', function() {
       var getUrl = window.location;
       var baseUrl = getUrl .protocol + "//" + getUrl.host;
-      var certificateId = $(this).attr('data-certid');
 
+
+      var certificateId = $(this).attr('data-certid');
+      let certUrl = '';
       $.ajax({
           type: 'GET',
           url: "/mycertificate/convert-pdf-to-image/"+certificateId,
           success: function(data) {
-
-              data = data.replace('\\','/')
-              if(data){
-                  var fbpopup = window.open(`http://www.facebook.com/sharer.php?u=${decodeURI(baseUrl)}/${decodeURI(data)}`, "pop", "width=600, height=400, scrollbars=no");
+               certUrl = '';
+               certUrl = data.replace('\\','/')
+              if(certUrl){
+                  var fbpopup = window.open(`http://www.facebook.com/sharer.php?u=${encodeURIComponent(baseUrl + '/' + certUrl)}`, "pop", "width=300, height=300, scrollbars=no");
                   return false;
               }
 
@@ -1697,7 +1699,7 @@
 
               data = data.replace('\\','/')
               if(data){
-                  var fbpopup = window.open(`http://twitter.com/share?url=${decodeURI(baseUrl)}/${decodeURI(data)}`, "pop", "width=600, height=400, scrollbars=no");
+                  var fbpopup = window.open(`http://twitter.com/share?url=${encodeURIComponent(baseUrl + '/' + certUrl)}`, "pop", "width=600, height=400, scrollbars=no");
                   return false;
               }
 

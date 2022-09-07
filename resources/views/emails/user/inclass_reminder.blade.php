@@ -1,8 +1,9 @@
 @extends('emails.user.layouts.master')
 
 @section('email_body')
+
 <tr>
-            <td align="center" class="r0-c">
+      <td align="center" class="r0-c">
                <table cellspacing="0" cellpadding="0" border="0" role="presentation" width="600" class="r1-o" style="table-layout: fixed; width: 600px;">
                   <tr>
                      <td valign="top" class="">
@@ -10,7 +11,7 @@
                            <tr>
                               <td class="r2-c" align="center">
                                  <table cellspacing="0" cellpadding="0" border="0" role="presentation" width="100%" class="r3-o" style="table-layout: fixed; width: 100%;">
-                                    <!-- -->
+ 
                                     <tr class="nl2go-responsive-hide">
                                        <td height="20" style="font-size: 20px; line-height: 20px; background-color: #ffffff;">­</td>
                                     </tr>
@@ -20,7 +21,6 @@
                                              <tr>
                                                 <th width="100%" valign="top" class="r5-c" style="font-weight: normal;">
                                                    <table cellspacing="0" cellpadding="0" border="0" role="presentation" width="100%" class="r6-o" style="table-layout: fixed; width: 100%;">
-                                                      <!-- -->
                                                       <tr>
                                                          <td class="nl2go-responsive-hide" width="15" style="font-size: 0px; line-height: 1px;">­ </td>
                                                          <td valign="top" class="r7-i">
@@ -59,7 +59,6 @@
                            <tr>
                               <td class="r2-c" align="center">
                                  <table cellspacing="0" cellpadding="0" border="0" role="presentation" width="100%" class="r3-o" style="table-layout: fixed; width: 100%;">
-                                    <!-- -->
                                     <tr class="nl2go-responsive-hide">
                                        <td height="20" style="font-size: 20px; line-height: 20px; background-color: #ffffff;">­</td>
                                     </tr>
@@ -69,7 +68,6 @@
                                              <tr>
                                                 <th width="100%" valign="top" class="r5-c" style="font-weight: normal;">
                                                    <table cellspacing="0" cellpadding="0" border="0" role="presentation" width="100%" class="r6-o" style="table-layout: fixed; width: 100%;">
-                                                      <!-- -->
                                                       <tr>
                                                          <td class="nl2go-responsive-hide" width="10" style="font-size: 0px; line-height: 1px;">­ </td>
                                                          <td valign="top" class="r7-i">
@@ -83,7 +81,7 @@
                                                                         <tr>
                                                                            <td align="left" valign="top" class="r14-i nl2go-default-textstyle" style="color: #3b3f44; font-family: arial,helvetica,sans-serif; font-size: 16px; line-height: 1.5; text-align: left;">
                                                                               <div>
-                                                                                 <h2 class="default-heading2" style="margin: 0; color: #1F2D3D; font-family: arial,helvetica,sans-serif; font-size: 32px;"><span style="font-family: Tahoma, geneva, sans-serif;">Welcome {{ $firstName }}</span></h2>
+                                                                                 <h2 class="default-heading2" style="margin: 0; color: #1F2D3D; font-family: arial,helvetica,sans-serif; font-size: 32px;"><span style="font-family: Tahoma, geneva, sans-serif;">Dear {{$firstname}}</span></h2>
                                                                               </div>
                                                                            </td>
                                                                         </tr>
@@ -99,9 +97,10 @@
                                                                         <tr>
                                                                            <td align="left" valign="top" class="r15-i nl2go-default-textstyle" style="color: #3b3f44; font-family: arial,helvetica,sans-serif; font-size: 16px; line-height: 1.5; text-align: left;">
                                                                               <div>
-                                                                                 <p style="margin: 0;"><span style="font-family: Tahoma, geneva, sans-serif;">Your enrollment is successful. </span></p>
+                                                                                 <p style="margin: 0;">This is a reminder that your course<span style="font-family: Tahoma, geneva, sans-serif;"> <strong>{{$eventTitle}}</strong> will take place in <strong>{{$venue}}  {{$address}}</strong> on <strong>{{$duration}}</strong>, <strong>{{$course_hours}}</strong>.</span></p>
                                                                                  <p style="margin: 0;"> </p>
-                                                                                 <p style="margin: 0;"><span style="font-family: Tahoma, geneva, sans-serif;">You are one of the privileged students of <strong>{{ $extrainfo[2] }}</strong>. We are glad you have chosen us and we promise you a wonderful experience full of inspiration &amp; creativity! <a href="{{ $slug }}" target="_blank" style="color: #0092ff; text-decoration: underline;">Access your account</a> and your course.</span></p>                                                                              </div>
+                                                                                 <p style="margin: 0;"><span style="font-family: Tahoma, geneva, sans-serif;">We are happy to have you in our course. Be there early for the networking session.</span></p>
+                                                                              </div>
                                                                            </td>
                                                                         </tr>
                                                                         <tr class="nl2go-responsive-hide">
@@ -110,8 +109,7 @@
                                                                      </table>
                                                                   </td>
                                                                </tr>
-                                                               
-                                                               
+                                                               @if($activateAccount)
                                                                <tr>
                                                                   <td class="r12-c" align="left">
                                                                      <table cellspacing="0" cellpadding="0" border="0" role="presentation" width="290" class="r16-o" style="table-layout: fixed; width: 290px;">
@@ -121,10 +119,10 @@
                                                                         <tr>
                                                                            <td height="18" align="center" valign="top" class="r17-i nl2go-default-textstyle" style="color: #3b3f44; font-family: arial,helvetica,sans-serif; font-size: 16px; line-height: 1.5;">
                                                                              
-                                                                              <a href="{{ $slug }}" class="r18-r default-button" target="_blank" data-btn="1" style="font-style: normal; font-weight: normal; line-height: 1.15; text-decoration: none; border-style: solid; display: inline-block; -webkit-text-size-adjust: none; mso-hide: all; background-color: #c8d151; border-color: #c8d151; border-radius: 4px; border-width: 0px; color: #ffffff; font-family: arial,helvetica,sans-serif; font-size: 16px; height: 18px; padding-bottom: 12px; padding-left: 5px; padding-right: 5px; padding-top: 12px; width: 280px;">
-                                                                                 <p style="margin: 0;"><span style="color: #030000; font-family: Tahoma, geneva, sans-serif;"><strong>Access your account</strong></span></p>
+                                                                              <a href="{{$activate_slug}}?utm_source=Knowcrunch.com&utm_medium=Registration_Email" class="r18-r default-button" target="_blank" data-btn="1" style="font-style: normal; font-weight: normal; line-height: 1.15; text-decoration: none; border-style: solid; display: inline-block; -webkit-text-size-adjust: none; mso-hide: all; background-color: #c8d151; border-color: #c8d151; border-radius: 4px; border-width: 0px; color: #ffffff; font-family: arial,helvetica,sans-serif; font-size: 16px; height: 18px; padding-bottom: 12px; padding-left: 5px; padding-right: 5px; padding-top: 12px; width: 280px;">
+                                                                                 <p style="margin: 0;"><span style="color: #030000; font-family: Tahoma, geneva, sans-serif;"><strong>Activate your account</strong></span></p>
                                                                               </a>
-                                                                             
+                                                                           
                                                                            </td>
                                                                         </tr>
                                                                         <tr class="nl2go-responsive-hide">
@@ -133,7 +131,7 @@
                                                                      </table>
                                                                   </td>
                                                                </tr>
-                                                        
+                                                               @endif
                                                                <tr>
                                                                   <td class="r12-c" align="left">
                                                                      <table cellspacing="0" cellpadding="0" border="0" role="presentation" width="100%" class="r13-o" style="table-layout: fixed; width: 100%;">
@@ -143,28 +141,8 @@
                                                                         <tr>
                                                                            <td align="left" valign="top" class="r15-i nl2go-default-textstyle" style="color: #3b3f44; font-family: arial,helvetica,sans-serif; font-size: 16px; line-height: 1.5; text-align: left;">
                                                                               <div>
-                                                                                 <p style="margin: 0;">Some useful information for the course:</p>
-                                                                              </div>
-                                                                           </td>
-                                                                        </tr>
-                                                                        <tr class="nl2go-responsive-hide">
-                                                                           <td height="15" style="font-size: 15px; line-height: 15px;">­</td>
-                                                                        </tr>
-                                                                     </table>
-                                                                  </td>
-                                                               </tr>
-                                                               <tr>
-                                                                  <td class="r12-c" align="left">
-                                                                     <table cellspacing="0" cellpadding="0" border="0" role="presentation" width="100%" class="r13-o" style="table-layout: fixed; width: 100%;">
-                                                                        <tr class="nl2go-responsive-hide">
-                                                                           <td height="15" style="font-size: 15px; line-height: 15px;">­</td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                           <td align="left" valign="top" class="r15-i nl2go-default-textstyle" style="color: #3b3f44; font-family: arial,helvetica,sans-serif; font-size: 16px; line-height: 1.5; text-align: left;">
-                                                                              <div>
-                                                                              @if(isset($duration) && $duration)<p style="margin: 0;"><span style="font-family: Tahoma, geneva, sans-serif;"><strong>Course's duration:</strong> {{$duration}} </span></p>@endif
-                                                                                 <p style="margin: 0;"><span style="font-family: Tahoma, geneva, sans-serif;"><strong>Have questions?</strong> Find answers in the </span><a href="{{$eventSlug}}/#faq?utm_source=Knowcrunch.com&utm_medium=Registration_Email" target="_blank" style="color: #0092ff; text-decoration: underline;"><span style="font-family: Tahoma, geneva, sans-serif;">frequently asked questions</span></a><span style="font-family: Tahoma, geneva, sans-serif;">.</span></p>
-                                                                              @if(isset($fbGroup) && $fbGroup) <p style="margin: 0;"><span style="font-family: Tahoma, geneva, sans-serif;"><strong>Course's group:</strong> Join our </span><a href="https://facebook.com/" target="_blank" style="color: #0092ff; text-decoration: underline;"><span style="font-family: Tahoma, geneva, sans-serif;">Facebook group</span></a><span style="font-family: Tahoma, geneva, sans-serif;"> and start interacting with us.</span></p>@endif
+                                                                                 @if($faq)<p style="margin: 0;"><span style="font-family: Tahoma, geneva, sans-serif;"><strong>More questions?</strong> Check the </span><a href="{{$faq}}?utm_source=Knowcrunch.com&utm_medium=Registration_Email" target="_blank" style="color: #0092ff; text-decoration: underline;"><span style="font-family: Tahoma, geneva, sans-serif;">frequently asked questions</span></a><span style="font-family: Tahoma, geneva, sans-serif;">.</span></p>@endif
+                                                                                 @if($fb_group)<p style="margin: 0;"><span style="font-family: Tahoma, geneva, sans-serif;"><strong>Did you join the course's group?</strong> </span><a href="{{$fb_group}}" target="_blank" style="color: #0092ff; text-decoration: underline;"><span style="font-family: Tahoma, geneva, sans-serif;">Join Facebook group</span></a><span style="font-family: Tahoma, geneva, sans-serif;"> now.</span></p>@endif
                                                                               </div>
                                                                            </td>
                                                                         </tr>
@@ -194,7 +172,7 @@
                      </td>
                   </tr>
                </table>
-            </td>
-         </tr>
+      </td>
+</tr>
 @stop
     

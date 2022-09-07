@@ -454,7 +454,7 @@ Route::group(['middleware' => ['web']], function () {
             Route::get('/remove/{item}', ['as' => 'cart.remove-item', 'uses' => 'Theme\CartController@dpremove']);
             Route::get('/summary/remove/{item}', ['as' => 'cart.remove-item', 'uses' => 'Theme\CartController@dpremove']);
 
-            Route::post('/cart/update', ['as' => 'cart.update', 'uses' => 'PaymentController@update']);
+            Route::post('/cart/update', ['as' => 'cart.update', 'uses' => 'Theme\CartController@update']);
 
             Route::get('/enroll-for-free/{content}', 'Theme\HomeController@enrollToFreeEvent')->name('enrollForFree');
             Route::get('/enroll-for-waiting/{content}', 'Theme\HomeController@enrollToWaitingList')->name('enrollForWaiting');
@@ -486,7 +486,7 @@ Route::group(['prefix' => 'info'], function () {
 Route::get('order-success', [
     'as' => 'info.Order.Success', 'uses' => 'Theme\InfoController@orderSuccess'
 ]);
-Route::get('thankyou', 'Theme\HomeController@thankyou');
+// Route::get('thankyou', 'Theme\HomeController@thankyou');
 Route::post('thankyou', 'Theme\HomeController@thankyouInstallments')->name('installments.thankyou');
 
 
@@ -648,6 +648,7 @@ Route::get('/sendHalfPeriod', 'Dashboard\CronjobsController@sendHalfPeriod');//i
 Route::get('/sendElearningFQ', 'Dashboard\CronjobsController@sendElearningFQ');//in
 Route::get('/sendSurveyMail', 'Dashboard\CronjobsController@sendSurveyMail');//in
 Route::get('/absences', 'Dashboard\CronjobsController@absences');//in
+Route::get('/sendInClassReminder', 'Dashboard\CronjobsController@sendInClassReminder');//in
 
 
 //SITEMAP

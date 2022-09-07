@@ -138,7 +138,7 @@
                         </tr>
                     </tfoot>
                     <tbody>
-                    <?php //dd($transactions[100]); ?>
+                    <?php //dd($transactions); ?>
                         @foreach ($transactions as $transaction)
 
                             <tr>
@@ -286,9 +286,8 @@ $(document).ready(function() {
     //console.log($('#min'))
     minDate = null;
     // //console.log('--min: '+minDate.val())
-    maxDate = moment().endOf('day').format('MM/DD/YYYY')
-
-
+    maxDate = moment().add(1, 'day').endOf('day').format('MM/DD/YYYY')
+    
     $('#participants_table').on( 'search.dt', function () {
         selected_event = $('#select2-col1_filter-container').attr('title')
         if(selected_event.search('E-Learning') != -1){
@@ -440,51 +439,6 @@ $(document).ready(function() {
 
     });
 
-    //Refilter the table
-    // $('#min, #max').on('change', function () {
-    //     //console.log('from change min!!')
-    //     table.draw();
-    //     //console.log(table.column(1).data())
-    //     price = $('#participants_table').DataTable().column( 3 ).data();
-
-    //     initCounters()
-
-    //     min = new Date($('#min').val());
-    //     max = new Date($('#max').val());
-
-    //     minDate = new DateTime($('#min'), {
-    //         format: 'L'
-    //     });
-
-    //     min = moment(min).format('MM/DD/YYYY')
-    //     max = moment(max).format('MM/DD/YYYY')
-
-    //     coupons = table.column(4,{filter: 'applied'}).data().unique().sort();
-    //     $('#col4_filter').empty();
-    //     $('#col4_filter').append('<option value>-- All --</option>')
-    //     $.each(coupons, function(key, value){
-    //         $('#col4_filter').append('<option value="'+value+'">'+value+'</option>')
-    //     })
-
-    //     paymentMethods = table.column(8,{filter: 'applied'}).data().unique().sort();
-    //     delivery = table.column(11,{filter: 'applied'}).data().unique().sort();
-
-    //     $('#col8_filter').empty();
-    //     $('#col8_filter').append('<option value>-- All --</option>')
-    //     $.each(paymentMethods, function(key, value){
-    //         $('#col8_filter').append('<option value="'+value+'">'+value+'</option>')
-    //     })
-
-    //     $('#col11_filter').empty();
-    //     $('#col11_filter').append('<option value>-- All --</option>')
-    //     $.each(delivery, function(key, value){
-    //         $('#col11_filter').append('<option value="'+value+'">'+value+'</option>')
-    //     })
-
-    //     stats_non_elearning()
-
-
-    // });
 });
 
     function filterGlobal () {
