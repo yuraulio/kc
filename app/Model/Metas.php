@@ -37,7 +37,7 @@ class Metas extends Model
             '<meta name="twitter:card" content="summary">'.
             '<meta name="twitter:title" content="' . $this->meta_title .'">'.
             '<meta name="twitter:description" content="' . $this->meta_description .'">'.
-            '<meta name="twitter:image" content="' . 'image' .'">';
+            '<meta name="twitter:image" content="' . url('/')  . get_image($this->metable->mediable,'social-media-sharing') .'">';
 
         
         return $metas;
