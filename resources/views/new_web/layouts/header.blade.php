@@ -62,7 +62,7 @@
                                     {{ csrf_field() }}
                                     <input id="sat" type="text" name="search_term"  class="search-input" placeholder="{{ $searchPlaceholder->value }}">
                                 </form>
-                            @elseif(request()->segment(1) == 'blog' || request()->segment(1) == 'blog_search')
+                            @elseif(request()->segment(1) == 'blog' || request()->segment(1) == 'blog_search' || request()->segment(1) == 'our-blog')
                                 <form method='get' action='blog_search' class='text-center'>
                                     {{ csrf_field() }}
                                     <input id="sat" type="text" name="search_term"  class="search-input" placeholder="{{ $searchPlaceholder->value }}">

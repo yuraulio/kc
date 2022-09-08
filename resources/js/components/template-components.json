@@ -1639,7 +1639,7 @@
         "inputs": [
             {
                 "type": "multidropdown",
-                "key": "blog_source",
+                "key": "list_source",
                 "label": "Blog source",
                 "route": "getSearchSource",
                 "value": {
@@ -1650,7 +1650,7 @@
             },
             {
                 "type": "multidropdown",
-                "key": "blog_list",
+                "key": "list_type",
                 "label": "Blog display",
                 "route": "getDisplayOptions",
                 "value": {

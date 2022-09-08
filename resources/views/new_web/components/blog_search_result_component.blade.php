@@ -13,7 +13,7 @@
    foreach ($column->template->inputs as $input){
       $blog_display[$input->key] = $input->value ?? "";
    }
-   $source = $blog_display["blog_source"]->title;
+   $source = $blog_display["list_source"]->title;
 
 
 
@@ -37,7 +37,7 @@
    </div>
 
    @if($results > 0)
-      @include("new_web.components.blog_list_component")
+      @include("new_web.components.lists.blog_list_component")
    @else
       <div class="mb-5"></div>
    @endif
