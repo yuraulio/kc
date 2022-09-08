@@ -309,6 +309,54 @@
         "simple_view": false,
         "mobile": true,
         "inputs": [
+            {
+                "type": "checkbox",
+                "key": "social_facebook_checkbox",
+                "label": "Use Facebook",
+                "simple_view": false,
+                "value": true,
+                "main": true,
+                "size": "col-md-6"
+            },
+            {
+                "type": "image",
+                "key": "social_facebook_icon",
+                "label": "Facebook icon",
+                "main": true,
+                "size": "col-lg-3 col-md-6"
+            },
+            {
+                "type": "checkbox",
+                "key": "social_twitter_checkbox",
+                "label": "Use Twitter",
+                "simple_view": false,
+                "value": true,
+                "main": true,
+                "size": "col-md-6"
+            },
+            {
+                "type": "image",
+                "key": "social_twitter_icon",
+                "label": "Twitter icon",
+                "main": true,
+                "size": "col-lg-3 col-md-6"
+            },
+            {
+                "type": "checkbox",
+                "key": "social_linkedin_checkbox",
+                "label": "Use LinkedIn",
+                "simple_view": false,
+                "value": true,
+                "main": true,
+                "size": "col-md-6"
+            },
+            {
+                "type": "image",
+                "key": "social_linkedin_icon",
+                "label": "LinkedIn icon",
+                "main": true,
+                "size": "col-lg-3 col-md-6"
+            }
         ]
     },
     "gallery" : {
@@ -449,7 +497,7 @@
     },
     "contact_form" : {
         "version": 3,
-        "title": "Form",
+        "title": "Contact form",
         "width": "content",
         "icon": "dripicons-mail",
         "key": "contact_form_component",
@@ -459,43 +507,432 @@
         "inputs": [
             {
                 "type": "text",
-                "key": "title",
-                "label": "Title"
+                "key": "contact_form_title",
+                "label": "Title",
+                "value": "We would love to hear from you",
+                "main": true,
+                "size": "col-lg-12"
             },
             {
                 "type": "text",
-                "key": "button_text",
-                "label": "Button text"
+                "key": "contact_form_first_name",
+                "label": "First name title",
+                "main": true,
+                "value": "First name"
             },
             {
                 "type": "text",
-                "key": "success_text",
-                "label": "Success message",
-                "size": "col-lg-6"
+                "key": "contact_form_last_name",
+                "label": "Last name title",
+                "main": true,
+                "value": "Last name"
+            },
+            {
+                "type": "text",
+                "key": "contact_form_email",
+                "label": "Emial title",
+                "main": true,
+                "value": "Email"
+            },
+            {
+                "type": "text",
+                "key": "contact_form_phone",
+                "label": "Mobile phone title",
+                "main": true,
+                "value": "Mobile phone"
+            },
+            {
+                "type": "text",
+                "key": "contact_form_message",
+                "label": "Your message title",
+                "main": true,
+                "value": "Your message"
             },
             {
                 "type": "checkbox",
-                "key": "enable_consent",
+                "key": "contact_form_consent",
                 "label": "Enable consent",
+                "main": true,
                 "value": true,
                 "size": "col-lg-6"
             },
             {
                 "type": "text_editor",
-                "key": "consent_text",
-                "label": "Consent text"
+                "key": "contact_form_consent_text",
+                "label": "Consent text",
+                "main": true,
+                "value": "Consent text"
             },
             {
-                "type": "multidropdown",
-                "key": "form_type",
-                "label": "Form type",
-                "route": "getFormTypes",
-                "main": true
+                "type": "text",
+                "key": "contact_form_button",
+                "label": "Button text",
+                "size": "col-lg-6",
+                "main": true,
+                "value": "APPLY NOW"
+            },
+            {
+                "type": "text",
+                "key": "contact_form_success",
+                "label": "Success message",
+                "main": true,
+                "size": "col-lg-6",
+                "value": "Thank you! We will contact you shortly."
+            },
+            {
+                "type": "text",
+                "key": "contact_form_recipient",
+                "label": "Recipient email",
+                "main": true,
+                "size": "col-lg-6",
+                "value": "info@knowcrunch.com"
             },
             {
                 "type": "checkbox",
-                "key": "top_overlap",
-                "label": "Overlap",
+                "key": "contact_form_top_overlap",
+                "label": "Form should overlay header image",
+                "main": true,
+                "value": true,
+                "size": "col-lg-6"
+            }
+        ]
+    },
+    "corporate_training_form" : {
+        "version": 3,
+        "title": "Corporate training form",
+        "width": "content",
+        "icon": "dripicons-mail",
+        "key": "corporate_training_component",
+        "tab": "Content",
+        "simple_view": true,
+        "mobile": true,
+        "inputs": [
+            {
+                "type": "text",
+                "key": "corporate_training_title",
+                "label": "Title",
+                "value": "Request for corporate training quotation",
+                "main": true,
+                "size": "col-lg-12"
+            },
+            {
+                "type": "text",
+                "key": "corporate_training_first_name",
+                "label": "First name title",
+                "main": true,
+                "value": "First name"
+            },
+            {
+                "type": "text",
+                "key": "corporate_training_last_name",
+                "label": "Last name title",
+                "main": true,
+                "value": "Last name"
+            },
+            {
+                "type": "text",
+                "key": "corporate_training_position",
+                "label": "Position title title",
+                "main": true,
+                "value": "Position title"
+            },
+            {
+                "type": "text",
+                "key": "corporate_training_company",
+                "label": "Company name title",
+                "main": true,
+                "value": "Company name"
+            },
+            {
+                "type": "text",
+                "key": "corporate_training_email",
+                "label": "Emial title",
+                "main": true,
+                "value": "Email"
+            },
+            {
+                "type": "text",
+                "key": "corporate_training_phone",
+                "label": "Mobile phone title",
+                "main": true,
+                "value": "Mobile phone"
+            },
+            {
+                "type": "checkbox",
+                "key": "corporate_training_consent",
+                "label": "Enable consent",
+                "main": true,
+                "value": true,
+                "size": "col-lg-6"
+            },
+            {
+                "type": "text_editor",
+                "key": "corporate_training_consent_text",
+                "label": "Consent text",
+                "main": true,
+                "value": "Consent text"
+            },
+            {
+                "type": "text",
+                "key": "corporate_training_button",
+                "label": "Button text",
+                "size": "col-lg-6",
+                "main": true,
+                "value": "CONTACT ME"
+            },
+            {
+                "type": "text",
+                "key": "corporate_training_success",
+                "label": "Success message",
+                "main": true,
+                "size": "col-lg-6",
+                "value": "Thank you! We will contact you shortly."
+            },
+            {
+                "type": "text",
+                "key": "corporate_training_recipient",
+                "label": "Recipient email",
+                "main": true,
+                "size": "col-lg-6",
+                "value": "info@knowcrunch.com"
+            },
+            {
+                "type": "checkbox",
+                "key": "corporate_training_top_overlap",
+                "label": "Form should overlay header image",
+                "main": true,
+                "value": true,
+                "size": "col-lg-6"
+            }
+        ]
+    },
+    "instructor_form" : {
+        "version": 3,
+        "title": "Instructor form",
+        "width": "content",
+        "icon": "dripicons-mail",
+        "key": "instructor_form_component",
+        "tab": "Content",
+        "simple_view": true,
+        "mobile": true,
+        "inputs": [
+            {
+                "type": "text",
+                "key": "instructor_form_title",
+                "label": "Title",
+                "value": "Apply to become a Knowcrunch’s instructor",
+                "main": true,
+                "size": "col-lg-12"
+            },
+            {
+                "type": "text",
+                "key": "instructor_form_first_name",
+                "label": "First name title",
+                "main": true,
+                "value": "First name"
+            },
+            {
+                "type": "text",
+                "key": "instructor_form_last_name",
+                "label": "Last name title",
+                "main": true,
+                "value": "Last name"
+            },
+            {
+                "type": "text",
+                "key": "instructor_form_email",
+                "label": "Emial title",
+                "main": true,
+                "value": "Email"
+            },
+            {
+                "type": "text",
+                "key": "instructor_form_phone",
+                "label": "Mobile phone title",
+                "main": true,
+                "value": "Mobile phone"
+            },
+            {
+                "type": "text",
+                "key": "instructor_form_linkedin",
+                "label": "Linkedin profile link title",
+                "main": true,
+                "value": "Linkedin profile link"
+            },
+            {
+                "type": "text",
+                "key": "instructor_form_languages",
+                "label": "Fluent in languages",
+                "main": true,
+                "value": "Fluent in languages (separated by a comma)"
+            },
+            {
+                "type": "text",
+                "key": "instructor_form_experience",
+                "label": "Experience in training",
+                "main": true,
+                "value": "Experience in training (years)"
+            },
+            {
+                "type": "text",
+                "key": "instructor_form_topics",
+                "label": "Training topics expertise",
+                "main": true,
+                "value": "Training topics expertise (separated by a comma)"
+            },
+            {
+                "type": "checkbox",
+                "key": "instructor_form_consent",
+                "label": "Enable consent",
+                "main": true,
+                "value": true,
+                "size": "col-lg-6"
+            },
+            {
+                "type": "text_editor",
+                "key": "instructor_form_consent_text",
+                "label": "Consent text",
+                "main": true,
+                "value": "Consent text"
+            },
+            {
+                "type": "text",
+                "key": "instructor_form_button",
+                "label": "Button text",
+                "size": "col-lg-6",
+                "main": true,
+                "value": "APPLY NOW"
+            },
+            {
+                "type": "text",
+                "key": "instructor_form_success",
+                "label": "Success message",
+                "main": true,
+                "size": "col-lg-6",
+                "value": "Thank you! We will contact you shortly."
+            },
+            {
+                "type": "text",
+                "key": "instructor_form_recipient",
+                "label": "Recipient email",
+                "main": true,
+                "size": "col-lg-6",
+                "value": "info@knowcrunch.com"
+            },
+            {
+                "type": "checkbox",
+                "key": "instructor_form_top_overlap",
+                "label": "Form should overlay header image",
+                "main": true,
+                "value": true,
+                "size": "col-lg-6"
+            }
+        ]
+    },
+    "giveaway_form" : {
+        "version": 3,
+        "title": "Giveaway form",
+        "width": "content",
+        "icon": "dripicons-mail",
+        "key": "giveaway_form_component",
+        "tab": "Content",
+        "simple_view": true,
+        "mobile": true,
+        "inputs": [
+            {
+                "type": "text",
+                "key": "giveaway_form_title",
+                "label": "Title",
+                "value": "Enter to win a FREE ticket",
+                "main": true,
+                "size": "col-lg-12"
+            },
+            {
+                "type": "text",
+                "key": "giveaway_form_first_name",
+                "label": "First name title",
+                "main": true,
+                "value": "First name"
+            },
+            {
+                "type": "text",
+                "key": "giveaway_form_last_name",
+                "label": "Last name title",
+                "main": true,
+                "value": "Last name"
+            },
+            {
+                "type": "text",
+                "key": "giveaway_form_position",
+                "label": "Position title title",
+                "main": true,
+                "value": "Position title"
+            },
+            {
+                "type": "text",
+                "key": "giveaway_form_company",
+                "label": "Company name title",
+                "main": true,
+                "value": "Company name"
+            },
+            {
+                "type": "text",
+                "key": "giveaway_form_email",
+                "label": "Emial title",
+                "main": true,
+                "value": "Email"
+            },
+            {
+                "type": "text",
+                "key": "giveaway_form_phone",
+                "label": "Mobile phone title",
+                "main": true,
+                "value": "Mobile phone"
+            },
+            {
+                "type": "checkbox",
+                "key": "giveaway_form_consent",
+                "label": "Enable consent",
+                "main": true,
+                "value": true,
+                "size": "col-lg-6"
+            },
+            {
+                "type": "text_editor",
+                "key": "giveaway_form_consent_text",
+                "label": "Consent text",
+                "main": true,
+                "value": "Consent text"
+            },
+            {
+                "type": "text",
+                "key": "giveaway_form_button",
+                "label": "Button text",
+                "size": "col-lg-6",
+                "main": true,
+                "value": "SUBMIT"
+            },
+            {
+                "type": "text",
+                "key": "giveaway_form_success",
+                "label": "Success message",
+                "main": true,
+                "size": "col-lg-6",
+                "value": "Thank you! We will contact you shortly."
+            },
+            {
+                "type": "text",
+                "key": "giveaway_form_recipient",
+                "label": "Recipient email",
+                "main": true,
+                "size": "col-lg-6",
+                "value": "info@knowcrunch.com"
+            },
+            {
+                "type": "checkbox",
+                "key": "giveaway_form_top_overlap",
+                "label": "Form should overlay header image",
+                "main": true,
                 "value": true,
                 "size": "col-lg-6"
             }
@@ -807,7 +1244,15 @@
         "width": "content",
         "simple_view": false,
         "mobile": true,
+        "dynamic": false,
         "inputs": [
+            {
+                "type": "multidropdown",
+                "key": "course_video_testimonials_event",
+                "label": "Course",
+                "route": "getEvents",
+                "size": "col-lg-12"
+            }
         ]
     },
     "course_written_testimonials" : {
@@ -819,7 +1264,15 @@
         "width": "content",
         "simple_view": false,
         "mobile": true,
+        "dynamic": false,
         "inputs": [
+            {
+                "type": "multidropdown",
+                "key": "course_written_testimonials_event",
+                "label": "Course",
+                "route": "getEvents",
+                "size": "col-lg-12"
+            }
         ]
     },
     "course_location" : {
@@ -864,6 +1317,40 @@
                 "value": {
                     "id": 1,
                     "title": "Trusted Brands"
+                },
+                "size": "col-lg-12"
+            }
+        ]
+    },
+    "list" : {
+        "version": 2,
+        "title": "Category display",
+        "icon": "dripicons-blog",
+        "key": "list_component",
+        "tab": "Content",
+        "width": "content",
+        "simple_view": true,
+        "mobile": true,
+        "inputs": [
+            {
+                "type": "multidropdown",
+                "key": "list_source",
+                "label": "List source",
+                "route": "getListSource",
+                "value": {
+                    "id": 1,
+                    "title": "Blog"
+                },
+                "size": "col-lg-12"
+            },
+            {
+                "type": "multidropdown",
+                "key": "list_type",
+                "label": "List display",
+                "route": "getDisplayOptions",
+                "value": {
+                    "id": 2,
+                    "title": "Grid"
                 },
                 "size": "col-lg-12"
             }
@@ -1142,7 +1629,7 @@
     },
     "blog_search_result" : {
         "version": 2,
-        "title": "Blog search result",
+        "title": "Search results",
         "icon": "dripicons-search",
         "key": "blog_search_result_component",
         "tab": "Content",
@@ -1152,9 +1639,9 @@
         "inputs": [
             {
                 "type": "multidropdown",
-                "key": "blog_source",
+                "key": "list_source",
                 "label": "Blog source",
-                "route": "getBlogSource",
+                "route": "getSearchSource",
                 "value": {
                     "id": 1,
                     "title": "Blog"
@@ -1163,7 +1650,7 @@
             },
             {
                 "type": "multidropdown",
-                "key": "blog_list",
+                "key": "list_type",
                 "label": "Blog display",
                 "route": "getDisplayOptions",
                 "value": {
@@ -1171,6 +1658,57 @@
                     "title": "Grid"
                 },
                 "size": "col-lg-12"
+            }
+        ]
+    },
+    "subscription" : {
+        "version": 2,
+        "title": "Subscription",
+        "icon": "dripicons-download",
+        "key": "subscription_component",
+        "tab": "Content",
+        "width": "content",
+        "simple_view": true,
+        "mobile": true,
+        "inputs": [
+            {
+                "type": "multidropdown",
+                "key": "subscribe_event",
+                "label": "Event",
+                "route": "getEvents",
+                "size": "col-lg-12",
+                "main": true
+            },
+            {
+                "type": "multidropdown",
+                "key": "subscribe_plan",
+                "label": "Plan",
+                "route": "getPlans",
+                "size": "col-lg-12",
+                "main": true
+            },
+            {
+                "type": "text",
+                "key": "subscribe_title",
+                "label": "Title",
+                "value": "",
+                "size": "col-lg-12",
+                "main": true
+            },
+            {
+                "type": "text",
+                "key": "subscribe_button",
+                "label": "Button text",
+                "value": "",
+                "size": "col-lg-12",
+                "main": true
+            },
+            {
+                "type": "checkbox",
+                "key": "subscribe_overlap",
+                "label": "Overlap",
+                "value": true,
+                "size": "col-lg-6"
             }
         ]
     }

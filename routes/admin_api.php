@@ -87,10 +87,14 @@ Route::domain('admin.' . env('APP_DOMAIN'))->group(function () {
         Route::get('getEventTypes', [PagesController::class, 'getEventTypes']);
         Route::get('templatesAll', [TemplatesController::class, 'templatesAll']);
         Route::get('getHomepageGalleryOptions', [PagesController::class, 'getHomepageGalleryOptions']);
-        Route::get('getBlogSource', [PagesController::class, 'getBlogSource']);
+        Route::get('getListSource', [PagesController::class, 'getListSource']);
+        Route::get('getSearchSource', [PagesController::class, 'getSearchSource']);
         Route::get('getPageTypes', [PagesController::class, 'getPageTypes']);
 
         Route::get('category_group/{id}', [CategoriesController::class, 'getCategoriesForPageType']);
+
+        Route::get('getEvents', [PagesController::class, 'getEvents']);
+        Route::get('getPlans', [PagesController::class, 'getPlans']);
     });
 });
 

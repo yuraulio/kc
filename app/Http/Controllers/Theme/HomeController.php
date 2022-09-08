@@ -850,18 +850,16 @@ class HomeController extends Controller
     public function giveAway(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'cemail' => 'required|email',
             'cname' => 'required',
             'csurname' => 'required',
             'ctel' => 'required',
-            'cemail' => 'unique:give_aways,email'
+            'cemail' => 'required|email|unique:give_aways,email'
         ]);
 
         if ($validator->fails()) {
             return [
-                'success' => false,
                 'status' => 0,
-                'errors' => $validator->errors()->first(),
+                'errors' => $validator->errors(),
                 'message' => '',
             ];
         }
@@ -878,9 +876,9 @@ class HomeController extends Controller
         $giveAway->save();
         $data = $request->all();
 
-        Mail::send('emails.admin.give_away', $data, function ($m) use ($data) {
+        Mail::send('emails.admin.give_away', $data, function ($m) use ($data, $request) {
             $fullname = $data['cname'] . ' ' . $data['csurname'];
-            $adminemail = 'info@knowcrunch.com';
+            $adminemail = $request->recipient ?? 'info@knowcrunch.com';
             $subject = 'Knowcrunch - Giveaway participant';
 
             //$emails = ['socratous12@gmail.com', 'info@darkpony.com'];

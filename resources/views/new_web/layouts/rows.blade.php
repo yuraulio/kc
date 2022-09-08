@@ -4,7 +4,7 @@
             <div class="row">
                 @foreach ($data->columns as $column)
                     <div class="{{ ($column->template->mobile ?? true) ? '' : 'hide-on-mobile' }} col-md-{{ isset($column->width) ? ($column->width * 2) : (12 / count($data->columns)) }}">
-                        @includeIf("new_web.components." . $column->template->key)
+                        @includeIf("new_web.components." . ($column->template->key ?? ""))
                     </div>
                 @endforeach
             </div>
@@ -16,7 +16,7 @@
             <div class="row">
                 @foreach ($data->columns as $column)
                     <div class="{{ ($column->template->mobile ?? true) ? '' : 'hide-on-mobile' }} col-md-{{ isset($column->width) ? ($column->width * 2) : (12 / count($data->columns)) }}">
-                        @includeIf("new_web.components." . $column->template->key)
+                        @includeIf("new_web.components." . ($column->template->key ?? ""))
 
                     </div>
                 @endforeach
@@ -30,7 +30,7 @@
                 @foreach ($data->columns as $column)
 
                     <div class="{{ ($column->template->mobile ?? true) ? '' : 'hide-on-mobile' }} col-md-{{ isset($column->width) ? ($column->width * 2) : (12 / count($data->columns)) }}">
-                        @includeIf("new_web.components." . $column->template->key)
+                        @includeIf("new_web.components." . ($column->template->key ?? ""))
                     </div>
                 @endforeach
             </div>
@@ -39,7 +39,7 @@
 @else
     @foreach ($data->columns as $column)
         <div class="{{ ($column->template->mobile ?? true) ? '' : 'hide-on-mobile' }}" >
-            @includeIf("new_web.components." . $column->template->key)
+            @includeIf("new_web.components." . ($column->template->key ?? ""))
         </div>
     @endforeach
 @endif

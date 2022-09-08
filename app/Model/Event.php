@@ -5,7 +5,6 @@ namespace App\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Model\Topic;
-use App\Model\Event;
 use App\Model\Ticket;
 use App\Model\Category;
 use App\Model\Type;

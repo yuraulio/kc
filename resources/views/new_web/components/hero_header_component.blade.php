@@ -93,7 +93,7 @@
 
                 <?php
                     if(isset($students_visible['landing']) && $students_visible['landing'] && isset($event['category'][0]['id'])){
-                        $sumStudents = $sumStudentsByCategory[$event['category'][0]['id']];
+                        $sumStudents = $sumStudentsByCategory[$event['category'][0]['id']] ?? null;
                     }else{
                         $sumStudents = null;
                     }

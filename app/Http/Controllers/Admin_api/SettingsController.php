@@ -40,7 +40,9 @@ class SettingsController extends Controller
             $setting->value = $request->value;
             $setting->save();
 
-            cache()->forget("cmsMode");
+            if ($setting->setting == "cms_mode") {
+                cache()->forget("cmsMode");
+            }
 
             return $setting;
         } catch (Exception $e) {

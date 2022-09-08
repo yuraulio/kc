@@ -1,8 +1,21 @@
 @php
+    use App\Library\CMS;
+    use App\Model\Event;
+
+    if (!isset($dynamic_page_data["testimonials"])) {
+        $written_testimonials = [];
+        foreach ($column->template->inputs as $input){
+            $written_testimonials[$input->key] = $input->value ?? "";
+        }
+        $eventId = $written_testimonials["course_written_testimonials_event"]->id ?? null;
+        $event = Event::where("id", $eventId)->first() ?? null;
+        $dynamic_page_data = CMS::getEventData($event) ?? null;
+    }
+
     $event = $dynamic_page_data["event"] ?? null;
     $sections = $dynamic_page_data["sections"] ?? null;
     $topics = $dynamic_page_data["topics"] ?? null;
-    $testimonials = $dynamic_page_data["testimonials"] ?? null;
+    $testimonials = $dynamic_page_data["testimonials"] ?? [];
     $title = '';
     $body = '';
     if(isset($sections['testimonials'])){
@@ -21,7 +34,7 @@
         }
     ?>
 
-    <div class="user-testimonial-wrapper">
+    <div class="user-testimonial-wrapper written-testimonials video-testimonials">
         <div class="container">
             <div class="user-testimonial-big owl-carousel">
                 @foreach ($testimonials as $key => $row)

@@ -27,7 +27,7 @@
     $elearningEvents = array_merge($elearningEvents, $elearningFree);
 @endphp
 
-@if($homepage["event_types"]->id == 1)
+@if($homepage["list_source"]->id == 6)
     <div class="row homepage-events mt-5">
         @foreach($inclassEvents as $data)
             @foreach($data['events'] as $event)
@@ -117,7 +117,7 @@
     </div>
 @endif
 
-@if($homepage["event_types"]->id == 2)
+@if($homepage["list_source"]->id == 7)
     <div class="row homepage-events mt-5">
         @foreach($elearningEvents as $data)
             @foreach($data['events'] as $event)
