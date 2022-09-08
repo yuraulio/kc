@@ -29,6 +29,7 @@
                     $index = 0;
 
                     foreach($tickets as $key => $ticket) {
+                        
                         $options = json_decode($ticket['pivot']['options'],true); 
                         if($ticket['type'] == 'Early Bird' && $ticket['pivot']['quantity'] > 0){
                             $early = true;
@@ -85,11 +86,12 @@
 
                             $justifyClass = "justify-content-center";
                             if ($numberOfItems > 1) {
-                                if ($index == 0) {
-                                    $justifyClass = 'justify-content-start-2';
-                                }
-                                if ($index == ($numberOfItems-1)) {
+                                //echo($index . " " . $numberOfItems);
+                                if ($index == 1) {
                                     $justifyClass = 'justify-content-end-2';
+                                }
+                                if ($index == ($numberOfItems)) {
+                                    $justifyClass = 'justify-content-start-2';
                                 }
                             }
                         ?>
