@@ -65,15 +65,41 @@
                     </div>
                     <div class="row mb-2">
                         <div class="col-3">
+                            <div @click="selectComponent('contact_form')" class="widget-rounded-circle card bg-grey text-center d-inline-block h-100 mb-1">
+                                <i style="font-size: 20px" class="text-muted dripicons-mail d-block mt-1"></i>
+                                <span class="text-muted mt-1 ms-1 me-1">Contact form</span>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div @click="selectComponent('corporate_training_form')" class="widget-rounded-circle card bg-grey text-center d-inline-block h-100 mb-1">
+                                <i style="font-size: 20px" class="text-muted dripicons-mail d-block mt-1"></i>
+                                <span class="text-muted mt-1 ms-1 me-1">Corporate form</span>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div @click="selectComponent('instructor_form')" class="widget-rounded-circle card bg-grey text-center d-inline-block h-100 mb-1">
+                                <i style="font-size: 20px" class="text-muted dripicons-mail d-block mt-1"></i>
+                                <span class="text-muted mt-1 ms-1 me-1">Instructor form</span>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div @click="selectComponent('giveaway_form')" class="widget-rounded-circle card bg-grey text-center d-inline-block h-100 mb-1">
+                                <i style="font-size: 20px" class="text-muted dripicons-mail d-block mt-1"></i>
+                                <span class="text-muted mt-1 ms-1 me-1">Giveaway form</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-3">
                             <div @click="selectComponent('gallery')" class="widget-rounded-circle card bg-grey text-center d-inline-block h-100 mb-1">
                                 <i style="font-size: 20px" class="text-muted dripicons-photo-group d-block mt-1"></i>
                                 <span class="text-muted mt-1 ms-1 me-1">Image gallery</span>
                             </div>
                         </div>
                         <div class="col-3">
-                            <div @click="selectComponent('contact_form')" class="widget-rounded-circle card bg-grey text-center d-inline-block h-100 mb-1">
-                                <i style="font-size: 20px" class="text-muted dripicons-mail d-block mt-1"></i>
-                                <span class="text-muted mt-1 ms-1 me-1">Form</span>
+                            <div @click="selectComponent('image_rounded')" class="widget-rounded-circle card bg-grey text-center d-inline-block h-100 mb-1">
+                                <i style="font-size: 20px" class="text-muted dripicons-photo d-block mt-1"></i>
+                                <span class="text-muted mt-1 ms-1 me-1">Rounded image</span>
                             </div>
                         </div>
                         <div class="col-3">
@@ -114,6 +140,7 @@
                                 <span class="text-muted mt-1 ms-1 me-1">Schema</span>
                             </div>
                         </div>
+                        
                     </div>
                 </template>
 
