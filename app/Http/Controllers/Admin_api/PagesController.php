@@ -24,6 +24,8 @@ use Illuminate\Support\Str;
 use Ramsey\Uuid\Uuid;
 use App\Jobs\UpdateTerms;
 use App\Model\Admin\PageType;
+use App\Model\Event;
+use App\Model\Plan;
 
 class PagesController extends Controller
 {
@@ -320,6 +322,10 @@ class PagesController extends Controller
                 [
                     "id" => 3,
                     "title" => "Become an instructor"
+                ],
+                [
+                    "id" => 4,
+                    "title" => "Giveaway"
                 ]
             ]
         ];
@@ -357,7 +363,7 @@ class PagesController extends Controller
         ];
     }
 
-    public function getBlogSource()
+    public function getListSource()
     {
         return [
             "data" => [
@@ -368,6 +374,46 @@ class PagesController extends Controller
                 [
                     "id" => 2,
                     "title" => "Knowledge"
+                ],
+                [
+                    "id" => 3,
+                    "title" => "Courses"
+                ],
+                [
+                    "id" => 4,
+                    "title" => "Instructors"
+                ],
+                [
+                    "id" => 5,
+                    "title" => "City"
+                ],
+                [
+                    "id" => 6,
+                    "title" => "Homepage - in class events"
+                ],
+                [
+                    "id" => 7,
+                    "title" => "Homepage - elearning events"
+                ]
+            ]
+        ];
+    }
+
+    public function getSearchSource()
+    {
+        return [
+            "data" => [
+                [
+                    "id" => 1,
+                    "title" => "Blog"
+                ],
+                [
+                    "id" => 2,
+                    "title" => "Knowledge"
+                ],
+                [
+                    "id" => 3,
+                    "title" => "Event"
                 ]
             ]
         ];
@@ -490,5 +536,35 @@ class PagesController extends Controller
         $data = PageType::all();
 
         return response()->json(['data' => $data], 200);
+    }
+
+    public function getEvents() {
+        $events = Event::get();
+        $data = [];
+        foreach ($events as $event) {
+            array_push(
+                $data,
+                [
+                    "id" => $event->id,
+                    "title" => $event->title
+                ]
+            );
+        }
+        return ["data" => $data];
+    }
+
+    public function getPlans() {
+        $events = Plan::get();
+        $data = [];
+        foreach ($events as $event) {
+            array_push(
+                $data,
+                [
+                    "id" => $event->id,
+                    "title" => $event->name
+                ]
+            );
+        }
+        return ["data" => $data];
     }
 }

@@ -57,12 +57,12 @@ class ContactUsController extends Controller
             ];
         } else {
 
-            Mail::send('theme.emails.contact.send_us_email', ['mail_data' => $mail_data], function ($m) use ($mail_data, $email) {
+            Mail::send('theme.emails.contact.send_us_email', ['mail_data' => $mail_data], function ($m) use ($mail_data, $email, $request) {
                 $fullname = $mail_data['cname'] . ' ' . $mail_data['csurname'];
 
-            	 $fullname = $mail_data['cname'] . ' ' . $mail_data['csurname'];
+            	$fullname = $mail_data['cname'] . ' ' . $mail_data['csurname'];
 
-            	$adminemail = 'info@knowcrunch.com';
+                $adminemail = $request->recipient ?? 'info@knowcrunch.com';
                 if(isset($mail_data['eventtitle'])) {
                     $subject = 'Knowcrunch – information about ' . $mail_data['eventtitle'];
                 }
@@ -131,9 +131,9 @@ class ContactUsController extends Controller
                 'message' => 'Please check form for errors',
             ];
         } else {
-            Mail::send('theme.emails.contact.instructor_email', ['mail_data' => $mail_data], function ($m) use ($mail_data, $fullname, $email) {
+            Mail::send('theme.emails.contact.instructor_email', ['mail_data' => $mail_data], function ($m) use ($mail_data, $fullname, $email, $request) {
                 $fullname = $fullname;
-                $adminemail = 'info@knowcrunch.com';
+                $adminemail = $request->recipient ?? 'info@knowcrunch.com';
                 $m->subject('Knowcrunch - Instructor Contact');
                 $m->from($adminemail, 'Knowcrunch');
                 $m->replyTo($email, $fullname);
@@ -191,9 +191,9 @@ class ContactUsController extends Controller
                 'message' => '',
             ];
         } else {
-            Mail::send('theme.emails.contact.corporate', $mail_data, function ($m) use ($mail_data, $fullname, $email) {
+            Mail::send('theme.emails.contact.corporate', $mail_data, function ($m) use ($mail_data, $fullname, $email, $request) {
                 $fullname = $fullname;
-                $adminemail = 'info@knowcrunch.com';
+                $adminemail = $request->recipient ?? 'info@knowcrunch.com';
                 $subject = 'Knowcrunch - Corporate training';
 
                 $m->subject($subject);

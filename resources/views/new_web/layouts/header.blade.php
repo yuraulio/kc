@@ -52,22 +52,25 @@
                         <div class="header-search-wrapper">
                             @php
                                 $subdomain = explode(".", request()->getHost())[0];
+
+                                use App\Model\Admin\Setting;
+                                $searchPlaceholder = Setting::whereSetting("search_placeholder")->first();
                             @endphp
 
                             @if($subdomain == 'knowledge')
                                 <form method='get' action='knowledge_search' class='text-center'>
                                     {{ csrf_field() }}
-                                    <input id="sat" type="text" name="search_term"  class="search-input" placeholder="Search">
+                                    <input id="sat" type="text" name="search_term"  class="search-input" placeholder="{{ $searchPlaceholder->value }}">
                                 </form>
-                            @elseif(request()->segment(1) == 'blog' || request()->segment(1) == 'blog_search')
+                            @elseif(request()->segment(1) == 'blog' || request()->segment(1) == 'blog_search' || request()->segment(1) == 'our-blog')
                                 <form method='get' action='blog_search' class='text-center'>
                                     {{ csrf_field() }}
-                                    <input id="sat" type="text" name="search_term"  class="search-input" placeholder="Search">
+                                    <input id="sat" type="text" name="search_term"  class="search-input" placeholder="{{ $searchPlaceholder->value }}">
                                 </form>
                             @else
                                 <form method="get" action="event_search">
                                     {{ csrf_field() }}
-                                    <input id="sat" type="text" name="search_term"  class="search-input" placeholder="Search">
+                                    <input id="sat" type="text" name="search_term"  class="search-input" placeholder="{{ $searchPlaceholder->value }}">
                                 </form>
                             @endif
                         </div>

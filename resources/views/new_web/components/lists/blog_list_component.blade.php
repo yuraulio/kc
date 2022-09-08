@@ -7,7 +7,7 @@
         $blog_display[$input->key] = $input->value ?? "";
     }
 
-    $source = $blog_display["blog_source"]->title;
+    $source = $blog_display["list_source"]->title;
 
     $c = request()->get('c');
 
@@ -57,16 +57,9 @@
 @endphp
 
 <div class="row mb-5">
-    @if (isset($blog_display["blog_title"]))
-        <div class="mt-5"></div>
-    @endif
     <div class="col-lg-12 marbot">
         @if ($category)
             <h1>{{$category->title}}</h1>
-        @else
-            @if (isset($blog_display["blog_title"]))
-                {!! $blog_display["blog_title"] !!}
-            @endif
         @endif
     </div>
 </div>
@@ -85,7 +78,7 @@
 
 <div class="blogpagex dynamic-courses-wrapper mb-3">
     @forelse($blog as $post)
-        @include("new_web.blog.index_loop", ["type" => $blog_display["blog_list"], "source" => $blog_display["blog_source"]])
+        @include("new_web.blog.index_loop", ["type" => $blog_display["list_type"], "source" => $blog_display["list_source"]])
         @empty
         <div class="col-md-12">
             <div class='alert alert-danger'>No posts!</div>

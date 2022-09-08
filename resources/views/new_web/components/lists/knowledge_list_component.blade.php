@@ -44,8 +44,6 @@
 
     $type = new stdClass();
     $type->id = 3;
-
-    //dd($categories[0]->parent()->first()->image()->first()->url);
 @endphp
 
 @if (count($categories))
