@@ -165,6 +165,8 @@
                 </div>
                 <div class="col-12">
                     <button v-if="findVersionData(version)" @click="deleteFile(findVersionData(version))" class="btn btn-soft-danger btn-block w-100 mt-2">Delete version</button>
+                </div>
+                <div class="col-12">
                     <button v-if="parentMode" @click="confirmSelection(findVersionData(version))" class="btn btn-soft-primary btn-block w-100 mt-2">Use</button>
                 </div>
             </div>
