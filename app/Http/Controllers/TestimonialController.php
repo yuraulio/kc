@@ -90,8 +90,9 @@ class TestimonialController extends Controller
             $testimonial->category()->attach([$category]);
         }
 
-
-        return redirect()->route('testimonials.index')->withStatus(__('Testimonial successfully created.'));
+        
+        return redirect()->route('testimonials.edit', $testimonial)->withStatus(__('Testimonial successfully created.'));
+        //return redirect()->route('testimonials.index')->withStatus(__('Testimonial successfully created.'));
     }
 
     /**
@@ -118,7 +119,7 @@ class TestimonialController extends Controller
         //$instructors = Instructor::with('testimonials','medias')->get();
         $instructors = Instructor::with('medias')->get()->groupBy('id');
 
-
+        
         return view('testimonial.edit', compact('testimonial', 'categories', 'instructors'));
     }
 
@@ -177,8 +178,9 @@ class TestimonialController extends Controller
         foreach($request->category_id as $category){
             $testimonial->category()->attach([$category]);
         }
-
-        return redirect()->route('testimonials.index')->withStatus(__('Testimonial successfully updated.'));
+        
+        return redirect()->route('testimonials.edit', $testimonial)->withStatus(__('Testimonial successfully updated.'));
+        //return redirect()->route('testimonials.index')->withStatus(__('Testimonial successfully updated.'));
     }
 
     /**
