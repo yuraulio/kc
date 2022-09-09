@@ -11,7 +11,7 @@ export default {
         },
         {
             name: 'visibility',
-            title: 'Visibility' + '<i title="Column cant be sorted." class="fa fa-info-circle text-muted ms-1"></i>',
+            title: 'Published' + '<i title="Column cant be sorted." class="fa fa-info-circle text-muted ms-1"></i>',
             dataClass: 'align-middle text-center',
             titleClass: 'text-center'
         },
