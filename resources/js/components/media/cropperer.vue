@@ -783,6 +783,42 @@ textarea {
     color: #fff!important;
     background-color: #6658dd!important;
 }
+.btn-soft-warning {
+    color: #f7b84b!important;
+    background-color: rgba(247, 184, 75, 0.18)!important;
+    border-color: rgba(247, 184, 75, 0.12)!important;
+}
+.btn-soft-warning:hover {
+    color: #fff!important;
+    background-color: #f7b84b!important;
+}
+.btn-soft-info {
+    color: #4fc6e1!important;
+    background-color: rgba(79, 198, 225, 0.18)!important;
+    border-color: rgba(79, 198, 225, 0.12)!important;
+}
+.btn-soft-info:hover {
+    color: #fff!important;
+    background-color: #4fc6e1!important;
+}
+.btn-soft-secondary {
+    color: #6c757d!important;
+    background-color: rgba(108, 117, 125, 0.18)!important;
+    border-color: rgba(108, 117, 125, 0.12)!important;
+}
+.btn-soft-secondary:hover {
+    color: #fff!important;
+    background-color: #6c757d!important;
+}
+.btn-soft-danger {
+    color: #f1556c!important;
+    background-color: rgba(241, 85, 108, 0.18)!important;
+    border-color: rgba(241, 85, 108, 0.12)!important;
+}
+.btn-soft-danger:hover {
+    color: #fff!important;
+    background-color: #f1556c!important;
+}
 
 .horizontal-scroll>.col-12>div {
     height: 210px;
@@ -818,7 +854,7 @@ textarea {
 .invisible-input {
     background: transparent;
     outline: none;
-    border: 0px;
+    border: 0px!important;
     box-shadow: none;
 }
 .cropper-image-name {

@@ -131,7 +131,17 @@ class MainController extends Controller
             $dynamicPageData = $this->blogSearch($dynamicPageData, $request);
         }
 
-        //dd(json_decode($page->content));
+
+        // thank you page exception
+        if ($slug == "thankyou") {
+            session_start();
+            $thankyouData = $_SESSION["thankyouData"] ?? null;
+            if ($thankyouData) {
+                $_SESSION["thankyouData"] = null;
+            } else {
+                return redirect('/');
+            }
+        }
 
         $this->fbp->sendPageViewEvent();
 

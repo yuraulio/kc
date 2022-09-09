@@ -292,7 +292,7 @@ export default {
             },
             update_title(value){
                 this.title_value = value;
-                this.slug_value = slugify(value);
+                // this.slug_value = slugify(value);
             },
             update_rows(value){
                 this.rows_value = value;
