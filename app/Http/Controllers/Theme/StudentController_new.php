@@ -90,8 +90,9 @@ class StudentController extends Controller
             $data = $this->studentsEvent();
         }
         $data['instructor'] = $instructor;
-
         $data['user']['hasExamResults'] = $user->hasExamResults();
+
+
         return view('theme.myaccount.student', $data);
 
     }
@@ -207,7 +208,7 @@ class StudentController extends Controller
             $eventInfo = $event->event_info();
 
             if($event->is_elearning_course()){
-                
+
                 //$data['user']['events'][$event->id]['topics'] = $event['topic']->unique()->groupBy('topic_id');
                 $data['events'][$event->id]['videos_progress'] = round($event->progress($user),2);
                 $data['events'][$event->id]['videos_seen'] = $event->video_seen($user);
@@ -614,7 +615,7 @@ class StudentController extends Controller
         $data['plans'] = Plan::where('published',true)->with('events')->get();
         $data['subscriptionAccess'] = [];
         $data['mySubscriptions'] = [];
-        
+
         $data['user'] = User::find($user->id);
         $statistics = $data['user']['statistic']->groupBy('id');//$user->statistic()->get()->groupBy('id');
         //dd($statistics);
@@ -624,7 +625,7 @@ class StudentController extends Controller
         $data['mySubscriptionEvents'] = [];
 
         $eventSubscriptions = [];
-        //$data['user']['hasExamResults'] = $data['user']->hasExamResults1();
+        
         foreach($data['user']['events'] as $key => $event){
             $after20Days = null;
 
@@ -1090,9 +1091,9 @@ class StudentController extends Controller
         $event = Event::where('title', $course)->with('slugable','category')->first();
         if($instructor = $user->instructor->first()){
             $data['instructor_topics'] = true;
-            
+
             $eventt = $instructor->elearningEvents()->wherePivot('instructor_id', $instructor->id)->wherePivot('event_id', $event['id'])->first();
-        
+
             if(!$eventt){
                 $data['instructor_topics'] = false;
                 $eventt = $user->events()->wherePivot('event_id', $event['id'])->first() ? $user->events()->wherePivot('event_id', $event['id'])->first() :
@@ -1119,7 +1120,7 @@ class StudentController extends Controller
 
         $statistic =  ($statistic = $user->statistic()->wherePivot('event_id',$event['id'])->first()) ?
                             $statistic->toArray() : ['pivot' => [], 'videos' => ''];
-       
+
         //$this->updateUserStatistic($event,$statistic['pivot'],$user);
         $statistic = $user->updateUserStatistic($event,$statistic['pivot']);
         $data['lastVideoSeen'] = $statistic['pivot']['lastVideoSeen'];
@@ -1273,10 +1274,10 @@ class StudentController extends Controller
 
                 }
 
-            
+
             //}else if( $event /*&& $event->view_tpl != 'elearning_free'*/ && !$event->isFree() && $event->hasCertificate()){
             }else if( $event && $event->hasCertificate()){
-                
+
                 $event->certification($user);
             }
 
@@ -1353,8 +1354,9 @@ class StudentController extends Controller
 
     public function createPassStore(Request $request,$slug){
 
+ 
         $user = decrypt($slug);
-
+    
         if( !($user = User::where('id',$user['id'])->where('email',$user['email'])->first()) ){
             return response()->json([
 
@@ -1378,7 +1380,7 @@ class StudentController extends Controller
                 'message' => $val->errors()->first()
             ]);
         }
-
+    
         $user->password = Hash::make($request->password);
         $user->save();
 
@@ -1391,9 +1393,10 @@ class StudentController extends Controller
                 'user_id' => $user->id,
                 'code' => Str::random(40),
                 'completed' => true,
-                'completed_at' => Carbon::now()
+                'completed_at' => Carbon::now();
             ]);
         }
+        
 
         Auth::login($user);
 

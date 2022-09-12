@@ -341,11 +341,9 @@ class EventController extends Controller
         }
 
         $infoData = $request->course;
-
         if(!$infoData['certificate']['event_title']){
             $infoData['certificate']['event_title'] = explode(',',$event->title)[0];
         }
-     
         $event_info = $this->prepareInfo($infoData, $request->status, $request->delivery, $partner, $request->syllabus, $request->city_id, $event);
         $this->updateEventInfo($event_info, $event->id);
 
@@ -565,18 +563,35 @@ class EventController extends Controller
             $selectedFiles = json_decode($request->selectedFiles, true);
         }
 
+        if($selectedFiles != null){
 
-        if($selectedFiles != null && isset($selectedFiles['selectedDropbox']) && $selectedFiles['selectedDropbox'] != null){
-
-            $exist_dropbox = Dropbox::where('folder_name', $selectedFiles['selectedDropbox'])->first();
-            if($exist_dropbox){
-                unset($selectedFiles['selectedDropbox']);
-                $event->dropbox()->sync([$exist_dropbox->id => ['selectedFolders' => json_encode($selectedFiles)]]);
-            }
-
-        }else if($selectedFiles != null && isset($selectedFiles['detach']) && $selectedFiles['detach']){
             $event->dropbox()->detach();
+            //dd($selectedFiles);
+
+            foreach($selectedFiles as $key => $folder) {
+
+                if(isset($folder['selectedDropbox']) && $folder['selectedDropbox'] != null){
+                    $exist_dropbox = Dropbox::where('folder_name', $folder['selectedDropbox'])->first();
+                    if($exist_dropbox){
+                        unset($folder['selectedDropbox']);
+                        $event->dropbox()->attach([$exist_dropbox->id => ['selectedFolders' => json_encode($folder)]]);
+                    }
+                }
+            }
         }
+
+
+        // if($selectedFiles != null && isset($selectedFiles['selectedDropbox']) && $selectedFiles['selectedDropbox'] != null){
+
+        //     $exist_dropbox = Dropbox::where('folder_name', $selectedFiles['selectedDropbox'])->first();
+        //     if($exist_dropbox){
+        //         unset($selectedFiles['selectedDropbox']);
+        //         $event->dropbox()->sync([$exist_dropbox->id => ['selectedFolders' => json_encode($selectedFiles)]]);
+        //     }
+
+        // }else if($selectedFiles != null && isset($selectedFiles['detach']) && $selectedFiles['detach']){
+        //     $event->dropbox()->detach();
+        // }
 
         if($request->category_id != $request->oldCategory){
             $category = Category::with('topics')->find($request->category_id);
@@ -1003,7 +1018,6 @@ class EventController extends Controller
 
         // Certificate
         if(isset($requestData['certificate'])){
-            
             $data['course_certification_name_success'] = $requestData['certificate']['success_text'];
             $data['course_certification_name_failure'] = $requestData['certificate']['failure_text'];
             $data['course_certification_event_title'] = $requestData['certificate']['event_title'];
