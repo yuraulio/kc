@@ -1393,7 +1393,7 @@ class StudentController extends Controller
                 'user_id' => $user->id,
                 'code' => Str::random(40),
                 'completed' => true,
-                'completed_at' => Carbon::now();
+                'completed_at' => Carbon::now()
             ]);
         }
         
