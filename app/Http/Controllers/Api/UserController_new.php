@@ -578,8 +578,12 @@ class UserController extends Controller
                 $eventLessons = $event['lessonsForApp']->sortBy('time_starts');
 
                 // if inclass, parse dropbox files without attach by topic
-                $data[$key]['files']['folders'][] = $foldersNew;
-
+                //$data[$key]['files']['folders'][] = $foldersNew;
+                if(isset($foldersNew[0]) && count($foldersNew[0]) > 0){ 
+                    $data[$key]['files']['folders'][] = $foldersNew;
+                }else{
+                  $data[$key]['files']['folders'] = [];
+                }
             }else if($event->is_elearning_course()){
                 $data[$key]['is_elearning'] = true;
                 $isElearning = true;
@@ -1154,8 +1158,12 @@ class UserController extends Controller
                 }
 
                 // if inclass, parse dropbox files without attach by topic
-                $data[$key]['files']['folders'][] = $foldersNew;
-
+                //$data[$key]['files']['folders'][] = $foldersNew;
+                if(isset($foldersNew[0]) && count($foldersNew[0]) > 0){ 
+                    $data[$key]['files']['folders'][] = $foldersNew;
+                }else{
+                  $data[$key]['files']['folders'] = [];
+                }
             }else if($event->is_elearning_course()){
                 $data[$key]['is_elearning'] = true;
                 $isElearning = true;

@@ -1637,7 +1637,7 @@ img.linkdein-image-add {
 /* Tablet Portrait */
 @media only screen and (max-width: 980px) {
     .hero-message .hours, .hero-message .certificate, .hero-message .delivery{
-        font-size: 1.2em;
+        font-size: 0.9em;
     }
 
     .sub-blue-form form {
