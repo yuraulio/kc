@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\Model\Event;
+use App\Model\Dropbox;
 
 class EventDropboxFiles extends Command
 {
@@ -59,4 +60,24 @@ class EventDropboxFiles extends Command
         //dd($events);
         return 0;
     }
+
+    /*public function handle()
+    {
+        $dropBoxs = Dropbox::all();
+        //dd($dropBoxs);
+        $duplicateFiles = [];
+        foreach($dropBoxs as $key => $dropBox){
+            
+            if(!isset($duplicateFiles[$dropBox->folder_name])){
+                $duplicateFiles[$dropBox->folder_name] = [];
+                continue;
+            }
+
+            $duplicateFiles[$dropBox->folder_name][] = $dropBox->id;
+
+        }
+        dd($duplicateFiles);
+        //dd($events);
+        return 0;
+    }*/
 }
