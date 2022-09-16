@@ -35,6 +35,7 @@ class EventController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    
     public function index(Event $model)
     {
         $this->authorize('manage-users', User::class);

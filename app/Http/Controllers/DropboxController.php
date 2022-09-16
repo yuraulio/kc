@@ -292,4 +292,9 @@ class DropboxController extends Controller
         ]);
 
     }
+
+    public function refreshDropBoxKey(){
+        update_dropbox_api();
+    }
+
 }

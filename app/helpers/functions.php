@@ -10,6 +10,7 @@ use App\Model\Certificate;
 use App\Model\Category;
 use App\Model\PaymentMethod;
 use CodexShaper\Menu\Models\Menu as NewMenu;
+use Spatie\Dropbox\Client;
 
 function get_social_media(){
     $social_media = Option::where('name', 'social_media')->get();
@@ -500,6 +501,65 @@ if(!function_exists('formatBytes')){
             'title' => $menu->custom_class ?? "",
         ];
     }
+
+
+    if (!function_exists('update_dropbox_api')) {
+        function update_dropbox_api() : void
+        {  
+
+            $t = base64_encode(env("DROPBOX_APPKEY").":".env("DROPBOX_SECRET"));
+            
+            $endpoint = "https://api.dropbox.com/oauth2/token";
+            $client = new \GuzzleHttp\Client(['headers' => ["Content-Type"=> 'application/json',"Authorization" => "Basic " . $t ]]);
+
+            $response = $client->request('POST', $endpoint,
+                [
+                    'form_params' => [
+                        'grant_type' =>  'refresh_token',
+                        'refresh_token' => env("DROPBOX_REFRESH_TOKEN")
+                ]
+            ]);
+            
+            
+            $statusCode = $response->getStatusCode();
+            $content = $response->getBody()->getContents();
+            $accessToken = json_decode($content,true);
+            
+            if(isset($accessToken['access_token']) && $accessToken['access_token']){
+                //$client = new Client();
+                //$client->setAccessToken($accessToken['access_token']);
+                update_env( ['DROPBOX_TOKEN' => $accessToken['access_token']] );
+                //dd($client);
+            }
+
+        }
+    }
+
+
+    if (!function_exists('update_env')) {
+        function update_env( $data = [] ) : void
+        {  
+
+            if(!isset($data['DROPBOX_TOKEN'])){
+                return;
+            }
+
+            $newData=['DROPBOX_TOKEN' => $data['DROPBOX_TOKEN']];
+            $path = base_path('.env');
+
+            if (file_exists($path)) {
+            
+                foreach ($newData as $key => $value) {
+                    file_put_contents($path, str_replace(
+                        $key . '=' . env($key), $key . '=' . $value, file_get_contents($path)
+                    ));
+                }
+            }
+
+        }
+    }
+
+
 
 }
     
