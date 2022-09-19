@@ -40,7 +40,7 @@ class FixOrder extends Command
     public function handle()
     {
         $masterEvent = Event::find(2304);
-        $events = Event::whereIn('id',[4628,4627,4626,4625,4624,4623,4622,4621])->get();
+        $events = Event::whereIn('id',[2304,4628,4627,4626,4625,4624,4623,4622,4621])->get();
 
         $lessonsOrder = [];
 
