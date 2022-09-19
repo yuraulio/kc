@@ -12,7 +12,7 @@ class DropboxController extends Controller
 {
 
     public function __construct(){
-        $this->middleware('auth.aboveauthor')->except('cacheDropboxCLI');
+        $this->middleware('auth.aboveauthor')->except('cacheDropboxCLI','refreshDropBoxKey');
     }
 
     /**
