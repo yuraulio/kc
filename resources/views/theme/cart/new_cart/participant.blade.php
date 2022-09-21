@@ -438,7 +438,7 @@ dataLayer.push({
     }
 
 	$(document).ready(function(){
-
+		$("#country").change();
 		@if(old('country_code',$country_code[0]))
 	    	$("#country").val("{{old('country_code',$country_code[0])}}")
 	    	$("#country").change();

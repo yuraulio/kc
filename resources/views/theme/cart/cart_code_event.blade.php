@@ -537,6 +537,9 @@ if(!isset($info)){
 
 <script>
 $(document).ready(function() {
+
+   $("#selectCountry").change();
+
     $(document).on('submit', '#billing-setting', function() {
         $('#checkout-button').attr('disabled', 'disabled');
     });

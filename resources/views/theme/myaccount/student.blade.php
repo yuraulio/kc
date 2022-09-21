@@ -2225,7 +2225,8 @@
 
 
       $("#selectCountry").select()
-
+      $("#selectCountry").change()
+      
       @if("{{ old('country_code') }}")
 
          $("#selectCountry").val("{{ old('country_code',$currentuser->country_code) }}").change();

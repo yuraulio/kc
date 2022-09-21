@@ -468,7 +468,7 @@
     }
 
 $(document).ready(function(){
-	
+	$(".country{{$i}}").change();
 	@for($i = 1; $i <= $totalitems; $i++)
     	$(".country{{$i}}").val("{{old('country_code',$country_code[$i-1])}}")
     	$(".country{{$i}}").change();

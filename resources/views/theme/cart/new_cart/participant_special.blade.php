@@ -471,10 +471,9 @@ dataLayer.push({
 $(document).ready(function(){
 	
 	@for($i = 1; $i <= $totalitems; $i++)
-
 		@if(old('country_code',$country_code[$i-1]))
-    		$("#country{{$i}}").val("{{old('country_code',$country_code[$i-1])}}")
-    		$("#country{{$i}}").change();
+    		$(".country{{$i}}").val("{{old('country_code',$country_code[$i-1])}}")
+    		$(".country{{$i}}").change();
 			
 		@endif
 		alphabetizeList('.country{{$i}}');

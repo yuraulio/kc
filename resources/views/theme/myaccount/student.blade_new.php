@@ -2236,6 +2236,7 @@
 
 
       $("#selectCountry").select()
+      $("#selectCountry").change()
 
       @if("{{ old('country_code') }}")
 
