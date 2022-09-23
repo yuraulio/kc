@@ -133,6 +133,7 @@ class MainController extends Controller
 
 
         // thank you page exception
+        $thankyouData = null;
         if ($slug == "thankyou") {
             session_start();
             $thankyouData = $_SESSION["thankyouData"] ?? null;
@@ -164,6 +165,7 @@ class MainController extends Controller
                 'comments' => $page->comments ? $page->comments->take(500) : null,
                 'page' => $page,
                 'dynamic_page_data' => $dynamicPageData,
+                'thankyouData' => $thankyouData
             ]);
         }
     }

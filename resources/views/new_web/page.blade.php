@@ -34,3 +34,96 @@
     <script src="{{asset('binshops-blog.js')}}"></script>
     <script src="{{asset('js/blog.js')}}"></script>
 @endsection
+
+
+@push('components-scripts')
+
+
+    @if(isset($thankyouData['tigran']) && isset($thankyouData['tigran']['Price']) &&$thankyouData['tigran']['Price'] > 0 && !env('APP_DEBUG'))
+
+        <script>
+        $(document).ready(function(){
+           @foreach($thankyouData['tigran'] as $key => $ti)
+              dataLayer.push({"{{$key}}": $.parseHTML("{{$ti}}")[0].data})
+           @endforeach
+        })
+        </script>
+
+    @endif
+
+    @if(isset($thankyouData['ecommerce']) && isset($thankyouData['ecommerce']['actionField']['value']) && $thankyouData['ecommerce']['actionField']['value'] > 0 && !env('APP_DEBUG'))
+
+        <script>
+           $(document).ready(function(){
+           dataLayer.push({ ecommerce: null });
+           let actionField = {};
+           let products = {};
+        
+           //dataLayer.push({"event": 'purchase'})
+        
+           @foreach($thankyouData['ecommerce']['actionField'] as $key => $ti)
+
+              @if($ti != '')
+                 actionField["{{$key}}"] =  $.parseHTML("{{$ti}}")[0].data
+        
+              @endif
+        
+           @endforeach
+        
+           @foreach($thankyouData['ecommerce']['products'] as $key => $ti)
+              @if($ti != '')
+                 products["{{$key}}"] = $.parseHTML("{{$ti}}")[0].data
+              @endif
+
+           @endforeach
+        
+           //dataLayer.push({"ecommerce": ecommerce})
+        
+        
+           dataLayer.push({
+          'event': 'purchase',
+          'ecommerce': {
+            'purchase': {
+              'actionField': actionField,
+              'products': [products]
+            }
+          }
+        });
+
+           })
+        </script>
+
+
+    @endif
+
+
+    @if(isset($thankyouData['gt3']) && isset($thankyouData['gt3']['gt3']['transactionTotal']) && $thankyouData['gt3']['gt3']['transactionTotal'] > 0 && !env('APP_DEBUG'))
+       {{--<script>
+          $(document).ready(function(){
+          let gt3 = {};
+          let products = {};
+        
+          @foreach($thankyouData['gt3']['gt3'] as $key => $ti)
+        
+            @if($ti != '')
+                gt3["{{$key}}"] = "{{$ti}}"
+        
+             @endif
+        
+          @endforeach
+        
+          @foreach($thankyouData['gt3']['transactionProducts'] as $key => $ti)
+        
+            @if($ti != '')
+                products["{{$key}}"] = "{{$ti}}"
+        
+             @endif
+        
+          @endforeach
+        
+          gt3['transactionProducts'] = products;
+          dataLayer.push(gt3);
+          })
+       </script>--}}
+    @endif
+@endpush
