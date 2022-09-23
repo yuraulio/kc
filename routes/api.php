@@ -42,6 +42,9 @@ Route::middleware('auth:api')->group(function () {
     //Absences
     Route::post('absences-store', 'Api\AbsenceController@store');
 
+    //GetDropboxToken
+    Route::get('get-dropbox-token', [UserController::class, 'getDropBoxToken']);
+
    
 
 });

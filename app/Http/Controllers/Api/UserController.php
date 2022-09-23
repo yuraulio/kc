@@ -1485,4 +1485,14 @@ class UserController extends Controller
     {
         //
     }
+
+    public function getDropBoxToken(){
+
+        return response()->json([
+            'success' => true,
+            'dropBoxToken' => env('DROPBOX_TOKEN')
+        ]);
+
+    }
+
 }
