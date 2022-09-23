@@ -66,6 +66,18 @@ a.cert-post{
 
 }
 
+.form-wrapper form .custom-checkbox-wrapper{
+    display: inline-flex;
+}
+
+.form-wrapper form .custom-checkbox-wrapper label {   
+    width: fit-content!important;
+}
+
+.form-wrapper form .custom-checkbox-wrapper .custom-checkbox{
+    margin-top: 6px!important;
+}
+
 .awards-landing-container {
     position: absolute;
     right: -5px;
