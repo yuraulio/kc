@@ -71,7 +71,7 @@
                                                         <tr >
                                                             <td><img height="10" src="theme/assets/img/calendar.svg" alt="Date" /> <?= date( "l d M Y", strtotime($lvalue['pivot']['time_starts']) ) ?></td>
                                                             <td><?= date( "H:i", strtotime($lvalue['pivot']['time_starts']) ) ?> ({!! $lvalue['pivot']['duration'] !!})</td>
-                                                            <td>{{$lvalue['pivot']['room'] }}</td>
+                                                            <td>@if(isset($lvalue['pivot']['location_url']) && $lvalue['pivot']['location_url']) <a href="{{ $lvalue['pivot']['location_url'] }}" target="_blank"> {{$lvalue['pivot']['room'] }} </a> @else {{$lvalue['pivot']['room'] }} @endif</td>
 
                                                             <td>{{-- $level --}} @if(count($lvalue['type']) > 0) {!! $lvalue['type'][0]['name'] !!} @endif</td>
                                                             <td>{{ $lvalue['title'] }}</td>
