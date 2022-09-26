@@ -530,7 +530,7 @@
             {
                 "type": "text",
                 "key": "contact_form_email",
-                "label": "Emial title",
+                "label": "Email title",
                 "main": true,
                 "value": "Email"
             },
@@ -646,7 +646,7 @@
             {
                 "type": "text",
                 "key": "corporate_training_email",
-                "label": "Emial title",
+                "label": "Email title",
                 "main": true,
                 "value": "Email"
             },
@@ -741,7 +741,7 @@
             {
                 "type": "text",
                 "key": "instructor_form_email",
-                "label": "Emial title",
+                "label": "Email title",
                 "main": true,
                 "value": "Email"
             },
@@ -878,7 +878,7 @@
             {
                 "type": "text",
                 "key": "giveaway_form_email",
-                "label": "Emial title",
+                "label": "Email title",
                 "main": true,
                 "value": "Email"
             },
