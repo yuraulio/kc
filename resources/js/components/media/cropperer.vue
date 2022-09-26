@@ -488,10 +488,18 @@ export default {
 
             this.$refs.cropper.setAspectRatio(this.selectedVersion.w / this.selectedVersion.h);
 
-            this.$set(this.cropBoxData, 'width', this.selectedVersion.w * this.width_ratio);
-            this.$set(this.cropBoxData, 'height', this.selectedVersion.h * this.height_ratio);
-            this.$set(this.cropBoxData, 'left', ((container_width - (this.selectedVersion.w * this.width_ratio))/2));
-            this.$set(this.cropBoxData, 'top', ((container_height - (this.selectedVersion.h * this.height_ratio))/2));
+            if (this.versionData.crop_data) {
+                this.$set(this.cropBoxData, 'width', this.versionData.crop_data.crop_width * this.width_ratio);
+                this.$set(this.cropBoxData, 'height', this.versionData.crop_data.crop_height * this.height_ratio);
+                this.$set(this.cropBoxData, 'left', (((container_width - canvas_width)/2) + (this.versionData.crop_data.width_offset * this.width_ratio)));
+                this.$set(this.cropBoxData, 'top', (((container_height - canvas_height)/2) + (this.versionData.crop_data.height_offset * this.width_ratio)));
+            } else {
+                this.$set(this.cropBoxData, 'width', this.selectedVersion.w * this.width_ratio);
+                this.$set(this.cropBoxData, 'height', this.selectedVersion.h * this.height_ratio);
+                this.$set(this.cropBoxData, 'left', ((container_width - (this.selectedVersion.w * this.width_ratio))/2));
+                this.$set(this.cropBoxData, 'top', ((container_height - (this.selectedVersion.h * this.height_ratio))/2));
+            }
+            
             this.setCropBoxData();
             
         },
