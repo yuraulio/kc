@@ -31,7 +31,7 @@
         <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12">
                 <h1>{{ $content['title'] }}</h1>
-                <h2>@if(count($content['city']) > 0) In {{ $content['city'][0]['name']}}@endif, @if($content->is_inclass_course()) In-class @endif</h2>
+                {{--<h2>@if(count($content['city']) > 0) In {{ $content['city'][0]['name']}}@endif, @if($content->is_inclass_course()) In-class @endif</h2>--}}
 
                 <div class="row">
                     <div class="col-lg-12 col-md-12 col-sm-12">

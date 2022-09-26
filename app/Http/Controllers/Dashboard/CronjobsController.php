@@ -759,8 +759,10 @@ class CronjobsController extends Controller
 
         $date1 =  date("Y-m-d", strtotime("+7 days"));
         $date2 =  date("Y-m-d", strtotime("+20 days"));
+        $date3 =  date("Y-m-d", strtotime("+1 days"));
+        $date4 =  date("Y-m-d", strtotime("+30 days"));
         
-        $dates = [$date1,$date2];
+        $dates = [$date1,$date2,$date3,$date4];
       
         $events = Event::
             where('published',true)
@@ -771,7 +773,7 @@ class CronjobsController extends Controller
             })
             ->with('users') 
             ->get();
-
+       
         foreach($events as $event){
 
             $info = $event->event_info();
