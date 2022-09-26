@@ -225,7 +225,7 @@
         "key": "schema_component",
         "disable_color": true,
         "tab": "Content",
-        "simple_view": true,
+        "simple_view": false,
         "inputs": [
             {
                 "type": "textarea",
