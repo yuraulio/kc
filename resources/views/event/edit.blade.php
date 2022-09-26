@@ -2855,7 +2855,7 @@
 
                             <div class="form-group">
                                 <label for="date">URL</label>
-                                <input type="text" name="location_url" class="form-control" id="location_url" value="${lesson.location_url ? lesson.room : ''}" placeholder="URL">
+                                <input type="text" name="location_url" class="form-control" id="location_url" value="${lesson.location_url ? lesson.location_url : ''}" placeholder="URL">
                             </div>
                         `
 
