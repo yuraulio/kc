@@ -72,6 +72,7 @@ class Kernel extends ConsoleKernel
        Commands\FixExamQuestion::class,
        Commands\FixExamQuestion::class,
        Commands\EnableExams::class,
+       Commands\RestoreVideosStatistics::class,
     ];
 
     /**

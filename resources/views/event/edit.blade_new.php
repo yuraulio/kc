@@ -2650,6 +2650,7 @@
             let date = $('#date').val()
             let end =  $('#time_ends').val()
             let room = $('#room').val()
+            let location_url = $('#location_url').val()
             let topic_id = $('#topic_id').val()
             let event_id = $('#event_id').val()
             let lesson_id = $('#lesson_id').val()
@@ -2672,7 +2673,7 @@
 
             }
 
-            data = {date:date, start:start, event_id:event_id, end:end, room:room, instructor_id:instructor_id, topic_id:topic_id, lesson_id:lesson_id}
+            data = {date:date, start:start, event_id:event_id, end:end, room:room,location_url:location_url, instructor_id:instructor_id, topic_id:topic_id, lesson_id:lesson_id}
 
             $.ajax({
                 type: 'POST',
@@ -2867,9 +2868,15 @@
                                 <input type="text" name="time_ends" class="form-control timepicker" id="time_ends" value="${lesson.time_ends != null ? time_ends : ''}" placeholder="End">
                             </div>
                             <div class="form-group">
-                                <label for="date">Room</label>
-                                <input type="text" name="room" class="form-control" id="room" value="${lesson.room != null ? lesson.room : ''}" placeholder="Room">
+                                <label for="date">Location</label>
+                                <input type="text" name="room" class="form-control" id="room" value="${lesson.room != null ? lesson.room : ''}" placeholder="Location">
                             </div>
+
+                            <div class="form-group">
+                                <label for="date">URL</label>
+                                <input type="text" name="location_url" class="form-control" id="location_url" value="${lesson.location_url ? lesson.room : ''}" placeholder="URL">
+                            </div>
+
                         `
 
                         $('#lesson_details').append(row)

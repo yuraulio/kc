@@ -285,12 +285,19 @@ class LessonController extends Controller
             }
             $duration = trim($duration);
         }
-
-
+        
+        $location_url = $request->location_url;
+        if($location_url){
+            $location_url = str_replace('https://', '', $location_url);
+            $location_url = str_replace('http://', '', $location_url);
+            $location_url = 'https://'.$location_url;
+        }
+        
         $topic->event_topic()->wherePivot('lesson_id', '=', $request->lesson_id)->wherePivot('event_id', '=', $request->event_id)->updateExistingPivot($request->topic_id,[
             //'priority' => $request->priority,
             'date' => $date,
             'room' => $request->room,
+            'location_url' => $location_url,
             'duration' => $duration,
             'instructor_id' => $request->instructor_id,
             'time_starts' => $start,
@@ -305,6 +312,7 @@ class LessonController extends Controller
         $data['start'] = $start_response;
         $data['end'] = $end_response;
         $data['room'] = $request->room;
+        $data['location_url'] = $location_url;
 
         dispatch((new UpdateStatisticJson($request->event_id))->delay(now()->addSeconds(3)));
 
@@ -325,7 +333,7 @@ class LessonController extends Controller
         $data['topic_id'] = $request->topic_id;
         $data['lesson_id'] = $request->lesson_id;
         $data['isInclassCourse'] = $event->is_inclass_course();
-
+       
         echo json_encode($data);
 
     }
