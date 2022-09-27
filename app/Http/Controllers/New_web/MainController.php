@@ -137,9 +137,7 @@ class MainController extends Controller
         if ($slug == "thankyou") {
             session_start();
             $thankyouData = $_SESSION["thankyouData"] ?? null;
-            if ($thankyouData) {
-                $_SESSION["thankyouData"] = null;
-            } else {
+            if (!$thankyouData) {
                 return redirect('/');
             }
         }
@@ -187,15 +185,15 @@ class MainController extends Controller
                 $q->whereHas('category', function ($query) use ($data) {
                     $query->where('name', 'like', '%' . $data['search_term'] . '%');
                 })
-                ->orWhereHas('topic', function ($query) use ($data) {
-                    $query->where('title', 'like', '%' . $data['search_term'] . '%');
-                })
-                ->orWhereHas('city', function ($query) use ($data) {
-                    $query->where('name', 'like', '%' . $data['search_term'] . '%');
-                })
-                ->orWhereHas('lessons', function ($query) use ($data) {
-                    $query->where('title', 'like', '%' . $data['search_term'] . '%');
-                });
+                    ->orWhereHas('topic', function ($query) use ($data) {
+                        $query->where('title', 'like', '%' . $data['search_term'] . '%');
+                    })
+                    ->orWhereHas('city', function ($query) use ($data) {
+                        $query->where('name', 'like', '%' . $data['search_term'] . '%');
+                    })
+                    ->orWhereHas('lessons', function ($query) use ($data) {
+                        $query->where('title', 'like', '%' . $data['search_term'] . '%');
+                    });
             })
             ->whereStatus(0)
             ->wherePublished(1)
