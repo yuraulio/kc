@@ -155,13 +155,13 @@ class MediaController extends Controller
             $original_image_height = $data[1];
 
             $mfile_original = $this->storeFile(
-                $image_name, 
-                "original", 
-                $imgpath_original, 
-                $mediaFolder->id, 
-                $image->getSize(), 
-                $request->parrent_id, 
-                $request->alt_text, 
+                $image_name,
+                "original",
+                $imgpath_original,
+                $mediaFolder->id,
+                $image->getSize(),
+                $request->parrent_id,
+                $request->alt_text,
                 $request->link,
                 $original_image_height,
                 $original_image_width
@@ -212,13 +212,13 @@ class MediaController extends Controller
 
                 // save to db
                 $mfile = $this->storeFile(
-                    $version_name, 
-                    $version[0], 
-                    $imgpath, 
-                    $mediaFolder->id, 
-                    $image->filesize(), 
-                    $mfile_original->id, 
-                    $request->alt_text, 
+                    $version_name,
+                    $version[0],
+                    $imgpath,
+                    $mediaFolder->id,
+                    $image->filesize(),
+                    $mfile_original->id,
+                    $request->alt_text,
                     $request->link,
                     $image_height,
                     $image_width
@@ -278,6 +278,8 @@ class MediaController extends Controller
                 $file_path = str_replace($original_file->name, $image_name, $file_path);
             }
 
+            $cropData = null;
+
             if ($request->version != 'original') {
                 // delete old file
                 if ($file && Storage::disk('public')->exists($file->path)) {
@@ -298,6 +300,15 @@ class MediaController extends Controller
                 $height_offset = $crop_data->top * (1 / $request->height_ratio);
                 $width_offset = $crop_data->left * (1 / $request->width_ratio);
 
+                $cropData = [
+                    "crop_height" => $crop_height,
+                    "crop_width" => $crop_width,
+                    "height_offset" => $height_offset,
+                    "width_offset" => $width_offset,
+
+                ];
+                $cropData = json_encode($cropData);
+
                 $image->crop((int) $crop_width, (int) $crop_height, (int) $width_offset, (int) $height_offset);
 
                 $folderPath = ltrim($mediaFolder->path, "/");
@@ -316,18 +327,19 @@ class MediaController extends Controller
             }
 
             $mfile = $this->editFile(
-                $parent_id, 
-                $request->version, 
-                $image_name, 
-                $imgpath, 
-                $mediaFolder->id, 
-                $size, 
-                null, 
-                $request->alttext, 
-                $request->link, 
+                $parent_id,
+                $request->version,
+                $image_name,
+                $imgpath,
+                $mediaFolder->id,
+                $size,
+                null,
+                $request->alttext,
+                $request->link,
                 $request->id,
                 $height,
-                $width
+                $width,
+                $cropData
             );
 
             if ($request->version != 'original') {
@@ -358,13 +370,13 @@ class MediaController extends Controller
             $file = Storage::disk('public')->putFileAs($path, $request->file('file'), ($request->imgname ? $request->imgname . "_" . getimagesize($image)[0] . "x" . getimagesize($image)[1] . "." . $image->extension() : $image->getClientOriginalName()), 'public');
 
             $mfile = $this->storeFile(
-                $image->getClientOriginalName(), 
-                "Original", 
-                $imgpath, 
-                $mediaFolder->id, 
-                $image->getSize(), 
-                null, 
-                null, 
+                $image->getClientOriginalName(),
+                "Original",
+                $imgpath,
+                $mediaFolder->id,
+                $image->getSize(),
+                null,
+                null,
                 null,
                 null,
                 null
@@ -380,18 +392,17 @@ class MediaController extends Controller
     }
 
     public function storeFile(
-        $name, 
-        $version, 
-        $path, 
-        $folderId, 
-        $size, 
-        $parent = null, 
-        $alt_text = null, 
+        $name,
+        $version,
+        $path,
+        $folderId,
+        $size,
+        $parent = null,
+        $alt_text = null,
         $link = null,
         $height,
         $width
-    )
-    {
+    ) {
         $path = str_replace("//", "/", $path);
 
         $mediaFile = new MediaFile();
@@ -417,20 +428,20 @@ class MediaController extends Controller
     }
 
     public function editFile(
-        $parent_id, 
-        $version, 
-        $name, 
-        $path, 
-        $folderId, 
-        $size, 
-        $parent = null, 
-        $alttext = "", 
-        $link = "", 
+        $parent_id,
+        $version,
+        $name,
+        $path,
+        $folderId,
+        $size,
+        $parent = null,
+        $alttext = "",
+        $link = "",
         $id,
         $height,
-        $width
-    )
-    {
+        $width,
+        $cropData
+    ) {
         DB::beginTransaction();
 
         try {
@@ -455,6 +466,7 @@ class MediaController extends Controller
             $mediaFile->parent_id = $parent_id;
             $mediaFile->height = $height;
             $mediaFile->width = $width;
+            $mediaFile->crop_data = $cropData;
             $mediaFile->save();
 
             if (!Storage::disk('public')->exists($mediaFile->path)) {
@@ -588,7 +600,8 @@ class MediaController extends Controller
         return response()->json('success', 200);
     }
 
-    public function deleteFiles(Request $request) {
+    public function deleteFiles(Request $request)
+    {
         $selected = json_decode($request->selected);
         DeleteMediaFiles::dispatch($selected);
     }
