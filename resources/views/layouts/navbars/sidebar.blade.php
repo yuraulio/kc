@@ -143,9 +143,9 @@
                         </a>
                         <div class="collapse show" id="navbar-pages">
                             <ul class="nav nav-sm flex-column">
-                                    <li class="nav-item  {{ isset($elementName) and $elementName  == 'pages-management' ? 'active' : '' }}">
+                                    {{--<li class="nav-item  {{ isset($elementName) and $elementName  == 'pages-management' ? 'active' : '' }}">
                                         <a href="{{ route('pages.index') }}" class="nav-link">{{ __('Pages') }}</a>
-                                    </li>
+                                    </li>--}}
                                     <li class="nav-item {{ isset($elementName) and $elementName  == 'user2-management' ? 'active' : '' }}">
                                         <a href="{{ route('binshopsblog.admin.index') }}" class="nav-link">{{ __('Blog posts') }}</a>
                                     </li>
