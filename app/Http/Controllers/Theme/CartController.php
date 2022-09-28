@@ -1978,7 +1978,7 @@ class CartController extends Controller
 
         Session::put('thankyouData',$data);
         session_start();
-        $_SESSION["thankyouData"] = true;
+        $_SESSION["thankyouData"] = $data;
         return redirect('/thankyou');
 
         //return view('theme.cart.new_cart.thank_you',$data);

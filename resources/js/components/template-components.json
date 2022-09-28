@@ -1602,6 +1602,17 @@
         "mobile": true,
         "inputs": []
     },
+    "thank_you_scripts": {
+        "version": 1,
+        "title": "Thank you scripts",
+        "icon": "dripicons-code",
+        "key": "thank_you_scripts_component",
+        "tab": "Content",
+        "width": "content",
+        "simple_view": false,
+        "mobile": true,
+        "inputs": []
+    },
     "knowledge_list": {
         "version": 2,
         "title": "Knowledge list",
