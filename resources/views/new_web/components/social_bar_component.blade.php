@@ -6,14 +6,25 @@
     $summary = $socials["social_summary"] ?? "";
     $title = $socials["social_title"] ?? "";
 
-    $facebookCheckbox = $socials["social_facebook_checkbox"] ?? "";
-    $facebookIcon = $socials["social_facebook_icon"]->full_path ?? '/theme/assets/images/icons/social/events/Facebook.svg';
+    if ($socials === []) {
+        $facebookCheckbox = true;
+        $facebookIcon = '/theme/assets/images/icons/social/events/Facebook.svg';
 
-    $twitterCheckbox = $socials["social_twitter_checkbox"] ?? "";
-    $twitterIcon = $socials["social_twitter_icon"]->full_path ?? '/theme/assets/images/icons/social/events/Twitter.svg';
+        $twitterCheckbox = true;
+        $twitterIcon = '/theme/assets/images/icons/social/events/Twitter.svg';
+        
+        $linkedinCheckbox = true;
+        $linkedinIcon = '/theme/assets/images/icons/social/events/Linkedin.svg';
+    } else {
+        $facebookCheckbox = $socials["social_facebook_checkbox"] ?? "";
+        $facebookIcon = $socials["social_facebook_icon"]->full_path ?? '/theme/assets/images/icons/social/events/Facebook.svg';
 
-    $linkedinCheckbox = $socials["social_linkedin_checkbox"] ?? "";
-    $linkedinIcon = $socials["social_linkedin_icon"]->full_path ?? '/theme/assets/images/icons/social/events/Linkedin.svg';
+        $twitterCheckbox = $socials["social_twitter_checkbox"] ?? "";
+        $twitterIcon = $socials["social_twitter_icon"]->full_path ?? '/theme/assets/images/icons/social/events/Twitter.svg';
+
+        $linkedinCheckbox = $socials["social_linkedin_checkbox"] ?? "";
+        $linkedinIcon = $socials["social_linkedin_icon"]->full_path ?? '/theme/assets/images/icons/social/events/Linkedin.svg';
+    }
 
 @endphp
 
