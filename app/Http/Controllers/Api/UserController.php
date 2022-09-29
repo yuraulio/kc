@@ -49,7 +49,7 @@ class UserController extends Controller
         $billing['billcity'] = isset($billingDetails['billcity']) ? $billingDetails['billcity'] : '' ;
         $billing['billpostcode'] = isset($billingDetails['billpostcode']) ? $billingDetails['billpostcode'] : '' ;
         $billing['billstate'] = isset($billingDetails['billstate']) ? $billingDetails['billstate'] : '' ;
-        $billing['bilcountry'] = isset($billingDetails['bilcountry']) ? $billingDetails['bilcountry'] : '' ;
+        $billing['billcountry'] = isset($billingDetails['billcountry']) ? $billingDetails['billcountry'] : '' ;
         $billing['billemail'] = isset($billingDetails['billemail']) ? $billingDetails['billemail'] : '' ;
 
         //$user['stripe_ids'] = json_decode($user['stripe_ids'],true)  ? $user['stripe_ids'] : [];
