@@ -347,12 +347,13 @@ export default {
 
                     // rebuild cropperjs with the updated source
                     this.$refs.cropper.replace(this.imgSrc);
-                    setTimeout(() => {
+
+                    this.$nextTick(() => {
                         this.getData();
                         this.getCropBoxData();
                         this.setCropBoxData();
-                        this.disable();
-                    }, 600);
+                        
+                    });
                 };
 
                 this.$forceUpdate();
@@ -362,16 +363,11 @@ export default {
                 this.version = this.prevalue.version;
                 this.selectedVersion = this.findVersion(this.version);
                 this.versionSelected();
-                // var element = document.getElementById(this.version);
-                // VueScrollTo.scrollTo(element, 500, {
-                //     container: "#versions",
-                // });
-
-                if (this.version != 'original' || this.version != 'Original' || this.version == null) {
+                if (this.version == 'original' || this.version == 'Original' || this.version == null) {
                     this.disable();
                 }
                 
-            }, 1000);
+            }, 600);
         }
     },
     methods: {
@@ -437,7 +433,9 @@ export default {
                 img.onload = () => {
                     image_width = img.width;
                     image_height = img.height;
-                    this.setCropBox(image_width, image_height);
+                    this.$nextTick(() => {
+                        this.setCropBox(image_width, image_height);
+                    });
                 }
                 img.src = this.parrentImage.url;
 
@@ -489,6 +487,9 @@ export default {
             this.$refs.cropper.setAspectRatio(this.selectedVersion.w / this.selectedVersion.h);
 
             if (this.versionData.crop_data) {
+                if (typeof this.versionData.crop_data === "string") {
+                    this.versionData.crop_data = JSON.parse(this.versionData.crop_data);
+                }
                 this.$set(this.cropBoxData, 'width', this.versionData.crop_data.crop_width * this.width_ratio);
                 this.$set(this.cropBoxData, 'height', this.versionData.crop_data.crop_height * this.height_ratio);
                 this.$set(this.cropBoxData, 'left', (((container_width - canvas_width)/2) + (this.versionData.crop_data.width_offset * this.width_ratio)));
@@ -499,7 +500,7 @@ export default {
                 this.$set(this.cropBoxData, 'left', ((container_width - (this.selectedVersion.w * this.width_ratio))/2));
                 this.$set(this.cropBoxData, 'top', ((container_height - (this.selectedVersion.h * this.height_ratio))/2));
             }
-            
+
             this.setCropBoxData();
             
         },
@@ -590,7 +591,6 @@ export default {
             this.$refs.cropper.setData(this.imgData);
         },
         setImage(e) {
-            console.log("set Image", e);
             const file = e.target.files[0];
             if (file.type.indexOf("image/") === -1) {
                 alert("Please select an image file");
