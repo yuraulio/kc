@@ -23,7 +23,7 @@ class ShoppingCart extends Model
 
     public function user()
     {
-        return $this->belongsToMany(User::class, 'shoppingcart' , 'identifier', 'identifier');
+        return $this->belongsToMany(User::class, 'shoppingcart' , 'identifier', 'identifier')->with('events');
     }
 
 }
