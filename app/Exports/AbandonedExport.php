@@ -19,10 +19,8 @@ class AbandonedExport implements FromArray
 
         $this->events = $events;
         $this->fromDate = date('Y-m-d',strtotime($fromDate));
-
-        $this->toDate = $toDate ? date('Y-m-d',strtotime($fromDate)) : date('Y-m-d');
+        $this->toDate = $toDate ? date('Y-m-d',strtotime($toDate)) : date('Y-m-d');
         $this->toDate = date('Y-m-d', strtotime($this->toDate . ' +1 day'));
-
     }
 
 

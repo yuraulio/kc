@@ -25,13 +25,24 @@ class AbandonedController extends Controller
 
         $freeEvents = Event::where('view_tpl','elearning_free')->pluck('id');
         $freeEvents = $freeEvents->toArray();
+
+
         //dd($freeEvents);
         //dd($list);
         foreach ($list as $key => $item) {
             $user_id = $item->identifier;
             $cart = unserialize($item->content);
 
+            $userEvents = isset($item->user[0]) ? $item->user[0]->events()->pluck('event_id')->toArray() : [];
+
+
             foreach ($cart as $cartItem) {
+
+                if(in_array($cartItem->options['event'],$userEvents)){
+                    $item->delete();
+                    continue;
+                }
+
                 //dd(in_array($cartItem->options['event'],$freeEvents));
                 if(!in_array($cartItem->options['event'],$freeEvents)){
                     //dd($cartItem->options['event']);
