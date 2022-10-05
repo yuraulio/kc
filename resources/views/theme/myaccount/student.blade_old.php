@@ -842,8 +842,32 @@
                                     @endif
                                  </div>
 
+                                 <?php
 
-                                <?php
+                                    //$dropbox = isset($event['category'][0]['dropbox'][0]) ? $event['category'][0]['dropbox'][0] : [];
+                                    $dropbox = isset($event['dropbox'][0]) ? $event['dropbox'][0] : [];
+                                    //dd($dropbox);
+                                    $folders = isset($dropbox['folders'][0]) ? $dropbox['folders'][0] : [];
+                                    //dd($folders);
+
+                                    //dd($dropbox);
+                                    if(isset($dropbox['pivot'])){
+                                        $selectedFiles = $dropbox['pivot']['selectedFolders'];
+                                        $selectedFiles = json_decode($selectedFiles, true);
+                                    }
+
+
+                                    $folders_bonus = isset($dropbox['folders'][1]) ? $dropbox['folders'][1] : [];
+                                    //dd($folders_bonus);
+                                    $files = isset($dropbox['files'][1]) ? $dropbox['files'][1] : [];
+                                    $files_bonus = isset($dropbox['files'][2]) ? $dropbox['files'][2] : [];
+
+
+
+                                    //dd($files);
+
+                                    ?>
+                                 <?php
                                     $now1 = strtotime(date("Y-m-d"));
                                     $display = false;
                                     if(!$event['release_date_files'] && $event['status'] == 3){
@@ -855,246 +879,209 @@
                                     }
 
                                     ?>
-
-
-                                 @if(isset($event['dropbox']))
-                                <div id="c-files-inner{{$tab}}" class="in-tab-wrapper">
-                                        <?php
-
-                                            foreach($event['dropbox'] as $dropbox){
-                                                $folders = isset($dropbox['folders'][0]) ? $dropbox['folders'][0] : [];
-                                                //dd($folders);
-
-                                                //dd($dropbox);
-                                                if(isset($dropbox['pivot'])){
-                                                $selectedFiles = $dropbox['pivot']['selectedFolders'];
-                                                $selectedFiles = json_decode($selectedFiles, true);
-                                                }
-
-
-                                                $folders_bonus = isset($dropbox['folders'][1]) ? $dropbox['folders'][1] : [];
-                                                //dd($folders_bonus);
-                                                $files = isset($dropbox['files'][1]) ? $dropbox['files'][1] : [];
-                                                $files_bonus = isset($dropbox['files'][2]) ? $dropbox['files'][2] : [];
-
-
-
-
-
-                                        ?>
+                                 @if(isset($dropbox) && $folders != null)
+                                 <div id="c-files-inner{{$tab}}" class="in-tab-wrapper">
                                     @if($display)
                                     <div class="acc-topic-accordion">
                                        <div class="accordion-wrapper accordion-big">
                                           @if(isset($folders) && count($folders) > 0)
+                                          @foreach($folders as $folder)
                                           <?php
-                                            if($event['slugable']['slugable_id'] == 4612){
-                                                //dd($dropbox['folder_name']);
+                                            $folderIsSelected = false;
+                                            if($selectedFiles['selectedAllFolders']){
+                                                $folderIsSelected = true;
+                                            }else{
+                                                foreach($selectedFiles['selectedFolders'] as $key10 => $selectedFile){
+                                                    if($folder['dirname'] == $selectedFile){
+                                                        $folderIsSelected = true;
+                                                    }
+                                                }
                                             }
-                                          ?>
-                                          <div class="accordion-item">
-                                            <h3 class="accordion-title title-blue-gradient scroll-to-top"> {{ $dropbox['folder_name'] }}</h3>
 
-                                            <div class="accordion-content accordion-content-root">
-                                                @foreach($folders as $folder)
-                                                    <?php
-                                                        $folderIsSelected = false;
-                                                        if($selectedFiles['selectedAllFolders']){
-                                                            $folderIsSelected = true;
-                                                        }else{
-                                                            foreach($selectedFiles['selectedFolders'] as $key10 => $selectedFile){
-                                                                if($folder['dirname'] == $selectedFile){
-                                                                    $folderIsSelected = true;
-                                                                }
+                                             $checkedF = [];
+                                             $fs = [];
+                                             $fk = 1;
+                                             $bonus = [];
+                                             $subfolder = [];
+                                             $subfiles = [];
+                                             ?>
+                                          <div class="accordion-item d-none">
+                                             <h3 class="accordion-title title-blue-gradient scroll-to-top"> {{ $folder['foldername'] }}</h3>
+                                             <div class="accordion-content no-padding">
+                                                @if(isset($files) && count($files) > 0)
+                                                   @foreach($folders_bonus as $folder_bonus)
+                                                      @if(isset($folder_bonus['parent']) && $folder_bonus['parent'] == $folder['id']  && !in_array($folder_bonus['foldername'],$bonusFiles))
+                                                      <?php
+                                                         $checkedF[] = $folder_bonus['id'] + 1 ;
+                                                         $fs[$folder_bonus['id']+1]=[];
+                                                         $fs[$folder_bonus['id']+1] = $folder_bonus;
+
+                                                         ?>
+                                                      @endif
+                                                   @endforeach
+                                                   @if(count($fs) > 0)
+
+                                                      @foreach($fs as $subf)
+                                                         @foreach($files_bonus as $folder_bonus)
+                                                         <?php
+                                                            if(in_array($subf['foldername'],$subfolder)){
+                                                               continue;
                                                             }
-                                                        }
+                                                            ?>
+                                                            @if(isset($folder_bonus['parent']) && $folder_bonus['parent'] == $folder['id'])
 
-                                                        $checkedF = [];
-                                                        $fs = [];
-                                                        $fk = 1;
-                                                        $bonus = [];
-                                                        $subfolder = [];
-                                                        $subfiles = [];
-                                                        ?>
-                                                    <div class="accordion-item d-none">
-                                                        <h3 class="accordion-title title-blue-gradient scroll-to-top"> {{ $folder['foldername'] }}</h3>
-                                                        <div class="accordion-content no-padding">
-                                                            @if(isset($files) && count($files) > 0)
-                                                            @foreach($folders_bonus as $folder_bonus)
-                                                                @if(isset($folder_bonus['parent']) && $folder_bonus['parent'] == $folder['id']  && !in_array($folder_bonus['foldername'],$bonusFiles))
-                                                                <?php
-                                                                    $checkedF[] = $folder_bonus['id'] + 1 ;
-                                                                    $fs[$folder_bonus['id']+1]=[];
-                                                                    $fs[$folder_bonus['id']+1] = $folder_bonus;
+                                                            <?php $folderIsSelected = false; ?>
 
-                                                                    ?>
-                                                                @endif
-                                                            @endforeach
-                                                            @if(count($fs) > 0)
-
-                                                                @foreach($fs as $subf)
-                                                                    @foreach($files_bonus as $folder_bonus)
-                                                                    <?php
-                                                                        if(in_array($subf['foldername'],$subfolder)){
-                                                                        continue;
-                                                                        }
-                                                                        ?>
-                                                                        @if(isset($folder_bonus['parent']) && $folder_bonus['parent'] == $folder['id'])
-
-                                                                        <?php $folderIsSelected = false; ?>
-
-                                                                        @if($selectedFiles['selectedAllFolders'])
-                                                                            <?php $folderIsSelected = true; ?>
-                                                                        @else
-                                                                            @foreach($selectedFiles['selectedFolders'] as $key10 => $selectedFile)
-                                                                                @if($folder_bonus['dirname'] == $selectedFile)
-                                                                                    <?php $folderIsSelected = true; ?>
-                                                                                @endif
-                                                                            @endforeach
-                                                                        @endif
-
-
-                                                                        <?php $subfolder[] =  $subf['foldername']; ?>
-                                                                        <div class="files-wrapper bonus-files d-none">
-                                                                        <h4 class="bonus-title">{{ $subf['foldername'] }}</h4>
-                                                                        <span><i class="icon-folder-open"></i>   </span>
-                                                                            @foreach($files_bonus as $file_bonus)
-                                                                                @if(isset($file_bonus['parent']) && $file_bonus['fid'] == $subf['id'] && $file_bonus['parent'] == $subf['parent'] )
-
-                                                                                @if($folderIsSelected)
-                                                                                    <?php $subfiles[]= $file_bonus['filename'] ?>
-                                                                                    <div class="file-wrapper">
-                                                                                        <h4 class="file-title">{{ $file_bonus['filename'] }}</h4>
-                                                                                        <span class="last-modified">Last modified:  {{$file_bonus['last_mod']}}</span>
-                                                                                        <a  class="download-file getdropboxlink"  data-dirname="{{ $file_bonus['dirname'] }}" data-filename="{{ $file_bonus['filename'] }}" href="javascript:void(0)" >
-                                                                                        <img src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}"  alt="Download File"/></a>
-                                                                                    </div>
-                                                                                @else
-
-                                                                                    @foreach($selectedFiles['selectedFolders'] as $key10 => $selectedFile)
-
-                                                                                        @if($file_bonus['dirname'] == $selectedFile)
-                                                                                        <?php $subfiles[]= $file_bonus['filename'] ?>
-                                                                                            <div class="file-wrapper">
-                                                                                                <h4 class="file-title">{{ $file_bonus['filename'] }}</h4>
-                                                                                                <span class="last-modified">Last modified:  {{$file_bonus['last_mod']}}</span>
-                                                                                                <a  class="download-file getdropboxlink"  data-dirname="{{ $file_bonus['dirname'] }}" data-filename="{{ $file_bonus['filename'] }}" href="javascript:void(0)" >
-                                                                                                <img src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}"  alt="Download File"/></a>
-                                                                                            </div>
-                                                                                        @endif
-                                                                                    @endforeach
-                                                                                @endif
-
-
-                                                                                @endif
-                                                                            @endforeach
-                                                                        </div>
-                                                                        @endif
-                                                                    @endforeach
+                                                            @if($selectedFiles['selectedAllFolders'])
+                                                                <?php $folderIsSelected = true; ?>
+                                                            @else
+                                                                @foreach($selectedFiles['selectedFolders'] as $key10 => $selectedFile)
+                                                                    @if($folder_bonus['dirname'] == $selectedFile)
+                                                                        <?php $folderIsSelected = true; ?>
+                                                                    @endif
                                                                 @endforeach
                                                             @endif
-                                                            @foreach($files as $file)
-                                                                @if($folder['id'] == $file['fid'])
 
-                                                                    @if($folderIsSelected)
-                                                                        <div class="files-wrapper no-bonus">
-                                                                            <div class="file-wrapper">
-                                                                                <h4 class="file-title">{{ $file['filename'] }}</h4>
-                                                                                <span class="last-modified">Last modified:  {{ $file['last_mod'] }}</span>
-                                                                                <a  class="download-file getdropboxlink"  data-dirname="{{ $file['dirname'] }}" data-filename="{{ $file['filename'] }}" href="javascript:void(0)" >
-                                                                                <img src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}"  alt="Download File"/></a>
-                                                                            </div>
+
+                                                            <?php $subfolder[] =  $subf['foldername']; ?>
+                                                            <div class="files-wrapper bonus-files d-none">
+                                                               <h4 class="bonus-title">{{ $subf['foldername'] }}</h4>
+                                                               <span><i class="icon-folder-open"></i>   </span>
+                                                                  @foreach($files_bonus as $file_bonus)
+                                                                     @if(isset($file_bonus['parent']) && $file_bonus['fid'] == $subf['id'] && $file_bonus['parent'] == $subf['parent'] )
+
+                                                                     @if($folderIsSelected)
+                                                                        <?php $subfiles[]= $file_bonus['filename'] ?>
+                                                                        <div class="file-wrapper">
+                                                                            <h4 class="file-title">{{ $file_bonus['filename'] }}</h4>
+                                                                            <span class="last-modified">Last modified:  {{$file_bonus['last_mod']}}</span>
+                                                                            <a  class="download-file getdropboxlink"  data-dirname="{{ $file_bonus['dirname'] }}" data-filename="{{ $file_bonus['filename'] }}" href="javascript:void(0)" >
+                                                                            <img src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}"  alt="Download File"/></a>
                                                                         </div>
-                                                                    @else
+                                                                     @else
+
                                                                         @foreach($selectedFiles['selectedFolders'] as $key10 => $selectedFile)
-                                                                            @if($file['dirname'] == $selectedFile)
-                                                                                <div class="files-wrapper no-bonus">
-                                                                                    <div class="file-wrapper">
-                                                                                        <h4 class="file-title">{{ $file['filename'] }}</h4>
-                                                                                        <span class="last-modified">Last modified:  {{ $file['last_mod'] }}</span>
-                                                                                        <a  class="download-file getdropboxlink"  data-dirname="{{ $file['dirname'] }}" data-filename="{{ $file['filename'] }}" href="javascript:void(0)" >
-                                                                                        <img src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}"  alt="Download File"/></a>
-                                                                                    </div>
+
+                                                                            @if($file_bonus['dirname'] == $selectedFile)
+                                                                            <?php $subfiles[]= $file_bonus['filename'] ?>
+                                                                                <div class="file-wrapper">
+                                                                                    <h4 class="file-title">{{ $file_bonus['filename'] }}</h4>
+                                                                                    <span class="last-modified">Last modified:  {{$file_bonus['last_mod']}}</span>
+                                                                                    <a  class="download-file getdropboxlink"  data-dirname="{{ $file_bonus['dirname'] }}" data-filename="{{ $file_bonus['filename'] }}" href="javascript:void(0)" >
+                                                                                    <img src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}"  alt="Download File"/></a>
                                                                                 </div>
                                                                             @endif
                                                                         @endforeach
-                                                                    @endif
-                                                                    <!-- <div class="files-wrapper">
+                                                                     @endif
+
+
+                                                                     @endif
+                                                                  @endforeach
+                                                            </div>
+                                                            @endif
+                                                         @endforeach
+                                                      @endforeach
+                                                   @endif
+                                                   @foreach($files as $file)
+                                                      @if($folder['id'] == $file['fid'])
+
+                                                        @if($folderIsSelected)
+                                                            <div class="files-wrapper no-bonus">
+                                                                <div class="file-wrapper">
+                                                                    <h4 class="file-title">{{ $file['filename'] }}</h4>
+                                                                    <span class="last-modified">Last modified:  {{ $file['last_mod'] }}</span>
+                                                                    <a  class="download-file getdropboxlink"  data-dirname="{{ $file['dirname'] }}" data-filename="{{ $file['filename'] }}" href="javascript:void(0)" >
+                                                                    <img src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}"  alt="Download File"/></a>
+                                                                </div>
+                                                            </div>
+                                                        @else
+                                                            @foreach($selectedFiles['selectedFolders'] as $key10 => $selectedFile)
+                                                                @if($file['dirname'] == $selectedFile)
+                                                                    <div class="files-wrapper no-bonus">
                                                                         <div class="file-wrapper">
                                                                             <h4 class="file-title">{{ $file['filename'] }}</h4>
                                                                             <span class="last-modified">Last modified:  {{ $file['last_mod'] }}</span>
                                                                             <a  class="download-file getdropboxlink"  data-dirname="{{ $file['dirname'] }}" data-filename="{{ $file['filename'] }}" href="javascript:void(0)" >
                                                                             <img src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}"  alt="Download File"/></a>
                                                                         </div>
-                                                                    </div> -->
-                                                                    @endif
-                                                            @endforeach
-                                                            @endif
-                                                            @if(isset($folders_bonus) && count($folders_bonus) > 0)
-                                                            <div class="files-wrapper bonus-files d-none">
-                                                            @foreach($folders_bonus as $folder_bonus)
-                                                            <?php
-                                                                if(in_array($folder_bonus['foldername'],$subfolder)){
-                                                                    continue;
-                                                                }
-                                                                ?>
-                                                            @if(isset($folder_bonus['parent']) && $folder_bonus['parent'] == $folder['id'])
-
-                                                                    <?php $folderIsSelected = false; ?>
-                                                                    @if($selectedFiles['selectedAllFolders'])
-                                                                        <?php $folderIsSelected = true; ?>
-                                                                    @else
-                                                                        @foreach($selectedFiles['selectedFolders'] as $key10 => $selectedFile)
-                                                                            @if($folder_bonus['dirname'] == $selectedFile)
-                                                                                <?php $folderIsSelected = true; ?>
-                                                                            @endif
-                                                                        @endforeach
-                                                                    @endif
-
-
-
-                                                            <h4 class="bonus-title">{{ $folder_bonus['foldername'] }}</h4>
-                                                            <span><i class="icon-folder-open"></i>   </span>
-                                                            @if(isset($files_bonus) && count($files_bonus) > 0)
-                                                            @foreach($files_bonus as $file_bonus)
-                                                            @if(isset($file_bonus['parent']) && $file_bonus['parent'] == $folder_bonus['parent'] && !in_array($file_bonus['filename'],$subfiles))
-
-                                                                @if($folderIsSelected)
-                                                                    <div class="file-wrapper">
-                                                                        <h4 class="file-title">{{ $file_bonus['filename'] }}</h4>
-                                                                        <span class="last-modified">Last modified:  {{$file_bonus['last_mod']}}</span>
-                                                                        <a  class="download-file getdropboxlink"  data-dirname="{{ $file_bonus['dirname'] }}" data-filename="{{ $file_bonus['filename'] }}" href="javascript:void(0)" >
-                                                                        <img src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}"  alt="Download File"/></a>
                                                                     </div>
-                                                                @else
-                                                                    @foreach($selectedFiles['selectedFolders'] as $key10 => $selectedFile)
-                                                                        @if($file_bonus['dirname'] == $selectedFile)
-                                                                            <div class="file-wrapper">
-                                                                                <h4 class="file-title">{{ $file_bonus['filename'] }}</h4>
-                                                                                <span class="last-modified">Last modified:  {{$file_bonus['last_mod']}}</span>
-                                                                                <a  class="download-file getdropboxlink"  data-dirname="{{ $file_bonus['dirname'] }}" data-filename="{{ $file_bonus['filename'] }}" href="javascript:void(0)" >
-                                                                                <img src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}"  alt="Download File"/></a>
-                                                                            </div>
-                                                                        @endif
-                                                                    @endforeach
                                                                 @endif
-
-                                                            @endif
                                                             @endforeach
-                                                            @endif
-                                                            @endif
-                                                            @endforeach
+                                                        @endif
+                                                        <!-- <div class="files-wrapper">
+                                                            <div class="file-wrapper">
+                                                                <h4 class="file-title">{{ $file['filename'] }}</h4>
+                                                                <span class="last-modified">Last modified:  {{ $file['last_mod'] }}</span>
+                                                                <a  class="download-file getdropboxlink"  data-dirname="{{ $file['dirname'] }}" data-filename="{{ $file['filename'] }}" href="javascript:void(0)" >
+                                                                <img src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}"  alt="Download File"/></a>
                                                             </div>
-                                                            @endif
+                                                        </div> -->
+                                                        @endif
+                                                   @endforeach
+                                                @endif
+                                                @if(isset($folders_bonus) && count($folders_bonus) > 0)
+                                                <div class="files-wrapper bonus-files d-none">
+                                                   @foreach($folders_bonus as $folder_bonus)
+                                                   <?php
+                                                      if(in_array($folder_bonus['foldername'],$subfolder)){
+                                                         continue;
+                                                      }
+                                                      ?>
+                                                   @if(isset($folder_bonus['parent']) && $folder_bonus['parent'] == $folder['id'])
+
+                                                        <?php $folderIsSelected = false; ?>
+                                                        @if($selectedFiles['selectedAllFolders'])
+                                                            <?php $folderIsSelected = true; ?>
+                                                        @else
+                                                            @foreach($selectedFiles['selectedFolders'] as $key10 => $selectedFile)
+                                                                @if($folder_bonus['dirname'] == $selectedFile)
+                                                                    <?php $folderIsSelected = true; ?>
+                                                                @endif
+                                                            @endforeach
+                                                        @endif
+
+
+
+                                                   <h4 class="bonus-title">{{ $folder_bonus['foldername'] }}</h4>
+                                                   <span><i class="icon-folder-open"></i>   </span>
+                                                   @if(isset($files_bonus) && count($files_bonus) > 0)
+                                                   @foreach($files_bonus as $file_bonus)
+                                                   @if(isset($file_bonus['parent']) && $file_bonus['parent'] == $folder_bonus['parent'] && !in_array($file_bonus['filename'],$subfiles))
+
+                                                    @if($folderIsSelected)
+                                                        <div class="file-wrapper">
+                                                            <h4 class="file-title">{{ $file_bonus['filename'] }}</h4>
+                                                            <span class="last-modified">Last modified:  {{$file_bonus['last_mod']}}</span>
+                                                            <a  class="download-file getdropboxlink"  data-dirname="{{ $file_bonus['dirname'] }}" data-filename="{{ $file_bonus['filename'] }}" href="javascript:void(0)" >
+                                                            <img src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}"  alt="Download File"/></a>
                                                         </div>
-                                                    </div>
-                                                @endforeach
-                                            </div>
+                                                    @else
+                                                        @foreach($selectedFiles['selectedFolders'] as $key10 => $selectedFile)
+                                                            @if($file_bonus['dirname'] == $selectedFile)
+                                                                <div class="file-wrapper">
+                                                                    <h4 class="file-title">{{ $file_bonus['filename'] }}</h4>
+                                                                    <span class="last-modified">Last modified:  {{$file_bonus['last_mod']}}</span>
+                                                                    <a  class="download-file getdropboxlink"  data-dirname="{{ $file_bonus['dirname'] }}" data-filename="{{ $file_bonus['filename'] }}" href="javascript:void(0)" >
+                                                                    <img src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}"  alt="Download File"/></a>
+                                                                </div>
+                                                            @endif
+                                                        @endforeach
+                                                    @endif
+
+                                                   @endif
+                                                   @endforeach
+                                                   @endif
+                                                   @endif
+                                                   @endforeach
+                                                </div>
+                                                @endif
+                                             </div>
                                           </div>
+                                          @endforeach
                                           @endif
                                        </div>
                                     </div>
                                     @endif
-                                    <?php } ?>
                                  </div>
                                  @endif
                                  @if(isset($event['exams']) && count($event['exams']) >0 )
@@ -1681,16 +1668,18 @@
    $(document).on('click', '.facebook-post-cert', function() {
       var getUrl = window.location;
       var baseUrl = getUrl .protocol + "//" + getUrl.host;
-      var certificateId = $(this).attr('data-certid');
 
+
+      var certificateId = $(this).attr('data-certid');
+      let certUrl = '';
       $.ajax({
           type: 'GET',
           url: "/mycertificate/convert-pdf-to-image/"+certificateId,
           success: function(data) {
-
-              data = data.replace('\\','/')
-              if(data){
-                  var fbpopup = window.open(`http://www.facebook.com/sharer.php?u=${decodeURI(baseUrl)}/${decodeURI(data)}`, "pop", "width=600, height=400, scrollbars=no");
+               certUrl = '';
+               certUrl = data.replace('\\','/')
+              if(certUrl){
+                  var fbpopup = window.open(`http://www.facebook.com/sharer.php?u=${encodeURIComponent(baseUrl + '/' + certUrl)}`, "pop", "width=300, height=300, scrollbars=no");
                   return false;
               }
 
@@ -1710,7 +1699,7 @@
 
               data = data.replace('\\','/')
               if(data){
-                  var fbpopup = window.open(`http://twitter.com/share?url=${decodeURI(baseUrl)}/${decodeURI(data)}`, "pop", "width=600, height=400, scrollbars=no");
+                  var fbpopup = window.open(`http://twitter.com/share?url=${encodeURIComponent(baseUrl + '/' + certUrl)}`, "pop", "width=600, height=400, scrollbars=no");
                   return false;
               }
 
@@ -2237,7 +2226,7 @@
 
       $("#selectCountry").select()
       $("#selectCountry").change()
-
+      
       @if("{{ old('country_code') }}")
 
          $("#selectCountry").val("{{ old('country_code',$currentuser->country_code) }}").change();

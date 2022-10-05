@@ -521,7 +521,6 @@
                                                     <div class="form-group col-sm-12 col-md-5 col-lg-2">
                                                     <div>(course_inclass_dates)</div>
                                                         <div class="input-group">
-                                                        
                                                             <input type="text" class="form-control" value="{{ (isset($dates) && isset($dates['text']) ) ? $dates['text'] : '' }}" name="course[{{'delivery'}}][{{'inclass'}}][{{'dates'}}][{{'text'}}]" placeholder="Dates(from/to)">
                                                             <span data-infowrapper="inclass_dates" class="input-group-addon input-group-append input-icon-wrapper-inclass">
                                                                 <span class="btn btn-outline-primary input-icon">
@@ -747,7 +746,7 @@
 
                                                 <div class="row">
                                                     <div class="form-group col-sm-12 col-md-4">
-                                                        <label class="form-control-label" for="input-hours">{{ __('Absences Limit(%)') }} (course_inclass_absences)</label>
+                                                        <label class="form-control-label" for="input-hours">{{ __('Absences Limit(%)') }}(course_inclass_absences)</label>
                                                         <div class="input-group">
                                                             <input type="text" name="course[{{'delivery'}}][{{'inclass'}}][{{'absences'}}]" id="input-absences_limit" class="form-control{{ $errors->has('Absences Limit(%)') ? ' is-invalid' : '' }}" placeholder="{{ __('absences_limit') }}" value="{{ old('$course_inclass_absences', (isset($info['inclass']['absences']) && $info['inclass']['absences'] != null) ? $info['inclass']['absences'] : 0 ) }}"autofocus>
                                                             <span class="input-group-addon input-group-append">
@@ -862,7 +861,7 @@
                                             </div>
 
                                             <div class="exp_input col-sm-12 col-md-6 col-lg-3 form-group">
-                                                <label class="form-control-label" for="input-test">{{ __('Months access text') }} (course_elearning_text)</label>
+                                                <label class="form-control-label" for="input-test">{{ __('Months access text') }} (course_elearning_expiration)</label>
                                                 <input type="text" name="course[{{'delivery'}}][{{'elearning'}}][{{'text'}}]" style="background:aliceblue;" class="form-control" placeholder="{{ __('alphanumeric text') }}" value="{{ old('expiration_text', (isset($info['elearning']['text']) && $info['elearning']['text'] != null) ? $info['elearning']['text'] : '' ) }}"autofocus>
                                             </div>
 
@@ -1355,7 +1354,7 @@
                                             <div class="form-group col-12 course-certification-visible-wrapper {{ isset($info['certificate']['has_certificate']) && $info['certificate']['has_certificate'] ? '' : 'd-none'  }}">
                                                 <div class="row">
                                                     <div class="col-sm-12 col-md-6 form-group{{ $errors->has('fb_') ? ' has-danger' : '' }}">
-                                                        <label class="form-control-label" for="input-hours">{{ __('Certificate Title') }} (course_certification_name_success)</label>
+                                                        <label class="form-control-label" for="input-hours">{{ __('Certificate Title') }}  (course_certification_name_success)</label>
 
                                                         {{--<textarea type="text" name="course[{{'certificate'}}][{{'success_text'}}]" id="input-certificate_title" class="ckeditor form-control" placeholder="{{ __('alphanumeric text ') }}" autofocus>{{ old('certificate_title', (isset($info['certificate']['messages']['success']) && $info['certificate']['messages']['success'] != null) ? $info['certificate']['messages']['success'] : '') }}</textarea>--}}
 
@@ -1370,7 +1369,7 @@
                                                     </div>
 
                                                     <div class="col-sm-12 col-md-6 form-group">
-                                                        <label class="form-control-label" for="input-hours">{{ __('Title of certification (in case of exams failure)') }}(course_certification_name_failure)</label>
+                                                        <label class="form-control-label" for="input-hours">{{ __('Title of certification (in case of exams failure)') }}  (course_certification_name_failure)</label>
 
                                                         {{--<textarea type="text" name="course[{{'certificate'}}][{{'failure_text'}}]" id="input-certificate_text_failure" class="form-control ckeditor" placeholder="{{ __('alphanumeric text ') }}"  autofocus>{{ old('certificate_failure', (isset($info['certificate']['messages']['failure']) && $info['certificate']['messages']['failure'] != null) ? $info['certificate']['messages']['failure'] : '') }}</textarea>--}}
 
@@ -1381,7 +1380,6 @@
                                                         <!-- anto's editor -->
 
                                                     </div>
-
                                                     <div class="col-sm-12 col-md-6 form-group">
                                                         <label class="form-control-label" for="input-hours">{{ __('Certificate Event Title') }} (course_certification_event_title)</label>
                                                         <!-- anto's editor -->
@@ -1391,7 +1389,6 @@
                                                         <!-- anto's editor -->
 
                                                     </div>
-
                                                     
                                                 </div>
                                                 <div class="col-sm-12 col-md-6 form-group">
@@ -1471,7 +1468,7 @@
                                             <div class="form-group col-12">
 
                                                 <div class="input-group">
-                                                    <h3 class="mb-0 title">{{ __('Course students') }} </h3>
+                                                    <h3 class="mb-0 title">{{ __('Course students') }}</h3>
                                                     <span data-infowrapper="students" class="input-group-addon input-group-append input-icon-wrapper">
                                                         <span class="btn btn-outline-primary input-icon">
                                                             @if($course_students_icon != null && $course_students_icon['path'] != null)
@@ -2069,8 +2066,8 @@
     let already_assign_files = @json($already_assign);
 
     if(already_assign_files.length != 0){
-        already_assign_files = already_assign_files[0]
-        loadAllFolders = JSON.parse(already_assign_files.pivot.selectedFolders);
+        already_assign_files = already_assign_files
+
     }
 
 
@@ -2198,29 +2195,36 @@
 
     function parseIdsForSelectFiles(){
 
-        if(files.length != 0 && loadAllFolders.length != 0){
 
 
-            if(loadAllFolders.selectedAllFolders){
-                $.each(files, function(index, value) {
+        if(files.length != 0 && already_assign_files.length != 0){
 
-                    if(value.Full_Name == already_assign_files.folder_name){
-                        selectedIds.push(value.ID)
-                    }
-                })
-            }else{
-                $.each(files, function(index, value) {
-                    if(loadAllFolders.selectedFolders.length != 0){
-                        $.each(loadAllFolders.selectedFolders, function(index1, value1){
+            $.each(already_assign_files, function(index11, value11) {
+                loadAllFolders = JSON.parse(value11.pivot.selectedFolders);
 
-                            if(value.dirname == value1 && already_assign_files.folder_name == value.dropboxFolder){
-                                selectedIds.push(value.ID)
-                            }
-                        })
+                if(loadAllFolders.selectedAllFolders){
+                    $.each(files, function(index, value) {
 
-                    }
-                })
-            }
+                        if(value.Full_Name == value11.folder_name){
+                            selectedIds.push(value.ID)
+                        }
+                    })
+                }else{
+                    $.each(files, function(index, value) {
+                        if(loadAllFolders.selectedFolders.length != 0){
+                            $.each(loadAllFolders.selectedFolders, function(index1, value1){
+
+                                if(value.dirname == value1 && value11.folder_name == value.dropboxFolder){
+                                    selectedIds.push(value.ID)
+                                }
+                            })
+
+                        }
+                    })
+                }
+            })
+
+
 
 
             treeList.selectRows(selectedIds);
@@ -2245,11 +2249,12 @@
                 let deselectIDS = [];
                 const currentSelectedRowKeys = e.currentSelectedRowKeys[0];
                 var currentSelectedRow = [];
-                selectedFolders = [];
+
                 let selectedDropbox = null;
                 let selectedAllFolders = false;
-                const allSelectedRowsData = e.selectedRowsData;
+                //const allSelectedRowsData = e.selectedRowsData;
                 const allSelectedRowsDataForSave = treeList.getSelectedRowsData('multiple')
+                console.log('current selected rows0', currentSelectedRowKeys)
 
                 $.each(files, function(index, value){
                     if(currentSelectedRowKeys == value.ID){
@@ -2258,29 +2263,35 @@
                 })
 
 
-                if(currentSelectedRow.isRootFolder && allSelectedRowsData.length != 1){
+                // Deselect previous rows
 
-                    allSelectedRowsData.filter(value => value.ID == currentSelectedRowKeys);
+                // if(currentSelectedRow.isRootFolder && allSelectedRowsData.length != 1){
 
-                    $.each(allSelectedRowsData,function(index,value){
-                        if(value.ID != currentSelectedRowKeys){
-                            deselectIDS.push(value.ID)
-                        }
-                    })
+                //     allSelectedRowsData.filter(value => value.ID == currentSelectedRowKeys);
 
-                }
+                //     $.each(allSelectedRowsData,function(index,value){
+                //         if(value.ID != currentSelectedRowKeys){
+                //             deselectIDS.push(value.ID)
+                //         }
+                //     })
+
+                // }
 
 
-                if(!currentSelectedRow.isRootFolder && allSelectedRowsData.length != 1){
-                    $.each(allSelectedRowsData,function(index,value){
-                        if(value.isRootFolder && currentSelectedRow.Head_ID != value.ID){
-                            deselectIDS.push(value.ID)
-                        }
-                    })
-                }
-                treeList.deselectRows(deselectIDS);
+                // if(!currentSelectedRow.isRootFolder && allSelectedRowsData.length != 1){
+                //     $.each(allSelectedRowsData,function(index,value){
+                //         if(value.isRootFolder && currentSelectedRow.Head_ID != value.ID){
+                //             deselectIDS.push(value.ID)
+                //         }
+                //     })
+                // }
+                // treeList.deselectRows(deselectIDS);
 
-                let dataForSubmit = [];
+                let dataForSubmit = {};
+                selectedFolders = [];
+
+                console.log('all selected rows data', allSelectedRowsDataForSave)
+
 
                 if(allSelectedRowsDataForSave.length != 0){
 
@@ -2291,25 +2302,33 @@
                             selectedDropbox = value.Full_Name;
 
                         }else{
-                            selectedFolders.push(value.dirname)
+                            if(selectedFolders[selectedDropbox] === undefined){
+                                selectedFolders[selectedDropbox] = [];
+                            }
+                            selectedFolders[selectedDropbox].push(value.dirname)
                             selectedDropbox = value.dropboxFolder;
                         }
+
+
+
+                        dataForSubmit[selectedDropbox] = {
+                            selectedDropbox :selectedDropbox,
+                            selectedAllFolders :selectedAllFolders,
+                            selectedFolders :selectedFolders[selectedDropbox],
+                        };
                     })
 
-                    dataForSubmit = {
-                        selectedDropbox :selectedDropbox,
-                        selectedAllFolders :selectedAllFolders,
-                        selectedFolders :selectedFolders,
-                    };
 
-                }else{
-                    dataForSubmit = {
-                        detach: true
-                    };
+
                 }
 
+                $.each(dataForSubmit, function(index, value) {
+                    if(value.selectedFolders === undefined){
+                        delete dataForSubmit[index]
+                    }
+                })
 
-
+                console.log(dataForSubmit)
 
                 dataForSubmit = JSON.stringify(dataForSubmit);
                 $('#selectedFiles').val(dataForSubmit);
@@ -2654,7 +2673,7 @@
 
             }
 
-            data = {date:date, start:start, event_id:event_id, end:end, room:room, location_url:location_url, instructor_id:instructor_id, topic_id:topic_id, lesson_id:lesson_id}
+            data = {date:date, start:start, event_id:event_id, end:end, room:room,location_url:location_url, instructor_id:instructor_id, topic_id:topic_id, lesson_id:lesson_id}
 
             $.ajax({
                 type: 'POST',
@@ -2857,6 +2876,7 @@
                                 <label for="date">URL</label>
                                 <input type="text" name="location_url" class="form-control" id="location_url" value="${lesson.location_url ? lesson.location_url : ''}" placeholder="URL">
                             </div>
+
                         `
 
                         $('#lesson_details').append(row)
