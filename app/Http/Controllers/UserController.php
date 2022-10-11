@@ -440,7 +440,7 @@ class UserController extends Controller
      */
     public function edit(User $user, Role $model)
     {
-        $data['events'] = Event::has('ticket')->whereIn('status',[0,2])->get();
+        $data['events'] = Event::has('ticket')->whereIn('status',[0,2,3])->get();
 
         //dd($data['events']);
         $data['user'] = $user::with('ticket','role','events_for_user_list','image','transactions')->find($user['id']);
