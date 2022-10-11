@@ -405,8 +405,15 @@ class TransactionController extends Controller
 
                 if($data['status'][$key] > 0){
 
-                    $us->events()->detach($request->oldevents[$key]);
-                    $us->events()->attach($request->newevents[$key],['paid' => true]);
+                    $us->events_for_user_list()->detach($request->oldevents[$key]);
+                   
+                    if($data['status'][$key] == 1){
+                        $us->events()->attach($request->newevents[$key],['paid' => true]);
+
+                    }else{
+                        $us->events()->attach($request->newevents[$key],['paid' => false]);
+
+                    }
 
                     $transaction->event()->detach($request->oldevents[$key]);
                     $transaction->event()->attach($request->newevents[$key]);
