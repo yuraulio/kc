@@ -32,7 +32,8 @@ class Authenticate extends Middleware
                     return route('homepage',['login'=>true]);
 
                 }else{
-                    return route('homepage');
+                    //dd('gsdf');
+                    return route('homepage', ['login'=>true]);
 
                 }
             }

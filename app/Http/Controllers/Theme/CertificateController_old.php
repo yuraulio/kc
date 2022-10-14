@@ -19,8 +19,6 @@ class CertificateController extends Controller
       //$this->middleware('auth')->except('exportCertificates');
       $this->middleware('cert.owner')->except('exportCertificates');
       $this->middleware('auth.aboveauthor')->only('exportCertificates');
-
-      $this->encryPass = 'knowcrunch' . date('Y-m-d H:i:m');
   }
 
   /*public function getCertificate(Certificate $certificate){
@@ -79,18 +77,15 @@ class CertificateController extends Controller
 
 
     $certificateTitle = $certificate->certificate_title;
-    $certificateEventTitle =  $certificate->event->first() ? $certificate->event->first()->title : '';
     //dd($certificate->event->first()->event_info()['certificate']);
     if($certificate->event->first() && isset($certificate->event->first()->event_info()['certificate']['messages'])){
 
       if($certificate->success && isset($certificate->event->first()->event_info()['certificate']['messages']['success'])){
 
-        $certificateTitle = $certificate->event->first()->event_info()['certificate']['messages']['success'];
-      
+      $certificateTitle = $certificate->event->first()->event_info()['certificate']['messages']['success'];
       }else if(!$certificate->success && isset($certificate->event->first()->event_info()['certificate']['messages']['failure'])){
 
-        $certificateTitle = strip_tags($certificate->event->first()->event_info()['certificate']['messages']['failure']);
-
+      $certificateTitle = $certificate->event->first()->event_info()['certificate']['messages']['failure'];
       }
 
       $certificateEventTitle = $certificate->event->first()->event_info()['certificate']['event_title'];
@@ -105,15 +100,8 @@ class CertificateController extends Controller
     $certificate['certificate_event_title'] = $certificateEventTitle;
     //$certificate['certification_title'] = $certificate->certificate_title;
     $certificate['certification_title'] = $certificateTitle;
-
-    $certificate['kc_id'] = $certificate->user()->first()->kc_id;
-    $certificate['meta_title'] =  $certificate->lastname . ' ' . $certificate->firstname . ' ' . $certificateTitle . ' ' . $certificate['kc_id']; 
-    
     $pdf->getDomPDF()->setHttpContext($contxt);
-    //$customPaper = array(0,0,3507,2480);
-    //$customPaper = array(0,0,842,595);;
-    //->setPaper($customPaper);
-    $pdf->loadView('admin.certificates.'.$certificate->template,compact('certificate'))->setPaper('a4', 'landscape');//->setEncryption('gfsd', $this->encryPass, []);
+    $pdf->loadView('admin.certificates.'.$certificate->template,compact('certificate'))->setPaper('a4', 'landscape');
 
     $data['pdf'] = $pdf;
     $data['certificate'] = $certificate;
@@ -161,7 +149,13 @@ class CertificateController extends Controller
     $data = $this->loadCertificateData($certificate);
     $certificate = $data['certificate'];
 
-    $fn = $data['certificate']->lastname . '-' . $data['certificate']->firstname . '-' . strip_tags($data['certificate']['certification_title']) . '-' . $data['certificate']['kc_id'] . '.pdf';
+    //$customPaper = array(0,0,3507,2480);
+    //$pdf->loadView('admin.certificates.'. $data['certificate']->template,compact( $data['certificate']))->setPaper($customPaper);
+
+    //$customPaper = array(0,0,842,595);;
+    //$data['pdf']->loadView('admin.certificates.'. $data['certificate']->template,compact('certificate'))->setPaper($customPaper);
+
+    $fn = $data['certificate']->firstname . '-' . $data['certificate']->lastname . '-' . '.pdf';
     return $data['pdf']->stream($fn);
     //return view('admin.certificates.'.$certificate->template,compact('certificate'));
 
@@ -182,15 +176,11 @@ class CertificateController extends Controller
       unlink(public_path($fileName));
     }
     //dd($zip->open(public_path($fileName), ZipArchive::CREATE));
-    
-    $successMessage = isset($event->event_info()['certificate']['messages']['success']) ? $event->event_info()['certificate']['messages']['success'] : '';
-    $failureMessage = isset($event->event_info()['certificate']['messages']['failure']) ? strip_tags($event->event_info()['certificate']['messages']['failure']) : '';
-    $certificateEventTitle = isset($event->event_info()['certificate']['event_title']) ? $event->event_info()['certificate']['event_title'] : $event->title;
-    
+
     if ($zip->open(public_path($fileName), ZipArchive::CREATE) === TRUE) {
 
       foreach($users as $user){
-        
+
         if($user->instructor->first()){
             continue;
         }
@@ -198,26 +188,43 @@ class CertificateController extends Controller
         $expda = strtotime(date('Y-m-d', strtotime('+24 months', strtotime(date('Y-m-d')))));
 
         $template = '';
-        $template_failed = '';
         if($paymentMethod == 1){
           $view = 'admin.certificates.kc_deree_diploma';
           $template = 'kc_deree_diploma';
-          $template_failed = 'kc_deree_attendance';
         }else /*if(in_array($paymentMethod,[3,2]))*/{
           $view = 'admin.certificates.kc_diploma_2022a';
           $template = 'kc_diploma_2022a';
-          $template_failed = 'kc_attendance_2022a';
         }
 
         if( !($cert = $event->userHasCertificate($user->id)->first()) ){
 
           $date = date('Y');
 
+          /*$template = '';
+          /*if($date <= 2021){
+            $view = 'admin.certificates.kc_deree_diploma';
+            $template = 'kc_deree_diploma';
+          }else{
+            $view = 'admin.certificates.certificates2021.kc_diploma';
+            $template = 'kc_diploma';
+          }*/
+
+          /*if($paymentMethod == 1){
+            $view = 'admin.certificates.kc_deree_diploma';
+            $template = 'kc_deree_diploma';
+          }else /*if(in_array($paymentMethod,[3,2]))*///{
+            /*$view = 'admin.certificates.kc_diploma_2022a';
+            $template = 'kc_diploma_2022a';
+          }*/
+
+
+
+
           $cert = new Certificate;
           $cert->success = true;
           $cert->firstname = $user->firstname;
           $cert->lastname = $user->lastname;
-          $cert->certificate_title = $successMessage;
+          $cert->certificate_title = $event->certificate_title;
           $cert->credential = get_certifation_crendetial() ;
           $createDate = strtotime(date('Y-m-d'));
           $cert->create_date = $createDate;
@@ -230,9 +237,8 @@ class CertificateController extends Controller
           $cert->user()->save($user);
 
         }else{
-          
-          $cert->certificate_title = $cert->success ? $successMessage : $failureMessage; 
-          $cert->template = $cert->success ? $template : $template_failed;
+          $cert->certificate_title = $event->certificate_title;
+          $cert->template = $template;
           $cert->save();
         }
 
@@ -244,8 +250,6 @@ class CertificateController extends Controller
         $certificate['expiration_date'] = $cert->expiration_date ? date('F Y',$cert->expiration_date) : null;
         $certificate['certification_title'] = $cert->certificate_title;
         $certificate['credential'] = $cert->credential;
-        $certificate['certificate_event_title'] = $certificateEventTitle;
-        $certificate['meta_title'] =  $cert->lastname . ' ' . $cert->firstname . ' ' . $cert->certificate_title . ' ' . $cert->user()->first()->kc_id; 
 
         $contxt = stream_context_create([
           'ssl' => [
@@ -261,11 +265,11 @@ class CertificateController extends Controller
 
         ]);
 
-        $name = $user->lastname . '_' . $user->firstname . '_' .  strip_tags($cert->certificate_title) . '_' .$user->kc_id;
+        $name = $user->firstname . '_' . $user->lastname . '_' .$user->kc_id;
         $fn = $name . '.pdf';
         $pdf->getDomPDF()->setHttpContext($contxt);
 
-        $pdf->loadView('admin.certificates.'.$cert->template,compact('certificate'))->setPaper('a4', 'landscape');//->setEncryption('', $this->encryPass, array())->save(public_path('certificates_folders/'.$fn))->stream($fn);
+        $pdf->loadView('admin.certificates.'.$cert->template,compact('certificate'))->setPaper('a4', 'landscape')->save(public_path('certificates_folders/'.$fn))->stream($fn);
 
         $zip->addFile(public_path('certificates_folders/'.$fn), $fn);
 
@@ -273,7 +277,7 @@ class CertificateController extends Controller
       }
 
     }
-    
+
     $zip->close();
     File::deleteDirectory(public_path('certificates_folders'));
 
