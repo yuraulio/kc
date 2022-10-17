@@ -38,7 +38,10 @@
    @if (count($list) > 0)
       <div class="section section--dynamic-learning">
          @foreach($list as $key => $row)
-         @if($row['view_tpl'] != 'elearning_event' && $row['view_tpl'] != 'elearning_greek')
+
+         <?php $info = $row->event_info(); ?>
+
+         @if(isset($info['delivery']) && $info['delivery'] != 143)
             <?php
 
                 $chmonth = date('m', strtotime($row['published_at']));
@@ -88,55 +91,48 @@
             ?>
 
          <!-- ./dynamic-learning--subtitle -->
-         <div class="dynamic-courses-wrapper dynamic-courses-wrapper--style2">
-            <div class="item">
-               <div class="left">
-                  <h2 class="@if($search2!==false) search-highlight @endif">{{ $row['title'] }}</h2>
-                  <?php
-                        $info = $row->event_info();
-                    ?>
-                  <div class="bottom">
-                     @include('new_web.components.event_infos',['type' => 'inclass'])
+            <div class="dynamic-courses-wrapper dynamic-courses-wrapper--style2">
+               <div class="item">
+                  <div class="left">
+                     <h2 class="@if($search2!==false) search-highlight @endif">{{ $row['title'] }}</h2>
+
+                     <div class="bottom">
+                        @include('new_web.components.event_infos',['type' => 'inclass'])
                         </div>
-               </div>
-               <div class="right">
-                @php
-                    if ($row['ticket'] && isset($row['ticket']->where('type','Early Bird')->first()->pivot->price) &&
-                        $row['ticket']->where('type','Early Bird')->first()->pivot->price > 0 &&
-                        $row['ticket']->where('type','Early Bird')->first()->pivot->quantity > 0 &&
-                        $row['ticket']->where('type','Early Bird')->first()->pivot->active) {
-
-                        $price = $row['ticket']->where('type','Early Bird')->first()->pivot->price;
-
-                    }else if($row['ticket'] && isset($row['ticket']->where('type','Special')->first()->pivot->price) &&
-                        $row['ticket']->where('type','Special')->first()->pivot->price > 0 &&
-                        $row['ticket']->where('type','Special')->first()->pivot->quantity > 0 &&
-                        $row['ticket']->where('type','Special')->first()->pivot->active){
-
-                        $price = $row['ticket']->where('type','Special')->first()->pivot->price;
-
-                    }else if($row['ticket'] && isset($row['ticket']->where('type','Regular')->first()->pivot->price) &&
-                        $row['ticket']->where('type','Regular')->first()->pivot->price > 0 &&
-                        $row['ticket']->where('type','Regular')->first()->pivot->quantity > 0 &&
-                        $row['ticket']->where('type','Regular')->first()->pivot->active){
-
-                        $price = $row['ticket']->where('type','Regular')->first()->pivot->price;
-                    }
-                    else {
-                        $price = 0;
-                    }
-                @endphp
-
-                  @if($row['view_tpl'] == 'elearning_pending')
-                     <div class="price">Pending</div>
-                  @elseif((isset($info['payment_method']) && $info['payment_method'] == 'free'))
-                     <div class="price">free</div>
-                  @elseif($row['status'] == 0)
-                     <div class="price">from €{{$price}}</div>
-                  @endif
-                  @if ($row['slugable'])
-                    <a href="{{ $row['slugable']['slug'] }}" class="btn btn--secondary btn--md">Course Details</a>
-                  @endif
+                  </div>
+                  <div class="right">
+                   @php
+                       if ($row['ticket'] && isset($row['ticket']->where('type','Early Bird')->first()->pivot->price) &&
+                           $row['ticket']->where('type','Early Bird')->first()->pivot->price > 0 &&
+                           $row['ticket']->where('type','Early Bird')->first()->pivot->quantity > 0 &&
+                           $row['ticket']->where('type','Early Bird')->first()->pivot->active) {      
+                           $price = $row['ticket']->where('type','Early Bird')->first()->pivot->price;      
+                       }else if($row['ticket'] && isset($row['ticket']->where('type','Special')->first()->pivot->price) &&
+                           $row['ticket']->where('type','Special')->first()->pivot->price > 0 &&
+                           $row['ticket']->where('type','Special')->first()->pivot->quantity > 0 &&
+                           $row['ticket']->where('type','Special')->first()->pivot->active){    
+                           $price = $row['ticket']->where('type','Special')->first()->pivot->price;      
+                       }else if($row['ticket'] && isset($row['ticket']->where('type','Regular')->first()->pivot->price) &&
+                           $row['ticket']->where('type','Regular')->first()->pivot->price > 0 &&
+                           $row['ticket']->where('type','Regular')->first()->pivot->quantity > 0 &&
+                           $row['ticket']->where('type','Regular')->first()->pivot->active){    
+                           $price = $row['ticket']->where('type','Regular')->first()->pivot->price;
+                       }
+                       else {
+                           $price = 0;
+                       }
+                   @endphp    
+                     @if($row['view_tpl'] == 'elearning_pending')
+                        <div class="price">Pending</div>
+                     @elseif((isset($info['payment_method']) && $info['payment_method'] == 'free'))
+                        <div class="price">free</div>
+                     @elseif($row['status'] == 0)
+                        <div class="price">from €{{$price}}</div>
+                     @endif
+                     @if ($row['slugable'])
+                       <a href="{{ $row['slugable']['slug'] }}" class="btn btn--secondary btn--md">Course Details</a>
+                     @endif
+                  </div>
                </div>
             </div>
             <!-- ./item -->
@@ -146,7 +142,9 @@
                <div class="item">
                   <div class="left">
                      <h2>{{ $row['title'] }}</h2>
+                     <div class="bottom">
                      @include('new_web.components.event_infos',['type' => 'elearning'])
+                     </div>
                   </div>
                   <div class="right">
 
@@ -172,7 +170,7 @@
             </div>
             <!-- ./dynamic-courses-wrapper -->
 
-         </div>
+         
          @endif
          <!--
          @if(isset($instructors))

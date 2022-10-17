@@ -1,7 +1,7 @@
 
 @if(isset($type) && $type == 'elearning')
 
-
+    
     @if(isset($info['elearning']['visible']['list']) && $info['elearning']['visible']['list'] && isset($info['elearning']['expiration']) && $info['elearning']['expiration'] )
         <div class="elearning">@if(isset($info['elearning']['icon']['path']) && $info['elearning']['icon']['path'] ) <img class="replace-with-svg" width="20" src="{{cdn($info['elearning']['icon']['path'])}}" onerror="this.onerror=null;this.src='/theme/assets/img/summary_icons/Days-Week.svg'" alt="{{$info['elearning']['icon']['alt_text']}}"> @else<img class="replace-with-svg" width="20" src="/theme/assets/img/summary_icons/Days-Week.svg" alt=""> @endif {{ $info['elearning']['expiration'] }} {{ (isset($info['elearning']['text']) && $info['elearning']['text'] ) ? $info['elearning']['text'] : '' }} </div>
     @endif
