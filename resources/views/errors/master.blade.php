@@ -82,7 +82,7 @@
                         <li class="header-search-area">
                            <a href="#" title="Search" class="search-toggle"><img src="{{cdn('/theme/assets/images/icons/icon-magnifier.svg')}}" class="replace-with-svg" width="22" alt="Search"></a>
                            <div class="header-search-wrapper">
-                              <form method="get" action="search/term">
+                              <form method="get" action="event_search">
                                  {{ csrf_field() }}
                                  <input id="sat" type="text" name="search_term"  class="search-input" placeholder="Search">
                               </form>
@@ -101,7 +101,7 @@
 		 <div class="mobile-menu">
    <div class="mob-menu-inner">
       <div class="search-wrapper">
-      <form method="get" action="search/term">
+      <form method="get" action="event_search">
           {{ csrf_field() }}
             <input type="text" name="search_term" placeholder="Search Knowcrunch">
             <button type="submit"><img src="{{cdn('/theme/assets/images/icons/icon-magnifier.svg')}}" class="replace-with-svg" alt=""/></button>

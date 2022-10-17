@@ -81,7 +81,7 @@
                                                 <input type="input" class="search-input" name="s" placeholder="Search" id='name' value="{{ \Request::get('s') }}"/>
                                             </form>
                                         @else
-                                            <form method="get" action="search/term">
+                                            <form method="get" action="event_search">
                                                 {{ csrf_field() }}
                                                 <input id="sat" type="text" name="search_term"  class="search-input" placeholder="Search">
                                             </form>
