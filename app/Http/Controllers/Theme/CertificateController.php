@@ -110,9 +110,9 @@ class CertificateController extends Controller
     $certificate['meta_title'] =  $certificate->lastname . ' ' . $certificate->firstname . ' ' . $certificateTitle . ' ' . $certificate['kc_id']; 
     
     $pdf->getDomPDF()->setHttpContext($contxt);
-    //$customPaper = array(0,0,3507,2480);
+    $customPaper = array(0,0,3507,2480);
     //$customPaper = array(0,0,842,595);;
-    //->setPaper($customPaper);
+    //$pdf->loadView('admin.certificates.'.$certificate->template,compact('certificate'))->setPaper($customPaper);
     $pdf->loadView('admin.certificates.'.$certificate->template,compact('certificate'))->setPaper('a4', 'landscape');//->setEncryption('gfsd', $this->encryPass, []);
 
     $data['pdf'] = $pdf;

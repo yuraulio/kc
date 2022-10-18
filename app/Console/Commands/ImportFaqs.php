@@ -16,7 +16,7 @@ class ImportFaqs extends Command
      *
      * @var string
      */
-    protected $signature = 'insert:faqs {delivery} {sheet}';
+    protected $signature = 'insert:faqs';
 
     /**
      * The console command description.
@@ -42,79 +42,110 @@ class ImportFaqs extends Command
      */
     public function handle()
     {
-
-        $del = $this->argument('delivery');
-        $events = [];
-        /*$categories = Category::whereHas('events',function($event) use($del){
-            return $event->whereHas('delivery',function($delivery) use($del){
-                return $delivery->where('deliveries.id', $del);
-            });
-        })->get();//->pluck('id')->toArray();*/
-
-        if($del == 'all'){
-            $categories = Category::whereHas('events')->get();
-        }else{
-            $categories = Category::whereHas('events',function($event) use($del){
-                return $event->where('view_tpl',$del);
-                
-            })->get();
+        $fileName = public_path() . '/import/FAQ for website.xlsx';
+      
+        if(!file_exists($fileName)){
+            return;
         }
 
-        foreach($categories as $category){
 
-            foreach($category->events as $event){
-                $events[] = $event->id;
-            }
+        $faqs = Faq::all();
 
+        foreach($faqs as $faq){
+            $faq->category->detatch();
+            $faq->categoryEvent->detatch();
+
+            $faq->delete();
         }
 
-        /*$categories = Category::whereHas('events',function($event) use($del){
-            return $event->whereHas('delivery',function($delivery) use($del){
-                return $delivery->where('deliveries.id', $del);
-            });
-        })->pluck('id')->toArray();*/
+        return;
 
-        if($del == 'all'){
-            $categories = Category::whereHas('events')->pluck('id')->toArray();
-        }else{
-            $categories = Category::whereHas('events',function($event) use($del){
-                return $event->where('view_tpl',$del);
-            })->pluck('id')->toArray();
-        }
+        //Faq::delete();
 
-        
 
-        $fileName = public_path() . '/FAQs.xlsx';
         $spreadsheet = new Spreadsheet();
         $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReaderForFile($fileName);
         $reader->setReadDataOnly(true);
+        
         $file = $reader->load($fileName);
-        $file = $file->getSheet($this->argument('sheet'));
+        $sheets = $file->getSheetNames();
 
-        $file = $file->toArray();
        
-        foreach($file as $key =>  $line){
+        foreach((array) $sheets as $key => $sheet){
 
-            if($key == 0 ){
-                continue;
+            $del = $this->argument('delivery');
+
+            if($key == 0){
+                $del = 'all';
+            }elseif($key == 1){
+                $del = 143;
+            }elseif($key == 2){
+                $del = 139;
             }
 
-            $faq = new Faq;
-            $faq->title = $line[1];
-            $faq->answer = $line[2];//htmlspecialchars($line[2], ENT_QUOTES);
-            $faq->status = true;
-            $faq->priority = $key;
 
-            $faq->save();
+            $events = [];
+            
 
-            $categoryFaq = CategoriesFaqs::where('name',trim($line[0]))->first();
+            if($del == 'all'){
+                $categories = Category::whereHas('events')->get();
+            }else{
+                $categories = Category::whereHas('events',function($event) use($del){
+                    return $event->where('view_tpl',$del);
 
-            $faq->categoryEvent()->attach($categories,['priority' => $key]);
-            $faq->category()->attach($categoryFaq->id,['priority' => $key]);
-            $faq->event()->attach($events,['priority' => $key]);
+                })->get();
+            }
 
+            foreach($categories as $category){
+
+                foreach($category->events as $event){
+                    $events[] = $event->id;
+                }
+
+            }
+
+        
+            if($del == 'all'){
+                $categories = Category::whereHas('events')->pluck('id')->toArray();
+            }else{
+                $categories = Category::whereHas('events',function($event) use($del){
+                    return $event->where('view_tpl',$del);
+                })->pluck('id')->toArray();
+            }
+
+
+
+
+            $file1 = $file->getSheet($key);
+            $file1 = $file1->toArray();
+            
+            foreach($file1 as $key =>  $line){
+
+                if($key == 0 ){
+                    continue;
+                }
+
+                $faq = new Faq;
+                $faq->title = $line[1];
+                $faq->answer = $line[2];//htmlspecialchars($line[2], ENT_QUOTES);
+                $faq->status = true;
+                $faq->priority = $key;
+
+                $faq->save();
+
+                $categoryFaq = CategoriesFaqs::where('name',trim($line[0]))->first();
+
+                $faq->categoryEvent()->attach($categories,['priority' => $key]);
+                $faq->category()->attach($categoryFaq->id,['priority' => $key]);
+                $faq->event()->attach($events,['priority' => $key]);
+
+
+            }
 
         }
+
+
+        
 
 
         return 0;

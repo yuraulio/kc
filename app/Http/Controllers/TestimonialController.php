@@ -49,8 +49,21 @@ class TestimonialController extends Controller
         $social = [];
         $video = [];
 
-        $social['facebook'] = $request->facebook;
-        $social['linkedin'] = $request->linkedin;
+        $link = $request->facebook;
+        if($link){
+            $link = str_replace('https://', '', $link);
+            $link = str_replace('http://', '', $link);
+            $link = 'https://'.$link;
+        }
+        $social['facebook'] = $link;
+
+        $link = $request->facebook;
+        if($link){
+            $link = str_replace('https://', '', $link);
+            $link = str_replace('http://', '', $link);
+            $link = 'https://'.$link;
+        }
+        $social['linkedin'] = $link;
         $social = json_encode($social);
 
         //$video['youtube'] = $request->youtube;
@@ -135,8 +148,24 @@ class TestimonialController extends Controller
         $social = [];
         $video = [];
 
-        $social['facebook'] = $request->facebook;
-        $social['linkedin'] = $request->linkedin;
+
+        $link = $request->facebook;
+        if($link){
+            $link = str_replace('https://', '', $link);
+            $link = str_replace('http://', '', $link);
+            $link = 'https://'.$link;
+        }
+
+        $social['facebook'] = $link;
+
+        $link = $request->facebook;
+        if($link){
+            $link = str_replace('https://', '', $link);
+            $link = str_replace('http://', '', $link);
+            $link = 'https://'.$link;
+        }
+
+        $social['linkedin'] = $link;
         $social = json_encode($social);
 
         //$video['youtube'] = $request->youtube;

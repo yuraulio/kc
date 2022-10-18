@@ -26,6 +26,7 @@ class MainController extends Controller
     public function __construct(FBPixelService $fbp)
     {
         $this->fbp = $fbp;
+        $this->middleware('preview');
         $this->middleware('auth.sms')->except('getSMSVerification', 'smsVerification');
         // $fbp->sendPageViewEvent();
     }

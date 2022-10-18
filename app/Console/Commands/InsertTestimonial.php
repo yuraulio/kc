@@ -55,7 +55,24 @@ class InsertTestimonial extends Command
             $images[$name] = $file;
         }
         
-        $fileName = public_path() . '/Testimonials.xlsx';
+        $fileName = public_path() . '/import/Testimonials_old.xlsx';
+
+        if(!file_exists($fileName)){
+            return;
+        }
+
+        $testimonials = Testimonial::all();
+
+        foreach($testimonials as $testimonial){
+
+            $testimonial->category()->detach();
+            $testimonial->instructors()->detach();
+            $testimonial->medias()->delete();
+
+            $testimonial->delete();
+
+        }
+        
         $spreadsheet = new Spreadsheet();
         $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReaderForFile($fileName);
         $reader->setReadDataOnly(true);
@@ -79,12 +96,29 @@ class InsertTestimonial extends Command
             $testimonial->video_url = $line[7];
 
             $socials = [];
-            if($line[8]){
-                $socials['facebook'] = $line[8];
+            if(isset($line[8])){
+
+                $link = $line[8];
+                if($link){
+                    $link = str_replace('https://', '', $link);
+                    $link = str_replace('http://', '', $link);
+                    $link = 'https://'.$link;
+                }
+
+                $social['facebook'] = $link;
+  
             }
 
-            if($line[9]){
-                $socials['linkedin'] = $line[9];
+            if(isset($line[9])){
+
+                $link = $line[9];
+                if($link){
+                    $link = str_replace('https://', '', $link);
+                    $link = str_replace('http://', '', $link);
+                    $link = 'https://'.$link;
+                }
+
+                $socials['linkedin'] = $link;
             }
 
             $testimonial->social_url = json_encode($socials);
@@ -92,11 +126,11 @@ class InsertTestimonial extends Command
 
             $categories = [];
             
-            if($line[4]){
+            if(isset($line[4])){
                 $categories[] = $line[4];
             }
 
-            if($line[5]){
+            if(isset($line[5])){
                 $categories[] = $line[5];
             }
             $categories = Category::whereIn('id',[46,183])->get();
@@ -125,18 +159,7 @@ class InsertTestimonial extends Command
                 $testimonial->createMedia();
             }
 
-            //$faq->answer = $line[2];//htmlspecialchars($line[2], ENT_QUOTES);
-            //$faq->status = true;
-            //$faq->priority = $key;
-//
-            //$faq->save();
-//
-            //$categoryFaq = CategoriesFaqs::where('name',trim($line[0]))->first();
-//
-            //$faq->categoryEvent()->attach($categories,['priority' => $key]);
-            //$faq->category()->attach($categoryFaq->id,['priority' => $key]);
-            //$faq->event()->attach($events,['priority' => $key]);
-
+           
 
         }
 
