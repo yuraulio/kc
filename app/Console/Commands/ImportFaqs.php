@@ -178,9 +178,14 @@ class ImportFaqs extends Command
 
                 $categoryFaq = CategoriesFaqs::where('name',trim($line[0]))->first();
 
-                $faq->categoryEvent()->sync($categories,['priority' => $key1]);
-                $faq->category()->sync($categoryFaq->id,['priority' => $key1]);
-                $faq->event()->sync($events,['priority' => $key1]);
+                $faq->category()->detach();
+                $faq->categoryEvent()->detach();
+                $faq->event()->detach();
+
+
+                $faq->categoryEvent()->attach($categories,['priority' => $key1]);
+                $faq->category()->attach($categoryFaq->id,['priority' => $key1]);
+                $faq->event()->attach($events,['priority' => $key1]);
 
 
             }*/
