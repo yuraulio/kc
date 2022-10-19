@@ -49,7 +49,7 @@ class ImportFaqs extends Command
         }
 
 
-        $faqs = Faq::all();
+        /*$faqs = Faq::all();
 
         foreach($faqs as $faq){
             
@@ -59,7 +59,7 @@ class ImportFaqs extends Command
 
             $faq->delete();
 
-        }
+        }*/
         //return;
 
         $spreadsheet = new Spreadsheet();
@@ -76,9 +76,9 @@ class ImportFaqs extends Command
             if($key == 0){
                 $del = 'all';
             }elseif($key == 1){
-                $del = 143;
+                $del = [143];
             }elseif($key == 2){
-                $del = 139;
+                $del = [139,215];
             }
 
            
@@ -89,7 +89,9 @@ class ImportFaqs extends Command
                 $categories = Category::whereHas('events')->get();
             }else{
                 $categories = Category::whereHas('events',function($event) use($del){
-                    return $event->where('view_tpl',$del);
+                    return $event->whereHas('event_info1',function($query) use ($del){
+                        $query->whereIn('course_delivery',$del);
+                    });
 
                 })->get();
             }
@@ -105,20 +107,21 @@ class ImportFaqs extends Command
             if($del == 'all'){
                 $categories = Category::whereHas('events')->pluck('id')->toArray();
             }else{
+                
                 $categories = Category::whereHas('events',function($event) use($del){
-                    return $event->where('view_tpl',$del);
+                    return $event->whereHas('event_info1',function($query) use ($del){
+                        $query->whereIn('course_delivery',$del);
+                    });
                 })->pluck('id')->toArray();
             }
-
-
 
 
             $file1 = $file->getSheet($key);
             $file1 = $file1->toArray();
             
-            foreach($file1 as $key =>  $line){
+            /*foreach($file1 as $key1 =>  $line){
 
-                if($key == 0 ){
+                if($key1 == 0 ){
                     continue;
                 }
 
@@ -134,12 +137,53 @@ class ImportFaqs extends Command
 
                 
 
-                $faq->categoryEvent()->attach($categories,['priority' => $key]);
-                $faq->category()->attach($categoryFaq->id,['priority' => $key]);
-                $faq->event()->attach($events,['priority' => $key]);
+                $faq->categoryEvent()->attach($categories,['priority' => $key1]);
+                $faq->category()->attach($categoryFaq->id,['priority' => $key1]);
+                $faq->event()->attach($events,['priority' => $key1]);
+
+
+            }*/
+
+            
+            foreach($file1 as $key1 =>  $line){
+                
+                if($key1 == 0 ){
+                    continue;
+                }
+                
+                
+                if($key == 0){
+                    $faq = Faq::whereTitle(trim($line[1]))->first();
+                }else{
+                    
+                    $faq = Faq::whereTitle(trim($line[1]))->get();
+
+
+                    if(count($faq) == 2){
+                        $faq = $faq[$key-1];
+                    }else{
+                        $faq =$faq[0];
+                    }
+
+                    
+
+                }
+
+                
+                if(!$faq){
+                    continue;
+                }
+
+                $categoryFaq = CategoriesFaqs::where('name',trim($line[0]))->first();
+
+                $faq->categoryEvent()->sync($categories,['priority' => $key1]);
+                $faq->category()->sync($categoryFaq->id,['priority' => $key1]);
+                $faq->event()->sync($events,['priority' => $key1]);
 
 
             }
+
+
 
         }
 
