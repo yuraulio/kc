@@ -55,7 +55,7 @@ class InsertTestimonial extends Command
             $images[$name] = $file;
         }
         
-        $fileName = public_path() . '/import/Testimonials New.xlsx';
+        $fileName = public_path() . '/import/Testimonials.xlsx';
 
         if(!file_exists($fileName)){
             return;
@@ -72,6 +72,7 @@ class InsertTestimonial extends Command
             $testimonial->delete();
 
         }
+
         
         $spreadsheet = new Spreadsheet();
         $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReaderForFile($fileName);
@@ -105,7 +106,7 @@ class InsertTestimonial extends Command
                     $link = 'https://'.$link;
                 }
 
-                $social['facebook'] = $link;
+                $socials['facebook'] = $link;
   
             }
 
@@ -140,7 +141,7 @@ class InsertTestimonial extends Command
                 $testimonial->category()->attach([$category->id]);
             }
 
-            if($line[0]){
+            if($line[0] && isset($images[$name]) ){
 
                 $name = str_replace('.','',$line[0]);
                 $media = new Media;

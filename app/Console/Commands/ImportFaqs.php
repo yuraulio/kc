@@ -42,7 +42,7 @@ class ImportFaqs extends Command
      */
     public function handle()
     {
-        $fileName = public_path() . '/import/FAQ for website.xlsx';
+        $fileName = public_path() . '/import/FAQs.xlsx';
       
         if(!file_exists($fileName)){
             return;
