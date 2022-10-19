@@ -371,8 +371,10 @@ class HomeController extends Controller
                     $monthsExp = '+' . $content->expiration .'months';
                     $expiration_date = date('Y-m-d', strtotime($monthsExp, strtotime($today)));
                 }
-
+                
                 $content->users()->save($user, ['comment'=>'free','expiration'=>$expiration_date,'paid'=>true]);
+                $transaction->event()->save($content);
+                $transaction->user()->save($user);
             }
         }
 
