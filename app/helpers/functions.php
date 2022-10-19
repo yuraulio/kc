@@ -11,6 +11,7 @@ use App\Model\Category;
 use App\Model\PaymentMethod;
 use CodexShaper\Menu\Models\Menu as NewMenu;
 use Spatie\Dropbox\Client;
+use App\Model\Admin\Page;
 
 function get_social_media(){
     $social_media = Option::where('name', 'social_media')->get();
@@ -79,10 +80,14 @@ if (!function_exists('check_for_slug')) {
 if (!function_exists('get_status_by_slug')){
 
     function get_status_by_slug($slugg){
-
+       
         $slug = Slug::where('slug',$slugg)->first();
 
-        if($slug && $slug->slugable && (get_class($slug->slugable) == 'App\\Model\\Pages' || get_class($slug->slugable) == 'App\\Model\\Event')){
+        /*if($slug && $slug->slugable && (get_class($slug->slugable) == 'App\\Model\\Admin\\Page' || get_class($slug->slugable) == 'App\\Model\\Event')){
+            return $slug->slugable->published;
+        }*/
+
+        if($slug && get_class($slug->slugable) == 'App\\Model\\Event'){
             return $slug->slugable->published;
         }
 
@@ -93,6 +98,12 @@ if (!function_exists('get_status_by_slug')){
         else if($slug && $slug->slugable && (get_class($slug->slugable) == 'App\\Model\\Category')){
             return count($slug->slugable->events()->where('published',1)->where('status',0)->get()) > 0;
         }
+        
+        else if($page = Page::withoutGlobalScope("published")->whereSlug($slugg)->first()){
+            return $page->published;
+        }
+
+        
 
         return true;
 

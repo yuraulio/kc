@@ -52,8 +52,8 @@ class ImportFaqs extends Command
         $faqs = Faq::all();
 
         foreach($faqs as $faq){
-            $faq->category->detatch();
-            $faq->categoryEvent->detatch();
+            $faq->category()->detatch();
+            $faq->categoryEvent()->detatch();
 
             $faq->delete();
         }

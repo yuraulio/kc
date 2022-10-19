@@ -16,7 +16,7 @@ class Preview
      */
     public function handle(Request $request, Closure $next)
     {
-        
+    
         if(isset($_GET['preview']) && $_GET['preview'] == 'true'){
             //dd(get_status_by_slug($request->path()));
             //dd(Auth::user());   

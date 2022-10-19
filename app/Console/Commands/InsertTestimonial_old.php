@@ -9,7 +9,8 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use App\Model\Media;
 
-class InsertTestimonial extends Command
+class InsertTestimonial_old
+ extends Command
 {
     /**
      * The name and signature of the console command.
@@ -55,7 +56,7 @@ class InsertTestimonial extends Command
             $images[$name] = $file;
         }
         
-        $fileName = public_path() . '/import/Testimonials New.xlsx';
+        $fileName = public_path() . '/import/Testimonials_old.xlsx';
 
         if(!file_exists($fileName)){
             return;
@@ -92,13 +93,13 @@ class InsertTestimonial extends Command
             $testimonial->lastname = $line[2];
             $testimonial->title = $line[3];
             $testimonial->status = true;
-            $testimonial->testimonial = $line[4];
-            $testimonial->video_url = $line[5];
+            $testimonial->testimonial = $line[6];
+            $testimonial->video_url = $line[7];
 
             $socials = [];
-            if(isset($line[6])){
+            if(isset($line[8])){
 
-                $link = $line[6];
+                $link = $line[8];
                 if($link){
                     $link = str_replace('https://', '', $link);
                     $link = str_replace('http://', '', $link);
@@ -109,9 +110,9 @@ class InsertTestimonial extends Command
   
             }
 
-            if(isset($line[7])){
+            if(isset($line[9])){
 
-                $link = $line[7];
+                $link = $line[9];
                 if($link){
                     $link = str_replace('https://', '', $link);
                     $link = str_replace('http://', '', $link);
@@ -127,14 +128,13 @@ class InsertTestimonial extends Command
             $categories = [];
             
             if(isset($line[4])){
-                //$categories[] = $line[4];
+                $categories[] = $line[4];
             }
 
             if(isset($line[5])){
-                //$categories[] = $line[5];
+                $categories[] = $line[5];
             }
-            //$categories = Category::whereIn('id',[46,183])->get();
-            $categories = Category::all();
+            $categories = Category::whereIn('id',[46,183])->get();
 
             foreach($categories as $category){
                 $testimonial->category()->attach([$category->id]);
