@@ -52,16 +52,15 @@ class ImportFaqs extends Command
         $faqs = Faq::all();
 
         foreach($faqs as $faq){
-            $faq->category()->detatch();
-            $faq->categoryEvent()->detatch();
+            
+            $faq->category()->detach();
+            $faq->categoryEvent()->detach();
+            $faq->event()->detach();
 
             $faq->delete();
+
         }
-
-        return;
-
-        //Faq::delete();
-
+        //return;
 
         $spreadsheet = new Spreadsheet();
         $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReaderForFile($fileName);
@@ -73,7 +72,6 @@ class ImportFaqs extends Command
        
         foreach((array) $sheets as $key => $sheet){
 
-            $del = $this->argument('delivery');
 
             if($key == 0){
                 $del = 'all';
@@ -83,7 +81,7 @@ class ImportFaqs extends Command
                 $del = 139;
             }
 
-
+           
             $events = [];
             
 
@@ -104,7 +102,6 @@ class ImportFaqs extends Command
 
             }
 
-        
             if($del == 'all'){
                 $categories = Category::whereHas('events')->pluck('id')->toArray();
             }else{
@@ -134,6 +131,8 @@ class ImportFaqs extends Command
                 $faq->save();
 
                 $categoryFaq = CategoriesFaqs::where('name',trim($line[0]))->first();
+
+                
 
                 $faq->categoryEvent()->attach($categories,['priority' => $key]);
                 $faq->category()->attach($categoryFaq->id,['priority' => $key]);
