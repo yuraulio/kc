@@ -221,20 +221,36 @@ class FaqController extends Controller
         
         $faq->update($request->all());
 
-        $faq->category()->detach();
-        foreach($request->category_id as $cat){
-            $category = CategoriesFaqs::find($request->category_id);  
-            $faq->category()->attach($category);
+        $priorities = [];
+        $lastPriority = 1;
+        foreach($faq->category as $fcat){
+            $priorities[$fcat->id] = $fcat->priority;
         }
-       
-       
-        $faq->categoryEvent()->detach();
-        foreach($request->eventcategory_id as $cat){
-            $category = Category::find($request->eventcategory_id);   
-            $faq->categoryEvent()->attach($category);
+
+        $faq->category()->detach();
+    
+        $lastPriority = count($priorities) + 1;
+        
+        foreach($request->category_id as $cat){
+            //$category = CategoriesFaqs::find($request->category_id);  
+            $faq->category()->attach($cat, ['priority' => isset($priorities[$cat]) ? $priorities[$cat] : $lastPriority]);
+            $lastPriority + 1;
         }
         
-        return redirect()->route('faqs.index')->withStatus(__('Faq successfully updated.'));
+        $priorities = [];
+        foreach($faq->categoryEvent as $fcat){
+            $priorities[$fcat->id] = $fcat->priority;
+        }
+       
+        $faq->categoryEvent()->detach();
+        $lastPriority = count($priorities) + 1;
+        //dd($request->eventcategory_id);
+        foreach($request->eventcategory_id as $cat){
+            //$category = Category::find($request->eventcategory_id);   
+            $faq->categoryEvent()->attach($cat, ['priority' => isset($priorities[$cat]) ? $priorities[$cat] : $lastPriority]);
+        }
+        
+        return redirect()->route('faqs.edit',$faq->id)->withStatus(__('Faq successfully updated.'));
     }
 
     public function update_category(Categories_faqsRequest $request, CategoriesFaqs $model)

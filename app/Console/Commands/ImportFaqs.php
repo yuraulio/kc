@@ -119,7 +119,7 @@ class ImportFaqs extends Command
             $file1 = $file->getSheet($key);
             $file1 = $file1->toArray();
             
-            foreach($file1 as $key1 =>  $line){
+            /*foreach($file1 as $key1 =>  $line){
 
                 if($key1 == 0 ){
                     continue;
@@ -142,10 +142,10 @@ class ImportFaqs extends Command
                 $faq->event()->attach($events,['priority' => $key1]);
 
 
-            }
+            }*/
 
             
-            /*foreach($file1 as $key1 =>  $line){
+            foreach($file1 as $key1 =>  $line){
                 if($key == 1){
                     echo $key1;
                 }
@@ -188,7 +188,7 @@ class ImportFaqs extends Command
                 $faq->event()->attach($events,['priority' => $key1]);
 
 
-            }*/
+            }
 
 
 

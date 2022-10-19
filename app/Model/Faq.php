@@ -26,16 +26,16 @@ class Faq extends Model
 
     public function category()
     {
-        return $this->morphedByMany(CategoriesFaqs::class, 'faqable');
+        return $this->morphedByMany(CategoriesFaqs::class, 'faqable')->withPivot('priority');
     }
 
     public function categoryEvent()
     {
-        return $this->morphedByMany(Category::class, 'faqable');
+        return $this->morphedByMany(Category::class, 'faqable')->withPivot('priority');
     }
 
     public function event()
     {
-        return $this->morphedByMany(Event::class, 'faqable');
+        return $this->morphedByMany(Event::class, 'faqable')->withPivot('priority');
     }
 }
