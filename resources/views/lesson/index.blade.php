@@ -515,6 +515,18 @@
         } );
 
         $("#move-lesson").click(function(){
+
+
+            $( document ).ajaxStart(function() {
+                window.swal({
+                    title: "Move lessons...",
+                    text: "Please wait",
+                    showConfirmButton: false,
+                    allowOutsideClick: false
+                });
+            });
+
+
             let category = $("#col2_filter").data('categoryy');
             let fromTopic = $("#col1_filter").data('topic');
             let toTopic = $("#col1_move").data('topic');
@@ -586,7 +598,7 @@
                         $(".success-message").show();
 
                         window.swal({
-                        title: '',
+                        title: message,
                         showConfirmButton: false,
                         timer: 2000
                     });
@@ -602,7 +614,7 @@
                         });
 
                         window.swal({
-                        title: '',
+                        title: errorMessage,
                         showConfirmButton: false,
                         timer: 2000
                     });

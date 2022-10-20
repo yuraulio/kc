@@ -117,7 +117,7 @@ class TopicController extends Controller
                 $event->topic()->attach($topic);
             }
         }else{
-            //dd('nothing selected');
+            dd('nothing selected');
         }
 
 
@@ -183,47 +183,61 @@ class TopicController extends Controller
                 $category = Category::find($category_id);
                
                 $topic->category()->attach($category_id,['priority' => count($category->topics)]);
-
-                $lastPriority =  count($category->topic()->get()) + 1;
-                foreach($topic->lessonsCategory()->wherePivot('category_id',$fromCategory)->orderBy('priority')->get() as $lesson){
+                foreach($topic->lessonsCategory()->wherePivot('category_id',$fromCategory)->get() as $lesson){
 
                     if(in_array($lesson->id,$lessons)){
                         continue;
                     }
                     $lessons[] = $lesson->id;
-                    $category->topic()->attach($topic,['category_id' => $category_id, 'lesson_id' => $lesson->id,'priority'=>$lastPriority]);
-                    $lastPriority += 1;
+                    $category->topic()->attach($topic,['category_id' => $category_id, 'lesson_id' => $lesson->id,'priority'=>$lesson->pivot->priority]);
+
                     
 
                 }
-                //dispatch(new FixOrder($category,''));
+                dispatch(new FixOrder($category,''));
                 $topic = Topic::find($topic->id);
                 foreach($category->events as $event){
-                    
-                    $lastPriority = count($event->allLessons()->get()) + 1;
-                    foreach($topic->event_lesson()->orderBy('priority')->get() as $lesson){
-                        if(in_array($lesson->id,$lessonsAttached) || !in_array($fromCategory,$lesson->category->pluck('id')->toArray())){
+                    //foreach($topic->event_topic as $to){
+                        /*if(!in_array($fromCategory,$to->category->pluck('id')->toArray())){
                             continue;
-                        }
-                        
-                        $lessonsAttached[] = $lesson->id;
-                        $event->topic()->attach($topic,['event_id' => $event->id,
-                                                        'lesson_id' => $lesson->pivot->lesson_id, 
-                                                        'instructor_id' => $lesson->pivot->instructor_id,
-                                                        'date' => $lesson->pivot->date,
-                                                        'duration' => $lesson->pivot->duration,
-                                                        'time_starts' => $lesson->pivot->time_starts,
-                                                        'time_ends' => $lesson->pivot->time_ends,
-                                                        'priority' => $lastPriority
-                                                        //'priority' => $priority
-                                                        ]);
-                        $lastPriority += 1;
-                    }
+                        }*/
 
-                        //dispatch(new FixOrder($event,''));           
+                        //$priorityLesson = $event->allLessons()->wherePivot('topic_id',$toTopic)->orderBy('priority')->get();
+                        //$priority = isset($priorityLesson->last()['pivot']['priority']) ? $priorityLesson->last()['pivot']['priority'] + 1 :count($priorityLesson)+1 ;
+
+                        foreach($topic->event_lesson as $lesson){
+                            if(in_array($lesson->id,$lessonsAttached) || !in_array($fromCategory,$lesson->category->pluck('id')->toArray())){
+                                continue;
+                            }
+                            
+                            $lessonsAttached[] = $lesson->id;
+                            $event->topic()->attach($topic,['event_id' => $event->id,
+                                                            'lesson_id' => $lesson->pivot->lesson_id, 
+                                                            'instructor_id' => $lesson->pivot->instructor_id,
+                                                            'date' => $lesson->pivot->date,
+                                                            'duration' => $lesson->pivot->duration,
+                                                            'time_starts' => $lesson->pivot->time_starts,
+                                                            'time_ends' => $lesson->pivot->time_ends,
+                                                            'priority' => $lesson->pivot->priority
+                                                            //'priority' => $priority
+                                                            ]);
+
+                            //$priority += 1;                   
+                            //$category->lessons()->wherePivot('lesson_id', $lesson->pivot->lesson_id)->updateExistingPivot($lesson->pivot->lesson_id, ['priority' =>  $lesson->pivot->priority],false);
+                        }
+
+                        dispatch(new FixOrder($event,''));
+
+                    //}
                 }
 
+                
+
+                
+
             }
+
+            //$topic->category()->sync($request->category_id);
 
         }
         return redirect()->route('topics.edit',[$topic->id,'selectedCategory'=>$fromCategory])->withStatus(__('Topic successfully updated.'));
@@ -235,7 +249,29 @@ class TopicController extends Controller
      * @param  \App\Model\Topic  $topic
      * @return \Illuminate\Http\Response
      */
-    
+    /*public function destroy(Topic $topic)
+    {
+        /*if (!$topic->category->isEmpty()) {
+            return redirect()->route('topics.index')->withErrors(__('This topic has items attached and can\'t be deleted.'));
+        }*/
+
+        /*if( count($topic->category) > 1){
+            $catgegoriesAssignded = '';
+            foreach($topic['category'] as $category){
+            
+                $categoriess[] = $category['name'];
+
+                $catgegoriesAssignded .= $category['name'] . '<br>';
+
+            }
+
+            return redirect()->route('topics.index')->withErrors(__('This topic cannot be delete because is attached to more than one categries.<br>' . $catgegoriesAssignded));
+        }
+
+        $topic->delete();
+
+        return redirect()->route('topics.index')->withStatus(__('topic successfully deleted.'));
+    }*/
 
     public function destroy(Request $request, Topic $topic)
     {
