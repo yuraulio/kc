@@ -585,6 +585,13 @@
                         $(".success-message p").html(message);
                         $(".success-message").show();
 
+                        window.swal({
+                        title: '',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+
+
                     }else{
                         let errorMessage = '';
                         $.each(data.errors,function(index, value){
@@ -593,6 +600,12 @@
                             });
                            
                         });
+
+                        window.swal({
+                        title: '',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
 
                         $(".error-message p").html(errorMessage);
                         $(".error-message").show();
@@ -780,6 +793,13 @@
                     $(".error-message").show();--}}
                 }
 
+            },
+            error: function(data) {
+                window.swal({
+                        title: errorMessage,
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
             }
         });
 

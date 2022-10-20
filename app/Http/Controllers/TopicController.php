@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Symfony\Component\Routing\Route as SymfonyRoute;;
 use Illuminate\Support\Facades\URL;
 use Validator;
+use App\Jobs\FixOrder;
 
 class TopicController extends Controller
 {
@@ -159,7 +160,7 @@ class TopicController extends Controller
      */
     public function update(TopicRequest $request, Topic $topic)
     {
-
+        
         if($request->status)
         {
             $status = 1;
@@ -189,13 +190,21 @@ class TopicController extends Controller
                     }
                     $lessons[] = $lesson->id;
                     $category->topic()->attach($topic,['category_id' => $category_id, 'lesson_id' => $lesson->id,'priority'=>$lesson->pivot->priority]);
+
+                    
+
                 }
+                dispatch(new FixOrder($category,''));
                 $topic = Topic::find($topic->id);
                 foreach($category->events as $event){
                     //foreach($topic->event_topic as $to){
                         /*if(!in_array($fromCategory,$to->category->pluck('id')->toArray())){
                             continue;
                         }*/
+
+                        //$priorityLesson = $event->allLessons()->wherePivot('topic_id',$toTopic)->orderBy('priority')->get();
+                        //$priority = isset($priorityLesson->last()['pivot']['priority']) ? $priorityLesson->last()['pivot']['priority'] + 1 :count($priorityLesson)+1 ;
+
                         foreach($topic->event_lesson as $lesson){
                             if(in_array($lesson->id,$lessonsAttached) || !in_array($fromCategory,$lesson->category->pluck('id')->toArray())){
                                 continue;
@@ -210,16 +219,19 @@ class TopicController extends Controller
                                                             'time_starts' => $lesson->pivot->time_starts,
                                                             'time_ends' => $lesson->pivot->time_ends,
                                                             'priority' => $lesson->pivot->priority
+                                                            //'priority' => $priority
                                                             ]);
 
-                                                 
+                            //$priority += 1;                   
                             //$category->lessons()->wherePivot('lesson_id', $lesson->pivot->lesson_id)->updateExistingPivot($lesson->pivot->lesson_id, ['priority' =>  $lesson->pivot->priority],false);
                         }
 
-                      
+                        dispatch(new FixOrder($event,''));
 
                     //}
                 }
+
+                
 
                 
 
@@ -228,7 +240,7 @@ class TopicController extends Controller
             //$topic->category()->sync($request->category_id);
 
         }
-        return redirect()->route('topics.index')->withStatus(__('Topic successfully updated.'));
+        return redirect()->route('topics.edit',[$topic->id,'selectedCategory'=>$fromCategory])->withStatus(__('Topic successfully updated.'));
     }
 
     /**
