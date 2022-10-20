@@ -461,15 +461,18 @@
                                             <?php
 
                                                 if(isset($info['inclass']['city']['icon']) && $info['inclass']['city']['icon'] != null){
+                                                    dd('fdf');
                                                     $course_inclass_city_icon = $info['inclass']['city']['icon'];
                                                 }else{
+                                                    
                                                     $course_inclass_city_icon = null;
                                                 }
 
                                             ?>
 
-                                            <div class="col-12 delivery_child_wrapper <?= ($event->delivery->first()['id'] == 139 || $event->delivery->first()['id'] == 215) ? '' : 'd-none' ?>">
-                                                <div class="row delivery_city_wrapper <?= $event->delivery->first()['id'] == 215 ? 'd-none' : '' ?>">
+
+                                            <div class="col-12 delivery_child_wrapper <?= isset($event->delivery->first()['id']) && ( $event->delivery->first()['id'] == 139 || $event->delivery->first()['id'] == 215) ? '' : 'd-none' ?>">
+                                                <div class="row delivery_city_wrapper <?= isset($event->delivery->first()['id']) && $event->delivery->first()['id'] == 215 ? 'd-none' : '' ?>">
                                                     <div style="display:flex;" class="col-9 col-sm-12 col-md-6 col-lg-3 form-group{{ $errors->has('city_id') ? ' has-danger' : '' }} ">
                                                         <!-- <div class="col-sm-12 col-md-6 col-lg-3 form-group{{ $errors->has('city_id') ? ' has-danger' : '' }} "> -->
                                                         <select name="city_id" id="input-city_id" class="form-control" placeholder="{{ __('Please select the city of this course') }}" >
@@ -485,7 +488,7 @@
                                                     <span class="col-2 input-icon-wrapper-city" data-infowrapper="inclass_city">
                                                         <span class="btn btn-outline-primary input-icon">
 
-                                                            @if(isset($course_inclass_city_icon) && $course_inclass_city_icon != null && $course_inclass_city_icon['path'] != null)
+                                                            @if($course_inclass_city_icon && $course_inclass_city_icon != null && $course_inclass_city_icon['path'] != null)
                                                                 <img src="{{ asset($course_inclass_city_icon['path']) }}" alt="{{ $course_inclass_city_icon != null && $course_inclass_city_icon['alt_text'] != '' ? $course_inclass_city_icon['alt_text'] : '' }}"/>
                                                             @else
                                                                 <i class="fa fa-map-marker"></i>
@@ -493,8 +496,7 @@
                                                         </span>
                                                         (course_inclass_city)
                                                     </span>
-
-
+                                                
                                                     <input type="hidden" value="{{ old('inclass_city_icon_path', ($course_inclass_city_icon != null && $course_inclass_city_icon['path'] != '') ? $course_inclass_city_icon['path'] : '' ) }}" id="inclass_city_path" name="course[{{'delivery'}}][{{'inclass'}}][{{'city'}}][{{'icon'}}][{{'path'}}]">
                                                     <input type="hidden" value="{{ old('inclass_city_icon_alt_text', ($course_inclass_city_icon != null && $course_inclass_city_icon['alt_text'] != '') ? $course_inclass_city_icon['alt_text'] : '' ) }}" id="inclass_city_alt_text" name="course[{{'delivery'}}][{{'inclass'}}][{{'city'}}][{{'icon'}}][{{'alt_text'}}]">
 
@@ -871,7 +873,7 @@
                                         <?php
                                             $visible_elearning = (isset($info['elearning']['visible'])) ? $info['elearning']['visible'] : null;
                                         ?>
-                                        <div class="row elearning_visible_wrapper @if($event['delivery'][0]['id'] != 143) ? 'd-none' : '' @endif">
+                                        <div class="row elearning_visible_wrapper @if(isset($event['delivery'][0]['id']) && $event['delivery'][0]['id'] != 143) ? 'd-none' : '' @endif">
 
                                             <label class="form-control-label col-12" for="input-delivery">{{ __('Visible on:') }}</label>
                                             <div class="col-sm-12 col-md-6 col-lg-2">
@@ -918,7 +920,7 @@
                                             <?php
                                                 $visible_elearning_exam = (isset($info['elearning']['exam']['visible'])) ? $info['elearning']['exam']['visible'] : null;
                                             ?>
-                                            <div class="row elearning_exam_visible_wrapper @if($event['delivery'][0]['id'] != 143) ? 'd-none' : '' @endif">
+                                            <div class="row elearning_exam_visible_wrapper @if(isset($event['delivery'][0]['id']) && $event['delivery'][0]['id'] != 143) ? 'd-none' : '' @endif">
 
                                                 <div class="exam_input col-sm-12 col-md-6 col-lg-3 form-group">
                                                     <?php
