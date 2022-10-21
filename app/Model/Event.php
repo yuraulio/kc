@@ -1014,4 +1014,29 @@ class Event extends Model
         return $total/60;
     }
 
+
+    public function changeOrder($from = 0){
+        foreach($this->allLessons()->wherePivot('priority','>=',$from)->get() as  $pLesson){
+            $newPriorityLesson = $pLesson->pivot->priority + 1;
+            $pLesson->pivot->priority = $newPriorityLesson;
+            $pLesson->pivot->save();
+            //$newOrder[$category->id.'-'.$fromTopic.'-'.$pLesson->id] = $newPriorityLesson;
+            
+        }
+    }
+
+    public function fixOrder(){
+        $newPriorityLesson = 1;
+        foreach($this->allLessons()->orderBy('priority')->get() as  $pLesson){
+        
+            $pLesson->pivot->priority = $newPriorityLesson;
+            $pLesson->pivot->save();
+            $newPriorityLesson = $pLesson->pivot->priority + 1;
+        }
+
+    }
+
+
+
+
 }

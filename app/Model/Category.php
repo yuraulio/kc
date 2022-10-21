@@ -180,6 +180,30 @@ class Category extends Model
         return $sumStudents;
     }
 
+
+    public function changeOrder($from = 0){
+        foreach($this->lessons()->wherePivot('priority','>=',$from)->get() as  $pLesson){
+            $newPriorityLesson = $pLesson->pivot->priority + 1;
+            $pLesson->pivot->priority = $newPriorityLesson;
+            $pLesson->pivot->save();  
+        }
+    }
+
+    public function fixOrder($fromTopic = null){
+        $newPriorityLesson = 1;
+        $newOrder = [];
+        foreach($this->lessons()->orderBy('priority')->get() as  $pLesson){
+
+            $pLesson->pivot->priority = $newPriorityLesson;
+            $pLesson->pivot->save();  
+            $newOrder[$this->id.'-'.$pLesson->pivot->topic_id.'-'.$pLesson->id] = $newPriorityLesson;
+            $newPriorityLesson += 1;
+        }
+
+        return $newOrder;
+
+    }
+
     /*public function getEventStatus(){
 
         return $this->morphedByMany(Event::class, 'categoryable')->latest('published_at');

@@ -145,8 +145,9 @@ class LessonController extends Controller
                         $duration = '';
                         $room = '';
                         $instructor_id = '';
-                        $priority = count($allLessons)+1;
-
+                        //$priority = count($allLessons)+1;
+                        $priorityLesson = $event->allLessons()->wherePivot('topic_id',$topic->id)->orderBy('priority')->get();
+                        $priority = isset($priorityLesson->last()['pivot']['priority']) ? $priorityLesson->last()['pivot']['priority'] + 1 :count($priorityLesson)+1 ;
                         if(isset($allLessons[$lesson['id']][0])){
 
                             $date = $allLessons[$lesson['id']][0]['pivot']['date'];
@@ -161,13 +162,17 @@ class LessonController extends Controller
                         //if(!in_array($lesson['id'],$allLessons)){
                         
                         $event->allLessons()->detach($lesson['id']);
+                        $event->changeOrder($priority);
                         $event->topic()->attach($topic['id'],['lesson_id' => $lesson['id'],'date'=>$date,'time_starts'=>$time_starts,
                             'time_ends'=>$time_ends, 'duration' => $duration, 'room' => $room, 'instructor_id' => $instructor_id, 'priority' => $priority]);
                         //}
+                        $event->fixOrder();
 
                         $lesson->topic()->wherePivot('category_id',$request->category)->detach();
+                        $cat->changeOrder($priority);
                         $cat->topic()->attach($topic, ['lesson_id' => $lesson->id,'priority'=>$priority]);
-                        
+                        $cat->fixOrder();
+
 
                     }
                 }
@@ -346,86 +351,7 @@ class LessonController extends Controller
      * @param  \App\Model\Lesson  $lesson
      * @return \Illuminate\Http\Response
      */
-    /*public function update(Request $request, Lesson $lesson)
-    {
-        $arr = array();
-
-        if(!empty($request->links)){
-            foreach($request->links as $key => $link){
-
-                $correct_link = strpos($link, 'https://');
-
-                if(!$correct_link){
-                    $link = 'https://'.$link;
-                }
-                $arr1[$key] = ['name'=> $request->names[$key], 'link'=>$link];
-            }
-        }else{
-            $arr1 = [];
-        }
-        $links = json_encode($arr1);
-
-        if($request->status == 'on')
-        {
-            $status = 1;
-        }else
-        {
-            $status = 0;
-        }
-
-        if($request->bold == 'on')
-        {
-            $bold = 1;
-        }else
-        {
-            $bold = 0;
-        }
-
-        $request->request->add(['status' => $status, 'links' => $links,'bold'=>$bold]);
-
-        $lesson_id = $lesson['id'];
-        $lesson->update($request->all());
-
-        //dd($request->all());
-        if($request->topic_id != null){
-            $lesson->topic()->detach();
-            foreach($request->topic_id as $topic)
-            {
-                $topic = Topic::with('category')->find($topic);
-                dd($topic);
-                foreach($topic->category as $cat){
-                    $cat->topic()->attach($topic, ['lesson_id' => $lesson->id]);
-
-                    $allEvents = $cat->events;
-                    foreach($allEvents as $event)
-                    {
-                        $allLessons = $event->allLessons->pluck('id')->toArray();
-
-                        if(!in_array($lesson['id'],$allLessons)){
-                            $priority = count($allLessons)+1;
-                            //$event->topic()->sync([['topic_id'=>$topic['id'],'lesson_id' => $lesson['id'],'priority' => $priority]]);
-                            $event->topic()->attach($topic['id'],['lesson_id' => $lesson['id'],'priority' => $priority]);
-                        }
-                        
     
-                    }
-
-                 
-                       
-
-                }
-                
-
-                
-            }
-        }
-
-        $lesson->type()->sync([$request->type_id]);
-
-
-        return back()->withStatus(__('Lesson successfully updated.'));
-        //return redirect()->route('lessons.index')->withStatus(__('Lesson successfully updated.'));
-    }*/
 
     public function update(Request $request, Lesson $lesson)
     {
@@ -516,7 +442,16 @@ class LessonController extends Controller
                         $duration = '';
                         $room = '';
                         $instructor_id = '';
-                        $priority = count($allLessons)+1;
+                        //$priority = count($allLessons)+1;
+
+                        if($existLesson = $event->allLessons()->wherePivot('topic_id',$topic->id)->wherePivot('lesson_id',$lesson->id)->first()){
+                            $priority =  $existLesson->pivot->priority;
+                        }else{
+                            $priorityLesson = $event->allLessons()->wherePivot('topic_id',$topic->id)->orderBy('priority')->get();
+                            $priority = isset($priorityLesson->last()['pivot']['priority']) ? $priorityLesson->last()['pivot']['priority'] + 1 :count($priorityLesson)+1 ;
+                        }
+
+                       
 
                         if(isset($allLessons[$lesson['id']][0])){
                             
@@ -526,7 +461,7 @@ class LessonController extends Controller
                             $duration = $allLessons[$lesson['id']][0]['pivot']['duration'];
                             $room = $allLessons[$lesson['id']][0]['pivot']['room'];
                             $instructor_id = $allLessons[$lesson['id']][0]['pivot']['instructor_id'];
-                            $priority = $allLessons[$lesson['id']][0]['pivot']['priority'];
+                            //$priority = $allLessons[$lesson['id']][0]['pivot']['priority'];
                         }
 
                         //if(!in_array($lesson['id'],$allLessons)){
@@ -535,13 +470,17 @@ class LessonController extends Controller
                         //$lesson->topic()->attach($topic->id);
                 
                         $event->allLessons()->detach($lesson['id']);
+                        $event->changeOrder($priority);
+
                         $event->topic()->attach($topic['id'],['lesson_id' => $lesson['id'],'date'=>$date,'time_starts'=>$time_starts,
                             'time_ends'=>$time_ends, 'duration' => $duration, 'room' => $room, 'instructor_id' => $instructor_id, 'priority' => $priority]);
+                        $event->fixOrder();
                         //}
                         
                         $lesson->topic()->wherePivot('category_id',$request->category)->detach();
+                        $cat->changeOrder($priority);
                         $cat->topic()->attach($topic, ['lesson_id' => $lesson->id,'priority'=>$priority]);
-    
+                        $cat->fixOrder();
                     }
 
                 }
@@ -590,67 +529,6 @@ class LessonController extends Controller
         return trim($finalFormat);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Model\Lesson  $lesson
-     * @return \Illuminate\Http\Response
-     */
-    /*public function destroy(Lesson $lesson)
-    {
-
-        if(count($lesson->topic) > 1){
-
-            $catgegoriesAssignded = '';
-           
-            foreach($lesson->topic as $key => $topic){
-            
-                $catgegoriesAssignded .= $lesson->category[$key]['name'] . ' => ' . $topic->title . '<br> ';
-
-               
-            }
-
-            return redirect()->route('lessons.index')->withErrors(__('Lesson cannot be delete because is attached to more than one topics.<br>'. $catgegoriesAssignded));
-        }
-        $lesson->deletee();
-
-        return redirect()->route('lessons.index')->withStatus(__('Lesson successfully deleted.'));
-    }*/
-
-    /*public function destroy(Request $request, Lesson $lesson)
-    {
-
-        $error = false;
-        $categoriesAssignded = '';
-        foreach($request->lessons as $lesson){
-            $lesson = Lesson::find($lesson);
-
-            if(count($lesson->topic) > 1){
-                $error = true;
-                $categoriesAssignded .= 'Lesson <strong>'. $lesson->title .'</strong> cannot be delete because is attached to more than one topics.<br>';
-               
-                foreach($lesson->topic as $key => $topic){
-                
-                    $categoriesAssignded .= $lesson->category[$key]['name'] . ' => ' . $topic->title . '<br> ';
-    
-                   
-                }
-                $categoriesAssignded .= '<br>';
-                //return redirect()->route('lessons.index')->withErrors(__('Lesson cannot be delete because is attached to more than one topics.<br>'. $catgegoriesAssignded));
-            }else{
-                $lesson->deletee();
-
-            }
-
-        }
-
-        if($error){
-            return redirect()->route('lessons.index')->withErrors($categoriesAssignded);
-        }
-
-        return redirect()->route('lessons.index')->withStatus(__('Lesson successfully deleted.'));
-    }*/
-
 
     public function destroy(Request $request, Lesson $lesson)
     {
@@ -663,14 +541,10 @@ class LessonController extends Controller
             }
 
             $category = Category::find($categories[$key]);
-            //$category->lessons()->where('id',$lesson)->detach();
             $category->lessons()->detach($lesson);
 
             foreach($category->events as $event){
-
-                //dd($event->allLessons->where('id',$lesson)->first());
                 $event->allLessons()->detach($lesson);
-                //$event->allLessons()->where('id',$lesson)->detach();
             }
 
             $lesson = Lesson::find($lesson);
@@ -764,26 +638,31 @@ class LessonController extends Controller
 
                     $event->allLessons()->detach($lesson);
                     
+                    $event->changeOrder($priority);
                 
-                    foreach($event->allLessons()->wherePivot('priority','>=',$priority)->get() as  $pLesson){
+                    /*foreach($event->allLessons()->wherePivot('priority','>=',$priority)->get() as  $pLesson){
                         $newPriorityLesson = $pLesson->pivot->priority + 1;
                         $pLesson->pivot->priority = $newPriorityLesson;
                         $pLesson->pivot->save();
                         $newOrder[$category->id.'-'.$fromTopic.'-'.$pLesson->id] = $newPriorityLesson;
                         
-                    }
+                    }*/
 
                     
                     $event->topic()->attach($toTopic,['lesson_id' => $lesson,'date'=>$date,'time_starts'=>$time_starts,
                         'time_ends'=>$time_ends, 'duration' => $duration, 'room' => $room, 'instructor_id' => $instructor_id, 'priority' => $priority]);
                         //}
 
-
-                    foreach($event->allLessons as  $pLesson){
+                    $event->fixOrder();
+                    /*$newPriorityLesson = 1;
+                    foreach($event->allLessons()->orderBy('priority')->get() as  $pLesson){
             
-                        $newOrder[$category->id.'-'.$fromTopic.'-'.$pLesson->id] = $pLesson->pivot->priority;
-                            
-                    }
+                        $pLesson->pivot->priority = $newPriorityLesson;
+                        $pLesson->pivot->save();
+                        $newPriorityLesson = $pLesson->pivot->priority + 1;
+                    }*/
+
+
     
 
                 }
@@ -797,13 +676,25 @@ class LessonController extends Controller
                     //$category->lessons()->wherePivot('topic_id',$fromTopic)->wherePivot('lesson_id',$lesson)->detach();
 
                 //dd($priorityCat);
-                foreach($category->lessons()->wherePivot('priority','>=',$priorityCat)->get() as  $pLesson){
+                /*foreach($category->lessons()->wherePivot('priority','>=',$priorityCat)->get() as  $pLesson){
                     $newPriorityLesson = $pLesson->pivot->priority + 1;
                     $pLesson->pivot->priority = $newPriorityLesson;
                     $pLesson->pivot->save();  
-                }
-                
+                }*/
+                $category->changeOrder($priorityCat);
                 $category->topic()->attach($toTopic, ['lesson_id' => $lesson,'priority'=>$priorityCat]);
+                
+                $newOrder = $category->fixOrder($fromTopic);
+            
+                /*$newPriorityLesson = 1;
+                foreach($category->lessons()->orderBy('priority')->get() as  $pLesson){
+                    $pLesson->pivot->priority = $newPriorityLesson;
+                    $pLesson->pivot->save();  
+                    $newOrder[$category->id.'-'.$fromTopic.'-'.$pLesson->id] = $newPriorityLesson;
+                    $newPriorityLesson = $pLesson->pivot->priority + 1;
+                }*/
+                
+                
 
 
             }
@@ -820,16 +711,6 @@ class LessonController extends Controller
         
 
     }
-
-    /*public function orderLesson(Request $request, Event $event){
-        //dd($request->all());
-        foreach($event->lessons as $lesson){
-            $lesson->pivot->priority = $request->all()[$lesson['id']];
-            $lesson->pivot->save();
-
-        }
-
-    }*/
 
     public function orderLesson(Request $request){
         //dd($request->all());
@@ -857,10 +738,9 @@ class LessonController extends Controller
         }
 
         foreach($category->events as $event){
-
             //dd($event->lessons()->wherePivotIn('lesson_id',$lessons)->get());
-
-            foreach($event->lessons()->wherePivotIn('lesson_id',$lessons)->get() as $lesson){
+            
+            foreach($event->lessons()->wherePivot('topic_id',$request->topic)->wherePivotIn('lesson_id',$lessons)->get() as $lesson){
                 $index = $category->id . '-' . $lesson->pivot->topic_id . '-' . $lesson->pivot->lesson_id;
 
                 if(!isset($request->order[$index])){
@@ -871,12 +751,12 @@ class LessonController extends Controller
                 $lesson->pivot->save();
 
             }
-            dispatch(new FixOrder($event,''));
+            //dispatch(new FixOrder($event,''));
         }
         
 
         $newOrder = [];
-        foreach($category->lessons()->wherePivotIn('lesson_id',$lessons)->get() as $lesson){
+        foreach($category->lessons()->wherePivot('topic_id',$request->topic)->wherePivotIn('lesson_id',$lessons)->get() as $lesson){
             
             $index = $lesson->pivot->category_id . '-' . $lesson->pivot->topic_id . '-' . $lesson->pivot->lesson_id;
            
@@ -888,11 +768,12 @@ class LessonController extends Controller
             $lesson->pivot->save();
 
         }
-        $category = Category::find($request->category);
+        //$category = Category::find($request->category);
         //dispatch(new FixOrder($category,''));
 
         return [
             'success' => true,
+            'newOrder' => $request->order,
             'message' => 'Order has changed',
         ];
 

@@ -128,7 +128,7 @@
                                          
                                         </td>
                                        
-                                        <td id="order-{{$lesson->category[$key]['id']}}-{{$topic->id}}-{{$lesson->id}}" data-priority="{{$lesson->category[$key]['id']}}-{{$topic->id}}-{{$lesson->id}}" class="hidden order-priority">
+                                        <td id="order-{{$lesson->category[$key]['id']}}-{{$topic->id}}-{{$lesson->id}}" data-priority="{{$lesson->category[$key]['id']}}-{{$topic->id}}-{{$lesson->id}}" data-priority-value="{{ $topic->pivot->priority }}" class="hidden order-priority">
                                        
                                                 {{ $topic->pivot->priority }}
                                          
@@ -526,7 +526,6 @@
                 });
             });
 
-
             let category = $("#col2_filter").data('categoryy');
             let fromTopic = $("#col1_filter").data('topic');
             let toTopic = $("#col1_move").data('topic');
@@ -566,11 +565,17 @@
 
                             $(`#${category}-${fromTopic}-${value}`).html( toTopicName + ',')
                             $(`#${category}-${fromTopic}-${value}`).attr("id",`${category}-${toTopic}-${value}`);
+
+                            $(`#order-${category}-${fromTopic}-${value}`).attr("data-priority",`${category}-${toTopic}-${value}`);
+                            $(`#order-${category}-${fromTopic}-${value}`).attr("data-priority-value",data.newOrder[`${category}-${toTopic}-${value}`]);
+                            $(`#order-${category}-${fromTopic}-${value}`).text(data.newOrder[`${category}-${toTopic}-${value}`]);
+
+                            $(`#order-${category}-${fromTopic}-${value}`).attr("id",`#order-${category}-${toTopic}-${value}`);
+
+                            
+
                         });
 
-                        $.each(data.newOrder,function(index, value){
-                            $(`#order-`+index).html( value );
-                        })
 
                         if(lessons.length > 1 ){
                             message = 'The lessons ' + message + ' are moved to ' + toTopicName + '.'
@@ -584,6 +589,7 @@
                         table = $('#datatable-basic31').DataTable({
                             destroy: true,
                             "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+                            "order": [[ 5, "asc" ]],
                             language: {
                                 paginate: {
                                 next: '&#187;', // or '→'
@@ -591,6 +597,10 @@
                                 }
                             }
                         });
+
+                       
+
+
                         $('#col2_filter').change();
                         $('#col1_filter').change();
 
@@ -598,10 +608,10 @@
                         $(".success-message").show();
 
                         window.swal({
-                        title: message,
-                        showConfirmButton: false,
-                        timer: 2000
-                    });
+                            title: message,
+                            showConfirmButton: false,
+                            timer: 2000
+                        });
 
 
                     }else{
@@ -612,17 +622,17 @@
                             });
                            
                         });
-
+                        $(".error-message p").html(errorMessage);
+                        $(".error-message").show();
                         window.swal({
                         title: errorMessage,
                         showConfirmButton: false,
                         timer: 2000
                     });
 
-                        $(".error-message p").html(errorMessage);
-                        $(".error-message").show();
+                        
                     }
-                   
+                    $("#col1_move").val("-- All --").change();
                 }
             });
 
@@ -635,10 +645,9 @@
         function initCheckBox(){
 
             $('.check-lesson').each(function(){
-                $("#move_col1").hide()
                 $(this).prop('checked', false);
             });
-
+            $("#move_col1").hide()
         }
 
         //$(".check-lesson").click(function(){
@@ -709,7 +718,8 @@
        $( ".lesson-list .order-priority" ).each(function( index ) {
             
             if(index == 0){
-                order = Number($(this).html());
+                //order = Number($(this).html());
+                order = Number($(this).data('priority-value'));
                 lessons[$(this).data('priority')] = order;
                 lessons[index] = order;
             }else{
@@ -717,7 +727,6 @@
                 lessons[$(this).data('priority')] = order;
                 lessons[index] = order;
             }
-
             //console.log('index = ' + index + ' order = ' + order)
 
 
@@ -731,12 +740,12 @@
         category = $("#col2_filter").data('categoryy');
         topic = $("#col1_filter").data('topic');
         $( ".lesson-list .order-priority" ).each(function( index ) {
-            newOrder[$(this).data('priority')] = lessons[index]
+
+            let lessonPrioId = $(this).data('priority').split('-')[2]
+            newOrder[`${category}-${topic}-${lessonPrioId}`] = lessons[index]
         });
 
-        //console.log('old order = ', lessons)
-        //console.log('new order = ', newOrder)
-
+       
         data = {'category':category,'topic':topic,'order':newOrder}
         //console.log(data);
         $( document ).ajaxStart(function() {
@@ -759,9 +768,14 @@
             success: function(data) {
                 if(data['success']){
 
-                    $( ".lesson-list .order-priority" ).each(function( index ) {
+                    /*$( ".lesson-list .order-priority" ).each(function( index ) {
                         $(this).html(lessons[index])
-                    });
+                    });*/
+
+                    $.each(data.newOrder,function(index, value){
+                            $(`#order-`+index).html( value );
+                            $(`#order-`+index).attr("data-priority-value",value);
+                    })
 
                     initCheckBox()
                     $('#datatable-basic31').dataTable().fnDestroy();
@@ -807,6 +821,15 @@
 
             },
             error: function(data) {
+
+                $.each(data.errors,function(index, value){
+                        $.each(value,function(index1, value1){
+                            errorMessage += value1 + ' ';
+                        });
+                       
+                    });
+
+
                 window.swal({
                         title: errorMessage,
                         showConfirmButton: false,
