@@ -461,7 +461,6 @@
                                             <?php
 
                                                 if(isset($info['inclass']['city']['icon']) && $info['inclass']['city']['icon'] != null){
-                                                    dd('fdf');
                                                     $course_inclass_city_icon = $info['inclass']['city']['icon'];
                                                 }else{
                                                     
