@@ -78,10 +78,10 @@
     'normal' => $fontDir . '/DejaVuSerif',
   ),
   'foco' => array(
-    'normal' => $fontDir . '/foco_normal_1ba1a01ad963e4cf7106b24e2edc0042',
+    'normal' => $fontDir . '/foco_normal_cac6edede02e3298a5de814582962e0a',
     'bold' => $fontDir . '/Foco_Bold',
   ),
   'foco-bold' => array(
-    'bold' => $fontDir . '/foco_bold_bold_2a6ec21f68af16eb912397271870f90a',
+    'bold' => $fontDir . '/foco_bold_bold_67082d5267459d8c9e591523b2f75bc1',
   ),
 ) ?>

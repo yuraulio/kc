@@ -2,7 +2,7 @@
 <html lang="en" >
    <head>
       <meta charset="UTF-8">
-      <title>{{$certificate['meta_title']}}</title>
+      <title>{!!$certificate['meta_title']!!}</title>
       <style type="text/css">
          @font-face {
          font-family: 'Foco';
@@ -40,7 +40,7 @@
          }
          
          .certificate{
-         	margin-top:70px;
+			margin-top:100px;
          	padding: 0 70px;
          }
        
@@ -51,8 +51,10 @@
         }
 
 		.user-name{
-			font-size:42px;
-			letter-spacing:5px;
+			margin-top:6px!important;
+			margin-left:9px!important;
+		    font-size:42px;
+		    letter-spacing:6px;
 			text-transform: uppercase;
 		}
 
@@ -65,7 +67,7 @@
 		.info-title p{
 			font-size:25px!important;
 			line-height:15px;
-			/*letter-spacing:5px;*/
+			letter-spacing:0.5px;
 			/*text-transform: uppercase;*/
 		}
 
@@ -85,13 +87,19 @@
 		}
 		
 		
-		.certi-title-new p{
-			
-			font-size:27px;
-			line-height:35px;
-			text-transform: uppercase;
-			letter-spacing:5px;
-		}
+		.certi-title-new{
+				margin-top:8px!important;
+				margin-left:19px!important;
+				line-height:0.9;
+			}
+
+			.certi-title-new p{
+				
+				font-size:25px;
+				text-transform: uppercase;
+				letter-spacing:5px;
+				
+			}
 
 		p{
 			padding: 0;
@@ -99,8 +107,9 @@
 		}
 
 		.knowcrunch-logo{
-			margin-top: 35px;
-			width:200px;
+			margin-top: 5px;
+			margin-right: 25px;
+			width:195px;
 		}
 
 		.signature{
@@ -111,47 +120,63 @@
 		.name-signature{
 			font-size:22px;
 			letter-spacing:3px;
+			margin-top:-5px!important;
+		}
+		.after-name-signature{
+			margin-top: -4px!important;
+			font-size:15px;;
+			letter-spacing:2.7px;
+			margin-left:16px!important;
 		}
 		.signature-table {	
 			position: absolute;
 			top: 68%;
 		}
 		.signature-line{
+			margin-top:-2px;
 			padding: 10px 0;
-			max-width: 350px;
+			max-width: 340px;
 		}
 		.footer {
-			font-size:8px;
-			position: absolute;
-			top: 92%;
-		}
+				font-size:7px;
+				position: absolute;
+				margin-left:41px!important;
+				top:90.5%!important;
 
-		.footer p{
-			letter-spacing:2px;
-			text-transform: uppercase;
-		}
+			}
 
-		.footer span{
-			margin:0 0;
-			color:#fff;
-			font-size: 11px;
-		}
+			.footer p{
+				letter-spacing:2px;
+				text-transform: uppercase;
+
+         }
+
+			.footer span{
+				margin:0 0;
+				color:#fff;
+				font-size: 11px;
+				
+         }
+
 
 		.background-element-left{
-			position: absolute;
-			max-width: 210px;
-			top:15%;
-		}
+				position: absolute;
+				max-width: 210px;
+				top:13%;
+			}
 
-		.background-element-right{
-			position: absolute;
-			max-width: 210px;
-			top:15%;
-			left:82%
-		}
+			.background-element-right{
+				position: absolute;
+				max-width: 220px;
+				/*transform: rotate(180deg);*/
+				top:12%;
+				left:81%
+			}
 
 		.signature-img{
 			max-width:200px;
+			margin-top:8px;
+			margin-right:7px;
 
 		}
         
@@ -230,10 +255,10 @@
 						<td  align="center"> <img class="signature-line" src="{{asset('theme/assets/images/certificates2022b/line-signature.png')}}"></td>
                </tr>
 					<tr>
-						<td  class="signature name-signature" align="center"> TOLIS AIVALIS</td>
+						<td  class="signature" align="center"> <p class="name-signature">TOLIS AIVALIS</p></td></td>
                </tr>
 				<tr>
-						<td class="signature"  align="center"> HEAD OF CURRICULUM, KNOWCRUNCH </td>
+						<td class="signature"  align="center"> <p class="after-name-signature"> HEAD OF CURRICULUM, KNOWCRUNCH</p> </td>
                </tr>
             </tbody>
          </table>

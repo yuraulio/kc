@@ -2,7 +2,7 @@
 <html lang="en" >
    <head>
       <meta charset="UTF-8">
-      <title>{{$certificate['meta_title']}}</title>
+      <title>{!!$certificate['meta_title']!!}</title>
       <style type="text/css">
          @font-face {
          font-family: 'Foco';
@@ -38,14 +38,16 @@
        
          
 		.user-info {
-         	margin-top: 50px;
+         	margin-top: 52px;
          	margin-bottom: 10px;
          }
 
 
 			.info-title{
+				margin-top:6px!important;
+				margin-left:9px!important;
 		    	font-size:42px;
-		    	letter-spacing:5px;
+		    	letter-spacing:6px;
 				text-transform: uppercase;
 			}
 
@@ -53,57 +55,70 @@
 			.award{
    				font-size:25px;
    				line-height:1;
-				padding: 10px 0;
-				
-
+				letter-spacing:0.4px;
+				margin-top:2.5px!important;
+				margin-left:10px!important;
 			}
 
-			p.certi-title{
-				line-height:40px;
+
+			.certi-title-new{
+				margin-top:10px!important;
+				margin-left:17px!important;
+				line-height:0.9;
 			}
-			
-			
+
 			.certi-title-new p{
+				
 				font-size:42px;
-				line-height:40px;
 				text-transform: uppercase;
-				letter-spacing:5.5px;
+				letter-spacing:6.2px;
+				
 			}
 
 			p{
-				padding: 0;
+				padding: 0!important;
 				margin: 0 !important;;
 			}
 
 			.knowcrunch-logo{
-				margin-top: 20px;
-				width:200px;
+				margin-top: 5px;
+				margin-right: 25px;
+				width:195px;
 			}
 
 			.signature{
 				font-size:17px;
 				letter-spacing:2px;
 				line-height:20px;
+				
 			}
 
 			.name-signature{
 				font-size:22px;
 				letter-spacing:3px;
+				margin-top:-5px!important;
 			}
-
+			.after-name-signature{
+				margin-top: -3px!important;
+				font-size:14px;;
+			}
 			.signature-table {
 
 				position: absolute;
 				top: 68%;
 			}
 			.signature-line{
+				margin-top:-2px;
 				padding: 10px 0;
-				max-width: 350px;
+				max-width: 340px;
 			}
 			.footer {
-				font-size:8px;
+				font-size:7px;
 				position: absolute;
 				top: 92%;
+				margin-left:20px!important;
+				margin-top:-13px!important;
+
 			}
 
 			.footer p{
@@ -122,15 +137,15 @@
 			.background-element-left{
 				position: absolute;
 				max-width: 210px;
-				top:15%;
+				top:13%;
 			}
 
 			.background-element-right{
 				position: absolute;
-				max-width: 210px;
+				max-width: 220px;
 				/*transform: rotate(180deg);*/
-				top:15%;
-				left:82%
+				top:12%;
+				left:81%
 			}
 
 			.signature-img{
@@ -151,8 +166,8 @@
             
             <tbody>
                <tr>
-						<td  align="center"> <img class="knowcrunch-logo" src="{{asset('theme/assets/images/certificates2022b/logo-knowcrunch.png')}}"></td>
-					</tr>
+					<td  align="center"> <img class="knowcrunch-logo" src="{{asset('theme/assets/images/certificates2022b/logo-knowcrunch.png')}}"></td>
+				</tr>
               
             </tbody>
          </table>
@@ -161,7 +176,7 @@
 				<tbody>
             	<tr class="">
             	   <td align="center">
-							<p class="info-title"> {{$certificate['firstname']}} {{$certificate['lastname']}} </p>
+						<p class="info-title"> {{$certificate['firstname']}} {{$certificate['lastname']}} </p>
             	   </td>
             	</tr>
 
@@ -177,11 +192,11 @@
 
 					<tr>
             	   <td class="certi-title-new" align="center">
-							<p class="info-title certi-title">
+						<p class="certi-title">
                
-								{!! $certificate['certification_title'] !!}
+							{!! $certificate['certification_title'] !!}
 
-			  				</p>
+			  			</p>
             	   </td>
             	</tr>
 					
@@ -197,10 +212,10 @@
 						<td  align="center"> <img class="signature-line" src="{{asset('theme/assets/images/certificates2022b/line-signature.png')}}"></td>
                </tr>
 				<tr>
-					<td  class="signature name-signature" align="center">TOLIS AIVALIS</td>
+					<td  class="signature" align="center"><p class="name-signature">TOLIS AIVALIS</p></td>
                </tr>
 				<tr>
-					<td class="signature"  align="center"> HEAD OF CURRICULUM, KNOWCRUNCH </td>
+					<td class="signature"  align="center"><p class="after-name-signature"> HEAD OF CURRICULUM, KNOWCRUNCH</p> </td>
                </tr>
             </tbody>
          </table>
