@@ -51,14 +51,14 @@
          .info-title p{
 			font-size:25px!important;
 			line-height:15px;
-			/*letter-spacing:5px;*/
+			letter-spacing:0.5px;
 			/*text-transform: uppercase;*/
 		}
 
 
         .award p{
 
-        line-height:1;
+        line-height:0.8;
         margin: 0;
         display:inline;
         float:none;
@@ -76,7 +76,9 @@
 			font-size:27px;
 			line-height:35px;
 			text-transform: uppercase;
-			letter-spacing:4px;
+			letter-spacing:3.8px;
+			margin-top: -3.3px!important;
+			margin-left: 20px!important;
 		}
 
 			p{
@@ -86,14 +88,16 @@
 
 			.knowcrunch-logo{
 				width:200px;            
-                margin-left:80px;
+                margin-left:111px;
+				margin-top:18px
 			}
 
+				
             .deree-logo{
                 max-width: 70px;
                 position:absolute;
-                top:75px;
-                left:670px;
+                top:90px;
+                left:680px;
             }
 
 			.signature{
@@ -105,25 +109,53 @@
 			.name-signature{
 				font-size:16px;
 				letter-spacing:3px;
+				margin-top:10px!important;
+				margin-right:10px!important;
 			}
 
-			.signature-table {
+			.name-signature-deree{
+				font-size:16px;
+				letter-spacing:3px;
+				margin-top:10px!important;
+				margin-left:25px!important;
+			}
 
-				position: absolute;
-				top: 63%;
+			.after-name-signature{
+				font-size:12px!important;
+				letter-spacing:2px!important;
+				margin-top:-5.3px!important;
+				margin-right:18px!important;
+				line-height:0!important;
+			}
+
+			.after-name-signature-deree{
+				font-size:12px!important;
+				letter-spacing:2px!important;
+				margin-left:18px!important;
+				line-height:0.9!important;
 			}
 			.signature-line{
-				padding: 10px 0;
-				max-width: 300px;
+				max-width: 280px;
+				margin-right:25px;
+				margin-top:0px;
+
+			}
+
+			.signature-line-deree{
+				max-width: 280px;
+				margin-top:0px;
 			}
 			.footer {
-				font-size:8px;
+				font-size:7px;
 				position: absolute;
-				top: 88%;
+				top: 92.3%;
+				margin-left:40px!important;
+				margin-top:-13px!important;
+
 			}
 
 			.footer p{
-				letter-spacing:2px;
+				letter-spacing:2.2px;
 				text-transform: uppercase;
 
          }
@@ -135,27 +167,29 @@
 				
          }
 
-			.background-element-left{
-				position: absolute;
-				max-width: 210px;
-				top:15%;
-			}
+		 .background-element-left{
+			position: absolute;
+			max-width: 210px;
+			top:13%;
+		}
 
-			.background-element-right{
-				position: absolute;
-				max-width: 210px;
-				/*transform: rotate(180deg);*/
-				top:15%;
-				left:82%
-			}
+		.background-element-right{
+			position: absolute;
+			max-width: 220px;
+			top:13%;
+			left:80.5%
+		}
+
 
 			.signature-img{
 			   max-width:200px;
+			   margin-right:26px;
 
 			}
 
             .signature-img-deree{
 			   max-width:150px;
+			   margin-left:25px;
 
 			}
 
@@ -174,11 +208,17 @@
 		}
 
         .user-name{
-			font-size:42px;
-			letter-spacing:5px;
+			margin-top:-12px!important;
+			margin-left:10px!important;
+		    font-size:42px;
+		    letter-spacing:5px;
 			text-transform: uppercase;
 		}
+		.signature-table {
 
+			position: absolute;
+			top: 68%;
+		}
         
       </style>
    </head>
@@ -204,7 +244,7 @@
 				<tbody>
             	<tr class="">
             	   <td align="center">
-						<p class="user-name"> {{$certificate['firstname']}} {{$certificate['lastname']}} </p>
+						<p class="user-name">{{$certificate['firstname']}} {{$certificate['lastname']}} </p>
             	   </td>
             	</tr>
 
@@ -243,21 +283,21 @@
 
          <table class="signature-table" width="100%">
             <tbody>
-				<tr >
+			<tr >
 					<td class="knowcrunch-signature" align="center"><img class="signature-img" src="{{asset('theme/assets/images/certificates2022b/signature-aivalis.png')}}"></td>
                     <td  class="deree-signature" align="center"><img class="signature-img-deree" src="{{asset('theme/assets/images/certificates2022b/signature-krepapa.png')}}"></td>
                </tr>
                <tr >
 					<td class="knowcrunch-signature" align="center"> <img class="signature-line" src="{{asset('theme/assets/images/certificates2022b/line-signature.png')}}"></td>
-                    <td class="deree-signature" align="center"> <img class="signature-line" src="{{asset('theme/assets/images/certificates2022b/line-signature.png')}}"></td>
+                    <td class="deree-signature" align="center"> <img class="signature-line-deree" src="{{asset('theme/assets/images/certificates2022b/line-signature.png')}}"></td>
                </tr>
 				<tr>
 					<td class="knowcrunch-signature signature name-signature" align="center">TOLIS AIVALIS</td>
-                    <td class="signature name-signature deree-signature" align="center">ARETI KREPAPA, PHD</td>
+                    <td class="signature name-signature deree-signature name-signature-deree" align="center">ARETI KREPAPA, PHD</td>
                </tr>
 				<tr>
-					<td class="knowcrunch-signature signature" align="center"> <p style="line-height:0;"> HEAD OF CURRICULUM, KNOWCRUNCH</p> </td>
-                    <td class="signature deree-signature"  align="center" style="line-height:13px"> DEAN OF DEREE SCHOOL OF GRADUATE </br>AND PROFESSIONAL EDUCATION </td>
+					<td class="knowcrunch-signature signature after-name-signature" align="center"> <p > HEAD OF CURRICULUM, KNOWCRUNCH</p> </td>
+                    <td class="signature deree-signature after-name-signature-deree"  align="center" > DEAN OF DEREE SCHOOL OF GRADUATE </br>AND PROFESSIONAL EDUCATION </td>
                </tr>
             </tbody>
          </table>

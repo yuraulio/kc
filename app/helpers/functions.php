@@ -87,7 +87,7 @@ if (!function_exists('get_status_by_slug')){
             return $slug->slugable->published;
         }*/
 
-        if($slug && get_class($slug->slugable) == 'App\\Model\\Event'){
+        if($slug && $slug->slugable && get_class($slug->slugable) == 'App\\Model\\Event'){
             return $slug->slugable->published;
         }
 
