@@ -27,6 +27,12 @@
                             </div>
                             @can('create', App\Model\User::class)
                                 <div class="col-4 text-right">
+                                <form hidden id="submit-file" action="{{ route('faqs.file.import') }}" method="post" enctype="multipart/form-data">
+                                    @csrf
+                                    <input id="file-input" name="file" type="file" class="btn btn-sm btn-primary"  accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" value="{{ __('Import Testimonials From file') }}" style="display: none;">
+                                </form>
+
+                                <a id="import-from-file" href="javascript:void(0)" class="btn btn-sm btn-primary">{{ __('Import Faqs From file') }}</a>
                                     <a href="{{ route('faqs.create') }}" class="btn btn-sm btn-primary">{{ __('Add Faq') }}</a>
                                 </div>
                             @endcan
@@ -119,4 +125,20 @@
                 });
         </script>
 
+
+
+<script>
+    $(document).ready(() => {
+        $('#import-from-file').on('click', function (event) {
+            event.preventDefault();
+            $("#file-input").trigger('click');
+        });
+
+    });
+
+    $("#file-input").change(function(){
+        $("#submit-file").submit();
+    })
+
+</script>
 @endpush

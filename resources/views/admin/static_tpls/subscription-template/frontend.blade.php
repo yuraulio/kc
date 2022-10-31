@@ -349,6 +349,17 @@
    
    
    }
+
+   $(document).keyup(function(event){
+
+      if($('.login-popup-wrapper-subscription').hasClass('active')){
+
+         if(event.keyCode == 13){
+           loginAjaxSubscription()
+         }
+      }
+   })
+
    @endif
    
 </script>

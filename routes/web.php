@@ -407,6 +407,10 @@ Route::group(['middleware' => 'auth.aboveauthor', 'prefix' => 'admin'], function
     //import testimonial from file
     Route::post('testimonials-import-from-file', 'TestimonialController@importFromFile')->name('testimonials.file.import');
 
+
+    //import faqs from file
+    Route::post('faqs-import-from-file', 'FaqController@importFromFile')->name('faqs.file.import');
+
 });
 
 /*Route::group(['prefix' => 'cart','middleware' => ['web']], function () {

@@ -16,7 +16,7 @@ class InsertTestimonial extends Command
      *
      * @var string
      */
-    protected $signature = 'insert:testimonials';
+    protected $signature = 'insert:testimonials {file_name}';
 
     /**
      * The console command description.
@@ -55,7 +55,8 @@ class InsertTestimonial extends Command
             $images[$name] = $file;
         }
         
-        $fileName = public_path() . '/import/Testimonials.xlsx';
+        //$fileName = public_path() . '/import/Testimonials.xlsx';
+        $fileName = public_path() . '/import/' . $this->argument('file_name');
 
         if(!file_exists($fileName)){
             return;

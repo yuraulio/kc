@@ -473,12 +473,24 @@ $social_media = get_social_media();
 
 }
 
+
+
 $(".close-alert").on("click", function () {
 
 $('.alert-outer').hide()
 
 });
 
+
+$(document).keyup(function(event){
+
+    if($('.login-popup-wrapper').hasClass('active')){
+    
+       if(event.keyCode == 13){
+        loginAjaxNew()
+       }
+    }
+})
       </script>
       <script>
 

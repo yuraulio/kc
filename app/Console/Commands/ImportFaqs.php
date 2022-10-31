@@ -16,7 +16,7 @@ class ImportFaqs extends Command
      *
      * @var string
      */
-    protected $signature = 'insert:faqs';
+    protected $signature = 'insert:faqs {file_name}';
 
     /**
      * The console command description.
@@ -42,14 +42,15 @@ class ImportFaqs extends Command
      */
     public function handle()
     {
-        $fileName = public_path() . '/import/FAQs.xlsx';
+        //$fileName = public_path() . '/import/FAQs.xlsx';
+        $fileName = public_path() . '/import/' . $this->argument('file_name');
       
         if(!file_exists($fileName)){
             return;
         }
 
 
-        /*$faqs = Faq::all();
+        $faqs = Faq::all();
 
         foreach($faqs as $faq){
             
@@ -59,7 +60,7 @@ class ImportFaqs extends Command
 
             $faq->delete();
 
-        }*/
+        }
         //return;
 
         $spreadsheet = new Spreadsheet();
@@ -119,7 +120,7 @@ class ImportFaqs extends Command
             $file1 = $file->getSheet($key);
             $file1 = $file1->toArray();
             
-            /*foreach($file1 as $key1 =>  $line){
+            foreach($file1 as $key1 =>  $line){
 
                 if($key1 == 0 ){
                     continue;
@@ -142,10 +143,10 @@ class ImportFaqs extends Command
                 $faq->event()->attach($events,['priority' => $key1]);
 
 
-            }*/
+            }
 
             
-            foreach($file1 as $key1 =>  $line){
+            /*foreach($file1 as $key1 =>  $line){
                 if($key == 1){
                     echo $key1;
                 }
@@ -188,7 +189,7 @@ class ImportFaqs extends Command
                 $faq->event()->attach($events,['priority' => $key1]);
 
 
-            }
+            }*/
 
 
 

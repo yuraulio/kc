@@ -91,7 +91,7 @@
 			<label for="remember-me"><input id="remember-me" type="checkbox">Remember me</label>
 			{{--<a id="forgot-pass" href="javascript:void(0)">Forgot password?</a>--}}
 		</div>
-		<input type="button" onclick="loginAjaxNew()" value="LOGIN">
+		<input type="button" onkeypress="keyPress(event)" onclick="loginAjaxNew()" value="LOGIN">
 	</form>
 </div><!-- ./login-popup -->
 
@@ -249,6 +249,18 @@ var routesObj = {
 
 
 }
+
+$(document).keyup(function(event){
+
+    if($('.login-popup-wrapper').hasClass('active')){
+        
+        if(event.keyCode == 13){
+            loginAjaxNew()
+        }
+    }
+    
+    
+})
 		</script>
 
 

@@ -95,7 +95,7 @@
                                 <label for="remember-me"><input id="remember-me" type="checkbox">Remember me</label>
                                 <a id="forgot-pass" href="javascript:void(0)">Forgot password?</a>
                             </div>
-                            <input type="button" onclick="loginAjaxNew()" value="LOGIN">
+                            <input id="test-login" type="button" onclick="loginAjaxNew()" value="LOGIN">
                         </form>
                     </div>
 

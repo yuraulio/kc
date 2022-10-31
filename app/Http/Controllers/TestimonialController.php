@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\TestimonialRequest;
 use Artisan;
+use Storage;
 
 class TestimonialController extends Controller
 {
@@ -231,7 +232,16 @@ class TestimonialController extends Controller
     }
 
     public function importFromFile(Request $request){
-        dd($request->all());
+
+        $file = $request->file('file');
+        $name = $file->hashName();
+        //dd($name);
+        //Storage::path('import/' . $name);
+        Storage::disk('import')->put('', $request->file('file'), 'public');
+
+        Artisan::call('insert:testimonials',['file_name' => $name]);
+
+        return back();
     }
 
 }

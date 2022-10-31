@@ -10,6 +10,8 @@ use App\Model\Category;
 use App\Model\CategoriesFaqs;
 use App\Http\Requests\FaqRequest;
 use App\Http\Requests\Categories_faqsRequest;
+use Artisan;
+use Storage;
 
 class FaqController extends Controller
 {
@@ -313,4 +315,20 @@ class FaqController extends Controller
         }
 
     }
+
+
+    public function importFromFile(Request $request){
+
+        $file = $request->file('file');
+        $name = $file->hashName();
+        //dd($name);
+        //Storage::path('import/' . $name);
+        Storage::disk('import')->put('', $request->file('file'), 'public');
+
+        Artisan::call('insert:faqs',['file_name' => $name]);
+
+        return back();
+    }
+
+
 }

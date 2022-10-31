@@ -47,6 +47,10 @@ return [
             'driver' => 'local',
             'root' => public_path('/cert'),
         ],
+        'import' => [
+            'driver' => 'local',
+            'root' => public_path('/import'),
+        ],
         'local' => [
             'driver' => 'local',
             'root' => public_path('storage/app/public'),

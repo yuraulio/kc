@@ -197,7 +197,12 @@ class WebhookController extends BaseWebhookController
 			'paid' => 1
 		], false);
 
-
+		$enrollFromEvents = $user->events_for_user_list()->wherePivot('comment','enroll from '.$eventId)->get();
+        foreach($enrollFromEvents as $enrollFromEvent){
+            $enrollFromEvent->pivot->paid = 1;
+            $enrollFromEvent->pivot->save();
+        }
+		
 		if ((int)$count >= (int)$totalinst) {
 			$subscription->noProrate()->cancel();
 		}
@@ -752,6 +757,12 @@ class WebhookController extends BaseWebhookController
 					$user->events_for_user_list()->wherePivot('event_id',$eventId)->updateExistingPivot($eventId,[
 						'paid' => 0
 					], false);
+
+					$enrollFromEvents = $user->events_for_user_list()->wherePivot('comment','enroll from '.$eventId)->get();
+        			foreach($enrollFromEvents as $enrollFromEvent){
+        			    $enrollFromEvent->pivot->paid = 0;
+        			    $enrollFromEvent->pivot->save();
+        			}
 
 				}
 

@@ -216,138 +216,26 @@ $(document).ready(function(){
 
 }
 
+
+
+$(document).keyup(function(event){
+    if($('.login-popup-wrapper').hasClass('active')){
+        
+        if(event.keyCode == 13){
+            loginAjaxNew()
+        }
+    }
+    
+    
+})
+
+
 $(".close-alert").on("click", function () {
 
 $('.alert-outer').hide()
 
 });
-/*
-function loginAjax(){
-    /*   Remove this comments when moving to server
-    $.post( "/login", function( data ) {
-            if(data == 1){
-                window.location.replace("/home");
-            } else {
-                 shakeModal();
-            }
-        });
 
-    //data: $(".newsletter_form").serialize(),
-    var email = $('input#uemail').val();
-    var password = $('input#upassword').val();
-    var remember = document.getElementById("remember").checked;
-
-    if (email.length > 4 && password.length > 4) {
-    $.ajax({ url: routesObj.baseUrl+"studentlogin", type: "post",
-            data: {email:email, password:password, remember:remember},
-            success: function(data) {
-            //    console.log(data);
-
-                switch (data.status) {
-                    case 0:
-                        if (data.message.length > 0) {
-
-                            notify(data.message, 'error', 7000);
-
-                        } else {
-                           // console.log(data.errors);
-                            /*$.each(data.errors, function (key, row) {
-
-                            });
-
-                        }
-                        shakeModal();
-                        break;
-                    case 1:
-                        $('.login-form').find('input').val('');
-
-                        $('#loginModal').modal('toggle');
-                        $('#fireloginlogout').html('<a class="dropdown-toggle" href="javascript:void(0)"><i class="fa fa-user" aria-hidden="true"></i></a><ul class="dropdown-menu pull-right"><li><a href="/myaccount">My Account <i class="fa fa-id-card" aria-hidden="true"></i></a></li><li><a href="{{ url('logmeout') }}">Sign out <i class="fa fa-sign-out" aria-hidden="true"></i></a></li></ul>');
-                        $('#fireloginlogout').addClass('active');
-
-
-                        $('#fireloginlogout').hover(function() {
-
-                          $(this).find('.dropdown-menu').stop(true, true).delay(200).fadeIn(500);
-
-                        }, function() {
-
-                          $(this).find('.dropdown-menu').stop(true, true).delay(400).fadeOut(500);
-
-                        });
-
-                        notify(data.message, 'success', 7000);
-
-                        setTimeout( function(){
-                            window.location.replace(data.redirect);
-                        }, 1000 );
-
-
-                        break;
-
-                    default:
-                        shakeModal();
-                        break;
-                }
-            },
-            error: function(data) {
-                shakeModal();
-            }
-        });
-
-        }
-        else {
-            shakeModal();
-
-        }
-
-
-/*   Simulate error message from the server   */
-     //shakeModal();
-//}
-
-/*function shakeModal(){
-    $('#loginModal .modal-dialog').addClass('shake');
-             $('input[type="password"]').val('');
-             setTimeout( function(){
-                $('#loginModal .modal-dialog').removeClass('shake');
-    }, 700 );
-}
-
-/*});*/
-
-
-//});
-
-
-/*window.onbeforeunload = function (e) {
-  var e = window.event;
-
-  //IE & Firefox
-  if (e) {
-    $.ajax({ url: '/abanoded/user', type: "get",
-            success: function(data) {
-                window.close();
-            }
-        });
-  }
-
-};*/
-
-
-/*window.addEventListener('beforeunload', function (e) {
-
-    console.log(e.target);
-    if(window.opener.closed){
-        $.ajax({ url: '/abanoded/user', type: "get",
-            success: function(data) {
-                window.close();
-            }
-        });
-    }
-
-
-});*/
 </script>
 
 
