@@ -404,6 +404,9 @@ Route::group(['middleware' => 'auth.aboveauthor', 'prefix' => 'admin'], function
 
     Route::post('/absence-update','Dashboard\AbsenceController@update')->name('update-absences');
 
+    //import testimonial from file
+    Route::post('testimonials-import-from-file', 'TestimonialController@importFromFile')->name('testimonials.file.import');
+
 });
 
 /*Route::group(['prefix' => 'cart','middleware' => ['web']], function () {

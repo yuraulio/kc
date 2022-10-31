@@ -26,7 +26,7 @@ class TransactionExport implements FromArray,WithHeadings
         $this->toDate = date('Y-m-d', strtotime($this->toDate . ' +1 day'));
 
         if($request->event){
-            $this->event = [$request->event];
+            $this->event = is_array($request->event) ? $request->event : [$request->event];
         }else{
             $this->event = Event::all()->pluck('id')->toArray();
         }

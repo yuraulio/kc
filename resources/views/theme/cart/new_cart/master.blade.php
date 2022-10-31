@@ -222,9 +222,9 @@ var routesObj = {
                         }
                         break;
                     case 1:
-                        setTimeout( function(){
+                        //setTimeout( function(){
                             window.location.reload();;
-                        }, 1000 );
+                        //}, 1000 );
 
                         break;
 

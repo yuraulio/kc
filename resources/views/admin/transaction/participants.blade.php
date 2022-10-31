@@ -256,9 +256,9 @@ let minDate = null, maxDate = null;
 $.fn.dataTable.ext.search.push(
 
     function( settings, data, dataIndex ) {
-        var min = new Date(minDate);
-        var max = new Date(maxDate);
-        var date = new Date( data[6] );
+        var min = new Date(minDate).setHours(0, 0, 0, 0);
+        var max = new Date(maxDate).setHours(0, 0, 0, 0);
+        var date = new Date( data[6] ).setHours(0, 0, 0, 0);
         if (
             ( min === null && max === null ) ||
             ( min === null && date <= max ) ||
@@ -313,8 +313,8 @@ $(document).ready(function() {
 
     } );
 
-    let eventIDS = table.column(9).data().unique()
-    let events = table.column(1).data().unique();
+    let eventIDS = table.column(9,{filter: 'applied'}).data().unique()
+    let events = table.column(1,{filter: 'applied'}).data().unique();
 
     $.each(events, function(key, value) {
         eventsArray[removeSpecial(value)] = eventIDS[key]
@@ -418,13 +418,20 @@ $(document).ready(function() {
             $('#col8_filter').append('<option value="'+value+'">'+value+'</option>')
         })
 
-        $('#col11_filter').empty();
+        /*$('#col11_filter').empty();
         $('#col11_filter').append('<option value>-- All --</option>')
         $.each(delivery, function(key, value){
             $('#col11_filter').append('<option value="'+value+'">'+value+'</option>')
-        })
+        })*/
 
+        let eventIDS = table.column(9,{filter: 'applied'}).data().unique()
+        let events = table.column(1,{filter: 'applied'}).data().unique();
+        eventsArray ={};
+         $.each(events, function(key, value) {
+            eventsArray[removeSpecial(value)] = eventIDS[key]
+        })
         stats_non_elearning()
+
     });
 
     $('input[name="daterange"]').on('cancel.daterangepicker', function(ev, picker) {
@@ -436,6 +443,13 @@ $(document).ready(function() {
 
         table.draw()
         stats_non_elearning();
+
+        let eventIDS = table.column(9,{filter: 'applied'}).data().unique()
+        let events = table.column(1,{filter: 'applied'}).data().unique();
+        eventsArray ={};
+         $.each(events, function(key, value) {
+            eventsArray[removeSpecial(value)] = eventIDS[key]
+        })
 
     });
 
@@ -665,8 +679,14 @@ $(document).ready(function() {
                 $('#col4_filter').append('<option value="'+value+'">'+value+'</option>')
             })
         }
+        
+        let eventIDS = table.column(9,{filter: 'applied'}).data().unique()
+        let events = table.column(1,{filter: 'applied'}).data().unique();
 
-
+        eventsArray ={};
+         $.each(events, function(key, value) {
+            eventsArray[removeSpecial(value)] = eventIDS[key]
+        })
 
 
     }
@@ -949,8 +969,12 @@ $(document).ready(function() {
 
             let min = minDate;
             let max = maxDate;
-            let event = eventsArray[removeSpecial($("#col1_filter").val())];
+            //let event = eventsArray[removeSpecial($("#col1_filter").val())];
 
+            let event = [];
+            $.each(eventsArray, function(key, value) {
+                event.push(value);
+            })
 
             $.ajax({
                 headers: {

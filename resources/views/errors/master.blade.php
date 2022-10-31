@@ -445,9 +445,9 @@ $social_media = get_social_media();
                         break;
                     case 1:
 
-                        setTimeout( function(){
+                        //setTimeout( function(){
                             window.location.replace(data.redirect);
-                        }, 1000 );
+                        //}, 1000 );
 
                         break;
 

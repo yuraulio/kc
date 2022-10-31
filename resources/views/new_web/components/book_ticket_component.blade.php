@@ -130,7 +130,7 @@
                                                         @if($ticket['type'] != 'Alumni') 
                                                         <li><a href="{{ route('cart.add-item', [ $event->id, $ticket['id'], 1 ]) }}" class="btn btn-add btn--lg btn--primary">UNEMPLOYED</a></li>
                                                         <li><a href="{{ route('cart.add-item', [ $event->id, $ticket['id'], 2 ]) }}" class="btn btn-add btn--lg btn--primary">STUDENT</a></li>
-                                                        <li><a href="{{ route('cart.add-item', [ $event->id, $ticket['id'], 5 ]) }}" class="btn btn-add btn--lg btn--primary">GROUP</a></li>
+                                                        <li><a href="{{ route('cart.add-item', [ $event->id, $ticket['id'], 5 ]) }}"  class="btn btn-add btn--lg btn--primary @if($ticket['pivot']['quantity'] < 2) group-button-disable @endif">GROUP</a></li>
                                                         @endif
                                                     </ul>
                                                 </div>

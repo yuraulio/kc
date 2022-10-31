@@ -8,6 +8,7 @@ use App\Model\Instructor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\TestimonialRequest;
+use Artisan;
 
 class TestimonialController extends Controller
 {
@@ -228,4 +229,9 @@ class TestimonialController extends Controller
 
         return redirect()->route('testimonials.index')->withStatus(__('Testimonial successfully deleted.'));
     }
+
+    public function importFromFile(Request $request){
+        dd($request->all());
+    }
+
 }

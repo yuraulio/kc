@@ -7,7 +7,7 @@ $(document).ready(function() {
     var cloneCount = 2;
     $(".add-participant").click(function() {
       
-        cloneCount = cloneCount + 1;
+        /*cloneCount = cloneCount + 1;
         var clone = $('#clone-box')
             .clone()
             .attr('id', 'clone-box-' + cloneCount)
@@ -16,7 +16,7 @@ $(document).ready(function() {
         clone.find('h2').text(`Participant ${cloneCount}`);
         clone.find('.custom-checkbox input[type="checkbox"]').attr('id', 'customCheck-' + cloneCount);
         clone.find('.custom-control-label').attr('for', 'customCheck-' + cloneCount);
-        $('.participant-number').css("display", "block");
+        $('.participant-number').css("display", "block");*/
     });
 
     $('form').on('click', '.remove-participant', function() {
