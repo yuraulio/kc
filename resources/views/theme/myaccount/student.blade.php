@@ -1309,6 +1309,9 @@
                                        @if (isset($event['videos_seen']))
                                        <div  class="duration"><img class="replace-with-svg" width="20" src="{{cdn('/theme/assets/images/icons/Recap-Events.svg')}}" alt=""> {{str_replace('/','of',$event['videos_seen'])}} </div>
                                        @endif
+                                       @if(isset($event['expiration']) && $event['expiration'])
+                                       <div class="expire-date exp-date"><img src="{{cdn('/theme/assets/images/icons/Days-Week.svg')}}" alt="">Expiration date: {{$event['expiration']}}</div>
+                                       @endif
                                        <div class="right">
                                           <?php $expire = false; ?>
                                           @foreach($mySubscriptions as $key => $sub)
@@ -1459,6 +1462,9 @@
                                        @endif
                                        @if (isset($event['videos_seen']))
                                        <div  class="duration"><img class="replace-with-svg" width="20" src="{{cdn('/theme/assets/images/icons/Recap-Events.svg')}}" alt=""> {{str_replace('/','of',$event['videos_seen'])}} </div>
+                                       @endif
+                                       @if(isset($event['expiration']) && $event['expiration'])
+                                       <div class="expire-date exp-date"><img src="{{cdn('/theme/assets/images/icons/Days-Week.svg')}}" alt="">Expiration date: {{$event['expiration']}}</div>
                                        @endif
                                        <div class="right">
                                           <?php $expire = false; ?>
