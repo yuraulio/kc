@@ -160,9 +160,11 @@ class CertificateController extends Controller
 
     $data = $this->loadCertificateData($certificate);
     $certificate = $data['certificate'];
-
-    $fn = $data['certificate']->lastname . '-' . $data['certificate']->firstname . '-' . strip_tags($data['certificate']['certification_title']) . '-' . $data['certificate']['kc_id'] . '.pdf';
-    $fn = strip_tags($fn);
+    trim(preg_replace('/\s\s+/', ' ', $data['certificate']['certification_title']));
+    $fn = $data['certificate']->lastname . '-' . $data['certificate']->firstname . '-' . trim(preg_replace('/\s\s+/', '', strip_tags($data['certificate']['certification_title']))) . '-' . $data['certificate']['kc_id'] . '.pdf';
+    //$fn = strip_tags($fn);
+    $fn = htmlspecialchars_decode($fn,ENT_QUOTES);
+    
     return $data['pdf']->stream($fn);
     //return view('admin.certificates.'.$certificate->template,compact('certificate'));
 
@@ -262,7 +264,7 @@ class CertificateController extends Controller
 
         ]);
 
-        $name = $user->lastname . '_' . $user->firstname . '_' .  strip_tags($cert->certificate_title) . '_' .$user->kc_id;
+        $name = $user->lastname . '_' . $user->firstname . '_' .  trim(preg_replace('/\s\s+/', '', strip_tags($cert->certificate_title))) . '_' .$user->kc_id;
         $fn = $name . '.pdf';
         $fn = strip_tags($fn);
         $pdf->getDomPDF()->setHttpContext($contxt);
