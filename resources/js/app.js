@@ -79,6 +79,7 @@ Vue.component('menu-left-sidebar', require('./components/menu/layouts/LeftSideba
 
 Vue.component('draggable-menu', require('./components/menu/MenuBuilder.vue').default);
 Vue.component('nest-menu', require('./components/menu/NestMenu.vue').default);
+Vue.component('ticker', require('./components/menu/Ticker.vue').default);
 Vue.component('admins', require('./components/admins.vue').default);
 
 Vue.component('settings', require('./components/settings.vue').default);

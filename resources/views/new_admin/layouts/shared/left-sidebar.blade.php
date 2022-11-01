@@ -125,6 +125,9 @@
                             <li class="{{ \Request::is('menus/*') ? 'menuitem-active' : ''}}">
                                 <a href="{{route('admin-menu')}}">Menus management</a>
                             </li>
+                            <li>
+                                <a href="{{route('admin-ticker')}}">Ticker management</a>
+                            </li>
                         </ul>
                     </div>
                 </li>
