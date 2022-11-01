@@ -121,6 +121,7 @@
                                     <th scope="col">{{ __('Lastname') }}</th>
                                     <th scope="col">{{ __('Mobile') }}</th>
                                     <th scope="col">{{ __('Email') }}</th>
+                                    <th scope="col">{{ __('KC Id') }}</th>
                                     <th scope="col">{{ __('Student Id') }}</th>
                                     <th scope="col">{{ __('Role') }}</th>
                                     <th scope="col">{{ __('Status') }}</th>
@@ -151,6 +152,7 @@
                                         <td>{{ $user['lastname'] }}</td>
                                         <td>{{ $user['mobile'] }}</td>
                                         <td><a href="mailto:{{ $user['email'] }}">{{ $user['email'] }}</a></td>
+                                        <td>{{ $user['kc_id'] }}</td>
                                         <td>{{ $user['id'] }}</td>
 
                                         <td>
@@ -172,7 +174,7 @@
                                         @endif
                                         </td>
 
-                                        <td>{{ $user['created_at'] }}</td>
+                                        <td>{{ date('Y-m-d', strtotime($user['created_at'])) }}</td>
 
                                         <td class="d-none">
                                             @foreach($user['events_for_user_list'] as $event){{ $event['title'] }}--@if(isset($data['transactions'][$user['id']]))@if(isset($data['transactions'][$user['id']][$event['id']])){{$data['transactions'][$user['id']][$event['id']][0]['type']}}--{{$data['transactions'][$user['id']][$event['id']][0]['amount']}}--{{$data['transactions'][$user['id']][$event['id']][0]['coupon_code']}}--{{$data['transactions'][$user['id']][$event['id']][0]['date']}}||@else||@endif

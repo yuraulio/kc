@@ -237,11 +237,27 @@ class TestimonialController extends Controller
         $name = $file->hashName();
         //dd($name);
         //Storage::path('import/' . $name);
-        Storage::disk('import')->put('', $request->file('file'), 'public');
 
-        Artisan::call('insert:testimonials',['file_name' => $name]);
+        try{
 
-        return back();
+            Storage::disk('import')->put('', $request->file('file'), 'public');
+            $response = Artisan::call('insert:testimonials',['file_name' => $name]);
+            
+            if($response){
+                return redirect()->route('testimonials.index')->withStatus(__('File is imported'));
+
+            }else{
+                return redirect()->route('testimonials.index')->withStatus(__('File is not imported'));
+
+            }
+
+
+        }catch(\Exception $e){
+            return redirect()->route('testimonials.index')->withStatus('File is not imported');
+        }
+       
+
+   
     }
 
 }

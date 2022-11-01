@@ -319,13 +319,30 @@ class FaqController extends Controller
 
     public function importFromFile(Request $request){
 
-        $file = $request->file('file');
-        $name = $file->hashName();
-        //dd($name);
-        //Storage::path('import/' . $name);
-        Storage::disk('import')->put('', $request->file('file'), 'public');
+        try{
 
-        Artisan::call('insert:faqs',['file_name' => $name]);
+            $file = $request->file('file');
+            $name = $file->hashName();
+            //dd($name);
+            //Storage::path('import/' . $name);
+            Storage::disk('import')->put('', $request->file('file'), 'public');
+    
+            $response = Artisan::call('insert:faqs',['file_name' => $name]);
+
+            if($response){
+                return redirect()->route('faqs.index')->withStatus(__('File is imported'));
+
+            }else{
+                return redirect()->route('faqs.index')->withStatus(__('File is not imported'));
+
+            }
+
+
+        }catch(\Exception $e){
+            return redirect()->route('faqs.index')->withStatus(__('File is not imported'));
+        }
+
+        
 
         return back();
     }
