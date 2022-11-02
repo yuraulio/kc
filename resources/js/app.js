@@ -46,6 +46,7 @@ Vue.use(VueNestable)
 require('datatables.net-bs4');
 require('nestable2');
 
+Vue.component('ticker', require('./components/ticker.vue').default);
 Vue.component('dashboard-widget', require('./components/dashboard-widget.vue').default);
 Vue.component('dashboard-table', require('./components/dashboard-table.vue').default);
 Vue.component('templates', require('./components/templates.vue').default);

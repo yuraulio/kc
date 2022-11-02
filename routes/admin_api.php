@@ -35,6 +35,13 @@ Route::domain('admin.' . env('APP_DOMAIN'))->group(function () {
             'index', 'store', 'update', 'show', 'destroy'
         ]);
 
+        // tickers
+        Route::post('tickers/deleteMultiple', [TickerController::class, 'deleteMultiple']);
+        Route::post('tickers/widgets', [TickerController::class, 'widgets']);
+        Route::resource('tickers', Admin_api\TickerController::class)->only([
+            'index', 'store', 'update', 'show', 'destroy'
+        ]);
+
         // pages
         Route::post('pages/deleteMultiple', [PagesController::class, 'deleteMultiple']);
         Route::post('pages/widgets', [PagesController::class, 'widgets']);
