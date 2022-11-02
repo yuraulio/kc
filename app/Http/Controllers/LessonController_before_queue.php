@@ -19,7 +19,6 @@ use App\Jobs\UpdateStatisticJson;
 use App\Exports\LessonsNoVimeoLinkExport;
 use Excel;
 use App\Jobs\FixOrder;
-use App\Jobs\LessonUpdate;
 
 class LessonController extends Controller
 {
@@ -124,7 +123,61 @@ class LessonController extends Controller
 
         if($request->topic_id != null){
             
-            dispatch(new LessonUpdate($request->all(),$lesson));
+            foreach($request->topic_id as $topic){
+                $topic = Topic::with('category')->find($topic);
+               
+                foreach($topic->category as $cat){
+                    
+                    if($cat->id != $request->category){
+                        continue;
+                    }
+                    //$lesson->topic()->wherePivot('category_id',$request->category)->detach();
+                    //$cat->topic()->attach($topic, ['lesson_id' => $lesson->id]);
+
+                    $allEvents = $cat->events;
+                    foreach($allEvents as $event)
+                    {
+                        $allLessons = $event->allLessons->groupBy('id');
+
+                        $date = '';
+                        $time_starts = '';
+                        $time_ends = '';
+                        $duration = '';
+                        $room = '';
+                        $instructor_id = '';
+                        //$priority = count($allLessons)+1;
+                        $priorityLesson = $event->allLessons()->wherePivot('topic_id',$topic->id)->orderBy('priority')->get();
+                        $priority = isset($priorityLesson->last()['pivot']['priority']) ? $priorityLesson->last()['pivot']['priority'] + 1 :count($priorityLesson)+1 ;
+                        if(isset($allLessons[$lesson['id']][0])){
+
+                            $date = $allLessons[$lesson['id']][0]['pivot']['date'];
+                            $time_starts = $allLessons[$lesson['id']][0]['pivot']['time_starts'];
+                            $time_ends = $allLessons[$lesson['id']][0]['pivot']['time_ends'];
+                            $duration = $allLessons[$lesson['id']][0]['pivot']['duration'];
+                            $room = $allLessons[$lesson['id']][0]['pivot']['room'];
+                            $instructor_id = $allLessons[$lesson['id']][0]['pivot']['instructor_id'];
+                            
+                        }
+
+                        //if(!in_array($lesson['id'],$allLessons)){
+                        
+                        $event->allLessons()->detach($lesson['id']);
+                        $event->changeOrder($priority);
+                        $event->topic()->attach($topic['id'],['lesson_id' => $lesson['id'],'date'=>$date,'time_starts'=>$time_starts,
+                            'time_ends'=>$time_ends, 'duration' => $duration, 'room' => $room, 'instructor_id' => $instructor_id, 'priority' => $priority]);
+                        //}
+                        $event->fixOrder();
+
+                        $lesson->topic()->wherePivot('category_id',$request->category)->detach();
+                        $cat->changeOrder($priority);
+                        $cat->topic()->attach($topic, ['lesson_id' => $lesson->id,'priority'=>$priority]);
+                        $cat->fixOrder();
+
+
+                    }
+                }
+
+            }
         }
 
         if($request->type_id != null){
@@ -161,7 +214,19 @@ class LessonController extends Controller
         $lesson = $lesson->with('topic', 'category','type')->find($lesson['id']);
         $topics = Topic::with('category')->get();
         $selectedCategory = $request->get('selectedCategory') ?: $request->get('selectedCategory');
-        
+        // //dd($topics);
+        // $new_topics = [];
+
+        // foreach($topics as $topic)
+        // {
+        //     //dd($topic);
+        //     if($topic->category[0]['id'] != $lesson->category[0]['id']){
+        //         array_push($new_topics, $topic);
+        //     }
+        // }
+
+        // $topics = $new_topics;
+        // dd($topics);
 
         $types = Type::all();
  
@@ -351,10 +416,76 @@ class LessonController extends Controller
             $lesson->save();
         }
         if($request->topic_id != null){
-            
+            //$lesson->topic()->detach();
+            foreach($request->topic_id as $topic)
+            {
+                $topic = Topic::with('category')->find($topic);
+               
+                foreach($topic->category as $cat){
+                    
+                    //dd($cat->id . ' => ' .$request->category);
+                    if($cat->id != $request->category){
+                        
+                        continue;
+                    }
+                    //$lesson->topic()->wherePivot('category_id',$request->category)->detach();
+                    //$cat->topic()->attach($topic, ['lesson_id' => $lesson->id]);
+                    $allEvents = $cat->events;
+                    foreach($allEvents as $event)
+                    {
+                        
+                        $allLessons = $event->allLessons->groupBy('id');
+                        
+                        $date = '';
+                        $time_starts = '';
+                        $time_ends = '';
+                        $duration = '';
+                        $room = '';
+                        $instructor_id = '';
+                        //$priority = count($allLessons)+1;
 
-            dispatch(new LessonUpdate($request->all(),$lesson));
+                        if($existLesson = $event->allLessons()->wherePivot('topic_id',$topic->id)->wherePivot('lesson_id',$lesson->id)->first()){
+                            $priority =  $existLesson->pivot->priority;
+                        }else{
+                            $priorityLesson = $event->allLessons()->wherePivot('topic_id',$topic->id)->orderBy('priority')->get();
+                            $priority = isset($priorityLesson->last()['pivot']['priority']) ? $priorityLesson->last()['pivot']['priority'] + 1 :count($priorityLesson)+1 ;
+                        }
 
+                       
+
+                        if(isset($allLessons[$lesson['id']][0])){
+                            
+                            $date = $allLessons[$lesson['id']][0]['pivot']['date'];
+                            $time_starts = $allLessons[$lesson['id']][0]['pivot']['time_starts'];
+                            $time_ends = $allLessons[$lesson['id']][0]['pivot']['time_ends'];
+                            $duration = $allLessons[$lesson['id']][0]['pivot']['duration'];
+                            $room = $allLessons[$lesson['id']][0]['pivot']['room'];
+                            $instructor_id = $allLessons[$lesson['id']][0]['pivot']['instructor_id'];
+                            //$priority = $allLessons[$lesson['id']][0]['pivot']['priority'];
+                        }
+
+                        //if(!in_array($lesson['id'],$allLessons)){
+                        
+                        
+                        //$lesson->topic()->attach($topic->id);
+                
+                        $event->allLessons()->detach($lesson['id']);
+                        $event->changeOrder($priority);
+
+                        $event->topic()->attach($topic['id'],['lesson_id' => $lesson['id'],'date'=>$date,'time_starts'=>$time_starts,
+                            'time_ends'=>$time_ends, 'duration' => $duration, 'room' => $room, 'instructor_id' => $instructor_id, 'priority' => $priority]);
+                        $event->fixOrder();
+                        //}
+                        
+                        $lesson->topic()->wherePivot('category_id',$request->category)->detach();
+                        $cat->changeOrder($priority);
+                        $cat->topic()->attach($topic, ['lesson_id' => $lesson->id,'priority'=>$priority]);
+                        $cat->fixOrder();
+                    }
+
+                }
+                    
+            }
 
         }else {
 
