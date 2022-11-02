@@ -32,7 +32,7 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-lg-12 col-md-12 col-sm-12">
-                <ticker prefix="{{ menu_base_url() }}"></ticker>
+                <ticker></ticker>
         </div>
         </div>
     </div>

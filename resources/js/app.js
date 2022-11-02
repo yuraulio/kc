@@ -46,6 +46,7 @@ Vue.use(VueNestable)
 require('datatables.net-bs4');
 require('nestable2');
 
+Vue.component('ticker', require('./components/ticker.vue').default);
 Vue.component('dashboard-widget', require('./components/dashboard-widget.vue').default);
 Vue.component('dashboard-table', require('./components/dashboard-table.vue').default);
 Vue.component('templates', require('./components/templates.vue').default);
@@ -79,7 +80,6 @@ Vue.component('menu-left-sidebar', require('./components/menu/layouts/LeftSideba
 
 Vue.component('draggable-menu', require('./components/menu/MenuBuilder.vue').default);
 Vue.component('nest-menu', require('./components/menu/NestMenu.vue').default);
-Vue.component('ticker', require('./components/menu/Ticker.vue').default);
 Vue.component('admins', require('./components/admins.vue').default);
 
 Vue.component('settings', require('./components/settings.vue').default);

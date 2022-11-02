@@ -25,7 +25,7 @@
     ),
     'aliases' => 
     array (
-      'PDF' => 'Barryvdh\\DomPDF\\Facade\\Pdf',
+      'PDF' => 'Barryvdh\\DomPDF\\Facade',
     ),
   ),
   'beyondcode/laravel-dump-server' => 
@@ -161,6 +161,17 @@
     'providers' => 
     array (
       0 => 'Laravel\\Ui\\UiServiceProvider',
+    ),
+  ),
+  'laravelium/feed' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Laravelium\\Feed\\FeedServiceProvider',
+    ),
+    'aliases' => 
+    array (
+      'Feed' => 'Laravelium\\Feed\\Feed',
     ),
   ),
   'maatwebsite/excel' => 

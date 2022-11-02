@@ -359,6 +359,7 @@ export default {
                 this.$refs.tc.rearange(true);
             },
             add(){
+                console.log('i am here')
                 this.errors = null;
                 this.loading = true;
                 axios
