@@ -37,7 +37,7 @@ class FixOrder extends Command
      *
      * @return int
      */
-    public function handle()
+    /*public function handle()
     {
         $masterEvent = Event::find(2304);
         $events = Event::whereIn('id',[2304,4628,4627,4626,4625,4624,4623,4622,4621])->get();
@@ -62,6 +62,30 @@ class FixOrder extends Command
             
         }
 
+
+        return 0;
+    }*/
+
+
+    public function handle()
+    {
+        
+        
+        $events = Event::
+        whereHas('event_info1',function($query){
+            $query->where('course_delivery',143);
+        })
+        ->get();
+        
+        foreach($events as $event){
+            $event->fixOrder();
+        }
+
+        $categories = Category::all();
+
+        foreach($categories as $category){
+            $category->fixOrder();
+        }
 
         return 0;
     }
