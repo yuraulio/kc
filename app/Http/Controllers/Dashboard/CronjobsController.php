@@ -25,6 +25,7 @@ use App\Model\Pages;
 use App\Model\Transaction;
 use App\Model\Absence;
 use App\Notifications\InClassReminder;
+use App\Notifications\SendTopicAutomateMail;
 
 class CronjobsController extends Controller
 {
@@ -883,6 +884,93 @@ class CronjobsController extends Controller
     
             }
     
+
+        }
+
+    }
+
+
+    public function sendAutomateMailBasedOnTopic(){
+
+       //$date1 =  date("Y-m-d", strtotime("+7 days"));
+       //$date2 =  date("Y-m-d", strtotime("+20 days"));
+       //$date3 =  date("Y-m-d", strtotime("+1 days"));
+       //$date4 =  date("Y-m-d", strtotime("+30 days"));
+        $date1 = '2023-01-23';
+        //$dates = [$date1,$date2,$date3,$date4];
+        $dates = [$date1];
+      
+        $events = Event::
+            where('published',true)
+            ->whereIn('status',[0,2,3])    
+            ->whereHas('event_info1',function($query){
+                $query->where('course_delivery','!=',143);
+            })
+            ->whereHas('lessons',function($query) use ($dates){
+                return $query->where('automate_mail',true)->where('send_automate_mail',false)->whereIn('date',$dates);
+            })
+            ->with([
+                'topic' => function($query) use ($dates){
+                    return $query->where('automate_mail',true)->where('send_automate_mail',false)->whereIn('date',$dates);
+                }
+            ])
+            ->with([
+                'lessons' => function($query) use ($dates){
+                    return $query->where('automate_mail',true)->where('send_automate_mail',false)->whereIn('date',$dates);
+                }
+            ])
+            ->with('users') 
+            ->get();
+
+        $checkForDoubleTopics = [];
+
+        foreach($events as $event){
+
+            $info = $event->event_info();
+            $venues = $event->venues;
+
+            $data['duration'] = isset($info['inclass']['dates']['text']) ? $info['inclass']['dates']['text'] : '';
+            $data['course_hours'] = isset($info['inclass']['days']['text']) ? $info['inclass']['days']['text'] : '';
+            $data['venue'] = isset($venues[0]['name']) ? $venues[0]['name'] : '';
+            $data['address'] = isset($venues[0]['address']) ? $venues[0]['address'] : '';;
+            $data['faq'] = url('/') . '/' . $event->slugable->slug . '/#faq?utm_source=Knowcrunch.com&utm_medium=Registration_Email';;
+            $data['fb_group'] = $event->fb_group;;
+            $data['eventTitle'] = $event->title;
+        
+            foreach($event['topic'] as $topic){
+                if(in_array($topic->id,$checkForDoubleTopics)){
+                    continue;
+                }
+
+                if(!$topic->email_template){
+                    continue;
+                }
+
+                $subject = '';
+
+                if($topic->email_template == 'activate_social_media_account_email'){
+                    $subject = 'activate your social media accounts!';
+                }else if($topic->email_template == 'activate_advertising_account_email'){
+                    $subject = 'activate your personal advertising accounts!';
+                }
+
+                $data['email_template'] = $topic->email_template;
+                foreach($event->users as $user){
+
+                    $data['firstname'] = $user->firstname;
+                    $data['subject'] = 'Knowcrunch | ' . $user->firstname . ', ' . $subject;
+                          
+                    $user->notify(new SendTopicAutomateMail($data));
+    
+                }
+
+
+                foreach($event['lessons'] as $lesson){
+                    $lesson->pivot->send_automate_mail = true;
+                    $lesson->pivot->save();
+                }
+
+            }
 
         }
 

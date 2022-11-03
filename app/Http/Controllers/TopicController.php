@@ -13,6 +13,7 @@ use Symfony\Component\Routing\Route as SymfonyRoute;;
 use Illuminate\Support\Facades\URL;
 use Validator;
 use App\Jobs\FixOrder;
+use App\Jobs\SetAutomateEmailStatusForTopics;
 
 class TopicController extends Controller
 {
@@ -390,4 +391,17 @@ class TopicController extends Controller
 
 
     }
+
+
+    function automateMailStatus(Request $request){
+
+        dispatch(new SetAutomateEmailStatusForTopics($request->all()));
+
+        return response()->json([
+            'success' => true
+        ]);
+
+    }
+
+
 }

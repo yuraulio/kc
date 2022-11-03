@@ -594,6 +594,18 @@ if(!function_exists('formatBytes')){
     }
 
 
+    if (!function_exists('automateEmailTemplates')) {
+        function automateEmailTemplates(){
+        
+            $emailTemplates['activate_social_media_account_email'] = 'Activate Social Media Account Email';
+            $emailTemplates['activate_advertising_account_email'] = 'Activate Advertising Account Email';
+
+            return $emailTemplates;
+
+        }
+    }
+
+
 
 }
     

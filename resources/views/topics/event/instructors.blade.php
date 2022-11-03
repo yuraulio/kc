@@ -56,7 +56,7 @@
             @if($isInclassCourse)
             <div class="col-2 assign-toggle automate-mail" id="toggle_automate_mail_{{$key}}">
                 <label class="custom-toggle custom-published">
-                    <input type="checkbox" data-checked="@if(isset($topic['pivot']['automate_mail']) && $topic['pivot']['automate_mail']) $topic['pivot']['automate_mail'] @else 0 @endif" data-event-id="{{$event['id']}}" data-topic-id="{{$topic['id']}}" @if(isset($topic['pivot']['automate_mail']) && $topic['pivot']['automate_mail']) checked @endif>
+                    <input type="checkbox" data-email-template="{{$topic['email_template']}}" data-checked="@if(isset($topic['pivot']['automate_mail']) && $topic['pivot']['automate_mail']) $topic['pivot']['automate_mail'] @else 0 @endif" data-event-id="{{$event['id']}}" data-topic-id="{{$topic['id']}}" @if(isset($topic['pivot']['automate_mail']) && $topic['pivot']['automate_mail']) checked @endif>
                     <span class="automate-mail custom-toggle-slider rounded-circle" data-label-on="no automate mail" data-label-off="automate mail" ></span>
                 </label>
             </div>
@@ -327,27 +327,30 @@ $(document).on('click', '.automate-mail.custom-toggle-slider', function(){
         let topic_id = $($(this).parent().find('input')).data('topicId')
         let event_id = $($(this).parent().find('input')).data('eventId')
         let status = $($(this).parent().find('input')).data('checked')
-
-        console.log('event_id = ',event_id)
-        console.log('topic_id = ', topic_id)
-
+        let email_template = $($(this).parent().find('input')).data('email-template')
+        
         if(status === 1){
-
-            console.log('edw1')
-
             status = 0;
             $($(this).parent().find('input')).data('checked',status)
         }else{
-            console.log('edw2')
-
             status = 1;
             $($(this).parent().find('input')).data('checked',status)
         }
 
-        console.log('status = ', status)
-        let data = {status:status, topic_id : topic_id, event_id : event_id}
+        let data = {status:status, topic_id : topic_id, event_id : event_id, email_template: email_template}
 
-        
+        $.ajax({
+            type: 'POST',
+            headers: {
+            'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+            },
+            Accept: 'application/json',
+            url: "{{ route ('topics.automate.mails.status') }}",
+            data:data,
+            success: function(data) {
+               
+            }
+        });
 
     })
 

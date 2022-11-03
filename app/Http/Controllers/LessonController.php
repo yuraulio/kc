@@ -490,6 +490,7 @@ class LessonController extends Controller
                     $duration = '';
                     $room = '';
                     $instructor_id = '';
+                    $automate_mail = false;
                     //$priority = isset($allLessons->last()[0]['pivot']['priority']) ? $allLessons->last()[0]['pivot']['priority'] + 1 :( count($allLessons)+1);
                     
                     $priority = isset($priorityLesson->last()['pivot']['priority']) ? $priorityLesson->last()['pivot']['priority'] + 1 :count($priorityLesson)+1 ;
@@ -502,6 +503,7 @@ class LessonController extends Controller
                         $duration = $allLessons[$lesson][0]['pivot']['duration'];
                         $room = $allLessons[$lesson][0]['pivot']['room'];
                         $instructor_id = $allLessons[$lesson][0]['pivot']['instructor_id'];
+                        $automate_mail = $allLessons[$lesson][0]['pivot']['automate_mail'];
                         //$priority = $priority;
                     }
 
@@ -519,7 +521,8 @@ class LessonController extends Controller
 
                     
                     $event->topic()->attach($toTopic,['lesson_id' => $lesson,'date'=>$date,'time_starts'=>$time_starts,
-                        'time_ends'=>$time_ends, 'duration' => $duration, 'room' => $room, 'instructor_id' => $instructor_id, 'priority' => $priority]);
+                        'time_ends'=>$time_ends, 'duration' => $duration, 'room' => $room, 'instructor_id' => $instructor_id, 
+                        'priority' => $priority,'automate_mail'=>$automate_mail]);
                         //}
 
                     $event->fixOrder();
