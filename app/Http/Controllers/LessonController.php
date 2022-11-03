@@ -124,7 +124,7 @@ class LessonController extends Controller
 
         if($request->topic_id != null){
             
-            dispatch(new LessonUpdate($request->all(),$model));
+            dispatch(new LessonUpdate($request->all(),$lesson));
         }
 
         if($request->type_id != null){
