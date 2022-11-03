@@ -21,7 +21,7 @@
    <label class="form-control-label" for="input-method">{{ __('Visible') }}</label>
    <div style="margin: auto;" class="form-group">
 
-       <label class="custom-toggle enroll-toggle">
+       <label class="custom-toggle enroll-toggle visible">
            <input type="checkbox"  name="sections[topics][visible]" @if($visible) checked @endif>
            <span class="custom-toggle-slider rounded-circle" data-label-off="no visible" data-label-on="visible"></span>
        </label>
@@ -34,7 +34,7 @@
 
 <div class="accordion accord_topic" id="accordionExample">
     @foreach($topics as $key => $topic)
-        <?php $topic = $topic->first(); ?>
+        <?php $topic = $topic->first();?>
         <?php $status=""; ?>
         @foreach($event['topic'] as $topic_db)
             @if($topic['id'] == $topic_db->id)
@@ -43,16 +43,24 @@
         @endforeach
     <div class="card">
         <div class="row">
-            <div class="card-header col-10" id="{{$key}}" data-toggle="collapse" data-target="#col_{{$key}}" aria-expanded="false" aria-controls="collapseOne">
+            <div class="card-header @if($isInclassCourse) col-9 @else col-10 @endif " id="{{$key}}" data-toggle="collapse" data-target="#col_{{$key}}" aria-expanded="false" aria-controls="collapseOne">
                 <h5 class="mb-0">{{$topic->title}}</h5>
             </div>
 
-            <div class="col-2 assign-toggle" id="toggle_{{$key}}">
+            <div class=" @if($isInclassCourse) col-1 @else col-2 @endif  assign-toggle" id="toggle_{{$key}}">
                 <label class="custom-toggle custom-published">
                     <input data-event-status="<?= ($status == 'active') ? '1' : '0'; ?>" type="checkbox" data-event-id="{{$event['id']}}" data-topic-id="{{$topic['id']}}" checked >
                     <span class="topic custom-toggle-slider rounded-circle" data-label-off="unassign" data-label-on="assigned" ></span>
                 </label>
             </div>
+            @if($isInclassCourse)
+            <div class="col-2 assign-toggle automate-mail" id="toggle_automate_mail_{{$key}}">
+                <label class="custom-toggle custom-published">
+                    <input type="checkbox" data-checked="@if(isset($topic['pivot']['automate_mail']) && $topic['pivot']['automate_mail']) $topic['pivot']['automate_mail'] @else 0 @endif" data-event-id="{{$event['id']}}" data-topic-id="{{$topic['id']}}" @if(isset($topic['pivot']['automate_mail']) && $topic['pivot']['automate_mail']) checked @endif>
+                    <span class="automate-mail custom-toggle-slider rounded-circle" data-label-on="no automate mail" data-label-off="automate mail" ></span>
+                </label>
+            </div>
+            @endif
         </div>
         <div id="col_{{$key}}" class="collapse" aria-labelledby="{{$key}}" data-parent="#accordionExample">
             <div class="card-body">
@@ -205,7 +213,7 @@
                                     @if(count($event['type']) > 0 && $isInclassCourse )
                                     @if($lesson->pivot->date != null)
                                     <td id="date_lesson_edit_{{$lesson['id']}}"><?php $date = strtotime($lesson->pivot->date);  ?>{{ date('d-m-Y', $date ) }} </td>
-                                    <td id="start_lesson_edit_{{$lesson['id']}}"><?php dd($lesson->pivot->time_starts); if($lesson->pivot->time_starts != null){$start = strtotime($lesson->pivot->time_starts);}else{ $start = "";} ?><?=  date('H:i:s', $start ) ?></td>
+                                    <td id="start_lesson_edit_{{$lesson['id']}}"><?php if($lesson->pivot->time_starts != null){$start = strtotime($lesson->pivot->time_starts);}else{ $start = "";} ?><?=  date('H:i:s', $start ) ?></td>
                                     <td id="end_lesson_edit_{{$lesson['id']}}"><?php $ends = strtotime($lesson->pivot->time_ends); ?>{{ date('H:i:s', $ends ) }}</td>
                                     <td id="duration_lesson_edit_{{$lesson['id']}}">{{$lesson->pivot->duration}}</td>
                                     <td id="room_lesson_edit_{{$lesson['id']}}">{{$lesson->pivot->room}}</td>
@@ -310,6 +318,43 @@
     })
 
 </script>
+
+
+<script>
+
+$(document).on('click', '.automate-mail.custom-toggle-slider', function(){
+        //alert($($(this).parent().find('input')).data('topicId'))
+        let topic_id = $($(this).parent().find('input')).data('topicId')
+        let event_id = $($(this).parent().find('input')).data('eventId')
+        let status = $($(this).parent().find('input')).data('checked')
+
+        console.log('event_id = ',event_id)
+        console.log('topic_id = ', topic_id)
+
+        if(status === 1){
+
+            console.log('edw1')
+
+            status = 0;
+            $($(this).parent().find('input')).data('checked',status)
+        }else{
+            console.log('edw2')
+
+            status = 1;
+            $($(this).parent().find('input')).data('checked',status)
+        }
+
+        console.log('status = ', status)
+        let data = {status:status, topic_id : topic_id, event_id : event_id}
+
+        
+
+    })
+
+
+</script>
+
+
 <script>
 
 

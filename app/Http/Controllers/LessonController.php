@@ -135,7 +135,7 @@ class LessonController extends Controller
         }
 
 
-        return redirect()->route('lessons.index')->withStatus(__('Lesson successfully created.'));
+        return redirect()->route('lessons.edit',$lesson->id)->withStatus(__('Lesson successfully created.'));
     }
 
     /**

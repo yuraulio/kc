@@ -40,7 +40,7 @@
    <label class="form-control-label" for="input-method">{{ __('Visible') }}</label>
    <div style="margin: auto;" class="form-group">
 
-       <label class="custom-toggle enroll-toggle">
+       <label class="custom-toggle enroll-toggle visible">
            <input type="checkbox"  name="sections[tickets][visible]" @if($visible) checked @endif>
            <span class="custom-toggle-slider rounded-circle" data-label-off="no visible" data-label-on="visible"></span>
        </label>
@@ -179,7 +179,7 @@
                         <label class="form-control-label" for="input-method">{{ __('SHOW REMAINING SEATS') }}</label>
                         <div style="margin: auto;" class="form-group">
 
-                            <label class="custom-toggle enroll-toggle">
+                            <label class="custom-toggle enroll-toggle visible">
                                 <input type="checkbox"  name="seats_visible" id="input-show-seats-store">
                                 <span class="custom-toggle-slider rounded-circle" data-label-off="No" data-label-on="Yes"></span>
                             </label>
@@ -269,7 +269,7 @@
                     <label class="form-control-label" for="input-method">{{ __('SHOW REMAINING SEATS') }}</label>
                         <div style="margin: auto;" class="form-group">
     
-                            <label class="custom-toggle enroll-toggle">
+                            <label class="custom-toggle enroll-toggle visible">
                                 <input type="checkbox"  name="seats_visible" id="input-show-seats">
                                 <span class="custom-toggle-slider rounded-circle" data-label-off="No" data-label-on="Yes"></span>
                             </label>
