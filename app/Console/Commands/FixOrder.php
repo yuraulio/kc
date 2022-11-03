@@ -79,6 +79,28 @@ class FixOrder extends Command
         
         foreach($events as $event){
             $event->fixOrder();
+
+            $category = $event->category->first();
+
+            foreach($event->allLessons()->orderBy('priority')->get() as  $pLesson){
+        
+                $topicId = $pLesson->pivot->topic_id;
+                $lessonId = $pLesson->pivot->lesson_id;
+                $priority = $pLesson->pivot->priority;;
+
+
+                if( $lessonCategory = $category->lessons()->wherePivot('topic_id',$topicId)->wherePivot('lesson_id',$lessonId)->first()){
+
+                    $lessonCategory->pivot->priority = $priority;
+                    $lessonCategory->pivot->save();
+                }else{
+                    
+                    $category->topic()->attach($topicId, ['lesson_id' => $lessonId,'priority'=>$priority]);
+                }
+               
+
+            }
+
         }
 
         $categories = Category::all();
