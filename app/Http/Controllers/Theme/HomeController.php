@@ -632,6 +632,7 @@ class HomeController extends Controller
 
     private function pages($page)
     {
+        dd('asd');
         $data['page'] = $page;
         //dd($page);
         if ($data['page']['template'] == 'corporate-template') {
