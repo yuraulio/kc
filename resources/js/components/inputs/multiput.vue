@@ -128,9 +128,22 @@
         <input v-model="editorData" type="checkbox" :id="keyput" class="form-check-input d-block">
     </div>
 
+    <div v-if="type == 'toggle'" class="form-check form-switch mb-3">
+        <label v-if="label" :for="keyput" class="form-label">{{ label }}</label>
+        <input v-model="editorData"  type="checkbox" :id="keyput" class="form-check-input d-block">
+    </div>
+
     <div v-if="type == 'number'" class="">
         <label v-if="label" :for="keyput" class="form-label">{{ label }}</label>
         <input v-model="editorData" type="number" :id="keyput" class="form-control">
+    </div>
+
+    <div v-if="type == 'datepicker'" class="">
+        <datepicker-component
+            :title="label"
+            @updatevalue="updated"
+            :prop-value="existingValue"
+        ></datepicker-component>
     </div>
 
     <div v-if="type == 'multidropdown'" class="">
