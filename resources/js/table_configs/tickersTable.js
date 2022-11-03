@@ -1,6 +1,6 @@
 const collectiveInputs = [
     {
-        "type": "checkbox",
+        "type": "toggle",
         "key": "active",
         "label": "Active",
         "size": "col-lg-12"
@@ -16,7 +16,19 @@ const collectiveInputs = [
         "key": "content",
         "label": "Content",
         "size": "col-lg-12"
-    }
+    },
+    {
+        "type": "datepicker",
+        "key": "from_date",
+        "label": "From",
+        "size": "col-lg-12"
+    },
+    {
+        "type": "datepicker",
+        "key": "until_date",
+        "label": "Until",
+        "size": "col-lg-12"
+    },
     
 
 ];
@@ -34,6 +46,19 @@ export default {
             sortField: 'title',
             dataClass: 'align-middle',
             titleClass: ''
+        },
+        {
+            name: 'active',
+            title: 'Active',
+            dataClass: 'text-center',
+            titleClass: 'text-center',
+            sortField: 'active',
+            formatter (value) {
+                if (value) {
+                    return '<i class="fa fa-check-circle text-success" aria-hidden="true"></i>';
+                }
+                return '<i class="fa fa-times-circle text-danger" aria-hidden="true"></i>';
+            },
         },
         {
             name: 'created_at',

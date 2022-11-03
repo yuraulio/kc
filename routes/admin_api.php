@@ -36,7 +36,7 @@ Route::domain('admin.' . env('APP_DOMAIN'))->group(function () {
         ]);
 
         // tickers
-        Route::post('tickers/deleteMultiple', [TickerController::class, 'deleteMultiple']);
+        Route::post('tickers/deleteMultiple', ['App\Http\Controllers\Admin_api\TickerController', 'deleteMultiple']);
         Route::post('tickers/widgets', [TickerController::class, 'widgets']);
         Route::resource('tickers', Admin_api\TickerController::class)->only([
             'index', 'store', 'update', 'show', 'destroy'

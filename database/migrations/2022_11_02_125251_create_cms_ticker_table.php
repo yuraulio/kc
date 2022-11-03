@@ -18,8 +18,8 @@ class CreateCmsTickerTable extends Migration
             $table->string('title');
             $table->longtext('content');
             $table->boolean('status');
-            $table->date('from_date');
-            $table->date('until_date');
+            $table->date('from_date')->nullable();
+            $table->date('until_date')->nullable();
             $table->timestamps();
         });
     }

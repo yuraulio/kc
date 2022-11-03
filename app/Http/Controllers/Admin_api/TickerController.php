@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Http\Resources\TickerResource;
 use App\Jobs\DeleteMultipleTickers;
+use Carbon\Carbon;
 
 class TickerController extends Controller
 {
@@ -31,7 +32,7 @@ class TickerController extends Controller
             //     ->tableSort($request);
             $tickers = Ticker::tableSort($request);
 
-            //$tickers = $this->filters($tickers, $request);
+            $tickers = $this->filters($tickers, $request);
             $tickers = $tickers->paginate($request->per_page ?? 50);
 
             return TickerResource::collection($tickers);
@@ -39,6 +40,13 @@ class TickerController extends Controller
             Log::error("Failed to get tickers. " . $e->getMessage());
             return response()->json(['message' => $e->getMessage()], 400);
         }
+    }
+
+    private function filters($ticker, $request)
+    {
+        $ticker->lookForOriginal($request->filter);
+        
+        return $ticker;
     }
 
     /**
@@ -55,6 +63,8 @@ class TickerController extends Controller
             $ticker->title = $request->title;
             $ticker->content = $request->content;
             $ticker->status = $request->active;
+            $ticker->from_date = ($request->from_date) ? Carbon::parse($request->from_date) : null;
+            $ticker->until_date = ($request->until_date) ? Carbon::parse($request->until_date) : null;
 
             $ticker->save();
 
@@ -74,11 +84,13 @@ class TickerController extends Controller
     {
         $this->authorize('create', Ticker::class, Auth::user());
         
-        try {
+        try { 
             $ticker = new Ticker();
             $ticker->title = $request->title;
             $ticker->content = $request->content;
             $ticker->status = $request->active;
+            $ticker->from_date = ($request->from_date) ? Carbon::parse($request->from_date) : null;
+            $ticker->until_date = ($request->until_date) ? Carbon::parse($request->until_date) : null;
 
             $ticker->save();
 
@@ -113,9 +125,14 @@ class TickerController extends Controller
 
     public function deleteMultiple(Request $request)
     {
-        dd('asd');
         try {
             $ids = $request->selected;
+
+            // authorize action
+            $categories = Ticker::findOrFail($ids);
+            foreach ($categories as $category) {
+                $this->authorize('delete', $category, Auth::user());
+            }
 
             // start job
             DeleteMultipleTickers::dispatch($ids, Auth::user());

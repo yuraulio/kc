@@ -12,6 +12,29 @@ use App\Model\PaymentMethod;
 use CodexShaper\Menu\Models\Menu as NewMenu;
 use Spatie\Dropbox\Client;
 use App\Model\Admin\Page;
+use App\Model\Admin\Ticker;
+use Carbon\Carbon;
+
+if(!function_exists('get_tickers')){
+    function get_tickers(){
+
+        $tickers = Ticker::where('status', true)->get()->filter(function($item) {
+
+            if($item->from_date && $item->until_date && Carbon::now()->between($item->from_date, $item->until_date)){
+                return $item;
+            }else if($item->from_date && !$item->until_date && Carbon::now() >= Carbon::parse($item->from_date)){
+                return $item;
+            }else if(!$item->from_date && $item->until_date && Carbon::now() <= Carbon::parse($item->until_date)){
+                return $item;
+            }else{
+                return $item;
+            }
+            
+        });
+
+        return $tickers;
+    }
+}
 
 function get_social_media(){
     $social_media = Option::where('name', 'social_media')->get();
