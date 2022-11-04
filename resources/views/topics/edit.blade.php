@@ -135,7 +135,7 @@
 
                                 <div class="form-group{{ $errors->has('category_id') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-email_template">{{ __('Email Template') }}</label>
-                                    <select name="email_template" id="input-email_template" class="form-control" placeholder="{{ __('Email Template') }}" required>
+                                    <select name="email_template" id="input-email_template" class="form-control" placeholder="{{ __('Email Template') }}">
                                         <option value="">-</option>
 
                                         @foreach(automateEmailTemplates() as $key => $emailTemplate)

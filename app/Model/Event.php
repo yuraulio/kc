@@ -1024,7 +1024,7 @@ class Event extends Model
             //$pLesson->pivot->priority = $newPriorityLesson;
             //$pLesson->pivot->save();
 
-            $or[$pLesson->pivot->id] = [
+            $or[$pLesson->pivot->lesson_id] = [
                                         'topic_id'=>$pLesson->pivot->topic_id,
                                         'lesson_id'=>$pLesson->pivot->lesson_id,
                                         'event_id' => $pLesson->pivot->event_id,
@@ -1041,7 +1041,8 @@ class Event extends Model
                                     ];
         }
 
-        $this->allLessons()->sync($or);
+        $this->allLessons()->detach(array_keys($or));
+        $this->allLessons()->attach($or);
 
     }
 
@@ -1053,7 +1054,7 @@ class Event extends Model
             //$pLesson->pivot->priority = $newPriorityLesson;
             //$pLesson->pivot->save();
 
-            $or[$pLesson->pivot->id] = [
+            $or[$pLesson->pivot->lesson_id] = [
                 'topic_id'=>$pLesson->pivot->topic_id,
                 'lesson_id'=>$pLesson->pivot->lesson_id,
                 'event_id' => $pLesson->pivot->event_id,
@@ -1068,11 +1069,12 @@ class Event extends Model
                 'send_automate_mail'=>$pLesson->pivot->send_automate_mail,
                 'priority' => $newPriorityLesson
             ];
-            $newPriorityLesson = $pLesson->pivot->priority + 1;
+            $newPriorityLesson += 1;
 
         }
 
-        $this->allLessons()->sync($or);
+        $this->allLessons()->detach(array_keys($or));
+        $this->allLessons()->attach($or);
 
     }
 

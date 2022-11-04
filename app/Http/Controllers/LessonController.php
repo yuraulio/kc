@@ -360,7 +360,7 @@ class LessonController extends Controller
             $category = Category::find($request->category);
             $topic = Topic::with('category')->find($request->topic_id[0]);
             $category->updateLesson($topic, $lesson);
-
+    
             dispatch(new LessonUpdate($request->all(),$lesson));
 
 
@@ -481,6 +481,9 @@ class LessonController extends Controller
             foreach($lessons as $lesson){
                 
                 $allEvents = $category->events;
+                //$allEvents = $category->events()->whereHas('event_info1',function($query){
+                //    $query->where('course_delivery',143);
+                //})->get();
 
                 foreach($allEvents as $event)
                 {

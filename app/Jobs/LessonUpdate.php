@@ -45,20 +45,20 @@ class LessonUpdate implements ShouldQueue
            
             foreach($topic->category as $cat){
                 
-                if($cat->id == $this->request['category']){
+                if($cat->id != $this->request['category']){
                     continue;
                 }
                 
                 if(in_array($cat->id,$catsIds)){
-                    continue;
+                    //continue;
                 }
 
                 $catsIds[] = $cat->id;
 
-                //$allEvents = $cat->events;
-                $allEvents = $cat->events()->whereHas('event_info1',function($query){
+                $allEvents = $cat->events;
+                /*$allEvents = $cat->events()->whereHas('event_info1',function($query){
                     $query->where('course_delivery',143);
-                })->get();
+                })->get();*/
 
                 foreach($allEvents as $event)
                 {
@@ -71,7 +71,9 @@ class LessonUpdate implements ShouldQueue
                     $duration = '';
                     $room = '';
                     $instructor_id = '';
-
+                    $automate_mail = false;
+                    $send_automate_mail = false;
+                    
                     if($existLesson = $event->allLessons()->wherePivot('topic_id',$topic->id)->wherePivot('lesson_id',$this->lesson->id)->first()){
                         $priority =  $existLesson->pivot->priority;
                     }else{
@@ -86,13 +88,17 @@ class LessonUpdate implements ShouldQueue
                         $duration = $allLessons[$this->lesson['id']][0]['pivot']['duration'];
                         $room = $allLessons[$this->lesson['id']][0]['pivot']['room'];
                         $instructor_id = $allLessons[$this->lesson['id']][0]['pivot']['instructor_id'];
+                        $automate_mail = $allLessons[$this->lesson['id']][0]['pivot']['automate_mail'];
+                        $send_automate_mail = $allLessons[$this->lesson['id']][0]['pivot']['send_automate_mail'];
                     }
 
                     $event->allLessons()->detach($this->lesson['id']);
                     $event->changeOrder($priority);
 
                     $event->topic()->attach($topic['id'],['lesson_id' => $this->lesson['id'],'date'=>$date,'time_starts'=>$time_starts,
-                        'time_ends'=>$time_ends, 'duration' => $duration, 'room' => $room, 'instructor_id' => $instructor_id, 'priority' => $priority]);
+                        'time_ends'=>$time_ends, 'duration' => $duration, 'room' => $room, 'instructor_id' => $instructor_id, 'priority' => $priority,
+                        'automate_mail' => $automate_mail,'send_automate_mail'=>$send_automate_mail
+                    ]);
                     $event->fixOrder();
                     
                     $this->lesson->topic()->wherePivot('category_id',$this->request['category'])->detach();
@@ -105,7 +111,7 @@ class LessonUpdate implements ShouldQueue
                 //$cat->changeOrder($priority);
                 //$cat->topic()->attach($topic, ['lesson_id' => $this->lesson->id,'priority'=>$priority]);
                 //$cat->fixOrder();
-//
+
             }
                 
         }
