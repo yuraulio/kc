@@ -609,7 +609,8 @@
 
                         window.swal({
                             title: message,
-                            showConfirmButton: false,
+                            showConfirmButton: true,
+                            allowOutsideClick: true,
                             timer: 2000
                         });
 
@@ -626,7 +627,8 @@
                         $(".error-message").show();
                         window.swal({
                         title: errorMessage,
-                        showConfirmButton: false,
+                        showConfirmButton: true,
+                        allowOutsideClick: true,
                         timer: 2000
                     });
 
