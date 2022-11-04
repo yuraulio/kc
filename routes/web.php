@@ -411,6 +411,12 @@ Route::group(['middleware' => 'auth.aboveauthor', 'prefix' => 'admin'], function
     //import faqs from file
     Route::post('faqs-import-from-file', 'FaqController@importFromFile')->name('faqs.file.import');
 
+    //import faqs from file
+    Route::post('faqs-import-from-file', 'FaqController@importFromFile')->name('faqs.file.import');
+
+    //set automate email status for topics
+    Route::post('automate-mails-status', 'TopicController@automateMailStatus')->name('topics.automate.mails.status');
+
 });
 
 /*Route::group(['prefix' => 'cart','middleware' => ['web']], function () {
@@ -657,6 +663,7 @@ Route::get('/sendElearningFQ', 'Dashboard\CronjobsController@sendElearningFQ');/
 Route::get('/sendSurveyMail', 'Dashboard\CronjobsController@sendSurveyMail');//in
 Route::get('/absences', 'Dashboard\CronjobsController@absences');//in
 Route::get('/sendInClassReminder', 'Dashboard\CronjobsController@sendInClassReminder');//in
+Route::get('/automateTopicMail', 'Dashboard\CronjobsController@sendAutomateMailBasedOnTopic');//in
 
 
 //SITEMAP

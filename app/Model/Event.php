@@ -87,11 +87,11 @@ class Event extends Model
     {
         if($this->delivery->first() && $this->delivery->first()->id == 143){
             return $this->belongsToMany(Topic::class, 'event_topic_lesson_instructor')->select('topics.*','topic_id','instructor_id')->where('instructor_id','!=', NULL)
-            ->withPivot('event_id','topic_id','lesson_id','instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room', 'priority')->with('lessons.instructor')->orderBy('event_topic_lesson_instructor.priority','asc');
+            ->withPivot('event_id','topic_id','lesson_id','instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room', 'priority','automate_mail','send_automate_mail')->with('lessons.instructor')->orderBy('event_topic_lesson_instructor.priority','asc');
         }else{
 
             return $this->belongsToMany(Topic::class, 'event_topic_lesson_instructor')->select('topics.*','topic_id','instructor_id')->where('instructor_id','!=', NULL)
-            ->withPivot('event_id','topic_id','lesson_id','instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room', 'priority')->with('lessons.instructor')->orderBy('event_topic_lesson_instructor.time_starts','asc');
+            ->withPivot('event_id','topic_id','lesson_id','instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room', 'priority','automate_mail','send_automate_mail')->with('lessons.instructor')->orderBy('event_topic_lesson_instructor.time_starts','asc');
         }
 
     }
@@ -101,11 +101,11 @@ class Event extends Model
     {
         if($this->delivery->first() && $this->delivery->first()->id == 143){
             return $this->belongsToMany(Topic::class, 'event_topic_lesson_instructor')->select('topics.*','topic_id','instructor_id')
-            ->withPivot('event_id','topic_id','lesson_id','instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room', 'priority')->with('lessons.instructor')->orderBy('event_topic_lesson_instructor.priority','asc');
+            ->withPivot('event_id','topic_id','lesson_id','instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room', 'priority','automate_mail','send_automate_mail')->with('lessons.instructor')->orderBy('event_topic_lesson_instructor.priority','asc');
         }else{
 
             return $this->belongsToMany(Topic::class, 'event_topic_lesson_instructor')->select('topics.*','topic_id','instructor_id')
-            ->withPivot('event_id','topic_id','lesson_id','instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room', 'priority')->with('lessons.instructor')->orderBy('event_topic_lesson_instructor.time_starts','asc');
+            ->withPivot('event_id','topic_id','lesson_id','instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room', 'priority','automate_mail','send_automate_mail')->with('lessons.instructor')->orderBy('event_topic_lesson_instructor.time_starts','asc');
         }
 
     }
@@ -114,7 +114,7 @@ class Event extends Model
     {
 
         return $this->belongsToMany(Topic::class, 'event_topic_lesson_instructor')->select('topics.*','topic_id')
-            ->withPivot('event_id','topic_id','lesson_id','instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room', 'priority','location_url');
+            ->withPivot('event_id','topic_id','lesson_id','instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room', 'priority','location_url','automate_mail','send_automate_mail');
     }
 
     public function coupons(){
@@ -125,7 +125,7 @@ class Event extends Model
     public function allLessons()
     {
 
-        return $this->belongsToMany(Lesson::class,'event_topic_lesson_instructor')->select('lessons.*')->withPivot('event_id','topic_id','lesson_id','instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room','priority','location_url');
+        return $this->belongsToMany(Lesson::class,'event_topic_lesson_instructor')->select('lessons.*')->withPivot('id','event_id','topic_id','lesson_id','instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room','priority','location_url','automate_mail','send_automate_mail');
     }
 
     public function lessons()
@@ -134,11 +134,11 @@ class Event extends Model
         if(!$this->is_inclass_course()){
 
             return $this->belongsToMany(Lesson::class,'event_topic_lesson_instructor')->where('status',true)->select('lessons.*','topic_id','event_id', 'lesson_id','instructor_id')
-            ->withPivot('event_id','topic_id','lesson_id','instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room','priority','location_url')->orderBy('event_topic_lesson_instructor.priority','asc')->with('type');//priority
+            ->withPivot('event_id','topic_id','lesson_id','instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room','priority','location_url','automate_mail','send_automate_mail')->orderBy('event_topic_lesson_instructor.priority','asc')->with('type');//priority
         }else{
 
             return $this->belongsToMany(Lesson::class,'event_topic_lesson_instructor')->where('status',true)->select('lessons.*','topic_id','event_id', 'lesson_id','instructor_id')
-            ->withPivot('event_id','topic_id','lesson_id','instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room','priority','location_url')->orderBy('event_topic_lesson_instructor.time_starts','asc')->with('type');//priority
+            ->withPivot('event_id','topic_id','lesson_id','instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room','priority','location_url','automate_mail','send_automate_mail')->orderBy('event_topic_lesson_instructor.time_starts','asc')->with('type');//priority
         }
 
     }
@@ -148,7 +148,7 @@ class Event extends Model
 
         return $this->belongsToMany(Lesson::class,'event_topic_lesson_instructor')->where('status',true)
             ->select('lessons.*','topic_id','event_id', 'lesson_id','instructor_id','event_topic_lesson_instructor.priority','event_topic_lesson_instructor.time_starts')
-            ->withPivot('event_id','topic_id','lesson_id','instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room','location_url','priority')->with('type');
+            ->withPivot('event_id','topic_id','lesson_id','instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room','location_url','priority','automate_mail','send_automate_mail')->with('type');
 
 
     }
@@ -1016,23 +1016,63 @@ class Event extends Model
 
 
     public function changeOrder($from = 0){
+
+        $or = [];
+
         foreach($this->allLessons()->wherePivot('priority','>=',$from)->get() as  $pLesson){
             $newPriorityLesson = $pLesson->pivot->priority + 1;
-            $pLesson->pivot->priority = $newPriorityLesson;
-            $pLesson->pivot->save();
-            //$newOrder[$category->id.'-'.$fromTopic.'-'.$pLesson->id] = $newPriorityLesson;
-            
+            //$pLesson->pivot->priority = $newPriorityLesson;
+            //$pLesson->pivot->save();
+
+            $or[$pLesson->pivot->id] = [
+                                        'topic_id'=>$pLesson->pivot->topic_id,
+                                        'lesson_id'=>$pLesson->pivot->lesson_id,
+                                        'event_id' => $pLesson->pivot->event_id,
+                                        'instructor_id' => $pLesson->pivot->instructor_id,
+                                        'date' => $pLesson->pivot->date,
+                                        'time_starts' => $pLesson->pivot->time_starts,
+                                        'time_ends' => $pLesson->pivot->time_ends,
+                                        'duration' => $pLesson->pivot->duration,
+                                        'room' => $pLesson->pivot->room,
+                                        'location_url'=> $pLesson->pivot->location_url,
+                                        'automate_mail'=>$pLesson->pivot->automate_mail,
+                                        'send_automate_mail'=>$pLesson->pivot->send_automate_mail,
+                                        'priority' => $newPriorityLesson
+                                    ];
         }
+
+        $this->allLessons()->sync($or);
+
     }
 
     public function fixOrder(){
         $newPriorityLesson = 1;
+        $or = [];
         foreach($this->allLessons()->orderBy('priority')->get() as  $pLesson){
         
-            $pLesson->pivot->priority = $newPriorityLesson;
-            $pLesson->pivot->save();
+            //$pLesson->pivot->priority = $newPriorityLesson;
+            //$pLesson->pivot->save();
+
+            $or[$pLesson->pivot->id] = [
+                'topic_id'=>$pLesson->pivot->topic_id,
+                'lesson_id'=>$pLesson->pivot->lesson_id,
+                'event_id' => $pLesson->pivot->event_id,
+                'instructor_id' => $pLesson->pivot->instructor_id,
+                'date' => $pLesson->pivot->date,
+                'time_starts' => $pLesson->pivot->time_starts,
+                'time_ends' => $pLesson->pivot->time_ends,
+                'duration' => $pLesson->pivot->duration,
+                'room' => $pLesson->pivot->room,
+                'location_url'=> $pLesson->pivot->location_url,
+                'automate_mail'=>$pLesson->pivot->automate_mail,
+                'send_automate_mail'=>$pLesson->pivot->send_automate_mail,
+                'priority' => $newPriorityLesson
+            ];
             $newPriorityLesson = $pLesson->pivot->priority + 1;
+
         }
+
+        $this->allLessons()->sync($or);
 
     }
 

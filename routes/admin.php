@@ -24,6 +24,7 @@ Route::domain('admin.' . env('APP_DOMAIN'))->group(function () {
         Route::get('/media', [DashboardController::class, 'media'])->name("admin-media");
         Route::get('/menus', [DashboardController::class, 'menu'])->name("admin-menu");
         Route::get('/menus', [DashboardController::class, 'menu'])->name("admin-menu");
+        Route::get('/ticker', [DashboardController::class, 'ticker'])->name("admin-ticker");
 
         Route::prefix('users')->group(function () {
             Route::get('/admins', [UserController::class, 'admins'])->name("admins-management");

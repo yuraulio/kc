@@ -747,6 +747,13 @@
             },
             {
                 "type": "text",
+                "key": "instructor_form_codephone",
+                "label": "Mobile code title",
+                "main": true,
+                "value": "Mobile code"
+            },
+            {
+                "type": "select",
                 "key": "instructor_form_phone",
                 "label": "Mobile phone title",
                 "main": true,
@@ -758,6 +765,13 @@
                 "label": "Linkedin profile link title",
                 "main": true,
                 "value": "Linkedin profile link"
+            },
+            {
+                "type": "text",
+                "key": "instructor_form_location",
+                "label": "Based in",
+                "main": true,
+                "value": "Based in (please state your location)"
             },
             {
                 "type": "text",

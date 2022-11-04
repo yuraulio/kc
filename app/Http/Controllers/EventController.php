@@ -1295,7 +1295,8 @@ class EventController extends Controller
 
             $newEvent->lessons()->attach($lesson->pivot->lesson_id,['topic_id'=>$lesson->pivot->topic_id, 'date'=>$lesson->pivot->date,
                 'time_starts'=>$lesson->pivot->time_starts,'time_ends'=>$lesson->pivot->time_ends, 'duration' => $lesson->pivot->duration,
-                'room' => $lesson->pivot->room,'instructor_id' => $lesson->pivot->instructor_id, 'priority' => $lesson->pivot->priority]);
+                'room' => $lesson->pivot->room,'instructor_id' => $lesson->pivot->instructor_id, 
+                'priority' => $lesson->pivot->priority,'automate_mail'=>$lesson->pivot->automate_mail]);
         }
 
 

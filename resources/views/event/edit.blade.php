@@ -1811,7 +1811,7 @@
                                                             <label class="form-control-label" for="input-method">{{ __('Visible') }}</label>
                                                             <div style="margin: auto;" class="form-group">
 
-                                                                <label class="custom-toggle enroll-toggle">
+                                                                <label class="custom-toggle enroll-toggle visible">
                                                                     <input type="checkbox"  name="sections[instructors][visible]" @if($visible)) checked @endif>
                                                                     <span class="custom-toggle-slider rounded-circle" data-label-off="no visible" data-label-on="visible"></span>
                                                                 </label>
@@ -1846,7 +1846,7 @@
                                                         <label class="form-control-label" for="input-method">{{ __('Visible') }}</label>
                                                         <div style="margin: auto;" class="form-group">
 
-                                                            <label class="custom-toggle enroll-toggle">
+                                                            <label class="custom-toggle enroll-toggle visible">
                                                                 <input type="checkbox"  name="sections[testimonials][visible]" @if($visible) checked @endif>
                                                                 <span class="custom-toggle-slider rounded-circle" data-label-off="no visible" data-label-on="visible"></span>
                                                             </label>
@@ -2255,7 +2255,6 @@
                 let selectedAllFolders = false;
                 //const allSelectedRowsData = e.selectedRowsData;
                 const allSelectedRowsDataForSave = treeList.getSelectedRowsData('multiple')
-                console.log('current selected rows0', currentSelectedRowKeys)
 
                 $.each(files, function(index, value){
                     if(currentSelectedRowKeys == value.ID){
@@ -2291,7 +2290,6 @@
                 let dataForSubmit = {};
                 selectedFolders = [];
 
-                console.log('all selected rows data', allSelectedRowsDataForSave)
 
 
                 if(allSelectedRowsDataForSave.length != 0){
@@ -2329,7 +2327,6 @@
                     }
                 })
 
-                console.log(dataForSubmit)
 
                 dataForSubmit = JSON.stringify(dataForSubmit);
                 $('#selectedFiles').val(dataForSubmit);
@@ -3079,7 +3076,6 @@
     $('.enroll-students').change(function(){
 
         let enroll = $("#input-enroll").is(":checked") ? 1 : 0;
-        console.log('dfsd');
         $.ajax({
             type: 'get',
             headers: {

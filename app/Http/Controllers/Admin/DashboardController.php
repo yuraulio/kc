@@ -130,4 +130,9 @@ class DashboardController extends Controller
     {
         return view('new_admin.pages.template_new');
     }
+
+    public function ticker()
+    {
+        return view('new_admin.pages.ticker');
+    }
 }

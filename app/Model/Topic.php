@@ -14,7 +14,7 @@ class Topic extends Model
     protected $table = 'topics';
 
     protected $fillable = [
-        'priority', 'status', 'comment_status', 'title', 'short_title', 'subtitle', 'header', 'summary', 'body', 'author_id', 'creator_id'
+        'priority', 'status', 'comment_status', 'title', 'short_title', 'subtitle', 'header', 'summary', 'body', 'author_id', 'creator_id', 'email_template'
     ];
 
     public function category()

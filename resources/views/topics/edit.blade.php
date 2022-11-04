@@ -131,6 +131,24 @@
 
                                     @include('alerts.feedback', ['field' => 'body'])
                                 </div>
+
+
+                                <div class="form-group{{ $errors->has('category_id') ? ' has-danger' : '' }}">
+                                    <label class="form-control-label" for="input-email_template">{{ __('Email Template') }}</label>
+                                    <select name="email_template" id="input-email_template" class="form-control" placeholder="{{ __('Email Template') }}" required>
+                                        <option value="">-</option>
+
+                                        @foreach(automateEmailTemplates() as $key => $emailTemplate)
+
+                                            <option value="{{ $key }}" @if(old('email_template',$topic->email_template) === $key) selected @endif >{{ $emailTemplate }}</option>
+
+                                        @endforeach
+
+                                    </select>
+
+                                    @include('alerts.feedback', ['field' => 'email_template'])
+                                </div>
+
                                     <input type="hidden" name="creator_id" id="input-creator_id" class="form-control" value="{{$topic->creator_id}}">
                                     <input type="hidden" name="author_id" id="input-author_id" class="form-control" value="{{$topic->author_id}}">
 

@@ -20223,6 +20223,29 @@ body {
   width: 100px;
 }
 
+.accord_topic .custom-toggle.custom-published input:checked + .custom-toggle-slider::before {
+  background: #5e72e4;
+  transform: translateX(68px);
+}
+
+.accord_topic .custom-toggle.custom-published {
+  width: 94px !important;
+}
+
+.accord_topic .assign-toggle {
+  text-align: center;
+  margin: 0px -6px;
+}
+
+.automate-mail .custom-toggle.custom-published {
+  width: 140px !important;
+}
+
+.automate-mail .custom-toggle.custom-published input:checked + .custom-toggle-slider::before {
+  background: #5e72e4;
+  transform: translateX(115px);
+}
+
 .is-flex {
   display: flex;
 }
@@ -20276,6 +20299,10 @@ button#move-lesson {
 
 .enroll-toggle, .index-toggle, .feed-toggle {
   width: 80px !important;
+}
+
+.visible.enroll-toggle input:checked + .custom-toggle-slider:before {
+  transform: translateX(55px) !important;
 }
 
 #results .progress-label span {
