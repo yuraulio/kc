@@ -102,9 +102,9 @@
         <label v-if="label" :for="keyput" class="form-label">{{ label }}</label>
         -->
 
-        <editor 
-            :height="300" 
-            :id="keyput" 
+        <editor
+            :height="300"
+            :id="keyput"
             v-model="editorData"
             :api-key="tinymce"
             :init="{
@@ -113,7 +113,8 @@
                 toolbar_sticky: true,
                 toolbar_mode: 'wrap',
                 height: 300,
-                font_css: '/theme/assets/css/editor.css'
+                font_css: '/theme/assets/css/editor.css',
+                default_link_target: '_blank'
             }"
         ></editor>
     </div>

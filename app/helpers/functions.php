@@ -26,10 +26,10 @@ if(!function_exists('get_tickers')){
                 return $item;
             }else if(!$item->from_date && $item->until_date && Carbon::now() <= Carbon::parse($item->until_date)){
                 return $item;
-            }else{
+            }else if(!$item->from_date && !$item->until_date){
                 return $item;
             }
-            
+
         });
 
         return $tickers;
@@ -103,7 +103,7 @@ if (!function_exists('check_for_slug')) {
 if (!function_exists('get_status_by_slug')){
 
     function get_status_by_slug($slugg){
-       
+
         $slug = Slug::where('slug',$slugg)->first();
 
         /*if($slug && $slug->slugable && (get_class($slug->slugable) == 'App\\Model\\Admin\\Page' || get_class($slug->slugable) == 'App\\Model\\Event')){
@@ -121,12 +121,12 @@ if (!function_exists('get_status_by_slug')){
         else if($slug && $slug->slugable && (get_class($slug->slugable) == 'App\\Model\\Category')){
             return count($slug->slugable->events()->where('published',1)->where('status',0)->get()) > 0;
         }
-        
+
         else if($page = Page::withoutGlobalScope("published")->whereSlug($slugg)->first()){
             return $page->published;
         }
 
-        
+
 
         return true;
 
@@ -484,41 +484,41 @@ if(!function_exists('formatBytes')){
     }
 
     if (!function_exists('getLessonDurationToSec')){
-        
+
         function getLessonDurationToSec($vimeoDuration){
 
             if(!$vimeoDuration){
                 return 0;
             }
-    
+
             $totalDuration = 0;
-            
-            $duration = explode(" ",$vimeoDuration);   
+
+            $duration = explode(" ",$vimeoDuration);
             if(count($duration) == 2){
-               
+
                 $seconds = (float)preg_replace('/[^0-9.]+/', '', $duration[0]) * 60;
                 $seconds += (float)preg_replace('/[^0-9.]+/', '', $duration[1]);
-    
+
                 $totalDuration += $seconds;
-    
+
             }else{
 
-                
+
 
                 $isMinutes = strpos($duration[0], 'm');
-                
+
                 if(!$isMinutes){
                     $seconds = (float)preg_replace('/[^0-9.]+/', '', $duration[0]);
                     $totalDuration += $seconds;
-                }else{    
+                }else{
                     $seconds = (float)preg_replace('/[^0-9.]+/', '', $duration[0]) * 60;
                     $totalDuration += $seconds;
                 }
-    
-               
-    
+
+
+
             }
-    
+
             return $totalDuration;
 
         }
@@ -539,10 +539,10 @@ if(!function_exists('formatBytes')){
 
     if (!function_exists('update_dropbox_api')) {
         function update_dropbox_api() : void
-        {  
+        {
 
             $t = base64_encode(env("DROPBOX_APPKEY").":".env("DROPBOX_SECRET"));
-            
+
             $endpoint = "https://api.dropbox.com/oauth2/token";
             $client = new \GuzzleHttp\Client(['headers' => ["Content-Type"=> 'application/json',"Authorization" => "Basic " . $t ]]);
 
@@ -553,12 +553,12 @@ if(!function_exists('formatBytes')){
                         'refresh_token' => env("DROPBOX_REFRESH_TOKEN")
                 ]
             ]);
-            
-            
+
+
             $statusCode = $response->getStatusCode();
             $content = $response->getBody()->getContents();
             $accessToken = json_decode($content,true);
-            
+
             if(isset($accessToken['access_token']) && $accessToken['access_token']){
                 //$client = new Client();
                 //$client->setAccessToken($accessToken['access_token']);
@@ -572,7 +572,7 @@ if(!function_exists('formatBytes')){
 
     if (!function_exists('update_env')) {
         function update_env( $data = [] ) : void
-        {  
+        {
 
             if(!isset($data['DROPBOX_TOKEN'])){
                 return;
@@ -582,7 +582,7 @@ if(!function_exists('formatBytes')){
             $path = base_path('.env');
 
             if (file_exists($path)) {
-            
+
                 foreach ($newData as $key => $value) {
                     file_put_contents($path, str_replace(
                         $key . '=' . env($key), $key . '=' . $value, file_get_contents($path)
@@ -596,7 +596,7 @@ if(!function_exists('formatBytes')){
 
     if (!function_exists('automateEmailTemplates')) {
         function automateEmailTemplates(){
-        
+
             $emailTemplates['activate_social_media_account_email'] = 'Activate Social Media Account Email';
             $emailTemplates['activate_advertising_account_email'] = 'Activate Advertising Account Email';
 
@@ -608,7 +608,7 @@ if(!function_exists('formatBytes')){
 
 
 }
-    
-    
+
+
 
 

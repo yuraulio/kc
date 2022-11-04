@@ -29,7 +29,7 @@
 
                     @if (isset($page) && $page->type == "Knowledge")
                         <!-- no user menu -->
-                    @else 
+                    @else
                         @if (Auth::check())
                             <?php $img_src = get_profile_image(Auth::user()->image); ?>
                             <li class="account-menu login-pad">
@@ -93,3 +93,11 @@
         document.getElementById('header').classList.add('header-transparent');
     </script>
 @endif
+
+<script>
+    document.getElementById('header').classList.add('header-transparent');
+
+    if($('.ticker-wrapper').length != 0 && $('.ticker-wrapper').length != 0){
+        $('#header').addClass('headerWithTicker')
+    }
+</script>
