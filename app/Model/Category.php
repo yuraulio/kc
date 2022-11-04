@@ -84,7 +84,7 @@ class Category extends Model
 
     public function lessons()
     {
-        return $this->belongsToMany(Lesson::class, 'categories_topics_lesson')->withPivot('lesson_id','topic_id','priority');
+        return $this->belongsToMany(Lesson::class, 'categories_topics_lesson')->withPivot('id','lesson_id','topic_id','priority');
     }
 
     /**
@@ -182,24 +182,42 @@ class Category extends Model
 
 
     public function changeOrder($from = 0){
+
+        $or = [];
+
         foreach($this->lessons()->wherePivot('priority','>=',$from)->get() as  $pLesson){
             $newPriorityLesson = $pLesson->pivot->priority + 1;
-            $pLesson->pivot->priority = $newPriorityLesson;
-            $pLesson->pivot->save();  
+            $or[$pLesson->pivot->id] = [
+                'priority' => $newPriorityLesson,
+                'category_id' => $pLesson->pivot->category_id,
+                'topic_id' => $pLesson->pivot->topic_id,
+                'lesson_id' => $pLesson->pivot->lesson_id
+                ];
+            //$pLesson->pivot->priority = $newPriorityLesson;
+            //$pLesson->pivot->save();  
         }
+
+        $this->lessons()->sync($or);
     }
 
     public function fixOrder($fromTopic = null){
         $newPriorityLesson = 1;
         $newOrder = [];
+        $or = [];
         foreach($this->lessons()->orderBy('priority')->get() as  $pLesson){
 
-            $pLesson->pivot->priority = $newPriorityLesson;
-            $pLesson->pivot->save();  
+            //$pLesson->pivot->priority = $newPriorityLesson;
+            //$pLesson->pivot->save();  
+            $or[$pLesson->pivot->id] = [
+                                        'priority' => $newPriorityLesson,
+                                        'category_id' => $pLesson->pivot->category_id,
+                                        'topic_id' => $pLesson->pivot->topic_id,
+                                        'lesson_id' => $pLesson->pivot->lesson_id
+                                        ];
             $newOrder[$this->id.'-'.$pLesson->pivot->topic_id.'-'.$pLesson->id] = $newPriorityLesson;
             $newPriorityLesson += 1;
         }
-
+        $this->lessons()->sync($or);
         return $newOrder;
 
     }
@@ -230,10 +248,12 @@ class Category extends Model
 
     public function updateLesson(Topic $topic, Lesson $lesson){
         $allEvents = $this->events;
+
         foreach($allEvents as $event)
         {
             
             $allLessons = $event->allLessons->groupBy('id');
+        
             
             $date = '';
             $time_starts = '';
@@ -248,6 +268,8 @@ class Category extends Model
                 $priorityLesson = $event->allLessons()->wherePivot('topic_id',$topic->id)->orderBy('priority')->get();
                 $priority = isset($priorityLesson->last()['pivot']['priority']) ? $priorityLesson->last()['pivot']['priority'] + 1 :count($priorityLesson)+1 ;
             }
+
+            
 
             if(isset($allLessons[$lesson['id']][0])){
                 $date = $allLessons[$lesson['id']][0]['pivot']['date'];

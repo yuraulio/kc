@@ -46,7 +46,6 @@ class LessonUpdate implements ShouldQueue
             foreach($topic->category as $cat){
                 
                 if($cat->id == $this->request['category']){
-                    echo $cat->id;
                     continue;
                 }
                 
@@ -56,7 +55,11 @@ class LessonUpdate implements ShouldQueue
 
                 $catsIds[] = $cat->id;
 
-                $allEvents = $cat->events;
+                //$allEvents = $cat->events;
+                $allEvents = $cat->events()->whereHas('event_info1',function($query){
+                    $query->where('course_delivery',143);
+                })->get();
+
                 foreach($allEvents as $event)
                 {
                     
@@ -92,17 +95,17 @@ class LessonUpdate implements ShouldQueue
                         'time_ends'=>$time_ends, 'duration' => $duration, 'room' => $room, 'instructor_id' => $instructor_id, 'priority' => $priority]);
                     $event->fixOrder();
                     
-                    //$this->lesson->topic()->wherePivot('category_id',$this->request['category'])->detach();
-                    //$cat->changeOrder($priority);
-                    //$cat->topic()->attach($topic, ['lesson_id' => $this->lesson->id,'priority'=>$priority]);
-                    //$cat->fixOrder();
+                    $this->lesson->topic()->wherePivot('category_id',$this->request['category'])->detach();
+                    $cat->changeOrder($priority);
+                    $cat->topic()->attach($topic, ['lesson_id' => $this->lesson->id,'priority'=>$priority]);
+                    $cat->fixOrder();
                 }
 
-                $this->lesson->topic()->wherePivot('category_id',$this->request['category'])->detach();
-                $cat->changeOrder($priority);
-                $cat->topic()->attach($topic, ['lesson_id' => $this->lesson->id,'priority'=>$priority]);
-                $cat->fixOrder();
-
+                //$this->lesson->topic()->wherePivot('category_id',$this->request['category'])->detach();
+                //$cat->changeOrder($priority);
+                //$cat->topic()->attach($topic, ['lesson_id' => $this->lesson->id,'priority'=>$priority]);
+                //$cat->fixOrder();
+//
             }
                 
         }
