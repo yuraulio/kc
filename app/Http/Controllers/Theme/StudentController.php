@@ -1156,11 +1156,13 @@ class StudentController extends Controller
             //dd($notes);
             foreach($notes as $key => $note){
                 if($key == $request->vimeoId){
+
+                    //dd($request->text);
                     //$note =  preg_replace( '/[^A-Za-z0-9\-]/', ' ',  $request->text );
                     //$note = preg_replace('/\s+/', ' ', $note);
                     //$note =  preg_replace( "/\r|\n/", "||", $request->text );
-                    
-                    $notes[$key] = $request->text;
+                    //dd(preg_replace( "/\r|\n/", "||", $request->text ));
+                    $notes[$key] = preg_replace( "/\r|\n/", "||", $request->text );
                 }
             }
         }
