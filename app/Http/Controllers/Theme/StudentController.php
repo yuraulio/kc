@@ -1131,7 +1131,7 @@ class StudentController extends Controller
         $data['videos'] = $statistic['pivot']['videos'];
         //load notes
         $data['notes'] = $statistic['pivot']['notes'];
-        //dd($data['notes']);
+        //dd(json_decode($data['notes'],true));
         //load statistic
 
         //$data['instructor_topics'] = count($user->instructor) > 0;
@@ -1156,11 +1156,11 @@ class StudentController extends Controller
             //dd($notes);
             foreach($notes as $key => $note){
                 if($key == $request->vimeoId){
-                    $note =  preg_replace( '/[^A-Za-z0-9\-]/', ' ',  $request->text );
-                    $note = preg_replace('/\s+/', ' ', $note);
+                    //$note =  preg_replace( '/[^A-Za-z0-9\-]/', ' ',  $request->text );
+                    //$note = preg_replace('/\s+/', ' ', $note);
                     //$note =  preg_replace( "/\r|\n/", "||", $request->text );
-
-                    $notes[$key] = $note;
+                    
+                    $notes[$key] = $request->text;
                 }
             }
         }

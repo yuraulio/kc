@@ -37,8 +37,9 @@
       @endif
    </head>
    <?php
-      $notesss = json_decode($notes);
-      $notesss = (array) $notesss;
+      $notesss = json_decode($notes,true);
+      //dd($notesss);
+      //$notesss = (array) $notesss;
       //dd($lastVideoSeen);
 
       ?>
