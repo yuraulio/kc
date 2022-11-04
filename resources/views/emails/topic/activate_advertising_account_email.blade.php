@@ -80,7 +80,7 @@
                                                                                     <tr>
                                                                                         <td align="left" valign="top" class="r14-i nl2go-default-textstyle" style="color: #3b3f44; font-family: arial,helvetica,sans-serif; font-size: 16px; line-height: 1.5; text-align: left;">
                                                                                             <div>
-                                                                                                <h2 class="default-heading2" style="color: #1F2D3D; font-family: arial,helvetica,sans-serif; font-size: 32px; margin: 0px;"><span style="font-family: Tahoma, geneva, sans-serif;">Dear {{$firstname}}</span></h2>
+                                                                                                <h2 class="default-heading2" style="color: #1F2D3D; font-family: arial,helvetica,sans-serif; font-size: 32px; margin: 0px;"><span style="font-family: Tahoma, geneva, sans-serif;">Dear {{ $firstname }} </span></h2>
                                                                                             </div>
                                                                                         </td>
                                                                                     </tr>
@@ -96,7 +96,7 @@
                                                                                     <tr>
                                                                                         <td align="left" valign="top" class="r15-i nl2go-default-textstyle" style="color: #3b3f44; font-family: arial,helvetica,sans-serif; font-size: 16px; line-height: 1.5; text-align: left;">
                                                                                             <div>
-                                                                                                <p style="margin: 0px;">As you are about to start the Social Media Platforms section of the course, which describes the features of the important social networks, <strong>we encourage you to create a personal account</strong> so that you can better comprehend your training. The social networks we suggest to start using are the following:</p>
+                                                                                                <p style="margin: 0px;">As you are about to start the Advertising Platforms section, in which you will learn all features of the ad campaigns, <strong>we encourage you to activate your personal ad accounts</strong>. The ad platforms we suggest to start using are the following:</p>
                                                                                             </div>
                                                                                         </td>
                                                                                     </tr>
@@ -116,18 +116,15 @@
                                                                                         <td align="left" valign="top" class="r15-i nl2go-default-textstyle" style="color: #3b3f44; font-family: arial,helvetica,sans-serif; font-size: 16px; line-height: 1.5; text-align: left; word-wrap: break-word;">
                                                                                             <div>
                                                                                                 <ul style="margin: 0px;">
-                                                                                                    <li><a href="https://www.facebook.com/" style="color: #0092ff; text-decoration: underline;">Facebook.com</a></li>
-                                                                                                    <li><a href="https://www.instagram.com/" style="color: #0092ff; text-decoration: underline;">Instagram.com</a></li>
-                                                                                                    <li><a href="https://www.linkedin.com" style="color: #0092ff; text-decoration: underline;">Linkedin.com</a></li>
-                                                                                                    <li><a href="https://twitter.com/" style="color: #0092ff; text-decoration: underline;">Twitter.com</a></li>
-                                                                                                    <li><a href="https://www.tiktok.com" style="color: #0092ff; text-decoration: underline;">Tiktok.com</a></li>
-                                                                                                    <li><a href="https://www.youtube.com/" style="color: #0092ff; text-decoration: underline;">Youtube.com</a></li>
-                                                                                                    <li><a href="https://www.pinterest.com/" style="color: #0092ff; text-decoration: underline;">Pinterest.com</a></li>
-                                                                                                    <li><a href="https://www.snapchat.com/" style="color: #0092ff; text-decoration: underline;">Snapchat.com</a></li>
-                                                                                                    <li><a href="https://www.reddit.com/" style="color: #0092ff; text-decoration: underline;">Reddit.com</a></li>
-                                                                                                    <li><a href="https://www.clubhouse.com/" style="color: #0092ff; text-decoration: underline;">Clubhouse.com</a></li>
-                                                                                                    <li><a href="https://www.twitch.tv/" style="color: #0092ff; text-decoration: underline;">Twitch.tv</a></li>
-                                                                                                    <li><a href="https://www.quora.com/" style="color: #0092ff; text-decoration: underline;">Quora.com</a></li>
+                                                                                                    <li><a href="https://www.facebook.com/adsmanager" title="Facebook ad manager" target="_blank" style="color: #0092ff; text-decoration: underline;">Facebook.com/adsmanager</a></li>
+                                                                                                    <li><a href="https://ads.google.com/" title="Google ads" target="_blank" style="color: #0092ff; text-decoration: underline;">Ads.google.com</a></li>
+                                                                                                    <li><a href="https://www.linkedin.com/campaignmanager" title="LinkedIn campaign manager" target="_blank" style="color: #0092ff; text-decoration: underline;">Linkedin.com/campaignmanager</a></li>
+                                                                                                    <li><a href="https://ads.twitter.com/" title="Twitter ads" target="_blank" style="color: #0092ff; text-decoration: underline;">Ads.twitter.com</a></li>
+                                                                                                    <li><a href="https://ads.pinterest.com/" title="Pinterest ads" target="_blank" style="color: #0092ff; text-decoration: underline;">Ads.pinterest.com</a></li>
+                                                                                                    <li><a href="https://www.quora.com/business" title="Quora advertising" target="_blank" style="color: #0092ff; text-decoration: underline;">Quora.com/business</a></li>
+                                                                                                    <li><a href="https://forbusiness.snapchat.com/" title="Snapchat advertising" target="_blank" style="color: #0092ff; text-decoration: underline;">Forbusiness.snapchat.com</a></li>
+                                                                                                    <li><a href="https://ads.reddit.com/" title="Reddit ads" target="_blank" style="color: #0092ff; text-decoration: underline;">Ads.reddit.com</a></li>
+                                                                                                    <li><a href="https://ads.tiktok.com/" title="TikTok ads" target="_blank" style="color: #0092ff; text-decoration: underline;">Ads.tiktok.com</a></li>
                                                                                                 </ul>
                                                                                             </div>
                                                                                         </td>
@@ -147,13 +144,30 @@
                                                                                     <tr>
                                                                                         <td align="left" valign="top" class="r15-i nl2go-default-textstyle" style="color: #3b3f44; font-family: arial,helvetica,sans-serif; font-size: 16px; line-height: 1.5; text-align: left;">
                                                                                             <div>
-                                                                                                <p style="margin: 0px;"><strong>For all of them:</strong></p>
-                                                                                                <p style="margin: 0px;"> </p>
-                                                                                                <ol style="margin: 0px;">
-                                                                                                    <li>Create a personal account - if you do not already have one</li>
-                                                                                                    <li>Fill in the basics (photo, about)</li>
-                                                                                                    <li>Remember your username &amp; password</li>
-                                                                                                </ol>
+                                                                                                <p style="margin: 0px;"><strong>In all the ad platforms:</strong></p>
+                                                                                                <p style="margin: 0px;">Enter your personal or corporate billing details, credit/debit card or PayPal payment details and the currency &amp; time zone of the country where you are located (be careful you can not change the time zone later).</p>
+                                                                                            </div>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                    <tr class="nl2go-responsive-hide">
+                                                                                        <td height="15" style="font-size: 15px; line-height: 15px;">­</td>
+                                                                                    </tr>
+                                                                                </table>
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="r12-c" align="left">
+                                                                                <table cellspacing="0" cellpadding="0" border="0" role="presentation" width="100%" class="r13-o" style="table-layout: fixed; width: 100%;">
+                                                                                    <tr class="nl2go-responsive-hide">
+                                                                                        <td height="15" style="font-size: 15px; line-height: 15px;">­</td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <td align="left" valign="top" class="r15-i nl2go-default-textstyle" style="color: #3b3f44; font-family: arial,helvetica,sans-serif; font-size: 16px; line-height: 1.5; text-align: left;">
+                                                                                            <div>
+                                                                                                <p style="margin: 0px;"><strong>Especially for Google ads platform:</strong></p>
+                                                                                                <p style="margin: 0px;">1) Google will ask you to create your first campaign. Ignore it.</p>
+                                                                                                <p style="margin: 0px;">2) Click “Switch to expert mode” (small text under the campaign goals). </p>
+                                                                                                <p style="margin: 0px;">3) Click “Create an account without a campaign” (small text under the campaign goals to the left). Done.</p>
                                                                                             </div>
                                                                                         </td>
                                                                                     </tr>

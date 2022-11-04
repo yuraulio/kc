@@ -896,7 +896,14 @@ class CronjobsController extends Controller
        //$date2 =  date("Y-m-d", strtotime("+20 days"));
        //$date3 =  date("Y-m-d", strtotime("+1 days"));
        //$date4 =  date("Y-m-d", strtotime("+30 days"));
-        $date1 = '2023-01-23';
+        //$date1 = '2023-01-23';
+        //$date1 = '2023-02-20';
+
+        $date1 = date("Y-m-d");
+
+
+        //$date1 = date("Y-m-d");
+        
         //$dates = [$date1,$date2,$date3,$date4];
         $dates = [$date1];
       
@@ -914,18 +921,14 @@ class CronjobsController extends Controller
                     return $query->where('automate_mail',true)->where('send_automate_mail',false)->whereIn('date',$dates);
                 }
             ])
-            ->with([
-                'lessons' => function($query) use ($dates){
-                    return $query->where('automate_mail',true)->where('send_automate_mail',false)->whereIn('date',$dates);
-                }
-            ])
+            ->with('lessons')
             ->with('users') 
             ->get();
 
         $checkForDoubleTopics = [];
 
         foreach($events as $event){
-
+            $checkForDoubleTopics = [];
             $info = $event->event_info();
             $venues = $event->venues;
 
@@ -941,7 +944,8 @@ class CronjobsController extends Controller
                 if(in_array($topic->id,$checkForDoubleTopics)){
                     continue;
                 }
-
+                $checkForDoubleTopics[] = $topic->id;
+                
                 if(!$topic->email_template){
                     continue;
                 }
@@ -965,7 +969,7 @@ class CronjobsController extends Controller
                 }
 
 
-                foreach($event['lessons'] as $lesson){
+                foreach($event->lessons()->wherePivot('topic_id',$topic->id)->get() as $lesson){
                     $lesson->pivot->send_automate_mail = true;
                     $lesson->pivot->save();
                 }

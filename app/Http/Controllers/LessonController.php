@@ -74,6 +74,7 @@ class LessonController extends Controller
      */
     public function store(Request $request, Lesson $model)
     {
+
         $this->validate($request, [
             'category' => 'required',
             'topic_id' => 'required',
@@ -123,7 +124,11 @@ class LessonController extends Controller
         }
 
         if($request->topic_id != null){
-            
+
+            $category = Category::find($request->category);
+            $topic = Topic::with('category')->find($request->topic_id[0]);
+            $category->updateLesson($topic, $lesson);
+
             dispatch(new LessonUpdate($request->all(),$lesson));
         }
 
@@ -351,7 +356,10 @@ class LessonController extends Controller
             $lesson->save();
         }
         if($request->topic_id != null){
-            
+
+            $category = Category::find($request->category);
+            $topic = Topic::with('category')->find($request->topic_id[0]);
+            $category->updateLesson($topic, $lesson);
 
             dispatch(new LessonUpdate($request->all(),$lesson));
 
@@ -471,10 +479,6 @@ class LessonController extends Controller
         if($category){
 
             foreach($lessons as $lesson){
-                //dd($fromTopic);
-                //dd($category->lessons()->wherePivot('topic_id',450)->get());
-                //$category->lessons()->wherePivot('topic_id',$fromTopic)->detach();
-                //$category->topic()->attach($toTopic, ['lesson_id' => $lesson]);
                 
                 $allEvents = $category->events;
 
@@ -490,9 +494,7 @@ class LessonController extends Controller
                     $duration = '';
                     $room = '';
                     $instructor_id = '';
-                    $automate_mail = false;
-                    //$priority = isset($allLessons->last()[0]['pivot']['priority']) ? $allLessons->last()[0]['pivot']['priority'] + 1 :( count($allLessons)+1);
-                    
+                    $automate_mail = false;                    
                     $priority = isset($priorityLesson->last()['pivot']['priority']) ? $priorityLesson->last()['pivot']['priority'] + 1 :count($priorityLesson)+1 ;
                     
                     if(isset($allLessons[$lesson][0])){
@@ -511,14 +513,6 @@ class LessonController extends Controller
                     
                     $event->changeOrder($priority);
                 
-                    /*foreach($event->allLessons()->wherePivot('priority','>=',$priority)->get() as  $pLesson){
-                        $newPriorityLesson = $pLesson->pivot->priority + 1;
-                        $pLesson->pivot->priority = $newPriorityLesson;
-                        $pLesson->pivot->save();
-                        $newOrder[$category->id.'-'.$fromTopic.'-'.$pLesson->id] = $newPriorityLesson;
-                        
-                    }*/
-
                     
                     $event->topic()->attach($toTopic,['lesson_id' => $lesson,'date'=>$date,'time_starts'=>$time_starts,
                         'time_ends'=>$time_ends, 'duration' => $duration, 'room' => $room, 'instructor_id' => $instructor_id, 
@@ -526,49 +520,20 @@ class LessonController extends Controller
                         //}
 
                     $event->fixOrder();
-                    /*$newPriorityLesson = 1;
-                    foreach($event->allLessons()->orderBy('priority')->get() as  $pLesson){
-            
-                        $pLesson->pivot->priority = $newPriorityLesson;
-                        $pLesson->pivot->save();
-                        $newPriorityLesson = $pLesson->pivot->priority + 1;
-                    }*/
-
-
-    
-
+                    
                 }
 
 
-
-                //$allLessons = $event->allLessons->groupBy('id');
                 $priorityLessonCat = $category->lessons()->wherePivot('topic_id',$toTopic)->orderBy('priority')->get();
                 $priorityCat = isset($priorityLessonCat->last()['pivot']['priority']) ? $priorityLessonCat->last()['pivot']['priority'] + 1 :count($priorityLessonCat)+1 ;
                 $category->lessons()->wherePivot('topic_id',$fromTopic)->wherePivot('lesson_id',$lesson)->detach();
-                    //$category->lessons()->wherePivot('topic_id',$fromTopic)->wherePivot('lesson_id',$lesson)->detach();
-
-                //dd($priorityCat);
-                /*foreach($category->lessons()->wherePivot('priority','>=',$priorityCat)->get() as  $pLesson){
-                    $newPriorityLesson = $pLesson->pivot->priority + 1;
-                    $pLesson->pivot->priority = $newPriorityLesson;
-                    $pLesson->pivot->save();  
-                }*/
+                  
                 $category->changeOrder($priorityCat);
                 $category->topic()->attach($toTopic, ['lesson_id' => $lesson,'priority'=>$priorityCat]);
                 
                 $newOrder = $category->fixOrder($fromTopic);
             
-                /*$newPriorityLesson = 1;
-                foreach($category->lessons()->orderBy('priority')->get() as  $pLesson){
-                    $pLesson->pivot->priority = $newPriorityLesson;
-                    $pLesson->pivot->save();  
-                    $newOrder[$category->id.'-'.$fromTopic.'-'.$pLesson->id] = $newPriorityLesson;
-                    $newPriorityLesson = $pLesson->pivot->priority + 1;
-                }*/
-                
-                
-
-
+            
             }
 
             return response()->json([

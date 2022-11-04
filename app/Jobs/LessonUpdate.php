@@ -36,17 +36,26 @@ class LessonUpdate implements ShouldQueue
      */
     public function handle()
     {
+
+        $catsIds = [];
+
         foreach($this->request['topic_id'] as $topic)
         {
             $topic = Topic::with('category')->find($topic);
            
             foreach($topic->category as $cat){
                 
-                if($cat->id != $this->request['category']){
-                    
+                if($cat->id == $this->request['category']){
+                    echo $cat->id;
                     continue;
                 }
                 
+                if(in_array($cat->id,$catsIds)){
+                    continue;
+                }
+
+                $catsIds[] = $cat->id;
+
                 $allEvents = $cat->events;
                 foreach($allEvents as $event)
                 {
@@ -83,11 +92,16 @@ class LessonUpdate implements ShouldQueue
                         'time_ends'=>$time_ends, 'duration' => $duration, 'room' => $room, 'instructor_id' => $instructor_id, 'priority' => $priority]);
                     $event->fixOrder();
                     
-                    $this->lesson->topic()->wherePivot('category_id',$this->request['category'])->detach();
-                    $cat->changeOrder($priority);
-                    $cat->topic()->attach($topic, ['lesson_id' => $this->lesson->id,'priority'=>$priority]);
-                    $cat->fixOrder();
+                    //$this->lesson->topic()->wherePivot('category_id',$this->request['category'])->detach();
+                    //$cat->changeOrder($priority);
+                    //$cat->topic()->attach($topic, ['lesson_id' => $this->lesson->id,'priority'=>$priority]);
+                    //$cat->fixOrder();
                 }
+
+                $this->lesson->topic()->wherePivot('category_id',$this->request['category'])->detach();
+                $cat->changeOrder($priority);
+                $cat->topic()->attach($topic, ['lesson_id' => $this->lesson->id,'priority'=>$priority]);
+                $cat->fixOrder();
 
             }
                 

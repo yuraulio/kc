@@ -228,4 +228,51 @@ class Category extends Model
     }*/
 
 
+    public function updateLesson(Topic $topic, Lesson $lesson){
+        $allEvents = $this->events;
+        foreach($allEvents as $event)
+        {
+            
+            $allLessons = $event->allLessons->groupBy('id');
+            
+            $date = '';
+            $time_starts = '';
+            $time_ends = '';
+            $duration = '';
+            $room = '';
+            $instructor_id = '';
+
+            if($existLesson = $event->allLessons()->wherePivot('topic_id',$topic->id)->wherePivot('lesson_id',$lesson->id)->first()){
+                $priority =  $existLesson->pivot->priority;
+            }else{
+                $priorityLesson = $event->allLessons()->wherePivot('topic_id',$topic->id)->orderBy('priority')->get();
+                $priority = isset($priorityLesson->last()['pivot']['priority']) ? $priorityLesson->last()['pivot']['priority'] + 1 :count($priorityLesson)+1 ;
+            }
+
+            if(isset($allLessons[$lesson['id']][0])){
+                $date = $allLessons[$lesson['id']][0]['pivot']['date'];
+                $time_starts = $allLessons[$lesson['id']][0]['pivot']['time_starts'];
+                $time_ends = $allLessons[$lesson['id']][0]['pivot']['time_ends'];
+                $duration = $allLessons[$lesson['id']][0]['pivot']['duration'];
+                $room = $allLessons[$lesson['id']][0]['pivot']['room'];
+                $instructor_id = $allLessons[$lesson['id']][0]['pivot']['instructor_id'];
+            }
+
+            $event->allLessons()->detach($lesson['id']);
+            $event->changeOrder($priority);
+
+            $event->topic()->attach($topic['id'],['lesson_id' => $lesson['id'],'date'=>$date,'time_starts'=>$time_starts,
+                'time_ends'=>$time_ends, 'duration' => $duration, 'room' => $room, 'instructor_id' => $instructor_id, 'priority' => $priority]);
+            $event->fixOrder();
+            
+            
+        }
+
+        $lesson->topic()->wherePivot('category_id',$this->id)->detach();
+        $this->changeOrder($priority);
+        $this->topic()->attach($topic, ['lesson_id' => $lesson->id,'priority'=>$priority]);
+        $this->fixOrder();
+    }
+
+
 }
