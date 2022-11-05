@@ -347,14 +347,15 @@ class LessonController extends Controller
         $vimeoVideo = explode("/",$lesson->vimeo_video);
         $duration = 0;       
 
-        /*$client = new Vimeo(env('client_id'), env('client_secret'), env('vimeo_token'));
+        $client = new Vimeo(env('client_id'), env('client_secret'), env('vimeo_token'));
         $response = $client->request("/videos/". end($vimeoVideo) . "/?password=".env('video_password'), array(), 'GET');
 
         if($response['status'] === 200){
             $duration = $response['body']['duration'];
             $lesson->vimeo_duration = $this->formatDuration($duration);
             $lesson->save();
-        }*/
+        }
+        
         if($request->topic_id != null){
 
             $category = Category::find($request->category);
