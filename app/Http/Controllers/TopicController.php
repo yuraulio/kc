@@ -215,8 +215,8 @@ class TopicController extends Controller
                                                         'duration' => $lesson->pivot->duration,
                                                         'time_starts' => $lesson->pivot->time_starts,
                                                         'time_ends' => $lesson->pivot->time_ends,
-                                                        'priority' => $lastPriority
-                                                        //'priority' => $priority
+                                                        'priority' => $lastPriority,
+                                                        'automate_mail' => $lesson->pivot->automate_mail
                                                         ]);
                         $lastPriority += 1;
                     }
@@ -277,7 +277,7 @@ class TopicController extends Controller
 
     public function detachTopic(Request $request)
     {
-        //dd($request->all());
+        dd($request->all());
         $catgegoriesAssignded = '';
         $error = false;
 
