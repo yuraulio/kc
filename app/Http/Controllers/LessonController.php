@@ -347,14 +347,14 @@ class LessonController extends Controller
         $vimeoVideo = explode("/",$lesson->vimeo_video);
         $duration = 0;       
 
-        $client = new Vimeo(env('client_id'), env('client_secret'), env('vimeo_token'));
+        /*$client = new Vimeo(env('client_id'), env('client_secret'), env('vimeo_token'));
         $response = $client->request("/videos/". end($vimeoVideo) . "/?password=".env('video_password'), array(), 'GET');
 
         if($response['status'] === 200){
             $duration = $response['body']['duration'];
             $lesson->vimeo_duration = $this->formatDuration($duration);
             $lesson->save();
-        }
+        }*/
         if($request->topic_id != null){
 
             $category = Category::find($request->category);
@@ -441,8 +441,12 @@ class LessonController extends Controller
     public function remove_lesson(Request $request)
     {
        
+        $event = Event::find($request->event_id);
+
         $topic = Topic::find($request->topic_id);
         $topic->event_topic()->wherePivot('lesson_id', '=', $request->lesson_id)->wherePivot('event_id', '=', $request->event_id)->detach($request->topic_id);
+
+        $event->fixOrder();
 
         dispatch((new UpdateStatisticJson($request->event_id))->delay(now()->addSeconds(3)));
 
@@ -580,20 +584,34 @@ class LessonController extends Controller
         $category = Category::find($category);
         $newOrder = [];
         if($category){
-
-            foreach($lessons as $lesson){
+            $allEvents = $category->events;
+            foreach($allEvents as $event)
+            {
+           
                 
-                $allEvents = $category->events;
+                
                 //$allEvents = $category->events()->whereHas('event_info1',function($query){
                 //    $query->where('course_delivery',143);
                 //})->get();
 
-                foreach($allEvents as $event)
-                {
+                $allLessons = $event->allLessons->groupBy('id');
+                $priorityLesson = $event->allLessons()->wherePivot('topic_id',$toTopic)->orderBy('priority')->get();
+                $priority = isset($priorityLesson->last()['pivot']['priority']) ? $priorityLesson->last()['pivot']['priority'] + 1 :count($allLessons)+1 ;
+
+                $movedLessons = [];
+                $movedLessonsCate = [];
+
+                foreach($lessons as $pLesson){
                         
-                    $allLessons = $event->allLessons->groupBy('id');
-                    $priorityLesson = $event->allLessons()->wherePivot('topic_id',$toTopic)->orderBy('priority')->get();
+                    //$allLessons = $event->allLessons->groupBy('id');
+                    //$priorityLesson = $event->allLessons()->wherePivot('topic_id',$toTopic)->orderBy('priority')->get();
                     
+                    if(!$pLesson = $allLessons[$pLesson][0]){
+                        continue;
+                    }
+
+                    //dd($pLesson);
+
                     $date = '';
                     $time_starts = '';
                     $time_ends = '';
@@ -601,10 +619,8 @@ class LessonController extends Controller
                     $room = '';
                     $instructor_id = '';
                     $automate_mail = false;                    
-                    //$priority = isset($priorityLesson->last()['pivot']['priority']) ? $priorityLesson->last()['pivot']['priority'] + 1 :count($priorityLesson)+1 ;
-                    $priority = count($allLessons) + 1 ;
                     
-                    if(isset($allLessons[$lesson][0])){
+                    /*if(isset($allLessons[$lesson][0])){
                         
                         $date = $allLessons[$lesson][0]['pivot']['date'];
                         $time_starts = $allLessons[$lesson][0]['pivot']['time_starts'];
@@ -614,44 +630,55 @@ class LessonController extends Controller
                         $instructor_id = $allLessons[$lesson][0]['pivot']['instructor_id'];
                         $automate_mail = $allLessons[$lesson][0]['pivot']['automate_mail'];
                         //$priority = $priority;
-                    }
+                    }*/
 
-                    $event->allLessons()->detach($lesson);
-                    
-                    //$event->changeOrder($priority);
-                
-                    
-                    $event->topic()->attach($toTopic,['lesson_id' => $lesson,'date'=>$date,'time_starts'=>$time_starts,
-                        'time_ends'=>$time_ends, 'duration' => $duration, 'room' => $room, 'instructor_id' => $instructor_id, 
-                        'priority' => $priority,'automate_mail'=>$automate_mail]);
-                        //}
+                    $movedLessons[$pLesson->pivot->lesson_id] = [
+                        'topic_id'=>$toTopic,
+                        'lesson_id'=>$pLesson->pivot->lesson_id,
+                        'event_id' => $pLesson->pivot->event_id,
+                        'instructor_id' => $pLesson->pivot->instructor_id,
+                        'date' => $pLesson->pivot->date,
+                        'time_starts' => $pLesson->pivot->time_starts,
+                        'time_ends' => $pLesson->pivot->time_ends,
+                        'duration' => $pLesson->pivot->duration,
+                        'room' => $pLesson->pivot->room,
+                        'location_url'=> $pLesson->pivot->location_url,
+                        'automate_mail'=>$pLesson->pivot->automate_mail,
+                        'send_automate_mail'=>$pLesson->pivot->send_automate_mail,
+                        'priority' => $priority
+                    ];
 
-                    //$event->fixOrder();
-                    
+                    $movedLessonsCate[$pLesson->pivot->lesson_id] = [
+                        'topic_id'=>$toTopic,
+                        'lesson_id'=>$pLesson->pivot->lesson_id,
+                        'category_id' => $category->id,
+                        'priority' => $priority
+                    ];
+
+                    $priority += 1;
                 }
 
 
-                $priorityLessonCat = $category->lessons()->wherePivot('topic_id',$toTopic)->orderBy('priority')->get();
-                $priorityCat = isset($priorityLessonCat->last()['pivot']['priority']) ? $priorityLessonCat->last()['pivot']['priority'] + 1 :count($priorityLessonCat)+1 ;
-                $category->lessons()->wherePivot('topic_id',$fromTopic)->wherePivot('lesson_id',$lesson)->detach();
+                $event->allLessons()->detach(array_keys($movedLessons));
+                $event->allLessons()->attach($movedLessons);
+
+                $event->fixOrder();
+
+                //$priorityLessonCat = $category->lessons()->wherePivot('topic_id',$toTopic)->orderBy('priority')->get();
+                //$priorityCat = isset($priorityLessonCat->last()['pivot']['priority']) ? $priorityLessonCat->last()['pivot']['priority'] + 1 :count($priorityLessonCat)+1 ;
+                //$category->lessons()->wherePivot('topic_id',$fromTopic)->wherePivot('lesson_id',$lesson)->detach();
                   
                 //$category->changeOrder($priorityCat);
-                $category->topic()->attach($toTopic, ['lesson_id' => $lesson,'priority'=>$priorityCat]);
+                //$category->topic()->attach($toTopic, ['lesson_id' => $lesson,'priority'=>$priority]);
                 
                 
             
             
             }
 
-            $allEvents = $category->events;
-            //$allEvents = $category->events()->whereHas('event_info1',function($query){
-            //    $query->where('course_delivery',143);
-            //})->get();
-
-            foreach($allEvents as $event)
-            {
-                $event->fixOrder();
-            }
+   
+            $category->lessons()->wherePivot('topic_id',$fromTopic)->wherePivotIn('lesson_id',array_keys($movedLessonsCate))->detach();
+            $category->lessons()->attach($movedLessonsCate);
 
             $newOrder = $category->fixOrder($fromTopic);
             return response()->json([

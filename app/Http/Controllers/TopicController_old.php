@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Auth;
 use Symfony\Component\Routing\Route as SymfonyRoute;;
 use Illuminate\Support\Facades\URL;
 use Validator;
+use App\Jobs\FixOrder;
+use App\Jobs\SetAutomateEmailStatusForTopics;
 
 class TopicController extends Controller
 {
@@ -116,7 +118,7 @@ class TopicController extends Controller
                 $event->topic()->attach($topic);
             }
         }else{
-            dd('nothing selected');
+            //dd('nothing selected');
         }
 
 
@@ -143,8 +145,8 @@ class TopicController extends Controller
      */
     public function edit(Topic $topic, Category $categories)
     {
-        $fromCategory = request()->get('selectedCategory') ?: request()->get('selectedCategory');
         $categories = Category::all();
+        $fromCategory = request()->get('selectedCategory') ?: request()->get('selectedCategory');
         //$topic = $topic->with('category')->first();
 
         return view('topics.edit', compact('topic', 'categories','fromCategory'));
@@ -159,7 +161,7 @@ class TopicController extends Controller
      */
     public function update(TopicRequest $request, Topic $topic)
     {
-
+        
         if($request->status)
         {
             $status = 1;
@@ -168,25 +170,64 @@ class TopicController extends Controller
             $status = 0;
         }
 
-        $request->request->add(['status' => $status]);
 
+        $fromCategory = $request->fromCategory ?: $request->fromCategory;
+        $request->request->add(['status' => $status]);
         $topic->update($request->all());
         
+        $lessons = [];
+        $lessonsAttached = [];
+
         foreach($request->category_id as $category_id){
 
             if(!in_array($category_id,$topic->category()->pluck('category_id')->toArray())){
-
                 $category = Category::find($category_id);
-
+               
                 $topic->category()->attach($category_id,['priority' => count($category->topics)]);
 
+                $lastPriority =  count($category->topic()->get()) + 1;
+                foreach($topic->lessonsCategory()->wherePivot('category_id',$fromCategory)->orderBy('priority')->get() as $lesson){
+
+                    if(in_array($lesson->id,$lessons)){
+                        continue;
+                    }
+                    $lessons[] = $lesson->id;
+                    $category->topic()->attach($topic,['category_id' => $category_id, 'lesson_id' => $lesson->id,'priority'=>$lastPriority]);
+                    $lastPriority += 1;
+                    
+
+                }
+                //dispatch(new FixOrder($category,''));
+                $topic = Topic::find($topic->id);
+                foreach($category->events as $event){
+                    
+                    $lastPriority = count($event->allLessons()->get()) + 1;
+                    foreach($topic->event_lesson()->orderBy('priority')->get() as $lesson){
+                        if(in_array($lesson->id,$lessonsAttached) || !in_array($fromCategory,$lesson->category->pluck('id')->toArray())){
+                            continue;
+                        }
+                        
+                        $lessonsAttached[] = $lesson->id;
+                        $event->topic()->attach($topic,['event_id' => $event->id,
+                                                        'lesson_id' => $lesson->pivot->lesson_id, 
+                                                        'instructor_id' => $lesson->pivot->instructor_id,
+                                                        'date' => $lesson->pivot->date,
+                                                        'duration' => $lesson->pivot->duration,
+                                                        'time_starts' => $lesson->pivot->time_starts,
+                                                        'time_ends' => $lesson->pivot->time_ends,
+                                                        'priority' => $lastPriority
+                                                        //'priority' => $priority
+                                                        ]);
+                        $lastPriority += 1;
+                    }
+
+                        //dispatch(new FixOrder($event,''));           
+                }
+
             }
-            //$topic->category()->sync($request->category_id);
 
         }
-        
-
-        return redirect()->route('topics.index')->withStatus(__('Topic successfully updated.'));
+        return redirect()->route('topics.edit',[$topic->id,'selectedCategory'=>$fromCategory])->withStatus(__('Topic successfully updated.'));
     }
 
     /**
@@ -195,29 +236,7 @@ class TopicController extends Controller
      * @param  \App\Model\Topic  $topic
      * @return \Illuminate\Http\Response
      */
-    /*public function destroy(Topic $topic)
-    {
-        /*if (!$topic->category->isEmpty()) {
-            return redirect()->route('topics.index')->withErrors(__('This topic has items attached and can\'t be deleted.'));
-        }*/
-
-        /*if( count($topic->category) > 1){
-            $catgegoriesAssignded = '';
-            foreach($topic['category'] as $category){
-            
-                $categoriess[] = $category['name'];
-
-                $catgegoriesAssignded .= $category['name'] . '<br>';
-
-            }
-
-            return redirect()->route('topics.index')->withErrors(__('This topic cannot be delete because is attached to more than one categries.<br>' . $catgegoriesAssignded));
-        }
-
-        $topic->delete();
-
-        return redirect()->route('topics.index')->withStatus(__('topic successfully deleted.'));
-    }*/
+    
 
     public function destroy(Request $request, Topic $topic)
     {
@@ -372,4 +391,17 @@ class TopicController extends Controller
 
 
     }
+
+
+    function automateMailStatus(Request $request){
+
+        dispatch(new SetAutomateEmailStatusForTopics($request->all()));
+
+        return response()->json([
+            'success' => true
+        ]);
+
+    }
+
+
 }
