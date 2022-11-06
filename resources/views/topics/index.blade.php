@@ -290,8 +290,8 @@
                     })
                 }
 
-
-                countTopics()
+                initCheckBox();
+                countTopics();
             })
 
             $.each(categories, function(key, value) {
@@ -303,6 +303,14 @@
 
             
         });
+
+
+        function initCheckBox(){
+            
+            $('.check-topic').each(function(){
+                $(this).prop('checked', false);
+            });
+        }
 
     </script>
 
@@ -434,6 +442,8 @@
                     
                 }
 
+                initCheckBox();
+
             }
         });
 
@@ -483,6 +493,7 @@
 
     $(document).ready(function(){
         countTopics();
+        initCheckBox();
     })
 
     function countTopics(){
