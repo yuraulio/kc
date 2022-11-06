@@ -201,7 +201,7 @@ class TopicController extends Controller
                     
 
                 }
-                //dispatch(new FixOrder($category,''));
+                //dispatch(rder($category,''));
                 $topic = Topic::find($topic->id);
                 foreach($category->events as $event){
                     
@@ -225,7 +225,6 @@ class TopicController extends Controller
                         $lastPriority += 1;
                     }
 
-                        //dispatch(new FixOrder($event,''));           
                 }
 
             }
@@ -281,7 +280,7 @@ class TopicController extends Controller
 
     public function detachTopic(Request $request)
     {
-        dd($request->all());
+        //dd($request->all());
         $catgegoriesAssignded = '';
         $error = false;
 
@@ -295,6 +294,7 @@ class TopicController extends Controller
                 $topic->lessonsCategory()->wherePivot('category_id',$category)->detach();
 
                 $category = Category::find($category);
+                dispatch(new FixOrder($category,''));
 
                 foreach($category->events as $event){
                     
@@ -303,6 +303,7 @@ class TopicController extends Controller
                     }
 
                     $topic->lessons()->wherePivot('event_id',$event->id)->detach();
+                    dispatch(new FixOrder($event,''));
 
                 }
 

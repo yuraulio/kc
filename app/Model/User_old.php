@@ -212,12 +212,12 @@ class User extends Authenticatable
 
     public function statistic()
     {
-        return $this->belongsToMany(Event::class, 'event_statistics')->withPivot('id', 'videos', 'lastVideoSeen', 'notes', 'event_id','created_at');
+        return $this->belongsToMany(Event::class, 'event_statistics')->withPivot('id', 'videos', 'lastVideoSeen', 'notes', 'event_id');
     }
 
     public function statisticGroupByEvent()
     {
-        return $this->belongsToMany(Event::class, 'event_statistics')->select('user_id', 'event_id')->withPivot('id', 'videos', 'lastVideoSeen', 'notes', 'event_id','created_at');
+        return $this->belongsToMany(Event::class, 'event_statistics')->select('user_id', 'event_id')->withPivot('id', 'videos', 'lastVideoSeen', 'notes', 'event_id');
     }
 
     public function transactions()
@@ -684,16 +684,8 @@ class User extends Authenticatable
         return $this->hasOne(CartCache::class);
     }
 
-
-    public function getStatistsicsUpdate($event, $statistics,$eventTopics = null){
-
-
-        if(!$eventTopics){
-            $eventTopics = $event->topicsLessonsInstructors()['topics'];
-        }
-
-        $newStatistics = [];
-
+    public function updateUserStatistic($event, $statistics)
+    {
         $tab = $event['title'];
         $tab = str_replace(' ', '_', $tab);
         $tab = str_replace('-', '', $tab);
@@ -709,20 +701,16 @@ class User extends Authenticatable
         $notes = [];
         $lastVideoSeen = '';
         $firstTime = true;
-        $createdAt = Carbon::now();
-        $updatedAt = Carbon::now();
-
         if (isset($statistic['videos']) && $statistic['videos'] != '') {
             $notes = json_decode($statistic['notes'], true);
             $videos = json_decode($statistic['videos'], true);
             $lastVideoSeen = $statistic['lastVideoSeen'];
-            $createdAt = $statistic['created_at'];
             $firstTime = false;
         }
         $countVideos = $videos ? count($videos) + 1 : 1;
         $oldVideos = [];
         $change = 0;
-        foreach ($eventTopics as $key => $topic) {
+        foreach ($event->topicsLessonsInstructors()['topics'] as $key => $topic) {
             foreach ($topic['lessons'] as $key1 => $lesson) {
                 // if(isset($lesson) && $lesson['vimeo_video'] != null){
             
@@ -753,22 +741,12 @@ class User extends Authenticatable
             }
         }
 
-        $newStatistics = ['videos'=>json_encode($videos), 'notes' => json_encode($notes), 'lastVideoSeen' => $lastVideoSeen,
-                                        'created_at' => $createdAt,'updated_at' => $updatedAt, 'event_id' => $event['id'],'user_id' => $this->id];
-
-        return $newStatistics;
-
-    }
-
-
-    public function updateUserStatistic($event, $statistics, $eventTopics = null)
-    {
-        
-
         if (!$this->statistic()->wherePivot('event_id', $event['id'])->first()) {
-            $this->statistic()->attach($event['id'], $this->getStatistsicsUpdate($event, $statistics,$eventTopics));
+            $this->statistic()->attach($event['id'], ['videos'=>json_encode($videos), 'notes' => json_encode($notes), 'lastVideoSeen' => $lastVideoSeen,
+                                        'created_at' => Carbon::now(),'updated_at' => Carbon::now()]);
         } else {
-            $this->statistic()->wherePivot('event_id', $event['id'])->updateExistingPivot($event['id'], $this->getStatistsicsUpdate($event, $statistics,$eventTopics), false);
+            $this->statistic()->wherePivot('event_id', $event['id'])->updateExistingPivot($event['id'], ['videos' => json_encode($videos),
+                                            'notes' => json_encode($notes),'lastVideoSeen' => $lastVideoSeen], false);
         }
 
         return $this->statistic()->wherePivot('event_id', $event['id'])->first();

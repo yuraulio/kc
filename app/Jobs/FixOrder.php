@@ -37,37 +37,24 @@ class FixOrder implements ShouldQueue
      */
     public function handle()
     {
-        if(get_class($this->model) == 'App\\Model\\Category'){
+
+        $this->model->fixOrder();
+
+        /*if(get_class($this->model) == 'App\\Model\\Category'){
             $this->topicOrder();
         }else if(get_class($this->model) == 'App\\Model\\Event'){
             $this->eventLessonOrder();
-        }
+        }*/
     }
 
 
     function topicOrder(){
-
-        $priority = 1;
-        foreach($this->model->lessons as $lesson){
-
-            $lesson->pivot->priority = $priority;
-            $lesson->pivot->save();
-            $priority += 1;
-        }
+        $this->model->fixOrder();
     }
 
 
     function eventLessonOrder(){
-
-        $priority = 1;
-        foreach($this->model->lessons() as $lesson){
-           
-            
-            $lesson->pivot->priority = $priority;
-            $lesson->pivot->save();
-            $priority += 1;
-
-        }
+        $this->model->fixOrder();
     }
 
 }

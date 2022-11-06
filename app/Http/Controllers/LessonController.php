@@ -447,8 +447,8 @@ class LessonController extends Controller
         $topic = Topic::find($request->topic_id);
         $topic->event_topic()->wherePivot('lesson_id', '=', $request->lesson_id)->wherePivot('event_id', '=', $request->event_id)->detach($request->topic_id);
 
-        $event->fixOrder();
-
+        //$event->fixOrder();
+        dispatch(new FixOrder($event,''));
         dispatch((new UpdateStatisticJson($request->event_id))->delay(now()->addSeconds(3)));
 
         echo json_encode($request->all());
@@ -734,7 +734,6 @@ class LessonController extends Controller
                 $lesson->pivot->save();
 
             }
-            //dispatch(new FixOrder($event,''));
         }
         
 
@@ -752,7 +751,7 @@ class LessonController extends Controller
 
         }
         //$category = Category::find($request->category);
-        //dispatch(new FixOrder($category,''));
+        //dispatch(rder($category,''));
 
         return [
             'success' => true,

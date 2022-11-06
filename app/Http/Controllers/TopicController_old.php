@@ -197,7 +197,7 @@ class TopicController extends Controller
                     
 
                 }
-                //dispatch(new FixOrder($category,''));
+                //dispatch(rder($category,''));
                 $topic = Topic::find($topic->id);
                 foreach($category->events as $event){
                     
@@ -221,7 +221,6 @@ class TopicController extends Controller
                         $lastPriority += 1;
                     }
 
-                        //dispatch(new FixOrder($event,''));           
                 }
 
             }
