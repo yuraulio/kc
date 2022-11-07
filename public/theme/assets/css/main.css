@@ -1287,8 +1287,9 @@
        .section-text-img-blue { padding: 45px 0 80px; }
 
        .content-wrapper .tabs-wrapper.fixed-tab-controls{ padding-top: 0; }
-       .section-course-tabs .content-wrapper .tabs-wrapper.fixed-tab-controls .tab-controls { position: fixed; top: 79px; border-top: none; z-index: 10; border-top: 1px solid #fff; }
+       .section-course-tabs .content-wrapper .tabs-wrapper.fixed-tab-controls .tab-controls { position: fixed; top: 79px; border-top: none; z-index: 10; border-top: 1px solid #fff; transition: 300ms all ease; }
        .section-course-tabs .content-wrapper .tabs-wrapper.fixed-tab-controls .tab-controls:after { content: ''; position: fixed; top: 75px; display: block; left: 0; width: 100vw; height: 1px; background-color: #ffffff; }
+       .section-course-tabs .content-wrapper .tabs-wrapper.fixed-tab-controls .tab-controls.withTicker { top: 6.95rem; }
 
        .elearning-page-wrapper{ padding-top: 26px; margin-bottom: 0; }
        .elearning-page-wrapper .page-content{ box-shadow: none; }

@@ -1,18 +1,21 @@
 
 
 $( window ).resize(function() {
+    removeTickerMobile()
 
-    let a = document.getElementsByClassName('ticker__item')[0]
-    a = a.offsetHeight
+    showTicker()
+
+    // let text = $('.ticker')[0]
+
+    // text = text.offsetWidth;
+    // length_text = getCharWidth('Foco', 18, $('.ticker__item').text())
 
 
-    if(a < 30){
-        //console.log('one line')
-        removeTickerMobile()
-    }else{
-        //console.log('multiple lines')
-        addTickerMobile()
-    }
+    // let width = window.innerWidth;
+    // console.log('windows', width)
+
+    // let result = width - length_text
+    // console.log('result: ',result)
 });
 
     function addTickerMobile(){
@@ -26,16 +29,78 @@ $( window ).resize(function() {
         $('.ticker__item').removeClass('mobile')
     }
 
+    function getCharWidth(fontFamily, fontSize, text) {
+        var div = document.createElement("div");
+        div.style.position = "absolute";
+        div.style.visibility = "hidden";
+        div.style.fontFamily = fontFamily;
+        div.style.fontSize = fontSize;
+        div.innerHTML = text;
+        document.body.appendChild(div);
+        var width = div.offsetWidth;
+        document.body.removeChild(div);
+        return(width);
+    }
+
+    function getTickerLength(){
+        let text = $('.ticker__item')[0]
+
+        text = text.offsetWidth;
+        length_text = getCharWidth('Foco', 18, $('.ticker__item').text())
+
+
+        let width = window.innerWidth;
+        let result = width - length_text
+        return result
+    }
+
+    function showTicker(){
+        let multipleLines = false
+
+        if(getTickerLength() > 180){
+            multipleLines = false
+        }else{
+            multipleLines = true
+        }
+
+        $('.ticker__item').removeClass('hidden')
+
+        a = Math.round($('.ticker__item').outerHeight())
+
+        console.log(a)
+
+        if(a < 30){
+            multipleLines = false
+        }else{
+            multipleLines = true
+        }
+
+        if(!multipleLines){
+            removeTickerMobile()
+        }else{
+            addTickerMobile()
+        }
+    }
+
 
 jQuery(document).ready(function($) {
 
-    let a = $('.ticker__item').height();
+    //let a = document.getElementsByClassName('ticker__item')[0]
 
-    if(a < 30){
-        removeTickerMobile()
-    }else{
-        addTickerMobile()
-    }
+
+
+
+
+
+
+    // if(a < 30){
+    //     removeTickerMobile()
+    // }else{
+    //     addTickerMobile()
+    // }
+
+    showTicker()
+
 
 
 
@@ -337,10 +402,24 @@ jQuery(document).ready(function($) {
    $(window).scroll(function(){
         if( $(window).scrollTop() > 0 ){
             $('#header').addClass('scroll-down');
-            $('#header').removeClass('headerWithTicker');
+            //help
+            // if($(window).width() > mobileWidth){
+            //     $('#header').removeClass('headerWithTicker');
+            // }
+            if($('.ticker-main-wrapper').length != 0){
+                $('#header').removeClass('headerWithTicker');
+                $('.tab-controls').removeClass('withTicker')
+            }
+
+
         }else{
             $('#header').removeClass('scroll-down');
-            $('#header').addClass('headerWithTicker');
+
+            if($('.ticker-main-wrapper').length != 0){
+                $('#header').addClass('headerWithTicker');
+                $('.tab-controls').addClass('withTicker')
+            }
+
         }
 
         if( $(window).scrollTop() > 200 ){
@@ -689,8 +768,16 @@ jQuery(document).ready(function($) {
 
         if( $(window).scrollTop() > 0 ){
             $('#header').addClass('scroll-down');
+            if(!$('#header').hasClass('headerWithTicker')){
+                $('.tab-controls').removeClass('withTicker')
+            }
+
         }else{
             $('#header').removeClass('scroll-down');
+            if($('#header').hasClass('headerWithTicker')){
+                $('.tab-controls').addClass('withTicker')
+            }
+
         }
         if( $(window).scrollTop() > 200 ){
             $('.go-top-btn').addClass('visible');

@@ -470,14 +470,10 @@ footer {
 
 /* TICKER */
 
-.ticker-wrapper {
+
+.ticker-wrapper, .ticker-main-wrapper {
     background-color: #f53000;
 
-}
-
-.ticker__item {
-    text-align: center;
-    color: white;
 }
 
 .ticker__item.mobile{
@@ -491,7 +487,6 @@ footer {
 
 .ticker-wrap.mobile {
     /* position: fixed; */
-    bottom: 0;
     width: 100%;
     overflow: hidden;
     /* height: 4rem; */
@@ -501,7 +496,7 @@ footer {
 }
 
 .headerWithTicker{
-    margin-top: 1.5rem;
+    margin-top: 1.7rem;
 }
 
 
@@ -536,10 +531,14 @@ footer {
     }
 }
 
+.hidden {
+    display: none;
+}
+
 .ticker.mobile {
     display: inline-block;
-    /* height: 4rem;
-    line-height: 4rem; */
+    height: 2rem;
+    line-height: 2rem;
     white-space: nowrap;
     padding-right: 100%;
     box-sizing: content-box;
@@ -555,30 +554,37 @@ footer {
     }
 
     .ticker__item {
+        padding: 0 2rem;
+        text-align: center;
+        color: white;
+    }
+
+
+    .ticker__item p,
+    .ticker__item h1,
+    .ticker__item h2,
+    .ticker__item h3,
+    .ticker__item h4,
+    .ticker__item h5 {
+        display: inline-block;
         padding: 0 5%;
     }
-
-
-    .ticker__item p,h1,h2,h3,h4,h5 {
-        display: inline;
-    }
-
 
 /* mobile */
 
     @media only screen and (max-width: 600px) {
 
         .headerWithTicker{
-            margin-top: unset;
+            margin-top: 2rem;
         }
 
-        #header{
+        /* #header{
             position: unset;
-        }
+        } */
 
-        * {
+        /* * {
             box-sizing: border-box;
-        }
+        } */
 
         @-webkit-keyframes ticker {
             0% {
@@ -607,8 +613,12 @@ footer {
         }
 
         .ticker-wrap {
+            /* position:fixed;
+            top:0;
+            z-index: 100; */
             /* position: fixed; */
-            bottom: 0;
+            /* position: relative;
+            bottom: 0; */
             width: 100%;
             overflow: hidden;
             /* height: 4rem; */
@@ -619,8 +629,8 @@ footer {
 
         .ticker {
         display: inline-block;
-        /* height: 4rem;
-        line-height: 4rem; */
+        height: 2rem;
+        line-height: 2rem;
         white-space: nowrap;
         padding-right: 100%;
         box-sizing: content-box;
@@ -639,20 +649,10 @@ footer {
             display: inline-block;
 
             padding: 0 2rem;
-            font-size: 2rem;
+            /* font-size: 2rem; */
             color: white;
         }
 
-
-
-        body {
-            padding-bottom: 5rem;
-        }
-        h1,
-        h2,
-        p {
-            padding: 0 5%;
-        }
     }
 
 

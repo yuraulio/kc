@@ -95,7 +95,8 @@
 @endif
 
 <script>
-    // if($('.ticker-wrapper').length != 0 && $('.ticker-wrapper').length != 0){
-    //     $('#header').addClass('headerWithTicker')
-    // }
+    if($('.ticker-wrapper').length != 0 && $('.ticker-wrapper').length != 0){
+        $('#header').addClass('headerWithTicker')
+        $('.tab-controls').addClass('withTicker')
+    }
 </script>

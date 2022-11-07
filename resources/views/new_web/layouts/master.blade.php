@@ -59,7 +59,7 @@
         @endif
 
         <div class="page-wrapper non-pointer">
-           {{-- @include('new_web.layouts.tickers') --}}
+            @include('new_web.layouts.tickers')
             @include('new_web.layouts.header')
             @include('new_web.layouts.mobile_menu')
 
@@ -269,6 +269,7 @@
                 $("body").show();
             }, 200);
         </script>
+
 
         @if(!Auth::check())
             <script>

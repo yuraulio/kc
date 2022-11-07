@@ -6,12 +6,12 @@
             "tabs" => $input->tabs ?? "",
         ];
     }
- 
+
     $event = $dynamic_page_data["event"] ?? null;
     $is_event_paid = $dynamic_page_data["is_event_paid"] ?? null;
     $is_joined_waiting_list = $dynamic_page_data["is_joined_waiting_list"] ?? null;
     $estatus = $event->status ?? null;
-    
+
     $freeEvent = isset($dynamic_page_data['info']['payment_method']) && $dynamic_page_data['info']['payment_method'] == 'free' ? true : false;
 
     function checkTabContent($tab, $dynamic_page_data, $tabs) {
@@ -39,12 +39,14 @@
         return false;
     }
 
+    $tickers = get_tickers();
+
 @endphp
 
 <div class="section-course-tabs">
     <div class="content-wrapper">
         <div class="tabs-wrapper fixed-tab-controls">
-            <div class="tab-controls">
+            <div class="tab-controls @if(count($tickers) != 0) {{ 'withTicker'}} @else {{''}} @endif">
                 <div class="container tabs-container">
                             <a href="#" class="mobile-tabs-menu">Menu</a>
                             <ul class="clearfix tab-controls-list">
@@ -62,7 +64,7 @@
                                     <li><a href="#{{Illuminate\Support\Str::slug("Instructors")}}" class="">Instructors</a></li>
                                 @endif
                             </ul>
-                            
+
                             @if ($event)
                                 {{--@if($event->view_tpl == "elearning_free")--}}
                                 @if($freeEvent)
@@ -83,7 +85,7 @@
                                     <a href="#seats" class="btn btn--lg btn--primary go-to-href go-to-href soldout">SOLD OUT</a>
                                 @endif
                             @endif
-                
+
                 </div>
             </div>
 
@@ -181,7 +183,7 @@
                         $('.alert-outer').show()
                         }else{
                             window.location.replace(data['redirect']);
-                        }    
+                        }
                     },
                 });
             }
