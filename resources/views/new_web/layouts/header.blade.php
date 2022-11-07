@@ -95,9 +95,7 @@
 @endif
 
 <script>
-    document.getElementById('header').classList.add('header-transparent');
-
-    if($('.ticker-wrapper').length != 0 && $('.ticker-wrapper').length != 0){
-        $('#header').addClass('headerWithTicker')
-    }
+    // if($('.ticker-wrapper').length != 0 && $('.ticker-wrapper').length != 0){
+    //     $('#header').addClass('headerWithTicker')
+    // }
 </script>
