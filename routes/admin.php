@@ -8,7 +8,8 @@ use App\Http\Controllers\Auth\AdminLoginController;
 use Illuminate\Support\Facades\Route;
 
 
-Route::domain('admin.' . env('APP_DOMAIN'))->group(function () {
+//Route::domain('admin.' . env('APP_DOMAIN'))->group(function () {
+Route::domain(env('PREFIX_NEW_ADMIN_DOMAIN_URL') . env('APP_DOMAIN'))->group(function () {
     Route::get('/login', [AdminLoginController::class, 'showLoginPage'])->name("admin-login");
     Route::post('/authenticate', [AdminLoginController::class, 'authenticate'])->name("admin-authenticate");
 

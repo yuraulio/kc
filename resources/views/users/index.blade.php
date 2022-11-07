@@ -250,6 +250,7 @@
                 previous: '&#171;' // or '←'
                 }
             },
+            "deferRender": true
         
         });
 

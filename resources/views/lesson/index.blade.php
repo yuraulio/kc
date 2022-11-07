@@ -202,7 +202,8 @@
                 next: '&#187;', // or '→'
                 previous: '&#171;' // or '←'
                 }
-            }
+            },
+            "deferRender": true
         });
 
         function removeSpecial(s){
@@ -593,7 +594,8 @@
                                 next: '&#187;', // or '→'
                                 previous: '&#171;' // or '←'
                                 }
-                            }
+                            },
+                            "deferRender": true
                         });
 
                        
@@ -789,7 +791,8 @@
                             next: '&#187;', // or '→'
                             previous: '&#171;' // or '←'
                             }
-                        }
+                        },
+                        "deferRender": true
                     });
                     $('#col2_filter').change();
                     $('#col1_filter').change();

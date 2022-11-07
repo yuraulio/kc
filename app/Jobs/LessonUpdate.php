@@ -38,18 +38,12 @@ class LessonUpdate implements ShouldQueue
     {
         foreach($this->request['topic_id'] as $topic)
         {
+            $catsIds = [];
             $topic = Topic::with('category')->find($topic);
            
             foreach($topic->category as $cat){
                 
                 if($cat->id != $this->request['category']){
-<<<<<<< HEAD
-                    
-                    continue;
-                }
-                
-                $allEvents = $cat->events;
-=======
                     continue;
                 }
                 
@@ -64,7 +58,6 @@ class LessonUpdate implements ShouldQueue
                     $query->where('course_delivery',143);
                 })->get();*/
 
->>>>>>> lcdev
                 foreach($allEvents as $event)
                 {
                     
@@ -112,14 +105,11 @@ class LessonUpdate implements ShouldQueue
                     $cat->fixOrder();
                 }
 
-<<<<<<< HEAD
-=======
                 //$this->lesson->topic()->wherePivot('category_id',$this->request['category'])->detach();
                 //$cat->changeOrder($priority);
                 //$cat->topic()->attach($topic, ['lesson_id' => $this->lesson->id,'priority'=>$priority]);
                 //$cat->fixOrder();
 
->>>>>>> lcdev
             }
                 
         }
