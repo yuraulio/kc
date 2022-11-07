@@ -37,7 +37,7 @@ class FixOrder extends Command
      *
      * @return int
      */
-    public function handle()
+    /*public function handle()
     {
         $masterEvent = Event::find(2304);
         $events = Event::whereIn('id',[4628,4627,4626,4625,4624,4623,4622,4621])->get();
@@ -64,10 +64,10 @@ class FixOrder extends Command
 
 
         return 0;
-    }
+    }*/
 
 
-    /*public function handle()
+    public function handle()
     {
         
         
@@ -110,5 +110,5 @@ class FixOrder extends Command
         }
 
         return 0;
-    }*/
+    }
 }

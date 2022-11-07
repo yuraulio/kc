@@ -252,14 +252,14 @@
                 
                 
                 <label>{{ $form["instructor_form_phone"] ?? "" }}<span>*</span></label>
-                    <div style="display:flex;" class="input-safe-wrapper">
-                        <select class="required select2" name="mobile_code" id="mobile_code">
-                                <option disabled selected value=""></option>
-                                @foreach($phoneCode as $key => $code)
-                                <option value="{{$key}}" label="{{$code}}">{{$code}}</opttion>
-                                @endforeach
-                            </select>
-                    <input class="required" type="text" id="mobile_phone" name="mobile_phone">
+                <div style="display:flex;" class="input-safe-wrapper country-dropdown">
+                    <select class="required form-control" name="mobile_code" id="mobile_code">
+                        <option disabled selected value=""></option>
+                        @foreach($phoneCode as $key => $code)
+                        <option @if(!old('mobile_code') && $key == 30) selected @endif value="{{$key}}" label="{{$code}}">{{$code}}</opttion>
+                        @endforeach
+                    </select>
+                    <input class="required" type="number" id="mobile_phone" name="mobile_phone">
                 </div>
              
 

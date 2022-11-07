@@ -36,11 +36,9 @@ class LessonUpdate implements ShouldQueue
      */
     public function handle()
     {
-
-        $catsIds = [];
-
         foreach($this->request['topic_id'] as $topic)
         {
+            $catsIds = [];
             $topic = Topic::with('category')->find($topic);
            
             foreach($topic->category as $cat){

@@ -124,11 +124,7 @@ class LessonController extends Controller
         }
 
         if($request->topic_id != null){
-
-            $category = Category::find($request->category);
-            $topic = Topic::with('category')->find($request->topic_id[0]);
-            $category->updateLesson($topic, $lesson);
-
+            
             dispatch(new LessonUpdate($request->all(),$lesson));
         }
 

@@ -14,7 +14,6 @@ use Illuminate\Support\Facades\URL;
 use Validator;
 use App\Jobs\FixOrder;
 use App\Jobs\SetAutomateEmailStatusForTopics;
-use App\Jobs\CopyTopicFromOneCategoryToAnother;
 
 class TopicController extends Controller
 {
@@ -165,7 +164,7 @@ class TopicController extends Controller
      */
     public function update(TopicRequest $request, Topic $topic)
     {
-
+        
         if($request->status)
         {
             $status = 1;
@@ -181,13 +180,10 @@ class TopicController extends Controller
         
         $lessons = [];
         $lessonsAttached = [];
-        
-        $fromCategoryModel = Category::findOrFail($fromCategory);
 
         foreach($request->category_id as $category_id){
 
             if(!in_array($category_id,$topic->category()->pluck('category_id')->toArray())){
-                //dd('efw1');
                 $category = Category::find($category_id);
                 $priority =  $category->topics()->orderBy('priority')->get();
                 $priority = isset($priority->last()['pivot']['priority']) ? $priority->last()['pivot']['priority'] + 1 :count($priority)+1 ;
@@ -205,16 +201,34 @@ class TopicController extends Controller
                     
 
                 }
-                
+                //dispatch(rder($category,''));
                 $topic = Topic::find($topic->id);
-                foreach($fromCategoryModel->events as $fromEvent){
+                foreach($category->events as $event){
                     
-                    dispatch(new CopyTopicFromOneCategoryToAnother($category, $fromEvent->id, $fromCategory, $topic, $lessonsAttached));
+                    $lastPriority = count($event->allLessons()->get()) + 1;
+                    foreach($topic->event_lesson()->orderBy('priority')->get() as $lesson){
+                        if(in_array($lesson->id,$lessonsAttached) || !in_array($fromCategory,$lesson->category->pluck('id')->toArray())){
+                            continue;
+                        }
+                        
+                        $lessonsAttached[] = $lesson->id;
+                        $event->topic()->attach($topic,['event_id' => $event->id,
+                                                        'lesson_id' => $lesson->pivot->lesson_id, 
+                                                        'instructor_id' => $lesson->pivot->instructor_id,
+                                                        'date' => $lesson->pivot->date,
+                                                        'duration' => $lesson->pivot->duration,
+                                                        'time_starts' => $lesson->pivot->time_starts,
+                                                        'time_ends' => $lesson->pivot->time_ends,
+                                                        'priority' => $lastPriority,
+                                                        'automate_mail' => $lesson->pivot->automate_mail ? $lesson->pivot->automate_mail : false
+                                                        ]);
+                        $lastPriority += 1;
+                    }
 
                 }
 
             }
-            //dd('edw2');
+
         }
         return redirect()->route('topics.edit',[$topic->id,'selectedCategory'=>$fromCategory])->withStatus(__('Topic successfully updated.'));
     }
@@ -353,7 +367,7 @@ class TopicController extends Controller
                 continue;
             }
             
-            foreach($category->lessons()->wherePivot('topic_id',$topic)->orderBy('priority','ASC')->get() as $topicc){
+            foreach($category->lessons()->wherePivot('topic_id',$topic)->get() as $topicc){
                 
                 $topicc->pivot->priority = $order;
                 $topicc->pivot->save();
@@ -363,7 +377,7 @@ class TopicController extends Controller
 
             foreach($category->events as $event){
     
-                foreach($event->allLessons()->wherePivot('topic_id',$topic)->orderBy('priority','ASC')->get() as $lesson){
+                foreach($event->lessons()->wherePivot('topic_id',$topic)->get() as $lesson){
                    
                     $lesson->pivot->priority = $orderLessons;
                     $lesson->pivot->save();
