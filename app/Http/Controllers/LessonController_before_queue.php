@@ -751,7 +751,6 @@ class LessonController extends Controller
                 $lesson->pivot->save();
 
             }
-            //dispatch(new FixOrder($event,''));
         }
         
 
@@ -769,7 +768,7 @@ class LessonController extends Controller
 
         }
         //$category = Category::find($request->category);
-        //dispatch(new FixOrder($category,''));
+        //dispatch(rder($category,''));
 
         return [
             'success' => true,

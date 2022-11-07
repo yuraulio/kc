@@ -351,9 +351,13 @@ class LessonController extends Controller
             $lesson->vimeo_duration = $this->formatDuration($duration);
             $lesson->save();
         }
+        
         if($request->topic_id != null){
-            
 
+            $category = Category::find($request->category);
+            $topic = Topic::with('category')->find($request->topic_id[0]);
+            $category->updateLesson($topic, $lesson);
+    
             dispatch(new LessonUpdate($request->all(),$lesson));
 
 
@@ -434,15 +438,19 @@ class LessonController extends Controller
     public function remove_lesson(Request $request)
     {
        
+        $event = Event::find($request->event_id);
+
         $topic = Topic::find($request->topic_id);
         $topic->event_topic()->wherePivot('lesson_id', '=', $request->lesson_id)->wherePivot('event_id', '=', $request->event_id)->detach($request->topic_id);
 
+        //$event->fixOrder();
+        dispatch(new FixOrder($event,''));
         dispatch((new UpdateStatisticJson($request->event_id))->delay(now()->addSeconds(3)));
 
         echo json_encode($request->all());
     }
 
-    public function moveMultipleLessonToTopic(Request $request){
+    /*public function moveMultipleLessonToTopic(Request $request){
         
         //dd($request->all());
         $validatorArray['lessons'] = 'required';
@@ -474,6 +482,9 @@ class LessonController extends Controller
             foreach($lessons as $lesson){
                 
                 $allEvents = $category->events;
+                //$allEvents = $category->events()->whereHas('event_info1',function($query){
+                //    $query->where('course_delivery',143);
+                //})->get();
 
                 foreach($allEvents as $event)
                 {
@@ -540,6 +551,144 @@ class LessonController extends Controller
         ]);
         
 
+    }*/
+
+    public function moveMultipleLessonToTopic(Request $request){
+        
+        //dd($request->all());
+        $validatorArray['lessons'] = 'required';
+        $validatorArray['category'] = 'required';
+        $validatorArray['fromTopic'] = 'required';
+        $validatorArray['toTopic'] = 'required';
+       
+
+        $validator = Validator::make($request->all(), $validatorArray);
+        
+        if ($validator->fails()) {
+            return [
+                'success' => false,
+                'errors' => $validator->errors(),
+                'message' => '',
+            ];
+
+        }
+
+        $lessons = $request->lessons;
+        $category = $request->category;
+        $fromTopic = $request->fromTopic;
+        $toTopic = $request->toTopic;
+       
+        $category = Category::find($category);
+        $newOrder = [];
+        if($category){
+            $allEvents = $category->events;
+            foreach($allEvents as $event)
+            {
+           
+                
+                
+                //$allEvents = $category->events()->whereHas('event_info1',function($query){
+                //    $query->where('course_delivery',143);
+                //})->get();
+
+                $allLessons = $event->allLessons->groupBy('id');
+                $priorityLesson = $event->allLessons()->wherePivot('topic_id',$toTopic)->orderBy('priority')->get();
+                $priority = isset($priorityLesson->last()['pivot']['priority']) ? $priorityLesson->last()['pivot']['priority'] + 1 :count($allLessons)+1 ;
+
+                $movedLessons = [];
+                $movedLessonsCate = [];
+
+                foreach($lessons as $pLesson){
+                        
+                    //$allLessons = $event->allLessons->groupBy('id');
+                    //$priorityLesson = $event->allLessons()->wherePivot('topic_id',$toTopic)->orderBy('priority')->get();
+                    
+                    if(!$pLesson = $allLessons[$pLesson][0]){
+                        continue;
+                    }
+
+                    //dd($pLesson);
+
+                    $date = '';
+                    $time_starts = '';
+                    $time_ends = '';
+                    $duration = '';
+                    $room = '';
+                    $instructor_id = '';
+                    $automate_mail = false;                    
+                    
+                    /*if(isset($allLessons[$lesson][0])){
+                        
+                        $date = $allLessons[$lesson][0]['pivot']['date'];
+                        $time_starts = $allLessons[$lesson][0]['pivot']['time_starts'];
+                        $time_ends = $allLessons[$lesson][0]['pivot']['time_ends'];
+                        $duration = $allLessons[$lesson][0]['pivot']['duration'];
+                        $room = $allLessons[$lesson][0]['pivot']['room'];
+                        $instructor_id = $allLessons[$lesson][0]['pivot']['instructor_id'];
+                        $automate_mail = $allLessons[$lesson][0]['pivot']['automate_mail'];
+                        //$priority = $priority;
+                    }*/
+
+                    $movedLessons[$pLesson->pivot->lesson_id] = [
+                        'topic_id'=>$toTopic,
+                        'lesson_id'=>$pLesson->pivot->lesson_id,
+                        'event_id' => $pLesson->pivot->event_id,
+                        'instructor_id' => $pLesson->pivot->instructor_id,
+                        'date' => $pLesson->pivot->date,
+                        'time_starts' => $pLesson->pivot->time_starts,
+                        'time_ends' => $pLesson->pivot->time_ends,
+                        'duration' => $pLesson->pivot->duration,
+                        'room' => $pLesson->pivot->room,
+                        'location_url'=> $pLesson->pivot->location_url,
+                        'automate_mail'=>$pLesson->pivot->automate_mail,
+                        'send_automate_mail'=>$pLesson->pivot->send_automate_mail,
+                        'priority' => $priority
+                    ];
+
+                    $movedLessonsCate[$pLesson->pivot->lesson_id] = [
+                        'topic_id'=>$toTopic,
+                        'lesson_id'=>$pLesson->pivot->lesson_id,
+                        'category_id' => $category->id,
+                        'priority' => $priority
+                    ];
+
+                    $priority += 1;
+                }
+
+
+                $event->allLessons()->detach(array_keys($movedLessons));
+                $event->allLessons()->attach($movedLessons);
+
+                $event->fixOrder();
+
+                //$priorityLessonCat = $category->lessons()->wherePivot('topic_id',$toTopic)->orderBy('priority')->get();
+                //$priorityCat = isset($priorityLessonCat->last()['pivot']['priority']) ? $priorityLessonCat->last()['pivot']['priority'] + 1 :count($priorityLessonCat)+1 ;
+                //$category->lessons()->wherePivot('topic_id',$fromTopic)->wherePivot('lesson_id',$lesson)->detach();
+                  
+                //$category->changeOrder($priorityCat);
+                //$category->topic()->attach($toTopic, ['lesson_id' => $lesson,'priority'=>$priority]);
+                
+                
+            
+            
+            }
+
+   
+            $category->lessons()->wherePivot('topic_id',$fromTopic)->wherePivotIn('lesson_id',array_keys($movedLessonsCate))->detach();
+            $category->lessons()->attach($movedLessonsCate);
+
+            $newOrder = $category->fixOrder($fromTopic);
+            return response()->json([
+                'success' => true,
+                'newOrder' => $newOrder,
+            ]);
+
+        }
+        return response()->json([
+            'success' => false,
+        ]);
+        
+
     }
 
     public function orderLesson(Request $request){
@@ -581,7 +730,6 @@ class LessonController extends Controller
                 $lesson->pivot->save();
 
             }
-            //dispatch(new FixOrder($event,''));
         }
         
 
@@ -599,7 +747,7 @@ class LessonController extends Controller
 
         }
         //$category = Category::find($request->category);
-        //dispatch(new FixOrder($category,''));
+        //dispatch(rder($category,''));
 
         return [
             'success' => true,

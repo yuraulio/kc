@@ -24,7 +24,7 @@ class ExamAttemptController extends Controller
     }
 
 
-    public function attemptExam($ex_id) {       
+    public function attemptExam($ex_id) {
 
         $exam = Exam::find($ex_id);
         $event = $exam->event->first();
@@ -33,18 +33,18 @@ class ExamAttemptController extends Controller
 
     }
 
-    public function examStart(Exam $exam) {  
+    public function examStart(Exam $exam) {
 
         //$exam = ExamSetting::find($ex_id);
         $event = $exam->event->first();
-        $st_id = Auth::user()->id;        
-       
+        $st_id = Auth::user()->id;
+
         if($exam->random_questions) {
 
             $ex_scontents = json_decode($exam->questions,true);
             $exam_keys = array_keys($ex_scontents);
             shuffle($exam_keys);
-        
+
         } else {
 
             $ex_scontents = json_decode($exam->questions,true);
@@ -52,7 +52,7 @@ class ExamAttemptController extends Controller
 
         }
 
-        
+
 
         $ex_contents = array();
 
@@ -60,9 +60,9 @@ class ExamAttemptController extends Controller
         foreach($exam_keys as $key => $exam_key) {
 
             $ex_content = $ex_scontents[$exam_key];
-            
+
             $options = array();
-           
+
             if($ex_content['question-type'] == 1) { //For True False Type
 
                 $unser_data = unserialize($ex_content->answer_keys);
@@ -71,12 +71,12 @@ class ExamAttemptController extends Controller
 
                 $opt2 = $unser_data['option_2'];
 
-                array_push($options, $opt1, $opt2);                
+                array_push($options, $opt1, $opt2);
 
             } elseif($ex_content['question-type'] == 'radio buttons') { //For Multiple Choice Type
 
                 $answer_keys = array_keys($ex_content['answers']);
-                
+
                 if($exam->random_answers) {
                     shuffle($answer_keys);
                 }
@@ -84,7 +84,7 @@ class ExamAttemptController extends Controller
                 $opt1 = $ex_content['answers'][$answer_keys[0]];
                 $opt2 = $ex_content['answers'][$answer_keys[1]];
                 $opt3 = $ex_content['answers'][$answer_keys[2]];
-                $opt4 = $ex_content['answers'][$answer_keys[3]];         
+                $opt4 = $ex_content['answers'][$answer_keys[3]];
                 array_push($options, $opt1, $opt2, $opt3, $opt4);
 
 
@@ -104,8 +104,8 @@ class ExamAttemptController extends Controller
 
                 array_push($options, $opt1, $opt2, $opt3, $opt4);
 
-            }     
-        
+            }
+
             $ex_contents[] = ['id'=> $key,'answers_keys' => $options, 'mark_status' => 0, 'question_title' => $ex_content['question'], 'question_description' => '',
                 'question-type' => $ex_content['question-type'],'given_ans'=>'', 'q_id' => $exam_key];
 
@@ -122,7 +122,7 @@ class ExamAttemptController extends Controller
 
             $redata = ExamSyncData::where(['exam_id' => $exam->id, 'user_id' => $st_id])->value('started_at');
 
-            
+
 
             $fndata = ExamSyncData::where(['exam_id' => $exam->id, 'user_id' => $st_id])->value('finish_at');
             $examResultData = ExamResult::where('exam_id',$exam->id)->where('user_id', $st_id)->first();
@@ -134,7 +134,7 @@ class ExamAttemptController extends Controller
             }
 
         }
-        
+
         return view('exams.exam_start', ['event' => $event,'user_id' => $st_id, 'ex_contents' => $ex_contents, 'exam' => $exam, 'redata' => $redata,
                     'event_title' => $event->title,'first_name' => Auth::user()->firstname,'last_name'=>Auth::user()->lastname]);
 
@@ -146,11 +146,11 @@ class ExamAttemptController extends Controller
 
             $exam_id = $request->exam_id;
             $st_id = $request->student_id;
-            $examJson = $request->examJson;  
+            $examJson = $request->examJson;
             $start_time = $request->start_time;
 
             $getSyncData = ExamSyncData::where(['exam_id' => $exam_id, 'user_id' => $st_id])->value('id');
-            
+
 
             if(isset($getSyncData) && !empty($getSyncData)) {
 
@@ -177,7 +177,7 @@ class ExamAttemptController extends Controller
 
                 ]);
 
-            } 
+            }
             return 'success';
         }
 
@@ -188,12 +188,12 @@ class ExamAttemptController extends Controller
 
     public function saveData(Request $request) {
 
-        if(isset($request->examJson) && isset($request->exam_id) && isset($request->student_id) && isset($request->start_time)){ 
+        if(isset($request->examJson) && isset($request->exam_id) && isset($request->student_id) && isset($request->start_time)){
 
 
             $exam_id = $request->exam_id;
             $st_id = $request->student_id;
-            $examJson = $request->examJson;  
+            $examJson = $request->examJson;
             $start_time = $request->start_time;
             $finish = date("Y-m-d H:i:s");
 
@@ -232,7 +232,7 @@ class ExamAttemptController extends Controller
 
             if($examSyncData) {
 
-                $exam_datas = json_decode($examJson, true);   
+                $exam_datas = json_decode($examJson, true);
                 $total_credit = 0;
                 $totalCredits = 0;
                 $answers = [];
@@ -242,7 +242,7 @@ class ExamAttemptController extends Controller
                     $ex_id = $exam_id;
                     $q_type_id = $exam_data['question-type'];
                     $given_ans = $exam_data['given_ans'];
-                   
+
                     $credit = 0;
 
 
@@ -264,7 +264,7 @@ class ExamAttemptController extends Controller
                         if($q_type_id == 1) { //For True False Type
 
                             $Ans = $dbAns;
-                            
+
                             if($given_ans == $Ans) {
 
                                 $credit =  $getDB['answer-credit'];
@@ -274,9 +274,9 @@ class ExamAttemptController extends Controller
                         } else if($q_type_id == 'radio buttons') { //For Multiple Choice
 
                             //$opSer = unserialize($getDB->answer_keys);
-                            
+
                             $cAns = $dbAns;
-                           
+
                             if(htmlspecialchars_decode($given_ans,ENT_QUOTES) == htmlspecialchars_decode($cAns[0],ENT_QUOTES)) {
 
                                 $credit = $getDB[$q_id]['answer-credit'];
@@ -305,7 +305,7 @@ class ExamAttemptController extends Controller
 
                                 array_push($opns_arr, preg_replace('/\s+/', ' ', trim($opSer['option_4'])));
 
-                                
+
 
                             $anss = explode("|", $given_ans);
 
@@ -327,7 +327,7 @@ class ExamAttemptController extends Controller
 
                 }
 
-                
+
 
                 //getting user data
 
@@ -350,10 +350,10 @@ class ExamAttemptController extends Controller
                     $examResultData->end_time = $finish;
                     $examResultData->total_time = $total_time;
                     $examResultData->total_score = $totalQues; //$totalCredits,
-                
+
                     $examResultData->save();
-                    
-                
+
+
                 }else{
 
                     $examResultData = ExamResult::create([
@@ -368,19 +368,19 @@ class ExamAttemptController extends Controller
                         'end_time' => $finish,
                         'total_time' => $total_time,
                         'total_score' => $totalQues, //$totalCredits,
-    
-                    ]); 
+
+                    ]);
                 }
 
-                
+
                 $exam = Exam::find($ex_id);
                 $eventType = Event::select('id','view_tpl')->where('id',$exam->event->first()->id)->first();
 
                 if($eventType->view_tpl == 'elearning_event'){
-                   
+
                    $successLimit = round(($total_credit*100 / $totalQues), 2);
                    $success = false;
-                    
+
                     if($successLimit >= $exam->q_limit){
                         $success = true;
                     }
@@ -400,7 +400,7 @@ class ExamAttemptController extends Controller
                     $cert->event()->save($eventType);
                     $cert->user()->save($student);
                     $cert->exam()->save($exam);
-                   
+
                     $adminemail = 'info@knowcrunch.com';
 
                     $muser = [];
@@ -409,7 +409,7 @@ class ExamAttemptController extends Controller
                     $muser['first'] = $examResultData->user->firstname;
 
                     $data['firstName'] = $examResultData->user->firstname;
-                    
+
                     if($exam->event_id === 1350){
                         $view_email = 'emails.student.after_exam_old';
                     }else{
@@ -418,7 +418,7 @@ class ExamAttemptController extends Controller
 
                     $pathFile = url('/') . '/pdf/elearning/Knowcrunch - How to add your certification in Social Media.pdf';
                     $pathFile = str_replace(' ','%20',$pathFile);
-                    
+
                     $sent = Mail::send($view_email, $data,function ($m) use ($adminemail, $muser,$pathFile) {
 
                         $sub =  'Knowcrunch |' . $muser['first'] . ', Final Evaluation Surveys & how to add your certification in Social Media';
@@ -426,12 +426,12 @@ class ExamAttemptController extends Controller
                         $m->to($muser['email'], $muser['fullname']);
                         $m->subject($sub);
                         $m->attach($pathFile);
-                        
+
                     });
 
                 }
 
-                
+
                 if($examResultData) {
 
                     echo '<script>alert("woo!")</script>';
@@ -460,7 +460,7 @@ class ExamAttemptController extends Controller
         $data['last_name'] = $user->lastname;
         $data['image'] = $user->image;
         $data['showAnswers'] = $nowTime->diffInHours($examResult->end_time) < 48;
-        
+
         return view('exams.results',$data);
 
     }

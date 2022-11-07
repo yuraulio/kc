@@ -14,8 +14,8 @@ class AddAutomateMailFieldToTopic extends Migration
     public function up()
     {
         Schema::table('event_topic_lesson_instructor', function (Blueprint $table) {
-            $table->boolean('automate_mail')->default(false);
-            $table->boolean('send_automate_mail')->default(false);
+            $table->boolean('automate_mail')->default(false)->nullable();
+            $table->boolean('send_automate_mail')->default(false)->nullable();
 
         });
     }

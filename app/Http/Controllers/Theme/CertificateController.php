@@ -11,6 +11,9 @@ use ZipArchive;
 use File;
 use Imagick;
 use Illuminate\Support\Facades\Storage;
+use PDF1;
+
+
 
 class CertificateController extends Controller
 {
@@ -86,7 +89,7 @@ class CertificateController extends Controller
       if($certificate->success && isset($certificate->event->first()->event_info()['certificate']['messages']['success'])){
 
         $certificateTitle = $certificate->event->first()->event_info()['certificate']['messages']['success'];
-      
+
       }else if(!$certificate->success && isset($certificate->event->first()->event_info()['certificate']['messages']['failure'])){
 
         $certificateTitle = strip_tags($certificate->event->first()->event_info()['certificate']['messages']['failure']);
@@ -107,31 +110,61 @@ class CertificateController extends Controller
     $certificate['certification_title'] = $certificateTitle;
 
     $certificate['kc_id'] = $certificate->user()->first()->kc_id;
-    $certificate['meta_title'] =  $certificate->lastname . ' ' . $certificate->firstname . ' ' . $certificateTitle . ' ' . $certificate['kc_id']; 
-    
+    $certificate['meta_title'] =  $certificate->lastname . ' ' . $certificate->firstname . ' ' . $certificateTitle . ' ' . $certificate['kc_id'];
+
     $pdf->getDomPDF()->setHttpContext($contxt);
     //$customPaper = array(0,0,3507,2480);
     //$customPaper = array(0,0,842,595);;
     //->setPaper($customPaper);
-    $pdf->loadView('admin.certificates.'.$certificate->template,compact('certificate'))->setPaper('a4', 'landscape');//->setEncryption('gfsd', $this->encryPass, []);
+    $pdf->loadView('admin.certificates.'.$certificate->template,compact('certificate'))->setPaper('a4', 'landscape')->setEncryption('', 'asd', ['modify', 'copy']);
 
     $data['pdf'] = $pdf;
     $data['certificate'] = $certificate;
 
     return $data;
-    
+
   }
 
-  public function getCertificateImage($certificate){
-    
+  public function getCertificatePdfPerm($certificate){
     $timestamp = strtotime("now");
     $data = $this->loadCertificateData($certificate);
     $fn = $data['certificate']->firstname . '_' . $data['certificate']->lastname.'_'. $timestamp .'.pdf';
-    
+
     $content = $data['pdf']->download()->getOriginalContent();
-  
+
     Storage::disk('cert')->put($fn,$content);
-    
+
+    $filepath = public_path('cert/'.$fn);
+
+    $pdf = new PDF1($filepath,[
+        'command' => 'C:\Program Files (x86)\PDFtk\bin\pdftk.exe',
+        'useExec' => true,
+    ]);
+
+    $result = $pdf->allow('Printing')      // Change permissions
+        // ->setPassword('pass')          // Set owner password
+        // ->setUserPassword('pass123@')      // Set user password
+        ->passwordEncryption(128)   // Set password encryption strength
+        ->saveAs($filepath);
+
+        dd($pdf);
+    if ($result === false) {
+        $error = $pdf->getError();
+    }
+
+    dd($filepath);
+  }
+
+  public function getCertificateImage($certificate){
+
+    $timestamp = strtotime("now");
+    $data = $this->loadCertificateData($certificate);
+    $fn = $data['certificate']->firstname . '_' . $data['certificate']->lastname.'_'. $timestamp .'.pdf';
+
+    $content = $data['pdf']->download()->getOriginalContent();
+
+    Storage::disk('cert')->put($fn,$content);
+
     $filepath = public_path('cert/'.$fn);
     $newFile =  'cert/'.base64_encode($data['certificate']->firstname . '-' . $data['certificate']->lastname.'-'.$timestamp) .'.jpg';
     $saveImagePath = public_path($newFile);
@@ -140,7 +173,7 @@ class CertificateController extends Controller
     $imagick->setResolution(300, 300);
     //dd($filepath);
     $imagick->readImage($filepath);
-    
+
     $imagick->setImageFormat('jpg');
 
     $imagick->writeImage($saveImagePath);
@@ -155,7 +188,7 @@ class CertificateController extends Controller
     return $newFile;
   }
 
-  
+
   public function getCertificate($certificate){
 
     $data = $this->loadCertificateData($certificate);
@@ -164,7 +197,7 @@ class CertificateController extends Controller
     $fn = $data['certificate']->lastname . '-' . $data['certificate']->firstname . '-' . trim(preg_replace('/\s\s+/', '', strip_tags($data['certificate']['certification_title']))) . '-' . $data['certificate']['kc_id'] . '.pdf';
     //$fn = strip_tags($fn);
     $fn = htmlspecialchars_decode($fn,ENT_QUOTES);
-    
+
     return $data['pdf']->stream($fn);
     //return view('admin.certificates.'.$certificate->template,compact('certificate'));
 
@@ -185,15 +218,15 @@ class CertificateController extends Controller
       unlink(public_path($fileName));
     }
     //dd($zip->open(public_path($fileName), ZipArchive::CREATE));
-    
+
     $successMessage = isset($event->event_info()['certificate']['messages']['success']) ? $event->event_info()['certificate']['messages']['success'] : '';
     $failureMessage = isset($event->event_info()['certificate']['messages']['failure']) ? strip_tags($event->event_info()['certificate']['messages']['failure']) : '';
     $certificateEventTitle = isset($event->event_info()['certificate']['event_title']) ? $event->event_info()['certificate']['event_title'] : $event->title;
-    
+
     if ($zip->open(public_path($fileName), ZipArchive::CREATE) === TRUE) {
 
       foreach($users as $user){
-        
+
         if($user->instructor->first()){
             continue;
         }
@@ -233,8 +266,8 @@ class CertificateController extends Controller
           $cert->user()->save($user);
 
         }else{
-          
-          $cert->certificate_title = $cert->success ? $successMessage : $failureMessage; 
+
+          $cert->certificate_title = $cert->success ? $successMessage : $failureMessage;
           $cert->template = $cert->success ? $template : $template_failed;
           $cert->save();
         }
@@ -248,7 +281,7 @@ class CertificateController extends Controller
         $certificate['certification_title'] = $cert->certificate_title;
         $certificate['credential'] = $cert->credential;
         $certificate['certificate_event_title'] = $certificateEventTitle;
-        $certificate['meta_title'] =  $cert->lastname . ' ' . $cert->firstname . ' ' . $cert->certificate_title . ' ' . $cert->user()->first()->kc_id; 
+        $certificate['meta_title'] =  $cert->lastname . ' ' . $cert->firstname . ' ' . $cert->certificate_title . ' ' . $cert->user()->first()->kc_id;
 
         $contxt = stream_context_create([
           'ssl' => [
@@ -277,7 +310,7 @@ class CertificateController extends Controller
       }
 
     }
-    
+
     $zip->close();
     File::deleteDirectory(public_path('certificates_folders'));
 

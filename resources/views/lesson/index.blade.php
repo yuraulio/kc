@@ -583,8 +583,6 @@
                             message = 'The lesson ' + message + ' is moved to ' + toTopicName + '.'
                         }
 
-                        initCheckBox()
-
                         $('#datatable-basic31').dataTable().fnDestroy();
                         table = $('#datatable-basic31').DataTable({
                             destroy: true,
@@ -609,7 +607,8 @@
 
                         window.swal({
                             title: message,
-                            showConfirmButton: false,
+                            showConfirmButton: true,
+                            allowOutsideClick: true,
                             timer: 2000
                         });
 
@@ -626,12 +625,14 @@
                         $(".error-message").show();
                         window.swal({
                         title: errorMessage,
-                        showConfirmButton: false,
+                        showConfirmButton: true,
+                        allowOutsideClick: true,
                         timer: 2000
                     });
 
                         
                     }
+                    initCheckBox()
                     $("#col1_move").val("-- All --").change();
                 }
             });
@@ -819,22 +820,25 @@
                     $(".error-message").show();--}}
                 }
 
+                initCheckBox()
+
             },
             error: function(data) {
 
                 $.each(data.errors,function(index, value){
-                        $.each(value,function(index1, value1){
-                            errorMessage += value1 + ' ';
-                        });
-                       
+                    $.each(value,function(index1, value1){
+                        errorMessage += value1 + ' ';
                     });
+                   
+                });
 
 
                 window.swal({
-                        title: errorMessage,
-                        showConfirmButton: false,
-                        timer: 2000
-                    });
+                    title: errorMessage,
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+                initCheckBox()
             }
         });
 

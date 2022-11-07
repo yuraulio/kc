@@ -1121,8 +1121,11 @@ class StudentController extends Controller
         $statistic =  ($statistic = $user->statistic()->wherePivot('event_id',$event['id'])->first()) ?
                             $statistic->toArray() : ['pivot' => [], 'videos' => ''];
 
+        //load videos
+        $data['videos'] = isset($statistic['pivot']['videos']) ? $statistic['pivot']['videos'] : '';
         //$this->updateUserStatistic($event,$statistic['pivot'],$user);
-        $statistic = $user->updateUserStatistic($event,$statistic['pivot']);
+        $data['topics'] = $event->topicsLessonsInstructors($data['videos']);
+        $statistic = $user->updateUserStatistic($event,$statistic['pivot'],$data['topics']['topics']);
         $data['lastVideoSeen'] = $statistic['pivot']['lastVideoSeen'];
         $data['event_statistic_id'] = $statistic['pivot']['id'];
         $data['event_id'] = $statistic['pivot']['event_id'];
@@ -1131,13 +1134,13 @@ class StudentController extends Controller
         $data['videos'] = $statistic['pivot']['videos'];
         //load notes
         $data['notes'] = $statistic['pivot']['notes'];
-        //dd($data['notes']);
+        //dd(json_decode($data['notes'],true));
         //load statistic
 
         //$data['instructor_topics'] = count($user->instructor) > 0;
         //expiration event for user
         $expiration_event_user = $event['pivot']['expiration'];
-        $data['topics'] = $event->topicsLessonsInstructors($data['videos']);
+        //$data['topics'] = $event->topicsLessonsInstructors($data['videos']);
 
 
         return view('theme.myaccount.newelearning', $data);
@@ -1156,11 +1159,13 @@ class StudentController extends Controller
             //dd($notes);
             foreach($notes as $key => $note){
                 if($key == $request->vimeoId){
-                    $note =  preg_replace( '/[^A-Za-z0-9\-]/', ' ',  $request->text );
-                    $note = preg_replace('/\s+/', ' ', $note);
-                    //$note =  preg_replace( "/\r|\n/", "||", $request->text );
 
-                    $notes[$key] = $note;
+                    //dd($request->text);
+                    //$note =  preg_replace( '/[^A-Za-z0-9\-]/', ' ',  $request->text );
+                    //$note = preg_replace('/\s+/', ' ', $note);
+                    //$note =  preg_replace( "/\r|\n/", "||", $request->text );
+                    //dd(preg_replace( "/\r|\n/", "||", $request->text ));
+                    $notes[$key] = preg_replace( "/\r|\n/", "||", $request->text );
                 }
             }
         }

@@ -100,7 +100,10 @@ class TopicController extends Controller
         if($request->category_id != null){
             $category = Category::find($request->category_id);
 
-            $topic->category()->attach([$category->id]);
+            $priority =  $category->topics()->orderBy('priority')->get();
+            $priority = isset($priority->last()['pivot']['priority']) ? $priority->last()['pivot']['priority'] + 1 :count($priority)+1 ;
+
+            $topic->category()->attach($category->id,['priority' => $priority]);
         }
 
 
@@ -182,8 +185,9 @@ class TopicController extends Controller
 
             if(!in_array($category_id,$topic->category()->pluck('category_id')->toArray())){
                 $category = Category::find($category_id);
-               
-                $topic->category()->attach($category_id,['priority' => count($category->topics)]);
+                $priority =  $category->topics()->orderBy('priority')->get();
+                $priority = isset($priority->last()['pivot']['priority']) ? $priority->last()['pivot']['priority'] + 1 :count($priority)+1 ;
+                $topic->category()->attach($category_id,['priority' => $priority]);
 
                 $lastPriority =  count($category->topic()->get()) + 1;
                 foreach($topic->lessonsCategory()->wherePivot('category_id',$fromCategory)->orderBy('priority')->get() as $lesson){
@@ -197,7 +201,7 @@ class TopicController extends Controller
                     
 
                 }
-                //dispatch(new FixOrder($category,''));
+                //dispatch(rder($category,''));
                 $topic = Topic::find($topic->id);
                 foreach($category->events as $event){
                     
@@ -215,13 +219,12 @@ class TopicController extends Controller
                                                         'duration' => $lesson->pivot->duration,
                                                         'time_starts' => $lesson->pivot->time_starts,
                                                         'time_ends' => $lesson->pivot->time_ends,
-                                                        'priority' => $lastPriority
-                                                        //'priority' => $priority
+                                                        'priority' => $lastPriority,
+                                                        'automate_mail' => $lesson->pivot->automate_mail ? $lesson->pivot->automate_mail : false
                                                         ]);
                         $lastPriority += 1;
                     }
 
-                        //dispatch(new FixOrder($event,''));           
                 }
 
             }
@@ -291,6 +294,7 @@ class TopicController extends Controller
                 $topic->lessonsCategory()->wherePivot('category_id',$category)->detach();
 
                 $category = Category::find($category);
+                dispatch(new FixOrder($category,''));
 
                 foreach($category->events as $event){
                     
@@ -299,6 +303,7 @@ class TopicController extends Controller
                     }
 
                     $topic->lessons()->wherePivot('event_id',$event->id)->detach();
+                    dispatch(new FixOrder($event,''));
 
                 }
 
@@ -351,7 +356,7 @@ class TopicController extends Controller
             $topic->pivot->save();
             
         }
-
+        
         foreach($request->order as $key => $ct){
             
             $index = $key;

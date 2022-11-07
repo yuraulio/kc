@@ -1,4 +1,7 @@
 <style scoped>
+    .vm--container{
+        z-index: 999 !important;
+    }
 </style>
 
 <style>
@@ -11,7 +14,7 @@
     }
 
     .settings-dropdown {
-        right:0!important; 
+        right:0!important;
         left: auto!important;
     }
     .form-check-input:checked {
@@ -32,15 +35,15 @@
             </div>
             <div class="card-body">
                 <template v-for="input in (type == 'edit' ? config.editInputs : config.addInputs)" >
-                    <multiput 
-                        :key="input.key" 
-                        :keyput="input.key" 
-                        :label="input.label" 
-                        :type="input.type" 
-                        :size="input.size" 
-                        :existing-value="item[input.key]" 
-                        :value="item[input.key]" 
-                        @inputed="inputed($event, input)" 
+                    <multiput
+                        :key="input.key"
+                        :keyput="input.key"
+                        :label="input.label"
+                        :type="input.type"
+                        :size="input.size"
+                        :existing-value="item[input.key]"
+                        :value="item[input.key]"
+                        @inputed="inputed($event, input)"
                         :multi="input.multi"
                         :taggable="input.taggable"
                         :fetch="input.fetch"
@@ -374,16 +377,16 @@
                 <vue-loaders-ball-grid-beat color="#6658dd" scale="1" class="mt-4 text-center">
                 </vue-loaders-ball-grid-beat>
             </div>
-            <vuetable 
-                v-show="!loading" 
-                ref="vuetable" 
-                :fields="config.fields" 
-                :api-url="config.apiUrl + '?filter=' + this.filter" 
-                :api-mode="true" 
-                pagination-path="meta" 
-                @vuetable:pagination-data="onPaginationData" 
-                @vuetable:initialized="onInitialized" 
-                @vuetable:loading="showLoader" 
+            <vuetable
+                v-show="!loading"
+                ref="vuetable"
+                :fields="config.fields"
+                :api-url="config.apiUrl + '?filter=' + this.filter"
+                :api-mode="true"
+                pagination-path="meta"
+                @vuetable:pagination-data="onPaginationData"
+                @vuetable:initialized="onInitialized"
+                @vuetable:loading="showLoader"
                 @vuetable:loaded="getWidgets"
                 @vuetable:checkbox-toggled="showMultiselectActions"
                 @vuetable:checkbox-toggled-all="selectAllItems"
@@ -621,7 +624,7 @@ export default {
                                 this.$refs.vuetable.tableData.splice(index, 1);
 
                                 if (this.$refs.vuetable.tableData.length == 0) {
-                                    if (this.$refs.vuetable.tablePagination.current_page > 1) { 
+                                    if (this.$refs.vuetable.tablePagination.current_page > 1) {
                                         this.$refs.vuetable.changePage(this.$refs.vuetable.tablePagination.current_page -1);
                                     }
                                 }
@@ -656,7 +659,7 @@ export default {
                 //         if (response.status == 200) {
                 //             this.$refs['vuetable'].selectedTo = response.data;
                 //             this.selectAllCheckbox = true;
-                //             checkbox.checked = true;     
+                //             checkbox.checked = true;
                 //         }
                 //     })
                 //     .catch((error) => {
@@ -872,7 +875,7 @@ export default {
 
         var urlValues = this.getURLValues();
         if (urlValues["templateID"] && urlValues["templateName"]) {
-            
+
             this.template_value = {
                 title: urlValues["templateName"],
                 id: urlValues["templateID"]

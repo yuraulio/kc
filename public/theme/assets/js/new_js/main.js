@@ -1,4 +1,43 @@
+
+
+$( window ).resize(function() {
+
+    let a = document.getElementsByClassName('ticker__item')[0]
+    a = a.offsetHeight
+
+
+    if(a < 30){
+        //console.log('one line')
+        removeTickerMobile()
+    }else{
+        //console.log('multiple lines')
+        addTickerMobile()
+    }
+});
+
+    function addTickerMobile(){
+        $('.ticker').addClass('mobile')
+        $('.ticker-wrap').addClass('mobile')
+        $('.ticker_item').addClass('mobile')
+    }
+    function removeTickerMobile(){
+        $('.ticker').removeClass('mobile')
+        $('.ticker-wrap').removeClass('mobile')
+        $('.ticker__item').removeClass('mobile')
+    }
+
+
 jQuery(document).ready(function($) {
+
+    let a = $('.ticker__item').height();
+
+    if(a < 30){
+        removeTickerMobile()
+    }else{
+        addTickerMobile()
+    }
+
+
 
     var tabletWidth = 980;
     var mobileWidth = 680;
@@ -6,8 +45,8 @@ jQuery(document).ready(function($) {
     //placeholders for IE
     $('input').placeholder();
 
-    /* Check on blur if required fields is empty. Required fields must have class 
-     * "required" and a div wrapper with class "input-safe-wrapper". In this div 
+    /* Check on blur if required fields is empty. Required fields must have class
+     * "required" and a div wrapper with class "input-safe-wrapper". In this div
      * include only required field. */
     $(document).on('blur','input, textarea',function( event ){
         if( $(this).hasClass('required') ){
@@ -15,7 +54,7 @@ jQuery(document).ready(function($) {
                 $(this).addClass('validate-error');
                 $(this).parent().find('.error-message').remove();
                 $(this).parent().append('<span class="error-message">'+ errorMessages.requiredError +'</span>');
-     
+
             }else{
                 $(this).removeClass('validate-error');
                 $(this).parent().find('.error-message').remove();
@@ -38,7 +77,7 @@ jQuery(document).ready(function($) {
     $(document).on('click','.btn',function( event ){
 
         var validForm = true;
- 
+
         /* Check for required fields. Required fields must have class "required"
          * and a div wrapper with class "input-safe-wrapper". In this div include
          * only required field. */
@@ -52,8 +91,8 @@ jQuery(document).ready(function($) {
             }
         });
 
- 
-        
+
+
 
 
         // If form isn't valid, form don't submit and scroll to error area.
@@ -111,7 +150,7 @@ jQuery(document).ready(function($) {
     }
 
     $('.responsive-video').fitVids();
-    $('.responsive-fb-video').fitVids({ 
+    $('.responsive-fb-video').fitVids({
         customSelector: "iframe[src^='https://www.facebook.com']"
     });
 
@@ -259,7 +298,7 @@ jQuery(document).ready(function($) {
         //Bind click event to the document only when the search toggle is clicked.
         $(document).on('click.search' , function(){
             $('#header').toggleClass('search-active');
-  
+
             //Unbind click event once search is closed for better performance
             $(document).off('click.search');
     });
@@ -269,7 +308,7 @@ jQuery(document).ready(function($) {
         event.stopPropagation();
     });
 
-   
+
 
     $('.boxes-carousel').owlCarousel({
         loop:false,
@@ -298,8 +337,10 @@ jQuery(document).ready(function($) {
    $(window).scroll(function(){
         if( $(window).scrollTop() > 0 ){
             $('#header').addClass('scroll-down');
+            $('#header').removeClass('headerWithTicker');
         }else{
             $('#header').removeClass('scroll-down');
+            $('#header').addClass('headerWithTicker');
         }
 
         if( $(window).scrollTop() > 200 ){
@@ -389,7 +430,7 @@ jQuery(document).ready(function($) {
             },400);
         }
     });
-     
+
     $('.mobile-tabs-menu').click(function(){
         $(this).toggleClass('active');
         $(this).next('.tab-controls-list').slideToggle(300);
@@ -506,7 +547,7 @@ jQuery(document).ready(function($) {
 
     $('.accordion-wrapper .accordion-item .accordion-title').click(function(){
         var $this = $(this);
-        
+
     	$this.parent('.accordion-item').addClass('clicked');
     	$this.parent().parent().find('.accordion-item').each(function(){
     		if( $(this).hasClass('active-tab') && ! $(this).hasClass('clicked') ){
@@ -522,7 +563,7 @@ jQuery(document).ready(function($) {
                 }
             });
         }
-        
+
     	if( ! $this.parent('.accordion-item').hasClass('active-tab') ){
     		$this.parent('.accordion-item').addClass('active-tab');
     		$this.next('.accordion-content').slideDown(300);
@@ -594,7 +635,7 @@ jQuery(document).ready(function($) {
             $el.parent().parent().parent('.container').parent('.tab-controls').next('.tabs-content').children('.tab-content-wrapper').removeClass('active-tab');
         }
         $(".tabs-content>div").removeClass('active-tab');
-    	
+
     	$(target).addClass('active-tab');
     	$this.addClass('active');
 
@@ -645,7 +686,7 @@ jQuery(document).ready(function($) {
     });
 
     $(window).on('load', function(){
-        
+
         if( $(window).scrollTop() > 0 ){
             $('#header').addClass('scroll-down');
         }else{
@@ -660,7 +701,7 @@ jQuery(document).ready(function($) {
         // document.fonts.ready.then(function () {
         //     $(".profile-form-wrapper form .form-row .input-wrapper input").autoresize({padding:0,minWidth:10,maxWidth:300});
         // });
-        
+
 
         // Wait for menu transition ends and get the final height of menu
         setTimeout(function(){
@@ -697,7 +738,7 @@ jQuery(document).ready(function($) {
 
     $('.login-popup-wrapper .close-btn').click(function(e) {
         e.preventDefault();
-        
+
         $('.login-popup-wrapper').removeClass('active');
     });
 
@@ -751,7 +792,7 @@ $.fn.textWidth = function(_text, _font){//get width of text with font.  usage: $
 
 $.fn.autoresize = function(options){//resizes elements based on content size.  usage: $('input').autoresize({padding:10,minWidth:0,maxWidth:100});
     options = $.extend({padding:10,minWidth:0,maxWidth:10000}, options||{});
-    
+
     $(this).on('input', function() {
         $(this).css('width', Math.min(options.maxWidth,Math.max(options.minWidth,$(this).textWidth() + options.padding)));
     }).trigger('input');

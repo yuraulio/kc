@@ -187,7 +187,7 @@ class Category extends Model
 
         foreach($this->lessons()->wherePivot('priority','>=',$from)->get() as  $pLesson){
             $newPriorityLesson = $pLesson->pivot->priority + 1;
-            $or[$pLesson->pivot->id] = [
+            $or[$pLesson->pivot->lesson_id] = [
                 'priority' => $newPriorityLesson,
                 'category_id' => $pLesson->pivot->category_id,
                 'topic_id' => $pLesson->pivot->topic_id,
@@ -196,8 +196,9 @@ class Category extends Model
             //$pLesson->pivot->priority = $newPriorityLesson;
             //$pLesson->pivot->save();  
         }
-
-        $this->lessons()->sync($or);
+        //dd($or);
+        $this->lessons()->wherePivotIn('lesson_id',array_keys($or))->detach();
+        $this->lessons()->attach($or);
     }
 
     public function fixOrder($fromTopic = null){
@@ -208,7 +209,7 @@ class Category extends Model
 
             //$pLesson->pivot->priority = $newPriorityLesson;
             //$pLesson->pivot->save();  
-            $or[$pLesson->pivot->id] = [
+            $or[$pLesson->pivot->lesson_id] = [
                                         'priority' => $newPriorityLesson,
                                         'category_id' => $pLesson->pivot->category_id,
                                         'topic_id' => $pLesson->pivot->topic_id,
@@ -217,7 +218,11 @@ class Category extends Model
             $newOrder[$this->id.'-'.$pLesson->pivot->topic_id.'-'.$pLesson->id] = $newPriorityLesson;
             $newPriorityLesson += 1;
         }
-        $this->lessons()->sync($or);
+
+        
+
+        $this->lessons()->wherePivotIn('lesson_id',array_keys($or))->detach();
+        $this->lessons()->attach($or);
         return $newOrder;
 
     }
@@ -261,6 +266,8 @@ class Category extends Model
             $duration = '';
             $room = '';
             $instructor_id = '';
+            $automate_mail = false;
+            $send_automate_mail = false;
 
             if($existLesson = $event->allLessons()->wherePivot('topic_id',$topic->id)->wherePivot('lesson_id',$lesson->id)->first()){
                 $priority =  $existLesson->pivot->priority;
@@ -278,13 +285,16 @@ class Category extends Model
                 $duration = $allLessons[$lesson['id']][0]['pivot']['duration'];
                 $room = $allLessons[$lesson['id']][0]['pivot']['room'];
                 $instructor_id = $allLessons[$lesson['id']][0]['pivot']['instructor_id'];
+                $automate_mail = $allLessons[$lesson['id']][0]['pivot']['automate_mail'];
+                $send_automate_mail = $allLessons[$lesson['id']][0]['pivot']['send_automate_mail'];
             }
 
             $event->allLessons()->detach($lesson['id']);
             $event->changeOrder($priority);
 
             $event->topic()->attach($topic['id'],['lesson_id' => $lesson['id'],'date'=>$date,'time_starts'=>$time_starts,
-                'time_ends'=>$time_ends, 'duration' => $duration, 'room' => $room, 'instructor_id' => $instructor_id, 'priority' => $priority]);
+                'time_ends'=>$time_ends, 'duration' => $duration, 'room' => $room, 'instructor_id' => $instructor_id, 'priority' => $priority,
+                'automate_mail' => $automate_mail, 'send_automate_mail' => $send_automate_mail]);
             $event->fixOrder();
             
             

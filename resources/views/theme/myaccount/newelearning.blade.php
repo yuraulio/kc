@@ -37,8 +37,10 @@
       @endif
    </head>
    <?php
-      $notesss = json_decode($notes);
-      $notesss = (array) $notesss;
+   
+      $notesss = json_decode($notes,true);
+      //dd($notesss);
+      //$notesss = (array) $notesss;
       //dd($lastVideoSeen);
 
       ?>
@@ -921,11 +923,7 @@
 
                    let prog = $('.isWatching').find('.lesson-progress').attr('src','theme/assets/img/new/current_lesson_icon.svg')
 
-
-
-
-
-
+                   videoNote = videoNote.replaceAll('||','\n');
                    $('#notes').val(videoNote);
                    videoPlayers[frame].setCurrentTime(videos[id]['stop_time'])
                    // videoPlayers[frame].setLoop(false)
@@ -1168,7 +1166,7 @@
                $( ".isWatching" ).parent().css('display', 'block')
 
                 let videoNote = $('.isWatching').data('note')
-
+                videoNote = videoNote.replaceAll('||','\n');
                 //videoNote = videoNote.replace("||", "\n");
                 $('#notes').val(videoNote)
                 $('.status').addClass('saveDone');

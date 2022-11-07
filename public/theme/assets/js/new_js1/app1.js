@@ -203,6 +203,6 @@ $(document).ready(function () {
             $('.jsSidebar.open').removeClass('open')
         }
     })
-   
+
 
 });

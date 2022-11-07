@@ -1,22 +1,23 @@
 <?php
     $tickers = get_tickers();
+    $allTickersString = '';
 ?>
 
-@if(!empty($tickers))
-<div class="ticker-wrap">
-  <div class="ticker">
+@if(count($tickers) != 0)
+<div class="ticker-wrapper">
+    <div class="ticker-wrap">
+        <div class="ticker">
+            <?php
+            foreach($tickers as $ticker){
+                $allTickersString = $allTickersString . ' '. $ticker->content;
+            }
+            ?>
+            <div class="ticker__item">
+                {!! $allTickersString !!}
+            </div>
 
-    @foreach($tickers as $ticker)
-        <div class="ticker__item">
-            {!! $ticker->content !!}
+
         </div>
-    @endforeach
-
-
-  </div>
+    </div>
 </div>
 @endif
-
-
-
-
