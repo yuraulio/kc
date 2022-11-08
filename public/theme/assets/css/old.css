@@ -1532,7 +1532,7 @@ img.linkdein-image-add {
 
 /* Ticker */
 .carouselTicker-wrapper {
-    /* background-color: #f53000; */
+    background-color: #f53000;
 }
 #header.has_ticker {
     top: 50px;

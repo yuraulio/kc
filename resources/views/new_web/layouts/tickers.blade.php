@@ -6,48 +6,12 @@
 <div class="carouselTicker-wrapper">
     <div id="carouselTicker" class="carouselTicker container">
         <ul class="carouselTicker__list">
+            @foreach($tickers as $ticker)
             <li class="carouselTicker__item">
-                <a href="https://placehold.it/290x60"><img src="https://placehold.it/290x60" alt="banner image"></a>
+                {!! $ticker->content !!}
             </li>
-            <li class="carouselTicker__item">
-                <a href="https://placehold.it/190x65"><img src="https://placehold.it/190x65" alt="banner image"></a>
-            </li>
-            <li class="carouselTicker__item">
-                <a href="#"><img src="https://placehold.it/190x65" alt="banner image"></a>
-            </li>
-            <li class="carouselTicker__item">
-                <a href="#"><img src="https://placehold.it/190x65" alt="banner image"></a>
-            </li>
-            <li class="carouselTicker__item">
-                <a href="#"><img src="https://placehold.it/190x65" alt="banner image"></a>
-            </li>
-            <li class="carouselTicker__item">
-                <a href="https://placehold.it/290x60"><img src="https://placehold.it/290x60" alt="banner image"></a>
-            </li>
-            <li class="carouselTicker__item">
-                <a href="https://placehold.it/190x65"><img src="https://placehold.it/190x65" alt="banner image"></a>
-            </li>
-            <li class="carouselTicker__item">
-                <a href="#"><img src="https://placehold.it/190x65" alt="banner image"></a>
-            </li>
-            <li class="carouselTicker__item">
-                <a href="#"><img src="https://placehold.it/190x65" alt="banner image"></a>
-            </li>
-            <li class="carouselTicker__item">
-                <a href="#"><img src="https://placehold.it/190x65" alt="banner image"></a>
-            </li>
-            <li class="carouselTicker__item">
-                <a href="#"><img src="https://placehold.it/190x65" alt="banner image"></a>
-            </li>
-            <li class="carouselTicker__item">
-                <a href="#"><img src="https://placehold.it/190x65" alt="banner image"></a>
-            </li>
-            <li class="carouselTicker__item">
-                <a href="#"><img src="https://placehold.it/190x65" alt="banner image"></a>
-            </li>
-            <li class="carouselTicker__item">
-                <a href="#"><img src="https://placehold.it/190x65" alt="banner image"></a>
-            </li>
+            @endforeach
+        
 
         </ul>
     </div>
@@ -66,4 +30,5 @@
 
 
 </script>
+
 @endpush

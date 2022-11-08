@@ -33,6 +33,7 @@ mix.js('resources/js/app.js', 'public/js')
           'public/theme/assets/css/fontawesome/css/kcfonts.css',
           'public/theme/assets/css/select2.css',
           'public/theme/assets/css/my_datepicker.css',
+          'public/theme/assets/css/carouselTicker.css'
       ], 'public/theme/assets/css/style_ver.css');
 
       mix.styles([
@@ -48,6 +49,7 @@ mix.js('resources/js/app.js', 'public/js')
         'public/theme/assets/css/select2.css',
         'resources/assets/css/custom.css',
         'resources/assets/css/editor.css',
+        'public/theme/assets/css/carouselTicker.css'
         // 'public/admin_assets/css/icons.css',
     ], 'public/theme/assets/css/style_ver_new.css');
 
@@ -77,8 +79,10 @@ mix.js('resources/js/app.js', 'public/js')
           'public/theme/assets/js/new_js/jquery-3.4.1.min.js',
           'public/theme/assets/js/new_js/jquery-ui.js',
           'public/theme/assets/js/new_js/plugins.js',
+          'public/theme/assets/js/jquery.carouselTicker.js',
           'public/theme/assets/js/new_js/main.js',
           'public/theme/assets/js/new_js/select2.js',
+          
       ],'public/theme/assets/js/front.js')
 
       mix.version([
@@ -91,6 +95,7 @@ mix.js('resources/js/app.js', 'public/js')
           'public/theme/assets/css/new/core.css',
           'public/theme/assets/js/new_js1/app1.js',
           'public/theme/assets/js/new_js1/burger.js',
+          'public/theme/assets/js/jquery.carouselTicker.js',
 
       ]);
   //});

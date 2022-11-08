@@ -94,11 +94,13 @@
     </script>
 @endif
 
-<!-- <script>
+<script>
     $(document).ready(function(){
         if(hasTicker){
             $('#header').addClass('has_ticker');
         }
     });
-</script> -->
+</script>
+
+
 
