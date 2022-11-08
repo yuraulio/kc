@@ -899,17 +899,17 @@ class CronjobsController extends Controller
         //$date1 = '2023-01-23';
         //$date1 = '2023-02-20';
 
-        $date1 = date("Y-m-d");
-
-
         //$date1 = date("Y-m-d");
+
+
+        $date1 = date("Y-m-d");
         
         //$dates = [$date1,$date2,$date3,$date4];
         $dates = [$date1];
       
         $events = Event::
             where('published',true)
-            ->whereIn('status',[0,2,3])    
+            ->whereIn('status',[/*0,2,*/3])    
             ->whereHas('event_info1',function($query){
                 $query->where('course_delivery','!=',143);
             })
