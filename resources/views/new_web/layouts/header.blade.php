@@ -1,4 +1,4 @@
-<header id="header" >
+<header id="header">
     <div class="container clearfix">
         <div class="logo-area">
             <a href="{{ env("APP_URL"); }}" class="logo">Know Crunch</a>
@@ -94,9 +94,11 @@
     </script>
 @endif
 
-<script>
-    if($('.ticker-wrapper').length != 0 && $('.ticker-wrapper').length != 0){
-        $('#header').addClass('headerWithTicker')
-        $('.tab-controls').addClass('withTicker')
-    }
-</script>
+<!-- <script>
+    $(document).ready(function(){
+        if(hasTicker){
+            $('#header').addClass('has_ticker');
+        }
+    });
+</script> -->
+

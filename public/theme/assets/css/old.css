@@ -70,7 +70,7 @@ a.cert-post{
     display: inline-flex;
 }
 
-.form-wrapper form .custom-checkbox-wrapper label {   
+.form-wrapper form .custom-checkbox-wrapper label {
     width: fit-content!important;
 }
 
@@ -1530,6 +1530,16 @@ img.linkdein-image-add {
     margin-bottom: 10px;
 }
 
+/* Ticker */
+.carouselTicker-wrapper {
+    /* background-color: #f53000; */
+}
+#header.has_ticker {
+    top: 50px;
+}
+
+/* End Ticker */
+
 
 /* Tablet */
 @media only screen and (max-width: 1100px) {
@@ -1743,7 +1753,7 @@ img.linkdein-image-add {
 
 
     .event-infos-mobile .hours, .event-infos-mobile .certificate, .event-infos-mobile .delivery {
-        
+
         font-size: 0.7em;
         background-color: #fff;
         color: rgb(65, 156, 255);
