@@ -1,8 +1,9 @@
-           
+
 jQuery(document).ready(function($) {
 
 
     $('.carouselTicker').carouselTicker();
+
 
     var tabletWidth = 980;
     var mobileWidth = 680;
@@ -311,7 +312,7 @@ jQuery(document).ready(function($) {
                     $('.tab-controls').removeClass('has_ticker')
                 }
 
-                
+
             }
 
         }else{
@@ -667,6 +668,12 @@ jQuery(document).ready(function($) {
             $('#footer .footer-title').removeClass('active');
             $('.custom-scroll-area').mCustomScrollbar("destroy");
         }
+
+    });
+
+    $(window).on('resize', function() {
+        console.log('asd')
+        $('.carouselTicker').carouselTicker().resizeTicker();
     });
 
     $(window).on('load', function(){
@@ -674,7 +681,7 @@ jQuery(document).ready(function($) {
         if( $(window).scrollTop() > 0 ){
             $('#header').addClass('scroll-down');
 
-            
+
 
         }else{
             $('#header').removeClass('scroll-down');
@@ -685,7 +692,7 @@ jQuery(document).ready(function($) {
         }else{
             $('.go-top-btn').removeClass('visible');
         }
-        
+
 
         // document.fonts.ready.then(function () {
         //     $(".profile-form-wrapper form .form-row .input-wrapper input").autoresize({padding:0,minWidth:10,maxWidth:300});

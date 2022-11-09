@@ -19,16 +19,6 @@
   text-align: center;
 }
 
-.carouselTicker__item p,
-.carouselTicker__item h1,
-.carouselTicker__item h2,
-.carouselTicker__item h3,
-.carouselTicker__item h4,
-.carouselTicker__item h5
-{
-  color: #fff;
-}
-
 .carouselTicker__loader {
   position: absolute;
   left: 0;

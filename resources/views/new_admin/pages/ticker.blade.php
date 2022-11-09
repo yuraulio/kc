@@ -1,4 +1,4 @@
-@extends('new_admin/layouts.vertical', ["page_title"=> "Menu"])
+@extends('new_admin/layouts.vertical', ["page_title"=> "Ticker"])
 
 @section('css')
 <!-- third party css -->

@@ -1531,11 +1531,41 @@ img.linkdein-image-add {
 }
 
 /* Ticker */
-.carouselTicker-wrapper {
+.carouselTicker__wrap{
     background-color: #f53000;
 }
 #header.has_ticker {
-    top: 50px;
+    top: 47px;
+}
+
+/* .carouselTicker__list{
+    margin: 0 auto !important;
+} */
+
+.carouselTicker__item{
+    margin: 0 10px !important;
+}
+
+/* .carouselTicker__item p {
+    display: inline !important;
+} */
+.carouselTicker__list{
+    display: -webkit-inline-box !important;
+}
+
+.carouselTicker__item p,
+.carouselTicker__item h1,
+.carouselTicker__item h2,
+.carouselTicker__item h3,
+.carouselTicker__item h4,
+.carouselTicker__item h5
+{
+  color: #fff;
+  /* display: inline-block; */
+}
+
+.mob-menu-active #header.has_ticker{
+    top: unset;
 }
 
 /* End Ticker */
