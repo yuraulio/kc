@@ -6,7 +6,7 @@
 
 
 
-<div class="carouselTicker__wrap">
+<div class="carouselTicker-wrap">
     <div id="carouselTicker" class="carouselTicker text-center">
         <ul class="carouselTicker__list">
             @foreach($tickers as $ticker)

@@ -147,8 +147,10 @@
       }
 
       function setupFunc() {
+        console.log(' pre return')
         // check wrap el
         if ($el.children().hasClass(ticker.wrapCls)) return;
+        console.log('after return')
         // add loader
         $("<div class='" + ticker.loaderCls + "'></div>").appendTo($el);
         // set css to element
@@ -196,7 +198,7 @@
     /**
      * Move carouselTicker
      */
-
+     let t;
     var _moveTicker = function () {
       var mode = ticker.settings.mode === "horizontal" ? "left" : "top",
         itemsSize =

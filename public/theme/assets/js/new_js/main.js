@@ -2,7 +2,7 @@
 jQuery(document).ready(function($) {
 
 
-    $('.carouselTicker').carouselTicker();
+    $('#carouselTicker').carouselTicker();
 
 
     var tabletWidth = 980;
@@ -672,8 +672,7 @@ jQuery(document).ready(function($) {
     });
 
     $(window).on('resize', function() {
-        console.log('asd')
-        $('.carouselTicker').carouselTicker().resizeTicker();
+        $('#carouselTicker').carouselTicker().reloadCarouselTicker();
     });
 
     $(window).on('load', function(){
