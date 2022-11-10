@@ -20,7 +20,7 @@ class TickerResource extends JsonResource
             'id' => $this->id,
             'title' => $this->title,
             'content' => $this->content,
-            'active' => $this->status,
+            'published' => $this->published,
             'from_date' => $this->from_date,
             'until_date' => $this->until_date,
             'created_at' => Carbon::parse($this->created_at)->toFormattedDateString()

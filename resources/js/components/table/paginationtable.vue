@@ -405,16 +405,28 @@
                 <template slot="page_title" slot-scope="props">
                     <a :href="'/page/' + props.rowData.id" target="_blank">{{ props.rowData.title }}</a>
                 </template>
-
                 <template slot="visibility" slot-scope="props">
-                    <template v-if="props.rowData.dynamic == 0">
-                        <div :key="props.rowData.id"  class="form-check form-switch mb-1" style="display: inline-grid; cursor: pointer">
-                            <input :key="props.rowData.id + 'on'" @click="changePublish(props.rowData.id)" :id="props.rowData.id + 'input'" type="checkbox" class="form-check-input" name="color-scheme-mode" value="light" :for="props.rowData.id + 'input'" :checked="props.rowData.published">
-                        </div>
+                    <!-- if dynamic var exist -> current page is Pages -->
+                    <template v-if="props.rowData.dynamic !== undefined">
+                        <template v-if="props.rowData.dynamic == 0">
+                            <div :key="props.rowData.id"  class="form-check form-switch mb-1" style="display: inline-grid; cursor: pointer">
+                                <input :key="props.rowData.id + 'on'" @click="changePublish(props.rowData.id)" :id="props.rowData.id + 'input'" type="checkbox" class="form-check-input" name="color-scheme-mode" value="light" :for="props.rowData.id + 'input'" :checked="props.rowData.published">
+                            </div>
+                        </template>
+                        <template v-else>
+                            <span class="badge bg-warning d-inline-grid">Dynamic</span>
+                        </template>
                     </template>
+                    <!-- if not dynamic var exist -> current page is Ticker -->
                     <template v-else>
-                        <span class="badge bg-warning d-inline-grid">Dynamic</span>
+                        <div :key="props.rowData.id"  class="form-check form-switch mb-1" style="display: inline-grid; cursor: pointer">
+                                <input :key="props.rowData.id + 'on'" @click="changePublish(props.rowData.id, 'ticker')" :id="props.rowData.id + 'input'" type="checkbox" class="form-check-input" name="color-scheme-mode" value="light" :for="props.rowData.id + 'input'" :checked="props.rowData.published">
+                            </div>
                     </template>
+
+
+
+
                 </template>
 
                 <template slot="actions" slot-scope="props">
@@ -750,10 +762,10 @@ export default {
                 this.hideLoader();
             }
         },
-        changePublish(id) {
+        changePublish(id, model = 'pages') {
             this.loading = true;
             axios
-            .put('/api/pages/update_published/' + id)
+            .put('/api/'+model+'/update_published/' + id)
             .then((response) => {
                 if (response.status == 200){
                     this.$toast.success('Published Status Updated Successfully!')

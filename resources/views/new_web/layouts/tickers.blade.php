@@ -3,7 +3,7 @@
 
     $string = '';
     foreach($tickers as $ticker){
-        $string = $string . '  <div style="display:inline; margin-right:2rem;">' . $ticker->content . '</div>';
+        $string = $string . '  <div style="display:inline; margin-right:2rem;">' . preg_replace( "/\r|\n/", " ", $ticker->content ) . '</div>';
     }
     $string = $string ;
 ?>

@@ -37,13 +37,13 @@
                         </h4>
                         <div class="text-muted d-flex justify-content-between mb-2">
                             <div v-if="page.template" class="text-uppercase">
-                                <i class="mdi mdi-account-circle"></i> 
+                                <i class="mdi mdi-account-circle"></i>
                                 <small>
                                     <a :href="'/templates?id=' + page.template.id + '&title=' + page.template.title + '&preview=' + true">{{ page.template.title }}</a>
                                 </small>
                             </div>
                             <div v-if="page.type">
-                                Type: 
+                                Type:
                                 {{ page.type }}
                             </div>
                         </div>

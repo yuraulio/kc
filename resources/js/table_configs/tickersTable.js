@@ -1,8 +1,8 @@
 const collectiveInputs = [
     {
         "type": "toggle",
-        "key": "active",
-        "label": "Active",
+        "key": "published",
+        "label": "Published",
         "size": "col-lg-12"
     },
     {
@@ -29,7 +29,7 @@ const collectiveInputs = [
         "label": "Until",
         "size": "col-lg-12"
     },
-    
+
 
 ];
 
@@ -41,25 +41,31 @@ export default {
             dataClass: 'align-middle',
         },
         {
+            name: 'visibility',
+            title: 'Published' + '<i title="Column cant be sorted." class="fa fa-info-circle text-muted ms-1"></i>',
+            dataClass: 'align-middle text-center',
+            titleClass: 'text-center'
+        },
+        {
             name: 'title',
             title: 'Name',
             sortField: 'title',
             dataClass: 'align-middle',
             titleClass: ''
         },
-        {
-            name: 'active',
-            title: 'Active',
-            dataClass: 'text-center',
-            titleClass: 'text-center',
-            sortField: 'active',
-            formatter (value) {
-                if (value) {
-                    return '<i class="fa fa-check-circle text-success" aria-hidden="true"></i>';
-                }
-                return '<i class="fa fa-times-circle text-danger" aria-hidden="true"></i>';
-            },
-        },
+        // {
+        //     name: 'published',
+        //     title: 'Published',
+        //     dataClass: 'text-center',
+        //     titleClass: 'text-center',
+        //     sortField: 'published',
+        //     formatter (value) {
+        //         if (value) {
+        //             return '<i class="fa fa-check-circle text-success" aria-hidden="true"></i>';
+        //         }
+        //         return '<i class="fa fa-times-circle text-danger" aria-hidden="true"></i>';
+        //     },
+        // },
         {
             name: 'created_at',
             title: 'Created at',
@@ -81,7 +87,10 @@ export default {
     edit: true,
     editInputs: collectiveInputs,
     loadWidgets: false,
-    showFilters: false,
+    showFilters: true,
+    filters: [
+        'visibility',
+    ],
     addInputs: collectiveInputs,
 }
 

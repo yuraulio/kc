@@ -39,10 +39,10 @@ import pagesConfig from "../table_configs/pagesTable";
             }
         },
         methods: {
-            
+
         },
         mounted() {
-            
+
         }
     }
 </script>
