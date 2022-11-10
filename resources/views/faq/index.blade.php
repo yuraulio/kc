@@ -32,7 +32,7 @@
                                     <input id="file-input" name="file" type="file" class="btn btn-sm btn-primary"  accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" value="{{ __('Import Faqs From file') }}" style="display: none;">
                                 </form>
 
-                                <a id="download-sample" href="javascript:void(0)" class="btn btn-sm btn-primary">{{ __('Download a sample') }}</a>
+                                <a id="download-sample" href="javascript:void(0)" class="btn btn-sm btn-primary">{{ __('Sample File') }}</a>
                                 <a id="import-from-file" href="javascript:void(0)" class="btn btn-sm btn-primary">{{ __('Import Faqs From file') }}</a>
                                 <a href="{{ route('faqs.create') }}" class="btn btn-sm btn-primary">{{ __('Add Faq') }}</a>
                                 </div>
