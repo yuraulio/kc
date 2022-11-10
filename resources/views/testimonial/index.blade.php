@@ -33,6 +33,7 @@
                                     <input id="file-input" name="file" type="file" class="btn btn-sm btn-primary"  accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" value="{{ __('Import Testimonials From file') }}" style="display: none;">
                                 </form>
 
+                                <a id="download-sample" href="javascript:void(0)" class="btn btn-sm btn-primary">{{ __('Download a sample') }}</a>
                                 <a id="import-from-file" href="javascript:void(0)" class="btn btn-sm btn-primary">{{ __('Import Testimonials From file') }}</a>
                                 <a href="{{ route('testimonials.create') }}" class="btn btn-sm btn-primary">{{ __('Add Testimonial') }}</a>
                             </div>
@@ -133,6 +134,12 @@
             event.preventDefault();
             $("#file-input").trigger('click');
         });
+
+        $('#download-sample').on('click', function (event) {
+            event.preventDefault();
+            window.location.href = '/import/Testimonials_sample.xlsx';
+        });
+
 
     });
 
