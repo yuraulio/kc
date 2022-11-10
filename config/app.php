@@ -243,7 +243,7 @@ return [
         'Image' => Intervention\Image\Facades\Image::class,
         'PDF' => Barryvdh\DomPDF\Facade::class,
         'Sitemap'   => Watson\Sitemap\Facades\Sitemap::class,
-        //'PDF1' => mikehaertl\pdftk\PDF::class,
+        'PDF1' => mikehaertl\pdftk\PDF::class,
 
         'Tinify' => msonowal\LaravelTinify\Facades\Tinify::class,
 

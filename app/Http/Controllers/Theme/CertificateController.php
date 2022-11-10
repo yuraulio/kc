@@ -115,44 +115,13 @@ class CertificateController extends Controller
     $pdf->getDomPDF()->setHttpContext($contxt);
     //$customPaper = array(0,0,3507,2480);
     //$customPaper = array(0,0,842,595);;
-    //->setPaper($customPaper);
-    $pdf->loadView('admin.certificates.'.$certificate->template,compact('certificate'))->setPaper('a4', 'landscape')->setEncryption('', 'asd', ['modify', 'copy']);
+    $pdf->loadView('admin.certificates.'.$certificate->template,compact('certificate'))->setPaper('a4', 'landscape')->setEncryption('', 'asd', ['print']);
 
     $data['pdf'] = $pdf;
     $data['certificate'] = $certificate;
 
     return $data;
 
-  }
-
-  public function getCertificatePdfPerm($certificate){
-    $timestamp = strtotime("now");
-    $data = $this->loadCertificateData($certificate);
-    $fn = $data['certificate']->firstname . '_' . $data['certificate']->lastname.'_'. $timestamp .'.pdf';
-
-    $content = $data['pdf']->download()->getOriginalContent();
-
-    Storage::disk('cert')->put($fn,$content);
-
-    $filepath = public_path('cert/'.$fn);
-
-    $pdf = new PDF1($filepath,[
-        'command' => 'C:\Program Files (x86)\PDFtk\bin\pdftk.exe',
-        'useExec' => true,
-    ]);
-
-    $result = $pdf->allow('Printing')      // Change permissions
-        // ->setPassword('pass')          // Set owner password
-        // ->setUserPassword('pass123@')      // Set user password
-        ->passwordEncryption(128)   // Set password encryption strength
-        ->saveAs($filepath);
-
-        dd($pdf);
-    if ($result === false) {
-        $error = $pdf->getError();
-    }
-
-    dd($filepath);
   }
 
   public function getCertificateImage($certificate){
