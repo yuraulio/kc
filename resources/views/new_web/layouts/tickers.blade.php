@@ -1,23 +1,23 @@
 <?php
     $tickers = get_tickers();
+
+    $string = '';
+    foreach($tickers as $ticker){
+        $string = $string . '  <div style="display:inline; margin-right:2rem;">' . $ticker->content . '</div>';
+    }
+    $string = $string ;
 ?>
 
 @if(count($tickers) != 0)
 
+<div class="marquee3k carouselTicker-wrap" data-speed="0.25"
+     data-reverse="false"
+     data-pausable="true">
 
+     <div>{!! $string !!}</div>
 
-<div class="carouselTicker-wrap">
-    <div id="carouselTicker" class="carouselTicker text-center">
-        <ul class="carouselTicker__list">
-            @foreach($tickers as $ticker)
-            <li class="carouselTicker__item">
-                {!! $ticker->content !!}
-            </li>
-            @endforeach
-
-        </ul>
-    </div>
 </div>
+
 @endif
 
 @push('components-scripts')

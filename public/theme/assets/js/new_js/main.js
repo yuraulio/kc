@@ -2,9 +2,6 @@
 jQuery(document).ready(function($) {
 
 
-    $('#carouselTicker').carouselTicker();
-
-
     var tabletWidth = 980;
     var mobileWidth = 680;
 
@@ -671,9 +668,7 @@ jQuery(document).ready(function($) {
 
     });
 
-    $(window).on('resize', function() {
-        $('#carouselTicker').carouselTicker().reloadCarouselTicker();
-    });
+    Marquee3k.init()
 
     $(window).on('load', function(){
 

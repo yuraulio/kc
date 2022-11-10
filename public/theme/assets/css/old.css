@@ -1553,6 +1553,25 @@ img.linkdein-image-add {
     display: -webkit-inline-box !important;
 }
 
+/* marquee ticker */
+.marquee3k__copy {
+    padding: 0.65rem;
+}
+
+.carouselTicker-wrap p,
+.carouselTicker-wrap h1,
+.carouselTicker-wrap h2,
+.carouselTicker-wrap h3,
+.carouselTicker-wrap h4,
+.carouselTicker-wrap h5
+{
+    color: #fff;
+    display: inline;
+}
+
+/* marquee ticker end */
+
+
 .carouselTicker__item p,
 .carouselTicker__item h1,
 .carouselTicker__item h2,
