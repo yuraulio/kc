@@ -429,7 +429,7 @@ export default {
                         }
                     })
 
-                
+
                 }else{
                     this.editPage(0);
                 }
@@ -528,7 +528,7 @@ export default {
                     this.rows_value = JSON.parse(data.rows);
                 }
                 this.category_value = data.categories;
-                
+
                 var subcategories = [];
 
                 if (this.category_value) {

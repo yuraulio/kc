@@ -57,7 +57,7 @@ class TicketController extends Controller
         $model = app($request->model_type);
         $model = $model::with('ticket')->find($request->model_id);
 
-        $ticket = Ticket::find($request->ticket_id);        
+        $ticket = Ticket::find($request->ticket_id);
         $features = json_encode($request->features);
 
         $options['featured'] = ($request->option1 == 1 ? true : false);
@@ -81,7 +81,7 @@ class TicketController extends Controller
         //$ticket->subtitle = $ticket['subtitle'];
         //$ticket->quantity = $request->quantity;
         //$ticket->price = $request->price;
-        
+
        $ticket = $model->ticket()->wherePivot('ticket_id',$request->ticket_id)->first();
 
        return response()->json([
@@ -166,7 +166,7 @@ class TicketController extends Controller
         $event = Event::find($request->model_id);
 
         $features = $request->features;
-        
+
         $options['featured'] = ($request->option1 == 1 ? true : false);
         $options['dropdown'] = ($request->option2 == 1 ? true : false);
         $options['alumni'] = ($request->option3 == 1 ? true : false);
@@ -269,11 +269,11 @@ class TicketController extends Controller
 
         //$event->ticket()->wherePivot('ticket_id',$ticket)->first()->active = $active;
         //$event->ticket()->wherePivot('ticket_id',$ticket)->first()->save();
-       
+
         $event->ticket()->wherePivot('ticket_id',$ticket)->updateExistingPivot($ticket,[
             'active' => $active
         ], false);
-        
+
         if($active == 1){
             return response()->json([
                 'active' => 0,

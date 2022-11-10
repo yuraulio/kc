@@ -18,7 +18,7 @@ use Carbon\Carbon;
 if(!function_exists('get_tickers')){
     function get_tickers(){
 
-        $tickers = Ticker::where('status', true)->get()->filter(function($item) {
+        $tickers = Ticker::where('published', true)->get()->filter(function($item) {
 
             if($item->from_date && $item->until_date && Carbon::now()->between($item->from_date, $item->until_date)){
                 return $item;

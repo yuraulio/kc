@@ -45,7 +45,7 @@ class TickerController extends Controller
     private function filters($ticker, $request)
     {
         $ticker->lookForOriginal($request->filter);
-        
+
         return $ticker;
     }
 
@@ -62,7 +62,7 @@ class TickerController extends Controller
             $this->authorize('update', $ticker, Auth::user());
             $ticker->title = $request->title;
             $ticker->content = $request->content;
-            $ticker->status = $request->active;
+            $ticker->published = $request->published;
             $ticker->from_date = ($request->from_date) ? Carbon::parse($request->from_date) : null;
             $ticker->until_date = ($request->until_date) ? Carbon::parse($request->until_date) : null;
 
@@ -83,19 +83,19 @@ class TickerController extends Controller
     public function store(TickerRequest $request)
     {
         $this->authorize('create', Ticker::class, Auth::user());
-        
-        try { 
+
+        try {
             $ticker = new Ticker();
             $ticker->title = $request->title;
             $ticker->content = $request->content;
-            $ticker->status = $request->active;
+            $ticker->published = $request->published;
             $ticker->from_date = ($request->from_date) ? Carbon::parse($request->from_date) : null;
             $ticker->until_date = ($request->until_date) ? Carbon::parse($request->until_date) : null;
 
             $ticker->save();
 
             return new TickerResource($ticker);
-            
+
         } catch (Exception $e) {
             Log::error("Failed to add new ticker. " . $e->getMessage());
             return response()->json(['message' => $e->getMessage()], 400);
@@ -140,6 +140,23 @@ class TickerController extends Controller
             return response()->json(['message' => 'success'], 200);
         } catch (Exception $e) {
             Log::error("Failed to bulk delete templates. " . $e->getMessage());
+            return response()->json(['message' => $e->getMessage()], 400);
+        }
+    }
+
+    public function updatePublished(int $id): JsonResponse
+    {
+        try {
+            $ticker = Ticker::withoutGlobalScopes()->find($id);
+
+            $this->authorize('publish', $ticker, Auth::user());
+
+            $ticker->published = !$ticker->published;
+            $ticker->save();
+
+            return response()->json(['message' => 'success'], 200);
+        } catch (Exception $e) {
+            Log::error("Failed to publish ticker. " . $e->getMessage());
             return response()->json(['message' => $e->getMessage()], 400);
         }
     }
