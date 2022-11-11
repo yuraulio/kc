@@ -157,17 +157,22 @@ $(document).ready(function(){
     var remember = document.getElementById("remember-me").checked;
 
     if (email.length > 4 && password.length > 4) {
-        
-    $.ajax({ 
+
+    $.ajax({
             headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
             url: "/studentlogin", type: "post",
             data: {email:email, password:password, remember:remember},
+            beforeSend: function beforeSend() {
+                $('#test-login').hide()
+                $('.loader').show()
+
+            },
             success: function(data) {
 
                 data = data.data
-                
+
                 switch (data.status) {
                     case 0:
                         if (data.message.length > 0) {
@@ -180,6 +185,9 @@ $(document).ready(function(){
                             $('#account-error').append(img);*/
                         //	console.log(p);
                             $('.alert-outer').show()
+
+                            $('#test-login').show()
+                            $('.loader').hide()
 
                         } else {
 
@@ -204,6 +212,8 @@ $(document).ready(function(){
             },
             error: function(data) {
                 //shakeModal();
+                $('#test-login').show()
+                $('.loader').hide()
             }
         });
 
@@ -220,13 +230,13 @@ $(document).ready(function(){
 
 $(document).keyup(function(event){
     if($('.login-popup-wrapper').hasClass('active')){
-        
+
         if(event.keyCode == 13){
             loginAjaxNew()
         }
     }
-    
-    
+
+
 })
 
 

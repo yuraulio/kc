@@ -115,7 +115,7 @@ class CertificateController extends Controller
     $pdf->getDomPDF()->setHttpContext($contxt);
     //$customPaper = array(0,0,3507,2480);
     //$customPaper = array(0,0,842,595);;
-    $pdf->loadView('admin.certificates.'.$certificate->template,compact('certificate'))->setPaper('a4', 'landscape')->setEncryption('', 'asd', ['print']);
+    $pdf->loadView('admin.certificates.'.$certificate->template,compact('certificate'))->setPaper('a4', 'landscape')->setEncryption('', '', ['print']);
 
     $data['pdf'] = $pdf;
     $data['certificate'] = $certificate;
@@ -271,7 +271,7 @@ class CertificateController extends Controller
         $fn = strip_tags($fn);
         $pdf->getDomPDF()->setHttpContext($contxt);
 
-        $pdf->loadView('admin.certificates.'.$cert->template,compact('certificate'))->setPaper('a4', 'landscape');//->setEncryption('', $this->encryPass, array())->save(public_path('certificates_folders/'.$fn))->stream($fn);
+        $pdf->loadView('admin.certificates.'.$cert->template,compact('certificate'))->setPaper('a4', 'landscape')->save(public_path('certificates_folders/'.$fn))->stream($fn);
 
         $zip->addFile(public_path('certificates_folders/'.$fn), $fn);
 

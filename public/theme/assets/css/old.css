@@ -1538,21 +1538,6 @@ img.linkdein-image-add {
     top: 47px;
 }
 
-/* .carouselTicker__list{
-    margin: 0 auto !important;
-} */
-
-.carouselTicker__item{
-    margin: 0 10px !important;
-}
-
-/* .carouselTicker__item p {
-    display: inline !important;
-} */
-.carouselTicker__list{
-    display: -webkit-inline-box !important;
-}
-
 /* marquee ticker */
 .marquee3k__copy {
     padding: 0.65rem;
@@ -1563,28 +1548,16 @@ img.linkdein-image-add {
 .carouselTicker-wrap h2,
 .carouselTicker-wrap h3,
 .carouselTicker-wrap h4,
-.carouselTicker-wrap h5
+.carouselTicker-wrap h5,
+.carouselTicker-wrap a,
+.carouselTicker-wrap a:visited
 {
-    color: #fff;
+    color: #fff !important;
     display: inline;
 }
 
 /* marquee ticker end */
 
-
-.carouselTicker__item p,
-.carouselTicker__item h1,
-.carouselTicker__item h2,
-.carouselTicker__item h3,
-.carouselTicker__item h4,
-.carouselTicker__item h5
-{
-    color: #fff;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    display: inherit;
-}
 
 .mob-menu-active #header.has_ticker{
     top: unset;

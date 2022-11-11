@@ -574,7 +574,6 @@ Route::group(['middleware' => ['web']], function () {
 
     Route::get('/mycertificate/{certificate}', 'Theme\CertificateController@getCertificate');
     Route::get('/mycertificate/convert-pdf-to-image/{certificate}', 'Theme\CertificateController@getCertificateImage');
-    Route::get('/mycertificate/pdf-perm/{certificate}', 'Theme\CertificateController@getCertificatePdfPerm');
 });
 
 Route::group(['middleware' => 'auth'], function () {

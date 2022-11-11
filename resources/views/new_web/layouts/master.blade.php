@@ -97,6 +97,8 @@
                                 <a id="forgot-pass" href="javascript:void(0)">Forgot password?</a>
                             </div>
                             <input id="test-login" type="button" onclick="loginAjaxNew()" value="LOGIN">
+                            <div class="row text-center loader d-none"><img class="img-responsive" src="theme/assets/img/ajax-loader-blue.gif" alt="Loader" title="Loader" /> </div>
+
                         </form>
                     </div>
 

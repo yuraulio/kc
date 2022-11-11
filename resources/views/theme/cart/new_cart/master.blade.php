@@ -2,12 +2,12 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">	
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 	<title>Knowcrunch Billing</title>
-	@include('theme.layouts.favicons')	
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">	
+	@include('theme.layouts.favicons')
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 	{{--<link rel="stylesheet" type="text/css" href="{{cdn('new_cart/css/style.css')}}">--}}
 	<link href="{{ cdn(mix('new_cart/version/style_ver.css')) }}" rel="stylesheet" media="all" />
 
@@ -45,7 +45,7 @@
 						<img src="{{cdn('new_cart/images/ssl.svg')}}" alt="ssl" width="21px" height="21px">
 						<img src="{{cdn('new_cart/images/lock.svg')}}" alt="lock" width="16px" height="20px">
 					</div>
-						<img src="{{cdn('new_cart/images/powered-by-stripe.svg')}}" alt="Powered By Stripe" width="119px" height="28px">					
+						<img src="{{cdn('new_cart/images/powered-by-stripe.svg')}}" alt="Powered By Stripe" width="119px" height="28px">
 				</div>
 				@endif
 			</div>
@@ -63,7 +63,7 @@
 		<p>Access your courses, schedule & files.</p>
 	</div>
 	<div class="alert-outer" hidden>
-				
+
 					<div class="alert-wrapper error-alert">
 						<div class="alert-inner">
 							<p id="account-error"></p>
@@ -78,15 +78,15 @@
                 <input type="text"  id="emaill" autocomplete="off">
 
             </div>
-            
+
             </br>
 
             <label> Password <span class="required">(*)</span></label><span data-id="password" class="icon"><img width="20" src="{{cdn('/theme/assets/images/icons/eye-password.svg')}}" alt="">Show</span>
-            <div class="input-wrapper input-wrapper--text">    
+            <div class="input-wrapper input-wrapper--text">
                 <input type="password"  id="password" autocomplete="off">
             </div>
 
-        
+
 		<div class="form-group">
 			<label for="remember-me"><input id="remember-me" type="checkbox">Remember me</label>
 			{{--<a id="forgot-pass" href="javascript:void(0)">Forgot password?</a>--}}
@@ -106,7 +106,7 @@
 	{!!csrf_field()!!}
 
 	<div id="error-mail" class="alert-outer" hidden>
-				
+
 				<div class="alert-wrapper error-alert">
 					<div class="alert-inner">
 						<p id="message-error"></p>
@@ -119,7 +119,7 @@
 					   <div class="container">
 						  <div class="alert-wrapper success-alert">
 							 <div class="alert-inner">
-							 <p id="message-success"></p>                                   
+							 <p id="message-success"></p>
 							</div>
 						  </div>
 					   </div>
@@ -127,12 +127,12 @@
 					</div>
 
 		<div class="input-wrapper input-wrapper--text input-wrapper--email">
-		<div class="input-safe-wrapper">	
+		<div class="input-safe-wrapper">
 			<span class="icon"><img width="14" src="{{cdn('/theme/assets/images/icons/icon-email.svg')}}" alt=""></span>
-			<input type="email"  placeholder="Email" name="email" id="email-forgot" class="required"> 
+			<input type="email"  placeholder="Email" name="email" id="email-forgot" class="required">
 		</div>
 		</div>
-	   
+
 		<button type="button" class="btn btn--lg btn--secondary change-password"  value="Change">Change</button>
 	</form>
 </div><!-- ./login-popup -->
@@ -141,7 +141,7 @@
 	</header>
 	<!---------------- header end --------------->
 
-	
+
 
     @yield('content')
 
@@ -158,13 +158,13 @@
 		@endif
 		<div class="address text-center">
 			Knowcrunch Inc., 2035 Sunset Lake Road, Delaware, USA.
-		</div>		
+		</div>
 	</footer>
 	<!---------------- footer end--------------->
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	<script src="{{cdn('new_cart/js/jquery.validate.min.js')}}" type="text/javascript" charset="utf-8" async defer></script>
-	<script src="{{cdn('new_cart/js/additional-methods.min.js')}}" type="text/javascript" charset="utf-8" async defer></script>	
-	<script src="{{cdn('new_cart/js/validation.js')}}" type="text/javascript" charset="utf-8" async defer></script>					
+	<script src="{{cdn('new_cart/js/additional-methods.min.js')}}" type="text/javascript" charset="utf-8" async defer></script>
+	<script src="{{cdn('new_cart/js/validation.js')}}" type="text/javascript" charset="utf-8" async defer></script>
 	<script src="{{cdn('new_cart/js/script.js')}}" type="text/javascript" charset="utf-8" async defer></script>
     <script src="{{cdn('new_cart/js/cart.js')}}" type="text/javascript" charset="utf-8" async defer></script>
 
@@ -184,7 +184,7 @@ var routesObj = {
 
     $('.login-popup-wrapper .close-btn').click(function(e) {
         e.preventDefault();
-        
+
         $('.login-popup-wrapper').removeClass('active');
     });
 
@@ -201,7 +201,7 @@ var routesObj = {
     	    		'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
     	 			},
             success: function(data) {
-                
+
 
                 switch (data.data.status) {
                     case 0:
@@ -229,7 +229,7 @@ var routesObj = {
                         break;
 
                     default:
-                        
+
                         break;
                 }
 
@@ -237,7 +237,7 @@ var routesObj = {
 
             },
             error: function(data) {
-                
+
             }
         });
 
@@ -253,13 +253,13 @@ var routesObj = {
 $(document).keyup(function(event){
 
     if($('.login-popup-wrapper').hasClass('active')){
-        
+
         if(event.keyCode == 13){
             loginAjaxNew()
         }
     }
-    
-    
+
+
 })
 		</script>
 
@@ -279,7 +279,7 @@ $(document).ready(function(){
 				dataLayer.push({"{{$key}}": {{$ti}}})
 			@else
 				dataLayer.push({"{{$key}}": $.parseHTML("{{$ti}}")[0].data})
-			@endif		
+			@endif
          @endforeach
 })
       </script>

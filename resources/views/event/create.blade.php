@@ -88,7 +88,7 @@
                             <div class="row">
                                 <div class="form-group col-12">
                                     <div class="input-group">
-                                        <h3 class="mb-0 title">{{ __('Course hours') }}</h3>
+                                        <h3 class="mb-0 title">{{ __('Course Hours') }}</h3>
 
                                         <span data-infowrapper="hours" class="input-group-addon input-group-append input-icon-wrapper">
                                             <span class="btn btn-outline-primary input-icon">
@@ -172,7 +172,7 @@
                                 <div class="form-group col-12">
 
                                     <div class="input-group">
-                                    <h3 class="mb-0 title">{{ __('Course language') }}</h3>
+                                    <h3 class="mb-0 title">{{ __('Course Language') }}</h3>
 
                                         <span data-infowrapper="language" class="input-group-addon input-group-append input-icon-wrapper">
                                             <span class="btn btn-outline-primary input-icon">
@@ -499,7 +499,7 @@
                                         <div class="form-group col-12">
 
                                             <div class="input-group">
-                                                <h3 class="mb-0 title">{{ __('Course access') }}</h3>
+                                                <h3 class="mb-0 title">{{ __('Course Access') }}</h3>
 
                                                 <span data-infowrapper="free_courses" class="input-group-addon input-group-append input-icon-wrapper">
                                                     <span class="btn btn-outline-primary input-icon">
@@ -516,9 +516,9 @@
 
                                         <div class="form-group col-12">
                                             <span class="toggle-btn-inline-text">Would you like to let students access an e-learning course for free?</span>
-                                            <label id="access-student-toggle" class="custom-toggle">
+                                            <label id="access-student-toggle" class="custom-toggle yesno">
                                                 <input id="access-student" name="course[{{'free_courses'}}][{{'enabled'}}]" type="checkbox">
-                                                <span class="custom-toggle-slider rounded-circle" data-label-off="No" data-label-on="Yes"></span>
+                                                <span class="custom-toggle-slider rounded-circle" data-label-off="Off" data-label-on="On"></span>
                                             </label>
                                         </div>
 
@@ -672,7 +672,7 @@
                                 <div class="form-group col-12">
 
                                     <div class="input-group">
-                                        <h3 class="mb-0 title" for="input-hours">{{ __('Course partners') }}</h3>
+                                        <h3 class="mb-0 title" for="input-hours">{{ __('Course Partners') }}</h3>
 
                                         <span data-infowrapper="partner" class="input-group-addon input-group-append input-icon-wrapper">
                                             <span class="btn btn-outline-primary input-icon">
@@ -687,9 +687,9 @@
 
                                 <div class="form-group col-12">
                                     <span class="toggle-btn-inline-text">Does this course have supporters/partners?</span>
-                                    <label class="custom-toggle">
+                                    <label class="custom-toggle yesno">
                                         <input id="partner-toggle" name="partner_enabled" type="checkbox" >
-                                        <span class="custom-toggle-slider rounded-circle" data-label-off="No" data-label-on="Yes"></span>
+                                        <span class="custom-toggle-slider rounded-circle" data-label-off="Off" data-label-on="On"></span>
                                     </label>
                                 </div>
 
@@ -713,7 +713,7 @@
                                 <div class="form-group col-12">
 
                                     <div class="input-group">
-                                        <h3 class="mb-0 title" for="input-hours">{{ __('Course files') }}</h3>
+                                        <h3 class="mb-0 title" for="input-hours">{{ __('Course Files') }}</h3>
 
                                         <span data-infowrapper="files" class="input-group-addon input-group-append input-icon-wrapper">
                                             <span class="btn btn-outline-primary input-icon">
@@ -752,7 +752,7 @@
                                 <div class="form-group col-12">
 
                                     <div class="input-group">
-                                        <h3 class="mb-0 title" >{{ __('Course manager') }}</h3>
+                                        <h3 class="mb-0 title" >{{ __('Course Manager') }}</h3>
 
                                         <span data-infowrapper="manager" class="input-group-addon input-group-append input-icon-wrapper">
                                             <span class="btn btn-outline-primary input-icon">
@@ -769,9 +769,9 @@
 
                                 <div class="form-group col-12">
                                     <span class="toggle-btn-inline-text">Does this course have a visible manager?</span>
-                                    <label class="custom-toggle">
+                                    <label class="custom-toggle yesno">
                                         <input id="manager-toggle" name="manager-enabled" type="checkbox">
-                                        <span class="custom-toggle-slider rounded-circle" data-label-off="No" data-label-on="Yes"></span>
+                                        <span class="custom-toggle-slider rounded-circle" data-label-off="Off" data-label-on="On"></span>
                                     </label>
                                 </div>
 
@@ -805,7 +805,7 @@
                                 <div class="form-group col-12">
 
                                     <div class="input-group">
-                                        <h3 class="mb-0 title">{{ __('Course awards & badges') }}</h3>
+                                        <h3 class="mb-0 title">{{ __('Course Awards & Badges') }}</h3>
 
                                         <span data-infowrapper="awards" class="input-group-addon input-group-append input-icon-wrapper">
                                             <span class="btn btn-outline-primary input-icon">
@@ -818,9 +818,9 @@
                                 </div>
                                 <div class="form-group col-12">
                                     <span class="toggle-btn-inline-text">Does this course have some award?</span>
-                                    <label class="custom-toggle">
+                                    <label class="custom-toggle yesno">
                                         <input id="award-toggle" type="checkbox">
-                                        <span class="custom-toggle-slider rounded-circle" data-label-off="No" data-label-on="Yes"></span>
+                                        <span class="custom-toggle-slider rounded-circle" data-label-off="Off" data-label-on="On"></span>
                                     </label>
                                 </div>
 
@@ -837,7 +837,7 @@
                                 <div class="form-group col-12">
 
                                     <div class="input-group">
-                                        <h3 class="mb-0 title">{{ __('Course certification') }}</h3>
+                                        <h3 class="mb-0 title">{{ __('Course Certification') }}</h3>
 
                                         <span data-infowrapper="certificate" class="input-group-addon input-group-append input-icon-wrapper">
                                             <span class="btn btn-outline-primary input-icon">
@@ -852,9 +852,9 @@
 
                                 <div class="form-group col-12">
                                     <span class="toggle-btn-inline-text">Does this course offer a certification? </span>
-                                    <label class="custom-toggle">
+                                    <label class="custom-toggle yesno">
                                         <input name="course[{{'certificate'}}][{{'certification'}}]" id="certification-toggle" type="checkbox">
-                                        <span class="custom-toggle-slider rounded-circle" data-label-off="No" data-label-on="Yes"></span>
+                                        <span class="custom-toggle-slider rounded-circle" data-label-off="Off" data-label-on="On"></span>
                                     </label>
                                 </div>
 
@@ -875,7 +875,7 @@
                                         </div>
 
                                         <div class="col-sm-12 col-md-6 form-group">
-                                            <label class="form-control-label" for="input-hours">{{ __('Title of certification (in case of exams failure)') }}</label>
+                                            <label class="form-control-label" for="input-hours">{{ __('Title Of Certification (in case of exams failure)') }}</label>
 
                                             {{--<textarea type="text" id="input-certificate_text_failure_hidden" name="course[{{'certificate'}}][{{'failure_text'}}]" id="input-certificate_text_failure" class="form-control ckeditor"  autofocus>{{old('certificate_failure')}}</textarea>--}}
 
@@ -897,7 +897,7 @@
                                         </div>
 
                                         <div class="col-sm-12 col-md-6 form-group">
-                                            <label class="form-control-label" for="input-hours">{{ __('Certificate type') }}</label>
+                                            <label class="form-control-label" for="input-hours">{{ __('Certificate Type') }}</label>
                                             <input type="text" name="course[{{'certificate'}}][{{'type'}}]" id="input-certificate_type" class="form-control" placeholder="{{ __('alphanumeric text ') }}" value="{{old('certificate_type')}}" autofocus/>
 
                                         </div>
@@ -967,7 +967,7 @@
                                 <div class="form-group col-12">
 
                                     <div class="input-group">
-                                        <h3 class="mb-0 title">{{ __('Course students') }}</h3>
+                                        <h3 class="mb-0 title">{{ __('Course Students') }}</h3>
                                         <span data-infowrapper="students" class="input-group-addon input-group-append input-icon-wrapper">
                                             <span class="btn btn-outline-primary input-icon">
                                                 <span class="fa fa-users"></span>
@@ -979,21 +979,24 @@
                                     </div>
                                 </div>
 
-                                <div calss="col-sm-12 col-md-6 col-lg-3">
-                                    <div class="form-group col-auto">
-                                        <label class="form-control-label" for="input-hours">{{ __('Student should start count from this number:') }}</label>
-                                        <input type="text" name="course[{{'students'}}][{{'count_start'}}]" class="form-control" placeholder="{{ __('number') }}" value="{{ old('count_start') }}" autofocus>
-                                    </div>
 
-                                    <div class="form-group col-auto">
-                                        <label class="form-control-label" for="input-hours">{{ __('Text after the number of students:') }}</label>
-                                        <input style="background:aliceblue;" name="course[{{'students'}}][{{'text'}}]" type="text" class="form-control" placeholder="{{ __('alphanumeric text') }}" value="{{ old('count_text') }}" autofocus>
-                                    </div>
+                                <div class="form-group col-sm-12 col-md-auto">
+                                    <label class="form-control-label" for="input-hours">{{ __('Student should start count from this number:') }}</label>
+                                    <input type="text" name="course[{{'students'}}][{{'count_start'}}]" class="form-control" placeholder="{{ __('number') }}" value="{{ old('count_start') }}" autofocus>
+                                </div>
+
+                                <div class="form-group col-sm-12 col-md-auto">
+                                    <label class="form-control-label" for="input-hours">{{ __('Text after the number of students:') }}</label>
+                                    <input style="background:aliceblue;" name="course[{{'students'}}][{{'text'}}]" type="text" class="form-control" placeholder="{{ __('alphanumeric text') }}" value="{{ old('count_text') }}" autofocus>
                                 </div>
 
 
 
+
+
+
                             </div>
+
                             <div class="row">
 
                                 <label class="form-control-label col-12" for="input-hours">{{ __('Visible on:') }}</label>

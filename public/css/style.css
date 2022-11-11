@@ -494,10 +494,19 @@ li.select2-results__option:empty {
     width: 120px !important;
 }
 
-#event_edit_form .title,
-#event_create_form .title {
-    color: #324cdd;
+.custom-toggle-slider::after {
+    margin: 0 0.517rem;;
 }
+
+#event_edit_form .custom-toggle.yesno .custom-toggle-slider::before,
+#event_create_form .custom-toggle.yesno .custom-toggle-slider::before{
+    left: 8px;
+}
+#event_edit_form .custom-toggle.yesno .custom-toggle-slider,
+#event_create_form .custom-toggle.yesno .custom-toggle-slider{
+    width: 62px;
+}
+
 
 .custom-toggle.custom-published input:checked+.custom-toggle-slider::before {
     background: #5e72e4;

@@ -20318,7 +20318,8 @@ button#move-lesson {
   flex: none !important;
 }
 
-.event-tabs button {
+.event-tabs button,
+.event-tabs a {
   background: white;
   color: #324cdd;
   border-color: white;
