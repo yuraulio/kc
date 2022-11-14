@@ -95,6 +95,26 @@
                                 </button>
                             </li>
 
+                            <li class="nav-item">
+                                <a target="_blank" href="/print/syllabus/{{$event['slugable']['slug']}}"  class="btn btn-icon btn-primary">Download course schedule</a>
+
+                            </li>
+
+
+
+
+
+
+                            <div class="row">
+    <div class="form-group col-4">
+
+
+    </div>
+</div>
+
+
+
+
                         </ul>
                     </div>
                     <div class="card shadow">
@@ -243,7 +263,7 @@
                                                 ?>
 
                                                 <div class="input-group">
-                                                    <h3 class="mb-0 title">{{ __('Course hours') }} (course_hours)</h3>
+                                                    <h3 class="mb-0 title">{{ __('Course Hours') }} (course_hours)</h3>
                                                     <span data-infowrapper="hours" class="input-group-addon input-group-append input-icon-wrapper">
                                                         <span class="btn btn-outline-primary input-icon">
                                                             @if(isset($info['hours']['icon']) && $info['hours']['icon']['path'] != null)
@@ -341,7 +361,7 @@
                                             <div class="form-group col-12">
 
                                                 <div class="input-group">
-                                                <h3 class="mb-0 title">{{ __('Course language') }} (course_language)</h3>
+                                                <h3 class="mb-0 title">{{ __('Course Language') }} (course_language)</h3>
 
                                                     <span data-infowrapper="language" class="input-group-addon input-group-append input-icon-wrapper">
                                                         <span class="btn btn-outline-primary input-icon">
@@ -463,7 +483,7 @@
                                                 if(isset($info['inclass']['city']['icon']) && $info['inclass']['city']['icon'] != null){
                                                     $course_inclass_city_icon = $info['inclass']['city']['icon'];
                                                 }else{
-                                                    
+
                                                     $course_inclass_city_icon = null;
                                                 }
 
@@ -495,7 +515,7 @@
                                                         </span>
                                                         (course_inclass_city)
                                                     </span>
-                                                
+
                                                     <input type="hidden" value="{{ old('inclass_city_icon_path', ($course_inclass_city_icon != null && $course_inclass_city_icon['path'] != '') ? $course_inclass_city_icon['path'] : '' ) }}" id="inclass_city_path" name="course[{{'delivery'}}][{{'inclass'}}][{{'city'}}][{{'icon'}}][{{'path'}}]">
                                                     <input type="hidden" value="{{ old('inclass_city_icon_alt_text', ($course_inclass_city_icon != null && $course_inclass_city_icon['alt_text'] != '') ? $course_inclass_city_icon['alt_text'] : '' ) }}" id="inclass_city_alt_text" name="course[{{'delivery'}}][{{'inclass'}}][{{'city'}}][{{'icon'}}][{{'alt_text'}}]">
 
@@ -758,12 +778,6 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="row">
-                                                    <div class="form-group col-4">
-
-                                                        <a target="_blank" href="/print/syllabus/{{$event['slugable']['slug']}}"  class="btn btn-primary">Download course schedule</a>
-                                                    </div>
-                                                </div>
 
 
                                                 <div class="row access-student-wrapper">
@@ -781,7 +795,7 @@
                                                     <div class="form-group col-12">
 
                                                         <div class="input-group">
-                                                            <h3 class="mb-0 title">{{ __('Course access') }}</h3>
+                                                            <h3 class="mb-0 title">{{ __('Course Access') }}</h3>
 
                                                             <span data-infowrapper="free_courses" class="input-group-addon input-group-append input-icon-wrapper">
                                                                 <span class="btn btn-outline-primary input-icon">
@@ -805,9 +819,9 @@
                                                     ?>
                                                     <div class="form-group col-12">
                                                         <span class="toggle-btn-inline-text">Would you like to let students access an e-learning course for free?</span>
-                                                        <label id="access-student-toggle" class="custom-toggle">
+                                                        <label id="access-student-toggle" class="custom-toggle yesno">
                                                             <input id="access-student" name="course[{{'free_courses'}}][{{'enabled'}}]" type="checkbox" {{ (isset($access_events) && count($access_events) != 0) ? 'checked' : ''}}>
-                                                            <span class="custom-toggle-slider rounded-circle" data-label-off="No" data-label-on="Yes"></span>
+                                                            <span class="custom-toggle-slider rounded-circle" data-label-off="Off" data-label-on="On"></span>
                                                         </label>
                                                     </div>
 
@@ -1010,7 +1024,7 @@
                                             <div class="form-group col-12">
 
                                                 <div class="input-group">
-                                                    <h3 class="mb-0 title" for="input-hours">{{ __('Course payment method') }} (course_payment_method)</h3>
+                                                    <h3 class="mb-0 title" for="input-hours">{{ __('Course Payment Method') }} (course_payment_method)</h3>
 
                                                     <span data-infowrapper="payment" class="input-group-addon input-group-append input-icon-wrapper">
                                                         <span class="btn btn-outline-primary input-icon">
@@ -1030,7 +1044,7 @@
 
                                             <div class="form-group col-12">
                                                 <span class="toggle-btn-inline-text">Is this course free or paid?</span>
-                                                <label class="custom-toggle">
+                                                <label class="custom-toggle yesno">
                                                     <input id="payment-method-toggle" value="on" name="course[{{'payment'}}][{{'paid'}}]" type="checkbox" {{($event['paymentMethod']->first()) ? 'checked=""' : ''}} >
                                                     <span class="custom-toggle-slider rounded-circle" data-label-off="Free" data-label-on="Paid"></span>
                                                 </label>
@@ -1072,7 +1086,7 @@
                                             <div class="form-group col-12">
 
                                                 <div class="input-group">
-                                                    <h3 class="mb-0 title" for="input-hours">{{ __('Course partners') }} (course_partner)</h3>
+                                                    <h3 class="mb-0 title" for="input-hours">{{ __('Course Partners') }} (course_partner)</h3>
 
                                                     <span data-infowrapper="partner" class="input-group-addon input-group-append input-icon-wrapper">
                                                         <span class="btn btn-outline-primary input-icon">
@@ -1093,9 +1107,9 @@
 
                                             <div class="form-group col-12">
                                                 <span class="toggle-btn-inline-text">Does this course have supporters/partners?</span>
-                                                <label class="custom-toggle">
+                                                <label class="custom-toggle yesno">
                                                     <input id="partner-toggle" name="partner_enabled" type="checkbox" {{(count($eventPartners) != 0) ? 'checked=""' : ''}} >
-                                                    <span class="custom-toggle-slider rounded-circle" data-label-off="No" data-label-on="Yes"></span>
+                                                    <span class="custom-toggle-slider rounded-circle" data-label-off="Off" data-label-on="On"></span>
                                                 </label>
                                             </div>
 
@@ -1126,7 +1140,7 @@
                                                 ?>
 
                                                 <div class="input-group">
-                                                    <h3 class="mb-0 title" for="input-hours">{{ __('Course files') }}</h3>
+                                                    <h3 class="mb-0 title" for="input-hours">{{ __('Course Files') }}</h3>
 
                                                     <span data-infowrapper="files" class="input-group-addon input-group-append input-icon-wrapper">
                                                         <span class="btn btn-outline-primary input-icon">
@@ -1200,7 +1214,7 @@
                                             <div class="form-group col-12">
 
                                                 <div class="input-group">
-                                                    <h3 class="mb-0 title" >{{ __('Course manager') }} (course_manager)</h3>
+                                                    <h3 class="mb-0 title" >{{ __('Course Manager') }} (course_manager)</h3>
 
                                                     <span data-infowrapper="manager" class="input-group-addon input-group-append input-icon-wrapper">
                                                         <span class="btn btn-outline-primary input-icon">
@@ -1219,9 +1233,9 @@
 
                                             <div class="form-group col-12">
                                                 <span class="toggle-btn-inline-text">Does this course have a visible manager?</span>
-                                                <label class="custom-toggle">
+                                                <label class="custom-toggle yesno">
                                                     <input id="manager-toggle" name="manager-enabled" type="checkbox" {{(isset($event->syllabus[0])) ? 'checked' : ''}}>
-                                                    <span class="custom-toggle-slider rounded-circle" data-label-off="No" data-label-on="Yes"></span>
+                                                    <span class="custom-toggle-slider rounded-circle" data-label-off="Off" data-label-on="On"></span>
                                                 </label>
                                             </div>
 
@@ -1271,7 +1285,7 @@
                                             <div class="form-group col-12">
 
                                                 <div class="input-group">
-                                                    <h3 class="mb-0 title">{{ __('Course awards & badges') }} (course_awards)</h3>
+                                                    <h3 class="mb-0 title">{{ __('Course Awards & Badges') }} (course_awards)</h3>
                                                     <span data-infowrapper="awards" class="input-group-addon input-group-append input-icon-wrapper">
                                                         <span class="btn btn-outline-primary input-icon">
                                                             @if($course_awards_icon != null && $course_awards_icon['path'] != null)
@@ -1288,9 +1302,9 @@
                                             </div>
                                             <div class="form-group col-12">
                                                 <span class="toggle-btn-inline-text">Does this course have some award?</span>
-                                                <label class="custom-toggle">
+                                                <label class="custom-toggle yesno">
                                                     <input id="award-toggle" {{ (isset($info['awards']['text']) && $info['awards']['text'] != null) ? 'checked' : ''}} type="checkbox">
-                                                    <span class="custom-toggle-slider rounded-circle" data-label-off="No" data-label-on="Yes"></span>
+                                                    <span class="custom-toggle-slider rounded-circle" data-label-off="Off" data-label-on="On"></span>
                                                 </label>
                                             </div>
 
@@ -1318,7 +1332,7 @@
                                             <div class="form-group col-12">
 
                                                 <div class="input-group">
-                                                    <h3 class="mb-0 title">{{ __('Course certification') }}</h3>
+                                                    <h3 class="mb-0 title">{{ __('Course Certification') }}</h3>
 
                                                     <span data-infowrapper="certificate" class="input-group-addon input-group-append input-icon-wrapper">
                                                         <span class="btn btn-outline-primary input-icon">
@@ -1338,9 +1352,9 @@
 
                                             <div class="form-group col-12">
                                                 <span class="toggle-btn-inline-text">Does this course offer a certification? </span>
-                                                <label class="custom-toggle">
+                                                <label class="custom-toggle yesno">
                                                     <input name="course[{{'certificate'}}][{{'certification'}}]" id="certification-toggle" {{isset($info['certificate']['has_certificate']) && $info['certificate']['has_certificate'] ? 'checked' : '' }} type="checkbox">
-                                                    <span class="custom-toggle-slider rounded-circle" data-label-off="No" data-label-on="Yes"></span>
+                                                    <span class="custom-toggle-slider rounded-circle" data-label-off="Off" data-label-on="On"></span>
                                                 </label>
                                             </div>
 
@@ -1370,7 +1384,7 @@
                                                     </div>
 
                                                     <div class="col-sm-12 col-md-6 form-group">
-                                                        <label class="form-control-label" for="input-hours">{{ __('Title of certification (in case of exams failure)') }}  (course_certification_name_failure)</label>
+                                                        <label class="form-control-label" for="input-hours">{{ __('Title Of Certification (in case of exams failure)') }}  (course_certification_name_failure)</label>
 
                                                         {{--<textarea type="text" name="course[{{'certificate'}}][{{'failure_text'}}]" id="input-certificate_text_failure" class="form-control ckeditor" placeholder="{{ __('alphanumeric text ') }}"  autofocus>{{ old('certificate_failure', (isset($info['certificate']['messages']['failure']) && $info['certificate']['messages']['failure'] != null) ? $info['certificate']['messages']['failure'] : '') }}</textarea>--}}
 
@@ -1390,10 +1404,10 @@
                                                         <!-- anto's editor -->
 
                                                     </div>
-                                                    
+
                                                 </div>
                                                 <div class="col-sm-12 col-md-6 form-group">
-                                                        <label class="form-control-label" for="input-hours">{{ __('Certificate type') }} (course_certification_type)</label>
+                                                        <label class="form-control-label" for="input-hours">{{ __('Certificate Type') }} (course_certification_type)</label>
                                                         <input type="text" name="course[{{'certificate'}}][{{'type'}}]" id="input-certificate_type" class="form-control" placeholder="{{ __('alphanumeric text ') }}" value="{{old('certificate_type',(isset($info['certificate']['type']) && $info['certificate']['type'] != null) ? $info['certificate']['type'] : '' )}}" autofocus/>
 
                                                     </div>
@@ -1469,7 +1483,7 @@
                                             <div class="form-group col-12">
 
                                                 <div class="input-group">
-                                                    <h3 class="mb-0 title">{{ __('Course students') }}</h3>
+                                                    <h3 class="mb-0 title">{{ __('Course Students') }}</h3>
                                                     <span data-infowrapper="students" class="input-group-addon input-group-append input-icon-wrapper">
                                                         <span class="btn btn-outline-primary input-icon">
                                                             @if($course_students_icon != null && $course_students_icon['path'] != null)
@@ -1484,17 +1498,16 @@
                                                 </div>
                                             </div>
 
-                                            <div calss="col-sm-12 col-md-6 col-lg-3">
-                                                <div class="form-group col-auto">
-                                                    <label class="form-control-label" for="input-hours">{{ __('Student should start count from this number:') }} (course_students_number)</label>
-                                                    <input type="text" name="course[{{'students'}}][{{'count_start'}}]" class="form-control" placeholder="{{ __('alphanumeric text') }}" value="{{ old('count_start', (isset($info['students']['number']) && $info['students']['number'] != null) ? $info['students']['number'] : '' ) }}" autofocus>
-                                                </div>
-
-                                                <div class="form-group col-auto">
-                                                    <label class="form-control-label" for="input-hours">{{ __('Text after the number of students:') }} (course_students_text)</label>
-                                                    <input style="background:aliceblue;" name="course[{{'students'}}][{{'text'}}]" type="text" class="form-control" placeholder="{{ __('alphanumeric text') }}" value="{{ old('count_text', (isset($info['students']['text']) && $info['students']['text'] != null) ? $info['students']['text'] : '' ) }}" autofocus>
-                                                </div>
+                                            <div class="form-group col-sm-12 col-md-4">
+                                                <label class="form-control-label" for="input-hours">{{ __('Student should start count from this number:') }} (course_students_number)</label>
+                                                <input type="text" name="course[{{'students'}}][{{'count_start'}}]" class="form-control" placeholder="{{ __('number') }}" value="{{ old('count_start', (isset($info['students']['number']) && $info['students']['number'] != null) ? $info['students']['number'] : '' ) }}" autofocus>
                                             </div>
+
+                                            <div class="form-group col-sm-12 col-md-6">
+                                                <label class="form-control-label" for="input-hours">{{ __('Text after the number of students:') }} (course_students_text)</label>
+                                                <input style="background:aliceblue;" name="course[{{'students'}}][{{'text'}}]" type="text" class="form-control" placeholder="{{ __('alphanumeric text') }}" value="{{ old('count_text', (isset($info['students']['text']) && $info['students']['text'] != null) ? $info['students']['text'] : '' ) }}" autofocus>
+                                            </div>
+
 
 
 
