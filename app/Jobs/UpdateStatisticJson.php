@@ -30,39 +30,7 @@ class UpdateStatisticJson implements ShouldQueue
         $this->event = Event::find($event);
         $this->userId = $userId;
 
-        if($this->userId){
-
-            $eventId = $this->event->id;
-            $this->users = User::whereId($this->userId)->whereHas('events',function($event) use ($eventId){
-                return $event->where('event_id',$eventId)
-                    ->whereHas('event_info1',function($query){
-                        $query->whereCourseDelivery(143);
-                    });
-            })
-            ->with([
-                'statistic' => function($statistic) use($eventId){
-                    return $statistic->where('event_id',$eventId);
-                }
-            ])
-            ->get();
-
-        }else{
-
-            $eventId = $this->event->id;
-            $this->users = User::whereHas('events',function($event) use ($eventId){
-                return $event->where('event_id',$eventId)
-                    ->whereHas('event_info1',function($query){
-                        $query->whereCourseDelivery(143);
-                    });
-            })
-            ->with([
-                'statistic' => function($statistic) use($eventId){
-                    return $statistic->where('event_id',$eventId);
-                }
-            ])
-            ->get();
-        }
-
+        
         //dd($this->users);
 
     }
@@ -101,17 +69,50 @@ class UpdateStatisticJson implements ShouldQueue
 
         $newStatistics = [];
         $eventTopics = $this->event->topicsLessonsInstructors()['topics'];
+        
+        if($this->userId){
+
+            $eventId = $this->event->id;
+            $this->users = User::whereId($this->userId)->whereHas('events',function($event) use ($eventId){
+                return $event->where('event_id',$eventId)
+                    ->whereHas('event_info1',function($query){
+                        $query->whereCourseDelivery(143);
+                    });
+            })
+            ->with([
+                'statistic' => function($statistic) use($eventId){
+                    return $statistic->where('event_id',$eventId);
+                }
+            ])
+            ->get();
+
+        }else{
+
+            $eventId = $this->event->id;
+            
+            $this->users = User::whereHas('events',function($event) use ($eventId){
+                return $event->where('event_id',$eventId)
+                    ->whereHas('event_info1',function($query){
+                        $query->whereCourseDelivery(143);
+                    });
+            })
+            ->with([
+                'statistic' => function($statistic) use($eventId){
+                    
+                    return $statistic->where('event_id',$eventId);
+                }
+            ])
+            ->get();
+
+        
+        }
 
         foreach($this->users as $user){
             
             $statistics = isset($user['statistic'][0]['pivot']) ? $user['statistic'][0]['pivot'] : [];
-            //$newStatistics[] = $user->getStatistsicsUpdate($this->event,$statistics,$eventTopics);
             $user->updateUserStatistic($this->event,$statistics,$eventTopics);
 
         }
-        //$this->event->statistic()->detach();
-        //$this->event->statistic()->attach($newStatistics);
-        //dd($newStatistics);
 
     }
 
