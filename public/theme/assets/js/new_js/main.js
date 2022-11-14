@@ -668,7 +668,12 @@ jQuery(document).ready(function($) {
 
     });
 
-    Marquee3k.init()
+    setTimeout(function(){
+
+        Marquee3k.init()
+        
+    },100);
+
 
     $(window).on('load', function(){
 
@@ -695,6 +700,8 @@ jQuery(document).ready(function($) {
 
         // Wait for menu transition ends and get the final height of menu
         setTimeout(function(){
+
+            Marquee3k.init()
             if( $('.fixed-tab-controls').length ){
                 var headerHeight = $('#header').outerHeight();
                 var distanceTop = $('.fixed-tab-controls').offset().top;
