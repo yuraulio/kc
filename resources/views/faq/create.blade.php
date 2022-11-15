@@ -70,7 +70,7 @@
                                     @include('alerts.feedback', ['field' => 'category_id'])
                                 </div>
 
-                                <div class="form-group{{ $errors->has('category_id') ? ' has-danger' : '' }}">
+                                {{--<div class="form-group{{ $errors->has('category_id') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-category_id">{{ __('Event Category') }}</label>
                                     <select multiple name="eventcategory_id[]" id="input-category_id" class="form-control" placeholder="{{ __('Event Category') }}">
                                         <option value="">-</option>
@@ -80,6 +80,21 @@
                                     </select>
 
                                     @include('alerts.feedback', ['field' => 'eventcategory_id'])
+                                </div>--}}
+
+
+                                <div class="form-group{{ $errors->has('category_id') ? ' has-danger' : '' }}">
+                                    <label class="form-control-label" for="input-category_id">{{ __('Event Category') }}</label>
+                                    <select name="type" id="input-category_id" class="form-control" placeholder="{{ __('Event Category') }}">
+                                        <option value="">-</option>
+                                        
+                                        <option value="both">Both</option>
+                                        <option value="in_class">In Class</option>
+                                        <option value="elearning">Elearning</option>
+                                       
+                                    </select>
+
+                                    @include('alerts.feedback', ['field' => 'type'])
                                 </div>
 
                                 <div class="text-center">

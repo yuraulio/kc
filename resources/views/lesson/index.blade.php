@@ -100,35 +100,35 @@
                             <tbody class="lessons-order">
                                 @foreach ($lessons as $lesson)
                              
-
-                               
+                                <?php $lessonTopicCategory = getLessonCategoryByTopic($lesson->category,$lesson->topic) ?>
+                           
 
                                 @foreach($lesson->topic as $key => $topic)
                                 
-                                
+
                                 
                                     <tr class="lesson-list">
                                         <td> 
                                             <div class="input-group-prepend lesson-select">
                                                 <div class="input-group-text">
-                                                    <input data-category-id="{{$lesson->category[$key]['id']}}" data-lesson-id="{{$lesson->id}}" class="check-lesson" type="checkbox" aria-label="Checkbox for following text input">
+                                                    <input data-category-id="{{$lessonTopicCategory[$topic->id.'_'.$topic->pivot->category_id]['id']}}" data-lesson-id="{{$lesson->id}}" class="check-lesson" type="checkbox" aria-label="Checkbox for following text input">
                                                 </div>
                                             </div> 
                                         </td>
                                         <td><?= ($lesson->status == 1) ? 'Published' : 'Unpublished'; ?></td>
-                                        <td class="lesson-title-{{$lesson->id}}"><a href="{{ route('lessons.edit', [$lesson,'selectedCategory' => $lesson->category[$key]['id']]) }}">{{ $lesson->title }}</a></td>
-                                        <td id="{{$lesson->category[$key]['id']}}-{{$topic->id}}-{{$lesson->id}}">
+                                        <td class="lesson-title-{{$lesson->id}}"><a href="{{ route('lessons.edit', [$lesson,'selectedCategory' => $lessonTopicCategory[$topic->id.'_'.$topic->pivot->category_id]['id']]) }}">{{ $lesson->title }}</a></td>
+                                        <td id="{{$lessonTopicCategory[$topic->id.'_'.$topic->pivot->category_id]['id']}}-{{$topic->id}}-{{$lesson->id}}">
                                        
                                             {{ $topic->title }},
                                        
                                         </td>
                                         <td class="">
                                        
-                                                {{ $lesson->category[$key]['name'] }},
+                                                {{ $lessonTopicCategory[$topic->id.'_'.$topic->pivot->category_id]['name'] }},
                                          
                                         </td>
                                        
-                                        <td id="order-{{$lesson->category[$key]['id']}}-{{$topic->id}}-{{$lesson->id}}" data-priority="{{$lesson->category[$key]['id']}}-{{$topic->id}}-{{$lesson->id}}" data-priority-value="{{ $topic->pivot->priority }}" class="hidden order-priority">
+                                        <td id="order-{{$lessonTopicCategory[$topic->id.'_'.$topic->pivot->category_id]['id']}}-{{$topic->id}}-{{$lesson->id}}" data-priority="{{$lessonTopicCategory[$topic->id.'_'.$topic->pivot->category_id]['id']}}-{{$topic->id}}-{{$lesson->id}}" data-priority-value="{{ $topic->pivot->priority }}" class="hidden order-priority">
                                        
                                                 {{ $topic->pivot->priority }}
                                          
@@ -272,7 +272,7 @@
     $('#col2_filter').append(row)
 
     $.each(topics, function(key1, value1) {
-        let row = `<option data-topic="${value1.id}" data-category="${key}" value="${removeSpecial(value1.title)}">${value1.title}</option>`
+        let row = `<option data-status="${value1.status}" data-topic="${value1.id}" data-category="${key}" value="${removeSpecial(value1.title)}">${value1.title}</option>`
         $('#col1_filter').append(row)
         $('#col1_move').append(row)
     })
@@ -470,6 +470,7 @@
     
     $('#col1_move').change(function() {
         $("#col1_move").data('topic',$("option:selected", this).data('topic'))
+        $("#col1_move").data('status',$("option:selected", this).data('status'))
     })
     
     $('#col2_filter').change(function() {
@@ -517,7 +518,40 @@
 
         $("#move-lesson").click(function(){
 
+            let status = $("#col1_move").data('status');
+            console.log('status = ', status)
 
+            if(status == 0){
+             
+                Swal.fire({
+                  title: 'The topic is unpublished. If you move the lessons to this topic, the users will lose their video data of the moving lessons?',
+                  text: "",
+                  icon: 'warning',
+                  showCancelButton: true,
+                  confirmButtonColor: '#3085d6',
+                  cancelButtonColor: '#d33',
+                  confirmButtonText: 'Yes, move them!'
+                }).then((result) => {
+                
+                  if (result.value) {
+                    moveLessons()
+                  }
+                })
+
+            }else{
+                moveLessons()
+            }
+
+
+
+
+           
+
+        })
+
+
+        function moveLessons(){
+            
             $( document ).ajaxStart(function() {
                 window.swal({
                     title: "Move lessons...",
@@ -608,7 +642,7 @@
                         $(".success-message").show();
 
                         window.swal({
-                            title: message,
+                            title: 'Lessons moved',
                             showConfirmButton: true,
                             allowOutsideClick: true,
                             timer: 2000
@@ -638,8 +672,8 @@
                     $("#col1_move").val("-- All --").change();
                 }
             });
+        }
 
-        })
 
     </script>
 

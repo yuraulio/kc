@@ -77,10 +77,13 @@ class ImportFaqs extends Command
 
                 if($key == 0){
                     $del = 'all';
+                    $type = 'both';
                 }elseif($key == 1){
                     $del = [143];
+                    $type = 'elearning';
                 }elseif($key == 2){
                     $del = [139,215];
+                    $type = 'in_class';
                 }
 
             
@@ -132,6 +135,7 @@ class ImportFaqs extends Command
                     $faq->answer = $line[2];//htmlspecialchars($line[2], ENT_QUOTES);
                     $faq->status = true;
                     $faq->priority = $key;
+                    $faq->type = $type;
 
                     $faq->save();
 
