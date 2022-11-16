@@ -211,7 +211,7 @@
                                           </div>
                                        </div>
                                        <div class="col12">
-                                          <?php $birthday = date('j F Y',strtotime($currentuser['birthday']))?>
+                                          <?php $birthday = $currentuser['birthday'] ? date('j F Y',strtotime($currentuser['birthday'])) : ""?>
                                           <label>Date of birth:</label>
 
 
