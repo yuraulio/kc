@@ -3,7 +3,7 @@
 <link href="{{ cdn(mix('theme/assets/css/bootstrap5-grid.css')) }}" rel="stylesheet" media="all" />
 
 <script type="text/javascript" src="{{ cdn('theme/assets/js/jquery-2.1.4.min.js') }}"></script>
-<script type="text/javascript" src="{{ cdn(mix('theme/assets/js/marquee3k.js')) }}"></script>
+{{--<script type="text/javascript" src="{{ cdn(mix('theme/assets/js/marquee3k.js')) }}"></script>--}}
 
 <script type="text/javascript">
     var routesObj = {

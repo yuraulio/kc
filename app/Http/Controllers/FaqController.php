@@ -65,7 +65,7 @@ class FaqController extends Controller
     public function store(FaqRequest $request, Faq $model)
     {
 
-        
+        $request->request->add(['status' => 1]);
         $faq = $model->create($request->all());
 
         if($request->category_id != null ){
@@ -75,15 +75,12 @@ class FaqController extends Controller
             //$faq->category()->attach([$request->category_id]);
         }
 
-        $faq->categoryEvent()->detach();
+        /*$faq->categoryEvent()->detach();
         foreach($request->eventcategory_id as $cat){
             $category = Category::find($request->eventcategory_id);   
             $faq->categoryEvent()->attach($category);
-        }
+        }*/
         
-
-
-
         return redirect()->route('faqs.index')->withStatus(__('Faq successfully created.'));
     }
 
@@ -229,7 +226,7 @@ class FaqController extends Controller
             $priorities[$fcat->id] = $fcat->priority;
         }
 
-        $faq->category()->detach();
+        /*$faq->category()->detach();
     
         $lastPriority = count($priorities) + 1;
         
@@ -250,7 +247,7 @@ class FaqController extends Controller
         foreach($request->eventcategory_id as $cat){
             //$category = Category::find($request->eventcategory_id);   
             $faq->categoryEvent()->attach($cat, ['priority' => isset($priorities[$cat]) ? $priorities[$cat] : $lastPriority]);
-        }
+        }*/
         
         return redirect()->route('faqs.edit',$faq->id)->withStatus(__('Faq successfully updated.'));
     }

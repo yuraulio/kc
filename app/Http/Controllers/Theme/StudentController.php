@@ -1191,33 +1191,28 @@ class StudentController extends Controller
 
         if($user->statistic()->wherePivot('event_id',$request->event)->first()){
 
-          $videos = $user->statistic()->wherePivot('event_id',$request->event)->first()->pivot['videos'];
-          $videos = json_decode($videos,true);
-          foreach($request->videos as $key => $video){
+            $videos = $user->statistic()->wherePivot('event_id',$request->event)->first()->pivot['videos'];
+            $videos = json_decode($videos,true);
+            foreach($request->videos as $key => $video){
 
 
-            if(!isset( $videos[$key])){
-                continue;
+                if(!isset( $videos[$key])){
+                    continue;
+                }
+
+                //$videos[$key]['seen'] = isset($video['seen']) ? $video['seen'] : 0;
+                $videos[$key]['stop_time'] = isset($video['stop_time']) ? $video['stop_time'] : 0;
+                $videos[$key]['percentMinutes'] = isset($video['stop_time']) ? $video['percentMinutes'] : 0;
+
+                if( (int) $video['seen'] == 1 && (int) $videos[$key]['seen'] == 0){
+                    $videos[$key]['seen'] = (int) $video['seen'];
+                }
+
+                if((float)$video['stop_time'] > (float)$videos[$key]['total_seen']){
+                    $videos[$key]['total_seen'] = $video['stop_time'];
+                }
+
             }
-
-            //$videos[$key]['seen'] = isset($video['seen']) ? $video['seen'] : 0;
-            $videos[$key]['stop_time'] = isset($video['stop_time']) ? $video['stop_time'] : 0;
-            $videos[$key]['percentMinutes'] = isset($video['stop_time']) ? $video['percentMinutes'] : 0;
-
-            if( (int) $video['seen'] == 1 && (int) $videos[$key]['seen'] == 0){
-                $videos[$key]['seen'] = (int) $video['seen'];
-            }
-
-            if((float)$videos[$key]['stop_time'] >= (float)$videos[$key]['total_seen']){
-                $videos[$key]['total_seen'] = $videos[$key]['stop_time'];
-            }
-
-            if((float)$videos[$key]['stop_time'] >= (float)$videos[$key]['total_seen']){
-
-                $videos[$key]['total_seen'] = $videos[$key]['stop_time'];
-            }
-
-          }
 
             $user->statistic()->wherePivot('event_id',$request->event)->updateExistingPivot($request->event,[
                 'lastVideoSeen' => $request->lastVideoSeen,

@@ -212,7 +212,7 @@ class User extends Authenticatable
 
     public function statistic()
     {
-        return $this->belongsToMany(Event::class, 'event_statistics')->withPivot('id', 'videos', 'lastVideoSeen', 'notes', 'event_id','created_at');
+        return $this->belongsToMany(Event::class, 'event_statistics')->withPivot('id', 'videos', 'user_id','lastVideoSeen', 'notes', 'event_id','created_at');
     }
 
     public function statisticGroupByEvent()

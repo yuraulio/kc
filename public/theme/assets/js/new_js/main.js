@@ -668,7 +668,12 @@ jQuery(document).ready(function($) {
 
     });
 
-    Marquee3k.init()
+    setTimeout(function(){
+
+        Marquee3k.init()
+        
+    },100);
+
 
     $(window).on('load', function(){
 

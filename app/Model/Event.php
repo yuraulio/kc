@@ -378,6 +378,10 @@ class Event extends Model
         foreach($this->topic->unique()->groupBy('topic_id') as $key => $topic){
             foreach($topic as $t){
 
+                if(!$t->status){
+                    continue;
+                }
+
                 if(!isset($lessons[$t->id])){
                     continue;
                 }
@@ -386,7 +390,9 @@ class Event extends Model
                     if(!$lesson['instructor_id']){
                         unset($lessonsArray[$key]);
                     }
-                    if(($this->view_tpl=='elearning_event' || $this->view_tpl == 'elearnig_free') && $lesson['vimeo_video'] ==''){
+                    //if(($this->view_tpl=='elearning_event' || $this->view_tpl == 'elearnig_free') && $lesson['vimeo_video'] ==''){
+                    if($this->is_elearning_course() && $lesson['vimeo_video'] ==''){
+                        
                         unset($lessonsArray[$key]);
                     }
                 }
@@ -448,7 +454,7 @@ class Event extends Model
         return $faqs;
     }
 
-    public function getFaqsByCategoryEvent(){
+    /*public function getFaqsByCategoryEvent(){
 
         $faqs = [];
 
@@ -486,7 +492,55 @@ class Event extends Model
 
 
         //return $faqs;
+    }*/
+
+    public function getFaqsByType()
+    {
+        $type = $this->is_elearning_course() ? 'elearning' : 'in_class';
+        $type = ['both',$type];
+
+        return Faq::whereIn('type',$type)->with('category')->get();
     }
+
+    public function getFaqsByCategoryEvent(){
+
+        $faqs = [];
+
+        foreach($this->getFaqs() as $key => $faq){
+            if(key_exists($key,$faqs)){
+                continue;
+            }
+            $faqs[$key] = [];
+        }
+
+        
+        $categoryFaqs = $this->getFaqsByType();
+        foreach($categoryFaqs as $faq){
+
+            foreach($faq->category as $categoryFaq){
+                $faqs[$categoryFaq['name']][] = array('id' => $faq['id'], 'question' =>  $faq['title']);
+            }
+        }
+    
+
+        //pt
+
+        $new_faqs = [];
+
+        foreach($faqs as $key => $val){
+           $arr = unique_multidim_array($val, 'id');
+           $new_faqs[$key] = $arr;
+        }
+
+        //dd($new_faqs);
+        return $new_faqs;
+
+        //pt
+
+
+        //return $faqs;
+    }
+    
 
     public function statistic()
     {

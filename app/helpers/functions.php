@@ -527,15 +527,15 @@ if(!function_exists('formatBytes')){
 
 
     if (!function_exists('get_menu')){
-    function get_menu($id)
-    {
-        $menu = NewMenu::find($id);
-        return [
-            'name' => $menu->name ?? "",
-            'title' => $menu->custom_class ?? "",
-        ];
+        function get_menu($id)
+        {
+            $menu = NewMenu::find($id);
+            return [
+                'name' => $menu->name ?? "",
+                'title' => $menu->custom_class ?? "",
+            ];
+        }
     }
-
 
     if (!function_exists('update_dropbox_api')) {
         function update_dropbox_api() : void
@@ -606,8 +606,24 @@ if(!function_exists('formatBytes')){
     }
 
 
+    if (!function_exists('getLessonCategoryByTopic')) {
+        function getLessonCategoryByTopic($categories,$topics){
 
-}
+            $topicsCategories=[];
+
+            $categories = $categories->groupBy('id');
+  
+            foreach($topics as $topic){
+                $topicsCategories[$topic->id . '_' . $topic->pivot->category_id] = $categories[$topic->pivot->category_id][0];
+            }
+           
+            return $topicsCategories;
+
+        }
+    }
+
+
+
 
 
 

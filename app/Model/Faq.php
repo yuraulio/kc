@@ -16,7 +16,7 @@ class Faq extends Model
     protected $table = 'faqs';
 
     protected $fillable = [
-        'title', 'answer', 'priority'
+        'title', 'answer', 'priority','type','status'
     ];
 
     /*public function category()
