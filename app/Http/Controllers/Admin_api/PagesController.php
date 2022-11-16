@@ -173,8 +173,8 @@ class PagesController extends Controller
             $page->dynamic = $request->dynamic;
             $page->published_from = $request->published_from;
             $page->published_to = $request->published_to;
-            $page->type = $request->type;
-            $page->type_slug = Str::slug($request->type, '-');
+            $page->type = $request->type['title'];
+            $page->type_slug = Str::slug($request->type['title'], '-');
             $page->slug = $request->slug;
             $page->uuid = $page->uuid ?? Uuid::uuid4();
 

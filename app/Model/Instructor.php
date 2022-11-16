@@ -10,6 +10,7 @@ use App\Model\User;
 use App\Traits\SlugTrait;
 use App\Traits\MetasTrait;
 use App\Traits\MediaTrait;
+use Illuminate\Notifications\Notifiable;
 
 class Instructor extends Model
 {
@@ -17,6 +18,7 @@ class Instructor extends Model
     use SlugTrait;
     use MetasTrait;
     use MediaTrait;
+    use Notifiable;
 
     protected $table = 'instructors';
 
@@ -49,7 +51,7 @@ class Instructor extends Model
         $now = date('Y-m-d');
         return $this->belongsToMany(Event::class, 'event_topic_lesson_instructor')->wherePivot('time_starts','>=',$now)->orWhere('time_starts',null)->whereIn('status',[0,2,3])->where('published',true)->with('slugable','category','city')->distinct();
     }
-    
+
 
     public function testimonials()
     {
