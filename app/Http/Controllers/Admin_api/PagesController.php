@@ -95,7 +95,6 @@ class PagesController extends Controller
     public function store(CreateAdminPageRequest $request)
     {
         $this->authorize('create', Page::class, Auth::user());
-
         try {
             $page = new Page();
             $page->title = $request->title;
@@ -107,8 +106,8 @@ class PagesController extends Controller
             $page->user_id = Auth::user()->id;
             $page->published_from = $request->published_from;
             $page->published_to = $request->published_to;
-            $page->type = $request->type;
-            $page->type_slug = Str::slug($request->type, '-');
+            $page->type = $request->type['title'];
+            $page->type_slug = Str::slug($request->type['title'], '-');
             $page->uuid = Uuid::uuid4();
             $page->save();
 
