@@ -700,8 +700,6 @@ jQuery(document).ready(function($) {
 
         // Wait for menu transition ends and get the final height of menu
         setTimeout(function(){
-
-            Marquee3k.init()
             if( $('.fixed-tab-controls').length ){
                 var headerHeight = $('#header').outerHeight();
                 var distanceTop = $('.fixed-tab-controls').offset().top;
