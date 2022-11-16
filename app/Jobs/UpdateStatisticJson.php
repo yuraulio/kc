@@ -60,7 +60,7 @@ class UpdateStatisticJson implements ShouldQueue
             $user->updateUserStatistic($this->event,$statistics);
 
         }
-        
+
     }*/
 
 
@@ -108,7 +108,7 @@ class UpdateStatisticJson implements ShouldQueue
         }
 
         foreach($this->users as $user){
-            
+
             $statistics = isset($user['statistic'][0]['pivot']) ? $user['statistic'][0]['pivot'] : [];
             $user->updateUserStatistic($this->event,$statistics,$eventTopics);
 

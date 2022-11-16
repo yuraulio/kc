@@ -20,11 +20,11 @@ if(!function_exists('get_tickers')){
 
         $tickers = Ticker::where('published', true)->get()->filter(function($item) {
 
-            if($item->from_date && $item->until_date && Carbon::now()->between($item->from_date, $item->until_date)){
+            if($item->from_date && $item->until_date && Carbon::now()->between($item->from_date .' '.'00:00:00', $item->until_date .' '. '23:59:59')){
                 return $item;
-            }else if($item->from_date && !$item->until_date && Carbon::now() >= Carbon::parse($item->from_date)){
+            }else if($item->from_date && !$item->until_date && Carbon::now() >= Carbon::parse($item->from_date .' '.'00:00:00')){
                 return $item;
-            }else if(!$item->from_date && $item->until_date && Carbon::now() <= Carbon::parse($item->until_date)){
+            }else if(!$item->from_date && $item->until_date && Carbon::now() <= Carbon::parse($item->until_date .' '. '23:59:59')){
                 return $item;
             }else if(!$item->from_date && !$item->until_date){
                 return $item;

@@ -23,9 +23,9 @@
     }
 @endphp
 
-@if(!$column->template->dynamic && !$image) 
+@if(!$column->template->dynamic && !$image)
     <section class="section-hero section-hero-small section-hero-small-no-image">
-    
+
     </section>
 @else
 
@@ -71,7 +71,7 @@
                 @endif
 
                 <div class="event-infos-mobile">
-                    
+
 
                         @if(isset($certificate_visible['landing']) && $certificate_visible['landing'] && isset($info['course_certification_type']) && $info['course_certification_type'] != null)
                         <span class="col-auto certificate text-center">
@@ -88,7 +88,7 @@
                             {{ $info['course_hours'] }} hours
                         </span>
                         @endif
-                    
+
                 </div>
 
                 <?php

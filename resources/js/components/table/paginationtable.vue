@@ -410,7 +410,7 @@
                     <template v-if="props.rowData.dynamic !== undefined">
                         <template v-if="props.rowData.dynamic == 0">
                             <div :key="props.rowData.id"  class="form-check form-switch mb-1" style="display: inline-grid; cursor: pointer">
-                                <input :key="props.rowData.id + 'on'" @click="changePublish(props.rowData.id)" :id="props.rowData.id + 'input'" type="checkbox" class="form-check-input" name="color-scheme-mode" value="light" :for="props.rowData.id + 'input'" :checked="props.rowData.published">
+                                <input :key="props.rowData.id + 'on'" @click="changePublish(props.rowData)" :id="props.rowData.id + 'input'" type="checkbox" class="form-check-input" name="color-scheme-mode" value="light" :for="props.rowData.id + 'input'" :checked="props.rowData.published">
                             </div>
                         </template>
                         <template v-else>
@@ -420,7 +420,7 @@
                     <!-- if not dynamic var exist -> current page is Ticker -->
                     <template v-else>
                         <div :key="props.rowData.id"  class="form-check form-switch mb-1" style="display: inline-grid; cursor: pointer">
-                                <input :key="props.rowData.id + 'on'" @click="changePublish(props.rowData.id, 'ticker')" :id="props.rowData.id + 'input'" type="checkbox" class="form-check-input" name="color-scheme-mode" value="light" :for="props.rowData.id + 'input'" :checked="props.rowData.published">
+                                <input :key="props.rowData.id + 'on'" @click="changePublish(props.rowData, 'ticker')" :id="props.rowData.id + 'input'" type="checkbox" class="form-check-input" name="color-scheme-mode" value="light" :for="props.rowData.id + 'input'" :checked="props.rowData.published">
                             </div>
                     </template>
 
@@ -762,12 +762,20 @@ export default {
                 this.hideLoader();
             }
         },
-        changePublish(id, model = 'pages') {
+        changePublish(data, model = 'pages') {
+            let id = data.id
             this.loading = true;
             axios
             .put('/api/'+model+'/update_published/' + id)
             .then((response) => {
+
                 if (response.status == 200){
+
+                    if(model == 'ticker'){
+                        data.published = response.data.published === false ? 0 : 1;
+                        this.update_published(data.published)
+                    }
+
                     this.$toast.success('Published Status Updated Successfully!')
                 }
                 this.loading = false;
