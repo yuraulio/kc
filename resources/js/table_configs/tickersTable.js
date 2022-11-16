@@ -87,10 +87,9 @@ export default {
     edit: true,
     editInputs: collectiveInputs,
     loadWidgets: false,
-    showFilters: true,
-    filters: [
-        'visibility',
-    ],
+    showFilters: false,
+    filters: [],
+    perPage: 50,
     addInputs: collectiveInputs,
 }
 

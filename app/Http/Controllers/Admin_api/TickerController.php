@@ -154,7 +154,7 @@ class TickerController extends Controller
             $ticker->published = !$ticker->published;
             $ticker->save();
 
-            return response()->json(['message' => 'success'], 200);
+            return response()->json(['message' => 'success', 'data' => ['published' => $ticker->published]], 200);
         } catch (Exception $e) {
             Log::error("Failed to publish ticker. " . $e->getMessage());
             return response()->json(['message' => $e->getMessage()], 400);

@@ -81,9 +81,9 @@
 
             @if(isset($info['elearning']['exam']['visible']) && $info['elearning']['exam']['visible'] && isset($info['elearning']['exam']['text']) && $info['elearning']['exam']['text'] )
             <li>
-            
-                <img class="info-icon" src="{{cdn($info['elearning']['exam']['icon']['path'])}}" onerror="this.src='{{cdn('/theme/assets/img/summary_icons/messages-warning-information.svg')}}'" width="30" alt="{{$info['elearning']['exam']['icon']['alt_text']}}"/> 
-                
+
+                <img class="info-icon" src="{{cdn($info['elearning']['exam']['icon']['path'])}}" onerror="this.src='{{cdn('/theme/assets/img/summary_icons/messages-warning-information.svg')}}'" width="30" alt="{{$info['elearning']['exam']['icon']['alt_text']}}"/>
+
                 <div class="info-text">
                     <p>
                         {{  $info['elearning']['exam']['text'] }}
@@ -114,7 +114,7 @@
                     <p>
                         {{$sumStudents}} {{  $info['students']['text'] }}
                         </br>
-                        
+
                     </p>
                 </div>
             </li>
@@ -133,7 +133,7 @@
             </li>
             @endif
 
-           
+
             @if(isset($info['inclass']['times']['visible']['landing']) && $info['inclass']['times']['visible']['landing'] && isset($info['inclass']['times']['text']) && $info['inclass']['times']['text'] )
 
             <li>
