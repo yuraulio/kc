@@ -26,10 +26,12 @@ use App\Model\Transaction;
 use App\Model\Absence;
 use App\Notifications\InClassReminder;
 use App\Notifications\SendTopicAutomateMail;
+use App\Model\Instructor;
+use App\Notifications\InstructorsMail;
 
 class CronjobsController extends Controller
 {
-    
+
     public function unroll(){
 
         $students = User::has('events')->with('events')->get();
@@ -79,7 +81,7 @@ class CronjobsController extends Controller
             $data['subject'] = 'Knowcrunch - ' . $data['firstName'] .' your payment failed';
             $data['amount'] = round($invoiceUser->amount,2);
             $data['template'] = 'emails.user.failed_payment';
-            $data['userLink'] = url('/') . '/admin/user/' . $invoiceUser->user->first()->id . '/edit'; 
+            $data['userLink'] = url('/') . '/admin/user/' . $invoiceUser->user->first()->id . '/edit';
             //$data['installments'] =
 
             $invoiceUser->user->first()->notify(new FailedPayment($data));
@@ -95,7 +97,7 @@ class CronjobsController extends Controller
                 $m->from('info@knowcrunch.com', 'Knowcrunch');
                 $m->to($adminemail, $data['firstName']);
                 $m->subject($sub);
-            
+
             });*/
 
             $invoiceUser->email_sent = true;
@@ -113,9 +115,9 @@ class CronjobsController extends Controller
 
         $today = strtotime( date('Y-m-d'));
         $subscriptions = Subscription::where('must_be_updated','<',$today)->whereIn('stripe_status',['active','trialing'])->where('email_send',false)->where('must_be_updated','!=', 0)->get();
-        
+
         foreach($subscriptions as $subscription){
-          
+
             $subscription->email_send = true;
             $subscription->save();
 
@@ -189,7 +191,7 @@ class CronjobsController extends Controller
             $eventTitle = $event->xml_title ? $event->xml_title : $event->title;
             $summary = $event->xml_description;
 
-        
+
             //$img = url('/') . $event['mediable']['path'] . '/' . $event['mediable']['original_name'];
             $img = url('/') . get_image($event['mediable'],'header-image');
             $img = str_replace(' ', '%20', $img);
@@ -226,7 +228,7 @@ class CronjobsController extends Controller
             $city = null;
 
             $amount = 0;
-            
+
             foreach($event->ticket as $price){
                 if($price->pivot->price > 0 && $price->type != 'Alumni' && $price->type != 'Special') {
                     $amount = $price->pivot->price;
@@ -240,7 +242,7 @@ class CronjobsController extends Controller
             $img = str_replace(' ', '%20', $img);
             $eventTitle = $event->xml_title ? $event->xml_title : $event->title;
             $summary = $event->xml_description;
-            
+
             fputcsv($file, array($event->id, $eventTitle,  url('/') . '/' . $event->slugable->slug, $img, $amount . ' EUR',  $cat, trim($summary)));
 
         }
@@ -325,10 +327,10 @@ class CronjobsController extends Controller
 
                 $subscription->stripe_status = 'active';
                 $subscription->save();
-                
+
             }
 
-            
+
         }
 
         $date = strtotime(date('Y-m-d'));
@@ -341,7 +343,7 @@ class CronjobsController extends Controller
                 $subscription->save();
             }
 
-            
+
         }
 
     }
@@ -368,9 +370,9 @@ class CronjobsController extends Controller
 
     public function remindAbandonedUser()
     {
-       
+
         $abandoneds = CartCache::where('send_email',false)->get();
-        
+
         foreach($abandoneds as $abandoned){
 
 
@@ -424,7 +426,7 @@ class CronjobsController extends Controller
                 $date = date_diff($date, $today);
 
                 if( $event->id == 2304 && ($date->y == 0 && $date->m ==  0 && $date->d == 7 )){
-                    
+
                     $data['firstName'] = $user->firstname;
                     $data['eventTitle'] = $event->title;
                     $data['expirationDate'] = date('d-m-Y',strtotime($user->pivot->expiration));
@@ -449,7 +451,7 @@ class CronjobsController extends Controller
                 }
 
 
-                
+
 
             }
 
@@ -501,12 +503,12 @@ class CronjobsController extends Controller
         //$events = Event::has('transactions')->with('users')->where('view_tpl','elearning_event')->get();
 
         $events = Event::has('transactions')->where('published',true)->with('users')
-        
+
         ->whereHas('event_info1',function($query){
             $query->whereCourseDelivery(143);
         })
         ->get();
-        
+
         //$events = Event::has('transactions')->where('published','true')->with('users')->get();
 
         $today = date_create( date('Y/m/d'));
@@ -517,14 +519,14 @@ class CronjobsController extends Controller
 
             $eventInfo = $event->event_info();
             $expiration = isset($eventInfo['elearning']['expiration']) ? $eventInfo['elearning']['expiration'] : '';
-            
+
             foreach($event['users'] as $user){
 
                 if(!($user->pivot->expiration >= $today1) || !$user->pivot->expiration || !$expiration){
                     continue;
                 }
 
-                
+
 
                 $date = date_create($user->pivot->expiration);
                 $date = date_diff($date, $today);
@@ -532,7 +534,7 @@ class CronjobsController extends Controller
                 if( $date->y==0 && $date->m == ($expiration/2)  && $date->d == 0){
 
                     // dd('edww');
-                    
+
                     $data['firstName'] = $user->firstname;
                     $data['eventTitle'] = $event->title;
                     $data['fbGroup'] = $event->fb_group;
@@ -540,7 +542,7 @@ class CronjobsController extends Controller
                     $data['template'] = 'emails.user.half_period';
 
                     $user->notify(new HalfPeriod($data));
-                    
+
 
                 }
             }
@@ -548,7 +550,7 @@ class CronjobsController extends Controller
 
 
         //$events = Event::has('transactions')->where('published',true)->with('users')->where('view_tpl','event')->get();
-        $events = Event::has('transactions')->where('published',true)->whereIn('status',[0,3])->with('users')        
+        $events = Event::has('transactions')->where('published',true)->whereIn('status',[0,3])->with('users')
         ->whereHas('event_info1',function($query){
             $query->where('course_delivery','!=',143);
         })
@@ -563,15 +565,15 @@ class CronjobsController extends Controller
             $eventInfo = $event->event_info();
             //$eventDate = isset($eventInfo['inclass']['dates']['text']) ? $eventInfo['inclass']['dates']['text'] : '';
             //$expiration = isset($eventInfo['elearning']['expiration']) ? $eventInfo['elearning']['expiration'] : '';
-    
+
             foreach($event['users'] as $user){
                 $eventDate = isset($eventInfo['inclass']['dates']['text']) ? $eventInfo['inclass']['dates']['text'] : '';
                 if( !$eventDate ){
                     continue;
                 }
-                
+
                 $eventDate = explode('-',$eventDate);
-                
+
                 if(!isset($eventDate[1])){
                     continue;
                 }
@@ -584,14 +586,14 @@ class CronjobsController extends Controller
 
                 $eventDate = date('Y-m-d',strtotime($eventDate[1]));
                 $date = date_create($eventDate);
-               
+
                 $expiration =  date_diff($date, $startDate);
                 $date = date_diff($date, $today);
-               
+
                 if( $date->y==0 && $date->m == ($expiration->m/2)  && $date->d == 0){
 
                     // dd('edww');
-                    
+
                     $data['firstName'] = $user->firstname;
                     $data['eventTitle'] = $event->title;
                     $data['fbGroup'] = $event->fb_group;
@@ -599,7 +601,7 @@ class CronjobsController extends Controller
                     $data['template'] = 'emails.user.half_period';
 
                     $user->notify(new HalfPeriod($data));
-                    
+
 
                 }
             }
@@ -620,7 +622,7 @@ class CronjobsController extends Controller
                                 $query->whereViewTpl('elearning_event');
                             });
                         })->get();
- 
+
         foreach($transactions as $transaction){
             if( !( $event = $transaction->event->first() ) ){
                 continue;
@@ -629,14 +631,14 @@ class CronjobsController extends Controller
             if(count($event->getExams()) <= 0 || !$event->expiration){
                 continue;
             }
-            
+
             foreach($transaction['user'] as $user){
                 //dd($event);
                 $expiration = $event->users()->wherePivot('user_id',$user->id)->first();
                 if(!$expiration){
                     continue;
                 }
-                
+
                 $data['firstName'] = $user->firstname;
                 $data['eventTitle'] = $event->title;
                 $data['subject'] = 'Knowcrunch - ' . $data['firstName'] .' enjoying ' . $event->title .'?';
@@ -645,8 +647,8 @@ class CronjobsController extends Controller
                 $data['template'] = 'emails.user.elearning_f&qemail';
 
                 $user->notify(new ElearningFQ($data));
-                    
-                
+
+
             }
         }
 
@@ -654,14 +656,14 @@ class CronjobsController extends Controller
 
     public function sendSurveyMail(){
 
-    
+
         $events = Event::has('transactions')->with('users')->where('view_tpl','elearning_event')->get();
         //$events = Event::has('transactions')->where('published','true')->with('users')->get();
-     
+
         $today = date('Y/m/d');
         $today = date('Y-m-d', strtotime('-1 day', strtotime($today)));
         foreach($events as $event){
-        
+
             $sendEmail = false;
             foreach($event['users'] as $user){
 
@@ -683,20 +685,20 @@ class CronjobsController extends Controller
                 $data['evaluateTopics'] = $event->evaluate_topics;
                 $data['evaluateInstructors'] = $event->evaluate_instructors;
                 $data['fbTestimonial'] = $event->fb_testimonial;
-               
+
                 if($sendEmail){
                     $user->notify(new SurveyEmail($data));
                 }
-                    
-                
+
+
             }
         }
 
-       
+
         $events = Event::has('transactions')->with('users')->where('view_tpl','event')->get();
-        
+
         foreach($events as $event){
-        
+
             $sendEmail = false;
             //$lessons = $event->topicsLessonsInstructors();
             $lessons = $event->lessons;
@@ -705,7 +707,7 @@ class CronjobsController extends Controller
                 /*if(!isset($lessons['topics'])){
                     continue;
                 }
- 
+
                 $lesson = end($lessons['topics']);
 
                 if(!isset($lesson['lessons'])){
@@ -718,13 +720,13 @@ class CronjobsController extends Controller
                 if(!isset($lesson['pivot']['time_ends'])){
                     continue;
                 }
-            
+
                 $lastDayLesson = date('Y-m-d',strtotime($lesson['pivot']['time_ends']));
 
                 if( $lastDayLesson !== $today ){
                     continue;
                 }
- 
+
                 if($event->evaluate_instructors){
                     $sendEmail = true;
                 }else if($event->evaluate_topics){
@@ -744,16 +746,16 @@ class CronjobsController extends Controller
                 if($sendEmail){
                     $user->notify(new SurveyEmail($data));
                 }
-                    
-                
+
+
             }
         }
 
     }
-    
+
 
     public function sendInClassReminder(){
-       
+
         //$date = '2022-09-07';
         //$date1 = date("Y-m-d", strtotime($date . "+7 days"));
         //$date2 = date("Y-m-d", strtotime($date . "+20 days"));
@@ -762,19 +764,19 @@ class CronjobsController extends Controller
         $date2 =  date("Y-m-d", strtotime("+20 days"));
         $date3 =  date("Y-m-d", strtotime("+1 days"));
         $date4 =  date("Y-m-d", strtotime("+30 days"));
-        
+
         $dates = [$date1,$date2,$date3,$date4];
-      
+
         $events = Event::
             where('published',true)
-            ->whereIn('status',[0,2])    
-            ->whereIn('launch_date',$dates)   
+            ->whereIn('status',[0,2])
+            ->whereIn('launch_date',$dates)
             ->whereHas('event_info1',function($query){
                 $query->where('course_delivery','!=',143);
             })
-            ->with('users') 
+            ->with('users')
             ->get();
-       
+
         foreach($events as $event){
 
             $info = $event->event_info();
@@ -787,7 +789,7 @@ class CronjobsController extends Controller
             $data['faq'] = url('/') . '/' . $event->slugable->slug . '/#faq?utm_source=Knowcrunch.com&utm_medium=Registration_Email';;
             $data['fb_group'] = $event->fb_group;;
             $data['eventTitle'] = $event->title;
-            
+
 
             foreach($event->users as $user){
 
@@ -803,13 +805,13 @@ class CronjobsController extends Controller
 
                 $data['firstname'] = $user->firstname;
                 $data['activate_slug'] = url('/') . '/create-your-password/' . $slug;
-              
+
 
                 if($user->statusAccount && $user->statusAccount->completed){
                     $data['activateAccount'] = false;
 
                 }
-                
+
                 $user->notify(new InClassReminder($data));
 
             }
@@ -835,21 +837,21 @@ class CronjobsController extends Controller
             ]
         )->get();
 
-        
+
 
         foreach($events as $event){
-            
+
             $timeStarts = false;
             $timeEnds = false;
             $totalLessonHour = 0;
 
             $lessons = $event['lessons'];
 
-            foreach($lessons as $key => $lesson){  
-            
-            
+            foreach($lessons as $key => $lesson){
+
+
                 $lessonHour = date('H', strtotime($lesson->pivot->time_starts));
-    
+
                 if(!$timeStarts){
                     $timeStarts = (int) date('H', strtotime($lesson->pivot->time_starts));
                 }
@@ -857,10 +859,10 @@ class CronjobsController extends Controller
             }
 
             if($timeStarts && $timeEnds){
-           
+
                 $totalLessonHour = ($timeEnds - $timeStarts) * 60;
                 $instructorIds = $event->instructors->unique()->pluck('id')->toArray();
-                
+
                 foreach($event['users'] as $user){
                     if($user->instructor->first() && in_array($user->instructor->first()->id,$instructorIds)){
                         continue;
@@ -869,23 +871,79 @@ class CronjobsController extends Controller
                     if(Absence::where('user_id',$user->id)->where('event_id',$event->id)->where('date',$date)->first()){
                         continue;
                     }
-                    
+
                     $absence = new Absence;
                     $absence->user_id = $user->id;
                     $absence->event_id = $event->id;
                     $absence->date = $date;
                     $absence->minutes = 0;
                     $absence->total_minutes = $totalLessonHour;
-        
+
                     $absence->save();
                 }
-                
-                
-    
+
+
+
             }
-    
+
 
         }
+
+    }
+
+    public function sendAutomateEmailForInstructors(){
+        $data = [];
+
+        $date = date("Y-m-d");
+
+        $events = Event::where('published', true)
+            ->whereIn('status', [0,3])
+            ->whereHas('event_info1',function($query){
+                $query->where('course_delivery','=', 139);
+            })
+            ->whereHas('lessons',function($lessonQ) use($date){
+                return $lessonQ->where('event_topic_lesson_instructor.date','>',$date);
+            })
+            ->with([
+                'lessons' => function($lessonQ) use($date){
+                    return $lessonQ->wherePivot('date','>',$date);
+                },
+                ]
+            )
+            ->get();
+
+        $date = Carbon::parse($date);
+
+        foreach($events as $key => $event){
+            foreach($event['lessons'] as $key_lesson => $lesson){
+                $lesson_start = Carbon::parse($lesson->pivot->date)->format('Y-m-d');
+
+                $diff = $date->diffInDays($lesson_start);
+
+                // for one day change number
+                //7 is demo day
+                if($diff == 1){
+                    $data[$lesson->pivot->instructor_id][] = [$lesson];
+                }
+            }
+        }
+
+
+
+
+        foreach($data as $instructor_id => $lessons){
+
+            $instructor = Instructor::find($instructor_id);
+
+            $email_data = [];
+            $email_data['firstname'] = $instructor['user'][0]['firstname'];
+            $email_data['template'] = 'emails.instructor.automate_instructor';
+            $email_data['subject'] = 'Knowcrunch | '.$email_data['firstname'].', reminder about your course';
+
+            $instructor['user'][0]->notify(new InstructorsMail($email_data));
+
+        }
+
 
     }
 
@@ -903,13 +961,13 @@ class CronjobsController extends Controller
 
 
         $date1 = date("Y-m-d");
-        
+
         //$dates = [$date1,$date2,$date3,$date4];
         $dates = [$date1];
-      
+
         $events = Event::
             where('published',true)
-            ->whereIn('status',[/*0,2,*/3])    
+            ->whereIn('status',[/*0,2,*/3])
             ->whereHas('event_info1',function($query){
                 $query->where('course_delivery','!=',143);
             })
@@ -922,7 +980,7 @@ class CronjobsController extends Controller
                 }
             ])
             ->with('lessons')
-            ->with('users') 
+            ->with('users')
             ->get();
 
         $checkForDoubleTopics = [];
@@ -939,13 +997,13 @@ class CronjobsController extends Controller
             $data['faq'] = url('/') . '/' . $event->slugable->slug . '/#faq?utm_source=Knowcrunch.com&utm_medium=Registration_Email';;
             $data['fb_group'] = $event->fb_group;;
             $data['eventTitle'] = $event->title;
-        
+
             foreach($event['topic'] as $topic){
                 if(in_array($topic->id,$checkForDoubleTopics)){
                     continue;
                 }
                 $checkForDoubleTopics[] = $topic->id;
-                
+
                 if(!$topic->email_template){
                     continue;
                 }
@@ -963,9 +1021,9 @@ class CronjobsController extends Controller
 
                     $data['firstname'] = $user->firstname;
                     $data['subject'] = 'Knowcrunch | ' . $user->firstname . ', ' . $subject;
-                          
+
                     $user->notify(new SendTopicAutomateMail($data));
-    
+
                 }
 
 
