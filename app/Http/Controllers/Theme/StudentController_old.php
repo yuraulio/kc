@@ -90,8 +90,9 @@ class StudentController extends Controller
             $data = $this->studentsEvent();
         }
         $data['instructor'] = $instructor;
-
         $data['user']['hasExamResults'] = $user->hasExamResults();
+
+
         return view('theme.myaccount.student', $data);
 
     }
@@ -207,7 +208,7 @@ class StudentController extends Controller
             $eventInfo = $event->event_info();
 
             if($event->is_elearning_course()){
-                
+
                 //$data['user']['events'][$event->id]['topics'] = $event['topic']->unique()->groupBy('topic_id');
                 $data['events'][$event->id]['videos_progress'] = round($event->progress($user),2);
                 $data['events'][$event->id]['videos_seen'] = $event->video_seen($user);
@@ -614,7 +615,7 @@ class StudentController extends Controller
         $data['plans'] = Plan::where('published',true)->with('events')->get();
         $data['subscriptionAccess'] = [];
         $data['mySubscriptions'] = [];
-        
+
         $data['user'] = User::find($user->id);
         $statistics = $data['user']['statistic']->groupBy('id');//$user->statistic()->get()->groupBy('id');
         //dd($statistics);
@@ -624,7 +625,7 @@ class StudentController extends Controller
         $data['mySubscriptionEvents'] = [];
 
         $eventSubscriptions = [];
-        //$data['user']['hasExamResults'] = $data['user']->hasExamResults1();
+        
         foreach($data['user']['events'] as $key => $event){
             $after20Days = null;
 
@@ -1090,9 +1091,9 @@ class StudentController extends Controller
         $event = Event::where('title', $course)->with('slugable','category')->first();
         if($instructor = $user->instructor->first()){
             $data['instructor_topics'] = true;
-            
+
             $eventt = $instructor->elearningEvents()->wherePivot('instructor_id', $instructor->id)->wherePivot('event_id', $event['id'])->first();
-        
+
             if(!$eventt){
                 $data['instructor_topics'] = false;
                 $eventt = $user->events()->wherePivot('event_id', $event['id'])->first() ? $user->events()->wherePivot('event_id', $event['id'])->first() :
@@ -1119,9 +1120,12 @@ class StudentController extends Controller
 
         $statistic =  ($statistic = $user->statistic()->wherePivot('event_id',$event['id'])->first()) ?
                             $statistic->toArray() : ['pivot' => [], 'videos' => ''];
-       
+
+        //load videos
+        $data['videos'] = isset($statistic['pivot']['videos']) ? $statistic['pivot']['videos'] : '';
         //$this->updateUserStatistic($event,$statistic['pivot'],$user);
-        $statistic = $user->updateUserStatistic($event,$statistic['pivot']);
+        $data['topics'] = $event->topicsLessonsInstructors($data['videos']);
+        $statistic = $user->updateUserStatistic($event,$statistic['pivot'],$data['topics']['topics']);
         $data['lastVideoSeen'] = $statistic['pivot']['lastVideoSeen'];
         $data['event_statistic_id'] = $statistic['pivot']['id'];
         $data['event_id'] = $statistic['pivot']['event_id'];
@@ -1130,13 +1134,13 @@ class StudentController extends Controller
         $data['videos'] = $statistic['pivot']['videos'];
         //load notes
         $data['notes'] = $statistic['pivot']['notes'];
-        //dd($data['notes']);
+        //dd(json_decode($data['notes'],true));
         //load statistic
 
         //$data['instructor_topics'] = count($user->instructor) > 0;
         //expiration event for user
         $expiration_event_user = $event['pivot']['expiration'];
-        $data['topics'] = $event->topicsLessonsInstructors($data['videos']);
+        //$data['topics'] = $event->topicsLessonsInstructors($data['videos']);
 
 
         return view('theme.myaccount.newelearning', $data);
@@ -1155,11 +1159,13 @@ class StudentController extends Controller
             //dd($notes);
             foreach($notes as $key => $note){
                 if($key == $request->vimeoId){
-                    $note =  preg_replace( '/[^A-Za-z0-9\-]/', ' ',  $request->text );
-                    $note = preg_replace('/\s+/', ' ', $note);
-                    //$note =  preg_replace( "/\r|\n/", "||", $request->text );
 
-                    $notes[$key] = $note;
+                    //dd($request->text);
+                    //$note =  preg_replace( '/[^A-Za-z0-9\-]/', ' ',  $request->text );
+                    //$note = preg_replace('/\s+/', ' ', $note);
+                    //$note =  preg_replace( "/\r|\n/", "||", $request->text );
+                    //dd(preg_replace( "/\r|\n/", "||", $request->text ));
+                    $notes[$key] = preg_replace( "/\r|\n/", "||", $request->text );
                 }
             }
         }
@@ -1185,33 +1191,28 @@ class StudentController extends Controller
 
         if($user->statistic()->wherePivot('event_id',$request->event)->first()){
 
-          $videos = $user->statistic()->wherePivot('event_id',$request->event)->first()->pivot['videos'];
-          $videos = json_decode($videos,true);
-          foreach($request->videos as $key => $video){
+            $videos = $user->statistic()->wherePivot('event_id',$request->event)->first()->pivot['videos'];
+            $videos = json_decode($videos,true);
+            foreach($request->videos as $key => $video){
 
 
-            if(!isset( $videos[$key])){
-                continue;
+                if(!isset( $videos[$key])){
+                    continue;
+                }
+
+                //$videos[$key]['seen'] = isset($video['seen']) ? $video['seen'] : 0;
+                $videos[$key]['stop_time'] = isset($video['stop_time']) ? $video['stop_time'] : 0;
+                $videos[$key]['percentMinutes'] = isset($video['stop_time']) ? $video['percentMinutes'] : 0;
+
+                if( (int) $video['seen'] == 1 && (int) $videos[$key]['seen'] == 0){
+                    $videos[$key]['seen'] = (int) $video['seen'];
+                }
+
+                if((float)$video['stop_time'] > (float)$videos[$key]['total_seen']){
+                    $videos[$key]['total_seen'] = $video['stop_time'];
+                }
+
             }
-
-            //$videos[$key]['seen'] = isset($video['seen']) ? $video['seen'] : 0;
-            $videos[$key]['stop_time'] = isset($video['stop_time']) ? $video['stop_time'] : 0;
-            $videos[$key]['percentMinutes'] = isset($video['stop_time']) ? $video['percentMinutes'] : 0;
-
-            if( (int) $video['seen'] == 1 && (int) $videos[$key]['seen'] == 0){
-                $videos[$key]['seen'] = (int) $video['seen'];
-            }
-
-            if((float)$videos[$key]['stop_time'] >= (float)$videos[$key]['total_seen']){
-                $videos[$key]['total_seen'] = $videos[$key]['stop_time'];
-            }
-
-            if((float)$videos[$key]['stop_time'] >= (float)$videos[$key]['total_seen']){
-
-                $videos[$key]['total_seen'] = $videos[$key]['stop_time'];
-            }
-
-          }
 
             $user->statistic()->wherePivot('event_id',$request->event)->updateExistingPivot($request->event,[
                 'lastVideoSeen' => $request->lastVideoSeen,
@@ -1273,10 +1274,10 @@ class StudentController extends Controller
 
                 }
 
-            
+
             //}else if( $event /*&& $event->view_tpl != 'elearning_free'*/ && !$event->isFree() && $event->hasCertificate()){
             }else if( $event && $event->hasCertificate()){
-                
+
                 $event->certification($user);
             }
 
@@ -1353,8 +1354,9 @@ class StudentController extends Controller
 
     public function createPassStore(Request $request,$slug){
 
+ 
         $user = decrypt($slug);
-
+    
         if( !($user = User::where('id',$user['id'])->where('email',$user['email'])->first()) ){
             return response()->json([
 
@@ -1378,7 +1380,7 @@ class StudentController extends Controller
                 'message' => $val->errors()->first()
             ]);
         }
-
+    
         $user->password = Hash::make($request->password);
         $user->save();
 
@@ -1394,6 +1396,7 @@ class StudentController extends Controller
                 'completed_at' => Carbon::now()
             ]);
         }
+        
 
         Auth::login($user);
 

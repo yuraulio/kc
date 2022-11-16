@@ -289,13 +289,13 @@ class Event extends Model
     }
 
 
-    public function topicsLessonsInstructors($videos = null,$topicEvent = null, $lessons = null, $instructors = null){
+    public function topicsLessonsInstructors($videos = null){
 
         $videos = json_decode($videos,true);
 
         $topics = [];
         $topicsSeen = [];
-        $lessons = $lessons ? $lessons->groupBy('topic_id') : $this->lessons->groupBy('topic_id');
+        $lessons = $this->lessons->groupBy('topic_id');
         $sum1 = 0;
         //162
 
@@ -373,11 +373,9 @@ class Event extends Model
         }
 
 
-        $instructors = $instructors ? $instructors->unique()->groupBy('instructor_id')->toArray() : $this->instructors->unique()->groupBy('instructor_id')->toArray();
-    
-        $topicEvent = $topicEvent ? $topicEvent->unique()->groupBy('topic_id') : $this->topic->unique()->groupBy('topic_id');
+        $instructors = $this->instructors->unique()->groupBy('instructor_id')->toArray();
 
-        foreach($topicEvent as $key => $topic){
+        foreach($this->topic->unique()->groupBy('topic_id') as $key => $topic){
             foreach($topic as $t){
 
                 if(!$t->status){
@@ -553,9 +551,9 @@ class Event extends Model
         return $this->hasMany(WaitingList::class);
     }
 
-    public function examAccess( $user,$successPer = 0.8, $videos = false){
+    public function examAccess( $user,$successPer = 0.8){
 
-        $seenPercent =  $this->progress($user,$videos);
+        $seenPercent =  $this->progress($user);
         $studentsEx = [1353,1866,1753,1882,1913,1923];
 
         if(in_array($user->id, $studentsEx)){
@@ -601,14 +599,10 @@ class Event extends Model
     }*/
 
 
-    public function progress($user,$videos = false)
+    public function progress($user)
     {
-       
-        if($videos == 'no_videos'){
-            return 0;
-        }
-        
-        if(!$videos && !$videos = $user->statistic()->wherePivot('event_id',$this['id'])->first()){
+
+        if(!$videos = $user->statistic()->wherePivot('event_id',$this['id'])->first()){
             return 0;
         }
 
@@ -632,14 +626,9 @@ class Event extends Model
         return $totalDuration > 0 ?  $seenTime /  $totalDuration * 100 : 0;
     }
 
-    public function video_seen($user,$videos = false)
+    public function video_seen($user)
     {
-
-        if($videos == 'no_videos'){
-            return 0;
-        }
-
-        if(!$videos && !$videos = $user->statistic()->wherePivot('event_id',$this['id'])->first()){
+        if(!$videos = $user->statistic()->wherePivot('event_id',$this['id'])->first()){
             return '0 of ' . count($this->lessons);
         }
 

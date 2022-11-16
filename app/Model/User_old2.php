@@ -184,30 +184,9 @@ class User extends Authenticatable
         return $this->morphOne(Media::class, 'mediable');
     }
 
-    /*public function events()
-    {   
-        return $this->belongsToMany(Event::class, 'event_user')->withPivot('paid', 'expiration', 'comment', 'payment_method')
-            ->with('summary1', 'category', 'slugable', 'dropbox')->wherePivot('paid', true);
-    }*/
-
     public function events()
     {   
-        return $this->belongsToMany(Event::class, 'event_user')->withPivot('paid', 'expiration', 'comment', 'payment_method')
-            ->with(['summary1', 
-            'category', 
-            'slugable', 
-            'dropbox',
-            'topic',
-            'lessons',
-            'instructors',
-            'certificates' => function($certificate){
-                //dd($certificate->first());
-                $user = $this->id;
-                return $certificate->where('show_certificate',true)->whereHas('user', function ($query) use($user){
-                    $query->where('id', $user);;
-                });
-            }
-            ])->wherePivot('paid', true);
+        return $this->belongsToMany(Event::class, 'event_user')->withPivot('paid', 'expiration', 'comment', 'payment_method')->with('summary1', 'category', 'slugable', 'dropbox')->wherePivot('paid', true);
     }
 
 
