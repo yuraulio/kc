@@ -703,6 +703,7 @@ li.select2-results__option:empty {
 
 #mobile_menu {
     width: -moz-available;
+    width: -webkit-fill-available;
     margin: 1rem 2rem;
 }
 
