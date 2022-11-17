@@ -192,7 +192,7 @@ class CategoriesController extends Controller
                 $currentSubcategory->save();
             }
         }
-        
+
         foreach ($subcategories ?? [] as $sub) {
             if (array_key_exists('new', $sub) && $sub['new']) {
                 $cat = new Category();
@@ -208,7 +208,7 @@ class CategoriesController extends Controller
     {
         try {
             $ids = $request->selected;
-        
+
             // authorize action
             $categories = Category::findOrFail($ids);
             foreach ($categories as $category) {

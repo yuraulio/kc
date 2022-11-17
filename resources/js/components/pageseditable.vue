@@ -329,7 +329,7 @@ export default {
                 this.categories = [];
                 this.subcategories = [];
                 this.category_value = [];
-                this.subcategory_value = [];
+                //this.subcategory_value = [];
 
                 // get categories and subcategories based on the page type
                 axios
@@ -359,7 +359,6 @@ export default {
                 this.$refs.tc.rearange(true);
             },
             add(){
-                console.log('i am here')
                 this.errors = null;
                 this.loading = true;
                 axios

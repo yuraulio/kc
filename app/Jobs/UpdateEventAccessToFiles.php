@@ -26,6 +26,10 @@ class UpdateEventAccessToFiles implements ShouldQueue
     public function __construct($event)
     {
         $this->event = Event::with('lessons')->find($event);
+
+        if($this->event->is_inclass_course()){
+            return 0;
+        }
     }
 
     /**
@@ -46,8 +50,8 @@ class UpdateEventAccessToFiles implements ShouldQueue
                 $maxDate = $lessonDate;
             }
 
-           if($lessonDate > $maxDate){
-            $maxDate = $lessonDate;
+           if(strtotime($lessonDate) > strtotime($maxDate)){
+                $maxDate = $lessonDate;
            }
 
         }

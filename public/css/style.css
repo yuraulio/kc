@@ -8,6 +8,10 @@
     float: left !important;
 }
 
+#tab_inside_tab.has_mobile_menu{
+    display: none !important;
+}
+
 #tab_inside_tab li {
     margin-bottom: 15px;
 }
@@ -696,6 +700,76 @@ li.select2-results__option:empty {
 #sub_datePicker {
     display: inline-flex;
 }
+
+#mobile_menu {
+    width: -moz-available;
+    margin: 1rem 2rem;
+}
+
+#mobile_menu .dropdown-toggle::after{
+    position: absolute;
+    left: 92%;
+    top: 50%;
+}
+
+#mobile_menu .dropdown-item {
+    background: white;
+    color: #324cdd;
+    border-color: white;
+}
+
+#mobile_menu .dropdown-toggle{
+    background: #5e72e4;
+    color: white;
+    width: 100%;
+}
+
+#mobile_menu .dropdown-menu {
+    width: inherit;
+}
+
+#mobile_menu .dropdown-item.active{
+    background: #5e72e4;
+    color: white;
+}
+
+
+.tab-pane-mobile #tab_inside_tab .nav-link i {
+    display: inline;
+}
+
+.tab-pane-mobile .nav-pills .nav-link{
+    padding: 0.55rem 0rem;
+}
+
+.owl-prev {
+    width: 15px;
+    position: absolute;
+    top: 9%;
+    margin-left: -20px;
+    display: block !important;
+    border:0px solid black;
+}
+
+.owl-next {
+    width: 15px;
+    position: absolute;
+    top: 9%;
+    right: -20px;
+    display: block !important;
+    border:0px solid black;
+}
+.owl-prev i, .owl-next i {
+    color: white;
+    background: black;
+    border-radius: 100%;
+    padding: 3px 5px;
+}
+
+.tab-pane-mobile {
+    margin-top: 2rem;
+}
+
 
 
 
