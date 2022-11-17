@@ -126,17 +126,17 @@ $(function() {
 
         messages: {
             'firstname': {
-                required: "This field is required, enter your name.",
+                required: "Required field, please enter your first name.",
                 lettersonly: "Please write everything in English."
             },
 
             'lastname': {
-                required: "This field is required, enter your last name.",
+                required: "Required field, please enter your last name.",
                 lettersonly: "Please write everything in English."               
             },
 
             'email': {
-                required: "This field is required, enter your email.",
+                required: "Required field, please enter your email address.",
             },
             
             'student_type_id': {
@@ -151,7 +151,7 @@ $(function() {
             },
 
             'mobile': {
-                required: "This field is required, enter your phone.",
+                required: "Required field, please enter your mobile phone.",
             },
 
             'company': {

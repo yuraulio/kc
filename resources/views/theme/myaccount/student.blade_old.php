@@ -516,7 +516,7 @@
 
 
                                           <div class="col12">
-                                             <label>Company or full name:</label>
+                                             <label>Company name (for invoice) or personal full name (for receipt):</label>
                                              <div class="input-safe-wrapper">
                                                 <input  type="text" id="billname" name="billname" value="{{ isset($billingDetails['billname']) ? $billingDetails['billname'] : '' }}" >
                                              </div>

@@ -49,7 +49,7 @@
 												
 								<div class="checkout-input-groups">
 									<input id="coupon" type="text" name="" class="form-control">
-									<label class="coupon-code-validation-message mt-1"> Enter a valid coupon code</label>
+									<label class="coupon-code-validation-message mt-1"> Invalid coupon code, please try again. </label>
 								</div>								
 								<button type="button" class="btn btn-2 checkout-button-coupon">apply</button>
 

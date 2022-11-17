@@ -91,7 +91,6 @@ class StudentController extends Controller
         }
         $data['instructor'] = $instructor;
         $data['user']['hasExamResults'] = $user->hasExamResults();
-        //dd('fdsaf');
 
         return view('theme.myaccount.student', $data);
 
@@ -114,7 +113,7 @@ class StudentController extends Controller
         //$data['subscriptionAccess'] =  false;//$subscriptionAccess;
         //$data['mySubscriptionEvents'] = [];
 
-        [$subscriptionAccess, $subscriptionEvents] = $user->checkUserSubscriptionByEvent();
+        [$subscriptionAccess, $subscriptionEvents] = $user->checkUserSubscriptionByEvent($user['events']);
         $data['subscriptionAccess'] =  $subscriptionAccess;
         $data['mySubscriptionEvents'] = [];
 
@@ -401,11 +400,11 @@ class StudentController extends Controller
 
         $data['user'] = User::find($user->id);
         $statistics = $data['user']['statistic']->groupBy('id');//$user->statistic()->get()->groupBy('id');
-        [$subscriptionAccess, $subscriptionEvents] = $user->checkUserSubscriptionByEvent();
+        [$subscriptionAccess, $subscriptionEvents] = $user->checkUserSubscriptionByEvent($data['user']['events']);
 
         $data['subscriptionAccess'] =  $subscriptionAccess;
         $data['mySubscriptionEvents'] = [];
-
+        $data['instructors'] = new \Illuminate\Database\Eloquent\Collection;;
         $eventSubscriptions = [];
         
         foreach($data['user']['events'] as $key => $event){
@@ -513,7 +512,7 @@ class StudentController extends Controller
                 //$data['user']['events'][$event->id]['exam_access'] = $user->examAccess(0.8,$event->id);
 
             }
-
+            //$data['instructors']->merge($event['instructors']->groupby('id'));
             //$data['elearningAccess'] = $event->is_elearning_course();
         }
 
@@ -569,11 +568,14 @@ class StudentController extends Controller
                 $find = true;
                 $data['elearningAccess'] = $find;
             }
-
+           // array_merge($data['instructors'], $event['instructors']->get()->groupby('id'));
         }
+    
         $data['instructors'] = Instructor::with('slugable', 'medias')->get()->groupby('id');
-        $data['subscriptionEvents'] = Event::whereIn('id',$subscriptionEvents)->with('slugable')->get();
+        
+        //dd($data['instructors']);
 
+        $data['subscriptionEvents'] = Event::whereIn('id',$subscriptionEvents)->with('slugable')->get();
         $data = $this->getWaitingList($data);
 
         if(isset($data['events'][2304])){
@@ -581,6 +583,7 @@ class StudentController extends Controller
             unset($data['events'][2304]);
             array_unshift($data['events'], $value);
         }
+
         //dd($data['user']['events'][0]);
         return $data;
 
@@ -1235,7 +1238,7 @@ class StudentController extends Controller
         $userEvents = isset($data['events']) ? array_keys($data['events']) : [];
         $userWaitingEvents = Auth::user()->waitingList()->whereNotIn('event_id',$userEvents)->pluck('event_id')->toArray();
 
-        $events = Event::whereIn('id',$userWaitingEvents)->get();
+        $events = Event::whereIn('id',$userWaitingEvents)->with('event_info1','slugable','category')->get();
 
         foreach($events as $event){
 

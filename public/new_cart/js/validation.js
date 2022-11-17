@@ -86,26 +86,26 @@ $(function() {
         
 
         messages[`firstname[]`] = {}
-        messages[`firstname[]`]['required'] = "This field is required, enter your name."
+        messages[`firstname[]`]['required'] = "Required field, please enter your first name."
         messages[`firstname[]`]['lettersonly'] = "Please write everything in English."
 
         messages[`firstname[${index}]`] = {}
-        messages[`firstname[${index}]`]['required'] = "This field is required, enter your name."
+        messages[`firstname[${index}]`]['required'] = "Required field, please enter your first name."
         messages[`firstname[${index}]`]['lettersonly'] = "Please write everything in English."
 
         messages[`lastname[]`] = {}
-        messages[`lastname[]`]['required'] = "This field is required, enter your last name."
+        messages[`lastname[]`]['required'] = "Required field, please enter your last name."
         messages[`lastname[]`]['lettersonly'] = "Please write everything in English."
 
         messages[`lastname[${index}]`] = {}
-        messages[`lastname[${index}]`]['required'] = "This field is required, enter your last name."
+        messages[`lastname[${index}]`]['required'] = "Required field, please enter your last name."
         messages[`lastname[${index}]`]['lettersonly'] = "Please write everything in English."
 
         messages[`email[]`] = {}
-        messages[`email[]`]['required'] = "This field is required, enter your email."
+        messages[`email[]`]['required'] = "Required field, please enter your email address."
 
         messages[`email[${index}]`] = {}
-        messages[`email[${index}]`]['required'] = "This field is required, enter your email."
+        messages[`email[${index}]`]['required'] = "Required field, please enter your email address."
 
         messages[`company[]`] = {}
         messages[`company[]`]['lettersonly'] = "Please write everything in English."
@@ -120,10 +120,10 @@ $(function() {
         messages[`city[${index}]`]['lettersonly'] = "Please write everything in English."
 
         messages[`mobile[]`] = {}
-        messages[`mobile[]`]['required'] = "This field is required, enter your phone."
+        messages[`mobile[]`]['required'] = "Required field, please enter your mobile phone."
 
         messages[`mobile[${index}]`] = {}
-        messages[`mobile[${index}]`]['required'] = "This field is required, enter your phone."
+        messages[`mobile[${index}]`]['required'] = "Required field, please enter your mobile phone."
 
         messages[`student_type_id[]`] = {}
         messages[`student_type_id[]`]['required'] = "This field is required, enter your ID."
@@ -218,12 +218,12 @@ $(function() {
 
     messages['terms_condition']={}
     rules['terms_condition']={}
-    messages['terms_condition']['required'] = "  Confirm that you accept our terms & conditions and data privacy policy."
+    messages['terms_condition']['required'] = "Please confirm that you accept our terms & conditions and our data privacy policy in order to proceed."
     rules['terms_condition']['required'] = true
 
     messages['terms_condition2']={}
     rules['terms_condition2']={}
-    messages['terms_condition2']['required'] = "  You need to consent to proceed."
+    messages['terms_condition2']['required'] = "Please check the box for consent in order to proceed."
     rules['terms_condition2']['required'] = true
 
     $("form[name='participant-form']").validate({
@@ -279,7 +279,7 @@ $(function() {
         messages: {
 
             'billname': {
-                required: "This field is required, Enter Company or full name.",      
+                required: "Required field, please enter your company name or your full name.",      
                 lettersonly: "Please write everything in English."         
             },
             'billafm': {

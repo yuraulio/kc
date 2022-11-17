@@ -672,7 +672,7 @@ jQuery(document).ready(function($) {
 
         Marquee3k.init()
         
-    },100);
+    },500);
 
 
     $(window).on('load', function(){

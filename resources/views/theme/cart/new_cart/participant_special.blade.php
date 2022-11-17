@@ -339,7 +339,7 @@
 									<label id="terms_condition-error" class="error" for="terms_condition" style="display:none;"> </label>
 								</div>
 								@if($elearning)
-									<div class="custom-control custom-checkbox">
+									<div id="customCheck2New" class="custom-control custom-checkbox">
 										<input type="checkbox" name="terms_condition2" class="custom-control-input" id="customCheck2">
 										<label class="custom-control-label" for="customCheck2"></label><p>Ι accept that by accessing this course, I can't withdraw from payment.</p>
 										<label id="terms_condition-error2" class="error" for="terms_condition2" style="display:none;"> </label>
