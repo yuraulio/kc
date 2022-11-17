@@ -1,7 +1,6 @@
 
 jQuery(document).ready(function($) {
 
-
     var tabletWidth = 980;
     var mobileWidth = 680;
 
@@ -671,16 +670,23 @@ jQuery(document).ready(function($) {
     setTimeout(function(){
 
         Marquee3k.init()
-        
+
     },100);
+
+    if( $(window).scrollTop() > 0 ){
+        $('#header').addClass('scroll-down');
+        $('#header').removeClass('has_ticker');
+
+    }else{
+        $('#header').removeClass('scroll-down');
+    }
 
 
     $(window).on('load', function(){
 
         if( $(window).scrollTop() > 0 ){
+
             $('#header').addClass('scroll-down');
-
-
 
         }else{
             $('#header').removeClass('scroll-down');

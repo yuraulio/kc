@@ -721,7 +721,7 @@ class LessonController extends Controller
 
         foreach($category->events as $event){
             //dd($event->lessons()->wherePivotIn('lesson_id',$lessons)->get());
-            
+
             foreach($event->allLessons()->wherePivot('topic_id',$request->topic)->wherePivotIn('lesson_id',$lessons)->get() as $lesson){
                 $index = $category->id . '-' . $lesson->pivot->topic_id . '-' . $lesson->pivot->lesson_id;
 

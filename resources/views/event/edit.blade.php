@@ -30,8 +30,54 @@
                             <div class="col-8">
                                 <h3 class="mb-0 ml-1">{{ $event['htmlTitle'] }}</h3>
                             </div>
+                            <div id="mobile_menu" class="dropdown">
+                        <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Menu
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <button class="dropdown-item settings-btn" data-toggle="tab"  href="#tabs-icons-text-1" role="tab" type="button">
+                            <span class="btn-inner--icon"><i class="ni ni-settings-gear-65"></i></span>
+                            <span class="btn-inner--text">Settings</span>
+                        </button>
+                        <button class="dropdown-item seo" data-toggle="tab"  href="#metas" role="tab" type="button">
+                            <span class="btn-inner--icon"><i class="ni ni-world"></i></span>
+                            <span class="btn-inner--text">Seo</span>
+                        </button>
+                        <button class="dropdown-item" data-toggle="tab"  href="#tabs-icons-text-2" role="tab" type="button">
+                            <span class="btn-inner--icon"><i class="ni ni-folder-17"></i></span>
+                            <span class="btn-inner--text">Content</span>
+                        </button>
+                        <button class="dropdown-item" data-toggle="tab"  href="#emails_fields" role="tab" type="button">
+                            <span class="btn-inner--icon"><i class="ni ni-curved-next"></i></span>
+                            <span class="btn-inner--text">Links</span>
+                        </button>
+                        <button class="dropdown-item" data-toggle="tab"  href="#tabs-icons-text-3" role="tab" type="button">
+                            <span class="btn-inner--icon"><i class="ni ni-hat-3"></i></span>
+                            <span class="btn-inner--text">Students</span>
+                        </button>
+                        <button class="dropdown-item" data-toggle="tab"  href="#waiting_list" role="tab" type="button">
+                            <span class="btn-inner--icon"><i class="ni ni-hat-3"></i></span>
+                            <span class="btn-inner--text">Waiting List Students</span>
+                        </button>
+                        <button class="dropdown-item" data-toggle="tab"  href="#tabs-icons-text-5" role="tab" type="button">
+                            <span class="btn-inner--icon"><i class="ni ni-tag"></i></span>
+                            <span class="btn-inner--text">Coupons</span>
+                        </button>
+                        <button class="dropdown-item" data-toggle="tab"  href="#xml_fields" role="tab" type="button">
+                            <span class="btn-inner--icon"><i class="ni ni-single-copy-04"></i></span>
+                            <span class="btn-inner--text">XML fields</span>
+                        </button>
+                        <a target="_blank" href="/print/syllabus/{{$event['slugable']['slug']}}"  class="dropdown-item">Download course schedule</a>
+
                         </div>
                     </div>
+                        </div>
+                    </div>
+
+
+
+
+
                     <div class="nav-wrapper tab-buttons">
                         <ul class="nav nav-pills nav-fill flex-column flex-md-row event-tabs" id="tabs-icons-text" role="tablist">
                             <li class="nav-item">
@@ -99,19 +145,6 @@
                                 <a target="_blank" href="/print/syllabus/{{$event['slugable']['slug']}}"  class="btn btn-icon btn-primary">Download course schedule</a>
 
                             </li>
-
-
-
-
-
-
-                            <div class="row">
-    <div class="form-group col-4">
-
-
-    </div>
-</div>
-
 
 
 
@@ -1746,8 +1779,42 @@
                                     </div>
 
 
+
+
+
                                     <div class="tab-pane fade" id="tabs-icons-text-2" role="tabpanel" aria-labelledby="tabs-icons-text-2-tab">
-                                        <div class="nav-wrapper">
+                                    <div class="tab-pane-mobile d-none">
+                                        <ul id="tab_inside_tab_mobile" class="nav nav-pills nav-fill flex-column flex-md-row owl-carousel" id="tabs-icons-text" role="tablist">
+                                            <li class="nav-item item">
+                                                <a class="nav-link mb-sm-3 mb-md-0 active" id="tabs-icons-text-1-tab_inside" data-toggle="tab" href="#tabs-icons-text-1_inside" role="tab" aria-controls="tabs-icons-text-1_inside" aria-selected="true"><i class="ni ni-cloud-upload-96 mr-2"></i>Overview</a>
+                                            </li>
+                                            <li class="nav-item item">
+                                                <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-4-tab_inside" data-toggle="tab" href="#tabs-icons-text-4_inside" role="tab" aria-controls="tabs-icons-text-4_inside" aria-selected="true"><i class="ni ni-cloud-upload-96 mr-2"></i>Topics</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-5-tab_inside" data-toggle="tab" href="#tabs-icons-text-5_inside" role="tab" aria-controls="tabs-icons-text-5_inside" aria-selected="false"><i class="ni ni-bell-55 mr-2"></i>Tickets</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-7-tab_inside" data-toggle="tab" href="#tabs-icons-text-7_inside" role="tab" aria-controls="tabs-icons-text-7_inside" aria-selected="false"><i class="ni ni-bell-55 mr-2"></i>Venue</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-10-tab_inside" data-toggle="tab" href="#tabs-icons-text-10_inside" role="tab" aria-controls="tabs-icons-text-10_inside" aria-selected="false"><i class="ni ni-bell-55 mr-2"></i>Faqs</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-11-tab_inside" data-toggle="tab" href="#tabs-icons-text-11_inside" role="tab" aria-controls="tabs-icons-text-11_inside" aria-selected="false"><i class="far fa-images mr-2"></i>Image</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-11-tab_inside" data-toggle="tab" href="#testimonials-tab" role="tab" aria-controls="tabs-icons-text-11_inside" aria-selected="false"><i class="far fa-images mr-2"></i>Testimonials</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-9-tab_inside" data-toggle="tab" href="#videos" role="tab" aria-controls="videos" aria-selected="false"><i class="ni ni-calendar-grid-58 mr-2"></i>Videos</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-8-tab_inside" data-toggle="tab" href="#instructors-tab" role="tab" aria-controls="instructors-tab" aria-selected="false"><i class="ni ni-calendar-grid-58 mr-2"></i>Instructors</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="nav-wrapper">
                                             <ul id="tab_inside_tab" class="nav nav-pills nav-fill flex-column flex-md-row" id="tabs-icons-text" role="tablist">
                                                 <li class="nav-item">
                                                     <a class="nav-link mb-sm-3 mb-md-0 active" id="tabs-icons-text-1-tab_inside" data-toggle="tab" href="#tabs-icons-text-1_inside" role="tab" aria-controls="tabs-icons-text-1_inside" aria-selected="true"><i class="ni ni-cloud-upload-96 mr-2"></i>Overview</a>
@@ -2194,6 +2261,7 @@
     <link rel="stylesheet" href="{{ asset('argon') }}/vendor/datatables.net-select-bs4/css/select.bootstrap4.min.css">
     <link rel="stylesheet" href="{{ asset('argon') }}/vendor/datatables-datetime/datetime.min.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/20.2.11/css/dx.carmine.compact.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.css" integrity="sha512-UTNP5BXLIptsaj5WdKFrkFov94lDx+eBvbKyoe1YAfjeRPC+gT5kyZ10kOHCfNZqEui1sxmqvodNUx3KbuYI/A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 @endpush
 
 @push('js')
@@ -2202,7 +2270,7 @@
     <script src="{{ asset('argon') }}/vendor/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
     <script src="{{ asset('argon') }}/vendor/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/devextreme/20.2.11/js/dx.all.js"></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js" integrity="sha512-bPs7Ae6pVvhOSiIcyUClR7/q2OAsRiovw4vAkX+zJbw3ShAeeqezq50RIIcIURq7Oa20rW2n2q+fyXBNcU9lrw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 <script>
     let selectedFolders = [];
@@ -3319,6 +3387,104 @@ var datePickerOptions = {
         current_icon_input = btn+'_path';
         current_icon_input_alt_text = btn+'_alt_text';
     })
+
+
+
+    $(document).ready(function(){
+
+
+
+        mobileMenu()
+
+        $(window).on('resize', function(){
+            mobileMenu()
+        })
+
+        $(document).on('click', '#mobile_menu .dropdown-item', function() {
+            let items = $('#mobile_menu').find('.dropdown-item')
+
+            $.each(items, function(index, value) {
+                $(value).removeClass('active')
+            })
+
+            $(this).addClass('active')
+        })
+
+        $(document).on('click', '#tab_inside_tab_mobile .nav-link ', function() {
+            let items = $('#tab_inside_tab_mobile').find('.nav-link')
+
+            $.each(items, function(index, value) {
+                $(value).removeClass('active')
+            })
+
+
+            $(this).addClass('active')
+        })
+
+
+    })
+
+    function mobileMenu(){
+        var mobileWidth = 680;
+
+        if($(window).width() <= mobileWidth){
+
+            $('#mobile_menu').removeClass('d-none')
+            $('.nav-wrapper.tab-buttons').addClass('d-none')
+
+            $('.tab-pane-mobile').removeClass('d-none');
+            $('#tab_inside_tab').addClass('has_mobile_menu');
+
+        }else{
+
+            $('#mobile_menu').addClass('d-none')
+            $('.nav-wrapper.tab-buttons').removeClass('d-none')
+
+            $('.tab-pane-mobile').addClass('d-none');
+            $('#tab_inside_tab').removeClass('has_mobile_menu');
+
+        }
+        var fixOwl = function(){
+        var $stage = $('.owl-stage'),
+            stageW = $stage.width(),
+            $el = $('.owl-item'),
+            elW = 0;
+        $el.each(function() {
+            elW += $(this).width()+ +($(this).css("margin-right").slice(0, -2))
+        });
+        if ( elW > stageW ) {
+            $stage.width( elW );
+        };
+    }
+
+        $(document).ready(function(){
+            $(".owl-carousel").owlCarousel({
+                items:2,
+                margin:10,
+                nav:true,
+                navText : ['<i class="fa fa-angle-left" aria-hidden="true"></i>','<i class="fa fa-angle-right" aria-hidden="true"></i>'],
+                onInitialized: fixOwl,
+                onRefreshed: fixOwl,
+                responsive:{
+                    0:{
+                        items:2,
+                        nav:true,
+
+                    },
+                    600:{
+                        items:3,
+                        nav:true
+                    },
+                    1000:{
+                        items:5,
+                        nav:true,
+                        loop:false
+                    }
+                }
+            });
+        });
+
+    }
 </script>
 
 @endpush

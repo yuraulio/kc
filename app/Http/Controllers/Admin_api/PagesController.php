@@ -106,8 +106,8 @@ class PagesController extends Controller
             $page->user_id = Auth::user()->id;
             $page->published_from = $request->published_from;
             $page->published_to = $request->published_to;
-            $page->type = $request->type['title'];
-            $page->type_slug = Str::slug($request->type['title'], '-');
+            $page->type = (gettype($request->type) == 'string') ? $request->type : $request->type['title'];
+            $page->type_slug = Str::slug((gettype($request->type) == 'string') ? $request->type : $request->type['title'], '-');
             $page->uuid = Uuid::uuid4();
             $page->save();
 
@@ -173,8 +173,8 @@ class PagesController extends Controller
             $page->dynamic = $request->dynamic;
             $page->published_from = $request->published_from;
             $page->published_to = $request->published_to;
-            $page->type = $request->type['title'];
-            $page->type_slug = Str::slug($request->type['title'], '-');
+            $page->type = (gettype($request->type) == 'string') ? $request->type : $request->type['title'];
+            $page->type_slug = Str::slug((gettype($request->type) == 'string') ? $request->type : $request->type['title'], '-');
             $page->slug = $request->slug;
             $page->uuid = $page->uuid ?? Uuid::uuid4();
 
