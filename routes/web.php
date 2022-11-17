@@ -664,8 +664,6 @@ Route::get('/sendSurveyMail', 'Dashboard\CronjobsController@sendSurveyMail');//i
 Route::get('/absences', 'Dashboard\CronjobsController@absences');//in
 Route::get('/sendInClassReminder', 'Dashboard\CronjobsController@sendInClassReminder');//in
 Route::get('/automateTopicMail', 'Dashboard\CronjobsController@sendAutomateMailBasedOnTopic');//in
-
-// Automate email for instructors
 Route::get('/automateInstructorsMail', 'Dashboard\CronjobsController@sendAutomateEmailForInstructors');//in
 
 //SITEMAP
