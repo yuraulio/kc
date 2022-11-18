@@ -60,7 +60,7 @@ class UserController extends Controller
      */
     public function index(User $model)
     {
-        
+
         $user = Auth::user();
 
         $data['all_users'] = $model::count();
@@ -197,7 +197,7 @@ class UserController extends Controller
 
     public function assignEventToUserCreate(Request $request)
     {
-        //dd($request->all());
+
        $user_id = $request->user_id;
        $event_id = $request->event_id;
        $ticket_id = $request->ticket_id;
@@ -306,27 +306,36 @@ class UserController extends Controller
             $invoiceNumber = sprintf('%04u', $invoiceNumber);
         }*/
 
-        $paymentMethodId = $event->paymentMethod->first() ? $event->paymentMethod->first()->id : -1;
-        
-        $elearningInvoice = null;
-        if($price > 0) {
-            $elearningInvoice = new Invoice;
-            $elearningInvoice->name = isset($billingDetails['billname']) ? $billingDetails['billname'] : '';;
-            $elearningInvoice->amount = $price;
-            $elearningInvoice->invoice = generate_invoice_number($paymentMethodId);;
-            $elearningInvoice->date = date('Y-m-d');//Carbon::today()->toDateString();
-            $elearningInvoice->instalments_remaining = 1;
-            $elearningInvoice->instalments = 1;
-    
-            $elearningInvoice->save();
-    
-    
-            //$elearningInvoice->user()->save($dpuser);
-            $elearningInvoice->event()->save($event);
-            $elearningInvoice->transaction()->save($transaction);
-            $elearningInvoice->user()->save($user);
+        if($request->sendInvoice == 'true'){
+
+            $paymentMethodId = $event->paymentMethod->first() ? $event->paymentMethod->first()->id : -1;
+
+            $elearningInvoice = null;
+            if($price > 0) {
+                $elearningInvoice = new Invoice;
+                $elearningInvoice->name = isset($billingDetails['billname']) ? $billingDetails['billname'] : '';
+                $elearningInvoice->amount = $price;
+                $elearningInvoice->invoice = generate_invoice_number($paymentMethodId);
+                $elearningInvoice->date = date('Y-m-d');//Carbon::today()->toDateString();
+                $elearningInvoice->instalments_remaining = 1;
+                $elearningInvoice->instalments = 1;
+
+                $elearningInvoice->save();
+
+
+                //$elearningInvoice->user()->save($dpuser);
+                $elearningInvoice->event()->save($event);
+                $elearningInvoice->transaction()->save($transaction);
+                $elearningInvoice->user()->save($user);
+            }
+
+            $pdf = $elearningInvoice ? $elearningInvoice->generateInvoice() : null;
+
+            $this->sendEmail($elearningInvoice,$pdf,0,$transaction);
+            //$this->sendEmails($transaction,$event,$response_data);
+
         }
-        
+
 
        $response_data['ticket']['event'] = $data['event']['title'];
        $response_data['ticket']['ticket_title'] = $ticket['title'];
@@ -336,11 +345,6 @@ class UserController extends Controller
        $response_data['ticket']['ticket_id'] = $ticket['id'];;
        $response_data['ticket']['type'] = $ticket['type'];;
 
-
-        $pdf = $elearningInvoice ? $elearningInvoice->generateInvoice() : null; 
-
-	    $this->sendEmail($elearningInvoice,$pdf,0,$transaction);
-        //$this->sendEmails($transaction,$event,$response_data);
 
        return response()->json([
             'success' => __('Ticket assigned succesfully.'),
@@ -685,7 +689,7 @@ class UserController extends Controller
 
 		});*/
 
-		
+
         if($user->cart){
             $user->cart->delete();
         }

@@ -70,6 +70,7 @@ class MainController extends Controller
     public function page(String $slug, Request $request)
     {
         $page = null;
+        $renderFbChat = false;
 
         if (!cache($request->path()) && Cache::getCmsMode() == Setting::NEW_PAGES) {
             $dynamicPageData = null;
@@ -78,6 +79,7 @@ class MainController extends Controller
 
             if ($modelSlug && $modelSlug->slugable != null && get_class($modelSlug->slugable) == "App\Model\Event") {
                 $event = $modelSlug->slugable;
+                $renderFbChat = true;
                 $page = Template::whereType("Course page")->whereDynamic(true)->first();
                 $dynamicPageData = CMS::getEventData($event);
 
@@ -164,7 +166,8 @@ class MainController extends Controller
                 'comments' => $page->comments ? $page->comments->take(500) : null,
                 'page' => $page,
                 'dynamic_page_data' => $dynamicPageData,
-                'thankyouData' => $thankyouData
+                'thankyouData' => $thankyouData,
+                'renderFbChat' => $renderFbChat
             ]);
         }
     }

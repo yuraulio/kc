@@ -23,14 +23,14 @@
         <tbody>
         <?php //dd($allTopicsByCategory); ?>
             @foreach ($eventWaitingUsers as $user)
-                   
+
                 <tr>
                     <td><a target="_blank" href="{{ route('user.edit', $user['user']['id']) }}">{{ $user['user']['firstname'] }}</a></td>
                     <td>{{ $user['user']['lastname'] }}</td>
                     <td><a href="mailto:{{ $user['email'] }}">{{ $user['user']['email'] }}</a> </td>
                     <td>{{ $user['user']['mobile'] }}</td>
 
-                    
+
 
                 </tr>
             @endforeach
@@ -73,7 +73,9 @@
             });
 
             table.buttons().container()
-        .appendTo('#ddatatable-basic-students-waiting1_wrapper .col-md-6:eq(0)');
+                .appendTo('#ddatatable-basic-students-waiting1_wrapper .col-md-6:eq(0)');
+
+            $('#datatable-basic-students-waiting1').addClass('table-responsive-sm')
 
         } );
     </script>

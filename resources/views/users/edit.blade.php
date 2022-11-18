@@ -388,7 +388,13 @@
                                     </select>
                                 </div>
 
-
+                                <div class="form-group">
+                                    <label class="form-control-label" for="input-topic_id">{{ __('Create and send invoice') }}</label>
+                                    <label id="sendinvoice-toggle" class="custom-toggle yesno">
+                                        <input id="sendinvoice" name="sendinvoice" type="checkbox">
+                                        <span class="custom-toggle-slider rounded-circle" data-label-off="Off" data-label-on="On"></span>
+                                    </label>
+                                </div>
 
 
                                 <input type="hidden" name="user_id" value="{{$user['id']}}">
@@ -1214,12 +1220,25 @@ $(document).on('click', '.ticket-card', function () {
 </script>
 
 <script>
+    function initModal(){
+        $('#input-event_id').val('')
+        $('#card-ticket').empty();
+        $('#sendinvoice').prop('checked', false)
+        $('#billing').val(1)
+        $('#cardtype').val(3)
+    }
+
+    $('#assignUserEvent').on('hidden.bs.modal', function () {
+        initModal()
+    })
+
     $(document).on('click', '#assignTicketUser', function () {
         const user_id = $(this).data('user-id')
         var event_id = $('#input-event_id').val()
         var billing = $('#billing').val()
         var cardtype = $('#cardtype').val()
         var ticket_id = $(".ticket-card input[type='radio']:checked").attr('id');
+        var sendInvoice = $('#sendinvoice').prop('checked');
 
         $.ajax({
                 headers: {
@@ -1227,7 +1246,7 @@ $(document).on('click', '.ticket-card', function () {
                 },
                 type: 'post',
                 url: '/admin/user/assignEventToUserCreate',
-                data: {'cardtype':cardtype, 'billing':billing ,'event_id': event_id, 'ticket_id': ticket_id, 'user_id': user_id},
+                data: {'cardtype':cardtype, 'billing':billing ,'event_id': event_id, 'ticket_id': ticket_id, 'user_id': user_id, 'sendInvoice': sendInvoice},
                 success: function (data) {
 
                     let ticket = data.data.ticket;
@@ -1255,12 +1274,13 @@ $(document).on('click', '.ticket-card', function () {
 
                     $("#assigned_ticket_users").append(newRow);
                     $(".close_modal").click();
+                    initModal()
                     $("#success-message p").html(data.success);
                     $("#success-message").show();
-                        },
-                        error: function() {
-                            //console.log(data);
-                        }
+                },
+                error: function() {
+                    //console.log(data);
+                }
 
 
 

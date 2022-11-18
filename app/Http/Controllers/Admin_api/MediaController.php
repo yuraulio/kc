@@ -445,7 +445,7 @@ class MediaController extends Controller
         DB::beginTransaction();
 
         try {
-            $url = config('app.url') . "/uploads" . $path;
+            $url = env('MIX_APP_URL') . "/uploads" . $path;
 
             $mediaFile = MediaFile::whereParentId($parent_id)->whereVersion($version)->firstOrNew();
 

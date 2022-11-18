@@ -14,7 +14,7 @@
                 <label for="accept"><input id="accept" type="checkbox">
                               I have read, agree &amp; accept the <a class="termlink" target="_blank" title="View the data privacy policy" href="/data-privacy-policy">data privacy policy</a> above.</label>
             </div>
-                        
+
                         </div>
                     </div>
                 </div>

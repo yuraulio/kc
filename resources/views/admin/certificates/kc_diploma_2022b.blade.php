@@ -3,6 +3,7 @@
    <head>
       <meta charset="UTF-8">
       <title>{!!$certificate['meta_title']!!}</title>
+      <meta name="author" content="Knowcrunch">
       <style type="text/css">
          @font-face {
          font-family: 'Foco';
@@ -21,8 +22,8 @@
          *{
          	font-family: 'Foco';
          }
-         
-         
+
+
          table {
          	font-size: x-small;
          }
@@ -30,13 +31,13 @@
          	font-weight: bold;
          	font-size: x-small;
          }
-         
+
          .certificate{
          	margin-top:100px;
          	padding: 0 70px;
          }
-       
-         
+
+
 		.user-info {
          	margin-top: 52px;
          	margin-bottom: 10px;
@@ -68,11 +69,11 @@
 			}
 
 			.certi-title-new p{
-				
+
 				font-size:42px;
 				text-transform: uppercase;
 				letter-spacing:6.2px;
-				
+
 			}
 
 			p{
@@ -90,7 +91,7 @@
 				font-size:17px;
 				letter-spacing:2px;
 				line-height:20px;
-				
+
 			}
 
 			.name-signature{
@@ -131,7 +132,7 @@
 				margin:0 0;
 				color:#fff;
 				font-size: 11px;
-				
+
          }
 
 			.background-element-left{
@@ -152,23 +153,23 @@
 			   max-width:200px;
 
 			}
-        
+
       </style>
    </head>
    <body>
-		
+
 		<img class="background-element-left" src="{{asset('theme/assets/images/certificates2022b/bg-image-left.png')}}">
 		<img class="background-element-right" src="{{asset('theme/assets/images/certificates2022b/bg-image-right.png')}}">
 
 		<div class="certificate">
 
          <table width="100%">
-            
+
             <tbody>
                <tr>
 					<td  align="center"> <img class="knowcrunch-logo" src="{{asset('theme/assets/images/certificates2022b/logo-knowcrunch.png')}}"></td>
 				</tr>
-              
+
             </tbody>
          </table>
 
@@ -183,7 +184,7 @@
 					<tr>
             	   <td align="center">
 							<p class="award">
-               
+
 								has successfully completed all exams and is hereby awarded this
 
 			  				</p>
@@ -193,13 +194,13 @@
 					<tr>
             	   <td class="certi-title-new" align="center">
 						<p class="certi-title">
-               
+
 							{!! $certificate['certification_title'] !!}
 
 			  			</p>
             	   </td>
             	</tr>
-					
+
 				</tbody>
          </table>
 
@@ -223,17 +224,17 @@
 			<table class="footer" width="100%">
             <tbody>
                <tr>
-					<td  align="center"> 
-						<p > 
-							ISSUED: {{$certificate['certification_date']}} <span> | </span>    Credential NO.: {{$certificate['credential']}} 
+					<td  align="center">
+						<p >
+							ISSUED: {{$certificate['certification_date']}} <span> | </span>    Credential NO.: {{$certificate['credential']}}
 						</p>
 					</td>
                </tr>
-					
+
             </tbody>
          </table>
 
       </div>
-     
+
    </body>
 </html>

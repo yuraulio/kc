@@ -21,57 +21,57 @@
 
     @include('admin.upload.upload_new', ['from' => 'event_info'])
 
-    <div class="">
+    <div class="container-fluid mt--6">
         <div class="row">
             <div class="col">
-                <div class="">
+
                     <div class="card-header">
-                        <div class="row align-items-center">
+                        <!-- <div class="row align-items-center"> -->
                             <div class="col-8">
                                 <h3 class="mb-0 ml-1">{{ $event['htmlTitle'] }}</h3>
                             </div>
-                            <div id="mobile_menu" class="dropdown">
-                        <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Menu
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <button class="dropdown-item settings-btn" data-toggle="tab"  href="#tabs-icons-text-1" role="tab" type="button">
-                            <span class="btn-inner--icon"><i class="ni ni-settings-gear-65"></i></span>
-                            <span class="btn-inner--text">Settings</span>
-                        </button>
-                        <button class="dropdown-item seo" data-toggle="tab"  href="#metas" role="tab" type="button">
-                            <span class="btn-inner--icon"><i class="ni ni-world"></i></span>
-                            <span class="btn-inner--text">Seo</span>
-                        </button>
-                        <button class="dropdown-item" data-toggle="tab"  href="#tabs-icons-text-2" role="tab" type="button">
-                            <span class="btn-inner--icon"><i class="ni ni-folder-17"></i></span>
-                            <span class="btn-inner--text">Content</span>
-                        </button>
-                        <button class="dropdown-item" data-toggle="tab"  href="#emails_fields" role="tab" type="button">
-                            <span class="btn-inner--icon"><i class="ni ni-curved-next"></i></span>
-                            <span class="btn-inner--text">Links</span>
-                        </button>
-                        <button class="dropdown-item" data-toggle="tab"  href="#tabs-icons-text-3" role="tab" type="button">
-                            <span class="btn-inner--icon"><i class="ni ni-hat-3"></i></span>
-                            <span class="btn-inner--text">Students</span>
-                        </button>
-                        <button class="dropdown-item" data-toggle="tab"  href="#waiting_list" role="tab" type="button">
-                            <span class="btn-inner--icon"><i class="ni ni-hat-3"></i></span>
-                            <span class="btn-inner--text">Waiting List Students</span>
-                        </button>
-                        <button class="dropdown-item" data-toggle="tab"  href="#tabs-icons-text-5" role="tab" type="button">
-                            <span class="btn-inner--icon"><i class="ni ni-tag"></i></span>
-                            <span class="btn-inner--text">Coupons</span>
-                        </button>
-                        <button class="dropdown-item" data-toggle="tab"  href="#xml_fields" role="tab" type="button">
-                            <span class="btn-inner--icon"><i class="ni ni-single-copy-04"></i></span>
-                            <span class="btn-inner--text">XML fields</span>
-                        </button>
-                        <a target="_blank" href="/print/syllabus/{{$event['slugable']['slug']}}"  class="dropdown-item">Download course schedule</a>
+                            <div id="mobile_menu" class="dropdown d-none">
+                                <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Menu
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <button class="dropdown-item settings-btn active" data-toggle="tab"  href="#tabs-icons-text-1" role="tab" type="button">
+                                    <span class="btn-inner--icon"><i class="ni ni-settings-gear-65"></i></span>
+                                    <span class="btn-inner--text">Settings</span>
+                                </button>
+                                <button class="dropdown-item seo" data-toggle="tab"  href="#metas" role="tab" type="button">
+                                    <span class="btn-inner--icon"><i class="ni ni-world"></i></span>
+                                    <span class="btn-inner--text">Seo</span>
+                                </button>
+                                <button class="dropdown-item" data-toggle="tab"  href="#tabs-icons-text-2" role="tab" type="button">
+                                    <span class="btn-inner--icon"><i class="ni ni-folder-17"></i></span>
+                                    <span class="btn-inner--text">Content</span>
+                                </button>
+                                <button class="dropdown-item" data-toggle="tab"  href="#emails_fields" role="tab" type="button">
+                                    <span class="btn-inner--icon"><i class="ni ni-curved-next"></i></span>
+                                    <span class="btn-inner--text">Links</span>
+                                </button>
+                                <button class="dropdown-item" data-toggle="tab"  href="#tabs-icons-text-3" role="tab" type="button">
+                                    <span class="btn-inner--icon"><i class="ni ni-hat-3"></i></span>
+                                    <span class="btn-inner--text">Students</span>
+                                </button>
+                                <button class="dropdown-item" data-toggle="tab"  href="#waiting_list" role="tab" type="button">
+                                    <span class="btn-inner--icon"><i class="ni ni-hat-3"></i></span>
+                                    <span class="btn-inner--text">Waiting List Students</span>
+                                </button>
+                                <button class="dropdown-item" data-toggle="tab"  href="#tabs-icons-text-5" role="tab" type="button">
+                                    <span class="btn-inner--icon"><i class="ni ni-tag"></i></span>
+                                    <span class="btn-inner--text">Coupons</span>
+                                </button>
+                                <button class="dropdown-item" data-toggle="tab"  href="#xml_fields" role="tab" type="button">
+                                    <span class="btn-inner--icon"><i class="ni ni-single-copy-04"></i></span>
+                                    <span class="btn-inner--text">XML fields</span>
+                                </button>
+                                <a target="_blank" href="/print/syllabus/{{$event['slugable']['slug']}}"  class="dropdown-item download">Download course schedule</a>
 
-                        </div>
-                    </div>
-                        </div>
+                                </div>
+                            </div>
+
                     </div>
 
 
@@ -174,7 +174,7 @@
                                         <div class="row align-center">
 
 
-                                            <div class="col-md-2 col-sm-6 col-6">
+                                            <div class="col-lg-2 col-md-6 col-sm-6 col-6">
 
                                                 <div class="form-group">
                                                     <label class="form-control-label" for="input-published">{{ __('Date created') }}</label>
@@ -186,7 +186,7 @@
                                             </div>
 
 
-                                            <div class="col-md-2 col-sm-6 col-6">
+                                            <div class="col-lg-2 col-md-6 col-sm-6 col-6">
                                                 <div class="form-group">
                                                         <label class="form-control-label" for="launch_date">{{ __('Launch Date') }}</label>
                                                         <input type="text" name="launch_date" type="text" id="input-launch-input"
@@ -197,28 +197,28 @@
 
 
 
-                                            <div class="col-md-2 col-sm-6 col-6">
-                                                <div style="margin: auto 0;" class="col-md-3 col-sm-3">
-                                                    <div class="form-group{{ $errors->has('published') ? ' has-danger' : '' }}">
-                                                        <label class="form-control-label" for="input-method">{{ __('Published') }}</label>
+                                            <div class="col-lg-2 col-md-4 col-sm-6 col-6">
+
+                                                <div class="form-group{{ $errors->has('published') ? ' has-danger' : '' }}">
+                                                    <label class="form-control-label" for="input-method">{{ __('Published') }}</label>
 
 
-                                                        <div style="margin: auto;" class="form-group">
-                                                            <label class="custom-toggle custom-published">
-                                                                <input type="checkbox" name="published" id="input-published" @if($event['published']) checked @endif>
-                                                                <span class="custom-toggle-slider rounded-circle" data-label-off="unpublished" data-label-on="published"></span>
-                                                            </label>
-                                                        </div>
-                                                        @include('alerts.feedback', ['field' => 'published'])
-
-
-
+                                                    <div style="margin: auto;" class="form-group">
+                                                        <label class="custom-toggle custom-published">
+                                                            <input type="checkbox" name="published" id="input-published" @if($event['published']) checked @endif>
+                                                            <span class="custom-toggle-slider rounded-circle" data-label-off="unpublished" data-label-on="published"></span>
+                                                        </label>
                                                     </div>
+                                                    @include('alerts.feedback', ['field' => 'published'])
+
+
+
                                                 </div>
+
                                             </div>
 
 
-                                            <div class="col-md-2 col-sm-6 col-6">
+                                            <div class="col-lg-2 col-md-4 col-sm-6 col-6">
 
                                                 <div class="form-group">
                                                     <label class="form-control-label" for="input-method">{{ __('Index') }}</label>
@@ -233,7 +233,7 @@
                                                 </div>
                                             </div>
 
-                                            <div class="col-md-2 col-sm-6 col-6">
+                                            <div class="col-lg-2 col-md-4 col-sm-6 col-6">
 
                                                 <div class="form-group">
                                                     <label class="form-control-label" for="input-method">{{ __('Feed') }}</label>
@@ -249,7 +249,7 @@
                                             </div>
 
 
-                                            <div class="col-md-2 col-sm-6 col-6 text-center form_event_btn">
+                                            <div class="col-lg-2 col-md-12 col-sm-6 col-6 text-center form_event_btn">
                                                 <div class="save_event_btn" >@include('admin.save.save',['event' => isset($event) ? $event : null])</div>
                                                 <div class="preview_event_btn">@include('admin.preview.preview',['slug' => isset($slug) ? $slug : null])</div>
                                             </div>
@@ -295,19 +295,27 @@
                                                     }
                                                 ?>
 
-                                                <div class="input-group">
-                                                    <h3 class="mb-0 title">{{ __('Course Hours') }} (course_hours)</h3>
-                                                    <span data-infowrapper="hours" class="input-group-addon input-group-append input-icon-wrapper">
-                                                        <span class="btn btn-outline-primary input-icon">
-                                                            @if(isset($info['hours']['icon']) && $info['hours']['icon']['path'] != null)
-                                                                <img src="{{ asset($info['hours']['icon']['path']) }}"/>
-                                                            @else
+                                                <div class="row">
 
-                                                                <img src="/theme/assets/images/icons/Start-Finish.svg"/>
+                                                    <div class="col-9 col-md-auto col-lg-auto">
+                                                        <h3 class="mb-0 title">{{ __('Course Hours') }} (course_hours)</h3>
 
-                                                            @endif
+                                                    </div>
+
+                                                    <div class="col-2 col-md-auto col-lg-auto">
+                                                        <span data-infowrapper="hours" class="input-group-addon input-group-append input-icon-wrapper">
+                                                            <span class="btn btn-outline-primary input-icon">
+                                                                @if(isset($info['hours']['icon']) && $info['hours']['icon']['path'] != null)
+                                                                    <img src="{{ asset($info['hours']['icon']['path']) }}"/>
+                                                                @else
+
+                                                                    <img src="/theme/assets/images/icons/Start-Finish.svg"/>
+
+                                                                @endif
+                                                            </span>
                                                         </span>
-                                                    </span>
+                                                    </div>
+
                                                     <input type="hidden" value="{{ old('hours_icon_path', (isset($info['hours']['icon']) && $info['hours']['icon'] != null) ? $info['hours']['icon']['path'] : '' ) }}" id="hours_path" name="course[{{'hours'}}][{{'icon'}}][{{'path'}}]">
                                                     <input type="hidden" value="{{ old('hours_icon_alt_text', (isset($info['hours']['icon']) && $info['hours']['icon']['alt_text'] != '') ? $info['hours']['icon']['alt_text'] : '' ) }}" id="hours_alt_text" name="course[{{'hours'}}][{{'icon'}}][{{'alt_text'}}]">
                                                 </div>
@@ -408,19 +416,25 @@
 
                                             <div class="form-group col-12">
 
-                                                <div class="input-group">
-                                                <h3 class="mb-0 title">{{ __('Course Language') }} (course_language)</h3>
+                                                <div class="row">
+                                                    <div class="col-9 col-md-auto col-lg-auto">
+                                                        <h3 class="mb-0 title">{{ __('Course Language') }} (course_language)</h3>
+                                                    </div>
 
-                                                    <span data-infowrapper="language" class="input-group-addon input-group-append input-icon-wrapper">
-                                                        <span class="btn btn-outline-primary input-icon">
-                                                            @if($course_language_icon != null && $course_language_icon['path'] != null)
-                                                                <img src="{{ asset($course_language_icon['path']) }}"/>
-                                                            @else
-                                                                <img src="/theme/assets/images/icons/Language.svg" alt="">
-                                                            @endif
 
+                                                    <div class="col-2 col-md-auto col-lg-auto">
+                                                        <span data-infowrapper="language" class="input-group-addon input-group-append input-icon-wrapper">
+                                                            <span class="btn btn-outline-primary input-icon">
+                                                                @if($course_language_icon != null && $course_language_icon['path'] != null)
+                                                                    <img src="{{ asset($course_language_icon['path']) }}"/>
+                                                                @else
+                                                                    <img src="/theme/assets/images/icons/Language.svg" alt="">
+                                                                @endif
+
+                                                            </span>
                                                         </span>
-                                                    </span>
+                                                    </div>
+
                                                     <input type="hidden" value="{{ old('language_icon_path', ($course_language_icon != null) ? $course_language_icon['path'] : '' ) }}" id="language_path" name="course[{{'language'}}][{{'icon'}}][{{'path'}}]">
                                                     <input type="hidden" value="{{ old('language_icon_alt_text', ($course_language_icon != null) ? $course_language_icon['alt_text'] : '' ) }}" id="language_alt_text" name="course[{{'language'}}][{{'icon'}}][{{'alt_text'}}]">
                                                 </div>
@@ -554,30 +568,34 @@
 
                                             <div class="col-12 delivery_child_wrapper <?= isset($event->delivery->first()['id']) && ( $event->delivery->first()['id'] == 139 || $event->delivery->first()['id'] == 215) ? '' : 'd-none' ?>">
                                                 <div class="row delivery_city_wrapper <?= isset($event->delivery->first()['id']) && $event->delivery->first()['id'] == 215 ? 'd-none' : '' ?>">
-                                                    <div style="display:flex;" class="col-9 col-sm-12 col-md-6 col-lg-4 form-group{{ $errors->has('city_id') ? ' has-danger' : '' }} ">
-                                                        <!-- <div class="col-sm-12 col-md-6 col-lg-3 form-group{{ $errors->has('city_id') ? ' has-danger' : '' }} "> -->
-                                                        <select name="city_id" id="input-city_id" class="form-control" placeholder="{{ __('Please select the city of this course') }}" >
-                                                            <option selected disabled value="">Please select the city of this course</option>
-                                                            @foreach ($cities as $city)
 
-                                                                <option value="{{$city->id}}" @if($city->id == $eventCity) selected @endif> {{ $city->name }} </option>
+                                                    <div class="col-9 col-md-6 col-lg-4 form-group{{ $errors->has('city_id') ? ' has-danger' : '' }} ">
+                                                            <!-- <div class="col-sm-12 col-md-6 col-lg-3 form-group{{ $errors->has('city_id') ? ' has-danger' : '' }} "> -->
+                                                            <select name="city_id" id="input-city_id" class="form-control" placeholder="{{ __('Please select the city of this course') }}" >
+                                                                <option selected disabled value="">Please select the city of this course</option>
+                                                                @foreach ($cities as $city)
 
-                                                            @endforeach
-                                                        </select>
+                                                                    <option value="{{$city->id}}" @if($city->id == $eventCity) selected @endif> {{ $city->name }} </option>
+
+                                                                @endforeach
+                                                            </select>
 
                                                     </div>
-                                                    <span class="col-2 input-icon-wrapper-city" data-infowrapper="inclass_city">
-                                                        <span class="btn btn-outline-primary input-icon">
 
-                                                            @if($course_inclass_city_icon && $course_inclass_city_icon != null && $course_inclass_city_icon['path'] != null)
-                                                                <img src="{{ asset($course_inclass_city_icon['path']) }}" alt="{{ $course_inclass_city_icon != null && $course_inclass_city_icon['alt_text'] != '' ? $course_inclass_city_icon['alt_text'] : '' }}"/>
-                                                            @else
-                                                                <img src="/theme/assets/images/icons/marker.svg" alt="">
-                                                            @endif
+                                                    <div class="col-2 col-md-auto col-lg-auto">
+                                                        <span class="input-icon-wrapper-city" data-infowrapper="inclass_city">
+                                                            <span class="btn btn-outline-primary input-icon">
+
+                                                                @if($course_inclass_city_icon && $course_inclass_city_icon != null && $course_inclass_city_icon['path'] != null)
+                                                                    <img src="{{ asset($course_inclass_city_icon['path']) }}" alt="{{ $course_inclass_city_icon != null && $course_inclass_city_icon['alt_text'] != '' ? $course_inclass_city_icon['alt_text'] : '' }}"/>
+                                                                @else
+                                                                    <img src="/theme/assets/images/icons/marker.svg" alt="">
+                                                                @endif
+                                                            </span>
+                                                            <!-- (course_inclass_city) -->
                                                         </span>
-                                                        (course_inclass_city)
-                                                    </span>
 
+                                                    </div>
                                                     <input type="hidden" value="{{ old('inclass_city_icon_path', ($course_inclass_city_icon != null && $course_inclass_city_icon['path'] != '') ? $course_inclass_city_icon['path'] : '' ) }}" id="inclass_city_path" name="course[{{'delivery'}}][{{'inclass'}}][{{'city'}}][{{'icon'}}][{{'path'}}]">
                                                     <input type="hidden" value="{{ old('inclass_city_icon_alt_text', ($course_inclass_city_icon != null && $course_inclass_city_icon['alt_text'] != '') ? $course_inclass_city_icon['alt_text'] : '' ) }}" id="inclass_city_alt_text" name="course[{{'delivery'}}][{{'inclass'}}][{{'city'}}][{{'icon'}}][{{'alt_text'}}]">
 
@@ -897,19 +915,25 @@
 
                                                     <div class="form-group col-12">
 
-                                                        <div class="input-group">
-                                                            <h3 class="mb-0 title">{{ __('Course Access') }}</h3>
+                                                        <div class="row">
+                                                            <div class="col-9 col-md-auto col-lg-auto">
+                                                                <h3 class="mb-0 title">{{ __('Course Access') }}</h3>
+                                                            </div>
 
-                                                            <span data-infowrapper="free_courses" class="input-group-addon input-group-append input-icon-wrapper">
-                                                                <span class="btn btn-outline-primary input-icon">
+                                                            <div class="col-2 col-md-auto col-lg-auto">
+                                                                <span data-infowrapper="free_courses" class="input-group-addon input-group-append input-icon-wrapper">
+                                                                    <span class="btn btn-outline-primary input-icon">
 
-                                                                    @if($course_free_access_icon != null && $course_free_access_icon['path'] != null)
-                                                                        <img src="{{ asset($course_free_access_icon['path']) }}"/>
-                                                                    @else
-                                                                        <span class="fa fa-calendar"></span>
-                                                                    @endif
+                                                                        @if($course_free_access_icon != null && $course_free_access_icon['path'] != null)
+                                                                            <img src="{{ asset($course_free_access_icon['path']) }}"/>
+                                                                        @else
+                                                                            <span class="fa fa-calendar"></span>
+                                                                        @endif
+                                                                    </span>
                                                                 </span>
-                                                            </span>
+                                                            </div>
+
+
                                                             <input type="hidden" value="{{ old('$course_free_access_icon_path', ($course_free_access_icon != null && $course_free_access_icon['path'] != '') ? $course_free_access_icon['path'] : '' ) }}" id="free_courses_path" name="course[{{'free_courses'}}][{{'icon'}}][{{'path'}}]">
                                                             <input type="hidden" value="{{ old('$course_free_access_icon_alt_text', ($course_free_access_icon != null && $course_free_access_icon['alt_text'] != '') ? $course_free_access_icon['alt_text'] : '' ) }}" id="free_courses_alt_text" name="course[{{'free_courses'}}][{{'icon'}}][{{'alt_text'}}]">
                                                         </div>
@@ -922,7 +946,7 @@
                                                     ?>
                                                     <div class="form-group col-12">
                                                         <span class="toggle-btn-inline-text">Would you like to let students access an e-learning course for free?</span>
-                                                        <label id="access-student-toggle" class="custom-toggle yesno">
+                                                        <label id="access-student-toggle" class="custom-toggle enroll-toggle visible">
                                                             <input id="access-student" name="course[{{'free_courses'}}][{{'enabled'}}]" type="checkbox" {{ (isset($access_events) && count($access_events) != 0) ? 'checked' : ''}}>
                                                             <span class="custom-toggle-slider rounded-circle" data-label-off="Off" data-label-on="On"></span>
                                                         </label>
@@ -1156,19 +1180,25 @@
 
                                             <div class="form-group col-12">
 
-                                                <div class="input-group">
-                                                    <h3 class="mb-0 title" for="input-hours">{{ __('Course Payment Method') }} (course_payment_method)</h3>
+                                                <div class="row">
 
-                                                    <span data-infowrapper="payment" class="input-group-addon input-group-append input-icon-wrapper">
-                                                        <span class="btn btn-outline-primary input-icon">
+                                                    <div class="col-9 col-md-auto col-lg-auto">
+                                                        <h3 class="mb-0 title" for="input-hours">{{ __('Course Payment Method') }} (course_payment_method)</h3>
+                                                    </div>
 
-                                                            @if($course_payment_icon != null && $course_payment_icon['path'] != null)
-                                                                <img src="{{ asset($course_payment_icon['path']) }}" alt="{{ (isset($course_payment_icon['alt_text']) && $course_payment_icon['alt_text'] != null) ? $course_payment_icon['alt_text'] : '' }}"/>
-                                                            @else
-                                                                <i class="ni ni-credit-card"></i>
-                                                            @endif
+                                                    <div class="col-2 col-md-auto col-lg-auto">
+                                                        <span data-infowrapper="payment" class="input-group-addon input-group-append input-icon-wrapper">
+                                                            <span class="btn btn-outline-primary input-icon">
+
+                                                                @if($course_payment_icon != null && $course_payment_icon['path'] != null)
+                                                                    <img src="{{ asset($course_payment_icon['path']) }}" alt="{{ (isset($course_payment_icon['alt_text']) && $course_payment_icon['alt_text'] != null) ? $course_payment_icon['alt_text'] : '' }}"/>
+                                                                @else
+                                                                    <i class="ni ni-credit-card"></i>
+                                                                @endif
+                                                            </span>
                                                         </span>
-                                                    </span>
+                                                    </div>
+
                                                     <input type="hidden" value="{{ old('course_payment_icon_path', ($course_payment_icon != null && $course_payment_icon['path'] != '') ? $course_payment_icon['path'] : '' ) }}" id="payment_path" name="course[{{'payment'}}][{{'icon'}}][{{'path'}}]">
                                                     <input type="hidden" value="{{ old('course_payment_icon_alt_text', ($course_payment_icon != null && $course_payment_icon['alt_text'] != '') ? $course_payment_icon['alt_text'] : '' ) }}" id="payment_alt_text" name="course[{{'payment'}}][{{'icon'}}][{{'alt_text'}}]">
                                                 </div>
@@ -1177,7 +1207,7 @@
 
                                             <div class="form-group col-12">
                                                 <span class="toggle-btn-inline-text">Is this course free or paid?</span>
-                                                <label class="custom-toggle yesno">
+                                                <label class="custom-toggle enroll-toggle visible">
                                                     <input id="payment-method-toggle" value="on" name="course[{{'payment'}}][{{'paid'}}]" type="checkbox" {{($event['paymentMethod']->first()) ? 'checked=""' : ''}} >
                                                     <span class="custom-toggle-slider rounded-circle" data-label-off="Free" data-label-on="Paid"></span>
                                                 </label>
@@ -1218,20 +1248,26 @@
 
                                             <div class="form-group col-12">
 
-                                                <div class="input-group">
-                                                    <h3 class="mb-0 title" for="input-hours">{{ __('Course Partners') }} (course_partner)</h3>
+                                                <div class="row">
 
-                                                    <span data-infowrapper="partner" class="input-group-addon input-group-append input-icon-wrapper">
-                                                        <span class="btn btn-outline-primary input-icon">
+                                                    <div class="col-9 col-md-auto col-lg-auto">
+                                                        <h3 class="mb-0 title" for="input-hours">{{ __('Course Partners') }} (course_partner)</h3>
+                                                    </div>
 
-                                                            @if($course_partner_icon != null && $course_partner_icon['path'] != null)
-                                                                <img src="{{ asset($course_partner_icon['path']) }}"/>
-                                                            @else
-                                                                <span class="fa fa-calendar"></span>
+                                                    <div class="col-2 col-md-auto col-lg-auto">
+                                                        <span data-infowrapper="partner" class="input-group-addon input-group-append input-icon-wrapper">
+                                                            <span class="btn btn-outline-primary input-icon">
 
-                                                            @endif
+                                                                @if($course_partner_icon != null && $course_partner_icon['path'] != null)
+                                                                    <img src="{{ asset($course_partner_icon['path']) }}"/>
+                                                                @else
+                                                                    <span class="fa fa-calendar"></span>
+
+                                                                @endif
+                                                            </span>
                                                         </span>
-                                                    </span>
+                                                    </div>
+
                                                     <input type="hidden" value="{{ old('course_partner_icon_path', ($course_partner_icon != null && $course_partner_icon['path'] != '') ? $course_partner_icon['path'] : '' ) }}" id="partner_path" name="course[{{'partner'}}][{{'icon'}}][{{'path'}}]">
                                                     <input type="hidden" value="{{ old('course_partner_icon_alt_text', ($course_partner_icon != null && $course_partner_icon['alt_text'] != '') ? $course_partner_icon['alt_text'] : '' ) }}" id="partner_alt_text" name="course[{{'partner'}}][{{'icon'}}][{{'alt_text'}}]">
                                                 </div>
@@ -1240,7 +1276,7 @@
 
                                             <div class="form-group col-12">
                                                 <span class="toggle-btn-inline-text">Does this course have supporters/partners?</span>
-                                                <label class="custom-toggle yesno">
+                                                <label class="custom-toggle enroll-toggle visible">
                                                     <input id="partner-toggle" name="partner_enabled" type="checkbox" {{(count($eventPartners) != 0) ? 'checked=""' : ''}} >
                                                     <span class="custom-toggle-slider rounded-circle" data-label-off="Off" data-label-on="On"></span>
                                                 </label>
@@ -1272,18 +1308,24 @@
                                                     }
                                                 ?>
 
-                                                <div class="input-group">
-                                                    <h3 class="mb-0 title" for="input-hours">{{ __('Course Files') }}</h3>
+                                                <div class="row">
+                                                    <div class="col-9 col-md-auto col-lg-auto">
+                                                        <h3 class="mb-0 title" for="input-hours">{{ __('Course Files') }}</h3>
+                                                    </div>
 
-                                                    <span data-infowrapper="files" class="input-group-addon input-group-append input-icon-wrapper">
-                                                        <span class="btn btn-outline-primary input-icon">
-                                                            @if($course_files_icon != null && $course_files_icon['path'] != null)
-                                                                <img src="{{ asset($course_files_icon['path']) }}" alt="{{ (isset($course_files_icon['alt_text']) && $course_files_icon['alt_text'] != null) ? $course_files_icon['alt_text'] : ''  }}"/>
-                                                            @else
-                                                                <img src="/theme/assets/images/icons/Access-Files.svg" alt="">
-                                                            @endif
+
+                                                    <div class="col-2 col-md-auto col-lg-auto">
+                                                        <span data-infowrapper="files" class="input-group-addon input-group-append input-icon-wrapper">
+                                                            <span class="btn btn-outline-primary input-icon">
+                                                                @if($course_files_icon != null && $course_files_icon['path'] != null)
+                                                                    <img src="{{ asset($course_files_icon['path']) }}" alt="{{ (isset($course_files_icon['alt_text']) && $course_files_icon['alt_text'] != null) ? $course_files_icon['alt_text'] : ''  }}"/>
+                                                                @else
+                                                                    <img src="/theme/assets/images/icons/Access-Files.svg" alt="">
+                                                                @endif
+                                                            </span>
                                                         </span>
-                                                    </span>
+                                                    </div>
+
                                                     <input type="hidden" value="" id="files_path" name="course[{{'files'}}][{{'icon'}}][{{'path'}}]">
                                                     <input type="hidden" value="" id="files_alt_text" name="course[{{'files'}}][{{'icon'}}][{{'alt_text'}}]">
                                                 </div>
@@ -1346,18 +1388,24 @@
                                             ?>
                                             <div class="form-group col-12">
 
-                                                <div class="input-group">
-                                                    <h3 class="mb-0 title" >{{ __('Course Manager') }} (course_manager)</h3>
+                                                <div class="row">
+                                                    <div class="col-9 col-md-auto col-lg-auto">
+                                                        <h3 class="mb-0 title" >{{ __('Course Manager') }} (course_manager)</h3>
+                                                    </div>
 
-                                                    <span data-infowrapper="manager" class="input-group-addon input-group-append input-icon-wrapper">
-                                                        <span class="btn btn-outline-primary input-icon">
-                                                            @if($course_manager_icon != null && $course_manager_icon['path'] != null)
-                                                                <img src="{{ asset($course_manager_icon['path']) }}" alt="{{ (isset($course_manager_icon['alt_text']) && $course_manager_icon['alt_text'] != null) ? $course_manager_icon['alt_text'] : ''  }}"/>
-                                                            @else
-                                                                <span class="fa fa-calendar"></span>
-                                                            @endif
+
+                                                    <div class="col-2 col-md-auto col-lg-auto">
+                                                        <span data-infowrapper="manager" class="input-group-addon input-group-append input-icon-wrapper">
+                                                            <span class="btn btn-outline-primary input-icon">
+                                                                @if($course_manager_icon != null && $course_manager_icon['path'] != null)
+                                                                    <img src="{{ asset($course_manager_icon['path']) }}" alt="{{ (isset($course_manager_icon['alt_text']) && $course_manager_icon['alt_text'] != null) ? $course_manager_icon['alt_text'] : ''  }}"/>
+                                                                @else
+                                                                    <span class="fa fa-calendar"></span>
+                                                                @endif
+                                                            </span>
                                                         </span>
-                                                    </span>
+                                                    </div>
+
                                                     <input type="hidden" value="{{ old('course_manager_icon_path', ($course_manager_icon != null && $course_manager_icon['path'] != '') ? $course_manager_icon['path'] : '' ) }}" id="manager_path" name="course[{{'manager'}}][{{'icon'}}][{{'path'}}]">
                                                     <input type="hidden" value="{{ old('course_manager_icon_alt_text', ($course_manager_icon != null && $course_manager_icon['alt_text'] != '') ? $course_manager_icon['alt_text'] : '' ) }}" id="manager_alt_text" name="course[{{'manager'}}][{{'icon'}}][{{'alt_text'}}]">
                                                 </div>
@@ -1366,7 +1414,7 @@
 
                                             <div class="form-group col-12">
                                                 <span class="toggle-btn-inline-text">Does this course have a visible manager?</span>
-                                                <label class="custom-toggle yesno">
+                                                <label class="custom-toggle enroll-toggle visible">
                                                     <input id="manager-toggle" name="manager-enabled" type="checkbox" {{(isset($event->syllabus[0])) ? 'checked' : ''}}>
                                                     <span class="custom-toggle-slider rounded-circle" data-label-off="Off" data-label-on="On"></span>
                                                 </label>
@@ -1417,25 +1465,31 @@
 
                                             <div class="form-group col-12">
 
-                                                <div class="input-group">
-                                                    <h3 class="mb-0 title">{{ __('Course Awards & Badges') }} (course_awards)</h3>
-                                                    <span data-infowrapper="awards" class="input-group-addon input-group-append input-icon-wrapper">
-                                                        <span class="btn btn-outline-primary input-icon">
-                                                            @if($course_awards_icon != null && $course_awards_icon['path'] != null)
-                                                                <img src="{{ asset($course_awards_icon['path']) }}"/>
-                                                            @else
-                                                                <span class="fa fa-calendar"></span>
-                                                            @endif
+                                                <div class="row">
+                                                    <div class="col-9 col-md-auto col-lg-auto">
+                                                        <h3 class="mb-0 title">{{ __('Course Awards & Badges') }} (course_awards)</h3>
+                                                    </div>
 
+                                                    <div class="col-2 col-md-auto col-lg-auto">
+                                                        <span data-infowrapper="awards" class="input-group-addon input-group-append input-icon-wrapper">
+                                                            <span class="btn btn-outline-primary input-icon">
+                                                                @if($course_awards_icon != null && $course_awards_icon['path'] != null)
+                                                                    <img src="{{ asset($course_awards_icon['path']) }}"/>
+                                                                @else
+                                                                    <span class="fa fa-calendar"></span>
+                                                                @endif
+
+                                                            </span>
                                                         </span>
-                                                    </span>
+                                                    </div>
+
                                                     <input type="hidden" value="{{ old('course_awards_icon_path', ($course_awards_icon != null && $course_awards_icon['path'] != '') ? $course_awards_icon['path'] : '' ) }}" id="awards_path" name="course[{{'awards'}}][{{'icon'}}][{{'path'}}]">
                                                     <input type="hidden" value="{{ old('course_awards_icon_alt_text', ($course_awards_icon != null && $course_awards_icon['alt_text'] != '') ? $course_awards_icon['alt_text'] : '' ) }}" id="awards_alt_text" name="course[{{'awards'}}][{{'icon'}}][{{'alt_text'}}]">
                                                 </div>
                                             </div>
                                             <div class="form-group col-12">
                                                 <span class="toggle-btn-inline-text">Does this course have some award?</span>
-                                                <label class="custom-toggle yesno">
+                                                <label class="custom-toggle enroll-toggle visible">
                                                     <input id="award-toggle" {{ (isset($info['awards']['text']) && $info['awards']['text'] != null) ? 'checked' : ''}} type="checkbox">
                                                     <span class="custom-toggle-slider rounded-circle" data-label-off="Off" data-label-on="On"></span>
                                                 </label>
@@ -1464,19 +1518,25 @@
 
                                             <div class="form-group col-12">
 
-                                                <div class="input-group">
-                                                    <h3 class="mb-0 title">{{ __('Course Certification') }}</h3>
+                                                <div class="row">
+                                                    <div class="col-9 col-md-auto col-lg-auto">
+                                                        <h3 class="mb-0 title">{{ __('Course Certification') }}</h3>
+                                                    </div>
 
-                                                    <span data-infowrapper="certificate" class="input-group-addon input-group-append input-icon-wrapper">
-                                                        <span class="btn btn-outline-primary input-icon">
-                                                            @if($course_certification_icon  != null && $course_certification_icon['path'] != null)
-                                                                <img src="{{ asset($course_certification_icon['path']) }}"/>
-                                                            @else
-                                                                {{--<span class="fa fa-calendar"></span>--}}
-                                                                <img class="replace-with-svg" width="20" src="/theme/assets/images/icons/Level.svg" alt="">
-                                                            @endif
+
+                                                    <div class="col-2 col-md-auto col-lg-auto">
+                                                        <span data-infowrapper="certificate" class="input-group-addon input-group-append input-icon-wrapper">
+                                                            <span class="btn btn-outline-primary input-icon">
+                                                                @if($course_certification_icon  != null && $course_certification_icon['path'] != null)
+                                                                    <img src="{{ asset($course_certification_icon['path']) }}"/>
+                                                                @else
+                                                                    {{--<span class="fa fa-calendar"></span>--}}
+                                                                    <img class="replace-with-svg" width="20" src="/theme/assets/images/icons/Level.svg" alt="">
+                                                                @endif
+                                                            </span>
                                                         </span>
-                                                    </span>
+                                                    </div>
+
                                                     <input type="hidden" value="{{ old('course_certification_icon_path', ($course_certification_icon != null && $course_certification_icon['path'] != '') ? $course_certification_icon['path'] : '' ) }}" id="certificate_path" name="course[{{'certificate'}}][{{'icon'}}][{{'path'}}]">
                                                     <input type="hidden" value="{{ old('course_certification_icon_alt_text', ($course_certification_icon != null && $course_certification_icon['alt_text'] != '') ? $course_certification_icon['alt_text'] : '' ) }}" id="certificate_alt_text" name="course[{{'certificate'}}][{{'icon'}}][{{'alt_text'}}]">
                                                 </div>
@@ -1485,7 +1545,7 @@
 
                                             <div class="form-group col-12">
                                                 <span class="toggle-btn-inline-text">Does this course offer a certification? </span>
-                                                <label class="custom-toggle yesno">
+                                                <label class="custom-toggle enroll-toggle visible">
                                                     <input name="course[{{'certificate'}}][{{'certification'}}]" id="certification-toggle" {{isset($info['certificate']['has_certificate']) && $info['certificate']['has_certificate'] ? 'checked' : '' }} type="checkbox">
                                                     <span class="custom-toggle-slider rounded-circle" data-label-off="Off" data-label-on="On"></span>
                                                 </label>
@@ -1631,17 +1691,23 @@
                                             ?>
                                             <div class="form-group col-12">
 
-                                                <div class="input-group">
-                                                    <h3 class="mb-0 title">{{ __('Course Students') }}</h3>
-                                                    <span data-infowrapper="students" class="input-group-addon input-group-append input-icon-wrapper">
-                                                        <span class="btn btn-outline-primary input-icon">
-                                                            @if($course_students_icon != null && $course_students_icon['path'] != null)
-                                                                <img src="{{ asset($course_students_icon ['path']) }}"/>
-                                                            @else
-                                                                <img src="/theme/assets/images/icons/Group_User.1.svg" alt="">
-                                                            @endif
+                                                <div class="row">
+                                                    <div class="col-9 col-md-auto col-lg-auto">
+                                                        <h3 class="mb-0 title">{{ __('Course Students') }}</h3>
+                                                    </div>
+
+                                                    <div class="col-2 col-md-auto col-lg-auto">
+                                                        <span data-infowrapper="students" class="input-group-addon input-group-append input-icon-wrapper">
+                                                            <span class="btn btn-outline-primary input-icon">
+                                                                @if($course_students_icon != null && $course_students_icon['path'] != null)
+                                                                    <img src="{{ asset($course_students_icon ['path']) }}"/>
+                                                                @else
+                                                                    <img src="/theme/assets/images/icons/Group_User.1.svg" alt="">
+                                                                @endif
+                                                            </span>
                                                         </span>
-                                                    </span>
+                                                    </div>
+
                                                     <input type="hidden" value="{{ old('course_students_icon_path', ($course_students_icon != null && $course_students_icon['path'] != '') ? $course_students_icon['path'] : '' ) }}" id="students_path" name="course[{{'students'}}][{{'icon'}}][{{'path'}}]">
                                                     <input type="hidden" value="{{ old('course_students_icon_alt_text', ($course_students_icon != null && $course_students_icon['alt_text'] != '') ? $course_students_icon['alt_text'] : '' ) }}" id="students_alt_text" name="course[{{'students'}}][{{'icon'}}][{{'alt_text'}}]">
                                                 </div>
@@ -1883,7 +1949,7 @@
                                                                     {{--<label class="form-control-label" for="input-method">{{ __('Visible') }}</label>
                                                                     <div style="margin: auto;" class="form-group">
 
-                                                                    <label class="custom-toggle enroll-toggle">
+                                                                    <label class="custom-toggle enroll-toggle visible">
                                                                         <input type="checkbox"  name="sections[instructors][visible]" @if($visible)) checked @endif>
                                                                         <span class="custom-toggle-slider rounded-circle" data-label-off="no visible" data-label-on="visible"></span>
                                                                     </label>
@@ -2022,7 +2088,7 @@
                                                             <label class="form-control-label" for="input-method">{{ __('Visible') }}</label>
                                                             <div style="margin: auto;" class="form-group">
 
-                                                                <label class="custom-toggle enroll-toggle visible">
+                                                                <label class="custom-toggle enroll-toggle visible visible">
                                                                     <input type="checkbox"  name="sections[instructors][visible]" @if($visible)) checked @endif>
                                                                     <span class="custom-toggle-slider rounded-circle" data-label-off="no visible" data-label-on="visible"></span>
                                                                 </label>
@@ -2057,7 +2123,7 @@
                                                         <label class="form-control-label" for="input-method">{{ __('Visible') }}</label>
                                                         <div style="margin: auto;" class="form-group">
 
-                                                            <label class="custom-toggle enroll-toggle visible">
+                                                            <label class="custom-toggle enroll-toggle visible visible">
                                                                 <input type="checkbox"  name="sections[testimonials][visible]" @if($visible) checked @endif>
                                                                 <span class="custom-toggle-slider rounded-circle" data-label-off="no visible" data-label-on="visible"></span>
                                                             </label>
@@ -2116,43 +2182,43 @@
 
                                     <div class="tab-pane fade" id="emails_fields" role="tabpanel" aria-labelledby="tabs-icons-text-3-tab">
                                         <p class="text-sm mb-0">
-                                                            {{ __("Please submit the full links for for this course's automated emails.") }}
-                                                        </p>
-                                                        <div class="form-group">
-                                                            <div class="form-group{{ $errors->has('fb_group') ? ' has-danger' : '' }}">
-                                                                <label class="form-control-label" for="input-fb_group">{{ __("Course's Facebook group:") }}</label>
-                                                                <input type="text" name="fb_group" id="input-fb_group" class="form-control{{ $errors->has('fb_group') ? ' is-invalid' : '' }}" placeholder='Example: https:/facebook.com/groups/yourgroup' value="{{ old('fb_group', $event->fb_group) }}"autofocus>
+                                            {{ __("Please submit the full links for for this course's automated emails.") }}
+                                        </p>
+                                        <div class="form-group">
+                                            <div class="form-group{{ $errors->has('fb_group') ? ' has-danger' : '' }}">
+                                                <label class="form-control-label" for="input-fb_group">{{ __("Course's Facebook group:") }}</label>
+                                                <input type="text" name="fb_group" id="input-fb_group" class="form-control{{ $errors->has('fb_group') ? ' is-invalid' : '' }}" placeholder='Example: https:/facebook.com/groups/yourgroup' value="{{ old('fb_group', $event->fb_group) }}"autofocus>
 
-                                                                @include('alerts.feedback', ['field' => 'fb_group'])
-                                                            </div>
-                                                        </div>
+                                                @include('alerts.feedback', ['field' => 'fb_group'])
+                                            </div>
+                                        </div>
 
-                                                        <div class="form-group">
-                                                            <div class="form-group{{ $errors->has('evaluate_instructors') ? ' has-danger' : '' }}">
-                                                                <label class="form-control-label" for="input-evaluate_instructors">{{ __("Course's evaluation survey for instructors:") }}</label>
-                                                                <input type="text" name="evaluate_instructors" id="input-evaluate_instructors" class="form-control{{ $errors->has('evaluate_instructors') ? ' is-invalid' : '' }}" placeholder='Example: https:/typeform.com/yoursurvey' value="{{ old('evaluate_instructors', $event->evaluate_instructors) }}"autofocus>
+                                        <div class="form-group">
+                                            <div class="form-group{{ $errors->has('evaluate_instructors') ? ' has-danger' : '' }}">
+                                                <label class="form-control-label" for="input-evaluate_instructors">{{ __("Course's evaluation survey for instructors:") }}</label>
+                                                <input type="text" name="evaluate_instructors" id="input-evaluate_instructors" class="form-control{{ $errors->has('evaluate_instructors') ? ' is-invalid' : '' }}" placeholder='Example: https:/typeform.com/yoursurvey' value="{{ old('evaluate_instructors', $event->evaluate_instructors) }}"autofocus>
 
-                                                                @include('alerts.feedback', ['field' => 'evaluate_instructors'])
-                                                            </div>
-                                                        </div>
+                                                @include('alerts.feedback', ['field' => 'evaluate_instructors'])
+                                            </div>
+                                        </div>
 
-                                                        {{--<div class="form-group">
-                                                            <div class="form-group{{ $errors->has('evaluate_topics') ? ' has-danger' : '' }}">
-                                                                <label class="form-control-label" for="input-evaluate_topics">{{ __("Course's evaluation survey for topics:") }}</label>
-                                                                <input type="text" name="evaluate_topics" id="input-evaluate_topics" class="form-control{{ $errors->has('evaluate_topics') ? ' is-invalid' : '' }}" placeholder='Example: https:/typeform.com/yoursurvey' value="{{ old('evaluate_topics', $event->evaluate_topics) }}"autofocus>
+                                        {{--<div class="form-group">
+                                            <div class="form-group{{ $errors->has('evaluate_topics') ? ' has-danger' : '' }}">
+                                                <label class="form-control-label" for="input-evaluate_topics">{{ __("Course's evaluation survey for topics:") }}</label>
+                                                <input type="text" name="evaluate_topics" id="input-evaluate_topics" class="form-control{{ $errors->has('evaluate_topics') ? ' is-invalid' : '' }}" placeholder='Example: https:/typeform.com/yoursurvey' value="{{ old('evaluate_topics', $event->evaluate_topics) }}"autofocus>
 
-                                                                @include('alerts.feedback', ['field' => 'evaluate_topics'])
-                                                            </div>
-                                                        </div>--}}
+                                                @include('alerts.feedback', ['field' => 'evaluate_topics'])
+                                            </div>
+                                        </div>--}}
 
-                                                        <div class="form-group">
-                                                            <div class="form-group{{ $errors->has('fb_testimonial') ? ' has-danger' : '' }}">
-                                                                <label class="form-control-label" for="input-fb_testimonial">{{ __("Course's testimonial survey:") }}</label>
-                                                                <input type="text" name="fb_testimonial" id="input-fb_testimonial" class="form-control{{ $errors->has('fb_testimonial') ? ' is-invalid' : '' }}" placeholder='Example: https:/typeform.com/yoursurvey' value="{{ old('fb_testimonial', $event->fb_testimonial) }}"autofocus>
+                                        <div class="form-group">
+                                            <div class="form-group{{ $errors->has('fb_testimonial') ? ' has-danger' : '' }}">
+                                                <label class="form-control-label" for="input-fb_testimonial">{{ __("Course's testimonial survey:") }}</label>
+                                                <input type="text" name="fb_testimonial" id="input-fb_testimonial" class="form-control{{ $errors->has('fb_testimonial') ? ' is-invalid' : '' }}" placeholder='Example: https:/typeform.com/yoursurvey' value="{{ old('fb_testimonial', $event->fb_testimonial) }}"autofocus>
 
-                                                                @include('alerts.feedback', ['field' => 'fb_testimonial'])
-                                                            </div>
-                                                        </div>
+                                                @include('alerts.feedback', ['field' => 'fb_testimonial'])
+                                            </div>
+                                        </div>
                                     </div>
 
                                     <div class="tab-pane fade" id="tabs-icons-text-5" role="tabpanel" aria-labelledby="tabs-icons-text-5-tab">
@@ -2206,7 +2272,7 @@
                             </form>
                         </div>
                     </div>
-                </div>
+
             </div>
 
         </div>
@@ -2214,7 +2280,7 @@
     </div>
 
 
-    <div class="row">
+    <div class="">
         <div class="col-md-4">
             <div class="modal fade" id="modal-default" tabindex="-1" role="dialog" aria-labelledby="modal-default" aria-hidden="true">
             <div class="modal-dialog modal- modal-dialog-centered modal-" role="document">
@@ -3393,8 +3459,17 @@ var datePickerOptions = {
     $(document).ready(function(){
 
 
+        function setActiveLabelMobileMenu(){
+            let items = $('#mobile_menu').find('.dropdown-item')
+            $.each(items, function(index, value) {
+                if($(value).hasClass('active') && !$(value).hasClass('download')){
+                    $('#dropdownMenuButton').text($(value).text())
+                }
+            })
+        }
 
         mobileMenu()
+        setActiveLabelMobileMenu()
 
         $(window).on('resize', function(){
             mobileMenu()
@@ -3408,6 +3483,8 @@ var datePickerOptions = {
             })
 
             $(this).addClass('active')
+            setActiveLabelMobileMenu()
+
         })
 
         $(document).on('click', '#tab_inside_tab_mobile .nav-link ', function() {

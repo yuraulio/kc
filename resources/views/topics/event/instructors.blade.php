@@ -1,19 +1,19 @@
 
-<?php 
+<?php
 
     $id = isset($sections['topics'][0]) ? $sections['topics'][0]['id'] : '';
     $tab_title = isset($sections['topics'][0]) ? $sections['topics'][0]['tab_title'] : '' ;
     $title = isset($sections['topics'][0]) ? $sections['topics'][0]['title'] : '' ;
     $visible = isset($sections['topics'][0]) ? $sections['topics'][0]['visible'] : false ;
-                                            
-?> 
+
+?>
 
 <div class="form-group">
 
-   <input hidden name="sections[topics][id]" value="{{$id}}"> 
+   <input hidden name="sections[topics][id]" value="{{$id}}">
 
    <label class="form-control-label" for="input-title">{{ __('Tab Title') }}</label>
-   <input type="text" name="sections[topics][tab_title]" class="form-control" placeholder="{{ __('Tab Title') }}" value="{{ old("sections[topics][tab_title]", $tab_title) }}" autofocus> 
+   <input type="text" name="sections[topics][tab_title]" class="form-control" placeholder="{{ __('Tab Title') }}" value="{{ old("sections[topics][tab_title]", $tab_title) }}" autofocus>
    <label class="form-control-label" for="input-title">{{ __('H2 Title') }}</label>
    <input type="text" name="sections[topics][title]" class="form-control" placeholder="{{ __('H2 Title') }}" value="{{ old("sections[topics][title]", $title) }}" autofocus>
 
@@ -27,7 +27,7 @@
        </label>
 
    </div>
-                                
+
 
 </div>
 
@@ -43,24 +43,27 @@
         @endforeach
     <div class="card">
         <div class="row">
-            <div class="card-header @if($isInclassCourse) col-9 @else col-10 @endif " id="{{$key}}" data-toggle="collapse" data-target="#col_{{$key}}" aria-expanded="false" aria-controls="collapseOne">
+            <div class="card-header col-sm-7 @if($isInclassCourse) col-md-8 @else col-md-10 @endif col-lg-10" id="{{$key}}" data-toggle="collapse" data-target="#col_{{$key}}" aria-expanded="false" aria-controls="collapseOne">
                 <h5 class="mb-0">{{$topic->title}}</h5>
             </div>
 
-            <div class=" @if($isInclassCourse) col-1 @else col-2 @endif  assign-toggle" id="toggle_{{$key}}">
-                <label class="custom-toggle custom-published">
-                    <input data-event-status="<?= ($status == 'active') ? '1' : '0'; ?>" type="checkbox" data-event-id="{{$event['id']}}" data-topic-id="{{$topic['id']}}" checked >
-                    <span class="topic custom-toggle-slider rounded-circle" data-label-off="unassign" data-label-on="assigned" ></span>
-                </label>
+            <div class="col-sm-5 @if($isInclassCourse) col-md-4 @else col-md-2 @endif col-lg-2">
+                <div class="assign-toggle" id="toggle_{{$key}}">
+                    <label class="custom-toggle custom-published">
+                        <input data-event-status="<?= ($status == 'active') ? '1' : '0'; ?>" type="checkbox" data-event-id="{{$event['id']}}" data-topic-id="{{$topic['id']}}" checked >
+                        <span class="topic custom-toggle-slider rounded-circle" data-label-off="unassign" data-label-on="assigned" ></span>
+                    </label>
+                </div>
+                @if($isInclassCourse)
+                <div class="assign-toggle automate-mail" id="toggle_automate_mail_{{$key}}">
+                    <label class="custom-toggle custom-published">
+                        <input type="checkbox" data-email-template="{{$topic['email_template']}}" data-checked="@if(isset($topic['pivot']['automate_mail']) && $topic['pivot']['automate_mail']) $topic['pivot']['automate_mail'] @else 0 @endif" data-event-id="{{$event['id']}}" data-topic-id="{{$topic['id']}}" @if(isset($topic['pivot']['automate_mail']) && $topic['pivot']['automate_mail']) checked @endif>
+                        <span class="automate-mail custom-toggle-slider rounded-circle" data-label-on="no automate mail" data-label-off="automate mail" ></span>
+                    </label>
+                </div>
+                @endif
             </div>
-            @if($isInclassCourse)
-            <div class="col-2 assign-toggle automate-mail" id="toggle_automate_mail_{{$key}}">
-                <label class="custom-toggle custom-published">
-                    <input type="checkbox" data-email-template="{{$topic['email_template']}}" data-checked="@if(isset($topic['pivot']['automate_mail']) && $topic['pivot']['automate_mail']) $topic['pivot']['automate_mail'] @else 0 @endif" data-event-id="{{$event['id']}}" data-topic-id="{{$topic['id']}}" @if(isset($topic['pivot']['automate_mail']) && $topic['pivot']['automate_mail']) checked @endif>
-                    <span class="automate-mail custom-toggle-slider rounded-circle" data-label-on="no automate mail" data-label-off="automate mail" ></span>
-                </label>
-            </div>
-            @endif
+
         </div>
         <div id="col_{{$key}}" class="collapse" aria-labelledby="{{$key}}" data-parent="#accordionExample">
             <div class="card-body">
@@ -162,11 +165,11 @@
         <?php $status=""; ?>
     <div class="card">
         <div class="row">
-            <div class="card-header col-10" id="{{$key}}" data-toggle="collapse" data-target="#col_{{$key}}" aria-expanded="false" aria-controls="collapseOne">
+            <div class="card-header col-sm-8 col-md-9 col-lg-10" id="{{$key}}" data-toggle="collapse" data-target="#col_{{$key}}" aria-expanded="false" aria-controls="collapseOne">
                 <h5 class="mb-0">{{$topic->title}}</h5>
             </div>
 
-            <div class="col-2 assign-toggle" id="toggle_{{$key}}">
+            <div class="col-sm-4 col-md-3 col-lg-2 assign-toggle" id="toggle_{{$key}}">
                 <label class="custom-toggle custom-published">
 
                     <input data-event-status="0" type="checkbox" data-event-id="{{$event['id']}}" data-topic-id="{{$topic['id']}}"  >
@@ -328,7 +331,7 @@ $(document).on('click', '.automate-mail.custom-toggle-slider', function(){
         let event_id = $($(this).parent().find('input')).data('eventId')
         let status = $($(this).parent().find('input')).data('checked')
         let email_template = $($(this).parent().find('input')).data('email-template')
-        
+
         if(status === 1){
             status = 0;
             $($(this).parent().find('input')).data('checked',status)
@@ -348,7 +351,7 @@ $(document).on('click', '.automate-mail.custom-toggle-slider', function(){
             url: "{{ route ('topics.automate.mails.status') }}",
             data:data,
             success: function(data) {
-               
+
             }
         });
 

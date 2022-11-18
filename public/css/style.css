@@ -99,14 +99,14 @@
 #event_edit_form #input-city_id,
 #event_create_form #input-status,
 #event_create_form #input-delivery,
-#event_create_form #input-city_id
+#event_create_form #input-city_id,
+#event_edit_form #input-method
 {
 
     background: url('/theme/assets/img/new/arrows_up_down.svg') no-repeat 95.5%;
     -moz-appearance: none;
     -webkit-appearance: none;
     appearance: none;
-    padding : 4px 22px;
     background-color: #5e72e4;
     background-size: 9px;
 
@@ -545,20 +545,6 @@ li.select2-results__option:empty {
     margin: 0 0.617rem;
 }
 
-#event_edit_form .custom-toggle.yesno .custom-toggle-slider::before,
-#event_create_form .custom-toggle.yesno .custom-toggle-slider::before{
-    left: 7px;
-}
-#event_edit_form .custom-toggle.yesno .custom-toggle-slider,
-#event_create_form .custom-toggle.yesno .custom-toggle-slider{
-    width: 62px;
-}
-
-#event_edit_form .custom-toggle.yesno .custom-toggle-slider::after,
-#event_create_form .custom-toggle.yesno .custom-toggle-slider::after{
-    margin:0 0.517rem;
-}
-
 #event_edit_form .custom-toggle.index-toggle .custom-toggle-slider::after,
 #event_create_form .custom-toggle.index-toggle .custom-toggle-slider::after{
     margin:0 0.817rem;
@@ -580,6 +566,25 @@ li.select2-results__option:empty {
     color: #5e72e4;
     right: auto;
     left: 7px;
+}
+
+
+
+#event_edit_form #tabs-icons-text-4_inside h5{
+    margin: revert;
+    width: 95%;
+}
+
+
+#event_edit_form .table-responsive{overflow: auto !important;}
+
+.custom-toggle.yesno .custom-toggle-slider::after{
+    margin: 0 0.317rem;
+}
+
+#calculate-total-hours-btn{
+    width: 100%;
+    white-space: normal;
 }
 
 
@@ -801,6 +806,15 @@ li.select2-results__option:empty {
     }
     .visible-item{
         margin-top: unset;
+    }
+
+    #event_edit_form #videos .col-4.text-right button{
+        width: 100%;
+        white-space: normal;
+    }
+    #event_edit_form #tabs-icons-text-7_inside .col-4.text-right button{
+        width: 100%;
+        white-space: normal;
     }
 }
 

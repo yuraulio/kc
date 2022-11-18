@@ -1254,7 +1254,9 @@ select#selectCountry {
     text-overflow: ellipsis;
     background-color: #e9e9e9;
     outline: none;
+    background-color: white;
 }
+
 
 select#selectCountry {
     -webkit-appearance: none;
@@ -1566,7 +1568,8 @@ img.linkdein-image-add {
 
 /* End Ticker */
 
-#beForm #mobile_code {
+#beForm #mobile_code
+{
     background: white;
 }
 

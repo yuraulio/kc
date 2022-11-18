@@ -20,23 +20,23 @@
     @include('alerts.errors')
 </div>
 
-<?php 
+<?php
 
    $id = isset($sections['location'][0]) ? $sections['location'][0]['id'] : '';
    $tab_title = isset($sections['location'][0]) ? $sections['location'][0]['tab_title'] : '' ;
    $title = isset($sections['location'][0]) ? $sections['location'][0]['title'] : '' ;
    $visible = isset($sections['location'][0]) ? $sections['location'][0]['visible'] : false ;
 
-?> 
+?>
 
 
 
 <div class="form-group">
 
-   <input hidden name="sections[location][id]" value="{{$id}}"> 
+   <input hidden name="sections[location][id]" value="{{$id}}">
 
    <label class="form-control-label" for="input-title">{{ __('Tab Title') }}</label>
-   <input type="text" name="sections[location][tab_title]" class="form-control" placeholder="{{ __('Tab Title') }}" value="{{ old("sections[location][tab_title]", $tab_title) }}" autofocus> 
+   <input type="text" name="sections[location][tab_title]" class="form-control" placeholder="{{ __('Tab Title') }}" value="{{ old("sections[location][tab_title]", $tab_title) }}" autofocus>
    <label class="form-control-label" for="input-title">{{ __('H2 Title') }}</label>
    <input type="text" name="sections[location][title]" class="form-control" placeholder="{{ __('H2 Title') }}" value="{{ old("sections[location][title]", $title) }}" autofocus>
 
@@ -50,13 +50,13 @@
        </label>
 
    </div>
-                                
+
 
 </div>
 
 
 <div class="table-responsive py-4">
-    <table class="table align-items-center table-flush"  id="datatable-basic20">
+    <table class="table"  id="datatable-basic20">
         <thead class="thead-light">
             <tr>
                 <th scope="col">{{ __('Name') }}</th>
