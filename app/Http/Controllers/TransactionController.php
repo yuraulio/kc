@@ -108,14 +108,14 @@ class TransactionController extends Controller
             $from = date($start_date);
             $to = date($end_date);
 
-            $transactions = Transaction::with('user.statisticGroupByEvent','user.events','user.ticket','subscription','event','event.delivery','event.category')->whereBetween('created_at', [$from,$to])->orderBy('created_at','desc')->get();
+            $transactions = Transaction::with('user.statisticGroupByEvent','user.events_for_user_list','user.ticket','subscription','event','event.delivery','event.category')->whereBetween('created_at', [$from,$to])->orderBy('created_at','desc')->get();
 
         }else{
             //dd('fsad');
-            $transactions = Transaction::with('user.statisticGroupByEvent','user.events','user.ticket','subscription','event','event.delivery','event.category')->where('status', 1)->orderBy('created_at','desc')->get();
+            $transactions = Transaction::with('user.statisticGroupByEvent','user.events_for_user_list','user.ticket','subscription','event','event.delivery','event.category')->where('status', 1)->orderBy('created_at','desc')->get();
 
         }
-
+        
         $earlyCount = 0;
         $data['transactions'] = [];
         foreach($transactions as $transaction){

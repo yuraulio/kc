@@ -64,7 +64,7 @@ class CheckForEvent
         if(!$video_access){
             return redirect('/myaccount');
         }
-
+        
         return $next($request);
     }
 }
