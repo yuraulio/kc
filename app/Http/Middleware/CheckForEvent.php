@@ -42,7 +42,6 @@ class CheckForEvent
         }
 
         $user = Auth::user();
-        
         //$event = $user->events->where('id',$eventId)->first();
         $event = $user->events_for_user_list->where('id',$eventId)->wherePivot('paid',true)->first();
         
