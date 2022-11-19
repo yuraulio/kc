@@ -162,7 +162,7 @@ class TransactionController extends Controller
                     $videos = isset($statistic[$transaction->event->first()->id]) ?
                     $statistic[$transaction->event->first()->id]->first()->pivot : null;
 
-                    $events = $u->events->groupBy('id');
+                    $events = $u->events_for_user_list->groupBy('id');
                     $expiration = isset($events[$transaction->event->first()->id]) ? $events[$transaction->event->first()->id]->first()->pivot->expiration : null;
                     $paymentMethodId = isset($events[$transaction->event->first()->id]) ? $events[$transaction->event->first()->id]->first()->pivot->payment_method : 0;
                     $videos = isset($videos) ? json_decode($videos->videos,true) : null;
@@ -206,11 +206,11 @@ class TransactionController extends Controller
             $from = date($start_date);
             $to = date($end_date);
 
-            $transactions = Transaction::with('user.statisticGroupByEvent','user.events','user.ticket','subscription','event','event.delivery','event.category','invoice')->whereBetween('created_at', [$from,$to])->orderBy('created_at','desc')->get();
+            $transactions = Transaction::with('user.statisticGroupByEvent','user.events_for_user_list','user.ticket','subscription','event','event.delivery','event.category','invoice')->whereBetween('created_at', [$from,$to])->orderBy('created_at','desc')->get();
 
         }else{
             //dd('fsad');
-            $transactions = Transaction::with('user.statisticGroupByEvent','user.events','user.ticket','subscription','event','event.delivery','event.category','invoice')->where('status', 1)->orderBy('created_at','desc')->get();
+            $transactions = Transaction::with('user.statisticGroupByEvent','user.events_for_user_list','user.ticket','subscription','event','event.delivery','event.category','invoice')->where('status', 1)->orderBy('created_at','desc')->get();
 
         }
 
@@ -262,7 +262,7 @@ class TransactionController extends Controller
                     $videos = isset($statistic[$transaction->event->first()->id]) ?
                     $statistic[$transaction->event->first()->id]->first()->pivot : null;
 
-                    $events = $u->events->groupBy('id');
+                    $events = $u->events_for_user_list->groupBy('id');
                     $expiration = isset($events[$transaction->event->first()->id]) ? $events[$transaction->event->first()->id]->first()->pivot->expiration : null;
                     $paymentMethodId = isset($events[$transaction->event->first()->id]) ? $events[$transaction->event->first()->id]->first()->pivot->payment_method : 0;
                     $videos = isset($videos) ? json_decode($videos->videos,true) : null;
