@@ -1188,7 +1188,7 @@ table.dataTable tbody td.selected a {
 
   ul {
     list-style: none;
-    min-width: 260px;
+    /* min-width: 260px; */
     padding: 0px;
     margin: 0px;
   }

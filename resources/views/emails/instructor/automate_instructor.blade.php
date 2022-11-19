@@ -1,5 +1,6 @@
-@extends('emails.instructor.layouts.master')
+@extends('emails.user.layouts.master')
 
+@section('email_body')
       <tr>
         <td align="center" class="r0-c">
           <table cellspacing="0" cellpadding="0" border="0" role="presentation" width="600" class="r1-o" style="table-layout: fixed; width: 600px;">
@@ -220,111 +221,6 @@
           </table>
         </td>
       </tr>
-      <tr>
-        <td align="" class="r16-c">
-          <table cellspacing="0" cellpadding="0" border="0" role="presentation" width="100%" class="r6-o" style="table-layout: fixed; width: 100%;">
-            <!-- -->
-            <tr>
-              <td valign="top" class="r17-i" style="background-color: #eff2f7;">
-                <table width="100%" cellspacing="0" cellpadding="0" border="0" role="presentation">
-                  <tr>
-                    <td class="r0-c" align="center">
-                      <table cellspacing="0" cellpadding="0" border="0" role="presentation" width="600" class="r1-o" style="table-layout: fixed; width: 600px;">
-                        <!-- -->
-                        <tr class="nl2go-responsive-hide">
-                          <td height="20" style="font-size: 20px; line-height: 20px;">­</td>
-                        </tr>
-                        <tr>
-                          <td class="r18-i">
-                            <table width="100%" cellspacing="0" cellpadding="0" border="0" role="presentation">
-                              <tr>
-                                <th width="100%" valign="top" class="r5-c" style="font-weight: normal;">
-                                  <table cellspacing="0" cellpadding="0" border="0" role="presentation" width="100%" class="r6-o" style="table-layout: fixed; width: 100%;">
-                                    <!-- -->
-                                    <tr>
-                                      <td class="nl2go-responsive-hide" width="15" style="font-size: 0px; line-height: 1px;">­ </td>
-                                      <td valign="top" class="r7-i">
-                                        <table width="100%" cellspacing="0" cellpadding="0" border="0" role="presentation">
-                                          <tr>
-                                            <td class="r12-c" align="left">
-                                              <table cellspacing="0" cellpadding="0" border="0" role="presentation" width="100%" class="r13-o" style="table-layout: fixed; width: 100%;">
-                                                <tr class="nl2go-responsive-hide">
-                                                  <td height="15" style="font-size: 15px; line-height: 15px;">­</td>
-                                                </tr>
-                                                <tr>
-                                                  <td align="center" valign="top" class="r19-i nl2go-default-textstyle" style="font-family: arial,helvetica,sans-serif; color: #3b3f44; font-size: 18px; line-height: 1.5; text-align: center;">
-                                                    <div>
-                                                      <p style="margin: 0;">
-                                                        <strong>Knowcrunch Inc.</strong>
-                                                      </p>
-                                                    </div>
-                                                  </td>
-                                                </tr>
-                                              </table>
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <td class="r12-c" align="left">
-                                              <table cellspacing="0" cellpadding="0" border="0" role="presentation" width="100%" class="r13-o" style="table-layout: fixed; width: 100%;">
-                                                <tr>
-                                                  <td align="center" valign="top" class="r20-i nl2go-default-textstyle" style="font-family: arial,helvetica,sans-serif; color: #3b3f44; font-size: 18px; line-height: 1.5; text-align: center;">
-                                                    <div>
-                                                      <p style="margin: 0; font-size: 14px;">2035 Sunset Lake Road, Suite B2, 19702, Newark, Delaware, USA</p>
-                                                    </div>
-                                                  </td>
-                                                </tr>
-                                              </table>
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <td class="r21-c" align="center">
-                                              <table cellspacing="0" cellpadding="0" border="0" role="presentation" width="100%" class="r3-o" style="table-layout: fixed; width: 100%;">
-                                                <tr>
-                                                  <td valign="top" class="r22-i">
-                                                    <table width="100%" cellspacing="0" cellpadding="0" border="0" role="presentation">
-                                                      <tr>
-                                                        <td class="r23-c" align="center">
-                                                          <table cellspacing="0" cellpadding="0" border="0" role="presentation" width="129" class="r24-o" style="table-layout: fixed;">
-                                                            <tr>
-                                                              <td height="48" class="" style="font-size: 0px; line-height: 0px;">
-                                                                <img src="https://img.mailinblue.com/new_images/rnb/en.png" width="129" border="0" class="" style="display: block; width: 100%;">
-                                                              </td>
-                                                            </tr>
-                                                          </table>
-                                                        </td>
-                                                      </tr>
-                                                    </table>
-                                                  </td>
-                                                </tr>
-                                                <tr class="nl2go-responsive-hide">
-                                                  <td height="15" style="font-size: 15px; line-height: 15px;">­</td>
-                                                </tr>
-                                              </table>
-                                            </td>
-                                          </tr>
-                                        </table>
-                                      </td>
-                                      <td class="nl2go-responsive-hide" width="15" style="font-size: 0px; line-height: 1px;">­ </td>
-                                    </tr>
-                                  </table>
-                                </th>
-                              </tr>
-                            </table>
-                          </td>
-                        </tr>
-                        <tr class="nl2go-responsive-hide">
-                          <td height="20" style="font-size: 20px; line-height: 20px;">­</td>
-                        </tr>
-                      </table>
-                    </td>
-                  </tr>
-                </table>
-              </td>
-            </tr>
-          </table>
-        </td>
-      </tr>
-    </table>
-  </body>
-</html>
 
+
+@stop

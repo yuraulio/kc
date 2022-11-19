@@ -35,6 +35,32 @@
     <script src="{{asset('js/blog.js')}}"></script>
 @endsection
 
+@if(isset($renderFbChat) && $renderFbChat)
+@section('fbchat')
+        <div id="fb-root"></div>
+        <script>
+            window.fbAsyncInit = function() {
+            FB.init({
+                xfbml            : true,
+                version          : 'v5.0'
+            });
+            };
+            (function(d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) return;
+            js = d.createElement(s); js.id = id;
+            js.src = 'https://connect.facebook.net/en_US/sdk/xfbml.customerchat.js';
+            fjs.parentNode.insertBefore(js, fjs);
+            }(document, 'script', 'facebook-jssdk'));
+        </script>
+        <!-- Your customer chat code -->
+        <div class="fb-customerchat"
+        attribution=install_email
+        page_id="486868751386439">
+        </div>
+@endsection
+@endif
+
 
 @push('components-scripts')
 
@@ -58,28 +84,28 @@
            dataLayer.push({ ecommerce: null });
            let actionField = {};
            let products = {};
-        
+
            //dataLayer.push({"event": 'purchase'})
-        
+
            @foreach($thankyouData['ecommerce']['actionField'] as $key => $ti)
 
               @if($ti != '')
                  actionField["{{$key}}"] =  $.parseHTML("{{$ti}}")[0].data
-        
+
               @endif
-        
+
            @endforeach
-        
+
            @foreach($thankyouData['ecommerce']['products'] as $key => $ti)
               @if($ti != '')
                  products["{{$key}}"] = $.parseHTML("{{$ti}}")[0].data
               @endif
 
            @endforeach
-        
+
            //dataLayer.push({"ecommerce": ecommerce})
-        
-        
+
+
            dataLayer.push({
           'event': 'purchase',
           'ecommerce': {
@@ -102,28 +128,30 @@
           $(document).ready(function(){
           let gt3 = {};
           let products = {};
-        
+
           @foreach($thankyouData['gt3']['gt3'] as $key => $ti)
-        
+
             @if($ti != '')
                 gt3["{{$key}}"] = "{{$ti}}"
-        
+
              @endif
-        
+
           @endforeach
-        
+
           @foreach($thankyouData['gt3']['transactionProducts'] as $key => $ti)
-        
+
             @if($ti != '')
                 products["{{$key}}"] = "{{$ti}}"
-        
+
              @endif
-        
+
           @endforeach
-        
+
           gt3['transactionProducts'] = products;
           dataLayer.push(gt3);
           })
        </script>--}}
     @endif
+
+
 @endpush

@@ -87,14 +87,18 @@
                             <!-- HOURS SECTION -->
                             <div class="row">
                                 <div class="form-group col-12">
-                                    <div class="input-group">
-                                        <h3 class="mb-0 title">{{ __('Course Hours') }}</h3>
+                                    <div class="row">
+                                        <div class="col-9 col-md-auto col-lg-auto">
+                                            <h3 class="mb-0 title">{{ __('Course Hours') }} (course_hours)</h3>
+                                        </div>
 
-                                        <span data-infowrapper="hours" class="input-group-addon input-group-append input-icon-wrapper">
-                                            <span class="btn btn-outline-primary input-icon">
-                                                <img src="/theme/assets/images/icons/Start-Finish.svg"/>
+                                        <div class="col-2 col-md-auto col-lg-auto">
+                                            <span data-infowrapper="hours" class="input-group-addon input-group-append input-icon-wrapper">
+                                                <span class="btn btn-outline-primary input-icon">
+                                                    <img src="/theme/assets/images/icons/Start-Finish.svg"/>
+                                                </span>
                                             </span>
-                                        </span>
+                                        </div>
                                         <input type="hidden" value="{{ old('hours_icon_path')}}" id="hours_path" name="course[{{'hours'}}][{{'icon'}}][{{'path'}}]">
                                         <input type="hidden" value="{{ old('hours_icon_alt_text') }}" id="hours_alt_text" name="course[{{'hours'}}][{{'icon'}}][{{'alt_text'}}]">
                                     </div>
@@ -182,14 +186,18 @@
 
                                 <div class="form-group col-12">
 
-                                    <div class="input-group">
-                                    <h3 class="mb-0 title">{{ __('Course Language') }}</h3>
+                                    <div class="row">
 
-                                        <span data-infowrapper="language" class="input-group-addon input-group-append input-icon-wrapper">
-                                            <span class="btn btn-outline-primary input-icon">
-                                                <img src="/theme/assets/images/icons/Language.svg" alt="">
+                                        <div class="col-9 col-md-auto col-lg-auto">
+                                            <h3 class="mb-0 title">{{ __('Course Language') }} (course_language)</h3>
+                                        </div>
+                                        <div class="col-2 col-md-auto col-lg-auto">
+                                            <span data-infowrapper="language" class="input-group-addon input-group-append input-icon-wrapper">
+                                                <span class="btn btn-outline-primary input-icon">
+                                                    <img src="/theme/assets/images/icons/Language.svg" alt="">
+                                                </span>
                                             </span>
-                                        </span>
+                                        </div>
                                         <input type="hidden" value="{{ old('language_icon_path') }}" id="language_path" name="course[{{'language'}}][{{'icon'}}][{{'path'}}]">
                                         <input type="hidden" value="{{ old('language_icon_alt_text') }}" id="language_alt_text" name="course[{{'language'}}][{{'icon'}}][{{'alt_text'}}]">
                                     </div>
@@ -302,7 +310,7 @@
 
                                 <div class="col-12 delivery_child_wrapper d-none">
                                     <div class="row delivery_city_wrapper">
-                                        <div style="display:flex;" class="col-9 col-sm-12 col-md-6 col-lg-4 form-group{{ $errors->has('city_id') ? ' has-danger' : '' }} ">
+                                        <div class="col-9 col-md-6 col-lg-4 form-group{{ $errors->has('city_id') ? ' has-danger' : '' }} ">
                                             <select name="city_id" id="input-city_id" class="form-control" placeholder="{{ __('Please select the city of this course') }}" >
                                                 <option selected disabled value="">Please select the city of this course</option>
                                                 @foreach ($cities as $city)
@@ -313,12 +321,16 @@
                                             </select>
 
                                         </div>
-                                        <span class="input-icon-wrapper-city col-2" data-infowrapper="inclass_city">
-                                            <span class="btn btn-outline-primary input-icon">
-                                                <img src="/theme/assets/images/icons/marker.svg" alt="">
-                                            </span>
 
-                                        </span>
+
+                                        <div class="col-2 col-md-auto col-lg-auto">
+                                            <span class="input-icon-wrapper-city " data-infowrapper="inclass_city">
+                                                <span class="btn btn-outline-primary input-icon">
+                                                    <img src="/theme/assets/images/icons/marker.svg" alt="">
+                                                </span>
+
+                                            </span>
+                                        </div>
 
 
                                         <input type="hidden" value="{{ old('inclass_city_icon_path') }}" id="inclass_city_path" name="course[{{'delivery'}}][{{'inclass'}}][{{'city'}}][{{'icon'}}][{{'path'}}]">
@@ -583,7 +595,7 @@
 
                                         <div class="form-group col-12">
                                             <span class="toggle-btn-inline-text">Would you like to let students access an e-learning course for free?</span>
-                                            <label id="access-student-toggle" class="custom-toggle yesno">
+                                            <label id="access-student-toggle" class="custom-toggle enroll-toggle visible">
                                                 <input id="access-student" name="course[{{'free_courses'}}][{{'enabled'}}]" type="checkbox">
                                                 <span class="custom-toggle-slider rounded-circle" data-label-off="Off" data-label-on="On"></span>
                                             </label>
@@ -778,14 +790,20 @@
 
                                 <div class="form-group col-12">
 
-                                    <div class="input-group">
-                                        <h3 class="mb-0 title" for="input-hours">{{ __('Course Partners') }}</h3>
+                                    <div class="row">
 
-                                        <span data-infowrapper="partner" class="input-group-addon input-group-append input-icon-wrapper">
-                                            <span class="btn btn-outline-primary input-icon">
-                                                <span class="fa fa-calendar"></span>
+                                        <div class="col-9 col-md-auto col-lg-auto">
+                                            <h3 class="mb-0 title" for="input-hours">{{ __('Course Partners') }} (course_partner)</h3>
+                                        </div>
+
+                                        <div class="col-2 col-md-auto col-lg-auto">
+                                            <span data-infowrapper="partner" class="input-group-addon input-group-append input-icon-wrapper">
+                                                <span class="btn btn-outline-primary input-icon">
+                                                    <span class="fa fa-calendar"></span>
+                                                </span>
                                             </span>
-                                        </span>
+                                        </div>
+
                                         <input type="hidden" value="{{ old('course_partner_icon_path') }}" id="partner_path" name="course[{{'partner'}}][{{'icon'}}][{{'path'}}]">
                                         <input type="hidden" value="{{ old('course_partner_icon_alt_text') }}" id="partner_alt_text" name="course[{{'partner'}}][{{'icon'}}][{{'alt_text'}}]">
                                     </div>
@@ -794,7 +812,7 @@
 
                                 <div class="form-group col-12">
                                     <span class="toggle-btn-inline-text">Does this course have supporters/partners?</span>
-                                    <label class="custom-toggle yesno">
+                                    <label class="custom-toggle enroll-toggle visible">
                                         <input id="partner-toggle" name="partner_enabled" type="checkbox" >
                                         <span class="custom-toggle-slider rounded-circle" data-label-off="Off" data-label-on="On"></span>
                                     </label>
@@ -819,14 +837,18 @@
 
                                 <div class="form-group col-12">
 
-                                    <div class="input-group">
-                                        <h3 class="mb-0 title" for="input-hours">{{ __('Course Files') }}</h3>
+                                    <div class="row">
+                                        <div class="col-9 col-md-auto col-lg-auto">
+                                            <h3 class="mb-0 title" for="input-hours">{{ __('Course Files') }}</h3>
+                                        </div>
 
-                                        <span data-infowrapper="files" class="input-group-addon input-group-append input-icon-wrapper">
-                                            <span class="btn btn-outline-primary input-icon">
-                                            <img src="/theme/assets/images/icons/Access-Files.svg" alt="">
+                                        <div class="col-2 col-md-auto col-lg-auto">
+                                            <span data-infowrapper="files" class="input-group-addon input-group-append input-icon-wrapper">
+                                                <span class="btn btn-outline-primary input-icon">
+                                                <img src="/theme/assets/images/icons/Access-Files.svg" alt="">
+                                                </span>
                                             </span>
-                                        </span>
+                                        </div>
                                         <input type="hidden" value="" id="files_path" name="course[{{'files'}}][{{'icon'}}][{{'path'}}]">
                                         <input type="hidden" value="" id="files_alt_text" name="course[{{'files'}}][{{'icon'}}][{{'alt_text'}}]">
                                     </div>
@@ -858,16 +880,21 @@
 
                                 <div class="form-group col-12">
 
-                                    <div class="input-group">
-                                        <h3 class="mb-0 title" >{{ __('Course Manager') }}</h3>
+                                    <div class="row">
 
-                                        <span data-infowrapper="manager" class="input-group-addon input-group-append input-icon-wrapper">
-                                            <span class="btn btn-outline-primary input-icon">
+                                        <div class="col-9 col-md-auto col-lg-auto">
+                                            <h3 class="mb-0 title" >{{ __('Course Manager') }} (course_manager)</h3>
+                                        </div>
 
-                                                <span class="fa fa-calendar"></span>
+                                        <div class="col-2 col-md-auto col-lg-auto">
+                                            <span data-infowrapper="manager" class="input-group-addon input-group-append input-icon-wrapper">
+                                                <span class="btn btn-outline-primary input-icon">
 
+                                                    <span class="fa fa-calendar"></span>
+
+                                                </span>
                                             </span>
-                                        </span>
+                                        </div>
                                         <input type="hidden" value="{{ old('course_manager_icon_path') }}" id="manager_path" name="course[{{'manager'}}][{{'icon'}}][{{'path'}}]">
                                         <input type="hidden" value="{{ old('course_manager_icon_alt_text') }}" id="manager_alt_text" name="course[{{'manager'}}][{{'icon'}}][{{'alt_text'}}]">
                                     </div>
@@ -876,7 +903,7 @@
 
                                 <div class="form-group col-12">
                                     <span class="toggle-btn-inline-text">Does this course have a visible manager?</span>
-                                    <label class="custom-toggle yesno">
+                                    <label class="custom-toggle enroll-toggle visible">
                                         <input id="manager-toggle" name="manager-enabled" type="checkbox">
                                         <span class="custom-toggle-slider rounded-circle" data-label-off="Off" data-label-on="On"></span>
                                     </label>
@@ -911,21 +938,26 @@
 
                                 <div class="form-group col-12">
 
-                                    <div class="input-group">
-                                        <h3 class="mb-0 title">{{ __('Course Awards & Badges') }}</h3>
+                                    <div class="row">
 
-                                        <span data-infowrapper="awards" class="input-group-addon input-group-append input-icon-wrapper">
-                                            <span class="btn btn-outline-primary input-icon">
-                                                <span class="fa fa-calendar"></span>
+                                        <div class="col-9 col-md-auto col-lg-auto">
+                                            <h3 class="mb-0 title">{{ __('Course Awards & Badges') }} (course_awards)</h3>
+                                        </div>
+
+                                        <div class="col-2 col-md-auto col-lg-auto">
+                                            <span data-infowrapper="awards" class="input-group-addon input-group-append input-icon-wrapper">
+                                                <span class="btn btn-outline-primary input-icon">
+                                                    <span class="fa fa-calendar"></span>
+                                                </span>
                                             </span>
-                                        </span>
+                                        </div>
                                         <input type="hidden" value="{{ old('course_awards_icon_path') }}" id="awards_path" name="course[{{'awards'}}][{{'icon'}}][{{'path'}}]">
                                         <input type="hidden" value="{{ old('course_awards_icon_alt_text') }}" id="awards_alt_text" name="course[{{'awards'}}][{{'icon'}}][{{'alt_text'}}]">
                                     </div>
                                 </div>
                                 <div class="form-group col-12">
                                     <span class="toggle-btn-inline-text">Does this course have some award?</span>
-                                    <label class="custom-toggle yesno">
+                                    <label class="custom-toggle enroll-toggle visible">
                                         <input id="award-toggle" type="checkbox">
                                         <span class="custom-toggle-slider rounded-circle" data-label-off="Off" data-label-on="On"></span>
                                     </label>
@@ -943,14 +975,18 @@
 
                                 <div class="form-group col-12">
 
-                                    <div class="input-group">
-                                        <h3 class="mb-0 title">{{ __('Course Certification') }}</h3>
+                                    <div class="row">
+                                        <div class="col-9 col-md-auto col-lg-auto">
+                                            <h3 class="mb-0 title">{{ __('Course Certification') }}</h3>
+                                        </div>
 
-                                        <span data-infowrapper="certificate" class="input-group-addon input-group-append input-icon-wrapper">
-                                            <span class="btn btn-outline-primary input-icon">
-                                                <img class="replace-with-svg" width="20" src="/theme/assets/images/icons/Level.svg" alt="">
+                                        <div class="col-2 col-md-auto col-lg-auto">
+                                            <span data-infowrapper="certificate" class="input-group-addon input-group-append input-icon-wrapper">
+                                                <span class="btn btn-outline-primary input-icon">
+                                                    <img class="replace-with-svg" width="20" src="/theme/assets/images/icons/Level.svg" alt="">
+                                                </span>
                                             </span>
-                                        </span>
+                                        </div>
                                         <input type="hidden" value="{{ old('course_certification_icon_path') }}" id="certificate_path" name="course[{{'certificate'}}][{{'icon'}}][{{'path'}}]">
                                         <input type="hidden" value="{{ old('course_certification_icon_alt_text') }}" id="certificate_alt_text" name="course[{{'certificate'}}][{{'icon'}}][{{'alt_text'}}]">
                                     </div>
@@ -959,7 +995,7 @@
 
                                 <div class="form-group col-12">
                                     <span class="toggle-btn-inline-text">Does this course offer a certification? </span>
-                                    <label class="custom-toggle yesno">
+                                    <label class="custom-toggle enroll-toggle visible">
                                         <input name="course[{{'certificate'}}][{{'certification'}}]" id="certification-toggle" type="checkbox">
                                         <span class="custom-toggle-slider rounded-circle" data-label-off="Off" data-label-on="On"></span>
                                     </label>
@@ -1088,13 +1124,17 @@
                             <div class="row course-student-wrapper">
                                 <div class="form-group col-12">
 
-                                    <div class="input-group">
-                                        <h3 class="mb-0 title">{{ __('Course Students') }}</h3>
-                                        <span data-infowrapper="students" class="input-group-addon input-group-append input-icon-wrapper">
-                                            <span class="btn btn-outline-primary input-icon">
-                                                <img src="/theme/assets/images/icons/Group_User.1.svg" alt="">
+                                    <div class="row">
+                                        <div class="col-9 col-md-auto col-lg-auto">
+                                            <h3 class="mb-0 title">{{ __('Course Students') }}</h3>
+                                        </div>
+                                        <div class="col-2 col-md-auto col-lg-auto">
+                                            <span data-infowrapper="students" class="input-group-addon input-group-append input-icon-wrapper">
+                                                <span class="btn btn-outline-primary input-icon">
+                                                    <img src="/theme/assets/images/icons/Group_User.1.svg" alt="">
+                                                </span>
                                             </span>
-                                        </span>
+                                        </div>
                                         <input type="hidden" value="{{ old('course_students_icon_path') }}" id="students_path" name="course[{{'students'}}][{{'icon'}}][{{'path'}}]">
                                         <input type="hidden" value="{{ old('course_students_icon_alt_text') }}" id="students_alt_text" name="course[{{'students'}}][{{'icon'}}][{{'alt_text'}}]">
                                     </div>

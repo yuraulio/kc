@@ -47,7 +47,7 @@
 
                     @if($isInclassCourse)
                         <td> <button class="absences btn btn-info btn-sm" style="margin-top:10px;" type="button"
-                                                data-user_id="{{$user['id']}}" data-event_id="{{$event->id}}" 
+                                                data-user_id="{{$user['id']}}" data-event_id="{{$event->id}}"
                                                 data-toggle="modal" data-target="#absences-info">Absences</button> </td>
                     @endif
 
@@ -92,7 +92,9 @@
             });
 
             table.buttons().container()
-        .appendTo('#datatable-basic-students1_wrapper .col-md-6:eq(0)');
+                .appendTo('#datatable-basic-students1_wrapper .col-md-6:eq(0)');
+
+            $('#datatable-basic-students1').parent().addClass('table-responsive')
 
         } );
     </script>
