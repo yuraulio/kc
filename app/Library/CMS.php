@@ -107,7 +107,7 @@ class CMS
         $data['title'] = trim($data['title']);
 
         foreach ($instructor['eventInstructorPage'] as $key => $event) {
-            if (($event['status'] == 0 || $event['status'] == 2) && $event->is_inclass_course()) {
+            if (($event['status'] == 0 || $event['status'] == 2) && $event->is_inclass_course() && $event->published) {
                 foreach ($event['lessons'] as $lesson) {
                     if ($lesson->pivot['date'] != '') {
                         $date = date("Y/m/d", strtotime($lesson->pivot['date']));
@@ -125,6 +125,9 @@ class CMS
         $category = array();
 
         foreach ($instructor['eventInstructorPage'] as $key => $event) {
+            if(!$event->published){
+                continue;
+            }
             if ($key == 0) {
                 $category[$event['id']] = $event;
             } else {
@@ -142,6 +145,10 @@ class CMS
             } else {
                 $find = false;
                 foreach ($new_events as $event) {
+                    
+                    if(!$event->published){
+                        continue;
+                    }
                     if ($event['title'] == $category['title']) {
                         $find = true;
                     }
