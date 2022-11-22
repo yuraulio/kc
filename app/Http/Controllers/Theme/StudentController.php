@@ -123,6 +123,9 @@ class StudentController extends Controller
         $data['eventss'] = [];
         foreach($data['user']['events'] as $key => $event){
 
+            if(!$event->published){
+                continue;
+            }
             $eventInfo = $event->event_info();
 
             //if elearning assign progress for this event
