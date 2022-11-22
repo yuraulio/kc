@@ -195,30 +195,34 @@ class UserController extends Controller
         return view('users.create', ['roles' => $model->get(['id', 'name'])]);
     }
 
-    public function assignEventToUserCreate(Request $request)
+    public function assignEventToUserCreate(Request $request, $sendInvoice = true)
     {
 
-       $user_id = $request->user_id;
-       $event_id = $request->event_id;
-       $ticket_id = $request->ticket_id;
+        $user_id = $request->user_id;
+        $event_id = $request->event_id;
+        $ticket_id = $request->ticket_id;
+        $custom_price = isset($request->custom_price) ? $request->custom_price : null;
 
-       $user = User::find($user_id);
-       //dd($user);
-       $user->ticket()->attach($ticket_id, ['event_id' => $event_id]);
+        $user = User::find($user_id);
+        //dd($user);
+        $user->ticket()->attach($ticket_id, ['event_id' => $event_id]);
 
-       $data['event'] = Event::with('delivery', 'ticket')->find($event_id);
-       //dd($data['event']['ticket']);
-       foreach($data['event']->ticket as $ticket){
-           //dd($ticket);
-           if($ticket->pivot->ticket_id == $ticket_id)
-           {
-               $data['event']['ticket_title'] = $ticket['title'];
+        $data['event'] = Event::with('delivery', 'ticket')->find($event_id);
+        //dd($data['event']['ticket']);
+        foreach($data['event']->ticket as $ticket){
+            //dd($ticket);
+            if($ticket->pivot->ticket_id == $ticket_id)
+            {
+                $data['event']['ticket_title'] = $ticket['title'];
                 $quantity = $ticket->pivot->quantity - 1;
-           }
+
+                if($quantity < 0)
+                    $quantity = 0;
+            }
 
 
-       }
-       $extra_month = $data['event']['expiration'];
+        }
+        $extra_month = $data['event']['expiration'];
 
         $ticket = Ticket::find($ticket_id);
 
@@ -257,8 +261,8 @@ class UserController extends Controller
        $transaction->ip_address = \Request::ip();
        $transaction->type = $ticket['type'];
        $transaction->billing_details = json_encode($billingDetails);
-       $transaction->total_amount = $price;
-       $transaction->amount = $price;
+       $transaction->total_amount = ($custom_price != null) ? $custom_price : $price;;
+       $transaction->amount = ($custom_price != null) ? $custom_price : $price;;
        $transaction->status = 1;
        $transaction->trial = 0;
 
@@ -266,9 +270,9 @@ class UserController extends Controller
            "rowId" => "manualtransaction",
            //"id" => 'coupon code ' . $content->id,
            "name" => $data['event']['title'],"qty" => "1",
-           "price" => $price,
+           "price" => ($custom_price != null) ? $custom_price : $price,
            //"options" => ["type" => "9","event"=> $content->id],
-           "tax" => 0,"subtotal" => $price
+           "tax" => 0,"subtotal" => ($custom_price != null) ? $custom_price : $price
            ]];
 
        $status_history[] = [
@@ -311,10 +315,11 @@ class UserController extends Controller
             $paymentMethodId = $event->paymentMethod->first() ? $event->paymentMethod->first()->id : -1;
 
             $elearningInvoice = null;
-            if($price > 0) {
+            if($price > 0 || $custom_price != null) {
                 $elearningInvoice = new Invoice;
                 $elearningInvoice->name = isset($billingDetails['billname']) ? $billingDetails['billname'] : '';
-                $elearningInvoice->amount = $price;
+                // $elearningInvoice->amount = $price;
+                $elearningInvoice->amount = ($custom_price != null) ? $custom_price : $price;
                 $elearningInvoice->invoice = generate_invoice_number($paymentMethodId);
                 $elearningInvoice->date = date('Y-m-d');//Carbon::today()->toDateString();
                 $elearningInvoice->instalments_remaining = 1;
@@ -331,7 +336,9 @@ class UserController extends Controller
 
             $pdf = $elearningInvoice ? $elearningInvoice->generateInvoice() : null;
 
-            $this->sendEmail($elearningInvoice,$pdf,0,$transaction);
+            if($sendInvoice)
+                $this->sendEmail($elearningInvoice,$pdf,0,$transaction);
+
             //$this->sendEmails($transaction,$event,$response_data);
 
         }

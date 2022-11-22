@@ -185,17 +185,17 @@ class User extends Authenticatable
     }
 
     /*public function events()
-    {   
+    {
         return $this->belongsToMany(Event::class, 'event_user')->withPivot('paid', 'expiration', 'comment', 'payment_method')
             ->with('summary1', 'category', 'slugable', 'dropbox')->wherePivot('paid', true);
     }*/
 
     public function events()
-    {   
+    {
         return $this->belongsToMany(Event::class, 'event_user')->withPivot('paid', 'expiration', 'comment', 'payment_method')
-            ->with(['summary1', 
-            'category', 
-            'slugable', 
+            ->with(['summary1',
+            'category',
+            'slugable',
             'dropbox',
             'lessons',
             'topic',
@@ -752,7 +752,7 @@ class User extends Authenticatable
         foreach ($eventTopics as $key => $topic) {
             foreach ($topic['lessons'] as $key1 => $lesson) {
                 // if(isset($lesson) && $lesson['vimeo_video'] != null){
-            
+
                 $vimeo_id = str_replace('https://vimeo.com/', '', $lesson['vimeo_video']);
                 $oldVideos[] = $vimeo_id;
                 if ($firstTime) {
@@ -790,7 +790,7 @@ class User extends Authenticatable
 
     public function updateUserStatistic($event, $statistics, $eventTopics = null)
     {
-        
+
 
         if (!$this->statistic()->wherePivot('event_id', $event['id'])->first()) {
             $this->statistic()->attach($event['id'], $this->getStatistsicsUpdate($event, $statistics,$eventTopics));
@@ -898,4 +898,6 @@ class User extends Authenticatable
     {
         return $this->hasMany(WaitingList::class);
     }
+
+
 }

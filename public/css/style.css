@@ -134,6 +134,14 @@
     margin-top: 1rem;
 }
 
+.error-msg p{
+    color: red;
+}
+
+#filter-student-btn{
+    margin-bottom: 2rem;
+}
+
 
 .input-icon{
     border: none;

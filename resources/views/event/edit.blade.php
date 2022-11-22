@@ -161,7 +161,6 @@
                                 <div class="save_event_btn" >@include('admin.save.save',['event' => isset($event) ? $event : null])</div>
                                 <div class="preview_event_btn">@include('admin.preview.preview',['slug' => isset($slug) ? $slug : null])</div>
                             </div>
-
                             <form id="event_edit_form" method="POST" action="{{ route('events.update', $event) }}" autocomplete="off"
                                         enctype="multipart/form-data">
                                                 @csrf
