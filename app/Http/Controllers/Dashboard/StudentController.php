@@ -112,7 +112,7 @@ class StudentController extends Controller
         'mobile'        => 'nullable|digits:10',
         'telephone'     => 'nullable|numeric|size:10',
         'address'       => 'nullable|min:3',
-        'address_num'   => 'nullable|digits:9',
+        'address_num'   => 'nullable',
         'country_code'  => 'nullable|digits:2',
         'ticket_title'  => 'required|min:3',
         'ticket_price'  => 'nullable|digits_between:-10000000,10000000',
@@ -127,7 +127,7 @@ class StudentController extends Controller
         'billaddress'   =>  'nullable|string|min:3',
         'billaddressnum'=>  'nullable|numeric',
         'billcity'      =>  'nullable|string|min:3',
-        'billcountry'   =>  'nullable|string|min:3',
+        'billcountry'   =>  'nullable|string',
         'billstate'     =>  'nullable|string|min:3'
 
     );
@@ -140,6 +140,7 @@ class StudentController extends Controller
             $v = Validator::make($data, $this->rules);
         }else{
             $v = Validator::make($data, $this->rules_billing);
+            
         }
 
         // return the result
