@@ -421,11 +421,6 @@ Route::group(['middleware' => 'auth.aboveauthor', 'prefix' => 'admin'], function
     //import users from file
     Route::post('users-import-from-file', 'UserController@importFromFile')->name('users.file.import');
 
-
-
-    //Students
-    Route::get('getCsvTemplate', ['as' => 'student.cvs_template', 'uses' => 'Dashboard\StudentController@csvTemplate']);
-    Route::post('upload/student-csv', ['as' => 'student.upload_csv', 'uses' => 'Dashboard\StudentController@uploadCsv']);
 });
 
 /*Route::group(['prefix' => 'cart','middleware' => ['web']], function () {
