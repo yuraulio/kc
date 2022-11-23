@@ -21,25 +21,25 @@ input:hover{background-color: #f5f5f5;}
 input.form-control:focus{outline-offset:2px;outline:#437DC5 solid 2px!important;}
 ::placeholder{color:#7c7c7c;font-size:19px;}
 .custom-control-label:hover::before{background:#e8e8e8;}
-select#country{border:1px solid #000;border-radius:0;height:45px;font-size: 22px;color: #000;position: absolute;z-index: 0;left: 0;font-size:19px; width: 40.5%;overflow: hidden;text-overflow: ellipsis;background-color:#e9e9e9;}
+select#country{border:1px solid #000;border-radius:0;height:45px;font-size: 22px;color: #000;position: absolute;z-index: 0;left: 0;font-size:19px; width: 40.5%;overflow: hidden;text-overflow: ellipsis;background-color:white;}
 select { -webkit-appearance: none; -moz-appearance: none; text-indent: 1px; text-overflow: ''; }
 select#country{background-image:url(../images/arrow-down.svg);background-position:95%;background-repeat:no-repeat;background-size:17px;padding-top: 10px;}
 h1, h2, h3, h4, h5, h6{font-weight:inherit;}
 .row{margin:0}
 
 body.using-mouse a.link-color:focus {
-    background-color: #ededed;    
+    background-color: #ededed;
 }
 
 body.using-mouse .remove-from-cart a:focus {
-    background-color: #ededed;   
+    background-color: #ededed;
 }
 
 body.using-mouse input:focus,
 body.using-mouse select:focus,
 body.using-mouse button:focus,
 body.using-mouse a.link-color:focus,
-body.using-mouse .remove-from-cart a:focus {   
+body.using-mouse .remove-from-cart a:focus {
     outline: none !important;
 }
 
@@ -53,14 +53,14 @@ body .remove-from-cart a:focus {
     outline-style: solid !important;
 }
 
-body.using-mouse button:focus {   
+body.using-mouse button:focus {
     filter: drop-shadow(9.326px 7.552px 12px rgba(76, 76, 76, 0.3));
     background-color: #ededed;
-    box-shadow: none;   
+    box-shadow: none;
 }
 
-body button:focus {    
-    box-shadow: none;    
+body button:focus {
+    box-shadow: none;
 }
 
 .btn:focus {
@@ -403,11 +403,11 @@ label#terms_condition-error2 {
     }
 
     #remember-me{
-        font-size: inherit; 
+        font-size: inherit;
         height: inherit;
         width: inherit;
     }
-    
+
     #clone-box{
         border:none;
     }
@@ -419,24 +419,24 @@ label#terms_condition-error2 {
     .reset-password .icon, .login-popup-wrapper .icon{
         float: right;
     }
-    
+
     .reset-password .icon img , .login-popup-wrapper .icon img{
         margin-right: 5px;
         display:inline-block!important;
     }
-    
+
     .reset-password .input-wrapper--text input,  .login-popup-wrapper  .input-wrapper--text input{
         padding-left: 10px!important;
     }
-    
+
     .reset-password .required, .login-popup-wrapper .required{
         color:red;
     }
-    
+
     .reset-password label, .login-popup-wrapper label{
         font-size: 19px;
     }
-    
+
     .reset-password .login-popup, .login-popup-wrapper .login-popup{
         max-width:450px
     }
@@ -570,4 +570,3 @@ form input[type="text"], form input[type="email"]{font-size:15px;}
 
 
 
-      

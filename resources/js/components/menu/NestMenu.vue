@@ -12,7 +12,7 @@
                                 Add Menu
                         </button>
                     </div>
-                     
+
                     <div class="col-md-12 col-sm-12 dataTables_wrapper dt-bootstrap5 no-footer">
                         <div class="table-responsive">
                             <table class="table" id="menuTable" >

@@ -18,10 +18,11 @@ class AbandonedCart extends Notification
      *
      * @return void
      */
-    public function __construct($data)
+    public function __construct($data, $second = false)
     {
 
         $this->data = $data;
+        $this->second = $second;
 
     }
 
@@ -44,10 +45,27 @@ class AbandonedCart extends Notification
      */
     public function toMail($notifiable)
     {
+        $template = 'emails.user.abandoned_email';
+
+        $now_date = now();
+        $now_date = date_format($now_date, 'Y-m-d');
+
+        if(strtotime(env('BLACKFRIDAY'))  == strtotime($now_date)){
+
+            if($this->second){
+                $template = 'emails.user.abandoned_blackfriday_email';
+            }
+        }else if(strtotime(env('CYBERMONDAY'))  == strtotime($now_date)){
+
+            if($this->second){
+                $template = 'emails.user.abandoned_cybermonday_email';
+            }
+        }
+
         return (new MailMessage)
                     ->from('info@knowcrunch.com', 'Knowcrunch')
                     ->subject($this->data['firstName'] . ' - do you need help with your enrollment')
-                    ->view('emails.user.abandoned_email',$this->data);
+                    ->view($template ,$this->data);
     }
 
     /**
