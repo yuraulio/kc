@@ -7,7 +7,7 @@ $(document).ready(function(){
     }
 
     function blackFriday(){
-    
+        return true
         if(localStorage.getItem("CyberMonthCooκie2021")){ 
             return true;
         }
