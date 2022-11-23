@@ -373,12 +373,13 @@ class CronjobsController extends Controller
 
         $abandoneds = CartCache::where('send_email',0)->get();
 
+        $nowTime = now()->subMinutes(30);
         foreach($abandoneds as $abandoned){
-
+        
             if($abandoned->created_at >= now()->subMinutes(30)){
                continue;
             }
-
+           
             if(!$user = $abandoned->user){
                 continue;
             }
@@ -408,19 +409,21 @@ class CronjobsController extends Controller
     {
         $now_date = now();
         $now_date = date_format($now_date, 'Y-m-d');
-
-
+        
         if((strtotime(env('BLACKFRIDAY')) == strtotime($now_date)) || (strtotime(env('CYBERMONDAY'))  == strtotime($now_date))){
 
             $abandoneds = CartCache::where('send_email', '=', 1)->get();
 
 
             foreach($abandoneds as $abandoned){
-
+                
+                
                 if($abandoned->created_at <= now()->subMinutes(120)){
+                  
                     continue;
                 }
 
+                //dd('fdgsfd');
                 if($abandoned->updated_at >= now()->subMinutes(60)){
                     continue;
                 }
