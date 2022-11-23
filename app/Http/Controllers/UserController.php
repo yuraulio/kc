@@ -83,7 +83,6 @@ class UserController extends Controller
 {
     public function __construct()
     {
-        ini_set('memory_limit', '-1');
         $this->authorizeResource(User::class);
     }
 

@@ -41,7 +41,6 @@ class HomeController extends Controller
      */
     public function index()
     {
-        ini_set('memory_limit', '-1');
         $transactions = (new TransactionController)->participants()['transactions'];
 
         //dd($transactions);
