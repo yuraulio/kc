@@ -606,7 +606,8 @@ class LessonController extends Controller
                     //$allLessons = $event->allLessons->groupBy('id');
                     //$priorityLesson = $event->allLessons()->wherePivot('topic_id',$toTopic)->orderBy('priority')->get();
 
-                    if(!$pLesson = $allLessons[$pLesson][0]){
+                    //if(!$pLesson = $allLessons[$pLesson][0]){
+                    if(!isset($allLessons[$pLesson][0]) || !$pLesson = $allLessons[$pLesson][0]){
                         continue;
                     }
 
