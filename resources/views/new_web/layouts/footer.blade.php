@@ -4,7 +4,7 @@
 
 <footer id="footer">
     @if(strtotime(date('Y-m-d')) == strtotime(env('BLACKFRIDAY')))
-        @include('theme.blackfriday.blackfriday')
+    {{--@include('theme.blackfriday.blackfriday')--}}
     @endif
     <div class="container">
         <div class="footer-row">
