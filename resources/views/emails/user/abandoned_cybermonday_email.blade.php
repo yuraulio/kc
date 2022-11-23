@@ -110,7 +110,7 @@
                                                     </p>
                                                     <p style="margin: 0;"></p>
                                                     <p style="margin: 0;">
-                                                    <a href="https://knowcrunch.com/?utm_source=Knowcrunch.com&utm_medium=Abandoned_Email" target="_blank" style="color: #0092ff; text-decoration: underline;">
+                                                    <a href="{{$slug}}?utm_source=Knowcrunch.com&utm_medium=Abandoned_Email" target="_blank" style="color: #0092ff; text-decoration: underline;">
                                                         <span style="font-family: Tahoma, geneva, sans-serif;">Complete your registration</span>
                                                     </a>
                                                     <span style="font-family: Tahoma, geneva, sans-serif;"> now, if you want to get the <strong>Cyber Monday special discount</strong>, valid only for today. </span>
@@ -132,25 +132,9 @@
                                             </tr>
                                             <tr>
                                                 <td height="18" align="center" valign="top" class="r17-i nl2go-default-textstyle" style="color: #3b3f44; font-family: arial,helvetica,sans-serif; font-size: 16px; line-height: 1.5;">
-                                                <!--[if mso]>
-                                                                                                                        <v:roundrect
-                                                                                                                            xmlns:v="urn:schemas-microsoft-com:vml"
-                                                                                                                            xmlns:w="urn:schemas-microsoft-com:office:word" href="https://knowcrunch.com/?utm_source=Knowcrunch.com&utm_medium=Abandoned_Email" style="v-text-anchor:middle; height: 41px; width: 289px;" arcsize="10%" fillcolor="#c8d151" strokecolor="#c8d151" strokeweight="1px" data-btn="1">
-                                                                                                                            <w:anchorlock/>
-                                                                                                                            <div style="display:none;">
-                                                                                                                                <center class="default-button">
-                                                                                                                                    <p>
-                                                                                                                                        <span style="color:#000000;">
-                                                                                                                                            <strong>Complete your registration now</strong>
-                                                                                                                                        </span>
-                                                                                                                                    </p>
-                                                                                                                                </center>
-                                                                                                                            </div>
-                                                                                                                        </v:roundrect>
-                                                                                                                        <![endif]-->
-                                                <!--[if !mso]>
+                                              
                                                                                                                         <!-- -->
-                                                <a href="https://knowcrunch.com/?utm_source=Knowcrunch.com&utm_medium=Abandoned_Email" class="r18-r default-button" target="_blank" data-btn="1" style="font-style: normal; font-weight: normal; line-height: 1.15; text-decoration: none; border-style: solid; word-wrap: break-word; display: inline-block; -webkit-text-size-adjust: none; mso-hide: all; background-color: #c8d151; border-color: #c8d151; border-radius: 4px; border-width: 0px; color: #ffffff; font-family: arial,helvetica,sans-serif; font-size: 16px; height: 18px; padding-bottom: 12px; padding-left: 5px; padding-right: 5px; padding-top: 12px; width: 280px;">
+                                                <a href="{{$slug}}?utm_source=Knowcrunch.com&utm_medium=Abandoned_Email" class="r18-r default-button" target="_blank" data-btn="1" style="font-style: normal; font-weight: normal; line-height: 1.15; text-decoration: none; border-style: solid; word-wrap: break-word; display: inline-block; -webkit-text-size-adjust: none; mso-hide: all; background-color: #c8d151; border-color: #c8d151; border-radius: 4px; border-width: 0px; color: #ffffff; font-family: arial,helvetica,sans-serif; font-size: 16px; height: 18px; padding-bottom: 12px; padding-left: 5px; padding-right: 5px; padding-top: 12px; width: 280px;">
                                                     <p style="margin: 0;">
                                                     <span style="color: #000000;">
                                                         <strong>Complete your registration now</strong>
