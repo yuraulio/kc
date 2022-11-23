@@ -320,10 +320,6 @@ Route::group(['middleware' => 'auth.aboveauthor', 'prefix' => 'admin'], function
     Route::post('password-inform', ['as' => 'student.password.inform', 'uses' => 'Dashboard\StudentController@passwordInform']);
     Route::post('activation-inform', ['as' => 'student.activation.inform', 'uses' => 'Dashboard\StudentController@activationInform']);
 
-    //Students
-    Route::get('getCsvTemplate', ['as' => 'student.cvs_template', 'uses' => 'Dashboard\StudentController@csvTemplate']);
-    Route::post('upload/student-csv', ['as' => 'student.upload_csv', 'uses' => 'Dashboard\StudentController@uploadCsv']);
-
     //Transaction Update
     Route::post('transaction/update', 'TransactionController@update');
     Route::get('invoice/{invoice}', 'Theme\InvoiceController@getInvoice');
@@ -421,6 +417,15 @@ Route::group(['middleware' => 'auth.aboveauthor', 'prefix' => 'admin'], function
     //set automate email status for topics
     Route::post('automate-mails-status', 'TopicController@automateMailStatus')->name('topics.automate.mails.status');
 
+
+    //import users from file
+    Route::post('users-import-from-file', 'UserController@importFromFile')->name('users.file.import');
+
+
+
+    //Students
+    Route::get('getCsvTemplate', ['as' => 'student.cvs_template', 'uses' => 'Dashboard\StudentController@csvTemplate']);
+    Route::post('upload/student-csv', ['as' => 'student.upload_csv', 'uses' => 'Dashboard\StudentController@uploadCsv']);
 });
 
 /*Route::group(['prefix' => 'cart','middleware' => ['web']], function () {

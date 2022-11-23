@@ -33,7 +33,15 @@
                                 <h3 class="mb-0">{{ __('Users') }}</h3>
                             </div>
                             <div class="col-4 text-right">
+
+                                <form hidden id="submit-file" action="{{ route('users.file.import') }}" method="post" enctype="multipart/form-data">
+                                    @csrf
+                                    <input id="file-input" name="file" type="file" class="btn btn-sm btn-primary"  accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" value="{{ __('Import Testimonials From file') }}" style="display: none;">
+                                </form>
+                                <a id="download-sample" href="javascript:void(0)" class="btn btn-sm btn-primary">{{ __('Sample File') }}</a>
+                                <a id="import-from-file" href="javascript:void(0)" class="btn btn-sm btn-primary">{{ __('Import Users From file') }}</a>
                                 <a href="{{ route('user.create') }}" class="btn btn-sm btn-primary">{{ __('New') }}</a>
+                            
                             </div>
                         </div>
                     </div>
@@ -240,6 +248,26 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="{{ asset('argon') }}/vendor/datatables-datetime/datetime.min.js"></script>
 
+    <script>
+        $(document).ready(() => {
+            $('#import-from-file').on('click', function (event) {
+                event.preventDefault();
+                $("#file-input").trigger('click');
+            });
+
+            $('#download-sample').on('click', function (event) {
+                event.preventDefault();
+                window.location.href = '/import/Users_sample.xlsx';
+            });
+
+
+        });
+
+        $("#file-input").change(function(){
+            $("#submit-file").submit();
+        })
+
+    </script>
     <script>
         let user_ids = []
         var table = $('#datatable-basic45').DataTable({
