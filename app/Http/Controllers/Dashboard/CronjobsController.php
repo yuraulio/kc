@@ -371,12 +371,11 @@ class CronjobsController extends Controller
     public function remindAbandonedUser()
     {
 
-        $abandoneds = CartCache::where('send_email',false)->get();
+        $abandoneds = CartCache::where('send_email',0)->get();
 
         foreach($abandoneds as $abandoned){
 
-
-            if($abandoned->created_at >= now()->subMinutes(5)){
+            if($abandoned->created_at >= now()->subMinutes(30)){
                continue;
             }
 
@@ -402,6 +401,56 @@ class CronjobsController extends Controller
             $abandoned->save();
 
         }
+
+    }
+
+    public function remindAbandonedUserSecond()
+    {
+        $now_date = now();
+        $now_date = date_format($now_date, 'Y-m-d');
+
+
+        if((strtotime(env('BLACKFRIDAY')) == strtotime($now_date)) || (strtotime(env('CYBERMONDAY'))  == strtotime($now_date))){
+
+            $abandoneds = CartCache::where('send_email', '=', 1)->get();
+
+
+            foreach($abandoneds as $abandoned){
+
+                if($abandoned->created_at <= now()->subMinutes(120)){
+                    continue;
+                }
+
+                if($abandoned->updated_at >= now()->subMinutes(60)){
+                    continue;
+                }
+
+                if(!$user = $abandoned->user){
+                    continue;
+                }
+
+                if(!$event = $abandoned->eventt){
+                    continue;
+                }
+
+                if(!$event->published || $event->status!=0){
+                    continue;
+                }
+
+                $data['firstName'] = $user->firstname;
+                $data['eventTitle'] = $event->title;
+                $data['faqs'] = url('/') . '/' . $event->slugable->slug . '/#faq';
+                $data['slug'] = url('/') . '/registration?cart=' . $abandoned->slug;
+
+                $user->notify(new AbandonedCart($data, true));
+                $abandoned->send_email = 2;
+                $abandoned->save();
+
+
+            }
+
+        }
+
 
     }
 

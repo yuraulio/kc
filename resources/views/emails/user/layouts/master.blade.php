@@ -72,7 +72,7 @@
                                                                      </table>
                                                                   </td>
                                                                </tr>
-                                                              
+
                                                             </table>
                                                          </td>
                                                          <td class="nl2go-responsive-hide" width="15" style="font-size: 0px; line-height: 1px;">­ </td>

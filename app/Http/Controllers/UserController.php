@@ -310,11 +310,13 @@ class UserController extends Controller
             $invoiceNumber = sprintf('%04u', $invoiceNumber);
         }*/
 
+        $elearningInvoice = null;
+        $pdf = null;
         if($request->sendInvoice == 'true'){
 
             $paymentMethodId = $event->paymentMethod->first() ? $event->paymentMethod->first()->id : -1;
 
-            $elearningInvoice = null;
+
             if($price > 0 || $custom_price != null) {
                 $elearningInvoice = new Invoice;
                 $elearningInvoice->name = isset($billingDetails['billname']) ? $billingDetails['billname'] : '';
@@ -336,12 +338,13 @@ class UserController extends Controller
 
             $pdf = $elearningInvoice ? $elearningInvoice->generateInvoice() : null;
 
-            if($sendInvoice)
-                $this->sendEmail($elearningInvoice,$pdf,0,$transaction);
+
 
             //$this->sendEmails($transaction,$event,$response_data);
 
         }
+
+        $this->sendEmail($elearningInvoice,$pdf,0,$transaction);
 
 
        $response_data['ticket']['event'] = $data['event']['title'];

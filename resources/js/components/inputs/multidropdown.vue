@@ -142,11 +142,14 @@
             setMenuIds() {
                 var value = this.value;
                 if (!('id' in this.value)) {
-                    var index = this.list.findIndex(function(menu) {
-                        return menu.name == value.name;
-                    });
-
-                    this.value.id = this.list[index].id;
+                    if(menu !== undefined){
+                        var index = this.list.findIndex(function(menu) {
+                            return menu.name == value.name;
+                        });
+                        if(index != -1){
+                            this.value.id = this.list[index].id;
+                        }
+                    }
                 }
             },
             updateSelectedMenu() {
