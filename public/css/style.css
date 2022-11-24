@@ -147,6 +147,11 @@
     border: none;
 }
 
+#event_edit_form .download-schedule{
+    width: 100%;
+    white-space: normal;
+}
+
 #event_edit_form #input-syllabus1,
 #event_create_form #input-syllabus1 {
     background-color: #5e72e4;
