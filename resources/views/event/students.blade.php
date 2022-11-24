@@ -12,56 +12,6 @@
 </div>
 @include('users.absences.absences_modal')
 
-
-    <div class="row">
-        <div class="col-12 text-right">
-            <a class="btn btn-sm btn-secondary" id="filter-student-btn" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">{{ __('Import') }}</a>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-12">
-            <div class="collapse" id="collapseExample" style="">
-                <div class="container-fluid">
-                    <div class="row">
-
-                        {{--<div class="col-12">
-                            <div class="form-group">
-                                <a href="{{ route('student.cvs_template') }}" class="btn btn-sm btn-primary" target="_black" type="button">Download Template</a>
-                            </div>
-
-                            <form id="uploadcsv_form">
-                                <div class="form-group">
-                                    <label for="exampleFormControlFile1">Upload CSV</label>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
-                                        </div>
-                                        <div class="custom-file">
-                                            <input name="file" type="file" class="custom-file-input" id="file"
-                                            aria-describedby="inputGroupFileAddon01">
-                                            <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
-                                        </div>
-                                        <input type="hidden" value="{{ $event->id }}" name="event_id">
-                                    </div>
-                                </div>
-                                <div class="form-group error-msg"><p></p></div>
-                                <div class="form-group text-right">
-                                    <button class="btn btn-sm" id="submit-file" type="button">Submit</button>
-                                </div>
-                            </form>
-                        </div>--}}
-
-
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-
-
-
     <table class="table align-items-center table-flush"  id="datatable-basic-students1">
         <thead class="thead-light">
             <tr>
@@ -147,13 +97,6 @@
                 .appendTo('#datatable-basic-students1_wrapper .col-md-6:eq(0)');
 
             $('#datatable-basic-students1').parent().addClass('table-responsive')
-
-            $('#file').on('change',function(){
-                //get the file name
-                var fileName = $(this).val();
-                //replace the "Choose a file" label
-                $(this).next('.custom-file-label').html(fileName.substring(fileName.lastIndexOf("\\") + 1));
-            })
 
         } );
     </script>

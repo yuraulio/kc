@@ -124,30 +124,31 @@ class UserController extends Controller
     }
 
     private $rules = array(
-        // 'firstname'     => 'min:3',
-        // 'lastname'      => 'min:3',
-        // 'email'         => 'required|email',
-        // 'mobile'        => 'nullable|numeric|size:10',
-        // 'telephone'     => 'nullable|numeric|size:10',
-        // 'address'       => 'nullable|min:3',
-        // 'address_num'   => 'nullable',
-        // 'country_code'  => 'nullable|numeric|size:2',
-        // 'ticket_type'   => 'required|min:3',
-        // 'ticket_price'  => 'nullable|digits_between:-10000000,10000000',
-        // 'afm'           => 'nullable|numeric',
-        // 'birthday'      => 'nullable|date_format:d-m-Y',
-        // 'event_id'      => 'nullable|numeric'
+        'firstname'     => 'min:3',
+        'lastname'      => 'min:3',
+        'email'         => 'required|email',
+        'mobile'        => 'nullable|digits:10',
+        'telephone'     => 'nullable|digits:10',
+        'address'       => 'nullable|min:3',
+        'address_num'   => 'nullable|numeric',
+        'country_code'  => 'nullable|digits:2',
+        'ticket_type'   => 'required|min:3',
+        'ticket_price'  => 'nullable|digits_between:-10000000,10000000',
+        'afm'           => 'nullable|digits:8',
+        'birthday'      => 'nullable|date_format:d-m-Y',
+        'event_id'      => 'nullable|numeric'
 
     );
 
     private $rules_billing = array(
-        'billname'      =>  'nullable|string|min:3',
+        'billname'      =>  'nullable|min:3',
         'billemail'     =>  'nullable|email',
-        'billaddress'   =>  'nullable|string|min:3',
+        'billaddress'   =>  'nullable|min:3',
         'billaddressnum'=>  'nullable|numeric',
-        'billcity'      =>  'nullable|string|min:3',
-        'billcountry'   =>  'nullable|string',
-        'billstate'     =>  'nullable|string|min:3'
+        'billcity'      =>  'nullable|min:3',
+        'billcountry'   =>  'nullable|min:3',
+        'billstate'     =>  'nullable|min:3',
+        'billafm'       =>  'nullable|digits:8'
 
     );
 
@@ -158,7 +159,6 @@ class UserController extends Controller
             $v = Validator::make($data, $this->rules);
         }else{
             $v = Validator::make($data, $this->rules_billing);
-            
         }
 
         // return the result
@@ -178,7 +178,7 @@ class UserController extends Controller
 
         // Save to file.
         $writer = new Xlsx($spreadsheet);
-        $writer->save('uploads/import/error_import_users.xlsx');
+        $writer->save('import/error_import_users.xlsx');
 
     }
 
@@ -191,7 +191,7 @@ class UserController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return redirect()->route('user.index')->withErrors('Upload a valid csv file!');
+            return back()->withErrors('Upload a valid csv file!');
         }
 
         $file = $request->file('file');
@@ -458,12 +458,12 @@ class UserController extends Controller
                         }
 
                         // check if ticket already assign
-                        if($ticket_info['ticket_type'] != null){
+                        if($ticket_info['ticket_type'] != null && $event_id != null){
                             $user = User::with('ticket')->where('email', $update_user['email'])->first();
 
                             $foundTicket = false;
                             foreach($user['ticket'] as $ticket){
-                                if($ticket['title'] == $ticket_info['ticket_title']){
+                                if(strtolower($ticket['type']) == strtolower($ticket_info['ticket_type']) && $ticket['event_id'] == $event_id){
                                     $foundTicket = true;
                                 }
                             }
@@ -489,7 +489,12 @@ class UserController extends Controller
 
 
                     $this->errorImportCsvReport($arr);
+
+                    return back()->withErrors(__('File is not imported, email faild to import: '. $error_msg));
+
                 }
+
+                return back()->withStatus(__('File is imported successfully'));
 
             }
         }
@@ -498,12 +503,15 @@ class UserController extends Controller
     public function assigns($user, $event_id, $ticket_type, $ticket_price){
         //Todo find ticket
 
-        
+        if(!$event_id || !$ticket_type){
+            return 0;
+        }
+
         $event = Event::with('ticket')->find($event_id);
         $ticket_id = null;
 
         foreach($event['ticket'] as $ticket){
-            if(strtolower($ticket->type) == strtolower($ticket_type))
+            if($ticket->type != null && strtolower($ticket->type) == strtolower($ticket_type))
             {
                 $ticket_id = $ticket['id'];
                 break;
@@ -511,7 +519,7 @@ class UserController extends Controller
 
 
         }
-        
+
         //create request event
 
         if($ticket_id != null){
@@ -521,15 +529,15 @@ class UserController extends Controller
                 'user_id' => $user['id'],
                 'event_id' => $event_id,
                 'ticket_id' => $ticket_id,
-                'sendInvoice' => true,
+                'sendInvoice' => false,
                 'custom_price' => $ticket_price
              ]);
-    
+
             $this->assignEventToUserCreate($request);
         }
-        
 
-       
+
+
     }
 
 
@@ -759,7 +767,7 @@ class UserController extends Controller
 
             $paymentMethodId = $event->paymentMethod->first() ? $event->paymentMethod->first()->id : -1;
 
-            
+
             if($price > 0 || $custom_price != null) {
                 $elearningInvoice = new Invoice;
                 $elearningInvoice->name = isset($billingDetails['billname']) ? $billingDetails['billname'] : '';
@@ -781,7 +789,7 @@ class UserController extends Controller
 
             $pdf = $elearningInvoice ? $elearningInvoice->generateInvoice() : null;
 
-            
+
 
             //$this->sendEmails($transaction,$event,$response_data);
 
