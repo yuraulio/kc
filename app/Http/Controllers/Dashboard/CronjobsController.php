@@ -376,7 +376,7 @@ class CronjobsController extends Controller
         $nowTime = now()->subMinutes(30);
         foreach($abandoneds as $abandoned){
         
-            if($abandoned->created_at >= now()->subMinutes(30)){
+            if($abandoned->created_at >= $nowTime){
                continue;
             }
            

@@ -84,6 +84,9 @@ class ExportAllUserByCategory extends Command
 
             foreach($user->events_for_user_list as $event){
 
+                if(!$event->pivot->paid){
+                    continue;
+                }
 
                 if(in_array($instrunctorId,$event->instructors()->pluck('instructor_id')->toArray())){
                     unset($users[$key]);
@@ -131,7 +134,7 @@ class ExportAllUserByCategory extends Command
         $users = 
         
             User::whereHas('events_for_user_list', function($event){
-                $event->wherePivot('paid',true)->whereHas('category', function($category){
+                $event->whereHas('category', function($category){
                     return $category->whereIn('categoryables.category_id',[183]);
                 });
             })
@@ -159,9 +162,11 @@ class ExportAllUserByCategory extends Command
         foreach($users as $key => $user){
 
 
-            foreach($user->events as $event){
+            foreach($user->events_for_user_list as $event){
 
-
+                if(!$event->pivot->paid){
+                    continue;
+                }
                if(strtotime($event->pivot->expiration) <= $today){
 
                     unset($users[$key]);
@@ -228,9 +233,11 @@ class ExportAllUserByCategory extends Command
         foreach($users as $key => $user){
 
 
-            foreach($user->events as $event){
+            foreach($user->events_for_user_list as $event){
     
-             
+                if(!$event->pivot->paid){
+                    continue;
+                }
                 if($today >= strtotime($event->pivot->expiration) ){
     
                     unset($users[$key]);
