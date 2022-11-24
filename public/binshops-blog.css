@@ -277,15 +277,10 @@
 /* Remove fixed high for small devices */
 @media only screen and (max-width: 768px) {
     /* For mobile phones: */
-    .blog img, iframe, table{
+    .blog img, iframe:not(#fb-root), table{
         width: auto !important;
         height: auto !important;
         min-width: 0;
-    }
-
-    #fb-root iframe{
-        width: 60px !important;
-        height: 60px !important;
     }
 
     .comment_author img {
