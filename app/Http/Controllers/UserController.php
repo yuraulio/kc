@@ -510,15 +510,16 @@ class UserController extends Controller
         $event = Event::with('ticket')->find($event_id);
         $ticket_id = null;
 
-        foreach($event['ticket'] as $ticket){
-            if($ticket->type != null && strtolower($ticket->type) == strtolower($ticket_type))
-            {
-                $ticket_id = $ticket['id'];
-                break;
+        if($event){
+            foreach($event['ticket'] as $ticket){
+                if($ticket->type != null && strtolower($ticket->type) == strtolower($ticket_type))
+                {
+                    $ticket_id = $ticket['id'];
+                    break;
+                }
             }
-
-
         }
+
 
         //create request event
 
