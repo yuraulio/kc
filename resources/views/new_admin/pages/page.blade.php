@@ -3,12 +3,7 @@
 
 @section('blog-custom-css')
     <link type="text/css" href="{{ asset('binshops-blog.css') }}" rel="stylesheet">
-    <style>
-        #fb-root iframe{
-            height: 60px !important;
-            width: 60px !important;
-        }
-    </style>
+
 @endsection
 
 @section("content")
