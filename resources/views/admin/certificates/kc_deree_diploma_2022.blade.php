@@ -2,7 +2,7 @@
 <html lang="en" >
    <head>
       <meta charset="UTF-8">
-      <title>{{$certificate['meta_title']}}</title>
+      <title>{!!$certificate['meta_title']!!}</title>
       <meta name="author" content="Knowcrunch">
       <style type="text/css">
          @font-face {

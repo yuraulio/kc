@@ -163,7 +163,7 @@ class CertificateController extends Controller
     $data = $this->loadCertificateData($certificate);
     $certificate = $data['certificate'];
     trim(preg_replace('/\s\s+/', ' ', $data['certificate']['certification_title']));
-    $fn = $data['certificate']->lastname . '-' . $data['certificate']->firstname . '-' . trim(preg_replace('/\s\s+/', '', strip_tags($data['certificate']['certification_title']))) . '-' . $data['certificate']['kc_id'] . '.pdf';
+    $fn = $data['certificate']->lastname . '_' . $data['certificate']->firstname . '_' . trim(preg_replace('/\s\s+/', '', strip_tags($data['certificate']['certification_title']))) . '_' . $data['certificate']['kc_id'] . '.pdf';
     //$fn = strip_tags($fn);
     $fn = htmlspecialchars_decode($fn,ENT_QUOTES);
 
