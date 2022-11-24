@@ -41,15 +41,6 @@
         </script>
 
         @yield('blog-custom-css')
-        <style>
-            @media only screen and (max-width: 768px){
-                #fb-root iframe{
-                    height: 60px !important;
-                    width: 60px !important;
-                }
-            }
-
-        </style>
 
     </head>
 

@@ -283,6 +283,11 @@
         min-width: 0;
     }
 
+    #fb-root iframe{
+        width: 60px !important;
+        height: 60px !important;
+    }
+
     .comment_author img {
         width: 25px !important;
     }
