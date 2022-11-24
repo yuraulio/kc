@@ -24,7 +24,7 @@
                 <div class="container-fluid">
                     <div class="row">
 
-                        <div class="col-12">
+                        {{--<div class="col-12">
                             <div class="form-group">
                                 <a href="{{ route('student.cvs_template') }}" class="btn btn-sm btn-primary" target="_black" type="button">Download Template</a>
                             </div>
@@ -49,7 +49,7 @@
                                     <button class="btn btn-sm" id="submit-file" type="button">Submit</button>
                                 </div>
                             </form>
-                        </div>
+                        </div>--}}
 
 
                     </div>
