@@ -220,7 +220,7 @@ class StudentController extends Controller
                 $data['events'][$event->id]['mySubscription'] = $user->eventSubscriptions()->wherePivot('event_id',$event['id'])->first();
                 $data['events'][$event->id]['plans'] = $event['plans'];
 
-                $data['events'][$event->id]['certs'] = $event['certificates'];//$event->certificatesByUser($user->id);
+                $data['events'][$event->id]['certs'] = $event['certificates'] ? $event['certificates'] : [];//$event->certificatesByUser($user->id);
                 $data['events'][$event->id]['exams'] = $event->getExams();
                 $data['events'][$event->id]['exam_access'] = $event->examAccess($user,0.8,$statistic);//$user->examAccess(0.8,$event->id);
                 $data['events'][$event->id]['view_tpl'] = $event['view_tpl'];
@@ -265,7 +265,7 @@ class StudentController extends Controller
 
                 $data['events'][$event->id]['topics'] = $event->topicsLessonsInstructors(null,$event['topic'],$event['lessons'],$event['instructors'])['topics'];;
                 $data['events'][$event->id]['exams'] = [];
-                $data['events'][$event->id]['certs'] = $event->certificatesByUser($user->id);
+                $data['events'][$event->id]['certs'] = $event['certificates'] ? $event['certificates'] : [];
                 $data['events'][$event->id]['view_tpl'] = $event['view_tpl'];
                 $data['events'][$event->id]['category'] = $event['category'];
                 //$data['events'][$event->id]['summary1'] = $event['summary1'];
@@ -312,7 +312,7 @@ class StudentController extends Controller
 
                 $data['mySubscriptionEvents'][$key]['exams'] = $event->getExams();
                 $data['mySubscriptionEvents'][$key]['exam_access'] = $event->examAccess($user,0.8,$statistic);
-                $data['mySubscriptionEvents'][$key]['certs'] = $event['certificates'];//$event->certificatesByUser($user->id);
+                $data['mySubscriptionEvents'][$key]['certs'] = $event['certificates'] ? $event['certificates'] : [];//$event->certificatesByUser($user->id);
                 $data['mySubscriptionEvents'][$key]['mySubscription'] = $user->subscriptions()->where('id',$subEvent['id'])->first();
                 $data['mySubscriptionEvents'][$key]['delivery'] = isset($eventInfo['delivery'])  ? $eventInfo['delivery'] : -1;
                 $data['mySubscriptionEvents'][$key]['hours'] = isset($eventInfo['hours']['hour']) && $eventInfo['hours']['hour'] > 0 ? $eventInfo['hours']['hour'] : '';
@@ -434,7 +434,7 @@ class StudentController extends Controller
                 $data['events'][$event->id]['mySubscription'] = $user->eventSubscriptions()->wherePivot('event_id',$event['id'])->first();
                 $data['events'][$event->id]['plans'] = $event['plans'];
 
-                $data['events'][$event->id]['certs'] = $event['certificates'];
+                $data['events'][$event->id]['certs'] = $event['certificates'] ? $event['certificates'] : [];;
                 $data['events'][$event->id]['exams'] = $event->getExams();
                 $data['events'][$event->id]['exam_access'] = $event->examAccess($user,0.8,$statistic);//$user->examAccess(0.8,$event->id);
                 $data['events'][$event->id]['view_tpl'] = $event['view_tpl'];
@@ -495,7 +495,7 @@ class StudentController extends Controller
                 $expiration_event = $event->pivot['expiration'];
                 $expiration_event = strtotime($expiration_event);
                 $data['events'][$event->id]['exams'] = $event->getExams();
-                $data['events'][$event->id]['certs'] = $event['certificates'];
+                $data['events'][$event->id]['certs'] = $event['certificates'] ? $event['certificates'] : [];;
                 $data['events'][$event->id]['view_tpl'] = $event['view_tpl'];
                 $data['events'][$event->id]['category'] = $event['category'];
                 //$data['events'][$event->id]['summary1'] = $event['summary1'];
@@ -532,7 +532,7 @@ class StudentController extends Controller
                 $data['mySubscriptionEvents'][$key]['videos_seen'] = $event->video_seen($user,$statistic);
                 $data['mySubscriptionEvents'][$key]['view_tpl'] = $event['view_tpl'];
     
-                $data['mySubscriptionEvents'][$key]['certs'] = $event['certificate'];//$event->certificatesByUser($user->id);
+                $data['mySubscriptionEvents'][$key]['certs'] = $event['certificates'] ? $event['certificates'] : [];;//$event->certificatesByUser($user->id);
                 $data['mySubscriptionEvents'][$key]['exams'] = $event->getExams();
                 $data['mySubscriptionEvents'][$key]['exam_access'] = $event->examAccess($user,0.8,$statistic);
 
