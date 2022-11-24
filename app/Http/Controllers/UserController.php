@@ -160,9 +160,16 @@ class UserController extends Controller
         }else{
             $v = Validator::make($data, $this->rules_billing);
         }
+        $data = [];
+
+        $data['pass'] = $v->passes();
+
+        if($v->errors()){
+            $data['errors'] = $v->errors();
+        }
 
         // return the result
-        return $v->passes();
+        return $data;
     }
 
     public function errorImportCsvReport($data){
@@ -234,6 +241,7 @@ class UserController extends Controller
                 $userForUpdate = [];
                 $userForCreate = [];
                 $userFailedImport = [];
+                $validationErrors = [];
 
                 $i = 0;
                 foreach ($sheetData as $key => $importData) {
@@ -282,8 +290,11 @@ class UserController extends Controller
                     $billing_details['billstate'] = isset($importData['AA']) ? $importData['AA'] : null;
                     $billing_details['billafm'] = isset($importData['AB']) ? $importData['AB'] : null;
 
-                    if(!$this->validateCsv($billing_details, true)){
+                    $validations = $this->validateCsv($billing_details, true);
+
+                    if(!$validations['pass']){
                         $userFailedImport[] = $user;
+                        $validationErrors[] = $validations['errors'];
                         continue;
                     }
 
@@ -299,11 +310,16 @@ class UserController extends Controller
                     $user->ticket_price = isset($importData['AF']) ? $importData['AF'] : null;
                     $user->event_id = isset($importData['AG']) ? $importData['AG'] : null;
 
+
+                    $validations = null;
                     //check if exist user
                     if(isset($allUsers[$user->email])){
+                        
+                        $validations = $this->validateCsv($user->toArray());
 
-                        if(!$this->validateCsv($user->toArray())){
+                        if(!$validations['pass']){
                             $userFailedImport[] = $user;
+                            $validationErrors[] = $validations['errors'];
                             continue;
                         }
 
@@ -311,8 +327,12 @@ class UserController extends Controller
                         $userForUpdate[] = $user;
 
                     }else{
-                        if(!$this->validateCsv($user->toArray())){
+
+                        $validations = $this->validateCsv($user->toArray());
+
+                        if(!$validations['pass']){
                             $userFailedImport[] = $user;
+                            $validationErrors[] = $validations['errors'];
                             continue;
                         }
                         // create
@@ -328,6 +348,7 @@ class UserController extends Controller
                         $ticket_price = $new_user['ticket_price'];
                         if($new_user->password == null || strlen($new_user->password) < 6){
                             $userFailedImport[] = $new_user;
+                            $validationErrors[] = ['password'=>['Password required for new user']];
                             continue;
                         }
                         $new_user->password = bcrypt($new_user->password);
@@ -482,15 +503,29 @@ class UserController extends Controller
 
                 }
 
+                //dd($validationErrors);
+
                 if(!empty($userFailedImport)){
 
                     $arr = [];
                     foreach($userFailedImport as $key => $user){
-                        $arr[] = $user['email'];
+                        $arr[$key]['email'] = $user['email'];
+                       // dd($validationErrors[$key]->toArray());
+                        if(!empty($validationErrors[$key])){
+                            //dd($validationErrors);
+                            if(gettype($validationErrors[$key]) != 'array'){
+                                $validationErrors[$key] = $validationErrors[$key]->toArray();
+                            }
+                            foreach($validationErrors[$key] as $input => $error){
+                            
+                                $arr[$key][$input] = $input .' : '. $error[0];
+                            }
+                        }
                         $error_msg = $error_msg.($key == 0 ? '' : ', ').$user['email'];
                     }
 
 
+                    //dd($arr);
                     $this->errorImportCsvReport($arr);
 
                     return back()->withErrors(__('File is not imported, email faild to import: '. $error_msg));
