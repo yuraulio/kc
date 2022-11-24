@@ -633,7 +633,6 @@ class HomeController extends Controller
     private function pages($page)
     {
         $data['page'] = $page;
-        //dd($page);
         if ($data['page']['template'] == 'corporate-template') {
             //$data['page']['template'] = 'corporate-template';
             $data['benefits'] = $page->benefits;

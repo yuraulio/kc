@@ -248,7 +248,12 @@ class UserController extends Controller
 
                     $user->firstname = isset($importData['A']) ? $importData['A'] : null;
                     $user->lastname = isset($importData['B']) ? $importData['B'] : null;
-                    $user->email = isset($importData['C']) ? $importData['C'] : null;
+                    if(isset($importData['C']) && $importData['C'] != null){
+                        $user->email = $importData['C'];
+                    }else{
+                        continue;
+                    }
+
                     $user->username = isset($importData['D']) ? $importData['D'] : null;
                     $user->password = isset($importData['E']) ? $importData['E'] : null;
                     $user->company = isset($importData['F']) ? $importData['F'] : null;
@@ -478,8 +483,6 @@ class UserController extends Controller
                 }
 
                 if(!empty($userFailedImport)){
-
-
 
                     $arr = [];
                     foreach($userFailedImport as $key => $user){
