@@ -155,62 +155,6 @@
                 $(this).next('.custom-file-label').html(fileName.substring(fileName.lastIndexOf("\\") + 1));
             })
 
-
-            $(document).on('click', '#submit-file', function() {
-
-                var formData = new FormData($('#uploadcsv_form')[0]);
-
-                $.ajax({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    type: 'post',
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    url: "{{ route('student.upload_csv') }}",
-                    beforeSend: function() {
-                        $('.error-msg').empty()
-                        $('.error-msg').append('Wait for server response!!')
-
-                    },
-                    success: function (data) {
-                        $('.error-msg').empty()
-
-                        if(data.error){
-
-                            Swal.close()
-
-                            if(data.from == 'file'){
-                                let msg = data.messages.file[0]
-                                $('.error-msg').append(`<p>${msg}</p>`)
-                            }else if(data.from == 'import'){
-
-                                Swal.fire(
-                                    'Fail to import this emails:',
-                                    data.messages +' <br><a target="_black" href="/uploads/students/error_import_emails.xlsx">Download failed emails</a>',
-                                    'info'
-                                )
-                            }else{
-                                Swal.fire(
-                                    'Information:',
-                                    data.messages,
-                                    'error'
-                                )
-                            }
-
-                        }else if(!data.error){
-                            Swal.fire(
-                            'Notification!',
-                            'Import successfully finished',
-                            'success')
-                        }
-
-
-                    }
-                })
-            })
-
         } );
     </script>
 
