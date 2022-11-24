@@ -43,10 +43,10 @@ class ExportAllUserByCategory extends Command
     public function handle()
     {
 
-        //$this->complicatedQuery();
-        //$this->queryForBigElearningAccess();
+        $this->complicatedQuery();
+        $this->queryForBigElearningAccess();
         $this->queryForbUYBigElearningAccess();
-
+        $this->queryForUsesHasOnlyFreeEvents();
     }
 
 
@@ -63,7 +63,7 @@ class ExportAllUserByCategory extends Command
         })
         ->with([
             'events_for_user_list' => function($event){
-                return $event->whereHas('category', function($category){
+                return $event->wherePivot('paid',true)->whereHas('category', function($category){
                     return $category->whereIn('categoryables.category_id',[46,277,183]);
                 });
             }
@@ -130,8 +130,8 @@ class ExportAllUserByCategory extends Command
     private function queryForBigElearningAccess(){
         $users = 
         
-            User::whereHas('events', function($event){
-                $event->whereHas('category', function($category){
+            User::whereHas('events_for_user_list', function($event){
+                $event->wherePivot('paid',true)->whereHas('category', function($category){
                     return $category->whereIn('categoryables.category_id',[183]);
                 });
             })
@@ -139,7 +139,7 @@ class ExportAllUserByCategory extends Command
         
         ->orWhereHas('subscriptionEvents')->
         with([
-            'events' => function($event){
+            'events_for_user_list' => function($event){
                 return $event->whereHas('category', function($category){
                     return $category->whereIn('categoryables.category_id',[183]);
                 });
@@ -202,7 +202,7 @@ class ExportAllUserByCategory extends Command
     private function queryForbUYBigElearningAccess(){
         $users = 
         
-            User::whereHas('events', function($event){
+            User::whereHas('events_for_user_list', function($event){
                 $event->whereHas('category', function($category){
                     $category->whereIn('categoryables.category_id',[183]);
                 })
@@ -210,8 +210,8 @@ class ExportAllUserByCategory extends Command
                     $ticket->where('ticket_id','<>',822);
                 })
                 ->with([
-                    'events' => function($event){
-                        return $event->whereHas('category', function($category){
+                    'events_for_user_list' => function($event){
+                        return $event->wherePivot('paid',true)->whereHas('category', function($category){
                             $category->whereIn('categoryables.category_id',[183]);
                         })->whereHas('ticket',function($ticket){
                            $ticket->where('ticket_id','<>',822);
@@ -256,4 +256,34 @@ class ExportAllUserByCategory extends Command
 
     }
 
+    private function queryForUsesHasOnlyFreeEvents(){
+        $users = User::whereHas('events_for_user_list', function($event){
+
+            return $event->whereHas('event_info1',function($eventInfo){
+                return $eventInfo->where('course_payment_method','free');
+            });
+
+            
+
+        })
+        ->whereDoesntHave('events_for_user_list', function($event){
+
+            return $event->whereHas('event_info1',function($eventInfo){
+                return $eventInfo->where('course_payment_method','<>','free');
+            });
+        })
+        ->get();
+   
+
+        $columns = array("ID", "First Name", "Last Name", "email",'Mobile');
+
+        $file = fopen('free_event_access_only.csv', 'w');
+        fputcsv($file, $columns);
+
+        foreach($users as $user){
+            fputcsv($file, array($user->id, $user->firstname,  $user->lastname, $user->email,$user->mobile));
+        }
+
+        fclose($file);
+    }
 }
