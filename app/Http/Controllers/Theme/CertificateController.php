@@ -79,7 +79,7 @@ class CertificateController extends Controller
         'isRemoteEnabled' => true,
 
     ]);
-
+   
 
     $certificateTitle = $certificate->certificate_title;
     $certificateEventTitle =  $certificate->event->first() ? $certificate->event->first()->title : '';
@@ -110,9 +110,9 @@ class CertificateController extends Controller
     $certificate['certification_title'] = $certificateTitle;
 
     $certificate['kc_id'] = $certificate->user()->first()->kc_id;
-    $certificate['meta_title'] =  $certificate->lastname . ' ' . $certificate->firstname . ' ' . $certificateTitle . ' ' . $certificate['kc_id'];
+    $certificate['meta_title'] =  $certificate['kc_id'];//strip_tags($certificate->lastname . ' ' . $certificate->firstname . ' ' . $certificateTitle . ' ' . $certificate['kc_id']);
 
-    $pdf->getDomPDF()->setHttpContext($contxt);
+    $pdf->getDomPDF()->setHttpContext($contxt)->add_info('title', 'Your meta title');
     //$customPaper = array(0,0,3507,2480);
     //$customPaper = array(0,0,842,595);;
     $pdf->loadView('admin.certificates.'.$certificate->template,compact('certificate'))->setPaper('a4', 'landscape')->setEncryption('', '', ['print']);
@@ -166,6 +166,7 @@ class CertificateController extends Controller
     $fn = $data['certificate']->lastname . '_' . $data['certificate']->firstname . '_' . trim(preg_replace('/\s\s+/', '', strip_tags($data['certificate']['certification_title']))) . '_' . $data['certificate']['kc_id'] . '.pdf';
     //$fn = strip_tags($fn);
     $fn = htmlspecialchars_decode($fn,ENT_QUOTES);
+    //$data['pdf']->render();
 
     return $data['pdf']->stream($fn);
     //return view('admin.certificates.'.$certificate->template,compact('certificate'));
