@@ -43,10 +43,12 @@ class ExportAllUserByCategory extends Command
     public function handle()
     {
 
-        $this->complicatedQuery();
-        $this->queryForBigElearningAccess();
-        $this->queryForbUYBigElearningAccess();
-        $this->queryForUsesHasOnlyFreeEvents();
+        //$this->complicatedQuery();
+        //$this->queryForBigElearningAccess();
+        //$this->queryForbUYBigElearningAccess();
+        //$this->queryForUsesHasOnlyFreeEvents();
+      	//$this->queryForUsesHasSmallElearning();
+        $this->queryForInclassElearning();
     }
 
 
@@ -293,4 +295,108 @@ class ExportAllUserByCategory extends Command
 
         fclose($file);
     }
+  
+  	private function queryForUsesHasSmallElearning(){
+     
+       $users = User::whereHas('events_for_user_list', function($event){
+
+            return $event->whereHas('event_info1',function($eventInfo){
+                return $eventInfo->where('course_payment_method','<>','free')->where('course_delivery',143);
+            });
+
+            
+
+        })->get();
+        
+         
+        $columns = array("ID", "First Name", "Last Name", "email",'Mobile');
+
+        $file = fopen('small_elearning.csv', 'w');
+        fputcsv($file, $columns);
+
+        foreach($users as $user){
+            fputcsv($file, array($user->id, $user->firstname,  $user->lastname, $user->email,$user->mobile));
+        }
+
+        fclose($file);
+         
+    }
+  
+   private function queryForInclassElearning(){
+
+        $users = User::doesntHave('subscriptionEvents')->whereHas('transactions',function($transaction){
+
+            $transaction->whereHas('event', function($event){
+                $event->whereHas('category', function($category){
+                    return $category->whereIn('categoryables.category_id',[46,183]);
+                });
+            });
+
+        })
+          ->whereDoesntHave('events_for_user_list',function($event){
+             $event->whereHas('category', function($category){
+                    return $category->whereNotIn('categoryables.category_id',[46,183]);
+                });
+          })
+        ->with([
+            'events_for_user_list' => function($event){
+                return $event->wherePivot('paid',true)->whereHas('category', function($category){
+                    return $category->whereIn('categoryables.category_id',[46,183]);
+                });
+            }
+        ])
+        ->get();
+
+        echo count($users);
+        echo "####";
+        $today = strtotime(date('Y-m-d'));
+        foreach($users as $key => $user){
+
+            $instrunctorId = -1;
+
+            if($user->instructor->first()){
+                $instrunctorId = $user->instructor->first()->id;
+
+            }
+
+            foreach($user->events_for_user_list as $event){
+
+                
+
+                if(in_array($instrunctorId,$event->instructors()->pluck('instructor_id')->toArray())){
+                    unset($users[$key]);
+                }
+
+               
+               
+
+                if(!$event->pivot->paid){
+                    unset($users[$key]);
+                }
+
+            
+            }
+
+
+        }
+
+        echo count($users);
+        
+        $columns = array("ID", "First Name", "Last Name", "email",'Mobile');
+
+        $file = fopen('inclass_elearning.csv', 'w');
+        fputcsv($file, $columns);
+
+        foreach($users as $user){
+            fputcsv($file, array($user->id, $user->firstname,  $user->lastname, $user->email,$user->mobile));
+        }
+
+        fclose($file);
+
+    }
+    
+
+      
+  
 }
+

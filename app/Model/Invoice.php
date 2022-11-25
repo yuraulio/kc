@@ -403,8 +403,8 @@ class Invoice extends Model
         $paymentMethodId = 2;
         if( $user = $this->user->first() ){
 
-            if($event = $user->events()->wherePivot('event_id',$eventId)->first()){
-
+            //if($event = $user->events()->wherePivot('event_id',$eventId)->first()){
+            if($event = $user->events_for_user_list()->wherePivot('event_id',$eventId)->first()){
                 $paymentMethodId = $event->pivot->payment_method;
 
             }
@@ -452,6 +452,7 @@ class Invoice extends Model
         $data['vat'] = $billafm;
         //$data['footer'] = $this->event->first()->paymentMethod->first() ? $this->event->first()->paymentMethod->first()->footer : '';
         $data['footer'] = ($paymentMethod = PaymentMethod::find($paymentMethodId)) ? $paymentMethod->footer : '';
+
         $data['installments']= ($this->instalments > 1) ? ($this->instalments - $this->instalments_remaining) . ' of ' . $this->instalments : '';
 
         if($planDecription){
