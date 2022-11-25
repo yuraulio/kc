@@ -58,7 +58,7 @@ class InstructorController extends Controller
         {
             $status = 0;
         }
-        
+
         $link = $request->ext_url;
         if($link){
             $link = str_replace('https://', '', $link);
@@ -145,7 +145,7 @@ class InstructorController extends Controller
         {
             $status = 0;
         }
-  
+
         $link = $request->ext_url;
         if($link){
             $link = str_replace('https://', '', $link);

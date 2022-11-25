@@ -314,7 +314,7 @@ class UserController extends Controller
                     $validations = null;
                     //check if exist user
                     if(isset($allUsers[$user->email])){
-                        
+
                         $validations = $this->validateCsv($user->toArray());
 
                         if(!$validations['pass']){
@@ -382,7 +382,7 @@ class UserController extends Controller
 
                             $this->createKC($request);
 
-                            $this->assigns($user, $event_id, $ticket_type, $ticket_price);
+                            $this->assigns($user, $event_id, $ticket_type, $ticket_price, $isNewUser = true);
                         }
                     }
                 }
@@ -495,7 +495,7 @@ class UserController extends Controller
                             }
 
                             if(!$foundTicket){
-                                $this->assigns($user, $event_id, $ticket_info['ticket_type'], $ticket_info['ticket_price']);
+                                $this->assigns($user, $event_id, $ticket_info['ticket_type'], $ticket_info['ticket_price'], $isNewUser = false);
                             }
                         }
 
@@ -517,7 +517,7 @@ class UserController extends Controller
                                 $validationErrors[$key] = $validationErrors[$key]->toArray();
                             }
                             foreach($validationErrors[$key] as $input => $error){
-                            
+
                                 $arr[$key][$input] = $input .' : '. $error[0];
                             }
                         }
@@ -538,7 +538,7 @@ class UserController extends Controller
         }
     }
 
-    public function assigns($user, $event_id, $ticket_type, $ticket_price){
+    public function assigns($user, $event_id, $ticket_type, $ticket_price, $isNewUser = false){
         //Todo find ticket
 
         if(!$event_id || !$ticket_type){
@@ -569,7 +569,8 @@ class UserController extends Controller
                 'event_id' => $event_id,
                 'ticket_id' => $ticket_id,
                 'sendInvoice' => false,
-                'custom_price' => $ticket_price
+                'custom_price' => $ticket_price,
+                'newUser' => $isNewUser
              ]);
 
             $this->assignEventToUserCreate($request);
@@ -687,11 +688,11 @@ class UserController extends Controller
 
     public function assignEventToUserCreate(Request $request)
     {
-
         $user_id = $request->user_id;
         $event_id = $request->event_id;
         $ticket_id = $request->ticket_id;
         $custom_price = isset($request->custom_price) ? $request->custom_price : null;
+        $isNewUser = ($request->newUser != null) ? true : false;
 
         $user = User::find($user_id);
         //dd($user);
@@ -834,7 +835,7 @@ class UserController extends Controller
 
         }
 
-        $this->sendEmail($elearningInvoice,$pdf,0,$transaction);
+        $this->sendEmail($elearningInvoice,$pdf,0,$transaction, $isNewUser);
 
 
        $response_data['ticket']['event'] = $data['event']['title'];
@@ -1118,7 +1119,7 @@ class UserController extends Controller
 
     }*/
 
-    private function sendEmail($elearningInvoice,$pdf,$paymentMethod = null,$transaction){
+    private function sendEmail($elearningInvoice,$pdf,$paymentMethod = null,$transaction, $isNewUser){
 
 		$adminemail = ($paymentMethod && $paymentMethod->payment_email) ? $paymentMethod->payment_email : 'info@knowcrunch.com';
 
@@ -1142,6 +1143,10 @@ class UserController extends Controller
         $data['eventSlug'] = $transaction->event->first() ? url('/') . '/' . $transaction->event->first()->getSlug() : url('/');
         $data['user']['createAccount'] = false;
         $data['user']['name'] = $transaction->user->first()->firstname;
+
+        if($isNewUser){
+            $data['user']['createAccount'] = true;
+        }
 
         $eventInfo = $transaction->event->first() ? $transaction->event->first()->event_info() : [];
 
@@ -1193,8 +1198,6 @@ class UserController extends Controller
         if($user->cart){
             $user->cart->delete();
         }
-
-        $data['firstName'] = $user->firstname;
 
         $user->notify(new WelcomeEmail($user,$data));
 
