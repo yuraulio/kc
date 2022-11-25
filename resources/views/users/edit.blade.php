@@ -367,7 +367,7 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <div class="card-deck" id="card-ticket">
+                                    <div class="container" id="card-ticket">
                                     </div>
                                 </div>
 
@@ -1183,22 +1183,26 @@
                 success: function (data) {
 
                     let tickets = data.data
-
+                    ticketCard = '<div class="row">'
                     $.each( tickets, function(key, value) {
-                        ticketCard = `
-                            <div class="card ticket-card${value.pivot.quantity == 0 ? 'not_selectable' : ''}">
-                                <div class="card-body">
-                                <input style="display:none;" id="${value.id}" type="radio" name="ticket_radio" ${value.pivot.quantity == 0 ? 'disabled' : ''}>
-                                <h5 class="card-title">${value.title}</h5>
-                                <p class="card-text">${value.pivot.price}€</p>
-                                <p class="card-text"><small class="text-muted">${value.subtitle}</small></p>
-                                </div>
-                            </div>
 
-                    `
-                    $('#card-ticket').append(ticketCard)
+                        if(value.pivot.price != null){
+                            row = `
+                                <div class="col-12 card ticket-card${value.pivot.quantity == 0 ? 'not_selectable' : ''}">
+                                    <div class="card-body">
+                                    <input style="display:none;" id="${value.id}" type="radio" name="ticket_radio" ${value.pivot.quantity == 0 ? 'disabled' : ''}>
+                                    <h5 class="card-title">${value.title}</h5>
+                                    <p class="card-text">${value.pivot.price}€</p>
+                                    <p class="card-text"><small class="text-muted">${value.subtitle != null ? value.subtitle : ''}</small></p>
+                                    </div>
+                                </div>
+
+                            `
+                            ticketCard = ticketCard + row
+                        }
 
                     })
+                    $('#card-ticket').append(ticketCard+'</div>')
 
                 }
             });
@@ -1220,6 +1224,10 @@ $(document).on('click', '.ticket-card', function () {
 </script>
 
 <script>
+    $( document ).ready(function() {
+        initModal()
+    });
+
     function initModal(){
         $('#input-event_id').val('')
         $('#card-ticket').empty();

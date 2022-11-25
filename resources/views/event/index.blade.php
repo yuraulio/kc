@@ -44,31 +44,31 @@
                     </div>
 
                     <div class="collapse" id="collapseExample">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-sm-3 filter_col" id="filter_col1" data-column="1">
-                                <label>Published/Upublished</label>
-                                <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..."  name="Name" class="column_filter" id="col1_filter">
-                                <option selected value> -- All -- </option>
-                                </select>
-                            </div>
-                            <div class="col-sm-3 filter_col" id="filter_col2" data-column="2">
-                                <label>Status</label>
-                                <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..." name="Name" class="column_filter" id="col2_filter" >
-                                <option selected value> -- All -- </option>
-                                </select>
-                            </div>
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-sm-3 filter_col" id="filter_col1" data-column="1">
+                                    <label>Published/Upublished</label>
+                                    <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..."  name="Name" class="column_filter" id="col1_filter">
+                                    <option selected value> -- All -- </option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-3 filter_col" id="filter_col2" data-column="2">
+                                    <label>Status</label>
+                                    <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..." name="Name" class="column_filter" id="col2_filter" >
+                                    <option selected value> -- All -- </option>
+                                    </select>
+                                </div>
 
-                            <div class="col-sm-3 filter_col" id="filter_col6" data-column="6">
-                                <label>Delivery</label>
-                                <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..." name="Name" class="column_filter" id="col6_filter" >
-                                <option selected value> -- All -- </option>
-                                </select>
-                            </div>
+                                <div class="col-sm-3 filter_col" id="filter_col6" data-column="6">
+                                    <label>Delivery</label>
+                                    <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..." name="Name" class="column_filter" id="col6_filter" >
+                                    <option selected value> -- All -- </option>
+                                    </select>
+                                </div>
 
+                            </div>
                         </div>
                     </div>
-                </div>
 
                     <div class="col-12 mt-2">
                         @include('alerts.success')

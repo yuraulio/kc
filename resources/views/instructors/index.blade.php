@@ -10,6 +10,10 @@
             @slot('title')
                 {{ __('') }}
             @endslot
+            @slot('filter')
+                <a class="btn btn-sm btn-neutral" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">{{ __('Filters') }}</a>
+
+            @endslot
 
             <li class="breadcrumb-item"><a href="{{ route('instructors.index') }}">{{ __('Insctructors Management') }}</a></li>
             <li class="breadcrumb-item active" aria-current="page">{{ __('List') }}</li>
@@ -31,6 +35,22 @@
                                     <a href="{{ route('instructors.create') }}" class="btn btn-sm btn-primary">{{ __('Add instructor') }}</a>
                                 </div>
                             @endcan
+                        </div>
+                    </div>
+
+                    <div class="collapse" id="collapseExample">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-sm-3 filter_col" id="filter_col" data-column="1">
+                                    <label>Status</label>
+                                    <select data-toggle="select" placeholder="Active" name="Name" class="column_filter" id="col1_filter" >
+                                        <option value = ''> -- All -- </option>
+                                        <option value = 'Active' selected> Active </option>
+                                        <option value = 'Inactive'> Inactive </option>
+                                    </select>
+                                </div>
+
+                            </div>
                         </div>
                     </div>
 
@@ -117,13 +137,33 @@
 
     <script>
         // DataTables initialisation
-    var table = $('#datatable-basic30').DataTable({
-        language: {
-            paginate: {
-            next: '&#187;', // or '→'
-            previous: '&#171;' // or '←'
+        var table = $('#datatable-basic30').DataTable({
+            order: [[4, 'desc']],
+            language: {
+                paginate: {
+                next: '&#187;', // or '→'
+                previous: '&#171;' // or '←'
+                }
             }
+        });
+
+        $( document ).ready(function(){
+            $('#col1_filter').select2({
+                minimumResultsForSearch: -1
+            })
+        });
+
+        $('select.column_filter').on('change', function () {
+            filterColumn( $(this).parents('div').attr('data-column') );
+        });
+
+        function filterColumn ( i ) {
+
+            $('#datatable-basic30').DataTable().column( i ).search(
+                $('#col'+i+'_filter').val()
+            ).draw();
+
+
         }
-    });
     </script>
 @endpush
