@@ -945,6 +945,9 @@ class StudentController extends Controller
                     //$note =  preg_replace( "/\r|\n/", "||", $request->text );
                     //dd(preg_replace( "/\r|\n/", "||", $request->text ));
                     $notes[$key] = preg_replace( "/\r|\n/", "||", $request->text );
+                    $notes[$key] = str_replace(['"',"'"], "", $notes[$key]);
+
+
                 }
             }
         }
