@@ -14,6 +14,10 @@ class LessonController extends Controller
         //dd($user);
         $event_id = $request->event_id;
         $new_note = $request->note;
+
+        //$new_note = preg_replace( "/\r|\n/", "||", $new_note );
+        //$new_note = str_replace(['"',"'"], "", $new_note);
+
         $vimeo_id = $request->vimeo_id;
         $db_note = $user->statistic()->wherePivot('event_id',$event_id)->first()->pivot['notes'];
         $db_note = json_decode($db_note, true);
