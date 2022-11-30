@@ -63,11 +63,11 @@
             </div>
         </modal>
 
-        <tcdit 
-            v-if="show" 
-            ref="tc" 
-            :pseudo="true" 
-            :mode="type" 
+        <tcdit
+            v-if="show"
+            ref="tc"
+            :pseudo="true"
+            :mode="type"
             :predata="type == 'edit' ? predata : null"
             :pageTitle="pageTitle"
             @save="save()"
@@ -226,7 +226,7 @@ export default {
                 });
             },
             save() {
-                this.$modal.show('save-modal'); 
+                this.$modal.show('save-modal');
                 $forceUpdate();
             },
             getTypes() {

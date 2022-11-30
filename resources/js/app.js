@@ -46,6 +46,7 @@ Vue.use(VueNestable)
 require('datatables.net-bs4');
 require('nestable2');
 
+Vue.component('countdown', require('./components/countdown.vue').default);
 Vue.component('ticker', require('./components/ticker.vue').default);
 Vue.component('dashboard-widget', require('./components/dashboard-widget.vue').default);
 Vue.component('dashboard-table', require('./components/dashboard-table.vue').default);
@@ -70,6 +71,8 @@ Vue.component('component-modal-simple', require('./components/component-modal-si
 Vue.component('list', require('./components/inputs/list.vue').default);
 Vue.component('pagination', require('laravel-vue-pagination'));
 Vue.component('datepicker-component', require('./components/inputs/datepicker-component.vue').default);
+Vue.component('datetimepicker-component', require('./components/inputs/datetimepicker-component.vue').default);
+
 Vue.component('comments', require('./components/comments.vue').default);
 Vue.component('tcedit', require('./components/tcdit.vue').default);
 
@@ -101,6 +104,8 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 Vue.component('page-edit', require('./components/page-edit.vue').default);
 Vue.component('page-new', require('./components/page-new.vue').default);
 Vue.component('page-edit-simple', require('./components/page-edit-simple.vue').default);
+
+Vue.component('countdown-new', require('./components/countdown-new.vue').default);
 
 import VueClipboard from 'vue-clipboard2'
 VueClipboard.config.autoSetContainer = true // add this line

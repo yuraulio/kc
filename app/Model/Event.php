@@ -260,7 +260,7 @@ class Event extends Model
     {
         return $this->belongsToMany(User::class, 'event_user')->withPivot('expiration','payment_method','paid')->wherePivot('paid', true);
     }
-    
+
 
     public function partners()
     {
@@ -374,7 +374,7 @@ class Event extends Model
 
 
         $instructors = $instructors ? $instructors->unique()->groupBy('instructor_id')->toArray() : $this->instructors->unique()->groupBy('instructor_id')->toArray();
-    
+
         $topicEvent = $topicEvent ? $topicEvent->unique()->groupBy('topic_id') : $this->topic->unique()->groupBy('topic_id');
 
         foreach($topicEvent as $key => $topic){
@@ -394,7 +394,7 @@ class Event extends Model
                     }
                     //if(($this->view_tpl=='elearning_event' || $this->view_tpl == 'elearnig_free') && $lesson['vimeo_video'] ==''){
                     if($this->is_elearning_course() && $lesson['vimeo_video'] ==''){
-                        
+
                         unset($lessonsArray[$key]);
                     }
                 }
@@ -515,7 +515,7 @@ class Event extends Model
             $faqs[$key] = [];
         }
 
-        
+
         $categoryFaqs = $this->getFaqsByType();
         foreach($categoryFaqs as $faq){
 
@@ -523,7 +523,7 @@ class Event extends Model
                 $faqs[$categoryFaq['name']][] = array('id' => $faq['id'], 'question' =>  $faq['title']);
             }
         }
-    
+
 
         //pt
 
@@ -542,7 +542,7 @@ class Event extends Model
 
         //return $faqs;
     }
-    
+
 
     public function statistic()
     {
@@ -603,11 +603,11 @@ class Event extends Model
 
     public function progress($user,$videos = false)
     {
-       
+
         if($videos == 'no_videos'){
             return 0;
         }
-        
+
         if(!$videos && !$videos = $user->statistic()->wherePivot('event_id',$this['id'])->first()){
             return 0;
         }
@@ -719,7 +719,7 @@ class Event extends Model
         $exams = $this->exam->where('status',true);
         //return $examsArray;
         foreach($exams as $exam){
-  
+
             if($exam->publish_time >  $curr_date_time){
                 $exam->exstatus = 0;
                 $exam->islive = 0;
@@ -807,7 +807,7 @@ class Event extends Model
 
     }
 
-    
+
     /*public function getTotalHours(){
 
         $hours = 0;
@@ -874,7 +874,7 @@ class Event extends Model
         //dd($lesson->pivot->time_starts);
         return $hours;
     }
-    
+
 
     public function getXmlDescriptionAttribute($value)
     {
@@ -1115,7 +1115,7 @@ class Event extends Model
         $newPriorityLesson = 1;
         $or = [];
         foreach($this->allLessons()->orderBy('priority')->get() as  $pLesson){
-        
+
             //$pLesson->pivot->priority = $newPriorityLesson;
             //$pLesson->pivot->save();
 
@@ -1142,7 +1142,6 @@ class Event extends Model
         $this->allLessons()->attach($or);
 
     }
-
 
 
 

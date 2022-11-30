@@ -34,8 +34,8 @@
         display: inline-block;
     }
 
- 
-    
+
+
     .column-navigation {
         min-width: unset;
         transform: translateY(-3px);
@@ -74,7 +74,7 @@
 
                         <template v-if="type != 'new'">
                             <button v-if="type != 'new'" :disabled="loading" @click="preview()" type="button" class="btn btn-soft-warning waves-effect waves-light float-end ms-2 mb-3"><i class="dripicons-preview me-1" style="transform: translateY(2px);"></i>Preview</button>
-                            
+
                             <template v-if="!page.dynamic">
                                 <template v-if="page.published">
                                     <input @click="page.published = !page.published" type="checkbox" class="btn-check float-end" id="btn-check-outlined" autocomplete="off" :checked="page.published">
@@ -156,10 +156,10 @@
                                             <div v-show="!column.template.dynamic" class="col-12">
                                                 <label class="form-label mt-2">Preview</label>
                                                 <div class="text-center">
-                                           
+
                                                     <iframe
                                                         :width="findInputValue(column.template.inputs, 'youtube_full_width') ? '100%' : (findInputValue(column.template.inputs, 'youtube_width') || '100%')"
-                                                        :height="findInputValue(column.template.inputs, 'youtube_height') || '600'" 
+                                                        :height="findInputValue(column.template.inputs, 'youtube_height') || '600'"
                                                         :src="'https://www.youtube.com/embed/' + getYoutubeVideoCode(findInputValue(column.template.inputs, 'youtube_embed'))"
                                                         title="YouTube video player"
                                                         frameborder="0"
@@ -355,7 +355,7 @@ import slugify from '@sindresorhus/slugify';
                         }
                     })
 
-                
+
                 }else{
                     this.editPage(0);
                 }

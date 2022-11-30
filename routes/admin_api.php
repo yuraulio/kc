@@ -44,6 +44,19 @@ Route::domain(env('PREFIX_NEW_ADMIN_DOMAIN_URL') . env('APP_DOMAIN'))->group(fun
             'index', 'store', 'update', 'show', 'destroy'
         ]);
 
+        // Countdowns
+        Route::post('countdown/deleteMultiple', ['App\Http\Controllers\Admin_api\CountdownController', 'deleteMultiple']);
+        Route::post('countdown/widgets', [CountdownController::class, 'widgets']);
+        Route::resource('countdown', Admin_api\CountdownController::class)->only([
+            'index', 'store', 'update', 'show', 'destroy'
+        ]);
+
+        // Categories Event
+        Route::get('getCategories', ['App\Http\Controllers\Admin_api\CategoryEventController', 'getList']);
+
+        // Delivery
+        Route::get('getDeliveries', ['App\Http\Controllers\Admin_api\DeliveryController', 'getList']);
+
         // pages
         Route::post('pages/deleteMultiple', [PagesController::class, 'deleteMultiple']);
         Route::post('pages/widgets', [PagesController::class, 'widgets']);

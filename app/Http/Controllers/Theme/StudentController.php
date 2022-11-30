@@ -29,6 +29,8 @@ use App\Model\Plan;
 use App\Model\Invoice;
 use App\Notifications\ExamActive;
 use Illuminate\Support\Str;
+use App\Jobs\UploadProfileWebpImage;
+use App\Jobs\RemoveProfileWebpImage;
 
 class StudentController extends Controller
 {
@@ -409,7 +411,7 @@ class StudentController extends Controller
         $data['mySubscriptionEvents'] = [];
         $data['instructors'] = new \Illuminate\Database\Eloquent\Collection;;
         $eventSubscriptions = [];
-        
+
         foreach($data['user']['events'] as $key => $event){
             $after20Days = null;
             /*if($event->id == 2304){
@@ -418,13 +420,13 @@ class StudentController extends Controller
             }*/
             $eventInfo = $event->event_info();
 
-            
+
 
             //if elearning assign progress for this event
             if($event->is_elearning_course()){
 
                 $statistic = isset($statistics[$event->id][0]) ? $statistics[$event->id][0] : 'no_videos';
-               
+
                 $data['elearningAccess'] = true;
                 //$data['user']['events'][$event->id]['topics'] = $event['topic']->unique()->groupBy('topic_id');
                 $data['events'][$event->id]['videos_progress'] = round($event->progress($user,$statistic),2);
@@ -531,7 +533,7 @@ class StudentController extends Controller
                 $data['mySubscriptionEvents'][$key]['videos_progress'] = round($event->progress($user,$statistic),2);
                 $data['mySubscriptionEvents'][$key]['videos_seen'] = $event->video_seen($user,$statistic);
                 $data['mySubscriptionEvents'][$key]['view_tpl'] = $event['view_tpl'];
-    
+
                 $data['mySubscriptionEvents'][$key]['certs'] = $event['certificates'] ? $event['certificates'] : [];;//$event->certificatesByUser($user->id);
                 $data['mySubscriptionEvents'][$key]['exams'] = $event->getExams();
                 $data['mySubscriptionEvents'][$key]['exam_access'] = $event->examAccess($user,0.8,$statistic);
@@ -573,9 +575,9 @@ class StudentController extends Controller
             }
            // array_merge($data['instructors'], $event['instructors']->get()->groupby('id'));
         }
-    
+
         $data['instructors'] = Instructor::with('slugable', 'medias')->get()->groupby('id');
-        
+
         //dd($data['instructors']);
 
         $data['subscriptionEvents'] = Event::whereIn('id',$subscriptionEvents)->with('slugable')->get();
@@ -595,6 +597,7 @@ class StudentController extends Controller
     public function removeProfileImage(){
         //dd('from remove');
         $user = Auth::user();
+        $user_id = $user->id;
         $media = $user->image;
         if(!$media){
             return;
@@ -616,6 +619,8 @@ class StudentController extends Controller
             unlink($path);
         }
 
+        dispatch((new RemoveProfileWebpImage($user_id))->delay(now()->addSeconds(3)));
+
         //null db image
         $media->original_name = null;
         $media->name = null;
@@ -635,6 +640,7 @@ class StudentController extends Controller
         $this->removeProfileImage();
 
         $user = Auth::user();
+        $user_id = $user['id'];
         $media = $user->image;
 
         if(!$media){
@@ -676,6 +682,8 @@ class StudentController extends Controller
         $media->width = $size[0];
         $media->height = $size[1];
         $media->save();
+
+        //dispatch((new UploadProfileWebpImage($user_id))->delay(now()->addSeconds(3)));
 
         return response()->json([
             'message' => 'Change profile photo successfully!!',
@@ -1133,9 +1141,9 @@ class StudentController extends Controller
 
     public function createPassStore(Request $request,$slug){
 
- 
+
         $user = decrypt($slug);
-    
+
         if( !($user = User::where('id',$user['id'])->where('email',$user['email'])->first()) ){
             return response()->json([
 
@@ -1159,7 +1167,7 @@ class StudentController extends Controller
                 'message' => $val->errors()->first()
             ]);
         }
-    
+
         $user->password = Hash::make($request->password);
         $user->save();
 
@@ -1175,7 +1183,7 @@ class StudentController extends Controller
                 'completed_at' => Carbon::now()
             ]);
         }
-        
+
 
         Auth::login($user);
 

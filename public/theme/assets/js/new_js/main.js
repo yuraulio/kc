@@ -670,7 +670,7 @@ jQuery(document).ready(function($) {
     setTimeout(function(){
 
         Marquee3k.init()
-        
+
     },500);
 
     if( $(window).scrollTop() > 0 ){

@@ -15,6 +15,14 @@ use App\Model\Admin\Page;
 use App\Model\Admin\Ticker;
 use Carbon\Carbon;
 
+if(!function_exists('support_webp')){
+    function support_webp(): bool
+    {
+        return isset($_SERVER['HTTP_ACCEPT']) &&
+            strpos($_SERVER['HTTP_ACCEPT'], 'image/webp') !== false;
+    }
+}
+
 if(!function_exists('get_tickers')){
     function get_tickers(){
 
@@ -204,26 +212,22 @@ if (!function_exists('cdnPath')){
     }
 }*/
 
-if(!function_exists('support_webp')){
-    function support_webp(){
-        return isset($_SERVER['HTTP_ACCEPT']) &&
-            strpos($_SERVER['HTTP_ACCEPT'], 'image/webp') !== false;
-    }
-}
+// if(!function_exists('support_web')){
+//     function support_web(){
+
+//     }
+// }
 
 
 if (!function_exists('get_image')){
     function get_image($media, $version = null) {
 
+
         if($version){
 
             $image = isset($media['name']) ? $media['path']  . $media['name'] : '';
 
-
-            if(file_exists(public_path('/')   .$image . '-' . $version . '.webp') && support_webp()){
-                $image = $image . '-' . $version . '.webp';
-
-            }else if(file_exists(public_path('/')   .$image . '-' . $version . $media['ext'])){
+            if(file_exists(public_path('/')   .$image . '-' . $version . $media['ext'])){
                 $image = $image . '-' . $version . $media['ext'];
             }else if($image!=''){
                // dd($image . $media['ext']);
@@ -233,9 +237,6 @@ if (!function_exists('get_image')){
         }
 
         if(!$version){
-            if(file_exists(public_path('/')   .$media['path'] . $media['name'] . '.webp') && support_webp()){
-                return $media['path'] . $media['name'] . '.webp';
-            }
             return isset($media['original_name']) ? $media['path'] . $media['original_name']  : '';
         }
         return $image;
@@ -246,28 +247,17 @@ if (!function_exists('get_profile_image')){
     function get_profile_image($media) {
 
 
-        //dd($media['original_name']);
+
         if(isset($media['original_name']) && $media['original_name']!=''){
 
             $name = explode('.', $media['original_name']);
             $path = ltrim($media['path'] . $name[0] . '-crop.'. $name[1], $media['path'][0]);
-            $webp_path = ltrim($media['path'] . $name[0] . '-crop.'. 'webp', $media['path'][0]);
 
 
-            if(file_exists($webp_path) && support_webp()){
-                return $media['path'] . $name[0] . '-crop.'. 'webp';
-            }else if(file_exists($path)){
+            if(file_exists($path)){
 
                 return $media['path'] . $name[0] . '-crop.'. $name[1];
             }else{
-
-                $name = explode('.', $media['original_name']);
-
-                if(file_exists($media['path'].$name[0].'.webp') && support_webp()){
-                    return $media['path'].$media['name'].'.webp';
-                }
-
-
                 return $media['path'] . $media['original_name'];
             }
 

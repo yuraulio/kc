@@ -27,6 +27,9 @@ Route::domain(env('PREFIX_NEW_ADMIN_DOMAIN_URL') . env('APP_DOMAIN'))->group(fun
         Route::get('/menus', [DashboardController::class, 'menu'])->name("admin-menu");
         Route::get('/ticker', [DashboardController::class, 'ticker'])->name("admin-ticker");
 
+        Route::get('/countdown', [DashboardController::class, 'countdown'])->name("admin-countdown");
+        Route::get('/new_countdown', [DashboardController::class, 'countdownNew']);
+
         Route::prefix('users')->group(function () {
             Route::get('/admins', [UserController::class, 'admins'])->name("admins-management");
         });

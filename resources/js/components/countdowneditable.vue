@@ -1,0 +1,524 @@
+<template>
+<div class="row">
+
+        <div class="col-sm-12 mt-3 mb-3">
+            <div class="page-title-box">
+                <h4 v-if="title" class="page-title d-inline-block">Edit page</h4>
+                <h4 v-else class="page-title d-inline-block">New page</h4>
+
+                <!-- <button :disabled="loading" @click="changeMode()" type="button" class="btn btn-soft-info waves-effect waves-light float-end">Page</button>
+                <button v-if="type != 'new'" @click="preview()" class="btn btn-block btn-soft-warning waves-effect waves-light me-2 float-end">Live preview</button> -->
+                <!--
+                <button type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions" :disabled="!template_value" @click="rearange()" class="btn btn-block btn-soft-info waves-effect waves-light me-2 float-end">Pseudo preview</button>
+                -->
+                <button v-if="type == 'new'" @click="add()" type="button" class="btn btn-soft-success waves-effect waves-light me-2 float-end" :disabled="loading"><i v-if="loading" class="fas fa-spinner fa-spin"></i> Create</button>
+                <button v-if="type == 'edit'" :disabled="loading" @click="edit()" type="button" class="btn btn-soft-success waves-effect waves-light me-2 float-end"><i v-if="loading" class="fas fa-spinner fa-spin"></i> Save</button>
+                <a href="/pages" type="button" class="btn btn-soft-secondary waves-effect waves-light me-2 float-end">Cancel</a>
+            </div>
+        </div>
+
+        <div class="col-lg-9" >
+
+            <template v-for="input in (type == 'edit' ? config.editInputs : config.addInputs)" >
+                <multiput
+                    :key="input.key"
+                    :keyput="input.key"
+                    :label="input.label"
+                    :type="input.type"
+                    :size="input.size"
+                    :value="item[input.key]"
+                    :existing-value="item[input.key]"
+                    @inputed="inputed($event, input)"
+                    :multi="input.multi"
+                    :taggable="input.taggable"
+                    :fetch="input.fetch"
+                    :route="input.route"
+                    :placeholder="input.placeholder"
+                >
+                </multiput>
+                <ul v-if="errors && errors[input.key]" class="parsley-errors-list filled" id="parsley-id-7" aria-hidden="false">
+                    <li class="parsley-required">{{ errors[input.key][0] }}</li>
+                </ul>
+
+                <template v-if="errors && input.key == 'subcategories'">
+                    <template v-for="(errorInput, key) in item.subcategories">
+                        <ul v-if="errors && errors[input.key + '.' + key]" class="parsley-errors-list filled" id="parsley-id-7" aria-hidden="false">
+                            <li class="parsley-required">{{ fixError(errors[input.key + '.' + key][0], input.key + '.' + key, errorInput.title) }}</li>
+                        </ul>
+                    </template>
+                </template>
+            </template>
+
+
+
+            <!-- <template v-if="template_value && loader == false">
+                <tcedit
+                    :mode="type"
+                    ref="tc"
+                    :pseudo="false"
+                    :predata="data.content"
+                    :collapseAllProp="collapseAll"
+                    :slug="slug_value"
+                    class="mb-3"
+                ></tcedit>
+            </template> -->
+            <!-- <template v-else>
+                <div style="margin-top: 150px" class="text-center">
+                    <vue-loaders-ball-grid-beat	 color="#6658dd" scale="1" class="mt-4 text-center"></vue-loaders-ball-grid-beat	>
+                </div>
+            </template> -->
+
+            <!--
+            <div v-else class="card">
+                <div class="card-body p-4">
+                    <div class="error-ghost text-center">
+                        <gicon></gicon>
+                    </div>
+                    <div class="text-center">
+                        <h3 class="mt-4">Select Template go get started</h3>
+                        <multidropdown
+                            title="Template"
+                            :multi="false"
+                            @updatevalue="update_template"
+                            :prop-value="template_value"
+                            route="templatesAll"
+                        ></multidropdown>
+                    </div>
+                </div>
+            </div>
+            -->
+        </div>
+        <div class="col-lg-3">
+            <div class="card ">
+                <div class="card-body">
+
+                    <!-- <h4 class="mb-2">{{pageTitle}}</h4> -->
+
+                    <div class="row">
+                        <div class="col-xl-12">
+
+                            <multidropdown
+                                title="Type"
+                                :multi="false"
+                                @updatevalue="update_delivery"
+                                :prop-value="type_value"
+                                :fetch="true"
+                                route="getDeliveries"
+                            ></multidropdown>
+
+                            <multidropdown
+                                title="Type"
+                                :multi="true"
+                                @updatevalue="update_category"
+                                :fetch="true"
+                                route="getCategories"
+                            ></multidropdown>
+
+                            <!--
+                            <multidropdown
+                                title="Template"
+                                :key="template_value ? template_value.id : 'temmult'"
+                                :multi="false"
+                                @updatevalue="update_template"
+                                :prop-value="template_value"
+                                route="templates"
+                            ></multidropdown>
+                            -->
+
+                            <!-- this is now category group, is hidden -->
+                            <!-- <multidropdown
+                                title="Categories"
+                                @updatevalue="update_category"
+                                :prop-value="category_value"
+                                route="categories"
+                                class="visually-hidden"
+                            ></multidropdown> -->
+
+                            <!-- this is now categories, used to be subcategories -->
+                            <!-- <multidropdown
+                                title="Categories"
+                                @updatevalue="update_subcategory"
+                                :prop-value="subcategory_value"
+                                :fetch="false"
+                                :data="subcategories"
+                            ></multidropdown> -->
+
+
+                            <div :key="'ck'"  class="form-check form-switch mb-3" style="cursor: pointer">
+                                <input :key="'on'" @click="published = !published" :id="'cinput'" type="checkbox" class="form-check-input" name="color-scheme-mode" value="light" :for="'cinput'" :checked="published">
+                                <label class="form-check-label" for="light-mode-check">Published</label>
+                            </div>
+
+
+
+                            <!--
+                            <div class="form-check form-switch mb-3" style="cursor: pointer">
+                                <input @click="dynamic = !dynamic" type="checkbox" class="form-check-input" name="color-scheme-mode" value="light" :checked="dynamic">
+                                <label class="form-check-label">Dynamic page</label>
+                            </div>
+                            -->
+
+                            <datepicker-component
+                                title="Publish from"
+                                @updatevalue="update_published_from"
+                                :prop-value="published_from_value"
+                            ></datepicker-component>
+
+                            <datepicker-component
+                                title="Publish to"
+                                @updatevalue="update_published_to"
+                                :prop-value="published_to_value"
+                            ></datepicker-component>
+
+                            <!--
+                            <div class="row mt-3">
+                                <div class="col-12 text-center mb-3 d-grid">
+                                    <button v-if="type != 'new'" @click="preview()" class="btn btn-block btn-soft-warning waves-effect waves-light m-1">
+                                        Live preview
+                                    </button>
+                                    <button type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions" :disabled="!template_value" @click="rearange()" class="btn btn-block btn-soft-info waves-effect waves-light m-1">Pseudo preview</button>
+                                    <button v-if="type == 'new'" @click="add()" type="button" class="btn btn-soft-success waves-effect waves-light m-1" :disabled="loading"><i v-if="!loading" class="fe-check-circle me-1"></i><i v-else class="fas fa-spinner fa-spin"></i> Create</button>
+                                    <button v-if="type == 'edit'" :disabled="loading" @click="edit()" type="button" class="btn btn-soft-success waves-effect waves-light m-1"><i v-if="!loading" class="mdi mdi-square-edit-outline me-1"></i><i v-else class="fas fa-spinner fa-spin"></i> Save</button>
+
+                                    <a href="/pages" type="button" class="btn btn-soft-secondary waves-effect waves-light m-1"><i class="fe-x me-1"></i> Cancel</a>
+                                </div>
+                            </div>
+                            -->
+                        </div> <!-- end col-->
+                    </div>
+                </div> <!-- end col-->
+            </div>
+        </div>
+        <!-- end row -->
+
+        <div v-if="errors" class="row mt-3">
+            <span class="text-danger" v-for="error in errors">{{error[0]}}</span>
+        </div>
+
+<!--         <div class="row mt-3">
+            <div class="col-12 text-center mb-3">
+                <button v-if="type == 'new'" @click="add()" type="button" class="btn btn-success waves-effect waves-light m-1" :disabled="loading"><i v-if="!loading" class="fe-check-circle me-1"></i><i v-else class="fas fa-spinner fa-spin"></i> Create</button>
+                <button v-if="type == 'edit'" :disabled="loading" @click="edit()" type="button" class="btn btn-success waves-effect waves-light m-1"><i v-if="!loading" class="mdi mdi-square-edit-outline me-1"></i><i v-else class="fas fa-spinner fa-spin"></i> Edit</button>
+                <button type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions" @click="rearange()" class="btn btn-lg btn-secondary waves-effect waves-light">Preview</button>
+                <button @click="$emit('updatemode', 'list')" type="button" class="btn btn-light waves-effect waves-light m-1"><i class="fe-x me-1"></i> Cancel</button>
+            </div>
+        </div> -->
+
+</div>
+</template>
+
+<script>
+import multidropdown from './inputs/multidropdown.vue';
+// import Tcedit from './tcdit.vue';
+import gicon from './gicon.vue';
+import slugify from '@sindresorhus/slugify';
+import Multiput from './inputs/multiput.vue';
+
+export default {
+        components: {
+            multidropdown,
+            gicon,
+            Multiput
+
+        },
+        props: {
+            pageTitle: String,
+            title: String,
+            category: String,
+            route: String,
+            type: String,
+            id: Number,
+            data: {},
+            additionalTemplates: {},
+            config: {}
+        },
+        data() {
+            return {
+                title_value: null,
+                delivery: null,
+                // category: [],
+                errors: null,
+                test: null,
+                loading: false,
+                loader: true,
+                published: false,
+                lodash: _,
+                item: {},
+                published_from_value: null,
+                published_to_value: null,
+                type_value: null,
+                type_list: [
+                    {
+                        'id': 2,
+                        'title':'Blog'
+                    },
+                    {
+                        'id': 3,
+                        'title':'Course page'
+                    },
+                    {
+                        'id': 4,
+                        'title':'Trainer page'
+                    },
+                    {
+                        'id': 5,
+                        'title':'General'
+                    },
+                    {
+                        'id': 6,
+                        'title':'Knowledge'
+                    },
+                    {
+                        'id': 7,
+                        'title':'City page'
+                    }
+                ],
+                slug_value: null,
+                collapseAll: true,
+            }
+        },
+        methods: {
+            inputed($event, key) {
+                console.log($event.key, $event.data)
+                this.$set(this.item, $event.key, $event.data);
+
+            },
+            update_delivery(value) {
+                this.delivery = value;
+            },
+            update_category(value){
+                this.category = value;
+                // this.subcategory_value = [];
+            },
+            update_published_from(value){
+                this.published_from_value = value;
+            },
+            update_published_to(value){
+                this.published_to_value = value;
+            },
+            setCategories(){
+                // reset categorise and subcategories
+                this.categories = [];
+                this.subcategories = [];
+                this.category_value = [];
+                //this.subcategory_value = [];
+
+                // get categories and subcategories based on the page type
+                axios
+                .get('/api/category_group/' + this.type_value.id)
+                .then((response) => {
+                    this.categories = response.data.data;
+                    this.category_value = this.categories;
+
+                    var subcategories = [];
+                    if (this.category_value) {
+                    this.category_value.forEach(function(category, index) {
+                        if (category.subcategories) {
+                            category.subcategories.forEach(function(subcategory, index) {
+                                subcategories.push(subcategory);
+                            });
+                        }
+                    });
+                    this.subcategories = subcategories;
+                }
+                })
+                .catch((error) => {
+                    console.log(error)
+                });
+
+            },
+            add(){
+                console.log('on save :', this.item)
+                this.errors = null;
+                this.loading = true;
+                axios
+                .post('/api/' + this.route,
+                    {
+                        title: this.item.title,
+                        content: this.item.content ? this.item.content : '',
+                        //categories: this.category_value,
+
+                        published_value: this.item.published,
+                        published_from: this.item.published_from_value,
+                        published_to: this.item.published_to_value,
+                        countdown_from: this.item.countdown_from,
+                        countdown_to: this.item.countdown_to,
+
+                    }
+                )
+                .then((response) => {
+                    if (response.status == 201){
+                        //this.$emit('refreshcategories');
+                        this.$emit('created', response.data.data);
+                        this.$emit('updatemode', 'list');
+                        this.$toast.success('Created Successfully!')
+                        window.location="/page/" + response.data.data.id;
+                    }
+                    this.loading = false;
+                })
+                .catch((error) => {
+                    console.log(error)
+                    this.errors = error.response.data.errors;
+                    this.loading = false;
+                    this.$toast.error("Failed to create. " + this.errors[Object.keys(this.errors)[0]]);
+                });
+            },
+
+            // edit() {
+            //     var hasTerms = false;
+            //     this.data.content.forEach((row) => {
+            //         row.columns.forEach((column) => {
+            //             if (column.component == "terms_conditions") {
+            //                 hasTerms = true;
+            //             }
+            //         });
+            //     });
+
+            //     if(hasTerms){
+            //         Swal.fire({
+            //             title: 'Saving page.',
+            //             text: "Do you want to update users terms?",
+            //             icon: 'warning',
+            //             showCancelButton: true,
+            //             confirmButtonText: 'Yes',
+            //             cancelButtonText: 'No',
+            //             buttonsStyling: false,
+            //             customClass: {
+            //                 cancelButton: "btn btn-soft-secondary",
+            //                 confirmButton: "btn btn-soft-success",
+            //             },
+            //         }).then((result) => {
+            //             if (result.value) {
+            //                 this.editPage("yes");
+            //             }else{
+            //                 this.editPage(0);
+            //             }
+            //         })
+
+
+            //     }else{
+            //         this.editPage(0);
+            //     }
+            // },
+            // editPage(terms_val){
+            //     this.loading = true;
+            //     this.errors = null;
+
+            //     var data = {
+            //         title: this.title,
+            //         rows: JSON.stringify(this.rows_value),
+            //         categories: this.category_value,
+            //         subcategories: this.subcategory_value,
+            //         content: this.template_value ? JSON.stringify(this.$refs.tc.data) : '',
+            //         template_id: this.template_value ? this.template_value.id : null,
+            //         published: this.published,
+            //         indexed: this.indexed,
+            //         dynamic: this.dynamic,
+            //         id: this.id,
+            //         published_from: this.published_from_value,
+            //         published_to: this.published_to_value,
+            //         type: this.type_value ? this.type_value.title : null,
+            //         slug: this.slug_value,
+            //     };
+
+            //     if (terms_val == "yes") {
+            //         data.terms_val = terms_val;
+            //     }
+
+            //     axios
+            //     .patch('/api/' + this.route + '/' + this.id, data)
+            //     .then((response) => {
+            //         if (response.status == 200){
+            //             this.route == 'categories' ? this.$emit('edited', response.data) : this.$emit('refreshcategories');
+            //             // this.$emit('updatemode', 'list');
+            //             this.$toast.success('Saved Successfully!');
+            //             this.loading = false;
+            //         }
+            //     })
+            //     .catch((error) => {
+            //         console.log(error)
+            //         this.loading = false;
+            //         this.errors = error.response.data.errors;
+            //         this.$toast.error("Failed to save. " + this.errors[Object.keys(this.errors)[0]]);
+            //     });
+            // },
+            get(){
+                axios
+                .get('/api/' + this.route + '/' + this.id)
+                .then((response) => {
+                    if (response.status == 200){
+                        var data = response.data.data;
+                        // this.data = data;
+                        this.content = data.content
+                        this.title = data.title;
+                        this.published = data.published
+                        this.category = data.categories;
+
+                        this.loader = false;
+                    }
+                })
+                .catch((error) => {
+                    console.log(error)
+                });
+            },
+            changeMode() {
+                this.data.title = this.title;
+                this.data.slug = this.slug_value;
+                this.data.published = this.published;
+                this.data.content = this.$refs.tc.data;
+                this.$emit('changeMode', this.data);
+            },
+            preview() {
+                window.open(
+                    process.env.MIX_APP_URL + '/__preview/' + this.data.uuid + '?p=HEW7M9hd8xY2gkRk',
+                    '_blank'
+                );
+            }
+        },
+        mounted() {
+            if (this.data) {
+                var data = this.data;
+                this.title = data.title;
+                this.published = data.published;
+
+                //this.category_value = data.categories;
+
+
+                this.published_from_value = data.published_from;
+                this.published_to_value = data.published_to;
+
+
+
+                //this.setCategories();
+
+                this.slug_value = data.slug;
+                this.loader = false;
+            } else {
+                //this.get()
+            }
+
+        },
+        watch: {
+            // "category_value": function() {
+            //     var subcategories = [];
+            //     if (this.category_value) {
+            //         this.category_value.forEach(function(category, index) {
+            //             if (category.subcategories) {
+            //                 category.subcategories.forEach(function(subcategory, index) {
+            //                     subcategories.push(subcategory);
+            //                 });
+            //             }
+            //         });
+            //         this.subcategories = subcategories;
+            //     }
+            // }
+        }
+    }
+</script>
+
+<style scoped>
+    .form-check-input:checked {
+        background-color: #28a745;
+        border-color: #28a745;
+    }
+</style>
