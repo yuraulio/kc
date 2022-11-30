@@ -588,8 +588,8 @@ class SubscriptionController extends Controller
             }
         }catch(\Stripe\Exception\InvalidArgumentException $e){
             //dd($subscription);
-            $subscription->status = false;
-            $subscription->save();
+            //$subscription->status = false;
+            //$subscription->save();
         }
 
         

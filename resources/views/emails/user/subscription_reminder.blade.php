@@ -99,7 +99,7 @@
                                                                         <tr>
                                                                            <td align="left" valign="top" class="r15-i nl2go-default-textstyle" style="color: #3b3f44; font-family: arial,helvetica,sans-serif; font-size: 16px; line-height: 1.5; text-align: left;">
                                                                               <div>
-                                                                                 <p style="margin: 0px;"><span style="font-family: Tahoma, geneva, sans-serif;">We remind you that your subscription to the {CourseName} will be renewed in the end of <strong>{{$expirationDate}}</strong>. </span></p>
+                                                                                 <p style="margin: 0px;"><span style="font-family: Tahoma, geneva, sans-serif;">We remind you that your subscription to the {{$eventTitle}} will be renewed in the end of <strong>{{$expirationDate}}</strong>. </span></p>
                                                                                  <p style="margin: 0px;"> </p>
                                                                                  <br>
                                                                                  <p style="margin: 0px;"><span style="font-family: Tahoma, geneva, sans-serif;">­If you don't want to keep having full access to the course's updated videos, files and your personal notes for one more year you can always cancel your subscription in your account.</span></p>

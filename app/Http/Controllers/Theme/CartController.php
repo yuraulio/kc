@@ -233,11 +233,24 @@ class CartController extends Controller
     public function mobileCheck(Request $request){
         
         
-        $data = array();
-        
+        $data = array();        
         $validatorArray = [];
 
+        $phones = [];
+
+        $requestPhones = isset($request->all()['mobile']) ? $request->all()['mobile'] : [];
+        $requestPhonesCodes = isset($request->all()['country_code']) ? $request->all()['country_code'] : [];
+
+        foreach($requestPhones as $key => $phone){
+
+            $countryCode = isset($requestPhonesCodes[$key]) ? $requestPhonesCodes[$key] : '+30';
+            $phones[] = '+' .  $requestPhonesCodes[$key] . $phone;
+
+        }
+
+        $request->request->add(['mobileCheck' => $phones]);
         $validatorArray['mobileCheck.*'] = 'phone:AUTO';
+        
 
         $validator = Validator::make($request->all(), $validatorArray);
         //dd($validator);
