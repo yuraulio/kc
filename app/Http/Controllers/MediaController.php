@@ -7,6 +7,8 @@ use App\Model\Media;
 use App\Model\Event;
 use Intervention\Image\ImageManagerStatic as Image;
 use Alexusmai\LaravelFileManager\Events\Download;
+use App\Jobs\SaveImageWebp;
+use App\Jobs\UploadWebpImage;
 
 class MediaController extends Controller
 {
@@ -181,6 +183,9 @@ class MediaController extends Controller
             if (file_exists($name1.$name[0].'-crop'.$media['ext'])) {
                 unlink($name1.$name[0].'-crop'.$media['ext']);
             }
+            if (file_exists($name1.$name[0].'-crop'.'webp')) {
+                unlink($name1.$name[0].'-crop'.'webp');
+            }
 
             //save new crop image
         } else {
@@ -207,6 +212,8 @@ class MediaController extends Controller
         $name = explode('.', $media['original_name']);
         $image->save(public_path($media['path'].$name[0].'-crop'.$media['ext']), 80);
         //dd(public_path($media['path'].$name[0].'-crop'.$media['ext']));
+
+        dispatch((new SaveImageWebp($details, $request->all()))->delay(now()->addSeconds(3)));
 
         return response()->json([
             'success' => __('Already image cropped.'),
@@ -336,7 +343,7 @@ class MediaController extends Controller
     public function eventImage($id)
     {
         $data['media'] = Media::find($id);
-        
+
         return view('layouts.media_versions', $data);
     }
 

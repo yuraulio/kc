@@ -135,4 +135,14 @@ class DashboardController extends Controller
     {
         return view('new_admin.pages.ticker');
     }
+
+    public function countdown()
+    {
+        return view('new_admin.pages.countdown');
+    }
+
+    public function countdownNew()
+    {
+        return view('new_admin.pages.countdown_new');
+    }
 }

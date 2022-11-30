@@ -128,6 +128,9 @@
                             <li>
                                 <a href="{{route('admin-ticker')}}">Ticker management</a>
                             </li>
+                            <li>
+                                <a href="{{route('admin-countdown')}}">Countdown management</a>
+                            </li>
                         </ul>
                     </div>
                 </li>

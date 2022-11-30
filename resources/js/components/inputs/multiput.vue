@@ -147,6 +147,14 @@
         ></datepicker-component>
     </div>
 
+    <div v-if="type == 'datetimepicker'" class="">
+        <datetimepicker-component
+        :title="label"
+        @updatevalue="updated"
+        :prop-value="existingValue"
+        ></datetimepicker-component>
+    </div>
+
     <div v-if="type == 'multidropdown'" class="">
         <label v-if="label" :for="keyput" class="form-label">{{ label }}</label>
         <multidropdown

@@ -480,6 +480,7 @@ class UserController extends Controller
                             //unset($data_for_update['password']);
 
                             User::where('email', $update_user['email'])->update($data_for_update);
+                            $this->createKC($request);
 
                         }
 
