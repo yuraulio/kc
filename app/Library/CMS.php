@@ -35,6 +35,7 @@ class CMS
         $data['showAlumni'] = $event->ticket()->where('type', 'Alumni')->where('active', true)->first() ? true : false;
         $data['partners'] = $event->partners;
 
+        $data['countdown'] = get_countdowns($event);
 
 
         if ($event->ticket()->where('type', 'Early Bird')->first()) {
@@ -145,7 +146,6 @@ class CMS
             } else {
                 $find = false;
                 foreach ($new_events as $event) {
-                    
                     if(!$event->published){
                         continue;
                     }
@@ -209,7 +209,7 @@ class CMS
         //dd($categories);
         foreach ($categories as $category) {
             $newCategoriesArr[$category['id']] = $category ? $category->getSumOfStudentsByCategory() : 0;
-            
+
             if ($category) {
                 if (!key_exists($category['id'], $data['nonElearningEvents'])) {
                     $data['nonElearningEvents'][$category['id']]['name'] = $category['name'];

@@ -26,6 +26,7 @@ use App\Model\Testimonial;
 use App\Model\Faq;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\SlugTrait;
+use App\Model\Admin\Countdown;
 
 class Category extends Model
 {
@@ -194,7 +195,7 @@ class Category extends Model
                 'lesson_id' => $pLesson->pivot->lesson_id
                 ];
             //$pLesson->pivot->priority = $newPriorityLesson;
-            //$pLesson->pivot->save();  
+            //$pLesson->pivot->save();
         }
         //dd($or);
         $this->lessons()->wherePivotIn('lesson_id',array_keys($or))->detach();
@@ -208,7 +209,7 @@ class Category extends Model
         foreach($this->lessons()->orderBy('priority')->get() as  $pLesson){
 
             //$pLesson->pivot->priority = $newPriorityLesson;
-            //$pLesson->pivot->save();  
+            //$pLesson->pivot->save();
             $or[$pLesson->pivot->lesson_id] = [
                                         'priority' => $newPriorityLesson,
                                         'category_id' => $pLesson->pivot->category_id,
@@ -219,7 +220,7 @@ class Category extends Model
             $newPriorityLesson += 1;
         }
 
-        
+
 
         $this->lessons()->wherePivotIn('lesson_id',array_keys($or))->detach();
         $this->lessons()->attach($or);
@@ -256,10 +257,10 @@ class Category extends Model
 
         foreach($allEvents as $event)
         {
-            
+
             $allLessons = $event->allLessons->groupBy('id');
-        
-            
+
+
             $date = '';
             $time_starts = '';
             $time_ends = '';
@@ -276,7 +277,7 @@ class Category extends Model
                 $priority = isset($priorityLesson->last()['pivot']['priority']) ? $priorityLesson->last()['pivot']['priority'] + 1 :count($priorityLesson)+1 ;
             }
 
-            
+
 
             if(isset($allLessons[$lesson['id']][0])){
                 $date = $allLessons[$lesson['id']][0]['pivot']['date'];
@@ -296,8 +297,8 @@ class Category extends Model
                 'time_ends'=>$time_ends, 'duration' => $duration, 'room' => $room, 'instructor_id' => $instructor_id, 'priority' => $priority,
                 'automate_mail' => $automate_mail, 'send_automate_mail' => $send_automate_mail]);
             $event->fixOrder();
-            
-            
+
+
         }
 
         $lesson->topic()->wherePivot('category_id',$this->id)->detach();

@@ -19,7 +19,9 @@
     /> -->
 
     <DxDateBox
+        v-model:value="value"
         type="datetime"
+        :value="value"
         @value-changed="$emit('updatevalue', value)"
     />
 
@@ -40,24 +42,18 @@
         },
         props: {
             title: String,
-            propValue: {},
-            required: false
+            value: null,
+            required: false,
         },
         data() {
             return {
-                value: new Date(1981, 3, 27),
                 now: new Date(),
-                firstWorkDay2017: new Date(2017, 0, 3),
                 min: new Date(1900, 0, 1),
-                dateClear: new Date(2015, 11, 1, 6),
+                dateClear: new Date(),
             }
         },
-
-        methods: {
-
-        },
         mounted() {
-            console.log('from datetimepicker component')
+
         }
     }
 </script>

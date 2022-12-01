@@ -149,9 +149,9 @@
 
     <div v-if="type == 'datetimepicker'" class="">
         <datetimepicker-component
-        :title="label"
-        @updatevalue="updated"
-        :prop-value="existingValue"
+            :title="label"
+            @updatevalue="updated"
+            :value="existingValue"
         ></datetimepicker-component>
     </div>
 

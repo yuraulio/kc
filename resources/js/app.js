@@ -106,6 +106,7 @@ Vue.component('page-new', require('./components/page-new.vue').default);
 Vue.component('page-edit-simple', require('./components/page-edit-simple.vue').default);
 
 Vue.component('countdown-new', require('./components/countdown-new.vue').default);
+Vue.component('countdown-edit', require('./components/countdown-edit.vue').default);
 
 import VueClipboard from 'vue-clipboard2'
 VueClipboard.config.autoSetContainer = true // add this line

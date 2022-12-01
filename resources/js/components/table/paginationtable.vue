@@ -420,7 +420,7 @@
                     <!-- if not dynamic var exist -> current page is Ticker -->
                     <template v-else>
                         <div :key="props.rowData.id"  class="form-check form-switch mb-1" style="display: inline-grid; cursor: pointer">
-                                <input :key="props.rowData.id + 'on'" @click="changePublish(props.rowData, 'ticker')" :id="props.rowData.id + 'input'" type="checkbox" class="form-check-input" name="color-scheme-mode" value="light" :for="props.rowData.id + 'input'" :checked="props.rowData.published">
+                                <input :key="props.rowData.id + 'on'" @click="changePublish(props.rowData, props.rowField.model)" :id="props.rowData.id + 'input'" type="checkbox" class="form-check-input" name="color-scheme-mode" value="light" :for="props.rowData.id + 'input'" :checked="props.rowData.published">
                             </div>
                     </template>
 

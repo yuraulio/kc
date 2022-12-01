@@ -6,11 +6,6 @@
                 <h4 v-if="title" class="page-title d-inline-block">Edit page</h4>
                 <h4 v-else class="page-title d-inline-block">New page</h4>
 
-                <!-- <button :disabled="loading" @click="changeMode()" type="button" class="btn btn-soft-info waves-effect waves-light float-end">Page</button>
-                <button v-if="type != 'new'" @click="preview()" class="btn btn-block btn-soft-warning waves-effect waves-light me-2 float-end">Live preview</button> -->
-                <!--
-                <button type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions" :disabled="!template_value" @click="rearange()" class="btn btn-block btn-soft-info waves-effect waves-light me-2 float-end">Pseudo preview</button>
-                -->
                 <button v-if="type == 'new'" @click="add()" type="button" class="btn btn-soft-success waves-effect waves-light me-2 float-end" :disabled="loading"><i v-if="loading" class="fas fa-spinner fa-spin"></i> Create</button>
                 <button v-if="type == 'edit'" :disabled="loading" @click="edit()" type="button" class="btn btn-soft-success waves-effect waves-light me-2 float-end"><i v-if="loading" class="fas fa-spinner fa-spin"></i> Save</button>
                 <a href="/pages" type="button" class="btn btn-soft-secondary waves-effect waves-light me-2 float-end">Cancel</a>
@@ -98,16 +93,16 @@
                         <div class="col-xl-12">
 
                             <multidropdown
-                                title="Type"
+                                title="Delivery"
                                 :multi="false"
                                 @updatevalue="update_delivery"
-                                :prop-value="type_value"
+                                @prop-value="delivery"
                                 :fetch="true"
                                 route="getDeliveries"
                             ></multidropdown>
 
                             <multidropdown
-                                title="Type"
+                                title="Category"
                                 :multi="true"
                                 @updatevalue="update_category"
                                 :fetch="true"
@@ -161,13 +156,13 @@
                             <datepicker-component
                                 title="Publish from"
                                 @updatevalue="update_published_from"
-                                :prop-value="published_from_value"
+                                :prop-value="item['published_from']"
                             ></datepicker-component>
 
                             <datepicker-component
                                 title="Publish to"
                                 @updatevalue="update_published_to"
-                                :prop-value="published_to_value"
+                                :prop-value="item['published_to']"
                             ></datepicker-component>
 
                             <!--
@@ -234,100 +229,72 @@ export default {
         },
         data() {
             return {
-                title_value: null,
-                delivery: null,
-                // category: [],
+                delivery: [],
                 errors: null,
                 test: null,
                 loading: false,
                 loader: true,
-                published: false,
+                published: true,
                 lodash: _,
                 item: {},
                 published_from_value: null,
                 published_to_value: null,
                 type_value: null,
-                type_list: [
-                    {
-                        'id': 2,
-                        'title':'Blog'
-                    },
-                    {
-                        'id': 3,
-                        'title':'Course page'
-                    },
-                    {
-                        'id': 4,
-                        'title':'Trainer page'
-                    },
-                    {
-                        'id': 5,
-                        'title':'General'
-                    },
-                    {
-                        'id': 6,
-                        'title':'Knowledge'
-                    },
-                    {
-                        'id': 7,
-                        'title':'City page'
-                    }
-                ],
-                slug_value: null,
-                collapseAll: true,
+
             }
         },
         methods: {
             inputed($event, key) {
-                console.log($event.key, $event.data)
                 this.$set(this.item, $event.key, $event.data);
 
             },
             update_delivery(value) {
-                this.delivery = value;
+                this.item.delivery = value;
             },
             update_category(value){
-                this.category = value;
+                this.item.category = value;
                 // this.subcategory_value = [];
             },
             update_published_from(value){
-                this.published_from_value = value;
+                this.item.published_from = value;
             },
             update_published_to(value){
-                this.published_to_value = value;
+                this.item.published_to = value;
             },
             setCategories(){
+                this.delivery = this.item.delivery;
                 // reset categorise and subcategories
-                this.categories = [];
-                this.subcategories = [];
-                this.category_value = [];
+                // this.categories = [];
+                // this.subcategories = [];
+                // this.category_value = [];
                 //this.subcategory_value = [];
 
                 // get categories and subcategories based on the page type
-                axios
-                .get('/api/category_group/' + this.type_value.id)
-                .then((response) => {
-                    this.categories = response.data.data;
-                    this.category_value = this.categories;
+                // axios
+                // .get('/api/category_group/' + this.type_value.id)
+                // .then((response) => {
+                //     this.categories = response.data.data;
+                //     this.category_value = this.categories;
 
-                    var subcategories = [];
-                    if (this.category_value) {
-                    this.category_value.forEach(function(category, index) {
-                        if (category.subcategories) {
-                            category.subcategories.forEach(function(subcategory, index) {
-                                subcategories.push(subcategory);
-                            });
-                        }
-                    });
-                    this.subcategories = subcategories;
-                }
-                })
-                .catch((error) => {
-                    console.log(error)
-                });
+                //     var subcategories = [];
+                //     if (this.category_value) {
+                //     this.category_value.forEach(function(category, index) {
+                //         if (category.subcategories) {
+                //             category.subcategories.forEach(function(subcategory, index) {
+                //                 subcategories.push(subcategory);
+                //             });
+                //         }
+                //     });
+                //     this.subcategories = subcategories;
+                // }
+                // })
+                // .catch((error) => {
+                //     console.log(error)
+                // });
 
             },
             add(){
+                console.log('published: ', this.published)
                 console.log('on save :', this.item)
                 this.errors = null;
                 this.loading = true;
@@ -338,11 +305,15 @@ export default {
                         content: this.item.content ? this.item.content : '',
                         //categories: this.category_value,
 
-                        published_value: this.item.published,
-                        published_from: this.item.published_from_value,
-                        published_to: this.item.published_to_value,
+                        published_from: this.item.published_from,
+                        published_to: this.item.published_to,
                         countdown_from: this.item.countdown_from,
                         countdown_to: this.item.countdown_to,
+                        published: this.published,
+                        delivery: this.item.delivery,
+                        category: this.item.category,
+                        button_status: this.item.button_status,
+                        button_title: this.item.button_title
 
                     }
                 )
@@ -352,7 +323,7 @@ export default {
                         this.$emit('created', response.data.data);
                         this.$emit('updatemode', 'list');
                         this.$toast.success('Created Successfully!')
-                        window.location="/page/" + response.data.data.id;
+                        //window.location="/countdown/" + response.data.data.id;
                     }
                     this.loading = false;
                 })
@@ -364,84 +335,28 @@ export default {
                 });
             },
 
-            // edit() {
-            //     var hasTerms = false;
-            //     this.data.content.forEach((row) => {
-            //         row.columns.forEach((column) => {
-            //             if (column.component == "terms_conditions") {
-            //                 hasTerms = true;
-            //             }
-            //         });
-            //     });
+            edit() {
 
-            //     if(hasTerms){
-            //         Swal.fire({
-            //             title: 'Saving page.',
-            //             text: "Do you want to update users terms?",
-            //             icon: 'warning',
-            //             showCancelButton: true,
-            //             confirmButtonText: 'Yes',
-            //             cancelButtonText: 'No',
-            //             buttonsStyling: false,
-            //             customClass: {
-            //                 cancelButton: "btn btn-soft-secondary",
-            //                 confirmButton: "btn btn-soft-success",
-            //             },
-            //         }).then((result) => {
-            //             if (result.value) {
-            //                 this.editPage("yes");
-            //             }else{
-            //                 this.editPage(0);
-            //             }
-            //         })
+                this.item.published = this.published
 
+                axios
+                    .patch('/api/' + this.route + '/' + this.id, this.item)
+                    .then((response) => {
+                        if (response.status == 200){
+                            this.route == 'categories' ? this.$emit('edited', response.data) : this.$emit('refreshcategories');
+                            // this.$emit('updatemode', 'list');
+                            this.$toast.success('Saved Successfully!');
+                            this.loading = false;
+                        }
+                    })
+                    .catch((error) => {
+                        console.log(error)
+                        this.loading = false;
+                        this.errors = error.response.data.errors;
+                        this.$toast.error("Failed to save. " + this.errors[Object.keys(this.errors)[0]]);
+                    });
 
-            //     }else{
-            //         this.editPage(0);
-            //     }
-            // },
-            // editPage(terms_val){
-            //     this.loading = true;
-            //     this.errors = null;
-
-            //     var data = {
-            //         title: this.title,
-            //         rows: JSON.stringify(this.rows_value),
-            //         categories: this.category_value,
-            //         subcategories: this.subcategory_value,
-            //         content: this.template_value ? JSON.stringify(this.$refs.tc.data) : '',
-            //         template_id: this.template_value ? this.template_value.id : null,
-            //         published: this.published,
-            //         indexed: this.indexed,
-            //         dynamic: this.dynamic,
-            //         id: this.id,
-            //         published_from: this.published_from_value,
-            //         published_to: this.published_to_value,
-            //         type: this.type_value ? this.type_value.title : null,
-            //         slug: this.slug_value,
-            //     };
-
-            //     if (terms_val == "yes") {
-            //         data.terms_val = terms_val;
-            //     }
-
-            //     axios
-            //     .patch('/api/' + this.route + '/' + this.id, data)
-            //     .then((response) => {
-            //         if (response.status == 200){
-            //             this.route == 'categories' ? this.$emit('edited', response.data) : this.$emit('refreshcategories');
-            //             // this.$emit('updatemode', 'list');
-            //             this.$toast.success('Saved Successfully!');
-            //             this.loading = false;
-            //         }
-            //     })
-            //     .catch((error) => {
-            //         console.log(error)
-            //         this.loading = false;
-            //         this.errors = error.response.data.errors;
-            //         this.$toast.error("Failed to save. " + this.errors[Object.keys(this.errors)[0]]);
-            //     });
-            // },
+            },
             get(){
                 axios
                 .get('/api/' + this.route + '/' + this.id)
@@ -449,10 +364,12 @@ export default {
                     if (response.status == 200){
                         var data = response.data.data;
                         // this.data = data;
-                        this.content = data.content
-                        this.title = data.title;
+                        this.item.content = data.content
+                        this.item.title = data.title;
                         this.published = data.published
-                        this.category = data.categories;
+                        //this.category = data.categories;
+
+                        this.setCategories();
 
                         this.loader = false;
                     }
@@ -461,40 +378,32 @@ export default {
                     console.log(error)
                 });
             },
-            changeMode() {
-                this.data.title = this.title;
-                this.data.slug = this.slug_value;
-                this.data.published = this.published;
-                this.data.content = this.$refs.tc.data;
-                this.$emit('changeMode', this.data);
-            },
-            preview() {
-                window.open(
-                    process.env.MIX_APP_URL + '/__preview/' + this.data.uuid + '?p=HEW7M9hd8xY2gkRk',
-                    '_blank'
-                );
-            }
+
         },
         mounted() {
+
             if (this.data) {
+
                 var data = this.data;
-                this.title = data.title;
-                this.published = data.published;
+                this.item = data
+                // this.item.title = data.title;
+                // this.item.published = data.published;
+                //this.item.content = data.content
 
                 //this.category_value = data.categories;
 
 
-                this.published_from_value = data.published_from;
-                this.published_to_value = data.published_to;
+               // this.published_from_value = data.published_from;
+                //this.published_to_value = data.published_to;
+
+                // TODO LOAD DELIVERY
+                this.setCategories();
 
 
 
-                //this.setCategories();
-
-                this.slug_value = data.slug;
                 this.loader = false;
             } else {
-                //this.get()
+                this.get()
             }
 
         },

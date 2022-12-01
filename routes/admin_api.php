@@ -48,8 +48,10 @@ Route::domain(env('PREFIX_NEW_ADMIN_DOMAIN_URL') . env('APP_DOMAIN'))->group(fun
         Route::post('countdown/deleteMultiple', ['App\Http\Controllers\Admin_api\CountdownController', 'deleteMultiple']);
         Route::post('countdown/widgets', [CountdownController::class, 'widgets']);
         Route::resource('countdown', Admin_api\CountdownController::class)->only([
-            'index', 'store', 'update', 'show', 'destroy'
+            'index', 'store', 'update', 'show','destroy'
         ]);
+        Route::put('countdown/update_published/{id}', ['App\Http\Controllers\Admin_api\CountdownController', 'updatePublished']);
+
 
         // Categories Event
         Route::get('getCategories', ['App\Http\Controllers\Admin_api\CategoryEventController', 'getList']);
@@ -85,7 +87,6 @@ Route::domain(env('PREFIX_NEW_ADMIN_DOMAIN_URL') . env('APP_DOMAIN'))->group(fun
         });
 
         Route::put('pages/update_published/{id}', [PagesController::class, 'updatePublished']);
-
         Route::put('ticker/update_published/{id}', [TickerController::class, 'updatePublished']);
 
         Route::post('pages/upload_image', [PagesController::class, 'uploadImage']);

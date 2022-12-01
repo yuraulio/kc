@@ -22,14 +22,21 @@ class CreateCmsCountdownTable extends Migration
             $table->string('button_title')->nullable();
             $table->date('published_from')->nullable();
             $table->date('published_to')->nullable();
-            $table->date('countdown_from');
-            $table->date('countdown_to');
+            $table->timestamp('countdown_from');
+            $table->timestamp('countdown_to');
             $table->timestamps();
         });
 
-        Schema::create('cms_countdownable', function (Blueprint $table) {
+        Schema::create('cms_countdown_delivery', function (Blueprint $table) {
+            $table->id();
             $table->integer('countdown_id');
-            $table->morphs('countdownable');
+            $table->integer('delivery_id');
+
+        });
+        Schema::create('cms_countdown_category', function (Blueprint $table) {
+            $table->id();
+            $table->integer('countdown_id');
+            $table->integer('category_id');
         });
     }
 
@@ -41,6 +48,7 @@ class CreateCmsCountdownTable extends Migration
     public function down()
     {
         Schema::dropIfExists('cms_countdown');
-        Schema::dropIfExists('cms_countdownable');
+        Schema::dropIfExists('cms_countdown_delivery');
+        Schema::dropIfExists('cms_countdown_category');
     }
 }

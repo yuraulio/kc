@@ -165,6 +165,7 @@
             }
         },
         mounted() {
+            console.log(this)
             if (this.propValue){
                 this.value = this.propValue;
             }
