@@ -14,18 +14,18 @@ use App\Http\Resources\CountdownResource;
 // use App\Jobs\DeleteMultipleTickers;
 use Carbon\Carbon;
 use App\Model\Delivery;
+use App\Model\Category;
 
 class CountdownController extends Controller
 {
     /**
-     * Get ticker
+     * Get countdown
      *
      * @return AnonymousResourceCollection
      */
     public function index(Request $request)
     {
         $this->authorize('viewAny', Countdown::class, Auth::user());
-
 
         try {
             // $countdowns = Countdown::with(["pages", "user"])
@@ -51,7 +51,7 @@ class CountdownController extends Controller
     }
 
     /**
-     * Edit ticker
+     * Edit countdown
      *
      * @return CountdownResource
      */
@@ -61,23 +61,67 @@ class CountdownController extends Controller
             $countdown = Countdown::find($id);
 
             $this->authorize('update', $countdown, Auth::user());
+
             $countdown->title = $request->title;
             $countdown->content = $request->content;
             $countdown->published = $request->published;
-            $countdown->from_date = ($request->from_date) ? Carbon::parse($request->from_date) : null;
-            $countdown->until_date = ($request->until_date) ? Carbon::parse($request->until_date) : null;
+            $countdown->countdown_from = ($request->countdown_from) ? Carbon::parse($request->countdown_from) : null;
+            $countdown->countdown_to = ($request->countdown_to) ? Carbon::parse($request->countdown_to) : null;
+            $countdown->published_from = ($request->published_from) ? Carbon::parse($request->published_from) : null;
+            $countdown->published_to = ($request->published_to) ? Carbon::parse($request->published_to) : null;
+            $countdown->button_status = $request->button_status;
+            $countdown->button_title = $request->button_title;
 
-            $countdown->save();
+            $updated = $countdown->save();
 
-            return new CountdownResource($countdown);
+            $countdown = new CountdownResource($countdown);
+
+            if($updated && isset($request->delivery)){
+
+                $countdown->delivery()->detach();
+
+                $countdown->delivery()->attach([$request->delivery['id']]);
+
+            }
+
+            if($updated && isset($request->category) && count($request->category) != 0){
+
+                $countdown->category()->detach();
+
+                foreach($request->category as $category){
+                    $countdown->category()->attach($category['id']);
+                }
+
+            }
+
+            return $countdown;
         } catch (Exception $e) {
-            Log::error("Failed to edit ticker. " . $e->getMessage());
+            Log::error("Failed to edit countdown. " . $e->getMessage());
             return response()->json(['message' => $e->getMessage()], 400);
         }
     }
 
     /**
-     * Add ticker
+     * Get page
+     *
+     * @return PageResource
+     */
+    public function show(int $id)
+    {
+        try {
+            $countdown = Countdown::find($id);
+
+            $this->authorize('view', $countdown, Auth::user());
+
+            return new CountdownResource($countdown);
+        } catch (Exception $e) {
+            Log::error("Failed to get countdown. " . $e->getMessage());
+            return response()->json(['message' => $e->getMessage()], 400);
+        }
+    }
+
+    /**
+     * Add countdown
      *
      * @return CountdownResource
      */
@@ -90,21 +134,41 @@ class CountdownController extends Controller
             $countdown->title = $request->title;
             $countdown->content = $request->content;
             $countdown->published = $request->published;
-            $countdown->from_date = ($request->from_date) ? Carbon::parse($request->from_date) : null;
-            $countdown->until_date = ($request->until_date) ? Carbon::parse($request->until_date) : null;
+            $countdown->countdown_from = ($request->countdown_from) ? Carbon::parse($request->countdown_from) : null;
+            $countdown->countdown_to = ($request->countdown_to) ? Carbon::parse($request->countdown_to) : null;
+            $countdown->published_from = ($request->published_from) ? Carbon::parse($request->published_from) : null;
+            $countdown->published_to = ($request->published_to) ? Carbon::parse($request->published_to) : null;
+            $countdown->button_status = $request->button_status;
+            $countdown->button_title = $request->button_title;
 
-            $countdown->save();
+            $stored = $countdown->save();
 
-            return new CountdownResource($countdown);
+            $countdown = new CountdownResource($countdown);
+
+            if($stored && isset($request->delivery)){
+
+                $countdown->delivery()->attach([$request->delivery['id']]);
+
+            }
+
+            if($stored && isset($request->category) && count($request->category) != 0){
+
+                foreach($request->category as $category){
+                    $countdown->category()->attach($category['id']);
+                }
+
+            }
+
+            return $countdown;
 
         } catch (Exception $e) {
-            Log::error("Failed to add new ticker. " . $e->getMessage());
+            Log::error("Failed to add new countdown. " . $e->getMessage());
             return response()->json(['message' => $e->getMessage()], 400);
         }
     }
 
     /**
-     * Delete ticker
+     * Delete countdown
      *
      * @return JsonResponse
      */
@@ -115,11 +179,14 @@ class CountdownController extends Controller
 
             $this->authorize('delete', $countdown, Auth::user());
 
+            $countdown->delivery()->detach();
+            $countdown->category()->detach();
+
             $countdown->delete();
 
             return response()->json(['message' => 'success'], 200);
         } catch (Exception $e) {
-            Log::error("Failed to delete ticker. " . $e->getMessage());
+            Log::error("Failed to delete countdown. " . $e->getMessage());
             return response()->json(['message' => $e->getMessage()], 400);
         }
     }
@@ -157,7 +224,7 @@ class CountdownController extends Controller
 
             return response()->json(['message' => 'success', 'data' => ['published' => $countdown->published]], 200);
         } catch (Exception $e) {
-            Log::error("Failed to publish ticker. " . $e->getMessage());
+            Log::error("Failed to publish countdown. " . $e->getMessage());
             return response()->json(['message' => $e->getMessage()], 400);
         }
     }

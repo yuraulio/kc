@@ -36,6 +36,22 @@ if(!function_exists('get_tickers')){
     }
 }
 
+if(!function_exists('get_countdowns')){
+    function get_countdowns($event){
+
+        //$countdowns = $event->delivery->first()->countdown()->where('published_from', '>=', date('Y-m-d'))->where('published_to', '=', date('Y-m-d'))->where('countdown_from', '>=', date('Y-m-d H:s'))->where('countdown_to', '<=', date('Y-m-d H:s'))->get();
+        $countdowns = $event->delivery->first()->countdown()
+                        ->where('published_from', '<=', date('Y-m-d'))
+                        ->where('published_to', '>=', date('Y-m-d'))
+                        ->where('countdown_from', '<=', date('Y-m-d H:s'))
+                        ->where('countdown_to', '>=', date('Y-m-d H:s'))
+                        ->get()
+                        ->toArray();
+
+        return $countdowns;
+    }
+}
+
 function get_social_media(){
     $social_media = Option::where('name', 'social_media')->get();
     $social_media = json_decode($social_media[0]['settings'], true);

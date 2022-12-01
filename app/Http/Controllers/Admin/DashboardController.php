@@ -145,4 +145,9 @@ class DashboardController extends Controller
     {
         return view('new_admin.pages.countdown_new');
     }
+
+    public function countdownEdit($id)
+    {
+        return view('new_admin.pages.countdown_edit', ["id" => $id]);
+    }
 }

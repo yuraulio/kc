@@ -50,7 +50,8 @@ export default {
             name: 'visibility',
             title: 'Published' + '<i title="Column cant be sorted." class="fa fa-info-circle text-muted ms-1"></i>',
             dataClass: 'align-middle text-center',
-            titleClass: 'text-center'
+            titleClass: 'text-center',
+            model: 'countdown'
         },
         {
             name: 'title',
@@ -88,7 +89,7 @@ export default {
             dataClass: 'align-middle actions-width'
         }
     ],
-    apiUrl: '/api/countdowns',
+    apiUrl: '/api/countdown',
     create: true,
     createLink: '/new_countdown',
     editLink: '/countdown/',
