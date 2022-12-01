@@ -243,7 +243,7 @@ class CartController extends Controller
 
         foreach($requestPhones as $key => $phone){
 
-            $countryCode = isset($requestPhonesCodes[$key]) ? $requestPhonesCodes[$key] : '+30';
+            $countryCode = isset($requestPhonesCodes[$key]) ? $requestPhonesCodes[$key] : '30';
             $phones[] = '+' .  $countryCode . $phone;
 
         }
