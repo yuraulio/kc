@@ -48,7 +48,8 @@ class ExportAllUserByCategory extends Command
         //$this->queryForbUYBigElearningAccess();
         //$this->queryForUsesHasOnlyFreeEvents();
       	//$this->queryForUsesHasSmallElearning();
-        $this->queryForInclassElearning();
+        //$this->queryForInclassElearning();
+        $this->queryForUsersHaveTransactionsByDate('2022-11-17');
     }
 
 
@@ -322,7 +323,7 @@ class ExportAllUserByCategory extends Command
          
     }
   
-   private function queryForInclassElearning(){
+    private function queryForInclassElearning(){
 
         $users = User::doesntHave('subscriptionEvents')->whereHas('transactions',function($transaction){
 
@@ -395,6 +396,46 @@ class ExportAllUserByCategory extends Command
 
     }
     
+
+    private function queryForUsersHaveTransactionsByDate($date = '1970-01-01'){
+
+        $toDate = date('Y-m-d', strtotime(' +1 day'));
+        //$date = '1970-01-01';
+
+        $users = User::whereHas('transactions',function($transaction) use($date,$toDate){
+
+            $transaction->whereBetween('created_at', [$date,$toDate])->whereHas('event', function($event){
+                $event->whereHas('event_info1',function($eventInfo){
+                    return $eventInfo->where('course_payment_method','<>','free');
+                });
+            });
+        })
+
+        
+        ->with([
+            'events_for_user_list' => function($event){
+                return $event->wherePivot('paid',true)->whereHas('event_info1',function($eventInfo){
+                    return $eventInfo->where('course_payment_method','<>','free');
+                });
+            }
+        ])
+        ->get();
+
+        echo count($users);
+        echo "####";
+        
+        $columns = array("ID", "First Name", "Last Name", "email",'Mobile','zip');
+
+        $file = fopen('buy_event_by_date.csv', 'w');
+        fputcsv($file, $columns);
+
+        foreach($users as $user){
+            fputcsv($file, array($user->id, $user->firstname,  $user->lastname, $user->email,$user->mobile,$user->postcode));
+        }
+
+        fclose($file);
+
+    }
 
       
   

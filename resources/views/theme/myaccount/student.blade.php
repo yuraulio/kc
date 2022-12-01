@@ -1254,6 +1254,7 @@
                                                       $a = '';
                                                       $status = '';
                                                       $row_status = '';
+                                                      $showToggle = isset($event['mySubscription']['stripe_status']) && $event['mySubscription']['stripe_status'] == 'active' ? true : false;
                                                       if($event['mySubscription']['status']){
                                                          $a = 'checked';
                                                          $status = 'Active';
@@ -1264,7 +1265,7 @@
                                                          //row_status = ` style="color:red;" `;
                                                       }
                                                    ?>
-                                                @if($status !== 'Cancel')
+                                                @if($showToggle)
                                                 <div class="status_switch">
                                                    <div class="onoffswitch" data-status="{{$status}}" data-id="{{$event['mySubscription']['id']}}" id="onoffswitch">
                                                       <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" tabindex="0" <?php echo $a; ?>>
@@ -1608,6 +1609,7 @@
                                                       $a = '';
                                                       $status = '';
                                                       $row_status = '';
+                                                      $showToggle = isset($event['mySubscription']['stripe_status']) && $event['mySubscription']['stripe_status'] == 'active' ? true : false;
                                                       if($event['mySubscription']['status']){
                                                          $a = 'checked';
                                                          $status = 'Active';
@@ -1618,7 +1620,7 @@
                                                          //row_status = ` style="color:red;" `;
                                                       }
                                                    ?>
-                                                @if($status !== 'Cancel')
+                                                @if($showToggle)
                                                 <div class="status_switch">
                                                    <div class="onoffswitch" data-status="{{$status}}" data-id="{{$event['mySubscription']['id']}}" id="onoffswitch">
                                                       <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" tabindex="0" <?php echo $a; ?>>
