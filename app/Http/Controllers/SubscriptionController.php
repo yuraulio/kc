@@ -19,7 +19,7 @@ class SubscriptionController extends Controller
         $subscriptions = [];
 
         $events = Event::has('transactions')->with('category', 'delivery')->get()->groupBy('id');
-        $data['subscriptions'] = Transaction::with('user', 'user.events', 'subscription.event', 'subscription.event.category')->get()->sortBy('created_at');
+        $data['subscriptions'] = Transaction::with('user', 'user.events_for_user_list', 'subscription.event', 'subscription.event.category')->get()->sortBy('created_at');
         // $plans = Plan::all()->groupby('stripe_plan');
         //$plans = Plan::with('categories')->get()->groupBy('id');
         $plans = Plan::wherePublished(1)->with('categories')->get();
@@ -59,16 +59,21 @@ class SubscriptionController extends Controller
                 }
                 //dd($sub['user']);
                 $registrationEvent = null;
-                foreach($sub['user'][0]['events'] as $userEvent){
+                foreach($sub['user'][0]['events_for_user_list'] as $userEvent){
                     $category = isset($userEvent['category'][0]['id']) ? $userEvent['category'][0]['id'] : -1;
                     if(in_array($category,$categories)){
                         $registrationEvent = $userEvent;
                     }
                 }
-            
+             	
                 $name = $sub['user'][0]['firstname'] . ' ' . $sub['user'][0]['lastname'];
                 $amount = '€'.number_format(intval($sub['total_amount']), 2, '.', '');
-                $delivery = $registrationEvent->is_inclass_course() ? 'In-Class' : 'E-Learning';
+              
+              	$delivery = '-';
+              	if($registrationEvent){
+                  $delivery = $registrationEvent->is_inclass_course() ? 'In-Class' : 'E-Learning';
+                }
+                
 
                 $subscriptions[$sub['subscription'][0]['stripe_id']]=['user_id' => $sub['user'][0]['id'], 'user' => $name, 'plan_id' => $sub['subscription'][0]['event'][0]['plans'][0]['id'], 'plan_name' => $sub['subscription'][0]['name'],
                     'event_title' => $sub['subscription'][0]['event'][0]['title'], 'status' => $status,'ends_at'=>$sub['ends_at'],
