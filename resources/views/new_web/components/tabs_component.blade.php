@@ -152,6 +152,16 @@
 @push('components-scripts')
     <script type="text/javascript">
         $(document).ready(function() {
+
+
+            if(hasCountdown){
+                $('.tab-controls').addClass('has_countdown')
+            }
+
+
+
+
+
             $('#open-code-popup').click(function(e) {
                 $('.code-popup-wrapper').addClass('active');
             });

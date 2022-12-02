@@ -19,17 +19,20 @@
             </script>
         @endif
     @endsection
+
+    @include('new_web.layouts.countdown', ['event' => $event])
+
 @elseif ($instructor)
     @section('header')
         {{-- <title>{{ $instructor->title . " " . $instructor->subtitle }}</title> --}}
         {!! $instructor->metable->getMetas() !!}
 
             @if(isset($meta['meta_schema']) && $meta['meta_schema'])
-    
+
             <script type="application/ld+json">
                 {!! $meta['meta_schema'] ?? "" !!}
             </script>
-    
+
             @endif
     @endsection
 @else

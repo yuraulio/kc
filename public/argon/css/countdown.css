@@ -1,0 +1,14 @@
+@import url("https://fonts.googleapis.com/css?family=Lato");
+
+.wrapper {
+  text-align: center;
+}
+.time {
+  color: black;
+  font-size: 2em;
+}
+.label {
+  font-size: 1em;
+  display: block;
+  color: #aaa;
+}

@@ -1291,6 +1291,7 @@
        .section-course-tabs .content-wrapper .tabs-wrapper.fixed-tab-controls .tab-controls:after { content: ''; position: fixed; top: 75px; display: block; left: 0; width: 100vw; height: 1px; background-color: #ffffff; }
 
        .tab-controls.has_ticker { top: 126px !important; }
+       .tab-controls.has_countdown { top: 279px !important; }
 
        .elearning-page-wrapper{ padding-top: 26px; margin-bottom: 0; }
        .elearning-page-wrapper .page-content{ box-shadow: none; }

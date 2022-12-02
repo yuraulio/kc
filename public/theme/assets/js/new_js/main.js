@@ -308,6 +308,14 @@ jQuery(document).ready(function($) {
                     $('.tab-controls').removeClass('has_ticker')
                 }
 
+            }
+            if(hasCountdown){
+                $('#header').removeClass('has_countdown');
+
+                if($(window).width() <= mobileWidth){
+                    //console.log('remove has ticker tab-content')
+                    $('.tab-controls').removeClass('has_countdown')
+                }
 
             }
 
@@ -319,6 +327,15 @@ jQuery(document).ready(function($) {
                 if($(window).width() <= mobileWidth){
                     //console.log('add has ticker tab-content')
                     $('.tab-controls').addClass('has_ticker')
+                }
+            }
+
+            if(hasCountdown){
+                $('#header').addClass('has_countdown');
+
+                if($(window).width() <= mobileWidth){
+                    //console.log('add has ticker tab-content')
+                    $('.tab-controls').addClass('has_countdown')
                 }
             }
 

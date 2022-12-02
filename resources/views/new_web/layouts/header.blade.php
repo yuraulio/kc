@@ -99,6 +99,10 @@
         if(hasTicker){
             $('#header').addClass('has_ticker');
         }
+
+        if(hasCountdown){
+            $('#header').addClass('has_countdown');
+        }
     });
 </script>
 

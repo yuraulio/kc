@@ -7,7 +7,6 @@
     @endif
 
 @stop
-
 @section('blog-custom-css')
     <link type="text/css" href="{{ asset('binshops-blog.css') }}" rel="stylesheet">
 @endsection
