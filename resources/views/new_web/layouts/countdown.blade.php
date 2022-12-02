@@ -31,20 +31,24 @@
 <script>
     let hasCountdown = false;
     let countdown = null;
-    if(@json($countdown) !== undefined){
+
+    if(@json($countdown) != null){
+
         countdown = @json($countdown);
         hasCountdown = true;
+
+        start_at = new Date(countdown.countdown_from)
+
+        $('#countdown').countdown({
+            year: start_at.getFullYear(),
+            month: start_at.getMonth() + 1,
+            day: start_at.getDate()
+        });
 
     }
 
 
-    start_at = new Date(countdown.countdown_from)
 
-    $('#countdown').countdown({
-        year: start_at.getFullYear(),
-        month: start_at.getMonth() + 1,
-        day: start_at.getDate()
-    });
 </script>
 
 @endpush

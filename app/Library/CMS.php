@@ -35,9 +35,6 @@ class CMS
         $data['showAlumni'] = $event->ticket()->where('type', 'Alumni')->where('active', true)->first() ? true : false;
         $data['partners'] = $event->partners;
 
-        $data['countdown'] = get_countdowns($event);
-
-
         if ($event->ticket()->where('type', 'Early Bird')->first()) {
             $data['showSpecial'] = ($event->ticket()->where('type', 'Early Bird')->first() && $event->ticket()->where('type', 'Special')->first())  ?
                                     ($event->ticket()->where('type', 'Special')->first()->pivot->active
