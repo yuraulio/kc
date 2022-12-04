@@ -308,7 +308,6 @@ export default {
                         published_from: this.item.published_from,
                         published_to: this.item.published_to,
                         countdown_from: this.item.countdown_from,
-                        countdown_to: this.item.countdown_to,
                         published: this.published,
                         delivery: this.item.delivery,
                         category: this.item.category,

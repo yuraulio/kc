@@ -239,9 +239,11 @@ if (!function_exists('get_image')){
             if(file_exists(public_path('/')   .$image . '-' . $version . '.webp') && support_webp()){
                 $image = $image . '-' . $version . '.webp';
 
-            }else if(file_exists(public_path('/')   .$image . '-' . $version . $media['ext'])){
+            }
+            else if(file_exists(public_path('/')   .$image . '-' . $version . $media['ext'])){
                 $image = $image . '-' . $version . $media['ext'];
-            }else if($image!=''){
+            }
+            else if($image!=''){
                // dd($image . $media['ext']);
                 $image = $image . $media['ext'];
             }

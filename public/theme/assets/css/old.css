@@ -1542,7 +1542,11 @@ img.linkdein-image-add {
 }
 
 #header.has_countdown {
-    top: 80px;
+    top: 92px;
+}
+
+#header.has_ticker.has_countdown{
+    top: 141px;
 }
 
 /* marquee ticker */
@@ -1566,7 +1570,9 @@ img.linkdein-image-add {
 /* marquee ticker end */
 
 
-.mob-menu-active #header.has_ticker{
+.mob-menu-active #header.has_ticker,
+.mob-menu-active #header.has_ticker.has_countdown,
+.mob-menu-active #header.has_countdown{
     top: unset;
 }
 
@@ -1803,6 +1809,18 @@ img.linkdein-image-add {
 
 
     #overview .pb-4.pt-4 { padding-top: 0!important; }
+
+    #header.has_countdown{
+        top: 121px;
+    }
+    #header.has_countdown.has_ticker{
+        top: 193px;
+    }
+    
+
+    .countdown-btn{
+        display: none;
+    }
 
 
 }
