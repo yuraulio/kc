@@ -340,15 +340,15 @@ export default {
 
                     var subcategories = [];
                     if (this.category_value) {
-                        this.category_value.forEach(function(category, index) {
-                            if (category.subcategories) {
-                                category.subcategories.forEach(function(subcategory, index) {
-                                    subcategories.push(subcategory);
-                                });
-                            }
-                        });
-                        this.subcategories = subcategories;
-                    }
+                    this.category_value.forEach(function(category, index) {
+                        if (category.subcategories) {
+                            category.subcategories.forEach(function(subcategory, index) {
+                                subcategories.push(subcategory);
+                            });
+                        }
+                    });
+                    this.subcategories = subcategories;
+                }
                 })
                 .catch((error) => {
                     console.log(error)
@@ -516,7 +516,6 @@ export default {
         },
         mounted() {
             if (this.data) {
-
                 var data = this.data;
                 this.title_value = data.title;
                 this.type_value = data.type;
@@ -551,7 +550,7 @@ export default {
                         return type.title ==  data.type;
                     });
                     this.type_value = this.type_list[index];
-                    console.log('TYPE VALUE')
+                    console.log('////')
                     console.log(this.type_value)
                 }
 

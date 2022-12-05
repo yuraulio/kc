@@ -270,8 +270,14 @@ export default {
                 console.log(this.item)
                 console.log('set category method')
                 //this.delivery = this.item.delivery
-                this.delivery.id = this.item.delivery[0].id
-                this.delivery.title = 'test'
+
+                // this.delivery.id = this.item.delivery[0].id
+                // this.delivery.title = 'test'
+
+
+
+
+
                 // reset categorise and subcategories
                 // this.categories = [];
                 // this.subcategories = [];
@@ -395,7 +401,7 @@ export default {
                 this.item = this.data
 
                 if(this.data.delivery !== undefined && this.data.delivery.length != 0){
-                    this.delivery = this.data.delivery[0].name
+                    this.delivery = this.data.delivery
 
                     this.delivery = {
                         id: this.data.delivery[0].id,
@@ -403,8 +409,8 @@ export default {
                     }
 
                     // console.log('mounted')
-                console.log('TYPE DELIVERY')
-                console.log(this.delivery)
+                    console.log('TYPE DELIVERY')
+                    console.log(this.delivery)
 
                 }
 

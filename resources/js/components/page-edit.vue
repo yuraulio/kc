@@ -5,7 +5,7 @@
 <template>
 <div >
     <template v-if="simple">
-        <page-edit-simple 
+        <page-edit-simple
             :pageId="pageId"
             :page="page"
             :content="content"
@@ -27,7 +27,7 @@
             :key="NaN"
         ></pageseditable>
     </template>
-</div> 
+</div>
 </template>
 
 <script>

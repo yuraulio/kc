@@ -190,13 +190,31 @@
 }
 
 .dx-toolbar-after{
-    right: unset;
+    right: unset !important;
+    width: 100% !important;
 }
+.dx-texteditor-input-container input{
+    display: block !important;
+    width: 100% !important;
+    font-size: 1rem !important;
+    line-height: 1.5 !important;
+    background-color: #fff !important;
+    background-clip: padding-box !important;
+    border: 1px solid #dee2e6 !important;
+    border-radius: 0.25rem !important;
+    box-shadow: 0 3px 2px rgb(233 236 239 / 5%);
+}
+
+.hours-input-wrapper{
+    margin: auto 0;
+}
+
 .dx-toolbar .dx-toolbar-after{
-    padding-left: unset;
+    padding-left: unset !important;
 }
 .dx-treelist-search-panel{
-    margin: 0;
+    margin: 0 !important;
+    width: 100% !important;
 }
 .dx-treelist-headers{
     display: none;
@@ -761,7 +779,7 @@ li.select2-results__option:empty {
     padding: 0.55rem 0rem;
 }
 
-.owl-prev {
+#tab_inside_tab_mobile .owl-prev {
     width: 15px;
     position: absolute;
     top: 9%;
@@ -770,19 +788,36 @@ li.select2-results__option:empty {
     border:0px solid black;
 }
 
-.owl-next {
+#tab_inside_tab_mobile .owl-next {
     width: 15px;
     position: absolute;
-    top: 9%;
+    top: 8%;
     right: -20px;
     display: block !important;
     border:0px solid black;
 }
-.owl-prev i, .owl-next i {
+#tab_inside_tab_mobile .owl-prev i,
+#tab_inside_tab_mobile .owl-next i {
     color: white;
     background: black;
     border-radius: 100%;
-    padding: 3px 5px;
+    width: 20px;
+    height: 20px;
+}
+
+#tab_inside_tab_mobile .owl-stage {
+    margin-left: 4px;
+}
+
+#tab_inside_tab_mobile .fa-angle-right:before {
+    content: "\f105";
+    position: relative;
+    top: 14%;
+}
+
+#tab_inside_tab_mobile .fa-angle-left:before{
+    position: relative;
+    top: 14%;
 }
 
 .tab-pane-mobile {
@@ -798,12 +833,6 @@ li.select2-results__option:empty {
     ;
 } */
 
-
-/* @media (min-height: 693px) {
-    #file-man-main {
-        height: 100% !important;
-    }
-} */
 
 @media (min-width: 1200px) {
     #nav-wrapper-user {
@@ -828,6 +857,10 @@ li.select2-results__option:empty {
     #event_edit_form #tabs-icons-text-7_inside .col-4.text-right button{
         width: 100%;
         white-space: normal;
+    }
+
+    .hours-input-wrapper{
+        margin-bottom: 1.5rem;
     }
 }
 
