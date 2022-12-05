@@ -18,12 +18,6 @@ const collectiveInputs = [
         "size": "col-sm-3 col-lg-12"
     },
     {
-        "type": "datetimepicker",
-        "key": "countdown_to",
-        "label": "Countdown To",
-        "size": "col-sm-3 col-lg-12"
-    },
-    {
         "type": "toggle",
         "key": "button_status",
         "label": "Button Status",

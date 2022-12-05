@@ -4,11 +4,17 @@
   text-align: center;
 }
 .time {
-  color: black;
+  color: #245DAE;
   font-size: 2em;
+  font-weight: bold;
 }
 .label {
   font-size: 1em;
   display: block;
   color: #aaa;
+  margin-top: -0.5rem;
+}
+
+.countdown-text p{
+    font-size: x-large;
 }

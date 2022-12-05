@@ -229,17 +229,17 @@ export default {
         },
         data() {
             return {
-                delivery: [],
+                delivery: null,
                 errors: null,
                 test: null,
                 loading: false,
                 loader: true,
                 published: true,
+                button_status: false,
                 lodash: _,
                 item: {},
                 published_from_value: null,
                 published_to_value: null,
-                type_value: null,
 
             }
         },
@@ -249,6 +249,7 @@ export default {
 
             },
             update_delivery(value) {
+                console.log(value)
                 this.item.delivery = value;
             },
             update_category(value){
@@ -262,7 +263,15 @@ export default {
                 this.item.published_to = value;
             },
             setCategories(){
-                this.delivery = this.item.delivery;
+
+                //this.delivery = this.item.delivery;
+
+                console.log('setCategory this item')
+                console.log(this.item)
+                console.log('set category method')
+                //this.delivery = this.item.delivery
+                this.delivery.id = this.item.delivery[0].id
+                this.delivery.title = 'test'
                 // reset categorise and subcategories
                 // this.categories = [];
                 // this.subcategories = [];
@@ -308,11 +317,10 @@ export default {
                         published_from: this.item.published_from,
                         published_to: this.item.published_to,
                         countdown_from: this.item.countdown_from,
-                        countdown_to: this.item.countdown_to,
                         published: this.published,
                         delivery: this.item.delivery,
                         category: this.item.category,
-                        button_status: this.item.button_status,
+                        button_status: this.item.button_status ? this.item.button_status : this.button_status,
                         button_title: this.item.button_title
 
                     }
@@ -384,8 +392,26 @@ export default {
 
             if (this.data) {
 
-                var data = this.data;
-                this.item = data
+                this.item = this.data
+
+                if(this.data.delivery !== undefined && this.data.delivery.length != 0){
+                    this.delivery = this.data.delivery[0].name
+
+                    this.delivery = {
+                        id: this.data.delivery[0].id,
+                        title: this.data.delivery[0].name
+                    }
+
+                    // console.log('mounted')
+                console.log('TYPE DELIVERY')
+                console.log(this.delivery)
+
+                }
+
+
+
+
+
                 // this.item.title = data.title;
                 // this.item.published = data.published;
                 //this.item.content = data.content
@@ -397,7 +423,7 @@ export default {
                 //this.published_to_value = data.published_to;
 
                 // TODO LOAD DELIVERY
-                this.setCategories();
+                //this.setCategories();
 
 
 
