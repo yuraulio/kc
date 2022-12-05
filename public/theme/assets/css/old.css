@@ -1545,6 +1545,11 @@ img.linkdein-image-add {
     top: 92px;
 }
 
+.countdown-btn button{
+    padding: 10px 5px;
+    font-weight: bold;
+}
+
 #header.has_ticker.has_countdown{
     top: 141px;
 }
@@ -1814,9 +1819,9 @@ img.linkdein-image-add {
         top: 121px;
     }
     #header.has_countdown.has_ticker{
-        top: 193px;
+        top: 177px;
     }
-    
+
 
     .countdown-btn{
         display: none;

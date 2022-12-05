@@ -165,9 +165,13 @@
             }
         },
         mounted() {
-            console.log(this)
+            console.log('from multidropdown')
+
             if (this.propValue){
+                console.log('prop value')
+
                 this.value = this.propValue;
+                console.log(this.value)
             }
 
             if (this.data) {

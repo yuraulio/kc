@@ -57,6 +57,7 @@ class CountdownController extends Controller
      */
     public function update(CountdownRequest $request, int $id)
     {
+
         try {
             $countdown = Countdown::find($id);
 
@@ -79,7 +80,7 @@ class CountdownController extends Controller
 
                 $countdown->delivery()->detach();
 
-                $countdown->delivery()->attach([$request->delivery['id']]);
+                $countdown->delivery()->attach([$request->delivery[0]['id']]);
 
             }else if($updated){
                 $countdown->delivery()->detach();

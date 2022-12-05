@@ -16,7 +16,7 @@
         <div id="countdown" class="row @if($countdown['button_status']) col-sm-12 col-md-5 @else col-8 @endif h-100 justify-content-center align-items-center"></div>
         @if($countdown['button_status'])
         <div style="margin:auto;" class="col-sm-12 col-md-3 text-center countdown-btn">
-            <button type="button" class="btn btn--lg btn--primary go-to-href">{{ $countdown['button_title'] }}</button>
+            <button type="button" class="btn btn--primary go-to-href">{{ $countdown['button_title'] }}</button>
         </div>
         @endif
     </div>
