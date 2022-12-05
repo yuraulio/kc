@@ -50,8 +50,8 @@ class CronjobsController extends Controller
                 $expiration = strtotime($event->pivot->expiration);
 
                 if($today > $expiration){
-                    //$student->events()->detach($event->id);
-                    $student->events()->where('id',$event->id)->detach();
+                    $student->events()->detach($event->id);
+                    //$student->events()->where('id',$event->id)->detach();
                 }
 
             }
