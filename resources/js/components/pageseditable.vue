@@ -336,6 +336,7 @@ export default {
                 .get('/api/category_group/' + this.type_value.id)
                 .then((response) => {
                     this.categories = response.data.data;
+                    console.log('CATEGORIES :', this.categories)
                     this.category_value = this.categories;
 
                     var subcategories = [];

@@ -25,7 +25,7 @@ class CountdownResource extends JsonResource
             'countdown_from' => $this->countdown_from,
             'button_status' => $this->button_status,
             'button_title' => $this->button_title,
-            'delivery' => $this->delivery()->first()['id'],
+            'delivery' => $this->delivery,
             'category' => $this->category,
             'created_at' => Carbon::parse($this->created_at)->toFormattedDateString(),
 

@@ -96,7 +96,7 @@
                                 title="Delivery"
                                 :multi="false"
                                 @updatevalue="update_delivery"
-                                @prop-value="delivery"
+                                :prop-value="delivery"
                                 :fetch="true"
                                 route="getDeliveries"
                             ></multidropdown>
@@ -105,6 +105,7 @@
                                 title="Category"
                                 :multi="true"
                                 @updatevalue="update_category"
+                                :prop-value="category"
                                 :fetch="true"
                                 route="getCategories"
                             ></multidropdown>
@@ -230,6 +231,7 @@ export default {
         data() {
             return {
                 delivery: null,
+                category: [],
                 errors: null,
                 test: null,
                 loading: false,
@@ -249,7 +251,9 @@ export default {
 
             },
             update_delivery(value) {
+                console.log('from update')
                 console.log(value)
+                this.item.delivery = null
                 this.item.delivery = value;
             },
             update_category(value){
@@ -265,6 +269,7 @@ export default {
             setCategories(){
 
                 //this.delivery = this.item.delivery;
+                this.category = [];
 
                 console.log('setCategory this item')
                 console.log(this.item)
@@ -273,6 +278,8 @@ export default {
 
                 // this.delivery.id = this.item.delivery[0].id
                 // this.delivery.title = 'test'
+
+                //this.category = [{id: 3, title: 'test'}, {id: 3, title: 'test5'}]
 
 
 
@@ -352,6 +359,12 @@ export default {
             edit() {
 
                 this.item.published = this.published
+                console.log()
+                if(this.item.delivery[0] !== undefined){
+                    this.item.delivery = this.item.delivery[0]
+                }
+
+                console.log('pre save', this.item)
 
                 axios
                     .patch('/api/' + this.route + '/' + this.id, this.item)
@@ -400,36 +413,15 @@ export default {
 
                 this.item = this.data
 
-                if(this.data.delivery !== undefined && this.data.delivery.length != 0){
-                    this.delivery = this.data.delivery
+                console.log(this.data)
 
-                    this.delivery = {
-                        id: this.data.delivery[0].id,
-                        title: this.data.delivery[0].name
-                    }
-
-                    // console.log('mounted')
-                    console.log('TYPE DELIVERY')
-                    console.log(this.delivery)
-
+                this.delivery = {
+                    id: this.data.delivery[0].id,
+                    title: this.data.delivery[0].name
                 }
 
-
-
-
-
-                // this.item.title = data.title;
-                // this.item.published = data.published;
-                //this.item.content = data.content
-
-                //this.category_value = data.categories;
-
-
-               // this.published_from_value = data.published_from;
-                //this.published_to_value = data.published_to;
-
                 // TODO LOAD DELIVERY
-                //this.setCategories();
+                this.setCategories();
 
 
 
