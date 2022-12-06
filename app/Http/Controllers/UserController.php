@@ -480,6 +480,11 @@ class UserController extends Controller
                             //unset($data_for_update['password']);
 
                             User::where('email', $update_user['email'])->update($data_for_update);
+                            // get kc id
+                            $request = new \Illuminate\Http\Request();
+                            $request->replace([
+                                'user' => $user['id']
+                            ]);
                             $this->createKC($request);
 
                         }
@@ -1236,10 +1241,10 @@ class UserController extends Controller
 		$MM = date("m",$time);
 		$YY = date("y",$time);
 
-
+        //dd($request->user);
         $user = User::find($request->user);
 
-        if(!$user->kc_id){
+        if($user && $user->kc_id == null){
 
             $optionKC = Option::where('abbr','website_details')->first();
 		    $next = $optionKC->value;
@@ -1259,8 +1264,9 @@ class UserController extends Controller
             $optionKC->value=$next;
             $optionKC->save();
 
+            $user->save();
         }
-        $user->save();
+
 
 
 

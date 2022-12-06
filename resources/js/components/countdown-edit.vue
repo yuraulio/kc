@@ -9,7 +9,7 @@
             category="true"
             type="edit"
             route="countdown"
-            page-title="Edit Page"
+            page-title="Edit Countdown"
             :data="item"
             :id="countdownId"
             :uuid="null"

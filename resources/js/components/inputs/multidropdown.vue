@@ -84,8 +84,10 @@
         watch: {
             "propValue": function() {
                 this.value = this.propValue;
+                console.log('value prop : ', this.value)
             },
             "data": function() {
+                console.log('watch data list:', this.data)
                 this.list = this.data;
             }
         },

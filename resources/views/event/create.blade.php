@@ -46,20 +46,32 @@
 
                             <h6 class="heading-small text-muted mb-4">{{ __('Event information') }}</h6>
                             <div class="pl-lg-4">
+
                                 <div class="d-none form-group{{ $errors->has('priority') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-priority">{{ __('Priority') }}</label>
                                     <input type="number" name="priority" id="input-priority" class="form-control{{ $errors->has('priority') ? ' is-invalid' : '' }}" placeholder="{{ __('Priority') }}" value="{{ old('priority') }}">
 
                                     @include('alerts.feedback', ['field' => 'priority'])
                                 </div>
-                                <div class="form-group{{ $errors->has('published') ? ' has-danger' : '' }}">
 
-                                        <label class="custom-toggle custom-published">
-                                            <input type="checkbox" name="published" id="input-published">
-                                            <span class="custom-toggle-slider rounded-circle" data-label-off="unpublished" data-label-on="published"></span>
-                                        </label>
-                                        @include('alerts.feedback', ['field' => 'published'])
 
+                                <div class="row">
+                                    <div class="form-group{{ $errors->has('published') ? ' has-danger' : '' }}">
+
+                                        <div class="form-group col-12">
+                                            <h3 class="mb-0 title" for="input-status">{{ __('Course Publish') }}</h3>
+                                        </div>
+
+                                        <div class="form-group col-12">
+                                            <label class="custom-toggle enroll-toggle visible">
+                                                <input type="checkbox" name="published" id="input-published">
+                                                <span class="custom-toggle-slider rounded-circle" data-label-off="Off" data-label-on="On"></span>
+                                            </label>
+                                            @include('alerts.feedback', ['field' => 'published'])
+                                        </div>
+
+
+                                    </div>
                                 </div>
 
 

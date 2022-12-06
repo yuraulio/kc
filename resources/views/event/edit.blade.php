@@ -203,9 +203,9 @@
 
 
                                                     <div style="margin: auto;" class="form-group">
-                                                        <label class="custom-toggle custom-published">
+                                                        <label class="custom-toggle enroll-toggle visible">
                                                             <input type="checkbox" name="published" id="input-published" @if($event['published']) checked @endif>
-                                                            <span class="custom-toggle-slider rounded-circle" data-label-off="unpublished" data-label-on="published"></span>
+                                                            <span class="custom-toggle-slider rounded-circle" data-label-off="Off" data-label-on="On"></span>
                                                         </label>
                                                     </div>
                                                     @include('alerts.feedback', ['field' => 'published'])
@@ -223,9 +223,9 @@
                                                     <label class="form-control-label" for="input-method">{{ __('Index') }}</label>
                                                     <div style="margin: auto;" class="form-group">
 
-                                                        <label class="custom-toggle index-toggle">
+                                                        <label class="custom-toggle enroll-toggle visible">
                                                             <input type="checkbox" id="input-index" @if($event['index']) checked @endif>
-                                                            <span class="custom-toggle-slider rounded-circle" data-label-off="Not indexed" data-label-on="Indexed"></span>
+                                                            <span class="custom-toggle-slider rounded-circle" data-label-off="Off" data-label-on="On"></span>
                                                         </label>
 
                                                     </div>
@@ -238,9 +238,9 @@
                                                     <label class="form-control-label" for="input-method">{{ __('Feed') }}</label>
                                                     <div style="margin: auto;" class="form-group">
 
-                                                        <label class="custom-toggle feed-toggle">
+                                                        <label class="custom-toggle enroll-toggle visible">
                                                             <input type="checkbox" id="input-feed" @if($event['feed']) checked @endif>
-                                                            <span class="custom-toggle-slider rounded-circle" data-label-off="Not in ads feed" data-label-on="Ads feed"></span>
+                                                            <span class="custom-toggle-slider rounded-circle" data-label-off="Off" data-label-on="On"></span>
                                                         </label>
 
                                                     </div>
@@ -320,16 +320,16 @@
                                                 </div>
                                             </div>
 
-                                            <div class="form-group col-sm-12 col-md-4">
+                                            <div class="form-group col-sm-12 col-md-4 hours-input-wrapper">
                                                 <input type="text" id="input-hours" name="course[{{'hours'}}][{{'hour'}}]" class="form-control" placeholder="{{ __('Course Hours') }}" value="{{ old('hours', (isset($info['hours']['hour']) && $info['hours']['hour'] != null) ? $info['hours']['hour'] : '' ) }}" autofocus>
 
                                             </div>
 
-                                            <div class="form-group col-sm-12 col-md-4">
+                                            <div class="form-group col-sm-12 col-md-4 hours-input-wrapper">
                                                 <input style="background: aliceblue;" type="text" name="course[{{'hours'}}][{{'text'}}]" id="input-hours-text" class="form-control" placeholder="{{ __('alphanumeric text') }}" value="{{ old('hours_text', (isset($info['hours']['text']) && $info['hours']['text'] != null) ? $info['hours']['text'] : '' ) }}" autofocus>
                                             </div>
 
-                                            <div class="form-group col-sm-12 col-md-4">
+                                            <div class="form-group col-sm-12 col-md-4 hours-input-wrapper">
                                                 <button id="calculate-total-hours-btn" type="button" class="btn btn-primary">Automatically calculate & add lessons hours</button>
                                             </div>
 
@@ -2516,7 +2516,10 @@
         treeData().then(function () {
             treeFiles()
             parseIdsForSelectFiles()
+            $('.dx-treelist-search-panel').addClass('col-sm-12 col-md-6 col-lg-4 form-group');
         })
+
+
 
         $('#state-reset-link').on('click', () => {
             treeList.state(null);
@@ -3468,7 +3471,7 @@ var datePickerOptions = {
         }
 
         mobileMenu()
-        setActiveLabelMobileMenu()
+        //setActiveLabelMobileMenu()
 
         $(window).on('resize', function(){
             mobileMenu()
