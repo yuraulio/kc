@@ -251,7 +251,7 @@ class CertificateController extends Controller
         $certificate['certification_title'] = $cert->certificate_title;
         $certificate['credential'] = $cert->credential;
         $certificate['certificate_event_title'] = $certificateEventTitle;
-        $certificate['meta_title'] =  $cert->lastname . ' ' . $cert->firstname . ' ' . $cert->certificate_title . ' ' . $cert->user()->first()->kc_id;
+        $certificate['meta_title'] =  strip_tags($cert->lastname . ' ' . $cert->firstname . ' ' . $cert->certificate_title . ' ' . $cert->user()->first()->kc_id);//$cert->lastname . ' ' . $cert->firstname . ' ' . $cert->certificate_title . ' ' . $cert->user()->first()->kc_id;
 
         $contxt = stream_context_create([
           'ssl' => [
@@ -269,9 +269,10 @@ class CertificateController extends Controller
 
         $name = $user->lastname . '_' . $user->firstname . '_' .  trim(preg_replace('/\s\s+/', '', strip_tags($cert->certificate_title))) . '_' .$user->kc_id;
         $fn = $name . '.pdf';
-        $fn = strip_tags($fn);
-        $pdf->getDomPDF()->setHttpContext($contxt);
+        //$fn = strip_tags($fn);
+        $fn = htmlspecialchars_decode($fn,ENT_QUOTES);
 
+        $pdf->getDomPDF()->setHttpContext($contxt);
         $pdf->loadView('admin.certificates.'.$cert->template,compact('certificate'))->setPaper('a4', 'landscape')->save(public_path('certificates_folders/'.$fn))->stream($fn);
 
         $zip->addFile(public_path('certificates_folders/'.$fn), $fn);
