@@ -65,7 +65,7 @@
                                         <div class="form-group col-12">
                                             <label class="custom-toggle enroll-toggle visible">
                                                 <input type="checkbox" name="published" id="input-published">
-                                                <span class="custom-toggle-slider rounded-circle" data-label-off="Off" data-label-on="On"></span>
+                                                <span class="custom-toggle-slider rounded-circle" data-label-off="No" data-label-on="Yes"></span>
                                             </label>
                                             @include('alerts.feedback', ['field' => 'published'])
                                         </div>
@@ -609,7 +609,7 @@
                                             <span class="toggle-btn-inline-text">Would you like to let students access an e-learning course for free?</span>
                                             <label id="access-student-toggle" class="custom-toggle enroll-toggle visible">
                                                 <input id="access-student" name="course[{{'free_courses'}}][{{'enabled'}}]" type="checkbox">
-                                                <span class="custom-toggle-slider rounded-circle" data-label-off="Off" data-label-on="On"></span>
+                                                <span class="custom-toggle-slider rounded-circle" data-label-off="No" data-label-on="Yes"></span>
                                             </label>
                                         </div>
 
@@ -826,7 +826,7 @@
                                     <span class="toggle-btn-inline-text">Does this course have supporters/partners?</span>
                                     <label class="custom-toggle enroll-toggle visible">
                                         <input id="partner-toggle" name="partner_enabled" type="checkbox" >
-                                        <span class="custom-toggle-slider rounded-circle" data-label-off="Off" data-label-on="On"></span>
+                                        <span class="custom-toggle-slider rounded-circle" data-label-off="No" data-label-on="Yes"></span>
                                     </label>
                                 </div>
 
@@ -917,7 +917,7 @@
                                     <span class="toggle-btn-inline-text">Does this course have a visible manager?</span>
                                     <label class="custom-toggle enroll-toggle visible">
                                         <input id="manager-toggle" name="manager-enabled" type="checkbox">
-                                        <span class="custom-toggle-slider rounded-circle" data-label-off="Off" data-label-on="On"></span>
+                                        <span class="custom-toggle-slider rounded-circle" data-label-off="No" data-label-on="Yes"></span>
                                     </label>
                                 </div>
 
@@ -971,7 +971,7 @@
                                     <span class="toggle-btn-inline-text">Does this course have some award?</span>
                                     <label class="custom-toggle enroll-toggle visible">
                                         <input id="award-toggle" type="checkbox">
-                                        <span class="custom-toggle-slider rounded-circle" data-label-off="Off" data-label-on="On"></span>
+                                        <span class="custom-toggle-slider rounded-circle" data-label-off="No" data-label-on="Yes"></span>
                                     </label>
                                 </div>
 
@@ -1009,7 +1009,7 @@
                                     <span class="toggle-btn-inline-text">Does this course offer a certification? </span>
                                     <label class="custom-toggle enroll-toggle visible">
                                         <input name="course[{{'certificate'}}][{{'certification'}}]" id="certification-toggle" type="checkbox">
-                                        <span class="custom-toggle-slider rounded-circle" data-label-off="Off" data-label-on="On"></span>
+                                        <span class="custom-toggle-slider rounded-circle" data-label-off="No" data-label-on="Yes"></span>
                                     </label>
                                 </div>
 
@@ -1490,6 +1490,7 @@
                     })
                 }
             })
+
             resolve();
         })
     }
@@ -1529,6 +1530,7 @@
 
         treeData().then(function () {
             treeFiles()
+            $('.dx-toolbar-after').addClass('col-sm-12 col-md-6 col-lg-4 form-group');
         })
 
         $('#state-reset-link').on('click', () => {

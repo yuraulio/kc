@@ -136,30 +136,16 @@ class UserController extends Controller
         'ticket_price'  => 'nullable|digits_between:-10000000,10000000',
         'afm'           => 'nullable|digits:8',
         'birthday'      => 'nullable|date_format:d-m-Y',
-        'event_id'      => 'nullable|numeric'
-
-    );
-
-    private $rules_billing = array(
-        'billname'      =>  'nullable|min:3',
-        'billemail'     =>  'nullable|email',
-        'billaddress'   =>  'nullable|min:3',
-        'billaddressnum'=>  'nullable|numeric',
-        'billcity'      =>  'nullable|min:3',
-        'billcountry'   =>  'nullable|min:3',
-        'billstate'     =>  'nullable|min:3',
-        'billafm'       =>  'nullable|digits:8'
+        'event_id'      => 'required|numeric'
 
     );
 
     public function validateCsv($data, $billing_details = false)
     {
         // make a new validator object
-        if(!$billing_details){
-            $v = Validator::make($data, $this->rules);
-        }else{
-            $v = Validator::make($data, $this->rules_billing);
-        }
+
+        $v = Validator::make($data, $this->rules);
+
         $data = [];
 
         $data['pass'] = $v->passes();
@@ -290,13 +276,13 @@ class UserController extends Controller
                     $billing_details['billstate'] = isset($importData['AA']) ? $importData['AA'] : null;
                     $billing_details['billafm'] = isset($importData['AB']) ? $importData['AB'] : null;
 
-                    $validations = $this->validateCsv($billing_details, true);
+                    //$validations = $this->validateCsv($billing_details, true);
 
-                    if(!$validations['pass']){
-                        $userFailedImport[] = $user;
-                        $validationErrors[] = $validations['errors'];
-                        continue;
-                    }
+                    // if(!$validations['pass']){
+                    //     $userFailedImport[] = $user;
+                    //     $validationErrors[] = $validations['errors'];
+                    //     continue;
+                    // }
 
 
                     $user->receipt_details = json_encode($billing_details);

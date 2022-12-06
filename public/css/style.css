@@ -200,7 +200,6 @@
     line-height: 1.5 !important;
     background-color: #fff !important;
     background-clip: padding-box !important;
-    border: 1px solid #dee2e6 !important;
     border-radius: 0.25rem !important;
     box-shadow: 0 3px 2px rgb(233 236 239 / 5%);
 }
@@ -826,7 +825,9 @@ li.select2-results__option:empty {
 
 
 
-
+.schedule-course-wrapper .btn {
+    white-space: break-spaces;
+}
 
 /* #file-man-main {
     height: 68vh !important;
@@ -862,6 +863,7 @@ li.select2-results__option:empty {
     .hours-input-wrapper{
         margin-bottom: 1.5rem;
     }
+
 }
 
 

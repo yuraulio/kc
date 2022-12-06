@@ -13,20 +13,11 @@
     <label for="projectname" class="form-label">{{title}} <span v-if="required">*</span> </label>
 
 
-    <!-- <DxDateBox
-    :value="now"
-    type="datetime"
-    /> -->
-
     <DxDateBox
         v-model:value="value"
         type="datetime"
-        :value="value"
         @value-changed="$emit('updatevalue', value)"
     />
-
-
-
 
 </div>
 
@@ -53,7 +44,6 @@
             }
         },
         mounted() {
-
         }
     }
 </script>

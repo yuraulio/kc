@@ -1288,11 +1288,11 @@
 
        .content-wrapper .tabs-wrapper.fixed-tab-controls{ padding-top: 0; }
        .section-course-tabs .content-wrapper .tabs-wrapper.fixed-tab-controls .tab-controls { position: fixed; top: 79px; border-top: none; z-index: 10; border-top: 1px solid #fff; transition: 300ms all ease; }
-       .section-course-tabs .content-wrapper .tabs-wrapper.fixed-tab-controls .tab-controls:after { content: ''; position: fixed; top: 75px; display: block; left: 0; width: 100vw; height: 1px; background-color: #ffffff; }
+       .section-course-tabs .content-wrapper .tabs-wrapper.fixed-tab-controls .tab-controls:after { content: ''; top: 75px; display: block; left: 0; width: 100vw; height: 1px; background-color: #ffffff; }
 
        .tab-controls.has_ticker { top: 126px !important; }
-       .tab-controls.has_countdown { top: 199px !important; }
-       .tab-controls.has_countdown.has_ticker { top: 255px !important; }
+       .tab-controls.has_countdown { top: 200px !important; }
+       .tab-controls.has_countdown.has_ticker { top: 256px !important; }
 
        .elearning-page-wrapper{ padding-top: 26px; margin-bottom: 0; }
        .elearning-page-wrapper .page-content{ box-shadow: none; }

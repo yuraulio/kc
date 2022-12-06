@@ -32,7 +32,7 @@ class CountdownRequest extends FormRequest
                 'required', 'min:3'
             ],
 
-            'countdown_from' => [
+            'countdown_to' => [
                 'required'
             ]
         ];

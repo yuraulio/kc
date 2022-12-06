@@ -66,7 +66,7 @@ class CountdownController extends Controller
             $countdown->title = $request->title;
             $countdown->content = $request->content;
             $countdown->published = $request->published;
-            $countdown->countdown_from = ($request->countdown_from) ? Carbon::parse($request->countdown_from) : null;
+            $countdown->countdown_to = ($request->countdown_to) ? Carbon::parse($request->countdown_to) : null;
             $countdown->published_from = ($request->published_from) ? Carbon::parse($request->published_from) : null;
             $countdown->published_to = ($request->published_to) ? Carbon::parse($request->published_to) : null;
             $countdown->button_status = $request->button_status;
@@ -138,7 +138,7 @@ class CountdownController extends Controller
             $countdown->title = $request->title;
             $countdown->content = $request->content;
             $countdown->published = $request->published;
-            $countdown->countdown_from = ($request->countdown_from) ? Carbon::parse($request->countdown_from) : null;
+            $countdown->countdown_to = ($request->countdown_to) ? Carbon::parse($request->countdown_to) : null;
             $countdown->published_from = ($request->published_from) ? Carbon::parse($request->published_from) : null;
             $countdown->published_to = ($request->published_to) ? Carbon::parse($request->published_to) : null;
             $countdown->button_status = $request->button_status;

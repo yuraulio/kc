@@ -84,10 +84,8 @@
         watch: {
             "propValue": function() {
                 this.value = this.propValue;
-                console.log('value prop : ', this.value)
             },
             "data": function() {
-                console.log('watch data list:', this.data)
                 this.list = this.data;
             }
         },
@@ -167,13 +165,9 @@
             }
         },
         mounted() {
-            console.log('from multidropdown')
 
             if (this.propValue){
-                console.log('prop value')
-
                 this.value = this.propValue;
-                console.log(this.value)
             }
 
             if (this.data) {

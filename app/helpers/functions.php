@@ -42,11 +42,24 @@ if(!function_exists('get_countdowns')){
         //$countdowns = $event->delivery->first()->countdown()->where('published_from', '>=', date('Y-m-d'))->where('published_to', '=', date('Y-m-d'))->where('countdown_from', '>=', date('Y-m-d H:s'))->where('countdown_to', '<=', date('Y-m-d H:s'))->get();
         $countdowns = $event->delivery->first()->countdown()
                         ->where('published', true)
-                        ->where('published_from', '<=', date('Y-m-d'))
-                        ->where('published_to', '>=', date('Y-m-d'))
-                        ->where('countdown_from', '>=', date('Y-m-d H:s'))
+                        // ->where('published_from', '<=', date('Y-m-d'))
+                        // ->where('published_to', '>=', date('Y-m-d'))
+                        ->where('countdown_to', '>=', date('Y-m-d H:s'))
                         ->get()
                         ->toArray();
+
+        if(empty($countdowns)){
+
+            $countdowns = $event->category->first()->countdown()
+                ->where('published', true)
+                // ->where('published_from', '<=', date('Y-m-d'))
+                // ->where('published_to', '>=', date('Y-m-d'))
+                ->where('countdown_to', '>=', date('Y-m-d H:s'))
+                ->get()
+                ->toArray();
+
+        }
+
 
         return $countdowns;
     }

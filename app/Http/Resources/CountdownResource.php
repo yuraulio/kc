@@ -22,7 +22,7 @@ class CountdownResource extends JsonResource
             'published' => $this->published,
             'published_from' => $this->published_from,
             'published_to' => $this->published_to,
-            'countdown_from' => $this->countdown_from,
+            'countdown_to' => $this->countdown_to,
             'button_status' => $this->button_status,
             'button_title' => $this->button_title,
             'delivery' => $this->delivery,
