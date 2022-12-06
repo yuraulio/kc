@@ -206,13 +206,13 @@ class CertificateController extends Controller
         $template = '';
         $template_failed = '';
         if($paymentMethod == 1){
-          $view = 'admin.certificates.kc_deree_diploma';
-          $template = 'kc_deree_diploma';
-          $template_failed = 'kc_deree_attendance';
+          $view = 'admin.certificates.kc_deree_diploma_2022';
+          $template = 'kc_deree_diploma_2022';
+          $template_failed = 'kc_deree_attendance_2022';
         }else /*if(in_array($paymentMethod,[3,2]))*/{
-          $view = 'admin.certificates.kc_diploma_2022a';
-          $template = 'kc_diploma_2022a';
-          $template_failed = 'kc_attendance_2022a';
+          $view = 'admin.certificates.kc_diploma_2022b';
+          $template = 'kc_diploma_2022b';
+          $template_failed = 'kc_attendance_2022b';
         }
 
         if( !($cert = $event->userHasCertificate($user->id)->first()) ){

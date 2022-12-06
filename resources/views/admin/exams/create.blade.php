@@ -105,13 +105,14 @@
                                      @include('alerts.feedback', ['field' => 'examCheckbox'])
                                   </div>
                                </div>
+
                                <div class="col-md-6 plan">
                                   <div class="form-group{{ $errors->has('event_id') ? ' has-danger' : '' }}">
                                      <label class="form-control-label" for="input-event_id">{{ __('Event') }}</label>
                                      <select name="event_id" id="input-event_id" class="form-control" placeholder="{{ __('Event') }}">
                                         <option value="">-</option>
-                                        @foreach ($events as $key => $event)
-                                        <option value="{{ $key }}" @if(old('event_id',$event_id) == $key) selected @endif>{{ $event }}</option>
+                                        @foreach ($events as $key => $ev)
+                                        <option value="{{ $key }}" @if(old('event_id',$event_id) == $key) selected @endif>{{ $ev }}</option>
                                         @endforeach
                                      </select>
                                      @include('alerts.feedback', ['field' => 'event_id'])

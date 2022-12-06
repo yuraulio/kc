@@ -114,14 +114,13 @@ class ExamController extends Controller
 
             }
 
-            foreach($events as $event){
+            
+            $eventsData[$event->id] = trim($event->htmlTitle . ' ' . $date);
 
-                $eventsData[$event->id] = trim($event->htmlTitle . ' ' . $date);
-
-            }
+            
 
         }
-
+        
         $liveResults = [];
         $syncDatas = ExamSyncData::where('exam_id', $exam->id)->get();
 
