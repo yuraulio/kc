@@ -336,7 +336,6 @@ export default {
                 .get('/api/category_group/' + this.type_value.id)
                 .then((response) => {
                     this.categories = response.data.data;
-                    console.log('CATEGORIES :', this.categories)
                     this.category_value = this.categories;
 
                     var subcategories = [];
@@ -551,8 +550,6 @@ export default {
                         return type.title ==  data.type;
                     });
                     this.type_value = this.type_list[index];
-                    console.log('////')
-                    console.log(this.type_value)
                 }
 
                 this.setCategories();

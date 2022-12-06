@@ -22,7 +22,6 @@ class CreateCmsCountdownTable extends Migration
             $table->string('button_title')->nullable();
             $table->date('published_from')->nullable();
             $table->date('published_to')->nullable();
-            $table->timestamp('countdown_from');
             $table->timestamp('countdown_to');
             $table->timestamps();
         });

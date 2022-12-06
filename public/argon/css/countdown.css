@@ -18,3 +18,7 @@
 .countdown-text p{
     font-size: x-large;
 }
+
+#countdown {
+    display: flex;
+}

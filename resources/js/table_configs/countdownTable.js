@@ -13,8 +13,8 @@ const collectiveInputs = [
     },
     {
         "type": "datetimepicker",
-        "key": "countdown_from",
-        "label": "Countdown From",
+        "key": "countdown_to",
+        "label": "Countdown To",
         "size": "col-sm-3 col-lg-12"
     },
     {

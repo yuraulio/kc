@@ -1,7 +1,8 @@
 
 @if($slug)
 
-<div class="pl-lg-4">
+{{--<div class="pl-lg-4">--}}
+<div>
     <div class="text-right">
         <a href="/{{$slug->slug}}?preview=true" class="btn btn-success mt-4">{{ __('Preview') }}</a>
     </div>

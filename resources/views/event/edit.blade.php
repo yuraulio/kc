@@ -67,7 +67,7 @@
                                     <span class="btn-inner--icon"><i class="ni ni-single-copy-04"></i></span>
                                     <span class="btn-inner--text">XML fields</span>
                                 </button>
-                                <a target="_blank" href="/print/syllabus/{{$event['slugable']['slug']}}"  class="dropdown-item download">Download course schedule</a>
+                                {{--<a target="_blank" href="/print/syllabus/{{$event['slugable']['slug']}}"  class="dropdown-item download">Download course schedule</a>--}}
 
                                 </div>
                             </div>
@@ -141,10 +141,10 @@
                                 </button>
                             </li>
 
-                            <li class="nav-item">
+                            {{--<li class="nav-item">
                                 <a target="_blank" href="/print/syllabus/{{$event['slugable']['slug']}}"  class="btn btn-icon btn-primary">Download course schedule</a>
 
-                            </li>
+                            </li>--}}
 
 
 
@@ -160,6 +160,7 @@
                             <div class="form_event_btn_new d-none">
                                 <div class="save_event_btn" >@include('admin.save.save',['event' => isset($event) ? $event : null])</div>
                                 <div class="preview_event_btn">@include('admin.preview.preview',['slug' => isset($slug) ? $slug : null])</div>
+                                <div class="save_event_btn" >@include('admin.download.schedule',['event' => isset($event) ? $event : null])</div>
                             </div>
                             <form id="event_edit_form" method="POST" action="{{ route('events.update', $event) }}" autocomplete="off"
                                         enctype="multipart/form-data">
@@ -205,7 +206,7 @@
                                                     <div style="margin: auto;" class="form-group">
                                                         <label class="custom-toggle enroll-toggle visible">
                                                             <input type="checkbox" name="published" id="input-published" @if($event['published']) checked @endif>
-                                                            <span class="custom-toggle-slider rounded-circle" data-label-off="Off" data-label-on="On"></span>
+                                                            <span class="custom-toggle-slider rounded-circle" data-label-off="No" data-label-on="Yes"></span>
                                                         </label>
                                                     </div>
                                                     @include('alerts.feedback', ['field' => 'published'])
@@ -225,7 +226,7 @@
 
                                                         <label class="custom-toggle enroll-toggle visible">
                                                             <input type="checkbox" id="input-index" @if($event['index']) checked @endif>
-                                                            <span class="custom-toggle-slider rounded-circle" data-label-off="Off" data-label-on="On"></span>
+                                                            <span class="custom-toggle-slider rounded-circle" data-label-off="No" data-label-on="Yes"></span>
                                                         </label>
 
                                                     </div>
@@ -240,7 +241,7 @@
 
                                                         <label class="custom-toggle enroll-toggle visible">
                                                             <input type="checkbox" id="input-feed" @if($event['feed']) checked @endif>
-                                                            <span class="custom-toggle-slider rounded-circle" data-label-off="Off" data-label-on="On"></span>
+                                                            <span class="custom-toggle-slider rounded-circle" data-label-off="No" data-label-on="Yes"></span>
                                                         </label>
 
                                                     </div>
@@ -248,9 +249,11 @@
                                             </div>
 
 
-                                            <div class="col-lg-2 col-md-12 col-sm-6 col-6 text-center form_event_btn">
+                                            {{--<div class="col-lg-2 col-md-12 col-sm-6 col-6  form_event_btn">--}}
+                                            <div class="col-md-12 col-sm-12 form_event_btn">
                                                 <div class="save_event_btn" >@include('admin.save.save',['event' => isset($event) ? $event : null])</div>
                                                 <div class="preview_event_btn">@include('admin.preview.preview',['slug' => isset($slug) ? $slug : null])</div>
+                                                <div class="save_event_btn" >@include('admin.download.schedule',['event' => isset($event) ? $event : null])</div>
                                             </div>
 
 
@@ -947,7 +950,7 @@
                                                         <span class="toggle-btn-inline-text">Would you like to let students access an e-learning course for free?</span>
                                                         <label id="access-student-toggle" class="custom-toggle enroll-toggle visible">
                                                             <input id="access-student" name="course[{{'free_courses'}}][{{'enabled'}}]" type="checkbox" {{ (isset($access_events) && count($access_events) != 0) ? 'checked' : ''}}>
-                                                            <span class="custom-toggle-slider rounded-circle" data-label-off="Off" data-label-on="On"></span>
+                                                            <span class="custom-toggle-slider rounded-circle" data-label-off="No" data-label-on="Yes"></span>
                                                         </label>
                                                     </div>
 
@@ -1277,7 +1280,7 @@
                                                 <span class="toggle-btn-inline-text">Does this course have supporters/partners?</span>
                                                 <label class="custom-toggle enroll-toggle visible">
                                                     <input id="partner-toggle" name="partner_enabled" type="checkbox" {{(count($eventPartners) != 0) ? 'checked=""' : ''}} >
-                                                    <span class="custom-toggle-slider rounded-circle" data-label-off="Off" data-label-on="On"></span>
+                                                    <span class="custom-toggle-slider rounded-circle" data-label-off="No" data-label-on="Yes"></span>
                                                 </label>
                                             </div>
 
@@ -1415,7 +1418,7 @@
                                                 <span class="toggle-btn-inline-text">Does this course have a visible manager?</span>
                                                 <label class="custom-toggle enroll-toggle visible">
                                                     <input id="manager-toggle" name="manager-enabled" type="checkbox" {{(isset($event->syllabus[0])) ? 'checked' : ''}}>
-                                                    <span class="custom-toggle-slider rounded-circle" data-label-off="Off" data-label-on="On"></span>
+                                                    <span class="custom-toggle-slider rounded-circle" data-label-off="No" data-label-on="Yes"></span>
                                                 </label>
                                             </div>
 
@@ -1490,7 +1493,7 @@
                                                 <span class="toggle-btn-inline-text">Does this course have some award?</span>
                                                 <label class="custom-toggle enroll-toggle visible">
                                                     <input id="award-toggle" {{ (isset($info['awards']['text']) && $info['awards']['text'] != null) ? 'checked' : ''}} type="checkbox">
-                                                    <span class="custom-toggle-slider rounded-circle" data-label-off="Off" data-label-on="On"></span>
+                                                    <span class="custom-toggle-slider rounded-circle" data-label-off="No" data-label-on="Yes"></span>
                                                 </label>
                                             </div>
 
@@ -1546,7 +1549,7 @@
                                                 <span class="toggle-btn-inline-text">Does this course offer a certification? </span>
                                                 <label class="custom-toggle enroll-toggle visible">
                                                     <input name="course[{{'certificate'}}][{{'certification'}}]" id="certification-toggle" {{isset($info['certificate']['has_certificate']) && $info['certificate']['has_certificate'] ? 'checked' : '' }} type="checkbox">
-                                                    <span class="custom-toggle-slider rounded-circle" data-label-off="Off" data-label-on="On"></span>
+                                                    <span class="custom-toggle-slider rounded-circle" data-label-off="No" data-label-on="Yes"></span>
                                                 </label>
                                             </div>
 
@@ -2516,7 +2519,7 @@
         treeData().then(function () {
             treeFiles()
             parseIdsForSelectFiles()
-            $('.dx-treelist-search-panel').addClass('col-sm-12 col-md-6 col-lg-4 form-group');
+            $('.dx-toolbar-after').addClass('col-sm-12 col-md-6 col-lg-4 form-group');
         })
 
 

@@ -307,5 +307,10 @@ class Category extends Model
         $this->fixOrder();
     }
 
+    public function countdown()
+    {
+        return $this->belongsToMany(Countdown::class, 'cms_countdown_category');
+    }
+
 
 }
