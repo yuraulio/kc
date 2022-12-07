@@ -581,9 +581,13 @@ Route::group(['middleware' => ['web']], function () {
 });
 
 Route::group(['middleware' => 'auth'], function () {
-    Route::get('attempt-exam/{ex_id}', 'Theme\ExamAttemptController@attemptExam')->name('attempt-exam');
-    Route::get('exam-start/{exam}', 'Theme\ExamAttemptController@examStart')->name('exam-start');
-    Route::get('exam-results/{id}', 'Theme\ExamAttemptController@examResults')->name('exam-results');
+
+    Route::group(['middleware' => 'exam.access'], function () {
+        Route::get('attempt-exam/{ex_id}', 'Theme\ExamAttemptController@attemptExam')->name('attempt-exam');
+        Route::get('exam-start/{exam}', 'Theme\ExamAttemptController@examStart')->name('exam-start');
+        Route::get('exam-results/{id}', 'Theme\ExamAttemptController@examResults')->name('exam-results');
+    });
+
     Route::post('sync-data', 'Theme\ExamAttemptController@syncData')->name('sync-data');
     Route::post('save-data', 'Theme\ExamAttemptController@saveData')->name('save-data');
 });
