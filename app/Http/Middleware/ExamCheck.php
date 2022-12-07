@@ -31,6 +31,12 @@ class ExamCheck
             }
         }
 
+        else if(isset($request->route()->parameters['exam'])){
+            if(!$this->checkForExamAccess($request->route()->parameters['exam'])){
+                abort(404);
+            }
+        }
+
         return $next($request);
     }
 
