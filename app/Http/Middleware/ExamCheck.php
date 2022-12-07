@@ -51,7 +51,8 @@ class ExamCheck
 
             $user = Auth::user();
             $event = $exam->event->first();
-
+            $event = $user->events_for_user_list()->wherePivot('event_id',$event->id)->first();
+            
             if($event && $event->is_inclass_course()){
                 $userEvents = $user->events_for_user_list()->wherePivot('event_id',$event->id)->pluck('event_id')->toArray();
                 return in_array($event->id, $userEvents);
