@@ -57,7 +57,7 @@ class ExamCheck
                 return in_array($event->id, $userEvents);
 
             }else if($event && $event->is_elearning_course()){
-                return $event->examAccess($user);
+                return$event->examAccess($user,0.8,false,false);
             }
 
             

@@ -553,7 +553,7 @@ class Event extends Model
         return $this->hasMany(WaitingList::class);
     }
 
-    public function examAccess( $user,$successPer = 0.8, $videos = false){
+    public function examAccess( $user,$successPer = 0.8, $videos = false, $checkForCetification = true){
 
         $seenPercent =  $this->progress($user,$videos);
         $studentsEx = [1353,1866,1753,1882,1913,1923];
@@ -565,12 +565,11 @@ class Event extends Model
         //$event = EventStudent::where('student_id',$this->user_id)->where('event_id',$this->event_id)->first()->created_at;
         $event = $this;
         //if(!$event->created_at || $event->pivot->comment == 'enroll' /*|| $event->view_tpl == 'elearning_free'*/){
-        
         if(!$event->created_at || $event->pivot->comment == 'enroll' || (strpos($event->pivot->comment, 'enroll from') !== false)){
              return false;
         }
 
-        $certification = count($this->certificatesByUser($user->id)) > 0;
+        $certification = $checkForCetification && count($this->certificatesByUser($user->id)) > 0;
         return $seenPercent >=  ($successPer * 100) && !$certification;
 
     }
