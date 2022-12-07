@@ -564,7 +564,9 @@ class Event extends Model
 
         //$event = EventStudent::where('student_id',$this->user_id)->where('event_id',$this->event_id)->first()->created_at;
         $event = $this;
-        if(!$event->created_at || $event->pivot->comment == 'enroll' /*|| $event->view_tpl == 'elearning_free'*/){
+        //if(!$event->created_at || $event->pivot->comment == 'enroll' /*|| $event->view_tpl == 'elearning_free'*/){
+        
+        if(!$event->created_at || $event->pivot->comment == 'enroll' || (strpos($event->pivot->comment, 'enroll from') !== false)){
              return false;
         }
 
