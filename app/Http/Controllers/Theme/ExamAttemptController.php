@@ -392,15 +392,15 @@ class ExamAttemptController extends Controller
 
                 if(($eventType->delivery->first() && $eventType->delivery->first()->id == 143) || date('Y') > 2021){
                     if($success){
-                        $template ='kc_diploma_2022a';
+                        $template ='kc_diploma_2022b';
                     }else{
-                        $template ='kc_attendance_2022a';
+                        $template ='kc_attendance_2022b';
                     }
                 }else{
                     if($success){
-                        $template ='kc_deree_diploma';
+                        $template ='kc_deree_diploma_2022';
                     }else{
-                        $template ='kc_deree_attendance';
+                        $template ='kc_deree_attendance_2022';
                     }
                 }
 
