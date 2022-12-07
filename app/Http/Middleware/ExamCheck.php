@@ -32,7 +32,10 @@ class ExamCheck
         }
 
         else if(isset($request->route()->parameters['exam'])){
-            if(!$this->checkForExamAccess($request->route()->parameters['exam'])){
+
+            $eventId = $request->route()->parameters['exam']->id;
+
+            if(!$this->checkForExamAccess($eventId)){
                 abort(404);
             }
         }
