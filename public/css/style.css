@@ -864,6 +864,10 @@ li.select2-results__option:empty {
         margin-bottom: 1.5rem;
     }
 
+    .form_event_btn, .form_event_btn_new {
+        text-align: center;
+    }
+
 }
 
 

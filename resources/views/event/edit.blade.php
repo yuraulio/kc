@@ -250,7 +250,7 @@
 
 
                                             {{--<div class="col-lg-2 col-md-12 col-sm-6 col-6  form_event_btn">--}}
-                                            <div class="col-md-12 col-sm-12 form_event_btn">
+                                            <div class="col-md-12 col-sm-12 text-sm-center text-lg-right text-md-right form_event_btn">
                                                 <div class="save_event_btn" >@include('admin.save.save',['event' => isset($event) ? $event : null])</div>
                                                 <div class="preview_event_btn">@include('admin.preview.preview',['slug' => isset($slug) ? $slug : null])</div>
                                                 <div class="save_event_btn" >@include('admin.download.schedule',['event' => isset($event) ? $event : null])</div>
