@@ -20,8 +20,8 @@ class CertificateController extends Controller
 
   public function __construct(){
       //$this->middleware('auth')->except('exportCertificates');
-      $this->middleware('cert.owner')->except('exportCertificates');
-      $this->middleware('auth.aboveauthor')->only('exportCertificates');
+      $this->middleware('cert.owner')->except(['exportCertificates','getCertificateAdmin']);
+      $this->middleware('auth.aboveauthor')->only(['exportCertificates','getCertificateAdmin']);
 
       $this->encryPass = 'knowcrunch' . date('Y-m-d H:i:m');
   }
@@ -62,8 +62,7 @@ class CertificateController extends Controller
 
   public function loadCertificateData($certificate){
 
-    $certificate =base64_decode($certificate);
-    $certificate = explode('--',$certificate)[1];
+    
     $certificate = Certificate::find($certificate);
 
     $contxt = stream_context_create([
@@ -126,6 +125,9 @@ class CertificateController extends Controller
 
   public function getCertificateImage($certificate){
 
+    $certificate =base64_decode($certificate);
+    $certificate = explode('--',$certificate)[1];
+
     $timestamp = strtotime("now");
     $data = $this->loadCertificateData($certificate);
     $fn = $data['certificate']->firstname . '_' . $data['certificate']->lastname.'_'. $timestamp .'.pdf';
@@ -159,15 +161,18 @@ class CertificateController extends Controller
 
 
   public function getCertificate($certificate){
+    
+    $certificate =base64_decode($certificate);
+    $certificate = explode('--',$certificate)[1];
 
     $data = $this->loadCertificateData($certificate);
     $certificate = $data['certificate'];
-    trim(preg_replace('/\s\s+/', ' ', $data['certificate']['certification_title']));
+    $data['certificate']['certification_title'] = trim(preg_replace('/\s\s+/', ' ', $data['certificate']['certification_title']));
     $fn = $data['certificate']->lastname . '_' . $data['certificate']->firstname . '_' . trim(preg_replace('/\s\s+/', '', strip_tags($data['certificate']['certification_title']))) . '_' . $data['certificate']['kc_id'] . '.pdf';
     //$fn = strip_tags($fn);
     $fn = htmlspecialchars_decode($fn,ENT_QUOTES);
     //$data['pdf']->render();
-
+    
     return $data['pdf']->stream($fn);
     //return view('admin.certificates.'.$certificate->template,compact('certificate'));
 
@@ -286,6 +291,20 @@ class CertificateController extends Controller
     File::deleteDirectory(public_path('certificates_folders'));
 
     return response()->download(public_path($fileName));
+  }
+
+  public function getCertificateAdmin($certificate){
+
+    $data = $this->loadCertificateData($certificate);
+    $certificate = $data['certificate'];
+    trim(preg_replace('/\s\s+/', ' ', $data['certificate']['certification_title']));
+    $fn = $data['certificate']->lastname . '_' . $data['certificate']->firstname . '_' . trim(preg_replace('/\s\s+/', '', strip_tags($data['certificate']['certification_title']))) . '_' . $data['certificate']['kc_id'] . '.pdf';
+    //$fn = strip_tags($fn);
+    $fn = htmlspecialchars_decode($fn,ENT_QUOTES);
+    //$data['pdf']->render();
+
+    return $data['pdf']->stream($fn);
+
   }
 
 }

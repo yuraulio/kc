@@ -19,6 +19,7 @@ class ExamCheck
      */
     public function handle(Request $request, Closure $next)
     {
+       
         if(isset($request->route()->parameters['ex_id'])){
             
             if(!$this->checkForExamAccess($request->route()->parameters['ex_id'])){
@@ -32,7 +33,7 @@ class ExamCheck
         }
 
         else if(isset($request->route()->parameters['exam'])){
-
+            
             $eventId = $request->route()->parameters['exam']->id;
 
             if(!$this->checkForExamAccess($eventId)){
@@ -46,18 +47,18 @@ class ExamCheck
     private function checkForExamAccess($examId){
 
         $exam = Exam::find($examId);
-
+        
         if($exam && $exam->event->first()){
 
             $user = Auth::user();
             $event = $exam->event->first();
-            $event = $user->events_for_user_list()->wherePivot('event_id',$event->id)->first();
-            
             if($event && $event->is_inclass_course()){
+                
                 $userEvents = $user->events_for_user_list()->wherePivot('event_id',$event->id)->pluck('event_id')->toArray();
                 return in_array($event->id, $userEvents);
 
             }else if($event && $event->is_elearning_course()){
+                $event = $user->events_for_user_list()->wherePivot('event_id',$event->id)->first();
                 return$event->examAccess($user,0.8,false,false);
             }
 

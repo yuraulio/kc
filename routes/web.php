@@ -421,6 +421,9 @@ Route::group(['middleware' => 'auth.aboveauthor', 'prefix' => 'admin'], function
     //import users from file
     Route::post('users-import-from-file', 'UserController@importFromFile')->name('users.file.import');
 
+    //Get Certifcate Only for Admin
+    Route::get('/get-certificate/{certificate}', 'Theme\CertificateController@getCertificateAdmin')->name('admin.get_certificate');
+
 });
 
 /*Route::group(['prefix' => 'cart','middleware' => ['web']], function () {
