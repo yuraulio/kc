@@ -40,7 +40,7 @@ class InsertExamQuestion extends Command
      */
     public function handle()
     {
-        $fileName = public_path() . '/exam-questions.xlsx';
+        $fileName = public_path() . '/import/EXAMS.xlsx';
         $spreadsheet = new Spreadsheet();
         $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReaderForFile($fileName);
         $reader->setReadDataOnly(true);
@@ -56,15 +56,30 @@ class InsertExamQuestion extends Command
                 continue;
             }
             
-            $questions[] = ['question' => trim(str_replace(['"',"'"], "", trim($line[1]))), 'answer-credit' => 1, 
-                            'answers' => [trim(str_replace(['"',"'"], "", trim($line[2]))),trim(str_replace(['"',"'"], "", trim($line[3]))),trim(str_replace(['"',"'"], "", trim($line[4]))),trim(str_replace(['"',"'"], "", $line[5]))], 
+            $qInsert = trim(str_replace(['"',"'"], "", $line[1]));
+            $qInsert = preg_replace('~^\s+|\s+$~us', '\1', $qInsert);
+
+            $answer1 = str_replace(['"',"'"], "", $line[2]);
+            $answer1 = preg_replace('~^\s+|\s+$~us', '\1', $answer1);
+
+            $answer2 = str_replace(['"',"'"], "", $line[3]);
+            $answer2 = preg_replace('~^\s+|\s+$~us', '\1', $answer2);
+
+            $answer3 = str_replace(['"',"'"], "", $line[4]);
+            $answer3 = preg_replace('~^\s+|\s+$~us', '\1', $answer3);
+
+            $answer4 = str_replace(['"',"'"], "", $line[5]);
+            $answer4 = preg_replace('~^\s+|\s+$~us', '\1', $answer4);
+
+            $questions[] = ['question' => trim($qInsert), 'answer-credit' => 1, 
+                            'answers' => [trim($answer1),trim($answer2),trim($answer3),trim($answer4)], 
                             'question-type' => "radio buttons", 
-                            'correct_answer' => [trim(str_replace(['"',"'"], "", trim($line[3])))]
+                            'correct_answer' => [trim($answer2)]
                         ];
                     
         }
-        //dd($questions);
-        $exam = Exam::find(87);
+        
+        $exam = Exam::find(98);
         $exam->questions = json_encode($questions);
         $exam->save();
 

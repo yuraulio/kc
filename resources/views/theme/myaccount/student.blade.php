@@ -1352,15 +1352,15 @@
                                           <?php $userExam = isset($user['hasExamResults'][$p->id][0]) ? $user['hasExamResults'][$p->id][0] : null ?>
 
                                           @if($event['exam_access'] && !$userExam)
-                                          @if($p->islive == 1)
-                                          <a target="_blank" onclick="window.open('{{ route('attempt-exam', [$p->id]) }}', 'newwindow', 'width=1400,height=650'); return false;" title="{{$p['exam_name']}}" class="btn btn--secondary btn--md">TAKE EXAM</a>
-                                          @endif
+                                             @if($p->islive == 1)
+                                             <a target="_blank" onclick="window.open('{{ route('attempt-exam', [$p->id]) }}', 'newwindow', 'width=1400,height=650'); return false;" title="{{$p['exam_name']}}" class="btn btn--secondary btn--md">TAKE EXAM</a>
+                                             @endif
                                           @elseif($userExam)
-                                          @if($nowTime->diffInHours($userExam->end_time) < 48)
-                                          <a target="_blank" href="{{ url('exam-results/' . $p->id) }}?s=1" title="{{$p['exam_name']}}" class="btn btn--secondary btn--md">VIEW RESULT</a>
-                                          @else
-                                          <a target="_blank" href="{{ url('exam-results/' . $p->id) }}?s=1" title="{{$p['exam_name']}}" class="btn btn--secondary btn--md btn--completed">VIEW RESULT</a>
-                                          @endif
+                                             @if($nowTime->diffInHours($userExam->end_time) < 48)
+                                             <a target="_blank" href="{{ url('exam-results/' . $p->id) }}?s=1" title="{{$p['exam_name']}}" class="btn btn--secondary btn--md">VIEW RESULT</a>
+                                             @else
+                                             <a target="_blank" href="{{ url('exam-results/' . $p->id) }}?s=1" title="{{$p['exam_name']}}" class="btn btn--secondary btn--md btn--completed">VIEW RESULT</a>
+                                             @endif
                                           @else
                                           <div class="right">
                                              <a href="javascript:void(0)" title="{{$p['exam_name']}}" class="btn btn--secondary btn--md btn--completed">TAKE EXAM</a>
