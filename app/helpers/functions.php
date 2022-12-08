@@ -14,6 +14,7 @@ use Spatie\Dropbox\Client;
 use App\Model\Admin\Page;
 use App\Model\Admin\Ticker;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 if(!function_exists('get_tickers')){
     function get_tickers(){
@@ -39,6 +40,14 @@ if(!function_exists('get_tickers')){
 if(!function_exists('get_countdowns')){
     function get_countdowns($event){
 
+        if(Auth::check()){
+            $user = Auth::user();
+
+            if($user->checkUserSubscriptionByEventId($event->id)){
+                return [];
+            }  
+        }
+
         //$countdowns = $event->delivery->first()->countdown()->where('published_from', '>=', date('Y-m-d'))->where('published_to', '=', date('Y-m-d'))->where('countdown_from', '>=', date('Y-m-d H:s'))->where('countdown_to', '<=', date('Y-m-d H:s'))->get();
         $countdowns = $event->delivery->first() ? $event->delivery->first()->countdown()
                         ->where('published', true)
@@ -59,6 +68,8 @@ if(!function_exists('get_countdowns')){
                 ->toArray() : [];
 
         }
+
+        //dd($countdowns);
 
 
         return $countdowns;
