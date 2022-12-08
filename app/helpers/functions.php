@@ -50,13 +50,13 @@ if(!function_exists('get_countdowns')){
 
         if(empty($countdowns)){
 
-            $countdowns = $event->category->first()->countdown()
+            $countdowns = $event->category->first() ? $event->category->first()->countdown()
                 ->where('published', true)
                 // ->where('published_from', '<=', date('Y-m-d'))
                 // ->where('published_to', '>=', date('Y-m-d'))
                 ->where('countdown_to', '>=', date('Y-m-d H:s'))
                 ->get()
-                ->toArray();
+                ->toArray() : [];
 
         }
 
