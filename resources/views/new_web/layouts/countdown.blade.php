@@ -5,7 +5,7 @@
     if(!empty($countdowns)){
         $countdown = end($countdowns);
     }
-    
+
 ?>
 
 <link rel="stylesheet" href="{{ asset('argon') }}/css/countdown.css">
