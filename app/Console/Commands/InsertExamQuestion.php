@@ -40,7 +40,8 @@ class InsertExamQuestion extends Command
      */
     public function handle()
     {
-        $fileName = public_path() . '/import/EXAMS.xlsx';
+        //$fileName = public_path() . '/import/Exams3.xlsx';
+        //$fileName = public_path() . '/import/EXAMS.xlsx';
         $spreadsheet = new Spreadsheet();
         $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReaderForFile($fileName);
         $reader->setReadDataOnly(true);
