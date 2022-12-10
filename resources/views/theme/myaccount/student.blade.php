@@ -1141,10 +1141,13 @@
                                                 $expirationYear = date('Y',$certificate->expiration_date);
                                              }
 
+                                             $certiTitle = preg_replace( "/\r|\n/", " ", $certificate->certificate_title );
+                                             $certiTitle = urlencode(htmlspecialchars_decode(strip_tags($certiTitle),ENT_QUOTES));
+                                          
                                           ?>
                                        <div class="right">
                                           <a  class="btn btn--secondary btn--md" target="_blank" href="/mycertificate/{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" >DOWNLOAD </a>
-                                          <a class="linkedin-post" title="Add this certification to your LinkedIn profile" target="_blank" href="https://www.linkedin.com/profile/add?startTask={{urlencode(strip_tags($certificate->certificate_title))}}&name={{urlencode(strip_tags($certificate->certificate_title))}}&organizationId=3152129&issueYear={{date('Y',$certificate->create_date)}}
+                                          <a class="linkedin-post cert-post"  target="_blank" href="https://www.linkedin.com/profile/add?startTask={{$certiTitle}}&name={{$certiTitle}}&organizationId=3152129&issueYear={{date('Y',$certificate->create_date)}}
                                                 &issueMonth={{date('m',$certificate->create_date)}}&expirationYear={{$expirationYear}}&expirationMonth={{$expirationMonth}}&certUrl={{$certUrl}}&certId={{$certificate->credential}}">
                                                 <img class="linkdein-image-add" src="{{cdn('theme/assets/images/icons/social/events/Linkedin.svg')}}" alt="LinkedIn Add to Profile button">
                                           </a>
@@ -1384,14 +1387,15 @@
                                                 $expirationMonth = date('m',$certificate->expiration_date);
                                                 $expirationYear = date('Y',$certificate->expiration_date);
                                              }
+                                             $certiTitle = urlencode(htmlspecialchars_decode(strip_tags($certificate->certificate_title),ENT_QUOTES));
 
-                                          ?>
+                                             ?>
                                        <div class="right">
-                                          <a  class="btn btn--secondary btn--md" target="_blank" href="/mycertificate/{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" >DOWNLOAD </a>
-                                          <a class="linkedin-post cert-post"  target="_blank" href="https://www.linkedin.com/profile/add?startTask={{urlencode(strip_tags($certificate->certificate_title))}}&name={{urlencode(strip_tags($certificate->certificate_title))}}&organizationId=3152129&issueYear={{date('Y',$certificate->create_date)}}
-                                                &issueMonth={{date('m',$certificate->create_date)}}&expirationYear={{$expirationYear}}&expirationMonth={{$expirationMonth}}&certUrl={{$certUrl}}&certId={{$certificate->credential}}">
-                                                <img class="linkdein-image-add" src="{{cdn('theme/assets/images/icons/social/events/Linkedin.svg')}}" alt="LinkedIn Add to Profile button">
-                                          </a>
+                                             <a  class="btn btn--secondary btn--md" target="_blank" href="/mycertificate/{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" >DOWNLOAD </a>
+                                             <a class="linkedin-post cert-post"  target="_blank" href="https://www.linkedin.com/profile/add?startTask={{$certiTitle}}&name={{$certiTitle}}&organizationId=3152129&issueYear={{date('Y',$certificate->create_date)}}
+                                                   &issueMonth={{date('m',$certificate->create_date)}}&expirationYear={{$expirationYear}}&expirationMonth={{$expirationMonth}}&certUrl={{$certUrl}}&certId={{$certificate->credential}}">
+                                                   <img class="linkdein-image-add" src="{{cdn('theme/assets/images/icons/social/events/Linkedin.svg')}}" alt="LinkedIn Add to Profile button">
+                                             </a>
                                           @if($user->id == 1359)
                                           <a class="facebook-post-cert cert-post" data-certid="{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" title="Add this certification to your Facebook profile" href="javascript:void(0)">
                                                 <img class="linkdein-image-add" src="{{cdn('theme/assets/images/icons/social/events/Facebook.svg')}}" alt="Facebook Add to Profile button">
@@ -1536,14 +1540,15 @@
                                                 $expirationMonth = date('m',$certificate->expiration_date);
                                                 $expirationYear = date('Y',$certificate->expiration_date);
                                              }
-
-                                          ?>
+                                             $certiTitle = urlencode(htmlspecialchars_decode(strip_tags($certificate->certificate_title),ENT_QUOTES));
+                                            
+                                             ?>
                                        <div class="right">
-                                          <a  class="btn btn--secondary btn--md" target="_blank" href="/mycertificate/{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" >DOWNLOAD </a>
-                                          <a class="linkedin-post" title="Add this certification to your LinkedIn profile" target="_blank" href="https://www.linkedin.com/profile/add?startTask={{urlencode(strip_tags($certificate->certificate_title))}}&name={{urlencode(strip_tags($certificate->certificate_title))}}&organizationId=3152129&issueYear={{date('Y',$certificate->create_date)}}
-                                                &issueMonth={{date('m',$certificate->create_date)}}&expirationYear={{$expirationYear}}&expirationMonth={{$expirationMonth}}&certUrl={{$certUrl}}&certId={{$certificate->credential}}">
-                                                <img class="linkdein-image-add" src="{{cdn('theme/assets/images/icons/social/events/Linkedin.svg')}}" alt="LinkedIn Add to Profile button">
-                                          </a>
+                                             <a  class="btn btn--secondary btn--md" target="_blank" href="/mycertificate/{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" >DOWNLOAD </a>
+                                             <a class="linkedin-post cert-post"  target="_blank" href="https://www.linkedin.com/profile/add?startTask={{$certiTitle}}&name={{$certiTitle}}&organizationId=3152129&issueYear={{date('Y',$certificate->create_date)}}
+                                                   &issueMonth={{date('m',$certificate->create_date)}}&expirationYear={{$expirationYear}}&expirationMonth={{$expirationMonth}}&certUrl={{$certUrl}}&certId={{$certificate->credential}}">
+                                                   <img class="linkdein-image-add" src="{{cdn('theme/assets/images/icons/social/events/Linkedin.svg')}}" alt="LinkedIn Add to Profile button">
+                                             </a>
                                           @if($user->id == 1359)
                                           <a class="facebook-post-cert" data-certid="{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" title="Add this certification to your Facebook profile" href="javascript:void(0)">
                                                 <img class="linkdein-image-add" src="{{cdn('theme/assets/images/icons/social/events/Facebook.svg')}}" alt="Facebook Add to Profile button">
