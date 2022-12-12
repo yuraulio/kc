@@ -49,7 +49,8 @@ class ExportAllUserByCategory extends Command
         //$this->queryForUsesHasOnlyFreeEvents();
       	//$this->queryForUsesHasSmallElearning();
         //$this->queryForInclassElearning();
-        $this->queryForUsersHaveTransactionsByDate('2022-11-17');
+        //$this->queryForUsersHaveTransactionsByDate('2022-11-17');
+        $this->queryForSponsorded();
     }
 
 
@@ -437,7 +438,31 @@ class ExportAllUserByCategory extends Command
 
     }
 
-      
+    private function queryForSponsorded(){
+     
+       $users = 
+        
+            User::whereHas('events_for_user_list', function($event){
+                $event->whereHas('tickets',function($ticket){
+                           $ticket->where('ticket_id',822);
+                });
+                
+              
+            })->get();
+        
+         
+        $columns = array("ID", "First Name", "Last Name", "email",'Mobile');
+
+        $file = fopen('sponsored.csv', 'w');
+        fputcsv($file, $columns);
+
+        foreach($users as $user){
+            fputcsv($file, array($user->id, $user->firstname,  $user->lastname, $user->email,$user->mobile));
+        }
+
+        fclose($file);
+         
+    }
   
 }
 
