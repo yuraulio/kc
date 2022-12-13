@@ -945,11 +945,19 @@
                                                     <?php
 
                                                         $access_events = (isset($info['inclass']['elearning_access'])) ? $info['inclass']['elearning_access'] : null;
+                                                        $access_events_exams = (isset($info['inclass']['elearning_access_exams'])) ? $info['inclass']['elearning_access_exams'] : null;
                                                     ?>
                                                     <div class="form-group col-12">
                                                         <span class="toggle-btn-inline-text">Would you like to let students access an e-learning course for free?</span>
                                                         <label id="access-student-toggle" class="custom-toggle enroll-toggle visible">
                                                             <input id="access-student" name="course[{{'free_courses'}}][{{'enabled'}}]" type="checkbox" {{ (isset($access_events) && count($access_events) != 0) ? 'checked' : ''}}>
+                                                            <span class="custom-toggle-slider rounded-circle" data-label-off="No" data-label-on="Yes"></span>
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-group col-12">
+                                                        <span class="toggle-btn-inline-text">Exams for selected free course access?</span>
+                                                        <label id="access-student-toggle" class="custom-toggle enroll-toggle visible">
+                                                            <input id="access-student-exams" name="course[{{'free_courses'}}][{{'exams'}}]" type="checkbox" {{ (isset($access_events_exams) && count($access_events_exams) != 0) ? 'checked' : ''}}>
                                                             <span class="custom-toggle-slider rounded-circle" data-label-off="No" data-label-on="Yes"></span>
                                                         </label>
                                                     </div>

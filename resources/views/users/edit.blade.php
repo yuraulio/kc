@@ -441,7 +441,11 @@
                                 <th scope="col">{{ __('Paid') }}</th>
                                 <th scope="col">{{ __('Registration Date') }}</th>
                                 <th scope="col">{{ __('Expiration Date') }}</th>
+
                                 <th scope="col">{{ __('Absences') }}</th>
+
+                                <th scope="col">{{ __('Certification') }}</th>
+
                                 <th scope="col"></th>
                             </tr>
                         </thead>
@@ -462,23 +466,38 @@
                                    <td> @if($trans) {{date('d-m-Y',strtotime($trans->created_at))}} @endif</td>
                                     <td>
                                         <div style="display: inline-flex;">
-                                            <input id="{{$user_event->id}}" class="form-control datepicker" placeholder="Select date" type="text" value="<?= ($user_event->pivot->expiration != null) ? date_format( new DateTime($user_event->pivot->expiration), 'm/d/Y') : ''; ?>">
-                                        </div>
-
-                                        <div style="display: inline-flex;">
-                                            <button class="update_exp btn btn-info btn-sm" style="margin-top:10px;" type="button"
+                                            <input style="width:auto;" id="{{$user_event->id}}" class="form-control datepicker" placeholder="Select date" type="text" value="<?= ($user_event->pivot->expiration != null) ? date_format( new DateTime($user_event->pivot->expiration), 'm/d/Y') : ''; ?>">
+                                            <button class="update_exp btn btn-info btn-sm" type="button"
                                                 data-user_id="{{$user_event->pivot->user_id}}" data-event_id="{{$user_event->id}}" >Update</button>
                                         </div>
+
+
                                     </td>
 
                                     @if($user_event->is_inclass_course())
                                     <td>
-                                        <button class="absences btn btn-info btn-sm" style="margin-top:10px;" type="button"
+                                        <button class="absences btn btn-info btn-sm" type="button"
                                                 data-user_id="{{$user_event->pivot->user_id}}" data-event_id="{{$user_event->id}}"
                                                 data-toggle="modal" data-target="#absences-info">Absences</button>
 
                                     </td>
+                                    @else
+                                    <td></td>
                                     @endif
+
+
+                                    @if(!empty($user_event['certifications']))
+
+                                        @foreach($user_event['certifications'] as $cert)
+                                            <td><a class="btn btn-info btn-sm" href="/admin/get-certificate/{{$cert['id']}}">Download</a></td>
+                                        @endforeach
+
+                                    @else
+                                    <td></td>
+
+                                    @endif
+
+
 
                                     <td class="text-right">
 

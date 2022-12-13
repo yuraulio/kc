@@ -948,11 +948,17 @@ class UserController extends Controller
 
             $user_id = $value->pivot->user_id;
             $event_id = $value->pivot->event_id;
-            $event = Event::find($event_id);
+            $event = Event::with('certificates')->find($event_id);
+
             $ticket = $event->tickets()->wherePivot('event_id', '=', $event_id)->wherePivot('user_id', '=', $user_id)->first();
 
             $data['user']['events_for_user_list'][$key]['ticket_id'] = isset($ticket->pivot) ? $ticket->pivot->ticket_id : null;
             $data['user']['events_for_user_list'][$key]['ticket_title'] = isset($ticket['title']) ? $ticket['title'] : '';
+            $data['user']['events_for_user_list'][$key]['certifications'] = [];
+
+            if(!empty($event->certificatesByUser($user_id))){
+                $data['user']['events_for_user_list'][$key]['certifications'] = $event->certificatesByUser($user_id)->toArray();
+            }
 
             if(!key_exists($value['title'],$data['transactions'])){
                 $data['transactions'][$value['title']] = [];

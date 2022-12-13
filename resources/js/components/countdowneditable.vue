@@ -136,7 +136,12 @@ export default {
                 this.$set(this.item, $event.key, $event.data);
 
             },
-            update_delivery(value) {
+            update_delivery(value = []) {
+
+                if(value == null){
+                    value = []
+                }
+
                 this.item.delivery = value;
             },
             update_category(value){
@@ -223,7 +228,9 @@ export default {
 
                 this.item.published = this.published
 
-                if(this.item.delivery[0] !== undefined){
+                console.log('test:  ')
+                console.log(this.item)
+                if(this.item.delivery !== undefined && this.item.delivery[0] !== undefined){
                     this.item.delivery = this.item.delivery[0]
                 }
 

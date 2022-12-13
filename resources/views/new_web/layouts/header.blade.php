@@ -95,14 +95,17 @@
 @endif
 
 <script>
+
     $(document).ready(function(){
-        if(hasTicker){
+
+        if(hasTicker !== undefined && hasTicker){
             $('#header').addClass('has_ticker');
         }
 
-        if(hasCountdown){
+        if(typeof hasCountdown != 'undefined' && hasCountdown){
             $('#header').addClass('has_countdown');
         }
+
     });
 </script>
 

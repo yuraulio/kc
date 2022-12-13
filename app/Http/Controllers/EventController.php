@@ -672,10 +672,21 @@ class EventController extends Controller
 
 
         if(isset($infoData['free_courses']['list'])){
-            dispatch((new EnrollStudentsToElearningEvents($event->id,$infoData['free_courses']['list']))->delay(now()->addSeconds(3)));
+            // todo parse exams
+
+
+
+
+            if(isset($infoData['free_courses']['exams'])){
+                dispatch((new EnrollStudentsToElearningEvents($event->id,$infoData['free_courses']['list'], true))->delay(now()->addSeconds(3)));
+            }else{
+                //dd('disabled');
+                dispatch((new EnrollStudentsToElearningEvents($event->id,$infoData['free_courses']['list'], false))->delay(now()->addSeconds(3)));
+            }
 
         }else{
-            dispatch((new EnrollStudentsToElearningEvents($event->id,null))->delay(now()->addSeconds(3)));
+            // todo parse exams
+            dispatch((new EnrollStudentsToElearningEvents($event->id,null, false))->delay(now()->addSeconds(3)));
         }
 
         return back()->withStatus(__('Event successfully updated.'));
@@ -1295,7 +1306,7 @@ class EventController extends Controller
 
             $newEvent->lessons()->attach($lesson->pivot->lesson_id,['topic_id'=>$lesson->pivot->topic_id, 'date'=>$lesson->pivot->date,
                 'time_starts'=>$lesson->pivot->time_starts,'time_ends'=>$lesson->pivot->time_ends, 'duration' => $lesson->pivot->duration,
-                'room' => $lesson->pivot->room,'instructor_id' => $lesson->pivot->instructor_id, 
+                'room' => $lesson->pivot->room,'instructor_id' => $lesson->pivot->instructor_id,
                 'priority' => $lesson->pivot->priority,'automate_mail'=>$lesson->pivot->automate_mail]);
         }
 

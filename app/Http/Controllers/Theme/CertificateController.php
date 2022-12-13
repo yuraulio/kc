@@ -62,7 +62,7 @@ class CertificateController extends Controller
 
   public function loadCertificateData($certificate){
 
-    
+
     $certificate = Certificate::find($certificate);
 
     $contxt = stream_context_create([
@@ -78,7 +78,7 @@ class CertificateController extends Controller
         'isRemoteEnabled' => true,
 
     ]);
-   
+
 
     $certificateTitle = $certificate->certificate_title;
     $certificateEventTitle =  $certificate->event->first() ? $certificate->event->first()->title : '';
@@ -161,7 +161,7 @@ class CertificateController extends Controller
 
 
   public function getCertificate($certificate){
-    
+
     $certificate =base64_decode($certificate);
     $certificate = explode('--',$certificate)[1];
 
@@ -172,7 +172,7 @@ class CertificateController extends Controller
     //$fn = strip_tags($fn);
     $fn = htmlspecialchars_decode($fn,ENT_QUOTES);
     //$data['pdf']->render();
-    
+
     return $data['pdf']->stream($fn);
     //return view('admin.certificates.'.$certificate->template,compact('certificate'));
 

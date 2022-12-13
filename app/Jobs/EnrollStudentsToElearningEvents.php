@@ -23,11 +23,18 @@ class EnrollStudentsToElearningEvents implements ShouldQueue
 
     private $event;
     private $eventsToEnroll;
+    private $eventsToEnrollExams;
 
-    public function __construct($event, $eventsToEnroll)
+    public function __construct($event, $eventsToEnroll, $eventsToEnrollExams)
     {
         $this->event = Event::find($event);
         $this->eventsToEnroll = $eventsToEnroll;
+
+        $this->eventsToEnrollExams = 0;
+        if($eventsToEnrollExams){
+            $this->eventsToEnrollExams = 1;
+        }
+
     }
 
     /**
@@ -38,30 +45,45 @@ class EnrollStudentsToElearningEvents implements ShouldQueue
     public function handle()
     {
 
-        
-    
         if(!$this->eventsToEnroll){
-           
+
             $students = $this->event->users()->get();
             foreach($students as $student){
-            
-                $student->events()->wherePivot('comment','enroll from ' . $this->event->id)->detach();
+
+                $arr = $student->events()->get();
+                foreach($arr as $key => $ar){
+                    $comment = explode('||',$ar->pivot['comment']);
+
+                    if($ar->pivot['comment'] != null){
+
+                        if('enroll from ' . $this->event->id == $comment[0]){
+                            $student->events()->wherePivot('comment','enroll from ' . $this->event->id.'||'.$comment[1])->detach();
+                        }
+                    }
+
+                }
+
+
+
             }
 
             $this->event->enroll = false;
             $this->event->save();
 
         }else{
-            
+
             $students = $this->event->users()->pluck('user_id')->toArray();
-            
+
 
             foreach($students as $student){
                 $user = User::find($student);
-                
-                $user->events()->wherePivotNotIn('event_id',$this->eventsToEnroll)->wherePivot('comment','enroll from ' . $this->event->id)->detach();
+
+                $user->events()->wherePivotNotIn('event_id',$this->eventsToEnroll)->wherePivot('comment','enroll from ' . $this->event->id.'||1')->detach();
 
             }
+
+            // enroll from .... ||0 // exams disabled
+            // enroll from .... ||1 // exams enabled
 
             //dd($this->eventsToEnroll);
             foreach($this->eventsToEnroll as $eventToEnroll){
@@ -69,30 +91,30 @@ class EnrollStudentsToElearningEvents implements ShouldQueue
 
                 $elearningEvent = Event::find($eventToEnroll);
                 $existsStudent = $elearningEvent->users()->pluck('user_id')->toArray();
-            
+
                 $students1 = array_diff(  $students, $existsStudent );
                 $today = date('Y/m/d');
                 $monthsExp2 = '+' . $elearningEvent->expiration .' months';
 
-              
+
                 foreach($students1 as $student){
                     $user = User::find($student);
-                   
+
                     $elearningEvent->users()->attach($student,
                             [
-                                'comment'=>'enroll from ' . $this->event->id ,
+                                'comment'=>'enroll from ' . $this->event->id.'||'.$this->eventsToEnrollExams,
                                 'expiration'=>date('Y-m-d', strtotime($monthsExp2, strtotime($today))),
-                                'paid' => true,
+                                'paid' => true
                             ]
                     );
-                                
-            
+
+
                 }
-    
+
 
             }
 
-            
+
             $this->event->enroll = true;
             $this->event->save();
 
