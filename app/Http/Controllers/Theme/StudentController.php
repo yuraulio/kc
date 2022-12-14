@@ -924,6 +924,17 @@ class StudentController extends Controller
         //dd(json_decode($data['notes'],true));
         //load statistic
 
+        $notes = json_decode($data['notes'],true);;
+
+        foreach($notes as $key => $note){
+            if($note){
+                $notes[$key] = str_replace(['\\'], "", $note);
+            }
+        }
+
+
+        $data['notes'] = json_encode($notes);;
+
         //$data['instructor_topics'] = count($user->instructor) > 0;
         //expiration event for user
         $expiration_event_user = $event['pivot']['expiration'];
@@ -954,6 +965,7 @@ class StudentController extends Controller
                     //dd(preg_replace( "/\r|\n/", "||", $request->text ));
                     $notes[$key] = preg_replace( "/\r|\n/", "||", $request->text );
                     $notes[$key] = str_replace(['"',"'"], "", $notes[$key]);
+                    $notes[$key] = str_replace(['\\'], "", $notes[$key]);
 
 
                 }
