@@ -1583,10 +1583,44 @@ img.linkdein-image-add {
     background: white;
 }
 
+#countdown_enroll_btn {
+    padding: 10px 40px 10px;
+    float: right;
+}
+
+#countdown_container {
+    padding:0 23px;
+}
+
+#countdown_container .row{
+    padding:10px 0;
+}
+#countdown{
+    margin: 0 auto;
+}
+
+
+
+
 /* Tablet */
 @media only screen and (max-width: 1100px) {
     .hero-message .hours, .hero-message .certificate, .hero-message .delivery{
         font-size: 22px;
+    }
+}
+
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+    .countdown-text{
+        max-width: 28% !important;
+    }
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+    .countdown-text{
+        max-width: 28% !important;
     }
 }
 

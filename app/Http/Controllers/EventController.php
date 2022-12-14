@@ -674,13 +674,9 @@ class EventController extends Controller
         if(isset($infoData['free_courses']['list'])){
             // todo parse exams
 
-
-
-
             if(isset($infoData['free_courses']['exams'])){
                 dispatch((new EnrollStudentsToElearningEvents($event->id,$infoData['free_courses']['list'], true))->delay(now()->addSeconds(3)));
             }else{
-                //dd('disabled');
                 dispatch((new EnrollStudentsToElearningEvents($event->id,$infoData['free_courses']['list'], false))->delay(now()->addSeconds(3)));
             }
 
@@ -983,6 +979,7 @@ class EventController extends Controller
             // Free E-learning
             if(isset($requestData['free_courses']['list'])){
                 $data['course_elearning_access'] = json_encode($requestData['free_courses']['list']);
+                $data['course_elearning_exam'] = isset($requestData['free_courses']['exams']) ? $requestData['free_courses']['exams'] : null;
             }else{
                 $data['course_elearning_access'] = null;
             }
@@ -1138,6 +1135,7 @@ class EventController extends Controller
         $infos->course_elearning_exam_visible = isset($event_info['course_elearning_exam_visible']) ? $event_info['course_elearning_exam_visible'] : null;
         $infos->course_elearning_exam_icon = isset($event_info['course_elearning_exam_icon']) ? $event_info['course_elearning_exam_icon'] : null;
         $infos->course_elearning_exam_text = isset($event_info['course_elearning_exam_text']) ? $event_info['course_elearning_exam_text'] : null;
+        $infos->course_elearning_exam = isset($event_info['course_elearning_exam']) ? true : false;
 
 
         /*if($event->paymentMethod()->first()){

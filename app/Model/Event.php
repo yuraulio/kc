@@ -925,6 +925,8 @@ class Event extends Model
 
                 $data['inclass']['elearning_access'] = ($infos['course_elearning_access'] != null) ? json_decode($infos['course_elearning_access'], true) : null;
                 $data['inclass']['elearning_access_icon'] = ($infos['course_elearning_access_icon'] != null) ? json_decode($infos['course_elearning_access_icon'], true) : null;
+                $data['inclass']['elearning_exam'] = ($infos['course_elearning_exam']) ? true : false;
+
             }else if($data['delivery'] == 143){
                 $data['elearning']['visible'] = $infos['course_elearning_visible'] != null ? json_decode($infos['course_elearning_visible'], true) : null;
                 $data['elearning']['icon'] = $infos['course_elearning_icon'] != null ? json_decode($infos['course_elearning_icon'], true) : null;
@@ -942,6 +944,7 @@ class Event extends Model
 
                 $data['inclass']['elearning_access'] = ($infos['course_elearning_access'] != null) ? json_decode($infos['course_elearning_access'], true) : null;
                 $data['inclass']['elearning_access_icon'] = ($infos['course_elearning_access_icon'] != null) ? json_decode($infos['course_elearning_access_icon'], true) : null;
+                $data['inclass']['elearning_exam'] = ($infos['course_elearning_exam']) ? true : false;
             }
 
             $data['awards']['text'] = $infos['course_awards_text'];
