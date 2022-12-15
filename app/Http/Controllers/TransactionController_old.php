@@ -124,7 +124,7 @@ class TransactionController extends Controller
         $earlyCount = 0;
         $data['transactions'] = [];
         foreach($transactions as $transaction){
-            
+
             if(!$transaction->user->first()){
                 continue;
             }
@@ -133,8 +133,8 @@ class TransactionController extends Controller
             //dd($eventInfo);
 
             $isElearning = isset($eventInfo['delivery']) && $eventInfo['delivery'] == 143;
-            $category =  ($category = $transaction->user->first()->events->first()->category->first()) ? $category->id : -1; 
-                
+            $category =  ($category = $transaction->user->first()->events->first()->category->first()) ? $category->id : -1;
+
             if(in_array(9,$userRole) &&  ($category !== 46)){
                 continue;
             }
@@ -143,13 +143,13 @@ class TransactionController extends Controller
             if(isset($transaction['user'][0]['ticket'][0]['type'])){
                 $ticketType = $transaction['user'][0]['ticket'][0]['type'];
                 $ticketName = $transaction['user'][0]['ticket'][0]['title'];
-    
+
             }else{
                 $ticketType = '-';
                 $ticketName = '-';
-    
+
             }
-            
+
             if($transaction['coupon_code'] != ''){
                 $coupon_code = $transaction['coupon_code'];
             }else{
@@ -159,9 +159,9 @@ class TransactionController extends Controller
             if($ticketType == 'Early Bird'){
                 $earlyCount += 1;
             }
-            
+
             $countUsers = count($transaction->user);
-            
+
 
             foreach($transaction['user'] as $u){
                 $statistic = $u->statisticGroupByEvent->groupBy('event_id');
@@ -180,11 +180,11 @@ class TransactionController extends Controller
             }
 
         }
-        
+
         return $data;
 
     }
-    
+
 
     public function participants_inside_revenue()
     {
@@ -272,22 +272,22 @@ class TransactionController extends Controller
                 $transaction->save();
 
                 $us = User::find($request->users[$key]);
-                
+
                 if($data['status'][$key] > 0){
-                    
+
                     $us->events()->detach($request->oldevents[$key]);
                     $us->events()->attach($request->newevents[$key]);
-        
+
                     $transaction->event()->detach($request->oldevents[$key]);
                     $transaction->event()->attach($request->newevents[$key]);
 
                 }else{
-                    
+
                     $us->events()->detach($request->oldevents[$key]);
                     $transaction->event()->detach($request->oldevents[$key]);
                     $transaction->user()->detach($us);
                 }
-    
+
             }
 
         }
@@ -296,7 +296,7 @@ class TransactionController extends Controller
     }
 
     public function exportExcel(Request $request){
-        
+
         //$fromDate = date('Y-m-d',strtotime($request->fromDate));
         //$toDate = $request->toDate ? date('Y-m-d',strtotime($request->toDate)) : date('Y-m-d');
 

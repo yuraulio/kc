@@ -17,6 +17,10 @@ class TransactionExport implements FromArray,WithHeadings
     public $fromDate;
     public $toDate;
     public $event;
+    public $city;
+    public $category;
+    public $delivery;
+
     public function __construct($request){
 
         $this->createDir(base_path('public/tmp/exports/'));
@@ -24,6 +28,17 @@ class TransactionExport implements FromArray,WithHeadings
 
         $this->toDate = $request->toDate ? date('Y-m-d',strtotime($request->toDate)) : date('Y-m-d');
         $this->toDate = date('Y-m-d', strtotime($this->toDate . ' +1 day'));
+
+        $this->city = $request->city;
+        $this->category = $request->category;
+        $this->delivery = [];
+
+        if($request->delivery == 'in-class'){
+            $this->delivery = [139, 215];
+        }else if($request->delivery == 'e-learning'){
+            $this->delivery = [143];
+        }
+
 
         if($request->event){
             $this->event = is_array($request->event) ? $request->event : [$request->event];
@@ -38,8 +53,45 @@ class TransactionExport implements FromArray,WithHeadings
     public function array(): array
     {
 
-        $transactions = Transaction::whereBetween('created_at', [$this->fromDate,$this->toDate])->
-                                with('user.events','user.ticket','subscription','event','event.delivery','event.category')->get();
+        $transactions = Transaction::query();
+
+        $transactions = $transactions->whereBetween('created_at', [$this->fromDate,$this->toDate])->
+                                with('user.events_for_user_list','user.ticket','subscription','event','event.delivery');
+
+                                //dd($transactions->get());
+
+
+        if($this->city != null){
+            $city = $this->city;
+            $transactions = $transactions->whereHas('event.city', function($q) use ($city) {
+                return $q->where('name', $city);
+            });
+        }
+
+        if($this->category != null){
+
+            $category = $this->category;
+            $transactions = $transactions->whereHas('event.category', function($q) use ($category) {
+                return $q->where('name', $category);
+            });
+        }
+
+        if($this->delivery != null){
+
+
+
+            $delivery = $this->delivery;
+            $transactions = $transactions->whereHas('event.event_info1', function($q) use ($delivery) {
+                return $q->whereIn('course_delivery', $delivery);
+            });
+        }
+        $transactions = $transactions->get();
+
+        //dd($transactions);
+
+
+
+
         $userRole = Auth::user()->role->pluck('id')->toArray();
         $data = array();
         foreach($transactions as $transaction){

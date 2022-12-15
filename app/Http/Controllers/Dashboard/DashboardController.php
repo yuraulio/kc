@@ -26,46 +26,46 @@ class DashboardController extends Controller
     public function enrollStudendsToElearning(Event $event,$enroll){
 
         //dd($enroll);
-    
+
         if($enroll){
-            
+
             $elearningEvent = Event::find(2304);
-            
+
             $students = $event->users()->pluck('user_id')->toArray();
             $existsStudent = $elearningEvent->users()->pluck('user_id')->toArray();
-            
+
             $students = array_diff(  $students, $existsStudent );
             $today = date('Y/m/d');
             $monthsExp2 = '+' . $elearningEvent->expiration .' months';
 
             foreach($students as $student){
-        
+
                 $elearningEvent->users()->attach($student,
                         [
-                            'comment'=>'enroll',
+                            'comment'=>'enroll||0',
                             'expiration'=>date('Y-m-d', strtotime($monthsExp2, strtotime($today))),
                             'paid' => true,
                         ]
                 );
-                            
-        
+
+
             }
-           
+
            $event->enroll = true;
            $event->save();
 
         }else{
             $elearningEvent = Event::find(2304);
             $students = $event->users()->pluck('user_id')->toArray();
-            
-            $elearningEvent->users()->wherePivotIn('user_id',$students)->wherePivot('comment','enroll')->detach();
+
+            $elearningEvent->users()->wherePivotIn('user_id',$students)->wherePivot('comment','enroll||0')->detach();
 
             $event->enroll = false;
             $event->save();
 
         }
 
-        
+
     }
 
     public function changeIndex(Event $event,$index){

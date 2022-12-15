@@ -2649,6 +2649,7 @@
     })
 
     $( "#input-delivery" ).change(function() {
+        $('#free_course_list').val("")
         if($(this).val() == 139){
             $('.delivery_child_wrapper').removeClass('d-none')
             $('.delivery_city_wrapper').removeClass('d-none')
@@ -2656,6 +2657,8 @@
             $('.elearning_exam_visible_wrapper').addClass('d-none')
             $('.exp_input').addClass('d-none')
             $('.exam_input').addClass('d-none')
+
+            //
         }else if($(this).val() == 143){
             $('.delivery_child_wrapper').addClass('d-none')
             $('.elearning_visible_wrapper').removeClass('d-none')

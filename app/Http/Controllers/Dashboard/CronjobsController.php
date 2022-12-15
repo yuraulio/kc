@@ -39,7 +39,7 @@ class CronjobsController extends Controller
         $today = strtotime($today);
         foreach($students as $student){
 
-            $events = $student->events()->wherePivot('comment','enroll')->get();
+            $events = $student->events()->wherePivot('comment','enroll||0')->get();
 
             foreach($events as $event){
 
@@ -375,11 +375,11 @@ class CronjobsController extends Controller
 
         $nowTime = now()->subMinutes(30);
         foreach($abandoneds as $abandoned){
-        
+
             if($abandoned->created_at >= $nowTime){
                continue;
             }
-           
+
             if(!$user = $abandoned->user){
                 continue;
             }
@@ -409,17 +409,17 @@ class CronjobsController extends Controller
     {
         $now_date = now();
         $now_date = date_format($now_date, 'Y-m-d');
-        
+
         if((strtotime(env('BLACKFRIDAY')) == strtotime($now_date)) || (strtotime(env('CYBERMONDAY'))  == strtotime($now_date))){
 
             $abandoneds = CartCache::where('send_email', '=', 1)->get();
 
 
             foreach($abandoneds as $abandoned){
-                
-                
+
+
                 if($abandoned->created_at <= now()->subMinutes(120)){
-                  
+
                     continue;
                 }
 
@@ -944,6 +944,7 @@ class CronjobsController extends Controller
     }
 
     public function sendAutomateEmailForInstructors(){
+
         $data = [];
 
         $date = date("Y-m-d");

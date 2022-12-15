@@ -126,17 +126,6 @@ class EnrollStudentsToElearningEvents implements ShouldQueue
 
         }else{
 
-            // $students = $this->event->users()->pluck('user_id')->toArray();
-
-
-            // foreach($students as $student){
-            //     $user = User::find($student);
-
-            //     $user->events()->wherePivotNotIn('event_id',$this->eventsToEnroll)->wherePivot('comment','enroll from ' . $this->event->id.'||1')->detach();
-
-            // }
-
-
             $students = $this->event->users()->pluck('user_id')->toArray();
 
 
@@ -151,18 +140,19 @@ class EnrollStudentsToElearningEvents implements ShouldQueue
                 foreach($userEvents as $eve){
 
                     if(in_array($eve->id ,$this->eventsToEnroll)){
-                        // dd($eve->pivot['comment'].'//'.'enroll from '.$this->event->id.'||'.$this->eventsToEnrollExams);
-                        // dd($eve->pivot['comment'] == 'enroll from '.$this->event->id.'||'.$this->eventsToEnrollExams);
-                        if(str_contains($eve->pivot['comment'], 'enroll from') && $eve->pivot['comment'] != 'enroll from '.$this->event->id.'||'.$this->eventsToEnrollExams){
-                            $user->events()->wherePivot('event_id', $eve->id)->wherePivot('user_id', $user->id)->detach();
-                            //DB::table('event_user')->where('event_id', $eve->id)->where('user_id', $user->id)->delete();
+
+                        if(str_contains($eve->pivot['comment'], 'enroll from') || str_contains($eve->pivot['comment'], 'enroll') && ($eve->pivot['comment'] != 'enroll from '.$this->event->id.'||'.$this->eventsToEnrollExams || $eve->pivot['comment'] != 'enroll'.'||'.$this->eventsToEnrollExams)){
+
+                            $user->events()->wherePivot('event_id', $eve->id)->wherePivot('user_id', $user->id)->updateExistingPivot($eve->id, ['comment' => 'enroll from '.$this->event->id.'||'.$this->eventsToEnrollExams], false);
+                            //$user->events()->wherePivot('event_id', $eve->id)->wherePivot('user_id', $user->id)->detach();
+
                         }
                     }else{
-                        if(str_contains($eve->pivot['comment'], 'enroll from')){
+                        if(str_contains($eve->pivot['comment'], 'enroll from') || str_contains($eve->pivot['comment'], 'enroll')){
                             $user->events()->wherePivot('event_id', $eve->id)->wherePivot('user_id', $user->id)->detach();
-                            //DB::table('event_user')->where('event_id', $eve->id)->where('user_id', $user->id)->delete();
+
                         }
-                        
+
                     }
                     // if($eve->pivot['comment'] != null && str_contains($eve->pivot['comment'], 'enroll from') && ($eve->pivot['comment'] == 'enroll from '.$this->event->id.'||'.$this->eventsToEnrollExams)){
 
