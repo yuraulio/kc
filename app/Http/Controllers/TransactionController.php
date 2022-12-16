@@ -448,12 +448,9 @@ class TransactionController extends Controller
 
     public function exportInvoices(Request $request){
 
-
-
         $transactions = Transaction::whereIn('id', $request->transactions)->
                                 with('user.events_for_user_list','user.ticket','subscription','event','event.delivery','event.category')->get();
 
-        //dd($transactions);
         $userRole = Auth::user()->role->pluck('id')->toArray();
 
         $fileName = 'invoices.zip';
@@ -475,8 +472,6 @@ class TransactionController extends Controller
                 if(in_array(9,$userRole)){
                     continue;
                 }
-
-
 
                 foreach($transaction->invoice as $invoice){
 

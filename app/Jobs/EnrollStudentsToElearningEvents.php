@@ -10,7 +10,6 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use App\Model\Event;
 use App\Model\User;
-use Illuminate\Support\Facades\DB;
 
 class EnrollStudentsToElearningEvents implements ShouldQueue
 {
@@ -36,60 +35,6 @@ class EnrollStudentsToElearningEvents implements ShouldQueue
             $this->eventsToEnrollExams = 1;
         }
 
-
-
-        // dd($this->eventsToEnroll);
-
-        // foreach($this->eventsToEnroll as $eventToEnroll){
-
-
-        //     $elearningEvent = Event::find($eventToEnroll);
-        //     $existsStudent = $elearningEvent->users()->pluck('user_id')->toArray();
-
-        //     $students1 = array_diff(  $students, $existsStudent );
-        //     dd($students1);
-        //     $today = date('Y/m/d');
-        //     $monthsExp2 = '+' . $elearningEvent->expiration .' months';
-
-        //     foreach($students1 as $student){
-        //         $user = User::find($student);
-
-        //         $elearningEvent->users()->attach($student,
-        //                 [
-        //                     'comment'=>'enroll from ' . $this->event->id.'||'.$this->eventsToEnrollExams,
-        //                     'expiration'=>date('Y-m-d', strtotime($monthsExp2, strtotime($today))),
-        //                     'paid' => true
-        //                 ]
-        //         );
-
-
-        //     }
-
-
-        // }
-
-        // $students = $this->event->users()->pluck('user_id')->toArray();
-
-
-        //     foreach($students as $student){
-        //         $user = User::find($student);
-
-        //         $userEvents = $user->events()->wherePivotNotIn('event_id',$this->eventsToEnroll)->get();
-
-        //         dd($userEvents);
-        //         foreach($userEvents as $eve){
-        //             if($eve->pivot['comment'] != null && (strpos($eve->pivot['comment'], 'enroll') && strpos($eve->pivot['comment'], 'enroll from')) && $eve->pivot['comment'] != 'enroll from '.$eve->id.'||'.($eventsToEnrollExams ? 0 : 1)){
-        //                 //$student->events()->wherePivot('comment','enroll from ' . $this->event->id.'||'.$comment[1])->detach();
-
-        //                 DB::table('user_event')->where('id', $eve->id)->delete();
-        //             }
-        //         }
-
-        //         //$user->events()->wherePivotNotIn('event_id',$this->eventsToEnroll)->wherePivot('comment','enroll from ' . $this->event->id.'||0')->detach();
-
-        //     }
-
-
     }
 
     /**
@@ -100,24 +45,11 @@ class EnrollStudentsToElearningEvents implements ShouldQueue
     public function handle()
     {
         if(!$this->eventsToEnroll){
-
             $students = $this->event->users()->get();
+
             foreach($students as $student){
 
-                $arr = $student->events()->get();
-                foreach($arr as $key => $ar){
-                    $comment = explode('||',$ar->pivot['comment']);
-
-                    if($ar->pivot['comment'] != null){
-
-                        if('enroll from ' . $this->event->id == $comment[0]){
-                            $student->events()->wherePivot('comment','enroll from ' . $this->event->id.'||1')->orWherePivot('comment','enroll from ' . $this->event->id.'||0')->detach();
-                        }
-                    }
-
-                }
-
-
+                $student->events()->wherePivot('comment','enroll from ' . $this->event->id.'||1')->orWherePivot('comment','enroll from ' . $this->event->id.'||0')->detach();
 
             }
 
@@ -131,9 +63,6 @@ class EnrollStudentsToElearningEvents implements ShouldQueue
 
             foreach($students as $student){
                 $user = User::find($student);
-
-                //dd($this->eventsToEnroll);
-                //dd($user->events_for_user_list);
 
                 $userEvents = $user->events_for_user_list;
 
@@ -154,10 +83,6 @@ class EnrollStudentsToElearningEvents implements ShouldQueue
                         }
 
                     }
-                    // if($eve->pivot['comment'] != null && str_contains($eve->pivot['comment'], 'enroll from') && ($eve->pivot['comment'] == 'enroll from '.$this->event->id.'||'.$this->eventsToEnrollExams)){
-
-                    //     DB::table('event_user')->where('event_id', $eve->id)->where('user_id', $user->id)->delete();
-                    // }
                 }
 
 
@@ -166,7 +91,6 @@ class EnrollStudentsToElearningEvents implements ShouldQueue
             // enroll from .... ||0 // exams disabled
             // enroll from .... ||1 // exams enabled
 
-            //dd($this->eventsToEnroll);
             foreach($this->eventsToEnroll as $eventToEnroll){
 
 

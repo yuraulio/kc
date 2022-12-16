@@ -27,6 +27,9 @@ use Storage;
 use App\Model\Dropbox;
 use App\Model\EventInfo;
 use App\Jobs\EnrollStudentsToElearningEvents;
+use App\Jobs\EventSoldOut;
+use App\Exports\StudentExport;
+use Excel;
 
 class EventController extends Controller
 {
@@ -249,7 +252,14 @@ class EventController extends Controller
 
         $launchDate = $request->launch_date ? date('Y-m-d',strtotime($request->launch_date)) : $published_at;
 
-        $request->request->add(['published' => $published, 'published_at' => $published_at, 'release_date_files' => date('Y-m-d', strtotime($request->release_date_files)),'launch_date'=>$launchDate]);
+        $request->request->add([
+            'published' => $published,
+            'published_at' => $published_at,
+            'release_date_files' => date('Y-m-d', strtotime($request->release_date_files)),
+            'launch_date'=> $launchDate,
+            'index' => isset($request->index) ? true : false,
+            'feed' => isset($request->feed) ? true : false
+        ]);
         $event = $model->create($request->all());
 
         /*if($event && $request->image_upload){
@@ -528,10 +538,22 @@ class EventController extends Controller
 
         $launchDate = $request->launch_date ? date('Y-m-d',strtotime($request->launch_date)) : $published_at;
 
-        $request->request->add(['published' => $published, 'published_at' => $published_at,
+        $request->request->add([
+            'published' => $published,
+            'published_at' => $published_at,
             'release_date_files' => date('Y-m-d', strtotime($request->release_date_files)),
-            'launch_date'=>$launchDate,'title'=>$request->eventTitle, 'hours' => intval($request->hours)]);
-        $ev = $event->update($request->all());
+            'launch_date'=> $launchDate,
+            'title'=>$request->eventTitle,
+            'hours' => intval($request->hours),
+            'index' => isset($request->index) ? true : false,
+            'feed' => isset($request->feed) ? true : false
+        ]);
+        //dd($request->all());
+        $event_has_updated = $event->update($request->all());
+
+        if($event_has_updated && ($request->status == 2 || $request->status == 3 || $request->status == 1)){
+            dispatch((new EventSoldOut($event->id))->delay(now()->addSeconds(3)));
+        }
 
         /*if($request->image_upload != null && $ev){
             $event->updateMedia($request->image_upload);
@@ -670,7 +692,6 @@ class EventController extends Controller
 
         }
 
-
         if(isset($infoData['free_courses']['list'])){
             // todo parse exams
 
@@ -682,7 +703,7 @@ class EventController extends Controller
 
         }else{
             // todo parse exams
-            dispatch((new EnrollStudentsToElearningEvents($event->id,null, false))->delay(now()->addSeconds(3)));
+            dispatch((new EnrollStudentsToElearningEvents($event->id, false, false))->delay(now()->addSeconds(3)));
         }
 
         return back()->withStatus(__('Event successfully updated.'));
@@ -1345,6 +1366,12 @@ class EventController extends Controller
         }
 
 
+    }
+
+    public function exportStudent(Request $request){
+
+        Excel::store(new StudentExport($request), 'StudentsExport.xlsx', 'export');
+        return Excel::download(new StudentExport($request), 'StudentsExport.xlsx');
     }
 
 }

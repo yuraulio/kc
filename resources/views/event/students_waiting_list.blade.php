@@ -77,6 +77,34 @@
 
             $('#datatable-basic-students-waiting1').addClass('table-responsive-sm')
 
+
+
+            $('#datatable-basic-students-waiting1_filter').append(
+
+                `<div class='export-student-waiting-button'>
+                    <button title="export transactions to csv" class="btn btn-icon btn-primary" type="button">
+                        <span class="btn-inner--icon"><i class="ni ni-cloud-download-95"></i></span>
+                    </button>
+                </div>
+                `
+            )
+
+            $(document).on("click",".export-student-waiting-button",function() {
+                let state = 'student_waiting_list';
+
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: "{{route('event.export-waiting-students')}}",
+                    type: "POST",
+                    data:{state: state, id: @json($event->id)} ,
+                    success: function(data) {
+                        window.location.href = '/tmp/exports/StudentsExport.xlsx'
+                    }
+                });
+            });
+
         } );
     </script>
 

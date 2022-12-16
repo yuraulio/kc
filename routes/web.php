@@ -59,6 +59,10 @@ Route::group(['middleware' => 'auth.aboveauthor', 'prefix' => 'admin'], function
     // Total hours
     Route::get('/events/totalHours/{id}', 'EventController@calculateTotalHours')->name('event.total_hours');
 
+    // Events
+    Route::post('/events/export-waiting-students', 'EventController@exportStudent')->name('event.export-waiting-students');
+
+
     Route::post('/summary/update/{summary}', 'SummaryController@update')->name('summary.update');
 
     //Subscriptions

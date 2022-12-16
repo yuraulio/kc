@@ -3,7 +3,7 @@
     if ($column->template->dynamic) {
         $brands = $dynamic_page_data["brands"];
         $logos = $dynamic_page_data["logos"];
-    } 
+    }
     foreach ($column->template->inputs as $input){
         $gallery[$input->key] = $input->value ?? "";
     }
@@ -11,7 +11,7 @@
 @endphp
 
 @if ($column->template->dynamic)
-    @if($page->slug == "in-the-media") 
+    @if($page->slug == "in-the-media")
         <div class="logos-area content-text-area text-center">
             <h2>{{ $gallery["gallery_title"] ?? "" }}</h2>
         </div>
@@ -99,7 +99,7 @@
             <div class="view-more">
                 <a href="{{env('NEW_PAGES_LINK') . '/' .  $gallery["gallery_link"] }}">{{ $gallery["gallery_link_text"] }}</a>
             </div>
-            
+
         @endif
     </div>
 @endif

@@ -91,7 +91,7 @@
                      </ul>
                   </div>
                   <ul class="main-menu">
-							
+
 							@yield('main_menu_desktop')
 						</ul>
                </div>
@@ -153,11 +153,11 @@
                 <input type="text" id="email" autocomplete="off">
 
             </div>
-            
+
             </br>
 
             <label> Password <span class="required">(*)</span></label><span data-id="password" class="icon"><img width="20" src="{{cdn('/theme/assets/images/icons/eye-password.svg')}}" alt="">Show</span>
-            <div class="input-wrapper input-wrapper--text">    
+            <div class="input-wrapper input-wrapper--text">
                 <input type="password"  id="password" autocomplete="off">
             </div>
 
@@ -485,7 +485,7 @@ $('.alert-outer').hide()
 $(document).keyup(function(event){
 
     if($('.login-popup-wrapper').hasClass('active')){
-    
+
        if(event.keyCode == 13){
         loginAjaxNew()
        }

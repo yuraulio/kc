@@ -48,7 +48,7 @@ class Event extends Model
 
     protected $fillable = [
         'published', 'published_at', 'release_date_files', 'expiration' ,'status', 'title', 'htmlTitle', 'subtitle', 'header', 'summary', 'body', 'hours','author_id', 'creator_id', 'view_tpl', 'view_counter',
-        'launch_date','certificate_title','fb_group','evaluate_topics','evaluate_instructors','fb_testimonial','absences_limit','xml_title','xml_description','xml_short_description'
+        'launch_date','certificate_title','fb_group','evaluate_topics','evaluate_instructors','fb_testimonial','absences_limit','xml_title','xml_description','xml_short_description', 'index', 'feed'
     ];
 
 

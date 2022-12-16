@@ -91,7 +91,7 @@
    /*@if (!empty($content['featured']) && isset($content['featured'][0]) &&isset($content['featured'][0]['media']) && !empty($content['featured'][0]['media']))
    $('.section-hero').css({background:url({{ $frontHelp->pImg($content, 'header-image') }})})
    @endif*/
-       
+
 </script>
 <script type="text/javascript">
    $.fn.inputFilter = function(inputFilter) {
@@ -121,24 +121,24 @@
    		// Checking for blank fields.
    		var thec = $('input#accept');
         if (thec.prop("checked") === false) {
-   
+
           alert('Please accept our data privacy policy');
-   
+
         }else {
    			if (email == '' || surname == '' || firstname == ''   || tel == ''  ) {
    				alert("Please Fill Required Fields");
    			} else {
    			// Returns successful data submission message when the entered information is stored in database.
    			$("#doall").submit();
-			
+
    				$("#doall")[0].reset(); // To reset form fields on success.
    				bq('track', 'Lead');
    			}
 		}
-   
+
    });
 
-   
+
 </script>
 {{--<script> (function(){ window.ldfdr = window.ldfdr || {}; (function(d, s, ss, fs){ fs = d.getElementsByTagName(s)[0]; function ce(src){ var cs = d.createElement(s); cs.src = src; setTimeout(function(){fs.parentNode.insertBefore(cs,fs)}, 1); } ce(ss); })(document, 'script', 'https://sc.lfeeder.com/lftracker_v1_kn9Eq4RdQXY8RlvP.js'); })(); </script>--}}
 @stop

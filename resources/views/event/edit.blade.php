@@ -225,7 +225,7 @@
                                                     <div style="margin: auto;" class="form-group">
 
                                                         <label class="custom-toggle enroll-toggle visible">
-                                                            <input type="checkbox" id="input-index" @if($event['index']) checked @endif>
+                                                            <input type="checkbox" name="index" id="input-index" @if($event['index']) checked @endif>
                                                             <span class="custom-toggle-slider rounded-circle" data-label-off="No" data-label-on="Yes"></span>
                                                         </label>
 
@@ -240,7 +240,7 @@
                                                     <div style="margin: auto;" class="form-group">
 
                                                         <label class="custom-toggle enroll-toggle visible">
-                                                            <input type="checkbox" id="input-feed" @if($event['feed']) checked @endif>
+                                                            <input type="checkbox" name="feed" id="input-feed" @if($event['feed']) checked @endif>
                                                             <span class="custom-toggle-slider rounded-circle" data-label-off="No" data-label-on="Yes"></span>
                                                         </label>
 

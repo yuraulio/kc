@@ -181,6 +181,12 @@
     color: white;
 }
 
+.export-student-waiting-button{
+    position: absolute;
+    right: 22em;
+    top: -10px;
+}
+
 .input-icon-wrapper-city .input-icon{
     margin-top: 0.2rem;
 }

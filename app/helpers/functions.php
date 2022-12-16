@@ -244,6 +244,26 @@ if(!function_exists('support_webp')){
 if (!function_exists('get_image')){
     function get_image($media, $version = null) {
 
+        // if string(path) image
+        if(gettype($media) == 'string'){
+
+            $path = $media;
+
+            if(file_exists(public_path($media))){
+                $ext = explode('.',$path)[count(explode('.',$path)) - 1];
+
+                $new_webp_path = str_replace($ext,'webp',$path);
+                if(file_exists(public_path($new_webp_path)) && support_webp()){
+                    return $new_webp_path;
+                }else{
+                    return $path;
+                }
+            }
+            return null;
+
+        }
+
+        // if object image
         if($version){
 
             $image = isset($media['name']) ? $media['path']  . $media['name'] : '';

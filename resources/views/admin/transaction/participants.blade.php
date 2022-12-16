@@ -1044,6 +1044,10 @@ $(document).ready(function() {
 
         $(document).on("click",".invoice-button",function() {
 
+            let city = $('#col12_filter').val()
+            let category = $('#col13_filter').val()
+            let delivery = $('#col11_filter').val()
+
             let transactionsData = table.column(10,{filter: 'applied'}).data().unique().sort();
             let transactions = [];
             $.each(transactionsData, function(key, value){
@@ -1056,7 +1060,7 @@ $(document).ready(function() {
                 },
                 url: "{{route('transaction.export-invoice')}}",
                 type: "POST",
-                data:{transactions:transactions} ,
+                data:{transactions:transactions, city: city, delivery: delivery, category: category} ,
                 success: function(data) {
                     window.location.href = data.zip
                 }
