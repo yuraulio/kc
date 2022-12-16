@@ -62,6 +62,13 @@ return [
             'visibility' => 'public',
         ],
 
+        'awards' => [
+            'driver' => 'local',
+            'root' => public_path('/awards'),
+            'url' => env('APP_URL'),
+            'visibility' => 'public',
+        ],
+
         'public' => [
             'driver' => 'local',
             'root' => public_path('/uploads'),

@@ -25,7 +25,7 @@
     <div class="row">
         @foreach ($gallery as $image)
             <div class="col-md-2 col-6 self-align-center mb-5">
-                <img src="{{ url($image['medias']['path'].$image['medias']['original_name']) ?? "" }}" class="center grayscale image-grid-hover" alt="{{ $image['name'] ?? "" }}">
+                <img src="{{ get_image($image['medias'])}}" class="center grayscale image-grid-hover" alt="{{ $image['name'] ?? "" }}">
             </div>
         @endforeach
     </div>

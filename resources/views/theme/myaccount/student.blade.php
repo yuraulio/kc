@@ -1142,8 +1142,15 @@
                                              }
 
                                              $certiTitle = preg_replace( "/\r|\n/", " ", $certificate->certificate_title );
+
+                                             if(strpos($certificate->certificate_title, '</p><p>')){
+                                                $certiTitle = substr_replace($certificate->certificate_title, ' ', strpos($certificate->certificate_title, '</p>'), 0);
+                                             }else{
+                                                $certiTitle = $certificate->certificate_title;
+                                             }
+
                                              $certiTitle = urlencode(htmlspecialchars_decode(strip_tags($certiTitle),ENT_QUOTES));
-                                          
+
                                           ?>
                                        <div class="right">
                                           <a  class="btn btn--secondary btn--md" target="_blank" href="/mycertificate/{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" >DOWNLOAD </a>
@@ -1387,10 +1394,22 @@
                                                 $expirationMonth = date('m',$certificate->expiration_date);
                                                 $expirationYear = date('Y',$certificate->expiration_date);
                                              }
-                                             $certiTitle = urlencode(htmlspecialchars_decode(strip_tags($certificate->certificate_title),ENT_QUOTES));
+
+                                             //dd(strpos($certificate->certificate_title, '</p>'));
+
+                                             if(strpos($certificate->certificate_title, '</p><p>')){
+                                                $certiTitle = substr_replace($certificate->certificate_title, ' ', strpos($certificate->certificate_title, '</p>'), 0);
+                                             }else{
+                                                $certiTitle = $certificate->certificate_title;
+                                             }
+
+                                             $certiTitle = urlencode(htmlspecialchars_decode(strip_tags($certiTitle),ENT_QUOTES));
+
+                                             //dd($certiTitle);
 
                                              ?>
                                        <div class="right">
+
                                              <a  class="btn btn--secondary btn--md" target="_blank" href="/mycertificate/{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" >DOWNLOAD </a>
                                              <a class="linkedin-post cert-post"  target="_blank" href="https://www.linkedin.com/profile/add?startTask={{$certiTitle}}&name={{$certiTitle}}&organizationId=3152129&issueYear={{date('Y',$certificate->create_date)}}
                                                    &issueMonth={{date('m',$certificate->create_date)}}&expirationYear={{$expirationYear}}&expirationMonth={{$expirationMonth}}&certUrl={{$certUrl}}&certId={{$certificate->credential}}">
@@ -1540,8 +1559,15 @@
                                                 $expirationMonth = date('m',$certificate->expiration_date);
                                                 $expirationYear = date('Y',$certificate->expiration_date);
                                              }
-                                             $certiTitle = urlencode(htmlspecialchars_decode(strip_tags($certificate->certificate_title),ENT_QUOTES));
-                                            
+
+                                             if(strpos($certificate->certificate_title, '</p><p>')){
+                                                $certiTitle = substr_replace($certificate->certificate_title, ' ', strpos($certificate->certificate_title, '</p>'), 0);
+                                             }else{
+                                                $certiTitle = $certificate->certificate_title;
+                                             }
+
+                                             $certiTitle = urlencode(htmlspecialchars_decode(strip_tags($certiTitle),ENT_QUOTES));
+
                                              ?>
                                        <div class="right">
                                              <a  class="btn btn--secondary btn--md" target="_blank" href="/mycertificate/{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" >DOWNLOAD </a>

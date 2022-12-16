@@ -300,7 +300,7 @@ jQuery(document).ready(function($) {
 
         if( $(window).scrollTop() > 0 ){
             $('#header').addClass('scroll-down');
-            if(hasTicker){
+            if(typeof hasTicker !== 'undefined' && hasTicker){
                 $('#header').removeClass('has_ticker');
 
                 if($(window).width() <= mobileWidth){
@@ -309,7 +309,7 @@ jQuery(document).ready(function($) {
                 }
 
             }
-            if(hasCountdown){
+            if(typeof hasCountdown !== 'undefined' && hasCountdown){
                 $('#header').removeClass('has_countdown');
 
                 if($(window).width() <= mobileWidth){
@@ -321,7 +321,7 @@ jQuery(document).ready(function($) {
 
         }else{
             $('#header').removeClass('scroll-down')
-            if(hasTicker){
+            if(typeof hasTicker !== 'undefined' && hasTicker){
                 $('#header').addClass('has_ticker');
 
                 if($(window).width() <= mobileWidth){
@@ -330,7 +330,7 @@ jQuery(document).ready(function($) {
                 }
             }
 
-            if(hasCountdown){
+            if(typeof hasCountdown !== 'undefined' && hasCountdown){
                 $('#header').addClass('has_countdown');
 
                 if($(window).width() <= mobileWidth){

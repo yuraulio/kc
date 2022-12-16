@@ -225,7 +225,7 @@
                                                     <div style="margin: auto;" class="form-group">
 
                                                         <label class="custom-toggle enroll-toggle visible">
-                                                            <input type="checkbox" id="input-index" @if($event['index']) checked @endif>
+                                                            <input type="checkbox" name="index" id="input-index" @if($event['index']) checked @endif>
                                                             <span class="custom-toggle-slider rounded-circle" data-label-off="No" data-label-on="Yes"></span>
                                                         </label>
 
@@ -240,7 +240,7 @@
                                                     <div style="margin: auto;" class="form-group">
 
                                                         <label class="custom-toggle enroll-toggle visible">
-                                                            <input type="checkbox" id="input-feed" @if($event['feed']) checked @endif>
+                                                            <input type="checkbox" name="feed" id="input-feed" @if($event['feed']) checked @endif>
                                                             <span class="custom-toggle-slider rounded-circle" data-label-off="No" data-label-on="Yes"></span>
                                                         </label>
 
@@ -945,6 +945,8 @@
                                                     <?php
 
                                                         $access_events = (isset($info['inclass']['elearning_access'])) ? $info['inclass']['elearning_access'] : null;
+                                                        //dd($access_events);
+                                                        $access_events_exams = (isset($info['inclass']['elearning_exam']) && $info['inclass']['elearning_exam']) ? true : false;
                                                     ?>
                                                     <div class="form-group col-12">
                                                         <span class="toggle-btn-inline-text">Would you like to let students access an e-learning course for free?</span>
@@ -953,15 +955,22 @@
                                                             <span class="custom-toggle-slider rounded-circle" data-label-off="No" data-label-on="Yes"></span>
                                                         </label>
                                                     </div>
+                                                    <div id="elearning_exams_wrapper" class="form-group col-12">
+                                                        <span class="toggle-btn-inline-text">Exams for selected free course access?</span>
+                                                        <label id="access-student-toggle" class="custom-toggle enroll-toggle visible">
+                                                            <input id="access-student-exams" name="course[{{'free_courses'}}][{{'exams'}}]" type="checkbox" {{ (isset($access_events_exams) && $access_events_exams) ? 'checked' : ''}}>
+                                                            <span class="custom-toggle-slider rounded-circle" data-label-off="No" data-label-on="Yes"></span>
+                                                        </label>
+                                                    </div>
 
 
                                                     @if(count($elearning_events) != 0)
 
-                                                    <div class="free-course-wrapper {{ (isset($access_events) && count($access_events) != 0) ? '' : 'd-none'}}">
-
+                                                    <div class="free-course-wrapper">
                                                         <div class="form-group col-12">
                                                             <label class="form-control-label" for="exampleFormControlSelect3">Please select the courses you want to allow free access</label>
                                                             <select multiple="" name="course[{{'free_courses'}}][{{'list'}}][]" class="form-control" id="free_course_list">
+
                                                             @foreach($elearning_events as $elearning_event)
                                                                 <option {{ (isset($access_events) && in_array($elearning_event['id'],$access_events)) ? 'selected' : '' }} value="{{ $elearning_event['id'] }}">{{ $elearning_event['title'] }}</option>
                                                             @endforeach
@@ -2640,6 +2649,7 @@
     })
 
     $( "#input-delivery" ).change(function() {
+        $('#free_course_list').val("")
         if($(this).val() == 139){
             $('.delivery_child_wrapper').removeClass('d-none')
             $('.delivery_city_wrapper').removeClass('d-none')
@@ -2647,6 +2657,8 @@
             $('.elearning_exam_visible_wrapper').addClass('d-none')
             $('.exp_input').addClass('d-none')
             $('.exam_input').addClass('d-none')
+
+            //
         }else if($(this).val() == 143){
             $('.delivery_child_wrapper').addClass('d-none')
             $('.elearning_visible_wrapper').removeClass('d-none')
@@ -2816,9 +2828,12 @@
 
             if(status){
                 $('.free-course-wrapper').removeClass('d-none')
+                $('#elearning_exams_wrapper').removeClass('d-none')
             }else{
                 $('.free-course-wrapper').addClass('d-none')
                 $('#free_course_list').val("")
+
+                $('#elearning_exams_wrapper').addClass('d-none')
             }
         })
 

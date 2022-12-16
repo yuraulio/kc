@@ -26,10 +26,10 @@
       <!-- /.section-hero -->
    </section>
    <?php
-      
-     
+
+
       endif; ?>
-    
+
 
    @if(isset($eventsbycategory))
    @foreach($eventsbycategory as $bcatid => $bcateventids)
@@ -56,7 +56,7 @@
                      $advancedtag = 0;
                      $advancedtagslug = '';
                      $categoryType=false;
-                   
+
                      ?>
                   <h2>{{$until}}</h2>
                   @if (isset($bcateventids['cat']['description']) && $bcateventids['cat']['description'] != '')
@@ -154,14 +154,14 @@
    <?php //dd($eventsbycategoryElearning); ?>
    @if(!empty($eventsbycategoryElearning))
    @foreach($eventsbycategoryElearning as $bcatid => $bcateventids)
- 
+
    <section class="section-text-carousel background section--blue-gradient">
       <div class="container container--md">
          <div class="row-text-carousel clearfix">
             <div class="text-column">
                <div class="text-area">
                   <?php
-              
+
                         $until = $bcateventids['cat']['name'];
                          ?>
                   <h2>{{ $until }}</h2>
@@ -175,7 +175,7 @@
                         if (isset($eventsbycategory1) && !empty($eventsbycategory1)) :
                         //  foreach ($eventsbycategoryDetailsHelper[$bcatid]->categories as $category) :
                             foreach ($eventsbycategory1 as $category) :
-                            
+
 
                              if ($category['id'] == 117) {
                                  $advancedtag = 1;
@@ -198,14 +198,14 @@
             <div class="carousel-column">
                <div class="carousel-wrapper">
                   <div class="boxes-carousel owl-carousel">
-                     <?php $lastmonth = ''; 
-                        
+                     <?php $lastmonth = '';
+
                      ?>
                      @foreach($bcateventids['events'] as $key => $row)
-                    
+
                      @if($row['view_tpl'] != 'event_free' && $row['view_tpl'] != 'event_free_coupon')
                     <?php
-                    
+
                         $location = [];
                         $eventtype = [];
                         $eventtopic = [];
@@ -216,7 +216,7 @@
 
                         //dd($row->category);
                         if (isset($row['category']) && !empty($row['category'])) :
-                           
+
                             foreach ($row['category'] as $category) :
                                 if(count($row['city'])>0){
                                     $location=$row['city'][0];
@@ -338,7 +338,7 @@
                            //dd($row->slugable['slug']);
                            if(isset($row['status'])){
                                 $estatus = $row['status'];
-                               
+
 
                               if($price == 0 && $estatus == 1){
                                  $estatus = 2;
@@ -402,7 +402,7 @@
    <?php
    //dd($bcateventids[]);
     ?>
-   
+
    <?php //dd($bcateventids); ?>
    <section class="section-text-carousel background event-background">
       <div class="container container--md">
@@ -428,7 +428,7 @@
                      $advancedtagslug = '';
                      $categoryType= false;
 
-                  
+
                      ?>
                   <h2>{{$until}}</h2>
                   @if (isset($bcateventids['cat']['description']) && $bcateventids['cat']['description'] != '')
@@ -535,7 +535,7 @@
     //dd($bcateventids);
    ?>
                   <?php
-                    
+
                          $until = $bcateventids['cat']['name'];
                          ?>
                   <?php
@@ -545,7 +545,7 @@
                      $advancedtag = 0;
                      $advancedtagslug = '';
                      $categoryType= false;
-                  
+
                      ?>
                   <h2>{{$until}}</h2>
                   <?php //dd($until); ?>

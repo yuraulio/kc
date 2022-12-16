@@ -75,6 +75,20 @@
                                 </select>
                             </div>
 
+                            <div class="col-sm-3 filter_col d-none" id="filter_col12" data-column="12">
+                                <label>City</label>
+                                <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..." name="Name" class="column_filter" id="col12_filter" placeholder="City">
+                                <option selected value> -- All -- </option>
+                                </select>
+                            </div>
+
+                            <div class="col-sm-3 filter_col" id="filter_col13" data-column="13">
+                                <label>Category</label>
+                                <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..." name="Name" class="column_filter" id="col13_filter" placeholder="Category">
+                                <option selected value> -- All -- </option>
+                                </select>
+                            </div>
+
 
                             <div class="col-sm-3 filter_col">
                                 <div class="form-group">
@@ -116,6 +130,8 @@
                             <th hidden>{{ __('Event ID') }}</th>
                             <th hidden>{{ __('Transaction ID') }}</th>
                             <th hidden>{{ __('Delivery') }}</th>
+                            <th>{{__('City')}}</th>
+                            <th>{{ __('Category') }}</th>
                             {{--<th class="participant_elearning none">{{ __('New Expiration Date') }}</th>--}}
                         </tr>
                     </thead>
@@ -134,6 +150,8 @@
                             <th hidden>{{ __('Event ID') }}</th>
                             <th hidden>{{ __('Transaction ID') }}</th>
                             <th hidden>{{ __('Delivery') }}</th>
+                            <th>{{ __('City') }}</th>
+                            <th>{{ __('Category') }}</th>
                             {{--<th class="participant_elearning none">{{ __('New Expiration Date') }}</th>--}}
                         </tr>
                     </tfoot>
@@ -161,6 +179,8 @@
                                 <td hidden>{{$transaction['event_id']}}</td>
                                 <td hidden>{{$transaction['id']}}</td>
                                 <td hidden>{{$transaction['is_elearning'] ? 'e-learning' : 'in-class'}}</td>
+                                <td>{{ $transaction['city'] }}</td>
+                                <td>{{ $transaction['category'] }}</td>
                                 {{--<td class="participant_elearning none">
                                     <input id="{{$transaction['id']}}" class="form-control datepicker" placeholder="Select date" type="text" value="<?= ($transaction['expiration'] != null) ? $transaction['expiration'] : ''; ?>">
                                     <button class="update_exp btn btn-info btn-sm" style="margin-top:10px;" type="button" data-id="{{$transaction['id']}}" >Update</button>
@@ -287,7 +307,7 @@ $(document).ready(function() {
     minDate = null;
     // //console.log('--min: '+minDate.val())
     maxDate = moment().add(1, 'day').endOf('day').format('MM/DD/YYYY')
-    
+
     $('#participants_table').on( 'search.dt', function () {
         selected_event = $('#select2-col1_filter-container').attr('title')
         if(selected_event.search('E-Learning') != -1){
@@ -325,6 +345,8 @@ $(document).ready(function() {
     coupons = table.column(4).data().unique().sort()
     paymentMethods = table.column(8).data().unique().sort()
     delivery = table.column(11).data().unique().sort()
+    city = table.column(12).data().unique().sort()
+    category = table.column(13).data().unique().sort()
 
     prices = table.column(3).data()
 
@@ -388,6 +410,29 @@ $(document).ready(function() {
     $.each(delivery, function(key, value){
         $('#col11_filter').append('<option value="'+value+'">'+value+'</option>')
     })
+
+    $.each(city, function(key, value){
+        $('#col12_filter').append('<option value="'+value+'">'+value+'</option>')
+    })
+
+    $.each(category, function(key, value){
+        $('#col13_filter').append('<option>'+value+'</option>')
+    })
+
+
+    $('#col11_filter').on('select2:select', function (e) {
+
+
+        if($(this).val() == 'in-class'){
+            $('#filter_col12').removeClass('d-none');
+        }else{
+            $('#col12_filter').val("")
+            $('#col12_filter').select2().trigger('change');
+
+            $('#filter_col12').addClass('d-none');
+
+        }
+    });
 
     //Refilter the table
     $('input[name="daterange"]').on('apply.daterangepicker', function(ev, picker) {
@@ -679,7 +724,7 @@ $(document).ready(function() {
                 $('#col4_filter').append('<option value="'+value+'">'+value+'</option>')
             })
         }
-        
+
         let eventIDS = table.column(9,{filter: 'applied'}).data().unique()
         let events = table.column(1,{filter: 'applied'}).data().unique();
 
@@ -716,7 +761,7 @@ $(document).ready(function() {
             $.each(price, function(key, value){
                 //console.log(value)
                 value = value.replace("€", "")
-            //console.log($('#participants_table').DataTable().column( i ).data()[key] == $('#col'+i+'_filter').val())
+                //console.log($('#participants_table').DataTable().column( i ).data()[key] == $('#col'+i+'_filter').val())
                 //console.log('asd')
                 //console.log($('#participants_table').DataTable().column( 3 ).data()[key])
                 sum = sum + parseInt($('#participants_table').DataTable().column( 3 ).data()[key].replace("€", ""))
@@ -969,6 +1014,10 @@ $(document).ready(function() {
 
             let min = minDate;
             let max = maxDate;
+            let city = $('#col12_filter').val()
+            let category = $('#col13_filter').val()
+            let delivery = $('#col11_filter').val()
+
             //let event = eventsArray[removeSpecial($("#col1_filter").val())];
 
             let event = [];
@@ -982,7 +1031,7 @@ $(document).ready(function() {
                 },
                 url: "{{route('transaction.export-excel')}}",
                 type: "POST",
-                data:{event:event,fromDate:min,toDate:max} ,
+                data:{event:event,fromDate:min,toDate:max, city: city, category: category, delivery: delivery} ,
                 success: function(data) {
 
                     window.location.href = '/tmp/exports/TransactionsExport.xlsx'
@@ -994,6 +1043,10 @@ $(document).ready(function() {
 
 
         $(document).on("click",".invoice-button",function() {
+
+            let city = $('#col12_filter').val()
+            let category = $('#col13_filter').val()
+            let delivery = $('#col11_filter').val()
 
             let transactionsData = table.column(10,{filter: 'applied'}).data().unique().sort();
             let transactions = [];
@@ -1007,7 +1060,7 @@ $(document).ready(function() {
                 },
                 url: "{{route('transaction.export-invoice')}}",
                 type: "POST",
-                data:{transactions:transactions} ,
+                data:{transactions:transactions, city: city, delivery: delivery, category: category} ,
                 success: function(data) {
                     window.location.href = data.zip
                 }

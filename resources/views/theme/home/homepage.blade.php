@@ -35,7 +35,7 @@
          "telephone": "[+302103007214]",
          "email": "info@knowcrunch.com"
       },
-      "sameAs": [ 
+      "sameAs": [
          "https://www.facebook.com/Knowcrunch",
          "https://twitter.com/knowcrunch",
          "https://www.instagram.com/knowcrunch/",
@@ -62,7 +62,6 @@
 <main id="main-area" class="with-hero" role="main">
    <?php if (isset($homePage) ) : ?>
    <?php $image = get_image($homePage['mediable'],'header-image');
-     // dd($image);
    ?>
    <section class="section-hero"  style="background-image:url('{{ cdn($image) }}');">
       <div class="overlay"></div>
@@ -227,7 +226,7 @@
                            <?php $url = url($slug); ?>
 
                            <h3><a href="{{$url}}">{{ $until }}</a></h3>
-                           
+
                            @if(isset($header_menus['elearning_card']['data']['slugable']) )<a href="{{ $header_menus['elearning_card']['data']['slugable']['slug'] }}" class="location"> VIDEO E-LEARNING COURSES</a>@endif
                            <span class="date"> </span>
                            @if($row['status'] == 0)

@@ -148,13 +148,13 @@ class CountdownController extends Controller
 
             $countdown = new CountdownResource($countdown);
 
-            if($stored && isset($request->delivery)){
+            if($stored && isset($request->delivery) && !empty($request->delivery)){
 
                 $countdown->delivery()->attach([$request->delivery['id']]);
 
             }
 
-            if($stored && isset($request->category) && count($request->category) != 0){
+            if($stored && isset($request->category) && !empty($request->category)){
 
                 foreach($request->category as $category){
                     $countdown->category()->attach($category['id']);

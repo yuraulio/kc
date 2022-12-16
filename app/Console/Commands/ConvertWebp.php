@@ -41,22 +41,110 @@ class ConvertWebp extends Command
      */
     public function handle()
     {
-        $image = Media::where('id','=', '5694')->first();
-
-        $source = '\courses\Knowcrunch-Digital-Marketing-Course-Athens.JPG';
-        //dd($source);
-
-        $destination = '\courses\Knowcrunch-Digital-Marketing-Course-Athens.webp';
         $options = [
             'quality'=> 80,
             'auto-limit'=> true,
         ];
 
-        //dd(public_path('/uploads/').$source);
-        $a = Image::make(public_path('/uploads/').$source)->stream("webp", 70);
-        //dd($a);
-        Storage::disk('local')->put(public_path('/uploads/').$destination, $a, 'public');
-       //WebPConvert::convert($source, $destination, $options);
+        //awards folder
+
+        $files = Storage::disk('awards')->files();
+        foreach($files as $file){
+            $source = $file;
+            $ext = explode('.',$source)[count(explode('.',$source)) - 1];
+
+            if($ext == 'JPG' || $ext == 'jpg' || $ext == 'jpeg' || $ext == 'png' || $ext == 'gif' || $ext == 'bmp'){
+                $destination = '/'.str_replace($ext,'webp',$source);
+
+
+                $a = Image::make(public_path('/awards/').$source)->stream("webp", 70);
+                Storage::disk('awards')->put($destination, $a, 'public');
+
+            }
+        }
+
+
+        // upload folder
+        $folders = Storage::disk('public')->directories();
+
+
+
+        foreach($folders as $folder){
+            if(str_contains($folder, '__MACOSX')){
+                continue;
+            }
+            $files = Storage::disk('public')->files($folder);
+            foreach($files as $file){
+                //$path = public_path('/uploads/'.$file);
+
+
+                $source = $file;
+                $ext = explode('.',$source)[count(explode('.',$source)) - 1];
+
+                if($ext == 'JPG' || $ext == 'jpg' || $ext == 'jpeg' || $ext == 'png' || $ext == 'gif' || $ext == 'bmp'){
+                    $destination = '/'.str_replace($ext,'webp',$source);
+
+
+                    $a = Image::make(public_path('/uploads/').$source)->stream("webp", 70);
+                    Storage::disk('public')->put($destination, $a, 'public');
+
+                }
+
+
+
+            }
+            $folders1 = Storage::disk('public')->directories($folder);
+            foreach($folders1 as $fol){
+                if(str_contains($fol, '__MACOSX')){
+                    continue;
+                }
+                //$path = public_path('/uploads/'.$file);
+
+
+                $files = Storage::disk('public')->files($fol);
+                foreach($files as $file){
+                    //$path = public_path('/uploads/'.$file);
+
+
+                    $source = $file;
+                    $ext = explode('.',$source)[count(explode('.',$source)) - 1];
+
+                    if($ext == 'JPG' || $ext == 'jpg' || $ext == 'jpeg' || $ext == 'png' || $ext == 'gif' || $ext == 'bmp'){
+                        $destination = '/'.str_replace($ext,'webp',$source);
+
+
+                        $a = Image::make(public_path('/uploads/').$source)->stream("webp", 70);
+                        Storage::disk('public')->put($destination, $a, 'public');
+
+                    }
+
+
+
+                }
+
+
+
+            }
+
+        }
+
+        $files = Storage::disk('public')->files();
+        foreach($files as $file){
+            $source = $file;
+            $ext = explode('.',$source)[count(explode('.',$source)) - 1];
+
+            if($ext == 'JPG' || $ext == 'jpg' || $ext == 'jpeg' || $ext == 'png' || $ext == 'gif' || $ext == 'bmp'){
+                $destination = '/'.str_replace($ext,'webp',$source);
+
+
+                $a = Image::make(public_path('/uploads/').$source)->stream("webp", 70);
+                Storage::disk('public')->put($destination, $a, 'public');
+
+            }
+
+
+
+        }
 
 
 

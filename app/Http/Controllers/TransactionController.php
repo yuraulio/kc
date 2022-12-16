@@ -108,14 +108,14 @@ class TransactionController extends Controller
             $from = date($start_date);
             $to = date($end_date);
 
-            $transactions = Transaction::with('user.statisticGroupByEvent','user.events_for_user_list','user.ticket','subscription','event','event.delivery','event.category')->whereBetween('created_at', [$from,$to])->orderBy('created_at','desc')->get();
+            $transactions = Transaction::with('user.statisticGroupByEvent','user.events_for_user_list','user.ticket','subscription','event','event.delivery','event.category', 'event.city')->whereBetween('created_at', [$from,$to])->orderBy('created_at','desc')->get();
 
         }else{
             //dd('fsad');
-            $transactions = Transaction::with('user.statisticGroupByEvent','user.events_for_user_list','user.ticket','subscription','event','event.delivery','event.category')->where('status', 1)->orderBy('created_at','desc')->get();
+            $transactions = Transaction::with('user.statisticGroupByEvent','user.events_for_user_list','user.ticket','subscription','event','event.delivery','event.category', 'event.city')->where('status', 1)->orderBy('created_at','desc')->get();
 
         }
-        
+
         $earlyCount = 0;
         $data['transactions'] = [];
         foreach($transactions as $transaction){
@@ -169,12 +169,17 @@ class TransactionController extends Controller
 
                     $paymentMethod = isset($paymentMethods[$paymentMethodId]) ? $paymentMethods[$paymentMethodId] :'Alpha Bank';
 
+                    $city = !empty($transaction->event[0]['city']) && isset($transaction->event[0]['city'][0]) ? $transaction->event[0]['city'][0]['name'] : '';
+
+
                     $data['transactions'][] = ['id' => $transaction['id'], 'user_id' => $u['id'],'name' => $u['firstname'].' '.$u['lastname'],
                                                 'event_id' => $transaction->event[0]['id'],'event_title' => $transaction->event[0]['title'].' / '.date('d-m-Y', strtotime($transaction->event[0]['published_at'])),'coupon_code' => $coupon_code, 'type' => trim($ticketType),'ticketName' => $ticketName,
                                                 'date' => date_format($transaction['created_at'], 'Y-m-d'), 'amount' => $transaction['amount'] / $countUsers,
                                                 'is_elearning' => $isElearning,
                                                 'coupon_code' => $transaction['coupon_code'],'videos_seen' => $this->getVideosSeen($videos),'expiration'=>$expiration,
-                                                'paymentMethod' => $paymentMethod];
+                                                'paymentMethod' => $paymentMethod,
+                                                'city' => $city,
+                                                'category' => isset($transaction->event[0]['category'][0]['name']) ? $transaction->event[0]['category'][0]['name'] : ''];
                 }
 
             }
@@ -406,7 +411,7 @@ class TransactionController extends Controller
                 if($data['status'][$key] > 0){
 
                     $us->events_for_user_list()->detach($request->oldevents[$key]);
-                   
+
                     if($data['status'][$key] == 1){
                         $us->events_for_user_list()->attach($request->newevents[$key],['paid' => true]);
 
@@ -443,10 +448,9 @@ class TransactionController extends Controller
 
     public function exportInvoices(Request $request){
 
-
-
         $transactions = Transaction::whereIn('id', $request->transactions)->
-                                with('user.events','user.ticket','subscription','event','event.delivery','event.category')->get();
+                                with('user.events_for_user_list','user.ticket','subscription','event','event.delivery','event.category')->get();
+
         $userRole = Auth::user()->role->pluck('id')->toArray();
 
         $fileName = 'invoices.zip';
@@ -468,8 +472,6 @@ class TransactionController extends Controller
                 if(in_array(9,$userRole)){
                     continue;
                 }
-
-
 
                 foreach($transaction->invoice as $invoice){
 

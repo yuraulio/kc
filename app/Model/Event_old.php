@@ -260,7 +260,7 @@ class Event extends Model
     {
         return $this->belongsToMany(User::class, 'event_user')->withPivot('expiration','payment_method','paid')->wherePivot('paid', true);
     }
-    
+
 
     public function partners()
     {
@@ -289,13 +289,13 @@ class Event extends Model
     }
 
 
-    public function topicsLessonsInstructors($videos = null){
+    public function topicsLessonsInstructors($videos = null,$topicEvent = null, $lessons = null, $instructors = null){
 
         $videos = json_decode($videos,true);
 
         $topics = [];
         $topicsSeen = [];
-        $lessons = $this->lessons->groupBy('topic_id');
+        $lessons = $lessons ? $lessons->groupBy('topic_id') : $this->lessons->groupBy('topic_id');
         $sum1 = 0;
         //162
 
@@ -373,9 +373,11 @@ class Event extends Model
         }
 
 
-        $instructors = $this->instructors->unique()->groupBy('instructor_id')->toArray();
+        $instructors = $instructors ? $instructors->unique()->groupBy('instructor_id')->toArray() : $this->instructors->unique()->groupBy('instructor_id')->toArray();
 
-        foreach($this->topic->unique()->groupBy('topic_id') as $key => $topic){
+        $topicEvent = $topicEvent ? $topicEvent->unique()->groupBy('topic_id') : $this->topic->unique()->groupBy('topic_id');
+
+        foreach($topicEvent as $key => $topic){
             foreach($topic as $t){
 
                 if(!$t->status){
@@ -392,7 +394,7 @@ class Event extends Model
                     }
                     //if(($this->view_tpl=='elearning_event' || $this->view_tpl == 'elearnig_free') && $lesson['vimeo_video'] ==''){
                     if($this->is_elearning_course() && $lesson['vimeo_video'] ==''){
-                        
+
                         unset($lessonsArray[$key]);
                     }
                 }
@@ -513,7 +515,7 @@ class Event extends Model
             $faqs[$key] = [];
         }
 
-        
+
         $categoryFaqs = $this->getFaqsByType();
         foreach($categoryFaqs as $faq){
 
@@ -521,7 +523,7 @@ class Event extends Model
                 $faqs[$categoryFaq['name']][] = array('id' => $faq['id'], 'question' =>  $faq['title']);
             }
         }
-    
+
 
         //pt
 
@@ -540,7 +542,7 @@ class Event extends Model
 
         //return $faqs;
     }
-    
+
 
     public function statistic()
     {
@@ -551,9 +553,9 @@ class Event extends Model
         return $this->hasMany(WaitingList::class);
     }
 
-    public function examAccess( $user,$successPer = 0.8){
+    public function examAccess( $user,$successPer = 0.8, $videos = false, $checkForCetification = true){
 
-        $seenPercent =  $this->progress($user);
+        $seenPercent =  $this->progress($user,$videos);
         $studentsEx = [1353,1866,1753,1882,1913,1923];
 
         if(in_array($user->id, $studentsEx)){
@@ -562,11 +564,12 @@ class Event extends Model
 
         //$event = EventStudent::where('student_id',$this->user_id)->where('event_id',$this->event_id)->first()->created_at;
         $event = $this;
-        if(!$event->created_at || $event->pivot->comment == 'enroll' /*|| $event->view_tpl == 'elearning_free'*/){
+        //if(!$event->created_at || $event->pivot->comment == 'enroll' /*|| $event->view_tpl == 'elearning_free'*/){
+        if(!$event->created_at || $event->pivot->comment == 'enroll' || (strpos($event->pivot->comment, 'enroll from') !== false)){
              return false;
         }
 
-        $certification = count($this->certificatesByUser($user->id)) > 0;
+        $certification = $checkForCetification && count($this->certificatesByUser($user->id)) > 0;
         return $seenPercent >=  ($successPer * 100) && !$certification;
 
     }
@@ -599,10 +602,14 @@ class Event extends Model
     }*/
 
 
-    public function progress($user)
+    public function progress($user,$videos = false)
     {
 
-        if(!$videos = $user->statistic()->wherePivot('event_id',$this['id'])->first()){
+        if($videos == 'no_videos'){
+            return 0;
+        }
+
+        if(!$videos && !$videos = $user->statistic()->wherePivot('event_id',$this['id'])->first()){
             return 0;
         }
 
@@ -626,9 +633,14 @@ class Event extends Model
         return $totalDuration > 0 ?  $seenTime /  $totalDuration * 100 : 0;
     }
 
-    public function video_seen($user)
+    public function video_seen($user,$videos = false)
     {
-        if(!$videos = $user->statistic()->wherePivot('event_id',$this['id'])->first()){
+
+        if($videos == 'no_videos'){
+            return 0;
+        }
+
+        if(!$videos && !$videos = $user->statistic()->wherePivot('event_id',$this['id'])->first()){
             return '0 of ' . count($this->lessons);
         }
 
@@ -708,7 +720,7 @@ class Event extends Model
         $exams = $this->exam->where('status',true);
         //return $examsArray;
         foreach($exams as $exam){
-  
+
             if($exam->publish_time >  $curr_date_time){
                 $exam->exstatus = 0;
                 $exam->islive = 0;
@@ -776,7 +788,7 @@ class Event extends Model
             $createDate = strtotime(date('Y-m-d'));
             $cert->create_date = $createDate;
 
-            $cert->template = 'kc_attendance_2022a';
+            $cert->template = 'kc_attendance_2022b';
             $cert->show_certificate = true;
 
             $cert->save();
@@ -796,7 +808,7 @@ class Event extends Model
 
     }
 
-    
+
     /*public function getTotalHours(){
 
         $hours = 0;
@@ -863,7 +875,7 @@ class Event extends Model
         //dd($lesson->pivot->time_starts);
         return $hours;
     }
-    
+
 
     public function getXmlDescriptionAttribute($value)
     {
@@ -913,6 +925,8 @@ class Event extends Model
 
                 $data['inclass']['elearning_access'] = ($infos['course_elearning_access'] != null) ? json_decode($infos['course_elearning_access'], true) : null;
                 $data['inclass']['elearning_access_icon'] = ($infos['course_elearning_access_icon'] != null) ? json_decode($infos['course_elearning_access_icon'], true) : null;
+                $data['inclass']['elearning_exam'] = ($infos['course_elearning_exam']) ? true : false;
+
             }else if($data['delivery'] == 143){
                 $data['elearning']['visible'] = $infos['course_elearning_visible'] != null ? json_decode($infos['course_elearning_visible'], true) : null;
                 $data['elearning']['icon'] = $infos['course_elearning_icon'] != null ? json_decode($infos['course_elearning_icon'], true) : null;
@@ -930,6 +944,7 @@ class Event extends Model
 
                 $data['inclass']['elearning_access'] = ($infos['course_elearning_access'] != null) ? json_decode($infos['course_elearning_access'], true) : null;
                 $data['inclass']['elearning_access_icon'] = ($infos['course_elearning_access_icon'] != null) ? json_decode($infos['course_elearning_access_icon'], true) : null;
+                $data['inclass']['elearning_exam'] = ($infos['course_elearning_exam']) ? true : false;
             }
 
             $data['awards']['text'] = $infos['course_awards_text'];
@@ -1104,7 +1119,7 @@ class Event extends Model
         $newPriorityLesson = 1;
         $or = [];
         foreach($this->allLessons()->orderBy('priority')->get() as  $pLesson){
-        
+
             //$pLesson->pivot->priority = $newPriorityLesson;
             //$pLesson->pivot->save();
 
@@ -1131,7 +1146,6 @@ class Event extends Model
         $this->allLessons()->attach($or);
 
     }
-
 
 
 

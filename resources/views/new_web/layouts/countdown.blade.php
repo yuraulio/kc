@@ -11,13 +11,13 @@
 <link rel="stylesheet" href="{{ asset('argon') }}/css/countdown.css">
 
 @if($countdown != null)
-<div class="container h-100">
-    <div style="padding:10px 0;" class="row">
-        <div style="margin:auto;" class="col-sm-12 col-md-4 text-center countdown-text">{!! $countdown['content'] !!}</div>
-        <div id="countdown" class="@if($countdown['button_status']) col-sm-12 col-md-5 @else col-sm-12 col-md-8 @endif h-100 justify-content-center align-items-center"></div>
+<div id="countdown_container" class="container tabs-container">
+    <div class="row">
+        <div style="margin:auto 0;" class="col-sm-12 col-md-auto text-left text-sm-center countdown-text">{!! $countdown['content'] !!}</div>
+        <div id="countdown" class="@if($countdown['button_status']) col-sm-12 col-md-5 @else col-sm-12 col-md-9 @endif h-100 justify-content-center align-items-center"></div>
         @if($countdown['button_status'])
-        <div style="margin:auto;" class="col-sm-12 col-md-3 text-center countdown-btn">
-            <a href="#seats" class="btn btn--lg btn--primary go-to-href">{{ $countdown['button_title'] }}</a>
+        <div style="margin:auto 0;" class="col-sm-12 col-md-auto text-right text-sm-center countdown-btn">
+            <a id="countdown_enroll_btn" href="#seats" class="btn btn--lg btn--primary go-to-href">{{ $countdown['button_title'] }}</a>
         </div>
         @endif
     </div>
