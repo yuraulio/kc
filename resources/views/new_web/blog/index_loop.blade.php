@@ -27,7 +27,8 @@
         <div class="">
             <div class='text-center blogpagex-blog-image'>
                 <a href="{{env("NEW_PAGES_LINK") . "/$source/$post->slug"}}">
-                    <img src="{{$metaData["meta_image"]->url ?? ''}}" alt="{{$metaData["meta_image"]->alt_text ?? ''}}">
+                    {{--<img src="{{$metaData["meta_image"]->url ?? ''}}" alt="{{$metaData["meta_image"]->alt_text ?? ''}}">--}}
+                    <img src="{{get_image($metaData["meta_image"]->full_path)}}" alt="{{$metaData["meta_image"]->alt_text ?? ''}}">
                 </a>
             </div>
         </div>
@@ -53,7 +54,8 @@
             <div class="col-md-6">
                 <div class='text-center blogpagex-blog-image'>
                     <a href="{{env("NEW_PAGES_LINK") . "/$source/$post->slug"}}">
-                        <img src="{{$metaData["meta_image"]->url ?? ''}}" alt="{{$metaData["meta_image"]->alt_text ?? ''}}">
+                        {{--<img src="{{$metaData["meta_image"]->url ?? ''}}" alt="{{$metaData["meta_image"]->alt_text ?? ''}}">--}}
+                        <img src="{{get_image($metaData["meta_image"]->full_path)}}" alt="{{$metaData["meta_image"]->alt_text ?? ''}}">
                     </a>
                 </div>
             </div>
@@ -81,7 +83,8 @@
         <div class="row">
             <div class="col-auto">
                 <div class='text-center list2-image'>
-                    <img src="{{$metaData["meta_image"]->url ?? ''}}" alt="{{$metaData["meta_image"]->alt_text ?? ''}}">
+                    {{--<img src="{{$metaData["meta_image"]->url ?? ''}}" alt="{{$metaData["meta_image"]->alt_text ?? ''}}">--}}
+                    <img src="{{get_image($metaData["meta_image"]->full_path)}}" alt="{{$metaData["meta_image"]->alt_text ?? ''}}">
                 </div>
             </div>
             <div class="col">
