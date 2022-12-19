@@ -4,7 +4,6 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\Model\Media;
-use WebPConvert\WebPConvert;
 use Intervention\Image\ImageManagerStatic as Image;
 use Storage;
 
@@ -41,23 +40,20 @@ class ConvertWebp extends Command
      */
     public function handle()
     {
-        $options = [
-            'quality'=> 80,
-            'auto-limit'=> true,
-        ];
 
         //awards folder
 
         $files = Storage::disk('awards')->files();
         foreach($files as $file){
             $source = $file;
+
             $ext = explode('.',$source)[count(explode('.',$source)) - 1];
 
             if($ext == 'JPG' || $ext == 'jpg' || $ext == 'jpeg' || $ext == 'png' || $ext == 'gif' || $ext == 'bmp'){
                 $destination = '/'.str_replace($ext,'webp',$source);
 
 
-                $a = Image::make(public_path('/awards/').$source)->stream("webp", 70);
+                $a = Image::make(public_path('/awards/').$source)->stream("webp", env('WEBP_IMAGE_QUALITY'));
                 Storage::disk('awards')->put($destination, $a, 'public');
 
             }
@@ -85,7 +81,7 @@ class ConvertWebp extends Command
                     $destination = '/'.str_replace($ext,'webp',$source);
 
 
-                    $a = Image::make(public_path('/uploads/').$source)->stream("webp", 70);
+                    $a = Image::make(public_path('/uploads/').$source)->stream("webp", env('WEBP_IMAGE_QUALITY'));
                     Storage::disk('public')->put($destination, $a, 'public');
 
                 }
@@ -113,7 +109,7 @@ class ConvertWebp extends Command
                         $destination = '/'.str_replace($ext,'webp',$source);
 
 
-                        $a = Image::make(public_path('/uploads/').$source)->stream("webp", 70);
+                        $a = Image::make(public_path('/uploads/').$source)->stream("webp", env('WEBP_IMAGE_QUALITY'));
                         Storage::disk('public')->put($destination, $a, 'public');
 
                     }
@@ -137,7 +133,7 @@ class ConvertWebp extends Command
                 $destination = '/'.str_replace($ext,'webp',$source);
 
 
-                $a = Image::make(public_path('/uploads/').$source)->stream("webp", 70);
+                $a = Image::make(public_path('/uploads/').$source)->stream("webp", env('WEBP_IMAGE_QUALITY'));
                 Storage::disk('public')->put($destination, $a, 'public');
 
             }

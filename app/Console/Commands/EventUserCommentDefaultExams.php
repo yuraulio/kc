@@ -38,7 +38,7 @@ class EventUserCommentDefaultExams extends Command
      */
     public function handle()
     {
-        $events_user = DB::table('event_user')->where('comment', 'LIKE', '%'.'enroll from'.'%')->orWhere('comment', 'LIKE', '%'.'enroll'.'%')->get();
+        $events_user = DB::table('event_user')->where('comment', 'LIKE', '%'.'enroll from'.'%')->orWhere('comment', 'enroll')->get();
 
         foreach($events_user as $com){
             DB::table('event_user')->where('id', $com->id)->update(['comment' => $com->comment.'||0']);

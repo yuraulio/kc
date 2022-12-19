@@ -51,7 +51,7 @@
                     <div class="col-md-3 col-6 self-align-center mb-5">
                         <a href="{{ $image->link ?? "" }}" target="_blank">
                             {{--<img src="{{ $image->url ?? "" }}" class="center grayscale image-grid-hover" alt="{{ $image->alt_text ?? "" }}">--}}
-                            <img src="{{ isset($image->path) && $image->path != null ? get_image($image->path) : "" }}" class="center grayscale image-grid-hover" alt="{{ $image->alt_text ?? "" }}">
+                            <img src="{{ isset($image->path) && $image->path != null ? get_image('uploads/'.$image->path) : "" }}" class="center grayscale image-grid-hover" alt="{{ $image->alt_text ?? "" }}">
                         </a>
                     </div>
                 @endif
