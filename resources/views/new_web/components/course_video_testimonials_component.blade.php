@@ -43,7 +43,7 @@
             <div class="video-carousel-big owl-carousel">
                 @foreach($testimonials as $key => $video)
                 <?php
-                    
+
                     if(!$video['video_url']){
                     continue;
                     }

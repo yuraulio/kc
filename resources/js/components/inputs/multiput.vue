@@ -266,12 +266,6 @@ export default {
                 data = this.value;
             }
 
-            console.log('22222')
-
-            console.log('event : ', $event)
-
-            console.log(' 222222 END')
-
             var image_data = {
                 url: $event.url,
                 full_path: $event.full_path,

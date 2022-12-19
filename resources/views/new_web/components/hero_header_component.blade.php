@@ -16,7 +16,7 @@
         $sumStudentsByCategory = getCategoriesWithSumStudents();
     } else {
         //$image = $hero["hero_image"]->url ?? "";
-        $image = isset($hero["hero_image"]->full_path) ? get_image($hero["hero_image"]->full_path) : "";
+        $image = isset($hero["hero_image"]->path) ? get_image('uploads/'.$hero["hero_image"]->path) : "";
         $title = $hero["hero_title"] ?? "";
         $subtitle = $hero["hero_subtitle"] ?? "";
         $small = $hero['hero_small'] ?? null;

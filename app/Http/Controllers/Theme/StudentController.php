@@ -29,8 +29,7 @@ use App\Model\Plan;
 use App\Model\Invoice;
 use App\Notifications\ExamActive;
 use Illuminate\Support\Str;
-use App\Jobs\UploadProfileWebpImage;
-use App\Jobs\RemoveProfileWebpImage;
+use App\Jobs\UploadImageConvertWebp;
 
 class StudentController extends Controller
 {
@@ -533,7 +532,7 @@ class StudentController extends Controller
                 $data['mySubscriptionEvents'][$key]['videos_progress'] = round($event->progress($user,$statistic),2);
                 $data['mySubscriptionEvents'][$key]['videos_seen'] = $event->video_seen($user,$statistic);
                 $data['mySubscriptionEvents'][$key]['view_tpl'] = $event['view_tpl'];
-    
+
                 $data['mySubscriptionEvents'][$key]['certs'] = isset($event['certificates']) && $event['certificates'] ? $event['certificates'] : [];;//$event->certificatesByUser($user->id);
                 $data['mySubscriptionEvents'][$key]['exams'] = $event->getExams();
                 $data['mySubscriptionEvents'][$key]['exam_access'] = $event->examAccess($user,0.8,$statistic);
@@ -605,9 +604,12 @@ class StudentController extends Controller
         $path_crop = explode('.', $media['original_name']);
         $path_crop = $media['path'].$path_crop[0].'-crop'.$media['ext'];
         $path_crop = substr_replace($path_crop, "", 0, 1);
+        $path_crop_webp = str_replace($media['ext'],'.webp',$path_crop);
 
         $path = $media['path'].$media['original_name'];
         $path = substr_replace($path, "", 0, 1);
+        $path_webp = str_replace($media['ext'],'.webp',$path);
+
 
         if(file_exists($path_crop)){
             //unlink crop image
@@ -619,7 +621,16 @@ class StudentController extends Controller
             unlink($path);
         }
 
-        dispatch((new RemoveProfileWebpImage($user_id))->delay(now()->addSeconds(3)));
+        if(file_exists($path_webp)){
+            //unlink crop image
+            unlink($path_webp);
+        }
+
+        if(file_exists($path_crop_webp)){
+            //unlink crop image
+            unlink($path_crop_webp);
+        }
+
 
         //null db image
         $media->original_name = null;
@@ -664,6 +675,9 @@ class StudentController extends Controller
 
         $image->save(public_path('/uploads/').$path_name, 60);
 
+
+
+
         $name = explode('profile_user/',$path_name);
         $size = getimagesize('uploads/'.$path_name);
         $media->name = $name1[0];
@@ -683,7 +697,10 @@ class StudentController extends Controller
         $media->height = $size[1];
         $media->save();
 
-        //dispatch((new UploadProfileWebpImage($user_id))->delay(now()->addSeconds(3)));
+        // Convert webp image format
+        dispatch((new UploadImageConvertWebp('profile_user/', $media->original_name))->delay(now()->addSeconds(3)));
+
+
 
         return response()->json([
             'message' => 'Change profile photo successfully!!',

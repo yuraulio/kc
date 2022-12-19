@@ -27,6 +27,7 @@ use App\Jobs\TinifyImage;
 use App\Model\Admin\Page;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\DB;
+use App\Jobs\UploadImageConvertWebp;
 
 class MediaController extends Controller
 {
@@ -135,6 +136,7 @@ class MediaController extends Controller
             $mediaFolder = $folder["mediaFolder"];
 
             $image_name = $image->getClientOriginalName();
+            $image_name1 = $image->getClientOriginalName();
             $imgpath_original = $path . '' . $image_name;
 
             if (Storage::disk('public')->exists($imgpath_original)) {
@@ -149,6 +151,9 @@ class MediaController extends Controller
             }
 
             $file = Storage::disk('public')->putFileAs($path, $image, $image_name, 'public');
+
+            // convert uploaded image to webp format
+            dispatch((new UploadImageConvertWebp($path, $image_name1))->delay(now()->addSeconds(3)));
 
             $data = getimagesize($request->file);
             $original_image_width = $data[0];
@@ -209,6 +214,9 @@ class MediaController extends Controller
 
                 $image->crop($crop_width, $crop_height, $width_offset, $height_offset);
                 $image->save(public_path("/uploads" . $path . $version_name), 50, $extension);
+
+                // Convert version image to webp format
+                dispatch((new UploadImageConvertWebp($path, $version_name))->delay(now()->addSeconds(3)));
 
                 // save to db
                 $mfile = $this->storeFile(
@@ -282,8 +290,15 @@ class MediaController extends Controller
 
             if ($request->version != 'original') {
                 // delete old file
+
                 if ($file && Storage::disk('public')->exists($file->path)) {
                     Storage::disk('public')->delete($file->path);
+
+                    // Delete webp version image
+                    $webp_version = str_replace($extension,'webp',$file->path);
+                    if(Storage::disk('public')->exists($webp_version)){
+                        Storage::disk('public')->delete($webp_version);
+                    }
                 }
 
                 // duplicate original file
@@ -315,6 +330,9 @@ class MediaController extends Controller
                 $folderPath = "/" . $folderPath;
 
                 $image->save(public_path("/uploads" . $folderPath . "/" . $image_name), 50, $extension);
+
+                // Convert webp image format
+                dispatch((new UploadImageConvertWebp($folderPath , '/'.$image_name))->delay(now()->addSeconds(3)));
 
                 $size = $image ? $image->filesize() : null;
                 $height = $image ? $image->height() : null;
@@ -415,7 +433,7 @@ class MediaController extends Controller
         $mediaFile->folder_id = $folderId;
         $mediaFile->size = $size;
         $mediaFile->parent_id = $parent;
-        $mediaFile->url = config('app.url') . "/uploads" . $path;
+        $mediaFile->url = env('MIX_APP_URL') . "/uploads" . $path;
         $mediaFile->user_id = Auth::user()->id;
         $mediaFile->version = $version;
         $mediaFile->height = $height;
@@ -583,12 +601,27 @@ class MediaController extends Controller
             Storage::disk('public')->delete($file->path);
         }
 
+        // Delete webp version image
+        $webp_version = str_replace($file['extension'],'webp',$file->path);
+
+        if(Storage::disk('public')->exists($webp_version)){
+            Storage::disk('public')->delete($webp_version);
+        }
+
         if ($file->parent_id == null) {
             $subfiles = MediaFile::where("parent_id", $file->id)->get();
             foreach ($subfiles as $subfile) {
                 if (Storage::disk('public')->exists($subfile->path)) {
                     Storage::disk('public')->delete($subfile->path);
                 }
+
+                // Delete webp version subfile image
+                $webp_version = str_replace($subfile['extension'],'webp',$subfile->path);
+
+                if(Storage::disk('public')->exists($webp_version)){
+                    Storage::disk('public')->delete($webp_version);
+                }
+
                 $subfile->pages()->detach();
                 $subfile->delete();
             }

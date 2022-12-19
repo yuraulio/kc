@@ -273,6 +273,10 @@ if (!function_exists('get_image')){
                 $image = $image . '-' . $version . '.webp';
 
             }
+            else if(!file_exists(public_path('/')   .$image . '-' . $version . '.webp') && support_webp() && file_exists(public_path('/')   .$image . '.webp')){
+                //$image = $image . '.webp';
+                $version = false;
+            }
             else if(file_exists(public_path('/')   .$image . '-' . $version . $media['ext'])){
                 $image = $image . '-' . $version . $media['ext'];
             }
@@ -302,12 +306,16 @@ if (!function_exists('get_profile_image')){
 
             $name = explode('.', $media['original_name']);
             $path = ltrim($media['path'] . $name[0] . '-crop.'. $name[1], $media['path'][0]);
-            $webp_path = ltrim($media['path'] . $name[0] . '-crop.'. 'webp', $media['path'][0]);
+            $webp_path_crop = ltrim($media['path'] . $name[0] . '-crop.'. 'webp', $media['path'][0]);
+            $webp_path = ltrim($media['path'] . $name[0] . '.webp', $media['path'][0]);
 
 
-            if(file_exists($webp_path) && support_webp()){
+            if(file_exists($webp_path_crop) && support_webp()){
                 return $media['path'] . $name[0] . '-crop.'. 'webp';
-            }else if(file_exists($path)){
+            }else if(file_exists($webp_path) && support_webp()){
+                return $media['path'] . $name[0] . '.webp';
+            }
+            else if(file_exists($path)){
 
                 return $media['path'] . $name[0] . '-crop.'. $name[1];
             }else{
@@ -317,7 +325,6 @@ if (!function_exists('get_profile_image')){
                 if(file_exists($media['path'].$name[0].'.webp') && support_webp()){
                     return $media['path'].$media['name'].'.webp';
                 }
-
 
                 return $media['path'] . $media['original_name'];
             }

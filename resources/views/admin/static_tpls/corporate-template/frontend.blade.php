@@ -120,7 +120,7 @@
 					<div class="user-testimonial-wrapper">
 						<div class="container"> <!-- Feedback 18-11 changed -->
 							<div class="user-testimonial-big-single owl-carousel">
-								<div class="slide">
+                                <div class="slide">
 									<div class="testimonial-box">
 										<div class="author-infos">
 											<span class="author-name">
