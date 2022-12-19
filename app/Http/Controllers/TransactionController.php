@@ -351,7 +351,7 @@ class TransactionController extends Controller
             ]);
         }
 
-        $event = $user->events->where('id',$request->event_id)->first();
+        $event = $user->events_for_user_list->where('id',$request->event_id)->first();
         if(!$event){
             return response()->json([
                 'message' => 'User has not be assigned to event!',
