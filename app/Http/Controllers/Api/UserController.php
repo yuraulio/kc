@@ -67,6 +67,15 @@ class UserController extends Controller
         unset($user['receipt_details']);
         unset($user['invoice_details']);
 
+        foreach($user->getAttributes() as $key => $attribute){
+
+            if($key == 'terms'){
+                continue;
+            }
+            if(!$attribute){
+                $user[$key] = '';
+            }
+        }
 
         return response()->json([
             'success' => true,
