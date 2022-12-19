@@ -899,6 +899,17 @@ $(document).ready(function() {
 
 
         })
+
+        console.log('sum = ', sum)
+        console.log('special = ', special)
+        console.log('regular = ', regular)
+        console.log('alumni = ', alumni)
+
+
+        console.log('count special = ', count_special)
+        console.log('count regular = ', count_regular)
+        console.log('count alumni = ', count_alumni)
+
         $('#total').text('€'+sum.toLocaleString())
         $('#special').text('€'+special.toLocaleString())
         $('#regular').text('€'+regular.toLocaleString())

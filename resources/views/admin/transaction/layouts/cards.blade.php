@@ -5,7 +5,7 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col">
-                    <h5 class="card-title text-uppercase text-muted mb-0">Total Revenue:</h5>
+                    <h5 class="card-title text-uppercase text-muted mb-0">Total Sales:</h5>
                         <span id="total" class="h2 font-weight-bold mb-0"></span>
                     </div>
                     
@@ -14,6 +14,25 @@
         </div>
     </div>
 
+    <div class="card-body col-xl-3 col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                       <h5 class="card-title text-uppercase text-muted mb-0" id="count_alumni">Alumni:</h5>
+                       <span id="alumni" class="h2 font-weight-bold mb-0"></span>
+                    </div>
+                    <div class="col-auto">
+                       <button type="button" class="btn btn-sm btn-neutral mr-0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-ellipsis-h"></i>
+                       </button>
+                       <div class="ticket-choices dropdown-menu dropdown-menu-right alumni-action">
+                       </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="card-body col-xl-3 col-md-6">
         <div class="card">

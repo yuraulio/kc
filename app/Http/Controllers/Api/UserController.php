@@ -217,7 +217,7 @@ class UserController extends Controller
     {
 
         $user = Auth::user();;//->with('events.summary1','events.lessons.topic','instructor.event')->first();
-        $user = User::where('id',$user->id)->with('events.dropbox','events','events.lessonsForApp','events.lessonsForApp.topic')->first();
+        $user = User::where('id',$user->id)->with('events_for_user_list.dropbox','events_for_user_list','events_for_user_list.lessonsForApp','events_for_user_list.lessonsForApp.topic')->first();
         $data = [];
         $instructor = count($user->instructor) > 0;
 
@@ -262,8 +262,12 @@ class UserController extends Controller
 
         $bonusFiles = ['_Bonus', 'Bonus', 'Bonus Files', 'Βonus', '_Βonus', 'Βonus', 'Βonus Files'];
         $instructors = Instructor::with('medias')->get()->groupby('id');
-        foreach($user['events']->whereNotIn('id',$exceptEvents) as $key => $event)
+        foreach($user['events_for_user_list']->whereNotIn('id',$exceptEvents) as $key => $event)
         {
+
+            if($event->pivot && !$event->pivot->paid){
+                continue;
+            }
 
             $eventInfo = $event->event_info();
             //dd($event->lessons);
@@ -644,6 +648,9 @@ class UserController extends Controller
                 $sum= 0;
                 $arr_lesson = array();
                 $topic = $lesson['topic']->first();
+                if(!$topic){
+                    continue;
+                }
                 //$topic = $lesson->topic()->wherePivot('category_id',$category->id)->first();
 
                 if(!isset($topics[$topic->id])){
