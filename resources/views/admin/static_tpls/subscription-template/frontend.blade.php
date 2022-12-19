@@ -30,22 +30,22 @@
             <!-- /.alert-outer -->
          </div>
          <form autocomplete="off" class="login-form">
-        
+
 
             <label>Email <span class="required">(*)</span></label>
             <div class="input-wrapper input-wrapper--text input-wrapper--email">
                 <input type="text"  id="email-sub" autocomplete="off">
 
             </div>
-            
+
             </br>
 
             <label> Password <span class="required">(*)</span></label><span data-id="password-sub" class="icon sub"><img width="20" src="{{cdn('/theme/assets/images/icons/eye-password.svg')}}" alt="">Show</span>
-            <div class="input-wrapper input-wrapper--text">    
+            <div class="input-wrapper input-wrapper--text">
                 <input type="password"  id="password-sub" autocomplete="off">
             </div>
 
-            
+
             <div class="form-group">
                <label for="remember-me"><input id="remember-me-sub" type="checkbox">Remember me</label>
                {{--<a id="forgot-pass" href="javascript:void(0)">Forgot password?</a>--}}
@@ -83,9 +83,9 @@
                <!-- /.alert-outer -->
             </div>
             <div class="input-wrapper input-wrapper--text input-wrapper--email">
-               <div class="input-safe-wrapper">	
+               <div class="input-safe-wrapper">
                   <span class="icon"><img width="14" src="{{cdn('/theme/assets/images/icons/icon-email.svg')}}" alt=""></span>
-                  <input type="email"  placeholder="Email" name="email" id="email-forgot" class="required"> 
+                  <input type="email"  placeholder="Email" name="email" id="email-forgot" class="required">
                </div>
             </div>
             <button type="button" class="btn btn--lg btn--secondary change-password"  value="Change">Change</button>
@@ -160,7 +160,7 @@
                <div class="tab-content-wrapper tab-no-pad active-tab">
                   <div class="container">
                      <div class="testimonial-carousel-wrapper hidden-xs">
-                      
+
                         <div class="video-carousel-big owl-carousel">
                            @foreach($testimonials as $key => $video)
                               <?php
@@ -273,81 +273,81 @@
 <script type="text/javascript">
    //login function function
    $(".subscription-enroll").click(function() {
-   
+
    	@if(!Auth::user())
    		$('.login-popup-wrapper-subscription').addClass('active')
    @else
-   
+
    $('#doall').submit();
-   
+
    	@endif
-   
+
    	//myaccount/subscription/1350/2
-   
+
    });
-   
+
    $('.close-btn').click(function(e){
    	e.preventDefault();
    	$('.login-popup-wrapper-subscription').removeClass('active')
    })
-   
+
    @if(!Auth::user())
    function loginAjaxSubscription(){
        var email = $('#email-sub').val();
        var password = $('#password-sub').val();
        var remember = document.getElementById("remember-me-sub").checked;
-      
+
        if (email.length > 4 && password.length > 4) {
        $.ajax({ url: routesObj.baseUrl+"studentlogin", type: "post",
                data: {email:email, password:password, remember:remember},
-               success: function(data) {                   
+               success: function(data) {
                    switch (data.status) {
                        case 0:
                            if (data.message.length > 0) {
-   
+
                                var p = document.getElementById('account-error').textContent = data['message'];
                              /*  var img = document.createElement('img');
                                img.setAttribute('src',"/theme/assets/images/icons/alert-icons/icon-error-alert.svg" )
                                img.setAttribute('alt',"Info Alert" )
-   
+
                                $('#account-error').append(img);*/
                            //	console.log(p);
                                $('.alert-outer').show()
-   
+
                            } else {
-                             
-   
+
+
                            }
                            break;
                        case 1:
-                         
+
    			               location.reload();
                            /*setTimeout( function(){
                                window.location.replace(data.redirect);
                            }, 1000 );*/
-   
+
                            break;
-   
+
                        default:
                            //shakeModal();
                            break;
                    }
-                   
-              
-      
+
+
+
                },
                error: function(data) {
                    //shakeModal();
                }
            });
-   
+
            }
            else {
              //  shakeModal();
-   
+
            }
-   
-   
+
+
    }
 
    $(document).keyup(function(event){
@@ -361,7 +361,7 @@
    })
 
    @endif
-   
+
 </script>
 
 <script>

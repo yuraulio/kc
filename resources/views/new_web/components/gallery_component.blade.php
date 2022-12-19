@@ -47,11 +47,15 @@
             </div>
             <div class="row">
                 @foreach ($gallery["gallery"] as $image)
+                @if(isset($image->path) && $image->path != null)
                     <div class="col-md-3 col-6 self-align-center mb-5">
                         <a href="{{ $image->link ?? "" }}" target="_blank">
-                            <img src="{{ $image->url ?? "" }}" class="center grayscale image-grid-hover" alt="{{ $image->alt_text ?? "" }}">
+                            {{--<img src="{{ $image->url ?? "" }}" class="center grayscale image-grid-hover" alt="{{ $image->alt_text ?? "" }}">--}}
+                            <img src="{{ isset($image->path) && $image->path != null ? get_image($image->path) : "" }}" class="center grayscale image-grid-hover" alt="{{ $image->alt_text ?? "" }}">
                         </a>
                     </div>
+                @endif
+
                 @endforeach
             </div>
         @elseif ($gallery["galery_type"]->id == 2)

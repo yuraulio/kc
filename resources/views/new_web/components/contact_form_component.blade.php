@@ -40,7 +40,7 @@
                             <input type="checkbox" id="accept" name="receive-messages" value="accept">
                             <span></span>
                         </div>
-                        
+
                         <label class="contact-form" for="receive-messages">
                             {!! $form["contact_form_consent_text"] ?? "" !!}
                         </label>
@@ -54,7 +54,7 @@
 
                 <div class="submit-area-custom">
                     <button onClick="contactUsSubmit()" type="button" id="sendme" class="btn btn--md btn--secondary contactUsSubmit">
-                        {{ $form["contact_form_button"] ?? "" }} 
+                        {{ $form["contact_form_button"] ?? "" }}
                     </button>
                 </div>
             </form>
