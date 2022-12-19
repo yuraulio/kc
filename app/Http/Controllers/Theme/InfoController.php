@@ -608,7 +608,7 @@ class InfoController extends Controller
                 $checkemailuser->consent = json_encode($consent);;
                 $checkemailuser->save();
 
-                if(!$checkemailuser->statusAccount->completed){
+                if($checkemailuser->statusAccount && !$checkemailuser->statusAccount->completed){
                     
                     $creatAccount = true;
 
