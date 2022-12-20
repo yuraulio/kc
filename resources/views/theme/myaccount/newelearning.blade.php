@@ -37,7 +37,7 @@
       @endif
    </head>
    <?php
-   
+
       $notesss = json_decode($notes,true);
       //dd($notesss);
       //$notesss = (array) $notesss;
@@ -1461,7 +1461,7 @@
                 $('.topic.open').removeClass('.open')
 
                 let a = $('.isWatching').parent().parent()
-                $(a).children('.lessons-list').css('display','block')
+                $(a).children('.lessons-list').css('display','none')
 
                 if($('.'+ array[array.length - 1]).attr("data-completed") != 1){
                       $('.'+array[array.length - 1]).find('.lesson-progress').attr('src','theme/assets/img/new/lesson_icon.svg')

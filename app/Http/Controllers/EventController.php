@@ -1370,8 +1370,14 @@ class EventController extends Controller
 
     public function exportStudent(Request $request){
 
-        Excel::store(new StudentExport($request), 'StudentsExport.xlsx', 'export');
-        return Excel::download(new StudentExport($request), 'StudentsExport.xlsx');
+        if($request->state == 'student_waiting_list'){
+            $filename = 'StudentsWaitingListExport.xlsx';
+        }else if($request->state == 'student_list'){
+            $filename = 'StudentsListExport.xlsx';
+        }
+
+        Excel::store(new StudentExport($request), $filename, 'export');
+        return Excel::download(new StudentExport($request), $filename);
     }
 
 }

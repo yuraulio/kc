@@ -27,10 +27,10 @@
                   <h2>{{ $currentuser['firstname'] }} {{ $currentuser['lastname'] }}</h2>
                   <ul>
                      @if($currentuser['kc_id'] != '')
-                     <li>Knowcrunch alumni number: {{ $currentuser['kc_id'] }}</li>
+                     <li>{{ $currentuser['kc_id'] }}, </li>
                      @endif
                      @if($currentuser['partner_id'])
-                     <li>Deree number: {{ $currentuser['partner_id'] }}</li>
+                     <li>DR-{{ $currentuser['partner_id'] }}</li>
                      @endif
                   </ul>
                </div>

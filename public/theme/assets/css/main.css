@@ -302,7 +302,7 @@
    .section-hero .hero-message .account-infos .account-hero-info h2{ color: #ffffff; font-size: 46px; line-height: 1.2; margin-bottom: 12px; }
    .section-hero .hero-message .account-infos .account-hero-info ul{  }
    .section-hero .hero-message .account-infos .account-hero-info ul li{ line-height: 1.2; color: #8fc4fc; display: inline-block; }
-   .section-hero .hero-message .account-infos .account-hero-info ul li:not(:last-child){ margin-right: 36px; }
+   /* .section-hero .hero-message .account-infos .account-hero-info ul li:not(:last-child){ margin-right: 36px; } */
 
 
    /* ==========================================================================
