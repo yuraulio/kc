@@ -74,7 +74,8 @@ class Kernel extends ConsoleKernel
        Commands\EnableExams::class,
        Commands\RestoreVideosStatistics::class,
        Commands\FixStatisicsPercent::class,
-       commands\INSERTLESSONS::class
+       Commands\INSERTLESSONS::class,
+       Commands\ExportCertificateByEvent::class,
     ];
 
     /**

@@ -254,11 +254,11 @@ class Event extends Model
 
     public function users()
     {
-        return $this->belongsToMany(User::class, 'event_user')->withPivot('expiration','payment_method');
+        return $this->belongsToMany(User::class, 'event_user')->withPivot('expiration','payment_method','comment');
     }
     public function usersPaid()
     {
-        return $this->belongsToMany(User::class, 'event_user')->withPivot('expiration','payment_method','paid')->wherePivot('paid', true);
+        return $this->belongsToMany(User::class, 'event_user')->withPivot('expiration','payment_method','paid','comment')->wherePivot('paid', true);
     }
 
 
@@ -561,11 +561,11 @@ class Event extends Model
         if(in_array($user->id, $studentsEx)){
             return true;
         }
-
+        
         //$event = EventStudent::where('student_id',$this->user_id)->where('event_id',$this->event_id)->first()->created_at;
         $event = $this;
         //if(!$event->created_at || $event->pivot->comment == 'enroll' /*|| $event->view_tpl == 'elearning_free'*/){
-
+ 
         if(!$event->created_at || $event->pivot->comment == 'enroll||0' || (strpos($event->pivot->comment, 'enroll from') !== false && explode('||', $event->pivot->comment)[1] == 0)){
             return false;
         }
@@ -769,12 +769,11 @@ class Event extends Model
 
     public function certification(User $user,$successPer = 0.9){
 
-
         $certification = count($this->certificatesByUser($user->id)) > 0;
         $infos = $this->event_info();
 
         if($this->examAccess($user,$successPer) && !$certification){
-
+            
             $cert = new Certificate;
             $cert->success = true;
             $cert->create_date = strtotime(date('Y-m-d'));

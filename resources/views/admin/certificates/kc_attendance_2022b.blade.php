@@ -227,7 +227,7 @@
 
 
 					<td class="certi-title-new">
-						<p>{{$certificate['certificate_event_title']}}</p>
+						<p>{!!$certificate['certificate_event_title']!!}</p>
 					</td>
 
 
