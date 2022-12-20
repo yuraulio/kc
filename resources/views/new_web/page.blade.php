@@ -62,9 +62,39 @@
 
 @push('components-scripts')
 
+    @if(isset($dynamic_page_data['tigran']) && !env('APP_DEBUG'))
+        <script>
+            $(document).ready(function(){
+                dataLayer.push({'Event_ID':"{{$dynamic_page_data['tigran']['Event_ID']}}v", 'event': 'ViewContent', 'Product_id' : "{{$dynamic_page_data['tigran']['Product_id']}}", 'Price': "{{$dynamic_page_data['tigran']['Price']}}",
+                                'ProductCategory':"{{$dynamic_page_data['tigran']['ProductCategory']}}","product":"product","ProductName":$.parseHTML("{{ $dynamic_page_data['tigran']['ProductName'] }}")[0].data});
+            })
+            </script>
+
+            <script>
+
+            $(document).ready(function(){
+                dataLayer.push({ ecommerce: null });  // Clear the previous ecommerce object.
+                dataLayer.push({
+                    'ecommerce': {
+                    'detail': {
+                        'products': [{
+                        'name': $.parseHTML("{{ $dynamic_page_data['tigran']['ProductName'] }}")[0].data,
+                        'id': "{{$dynamic_page_data['tigran']['Product_id']}}",
+                        'price': "{{$dynamic_page_data['tigran']['Price']}}",
+                        'brand': 'Knowcrunch',
+                        'category': "{{$dynamic_page_data['tigran']['ProductCategory']}}",
+                        }]
+                    }
+                    }
+                });
+            })
+
+        </script>
+
+    @endif
+
 
     @if(isset($thankyouData['tigran']) && isset($thankyouData['tigran']['Price']) &&$thankyouData['tigran']['Price'] > 0 && !env('APP_DEBUG'))
-
         <script>
         $(document).ready(function(){
            @foreach($thankyouData['tigran'] as $key => $ti)

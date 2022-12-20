@@ -31,7 +31,7 @@ class FBPixelService
         $user_data = (new UserData())
             ->setClientIpAddress($_SERVER['REMOTE_ADDR'])
             ->setClientUserAgent($_SERVER['HTTP_USER_AGENT']);
-   
+
         $content = (new Content())
             ->setProductId($data['Product_id'])
             ->setQuantity($data['Quantity']);
@@ -40,13 +40,13 @@ class FBPixelService
                 ->setContents(array($content))
                 ->setCurrency('EUR')
                 ->setValue($data['Price']);
-        
+
         $event = (new Event())
                 ->setEventName($event)
                 ->setEventTime(time())
                 ->setUserData($user_data)
                 ->setCustomData($custom_data);
-        
+
         $events = array();
         array_push($events, $event);
 
@@ -85,13 +85,13 @@ class FBPixelService
         $event = (new Event($eventData))
                 ->setEventTime(time())
                 ->setUserData($this->getUserData());
-        
+
         $events = array();
         array_push($events, $event);
 
         $request = (new EventRequest($this->pixelID))
             ->setEvents($events);
-      
+
         $response = $request->execute();
     }
 
@@ -105,14 +105,14 @@ class FBPixelService
                     'content_name' => $data['tigran']['ProductName'], 'content_category' => $data['tigran']['ProductCategory'],'currency' => 'EUR',
                     'value' => $data['tigran']['Price']
         ];
-        
+
         $custom_data = new CustomData($customData);
 
         $event = (new Event($eventData))
                  ->setEventTime(time())
                  ->setUserData($this->getUserData())
                  ->setCustomData($custom_data);
-    
+
         $events = array();
         array_push($events, $event);
 
@@ -127,7 +127,7 @@ class FBPixelService
         $eventData = ['event_id' => $data['tigran']['Event_ID'].'p','event_name'=>'AddToCart','event_source_url'=>url('/'),
                         'action_source'=>'website'
                     ];
-        
+
         $customData = ['content_type' => 'product', 'content_ids' => [$data['tigran']['Product_id']],
         'content_name' => $data['tigran']['ProductName'], 'content_category' => $data['tigran']['ProductCategory'],'currency' => 'EUR',
         'value' => $data['tigran']['Price']
@@ -139,14 +139,14 @@ class FBPixelService
                 ->setEventTime(time())
                 ->setUserData($this->getUserData())
                 ->setCustomData($custom_data);
-        
-        
+
+
         $events = array();
         array_push($events, $event);
 
         $request = (new EventRequest($this->pixelID))
             ->setEvents($events);
-      
+
         $response = $request->execute();
     }
 
@@ -162,18 +162,18 @@ class FBPixelService
 
         $eventData = ['event_id' => $data['tigran']['Event_ID'],'event_name'=>'Purchase','event_source_url'=>url('/'),
                         'action_source'=>'website'];
-        
+
         $customData = ['content_type' => 'product', 'content_ids' => [$data['tigran']['Product_id']],
                     'currency' => 'EUR', 'value' => $data['tigran']['Price']
                     ];
-                    
+
         $custom_data = new CustomData($customData);
 
         $event = (new Event($eventData))
                 ->setEventTime(time())
                 ->setUserData($this->getUserData())
                 ->setCustomData($custom_data);
-        
+
         $events = array();
         array_push($events, $event);
 
@@ -186,11 +186,11 @@ class FBPixelService
     public function sendPageViewEvent()
     {
         $eventData = ['event_id' => 'kc_' . time(),'event_name'=>'PageView','event_source_url'=>url('/'),'action_source'=>'website'];
-        
+
         $event = (new Event($eventData))
                 ->setEventTime(time())
                 ->setUserData($this->getUserData());
-        
+
         $events = array();
         array_push($events, $event);
 
@@ -216,7 +216,7 @@ class FBPixelService
                 ->setEventTime(time())
                 ->setUserData($this->getUserData())
                 ->setCustomData($custom_data);
-        
+
         $events = array();
         array_push($events, $event);
 
@@ -242,7 +242,7 @@ class FBPixelService
                 ->setEventTime(time())
                 ->setUserData($this->getUserData())
                 ->setCustomData($custom_data);
-        
+
         $events = array();
         array_push($events, $event);
 

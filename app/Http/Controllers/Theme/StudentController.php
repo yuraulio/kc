@@ -411,6 +411,15 @@ class StudentController extends Controller
         $data['instructors'] = new \Illuminate\Database\Eloquent\Collection;;
         $eventSubscriptions = [];
 
+        $data['eventsUnPaid'] = [];
+
+        if(!empty($data['user']['eventsUnPaid'])){
+            foreach($data['user']['eventsUnPaid'] as $key => $event){
+                $data['eventsUnPaid'][$key]['title'] = $event['title'];
+            }
+        }
+
+
         foreach($data['user']['events'] as $key => $event){
             $after20Days = null;
             /*if($event->id == 2304){
@@ -418,7 +427,6 @@ class StudentController extends Controller
 
             }*/
             $eventInfo = $event->event_info();
-
 
 
             //if elearning assign progress for this event

@@ -7,8 +7,9 @@ use App\Model\Transaction;
 use Auth;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use App\Model\Event;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 
-class TransactionExport implements FromArray,WithHeadings
+class TransactionExport implements FromArray,WithHeadings, ShouldAutoSize
 {
     /**
     * @return \Illuminate\Support\Collection
@@ -223,7 +224,7 @@ class TransactionExport implements FromArray,WithHeadings
                     $partnerId = $user->partner_id;
 
                     $rowdata = array($event, $name, $last, $email, $mobile, $jobTitle,$companyName,$companyProfession,$companyafm,$companydoy,$companyaddress.' '.$companyaddressnum,
-                    $companypostcode,$companycity,$city, $company, $kcId, $partnerId, $amount, $invoice, $ticketType, $seats, $datePlaced,
+                    $companypostcode,$city, $company, $kcId, $partnerId, $amount, $invoice, $ticketType, $seats, $datePlaced,
                         $status, $bankDetails);
 
 
@@ -241,7 +242,7 @@ class TransactionExport implements FromArray,WithHeadings
     public function headings(): array {
         return [
             'Event', 'Name', 'Surname', 'Email', 'Mobile', 'Job Title','Επωνυμία/Company','Δραστηριότητα','ΑΦΜ','ΔΟΥ','Διεύθυνση/Address','Τ.Κ./PostCode',
-            'Πόλη/City','Πόλη','Company', 'Knowcrunch Id', 'DereeId', 'Amount', 'Invoice', 'Ticket Type', '# of Seats', 'Date Placed', 'Status', 'Bank Details'
+            'Πόλη','Company', 'Knowcrunch Id', 'DereeId', 'Amount', 'Invoice', 'Ticket Type', '# of Seats', 'Date Placed', 'Status', 'Bank Details'
         ];
       }
 
