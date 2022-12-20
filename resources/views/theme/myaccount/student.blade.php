@@ -74,6 +74,18 @@
             <!-- /.alert-outer -->
          </div>
       </div>
+      <div id="favDialogUnPaid" hidden>
+    <div class="alert-outer" >
+        <div class="container">
+            <div class="alert-wrapper error-alert">
+                <div class="alert-inner">
+                    <p id ="message"></p>
+                </div>
+            </div>
+        </div>
+    <!-- /.alert-outer -->
+    </div>
+</div>
       <div id="examDialog" hidden>
          <div class="alert-wrapper success-alert">
             <div class="alert-inner">
@@ -641,30 +653,30 @@
 
                @if(!$masterClassAccess && $subscriptionAccess)
                     <div class="subscription-div">
-               <div class="col12 dynamic-courses-wrapper subscription-card">
-                     <div class="item">
-                        <h2>E-Learning Masterclass Digital & Social Media Marketing Annual Access</h2>
+                        <div class="col12 dynamic-courses-wrapper subscription-card">
+                                <div class="item">
+                                    <h2>E-Learning Masterclass Digital & Social Media Marketing Annual Access</h2>
 
 
-                        <div class="bottom">
-                           <div class="left">
-                              <div class="location">
+                                    <div class="bottom">
+                                    <div class="left">
+                                        <div class="location">
 
-                              You are one of the selected graduates who have access to our annual subscription. Access all of our course's updated videos & files for €199/year.
+                                        You are one of the selected graduates who have access to our annual subscription. Access all of our course's updated videos & files for €199/year.
 
-                              </div>
-                           </div>
-                           <div class="right subscription-button">
-                           @foreach($plans as $key => $plan)
-                              <a href="/myaccount/subscription/{{$plan->events->first()->title}}/{{ $plan->name }}" class="btn btn--primary btn--lg">GET ANNUAL ACCESS NOW</a>
-                           @endforeach
-                           </div>
-                        </div>
-
-                     </div>
-
-                  </div>
+                                        </div>
                                     </div>
+                                    <div class="right subscription-button">
+                                    @foreach($plans as $key => $plan)
+                                        <a href="/myaccount/subscription/{{$plan->events->first()->title}}/{{ $plan->name }}" class="btn btn--primary btn--lg">GET ANNUAL ACCESS NOW</a>
+                                    @endforeach
+                                    </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
 
                @endif
 
@@ -841,7 +853,6 @@
                                     </div>
                                     @endif
                                  </div>
-
 
                                 <?php
                                     $now1 = strtotime(date("Y-m-d"));
@@ -2236,6 +2247,27 @@
 
 
    }
+</script>
+<script>
+    $(document).ready(function() {
+        let events = @json($eventsUnPaid);
+
+        let row = '';
+        let hasUnpaid = false
+        $.each(events, function(index, value) {
+            hasUnpaid = true;
+            row = row + `<p>Course: ${value.title}</p>`
+        })
+
+        if(hasUnpaid){
+            $('#favDialogUnPaid').removeAttr('hidden')
+            row = row + '<br><p>Instalment payment has failure!!</p>'
+
+            $('#favDialogUnPaid #message').html(row)
+        }
+
+
+    })
 </script>
 <script>
    $(document).ready(function() {

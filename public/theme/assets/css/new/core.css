@@ -335,7 +335,7 @@ img.topic-progress{
 }
 
 .content-wrapper .sidebar-wrapper .sidebar-content .topics-list .topic .topic-header .topic-info .topic-info_title .highlighted {
-  font-size: 12px;
+  font-size: 22px;
   color: #32ff22;
 }
 
@@ -431,6 +431,10 @@ img.topic-progress{
   .content-wrapper .sidebar-wrapper .sidebar-content .lessons-list .lesson a .lesson-info .lesson-info_title {
     font-size: 16px;
     margin-bottom: 0;
+  }
+
+  .content-wrapper .sidebar-wrapper .sidebar-content .topics-list .topic .topic-header .topic-info .topic-info_title .highlighted{
+    font-size: 16px;
   }
 
   .content-wrapper .sidebar-wrapper .sidebar-content .lessons-list .lesson a .lesson-info .lesson-info_title .highlighted {
@@ -1257,7 +1261,7 @@ img.topic-progress{
   -ms-flex-align: center;
   -webkit-align-items: center;
   align-items: center;
-  color: #81be00;
+  color: black;
   text-decoration: underline;
   -moz-transition: 300ms all ease;
   -ms-transition: 300ms all ease;
@@ -1266,8 +1270,10 @@ img.topic-progress{
   transition: 300ms all ease;
 }
 
+.resource-list .last-modified{ display: block; line-height: 1.2; color: #419cff; font-size: 15px; margin-left: 2.8rem;}
+
 .content-wrapper .lesson-wrapper .lesson-main .lesson-misc-wrapper .lesson-misc .lesson-resources .resource-list .resource a:hover {
-  color: #5b8600;
+  color: black;
 }
 
 @media (max-width: 991px) {

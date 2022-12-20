@@ -210,6 +210,12 @@ class User extends Authenticatable
             ])->wherePivot('paid', true);
     }
 
+    public function eventsUnPaid()
+    {
+        return $this->belongsToMany(Event::class, 'event_user')->withPivot('paid')
+           ->wherePivot('paid', false);
+    }
+
 
     public function events_for_user_list()
     {

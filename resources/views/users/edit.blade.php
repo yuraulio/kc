@@ -466,7 +466,7 @@
                                    <td> @if($trans) {{date('d-m-Y',strtotime($trans->created_at))}} @endif</td>
                                     <td>
                                         <div style="display: inline-flex;">
-                                            <input style="width:auto;" id="{{$user_event->id}}" class="form-control datepicker" placeholder="Select date" type="text" value="<?= ($user_event->pivot->expiration != null) ? date_format( new DateTime($user_event->pivot->expiration), 'm/d/Y') : ''; ?>">
+                                            <input style="width:auto; height:2rem;" id="{{$user_event->id}}" class="form-control datepicker" placeholder="Select date" type="text" value="<?= ($user_event->pivot->expiration != null) ? date_format( new DateTime($user_event->pivot->expiration), 'm/d/Y') : ''; ?>">
                                             <button class="update_exp btn btn-info btn-sm" type="button"
                                                 data-user_id="{{$user_event->pivot->user_id}}" data-event_id="{{$user_event->id}}" >Update</button>
                                         </div>

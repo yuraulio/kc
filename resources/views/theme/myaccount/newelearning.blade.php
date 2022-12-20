@@ -478,20 +478,20 @@
                                             @if($folderIsSelected)
                                                 <li id="{{$folder['dirname']}}" data-folder-id="{{$topic_name}}" class="resource hidden">
                                                     <a class="download-file getdropboxlink"  data-dirname="{{ $file['dirname'] }}" data-filename="{{ $file['filename'] }}" href="javascript:void(0)" ><img
-                                                        src="theme/assets/img/new/download.svg"
+                                                        src="/theme/assets/images/icons/access-files.svg"
                                                         alt="download resource" />{{ $file['filename'] }}</a
                                                         >
-                                                    {{--<span class="last-modified">Last modified:  {{$file['last_mod']}}</span>--}}
+                                                    <span class="last-modified">Last modified:  {{$file['last_mod']}}</span>
                                                 </li>
                                             @else
                                                 @foreach($selectedFiles['selectedFolders'] as $key10 => $selectedFile)
                                                     @if($file['dirname'] == $selectedFile)
                                                         <li id="{{$folder['dirname']}}" data-folder-id="{{$topic_name}}" class="resource hidden">
                                                             <a class="download-file getdropboxlink"  data-dirname="{{ $file['dirname'] }}" data-filename="{{ $file['filename'] }}" href="javascript:void(0)" ><img
-                                                                src="theme/assets/img/new/download.svg"
+                                                                src="/theme/assets/images/icons/access-files.svg"
                                                                 alt="download resource" />{{ $file['filename'] }}</a
                                                                 >
-                                                            {{--<span class="last-modified">Last modified:  {{$file['last_mod']}}</span>--}}
+                                                            <span class="last-modified">Last modified:  {{$file['last_mod']}}</span>
                                                         </li>
                                                     @endif
                                                 @endforeach
@@ -530,8 +530,9 @@
                                                     @if($folderIsSelected)
                                                         <li id="{{$folder_bonus['dirname']}}" data-folder-id="{{$topicNames[$folder_bonus['parent']]}}" class="resource bonus-files hidden">
                                                             <a class="download-file getdropboxlink"  data-dirname="{{ $file_bonus['dirname'] }}" data-filename="{{ $file_bonus['filename'] }}" href="javascript:void(0)" ><img
-                                                                src="theme/assets/img/new/download.svg"
+                                                                src="/theme/assets/images/icons/access-files.svg"
                                                                 alt="download resource" />{{ $file_bonus['filename'] }}</a>
+                                                            <span class="last-modified">Last modified:  {{$file_bonus['last_mod']}}</span>
                                                         </li>
                                                     @else
 
@@ -541,8 +542,9 @@
 
                                                                 <li id="{{$folder_bonus['dirname']}}" data-folder-id="{{$topicNames[$folder_bonus['parent']]}}" class="resource bonus-files hidden">
                                                                     <a class="download-file getdropboxlink"  data-dirname="{{ $file_bonus['dirname'] }}" data-filename="{{ $file_bonus['filename'] }}" href="javascript:void(0)" ><img
-                                                                        src="theme/assets/img/new/download.svg"
+                                                                        src="/theme/assets/images/icons/access-files.svg"
                                                                         alt="download resource" />{{ $file_bonus['filename'] }}</a>
+                                                                    <span class="last-modified">Last modified:  {{$file_bonus['last_mod']}}</span>
                                                                 </li>
                                                             @endif
                                                         @endforeach
@@ -1020,8 +1022,10 @@
 
 
              this.videoPlayers[frame].on('ended', function(ended) {
+                console.log('has ended video')
              if(ended['percent'] == 1){
                nextVideo();
+               closeTopic()
                $('.isWatching').find('.lesson-progress').attr('src','/theme/assets/img/new/completed_lesson_icon.svg')
              }
 
@@ -1143,9 +1147,9 @@
 
              videoPlayers[frame].loadVideo(video).then(function(id) {
 
-                 let video_link = $('.isWatching').data('link')
+                let video_link = $('.isWatching').data('link')
 
-         $('#links').empty()
+                $('#links').empty()
 
                 $.each(video_link,function(key, value) {
 
@@ -1471,6 +1475,7 @@
             });
 
             $('.change-lesson-button.next-video-button').click(function(e) {
+                closeTopic()
               $('.isWatching').parent().css('display', 'block')
               if($('.'+ array[array.length - 1]).attr("data-completed") != 1){
                 $('.'+array[array.length - 1]).find('.lesson-progress').attr('src','theme/assets/img/new/lesson_icon.svg')
@@ -1481,8 +1486,39 @@
               window.open($(this).children().data('slug'))
             })
 
+            function scrollIsWatchingClass(){
+                setTimeout( function(){
+                    document.querySelector('.isWatching').scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }, 50)
+
+            }
+
+            function closeTopic(){
+                scrollIsWatchingClass()
+                let topics = $('.topic')
+
+                $.each(topics, function(index, value) {
+                    let hasIsWatching = $(value).find('.isWatching')
+                    if(hasIsWatching.length == 0){
+                        $(value).removeClass('open')
+                        let lessonList = $(value).children()[1]
+                        $(lessonList).css('display', 'none')
+                    }
+                })
+
+
+
+            }
+
             $('.change-lesson-button.previous-video-button').click(function(e) {
+                //close accordion if next or previous lesson topic
+                closeTopic()
+
+                //open accordion
               $('.isWatching').parent().css('display', 'block')
+
               if($('.'+ array[array.length - 1]).attr("data-completed") != 1){
                 $('.'+array[array.length - 1]).find('.lesson-progress').attr('src','theme/assets/img/new/lesson_icon.svg')
                }

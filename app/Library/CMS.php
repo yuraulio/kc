@@ -6,11 +6,15 @@ use App\Model\Instructor;
 use Illuminate\Support\Facades\Auth;
 use App\Model\Category;
 use App\Model\City;
+use App\Services\FBPixelService;
 
 class CMS
 {
+    private $fbp;
+
     public static function getEventData($event)
     {
+        $fbp = new FBPixelService;
         $data = $event->topicsLessonsInstructors();
         $data['event'] = $event;
         $data['benefits'] = [];//$event->benefits->toArray();
@@ -74,6 +78,8 @@ class CMS
         } elseif (Auth::user() && $event->waitingList()->where('user_id', Auth::user()->id)->first()) {
             $data['is_joined_waiting_list'] = 1;
         }
+
+        $fbp->sendViewContentEvent($data);
 
         return $data;
     }
