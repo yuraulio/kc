@@ -1,5 +1,5 @@
 <div id="participants_info" class="row d-none">
- 
+
     <div class="card-body col-xl-3 col-md-6 total-revenue">
         <div class="card">
             <div class="card-body">
@@ -8,7 +8,7 @@
                     <h5 class="card-title text-uppercase text-muted mb-0">Total Sales:</h5>
                         <span id="total" class="h2 font-weight-bold mb-0"></span>
                     </div>
-                    
+
                 </div>
             </div>
         </div>
@@ -103,7 +103,21 @@
                         <h5 class="card-title text-uppercase text-muted mb-0"><div id="count_sponsored"></div> Sponsored:</h5>
                         <span id="sponsored" class="h2 font-weight-bold mb-0"></span>
                     </div>
-                    
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body col-xl-3 col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                    <h5 class="card-title text-uppercase text-muted mb-0">Total Students:</h5>
+                        <span id="total_students" class="h2 font-weight-bold mb-0">{{ $total_users }}</span>
+                    </div>
+
                 </div>
             </div>
         </div>

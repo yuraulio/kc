@@ -18,9 +18,9 @@
                   <?php
                      $img_src = get_profile_image($user['image']);
                      ?>
-                  <img id="user-img-up" src="{{cdn($img_src)}}" onerror="this.src='{{cdn('/theme/assets/images/icons/user-profile-placeholder-image.png')}}'" alt="{{ $currentuser['firstname'] }} {{ $currentuser['lastname'] }}"/>
+                  <img id="user-img-up" src="{{cdn($img_src)}}" onerror="this.src='{{cdn('/theme/assets/images/icons/user-circle.svg')}}'" alt="{{ $currentuser['firstname'] }} {{ $currentuser['lastname'] }}"/>
                   @else
-                  <img id="user-img-up" src="{{cdn('/theme/assets/images/icons/user-profile-placeholder-image.png')}}" alt="user-profile-placeholder-image"/>
+                  <img id="user-img-up" src="{{cdn('/theme/assets/images/icons/user-circle.svg')}}" alt="user-circle"/>
                   @endif
                </div>
                <div class="account-hero-info">
@@ -113,9 +113,9 @@
                         <div class="account-image-actions"  id="logo_dropzone">
                            <div class="acc-img">
                               @if(isset($user['image']) && $user['image']['name'] != '')
-                              <img id="user-img" src="{{cdn($img_src)}}" onerror="this.src='{{cdn('/theme/assets/images/icons/user-profile-placeholder-image.png')}}'" alt="{{ $currentuser['firstname'] }} {{ $currentuser['lastname'] }}"/>
+                              <img id="user-img" src="{{cdn($img_src)}}" onerror="this.src='{{cdn('/theme/assets/images/icons/user-circle.svg')}}'" alt="{{ $currentuser['firstname'] }} {{ $currentuser['lastname'] }}"/>
                               @else
-                              <img id="user-img" src="{{cdn('/theme/assets/images/icons/user-profile-placeholder-image.png')}}" alt="user-profile-placeholder-image"/>
+                              <img id="user-img" src="{{cdn('/theme/assets/images/icons/user-circle.svg')}}" alt="user-circle"/>
                               @endif
                            </div>
                            <div class="actions">
@@ -1987,8 +1987,8 @@
                       if (Number(data.status) === 1) {
 
 
-                        document.getElementById('user-img').setAttribute('src','/theme/assets/images/icons/user-profile-placeholder-image.png')
-                        document.getElementById('user-img-up').setAttribute('src','/theme/assets/images/icons/user-profile-placeholder-image.png')
+                        document.getElementById('user-img').setAttribute('src','/theme/assets/images/icons/user-circle.svg')
+                        document.getElementById('user-img-up').setAttribute('src','/theme/assets/images/icons/user-circle.svg')
 
                           $('.delete_media').hide();
                       }
@@ -2226,7 +2226,7 @@
 
       $("#selectCountry").select()
       $("#selectCountry").change()
-      
+
       @if("{{ old('country_code') }}")
 
          $("#selectCountry").val("{{ old('country_code',$currentuser->country_code) }}").change();

@@ -81,7 +81,4 @@
     'normal' => $fontDir . '/foco_normal_1ba1a01ad963e4cf7106b24e2edc0042',
     'bold' => $fontDir . '/Foco_Bold',
   ),
-  'foco-bold' => array(
-    'bold' => $fontDir . '/foco_bold_bold_2a6ec21f68af16eb912397271870f90a',
-  ),
 ) ?>

@@ -147,7 +147,7 @@
                            {{ $item['id'] }}
                         </td>
                         <td>
-                           <a href="{{ route('user.edit', $item['user_id']) }}">{{ $item['user'] }}</a>
+                           <a data-name="{{$item['user']}}" href="{{ route('user.edit', $item['user_id']) }}">{{ $item['user'] }}</a>
                         </td>
                         {{--<td>{{$item['plan_name']}}</td>--}}
                         <td>{{ $item['event_title'] }}</td>
@@ -222,7 +222,9 @@
        }
    );
 
-
+    function onlyUnique(value, index, self) {
+        return self.indexOf(value) === index;
+    }
 
     function initStats(){
         transactionArray = [];
@@ -231,12 +233,16 @@
         let cancelled = 0 ;
         let inclass = 0;
         let elearning = 0;
+        let count_students = 0;
+        let unique_users = [];
         //returns 'filtered' or visible rows
         table.rows({filter: 'applied'}).every( function ( rowIdx, tableLoop, rowLoop ) {
             var statuss = this.data()[3];
             var amount = this.data()[6];
             var delivery = this.data()[4]
             amount = parseInt(amount.replace("€",""))
+
+            unique_users.push($(this.data()[1]).data('name'))
 
             if( $("#col3_filter").val() !== 'cancelled' &&  $("#filter_col3").val() !== 'trialing' ){
 
@@ -262,12 +268,16 @@
             transactionArray.push(this.data()[0]);
         } );
 
+        unique_users = unique_users.filter(onlyUnique)
+        count_students = unique_users.length;
+
 
         $('#total').text('€'+sum)
         $('#cancel').text(cancelled)
         $('#trial').text(trial)
         $('#inclass').text(inclass)
         $('#e-learning').text(elearning)
+        $('#total_students').text(count_students)
 
     }
 

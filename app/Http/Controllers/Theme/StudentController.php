@@ -223,7 +223,7 @@ class StudentController extends Controller
 
                 $data['events'][$event->id]['certs'] = isset($event['certificates']) && $event['certificates'] ? $event['certificates'] : [];//$event->certificatesByUser($user->id);
                 $data['events'][$event->id]['exams'] = $event->getExams();
-                $data['events'][$event->id]['exam_access'] = $event->examAccess($user,0.8,$statistic);//$user->examAccess(0.8,$event->id);
+                $data['events'][$event->id]['exam_access'] = $event->examAccess($user,2);//$user->examAccess(0.8,$event->id);
                 $data['events'][$event->id]['view_tpl'] = $event['view_tpl'];
                 $data['events'][$event->id]['category'] = $event['category'];
                 //$data['events'][$event->id]['summary1'] = $event['summary1'];
@@ -415,7 +415,16 @@ class StudentController extends Controller
 
         if(!empty($data['user']['eventsUnPaid'])){
             foreach($data['user']['eventsUnPaid'] as $key => $event){
-                $data['eventsUnPaid'][$key]['title'] = $event['title'];
+
+                if($event->pivot['comment'] == null ){
+                    $data['eventsUnPaid'][$key]['title'] = $event['title'];
+                }else{
+                    if(!str_contains($event->pivot['comment'], 'enroll from')){
+                        $data['eventsUnPaid'][$key]['title'] = $event['title'];
+
+                    }
+                }
+
             }
         }
 
@@ -445,7 +454,8 @@ class StudentController extends Controller
 
                 $data['events'][$event->id]['certs'] = isset($event['certificates']) && $event['certificates'] ? $event['certificates'] : [];;
                 $data['events'][$event->id]['exams'] = $event->getExams();
-                $data['events'][$event->id]['exam_access'] = $event->examAccess($user,0.8,$statistic);//$user->examAccess(0.8,$event->id);
+                $data['events'][$event->id]['exam_access'] = $event->examAccess($user,2);//$user->examAccess(0.8,$event->id);
+
                 $data['events'][$event->id]['view_tpl'] = $event['view_tpl'];
                 $data['events'][$event->id]['category'] = $event['category'];
                 //$data['events'][$event->id]['summary1'] = $event['summary1'];
@@ -543,7 +553,7 @@ class StudentController extends Controller
 
                 $data['mySubscriptionEvents'][$key]['certs'] = isset($event['certificates']) && $event['certificates'] ? $event['certificates'] : [];;//$event->certificatesByUser($user->id);
                 $data['mySubscriptionEvents'][$key]['exams'] = $event->getExams();
-                $data['mySubscriptionEvents'][$key]['exam_access'] = $event->examAccess($user,0.8,$statistic);
+                $data['mySubscriptionEvents'][$key]['exam_access'] = $event->examAccess($user,2);
 
                 $data['mySubscriptionEvents'][$key]['mySubscription'] = $user->subscriptions()->where('id',$subEvent['id'])->first();
                 $data['mySubscriptionEvents'][$key]['plans'] = $event['plans'];
@@ -596,7 +606,6 @@ class StudentController extends Controller
             array_unshift($data['events'], $value);
         }
 
-        //dd($data['user']['events'][0]);
         return $data;
 
     }
@@ -991,6 +1000,8 @@ class StudentController extends Controller
                     $notes[$key] = preg_replace( "/\r|\n/", "||", $request->text );
                     $notes[$key] = str_replace(['"',"'"], "", $notes[$key]);
                     $notes[$key] = str_replace(['\\'], "", $notes[$key]);
+
+                    //dd($notes);
 
 
                 }

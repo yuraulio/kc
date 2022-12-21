@@ -39,7 +39,7 @@
                                 @if (Sentinel::check())
 
                                 <li class="account-menu">
-									<a href="javascript:void(0)" title="Superhero Login"><img src="{{cdn('/theme/assets/images/icons/knowcrunch-superhero-icons-login.svg')}}"  alt="Superhero Login"></a>
+									<a href="javascript:void(0)" title="Superhero Login"><img src="{{cdn('/theme/assets/images/icons/user-circle.svg')}}"  alt="Superhero Login"></a>
                                         <div class="account-submenu">
                                             <ul>
                                                 <li class="account-menu"><a href="/myaccount">Account</a></li>
@@ -52,7 +52,7 @@
                                 @else
 
                                 <li class="account-menu">
-									<a href="javascript:void(0)" title="Superhero Login"><img src="{{cdn('/theme/assets/images/icons/knowcrunch-superhero-icons-login.svg')}}" width="18" alt="Superhero Login"></a>
+									<a href="javascript:void(0)" title="Superhero Login"><img src="{{cdn('/theme/assets/images/icons/user-circle.svg')}}" width="18" alt="Superhero Login"></a>
 
                                 </li>
                                 @endif

@@ -59,9 +59,9 @@
                                         $path = asset($path);
                                     }
                                 ?>
-                                    <img src="{{ $path }}" onerror="this.src='{{cdn('/theme/assets/images/icons/user-profile-placeholder-image.png')}}'" class="rounded-circle">
+                                    <img src="{{ $path }}" onerror="this.src='{{cdn('/theme/assets/images/icons/user-circle-placeholder.svg')}}'" class="rounded-circle">
                                 @else
-                                <img src="" alt="{{auth()->user()->firstname}}" onerror="this.src='{{cdn('/theme/assets/images/icons/user-profile-placeholder-image.png')}}'" class="rounded-circle">
+                                <img src="" alt="{{auth()->user()->firstname}}" onerror="this.src='{{cdn('/theme/assets/images/icons/user-circle-placeholder.svg')}}'" class="rounded-circle">
                                 @endif
 
                             </span>

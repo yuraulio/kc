@@ -41,7 +41,7 @@
                                 <a id="download-sample" href="javascript:void(0)" class="btn btn-sm btn-primary">{{ __('Sample File') }}</a>
                                 <a id="import-from-file" href="javascript:void(0)" class="btn btn-sm btn-primary">{{ __('Import Users From file') }}</a>
                                 <a href="{{ route('user.create') }}" class="btn btn-sm btn-primary">{{ __('New') }}</a>
-                            
+
                             </div>
                         </div>
                     </div>
@@ -150,9 +150,9 @@
                                             <span class="avatar avatar-sm rounded-circle">
 
                                             @if($user['image'] != null && $user['image']['name'] != '')
-                                                <img src="{{ cdn(get_image($user['image'])) }}" alt="{{ $user['firstname'] }}" onerror="this.src='{{cdn('/theme/assets/images/icons/user-profile-placeholder-image.png')}}'" style="max-width: 100px; border-radiu: 25px">
+                                                <img src="{{ cdn(get_image($user['image'])) }}" alt="{{ $user['firstname'] }}" onerror="this.src='{{cdn('/theme/assets/images/icons/user-circle.svg')}}'" style="max-width: 100px; border-radiu: 25px">
                                             @else
-                                            <img src="{{cdn('/theme/assets/images/icons/user-profile-placeholder-image.png')}}" alt="{{ $user['firstname'] }}" style="max-width: 100px; border-radius: 25px">
+                                            <img src="{{cdn('/theme/assets/images/icons/user-circle.svg')}}" alt="{{ $user['firstname'] }}" style="max-width: 100px; border-radius: 25px">
                                             @endif
                                             </span>
                                         </td>
@@ -279,7 +279,7 @@
                 }
             },
             "deferRender": true
-        
+
         });
 
         table.on( 'search.dt', function () {
@@ -884,7 +884,7 @@
         });
 
         function fillFilters(){
-        
+
             let jobs = $('#datatable-basic45').DataTable().column(12,{filter: 'applied'}).data().unique().sort();
             let companies = $('#datatable-basic45').DataTable().column(13,{filter: 'applied'}).data().unique().sort();
 
@@ -908,6 +908,6 @@
 
         }
 
-    
+
     </script>
 @endpush

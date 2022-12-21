@@ -35,6 +35,7 @@ use App\Model\Certificate;
 use App\Model\WaitingList;
 use App\Model\EventInfo;
 use App\Notifications\CertificateAvaillable;
+use Carbon\Carbon;
 
 class Event extends Model
 {
@@ -254,11 +255,11 @@ class Event extends Model
 
     public function users()
     {
-        return $this->belongsToMany(User::class, 'event_user')->withPivot('expiration','payment_method','comment');
+        return $this->belongsToMany(User::class, 'event_user')->withPivot('expiration','payment_method');
     }
     public function usersPaid()
     {
-        return $this->belongsToMany(User::class, 'event_user')->withPivot('expiration','payment_method','paid','comment')->wherePivot('paid', true);
+        return $this->belongsToMany(User::class, 'event_user')->withPivot('expiration','payment_method','paid')->wherePivot('paid', true);
     }
 
 
@@ -553,25 +554,27 @@ class Event extends Model
         return $this->hasMany(WaitingList::class);
     }
 
-    public function examAccess( $user,$successPer = 0.8, $videos = false, $checkForCetification = true){
+    public function examAccess( $user,$accessMonths = 2, $checkForCetification = true){
 
-        $seenPercent =  $this->progress($user,$videos);
+        $periodAfterHasCourse = $this->period($user);
+
         $studentsEx = [1353,1866,1753,1882,1913,1923];
 
         if(in_array($user->id, $studentsEx)){
             return true;
         }
-        
+
         //$event = EventStudent::where('student_id',$this->user_id)->where('event_id',$this->event_id)->first()->created_at;
         $event = $this;
         //if(!$event->created_at || $event->pivot->comment == 'enroll' /*|| $event->view_tpl == 'elearning_free'*/){
- 
+
         if(!$event->created_at || $event->pivot->comment == 'enroll||0' || (strpos($event->pivot->comment, 'enroll from') !== false && explode('||', $event->pivot->comment)[1] == 0)){
             return false;
         }
 
         $certification = $checkForCetification && count($this->certificatesByUser($user->id)) > 0;
-        return $seenPercent >=  ($successPer * 100) && !$certification;
+
+        return $periodAfterHasCourse >=  $accessMonths && !$certification;
 
     }
 
@@ -601,6 +604,21 @@ class Event extends Model
 
         return 0 * 100;
     }*/
+
+    public function period($user){
+
+        $transaction = $this->transactionsByUserNew($user['id'])->first();
+
+        if($transaction == null){
+            return 0;
+        }
+
+        $transactionDate = Carbon::parse($transaction['created_at']);
+        $nowDate = Carbon::now();
+        $months = $transactionDate->diffInMonths($nowDate);
+
+        return $months;
+    }
 
 
     public function progress($user,$videos = false)
@@ -681,6 +699,12 @@ class Event extends Model
         return $this->invoices()->doesntHave('subscription')->whereHas('user', function ($query) use($user) {
                 $query->where('id', $user);
             })->withPivot('invoiceable_id','invoiceable_type');
+    }
+
+    public function transactionsByUserNew($user){
+        return $this->transactions()->whereHas('user', function ($query) use($user) {
+            $query->where('id', $user);
+        });
     }
 
     public function subscriptionInvoicesByUser($user){
@@ -769,11 +793,12 @@ class Event extends Model
 
     public function certification(User $user,$successPer = 0.9){
 
+
         $certification = count($this->certificatesByUser($user->id)) > 0;
         $infos = $this->event_info();
 
         if($this->examAccess($user,$successPer) && !$certification){
-            
+
             $cert = new Certificate;
             $cert->success = true;
             $cert->create_date = strtotime(date('Y-m-d'));

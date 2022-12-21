@@ -18,19 +18,19 @@
                   <?php
                      $img_src = get_profile_image($user['image']);
                      ?>
-                  <img id="user-img-up" src="{{cdn($img_src)}}" onerror="this.src='{{cdn('/theme/assets/images/icons/user-profile-placeholder-image.png')}}'" alt="{{ $currentuser['firstname'] }} {{ $currentuser['lastname'] }}"/>
+                  <img id="user-img-up" src="{{cdn($img_src)}}" onerror="this.src='{{cdn('/theme/assets/images/icons/user-circle-placeholder.svg')}}'" alt="{{ $currentuser['firstname'] }} {{ $currentuser['lastname'] }}"/>
                   @else
-                  <img id="user-img-up" src="{{cdn('/theme/assets/images/icons/user-profile-placeholder-image.png')}}" alt="user-profile-placeholder-image"/>
+                  <img id="user-img-up" src="{{cdn('/theme/assets/images/icons/user-circle-placeholder.svg')}}" alt="user-circle"/>
                   @endif
                </div>
                <div class="account-hero-info">
                   <h2>{{ $currentuser['firstname'] }} {{ $currentuser['lastname'] }}</h2>
                   <ul>
                      @if($currentuser['kc_id'] != '')
-                     <li>{{ $currentuser['kc_id'] }}, </li>
+                     <li>{{ $currentuser['kc_id'] }}</li>
                      @endif
                      @if($currentuser['partner_id'])
-                     <li>DR-{{ $currentuser['partner_id'] }}</li>
+                     <li>, DR-{{ $currentuser['partner_id'] }}</li>
                      @endif
                   </ul>
                </div>
@@ -125,9 +125,9 @@
                         <div class="account-image-actions"  id="logo_dropzone">
                            <div class="acc-img">
                               @if(isset($user['image']) && $user['image']['name'] != '')
-                              <img id="user-img" src="{{cdn($img_src)}}" onerror="this.src='{{cdn('/theme/assets/images/icons/user-profile-placeholder-image.png')}}'" alt="{{ $currentuser['firstname'] }} {{ $currentuser['lastname'] }}"/>
+                              <img id="user-img" src="{{cdn($img_src)}}" onerror="this.src='{{cdn('/theme/assets/images/icons/user-circle-placeholder.svg')}}'" alt="{{ $currentuser['firstname'] }} {{ $currentuser['lastname'] }}"/>
                               @else
-                              <img id="user-img" src="{{cdn('/theme/assets/images/icons/user-profile-placeholder-image.png')}}" alt="user-profile-placeholder-image"/>
+                              <img id="user-img" src="{{cdn('/theme/assets/images/icons/user-circle-placeholder.svg')}}" alt="user-circle"/>
                               @endif
                            </div>
                            <div class="actions">
@@ -1366,7 +1366,7 @@
                                  <div id="c-exams-inner{{$tab}}" class="in-tab-wrapper">
                                     <div class="bottom">
                                        @foreach($event['exams'] as $p)
-                                       <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Customer_Access.svg')}}" alt="">Exams activate automatically when you watch 80% </div>
+                                       <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Customer_Access.svg')}}" alt="">Exams activate automatically after 2 months </div>
                                        <div class="right">
                                           <!-- Feedback 8-12 changed -->
 
@@ -1532,7 +1532,7 @@
                                  <div id="c-exams-inner{{$tab}}" class="in-tab-wrapper">
                                     <div class="bottom">
                                        @foreach($event['exams'] as $p)
-                                       <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Customer_Access.svg')}}" alt="">Exams activate automatically when you watch 80% </div>
+                                       <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Customer_Access.svg')}}" alt="">Exams activate automatically after 2 months </div>
                                        <div class="right">
                                           <!-- Feedback 8-12 changed -->
                                           <?php $userExam = isset($user['hasExamResults'][$p->id][0]) ? $user['hasExamResults'][$p->id][0] : null ?>
@@ -2048,8 +2048,8 @@
                       if (Number(data.status) === 1) {
 
 
-                        document.getElementById('user-img').setAttribute('src','/theme/assets/images/icons/user-profile-placeholder-image.png')
-                        document.getElementById('user-img-up').setAttribute('src','/theme/assets/images/icons/user-profile-placeholder-image.png')
+                        document.getElementById('user-img').setAttribute('src','/theme/assets/images/icons/user-circle-placeholder.svg')
+                        document.getElementById('user-img-up').setAttribute('src','/theme/assets/images/icons/user-circle-placeholder.svg')
 
                           $('.delete_media').hide();
                       }

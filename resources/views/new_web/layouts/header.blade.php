@@ -33,8 +33,8 @@
                         @if (Auth::check())
                             <?php $img_src = get_profile_image(Auth::user()->image); ?>
                             <li class="account-menu login-pad">
-                                <a href="javascript:void(0)" title="Superhero Login">
-                                    <img class="login-image" src="{{cdn($img_src)}}" onerror="this.src='{{cdn('/theme/assets/images/icons/user-profile-placeholder-image.png')}}'" alt="user-profile-placeholder-image"/>
+                                <a href="javascript:void(0)" title="Login to your account.">
+                                    <img class="login-image" src="{{cdn($img_src)}}" onerror="this.src='{{cdn('/theme/assets/images/icons/user-circle-placeholder.svg')}}'" alt="user-circle"/>
                                 </a>
                                 <div class="account-submenu">
                                     @yield('account_menu')
@@ -42,7 +42,7 @@
                             </li>
                         @else
                             <li class="account-menu">
-                                <a href="javascript:void(0)" title="Superhero Login"><img src="{{cdn('/theme/assets/images/icons/knowcrunch-superhero-icons-login.svg')}}"class="replace-with-svg" width="18" alt="Superhero Login"></a>
+                                <a href="javascript:void(0)" title="Login to your account."><img src="{{cdn('/theme/assets/images/icons/user-circle.svg')}}"class="replace-with-svg" width="18" alt="Login to your account."></a>
                             </li>
                         @endif
                     @endif

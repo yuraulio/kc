@@ -46,9 +46,9 @@
 								?>
 
                                 <li class="account-menu login-pad">
-									<a href="javascript:void(0)" title="Superhero Login">
+									<a href="javascript:void(0)" title="Login to your account.">
 
-										<img class="login-image" src="{{cdn($img_src)}}" onerror="this.src='{{cdn('/theme/assets/images/icons/user-profile-placeholder-image.png')}}'" alt="user-profile-placeholder-image"/>
+										<img class="login-image" src="{{cdn($img_src)}}" onerror="this.src='{{cdn('/theme/assets/images/icons/user-circle-placeholder.svg')}}'" alt="user-profile-placeholder-image"/>
 
 									</a>
                                         <div class="account-submenu">
@@ -63,7 +63,7 @@
                                 @else
 
                                 <li class="account-menu">
-									<a href="javascript:void(0)" title="Superhero Login"><img src="{{cdn('/theme/assets/images/icons/knowcrunch-superhero-icons-login.svg')}}"class="replace-with-svg" width="18" alt="Superhero Login"></a>
+									<a href="javascript:void(0)" title="Login to your account."><img src="{{cdn('/theme/assets/images/icons/user-circle.svg')}}"class="replace-with-svg" width="18" alt="Login to your account."></a>
 
                                 </li>
                                 @endif
@@ -112,13 +112,13 @@
                                 <li>
                                     <a title="Blog" href="/blog">Blog</a>
                                 </li>
-								
+
                             @endif
 						</ul>--}}
 
 						<ul class="main-menu">
-							
-							@yield('main_menu_desktop')
+
+							@yield('main_menu_deskto								p')
 						</ul>
 
 					</div>
