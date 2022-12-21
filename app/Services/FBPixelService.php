@@ -97,6 +97,10 @@ class FBPixelService
 
     public function sendViewContentEvent($data)
     {
+        if (!isset($data['tigran'])) {
+            return;
+        }
+
         $eventData = ['event_id' => $data['tigran']['Event_ID'].'v','event_name'=>'ViewContent','event_source_url'=>url('/'),
                         'action_source'=>'website'
                     ];
@@ -124,6 +128,11 @@ class FBPixelService
 
     public function sendAddToCart($data)
     {
+
+        if (!isset($data['tigran'])) {
+            return;
+        }
+
         $eventData = ['event_id' => $data['tigran']['Event_ID'].'p','event_name'=>'AddToCart','event_source_url'=>url('/'),
                         'action_source'=>'website'
                     ];
@@ -202,6 +211,11 @@ class FBPixelService
 
     public function sendAddBillingInfoEvent($data)
     {
+
+        if (!isset($data['tigran'])) {
+            return;
+        }
+
         $eventData = ['event_id' => $data['tigran']['Event_ID'],'event_name'=>'Add Billing Info','event_source_url'=>url('/'),
             'action_source'=>'website'
         ];
@@ -228,6 +242,11 @@ class FBPixelService
 
     public function sendAddPaymentInfoEvent($data)
     {
+
+        if (!isset($data['tigran'])) {
+            return;
+        }
+
         $eventData = ['event_id' => $data['tigran']['Event_ID'],'event_name'=>'AddPaymentInfo','event_source_url'=>url('/'),
             'action_source'=>'website'
         ];
@@ -254,6 +273,10 @@ class FBPixelService
 
     public function sendCompleteRegistrationEvent($data)
     {
+        if (!isset($data['tigran'])) {
+            return;
+        }
+        
         $eventData = ['event_id' => $data['tigran']['Event_ID'],'event_name'=>'CompleteRegistration','event_source_url'=>url('/'),
             'action_source'=>'website'
         ];

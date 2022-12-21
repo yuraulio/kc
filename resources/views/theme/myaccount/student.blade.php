@@ -2261,7 +2261,7 @@
 
         if(hasUnpaid){
             $('#favDialogUnPaid').removeAttr('hidden')
-            row = row + '<br><p>Instalment payment has failure!!</p>'
+            row = row + '<br><p>Instalment payment has failed!!</p>'
 
             $('#favDialogUnPaid #message').html(row)
         }
