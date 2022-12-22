@@ -798,7 +798,7 @@ class Event extends Model
 
         $certification = count($this->certificatesByUser($user->id)) > 0;
         $infos = $this->event_info();
-
+        
         if($this->examAccess($user,$successPer) && !$certification){
 
             $cert = new Certificate;
