@@ -80,9 +80,11 @@ class ConvertWebp extends Command
                 if($ext == 'JPG' || $ext == 'jpg' || $ext == 'jpeg' || $ext == 'png' || $ext == 'gif' || $ext == 'bmp'){
                     $destination = '/'.str_replace($ext,'webp',$source);
 
-
-                    $a = Image::make(public_path('/uploads/').$source)->stream("webp", env('WEBP_IMAGE_QUALITY'));
-                    Storage::disk('public')->put($destination, $a, 'public');
+                    try{
+                        $a = Image::make(public_path('/uploads/').$source)->stream("webp", env('WEBP_IMAGE_QUALITY'));
+                        Storage::disk('public')->put($destination, $a, 'public');
+                    }catch(\Exception $e){}
+                   
 
                 }
 
