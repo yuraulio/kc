@@ -557,16 +557,12 @@ class Event extends Model
     public function examAccess( $user,$accessMonths = 2, $checkForCetification = true){
 
         if($accessMonths < 1){
-            $this->progress($user);
+            $periodAfterHasCourse = $this->progress($user);
         }else{
             $periodAfterHasCourse = $this->period($user);
         }
 
-        
-
-
-
-
+    
         $studentsEx = [1353,1866,1753,1882,1913,1923];
 
         if(in_array($user->id, $studentsEx)){
