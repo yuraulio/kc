@@ -24,7 +24,7 @@ class CommentResource extends JsonResource
                 function () {
                     return [
                         'name' => $this->user->firstname . " " . $this->user->lastname,
-                        'image' => get_profile_image($this->user->image) ?? '/theme/assets/images/icons/user-profile-placeholder-image.png',
+                        'image' => get_profile_image($this->user->image) ?? '/theme/assets/images/icons/user-circle-placeholder.svg',
                     ];
                 }
             ),

@@ -110,7 +110,7 @@
                 axios.post('/save-comment', {
                     comment: this.message,
                     page_id: this.page_id,
-                    user_id: this.user_id, 
+                    user_id: this.user_id,
                 })
                 .then((response) => {
                     if (response.status == 201){
