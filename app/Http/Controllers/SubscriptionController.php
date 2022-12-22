@@ -31,6 +31,9 @@ class SubscriptionController extends Controller
 
         $users = [];
 
+        $data['total_users'] = 0;
+        $total_users = [];
+
         foreach($data['subscriptions'] as $key => $sub){
             $events = [];
             if(count($sub['subscription']) != 0){
@@ -65,19 +68,21 @@ class SubscriptionController extends Controller
                         $registrationEvent = $userEvent;
                     }
                 }
-             	
+
                 $name = $sub['user'][0]['firstname'] . ' ' . $sub['user'][0]['lastname'];
                 $amount = '€'.number_format(intval($sub['total_amount']), 2, '.', '');
-              
+
               	$delivery = '-';
               	if($registrationEvent){
                   $delivery = $registrationEvent->is_inclass_course() ? 'In-Class' : 'E-Learning';
                 }
-                
+
+                $total_users[$name] = $name;
+
 
                 $subscriptions[$sub['subscription'][0]['stripe_id']]=['user_id' => $sub['user'][0]['id'], 'user' => $name, 'plan_id' => $sub['subscription'][0]['event'][0]['plans'][0]['id'], 'plan_name' => $sub['subscription'][0]['name'],
                     'event_title' => $sub['subscription'][0]['event'][0]['title'], 'status' => $status,'ends_at'=>$sub['ends_at'],
-                    'amount' => $amount,'created_at'=>date('Y-m-d',strtotime($sub['created_at'])),'id'=>$sub['id'], 
+                    'amount' => $amount,'created_at'=>date('Y-m-d',strtotime($sub['created_at'])),'id'=>$sub['id'],
                     'event_id' => $sub['subscription'][0]['event'][0]['id'], 'delivery' => $delivery];
 
             }
@@ -86,6 +91,7 @@ class SubscriptionController extends Controller
         }
 
         //dd($subscriptions);
+        $data['total_users'] = count($total_users);
         $data['subscriptions'] = $subscriptions;
 
         return view('admin.subscription.subscription_list', $data);

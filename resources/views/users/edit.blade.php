@@ -26,9 +26,9 @@
                             <div class="card-profile-image">
                                 @if($path = get_profile_image($user->image))
                                 //dd($path);?>
-                                    <img src="{{ cdn(asset($path)) }}" onerror="this.src='{{cdn('/theme/assets/images/icons/user-profile-placeholder-image.png')}}'" class="rounded-circle">
+                                    <img src="{{ cdn(asset($path)) }}" onerror="this.src='{{cdn('/theme/assets/images/icons/user-circle-placeholder.svg')}}'" class="rounded-circle">
                                 @else
-                                    <img src="" alt="{{$user['firstname']}}" onerror="this.src='{{cdn('/theme/assets/images/icons/user-profile-placeholder-image.png')}}'" class="rounded-circle">
+                                    <img src="" alt="{{$user['firstname']}}" onerror="this.src='{{cdn('/theme/assets/images/icons/user-circle-placeholder.svg')}}'" class="rounded-circle">
                                 @endif
 
                             </div>

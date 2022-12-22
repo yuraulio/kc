@@ -209,7 +209,7 @@
                               <div class="testimonial-box">
                                  <div class="author-infos">
                                     <div class="author-img">
-                                       <img onerror="this.src='{{cdn('/theme/assets/images/icons/user-profile-placeholder-image.png')}}'" src="{{ cdn(get_image($row['mediable'],'users')) }}" alt="{!! $row['name'] !!}">
+                                       <img onerror="this.src='{{cdn('/theme/assets/images/icons/user-circle-placeholder.svg')}}'" src="{{ cdn(get_image($row['mediable'],'users')) }}" alt="{!! $row['name'] !!}">
                                     </div>
                                     <span class="author-name">
                                     {!! $row['name'] !!} {!! $row['lastname'] !!}</span>

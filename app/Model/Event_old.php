@@ -48,7 +48,7 @@ class Event extends Model
 
     protected $fillable = [
         'published', 'published_at', 'release_date_files', 'expiration' ,'status', 'title', 'htmlTitle', 'subtitle', 'header', 'summary', 'body', 'hours','author_id', 'creator_id', 'view_tpl', 'view_counter',
-        'launch_date','certificate_title','fb_group','evaluate_topics','evaluate_instructors','fb_testimonial','absences_limit','xml_title','xml_description','xml_short_description'
+        'launch_date','certificate_title','fb_group','evaluate_topics','evaluate_instructors','fb_testimonial','absences_limit','xml_title','xml_description','xml_short_description', 'index', 'feed'
     ];
 
 
@@ -565,8 +565,9 @@ class Event extends Model
         //$event = EventStudent::where('student_id',$this->user_id)->where('event_id',$this->event_id)->first()->created_at;
         $event = $this;
         //if(!$event->created_at || $event->pivot->comment == 'enroll' /*|| $event->view_tpl == 'elearning_free'*/){
-        if(!$event->created_at || $event->pivot->comment == 'enroll' || (strpos($event->pivot->comment, 'enroll from') !== false)){
-             return false;
+
+        if(!$event->created_at || $event->pivot->comment == 'enroll||0' || (strpos($event->pivot->comment, 'enroll from') !== false && explode('||', $event->pivot->comment)[1] == 0)){
+            return false;
         }
 
         $certification = $checkForCetification && count($this->certificatesByUser($user->id)) > 0;

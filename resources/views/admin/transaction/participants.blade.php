@@ -160,7 +160,7 @@
                         @foreach ($transactions as $transaction)
 
                             <tr>
-                                <td><a href="{{ route('user.edit', $transaction['user_id']) }}">{{$transaction['name']}}</a></td>
+                                <td><a data-name="{{$transaction['name']}}" href="{{ route('user.edit', $transaction['user_id']) }}">{{$transaction['name']}}</a></td>
                                 <td>{{$transaction['event_title']}}</td>
 
                                 <td>{{ $transaction['type'] }}</td>
@@ -238,6 +238,7 @@
         let early = 0;
         let count_alumni = 0;
         let count_special = 0;
+        let count_students = 0;
         let count_regular = 0;
         let count_sponsored = 0;
         let count_early = 0;
@@ -246,6 +247,7 @@
         let countRegularNew = {};
         let countValueRegularNew = {};
         let newTickets = {};
+        let unique_users = [];
 
         function initCounters(){
             sum = 0
@@ -256,12 +258,14 @@
             early = 0;
             count_alumni = 0;
             count_special = 0;
+            count_students = 0;
             count_regular = 0;
             count_sponsored = 0;
             count_early = 0;
             countRegularNew = {};
             countValueRegularNew = {};
             newTickets = {};
+            unique_users = [];
         }
 
 
@@ -513,6 +517,9 @@ $(document).ready(function() {
         s = s.replace(/amp;/g,'');
         return s
     }
+    function onlyUnique(value, index, self) {
+        return self.indexOf(value) === index;
+    }
 
     function stats_non_elearning(){
 
@@ -529,6 +536,9 @@ $(document).ready(function() {
             var amount = this.data()[3];
             amount = parseInt(amount.replace("€",""))
             sum = sum + amount
+
+            unique_users.push($(this.data()[0]).data('name'))
+
 
             if(coupon == 'Alumni'){
                 alumni = alumni + amount
@@ -650,6 +660,9 @@ $(document).ready(function() {
 
         });
 
+        unique_users = unique_users.filter(onlyUnique)
+        count_students = unique_users.length;
+
 
         $('#total').text('€'+sum.toLocaleString())
         $('#special').text('€'+special.toLocaleString())
@@ -663,6 +676,7 @@ $(document).ready(function() {
         $('#count_alumni').text('Alumni(all): '+count_alumni)
         $('#count_early-bird').text('Early Bird(all): '+count_early)
         $('#count_sponsored').text(+count_sponsored)
+        $('#total_students').text(count_students)
 
         $.each( newTickets, function( key, value ) {
 
@@ -900,7 +914,7 @@ $(document).ready(function() {
 
         })
 
-        
+
 
         $('#total').text('€'+sum.toLocaleString())
         $('#special').text('€'+special.toLocaleString())

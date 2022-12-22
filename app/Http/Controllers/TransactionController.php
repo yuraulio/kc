@@ -118,6 +118,8 @@ class TransactionController extends Controller
 
         $earlyCount = 0;
         $data['transactions'] = [];
+        $data['total_users'] = 0;
+        $total_users = [];
         foreach($transactions as $transaction){
             if(!$transaction->subscription->first() && $transaction->user->first() && $transaction->event->first()){
 
@@ -158,6 +160,8 @@ class TransactionController extends Controller
 
                 foreach($transaction['user'] as $u){
 
+                    $total_users[$u['firstname'].'_'.$u['lastname']] = $u['firstname'].'_'.$u['lastname'];
+
                     $statistic = $u->statisticGroupByEvent->groupBy('event_id');
                     $videos = isset($statistic[$transaction->event->first()->id]) ?
                     $statistic[$transaction->event->first()->id]->first()->pivot : null;
@@ -185,6 +189,8 @@ class TransactionController extends Controller
             }
 
         }
+
+        $data['total_users'] = count($total_users);
 
         return $data;
 
@@ -222,6 +228,8 @@ class TransactionController extends Controller
         $earlyCount = 0;
         $data['transactions'] = [];
         $doubleTransactions = [];
+        $data['total_users'] = 0;
+        $total_users = [];
 
         foreach($transactions as $transaction){
             if(!$transaction->subscription->first() && $transaction->user->first() && $transaction->event->first()){
@@ -262,6 +270,8 @@ class TransactionController extends Controller
                 $countUsers = count($transaction->user);
 
                 foreach($transaction['user'] as $u){
+
+                    $total_users[$u['firstname'].'_'.$u['lastname']] = $u['firstname'].'_'.$u['lastname'];
 
                     $statistic = $u->statisticGroupByEvent->groupBy('event_id');
                     $videos = isset($statistic[$transaction->event->first()->id]) ?
@@ -307,6 +317,7 @@ class TransactionController extends Controller
             }
 
         }
+        $data['total_users'] = count($total_users);
 
         return $data;
 
@@ -316,14 +327,16 @@ class TransactionController extends Controller
     public function participants_inside_revenue()
     {
         $this->authorize('view',User::class,Transaction::class);
-        $data['transactions'] = $this->participants()['transactions'];
+        $data = $this->participants();
+
         return view('admin.transaction.participants', $data);
     }
 
     public function participants_inside_revenue_new()
     {
         $this->authorize('view',User::class,Transaction::class);
-        $data['transactions'] = $this->participantsNew()['transactions'];
+
+        $data = $this->participantsNew();
 
         return view('admin.transaction.revenue', $data);
     }

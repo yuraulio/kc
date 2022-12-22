@@ -1449,8 +1449,11 @@
 
             // Handler for .ready() called.
             setTimeout( function(){
-              $('.open').children('.lessons-list').css('display','block')
-                }, 1000 );
+
+                    $('.topic.open').children('.lessons-list').css('display','block')
+                    scrollIsWatchingClass()
+
+            }, 2000 );
 
 
             $(window).resize(function(){
@@ -1525,7 +1528,10 @@
             })
 
             $(window).on('load', function() {
+                console.log('on load function')
+
               setTimeout( function(){
+                //scrollIsWatchingClass()
               var container = $('.sidebar-wrapper'),
                 scrollTo = $('.isWatching');
 

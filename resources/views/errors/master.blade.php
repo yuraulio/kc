@@ -55,7 +55,6 @@
                   </button>
                   <div class="header-actions clearfix">
                      <ul class="actions-list">
-
                         {{--@if($data['cartitems'] > 0)
                         <li>
                            <a href="/cart" title="Cart">
@@ -66,7 +65,7 @@
                         @endif--}}
                         @if (Auth::check())
                         <li class="account-menu">
-                           <a href="javascript:void(0)" title="Superhero Login"><img src="{{cdn('/theme/assets/images/icons/knowcrunch-superhero-icons-login.svg')}}" class="replace-with-svg" alt="Superhero Login"></a>
+                           <a href="javascript:void(0)" title="Login to your account."><img src="{{cdn('/theme/assets/images/icons/knowcrunch-superhero-icons-login.svg')}}" class="replace-with-svg" alt="Login to your account."></a>
                            <div class="account-submenu">
                               <ul>
                                  <li><a href="/myaccount">Account</a></li>
@@ -76,7 +75,7 @@
                         </li>
                         @else
                         <li class="account-menu">
-                           <a href="javascript:void(0)" title="Superhero Login"><img src="{{cdn('/theme/assets/images/icons/knowcrunch-superhero-icons-login.svg')}}" class="replace-with-svg" width="18" alt="Superhero Login"></a>
+                           <a href="javascript:void(0)" title="Login to your account."><img src="{{cdn('/theme/assets/images/icons/knowcrunch-superhero-icons-login.svg')}}" class="replace-with-svg" width="18" alt="Login to your account."></a>
                         </li>
                         @endif
                         <li class="header-search-area">
@@ -118,7 +117,7 @@
             </li>
             @else
             <li class="account-menu">
-				   <a href="javascript:void(0)" title="Superhero Login">Account</a>
+				   <a href="javascript:void(0)" title="Login to your account.">Account</a>
             </li>
             @endif
          </ul>

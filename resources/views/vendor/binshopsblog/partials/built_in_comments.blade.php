@@ -4,7 +4,7 @@
     <div class="single_comment">
         <p class="single_comment_text">{!! nl2br(e($comment->comment))!!}</p>
         <div class="single_comment_details">
-            <div class="comment_author">  <img src="/theme/assets/images/icons/user-profile-placeholder-image.png" alt="" width="25"> {{$comment->user->name }} </div>
+            <div class="comment_author">  <img src="/theme/assets/images/icons/user-circle-placeholder.svg" alt="" width="25"> {{$comment->user->name }} </div>
             <div class="comment_date">  {{$comment->created_at->diffForHumans()}} </div>
         </div>
     </div>

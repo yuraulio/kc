@@ -212,7 +212,7 @@ class User extends Authenticatable
 
     public function eventsUnPaid()
     {
-        return $this->belongsToMany(Event::class, 'event_user')->withPivot('paid')
+        return $this->belongsToMany(Event::class, 'event_user')->withPivot('paid', 'comment')
            ->wherePivot('paid', false);
     }
 

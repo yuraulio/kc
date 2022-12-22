@@ -101,7 +101,7 @@
                         <table class="table align-items-center table-flush"  id="datatable-basic45">
                             <thead class="thead-light">
                                 <tr>
-                                    
+
                                     <th scope="col">Photo</th>
                                     <th scope="col">{{ __('Name') }}</th>
                                     <th scope="col">{{ __('Lastname') }}</th>
@@ -127,9 +127,9 @@
                                             <span class="avatar avatar-sm rounded-circle">
 
                                             @if($user['image'] != null && $user['image']['name'] != '')
-                                                <img src="{{ cdn(get_image($user['image'])) }}" alt="{{ $user['firstname'] }}" onerror="this.src='{{cdn('/theme/assets/images/icons/user-profile-placeholder-image.png')}}'" style="max-width: 100px; border-radiu: 25px">
+                                                <img src="{{ cdn(get_image($user['image'])) }}" alt="{{ $user['firstname'] }}" onerror="this.src='{{cdn('/theme/assets/images/icons/user-circle.svg')}}'" style="max-width: 100px; border-radiu: 25px">
                                             @else
-                                            <img src="{{cdn('/theme/assets/images/icons/user-profile-placeholder-image.png')}}" alt="{{ $user['firstname'] }}" style="max-width: 100px; border-radius: 25px">
+                                            <img src="{{cdn('/theme/assets/images/icons/user-circle.svg')}}" alt="{{ $user['firstname'] }}" style="max-width: 100px; border-radius: 25px">
                                             @endif
                                             </span>
                                         </td>
@@ -233,7 +233,7 @@
                 previous: '&#171;' // or '←'
                 }
             },
-        
+
         });
 
         table.on( 'search.dt', function () {

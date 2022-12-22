@@ -147,7 +147,7 @@
                         @foreach ($transactions as $key => $transaction)
 
                             <tr>
-                                <td><a href="{{ route('user.edit', $transaction['user_id']) }}">{{$transaction['name']}}</a></td>
+                                <td><a data-name="{{$transaction['name']}}" href="{{ route('user.edit', $transaction['user_id']) }}">{{$transaction['name']}}</a></td>
                                 <td>{{$transaction['event_title']}}</td>
 
                                 <td>{{ $transaction['type'] }}</td>
@@ -247,6 +247,7 @@
         let count_special = 0;
         let count_regular = 0;
         let count_sponsored = 0;
+        let count_students = 0;
         let count_early = 0;
         let min = null;
         let max = null;
@@ -255,6 +256,7 @@
         let newTickets = {};
         let totalSales = 0;
         let transactionCheck = [];
+        let unique_users = [];
 
         function initCounters(){
             sum = 0
@@ -273,6 +275,8 @@
             newTickets = {};
             totalSales = 0;
             transactionCheck = [];
+            count_students = 0;
+            unique_users = [];
         }
 
 
@@ -554,13 +558,16 @@ $(document).ready(function() {
             var amount = this.data()[3];
             var ticketPrice = this.data()[11];
             amount = parseInt(amount.replace("€",""));
-
             sum = sum + amount
+
+            unique_users.push($(this.data()[0]).data('name'))
 
             if(transactionCheck.indexOf(this.data()[10]) == -1){
                 totalSales +=  parseInt(ticketPrice.replace("€",""))
             }
             transactionCheck.push(this.data()[10]);
+
+
 
             if(coupon == 'Alumni'){
                 alumni = alumni + amount
@@ -683,10 +690,14 @@ $(document).ready(function() {
         } );
 
 
-
+        console.log(unique_users)
+        unique_users = unique_users.filter(onlyUnique)
+        console.log('after unique: ', unique_users )
+        count_students = unique_users.length;
 
         $('#total').text('€'+sum.toLocaleString())
         $('#total-sales').text('€'+totalSales.toLocaleString())
+        $('#total_students').text(count_students)
 
         $.each( newTickets, function( key, value ) {
 
@@ -708,6 +719,10 @@ $(document).ready(function() {
 
 
 
+    }
+
+    function onlyUnique(value, index, self) {
+        return self.indexOf(value) === index;
     }
 
 

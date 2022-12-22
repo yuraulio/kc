@@ -10,7 +10,7 @@
 
             <div class="card-header">
 
-                <img class="account-thumb" src="{{cdn(get_profile_image($image))}}" onerror="this.src='{{cdn('/theme/assets/images/icons/user-profile-placeholder-image.png')}}'" alt="user-profile-placeholder-image">
+                <img class="account-thumb" src="{{cdn(get_profile_image($image))}}" onerror="this.src='{{cdn('/theme/assets/images/icons/user-circle-placeholder.svg')}}'" alt="user-circle">
                 <div class="pad-left-15">
                 <p class="completed"> Completed: {{$end_time}}</p>
                 <p class="name"> {{$first_name}} {{$last_name}} </p>
