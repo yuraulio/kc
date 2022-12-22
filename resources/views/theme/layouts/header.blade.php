@@ -118,7 +118,7 @@
 
 						<ul class="main-menu">
 
-							@yield('main_menu_deskto								p')
+							@yield('main_menu_desktop')
 						</ul>
 
 					</div>

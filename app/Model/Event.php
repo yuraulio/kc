@@ -556,7 +556,16 @@ class Event extends Model
 
     public function examAccess( $user,$accessMonths = 2, $checkForCetification = true){
 
-        $periodAfterHasCourse = $this->period($user);
+        if($accessMonths < 1){
+            $this->progress($user);
+        }else{
+            $periodAfterHasCourse = $this->period($user);
+        }
+
+        
+
+
+
 
         $studentsEx = [1353,1866,1753,1882,1913,1923];
 
@@ -793,7 +802,7 @@ class Event extends Model
     }
 
 
-    public function certification(User $user,$successPer = 2){
+    public function certification(User $user,$successPer = 0.9){
 
 
         $certification = count($this->certificatesByUser($user->id)) > 0;
