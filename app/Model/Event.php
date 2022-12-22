@@ -570,6 +570,8 @@ class Event extends Model
 
         if(!$event->created_at || $event->pivot->comment == 'enroll||0' || (strpos($event->pivot->comment, 'enroll from') !== false && explode('||', $event->pivot->comment)[1] == 0)){
             return false;
+        }else if( $event->pivot->comment == 'enroll||1' || (strpos($event->pivot->comment, 'enroll from') !== false && explode('||', $event->pivot->comment)[1] == 1)){
+            $periodAfterHasCourse = $accessMonths;
         }
 
         $certification = $checkForCetification && count($this->certificatesByUser($user->id)) > 0;
@@ -791,7 +793,7 @@ class Event extends Model
     }
 
 
-    public function certification(User $user,$successPer = 0.9){
+    public function certification(User $user,$successPer = 2){
 
 
         $certification = count($this->certificatesByUser($user->id)) > 0;
