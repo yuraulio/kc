@@ -463,9 +463,9 @@ function tictac(){
 
 
     if(TOTAL_NOT_ANSWERED!=0 || TOTAL_NOT_VISITED != 0  || TOTAL_MARKED != 0){
-        document.getElementById("ExamFinish").style.display = 'none';
+        document.getElementById("ExamFinish").setAttribute('disabled', 'disabled');
     }else{
-        document.getElementById("ExamFinish").style.display = 'inline-block';
+        document.getElementById("ExamFinish").removeAttribute('disabled');
     }
 
     SECONDS--;
@@ -520,7 +520,7 @@ function tictac(){
 function initializeView() {
 
 
-    document.getElementById("ExamFinish").style.display = 'none';
+    document.getElementById("ExamFinish").setAttribute('disabled', 'disabled');
 
     var eJson = JSON.parse( window.examVar );
     window.startTime = localStorage.getItem("examStart<?php echo $exam->id;?>-{{$user_id}}");
@@ -684,200 +684,211 @@ window.actQues = 0;
 <div class="row justify-content-center hidden" id="endExamText" style="
     text-align: center;
 ">
-        <div class="col-md-12">
+        <div class="col-12">
             <h5>{!! $exam->end_of_time_text !!}</h5>
         </div>
     </div>
-<div class="container-fluid">
+<div class="container">
 
     <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
+        <div class="col-12">
 
-                <div class="card-body" style="padding:0">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
-                    @endif
-                    <form method="post" action="">
-                    <input type="hidden" name="time_spent" id="time_spent" value="0">
-
-                                 @foreach($ex_contents as $exam_content_id => $ex_content)
-                                 <?php $last_id = $exam_content_id; ?>
-                                    <div class="question_div {{$exam->id}}" name="question[{{ $exam_content_id }}]" id="{{ $exam_content_id}}" style="display:none;" value="0">
-                                        <div style="padding: .75rem 1.25rem;
-    margin-bottom: 0;
-    background-color: rgba(0,0,0,.03);
-    border-bottom: 1px solid rgba(0,0,0,.125);"><h4>{!!$ex_content['question_title'] !!}</h4>
-         <div class="q_description">
-                                            <?php  echo $ex_content['question_description']; ?>
-                                        </div>
-                                        </div>
-
-                                        <div class="row">
-                                        <div class="col-md-10 offset-1" style="padding-top: 2%;">
-                                            <?php
-                                                if($ex_content['question-type'] == 1) { //For True False Type
-                                                    echo '
-                                                        <div class="col-md-12">
-                                                            <div class="form-check form-check-inline">
-
-                                                                <label class="form-check-label checkradio" >
-                                                                <input class="form-check-input " type="radio" name="'.$exam_content_id.'" value="True">  <span class="checkmark"></span>
-                                                                True
-                                                                </label>
-                                                            </div>
-                                                            <div class="form-check form-check-inline">
-
-                                                                <label class="form-check-label checkradio" >
-                                                                <input class="form-check-input " type="radio" name="'.$exam_content_id.'"  value="False">  <span class="checkmark"></span>
-                                                                False
-                                                                </label>
-                                                            </div>
-                                                        </div>
-                                                        ';
-
-                                                } elseif($ex_content['question-type'] == 'radio buttons') { //For Multiple Choice Type
-
-                                                    $unser_data = $ex_content['answers_keys'];
-
-                                                    $opt1 = $unser_data[0];
-                                                    $opt2 = $unser_data[1];
-                                                    $opt3 = $unser_data[2];
-                                                    $opt4 = $unser_data[3];
-
-                                                    echo '<div class="col-md-12">
-                                                            <div class="form-check form-check-inline">
-                                                            <label class="form-check-label checkradio" ><input class="form-check-input" type="radio" name="'.$exam_content_id.'"  value="'.$opt1.'"><span class="checkmark"></span>
-                                                                <div class="answeralign">'
-                                                                    . $opt1 .
-                                                                '</div></label>
-                                                            </div>
-                                                            <div class="form-check form-check-inline">
-                                                            <label class="form-check-label checkradio" ><input class="form-check-input" type="radio" name="'.$exam_content_id.'"  value="'.$opt2.'"><span class="checkmark"></span>
-                                                            <div class="answeralign">'
-                                                                    . $opt2 .
-                                                                '</div></label>
-                                                            </div><br/>
-                                                            <div class="form-check form-check-inline">
-                                                            <label class="form-check-label checkradio" ><input class="form-check-input" type="radio" name="'.$exam_content_id.'"  value="'.$opt3.'"><span class="checkmark"></span>
-                                                            <div class="answeralign">'
-                                                                    . $opt3 .
-                                                                '</div></label>
-                                                            </div>
-                                                            <div class="form-check form-check-inline">
-                                                            <label class="form-check-label checkradio" ><input class="form-check-input" type="radio" name="'.$exam_content_id.'"  value="'.$opt4.'"><span class="checkmark"></span>
-                                                            <div class="answeralign"> '
-                                                                    . $opt4 .
-                                                                '</div></label>
-                                                            </div>
-                                                        </div>
-                                                        ';
-
-                                                } elseif($ex_content['question-type'] == 3) { //For Several Answer Type
-
-                                                    $unser_data = $ex_content['answers_keys'];
-
-                                                    $opt1 = $unser_data[0];
-                                                    $opt2 = $unser_data[1];
-                                                    $opt3 = $unser_data[2];
-                                                    $opt4 = $unser_data[3];
-
-                                                    // array_push($options, $opt1, $opt2, $opt3, $opt4);
-                                                    echo '<div class="col-md-12">
-                                                            <div class="form-check form-check-inline">
-                                                            <label class="form-check-label checklabel" ><input class="form-check-input" type="checkbox" name="'.$exam_content_id.'"  value="'.$opt1.'"><span class="checkmark"></span>
-                                                            <div class="answeralign">'
-                                                                    . $opt1 .
-                                                                '</div></label>
-                                                            </div>
-                                                            <div class="form-check form-check-inline">
-                                                            <label class="form-check-label checklabel" ><input class="form-check-input" type="checkbox" name="'.$exam_content_id.'" value="'.$opt2.'"><span class="checkmark"></span>
-                                                            <div class="answeralign">'
-                                                                    . $opt2 .
-                                                                '</div></label>
-                                                            </div><br/>
-                                                            <div class="form-check form-check-inline">
-                                                            <label class="form-check-label checklabel" ><input class="form-check-input" type="checkbox" name="'.$exam_content_id.'"  value="'.$opt3.'"><span class="checkmark"></span>
-                                                            <div class="answeralign">'
-                                                                    . $opt3 .
-                                                                '</div></label>
-                                                            </div>
-                                                            <div class="form-check form-check-inline">
-                                                            <label class="form-check-label checklabel" ><input class="form-check-input" type="checkbox" name="'.$exam_content_id.'"  value="'.$opt4.'"><span class="checkmark"></span>
-                                                            <div class="answeralign">'
-                                                                    . $opt4 .
-                                                                '</div></label>
-                                                            </div>
-                                                        </div>
-                                                        ';
-                                                }
-                                            ?>
-                                        </div>
-                                        </div>
-                                    </div>
-                                @endforeach
-                                <br/>
-
-                    </form>
+            @if (session('status'))
+                <div class="alert alert-success" role="alert">
+                    {{ session('status') }}
                 </div>
-                <div class="card-footer text-center">
-                    <div class="question-paginate">
-                  <div class="controls_up" style="padding-bottom: 5px;height: 55px;">
+            @endif
+            <form method="post" action="">
+                <input type="hidden" name="time_spent" id="time_spent" value="0">
 
-                        <button class="btn btn-lg btn-success button prev" type="button"  onclick="prevQues();" style="width: 186px;float:left">
-                            <i class="fa fa-arrow-circle-o-left"> </i> PREVIOUS
-                        </button>
+                            @foreach($ex_contents as $exam_content_id => $ex_content)
+                            <?php $last_id = $exam_content_id; ?>
+                            <div class="question_div {{$exam->id}}" name="question[{{ $exam_content_id }}]" id="{{ $exam_content_id}}" style="display:none;" value="0">
+                                <div><h4>{!!$ex_content['question_title'] !!}</h4>
+                                        <div class="q_description">
+                                    <?php  echo $ex_content['question_description']; ?>
+                                </div>
+                                </div>
 
-                        <button class="btn btn-lg btn-success button next" type="button" onclick="nextQues();" style="width: 186px;float:right">
-                            NEXT <i class="fa fa-arrow-circle-o-right"> </i>
-                        </button>
+                                <div class="row">
+                                <div class="col-md-12 questions-wrapper">
+                                    <?php
+                                        if($ex_content['question-type'] == 1) { //For True False Type
+                                            echo '
+                                                <div class="col-md-12">
+                                                    <div class="form-check form-check-inline">
+
+                                                        <label class="form-check-label checkradio" >
+                                                        <input class="form-check-input " type="radio" name="'.$exam_content_id.'" value="True">  <span class="checkmark"></span>
+                                                        True
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check form-check-inline">
+
+                                                        <label class="form-check-label checkradio" >
+                                                        <input class="form-check-input " type="radio" name="'.$exam_content_id.'"  value="False">  <span class="checkmark"></span>
+                                                        False
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                ';
+
+                                        } elseif($ex_content['question-type'] == 'radio buttons') { //For Multiple Choice Type
+
+                                            $unser_data = $ex_content['answers_keys'];
+
+                                            $opt1 = $unser_data[0];
+                                            $opt2 = $unser_data[1];
+                                            $opt3 = $unser_data[2];
+                                            $opt4 = $unser_data[3];
+
+                                            echo '<div class="col-md-12">
+                                                    <div class="form-check form-check-inline">
+                                                    <label class="form-check-label checkradio" ><input class="form-check-input" type="radio" name="'.$exam_content_id.'"  value="'.$opt1.'"><span class="checkmark"></span>
+                                                        <div class="answeralign">'
+                                                            . $opt1 .
+                                                        '</div></label>
+                                                    </div>
+                                                    <div class="form-check form-check-inline">
+                                                    <label class="form-check-label checkradio" ><input class="form-check-input" type="radio" name="'.$exam_content_id.'"  value="'.$opt2.'"><span class="checkmark"></span>
+                                                    <div class="answeralign">'
+                                                            . $opt2 .
+                                                        '</div></label>
+                                                    </div><br/>
+                                                    <div class="form-check form-check-inline">
+                                                    <label class="form-check-label checkradio" ><input class="form-check-input" type="radio" name="'.$exam_content_id.'"  value="'.$opt3.'"><span class="checkmark"></span>
+                                                    <div class="answeralign">'
+                                                            . $opt3 .
+                                                        '</div></label>
+                                                    </div>
+                                                    <div class="form-check form-check-inline">
+                                                    <label class="form-check-label checkradio" ><input class="form-check-input" type="radio" name="'.$exam_content_id.'"  value="'.$opt4.'"><span class="checkmark"></span>
+                                                    <div class="answeralign"> '
+                                                            . $opt4 .
+                                                        '</div></label>
+                                                    </div>
+                                                </div>
+                                                ';
+
+                                        } elseif($ex_content['question-type'] == 3) { //For Several Answer Type
+
+                                            $unser_data = $ex_content['answers_keys'];
+
+                                            $opt1 = $unser_data[0];
+                                            $opt2 = $unser_data[1];
+                                            $opt3 = $unser_data[2];
+                                            $opt4 = $unser_data[3];
+
+                                            // array_push($options, $opt1, $opt2, $opt3, $opt4);
+                                            echo '<div class="col-md-12">
+                                                    <div class="form-check form-check-inline">
+                                                    <label class="form-check-label checklabel" ><input class="form-check-input" type="checkbox" name="'.$exam_content_id.'"  value="'.$opt1.'"><span class="checkmark"></span>
+                                                    <div class="answeralign">'
+                                                            . $opt1 .
+                                                        '</div></label>
+                                                    </div>
+                                                    <div class="form-check form-check-inline">
+                                                    <label class="form-check-label checklabel" ><input class="form-check-input" type="checkbox" name="'.$exam_content_id.'" value="'.$opt2.'"><span class="checkmark"></span>
+                                                    <div class="answeralign">'
+                                                            . $opt2 .
+                                                        '</div></label>
+                                                    </div><br/>
+                                                    <div class="form-check form-check-inline">
+                                                    <label class="form-check-label checklabel" ><input class="form-check-input" type="checkbox" name="'.$exam_content_id.'"  value="'.$opt3.'"><span class="checkmark"></span>
+                                                    <div class="answeralign">'
+                                                            . $opt3 .
+                                                        '</div></label>
+                                                    </div>
+                                                    <div class="form-check form-check-inline">
+                                                    <label class="form-check-label checklabel" ><input class="form-check-input" type="checkbox" name="'.$exam_content_id.'"  value="'.$opt4.'"><span class="checkmark"></span>
+                                                    <div class="answeralign">'
+                                                            . $opt4 .
+                                                        '</div></label>
+                                                    </div>
+                                                </div>
+                                                ';
+                                        }
+                                    ?>
+                                </div>
+                                </div>
                             </div>
-                            <div class="controls_down">
-                            <button class="btn btn-lg btn-dark button clear-answer" type="button" onclick="clearAnswer();" style="width: 186px;float:left">
-                            CLEAR
-                        </button>
-                             <button class="btn btn-lg btn-dark button next" style="background: orange;border-color: orange;width: 186px;float:right" id="markbtn" type="button"  onclick="nextQues(1);" >
-                             ANSWER LATER
-                        </button>
+                        @endforeach
+                        <br/>
 
-                        </div>
+            </form>
+        </div>
+
+
+        <div class="col-12">
+            <div class="row">
+
+
+                            <button class="col-sm-12 col-md-6 col-lg-3 btn btn-lg button-secondary-previous button prev" type="button"  onclick="prevQues();" style="width: 250px;">
+                            <img src="{{cdn('new_cart/images/arrow-previous-white.svg')}}" width="20px" height="12px" alt="">
+                            PREVIOUS QUESTION
+                            </button>
+
+                            <button class="col-sm-12 col-md-6 col-lg-3 btn btn-lg button clear-answer button-quinary" type="button" onclick="clearAnswer();" style="width: 186px;">
+                                CLEAR
+                            </button>
+
+                            <button class="col-sm-12 col-md-6 col-lg-3 btn btn-lg button next button-senary" style="width: 186px;" id="markbtn" type="button"  onclick="nextQues(1);" >
+                                ANSWER LATER
+                            </button>
+
+                            <button class="col-sm-12 col-md-6 col-lg-3 btn btn-lg button-secondary-next button next" type="button" onclick="nextQues();" style="width: 250px;">
+                                NEXT QUESTION
+                                <img src="{{cdn('new_cart/images/arrow-next-white.svg')}}" width="20px" height="12px" alt="">
+                            </button>
+
+
+
                         <!--<button class="btn btn-lg btn-danger button   finish" type="submit" onclick="finishExam();">
-                            Ολοκλήρωση
+                        Ολοκλήρωση
                         </button>-->
-                    </div>
+
+            </div>
+            <hr>
+
+        </div>
+
+        <div class="col-12">
+            <div class="row justify-content-between">
+                <div style="display:flex" class="col-sm-12 mark_question_details">
+                    <p><span class="icon unanswered">&#9632;</span> unanswered </p>
+                    <p><span class="icon answered">&#9632;</span> answered </p>
+                    <p><span class="icon answer_later">&#9632;</span> answer later </p>
+                </div>
+                @if(Request::segment(1) == 'exam-start')
+                <div class="col-sm-12 finish-exams">
+                        <button class="btn btn-lg btn-danger button finish" disabled type="submit" onclick="finishExam();" id="ExamFinish">SUBMIT YOUR EXAM</button>
+                </div>
+                @endif
+            </div>
+        </div>
+
+
+        <div class="col-12">
+            <div class="container1">
+                <div class="header1"><span>Expand</span>
+
+                </div>
+                <div class="content1">
+                    <ul>
+                        <li>This is just some random content.</li>
+                        <li>This is just some random content.</li>
+                        <li>This is just some random content.</li>
+                        <li>This is just some random content.</li>
+                    </ul>
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="card text-center" style="margin: 0px 0px 25px 0px;">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-12">
 
-                            <div id="timerdiv" class="countdown-styled ">
-                                <span id="hours">{{$hours}}</span> :
-                                <span id="mins"><?php if($minutes<10){ echo '0'; }?>{{$minutes}}</span> :
-                                <span id="seconds">00</span>
-                            </div>
 
-                        </div>
-                    </div>
-                </div>
 
-            </div>
-            @if(Request::segment(1) == 'exam-start')
+        <div class="col-12">
 
-<div style="margin-bottom: 25px;text-align:center"><button class="btn btn-danger button finish" style="display: none;" type="submit" onclick="finishExam();" id="ExamFinish">
-
-    I AM FINISHED WITH MY EXAM
-
-</button>
-</div>
-@endif
-
-            <div class="card text-center" style="margin: 0px 0px 25px 0px;">
+            <div class="card text-center" style="margin: 10px 0px 25px 0px; width: auto; height:auto;">
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-12">
@@ -896,30 +907,34 @@ window.actQues = 0;
                         </div>
                     </div>
                 </div>
-            </div>
-<!--
-            <div class="card" style="margin: 0px 0px 25px 0px;">
-                <div class="card-header text-center">
-                    <h5>Επισκόπηση</h5>
-                </div>
-                <div class="card-body">
-                    <ul class="legends">
-                        <li class="palette answered"><span id="palette_total_answered">0</span> Απαντημένες</li>
-                        <li class="palette marked"><span id="palette_total_marked">0</span> Σημειωμένες</li>
-                        <li class="palette not-answered"><span id="palette_total_not_answered">0</span> Μη απαντημένες</li>
-                        <li class="palette not-visited"><span id="palette_total_not_visited"><?php echo $i-1; ?></span> Δεν έχουν εμφανιστεί</li>
-                    </ul>
-                </div>
-            </div>
         </div>
-    </div>
-</div>
--->
+
+                        {{--<!--
+                                    <div class="card" style="margin: 0px 0px 25px 0px;">
+                                        <div class="card-header text-center">
+                                            <h5>Επισκόπηση</h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <ul class="legends">
+                                                <li class="palette answered"><span id="palette_total_answered">0</span> Απαντημένες</li>
+                                                <li class="palette marked"><span id="palette_total_marked">0</span> Σημειωμένες</li>
+                                                <li class="palette not-answered"><span id="palette_total_not_answered">0</span> Μη απαντημένες</li>
+                                                <li class="palette not-visited"><span id="palette_total_not_visited"><?php echo $i-1; ?></span> Δεν έχουν εμφανιστεί</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        -->--}}
 
 
 <script>
 
     jQuery( document ).ready(function() {
+
+        $('.time_remaining_header').removeAttr('hidden')
+
         window.actQues = <?php echo $activeQuestion; ?>;
         var eJson = JSON.parse( window.examVar );
         var showx = 0;
@@ -1016,6 +1031,33 @@ window.actQues = 0;
     });
 
 jQuery(document).ready(function(){
+
+    $(".header1").click(function () {
+
+        $header = $(this);
+        //getting the next element
+        $content = $header.next();
+        //open up the content needed - toggle the slide- if visible, slide up, if not slidedown.
+        if($('.content1').hasClass('expanded')){
+                    $('.content1').removeClass('expanded');
+                }else{
+                    $('.content1').addClass('expanded');
+                }
+        // $content.slideToggle(500, function () {
+        //     //execute this after slideToggle is done
+        //     //change text of header based on visibility of content div
+        //     $header.text(function () {
+        //         //change text based on condition
+
+
+
+        //         //return $content.is(":visible") ? "Collapse" : "Expand";
+        //     });
+        // });
+
+    });
+
+
     jQuery("body").on("change",function(){
         mark = 0;
         var eJson = JSON.parse(window.examVar);

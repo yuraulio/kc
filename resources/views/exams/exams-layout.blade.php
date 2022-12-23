@@ -15,11 +15,8 @@
     <!-- CSRF Token -->
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
-
-
-
-    <title>{{ $event_title }}</title>
-
+    @include('theme.layouts.favicons')
+    @include('theme.layouts.header_scripts')
 
 
     <!-- Scripts -->
@@ -56,12 +53,28 @@
 
 
 </head>
+@include('theme.layouts.header_exam')
 
-<body style="background: transparent;" class="hold-transition exam-page disable-select" oncontextmenu="return false;" onkeydown="return (event.keyCode != 116)">
-
+<!-- <body style="background: transparent;" class="hold-transition exam-page disable-select" oncontextmenu="return false;" onkeydown="return (event.keyCode != 116)"> -->
+<body style="background: transparent;" class="hold-transition exam-page disable-select" >
     <div id="app">
+        <div id="closeDialog" hidden>
+            <div class="alert-wrapper error-alert">
+                <div class="alert-inner">
+                    <p>Are you sure you want to exit your exam?</p>
+                {{-- <a id="close-exam-dialog" href="javascript:void(0)" class="close-alert"><img src="{{cdn('/theme/assets/images/icons/alert-icons/icon-close-alert.svg')}}" alt="Close Alert"/></a>--}}
+                </div>
 
-        <nav class="navbar navbar-expand-md navbar-light navbar-laravel">
+                <div style="display:inline-flex;">
+                    <button style="margin-right: 1rem;" class="btn btn-exit-exam btn-sm go-to-account">Yes, exit my exam. </button>
+                    <button class="btn btn-not-exit-exam btn-sm go-to-account go-to-account">Do not exit, want to continue with my exam. </button>
+                </div>
+
+                <!-- /.alert-outer -->
+            </div>
+        </div>
+
+        {{--<nav class="navbar navbar-expand-md navbar-light navbar-laravel">
 
 
                 <h1  id="custom" class="navbar-brand">
@@ -114,11 +127,11 @@
 
 
 
-        </nav>
+        </nav>--}}
 
 
 
-        <main class="py-4">
+        <main style="margin-top: 13rem;" class="">
 
             @yield('content')
 
@@ -138,6 +151,26 @@
 
     <script language="JavaScript">
 
+        $(document).ready(function() {
+
+
+            jQuery('.btn-not-exit-exam').click(function(){
+                $('#closeDialog').attr('hidden', '')
+
+                $("body").css("overflow-y", "auto")
+            })
+
+            jQuery('.btn-exit-exam').click(function(){
+                window.top.close()
+            })
+
+            jQuery('.close').click(function(){
+
+                $('#closeDialog').removeAttr('hidden')
+            });
+        })
+
+
 
 
     </script>
@@ -147,4 +180,3 @@
 </body>
 
 </html>
-

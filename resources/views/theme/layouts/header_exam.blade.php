@@ -1,33 +1,11 @@
 
 {{-- Navigation {{ !Request::is('/') ? "top-nav-collapse short" : "" }}--}}
-<style>
-    .close {
-  position: absolute;
-  right: 32px;
-  top: 32px;
-  width: 32px;
-  height: 32px;
-  opacity: 0.3;
-}
-.close:hover {
-  opacity: 1;
-}
-.close:before, .close:after {
-  position: absolute;
-  left: 30px;
-  content: ' ';
-  height: 33px;
-  width: 2px;
-  top: -15px;
-  background-color: #96c1ff;
-}
-.close:before {
-  transform: rotate(45deg);
-}
-.close:after {
-  transform: rotate(-45deg);
-}
-</style>
+
+@php
+$hours = 0;
+$minutes = 0;
+@endphp
+
 <header id="header" >
 <a href="#" title="Close window" class="close"></a>
 				<div class="container clearfix">
@@ -36,7 +14,7 @@
                             <a href="/" class="logo">Know Crunch</a>
                         </div>
                         <div class="title-area col-md-7 col-sm-12">
-                            <h1 style="color:white;">{{ $event_title }}</h1>
+                            <h1>{{ $event_title }}</h1>
                         </div>
                         <div class="menu-area col-md-3 col-sm-12">
 
@@ -50,22 +28,22 @@
                                     ?>
 
                                     <li class="account-menu login-pad">
-                                        <div style="display:inline-block; margin-right: 1rem; vertical-align: sub;">
-                                            <h5 style="color:white !important;">{{ Auth::user()->firstname.' '.Auth::user()->lastname }}</h5>
+                                        <div class="event-name">
+                                            <h5>{{ Auth::user()->firstname.' '.Auth::user()->lastname }}</h5>
                                         </div>
-                                        <div style="display:inline-block" href="javascript:void(0)">
+                                        <div class="event-name-icon" href="javascript:void(0)">
 
                                             <img class="login-image" src="{{cdn($img_src)}}" onerror="this.src='{{cdn('/theme/assets/images/icons/user-circle-placeholder.svg')}}'" alt="user-profile-placeholder-image"/>
 
                                         </div>
-                                        <div>
-                                            <label style="color:#A9D2FE; font-size: 1.2rem" for="">Time remaining:</label>
+                                        <div class="time_remaining_header" hidden>
+                                            <label for="">Time remaining:</label>
                                         </div>
 
-                                        <div style="background-color: #A9D2FE; font-size: 18px; width: fit-content; float: inline-end;" id="timerdiv" class="countdown-styled text-right">
-                                            <span style="color:white;" id="hours">{{$hours}}</span> <span style="color:white;" >hr :</span>
-                                            <span style="color:white;" id="mins"><?php if($minutes<10){ echo '0'; }?>{{$minutes}}</span> <span style="color:white;" >min :</span>
-                                            <span style="color:white;" id="seconds">00</span> <span style="color:white;" >sec</span>
+                                        <div hidden id="timerdiv" class="countdown-styled text-right time_remaining_header">
+                                            <span id="hours">{{$hours}}</span> <span >hr :</span>
+                                            <span id="mins"><?php if($minutes<10){ echo '0'; }?>{{$minutes}}</span> <span >min :</span>
+                                            <span id="seconds">00</span> <span >sec</span>
                                         </div>
 
 
@@ -123,8 +101,7 @@
 
     document.getElementById('header').classList.add('header-transparent');
 
-    $(".close").click(function(){
-          alert("The paragraph was clicked.");
-    });
+
+
 </script>
 @endif

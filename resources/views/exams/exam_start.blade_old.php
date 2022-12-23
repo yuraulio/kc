@@ -701,16 +701,16 @@ window.actQues = 0;
                         </div>
                     @endif
                     <form method="post" action="">
-                        <input type="hidden" name="time_spent" id="time_spent" value="0">
+                    <input type="hidden" name="time_spent" id="time_spent" value="0">
 
                                  @foreach($ex_contents as $exam_content_id => $ex_content)
                                  <?php $last_id = $exam_content_id; ?>
                                     <div class="question_div {{$exam->id}}" name="question[{{ $exam_content_id }}]" id="{{ $exam_content_id}}" style="display:none;" value="0">
                                         <div style="padding: .75rem 1.25rem;
-                                            margin-bottom: 0;
-                                            background-color: rgba(0,0,0,.03);
-                                            border-bottom: 1px solid rgba(0,0,0,.125);"><h4>{!!$ex_content['question_title'] !!}</h4>
-                                                <div class="q_description">
+    margin-bottom: 0;
+    background-color: rgba(0,0,0,.03);
+    border-bottom: 1px solid rgba(0,0,0,.125);"><h4>{!!$ex_content['question_title'] !!}</h4>
+         <div class="q_description">
                                             <?php  echo $ex_content['question_description']; ?>
                                         </div>
                                         </div>
@@ -851,7 +851,7 @@ window.actQues = 0;
             </div>
         </div>
         <div class="col-md-4">
-            {{--<div class="card text-center" style="margin: 0px 0px 25px 0px;">
+            <div class="card text-center" style="margin: 0px 0px 25px 0px;">
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-12">
@@ -866,16 +866,16 @@ window.actQues = 0;
                     </div>
                 </div>
 
-            </div>--}}
+            </div>
             @if(Request::segment(1) == 'exam-start')
 
-                <div style="margin-bottom: 25px;text-align:center"><button class="btn btn-danger button finish" style="display: none;" type="submit" onclick="finishExam();" id="ExamFinish">
+<div style="margin-bottom: 25px;text-align:center"><button class="btn btn-danger button finish" style="display: none;" type="submit" onclick="finishExam();" id="ExamFinish">
 
-                    I AM FINISHED WITH MY EXAM
+    I AM FINISHED WITH MY EXAM
 
-                </button>
-                </div>
-            @endif
+</button>
+</div>
+@endif
 
             <div class="card text-center" style="margin: 0px 0px 25px 0px;">
                 <div class="card-body">

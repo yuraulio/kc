@@ -3,21 +3,6 @@
 
 
 @section('content')
-<div id="closeDialog" hidden>
-    <div class="alert-wrapper error-alert">
-        <div class="alert-inner">
-            <p>Are you sure you want to exit your exam?</p>
-           {{-- <a id="close-exam-dialog" href="javascript:void(0)" class="close-alert"><img src="{{cdn('/theme/assets/images/icons/alert-icons/icon-close-alert.svg')}}" alt="Close Alert"/></a>--}}
-        </div>
-
-        <div style="display:inline-flex;">
-            <button style="margin-right: 1rem;" class="btn btn-exit-exam btn-sm go-to-account">Yes, exit my exam. </button>
-            <button class="btn btn-not-exit-exam btn-sm go-to-account go-to-account">Do not exit, want to continue with my exam. </button>
-        </div>
-
-        <!-- /.alert-outer -->
-    </div>
-</div>
 @if($exam->examCheckbox !== "" && $exam->examCheckbox)
 <div class="container">
 
@@ -54,12 +39,12 @@
 
                     </div>
 
-                    <div class="">
+                    <div class="card-footer" style="text-align:center">
 
                             <div class="checkbox">
 
 								  <label>
-                                        PASSWORD<br/>
+PASSWORD<br/>
 									<input type="password" required name="examPassword" id="examPassword">
 
                                     <i style="cursor: pointer;" id="togglePassword" class="fa fa-eye"></i>
@@ -69,7 +54,7 @@
 
 								</div>
 
-                            <button id="submitPass" class="btn btn--md btn--secondary">START THE EXAM NOW</button>
+                            <button id="submitPass" class="btn btn-primary">START THE EXAM NOW</button>
 
 					</div>
 
@@ -119,9 +104,9 @@
 
                     </div>
 
-                    <div class="">
+                    <div class="card-footer" style="text-align:center">
 
-                        <button id="submitPassΝο" class="btn btn--secondary btn--md">START THE EXAM NOW</button>
+                        <button id="submitPassΝο" class="btn btn-primary">START THE EXAM NOW</button>
 
 					</div>
 
@@ -160,10 +145,7 @@
                 });
             }
 
-            jQuery('.close').click(function(){
 
-                $('#closeDialog').removeAttr('hidden')
-            });
 
 
             jQuery('#submitPassΝο').click(function(){
@@ -184,24 +166,7 @@
                     alert('Sorry, wrong password!');
                 }
             });
-
-            jQuery('.btn-not-exit-exam').click(function(){
-                $('#closeDialog').attr('hidden', '')
-
-                $("body").css("overflow-y", "auto")
-            })
-
-            jQuery('.btn-exit-exam').click(function(){
-                window.top.close()
-            })
-
-
-
-
         });
-
-
-
 
 
 

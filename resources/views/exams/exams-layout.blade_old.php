@@ -15,8 +15,11 @@
     <!-- CSRF Token -->
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    @include('theme.layouts.favicons')
-    @include('theme.layouts.header_scripts')
+
+
+
+    <title>{{ $event_title }}</title>
+
 
 
     <!-- Scripts -->
@@ -53,13 +56,12 @@
 
 
 </head>
-@include('theme.layouts.header_exam')
 
-<!-- <body style="background: transparent;" class="hold-transition exam-page disable-select" oncontextmenu="return false;" onkeydown="return (event.keyCode != 116)"> -->
-<body style="background: transparent;" class="hold-transition exam-page disable-select" >
+<body style="background: transparent;" class="hold-transition exam-page disable-select" oncontextmenu="return false;" onkeydown="return (event.keyCode != 116)">
+
     <div id="app">
 
-        {{--<nav class="navbar navbar-expand-md navbar-light navbar-laravel">
+        <nav class="navbar navbar-expand-md navbar-light navbar-laravel">
 
 
                 <h1  id="custom" class="navbar-brand">
@@ -112,11 +114,11 @@
 
 
 
-        </nav>--}}
+        </nav>
 
 
 
-        <main style="margin-top: 13rem;" class="">
+        <main class="py-4">
 
             @yield('content')
 
@@ -145,3 +147,4 @@
 </body>
 
 </html>
+

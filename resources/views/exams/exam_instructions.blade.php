@@ -3,6 +3,7 @@
 
 
 @section('content')
+
 @if($exam->examCheckbox !== "" && $exam->examCheckbox)
 <div class="container">
 
@@ -39,12 +40,12 @@
 
                     </div>
 
-                    <div class="card-footer" style="text-align:center">
+                    <div class="">
 
                             <div class="checkbox">
 
 								  <label>
-PASSWORD<br/>
+                                        PASSWORD<br/>
 									<input type="password" required name="examPassword" id="examPassword">
 
                                     <i style="cursor: pointer;" id="togglePassword" class="fa fa-eye"></i>
@@ -54,7 +55,7 @@ PASSWORD<br/>
 
 								</div>
 
-                            <button id="submitPass" class="btn btn-primary">START THE EXAM NOW</button>
+                            <button id="submitPass" class="btn btn--md btn--secondary">START THE EXAM NOW</button>
 
 					</div>
 
@@ -104,9 +105,9 @@ PASSWORD<br/>
 
                     </div>
 
-                    <div class="card-footer" style="text-align:center">
+                    <div class="">
 
-                        <button id="submitPassΝο" class="btn btn-primary">START THE EXAM NOW</button>
+                        <button id="submitPassΝο" class="btn btn--secondary btn--md">START THE EXAM NOW</button>
 
 					</div>
 
@@ -121,7 +122,7 @@ PASSWORD<br/>
 
     @endif
 
-    <script>
+    <script type="application/javascript">
 
         jQuery(document).ready(function(){
 
