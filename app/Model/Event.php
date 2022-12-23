@@ -556,7 +556,11 @@ class Event extends Model
 
     public function examAccess( $user,$accessMonths = 2, $checkForCetification = true){
 
-        $periodAfterHasCourse = $this->period($user);
+        if($accessMonths < 1){
+            $periodAfterHasCourse = $this->progress($user);
+        }else{
+            $periodAfterHasCourse = $this->period($user);
+        }
 
         $studentsEx = [1353,1866,1753,1882,1913,1923];
 
@@ -570,7 +574,11 @@ class Event extends Model
 
         if(!$event->created_at || $event->pivot->comment == 'enroll||0' || (strpos($event->pivot->comment, 'enroll from') !== false && explode('||', $event->pivot->comment)[1] == 0)){
             return false;
+        }else if( $event->pivot->comment == 'enroll||1' || (strpos($event->pivot->comment, 'enroll from') !== false && explode('||', $event->pivot->comment)[1] == 1)){
+            $periodAfterHasCourse = $accessMonths;
         }
+
+
 
         $certification = $checkForCetification && count($this->certificatesByUser($user->id)) > 0;
 

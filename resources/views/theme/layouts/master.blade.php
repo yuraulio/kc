@@ -148,7 +148,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 @if (!Auth::check())
 
-   
+
 
 <div  class="login-popup-wrapper">
 
@@ -161,7 +161,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <p>Access your courses, schedule & files.</p>
         </div>
         <div class="alert-outer" hidden>
-					
+
 						<div class="alert-wrapper error-alert">
 							<div class="alert-inner">
 								<p id="account-error"></p>
@@ -171,18 +171,18 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 				<!-- /.alert-outer -->
 	    </div>
         <form autocomplete="off" class="login-form">
-         
+
 
             <label>Email <span class="required">(*)</span></label>
             <div class="input-wrapper input-wrapper--text input-wrapper--email">
                 <input type="text" id="email" autocomplete="off">
 
             </div>
-            
+
             </br>
 
             <label> Password <span class="required">(*)</span></label><span data-id="password" class="icon"><img width="20" src="{{cdn('/theme/assets/images/icons/eye-password.svg')}}" alt="">Show</span>
-            <div class="input-wrapper input-wrapper--text">    
+            <div class="input-wrapper input-wrapper--text">
                 <input type="password"  id="password" autocomplete="off">
             </div>
 
@@ -205,7 +205,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         {!!csrf_field()!!}
 
         <div id="error-mail" class="alert-outer" hidden>
-					
+
                     <div class="alert-wrapper error-alert">
                         <div class="alert-inner">
                             <p id="message-error"></p>
@@ -218,7 +218,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                            <div class="container">
                               <div class="alert-wrapper success-alert">
                                  <div class="alert-inner">
-                                 <p id="message-success"></p>                                   
+                                 <p id="message-success"></p>
                                 </div>
                               </div>
                            </div>
@@ -226,12 +226,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                         </div>
 
             <div class="input-wrapper input-wrapper--text input-wrapper--email">
-            <div class="input-safe-wrapper">	
+            <div class="input-safe-wrapper">
                 <span class="icon"><img width="14" src="{{cdn('/theme/assets/images/icons/icon-email.svg')}}" alt=""></span>
-                <input type="email"  placeholder="Email" name="email" id="email-forgot" class="required"> 
+                <input type="email"  placeholder="Email" name="email" id="email-forgot" class="required">
             </div>
             </div>
-           
+
             <button type="button" class="btn btn--lg btn--secondary change-password"  value="Change">Change</button>
         </form>
     </div><!-- ./login-popup -->
@@ -273,14 +273,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         $('#success-mail').hide()
         //console.log($(".change-password-form").serialize());
         var email = document.getElementById('email-forgot').value
-        
+
         if(email!=''){
-        
+
             $.ajax({ url: '/myaccount/reset', type: "post",
-                    
+
                     data: {"email": email},
                     success: function(data) {
-                        
+
                         if(data['success']){
                             $('#success-mail').show()
                             var p = document.getElementById('message-success').textContent = data['message'];
@@ -296,7 +296,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
                         }
                     },
-                
+
                 });
         }
 
@@ -308,12 +308,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <script>
 $(document).on('click', '#forgot-pass', function(e){
     $('#login-popup').hide()
-    $('#forgot-pass-input').show()    
+    $('#forgot-pass-input').show()
 })
 
 $(document).on('click', '.close-btn', function(e){
     $('#login-popup').show()
-    $('#forgot-pass-input').hide()    
+    $('#forgot-pass-input').hide()
 })
 
 </script>
@@ -335,7 +335,7 @@ $(document).on('click', '.close-btn', function(e){
 
       <script>
             $(document).ready(function(){
-                     @foreach($tigran as $key => $ti) 
+                     @foreach($tigran as $key => $ti)
                         dataLayer.push({"{{$key}}": $.parseHTML("{{$ti}}")[0].data})
                      @endforeach
             });
@@ -343,7 +343,7 @@ $(document).on('click', '.close-btn', function(e){
 
    @endif
 
-   
+
    <script>
 
         let url = window.location.href.split('#')
@@ -369,7 +369,7 @@ $(document).on('click', '.close-btn', function(e){
 
     $('.icon').click(function(){
         let input = $(`#${$(this).data('id')}`);
-    
+
 
         if(input.attr('type') === "password"){
             input.attr('type','text')

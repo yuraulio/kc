@@ -65,7 +65,7 @@
                         @endif--}}
                         @if (Auth::check())
                         <li class="account-menu">
-                           <a href="javascript:void(0)" title="Login to your account."><img src="{{cdn('/theme/assets/images/icons/knowcrunch-superhero-icons-login.svg')}}" class="replace-with-svg" alt="Login to your account."></a>
+                           <a href="javascript:void(0)" title="Go to my account."><img src="{{cdn('/theme/assets/images/icons/knowcrunch-superhero-icons-login.svg')}}" class="replace-with-svg" alt="Go to my account."></a>
                            <div class="account-submenu">
                               <ul>
                                  <li><a href="/myaccount">Account</a></li>

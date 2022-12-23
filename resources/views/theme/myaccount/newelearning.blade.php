@@ -478,7 +478,7 @@
                                             @if($folderIsSelected)
                                                 <li id="{{$folder['dirname']}}" data-folder-id="{{$topic_name}}" class="resource hidden">
                                                     <a class="download-file getdropboxlink"  data-dirname="{{ $file['dirname'] }}" data-filename="{{ $file['filename'] }}" href="javascript:void(0)" ><img
-                                                        src="/theme/assets/images/icons/access-files.svg"
+                                                        src="/theme/assets/images/icons/Access-Files.svg"
                                                         alt="download resource" />{{ $file['filename'] }}</a
                                                         >
                                                     <span class="last-modified">Last modified:  {{$file['last_mod']}}</span>
@@ -488,7 +488,7 @@
                                                     @if($file['dirname'] == $selectedFile)
                                                         <li id="{{$folder['dirname']}}" data-folder-id="{{$topic_name}}" class="resource hidden">
                                                             <a class="download-file getdropboxlink"  data-dirname="{{ $file['dirname'] }}" data-filename="{{ $file['filename'] }}" href="javascript:void(0)" ><img
-                                                                src="/theme/assets/images/icons/access-files.svg"
+                                                                src="/theme/assets/images/icons/Access-Files.svg"
                                                                 alt="download resource" />{{ $file['filename'] }}</a
                                                                 >
                                                             <span class="last-modified">Last modified:  {{$file['last_mod']}}</span>
@@ -530,7 +530,7 @@
                                                     @if($folderIsSelected)
                                                         <li id="{{$folder_bonus['dirname']}}" data-folder-id="{{$topicNames[$folder_bonus['parent']]}}" class="resource bonus-files hidden">
                                                             <a class="download-file getdropboxlink"  data-dirname="{{ $file_bonus['dirname'] }}" data-filename="{{ $file_bonus['filename'] }}" href="javascript:void(0)" ><img
-                                                                src="/theme/assets/images/icons/access-files.svg"
+                                                                src="/theme/assets/images/icons/Access-Files.svg"
                                                                 alt="download resource" />{{ $file_bonus['filename'] }}</a>
                                                             <span class="last-modified">Last modified:  {{$file_bonus['last_mod']}}</span>
                                                         </li>
@@ -542,7 +542,7 @@
 
                                                                 <li id="{{$folder_bonus['dirname']}}" data-folder-id="{{$topicNames[$folder_bonus['parent']]}}" class="resource bonus-files hidden">
                                                                     <a class="download-file getdropboxlink"  data-dirname="{{ $file_bonus['dirname'] }}" data-filename="{{ $file_bonus['filename'] }}" href="javascript:void(0)" ><img
-                                                                        src="/theme/assets/images/icons/access-files.svg"
+                                                                        src="/theme/assets/images/icons/Access-Files.svg"
                                                                         alt="download resource" />{{ $file_bonus['filename'] }}</a>
                                                                     <span class="last-modified">Last modified:  {{$file_bonus['last_mod']}}</span>
                                                                 </li>
