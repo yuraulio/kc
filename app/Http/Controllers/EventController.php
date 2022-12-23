@@ -382,6 +382,7 @@ class EventController extends Controller
      */
     public function edit(Event $event)
     {
+        //dd($show_popup);
         //$faq = Faq::find(16);
         //dd($faq->category);
 
@@ -523,6 +524,7 @@ class EventController extends Controller
      */
     public function update(Request $request, Event $event)
     {
+        $show_popup = false;
         if($request->published == 'on')
         {
             $published = 1;
@@ -533,8 +535,7 @@ class EventController extends Controller
             $published_at = $event->published_at;
         }
 
-        //dd($request->all());
-        //dd($request->release_date_files);
+        $old_status = $event->status;
 
         $launchDate = $request->launch_date ? date('Y-m-d',strtotime($request->launch_date)) : $published_at;
 
@@ -551,7 +552,8 @@ class EventController extends Controller
         //dd($request->all());
         $event_has_updated = $event->update($request->all());
 
-        if($event_has_updated && ($request->status == 2 || $request->status == 3 || $request->status == 1)){
+        if($event_has_updated && ($request->status == 2 || $request->status == 3 || $request->status == 1) && ($old_status != 2 && $old_status != 3 && $old_status != 1)){
+            $show_popup = true;
             dispatch((new EventSoldOut($event->id))->delay(now()->addSeconds(3)));
         }
 
@@ -706,8 +708,8 @@ class EventController extends Controller
             dispatch((new EnrollStudentsToElearningEvents($event->id, false, false))->delay(now()->addSeconds(3)));
         }
 
-        return back()->withStatus(__('Event successfully updated.'));
-        //return redirect()->route('events.edit',$event->id)->withStatus(__('Event successfully created.'));
+        //return back()->withStatus(__('Event successfully updated.'));
+        return redirect()->route('events.edit',['event'=>$event->id, 'show_popup'=>$show_popup])->withStatus(__('Event successfully created.'));
         //return redirect()->route('events.index')->withStatus(__('Event successfully updated.'));
     }
 

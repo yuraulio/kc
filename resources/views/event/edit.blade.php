@@ -7,6 +7,7 @@
 
 
 @section('content')
+
     @component('layouts.headers.auth')
     @component('layouts.headers.breadcrumbs')
 
@@ -20,6 +21,14 @@
     @endcomponent
 
     @include('admin.upload.upload_new', ['from' => 'event_info'])
+    <?php
+
+
+        $uri = \Request::input();
+
+        $show_popup = isset($uri['show_popup']) ? $uri['show_popup'] : 0
+
+    ?>
 
     <div class="container-fluid mt--6">
         <div class="row">
@@ -3582,6 +3591,26 @@ var datePickerOptions = {
         });
 
     }
+</script>
+<script>
+    $( document ).ready(function() {
+        let show_popup = @json($show_popup)
+
+        if(show_popup == 1){
+
+            Swal.fire({
+                type: 'info',
+                title: 'Please allow 1 minute for changes to take effects',
+                text: '',
+                footer: ''
+            })
+
+
+
+        }
+
+
+    });
 </script>
 
 @endpush

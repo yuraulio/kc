@@ -46,7 +46,7 @@
 								?>
 
                                 <li class="account-menu login-pad">
-									<a href="javascript:void(0)" title="Login to your account.">
+									<a href="javascript:void(0)" title="Go to my account">
 
 										<img class="login-image" src="{{cdn($img_src)}}" onerror="this.src='{{cdn('/theme/assets/images/icons/user-circle-placeholder.svg')}}'" alt="user-profile-placeholder-image"/>
 

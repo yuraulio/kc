@@ -1268,6 +1268,7 @@ img.topic-progress{
   -o-transition: 300ms all ease;
   -webkit-transition: 300ms all ease;
   transition: 300ms all ease;
+  text-decoration: unset;
 }
 
 .resource-list .last-modified{ display: block; line-height: 1.2; color: #419cff; font-size: 15px; margin-left: 2.8rem;}

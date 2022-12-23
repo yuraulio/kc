@@ -579,6 +579,8 @@ class Event extends Model
             $periodAfterHasCourse = $accessMonths;
         }
 
+
+
         $certification = $checkForCetification && count($this->certificatesByUser($user->id)) > 0;
 
         return $periodAfterHasCourse >=  $accessMonths && !$certification;

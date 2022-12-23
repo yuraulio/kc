@@ -358,7 +358,8 @@ input[type="number"]#mobile_phone::-webkit-inner-spin-button {
 }
 
 #favDialog1,
-#examDialog {
+#examDialog,
+#closeDialog {
     position: fixed;
     z-index: 9999;
     text-align: center;
@@ -788,6 +789,22 @@ h3.important-notice {
     position: relative;
     float: right;
     top: 10px;
+    background-color: #d8d8d8;
+    color: #ffffff;
+}
+
+.btn-exit-exam {
+    position: relative;
+    float: left;
+    top: 20px;
+    background-color: #d8d8d8;
+    color: #ffffff;
+}
+
+.btn-not-exit-exam {
+    position: relative;
+    float: right;
+    top: 20px;
     background-color: #d8d8d8;
     color: #ffffff;
 }
