@@ -1297,9 +1297,24 @@ class Subscription extends Model
         return SubscriptionFactory::new();
     }
 
-    public function event(){
+    /*public function event(){
         return $this->belongsToMany(Event::class,'subscription_user_event')->withPivot('event_id','expiration')->with('plans');
-    }
+    }*/
+
+
+    public function event(){
+        return $this->belongsToMany(Event::class,'subscription_user_event')->withPivot('event_id','expiration')
+         ->with([
+             'plans',
+             'certificates' => function($certificate){
+                 //dd($certificate->first());
+                 $user = $this->id;
+                 return $certificate->where('show_certificate',true)->whereHas('user', function ($query) use($user){
+                     $query->where('id', $user);;
+                 });
+             }
+         ]);
+     }
 
     public function transactions(){
         return $this->morphToMany(Transaction::class, 'transactionable');
