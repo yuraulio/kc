@@ -55,7 +55,7 @@
 
 								</div>
 
-                            <button id="submitPass" class="btn btn--md btn--secondary">START THE EXAM NOW</button>
+                            <button id="submitPass" class="btn btn-lg button-secondary-next">START YOUR EXAM NOW</button>
 
 					</div>
 
@@ -107,7 +107,7 @@
 
                     <div class="">
 
-                        <button id="submitPassΝο" class="btn btn--secondary btn--md">START THE EXAM NOW</button>
+                        <button id="submitPassΝο" class="btn btn-lg button-secondary-next">START YOUR EXAM NOW</button>
 
 					</div>
 
