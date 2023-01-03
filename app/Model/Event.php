@@ -690,10 +690,6 @@ class Event extends Model
                     $sum++;
                 }
 
-                else if($this->id == 2304){
-                   // dd($video);
-                }
-
             }
             return $sum.' of '.count($videos);
         }
