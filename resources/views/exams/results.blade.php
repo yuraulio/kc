@@ -6,7 +6,7 @@
 
     <div class="col-md-12">
 
-        <div class="card" >
+        {{--<div class="card" >
 
             <div class="card-header">
 
@@ -18,7 +18,7 @@
 
             </div>
 
-        </div>
+        </div>--}}
 
         <div class = "row border-bot">
 
@@ -26,15 +26,16 @@
 
 
 
-                    <div class="col-md-6 chart">
-                        <!-- Chart wrapper -->
-                        <canvas id="chart-pie" style="height: 370px; width: 100%;" class="chart-canvas"></canvas>
-                    </div>
+            <div class="col-md-6 chart">
+                <!-- Chart wrapper -->
+                <canvas id="chart-pie" style="height: 370px; width: 100%;" class="chart-canvas"></canvas>
+            </div>
 
 
 
 
-            <div class="col-md-6 success-fail-text @if($success) pass @else fail @endif">
+            <div class="col-md-6 success-fail-text">
+                <h2 style="font-weight:700">Thank you for taking your exam with us.<br>Here are your results.</h2>
                 <?php
 
                     if (isset($_GET['s'])) {
@@ -51,7 +52,7 @@
                     }
                 ?>
 
-            <p> <span class="score"> Score :</span> {{ $score }}%</p>
+           {{-- <p> <span class="score"> Score :</span> {{ $score }}%</p> --}}
 
             @if(isset($_GET['t']))
                 {!! $endOfTime !!}
@@ -59,31 +60,68 @@
             </div>
 
             </div>
+            <div class="row action-wrapper">
+                <div class="col-sm-12 col-md-6 col-lg-6">
+                    <h2 class="text-sm-center text-md-left text-lg-left" style="font-weight:700">Your answers summary</h2>
+                </div>
 
-        <div class="action">
-            <button class="btn" type="button"  onclick="closee()" id ="closee"> close </button>
-            @if($showAnswers)
-            <button class="btn" type="button" onclick="viewResults()" id="view-results"> view results </button>
-            <button class="btn" type="button" onclick="hideResults()" id="hide-results"> hide results </button>
-            @endif
+                <div class="col-sm-12 col-md-6 col-lg-6 text-sm-center text-md-right text-lg-right">
+                    @if($showAnswers)
+                    <button class="btn button-quaternary" type="button" onclick="toggleResults()" id="toggle-results"> SHOW/HIDE ANSWERS SUMMARY </button>
+                    @endif
+                </div>
+            </div>
 
-        </div>
+
+
+
 
         <div class="row ">
             @if($showAnswers)
-            <div id="answers">
+            <div class="col-12" id="answers">
 
                     @foreach($answers as $key => $answer)
                     <div class="col-md-12">
-                        <h3><div class="resulttitle">({{$key+1}}). {!! $answer['question'] !!}</div></h3>
-                        @if($indicate_crt_incrt_answers)
-                            <p class="result_answer {{$answer['classname']}}"> Your Answer :{!! $answer['given_answer'] !!} </p>
-                        @endif
+                        <div class="row resulttitle">
+                            <div class="col-1">
+                                <span>{{$key+1}}</span>
+                            </div>
+                            <div class="col-11 question-title">
+                                <h4>{!! $answer['question'] !!}</h4>
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-sm-12 col-md-3 col-lg-3 desc-answer">
+                                            <p>Correct Answer:</p>
+                                        </div>
+                                        <div class="col-sm-12 col-md-9 col-lg-9 desc-question">
+                                            @if($displayCorrectAnswer)
+                                                <p class="result_answer">{!! $answer['correct_answer'] !!}</p>
+                                            @endif
+                                        </div>
 
-                        @if($displayCorrectAnswer)
-                            <p class="result_answer"> Correct Answer : {!! $answer['correct_answer'] !!}</p>
-                        @endif
+                                        <div class="col-sm-12 col-md-3 col-lg-3 desc-answer">
+                                            <p>Your Answer:</p>
+                                        </div>
+                                        <div class="col-sm-12 col-md-9 col-lg-9 desc-question">
+                                            @if($indicate_crt_incrt_answers)
+                                                <p class="result_answer {{$answer['classname']}}"> {!! $answer['given_answer'] !!} </p>
+                                            @endif
+                                        </div>
+
+
+
+                                    </div>
+                                </div>
+
+
+
+
+                            </div>
+                        </div>
+
+
                     </div>
+                    <hr>
                     @endforeach
 
                 </div>
@@ -194,39 +232,23 @@
         var score = <?php echo $score;?>
 
 
-        @if($success)
-
-            const data = {
-
-                labels: ['correct','incorrect'],
-                datasets: [{
-                    data: [score,100-score],
-                    backgroundColor: [
-                      'green',
-                      'grey',
-
-                    ],
-                    borderWidth:5,
-
-                }]
-            };
 
 
-        @else
-            const data = {
-                labels: ['correct','incorrect'],
-                    datasets: [{
-                    data: [score,100-score],
-                    backgroundColor: [
-                      'red',
-                      'grey',
+        const data = {
 
-                    ],
-                    borderWidth:5,
+            labels: ['correct','incorrect'],
+            datasets: [{
+                data: [score,100-score],
+                backgroundColor: [
+                    'green',
+                    'red',
 
-                }]
-            };
-        @endif
+                ],
+                borderWidth:5,
+
+            }]
+        };
+
 
         var $this = document.getElementById("chart-pie").getContext("2d");
         //var $this = $("#chart-pie")
@@ -243,6 +265,13 @@
                     minFontSize: 25, // Default is 20 (in px), set to false and text will not wrap.
                     lineHeight: 25 // Default is 25 (in px), used for when text wraps
                   }
+                },
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        padding: 30,
+                        boxWidth: 10
+                    }
                 }
             }
         });
@@ -264,25 +293,28 @@
 
     }
     @if($showAnswers)
-        function viewResults(){
-
-            document.getElementById("answers").style.display = "block";;
-            document.getElementById("hide-results").style.display = "inline";;
-            document.getElementById("view-results").style.display = "none";;
-
-            //$("#answers").css({"display": "block"});
-
+        function toggleResults(){
+            $('#answers').toggle();
         }
+        // function viewResults(){
 
-        function hideResults(){
+        //     document.getElementById("answers").style.display = "block";;
+        //     document.getElementById("hide-results").style.display = "inline";;
+        //     document.getElementById("view-results").style.display = "none";;
 
-            document.getElementById("answers").style.display = "none";;
-            document.getElementById("hide-results").style.display = "none";;
-            document.getElementById("view-results").style.display = "inline";;
+        //     //$("#answers").css({"display": "block"});
 
-            //$("#answers").css({"display": "block"});
+        // }
 
-        }
+        // function hideResults(){
+
+        //     document.getElementById("answers").style.display = "none";;
+        //     document.getElementById("hide-results").style.display = "none";;
+        //     document.getElementById("view-results").style.display = "inline";;
+
+        //     //$("#answers").css({"display": "block"});
+
+        // }
     @endif
 </script>
 @stop

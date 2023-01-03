@@ -122,7 +122,7 @@
 
     @endif
 
-    <script type="application/javascript">
+    <script>
 
         jQuery(document).ready(function(){
 

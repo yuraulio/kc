@@ -10,15 +10,24 @@ $minutes = 0;
 <a href="#" title="Close window" class="close"></a>
 				<div class="container clearfix">
                     <div class="row">
-                        <div class="logo-area col-md-2 col-sm-12 text-sm-center">
+                        {{--<div class="logo-area col-sm-12 col-md-2 col-lg-2 text-sm-center">
                             <a href="/" class="logo">Know Crunch</a>
                         </div>
-                        <div class="title-area col-md-7 col-sm-12">
+                        <div class="title-area col-sm-12 col-md-7 offset-md-1 col-lg-7 offset-lg-0">
                             <h1>{{ $event_title }}</h1>
                         </div>
-                        <div class="menu-area col-md-3 col-sm-12">
+                        <div class="menu-area col-sm-12 col-md-2 col-lg-3 text-right">
+--}}
+                        <div class="logo-area col-sm-12 col-md-2 col-lg-2 text-sm-center">
+                            <a href="/" class="logo">Know Crunch</a>
+                        </div>
+                        <div class="title-area col-sm-12 col-md-9 offset-md-1 col-lg-5 offset-lg-1">
+                            <h1>{{ $event_title }}</h1>
+                        </div>
+                        <div class="menu-area col-sm-12 col-md-12 col-lg-3 text-right">
 
-                            <div class="header-actions clearfix">
+                            {{--<div class="header-actions clearfix">--}}
+                            <div class="clearfix">
                                 <ul class="actions-list">
 
                                     <?php
@@ -30,10 +39,11 @@ $minutes = 0;
                                     <li class="account-menu login-pad">
                                         <div class="event-name">
                                             <h5>{{ Auth::user()->firstname.' '.Auth::user()->lastname }}</h5>
+                                            <img class="login-image" src="{{cdn($img_src)}}" onerror="this.src='{{cdn('/theme/assets/images/icons/user-circle-placeholder.svg')}}'" alt="user-profile-placeholder-image"/>
                                         </div>
                                         <div class="event-name-icon" href="javascript:void(0)">
 
-                                            <img class="login-image" src="{{cdn($img_src)}}" onerror="this.src='{{cdn('/theme/assets/images/icons/user-circle-placeholder.svg')}}'" alt="user-profile-placeholder-image"/>
+
 
                                         </div>
                                         <div class="time_remaining_header" hidden>

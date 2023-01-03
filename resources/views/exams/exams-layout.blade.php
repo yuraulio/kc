@@ -131,7 +131,7 @@
 
 
 
-        <main style="margin-top: 13rem;" class="">
+        <main id="exam-app">
 
             @yield('content')
 

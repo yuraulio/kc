@@ -939,13 +939,13 @@ window.actQues = 0;
 
         <div class="col-12">
             <div class="row justify-content-between">
-                <div style="display:flex" class="col-sm-12 mark_question_details">
-                    <p><span class="icon unanswered">&#9632;</span> unanswered </p>
-                    <p><span class="icon answered">&#9632;</span> answered </p>
-                    <p><span class="icon answer_later">&#9632;</span> answer later </p>
+                <div style="display:flex" class="col-sm-12 col-md-auto col-lg-5 mark_question_details">
+                    <p class="unanswered"><span class="icon">&#9632;</span> <span class="text">unanswered</span> </p>
+                    <p class="answered"><span class="icon">&#9632;</span> <span class="text">answered</span> </p>
+                    <p class="answer_later"><span class="icon">&#9632;</span> <span class="text">answer later</span> </p>
                 </div>
                 @if(Request::segment(1) == 'exam-start')
-                <div class="col-sm-12 finish-exams">
+                <div class="col-sm-12 col-md-auto col-lg-7 finish-exams text-right">
                         <button class="btn btn-lg btn-danger button finish" disabled type="submit" onclick="finishExam();" id="ExamFinish">SUBMIT YOUR EXAM</button>
                 </div>
                 @endif
