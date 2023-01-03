@@ -113,6 +113,7 @@
 							$("#inst1").html('I will pay in full: €' +  data['new_price']);
 							$("#inst2").text('I will pay in 2 installments: 2x €' + data['newPriceInt2']);
 							$("#inst3").text('I will pay in 3 installments: 3x €' +  data['newPriceInt3']);
+							$("#inst4").text('I will pay in 4 installments: 4x €' +  data['newPriceInt4']);
 
 							//let p = `<p><img src="{{cdn('/theme/assets/images/icons/alert-icons/icon-success-alert.svg')}}" alt="Info Alert">` + data['message']+ `</p>`
 

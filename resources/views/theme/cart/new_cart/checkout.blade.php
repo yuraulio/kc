@@ -37,6 +37,7 @@
                 $instOne = $price;
         	    $instTwo = round($price / 2, 2);
         	    $instThree = round($price / 3, 2);
+				$instFour = round($price / 4, 2);
 
 				//$instTwo = number_format($instTwo , 2 , '.', '');
 				//$instThree = number_format($instThree , 2 , '.', ',');
@@ -60,6 +61,12 @@
                     $instThree = number_format($instThree , 0 , '.', ',');
                 }
 
+				if($instFour - floor($instFour)>0){
+                    $instFour = number_format($instFour , 2 , '.', ',');
+                }else{
+                    $instFour = number_format($instFour , 0 , '.', ',');
+                }
+
         	?>
         	<div class="col-md-6 col-xl-6 selection-order">
 			<h1 class="hidden-lg">Checkout</h1>				
@@ -81,6 +88,10 @@
 							<div class="custom-control custom-radio mb-3">
 								<input type="radio" id="customRadio3" name="installments" value="3" class="custom-control-input">
 								<label class="custom-control-label" for="customRadio3"></label><p id="inst3">I will pay in 3 installments: 3x €{{$instThree}}</p>
+							</div>
+							<div class="custom-control custom-radio mb-3">
+								<input type="radio" id="customRadio4" name="installments" value="4" class="custom-control-input">
+								<label class="custom-control-label" for="customRadio4"></label><p id="inst4">I will pay in 4 installments: 4x €{{$instFour}}</p>
 							</div>
 						</div>
 						<div class="card-info">

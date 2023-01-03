@@ -1078,10 +1078,7 @@ class StudentController extends Controller
                 if($examAccess){
 
                     $adminemail = 'info@knowcrunch.com';
-
-
-
-
+                    
                     $data['firstName'] = $user->firstname;
                     $data['eventTitle'] = $event->title;
                     $data['fbGroup'] = $event->fb_group;
