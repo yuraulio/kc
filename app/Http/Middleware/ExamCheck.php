@@ -58,9 +58,13 @@ class ExamCheck
                 return in_array($event->id, $userEvents);
 
             }else if($event && $event->is_elearning_course()){
-                $event = $user->events_for_user_list()->wherePivot('event_id',$event->id)->first();
+                $eventId = $event->id;
+              	$event = $user->events_for_user_list()->wherePivot('event_id',$event->id)->first();
+              	if(!$event){
+                    $event = $user->subscriptionEvents->where('id',$eventId)->first();
+                }
                 //return$event->examAccess($user,0.8,false,false);
-                return$event->examAccess($user, 2, false);
+                return $event->examAccess($user, 2, false);
             }
 
 

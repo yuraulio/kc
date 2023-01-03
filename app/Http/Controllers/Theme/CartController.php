@@ -1697,6 +1697,7 @@ class CartController extends Controller
                 $instOne = $newPrice * $request->totalItems;
                 $instTwo = round($newPrice / 2, 2) * $request->totalItems;
                 $instThree = round($newPrice / 3, 2) * $request->totalItems;
+                $instFour = round($newPrice / 4, 2) * $request->totalItems;
 
                 if($instOne - floor($instOne)>0){
                     $instOne = number_format($instOne , 2 , '.', ',');
@@ -1716,6 +1717,12 @@ class CartController extends Controller
                     $instThree = number_format($instThree , 0 , '.', ',');
                 }
 
+                if($instFour - floor($instFour)>0){
+                    $instFour = number_format($instFour , 2 , '.', ',');
+                }else{
+                    $instFour = number_format($instFour , 0 , '.', ',');
+                }
+
                 //dd($instOne);
 
                 return response()->json([
@@ -1725,6 +1732,7 @@ class CartController extends Controller
                     'priceOf' => $priceOf,
                     'newPriceInt2' => $instTwo,
                     'newPriceInt3' => $instThree,
+                    'newPriceInt4' => $instFour,
                     'message' => 'Success! Your coupon has been accepted.',
                     'coupon_code' => $request->coupon,
 

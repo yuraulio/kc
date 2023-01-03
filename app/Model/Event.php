@@ -304,7 +304,7 @@ class Event extends Model
         foreach($lessons as $key => $lesson1){
 
             $sum1 = 0;
-
+            $topicsSeen[$key] = 0;
             foreach($lesson1 as $key1 => $lesson){
                 $sum = 0;
 
@@ -365,12 +365,17 @@ class Event extends Model
 
                 $vimeoVideo = explode("/",$lesson->vimeo_video);
                 $vimeoVideo = end( $vimeoVideo );
-                $topicsSeen[$key] = isset($videos[$vimeoVideo]) && (int) $videos[$vimeoVideo]['seen'] == 1? true : false;
+
+                if(isset($videos[$vimeoVideo]) && (int) $videos[$vimeoVideo]['seen'] == 1){
+                    $topicsSeen[$key]++;
+                }
+                
                 $sum1 = $sum1 + $sum;
                 $data['keys'][$key] = $sum1;
 
             }
-
+            $topicsSeen[$key] = $topicsSeen[$key] == count($lesson1);
+            
         }
 
 
@@ -683,6 +688,10 @@ class Event extends Model
             foreach($videos as $video){
                 if($video['seen'] == 1 || $video['seen'] == '1'){
                     $sum++;
+                }
+
+                else if($this->id == 2304){
+                   // dd($video);
                 }
 
             }
@@ -1178,6 +1187,16 @@ class Event extends Model
 
         $this->allLessons()->detach(array_keys($or));
         $this->allLessons()->attach($or);
+
+    }
+
+
+    public function getAccessInMonths(){
+
+        $eventInfo = $this->event_info1;
+        $accessMonths = isset($eventInfo['course_elearning_expiration']) ? $eventInfo['course_elearning_expiration'] : 0;
+
+        return $accessMonths;
 
     }
 

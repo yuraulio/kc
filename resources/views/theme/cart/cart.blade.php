@@ -2034,6 +2034,7 @@ $(document).ready(function(){
                   $('.ticket-coupon').text('€' + "{{ $item->qty }}" * data['new_price']);
                   $('.ticket-coupon-inst2').text('€' + "{{ $item->qty }}" * data['newPriceInt2']);
                   $('.ticket-coupon-inst3').text('€' + "{{ $item->qty }}" * data['newPriceInt3']);
+                  $('.ticket-coupon-inst4').text('€' + "{{ $item->qty }}" * data['newPriceInt4']);
 
                   let p = `<p><img src="{{cdn('/theme/assets/images/icons/alert-icons/icon-success-alert.svg')}}" alt="Info Alert">` + data['message']+ `</p>`
 

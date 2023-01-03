@@ -524,8 +524,8 @@ class InfoController extends Controller
                     $today = date('Y/m/d'); 
                    
 
-                    if($thisevent->expiration){
-                        $monthsExp = '+' . $thisevent->expiration .'months';
+                    if($thisevent->getAccessInMonths() > 0){
+                        $monthsExp = '+' . $thisevent->getAccessInMonths() .'months';
                         $expiration_date = date('Y-m-d', strtotime($monthsExp, strtotime($today)));
                     }
                     //$thisevent->users()->where('id',$checkemailuser)->detach();
@@ -753,8 +753,8 @@ class InfoController extends Controller
                 $today = date('Y/m/d'); 
                 $expiration_date = '';
 
-                if($thisevent->expiration){
-                    $monthsExp = '+' . $thisevent->expiration .'months';
+                if($thisevent->getAccessInMonths() > 0){
+                    $monthsExp = '+' . $thisevent->getAccessInMonths() .'months';
                     $expiration_date = date('Y-m-d', strtotime($monthsExp, strtotime($today)));
                 }
 

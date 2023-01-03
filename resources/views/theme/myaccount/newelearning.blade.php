@@ -1022,7 +1022,6 @@
 
 
              this.videoPlayers[frame].on('ended', function(ended) {
-                console.log('has ended video')
              if(ended['percent'] == 1){
                nextVideo();
                closeTopic()
@@ -1528,8 +1527,7 @@
             })
 
             $(window).on('load', function() {
-                console.log('on load function')
-
+               
               setTimeout( function(){
                 //scrollIsWatchingClass()
               var container = $('.sidebar-wrapper'),

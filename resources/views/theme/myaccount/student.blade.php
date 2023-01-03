@@ -2248,6 +2248,8 @@
 
    }
 </script>
+
+@if(isset($eventsUnPaid))
 <script>
     $(document).ready(function() {
         let events = @json($eventsUnPaid);
@@ -2269,6 +2271,8 @@
 
     })
 </script>
+@endif
+
 <script>
    $(document).ready(function() {
 
