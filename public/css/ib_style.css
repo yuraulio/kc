@@ -690,6 +690,25 @@ a.cd-top:hover {
   opacity: 1;
 }
 
+.buttons-wrapper{
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+}
+
+.details-end-exam{
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    flex-direction: row;
+}
+
+.close-dialog-buttons{
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
  /* iPad Mini in portrait only */
  @media only screen
  and (min-device-width : 744px)
@@ -704,8 +723,28 @@ a.cd-top:hover {
     display: none;
     }
 
+    .details-end-exam{
+        justify-content: center;
+    }
+
 
   }
+
+  /* Ipad Pro */
+@media only screen
+ and (min-device-width : 768px)
+ and (max-device-width : 954px){
+    #exam-app .row.border-bot,
+    #exam-app .row.resulttitle,
+    #exam-app .row.action-wrapper{
+        flex-wrap: nowrap;
+    }
+
+    #exam-app .question-title .row{
+        display: block;
+    }
+
+ }
 
 /* iPad Mini in portrait only */
 @media only screen
@@ -719,6 +758,10 @@ and (orientation : portrait) {
     #hover-palette-expand-arrow,
     #hover-palette-expand{
         display: none;
+    }
+
+    .details-end-exam{
+        justify-content: center;
     }
 
  }
@@ -777,12 +820,38 @@ and (orientation : portrait) {
     #exam-app{
         margin-top: 17rem;
     }
+
+    .details-end-exam{
+
+        justify-content: center;
+    }
+
+    .close-dialog-buttons{
+        justify-content: center;
+    }
+
+    .btn-exit-exam{
+        margin-bottom: 0.5rem
+    }
 }
 
 @media only screen and (max-width: 360px) {
 
     #exam-app{
         margin-top: 20rem;
+    }
+
+    .details-end-exam{
+
+        justify-content: center;
+    }
+
+    .close-dialog-buttons{
+        justify-content: center;
+    }
+
+    .btn-exit-exam{
+        margin-bottom: 0.5rem
     }
 }
 /* mobile */
@@ -805,6 +874,7 @@ and (max-device-width: 809px) {
     #hover-palette-expand{
         display: none !important;
     }
+
 }
 
 
@@ -1120,7 +1190,7 @@ h5 {
 
 #ExamFinish{
     border-radius: 0;
-    padding: .5rem 3rem;
+    padding: .5rem 3.5rem;
     margin: auto;
 }
 

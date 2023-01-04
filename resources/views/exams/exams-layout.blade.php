@@ -65,8 +65,8 @@
                 {{-- <a id="close-exam-dialog" href="javascript:void(0)" class="close-alert"><img src="{{cdn('/theme/assets/images/icons/alert-icons/icon-close-alert.svg')}}" alt="Close Alert"/></a>--}}
                 </div>
 
-                <div style="display:inline-flex;">
-                    <button style="margin-right: 1rem;" class="btn btn-exit-exam btn-sm go-to-account">Yes, exit my exam. </button>
+                <div class="close-dialog-buttons">
+                    <button class="btn btn-exit-exam btn-sm go-to-account">Yes, exit my exam. </button>
                     <button class="btn btn-not-exit-exam btn-sm go-to-account go-to-account">Do not exit, want to continue with my exam. </button>
                 </div>
 

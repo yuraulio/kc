@@ -766,7 +766,7 @@ window.actQues = 0;
 
                 <div id="arrow-expanded"></div>
 
-                <div style="display: none" id="hover-palette-expand"><p>Expand</p></div>
+                <div class="hidden" id="hover-palette-expand"><p>Expand</p></div>
 
 
 
@@ -904,7 +904,7 @@ window.actQues = 0;
 
 
         <div class="col-12">
-            <div class="row buttons-wrapper">
+            <div class="buttons-wrapper">
 
             <!-- col-sm-12 col-md-6 col-lg-3 -->
 
@@ -938,14 +938,14 @@ window.actQues = 0;
         </div>
 
         <div class="col-12">
-            <div class="row justify-content-between">
-                <div style="display:flex" class="col-sm-12 col-md-auto col-lg-5 mark_question_details">
+            <div class="details-end-exam">
+                <div style="display:flex" class="mark_question_details">
                     <p class="unanswered"><span class="icon">&#9632;</span> <span class="text">unanswered</span> </p>
                     <p class="answered"><span class="icon">&#9632;</span> <span class="text">answered</span> </p>
                     <p class="answer_later"><span class="icon">&#9632;</span> <span class="text">answer later</span> </p>
                 </div>
                 @if(Request::segment(1) == 'exam-start')
-                <div class="col-sm-12 col-md-auto col-lg-7 finish-exams text-right">
+                <div class="finish-exams">
                         <button class="btn btn-lg btn-danger button finish" disabled type="submit" onclick="finishExam();" id="ExamFinish">SUBMIT YOUR EXAM</button>
                 </div>
                 @endif
@@ -1138,10 +1138,10 @@ jQuery(document).ready(function(){
 
     function checkIfExpanded(){
         if($('.content1').hasClass('expanded')){
-            $('#hover-palette-expand').css('display', 'none')
+            $('#hover-palette-expand').addClass('hidden')
 
         }else{
-            $('#hover-palette-expand').css('display', 'block')
+            $('#hover-palette-expand').removeClass('hidden')
         }
     }
 
@@ -1158,7 +1158,7 @@ jQuery(document).ready(function(){
 
     $( ".content1" ).on('mouseleave', function(){
 
-        $('#hover-palette-expand').css('display', 'none')
+        $('#hover-palette-expand').addClass('hidden')
     });
 
     $('#pallete_list span').hover(function(){
