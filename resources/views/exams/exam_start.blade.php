@@ -30,6 +30,44 @@ var SPENT_TIME                      = [];
 var LOOP_AGAIN                      = 0;
 
 
+function scrollCurrentQuestionRow(){
+
+//var offset = $('.not-answered').offsetTop; // Contains .top and .left
+
+
+
+// console.log($('.136').offset())
+// let elem = $('.not-answered.106')
+
+
+// container.animate({
+//           scrollTop: elem.offset().top
+//       });
+
+const elementInScrollableDiv = document.querySelector('.active-question')
+const positionFromTopOfScrollableDiv = elementInScrollableDiv.offsetTop
+
+
+
+const scrollableDivElement = document.querySelector('.content1')
+
+scrollableDivElement.scrollTop = positionFromTopOfScrollableDiv - 10
+
+
+
+// const innerDivPos = document.querySelector('.active-question').offsetTop
+
+// console.log('offset: ', innerDivPos)
+
+// document
+//     .getElementById('container1')
+//     .scrollTo({ top: innerDivPos, behavior: 'smooth' })
+
+
+
+}
+
+
 
 // onclick of next button
 function nextQues(mark) {
@@ -170,6 +208,7 @@ function nextQues(mark) {
             }
         }
     }
+    scrollCurrentQuestionRow()
     TOTAL_NOT_ANSWERED  = jQuery(".not-answered").length;
     TOTAL_NOT_VISITED   = jQuery(".not-visited").length;
     TOTAL_MARKED = jQuery(".marked").length;
@@ -200,6 +239,8 @@ function prevQues() {
     } else {
       //  jQuery('.prev').removeClass('hide');
     }
+
+    scrollCurrentQuestionRow()
 }
 
 
@@ -232,13 +273,24 @@ function showSpecificQuestion(qid, changeactive) {
       //  jQuery('.prev').removeClass('hide');
     }
 
+    // remove active-question class
+
+    $.each($('#pallete_list li'), function(index, value){
+        if($(value).hasClass('active-question')){
+            $(value).removeClass('active-question')
+        }
+    })
+
 
     $('.question_div').css('display', 'none');
     $('#'+qid).css('display', 'block');
     $('#pallete_list li').css('border', 'none');
     $('#pallete_list li.'+qid).css('border', 'solid 2px black');
+    $('#pallete_list li.'+qid).css('border-radius', '20%');
     $('#pallete_list li').css('box-shadow', 'none');
-    $('#pallete_list li.'+qid).css('box-shadow', 'black 1px 2px 8px');
+    // $('#pallete_list li.'+qid).css('box-shadow', 'black 1px 2px 8px');
+    $('#pallete_list li.'+qid).addClass('active-question')
+
 }
 
 function clearAnswer() {
@@ -691,7 +743,38 @@ window.actQues = 0;
 <div class="container">
 
     <div class="row justify-content-center">
-        <div class="col-12">
+
+
+    <div class="col-12" style="margin-bottom: 2rem">
+        <div id="container1" class="container1">
+            <div class="header1">
+
+            </div>
+            <div class="content1">
+                <ul class="question-palette" id="pallete_list">
+                    <?php
+                    $i = 1;
+                    foreach($ex_contents as $exam_content_id => $ex_content) {
+                        if($i==1)
+                            $activeQuestion = $exam_content_id;
+                        ?>
+                        <li class="palette pallete-elements not-visited {{ $exam_content_id }}" onclick="showSpecificQuestion({{ $exam_content_id }}, 1);">
+                            <span>{{ $i++ }}</span>
+                        </li>
+                    <?php } ?>
+                </ul>
+
+                <div id="arrow-expanded"></div>
+
+                <div class="hidden" id="hover-palette-expand"><p>Expand</p></div>
+
+
+
+            </div>
+        </div>
+        <div class="hidden" id="hover-palette-expand-arrow"><p>Expand</p></div>
+    </div>
+        <div class="col-12" style="margin-bottom: 2rem">
 
             @if (session('status'))
                 <div class="alert alert-success" role="alert">
@@ -819,24 +902,26 @@ window.actQues = 0;
         </div>
 
 
+
         <div class="col-12">
-            <div class="row">
+            <div class="buttons-wrapper">
 
+            <!-- col-sm-12 col-md-6 col-lg-3 -->
 
-                            <button class="col-sm-12 col-md-6 col-lg-3 btn btn-lg button-secondary-previous button prev" type="button"  onclick="prevQues();" style="width: 250px;">
+                            <button class=" btn btn-lg button-secondary-previous button prev" type="button"  onclick="prevQues();" style="width: 25%; min-width: fit-content;">
                             <img src="{{cdn('new_cart/images/arrow-previous-white.svg')}}" width="20px" height="12px" alt="">
                             PREVIOUS QUESTION
                             </button>
 
-                            <button class="col-sm-12 col-md-6 col-lg-3 btn btn-lg button clear-answer button-quinary" type="button" onclick="clearAnswer();" style="width: 186px;">
+                            <button class=" btn btn-lg button clear-answer button-quinary" type="button" onclick="clearAnswer();" style="width: 20%; min-width: fit-content;">
                                 CLEAR
                             </button>
 
-                            <button class="col-sm-12 col-md-6 col-lg-3 btn btn-lg button next button-senary" style="width: 186px;" id="markbtn" type="button"  onclick="nextQues(1);" >
+                            <button class=" btn btn-lg button next button-senary" style="width: 20%; min-width: fit-content;" id="markbtn" type="button"  onclick="nextQues(1);" >
                                 ANSWER LATER
                             </button>
 
-                            <button class="col-sm-12 col-md-6 col-lg-3 btn btn-lg button-secondary-next button next" type="button" onclick="nextQues();" style="width: 250px;">
+                            <button class=" btn btn-lg button-secondary-next button next" type="button" onclick="nextQues();" style="width: 25%; min-width: fit-content;">
                                 NEXT QUESTION
                                 <img src="{{cdn('new_cart/images/arrow-next-white.svg')}}" width="20px" height="12px" alt="">
                             </button>
@@ -853,14 +938,14 @@ window.actQues = 0;
         </div>
 
         <div class="col-12">
-            <div class="row justify-content-between">
-                <div style="display:flex" class="col-sm-12 mark_question_details">
-                    <p><span class="icon unanswered">&#9632;</span> unanswered </p>
-                    <p><span class="icon answered">&#9632;</span> answered </p>
-                    <p><span class="icon answer_later">&#9632;</span> answer later </p>
+            <div class="details-end-exam">
+                <div style="display:flex" class="mark_question_details">
+                    <p class="unanswered"><span class="icon">&#9632;</span> <span class="text">unanswered</span> </p>
+                    <p class="answered"><span class="icon">&#9632;</span> <span class="text">answered</span> </p>
+                    <p class="answer_later"><span class="icon">&#9632;</span> <span class="text">answer later</span> </p>
                 </div>
                 @if(Request::segment(1) == 'exam-start')
-                <div class="col-sm-12 finish-exams">
+                <div class="finish-exams">
                         <button class="btn btn-lg btn-danger button finish" disabled type="submit" onclick="finishExam();" id="ExamFinish">SUBMIT YOUR EXAM</button>
                 </div>
                 @endif
@@ -868,46 +953,9 @@ window.actQues = 0;
         </div>
 
 
-        <div class="col-12">
-            <div class="container1">
-                <div class="header1"><span>Expand</span>
-
-                </div>
-                <div class="content1">
-                    <ul>
-                        <li>This is just some random content.</li>
-                        <li>This is just some random content.</li>
-                        <li>This is just some random content.</li>
-                        <li>This is just some random content.</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
 
 
 
-        <div class="col-12">
-
-            <div class="card text-center" style="margin: 10px 0px 25px 0px; width: auto; height:auto;">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <ul class="question-palette" id="pallete_list">
-                                <?php
-                                $i = 1;
-                                foreach($ex_contents as $exam_content_id => $ex_content) {
-                                    if($i==1)
-                                        $activeQuestion = $exam_content_id;
-                                    ?>
-                                    <li class="palette pallete-elements not-visited {{ $exam_content_id }}" onclick="showSpecificQuestion({{ $exam_content_id }}, 1);">
-                                        <span>{{ $i++ }}</span>
-                                    </li>
-                                <?php } ?>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-        </div>
 
                         {{--<!--
                                     <div class="card" style="margin: 0px 0px 25px 0px;">
@@ -1030,19 +1078,50 @@ window.actQues = 0;
         }, 1000 * 60);
     });
 
+    function preventScroll(e){
+        e.preventDefault();
+        e.stopPropagation();
+
+        return false;
+    };
+
 jQuery(document).ready(function(){
 
-    $(".header1").click(function () {
+    document.querySelector('.content1').addEventListener('wheel', preventScroll, {passive: false});
 
+
+
+    $(document).on('click', '.container1', function(){
+        let rotate = 0
+
+        if($('.content1').hasClass('expanded')){
+
+        }else{
+            rotate = 180;
+        }
+
+        $('#arrow-expanded').css('-webkit-transform','rotate('+rotate+'deg)');
+        $('#arrow-expanded').css('-moz-transform','rotate('+rotate+'deg)');
+        $('#arrow-expanded').css('transform','rotate('+rotate+'deg)');
+
+
+    })
+
+    $(document).on('click', '.container1', function(){
         $header = $(this);
         //getting the next element
         $content = $header.next();
         //open up the content needed - toggle the slide- if visible, slide up, if not slidedown.
         if($('.content1').hasClass('expanded')){
-                    $('.content1').removeClass('expanded');
-                }else{
-                    $('.content1').addClass('expanded');
-                }
+            //$('.content1').removeClass('expanded').slideUp();
+            $('.content1').removeClass('expanded')
+
+            scrollCurrentQuestionRow()
+
+
+        }else{
+            $('.content1').addClass('expanded').slideDown();
+        }
         // $content.slideToggle(500, function () {
         //     //execute this after slideToggle is done
         //     //change text of header based on visibility of content div
@@ -1054,8 +1133,53 @@ jQuery(document).ready(function(){
         //         //return $content.is(":visible") ? "Collapse" : "Expand";
         //     });
         // });
+        checkIfExpanded()
+    })
+
+    function checkIfExpanded(){
+        if($('.content1').hasClass('expanded')){
+            $('#hover-palette-expand').addClass('hidden')
+
+        }else{
+            $('#hover-palette-expand').removeClass('hidden')
+        }
+    }
+
+    $( ".content1" ).on('mouseover', function(){
+
+        checkIfExpanded()
 
     });
+
+
+
+
+
+
+    $( ".content1" ).on('mouseleave', function(){
+
+        $('#hover-palette-expand').addClass('hidden')
+    });
+
+    $('#pallete_list span').hover(function(){
+        $('#hover-palette-expand').toggleClass('hidden')
+    })
+
+    $('#pallete_list li').click(function(e){
+        e.stopPropagation();
+    })
+
+    $('#arrow-expanded').hover(function(){
+        $('#hover-palette-expand-arrow').toggleClass('hidden')
+        $('#hover-palette-expand').toggleClass('hidden')
+    })
+
+
+
+
+
+
+
 
 
     jQuery("body").on("change",function(){
