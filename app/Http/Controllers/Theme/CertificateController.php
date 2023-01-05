@@ -126,62 +126,6 @@ class CertificateController extends Controller
 
   }
 
-//   public function getSuccessChart(Request $request){
-
-//     $image = $request->image;
-
-//     $image = str_replace('data:image/png;base64,', '', $image);
-//     $image = str_replace(' ', '+', $image);
-//     //$imageName = str_random(10).'.'.'png';
-
-//     $exam = $request->exam;
-
-//     // save by unique name
-//     // fetch
-//     $user = Auth::user();
-
-//     $exam = Exam::with('event')->find($exam);
-
-
-//     $event_title = $exam['event'][0]['title'];
-//     $event_id = $exam['event'][0]['id'];
-
-
-//     $certificate = $user->certificateByEvent($event_id)[0];
-
-
-//     $imageName = $user['firstname'].'_'.$user['lastname'].'_'.$event_title;
-//     $imageName = base64_encode(Str::slug($imageName, '_')).'.png';
-
-
-//     // TODO (1) : First save image
-//     Storage::disk('cert')->put($imageName,base64_decode($image));
-//     // TODO (2) : return path
-
-//     $certiTitle = preg_replace( "/\r|\n/", " ", $certificate->certificate_title );
-
-//     if(strpos($certificate->certificate_title, '</p><p>')){
-//     $certiTitle = substr_replace($certificate->certificate_title, ' ', strpos($certificate->certificate_title, '</p>'), 0);
-//     }else{
-//     $certiTitle = $certificate->certificate_title;
-//     }
-
-//     $certiTitle = urlencode(htmlspecialchars_decode(strip_tags($certiTitle),ENT_QUOTES));
-
-
-//     return response()->json([
-//         'success' => true,
-//         'path' => 'cert/'.$imageName,
-//         'certiTitle' => $certiTitle,
-//         'certiExpMonth' => date('m',$certificate->expiration_date),
-//         'certiExpYear' => date('Y',$certificate->expiration_date),
-//         'certiCreateDateY' => date('Y',$certificate->create_date),
-//         'certiCreateDateM' => date('m',$certificate->create_date),
-//         'certiCredential' => date('m',$certificate->credential),
-//         'message' => 'Success!'
-//     ]);
-
-  }
 
   public function getCertificateImage($certificate){
 

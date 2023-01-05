@@ -190,19 +190,6 @@ class User extends Authenticatable
             ->with('summary1', 'category', 'slugable', 'dropbox')->wherePivot('paid', true);
     }*/
 
-    public function certificateByEvent($eventId){
-
-        $userEvents = $this->events_with_certification()->get();
-
-        //$certificate = null;
-
-        foreach($userEvents as $event){
-            if( $eventId == $event['id'] ){
-                return $certificates = $event['certificates'];
-            }
-        }
-
-    }
 
     public function events()
     {
