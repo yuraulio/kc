@@ -23,8 +23,8 @@ class CertificateController extends Controller
 
   public function __construct(){
       //$this->middleware('auth')->except('exportCertificates');
-      $this->middleware('cert.owner')->except(['exportCertificates','getCertificateAdmin', 'getSuccessChart']);
-      $this->middleware('auth.aboveauthor')->only(['exportCertificates','getCertificateAdmin', 'getSuccessChart']);
+      $this->middleware('cert.owner')->except(['exportCertificates','getCertificateAdmin', 'getSuccessChart', 'getPie']);
+      $this->middleware('auth.aboveauthor')->only(['exportCertificates','getCertificateAdmin', 'getSuccessChart', 'getPie']);
 
       $this->encryPass = 'knowcrunch' . date('Y-m-d H:i:m');
   }
@@ -236,6 +236,11 @@ class CertificateController extends Controller
     return $data['pdf']->stream($fn);
     //return view('admin.certificates.'.$certificate->template,compact('certificate'));
 
+  }
+
+  public function getPie(){
+
+    return view('exams.certPie');
   }
 
   public function exportCertificates(Event $event){
