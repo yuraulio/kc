@@ -217,22 +217,14 @@ class User extends Authenticatable
            ->wherePivot('paid', false);
     }
 
-    public function events_with_certification(){
-        return $this->belongsToMany(Event::class, 'event_user')->with([
-            'certificates' => function($certificate){
-                //dd($certificate->first());
-                $user = $this->id;
-                return $certificate->where('show_certificate',true)->whereHas('user', function ($query) use($user){
-                    $query->where('id', $user);;
-                });
-            }
-        ])->withPivot('event_id', 'paid', 'expiration', 'comment', 'payment_method');
-
-    }
-
     public function events_for_user_list()
     {
         return $this->belongsToMany(Event::class, 'event_user')->with('summary1', 'category','slugable', 'dropbox')->withPivot('event_id', 'paid', 'expiration', 'comment', 'payment_method');
+    }
+
+    public function events_for_user_list_without_relationship()
+    {
+        return $this->belongsToMany(Event::class, 'event_user')->withPivot('event_id', 'paid', 'expiration');
     }
 
     public function subscriptionEvents()
