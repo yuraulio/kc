@@ -228,8 +228,8 @@ li.not-visited span {
     top: 20%;
     left: 50%;
     transform: translate(-20%, 50%);
-
     display: none;
+
 }
 
 #hover-palette-expand-arrow{
@@ -242,6 +242,7 @@ li.not-visited span {
     position: absolute;
     top: -0.5rem;
     left: 99%;
+    display: none;
 }
 
 
@@ -1043,6 +1044,25 @@ and (max-device-width: 809px) {
 .success-fail-text p {
   font-size: 16px;
   padding: 25px 0px;
+}
+
+.share-wrapper p{
+    margin-bottom: 3rem;
+    color: #2196F3;
+    display: inline-flex;
+}
+.share-wrapper div{
+   display: inline-block;
+}
+
+.exam-page .linkdein-image-add{
+    width: 23px !important;
+}
+
+.exam-page .facebook-post-cert,
+.exam-page .twitter-post-cert,
+.exam-page .linkedin-post{
+    margin-left: 0.3rem !important;
 }
 
 .score {

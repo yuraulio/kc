@@ -14,6 +14,7 @@ use Mail;
 use App\Model\Event;
 use \Carbon\Carbon;
 use App\Model\Certificate;
+use App\Notifications\CertificateAvaillable;
 
 class ExamAttemptController extends Controller
 {
@@ -25,6 +26,7 @@ class ExamAttemptController extends Controller
 
 
     public function attemptExam($ex_id) {
+
 
         $exam = Exam::find($ex_id);
         $event = $exam->event->first();
@@ -190,6 +192,14 @@ class ExamAttemptController extends Controller
 
         if(isset($request->examJson) && isset($request->exam_id) && isset($request->student_id) && isset($request->start_time)){
 
+            //Pavlos
+            $saveForLaterWithOutAnswer = 0;
+            $saveForLaterWithAnswer = 0;
+            //end
+
+            //Demo var
+            $count = 0;
+            // demo end
 
             $exam_id = $request->exam_id;
             $st_id = $request->student_id;
@@ -241,23 +251,23 @@ class ExamAttemptController extends Controller
                     $q_id = $exam_data['q_id'];
                     $ex_id = $exam_id;
                     $q_type_id = $exam_data['question-type'];
-                    $given_ans = $exam_data['given_ans'];
+                    $given_ans = preg_replace('~^\s+|\s+$~us', '\1', $exam_data['given_ans']);
 
                     $credit = 0;
 
 
                     $opns_arr = array();
 
-                    if($given_ans!='') {
-
                     $getDBContents = Exam::find($exam_id)->questions;
                     $getDB = json_decode($getDBContents,true);
 
-                    //foreach($getDBContents as $getDB) {
+                    $totalCredits +=  $getDB[$q_id]['answer-credit'];
+
+                    //if($given_ans!='') {
+                        //foreach($getDBContents as $getDB) {
 
                         $dbAns = $getDB[$q_id]['correct_answer'];
                         //dd($getDB[$q_id]['correct_answer']);
-                        $totalCredits +=  $getDB[$q_id]['answer-credit'];
 
                         $answers[] = ['question' => $getDB[$q_id]['question'],'correct_answer' => $getDB[$q_id]['correct_answer'],'given_answer' => $given_ans];
 
@@ -323,8 +333,6 @@ class ExamAttemptController extends Controller
 
                     //}
 
-                    }
-
                 }
 
 
@@ -335,7 +343,6 @@ class ExamAttemptController extends Controller
 
                 //$totalQues = count(Examcontent::where('exam_id',$ex_id)->get());
                 $totalQues =$totalCredits; //Exam::where('exam_id',$ex_id)->sum('answer_credit');
-
                 $examResultData = ExamResult::where('exam_id',$ex_id)->where('user_id', $st_id)->first();
 
                 if($examResultData){
@@ -374,33 +381,89 @@ class ExamAttemptController extends Controller
 
 
                 $exam = Exam::find($ex_id);
-                $eventType = Event::select('id','view_tpl')->where('id',$exam->event->first()->id)->first();
+                $eventType = Event::select('id','view_tpl','certificate_title','title')->where('id',$exam->event->first()->id)->first();
 
-                if($eventType->view_tpl == 'elearning_event'){
+                $successLimit = round(($total_credit*100 / $totalQues), 2);
+                $success = false;
 
-                   $successLimit = round(($total_credit*100 / $totalQues), 2);
-                   $success = false;
+                if($successLimit >= $exam->q_limit){
+                    $success = true;
+                }
 
-                    if($successLimit >= $exam->q_limit){
-                        $success = true;
+                if(($eventType->delivery->first() && $eventType->delivery->first()->id == 143) || date('Y') > 2021){
+                    if($success){
+                        $template ='kc_diploma_2022b';
+                    }else{
+                        $template ='kc_attendance_2022b';
                     }
+                }else{
+                    if($success){
+                        $template ='kc_deree_diploma_2022';
+                    }else{
+                        $template ='kc_deree_attendance_2022';
+                    }
+                }
+
+                $certificateTitle = $eventType->title;
+                //dd($certificate->event->first()->event_info()['certificate']);
+                if($eventType && isset($eventType->event_info()['certificate']['messages'])){
+
+                  if($success && isset($eventType->event_info()['certificate']['messages']['success'])){
+
+                    $certificateTitle = $eventType->event_info()['certificate']['messages']['success'];
+                  }else if(!$success && isset($eventType->event_info()['certificate']['messages']['failure'])){
+
+                    $certificateTitle = $eventType->event_info()['certificate']['messages']['failure'];
+                  }
+
+                }
+
+                if( ($cert = $eventType->userHasCertificate($student->id)->first()) ){
+
+                    $cert->success = $success;
+                    $cert->certificate_title = $certificateTitle;
+                    //$createDate = strtotime(date('Y-m-d'));
+                    ///$cert->create_date = $createDate;
+                    $cert->expiration_date = strtotime(date('Y-m-d', strtotime('+24 months', strtotime(date('Y-m-d')))));
+                    //$cert->template = $success ? 'kc_diploma' : 'kc_attendance';
+                    $cert->template = $template;
+                    $cert->show_certificate = true;
+                    $cert->save();
+
+                    $cert->exam()->save($exam);
+
+                }else{
 
                     $cert = new Certificate;
                     $cert->success = $success;
-                    //$cert->firstname = $student->firstname;
-                    //$cert->lastname = $student->lastname;
-                    //$cert->certificate_title = $eventType->certificate_title;
-                    //$cert->credential = ;
+                    $cert->firstname = $student->firstname;
+                    $cert->lastname = $student->lastname;
+                    $cert->credential = get_certifation_crendetial();
+                    $cert->certificate_title = $certificateTitle;
                     $createDate = strtotime(date('Y-m-d'));
                     $cert->create_date = $createDate;
-                    //$cert->expiration_date = strtotime(date('Y-m-d', strtotime('+24 months', strtotime(date('Y-m-d')))));
+                    $cert->expiration_date = strtotime(date('Y-m-d', strtotime('+24 months', strtotime(date('Y-m-d')))));
                     $cert->certification_date = date('F') . ' ' . date('Y');
+                    //$cert->template = $success ? 'kc_diploma' : 'kc_attendance';
+                    $cert->template = $template;
+                    $cert->show_certificate = true;
                     $cert->save();
 
                     $cert->event()->save($eventType);
                     $cert->user()->save($student);
                     $cert->exam()->save($exam);
 
+                }
+
+                $data['firstName'] = $student->firstname;
+                $data['eventTitle'] = $eventType->title;
+                $data['fbGroup'] = $eventType->fb_group;
+                $data['subject'] = 'Knowcrunch - ' . $data['firstName'] .' you certification is ready';
+                $data['template'] = 'emails.user.certificate';
+                $data['certUrl'] = trim(url('/') . '/mycertificate/' . base64_encode($student->email."--".$cert->id));
+                $student->notify(new CertificateAvaillable($data));
+
+                /*if($exam->event_id === 1350 || $exam->event_id === 2304){
                     $adminemail = 'info@knowcrunch.com';
 
                     $muser = [];
@@ -429,7 +492,7 @@ class ExamAttemptController extends Controller
 
                     });
 
-                }
+                }*/
 
 
                 if($examResultData) {
@@ -449,9 +512,13 @@ class ExamAttemptController extends Controller
     }
 
 
-    public function examResults($exam) {
+    public function examResults($exam, Request $request) {
 
         $nowTime = Carbon::now();
+
+        if(isset($request->t)){
+            $examEndOfTime = Exam::select('end_of_time_text')->find($exam)['end_of_time_text'];
+        }
 
         $user = Auth::user();
         $examResult = ExamResult::where(['exam_id' => $exam, 'user_id' => $user->id])->first();
@@ -460,6 +527,9 @@ class ExamAttemptController extends Controller
         $data['last_name'] = $user->lastname;
         $data['image'] = $user->image;
         $data['showAnswers'] = $nowTime->diffInHours($examResult->end_time) < 48;
+        if(isset($request->t)){
+            $data['endOfTime'] = ($examEndOfTime != null) ? $examEndOfTime : '';
+        }
 
         return view('exams.results',$data);
 

@@ -52,11 +52,71 @@
                     }
                 ?>
 
-           {{-- <p> <span class="score"> Score :</span> {{ $score }}%</p> --}}
+                {{-- <p> <span class="score"> Score :</span> {{ $score }}%</p> --}}
 
-            @if(isset($_GET['t']))
-                {!! $endOfTime !!}
-            @endif
+                @if(isset($_GET['t']))
+                    {!! $endOfTime !!}
+                @endif
+            </div>
+
+            <?php
+
+                /*
+
+                dd('asd');
+                $certificate = $cert;
+                dd($certificate);
+
+                $expirationMonth = '';
+                $expirationYear = '';
+                $certUrl = trim(url('/') . '/mycertificate/' . base64_encode(Auth::user()->email."--".$certificate->id));
+                if($certificate->expiration_date){
+                $expirationMonth = date('m',$certificate->expiration_date);
+                $expirationYear = date('Y',$certificate->expiration_date);
+                }
+
+                $certiTitle = preg_replace( "/\r|\n/", " ", $certificate->certificate_title );
+
+                if(strpos($certificate->certificate_title, '</p><p>')){
+                $certiTitle = substr_replace($certificate->certificate_title, ' ', strpos($certificate->certificate_title, '</p>'), 0);
+                }else{
+                $certiTitle = $certificate->certificate_title;
+                }
+
+                $certiTitle = urlencode(htmlspecialchars_decode(strip_tags($certiTitle),ENT_QUOTES));
+
+                */
+
+        ?>
+
+            <div class="col-md-6 offset-md-6 share-wrapper">
+                <p>Share my results:</p>
+                <div>
+                    <a class="facebook-post-cert" title="Add this certification to your Facebook profile" href="javascript:void(0)">
+                        <img class="linkdein-image-add" src="{{cdn('theme/assets/images/icons/social/events/Facebook.svg')}}" alt="Facebook Add to Profile button">
+                    </a>
+                    <a class="twitter-post-cert" data-certid="" title="Add this certification to your Twitter profile" href="javascript:void(0)">
+                        <img class="linkdein-image-add" src="{{cdn('theme/assets/images/icons/social/events/Twitter.svg')}}" alt="Twitter Add to Profile button">
+                    </a>
+                    <a type="button" class="linkedin-post cert-post">
+                        <img class="linkdein-image-add" src="{{cdn('theme/assets/images/icons/social/events/Linkedin.svg')}}" alt="LinkedIn Add to Profile button">
+                    </a>
+                </div>
+
+                {{--<a class="facebook-post-cert" data-certid="{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" title="Add this certification to your Facebook profile" href="javascript:void(0)">
+                    <img class="linkdein-image-add" src="{{cdn('theme/assets/images/icons/social/events/Facebook.svg')}}" alt="Facebook Add to Profile button">
+                </a>--}}
+
+                {{--<a class="twitter-post-cert" data-certid="{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" title="Add this certification to your Facebook profile" href="javascript:void(0)">
+                    <img class="linkdein-image-add" src="{{cdn('theme/assets/images/icons/social/events/Twitter.svg')}}" alt="Twitter Add to Profile button">
+                </a>--}}
+
+                {{--<a class="linkedin-post cert-post"  target="_blank" href="https://www.linkedin.com/profile/add?startTask={{$certiTitle}}&name={{$certiTitle}}&organizationId=3152129&issueYear={{date('Y',$certificate->create_date)}}
+                    &issueMonth={{date('m',$certificate->create_date)}}&expirationYear={{$expirationYear}}&expirationMonth={{$expirationMonth}}&certUrl={{$certUrl}}&certId={{$certificate->credential}}">
+                    <img class="linkdein-image-add" src="{{cdn('theme/assets/images/icons/social/events/Linkedin.svg')}}" alt="LinkedIn Add to Profile button">
+                </a>--}}
+
+
             </div>
 
             </div>
@@ -141,6 +201,7 @@
 <script src="{{ asset('argon') }}/vendor/chart.js/dist/Chart.min.js"></script>
 <script src="{{ asset('argon') }}/vendor/chart.js/dist/Chart.extension.js"></script>
 <script>
+    let chartImage = null;
 
     function pieChart(){
 
@@ -272,13 +333,130 @@
                         padding: 30,
                         boxWidth: 10
                     }
+                },
+                animation: {
+                    onComplete: function() {
+                        chartImage = chart.toBase64Image();
+
+                        // var a = document.createElement('a');
+                        // a.href = chartImage;
+                        // a.download = 'my_file_name.png';
+
+                        // // Trigger the download
+                        // a.click();
+                    }
                 }
             }
         });
 
+
+
     }
 
     setTimeout("pieChart()", 1000);
+
+    $(document).on('click', '.facebook-post-cert', function() {
+      var getUrl = window.location;
+      var baseUrl = getUrl .protocol + "//" + getUrl.host;
+      var pathname = getUrl.pathname
+
+
+
+      var exam = pathname.split("/").pop();
+
+
+      $.ajax({
+            headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+          type: 'POST',
+          url: "/mycertificate/save-success-chart",
+          data:{
+                image: chartImage,
+                exam: exam
+            },
+
+
+          success: function(data) {
+            url = data.path
+            url = url.replace('\\','/')
+            if(data){
+                var fbpopup = window.open(`http://www.facebook.com/sharer.php?u=${decodeURI(baseUrl)}/${decodeURI(url)}`, "pop", "width=600, height=400, scrollbars=no");
+                return false;
+            }
+
+          }
+      });
+   })
+
+
+   $(document).on('click', '.linkedin-post', function() {
+
+        var getUrl = window.location;
+        var baseUrl = getUrl .protocol + "//" + getUrl.host;
+        var pathname = getUrl.pathname
+
+        var exam = pathname.split("/").pop();
+
+        $.ajax({
+        headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+          type: 'POST',
+          url: "/mycertificate/save-success-chart",
+          data:{image: chartImage,exam: exam},
+          success: function(data) {
+
+            let path = data.path
+            let certiUrl = path.replace('\\','/')
+            let certiTitle = data.certiTitle
+            let certiIssueYear = data.certiCreateDateY;
+            let certiIssueMonth = data.certiCreateDateM;
+            let certiExpMonth = data.certiExpMonth;
+            let certiExpYear = data.certiExpYear;
+            let certiCredential = data.certiCredential;
+
+            if(data){
+
+                var fbpopup = window.open(`https://www.linkedin.com/profile/add?startTask=${certiTitle}&name=${certiTitle}&organizationId=3152129&issueYear=${certiIssueYear}
+                &issueMonth=${certiIssueMonth}&expirationYear=${certiExpYear}&expirationMonth=${certiExpMonth}&certUrl=${certiUrl}&certId=${certiCredential}`, "pop", "width=600, height=400, scrollbars=no");
+                return false;
+            }
+
+          }
+      });
+
+   })
+
+
+   $(document).on('click', '.twitter-post-cert', function() {
+      var getUrl = window.location;
+      var baseUrl = getUrl .protocol + "//" + getUrl.host;
+      var pathname = getUrl.pathname
+
+      var exam = pathname.split("/").pop();
+
+      $.ajax({
+        headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+          type: 'POST',
+          url: "/mycertificate/save-success-chart",
+          data:{image: chartImage,exam: exam},
+          success: function(data) {
+
+            url = data.path
+            url = url.replace('\\','/')
+            if(data){
+                var fbpopup = window.open(`http://twitter.com/share?url=${decodeURI(baseUrl)}/${decodeURI(url)}`, "pop", "width=600, height=400, scrollbars=no");
+                return false;
+            }
+
+          }
+      });
+   })
+
+
 
 </script>
 

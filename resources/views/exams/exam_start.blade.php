@@ -766,13 +766,13 @@ window.actQues = 0;
 
                 <div id="arrow-expanded"></div>
 
-                <div class="hidden" id="hover-palette-expand"><p>Expand</p></div>
+                <div id="hover-palette-expand"><p>Expand</p></div>
 
 
 
             </div>
         </div>
-        <div class="hidden" id="hover-palette-expand-arrow"><p>Expand</p></div>
+        <div id="hover-palette-expand-arrow"><p>Expand</p></div>
     </div>
         <div class="col-12" style="margin-bottom: 2rem">
 
@@ -1138,11 +1138,11 @@ jQuery(document).ready(function(){
 
     function checkIfExpanded(){
         if($('.content1').hasClass('expanded')){
-            $('#hover-palette-expand').addClass('hidden')
+            $('#hover-palette-expand').css('display', 'none')
+            $('#hover-palette-expand-arrow').css('display', 'none')
 
-        }else{
-            $('#hover-palette-expand').removeClass('hidden')
         }
+       
     }
 
     $( ".content1" ).on('mouseover', function(){
@@ -1157,21 +1157,38 @@ jQuery(document).ready(function(){
 
 
     $( ".content1" ).on('mouseleave', function(){
+        console.log('mouse has leave')
 
-        $('#hover-palette-expand').addClass('hidden')
+        //$('#hover-palette-expand').addClass('hidden')
+        $('#hover-palette-expand').css('display', 'none')
     });
 
-    $('#pallete_list span').hover(function(){
-        $('#hover-palette-expand').toggleClass('hidden')
+    $('#pallete_list span').on('mouseover',function(){
+        console.log('on span')
+        //$('#hover-palette-expand').toggleClass('hidden')
+        //$('#hover-palette-expand').css('display', 'none')
+        document.getElementById('hover-palette-expand').style.display = 'none';
     })
+
+    $( "#pallete_list span" ).on('mouseleave', function(){
+        console.log('mouse has leave 1111')
+
+        //$('#hover-palette-expand').toggleClass('hidden')
+        $('#hover-palette-expand').css('display', 'block')
+    });
 
     $('#pallete_list li').click(function(e){
         e.stopPropagation();
     })
 
     $('#arrow-expanded').hover(function(){
-        $('#hover-palette-expand-arrow').toggleClass('hidden')
-        $('#hover-palette-expand').toggleClass('hidden')
+        $('#hover-palette-expand-arrow').css('display', 'block');
+        $('#hover-palette-expand').css('display', 'none');
+    })
+
+    $('#arrow-expanded').on('mouseleave',function(){
+        $('#hover-palette-expand-arrow').css('display', 'none');
+        $('#hover-palette-expand').css('display', 'block');
     })
 
 
