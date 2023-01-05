@@ -614,7 +614,7 @@ class LessonController extends Controller
                     //dd($pLesson);
 
                     $date = '';
-                    $time_starts = '';
+                    $time_starts = null;
                     $time_ends = '';
                     $duration = '';
                     $room = '';

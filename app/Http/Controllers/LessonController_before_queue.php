@@ -140,7 +140,7 @@ class LessonController extends Controller
                         $allLessons = $event->allLessons->groupBy('id');
 
                         $date = '';
-                        $time_starts = '';
+                        $time_starts = null;
                         $time_ends = '';
                         $duration = '';
                         $room = '';
@@ -437,7 +437,7 @@ class LessonController extends Controller
                         $allLessons = $event->allLessons->groupBy('id');
                         
                         $date = '';
-                        $time_starts = '';
+                        $time_starts = null;
                         $time_ends = '';
                         $duration = '';
                         $room = '';
@@ -616,7 +616,7 @@ class LessonController extends Controller
                     $priorityLesson = $event->allLessons()->wherePivot('topic_id',$toTopic)->orderBy('priority')->get();
                     
                     $date = '';
-                    $time_starts = '';
+                    $time_starts = null;
                     $time_ends = '';
                     $duration = '';
                     $room = '';
