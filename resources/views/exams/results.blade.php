@@ -89,7 +89,7 @@
 
         ?>
 
-            <div class="col-md-6 offset-md-6 share-wrapper">
+            {{--<div class="col-md-6 offset-md-6 share-wrapper">
                 <p>Share my results:</p>
                 <div>
                     <a class="facebook-post-cert" title="Add this certification to your Facebook profile" href="javascript:void(0)">
@@ -103,22 +103,11 @@
                     </a>
                 </div>
 
-                {{--<a class="facebook-post-cert" data-certid="{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" title="Add this certification to your Facebook profile" href="javascript:void(0)">
-                    <img class="linkdein-image-add" src="{{cdn('theme/assets/images/icons/social/events/Facebook.svg')}}" alt="Facebook Add to Profile button">
-                </a>--}}
 
-                {{--<a class="twitter-post-cert" data-certid="{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" title="Add this certification to your Facebook profile" href="javascript:void(0)">
-                    <img class="linkdein-image-add" src="{{cdn('theme/assets/images/icons/social/events/Twitter.svg')}}" alt="Twitter Add to Profile button">
-                </a>--}}
-
-                {{--<a class="linkedin-post cert-post"  target="_blank" href="https://www.linkedin.com/profile/add?startTask={{$certiTitle}}&name={{$certiTitle}}&organizationId=3152129&issueYear={{date('Y',$certificate->create_date)}}
-                    &issueMonth={{date('m',$certificate->create_date)}}&expirationYear={{$expirationYear}}&expirationMonth={{$expirationMonth}}&certUrl={{$certUrl}}&certId={{$certificate->credential}}">
-                    <img class="linkdein-image-add" src="{{cdn('theme/assets/images/icons/social/events/Linkedin.svg')}}" alt="LinkedIn Add to Profile button">
-                </a>--}}
 
 
             </div>
-
+                --}}
             </div>
             <div class="row action-wrapper">
                 <div class="col-sm-12 col-md-6 col-lg-6">
@@ -355,106 +344,106 @@
 
     setTimeout("pieChart()", 1000);
 
-    $(document).on('click', '.facebook-post-cert', function() {
-      var getUrl = window.location;
-      var baseUrl = getUrl .protocol + "//" + getUrl.host;
-      var pathname = getUrl.pathname
+//     $(document).on('click', '.facebook-post-cert', function() {
+//       var getUrl = window.location;
+//       var baseUrl = getUrl .protocol + "//" + getUrl.host;
+//       var pathname = getUrl.pathname
 
 
 
-      var exam = pathname.split("/").pop();
+//       var exam = pathname.split("/").pop();
 
 
-      $.ajax({
-            headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-          type: 'POST',
-          url: "/mycertificate/save-success-chart",
-          data:{
-                image: chartImage,
-                exam: exam
-            },
+//       $.ajax({
+//             headers: {
+//                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+//             },
+//           type: 'POST',
+//           url: "/mycertificate/save-success-chart",
+//           data:{
+//                 image: chartImage,
+//                 exam: exam
+//             },
 
 
-          success: function(data) {
-            url = data.path
-            url = url.replace('\\','/')
-            if(data){
-                var fbpopup = window.open(`http://www.facebook.com/sharer.php?u=${decodeURI(baseUrl)}/${decodeURI(url)}`, "pop", "width=600, height=400, scrollbars=no");
-                return false;
-            }
+//           success: function(data) {
+//             url = data.path
+//             url = url.replace('\\','/')
+//             if(data){
+//                 var fbpopup = window.open(`http://www.facebook.com/sharer.php?u=${decodeURI(baseUrl)}/${decodeURI(url)}`, "pop", "width=600, height=400, scrollbars=no");
+//                 return false;
+//             }
 
-          }
-      });
-   })
-
-
-   $(document).on('click', '.linkedin-post', function() {
-
-        var getUrl = window.location;
-        var baseUrl = getUrl .protocol + "//" + getUrl.host;
-        var pathname = getUrl.pathname
-
-        var exam = pathname.split("/").pop();
-
-        $.ajax({
-        headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        },
-          type: 'POST',
-          url: "/mycertificate/save-success-chart",
-          data:{image: chartImage,exam: exam},
-          success: function(data) {
-
-            let path = data.path
-            let certiUrl = path.replace('\\','/')
-            let certiTitle = data.certiTitle
-            let certiIssueYear = data.certiCreateDateY;
-            let certiIssueMonth = data.certiCreateDateM;
-            let certiExpMonth = data.certiExpMonth;
-            let certiExpYear = data.certiExpYear;
-            let certiCredential = data.certiCredential;
-
-            if(data){
-
-                var fbpopup = window.open(`https://www.linkedin.com/profile/add?startTask=${certiTitle}&name=${certiTitle}&organizationId=3152129&issueYear=${certiIssueYear}
-                &issueMonth=${certiIssueMonth}&expirationYear=${certiExpYear}&expirationMonth=${certiExpMonth}&certUrl=${certiUrl}&certId=${certiCredential}`, "pop", "width=600, height=400, scrollbars=no");
-                return false;
-            }
-
-          }
-      });
-
-   })
+//           }
+//       });
+//    })
 
 
-   $(document).on('click', '.twitter-post-cert', function() {
-      var getUrl = window.location;
-      var baseUrl = getUrl .protocol + "//" + getUrl.host;
-      var pathname = getUrl.pathname
+//    $(document).on('click', '.linkedin-post', function() {
 
-      var exam = pathname.split("/").pop();
+//         var getUrl = window.location;
+//         var baseUrl = getUrl .protocol + "//" + getUrl.host;
+//         var pathname = getUrl.pathname
 
-      $.ajax({
-        headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        },
-          type: 'POST',
-          url: "/mycertificate/save-success-chart",
-          data:{image: chartImage,exam: exam},
-          success: function(data) {
+//         var exam = pathname.split("/").pop();
 
-            url = data.path
-            url = url.replace('\\','/')
-            if(data){
-                var fbpopup = window.open(`http://twitter.com/share?url=${decodeURI(baseUrl)}/${decodeURI(url)}`, "pop", "width=600, height=400, scrollbars=no");
-                return false;
-            }
+//         $.ajax({
+//         headers: {
+//                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+//         },
+//           type: 'POST',
+//           url: "/mycertificate/save-success-chart",
+//           data:{image: chartImage,exam: exam},
+//           success: function(data) {
 
-          }
-      });
-   })
+//             let path = data.path
+//             let certiUrl = path.replace('\\','/')
+//             let certiTitle = data.certiTitle
+//             let certiIssueYear = data.certiCreateDateY;
+//             let certiIssueMonth = data.certiCreateDateM;
+//             let certiExpMonth = data.certiExpMonth;
+//             let certiExpYear = data.certiExpYear;
+//             let certiCredential = data.certiCredential;
+
+//             if(data){
+
+//                 var fbpopup = window.open(`https://www.linkedin.com/profile/add?startTask=${certiTitle}&name=${certiTitle}&organizationId=3152129&issueYear=${certiIssueYear}
+//                 &issueMonth=${certiIssueMonth}&expirationYear=${certiExpYear}&expirationMonth=${certiExpMonth}&certUrl=${certiUrl}&certId=${certiCredential}`, "pop", "width=600, height=400, scrollbars=no");
+//                 return false;
+//             }
+
+//           }
+//         });
+
+//     })
+
+
+//    $(document).on('click', '.twitter-post-cert', function() {
+//       var getUrl = window.location;
+//       var baseUrl = getUrl .protocol + "//" + getUrl.host;
+//       var pathname = getUrl.pathname
+
+//       var exam = pathname.split("/").pop();
+
+//       $.ajax({
+//         headers: {
+//                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+//         },
+//           type: 'POST',
+//           url: "/mycertificate/save-success-chart",
+//           data:{image: chartImage,exam: exam},
+//           success: function(data) {
+
+//             url = data.path
+//             url = url.replace('\\','/')
+//             if(data){
+//                 var fbpopup = window.open(`http://twitter.com/share?url=${decodeURI(baseUrl)}/${decodeURI(url)}`, "pop", "width=600, height=400, scrollbars=no");
+//                 return false;
+//             }
+
+//           }
+//       });
+//    })
 
 
 
