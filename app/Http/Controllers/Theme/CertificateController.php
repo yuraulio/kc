@@ -171,7 +171,7 @@ class CertificateController extends Controller
 
     return response()->json([
         'success' => true,
-        'path' => url('cert/'.$imageName),
+        'path' => 'cert/'.$imageName,
         'certiTitle' => $certiTitle,
         'certiExpMonth' => date('m',$certificate->expiration_date),
         'certiExpYear' => date('Y',$certificate->expiration_date),
