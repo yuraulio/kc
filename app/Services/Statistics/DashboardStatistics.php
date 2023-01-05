@@ -9,40 +9,74 @@ class DashboardStatistics
 {
     public function totals(): array
     {
-        $results['users'] = User::count();
+        //$results['users'] = User::count();
 
         // Count Admins on SQL side. If we expect some complex logic there
         // is always option to add scope on User model
-        $results['adminUsers']  = User::whereHas('role', function ($q) {
-            return $q->where('roles.id', 1);
+        // $results['adminUsers']  = User::whereHas('role', function ($q) {
+        //     return $q->where('roles.id', 1);
+        // })->count();
+
+        $results['instructorsAll'] = Instructor::whereStatus(true)->has('event')->count();
+
+        $results['instructorsInClass'] = Instructor::whereStatus(true)->whereHas('event', function($q){
+            $q->whereStatus(0)->doesntHave('delivery')
+                ->OrWhereHas('delivery', function ($q2) {
+                    return $q2->where('deliveries.id', '<>', 143);
+                });
         })->count();
 
-        $results['instructors'] = Instructor::whereStatus(true)->has('event')->count();
 
-        $results['usersInclass'] = User::whereHas('events_for_user_list', function ($q) {
-            $q->wherePublished(true)->where(function ($q1) {
+
+        $results['instructorsElearning'] = Instructor::whereStatus(true)->whereHas('event', function($q){
+            $q->whereStatus(0)
+                ->WhereHas('delivery', function ($q2) {
+                    return $q2->where('deliveries.id', 143);
+                });
+        })->count();
+
+        //$results['usersInclass'] = 5;
+        $results['usersInclass'] = User::whereHas('events_for_user_list_without_relationship', function ($q) {
+            $q->wherePublished(true)->whereStatus(0)->where(function ($q1) {
                 $q1->doesntHave('delivery')->OrWhereHas('delivery', function ($q2) {
                     return $q2->where('deliveries.id', '<>', 143);
                 });
             });
         })->count();
 
-        $results['usersElearning'] = User::whereHas('events_for_user_list', function ($q) {
-            $q->wherePublished(true)->whereHas('delivery', function ($q1) {
+        //$results['usersElearning'] = 5;
+        $results['usersElearning'] = User::whereHas('events_for_user_list_without_relationship', function ($q) {
+
+            $q->wherePublished(true)->whereStatus(0)->where('event_user.expiration', '>=',date('Y-m-d'))->whereHas('delivery', function ($q1) {
                 return $q1->where('deliveries.id', 143);
             });
         })->count();
 
-        $results['usersGranduates'] = User::whereHas('events_for_user_list', function ($q) {
-            $q->wherePublished(true)->whereHas('type', function ($q1) {
-                return $q1->whereIn('types.id', [13, 14]);
+        $results['usersInclassAll'] = User::whereHas('events_for_user_list_without_relationship', function ($q) {
+            $q->wherePublished(true)->where('event_user.paid', true)->where(function ($q1) {
+                $q1->doesntHave('delivery')->OrWhereHas('delivery', function ($q2) {
+                    return $q2->where('deliveries.id', '<>', 143);
+                });
             });
         })->count();
 
-        //$results['totalsStudents'] =  $results['usersInclass'] + $results['usersElearning'];
-        $results['totalsStudents'] = User::whereHas('events_for_user_list', function ($q1) {
-            $q1->wherePublished(true);
+        $results['usersElearningAll'] = User::whereHas('events_for_user_list_without_relationship', function ($q) {
+
+            $q->wherePublished(true)->where('event_user.paid', true)->whereHas('delivery', function ($q1) {
+                return $q1->where('deliveries.id', 143);
+            });
         })->count();
+
+        // $results['usersGranduates'] = User::whereHas('events_for_user_list_without_relationship', function ($q) {
+        //     $q->wherePublished(true)->whereHas('type', function ($q1) {
+        //         return $q1->whereIn('types.id', [13, 14]);
+        //     });
+        // })->count();
+
+        //$results['totalsStudents'] =  $results['usersInclass'] + $results['usersElearning'];
+        // $results['totalsStudents'] = User::whereHas('events_for_user_list_without_relationship', function ($q1) {
+        //     $q1->wherePublished(true);
+        // })->count();
 
         return $results;
     }
