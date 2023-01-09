@@ -50,7 +50,7 @@ class UpdateTerms implements ShouldQueue
 
             }
 
-        }else if($this->pageId == 4753){
+        }else if($this->pageId == 4753 || $this->pageId == 48){
 
             $users = User::all();
             foreach($users as $user){
