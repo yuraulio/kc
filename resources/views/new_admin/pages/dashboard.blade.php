@@ -39,6 +39,19 @@
     <div class="row">
 
         <dashboard-widget
+            title="STUDENTS ACTIVE NOW"
+            type="students"
+        ></dashboard-widget>
+        <dashboard-widget
+            title="REGISTRATIONS ALL TIME"
+            type="students_all"
+        ></dashboard-widget>
+        <dashboard-widget
+            title="INSTRUCTORS"
+            type="instructors"
+        ></dashboard-widget>
+
+        <!-- <dashboard-widget
             title="ADMINS"
             type="admins"
         ></dashboard-widget>
@@ -56,12 +69,12 @@
         <dashboard-widget
             title="SUCCESSFUL GRADUATES"
             type="graduates"
-        ></dashboard-widget>
+        ></dashboard-widget> -->
 
-    </div> 
+    </div>
 
     <div class="row">
-    
+
         <dashboard-table
             title="COMMENTS"
             type="comments"
@@ -123,7 +136,7 @@
                 }
             ]"
         ></dashboard-table>
-    
+
     </div>
 
 </div> <!-- container -->

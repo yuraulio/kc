@@ -22,37 +22,10 @@ class InstructorController extends Controller
 
         $data = [];
 
-        // $data['active_instructors'] = $model::where('status', '1')->count();
-        // $data['all_instructors'] = $model::count();
-        $data = $this->statistics();
+        $data['active_instructors'] = $model::where('status', '1')->count();
+        $data['all_instructors'] = $model::count();
 
         return view('instructors.index', ['instructors' =>$model->with('medias')->get(), 'user' => $user, 'data' => $data ]);
-    }
-
-    public function statistics()
-    {
-        $data = [];
-
-        $data['active'] = Instructor::where('status', '1')->count();
-        $data['inactive'] = Instructor::where('status', '0')->count();
-
-        $data['inclass'] = Instructor::whereStatus(true)->whereHas('event', function($q){
-            $q->whereStatus(0)->doesntHave('delivery')
-                ->OrWhereHas('delivery', function ($q2) {
-                    return $q2->where('deliveries.id', '<>', 143);
-                });
-        })->count();
-        //$data['elearning']
-
-        $data['elearning'] = Instructor::whereStatus(true)->whereHas('event', function($q){
-            $q->whereStatus(0)
-                ->WhereHas('delivery', function ($q2) {
-                    return $q2->where('deliveries.id', 143);
-                });
-        })->count();
-
-        return $data;
-
     }
 
     /**

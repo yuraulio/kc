@@ -27,6 +27,9 @@ use Storage;
 use App\Model\Dropbox;
 use App\Model\EventInfo;
 use App\Jobs\EnrollStudentsToElearningEvents;
+use App\Jobs\EventSoldOut;
+use App\Exports\StudentExport;
+use Excel;
 
 class EventController extends Controller
 {
@@ -35,7 +38,6 @@ class EventController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    
     public function index(Event $model)
     {
         $this->authorize('manage-users', User::class);
@@ -250,7 +252,14 @@ class EventController extends Controller
 
         $launchDate = $request->launch_date ? date('Y-m-d',strtotime($request->launch_date)) : $published_at;
 
-        $request->request->add(['published' => $published, 'published_at' => $published_at, 'release_date_files' => date('Y-m-d', strtotime($request->release_date_files)),'launch_date'=>$launchDate]);
+        $request->request->add([
+            'published' => $published,
+            'published_at' => $published_at,
+            'release_date_files' => date('Y-m-d', strtotime($request->release_date_files)),
+            'launch_date'=> $launchDate,
+            'index' => isset($request->index) ? true : false,
+            'feed' => isset($request->feed) ? true : false
+        ]);
         $event = $model->create($request->all());
 
         /*if($event && $request->image_upload){
@@ -342,11 +351,9 @@ class EventController extends Controller
         }
 
         $infoData = $request->course;
-
         if(!$infoData['certificate']['event_title']){
             $infoData['certificate']['event_title'] = explode(',',$event->title)[0];
         }
-     
         $event_info = $this->prepareInfo($infoData, $request->status, $request->delivery, $partner, $request->syllabus, $request->city_id, $event);
         $this->updateEventInfo($event_info, $event->id);
 
@@ -375,6 +382,7 @@ class EventController extends Controller
      */
     public function edit(Event $event)
     {
+        //dd($show_popup);
         //$faq = Faq::find(16);
         //dd($faq->category);
 
@@ -457,7 +465,7 @@ class EventController extends Controller
         $data['delivery'] = Delivery::all();
         $data['isInclassCourse'] = $event->is_inclass_course();
         $data['eventFaqs'] = $event->faqs->pluck('id')->toArray();
-        $data['eventUsers'] = $event->usersPaid;//$event->users->toArray();
+        $data['eventUsers'] = $event->users;//$event->users->toArray();
         $data['eventWaitingUsers'] = $event->waitingList()->with('user')->get();
         $data['coupons'] = Coupon::all();
         $data['activeMembers'] = 0;
@@ -516,6 +524,7 @@ class EventController extends Controller
      */
     public function update(Request $request, Event $event)
     {
+        $show_popup = false;
         if($request->published == 'on')
         {
             $published = 1;
@@ -526,15 +535,27 @@ class EventController extends Controller
             $published_at = $event->published_at;
         }
 
-        //dd($request->all());
-        //dd($request->release_date_files);
+        $old_status = $event->status;
 
         $launchDate = $request->launch_date ? date('Y-m-d',strtotime($request->launch_date)) : $published_at;
 
-        $request->request->add(['published' => $published, 'published_at' => $published_at,
+        $request->request->add([
+            'published' => $published,
+            'published_at' => $published_at,
             'release_date_files' => date('Y-m-d', strtotime($request->release_date_files)),
-            'launch_date'=>$launchDate,'title'=>$request->eventTitle, 'hours' => intval($request->hours)]);
-        $ev = $event->update($request->all());
+            'launch_date'=> $launchDate,
+            'title'=>$request->eventTitle,
+            'hours' => intval($request->hours),
+            'index' => isset($request->index) ? true : false,
+            'feed' => isset($request->feed) ? true : false
+        ]);
+        //dd($request->all());
+        $event_has_updated = $event->update($request->all());
+
+        if($event_has_updated && ($request->status == 2 || $request->status == 3 || $request->status == 1) && ($old_status != 2 && $old_status != 3 && $old_status != 1)){
+            $show_popup = true;
+            dispatch((new EventSoldOut($event->id))->delay(now()->addSeconds(3)));
+        }
 
         /*if($request->image_upload != null && $ev){
             $event->updateMedia($request->image_upload);
@@ -566,18 +587,35 @@ class EventController extends Controller
             $selectedFiles = json_decode($request->selectedFiles, true);
         }
 
+        if($selectedFiles != null){
 
-        if($selectedFiles != null && isset($selectedFiles['selectedDropbox']) && $selectedFiles['selectedDropbox'] != null){
-
-            $exist_dropbox = Dropbox::where('folder_name', $selectedFiles['selectedDropbox'])->first();
-            if($exist_dropbox){
-                unset($selectedFiles['selectedDropbox']);
-                $event->dropbox()->sync([$exist_dropbox->id => ['selectedFolders' => json_encode($selectedFiles)]]);
-            }
-
-        }else if($selectedFiles != null && isset($selectedFiles['detach']) && $selectedFiles['detach']){
             $event->dropbox()->detach();
+            //dd($selectedFiles);
+
+            foreach($selectedFiles as $key => $folder) {
+
+                if(isset($folder['selectedDropbox']) && $folder['selectedDropbox'] != null){
+                    $exist_dropbox = Dropbox::where('folder_name', $folder['selectedDropbox'])->first();
+                    if($exist_dropbox){
+                        unset($folder['selectedDropbox']);
+                        $event->dropbox()->attach([$exist_dropbox->id => ['selectedFolders' => json_encode($folder)]]);
+                    }
+                }
+            }
         }
+
+
+        // if($selectedFiles != null && isset($selectedFiles['selectedDropbox']) && $selectedFiles['selectedDropbox'] != null){
+
+        //     $exist_dropbox = Dropbox::where('folder_name', $selectedFiles['selectedDropbox'])->first();
+        //     if($exist_dropbox){
+        //         unset($selectedFiles['selectedDropbox']);
+        //         $event->dropbox()->sync([$exist_dropbox->id => ['selectedFolders' => json_encode($selectedFiles)]]);
+        //     }
+
+        // }else if($selectedFiles != null && isset($selectedFiles['detach']) && $selectedFiles['detach']){
+        //     $event->dropbox()->detach();
+        // }
 
         if($request->category_id != $request->oldCategory){
             $category = Category::with('topics')->find($request->category_id);
@@ -656,16 +694,22 @@ class EventController extends Controller
 
         }
 
-
         if(isset($infoData['free_courses']['list'])){
-            dispatch((new EnrollStudentsToElearningEvents($event->id,$infoData['free_courses']['list']))->delay(now()->addSeconds(3)));
+            // todo parse exams
+
+            if(isset($infoData['free_courses']['exams'])){
+                dispatch((new EnrollStudentsToElearningEvents($event->id,$infoData['free_courses']['list'], true))->delay(now()->addSeconds(3)));
+            }else{
+                dispatch((new EnrollStudentsToElearningEvents($event->id,$infoData['free_courses']['list'], false))->delay(now()->addSeconds(3)));
+            }
 
         }else{
-            dispatch((new EnrollStudentsToElearningEvents($event->id,null))->delay(now()->addSeconds(3)));
+            // todo parse exams
+            dispatch((new EnrollStudentsToElearningEvents($event->id, false, false))->delay(now()->addSeconds(3)));
         }
 
-        return back()->withStatus(__('Event successfully updated.'));
-        //return redirect()->route('events.edit',$event->id)->withStatus(__('Event successfully created.'));
+        //return back()->withStatus(__('Event successfully updated.'));
+        return redirect()->route('events.edit',['event'=>$event->id, 'show_popup'=>$show_popup])->withStatus(__('Event successfully created.'));
         //return redirect()->route('events.index')->withStatus(__('Event successfully updated.'));
     }
 
@@ -958,6 +1002,7 @@ class EventController extends Controller
             // Free E-learning
             if(isset($requestData['free_courses']['list'])){
                 $data['course_elearning_access'] = json_encode($requestData['free_courses']['list']);
+                $data['course_elearning_exam'] = isset($requestData['free_courses']['exams']) ? $requestData['free_courses']['exams'] : null;
             }else{
                 $data['course_elearning_access'] = null;
             }
@@ -1004,7 +1049,6 @@ class EventController extends Controller
 
         // Certificate
         if(isset($requestData['certificate'])){
-            
             $data['course_certification_name_success'] = $requestData['certificate']['success_text'];
             $data['course_certification_name_failure'] = $requestData['certificate']['failure_text'];
             $data['course_certification_event_title'] = $requestData['certificate']['event_title'];
@@ -1114,6 +1158,7 @@ class EventController extends Controller
         $infos->course_elearning_exam_visible = isset($event_info['course_elearning_exam_visible']) ? $event_info['course_elearning_exam_visible'] : null;
         $infos->course_elearning_exam_icon = isset($event_info['course_elearning_exam_icon']) ? $event_info['course_elearning_exam_icon'] : null;
         $infos->course_elearning_exam_text = isset($event_info['course_elearning_exam_text']) ? $event_info['course_elearning_exam_text'] : null;
+        $infos->course_elearning_exam = isset($event_info['course_elearning_exam']) ? true : false;
 
 
         /*if($event->paymentMethod()->first()){
@@ -1282,7 +1327,8 @@ class EventController extends Controller
 
             $newEvent->lessons()->attach($lesson->pivot->lesson_id,['topic_id'=>$lesson->pivot->topic_id, 'date'=>$lesson->pivot->date,
                 'time_starts'=>$lesson->pivot->time_starts,'time_ends'=>$lesson->pivot->time_ends, 'duration' => $lesson->pivot->duration,
-                'room' => $lesson->pivot->room,'instructor_id' => $lesson->pivot->instructor_id, 'priority' => $lesson->pivot->priority]);
+                'room' => $lesson->pivot->room,'instructor_id' => $lesson->pivot->instructor_id,
+                'priority' => $lesson->pivot->priority,'automate_mail'=>$lesson->pivot->automate_mail]);
         }
 
 
@@ -1322,6 +1368,18 @@ class EventController extends Controller
         }
 
 
+    }
+
+    public function exportStudent(Request $request){
+
+        if($request->state == 'student_waiting_list'){
+            $filename = 'StudentsWaitingListExport.xlsx';
+        }else if($request->state == 'student_list'){
+            $filename = 'StudentsListExport.xlsx';
+        }
+
+        Excel::store(new StudentExport($request), $filename, 'export');
+        return Excel::download(new StudentExport($request), $filename);
     }
 
 }

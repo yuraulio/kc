@@ -218,18 +218,75 @@
                 <div class="card bg-pattern mb-3">
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-12">
-                                <h4 class="text-dark my-1 text-truncate" :title="widgets[0]"><span>{{widgets[0]}}</span></h4>
-                            </div>
-                            <div class="col-12">
-                                <div class="text-start">
-                                    <p class="text-muted mb-0 text-truncate">PUBLISHED: {{widgets[1]['published']}}, <span>UNPUBLISHED: {{ widgets[1]['unpublished'] }}</span></p>
+                            <div class="col-5">
+                                <div class="avatar-md bg-blue rounded">
+                                    <i class="fe-layers avatar-title font-22 text-white"></i>
                                 </div>
                             </div>
-                            <div class="col-12">
-                                <div class="text-start">
+                            <div class="col-7">
+                                <div class="text-end">
+                                    <h3 class="text-dark my-1 text-truncate" :title="widgets[0][1]"><span>{{widgets[0][1]}}</span></h3>
+                                    <p class="text-muted mb-0 text-truncate">{{widgets[0][0]}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-                                    <p class="text-muted mt-2 mb-0 text-truncate">{{widgets[2]}}</p>
+            <div v-if="widgets[1]" class="col-lg-3 col-md-6">
+                <div class="card bg-pattern mb-3">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-5">
+                                <div class="avatar-md bg-success rounded">
+                                    <i class="fe-award avatar-title font-22 text-white"></i>
+                                </div>
+                            </div>
+                            <div class="col-7">
+                                <div class="text-end">
+                                    <h3 class="text-dark my-1 text-truncate" :title="widgets[1][1]"><span>{{widgets[1][1]}}</span></h3>
+                                    <p class="text-muted mb-0 text-truncate">{{widgets[1][0]}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div v-if="widgets[2]" class="col-lg-3 col-md-6">
+                <div class="card bg-pattern mb-3">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-5">
+                                <div class="avatar-md bg-danger rounded">
+                                    <i class="fe-delete avatar-title font-22 text-white"></i>
+                                </div>
+                            </div>
+                            <div class="col-7">
+                                <div class="text-end">
+                                    <h3 class="text-dark my-1 text-truncate" :title="widgets[2][1]"><span>{{widgets[2][1]}}</span></h3>
+                                    <p class="text-muted mb-0 text-truncate">{{widgets[2][0]}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div v-if="widgets[3]" class="col-lg-3 col-md-6">
+                <div class="card bg-pattern mb-3">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-5">
+                                <div class="avatar-md bg-warning rounded">
+                                    <i class="fe-dollar-sign avatar-title font-22 text-white"></i>
+                                </div>
+                            </div>
+                            <div class="col-7">
+                                <div class="text-end">
+                                    <h3 class="text-dark my-1 text-truncate" :title="widgets[3][1]"><span>{{widgets[3][1]}}</span></h3>
+                                    <p class="text-muted mb-0 text-truncate">{{widgets[3][0]}}</p>
                                 </div>
                             </div>
                         </div>
@@ -412,7 +469,7 @@ import VuetablePaginationMixin from "vuetable-2/src/components/VuetablePaginatio
 import VuetablePagination from "vuetable-2/src/components/VuetablePagination";
 import VuetablePaginationDropdown from "vuetable-2/src/components/VuetablePaginationDropdown.vue";
 import VuetablePaginationInfo from "vuetable-2/src/components/VuetablePaginationInfo.vue";
-import multidropdown from '.././inputs/multidropdown.vue';
+import multidropdown from '../inputs/multidropdown.vue';
 export default {
     mixins: [VuetablePaginationMixin],
     components: {
@@ -678,7 +735,7 @@ export default {
                 // this.$toastr('error', transMan('submit_ad.nothing_selected'));
             }
         },
-        getWidgets(type) {
+        getWidgets() {
             if (this.config.loadWidgets !== false) {
                 axios
                 .post(this.config.apiUrl + '/widgets',
@@ -694,13 +751,7 @@ export default {
                 })
                 .then((response) => {
                     if (response.status == 200) {
-                        if(type == 'pages'){
-                            this.widgets = response.data[0];
-                        }else if(type == 'blog'){
-                            this.widgets = response.data[1];
-                        }
-                        console.log(this.widgets)
-
+                        this.widgets = response.data;
                         this.hideLoader();
                     }
                 })
@@ -801,12 +852,7 @@ export default {
     },
     mounted() {
         this.perPage = this.config.perPage;
-        if (window.location.pathname == "/pages_blog") {
-            this.getWidgets('blog');
-        }else if(window.location.pathname == "/pages"){
-            this.getWidgets('pages');
-        }
-
+        this.getWidgets();
     },
     created() {
         if (this.config.apiUrl == "/api/pages") {

@@ -43,11 +43,33 @@ class EventController extends Controller
         $this->authorize('manage-users', User::class);
         $user = Auth::user();
 
-        $data['live_courses'] = count(Event::where('published', 1)->where('status', [0,2])->get());
-        $data['completed_courses'] = count(Event::where('published', 1)->where('status', '3')->get());
-        $data['total_courses'] = count(Event::all());
+        // $data['live_courses'] = count(Event::where('published', 1)->where('status', [0,2])->get());
+        // $data['completed_courses'] = count(Event::where('published', 1)->where('status', '3')->get());
+        // $data['total_courses'] = count(Event::all());
+        $data = $this->statistics();
 
         return view('event.index', ['events' => $model->with('category', 'type','delivery')->orderBy('published', 'asc')->get(), 'user' => $user, 'data' => $data]);
+    }
+
+    public function statistics(){
+        $data = [];
+
+        $data['active'] = Event::where('status', 0)->count();
+
+        $data['completed'] = Event::where('status', 3)->count();
+
+        $data['all'] = Event::all()->count();
+
+        $data['inclass'] = Event::where('status', 0)->doesntHave('delivery')->orWhereHas('delivery', function($q) {
+            return $q->where('deliveries.id','<>', 143);
+        })->count();
+
+        $data['elearning'] = Event::where('status', 0)->whereHas('delivery', function($q) {
+            return $q->where('deliveries.id', 143);
+        })->count();
+
+
+        return $data;
     }
 
     public function assign_ticket(Request $request)

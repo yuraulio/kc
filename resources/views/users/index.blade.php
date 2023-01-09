@@ -185,7 +185,7 @@
                                         <td>{{ date('Y-m-d', strtotime($user['created_at'])) }}</td>
 
                                         <td class="d-none">
-                                            @foreach($user['events_for_user_list'] as $event){{ $event['title'] }}--@if(isset($data['transactions'][$user['id']]))@if(isset($data['transactions'][$user['id']][$event['id']])){{$data['transactions'][$user['id']][$event['id']][0]['type']}}--{{$data['transactions'][$user['id']][$event['id']][0]['amount']}}--{{$data['transactions'][$user['id']][$event['id']][0]['coupon_code']}}--{{$data['transactions'][$user['id']][$event['id']][0]['date']}}||@else||@endif
+                                            @foreach($user['events_for_user_list_without_relationship'] as $event){{ $event['title'] }}--@if(isset($data['transactions'][$user['id']]))@if(isset($data['transactions'][$user['id']][$event['id']])){{$data['transactions'][$user['id']][$event['id']][0]['type']}}--{{$data['transactions'][$user['id']][$event['id']][0]['amount']}}--{{$data['transactions'][$user['id']][$event['id']][0]['coupon_code']}}--{{$data['transactions'][$user['id']][$event['id']][0]['date']}}||@else||@endif
                                             @endif
                                             @endforeach
                                         </td>

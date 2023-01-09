@@ -1,27 +1,22 @@
 <div class="row">
+
     <div class="col-xl-3 col-md-6">
         <div class="card card-stats">
             <!-- Card body -->
             <div class="card-body">
                 <div class="row">
                     <div class="col">
-                        <h5 class="card-title text-uppercase text-muted mb-0">Total Courses</h5>
-                        <span class="h2 font-weight-bold mb-0"><?= $data['total_courses']; ?></span>
+                        <h5 class="card-title text-uppercase text-muted mb-0">COURSES</h5>
+                        <span class="h2 font-weight-bold mb-0">{{ $data['all'] }}</span>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-xl-3 col-md-6">
-        <div class="card card-stats">
-            <!-- Card body -->
-            <div class="card-body">
-                <div class="row">
-                    <div class="col">
-                        <h5 class="card-title text-uppercase text-muted mb-0">Live Courses</h5>
-                        <span class="h2 font-weight-bold mb-0"><?= $data['live_courses']; ?></span>
-                    </div>
-                </div>
+                <p class="mt-3 mb-0 text-sm">
+                    <span>ACTIVE:{{ $data['active'] }}</span>
+                    <span class="ml-3">COMPLETED:{{ $data['completed'] }}</span>
+                </p>
+                <p class="mb-0 text-sm">
+                    <span class="">All courses created by admins.</span>
+                </p>
             </div>
         </div>
     </div>
@@ -32,12 +27,20 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col">
-                        <h5 class="card-title text-uppercase text-muted mb-0">Completed Courses</h5>
-                        <span class="h2 font-weight-bold mb-0"><?= $data['completed_courses']; ?></span>
+                        <h5 class="card-title text-uppercase text-muted mb-0">ACTIVE COURSES</h5>
+                        <span class="h2 font-weight-bold mb-0">{{ $data['inclass'] }}</span>
                     </div>
                 </div>
+                <p class="mt-3 mb-0 text-sm">
+                    <span>CLASS:{{ $data['active'] }}</span>
+                    <span class="ml-3">VIDEO:{{ $data['elearning'] }}</span>
+                </p>
+                <p class="mb-0 text-sm">
+                    <span class="">All courses active now on the website.</span>
+                </p>
             </div>
         </div>
     </div>
+
 
 </div>
