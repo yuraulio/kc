@@ -119,12 +119,27 @@ class TransactionController extends Controller
         $earlyCount = 0;
         $data['transactions'] = [];
         $data['total_users'] = 0;
+        $data['usersElearningAll'] = 0;
+        $data['usersInClassAll'] = 0;
+        $data['usersElearningIncomeAll'] = 0;
+        $data['usersInClassIncomeAll'] = 0;
         $total_users = [];
         foreach($transactions as $transaction){
             if(!$transaction->subscription->first() && $transaction->user->first() && $transaction->event->first()){
 
                 $isElearning = $transaction->event->first()->delivery->first() && $transaction->event->first()->delivery->first()->id == 143;
 
+                if($isElearning){
+
+                    $data['usersElearningAll']++;
+                    $data['usersElearningIncomeAll'] = $data['usersElearningIncomeAll'] + $transaction['total_amount'];
+
+                }else{
+
+                    $data['usersInClassAll']++;
+                    $data['usersInClassIncomeAll'] = $data['usersInClassIncomeAll'] + $transaction['total_amount'];
+
+                }
 
                 $category =  $transaction->event->first()->category->first() ? $transaction->event->first()->category->first()->id : -1;
 
@@ -190,7 +205,7 @@ class TransactionController extends Controller
 
         }
 
-        $data['total_users'] = count($total_users);
+        //$data['total_users'] = count($total_users);
 
         return $data;
 
@@ -231,11 +246,30 @@ class TransactionController extends Controller
         $data['total_users'] = 0;
         $total_users = [];
 
+        $data['usersElearningAll'] = 0;
+        $data['usersInClassAll'] = 0;
+        $data['usersElearningIncomeAll'] = 0;
+        $data['usersInClassIncomeAll'] = 0;
+
         foreach($transactions as $transaction){
+            if(count($transaction['invoice']) != 0){
+                $i++;
+            }
             if(!$transaction->subscription->first() && $transaction->user->first() && $transaction->event->first()){
 
                 $isElearning = $transaction->event->first()->delivery->first() && $transaction->event->first()->delivery->first()->id == 143;
 
+                if($isElearning){
+
+                    $data['usersElearningAll']++;
+                    $data['usersElearningIncomeAll'] = $data['usersElearningIncomeAll'] + $transaction['total_amount'];
+
+                }else{
+
+                    $data['usersInClassAll']++;
+                    $data['usersInClassIncomeAll'] = $data['usersInClassIncomeAll'] + $transaction['total_amount'];
+
+                }
 
                 $category =  $transaction->event->first()->category->first() ? $transaction->event->first()->category->first()->id : -1;
 
@@ -317,11 +351,50 @@ class TransactionController extends Controller
             }
 
         }
+
         $data['total_users'] = count($total_users);
 
         return $data;
 
     }
+
+    // public function statistics($transactions)
+    // {
+    //     $data = [];
+
+    //     $data['usersInclassAll'] = User::whereHas('events_for_user_list_without_relationship', function ($q) {
+    //         $q->wherePublished(true)->where('event_user.paid', true)->where(function ($q1) {
+    //             $q1->doesntHave('delivery')->OrWhereHas('delivery', function ($q2) {
+    //                 return $q2->where('deliveries.id', '<>', 143);
+    //             });
+    //         });
+    //     })->count();
+
+    //     foreach($transactions){
+
+    //     }
+
+    //     $data['usersElearningAll'] = User::whereHas('events_for_user_list_without_relationship', function ($q) {
+
+    //         $q->wherePublished(true)->where('event_user.paid', true)->whereHas('delivery', function ($q1) {
+    //             return $q1->where('deliveries.id', 143);
+    //         });
+    //     })->count();
+
+    //     $data['inClassIncome'] = Transaction::whereHas('event', function($q){
+
+    //         $q->doesntHave('delivery')->OrWhereHas('delivery', function ($q1) {
+    //             return $q1->where('deliveries.id', '<>', 143);
+    //         });
+    //     })->sum('total_amount');
+
+
+    //     dd($data['inClassIncome']);
+    //     //$data['elearningIncomeAll']
+
+    //     return $data;
+
+    // }
 
 
     public function participants_inside_revenue()

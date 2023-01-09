@@ -5,16 +5,67 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col">
-                    <h5 class="card-title text-uppercase text-muted mb-0">Total Sales:</h5>
-                        <span id="total" class="h2 font-weight-bold mb-0"></span>
+                    <h5 class="card-title text-uppercase text-muted mb-0">REGISTRATIONS ALL TIME</h5>
+                        <span class="h2 font-weight-bold mb-0">{{ $usersInClassAll + $usersElearningAll }}</span>
                     </div>
 
                 </div>
+                <p class="mt-3 mb-0 text-sm">
+                    <span>CLASS: {{ $usersInClassAll }}</span>
+                    <span class="ml-3">VIDEO: {{ $usersElearningAll }}</span>
+                </p>
+                <p class="mb-0 text-sm">
+                    <span class="">All people who registered in a free or paid course (class or video).</span>
+                </p>
             </div>
         </div>
     </div>
 
-    <div class="card-body col-xl-3 col-md-6">
+    <div class="card-body col-xl-3 col-md-6 total-revenue">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                    <h5 class="card-title text-uppercase text-muted mb-0">REGISTRATIONS INCOME</h5>
+                        <span class="h2 font-weight-bold mb-0">&euro;{{ number_format($usersInClassIncomeAll + $usersElearningIncomeAll,2,'.','.') }}</span>
+                    </div>
+
+                </div>
+                <p class="mt-3 mb-0 text-sm">
+                    <span>CLASS: &euro;{{ number_format($usersInClassIncomeAll,2,'.','.') }}</span>
+                    <span class="ml-3">VIDEO: &euro;{{ number_format($usersElearningIncomeAll,2,'.','.') }}</span>
+                </p>
+                <p class="mb-0 text-sm">
+                    <span class="">All gross income from our paid courses (class or video).</span>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body col-xl-3 col-md-6 total-revenue">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                    <h5 class="card-title text-uppercase text-muted mb-0">TICKETS INCOME</h5>
+                        <span class="h2 font-weight-bold mb-0" id="total_income"></span>
+                    </div>
+
+                </div>
+                <p class="mt-3 mb-0 text-sm">
+                    <span>EARLY: <span id="early-bird"></span></span>
+                    <span class="ml-3">SPECIAL: <span id="special"></span></span>
+                    <span class="ml-3">REGULAR: <span id="regular"></span></span>
+                </p>
+                <p class="mb-0 text-sm">
+                    <span class="">All income from our paid courses (class or video) by ticket type.</span>
+                </p>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- <div class="card-body col-xl-3 col-md-6">
         <div class="card">
             <div class="card-body">
                 <div class="row">
@@ -107,22 +158,7 @@
                 </div>
             </div>
         </div>
-    </div>
-    @if(isset($total_users))
-    <div class="card-body col-xl-3 col-md-6">
-        <div class="card">
-            <div class="card-body">
-                <div class="row">
-                    <div class="col">
-                    <h5 class="card-title text-uppercase text-muted mb-0">Total Students:</h5>
-                        <span id="total_students" class="h2 font-weight-bold mb-0">{{ $total_users }}</span>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    </div>
-    @endif
+    </div> -->
 
 </div>
 

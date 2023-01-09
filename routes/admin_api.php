@@ -18,6 +18,7 @@ Route::domain(env('PREFIX_NEW_ADMIN_DOMAIN_URL') . env('APP_DOMAIN'))->group(fun
             Route::get('admins', [DashboardController::class, 'get_widget_data_admins']);
             Route::get('instructors', [DashboardController::class, 'get_widget_data_instructors']);
             Route::get('students', [DashboardController::class, 'get_widget_data_students']);
+            Route::get('students_all', [DashboardController::class, 'get_widget_data_students_all']);
             Route::get('graduates', [DashboardController::class, 'get_widget_data_graduates']);
             Route::get('comments', [DashboardController::class, 'get_widget_comments']);
             Route::get('pages', [DashboardController::class, 'get_widget_pages']);

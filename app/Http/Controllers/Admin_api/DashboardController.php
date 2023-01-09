@@ -42,37 +42,92 @@ class DashboardController extends Controller
     }
 
     /**
-     * Return active instructors count
-     *
-     * @return JsonResponse
-     */
-    public function get_widget_data_instructors(): JsonResponse
-    {
-        $instructors = Instructor::where('status', true)->has('event')->get();
-
-        return response()->json(['data' => count($instructors)], 200);
-    }
-
-    /**
      * Return active students count
      *
      * @return JsonResponse
      */
     public function get_widget_data_students(): JsonResponse
     {
-        $students_in_class = [];
-        $students_online = [];
-        $events = Event::where('published', true)->with('delivery', 'type', 'users')->get();
 
-        foreach ($events as $event) {
-            if ($event->delivery->first() && $event->delivery->first()->id == 143) {
-                //dd($event->users()->pluck('user_id')->toArray());
-                $students_online = array_merge($students_online, $event->users()->pluck('user_id')->toArray());
-            } else {
-                $students_in_class = array_merge($students_in_class, $event->users()->pluck('user_id')->toArray());
-            }
-        }
-        return response()->json(['data' => [count(array_unique($students_in_class)), count(array_unique($students_online))]], 200);
+
+        $students_in_class = User::whereHas('events_for_user_list_without_relationship', function ($q) {
+            $q->wherePublished(true)->whereStatus(0)->where(function ($q1) {
+                $q1->doesntHave('delivery')->OrWhereHas('delivery', function ($q2) {
+                    return $q2->where('deliveries.id', '<>', 143);
+                });
+            });
+        })->count();
+
+        $students_online = User::whereHas('events_for_user_list_without_relationship', function ($q) {
+
+            $q->wherePublished(true)->whereStatus(0)->where('event_user.expiration', '>=',date('Y-m-d'))->whereHas('delivery', function ($q1) {
+                return $q1->where('deliveries.id', 143);
+            });
+        })->count();
+
+
+        return response()->json(['data' => [
+            $students_in_class,
+            $students_online
+        ]], 200);
+    }
+
+    public function get_widget_data_students_all(): JsonResponse
+    {
+
+        $students_in_class = User::whereHas('events_for_user_list_without_relationship', function ($q) {
+            $q->wherePublished(true)->where('event_user.paid', true)->where(function ($q1) {
+                $q1->doesntHave('delivery')->OrWhereHas('delivery', function ($q2) {
+                    return $q2->where('deliveries.id', '<>', 143);
+                });
+            });
+        })->count();
+
+        $students_online = User::whereHas('events_for_user_list_without_relationship', function ($q) {
+
+            $q->wherePublished(true)->where('event_user.paid', true)->whereHas('delivery', function ($q1) {
+                return $q1->where('deliveries.id', 143);
+            });
+        })->count();
+
+
+        return response()->json(['data' => [
+            $students_in_class,
+            $students_online
+        ]], 200);
+    }
+
+    public function get_widget_data_instructors(): JsonResponse
+    {
+        $instructors_in_class = [];
+        $instructors_online = [];
+        $all_instructors = 0;
+
+        $instructors_in_class = Instructor::whereStatus(true)->whereHas('event', function($q){
+            $q->whereStatus(0)->doesntHave('delivery')
+                ->OrWhereHas('delivery', function ($q2) {
+                    return $q2->where('deliveries.id', '<>', 143);
+                });
+        })->count();
+
+
+
+        $instructors_online = Instructor::whereStatus(true)->whereHas('event', function($q){
+            $q->whereStatus(0)
+                ->WhereHas('delivery', function ($q2) {
+                    return $q2->where('deliveries.id', 143);
+                });
+        })->count();
+
+        $all_instructors = Instructor::whereStatus(true)->has('event')->count();
+
+
+
+        return response()->json(['data' => [
+            $instructors_in_class,
+            $instructors_online,
+            $all_instructors
+        ]], 200);
     }
 
     /**
