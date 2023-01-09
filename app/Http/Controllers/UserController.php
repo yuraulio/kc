@@ -1411,11 +1411,21 @@ class UserController extends Controller
 
     public function generateConsentPdf(User $user)
     {
-        $terms = Page::find(6);
-        $terms = json_decode($terms->content, true)[3]['columns'][0]['template']['inputs'][0]['value'];
 
-        $privacy = Page::select('content')->find(4);
-        $privacy = json_decode($privacy->content, true)[3]['columns'][0]['template']['inputs'][0]['value'];
+        if(!$user->instructor){
+            $terms = Page::find(6);
+            $terms = json_decode($terms->content, true)[3]['columns'][0]['template']['inputs'][0]['value'];
+    
+            $privacy = Page::select('content')->find(4);
+            $privacy = json_decode($privacy->content, true)[3]['columns'][0]['template']['inputs'][0]['value'];
+        }else{
+            $privacy = null;
+            $terms = Page::find(48);
+            $terms = json_decode($terms->content, true)[5]['columns'][0]['template']['inputs'][0]['value'];
+
+        }
+
+        
 
         $pdf = PDF::loadView('users.consent_pdf', compact('user', 'terms', 'privacy'));
 

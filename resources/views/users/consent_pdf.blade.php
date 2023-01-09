@@ -73,7 +73,7 @@
                     <td scope="row">{{$consent}}</td>
                 @else
                     @if($key != 'billafm')
-                        <td>{{$consent}}</td>
+                        <td>{!!$consent!!}</td>
                     @endif
                 @endif
 
@@ -87,7 +87,9 @@
     <h1>Terms & Conditions</h1>
     {!! $terms !!}
     <hr>
+    @if($privacy)
     <h1>Data Privacy Policy</h1>
     {!! $privacy !!}
+    @endif
 </body>
 </html>
