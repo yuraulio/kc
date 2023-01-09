@@ -444,7 +444,7 @@
                               <?php //dd($folders) ?>
                               <ul class="resource-list">
                                  <?php $topicNames = []; ?>
-
+                                 @if(isset($selectedFiles))
                                  @foreach($folders as $key => $folder)
                                     <?php
                                         $folderIsSelected = false;
@@ -499,8 +499,8 @@
                                        @endif
                                     @endforeach
                                  @endforeach
-
-
+                                 @endif
+                                 @if(isset($selectedFiles))
                                  @if(isset($files_bonus) && count($files_bonus) > 0 && isset($files) && count($files) > 0)
 
                                     @foreach($folders as $folder)
@@ -555,6 +555,7 @@
                                        @endforeach
 
                                     @endforeach
+                                 @endif
                                  @endif
                               </ul>
                            </div>
