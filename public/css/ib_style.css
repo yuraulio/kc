@@ -22,7 +22,7 @@ img.account-thumb {
   display: inline-block;
   letter-spacing: 0.07em;
   text-transform: uppercase;
-  box-shadow: 3px 3px 3.7px 0.28px rgba(76, 76, 76, 0.11);
+  box-shadow: 9px 8px 5px 2.28px rgba(76, 76, 76, 0.11);
   text-decoration: none;
   transition: 300ms all ease;
 
@@ -365,7 +365,7 @@ p.result_answer {
 }
 
 #exam-app{
-    margin-top: 15rem;
+    margin-top: 13rem;
 }
 
 
@@ -476,8 +476,8 @@ p.result_answer {
   height: 25px;
   width: 25px;
   border-radius: 50%;
-  top: 50%;
-  transform: translateY(-50%);
+  top: 5%;
+  transform: translateY(10%);
   border: 1px solid;
 }
 
@@ -697,6 +697,17 @@ a.cd-top:hover {
     flex-direction: row;
 }
 
+.buttons-wrapper img{
+    vertical-align: initial;
+}
+
+.buttons-wrapper .clear-answer,
+.buttons-wrapper .next.button-senary,
+#toggle-results
+{
+    box-shadow: unset;
+}
+
 .details-end-exam{
     display: flex;
     justify-content: space-between;
@@ -716,8 +727,13 @@ a.cd-top:hover {
  and (max-device-width : 1059px)
  and (orientation : portrait) {
 
+    .countdown-styled.time_remaining_header{
+
+        padding: 6px 8px !important;
+    }
+
     #exam-app{
-        margin-top: 17rem;
+        margin-top: 13rem;
     }
     #hover-palette-expand-arrow,
     #hover-palette-expand{
@@ -735,6 +751,11 @@ a.cd-top:hover {
 @media only screen
  and (min-device-width : 768px)
  and (max-device-width : 954px){
+    .countdown-styled.time_remaining_header{
+
+        padding: 6px 8px !important;
+    }
+
     #exam-app .row.border-bot,
     #exam-app .row.resulttitle,
     #exam-app .row.action-wrapper{
@@ -753,8 +774,13 @@ and (min-device-width : 768px)
 and (max-device-width : 1024px)
 and (orientation : portrait) {
 
+    .countdown-styled.time_remaining_header{
+
+        padding: 6px 8px !important;
+    }
+
     #exam-app{
-        margin-top: 17rem;
+        margin-top: 13rem;
     }
     #hover-palette-expand-arrow,
     #hover-palette-expand{
@@ -789,6 +815,9 @@ and (orientation : portrait) {
 
 /* Tablet */
 @media (min-width: 768px) and (max-width: 1024px) {
+
+
+
     .buttons-wrapper button{
         width: 45% !important;
 
@@ -799,6 +828,13 @@ and (orientation : portrait) {
 
 /* Mobile */
 @media only screen and (max-device-width: 480px) {
+
+    .countdown-styled.time_remaining_header{
+
+        padding: 4px 8px !important;
+    }
+
+
     .buttons-wrapper button{
         width: 100% !important;
 
@@ -819,7 +855,7 @@ and (orientation : portrait) {
     }
 
     #exam-app{
-        margin-top: 17rem;
+        margin-top: 15rem;
     }
 
     .details-end-exam{
@@ -839,7 +875,7 @@ and (orientation : portrait) {
 @media only screen and (max-width: 360px) {
 
     #exam-app{
-        margin-top: 20rem;
+        margin-top: 16rem;
     }
 
     .details-end-exam{
@@ -859,6 +895,11 @@ and (orientation : portrait) {
 @media only screen
 and (min-device-width: 375px)
 and (max-device-width: 809px) {
+
+    .countdown-styled.time_remaining_header{
+
+        padding: 4px 8px !important;
+    }
 
     .buttons-wrapper button{
         width: 100% !important;
@@ -1130,7 +1171,7 @@ h5 {
     font-size: 18px;
     width: fit-content;
     float: right;
-    padding: 4px 8px;
+    padding: 1px 8px;
 }
 
 #timerdiv span{
@@ -1145,6 +1186,12 @@ h5 {
 
 #header .title-area h1{
     color: white;
+    margin-top: 0;
+    margin-bottom: 1rem;
+    margin: 0;
+    padding: 0;
+    font-size: 18px;
+    line-height: 1.5;
 }
 
 /* close exam btn */
@@ -1224,8 +1271,14 @@ h5 {
 
 .container1 {
     width:100%;
+    border:1px solid gray;
+}
+
+.container1:hover {
+    width:100%;
     border:2px solid black;
 }
+
 .container1 div {
     width:100%;
 }
@@ -1246,6 +1299,8 @@ h5 {
     padding-left: 1rem;
 
     cursor: pointer;
+
+    box-shadow: 15px 8px 6.7px 3.28px rgba(15, 15, 15, 0.11);
 }
 .container1 .content1:hover{
     background-color: #f3f3f3;

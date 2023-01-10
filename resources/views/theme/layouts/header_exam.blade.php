@@ -10,21 +10,22 @@ $minutes = 0;
 <a href="#" title="Close window" class="close"></a>
 				<div class="container clearfix">
                     <div class="row">
+
                         {{--<div class="logo-area col-sm-12 col-md-2 col-lg-2 text-sm-center">
-                            <a href="/" class="logo">Know Crunch</a>
-                        </div>
-                        <div class="title-area col-sm-12 col-md-7 offset-md-1 col-lg-7 offset-lg-0">
-                            <h1>{{ $event_title }}</h1>
-                        </div>
-                        <div class="menu-area col-sm-12 col-md-2 col-lg-3 text-right">
---}}
-                        <div class="logo-area col-sm-12 col-md-2 col-lg-2 text-sm-center">
                             <a href="/" class="logo">Know Crunch</a>
                         </div>
                         <div class="title-area col-sm-12 col-md-9 offset-md-1 col-lg-5 offset-lg-1">
                             <h1>{{ $event_title }}</h1>
                         </div>
-                        <div class="menu-area col-sm-12 col-md-12 col-lg-3 text-right">
+                        <div class="menu-area col-sm-12 col-md-12 col-lg-3 text-right">--}}
+
+                        <div class="logo-area col-sm-12 col-md-2 col-lg-2 text-sm-center">
+                            <a href="/" class="logo">Know Crunch</a>
+                        </div>
+                        <div class="title-area col-sm-12 col-md-5 offset-md-1 col-lg-5 offset-lg-1">
+                            <h1>{{ $event_title }}</h1>
+                        </div>
+                        <div class="menu-area col-sm-12 col-md-4 col-lg-3 text-right">
 
                             {{--<div class="header-actions clearfix">--}}
                             <div class="clearfix">
