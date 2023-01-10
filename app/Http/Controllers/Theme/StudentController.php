@@ -1073,7 +1073,7 @@ class StudentController extends Controller
 
             }else if( $event && count($event->getExams()) > 0 ){
 
-                $examAccess = $event->examAccess($user);
+                $examAccess = false;//$event->examAccess($user);
 
                 if($examAccess){
 
@@ -1122,7 +1122,7 @@ class StudentController extends Controller
             'success' => true,
             'videos' => $request->videos,
             'loged_in' => true,
-            'exam_access' => $examAccess,
+            'exam_access' => false,//$examAccess,
             // 'progress' => $progress
         ]);
 
