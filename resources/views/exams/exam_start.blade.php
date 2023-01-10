@@ -1140,7 +1140,6 @@ jQuery(document).ready(function(){
         if($('.content1').hasClass('expanded')){
             $('#hover-palette-expand').css('display', 'none')
             $('#hover-palette-expand-arrow').css('display', 'none')
-
         }
 
     }
@@ -1165,7 +1164,8 @@ jQuery(document).ready(function(){
     $('#pallete_list span').on('mouseover',function(){
         //$('#hover-palette-expand').toggleClass('hidden')
         //$('#hover-palette-expand').css('display', 'none')
-        document.getElementById('hover-palette-expand').style.display = 'none';
+        //document.getElementById('hover-palette-expand').style.display = 'none';
+        $('#hover-palette-expand').css('display', 'none')
     })
 
     $( "#pallete_list span" ).on('mouseleave', function(){
