@@ -1159,7 +1159,7 @@
                                              }else{
                                                 $certiTitle = $certificate->certificate_title;
                                              }
-
+                                             $certiTitle = str_replace('&nbsp;',' ',$certiTitle);
                                              $certiTitle = urlencode(htmlspecialchars_decode(strip_tags($certiTitle),ENT_QUOTES));
 
                                         ?>
@@ -1413,7 +1413,7 @@
                                              }else{
                                                 $certiTitle = $certificate->certificate_title;
                                              }
-
+                                             $certiTitle = str_replace('&nbsp;',' ',$certiTitle);
                                              $certiTitle = urlencode(htmlspecialchars_decode(strip_tags($certiTitle),ENT_QUOTES));
 
                                              //dd($certiTitle);
@@ -1576,7 +1576,7 @@
                                              }else{
                                                 $certiTitle = $certificate->certificate_title;
                                              }
-
+                                             $certiTitle = str_replace('&nbsp;',' ',$certiTitle);
                                              $certiTitle = urlencode(htmlspecialchars_decode(strip_tags($certiTitle),ENT_QUOTES));
 
                                              ?>

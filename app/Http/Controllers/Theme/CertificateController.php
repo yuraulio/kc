@@ -97,7 +97,7 @@ class CertificateController extends Controller
         $certificateTitle = strip_tags($certificate->event->first()->event_info()['certificate']['messages']['failure']);
 
       }
-
+      $certificateTitle = str_replace('&nbsp;',$certificateTitle);
       $certificateEventTitle = $certificate->event->first()->event_info()['certificate']['event_title'];
 
     }
