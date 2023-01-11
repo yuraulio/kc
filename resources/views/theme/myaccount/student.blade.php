@@ -1366,7 +1366,15 @@
                                  <div id="c-exams-inner{{$tab}}" class="in-tab-wrapper">
                                     <div class="bottom">
                                        @foreach($event['exams'] as $p)
-                                       <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Customer_Access.svg')}}" alt="">Exams activate automatically after 2 months </div>
+
+                                       <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Customer_Access.svg')}}" alt="">
+                                       @if(isset($event['exam_activate_months']) && $event['exam_activate_months'] != null)
+                                             {{ 'Exams activate automatically after' }} {{ $event['exam_activate_months'] }} {{'months' }}
+                                       @else
+                                            {{ 'Exams activate automatically after 80% progress' }}
+                                       @endif
+
+                                    </div>
                                        <div class="right">
                                           <!-- Feedback 8-12 changed -->
 
@@ -1532,7 +1540,13 @@
                                  <div id="c-exams-inner{{$tab}}" class="in-tab-wrapper">
                                     <div class="bottom">
                                        @foreach($event['exams'] as $p)
-                                       <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Customer_Access.svg')}}" alt="">Exams activate automatically after 2 months </div>
+                                       <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Customer_Access.svg')}}" alt="">
+                                        @if(isset($event['exam_activate_months']) && $event['exam_activate_months'] != null)
+                                                {{ 'Exams activate automatically after' }} {{ $event['exam_activate_months'] }} {{ 'months' }}
+                                        @else
+                                                {{ 'Exams activate automatically after 80% progress' }}
+                                        @endif
+                                        </div>
                                        <div class="right">
                                           <!-- Feedback 8-12 changed -->
                                           <?php $userExam = isset($user['hasExamResults'][$p->id][0]) ? $user['hasExamResults'][$p->id][0] : null ?>

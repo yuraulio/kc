@@ -369,13 +369,13 @@ class Event extends Model
                 if(isset($videos[$vimeoVideo]) && (int) $videos[$vimeoVideo]['seen'] == 1){
                     $topicsSeen[$key]++;
                 }
-                
+
                 $sum1 = $sum1 + $sum;
                 $data['keys'][$key] = $sum1;
 
             }
             $topicsSeen[$key] = $topicsSeen[$key] == count($lesson1);
-            
+
         }
 
 
@@ -564,10 +564,10 @@ class Event extends Model
         if($accessMonths < 1){
             $periodAfterHasCourse = $this->progress($user);
         }else{
+
             $periodAfterHasCourse = $this->period($user);
         }
 
-    
         $studentsEx = [1353,1866,1753,1882,1913,1923];
 
         if(in_array($user->id, $studentsEx)){
@@ -810,7 +810,7 @@ class Event extends Model
 
         $certification = count($this->certificatesByUser($user->id)) > 0;
         $infos = $this->event_info();
-        
+
         if($this->examAccess($user,$successPer) && !$certification){
 
             $cert = new Certificate;
@@ -975,6 +975,9 @@ class Event extends Model
                 $data['elearning']['exam']['visible'] = $infos['course_elearning_exam_visible'] != null ? json_decode($infos['course_elearning_exam_visible'], true) : null;
                 $data['elearning']['exam']['icon'] = $infos['course_elearning_exam_icon'] != null ? json_decode($infos['course_elearning_exam_icon'], true) : null;
                 $data['elearning']['exam']['text'] = $infos['course_elearning_exam_text'] != null ? $infos['course_elearning_exam_text'] : null;
+
+                $data['elearning']['exam']['activate_months'] = $infos['course_elearning_exam_activate_months'] != null ? json_decode($infos['course_elearning_exam_activate_months'], true) : null;
+
             }else if($data['delivery'] == 215){
                 $data['inclass']['absences'] = $infos['course_inclass_absences'];
                 $data['inclass']['dates'] = ($infos['course_inclass_dates'] != null && $infos['course_inclass_dates'] != '[]') ? json_decode($infos['course_inclass_dates'], true) : null;

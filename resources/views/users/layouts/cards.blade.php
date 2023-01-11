@@ -28,12 +28,12 @@
                 <div class="row">
                     <div class="col">
                         <h5 class="card-title text-uppercase text-muted mb-0">STUDENTS ACTIVE NOW</h5>
-                        <span class="h2 font-weight-bold mb-0">{{ $data['userInclass'] + $data['userElearning'] }}</span>
+                        <span class="h2 font-weight-bold mb-0">{{ $data['usersInClass'] + $data['usersElearning'] }}</span>
                     </div>
                 </div>
                 <p class="mt-3 mb-0 text-sm">
-                    <span>CLASS:{{ $data['userInclass'] }}</span>
-                    <span class="ml-3">VIDEO:{{ $data['userElearning'] }}</span>
+                    <span>CLASS:{{ $data['usersInClass'] }}</span>
+                    <span class="ml-3">VIDEO:{{ $data['usersElearning'] }}</span>
 
                 </p>
                 <p class="mb-0 text-sm">
@@ -50,12 +50,12 @@
                 <div class="row">
                     <div class="col">
                         <h5 class="card-title text-uppercase text-muted mb-0">REGISTRATIONS ALL TIME</h5>
-                        <span class="h2 font-weight-bold mb-0">{{ $data['userInclassAll'] + $data['userElearningAll'] }}</span>
+                        <span class="h2 font-weight-bold mb-0">{{ $data['usersInClassAll'] + $data['usersElearningAll'] }}</span>
                     </div>
                 </div>
                 <p class="mt-3 mb-0 text-sm">
-                    <span>CLASS:{{ $data['userInclassAll'] }}</span>
-                    <span class="ml-3">VIDEO:{{ $data['userElearningAll'] }}</span>
+                    <span>CLASS:{{ $data['usersInClassAll'] }}</span>
+                    <span class="ml-3">VIDEO:{{ $data['usersElearningAll'] }}</span>
 
                 </p>
                 <p class="mb-0 text-sm">

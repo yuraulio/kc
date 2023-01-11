@@ -87,14 +87,15 @@ class UserController extends Controller
     }
 
     public function statistics($users){
+
         $data = [];
 
         $data['active'] = 0;
         $data['inactive'] = 0;
-        $data['userInclass'] = 0;
-        $data['userElearning'] = 0;
-        $data['userInclassAll'] = 0;
-        $data['userElearningAll'] = 0;
+        $data['usersInClass'] = 0;
+        $data['usersElearning'] = 0;
+        $data['usersInClassAll'] = 0;
+        $data['usersElearningAll'] = 0;
 
         foreach($users->toArray() as $user){
 
@@ -109,50 +110,50 @@ class UserController extends Controller
                     $data['inactive']++;
                 }
                 if($completed){
-// UserInclass
-if(!empty($user['events_for_user_list_without_relationship'])){
-    $events = $user['events_for_user_list_without_relationship'];
+                    // UserInclass
+                    if(!empty($user['events_for_user_list_without_relationship'])){
+                        $events = $user['events_for_user_list_without_relationship'];
 
-    $foundInClass = false;
-    $foundInClassAll = false;
-    $foundElearning = false;
-    $foundElearningAll = false;
+                        $foundInClass = false;
+                        $foundInClassAll = false;
+                        $foundElearning = false;
+                        $foundElearningAll = false;
 
-    foreach($events as $event){
+                        foreach($events as $event){
 
-        if($event['published'] && $event['status'] == 0 && $event['pivot']['paid'] == 1 && (empty($event['delivery']) || $event['delivery'][0]['id'] != 143)){
+                            if($event['published'] && $event['status'] == 0 && $event['pivot']['paid'] == 1 && (empty($event['delivery']) || $event['delivery'][0]['id'] != 143)){
 
-            $foundInClass = true;
-        }
+                                $foundInClass = true;
+                            }
 
 
 
-        if($event['published'] && $event['pivot']['expiration'] >= date('Y-m-d') && $event['status'] == 0 && $event['pivot']['paid'] == 1 && !empty($event['delivery']) && $event['delivery'][0]['id'] == 143 ){
-            $foundElearning = true;
-        }
+                            if($event['published'] && $event['pivot']['expiration'] >= date('Y-m-d') && $event['status'] == 0 && $event['pivot']['paid'] == 1 && !empty($event['delivery']) && $event['delivery'][0]['id'] == 143 ){
+                                $foundElearning = true;
+                            }
 
-        if(empty($event['delivery']) || (!empty($event['delivery']) && $event['delivery'][0]['id'] != 143) ){
-            $foundInClassAll = true;
-        }
+                            if(empty($event['delivery']) || (!empty($event['delivery']) && $event['delivery'][0]['id'] != 143) ){
+                                $foundInClassAll = true;
+                            }
 
-        if(!empty($event['delivery']) && $event['delivery'][0]['id'] == 143){
-            $foundElearningAll = true;
-        }
-    }
+                            if(!empty($event['delivery']) && $event['delivery'][0]['id'] == 143){
+                                $foundElearningAll = true;
+                            }
+                        }
 
-    if($foundInClass){
-        $data['userInclass']++;
-    }
-    if($foundElearning){
-        $data['userElearning']++;
-    }
-    if($foundInClassAll){
-        $data['userInclassAll']++;
-    }
-    if($foundElearningAll){
-        $data['userElearningAll']++;
-    }
-}
+                        if($foundInClass){
+                            $data['usersInClass']++;
+                        }
+                        if($foundElearning){
+                            $data['usersElearning']++;
+                        }
+                        if($foundInClassAll){
+                            $data['usersInClassAll']++;
+                        }
+                        if($foundElearningAll){
+                            $data['usersElearningAll']++;
+                        }
+                    }
                 }
             }
 
@@ -208,7 +209,7 @@ if(!empty($user['events_for_user_list_without_relationship'])){
         $data['all'] = $data['active'] + $data['inactive'];
 
 
-        $data['userInclass'] = User::WhereHas('events_for_user_list_without_relationship', function($q) {
+        $data['usersInClass'] = User::WhereHas('events_for_user_list_without_relationship', function($q) {
             $q->wherePublished(true)->where('event_user.paid', true)->whereStatus(0)->where(function ($q1) {
                 $q1->doesntHave('delivery')->OrWhereHas('delivery', function ($q2) {
                     return $q2->where('deliveries.id', '<>', 143);
@@ -216,20 +217,20 @@ if(!empty($user['events_for_user_list_without_relationship'])){
             });
         })->count();
         // dd($data['userInclass']);
-        $data['userInclass'] = 0;
+        $data['usersInClass'] = 0;
         //dd($data);
 
-        $data['userElearning'] = User::WhereHas('events_for_user_list_without_relationship', function($q) {
+        $data['usersElearning'] = User::WhereHas('events_for_user_list_without_relationship', function($q) {
             $q->wherePublished(true)->where('event_user.expiration', '>=',date('Y-m-d'))->where('event_user.paid', true)->whereStatus(0)->whereHas('delivery', function ($q1) {
                 return $q1->where('deliveries.id', 143);
             });
         })->count();
 
-        // dd($data['userElearning']);
+        // dd($data['usersElearning']);
 
 
 
-        $data['userInclassAll'] = User::WhereHas('events_for_user_list_without_relationship', function($q) {
+        $data['usersInClassAll'] = User::WhereHas('events_for_user_list_without_relationship', function($q) {
             $q->where(function ($q1) {
                 $q1->doesntHave('delivery')->OrWhereHas('delivery', function ($q2) {
                     return $q2->where('deliveries.id', '<>', 143);
@@ -238,14 +239,14 @@ if(!empty($user['events_for_user_list_without_relationship'])){
         })->count();
         //dd($data['userInclassAll']);
 
-        $data['userElearningAll'] = User::WhereHas('events_for_user_list_without_relationship', function($q) {
+        $data['usersElearningAll'] = User::WhereHas('events_for_user_list_without_relationship', function($q) {
             $q->whereHas('delivery', function ($q1) {
                 return $q1->where('deliveries.id', 143);
             });
         })->count();
 
 
-        //$data['userElearning']
+        //$data['usersElearning']
 
         return $data;
 
@@ -261,9 +262,7 @@ if(!empty($user['events_for_user_list_without_relationship'])){
     {
 
         $user = Auth::user();
-        $users = $model->with('role', 'image','statusAccount', 'events_for_user_list_without_relationship', 'events_for_user_list_without_relationship.delivery')->get();
-
-
+        $users = $model->with('role', 'image','statusAccount', 'events_for_user_list', 'events_for_user_list.delivery')->get();
 
         $data['events'] = (new EventController)->fetchAllEvents();
         $data['transactions'] = (new TransactionController)->participants();
@@ -283,8 +282,8 @@ if(!empty($user['events_for_user_list_without_relationship'])){
 
         //dd($model->with('role', 'image')->get()->toArray()[0]['image']);
         //dd($model->with('role', 'image','statusAccount', 'events_for_user_list_without_relationship')->get()->toArray()[10]);
-        $data = $data + $this->statistics($users);
-        //$data = $data + $this->statistics1();
+        //$data = $data + $this->statistics($users);
+        $data = $data + $this->statistics1();
 
 
         return view('users.index', ['users' => $users, 'data' => $data]);

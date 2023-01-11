@@ -15,6 +15,14 @@ img.account-thumb {
   border-radius: 50%;
 }
 
+.ib-card-body {
+    margin-bottom: 2rem;
+}
+
+#examPassword{
+    margin-bottom: 1rem;
+}
+
 .btn {
   cursor: pointer;
   border: none;
@@ -811,6 +819,20 @@ and (orientation : portrait) {
     bottom: 30px;
   }
 }
+
+/* Desktop */
+
+
+  @media screen and (min-width: 1400px) {
+    #exam-container{
+        max-width: 1370px;
+    }
+  }
+  @media screen and (min-width: 1600px) {
+    #exam-container{
+        max-width: 1570px;
+    }
+  }
 
 
 /* Tablet */

@@ -479,7 +479,7 @@ $(document).ready(function() {
          $.each(events, function(key, value) {
             eventsArray[removeSpecial(value)] = eventIDS[key]
         })
-        stats_non_elearning()
+        //stats_non_elearning()
 
     });
 
@@ -491,7 +491,7 @@ $(document).ready(function() {
         maxDate = moment().endOf('day').format('MM/DD/YYYY');
 
         table.draw()
-        stats_non_elearning();
+        //stats_non_elearning();
 
         let eventIDS = table.column(9,{filter: 'applied'}).data().unique()
         let events = table.column(1,{filter: 'applied'}).data().unique();
@@ -730,7 +730,7 @@ $(document).ready(function() {
 
 
         //console.log(removeSpecial($('#col'+i+'_filter').val()))
-        stats_non_elearning()
+        //stats_non_elearning()
 
         if(i!=4){
             coupons = table.column(4,{filter: 'applied'}).data().unique().sort();

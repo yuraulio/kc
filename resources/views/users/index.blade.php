@@ -20,7 +20,6 @@
             <li class="breadcrumb-item active" aria-current="page">{{ __('List') }}</li>
         @endcomponent
         @include('users.layouts.cards')
-        @include('admin.transaction.layouts.cards')
     @endcomponent
 
     <div class="container-fluid mt--6">

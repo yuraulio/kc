@@ -1,6 +1,6 @@
 <div class="row">
 
-    <div class="col-xl-3 col-md-6">
+    <div class="col-xl-4 col-md-6">
         <div class="card card-stats">
             <!-- Card body -->
             <div class="card-body">
@@ -11,8 +11,8 @@
                     </div>
                 </div>
                 <p class="mt-3 mb-0 text-sm">
-                    <span>ACTIVE NOW:{{ $data['active'] }}</span>
-                    <span class="ml-3">COMPLETED:{{ $data['completed'] }}</span>
+                    <span class="mr-3">ACTIVE NOW: {{ $data['active'] }}</span>
+                    <span class="mr-3">COMPLETED: {{ $data['completed'] }}</span>
                 </p>
                 <p class="mb-0 text-sm">
                     <span class="">All courses created by admins.</span>
@@ -21,7 +21,7 @@
         </div>
     </div>
 
-    <div class="col-xl-3 col-md-6">
+    <div class="col-xl-4 col-md-6">
         <div class="card card-stats">
             <!-- Card body -->
             <div class="card-body">
@@ -32,8 +32,8 @@
                     </div>
                 </div>
                 <p class="mt-3 mb-0 text-sm">
-                    <span>CLASS:{{ $data['inclass'] }}</span>
-                    <span class="ml-3">VIDEO:{{ $data['elearning'] }}</span>
+                    <span class="mr-3">CLASS: {{ $data['inclass'] }}</span>
+                    <span class="mr-3">VIDEO: {{ $data['elearning'] }}</span>
                 </p>
                 <p class="mb-0 text-sm">
                     <span class="">All courses active now on the website.</span>

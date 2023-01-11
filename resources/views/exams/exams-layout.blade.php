@@ -166,7 +166,14 @@
 
             jQuery('.close').click(function(){
 
+                if($('#chart-pie').length != 0){
+                    $('.btn-not-exit-exam.go-to-account').text('NO, Do not exit.')
+                    $('.btn-exit-exam.go-to-account').text('Yes, Exit.')
+                }
+
                 $('#closeDialog').removeAttr('hidden')
+
+
             });
         })
 

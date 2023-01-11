@@ -1,6 +1,6 @@
 <div class="row">
 
-    <div class="col-xl-3 col-md-6">
+    <div class="col-xl-4 col-md-6">
         <div class="card card-stats">
             <!-- Card body -->
             <div class="card-body">
@@ -13,7 +13,8 @@
                     </div>
                 </div>
                 <p class="mt-3 mb-0 text-sm">
-                    <span>CLASS:{{ $usersInclass }}</span><span class="ml-3">VIDEO:{{$usersElearning}}</span>
+                    <span class="mr-3">CLASS: {{ $usersInclass }}</span>
+                    <span class="mr-3">VIDEO: {{$usersElearning}}</span>
                 </p>
 
                 <p class="mb-0 text-sm">
@@ -23,7 +24,7 @@
         </div>
     </div>
 
-    <div class="col-xl-3 col-md-6">
+    <div class="col-xl-4 col-md-6">
         <div class="card card-stats">
             <div class="card-body">
                 <div class="row">
@@ -35,7 +36,8 @@
 
                 </div>
                 <p class="mt-3 mb-0 text-sm">
-                    <span>CLASS:{{ $usersInclassAll }}</span><span class="ml-3">VIDEO:{{ $usersElearningAll }}</span>
+                    <span class="mr-3">CLASS: {{ $usersInclassAll }}</span>
+                    <span class="mr-3">VIDEO: {{ $usersElearningAll }}</span>
                 </p>
                 <p class="mb-0 text-sm">
                     <span class="">All people who registered in a free or paid course (class or video).</span>
@@ -44,7 +46,7 @@
         </div>
     </div>
 
-    <div class="col-xl-3 col-md-6">
+    <div class="col-xl-4 col-md-6">
         <div class="card card-stats">
             <div class="card-body">
                 <div class="row">
@@ -54,7 +56,8 @@
                     </div>
                 </div>
                 <p class="mt-3 mb-0 text-sm">
-                    <span>CLASS:{{ $instructorsInClass }}</span><span class="ml-3">VIDEO:{{ $instructorsElearning }}</span>
+                    <span class="mr-3">CLASS: {{ $instructorsInClass }}</span>
+                    <span class="mr-3">VIDEO: {{ $instructorsElearning }}</span>
                 </p>
                 <p class="mb-0 text-sm">
                     <span class="">All instructors who are now active (class or video).</span>
