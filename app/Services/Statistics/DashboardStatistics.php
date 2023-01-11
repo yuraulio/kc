@@ -36,7 +36,7 @@ class DashboardStatistics
         })->count();
 
         //$results['usersInclass'] = 5;
-        $results['usersInclass'] = User::whereHas('events_for_user_list_without_relationship', function ($q) {
+        $results['usersInclass'] = User::whereHas('events_for_user_list1', function ($q) {
             $q->wherePublished(true)->whereStatus(0)->where(function ($q1) {
                 $q1->doesntHave('delivery')->OrWhereHas('delivery', function ($q2) {
                     return $q2->where('deliveries.id', '<>', 143);
@@ -45,14 +45,14 @@ class DashboardStatistics
         })->count();
 
         //$results['usersElearning'] = 5;
-        $results['usersElearning'] = User::whereHas('events_for_user_list_without_relationship', function ($q) {
+        $results['usersElearning'] = User::whereHas('events_for_user_list1', function ($q) {
 
             $q->wherePublished(true)->whereStatus(0)->where('event_user.expiration', '>=',date('Y-m-d'))->whereHas('delivery', function ($q1) {
                 return $q1->where('deliveries.id', 143);
             });
         })->count();
 
-        $results['usersInclassAll'] = User::whereHas('events_for_user_list_without_relationship', function ($q) {
+        $results['usersInclassAll'] = User::whereHas('events_for_user_list1', function ($q) {
             $q->wherePublished(true)->where('event_user.paid', true)->where(function ($q1) {
                 $q1->doesntHave('delivery')->OrWhereHas('delivery', function ($q2) {
                     return $q2->where('deliveries.id', '<>', 143);
@@ -60,21 +60,21 @@ class DashboardStatistics
             });
         })->count();
 
-        $results['usersElearningAll'] = User::whereHas('events_for_user_list_without_relationship', function ($q) {
+        $results['usersElearningAll'] = User::whereHas('events_for_user_list1', function ($q) {
 
             $q->wherePublished(true)->where('event_user.paid', true)->whereHas('delivery', function ($q1) {
                 return $q1->where('deliveries.id', 143);
             });
         })->count();
 
-        // $results['usersGranduates'] = User::whereHas('events_for_user_list_without_relationship', function ($q) {
+        // $results['usersGranduates'] = User::whereHas('events_for_user_list1', function ($q) {
         //     $q->wherePublished(true)->whereHas('type', function ($q1) {
         //         return $q1->whereIn('types.id', [13, 14]);
         //     });
         // })->count();
 
         //$results['totalsStudents'] =  $results['usersInclass'] + $results['usersElearning'];
-        // $results['totalsStudents'] = User::whereHas('events_for_user_list_without_relationship', function ($q1) {
+        // $results['totalsStudents'] = User::whereHas('events_for_user_list1', function ($q1) {
         //     $q1->wherePublished(true);
         // })->count();
 

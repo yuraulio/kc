@@ -484,7 +484,7 @@ class TransactionController extends Controller
     // {
     //     $data = [];
 
-    //     $data['usersInclassAll'] = User::whereHas('events_for_user_list_without_relationship', function ($q) {
+    //     $data['usersInclassAll'] = User::whereHas('events_for_user_list1', function ($q) {
     //         $q->wherePublished(true)->where('event_user.paid', true)->where(function ($q1) {
     //             $q1->doesntHave('delivery')->OrWhereHas('delivery', function ($q2) {
     //                 return $q2->where('deliveries.id', '<>', 143);
@@ -496,7 +496,7 @@ class TransactionController extends Controller
 
     //     }
 
-    //     $data['usersElearningAll'] = User::whereHas('events_for_user_list_without_relationship', function ($q) {
+    //     $data['usersElearningAll'] = User::whereHas('events_for_user_list1', function ($q) {
 
     //         $q->wherePublished(true)->where('event_user.paid', true)->whereHas('delivery', function ($q1) {
     //             return $q1->where('deliveries.id', 143);

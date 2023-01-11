@@ -50,7 +50,7 @@ class DashboardController extends Controller
     {
 
 
-        $students_in_class = User::whereHas('events_for_user_list_without_relationship', function ($q) {
+        $students_in_class = User::whereHas('events_for_user_list1', function ($q) {
             $q->wherePublished(true)->whereStatus(0)->where(function ($q1) {
                 $q1->doesntHave('delivery')->OrWhereHas('delivery', function ($q2) {
                     return $q2->where('deliveries.id', '<>', 143);
@@ -58,7 +58,7 @@ class DashboardController extends Controller
             });
         })->count();
 
-        $students_online = User::whereHas('events_for_user_list_without_relationship', function ($q) {
+        $students_online = User::whereHas('events_for_user_list1', function ($q) {
 
             $q->wherePublished(true)->whereStatus(0)->where('event_user.expiration', '>=',date('Y-m-d'))->whereHas('delivery', function ($q1) {
                 return $q1->where('deliveries.id', 143);
@@ -75,7 +75,7 @@ class DashboardController extends Controller
     public function get_widget_data_students_all(): JsonResponse
     {
 
-        $students_in_class = User::whereHas('events_for_user_list_without_relationship', function ($q) {
+        $students_in_class = User::whereHas('events_for_user_list1', function ($q) {
             $q->wherePublished(true)->where('event_user.paid', true)->where(function ($q1) {
                 $q1->doesntHave('delivery')->OrWhereHas('delivery', function ($q2) {
                     return $q2->where('deliveries.id', '<>', 143);
@@ -83,7 +83,7 @@ class DashboardController extends Controller
             });
         })->count();
 
-        $students_online = User::whereHas('events_for_user_list_without_relationship', function ($q) {
+        $students_online = User::whereHas('events_for_user_list1', function ($q) {
 
             $q->wherePublished(true)->where('event_user.paid', true)->whereHas('delivery', function ($q1) {
                 return $q1->where('deliveries.id', 143);

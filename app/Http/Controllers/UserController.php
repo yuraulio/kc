@@ -111,8 +111,8 @@ class UserController extends Controller
                 }
                 if($completed){
                     // UserInclass
-                    if(!empty($user['events_for_user_list_without_relationship'])){
-                        $events = $user['events_for_user_list_without_relationship'];
+                    if(!empty($user['events_for_user_list1'])){
+                        $events = $user['events_for_user_list1'];
 
                         $foundInClass = false;
                         $foundInClassAll = false;
@@ -196,7 +196,7 @@ class UserController extends Controller
 
         }
 
-        //dd($data);
+        
 
         $data['active'] = User::WhereHas('statusAccount', function($q) {
             $q->where('completed', true);
@@ -209,18 +209,16 @@ class UserController extends Controller
         $data['all'] = $data['active'] + $data['inactive'];
 
 
-        $data['usersInClass'] = User::WhereHas('events_for_user_list_without_relationship', function($q) {
+        $data['usersInClass'] = User::WhereHas('events_for_user_list1', function($q) {
             $q->wherePublished(true)->where('event_user.paid', true)->whereStatus(0)->where(function ($q1) {
                 $q1->doesntHave('delivery')->OrWhereHas('delivery', function ($q2) {
                     return $q2->where('deliveries.id', '<>', 143);
                 });
             });
         })->count();
-        // dd($data['userInclass']);
-        $data['usersInClass'] = 0;
-        //dd($data);
+        
 
-        $data['usersElearning'] = User::WhereHas('events_for_user_list_without_relationship', function($q) {
+        $data['usersElearning'] = User::WhereHas('events_for_user_list1', function($q) {
             $q->wherePublished(true)->where('event_user.expiration', '>=',date('Y-m-d'))->where('event_user.paid', true)->whereStatus(0)->whereHas('delivery', function ($q1) {
                 return $q1->where('deliveries.id', 143);
             });
@@ -230,7 +228,7 @@ class UserController extends Controller
 
 
 
-        $data['usersInClassAll'] = User::WhereHas('events_for_user_list_without_relationship', function($q) {
+        $data['usersInClassAll'] = User::WhereHas('events_for_user_list1', function($q) {
             $q->where(function ($q1) {
                 $q1->doesntHave('delivery')->OrWhereHas('delivery', function ($q2) {
                     return $q2->where('deliveries.id', '<>', 143);
@@ -239,7 +237,7 @@ class UserController extends Controller
         })->count();
         //dd($data['userInclassAll']);
 
-        $data['usersElearningAll'] = User::WhereHas('events_for_user_list_without_relationship', function($q) {
+        $data['usersElearningAll'] = User::WhereHas('events_for_user_list1', function($q) {
             $q->whereHas('delivery', function ($q1) {
                 return $q1->where('deliveries.id', 143);
             });
@@ -262,7 +260,7 @@ class UserController extends Controller
     {
 
         $user = Auth::user();
-        $users = $model->with('role', 'image','statusAccount', 'events_for_user_list', 'events_for_user_list.delivery')->get();
+        $users = $model->with('role', 'image','statusAccount', 'events_for_user_list1', 'events_for_user_list1.delivery')->get();
 
         $data['events'] = (new EventController)->fetchAllEvents();
         $data['transactions'] = (new TransactionController)->participants();
@@ -276,13 +274,13 @@ class UserController extends Controller
             $data['transactions'][$key] = group_by('event_id', $item);
         }
 
-        //dd($model->with('role', 'image','statusAccount', 'events_for_user_list_without_relationship')->get()[0]);
+        //dd($model->with('role', 'image','statusAccount', 'events_for_user_list1')->get()[0]);
         //dd($data['transactions']);
         //dd($model->with('role', 'image')->get()[0]);
 
         //dd($model->with('role', 'image')->get()->toArray()[0]['image']);
-        //dd($model->with('role', 'image','statusAccount', 'events_for_user_list_without_relationship')->get()->toArray()[10]);
-        //$data = $data + $this->statistics($users);
+        //dd($model->with('role', 'image','statusAccount', 'events_for_user_list1')->get()->toArray()[10]);
+        //data = $data + $this->statistics($users);
         $data = $data + $this->statistics1();
 
 
@@ -748,7 +746,7 @@ class UserController extends Controller
         $data['all_users'] = $model::count();
         $data['total_graduates'] = total_graduate();
 
-        $data['users'] = $model->with('role', 'image','statusAccount', 'events_for_user_list_without_relationship','statisticGroupByEvent','events','ticket','transactionss')->get();
+        $data['users'] = $model->with('role', 'image','statusAccount', 'events_for_user_list1','statisticGroupByEvent','events','ticket','transactionss')->get();
 
         //$this->getAllTransactions($data['users']);
 
@@ -771,7 +769,7 @@ class UserController extends Controller
         //dd($model->with('role', 'image')->get()[0]);
 
         //dd($model->with('role', 'image')->get()->toArray()[0]['image']);
-        //dd($model->with('role', 'image','statusAccount', 'events_for_user_list_without_relationship')->get()->toArray()[10]);
+        //dd($model->with('role', 'image','statusAccount', 'events_for_user_list1')->get()->toArray()[10]);
 		dd('fsa');
         return view('users.index', ['users'=>$data['users'],'data' => $data]);
     }
@@ -1467,7 +1465,7 @@ class UserController extends Controller
 
         $paid = $request->paid == 'true' ? 1 : 0;
 
-        $user->events_for_user_list_without_relationship()->wherePivot('event_id',$request->event_id)->updateExistingPivot($request->event_id,[
+        $user->events_for_user_list1()->wherePivot('event_id',$request->event_id)->updateExistingPivot($request->event_id,[
             'paid' => $paid
         ], false);
     }
