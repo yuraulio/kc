@@ -1107,11 +1107,12 @@ if(!empty($user['events_for_user_list_without_relationship'])){
         $data['events'] = Event::has('ticket')->whereIn('status',[0,2,3])->get();
 
         //dd($data['events']);
-        $data['user'] = $user::with('ticket','role','events_for_user_list_without_relationship','image','transactions')->find($user['id']);
+        $data['user'] = User::with('ticket','role','events_for_user_list','image','transactions')->find($user['id']);
+
 
         $data['transactions'] = [];
 
-        foreach($user->events_for_user_list_without_relationship as $key => $value){
+        foreach($user->events_for_user_list as $key => $value){
 
             $user_id = $value->pivot->user_id;
             $event_id = $value->pivot->event_id;
@@ -1119,12 +1120,13 @@ if(!empty($user['events_for_user_list_without_relationship'])){
 
             $ticket = $event->tickets()->wherePivot('event_id', '=', $event_id)->wherePivot('user_id', '=', $user_id)->first();
 
-            $data['user']['events_for_user_list_without_relationship'][$key]['ticket_id'] = isset($ticket->pivot) ? $ticket->pivot->ticket_id : null;
-            $data['user']['events_for_user_list_without_relationship'][$key]['ticket_title'] = isset($ticket['title']) ? $ticket['title'] : '';
-            $data['user']['events_for_user_list_without_relationship'][$key]['certifications'] = [];
+            $data['user']['events_for_user_list'][$key]['ticket_id'] = isset($ticket->pivot) ? $ticket->pivot->ticket_id : null;
+            $data['user']['events_for_user_list'][$key]['ticket_title'] = isset($ticket['title']) ? $ticket['title'] : '';
+            $data['user']['events_for_user_list'][$key]['certifications'] = [];
+
 
             if(!empty($event->certificatesByUser($user_id))){
-                $data['user']['events_for_user_list_without_relationship'][$key]['certifications'] = $event->certificatesByUser($user_id)->toArray();
+                $data['user']['events_for_user_list'][$key]['certifications'] = $event->certificatesByUser($user_id)->toArray();
             }
 
             if(!key_exists($value['title'],$data['transactions'])){
@@ -1506,7 +1508,7 @@ if(!empty($user['events_for_user_list_without_relationship'])){
         if(!$user->instructor){
             $terms = Page::find(6);
             $terms = json_decode($terms->content, true)[3]['columns'][0]['template']['inputs'][0]['value'];
-    
+
             $privacy = Page::select('content')->find(4);
             $privacy = json_decode($privacy->content, true)[3]['columns'][0]['template']['inputs'][0]['value'];
         }else{
@@ -1516,7 +1518,7 @@ if(!empty($user['events_for_user_list_without_relationship'])){
 
         }
 
-        
+
 
         $pdf = PDF::loadView('users.consent_pdf', compact('user', 'terms', 'privacy'));
 

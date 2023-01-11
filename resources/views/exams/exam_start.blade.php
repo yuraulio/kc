@@ -914,7 +914,7 @@ window.actQues = 0;
                             </button>
 
                             <button class=" btn btn-lg button clear-answer button-quinary" type="button" onclick="clearAnswer();" style="width: 20%; min-width: fit-content;">
-                                CLEAR
+                                CLEAR SELECTION
                             </button>
 
                             <button class=" btn btn-lg button next button-senary" style="width: 20%; min-width: fit-content;" id="markbtn" type="button"  onclick="nextQues(1);" >
@@ -1140,9 +1140,8 @@ jQuery(document).ready(function(){
         if($('.content1').hasClass('expanded')){
             $('#hover-palette-expand').css('display', 'none')
             $('#hover-palette-expand-arrow').css('display', 'none')
-
         }
-       
+
     }
 
     $( ".content1" ).on('mouseover', function(){
@@ -1157,21 +1156,19 @@ jQuery(document).ready(function(){
 
 
     $( ".content1" ).on('mouseleave', function(){
-        console.log('mouse has leave')
 
         //$('#hover-palette-expand').addClass('hidden')
         $('#hover-palette-expand').css('display', 'none')
     });
 
     $('#pallete_list span').on('mouseover',function(){
-        console.log('on span')
         //$('#hover-palette-expand').toggleClass('hidden')
         //$('#hover-palette-expand').css('display', 'none')
-        document.getElementById('hover-palette-expand').style.display = 'none';
+        //document.getElementById('hover-palette-expand').style.display = 'none';
+        $('#hover-palette-expand').css('display', 'none')
     })
 
     $( "#pallete_list span" ).on('mouseleave', function(){
-        console.log('mouse has leave 1111')
 
         //$('#hover-palette-expand').toggleClass('hidden')
         $('#hover-palette-expand').css('display', 'block')

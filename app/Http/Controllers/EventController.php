@@ -60,12 +60,12 @@ class EventController extends Controller
 
         $data['all'] = Event::all()->count();
 
-        $data['inclass'] = Event::where('status', 0)->doesntHave('delivery')->orWhereHas('delivery', function($q) {
-            return $q->where('deliveries.id','<>', 143);
+        $data['inclass'] = Event::where('status', 0)->whereHas('event_info1', function($q) {
+            return $q->where('event_info.course_delivery','<>', 143);
         })->count();
 
-        $data['elearning'] = Event::where('status', 0)->whereHas('delivery', function($q) {
-            return $q->where('deliveries.id', 143);
+        $data['elearning'] = Event::where('status', 0)->whereHas('event_info1', function($q) {
+            return $q->where('event_info.course_delivery', 143);
         })->count();
 
 
@@ -408,8 +408,10 @@ class EventController extends Controller
         //$faq = Faq::find(16);
         //dd($faq->category);
 
-        $data['sumOfStudents'] = count($event->users);
-        $data['totalRevenue'] = $event->transactions->sum('amount');
+        // $data['sumOfStudents'] = count($event->users);
+        // $data['totalRevenue'] = $event->transactions->sum('amount');
+
+        $data = $this->event_statistics($event);
 
         $user = Auth::user();
         $id = $event['id'];
@@ -536,6 +538,89 @@ class EventController extends Controller
         $data['dropbox'] = json_encode($dropbox);
 
         return view('event.edit', $data);
+    }
+
+    public function event_statistics($event)
+    {
+        $data = [];
+        //return [];
+        $eventId = $event['id'];
+
+        $eventTickets = [];
+
+        foreach($event->ticket as $ticket){
+
+            $eventTickets[$ticket->id] = $ticket['pivot']['price'] != null ?$ticket['pivot']['price'] : 0;
+        }
+
+        $users = $event->users;
+
+        $count = [];
+        $income = [];
+
+        $count['free'] = 0;
+        $count['special'] = 0;
+        $count['early'] = 0;
+        $count['alumni'] = 0;
+        $count['regular'] = 0;
+        $count['total'] = 0;
+
+        $income['special'] = 0;
+        $income['early'] = 0;
+        $income['regular'] = 0;
+        $income['alumni'] = 0;
+        $income['total'] = 0;
+
+
+
+        foreach($users as $user){
+
+            $tickets = $user->ticket;
+
+            if($tickets){
+                foreach($tickets as $ticket){
+
+                    if($ticket['pivot']['event_id'] == $eventId){
+
+                        switch($ticket['id']){
+                            case 19:
+                                $count['early']++;
+                                $income['early'] = $income['early'] + $eventTickets[19];
+                            case 20:
+                                $count['regular']++;
+                                $income['regular'] = $income['regular'] + $eventTickets[20];
+                            case 21:
+                                $count['special']++;
+                                $income['special'] = $income['special'] + $eventTickets[21];
+                            case 822:
+                                $count['free']++;
+                            case 1201:
+                                $count['alumni']++;
+                                $income['alumni'] = $income['alumni'] + $eventTickets[1201];
+                        }
+                    }
+                }
+            }
+
+        }
+        $total_income = 0;
+        foreach($income as $item){
+            $total_income = $total_income + $item;
+        }
+        $income['total'] = $total_income;
+
+        $total_count = 0;
+        foreach($count as $item){
+            $total_count = $total_count + $item;
+        }
+        $count['total'] = $total_count;
+
+        $data['count'] = $count;
+        $data['income'] = $income;
+
+
+
+        return $data;
     }
     /**
      * Update the specified resource in storage.

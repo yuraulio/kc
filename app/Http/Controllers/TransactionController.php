@@ -245,33 +245,54 @@ class TransactionController extends Controller
         $doubleTransactions = [];
         $data['total_users'] = 0;
         $total_users = [];
+        $total_users_elearning = [];
+        $total_users_inclass = [];
 
-        $data['usersElearningAll'] = 0;
-        $data['usersInClassAll'] = 0;
+        $data['paid_installments_inclass'] = 0;
+        $data['paid_installments_elearning'] = 0;
+
         $data['usersElearningIncomeAll'] = 0;
         $data['usersInClassIncomeAll'] = 0;
 
-        foreach($transactions as $transaction){
-            if(count($transaction['invoice']) != 0){
-                $i++;
-            }
-            if(!$transaction->subscription->first() && $transaction->user->first() && $transaction->event->first()){
+        $income['special'] = 0;
+        $income['early'] = 0;
+        $income['regular'] = 0;
+        $income['alumni'] = 0;
+        $income['total'] = 0;
 
-                $isElearning = $transaction->event->first()->delivery->first() && $transaction->event->first()->delivery->first()->id == 143;
+        $test = [];
+        foreach($transactions as $transaction){
+            // if(count($transaction['invoice']) != 0 && $transaction['total_amount'] != 0){
+            //     $test[] =$transaction;
+            // }
+            $event = $transaction->event->first();
+            $eventTickets = [];
+            if(isset($event->ticket)){
+                foreach($event->ticket as $ticket){
+
+                    $eventTickets[$ticket->id] = $ticket['pivot']['price'] != null ? $ticket['pivot']['price'] : 0;
+                }
+
+            }
+
+
+
+
+            if(!$transaction->subscription->first() && $transaction->user->first() && $event){
+
+                $isElearning = $event->delivery->first() && $event->delivery->first()->id == 143;
 
                 if($isElearning){
 
-                    $data['usersElearningAll']++;
                     $data['usersElearningIncomeAll'] = $data['usersElearningIncomeAll'] + $transaction['total_amount'];
 
                 }else{
 
-                    $data['usersInClassAll']++;
                     $data['usersInClassIncomeAll'] = $data['usersInClassIncomeAll'] + $transaction['total_amount'];
 
                 }
 
-                $category =  $transaction->event->first()->category->first() ? $transaction->event->first()->category->first()->id : -1;
+                $category =  $event->category->first() ? $event->category->first()->id : -1;
 
                 if(in_array(9,$userRole) &&  ($category !== 46)){
                     continue;
@@ -280,11 +301,11 @@ class TransactionController extends Controller
 
 
                 $tickets = $transaction->user->first()['ticket']->groupBy('event_id');
-                $ticketType = isset($tickets[$transaction->event->first()->id]) ? $tickets[$transaction->event->first()->id]->first()->type : '-';
+                $ticketType = isset($tickets[$event->id]) ? $tickets[$event->id]->first()->type : '-';
 
-                if(isset($tickets[$transaction->event->first()->id])){
-                    $ticketType = $tickets[$transaction->event->first()->id]->first()->type;
-                    $ticketName = $tickets[$transaction->event->first()->id]->first()->title;
+                if(isset($tickets[$event->id])){
+                    $ticketType = $tickets[$event->id]->first()->type;
+                    $ticketName = $tickets[$event->id]->first()->title;
 
                 }else{
                     $ticketType = '-';
@@ -305,23 +326,70 @@ class TransactionController extends Controller
 
                 foreach($transaction['user'] as $u){
 
+                    $userTickets = $u['ticket'];
+
+
+
+                    if($isElearning){
+                        $total_users_elearning[$u['firstname'].'_'.$u['lastname']] = $u['firstname'].'_'.$u['lastname'];
+                    }else{
+                        $total_users_inclass[$u['firstname'].'_'.$u['lastname']] = $u['firstname'].'_'.$u['lastname'];
+                    }
+
                     $total_users[$u['firstname'].'_'.$u['lastname']] = $u['firstname'].'_'.$u['lastname'];
 
                     $statistic = $u->statisticGroupByEvent->groupBy('event_id');
-                    $videos = isset($statistic[$transaction->event->first()->id]) ?
-                    $statistic[$transaction->event->first()->id]->first()->pivot : null;
+                    $videos = isset($statistic[$event->id]) ?
+                    $statistic[$event->id]->first()->pivot : null;
 
                     $events = $u->events_for_user_list->groupBy('id');
-                    $expiration = isset($events[$transaction->event->first()->id]) ? $events[$transaction->event->first()->id]->first()->pivot->expiration : null;
-                    $paymentMethodId = isset($events[$transaction->event->first()->id]) ? $events[$transaction->event->first()->id]->first()->pivot->payment_method : 0;
+                    $expiration = isset($events[$event->id]) ? $events[$event->id]->first()->pivot->expiration : null;
+                    $paymentMethodId = isset($events[$event->id]) ? $events[$event->id]->first()->pivot->payment_method : 0;
                     $videos = isset($videos) ? json_decode($videos->videos,true) : null;
 
                     $paymentMethod = isset($paymentMethods[$paymentMethodId]) ? $paymentMethods[$paymentMethodId] :'Alpha Bank';
+
 
                     if(count($transaction->invoice) > 0 ){
 
                         foreach($transaction->invoice as $invoice){
 
+                            // find type of ticket for this transaction
+
+                            if(!empty($eventTickets)){
+                                foreach($userTickets as $ticket){
+
+
+                                    if($event['id'] == $ticket['pivot']['event_id']){
+
+                                        switch($ticket['id']){
+                                            case 19:
+
+                                                $income['early'] = $income['early'] + (isset($eventTickets[19]) ? $eventTickets[19] : 0);
+                                            case 20:
+
+                                                $income['regular'] = $income['regular'] + (isset($eventTickets[20]) ? $eventTickets[20] : 0);
+                                            case 21:
+
+                                                $income['special'] = $income['special'] + (isset($eventTickets[21]) ? $eventTickets[21] : 0);
+
+                                            case 1201:
+
+                                                $income['alumni'] = $income['alumni'] + (isset($eventTickets[1201]) ? $eventTickets[1201] : 0);
+                                        }
+                                    }
+                                }
+                            }
+
+
+
+                            //end
+
+                            if($isElearning){
+                                $data['paid_installments_elearning'] = $data['paid_installments_elearning'] + $invoice->amount;
+                            }else{
+                                $data['paid_installments_inclass'] = $data['paid_installments_inclass'] + $invoice->amount;
+                            }
 
                             $data['transactions'][] = ['id' => $transaction['id'], 'user_id' => $u['id'],'name' => $u['firstname'].' '.$u['lastname'],
                             'event_id' => $transaction->event[0]['id'],'event_title' => $transaction->event[0]['title'].' / '.date('d-m-Y', strtotime($transaction->event[0]['published_at'])),'coupon_code' => $coupon_code, 'type' => trim($ticketType),'ticketName' => $ticketName,
@@ -335,12 +403,55 @@ class TransactionController extends Controller
 
                     }else{
 
+
+                        // if has transaction without invoice and set installments -> without paid first installment
+                        if(!isset($transaction->status_history[0]['installments'])){
+
+                            if($isElearning){
+                                $data['paid_installments_elearning'] = $data['paid_installments_elearning'] + $transaction['amount'] / $countUsers;
+                            }else{
+                                $data['paid_installments_inclass'] = $data['paid_installments_inclass'] + $transaction['amount'] / $countUsers;
+                            }
+
+                            // find type of ticket for this transaction
+                            if(!empty($eventTickets)){
+                                foreach($userTickets as $ticket){
+
+                                    if($event['id'] == $ticket['pivot']['event_id']){
+
+                                        switch($ticket['id']){
+                                            case 19:
+
+                                                $income['early'] = $income['early'] + (isset($eventTickets[19]) ? $eventTickets[19] : 0);
+                                            case 20:
+
+                                                $income['regular'] = $income['regular'] + (isset($eventTickets[20]) ? $eventTickets[20] : 0);
+                                            case 21:
+
+                                                $income['special'] = $income['special'] + (isset($eventTickets[21]) ? $eventTickets[21] : 0);
+
+                                            case 1201:
+
+                                                $income['alumni'] = $income['alumni'] + (isset($eventTickets[1201]) ? $eventTickets[1201] : 0);
+                                        }
+                                    }
+                                }
+                            }
+
+
+
+                            //end
+                        }
+
+
                         $data['transactions'][] = ['id' => $transaction['id'], 'user_id' => $u['id'],'name' => $u['firstname'].' '.$u['lastname'],
                         'event_id' => $transaction->event[0]['id'],'event_title' => $transaction->event[0]['title'].' / '.date('d-m-Y', strtotime($transaction->event[0]['published_at'])),'coupon_code' => $coupon_code, 'type' => trim($ticketType),'ticketName' => $ticketName,
                         'date' => date_format($transaction['created_at'], 'Y-m-d'), 'amount' => $transaction['amount'] / $countUsers,
                         'is_elearning' => $isElearning,
                         'coupon_code' => $transaction['coupon_code'],'videos_seen' => $this->getVideosSeen($videos),'expiration'=>$expiration,
                         'paymentMethod' => $paymentMethod, 'ticket_price' => $transaction['amount']];
+
+
 
                     }
 
@@ -352,7 +463,15 @@ class TransactionController extends Controller
 
         }
 
+        $data['total_users_elearning'] = count($total_users_elearning);
+        $data['total_users_inclass'] = count($total_users_inclass);
         $data['total_users'] = count($total_users);
+        $total_income = 0;
+        foreach($income as $item){
+            $total_income = $total_income + $item;
+        }
+        $income['total'] = $total_income;
+        $data['income'] = $income;
 
         return $data;
 
