@@ -226,7 +226,7 @@ class StudentController extends Controller
                 if(isset($eventInfo['elearning']['exam']['activate_months']) &&  $eventInfo['elearning']['exam']['activate_months'] != null  ){
                     $data['events'][$event->id]['exam_access'] = $event->examAccess($user,$eventInfo['elearning']['exam']['activate_months']);
                 }else{
-                    $data['events'][$event->id]['exam_access'] = $event->examAccess($user,0);
+                    $data['events'][$event->id]['exam_access'] = $event->examAccess($user,0.8);
                 }
                 //$data['events'][$event->id]['exam_access'] = $event->examAccess($user,2);//$user->examAccess(0.8,$event->id);
                 $data['events'][$event->id]['view_tpl'] = $event['view_tpl'];
@@ -318,10 +318,14 @@ class StudentController extends Controller
 
                 $data['mySubscriptionEvents'][$key]['exams'] = $event->getExams();
 
+                if($event->id == 2304){
+                    //dd($eventInfo['elearning']['exam']['activate_months']);
+                }
+
                 if(isset($eventInfo['elearning']['exam']['activate_months']) &&  $eventInfo['elearning']['exam']['activate_months'] != null  ){
                     $data['mySubscriptionEvents'][$key]['exam_access'] = $event->examAccess($user,$eventInfo['elearning']['exam']['activate_months']);
                 }else{
-                    $data['mySubscriptionEvents'][$key]['exam_access'] = $event->examAccess($user,0);
+                    $data['mySubscriptionEvents'][$key]['exam_access'] = $event->examAccess($user,0.8);
                 }
 
                 //$data['mySubscriptionEvents'][$key]['exam_access'] = $event->examAccess($user,0.8,$statistic);
@@ -519,7 +523,7 @@ class StudentController extends Controller
                 if(isset($eventInfo['elearning']['exam']['activate_months']) &&  $eventInfo['elearning']['exam']['activate_months'] != null  ){
                     $data['events'][$event->id]['exam_access'] = $event->examAccess($user,$eventInfo['elearning']['exam']['activate_months']);
                 }else{
-                    $data['events'][$event->id]['exam_access'] = $event->examAccess($user,0);
+                    $data['events'][$event->id]['exam_access'] = $event->examAccess($user,0.8);
                 }
                 //$data['user']['events'][$event->id]['exam_results'] = $user->examAccess(0.8,$event->id);
 
@@ -606,7 +610,7 @@ class StudentController extends Controller
                 if(isset($eventInfo['elearning']['exam']['activate_months']) &&  $eventInfo['elearning']['exam']['activate_months'] != null  ){
                     $data['mySubscriptionEvents'][$key]['exam_access'] = $event->examAccess($user,$eventInfo['elearning']['exam']['activate_months']);
                 }else{
-                    $data['mySubscriptionEvents'][$key]['exam_access'] = $event->examAccess($user,0);
+                    $data['mySubscriptionEvents'][$key]['exam_access'] = $event->examAccess($user,0.8);
                 }
 
                 //$data['mySubscriptionEvents'][$key]['exam_access'] = $event->examAccess($user,2);

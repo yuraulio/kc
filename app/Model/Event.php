@@ -566,11 +566,10 @@ class Event extends Model
     }
 
     public function examAccess( $user,$accessMonths = 2, $checkForCetification = true){
-
+  
         if($accessMonths < 1){
             $periodAfterHasCourse = $this->progress($user);
         }else{
-
             $periodAfterHasCourse = $this->period($user);
         }
 
@@ -590,8 +589,7 @@ class Event extends Model
             $periodAfterHasCourse = $accessMonths;
         }
 
-
-
+        
         $certification = $checkForCetification && count($this->certificatesByUser($user->id)) > 0;
 
         return $periodAfterHasCourse >=  $accessMonths && !$certification;
