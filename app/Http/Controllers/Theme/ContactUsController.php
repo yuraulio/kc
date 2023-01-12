@@ -174,7 +174,7 @@ class ContactUsController extends Controller
                 'position_title' => 'required',
                 'mobile_phone' => 'required',
                 'email' => 'required|email',
-                
+
             ]);
 
             $mail_data["csurname"] = $mail_data['first_name'] . " " . $mail_data['last_name'];

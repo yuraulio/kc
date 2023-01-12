@@ -75,6 +75,9 @@ Route::group(['middleware' => 'auth.aboveauthor', 'prefix' => 'admin'], function
     Route::post('transaction/export-excel', 'TransactionController@exportExcel')->name('transaction.export-excel');
     Route::post('transaction/export-invoice', 'TransactionController@exportInvoices')->name('transaction.export-invoice');
     Route::post('home/fetchDashboardData', ['as' => 'home.fetchData', 'uses' => 'HomeController@fetchByDate']);
+    Route::get('home/fetchDashboardStudentStatistics', ['as' => 'home.fetchDashboardStudentStatistics', 'uses' => 'HomeController@fetchDashboardStudentStatistics']);
+    Route::get('home/fetchDashboardStudentAllStatistics', ['as' => 'home.fetchDashboardStudentAllStatistics', 'uses' => 'HomeController@fetchDashboardStudentAllStatistics']);
+    Route::get('home/fetchDashboardInstructorStatistics', ['as' => 'home.fetchDashboardInstructorStatistics', 'uses' => 'HomeController@fetchDashboardInstructorStatistics']);
 
     //Subscriptions
     Route::get('subscriptions', ['as' => 'subscriptions.index', 'uses' => 'SubscriptionController@index']);

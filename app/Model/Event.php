@@ -257,6 +257,12 @@ class Event extends Model
     {
         return $this->belongsToMany(User::class, 'event_user')->withPivot('expiration','payment_method');
     }
+
+    public function users_with_transactions()
+    {
+        return $this->belongsToMany(User::class, 'event_user')->select('event_user.id','firstname', 'lastname', 'email', 'mobile')->with('transactions')->withPivot('expiration','payment_method');
+    }
+
     public function usersPaid()
     {
         return $this->belongsToMany(User::class, 'event_user')->withPivot('expiration','payment_method','paid')->wherePivot('paid', true);
@@ -716,7 +722,7 @@ class Event extends Model
     }
 
     public function transactionsByUserNew($user){
-        return $this->transactions()->whereHas('user', function ($query) use($user) {
+        return $this->transactions()->with('invoice')->whereHas('user', function ($query) use($user) {
             $query->where('id', $user);
         });
     }

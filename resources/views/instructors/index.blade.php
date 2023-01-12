@@ -158,7 +158,6 @@
         });
 
         function filterColumn ( i ) {
-            console.log($('#col'+i+'_filter').val())
 
             $('#datatable-basic30').DataTable().column( i ).search(
                 $('#col'+i+'_filter').val()

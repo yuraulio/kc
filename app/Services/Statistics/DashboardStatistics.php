@@ -7,34 +7,34 @@ use App\Model\Instructor;
 
 class DashboardStatistics
 {
-    public function totals(): array
+
+    public function studentsAll(): array
     {
-        //$results['users'] = User::count();
+        $results['usersInclassAll'] = 0;
+        $results['usersElearningAll'] = 0;
 
-        // Count Admins on SQL side. If we expect some complex logic there
-        // is always option to add scope on User model
-        // $results['adminUsers']  = User::whereHas('role', function ($q) {
-        //     return $q->where('roles.id', 1);
-        // })->count();
-
-        $results['instructorsAll'] = Instructor::whereStatus(true)->has('event')->count();
-
-        $results['instructorsInClass'] = Instructor::whereStatus(true)->whereHas('event', function($q){
-            $q->whereStatus(0)->doesntHave('delivery')
-                ->OrWhereHas('delivery', function ($q2) {
+        $results['usersInclassAll'] = User::whereHas('events_for_user_list1', function ($q) {
+            $q->wherePublished(true)->where('event_user.paid', true)->where(function ($q1) {
+                $q1->doesntHave('delivery')->OrWhereHas('delivery', function ($q2) {
                     return $q2->where('deliveries.id', '<>', 143);
                 });
+            });
         })->count();
 
+        $results['usersElearningAll'] = User::whereHas('events_for_user_list1', function ($q) {
 
-
-        $results['instructorsElearning'] = Instructor::whereStatus(true)->whereHas('event', function($q){
-            $q->whereStatus(0)
-                ->WhereHas('delivery', function ($q2) {
-                    return $q2->where('deliveries.id', 143);
-                });
+            $q->wherePublished(true)->where('event_user.paid', true)->whereHas('delivery', function ($q1) {
+                return $q1->where('deliveries.id', 143);
+            });
         })->count();
 
+        return $results;
+    }
+
+    public function students(): array{
+
+        $results['usersInclass'] = 0;
+        $results['usersElearning'] = 0;
         //$results['usersInclass'] = 5;
         $results['usersInclass'] = User::whereHas('events_for_user_list1', function ($q) {
             $q->wherePublished(true)->whereStatus(0)->where(function ($q1) {
@@ -52,19 +52,39 @@ class DashboardStatistics
             });
         })->count();
 
-        $results['usersInclassAll'] = User::whereHas('events_for_user_list1', function ($q) {
-            $q->wherePublished(true)->where('event_user.paid', true)->where(function ($q1) {
-                $q1->doesntHave('delivery')->OrWhereHas('delivery', function ($q2) {
+        return $results;
+    }
+
+    public function instructors(): array
+    {
+        //$results['users'] = User::count();
+
+        // Count Admins on SQL side. If we expect some complex logic there
+        // is always option to add scope on User model
+        // $results['adminUsers']  = User::whereHas('role', function ($q) {
+        //     return $q->where('roles.id', 1);
+        // })->count();
+
+        $results['instructorsAll'] = 0;
+        $results['instructorsInClass'] = 0;
+        $results['instructorsElearning'] = 0;
+
+        $results['instructorsAll'] = Instructor::whereStatus(true)->has('event')->count();
+
+        $results['instructorsInClass'] = Instructor::whereStatus(true)->whereHas('event', function($q){
+            $q->whereStatus(0)->doesntHave('delivery')
+                ->OrWhereHas('delivery', function ($q2) {
                     return $q2->where('deliveries.id', '<>', 143);
                 });
-            });
         })->count();
 
-        $results['usersElearningAll'] = User::whereHas('events_for_user_list1', function ($q) {
 
-            $q->wherePublished(true)->where('event_user.paid', true)->whereHas('delivery', function ($q1) {
-                return $q1->where('deliveries.id', 143);
-            });
+
+        $results['instructorsElearning'] = Instructor::whereStatus(true)->whereHas('event', function($q){
+            $q->whereStatus(0)
+                ->WhereHas('delivery', function ($q2) {
+                    return $q2->where('deliveries.id', 143);
+                });
         })->count();
 
         // $results['usersGranduates'] = User::whereHas('events_for_user_list1', function ($q) {

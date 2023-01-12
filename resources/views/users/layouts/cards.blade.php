@@ -11,8 +11,8 @@
                     </div>
                 </div>
                 <p class="mt-3 mb-0 text-sm">
-                    <span class="mr-3">ACTIVE:{{ $data['active'] }}</span>
-                    <span class="mr-3">INACTIVE:{{ $data['inactive'] }}</span>
+                    <span class="mr-3">ACTIVE: {{ $data['active'] }}</span>
+                    <span class="mr-3">INACTIVE: {{ $data['inactive'] }}</span>
                 </p>
                 <p class="mb-0 text-sm">
                     <span class="">All of the accounts created by users or admins.</span>
@@ -32,8 +32,8 @@
                     </div>
                 </div>
                 <p class="mt-3 mb-0 text-sm">
-                    <span class="mr-3">CLASS:{{ $data['usersInClass'] }}</span>
-                    <span class="mr-3">VIDEO:{{ $data['usersElearning'] }}</span>
+                    <span class="mr-3">CLASS: {{ $data['usersInClass'] }}</span>
+                    <span class="mr-3">VIDEO: {{ $data['usersElearning'] }}</span>
 
                 </p>
                 <p class="mb-0 text-sm">
@@ -54,8 +54,8 @@
                     </div>
                 </div>
                 <p class="mt-3 mb-0 text-sm">
-                    <span class="mr-3">CLASS:{{ $data['usersInClassAll'] }}</span>
-                    <span class="mr-3">VIDEO:{{ $data['usersElearningAll'] }}</span>
+                    <span class="mr-3">CLASS: {{ $data['usersInClassAll'] }}</span>
+                    <span class="mr-3">VIDEO: {{ $data['usersElearningAll'] }}</span>
 
                 </p>
                 <p class="mb-0 text-sm">

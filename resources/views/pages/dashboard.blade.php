@@ -1004,5 +1004,69 @@
 
 
     </script>
+
+    <script>
+        $( document ).ready(function() {
+
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type: 'GET',
+                url: '/admin/home/fetchDashboardStudentStatistics',
+                success: function (data) {
+                    let stats = data.data
+
+                    $('#student_total').text(stats.usersElearning+stats.usersInclass)
+                    $('#students_inclass').text(stats.usersInclass)
+                    $('#students_elearning').text(stats.usersElearning)
+
+                    $('.card-stats-student .loader').addClass('d-none')
+                    $('.card-stats-student .info').removeClass('d-none')
+
+
+                }
+            });
+
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type: 'GET',
+                url: '/admin/home/fetchDashboardStudentAllStatistics',
+                success: function (data) {
+
+                    let stats = data.data
+
+                    $('#students_all').text(stats.usersElearningAll + stats.usersInclassAll)
+                    $('#students_inclass_all').text(stats.usersInclassAll)
+                    $('#students_elearning_all').text(stats.usersElearningAll)
+
+                    $('.card-stats-student-all .loader').addClass('d-none')
+                    $('.card-stats-student-all .info').removeClass('d-none')
+
+                }
+            });
+
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type: 'GET',
+                url: '/admin/home/fetchDashboardInstructorStatistics',
+                success: function (data) {
+                    let stats = data.data
+
+                    $('#instructor_total').text(stats.instructorsAll)
+                    $('#instructor_inclass').text(stats.instructorsInClass)
+                    $('#instructor_elearning').text(stats.instructorsElearning)
+
+                    $('.card-stats-instructor .loader').addClass('d-none')
+                    $('.card-stats-instructor .info').removeClass('d-none')
+                }
+            });
+
+        });
+    </script>
 @endpush
 @endcan
