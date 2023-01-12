@@ -583,6 +583,9 @@ class StudentController extends Controller
 
                 //$data['mySubscriptionEvents'][$key]['exam_access'] = $event->examAccess($user,2);
 
+                $data['mySubscriptionEvents'][$key]['exam_activate_months'] = isset($eventInfo['elearning']['exam'])  ?  $eventInfo['elearning']['exam']['activate_months'] : null;
+
+
                 $data['mySubscriptionEvents'][$key]['mySubscription'] = $user->subscriptions()->where('id',$subEvent['id'])->first();
                 $data['mySubscriptionEvents'][$key]['plans'] = $event['plans'];
                 $data['mySubscriptionEvents'][$key]['delivery'] = isset($eventInfo['delivery'])  ? $eventInfo['delivery'] : -1;
