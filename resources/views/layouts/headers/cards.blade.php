@@ -1,13 +1,13 @@
 <style>
 
 </style>
-<div class="row">
+<div class="row widget-dashboard">
 
     <div class="col-xl-4 col-md-6">
         <div class="card card-stats-student">
 
             <!-- Card body -->
-            <div class="card-body">
+            <div class="card-body widget">
                 <div class="row">
                     <div class="col">
                         <h5 class="card-title text-uppercase text-muted mb-0">STUDENTS ACTIVE NOW</h5>
@@ -36,7 +36,7 @@
 
     <div class="col-xl-4 col-md-6">
         <div class="card card-stats-student-all">
-            <div class="card-body">
+            <div class="card-body widget">
                 <div class="row">
                     <div class="col">
                         <h5 class="card-title text-uppercase text-muted mb-0">REGISTRATIONS ALL TIME</h5>
@@ -64,7 +64,7 @@
 
     <div class="col-xl-4 col-md-6">
         <div class="card card-stats-instructor">
-            <div class="card-body">
+            <div class="card-body widget">
                 <div class="row">
                     <div class="col">
                         <h5 class="card-title text-uppercase text-muted mb-0">INSTRUCTORS</h5>

@@ -415,6 +415,22 @@ li.select2-results__option:empty {
     margin-top: 50px
 }
 
+.widget .card-body{
+    min-height: 13rem;
+}
+
+.widget-instructor .widget .card-body{
+    min-height: 9rem;
+}
+
+.widget-event .widget.card-body,
+.widget-user .widget.card-body{
+    min-height: 11rem;
+}
+.widget-dashboard .widget.card-body{
+    min-height: 12rem;
+}
+
 .none {
     display: none;
 }
