@@ -12,24 +12,24 @@
 <div class="form-section">
     <div class="form-area-wrapper m-0">
         <div class="form-wrapper blue-form w-m-bottom {{ $overlap_class }}">
-            
+
             <form method="GET" action="/myaccount/subscription/{{ $subscription['subscribe_event']->title }}/{{ $subscription['subscribe_plan']->title }}" id="doall" novalidate>
                 <h3 class="form-h3 subscription">{{ $subscription['subscribe_title'] ?? "" }}</h3>
                 <ul class="subs-page-list">
                     <li>
-                        <img class="replace-with-svg" width="20" src="{{cdn('/theme/assets/images/icons/checkmark-sqaure.svg')}}" alt=""> 
-                        <span class="subs-page-span">Access to presentations</span>
+                        <img class="replace-with-svg" width="20" src="{{cdn('/theme/assets/images/icons/checkmark-sqaure.svg')}}" alt="">
+                        <span class="subs-page-span">Videos</span>
                     </li>
                     <li>
-                        <img class="replace-with-svg" width="20" src="{{cdn('/theme/assets/images/icons/checkmark-sqaure.svg')}}" alt=""> 
-                        <span class="subs-page-span"> Access to bonus files</span>
+                        <img class="replace-with-svg" width="20" src="{{cdn('/theme/assets/images/icons/checkmark-sqaure.svg')}}" alt="">
+                        <span class="subs-page-span"> Presentations</span>
                     </li>
                     <li>
-                        <img class="replace-with-svg" width="20" src="{{cdn('/theme/assets/images/icons/checkmark-sqaure.svg')}}" alt=""> 
-                        <span class="subs-page-span"> Access to videos</span>
+                        <img class="replace-with-svg" width="20" src="{{cdn('/theme/assets/images/icons/checkmark-sqaure.svg')}}" alt="">
+                        <span class="subs-page-span"> Bonus files</span>
                     </li>
                     <li>
-                        <img class="replace-with-svg" width="20" src="{{cdn('/theme/assets/images/icons/checkmark-sqaure.svg')}}" alt=""> 
+                        <img class="replace-with-svg" width="20" src="{{cdn('/theme/assets/images/icons/checkmark-sqaure.svg')}}" alt="">
                         <span class="subs-page-span"> Personal notes</span>
                     </li>
                 </ul>
@@ -37,7 +37,7 @@
                     <button onClick="subscribe()" type="button" class="btn btn--md btn--primary subscription-enroll">{{ $subscription['subscribe_button'] ?? "" }}</button>
                 </div>
             </form>
-            
+
         </div>
     </div>
 </div>

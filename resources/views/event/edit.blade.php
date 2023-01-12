@@ -1128,7 +1128,7 @@
                                                 <div class="exam_input col-sm-12 col-md-6 col-lg-4 form-group">
                                                     <label class="form-control-label" for="input-expiration">{{ __('Exam Activate Months') }}</label>
                                                     <div class="input-group">
-                                                        <input type="text" name="course[{{'delivery'}}][{{'elearning'}}][{{'exam'}}][{{'activate_months'}}]" id="input-exam-activate-months" class="form-control" placeholder="{{ __('Months') }}" value="{{ old('exam_activate_months', (isset($info['elearning']['exam']['activate_months']) && $info['elearning']['exam']['activate_months'] != null) ? $info['elearning']['exam']['activate_months'] : '' ) }}"autofocus>
+                                                        <input type="number" min="1" name="course[{{'delivery'}}][{{'elearning'}}][{{'exam'}}][{{'activate_months'}}]" id="input-exam-activate-months" class="form-control" placeholder="{{ __('Months') }}" value="{{ old('exam_activate_months', (isset($info['elearning']['exam']['activate_months']) && $info['elearning']['exam']['activate_months'] != null) ? $info['elearning']['exam']['activate_months'] : '' ) }}"autofocus>
 
                                                     </div>
                                                 </div>
