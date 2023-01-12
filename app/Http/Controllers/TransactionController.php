@@ -385,6 +385,8 @@ class TransactionController extends Controller
                                 $income['total'] = $income['total'] + $invoice->amount;
 
 
+                            }else{
+                                $income['total'] = $income['total'] + $invoice->amount;
                             }
 
                             if($isElearning){
@@ -444,9 +446,11 @@ class TransactionController extends Controller
 
                             }else if($ticketType == 'Alumni'){
 
-                                $income['total'] = $income['total'] + $invoice->amount;
+                                $income['total'] = $income['total'] + $transaction['amount'] / $countUsers;
 
 
+                            }else{
+                                $income['total'] = $income['total'] + $transaction['amount'] / $countUsers;
                             }
                         }
 

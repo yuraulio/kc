@@ -335,7 +335,7 @@
 
                 //console.log(data[9])
                 //row = data[9]
-                row = data[9].split('||')
+                row = data[10].split('||')
                 selected_event = removeSpecial($('#select2-col9_filter-container').attr('title'))
                 //console.log('MY EVENT'+selected_event)
                 //console.log(row)
@@ -436,7 +436,7 @@
         //console.log('from change min!!')
         table.draw();
         //console.log(table.column(1).data())
-        events = table.column( 9 ).data()
+        events = table.column( 10 ).data()
         //console.log(price)
 
         initCounters()
@@ -513,7 +513,7 @@
              //returns 'filtered' or visible rows
              table.rows({filter: 'applied'}).every( function ( rowIdx, tableLoop, rowLoop ) {
                 let user_id = this.data()[5]
-                var data = this.data()[9];
+                var data = this.data()[10];
                 events = data.split('||')
                 $.each(events, function(key, value) {
                     let type = ''
@@ -641,7 +641,7 @@
 
             //returns 'filtered' or visible rows
             table.rows({filter: 'applied'}).every( function ( rowIdx, tableLoop, rowLoop ) {
-                var data = this.data()[9];
+                var data = this.data()[10];
                 //console.log(data)
                 events = data.split('||')
 
@@ -723,7 +723,7 @@
 
             //returns 'filtered' or visible rows
             table.rows({filter: 'applied'}).every( function ( rowIdx, tableLoop, rowLoop ) {
-                var data = this.data()[9];
+                var data = this.data()[10];
                 //console.log(data)
                 events = data.split('||')
 
@@ -806,11 +806,13 @@
 
             initCounters()
             if(i == 9) {
-                $('#datatable-basic45').DataTable().column( 9 ).search(
+                $('#datatable-basic45').DataTable().column( 10 ).search(
                     $('#col9_filter').val(), true,false
                 ).draw();
 
                 selected_event = removeSpecial(selected_event = removeSpecial($('#select2-col9_filter-container').attr('title')))
+
+                console.log(selected_event)
 
                 if(selected_event.search('E-Learning') != -1){
                     stats_elearning()
@@ -827,7 +829,7 @@
 
 
             }else if(i == 10){
-                $('#datatable-basic45').DataTable().column( 9 ).search(
+                $('#datatable-basic45').DataTable().column( 10 ).search(
                     $('#col10_filter').val(), true,false
                 ).draw();
 

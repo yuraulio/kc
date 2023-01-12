@@ -690,9 +690,7 @@ $(document).ready(function() {
         } );
 
 
-        console.log(unique_users)
         unique_users = unique_users.filter(onlyUnique)
-        console.log('after unique: ', unique_users )
         count_students = unique_users.length;
 
         $('#total').text('€'+sum.toLocaleString())
