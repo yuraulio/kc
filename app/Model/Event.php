@@ -581,8 +581,7 @@ class Event extends Model
         if(!$event->created_at || $event->pivot->comment == 'enroll||0' || (strpos($event->pivot->comment, 'enroll from') !== false && explode('||', $event->pivot->comment)[1] == 0)){
             return false;
         }else if( $event->pivot->comment == 'enroll||1' || (strpos($event->pivot->comment, 'enroll from') !== false && explode('||', $event->pivot->comment)[1] == 1)){
-            dd($accessMonths);
-            $periodAfterHasCourse = $this->progress($user);
+            $periodAfterHasCourse = $accessMonths;
         }
 
 
