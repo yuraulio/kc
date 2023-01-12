@@ -109,18 +109,19 @@
             </div>
                 --}}
             </div>
+            @if($showAnswers)
             <div class="row action-wrapper">
                 <div class="col-sm-12 col-md-6 col-lg-6">
                     <h2 class="text-sm-center text-md-left text-lg-left" style="font-weight:700">Your answers summary</h2>
                 </div>
 
                 <div class="col-sm-12 col-md-6 col-lg-6 text-sm-center text-md-right text-lg-right">
-                    @if($showAnswers)
+                    
                     <button class="btn button-quaternary" type="button" onclick="toggleResults()" id="toggle-results"> SHOW/HIDE ANSWERS SUMMARY </button>
-                    @endif
+                   
                 </div>
             </div>
-
+            @endif
 
 
 
