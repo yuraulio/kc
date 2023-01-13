@@ -379,8 +379,9 @@ class SubscriptionController extends Controller
                 $subEnds = $plan->getDays();
                 $subEnds=date('d-m-Y', strtotime("+$subEnds days"));
                 
-                if($exp = $user->events()->wherePivot('event_id',$event->id)->first()){
-				
+                //if($exp = $user->events()->wherePivot('event_id',$event->id)->first()){
+                if($exp = $user->events_for_user_list()->wherePivot('event_id',$event->id)->first()){
+                    
                     $exp = $exp->pivot->expiration;
                     $exp = strtotime($exp);
                     $today = strtotime(date('Y-m-d'));
@@ -399,8 +400,8 @@ class SubscriptionController extends Controller
                 }
 
 
-                if($exp = $user->events()->wherePivot('event_id',$event->id)->first()){
-				
+                //if($exp = $user->events()->wherePivot('event_id',$event->id)->first()){
+                if($exp = $user->events_for_user_list()->wherePivot('event_id',$event->id)->first()){
                     $exp = $exp->pivot->expiration;
                     $exp = strtotime($exp);
                     $today = strtotime(date('Y-m-d'));

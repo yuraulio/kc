@@ -94,7 +94,7 @@
     @endif
 
 
-    @if(isset($thankyouData['tigran']) && isset($thankyouData['tigran']['Price']) &&$thankyouData['tigran']['Price'] > 0 && !env('APP_DEBUG'))
+    {{--@if(isset($thankyouData['tigran']) && isset($thankyouData['tigran']['Price']) &&$thankyouData['tigran']['Price'] > 0 && !env('APP_DEBUG'))
         <script>
         $(document).ready(function(){
            @foreach($thankyouData['tigran'] as $key => $ti)
@@ -148,7 +148,7 @@
         </script>
 
 
-    @endif
+    @endif--}}
 
 
     @if(isset($thankyouData['gt3']) && isset($thankyouData['gt3']['gt3']['transactionTotal']) && $thankyouData['gt3']['gt3']['transactionTotal'] > 0 && !env('APP_DEBUG'))
