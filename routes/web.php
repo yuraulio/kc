@@ -588,7 +588,9 @@ Route::group(['middleware' => ['web']], function () {
 
     Route::get('/mycertificate/{certificate}', 'Theme\CertificateController@getCertificate');
     Route::get('/mycertificate/convert-pdf-to-image/{certificate}', 'Theme\CertificateController@getCertificateImage');
-    //Route::post('/mycertificate/save-success-chart', 'Theme\CertificateController@getSuccessChart');
+    Route::post('/mycertificate/save-success-chart', 'Theme\CertificateController@getSuccessChart');
+    Route::get('/mycertificate/save-success-chart', 'Theme\CertificateController@getSuccessChart');
+    Route::get('/mycertificateview', 'Theme\CertificateController@view_results');
 
 });
 

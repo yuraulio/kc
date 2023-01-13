@@ -15,6 +15,7 @@ use PDF1;
 use Auth;
 use App\Model\Exam;
 use Illuminate\Support\Str;
+use Abraham\TwitterOAuth\TwitterOAuth;
 
 
 
@@ -23,8 +24,8 @@ class CertificateController extends Controller
 
   public function __construct(){
       //$this->middleware('auth')->except('exportCertificates');
-      $this->middleware('cert.owner')->except(['exportCertificates','getCertificateAdmin']);
-      $this->middleware('auth.aboveauthor')->only(['exportCertificates','getCertificateAdmin']);
+      $this->middleware('cert.owner')->except(['exportCertificates','getCertificateAdmin', 'getSuccessChart', 'view_results']);
+      $this->middleware('auth.aboveauthor')->only(['exportCertificates','getCertificateAdmin', 'getSuccessChart', 'view_results']);
 
       $this->encryPass = 'knowcrunch' . date('Y-m-d H:i:m');
   }
@@ -310,5 +311,30 @@ class CertificateController extends Controller
     return $data['pdf']->stream($fn);
 
   }
+
+    public function getSuccessChart(Request $request)
+    {
+
+        $data = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $request->image));
+
+        $imageName = 'cert/image.png';
+        $destination = public_path($imageName);
+
+        file_put_contents($destination, $data);
+
+
+        return response()->json([
+            'success' => true,
+            'path' => $imageName
+        ]);
+
+
+    }
+
+    public function view_results()
+    {
+        return view('exams.results_view');
+    }
+
 
 }

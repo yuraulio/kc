@@ -89,7 +89,7 @@
 
         ?>
 
-            {{--<div class="col-md-6 offset-md-6 share-wrapper">
+            <div class="col-md-6 offset-md-6 share-wrapper">
                 <p>Share my results:</p>
                 <div>
                     <a class="facebook-post-cert" title="Add this certification to your Facebook profile" href="javascript:void(0)">
@@ -102,12 +102,8 @@
                         <img class="linkdein-image-add" src="{{cdn('theme/assets/images/icons/social/events/Linkedin.svg')}}" alt="LinkedIn Add to Profile button">
                     </a>
                 </div>
-
-
-
-
             </div>
-                --}}
+
             </div>
             <div class="row action-wrapper">
                 <div class="col-sm-12 col-md-6 col-lg-6">
@@ -418,32 +414,34 @@
 //     })
 
 
-//    $(document).on('click', '.twitter-post-cert', function() {
-//       var getUrl = window.location;
-//       var baseUrl = getUrl .protocol + "//" + getUrl.host;
-//       var pathname = getUrl.pathname
+   $(document).on('click', '.twitter-post-cert', function() {
+      var getUrl = window.location;
+      var baseUrl = getUrl .protocol + "//" + getUrl.host;
+      var pathname = getUrl.pathname
 
-//       var exam = pathname.split("/").pop();
+      var exam = pathname.split("/").pop();
 
-//       $.ajax({
-//         headers: {
-//                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-//         },
-//           type: 'POST',
-//           url: "/mycertificate/save-success-chart",
-//           data:{image: chartImage,exam: exam},
-//           success: function(data) {
+      $.ajax({
+        headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+          type: 'POST',
+          url: "/mycertificate/save-success-chart",
+          data:{image: chartImage,exam: exam},
+          success: function(data) {
 
-//             url = data.path
-//             url = url.replace('\\','/')
-//             if(data){
-//                 var fbpopup = window.open(`http://twitter.com/share?url=${decodeURI(baseUrl)}/${decodeURI(url)}`, "pop", "width=600, height=400, scrollbars=no");
-//                 return false;
-//             }
+            url = data.path
+            url = url.replace('\\','/')
 
-//           }
-//       });
-//    })
+            alert(url)
+            if(data){
+                var fbpopup = window.open(`http://twitter.com/share?url=${decodeURI(baseUrl)}/${decodeURI(url)}`, "pop", "width=600, height=400, scrollbars=no");
+                return false;
+            }
+
+          }
+      });
+   })
 
 
 
