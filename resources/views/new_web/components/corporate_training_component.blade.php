@@ -31,7 +31,7 @@
                 </div>
                 <label>{{ $form["corporate_training_email"] ?? "" }}<span>*</span></label>
                 <div class="input-safe-wrapper">
-                    <input class="required" type="email" id="email" name="email">
+                    <input class="required" type="email" id="corporate_email" name="email">
                 </div>
                 <label>{{ $form["corporate_training_phone"] ?? "" }}<span>*</span></label>
                 <div class="input-safe-wrapper">
@@ -44,7 +44,7 @@
                             <input type="checkbox" id="accept" name="receive-messages" value="accept">
                             <span></span>
                         </div>
-                        
+
                         <label class="contact-form" for="receive-messages">
                             {!! $form["corporate_training_consent_text"] ?? "" !!}
                         </label>
@@ -58,7 +58,7 @@
 
                 <div class="submit-area-custom">
                     <button onClick="corporateTrainingSubmit()" type="button" id="sendme1" class="btn btn--md btn--secondary contactUsSubmit">
-                        {{ $form["corporate_training_button"] ?? "" }} 
+                        {{ $form["corporate_training_button"] ?? "" }}
                     </button>
                 </div>
             </form>
@@ -102,7 +102,7 @@
             var surname = $("#last_name").val();
             var company = $("#company_name").val();
             var job = $("#position_title").val();
-            var email = $("#email").val();
+            var email = $("#corporate_email").val();
             var tel = $("#mobile_phone").val();
             var recipient = $("#recipient").val();
             $("#returnmessage").empty(); // To empty previous error/success message.

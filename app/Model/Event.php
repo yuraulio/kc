@@ -257,6 +257,12 @@ class Event extends Model
     {
         return $this->belongsToMany(User::class, 'event_user')->withPivot('expiration','payment_method');
     }
+
+    public function users_with_transactions()
+    {
+        return $this->belongsToMany(User::class, 'event_user')->select('event_user.id','firstname', 'lastname', 'email', 'mobile')->with('transactions')->withPivot('expiration','payment_method');
+    }
+
     public function usersPaid()
     {
         return $this->belongsToMany(User::class, 'event_user')->withPivot('expiration','payment_method','paid')->wherePivot('paid', true);
@@ -562,9 +568,10 @@ class Event extends Model
     public function examAccess( $user,$accessMonths = 2, $checkForCetification = true){
 
         if($accessMonths < 1){
+            // accessMonths var is video progress for this condition
+            $accessMonths = 80;
             $periodAfterHasCourse = $this->progress($user);
         }else{
-
             $periodAfterHasCourse = $this->period($user);
         }
 
@@ -585,7 +592,6 @@ class Event extends Model
             $accessMonths = 80;
             $periodAfterHasCourse = $this->progress($user);
         }
-
 
 
         $certification = $checkForCetification && count($this->certificatesByUser($user->id)) > 0;
@@ -718,7 +724,7 @@ class Event extends Model
     }
 
     public function transactionsByUserNew($user){
-        return $this->transactions()->whereHas('user', function ($query) use($user) {
+        return $this->transactions()->with('invoice')->whereHas('user', function ($query) use($user) {
             $query->where('id', $user);
         });
     }

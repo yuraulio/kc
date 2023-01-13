@@ -822,15 +822,19 @@ and (orientation : portrait) {
 
 /* Desktop */
 
-
+  @media screen and (min-width: 1200px) {
+    #exam-container{
+        max-width: 1110px;
+    }
+  }
   @media screen and (min-width: 1400px) {
     #exam-container{
-        max-width: 1370px;
+        max-width: 1250px;
     }
   }
   @media screen and (min-width: 1600px) {
     #exam-container{
-        max-width: 1570px;
+        max-width: 1450px;
     }
   }
 

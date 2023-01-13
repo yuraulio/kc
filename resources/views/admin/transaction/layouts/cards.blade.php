@@ -1,6 +1,6 @@
 <div id="participants_info" class="row d-none">
 
-    <div class="card-body col-xl-4 col-md-6 total-revenue">
+    <div class="card-body col-xl-4 col-md-6 total-revenue widget">
         <div class="card">
             <div class="card-body">
                 <div class="row">
@@ -10,18 +10,23 @@
                     </div>
 
                 </div>
-                <p class="mt-3 mb-0 text-sm">
-                    <span class="mr-3">CLASS: {{ $usersInClassAll }}</span>
-                    <span class="mr-3">VIDEO: {{ $usersElearningAll }}</span>
-                </p>
-                <p class="mb-0 text-sm">
-                    <span class="">All people who registered in a free or paid course (class or video).</span>
-                </p>
+                <div class="row">
+                    <div class="col">
+                        <p class="mt-3 mb-0 text-sm">
+                            <span class="mr-3">CLASS: {{ $usersInClassAll }}</span>
+                            <span class="mr-3">VIDEO: {{ $usersElearningAll }}</span>
+                        </p>
+                        <p class="mb-0 text-sm">
+                            <span class="">All people who registered in a free or paid course (class or video).</span>
+                        </p>
+                    </div>
+                </div>
+                
             </div>
         </div>
     </div>
 
-    <div class="card-body col-xl-4 col-md-6 total-revenue">
+    <div class="card-body col-xl-4 col-md-6 total-revenue widget">
         <div class="card">
             <div class="card-body">
                 <div class="row">
@@ -31,18 +36,22 @@
                     </div>
 
                 </div>
-                <p class="mt-3 mb-0 text-sm">
-                    <span class="mr-3">CLASS: &euro;{{ number_format($usersInClassIncomeAll,2,',','.') }}</span>
-                    <span class="mr-3">VIDEO: &euro;{{ number_format($usersElearningIncomeAll,2,',','.') }}</span>
-                </p>
-                <p class="mb-0 text-sm">
-                    <span class="">All gross income from our paid courses (class or video).</span>
-                </p>
+                <div class="row">
+                    <div class="col">
+                        <p class="mt-3 mb-0 text-sm">
+                            <span class="mr-3">CLASS: &euro;{{ number_format($usersInClassIncomeAll,2,',','.') }}</span>
+                            <span class="mr-3">VIDEO: &euro;{{ number_format($usersElearningIncomeAll,2,',','.') }}</span>
+                        </p>
+                        <p class="mb-0 text-sm">
+                            <span class="">All gross income from our paid courses (class or video).</span>
+                        </p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="card-body col-xl-4 col-md-6 total-revenue">
+    <div class="card-body col-xl-4 col-md-6 total-revenue widget">
         <div class="card">
             <div class="card-body">
                 <div class="row">
@@ -52,14 +61,18 @@
                     </div>
 
                 </div>
-                <p class="mt-3 mb-0 text-sm">
-                    <span class="mr-3">EARLY: <span id="early-bird"></span></span>
-                    <span class="mr-3">SPECIAL: <span id="special"></span></span>
-                    <span class="mr-3">REGULAR: <span id="regular"></span></span>
-                </p>
-                <p class="mb-0 text-sm">
-                    <span class="">All income from our paid courses (class or video) by ticket type.</span>
-                </p>
+                <div class="row">
+                    <div class="col">
+                        <p class="mt-3 mb-0 text-sm">
+                            <span class="mr-3">EARLY: <span id="early-bird"></span></span>
+                            <span class="mr-3">SPECIAL: <span id="special"></span></span>
+                            <span class="mr-3">REGULAR: <span id="regular"></span></span>
+                        </p>
+                        <p class="mb-0 text-sm">
+                            <span class="">All income from our paid courses (class or video) by ticket type.</span>
+                        </p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

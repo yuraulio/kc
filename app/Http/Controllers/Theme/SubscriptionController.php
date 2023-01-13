@@ -29,7 +29,7 @@ class SubscriptionController extends Controller
     }
 
     public function index($event,$plan)
-    {     
+    {
 
         $plan = Plan::where('name',$plan)->first();
         $event = Event::where('title',$event)->first();
@@ -37,7 +37,7 @@ class SubscriptionController extends Controller
 
         $secretKey = env('PAYMENT_PRODUCTION') ? $this->paymentMethod->processor_options['secret_key'] : $this->paymentMethod->test_processor_options['secret_key'];
         Stripe::setApiKey($secretKey);
-        
+
         $user = Auth::user();
         $user->asStripeCustomer();
         $data['plan'] = $plan;
@@ -46,34 +46,34 @@ class SubscriptionController extends Controller
         $data['cur_user'] = $user;
         $data['eventFree'] = false;
 
-        $data['stripe_key'] = env('PAYMENT_PRODUCTION') ? $this->paymentMethod->processor_options['key'] : 
+        $data['stripe_key'] = env('PAYMENT_PRODUCTION') ? $this->paymentMethod->processor_options['key'] :
                                                                 $this->paymentMethod->test_processor_options['key'];
 
 
         if (Session::has('pay_seats_data')) {
             $data['pay_seats_data'] = Session::get('pay_seats_data');
-        
+
         }
         else {
             $data['pay_seats_data'] = [];
         }
-        
-       
-        
+
+
+
         if (Session::has('pay_bill_data')) {
             $data['pay_bill_data'] = Session::get('pay_bill_data');
         }
         else {
             $data['pay_bill_data'] = [];
         }
-        
+
         if (Session::has('cardtype')) {
             $data['cardtype'] = Session::get('cardtype');
         }
         else {
             $data['cardtype'] = [];
         }
-        
+
         if (Session::has('installments')) {
             $data['installments'] = Session::get('installments');
         }
@@ -81,8 +81,8 @@ class SubscriptionController extends Controller
             $data['installments'] = [];
         }
 
-        
-        
+
+
         $data['billname'] = '';
         $data['billsurname'] = '';
         $data['billaddress'] ='';
@@ -93,29 +93,29 @@ class SubscriptionController extends Controller
         $data['billstate'] = '';
         $data['billemail'] = '';
         $data['billcountry'] = '';
-        
+
         if( $user) {
-        
-            
-            
+
+
+
             if(isset($data['pay_bill_data']) && empty($data['pay_bill_data'])) {
-               
+
                 $inv = []; $rec = [];
                 if($user->invoice_details != '') {
                     $inv = json_decode($user->invoice_details, true);
                     if(isset($inv['billing']))
                         unset($inv['billing']);
                 }
-        
+
                 if($user->receipt_details != '') {
                     $rec = json_decode($user->receipt_details, true);
                     if(isset($rec['billing']))
                         unset($rec['billing']);
                 }
-        
+
                 $data['pay_bill_data'] = array_merge($inv, $rec);
             }
-            
+
             $data['billname'] = isset($data['pay_bill_data']['billname']) ? $data['pay_bill_data']['billname'] : '';
             $data['billsurname'] = isset($data['pay_bill_data']['billsurname']) ? $data['pay_bill_data']['billsurname'] : '';
             $data['billaddress'] = isset($data['pay_bill_data']['billaddress']) ? $data['pay_bill_data']['billaddress'] : '';
@@ -126,17 +126,17 @@ class SubscriptionController extends Controller
             $data['billcountry'] = isset($data['pay_bill_data']['country']) ? $data['pay_bill_data']['billcountry'] : '';
             $data['billstate'] = isset($data['pay_bill_data']['state']) ? $data['pay_bill_data']['billstate'] : '';
             $data['billemail'] = isset($data['pay_bill_data']['billemail']) ? $data['pay_bill_data']['billemail'] : '';
-        
+
             $ukcid = $user->kc_id;
         }
-                                                        
+
 
         return view('theme.cart.new_cart.subscription.billing', $data);
-       
+
     }
 
     public function checkoutIndex($event,$plan)
-    {     
+    {
 
         $pay_bill_data = [];
 
@@ -159,7 +159,7 @@ class SubscriptionController extends Controller
 
         $secretKey = env('PAYMENT_PRODUCTION') ? $this->paymentMethod->processor_options['secret_key'] : $this->paymentMethod->test_processor_options['secret_key'];
         Stripe::setApiKey($secretKey);
-        
+
         $user = Auth::user();
         $user->asStripeCustomer();
         $data['plan'] = $plan;
@@ -167,35 +167,35 @@ class SubscriptionController extends Controller
         $data['eventId'] = $event->id;
         $data['cur_user'] = $user;
         $data['eventFree'] = false;
-        
-        $data['stripe_key'] = env('PAYMENT_PRODUCTION') ? $this->paymentMethod->processor_options['key'] : 
+
+        $data['stripe_key'] = env('PAYMENT_PRODUCTION') ? $this->paymentMethod->processor_options['key'] :
                                                                 $this->paymentMethod->test_processor_options['key'];
 
 
         if (Session::has('pay_seats_data')) {
             $data['pay_seats_data'] = Session::get('pay_seats_data');
-        
+
         }
         else {
             $data['pay_seats_data'] = [];
         }
-        
-       
-        
+
+
+
         if (Session::has('pay_bill_data')) {
             $data['pay_bill_data'] = Session::get('pay_bill_data');
         }
         else {
             $data['pay_bill_data'] = [];
         }
-        
+
         if (Session::has('cardtype')) {
             $data['cardtype'] = Session::get('cardtype');
         }
         else {
             $data['cardtype'] = [];
         }
-        
+
         if (Session::has('installments')) {
             $data['installments'] = Session::get('installments');
         }
@@ -203,8 +203,8 @@ class SubscriptionController extends Controller
             $data['installments'] = [];
         }
 
-        
-        
+
+
         $data['billname'] = '';
         $data['billsurname'] = '';
         $data['billaddress'] ='';
@@ -215,29 +215,29 @@ class SubscriptionController extends Controller
         $data['billstate'] = '';
         $data['billemail'] = '';
         $data['billcountry'] = '';
-        
+
         if( $user) {
-        
-            
-            
+
+
+
             if(isset($data['pay_bill_data']) && empty($data['pay_bill_data'])) {
-               
+
                 $inv = []; $rec = [];
                 if($user->invoice_details != '') {
                     $inv = json_decode($user->invoice_details, true);
                     if(isset($inv['billing']))
                         unset($inv['billing']);
                 }
-        
+
                 if($user->receipt_details != '') {
                     $rec = json_decode($user->receipt_details, true);
                     if(isset($rec['billing']))
                         unset($rec['billing']);
                 }
-        
+
                 $data['pay_bill_data'] = array_merge($inv, $rec);
             }
-            
+
             $data['billname'] = isset($data['pay_bill_data']['billname']) ? $data['pay_bill_data']['billname'] : '';
             $data['billsurname'] = isset($data['pay_bill_data']['billsurname']) ? $data['pay_bill_data']['billsurname'] : '';
             $data['billaddress'] = isset($data['pay_bill_data']['billaddress']) ? $data['pay_bill_data']['billaddress'] : '';
@@ -248,18 +248,18 @@ class SubscriptionController extends Controller
             $data['billcountry'] = isset($data['pay_bill_data']['country']) ? $data['pay_bill_data']['billcountry'] : '';
             $data['billstate'] = isset($data['pay_bill_data']['state']) ? $data['pay_bill_data']['billstate'] : '';
             $data['billemail'] = isset($data['pay_bill_data']['billemail']) ? $data['pay_bill_data']['billemail'] : '';
-        
+
             $ukcid = $user->kc_id;
         }
-                                                        
+
         Session::put('pay_bill_data', $pay_bill_data);
         return view('theme.cart.new_cart.subscription.checkout', $data);
-       
+
     }
 
     public function store(Request $request, $event,$plan)
     {
-  
+
         $user = Auth::user();
 
         $plan = Plan::where('name',$plan)->first();
@@ -272,14 +272,14 @@ class SubscriptionController extends Controller
         }
 		session()->put('payment_method',$this->paymentMethod->id);
 
-    
+
         if (Session::has('pay_bill_data')) {
-            
+
             $pay_bill_data = Session::get('pay_bill_data');
             $bd = json_encode($pay_bill_data);
         }
         else {
-          
+
             $bd = '';
             $pay_bill_data = [];
         }
@@ -299,7 +299,7 @@ class SubscriptionController extends Controller
             }
             else {
                 $temp['billing'] = 'Invoice requested';
-    
+
                 $st_name = $temp['companyname'] . ' ' . $temp['companyprofession'];
                 $st_tax_id = $temp['companyafm'] . ' ' . $temp['companydoy'];
                 $st_line1 = $temp['companyaddress'] . ' ' . $temp['companyaddressnum'];
@@ -327,13 +327,13 @@ class SubscriptionController extends Controller
             $days = $plan->interval_count;
             $sub_end = strtotime("+" . $days . "day");
         }
-        
+
         $user->asStripeCustomer();
         if(!$user->stripe_id){
-                
+
             $options=['name' => $user['firstname'] . ' ' . $user['lastname'], 'email' => $user['email']];
             $user->createAsStripeCustomer($options);
-           
+
             $stripe_ids = json_decode($user->stripe_ids,true) ? json_decode($user->stripe_ids,true) : [];
             $stripe_ids[] =$user->stripe_id;
 
@@ -350,15 +350,15 @@ class SubscriptionController extends Controller
             ->noProrate()
             //->trialDays($plan->trial_days)
             ->create($request->payment_method, ['email' => $user->email]);
-            
+
             $charge->price = $plan->cost;
             $charge->save();
 
-            $charge['status'] = 'succeeded';            
+            $charge['status'] = 'succeeded';
             $date_sub_end = date('Y/m/d H:i:s', $sub_end);
 
             if($charge){
-                
+
                 $subscription = $user->subscriptions()->where('id',$charge['id'])->first();
                 //dd($user->events()->where('event_id',$event->id)->first());
                 /*if(!$user->events()->where('event_id',$event)->first()){
@@ -367,8 +367,8 @@ class SubscriptionController extends Controller
 
                 $user->subscriptionEvents()->attach($event->id,['subscription_id'=>$charge['id'],'payment_method'=>$this->paymentMethod->id]);
 
-            
-                $data = [];  
+
+                $data = [];
                 /*$muser = [];
                 $muser['name'] = $user->firstname;
                 $muser['first'] = $user->firstname;
@@ -378,25 +378,25 @@ class SubscriptionController extends Controller
                 //$subEnds = $plan->trial_days && $plan->trial_days > 0 ? $plan->trial_days : $plan->getDays();
                 $subEnds = $plan->getDays();
                 $subEnds=date('d-m-Y', strtotime("+$subEnds days"));
-                
+
                 //if($exp = $user->events()->wherePivot('event_id',$event->id)->first()){
                 if($exp = $user->events_for_user_list()->wherePivot('event_id',$event->id)->first()){
-                    
+
                     $exp = $exp->pivot->expiration;
                     $exp = strtotime($exp);
                     $today = strtotime(date('Y-m-d'));
-    
+
                     if($exp && $exp > $today){
-    
+
                         $exp = date_create(date('Y-m-d',$exp));
                         $today = date_create(date('Y-m-d',$today));
-    
+
                         $days = date_diff($exp, $today);
-    
+
                         $subEnds = date('Y-m-d', strtotime($subEnds. ' + ' . $days->d .' days'));
-    
+
                     }
-    
+
                 }
 
 
@@ -405,18 +405,18 @@ class SubscriptionController extends Controller
                     $exp = $exp->pivot->expiration;
                     $exp = strtotime($exp);
                     $today = strtotime(date('Y-m-d'));
-    
+
                     if($exp && $exp > $today){
-    
+
                         $exp = date_create(date('Y-m-d',$exp));
                         $today = date_create(date('Y-m-d',$today));
-    
+
                         $days = date_diff($exp, $today);
-    
+
                         $subEnds = date('Y-m-d', strtotime($subEnds. ' + ' . $days->d .' days'));
-    
+
                     }
-    
+
                 }
 
                 $data['firstName'] = $user->firstname;
@@ -438,21 +438,21 @@ class SubscriptionController extends Controller
                 /*$data['sub_type'] = $plan->name;
                 $data['sub_price'] = $plan->cost;
                 $data['sub_period'] = $plan->period();*/
-        
+
                 $user->notify(new SubscriptionWelcome($data));
 
                 $adminemail = 'info@knowcrunch.com';
-        
+
                 /*$sent = Mail::send('emails.admin.admin_info_subscription_registration', $data, function ($m) use ($adminemail) {
-        
-                    
+
+
                     $sub = 'Knowcrunch - New subscription';
                     $m->from($adminemail, 'Knowcrunch');
                     $m->to($adminemail, 'Knowcrunch');
                     $m->subject($sub);
-                
+
                 });*/
-  
+
                 Session::forget('pay_seats_data');
                 Session::forget('transaction_id');
                 Session::forget('cardtype');
@@ -463,8 +463,8 @@ class SubscriptionController extends Controller
 
                 Session::put('subscription-user',$charge['id']);
 
-                return redirect('/myaccount/subscription-success'); 
-                //return redirect('/myaccount'); 
+                return redirect('/myaccount/subscription-success');
+                //return redirect('/myaccount');
             }else{
                 return 'have error';
             }
@@ -475,7 +475,7 @@ class SubscriptionController extends Controller
             // return redirect('/info/order_error');
         }
         catch(\Cartalyst\Stripe\Exception\CardErrorException $e) {
-            //dd('edwww3'); 
+            //dd('edwww3');
             \Session::put('dperror',$e->getMessage());
             return back();
              //return redirect('/info/order_error');
@@ -500,7 +500,7 @@ class SubscriptionController extends Controller
     public function orderSuccess(){
 
         //dd(Session::get('subscription-user'));
-
+W
         $subscription = Subscription::find(Session::get('subscription-user'));
 
         if($subscription && ($transaction = $subscription->transactions()->first())){
@@ -523,16 +523,16 @@ class SubscriptionController extends Controller
                         'Event_ID' => 'kc_' . time(),'Encrypted_email' => hash('sha256', $userEmail)
                 ];
 
-        
+
             $data['ecommerce'] = [
-                'actionField' => ['id' => $transaction['id'], 'value' => $tr_price, 'currency' => 'EUR', 'coupon' => $transaction->coupon_code], 
-                'products' => ['name' => $thisevent->title, 'id' => $thisevent->id, 'brand'=>'Knowcrunch', 'price' => $tr_price, 
+                'actionField' => ['id' => $transaction['id'], 'value' => $tr_price, 'currency' => 'EUR', 'coupon' => $transaction->coupon_code],
+                'products' => ['name' => $thisevent->title, 'id' => $thisevent->id, 'brand'=>'Knowcrunch', 'price' => $tr_price,
                                 'category' => $categoryScript, 'coupon' => $transaction->coupon_code,'quantity' => 1]
-                                    
+
             ];
 
 
-            /*$data['gt3'] = ['gt3' => ['transactionId' => $transaction['id'], 'transactionTotal' => $tr_price], 
+            /*$data['gt3'] = ['gt3' => ['transactionId' => $transaction['id'], 'transactionTotal' => $tr_price],
                                     'transactionProducts' => ['name' => $thisevent->title, 'sku' => $thisevent->id, 'price' => $tr_price, 'quantity' => 1, '' =>  $categoryScript] ];*/
         }
 
@@ -552,7 +552,7 @@ class SubscriptionController extends Controller
     }
 
     public function change_status(Request $request){
-        
+
         $user = Auth::user();
 
         $subscription = $user->subscriptions()->where('id',$request->sub_id)->first();//Subscription::where(['id' => $request->sub_id, 'user_id' => $currentuser->id])->first();
@@ -570,22 +570,22 @@ class SubscriptionController extends Controller
 
         try{
             if($request->status == 'Cancel'){
-                        
+
                 $subscription->status = false;
                 $subscription->stripe_status = 'cancelled';
                 $subscription->save();
                 $subscription = $subscription->cancel();
-             
-    
+
+
             }else if($request->status == 'Active'){
-    
-    
+
+
                 $subscription->status = true;
                 $subscription->stripe_status = 'active';
                 $subscription->save();
                 $subscription = $subscription->resume();
-            
-    
+
+
             }
         }catch(\Stripe\Exception\InvalidArgumentException $e){
             //dd($subscription);
@@ -593,7 +593,7 @@ class SubscriptionController extends Controller
             //$subscription->save();
         }
 
-        
+
 
         echo json_encode($subscription);
 

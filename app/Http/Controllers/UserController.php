@@ -196,7 +196,7 @@ class UserController extends Controller
 
         }
 
-        
+
 
         $data['active'] = User::WhereHas('statusAccount', function($q) {
             $q->where('completed', true);
@@ -216,7 +216,7 @@ class UserController extends Controller
                 });
             });
         })->count();
-        
+
 
         $data['usersElearning'] = User::WhereHas('events_for_user_list1', function($q) {
             $q->wherePublished(true)->where('event_user.expiration', '>=',date('Y-m-d'))->where('event_user.paid', true)->whereStatus(0)->whereHas('delivery', function ($q1) {
@@ -260,7 +260,13 @@ class UserController extends Controller
     {
 
         $user = Auth::user();
-        $users = $model->with('role', 'image','statusAccount', 'events_for_user_list1', 'events_for_user_list1.delivery')->get();
+        $users = $model->select('firstname', 'lastname', 'mobile', 'email', 'id', 'job_title', 'company', 'kc_id')->with([
+            'role',
+            'image',
+            'statusAccount',
+            'events_for_user_list1:id,title,published,status',
+            'events_for_user_list1.delivery'
+            ])->get();
 
         $data['events'] = (new EventController)->fetchAllEvents();
         $data['transactions'] = (new TransactionController)->participants();
@@ -280,8 +286,8 @@ class UserController extends Controller
 
         //dd($model->with('role', 'image')->get()->toArray()[0]['image']);
         //dd($model->with('role', 'image','statusAccount', 'events_for_user_list1')->get()->toArray()[10]);
-        //data = $data + $this->statistics($users);
-        $data = $data + $this->statistics1();
+        $data = $data + $this->statistics($users);
+        //$data = $data + $this->statistics1();
 
 
         return view('users.index', ['users' => $users, 'data' => $data]);

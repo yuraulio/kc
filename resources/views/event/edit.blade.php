@@ -1103,7 +1103,7 @@
                                                         $course_elearning_exam_icon = (isset($info['elearning']['exam']['icon']) && $info['elearning']['exam']['icon']) ? $info['elearning']['exam']['icon'] : null;
 
                                                     ?>
-                                                    <label class="form-control-label" for="input-expiration">{{ __('Online Exam') }} (course_elearning_exam_text)</label>
+                                                    <label class="form-control-label" for="input-expiration">{{ __('Online Exam') }}<br> (course_elearning_exam_text)</label>
                                                     <div class="input-group">
                                                         <input type="text" name="course[{{'delivery'}}][{{'elearning'}}][{{'exam'}}][{{'text'}}]" id="input-exam" class="form-control" placeholder="{{ __('alphanumeric text') }}" value="{{ old('exam', (isset($info['elearning']['exam']['text']) && $info['elearning']['exam']['text'] != null) ? $info['elearning']['exam']['text'] : '' ) }}"autofocus>
 
@@ -1126,9 +1126,9 @@
                                                 </div>
                                                 <!-- NOW -->
                                                 <div class="exam_input col-sm-12 col-md-6 col-lg-4 form-group">
-                                                    <label class="form-control-label" for="input-expiration">{{ __('Exam Activate Months') }}</label>
+                                                    <label class="form-control-label" for="input-expiration">{{ __('Exam Activate Months') }} {{ __('(course_elearning_exam_activate_months)') }}</label>
                                                     <div class="input-group">
-                                                        <input type="text" name="course[{{'delivery'}}][{{'elearning'}}][{{'exam'}}][{{'activate_months'}}]" id="input-exam-activate-months" class="form-control" placeholder="{{ __('Months') }}" value="{{ old('exam_activate_months', (isset($info['elearning']['exam']['activate_months']) && $info['elearning']['exam']['activate_months'] != null) ? $info['elearning']['exam']['activate_months'] : '' ) }}"autofocus>
+                                                        <input type="number" min="1" name="course[{{'delivery'}}][{{'elearning'}}][{{'exam'}}][{{'activate_months'}}]" id="input-exam-activate-months" class="form-control" placeholder="{{ __('Months') }}" value="{{ old('exam_activate_months', (isset($info['elearning']['exam']['activate_months']) && $info['elearning']['exam']['activate_months'] != null) ? $info['elearning']['exam']['activate_months'] : '' ) }}"autofocus>
 
                                                     </div>
                                                 </div>

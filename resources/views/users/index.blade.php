@@ -802,7 +802,6 @@
 
         function filterColumn ( i ) {
 
-            console.log('fasd = ', i);
 
             initCounters()
             if(i == 9) {
@@ -812,7 +811,6 @@
 
                 selected_event = removeSpecial(selected_event = removeSpecial($('#select2-col9_filter-container').attr('title')))
 
-                console.log(selected_event)
 
                 if(selected_event.search('E-Learning') != -1){
                     stats_elearning()

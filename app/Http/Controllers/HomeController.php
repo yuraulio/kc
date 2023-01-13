@@ -92,8 +92,6 @@ class HomeController extends Controller
 
         $data['booking'] = $transactions;// (new SubscriptionController)->subs_for_dashboard();
 
-        $data = $data + (new DashboardStatistics())->totals();
-
         return view('pages.dashboard', $data);
     }
 
@@ -144,6 +142,36 @@ class HomeController extends Controller
 
         return response()->json([
             'success' => __('Already fetched chart data.'),
+            'data' => $data,
+        ]);
+    }
+
+    public function fetchDashboardStudentStatistics()
+    {
+        $data = (new DashboardStatistics())->students();
+
+        return response()->json([
+            'success' => __('Already fetched Student statistic data.'),
+            'data' => $data,
+        ]);
+    }
+
+    public function fetchDashboardStudentAllStatistics()
+    {
+        $data = (new DashboardStatistics())->studentsAll();
+
+        return response()->json([
+            'success' => __('Already fetched Student all statistic data.'),
+            'data' => $data,
+        ]);
+    }
+
+    public function fetchDashboardInstructorStatistics()
+    {
+        $data = (new DashboardStatistics())->instructors();
+
+        return response()->json([
+            'success' => __('Already fetched Instructor statistic data.'),
             'data' => $data,
         ]);
     }
