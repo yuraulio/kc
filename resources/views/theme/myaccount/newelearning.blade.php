@@ -859,6 +859,7 @@
              if(seen != -1){
 
                 if(tabWatching != false){
+                    $('.isWatching').removeClass('isWatching')
                    document.getElementById(tabWatching).classList.remove('isWatching')
                 }
 
@@ -1090,10 +1091,35 @@
           var prevId = 0;
           let array = [];
 
+          function current_open_topic(){
+
+            let topicId = $('.isWatching').parent().parent().data('count')
+            //alert(topicId)
+
+            let watchingTopic = $('.isWatching').closest('.topic')[0]
+            watchingTopic = $(watchingTopic).find('.topic-info_title')[0]
+            console.log($(watchingTopic))
+            let topicTitle = $(watchingTopic).data('topic-slug');
+
+            let last = prev_topicId[prev_topicId.length - 1]
+
+            if(topicTitle != last){
+            $('*[data-folder-id='+last+']').addClass('hidden')
+
+            }
+
+            $('*[data-folder-id='+topicTitle+']').removeClass('hidden')
+
+            prev_topicId.push(topicTitle)
+            $('.open').children('.lessons-list').css('display','block')
+          }
+
           function play_video(video,playingVideo,vk,lesson){
               video = video + '?title=false'
 
              if(previousVideo !==false){
+
+                $('.isWatching').removeClass('isWatching')
 
                 document.getElementById(previousVideo).classList.remove('isWatching')
 
@@ -1123,27 +1149,9 @@
 
              this.videoPlayers[frame] = new Vimeo.Player(vimeoID);
 
-             let topicId = $('.isWatching').parent().parent().data('count')
-                //alert(topicId)
-                let topicTitle = $('.topic.open .topic-info_title').data('topic-slug');
 
 
-                let last = prev_topicId[prev_topicId.length - 1]
-
-
-
-
-                 if(topicTitle != last){
-                   $('*[data-folder-id='+last+']').addClass('hidden')
-
-                 }
-
-                 $('*[data-folder-id='+topicTitle+']').removeClass('hidden')
-
-               prev_topicId.push(topicTitle)
-               $('.open').children('.lessons-list').css('display','block')
-
-
+             current_open_topic()
 
              videoPlayers[frame].loadVideo(video).then(function(id) {
 
@@ -1200,26 +1208,6 @@
 
                 $('.isWatching').find('a').addClass('current-lesson')
 
-
-                let topicId = $('.isWatching').parent().parent().data('count')
-                let topicTitle = $('.topic.open .topic-info_title').data('topic-slug');
-
-
-
-
-               let last = prev_topicId[prev_topicId.length - 1]
-
-
-
-                 if(topicTitle != last){
-                   $('*[data-folder-id='+last+']').addClass('hidden')
-
-                 }
-
-                 $('*[data-folder-id='+topicTitle+']').removeClass('hidden')
-
-               prev_topicId.push(topicTitle)
-               $('.open').children('.lessons-list').css('display','block')
 
              }).catch(function(error) {
                 switch (error.name) {
@@ -1528,7 +1516,7 @@
             })
 
             $(window).on('load', function() {
-               
+
               setTimeout( function(){
                 //scrollIsWatchingClass()
               var container = $('.sidebar-wrapper'),

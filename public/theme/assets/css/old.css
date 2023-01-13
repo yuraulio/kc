@@ -2035,4 +2035,17 @@ img.linkdein-image-add {
   }
 
 
+.dynamic-courses-wrapper.unpaid{
+    background-color: gray;
+}
+.dynamic-courses-wrapper.unpaid:hover{
+    background-color: orange;
+}
+
+.dynamic-courses-wrapper.unpaid a,
+.dynamic-courses-wrapper.unpaid .accordion-title.title-blue-gradient{
+    pointer-events: none;
+}
+
+
 
