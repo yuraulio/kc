@@ -21,6 +21,7 @@ Auth::routes(['register' => false]);
 //Route::get('dashboard', 'HomeController@index')->name('home');
 Route::get('pricing', 'PageController@pricing')->name('page.pricing');
 Route::get('lock', 'PageController@lock')->name('page.lock');
+Route::get('mycertificateview', 'Theme\CertificateController@view_results');
 
 Route::group(['middleware' => 'auth.aboveauthor', 'prefix' => 'admin'], function () {
 
@@ -590,9 +591,10 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('/mycertificate/convert-pdf-to-image/{certificate}', 'Theme\CertificateController@getCertificateImage');
     Route::post('/mycertificate/save-success-chart', 'Theme\CertificateController@getSuccessChart');
     Route::get('/mycertificate/save-success-chart', 'Theme\CertificateController@getSuccessChart');
-    Route::get('/mycertificateview', 'Theme\CertificateController@view_results');
+
 
 });
+
 
 Route::group(['middleware' => 'auth'], function () {
 
