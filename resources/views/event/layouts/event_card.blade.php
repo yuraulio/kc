@@ -40,13 +40,14 @@
                             <span class="mr-3">EARLY: &euro; {{ number_format($income['early'],2,',','.') }}</span>
                             <span class="mr-3">SPECIAL: &euro; {{ number_format($income['special'],2,',','.') }}</span>
                             <span class="mr-3">REGULAR: &euro; {{ number_format($income['regular'],2,',','.') }}</span>
+                            <span class="mr-3">ALUMNI: &euro; {{ number_format($income['alumni'],2,',','.') }}</span>
                         </p>
                         <p class="mb-0 text-sm">
                             <span class="">All gross income for this course.</span>
                         </p>
                     </div>
                 </div>
-                
+
             </div>
         </div>
     </div>
@@ -57,7 +58,7 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col">
-                        <h5 class="card-title text-uppercase text-muted mb-0">REGISTRATIONS INCOME</h5>
+                        <h5 class="card-title text-uppercase text-muted mb-0">ACTUAL ACCRUED REVENUE</h5>
                         <span class="h2 font-weight-bold mb-0"> &euro; {{ number_format($incomeInstalments['total'],'2',',','.') }}</span>
                     </div>
                 </div>
@@ -67,13 +68,14 @@
                             <span class="mr-3">EARLY: &euro; {{ $incomeInstalments['early'] }}</span>
                             <span class="mr-3">SPECIAL: &euro; {{ number_format($incomeInstalments['special'],2,',','.') }}</span>
                             <span class="mr-3">REGULAR: &euro; {{ number_format($incomeInstalments['regular'],2,',','.') }}</span>
+                            <span class="mr-3">ALUMNI: &euro; {{ number_format($incomeInstalments['alumni'],2,',','.') }}</span>
                         </p>
                         <p class="mb-0 text-sm">
                             <span class="">All actual and accrued revenue for this course.</span>
                         </p>
                     </div>
                 </div>
-                
+
             </div>
         </div>
     </div>

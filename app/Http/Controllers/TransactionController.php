@@ -124,19 +124,21 @@ class TransactionController extends Controller
         $data['usersElearningIncomeAll'] = 0;
         $data['usersInClassIncomeAll'] = 0;
         $total_users = [];
-        foreach($transactions as $transaction){
+        $usersElearningAll = [];
+        $usersInClassAll = [];
+        foreach($transactions as $key => $transaction){
             if(!$transaction->subscription->first() && $transaction->user->first() && $transaction->event->first()){
 
                 $isElearning = $transaction->event->first()->delivery->first() && $transaction->event->first()->delivery->first()->id == 143;
 
                 if($isElearning){
 
-                    $data['usersElearningAll']++;
+                    //$data['usersElearningAll']++;
                     $data['usersElearningIncomeAll'] = $data['usersElearningIncomeAll'] + $transaction['total_amount'];
 
                 }else{
 
-                    $data['usersInClassAll']++;
+                    //$data['usersInClassAll']++;
                     $data['usersInClassIncomeAll'] = $data['usersInClassIncomeAll'] + $transaction['total_amount'];
 
                 }
@@ -175,6 +177,12 @@ class TransactionController extends Controller
 
                 foreach($transaction['user'] as $u){
 
+                    if($isElearning){
+                        $usersElearningAll[$u['firstname'].'_'.$u['lastname']] = $u['firstname'].'_'.$u['lastname'];
+                    }else{
+                        $usersInClassAll[$u['firstname'].'_'.$u['lastname']] = $u['firstname'].'_'.$u['lastname'];
+                    }
+
                     $total_users[$u['firstname'].'_'.$u['lastname']] = $u['firstname'].'_'.$u['lastname'];
 
                     $statistic = $u->statisticGroupByEvent->groupBy('event_id');
@@ -205,7 +213,10 @@ class TransactionController extends Controller
 
         }
 
-        //$data['total_users'] = count($total_users);
+        $data['usersElearningAll'] = count($usersElearningAll);
+        $data['usersInClassAll'] = count($usersInClassAll);
+
+        $data['total_users'] = count($total_users);
 
         return $data;
 

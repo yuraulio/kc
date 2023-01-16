@@ -514,13 +514,14 @@ class ExamAttemptController extends Controller
 
     public function examResults($exam, Request $request) {
 
+        $user = Auth::user();
+
         $nowTime = Carbon::now();
 
         if(isset($request->t)){
             $examEndOfTime = Exam::select('end_of_time_text')->find($exam)['end_of_time_text'];
         }
 
-        $user = Auth::user();
         $examResult = ExamResult::where(['exam_id' => $exam, 'user_id' => $user->id])->first();
         $data = $examResult->getResults($user->id);
         $data['first_name'] = $user->firstname;
@@ -529,6 +530,14 @@ class ExamAttemptController extends Controller
         $data['showAnswers'] = $nowTime->diffInHours($examResult->end_time) < 48;
         if(isset($request->t)){
             $data['endOfTime'] = ($examEndOfTime != null) ? $examEndOfTime : '';
+        }
+
+        $exam = Exam::with('event')->find($exam);
+
+        if($exam && count($exam['event']) > 0){
+            $event = $exam['event'][0];
+            $certificate = $event->certificatesByUser($user->id)[0];
+            $data['certificate'] = $certificate;
         }
 
         return view('exams.results',$data);
