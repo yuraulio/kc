@@ -394,6 +394,7 @@
 
                 let path = data.path
                 let certiUrl = path.replace('\\','/')
+                certiUrl = baseUrl+'/'+certiUrl
                 let certiTitle = data.certiTitle
                 let certiIssueYear = data.certiCreateDateY;
                 let certiIssueMonth = data.certiCreateDateM;
