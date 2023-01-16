@@ -46,7 +46,7 @@
                         </p>
                     </div>
                 </div>
-                
+
             </div>
         </div>
     </div>
@@ -57,7 +57,7 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col">
-                        <h5 class="card-title text-uppercase text-muted mb-0">REGISTRATIONS INCOME</h5>
+                        <h5 class="card-title text-uppercase text-muted mb-0">ACTUAL ACCRUED REVENUE</h5>
                         <span class="h2 font-weight-bold mb-0"> &euro; {{ number_format($incomeInstalments['total'],'2',',','.') }}</span>
                     </div>
                 </div>
@@ -73,7 +73,7 @@
                         </p>
                     </div>
                 </div>
-                
+
             </div>
         </div>
     </div>

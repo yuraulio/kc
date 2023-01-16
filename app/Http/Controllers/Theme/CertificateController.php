@@ -315,25 +315,34 @@ class CertificateController extends Controller
     public function getSuccessChart(Request $request)
     {
 
+        $certificateId = $request->certificate_id;
         $data = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $request->image));
 
-        $imageName = 'cert/image.png';
+        $imageName = 'cert/'.$certificateId.'.png';
         $destination = public_path($imageName);
 
         file_put_contents($destination, $data);
 
 
+        //return redirect()->route('certificate.results', ['img'=>$imageName]);
+
         return response()->json([
             'success' => true,
-            'path' => $imageName
+            'path' => 'mycertificateview/'.$certificateId
         ]);
 
 
     }
 
-    public function view_results()
+    public function view_results($id)
     {
-        return view('exams.results_view');
+        dd($this->loadCertificateData($id));
+        $img = $id.'.png';
+        $img = env('MIX_APP_URL').'/cert/'.$img;
+
+
+
+        return view('exams.results_view', compact('img'));
     }
 
 
