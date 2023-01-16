@@ -595,7 +595,7 @@ class EventController extends Controller
                 $tickets = $user['ticket']->groupBy('event_id');
                 $ticketType = isset($tickets[$event->id]) ? $tickets[$event->id]->first()->type : '-';
 
-                if(isset($tickets[$event->id]) && !$transaction->isSubscription()){
+                if(isset($tickets[$event->id]) && !$transaction->isSubscription()->first()){
                     $ticketType = $tickets[$event->id]->first()->type;
                     $ticketName = $tickets[$event->id]->first()->title;
 
