@@ -2036,7 +2036,7 @@ img.linkdein-image-add {
 
 
 .dynamic-courses-wrapper.unpaid{
-    background-color: gray;
+    background-color: #d8d8d8;
 }
 .dynamic-courses-wrapper.unpaid:hover{
     background-color: orange;

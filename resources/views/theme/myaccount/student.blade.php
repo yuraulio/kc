@@ -1177,7 +1177,11 @@
                                         @endif
                                     </div>
                                 </div>
-
+                                @if(isset($event['paid']) && $event['paid'] == 0)
+                                 <div class="unpaidMessage d-none">
+                                     <h3>You have an unpaid amount for this course. Please contact us to arrange payment and retrieve your access.</h3>
+                                 </div>
+                                 @endif
                             </div>
                         </div>
                      @else
