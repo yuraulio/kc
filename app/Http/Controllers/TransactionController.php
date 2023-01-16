@@ -268,9 +268,10 @@ class TransactionController extends Controller
         $income['special'] = 0;
         $income['early'] = 0;
         $income['regular'] = 0;
+        $income['alumni'] = 0;
+        $income['other'] = 0;
         $income['total'] = 0;
 
-        $test = [];
         foreach($transactions as $transaction){
             // if(count($transaction['invoice']) != 0 && $transaction['total_amount'] != 0){
             //     $test[] =$transaction;
@@ -286,7 +287,9 @@ class TransactionController extends Controller
             }
 
 
+            $countUsers = count($transaction->user);
 
+            $amount = ($transaction['amount'] != null && $transaction['amount'] != 0 && $countUsers != 0) ? $transaction['amount'] / $countUsers : 0;
 
             if(!$transaction->subscription->first() && $transaction->user->first() && $event){
 
@@ -294,11 +297,11 @@ class TransactionController extends Controller
 
                 if($isElearning){
 
-                    $data['usersElearningIncomeAll'] = $data['usersElearningIncomeAll'] + $transaction['total_amount'];
+                    $data['usersElearningIncomeAll'] = $data['usersElearningIncomeAll'] + $amount;
 
                 }else{
 
-                    $data['usersInClassIncomeAll'] = $data['usersInClassIncomeAll'] + $transaction['total_amount'];
+                    $data['usersInClassIncomeAll'] = $data['usersInClassIncomeAll'] + $amount;
 
                 }
 
@@ -332,7 +335,7 @@ class TransactionController extends Controller
                     $earlyCount += 1;
                 }
 
-                $countUsers = count($transaction->user);
+
 
                 foreach($transaction['user'] as $u){
 
@@ -364,12 +367,13 @@ class TransactionController extends Controller
 
                         foreach($transaction->invoice as $invoice){
 
+                            $amount = ($invoice->amount != null && $invoice->amount != 0 && $countUsers != 0) ? ($invoice->amount / $countUsers) : 0;
+
+
                             if($ticketType == 'Special'){
 
 
-
-                                $income['special'] = $income['special'] + $invoice->amount;
-                                $income['total'] = $income['total'] + $invoice->amount;
+                                $income['special'] = $income['special'] + $amount;
 
 
 
@@ -377,8 +381,8 @@ class TransactionController extends Controller
 
 
 
-                                $income['early'] = $income['early'] + $invoice->amount;
-                                $income['total'] = $income['total'] + $invoice->amount;
+                                $income['early'] = $income['early'] + $amount;
+
 
 
 
@@ -386,24 +390,25 @@ class TransactionController extends Controller
 
 
 
-                                $income['regular'] = $income['regular'] + $invoice->amount;
-                                $income['total'] = $income['total'] + $invoice->amount;
+                                $income['regular'] = $income['regular'] + $amount;
 
 
 
                             }else if($ticketType == 'Alumni'){
 
-                                $income['total'] = $income['total'] + $invoice->amount;
+                                $income['alumni'] = $income['alumni'] + $amount;
+
 
 
                             }else{
-                                $income['total'] = $income['total'] + $invoice->amount;
+                                $income['other'] = $income['other'] + $amount;
+
                             }
 
                             if($isElearning){
-                                $data['paid_installments_elearning'] = $data['paid_installments_elearning'] + $invoice->amount;
+                                $data['paid_installments_elearning'] = $data['paid_installments_elearning'] + $amount;
                             }else{
-                                $data['paid_installments_inclass'] = $data['paid_installments_inclass'] + $invoice->amount;
+                                $data['paid_installments_inclass'] = $data['paid_installments_inclass'] + $amount;
                             }
 
                             $data['transactions'][] = ['id' => $transaction['id'], 'user_id' => $u['id'],'name' => $u['firstname'].' '.$u['lastname'],
@@ -423,17 +428,17 @@ class TransactionController extends Controller
                         if(!isset($transaction->status_history[0]['installments'])){
 
                             if($isElearning){
-                                $data['paid_installments_elearning'] = $data['paid_installments_elearning'] + $transaction['amount'] / $countUsers;
+                                $data['paid_installments_elearning'] = $data['paid_installments_elearning'] + $amount;
                             }else{
-                                $data['paid_installments_inclass'] = $data['paid_installments_inclass'] + $transaction['amount'] / $countUsers;
+                                $data['paid_installments_inclass'] = $data['paid_installments_inclass'] + $amount;
                             }
 
                             if($ticketType == 'Special'){
 
 
 
-                                $income['special'] = $income['special'] + $transaction['amount'] / $countUsers;
-                                $income['total'] = $income['total'] + $transaction['amount'] / $countUsers;
+                                $income['special'] = $income['special'] + $amount;
+
 
 
 
@@ -441,8 +446,8 @@ class TransactionController extends Controller
 
 
 
-                                $income['early'] = $income['early'] + $transaction['amount'] / $countUsers;
-                                $income['total'] = $income['total'] + $transaction['amount'] / $countUsers;
+                                $income['early'] = $income['early'] + $amount;
+
 
 
 
@@ -450,18 +455,21 @@ class TransactionController extends Controller
 
 
 
-                                $income['regular'] = $income['regular'] + $transaction['amount'] / $countUsers;
-                                $income['total'] = $income['total'] + $transaction['amount'] / $countUsers;
+                                $income['regular'] = $income['regular'] + $amount;
+
 
 
 
                             }else if($ticketType == 'Alumni'){
 
-                                $income['total'] = $income['total'] + $transaction['amount'] / $countUsers;
+
+                                $income['alumni'] = $income['alumni'] + $amount;
 
 
                             }else{
-                                $income['total'] = $income['total'] + $transaction['amount'] / $countUsers;
+
+
+                                $income['other'] = $income['other'] + $amount;
                             }
                         }
 
@@ -490,6 +498,8 @@ class TransactionController extends Controller
         $data['total_users'] = count($total_users);
 
         $data['income'] = $income;
+        $data['income']['total'] = array_sum($income);
+
 
         return $data;
 

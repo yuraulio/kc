@@ -61,12 +61,7 @@
 
             <?php
 
-                /*
-
-                dd('asd');
-                $certificate = $cert;
-                dd($certificate);
-
+/*
                 $expirationMonth = '';
                 $expirationYear = '';
                 $certUrl = trim(url('/') . '/mycertificate/' . base64_encode(Auth::user()->email."--".$certificate->id));
@@ -78,14 +73,15 @@
                 $certiTitle = preg_replace( "/\r|\n/", " ", $certificate->certificate_title );
 
                 if(strpos($certificate->certificate_title, '</p><p>')){
-                $certiTitle = substr_replace($certificate->certificate_title, ' ', strpos($certificate->certificate_title, '</p>'), 0);
+                    $certiTitle = substr_replace($certificate->certificate_title, ' ', strpos($certificate->certificate_title, '</p>'), 0);
                 }else{
-                $certiTitle = $certificate->certificate_title;
+                    $certiTitle = $certificate->certificate_title;
                 }
 
                 $certiTitle = urlencode(htmlspecialchars_decode(strip_tags($certiTitle),ENT_QUOTES));
 
                 */
+
 
         ?>
 
@@ -364,6 +360,7 @@
           success: function(data) {
             url = data.path
             url = url.replace('\\','/')
+
             if(data){
                 var fbpopup = window.open(`http://www.facebook.com/sharer.php?u=${decodeURI(baseUrl)}/${decodeURI(url)}`, "pop", "width=600, height=400, scrollbars=no");
                 return false;
@@ -380,6 +377,7 @@
         var baseUrl = getUrl .protocol + "//" + getUrl.host;
         var pathname = getUrl.pathname
         var certificateId = $(this).attr('data-certid');
+        var exam = pathname.split("/").pop();
 
          $.ajax({
          headers: {
@@ -389,7 +387,8 @@
            url: "/mycertificate/save-success-chart",
            data:{
                 image: chartImage,
-                certificate_id: certificateId
+                certificate_id: certificateId,
+                exam: exam
             },
             success: function(data) {
 

@@ -21,9 +21,9 @@
                         <span class="">All people who registered in a free or paid course (class or video).</span>
                     </p>
                     </div>
-                    
+
                 </div>
-                
+
             </div>
         </div>
     </div>
@@ -50,7 +50,7 @@
                     </div>
 
                 </div>
-                
+
             </div>
         </div>
     </div>
@@ -77,7 +77,7 @@
                         </p>
                     </div>
                 </div>
-                
+
             </div>
         </div>
     </div>
@@ -96,6 +96,7 @@
                     <span class="mr-3">EARLY: &euro;{{ number_format($income['early'],2,'.','.') }}</span>
                     <span class="mr-3">SPECIAL: &euro;{{ number_format($income['special'],2,',','.') }}</span>
                     <span class="mr-3">REGULAR: &euro;{{ number_format($income['regular'],2,',','.') }}</span>
+                    <span class="mr-3">ALUMNI: &euro;{{ number_format($income['alumni'],2,',','.') }}</span>
                 </p>
                 <p class="mb-0 text-sm">
                     <span class="">All actual and accrued revenue from our paid courses (class or video) by ticket type.</span>

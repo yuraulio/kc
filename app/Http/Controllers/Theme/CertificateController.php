@@ -66,7 +66,6 @@ class CertificateController extends Controller
 
   public function loadCertificateData($certificate){
 
-
     $certificate = Certificate::find($certificate);
 
     $contxt = stream_context_create([
@@ -315,6 +314,7 @@ class CertificateController extends Controller
     public function getSuccessChart(Request $request)
     {
 
+        $user = Auth::user();
         $certificateId = $request->certificate_id;
         $data = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $request->image));
 
@@ -324,11 +324,40 @@ class CertificateController extends Controller
         file_put_contents($destination, $data);
 
 
+        $exam = Exam::with('event')->find($request->exam);
+
+
+
+        if($exam && count($exam['event']) > 0){
+            $event = $exam['event'][0];
+            $certificate = $event->certificatesByUser($user->id)[0];
+
+            $certiTitle = preg_replace( "/\r|\n/", " ", $certificate->certificate_title );
+            if(strpos($certificate->certificate_title, '</p><p>')){
+                $certiTitle = substr_replace($certificate->certificate_title, ' ', strpos($certificate->certificate_title, '</p>'), 0);
+            }else{
+                $certiTitle = $certificate->certificate_title;
+            }
+
+            $certiTitle = urlencode(htmlspecialchars_decode(strip_tags($certiTitle),ENT_QUOTES));
+        }
+
+
+
+
         //return redirect()->route('certificate.results', ['img'=>$imageName]);
 
         return response()->json([
             'success' => true,
-            'path' => 'mycertificateview/'.$certificateId
+            'path' => 'mycertificateview/'.$certificateId,
+            'certiTitle' => isset($certificate) ? $certiTitle : '',
+            'certiCreateDateY' => isset($certificate) ? date('Y',$certificate->expiration_date) : '',
+            'certiExpMonth' => isset($certificate) ? date('m',$certificate->expiration_date) : '',
+            'certiExpYear' => isset($certificate) ? date('Y',$certificate->expiration_date) : '',
+            'certiCredential' =>isset($certificate) ? $certificate->credential : '',
+            'certiCreateDateM' => isset($certificate) ? date('m',$certificate->create_date) : '',
+            'certiCreateDateY' => isset($certificate) ? date('Y',$certificate->create_date) : ''
+
         ]);
 
 
@@ -336,7 +365,7 @@ class CertificateController extends Controller
 
     public function view_results($id)
     {
-        dd($this->loadCertificateData($id));
+
         $img = $id.'.png';
         $img = env('MIX_APP_URL').'/cert/'.$img;
 
