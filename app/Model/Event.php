@@ -713,7 +713,7 @@ class Event extends Model
     }
 
     public function transactions(){
-        return $this->morphToMany(Transaction::class, 'transactionable');
+        return $this->morphToMany(Transaction::class, 'transactionable')->with('user.ticket','isSubscription');
     }
 
     public function invoicesByUser($user){
