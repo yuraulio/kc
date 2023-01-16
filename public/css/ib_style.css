@@ -822,6 +822,18 @@ and (orientation : portrait) {
 
 /* Desktop */
 
+@media screen and (min-width: 768px){
+  #exam-container {
+      max-width: 680px;
+  }
+}
+
+@media screen and (min-width: 992px){
+  #exam-container {
+    max-width: 925px;
+  }
+}
+
   @media screen and (min-width: 1200px) {
     #exam-container{
         max-width: 1110px;
@@ -837,6 +849,8 @@ and (orientation : portrait) {
         max-width: 1450px;
     }
   }
+ 
+
 
 
 /* Tablet */
