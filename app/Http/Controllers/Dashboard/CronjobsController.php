@@ -602,15 +602,14 @@ class CronjobsController extends Controller
 
 
         //$events = Event::has('transactions')->where('published',true)->with('users')->where('view_tpl','event')->get();
-        $events = Event::has('transactions')->where('published',true)->whereIn('status',[0,3])->with('users')
+        $events = []; /*Event::has('transactions')->where('published',true)->whereIn('status',[0,3])->with('users')
         ->whereHas('event_info1',function($query){
             $query->where('course_delivery','!=',143);
         })
-        ->get();
+        ->get();*/
 
         $today = date_create( date('Y/m/d'));
         $today1 = date('Y-m-d');
-
 
         foreach($events as $event){
 
@@ -642,8 +641,8 @@ class CronjobsController extends Controller
                 $expiration =  date_diff($date, $startDate);
                 $date = date_diff($date, $today);
 
-                if( $date->y==0 && $date->m == ($expiration->m/2)  && $date->d == 0){
-
+                //if( $date->y==0 && $date->m == ($expiration->m/2)  && $date->d == 0){
+                if( $date->y==0 && $date->m == ($expiration->m/2)  && $date->d == 0 && $expiration->y == 0 && $expiration->d == 0){
                     // dd('edww');
 
                     $data['firstName'] = $user->firstname;
