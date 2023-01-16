@@ -62,9 +62,11 @@ class VenueController extends Controller
         $model = app($request->model_type);
         $model = $model::find($request->model_id);
 
-        //dd($model);
-
-        $model->venues()->sync([$request->venue_id]);
+        if(in_array($request->venue_id,$model->venues()->pluck('venue_id')->toArray())){
+            $model->venues()->sync([$request->venue_id]);
+        }else{
+            $model->venues()->attach([$request->venue_id]);
+        }
 
         $venue = Venue::find($request->venue_id);
 
