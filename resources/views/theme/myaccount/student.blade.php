@@ -908,13 +908,13 @@
                                                                 {
                                                                   if($selectedFiles['selectedAllFolders']){
                                                                      $folderIsSelected = true;
-                                                                 }else{
+                                                                  }else{
                                                                      foreach($selectedFiles['selectedFolders'] as $key10 => $selectedFile){
                                                                          if($folder['dirname'] == $selectedFile){
                                                                              $folderIsSelected = true;
                                                                          }
                                                                      }
-                                                                 }
+                                                                  }
                                                                 }
                                                                 
 
