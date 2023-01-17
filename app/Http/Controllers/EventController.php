@@ -595,10 +595,15 @@ class EventController extends Controller
                 $tickets = $user['ticket']->groupBy('event_id');
                 $ticketType = isset($tickets[$event->id]) ? $tickets[$event->id]->first()->type : '-';
 
-                if(isset($tickets[$event->id]) && !$transaction->isSubscription()->first()){
+                $isSubscription = $transaction->isSubscription()->first();
+
+                if(isset($tickets[$event->id]) && !$isSubscription){
                     $ticketType = $tickets[$event->id]->first()->type;
                     $ticketName = $tickets[$event->id]->first()->title;
 
+                }else if($isSubscription){
+                    $ticketType = '-';
+                    $ticketName = '-';
                 }else{
                     $ticketType = '-';
                     $ticketName = '-';
@@ -635,12 +640,9 @@ class EventController extends Controller
 
                 }else if($ticketType == 'Alumni'){
 
-
                     $count['alumni']++;
                     $count['total']++;
-
                     $income['alumni'] +=  ($transaction['amount'] / $countUsers) ;
-
 
 
                 }else{
