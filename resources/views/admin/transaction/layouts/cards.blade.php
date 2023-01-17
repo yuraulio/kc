@@ -67,6 +67,7 @@
                             <span class="mr-3">EARLY: <span id="early-bird"></span></span>
                             <span class="mr-3">SPECIAL: <span id="special"></span></span>
                             <span class="mr-3">REGULAR: <span id="regular"></span></span>
+                            <span class="mr-3">ALUMNI: <span id="alumni"></span></span>
                         </p>
                         <p class="mb-0 text-sm">
                             <span class="">All income from our paid courses (class or video) by ticket type.</span>

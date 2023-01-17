@@ -671,7 +671,7 @@ $(document).ready(function() {
         $('#early-bird').text('€'+early.toLocaleString())
         $('#sponsored').text('€'+sponsored.toLocaleString())
 
-        $('#total_income').text('€'+(early+regular+special).toLocaleString())
+        $('#total_income').text('€'+(early+regular+special+alumni).toLocaleString())
 
         $('#count_special').text('Special(all): '+count_special)
         $('#count_regular').text('Regular(all): '+count_regular)
