@@ -99,7 +99,11 @@ class EnrollStudentsToElearningEvents implements ShouldQueue
 
                 $students1 = array_diff(  $students, $existsStudent );
                 $today = date('Y/m/d');
-                $monthsExp2 = '+' . $elearningEvent->expiration .' months';
+                $monthsExp2 = '';
+                if( ($exp = $elearningEvent->getAccessInMonths()) > 0){
+                    $monthsExp2 = '+' . $exp .' months';
+                    $monthsExp2 = date('Y-m-d', strtotime($monthsExp2, strtotime($today)));
+                }
 
                 foreach($students1 as $student){
                     $user = User::find($student);
@@ -107,7 +111,7 @@ class EnrollStudentsToElearningEvents implements ShouldQueue
                     $elearningEvent->users()->attach($student,
                             [
                                 'comment'=>'enroll from ' . $this->event->id.'||'.$this->eventsToEnrollExams,
-                                'expiration'=>date('Y-m-d', strtotime($monthsExp2, strtotime($today))),
+                                'expiration'=>$monthsExp2,
                                 'paid' => true
                             ]
                     );
