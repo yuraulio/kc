@@ -321,6 +321,12 @@ class CertificateController extends Controller
         $imageName = 'cert/'.$certificateId.'.png';
         $destination = public_path($imageName);
 
+
+        if(!File::exists('cert')) {
+          // path does not exist
+          File::makeDirectory('cert', 0777, true, true);
+        }
+
         file_put_contents($destination, $data);
 
 

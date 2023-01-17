@@ -1,20 +1,20 @@
-<!doctype html>
+<!DOCTYPE html>
 
-<html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
 
-<meta charset="utf-8">
+    <meta charset="utf-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <meta name="description" content="">
-
-<meta name="Saquib" content="Blade">
 
 <title>Checkout our layout</title>
 
 <!-- load bootstrap from a cdn -->
 
-<link rel="stylesheet" href="//netdna.bootstrapcdn.com/twitter-bootstrap/3.0.3/css/bootstrap-combined.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha512-k78e1fbYs09TQTqG79SpJdV4yXq8dX6ocfP0bzQHReQSbEghnS6AQHE2BbZKns962YaqgQL16l7PkiiAHZYvXQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 <!-- Primary Meta Tags -->
 <title>View Certification</title>
@@ -48,11 +48,15 @@
 
    </header>
 
-   <div id="main" class="row">
 
-           @yield('content')
 
-           <img src="{{ $img }}" alt="">
+   <div id="main" class="container">
+   <div class="row">
+    <div class="col-md-8 offset-md-2 col-sm-8 offfset-sm-2">
+    <img style="height:80vh;" src="{{ $img }}" alt="">
+    </div>
+  </div>
+        
 
    </div>
 
