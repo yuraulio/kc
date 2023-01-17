@@ -845,16 +845,20 @@
                                         </div>
 
                                         <?php
+                                        
                                             $now1 = strtotime(date("Y-m-d"));
                                             $display = false;
-                                            if(!$event['release_date_files'] && $event['status'] == 3){
+                                            if(!isset($event['release_date_files'])){
+                                             $display = false;
+                                            }
+                                            else if(!$event['release_date_files'] && $event['status'] == 3){
                                                 $display = true;
 
                                             }else if(strtotime(date('Y-m-d',strtotime($event['release_date_files']))) >= $now1 && $event['status'] == 3){
 
                                                 $display = true;
                                             }
-
+                                        
                                             ?>
 
 
@@ -867,7 +871,8 @@
                                                         //dd($folders);
 
                                                         //dd($dropbox);
-                                                        if(isset($dropbox['pivot'])){
+                                                        $selectedFiles = [];
+                                                        if(isset($dropbox['pivot']['selectedFolders'])){
                                                         $selectedFiles = $dropbox['pivot']['selectedFolders'];
                                                         $selectedFiles = json_decode($selectedFiles, true);
                                                         }
@@ -899,15 +904,19 @@
                                                         @foreach($folders as $folder)
                                                             <?php
                                                                 $folderIsSelected = false;
-                                                                if($selectedFiles['selectedAllFolders']){
-                                                                    $folderIsSelected = true;
-                                                                }else{
-                                                                    foreach($selectedFiles['selectedFolders'] as $key10 => $selectedFile){
-                                                                        if($folder['dirname'] == $selectedFile){
-                                                                            $folderIsSelected = true;
-                                                                        }
-                                                                    }
+                                                                if(isset($selectedFiles['selectedAllFolders']))
+                                                                {
+                                                                  if($selectedFiles['selectedAllFolders']){
+                                                                     $folderIsSelected = true;
+                                                                 }else{
+                                                                     foreach($selectedFiles['selectedFolders'] as $key10 => $selectedFile){
+                                                                         if($folder['dirname'] == $selectedFile){
+                                                                             $folderIsSelected = true;
+                                                                         }
+                                                                     }
+                                                                 }
                                                                 }
+                                                                
 
                                                                 $checkedF = [];
                                                                 $fs = [];
@@ -942,7 +951,7 @@
                                                                                 @if(isset($folder_bonus['parent']) && $folder_bonus['parent'] == $folder['id'])
 
                                                                                 <?php $folderIsSelected = false; ?>
-
+                                                                                @if(isset($selectedFiles['selectedAllFolders']))
                                                                                 @if($selectedFiles['selectedAllFolders'])
                                                                                     <?php $folderIsSelected = true; ?>
                                                                                 @else
@@ -952,7 +961,7 @@
                                                                                         @endif
                                                                                     @endforeach
                                                                                 @endif
-
+                                                                                @endif
 
                                                                                 <?php $subfolder[] =  $subf['foldername']; ?>
                                                                                 <div class="files-wrapper bonus-files d-none">
@@ -970,7 +979,7 @@
                                                                                                 <img src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}"  alt="Download File"/></a>
                                                                                             </div>
                                                                                         @else
-
+                                                                                          @if(isset($selectedFiles['selectedFolders']))
                                                                                             @foreach($selectedFiles['selectedFolders'] as $key10 => $selectedFile)
 
                                                                                                 @if($file_bonus['dirname'] == $selectedFile)
@@ -983,6 +992,7 @@
                                                                                                     </div>
                                                                                                 @endif
                                                                                             @endforeach
+                                                                                          @endif
                                                                                         @endif
 
 
@@ -1006,6 +1016,7 @@
                                                                                     </div>
                                                                                 </div>
                                                                             @else
+                                                                            @if(isset($selectedFiles['selectedFolders']))
                                                                                 @foreach($selectedFiles['selectedFolders'] as $key10 => $selectedFile)
                                                                                     @if($file['dirname'] == $selectedFile)
                                                                                         <div class="files-wrapper no-bonus">
@@ -1018,6 +1029,7 @@
                                                                                         </div>
                                                                                     @endif
                                                                                 @endforeach
+                                                                              @endif
                                                                             @endif
                                                                             <!-- <div class="files-wrapper">
                                                                                 <div class="file-wrapper">
@@ -1041,6 +1053,7 @@
                                                                     @if(isset($folder_bonus['parent']) && $folder_bonus['parent'] == $folder['id'])
 
                                                                             <?php $folderIsSelected = false; ?>
+                                                                            @if(isset($selectedFiles['selectedFolders']))
                                                                             @if($selectedFiles['selectedAllFolders'])
                                                                                 <?php $folderIsSelected = true; ?>
                                                                             @else
@@ -1049,6 +1062,7 @@
                                                                                         <?php $folderIsSelected = true; ?>
                                                                                     @endif
                                                                                 @endforeach
+                                                                            @endif
                                                                             @endif
 
 
@@ -1067,6 +1081,7 @@
                                                                                 <img src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}"  alt="Download File"/></a>
                                                                             </div>
                                                                         @else
+                                                                        @if(isset($selectedFiles['selectedFolders']))
                                                                             @foreach($selectedFiles['selectedFolders'] as $key10 => $selectedFile)
                                                                                 @if($file_bonus['dirname'] == $selectedFile)
                                                                                     <div class="file-wrapper">
@@ -1077,6 +1092,7 @@
                                                                                     </div>
                                                                                 @endif
                                                                             @endforeach
+                                                                           @endif
                                                                         @endif
 
                                                                     @endif
