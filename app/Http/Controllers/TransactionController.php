@@ -126,22 +126,14 @@ class TransactionController extends Controller
         $total_users = [];
         $usersElearningAll = [];
         $usersInClassAll = [];
+
         foreach($transactions as $key => $transaction){
+
             if(!$transaction->subscription->first() && $transaction->user->first() && $transaction->event->first()){
 
                 $isElearning = $transaction->event->first()->delivery->first() && $transaction->event->first()->delivery->first()->id == 143;
 
-                if($isElearning){
 
-                    //$data['usersElearningAll']++;
-                    $data['usersElearningIncomeAll'] = $data['usersElearningIncomeAll'] + $transaction['total_amount'];
-
-                }else{
-
-                    //$data['usersInClassAll']++;
-                    $data['usersInClassIncomeAll'] = $data['usersInClassIncomeAll'] + $transaction['total_amount'];
-
-                }
 
                 $category =  $transaction->event->first()->category->first() ? $transaction->event->first()->category->first()->id : -1;
 
@@ -174,8 +166,21 @@ class TransactionController extends Controller
                 }
 
                 $countUsers = count($transaction->user);
+                $amount = $transaction['amount'] / $countUsers;
 
                 foreach($transaction['user'] as $u){
+
+                    if($isElearning){
+
+                        //$data['usersElearningAll']++;
+                        $data['usersElearningIncomeAll'] = $data['usersElearningIncomeAll'] + $amount;
+
+                    }else{
+
+                        //$data['usersInClassAll']++;
+                        $data['usersInClassIncomeAll'] = $data['usersInClassIncomeAll'] + $amount;
+
+                    }
 
                     if($isElearning){
                         $usersElearningAll[$u['firstname'].'_'.$u['lastname']] = $u['firstname'].'_'.$u['lastname'];

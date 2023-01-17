@@ -495,7 +495,8 @@ class EventController extends Controller
         $data['info'] = !empty($event->event_info()) ? $event->event_info() : null;
 
 
-        $data = $data + $this->event_statistics($event, $data['eventUsers']);
+        //$data = $data + $this->event_statistics($event, $data['eventUsers']);
+
         //if elearning course (id = 143)
         $elearning_events = Delivery::with('event:id,title')->where('id',143)->whereHas('event', function ($query) {
             return $query->where('published', true);
@@ -541,8 +542,11 @@ class EventController extends Controller
         return view('event.edit', $data);
     }
 
-    public function event_statistics($event, $users)
+    public function event_statistics($id)
     {
+
+        $event = Event::find($id);
+        $users = $event->users_with_transactions()->with('ticket')->get();
 
         $data = [];
         //return [];
@@ -584,9 +588,8 @@ class EventController extends Controller
         $countUsersU = [];
         foreach($event->transactions as $transaction){
 
-            //$amount += $transaction->amount; 
-         
-            
+            //$amount += $transaction->amount;
+
             //dd($transaction->user);
             $users = $transaction->user;
             foreach($users as $user){
@@ -599,7 +602,6 @@ class EventController extends Controller
                 $isSubscription = $transaction->isSubscription()->first();
 
                 if(isset($tickets[$event->id]) && !$isSubscription){
-
                     $ticketType = $tickets[$event->id]->first()->type;
                     $ticketName = $tickets[$event->id]->first()->title;
 
@@ -613,7 +615,7 @@ class EventController extends Controller
 
                 $countUsers = count($users);
                 if($ticketType == 'Special'){
-                    
+
                     $count['special']++;
                     $count['total']++;
                     $income['special'] +=  ($transaction['amount'] / $countUsers);
@@ -631,18 +633,21 @@ class EventController extends Controller
 
                     $count['regular']++;
                     $count['total']++;
+
                     $income['regular'] += ($transaction['amount'] / $countUsers) ;
 
                 }else if($ticketType == 'Sponsored'){
-                
+
                     $count['free']++;
                     $count['total']++;
-                    
+
+
                 }else if($ticketType == 'Alumni'){
 
                     $count['alumni']++;
                     $count['total']++;
                     $income['alumni'] +=  ($transaction['amount'] / $countUsers) ;
+
 
                 }else{
                     $count['total']++;
@@ -690,15 +695,19 @@ class EventController extends Controller
                         if($ticketType == 'Special'){
 
 
+
                             $incomeInstalments['special'] = $incomeInstalments['special'] + ($transaction['amount'] != null ? ($transaction['amount'] / $countUsers) : 0);
                             //$incomeInstalments['total'] = $incomeInstalments['total'] + ($transaction['amount'] != null ? ($transaction['amount'] / $countUsers) : 0);
 
                         }else if($ticketType == 'Early Bird'){
 
+
                             $incomeInstalments['early'] = $incomeInstalments['early'] + ($transaction['amount'] != null ? ($transaction['amount'] / $countUsers) : 0);
                             //$incomeInstalments['total'] = $incomeInstalments['total'] + ($transaction['amount'] != null ? ($transaction['amount'] / $countUsers) : 0);
 
                         }else if($ticketType == 'Regular'){
+
+
 
                             $incomeInstalments['regular'] = $incomeInstalments['regular'] + ($transaction['amount'] != null ? ($transaction['amount'] / $countUsers) : 0);
                             //$incomeInstalments['total'] = $incomeInstalments['total'] + ($transaction['amount'] != null ? ($transaction['amount'] / $countUsers) : 0);
@@ -717,9 +726,14 @@ class EventController extends Controller
                         }
                     }
                 }
-                
+
+
+
+
             }
         }
+
+        //dd($income);
 
         $countUsersU = array_unique($countUsersU);
         $countUsersU = count($countUsersU);
@@ -735,9 +749,14 @@ class EventController extends Controller
         //dd($count);
 
 
+        return response()->json([
+            'success' => __('Event Statistic successfully fetched.'),
+            'data' => $data,
+        ]);
 
-        return $data;
+
     }
+
     /**
      * Update the specified resource in storage.
      *

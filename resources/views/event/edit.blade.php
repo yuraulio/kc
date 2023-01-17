@@ -3617,9 +3617,51 @@ var datePickerOptions = {
                 footer: ''
             })
 
-
-
         }
+
+        var getUrl = window.location;
+        var pathname = getUrl.pathname
+        var event = pathname.split("/");
+        event = event[event.length - 2]
+
+
+        $.ajax({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            type: 'GET',
+            url: '/admin/events/statistics/'+event,
+            success: function (data) {
+
+                let stats = data.data;
+
+                let income = stats.income;
+                let count = stats.count;
+                let incomeInstalments = stats.incomeInstalments;
+
+                $('#student_total').text(count.total)
+                $('#students_paid').text(count.total - count.free)
+                $('#students_free').text(count.free)
+
+                $('#income-total').text(income.total)
+                $('#income-early').text(income.early)
+                $('#income-alumni').text(income.alumni)
+                $('#income-special').text(income.special)
+                $('#income-regular').text(income.regular)
+
+                $('#installments-total').text(incomeInstalments.total)
+                $('#installments-early').text(incomeInstalments.early)
+                $('#installments-alumni').text(incomeInstalments.alumni)
+                $('#installments-special').text(incomeInstalments.special)
+                $('#installments-regular').text(incomeInstalments.regular)
+
+                $('.widget .loader').addClass('d-none')
+                $('.widget .info').removeClass('d-none')
+
+
+            }
+        });
+
 
 
     });
