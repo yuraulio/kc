@@ -574,14 +574,16 @@ class EventController extends Controller
         $income['early'] = 0.0;
         $income['regular'] = 0.0;
         $income['other'] = 0.0;
+        $income['subscription'] = 0.0;
         $income['total'] = 0.0;
 
-        $incomeInstalments['special'] = 0;
-        $incomeInstalments['early'] = 0;
-        $incomeInstalments['regular'] = 0;
-        $incomeInstalments['alumni'] = 0;
-        $incomeInstalments['other'] = 0;
-        $incomeInstalments['total'] = 0;
+        $incomeInstalments['special'] = 0.0;
+        $incomeInstalments['early'] = 0.0;
+        $incomeInstalments['regular'] = 0.0;
+        $incomeInstalments['alumni'] = 0.0;
+        $incomeInstalments['other'] = 0.0;
+        $incomeInstalments['subscription'] = 0.0;
+        $incomeInstalments['total'] = 0.0;
 
         $arr = [];
         //$arr_income = [];
@@ -611,6 +613,7 @@ class EventController extends Controller
                 }else if($isSubscription){
                     $ticketType = '-';
                     $ticketName = '-';
+
                 }else{
                     $ticketType = '-';
                     $ticketName = '-';
@@ -619,6 +622,11 @@ class EventController extends Controller
                 $countUsers = count($users);
 
                 $amount = $transaction['amount'] != null ? round($transaction['amount'] / $countUsers) : 0;
+
+                if($isSubscription != null){
+                    $income['subscription'] += $amount;
+                    $incomeInstalments['subscription'] += $amount;
+                }
 
                 if($ticketType == 'Special'){
 

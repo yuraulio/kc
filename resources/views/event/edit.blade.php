@@ -3643,20 +3643,22 @@ var datePickerOptions = {
                 $('#students_paid').text(count.regular + count.special + count.alumni + count.early)
                 $('#students_free').text(count.free)
 
-                $('#income-total').text((income.total).toLocaleString())
-                $('#income-early').text((income.early).toLocaleString())
-                $('#income-alumni').text((income.alumni).toLocaleString())
-                $('#income-special').text((income.special).toLocaleString())
-                $('#income-regular').text((income.regular).toLocaleString())
+                $('#income-total').text('€ '+(income.total).toLocaleString())
+                $('#income-early').text('€ '+(income.early).toLocaleString())
+                $('#income-alumni').text('€ '+(income.alumni).toLocaleString())
+                $('#income-special').text('€ '+(income.special).toLocaleString())
+                $('#income-regular').text('€ '+(income.regular).toLocaleString())
+                $('#income-subscription').text('€ '+(income.subscription).toLocaleString())
 
-                $('#installments-total').text((Math.round(incomeInstalments.total)).toLocaleString())
-                $('#installments-early').text((Math.round(incomeInstalments.early)).toLocaleString())
-                $('#installments-alumni').text((Math.round(incomeInstalments.alumni)).toLocaleString())
-                $('#installments-special').text((Math.round(incomeInstalments.special)).toLocaleString())
-                $('#installments-regular').text((Math.round(incomeInstalments.regular)).toLocaleString())
+                $('#installments-total').text('€ '+(Math.round(incomeInstalments.total)).toLocaleString())
+                $('#installments-early').text('€ '+(Math.round(incomeInstalments.early)).toLocaleString())
+                $('#installments-alumni').text('€ '+(Math.round(incomeInstalments.alumni)).toLocaleString())
+                $('#installments-special').text('€ '+(Math.round(incomeInstalments.special)).toLocaleString())
+                $('#installments-regular').text('€ '+(Math.round(incomeInstalments.regular)).toLocaleString())
+                $('#installments-subscription').text('€ '+(Math.round(incomeInstalments.subscription)).toLocaleString())
 
                 $('.widget .loader').addClass('d-none')
-                //$('.widget .info').removeClass('d-none')
+                $('.widget .info').removeClass('d-none')
 
 
             }

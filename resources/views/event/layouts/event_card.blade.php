@@ -34,19 +34,20 @@
                 <div class="row">
                     <div class="col">
                         <h5 class="card-title text-uppercase text-muted mb-0">REGISTRATIONS INCOME</h5>
-                        <span class="h2 font-weight-bold mb-0">&euro; <span id="income-total"></span></span>
+                        <span class="h2 font-weight-bold mb-0"><span id="income-total"></span></span>
                     </div>
                 </div>
                 <div class="loader text-center">
                     <img class="img-responsive" src="{{url('/theme/assets/img/ajax-loader-blue.gif')}}" alt="loader">
                 </div>
                 <div class="row">
-                    <div class="col">
+                    <div class="col info d-none">
                         <p class="mt-3 mb-0 text-sm">
-                            <span class="mr-3">EARLY: &euro; <span id="income-early"></span></span>
-                            <span class="mr-3">SPECIAL: &euro; <span id="income-special"></span></span>
-                            <span class="mr-3">REGULAR: &euro; <span id="income-regular"></span></span>
-                            <span class="mr-3">ALUMNI: &euro; <span id="income-alumni"></span></span>
+                            <span class="mr-3">EARLY: <span id="income-early"></span></span>
+                            <span class="mr-3">SPECIAL: <span id="income-special"></span></span>
+                            <span class="mr-3">REGULAR: <span id="income-regular"></span></span>
+                            <span class="mr-3">ALUMNI: <span id="income-alumni"></span></span>
+                            <span class="mr-3">SUBSCRIPTION: <span id="income-subscription"></span></span>
                         </p>
                         <p class="mb-0 text-sm">
                             <span class="">All gross income for this course.</span>
@@ -65,19 +66,20 @@
                 <div class="row">
                     <div class="col">
                         <h5 class="card-title text-uppercase text-muted mb-0">ACTUAL ACCRUED REVENUE</h5>
-                        <span class="h2 font-weight-bold mb-0"> &euro; <span id="installments-total"></span></span>
+                        <span class="h2 font-weight-bold mb-0"> <span id="installments-total"></span></span>
                     </div>
                 </div>
                 <div class="loader text-center">
                     <img class="img-responsive" src="{{url('/theme/assets/img/ajax-loader-blue.gif')}}" alt="loader">
                 </div>
                 <div class="row">
-                    <div class="col">
+                    <div class="col info d-none">
                         <p class="mt-3 mb-0 text-sm">
-                            <span class="mr-3">EARLY: &euro; <span id="installments-early"></span></span>
-                            <span class="mr-3">SPECIAL: &euro; <span id="installments-special"></span></span>
-                            <span class="mr-3">REGULAR: &euro; <span id="installments-regular"></span></span>
-                            <span class="mr-3">ALUMNI: &euro; <span id="installments-alumni"></span></span>
+                            <span class="mr-3">EARLY: <span id="installments-early"></span></span>
+                            <span class="mr-3">SPECIAL: <span id="installments-special"></span></span>
+                            <span class="mr-3">REGULAR: <span id="installments-regular"></span></span>
+                            <span class="mr-3">ALUMNI: <span id="installments-alumni"></span></span>
+                            <span class="mr-3">SUBSCRIPTION: <span id="installments-subscription"></span></span>
                         </p>
                         <p class="mb-0 text-sm">
                             <span class="">All actual and accrued revenue for this course.</span>
