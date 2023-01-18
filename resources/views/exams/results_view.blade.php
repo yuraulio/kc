@@ -55,7 +55,7 @@
             <div class="col-2"></div>
             <div style="margin: auto;" class="col-auto">
                 <div class="card card-block">
-                    <img class="text-center " style="height:60vh; background-color:white;" src="{{ $img }}" alt="">
+                    <img class="text-center " style="height:60vh;" src="{{ $img }}" alt="">
                 </div>
 
 

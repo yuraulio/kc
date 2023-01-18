@@ -319,6 +319,7 @@
                 animation: {
                     onComplete: function() {
                         chartImage = chart.toBase64Image();
+                        $('#chart-pie').css('background-color', 'white')
 
                         // var a = document.createElement('a');
                         // a.href = chartImage;
