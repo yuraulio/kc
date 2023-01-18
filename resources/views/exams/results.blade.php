@@ -69,6 +69,9 @@
 
             $certiTitle = urlencode(htmlspecialchars_decode(strip_tags($certiTitle),ENT_QUOTES));
 
+            $certiTitle = str_replace('+','_', $certiTitle);
+
+
 /*
                 $expirationMonth = '';
                 $expirationYear = '';
@@ -389,7 +392,7 @@
             url = url.replace('\\','/')
 
             if(data){
-                var fbpopup = window.open(`http://www.facebook.com/sharer.php?u=${decodeURI(baseUrl)}/${decodeURI(url)/$(decodeURI(certificateTitle))}`, "pop", "width=600, height=400, scrollbars=no");
+                var fbpopup = window.open(`http://www.facebook.com/sharer.php?u=${decodeURI(baseUrl)}/${decodeURI(url)}/${decodeURI(certificateTitle)}`, "pop", "width=600, height=400, scrollbars=no");
                 return false;
             }
 
@@ -422,18 +425,17 @@
 
                 let path = data.path
                 let certiUrl = path.replace('\\','/')
-                let certiTitle = data.certiTitle
-                let certiIssueYear = data.certiCreateDateY;
-                let certiIssueMonth = data.certiCreateDateM;
-                let certiExpMonth = data.certiExpMonth;
-                let certiExpYear = data.certiExpYear;
-                let certiCredential = data.certiCredential;
 
                 if(data){
 
-                    var fbpopup = window.open(`https://www.linkedin.com/profile/add?startTask=${certiTitle}&name=${certiTitle}&organizationId=3152129&issueYear=${certiIssueYear}
-                    &issueMonth=${certiIssueMonth}&expirationYear=${certiExpYear}&expirationMonth=${certiExpMonth}&certUrl=${baseUrl+'/'+certiUrl+'/'+certificateTitle}&certId=${certiCredential}`, "pop", "width=600, height=400, scrollbars=no");
+                    var fbpopup = window.open(`https://www.linkedin.com/shareArticle?mini=true&url=${baseUrl+'/'+certiUrl+'/'+certificateTitle}&title=${certificateTitle}`, "pop", "width=600, height=400, scrollbars=no");
                     return false;
+
+
+
+                    // var fbpopup = window.open(`https://www.linkedin.com/profile/add?startTask=${certiTitle}&name=${certiTitle}&organizationId=3152129&issueYear=${certiIssueYear}
+                    // &issueMonth=${certiIssueMonth}&expirationYear=${certiExpYear}&expirationMonth=${certiExpMonth}&certUrl=${baseUrl+'/'+certiUrl+'/'+certificateTitle}&certId=${certiCredential}`, "pop", "width=600, height=400, scrollbars=no");
+                    // return false;
                 }
             }
         });
@@ -449,6 +451,10 @@
       var certificateId = $(this).attr('data-certid');
       var certificateTitle = $(this).attr('data-certTitle');
 
+      certificateTitle = certificateTitle.replace('+','_')
+
+      console.log('cert title: ', certificateTitle)
+
       $.ajax({
         headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -461,8 +467,9 @@
             url = data.path
             url = url.replace('\\','/')
 
+
             if(data){
-                var fbpopup = window.open(`http://twitter.com/share?url=${decodeURI(baseUrl)}/${decodeURI(url)}/${decodeURI(certificateTitle)}`, "pop", "width=600, height=400, scrollbars=no");
+                var fbpopup = window.open(`http://twitter.com/share?url=${decodeURI(baseUrl)}/${decodeURI(url)}/${certificateTitle}`, "pop", "width=600, height=400, scrollbars=no");
                 return false;
             }
 

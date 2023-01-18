@@ -44,7 +44,9 @@
                         ?>
 
                         @if ( isset($event['mediable']) && isset($event['slugable']))
-                        <a href="{{ $event['slugable']['slug'] }}"><img src="{{ cdn(get_image($event['mediable'],'event-card')) }}" alt="{{ $until}}"/></a>
+                        <a href="{{ $event['slugable']['slug'] }}">
+                            <img src="{{ cdn(get_image($event['mediable'],'event-card')) }}" alt="{{ $until}}"/>
+                        </a>
                         @endif
 
                         <div class="box-text">
@@ -79,7 +81,7 @@
                                     if(isset($hours_visible['home']) && $hours_visible['home'] && isset($event['event_info1']['course_hours']) && $event['event_info1']['course_hours'] > 0){
                                         $dateLaunch .= ', ' . $event['event_info1']['course_hours'] . ' hours';
                                     }
-                                    
+
 
                                 ?>
 
@@ -92,7 +94,7 @@
                                 <span class="days">@if(isset($inclass_days['visible']['home']) && $inclass_days['visible']['home'] && isset($inclass_days['text']) && $inclass_days['text'] != null) {{ $inclass_days['text'] }} @endif</span>
                                 <span class="times">@if(isset($inclass_times['visible']['home']) && $inclass_times['visible']['home'] && isset($inclass_times['text']) && $inclass_times['text'] != null) {{ $inclass_times['text'] }} @endif</span>--}}
 
-                                
+
                                 <?php
                                     $sumStudents = $sumStudentsByCategory[$event['pivot']['category_id']];
                                 ?>
@@ -133,7 +135,8 @@
                             }
                         ?>
                         @if ( isset($event['mediable']) && isset($event['slugable']))
-                        <a href="{{ $event['slugable']['slug'] }}"><img src="{{ cdn(get_image($event['mediable'],'event-card')) }}" alt="{{ $until}}"/></a>
+                        <a href="{{ $event['slugable']['slug'] }}">
+                            <img src="{{ cdn(get_image($event['mediable'],'event-card')) }}" alt="{{ $until}}"/></a>
                         @endif
                         <div class="box-text box-text-orange">
                             <?php
