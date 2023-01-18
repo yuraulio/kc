@@ -126,14 +126,18 @@ class TransactionController extends Controller
         $total_users = [];
         $usersElearningAll = [];
         $usersInClassAll = [];
+        // $income['special'] = 0.0;
+        // $income['alumni'] = 0.0;
+        // $income['early'] = 0.0;
+        // $income['regular'] = 0.0;
+        // $income['other'] = 0.0;
+        // $income['total'] = 0.0;
 
         foreach($transactions as $key => $transaction){
 
             if(!$transaction->subscription->first() && $transaction->user->first() && $transaction->event->first()){
 
                 $isElearning = $transaction->event->first()->delivery->first() && $transaction->event->first()->delivery->first()->id == 143;
-
-
 
                 $category =  $transaction->event->first()->category->first() ? $transaction->event->first()->category->first()->id : -1;
 
@@ -170,17 +174,17 @@ class TransactionController extends Controller
 
                 foreach($transaction['user'] as $u){
 
-                    if($isElearning){
+                    // if($isElearning){
 
-                        //$data['usersElearningAll']++;
-                        $data['usersElearningIncomeAll'] = $data['usersElearningIncomeAll'] + $amount;
+                    //     //$data['usersElearningAll']++;
+                    //     $data['usersElearningIncomeAll'] = $data['usersElearningIncomeAll'] + $amount;
 
-                    }else{
+                    // }else{
 
-                        //$data['usersInClassAll']++;
-                        $data['usersInClassIncomeAll'] = $data['usersInClassIncomeAll'] + $amount;
+                    //     //$data['usersInClassAll']++;
+                    //     $data['usersInClassIncomeAll'] = $data['usersInClassIncomeAll'] + $amount;
 
-                    }
+                    // }
 
                     if($isElearning){
                         $usersElearningAll[$u['firstname'].'_'.$u['lastname']] = $u['firstname'].'_'.$u['lastname'];
@@ -206,12 +210,39 @@ class TransactionController extends Controller
 
                     $data['transactions'][] = ['id' => $transaction['id'], 'user_id' => $u['id'],'name' => $u['firstname'].' '.$u['lastname'],
                                                 'event_id' => $transaction->event[0]['id'],'event_title' => $transaction->event[0]['title'].' / '.date('d-m-Y', strtotime($transaction->event[0]['published_at'])),'coupon_code' => $coupon_code, 'type' => trim($ticketType),'ticketName' => $ticketName,
-                                                'date' => date_format($transaction['created_at'], 'Y-m-d'), 'amount' => $transaction['amount'] / $countUsers,
+                                                'date' => date_format($transaction['created_at'], 'Y-m-d'), 'amount' => $amount,
                                                 'is_elearning' => $isElearning,
                                                 'coupon_code' => $transaction['coupon_code'],'videos_seen' => $this->getVideosSeen($videos),'expiration'=>$expiration,
                                                 'paymentMethod' => $paymentMethod,
                                                 'city' => $city,
                                                 'category' => isset($transaction->event[0]['category'][0]['name']) ? $transaction->event[0]['category'][0]['name'] : ''];
+
+                    // if($ticketType == 'Special'){
+
+                    //     //$arr_income[$transaction->id] = $transaction->amount;
+
+                    //     $income['special'] +=  ($amount);
+
+
+                    // }else if($ticketType == 'Early Bird'){
+
+                    //     $income['early'] += ($amount) ;
+
+
+                    // }else if($ticketType == 'Regular'){
+
+                    //     $income['regular'] += ($amount) ;
+
+                    // }else if($ticketType == 'Sponsored'){
+
+                    // }else if($ticketType == 'Alumni'){
+
+                    //     $income['alumni'] +=  ($amount) ;
+
+
+                    // }else{
+                    //     $income['other'] += ($amount) ;
+                    // }
                 }
 
             }
@@ -220,6 +251,9 @@ class TransactionController extends Controller
 
         $data['usersElearningAll'] = count($usersElearningAll);
         $data['usersInClassAll'] = count($usersInClassAll);
+
+        // $data['income'] = $income;
+        // $data['income']['total'] = array_sum($income);
 
         $data['total_users'] = count($total_users);
 
@@ -264,18 +298,18 @@ class TransactionController extends Controller
         $total_users_elearning = [];
         $total_users_inclass = [];
 
-        $data['paid_installments_inclass'] = 0;
-        $data['paid_installments_elearning'] = 0;
+        // $data['paid_installments_inclass'] = 0;
+        // $data['paid_installments_elearning'] = 0;
 
-        $data['usersElearningIncomeAll'] = 0;
-        $data['usersInClassIncomeAll'] = 0;
+        // $data['usersElearningIncomeAll'] = 0;
+        // $data['usersInClassIncomeAll'] = 0;
 
-        $income['special'] = 0;
-        $income['early'] = 0;
-        $income['regular'] = 0;
-        $income['alumni'] = 0;
-        $income['other'] = 0;
-        $income['total'] = 0;
+        // $income['special'] = 0;
+        // $income['early'] = 0;
+        // $income['regular'] = 0;
+        // $income['alumni'] = 0;
+        // $income['other'] = 0;
+        // $income['total'] = 0;
 
         foreach($transactions as $transaction){
             // if(count($transaction['invoice']) != 0 && $transaction['total_amount'] != 0){
@@ -300,15 +334,15 @@ class TransactionController extends Controller
 
                 $isElearning = $event->delivery->first() && $event->delivery->first()->id == 143;
 
-                if($isElearning){
+                // if($isElearning){
 
-                    $data['usersElearningIncomeAll'] = $data['usersElearningIncomeAll'] + $amount;
+                //     $data['usersElearningIncomeAll'] = $data['usersElearningIncomeAll'] + $amount;
 
-                }else{
+                // }else{
 
-                    $data['usersInClassIncomeAll'] = $data['usersInClassIncomeAll'] + $amount;
+                //     $data['usersInClassIncomeAll'] = $data['usersInClassIncomeAll'] + $amount;
 
-                }
+                // }
 
                 $category =  $event->category->first() ? $event->category->first()->id : -1;
 
@@ -371,50 +405,33 @@ class TransactionController extends Controller
                     if(count($transaction->invoice) > 0 ){
 
                         foreach($transaction->invoice as $invoice){
-
                             $amount = ($invoice->amount != null && $invoice->amount != 0 && $countUsers != 0) ? ($invoice->amount / $countUsers) : 0;
 
-
-                            if($ticketType == 'Special'){
-
-
-                                $income['special'] = $income['special'] + $amount;
-
-
-
-                            }else if($ticketType == 'Early Bird'){
-
-
-
-                                $income['early'] = $income['early'] + $amount;
-
-
-
-
-                            }else if($ticketType == 'Regular'){
-
-
-
-                                $income['regular'] = $income['regular'] + $amount;
-
-
-
-                            }else if($ticketType == 'Alumni'){
-
-                                $income['alumni'] = $income['alumni'] + $amount;
-
-
-
-                            }else{
-                                $income['other'] = $income['other'] + $amount;
-
+                            if($invoice->amount == null){
+                                $amount = $transaction->amount / $countUsers ;
                             }
 
-                            if($isElearning){
-                                $data['paid_installments_elearning'] = $data['paid_installments_elearning'] + $amount;
-                            }else{
-                                $data['paid_installments_inclass'] = $data['paid_installments_inclass'] + $amount;
-                            }
+                            //$transaction[$key]['paid_from_installments'] += ($amount);
+
+                            // if($ticketType == 'Special'){
+                            //     $income['special'] = $income['special'] + $amount;
+                            // }else if($ticketType == 'Early Bird'){
+                            //     $income['early'] = $income['early'] + $amount;
+                            // }else if($ticketType == 'Regular'){
+                            //     $income['regular'] = $income['regular'] + $amount;
+
+                            // }else if($ticketType == 'Alumni'){
+                            //     $income['alumni'] = $income['alumni'] + $amount;
+
+                            // }else{
+                            //     $income['other'] = $income['other'] + $amount;
+                            // }
+
+                            // if($isElearning){
+                            //     $data['paid_installments_elearning'] = $data['paid_installments_elearning'] + $amount;
+                            // }else{
+                            //     $data['paid_installments_inclass'] = $data['paid_installments_inclass'] + $amount;
+                            // }
 
                             $data['transactions'][] = ['id' => $transaction['id'], 'user_id' => $u['id'],'name' => $u['firstname'].' '.$u['lastname'],
                             'event_id' => $transaction->event[0]['id'],'event_title' => $transaction->event[0]['title'].' / '.date('d-m-Y', strtotime($transaction->event[0]['published_at'])),'coupon_code' => $coupon_code, 'type' => trim($ticketType),'ticketName' => $ticketName,
@@ -432,50 +449,50 @@ class TransactionController extends Controller
                         // if has transaction without invoice and set installments -> without paid first installment
                         if(!isset($transaction->status_history[0]['installments'])){
 
-                            if($isElearning){
-                                $data['paid_installments_elearning'] = $data['paid_installments_elearning'] + $amount;
-                            }else{
-                                $data['paid_installments_inclass'] = $data['paid_installments_inclass'] + $amount;
-                            }
+                            // if($isElearning){
+                            //     $data['paid_installments_elearning'] = $data['paid_installments_elearning'] + $amount;
+                            // }else{
+                            //     $data['paid_installments_inclass'] = $data['paid_installments_inclass'] + $amount;
+                            // }
 
-                            if($ticketType == 'Special'){
-
-
-
-                                $income['special'] = $income['special'] + $amount;
+                            // if($ticketType == 'Special'){
 
 
 
-
-                            }else if($ticketType == 'Early Bird'){
-
-
-
-                                $income['early'] = $income['early'] + $amount;
+                            //     $income['special'] = $income['special'] + $amount;
 
 
 
 
-                            }else if($ticketType == 'Regular'){
+                            // }else if($ticketType == 'Early Bird'){
 
 
 
-                                $income['regular'] = $income['regular'] + $amount;
+                            //     $income['early'] = $income['early'] + $amount;
 
 
 
 
-                            }else if($ticketType == 'Alumni'){
+                            // }else if($ticketType == 'Regular'){
 
 
-                                $income['alumni'] = $income['alumni'] + $amount;
+
+                            //     $income['regular'] = $income['regular'] + $amount;
 
 
-                            }else{
 
 
-                                $income['other'] = $income['other'] + $amount;
-                            }
+                            // }else if($ticketType == 'Alumni'){
+
+
+                            //     $income['alumni'] = $income['alumni'] + $amount;
+
+
+                            // }else{
+
+
+                            //     $income['other'] = $income['other'] + $amount;
+                            // }
                         }
 
 
@@ -502,8 +519,8 @@ class TransactionController extends Controller
         $data['total_users_inclass'] = count($total_users_inclass);
         $data['total_users'] = count($total_users);
 
-        $data['income'] = $income;
-        $data['income']['total'] = array_sum($income);
+        // $data['income'] = $income;
+        // $data['income']['total'] = array_sum($income);
 
 
         return $data;
