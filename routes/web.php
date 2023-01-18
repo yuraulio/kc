@@ -21,7 +21,7 @@ Auth::routes(['register' => false]);
 //Route::get('dashboard', 'HomeController@index')->name('home');
 Route::get('pricing', 'PageController@pricing')->name('page.pricing');
 Route::get('lock', 'PageController@lock')->name('page.lock');
-Route::get('mycertificateview/{id}', 'Theme\CertificateController@view_results')->name('certificate.results');
+Route::get('mycertificateview/{id}/{title}', 'Theme\CertificateController@view_results')->name('certificate.results');
 
 Route::group(['middleware' => 'auth.aboveauthor', 'prefix' => 'admin'], function () {
 

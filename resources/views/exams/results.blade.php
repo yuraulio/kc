@@ -60,6 +60,14 @@
             </div>
 
             <?php
+            $certiTitle = preg_replace( "/\r|\n/", " ", $certificate->certificate_title );
+            if(strpos($certificate->certificate_title, '</p><p>')){
+                $certiTitle = substr_replace($certificate->certificate_title, ' ', strpos($certificate->certificate_title, '</p>'), 0);
+            }else{
+                $certiTitle = $certificate->certificate_title;
+            }
+
+            $certiTitle = urlencode(htmlspecialchars_decode(strip_tags($certiTitle),ENT_QUOTES));
 
 /*
                 $expirationMonth = '';
@@ -84,17 +92,16 @@
 
 
         ?>
-
             <div class="col-md-6 offset-md-6 share-wrapper">
                 <p>Share my results:</p>
                 <div>
-                    <a class="facebook-post-cert" data-certid="{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" title="Add this certification to your Facebook profile" href="javascript:void(0)">
+                    <a class="facebook-post-cert" data-certTitle="{{$certiTitle}}" data-certid="{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" title="Add this certification to your Facebook profile" href="javascript:void(0)">
                         <img class="linkdein-image-add" src="{{cdn('theme/assets/images/icons/social/events/Facebook.svg')}}" alt="Facebook Add to Profile button">
                     </a>
-                    <a class="twitter-post-cert" data-certid="{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" title="Add this certification to your Twitter profile" href="javascript:void(0)">
+                    <a class="twitter-post-cert" data-certTitle="{{$certiTitle}}" data-certid="{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" title="Add this certification to your Twitter profile" href="javascript:void(0)">
                         <img class="linkdein-image-add" src="{{cdn('theme/assets/images/icons/social/events/Twitter.svg')}}" alt="Twitter Add to Profile button">
                     </a>
-                    <a type="button" class="linkedin-post cert-post" data-certid="{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}">
+                    <a type="button" class="linkedin-post cert-post" data-certTitle="{{$certiTitle}}" data-certid="{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}">
                         <img class="linkdein-image-add" src="{{cdn('theme/assets/images/icons/social/events/Linkedin.svg')}}" alt="LinkedIn Add to Profile button">
                     </a>
                 </div>
@@ -362,6 +369,7 @@
       var pathname = getUrl.pathname
 
       var certificateId = $(this).attr('data-certid');
+      var certificateTitle = $(this).attr('data-certTitle');
 
 
       $.ajax({
@@ -381,7 +389,7 @@
             url = url.replace('\\','/')
 
             if(data){
-                var fbpopup = window.open(`http://www.facebook.com/sharer.php?u=${decodeURI(baseUrl)}/${decodeURI(url)}`, "pop", "width=600, height=400, scrollbars=no");
+                var fbpopup = window.open(`http://www.facebook.com/sharer.php?u=${decodeURI(baseUrl)}/${decodeURI(url)/$(decodeURI(certificateTitle))}`, "pop", "width=600, height=400, scrollbars=no");
                 return false;
             }
 
@@ -397,6 +405,7 @@
         var pathname = getUrl.pathname
         var certificateId = $(this).attr('data-certid');
         var exam = pathname.split("/").pop();
+        var certificateTitle = $(this).attr('data-certTitle');
 
          $.ajax({
          headers: {
@@ -423,7 +432,7 @@
                 if(data){
 
                     var fbpopup = window.open(`https://www.linkedin.com/profile/add?startTask=${certiTitle}&name=${certiTitle}&organizationId=3152129&issueYear=${certiIssueYear}
-                    &issueMonth=${certiIssueMonth}&expirationYear=${certiExpYear}&expirationMonth=${certiExpMonth}&certUrl=${baseUrl+'/'+certiUrl}&certId=${certiCredential}`, "pop", "width=600, height=400, scrollbars=no");
+                    &issueMonth=${certiIssueMonth}&expirationYear=${certiExpYear}&expirationMonth=${certiExpMonth}&certUrl=${baseUrl+'/'+certiUrl+'/'+certificateTitle}&certId=${certiCredential}`, "pop", "width=600, height=400, scrollbars=no");
                     return false;
                 }
             }
@@ -438,6 +447,7 @@
       var pathname = getUrl.pathname
 
       var certificateId = $(this).attr('data-certid');
+      var certificateTitle = $(this).attr('data-certTitle');
 
       $.ajax({
         headers: {
@@ -450,8 +460,9 @@
 
             url = data.path
             url = url.replace('\\','/')
+
             if(data){
-                var fbpopup = window.open(`http://twitter.com/share?url=${decodeURI(baseUrl)}/${decodeURI(url)}`, "pop", "width=600, height=400, scrollbars=no");
+                var fbpopup = window.open(`http://twitter.com/share?url=${decodeURI(baseUrl)}/${decodeURI(url)}/${decodeURI(certificateTitle)}`, "pop", "width=600, height=400, scrollbars=no");
                 return false;
             }
 

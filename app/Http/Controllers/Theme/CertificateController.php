@@ -382,15 +382,13 @@ class CertificateController extends Controller
 
     }
 
-    public function view_results($id)
+    public function view_results($id, $title = "")
     {
 
         $img = $id.'.png';
         $img = env('MIX_APP_URL').'/cert/'.$img;
 
-
-
-        return view('exams.results_view', compact('img'));
+        return view('exams.results_view', compact('img', 'title'));
     }
 
 

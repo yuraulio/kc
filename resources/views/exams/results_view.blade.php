@@ -10,7 +10,7 @@
 
 <meta name="description" content="">
 
-<title>Result</title>
+<title>{{ $title }} Result</title>
 
 <!-- load bootstrap from a cdn -->
 
@@ -19,20 +19,21 @@
 <!-- Primary Meta Tags -->
 <title>Result</title>
 <meta name="title" content="Result">
-<meta name="description" content="Exam Result">
+<meta name="description" content="{{ $title }}">
+<meta property="fb:app_id" content="961275423898153">
 
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content="website">
 <meta property="og:url" content="{{ Request::url() }}">
 <meta property="og:title" content="Result">
-<meta property="og:description" content="Exam Result">
+<meta property="og:description" content="{{ $title }} Result">
 <meta property="og:image" content="{{ $img }}">
 
 <!-- Twitter -->
 <meta property="twitter:card" content="summary_large_image">
 <meta property="twitter:url" content="{{ Request::url() }}">
 <meta property="twitter:title" content="Result">
-<meta property="twitter:description" content="Exam Result">
+<meta property="twitter:description" content="{{ $title }} Result">
 <meta property="twitter:image" content="{{ $img }}">
 
 
@@ -42,34 +43,25 @@
 
 <div class="container">
 
-   <header class="row">
-
-
-
-   </header>
-
-
+   <header class="row"></header>
 
     <div id="main" class="container">
         <div style="height:100vh" class="row">
+
             <div class="col-2"></div>
+
             <div style="margin: auto;" class="col-auto">
                 <div class="card card-block">
                     <img class="text-center" style="height:60vh;" src="{{ $img }}" alt="result-image">
                 </div>
-
-
-
             </div>
+
             <div class="col-2"></div>
+
         </div>
     </div>
 
-   <footer class="row">
-
-
-
-   </footer>
+   <footer class="row"></footer>
 
 </div>
 
