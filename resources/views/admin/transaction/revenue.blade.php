@@ -140,10 +140,11 @@
                             <th hidden>{{ __('Ticket Price') }}</th>
                             <th hidden>{{ __('Delivery') }}</th>
 
+
                         </tr>
                     </tfoot>
                     <tbody>
-                    <?php ///dd(count($transactions)); ?>
+                    <?php //dd($paid_from_installments); ?>
                         @foreach ($transactions as $key => $transaction)
 
                             <tr>
@@ -172,7 +173,6 @@
 
                                 <td hidden><?= '€'.number_format($transaction['ticket_price'], 2, '.', ''); ?></td>
                                 <td hidden>{{$transaction['is_elearning'] ? 'e-learning' : 'in-class'}}</td>
-
                             </tr>
                         @endforeach
                     </tbody>
@@ -219,7 +219,7 @@
     singleDatePicker: true,
     showDropdowns: true,
     minYear: 1901,
-    maxYear: parseInt(moment().format('YYYY'),10)
+    maxYear: parseFloat(moment().format('YYYY'),10)
   }, function(start, end, label) {
     var years = moment().diff(start, 'years');
     alert("You are " + years + " years old!");
@@ -277,6 +277,11 @@
             transactionCheck = [];
             count_students = 0;
             unique_users = [];
+            paid_installments = 0.0;
+            incomeElearning = 0.0;
+            incomeInclass = 0.0;
+            incomeElearningAll = 0.0;
+            incomeInclassAll = 0.0;
         }
 
 
@@ -368,18 +373,18 @@ $(document).ready(function() {
     delivery = table.column(12).data().unique().sort()
     prices = table.column(3).data()
 
-    let sum = 0
-    $.each(prices, function(key, value) {
+    // let sum = 0
+    // $.each(prices, function(key, value) {
 
-        value = value.replace("€", "")
-        sum = sum + parseInt(value)
+    //     value = value.replace("€", "")
+    //     sum = sum + parseFloat(value)
 
-    })
+    // })
 
     // var sum = prices.reduce(function(a, b){
-    //     return parseInt(a) + parseInt(b);
+    //     return parseFloat(a) + parseFloat(b);
     // }, 0);
-    $('#total').text('€'+sum)
+    //$('.total').text('€'+sum)
 
     //let sum = 0;
 
@@ -408,7 +413,7 @@ $(document).ready(function() {
         return dateA - dateB;
     });
 
-    let length = parseInt(sort_events.length) -1
+    let length = parseFloat(sort_events.length) -1
 
     $.each(sort_events, function(key, value){
         let data = sort_events[length];
@@ -544,12 +549,19 @@ $(document).ready(function() {
 
     function stats_non_elearning(){
 
+        $('.widget .info').addClass('d-none')
+        $('.widget .loader').removeClass('d-none')
+
 
         $(`.ticket-choices`).empty();
 
 
         initCounters()
 
+        let incomeElearningAll = 0.0;
+        let incomeInclassAll = 0.0;
+        let incomeElearning = 0.0;
+        let incomeInclass = 0.0;
         let sum = 0
         //returns 'filtered' or visible rows
         table.rows({filter: 'applied'}).every( function ( rowIdx, tableLoop, rowLoop ) {
@@ -557,145 +569,169 @@ $(document).ready(function() {
             var coupon = this.data()[2];
             var amount = this.data()[3];
             var ticketPrice = this.data()[11];
-            amount = parseInt(amount.replace("€",""));
+            amount = parseFloat(amount.replace("€",""));
             sum = sum + amount
 
             unique_users.push($(this.data()[0]).data('name'))
 
             if(transactionCheck.indexOf(this.data()[10]) == -1){
-                totalSales +=  parseInt(ticketPrice.replace("€",""))
+                totalSales +=  parseFloat(ticketPrice.replace("€",""))
+
+                if(event_type == 'e-learning'){
+                    incomeElearningAll += parseFloat(ticketPrice.replace("€",""))
+                }else{
+                    incomeInclassAll += parseFloat(ticketPrice.replace("€",""))
+                }
             }
             transactionCheck.push(this.data()[10]);
 
-
+            var event_type = this.data()[12];
+            if(event_type == 'e-learning'){
+                incomeElearning += parseFloat(amount)
+            }else{
+                incomeInclass += parseFloat(amount)
+            }
 
             if(coupon == 'Alumni'){
                 alumni = alumni + amount
                 count_alumni++
 
-                if(!newTickets[coupon]){
-                    newTickets[coupon] = {};
-                    newTickets[coupon]['all'] = {};
-                    newTickets[coupon]['all']['countValue'] = 0;
-                    newTickets[coupon]['all']['count'] = 0;
+                // if(!newTickets[coupon]){
+                //     newTickets[coupon] = {};
+                //     newTickets[coupon]['all'] = {};
+                //     newTickets[coupon]['all']['countValue'] = 0;
+                //     newTickets[coupon]['all']['count'] = 0;
 
-                }
-                if(!newTickets[coupon][amount]){
-                    newTickets[coupon][amount] = {};
-                    newTickets[coupon][amount]['countValue'] = 0;
-                    newTickets[coupon][amount]['count'] = 0;
+                // }
+                // if(!newTickets[coupon][amount]){
+                //     newTickets[coupon][amount] = {};
+                //     newTickets[coupon][amount]['countValue'] = 0;
+                //     newTickets[coupon][amount]['count'] = 0;
 
-                }
+                // }
 
-                newTickets[coupon]['all']['countValue'] += parseInt(amount);
-                newTickets[coupon]['all']['count']++;
-                newTickets[coupon][amount]['countValue'] += parseInt(amount);
-                newTickets[coupon][amount]['count']++;
+                // newTickets[coupon]['all']['countValue'] += parseFloat(amount);
+                // newTickets[coupon]['all']['count']++;
+                // newTickets[coupon][amount]['countValue'] += parseFloat(amount);
+                // newTickets[coupon][amount]['count']++;
 
             }else if(coupon == 'Regular'){
                 regular = regular + amount
                 count_regular++
 
-                if(!newTickets[coupon]){
-                    newTickets[coupon] = {};
-                    newTickets[coupon]['all'] = {};
-                    newTickets[coupon]['all']['countValue'] = 0;
-                    newTickets[coupon]['all']['count'] = 0;
+                // if(!newTickets[coupon]){
+                //     newTickets[coupon] = {};
+                //     newTickets[coupon]['all'] = {};
+                //     newTickets[coupon]['all']['countValue'] = 0;
+                //     newTickets[coupon]['all']['count'] = 0;
 
-                }
-                if(!newTickets[coupon][amount]){
-                    newTickets[coupon][amount] = {};
-                    newTickets[coupon][amount]['countValue'] = 0;
-                    newTickets[coupon][amount]['count'] = 0;
+                // }
+                // if(!newTickets[coupon][amount]){
+                //     newTickets[coupon][amount] = {};
+                //     newTickets[coupon][amount]['countValue'] = 0;
+                //     newTickets[coupon][amount]['count'] = 0;
 
-                }
+                // }
 
-                newTickets[coupon]['all']['countValue'] += parseInt(amount);
-                newTickets[coupon]['all']['count']++;
-                newTickets[coupon][amount]['countValue'] += parseInt(amount);
-                newTickets[coupon][amount]['count']++;
+                // newTickets[coupon]['all']['countValue'] += parseFloat(amount);
+                // newTickets[coupon]['all']['count']++;
+                // newTickets[coupon][amount]['countValue'] += parseFloat(amount);
+                // newTickets[coupon][amount]['count']++;
 
             }else if(coupon == 'Special'){
                 special = special + amount
                 count_special++
 
-                if(!newTickets[coupon]){
-                    newTickets[coupon] = {};
-                    newTickets[coupon]['all'] = {};
-                    newTickets[coupon]['all']['countValue'] = 0;
-                    newTickets[coupon]['all']['count'] = 0;
+                // if(!newTickets[coupon]){
+                //     newTickets[coupon] = {};
+                //     newTickets[coupon]['all'] = {};
+                //     newTickets[coupon]['all']['countValue'] = 0;
+                //     newTickets[coupon]['all']['count'] = 0;
 
-                }
-                if(!newTickets[coupon][amount]){
-                    newTickets[coupon][amount] = {};
-                    newTickets[coupon][amount]['countValue'] = 0;
-                    newTickets[coupon][amount]['count'] = 0;
+                // }
+                // if(!newTickets[coupon][amount]){
+                //     newTickets[coupon][amount] = {};
+                //     newTickets[coupon][amount]['countValue'] = 0;
+                //     newTickets[coupon][amount]['count'] = 0;
 
-                }
+                // }
 
-                newTickets[coupon]['all']['countValue'] += parseInt(amount);
-                newTickets[coupon]['all']['count']++;
-                newTickets[coupon][amount]['countValue'] += parseInt(amount);
-                newTickets[coupon][amount]['count']++;
+                // newTickets[coupon]['all']['countValue'] += parseFloat(amount);
+                // newTickets[coupon]['all']['count']++;
+                // newTickets[coupon][amount]['countValue'] += parseFloat(amount);
+                // newTickets[coupon][amount]['count']++;
 
             }else if(coupon == 'Sponsored'){
                 sponsored = sponsored + amount
                 count_sponsored++
 
-                if(!newTickets[coupon]){
-                    newTickets[coupon] = {};
-                    newTickets[coupon]['all'] = {};
-                    newTickets[coupon]['all']['countValue'] = 0;
-                    newTickets[coupon]['all']['count'] = 0;
+                // if(!newTickets[coupon]){
+                //     newTickets[coupon] = {};
+                //     newTickets[coupon]['all'] = {};
+                //     newTickets[coupon]['all']['countValue'] = 0;
+                //     newTickets[coupon]['all']['count'] = 0;
 
-                }
-                if(!newTickets[coupon][amount]){
-                    newTickets[coupon][amount] = {};
-                    newTickets[coupon][amount]['countValue'] = 0;
-                    newTickets[coupon][amount]['count'] = 0;
+                // }
+                // if(!newTickets[coupon][amount]){
+                //     newTickets[coupon][amount] = {};
+                //     newTickets[coupon][amount]['countValue'] = 0;
+                //     newTickets[coupon][amount]['count'] = 0;
 
-                }
+                // }
 
-                newTickets[coupon]['all']['countValue'] += parseInt(amount);
-                newTickets[coupon]['all']['count']++;
-                newTickets[coupon][amount]['countValue'] += parseInt(amount);
-                newTickets[coupon][amount]['count']++;
+                // newTickets[coupon]['all']['countValue'] += parseFloat(amount);
+                // newTickets[coupon]['all']['count']++;
+                // newTickets[coupon][amount]['countValue'] += parseFloat(amount);
+                // newTickets[coupon][amount]['count']++;
 
             }else if(coupon == 'Early birds' || coupon == 'Early Bird'){
                 //console.log('has early bird')
                 early = early + amount
                 count_early++
 
-                if(!newTickets[coupon]){
-                    newTickets[coupon] = {};
-                    newTickets[coupon]['all'] = {};
-                    newTickets[coupon]['all']['countValue'] = 0;
-                    newTickets[coupon]['all']['count'] = 0;
+                // if(!newTickets[coupon]){
+                //     newTickets[coupon] = {};
+                //     newTickets[coupon]['all'] = {};
+                //     newTickets[coupon]['all']['countValue'] = 0;
+                //     newTickets[coupon]['all']['count'] = 0;
 
-                }
-                if(!newTickets[coupon][amount]){
-                    newTickets[coupon][amount] = {};
-                    newTickets[coupon][amount]['countValue'] = 0;
-                    newTickets[coupon][amount]['count'] = 0;
+                // }
+                // if(!newTickets[coupon][amount]){
+                //     newTickets[coupon][amount] = {};
+                //     newTickets[coupon][amount]['countValue'] = 0;
+                //     newTickets[coupon][amount]['count'] = 0;
 
-                }
+                // }
 
-                newTickets[coupon]['all']['countValue'] += parseInt(amount);
-                newTickets[coupon]['all']['count']++;
-                newTickets[coupon][amount]['countValue'] += parseInt(amount);
-                newTickets[coupon][amount]['count']++;
+                // newTickets[coupon]['all']['countValue'] += parseFloat(amount);
+                // newTickets[coupon]['all']['count']++;
+                // newTickets[coupon][amount]['countValue'] += parseFloat(amount);
+                // newTickets[coupon][amount]['count']++;
 
             }
 
         } );
 
+        // console.log('total Sales: ', totalSales)
+        // console.log('sum: ', sum)
+
 
         unique_users = unique_users.filter(onlyUnique)
         count_students = unique_users.length;
 
-        $('#total').text('€'+sum.toLocaleString())
-        $('#total-sales').text('€'+totalSales.toLocaleString())
-        $('#total_students').text(count_students)
+        $('.total').text('€'+sum.toLocaleString())
+        $('#special').text('€'+special.toLocaleString())
+        $('#regular').text('€'+regular.toLocaleString())
+        $('#alumni').text('€'+alumni.toLocaleString())
+        $('#early-bird').text('€'+early.toLocaleString())
+        $('#income_inclass').text(incomeInclass.toLocaleString())
+        $('#income_elearning').text(incomeElearning.toLocaleString())
+        $('#income_inclassAll').text('€'+incomeInclassAll.toLocaleString())
+        $('#income_elearningAll').text('€'+incomeElearningAll.toLocaleString())
+        $('#totalIncomeAll').text('€'+(totalSales).toLocaleString())
+
+        $('.widget .info').removeClass('d-none')
+        $('.widget .loader').addClass('d-none')
 
         $.each( newTickets, function( key, value ) {
 
@@ -789,154 +825,186 @@ $(document).ready(function() {
         transactionCheck = [];
         newTickets = {};
 
+        let incomeElearning = 0.0;
+        let incomeInclass = 0.0;
+        let incomeElearningAll = 0.0;
+        let incomeInclassAll = 0.0;
+
             $.each(price, function(key, value){
-                //console.log(value)
+
                 value = value.replace("€", "")
-            //console.log($('#participants_table').DataTable().column( i ).data()[key] == $('#col'+i+'_filter').val())
+                //console.log($('#participants_table').DataTable().column( i ).data()[key] == $('#col'+i+'_filter').val())
                 //console.log('asd')
                 //console.log($('#participants_table').DataTable().column( 3 ).data()[key])
-                sum = sum + parseInt($('#participants_table').DataTable().column( 3 ).data()[key].replace("€", ""))
+                sum = sum + parseFloat($('#participants_table').DataTable().column( 3 ).data()[key].replace("€", ""))
+
+
+                var event_type = $('#participants_table').DataTable().column( 12 ).data()[key]
+                if(event_type == 'e-learning'){
+                    incomeElearning += parseFloat(value)
+                }else{
+                    incomeInclass += parseFloat(value)
+                }
 
                 if(transactionCheck.indexOf($('#participants_table').DataTable().column( 10 ).data()[key]) == -1){
-                    totalSales += parseInt($('#participants_table').DataTable().column( 11 ).data()[key].replace("€", ""))
+                    let ticketCost = $('#participants_table').DataTable().column( 11 ).data()[key].replace("€", "")
+                    totalSales += parseFloat(ticketCost)
 
+                    if(event_type == 'e-learning'){
+                        incomeElearningAll += parseFloat(ticketCost)
+                    }else{
+                        incomeInclassAll += parseFloat(ticketCost)
+                    }
                 }
                 transactionCheck.push($('#participants_table').DataTable().column( 10 ).data()[key])
                 if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Alumni'){
-                    alumni = alumni + parseInt(value)
+                    alumni = alumni + parseFloat(value)
                     count_alumni++
 
-                    if(!newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]]){
-                        newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]] = {};
-                        newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]]['all'] = {};
-                        newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]]['all']['countValue'] = 0;
-                        newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]]['all']['count'] = 0;
+                    // if(!newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]]){
+                    //     newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]] = {};
+                    //     newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]]['all'] = {};
+                    //     newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]]['all']['countValue'] = 0;
+                    //     newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]]['all']['count'] = 0;
 
-                    }
-                    if(!newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)]){
-                        newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)] = {};
-                        newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)]['countValue'] = 0;
-                        newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)]['count'] = 0;
+                    // }
+                    // if(!newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseFloat(value)]){
+                    //     newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseFloat(value)] = {};
+                    //     newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseFloat(value)]['countValue'] = 0;
+                    //     newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseFloat(value)]['count'] = 0;
 
-                    }
+                    // }
 
-                    newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]]['all']['countValue'] += parseInt(value);
-                    newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]]['all']['count']++;
-                    newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)]['countValue'] += parseInt(value);
-                    newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)]['count']++;
+                    // newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]]['all']['countValue'] += parseFloat(value);
+                    // newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]]['all']['count']++;
+                    // newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseFloat(value)]['countValue'] += parseFloat(value);
+                    // newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseFloat(value)]['count']++;
 
                 }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Regular'){
 
-                    regular = regular + parseInt(value)
+                    regular = regular + parseFloat(value)
                     count_regular++
 
-                    if(!newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]]){
-                        newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]] = {};
-                        newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]]['all'] = {};
-                        newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]]['all']['countValue'] = 0;
-                        newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]]['all']['count'] = 0;
+                    // if(!newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]]){
+                    //     newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]] = {};
+                    //     newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]]['all'] = {};
+                    //     newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]]['all']['countValue'] = 0;
+                    //     newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]]['all']['count'] = 0;
 
-                    }
-                    if(!newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)]){
-                        newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)] = {};
-                        newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)]['countValue'] = 0;
-                        newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)]['count'] = 0;
+                    // }
+                    // if(!newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseFloat(value)]){
+                    //     newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseFloat(value)] = {};
+                    //     newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseFloat(value)]['countValue'] = 0;
+                    //     newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseFloat(value)]['count'] = 0;
 
-                    }
+                    // }
 
-                    newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]]['all']['countValue'] += parseInt(value);
-                    newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]]['all']['count']++;
-                    newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)]['countValue'] += parseInt(value);
-                    newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)]['count']++;
+                    // newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]]['all']['countValue'] += parseFloat(value);
+                    // newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]]['all']['count']++;
+                    // newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseFloat(value)]['countValue'] += parseFloat(value);
+                    // newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseFloat(value)]['count']++;
 
                     /*if(!countValueRegularNew[value]){
                         countValueRegularNew[value] = 0;
                         countRegularNew[value] = 0;
                     }
-                    countValueRegularNew[value] += parseInt(value);
+                    countValueRegularNew[value] += parseFloat(value);
                     countRegularNew[value]++;*/
 
                 }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Special'){
-                    special = special + parseInt(value)
+                    special = special + parseFloat(value)
                     count_special++
 
 
-                    if(!newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]]){
-                        newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]] = {};
-                        newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]]['all'] = {};
-                        newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]]['all']['countValue'] = 0;
-                        newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]]['all']['count'] = 0;
+                    // if(!newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]]){
+                    //     newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]] = {};
+                    //     newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]]['all'] = {};
+                    //     newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]]['all']['countValue'] = 0;
+                    //     newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]]['all']['count'] = 0;
 
-                    }
-                    if(!newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)]){
-                        newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)] = {};
-                        newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)]['countValue'] = 0;
-                        newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)]['count'] = 0;
+                    // }
+                    // if(!newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseFloat(value)]){
+                    //     newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseFloat(value)] = {};
+                    //     newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseFloat(value)]['countValue'] = 0;
+                    //     newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseFloat(value)]['count'] = 0;
 
-                    }
+                    // }
 
-                    newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]]['all']['countValue'] += parseInt(value);
-                    newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]]['all']['count']++;
-                    newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)]['countValue'] += parseInt(value);
-                    newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)]['count']++;
+                    // newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]]['all']['countValue'] += parseFloat(value);
+                    // newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]]['all']['count']++;
+                    // newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseFloat(value)]['countValue'] += parseFloat(value);
+                    // newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseFloat(value)]['count']++;
 
 
                 }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Sponsored'){
-                    sponsored = sponsored + parseInt(value)
+                    sponsored = sponsored + parseFloat(value)
                     count_sponsored++
 
 
-                    if(!newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]]){
-                        newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]] = {};
-                        newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]]['all'] = {};
-                        newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]]['all']['countValue'] = 0;
-                        newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]]['all']['count'] = 0;
+                    // if(!newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]]){
+                    //     newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]] = {};
+                    //     newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]]['all'] = {};
+                    //     newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]]['all']['countValue'] = 0;
+                    //     newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]]['all']['count'] = 0;
 
-                    }
-                    if(!newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)]){
-                        newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)] = {};
-                        newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)]['countValue'] = 0;
-                        newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)]['count'] = 0;
+                    // }
+                    // if(!newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseFloat(value)]){
+                    //     newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseFloat(value)] = {};
+                    //     newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseFloat(value)]['countValue'] = 0;
+                    //     newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseFloat(value)]['count'] = 0;
 
-                    }
+                    // }
 
-                    newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]]['all']['countValue'] += parseInt(value);
-                    newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]]['all']['count']++;
-                    newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)]['countValue'] += parseInt(value);
-                    newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)]['count']++;
+                    // newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]]['all']['countValue'] += parseFloat(value);
+                    // newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]]['all']['count']++;
+                    // newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseFloat(value)]['countValue'] += parseFloat(value);
+                    // newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseFloat(value)]['count']++;
 
 
                 }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Early Bird' ||
                                 $('#participants_table').DataTable().column( 2 ).data()[key] == 'Early birds'){
-                    early = early + parseInt(value)
+                    early = early + parseFloat(value)
                     count_early++
 
-                    if(!newTickets['early-bird']){
-                        newTickets['early-bird'] = {};
-                        newTickets['early-bird']['all'] = {};
-                        newTickets['early-bird']['all']['countValue'] = 0;
-                        newTickets['early-bird']['all']['count'] = 0;
+                    // if(!newTickets['early-bird']){
+                    //     newTickets['early-bird'] = {};
+                    //     newTickets['early-bird']['all'] = {};
+                    //     newTickets['early-bird']['all']['countValue'] = 0;
+                    //     newTickets['early-bird']['all']['count'] = 0;
 
-                    }
-                    if(!newTickets['early-bird'][parseInt(value)]){
-                        newTickets['early-bird'][parseInt(value)] = {};
-                        newTickets['early-bird'][parseInt(value)]['countValue'] = 0;
-                        newTickets['early-bird'][parseInt(value)]['count'] = 0;
+                    // }
+                    // if(!newTickets['early-bird'][parseFloat(value)]){
+                    //     newTickets['early-bird'][parseFloat(value)] = {};
+                    //     newTickets['early-bird'][parseFloat(value)]['countValue'] = 0;
+                    //     newTickets['early-bird'][parseFloat(value)]['count'] = 0;
 
-                    }
+                    // }
 
-                    newTickets['early-bird']['all']['countValue'] += parseInt(value);
-                    newTickets['early-bird']['all']['count']++;
-                    newTickets['early-bird'][parseInt(value)]['countValue'] += parseInt(value);
-                    newTickets['early-bird'][parseInt(value)]['count']++;
+                    // newTickets['early-bird']['all']['countValue'] += parseFloat(value);
+                    // newTickets['early-bird']['all']['count']++;
+                    // newTickets['early-bird'][parseFloat(value)]['countValue'] += parseFloat(value);
+                    // newTickets['early-bird'][parseFloat(value)]['count']++;
 
                 }
 
 
 
         })
-        $('#total').text('€'+sum.toLocaleString())
-        $('#total-sales').text('€'+totalSales.toLocaleString())
+
+        $('.total').text('€'+sum.toLocaleString())
+        //$('.total-sales').text('€'+totalSales.toLocaleString())
+        $('#special').text('€'+special.toLocaleString())
+        $('#regular').text('€'+regular.toLocaleString())
+        $('#alumni').text('€'+alumni.toLocaleString())
+        $('#early-bird').text('€'+early.toLocaleString())
+        $('#income_inclass').text('€'+incomeInclass.toLocaleString())
+        $('#income_elearning').text('€'+incomeElearning.toLocaleString())
+        $('#income_inclassAll').text('€'+incomeInclassAll.toLocaleString())
+        $('#income_elearningAll').text('€'+incomeElearningAll.toLocaleString())
+        $('#totalIncomeAll').text('€'+(totalSales).toLocaleString())
+
+        $('.widget .info').removeClass('d-none')
+        $('.widget .loader').addClass('d-none')
 
         $.each( newTickets, function( key, value ) {
 

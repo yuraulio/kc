@@ -266,6 +266,8 @@
             countValueRegularNew = {};
             newTickets = {};
             unique_users = [];
+            incomeElearningAll = 0.0;
+            incomeInclassAll = 0.0;
         }
 
 
@@ -354,16 +356,16 @@ $(document).ready(function() {
 
     prices = table.column(3).data()
 
-    let sum = 0
-    $.each(prices, function(key, value) {
-        value = value.replace("€", "")
-        sum = sum + parseInt(value)
-    })
+    // let sum = 0
+    // $.each(prices, function(key, value) {
+    //     value = value.replace("€", "")
+    //     sum = sum + parseInt(value)
+    // })
 
     // var sum = prices.reduce(function(a, b){
     //     return parseInt(a) + parseInt(b);
     // }, 0);
-    $('#total').text('€'+sum)
+    //$('#total').text('€'+sum)
 
     //let sum = 0;
 
@@ -479,7 +481,7 @@ $(document).ready(function() {
          $.each(events, function(key, value) {
             eventsArray[removeSpecial(value)] = eventIDS[key]
         })
-        //stats_non_elearning()
+        stats_non_elearning()
 
     });
 
@@ -523,6 +525,8 @@ $(document).ready(function() {
 
     function stats_non_elearning(){
 
+        $('.widget .info').addClass('d-none')
+        $('.widget .loader').removeClass('d-none')
 
         $(`.ticket-choices`).empty();
 
@@ -530,131 +534,49 @@ $(document).ready(function() {
         initCounters()
 
         let sum = 0
+        // let incomeElearningAll = 0.0;
+        // let incomeInclassAll = 0.0;
         //returns 'filtered' or visible rows
         table.rows({filter: 'applied'}).every( function ( rowIdx, tableLoop, rowLoop ) {
             var coupon = this.data()[2];
             var amount = this.data()[3];
-            amount = parseInt(amount.replace("€",""))
+            amount = parseFloat(amount.replace("€",""))
             sum = sum + amount
 
             unique_users.push($(this.data()[0]).data('name'))
+
+            var event_type = this.data()[11];
+
+            if(event_type == 'e-learning'){
+                incomeElearningAll += parseFloat(amount)
+            }else{
+                incomeInclassAll += parseFloat(amount)
+            }
 
 
             if(coupon == 'Alumni'){
                 alumni = alumni + amount
                 count_alumni++
 
-                if(!newTickets[coupon]){
-                    newTickets[coupon] = {};
-                    newTickets[coupon]['all'] = {};
-                    newTickets[coupon]['all']['countValue'] = 0;
-                    newTickets[coupon]['all']['count'] = 0;
-
-                }
-                if(!newTickets[coupon][amount]){
-                    newTickets[coupon][amount] = {};
-                    newTickets[coupon][amount]['countValue'] = 0;
-                    newTickets[coupon][amount]['count'] = 0;
-
-                }
-
-                newTickets[coupon]['all']['countValue'] += parseInt(amount);
-                newTickets[coupon]['all']['count']++;
-                newTickets[coupon][amount]['countValue'] += parseInt(amount);
-                newTickets[coupon][amount]['count']++;
 
             }else if(coupon == 'Regular'){
                 regular = regular + amount
                 count_regular++
 
-                if(!newTickets[coupon]){
-                    newTickets[coupon] = {};
-                    newTickets[coupon]['all'] = {};
-                    newTickets[coupon]['all']['countValue'] = 0;
-                    newTickets[coupon]['all']['count'] = 0;
-
-                }
-                if(!newTickets[coupon][amount]){
-                    newTickets[coupon][amount] = {};
-                    newTickets[coupon][amount]['countValue'] = 0;
-                    newTickets[coupon][amount]['count'] = 0;
-
-                }
-
-                newTickets[coupon]['all']['countValue'] += parseInt(amount);
-                newTickets[coupon]['all']['count']++;
-                newTickets[coupon][amount]['countValue'] += parseInt(amount);
-                newTickets[coupon][amount]['count']++;
-
             }else if(coupon == 'Special'){
                 special = special + amount
                 count_special++
 
-                if(!newTickets[coupon]){
-                    newTickets[coupon] = {};
-                    newTickets[coupon]['all'] = {};
-                    newTickets[coupon]['all']['countValue'] = 0;
-                    newTickets[coupon]['all']['count'] = 0;
-
-                }
-                if(!newTickets[coupon][amount]){
-                    newTickets[coupon][amount] = {};
-                    newTickets[coupon][amount]['countValue'] = 0;
-                    newTickets[coupon][amount]['count'] = 0;
-
-                }
-
-                newTickets[coupon]['all']['countValue'] += parseInt(amount);
-                newTickets[coupon]['all']['count']++;
-                newTickets[coupon][amount]['countValue'] += parseInt(amount);
-                newTickets[coupon][amount]['count']++;
 
             }else if(coupon == 'Sponsored'){
                 sponsored = sponsored + amount
                 count_sponsored++
-
-                if(!newTickets[coupon]){
-                    newTickets[coupon] = {};
-                    newTickets[coupon]['all'] = {};
-                    newTickets[coupon]['all']['countValue'] = 0;
-                    newTickets[coupon]['all']['count'] = 0;
-
-                }
-                if(!newTickets[coupon][amount]){
-                    newTickets[coupon][amount] = {};
-                    newTickets[coupon][amount]['countValue'] = 0;
-                    newTickets[coupon][amount]['count'] = 0;
-
-                }
-
-                newTickets[coupon]['all']['countValue'] += parseInt(amount);
-                newTickets[coupon]['all']['count']++;
-                newTickets[coupon][amount]['countValue'] += parseInt(amount);
-                newTickets[coupon][amount]['count']++;
 
             }else if(coupon == 'Early birds' || coupon == 'Early Bird'){
                 //console.log('has early bird')
                 early = early + amount
                 count_early++
 
-                if(!newTickets[coupon]){
-                    newTickets[coupon] = {};
-                    newTickets[coupon]['all'] = {};
-                    newTickets[coupon]['all']['countValue'] = 0;
-                    newTickets[coupon]['all']['count'] = 0;
-
-                }
-                if(!newTickets[coupon][amount]){
-                    newTickets[coupon][amount] = {};
-                    newTickets[coupon][amount]['countValue'] = 0;
-                    newTickets[coupon][amount]['count'] = 0;
-
-                }
-
-                newTickets[coupon]['all']['countValue'] += parseInt(amount);
-                newTickets[coupon]['all']['count']++;
-                newTickets[coupon][amount]['countValue'] += parseInt(amount);
-                newTickets[coupon][amount]['count']++;
 
             }
 
@@ -664,21 +586,16 @@ $(document).ready(function() {
         count_students = unique_users.length;
 
 
-        $('#total').text('€'+sum.toLocaleString())
-        $('#special').text('€'+special.toLocaleString())
-        $('#regular').text('€'+regular.toLocaleString())
-        $('#alumni').text('€'+alumni.toLocaleString())
-        $('#early-bird').text('€'+early.toLocaleString())
-        $('#sponsored').text('€'+sponsored.toLocaleString())
+        $('#total_income').text('€ '+sum.toLocaleString())
+        $('#special').text('€ '+special.toLocaleString())
+        $('#regular').text('€ '+regular.toLocaleString())
+        $('#alumni').text('€ '+alumni.toLocaleString())
+        $('#early-bird').text('€ '+early.toLocaleString())
 
-        $('#total_income').text('€'+(early+regular+special+alumni).toLocaleString())
+        $('#incomeInclassAll').text('€ '+incomeInclassAll.toLocaleString())
+        $('#incomeElearningAll').text('€ '+incomeElearningAll.toLocaleString())
+        $('#total_income_by_type').text('€ '+(incomeElearningAll + incomeInclassAll).toLocaleString())
 
-        $('#count_special').text('Special(all): '+count_special)
-        $('#count_regular').text('Regular(all): '+count_regular)
-        $('#count_alumni').text('Alumni(all): '+count_alumni)
-        $('#count_early-bird').text('Early Bird(all): '+count_early)
-        $('#count_sponsored').text(+count_sponsored)
-        $('#total_students').text(count_students)
 
         $.each( newTickets, function( key, value ) {
 
@@ -695,9 +612,10 @@ $(document).ready(function() {
           actionValue = actionValue.replace(/ /g, '-');
           $(`.${actionValue}-action`).append(html)
 
-      });
+        });
 
-
+        $('.widget .info').removeClass('d-none')
+        $('.widget .loader').addClass('d-none')
 
 
     }
@@ -730,7 +648,7 @@ $(document).ready(function() {
 
 
         //console.log(removeSpecial($('#col'+i+'_filter').val()))
-        //stats_non_elearning()
+        stats_non_elearning()
 
         if(i!=4){
             coupons = table.column(4,{filter: 'applied'}).data().unique().sort();
@@ -772,6 +690,9 @@ $(document).ready(function() {
         let count_sponsored = 0;
         let count_early = 0;
 
+        let incomeElearningAll = 0.0;
+        let incomeInclassAll = 0.0;
+
         newTickets = {};
 
             $.each(price, function(key, value){
@@ -780,135 +701,41 @@ $(document).ready(function() {
                 //console.log($('#participants_table').DataTable().column( i ).data()[key] == $('#col'+i+'_filter').val())
                 //console.log('asd')
                 //console.log($('#participants_table').DataTable().column( 3 ).data()[key])
-                sum = sum + parseInt($('#participants_table').DataTable().column( 3 ).data()[key].replace("€", ""))
+                sum = sum + parseFloat($('#participants_table').DataTable().column( 3 ).data()[key].replace("€", ""))
+
+                var event_type = $('#participants_table').DataTable().column( 11 ).data()[key]
+                if(event_type == 'e-learning'){
+                    incomeElearningAll += parseFloat(value)
+                }else{
+                    incomeInclassAll += parseFloat(value)
+                }
 
                 if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Alumni'){
-                    alumni = alumni + parseInt(value)
+                    alumni = alumni + parseFloat(value)
                     count_alumni++
 
-                    if(!newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]]){
-                        newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]] = {};
-                        newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]]['all'] = {};
-                        newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]]['all']['countValue'] = 0;
-                        newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]]['all']['count'] = 0;
 
-                    }
-                    if(!newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)]){
-                        newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)] = {};
-                        newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)]['countValue'] = 0;
-                        newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)]['count'] = 0;
-
-                    }
-
-                    newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]]['all']['countValue'] += parseInt(value);
-                    newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]]['all']['count']++;
-                    newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)]['countValue'] += parseInt(value);
-                    newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)]['count']++;
 
                 }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Regular'){
 
-                    regular = regular + parseInt(value)
+                    regular = regular + parseFloat(value)
                     count_regular++
 
-                    if(!newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]]){
-                        newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]] = {};
-                        newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]]['all'] = {};
-                        newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]]['all']['countValue'] = 0;
-                        newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]]['all']['count'] = 0;
-
-                    }
-                    if(!newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)]){
-                        newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)] = {};
-                        newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)]['countValue'] = 0;
-                        newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)]['count'] = 0;
-
-                    }
-
-                    newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]]['all']['countValue'] += parseInt(value);
-                    newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]]['all']['count']++;
-                    newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)]['countValue'] += parseInt(value);
-                    newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)]['count']++;
-
-                    /*if(!countValueRegularNew[value]){
-                        countValueRegularNew[value] = 0;
-                        countRegularNew[value] = 0;
-                    }
-                    countValueRegularNew[value] += parseInt(value);
-                    countRegularNew[value]++;*/
-
                 }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Special'){
-                    special = special + parseInt(value)
+                    special = special + parseFloat(value)
                     count_special++
 
 
-                    if(!newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]]){
-                        newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]] = {};
-                        newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]]['all'] = {};
-                        newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]]['all']['countValue'] = 0;
-                        newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]]['all']['count'] = 0;
-
-                    }
-                    if(!newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)]){
-                        newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)] = {};
-                        newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)]['countValue'] = 0;
-                        newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)]['count'] = 0;
-
-                    }
-
-                    newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]]['all']['countValue'] += parseInt(value);
-                    newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]]['all']['count']++;
-                    newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)]['countValue'] += parseInt(value);
-                    newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)]['count']++;
-
 
                 }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Sponsored'){
-                    sponsored = sponsored + parseInt(value)
+                    sponsored = sponsored + parseFloat(value)
                     count_sponsored++
-
-
-                    if(!newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]]){
-                        newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]] = {};
-                        newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]]['all'] = {};
-                        newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]]['all']['countValue'] = 0;
-                        newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]]['all']['count'] = 0;
-
-                    }
-                    if(!newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)]){
-                        newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)] = {};
-                        newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)]['countValue'] = 0;
-                        newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)]['count'] = 0;
-
-                    }
-
-                    newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]]['all']['countValue'] += parseInt(value);
-                    newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]]['all']['count']++;
-                    newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)]['countValue'] += parseInt(value);
-                    newTickets[$('#participants_table').DataTable().column( 2 ).data()[key]][parseInt(value)]['count']++;
-
 
                 }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Early Bird' ||
                                 $('#participants_table').DataTable().column( 2 ).data()[key] == 'Early birds'){
-                    early = early + parseInt(value)
+                    early = early + parseFloat(value)
                     count_early++
 
-                    if(!newTickets['early-bird']){
-                        newTickets['early-bird'] = {};
-                        newTickets['early-bird']['all'] = {};
-                        newTickets['early-bird']['all']['countValue'] = 0;
-                        newTickets['early-bird']['all']['count'] = 0;
-
-                    }
-                    if(!newTickets['early-bird'][parseInt(value)]){
-                        newTickets['early-bird'][parseInt(value)] = {};
-                        newTickets['early-bird'][parseInt(value)]['countValue'] = 0;
-                        newTickets['early-bird'][parseInt(value)]['count'] = 0;
-
-                    }
-
-                    newTickets['early-bird']['all']['countValue'] += parseInt(value);
-                    newTickets['early-bird']['all']['count']++;
-                    newTickets['early-bird'][parseInt(value)]['countValue'] += parseInt(value);
-                    newTickets['early-bird'][parseInt(value)]['count']++;
 
                 }
 
@@ -917,19 +744,19 @@ $(document).ready(function() {
         })
 
 
+        $('#total_income').text('€ '+sum.toLocaleString())
+        $('#special').text('€ '+special.toLocaleString())
+        $('#regular').text('€ '+regular.toLocaleString())
+        $('#alumni').text('€ '+alumni.toLocaleString())
+        $('#early-bird').text('€ '+early.toLocaleString())
 
-        $('#total').text('€'+sum.toLocaleString())
-        $('#special').text('€'+special.toLocaleString())
-        $('#regular').text('€'+regular.toLocaleString())
-        $('#alumni').text('€'+alumni.toLocaleString())
-        $('#early-bird').text('€'+early.toLocaleString())
-        $('#sponsored').text('€'+sponsored.toLocaleString())
-        $('#count_special').text('Special(all): '+count_special.toLocaleString())
-        $('#count_regular').text('Regular(all): '+count_regular.toLocaleString())
-        $('#count_alumni').text('Alumni(all): '+count_alumni.toLocaleString())
-        $('#count_early-bird').text('Early Bird(all): '+count_early.toLocaleString())
-        $('#count_sponsored').text(+count_sponsored.toLocaleString())
-        $('#total_income').text('€'+(early+regular+special).toLocaleString())
+        $('#incomeInclassAll').text('€ '+incomeInclassAll.toLocaleString())
+        $('#incomeElearningAll').text('€ '+incomeElearningAll.toLocaleString())
+        $('#total_income_by_type').text('€ '+(incomeElearningAll + incomeInclassAll).toLocaleString())
+
+
+        $('.widget .info').removeClass('d-none')
+        $('.widget .loader').addClass('d-none')
 
 
         $.each( newTickets, function( key, value ) {

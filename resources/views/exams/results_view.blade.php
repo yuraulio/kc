@@ -17,21 +17,21 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha512-k78e1fbYs09TQTqG79SpJdV4yXq8dX6ocfP0bzQHReQSbEghnS6AQHE2BbZKns962YaqgQL16l7PkiiAHZYvXQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 <!-- Primary Meta Tags -->
-<title>View Certification</title>
-<meta name="title" content="View Certification">
+<title>Result</title>
+<meta name="title" content="Result">
 <meta name="description" content="Exam Result">
 
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content="website">
 <meta property="og:url" content="{{ env('MIX_APP_URL')}}">
-<meta property="og:title" content="View Certification">
+<meta property="og:title" content="Result">
 <meta property="og:description" content="Exam Result">
 <meta property="og:image" content="{{ $img }}">
 
 <!-- Twitter -->
 <meta property="twitter:card" content="summary_large_image">
 <meta property="twitter:url" content="{{ env('MIX_APP_URL')}}">
-<meta property="twitter:title" content="View Certification">
+<meta property="twitter:title" content="Result">
 <meta property="twitter:description" content="Exam Result">
 <meta property="twitter:image" content="{{ $img }}">
 
@@ -50,15 +50,20 @@
 
 
 
-   <div id="main" class="container">
-   <div class="row">
-    <div class="col-md-8 offset-md-2 col-sm-8 offfset-sm-2">
-    <img style="height:80vh;" src="{{ $img }}" alt="">
-    </div>
-  </div>
-        
+    <div id="main" class="container">
+        <div style="height:100vh" class="row">
+            <div class="col-2"></div>
+            <div style="margin: auto;" class="col-auto">
+                <div class="card card-block">
+                    <img class="text-center " style="height:60vh; background-color:white;" src="{{ $img }}" alt="">
+                </div>
 
-   </div>
+
+
+            </div>
+            <div class="col-2"></div>
+        </div>
+    </div>
 
    <footer class="row">
 

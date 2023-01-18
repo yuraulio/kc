@@ -3640,23 +3640,23 @@ var datePickerOptions = {
                 let incomeInstalments = stats.incomeInstalments;
 
                 $('#student_total').text(count.total)
-                $('#students_paid').text(count.total - count.free)
+                $('#students_paid').text(count.regular + count.special + count.alumni + count.early)
                 $('#students_free').text(count.free)
 
-                $('#income-total').text(income.total)
-                $('#income-early').text(income.early)
-                $('#income-alumni').text(income.alumni)
-                $('#income-special').text(income.special)
-                $('#income-regular').text(income.regular)
+                $('#income-total').text((income.total).toLocaleString())
+                $('#income-early').text((income.early).toLocaleString())
+                $('#income-alumni').text((income.alumni).toLocaleString())
+                $('#income-special').text((income.special).toLocaleString())
+                $('#income-regular').text((income.regular).toLocaleString())
 
-                $('#installments-total').text(incomeInstalments.total)
-                $('#installments-early').text(incomeInstalments.early)
-                $('#installments-alumni').text(incomeInstalments.alumni)
-                $('#installments-special').text(incomeInstalments.special)
-                $('#installments-regular').text(incomeInstalments.regular)
+                $('#installments-total').text((Math.round(incomeInstalments.total)).toLocaleString())
+                $('#installments-early').text((Math.round(incomeInstalments.early)).toLocaleString())
+                $('#installments-alumni').text((Math.round(incomeInstalments.alumni)).toLocaleString())
+                $('#installments-special').text((Math.round(incomeInstalments.special)).toLocaleString())
+                $('#installments-regular').text((Math.round(incomeInstalments.regular)).toLocaleString())
 
                 $('.widget .loader').addClass('d-none')
-                $('.widget .info').removeClass('d-none')
+                //$('.widget .info').removeClass('d-none')
 
 
             }
