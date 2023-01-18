@@ -318,6 +318,7 @@ class CertificateController extends Controller
         $certificateId = $request->certificate_id;
         $data = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $request->image));
 
+
         $imageName = 'cert/'.$certificateId.'.png';
         $destination = public_path($imageName);
 
@@ -328,6 +329,18 @@ class CertificateController extends Controller
         }
 
         file_put_contents($destination, $data);
+
+
+        // $im = new Imagick();
+
+        // $im->readImage($destination);
+        // $im->setBackgroundColor('white');
+        // $im->setImageCompression(imagick::COMPRESSION_JPEG);
+        // $im->setImageCompressionQuality(70);
+
+        // $im->writeImage($destination);
+
+
 
 
         $exam = Exam::with('event')->find($request->exam);

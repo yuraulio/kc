@@ -10,7 +10,7 @@
 
 <meta name="description" content="">
 
-<title>Checkout our layout</title>
+<title>Result</title>
 
 <!-- load bootstrap from a cdn -->
 
@@ -23,14 +23,14 @@
 
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content="website">
-<meta property="og:url" content="{{ env('MIX_APP_URL')}}">
+<meta property="og:url" content="{{ Request::url() }}">
 <meta property="og:title" content="Result">
 <meta property="og:description" content="Exam Result">
 <meta property="og:image" content="{{ $img }}">
 
 <!-- Twitter -->
 <meta property="twitter:card" content="summary_large_image">
-<meta property="twitter:url" content="{{ env('MIX_APP_URL')}}">
+<meta property="twitter:url" content="{{ Request::url() }}">
 <meta property="twitter:title" content="Result">
 <meta property="twitter:description" content="Exam Result">
 <meta property="twitter:image" content="{{ $img }}">
@@ -55,7 +55,7 @@
             <div class="col-2"></div>
             <div style="margin: auto;" class="col-auto">
                 <div class="card card-block">
-                    <img class="text-center " style="height:60vh;" src="{{ $img }}" alt="">
+                    <img class="text-center" style="height:60vh;" src="{{ $img }}" alt="result-image">
                 </div>
 
 

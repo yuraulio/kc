@@ -292,6 +292,18 @@
             }]
         };
 
+        const plugin = {
+            id: 'customCanvasBackgroundColor',
+            beforeDraw: (chart, args, options) => {
+                const {ctx} = chart;
+                ctx.save();
+                ctx.globalCompositeOperation = 'destination-over';
+                ctx.fillStyle = options.color || '#99ffff';
+                ctx.fillRect(0, 0, chart.width, chart.height);
+                ctx.restore();
+            }
+        };
+
 
         var $this = document.getElementById("chart-pie").getContext("2d");
         //var $this = $("#chart-pie")
@@ -299,6 +311,11 @@
             type: 'doughnut',
             data,
             options: {
+                plugins: {
+                    customCanvasBackgroundColor: {
+                        color: 'white',
+                    }
+                },
                 elements: {
                   center: {
                     text: score+"%",
@@ -319,7 +336,7 @@
                 animation: {
                     onComplete: function() {
                         chartImage = chart.toBase64Image();
-                        $('#chart-pie').css('background-color', 'white')
+
 
                         // var a = document.createElement('a');
                         // a.href = chartImage;
@@ -329,7 +346,8 @@
                         // a.click();
                     }
                 }
-            }
+            },
+            plugins: [plugin],
         });
 
 
@@ -395,7 +413,6 @@
 
                 let path = data.path
                 let certiUrl = path.replace('\\','/')
-                certiUrl = baseUrl+'/'+certiUrl
                 let certiTitle = data.certiTitle
                 let certiIssueYear = data.certiCreateDateY;
                 let certiIssueMonth = data.certiCreateDateM;
@@ -406,7 +423,7 @@
                 if(data){
 
                     var fbpopup = window.open(`https://www.linkedin.com/profile/add?startTask=${certiTitle}&name=${certiTitle}&organizationId=3152129&issueYear=${certiIssueYear}
-                    &issueMonth=${certiIssueMonth}&expirationYear=${certiExpYear}&expirationMonth=${certiExpMonth}&certUrl=${certiUrl}&certId=${certiCredential}`, "pop", "width=600, height=400, scrollbars=no");
+                    &issueMonth=${certiIssueMonth}&expirationYear=${certiExpYear}&expirationMonth=${certiExpMonth}&certUrl=${baseUrl+'/'+certiUrl}&certId=${certiCredential}`, "pop", "width=600, height=400, scrollbars=no");
                     return false;
                 }
             }
