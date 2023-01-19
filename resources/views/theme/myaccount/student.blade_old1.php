@@ -1798,9 +1798,7 @@
           url: "/mycertificate/convert-pdf-to-image/"+certificateId,
           success: function(data) {
 
-            let url = data.path
-
-              data = url.replace('\\','/')
+              data = data.replace('\\','/')
               if(data){
                   var fbpopup = window.open(`http://twitter.com/share?url=${decodeURI(baseUrl)}/${decodeURI(data)}`, "pop", "width=600, height=400, scrollbars=no");
                   return false;
