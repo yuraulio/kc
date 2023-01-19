@@ -154,12 +154,20 @@ function nextQues(mark) {
     window.examVar = JSON.stringify(eJson);
     updateStats();
     window.actQues = currQues;
+
     if(currQues==lastQues) {
       //  jQuery('.next').addClass('hide');
 
     } else {
       //  jQuery('.next').removeClass('hide');
     }
+    console.log('firstNonConfirm: ', firstNonConfirm)
+    console.log('final ques: ', finalQues)
+    console.log('last ques:', lastQues)
+    console.log('loop again: ', LOOP_AGAIN)
+    console.log('mark :', mark)
+
+    console.log('showx: ', showx)
     if(finalQues==lastQues && LOOP_AGAIN==0 && mark!=5) {
         if(firstNonConfirm==0) {
            // alert("You have completed the exam. Please click 'I AM FINISHED WITH MY EXAM' ");
@@ -331,6 +339,63 @@ function clearAnswer() {
     updateStats();
 }
 
+function finishExamDialog(){
+    closeGeneralDialog()
+
+    if($('#closeDialog').length == 0){
+        let dialog = `
+            <div id="closeDialog" hidden>
+                <div class="alert-wrapper success-alert">
+                    <div class="alert-inner">
+                        <p>Are you sure you want to finish the exam?</p>
+                    </div>
+
+                    <div class="close-dialog-buttons">
+                        <button onclick="finishExam()" class="btn btn-exit-exam btn-sm">Yes, finish my exam. </button>
+                        <button onclick="closeFinishExam()" class="btn btn-not-exit-exam btn-sm">Do not finish my exam. </button>
+                    </div>
+
+                    <!-- /.alert-outer -->
+                </div>
+            </div>
+        `
+        $('#finishDialog').append(dialog)
+    }
+
+    $('#closeDialog').removeAttr('hidden')
+
+
+}
+
+function closeFinishExam(){
+    $('#closeDialog').attr('hidden', '')
+}
+function closeGeneralDialog(){
+
+    $('#generalDialog').empty()
+}
+
+function showAlert(msg, type){
+    closeFinishExam()
+    let dialog = `
+            <div>
+                <div class="alert-wrapper ${type}-alert">
+                    <div class="alert-inner">
+                        <p>${msg}</p>
+                    </div>
+
+                    <div class="close-dialog-general-buttons">
+                        <button onclick="closeGeneralDialog()" class="btn btn-not-exit-exam btn-sm"> OK </button>
+                    </div>
+
+                    <!-- /.alert-outer -->
+                </div>
+            </div>
+        `
+    $('#generalDialog').append(dialog)
+
+}
+
 function finishExam() {
 
 
@@ -338,15 +403,16 @@ function finishExam() {
     TOTAL_NOT_VISITED   = jQuery(".not-visited").length;
     TOTAL_MARKED = jQuery(".marked").length;
 
-    var r = confirm("Are you sure you want to finish the exam?");
-    if (r == true) {
+    // var r = confirm("Are you sure you want to finish the exam?");
+    // if (r == true) {
 
 
 
         nextQues(5);
         if(TOTAL_NOT_ANSWERED!=0 || TOTAL_NOT_VISITED != 0 || TOTAL_MARKED !=0) {
             prevQues();
-            alert("You need to answer all questions to finish the exam!");
+            //alert("You need to answer all questions to finish the exam!");
+            showAlert('You need to answer all questions to finish the exam!', 'warning');
             return;
         }
 
@@ -379,8 +445,8 @@ function finishExam() {
             ?>
         }
         });
-    } else {
-    }
+    // } else {
+    // }
 }
 
 function outOfTime() {
@@ -723,7 +789,8 @@ if (typeof(Storage) !== "undefined") {
     }
 } else {
     setTimeout(function(){ jQuery("#overlay-loading").hide(); }, 500);
-    alert("Your browser does not support latest Session Storage. Please upgrade your browser to give the exam.")
+    showAlert('Your browser does not support latest Session Storage. Please upgrade your browser to give the exam.', 'warning')
+    //alert("Your browser does not support latest Session Storage. Please upgrade your browser to give the exam.")
     window.examVar = examJson;
     window.close('fs');
 }
@@ -743,6 +810,9 @@ window.actQues = 0;
 <div class="container">
 
     <div class="row justify-content-center">
+
+    <div id="finishDialog"></div>
+    <div id="generalDialog"></div>
 
 
     <div class="col-12" style="margin-bottom: 2rem">
@@ -946,8 +1016,8 @@ window.actQues = 0;
                 </div>
                 @if(Request::segment(1) == 'exam-start')
                 <div class="finish-exams">
-                        <button class="btn btn-lg btn-danger button finish" disabled type="submit" onclick="finishExam();" id="ExamFinish">SUBMIT YOUR EXAM</button>
-                </div>
+                        <button class="btn btn-lg btn-danger button finish" disabled type="submit" onclick="finishExamDialog();" id="ExamFinish">SUBMIT YOUR EXAM</button>
+                    </div>
                 @endif
             </div>
         </div>
@@ -1018,7 +1088,8 @@ window.actQues = 0;
             }
             else if(isOnline==1) {
                 isOnline = 0;
-                alert('You can continue the exam and wait until internet connection is back');
+                showAlert('You can continue the exam and wait until internet connection is back', 'warning')
+                //alert('You can continue the exam and wait until internet connection is back');
             }
 
             if(window.actQues=={{$last_id}}) {

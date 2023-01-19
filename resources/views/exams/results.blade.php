@@ -285,13 +285,11 @@
         var score = <?php echo $score;?>
 
 
-
-
         const data = {
 
             labels: ['correct','incorrect'],
             datasets: [{
-                data: [score,100-score],
+                data: [score.toFixed(2),(100-score).toFixed(2)],
                 backgroundColor: [
                     'green',
                     'red',

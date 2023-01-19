@@ -55,10 +55,10 @@
 </head>
 @include('theme.layouts.header_exam')
 
-<body style="background: transparent;" class="hold-transition exam-page disable-select" oncontextmenu="return false;" onkeydown="return (event.keyCode != 116)">
-<!-- <body style="background: transparent;" class="hold-transition exam-page disable-select" > -->
+<!-- <body style="background: transparent;" class="hold-transition exam-page disable-select" oncontextmenu="return false;" onkeydown="return (event.keyCode != 116)"> -->
+<body style="background: transparent;" class="hold-transition exam-page disable-select" >
     <div id="app">
-        <div id="closeDialog" hidden>
+        {{--<div id="closeDialog" hidden>
             <div class="alert-wrapper error-alert">
                 <div class="alert-inner">
                     <p>Are you sure you want to exit your exam?</p>
@@ -72,7 +72,7 @@
 
                 <!-- /.alert-outer -->
             </div>
-        </div>
+        </div>--}}
 
         {{--<nav class="navbar navbar-expand-md navbar-light navbar-laravel">
 
@@ -164,17 +164,20 @@
                 window.top.close()
             })
 
-            jQuery('.close').click(function(){
+            // jQuery('.close').click(function(){
+            //     alert('asd')
 
-                if($('#chart-pie').length != 0){
-                    $('.btn-not-exit-exam.go-to-account').text('NO, Do not exit.')
-                    $('.btn-exit-exam.go-to-account').text('Yes, Exit.')
-                }
+            //     if($('#chart-pie').length != 0){
+            //         $('.btn-not-exit-exam.go-to-account').text('NO, Do not exit.')
+            //         $('.btn-exit-exam.go-to-account').text('Yes, Exit.')
+            //     }
 
-                $('#closeDialog').removeAttr('hidden')
+            //     $('#closeDialog').removeAttr('hidden')
 
 
-            });
+            // });
+
+
         })
 
 

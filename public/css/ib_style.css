@@ -21,6 +21,15 @@ img.account-thumb {
 
 #examPassword{
     margin-bottom: 1rem;
+    height: 41px;
+    line-height: 41px;
+    padding: 0 15px;
+    font-size: 18px;
+    border: 1px solid #9e9e9e;
+    outline: none;
+    margin-bottom: 13px;
+    border-radius: 0;
+    box-shadow: none;
 }
 
 .btn {
@@ -277,7 +286,7 @@ li.palette span {
 }
 
 li.answered span {
-  background-color: #97d881;
+  background-color: #7BB401;
 }
 
 li.marked span {
@@ -481,10 +490,10 @@ p.result_answer {
   position: absolute;
 
   left: 0;
-  height: 25px;
-  width: 25px;
+  height: 20px;
+  width: 20px;
   border-radius: 50%;
-  top: 5%;
+  top: 24%;
   transform: translateY(10%);
   border: 1px solid;
 }
@@ -515,8 +524,8 @@ p.result_answer {
 .checkradio .checkmark:after {
   top: 2px;
   left: 2px;
-  width: 19px;
-  height: 19px;
+  width: 14px;
+  height: 14px;
   border-radius: 50%;
   background: black;
 }
@@ -728,6 +737,11 @@ a.cd-top:hover {
     justify-content: space-between;
     flex-wrap: wrap;
 }
+.close-dialog-general-buttons{
+    display: flex;
+    justify-content: end;
+    flex-wrap: wrap;
+}
 
  /* iPad Mini in portrait only */
  @media only screen
@@ -822,16 +836,25 @@ and (orientation : portrait) {
 
 /* Desktop */
 
-@media screen and (min-width: 768px){
+/* @media screen and (min-width: 768px){
   #exam-container {
       max-width: 680px;
   }
-}
+} */
 
-@media screen and (min-width: 992px){
+/* @media screen and (min-width: 992px){
   #exam-container {
     max-width: 925px;
   }
+} */
+
+@media only screen and (max-width: 980px){
+    .time_remaining_header label{
+        margin-bottom: 0.3rem !important;
+    }
+    .countdown-styled.time_remaining_header{
+        padding: 4px 8px !important;
+    }
 }
 
   @media screen and (min-width: 1200px) {
@@ -849,7 +872,7 @@ and (orientation : portrait) {
         max-width: 1450px;
     }
   }
- 
+
 
 
 
@@ -1202,12 +1225,13 @@ h5 {
 }
 
 .time_remaining_header label{
-    color:#419CFF;
-    font-size: 1.2rem
+    color:#98BAE6;
+    font-size: 1rem;
+    margin-bottom: unset;
 }
 
 .countdown-styled.time_remaining_header{
-    background-color: #419CFF;
+    background-color: #5899EC;
     font-size: 18px;
     width: fit-content;
     float: right;
@@ -1288,7 +1312,7 @@ h5 {
 }
 
 .mark_question_details .answered .icon{
-    color: #97d881;
+    color: #7BB401;
 }
 
 .mark_question_details .answer_later .icon{
