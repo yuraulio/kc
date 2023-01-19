@@ -1800,7 +1800,7 @@
 
               data = data.replace('\\','/')
               if(data){
-                  var fbpopup = window.open(`http://twitter.com/share?url=${decodeURI(baseUrl)}/${decodeURI(data)}&text=I just completed my exams at Knowcrunch. Join Knowcrunch’s community: http://bit.ly/3iG2q9D}`, "pop", "width=600, height=400, scrollbars=no");
+                  var fbpopup = window.open(`http://twitter.com/share?url=${decodeURI(baseUrl)}/${decodeURI(data)}`, "pop", "width=600, height=400, scrollbars=no");
                   return false;
               }
 

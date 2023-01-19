@@ -13,8 +13,8 @@
                 <div class="row">
                     <div class="col">
                         <p class="mt-3 mb-0 text-sm">
-                            <span class="mr-3">CLASS: {{ $usersInClassAll }}</span>
-                            <span class="mr-3">VIDEO: {{ $usersElearningAll }}</span>
+                            <span class="text-muted mr-3">CLASS: <span class="text-success">{{ $usersInClassAll }}</span></span>
+                            <span class="text-muted mr-3">VIDEO: <span class="text-success">{{ $usersElearningAll }}</span></span>
                         </p>
                         <p class="mb-0 text-sm">
                             <span class="">All people who registered in a free or paid course (class or video).</span>
@@ -42,8 +42,8 @@
                 <div class="row">
                     <div class="col info d-none">
                         <p class="mt-3 mb-0 text-sm">
-                            <span class="mr-3">CLASS: <span id="incomeInclassAll"></span></span>
-                            <span class="mr-3">VIDEO: <span id="incomeElearningAll"></span></span>
+                            <span class="text-muted mr-3">CLASS: <span class="text-success" id="incomeInclassAll"></span></span>
+                            <span class="text-muted mr-3">VIDEO: <span class="text-success" id="incomeElearningAll"></span></span>
                         </p>
                         <p class="mb-0 text-sm">
                             <span class="">All gross income from our paid courses (class or video).</span>
@@ -70,10 +70,10 @@
                 <div class="row">
                     <div class="col info d-none">
                         <p class="mt-3 mb-0 text-sm">
-                            <span class="mr-3">EARLY: <span id="early-bird">{{-- number_format($income['early'],2,',','.') --}}</span></span>
-                            <span class="mr-3">SPECIAL: <span id="special">{{-- number_format($income['special'],2,',','.') --}}</span></span>
-                            <span class="mr-3">REGULAR: <span id="regular">{{-- number_format($income['regular'],2,',','.') --}}</span></span>
-                            <span class="mr-3">ALUMNI: <span id="alumni">{{-- number_format($income['alumni'],2,',','.') --}}</span></span>
+                            <span class="text-muted mr-3">EARLY: <span class="text-success" id="early-bird">{{-- number_format($income['early'],2,',','.') --}}</span></span>
+                            <span class="text-muted mr-3">SPECIAL: <span class="text-success" id="special">{{-- number_format($income['special'],2,',','.') --}}</span></span>
+                            <span class="text-muted mr-3">REGULAR: <span class="text-success" id="regular">{{-- number_format($income['regular'],2,',','.') --}}</span></span>
+                            <span class="text-muted mr-3">ALUMNI: <span class="text-success" id="alumni">{{-- number_format($income['alumni'],2,',','.') --}}</span></span>
                         </p>
                         <p class="mb-0 text-sm">
                             <span class="">All income from our paid courses (class or video) by ticket type.</span>

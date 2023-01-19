@@ -426,7 +426,7 @@
 
                 if(data){
 
-                    var fbpopup = window.open(`https://www.linkedin.com/shareArticle?mini=true&url=${baseUrl+'/'+certiUrl+'/'+certificateTitle}&title=${certificateTitle}`, "pop", "width=600, height=400, scrollbars=no");
+                    var fbpopup = window.open(`https://www.linkedin.com/shareArticle?mini=true&url=${baseUrl+'/'+certiUrl+'/'+certificateTitle}`, "pop", "width=600, height=400, scrollbars=no");
                     return false;
 
 
