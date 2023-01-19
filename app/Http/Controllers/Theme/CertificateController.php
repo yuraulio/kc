@@ -330,52 +330,10 @@ class CertificateController extends Controller
 
         file_put_contents($destination, $data);
 
-
-        // $im = new Imagick();
-
-        // $im->readImage($destination);
-        // $im->setBackgroundColor('white');
-        // $im->setImageCompression(imagick::COMPRESSION_JPEG);
-        // $im->setImageCompressionQuality(70);
-
-        // $im->writeImage($destination);
-
-
-
-
-        $exam = Exam::with('event')->find($request->exam);
-
-
-
-        if($exam && count($exam['event']) > 0){
-            $event = $exam['event'][0];
-            $certificate = $event->certificatesByUser($user->id)[0];
-
-            $certiTitle = preg_replace( "/\r|\n/", " ", $certificate->certificate_title );
-            if(strpos($certificate->certificate_title, '</p><p>')){
-                $certiTitle = substr_replace($certificate->certificate_title, ' ', strpos($certificate->certificate_title, '</p>'), 0);
-            }else{
-                $certiTitle = $certificate->certificate_title;
-            }
-
-            $certiTitle = urlencode(htmlspecialchars_decode(strip_tags($certiTitle),ENT_QUOTES));
-        }
-
-
-
-
-        //return redirect()->route('certificate.results', ['img'=>$imageName]);
-
         return response()->json([
             'success' => true,
             'path' => 'mycertificateview/'.$certificateId,
-            'certiTitle' => isset($certificate) ? $certiTitle : '',
-            'certiCreateDateY' => isset($certificate) ? date('Y',$certificate->expiration_date) : '',
-            'certiExpMonth' => isset($certificate) ? date('m',$certificate->expiration_date) : '',
-            'certiExpYear' => isset($certificate) ? date('Y',$certificate->expiration_date) : '',
-            'certiCredential' =>isset($certificate) ? $certificate->credential : '',
-            'certiCreateDateM' => isset($certificate) ? date('m',$certificate->create_date) : '',
-            'certiCreateDateY' => isset($certificate) ? date('Y',$certificate->create_date) : ''
+
 
         ]);
 

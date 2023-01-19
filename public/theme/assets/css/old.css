@@ -359,7 +359,8 @@ input[type="number"]#mobile_phone::-webkit-inner-spin-button {
 
 #favDialog1,
 #examDialog,
-#closeDialog {
+#closeDialog,
+#generalDialog {
     position: fixed;
     z-index: 9999;
     text-align: center;

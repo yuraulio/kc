@@ -10,7 +10,13 @@
 
 <meta name="description" content="">
 
-<title>{{ $title }} Result</title>
+<?php
+$title1 = str_replace('_',' ',$title);
+?>
+
+<title>{{ $title1 }} Result</title>
+
+
 
 <!-- load bootstrap from a cdn -->
 
@@ -19,21 +25,21 @@
 <!-- Primary Meta Tags -->
 <title>Result</title>
 <meta name="title" content="Result">
-<meta name="description" content="{{ $title }}">
+<meta name="description" content="{{ $title1 }} Result">
 <meta property="fb:app_id" content="961275423898153">
 
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content="website">
 <meta property="og:url" content="{{ Request::url() }}">
 <meta property="og:title" content="Result">
-<meta property="og:description" content="{{ $title }} Result">
+<meta property="og:description" content="{{ $title1 }} Result">
 <meta property="og:image" content="{{ $img }}">
 
 <!-- Twitter -->
 <meta property="twitter:card" content="summary_large_image">
 <meta property="twitter:url" content="{{ Request::url() }}">
 <meta property="twitter:title" content="Result">
-<meta property="twitter:description" content="{{ $title }} Result">
+<meta property="twitter:description" content="{{ $title1 }} Result">
 <meta property="twitter:image" content="{{ $img }}">
 
 

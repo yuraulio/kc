@@ -771,6 +771,7 @@
                                         </div>--}}
 
                                         <div id="c-shedule-inner{{$tab}}" class="in-tab-wrapper" style="display: block;">
+
                                             <div class="bottom">
                                             @if(isset($event['summaryDate']))<div class="duration"><img class="replace-with-svg" onerror="this.src='{{cdn('/theme/assets/images/icons/Duration_Hours.svg')}}'" src="{{cdn($event['summaryDate_icon'])}}" alt="">{{$event['summaryDate']}}</div>@endif
                                             @if($event['hours'])
@@ -782,8 +783,9 @@
                                             </div>
                                             @endif
                                             </div>
+
                                             @if(isset($event['topics']) && count($event['topics']) > 0)
-                                            <div class="bottom tabs-bottom">
+                                            <div class="bottom  @if((isset($event['paid']) && $event['paid']) || !isset($event['paid'])) {{ 'tabs-bottom'}} @endif">
 
                                             <div class="expire-date exp-date"><img src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}" alt="">Schedule available in PDF</div>
                                             <div class="right">
@@ -791,44 +793,46 @@
                                             </div>
                                             </div>
                                             <div class="acc-topic-accordion">
+                                            @if((isset($event['paid']) && $event['paid']) || !isset($event['paid']))
                                             <div class="accordion-wrapper accordion-big">
                                                 <?php $catId = -1?>
                                                 <?php //dd($event['topics']); ?>
                                                 @foreach($event['topics'] as $keyTopic => $topic)
                                                 <?php //dd($keyTopic); ?>
                                                 @if(isset($topic) && count($topic) != 0 )
+
                                                 <div class="accordion-item">
                                                     <h3 class="accordion-title title-blue-gradient scroll-to-top">{{$keyTopic}}</h3>
                                                     <div class="accordion-content no-padding">
                                                         <?php //dd($topic[0]['lessons']); ?>
                                                         @foreach($topic['lessons'] as $keyLesso => $lesso)
-                                                        <div class="topic-wrapper-big">
-                                                        <div class="topic-title-meta">
-                                                            <h4>{{$lesso['title']}}</h4>
-                                                            <!-- Feedback 18-11 changed -->
-                                                            <div class="topic-meta">
-                                                                @if(count($lesso['type']) >0)
-                                                                <div class="category">{{$lesso['type'][0]['name']}}</div>
-                                                                @endif
-
+                                                            <div class="topic-wrapper-big">
+                                                            <div class="topic-title-meta">
+                                                                <h4>{{$lesso['title']}}</h4>
                                                                 <!-- Feedback 18-11 changed -->
-                                                                <span class="meta-item duration"><img src="{{cdn('/theme/assets/images/icons/Duration_Hours.svg')}}" alt="" /><?= date( "l d M Y", strtotime($lesso['pivot']['time_starts']) ) ?></span> <!-- Feedback 18-11 changed -->
-                                                                <span class="meta-item duration"><img src="{{cdn('/theme/assets/images/icons/Times.svg')}}" alt="" /><?= date( "H:i", strtotime($lesso['pivot']['time_starts']) ) ?> ({{$lesso['pivot']['duration']}})</span> <!-- Feedback 18-11 changed -->
-                                                                <span class="meta-item duration"><img src="{{cdn('/theme/assets/images/icons/icon-marker.svg')}}" alt="" />@if(isset($lesso['pivot']['location_url']) && $lesso['pivot']['location_url']) <a href="{{$lesso['pivot']['location_url']}}" target="_blank"> {{$lesso['pivot']['room']}} </a> @else {{$lesso['pivot']['room']}} @endif</span> <!-- Feedback 18-11 changed -->
-                                                                </div>
-                                                            <!-- /.topic-title-meta -->
-                                                        </div>
-                                                        <div class="author-img">
-                                                            <!-- Feedback 18-11 changed -->
-                                                            <a href="{{$instructors[$lesso['instructor_id']][0]['slugable']['slug']}}">
-                                                            <span class="custom-tooltip"><?= $instructors[$lesso['instructor_id']][0]['title'].' '.$instructors[$lesso['instructor_id']][0]['subtitle']; ?></span>
-                                                            <img src="{{cdn( get_image($instructors[$lesso['instructor_id']][0]['mediable'],'instructors-small') )}}" alt="<?= $instructors[$lesso['instructor_id']][0]['title']; $instructors[$lesso['instructor_id']][0]['subtitle']; ?>"/>
-                                                            </a>
-                                                        </div>
-                                                        <!-- /.topic-wrapper-big -->
-                                                        </div>
-                                                        {{--@if($lesso['type'])
-                                                        @endif--}}
+                                                                <div class="topic-meta">
+                                                                    @if(count($lesso['type']) >0)
+                                                                    <div class="category">{{$lesso['type'][0]['name']}}</div>
+                                                                    @endif
+
+                                                                    <!-- Feedback 18-11 changed -->
+                                                                    <span class="meta-item duration"><img src="{{cdn('/theme/assets/images/icons/Duration_Hours.svg')}}" alt="" /><?= date( "l d M Y", strtotime($lesso['pivot']['time_starts']) ) ?></span> <!-- Feedback 18-11 changed -->
+                                                                    <span class="meta-item duration"><img src="{{cdn('/theme/assets/images/icons/Times.svg')}}" alt="" /><?= date( "H:i", strtotime($lesso['pivot']['time_starts']) ) ?> ({{$lesso['pivot']['duration']}})</span> <!-- Feedback 18-11 changed -->
+                                                                    <span class="meta-item duration"><img src="{{cdn('/theme/assets/images/icons/icon-marker.svg')}}" alt="" />@if(isset($lesso['pivot']['location_url']) && $lesso['pivot']['location_url']) <a href="{{$lesso['pivot']['location_url']}}" target="_blank"> {{$lesso['pivot']['room']}} </a> @else {{$lesso['pivot']['room']}} @endif</span> <!-- Feedback 18-11 changed -->
+                                                                    </div>
+                                                                <!-- /.topic-title-meta -->
+                                                            </div>
+                                                            <div class="author-img">
+                                                                <!-- Feedback 18-11 changed -->
+                                                                <a href="{{$instructors[$lesso['instructor_id']][0]['slugable']['slug']}}">
+                                                                <span class="custom-tooltip"><?= $instructors[$lesso['instructor_id']][0]['title'].' '.$instructors[$lesso['instructor_id']][0]['subtitle']; ?></span>
+                                                                <img src="{{cdn( get_image($instructors[$lesso['instructor_id']][0]['mediable'],'instructors-small') )}}" alt="<?= $instructors[$lesso['instructor_id']][0]['title']; $instructors[$lesso['instructor_id']][0]['subtitle']; ?>"/>
+                                                                </a>
+                                                            </div>
+                                                            <!-- /.topic-wrapper-big -->
+                                                            </div>
+                                                            {{--@if($lesso['type'])
+                                                            @endif--}}
                                                         @endforeach
                                                         <!-- /.accordion-content -->
                                                     </div>
@@ -839,13 +843,15 @@
 
                                                 <!-- /.accordion-wrapper -->
                                             </div>
+                                            @endif
                                             <!-- /.acc-topic-accordion -->
                                             </div>
                                             @endif
+
                                         </div>
 
                                         <?php
-                                        
+
                                             $now1 = strtotime(date("Y-m-d"));
                                             $display = false;
                                             if(!isset($event['release_date_files'])){
@@ -858,7 +864,7 @@
 
                                                 $display = true;
                                             }
-                                        
+
                                             ?>
 
 
@@ -916,7 +922,7 @@
                                                                      }
                                                                   }
                                                                 }
-                                                                
+
 
                                                                 $checkedF = [];
                                                                 $fs = [];
@@ -1413,6 +1419,7 @@
                                         </div>
                                     </div>
                                     @endif
+
                                     @if(count($event['certs']) > 0)
                                     <div id="c-cert-inner{{$tab}}" class="in-tab-wrapper">
                                         <div class="bottom">
@@ -1793,7 +1800,7 @@
 
               data = data.replace('\\','/')
               if(data){
-                  var fbpopup = window.open(`http://twitter.com/share?url=${decodeURI(baseUrl)}/${decodeURI(data)}`, "pop", "width=600, height=400, scrollbars=no");
+                  var fbpopup = window.open(`http://twitter.com/share?url=${decodeURI(baseUrl)}/${decodeURI(data)}&text=I just completed my exams at Knowcrunch. Join Knowcrunch’s community: http://bit.ly/3iG2q9D}`, "pop", "width=600, height=400, scrollbars=no");
                   return false;
               }
 
@@ -2436,22 +2443,42 @@
             $(value).attr('href', 'javascript:void(0)')
         })
 
-        $(document).on('mouseover', '.dynamic-courses-wrapper.unpaid', function(){
+        $( '.dynamic-courses-wrapper.unpaid' ).mouseenter( handlerIn ).mouseleave( handlerOut );
+
+        function handlerIn(){
+            console.log($(this))
             let tabsElem = $(this).find('.inside-tabs')[0];
             let messageElem = $(this).find('.unpaidMessage')[0];
 
             $(tabsElem).addClass('d-none');
             $(messageElem).removeClass('d-none');
-        })
+        }
 
-        $(document).on('mouseleave', '.dynamic-courses-wrapper.unpaid', function(){
-
+        function handlerOut(){
             let tabsElem = $(this).find('.inside-tabs')[0];
             let messageElem = $(this).find('.unpaidMessage')[0];
 
             $(tabsElem).removeClass('d-none');
             $(messageElem).addClass('d-none');
-        })
+        }
+
+        // $(document).on('mouseover', '.dynamic-courses-wrapper.unpaid', function(){
+        //     console.log('test')
+        //     let tabsElem = $(this).find('.inside-tabs')[0];
+        //     let messageElem = $(this).find('.unpaidMessage')[0];
+
+        //     $(tabsElem).addClass('d-none');
+        //     $(messageElem).removeClass('d-none');
+        // })
+
+        // $(document).on('mouseleave', '.dynamic-courses-wrapper.unpaid', function(){
+
+        //     let tabsElem = $(this).find('.inside-tabs')[0];
+        //     let messageElem = $(this).find('.unpaidMessage')[0];
+
+        //     $(tabsElem).removeClass('d-none');
+        //     $(messageElem).addClass('d-none');
+        // })
 
 
     })

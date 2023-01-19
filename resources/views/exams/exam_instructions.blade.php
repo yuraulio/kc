@@ -8,6 +8,7 @@
 <div class="container">
 
         <div class="row justify-content-center">
+            <div id="generalDialog"></div>
 
             <div class="col-md-12">
 
@@ -124,6 +125,11 @@
 
     <script>
 
+        function closeGeneralDialog(){
+
+            $('#generalDialog').empty()
+        }
+
         jQuery(document).ready(function(){
 
             if(jQuery('#togglePassword').length){
@@ -154,7 +160,8 @@
                     window.location = '{{ route('exam-start', [$exam->id]) }}';
                 }
                 else {
-                    alert('Sorry, wrong password!');
+                    showAlert('Sorry, wrong password!', 'error')
+                    //alert('Sorry, wrong password!');
                 }
             });
 
@@ -164,9 +171,36 @@
                     window.location = '{{ route('exam-start', [$exam->id]) }}';
                 }
                 else {
-                    alert('Sorry, wrong password!');
+                    showAlert('Sorry, wrong password!', 'error')
+                    //alert('Sorry, wrong password!');
                 }
             });
+
+
+
+            function showAlert(msg, type){
+
+                let dialog = `
+                        <div>
+                            <div class="alert-wrapper ${type}-alert">
+                                <div class="alert-inner">
+                                    <p>${msg}</p>
+                                </div>
+
+                                <div class="close-dialog-general-buttons">
+                                    <button onclick="closeGeneralDialog()" class="btn btn-not-exit-exam btn-sm"> OK </button>
+                                </div>
+
+                                <!-- /.alert-outer -->
+                            </div>
+                        </div>
+                    `
+                $('#generalDialog').append(dialog)
+
+            }
+
+
+
         });
 
 

@@ -7,7 +7,7 @@ $minutes = 0;
 @endphp
 
 <header id="header" >
-<a href="#" title="Close window" class="close"></a>
+{{--<a href="#" title="Close window" class="close"></a>--}}
 				<div id="exam-container" class="container clearfix">
                     <div class="row">
 
