@@ -981,7 +981,7 @@ class StudentController extends Controller
 
             if(!$eventt){
                 $data['instructor_topics'] = false;
-                $eventt = $user->events()->wherePivot('event_id', $event['id'])->first() ? $user->events()->wherePivot('event_id', $event['id'])->first() :
+                $eventt = $user->events_for_user_list()->wherePivot('event_id', $event['id'])->first() ? $user->events_for_user_list()->wherePivot('event_id', $event['id'])->first() :
                             $user->subscriptionEvents->where('id',$event['id'])->first();
             }
             $event = $eventt;
