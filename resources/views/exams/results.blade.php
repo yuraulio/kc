@@ -452,8 +452,6 @@
 
       certificateTitle = certificateTitle.replace('+','_')
 
-      console.log('cert title: ', certificateTitle)
-
       $.ajax({
         headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

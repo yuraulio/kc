@@ -1173,7 +1173,6 @@
                                                     }
                                                     $certiTitle = str_replace('&nbsp;',' ',$certiTitle);
                                                     $certiTitle = urlencode(htmlspecialchars_decode(strip_tags($certiTitle),ENT_QUOTES));
-
                                                 ?>
                                             <div class="right">
                                                 <a  class="btn btn--secondary btn--md" target="_blank" href="/mycertificate/{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" >DOWNLOAD </a>
@@ -1444,8 +1443,6 @@
                                                 $certiTitle = str_replace('&nbsp;',' ',$certiTitle);
                                                 $certiTitle = urlencode(htmlspecialchars_decode(strip_tags($certiTitle),ENT_QUOTES));
 
-                                                //dd($certiTitle);
-
                                                 ?>
                                         <div class="right">
 
@@ -1455,10 +1452,10 @@
                                                     <img class="linkdein-image-add" src="{{cdn('theme/assets/images/icons/social/events/Linkedin.svg')}}" alt="LinkedIn Add to Profile button">
                                                 </a>
                                             @if($user->id == 1359)
-                                            <a class="facebook-post-cert cert-post" data-certid="{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" title="Add this certification to your Facebook profile" href="javascript:void(0)">
+                                            <a class="facebook-post-cert cert-post" data-certTitle="{{$certiTitle}}" data-certid="{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" title="Add this certification to your Facebook profile" href="javascript:void(0)">
                                                     <img class="linkdein-image-add" src="{{cdn('theme/assets/images/icons/social/events/Facebook.svg')}}" alt="Facebook Add to Profile button">
                                             </a>
-                                            <a class="twitter-post-cert" data-certid="{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" title="Add this certification to your Facebook profile" href="javascript:void(0)">
+                                            <a class="twitter-post-cert" data-certTitle="{{$certiTitle}}" data-certid="{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" title="Add this certification to your Facebook profile" href="javascript:void(0)">
                                                     <img class="linkdein-image-add" src="{{cdn('theme/assets/images/icons/social/events/Twitter.svg')}}" alt="Twitter Add to Profile button">
                                             </a>
                                             @endif
@@ -1627,10 +1624,10 @@
                                                    <img class="linkdein-image-add" src="{{cdn('theme/assets/images/icons/social/events/Linkedin.svg')}}" alt="LinkedIn Add to Profile button">
                                              </a>
                                           @if($user->id == 1359)
-                                          <a class="facebook-post-cert" data-certid="{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" title="Add this certification to your Facebook profile" href="javascript:void(0)">
+                                          <a class="facebook-post-cert" data-certTitle="{{$certiTitle}}" data-certid="{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" title="Add this certification to your Facebook profile" href="javascript:void(0)">
                                                 <img class="linkdein-image-add" src="{{cdn('theme/assets/images/icons/social/events/Facebook.svg')}}" alt="Facebook Add to Profile button">
                                           </a>
-                                          <a class="twitter-post-cert" data-certid="{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" title="Add this certification to your Facebook profile" href="javascript:void(0)">
+                                          <a class="twitter-post-cert" data-certTitle="{{$certiTitle}}" data-certid="{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" title="Add this certification to your Facebook profile" href="javascript:void(0)">
                                                 <img class="linkdein-image-add" src="{{cdn('theme/assets/images/icons/social/events/Twitter.svg')}}" alt="Twitter Add to Profile button">
                                           </a>
 
@@ -1772,15 +1769,20 @@
       var getUrl = window.location;
       var baseUrl = getUrl .protocol + "//" + getUrl.host;
       var certificateId = $(this).attr('data-certid');
+      var certificateTitle = $(this).attr('data-certTitle');
+
+      certificateTitle = certificateTitle.split('+').join('_')
+
 
       $.ajax({
           type: 'GET',
           url: "/mycertificate/convert-pdf-to-image/"+certificateId,
           success: function(data) {
+            let url = data.path
 
-              data = data.replace('\\','/')
+              data = url.replace('\\','/')
               if(data){
-                  var fbpopup = window.open(`http://www.facebook.com/sharer.php?u=${decodeURI(baseUrl)}/${decodeURI(data)}`, "pop", "width=600, height=400, scrollbars=no");
+                  var fbpopup = window.open(`http://www.facebook.com/sharer.php?u=${decodeURI(baseUrl)}/${decodeURI(data)}/${decodeURI(certificateTitle)}&p[summary]=test`, "pop", "width=600, height=400, scrollbars=no");
                   return false;
               }
 
@@ -1792,6 +1794,9 @@
       var getUrl = window.location;
       var baseUrl = getUrl .protocol + "//" + getUrl.host;
       var certificateId = $(this).attr('data-certid');
+      var certificateTitle = $(this).attr('data-certTitle');
+
+      certificateTitle = certificateTitle.split('+').join('_')
 
       $.ajax({
           type: 'GET',
@@ -1802,7 +1807,7 @@
 
               data = url.replace('\\','/')
               if(data){
-                  var fbpopup = window.open(`http://twitter.com/share?url=${decodeURI(baseUrl)}/${decodeURI(data)}`, "pop", "width=600, height=400, scrollbars=no");
+                  var fbpopup = window.open(`http://twitter.com/share?url=${decodeURI(baseUrl)}/${decodeURI(data)}/${decodeURI(certificateTitle)}&text=I just completed my exams at Knowcrunch. Join Knowcrunch’s community: http://bit.ly/3iG2q9D`, "pop", "width=600, height=400, scrollbars=no");
                   return false;
               }
 
