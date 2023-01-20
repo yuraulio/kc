@@ -336,8 +336,8 @@ class CertificateController extends Controller
 
 
         if(!File::exists('cert')) {
-          // path does not exist
-          File::makeDirectory('cert', 0777, true, true);
+            // path does not exist
+            File::makeDirectory('cert', 0777, true, true);
         }
 
         file_put_contents($destination, $data);

@@ -86,6 +86,8 @@ function nextQues(mark) {
     var firstNonConfirm = 0;
     var allUnanswered = [];
     var allUnansweredPlus = [];
+    var pavlosAllUnanswered = [];
+
 
 
     jQuery.each(eJson, function(index, quest) {
@@ -145,9 +147,12 @@ function nextQues(mark) {
         }
         lastQues = quest.id;
 
-        if(quest.given_ans=="" || quest.mark_status==1 ) {
+        if(quest.mark_status==1 ) {
             allUnanswered.push(quest.id);
             allUnansweredPlus.push(quest.id);
+        }
+        if(quest.given_ans=="" && quest.mark_status==0){
+            pavlosAllUnanswered.push(quest.id);
         }
     });
 
@@ -166,7 +171,6 @@ function nextQues(mark) {
     console.log('last ques:', lastQues)
     console.log('loop again: ', LOOP_AGAIN)
     console.log('mark :', mark)
-    console.log('current question: ', currQues)
 
     console.log('showx: ', showx)
     if(finalQues==lastQues && LOOP_AGAIN==0 && mark!=5) {
@@ -193,22 +197,63 @@ function nextQues(mark) {
         }
         else {
 
-            nextIsUnanswered = check(currQues,eJson);
+            // Pavlos
 
-            console.log('//////||||||',nextIsUnanswered)
-            if(nextIsUnanswered){
-                LOOP_AGAIN = 0
-                showSpecificQuestion(currQues+1)
+            //console.log('sdaf', pavlosAllUnanswered)
+            let findUnanswered = false;
+            if(pavlosAllUnanswered.length != 0){
 
-                // showSpecificQuestion(currQues+1);
-                // currQues = currQues+1;
-                // window.actQues = currQues;
 
-                console.log('NOT RETURN')
-                return 0;
+
+                jQuery.each(pavlosAllUnanswered, function(index, quest) {
+
+                    console.log('---------')
+                    console.log('///', quest)
+                    console.log(finalQues)
+                    if(finalQues <= quest){
+
+                        console.log('last question: ', finalQues)
+                        console.log(quest)
+
+                        showSpecificQuestion(quest);
+                        currQues = quest;
+                        window.actQues = currQues;
+                        findUnanswered = true;
+                        delete pavlosAllUnanswered[index];
+                        return false;
+                    }
+
+
+                })
+                if(findUnanswered){
+                    return false;
+                }else{
+                    console.log('i am here')
+                    // pavlosAllUnanswered = [];
+                    findUnanswered = false;
+                    console.log(pavlosAllUnanswered)
+                    jQuery.each(pavlosAllUnanswered, function(index, quest) {
+                        showSpecificQuestion(quest);
+                        currQues = quest;
+                        window.actQues = currQues;
+
+                        delete pavlosAllUnanswered[index];
+
+                        return false;
+                    })
+                    if(pavlosAllUnanswered.length == 0){
+                        return true;
+                    }else{
+                        return false;
+                    }
+
+
+                }
+
             }
 
-            // check if next question has mark = 0
+            // End Pavlos
+
              jQuery.each(allUnansweredPlus, function(index, quest) {
                 //    console.log(currQues);
               if(lastInArray==0) {
@@ -238,19 +283,6 @@ function nextQues(mark) {
     TOTAL_NOT_ANSWERED  = jQuery(".not-answered").length;
     TOTAL_NOT_VISITED   = jQuery(".not-visited").length;
     TOTAL_MARKED = jQuery(".marked").length;
-}
-
-function check(currQues, eJson){
-
-    let nextIsUnanswered = false;
-    $.each(eJson, function(index, value){
-
-        if(currQues+1 == value.id && value.mark_status == 0){
-            nextIsUnanswered = true;
-        }
-    })
-
-    return nextIsUnanswered;
 }
 
 function prevQues() {
@@ -672,6 +704,7 @@ function initializeView() {
     document.getElementById("ExamFinish").setAttribute('disabled', 'disabled');
 
     var eJson = JSON.parse( window.examVar );
+    console.log(eJson)
     window.startTime = localStorage.getItem("examStart<?php echo $exam->id;?>-{{$user_id}}");
     currentTime = '<?php echo date( "Y-m-d")."T".date( "H:i:s") ?>';
     var sTime = new Date(window.startTime);

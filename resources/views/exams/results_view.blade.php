@@ -29,7 +29,7 @@ $title1 = str_replace('_',' ',$title);
 <meta property="fb:app_id" content="961275423898153">
 
 <!-- Open Graph / Facebook -->
-<meta property="og:type" content="website">
+<meta property="og:type" content="article" />
 <meta property="og:url" content="{{ Request::url() }}">
 <meta property="og:title" content="Result">
 <meta property="og:description" content="{{ $title1 }} Result">
