@@ -129,6 +129,8 @@ class CertificateController extends Controller
 
   public function getCertificateImage($certificate){
 
+    $certId = $certificate;
+
     $certificate =base64_decode($certificate);
     $certificate = explode('--',$certificate)[1];
 
@@ -141,7 +143,8 @@ class CertificateController extends Controller
     Storage::disk('cert')->put($fn,$content);
 
     $filepath = public_path('cert/'.$fn);
-    $newFile =  'cert/'.base64_encode($data['certificate']->firstname . '-' . $data['certificate']->lastname.'-'.$timestamp) .'.jpg';
+    $name = base64_encode($data['certificate']->firstname . '-' . $data['certificate']->lastname);
+    $newFile =  'cert/'.$name.'.jpg';
     $saveImagePath = public_path($newFile);
 
     $imagick = new Imagick();
@@ -159,6 +162,15 @@ class CertificateController extends Controller
 
     $image1 = imagecreatefromjpeg($saveImagePath);
     imagejpeg($image1, $saveImagePath, 40);
+
+
+
+    return response()->json([
+        'success' => true,
+        'path' => 'mycertificateview/'.$name.'.jpg',
+
+
+    ]);
 
     return $newFile;
   }
@@ -332,7 +344,7 @@ class CertificateController extends Controller
 
         return response()->json([
             'success' => true,
-            'path' => 'mycertificateview/'.$certificateId,
+            'path' => 'mycertificateview/'.$certificateId.'.png',
 
 
         ]);
@@ -343,7 +355,7 @@ class CertificateController extends Controller
     public function view_results($id, $title = "")
     {
 
-        $img = $id.'.png';
+        $img = $id;
         $img = env('MIX_APP_URL').'/cert/'.$img;
 
         return view('exams.results_view', compact('img', 'title'));

@@ -166,6 +166,7 @@ function nextQues(mark) {
     console.log('last ques:', lastQues)
     console.log('loop again: ', LOOP_AGAIN)
     console.log('mark :', mark)
+    console.log('current question: ', currQues)
 
     console.log('showx: ', showx)
     if(finalQues==lastQues && LOOP_AGAIN==0 && mark!=5) {
@@ -191,8 +192,25 @@ function nextQues(mark) {
               window.actQues = currQues;
         }
         else {
+
+            nextIsUnanswered = check(currQues,eJson);
+
+            console.log('//////||||||',nextIsUnanswered)
+            if(nextIsUnanswered){
+                LOOP_AGAIN = 0
+                showSpecificQuestion(currQues+1)
+
+                // showSpecificQuestion(currQues+1);
+                // currQues = currQues+1;
+                // window.actQues = currQues;
+
+                console.log('NOT RETURN')
+                return 0;
+            }
+
+            // check if next question has mark = 0
              jQuery.each(allUnansweredPlus, function(index, quest) {
-         //    console.log(currQues);
+                //    console.log(currQues);
               if(lastInArray==0) {
                 return;
               }
@@ -220,6 +238,19 @@ function nextQues(mark) {
     TOTAL_NOT_ANSWERED  = jQuery(".not-answered").length;
     TOTAL_NOT_VISITED   = jQuery(".not-visited").length;
     TOTAL_MARKED = jQuery(".marked").length;
+}
+
+function check(currQues, eJson){
+
+    let nextIsUnanswered = false;
+    $.each(eJson, function(index, value){
+
+        if(currQues+1 == value.id && value.mark_status == 0){
+            nextIsUnanswered = true;
+        }
+    })
+
+    return nextIsUnanswered;
 }
 
 function prevQues() {
