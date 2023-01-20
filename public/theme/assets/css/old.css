@@ -360,7 +360,8 @@ input[type="number"]#mobile_phone::-webkit-inner-spin-button {
 #favDialog1,
 #examDialog,
 #closeDialog,
-#generalDialog {
+#generalDialog,
+#outOfTimeDialog {
     position: fixed;
     z-index: 9999;
     text-align: center;
@@ -369,6 +370,13 @@ input[type="number"]#mobile_phone::-webkit-inner-spin-button {
     max-width: 500px;
     margin: auto;
     top: 50%;
+}
+
+#outOfTimeDialog .alert-inner div{
+    padding: 0 3rem !important;
+}
+#outOfTimeDialog .alert-inner div p {
+    color: unset
 }
 
 .section-account-tabs #favDialog {

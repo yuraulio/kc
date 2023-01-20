@@ -904,9 +904,9 @@
                                                     }
                                                 ?>
                                                 <div class="accordion-item">
-                                                    <h3 class="accordion-title title-blue-gradient scroll-to-top"> {{ $dropbox['folder_name'] }}</h3>
+                                                    {{--<h3 class="accordion-title title-blue-gradient scroll-to-top"> {{ $dropbox['folder_name'] }}</h3>--}}
 
-                                                    <div class="accordion-content accordion-content-root">
+                                                    {{--<div class="accordion-content accordion-content-root">--}}
                                                         @foreach($folders as $folder)
                                                             <?php
                                                                 $folderIsSelected = false;
@@ -1111,7 +1111,7 @@
                                                                 </div>
                                                             </div>
                                                         @endforeach
-                                                    </div>
+                                                    {{--</div>--}}
                                                 </div>
                                                 @endif
                                             </div>

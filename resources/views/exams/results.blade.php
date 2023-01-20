@@ -54,9 +54,9 @@
 
                 {{-- <p> <span class="score"> Score :</span> {{ $score }}%</p> --}}
 
-                @if(isset($_GET['t']))
+                {{--@if(isset($_GET['t']))
                     {!! $endOfTime !!}
-                @endif
+                @endif--}}
             </div>
 
             <?php
@@ -95,7 +95,7 @@
 
 
         ?>
-            <div class="col-md-6 offset-md-6 share-wrapper">
+            {{--<div class="col-md-6 offset-md-6 share-wrapper">
                 <p>Share my results:</p>
                 <div>
                     <a class="facebook-post-cert" data-certTitle="{{$certiTitle}}" data-certid="{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" title="Add this certification to your Facebook profile" href="javascript:void(0)">
@@ -108,7 +108,7 @@
                         <img class="linkdein-image-add" src="{{cdn('theme/assets/images/icons/social/events/Linkedin.svg')}}" alt="LinkedIn Add to Profile button">
                     </a>
                 </div>
-            </div>
+            </div>--}}
 
             </div>
             @if($showAnswers)
@@ -424,11 +424,10 @@
                 let path = data.path
                 let certiUrl = path.replace('\\','/')
                 let url = encodeURIComponent(baseUrl+'/'+certiUrl+'/'+certificateTitle);
-                console.log(url)
 
                 if(data){
                     //<a href="https://www.linkedin.com/shareArticle?mini=true&url=https%3A%2F%2Fstevenwestmoreland.com%2F2018%2F07%2Fcreating-social-sharing-links-without-javascript.html&title=Creating+social+sharing+links+without+third-party+JavaScript&summary=How+to+create+social+sharing+links+for+your+website+without+having+to+load+third-party+JavaScript.&source=stevenwestmoreland.com" rel="noopener" target="_blank">Share on LinkedIn</a>
-                    var fbpopup = window.open(`https://www.linkedin.com/shareArticle?mini=true&url=${url}&title=Creating+social+sharing+links+without+third-party+JavaScript&summary=How+to+create+social+sharing+links+for+your+website+without+having+to+load+third-party+JavaScript.&source=stevenwestmoreland.com`, "pop", "width=600, height=400, scrollbars=no");
+                    var fbpopup = window.open(`https://www.linkedin.com/shareArticle?mini=true&url=${url}`, "pop", "width=600, height=400, scrollbars=no");
                     return false;
 
 

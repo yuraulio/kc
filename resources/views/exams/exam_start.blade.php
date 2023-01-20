@@ -402,6 +402,32 @@ function clearAnswer() {
     updateStats();
 }
 
+function outOfTimeDialog(){
+    closeGeneralDialog()
+
+    if($('#outOfTimeDialog').length == 0){
+        let dialog = `
+            <div id="outOfTimeDialog" hidden>
+                <div class="alert-wrapper warning-alert">
+                    <div class="alert-inner">
+                        <div>${@json($exam->end_of_time_text)}</div>
+                    </div>
+
+                    <div class="close-dialog-general-buttons">
+
+                        <button onclick="closeOutOfTimeExam()" class="btn btn-not-exit-exam btn-sm">OK </button>
+                    </div>
+
+                    <!-- /.alert-outer -->
+                </div>
+            </div>
+        `
+        $('#outOfTimeDialog-wrapper').append(dialog)
+    }
+
+    $('#outOfTimeDialog').removeAttr('hidden')
+}
+
 function finishExamDialog(){
     closeGeneralDialog()
 
@@ -512,6 +538,10 @@ function finishExam() {
     // }
 }
 
+function closeOutOfTimeExam(){
+    window.location = "{{ url('exam-results/' . $exam->id) }}?s=1&t=1";
+}
+
 function outOfTime() {
     jQuery.ajaxSetup({
         headers: {
@@ -528,7 +558,9 @@ function outOfTime() {
     success: function() {
        // alert("Time Over. Exam Completed Successfully");
 
-       window.location = "{{ url('exam-results/' . $exam->id) }}?s=1&t=1";
+       outOfTimeDialog()
+
+
     }
     });
 }
@@ -875,6 +907,7 @@ window.actQues = 0;
 
     <div class="row justify-content-center">
 
+    <div id="outOfTimeDialog-wrapper"></div>
     <div id="finishDialog"></div>
     <div id="generalDialog"></div>
 
