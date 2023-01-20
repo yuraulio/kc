@@ -1778,6 +1778,7 @@
           type: 'GET',
           url: "/mycertificate/convert-pdf-to-image/"+certificateId,
           success: function(data) {
+            console.log('response: ', data)
             let url = data.path
 
               data = url.replace('\\','/')
@@ -1797,15 +1798,19 @@
       var certificateTitle = $(this).attr('data-certTitle');
 
       certificateTitle = certificateTitle.split('+').join('_')
+      console.log(certificateTitle)
 
       $.ajax({
           type: 'GET',
           url: "/mycertificate/convert-pdf-to-image/"+certificateId,
           success: function(data) {
 
+
+
             let url = data.path
 
               data = url.replace('\\','/')
+              console.log('data: ', data)
               if(data){
                   var fbpopup = window.open(`http://twitter.com/share?url=${decodeURI(baseUrl)}/${decodeURI(data)}/${decodeURI(certificateTitle)}`, "pop", "width=600, height=400, scrollbars=no");
                   return false;
