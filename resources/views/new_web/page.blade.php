@@ -181,31 +181,5 @@
        </script>--}}
     @endif
 
-    <script>
-        // $( document ).ready(function() {
-        //     console.log('ready')
-
-        //     let img = $('img')
-
-        //     $.each(img, function(index, value) {
-        //         let height = 0;
-        //         let width = 0;
-
-        //         if(value.clientWidth != 0 && value.clientHeight != 0){
-        //             width = value.clientWidth
-        //             height = value.clientHeight
-        //         }else{
-        //             width = value.naturalWidth
-        //             height = value.naturalHeight
-        //         }
-
-        //         $(value).attr('width', width)
-        //         $(value).attr('height', height)
-        //         $(value).attr('loading', 'lazy')
-        //     })
-
-        // });
-    </script>
-
 
 @endpush

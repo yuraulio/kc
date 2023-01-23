@@ -141,6 +141,12 @@
                         <span> Settings </span>
                     </a>
                 </li>
+                <li>
+                    <a href="{{route('export')}}">
+                        <i data-feather="settings"></i>
+                        <span> Export Subscription Ends </span>
+                    </a>
+                </li>
 
             </ul>
 
