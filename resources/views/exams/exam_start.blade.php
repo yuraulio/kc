@@ -199,7 +199,7 @@ function nextQues(mark) {
 
             // Pavlos
 
-            //console.log('sdaf', pavlosAllUnanswered)
+            console.log('sdaf', pavlosAllUnanswered)
             let findUnanswered = false;
             if(pavlosAllUnanswered.length != 0){
 
