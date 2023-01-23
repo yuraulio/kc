@@ -99,6 +99,16 @@ if(!function_exists('get_image_versions')){
 
 }
 
+if(!function_exists('get_image_version_details')){
+
+    function get_image_version_details($ver)
+    {
+        $versions = isset(config('image_versions')['versions'][$ver]) ? config('image_versions')['versions'][$ver] : [];
+        return $versions;
+    }
+
+}
+
 if (!function_exists('get_templates')) {
 
     function get_templates($model = 'pages')

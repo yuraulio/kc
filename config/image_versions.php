@@ -3,7 +3,7 @@
 return[
 
     'versions' => [
-        [
+        'instructors-testimonials'=>[
             'w' => 470,
             'h' => 470,
             'q' => 60,
@@ -12,7 +12,7 @@ return[
             'description' => 'Applies to : Our Instructor Page (Footer) & Event -> Instructors',
 
         ],
-        [
+        'event-card'=>[
             'w' => 542,
             'h' => 291,
             'q' => 60,
@@ -21,7 +21,7 @@ return[
             'description' => 'Applies to : Homepage Events list',
             // 'description' => 'Applies to : Event version in grid layout',
         ],
-        [
+        'users'=>[
             'w' => 470,
             'h' => 470,
             'q' => 60,
@@ -29,7 +29,7 @@ return[
             'version' => 'users',
             'description' => 'Applies to : Testimonial square image',
         ],
-        [
+        'header-image'=>[
             'w' => 2880,
             'h' => 1248,
             'q' => 60,
@@ -37,7 +37,7 @@ return[
             'version' => 'header-image',
             'description' => 'Applies to: Event header carousel (Main event page)',
         ],
-        [
+        'instructors-small'=>[
             'w' => 90,
             'h' => 90,
             'q' => 60,
@@ -45,7 +45,7 @@ return[
             'version' => 'instructors-small',
             'description' => 'Applies to : Event -> Topics (syllabus-block)',
         ],
-        [
+        'feed-image'=>[
             'w' => 300,
             'h' => 300,
             'q' => 60,
@@ -53,7 +53,7 @@ return[
             'description' => 'feed-image',
             'version' => 'feed-image',
         ],
-        [
+        'social-media-sharing'=>[
             'w' => 1920,
             'h' => 832,
             'q' => 60,
