@@ -58,7 +58,7 @@
                     $thumbURL = 'https://img.youtube.com/vi/'.$youtubeVideoId.'/mqdefault.jpg';
                     ?>
                 <div class="slide">
-                    <a data-fancybox href="{{ $video['video_url'] }}"><img src="{{ $thumbURL }}" alt=""/></a>
+                    <a data-fancybox href="{{ $video['video_url'] }}"><img loading="lazy" class="resp-img" src="{{ $thumbURL }}" alt="thumb-youtube" title="thumb-youtube" width="200" height="100"/></a>
                 </div>
                 @endforeach
             </div>

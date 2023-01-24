@@ -10,7 +10,7 @@
 					<?php $cartitems = Cart::content()->count(); ?>
 					{{--if($cartitems > 0)
 					<span class="cart-menu xs-cart">
-						<a href="/cart" title="Cart"><img src="{{cdn('/theme/assets/images/icons/icon-cart.svg')}}" width="18" alt="Cart">
+						<a href="/cart" title="Cart"><img loading="lazy" class="resp-img" src="{{cdn('/theme/assets/images/icons/icon-cart.svg')}}" width="18" height="18" alt="Cart" title="Cart">
 							  <span class="cart-number">{{ Cart::content()->count() }}</span>
 						</a>
 					</span>
@@ -31,7 +31,7 @@
                                 <?php $cartitems = Cart::content()->count(); ?>
                                 @if($cartitems > 0)
 								    <li class="cart-menu">
-                                        <a href="/cart" title="Cart"><img src="{{cdn('/theme/assets/images/icons/icon-cart.svg')}}" class="replace-with-svg" width="18" alt="Cart">
+                                        <a href="/cart" title="Cart"><img loading="lazy" src="{{cdn('/theme/assets/images/icons/icon-cart.svg')}}" class="replace-with-svg resp-img" width="18" height="18" alt="Cart" title="Cart">
                                           <span class="cart-number">{{ Cart::content()->count() }}</span>
                                         </a>
                                     </li>
@@ -44,11 +44,10 @@
 									$img_src = get_profile_image(Auth::user()->image);
 
 								?>
-
                                 <li class="account-menu login-pad">
 									<a href="javascript:void(0)" title="Go to my account">
 
-										<img class="login-image" src="{{cdn($img_src)}}" onerror="this.src='{{cdn('/theme/assets/images/icons/user-circle-placeholder.svg')}}'" alt="user-profile-placeholder-image"/>
+										<img loading="lazy" class="login-image" src="{{cdn($img_src)}}" onerror="this.src='{{cdn('/theme/assets/images/icons/user-circle-placeholder.svg')}}'" alt="user-profile-placeholder-image" title="user-profile-placeholder-image" width="23" height="23"/>
 
 									</a>
                                         <div class="account-submenu">
@@ -63,7 +62,7 @@
                                 @else
 
                                 <li class="account-menu">
-									<a href="javascript:void(0)" title="Login to your account."><img src="{{cdn('/theme/assets/images/icons/user-circle.svg')}}"class="replace-with-svg" width="18" alt="Login to your account."></a>
+									<a href="javascript:void(0)" title="Login to your account."><img loading="lazy" src="{{cdn('/theme/assets/images/icons/user-circle.svg')}}" class="replace-with-svg resp-img" width="18" height="18" alt="Login to your account." title="Login to your account."></a>
 
                                 </li>
                                 @endif
@@ -72,7 +71,7 @@
 
 
                                 <li class="header-search-area">
-									<a href="javascript:void(0)" title="Search" class="search-toggle"><img src="{{cdn('/theme/assets/images/icons/icon-magnifier.svg')}}" class="replace-with-svg" alt="Search"></a>
+									<a href="javascript:void(0)" title="Search" class="search-toggle"><img loading="lazy" src="{{cdn('/theme/assets/images/icons/icon-magnifier.svg')}}" class="replace-with-svg" alt="Search" width="20" height="20" title="Search"></a>
 									<div class="header-search-wrapper">
 
                                         @if(request()->segment(2) == 'blog')

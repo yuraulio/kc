@@ -28,7 +28,7 @@
             <div class='text-center blogpagex-blog-image'>
                 <a href="{{env("NEW_PAGES_LINK") . "/$source/$post->slug"}}">
                     {{--<img src="{{$metaData["meta_image"]->url ?? ''}}" alt="{{$metaData["meta_image"]->alt_text ?? ''}}">--}}
-                    <img src="{{get_image($metaData["meta_image"]->full_path)}}" alt="{{$metaData["meta_image"]->alt_text ?? ''}}">
+                    <img loading="lazy" width="{{$metaData["meta_image"]->width}}" height="{{$metaData["meta_image"]->height}}" class="resp-img" src="{{get_image($metaData["meta_image"]->full_path)}}" alt="{{$metaData["meta_image"]->alt_text ?? ''}}" title="{{$metaData["meta_image"]->alt_text ?? ''}}">
                 </a>
             </div>
         </div>
@@ -55,7 +55,7 @@
                 <div class='text-center blogpagex-blog-image'>
                     <a href="{{env("NEW_PAGES_LINK") . "/$source/$post->slug"}}">
                         {{--<img src="{{$metaData["meta_image"]->url ?? ''}}" alt="{{$metaData["meta_image"]->alt_text ?? ''}}">--}}
-                        <img src="{{get_image($metaData["meta_image"]->full_path)}}" alt="{{$metaData["meta_image"]->alt_text ?? ''}}">
+                        <img loading="lazy" width="{{$metaData["meta_image"]->width}}" height="{{$metaData["meta_image"]->height}}" class="resp-img" src="{{get_image($metaData["meta_image"]->full_path)}}" alt="{{$metaData["meta_image"]->alt_text ?? ''}}" title="{{$metaData["meta_image"]->alt_text ?? ''}}">
                     </a>
                 </div>
             </div>
@@ -84,7 +84,7 @@
             <div class="col-auto">
                 <div class='text-center list2-image'>
                     {{--<img src="{{$metaData["meta_image"]->url ?? ''}}" alt="{{$metaData["meta_image"]->alt_text ?? ''}}">--}}
-                    <img src="{{get_image($metaData["meta_image"]->full_path)}}" alt="{{$metaData["meta_image"]->alt_text ?? ''}}">
+                    <img loading="lazy" class="resp-img" width="{{$metaData["meta_image"]->width}}" height="{{$metaData["meta_image"]->height}}" src="{{get_image($metaData["meta_image"]->full_path)}}" alt="{{$metaData["meta_image"]->alt_text ?? ''}}" title="{{$metaData["meta_image"]->alt_text ?? ''}}">
                 </div>
             </div>
             <div class="col">

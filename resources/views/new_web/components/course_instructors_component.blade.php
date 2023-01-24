@@ -32,18 +32,21 @@
         $twitter = isset($socialMedia['twitter']) ? $socialMedia['twitter'] : '';
         $instagram = isset($socialMedia['instagram']) ? $socialMedia['instagram'] : '';
         $linkedIn = isset($socialMedia['linkedin']) ? $socialMedia['linkedin']: '';
-        $yt = isset($socialMedia['youtube']) ? $socialMedia['youtube'] : '';                   
+        $yt = isset($socialMedia['youtube']) ? $socialMedia['youtube'] : '';
         $field2 = $inst['company'];
+
+        $imageDetails = get_image_version_details('instructors-testimonials');
+
         ?>
         <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-xs-12">
             <div class="instructor-box">
             <div class="instructor-inner">
-        
+
                 <div class="profile-img">
                     @if($inst['status'])
-                        <a href="{{ env('NEW_PAGES_LINK') . '/' . $inst['slugable']['slug']}}"><img src="{{cdn(get_image($inst['mediable'],'instructors-testimonials'))}}"  title="{{$inst['title']}}" alt="{{$inst['title']}}"></a>
+                        <a href="{{ env('NEW_PAGES_LINK') . '/' . $inst['slugable']['slug']}}"><img loading="lazy" src="{{cdn(get_image($inst['mediable'],'instructors-testimonials'))}}"  title="{{$inst['title']}}" alt="{{$inst['title']}}" width="{{ $imageDetails['w'] }}" height="{{ $imageDetails['h'] }}"></a>
                     @else
-                        <img src="{{cdn(get_image($inst['mediable'],'instructors-testimonials'))}}"  title="{{$inst['title']}}" alt="{{$inst['title']}}">
+                        <img loading="lazy" src="{{cdn(get_image($inst['mediable'],'instructors-testimonials'))}}"  title="{{$inst['title']}}" alt="{{$inst['title']}}" width="{{ $imageDetails['w'] }}" height="{{ $imageDetails['h'] }}">
                     @endif
                 </div>
                 @if($inst['status'])
@@ -68,7 +71,6 @@
                     @if($yt !='')
                     <li><a target="_blank" href="{{$yt}}"><img class="replace-with-svg"  src="{{cdn('/theme/assets/images/icons/social/Youtube.svg')}}" width="16" alt="Visit"></a></li>
                     @endif
-        
                 </ul>
                 <!-- /.instructor-inner -->
             </div>

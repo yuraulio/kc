@@ -14,7 +14,7 @@
 
             @if(isset($info['hours']['visible']['landing']) && $info['hours']['visible']['landing'] && isset($info['hours']['hour']) && $info['hours']['hour'] )
             <li>
-                @if(isset($info['hours']['icon']) && $info['hours']['icon']['path'] ) <img class="info-icon" onerror="this.src='/theme/assets/images/icons/Start-Finish.svg'" src="{{cdn($info['hours']['icon']['path'])}}" width="30" alt="{{$info['hours']['icon']['alt_text']}}" /> @else <img class="info-icon" width="30" src="/theme/assets/images/icons/Start-Finish.svg" alt=""> @endif
+                @if(isset($info['hours']['icon']) && $info['hours']['icon']['path'] ) <img loading="lazy" class="info-icon resp-img" onerror="this.src='/theme/assets/images/icons/Start-Finish.svg'" src="{{cdn($info['hours']['icon']['path'])}}" width="30" height="30" alt="{{$info['hours']['icon']['alt_text']}}" title="{{$info['hours']['icon']['alt_text']}}" /> @else <img class="info-icon resp-img" width="30" height="30" src="/theme/assets/images/icons/Start-Finish.svg" alt="start-finish-icon" title="start-finish-icon"> @endif
                 <div class="info-text">
                         <p>
                             {{  $info['hours']['hour'] }} {!!  $info['hours']['text'] !!}
@@ -27,7 +27,7 @@
             @if(isset($info['inclass']['dates']['visible']['landing']) && $info['inclass']['dates']['visible']['landing'] && isset($info['inclass']['dates']['text']) && $info['inclass']['dates']['text'] )
 
             <li>
-                @if(isset($info['inclass']['dates']['icon']['path']) && $info['inclass']['dates']['icon']['path'] )<img class="info-icon"  src="{{cdn($info['inclass']['dates']['icon']['path'])}}" onerror="this.onerror=null;this.src='/theme/assets/img/summary_icons/Duration_Hours.svg'" width="30" alt="{{$info['inclass']['dates']['icon']['alt_text']}}" /> @else <img class="info-icon" width="30" src="/theme/assets/img/summary_icons/Duration_Hours.svg" alt="">@endif
+                @if(isset($info['inclass']['dates']['icon']['path']) && $info['inclass']['dates']['icon']['path'] )<img loading="lazy" class="info-icon resp-img"  src="{{cdn($info['inclass']['dates']['icon']['path'])}}" onerror="this.onerror=null;this.src='/theme/assets/img/summary_icons/Duration_Hours.svg'" width="30" height="30" alt="{{$info['inclass']['dates']['icon']['alt_text']}}" title="{{$info['inclass']['dates']['icon']['alt_text']}}"/> @else <img class="info-icon resp-img" width="30" height="30" src="/theme/assets/img/summary_icons/Duration_Hours.svg" alt="Duration_Hours_icon" title="Duration_Hours_icon">@endif
                 <div class="info-text">
                     <p>
                         {{  $info['inclass']['dates']['text'] }}
@@ -40,7 +40,7 @@
 
             @if(isset($info['elearning']['visible']['landing']) && $info['elearning']['visible']['landing'] && isset($info['elearning']['expiration']) && $info['elearning']['expiration'] )
             <li>
-                @if(isset($info['elearning']['icon']['path']) && $info['elearning']['icon']['path'] )<img class="info-icon" src="{{cdn($info['elearning']['icon']['path'])}}" width="30" onerror="this.onerror=null;this.src='/theme/assets/img/summary_icons/Days-Week.svg'" alt="{{$info['elearning']['icon']['alt_text']}}" /> @else <img class="info-icon"  src="/theme/assets/img/summary_icons/Days-Week.svg" width="30" alt="" /> @endif
+                @if(isset($info['elearning']['icon']['path']) && $info['elearning']['icon']['path'] )<img loading="lazy" class="info-icon resp-img" src="{{cdn($info['elearning']['icon']['path'])}}" width="30" height="30" onerror="this.onerror=null;this.src='/theme/assets/img/summary_icons/Days-Week.svg'" alt="{{$info['elearning']['icon']['alt_text']}}" title="{{$info['elearning']['icon']['alt_text']}}" /> @else <img class="info-icon resp-img"  src="/theme/assets/img/summary_icons/Days-Week.svg" width="30" height="30" alt="Days-Week-icon" title="Days-Week-icon"/> @endif
                 <div class="info-text">
                     <p>
                         {{  $info['elearning']['expiration'] }} {{ (isset($info['elearning']['text']) && $info['elearning']['text'] ) ? $info['elearning']['text'] : ''}}
@@ -55,7 +55,7 @@
             @if(isset($info['inclass']['days']['visible']['landing']) && $info['inclass']['days']['visible']['landing'] && isset($info['inclass']['days']['text']) && $info['inclass']['days']['text'] )
 
             <li>
-                @if(isset($info['inclass']['days']['icon']['path']) && $info['inclass']['days']['icon']['path'] )<img class="info-icon" onerror="this.onerror=null;this.src='/theme/assets/img/summary_icons/Days-Week.svg'"  src="{{cdn($info['inclass']['days']['icon']['path'])}}" alt="{{$info['inclass']['days']['icon']['alt_text']}}"> @else <img class="info-icon" width="30" src="/theme/assets/img/summary_icons/Days-Week.svg" alt="/theme/assets/img/summary_icons/Days-Week.svg"> @endif
+                @if(isset($info['inclass']['days']['icon']['path']) && $info['inclass']['days']['icon']['path'] )<img loading="lazy" class="info-icon resp-img" onerror="this.onerror=null;this.src='/theme/assets/img/summary_icons/Days-Week.svg'"  src="{{cdn($info['inclass']['days']['icon']['path'])}}" alt="{{$info['inclass']['days']['icon']['alt_text']}}"> @else <img class="info-icon resp-img" width="30" height="30" src="/theme/assets/img/summary_icons/Days-Week.svg" alt="/theme/assets/img/summary_icons/Days-Week.svg"> @endif
                 <div class="info-text">
                     <p>
                         {{  $info['inclass']['days']['text'] }}
@@ -68,7 +68,7 @@
 
             @if(isset($info['language']['visible']['landing']) && $info['language']['visible']['landing'] && isset($info['language']['text']) && $info['language']['text'] )
             <li>
-                @if(isset($info['language']['icon']['path']) && isset($info['language']['icon']) && $info['language']['icon']['path'] ) <img class="info-icon" src="{{cdn($info['language']['icon']['path'])}}" onerror="this.onerror=null;this.src='theme/assets/images/icons/Language.svg'" width="30" alt="{{$info['language']['icon']['alt_text']}}"/> @else <img class="info-icon" src="/theme/assets/images/icons/Language.svg" width="30" alt=""/>  @endif
+                @if(isset($info['language']['icon']['path']) && isset($info['language']['icon']) && $info['language']['icon']['path'] ) <img loading="lazy" class="info-icon resp-img" src="{{cdn($info['language']['icon']['path'])}}" onerror="this.onerror=null;this.src='theme/assets/images/icons/Language.svg'" width="30" height="30" alt="{{$info['language']['icon']['alt_text']}}"/> @else <img class="info-icon resp-img" src="/theme/assets/images/icons/Language.svg" width="30" height="30" alt="Language_icon"/>  @endif
                 <div class="info-text">
                     <p>
                         {{  $info['language']['text'] }}
@@ -82,7 +82,7 @@
             @if(isset($info['elearning']['exam']['visible']) && $info['elearning']['exam']['visible'] && isset($info['elearning']['exam']['text']) && $info['elearning']['exam']['text'] )
             <li>
 
-                <img class="info-icon" src="{{cdn($info['elearning']['exam']['icon']['path'])}}" onerror="this.src='{{cdn('/theme/assets/img/summary_icons/messages-warning-information.svg')}}'" width="30" alt="{{$info['elearning']['exam']['icon']['alt_text']}}"/>
+                <img loading="lazy" class="info-icon resp-img" src="{{cdn($info['elearning']['exam']['icon']['path'])}}" onerror="this.src='{{cdn('/theme/assets/img/summary_icons/messages-warning-information.svg')}}'" width="30" height="30" alt="{{$info['elearning']['exam']['icon']['alt_text']}}"/>
 
                 <div class="info-text">
                     <p>
@@ -96,7 +96,7 @@
 
             @if(isset($info['certificate']['visible']['landing']) && $info['certificate']['visible']['landing'] && isset($info['certificate']['type']) && $info['certificate']['type'] )
             <li>
-                @if(isset($info['certificate']['icon']['path']) && $info['certificate']['icon']['path'] ) <img class="info-icon" src="{{cdn($info['certificate']['icon']['path'])}}" onerror="this.onerror=null;this.src='/theme/assets/images/icons/Level.svg'" width="30" alt="{{$info['certificate']['icon']['alt_text']}}" /> @else <img class="info-icon" width="30" src="/theme/assets/images/icons/Level.svg" alt=""> @endif
+                @if(isset($info['certificate']['icon']['path']) && $info['certificate']['icon']['path'] ) <img loading="lazy" class="info-icon resp-img" src="{{cdn($info['certificate']['icon']['path'])}}" onerror="this.onerror=null;this.src='/theme/assets/images/icons/Level.svg'" width="30" height="30" alt="{{$info['certificate']['icon']['alt_text']}}" /> @else <img class="info-icon resp-img" width="30" height="30" src="/theme/assets/images/icons/Level.svg" alt="level_icon"> @endif
                 <div class="info-text">
                     <p>
                         {{  $info['certificate']['type'] }}
@@ -109,7 +109,7 @@
 
             {{--@if(isset($info['students']['visible']['landing']) && $info['students']['visible']['landing'] && isset($info['students']['number']) && $sumStudents >= (int)$info['students']['number'])
             <li>
-                @if(isset($info['students']['icon']['path']) && $info['students']['icon']['path'] )<img class="info-icon" src="{{cdn($info['students']['icon']['path'])}}" width="30" onerror="this.onerror=null;this.src='/theme/assets/images/icons/Group_User.1.svg'" alt="{{$info['students']['icon']['alt_text']}}" /> @else <img class="info-icon"  src="/theme/assets/images/icons/Group_User.1.svg" width="30" alt="" /> @endif
+                @if(isset($info['students']['icon']['path']) && $info['students']['icon']['path'] )<img loading="lazy" class="info-icon resp-img" src="{{cdn($info['students']['icon']['path'])}}" width="30" height="30" onerror="this.onerror=null;this.src='/theme/assets/images/icons/Group_User.1.svg'" alt="{{$info['students']['icon']['alt_text']}}" /> @else <img class="info-icon resp-img"  src="/theme/assets/images/icons/Group_User.1.svg" width="30" height="30" alt="user_icon" /> @endif
                 <div class="info-text">
                     <p>
                         {{$sumStudents}} {{  $info['students']['text'] }}
@@ -122,7 +122,7 @@
 
             @if( isset($info['students']['visible']['landing']) && $info['students']['visible']['landing'] && isset($info['students']['text']) && $info['students']['text'])
             <li>
-                @if(isset($info['students']['icon']['path']) && $info['students']['icon']['path'] )<img class="info-icon" src="{{cdn($info['students']['icon']['path'])}}" width="30" onerror="this.onerror=null;this.src='/theme/assets/images/icons/Group_User.1.svg'" alt="{{$info['students']['icon']['alt_text']}}" /> @else <img class="info-icon"  src="/theme/assets/images/icons/Group_User.1.svg" width="30" alt="" /> @endif
+                @if(isset($info['students']['icon']['path']) && $info['students']['icon']['path'] )<img loading="lazy" class="info-icon resp-img" src="{{cdn($info['students']['icon']['path'])}}" width="30" height="30" onerror="this.onerror=null;this.src='/theme/assets/images/icons/Group_User.1.svg'" alt="{{$info['students']['icon']['alt_text']}}" /> @else <img class="info-icon resp-img"  src="/theme/assets/images/icons/Group_User.1.svg" width="30" height="30" alt="user_icon" /> @endif
                 <div class="info-text">
                     <p>
                         {{$sumStudents + (int)$info['students']['number']}} {{  $info['students']['text'] }}
@@ -137,7 +137,7 @@
             @if(isset($info['inclass']['times']['visible']['landing']) && $info['inclass']['times']['visible']['landing'] && isset($info['inclass']['times']['text']) && $info['inclass']['times']['text'] )
 
             <li>
-                @if(isset($info['inclass']['times']['icon']['path']) && $info['inclass']['times']['icon']['path'] )<img class="info-icon" onerror="this.onerror=null;this.src='/theme/assets/img/summary_icons/Days-Week.svg'" src="{{cdn($info['inclass']['times']['icon']['path'])}}" width="30" alt="{{$info['inclass']['times']['icon']['alt_text']}}" />@else<img class="info-icon" width="30" src="/theme/assets/img/summary_icons/Days-Week.svg" alt="">@endif
+                @if(isset($info['inclass']['times']['icon']['path']) && $info['inclass']['times']['icon']['path'] )<img loading="lazy" class="info-icon resp-img" onerror="this.onerror=null;this.src='/theme/assets/img/summary_icons/Days-Week.svg'" src="{{cdn($info['inclass']['times']['icon']['path'])}}" width="30" height="30" alt="{{$info['inclass']['times']['icon']['alt_text']}}" />@else<img class="info-icon resp-img" width="30" height="30" src="/theme/assets/img/summary_icons/Days-Week.svg" alt="days-week-icon">@endif
                 <div class="info-text">
                     <p>
                         {{  $info['inclass']['times']['text'] }}
