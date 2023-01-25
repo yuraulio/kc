@@ -149,11 +149,11 @@
     <footer>
 	@if(!$eventFree)
 		<div class="bank-details text-center">
-			<img src="{{cdn('new_cart/images/amex.svg')}}" alt="Amex" width="58px" height="37px">
-			<img src="{{cdn('new_cart/images/mastercard.svg')}}" alt="Mastercard" width="49px" height="38px">
-			<img src="{{cdn('new_cart/images/visa.svg')}}" alt="Visa" width="58px" height="37px">
-			<img src="{{cdn('new_cart/images/discover.svg')}}" alt="Discover" width="58px" height="37px">
-			<img src="{{cdn('new_cart/images/china-unionpay.svg')}}" alt="Unionpay" width="59px" height="37px">
+			<img loading="lazy" src="{{cdn('new_cart/images/amex.svg')}}" alt="Amex" title="Amex" width="58px" height="37px">
+			<img loading="lazy" src="{{cdn('new_cart/images/mastercard.svg')}}" alt="Mastercard" title="Mastercard" width="49px" height="38px">
+			<img loading="lazy" src="{{cdn('new_cart/images/visa.svg')}}" alt="Visa" title="Visa" width="58px" height="37px">
+			<img loading="lazy" src="{{cdn('new_cart/images/discover.svg')}}" alt="Discover" title="Discover" width="58px" height="37px">
+			<img loading="lazy" src="{{cdn('new_cart/images/china-unionpay.svg')}}" alt="Unionpay" title="Unionpay" width="59px" height="37px">
 		</div>
 		@endif
 		<div class="address text-center">

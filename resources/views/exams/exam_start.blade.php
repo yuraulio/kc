@@ -87,18 +87,29 @@ function nextQues(mark) {
     var allUnanswered = [];
     var allUnansweredPlus = [];
     var pavlosAllUnanswered = [];
-
+    
+    console.log('-------------')
+    console.log('showx: ', showx)
+    console.log('window.actQues', window.actQues)
 
 
     jQuery.each(eJson, function(index, quest) {
 
         if(firstNonConfirm==0 && (quest.given_ans=="" || quest.mark_status==1))   {
             firstNonConfirm = quest.id;
+            console.log('-+++++')
+            console.log(quest.id)
         }
+        console.log('|||||||| showx:',showx)
         if(showx==1 && LOOP_AGAIN ==0) {
-            showSpecificQuestion(quest.id);
-            showx = 0;
-            currQues = quest.id;
+
+            // pavlos comment
+
+            // showSpecificQuestion(quest.id);
+            // showx = 0;
+            // currQues = quest.id;
+
+            // end pavlos comment
         }
         if(quest.id==window.actQues) {
             var given_ans = "";
@@ -178,6 +189,60 @@ function nextQues(mark) {
            // alert("You have completed the exam. Please click 'I AM FINISHED WITH MY EXAM' ");
         }
         else {
+            // εαν υπαρχουν αναπαντητα τοτε θα παρουν προταιρεότητα σε σχεση με τις answer later
+            // Pavlos
+            let findUnanswered = false;
+            if(pavlosAllUnanswered.length != 0){
+
+
+
+                jQuery.each(pavlosAllUnanswered, function(index, quest) {
+
+                    console.log('---------')
+                    console.log('///', quest)
+                    console.log(finalQues)
+                    if(finalQues <= quest){
+
+                        console.log('last question: ', finalQues)
+                        console.log(quest)
+
+                        showSpecificQuestion(quest);
+                        currQues = quest;
+                        window.actQues = currQues;
+                        findUnanswered = true;
+                        delete pavlosAllUnanswered[index];
+                        return false;
+                    }
+
+
+                })
+                if(findUnanswered){
+                    return false;
+                }else{
+                    console.log('i am here')
+                    // pavlosAllUnanswered = [];
+                    findUnanswered = false;
+                    console.log(pavlosAllUnanswered)
+                    jQuery.each(pavlosAllUnanswered, function(index, quest) {
+                        showSpecificQuestion(quest);
+                        currQues = quest;
+                        window.actQues = currQues;
+
+                        delete pavlosAllUnanswered[index];
+
+                        return false;
+                    })
+                    if(pavlosAllUnanswered.length == 0){
+                        return true;
+                    }else{
+                        return false;
+                    }
+
+
+                }
+
+            }
+            // end pavlos
             showSpecificQuestion(firstNonConfirm);
             LOOP_AGAIN = 1;
             showx = 0;

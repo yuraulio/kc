@@ -79,9 +79,13 @@
                   </button>
                   <a tabindex="0" href="/myaccount" title="Back to my courses">
                   <img
+                     loading="lazy"
                      id="logo"
                      src="/theme/assets/img/new/logo-knowcrunch-seminars.svg"
                      alt="knowcruch logo"
+                     title="knowcruch logo"
+                     width="120"
+                     height="40"
                      /></a>
 
                </header>
@@ -96,7 +100,7 @@
                         placeholder="SEARCH"
                         name="search"
                         />
-                     <img id="jsSearchButton" src="theme/assets/img/new/search-icon.svg" alt="search" />
+                     <img loading="lazy" id="jsSearchButton" src="theme/assets/img/new/search-icon.svg" width="25" height="25" alt="search" title="Search" />
                   </form>
                </div>
                <!-- ./searchbar-wrapper -->
@@ -149,19 +153,27 @@
 
                                  </span>
                                  @if($topic['topic_seen'])
-                                    <img class="topic-progress" src="{{cdn('/theme/assets/img/new/completed_lesson_icon.svg')}}">
+                                    <img loading="lazy" class="topic-progress" src="{{cdn('/theme/assets/img/new/completed_lesson_icon.svg')}}" title="completed_lesson_icon" alt="completed_lesson_icon">
                                  @endif
                               </div>
                               <!-- ./topic-info -->
                               <img
+                                 loading="lazy"
                                  class="topic-open jsTopicOpen"
                                  src="theme/assets/img/new/arrow-down.svg"
                                  alt="open topic"
+                                 width="32"
+                                 height="32"
+                                 title="open topic"
                                  />
                               <img
+                                 loading="lazy"
                                  class="topic-close jsTopicClose"
                                  src="theme/assets/img/new/arrow-up.svg"
                                  alt="close topic"
+                                 width="32"
+                                 height="32"
+                                 title="clos topic"
                                  />
                            </a>
                            <?php
@@ -230,13 +242,19 @@
                                     </div>
                                     <!-- ./lesson-info -->
                                     <div class="lesson-teacher-wrapper">
-                                       <?php $instructor = $topics['instructors'][$lesson['instructor_id']][0];?>
+                                       <?php
+                                        $instructor = $topics['instructors'][$lesson['instructor_id']][0];
+                                        $imageDetails = get_image_version_details('instructors-small');
+                                       ?>
                                        <img
+                                          loading="lazy"
                                           class="lesson-teacher"
                                           src="{{cdn(get_image($instructor['mediable'],'instructors-small'))}}"
                                           alt="{{$instructor['title']}} {{$instructor['subtitle']}}"
                                           title="{{$instructor['title']}} {{$instructor['subtitle']}}"
                                           data-slug="{{$instructor['slugable']['slug']}}"
+                                          width="{{ $imageDetails['w'] }}"
+                                          height="{{ $imageDetails['h'] }}"
                                           />
                                     </div>
                                     <!-- ./lesson-teacher-wrapper -->
@@ -273,10 +291,13 @@
                   --}}
 
                   <img
+                     loading="lazy"
                      id="second-logo"
                      src="/theme/assets/img/new/logo-knowcrunch-seminars.svg"
                      alt="knowcruch logo"
                      title="Back to my courses"
+                     width="120"
+                     height="40"
                      />
 
                   <h1 class="lesson-header-title">
@@ -339,7 +360,7 @@
                            class="tab-button resources-button jsOpenResourcesTab active"
                            >
                            <div tabindex="-1" class="inner-tab-button">
-                              <img src="theme/assets/img/new/resources-icon.svg" alt="resources" />
+                              <img loading="lazy" src="theme/assets/img/new/resources-icon.svg" alt="resources" width="27" height="27" title="resources" />
                               <span>Resources</span>
                            </div>
                         </a>
@@ -350,7 +371,7 @@
                            class="tab-button notes-button jsOpenNotesTab"
                            >
                            <div tabindex="-1" class="inner-tab-button">
-                              <img src="theme/assets/img/new/notes-icon.svg" alt="notes" />
+                              <img loading="lazy" src="theme/assets/img/new/notes-icon.svg" alt="notes" width="27" height="27" title="notes" />
                               <span>Notes</span>
                            </div>
                         </a>
@@ -365,7 +386,7 @@
                            class="change-lesson-button previous-video-button"
                            >
                            <div tabindex="-1" class="inner-change-lesson-button">
-                              <img src="theme/assets/img/new/previous_video_icon.svg" alt="previous video" />
+                              <img loading="lazy" src="theme/assets/img/new/previous_video_icon.svg" alt="previous video" width="40" height="40" title="previous video"/>
                               <span>Previous video</span>
                            </div>
                         </a>
@@ -378,7 +399,7 @@
                            >
                            <div tabindex="-1" class="inner-change-lesson-button">
                               <span>Next video</span>
-                              <img src="theme/assets/img/new/next_video_icon.svg" alt="next video" />
+                              <img loading="lazy" src="theme/assets/img/new/next_video_icon.svg" alt="next video" width="40" height="40" title="next video"/>
                            </div>
                         </a>
                         <!-- ./next-video-button -->
@@ -478,8 +499,12 @@
                                             @if($folderIsSelected)
                                                 <li id="{{$folder['dirname']}}" data-folder-id="{{$topic_name}}" class="resource hidden">
                                                     <a class="download-file getdropboxlink"  data-dirname="{{ $file['dirname'] }}" data-filename="{{ $file['filename'] }}" href="javascript:void(0)" ><img
+                                                        loading="lazy"
                                                         src="/theme/assets/images/icons/Access-Files.svg"
-                                                        alt="download resource" />{{ $file['filename'] }}</a
+                                                        alt="download resource"
+                                                        width="20"
+                                                        height="20"
+                                                        title="download resource" />{{ $file['filename'] }}</a
                                                         >
                                                     <span class="last-modified">Last modified:  {{$file['last_mod']}}</span>
                                                 </li>
@@ -488,8 +513,12 @@
                                                     @if($file['dirname'] == $selectedFile)
                                                         <li id="{{$folder['dirname']}}" data-folder-id="{{$topic_name}}" class="resource hidden">
                                                             <a class="download-file getdropboxlink"  data-dirname="{{ $file['dirname'] }}" data-filename="{{ $file['filename'] }}" href="javascript:void(0)" ><img
+                                                                loading="lazy"
                                                                 src="/theme/assets/images/icons/Access-Files.svg"
-                                                                alt="download resource" />{{ $file['filename'] }}</a
+                                                                alt="download resource"
+                                                                width="20"
+                                                                height="20"
+                                                                title="download resource" />{{ $file['filename'] }}</a
                                                                 >
                                                             <span class="last-modified">Last modified:  {{$file['last_mod']}}</span>
                                                         </li>
@@ -530,8 +559,12 @@
                                                     @if($folderIsSelected)
                                                         <li id="{{$folder_bonus['dirname']}}" data-folder-id="{{$topicNames[$folder_bonus['parent']]}}" class="resource bonus-files hidden">
                                                             <a class="download-file getdropboxlink"  data-dirname="{{ $file_bonus['dirname'] }}" data-filename="{{ $file_bonus['filename'] }}" href="javascript:void(0)" ><img
+                                                                loading="lazy"
                                                                 src="/theme/assets/images/icons/Access-Files.svg"
-                                                                alt="download resource" />{{ $file_bonus['filename'] }}</a>
+                                                                alt="download resource"
+                                                                width="20"
+                                                                height="20"
+                                                                title="download resource" />{{ $file_bonus['filename'] }}</a>
                                                             <span class="last-modified">Last modified:  {{$file_bonus['last_mod']}}</span>
                                                         </li>
                                                     @else
@@ -542,8 +575,12 @@
 
                                                                 <li id="{{$folder_bonus['dirname']}}" data-folder-id="{{$topicNames[$folder_bonus['parent']]}}" class="resource bonus-files hidden">
                                                                     <a class="download-file getdropboxlink"  data-dirname="{{ $file_bonus['dirname'] }}" data-filename="{{ $file_bonus['filename'] }}" href="javascript:void(0)" ><img
+                                                                        loading="lazy"
                                                                         src="/theme/assets/images/icons/Access-Files.svg"
-                                                                        alt="download resource" />{{ $file_bonus['filename'] }}</a>
+                                                                        alt="download resource"
+                                                                        width="20"
+                                                                        height="20"
+                                                                        title="download resource" />{{ $file_bonus['filename'] }}</a>
                                                                     <span class="last-modified">Last modified:  {{$file_bonus['last_mod']}}</span>
                                                                 </li>
                                                             @endif
@@ -589,7 +626,7 @@
                                  class="tab-button save-button jsOpenNotesTab"
                                  >
                                  <div tabindex="-1" style="text-align: end;" class="inner-tab-button">
-                                    <img src="theme/assets/img/new/floppy-save-new.svg" width="30" height="20" alt="notes" />
+                                    <img loading="lazy" src="theme/assets/img/new/floppy-save-new.svg" width="30" height="20" alt="notes" title="notes"/>
                                     <!-- <span>Notes</span> -->
                                  </div>
                               </a>

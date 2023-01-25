@@ -105,23 +105,23 @@
                        if ($row['ticket'] && isset($row['ticket']->where('type','Early Bird')->first()->pivot->price) &&
                            $row['ticket']->where('type','Early Bird')->first()->pivot->price > 0 &&
                            $row['ticket']->where('type','Early Bird')->first()->pivot->quantity > 0 &&
-                           $row['ticket']->where('type','Early Bird')->first()->pivot->active) {      
-                           $price = $row['ticket']->where('type','Early Bird')->first()->pivot->price;      
+                           $row['ticket']->where('type','Early Bird')->first()->pivot->active) {
+                           $price = $row['ticket']->where('type','Early Bird')->first()->pivot->price;
                        }else if($row['ticket'] && isset($row['ticket']->where('type','Special')->first()->pivot->price) &&
                            $row['ticket']->where('type','Special')->first()->pivot->price > 0 &&
                            $row['ticket']->where('type','Special')->first()->pivot->quantity > 0 &&
-                           $row['ticket']->where('type','Special')->first()->pivot->active){    
-                           $price = $row['ticket']->where('type','Special')->first()->pivot->price;      
+                           $row['ticket']->where('type','Special')->first()->pivot->active){
+                           $price = $row['ticket']->where('type','Special')->first()->pivot->price;
                        }else if($row['ticket'] && isset($row['ticket']->where('type','Regular')->first()->pivot->price) &&
                            $row['ticket']->where('type','Regular')->first()->pivot->price > 0 &&
                            $row['ticket']->where('type','Regular')->first()->pivot->quantity > 0 &&
-                           $row['ticket']->where('type','Regular')->first()->pivot->active){    
+                           $row['ticket']->where('type','Regular')->first()->pivot->active){
                            $price = $row['ticket']->where('type','Regular')->first()->pivot->price;
                        }
                        else {
                            $price = 0;
                        }
-                   @endphp    
+                   @endphp
                      @if($row['view_tpl'] == 'elearning_pending')
                         <div class="price">Pending</div>
                      @elseif((isset($info['payment_method']) && $info['payment_method'] == 'free'))
@@ -170,7 +170,7 @@
             </div>
             <!-- ./dynamic-courses-wrapper -->
 
-         
+
          @endif
          <!--
          @if(isset($instructors))

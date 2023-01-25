@@ -17,10 +17,11 @@
                   @if(isset($user['image']))
                   <?php
                      $img_src = get_profile_image($user['image']);
+                     //dd($user['image']);
                      ?>
-                  <img id="user-img-up" src="{{cdn($img_src)}}" onerror="this.src='{{cdn('/theme/assets/images/icons/user-circle-placeholder.svg')}}'" alt="{{ $currentuser['firstname'] }} {{ $currentuser['lastname'] }}"/>
+                  <img loading="lazy" id="user-img-up" width="20" height="20" src="{{cdn($img_src)}}" onerror="this.src='{{cdn('/theme/assets/images/icons/user-circle-placeholder.svg')}}'" title="{{ $currentuser['firstname'] }} {{ $currentuser['lastname'] }}" alt="{{ $currentuser['firstname'] }} {{ $currentuser['lastname'] }}"/>
                   @else
-                  <img id="user-img-up" src="{{cdn('/theme/assets/images/icons/user-circle-placeholder.svg')}}" alt="user-circle"/>
+                  <img loading="lazy" id="user-img-up" width="20" height="20" src="{{cdn('/theme/assets/images/icons/user-circle-placeholder.svg')}}" alt="user-circle" title="user-circle"/>
                   @endif
                </div>
                <div class="account-hero-info">
@@ -43,8 +44,8 @@
       <div id="favDialog" hidden>
          <div class="alert-wrapper error-alert">
             <div class="alert-inner">
-               <p><img src="{{cdn('theme/assets/images/icons/alert-icons/icon-error-alert.svg')}}" alt="Info Alert">Do you really want to remove your profile picture?</p>
-               <a href="javascript:void(0)" class="close-alert"><img src="{{cdn('/theme/assets/images/icons/alert-icons/icon-close-alert.svg')}}" alt="Close Alert"/></a>
+               <p><img loading="lazy" src="{{cdn('theme/assets/images/icons/alert-icons/icon-error-alert.svg')}}" alt="Info Alert" width="24" height="24" title="Info Alert">Do you really want to remove your profile picture?</p>
+               <a href="javascript:void(0)" class="close-alert"><img src="{{cdn('/theme/assets/images/icons/alert-icons/icon-close-alert.svg')}}" alt="Close Alert" width="22" height="22" title="Closed Alert"/></a>
             </div>
             <button class="btn btn-del btn--sm deleteImg"> ok </button>
             <button class="btn btn-del btn--sm cancelImg"> cancel </button>
@@ -113,25 +114,25 @@
                         <div class="account-image-actions"  id="logo_dropzone">
                            <div class="acc-img">
                               @if(isset($user['image']) && $user['image']['name'] != '')
-                              <img id="user-img" src="{{cdn($img_src)}}" onerror="this.src='{{cdn('/theme/assets/images/icons/user-circle-placeholder.svg')}}'" alt="{{ $currentuser['firstname'] }} {{ $currentuser['lastname'] }}"/>
+                              <img loading="lazy" id="user-img" src="{{cdn($img_src)}}" onerror="this.src='{{cdn('/theme/assets/images/icons/user-circle-placeholder.svg')}}'" alt="{{ $currentuser['firstname'] }} {{ $currentuser['lastname'] }}" title="{{ $currentuser['firstname'] }} {{ $currentuser['lastname'] }}" width="230" height="230"/>
                               @else
-                              <img id="user-img" src="{{cdn('/theme/assets/images/icons/user-circle-placeholder.svg')}}" alt="user-circle"/>
+                              <img loading="lazy" id="user-img" src="{{cdn('/theme/assets/images/icons/user-circle-placeholder.svg')}}" alt="user-circle" title="user-circle" width="233" height="233"/>
                               @endif
                            </div>
                            <div class="actions">
                               <ul id='user-media'>
-                                 <li class="change-photo"><a id="logoDropzone" class="custFieldMediaDrop dz-message" href="javascript:void(0)"><img src="{{cdn('/theme/assets/images/icons/icon-edit.svg')}}" alt="Change photo"/><span>Change photo</span>
+                                 <li class="change-photo"><a id="logoDropzone" class="custFieldMediaDrop dz-message" href="javascript:void(0)"><img loading="lazy" src="{{cdn('/theme/assets/images/icons/icon-edit.svg')}}" alt="Change photo" title="Change photo" width="16" height="16"/><span>Change photo</span>
                                     </a>
                                  </li>
                                  @if(isset($user['image']))
-                                 <li class="remove-photo delete_media"><a data-dp-media-id="{{ $user['image']['id'] }}" href="javascript:void(0)"><img src="{{cdn('/theme/assets/images/icons/icon-remove.svg')}}" alt="Remove photo"/><span>Remove photo</span></a></li>
+                                 <li class="remove-photo delete_media"><a data-dp-media-id="{{ $user['image']['id'] }}" href="javascript:void(0)"><img loading="lazy" src="{{cdn('/theme/assets/images/icons/icon-remove.svg')}}" alt="Remove photo" title="Remove photo" width="10" height="10"/><span>Remove photo</span></a></li>
                                  @endif
                               </ul>
                            </div>
                         </div>
                         <div class="download-area">
                            <div class="download-area-inner">
-                              <a id="gdpr-download" href="javascript:void(0)"><span><img src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}" alt="Remove photo"/>Download all my data.</span></a>
+                              <a id="gdpr-download" href="javascript:void(0)"><span><img loading="lazy" src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}" alt="Remove photo" title="Remove photo" width="16" height="16"/>Download all my data.</span></a>
                            </div>
                         </div>
                      </div>
@@ -757,9 +758,9 @@
                                                     }
                                                 }*/
                                                 ?>
-                                            @if(isset($event['summaryDate']))<div class="duration"><img class="replace-with-svg" onerror="this.src='{{cdn('/theme/assets/images/icons/Duration_Hours.svg')}}'" src="{{cdn($event['summaryDate_icon'])}}" alt="">{{$event['summaryDate']}}</div>@endif
+                                            @if(isset($event['summaryDate']))<div class="duration"><img loading="lazy" class="replace-with-svg resp-img" onerror="this.src='{{cdn('/theme/assets/images/icons/Duration_Hours.svg')}}'" src="{{cdn($event['summaryDate_icon'])}}" title="summaryDate_icon" alt="summaryDate_icon">{{$event['summaryDate']}}</div>@endif
                                             @if($event['hours'])
-                                            <div class="expire-date"><img class="replace-with-svg" onerror="this.src='{{cdn('/theme/assets/images/icons/Start-Finish.svg')}}'"  src="{{cdn($event['hours_icon'])}}" alt="">{{$event['hours']}}h</div>
+                                            <div class="expire-date"><img loading="lazy" class="replace-with-svg" onerror="this.src='{{cdn('/theme/assets/images/icons/Start-Finish.svg')}}'"  src="{{cdn($event['hours_icon'])}}" title="hours" alt="hours_icon">{{$event['hours']}}h</div>
                                             @endif
 
                                             </div>
@@ -773,9 +774,9 @@
                                         <div id="c-shedule-inner{{$tab}}" class="in-tab-wrapper" style="display: block;">
 
                                             <div class="bottom">
-                                            @if(isset($event['summaryDate']))<div class="duration"><img class="replace-with-svg" onerror="this.src='{{cdn('/theme/assets/images/icons/Duration_Hours.svg')}}'" src="{{cdn($event['summaryDate_icon'])}}" alt="">{{$event['summaryDate']}}</div>@endif
+                                            @if(isset($event['summaryDate']))<div class="duration"><img loading="lazy" class="replace-with-svg resp-img" onerror="this.src='{{cdn('/theme/assets/images/icons/Duration_Hours.svg')}}'" width="20" height="20" src="{{cdn($event['summaryDate_icon'])}}" title="summary_icon" alt="summary_icon">{{$event['summaryDate']}}</div>@endif
                                             @if($event['hours'])
-                                            <div class="expire-date"><img class="replace-with-svg" onerror="this.src='{{cdn('/theme/assets/images/icons/Start-Finish.svg')}}'"  src="{{cdn($event['hours_icon'])}}" alt="">{{$event['hours']}}h</div>
+                                            <div class="expire-date"><img loading="lazy" class="replace-with-svg resp-img" onerror="this.src='{{cdn('/theme/assets/images/icons/Start-Finish.svg')}}'"  src="{{cdn($event['hours_icon'])}}" width="20" height="20" title="summary_icon" alt="summary_icon">{{$event['hours']}}h</div>
                                             @endif
                                             @if($event['status'] == 5)
                                             <div>
@@ -787,7 +788,7 @@
                                             @if(isset($event['topics']) && count($event['topics']) > 0)
                                             <div class="bottom  @if((isset($event['paid']) && $event['paid']) || !isset($event['paid'])) {{ 'tabs-bottom'}} @endif">
 
-                                            <div class="expire-date exp-date"><img src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}" alt="">Schedule available in PDF</div>
+                                            <div class="expire-date exp-date"><img loading="lazy" src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}" width="20" height="20" title="Access-Files-icon" alt="Access-Files-icon">Schedule available in PDF</div>
                                             <div class="right">
                                                 <a target="_blank" href="/print/syllabus/{{$event['slugable']['slug']}}" class="btn btn--secondary btn--md"> DOWNLOAD SCHEDULE </a>
                                             </div>
@@ -816,9 +817,9 @@
                                                                     @endif
 
                                                                     <!-- Feedback 18-11 changed -->
-                                                                    <span class="meta-item duration"><img src="{{cdn('/theme/assets/images/icons/Duration_Hours.svg')}}" alt="" /><?= date( "l d M Y", strtotime($lesso['pivot']['time_starts']) ) ?></span> <!-- Feedback 18-11 changed -->
-                                                                    <span class="meta-item duration"><img src="{{cdn('/theme/assets/images/icons/Times.svg')}}" alt="" /><?= date( "H:i", strtotime($lesso['pivot']['time_starts']) ) ?> ({{$lesso['pivot']['duration']}})</span> <!-- Feedback 18-11 changed -->
-                                                                    <span class="meta-item duration"><img src="{{cdn('/theme/assets/images/icons/icon-marker.svg')}}" alt="" />@if(isset($lesso['pivot']['location_url']) && $lesso['pivot']['location_url']) <a href="{{$lesso['pivot']['location_url']}}" target="_blank"> {{$lesso['pivot']['room']}} </a> @else {{$lesso['pivot']['room']}} @endif</span> <!-- Feedback 18-11 changed -->
+                                                                    <span class="meta-item duration"><img loading="lazy" class="resp-img" src="{{cdn('/theme/assets/images/icons/Duration_Hours.svg')}}" alt="Duration_Hours_icon" title="Duration_Hours_icon" /><?= date( "l d M Y", strtotime($lesso['pivot']['time_starts']) ) ?></span> <!-- Feedback 18-11 changed -->
+                                                                    <span class="meta-item duration"><img loading="lazy" class="resp-img" src="{{cdn('/theme/assets/images/icons/Times.svg')}}" alt="Times_icon" title="Times_icon" /><?= date( "H:i", strtotime($lesso['pivot']['time_starts']) ) ?> ({{$lesso['pivot']['duration']}})</span> <!-- Feedback 18-11 changed -->
+                                                                    <span class="meta-item duration"><img loading="lazy" class="resp-img" src="{{cdn('/theme/assets/images/icons/icon-marker.svg')}}" alt="icon-marker" title="icon-marker"/>@if(isset($lesso['pivot']['location_url']) && $lesso['pivot']['location_url']) <a href="{{$lesso['pivot']['location_url']}}" target="_blank"> {{$lesso['pivot']['room']}} </a> @else {{$lesso['pivot']['room']}} @endif</span> <!-- Feedback 18-11 changed -->
                                                                     </div>
                                                                 <!-- /.topic-title-meta -->
                                                             </div>
@@ -826,7 +827,10 @@
                                                                 <!-- Feedback 18-11 changed -->
                                                                 <a href="{{$instructors[$lesso['instructor_id']][0]['slugable']['slug']}}">
                                                                 <span class="custom-tooltip"><?= $instructors[$lesso['instructor_id']][0]['title'].' '.$instructors[$lesso['instructor_id']][0]['subtitle']; ?></span>
-                                                                <img src="{{cdn( get_image($instructors[$lesso['instructor_id']][0]['mediable'],'instructors-small') )}}" alt="<?= $instructors[$lesso['instructor_id']][0]['title']; $instructors[$lesso['instructor_id']][0]['subtitle']; ?>"/>
+                                                                <?php
+                                                                    $imageDetails = get_image_version_details('instructors-small');
+                                                                ?>
+                                                                <img loading="lazy" class="resp-img" src="{{cdn( get_image($instructors[$lesso['instructor_id']][0]['mediable'],'instructors-small') )}}" width="{{ $imageDetails['w'] }}" height="{{ $imageDetails['h'] }}" title="<?= $instructors[$lesso['instructor_id']][0]['title']; $instructors[$lesso['instructor_id']][0]['subtitle']; ?> alt="<?= $instructors[$lesso['instructor_id']][0]['title']; $instructors[$lesso['instructor_id']][0]['subtitle']; ?>"/>
                                                                 </a>
                                                             </div>
                                                             <!-- /.topic-wrapper-big -->
@@ -982,7 +986,7 @@
                                                                                                 <h4 class="file-title">{{ $file_bonus['filename'] }}</h4>
                                                                                                 <span class="last-modified">Last modified:  {{$file_bonus['last_mod']}}</span>
                                                                                                 <a  class="download-file getdropboxlink"  data-dirname="{{ $file_bonus['dirname'] }}" data-filename="{{ $file_bonus['filename'] }}" href="javascript:void(0)" >
-                                                                                                <img src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}"  alt="Download File"/></a>
+                                                                                                <img loading="lazy" src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}" class="resp-img" width="34" height="34" alt="Download File" title="Download File"/></a>
                                                                                             </div>
                                                                                         @else
                                                                                           @if(isset($selectedFiles['selectedFolders']))
@@ -994,7 +998,7 @@
                                                                                                         <h4 class="file-title">{{ $file_bonus['filename'] }}</h4>
                                                                                                         <span class="last-modified">Last modified:  {{$file_bonus['last_mod']}}</span>
                                                                                                         <a  class="download-file getdropboxlink"  data-dirname="{{ $file_bonus['dirname'] }}" data-filename="{{ $file_bonus['filename'] }}" href="javascript:void(0)" >
-                                                                                                        <img src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}"  alt="Download File"/></a>
+                                                                                                        <img loading="lazy" src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}" class="resp-img" width="34" height="34" alt="Download File" title="Download File"/></a>
                                                                                                     </div>
                                                                                                 @endif
                                                                                             @endforeach
@@ -1018,7 +1022,7 @@
                                                                                         <h4 class="file-title">{{ $file['filename'] }}</h4>
                                                                                         <span class="last-modified">Last modified:  {{ $file['last_mod'] }}</span>
                                                                                         <a  class="download-file getdropboxlink"  data-dirname="{{ $file['dirname'] }}" data-filename="{{ $file['filename'] }}" href="javascript:void(0)" >
-                                                                                        <img src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}"  alt="Download File"/></a>
+                                                                                        <img loading="lazy" src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}" class="resp-img" width="34" height="34" alt="Download File" title="Download File"/></a>
                                                                                     </div>
                                                                                 </div>
                                                                             @else
@@ -1030,7 +1034,7 @@
                                                                                                 <h4 class="file-title">{{ $file['filename'] }}</h4>
                                                                                                 <span class="last-modified">Last modified:  {{ $file['last_mod'] }}</span>
                                                                                                 <a  class="download-file getdropboxlink"  data-dirname="{{ $file['dirname'] }}" data-filename="{{ $file['filename'] }}" href="javascript:void(0)" >
-                                                                                                <img src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}"  alt="Download File"/></a>
+                                                                                                <img loading="lazy" src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}" class="resp-img" width="34" height="34" alt="Download File" title="Download File"/></a>
                                                                                             </div>
                                                                                         </div>
                                                                                     @endif
@@ -1084,7 +1088,7 @@
                                                                                 <h4 class="file-title">{{ $file_bonus['filename'] }}</h4>
                                                                                 <span class="last-modified">Last modified:  {{$file_bonus['last_mod']}}</span>
                                                                                 <a  class="download-file getdropboxlink"  data-dirname="{{ $file_bonus['dirname'] }}" data-filename="{{ $file_bonus['filename'] }}" href="javascript:void(0)" >
-                                                                                <img src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}"  alt="Download File"/></a>
+                                                                                <img loading="lazy" src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}" class="resp-img" width="34" height="34" alt="Download File" title="Download File"/></a>
                                                                             </div>
                                                                         @else
                                                                         @if(isset($selectedFiles['selectedFolders']))
@@ -1094,7 +1098,7 @@
                                                                                         <h4 class="file-title">{{ $file_bonus['filename'] }}</h4>
                                                                                         <span class="last-modified">Last modified:  {{$file_bonus['last_mod']}}</span>
                                                                                         <a  class="download-file getdropboxlink"  data-dirname="{{ $file_bonus['dirname'] }}" data-filename="{{ $file_bonus['filename'] }}" href="javascript:void(0)" >
-                                                                                        <img src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}"  alt="Download File"/></a>
+                                                                                        <img loading="lazy" src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}" class="resp-img" width="34" height="34" alt="Download File" title="Download File"/></a>
                                                                                     </div>
                                                                                 @endif
                                                                             @endforeach
@@ -1125,7 +1129,7 @@
                                         <div id="c-exams-inner{{$tab}}" class="in-tab-wrapper">
                                             <div class="dynamic-courses-wrapper dynamic-courses-wrapper--style2">
                                             <div class="bottom">
-                                                <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Customer_Access.svg')}}" alt="">Exams will activate in the end of your course.</div>
+                                                <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Customer_Access.svg')}}" title="customer_Access_icon" alt="customer_Access_icon">Exams will activate in the end of your course.</div>
                                                 @foreach($event['exams'] as $p)
                                                 <div class="right">
                                                     <!-- Feedback 8-12 changed -->
@@ -1153,7 +1157,7 @@
                                         @if(count($event['certs']) > 0)
                                         <div id="c-cert-inner{{$tab}}" class="in-tab-wrapper">
                                             <div class="bottom">
-                                            <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}" alt="">@if(isset($newlayoutExamsEvent[$keyType]) && count($newlayoutExamsEvent[$keyType])>0)Certificate download after completing your exams. @else Your certification is ready @endif</div>
+                                            <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}" title="customer_Access_icon" alt="Access-Files-icon">@if(isset($newlayoutExamsEvent[$keyType]) && count($newlayoutExamsEvent[$keyType])>0)Certificate download after completing your exams. @else Your certification is ready @endif</div>
                                             @foreach($event['certs'] as $certificate)
                                             <?php
                                                     $expirationMonth = '';
@@ -1178,14 +1182,14 @@
                                                 <a  class="btn btn--secondary btn--md" target="_blank" href="/mycertificate/{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" >DOWNLOAD </a>
                                                 <a class="linkedin-post cert-post"  target="_blank" href="https://www.linkedin.com/profile/add?startTask={{$certiTitle}}&name={{$certiTitle}}&organizationId=3152129&issueYear={{date('Y',$certificate->create_date)}}
                                                         &issueMonth={{date('m',$certificate->create_date)}}&expirationYear={{$expirationYear}}&expirationMonth={{$expirationMonth}}&certUrl={{$certUrl}}&certId={{$certificate->credential}}">
-                                                        <img class="linkdein-image-add" src="{{cdn('theme/assets/images/icons/social/events/Linkedin.svg')}}" alt="LinkedIn Add to Profile button">
+                                                        <img loading="lazy" class="linkdein-image-add resp-img" width="36" height="36" src="{{cdn('theme/assets/images/icons/social/events/Linkedin.svg')}}"  title="LinkedIn Add to Profile button" alt="LinkedIn Add to Profile button">
                                                 </a>
                                                 @if($user->id == 1359)
                                                 <a class="facebook-post-cert" data-certid="{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" title="Add this certification to your Facebook profile" href="javascript:void(0)">
-                                                        <img class="linkdein-image-add" src="{{cdn('theme/assets/images/icons/social/events/Facebook.svg')}}" alt="Facebook Add to Profile button">
+                                                        <img loading="lazy" class="linkdein-image-add resp-img" width="36" height="36" src="{{cdn('theme/assets/images/icons/social/events/Facebook.svg')}}" title="Facebook Add to Profile button" alt="Facebook Add to Profile button">
                                                 </a>
                                                 <a class="twitter-post-cert" data-certid="{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" title="Add this certification to your Twitter profile" href="javascript:void(0)">
-                                                        <img class="linkdein-image-add" src="{{cdn('theme/assets/images/icons/social/events/Twitter.svg')}}" alt="Twitter Add to Profile button">
+                                                        <img loading="lazy" class="linkdein-image-add resp-img" width="36" height="36" src="{{cdn('theme/assets/images/icons/social/events/Twitter.svg')}}" title="Twitter Add to Profile button" alt="Twitter Add to Profile button">
                                                 </a>
                                                 @endif
 
@@ -1260,13 +1264,13 @@
                                                     ?>
                                                 @if($date_timestamp > $now_date )
                                                 <?php //dd('not expired'); ?>
-                                                <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/clock-coins.svg')}}" alt=""><?php echo 'Your trial expiration: '.$date; ?></div>
+                                                <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/clock-coins.svg')}}" alt="clock-coins-icon" title="clock-coins-icon"><?php echo 'Your trial expiration: '.$date; ?></div>
                                                 @if($event['mySubscription']['status'])
-                                                <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt=""><?php echo 'You will be charged: '.date('d-m-Y',$event['mySubscription']['must_be_updated']); ?></div>
+                                                <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt="credit-icon" title="credit-icon"><?php echo 'You will be charged: '.date('d-m-Y',$event['mySubscription']['must_be_updated']); ?></div>
                                                 @endif
                                                 @else
                                                 @if($event['mySubscription'])
-                                                <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt=""><?php echo 'You will be charged: '.date('d-m-Y',$event['mySubscription']['must_be_updated']); ?></div>
+                                                <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt="credit-icon" title="credit-icon"><?php echo 'You will be charged: '.date('d-m-Y',$event['mySubscription']['must_be_updated']); ?></div>
                                                 @endif
                                                 @endif
                                                 @else
@@ -1277,11 +1281,11 @@
                                                     ?>
                                                 @if($date_timestamp > $now_date )
                                                 @if($event['mySubscription']['status'])
-                                                <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt=""><?php echo 'You will be charged: '.date('d-m-Y',$event['mySubscription']['must_be_updated']); ?></div>
+                                                <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt="credit-icon" title="credit-icon"><?php echo 'You will be charged: '.date('d-m-Y',$event['mySubscription']['must_be_updated']); ?></div>
                                                 @endif
                                                 @else
                                                 @if($event['mySubscription'])
-                                                <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt=""><?php echo 'You will be charged: '.date('d-m-Y',$event['mySubscription']['must_be_updated']); ?></div>
+                                                <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt="credit-icon" title="credit-icon"><?php echo 'You will be charged: '.date('d-m-Y',$event['mySubscription']['must_be_updated']); ?></div>
                                                 @endif
                                                 @endif
                                                 @endif
@@ -1341,16 +1345,16 @@
                                     <div id="c-watch-inner{{$tab}}" class="in-tab-wrapper" style="display: block;">
                                         <div class="bottom">
                                         @if (isset($event['hours']))
-                                        <div  class="duration"><img class="replace-with-svg" width="20" onerror="this.src='{{cdn('/theme/assets/images/icons/Start-Finish.svg')}}'"  src="{{cdn($event['hours_icon'])}}" alt=""> {{$event['hours']}}h </div>
+                                        <div  class="duration"><img loading="lazy" class="replace-with-svg resp-img" height="20" width="20" onerror="this.src='{{cdn('/theme/assets/images/icons/Start-Finish.svg')}}'"  src="{{cdn($event['hours_icon'])}}" title="hours" alt="hours"> {{$event['hours']}}h </div>
                                         @endif
                                         @if (isset($event['videos_progress']))
-                                        <div  class="duration"><img class="replace-with-svg" width="20" src="{{cdn('/theme/assets/images/icons/E-Learning.svg')}}" alt=""> {{$event['videos_progress']}}% </div>
+                                        <div  class="duration"><img class="replace-with-svg" width="20" src="{{cdn('/theme/assets/images/icons/E-Learning.svg')}}" alt="elearning" title="elearning"> {{$event['videos_progress']}}% </div>
                                         @endif
                                         @if (isset($event['videos_seen']))
-                                        <div  class="duration"><img class="replace-with-svg" width="20" src="{{cdn('/theme/assets/images/icons/Recap-Events.svg')}}" alt=""> {{str_replace('/','of',$event['videos_seen'])}} </div>
+                                        <div  class="duration"><img class="replace-with-svg" width="20" src="{{cdn('/theme/assets/images/icons/Recap-Events.svg')}}" alt="recap-events" title="recap-events"> {{str_replace('/','of',$event['videos_seen'])}} </div>
                                         @endif
                                         @if(isset($event['expiration']) && $event['expiration'])
-                                        <div class="expire-date exp-date"><img src="{{cdn('/theme/assets/images/icons/Days-Week.svg')}}" alt="">Expiration date: {{$event['expiration']}}</div>
+                                        <div class="expire-date exp-date"><img src="{{cdn('/theme/assets/images/icons/Days-Week.svg')}}" alt="days-week">Expiration date: {{$event['expiration']}}</div>
                                         @endif
                                         <div class="right">
                                             <?php $expire = false; ?>
@@ -1385,7 +1389,7 @@
                                         <div class="bottom">
                                         @foreach($event['exams'] as $p)
 
-                                        <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Customer_Access.svg')}}" alt="">
+                                        <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Customer_Access.svg')}}" alt="Customer_Access_icon" title="Customer_Access_icon">
                                         @if(isset($event['exam_activate_months']) && $event['exam_activate_months'] != null)
                                                 {{ 'Exams activate automatically after' }} {{ $event['exam_activate_months'] }} {{'months' }}
                                         @else
@@ -1422,7 +1426,7 @@
                                     @if(count($event['certs']) > 0)
                                     <div id="c-cert-inner{{$tab}}" class="in-tab-wrapper">
                                         <div class="bottom">
-                                        <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}" alt="">@if(isset($newlayoutExamsEvent[$keyType]) && count($newlayoutExamsEvent[$keyType])>0)Certificate download after completing your exams. @else Your certification is ready @endif</div>
+                                        <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}" alt="Access-Files-icon" title="Access-Files-icon">@if(isset($newlayoutExamsEvent[$keyType]) && count($newlayoutExamsEvent[$keyType])>0)Certificate download after completing your exams. @else Your certification is ready @endif</div>
                                         @foreach($event['certs'] as $certificate)
                                             <?php
                                                 $expirationMonth = '';
@@ -1449,14 +1453,14 @@
                                                 <a  class="btn btn--secondary btn--md" target="_blank" href="/mycertificate/{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" >DOWNLOAD </a>
                                                 <a class="linkedin-post cert-post"  target="_blank" href="https://www.linkedin.com/profile/add?startTask={{$certiTitle}}&name={{$certiTitle}}&organizationId=3152129&issueYear={{date('Y',$certificate->create_date)}}
                                                     &issueMonth={{date('m',$certificate->create_date)}}&expirationYear={{$expirationYear}}&expirationMonth={{$expirationMonth}}&certUrl={{$certUrl}}&certId={{$certificate->credential}}">
-                                                    <img class="linkdein-image-add" src="{{cdn('theme/assets/images/icons/social/events/Linkedin.svg')}}" alt="LinkedIn Add to Profile button">
+                                                    <img loading="lazy" class="linkdein-image-add resp-img" width="36" height="36" src="{{cdn('theme/assets/images/icons/social/events/Linkedin.svg')}}" alt="LinkedIn Add to Profile button" title="LinkedIn Add to Profile button">
                                                 </a>
                                             @if($user->id == 1359)
                                             <a class="facebook-post-cert cert-post" data-certTitle="{{$certiTitle}}" data-certid="{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" title="Add this certification to your Facebook profile" href="javascript:void(0)">
-                                                    <img class="linkdein-image-add" src="{{cdn('theme/assets/images/icons/social/events/Facebook.svg')}}" alt="Facebook Add to Profile button">
+                                                    <img loading="lazy" class="linkdein-image-add resp-img" width="36" height="36" src="{{cdn('theme/assets/images/icons/social/events/Facebook.svg')}}" alt="Facebook Add to Profile button" title="Facebook Add to Profile button">
                                             </a>
                                             <a class="twitter-post-cert" data-certTitle="{{$certiTitle}}" data-certid="{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" title="Add this certification to your Facebook profile" href="javascript:void(0)">
-                                                    <img class="linkdein-image-add" src="{{cdn('theme/assets/images/icons/social/events/Twitter.svg')}}" alt="Twitter Add to Profile button">
+                                                    <img loading="lazy" class="linkdein-image-add resp-img" width="36" height="36" src="{{cdn('theme/assets/images/icons/social/events/Twitter.svg')}}" alt="Twitter Add to Profile button" title="Twitter Add to Profile button">
                                             </a>
                                             @endif
                                         </div>
@@ -1521,7 +1525,7 @@
                                  <div id="c-watch-inner{{$tab}}" class="in-tab-wrapper" style="display: block;">
                                     <div class="bottom">
                                        @if (isset($event['hours']) && $event['hours'])
-                                       <div  class="duration"><img class="replace-with-svg" width="20" onerror="this.src='{{cdn('/theme/assets/images/icons/Start-Finish.svg')}}'"  src="{{cdn($event['hours_icon'])}}" alt=""> {{$event['hours']}}h </div>
+                                       <div  class="duration"><img loading="lazy" class="replace-with-svg resp-img" width="20" height="20" onerror="this.src='{{cdn('/theme/assets/images/icons/Start-Finish.svg')}}'"  src="{{cdn($event['hours_icon'])}}" alt="hours" title="hours"> {{$event['hours']}}h </div>
                                        @endif
                                        @if (isset($event['videos_progress']))
                                        <div  class="duration"><img class="replace-with-svg" width="20" src="{{cdn('/theme/assets/images/icons/E-Learning.svg')}}" alt=""> {{$event['videos_progress']}}% </div>
@@ -1563,7 +1567,7 @@
                                  <div id="c-exams-inner{{$tab}}" class="in-tab-wrapper">
                                     <div class="bottom">
                                        @foreach($event['exams'] as $p)
-                                       <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Customer_Access.svg')}}" alt="">
+                                       <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Customer_Access.svg')}}" alt="Customer_Access_icon" title="Customer_Access_icon">
                                         @if(isset($event['exam_activate_months']) && $event['exam_activate_months'] != null)
                                                 {{ 'Exams activate automatically after' }} {{ $event['exam_activate_months'] }} {{ 'months' }}
                                         @else
@@ -1621,14 +1625,14 @@
                                              <a  class="btn btn--secondary btn--md" target="_blank" href="/mycertificate/{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" >DOWNLOAD </a>
                                              <a class="linkedin-post cert-post"  target="_blank" href="https://www.linkedin.com/profile/add?startTask={{$certiTitle}}&name={{$certiTitle}}&organizationId=3152129&issueYear={{date('Y',$certificate->create_date)}}
                                                    &issueMonth={{date('m',$certificate->create_date)}}&expirationYear={{$expirationYear}}&expirationMonth={{$expirationMonth}}&certUrl={{$certUrl}}&certId={{$certificate->credential}}">
-                                                   <img class="linkdein-image-add" src="{{cdn('theme/assets/images/icons/social/events/Linkedin.svg')}}" alt="LinkedIn Add to Profile button">
+                                                   <img loading="lazy" class="linkdein-image-add resp-img" width="36" height="36" src="{{cdn('theme/assets/images/icons/social/events/Linkedin.svg')}}" alt="LinkedIn Add to Profile button" title="LinkedIn Add to Profile button">
                                              </a>
                                           @if($user->id == 1359)
                                           <a class="facebook-post-cert" data-certTitle="{{$certiTitle}}" data-certid="{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" title="Add this certification to your Facebook profile" href="javascript:void(0)">
-                                                <img class="linkdein-image-add" src="{{cdn('theme/assets/images/icons/social/events/Facebook.svg')}}" alt="Facebook Add to Profile button">
+                                                <img loading="lazy" class="linkdein-image-add resp-img" width="36" height="36" src="{{cdn('theme/assets/images/icons/social/events/Facebook.svg')}}" alt="Facebook Add to Profile button" title="Facebook Add to Profile button">
                                           </a>
                                           <a class="twitter-post-cert" data-certTitle="{{$certiTitle}}" data-certid="{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" title="Add this certification to your Facebook profile" href="javascript:void(0)">
-                                                <img class="linkdein-image-add" src="{{cdn('theme/assets/images/icons/social/events/Twitter.svg')}}" alt="Twitter Add to Profile button">
+                                                <img loading="lazy" class="linkdein-image-add resp-img" width="36" height="36" src="{{cdn('theme/assets/images/icons/social/events/Twitter.svg')}}" alt="Twitter Add to Profile button" title="Twitter Add to Profile button">
                                           </a>
 
                                           @endif
@@ -1655,13 +1659,13 @@
                                                 ?>
                                              @if($date_timestamp > $now_date )
                                              <?php //dd('not expired'); ?>
-                                             <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/clock-coins.svg')}}" alt=""><?php echo 'Your trial expiration: '.$date; ?></div>
+                                             <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/clock-coins.svg')}}" alt="clock-coins" title="clock-coins"><?php echo 'Your trial expiration: '.$date; ?></div>
                                              @if($event['mySubscription']['status'])
-                                             <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt=""><?php  echo 'You will be charged: '.date('d-m-Y',$event['mySubscription']['must_be_updated']); ?></div>
+                                             <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt="credit" title="credit"><?php  echo 'You will be charged: '.date('d-m-Y',$event['mySubscription']['must_be_updated']); ?></div>
                                              @endif
                                              @else
                                              @if($event['mySubscription'])
-                                             <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt=""><?php echo 'You will be charged: '.date('d-m-Y',$event['mySubscription']['must_be_updated']); ?></div>
+                                             <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt="credit" title="credit"><?php echo 'You will be charged: '.date('d-m-Y',$event['mySubscription']['must_be_updated']); ?></div>
                                              @endif
                                              @endif
                                              @else
@@ -1672,11 +1676,11 @@
                                                 ?>
                                              @if($date_timestamp > $now_date )
                                              @if($event['mySubscription']['status'])
-                                             <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt=""><?php echo 'You will be charged: '.date('d-m-Y',$event['mySubscription']['must_be_updated']); ?></div>
+                                             <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt="credit" title="credit"><?php echo 'You will be charged: '.date('d-m-Y',$event['mySubscription']['must_be_updated']); ?></div>
                                              @endif
                                              @else
                                              @if($event['mySubscription'])
-                                             <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt=""><?php echo 'You will be charged: '.date('d-m-Y',$event['mySubscription']['must_be_updated']); ?></div>
+                                             <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt="credit" title="credit"><?php echo 'You will be charged: '.date('d-m-Y',$event['mySubscription']['must_be_updated']); ?></div>
                                              @endif
                                              @endif
                                              @endif

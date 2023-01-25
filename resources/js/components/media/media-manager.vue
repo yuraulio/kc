@@ -322,7 +322,7 @@
                         <a href="#" @click.prevent="getFolders(); filesView = false; folderId=null;" class="list-group-item border-0 font-14"><i class="mdi mdi-folder-outline font-18 align-middle me-1"></i>Recent Updated</a>
                         <a href="#" @click.prevent="getFiles(); filesView = true; folderId=null;" class="list-group-item border-0 font-14"><i class="mdi mdi-folder-outline font-18 align-middle me-1"></i> All Files</a>
 
-                        <vue-nestable ref="folders" v-model="mediaFolders" :threshold="10000000000000" 
+                        <vue-nestable ref="folders" v-model="mediaFolders" :threshold="10000000000000"
                         :hooks="{'beforeMove': validateMove}" class="dd-list" @change="saveFolderOrderMove">
                             <vue-nestable-handle slot-scope="{ item, isChild }" :item="item">
                                 <li :key="item.id + uncolapsed.length" v-show="!isChild || uncolapsed.includes(item.id)" class="dd-item" :data-id="item.id">
@@ -394,18 +394,18 @@
                         </div>
                     </div>
                     <div v-if="!loading && loadstart">
-                        <files 
-                            :key="view" 
-                            :view="view" 
-                            v-if="!loading" 
-                            :mediaFiles="mediaFiles" 
-                            @selected="userSelectedFiles" 
-                            @delete="deleteFile" 
-                            @open="openFile" 
+                        <files
+                            :key="view"
+                            :view="view"
+                            v-if="!loading"
+                            :mediaFiles="mediaFiles"
+                            @selected="userSelectedFiles"
+                            @delete="deleteFile"
+                            @open="openFile"
                             @move="openMoveModal"
                             @moveMulti="openMoveModalMulti"
                             @deleteMulti="deleteFiles"
-                            :imageExtensions="imageExtensions" 
+                            :imageExtensions="imageExtensions"
                             :folderId="folderId">
                         </files>
                     </div>

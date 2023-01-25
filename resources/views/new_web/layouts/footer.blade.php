@@ -13,17 +13,17 @@
                 <div class="mobile-toggle">
                     <div class="row clearfix footer-award-menu">
                         <div class="col4 col-sm-12 award-div">
-                            <div><img alt_text="social media award" width="58" height="37" src="{{cdn(get_image('/awards/knowcrunch-award-marketing-education-leaders-2x.png'))}}"></div>
+                            <div><img loading="lazy" alt_text="social media award" title="social media award" width="58" height="37" src="{{cdn(get_image('/awards/knowcrunch-award-marketing-education-leaders-2x.png'))}}"></div>
                             <p> Best Digital Marketing E-learning
                                 Award by <span class="text-highlight2"> Education Leaders </span> </p>
                         </div>
                         <div class="col4 col-sm-12 award-div">
-                            <div><img alt_text="social media award" width="41" height="38"  src="{{cdn(get_image('/awards/knowcrunch-award-marketing-education-best-social-media-learning-program-2x.png'))}}"></div>
+                            <div><img loading="lazy" alt_text="social media award" title="social media award" width="41" height="38"  src="{{cdn(get_image('/awards/knowcrunch-award-marketing-education-best-social-media-learning-program-2x.png'))}}"></div>
                             <p> Best Social Media Learning Program
                             Award by <span class="text-highlight2"> Social Media World </span></p>
                         </div>
                         <div class="col4 col-sm-12 award-div">
-                            <div><img alt_text="social media award" width="62" height="35"  src="{{cdn(get_image('/awards/knowcrunch-award-marketing-best-content-strategy-2x.png'))}}"></div>
+                            <div><img loading="lazy" alt_text="social media award" title="social media award" width="62" height="35"  src="{{cdn(get_image('/awards/knowcrunch-award-marketing-best-content-strategy-2x.png'))}}"></div>
                             <p> Best Multi-Channel Content Strategy & Best Use of Multichannel Social Media in Content Marketing by <span class="text-highlight2">Digital Marketing Awards </span> </p>
                         </div>
                     </div>
@@ -128,35 +128,35 @@
                     @if($social_media['facebook']['url'] != '')
                         <li>
                             <a target="_blank" title="{{ $social_media['facebook']['title'] }}" href="{{ $social_media['facebook']['url'] }}">
-                                <img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/social/Facebook.svg')}}" height="23" width="23" alt="{{ $social_media['facebook']['title'] }}">
+                                <img loading="lazy" class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/social/Facebook.svg')}}" height="23" width="23" alt="{{ $social_media['facebook']['title'] }}" title="{{ $social_media['facebook']['title'] }}">
                             </a>
                         </li>
                     @endif
                     @if($social_media['twitter']['url'] != '')
                         <li>
                             <a target="_blank" title="{{ $social_media['twitter']['title'] }}" href="{{ $social_media['twitter']['url'] }}">
-                                <img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/social/Twitter.svg')}}" height="23" width="23" alt="{{ $social_media['twitter']['title'] }}">
+                                <img loading="lazy" class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/social/Twitter.svg')}}" height="23" width="23" alt="{{ $social_media['twitter']['title'] }}" title="{{ $social_media['twitter']['title'] }}">
                             </a>
                         </li>
                     @endif
                     @if($social_media['instagram']['url'] != '')
                         <li>
                             <a target="_blank" title="{{ $social_media['instagram']['title'] }}" href="{{ $social_media['instagram']['url'] }}">
-                                <img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/social/Instagram.svg')}}" height="23" width="23" alt="{{ $social_media['instagram']['title'] }}">
+                                <img loading="lazy" class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/social/Instagram.svg')}}" height="23" width="23" alt="{{ $social_media['instagram']['title'] }}" title="{{ $social_media['instagram']['title'] }}">
                             </a>
                         </li>
                     @endif
                     @if($social_media['linkedin']['url'] != '')
                         <li>
                             <a target="_blank" title="{{ $social_media['linkedin']['title'] }}" href="{{ $social_media['linkedin']['url'] }}">
-                                <img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/social/Linkedin.svg')}}" height="23" width="23" alt="{{ $social_media['linkedin']['title'] }}">
+                                <img loading="lazy" class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/social/Linkedin.svg')}}" height="23" width="23" alt="{{ $social_media['linkedin']['title'] }}" title="{{ $social_media['linkedin']['title'] }}">
                             </a>
                         </li>
                     @endif
                     @if($social_media['youtube']['url'] != '')
                         <li>
                             <a target="_blank" title="{{ $social_media['youtube']['title'] }}" href="{{ $social_media['youtube']['url'] }}">
-                                <img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/social/Youtube.svg')}}" height="23" width="23" alt="{{ $social_media['youtube']['title'] }}">
+                                <img loading="lazy" class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/social/Youtube.svg')}}" height="23" width="23" alt="{{ $social_media['youtube']['title'] }}" title="{{ $social_media['youtube']['title'] }}">
                             </a>
                         </li>
                     @endif
@@ -164,28 +164,28 @@
                     @if($social_media['tiktok']['url'] != '')
                         <li>
                             <a target="_blank" title="{{ $social_media['tiktok']['title'] }}" href="{{ $social_media['tiktok']['url'] }}">
-                                <img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/social/Knowcrunch-TikTok.svg')}}" height="23" width="23" alt="{{ $social_media['tiktok']['title'] }}"> </a>
+                                <img loading="lazy" class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/social/Knowcrunch-TikTok.svg')}}" height="23" width="23" alt="{{ $social_media['tiktok']['title'] }}" title="{{ $social_media['tiktok']['title'] }}"> </a>
                         </li>
                     @endif
 
                     @if($social_media['medium']['url'] != '')
                         <li>
                             <a target="_blank" title="{{ $social_media['medium']['title'] }}" href="{{ $social_media['medium']['url'] }}">
-                                <img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/social/Knowcrunch-Medium-Blog.svg')}}" height="23" width="23" alt="{{ $social_media['medium']['title'] }}"> </a>
+                                <img loading="lazy" class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/social/Knowcrunch-Medium-Blog.svg')}}" height="23" width="23" alt="{{ $social_media['medium']['title'] }}"  title="{{ $social_media['medium']['title'] }}"> </a>
                         </li>
                     @endif
 
                     @if($social_media['pinterest']['url'] != '')
                         <li>
                             <a target="_blank" title="{{ $social_media['pinterest']['title'] }}" href="{{ $social_media['pinterest']['url'] }}">
-                                <img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/social/Knowcrunch-Pinterest.svg')}}" height="23" width="23" alt="{{ $social_media['pinterest']['title'] }}"> </a>
+                                <img loading="lazy" class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/social/Knowcrunch-Pinterest.svg')}}" height="23" width="23" alt="{{ $social_media['pinterest']['title'] }}" title="{{ $social_media['pinterest']['title'] }}"> </a>
                         </li>
                     @endif
 
                     @if($social_media['spotify']['url'] != '')
                         <li>
                             <a target="_blank" title="{{ $social_media['spotify']['title'] }}" href="{{ $social_media['spotify']['url'] }}">
-                                <img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/social/Knowcrunch-Spotify.svg')}}" height="23" width="23" alt="{{ $social_media['spotify']['title'] }}"> </a>
+                                <img loading="lazy" class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/social/Knowcrunch-Spotify.svg')}}" height="23" width="23" alt="{{ $social_media['spotify']['title'] }}" title="{{ $social_media['spotify']['title'] }}"> </a>
                         </li>
                     @endif
                 </ul>

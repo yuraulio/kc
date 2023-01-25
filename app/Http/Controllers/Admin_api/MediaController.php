@@ -146,7 +146,7 @@ class MediaController extends Controller
             // if is non image file (or non supported image file)
             $tmp = explode('.', $image_name);
             $extension = end($tmp);
-            if (!in_array($extension, ["jpg", "jpeg", "png"])) {
+            if (!in_array($extension, ["jpg", "jpeg", "png", 'JPG'])) {
                 return $this->uploadRegFile($request);
             }
 
@@ -212,8 +212,11 @@ class MediaController extends Controller
                 $width_offset = ($image_width / 2) - ($crop_width / 2);
                 $width_offset = $width_offset > 0 ? (int) $width_offset : null;
 
-                $image->crop($crop_width, $crop_height, $width_offset, $height_offset);
-                $image->save(public_path("/uploads" . $path . $version_name), 50, $extension);
+                $image->resize($crop_width, $crop_height);
+                $image->fit($crop_width, $crop_height);
+
+                //$image->crop($crop_width, $crop_height, $width_offset, $height_offset);
+                $image->save(public_path("/uploads" . $path . $version_name), 60, $extension);
 
                 // Convert version image to webp format
                 dispatch((new UploadImageConvertWebp($path, $version_name))->delay(now()->addSeconds(3)));
