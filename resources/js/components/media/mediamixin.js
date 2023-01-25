@@ -272,29 +272,34 @@ var mediaMixin = {
         },
         imageEdit($event) {
             console.log('-------')
+            let value = $event
+            console.log($event)
             // console.log(this.selectedFile)
 
 
 
-            let data = this.$refs.crpr.versionsForUpdate;
+            // let data = this.$refs.crpr.versionsForUpdate;
+            // console.log(data);
+            // console.log('END')
 
-            data.forEach(function(value, index) {
+            // Object.values(data).forEach(value => {
+            //     console.log('inside object')
 
-                console.log(value.$parent)
+            //     console.log(value.$parent)
                 //var id = this.selectedFile.id;
                 var formData = new FormData();
-                formData.append('imgname', value.$parent.imgname);
-                formData.append('alttext', value.$parent.alttext);
-                formData.append('link', value.$parent.link);
-                formData.append('jpg', value.$parent.jpg);
-                formData.append('version', value.$parent.version);
-                formData.append('parent_id', value.$parent.parrentImage.id);
-                formData.append('crop_data', JSON.stringify(value.$parent.cropBoxData));
-                formData.append('width_ratio', value.$parent.width_ratio);
-                formData.append('height_ratio', value.$parent.height_ratio);
-                // formData.append('directory', this.selectedFile.folder_id);
-                formData.append('directory', value.$parent.parrentImage.folder_id);
-                formData.append('id', value.$parent.id);
+                formData.append('imgname', value.imgname);
+                formData.append('alttext', value.alttext);
+                formData.append('link', value.link);
+                formData.append('jpg', value.jpg);
+                formData.append('version', value.version);
+                formData.append('parent_id', value.parent_id);
+                formData.append('crop_data', JSON.stringify(value.crop_data));
+                formData.append('width_ratio', value.width_ratio);
+                formData.append('height_ratio', value.height_ratio);
+                formData.append('directory', this.selectedFile.folder_id);
+                //formData.append('directory', value.$parent.parrentImage.folder_id);
+                formData.append('id', value.id);
                 //this.$refs.crpr.isUploading = true;
 
 
@@ -337,7 +342,7 @@ var mediaMixin = {
                     this.$refs.crpr.isUploading = false;
                     this.$toast.error("Failed to update. " + error.response.data.message);
                 })
-            })
+            // })
         },
         addFolder() {
             this.errors = null;

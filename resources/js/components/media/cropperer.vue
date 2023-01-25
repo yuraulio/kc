@@ -229,7 +229,7 @@ export default {
             isUploading: false,
             originalFile: null,
             uploadedVersions: [],
-            versionsForUpdate: [],
+            versionsForUpdate: {},
             imgSrc: null,
             cropImg: "",
             data: null,
@@ -478,7 +478,7 @@ export default {
 
         },
         onMoveCropBox(){
-            console.log('triggered on move crop box')
+            console.log('triggered on move crop box', this.versionsForUpdate)
             this.getCropBoxData()
 
             //console.log('new values: ',this.cropBoxData)
@@ -486,29 +486,47 @@ export default {
             //console.log(this.versionsForUpdate)
 
             let currVersion = this.selectedVersion.version
-            console.log('current', currVersion)
-            //console.log('current_Version', this.selectedVersion)
-            let data = this.versionsForUpdate;
-            let arr = [];
+            // console.log('current', currVersion)
+            // //console.log('current_Version', this.selectedVersion)
+            // let data = this.versionsForUpdate;
+            // let arr = [];
 
-            if(data.length != 0){
-                data.forEach(function(value, index){
+            // if(data.length != 0){
+            //     data.forEach(function(value, index){
 
-                    if(value.$parent.version != currVersion){
-                        arr.push(value)
-                    }
+            //         if(value.$parent.version != currVersion){
+            //             arr.push(value)
+            //         }
 
-                })
-                arr.push(this.$refs.cropper)
-            }else{
-                arr.push(this.$refs.cropper)
+            //     })
+            //     arr.push(this.$refs.cropper)
+            // }else{
+            //     arr.push(this.$refs.cropper)
+            // }
+
+
+
+            // this.versionsForUpdate = arr
+            // let data = this.$refs.cropper
+
+            console.log('///',this.$refs.cropper)
+
+            
+            this.versionsForUpdate[currVersion] = {
+                'imgname': this.imgname,
+                'alttext': this.alttext,
+                'link': this.link,
+                'version': this.version,
+                'parent_id': this.$refs.cropper.$parent.parrentImage.id,
+                'crop_data': this.cropBoxData,
+                'width_ratio': this.width_ratio,
+                'height_ratio': this.height_ratio,
+                'id': this.id,
+                'jpg': this.jpg
             }
+            
 
-
-
-            this.versionsForUpdate = arr
-
-            console.log(this.versionsForUpdate)
+           
 
 
             //this.selectedVersion
@@ -579,27 +597,47 @@ export default {
 
             // for each gia oles tiw ekdoseis
 
-            // let versions = this.versions
+            let versions = this.versionsForUpdate
 
-            // versions.forEach((value, index) => {
-            //     console.log('index', index)
-            //     console.log('value', value)
-            // })
+           Object.values(versions).forEach(value => {
+                
+
+                let version = value.version
+                console.log('version: ',version)
+               
+                this.$emit(event,value);
+                /*
+                let crop = value
+                crop.getCroppedCanvas({
+                    width: this.cropBoxData.width,
+                    height: this.cropBoxData.height,
+                }).toBlob(
+                    (blob) => {
+                        // blob.version = this.version;
+                        this.$emit(event, blob);
+                    },
+                    "image/jpeg",
+                    this.compression / 100
+                );
+                */
+            })
+
+            // this.$refs.cropper.getCroppedCanvas({
+            //         width: this.cropBoxData.width,
+            //         height: this.cropBoxData.height,
+            //     }).toBlob(
+            //         (blob) => {
+            //             // blob.version = this.version;
+            //             this.$emit(event, blob);
+            //         },
+            //         "image/jpeg",
+            //         this.compression / 100
+            //     );
 
             // console.log('from upload function')
             // console.log(this.$refs.cropper)
 
-            this.$refs.cropper.getCroppedCanvas({
-                width: this.cropBoxData.width,
-                height: this.cropBoxData.height,
-            }).toBlob(
-                (blob) => {
-                    // blob.version = this.version;
-                    this.$emit(event, blob);
-                },
-                "image/jpeg",
-                this.compression / 100
-            );
+            
         },
         imageAdded($event) {
             this.imgSrc = $event.url;
