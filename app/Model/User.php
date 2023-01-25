@@ -341,7 +341,7 @@ class User extends Authenticatable
 
     public function eventSubscriptions()
     {
-        return $this->belongsToMany(Subscription::class, 'subscription_user_event')->with('event');
+        return $this->belongsToMany(Subscription::class, 'subscription_user_event')->with('event')->withPivot('expiration');
     }
 
     public function cookiesSMS()
