@@ -143,7 +143,7 @@
                 </li>
                 <li>
                     <a href="{{route('export')}}">
-                        <i data-feather="settings"></i>
+                        <i data-feather="download"></i>
                         <span> Export Subscription Ends </span>
                     </a>
                 </li>

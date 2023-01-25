@@ -10,7 +10,6 @@
                     :src="imgSrc"
                     preview=".preview"
                     @zoom.prevent
-                    @cropend="onMoveCropBox"
                     :img-style="{'max-height': '680px'}"/>
                 </div>
                 <!--
@@ -229,7 +228,6 @@ export default {
             isUploading: false,
             originalFile: null,
             uploadedVersions: [],
-            versionsForUpdate: [],
             imgSrc: null,
             cropImg: "",
             data: null,
@@ -347,11 +345,8 @@ export default {
                     this.imgSrc = event.target.result;
                     this.imgSrc.setAttribute('crossorigin', 'anonymous');
 
-
                     // rebuild cropperjs with the updated source
                     this.$refs.cropper.replace(this.imgSrc);
-
-                    console.log('asd')
 
                     this.$nextTick(() => {
                         this.getData();
@@ -430,11 +425,6 @@ export default {
             return null;
         },
         versionSelected() {
-
-            console.log('version selected function triggered')
-            //console.log(this.selectedVersion.version)
-            //console.log('uploaded cersion var: ', this.uploadedVersions)
-
             if (this.selectedVersion) {
                 this.$refs.cropper.enable();
                 var image_width, image_height;
@@ -474,44 +464,6 @@ export default {
                 var extension = tmp[tmp.length - 1];
                 this.imgname = tmp[0] + "-" + this.version + "." + extension;
             }
-
-
-        },
-        onMoveCropBox(){
-            console.log('triggered on move crop box')
-            this.getCropBoxData()
-
-            //console.log('new values: ',this.cropBoxData)
-            // help
-            //console.log(this.versionsForUpdate)
-
-            let currVersion = this.selectedVersion.version
-            console.log('current', currVersion)
-            //console.log('current_Version', this.selectedVersion)
-            let data = this.versionsForUpdate;
-            let arr = [];
-
-            if(data.length != 0){
-                data.forEach(function(value, index){
-
-                    if(value.$parent.version != currVersion){
-                        arr.push(value)
-                    }
-
-                })
-                arr.push(this.$refs.cropper)
-            }else{
-                arr.push(this.$refs.cropper)
-            }
-
-
-
-            this.versionsForUpdate = arr
-
-            console.log(this.versionsForUpdate)
-
-
-            //this.selectedVersion
         },
         resetData() {
             this.imgname = this.versionData ? this.versionData.name : this.parrentImage.name;
@@ -569,26 +521,7 @@ export default {
             return `${version} — [${description}]`
         },
         upload(event) {
-            // console.log('triggered upload function')
-            // console.log('event', event)
-
-
-            // console.log('version for update: ', this.versionsForUpdate)
-
-            //this.getCropBoxData();
-
-            // for each gia oles tiw ekdoseis
-
-            // let versions = this.versions
-
-            // versions.forEach((value, index) => {
-            //     console.log('index', index)
-            //     console.log('value', value)
-            // })
-
-            // console.log('from upload function')
-            // console.log(this.$refs.cropper)
-
+            this.getCropBoxData();
             this.$refs.cropper.getCroppedCanvas({
                 width: this.cropBoxData.width,
                 height: this.cropBoxData.height,
@@ -628,11 +561,9 @@ export default {
         },
         getData() {
             this.data = JSON.stringify(this.$refs.cropper.getData(), null, 4);
-            console.log('get data function: ', this.data)
             this.imgData = JSON.parse(
                 JSON.stringify(this.$refs.cropper.getData(), null, 4)
             );
-            console.log('img data', this.imgData)
         },
         move(offsetX, offsetY) {
             this.$refs.cropper.move(offsetX, offsetY);
