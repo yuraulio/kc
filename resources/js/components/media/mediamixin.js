@@ -273,7 +273,7 @@ var mediaMixin = {
         imageEdit($event) {
             console.log('-------')
             let value = $event
-            console.log($event)
+            console.log(value)
             // console.log(this.selectedFile)
 
 
