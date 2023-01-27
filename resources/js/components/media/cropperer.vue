@@ -681,7 +681,7 @@ export default {
             console.log('version data', this.versionData)
             console.log('updated data', this.versionsForUpdate[this.selectedVersion.version])
 
-            if(this.versionData == null && !this.versionsForUpdate[this.selectedVersion.version]){
+            if(this.versionData == null && this.versionsForUpdate[this.selectedVersion.version] === undefined){
                 this.getCropBoxData();
                 this.$refs.cropper.getCroppedCanvas({
                     width: this.cropBoxData.width,
@@ -689,20 +689,17 @@ export default {
                 }).toBlob(
                     (blob) => {
                         // blob.version = this.version;
-                        this.$emit('upload', blob);
+                        this.$emit(event, blob);
                     },
                     "image/jpeg",
                     this.compression / 100
                 );
 
-                return 0;
             }
 
             // for each gia oles tiw ekdoseis
 
             let versions = this.versionsForUpdate
-
-            console.log('VERSIONS :::', versions)
 
            Object.values(versions).forEach(value => {
 
@@ -729,10 +726,6 @@ export default {
                 }
 
             })
-
-            console.log('TEST')
-            console.log(this.versionsForUpdate)
-
             //this.versionsForUpdate = {}
 
         },
