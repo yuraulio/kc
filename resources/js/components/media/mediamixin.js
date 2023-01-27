@@ -239,6 +239,7 @@ var mediaMixin = {
             if (this.$refs.crpr.prevalue) {
                 formData.append('edited', this.$refs.crpr.prevalue.id);
             }
+            console.log(this)
             formData.append('original_file', this.$refs.crpr.originalFile);
             formData.append('directory', this.move_file_to.id);
             if (imagefile) {
@@ -300,7 +301,7 @@ var mediaMixin = {
                 formData.append('directory', this.selectedFile.folder_id);
                 //formData.append('directory', value.$parent.parrentImage.folder_id);
                 formData.append('id', value.id);
-                //this.$refs.crpr.isUploading = true;
+                this.$refs.crpr.isUploading = true;
 
 
                 console.log('pre edit image')
@@ -331,11 +332,17 @@ var mediaMixin = {
                         this.$refs.crpr.size = this.$refs.crpr.parrentImage.size;
                         this.$refs.crpr.height = this.$refs.crpr.parrentImage.height;
                         this.$refs.crpr.width = this.$refs.crpr.parrentImage.width;
+
                     }
+                    let version = value.version
                     this.$refs.crpr.jpg = false;
                     this.$refs.crpr.version = 'original';
                     this.$refs.crpr.disable();
                     this.$refs.crpr.versionData = null;
+
+
+                    delete this.$refs.crpr.versionsForUpdate[version]
+
                 })
                 .catch((error) => {
                     console.log("edit error", error.response.data.message);
