@@ -429,8 +429,12 @@ export default {
         },
         versionSelected() {
 
+            // if selected version is null -> original image
+
             console.log('version selected function triggered')
             console.log('data: ', this.versionsForUpdate)
+            console.log('version: ',this.selectedVersion)
+
             //console.log('uploaded cersion var: ', this.uploadedVersions)
 
             if (this.selectedVersion) {
@@ -540,13 +544,39 @@ export default {
 
 
 
+            }else{
+                if(this.versionsForUpdate['original'] === undefined){
+                    this.versionsForUpdate['original'] = {
+                        'imgname': this.imgname,
+                        'version': 'original',
+                        'parent_id': this.$refs.cropper.$parent.parrentImage.id,
+                        //'crop_data': cropData,
+                        // 'width_ratio': this.width_ratio,
+                        // 'height_ratio': this.height_ratio,
+                        'id': this.id,
+                        'jpg': this.jpg,
+                        'instance': this.$refs.cropper,
+                        'alttext': this.alttext != 'null' ? this.alttext : '',
+                        'link': this.link != 'null' ? this.link : '',
+                        'hasDeleted': false
+                    }
+                }else{
+                    this.alttext = this.versionsForUpdate['original'].alttext
+                    this.link = this.versionsForUpdate['original'].link
+                }
+                
             }
 
 
         },
         changeHandler(event){
             let input = event.target.name
-            this.versionsForUpdate[this.selectedVersion.version][input] = event.target.value
+            if(this.selectedVersion){
+                this.versionsForUpdate[this.selectedVersion.version][input] = event.target.value
+            }else{
+                this.versionsForUpdate['original'][input] = event.target.value
+            }
+            
         },
         onMoveCropBox(){
             this.getCropBoxData()
@@ -679,9 +709,9 @@ export default {
             console.log('triggered upload function')
 
             console.log('version data', this.versionData)
-            console.log('updated data', this.versionsForUpdate[this.selectedVersion.version])
 
-            if(this.versionData == null && this.versionsForUpdate[this.selectedVersion.version] === undefined){
+
+            if(this.versionData == null && this.selectedVersion && this.versionsForUpdate[this.selectedVersion.version] === undefined){
                 this.getCropBoxData();
                 this.$refs.cropper.getCroppedCanvas({
                     width: this.cropBoxData.width,
@@ -700,6 +730,8 @@ export default {
             // for each gia oles tiw ekdoseis
 
             let versions = this.versionsForUpdate
+
+            console.log('EST');
 
            Object.values(versions).forEach(value => {
 
