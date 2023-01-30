@@ -275,6 +275,8 @@ var mediaMixin = {
 
             let value = $event
 
+            console.log('value', value)
+
             // let data = this.$refs.crpr.versionsForUpdate;
             // console.log(data);
             // console.log('END')
@@ -285,6 +287,8 @@ var mediaMixin = {
             //     console.log(value.$parent)
                 //var id = this.selectedFile.id;
                 var formData = new FormData();
+
+                // edit image version
                 if(value.imgname){
                     formData.append('imgname', value.imgname);
                     formData.append('alttext', value.alttext);
@@ -299,6 +303,8 @@ var mediaMixin = {
                     formData.append('id', value.id);
                 }else{
                     //console.log('i am here')
+
+                    //Create Image version
 
                     formData.append('imgname', this.$refs.crpr.imgname);
                     formData.append('alttext', this.$refs.crpr.alttext);
@@ -358,7 +364,10 @@ var mediaMixin = {
                     this.$refs.crpr.versionData = null;
 
 
-                    delete this.$refs.crpr.versionsForUpdate[version]
+                    if(version != 'original'){
+                        delete this.$refs.crpr.versionsForUpdate[version]
+                    }
+
 
                 })
                 .catch((error) => {

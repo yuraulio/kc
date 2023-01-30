@@ -359,6 +359,21 @@ export default {
                     });
                 };
 
+                this.versionsForUpdate['original'] = {
+                    'imgname': this.imgname,
+                    'version': 'original',
+                    'parent_id': this.$refs.cropper.$parent.parrentImage.id,
+                    //'crop_data': cropData,
+                    // 'width_ratio': this.width_ratio,
+                    // 'height_ratio': this.height_ratio,
+                    'id': this.id,
+                    'jpg': this.jpg,
+                    'instance': this.$refs.cropper,
+                    'alttext': this.alttext != 'null' ? this.alttext : '',
+                    'link': this.link != 'null' ? this.link : '',
+                    'hasDeleted': false
+                }
+
                 this.$forceUpdate();
             }
 
@@ -429,17 +444,8 @@ export default {
         },
         versionSelected() {
 
-<<<<<<< HEAD
             // console.log('version selected function triggered')
             // console.log('data: ', this.versionsForUpdate)
-=======
-            // if selected version is null -> original image
-
-            console.log('version selected function triggered')
-            console.log('data: ', this.versionsForUpdate)
-            console.log('version: ',this.selectedVersion)
-
->>>>>>> 91f3aea007c47951e7707f159bd9185fe4266333
             //console.log('uploaded cersion var: ', this.uploadedVersions)
 
             if (this.selectedVersion) {
@@ -737,7 +743,7 @@ export default {
 
             let versions = this.versionsForUpdate
 
-            console.log('EST');
+            //console.log('EST');
 
            Object.values(versions).forEach(value => {
 
