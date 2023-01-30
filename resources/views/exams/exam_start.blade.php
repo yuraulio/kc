@@ -87,20 +87,20 @@ function nextQues(mark) {
     var allUnanswered = [];
     var allUnansweredPlus = [];
     var pavlosAllUnanswered = [];
-    
-    console.log('-------------')
-    console.log('showx: ', showx)
-    console.log('window.actQues', window.actQues)
+
+    // console.log('-------------')
+    // console.log('showx: ', showx)
+    // console.log('window.actQues', window.actQues)
 
 
     jQuery.each(eJson, function(index, quest) {
 
         if(firstNonConfirm==0 && (quest.given_ans=="" || quest.mark_status==1))   {
             firstNonConfirm = quest.id;
-            console.log('-+++++')
-            console.log(quest.id)
+            // console.log('-+++++')
+            // console.log(quest.id)
         }
-        console.log('|||||||| showx:',showx)
+        //console.log('|||||||| showx:',showx)
         if(showx==1 && LOOP_AGAIN ==0) {
 
             // pavlos comment
@@ -177,13 +177,13 @@ function nextQues(mark) {
     } else {
       //  jQuery('.next').removeClass('hide');
     }
-    console.log('firstNonConfirm: ', firstNonConfirm)
-    console.log('final ques: ', finalQues)
-    console.log('last ques:', lastQues)
-    console.log('loop again: ', LOOP_AGAIN)
-    console.log('mark :', mark)
+    // console.log('firstNonConfirm: ', firstNonConfirm)
+    // console.log('final ques: ', finalQues)
+    // console.log('last ques:', lastQues)
+    // console.log('loop again: ', LOOP_AGAIN)
+    // console.log('mark :', mark)
 
-    console.log('showx: ', showx)
+    // console.log('showx: ', showx)
     if(finalQues==lastQues && LOOP_AGAIN==0 && mark!=5) {
         if(firstNonConfirm==0) {
            // alert("You have completed the exam. Please click 'I AM FINISHED WITH MY EXAM' ");
@@ -198,13 +198,13 @@ function nextQues(mark) {
 
                 jQuery.each(pavlosAllUnanswered, function(index, quest) {
 
-                    console.log('---------')
-                    console.log('///', quest)
-                    console.log(finalQues)
+                    // console.log('---------')
+                    // console.log('///', quest)
+                    // console.log(finalQues)
                     if(finalQues <= quest){
 
-                        console.log('last question: ', finalQues)
-                        console.log(quest)
+                        // console.log('last question: ', finalQues)
+                        // console.log(quest)
 
                         showSpecificQuestion(quest);
                         currQues = quest;
@@ -219,10 +219,10 @@ function nextQues(mark) {
                 if(findUnanswered){
                     return false;
                 }else{
-                    console.log('i am here')
+                    //console.log('i am here')
                     // pavlosAllUnanswered = [];
                     findUnanswered = false;
-                    console.log(pavlosAllUnanswered)
+                    //console.log(pavlosAllUnanswered)
                     jQuery.each(pavlosAllUnanswered, function(index, quest) {
                         showSpecificQuestion(quest);
                         currQues = quest;
@@ -264,7 +264,7 @@ function nextQues(mark) {
 
             // Pavlos
 
-            console.log('sdaf', pavlosAllUnanswered)
+            //console.log('sdaf', pavlosAllUnanswered)
             let findUnanswered = false;
             if(pavlosAllUnanswered.length != 0){
 
@@ -272,13 +272,13 @@ function nextQues(mark) {
 
                 jQuery.each(pavlosAllUnanswered, function(index, quest) {
 
-                    console.log('---------')
-                    console.log('///', quest)
-                    console.log(finalQues)
+                    // console.log('---------')
+                    // console.log('///', quest)
+                    // console.log(finalQues)
                     if(finalQues <= quest){
 
-                        console.log('last question: ', finalQues)
-                        console.log(quest)
+                        // console.log('last question: ', finalQues)
+                        // console.log(quest)
 
                         showSpecificQuestion(quest);
                         currQues = quest;
@@ -293,10 +293,10 @@ function nextQues(mark) {
                 if(findUnanswered){
                     return false;
                 }else{
-                    console.log('i am here')
+                    //console.log('i am here')
                     // pavlosAllUnanswered = [];
                     findUnanswered = false;
-                    console.log(pavlosAllUnanswered)
+                    //console.log(pavlosAllUnanswered)
                     jQuery.each(pavlosAllUnanswered, function(index, quest) {
                         showSpecificQuestion(quest);
                         currQues = quest;
@@ -801,7 +801,7 @@ function initializeView() {
     document.getElementById("ExamFinish").setAttribute('disabled', 'disabled');
 
     var eJson = JSON.parse( window.examVar );
-    console.log(eJson)
+    //console.log(eJson)
     window.startTime = localStorage.getItem("examStart<?php echo $exam->id;?>-{{$user_id}}");
     currentTime = '<?php echo date( "Y-m-d")."T".date( "H:i:s") ?>';
     var sTime = new Date(window.startTime);
