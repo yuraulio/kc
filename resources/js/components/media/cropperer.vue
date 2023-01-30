@@ -429,12 +429,17 @@ export default {
         },
         versionSelected() {
 
+<<<<<<< HEAD
+            // console.log('version selected function triggered')
+            // console.log('data: ', this.versionsForUpdate)
+=======
             // if selected version is null -> original image
 
             console.log('version selected function triggered')
             console.log('data: ', this.versionsForUpdate)
             console.log('version: ',this.selectedVersion)
 
+>>>>>>> 91f3aea007c47951e7707f159bd9185fe4266333
             //console.log('uploaded cersion var: ', this.uploadedVersions)
 
             if (this.selectedVersion) {
@@ -518,7 +523,7 @@ export default {
                 // console.log(this.versionsForUpdate)
 
                 if(this.versionData){
-                    console.log('here')
+                    //console.log('here')
                     if(this.versionsForUpdate[this.selectedVersion.version] === undefined){
                         this.versionsForUpdate[this.selectedVersion.version] = {
                             'imgname': this.imgname,
@@ -535,7 +540,7 @@ export default {
                             'hasDeleted': false
                         }
                     }else if(this.versionsForUpdate[this.selectedVersion.version]){
-                        console.log('on load from dirty data alt and link')
+                        //console.log('on load from dirty data alt and link')
                         this.alttext = this.versionsForUpdate[this.selectedVersion.version].alttext
                         this.link = this.versionsForUpdate[this.selectedVersion.version].link
                     }
@@ -564,7 +569,7 @@ export default {
                     this.alttext = this.versionsForUpdate['original'].alttext
                     this.link = this.versionsForUpdate['original'].link
                 }
-                
+
             }
 
 
@@ -576,7 +581,7 @@ export default {
             }else{
                 this.versionsForUpdate['original'][input] = event.target.value
             }
-            
+
         },
         onMoveCropBox(){
             this.getCropBoxData()
@@ -670,7 +675,7 @@ export default {
             }
 
 
-            console.log('versionData is now available: ',this.versionData)
+            //console.log('versionData is now available: ',this.versionData)
             if (this.versionData && this.versionData.crop_data) {
                 if (typeof this.versionData.crop_data === "string") {
                     this.versionData.crop_data = JSON.parse(this.versionData.crop_data);
@@ -706,9 +711,10 @@ export default {
             return `${version} — [${description}]`
         },
         upload(event) {
-            console.log('triggered upload function')
+            // console.log('triggered upload function')
 
-            console.log('version data', this.versionData)
+            // console.log('version data', this.versionData)
+            // console.log('updated data', this.versionsForUpdate[this.selectedVersion.version])
 
 
             if(this.versionData == null && this.selectedVersion && this.versionsForUpdate[this.selectedVersion.version] === undefined){
@@ -739,7 +745,7 @@ export default {
 
                 // update crop data
                 if(cropper && value.crop_data !== undefined){
-                    console.log('update all infos')
+                    //console.log('update all infos')
                     cropper.getCroppedCanvas({
                         width: value.crop_data.width,
                         height: value.crop_data.height,
@@ -752,7 +758,7 @@ export default {
                         this.compression / 100
                     );
                 }else{
-                    console.log('update only alt text')
+                    //console.log('update only alt text')
                     //update only link and alt text
                     this.$emit(event, value);
                 }
@@ -788,11 +794,11 @@ export default {
         },
         getData() {
             this.data = JSON.stringify(this.$refs.cropper.getData(), null, 4);
-            console.log('get data function: ', this.data)
+            //console.log('get data function: ', this.data)
             this.imgData = JSON.parse(
                 JSON.stringify(this.$refs.cropper.getData(), null, 4)
             );
-            console.log('img data', this.imgData)
+            //console.log('img data', this.imgData)
         },
         move(offsetX, offsetY) {
             this.$refs.cropper.move(offsetX, offsetY);

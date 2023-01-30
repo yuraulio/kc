@@ -226,7 +226,7 @@ var mediaMixin = {
         },
         imageAdded($event) {
 
-            console.log('from function imageAdded in js file')
+            //console.log('from function imageAdded in js file')
 
 
             this.currentImage = $event;
@@ -239,7 +239,7 @@ var mediaMixin = {
             if (this.$refs.crpr.prevalue) {
                 formData.append('edited', this.$refs.crpr.prevalue.id);
             }
-            console.log(this)
+            //console.log(this)
             formData.append('original_file', this.$refs.crpr.originalFile);
             formData.append('directory', this.move_file_to.id);
             if (imagefile) {
@@ -272,7 +272,7 @@ var mediaMixin = {
             }
         },
         imageEdit($event) {
-            console.log('-------')
+
             let value = $event
 
             // let data = this.$refs.crpr.versionsForUpdate;
@@ -298,7 +298,7 @@ var mediaMixin = {
                     formData.append('directory', this.selectedFile.folder_id);
                     formData.append('id', value.id);
                 }else{
-                    console.log('i am here')
+                    //console.log('i am here')
 
                     formData.append('imgname', this.$refs.crpr.imgname);
                     formData.append('alttext', this.$refs.crpr.alttext);
@@ -319,9 +319,9 @@ var mediaMixin = {
 
 
 
-                console.log('pre edit image')
+                //console.log('pre edit image')
 
-                console.log('form data: ', formData)
+                //console.log('form data: ', formData)
 
 
                 axios.post('/api/media_manager/edit_image', formData, {
@@ -362,7 +362,7 @@ var mediaMixin = {
 
                 })
                 .catch((error) => {
-                    console.log("edit error", error.response.data.message);
+                    //console.log("edit error", error.response.data.message);
                     this.$refs.crpr.isUploading = false;
                     this.$toast.error("Failed to update. " + error.response.data.message);
                 })
