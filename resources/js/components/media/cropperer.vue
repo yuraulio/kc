@@ -429,17 +429,12 @@ export default {
         },
         versionSelected() {
 
-<<<<<<< HEAD
-            // console.log('version selected function triggered')
-            // console.log('data: ', this.versionsForUpdate)
-=======
             // if selected version is null -> original image
 
             console.log('version selected function triggered')
             console.log('data: ', this.versionsForUpdate)
             console.log('version: ',this.selectedVersion)
 
->>>>>>> 91f3aea007c47951e7707f159bd9185fe4266333
             //console.log('uploaded cersion var: ', this.uploadedVersions)
 
             if (this.selectedVersion) {
