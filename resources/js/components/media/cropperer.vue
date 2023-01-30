@@ -85,7 +85,7 @@
                     <label class="form-label">Image alternative text:</label>
                 </div>
                 <div class="col">
-                    <input v-model="alttext" type="text" class="form-control invisible-input text-end" placeholder="Enter alt text"/>
+                    <input v-model="alttext" v-on:change="changeHandler" type="text" name="alttext" class="form-control invisible-input text-end" placeholder="Enter alt text"/>
                 </div>
             </div>
             <div class="row mb-2">
@@ -93,7 +93,7 @@
                     <label class="form-label">Image link:</label>
                 </div>
                 <div class="col">
-                    <input v-model="link" type="text" class="form-control invisible-input text-end" placeholder="Enter link"/>
+                    <input v-model="link" v-on:change="changeHandler" type="text" class="form-control invisible-input text-end" name="link" placeholder="Enter link"/>
                 </div>
             </div>
             <div class="row mb-2">
@@ -229,7 +229,7 @@ export default {
             isUploading: false,
             originalFile: null,
             uploadedVersions: [],
-            versionsForUpdate: [],
+            versionsForUpdate: {},
             imgSrc: null,
             cropImg: "",
             data: null,
@@ -351,8 +351,6 @@ export default {
                     // rebuild cropperjs with the updated source
                     this.$refs.cropper.replace(this.imgSrc);
 
-                    console.log('asd')
-
                     this.$nextTick(() => {
                         this.getData();
                         this.getCropBoxData();
@@ -431,20 +429,46 @@ export default {
         },
         versionSelected() {
 
+            // if selected version is null -> original image
+
             console.log('version selected function triggered')
-            //console.log(this.selectedVersion.version)
+            console.log('data: ', this.versionsForUpdate)
+            console.log('version: ',this.selectedVersion)
+
             //console.log('uploaded cersion var: ', this.uploadedVersions)
 
             if (this.selectedVersion) {
                 this.$refs.cropper.enable();
                 var image_width, image_height;
 
+
+                // if has dirty version data for this version please load updated data -> no from db
+                // if(this.versionsForUpdate[this.selectedVersion.version]){
+                //     console.log('test')
+                //     var img = new Image();
+                //     img.onload = () => {
+                //         console.log(img)
+                //         image_width = img.width;
+                //         image_height = img.height;
+                //         this.$nextTick(() => {
+                //             this.setCropBox(image_width, image_height);
+
+
+                //         });
+                //     }
+
+
+                //     return 0;
+                // }
+
                 var img = new Image();
                 img.onload = () => {
                     image_width = img.width;
                     image_height = img.height;
                     this.$nextTick(() => {
+
                         this.setCropBox(image_width, image_height);
+
                     });
                 }
                 img.src = this.parrentImage.url;
@@ -475,54 +499,146 @@ export default {
                 this.imgname = tmp[0] + "-" + this.version + "." + extension;
             }
 
+            if (this.selectedVersion) {
 
-        },
-        onMoveCropBox(){
-            console.log('triggered on move crop box')
-            this.getCropBoxData()
+                this.getCropBoxData()
+                // let cropData = {}
 
-            //console.log('new values: ',this.cropBoxData)
-            // help
-            //console.log(this.versionsForUpdate)
+                // cropData['height'] = this.cropBoxData.height
+                // cropData['width'] = this.cropBoxData.width
+                // cropData['left'] = this.cropBoxData.left
+                // cropData['top'] = this.cropBoxData.top
 
-            let currVersion = this.selectedVersion.version
-            console.log('current', currVersion)
-            //console.log('current_Version', this.selectedVersion)
-            let data = this.versionsForUpdate;
-            let arr = [];
+                // this.versionsForUpdate[this.selectedVersion.version] = {
+                //     'alttext': this.alttext != 'null' ? this.alttext : '',
+                //     'link': this.link != 'null' ? this.link : '',
+                // }
 
-            if(data.length != 0){
-                data.forEach(function(value, index){
+                // console.log('selected version: ')
+                // console.log(this.versionsForUpdate)
 
-                    if(value.$parent.version != currVersion){
-                        arr.push(value)
+                if(this.versionData){
+                    console.log('here')
+                    if(this.versionsForUpdate[this.selectedVersion.version] === undefined){
+                        this.versionsForUpdate[this.selectedVersion.version] = {
+                            'imgname': this.imgname,
+                            'version': this.selectedVersion.version,
+                            'parent_id': this.$refs.cropper.$parent.parrentImage.id,
+                            //'crop_data': cropData,
+                            // 'width_ratio': this.width_ratio,
+                            // 'height_ratio': this.height_ratio,
+                            'id': this.id,
+                            'jpg': this.jpg,
+                            'instance': this.$refs.cropper,
+                            'alttext': this.alttext != 'null' ? this.alttext : '',
+                            'link': this.link != 'null' ? this.link : '',
+                            'hasDeleted': false
+                        }
+                    }else if(this.versionsForUpdate[this.selectedVersion.version]){
+                        console.log('on load from dirty data alt and link')
+                        this.alttext = this.versionsForUpdate[this.selectedVersion.version].alttext
+                        this.link = this.versionsForUpdate[this.selectedVersion.version].link
                     }
+                }
 
-                })
-                arr.push(this.$refs.cropper)
+
+
+
             }else{
-                arr.push(this.$refs.cropper)
+                if(this.versionsForUpdate['original'] === undefined){
+                    this.versionsForUpdate['original'] = {
+                        'imgname': this.imgname,
+                        'version': 'original',
+                        'parent_id': this.$refs.cropper.$parent.parrentImage.id,
+                        //'crop_data': cropData,
+                        // 'width_ratio': this.width_ratio,
+                        // 'height_ratio': this.height_ratio,
+                        'id': this.id,
+                        'jpg': this.jpg,
+                        'instance': this.$refs.cropper,
+                        'alttext': this.alttext != 'null' ? this.alttext : '',
+                        'link': this.link != 'null' ? this.link : '',
+                        'hasDeleted': false
+                    }
+                }else{
+                    this.alttext = this.versionsForUpdate['original'].alttext
+                    this.link = this.versionsForUpdate['original'].link
+                }
+                
             }
 
 
+        },
+        changeHandler(event){
+            let input = event.target.name
+            if(this.selectedVersion){
+                this.versionsForUpdate[this.selectedVersion.version][input] = event.target.value
+            }else{
+                this.versionsForUpdate['original'][input] = event.target.value
+            }
+            
+        },
+        onMoveCropBox(){
+            this.getCropBoxData()
 
-            this.versionsForUpdate = arr
+            let currVersion = this.selectedVersion.version
 
-            console.log(this.versionsForUpdate)
+            let cropData = {}
+
+            cropData['height'] = this.cropBoxData.height
+            cropData['width'] = this.cropBoxData.width
+            cropData['left'] = this.cropBoxData.left
+            cropData['top'] = this.cropBoxData.top
 
 
-            //this.selectedVersion
+            this.versionsForUpdate[currVersion].imgname = this.imgname
+            this.versionsForUpdate[currVersion].version = this.version
+            this.versionsForUpdate[currVersion].parent_id = this.$refs.cropper.$parent.parrentImage.id
+            this.versionsForUpdate[currVersion].crop_data = cropData
+            this.versionsForUpdate[currVersion].width_ratio = this.width_ratio
+            this.versionsForUpdate[currVersion].height_ratio = this.height_ratio
+            this.versionsForUpdate[currVersion].id = this.id
+            this.versionsForUpdate[currVersion].jpg = this.jpg
+            this.versionsForUpdate[currVersion].instance = this.$refs.cropper
+            this.versionsForUpdate[currVersion].hasDeleted = false
+
+            // this.versionsForUpdate[currVersion] = {
+            //     'imgname': this.imgname,
+            //     'version': this.version,
+            //     'parent_id': this.$refs.cropper.$parent.parrentImage.id,
+            //     'crop_data': cropData,
+            //     'width_ratio': this.width_ratio,
+            //     'height_ratio': this.height_ratio,
+            //     'id': this.id,
+            //     'jpg': this.jpg,
+            //     'instance': this.$refs.cropper
+            // }
+
         },
         resetData() {
             this.imgname = this.versionData ? this.versionData.name : this.parrentImage.name;
             this.alttext = this.versionData ? this.versionData.alt_text : this.parrentImage.alt_text;
             this.link = this.versionData ? this.versionData.link : this.parrentImage.link;
             this.jpg = false;
+
+            if(this.versionsForUpdate[this.selectedVersion.version]){
+
+                this.versionsForUpdate[this.selectedVersion.version].imgname = this.imgname
+                this.versionsForUpdate[this.selectedVersion.version].alttext = this.alttext
+                this.versionsForUpdate[this.selectedVersion.version].link = this.link
+                this.versionsForUpdate[this.selectedVersion.version].jpg = this.jpg
+
+                delete this.versionsForUpdate[this.selectedVersion.version].crop_data
+
+                this.onMoveCropBox()
+            }
+
         },
         close() {
             this.$modal.hide('edit-image-modal');
         },
         setCropBox(image_width, image_height) {
+
             var canvas_height = this.$refs.cropper.getCanvasData().height;
             var canvas_width = this.$refs.cropper.getCanvasData().width;
 
@@ -534,7 +650,28 @@ export default {
 
             this.$refs.cropper.setAspectRatio(this.selectedVersion.w / this.selectedVersion.h);
 
-            if (this.versionData.crop_data) {
+            if(this.versionsForUpdate[this.selectedVersion.version] && this.versionsForUpdate[this.selectedVersion.version].crop_data !== undefined && !this.versionsForUpdate[this.selectedVersion.version].hasDeleted){
+
+                let data = this.versionsForUpdate[this.selectedVersion.version].crop_data;
+
+                let crop_height = data.height * (1 / this.height_ratio)
+                let crop_width = data.width * (1 / this.width_ratio)
+                let height_offset = data.top * (1 / this.height_ratio)
+                let width_offset = data.left * (1 / this.width_ratio)
+
+                this.$set(this.cropBoxData, 'width', crop_width * this.width_ratio);
+                this.$set(this.cropBoxData, 'height', crop_height * this.height_ratio);
+                this.$set(this.cropBoxData, 'left', (((container_width - canvas_width)/2) + (width_offset * this.width_ratio)));
+                this.$set(this.cropBoxData, 'top', (((container_height - canvas_height)/2) + (height_offset * this.width_ratio)));
+
+                this.setCropBoxData();
+
+                return 0;
+            }
+
+
+            console.log('versionData is now available: ',this.versionData)
+            if (this.versionData && this.versionData.crop_data) {
                 if (typeof this.versionData.crop_data === "string") {
                     this.versionData.crop_data = JSON.parse(this.versionData.crop_data);
                 }
@@ -569,37 +706,60 @@ export default {
             return `${version} — [${description}]`
         },
         upload(event) {
-            // console.log('triggered upload function')
-            // console.log('event', event)
+            console.log('triggered upload function')
+
+            console.log('version data', this.versionData)
 
 
-            // console.log('version for update: ', this.versionsForUpdate)
+            if(this.versionData == null && this.selectedVersion && this.versionsForUpdate[this.selectedVersion.version] === undefined){
+                this.getCropBoxData();
+                this.$refs.cropper.getCroppedCanvas({
+                    width: this.cropBoxData.width,
+                    height: this.cropBoxData.height,
+                }).toBlob(
+                    (blob) => {
+                        // blob.version = this.version;
+                        this.$emit(event, blob);
+                    },
+                    "image/jpeg",
+                    this.compression / 100
+                );
 
-            //this.getCropBoxData();
+            }
 
             // for each gia oles tiw ekdoseis
 
-            // let versions = this.versions
+            let versions = this.versionsForUpdate
 
-            // versions.forEach((value, index) => {
-            //     console.log('index', index)
-            //     console.log('value', value)
-            // })
+            console.log('EST');
 
-            // console.log('from upload function')
-            // console.log(this.$refs.cropper)
+           Object.values(versions).forEach(value => {
 
-            this.$refs.cropper.getCroppedCanvas({
-                width: this.cropBoxData.width,
-                height: this.cropBoxData.height,
-            }).toBlob(
-                (blob) => {
-                    // blob.version = this.version;
-                    this.$emit(event, blob);
-                },
-                "image/jpeg",
-                this.compression / 100
-            );
+                let cropper = value.instance
+
+                // update crop data
+                if(cropper && value.crop_data !== undefined){
+                    console.log('update all infos')
+                    cropper.getCroppedCanvas({
+                        width: value.crop_data.width,
+                        height: value.crop_data.height,
+                    }).toBlob(
+                        (blob) => {
+                            // blob.version = this.version;
+                            this.$emit(event, value);
+                        },
+                        "image/jpeg",
+                        this.compression / 100
+                    );
+                }else{
+                    console.log('update only alt text')
+                    //update only link and alt text
+                    this.$emit(event, value);
+                }
+
+            })
+            //this.versionsForUpdate = {}
+
         },
         imageAdded($event) {
             this.imgSrc = $event.url;
@@ -719,6 +879,13 @@ export default {
         deleteFile(file, index) {
             file.parent = file.parent_id;
             this.$parent.$parent.deleteFile(file);
+
+            if(this.versionsForUpdate.length != 0 && this.versionsForUpdate[this.selectedVersion.version]){
+                delete this.versionsForUpdate[this.selectedVersion.version];
+
+                this.versionsForUpdate[this.selectedVersion.version].hasDeleted = true
+
+            }
         },
         updateUploadedVersions() {
             this.uploadedVersions = this.parrentImage.subfiles;

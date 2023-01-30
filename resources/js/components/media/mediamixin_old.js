@@ -1,3 +1,4 @@
+import { formatDate } from "devextreme/localization";
 import _ from "lodash";
 
 var mediaMixin = {
@@ -225,10 +226,6 @@ var mediaMixin = {
             }
         },
         imageAdded($event) {
-
-            console.log('from function imageAdded in js file')
-
-
             this.currentImage = $event;
             var formData = new FormData();
             var imagefile = $event;
@@ -239,7 +236,6 @@ var mediaMixin = {
             if (this.$refs.crpr.prevalue) {
                 formData.append('edited', this.$refs.crpr.prevalue.id);
             }
-            console.log(this)
             formData.append('original_file', this.$refs.crpr.originalFile);
             formData.append('directory', this.move_file_to.id);
             if (imagefile) {
@@ -272,101 +268,57 @@ var mediaMixin = {
             }
         },
         imageEdit($event) {
-            console.log('-------')
-            let value = $event
+            var id = this.selectedFile.id;
+            var formData = new FormData();
+            formData.append('imgname', this.$refs.crpr.imgname);
+            formData.append('alttext', this.$refs.crpr.alttext);
+            formData.append('link', this.$refs.crpr.link);
+            formData.append('jpg', this.$refs.crpr.jpg);
+            formData.append('version', this.$refs.crpr.version);
+            formData.append('parent_id', this.$refs.crpr.parrentImage.id);
+            formData.append('crop_data', JSON.stringify(this.$refs.crpr.cropBoxData));
+            formData.append('width_ratio', this.$refs.crpr.width_ratio);
+            formData.append('height_ratio', this.$refs.crpr.height_ratio);
+            formData.append('directory', this.selectedFile.folder_id);
+            formData.append('id', this.$refs.crpr.id);
+            this.$refs.crpr.isUploading = true;
 
-            // let data = this.$refs.crpr.versionsForUpdate;
-            // console.log(data);
-            // console.log('END')
-
-            // Object.values(data).forEach(value => {
-            //     console.log('inside object')
-
-            //     console.log(value.$parent)
-                //var id = this.selectedFile.id;
-                var formData = new FormData();
-                if(value.imgname){
-                    formData.append('imgname', value.imgname);
-                    formData.append('alttext', value.alttext);
-                    formData.append('link', value.link);
-                    formData.append('jpg', value.jpg);
-                    formData.append('version', value.version);
-                    formData.append('parent_id', value.parent_id);
-                    formData.append('crop_data', JSON.stringify(value.crop_data));
-                    formData.append('width_ratio', value.width_ratio);
-                    formData.append('height_ratio', value.height_ratio);
-                    formData.append('directory', this.selectedFile.folder_id);
-                    formData.append('id', value.id);
-                }else{
-                    console.log('i am here')
-
-                    formData.append('imgname', this.$refs.crpr.imgname);
-                    formData.append('alttext', this.$refs.crpr.alttext);
-                    formData.append('link', this.$refs.crpr.link);
-                    formData.append('jpg', this.$refs.crpr.jpg);
-                    formData.append('version', this.$refs.crpr.version);
-                    formData.append('parent_id', this.$refs.crpr.parrentImage.id);
-                    formData.append('crop_data', JSON.stringify(this.$refs.crpr.cropBoxData));
-                    formData.append('width_ratio', this.$refs.crpr.width_ratio);
-                    formData.append('height_ratio', this.$refs.crpr.height_ratio);
-                    formData.append('directory', this.selectedFile.folder_id);
-                    formData.append('id', this.$refs.crpr.id);
+            axios.post('/api/media_manager/edit_image', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
                 }
-
-                //formData.append('directory', value.$parent.parrentImage.folder_id);
-
-                this.$refs.crpr.isUploading = true;
-
-
-
-                console.log('pre edit image')
-
-                console.log('form data: ', formData)
-
-
-                axios.post('/api/media_manager/edit_image', formData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data'
-                    }
-                }).then((response) => {
-                    this.$toast.success('Uploaded Successfully!');
-                    this.getFiles(response.data.data.folder_id);
-                    this.$refs.crpr.isUploading = false;
-                    this.imageKey = Math.random().toString().substr(2, 8);
-                    // this.$modal.hide('edit-image-modal');
-                    if (response.data.data.version == 'original') {
-                        var image = response.data.data;
-                        this.$refs.crpr.imgname = image.name;
-                        this.$refs.crpr.alttext = image.alt_text;
-                        this.$refs.crpr.link = image.link;
-                        this.$refs.crpr.size = image.size;
-                        this.$refs.crpr.height = image.height;
-                        this.$refs.crpr.width = image.width;
-                    } else {
-                        this.$refs.crpr.imgname = this.$refs.crpr.parrentImage.name;
-                        this.$refs.crpr.alttext = this.$refs.crpr.parrentImage.alttext;
-                        this.$refs.crpr.link = this.$refs.crpr.parrentImage.link;
-                        this.$refs.crpr.size = this.$refs.crpr.parrentImage.size;
-                        this.$refs.crpr.height = this.$refs.crpr.parrentImage.height;
-                        this.$refs.crpr.width = this.$refs.crpr.parrentImage.width;
-
-                    }
-                    let version = value.version
-                    this.$refs.crpr.jpg = false;
-                    this.$refs.crpr.version = 'original';
-                    this.$refs.crpr.disable();
-                    this.$refs.crpr.versionData = null;
-
-
-                    delete this.$refs.crpr.versionsForUpdate[version]
-
-                })
-                .catch((error) => {
-                    console.log("edit error", error.response.data.message);
-                    this.$refs.crpr.isUploading = false;
-                    this.$toast.error("Failed to update. " + error.response.data.message);
-                })
-            // })
+            }).then((response) => {
+                this.$toast.success('Uploaded Successfully!');
+                this.getFiles(response.data.data.folder_id);
+                this.$refs.crpr.isUploading = false;
+                this.imageKey = Math.random().toString().substr(2, 8);
+                // this.$modal.hide('edit-image-modal');
+                if (response.data.data.version == 'original') {
+                    var image = response.data.data;
+                    this.$refs.crpr.imgname = image.name;
+                    this.$refs.crpr.alttext = image.alt_text;
+                    this.$refs.crpr.link = image.link;
+                    this.$refs.crpr.size = image.size;
+                    this.$refs.crpr.height = image.height;
+                    this.$refs.crpr.width = image.width;
+                } else {
+                    this.$refs.crpr.imgname = this.$refs.crpr.parrentImage.name;
+                    this.$refs.crpr.alttext = this.$refs.crpr.parrentImage.alttext;
+                    this.$refs.crpr.link = this.$refs.crpr.parrentImage.link;
+                    this.$refs.crpr.size = this.$refs.crpr.parrentImage.size;
+                    this.$refs.crpr.height = this.$refs.crpr.parrentImage.height;
+                    this.$refs.crpr.width = this.$refs.crpr.parrentImage.width;
+                }
+                this.$refs.crpr.jpg = false;
+                this.$refs.crpr.version = 'original';
+                this.$refs.crpr.disable();
+                this.$refs.crpr.versionData = null;
+            })
+            .catch((error) => {
+                console.log("edit error", error.response.data.message);
+                this.$refs.crpr.isUploading = false;
+                this.$toast.error("Failed to update. " + error.response.data.message);
+            })
         },
         addFolder() {
             this.errors = null;

@@ -521,6 +521,7 @@ export default {
             return `${version} — [${description}]`
         },
         upload(event) {
+            console.log('event from upload: ', event)
             this.getCropBoxData();
             this.$refs.cropper.getCroppedCanvas({
                 width: this.cropBoxData.width,

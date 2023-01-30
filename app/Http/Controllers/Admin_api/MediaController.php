@@ -216,7 +216,7 @@ class MediaController extends Controller
                 $image->fit($crop_width, $crop_height);
 
                 //$image->crop($crop_width, $crop_height, $width_offset, $height_offset);
-                $image->save(public_path("/uploads" . $path . $version_name), 60, $extension);
+                $image->save(public_path("/uploads" . $path . $version_name), 80, $extension);
 
                 // Convert version image to webp format
                 dispatch((new UploadImageConvertWebp($path, $version_name))->delay(now()->addSeconds(3)));
@@ -256,6 +256,9 @@ class MediaController extends Controller
                 $image = $this->editOriginalImage($request->id, $request->imgname, $request->alttext, $request->link);
                 return response()->json(['data' => new MediaFileResource($image)], 200);
             }
+            $height = null;
+            $width = null;
+            $crop_data = null;
 
             $folder = $this->getFolder($request);
             $path = $folder["path"];
@@ -291,7 +294,8 @@ class MediaController extends Controller
 
             $cropData = null;
 
-            if ($request->version != 'original') {
+            // if crop data undefined only alttext and link set
+            if ($request->version != 'original' && $request->crop_data != 'undefined') {
                 // delete old file
 
                 if ($file && Storage::disk('public')->exists($file->path)) {
@@ -485,9 +489,20 @@ class MediaController extends Controller
             $mediaFile->user_id = Auth::user()->id;
             $mediaFile->version = $version;
             $mediaFile->parent_id = $parent_id;
-            $mediaFile->height = $height;
-            $mediaFile->width = $width;
-            $mediaFile->crop_data = $cropData;
+
+
+            if($height != null){
+                $mediaFile->height = $height;
+            }
+
+            if($width != null){
+                $mediaFile->width = $width;
+            }
+
+            if($cropData != null){
+                $mediaFile->crop_data = $cropData;
+            }
+
             $mediaFile->save();
 
             if (!Storage::disk('public')->exists($mediaFile->path)) {
