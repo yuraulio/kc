@@ -216,7 +216,7 @@ class MediaController extends Controller
                 $image->fit($crop_width, $crop_height);
 
                 //$image->crop($crop_width, $crop_height, $width_offset, $height_offset);
-                $image->save(public_path("/uploads" . $path . $version_name), 70, $extension);
+                $image->save(public_path("/uploads" . $path . $version_name), 80, $extension);
 
                 // Convert version image to webp format
                 dispatch((new UploadImageConvertWebp($path, $version_name))->delay(now()->addSeconds(3)));
