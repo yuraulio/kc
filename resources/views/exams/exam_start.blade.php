@@ -87,29 +87,18 @@ function nextQues(mark) {
     var allUnanswered = [];
     var allUnansweredPlus = [];
     var pavlosAllUnanswered = [];
-
-    // console.log('-------------')
-    // console.log('showx: ', showx)
-    // console.log('window.actQues', window.actQues)
+    var pavlosAnswerLater = [];
 
 
     jQuery.each(eJson, function(index, quest) {
 
         if(firstNonConfirm==0 && (quest.given_ans=="" || quest.mark_status==1))   {
             firstNonConfirm = quest.id;
-            // console.log('-+++++')
-            // console.log(quest.id)
         }
-        //console.log('|||||||| showx:',showx)
         if(showx==1 && LOOP_AGAIN ==0) {
-
-            // pavlos comment
-
             // showSpecificQuestion(quest.id);
             // showx = 0;
             // currQues = quest.id;
-
-            // end pavlos comment
         }
         if(quest.id==window.actQues) {
             var given_ans = "";
@@ -158,11 +147,14 @@ function nextQues(mark) {
         }
         lastQues = quest.id;
 
-        if(quest.mark_status==1 ) {
+        if(quest.given_ans=="" || quest.mark_status==1 ) {
             allUnanswered.push(quest.id);
             allUnansweredPlus.push(quest.id);
         }
-        if(quest.given_ans=="" && quest.mark_status==0){
+        if(quest.mark_status==1){
+            pavlosAnswerLater.push(quest.id);
+        }
+        if(quest.given_ans=="" && quest.mark_status!=1){
             pavlosAllUnanswered.push(quest.id);
         }
     });
@@ -177,174 +169,120 @@ function nextQues(mark) {
     } else {
       //  jQuery('.next').removeClass('hide');
     }
-    // console.log('firstNonConfirm: ', firstNonConfirm)
-    // console.log('final ques: ', finalQues)
-    // console.log('last ques:', lastQues)
-    // console.log('loop again: ', LOOP_AGAIN)
-    // console.log('mark :', mark)
-
-    // console.log('showx: ', showx)
     if(finalQues==lastQues && LOOP_AGAIN==0 && mark!=5) {
         if(firstNonConfirm==0) {
            // alert("You have completed the exam. Please click 'I AM FINISHED WITH MY EXAM' ");
         }
         else {
-            // εαν υπαρχουν αναπαντητα τοτε θα παρουν προταιρεότητα σε σχεση με τις answer later
-            // Pavlos
-            let findUnanswered = false;
-            if(pavlosAllUnanswered.length != 0){
+            if(pavlosAllUnanswered.length==0) {
+                //  alert("You have completed the exam. Please click 'I AM FINISHED WITH MY EXAM' ");
+                // SHOW ANSWER LATER QUESTION IF EXIST
 
-
-
-                jQuery.each(pavlosAllUnanswered, function(index, quest) {
-
-                    // console.log('---------')
-                    // console.log('///', quest)
-                    // console.log(finalQues)
-                    if(finalQues <= quest){
-
-                        // console.log('last question: ', finalQues)
-                        // console.log(quest)
-
-                        showSpecificQuestion(quest);
-                        currQues = quest;
-                        window.actQues = currQues;
-                        findUnanswered = true;
-                        delete pavlosAllUnanswered[index];
-                        return false;
-                    }
-
-
+                jQuery.each(pavlosAnswerLater,function(index, value){
+                    showSpecificQuestion(value.id);
+                    currQues = value.id;
+                    window.actQues = currQues;
+                    return 0;
                 })
-                if(findUnanswered){
-                    return false;
-                }else{
-                    //console.log('i am here')
-                    // pavlosAllUnanswered = [];
-                    findUnanswered = false;
-                    //console.log(pavlosAllUnanswered)
-                    jQuery.each(pavlosAllUnanswered, function(index, quest) {
-                        showSpecificQuestion(quest);
-                        currQues = quest;
-                        window.actQues = currQues;
-
-                        delete pavlosAllUnanswered[index];
-
-                        return false;
-                    })
-                    if(pavlosAllUnanswered.length == 0){
-                        return true;
-                    }else{
-                        return false;
-                    }
-
-
-                }
-
+                
             }
-            // end pavlos
-            showSpecificQuestion(firstNonConfirm);
-            LOOP_AGAIN = 1;
-            showx = 0;
-            currQues = firstNonConfirm;
-            window.actQues = currQues;
+            else {
+                let nextQues = firstUnanswered;
+                nextQues = pavlosAllUnanswered[0]
+                showSpecificQuestion(nextQues);
+                currQues = nextQues;
+                window.actQues = currQues;
+                //  jQuery.each(allUnansweredPlus, function(index, quest) {
+        
+                //   if(lastInArray==0) {
+                //     return;
+                //   }
+                //   if(firstUnanswered==0) {
+                //     firstUnanswered = quest;
+                //   }
+                //   if(showx==1) {
+                //     showSpecificQuestion(quest);
+                //     currQues = quest;
+                //     window.actQues = currQues;
+                //     lastInArray = 0;
+                //   }
+                //   if(quest==currQues) {
+                //     showx = 1;
+                //   }
+                //  });
+                if(lastInArray==1) {
+                    showSpecificQuestion(firstUnanswered);
+                    currQues = firstUnanswered;
+                    window.actQues = currQues;
+                }
+            }
+            // alert('after last question')
+            // showSpecificQuestion(firstNonConfirm);
+            // LOOP_AGAIN = 1;
+            // showx = 0;
+            // currQues = firstNonConfirm;
+            // window.actQues = currQues;
         }
     }
     else if(showx==1 && mark!=5) {
         var lastInArray = 1;
         var firstUnanswered = 0;
         showx = 0;
-        if(allUnanswered.length==0) {
+        let nextQuest = 0;
+        if(pavlosAllUnanswered.length==0) {
             //  alert("You have completed the exam. Please click 'I AM FINISHED WITH MY EXAM' ");
-              showSpecificQuestion(lastQues);
-              currQues = lastQues;
-              window.actQues = currQues;
+            // SHOW ANSWER LATER QUESTION IF EXIST
+            alert('SHOW ANSWER LATER QUESTION IF EXIST')
+            console.log('answer later questions: ',pavlosAnswerLater)
+
+            jQuery.each(pavlosAnswerLater,function(index, value){
+                // showSpecificQuestion(value.id);
+                // currQues = value.id;
+                // window.actQues = currQues;
+                console.log(value)
+                nextQuest = value;
+                delete pavlosAnswerLater[index]
+                return false;
+            })
+              
         }
         else {
-
-            // Pavlos
-
-            //console.log('sdaf', pavlosAllUnanswered)
-            let findUnanswered = false;
-            if(pavlosAllUnanswered.length != 0){
-
-
-
-                jQuery.each(pavlosAllUnanswered, function(index, quest) {
-
-                    // console.log('---------')
-                    // console.log('///', quest)
-                    // console.log(finalQues)
-                    if(finalQues <= quest){
-
-                        // console.log('last question: ', finalQues)
-                        // console.log(quest)
-
-                        showSpecificQuestion(quest);
-                        currQues = quest;
-                        window.actQues = currQues;
-                        findUnanswered = true;
-                        delete pavlosAllUnanswered[index];
-                        return false;
-                    }
-
-
-                })
-                if(findUnanswered){
-                    return false;
-                }else{
-                    //console.log('i am here')
-                    // pavlosAllUnanswered = [];
-                    findUnanswered = false;
-                    //console.log(pavlosAllUnanswered)
-                    jQuery.each(pavlosAllUnanswered, function(index, quest) {
-                        showSpecificQuestion(quest);
-                        currQues = quest;
-                        window.actQues = currQues;
-
-                        delete pavlosAllUnanswered[index];
-
-                        return false;
-                    })
-                    if(pavlosAllUnanswered.length == 0){
-                        return true;
-                    }else{
-                        return false;
-                    }
-
-
-                }
-
-            }
-
-            // End Pavlos
-
-             jQuery.each(allUnansweredPlus, function(index, quest) {
-                //    console.log(currQues);
-              if(lastInArray==0) {
-                return;
-              }
-              if(firstUnanswered==0) {
-                firstUnanswered = quest;
-              }
-              if(showx==1) {
-                showSpecificQuestion(quest);
-                currQues = quest;
-                window.actQues = currQues;
-                lastInArray = 0;
-              }
-              if(quest==currQues) {
-                showx = 1;
-              }
-             });
-            if(lastInArray==1) {
-                showSpecificQuestion(firstUnanswered);
-                currQues = firstUnanswered;
-                window.actQues = currQues;
-            }
+            jQuery.each(pavlosAllUnanswered,function(index, value){
+                // showSpecificQuestion(value.id);
+                // currQues = value.id;
+                // window.actQues = currQues;
+                nextQuest = value
+                return false;
+            })
+            //  jQuery.each(allUnansweredPlus, function(index, quest) {
+        
+            //   if(lastInArray==0) {
+            //     return;
+            //   }
+            //   if(firstUnanswered==0) {
+            //     firstUnanswered = quest;
+            //   }
+            //   if(showx==1) {
+            //     showSpecificQuestion(quest);
+            //     currQues = quest;
+            //     window.actQues = currQues;
+            //     lastInArray = 0;
+            //   }
+            //   if(quest==currQues) {
+            //     showx = 1;
+            //   }
+            //  });
+            // if(lastInArray==1) {
+            //     showSpecificQuestion(firstUnanswered);
+            //     currQues = firstUnanswered;
+            //     window.actQues = currQues;
+            // }
         }
+        showSpecificQuestion(nextQuest);
+        currQues = nextQuest;
+        window.actQues = currQues;
+
     }
-    scrollCurrentQuestionRow()
     TOTAL_NOT_ANSWERED  = jQuery(".not-answered").length;
     TOTAL_NOT_VISITED   = jQuery(".not-visited").length;
     TOTAL_MARKED = jQuery(".marked").length;
