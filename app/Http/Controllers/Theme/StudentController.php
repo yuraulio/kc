@@ -1016,7 +1016,7 @@ class StudentController extends Controller
         $data['event_id'] = $statistic['pivot']['event_id'];
         //dd($statistic);
         //load videos
-        $data['videos'] = $statistic['pivot']['videos'];
+        //$data['videos'] = $statistic['pivot']['videos'];
         //load notes
         $data['notes'] = $statistic['pivot']['notes'];
         //dd(json_decode($data['notes'],true));
@@ -1105,6 +1105,7 @@ class StudentController extends Controller
                 //$videos[$key]['seen'] = isset($video['seen']) ? $video['seen'] : 0;
                 $videos[$key]['stop_time'] = isset($video['stop_time']) ? $video['stop_time'] : 0;
                 $videos[$key]['percentMinutes'] = isset($video['stop_time']) ? $video['percentMinutes'] : 0;
+                $videos[$key]['is_new'] = $video['is_new'];
 
                 if( (int) $video['seen'] == 1 && (int) $videos[$key]['seen'] == 0){
                     $videos[$key]['seen'] = (int) $video['seen'];

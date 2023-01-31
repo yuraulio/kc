@@ -327,6 +327,10 @@ img.topic-progress{
   border-bottom: 1px solid #5179af;
 }
 
+.topic{
+    background-color: #3362a1;
+}
+
 .content-wrapper .sidebar-wrapper .sidebar-content .topics-list .topic .topic-header .topic-info .topic-info_title {
   margin: 0;
   margin-bottom: 0px;
@@ -383,7 +387,8 @@ img.topic-progress{
   -webkit-align-items: flex-start;
   align-items: flex-start;
   padding: 15px 45px 12px;
-  background-color: #3362a1;
+  /* background-color: #3362a1; */
+  background-color: #294e81;
   border-bottom: 1px solid #5179af;
   cursor: pointer;
   text-decoration: none;

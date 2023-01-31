@@ -750,6 +750,8 @@ class User extends Authenticatable
         $createdAt = Carbon::now();
         $updatedAt = Carbon::now();
 
+        $is_new = 1;
+
         if (isset($statistic['videos']) && $statistic['videos'] != '') {
             $notes = json_decode($statistic['notes'], true);
             $videos = json_decode($statistic['videos'], true);
@@ -769,11 +771,12 @@ class User extends Authenticatable
                 if ($firstTime) {
                     $firstTime = false;
                     $lastVideoSeen = $vimeo_id;
+                    $is_new = 0;
                 }
                 if (!isset($videos[$vimeo_id])) {
                     $change+=1;
                     $videos[$vimeo_id] = ['seen' => 0, 'tab' =>$tab.$vimeo_id, 'lesson_id' => $lesson['id'], 'stop_time' => 0, 'total_seen' => 0,
-                                               'percentMinutes' => 0, 'total_duration' => getLessonDurationToSec($lesson['vimeo_duration'])];
+                                               'percentMinutes' => 0, 'total_duration' => getLessonDurationToSec($lesson['vimeo_duration']), 'is_new' => $is_new];
                     $notes[$vimeo_id] = '';
                 }
                 $countVideos += 1;

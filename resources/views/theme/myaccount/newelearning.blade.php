@@ -188,7 +188,7 @@
 
 
 
-                              ?>
+                              ?>{{dd($video_seen)}}
                            <!-- ./topic-header -->
                            <ul class="lessons-list">
 
@@ -213,8 +213,17 @@
                                   }
 
                                 ?>
+
                               <li class="lesson {{$vimeoVideo[1]}}" data-completed="{{$video_seen[$vimeoVideo[1]]['seen']}}" data-link="{{$lesson['links']}}" data-note="{{$notesss[$vimeoVideo[1]]}}" id="{{$frame1}}">
-                                 <a class="" href="javascript:void(0)" onclick="play_video('{{$path}}','{{$frame1}}','{video{{$lesson['id']}}}', '{{$lesson['id']}}')" tabindex="0">
+
+                                <a class="" href="javascript:void(0)" onclick="play_video('{{$path}}','{{$frame1}}','{video{{$lesson['id']}}}', '{{$lesson['id']}}')" tabindex="0">
+                                    @if($video_seen[$vimeoVideo[1]]['is_new'] == 1)
+                                        <div class="newLesson">
+                                            <p>test</p>
+                                        </div>
+
+                                    @endif
+
                                     <img
                                        class="lesson-progress"
                                        src="
@@ -1021,6 +1030,7 @@
 
                    if(playVi){
                       playVi = false;
+                      videos[videoId]['is_new'] = 0
                       videos[videoId]['stop_time'] = e['seconds'];
                       videos[videoId]['percentMinutes'] = e['percent'];
 
@@ -1080,6 +1090,7 @@
 
                          videos[videoId]['stop_time'] = e['seconds'];
                          videos[videoId]['percentMinutes'] = e['percent'];
+                         videos[videoId]['is_new'] = 0
                          videos[videoId]['seen'] = 1;
                          $('.isWatching').find('.lesson-progress').attr('src','/theme/assets/img/new/completed_lesson_icon.svg')
 
@@ -1151,16 +1162,58 @@
             $('.open').children('.lessons-list').css('display','block')
           }
 
+          // is_new video is lesson has update with new link video
+          function checkIsNewVideo(elem){
+
+            elem = $('#'+elem)[0]
+            //console.log('lesson: ',elem)
+            let elemHasNew = $(elem).find('.newLesson')
+
+            if(elemHasNew.length != 0){
+                elemHasNew = elemHasNew[0];
+                elemHasNew.remove()
+            }
+
+            let topic = $(elem).parent();
+            //console.log('curr: ', topic)
+            let lessons = $(topic).find('li');
+
+            let findHasNewLesson = false;
+            $.each(lessons, function(index, value) {
+                if($(value).find('.newLesson').length != 0){
+                    findHasNewLesson = true;
+                    return false;
+                }
+
+            })
+
+            if(!findHasNewLesson){
+                //console.log('TOPIC: ', topic)
+                topic = topic.parent()
+                let newLessonElem = $(topic).find('.newLesson')
+                if(newLessonElem.length != 0){
+
+                    newLessonElem.remove();
+                }
+
+            }
+
+            //console.log(lesson)
+          }
+
           function play_video(video,playingVideo,vk,lesson){
-              video = video + '?title=false'
 
-             if(previousVideo !==false){
+            checkIsNewVideo(playingVideo)
 
-                $('.isWatching').removeClass('isWatching')
+            video = video + '?title=false'
 
-                document.getElementById(previousVideo).classList.remove('isWatching')
+            if(previousVideo !==false){
 
-             }
+            $('.isWatching').removeClass('isWatching')
+
+            document.getElementById(previousVideo).classList.remove('isWatching')
+
+            }
 
 
 
@@ -1620,6 +1673,31 @@ $('#notes').on('focusin', function() {
     .on('focusout', function(e) {
       noteFocus = false;
     });
+
+</script>
+
+<script>
+     $(document).ready(function() {
+        let topics = $('.topics-list').find('.topic')
+
+        let hasNewLesson = []
+        $.each(topics, function(index, value) {
+            let lessons_list = $(value).find('.lessons-list')[0]
+
+            hasNewLesson = $(lessons_list).find('.newLesson');
+
+            if(hasNewLesson.length != 0){
+
+                let a = $(value).find('.topic-info')[0]
+
+                $(a).before('<div class="newLesson"><p>test</p></div>')
+            }
+            //return false;
+            // $.each(lessons, function(index1, lesson) {
+            //     let hasNewLesson = $(lesson).find('.newLesson')
+            // })
+        })
+     })
 
 </script>
 
