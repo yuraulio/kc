@@ -1016,7 +1016,7 @@ class StudentController extends Controller
         $data['event_id'] = $statistic['pivot']['event_id'];
         //dd($statistic);
         //load videos
-        //$data['videos'] = $statistic['pivot']['videos'];
+        $data['videos'] = $statistic['pivot']['videos'];
         //load notes
         $data['notes'] = $statistic['pivot']['notes'];
         //dd(json_decode($data['notes'],true));

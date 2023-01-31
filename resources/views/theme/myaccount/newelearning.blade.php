@@ -188,7 +188,7 @@
 
 
 
-                              ?>{{dd($video_seen)}}
+                              ?>{{--dd($video_seen)--}}
                            <!-- ./topic-header -->
                            <ul class="lessons-list">
 
@@ -214,16 +214,17 @@
 
                                 ?>
 
-                              <li class="lesson {{$vimeoVideo[1]}}" data-completed="{{$video_seen[$vimeoVideo[1]]['seen']}}" data-link="{{$lesson['links']}}" data-note="{{$notesss[$vimeoVideo[1]]}}" id="{{$frame1}}">
+                              <li class="lesson {{$vimeoVideo[1]}}" data-completed="{{isset($video_seen[$vimeoVideo[1]]) ? $video_seen[$vimeoVideo[1]]['seen'] : 0}}" data-link="{{$lesson['links']}}" data-note="{{$notesss[$vimeoVideo[1]]}}" id="{{$frame1}}">
 
                                 <a class="" href="javascript:void(0)" onclick="play_video('{{$path}}','{{$frame1}}','{video{{$lesson['id']}}}', '{{$lesson['id']}}')" tabindex="0">
-                                    @if($video_seen[$vimeoVideo[1]]['is_new'] == 1)
-                                        <div class="newLesson">
-                                            <p>test</p>
-                                        </div>
+                                    <?php
+                                    if($video_seen[$vimeoVideo[1]]['is_new'] == 1)
+                                    {
+                                        echo '<div class="newLesson"><p>test</p></div>';
 
-                                    @endif
 
+                                        }
+                                    ?>
                                     <img
                                        class="lesson-progress"
                                        src="
