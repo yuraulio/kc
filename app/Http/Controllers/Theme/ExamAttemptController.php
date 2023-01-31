@@ -341,10 +341,11 @@ class ExamAttemptController extends Controller
 
                 $student = User::find($st_id);
 
+
+
                 //$totalQues = count(Examcontent::where('exam_id',$ex_id)->get());
                 $totalQues =$totalCredits; //Exam::where('exam_id',$ex_id)->sum('answer_credit');
                 $examResultData = ExamResult::where('exam_id',$ex_id)->where('user_id', $st_id)->first();
-
                 if($examResultData){
 
                     $examResultData->user_id = $st_id;

@@ -184,44 +184,31 @@ function nextQues(mark) {
                     window.actQues = currQues;
                     return 0;
                 })
-                
+
             }
             else {
                 let nextQues = firstUnanswered;
-                nextQues = pavlosAllUnanswered[0]
+
+                let find = false;
+
+                jQuery(pavlosAllUnanswered,function(index, value) {
+
+                    if(value > currQues){
+                        find = true;
+                        nextQues = value;
+                        return false;
+                    }
+                })
+
+                if(!find){
+                    nextQues = pavlosAllUnanswered[0]
+                }
                 showSpecificQuestion(nextQues);
                 currQues = nextQues;
                 window.actQues = currQues;
-                //  jQuery.each(allUnansweredPlus, function(index, quest) {
-        
-                //   if(lastInArray==0) {
-                //     return;
-                //   }
-                //   if(firstUnanswered==0) {
-                //     firstUnanswered = quest;
-                //   }
-                //   if(showx==1) {
-                //     showSpecificQuestion(quest);
-                //     currQues = quest;
-                //     window.actQues = currQues;
-                //     lastInArray = 0;
-                //   }
-                //   if(quest==currQues) {
-                //     showx = 1;
-                //   }
-                //  });
-                if(lastInArray==1) {
-                    showSpecificQuestion(firstUnanswered);
-                    currQues = firstUnanswered;
-                    window.actQues = currQues;
-                }
+
+                return false;
             }
-            // alert('after last question')
-            // showSpecificQuestion(firstNonConfirm);
-            // LOOP_AGAIN = 1;
-            // showx = 0;
-            // currQues = firstNonConfirm;
-            // window.actQues = currQues;
         }
     }
     else if(showx==1 && mark!=5) {
@@ -235,52 +222,53 @@ function nextQues(mark) {
             alert('SHOW ANSWER LATER QUESTION IF EXIST')
             console.log('answer later questions: ',pavlosAnswerLater)
 
+            let find = false;
+            let nextQuest = firstUnanswered
             jQuery.each(pavlosAnswerLater,function(index, value){
-                // showSpecificQuestion(value.id);
-                // currQues = value.id;
-                // window.actQues = currQues;
-                console.log(value)
-                nextQuest = value;
-                delete pavlosAnswerLater[index]
-                return false;
+
+                if(value > currQues){
+                    find = true
+                    nextQuest = value;
+                    return false;
+                }
             })
-              
+
+            if(!find){
+                nextQuest = pavlosAnswerLater[0]
+            }
+            showSpecificQuestion(nextQuest);
+            currQues = nextQuest;
+            window.actQues = currQues;
+
+            return false;
+
         }
         else {
-            jQuery.each(pavlosAllUnanswered,function(index, value){
-                // showSpecificQuestion(value.id);
-                // currQues = value.id;
-                // window.actQues = currQues;
-                nextQuest = value
-                return false;
-            })
-            //  jQuery.each(allUnansweredPlus, function(index, quest) {
-        
-            //   if(lastInArray==0) {
-            //     return;
-            //   }
-            //   if(firstUnanswered==0) {
-            //     firstUnanswered = quest;
-            //   }
-            //   if(showx==1) {
-            //     showSpecificQuestion(quest);
-            //     currQues = quest;
-            //     window.actQues = currQues;
-            //     lastInArray = 0;
-            //   }
-            //   if(quest==currQues) {
-            //     showx = 1;
-            //   }
-            //  });
-            // if(lastInArray==1) {
-            //     showSpecificQuestion(firstUnanswered);
-            //     currQues = firstUnanswered;
-            //     window.actQues = currQues;
-            // }
+                nextQuest = firstUnanswered;
+                let find = false;
+
+                // console.log('curr question: ', currQues)
+                // console.log('pavlos all unanswered: ', pavlosAllUnanswered)
+
+                jQuery.each(pavlosAllUnanswered,function(index, value) {
+                    if(value > currQues){
+                        find = true;
+                        nextQuest = value;
+                        return false;
+                    }
+
+                })
+
+                if(!find){
+                    nextQuest = pavlosAllUnanswered[0]
+
+                }
+                showSpecificQuestion(nextQuest);
+                currQues = nextQuest;
+                window.actQues = currQues;
+
         }
-        showSpecificQuestion(nextQuest);
-        currQues = nextQuest;
-        window.actQues = currQues;
+
 
     }
     TOTAL_NOT_ANSWERED  = jQuery(".not-answered").length;
