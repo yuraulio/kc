@@ -432,6 +432,19 @@ img.topic-progress{
   color: #32ff22;
 }
 
+.newLesson.notification-topic {
+    position: absolute;
+    left: 0.5rem;
+}
+.newLesson.notification-lesson{
+    position: absolute;
+    left: 1rem;
+}
+.newLesson img{
+    height: 1.5rem;
+    width: 1.5rem;
+}
+
 @media (max-width: 991px) {
   .content-wrapper .sidebar-wrapper .sidebar-content .lessons-list .lesson a .lesson-info .lesson-info_title {
     font-size: 16px;

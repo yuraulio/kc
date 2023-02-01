@@ -15,6 +15,16 @@ use App\Model\Admin\Page;
 use App\Model\Admin\Ticker;
 use Carbon\Carbon;
 
+if(!function_exists('instagram_feed')){
+    function instagram_feed($profile, $limit = 15){
+
+        $feed = \Dymantic\InstagramFeed\InstagramFeed::for($profile, $limit);
+
+        return $feed;
+    }
+
+}
+
 if(!function_exists('get_tickers')){
     function get_tickers(){
 

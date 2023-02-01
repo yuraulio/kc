@@ -1585,6 +1585,29 @@
             }
         ]
     },
+    "instagram_feed": {
+        "version": 1,
+        "title": "Instagram feed",
+        "icon": "dripicons-view-thumb",
+        "key": "instagram_component",
+        "tab": "Content",
+        "width": "full",
+        "simple_view": false,
+        "mobile": true,
+        "inputs": [
+            {
+                "type": "text",
+                "key": "instagram_profile",
+                "label": "Instagram Profile",
+                "size": "col-lg-12"
+            },
+            {
+                "type": "button",
+                "key": "instagram_profile_button",
+                "label": "Instagram Profile Get Token"
+            }
+        ]
+    },
     "terms_conditions": {
         "version": 1,
         "title": "Accept terms prompt",

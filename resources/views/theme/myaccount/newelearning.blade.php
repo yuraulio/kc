@@ -220,7 +220,7 @@
                                     <?php
                                     if($video_seen[$vimeoVideo[1]]['is_new'] == 1)
                                     {
-                                        echo '<div class="newLesson"><p>test</p></div>';
+                                        echo '<div class="newLesson notification-lesson"><img src="/theme/assets/images/notification-dot.gif"></img></div>';
 
 
                                         }
@@ -1699,7 +1699,7 @@ $('#notes').on('focusin', function() {
 
                 let a = $(value).find('.topic-info')[0]
 
-                $(a).before('<div class="newLesson"><p>test</p></div>')
+                $(a).before('<div class="newLesson notification-topic"><img src="/theme/assets/images/notification-dot.gif"></img></div>')
             }
             //return false;
             // $.each(lessons, function(index1, lesson) {
