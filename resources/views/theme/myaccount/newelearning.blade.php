@@ -821,6 +821,8 @@
 
           function tabclick(videos,event,seen,statisticId,frame,notes,progress){
 
+
+
             $('.progress-bar').css('width', progress + '%')
 
                notes = JSON.parse(notes)
@@ -981,6 +983,9 @@
                    $('.status').addClass('saveDone');
 
 
+                   setTimeout(() => {
+                        checkIsNewVideo(videoId)
+                    }, "5000")
 
 
 
@@ -1166,11 +1171,13 @@
           // is_new video is lesson has update with new link video
           function checkIsNewVideo(elem){
 
-            elem = $('#'+elem)[0]
-            //console.log('lesson: ',elem)
+            elem = $('.'+elem)[0]
+            console.log('lesson: ',elem)
             let elemHasNew = $(elem).find('.newLesson')
+            console.log(elemHasNew)
 
             if(elemHasNew.length != 0){
+
                 elemHasNew = elemHasNew[0];
                 elemHasNew.remove()
             }
@@ -1181,6 +1188,7 @@
 
             let findHasNewLesson = false;
             $.each(lessons, function(index, value) {
+                console.log('tesdt: ',$(value).find('.newLesson'))
                 if($(value).find('.newLesson').length != 0){
                     findHasNewLesson = true;
                     return false;
@@ -1203,8 +1211,6 @@
           }
 
           function play_video(video,playingVideo,vk,lesson){
-
-            checkIsNewVideo(playingVideo)
 
             video = video + '?title=false'
 
@@ -1253,14 +1259,14 @@
                 $.each(video_link,function(key, value) {
 
 
-                //let strArray = e.split("|")
-                 $('#links').append( `<li class="resource linkitem">
-                                         <a target="_blank" href="${value.link}">
-                                           <img
-                                             src="theme/assets/img/new/link.svg"
-                                             alt="external resource link" />${value.name}</a>
-                                       </li>`
-                                     )
+                    //let strArray = e.split("|")
+                    $('#links').append( `<li class="resource linkitem">
+                                            <a target="_blank" href="${value.link}">
+                                            <img
+                                                src="theme/assets/img/new/link.svg"
+                                                alt="external resource link" />${value.name}</a>
+                                        </li>`
+                                        )
 
                 });
                 //viewDownloads()
@@ -1291,6 +1297,8 @@
                 this.videoId = id
                 this.videoPlayers[this.frame].setCurrentTime(videos[id]['stop_time'])
                 this.videoPlayers[this.frame].setLoop(false)
+
+                checkIsNewVideo(this.videoId)
 
                 array.push(id)
 
