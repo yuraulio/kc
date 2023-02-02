@@ -21,6 +21,7 @@ class InstagramController extends Controller
      */
     public function getProfile($profile)
     {
+
         $profile = \Dymantic\InstagramFeed\Profile::for($profile);
 
         if($profile->hasInstagramAccess() === false){

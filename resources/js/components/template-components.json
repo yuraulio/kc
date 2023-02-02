@@ -1592,21 +1592,9 @@
         "key": "instagram_component",
         "tab": "Content",
         "width": "full",
-        "simple_view": false,
+        "simple_view": true,
         "mobile": true,
-        "inputs": [
-            {
-                "type": "text",
-                "key": "instagram_profile",
-                "label": "Instagram Profile",
-                "size": "col-lg-12"
-            },
-            {
-                "type": "button",
-                "key": "instagram_profile_button",
-                "label": "Instagram Profile Get Token"
-            }
-        ]
+        "inputs": []
     },
     "terms_conditions": {
         "version": 1,

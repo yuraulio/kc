@@ -15,12 +15,28 @@ use App\Model\Admin\Page;
 use App\Model\Admin\Ticker;
 use Carbon\Carbon;
 
-if(!function_exists('instagram_feed')){
-    function instagram_feed($profile, $limit = 15){
+if(!function_exists('instagram_posts')){
+    function instagram_posts($limit = 15){
 
-        $feed = \Dymantic\InstagramFeed\InstagramFeed::for($profile, $limit);
+        $post = [];
+        if(env('instagram_profile')){
+            $post = \Dymantic\InstagramFeed\InstagramFeed::for(env('instagram_profile'), $limit, 'posts');
+        }
 
-        return $feed;
+        return $post;
+    }
+
+}
+
+if(!function_exists('instagram_stories')){
+    function instagram_stories($limit = 15){
+        $stories = [];
+
+        if(env('instagram_profile')){
+            $stories = \Dymantic\InstagramFeed\InstagramFeed::for(env('instagram_profile'), $limit, 'stories');
+        }
+
+        return $stories;
     }
 
 }

@@ -238,7 +238,6 @@
                                                 :width="input.width"
                                                 @inputed="inputed($event, input)"
                                                 @inputedTabs="inputedTabs($event, input)"
-                                                @clicked="clicked($event, input)"
                                                 :route="input.route"
                                                 :multi="false"
                                                 :existingValue="input.value"
@@ -593,75 +592,75 @@ export default {
         inputedTabs($event, value) {
             this.$set(value, 'tabs', $event.data);
         },
-        clicked($event, value){
-            console.log($event, value)
-            let data = this.data
+        // clicked($event, value){
+        //     console.log($event, value)
+        //     let data = this.data
 
-            let profile = null;
+        //     let profile = null;
 
-            if(value.key == 'instagram_profile_button'){
-                if(data.length != 0){
-                    data.forEach(function(value, index){
-                        let columns = value.columns
+        //     if(value.key == 'instagram_profile_button'){
+        //         if(data.length != 0){
+        //             data.forEach(function(value, index){
+        //                 let columns = value.columns
 
-                        if(columns.length != 0){
-                            columns.forEach(function(value1, index1) {
-                                let column_component = value1.component
+        //                 if(columns.length != 0){
+        //                     columns.forEach(function(value1, index1) {
+        //                         let column_component = value1.component
 
-                                if( column_component == 'instagram_feed'){
-                                    let inputs = value1.template.inputs
+        //                         if( column_component == 'instagram_feed'){
+        //                             let inputs = value1.template.inputs
 
-                                    inputs.forEach(function(value2, index2) {
-                                        let input_name = value2.key
-                                        if(input_name == 'instagram_profile'){
-                                            profile = value2.value
-                                        }
-                                    })
-                                }
-                            })
-                        }
-                    })
-                }
+        //                             inputs.forEach(function(value2, index2) {
+        //                                 let input_name = value2.key
+        //                                 if(input_name == 'instagram_profile'){
+        //                                     profile = value2.value
+        //                                 }
+        //                             })
+        //                         }
+        //                     })
+        //                 }
+        //             })
+        //         }
 
-                if(profile != null){
-                    let route = null;
+        //         if(profile != null){
+        //             let route = null;
 
-                    Swal.fire(
-                        'Check if instagram profile has token',
-                        ' ',
-                        'info'
-                    )
+        //             Swal.fire(
+        //                 'Check if instagram profile has token',
+        //                 ' ',
+        //                 'info'
+        //             )
 
-                    axios.get('/api/getProfile/'+profile)
-                        .then(({data}) => {
-                            console.log(data)
-                            if(data.url){
-                                $('#swal2-html-container').html(`<a target="_blank" href="${data.url}">Get Token</a>`)
-                            }else{
-                                $('#swal2-html-container').text('Instagram profile has token.')
-                            }
-                            // this.loading = false
-                            // this.done    = true
-                            // EventHub.fire('global-search-index', data)
-                            // this.showNotif(this.trans('glbl_search_avail'))
+        //             axios.get('/api/getProfile/'+profile)
+        //                 .then(({data}) => {
+        //                     console.log(data)
+        //                     if(data.url){
+        //                         $('#swal2-html-container').html(`<a target="_blank" href="${data.url}">Get Token</a>`)
+        //                     }else{
+        //                         $('#swal2-html-container').text('Instagram profile has token.')
+        //                     }
+        //                     // this.loading = false
+        //                     // this.done    = true
+        //                     // EventHub.fire('global-search-index', data)
+        //                     // this.showNotif(this.trans('glbl_search_avail'))
 
-                        }).catch((err) => {
-                            console.error(err)
-                        })
-                }
+        //                 }).catch((err) => {
+        //                     console.error(err)
+        //                 })
+        //         }
 
-            }
-
-
+        //     }
 
 
 
 
-            console.log('this', this.data)
-            console.log('$event: ', $event)
-            console.log('value: ', value)
-            console.log('tcdit triggered')
-        },
+
+
+        //     console.log('this', this.data)
+        //     console.log('$event: ', $event)
+        //     console.log('value: ', value)
+        //     console.log('tcdit triggered')
+        // },
         rearange(preview) {
             if (preview && preview === true) {
                 this.spreview = false;

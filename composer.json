@@ -82,7 +82,8 @@
             "Alexusmai\\LaravelFileManager\\":"app/overrides/file-manager/model/",
             "Laravel\\Cashier\\Concerns\\": "app/Concerns",
             "Library\\": "app/Library/",
-            "Illuminate\\Queue\\Connectors\\": "app/overrides/Connectors"
+            "Illuminate\\Queue\\Connectors\\": "app/overrides/Connectors",
+            "Dymantic\\InstagramFeed\\": "app/Overrides/Instagram-feed/"
 
         },
         "classmap": [

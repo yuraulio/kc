@@ -6,10 +6,10 @@
         <slot></slot>
     </div>
 
-    <div v-if="type == 'button'" class="">
+    <!-- <div v-if="type == 'button'" class="">
         <button @click="click()" class="btn btn-secondary">{{ label }}</button>
 
-    </div>
+    </div> -->
 
     <div v-if="type == 'image'" :key="keyput + 'media'" class="">
         <label v-if="label && label == 'Shareable image'" :for="keyput" class="form-label">{{ label }}</label>
@@ -308,10 +308,10 @@ export default {
                 eventHub.$emit('updateslug', editorData);
             }
         },
-        click($event){
-            console.log('has clicked')
-            this.$emit('clicked', { 'data': $event, 'key': this.keyput})
-        },
+        // click($event){
+        //     console.log('has clicked')
+        //     this.$emit('clicked', { 'data': $event, 'key': this.keyput})
+        // },
         limit (string = '', limit = 0) {
             return string.substring(0, limit)
         },
