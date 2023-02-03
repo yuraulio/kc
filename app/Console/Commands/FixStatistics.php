@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use App\Model\User;
 use App\Model\Lesson;
+use App\Jobs\UpdateStatisticJson;
 
 class FixStatistics extends Command
 {
@@ -40,7 +41,7 @@ class FixStatistics extends Command
     public function handle()
     {
         $users = User::whereHas('statistic')->get();
-
+        $doubleEvents = [];
         foreach($users as $user){
             
             foreach($user->statistic as $st){
@@ -49,7 +50,13 @@ class FixStatistics extends Command
                     continue;
                 }
                 
-                foreach($videos as $key => $video){
+                if(in_array($st->pivot->event_id,$doubleEvents)){
+                    continue;
+                }
+                $doubleEvents[] = $st->pivot->event_id;
+                dispatch((new UpdateStatisticJson($st->pivot->event_id))->delay(now()->addSeconds(180)));
+
+                /*foreach($videos as $key => $video){
                     if(!isset($video['tab'])){
                         continue;
                     }
@@ -76,7 +83,7 @@ class FixStatistics extends Command
                     $newVideos[$key]['total_seen'] = $newVideos[$key]['stop_time'];
 
                 }
-                $user->statistic()->wherePivot('event_id', $st->pivot->event_id)->updateExistingPivot($st->pivot->event_id, ['videos' => json_encode($newVideos)], false);
+                $user->statistic()->wherePivot('event_id', $st->pivot->event_id)->updateExistingPivot($st->pivot->event_id, ['videos' => json_encode($newVideos)], false);*/
             }
 
         }
