@@ -24,7 +24,7 @@ class SubscriptionController extends Controller
         //$plans = Plan::with('categories')->get()->groupBy('id');
         $plans = Plan::wherePublished(1)->with('categories')->get();
         $categories = [];
-
+        //dd(Transaction::whereHas('subscription')->sum('amount'));
         foreach($plans as $plan){
             $categories = array_merge($plan->categories->pluck('id')->toArray(),$categories);
         }
@@ -39,14 +39,21 @@ class SubscriptionController extends Controller
             if(count($sub['subscription']) != 0){
 
                 if(!isset($sub['subscription'][0]['event'][0]['title'])){
-                    continue;
+                    $subEvId = -1;
+                    $titleE = '-';
+                    $plId = -1;
+                    
+                }else{
+                    $subEvId = $sub['subscription'][0]['event'][0]['id'];
+                    $titleE = $sub['subscription'][0]['event'][0]['title'];
+                    $plId = $sub['subscription'][0]['event'][0]['plans'][0]['id'];
                 }
 
                 if(isset($users[$sub['user'][0]['id']])){
-                    $users[$sub['user'][0]['id']][] = $sub['subscription'][0]['event'][0]['id'];
+                    $users[$sub['user'][0]['id']][] = $subEvId;
                 }else{
                     $users[$sub['user'][0]['id']] = [];
-                    $users[$sub['user'][0]['id']][] = $sub['subscription'][0]['event'][0]['id'];
+                    $users[$sub['user'][0]['id']][] = $subEvId;
                 }
 
                 $status = $sub['subscription'][0]['stripe_status'];
@@ -79,11 +86,11 @@ class SubscriptionController extends Controller
 
                 $total_users[$name] = $name;
 
-                //$sub['subscription'][0]['stripe_id']
-                $subscriptions[$sub['id']]=['user_id' => $sub['user'][0]['id'], 'user' => $name, 'plan_id' => $sub['subscription'][0]['event'][0]['plans'][0]['id'], 'plan_name' => $sub['subscription'][0]['name'],
-                    'event_title' => $sub['subscription'][0]['event'][0]['title'], 'status' => $status,'ends_at'=>$sub['ends_at'],
+
+                $subscriptions[$sub['id']]=['user_id' => $sub['user'][0]['id'], 'user' => $name, 'plan_id' => $plId, 'plan_name' => $sub['subscription'][0]['name'],
+                    'event_title' => $titleE, 'status' => $status,'ends_at'=>$sub['ends_at'],
                     'amount' => $amount,'created_at'=>date('Y-m-d',strtotime($sub['created_at'])),'id'=>$sub['id'],
-                    'event_id' => $sub['subscription'][0]['event'][0]['id'], 'delivery' => $delivery];
+                    'event_id' => $subEvId, 'delivery' => $delivery];
 
             }
 
