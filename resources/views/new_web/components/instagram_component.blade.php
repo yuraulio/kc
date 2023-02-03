@@ -20,9 +20,10 @@
                     </video>
                 @elseif($post->type == 'carousel')
                     {{'has Album here!!'}}
-                    if(count($post->children) > 0)
+                    @if(count($post->children) > 0)
+                    {{--dd($post->children)--}}
                         @foreach($post->children as $post)
-                            @if($post->type == 'image')
+                            @if($post['type'] == 'image')
                                 <a target="_blank" href="{{$post->permalink}}"><img src={{ $post->url }} alt="A post from my instagram"></a>
                             @else
                                 <video width="320" height="240" controls>
