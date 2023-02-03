@@ -79,8 +79,8 @@ class SubscriptionController extends Controller
 
                 $total_users[$name] = $name;
 
-
-                $subscriptions[$sub['subscription'][0]['stripe_id']]=['user_id' => $sub['user'][0]['id'], 'user' => $name, 'plan_id' => $sub['subscription'][0]['event'][0]['plans'][0]['id'], 'plan_name' => $sub['subscription'][0]['name'],
+                //$sub['subscription'][0]['stripe_id']
+                $subscriptions[$sub['id']]=['user_id' => $sub['user'][0]['id'], 'user' => $name, 'plan_id' => $sub['subscription'][0]['event'][0]['plans'][0]['id'], 'plan_name' => $sub['subscription'][0]['name'],
                     'event_title' => $sub['subscription'][0]['event'][0]['title'], 'status' => $status,'ends_at'=>$sub['ends_at'],
                     'amount' => $amount,'created_at'=>date('Y-m-d',strtotime($sub['created_at'])),'id'=>$sub['id'],
                     'event_id' => $sub['subscription'][0]['event'][0]['id'], 'delivery' => $delivery];
