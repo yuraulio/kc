@@ -7,7 +7,7 @@ use Maatwebsite\Excel\Concerns\FromArray;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 
-class BigElearningNoSubsctriptionExpired implements FromArray,WithHeadings, ShouldAutoSize
+class BigElearningNoSubscriptionExpired implements FromArray,WithHeadings, ShouldAutoSize
 {
     public $users;
     public $userss;
