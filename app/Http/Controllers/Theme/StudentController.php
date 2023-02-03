@@ -498,6 +498,10 @@ class StudentController extends Controller
                 $data['events'][$event->id]['plans'] = $event['plans'];
 
                 $data['events'][$event->id]['certs'] = isset($event['certificates']) && $event['certificates'] ? $event['certificates'] : [];;
+
+                // if($event->id == 4641){
+                //     dd($event['certificates']);
+                // }
                 $data['events'][$event->id]['exams'] = $event->getExams();
 
 
