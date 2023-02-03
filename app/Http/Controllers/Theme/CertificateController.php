@@ -132,6 +132,13 @@ class CertificateController extends Controller
     $certId = $certificate;
 
     $certificate =base64_decode($certificate);
+
+
+    //Demo line (Remove after Test)
+    // $certificate = explode('--',$certificate);
+    // dd($certificate);
+    //End demo line
+
     $certificate = explode('--',$certificate)[1];
 
     $timestamp = strtotime("now");
@@ -143,7 +150,7 @@ class CertificateController extends Controller
     Storage::disk('cert')->put($fn,$content);
 
     $filepath = public_path('cert/'.$fn);
-    $name = base64_encode($data['certificate']->firstname . '-' . $data['certificate']->lastname);
+    $name = base64_encode($data['certificate']->firstname . '-' . $data['certificate']->lastname.' - '.Str::slug($data['certificate']['event'][0]['title']));
     $newFile =  'cert/'.$name.'.jpg';
     $saveImagePath = public_path($newFile);
 

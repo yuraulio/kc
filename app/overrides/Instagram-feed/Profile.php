@@ -144,9 +144,10 @@ class Profile extends Model
         // if(!$this->latestToken()) {
         //     return InstagramFeed::empty();
         // }
-        // if (Cache::has($this->cacheKey($type))) {
-        //     return new InstagramFeed($this, Cache::get($this->cacheKey($type)));
-        // }
+        if (Cache::has($this->cacheKey($type))) {
+            dd('asd');
+            return new InstagramFeed($this, Cache::get($this->cacheKey($type)));
+        }
 
         //Cache::forget($this->cacheKey($type));
 
@@ -161,7 +162,8 @@ class Profile extends Model
             }
 
 
-            Cache::forever($this->cacheKey($type), $feed);
+            // Remember for 3 hours and fetch again
+            Cache::put($this->cacheKey($type), $feed,$seconds = 10800);
 
             return new InstagramFeed($this, $feed);
         } catch (Exception $e) {
