@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin_api\MediaController;
 use App\Http\Controllers\Admin_api\DashboardController;
 use App\Http\Controllers\Admin_api\TemplatesController;
 use App\Http\Controllers\Admin_api\TickerController;
+use App\Http\Controllers\Admin_api\InstagramController;
 use Illuminate\Support\Facades\Route;
 
 //Route::domain('admin.' . env('APP_DOMAIN'))->group(function () {
@@ -122,6 +123,8 @@ Route::domain(env('PREFIX_NEW_ADMIN_DOMAIN_URL') . env('APP_DOMAIN'))->group(fun
 
         Route::get('getEvents', [PagesController::class, 'getEvents']);
         Route::get('getPlans', [PagesController::class, 'getPlans']);
+
+        Route::get('getProfile/{profile}', [InstagramController::class, 'getProfile']);
     });
 });
 

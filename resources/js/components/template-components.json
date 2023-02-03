@@ -1585,6 +1585,17 @@
             }
         ]
     },
+    "instagram_feed": {
+        "version": 1,
+        "title": "Instagram feed",
+        "icon": "dripicons-view-thumb",
+        "key": "instagram_component",
+        "tab": "Content",
+        "width": "full",
+        "simple_view": true,
+        "mobile": true,
+        "inputs": []
+    },
     "terms_conditions": {
         "version": 1,
         "title": "Accept terms prompt",

@@ -75,9 +75,9 @@
 
         </div>
 
-        <draggable 
+        <draggable
             v-if="data"
-            v-model="data" 
+            v-model="data"
             key="cols"
             handle=".handle"
         >
@@ -118,26 +118,26 @@
                                     <template v-if="val.color == 'gray'">
                                         Gray <i class="mdi mdi-chevron-down"></i>
                                     </template>
-                                    
+
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-center" style="">
-                                    <a @click.prevent="val.color = 'white'" 
-                                        :class="'dropdown-item ' + (val.color == 'white' ? 'active' : '')" 
+                                    <a @click.prevent="val.color = 'white'"
+                                        :class="'dropdown-item ' + (val.color == 'white' ? 'active' : '')"
                                         href="#!">White
                                     </a>
 
-                                    <a @click.prevent="val.color = 'blue_gradient'" 
-                                        :class="'dropdown-item ' + (val.color == 'blue_gradient' ? 'active' : '')" 
+                                    <a @click.prevent="val.color = 'blue_gradient'"
+                                        :class="'dropdown-item ' + (val.color == 'blue_gradient' ? 'active' : '')"
                                         href="#!">Blue gradient
                                     </a>
 
-                                    <a @click.prevent="val.color = 'blue'" 
-                                        :class="'dropdown-item ' + (val.color == 'blue' ? 'active' : '')" 
+                                    <a @click.prevent="val.color = 'blue'"
+                                        :class="'dropdown-item ' + (val.color == 'blue' ? 'active' : '')"
                                         href="#!">Blue
                                     </a>
 
-                                    <a @click.prevent="val.color = 'gray'" 
-                                        :class="'dropdown-item ' + (val.color == 'gray' ? 'active' : '')" 
+                                    <a @click.prevent="val.color = 'gray'"
+                                        :class="'dropdown-item ' + (val.color == 'gray' ? 'active' : '')"
                                         href="#!">Gray
                                     </a>
                                 </div>
@@ -221,7 +221,7 @@
 
                             </div>
                             <div :class="'tab-content collapse pb-3 ' + (val.initialCollapsed ? '' : 'show')" :id="'collapseelement' + val.id" style="padding-top: 0px" >
-                                
+
                                     <div v-for="(vl, indx) in val.columns" :key="'tabpane' + indx" :class="'tab-pane ' + (vl.active === true ? ' active' : '')">
                                         <div v-show="column.active" class="card-body row pb-0 pt-0">
 
@@ -254,13 +254,13 @@
                                                 <div class="col-12">
                                                     <label class="form-label mt-2">Preview</label>
                                                     <div class="text-center">
-                                                        <iframe 
+                                                        <iframe
                                                             :width="findInputValue(column.template.inputs, 'youtube_full_width') ? '100%' : (findInputValue(column.template.inputs, 'youtube_width') || '100%')"
-                                                            :height="findInputValue(column.template.inputs, 'youtube_height') || '600'" 
+                                                            :height="findInputValue(column.template.inputs, 'youtube_height') || '600'"
                                                             :src="'https://www.youtube.com/embed/' + getYoutubeVideoCode(findInputValue(column.template.inputs, 'youtube_embed'))"
-                                                            title="YouTube video player" 
-                                                            frameborder="0" 
-                                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                                            title="YouTube video player"
+                                                            frameborder="0"
+                                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                                             allowfullscreen
                                                         ></iframe>
                                                     </div>
@@ -279,7 +279,7 @@
                                         </template>
 
                                     </div>
-                                
+
                             </div>
                         </div>
                     </div>
@@ -369,8 +369,8 @@
 
         </div>
 
-        <draggable 
-            v-model="data" 
+        <draggable
+            v-model="data"
             key="cols"
             handle=".handle"
         >
@@ -404,20 +404,20 @@
                                 </template>
                             </button>
                             <div class="dropdown-menu dropdown-menu-center" style="">
-                                <a @click.prevent="val.color = 'white'" 
-                                    :class="'dropdown-item ' + (val.color == 'white' ? 'active' : '')" 
+                                <a @click.prevent="val.color = 'white'"
+                                    :class="'dropdown-item ' + (val.color == 'white' ? 'active' : '')"
                                     href="#!">White
                                 </a>
-                                <a @click.prevent="val.color = 'blue_gradient'" 
-                                    :class="'dropdown-item ' + (val.color == 'blue_gradient' ? 'active' : '')" 
+                                <a @click.prevent="val.color = 'blue_gradient'"
+                                    :class="'dropdown-item ' + (val.color == 'blue_gradient' ? 'active' : '')"
                                     href="#!">Blue gradient
                                 </a>
-                                <a @click.prevent="val.color = 'blue'" 
-                                    :class="'dropdown-item ' + (val.color == 'blue' ? 'active' : '')" 
+                                <a @click.prevent="val.color = 'blue'"
+                                    :class="'dropdown-item ' + (val.color == 'blue' ? 'active' : '')"
                                     href="#!">Blue
                                 </a>
-                                <a @click.prevent="val.color = 'gray'" 
-                                    :class="'dropdown-item ' + (val.color == 'gray' ? 'active' : '')" 
+                                <a @click.prevent="val.color = 'gray'"
+                                    :class="'dropdown-item ' + (val.color == 'gray' ? 'active' : '')"
                                     href="#!">Gray
                                 </a>
                             </div>
@@ -592,6 +592,75 @@ export default {
         inputedTabs($event, value) {
             this.$set(value, 'tabs', $event.data);
         },
+        // clicked($event, value){
+        //     console.log($event, value)
+        //     let data = this.data
+
+        //     let profile = null;
+
+        //     if(value.key == 'instagram_profile_button'){
+        //         if(data.length != 0){
+        //             data.forEach(function(value, index){
+        //                 let columns = value.columns
+
+        //                 if(columns.length != 0){
+        //                     columns.forEach(function(value1, index1) {
+        //                         let column_component = value1.component
+
+        //                         if( column_component == 'instagram_feed'){
+        //                             let inputs = value1.template.inputs
+
+        //                             inputs.forEach(function(value2, index2) {
+        //                                 let input_name = value2.key
+        //                                 if(input_name == 'instagram_profile'){
+        //                                     profile = value2.value
+        //                                 }
+        //                             })
+        //                         }
+        //                     })
+        //                 }
+        //             })
+        //         }
+
+        //         if(profile != null){
+        //             let route = null;
+
+        //             Swal.fire(
+        //                 'Check if instagram profile has token',
+        //                 ' ',
+        //                 'info'
+        //             )
+
+        //             axios.get('/api/getProfile/'+profile)
+        //                 .then(({data}) => {
+        //                     console.log(data)
+        //                     if(data.url){
+        //                         $('#swal2-html-container').html(`<a target="_blank" href="${data.url}">Get Token</a>`)
+        //                     }else{
+        //                         $('#swal2-html-container').text('Instagram profile has token.')
+        //                     }
+        //                     // this.loading = false
+        //                     // this.done    = true
+        //                     // EventHub.fire('global-search-index', data)
+        //                     // this.showNotif(this.trans('glbl_search_avail'))
+
+        //                 }).catch((err) => {
+        //                     console.error(err)
+        //                 })
+        //         }
+
+        //     }
+
+
+
+
+
+
+        //     console.log('this', this.data)
+        //     console.log('$event: ', $event)
+        //     console.log('value: ', value)
+        //     console.log('tcdit triggered')
+        // },
         rearange(preview) {
             if (preview && preview === true) {
                 this.spreview = false;
@@ -708,7 +777,7 @@ export default {
         getColumnWidth(column, columns) {
             if (column.width) {
                 return column.width * 2;
-            } 
+            }
             var width = (12 / columns.length) / 2;
             this.$set(column, "width", Number(width));
             return width * 2;
@@ -947,7 +1016,7 @@ export default {
                         element.initialCollapsed = element.collapsed ? element.collapsed : false;
                     });
                 }
-           
+
                 if (this.mode != "edit" && parsed.length) {
                     parsed.forEach(element => {
                         element.columns.forEach(column => {
@@ -1035,7 +1104,7 @@ export default {
         eventHub.$off('component-added-' + this.name);
         eventHub.$off('component-rearange-' + this.name);
         eventHub.$off('order-changed-' + this.name);
-        eventHub.$off('component-change-' + this.name);    
+        eventHub.$off('component-change-' + this.name);
     }
 }
 </script>

@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Excel;
-use App\Exports\BigElearningNoSubsctriptionExpired;
+use App\Exports\BigElearningNoSubscriptionExpired;
 
 class ExportController extends Controller
 {
@@ -16,8 +16,8 @@ class ExportController extends Controller
 
         $filename = 'users_masterclass_big_elearning_no_subsctription_expired_access_completed.xlsx';
 
-        Excel::store(new BigElearningNoSubsctriptionExpired(), $filename, 'export');
-        return Excel::download(new BigElearningNoSubsctriptionExpired(), $filename);
+        //Excel::store(new BigElearningNoSubscriptionExpired(), $filename, 'export');
+        return Excel::download(new BigElearningNoSubscriptionExpired(), $filename);
     }
 
 }

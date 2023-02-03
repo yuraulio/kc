@@ -271,6 +271,7 @@ function nextQues(mark) {
 
 
     }
+    scrollCurrentQuestionRow()
     TOTAL_NOT_ANSWERED  = jQuery(".not-answered").length;
     TOTAL_NOT_VISITED   = jQuery(".not-visited").length;
     TOTAL_MARKED = jQuery(".marked").length;

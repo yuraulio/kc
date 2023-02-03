@@ -16,6 +16,7 @@
         "codexshaper/laravel-menu-builder": "2.5",
         "doctrine/dbal": "^3.1",
         "dompdf/dompdf": "^1.0",
+        "dymantic/laravel-instagram-feed": "^3.2",
         "embed/embed": "^3.0",
         "facebook/php-business-sdk": "11.0.0",
         "fideloper/proxy": "^4.0",
@@ -81,7 +82,8 @@
             "Alexusmai\\LaravelFileManager\\":"app/overrides/file-manager/model/",
             "Laravel\\Cashier\\Concerns\\": "app/Concerns",
             "Library\\": "app/Library/",
-            "Illuminate\\Queue\\Connectors\\": "app/overrides/Connectors"
+            "Illuminate\\Queue\\Connectors\\": "app/overrides/Connectors",
+            "Dymantic\\InstagramFeed\\": "app/Overrides/Instagram-feed/"
 
         },
         "classmap": [

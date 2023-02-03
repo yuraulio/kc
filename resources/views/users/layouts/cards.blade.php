@@ -13,15 +13,15 @@
                 <div class="row">
                     <div class="col">
                         <p class="mt-3 mb-0 text-sm">
-                            <span class="mr-3">ACTIVE: {{ $data['active'] }}</span>
-                            <span class="mr-3">INACTIVE: {{ $data['inactive'] }}</span>
+                            <span class="text-muted mr-3">ACTIVE: <span class="text-success">{{ $data['active'] }}</span></span>
+                            <span class="text-muted mr-3">INACTIVE: <span class="text-success">{{ $data['inactive'] }}</span></span>
                         </p>
                         <p class="mb-0 text-sm">
                             <span class="">All of the accounts created by users or admins.</span>
                         </p>
                     </div>
                 </div>
-                
+
             </div>
         </div>
     </div>
@@ -39,8 +39,8 @@
                 <div class="row">
                     <div class="col">
                 <p class="mt-3 mb-0 text-sm">
-                    <span class="mr-3">CLASS: {{ $data['usersInClass'] }}</span>
-                    <span class="mr-3">VIDEO: {{ $data['usersElearning'] }}</span>
+                    <span class="text-muted mr-3">CLASS: <span class="text-success">{{ $data['usersInClass'] }}</span></span>
+                    <span class="text-muted mr-3">VIDEO: <span class="text-success">{{ $data['usersElearning'] }}</span></span>
 
                 </p>
                 <p class="mb-0 text-sm">
@@ -65,8 +65,8 @@
                 <div class="row">
                     <div class="col">
                     <p class="mt-3 mb-0 text-sm">
-                    <span class="mr-3">CLASS: {{ $data['usersInClassAll'] }}</span>
-                    <span class="mr-3">VIDEO: {{ $data['usersElearningAll'] }}</span>
+                    <span class="text-muted mr-3">CLASS: <span class="text-success">{{ $data['usersInClassAll'] }}</span></span>
+                    <span class="text-muted mr-3">VIDEO: <span class="text-success">{{ $data['usersElearningAll'] }}</span></span>
 
                 </p>
                 <p class="mb-0 text-sm">
@@ -74,7 +74,7 @@
                 </p>
                     </div>
                 </div>
-                
+
             </div>
         </div>
     </div>

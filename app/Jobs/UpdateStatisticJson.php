@@ -30,7 +30,7 @@ class UpdateStatisticJson implements ShouldQueue
         $this->event = Event::find($event);
         $this->userId = $userId;
 
-        
+
         //dd($this->users);
 
     }
@@ -69,7 +69,7 @@ class UpdateStatisticJson implements ShouldQueue
 
         $newStatistics = [];
         $eventTopics = $this->event->topicsLessonsInstructors()['topics'];
-        
+
         if($this->userId){
 
             $eventId = $this->event->id;
@@ -89,7 +89,7 @@ class UpdateStatisticJson implements ShouldQueue
         }else{
 
             $eventId = $this->event->id;
-            
+
             $this->users = User::whereHas('events',function($event) use ($eventId){
                 return $event->where('event_id',$eventId)
                     ->whereHas('event_info1',function($query){
@@ -98,13 +98,13 @@ class UpdateStatisticJson implements ShouldQueue
             })
             ->with([
                 'statistic' => function($statistic) use($eventId){
-                    
+
                     return $statistic->where('event_id',$eventId);
                 }
             ])
             ->get();
 
-        
+
         }
 
         foreach($this->users as $user){

@@ -13,7 +13,7 @@
                     <img class="img-responsive" src="{{url('/theme/assets/img/ajax-loader-blue.gif')}}" alt="loader">
                 </div>
                 <div class="row">
-                    <div class="col">
+                    <div class="col info d-none">
                         <p class="mt-3 mb-0 text-sm">
                             <span class="text-muted mr-3">PAID: <span class="text-success" id="students_paid"></span></span>
                             <span class="text-muted mr-3">FREE: <span class="text-success" id="students_free"></span></span>
