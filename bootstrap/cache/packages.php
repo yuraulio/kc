@@ -63,6 +63,13 @@
       0 => 'Cviebrock\\EloquentSluggable\\ServiceProvider',
     ),
   ),
+  'dymantic/laravel-instagram-feed' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Dymantic\\InstagramFeed\\InstagramFeedServiceProvider',
+    ),
+  ),
   'facade/ignition' => 
   array (
     'providers' => 

@@ -530,6 +530,10 @@ li.select2-results__option:empty {
     min-height: 101px;
 }
 
+.card.card-stats .info .mt-3.mb-0.text-sm span{
+    display: inline-flex;
+}
+
 .logo-area {
     float: left;
     padding-top: 10px;

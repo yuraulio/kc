@@ -327,6 +327,10 @@ img.topic-progress{
   border-bottom: 1px solid #5179af;
 }
 
+.topic{
+    background-color: #3362a1;
+}
+
 .content-wrapper .sidebar-wrapper .sidebar-content .topics-list .topic .topic-header .topic-info .topic-info_title {
   margin: 0;
   margin-bottom: 0px;
@@ -383,7 +387,8 @@ img.topic-progress{
   -webkit-align-items: flex-start;
   align-items: flex-start;
   padding: 15px 45px 12px;
-  background-color: #3362a1;
+  /* background-color: #3362a1; */
+  background-color: #294e81;
   border-bottom: 1px solid #5179af;
   cursor: pointer;
   text-decoration: none;
@@ -425,6 +430,19 @@ img.topic-progress{
 .content-wrapper .sidebar-wrapper .sidebar-content .lessons-list .lesson a .lesson-info .lesson-info_title .highlighted {
   font-size: 22px;
   color: #32ff22;
+}
+
+.newLesson.notification-topic {
+    position: absolute;
+    left: 0.5rem;
+}
+.newLesson.notification-lesson{
+    position: absolute;
+    left: 1rem;
+}
+.newLesson img{
+    height: 1.5rem;
+    width: 1.5rem;
 }
 
 @media (max-width: 991px) {
