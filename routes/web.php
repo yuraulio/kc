@@ -676,6 +676,8 @@ Route::get('/dropbox/KUBnqOX1FNyTh74', 'DropboxController@refreshDropBoxKey');
 Route::get('/unroll-elearning-users', 'Dashboard\CronjobsController@unroll');
 Route::get('/sendNonpaymentEmail', 'Dashboard\CronjobsController@sendNonPayment');
 Route::get('/sendSubscriptionNonPayment', 'Dashboard\CronjobsController@sendSubscriptionNonPayment');
+Route::get('/sendReminderAfterExpirationSubscription', 'Dashboard\CronjobsController@sendReminderForExpiredSubscription');
+
 //Route::get('/sendWarningElearning', 'Dashboard\CronjobsController@sendElearningWarning');//out
 //Route::get('/sendHalfPeriodElearning', 'Dashboard\CronjobsController@sendElearningHalfPeriod');//out
 Route::get('/fb-google-csv', 'Dashboard\CronjobsController@fbGoogleCsv');

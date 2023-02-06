@@ -53,18 +53,6 @@ const scrollableDivElement = document.querySelector('.content1')
 
 scrollableDivElement.scrollTop = positionFromTopOfScrollableDiv - 10
 
-
-
-// const innerDivPos = document.querySelector('.active-question').offsetTop
-
-// console.log('offset: ', innerDivPos)
-
-// document
-//     .getElementById('container1')
-//     .scrollTo({ top: innerDivPos, behavior: 'smooth' })
-
-
-
 }
 
 
@@ -219,8 +207,7 @@ function nextQues(mark) {
         if(pavlosAllUnanswered.length==0) {
             //  alert("You have completed the exam. Please click 'I AM FINISHED WITH MY EXAM' ");
             // SHOW ANSWER LATER QUESTION IF EXIST
-            alert('SHOW ANSWER LATER QUESTION IF EXIST')
-            console.log('answer later questions: ',pavlosAnswerLater)
+
 
             let find = false;
             let nextQuest = firstUnanswered
@@ -246,9 +233,6 @@ function nextQues(mark) {
         else {
                 nextQuest = firstUnanswered;
                 let find = false;
-
-                // console.log('curr question: ', currQues)
-                // console.log('pavlos all unanswered: ', pavlosAllUnanswered)
 
                 jQuery.each(pavlosAllUnanswered,function(index, value) {
                     if(value > currQues){

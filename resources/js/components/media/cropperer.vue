@@ -444,33 +444,9 @@ export default {
         },
         versionSelected() {
 
-            // console.log('version selected function triggered')
-            // console.log('data: ', this.versionsForUpdate)
-            //console.log('uploaded cersion var: ', this.uploadedVersions)
-
             if (this.selectedVersion) {
                 this.$refs.cropper.enable();
                 var image_width, image_height;
-
-
-                // if has dirty version data for this version please load updated data -> no from db
-                // if(this.versionsForUpdate[this.selectedVersion.version]){
-                //     console.log('test')
-                //     var img = new Image();
-                //     img.onload = () => {
-                //         console.log(img)
-                //         image_width = img.width;
-                //         image_height = img.height;
-                //         this.$nextTick(() => {
-                //             this.setCropBox(image_width, image_height);
-
-
-                //         });
-                //     }
-
-
-                //     return 0;
-                // }
 
                 var img = new Image();
                 img.onload = () => {
@@ -513,20 +489,6 @@ export default {
             if (this.selectedVersion) {
 
                 this.getCropBoxData()
-                // let cropData = {}
-
-                // cropData['height'] = this.cropBoxData.height
-                // cropData['width'] = this.cropBoxData.width
-                // cropData['left'] = this.cropBoxData.left
-                // cropData['top'] = this.cropBoxData.top
-
-                // this.versionsForUpdate[this.selectedVersion.version] = {
-                //     'alttext': this.alttext != 'null' ? this.alttext : '',
-                //     'link': this.link != 'null' ? this.link : '',
-                // }
-
-                // console.log('selected version: ')
-                // console.log(this.versionsForUpdate)
 
                 if(this.versionData){
                     //console.log('here')
@@ -561,9 +523,6 @@ export default {
                         'imgname': this.imgname,
                         'version': 'original',
                         'parent_id': this.$refs.cropper.$parent.parrentImage.id,
-                        //'crop_data': cropData,
-                        // 'width_ratio': this.width_ratio,
-                        // 'height_ratio': this.height_ratio,
                         'id': this.id,
                         'jpg': this.jpg,
                         'instance': this.$refs.cropper,
@@ -612,18 +571,6 @@ export default {
             this.versionsForUpdate[currVersion].jpg = this.jpg
             this.versionsForUpdate[currVersion].instance = this.$refs.cropper
             this.versionsForUpdate[currVersion].hasDeleted = false
-
-            // this.versionsForUpdate[currVersion] = {
-            //     'imgname': this.imgname,
-            //     'version': this.version,
-            //     'parent_id': this.$refs.cropper.$parent.parrentImage.id,
-            //     'crop_data': cropData,
-            //     'width_ratio': this.width_ratio,
-            //     'height_ratio': this.height_ratio,
-            //     'id': this.id,
-            //     'jpg': this.jpg,
-            //     'instance': this.$refs.cropper
-            // }
 
         },
         resetData() {
@@ -717,11 +664,6 @@ export default {
             return `${version} — [${description}]`
         },
         upload(event) {
-            // console.log('triggered upload function')
-
-            // console.log('version data', this.versionData)
-            // console.log('updated data', this.versionsForUpdate[this.selectedVersion.version])
-
 
             if(this.versionData == null && this.selectedVersion && this.versionsForUpdate[this.selectedVersion.version] === undefined){
                 this.getCropBoxData();
@@ -742,8 +684,6 @@ export default {
             // for each gia oles tiw ekdoseis
 
             let versions = this.versionsForUpdate
-
-            //console.log('EST');
 
            Object.values(versions).forEach(value => {
 
@@ -800,11 +740,9 @@ export default {
         },
         getData() {
             this.data = JSON.stringify(this.$refs.cropper.getData(), null, 4);
-            //console.log('get data function: ', this.data)
             this.imgData = JSON.parse(
                 JSON.stringify(this.$refs.cropper.getData(), null, 4)
             );
-            //console.log('img data', this.imgData)
         },
         move(offsetX, offsetY) {
             this.$refs.cropper.move(offsetX, offsetY);
