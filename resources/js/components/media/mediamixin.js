@@ -351,9 +351,10 @@ var mediaMixin = {
                     delete this.$refs.crpr.versionsForUpdate[version]
                 }
 
-
+console.log('version response: ', version)
             })
             .catch((error) => {
+                console.log('ERROR: ', error)
                 //console.log("edit error", error.response.data.message);
                 this.$refs.crpr.isUploading = false;
                 this.$toast.error("Failed to update. " + error.response.data.message);
