@@ -28,6 +28,7 @@ use App\Notifications\InClassReminder;
 use App\Notifications\SendTopicAutomateMail;
 use App\Model\Instructor;
 use App\Notifications\InstructorsMail;
+use App\Notifications\SubscriptionExpireReminder;
 
 class CronjobsController extends Controller
 {
@@ -153,6 +154,44 @@ class CronjobsController extends Controller
             });*/
 
 
+        }
+
+    }
+
+    public function sendReminderForExpiredSubscription(){
+
+        $subscriptions = Subscription::with('event')->where('ends_at', '<=', date("Y-m-d H:s:i"))->get();
+
+        foreach($subscriptions as $sub){
+
+
+            $event = $sub['event']->first();
+
+            if(!$event){
+                continue;
+            }
+
+            $subscription_expiration_email = $event['expiration_email'];
+
+            $status = 999;
+            if($subscription_expiration_email == 0){
+                //expired NOW
+                $status = 0;
+
+            }else if($subscription_expiration_email == 1){
+                // expired 6 MOMTHS
+                $status = 1;
+
+            }else if($subscription_expiration_email == 2){
+                // expired 12 MONTHS
+                $status = 2;
+            }
+
+            if($sub['user_id'] == 1359){
+                dd($status);
+            }
+
+            $sub->user->notify(new SubscriptionExpireReminder($status));
         }
 
     }

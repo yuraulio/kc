@@ -500,7 +500,6 @@ class SubscriptionController extends Controller
     public function orderSuccess(){
 
         //dd(Session::get('subscription-user'));
-
         $subscription = Subscription::find(Session::get('subscription-user'));
 
         if($subscription && ($transaction = $subscription->transactions()->first())){

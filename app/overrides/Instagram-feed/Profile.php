@@ -145,7 +145,6 @@ class Profile extends Model
         //     return InstagramFeed::empty();
         // }
         if (Cache::has($this->cacheKey($type))) {
-            dd('asd');
             return new InstagramFeed($this, Cache::get($this->cacheKey($type)));
         }
 

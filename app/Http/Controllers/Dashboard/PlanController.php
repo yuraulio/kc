@@ -21,7 +21,7 @@ class PlanController extends Controller
         }else{
             $events = Event::where('view_tpl',$view_tpl)->where('published',true)->get();
         }
- 
+
         return $events;
     }
 
@@ -55,23 +55,23 @@ class PlanController extends Controller
     }
 
     public function store(Request $request){
-    
+
         //dd($request->all());
         //$skey = env('STRIPE_SECRET');
-        //$stripe = Stripe::make($skey);    
+        //$stripe = Stripe::make($skey);
 
         $paymentMethod = PaymentMethod::find(2);
 
         $eventsAttach = [];
         foreach($request->events as $eventId){
-            
+
             if(($event = Event::find($eventId))){
                 if(!$event->paymentMethod->first()){
                     continue;
                 }
 
                 $eventsAttach[] = $eventId;
-                
+
                 //$secretKey = env('PAYMENT_PRODUCTION') ? $event->paymentMethod->first()->processor_options['secret_key'] : $event->paymentMethod->first()->test_processor_options['secret_key'];
                 //session()->put('payment_method',$event->paymentMethod->first()->id);
 
@@ -89,15 +89,15 @@ class PlanController extends Controller
                     'currency'             => 'EUR',
                     'interval'             => $request->interval,
                     'interval_count'       => $request->interval_count,
-                    'trial_period_days'    => $request->trial     
+                    'trial_period_days'    => $request->trial
 
                 ]);
 
 
             }
-        }   
+        }
 
-       
+
         if($plan){
 
             $planN = new MyPlan;
@@ -118,10 +118,10 @@ class PlanController extends Controller
                     $planN->events()->attach($event);
                 }
             }
-           
+
             if($request->categories){
                 foreach($request->categories as $category){
-                  
+
                     $planN->categories()->attach($category);
                 }
             }
@@ -139,7 +139,7 @@ class PlanController extends Controller
     }
 
     public function edit(MyPlan $plan){
-        
+
         $data['events'] = $this->getEvents('elearning_event');
         $data['noevents'] = $this->getEvents();
         $data['categories'] = $this->getCategories();
@@ -168,8 +168,8 @@ class PlanController extends Controller
             $plan->events()->detach();
             $plan->categories()->detach();
             $plan->noEvents()->detach();
-           
-            
+
+
             if($request->events){
                 foreach($request->events as $event){
                     $plan->events()->attach($event);
@@ -220,6 +220,6 @@ class PlanController extends Controller
             ]);
         }
         //dd($request->id);
-        
+
     }
 }
