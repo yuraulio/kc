@@ -42,11 +42,13 @@ class SubscriptionExpireReminder extends Notification
      */
     public function toMail($notifiable)
     {
-        dd($this);
+        dd($this->status);
+
+        
         return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+            ->from('info@knowcrunch.com', 'Knowcrunch')
+            ->subject('Knowcrunch |' . $this->data['user']['first'] . ', welcome to ' . $this->data['extrainfo'][2].'!')
+            ->view('emails.user.instructions_email',$this->data);
     }
 
     /**
