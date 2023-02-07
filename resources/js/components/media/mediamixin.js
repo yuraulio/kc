@@ -487,6 +487,10 @@ var mediaMixin = {
             this.loading = true;
             axios
                 .get('/api/media_manager/files', {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Content-Length': '256'
+                    },
                     params: {
                         folder_id: folderId,
                         filter: this.searchFilter,
