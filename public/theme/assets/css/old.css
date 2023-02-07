@@ -1638,6 +1638,15 @@ img.linkdein-image-add {
     display: inline-block;
 }
 
+#ios-icon{
+    /* max-height: 70px; */
+    height: 3rem;
+}
+#android-icon{
+    /* max-height: 70px; */
+    height: 3rem;
+}
+
 
 
 

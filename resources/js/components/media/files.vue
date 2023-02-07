@@ -198,7 +198,7 @@ export default {
                 })
                 .catch((error) => {
 
-                    if(error && error.response){
+                    if(error.response){
                         this.$parent.errors = error.response.data.errors;
                     }
 
