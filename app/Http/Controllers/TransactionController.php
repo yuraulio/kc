@@ -89,7 +89,7 @@ class TransactionController extends Controller
 
     }*/
 
-    public function participants($start_date = null, $end_date = null){
+    public function participants($start_date = null, $end_date = null, $homepage = false){
         $userRole = Auth::user()->role->pluck('id')->toArray();
 
         $paymentMethods = [];
@@ -108,11 +108,24 @@ class TransactionController extends Controller
             $from = date($start_date);
             $to = date($end_date);
 
-            $transactions = Transaction::with('user.statisticGroupByEvent','user.events_for_user_list','user.ticket','subscription','event','event.delivery','event.category', 'event.city')->whereBetween('created_at', [$from,$to])->orderBy('created_at','desc')->get();
+            if(!$homepage){
+                $transactions = Transaction::with('user.statisticGroupByEvent','user.events_for_user_list','user.ticket','subscription','event','event.delivery','event.category', 'event.city')->whereBetween('created_at', [$from,$to])->orderBy('created_at','desc')->get();
+
+            }else{
+                $transactions = Transaction::with('user.ticket','subscription','event','event.delivery','event.category', 'event.city')->whereBetween('created_at', [$from,$to])->orderBy('created_at','desc')->get();
+
+            }
+
 
         }else{
             //dd('fsad');
-            $transactions = Transaction::with('user.statisticGroupByEvent','user.events_for_user_list','user.ticket','subscription','event','event.delivery','event.category', 'event.city')->where('status', 1)->orderBy('created_at','desc')->get();
+            if(!$homepage){
+                $transactions = Transaction::with('user.statisticGroupByEvent','user.events_for_user_list','user.ticket','subscription','event','event.delivery','event.category', 'event.city')->where('status', 1)->orderBy('created_at','desc')->get();
+
+            }else{
+                $transactions = Transaction::with('user.ticket','subscription','event','event.delivery','event.category', 'event.city')->where('status', 1)->orderBy('created_at','desc')->get();
+
+            }
 
         }
 
@@ -194,21 +207,24 @@ class TransactionController extends Controller
 
                     $total_users[$u['firstname'].'_'.$u['lastname']] = $u['firstname'].'_'.$u['lastname'];
 
-                    $statistic = $u->statisticGroupByEvent->groupBy('event_id');
-                    $videos = isset($statistic[$transaction->event->first()->id]) ?
-                    $statistic[$transaction->event->first()->id]->first()->pivot : null;
+                    
+                    if(!$homepage){
+                        $statistic = $u->statisticGroupByEvent->groupBy('event_id');
 
-                    $events = $u->events_for_user_list->groupBy('id');
-                    $expiration = isset($events[$transaction->event->first()->id]) ? $events[$transaction->event->first()->id]->first()->pivot->expiration : null;
-                    $paymentMethodId = isset($events[$transaction->event->first()->id]) ? $events[$transaction->event->first()->id]->first()->pivot->payment_method : 0;
-                    $videos = isset($videos) ? json_decode($videos->videos,true) : null;
-
-                    $paymentMethod = isset($paymentMethods[$paymentMethodId]) ? $paymentMethods[$paymentMethodId] :'Alpha Bank';
-
+                        $videos = isset($statistic[$transaction->event->first()->id]) ?
+                        $statistic[$transaction->event->first()->id]->first()->pivot : null;
+                        $videos = isset($videos) ? json_decode($videos->videos,true) : null;
+                        $events = $u->events_for_user_list->groupBy('id');
+                        $expiration = isset($events[$transaction->event->first()->id]) ? $events[$transaction->event->first()->id]->first()->pivot->expiration : null;
+                        $paymentMethodId = isset($events[$transaction->event->first()->id]) ? $events[$transaction->event->first()->id]->first()->pivot->payment_method : 0;
+                        $paymentMethod = isset($paymentMethods[$paymentMethodId]) ? $paymentMethods[$paymentMethodId] :'Alpha Bank';
+                    }
+                    
                     $city = !empty($transaction->event[0]['city']) && isset($transaction->event[0]['city'][0]) ? $transaction->event[0]['city'][0]['name'] : '';
 
 
-                    $data['transactions'][] = ['id' => $transaction['id'], 'user_id' => $u['id'],'name' => $u['firstname'].' '.$u['lastname'],
+                    if(!$homepage){
+                        $data['transactions'][] = ['id' => $transaction['id'], 'user_id' => $u['id'],'name' => $u['firstname'].' '.$u['lastname'],
                                                 'event_id' => $transaction->event[0]['id'],'event_title' => $transaction->event[0]['title'].' / '.date('d-m-Y', strtotime($transaction->event[0]['published_at'])),'coupon_code' => $coupon_code, 'type' => trim($ticketType),'ticketName' => $ticketName,
                                                 'date' => date_format($transaction['created_at'], 'Y-m-d'), 'amount' => $amount,
                                                 'is_elearning' => $isElearning,
@@ -216,33 +232,16 @@ class TransactionController extends Controller
                                                 'paymentMethod' => $paymentMethod,
                                                 'city' => $city,
                                                 'category' => isset($transaction->event[0]['category'][0]['name']) ? $transaction->event[0]['category'][0]['name'] : ''];
-
-                    // if($ticketType == 'Special'){
-
-                    //     //$arr_income[$transaction->id] = $transaction->amount;
-
-                    //     $income['special'] +=  ($amount);
-
-
-                    // }else if($ticketType == 'Early Bird'){
-
-                    //     $income['early'] += ($amount) ;
-
-
-                    // }else if($ticketType == 'Regular'){
-
-                    //     $income['regular'] += ($amount) ;
-
-                    // }else if($ticketType == 'Sponsored'){
-
-                    // }else if($ticketType == 'Alumni'){
-
-                    //     $income['alumni'] +=  ($amount) ;
-
-
-                    // }else{
-                    //     $income['other'] += ($amount) ;
-                    // }
+                    }else{
+                        $data['transactions'][] = ['id' => $transaction['id'], 'user_id' => $u['id'],'name' => $u['firstname'].' '.$u['lastname'],
+                                                'event_id' => $transaction->event[0]['id'],'event_title' => $transaction->event[0]['title'].' / '.date('d-m-Y', strtotime($transaction->event[0]['published_at'])),'coupon_code' => $coupon_code, 'type' => trim($ticketType),'ticketName' => $ticketName,
+                                                'date' => date_format($transaction['created_at'], 'Y-m-d'), 'amount' => $amount,
+                                                'is_elearning' => $isElearning,
+                                                'coupon_code' => $transaction['coupon_code'],
+                                                'city' => $city,
+                                                'category' => isset($transaction->event[0]['category'][0]['name']) ? $transaction->event[0]['category'][0]['name'] : ''];
+                    }
+            
                 }
 
             }
@@ -251,9 +250,6 @@ class TransactionController extends Controller
 
         $data['usersElearningAll'] = count($usersElearningAll);
         $data['usersInClassAll'] = count($usersInClassAll);
-
-        // $data['income'] = $income;
-        // $data['income']['total'] = array_sum($income);
 
         $data['total_users'] = count($total_users);
 

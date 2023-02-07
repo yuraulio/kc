@@ -150,4 +150,9 @@ class DashboardController extends Controller
     {
         return view('new_admin.pages.countdown_edit', ["id" => $id]);
     }
+
+    public function reports()
+    {
+        return view('new_admin.pages.reports');
+    }
 }

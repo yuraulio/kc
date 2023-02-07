@@ -164,6 +164,8 @@ class CronjobsController extends Controller
 
         foreach($subscriptions as $sub){
 
+            $data = [];
+
 
             $event = $sub['event']->first();
 
@@ -177,21 +179,21 @@ class CronjobsController extends Controller
             if($subscription_expiration_email == 0){
                 //expired NOW
                 $status = 0;
+                $data['template'] = '';
+                
 
             }else if($subscription_expiration_email == 1){
                 // expired 6 MOMTHS
                 $status = 1;
+                $data['template'] = '';
 
             }else if($subscription_expiration_email == 2){
                 // expired 12 MONTHS
                 $status = 2;
+                $data['template'] = '';
             }
 
-            if($sub['user_id'] == 1359){
-                dd($status);
-            }
-
-            $sub->user->notify(new SubscriptionExpireReminder($status));
+            $sub->user->notify(new SubscriptionExpireReminder($status, $data));
         }
 
     }

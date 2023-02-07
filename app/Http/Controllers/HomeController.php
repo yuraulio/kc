@@ -41,7 +41,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $transactions = (new TransactionController)->participants()['transactions'];
+        $transactions = (new TransactionController)->participants(null,null,true)['transactions'];
 
         //dd($transactions);
 
