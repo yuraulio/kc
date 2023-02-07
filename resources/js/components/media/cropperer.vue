@@ -542,9 +542,9 @@ export default {
         changeHandler(event){
             let input = event.target.name
             if(this.selectedVersion){
-                this.versionsForUpdate[this.selectedVersion.version][input] = event.target.value
+                this.versionsForUpdate[this.selectedVersion.version][input] = event.target.value ? event.target.value : ''
             }else{
-                this.versionsForUpdate['original'][input] = event.target.value
+                this.versionsForUpdate['original'][input] = event.target.value ? event.target.value : ''
             }
 
         },
@@ -869,6 +869,7 @@ export default {
     beforeDestroy() {
         this.imgSrc = null;
         this.$parent.$parent.selectedFile = null;
+        this.versionsForUpdate = null
     }
 };
 </script>
