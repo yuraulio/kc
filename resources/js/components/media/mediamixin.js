@@ -487,10 +487,6 @@ var mediaMixin = {
             this.loading = true;
             axios
                 .get('/api/media_manager/files', {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Content-Length': '256'
-                    },
                     params: {
                         folder_id: folderId,
                         filter: this.searchFilter,
@@ -515,6 +511,7 @@ var mediaMixin = {
                         console.log(error.request)
                         console.log(folderId)
                         this.getFiles(folderId)
+                        console.log('after second time call')
                       } else {
                         console.log('33')
                         console.log(error)
