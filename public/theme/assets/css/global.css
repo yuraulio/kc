@@ -270,14 +270,6 @@ a.ui-button:active,
 .footer-social-menu li a path{ stroke: #ffffff !important; transition: 300ms all ease; }
 .footer-social-menu li a:hover path{ stroke: #81bbfc !important; stroke-width: 1.5;}
 
-.footer-mobile-app-icons {
-    float: right;
-    margin-top: 1rem;
-}
-.footer-mobile-app-icons li{
-    display: inline-block;
-}
-
 .copyright-wrapper{ margin-top: 80px; }
 .copyright-wrapper p{ color: #ffffff; font-size: 13px; text-align: right; line-height: 1.6; }
 
@@ -785,13 +777,7 @@ body.compensate-for-scrollbar { overflow: hidden; }
 	.form-control input{ font-size: 18px; height: 40px; line-height: 40px; }
 	.form-control button.btn{ font-size: 18px; padding: 15px 10px; }
 
-    .footer-mobile-app-icons {
-        float: none;
-        display: block;
-        width: 100%;
-        text-align: center;
-        margin: 30px auto 0 auto;
-    }
+
 
 
 }
