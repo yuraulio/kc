@@ -22,7 +22,7 @@ class MediaFileResource extends JsonResource
             'size' => $this->size,
             'url' => $this->url,
             'extension' => $this->extension,
-            'full_path' => $this->full_path,
+            'full_path' => $this->full_path ? $this->full_path : '',
             'subfiles' => $this->whenLoaded('subfiles', MediaFileResource::collection($this->subfiles), []),
             'parrent' => $this->whenLoaded('parrent', $this->parrent, null),
             'siblings' => $this->whenLoaded('siblings', $this->siblings, []),

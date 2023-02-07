@@ -367,7 +367,6 @@ class MediaController extends Controller
                 $cropData
             );
 
-            dd($mfile);
 
             if ($request->version != 'original') {
                 TinifyImage::dispatch(public_path() . $mfile->full_path, $mfile->id);
