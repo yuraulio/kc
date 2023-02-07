@@ -1782,7 +1782,6 @@
           type: 'GET',
           url: "/mycertificate/convert-pdf-to-image/"+certificateId,
           success: function(data) {
-            console.log('response: ', data)
             let url = data.path
 
               data = url.replace('\\','/')
@@ -2460,7 +2459,6 @@
         $( '.dynamic-courses-wrapper.unpaid' ).mouseenter( handlerIn ).mouseleave( handlerOut );
 
         function handlerIn(){
-            console.log($(this))
             let tabsElem = $(this).find('.inside-tabs')[0];
             let messageElem = $(this).find('.unpaidMessage')[0];
 

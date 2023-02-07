@@ -560,6 +560,9 @@ export default {
             cropData['left'] = this.cropBoxData.left
             cropData['top'] = this.cropBoxData.top
 
+            if(!this.versionsForUpdate[currVersion]){
+                this.versionsForUpdate[currVersion] = []
+            }
 
             this.versionsForUpdate[currVersion].imgname = this.imgname
             this.versionsForUpdate[currVersion].version = this.version
@@ -833,7 +836,10 @@ export default {
             if(this.versionsForUpdate.length != 0 && this.versionsForUpdate[this.selectedVersion.version]){
                 delete this.versionsForUpdate[this.selectedVersion.version];
 
-                this.versionsForUpdate[this.selectedVersion.version].hasDeleted = true
+                if(this.versionsForUpdate[this.selectedVersion.version]){
+                    this.versionsForUpdate[this.selectedVersion.version].hasDeleted = true
+                }
+
 
             }
         },

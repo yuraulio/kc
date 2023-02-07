@@ -1,4 +1,4 @@
-@extends('new_admin/layouts.vertical', ["page_title"=> "Countdown"])
+@extends('new_admin/layouts.vertical', ["page_title"=> "Report Tools"])
 
 @section('css')
 <!-- third party css -->
