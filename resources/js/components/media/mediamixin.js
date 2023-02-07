@@ -510,7 +510,7 @@ var mediaMixin = {
                         // client never received a response, or request never left
                         console.log(error.request)
                         console.log(folderId)
-                        getFiles(folderId)
+                        this.getFiles(folderId)
                       } else {
                         console.log('33')
                         console.log(error)
