@@ -474,6 +474,9 @@ var mediaMixin = {
             this.loading = true;
             axios
                 .get('/api/media_manager/files', {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
                     params: {
                         folder_id: folderId,
                         filter: this.searchFilter,
@@ -486,7 +489,21 @@ var mediaMixin = {
                     this.updateSelectedFile();
                 })
                 .catch((error) => {
-                    console.log(error)
+                    console.log('here is an error')
+                    //console.log(error)
+                    if (error.response) {
+                        console.log('11')
+                        // client received an error response (5xx, 4xx)
+                        console.log(error.response)
+                      } else if (error.request) {
+                        console.log('22')
+                        // client never received a response, or request never left
+                        console.log(error.request)
+                      } else {
+                        console.log('33')
+                        console.log(error)
+                        // anything else
+                      }
                     this.errors = error.response.data.errors;
                     this.loading = false;
                 });
