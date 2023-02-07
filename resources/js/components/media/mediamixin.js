@@ -320,7 +320,8 @@ var mediaMixin = {
             }).then((response) => {
                 this.$toast.success('Uploaded Successfully!');
                 console.log('response: ',response)
-                this.getFiles(response.data.data.folder_id);
+
+                //this.getFiles(response.data.data.folder_id);
                 this.$refs.crpr.isUploading = false;
                 this.imageKey = Math.random().toString().substr(2, 8);
                 // this.$modal.hide('edit-image-modal');
@@ -354,6 +355,10 @@ var mediaMixin = {
 
                 if(version != null && version != 'original'){
                     delete this.$refs.crpr.versionsForUpdate[version]
+                }
+
+                if(response){
+                    this.getFiles(response.data.data.folder_id);
                 }
 
 
@@ -475,13 +480,13 @@ var mediaMixin = {
             this.getFiles(folderId);
         },
         getFiles(folderId) {
+            console.log('from get files')
+
+            console.log()
             this.errors = null;
             this.loading = true;
             axios
                 .get('/api/media_manager/files', {
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
                     params: {
                         folder_id: folderId,
                         filter: this.searchFilter,

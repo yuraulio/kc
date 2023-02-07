@@ -316,11 +316,11 @@ class MediaController extends Controller
 
                 $crop_data = json_decode($request->crop_data);
 
-                $crop_height = $crop_data->height * (1 / $request->height_ratio);
-                $crop_width = $crop_data->width * (1 / $request->width_ratio);
+                $crop_height = $crop_data->height * (1 / (float)$request->height_ratio);
+                $crop_width = $crop_data->width * (1 / (float)$request->width_ratio);
 
-                $height_offset = $crop_data->top * (1 / $request->height_ratio);
-                $width_offset = $crop_data->left * (1 / $request->width_ratio);
+                $height_offset = $crop_data->top * (1 / (float)$request->height_ratio);
+                $width_offset = $crop_data->left * (1 / (float)$request->width_ratio);
 
                 $cropData = [
                     "crop_height" => $crop_height,

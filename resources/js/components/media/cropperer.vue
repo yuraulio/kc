@@ -713,7 +713,6 @@ export default {
                 }
 
             })
-            //this.versionsForUpdate = {}
 
         },
         imageAdded($event) {
@@ -867,6 +866,7 @@ export default {
         }
     },
     beforeDestroy() {
+        console.log('destroy')
         this.imgSrc = null;
         this.$parent.$parent.selectedFile = null;
         this.versionsForUpdate = null
