@@ -279,8 +279,9 @@ var mediaMixin = {
             let value = $event
             var formData = new FormData();
 
+            console.log('VALUE: ', value)
             // edit image version
-            if(value.imgname){
+            if(value != null && value.imgname){
                 formData.append('imgname', value.imgname);
                 formData.append('alttext', value.alttext);
                 formData.append('link', value.link);
@@ -340,18 +341,22 @@ var mediaMixin = {
                     this.$refs.crpr.width = this.$refs.crpr.parrentImage.width;
 
                 }
-                let version = value.version
+                let version = null;
+                if(value != null && value.imgname){
+                    version = value.version
+                }
+
                 this.$refs.crpr.jpg = false;
                 this.$refs.crpr.version = 'original';
                 this.$refs.crpr.disable();
                 this.$refs.crpr.versionData = null;
 
 
-                if(version != 'original'){
+                if(version != null && version != 'original'){
                     delete this.$refs.crpr.versionsForUpdate[version]
                 }
 
-                console.log('version response: ', version)
+
             })
             .catch((error) => {
                 console.log('ERROR: ', error)
