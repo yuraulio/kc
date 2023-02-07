@@ -561,7 +561,7 @@ export default {
             cropData['top'] = this.cropBoxData.top
 
             if(!this.versionsForUpdate[currVersion]){
-                this.versionsForUpdate[currVersion] = []
+                this.versionsForUpdate[currVersion] = {}
             }
 
             this.versionsForUpdate[currVersion].imgname = this.imgname
