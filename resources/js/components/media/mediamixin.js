@@ -320,6 +320,7 @@ var mediaMixin = {
             }).then((response) => {
                 this.$toast.success('Uploaded Successfully!');
                 console.log('response: ',response)
+
                 //this.getFiles(response.data.data.folder_id);
                 this.$refs.crpr.isUploading = false;
                 this.imageKey = Math.random().toString().substr(2, 8);
@@ -354,6 +355,10 @@ var mediaMixin = {
 
                 if(version != null && version != 'original'){
                     delete this.$refs.crpr.versionsForUpdate[version]
+                }
+
+                if(response){
+                    this.getFiles(response.data.data.folder_id);
                 }
 
 

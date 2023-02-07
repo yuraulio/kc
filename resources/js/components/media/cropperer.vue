@@ -714,7 +714,6 @@ export default {
 
             })
 
-
         },
         imageAdded($event) {
             this.imgSrc = $event.url;
