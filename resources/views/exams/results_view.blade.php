@@ -54,15 +54,12 @@ $title1 = str_replace('_',' ',$title);
     <div id="main" class="container">
         <div style="height:100vh" class="row">
 
-            <div class="col-2"></div>
-
-            <div style="margin: auto;" class="col-auto">
+            <div style="margin: auto;" class="col-10">
                 <div class="card card-block">
-                    <img class="text-center" style="height:60vh;" src="{{ $img }}" alt="result-image">
+                    <img class="text-center" style="height:70vh;" src="{{ $img }}" alt="result-image">
                 </div>
             </div>
 
-            <div class="col-2"></div>
 
         </div>
     </div>
