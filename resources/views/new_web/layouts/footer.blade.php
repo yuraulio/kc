@@ -194,13 +194,13 @@
                 <ul class="footer-mobile-app-icons">
                     <li>
                         <a target="_blank" title="ios app icon" href="https://apple.co/3XH07SC">
-                            <img loading="lazy" class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/ios_icon.svg')}}" height="60" width="90" alt="{{ 'ios_app_icon' }}" title="{{ 'ios_app_icon' }}">
+                            <img loading="lazy" class="replace-with-svg" id="ios-icon" src="{{cdn('/theme/assets/images/icons/ios_icon.svg')}}" height="60" width="100" alt="{{ 'ios_app_icon' }}" title="{{ 'ios_app_icon' }}">
                         </a>
                     </li>
                     <li>
                         <a target="_blank" title="android app icon" href="https://play.google.com/store/apps/details?id=gr.softweb.knowcrunch_android&fbclid=IwAR1zA5Wcf2cXXVCLg4yUfAC4IAstpFd4_jqXTGnA6NKs-kByXWDRfDRlzGE&utm_source=Knowcrunch&utm_campaign=Badge&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1">
                             {{--<img loading="lazy" class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/social/Facebook.svg')}}" height="50" width="80" alt="{{ 'android_app_icon' }}" title="{{ 'android_app_icon' }}">--}}
-                            <img loading="lazy" alt='Get it on Google Play' src="{{cdn('/theme/assets/images/icons/android_icon.png')}}" height="50" width="100"/>
+                            <img loading="lazy" id="android-icon" alt='Get it on Google Play' src="{{cdn('/theme/assets/images/icons/android_icon.png')}}" height="60" width="100"/>
                         </a>
                     </li>
                 </ul>

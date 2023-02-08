@@ -508,15 +508,16 @@ var mediaMixin = {
                       } else if (error.request) {
                         console.log('22')
                         // client never received a response, or request never left
-                        console.log(error.request)
-                        console.log(folderId)
-                        this.getFiles(folderId)
-                        console.log('after second time call')
+                        //console.log(error.request)
+                        //console.log(folderId)
+                        //this.getFiles(folderId)
+                        //console.log('after second time call')
                       } else {
                         console.log('33')
                         console.log(error)
                         // anything else
                       }
+                      return false;
                       if(error.response !== undefined){
                         this.errors = error.response.data.errors;
                       }

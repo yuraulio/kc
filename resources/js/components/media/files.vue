@@ -197,8 +197,7 @@ export default {
                     }
                 })
                 .catch((error) => {
-                    this.infiniteHandler($state);
-                    console.log(error);
+
                     if(error.response){
                         this.$parent.errors = error.response.data.errors;
                     }
