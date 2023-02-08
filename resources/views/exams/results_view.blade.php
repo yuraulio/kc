@@ -33,14 +33,14 @@ $title1 = str_replace('_',' ',$title);
 <meta property="og:url" content="{{ Request::url() }}">
 <meta property="og:title" content="Result">
 <meta property="og:description" content="{{ $title1 }} Result">
-<meta property="og:image" content="{{ $img }}">
+<meta property="og:image" content="{{ $og_image }}">
 
 <!-- Twitter -->
 <meta property="twitter:card" content="summary_large_image">
 <meta property="twitter:url" content="{{ Request::url() }}">
 <meta property="twitter:title" content="Result">
 <meta property="twitter:description" content="{{ $title1 }} Result">
-<meta property="twitter:image" content="{{ $img }}">
+<meta property="twitter:image" content="{{ $og_image }}">
 
 
 </head>
@@ -54,15 +54,12 @@ $title1 = str_replace('_',' ',$title);
     <div id="main" class="container">
         <div style="height:100vh" class="row">
 
-            <div class="col-2"></div>
-
-            <div style="margin: auto;" class="col-auto">
+            <div style="margin: auto;" class="col-10">
                 <div class="card card-block">
-                    <img class="text-center" style="height:60vh;" src="{{ $img }}" alt="result-image">
+                    <img class="text-center" style="height:70vh;" src="{{ $img }}" alt="result-image">
                 </div>
             </div>
 
-            <div class="col-2"></div>
 
         </div>
     </div>
