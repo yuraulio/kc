@@ -3,6 +3,7 @@ import _ from "lodash";
 var mediaMixin = {
     data() {
         return {
+            firstLoadedData: [],
             versions: [
                 {
                   "w": 470,
@@ -309,7 +310,6 @@ var mediaMixin = {
                 formData.append('directory', this.selectedFile.folder_id);
                 formData.append('id', this.$refs.crpr.id);
             }
-
             this.$refs.crpr.isUploading = true;
 
 
@@ -321,8 +321,11 @@ var mediaMixin = {
                 this.$toast.success('Uploaded Successfully!');
                 console.log('response: ',response)
 
-                //this.getFiles(response.data.data.folder_id);
-                this.$refs.crpr.isUploading = false;
+
+                if(this.$refs.crpr !== undefined){
+                    this.$refs.crpr.isUploading = false;
+                }
+
                 this.imageKey = Math.random().toString().substr(2, 8);
                 // this.$modal.hide('edit-image-modal');
                 if (response.data.data.version == 'original') {
@@ -342,6 +345,71 @@ var mediaMixin = {
                     this.$refs.crpr.width = this.$refs.crpr.parrentImage.width;
 
                 }
+
+                if(response){
+                    //this.getFiles(response.data.data.folder_id);
+                    this.getFiles(response.data.data.folder_id);
+
+
+                    console.log('////////')
+                    console.log(this.$parent.imageVersion)
+                    console.log(response.data.data.version)
+
+
+                    if(this.$parent.imageVersion && response.data.data.version == this.$parent.imageVersion){
+                        // this.$parent.imageVersionResponseData = response.data.data
+                        console.log('response data: ', response.data.data)
+                        console.log('RESPONSE IMAGE SET: ')
+                        this.updatedMediaImage(response.data.data)
+                    }else if(this.$parent && this.$parent.imageVersion){
+
+
+                        // console.log('here i am')
+                        let imgVersion = this.$parent.imageVersion
+                        let fileVersions = null;
+                        if(this.firstLoadedData.subfiles.length != 0){
+                            console.log('111')
+                            fileVersions = this.firstLoadedData.subfiles
+                        }else{
+                            fileVersions = this.firstLoadedData.parrent
+                            console.log('22')
+                        }
+
+
+
+
+                        // console.log('this.$parent.imageVersion: ', imgVersion)
+                        console.log('here is subfiles: ', fileVersions)
+
+                        let findFileVersion = null;
+
+                        fileVersions.forEach(function(value, index){
+                            if(value.version == imgVersion){
+                                console.log('test')
+                                findFileVersion = value
+                            }
+                        })
+                        if(findFileVersion != null){
+                            this.updatedMediaImage(findFileVersion)
+                        }else{
+                            console.log('the end')
+                            console.log(this.firstLoadedData)
+                            if(this.firstLoadedData.parrent == null){
+                                this.updatedMediaImage(this.firstLoadedData)
+                            }
+
+
+                        }
+
+
+
+
+
+                    }
+                    console.log('/////-------')
+                }
+
+
                 let version = null;
                 if(value != null && value.imgname){
                     version = value.version
@@ -357,17 +425,26 @@ var mediaMixin = {
                     delete this.$refs.crpr.versionsForUpdate[version]
                 }
 
-                if(response){
-                    this.getFiles(response.data.data.folder_id);
-                }
+
+
+
 
 
             })
             .catch((error) => {
                 console.log('ERROR: ', error)
                 //console.log("edit error", error.response.data.message);
-                this.$refs.crpr.isUploading = false;
-                this.$toast.error("Failed to update. " + error.response.data.message);
+                if(this.$refs.crpr !== undefined){
+
+                    this.$refs.crpr.isUploading = false;
+                }
+
+                if(error.response.data){
+                    this.$toast.error("Failed to update. " + error.response.data.message);
+                }else{
+                    this.$toast.error("Failed to update. " + error);
+                }
+
             })
         // })
         },
@@ -482,7 +559,6 @@ var mediaMixin = {
         getFiles(folderId) {
             console.log('from get files')
 
-            console.log()
             this.errors = null;
             this.loading = true;
             axios
@@ -494,6 +570,8 @@ var mediaMixin = {
                     }
                 })
                 .then((response) => {
+
+
                     this.mediaFiles = response.data.data;
                     this.loading = false;
                     this.updateSelectedFile();
@@ -526,6 +604,7 @@ var mediaMixin = {
                 });
         },
         userSelectedFiles($event) {
+            this.firstLoadedData = $event
             this.selectedFile = $event;
             this.warning = false;
             this.$modal.show('edit-image-modal');

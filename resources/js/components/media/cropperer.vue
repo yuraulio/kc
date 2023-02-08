@@ -167,9 +167,9 @@
                 <div class="col-12">
                     <button v-if="findVersionData(version)" @click="deleteFile(findVersionData(version))" class="btn btn-soft-danger btn-block w-100 mt-2">Delete version</button>
                 </div>
-                <div class="col-12">
+                <!-- <div class="col-12">
                     <button v-if="parentMode" @click="confirmSelection(findVersionData(version))" class="btn btn-soft-primary btn-block w-100 mt-2">Use</button>
-                </div>
+                </div> -->
             </div>
         </div>
     </div>
@@ -179,8 +179,8 @@
                 <img @click="disable(); version='original'; selectedVersion=null; imgname=parrentImage.name; alttext=parrentImage.alt_text; link=parrentImage.link; id=parrentImage.id; versionData=null; versionSelected();" crossorigin="anonymous" :src="parrentImage ? ('/uploads/' + parrentImage.path) : ''" alt="image" class="img-fluid rounded" :style="version == 'original' ? 'border: 4px solid #1abc9c;' : 'border: 4px solid #f3f7f9;'"/>
                 <h5>Original image</h5>
             </div>
-
-            <template v-for="(version1, index) in versions" v-if="matchVersions(version1.version)">
+            <!-- <template v-for="(version1, index) in versions" v-if="matchVersions(version1.version)"> -->
+            <template v-for="(version1, index) in versions">
                 <div class="p-1">
                     <template v-if="findVersionData(version1.version) != null">
                         <img @click="version=version1.version; selectedVersion=version1; versionSelected();" crossorigin="anonymous" :src="'/uploads/' + findVersionData(version1.version).path + '?key=' + imageKey" alt="image" class="img-fluid rounded" :style="version == version1.version ? 'border: 4px solid #1abc9c;' : 'border: 4px solid #f3f7f9;'" />
@@ -335,9 +335,12 @@ export default {
                     description: "The image of blog article on /blog.",
                 },
             ],
+
         };
     },
+
     mounted() {
+        console.log('Parent mode: ', this.parentMode)
         if (this.prevalue) {
             this.setupPrevalue();
 
@@ -389,14 +392,26 @@ export default {
         }
     },
     methods: {
+
         setupPrevalue() {
-            if (this.prevalue.parrent) {
-                this.parrentImage = this.prevalue.parrent;
-                // this.version = this.prevalue.version;
-            } else {
+            console.log('setup prevalue: ',this.prevalue)
+            // if (this.prevalue.parrent) {
+            //     console.log('parent: ', this.prevalue.parrent)
+            //     this.parrentImage = this.prevalue.parrent;
+            //     // this.version = this.prevalue.version;
+            // } else {
+            //     console.log('not parent: ', this.prevalue)
+            //     this.parrentImage = this.prevalue;
+            //     // this.version = 'original';
+            // }
+            if(this.prevalue.parrent == null){
                 this.parrentImage = this.prevalue;
-                // this.version = 'original';
+            }else{
+                this.parrentImage = this.prevalue.parrent;
             }
+            //this.parrentImage = this.prevalue;
+            console.log(this.parrentImage)
+
 
             this.version = 'original';
 
@@ -416,14 +431,37 @@ export default {
             this.extension = this.versionData ? this.versionData.extension : this.parrentImage.extension;
         },
         confirmSelection(image) {
-            if (image == null) {
-                image = this.parrentImage;
+            console.log('selected image: ', image)
+            console.log('parent Image: ', this.parrentImage)
+            if (image != null) {
+                //
+                // let uploadedVersions1 = this.uploadedVersions
+
+                // console.log('uploaded versions: ', uploadedVersions1)
+
+                // uploadedVersions1.forEach(function(value,index) {
+                //     if(value.version == image){
+
+                //         image = value
+                //         console.log('selected for today: ', image)
+                //     }
+                // })
+
+                console.log('new array for update: ', this.versionsForUpdate)
+                let up = this.versionsForUpdate
+
+
+
+
+                //
+                //image = this.parrentImage;
             }
-            if (this.$parent.$parent.mode != null ) {
-                this.$parent.$parent.updatedMediaImage(image);
-                // this.$modal.hide('gallery-modal');
-                this.$toast.success('New image selected!');
-            }
+            // if (this.$parent.$parent.mode != null ) {
+            //     console.log('Parent mode, confirm selection: ')
+            //     this.$parent.$parent.updatedMediaImage(image);
+            //     // this.$modal.hide('gallery-modal');
+            //     this.$toast.success('New image selected!');
+            // }
         },
         disable() {
             this.$set(this.cropBoxData, 'width', 0);
@@ -714,6 +752,23 @@ export default {
 
             })
 
+            // if(this.imageVersion){
+            //     this.confirmSelection(this.imageVersion)
+            // }
+
+            console.log('after test is here', this.$parent.$parent.selectedFile)
+            // if(this.$parent.$parent.selectedFile.version == 'original'){
+            //     this.$parent.$parent.updatedMediaImage(this.$parent.$parent.selectedFile)
+            // }else{
+            //     this.$parent.$parent.updatedMediaImage(this.$parent.$parent.selectedFile.parrent)
+            // }
+
+
+
+
+            //this.$parent.$parent.updatedMediaImage(image);
+
+
         },
         imageAdded($event) {
             this.imgSrc = $event.url;
@@ -856,8 +911,10 @@ export default {
             }
         },
         matchVersions(version) {
+
             if (this.imageVersion) {
                 if (version == this.imageVersion) {
+                    console.log('match Versions function')
                     return true;
                 }
                 return false;
