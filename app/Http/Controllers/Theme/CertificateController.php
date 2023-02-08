@@ -15,7 +15,7 @@ use PDF1;
 use Auth;
 use App\Model\Exam;
 use Illuminate\Support\Str;
-use Abraham\TwitterOAuth\TwitterOAuth;
+use Intervention\Image\ImageManager;
 
 
 
@@ -154,6 +154,8 @@ class CertificateController extends Controller
     $newFile =  'cert/'.$name.'.jpg';
     $saveImagePath = public_path($newFile);
 
+
+    // Image
     $imagick = new Imagick();
     $imagick->setResolution(300, 300);
     //dd($filepath);
@@ -168,7 +170,31 @@ class CertificateController extends Controller
     unlink('cert/'.$fn);
 
     $image1 = imagecreatefromjpeg($saveImagePath);
-    imagejpeg($image1, $saveImagePath, 40);
+    imagejpeg($image1, $saveImagePath, 50);
+
+
+    // OG IMAGE WITH SPECIFIC DIMENSION
+    $manager = new ImageManager();
+    $image = $manager->make(public_path($newFile));
+    $image_height = $image->height();
+    $image_width = $image->width();
+
+    $crop_height = 627;
+    $crop_width = 1200;
+
+    $height_offset = ($image_height / 2) - ($crop_height / 2);
+    $height_offset = $height_offset > 0 ? (int) $height_offset : null;
+
+    $width_offset = ($image_width / 2) - ($crop_width / 2);
+    $width_offset = $width_offset > 0 ? (int) $width_offset : null;
+
+    $image->resize($crop_width, $crop_height);
+    $image->fit($crop_width, $crop_height);
+
+    //$image->crop($crop_width, $crop_height, $width_offset, $height_offset);
+    $image->save(public_path('cert/'.$name.'_og_version.jpg'), 50, 'jpg');
+
+
 
 
 
@@ -362,10 +388,13 @@ class CertificateController extends Controller
     public function view_results($id, $title = "")
     {
 
-        $img = $id;
-        $img = env('MIX_APP_URL').'/cert/'.$img;
+        $image = $id;
+        $img = env('MIX_APP_URL').'/cert/'.$image;
 
-        return view('exams.results_view', compact('img', 'title'));
+        $og_image = explode('.',$image);
+        $og_image =  env('MIX_APP_URL').'/cert/'.$og_image[0].'_og_version.'.$og_image[1];
+
+        return view('exams.results_view', compact('img', 'title', 'og_image'));
     }
 
 

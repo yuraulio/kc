@@ -380,8 +380,21 @@ input[type="number"]#mobile_phone::-webkit-inner-spin-button {
 #outOfTimeDialog .alert-inner div{
     padding: 0 3rem !important;
 }
-#outOfTimeDialog .alert-inner div p {
+/* #outOfTimeDialog .alert-inner div p {
     color: unset
+} */
+
+#outOfTimeDialog .alert-wrapper{
+    display: inline-flex;
+}
+
+#outOfTimeDialog .close-dialog-general-buttons{
+    margin: auto 0;
+}
+
+#close-exam-dialog1{
+    height: 2rem;
+    width: 2rem;
 }
 
 .section-account-tabs #favDialog {

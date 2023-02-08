@@ -384,14 +384,14 @@ function outOfTimeDialog(){
     if($('#outOfTimeDialog').length == 0){
         let dialog = `
             <div id="outOfTimeDialog" hidden>
-                <div class="alert-wrapper warning-alert">
+                <div class="alert-wrapper error-alert">
                     <div class="alert-inner">
-                        <div>${@json($exam->end_of_time_text)}</div>
+                        <div class="text-white">${@json($exam->end_of_time_text)}</div>
                     </div>
 
                     <div class="close-dialog-general-buttons">
-
-                        <button onclick="closeOutOfTimeExam()" class="btn btn-not-exit-exam btn-sm">OK </button>
+                        <a id="close-exam-dialog1" href="javascript:void(0)" onclick="closeOutOfTimeExam()" class="close-alert"><img src="{{cdn('/theme/assets/images/icons/alert-icons/icon-close-alert.svg')}}" alt="Close Alert"/></a>
+                    <!-- <button onclick="closeOutOfTimeExam()" class="btn btn-not-exit-exam btn-sm">OK </button>-->
                     </div>
 
                     <!-- /.alert-outer -->
@@ -543,7 +543,8 @@ function outOfTime() {
 
 function forceFinish() {
 
-    jQuery("#endExamText").removeClass("hidden");
+    outOfTimeDialog()
+    //jQuery("#endExamText").removeClass("hidden");
     jQuery(".container-fluid").addClass("hidden");
     nextQues(5);
     window.exam_finish = 1;
@@ -872,13 +873,7 @@ window.actQues = 0;
 <div id="overlay-loading" class="overlay">
     <i class="fa fa-refresh fa-spin"></i>
 </div>
-<div class="row justify-content-center hidden" id="endExamText" style="
-    text-align: center;
-">
-        <div class="col-12">
-            <h5>{!! $exam->end_of_time_text !!}</h5>
-        </div>
-    </div>
+
 <div class="container">
 
     <div class="row justify-content-center">
