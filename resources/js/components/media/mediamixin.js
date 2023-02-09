@@ -295,6 +295,8 @@ var mediaMixin = {
                 formData.append('directory', this.selectedFile.folder_id);
                 formData.append('id', value.id);
             }else{
+                console.log('shit')
+                console.log(this.$refs.crpr)
 
                 //Create Image version
 
@@ -337,13 +339,15 @@ var mediaMixin = {
                     this.$refs.crpr.height = image.height;
                     this.$refs.crpr.width = image.width;
                 } else {
-                    this.$refs.crpr.imgname = this.$refs.crpr.parrentImage.name;
-                    this.$refs.crpr.alttext = this.$refs.crpr.parrentImage.alttext;
-                    this.$refs.crpr.link = this.$refs.crpr.parrentImage.link;
-                    this.$refs.crpr.size = this.$refs.crpr.parrentImage.size;
-                    this.$refs.crpr.height = this.$refs.crpr.parrentImage.height;
-                    this.$refs.crpr.width = this.$refs.crpr.parrentImage.width;
+                    if(this.$refs.crpr !== undefined){
+                        this.$refs.crpr.imgname = this.$refs.crpr.parrentImage.name;
+                        this.$refs.crpr.alttext = this.$refs.crpr.parrentImage.alttext;
+                        this.$refs.crpr.link = this.$refs.crpr.parrentImage.link;
+                        this.$refs.crpr.size = this.$refs.crpr.parrentImage.size;
+                        this.$refs.crpr.height = this.$refs.crpr.parrentImage.height;
+                        this.$refs.crpr.width = this.$refs.crpr.parrentImage.width;
 
+                    }
                 }
 
                 if(response){
@@ -361,49 +365,34 @@ var mediaMixin = {
                         console.log('response data: ', response.data.data)
                         console.log('RESPONSE IMAGE SET: ')
                         this.updatedMediaImage(response.data.data)
-                    }else if(this.$parent && this.$parent.imageVersion){
+                    }
+                    else if(this.$parent && this.$parent.imageVersion){
 
 
-                        // console.log('here i am')
-                        let imgVersion = this.$parent.imageVersion
-                        let fileVersions = null;
-                        if(this.firstLoadedData.subfiles.length != 0){
-                            console.log('111')
-                            fileVersions = this.firstLoadedData.subfiles
-                        }else{
-                            fileVersions = this.firstLoadedData.parrent
-                            console.log('22')
-                        }
+                        // // console.log('here i am')
+                        // let imgVersion = this.$parent.imageVersion
+                        // let fileVersions = null;
+                        // if(this.firstLoadedData.subfiles.length != 0){
+                        //     console.log('111')
+                        //     fileVersions = this.firstLoadedData.subfiles
 
+                        //     let findFileVersion = null;
 
+                        //     fileVersions.forEach(function(value, index){
+                        //         if(value.version == imgVersion){
+                        //             console.log('test')
+                        //             findFileVersion = value
+                        //         }
+                        //     })
+                        //     if(findFileVersion != null){
+                        //         this.updatedMediaImage(findFileVersion)
+                        //     }
 
-
-                        // console.log('this.$parent.imageVersion: ', imgVersion)
-                        console.log('here is subfiles: ', fileVersions)
-
-                        let findFileVersion = null;
-
-                        fileVersions.forEach(function(value, index){
-                            if(value.version == imgVersion){
-                                console.log('test')
-                                findFileVersion = value
-                            }
-                        })
-                        if(findFileVersion != null){
-                            this.updatedMediaImage(findFileVersion)
-                        }else{
-                            console.log('the end')
-                            console.log(this.firstLoadedData)
-                            if(this.firstLoadedData.parrent == null){
-                                this.updatedMediaImage(this.firstLoadedData)
-                            }
-
-
-                        }
-
-
-
-
+                        // }else{
+                        //     fileVersions = this.firstLoadedData.parrent
+                        //     this.updatedMediaImage(fileVersions)
+                        //     console.log('22')
+                        // }
 
                     }
                     console.log('/////-------')
@@ -415,14 +404,21 @@ var mediaMixin = {
                     version = value.version
                 }
 
-                this.$refs.crpr.jpg = false;
-                this.$refs.crpr.version = 'original';
-                this.$refs.crpr.disable();
-                this.$refs.crpr.versionData = null;
+                if(this.$refs.crpr !== undefined){
+                    console.log('i am here test')
+                    this.$refs.crpr.jpg = false;
+                    this.$refs.crpr.version = 'original';
+                    this.$refs.crpr.disable();
+                    this.$refs.crpr.versionData = null;
+                }
 
 
                 if(version != null && version != 'original'){
-                    delete this.$refs.crpr.versionsForUpdate[version]
+                    if(this.$refs.crpr){
+                        console.log('i am here test !!!! P')
+                        delete this.$refs.crpr.versionsForUpdate[version]
+                    }
+
                 }
 
 
@@ -439,7 +435,7 @@ var mediaMixin = {
                     this.$refs.crpr.isUploading = false;
                 }
 
-                if(error.response.data){
+                if(error.response.data !== undefined){
                     this.$toast.error("Failed to update. " + error.response.data.message);
                 }else{
                     this.$toast.error("Failed to update. " + error);
@@ -610,6 +606,9 @@ var mediaMixin = {
             this.$modal.show('edit-image-modal');
         },
         deleteFile($event) {
+
+            console.log('test',$event)
+
             var pagesText = "";
             var pages_count = $event.pages_count;
             if (pages_count) {
@@ -635,7 +634,26 @@ var mediaMixin = {
                         .delete('/api/media_manager/file/' + $event.id)
                         .then((response) => {
                             if (response.status == 200) {
+                                console.log('test folder: ', $event.folder_id)
                                 this.getFiles($event.folder_id);
+
+                                console.log(this.imageVersion)
+
+                                if(this.imageVersion != null && $event.version == this.imageVersion){
+                                    console.log('inside Inside')
+
+
+
+                                    if(this.firstLoadedData.parrent == null){
+                                        this.firstLoadedData.load = true;
+                                        this.updatedMediaImage(this.firstLoadedData)
+                                    }else{
+                                        this.firstLoadedData.parrent.load = true;
+                                        this.updatedMediaImage(this.firstLoadedData.parrent)
+                                    }
+                                    console.log(this.firstLoadedData)
+
+                                }
                             }
                         })
                         .catch(error => {
@@ -656,13 +674,28 @@ var mediaMixin = {
             })
         },
         updateSelectedFile() {
+            console.log('update Selected Files function triggered')
             if (this.selectedFile) {
-                var oldFile = this.selectedFile;
+                var oldFile = null;
+
+                if(this.selectedFile.parrent == null){
+                    oldFile = this.selectedFile;
+                }else{
+                    oldFile = this.selectedFile.parrent;
+                }
+                console.log('oldFile: ', oldFile)
+                console.log('media Files: ',this.mediaFiles)
+
                 var index = this.mediaFiles.findIndex(function(file) {
                     return file.id == oldFile.id;
                 });
+                console.log('index: ', index);
                 if (this.mediaFiles[index]) {
                     this.selectedFile = this.mediaFiles[index];
+                    console.log('New files')
+                    console.log('selected File: ', this.selectedFile)
+                    console.log('this.$refs.crpr : ')
+                    console.log('this.$refs.crpr : ',this.$refs.crpr)
                     setTimeout(() => {
                         this.$refs.crpr.setupPrevalue();
                     }, 1000);

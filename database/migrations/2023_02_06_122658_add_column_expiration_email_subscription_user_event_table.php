@@ -13,7 +13,7 @@ class AddColumnExpirationEmailSubscriptionUserEventTable extends Migration
      */
     public function up()
     {
-        Schema::table('subscription_user_event', function (Blueprint $table) {
+        Schema::table('event_user', function (Blueprint $table) {
             $table->integer('expiration_email')->after('expiration')->default(0);
         });
     }
@@ -25,7 +25,7 @@ class AddColumnExpirationEmailSubscriptionUserEventTable extends Migration
      */
     public function down()
     {
-        Schema::table('subscription_user_event', function (Blueprint $table) {
+        Schema::table('event_user', function (Blueprint $table) {
             $table->dropColumn('expiration_email');
         });
     }

@@ -860,7 +860,7 @@ class UserController extends Controller
         //dd($user);
         $user->ticket()->attach($ticket_id, ['event_id' => $event_id]);
 
-        $data['event'] = Event::with('delivery', 'ticket')->find($event_id);
+        $data['event'] = Event::with('delivery', 'ticket', 'event_info1')->find($event_id);
         //dd($data['event']['ticket']);
         foreach($data['event']->ticket as $ticket){
             //dd($ticket);
@@ -875,7 +875,7 @@ class UserController extends Controller
 
 
         }
-        $extra_month = $data['event']['expiration'];
+        $extra_month = $data['event']->getAccessInMonths();
 
         $ticket = Ticket::find($ticket_id);
 
@@ -883,7 +883,7 @@ class UserController extends Controller
 
 
 
-       if($data['event']['expiration'] != null){
+       if($extra_month != null && is_numeric($extra_month) && $extra_month != 0){
             $exp_date = date('Y-m-d', strtotime("+".$extra_month." months", strtotime('now')));
        }else{
            $exp_date = null;

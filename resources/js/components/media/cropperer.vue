@@ -575,6 +575,8 @@ export default {
 
             }
 
+            console.log('VERSION UPDATE DATA', this.versionsForUpdate)
+
 
         },
         changeHandler(event){
@@ -725,6 +727,11 @@ export default {
             // for each gia oles tiw ekdoseis
 
             let versions = this.versionsForUpdate
+
+            console.log('-----------------------')
+            console.log('this is array versions for update')
+            console.log(versions)
+            console.log('------------------------')
 
            Object.values(versions).forEach(value => {
 
