@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddColumnExpirationEmailSubscriptionUserEventTable extends Migration
+class CreateEventStatisticQueueTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,9 @@ class AddColumnExpirationEmailSubscriptionUserEventTable extends Migration
      */
     public function up()
     {
-        Schema::table('event_user', function (Blueprint $table) {
-            $table->integer('expiration_email')->after('expiration')->default(0);
+        Schema::create('event_statistics_queue', function (Blueprint $table) {
+            $table->integer('event_id')->primary();
+            $table->timestamps();
         });
     }
 
@@ -25,8 +26,6 @@ class AddColumnExpirationEmailSubscriptionUserEventTable extends Migration
      */
     public function down()
     {
-        Schema::table('event_user', function (Blueprint $table) {
-            $table->dropColumn('expiration_email');
-        });
+        Schema::dropIfExists('event_statistics_queue');
     }
 }

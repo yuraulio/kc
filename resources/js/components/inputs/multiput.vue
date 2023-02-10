@@ -258,8 +258,11 @@ export default {
             // $event.siblings = null;
             // $event.subfiles = null;
             this.$emit('inputed', { 'data': $event, 'key': this.keyput})
-            this.$refs[ref+'btn'].click()
-            this.$set(this.loadstart, ref,  false);
+            if($event.load === undefined){
+                this.$refs[ref+'btn'].click()
+                this.$set(this.loadstart, ref,  false);
+            }
+
         },
         updatedgallery($event, ref) {
             $event.siblings = null;

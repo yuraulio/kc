@@ -18,9 +18,9 @@ class SubscriptionExpireReminder extends Notification
      *
      * @return void
      */
-    public function __construct($status)
+    public function __construct($data)
     {
-        $this->status = $status;
+        $this->data = $data;
     }
 
     /**
@@ -42,13 +42,11 @@ class SubscriptionExpireReminder extends Notification
      */
     public function toMail($notifiable)
     {
-        dd($this->status);
 
-        
         return (new MailMessage)
             ->from('info@knowcrunch.com', 'Knowcrunch')
-            ->subject('Knowcrunch |' . $this->data['user']['first'] . ', welcome to ' . $this->data['extrainfo'][2].'!')
-            ->view('emails.user.instructions_email',$this->data);
+            ->subject($this->data['subject'])
+            ->view($this->data['template'], $this->data);
     }
 
     /**

@@ -14,6 +14,43 @@ use Spatie\Dropbox\Client;
 use App\Model\Admin\Page;
 use App\Model\Admin\Ticker;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
+
+if(!function_exists('add_event_statistic_queue')){
+    function add_event_statistic_queue($eventId){
+
+
+        if($eventId){
+            $exist = DB::table('event_statistics_queue')->where('event_id', $eventId)->first();
+
+
+            if($exist){
+
+                DB::table('event_statistics_queue')
+                    ->where('event_id', $eventId)
+                    ->update(
+                        ['updated_at' => date('Y-m-d H:i:s')]
+                );
+
+            }else{
+                DB::table('event_statistics_queue')
+                    ->where('event_id', $eventId)
+                    ->insert(
+                        [
+                            'event_id' => $eventId,
+                            'created_at' => date('Y-m-d H:i:s'),
+                            'updated_at' => date('Y-m-d H:i:s')
+                        ]
+                );
+            }
+
+
+        }
+
+
+
+    }
+}
 
 if(!function_exists('instagram_posts')){
     function instagram_posts($limit = 15){

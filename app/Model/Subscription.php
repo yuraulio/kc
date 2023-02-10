@@ -1303,7 +1303,7 @@ class Subscription extends Model
 
 
     public function event(){
-        return $this->belongsToMany(Event::class,'subscription_user_event')->withPivot('event_id','expiration', 'expiration_email')
+        return $this->belongsToMany(Event::class,'subscription_user_event')->withPivot('event_id','expiration')
          ->with([
              'plans',
              'certificates' => function($certificate){

@@ -699,7 +699,6 @@ export default {
                         }else if(type == 'blog'){
                             this.widgets = response.data[1];
                         }
-                        console.log(this.widgets)
 
                         this.hideLoader();
                     }

@@ -25,6 +25,8 @@ class AddColumnCourseExamActivateMonthsTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::table('event_info', function (Blueprint $table) {
+            $table->dropColumn('course_elearning_exam_activate_months');
+        });
     }
 }
