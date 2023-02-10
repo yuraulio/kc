@@ -24,10 +24,19 @@ class UpdateStatisticJson implements ShouldQueue
     private $event;
     private $userId;
     private $users;
+    public $execute;
 
     public function __construct($event, $userId = null)
     {
+        $this->execute = false;
         $this->event = Event::find($event);
+
+        if(!$this->event){
+            return $this;
+        }
+
+        $this->execute = true;
+
         $this->userId = $userId;
 
 

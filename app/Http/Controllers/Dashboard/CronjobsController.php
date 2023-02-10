@@ -29,8 +29,6 @@ use App\Notifications\SendTopicAutomateMail;
 use App\Model\Instructor;
 use App\Notifications\InstructorsMail;
 use App\Notifications\SubscriptionExpireReminder;
-use App\Jobs\UpdateStatisticJson;
-use Illuminate\Support\Facades\DB;
 
 class CronjobsController extends Controller
 {
@@ -1195,24 +1193,5 @@ class CronjobsController extends Controller
 
     }
 
-    public function updateEventStatistics(){
-
-        $events = DB::table('event_statistics_queue')->get();
-
-        foreach($events as $event){
-
-            try{
-                new UpdateStatisticJson($event->event_id);
-
-                DB::table('event_statistics_queue')->where('event_id', $event->event_id)->delete();
-
-            }catch(exception $e){
-                echo $e;
-            }
-
-        }
-
-
-    }
 
 }
