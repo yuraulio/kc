@@ -29,6 +29,8 @@ use App\Notifications\SendTopicAutomateMail;
 use App\Model\Instructor;
 use App\Notifications\InstructorsMail;
 use App\Notifications\SubscriptionExpireReminder;
+use App\Jobs\UpdateStatisticJson;
+use Illuminate\Support\Facades\DB;
 
 class CronjobsController extends Controller
 {
@@ -165,7 +167,6 @@ class CronjobsController extends Controller
         // $events = User::with('events_for_user_list1')->whereHas('events_for_user_list1', function($query){
         //     return $query->where('expiration', '<=', date('Y-m-d H:s:i'));
         // })->get();
-        $i = 0;
 
         $users = User::with('events_for_user_list1_expired')->get();
 
@@ -215,7 +216,6 @@ class CronjobsController extends Controller
                     $data['subscription_price'] = $event['plans'][0]['cost'];
 
                     $user->notify(new SubscriptionExpireReminder($data));
-                    $i++;
 
                     // Update Pivot Table
                     $user->events_for_user_list1_expired()->updateExistingPivot($event,['expiration_email' => $updatedStatus], false);
@@ -223,8 +223,6 @@ class CronjobsController extends Controller
 
             }
         }
-
-        dd($i);
 
         /*
         foreach($events as $sub){
@@ -1194,6 +1192,26 @@ class CronjobsController extends Controller
             }
 
         }
+
+    }
+
+    public function updateEventStatistics(){
+
+        $events = DB::table('event_statistics_queue')->get();
+
+        foreach($events as $event){
+
+            try{
+                new UpdateStatisticJson($event->event_id);
+
+                DB::table('event_statistics_queue')->where('event_id', $event->event_id)->delete();
+
+            }catch(exception $e){
+                echo $e;
+            }
+
+        }
+
 
     }
 

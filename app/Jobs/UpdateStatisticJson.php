@@ -33,6 +33,10 @@ class UpdateStatisticJson implements ShouldQueue
 
         //dd($this->users);
 
+        // TEST LINE
+        $this->handle();
+        // END TEST LINE
+
     }
 
     /**
@@ -66,7 +70,6 @@ class UpdateStatisticJson implements ShouldQueue
 
     public function handle()
     {
-
         $newStatistics = [];
         $eventTopics = $this->event->topicsLessonsInstructors()['topics'];
 
