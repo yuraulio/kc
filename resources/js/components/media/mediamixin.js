@@ -435,7 +435,7 @@ var mediaMixin = {
                     this.$refs.crpr.isUploading = false;
                 }
 
-                if(error.response.data !== undefined){
+                if(error.response !== undefined && error.response.data !== undefined){
                     this.$toast.error("Failed to update. " + error.response.data.message);
                 }else{
                     this.$toast.error("Failed to update. " + error);
@@ -582,7 +582,7 @@ var mediaMixin = {
                       } else if (error.request) {
                         console.log('22')
                         this.getFiles(folderId);
-                        return false;
+
                         // client never received a response, or request never left
                         //console.log(error.request)
                         //console.log(folderId)
@@ -593,7 +593,7 @@ var mediaMixin = {
                         console.log(error)
                         // anything else
                       }
-                      //return false;
+                      return false;
                       if(error.response !== undefined){
                         this.errors = error.response.data.errors;
                       }
