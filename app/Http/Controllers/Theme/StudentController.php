@@ -742,7 +742,7 @@ class StudentController extends Controller
         $media->save();
 
         // Convert webp image format
-        dispatch((new UploadImageConvertWebp('profile_user/', $media->original_name))->delay(now()->addSeconds(3)));
+        dispatch((new UploadImageConvertWebp('profile_user/', $media->original_name))->delay(now()->addSeconds(300)));
 
 
 
