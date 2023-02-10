@@ -593,10 +593,10 @@ var mediaMixin = {
                         console.log(error)
                         // anything else
                       }
-                      return false;
-                      if(error.response !== undefined){
-                        this.errors = error.response.data.errors;
-                      }
+                      //return false;
+                    //   if(error.response !== undefined){
+                    //     this.errors = error.response.data.errors;
+                    //   }
 
                     this.loading = false;
                 });
