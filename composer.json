@@ -39,7 +39,7 @@
         "phpoffice/phpspreadsheet": "^1.25",
         "propaganistas/laravel-phone": "^4.3",
         "rosell-dk/webp-convert": "^2.9",
-        "sentry/sentry-laravel": "^2.10",
+        "sentry/sentry-laravel": "^3.2",
         "spatie/flysystem-dropbox": "^1.0",
         "stripe/stripe-php": "^7.87",
         "teamtnt/laravel-scout-tntsearch-driver": "^11.5",

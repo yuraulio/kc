@@ -26,20 +26,29 @@ class Handler extends ExceptionHandler
         'password_confirmation',
     ];
 
+    public function register()
+    {
+        $this->reportable(function (Throwable $e) {
+            if (app()->bound('sentry')) {
+                app('sentry')->captureException($e);
+            }
+        });
+    }
+
     /**
      * Report or log an exception.
      *
      * @param  \Exception  $exception
      * @return void
      */
-    public function report(Throwable $exception)
-    {
-        if (app()->environment('production') && app()->bound('sentry') && $this->shouldReport($exception)) {
-            app('sentry')->captureException($exception);
-        }
+    // public function report(Throwable $exception)
+    // {
+    //     if (app()->environment('production') && app()->bound('sentry') && $this->shouldReport($exception)) {
+    //         app('sentry')->captureException($exception);
+    //     }
 
-        parent::report($exception);
-    }
+    //     parent::report($exception);
+    // }
 
     /**
      * Render an exception into an HTTP response.
