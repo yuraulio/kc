@@ -216,7 +216,7 @@ export default {
         prevalue: {},
         imageKey: "",
         warning: false,
-        imageVersion: null,
+        imageVersion: null
     },
     components: {
         VueCropper,
@@ -334,7 +334,7 @@ export default {
                     title: "Blog boxes",
                     description: "The image of blog article on /blog.",
                 },
-            ],
+            ]
 
         };
     },
@@ -394,6 +394,7 @@ export default {
     methods: {
 
         setupPrevalue() {
+
             console.log('setup prevalue: ',this.prevalue)
             // if (this.prevalue.parrent) {
             //     console.log('parent: ', this.prevalue.parrent)
@@ -409,21 +410,32 @@ export default {
             }else{
                 this.parrentImage = this.prevalue.parrent;
             }
-            //this.parrentImage = this.prevalue;
-            console.log(this.parrentImage)
 
 
-            this.version = 'original';
+            this.version = this.imageVersion ? this.imageVersion : 'original';
 
             this.imgSrc = '/uploads' + this.parrentImage.path;
             this.uploadedVersions = this.parrentImage.subfiles;
             this.originalFile = this.prevalue;
 
-            this.imgname = this.parrentImage ? this.parrentImage.name : '';
-            this.alttext = this.parrentImage.alt_text ? this.parrentImage.alt_text : '';
-            this.link = this.parrentImage.link ? this.parrentImage.link : '';
-            this.id = this.parrentImage.id ? this.parrentImage.id : null;
-            this.date = this.versionData ? this.versionData.created_at : this.parrentImage.created_at;
+            console.log('current version: ', this.version)
+
+            if(this.version == 'original'){
+                this.imgname = this.parrentImage ? this.parrentImage.name : '';
+                this.alttext = this.parrentImage.alt_text ? this.parrentImage.alt_text : '';
+                this.link = this.parrentImage.link ? this.parrentImage.link : '';
+                this.id = this.parrentImage.id ? this.parrentImage.id : null;
+                this.date = this.versionData ? this.versionData.created_at : this.parrentImage.created_at;
+            }else{
+
+                this.imgname = this.originalFile ? this.originalFile.name : '';
+                this.alttext = this.originalFile.alt_text ? this.originalFile.alt_text : '';
+                this.link = this.originalFile.link ? this.originalFile.link : '';
+                this.id = this.originalFile.id ? this.originalFile.id : null;
+                this.date = this.versionData ? this.versionData.created_at : this.originalFile.created_at;
+            }
+
+
             // this.size = this.versionData ? this.versionData.size : this.parrentImage.size;
             // this.height = this.versionData ? this.versionData.height : this.parrentImage.height;
             // this.width = this.versionData ? this.versionData.width : this.parrentImage.width;
@@ -431,30 +443,8 @@ export default {
             this.extension = this.versionData ? this.versionData.extension : this.parrentImage.extension;
         },
         confirmSelection(image) {
-            console.log('selected image: ', image)
-            console.log('parent Image: ', this.parrentImage)
             if (image != null) {
-                //
-                // let uploadedVersions1 = this.uploadedVersions
 
-                // console.log('uploaded versions: ', uploadedVersions1)
-
-                // uploadedVersions1.forEach(function(value,index) {
-                //     if(value.version == image){
-
-                //         image = value
-                //         console.log('selected for today: ', image)
-                //     }
-                // })
-
-                console.log('new array for update: ', this.versionsForUpdate)
-                let up = this.versionsForUpdate
-
-
-
-
-                //
-                //image = this.parrentImage;
             }
             // if (this.$parent.$parent.mode != null ) {
             //     console.log('Parent mode, confirm selection: ')
@@ -481,6 +471,9 @@ export default {
             return null;
         },
         versionSelected() {
+            console.log('version selected: ')
+
+            console.log(this.selectedVersion)
 
             if (this.selectedVersion) {
                 this.$refs.cropper.enable();
@@ -569,13 +562,11 @@ export default {
                         'hasDeleted': false
                     }
                 }else{
-                    this.alttext = this.versionsForUpdate['original'].alttext
-                    this.link = this.versionsForUpdate['original'].link
+                    // this.alttext = this.versionsForUpdate['original'].alttext
+                    // this.link = this.versionsForUpdate['original'].link
                 }
 
             }
-
-            console.log('VERSION UPDATE DATA', this.versionsForUpdate)
 
 
         },
@@ -727,12 +718,6 @@ export default {
             // for each gia oles tiw ekdoseis
 
             let versions = this.versionsForUpdate
-
-            console.log('-----------------------')
-            console.log('this is array versions for update')
-            console.log(versions)
-            console.log('------------------------')
-
            Object.values(versions).forEach(value => {
 
                 let cropper = value.instance
@@ -759,21 +744,32 @@ export default {
 
             })
 
+            // console.log('---------------')
+            // console.log(this.$parent.$parent.hasUpdated)
+            // console.log('+++++++++++++')
+
+            // if(this.$parent.$parent.hasUpdated === undefined){
+            //     console.log('has updated:::::', this.$parent.$parent.hasUpdated)
+
+            //     if(this.$parent.$parent.selectedFile.version == 'original'){
+            //         this.$parent.$parent.updatedMediaImage(this.$parent.$parent.selectedFile)
+            //     }else{
+            //         this.$parent.$parent.updatedMediaImage(this.$parent.$parent.selectedFile.parrent)
+            //     }
+
+            // }
+
+
+
             // if(this.imageVersion){
             //     this.confirmSelection(this.imageVersion)
             // }
 
-            console.log('after test is here', this.$parent.$parent.selectedFile)
-            // if(this.$parent.$parent.selectedFile.version == 'original'){
-            //     this.$parent.$parent.updatedMediaImage(this.$parent.$parent.selectedFile)
-            // }else{
-            //     this.$parent.$parent.updatedMediaImage(this.$parent.$parent.selectedFile.parrent)
-            // }
 
 
 
 
-            //this.$parent.$parent.updatedMediaImage(image);
+            // this.$parent.$parent.updatedMediaImage(image);
 
 
         },
@@ -921,7 +917,6 @@ export default {
 
             if (this.imageVersion) {
                 if (version == this.imageVersion) {
-                    console.log('match Versions function')
                     return true;
                 }
                 return false;

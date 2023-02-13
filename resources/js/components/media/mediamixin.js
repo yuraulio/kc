@@ -274,13 +274,9 @@ var mediaMixin = {
         },
         imageEdit($event) {
 
-            console.log('pre ajax:')
-            console.log($event)
-
             let value = $event
             var formData = new FormData();
 
-            console.log('VALUE: ', value)
             // edit image version
             if(value != null && value.imgname){
                 formData.append('imgname', value.imgname);
@@ -295,8 +291,6 @@ var mediaMixin = {
                 formData.append('directory', this.selectedFile.folder_id);
                 formData.append('id', value.id);
             }else{
-                console.log('shit')
-                console.log(this.$refs.crpr)
 
                 //Create Image version
 
@@ -321,7 +315,6 @@ var mediaMixin = {
                 }
             }).then((response) => {
                 this.$toast.success('Uploaded Successfully!');
-                console.log('response: ',response)
 
 
                 if(this.$refs.crpr !== undefined){
@@ -330,7 +323,7 @@ var mediaMixin = {
 
                 this.imageKey = Math.random().toString().substr(2, 8);
                 // this.$modal.hide('edit-image-modal');
-                if (response.data.data.version == 'original') {
+                if (this.$refs.crpr && response.data.data.version == 'original') {
                     var image = response.data.data;
                     this.$refs.crpr.imgname = image.name;
                     this.$refs.crpr.alttext = image.alt_text;
@@ -354,17 +347,11 @@ var mediaMixin = {
                     //this.getFiles(response.data.data.folder_id);
                     this.getFiles(response.data.data.folder_id);
 
-
-                    console.log('////////')
-                    console.log(this.$parent.imageVersion)
-                    console.log(response.data.data.version)
-
-
                     if(this.$parent.imageVersion && response.data.data.version == this.$parent.imageVersion){
                         // this.$parent.imageVersionResponseData = response.data.data
-                        console.log('response data: ', response.data.data)
-                        console.log('RESPONSE IMAGE SET: ')
                         this.updatedMediaImage(response.data.data)
+
+
                     }
                     else if(this.$parent && this.$parent.imageVersion){
 
@@ -395,7 +382,7 @@ var mediaMixin = {
                         // }
 
                     }
-                    console.log('/////-------')
+
                 }
 
 
@@ -405,7 +392,7 @@ var mediaMixin = {
                 }
 
                 if(this.$refs.crpr !== undefined){
-                    console.log('i am here test')
+
                     this.$refs.crpr.jpg = false;
                     this.$refs.crpr.version = 'original';
                     this.$refs.crpr.disable();
@@ -415,7 +402,7 @@ var mediaMixin = {
 
                 if(version != null && version != 'original'){
                     if(this.$refs.crpr){
-                        console.log('i am here test !!!! P')
+
                         delete this.$refs.crpr.versionsForUpdate[version]
                     }
 
@@ -609,8 +596,6 @@ var mediaMixin = {
         },
         deleteFile($event) {
 
-            console.log('test',$event)
-
             var pagesText = "";
             var pages_count = $event.pages_count;
             if (pages_count) {
@@ -685,22 +670,22 @@ var mediaMixin = {
                 }else{
                     oldFile = this.selectedFile.parrent;
                 }
-                console.log('oldFile: ', oldFile)
-                console.log('media Files: ',this.mediaFiles)
 
                 var index = this.mediaFiles.findIndex(function(file) {
                     return file.id == oldFile.id;
                 });
-                console.log('index: ', index);
+
                 if (this.mediaFiles[index]) {
                     this.selectedFile = this.mediaFiles[index];
-                    console.log('New files')
-                    console.log('selected File: ', this.selectedFile)
-                    console.log('this.$refs.crpr : ')
-                    console.log('this.$refs.crpr : ',this.$refs.crpr)
-                    setTimeout(() => {
-                        this.$refs.crpr.setupPrevalue();
-                    }, 1000);
+
+                    console.log('here')
+                    if(!this.imageVersion){
+                        setTimeout(() => {
+                            console.log('test')
+                            this.$refs.crpr.setupPrevalue();
+                        }, 1000);
+                    }
+
                 }
             }
         }
