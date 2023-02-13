@@ -596,6 +596,9 @@ var mediaMixin = {
         },
         deleteFile($event) {
 
+            console.log('triggered function delete File')
+            console.log($event)
+
             var pagesText = "";
             var pages_count = $event.pages_count;
             if (pages_count) {
@@ -604,6 +607,14 @@ var mediaMixin = {
             if ($event.parrent == null) {
                 pagesText = pagesText + "This is an original image, this action will delete all its subimages that exist.";
             }
+
+            Swal.fire(
+                'Good job!',
+                'You clicked the button!',
+                'success'
+              )
+
+            console.log('page text: ', pagesText)
             Swal.fire({
                 title: 'Are you sure?\n ' + pagesText,
                 text: "You won't be able to revert this! Delete file?",
@@ -659,6 +670,7 @@ var mediaMixin = {
                     )
                 }
             })
+            console.log('THE END')
         },
         updateSelectedFile() {
             console.log('update Selected Files function triggered')

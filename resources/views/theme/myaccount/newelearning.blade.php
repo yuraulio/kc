@@ -1152,7 +1152,6 @@
 
             let watchingTopic = $('.isWatching').closest('.topic')[0]
             watchingTopic = $(watchingTopic).find('.topic-info_title')[0]
-            console.log($(watchingTopic))
             let topicTitle = $(watchingTopic).data('topic-slug');
 
             let last = prev_topicId[prev_topicId.length - 1]
@@ -1172,9 +1171,7 @@
           function checkIsNewVideo(elem){
 
             elem = $('.'+elem)[0]
-            console.log('lesson: ',elem)
             let elemHasNew = $(elem).find('.newLesson')
-            console.log(elemHasNew)
 
             if(elemHasNew.length != 0){
 
@@ -1188,7 +1185,6 @@
 
             let findHasNewLesson = false;
             $.each(lessons, function(index, value) {
-                console.log('tesdt: ',$(value).find('.newLesson'))
                 if($(value).find('.newLesson').length != 0){
                     findHasNewLesson = true;
                     return false;
