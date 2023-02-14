@@ -75,13 +75,14 @@ class UpdateEventStatistics extends Command
                     }else{
                         DB::table('event_statistics_queue')->where('event_id', $event->id)->update(['running' => false]);
                         Log::info('UpdateEventStatistics Command -> This event id: '.$event->event_id.', do not exist!!');
+                        
                     }
 
                 }
 
             }catch(exception $e){
                 DB::table('event_statistics_queue')->where('event_id', $event->event_id)->update(['running' => false]);
-                echo $e;
+                Log::info('UpdateEventStatistics  '.$e->getMessage());
             }
 
         }
