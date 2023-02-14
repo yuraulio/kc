@@ -255,6 +255,7 @@ export default {
     },
     methods: {
         updatedmedia($event, ref) {
+            console.log('11')
             // $event.siblings = null;
             // $event.subfiles = null;
             this.$emit('inputed', { 'data': $event, 'key': this.keyput})
@@ -265,6 +266,7 @@ export default {
 
         },
         updatedgallery($event, ref) {
+            console.log('1122')
             $event.siblings = null;
             $event.subfiles = null;
             var data;
@@ -328,6 +330,7 @@ export default {
     },
     watch: {
         editorData() {
+            console.log('triggered')
             this.$emit('inputed', { 'data': this.editorData, 'key': this.keyput })
         },
         "value": function() {

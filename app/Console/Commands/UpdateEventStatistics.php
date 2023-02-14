@@ -15,7 +15,7 @@ class UpdateEventStatistics extends Command
      *
      * @var string
      */
-    protected $signature = 'command:update-event-statistics';
+    protected $signature = 'update:event-statistics';
 
     /**
      * The console command description.
@@ -41,10 +41,21 @@ class UpdateEventStatistics extends Command
      */
     public function handle()
     {
-        $events = DB::table('event_statistics_queue')->get();
+        $events = DB::table('event_statistics_queue')->whereRunning(true)->count();
+
+        if($events > 0 ){
+            return 0;
+        }
+
+        $events = DB::table('event_statistics_queue')->orderBy('created_at','asc')->get();
         $now = Carbon::parse(date('Y-m-d H:i:s'));
+        $running = false;
 
         foreach($events as $event){
+
+            if($running){
+                continue;
+            }
 
             $updated_event = Carbon::parse($event->updated_at);
 
@@ -53,19 +64,25 @@ class UpdateEventStatistics extends Command
             try{
 
                 if($diff_in_minutes >= 10){
+                   
+                    DB::table('event_statistics_queue')->where('event_id', $event->event_id)->update(['running' => true]);
+                    $running = true;
 
                     $has_updated = new UpdateStatisticJson($event->event_id);
 
                     if($has_updated->execute != null){
                         DB::table('event_statistics_queue')->where('event_id', $event->event_id)->delete();
                     }else{
+                        DB::table('event_statistics_queue')->where('event_id', $event->id)->update(['running' => false]);
                         Log::info('UpdateEventStatistics Command -> This event id: '.$event->event_id.', do not exist!!');
+                        
                     }
 
                 }
 
             }catch(exception $e){
-                echo $e;
+                DB::table('event_statistics_queue')->where('event_id', $event->event_id)->update(['running' => false]);
+                Log::info('UpdateEventStatistics  '.$e->getMessage());
             }
 
         }

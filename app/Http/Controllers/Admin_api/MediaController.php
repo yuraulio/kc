@@ -236,7 +236,7 @@ class MediaController extends Controller
                 );
                 $files[] = new MediaFileResource($mfile);
 
-                TinifyImage::dispatch(public_path() . $mfile->full_path, $mfile->id)->addSeconds(300);
+                TinifyImage::dispatch(public_path() . $mfile->full_path, $mfile->id)->delay(now()->addSeconds(300));
             }
 
             $original = MediaFile::find($mfile_original->id);
@@ -369,7 +369,7 @@ class MediaController extends Controller
 
 
             if ($request->version != 'original') {
-                TinifyImage::dispatch(public_path() . $mfile->full_path, $mfile->id)->addSeconds(300);;
+                TinifyImage::dispatch(public_path() . $mfile->full_path, $mfile->id)->delay(now()->addSeconds(300));
             }
 
             return response()->json(['data' => new MediaFileResource($mfile)], 200);
@@ -520,7 +520,7 @@ class MediaController extends Controller
             return $e->getMessage();
         }
 
-        RenameFile::dispatch($oldUrl, $url, $alttext, $link)->addSeconds(300);;
+        RenameFile::dispatch($oldUrl, $url, $alttext, $link)->delay(now()->addSeconds(300));
 
         $mediaFile->load(["pages", "siblings", "subfiles"]);
 
