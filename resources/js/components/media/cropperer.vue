@@ -338,8 +338,8 @@ export default {
 
         };
     },
-
     mounted() {
+        console.log('Image Version: ',this.imageVersion)
         console.log('Parent mode: ', this.parentMode)
         if (this.prevalue) {
             this.setupPrevalue();
@@ -382,6 +382,7 @@ export default {
 
             setTimeout(() => {
                 this.version = this.prevalue.version;
+                console.log('VERSION:: ', this.version)
                 this.selectedVersion = this.findVersion(this.version);
                 this.versionSelected();
                 if (this.version == 'original' || this.version == 'Original' || this.version == null) {
@@ -392,7 +393,11 @@ export default {
         }
     },
     methods: {
+        test(folderId){
 
+            this.$parent.$parent.getFiles(folderId)
+            this.setupPrevalue()
+        },
         setupPrevalue() {
 
             console.log('setup prevalue: ',this.prevalue)
@@ -718,6 +723,10 @@ export default {
             // for each gia oles tiw ekdoseis
 
             let versions = this.versionsForUpdate
+
+            let folderId = versions['original'].instance.$parent.originalFile.folder_id
+
+
            Object.values(versions).forEach(value => {
 
                 let cropper = value.instance
@@ -765,8 +774,11 @@ export default {
             //     this.confirmSelection(this.imageVersion)
             // }
 
+            //this.$parent.$parent.getFiles(folderId)
 
 
+            //console.log('-----TEST----')
+            //console.log(this.versionsForUpdate)
 
 
             // this.$parent.$parent.updatedMediaImage(image);

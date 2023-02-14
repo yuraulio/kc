@@ -345,7 +345,6 @@ var mediaMixin = {
 
                 if(response){
                     //this.getFiles(response.data.data.folder_id);
-                    this.getFiles(response.data.data.folder_id);
 
                     if(this.$parent.imageVersion && response.data.data.version == this.$parent.imageVersion){
                         // this.$parent.imageVersionResponseData = response.data.data
@@ -403,10 +402,28 @@ var mediaMixin = {
                 if(version != null && version != 'original'){
                     if(this.$refs.crpr){
 
+                        console.log('++++++++++')
+                        console.log('pre delete: ')
+                        console.log(this.$refs.crpr.versionsForUpdate)
+                        console.log('----------')
+
                         delete this.$refs.crpr.versionsForUpdate[version]
+
+                        console.log('++++++++++')
+                        console.log('version: ',version)
+                        console.log(this.$refs.crpr.versionsForUpdate)
+                        console.log('----------')
+
+                        console.log('length: ', Object.keys(this.$refs.crpr.versionsForUpdate).length)
+
+                        if(Object.keys(this.$refs.crpr.versionsForUpdate).length == 1){
+                            console.log('i am inside')
+                            this.$refs.crpr.test(this.selectedFile.folder_id)
+                        }
                     }
 
                 }
+
 
 
 
@@ -607,69 +624,133 @@ var mediaMixin = {
             if ($event.parrent == null) {
                 pagesText = pagesText + "This is an original image, this action will delete all its subimages that exist.";
             }
+            // var url = "{{ env('MIX_APP_URL') }}";
 
-            Swal.fire(
-                'Good job!',
-                'You clicked the button!',
-                'success'
-              )
+            // alert(url)
+            // if("{{env('MIX_APP_URL')}}"){
 
-            console.log('page text: ', pagesText)
-            Swal.fire({
-                title: 'Are you sure?\n ' + pagesText,
-                text: "You won't be able to revert this! Delete file?",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Yes, delete it!',
-                showLoaderOnConfirm: true,
-                buttonsStyling: false,
-                customClass: {
-                    cancelButton: 'btn btn-soft-secondary',
-                    confirmButton: 'btn btn-soft-danger',
-                },
-                preConfirm: () => {
-                    return axios
-                        .delete('/api/media_manager/file/' + $event.id)
-                        .then((response) => {
-                            if (response.status == 200) {
-                                console.log('test folder: ', $event.folder_id)
-                                this.getFiles($event.folder_id);
+            // }
+            // console.log('ENV: ', @json(env("MIX_APP_URL")))
+            // console.log('Url: ', location.protocol + '//' + location.host)
+            let baseUrl = location.protocol + '//' + location.host;
 
-                                console.log(this.imageVersion)
+            console.log(baseUrl.includes('admin'))
 
-                                if(this.imageVersion != null && $event.version == this.imageVersion){
-                                    console.log('inside Inside')
+            if (baseUrl.includes('admin'))
+            {
+                alert('test')
+                Swal.fire({
+                    title: 'Are you sure?\n ' + pagesText,
+                    text: "You won't be able to revert this! Delete file?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, delete it!',
+                    showLoaderOnConfirm: true,
+                    buttonsStyling: false,
+                    customClass: {
+                        cancelButton: 'btn btn-soft-secondary',
+                        confirmButton: 'btn btn-soft-danger',
+                    },
+                    preConfirm: () => {
+                        return axios
+                            .delete('/api/media_manager/file/' + $event.id)
+                            .then((response) => {
+                                if (response.status == 200) {
+                                    console.log('test folder: ', $event.folder_id)
+                                    this.getFiles($event.folder_id);
+
+                                    console.log(this.imageVersion)
+
+                                    if(this.imageVersion != null && $event.version == this.imageVersion){
+                                        console.log('inside Inside')
 
 
 
-                                    if(this.firstLoadedData.parrent == null){
-                                        this.firstLoadedData.load = true;
-                                        this.updatedMediaImage(this.firstLoadedData)
-                                    }else{
-                                        this.firstLoadedData.parrent.load = true;
-                                        this.updatedMediaImage(this.firstLoadedData.parrent)
+                                        if(this.firstLoadedData.parrent == null){
+                                            this.firstLoadedData.load = true;
+                                            this.updatedMediaImage(this.firstLoadedData)
+                                        }else{
+                                            this.firstLoadedData.parrent.load = true;
+                                            this.updatedMediaImage(this.firstLoadedData.parrent)
+                                        }
+                                        console.log(this.firstLoadedData)
+
                                     }
-                                    console.log(this.firstLoadedData)
-
                                 }
-                            }
-                        })
-                        .catch(error => {
-                            Swal.showValidationMessage(
-                                `Request failed: ${error}`
-                            )
-                        })
-                },
-                allowOutsideClick: () => !Swal.isLoading()
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    Swal.fire(
+                            })
+                            .catch(error => {
+                                Swal.showValidationMessage(
+                                    `Request failed: ${error}`
+                                )
+                            })
+                    },
+                    allowOutsideClick: () => !Swal.isLoading()
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        Swal.fire(
+                            'Deleted!',
+                            'Item has been deleted.',
+                            'success'
+                        )
+                    }
+                })
+            }else{
+
+                Swal.fire({
+                    type: 'warning',
+                    title: 'Are you sure?\n ' + pagesText,
+                    text: "You won't be able to revert this! Delete file?",
+                    showCancelButton: true,
+                    confirmButtonColor: '#f1556c',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: 'Yes, delete it!',
+                    preConfirm: () => {
+                        return axios
+                            .delete('/api/media_manager/file/' + $event.id)
+                            .then((response) => {
+                                if (response.status == 200) {
+                                    console.log('test folder: ', $event.folder_id)
+                                    this.getFiles($event.folder_id);
+
+                                    console.log(this.imageVersion)
+
+                                    if(this.imageVersion != null && $event.version == this.imageVersion){
+                                        console.log('inside Inside')
+
+
+
+                                        if(this.firstLoadedData.parrent == null){
+                                            this.firstLoadedData.load = true;
+                                            this.updatedMediaImage(this.firstLoadedData)
+                                        }else{
+                                            this.firstLoadedData.parrent.load = true;
+                                            this.updatedMediaImage(this.firstLoadedData.parrent)
+                                        }
+
+                                    }
+                                }
+                            })
+                            .catch(error => {
+                                Swal.showValidationMessage(
+                                    `Request failed: ${error}`
+                                )
+                            })
+                    },
+                  }).then((result) => {
+                    if (result.isConfirmed) {
+                      Swal.fire(
                         'Deleted!',
-                        'Item has been deleted.',
+                        'Your file has been deleted.',
                         'success'
-                    )
-                }
-            })
+                      )
+                    }
+                  })
+            }
+
+
+
+            console.log('page text: ', location.protocol + '//' + location.host)
+
             console.log('THE END')
         },
         updateSelectedFile() {
@@ -691,7 +772,8 @@ var mediaMixin = {
                     this.selectedFile = this.mediaFiles[index];
 
                     console.log('here')
-                    if(!this.imageVersion){
+                    console.log(this.imageVersion)
+                    if(this.imageVersion == null && !this.imageVersion){
                         setTimeout(() => {
                             console.log('test')
                             this.$refs.crpr.setupPrevalue();
