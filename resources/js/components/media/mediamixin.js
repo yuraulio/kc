@@ -575,6 +575,7 @@ var mediaMixin = {
                     this.mediaFiles = response.data.data;
                     this.loading = false;
                     this.updateSelectedFile();
+                    
                 })
                 .catch((error) => {
                     console.log('here is an error')

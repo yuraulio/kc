@@ -394,11 +394,31 @@ export default {
     },
     methods: {
         test(folderId){
-
+            
             this.$parent.$parent.getFiles(folderId)
-            this.setupPrevalue()
+            this.setupPrevalue(true)
         },
-        setupPrevalue() {
+        setupPrevalue(from_function = false) {
+
+            if(from_function){
+                alert('here')
+                let sublings = this.prevalue.subfiles
+
+                let imageSave = this.prevalue
+                console.log('PRE VALUE')
+                console.log(this.prevalue)
+                sublings.forEach(value => {
+                    
+                    if(value.version == 'header-image'){
+                        imageSave = value
+                    }
+                })
+
+                this.confirmSelection(imageSave)
+                
+                //this.prevalue
+
+            }
 
             console.log('setup prevalue: ',this.prevalue)
             // if (this.prevalue.parrent) {
@@ -448,15 +468,14 @@ export default {
             this.extension = this.versionData ? this.versionData.extension : this.parrentImage.extension;
         },
         confirmSelection(image) {
-            if (image != null) {
-
+            if (image == null) {
+                image = this.parrentImage;
             }
-            // if (this.$parent.$parent.mode != null ) {
-            //     console.log('Parent mode, confirm selection: ')
-            //     this.$parent.$parent.updatedMediaImage(image);
-            //     // this.$modal.hide('gallery-modal');
-            //     this.$toast.success('New image selected!');
-            // }
+            if (this.$parent.$parent.mode != null ) {
+                this.$parent.$parent.updatedMediaImage(image);
+                // this.$modal.hide('gallery-modal');
+                this.$toast.success('New image selected!');
+            }
         },
         disable() {
             this.$set(this.cropBoxData, 'width', 0);

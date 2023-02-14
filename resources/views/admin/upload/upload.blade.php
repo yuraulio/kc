@@ -70,6 +70,8 @@
             $path = $str . $name;
         }
 
+        $default_image = MediaFile::wherePath($str . $name)->first();
+        $default_image = json_encode($default_image);
         $image = MediaFile::wherePath($path)->first();
         $image = json_encode($image);
     }
@@ -79,6 +81,7 @@
 <div id="app" class="bootstrap-classes ubold mt-5 mb-5 pl-lg-4">
     <manager-for-old-admin
         starting-image="{{ $image }}"
+        default-image="{{$default_image}}"
     ></manager-for-old-admin>
 </div>
 
