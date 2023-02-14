@@ -45,13 +45,13 @@ function scrollCurrentQuestionRow(){
 //       });
 
 const elementInScrollableDiv = document.querySelector('.active-question')
-const positionFromTopOfScrollableDiv = elementInScrollableDiv.offsetTop
+if(elementInScrollableDiv != null){
+    const positionFromTopOfScrollableDiv = elementInScrollableDiv.offsetTop
 
+    const scrollableDivElement = document.querySelector('.content1')
+    scrollableDivElement.scrollTop = positionFromTopOfScrollableDiv - 10
+}
 
-
-const scrollableDivElement = document.querySelector('.content1')
-
-scrollableDivElement.scrollTop = positionFromTopOfScrollableDiv - 10
 
 }
 
@@ -158,19 +158,23 @@ function nextQues(mark) {
       //  jQuery('.next').removeClass('hide');
     }
     if(finalQues==lastQues && LOOP_AGAIN==0 && mark!=5) {
+        console.log('firstNonConfirm: ', firstNonConfirm)
+        console.log('pavlosAllUnanswered: ', pavlosAllUnanswered)
         if(firstNonConfirm==0) {
            // alert("You have completed the exam. Please click 'I AM FINISHED WITH MY EXAM' ");
         }
         else {
             if(pavlosAllUnanswered.length==0) {
+                console.log('inside answer later')
+                console.log(pavlosAnswerLater)
                 //  alert("You have completed the exam. Please click 'I AM FINISHED WITH MY EXAM' ");
                 // SHOW ANSWER LATER QUESTION IF EXIST
 
                 jQuery.each(pavlosAnswerLater,function(index, value){
-                    showSpecificQuestion(value.id);
-                    currQues = value.id;
+                    showSpecificQuestion(value);
+                    currQues = value;
                     window.actQues = currQues;
-                    return 0;
+                    return false;
                 })
 
             }
@@ -485,11 +489,15 @@ function finishExam() {
         window.exam_finish = 1;
         var retrievedObject = window.examVar;
         var startTime = localStorage.getItem("examStart<?php echo $exam->id;?>-{{$user_id}}");
+
+        $('.btn.btn-exit-exam.btn-sm').prop('disabled', true);
+
         jQuery.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
             }
         });
+        $('.btn.btn-exit-exam.btn-sm').prop('disabled', true);
         jQuery.ajax({
         method: "POST",
         url: "{{ route('save-data') }}",

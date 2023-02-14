@@ -59,11 +59,21 @@
             $str = substr($str, strlen($prefix));
         }
 
-        $path = $str . $name;
+        $version_image = explode('.',$name);
+        $extension = $version_image[1];
+        $version_image = $version_image[0].'-header-image.'.$extension;
+
+        if(file_exists( public_path($prefix.$str.$version_image)) ){
+
+            $path = $str . $version_image;
+        }else{
+            $path = $str . $name;
+        }
 
         $image = MediaFile::wherePath($path)->first();
         $image = json_encode($image);
     }
+
 ?>
 
 <div id="app" class="bootstrap-classes ubold mt-5 mb-5 pl-lg-4">
