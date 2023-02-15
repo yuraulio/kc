@@ -192,10 +192,10 @@ class CertificateController extends Controller
     $image->fit($crop_width, $crop_height);
 
     //$image->crop($crop_width, $crop_height, $width_offset, $height_offset);
-    $image->save(public_path('cert/'.$name.'_og_version.jpg'), 50, 'jpg');
+    $image->save(public_path('cert/'.$name.'_og_version.jpg'), 60, 'jpg');
 
 
-    sleep(5);
+
 
 
     return response()->json([
