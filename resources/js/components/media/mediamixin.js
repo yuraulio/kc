@@ -277,8 +277,13 @@ var mediaMixin = {
             let value = $event
             var formData = new FormData();
 
+            console.log('event: ', value)
+
             // edit image version
             if(value != null && value.imgname){
+
+                console.log('inside edit image version')
+
                 formData.append('imgname', value.imgname);
                 formData.append('alttext', value.alttext);
                 formData.append('link', value.link);
@@ -290,6 +295,7 @@ var mediaMixin = {
                 formData.append('height_ratio', value.height_ratio);
                 formData.append('directory', this.selectedFile.folder_id);
                 formData.append('id', value.id);
+
             }else{
 
                 //Create Image version
@@ -306,6 +312,7 @@ var mediaMixin = {
                 formData.append('directory', this.selectedFile.folder_id);
                 formData.append('id', this.$refs.crpr.id);
             }
+
             this.$refs.crpr.isUploading = true;
 
 
@@ -333,6 +340,7 @@ var mediaMixin = {
                     this.$refs.crpr.width = image.width;
                 } else {
                     if(this.$refs.crpr !== undefined){
+
                         this.$refs.crpr.imgname = this.$refs.crpr.parrentImage.name;
                         this.$refs.crpr.alttext = this.$refs.crpr.parrentImage.alttext;
                         this.$refs.crpr.link = this.$refs.crpr.parrentImage.link;
@@ -352,35 +360,7 @@ var mediaMixin = {
 
 
                     }
-                    else if(this.$parent && this.$parent.imageVersion){
 
-
-                        // // console.log('here i am')
-                        // let imgVersion = this.$parent.imageVersion
-                        // let fileVersions = null;
-                        // if(this.firstLoadedData.subfiles.length != 0){
-                        //     console.log('111')
-                        //     fileVersions = this.firstLoadedData.subfiles
-
-                        //     let findFileVersion = null;
-
-                        //     fileVersions.forEach(function(value, index){
-                        //         if(value.version == imgVersion){
-                        //             console.log('test')
-                        //             findFileVersion = value
-                        //         }
-                        //     })
-                        //     if(findFileVersion != null){
-                        //         this.updatedMediaImage(findFileVersion)
-                        //     }
-
-                        // }else{
-                        //     fileVersions = this.firstLoadedData.parrent
-                        //     this.updatedMediaImage(fileVersions)
-                        //     console.log('22')
-                        // }
-
-                    }
 
                 }
 
@@ -399,30 +379,49 @@ var mediaMixin = {
                 }
 
 
-                if(version != null && version != 'original'){
-                    if(this.$refs.crpr){
 
-                        console.log('++++++++++')
-                        console.log('pre delete: ')
-                        console.log(this.$refs.crpr.versionsForUpdate)
-                        console.log('----------')
+                let baseUrl = location.protocol + '//' + location.host;
 
-                        delete this.$refs.crpr.versionsForUpdate[version]
+                console.log(baseUrl.includes('admin'))
 
-                        console.log('++++++++++')
-                        console.log('version: ',version)
-                        console.log(this.$refs.crpr.versionsForUpdate)
-                        console.log('----------')
+                if (!baseUrl.includes('admin'))
+                {
+                    if(version != null && version != 'original'){
+                        if(this.$refs.crpr){
 
-                        console.log('length: ', Object.keys(this.$refs.crpr.versionsForUpdate).length)
+                            console.log('++++++++++')
+                            console.log('pre delete: ')
+                            console.log(this.$refs.crpr.versionsForUpdate)
+                            console.log('----------')
 
-                        if(Object.keys(this.$refs.crpr.versionsForUpdate).length == 1){
-                            console.log('i am inside')
-                            this.$refs.crpr.test(this.selectedFile.folder_id)
+                            delete this.$refs.crpr.versionsForUpdate[version]
+
+                            console.log('++++++++++')
+                            console.log('version: ',version)
+                            console.log(this.$refs.crpr.versionsForUpdate)
+                            console.log('----------')
+
+                            console.log('length: ', Object.keys(this.$refs.crpr.versionsForUpdate).length)
+
+                            if(Object.keys(this.$refs.crpr.versionsForUpdate).length == 1){
+                                console.log('i am inside')
+                                this.$refs.crpr.test(this.selectedFile.folder_id, response)
+                            }
                         }
-                    }
 
+                    }else if(version == 'original'){
+                        if(this.$refs.crpr){
+                            if(Object.keys(this.$refs.crpr.versionsForUpdate).length == 1){
+                                console.log('i am inside')
+                                this.$refs.crpr.test(this.selectedFile.folder_id, response)
+                            }
+                        }
+
+                    }
                 }
+
+
+
 
 
 
@@ -575,7 +574,7 @@ var mediaMixin = {
                     this.mediaFiles = response.data.data;
                     this.loading = false;
                     this.updateSelectedFile();
-                    
+
                 })
                 .catch((error) => {
                     console.log('here is an error')
@@ -639,7 +638,6 @@ var mediaMixin = {
 
             if (baseUrl.includes('admin'))
             {
-                alert('test')
                 Swal.fire({
                     title: 'Are you sure?\n ' + pagesText,
                     text: "You won't be able to revert this! Delete file?",
@@ -756,6 +754,11 @@ var mediaMixin = {
         },
         updateSelectedFile() {
             console.log('update Selected Files function triggered')
+            console.log('THE MEDIA FILES')
+            console.log(this.mediaFiles)
+            console.log('SELECTED FILE:')
+            console.log(this.selectedFile)
+
             if (this.selectedFile) {
                 var oldFile = null;
 
@@ -764,6 +767,8 @@ var mediaMixin = {
                 }else{
                     oldFile = this.selectedFile.parrent;
                 }
+
+                console.log('THIS IS OLD FILE: ', oldFile)
 
                 var index = this.mediaFiles.findIndex(function(file) {
                     return file.id == oldFile.id;

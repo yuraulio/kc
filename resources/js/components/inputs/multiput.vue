@@ -36,10 +36,10 @@
             <div v-if="value" class="d-grid text-center">
 
                 <div class="image-hover">
-                    <img 
-                    :src="value.url + '?i=' + (Math.random() * 100000)" 
-                    alt="image" 
-                    class="img-fluid rounded" 
+                    <img
+                    :src="value.url + '?i=' + (Math.random() * 100000)"
+                    alt="image"
+                    class="img-fluid rounded"
                     :style="'width:' + width"
                     @error="setAltImg"
                     >
@@ -261,11 +261,10 @@ export default {
         };
     },
     methods: {
-        setAltImg(event) { 
-            event.target.src = this.default_image.url 
-        }, 
+        setAltImg(event) {
+            event.target.src = this.default_image.url
+        },
         updatedmedia($event, ref) {
-            alert('1122')
             // $event.siblings = null;
             // $event.subfiles = null;
             this.$emit('inputed', { 'data': $event, 'key': this.keyput})
@@ -276,7 +275,6 @@ export default {
 
         },
         updatedgallery($event, ref) {
-            alert('112233')
             $event.siblings = null;
             $event.subfiles = null;
             var data;
@@ -302,7 +300,6 @@ export default {
             this.$set(this.loadstart, ref,  false);
         },
         updatedimage($event) {
-            alert('444')
             this.$emit('inputed', { 'data': $event, 'key': this.keyput})
         },
         updated($event) {
@@ -335,6 +332,7 @@ export default {
             this.value.splice(index, 1);
         },
         removeImage() {
+            //this.value = {}
             this.startingImage = null;
             this.editorData = null;
             this.default_image = null;
@@ -343,6 +341,8 @@ export default {
     watch: {
         editorData() {
             console.log('triggered')
+            console.log('editor data: ',this.editorData)
+            console.log('key: ',this.keyput)
             this.$emit('inputed', { 'data': this.editorData, 'key': this.keyput })
         },
         "value": function() {

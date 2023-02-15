@@ -414,14 +414,14 @@ function finishExamDialog(){
     if($('#closeDialog').length == 0){
         let dialog = `
             <div id="closeDialog" hidden>
-                <div class="alert-wrapper success-alert">
+                <div class="alert-wrapper">
                     <div class="alert-inner">
-                        <p>Are you sure you want to finish the exam?</p>
+                        <p style="color:black;">Are you sure you want to finish the exam?</p>
                     </div>
 
                     <div class="close-dialog-buttons">
-                        <button onclick="finishExam()" class="btn btn-exit-exam btn-sm">Yes, finish my exam. </button>
-                        <button onclick="closeFinishExam()" class="btn btn-not-exit-exam btn-sm">Do not finish my exam. </button>
+                        <button onclick="finishExam()" class="btn btn-exit-exam btn-sm button-secondary-next">Yes, finish my exam. </button>
+                        <button style="border-radius:0" onclick="closeFinishExam()" class="btn btn-not-exit-exam btn-sm btn-danger">Do not finish my exam. </button>
                     </div>
 
                     <!-- /.alert-outer -->

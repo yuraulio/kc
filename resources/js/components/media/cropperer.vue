@@ -361,21 +361,25 @@ export default {
 
                     });
                 };
-
+                console.log('i am here please')
+                console.log(this)
                 this.versionsForUpdate['original'] = {
-                    'imgname': this.imgname,
+                    'imgname': this.parrentImage.name,
                     'version': 'original',
                     'parent_id': this.$refs.cropper.$parent.parrentImage.id,
                     //'crop_data': cropData,
                     // 'width_ratio': this.width_ratio,
                     // 'height_ratio': this.height_ratio,
-                    'id': this.id,
+                    'id': this.parrentImage.id,
                     'jpg': this.jpg,
                     'instance': this.$refs.cropper,
-                    'alttext': this.alttext != 'null' ? this.alttext : '',
-                    'link': this.link != 'null' ? this.link : '',
+                    'alttext': this.parrentImage.alttext != 'null' ? this.parrentImage.alttext : '',
+                    'link': this.parrentImage.link != 'null' ? this.parrentImage.link : '',
                     'hasDeleted': false
                 }
+
+                console.log('from preve version original: ')
+                console.log(this.versionsForUpdate['original'])
 
                 this.$forceUpdate();
             }
@@ -393,32 +397,22 @@ export default {
         }
     },
     methods: {
-        test(folderId){
-            
+        test(folderId, response = null){
+
             this.$parent.$parent.getFiles(folderId)
+
+            // if(response != null && this.$parent.imageVersion && response.data.data.version == this.imageVersion){
+            //     // this.$parent.imageVersionResponseData = response.data.data
+            //     this.updatedMediaImage(response.data.data)
+            //     return false;
+
+            // }
+
             this.setupPrevalue(true)
         },
         setupPrevalue(from_function = false) {
 
-            if(from_function){
-                alert('here')
-                let sublings = this.prevalue.subfiles
 
-                let imageSave = this.prevalue
-                console.log('PRE VALUE')
-                console.log(this.prevalue)
-                sublings.forEach(value => {
-                    
-                    if(value.version == 'header-image'){
-                        imageSave = value
-                    }
-                })
-
-                this.confirmSelection(imageSave)
-                
-                //this.prevalue
-
-            }
 
             console.log('setup prevalue: ',this.prevalue)
             // if (this.prevalue.parrent) {
@@ -452,6 +446,8 @@ export default {
                 this.id = this.parrentImage.id ? this.parrentImage.id : null;
                 this.date = this.versionData ? this.versionData.created_at : this.parrentImage.created_at;
             }else{
+                console.log('not original')
+                console.log(this)
 
                 this.imgname = this.originalFile ? this.originalFile.name : '';
                 this.alttext = this.originalFile.alt_text ? this.originalFile.alt_text : '';
@@ -466,6 +462,27 @@ export default {
             // this.width = this.versionData ? this.versionData.width : this.parrentImage.width;
             this.user = this.versionData ? this.versionData.user : this.parrentImage.user;
             this.extension = this.versionData ? this.versionData.extension : this.parrentImage.extension;
+
+            if(from_function){
+                alert('inside function')
+                console.log(this.prevalue)
+                let sublings = this.prevalue.subfiles
+
+                let imageSave = this.prevalue
+                console.log('PRE VALUE')
+                console.log(this.prevalue)
+                sublings.forEach(value => {
+
+                    if(value.version == 'header-image'){
+                        imageSave = value
+                    }
+                })
+
+                this.confirmSelection(imageSave)
+
+                //this.prevalue
+
+            }
         },
         confirmSelection(image) {
             if (image == null) {
@@ -503,6 +520,7 @@ export default {
                 this.$refs.cropper.enable();
                 var image_width, image_height;
 
+                console.log('parent image',this.parrentImage)
                 var img = new Image();
                 img.onload = () => {
                     image_width = img.width;
@@ -513,7 +531,8 @@ export default {
 
                     });
                 }
-                img.src = this.parrentImage.url;
+
+                img.src = this.parrentImage.full_path;
 
                 this.versionData = this.findVersionData(this.selectedVersion.version);
                 this.imgname = this.versionData ? this.versionData.name : "";
@@ -743,7 +762,11 @@ export default {
 
             let versions = this.versionsForUpdate
 
-            let folderId = versions['original'].instance.$parent.originalFile.folder_id
+            console.log('version for update')
+            console.log(versions)
+
+            //let folderId = versions['original'].instance.$parent.originalFile.folder_id
+
 
 
            Object.values(versions).forEach(value => {
@@ -772,35 +795,8 @@ export default {
 
             })
 
-            // console.log('---------------')
-            // console.log(this.$parent.$parent.hasUpdated)
-            // console.log('+++++++++++++')
-
-            // if(this.$parent.$parent.hasUpdated === undefined){
-            //     console.log('has updated:::::', this.$parent.$parent.hasUpdated)
-
-            //     if(this.$parent.$parent.selectedFile.version == 'original'){
-            //         this.$parent.$parent.updatedMediaImage(this.$parent.$parent.selectedFile)
-            //     }else{
-            //         this.$parent.$parent.updatedMediaImage(this.$parent.$parent.selectedFile.parrent)
-            //     }
-
-            // }
 
 
-
-            // if(this.imageVersion){
-            //     this.confirmSelection(this.imageVersion)
-            // }
-
-            //this.$parent.$parent.getFiles(folderId)
-
-
-            //console.log('-----TEST----')
-            //console.log(this.versionsForUpdate)
-
-
-            // this.$parent.$parent.updatedMediaImage(image);
 
 
         },

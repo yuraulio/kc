@@ -195,7 +195,7 @@ class CertificateController extends Controller
     $image->save(public_path('cert/'.$name.'_og_version.jpg'), 50, 'jpg');
 
 
-
+    sleep(5);
 
 
     return response()->json([

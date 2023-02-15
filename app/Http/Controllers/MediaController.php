@@ -56,24 +56,42 @@ class MediaController extends Controller
 
     public function uploadVersionImage(Request $request, Media $media)
     {
+        //dd('test controller');
         // $versions = json_decode($request->versions);
         $mediaKey = $request->image_upload;
 
-        $pos = strrpos($mediaKey, '/');
-        $id = $pos === false ? $mediaKey : substr($mediaKey, $pos + 1);
+        //dd($mediaKey);
 
-        $folders =substr($mediaKey, 0, strrpos($mediaKey, '/'));
-        $path = explode(".", $id);
-        $image = Image::make(public_path('/').$mediaKey);
+        if($mediaKey != null){
+            $pos = strrpos($mediaKey, '/');
+            $id = $pos === false ? $mediaKey : substr($mediaKey, $pos + 1);
 
-        $media->original_name = $id;
-        $media->path = $folders.'/';
-        $media->name = $path[0];
-        $media->ext = '.'.$path[1];
-        $media->width = $image->width();
-        $media->height = $image->height();
+            $folders =substr($mediaKey, 0, strrpos($mediaKey, '/'));
+            $path = explode(".", $id);
+            $image = Image::make(public_path('/').$mediaKey);
 
+            $media->original_name = $id;
+            $media->path = $folders.'/';
+            $media->name = $path[0];
+            $media->ext = '.'.$path[1];
+            $media->width = $image->width();
+            $media->height = $image->height();
+
+        }else{
+            $media->original_name = null;
+            $media->path = null;
+            $media->name = null;
+            $media->ext = null;
+            $media->width = null;
+            $media->height = null;
+            $media->dpi = null;
+            $media->details = null;
+
+        }
         $media->save();
+
+
+
 
         // old code
         // foreach(get_image_versions() as $value){
