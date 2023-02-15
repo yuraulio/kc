@@ -713,7 +713,7 @@ var mediaMixin = {
 
                                     console.log(this.imageVersion)
 
-                                    if(this.imageVersion != null && $event.version == this.imageVersion){
+                                    if(this.imageVersion != null){
                                         console.log('inside Inside')
 
 
