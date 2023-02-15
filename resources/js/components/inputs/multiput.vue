@@ -36,7 +36,13 @@
             <div v-if="value" class="d-grid text-center">
 
                 <div class="image-hover">
-                    <img :src="value.url + '?i=' + (Math.random() * 100000)" alt="image" class="img-fluid rounded" :style="'width:' + width">
+                    <img
+                    :src="value.url + '?i=' + (Math.random() * 100000)"
+                    alt="image"
+                    class="img-fluid rounded"
+                    :style="'width:' + width"
+                    @error="setAltImg"
+                    >
                     <div class="middle">
                         <i @click="startingImage=null; $set(loadstart, (keyput + 'media'),  true)" data-bs-toggle="offcanvas" :data-bs-target="'#mediaCanvas' + keyput" class="fa fa-plus cursor-pointer" aria-hidden="true"></i>
                         <i @click="startingImage=value; $set(loadstart, (keyput + 'media'),  true)" data-bs-toggle="offcanvas" :data-bs-target="'#mediaCanvas' + keyput" class="fa fa-pencil-alt cursor-pointer" aria-hidden="true"></i>
@@ -244,6 +250,7 @@ export default {
             type: String,
             default: "Pick some",
         },
+        default_image: {}
     },
     data() {
         return {
@@ -254,8 +261,10 @@ export default {
         };
     },
     methods: {
+        setAltImg(event) {
+            event.target.src = this.default_image.url
+        },
         updatedmedia($event, ref) {
-            console.log('11')
             // $event.siblings = null;
             // $event.subfiles = null;
             this.$emit('inputed', { 'data': $event, 'key': this.keyput})
@@ -266,7 +275,6 @@ export default {
 
         },
         updatedgallery($event, ref) {
-            console.log('1122')
             $event.siblings = null;
             $event.subfiles = null;
             var data;
@@ -324,13 +332,17 @@ export default {
             this.value.splice(index, 1);
         },
         removeImage() {
+            //this.value = {}
             this.startingImage = null;
             this.editorData = null;
+            this.default_image = null;
         }
     },
     watch: {
         editorData() {
             console.log('triggered')
+            console.log('editor data: ',this.editorData)
+            console.log('key: ',this.keyput)
             this.$emit('inputed', { 'data': this.editorData, 'key': this.keyput })
         },
         "value": function() {

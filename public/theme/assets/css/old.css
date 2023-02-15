@@ -376,6 +376,9 @@ input[type="number"]#mobile_phone::-webkit-inner-spin-button {
     margin: auto;
     top: 50%;
 }
+#closeDialog{
+    background-color: white;
+}
 
 #outOfTimeDialog .alert-inner div{
     padding: 0 3rem !important;
