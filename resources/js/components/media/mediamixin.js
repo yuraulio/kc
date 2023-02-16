@@ -3,9 +3,7 @@ import _ from "lodash";
 var mediaMixin = {
     data() {
         return {
-            temp: {},
-            original: {},
-            selVer: {},
+            tempDelete: null,
             firstLoadedData: [],
             versions: [
                 {
@@ -367,6 +365,12 @@ var mediaMixin = {
                         this.updatedMediaImage(response.data.data)
 
 
+                    }else if(this.$parent.imageVersion){
+                        
+                        console.log('temp', this.$refs.crpr.tempVersionsForUpdate)
+                        delete this.$refs.crpr.tempVersionsForUpdate[response.data.data.version]
+                        console.log('version: ', response.data.data.version)
+                        console.log('temp11', this.$refs.crpr.tempVersionsForUpdate)
                     }
 
 
@@ -427,7 +431,7 @@ var mediaMixin = {
 
                     }
                 }else{
-
+                    
 
                 }
 
@@ -630,6 +634,8 @@ var mediaMixin = {
             // console.log('triggered function delete File')
             // console.log($event)
 
+            this.tempDelete = $event.version
+
             var pagesText = "";
             var pages_count = $event.pages_count;
             if (pages_count) {
@@ -805,14 +811,76 @@ var mediaMixin = {
         // }
         updateSelectedFile() {
             console.log('update selected file function')
-            //console.log(this.selectedFile)
+            console.log(this.selectedFile)
+            console.log('version for update')
+            console.log(this.$refs.crpr.versionsForUpdate)
+
+
+            
+
+
             if (this.selectedFile) {
                 var oldFile = this.selectedFile;
+                let versionImages = null
+                versionImages = oldFile.subfiles
+                let versionImageForUpdateWindow = null;
+                console.log('current version:', this.imageVersion)
+
+                
+                
+
+
                 if(this.selectedFile.parrent == null){
                     oldFile = this.selectedFile;
                 }else{
                     oldFile = this.selectedFile.parrent;
                 }
+
+                console.log('test: ersionImage',versionImages)
+                if(versionImages != null){
+                    versionImages.forEach(value => {
+        
+                        if(value.version == this.imageVersion){
+                            versionImageForUpdateWindow = value
+                            this.updatedMediaImage(versionImageForUpdateWindow)
+                            return false;
+                        }
+                    })
+
+                    if(versionImageForUpdateWindow == null){
+                        //this.$parent.$parent.updatedMediaImage(image)
+                        console.log('////')
+                        console.log(this.$refs.crpr.versionsForUpdate)
+                        
+                        if(this.$refs.crpr.tempVersionsForUpdate[versionImageForUpdateWindow.version].length != 0 ){
+
+                            if(this.tempDelete != null && versionImageForUpdateWindow.version != this.tempDelete){
+                                this.updatedMediaImage(versionImageForUpdateWindow)
+                                
+
+                            }else if(this.tempDelete == null){
+                                this.updatedMediaImage(versionImageForUpdateWindow)
+                            }
+                            else{
+                                alert('test old 2')
+                                this.updatedMediaImage(oldFile)
+                            }
+                            // else if(Object.keys(this.tempDelete).length == 0){
+                            //     this.updatedMediaImage(versionImageForUpdateWindow)
+                            // }
+                            
+                            
+                        }
+                        else{
+                            alert('has set old1')
+                            this.updatedMediaImage(oldFile)
+                        }
+                        
+                    }
+
+                    
+                }
+
                 //console.log('old files: ', oldFile)
                 var index = this.mediaFiles.findIndex(function(file) {
                     return file.id == oldFile.id;

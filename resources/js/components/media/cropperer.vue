@@ -230,6 +230,7 @@ export default {
             originalFile: null,
             uploadedVersions: [],
             versionsForUpdate: {},
+            tempVersionsForUpdate: {},
             imgSrc: null,
             cropImg: "",
             data: null,
@@ -418,11 +419,14 @@ export default {
 
             console.log('triggered setup prevalue FUNCTION.')
 
+            console.log(this.prevalue)
             if(this.prevalue.parrent == null){
                 this.parrentImage = this.prevalue;
             }else{
                 this.parrentImage = this.prevalue.parrent;
             }
+
+
 
 
             if((this.$parent.$parent.firstLoadedData.id != this.parrentImage.id && from_function) || this.$parent.$parent.withoutImage){
@@ -771,6 +775,8 @@ export default {
             // for each gia oles tiw ekdoseis
 
             let versions = this.versionsForUpdate
+
+            this.tempVersionsForUpdate = this.versionsForUpdate;
 
             console.log('version for update')
             console.log(versions)
