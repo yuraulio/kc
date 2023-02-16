@@ -425,6 +425,8 @@ var mediaMixin = {
                     }
                 }else{
 
+
+
                     console.log('paretn imag:', this.$parent.imageVersion)
                     console.log('resp vers: ', response.data.data.version)
                     if(this.$parent.imageVersion && response.data.data.version == this.$parent.imageVersion){
@@ -672,7 +674,9 @@ var mediaMixin = {
                 });
         },
         userSelectedFiles($event) {
-            this.firstLoadedData = $event
+            if(this.firstLoadedData.length == 0){
+                this.firstLoadedData = $event
+            }
             this.selectedFile = $event;
             this.warning = false;
             this.$modal.show('edit-image-modal');

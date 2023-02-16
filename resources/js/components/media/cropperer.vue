@@ -339,11 +339,13 @@ export default {
         };
     },
     mounted() {
+        console.log('first loaded: ', this.$parent.$parent.firstLoadedData)
+        console.log('selected files: ', this.$parent.$parent.selectedFile)
         console.log('Image Version: ',this.imageVersion)
         console.log('Parent mode: ', this.parentMode)
         console.log('version for update:', this.versionsForUpdate)
         if (this.prevalue) {
-            this.setupPrevalue();
+            this.setupPrevalue(true);
 
 
             if (typeof FileReader === "function") {
@@ -413,7 +415,8 @@ export default {
             this.setupPrevalue()
         },
         setupPrevalue(from_function = false) {
-            console.log('setup prevalue')
+
+
 
 
 
@@ -431,6 +434,13 @@ export default {
                 this.parrentImage = this.prevalue;
             }else{
                 this.parrentImage = this.prevalue.parrent;
+            }
+
+            console.log('version length: ', this.versionsForUpdate.length)
+            if(this.$parent.$parent.firstLoadedData.id != this.parrentImage.id && from_function){
+
+                this.confirmSelection(this.parrentImage)
+                //this.forRefresh = true
             }
 
 
@@ -466,25 +476,25 @@ export default {
             this.user = this.versionData ? this.versionData.user : this.parrentImage.user;
             this.extension = this.versionData ? this.versionData.extension : this.parrentImage.extension;
 
-            if(from_function){
-                //console.log(this.prevalue)
-                let sublings = this.prevalue.subfiles
+            // if(from_function){
+            //     //console.log(this.prevalue)
+            //     let sublings = this.prevalue.subfiles
 
-                let imageSave = this.prevalue
-                console.log('PRE VALUE')
-                console.log(this.prevalue)
-                sublings.forEach(value => {
+            //     let imageSave = this.prevalue
+            //     console.log('PRE VALUE')
+            //     console.log(this.prevalue)
+            //     sublings.forEach(value => {
 
-                    if(value.version == 'header-image'){
-                        imageSave = value
-                    }
-                })
+            //         if(value.version == 'header-image'){
+            //             imageSave = value
+            //         }
+            //     })
 
-                this.confirmSelection(imageSave)
+            //     this.confirmSelection(imageSave)
 
-                //this.prevalue
+            //     //this.prevalue
 
-            }
+            // }
         },
         confirmSelection(image) {
             if (image == null) {
