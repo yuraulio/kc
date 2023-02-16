@@ -45,8 +45,14 @@
 
                                     @include('alerts.feedback', ['field' => 'name'])
                                 </div>
+                                <div class="form-group{{ $errors->has('url') ? ' has-danger' : '' }}">
+                                    <label class="form-control-label" for="input-name">{{ __('Url') }}</label>
+                                    <input type="text" name="url" id="input-url" class="form-control{{ $errors->has('url') ? ' is-invalid' : '' }}" placeholder="{{ __('Url') }}" value="{{ old('url', $partner->url) }}" autofocus>
 
-                                
+                                    @include('alerts.feedback', ['field' => 'url'])
+                                </div>
+
+
 
                                 <div class="text-center">
                                     <button type="submit" class="btn btn-success mt-4">{{ __('Save') }}</button>
@@ -58,7 +64,7 @@
                                      <div class="col-xl-12 order-xl-1">
                                      @include('admin.upload.upload', ['event' => ($media != null) ? $media : null, 'versions' => ['event-card', 'header-image', 'social-media-sharing']])
                                      </div>
-                            
+
                                   </div>
                                     @if($media != null && $media['name'] != '')
                                         <div id="version-btn" style="margin-bottom:20px" class="col">
