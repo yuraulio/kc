@@ -425,17 +425,6 @@ var mediaMixin = {
                     }
                 }else{
 
-
-
-                    console.log('paretn imag:', this.$parent.imageVersion)
-                    console.log('resp vers: ', response.data.data.version)
-                    if(this.$parent.imageVersion && response.data.data.version == this.$parent.imageVersion){
-                        this.selVer = response.data.data
-                    }else if(response.data.data.version == 'original'){
-                        this.original = response.data.data
-                    }
-                    console.log('SEL VERSION IS SET: ',this.setVer)
-                    console.log('original VERSION IS SET',this.original)
                     // if(Object.keys(this.original).length != 0){
 
                     // }
@@ -879,7 +868,8 @@ var mediaMixin = {
                 if (this.mediaFiles[index]) {
                     this.selectedFile = this.mediaFiles[index];
                     setTimeout(() => {
-                        this.$refs.crpr.setupPrevalue();
+
+                        //this.$refs.crpr.setupPrevalue();
                     }, 1000);
                 }
             }

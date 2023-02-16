@@ -43,7 +43,7 @@
 										</div>
 						<div class="row">
 
-					
+
 
 							<div class="col6 col-sm-12">
 								<div class="text-area">
@@ -109,7 +109,7 @@
 				<!-- /.form-section -->
 				</section>
 
-		
+
 			</main>
 @endsection
 
@@ -124,12 +124,12 @@
 /*@if (!empty($content['featured']) && isset($content['featured'][0]) &&isset($content['featured'][0]['media']) && !empty($content['featured'][0]['media']))
 $('.section-hero').css({background:url({{ $frontHelp->pImg($content, 'header-image') }})})
 @endif*/
-    
+
 </script>
 
 
 <script type="text/javascript">
-   
+
 $.fn.inputFilter = function(inputFilter) {
     return this.on("input keydown keyup mousedown mouseup select contextmenu drop", function() {
       if (inputFilter(this.value)) {
@@ -170,7 +170,7 @@ alert("Please Fill Required Fields");
 	$.ajax({
 	    type: "POST",
 	    url: "/give-away",
-	
+
 	    data: {
 			'cname':firstname,
 			'csurname': surname,

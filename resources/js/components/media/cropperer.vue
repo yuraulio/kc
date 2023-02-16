@@ -416,9 +416,7 @@ export default {
         },
         setupPrevalue(from_function = false) {
 
-
-
-
+            console.log('here')
 
             //console.log('setup prevalue: ',this.prevalue)
             // if (this.prevalue.parrent) {
@@ -436,8 +434,9 @@ export default {
                 this.parrentImage = this.prevalue.parrent;
             }
 
-            console.log('version length: ', this.versionsForUpdate.length)
-            if(this.$parent.$parent.firstLoadedData.id != this.parrentImage.id && from_function){
+
+            console.log(this.$parent.$parent.withoutImage)
+            if((this.$parent.$parent.firstLoadedData.id != this.parrentImage.id && from_function) || this.$parent.$parent.withoutImage){
 
                 this.confirmSelection(this.parrentImage)
                 //this.forRefresh = true
@@ -639,6 +638,8 @@ export default {
 
             let currVersion = this.selectedVersion.version
 
+
+
             let cropData = {}
 
             cropData['height'] = this.cropBoxData.height
@@ -651,7 +652,7 @@ export default {
             }
 
             this.versionsForUpdate[currVersion].imgname = this.imgname
-            this.versionsForUpdate[currVersion].version = this.version
+            this.versionsForUpdate[currVersion].version = currVersion
             this.versionsForUpdate[currVersion].parent_id = this.$refs.cropper.$parent.parrentImage.id
             this.versionsForUpdate[currVersion].crop_data = cropData
             this.versionsForUpdate[currVersion].width_ratio = this.width_ratio
@@ -660,6 +661,9 @@ export default {
             this.versionsForUpdate[currVersion].jpg = this.jpg
             this.versionsForUpdate[currVersion].instance = this.$refs.cropper
             this.versionsForUpdate[currVersion].hasDeleted = false
+
+            console.log('after move crop box')
+            console.log(this.versionsForUpdate)
 
         },
         resetData() {
@@ -686,6 +690,9 @@ export default {
         },
         setCropBox(image_width, image_height) {
 
+            console.log('++++++++++++++++++++')
+            console.log('versions: ',this.versionsForUpdate)
+
             var canvas_height = this.$refs.cropper.getCanvasData().height;
             var canvas_width = this.$refs.cropper.getCanvasData().width;
 
@@ -697,7 +704,12 @@ export default {
 
             this.$refs.cropper.setAspectRatio(this.selectedVersion.w / this.selectedVersion.h);
 
+
+
             if(this.versionsForUpdate[this.selectedVersion.version] && this.versionsForUpdate[this.selectedVersion.version].crop_data !== undefined && !this.versionsForUpdate[this.selectedVersion.version].hasDeleted){
+
+                console.log('test')
+                console.log('version:',this.versionsForUpdate[this.selectedVersion.version])
 
                 let data = this.versionsForUpdate[this.selectedVersion.version].crop_data;
 
@@ -713,12 +725,15 @@ export default {
 
                 this.setCropBoxData();
 
+
+
                 return 0;
             }
 
 
             //console.log('versionData is now available: ',this.versionData)
             if (this.versionData && this.versionData.crop_data) {
+                console.log('test222')
                 if (typeof this.versionData.crop_data === "string") {
                     this.versionData.crop_data = JSON.parse(this.versionData.crop_data);
                 }
@@ -732,6 +747,7 @@ export default {
                 this.$set(this.cropBoxData, 'left', ((container_width - (this.selectedVersion.w * this.width_ratio))/2));
                 this.$set(this.cropBoxData, 'top', ((container_height - (this.selectedVersion.h * this.height_ratio))/2));
             }
+            console.log('----------------------')
 
             this.setCropBoxData();
 

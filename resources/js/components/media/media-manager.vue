@@ -492,6 +492,7 @@ export default {
             ],
             warning: false,
             startingImageData: null,
+            withoutImage: false
         };
     },
     methods: {
@@ -614,8 +615,11 @@ export default {
             this.getFolders();
         }
 
+
         if (this.startingImage) {
             this.setImage(this.startingImage);
+        }else{
+            this.withoutImage = true;
         }
     },
     beforeDestroy() {
