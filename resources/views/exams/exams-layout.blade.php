@@ -55,8 +55,8 @@
 </head>
 @include('theme.layouts.header_exam')
 
-<!-- <body style="background: transparent;" class="hold-transition exam-page disable-select" oncontextmenu="return false;" onkeydown="return (event.keyCode != 116)"> -->
-<body style="background: transparent;" class="hold-transition exam-page disable-select" >
+<body style="background: transparent;" class="hold-transition exam-page disable-select" oncontextmenu="return false;" onkeydown="return (event.keyCode != 116)">
+<!-- <body style="background: transparent;" class="hold-transition exam-page disable-select" > -->
     <div id="app">
         {{--<div id="closeDialog" hidden>
             <div class="alert-wrapper error-alert">
