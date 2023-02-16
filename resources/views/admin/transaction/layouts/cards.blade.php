@@ -108,7 +108,7 @@
             </div>
         </div>
     </div>
-
+    @if(isset(total_users))
     <div class="card-body col-xl-3 col-md-6">
         <div class="card">
             <div class="card-body">
@@ -122,6 +122,7 @@
             </div>
         </div>
     </div>
+    @endif
 
 </div>
 
