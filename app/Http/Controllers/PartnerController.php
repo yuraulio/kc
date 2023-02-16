@@ -100,7 +100,7 @@ class PartnerController extends Controller
         if(!$media){
             $media = $partner->createMedia();
         }
-        
+
         return view('partner.edit', compact('partner','media'));
     }
 
@@ -116,7 +116,7 @@ class PartnerController extends Controller
      * @param  \App\Partner  $partner
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Partner $partner)
+    public function update(PartnerRequest $request, Partner $partner)
     {
         $partner->update($request->all());
 

@@ -357,9 +357,16 @@ input[type="number"]#mobile_phone::-webkit-inner-spin-button {
     top: 50%;
 }
 
+.resp-img{
+    width: 100%;
+    height: auto;
+}
+
 #favDialog1,
 #examDialog,
-#closeDialog {
+#closeDialog,
+#generalDialog,
+#outOfTimeDialog {
     position: fixed;
     z-index: 9999;
     text-align: center;
@@ -368,6 +375,29 @@ input[type="number"]#mobile_phone::-webkit-inner-spin-button {
     max-width: 500px;
     margin: auto;
     top: 50%;
+}
+#closeDialog{
+    background-color: white;
+}
+
+#outOfTimeDialog .alert-inner div{
+    padding: 0 3rem !important;
+}
+/* #outOfTimeDialog .alert-inner div p {
+    color: unset
+} */
+
+#outOfTimeDialog .alert-wrapper{
+    display: inline-flex;
+}
+
+#outOfTimeDialog .close-dialog-general-buttons{
+    margin: auto 0;
+}
+
+#close-exam-dialog1{
+    height: 2rem;
+    width: 2rem;
 }
 
 .section-account-tabs #favDialog {
@@ -1616,6 +1646,27 @@ img.linkdein-image-add {
     margin: 0 auto;
 }
 
+.footer-mobile-app-icons {
+    float: right;
+    margin-top: 1rem;
+}
+.footer-mobile-app-icons li{
+    display: inline-block;
+}
+
+#ios-icon{
+    /* max-height: 70px; */
+    height: 3rem;
+}
+#android-icon{
+    /* max-height: 70px; */
+    height: 3rem;
+}
+
+.content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .course-tab-text .author-infos .ibox .ibox-img.partner{ margin-right: 6px; display: inline-block; vertical-align: top; width: 47px; overflow: hidden; }
+   .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .course-tab-text .author-infos .ibox .ibox-img.partner a{ display: block; }
+   .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .course-tab-text .author-infos .ibox .ibox-img.partner a img{ display: block; width: 100%; height: 100%; min-height: 47px;}
+   .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .course-tab-text .author-infos .ibox .ibox-img.partner a:hover img{ border: 2px solid #92cc16; }
 
 
 
@@ -1765,6 +1816,13 @@ img.linkdein-image-add {
         top: -9px;
         padding: 3px;
     }
+    .footer-mobile-app-icons {
+        float: none;
+        display: block;
+        width: 100%;
+        text-align: center;
+        margin: 30px auto 0 auto;
+    }
 }
 
 /* Tablet Portrait */
@@ -1872,6 +1930,8 @@ img.linkdein-image-add {
     .countdown-btn{
         display: none;
     }
+
+    .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .course-tab-text .author-infos .ibox .ibox-img.partner{ display: block; margin: 0 auto 10px; width: 54px; }
 
 
 }
@@ -2033,6 +2093,19 @@ img.linkdein-image-add {
       z-index: 5;
     }
   }
+
+
+.dynamic-courses-wrapper.unpaid{
+    background-color: #d8d8d8;
+}
+.dynamic-courses-wrapper.unpaid:hover{
+    background-color: orange;
+}
+
+.dynamic-courses-wrapper.unpaid a,
+.dynamic-courses-wrapper.unpaid .accordion-title.title-blue-gradient{
+    pointer-events: none;
+}
 
 
 

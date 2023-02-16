@@ -13,9 +13,15 @@
                         <div class="author-img">
                             <?php
                                 $alt='';
+                                $width = 0;
+                                $height = 0;
                                 $img = get_image($syllabus[0]['mediable'],'instructors-small');
+
+                                $imageDetails = get_image_version_details('instructors-small');
+                                $width = $imageDetails['w'];
+                                $height = $imageDetails['h'];
                             ?>
-                            <a id="syllabus-link" href="{{env("NEW_PAGES_LINK") . "/" . $syllabus[0]['slugable']['slug']}}"><img src="{{cdn($img)}}" alt="{{$alt}}"></a>
+                            <a id="syllabus-link" href="{{env("NEW_PAGES_LINK") . "/" . $syllabus[0]['slugable']['slug']}}"><img loading="lazy" src="{{cdn($img)}}" alt="{{$alt}}" width="{{ $width }}" height="{{ $height }}" title="{{$alt}}"></a>
                         </div>
                         <div class="ibox-text">
                             <p>Syllabus Manager<br></p>
@@ -32,12 +38,22 @@
                                 $alt=$partner->name;
                                 $img = get_image($partner['mediable']);
                             ?>
-                            <div class="ibox-img">
-                                <img src="{{cdn($img)}}" alt="{{$alt}}">
+                            <div class="ibox-img partner">
+                                <img class="resp-img" loading="lazy" src="{{cdn($img)}}" width="90" height="90" alt="{{$alt}}">
                             </div>
                             <div class="ibox-text">
-                                {!! $partner->name !!}
+                                <div class="ibox-text">
+                                <p>Official Partner<br></p>
+                                    @if($partner->url != null)
+                                    <p><a target="_blank" href="{{$partner->url}}">{!! $partner->name !!}</a><p>
+                                    @else
+                                    <p>{!! $partner->name !!}</p>
+                                    @endif
+                                </div>
+
+
                             </div>
+
                         @endforeach
                     </div>
                 </div>

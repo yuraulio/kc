@@ -42,6 +42,12 @@
 
                                     @include('alerts.feedback', ['field' => 'name'])
                                 </div>
+                                <div class="form-group{{ $errors->has('url') ? ' has-danger' : '' }}">
+                                    <label class="form-control-label" for="input-name">{{ __('Url') }}</label>
+                                    <input type="text" name="url" id="input-url" class="form-control{{ $errors->has('url') ? ' is-invalid' : '' }}" placeholder="{{ __('Url') }}" value="{{ old('url') }}" autofocus>
+
+                                    @include('alerts.feedback', ['field' => 'url'])
+                                </div>
 
                                 <div class="text-center">
                                     <button type="submit" class="btn btn-success mt-4">{{ __('Save') }}</button>
