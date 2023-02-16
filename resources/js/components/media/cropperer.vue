@@ -341,8 +341,10 @@ export default {
     mounted() {
         console.log('Image Version: ',this.imageVersion)
         console.log('Parent mode: ', this.parentMode)
+        console.log('version for update:', this.versionsForUpdate)
         if (this.prevalue) {
             this.setupPrevalue();
+
 
             if (typeof FileReader === "function") {
                 const reader = new FileReader();
@@ -361,8 +363,8 @@ export default {
 
                     });
                 };
-                console.log('i am here please')
-                console.log(this)
+                // console.log('i am here please')
+                // console.log(this)
                 this.versionsForUpdate['original'] = {
                     'imgname': this.parrentImage.name,
                     'version': 'original',
@@ -378,15 +380,15 @@ export default {
                     'hasDeleted': false
                 }
 
-                console.log('from preve version original: ')
-                console.log(this.versionsForUpdate['original'])
+                // console.log('from preve version original: ')
+                // console.log(this.versionsForUpdate['original'])
 
                 this.$forceUpdate();
             }
 
             setTimeout(() => {
                 this.version = this.prevalue.version;
-                console.log('VERSION:: ', this.version)
+                //console.log('VERSION:: ', this.version)
                 this.selectedVersion = this.findVersion(this.version);
                 this.versionSelected();
                 if (this.version == 'original' || this.version == 'Original' || this.version == null) {
@@ -408,13 +410,14 @@ export default {
 
             // }
 
-            this.setupPrevalue(true)
+            this.setupPrevalue()
         },
         setupPrevalue(from_function = false) {
+            console.log('setup prevalue')
 
 
 
-            console.log('setup prevalue: ',this.prevalue)
+            //console.log('setup prevalue: ',this.prevalue)
             // if (this.prevalue.parrent) {
             //     console.log('parent: ', this.prevalue.parrent)
             //     this.parrentImage = this.prevalue.parrent;
@@ -437,7 +440,7 @@ export default {
             this.uploadedVersions = this.parrentImage.subfiles;
             this.originalFile = this.prevalue;
 
-            console.log('current version: ', this.version)
+            //console.log('current version: ', this.version)
 
             if(this.version == 'original'){
                 this.imgname = this.parrentImage ? this.parrentImage.name : '';
@@ -446,8 +449,8 @@ export default {
                 this.id = this.parrentImage.id ? this.parrentImage.id : null;
                 this.date = this.versionData ? this.versionData.created_at : this.parrentImage.created_at;
             }else{
-                console.log('not original')
-                console.log(this)
+                // console.log('not original')
+                // console.log(this)
 
                 this.imgname = this.originalFile ? this.originalFile.name : '';
                 this.alttext = this.originalFile.alt_text ? this.originalFile.alt_text : '';
@@ -465,7 +468,7 @@ export default {
 
             if(from_function){
                 alert('inside function')
-                console.log(this.prevalue)
+                //console.log(this.prevalue)
                 let sublings = this.prevalue.subfiles
 
                 let imageSave = this.prevalue
@@ -512,15 +515,15 @@ export default {
             return null;
         },
         versionSelected() {
-            console.log('version selected: ')
+            //console.log('version selected: ')
 
-            console.log(this.selectedVersion)
+            //console.log(this.selectedVersion)
 
             if (this.selectedVersion) {
                 this.$refs.cropper.enable();
                 var image_width, image_height;
 
-                console.log('parent image',this.parrentImage)
+                //console.log('parent image',this.parrentImage)
                 var img = new Image();
                 img.onload = () => {
                     image_width = img.width;
@@ -532,7 +535,7 @@ export default {
                     });
                 }
 
-                img.src = this.parrentImage.full_path;
+                img.src = this.parrentImage.url;
 
                 this.versionData = this.findVersionData(this.selectedVersion.version);
                 this.imgname = this.versionData ? this.versionData.name : "";
@@ -955,7 +958,7 @@ export default {
         console.log('destroy')
         this.imgSrc = null;
         this.$parent.$parent.selectedFile = null;
-        this.versionsForUpdate = null
+        //this.versionsForUpdate = null
     }
 };
 </script>

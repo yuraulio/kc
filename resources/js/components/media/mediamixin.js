@@ -3,6 +3,9 @@ import _ from "lodash";
 var mediaMixin = {
     data() {
         return {
+            temp: {},
+            original: {},
+            selVer: {},
             firstLoadedData: [],
             versions: [
                 {
@@ -274,15 +277,17 @@ var mediaMixin = {
         },
         imageEdit($event) {
 
+            
+
             let value = $event
             var formData = new FormData();
 
-            console.log('event: ', value)
+            //console.log('event: ', value)
 
             // edit image version
             if(value != null && value.imgname){
 
-                console.log('inside edit image version')
+                //console.log('inside edit image version')
 
                 formData.append('imgname', value.imgname);
                 formData.append('alttext', value.alttext);
@@ -352,14 +357,14 @@ var mediaMixin = {
                 }
 
                 if(response){
-                    //this.getFiles(response.data.data.folder_id);
+                    this.getFiles(response.data.data.folder_id);
 
-                    if(this.$parent.imageVersion && response.data.data.version == this.$parent.imageVersion){
-                        // this.$parent.imageVersionResponseData = response.data.data
-                        this.updatedMediaImage(response.data.data)
+                    // if(this.$parent.imageVersion && response.data.data.version == this.$parent.imageVersion){
+                    //     // this.$parent.imageVersionResponseData = response.data.data
+                    //     this.updatedMediaImage(response.data.data)
 
 
-                    }
+                    // }
 
 
                 }
@@ -382,44 +387,105 @@ var mediaMixin = {
 
                 let baseUrl = location.protocol + '//' + location.host;
 
-                console.log(baseUrl.includes('admin'))
-
-                if (!baseUrl.includes('admin'))
-                {
+                //console.log(baseUrl.includes('admin'))
+                console.log('11');
+                if (!baseUrl.includes('admin')){
+                    console.log('22')
                     if(version != null && version != 'original'){
                         if(this.$refs.crpr){
 
-                            console.log('++++++++++')
-                            console.log('pre delete: ')
-                            console.log(this.$refs.crpr.versionsForUpdate)
-                            console.log('----------')
+                            // console.log('++++++++++')
+                            // console.log('pre delete: ')
+                            //console.log(this.$refs.crpr.versionsForUpdate)
+                            // console.log('----------')
 
                             delete this.$refs.crpr.versionsForUpdate[version]
 
-                            console.log('++++++++++')
-                            console.log('version: ',version)
-                            console.log(this.$refs.crpr.versionsForUpdate)
-                            console.log('----------')
+                            // console.log('++++++++++')
+                            // console.log('version: ',version)
+                            //console.log(this.$refs.crpr.versionsForUpdate)
+                            // console.log('----------')
 
-                            console.log('length: ', Object.keys(this.$refs.crpr.versionsForUpdate).length)
+                           // console.log('length: ', Object.keys(this.$refs.crpr.versionsForUpdate).length)
 
                             if(Object.keys(this.$refs.crpr.versionsForUpdate).length == 1){
                                 console.log('i am inside')
-                                this.$refs.crpr.test(this.selectedFile.folder_id, response)
+                                //this.$refs.crpr.test(this.selectedFile.folder_id, response)
                             }
                         }
 
                     }else if(version == 'original'){
                         if(this.$refs.crpr){
                             if(Object.keys(this.$refs.crpr.versionsForUpdate).length == 1){
-                                console.log('i am inside')
-                                this.$refs.crpr.test(this.selectedFile.folder_id, response)
+                               // console.log('i am inside')
+                                //this.$refs.crpr.test(this.selectedFile.folder_id, response)
                             }
                         }
 
                     }
+                }else{
+        
+                    console.log('paretn imag:', this.$parent.imageVersion)
+                    console.log('resp vers: ', response.data.data.version)
+                    if(this.$parent.imageVersion && response.data.data.version == this.$parent.imageVersion){
+                        this.selVer = response.data.data
+                    }else if(response.data.data.version == 'original'){
+                        this.original = response.data.data
+                    }
+                    console.log('SEL VERSION IS SET: ',this.setVer)
+                    console.log('original VERSION IS SET',this.original)
+                    // if(Object.keys(this.original).length != 0){
+                        
+                    // }
+                    /*
+                    if(Object.keys(this.temp).length == 0){
+                        this.temp = this.$refs.crpr.versionsForUpdate
+                    }
+                    //this.$refs.crpr.setupPrevalue();
+                    //console.log(this.selectedFile)
+                    //if(this.$parent.imageVersion && response.data.data.version == this.$parent.imageVersion){
+                        // this.$parent.imageVersionResponseData = response.data.data
+                        //this.updatedMediaImage(response.data.data)
+                        console.log('fuck you')
+                        console.log(this.$refs.crpr.versionsForUpdate[version])
+                        console.log('version: ', version)
+
+                        if(version == 'original'){
+                            this.original = response.data.data
+                        }
+
+                        if(this.$parent.imageVersion && response.data.data.version == this.$parent.imageVersion){
+                            this.selVer = response.data.data
+                        }else{
+                            delete this.temp[version]
+                        }
+
+                        
+
+                        
+
+
+
+                        if(Object.keys(this.temp).length == 1){
+                            //original
+                            this.updatedMediaImage(this.original)
+                            if(Object.keys(this.selVer).length != 0){
+                                this.updatedMediaImage(this.selVer)
+                            }else if(Object.keys(this.original).length != 0){
+                                this.updatedMediaImage(this.original)
+                            }
+                        }
+                        // else if(Object.keys(this.$refs.crpr.versionsForUpdate).length == 2){
+                        //     //header
+                        //     this.updatedMediaImage(this.selVer)
+
+                        // }
+
+                    //}
+                    */ 
                 }
 
+                
 
 
 
@@ -556,7 +622,7 @@ var mediaMixin = {
             this.getFiles(folderId);
         },
         getFiles(folderId) {
-            console.log('from get files')
+            //console.log('from get files')
 
             this.errors = null;
             this.loading = true;
@@ -613,8 +679,8 @@ var mediaMixin = {
         },
         deleteFile($event) {
 
-            console.log('triggered function delete File')
-            console.log($event)
+            // console.log('triggered function delete File')
+            // console.log($event)
 
             var pagesText = "";
             var pages_count = $event.pages_count;
@@ -634,7 +700,7 @@ var mediaMixin = {
             // console.log('Url: ', location.protocol + '//' + location.host)
             let baseUrl = location.protocol + '//' + location.host;
 
-            console.log(baseUrl.includes('admin'))
+            //console.log(baseUrl.includes('admin'))
 
             if (baseUrl.includes('admin'))
             {
@@ -655,13 +721,13 @@ var mediaMixin = {
                             .delete('/api/media_manager/file/' + $event.id)
                             .then((response) => {
                                 if (response.status == 200) {
-                                    console.log('test folder: ', $event.folder_id)
+                                    //console.log('test folder: ', $event.folder_id)
                                     this.getFiles($event.folder_id);
 
-                                    console.log(this.imageVersion)
+                                    //console.log(this.imageVersion)
 
                                     if(this.imageVersion != null && $event.version == this.imageVersion){
-                                        console.log('inside Inside')
+                                       // console.log('inside Inside')
 
 
 
@@ -672,7 +738,7 @@ var mediaMixin = {
                                             this.firstLoadedData.parrent.load = true;
                                             this.updatedMediaImage(this.firstLoadedData.parrent)
                                         }
-                                        console.log(this.firstLoadedData)
+                                        //console.log(this.firstLoadedData)
 
                                     }
                                 }
@@ -708,13 +774,13 @@ var mediaMixin = {
                             .delete('/api/media_manager/file/' + $event.id)
                             .then((response) => {
                                 if (response.status == 200) {
-                                    console.log('test folder: ', $event.folder_id)
+                                    //console.log('test folder: ', $event.folder_id)
                                     this.getFiles($event.folder_id);
 
-                                    console.log(this.imageVersion)
+                                    //console.log(this.imageVersion)
 
                                     if(this.imageVersion != null){
-                                        console.log('inside Inside')
+                                        //console.log('inside Inside')
 
 
 
@@ -748,44 +814,69 @@ var mediaMixin = {
 
 
 
-            console.log('page text: ', location.protocol + '//' + location.host)
+            // console.log('page text: ', location.protocol + '//' + location.host)
 
-            console.log('THE END')
+            // console.log('THE END')
         },
+        // updateSelectedFile() {
+        //     // console.log('update Selected Files function triggered')
+        //     // console.log('THE MEDIA FILES')
+        //     // console.log(this.mediaFiles)
+        //     // console.log('SELECTED FILE:')
+        //     // console.log(this.selectedFile)
+
+        //     if (this.selectedFile) {
+        //         var oldFile = null;
+
+        //         if(this.selectedFile.parrent == null){
+        //             oldFile = this.selectedFile;
+        //         }else{
+        //             oldFile = this.selectedFile.parrent;
+        //         }
+
+        //         //console.log('THIS IS OLD FILE: ', oldFile)
+
+        //         var index = this.mediaFiles.findIndex(function(file) {
+        //             return file.id == oldFile.id;
+        //         });
+
+        //         if (this.mediaFiles[index]) {
+        //             this.selectedFile = this.mediaFiles[index];
+
+        //             // console.log('here')
+        //             // console.log(this.imageVersion)
+        //             //if(this.imageVersion == null && !this.imageVersion){
+        //                 setTimeout(() => {
+        //                     //console.log('test')
+        //                     this.$refs.crpr.setupPrevalue();
+        //                 }, 1000);
+        //             //}
+
+        //         }
+        //     }
+        // }
         updateSelectedFile() {
-            console.log('update Selected Files function triggered')
-            console.log('THE MEDIA FILES')
-            console.log(this.mediaFiles)
-            console.log('SELECTED FILE:')
-            console.log(this.selectedFile)
-
+            console.log('update selected file function')
+            //console.log(this.selectedFile)
             if (this.selectedFile) {
-                var oldFile = null;
-
-                if(this.selectedFile.parrent == null){
-                    oldFile = this.selectedFile;
-                }else{
-                    oldFile = this.selectedFile.parrent;
-                }
-
-                console.log('THIS IS OLD FILE: ', oldFile)
-
+                var oldFile = this.selectedFile;
+                // if(this.selectedFile.parrent == null){
+                //     oldFile = this.selectedFile;
+                // }else{
+                //     oldFile = this.selectedFile.parrent;
+                // }
+                //console.log('old files: ', oldFile)
                 var index = this.mediaFiles.findIndex(function(file) {
                     return file.id == oldFile.id;
                 });
 
+                //console.log('media file: ',this.mediaFiles)
+                //console.log('index :', index)
                 if (this.mediaFiles[index]) {
                     this.selectedFile = this.mediaFiles[index];
-
-                    console.log('here')
-                    console.log(this.imageVersion)
-                    if(this.imageVersion == null && !this.imageVersion){
-                        setTimeout(() => {
-                            console.log('test')
-                            this.$refs.crpr.setupPrevalue();
-                        }, 1000);
-                    }
-
+                    setTimeout(() => {
+                        this.$refs.crpr.setupPrevalue(true);
+                    }, 1000);
                 }
             }
         }
