@@ -467,7 +467,6 @@ export default {
             this.extension = this.versionData ? this.versionData.extension : this.parrentImage.extension;
 
             if(from_function){
-                alert('inside function')
                 //console.log(this.prevalue)
                 let sublings = this.prevalue.subfiles
 

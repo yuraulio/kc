@@ -277,7 +277,7 @@ var mediaMixin = {
         },
         imageEdit($event) {
 
-            
+
 
             let value = $event
             var formData = new FormData();
@@ -424,7 +424,7 @@ var mediaMixin = {
 
                     }
                 }else{
-        
+
                     console.log('paretn imag:', this.$parent.imageVersion)
                     console.log('resp vers: ', response.data.data.version)
                     if(this.$parent.imageVersion && response.data.data.version == this.$parent.imageVersion){
@@ -435,7 +435,7 @@ var mediaMixin = {
                     console.log('SEL VERSION IS SET: ',this.setVer)
                     console.log('original VERSION IS SET',this.original)
                     // if(Object.keys(this.original).length != 0){
-                        
+
                     // }
                     /*
                     if(Object.keys(this.temp).length == 0){
@@ -446,7 +446,7 @@ var mediaMixin = {
                     //if(this.$parent.imageVersion && response.data.data.version == this.$parent.imageVersion){
                         // this.$parent.imageVersionResponseData = response.data.data
                         //this.updatedMediaImage(response.data.data)
-                        console.log('fuck you')
+
                         console.log(this.$refs.crpr.versionsForUpdate[version])
                         console.log('version: ', version)
 
@@ -460,9 +460,9 @@ var mediaMixin = {
                             delete this.temp[version]
                         }
 
-                        
 
-                        
+
+
 
 
 
@@ -482,10 +482,10 @@ var mediaMixin = {
                         // }
 
                     //}
-                    */ 
+                    */
                 }
 
-                
+
 
 
 
@@ -731,13 +731,13 @@ var mediaMixin = {
 
 
 
-                                        if(this.firstLoadedData.parrent == null){
-                                            this.firstLoadedData.load = true;
-                                            this.updatedMediaImage(this.firstLoadedData)
-                                        }else{
-                                            this.firstLoadedData.parrent.load = true;
-                                            this.updatedMediaImage(this.firstLoadedData.parrent)
-                                        }
+                                        // if(this.firstLoadedData.parrent == null){
+                                        //     this.firstLoadedData.load = true;
+                                        //     this.updatedMediaImage(this.firstLoadedData)
+                                        // }else{
+                                        //     this.firstLoadedData.parrent.load = true;
+                                        //     this.updatedMediaImage(this.firstLoadedData.parrent)
+                                        // }
                                         //console.log(this.firstLoadedData)
 
                                     }
@@ -784,13 +784,13 @@ var mediaMixin = {
 
 
 
-                                        if(this.firstLoadedData.parrent == null){
-                                            this.firstLoadedData.load = true;
-                                            this.updatedMediaImage(this.firstLoadedData)
-                                        }else{
-                                            this.firstLoadedData.parrent.load = true;
-                                            this.updatedMediaImage(this.firstLoadedData.parrent)
-                                        }
+                                        // if(this.firstLoadedData.parrent == null){
+                                        //     this.firstLoadedData.load = true;
+                                        //     this.updatedMediaImage(this.firstLoadedData)
+                                        // }else{
+                                        //     this.firstLoadedData.parrent.load = true;
+                                        //     this.updatedMediaImage(this.firstLoadedData.parrent)
+                                        // }
 
                                     }
                                 }
@@ -860,11 +860,11 @@ var mediaMixin = {
             //console.log(this.selectedFile)
             if (this.selectedFile) {
                 var oldFile = this.selectedFile;
-                // if(this.selectedFile.parrent == null){
-                //     oldFile = this.selectedFile;
-                // }else{
-                //     oldFile = this.selectedFile.parrent;
-                // }
+                if(this.selectedFile.parrent == null){
+                    oldFile = this.selectedFile;
+                }else{
+                    oldFile = this.selectedFile.parrent;
+                }
                 //console.log('old files: ', oldFile)
                 var index = this.mediaFiles.findIndex(function(file) {
                     return file.id == oldFile.id;
@@ -875,7 +875,7 @@ var mediaMixin = {
                 if (this.mediaFiles[index]) {
                     this.selectedFile = this.mediaFiles[index];
                     setTimeout(() => {
-                        this.$refs.crpr.setupPrevalue(true);
+                        this.$refs.crpr.setupPrevalue();
                     }, 1000);
                 }
             }
