@@ -500,8 +500,12 @@ export default {
             this.regFile = $event.target.files[0];
         },
         setImage(image) {
+
+            // console.log('here is set image')
+            // console.log(image)
+            //here demo
             if (image.parrent) {
-                this.userSelectedFiles(image);
+                this.userSelectedFiles(image.parrent);
             } else {
                 axios
                 .get('/api/media_manager/getFile/' + image.id)
@@ -633,6 +637,8 @@ export default {
             }
         },
         startingImage() {
+            console.log('from starting image')
+            console.log(this.startingImage)
             if (this.startingImage) {
                 this.setImage(this.startingImage);
             }

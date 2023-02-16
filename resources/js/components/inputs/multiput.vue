@@ -262,16 +262,20 @@ export default {
     },
     methods: {
         setAltImg(event) {
+            console.log('SET ALT IMAGE')
+            console.log(this)
+            console.log(event)
+            console.log(this.default_image)
             event.target.src = this.default_image.url
         },
         updatedmedia($event, ref) {
             // $event.siblings = null;
             // $event.subfiles = null;
             this.$emit('inputed', { 'data': $event, 'key': this.keyput})
-            if($event.load === undefined){
-                this.$refs[ref+'btn'].click()
-                this.$set(this.loadstart, ref,  false);
-            }
+            // if($event.load === undefined){
+            //     this.$refs[ref+'btn'].click()
+            //     this.$set(this.loadstart, ref,  false);
+            // }
 
         },
         updatedgallery($event, ref) {

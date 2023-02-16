@@ -356,15 +356,18 @@ var mediaMixin = {
                     }
                 }
 
+
+
                 if(response){
                     this.getFiles(response.data.data.folder_id);
 
-                    // if(this.$parent.imageVersion && response.data.data.version == this.$parent.imageVersion){
-                    //     // this.$parent.imageVersionResponseData = response.data.data
-                    //     this.updatedMediaImage(response.data.data)
+                    if(this.$parent.imageVersion && response.data.data.version == this.$parent.imageVersion){
+                        // this.$parent.imageVersionResponseData = response.data.data
+                        console.log('RESPONSE :', response)
+                        this.updatedMediaImage(response.data.data)
 
 
-                    // }
+                    }
 
 
                 }
@@ -425,55 +428,7 @@ var mediaMixin = {
                     }
                 }else{
 
-                    // if(Object.keys(this.original).length != 0){
 
-                    // }
-                    /*
-                    if(Object.keys(this.temp).length == 0){
-                        this.temp = this.$refs.crpr.versionsForUpdate
-                    }
-                    //this.$refs.crpr.setupPrevalue();
-                    //console.log(this.selectedFile)
-                    //if(this.$parent.imageVersion && response.data.data.version == this.$parent.imageVersion){
-                        // this.$parent.imageVersionResponseData = response.data.data
-                        //this.updatedMediaImage(response.data.data)
-
-                        console.log(this.$refs.crpr.versionsForUpdate[version])
-                        console.log('version: ', version)
-
-                        if(version == 'original'){
-                            this.original = response.data.data
-                        }
-
-                        if(this.$parent.imageVersion && response.data.data.version == this.$parent.imageVersion){
-                            this.selVer = response.data.data
-                        }else{
-                            delete this.temp[version]
-                        }
-
-
-
-
-
-
-
-                        if(Object.keys(this.temp).length == 1){
-                            //original
-                            this.updatedMediaImage(this.original)
-                            if(Object.keys(this.selVer).length != 0){
-                                this.updatedMediaImage(this.selVer)
-                            }else if(Object.keys(this.original).length != 0){
-                                this.updatedMediaImage(this.original)
-                            }
-                        }
-                        // else if(Object.keys(this.$refs.crpr.versionsForUpdate).length == 2){
-                        //     //header
-                        //     this.updatedMediaImage(this.selVer)
-
-                        // }
-
-                    //}
-                    */
                 }
 
 
