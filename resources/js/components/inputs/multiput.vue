@@ -37,7 +37,7 @@
 
                 <div class="image-hover">
                     <img
-                    :src="value.url + '?i=' + (Math.random() * 100000)"
+                    :src="(value.url) + '?i=' + (Math.random() * 100000)"
                     alt="image"
                     class="img-fluid rounded"
                     :style="'width:' + width"
@@ -258,6 +258,7 @@ export default {
             editorData: this.value,
             tinymce: process.env.MIX_PUSHER_TINYMCE,
             startingImage: null,
+            updatedImage: null
         };
     },
     methods: {
@@ -268,10 +269,11 @@ export default {
             console.log(this.default_image)
             event.target.src = this.default_image.url
         },
-        updatedmedia($event, ref) {
+        updatedmedia($event,ref) {
             // $event.siblings = null;
             // $event.subfiles = null;
             this.$emit('inputed', { 'data': $event, 'key': this.keyput})
+            //this.startingImage = $event
             // if($event.load === undefined){
             //     this.$refs[ref+'btn'].click()
             //     this.$set(this.loadstart, ref,  false);
@@ -351,7 +353,7 @@ export default {
         },
         "value": function() {
             this.editorData = this.value;
-        }
+        },
     },
     mounted() {
         if (this.value) {

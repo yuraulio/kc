@@ -501,13 +501,18 @@ export default {
         },
         setImage(image) {
 
-            // console.log('here is set image')
-            // console.log(image)
-            //here demo
-            if (image.parrent) {
-                this.userSelectedFiles(image.parrent);
-            } else {
-                axios
+            console.log('here rhre')
+
+
+            if(image.parrent != null){
+                image = image.parrent
+            }else if(image.parrent_id == null){
+                image = image
+            }
+
+            console.log(image)
+
+            axios
                 .get('/api/media_manager/getFile/' + image.id)
                 .then((response) => {
                     if (response.status == 200) {
@@ -521,7 +526,15 @@ export default {
                         `Request failed: ${error}`
                     )
                 })
-            }
+
+            // console.log('here is set image')
+            // console.log(image)
+            // //here demo
+            // if (image.parrent) {
+            //     this.userSelectedFiles(image.parrent);
+            // } else {
+
+            // }
         },
         validateMove(dragItem, pathFrom, pathTo) {
             if (dragItem.pathFrom && dragItem.pathTo && dragItem.pathFrom.length == dragItem.pathTo.length) {
@@ -621,6 +634,7 @@ export default {
 
 
         if (this.startingImage) {
+            console.log('from starting image: ', this.startingImage)
             this.setImage(this.startingImage);
         }else{
             this.withoutImage = true;

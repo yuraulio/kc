@@ -417,21 +417,22 @@ export default {
         },
         setupPrevalue(from_function = false) {
 
-            console.log('triggered setup prevalue FUNCTION.')
-
-            console.log(this.prevalue)
             if(this.prevalue.parrent == null){
                 this.parrentImage = this.prevalue;
             }else{
                 this.parrentImage = this.prevalue.parrent;
             }
 
+            if(this.$parent.$parent.firstLoadedData.parrent == null){
+                if((this.$parent.$parent.firstLoadedData.id != this.parrentImage.id && from_function)){
 
+                    this.confirmSelection(this.parrentImage)
+                }
+            }else{
+                if((this.$parent.$parent.firstLoadedData.parrent.id != this.parrentImage.id && from_function)){
 
-
-            if((this.$parent.$parent.firstLoadedData.id != this.parrentImage.id && from_function) || this.$parent.$parent.withoutImage){
-
-                this.confirmSelection(this.parrentImage)
+                    this.confirmSelection(this.parrentImage)
+                }
             }
 
 
@@ -778,8 +779,8 @@ export default {
 
             this.tempVersionsForUpdate = this.versionsForUpdate;
 
-            console.log('version for update')
-            console.log(versions)
+           //console.log('version for update')
+            //console.log(versions)
 
             //let folderId = versions['original'].instance.$parent.originalFile.folder_id
 
@@ -970,7 +971,7 @@ export default {
     beforeDestroy() {
         console.log('destroy')
         this.imgSrc = null;
-        this.$parent.$parent.selectedFile = null;
+        //this.$parent.$parent.selectedFile = null;
         //this.versionsForUpdate = null
     }
 };
