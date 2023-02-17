@@ -501,7 +501,7 @@ export default {
         },
         setImage(image) {
 
-            console.log('here rhre')
+            console.log('set image', image)
 
 
             if(image.parrent != null){
@@ -509,8 +509,6 @@ export default {
             }else if(image.parrent_id == null){
                 image = image
             }
-
-            console.log(image)
 
             axios
                 .get('/api/media_manager/getFile/' + image.id)
@@ -634,11 +632,12 @@ export default {
 
 
         if (this.startingImage) {
-            console.log('from starting image: ', this.startingImage)
             this.setImage(this.startingImage);
         }else{
             this.withoutImage = true;
+            console.log('Without image: ')
         }
+
     },
     beforeDestroy() {
         // console.log('unsetted');
@@ -651,8 +650,6 @@ export default {
             }
         },
         startingImage() {
-            console.log('from starting image')
-            console.log(this.startingImage)
             if (this.startingImage) {
                 this.setImage(this.startingImage);
             }

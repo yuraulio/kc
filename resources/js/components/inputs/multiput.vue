@@ -263,10 +263,6 @@ export default {
     },
     methods: {
         setAltImg(event) {
-            console.log('SET ALT IMAGE')
-            console.log(this)
-            console.log(event)
-            console.log(this.default_image)
             event.target.src = this.default_image.url
         },
         updatedmedia($event,ref) {
@@ -346,9 +342,6 @@ export default {
     },
     watch: {
         editorData() {
-            console.log('triggered')
-            console.log('editor data: ',this.editorData)
-            console.log('key: ',this.keyput)
             this.$emit('inputed', { 'data': this.editorData, 'key': this.keyput })
         },
         "value": function() {

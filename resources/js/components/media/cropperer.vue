@@ -229,6 +229,7 @@ export default {
             isUploading: false,
             originalFile: null,
             uploadedVersions: [],
+            uploadedVersionsSiblings: [],
             versionsForUpdate: {},
             tempVersionsForUpdate: {},
             imgSrc: null,
@@ -440,6 +441,9 @@ export default {
 
             this.imgSrc = '/uploads' + this.parrentImage.path;
             this.uploadedVersions = this.parrentImage.subfiles;
+            this.uploadedVersionsSiblings = this.parrentImage.siblings;
+            console.log('THIS IS A UPDATED SUBFILES?????')
+            console.log(this.uploadedVersions)
             this.originalFile = this.prevalue;
 
 
@@ -515,9 +519,11 @@ export default {
             return null;
         },
         versionSelected() {
-            //console.log('version selected: ')
+            console.log('version selected: ')
 
-            //console.log(this.selectedVersion)
+            console.log('selected version: ',this.selectedVersion)
+
+            console.log('versionsForUpdate: ', this.versionsForUpdate)
 
             if (this.selectedVersion) {
                 this.$refs.cropper.enable();
@@ -654,6 +660,8 @@ export default {
             this.versionsForUpdate[currVersion].instance = this.$refs.cropper
             this.versionsForUpdate[currVersion].hasDeleted = false
 
+            console.log('from on Move Crop Box Data: ', this.versionsForUpdate)
+
         },
         resetData() {
             this.imgname = this.versionData ? this.versionData.name : this.parrentImage.name;
@@ -678,6 +686,8 @@ export default {
             this.$modal.hide('edit-image-modal');
         },
         setCropBox(image_width, image_height) {
+            console.log('from set crop box data')
+            console.log(this.versionsForUpdate)
 
 
 
@@ -690,15 +700,19 @@ export default {
             this.width_ratio = canvas_width / image_width;
             this.height_ratio = canvas_height / image_height;
 
-            this.$refs.cropper.setAspectRatio(this.selectedVersion.w / this.selectedVersion.h);
+            //this.$refs.cropper.setAspectRatio(this.selectedVersion.w / this.selectedVersion.h);
 
 
 
             if(this.versionsForUpdate[this.selectedVersion.version] && this.versionsForUpdate[this.selectedVersion.version].crop_data !== undefined && !this.versionsForUpdate[this.selectedVersion.version].hasDeleted){
 
+                console.log('1111')
+                //console.log('selected version is ->>>>',this.selectedVersion.version)
 
 
                 let data = this.versionsForUpdate[this.selectedVersion.version].crop_data;
+
+                //this.$refs.cropper.setAspectRatio(data.width / data.height);
 
                 let crop_height = data.height * (1 / this.height_ratio)
                 let crop_width = data.width * (1 / this.width_ratio)
@@ -719,21 +733,55 @@ export default {
 
 
             //console.log('versionData is now available: ',this.versionData)
-            if (this.versionData && this.versionData.crop_data) {
+            // if (this.versionData && this.versionData.crop_data) {
 
-                if (typeof this.versionData.crop_data === "string") {
-                    this.versionData.crop_data = JSON.parse(this.versionData.crop_data);
+            //     console.log('versionData: ', this.versionData)
+            //     console.log('uploadedVersions: ', this.uploadedVersions)
+
+            //     if (typeof this.versionData.crop_data === "string") {
+            //         this.versionData.crop_data = JSON.parse(this.versionData.crop_data);
+            //     }
+            //     this.$set(this.cropBoxData, 'width', this.versionData.crop_data.crop_width * this.width_ratio);
+            //     this.$set(this.cropBoxData, 'height', this.versionData.crop_data.crop_height * this.height_ratio);
+            //     this.$set(this.cropBoxData, 'left', (((container_width - canvas_width)/2) + (this.versionData.crop_data.width_offset * this.width_ratio)));
+            //     this.$set(this.cropBoxData, 'top', (((container_height - canvas_height)/2) + (this.versionData.crop_data.height_offset * this.width_ratio)));
+            // } else {
+            //     this.$set(this.cropBoxData, 'width', this.selectedVersion.w * this.width_ratio);
+            //     this.$set(this.cropBoxData, 'height', this.selectedVersion.h * this.height_ratio);
+            //     this.$set(this.cropBoxData, 'left', ((container_width - (this.selectedVersion.w * this.width_ratio))/2));
+            //     this.$set(this.cropBoxData, 'top', ((container_height - (this.selectedVersion.h * this.height_ratio))/2));
+            // }
+            if (this.uploadedVersions) {
+
+
+                let data = this.findVersionPavlos(this.selectedVersion.version)
+
+                console.log('DATA: ', data)
+                console.log('this.selectedVersion :', this.selectedVersion)
+                console.log('THIS: ', this)
+                console.log('this.versionData: ',this.versionData)
+                console.log('this.uploadedVersions: ', this.uploadedVersions)
+
+                // console.log('versionData: ', this.versionData)
+                // console.log('uploadedVersions: ', this.uploadedVersions)
+
+                if (typeof data.crop_data === "string") {
+                    data.crop_data = JSON.parse(data.crop_data);
                 }
-                this.$set(this.cropBoxData, 'width', this.versionData.crop_data.crop_width * this.width_ratio);
-                this.$set(this.cropBoxData, 'height', this.versionData.crop_data.crop_height * this.height_ratio);
-                this.$set(this.cropBoxData, 'left', (((container_width - canvas_width)/2) + (this.versionData.crop_data.width_offset * this.width_ratio)));
-                this.$set(this.cropBoxData, 'top', (((container_height - canvas_height)/2) + (this.versionData.crop_data.height_offset * this.width_ratio)));
+                this.$set(this.cropBoxData, 'width', data.crop_data.crop_width * this.width_ratio);
+                this.$set(this.cropBoxData, 'height', data.crop_data.crop_height * this.height_ratio);
+                this.$set(this.cropBoxData, 'left', (((container_width - canvas_width)/2) + (data.crop_data.width_offset * this.width_ratio)));
+                this.$set(this.cropBoxData, 'top', (((container_height - canvas_height)/2) + (data.crop_data.height_offset * this.width_ratio)));
+                console.log('2222',data)
             } else {
+                console.log('ELSE')
                 this.$set(this.cropBoxData, 'width', this.selectedVersion.w * this.width_ratio);
                 this.$set(this.cropBoxData, 'height', this.selectedVersion.h * this.height_ratio);
                 this.$set(this.cropBoxData, 'left', ((container_width - (this.selectedVersion.w * this.width_ratio))/2));
                 this.$set(this.cropBoxData, 'top', ((container_height - (this.selectedVersion.h * this.height_ratio))/2));
             }
+
+
 
 
             this.setCropBoxData();
@@ -902,6 +950,23 @@ export default {
         },
         zoom(percent) {
             this.$refs.cropper.relativeZoom(percent);
+        },
+        findVersionPavlos(selected_version){
+            var return_value = null;
+
+            this.uploadedVersionsSiblings.forEach(function(value){
+                if (value.version == selected_version) {
+                    return_value = value;
+                }
+            })
+
+            this.uploadedVersions.forEach(function(value){
+                if (value.version == selected_version) {
+                    return_value = value;
+                }
+            })
+
+            return return_value;
         },
         findVersion(version1) {
             var return_value = null;
