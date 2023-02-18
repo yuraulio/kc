@@ -383,8 +383,6 @@ import slugify from '@sindresorhus/slugify';
                     slug: this.page.slug,
                 }
 
-                console.log('data :', data)
-
                 if (terms_val == "yes") {
                     data.terms_val = terms_val;
                 }

@@ -46,11 +46,9 @@ export default {
     },
     computed: {
         getStartingImage() {
-            console.log('test',this.startingImage)
             return this.startingImage ? JSON.parse(this.startingImage) : null;
         },
         getDefaultImage() {
-            console.log('test1',this.defaultImage)
             return this.defaultImage ? JSON.parse(this.defaultImage) : null;
         }
     },
