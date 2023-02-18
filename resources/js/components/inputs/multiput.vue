@@ -263,7 +263,11 @@ export default {
     },
     methods: {
         setAltImg(event) {
-            event.target.src = this.default_image.url
+     
+            if(this.default_image){
+                event.target.src = this.default_image.url
+            }
+            
         },
         updatedmedia($event,ref) {
             // $event.siblings = null;

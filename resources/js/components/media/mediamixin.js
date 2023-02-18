@@ -368,6 +368,12 @@ var mediaMixin = {
 
                     this.selectedFile = response.data.data
 
+                    console.log('ALERT: ', )
+
+                    console.log('image version: ', this.$parent.imageVersion)
+                    console.log('version: ', version)
+                    
+
                     if(this.$parent.imageVersion && version == this.$parent.imageVersion){
                         // this.$parent.imageVersionResponseData = response.data.data
                         console.log('RESPONSE :', response)
@@ -414,6 +420,12 @@ var mediaMixin = {
                     this.$refs.crpr.version = 'original';
                     this.$refs.crpr.disable();
                     this.$refs.crpr.versionData = null;
+
+                    if(this.$parent.imageVersion == null && this.$refs.crpr.selectedVersion != null && this.$refs.crpr.selectedVersion.version == version){
+                        this.$refs.crpr.confirmSelection(response.data.data)
+                    }else if(this.$parent.imageVersion == null && this.$refs.crpr.selectedVersion == null ){
+                        this.$refs.crpr.confirmSelection(response.data.data)
+                    }
                 }
 
 
