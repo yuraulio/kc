@@ -765,14 +765,29 @@ export default {
                 // console.log('versionData: ', this.versionData)
                 // console.log('uploadedVersions: ', this.uploadedVersions)
 
-                if (typeof data.crop_data === "string") {
-                    data.crop_data = JSON.parse(data.crop_data);
+                if(data.crop_data == null){
+
+                    this.$set(this.cropBoxData, 'width', this.selectedVersion.w * this.width_ratio);
+                    this.$set(this.cropBoxData, 'height', this.selectedVersion.h * this.height_ratio);
+                    this.$set(this.cropBoxData, 'left', ((container_width - (this.selectedVersion.w * this.width_ratio))/2));
+                    this.$set(this.cropBoxData, 'top', ((container_height - (this.selectedVersion.h * this.height_ratio))/2));
+
+                    alert('has no crop box data')
+
+                }else{
+
+                    if (typeof data.crop_data === "string") {
+                        data.crop_data = JSON.parse(data.crop_data);
+                    }
+                    this.$set(this.cropBoxData, 'width', data.crop_data.crop_width * this.width_ratio);
+                    this.$set(this.cropBoxData, 'height', data.crop_data.crop_height * this.height_ratio);
+                    this.$set(this.cropBoxData, 'left', (((container_width - canvas_width)/2) + (data.crop_data.width_offset * this.width_ratio)));
+                    this.$set(this.cropBoxData, 'top', (((container_height - canvas_height)/2) + (data.crop_data.height_offset * this.width_ratio)));
+                    console.log('2222',data)
+
                 }
-                this.$set(this.cropBoxData, 'width', data.crop_data.crop_width * this.width_ratio);
-                this.$set(this.cropBoxData, 'height', data.crop_data.crop_height * this.height_ratio);
-                this.$set(this.cropBoxData, 'left', (((container_width - canvas_width)/2) + (data.crop_data.width_offset * this.width_ratio)));
-                this.$set(this.cropBoxData, 'top', (((container_height - canvas_height)/2) + (data.crop_data.height_offset * this.width_ratio)));
-                console.log('2222',data)
+
+               
             } else {
                 console.log('ELSE')
                 this.$set(this.cropBoxData, 'width', this.selectedVersion.w * this.width_ratio);
@@ -952,8 +967,11 @@ export default {
             this.$refs.cropper.relativeZoom(percent);
         },
         findVersionPavlos(selected_version){
+            console.log('functions find version Pavlos START')
             var return_value = null;
 
+            console.log('UPLOADED VERSION SIBLINGS: ', this.uploadedVersionsSiblings)
+            console.log('UPLOADED VERSION :: ', this.uploadedVersions)
             this.uploadedVersionsSiblings.forEach(function(value){
                 if (value.version == selected_version) {
                     return_value = value;
@@ -965,6 +983,8 @@ export default {
                     return_value = value;
                 }
             })
+
+            console.log('end function')
 
             return return_value;
         },
