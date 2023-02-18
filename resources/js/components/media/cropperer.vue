@@ -772,7 +772,6 @@ export default {
                     this.$set(this.cropBoxData, 'left', ((container_width - (this.selectedVersion.w * this.width_ratio))/2));
                     this.$set(this.cropBoxData, 'top', ((container_height - (this.selectedVersion.h * this.height_ratio))/2));
 
-                    alert('has no crop box data')
 
                 }else{
 
