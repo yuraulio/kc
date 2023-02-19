@@ -210,6 +210,7 @@ import VueCropper from "vue-cropperjs";
 import "cropperjs/dist/cropper.css";
 import uploadImage from "../inputs/upload-image.vue";
 import VueScrollTo from "vue-scrollto";
+import { validate } from "json-schema";
 
 export default {
     props: {
@@ -404,6 +405,7 @@ export default {
     },
     methods: {
         test(folderId, response = null){
+            alert('from test')
 
             this.$parent.$parent.getFiles(folderId)
 
@@ -470,6 +472,24 @@ export default {
             // this.width = this.versionData ? this.versionData.width : this.parrentImage.width;
             this.user = this.versionData ? this.versionData.user : this.parrentImage.user;
             this.extension = this.versionData ? this.versionData.extension : this.parrentImage.extension;
+
+            alert('i am here')
+            
+            if(!from_function){
+
+                let foundVersion = false;
+
+                this.uploadedVersions.forEach(value => {
+                    if(value.version == this.imageVersion){
+                        this.confirmSelection(value)
+                        foundVersion = true;
+                    }
+                })
+
+                if(!foundVersion){
+                    this.confirmSelection(this.parrentImage)
+                }
+            }
 
             // if(from_function){
             //     //console.log(this.prevalue)
@@ -765,7 +785,7 @@ export default {
                 // console.log('versionData: ', this.versionData)
                 // console.log('uploadedVersions: ', this.uploadedVersions)
 
-                if(data.crop_data == null){
+                if(data != null && data.crop_data == null){
 
                     this.$set(this.cropBoxData, 'width', this.selectedVersion.w * this.width_ratio);
                     this.$set(this.cropBoxData, 'height', this.selectedVersion.h * this.height_ratio);
@@ -773,7 +793,7 @@ export default {
                     this.$set(this.cropBoxData, 'top', ((container_height - (this.selectedVersion.h * this.height_ratio))/2));
 
 
-                }else{
+                }else if(data != null){
 
                     if (typeof data.crop_data === "string") {
                         data.crop_data = JSON.parse(data.crop_data);
@@ -782,18 +802,22 @@ export default {
                     this.$set(this.cropBoxData, 'height', data.crop_data.crop_height * this.height_ratio);
                     this.$set(this.cropBoxData, 'left', (((container_width - canvas_width)/2) + (data.crop_data.width_offset * this.width_ratio)));
                     this.$set(this.cropBoxData, 'top', (((container_height - canvas_height)/2) + (data.crop_data.height_offset * this.width_ratio)));
-                    console.log('2222',data)
 
+                }else{
+                    this.$set(this.cropBoxData, 'width', this.selectedVersion.w * this.width_ratio);
+                    this.$set(this.cropBoxData, 'height', this.selectedVersion.h * this.height_ratio);
+                    this.$set(this.cropBoxData, 'left', ((container_width - (this.selectedVersion.w * this.width_ratio))/2));
+                    this.$set(this.cropBoxData, 'top', ((container_height - (this.selectedVersion.h * this.height_ratio))/2));
                 }
 
                
             } else {
-                console.log('ELSE')
                 this.$set(this.cropBoxData, 'width', this.selectedVersion.w * this.width_ratio);
                 this.$set(this.cropBoxData, 'height', this.selectedVersion.h * this.height_ratio);
                 this.$set(this.cropBoxData, 'left', ((container_width - (this.selectedVersion.w * this.width_ratio))/2));
                 this.$set(this.cropBoxData, 'top', ((container_height - (this.selectedVersion.h * this.height_ratio))/2));
             }
+    
 
 
 

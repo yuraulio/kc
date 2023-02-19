@@ -364,7 +364,7 @@ var mediaMixin = {
 
 
                 if(response){
-                    this.getFiles(response.data.data.folder_id);
+                    this.getFiles(response.data.data.folder_id, true);
 
                     this.selectedFile = response.data.data
 
@@ -439,6 +439,7 @@ var mediaMixin = {
                     if(version != null && version != 'original'){
                         if(this.$refs.crpr){
 
+                            alert('1111')
                             // console.log('++++++++++')
                             // console.log('pre delete: ')
                             //console.log(this.$refs.crpr.versionsForUpdate)
@@ -464,6 +465,7 @@ var mediaMixin = {
                             if(Object.keys(this.$refs.crpr.versionsForUpdate).length == 1){
                                // console.log('i am inside')
                                 //this.$refs.crpr.test(this.selectedFile.folder_id, response)
+                                alert('222')
                             }
                         }
 
@@ -609,7 +611,7 @@ var mediaMixin = {
 
             this.getFiles(folderId);
         },
-        getFiles(folderId) {
+        getFiles(folderId, from_save_btn = false) {
             //console.log('from get files')
 
             this.errors = null;
@@ -627,7 +629,7 @@ var mediaMixin = {
 
                     this.mediaFiles = response.data.data;
                     this.loading = false;
-                    this.updateSelectedFile();
+                    this.updateSelectedFile(from_save_btn);
 
                 })
                 .catch((error) => {
@@ -639,7 +641,7 @@ var mediaMixin = {
                         console.log(error.response)
                       } else if (error.request) {
                         console.log('22')
-                        this.getFiles(folderId);
+                        this.getFiles(folderId,from_save_btn);
 
                         // client never received a response, or request never left
                         //console.log(error.request)
@@ -767,23 +769,13 @@ var mediaMixin = {
                             .then((response) => {
                                 if (response.status == 200) {
                                     //console.log('test folder: ', $event.folder_id)
-                                    this.getFiles($event.folder_id);
-
-                                    //console.log(this.imageVersion)
-
-                                    if(this.imageVersion != null){
-                                        //console.log('inside Inside')
-
-
-
-                                        // if(this.firstLoadedData.parrent == null){
-                                        //     this.firstLoadedData.load = true;
-                                        //     this.updatedMediaImage(this.firstLoadedData)
-                                        // }else{
-                                        //     this.firstLoadedData.parrent.load = true;
-                                        //     this.updatedMediaImage(this.firstLoadedData.parrent)
-                                        // }
-
+                                                                    
+                                    if(this.imageVersion!= null && this.imageVersion == $event.version){
+                                        this.getFiles($event.folder_id, true);
+                                    }else if(this.imageVersion != null && this.imageVersion != $event.version){
+                                        this.getFiles($event.folder_id);
+                                    }else{
+                                        this.getFiles($event.folder_id, true);
                                     }
                                 }
                             })
@@ -847,7 +839,7 @@ var mediaMixin = {
         //         }
         //     }
         // }
-        updateSelectedFile() {
+        updateSelectedFile(from_save_btn = false) {
             console.log('update Selected File FUNCTION: ')
 
 
@@ -871,67 +863,12 @@ var mediaMixin = {
                 let versionImageForUpdateWindow = null;
 
 
-                //console.log('current version:', this.imageVersion)
-                //console.log('the media files : ', this.mediaFiles)
-                //console.log('selected file: ', this.selectedFile)
-                //console.log('this prevalue: ', this.$parent.prevalue)
-
-
-
-
-
                 if(this.selectedFile.parrent == null){
                     oldFile = this.selectedFile;
                 }else{
                     oldFile = this.selectedFile.parrent;
                 }
 
-                /*
-                console.log('test: ersionImage',versionImages)
-                if(versionImages != null){
-                    versionImages.forEach(value => {
-
-                        if(value.version == this.imageVersion){
-                            versionImageForUpdateWindow = value
-                            this.updatedMediaImage(versionImageForUpdateWindow)
-                            return false;
-                        }
-                    })
-
-                    if(versionImageForUpdateWindow == null){
-                        //this.$parent.$parent.updatedMediaImage(image)
-                        console.log('////')
-                        console.log(this.$refs.crpr.versionsForUpdate)
-
-                        if(this.$refs.crpr.tempVersionsForUpdate[versionImageForUpdateWindow.version].length != 0 ){
-
-                            if(this.tempDelete != null && versionImageForUpdateWindow.version != this.tempDelete){
-                                this.updatedMediaImage(versionImageForUpdateWindow)
-
-
-                            }else if(this.tempDelete == null){
-                                this.updatedMediaImage(versionImageForUpdateWindow)
-                            }
-                            else{
-                                alert('test old 2')
-                                this.updatedMediaImage(oldFile)
-                            }
-                            // else if(Object.keys(this.tempDelete).length == 0){
-                            //     this.updatedMediaImage(versionImageForUpdateWindow)
-                            // }
-
-
-                        }
-                        else{
-                            alert('has set old1')
-                            this.updatedMediaImage(oldFile)
-                        }
-
-                    }
-
-
-                }
-                */
 
                 //console.log('old files: ', oldFile)
                 var index = this.mediaFiles.findIndex(function(file) {
@@ -943,8 +880,13 @@ var mediaMixin = {
                 if (this.mediaFiles[index]) {
                     this.selectedFile = this.mediaFiles[index];
                     setTimeout(() => {
-
-                        this.$refs.crpr.setupPrevalue();
+                        alert('call setupPrevalue')
+                        if(from_save_btn){
+                            this.$refs.crpr.setupPrevalue();
+                        }else{
+                            this.$refs.crpr.setupPrevalue(true);
+                        }
+                        
                     }, 1000);
                 }
             }
