@@ -230,6 +230,7 @@ export default {
             isUploading: false,
             originalFile: null,
             uploadedVersions: [],
+            forUpdate: [],
             uploadedVersionsSiblings: [],
             versionsForUpdate: {},
             tempVersionsForUpdate: {},
@@ -569,12 +570,16 @@ export default {
             }
 
             if (this.selectedVersion) {
+                this.forUpdate[this.selectedVersion.version] = this.selectedVersion.version;
 
                 this.getCropBoxData()
 
                 if(this.versionData){
                     //console.log('here')
                     if(this.versionsForUpdate[this.selectedVersion.version] === undefined){
+
+
+
                         this.versionsForUpdate[this.selectedVersion.version] = {
                             'imgname': this.imgname,
                             'version': this.selectedVersion.version,
@@ -593,6 +598,7 @@ export default {
                         //console.log('on load from dirty data alt and link')
                         this.alttext = this.versionsForUpdate[this.selectedVersion.version].alttext
                         this.link = this.versionsForUpdate[this.selectedVersion.version].link
+
                     }
                 }
 
@@ -600,6 +606,7 @@ export default {
 
 
             }else{
+                this.forUpdate['original'] = 'original';
                 if(this.versionsForUpdate['original'] === undefined){
                     this.versionsForUpdate['original'] = {
                         'imgname': this.imgname,
@@ -618,6 +625,9 @@ export default {
                 }
 
             }
+
+            console.log('for update: ', this.forUpdate)
+
 
 
         },

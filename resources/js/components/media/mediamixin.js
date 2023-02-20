@@ -278,8 +278,15 @@ var mediaMixin = {
 
 
 
+
+
             let value = $event
             var formData = new FormData();
+
+            console.log('FOR UPDATE',this.$refs.crpr.forUpdate[value.version])
+            if(this.$refs.crpr.forUpdate[value.version] === undefined){
+                return false;
+            }
 
             //console.log('event: ', value)
 
@@ -365,6 +372,8 @@ var mediaMixin = {
 
                 if(response){
                     this.getFiles(response.data.data.folder_id, true);
+
+                    delete this.$refs.crpr.forUpdate[version]
 
                     this.selectedFile = response.data.data
 
