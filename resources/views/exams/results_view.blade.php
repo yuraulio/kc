@@ -36,7 +36,7 @@ $title1 = str_replace('_',' ',$title);
 <meta property="og:image" content="{{ $og_image }}">
 
 <!-- Twitter -->
-<meta property="twitter:card" content="summary_large_image">
+<meta property="twitter:card" content="summary">
 <meta property="twitter:url" content="{{ Request::url() }}">
 <meta property="twitter:title" content="Result">
 <meta property="twitter:description" content="{{ $title1 }} Result">
