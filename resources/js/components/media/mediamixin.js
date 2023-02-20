@@ -276,14 +276,9 @@ var mediaMixin = {
         },
         imageEdit($event) {
 
-
-
-
-
             let value = $event
             var formData = new FormData();
 
-            console.log('FOR UPDATE',this.$refs.crpr.forUpdate[value.version])
             if(this.$refs.crpr.forUpdate[value.version] === undefined){
                 return false;
             }
@@ -377,17 +372,9 @@ var mediaMixin = {
 
                     this.selectedFile = response.data.data
 
-                    //console.log('ALERT: ', )
-
-                    //console.log('image version: ', this.$parent.imageVersion)
-                    //console.log('version: ', version)
-
-
                     if(this.$parent.imageVersion && version == this.$parent.imageVersion){
                         // this.$parent.imageVersionResponseData = response.data.data
-                        console.log('RESPONSE :', response)
-
-                        // help
+                        
                         let baseUrl = location.protocol + '//' + location.host;
 
 
@@ -592,23 +579,20 @@ var mediaMixin = {
 
                 })
                 .catch((error) => {
-                    console.log('here is an error')
-                    //console.log(error)
+                    //console.log('here is an error')
+                    
                     if (error.response) {
-                        console.log('11')
+                    
                         // client received an error response (5xx, 4xx)
                         console.log(error.response)
                       } else if (error.request) {
-                        console.log('22')
+                       
                         this.getFiles(folderId,from_save_btn);
 
                         // client never received a response, or request never left
-                        //console.log(error.request)
-                        //console.log(folderId)
-                        //this.getFiles(folderId)
                         //console.log('after second time call')
                       } else {
-                        console.log('33')
+                     
                         console.log(error)
                         // anything else
                       }
@@ -676,24 +660,6 @@ var mediaMixin = {
                                 if (response.status == 200) {
                                     //console.log('test folder: ', $event.folder_id)
                                     this.getFiles($event.folder_id);
-
-                                    //console.log(this.imageVersion)
-
-                                    if(this.imageVersion != null && $event.version == this.imageVersion){
-                                       // console.log('inside Inside')
-
-
-
-                                        // if(this.firstLoadedData.parrent == null){
-                                        //     this.firstLoadedData.load = true;
-                                        //     this.updatedMediaImage(this.firstLoadedData)
-                                        // }else{
-                                        //     this.firstLoadedData.parrent.load = true;
-                                        //     this.updatedMediaImage(this.firstLoadedData.parrent)
-                                        // }
-                                        //console.log(this.firstLoadedData)
-
-                                    }
                                 }
                             })
                             .catch(error => {
@@ -755,51 +721,8 @@ var mediaMixin = {
                   })
             }
 
-
-
-            // console.log('page text: ', location.protocol + '//' + location.host)
-
-            // console.log('THE END')
         },
-        // updateSelectedFile() {
-        //     // console.log('update Selected Files function triggered')
-        //     // console.log('THE MEDIA FILES')
-        //     // console.log(this.mediaFiles)
-        //     // console.log('SELECTED FILE:')
-        //     // console.log(this.selectedFile)
-
-        //     if (this.selectedFile) {
-        //         var oldFile = null;
-
-        //         if(this.selectedFile.parrent == null){
-        //             oldFile = this.selectedFile;
-        //         }else{
-        //             oldFile = this.selectedFile.parrent;
-        //         }
-
-        //         //console.log('THIS IS OLD FILE: ', oldFile)
-
-        //         var index = this.mediaFiles.findIndex(function(file) {
-        //             return file.id == oldFile.id;
-        //         });
-
-        //         if (this.mediaFiles[index]) {
-        //             this.selectedFile = this.mediaFiles[index];
-
-        //             // console.log('here')
-        //             // console.log(this.imageVersion)
-        //             //if(this.imageVersion == null && !this.imageVersion){
-        //                 setTimeout(() => {
-        //                     //console.log('test')
-        //                     this.$refs.crpr.setupPrevalue();
-        //                 }, 1000);
-        //             //}
-
-        //         }
-        //     }
-        // }
         updateSelectedFile(from_save_btn = false) {
-            console.log('update Selected File FUNCTION: ')
 
             if (this.selectedFile) {
 

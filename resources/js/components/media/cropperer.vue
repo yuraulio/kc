@@ -451,9 +451,6 @@ export default {
             // console.log(this.uploadedVersions)
             this.originalFile = this.prevalue;
 
-            console.log('PARENT IMAGE: ',this.parrentImage)
-            console.log('ORIGINAL IMAGE: ', this.originalFile)
-
 
             if(this.version == 'original'){
                 this.imgname = this.parrentImage ? this.parrentImage.name : '';
@@ -622,7 +619,9 @@ export default {
 
 
             }else{
+
                 this.forUpdate['original'] = 'original';
+
                 if(this.versionsForUpdate['original'] === undefined){
                     this.versionsForUpdate['original'] = {
                         'imgname': this.imgname,
@@ -641,8 +640,6 @@ export default {
                 }
 
             }
-
-            //console.log('for update: ', this.forUpdate)
 
 
 
@@ -725,7 +722,7 @@ export default {
             this.width_ratio = canvas_width / image_width;
             this.height_ratio = canvas_height / image_height;
 
-            //this.$refs.cropper.setAspectRatio(this.selectedVersion.w / this.selectedVersion.h);
+            this.$refs.cropper.setAspectRatio(this.selectedVersion.w / this.selectedVersion.h);
 
 
 
@@ -1044,7 +1041,7 @@ export default {
         }
     },
     beforeDestroy() {
-        console.log('destroy')
+        //console.log('destroy')
         this.imgSrc = null;
         //this.$parent.$parent.selectedFile = null;
         //this.versionsForUpdate = null

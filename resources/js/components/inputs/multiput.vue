@@ -353,8 +353,6 @@ export default {
         },
     },
     mounted() {
-        console.log('VALUE: ', this.value)
-        console.log('original: ', this.default_image)
         if (this.value) {
             this.editorData = this.value;
         }
