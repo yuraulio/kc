@@ -36,7 +36,7 @@ return [
     'channels' => [
         'stack' => [
             'driver' => 'stack',
-            'channels' => ['daily', 'single', 'sentry'],
+            'channels' => ['daily', 'single'],
         ],
 
         'single' => [

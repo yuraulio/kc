@@ -263,11 +263,11 @@ export default {
     },
     methods: {
         setAltImg(event) {
-     
+
             if(this.default_image){
                 event.target.src = this.default_image.url
             }
-            
+
         },
         updatedmedia($event,ref) {
             // $event.siblings = null;
@@ -353,6 +353,8 @@ export default {
         },
     },
     mounted() {
+        console.log('VALUE: ', this.value)
+        console.log('original: ', this.default_image)
         if (this.value) {
             this.editorData = this.value;
         }

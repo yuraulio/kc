@@ -451,6 +451,9 @@ export default {
             // console.log(this.uploadedVersions)
             this.originalFile = this.prevalue;
 
+            console.log('PARENT IMAGE: ',this.parrentImage)
+            console.log('ORIGINAL IMAGE: ', this.originalFile)
+
 
             if(this.version == 'original'){
                 this.imgname = this.parrentImage ? this.parrentImage.name : '';
@@ -481,7 +484,20 @@ export default {
 
                 this.uploadedVersions.forEach(value => {
                     if(value.version == this.imageVersion){
-                        this.confirmSelection(value)
+
+                        let baseUrl = location.protocol + '//' + location.host;
+                        if (!baseUrl.includes('admin')){
+                            if(value.version == 'original'){
+                                this.confirmSelection(value)
+                            }
+                        }else{
+                            this.confirmSelection(value)
+                        }
+
+
+
+
+
                         foundVersion = true;
                     }
                 })
