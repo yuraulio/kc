@@ -1113,7 +1113,7 @@ class StudentController extends Controller
                     $data['subject'] = 'Knowcrunch - ' . $data['firstName'] .'  you exams are active now';
                     $data['template'] = 'emails.user.exam_activate';
 
-                    $user->notify(new ExamActive($data));
+                    //$user->notify(new ExamActive($data));
 
                     /*$muser['name'] = $user->firstname . ' ' . $user->lastname;
                     $muser['first'] = $user->firstname;
