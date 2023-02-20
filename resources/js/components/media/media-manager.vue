@@ -633,10 +633,8 @@ export default {
 
         if (this.startingImage) {
             this.setImage(this.startingImage);
-            alert('with starting image')
         }else{
             this.withoutImage = true;
-            alert('Without image: ')
         }
 
     },

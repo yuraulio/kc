@@ -368,11 +368,11 @@ var mediaMixin = {
 
                     this.selectedFile = response.data.data
 
-                    console.log('ALERT: ', )
+                    //console.log('ALERT: ', )
 
-                    console.log('image version: ', this.$parent.imageVersion)
-                    console.log('version: ', version)
-                    
+                    //console.log('image version: ', this.$parent.imageVersion)
+                    //console.log('version: ', version)
+
 
                     if(this.$parent.imageVersion && version == this.$parent.imageVersion){
                         // this.$parent.imageVersionResponseData = response.data.data
@@ -381,22 +381,10 @@ var mediaMixin = {
                         // help
                         let baseUrl = location.protocol + '//' + location.host;
 
-                        //console.log(baseUrl.includes('admin'))
-                        //console.log('11');
+
                         if (baseUrl.includes('admin')){
-                            this.$refs.crpr.confirmSelection(response.data.data)
+                            //this.$refs.crpr.confirmSelection(response.data.data)
                         }
-
-
-
-
-                        // if(response.data.data.subfiles.length != 0){
-                        //    // this.userSelectedFiles(response.data.data)
-                        //     this.firstLoadedData = response.data.data
-
-                        // }
-
-                        //this.updatedMediaImage(response.data.data)
 
 
                     }else if(this.$parent.imageVersion){
@@ -433,56 +421,18 @@ var mediaMixin = {
                 let baseUrl = location.protocol + '//' + location.host;
 
                 //console.log(baseUrl.includes('admin'))
-                console.log('11');
+                //console.log('11');
                 if (!baseUrl.includes('admin')){
-                    console.log('22')
+                    //console.log('22')
                     if(version != null && version != 'original'){
                         if(this.$refs.crpr){
 
-                            alert('1111')
-                            // console.log('++++++++++')
-                            // console.log('pre delete: ')
-                            //console.log(this.$refs.crpr.versionsForUpdate)
-                            // console.log('----------')
-
                             delete this.$refs.crpr.versionsForUpdate[version]
 
-                            // console.log('++++++++++')
-                            // console.log('version: ',version)
-                            //console.log(this.$refs.crpr.versionsForUpdate)
-                            // console.log('----------')
-
-                           // console.log('length: ', Object.keys(this.$refs.crpr.versionsForUpdate).length)
-
-                            if(Object.keys(this.$refs.crpr.versionsForUpdate).length == 1){
-                                console.log('i am inside')
-                                //this.$refs.crpr.test(this.selectedFile.folder_id, response)
-                            }
-                        }
-
-                    }else if(version == 'original'){
-                        if(this.$refs.crpr){
-                            if(Object.keys(this.$refs.crpr.versionsForUpdate).length == 1){
-                               // console.log('i am inside')
-                                //this.$refs.crpr.test(this.selectedFile.folder_id, response)
-                                alert('222')
-                            }
                         }
 
                     }
-                }else{
-
-
                 }
-
-
-
-
-
-
-
-
-
 
 
             })
@@ -769,8 +719,8 @@ var mediaMixin = {
                             .then((response) => {
                                 if (response.status == 200) {
                                     //console.log('test folder: ', $event.folder_id)
-                                                                    
-                                    if(this.imageVersion!= null && this.imageVersion == $event.version){
+
+                                    if(this.imageVersion != null && this.imageVersion == $event.version){
                                         this.getFiles($event.folder_id, true);
                                     }else if(this.imageVersion != null && this.imageVersion != $event.version){
                                         this.getFiles($event.folder_id);
@@ -842,19 +792,7 @@ var mediaMixin = {
         updateSelectedFile(from_save_btn = false) {
             console.log('update Selected File FUNCTION: ')
 
-
-            //console.log('update selected file function')
-            // console.log('version for update')
-            // console.log(this.$refs.crpr.versionsForUpdate)
-
-
-
-
-
             if (this.selectedFile) {
-
-                console.log('selected files: ')
-                console.log(this.selectedFile)
 
                 var oldFile = this.selectedFile;
 
@@ -869,24 +807,19 @@ var mediaMixin = {
                     oldFile = this.selectedFile.parrent;
                 }
 
-
-                //console.log('old files: ', oldFile)
                 var index = this.mediaFiles.findIndex(function(file) {
                     return file.id == oldFile.id;
                 });
 
-                //console.log('media file: ',this.mediaFiles)
-                //console.log('index :', index)
                 if (this.mediaFiles[index]) {
                     this.selectedFile = this.mediaFiles[index];
                     setTimeout(() => {
-                        alert('call setupPrevalue')
                         if(from_save_btn){
                             this.$refs.crpr.setupPrevalue();
                         }else{
                             this.$refs.crpr.setupPrevalue(true);
                         }
-                        
+
                     }, 1000);
                 }
             }

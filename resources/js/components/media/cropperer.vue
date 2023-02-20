@@ -342,11 +342,11 @@ export default {
         };
     },
     mounted() {
-        console.log('first loaded: ', this.$parent.$parent.firstLoadedData)
-        console.log('selected files: ', this.$parent.$parent.selectedFile)
-        console.log('Image Version: ',this.imageVersion)
-        console.log('Parent mode: ', this.parentMode)
-        console.log('version for update:', this.versionsForUpdate)
+        // console.log('first loaded: ', this.$parent.$parent.firstLoadedData)
+        // console.log('selected files: ', this.$parent.$parent.selectedFile)
+        // console.log('Image Version: ',this.imageVersion)
+        // console.log('Parent mode: ', this.parentMode)
+        // console.log('version for update:', this.versionsForUpdate)
         if (this.prevalue) {
             this.setupPrevalue(true);
 
@@ -368,8 +368,6 @@ export default {
 
                     });
                 };
-                // console.log('i am here please')
-                // console.log(this)
                 this.versionsForUpdate['original'] = {
                     'imgname': this.parrentImage.name,
                     'version': 'original',
@@ -385,15 +383,11 @@ export default {
                     'hasDeleted': false
                 }
 
-                // console.log('from preve version original: ')
-                // console.log(this.versionsForUpdate['original'])
-
                 this.$forceUpdate();
             }
 
             setTimeout(() => {
                 this.version = this.prevalue.version;
-                //console.log('VERSION:: ', this.version)
                 this.selectedVersion = this.findVersion(this.version);
                 this.versionSelected();
                 if (this.version == 'original' || this.version == 'Original' || this.version == null) {
@@ -439,13 +433,21 @@ export default {
             }
 
 
-            this.version = this.imageVersion ? this.imageVersion : 'original';
+
+            if(from_function){
+                // first load -> load image version selected
+                this.version = this.imageVersion ? this.imageVersion : 'original';
+            }else{
+                //after save selected original
+                this.version = 'original';
+            }
+
 
             this.imgSrc = '/uploads' + this.parrentImage.path;
             this.uploadedVersions = this.parrentImage.subfiles;
             this.uploadedVersionsSiblings = this.parrentImage.siblings;
-            console.log('THIS IS A UPDATED SUBFILES?????')
-            console.log(this.uploadedVersions)
+            // console.log('THIS IS A UPDATED SUBFILES?????')
+            // console.log(this.uploadedVersions)
             this.originalFile = this.prevalue;
 
 
@@ -456,8 +458,6 @@ export default {
                 this.id = this.parrentImage.id ? this.parrentImage.id : null;
                 this.date = this.versionData ? this.versionData.created_at : this.parrentImage.created_at;
             }else{
-                // console.log('not original')
-                // console.log(this)
 
                 this.imgname = this.originalFile ? this.originalFile.name : '';
                 this.alttext = this.originalFile.alt_text ? this.originalFile.alt_text : '';
@@ -473,8 +473,7 @@ export default {
             this.user = this.versionData ? this.versionData.user : this.parrentImage.user;
             this.extension = this.versionData ? this.versionData.extension : this.parrentImage.extension;
 
-            alert('i am here')
-            
+
             if(!from_function){
 
                 let foundVersion = false;
@@ -490,26 +489,6 @@ export default {
                     this.confirmSelection(this.parrentImage)
                 }
             }
-
-            // if(from_function){
-            //     //console.log(this.prevalue)
-            //     let sublings = this.prevalue.subfiles
-
-            //     let imageSave = this.prevalue
-            //     console.log('PRE VALUE')
-            //     console.log(this.prevalue)
-            //     sublings.forEach(value => {
-
-            //         if(value.version == 'header-image'){
-            //             imageSave = value
-            //         }
-            //     })
-
-            //     this.confirmSelection(imageSave)
-
-            //     //this.prevalue
-
-            // }
         },
         confirmSelection(image) {
             if (image == null) {
@@ -539,11 +518,11 @@ export default {
             return null;
         },
         versionSelected() {
-            console.log('version selected: ')
+            // console.log('version selected: ')
 
-            console.log('selected version: ',this.selectedVersion)
+            // console.log('selected version: ',this.selectedVersion)
 
-            console.log('versionsForUpdate: ', this.versionsForUpdate)
+            // console.log('versionsForUpdate: ', this.versionsForUpdate)
 
             if (this.selectedVersion) {
                 this.$refs.cropper.enable();
@@ -680,7 +659,7 @@ export default {
             this.versionsForUpdate[currVersion].instance = this.$refs.cropper
             this.versionsForUpdate[currVersion].hasDeleted = false
 
-            console.log('from on Move Crop Box Data: ', this.versionsForUpdate)
+            //console.log('from on Move Crop Box Data: ', this.versionsForUpdate)
 
         },
         resetData() {
@@ -706,8 +685,8 @@ export default {
             this.$modal.hide('edit-image-modal');
         },
         setCropBox(image_width, image_height) {
-            console.log('from set crop box data')
-            console.log(this.versionsForUpdate)
+            // console.log('from set crop box data')
+            // console.log(this.versionsForUpdate)
 
 
 
@@ -725,10 +704,6 @@ export default {
 
 
             if(this.versionsForUpdate[this.selectedVersion.version] && this.versionsForUpdate[this.selectedVersion.version].crop_data !== undefined && !this.versionsForUpdate[this.selectedVersion.version].hasDeleted){
-
-                console.log('1111')
-                //console.log('selected version is ->>>>',this.selectedVersion.version)
-
 
                 let data = this.versionsForUpdate[this.selectedVersion.version].crop_data;
 
@@ -751,39 +726,16 @@ export default {
                 return 0;
             }
 
-
-            //console.log('versionData is now available: ',this.versionData)
-            // if (this.versionData && this.versionData.crop_data) {
-
-            //     console.log('versionData: ', this.versionData)
-            //     console.log('uploadedVersions: ', this.uploadedVersions)
-
-            //     if (typeof this.versionData.crop_data === "string") {
-            //         this.versionData.crop_data = JSON.parse(this.versionData.crop_data);
-            //     }
-            //     this.$set(this.cropBoxData, 'width', this.versionData.crop_data.crop_width * this.width_ratio);
-            //     this.$set(this.cropBoxData, 'height', this.versionData.crop_data.crop_height * this.height_ratio);
-            //     this.$set(this.cropBoxData, 'left', (((container_width - canvas_width)/2) + (this.versionData.crop_data.width_offset * this.width_ratio)));
-            //     this.$set(this.cropBoxData, 'top', (((container_height - canvas_height)/2) + (this.versionData.crop_data.height_offset * this.width_ratio)));
-            // } else {
-            //     this.$set(this.cropBoxData, 'width', this.selectedVersion.w * this.width_ratio);
-            //     this.$set(this.cropBoxData, 'height', this.selectedVersion.h * this.height_ratio);
-            //     this.$set(this.cropBoxData, 'left', ((container_width - (this.selectedVersion.w * this.width_ratio))/2));
-            //     this.$set(this.cropBoxData, 'top', ((container_height - (this.selectedVersion.h * this.height_ratio))/2));
-            // }
             if (this.uploadedVersions) {
 
 
                 let data = this.findVersionPavlos(this.selectedVersion.version)
 
-                console.log('DATA: ', data)
-                console.log('this.selectedVersion :', this.selectedVersion)
-                console.log('THIS: ', this)
-                console.log('this.versionData: ',this.versionData)
-                console.log('this.uploadedVersions: ', this.uploadedVersions)
-
-                // console.log('versionData: ', this.versionData)
-                // console.log('uploadedVersions: ', this.uploadedVersions)
+                // console.log('DATA: ', data)
+                // console.log('this.selectedVersion :', this.selectedVersion)
+                // console.log('THIS: ', this)
+                // console.log('this.versionData: ',this.versionData)
+                // console.log('this.uploadedVersions: ', this.uploadedVersions)
 
                 if(data != null && data.crop_data == null){
 
@@ -810,14 +762,14 @@ export default {
                     this.$set(this.cropBoxData, 'top', ((container_height - (this.selectedVersion.h * this.height_ratio))/2));
                 }
 
-               
+
             } else {
                 this.$set(this.cropBoxData, 'width', this.selectedVersion.w * this.width_ratio);
                 this.$set(this.cropBoxData, 'height', this.selectedVersion.h * this.height_ratio);
                 this.$set(this.cropBoxData, 'left', ((container_width - (this.selectedVersion.w * this.width_ratio))/2));
                 this.$set(this.cropBoxData, 'top', ((container_height - (this.selectedVersion.h * this.height_ratio))/2));
             }
-    
+
 
 
 
@@ -864,12 +816,6 @@ export default {
             let versions = this.versionsForUpdate
 
             this.tempVersionsForUpdate = this.versionsForUpdate;
-
-           //console.log('version for update')
-            //console.log(versions)
-
-            //let folderId = versions['original'].instance.$parent.originalFile.folder_id
-
 
 
            Object.values(versions).forEach(value => {
@@ -990,11 +936,8 @@ export default {
             this.$refs.cropper.relativeZoom(percent);
         },
         findVersionPavlos(selected_version){
-            console.log('functions find version Pavlos START')
             var return_value = null;
 
-            console.log('UPLOADED VERSION SIBLINGS: ', this.uploadedVersionsSiblings)
-            console.log('UPLOADED VERSION :: ', this.uploadedVersions)
             this.uploadedVersionsSiblings.forEach(function(value){
                 if (value.version == selected_version) {
                     return_value = value;
@@ -1006,8 +949,6 @@ export default {
                     return_value = value;
                 }
             })
-
-            console.log('end function')
 
             return return_value;
         },
