@@ -15,6 +15,29 @@ use App\Model\Admin\Page;
 use App\Model\Admin\Ticker;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Coderjerk\BirdElephant\BirdElephant;
+
+if(!function_exists('twitter_upload_image')){
+    function twitter_upload_image($image){
+
+        $credentials = array(
+            //these are values that you can obtain from developer portal:
+            'consumer_key' => env('consumer_key'), // identifies your app, always needed
+            'consumer_secret' => env('consumer_secret'), // app secret, always needed
+            'bearer_token' => env('bearer_token'), // OAuth 2.0 Bearer Token requests
+
+            //this is a value created duting an OAuth 2.0 with PKCE authentication flow:
+            //'auth_token' => xxxxxx // OAuth 2.0 auth token
+
+            //these are values created during an OAuth 1.0a authentication flow to act ob behalf of other users, but these can also be obtained for your app from the developer portal in order to act on behalf of your app.
+            //'token_identifier' => xxxxxx, // OAuth 1.0a User Context requests
+            //'token_secret' => xxxxxx, // OAuth 1.0a User Context requests
+        );
+
+        $twitter = new BirdElephant($credentials);
+
+    }
+}
 
 if(!function_exists('add_event_statistic_queue')){
     function add_event_statistic_queue($eventId){

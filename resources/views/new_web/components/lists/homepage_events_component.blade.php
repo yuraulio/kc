@@ -122,6 +122,7 @@
 @if($homepage["list_source"]->id == 7)
     <div class="row homepage-events mt-5">
         @foreach($elearningEvents as $data)
+
             @foreach($data['events'] as $event)
                 <div class="col-sm-6 col-md-3 mb-5">
                     <div class="slide d-inline-block">

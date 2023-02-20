@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "025ceffebffec5f43da78a1445986b16",
+    "content-hash": "541bcc95df6579ff0f1a42d7d3f5226f",
     "packages": [
         {
             "name": "abraham/twitteroauth",
@@ -542,6 +542,60 @@
                 "source": "https://github.com/cocur/slugify/tree/v4.3.0"
             },
             "time": "2022-12-07T19:48:48+00:00"
+        },
+        {
+            "name": "coderjerk/bird-elephant",
+            "version": "v0.6.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/danieldevine/bird-elephant.git",
+                "reference": "1e4e0fafb5aff354c32786db4c9ad4e9b5b9cf3b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/danieldevine/bird-elephant/zipball/1e4e0fafb5aff354c32786db4c9ad4e9b5b9cf3b",
+                "reference": "1e4e0fafb5aff354c32786db4c9ad4e9b5b9cf3b",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "^7.0",
+                "guzzlehttp/oauth-subscriber": "^0.6.0"
+            },
+            "require-dev": {
+                "league/oauth1-client": "^1.10",
+                "phpunit/phpunit": "^9.5",
+                "smolblog/oauth2-twitter": "^1.0",
+                "symfony/var-dumper": "^5.1",
+                "vlucas/phpdotenv": "^5.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Coderjerk\\BirdElephant\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Daniel Devine",
+                    "email": "jerk@coderjerk.com"
+                }
+            ],
+            "description": "A simple library to request data from the Twitter APIv2 endpoints",
+            "support": {
+                "issues": "https://github.com/danieldevine/bird-elephant/issues",
+                "source": "https://github.com/danieldevine/bird-elephant/tree/v0.6.1"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/danieldevine",
+                    "type": "github"
+                }
+            ],
+            "time": "2023-01-09T15:04:03+00:00"
         },
         {
             "name": "codexshaper/laravel-menu-builder",
@@ -2418,6 +2472,65 @@
                 }
             ],
             "time": "2022-08-28T15:39:27+00:00"
+        },
+        {
+            "name": "guzzlehttp/oauth-subscriber",
+            "version": "0.6.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/guzzle/oauth-subscriber.git",
+                "reference": "8d6cab29f8397e5712d00a383eeead36108a3c1f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/guzzle/oauth-subscriber/zipball/8d6cab29f8397e5712d00a383eeead36108a3c1f",
+                "reference": "8d6cab29f8397e5712d00a383eeead36108a3c1f",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "^6.5|^7.2",
+                "guzzlehttp/psr7": "^1.7|^2.0",
+                "php": ">=5.5.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.0|^9.3.3"
+            },
+            "suggest": {
+                "ext-openssl": "Required to sign using RSA-SHA1"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.6-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "GuzzleHttp\\Subscriber\\Oauth\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Michael Dowling",
+                    "email": "mtdowling@gmail.com",
+                    "homepage": "https://github.com/mtdowling"
+                }
+            ],
+            "description": "Guzzle OAuth 1.0 subscriber",
+            "homepage": "http://guzzlephp.org/",
+            "keywords": [
+                "Guzzle",
+                "oauth"
+            ],
+            "support": {
+                "issues": "https://github.com/guzzle/oauth-subscriber/issues",
+                "source": "https://github.com/guzzle/oauth-subscriber/tree/0.6.0"
+            },
+            "time": "2021-07-13T12:01:32+00:00"
         },
         {
             "name": "guzzlehttp/promises",

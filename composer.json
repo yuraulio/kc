@@ -13,6 +13,7 @@
         "alexusmai/laravel-file-manager": "^2.5",
         "barryvdh/laravel-dompdf": "^1.0.2",
         "binshops/laravel-blog": "^9.2",
+        "coderjerk/bird-elephant": "^0.6.1",
         "codexshaper/laravel-menu-builder": "2.5",
         "doctrine/dbal": "^3.1",
         "dompdf/dompdf": "^1.0",
