@@ -35,8 +35,6 @@ export default {
     },
     methods: {
         imageSelected($event) {
-            console.log('from image selected')
-            console.log($event)
             if($event.data != null){
                 $('#image_upload').val("/uploads/" + $event.data.path);
             }else{
@@ -51,7 +49,6 @@ export default {
             return this.startingImage ? JSON.parse(this.startingImage) : null;
         },
         getDefaultImage() {
-            console.log(this.defaultImage)
             return this.defaultImage ? JSON.parse(this.defaultImage) : null;
         }
     },

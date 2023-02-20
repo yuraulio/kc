@@ -228,8 +228,6 @@ export default {
 
                 this.item.published = this.published
 
-                console.log('test:  ')
-                console.log(this.item)
                 if(this.item.delivery !== undefined && this.item.delivery[0] !== undefined){
                     this.item.delivery = this.item.delivery[0]
                 }

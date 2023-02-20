@@ -38,12 +38,22 @@
                                 $alt=$partner->name;
                                 $img = get_image($partner['mediable']);
                             ?>
-                            <div class="ibox-img">
-                                <img src="{{cdn($img)}}" alt="{{$alt}}">
+                            <div class="ibox-img partner">
+                                <img class="resp-img" loading="lazy" src="{{cdn($img)}}" width="90" height="90" alt="{{$alt}}">
                             </div>
                             <div class="ibox-text">
-                                {!! $partner->name !!}
+                                <div class="ibox-text">
+                                <p>Official Partner<br></p>
+                                    @if($partner->url != null)
+                                    <p><a target="_blank" href="{{$partner->url}}">{!! $partner->name !!}</a><p>
+                                    @else
+                                    <p>{!! $partner->name !!}</p>
+                                    @endif
+                                </div>
+
+
                             </div>
+
                         @endforeach
                     </div>
                 </div>

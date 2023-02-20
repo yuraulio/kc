@@ -158,15 +158,11 @@ function nextQues(mark) {
       //  jQuery('.next').removeClass('hide');
     }
     if(finalQues==lastQues && LOOP_AGAIN==0 && mark!=5) {
-        console.log('firstNonConfirm: ', firstNonConfirm)
-        console.log('pavlosAllUnanswered: ', pavlosAllUnanswered)
         if(firstNonConfirm==0) {
            // alert("You have completed the exam. Please click 'I AM FINISHED WITH MY EXAM' ");
         }
         else {
             if(pavlosAllUnanswered.length==0) {
-                console.log('inside answer later')
-                console.log(pavlosAnswerLater)
                 //  alert("You have completed the exam. Please click 'I AM FINISHED WITH MY EXAM' ");
                 // SHOW ANSWER LATER QUESTION IF EXIST
 

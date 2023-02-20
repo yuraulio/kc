@@ -315,7 +315,6 @@ var mediaMixin = {
                 this.$refs.crpr.versionData = null;
             })
             .catch((error) => {
-                console.log("edit error", error.response.data.message);
                 this.$refs.crpr.isUploading = false;
                 this.$toast.error("Failed to update. " + error.response.data.message);
             })

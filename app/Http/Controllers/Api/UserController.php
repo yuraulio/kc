@@ -1256,7 +1256,9 @@ class UserController extends Controller
                 $arr_lesson = array();
                 $topic = $lesson['topic']->first();
                 //$topic = $lesson->topic()->wherePivot('category_id',$category->id)->first();
-
+                if(!$topic){
+                    continue;
+                }
                 if(!isset($topics[$topic->id])){
                     $topics[$topic->id] = [];
                     $topics[$topic->id]['calendar_count'] = 0;

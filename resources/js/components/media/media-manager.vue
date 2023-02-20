@@ -492,6 +492,7 @@ export default {
             ],
             warning: false,
             startingImageData: null,
+            withoutImage: false
         };
     },
     methods: {
@@ -499,10 +500,17 @@ export default {
             this.regFile = $event.target.files[0];
         },
         setImage(image) {
-            if (image.parrent) {
-                this.userSelectedFiles(image);
-            } else {
-                axios
+
+            console.log('set image', image)
+
+
+            if(image.parrent != null){
+                image = image.parrent
+            }else if(image.parrent_id == null){
+                image = image
+            }
+
+            axios
                 .get('/api/media_manager/getFile/' + image.id)
                 .then((response) => {
                     if (response.status == 200) {
@@ -516,7 +524,15 @@ export default {
                         `Request failed: ${error}`
                     )
                 })
-            }
+
+            // console.log('here is set image')
+            // console.log(image)
+            // //here demo
+            // if (image.parrent) {
+            //     this.userSelectedFiles(image.parrent);
+            // } else {
+
+            // }
         },
         validateMove(dragItem, pathFrom, pathTo) {
             if (dragItem.pathFrom && dragItem.pathTo && dragItem.pathFrom.length == dragItem.pathTo.length) {
@@ -614,9 +630,13 @@ export default {
             this.getFolders();
         }
 
+
         if (this.startingImage) {
             this.setImage(this.startingImage);
+        }else{
+            this.withoutImage = true;
         }
+
     },
     beforeDestroy() {
         // console.log('unsetted');

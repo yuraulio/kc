@@ -210,6 +210,7 @@ import VueCropper from "vue-cropperjs";
 import "cropperjs/dist/cropper.css";
 import uploadImage from "../inputs/upload-image.vue";
 import VueScrollTo from "vue-scrollto";
+import { validate } from "json-schema";
 
 export default {
     props: {
@@ -229,7 +230,9 @@ export default {
             isUploading: false,
             originalFile: null,
             uploadedVersions: [],
+            uploadedVersionsSiblings: [],
             versionsForUpdate: {},
+            tempVersionsForUpdate: {},
             imgSrc: null,
             cropImg: "",
             data: null,
@@ -339,11 +342,13 @@ export default {
         };
     },
     mounted() {
-        console.log('Image Version: ',this.imageVersion)
-        console.log('Parent mode: ', this.parentMode)
-        console.log('version for update:', this.versionsForUpdate)
+        // console.log('first loaded: ', this.$parent.$parent.firstLoadedData)
+        // console.log('selected files: ', this.$parent.$parent.selectedFile)
+        // console.log('Image Version: ',this.imageVersion)
+        // console.log('Parent mode: ', this.parentMode)
+        // console.log('version for update:', this.versionsForUpdate)
         if (this.prevalue) {
-            this.setupPrevalue();
+            this.setupPrevalue(true);
 
 
             if (typeof FileReader === "function") {
@@ -363,8 +368,6 @@ export default {
 
                     });
                 };
-                // console.log('i am here please')
-                // console.log(this)
                 this.versionsForUpdate['original'] = {
                     'imgname': this.parrentImage.name,
                     'version': 'original',
@@ -380,15 +383,11 @@ export default {
                     'hasDeleted': false
                 }
 
-                // console.log('from preve version original: ')
-                // console.log(this.versionsForUpdate['original'])
-
                 this.$forceUpdate();
             }
 
             setTimeout(() => {
                 this.version = this.prevalue.version;
-                //console.log('VERSION:: ', this.version)
                 this.selectedVersion = this.findVersion(this.version);
                 this.versionSelected();
                 if (this.version == 'original' || this.version == 'Original' || this.version == null) {
@@ -400,6 +399,7 @@ export default {
     },
     methods: {
         test(folderId, response = null){
+            alert('from test')
 
             this.$parent.$parent.getFiles(folderId)
 
@@ -413,34 +413,43 @@ export default {
             this.setupPrevalue()
         },
         setupPrevalue(from_function = false) {
-            console.log('setup prevalue')
 
-
-
-            //console.log('setup prevalue: ',this.prevalue)
-            // if (this.prevalue.parrent) {
-            //     console.log('parent: ', this.prevalue.parrent)
-            //     this.parrentImage = this.prevalue.parrent;
-            //     // this.version = this.prevalue.version;
-            // } else {
-            //     console.log('not parent: ', this.prevalue)
-            //     this.parrentImage = this.prevalue;
-            //     // this.version = 'original';
-            // }
             if(this.prevalue.parrent == null){
                 this.parrentImage = this.prevalue;
             }else{
                 this.parrentImage = this.prevalue.parrent;
             }
 
+            if(this.$parent.$parent.firstLoadedData.parrent == null){
+                if((this.$parent.$parent.firstLoadedData.id != this.parrentImage.id && from_function)){
 
-            this.version = this.imageVersion ? this.imageVersion : 'original';
+                    this.confirmSelection(this.parrentImage)
+                }
+            }else{
+                if((this.$parent.$parent.firstLoadedData.parrent.id != this.parrentImage.id && from_function)){
+
+                    this.confirmSelection(this.parrentImage)
+                }
+            }
+
+
+
+            if(from_function){
+                // first load -> load image version selected
+                this.version = this.imageVersion ? this.imageVersion : 'original';
+            }else{
+                //after save selected original
+                this.version = 'original';
+            }
+
 
             this.imgSrc = '/uploads' + this.parrentImage.path;
             this.uploadedVersions = this.parrentImage.subfiles;
+            this.uploadedVersionsSiblings = this.parrentImage.siblings;
+            // console.log('THIS IS A UPDATED SUBFILES?????')
+            // console.log(this.uploadedVersions)
             this.originalFile = this.prevalue;
 
-            //console.log('current version: ', this.version)
 
             if(this.version == 'original'){
                 this.imgname = this.parrentImage ? this.parrentImage.name : '';
@@ -449,8 +458,6 @@ export default {
                 this.id = this.parrentImage.id ? this.parrentImage.id : null;
                 this.date = this.versionData ? this.versionData.created_at : this.parrentImage.created_at;
             }else{
-                // console.log('not original')
-                // console.log(this)
 
                 this.imgname = this.originalFile ? this.originalFile.name : '';
                 this.alttext = this.originalFile.alt_text ? this.originalFile.alt_text : '';
@@ -466,25 +473,21 @@ export default {
             this.user = this.versionData ? this.versionData.user : this.parrentImage.user;
             this.extension = this.versionData ? this.versionData.extension : this.parrentImage.extension;
 
-            if(from_function){
-                alert('inside function')
-                //console.log(this.prevalue)
-                let sublings = this.prevalue.subfiles
 
-                let imageSave = this.prevalue
-                console.log('PRE VALUE')
-                console.log(this.prevalue)
-                sublings.forEach(value => {
+            if(!from_function){
 
-                    if(value.version == 'header-image'){
-                        imageSave = value
+                let foundVersion = false;
+
+                this.uploadedVersions.forEach(value => {
+                    if(value.version == this.imageVersion){
+                        this.confirmSelection(value)
+                        foundVersion = true;
                     }
                 })
 
-                this.confirmSelection(imageSave)
-
-                //this.prevalue
-
+                if(!foundVersion){
+                    this.confirmSelection(this.parrentImage)
+                }
             }
         },
         confirmSelection(image) {
@@ -515,9 +518,11 @@ export default {
             return null;
         },
         versionSelected() {
-            //console.log('version selected: ')
+            // console.log('version selected: ')
 
-            //console.log(this.selectedVersion)
+            // console.log('selected version: ',this.selectedVersion)
+
+            // console.log('versionsForUpdate: ', this.versionsForUpdate)
 
             if (this.selectedVersion) {
                 this.$refs.cropper.enable();
@@ -630,6 +635,8 @@ export default {
 
             let currVersion = this.selectedVersion.version
 
+
+
             let cropData = {}
 
             cropData['height'] = this.cropBoxData.height
@@ -642,7 +649,7 @@ export default {
             }
 
             this.versionsForUpdate[currVersion].imgname = this.imgname
-            this.versionsForUpdate[currVersion].version = this.version
+            this.versionsForUpdate[currVersion].version = currVersion
             this.versionsForUpdate[currVersion].parent_id = this.$refs.cropper.$parent.parrentImage.id
             this.versionsForUpdate[currVersion].crop_data = cropData
             this.versionsForUpdate[currVersion].width_ratio = this.width_ratio
@@ -651,6 +658,8 @@ export default {
             this.versionsForUpdate[currVersion].jpg = this.jpg
             this.versionsForUpdate[currVersion].instance = this.$refs.cropper
             this.versionsForUpdate[currVersion].hasDeleted = false
+
+            //console.log('from on Move Crop Box Data: ', this.versionsForUpdate)
 
         },
         resetData() {
@@ -676,6 +685,10 @@ export default {
             this.$modal.hide('edit-image-modal');
         },
         setCropBox(image_width, image_height) {
+            // console.log('from set crop box data')
+            // console.log(this.versionsForUpdate)
+
+
 
             var canvas_height = this.$refs.cropper.getCanvasData().height;
             var canvas_width = this.$refs.cropper.getCanvasData().width;
@@ -686,11 +699,15 @@ export default {
             this.width_ratio = canvas_width / image_width;
             this.height_ratio = canvas_height / image_height;
 
-            this.$refs.cropper.setAspectRatio(this.selectedVersion.w / this.selectedVersion.h);
+            //this.$refs.cropper.setAspectRatio(this.selectedVersion.w / this.selectedVersion.h);
+
+
 
             if(this.versionsForUpdate[this.selectedVersion.version] && this.versionsForUpdate[this.selectedVersion.version].crop_data !== undefined && !this.versionsForUpdate[this.selectedVersion.version].hasDeleted){
 
                 let data = this.versionsForUpdate[this.selectedVersion.version].crop_data;
+
+                //this.$refs.cropper.setAspectRatio(data.width / data.height);
 
                 let crop_height = data.height * (1 / this.height_ratio)
                 let crop_width = data.width * (1 / this.width_ratio)
@@ -704,25 +721,58 @@ export default {
 
                 this.setCropBoxData();
 
+
+
                 return 0;
             }
 
+            if (this.uploadedVersions) {
 
-            //console.log('versionData is now available: ',this.versionData)
-            if (this.versionData && this.versionData.crop_data) {
-                if (typeof this.versionData.crop_data === "string") {
-                    this.versionData.crop_data = JSON.parse(this.versionData.crop_data);
+
+                let data = this.findVersionPavlos(this.selectedVersion.version)
+
+                // console.log('DATA: ', data)
+                // console.log('this.selectedVersion :', this.selectedVersion)
+                // console.log('THIS: ', this)
+                // console.log('this.versionData: ',this.versionData)
+                // console.log('this.uploadedVersions: ', this.uploadedVersions)
+
+                if(data != null && data.crop_data == null){
+
+                    this.$set(this.cropBoxData, 'width', this.selectedVersion.w * this.width_ratio);
+                    this.$set(this.cropBoxData, 'height', this.selectedVersion.h * this.height_ratio);
+                    this.$set(this.cropBoxData, 'left', ((container_width - (this.selectedVersion.w * this.width_ratio))/2));
+                    this.$set(this.cropBoxData, 'top', ((container_height - (this.selectedVersion.h * this.height_ratio))/2));
+
+
+                }else if(data != null){
+
+                    if (typeof data.crop_data === "string") {
+                        data.crop_data = JSON.parse(data.crop_data);
+                    }
+                    this.$set(this.cropBoxData, 'width', data.crop_data.crop_width * this.width_ratio);
+                    this.$set(this.cropBoxData, 'height', data.crop_data.crop_height * this.height_ratio);
+                    this.$set(this.cropBoxData, 'left', (((container_width - canvas_width)/2) + (data.crop_data.width_offset * this.width_ratio)));
+                    this.$set(this.cropBoxData, 'top', (((container_height - canvas_height)/2) + (data.crop_data.height_offset * this.width_ratio)));
+
+                }else{
+                    this.$set(this.cropBoxData, 'width', this.selectedVersion.w * this.width_ratio);
+                    this.$set(this.cropBoxData, 'height', this.selectedVersion.h * this.height_ratio);
+                    this.$set(this.cropBoxData, 'left', ((container_width - (this.selectedVersion.w * this.width_ratio))/2));
+                    this.$set(this.cropBoxData, 'top', ((container_height - (this.selectedVersion.h * this.height_ratio))/2));
                 }
-                this.$set(this.cropBoxData, 'width', this.versionData.crop_data.crop_width * this.width_ratio);
-                this.$set(this.cropBoxData, 'height', this.versionData.crop_data.crop_height * this.height_ratio);
-                this.$set(this.cropBoxData, 'left', (((container_width - canvas_width)/2) + (this.versionData.crop_data.width_offset * this.width_ratio)));
-                this.$set(this.cropBoxData, 'top', (((container_height - canvas_height)/2) + (this.versionData.crop_data.height_offset * this.width_ratio)));
+
+
             } else {
                 this.$set(this.cropBoxData, 'width', this.selectedVersion.w * this.width_ratio);
                 this.$set(this.cropBoxData, 'height', this.selectedVersion.h * this.height_ratio);
                 this.$set(this.cropBoxData, 'left', ((container_width - (this.selectedVersion.w * this.width_ratio))/2));
                 this.$set(this.cropBoxData, 'top', ((container_height - (this.selectedVersion.h * this.height_ratio))/2));
             }
+
+
+
+
 
             this.setCropBoxData();
 
@@ -765,11 +815,7 @@ export default {
 
             let versions = this.versionsForUpdate
 
-            console.log('version for update')
-            console.log(versions)
-
-            //let folderId = versions['original'].instance.$parent.originalFile.folder_id
-
+            this.tempVersionsForUpdate = this.versionsForUpdate;
 
 
            Object.values(versions).forEach(value => {
@@ -889,6 +935,23 @@ export default {
         zoom(percent) {
             this.$refs.cropper.relativeZoom(percent);
         },
+        findVersionPavlos(selected_version){
+            var return_value = null;
+
+            this.uploadedVersionsSiblings.forEach(function(value){
+                if (value.version == selected_version) {
+                    return_value = value;
+                }
+            })
+
+            this.uploadedVersions.forEach(function(value){
+                if (value.version == selected_version) {
+                    return_value = value;
+                }
+            })
+
+            return return_value;
+        },
         findVersion(version1) {
             var return_value = null;
             this.versions.forEach(function(version2){
@@ -957,7 +1020,7 @@ export default {
     beforeDestroy() {
         console.log('destroy')
         this.imgSrc = null;
-        this.$parent.$parent.selectedFile = null;
+        //this.$parent.$parent.selectedFile = null;
         //this.versionsForUpdate = null
     }
 };
