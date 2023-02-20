@@ -35,7 +35,6 @@ export default {
     },
     methods: {
         imageSelected($event) {
-            console.log('imageSelected :', $event.data)
             if($event.data != null){
                 $('#image_upload').val("/uploads/" + $event.data.path);
             }else{

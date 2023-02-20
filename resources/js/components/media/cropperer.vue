@@ -642,7 +642,7 @@ export default {
 
             }
 
-            console.log('for update: ', this.forUpdate)
+            //console.log('for update: ', this.forUpdate)
 
 
 
