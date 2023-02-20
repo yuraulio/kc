@@ -126,6 +126,76 @@ class CertificateController extends Controller
 
   }
 
+  public function shareTwitter($certificate){
+    $certId = $certificate;
+
+    $certificate =base64_decode($certificate);
+
+
+    //Demo line (Remove after Test)
+    // $certificate = explode('--',$certificate);
+    // dd($certificate);
+    //End demo line
+
+    $certificate = explode('--',$certificate)[1];
+
+    $timestamp = strtotime("now");
+    $data = $this->loadCertificateData($certificate);
+    $fn = $data['certificate']->firstname . '_' . $data['certificate']->lastname.'_'. $timestamp .'.pdf';
+
+    $content = $data['pdf']->download()->getOriginalContent();
+
+    Storage::disk('cert')->put($fn,$content);
+
+    $filepath = public_path('cert/'.$fn);
+    $name = base64_encode($data['certificate']->firstname . '-' . $data['certificate']->lastname.' - '.Str::slug($data['certificate']['event'][0]['title']));
+    $newFile =  'cert/'.$name.'.jpg';
+    $saveImagePath = public_path($newFile);
+
+
+    // Image
+    $imagick = new Imagick();
+    $imagick->setResolution(300, 300);
+    //dd($filepath);
+    $imagick->readImage($filepath);
+
+    $imagick->setImageFormat('jpg');
+
+    $imagick->writeImage($saveImagePath);
+    $imagick->clear();
+    $imagick->destroy();
+
+    unlink('cert/'.$fn);
+
+    $image1 = imagecreatefromjpeg($saveImagePath);
+    imagejpeg($image1, $saveImagePath, 50);
+
+    $certiTitle = preg_replace( "/\r|\n/", " ", $data['certificate']['certificate_title'] );
+    $certiTitle = str_replace('&nbsp;',' ',$certiTitle);
+
+    // if(strpos($data['certificate']['certificate_title'], '</p><p>')){
+    //     $certiTitle = substr_replace($data['certificate']['certificate_title'], ' ', strpos($data['certificate']['certificate_title'], '</p>'), 0);
+    // }else{
+    //     $certiTitle = $data['certificate']['certificate_title'];
+    // }
+    // $certiTitle = str_replace('&nbsp;',' ',$certiTitle);
+
+    // $certiTitle = urlencode(htmlspecialchars_decode(strip_tags($certiTitle),ENT_QUOTES));
+    // dd($certiTitle);
+    //dd($data['certificate']['certificate_title']);
+
+    $title = htmlspecialchars_decode(strip_tags($certiTitle));
+
+
+    twitter_upload_image(public_path('cert/'.$name.'.jpg'), $title);
+
+    return response()->json([
+        'success' => true,
+        'path' => 'mycertificateview/'.$name.'.jpg',
+
+    ]);
+  }
+
 
   public function getCertificateImage($certificate){
 
@@ -193,6 +263,8 @@ class CertificateController extends Controller
 
     //$image->crop($crop_width, $crop_height, $width_offset, $height_offset);
     $image->save(public_path('cert/'.$name.'_og_version.jpg'), 60, 'jpg');
+
+    //twitter_upload_image(public_path('cert/'.$name.'_og_version.jpg'), );
 
 
 

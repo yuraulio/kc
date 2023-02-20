@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\DB;
 use Coderjerk\BirdElephant\BirdElephant;
 
 if(!function_exists('twitter_upload_image')){
-    function twitter_upload_image($image){
+    function twitter_upload_image($image, $title){
 
         $credentials = array(
             //these are values that you can obtain from developer portal:
@@ -27,14 +27,27 @@ if(!function_exists('twitter_upload_image')){
             'bearer_token' => env('bearer_token'), // OAuth 2.0 Bearer Token requests
 
             //this is a value created duting an OAuth 2.0 with PKCE authentication flow:
-            //'auth_token' => xxxxxx // OAuth 2.0 auth token
+            'auth_token' => '' // OAuth 2.0 auth token
 
             //these are values created during an OAuth 1.0a authentication flow to act ob behalf of other users, but these can also be obtained for your app from the developer portal in order to act on behalf of your app.
-            //'token_identifier' => xxxxxx, // OAuth 1.0a User Context requests
-            //'token_secret' => xxxxxx, // OAuth 1.0a User Context requests
+            //'token_identifier' => '2730333663-wXgzTVzrvCcO059uGq1JjWF1iEXqLY0imaKkBju', // OAuth 1.0a User Context requests
+            //'token_secret' => 'srCFCU1WPW9dnxVQyAGNvg1yT6C0fwrZq8B4LvgyyVJ2r', // OAuth 1.0a User Context requests
         );
 
         $twitter = new BirdElephant($credentials);
+
+        $image = $twitter->tweets()->upload($image);
+        // //pass the returned media id to a media object as an array
+        $media = (new \Coderjerk\BirdElephant\Compose\Media)->mediaIds(
+            [
+                $image->media_id_string
+            ]
+        );
+
+        // //compose the tweet and pass along the media object
+        $tweet = (new \Coderjerk\BirdElephant\Compose\Tweet)->text($title)->media($media);
+        $twitter->tweets()->tweet($tweet);
+
 
     }
 }

@@ -1804,18 +1804,18 @@
 
       $.ajax({
           type: 'GET',
-          url: "/mycertificate/convert-pdf-to-image/"+certificateId,
+          url: "/mycertificate/share-twitter/"+certificateId,
           success: function(data) {
 
 
 
-            let url = data.path
+            // let url = data.path
 
-              data = url.replace('\\','/')
-              if(data){
-                  var fbpopup = window.open(`http://twitter.com/share?url=${decodeURI(baseUrl)}/${decodeURI(data)}/${decodeURI(certificateTitle)}`, "pop", "width=600, height=400, scrollbars=no");
-                  return false;
-              }
+            //   data = url.replace('\\','/')
+            //   if(data){
+            //       var fbpopup = window.open(`http://twitter.com/share?url=${decodeURI(baseUrl)}/${decodeURI(data)}/${decodeURI(certificateTitle)}`, "pop", "width=600, height=400, scrollbars=no");
+            //       return false;
+            //   }
 
           }
       });

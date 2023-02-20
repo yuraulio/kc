@@ -6,6 +6,17 @@
       0 => 'Alexusmai\\LaravelFileManager\\FileManagerServiceProvider',
     ),
   ),
+  'atymic/twitter' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Atymic\\Twitter\\ServiceProvider\\LaravelServiceProvider',
+    ),
+    'aliases' => 
+    array (
+      'Twitter' => 'Atymic\\Twitter\\Facade\\Twitter',
+    ),
+  ),
   'barryvdh/laravel-debugbar' => 
   array (
     'providers' => 
