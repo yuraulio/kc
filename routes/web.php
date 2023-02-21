@@ -554,6 +554,16 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'myaccount'], function () {
 
         Route::get('/elearning/{course?}',  'Theme\StudentController@elearning');
 
+        Route::get('/twitter/{id}', function ($id) {
+
+
+            Session::forget('certId');
+            Session::put('certId', $id);
+
+
+            return redirect()->away('https://twitter.com/i/oauth2/authorize?response_type=code&client_id='.env('TWITTER_CLIENT_ID').'&redirect_uri='.env('MIX_APP_URL').'/mycertificate/share-twitter/n'.'&scope=tweet.read%20users.read%20follows.read%20follows.write&state=state&code_challenge=challenge&code_challenge_method=plain');
+        });
+
 
         Route::get('/subscription/{event}/{plan}',  'Theme\SubscriptionController@index');
         Route::post('/subscription/checkout/{event}/{plan}',  'Theme\SubscriptionController@checkoutIndex')->name('subscription.checkoutIndex');
@@ -592,7 +602,8 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('/mycertificate/convert-pdf-to-image/{certificate}', 'Theme\CertificateController@getCertificateImage');
     Route::post('/mycertificate/save-success-chart', 'Theme\CertificateController@getSuccessChart');
     Route::get('/mycertificate/save-success-chart', 'Theme\CertificateController@getSuccessChart');
-    Route::get('/mycertificate/share-twitter/{certificate}', 'Theme\CertificateController@shareTwitter');
+
+    //Route::get('/mycertificate1/twitter', 'Theme\CertificateController@parseTwitterToken');
 
 });
 

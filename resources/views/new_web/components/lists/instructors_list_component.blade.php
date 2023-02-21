@@ -43,15 +43,7 @@
 
                                                         if(isset($lvalue['medias'])){
 
-
-
-
-
-
                                                             $img =  get_image($lvalue['medias'], 'instructors-testimonials');
-                                                            if($lvalue['medias']['name'] != null){
-                                                                //dd($img);
-                                                            }
                                                             $imageDetails = get_image_version_details('instructors-testimonials');
                                                             $width = $imageDetails['w'];
                                                             $height = $imageDetails['h'];
