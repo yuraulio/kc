@@ -16,7 +16,7 @@
         :value="this.getStartingImage"
         :default_image="this.getDefaultImage"
         :hideAltText="true"
-        :imageVersion="'header-image'"
+        :imageVersion="this.imageVersion"
     />
 
 </div>
@@ -26,7 +26,8 @@
 export default {
     props: {
         startingImage: null,
-        defaultImage: null
+        defaultImage: null,
+        imageVersion: null
     },
     data() {
         return {

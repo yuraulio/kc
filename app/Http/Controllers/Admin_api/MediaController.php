@@ -153,7 +153,7 @@ class MediaController extends Controller
             $file = Storage::disk('public')->putFileAs($path, $image, $image_name, 'public');
 
             // convert uploaded image to webp format
-            dispatch((new UploadImageConvertWebp($path, $image_name1))->delay(now()->addSeconds(300)));
+            dispatch((new UploadImageConvertWebp($path, $image_name1))->delay(now()->addSeconds(180)));
 
             $data = getimagesize($request->file);
             $original_image_width = $data[0];
@@ -219,7 +219,7 @@ class MediaController extends Controller
                 $image->save(public_path("/uploads" . $path . $version_name), 80, $extension);
 
                 // Convert version image to webp format
-                dispatch((new UploadImageConvertWebp($path, $version_name))->delay(now()->addSeconds(300)));
+                dispatch((new UploadImageConvertWebp($path, $version_name))->delay(now()->addSeconds(180)));
 
                 // save to db
                 $mfile = $this->storeFile(
@@ -236,7 +236,7 @@ class MediaController extends Controller
                 );
                 $files[] = new MediaFileResource($mfile);
 
-                TinifyImage::dispatch(public_path() . $mfile->full_path, $mfile->id)->delay(now()->addSeconds(300));
+                TinifyImage::dispatch(public_path() . $mfile->full_path, $mfile->id)->delay(now()->addSeconds(180));
             }
 
             $original = MediaFile::find($mfile_original->id);
@@ -339,7 +339,7 @@ class MediaController extends Controller
                 $image->save(public_path("/uploads" . $folderPath . "/" . $image_name), 50, $extension);
 
                 // Convert webp image format
-                dispatch((new UploadImageConvertWebp($folderPath , '/'.$image_name))->delay(now()->addSeconds(300)));
+                dispatch((new UploadImageConvertWebp($folderPath , '/'.$image_name))->delay(now()->addSeconds(180)));
 
                 $size = $image ? $image->filesize() : null;
                 $height = $image ? $image->height() : null;
@@ -369,7 +369,7 @@ class MediaController extends Controller
 
 
             if ($request->version != 'original') {
-                TinifyImage::dispatch(public_path() . $mfile->full_path, $mfile->id)->delay(now()->addSeconds(300));
+                TinifyImage::dispatch(public_path() . $mfile->full_path, $mfile->id)->delay(now()->addSeconds(180));
             }
 
             return response()->json(['data' => new MediaFileResource($mfile)], 200);
@@ -520,7 +520,7 @@ class MediaController extends Controller
             return $e->getMessage();
         }
 
-        RenameFile::dispatch($oldUrl, $url, $alttext, $link)->delay(now()->addSeconds(300));
+        RenameFile::dispatch($oldUrl, $url, $alttext, $link)->delay(now()->addSeconds(180));
 
         $mediaFile->load(["pages", "siblings", "subfiles"]);
 
