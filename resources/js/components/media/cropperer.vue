@@ -345,7 +345,7 @@ export default {
     mounted() {
         // console.log('first loaded: ', this.$parent.$parent.firstLoadedData)
         // console.log('selected files: ', this.$parent.$parent.selectedFile)
-        console.log('Image Version: ',this.imageVersion)
+        //console.log('Image Version: ',this.imageVersion)
         // console.log('Parent mode: ', this.parentMode)
         // console.log('version for update:', this.versionsForUpdate)
         if (this.prevalue) {
