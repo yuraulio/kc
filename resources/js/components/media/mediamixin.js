@@ -279,14 +279,19 @@ var mediaMixin = {
             let value = $event
             var formData = new FormData();
 
-            if(this.$refs.crpr.forUpdate[value.version] === undefined){
-                return false;
-            }
+            console.log('image Edit function: ')
+            console.log(value)
+
+
 
             //console.log('event: ', value)
 
             // edit image version
             if(value != null && value.imgname){
+
+                if(this.$refs.crpr.forUpdate[value.version] === undefined){
+                    return false;
+                }
 
                 //console.log('inside edit image version')
 
@@ -303,6 +308,10 @@ var mediaMixin = {
                 formData.append('id', value.id);
 
             }else{
+
+                if(this.$refs.crpr.forUpdate[this.$refs.crpr.version] === undefined){
+                    return false;
+                }
 
                 //Create Image version
 
@@ -374,7 +383,7 @@ var mediaMixin = {
 
                     if(this.$parent.imageVersion && version == this.$parent.imageVersion){
                         // this.$parent.imageVersionResponseData = response.data.data
-                        
+
                         let baseUrl = location.protocol + '//' + location.host;
 
 
@@ -580,19 +589,19 @@ var mediaMixin = {
                 })
                 .catch((error) => {
                     //console.log('here is an error')
-                    
+
                     if (error.response) {
-                    
+
                         // client received an error response (5xx, 4xx)
                         console.log(error.response)
                       } else if (error.request) {
-                       
+
                         this.getFiles(folderId,from_save_btn);
 
                         // client never received a response, or request never left
                         //console.log('after second time call')
                       } else {
-                     
+
                         console.log(error)
                         // anything else
                       }

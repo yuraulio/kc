@@ -1899,7 +1899,7 @@
                                                 <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-10-tab_inside" data-toggle="tab" href="#tabs-icons-text-10_inside" role="tab" aria-controls="tabs-icons-text-10_inside" aria-selected="false"><i class="ni ni-bell-55 mr-2"></i>Faqs</a>
                                             </li>
                                             <li class="nav-item">
-                                                <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-11-tab_inside" data-toggle="tab" href="#tabs-icons-text-11_inside" role="tab" aria-controls="tabs-icons-text-11_inside" aria-selected="false"><i class="far fa-images mr-2"></i>Image</a>
+                                                <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-12-tab_inside" data-toggle="tab" href="#tabs-icons-text-11_inside" role="tab" aria-controls="tabs-icons-text-11_inside" aria-selected="false"><i class="far fa-images mr-2"></i>Image</a>
                                             </li>
                                             <li class="nav-item">
                                                 <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-11-tab_inside" data-toggle="tab" href="#testimonials-tab" role="tab" aria-controls="tabs-icons-text-11_inside" aria-selected="false"><i class="far fa-images mr-2"></i>Testimonials</a>
@@ -1913,6 +1913,7 @@
                                         </ul>
                                     </div>
                                     <div class="nav-wrapper">
+
                                             <ul id="tab_inside_tab" class="nav nav-pills nav-fill flex-column flex-md-row" id="tabs-icons-text" role="tablist">
                                                 <li class="nav-item">
                                                     <a class="nav-link mb-sm-3 mb-md-0 active" id="tabs-icons-text-1-tab_inside" data-toggle="tab" href="#tabs-icons-text-1_inside" role="tab" aria-controls="tabs-icons-text-1_inside" aria-selected="true"><i class="ni ni-cloud-upload-96 mr-2"></i>Overview</a>
@@ -1933,7 +1934,7 @@
                                                     <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-10-tab_inside" data-toggle="tab" href="#tabs-icons-text-10_inside" role="tab" aria-controls="tabs-icons-text-10_inside" aria-selected="false"><i class="ni ni-bell-55 mr-2"></i>Faqs</a>
                                                 </li>
                                                 <li class="nav-item">
-                                                    <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-11-tab_inside" data-toggle="tab" href="#tabs-icons-text-11_inside" role="tab" aria-controls="tabs-icons-text-11_inside" aria-selected="false"><i class="far fa-images mr-2"></i>Image</a>
+                                                    <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-12-tab_inside" data-toggle="tab" href="#tabs-icons-text-12_inside" role="tab" aria-controls="tabs-icons-text-11_inside" aria-selected="false"><i class="far fa-images mr-2"></i>Image</a>
                                                 </li>
                                                 <li class="nav-item">
                                                     <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-11-tab_inside" data-toggle="tab" href="#testimonials-tab" role="tab" aria-controls="tabs-icons-text-11_inside" aria-selected="false"><i class="far fa-images mr-2"></i>Testimonials</a>
@@ -2081,9 +2082,9 @@
                                                     <div class="tab-pane fade" id="tabs-icons-text-10_inside" role="tabpanel" aria-labelledby="tabs-icons-text-10-tab_inside">
                                                         @include('admin.faq.index', ['model' => $event,'sections' => $sections])
                                                     </div>
-                                                    <div class="tab-pane fade" id="tabs-icons-text-11_inside" role="tabpanel" aria-labelledby="tabs-icons-text-11-tab_inside">
+                                                    <div class="tab-pane fade" id="tabs-icons-text-12_inside" role="tabpanel" aria-labelledby="tabs-icons-text-12-tab_inside">
 
-                                                       @include('admin.upload.upload', ['event' => ($event->medias != null) ? $event->medias : null, 'versions' => ['event-card', 'header-image', 'social-media-sharing']])
+                                                       @include('admin.upload.upload', ['event' => ($event->medias != null) ? $event->medias : null,'image_version' => 'header-image', 'versions' => ['header-image', 'social-media-sharing']])
 
                                                         <input type="hidden" name="creator_id" id="input-creator_id" class="form-control" value="{{$event->creator_id}}">
                                                         <input type="hidden" name="author_id" id="input-author_id" class="form-control" value="{{$event->author_id}}">
@@ -3321,8 +3322,8 @@
     $(document).ready(function(){
 
         if('{{old('tab')}}' != ''){
-            $('#'+'{{old('tab')}}').trigger('click')
-            $('#tabs-icons-text-11-tab_inside').trigger('click')
+            //$('#'+'{{old('tab')}}').trigger('click')
+            $('#tab_inside_tab #tabs-icons-text-12-tab_inside').trigger('click')
         }
 
         $("#input-syllabus1").select2({

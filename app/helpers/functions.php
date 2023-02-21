@@ -17,40 +17,59 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Coderjerk\BirdElephant\BirdElephant;
 
-if(!function_exists('twitter_upload_image')){
-    function twitter_upload_image($image, $title){
 
-        $credentials = array(
-            //these are values that you can obtain from developer portal:
-            'consumer_key' => env('consumer_key'), // identifies your app, always needed
-            'consumer_secret' => env('consumer_secret'), // app secret, always needed
-            'bearer_token' => env('bearer_token'), // OAuth 2.0 Bearer Token requests
+// if(!function_exists('twitter_get_tokens')){
+//     function twitter_get_tokens(){
+//         const TWITTER_API_VERSION = '1.1';
+//         const TWITTER_API_DOMAIN = 'https://api.twitter.com/';
+//         private $_consumerKey;
+//         private $_consumerSecret;
+//         private $_oauthToken;
+//         private $_oauthTokenSecret;
 
-            //this is a value created duting an OAuth 2.0 with PKCE authentication flow:
-            'auth_token' => '' // OAuth 2.0 auth token
+//         $requestToken = $this->getRequestToken( $callbackUrl );
+//         $requestToken['twitter_login_url'] = $this->getLoginUrl( $requestToken );
 
-            //these are values created during an OAuth 1.0a authentication flow to act ob behalf of other users, but these can also be obtained for your app from the developer portal in order to act on behalf of your app.
-            //'token_identifier' => '2730333663-wXgzTVzrvCcO059uGq1JjWF1iEXqLY0imaKkBju', // OAuth 1.0a User Context requests
-            //'token_secret' => 'srCFCU1WPW9dnxVQyAGNvg1yT6C0fwrZq8B4LvgyyVJ2r', // OAuth 1.0a User Context requests
-        );
+//         if ( 'ok' == $requestToken['status'] ) { // save twitter token info to the session
+//             $_SESSION['request_oauth_token'] = $requestToken['api_data']['oauth_token'];
+//             $_SESSION['request_oauth_token_secret'] = $requestToken['api_data']['oauth_token_secret'];
+//         }
+//     }
+// }
+// if(!function_exists('twitter_upload_image')){
+//     function twitter_upload_image($image, $title){
 
-        $twitter = new BirdElephant($credentials);
+//         $credentials = array(
+//             //these are values that you can obtain from developer portal:
+//             'consumer_key' => env('consumer_key'), // identifies your app, always needed
+//             'consumer_secret' => env('consumer_secret'), // app secret, always needed
+//             'bearer_token' => env('bearer_token'), // OAuth 2.0 Bearer Token requests
 
-        $image = $twitter->tweets()->upload($image);
-        // //pass the returned media id to a media object as an array
-        $media = (new \Coderjerk\BirdElephant\Compose\Media)->mediaIds(
-            [
-                $image->media_id_string
-            ]
-        );
+//             //this is a value created duting an OAuth 2.0 with PKCE authentication flow:
+//             'auth_token' => '' // OAuth 2.0 auth token
 
-        // //compose the tweet and pass along the media object
-        $tweet = (new \Coderjerk\BirdElephant\Compose\Tweet)->text($title)->media($media);
-        $twitter->tweets()->tweet($tweet);
+//             //these are values created during an OAuth 1.0a authentication flow to act ob behalf of other users, but these can also be obtained for your app from the developer portal in order to act on behalf of your app.
+//             //'token_identifier' => '2730333663-wXgzTVzrvCcO059uGq1JjWF1iEXqLY0imaKkBju', // OAuth 1.0a User Context requests
+//             //'token_secret' => 'srCFCU1WPW9dnxVQyAGNvg1yT6C0fwrZq8B4LvgyyVJ2r', // OAuth 1.0a User Context requests
+//         );
+
+//         $twitter = new BirdElephant($credentials);
+
+//         $image = $twitter->tweets()->upload($image);
+//         // //pass the returned media id to a media object as an array
+//         $media = (new \Coderjerk\BirdElephant\Compose\Media)->mediaIds(
+//             [
+//                 $image->media_id_string
+//             ]
+//         );
+
+//         // //compose the tweet and pass along the media object
+//         $tweet = (new \Coderjerk\BirdElephant\Compose\Tweet)->text($title)->media($media);
+//         $twitter->tweets()->tweet($tweet);
 
 
-    }
-}
+//     }
+// }
 
 if(!function_exists('add_event_statistic_queue')){
     function add_event_statistic_queue($eventId){
