@@ -3,7 +3,7 @@
 // You can find the keys here : https://developer.twitter.com/en/portal/projects-and-apps
 
 return [
-    'debug' => env('APP_DEBUG', false),
+    'debug' => env('APP_DEBUG', true),
 
     'api_url' => 'api.twitter.com',
     'upload_url' => 'upload.twitter.com',
