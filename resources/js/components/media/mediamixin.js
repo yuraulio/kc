@@ -279,11 +279,6 @@ var mediaMixin = {
             let value = $event
             var formData = new FormData();
 
-            console.log('image Edit function: ')
-            console.log(value)
-
-
-
             //console.log('event: ', value)
 
             // edit image version
