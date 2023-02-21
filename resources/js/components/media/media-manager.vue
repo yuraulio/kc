@@ -501,9 +501,6 @@ export default {
         },
         setImage(image) {
 
-            console.log('set image', image)
-
-
             if(image.parrent != null){
                 image = image.parrent
             }else if(image.parrent_id == null){
