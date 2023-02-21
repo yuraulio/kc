@@ -125,11 +125,22 @@ class CertificateController extends Controller
     return $data;
 
   }
+  public function parseTwitterToken(){
+    dd('asd');
+  }
 
-  public function shareTwitter($certificate){
+  public function shareTwitter(){
+    dd('asd');
+
+    dd($request->all());
+
+    $certificate = Session::get('certId');
+
     $certId = $certificate;
 
-    $certificate =base64_decode($certificate);
+    dd($certId);
+
+    $certificate = base64_decode($certificate);
 
 
     //Demo line (Remove after Test)
@@ -187,7 +198,7 @@ class CertificateController extends Controller
     $title = htmlspecialchars_decode(strip_tags($certiTitle));
 
 
-    twitter_upload_image(public_path('cert/'.$name.'.jpg'), $title);
+    //twitter_upload_image(public_path('cert/'.$name.'.jpg'), $title);
 
     return response()->json([
         'success' => true,
