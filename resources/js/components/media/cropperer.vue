@@ -399,20 +399,6 @@ export default {
         }
     },
     methods: {
-        test(folderId, response = null){
-            alert('from test')
-
-            this.$parent.$parent.getFiles(folderId)
-
-            // if(response != null && this.$parent.imageVersion && response.data.data.version == this.imageVersion){
-            //     // this.$parent.imageVersionResponseData = response.data.data
-            //     this.updatedMediaImage(response.data.data)
-            //     return false;
-
-            // }
-
-            this.setupPrevalue()
-        },
         setupPrevalue(from_function = false) {
 
             if(this.prevalue.parrent == null){
@@ -474,7 +460,7 @@ export default {
             this.user = this.versionData ? this.versionData.user : this.parrentImage.user;
             this.extension = this.versionData ? this.versionData.extension : this.parrentImage.extension;
 
-
+            let baseUrl = location.protocol + '//' + location.host;
             if(!from_function){
 
                 let foundVersion = false;
@@ -482,11 +468,11 @@ export default {
                 this.uploadedVersions.forEach(value => {
                     if(value.version == this.imageVersion){
 
-                        let baseUrl = location.protocol + '//' + location.host;
+                        
                         if (!baseUrl.includes('admin')){
-                            if(value.version == 'original'){
-                                this.confirmSelection(value)
-                            }
+                    
+                            this.confirmSelection(value)
+                            
                         }else{
                             this.confirmSelection(value)
                         }
@@ -500,7 +486,17 @@ export default {
                 })
 
                 if(!foundVersion){
-                    this.confirmSelection(this.parrentImage)
+
+                    if (!baseUrl.includes('admin')){
+
+                        if(this.$parent.$parent.firstLoadedData.id != this.parrentImage.id && value.version == 'original'){
+                                this.confirmSelection(value)
+                        }
+
+                    }else{
+                        this.confirmSelection(value)
+                    }
+                    
                 }
             }
         },
