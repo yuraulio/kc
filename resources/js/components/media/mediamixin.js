@@ -600,22 +600,38 @@ var mediaMixin = {
                 });
         },
         userSelectedFiles($event) {
+            let baseUrl = location.protocol + '//' + location.host;
+
+            // console.log('first load data',this.firstLoadedData)
+            // console.log(this)
+
+
+            if (!baseUrl.includes('admin') && this.withoutImage){
+                this.updatedMediaImage($event)
+            }
+
             if(this.firstLoadedData.length == 0){
                 this.firstLoadedData = $event
+
             }            
             this.warning = false;
 
-            let baseUrl = location.protocol + '//' + location.host;
+            
 
-            if (this.selectedFile && this.selectedFile.id != $event.id && !baseUrl.includes('admin')){
+           
+                if (this.selectedFile && this.selectedFile.id != $event.id && !baseUrl.includes('admin')){
 
-                this.updatedMediaImage($event)
-                //this.$modal.show('edit-image-modal');
-            }else{
-                //alert('not different image')
-                this.selectedFile = $event;
-                this.$modal.show('edit-image-modal');
-            }
+                    this.updatedMediaImage($event)
+                    //this.$modal.show('edit-image-modal');
+                }else if(this.selectedFile == null && this.withoutImage && !baseUrl.includes('admin')){
+
+                }
+                else{
+                    //alert('not different image')
+                    this.selectedFile = $event;
+                    this.$modal.show('edit-image-modal');
+                }
+            
             
         },
         deleteFile($event) {
