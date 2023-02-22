@@ -44,6 +44,7 @@
         "sentry/sentry-laravel": "^3.2",
         "spatie/flysystem-dropbox": "^1.0",
         "stripe/stripe-php": "^7.87",
+        "symfony/http-client": "^6.2",
         "teamtnt/laravel-scout-tntsearch-driver": "^11.5",
         "tinify/tinify": "^1.5",
         "vemcogroup/laravel-sparkpost-driver": "^4.0",
