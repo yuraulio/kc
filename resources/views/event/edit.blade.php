@@ -1103,7 +1103,7 @@
                                                         $course_elearning_exam_icon = (isset($info['elearning']['exam']['icon']) && $info['elearning']['exam']['icon']) ? $info['elearning']['exam']['icon'] : null;
 
                                                     ?>
-                                                    <label class="form-control-label" for="input-expiration">{{ __('Online Exam') }} (course_elearning_exam_text)</label>
+                                                    <label class="form-control-label" for="input-expiration">{{ __('Online Exam') }}<br> (course_elearning_exam_text)</label>
                                                     <div class="input-group">
                                                         <input type="text" name="course[{{'delivery'}}][{{'elearning'}}][{{'exam'}}][{{'text'}}]" id="input-exam" class="form-control" placeholder="{{ __('alphanumeric text') }}" value="{{ old('exam', (isset($info['elearning']['exam']['text']) && $info['elearning']['exam']['text'] != null) ? $info['elearning']['exam']['text'] : '' ) }}"autofocus>
 
@@ -1124,9 +1124,16 @@
                                                     </div>
 
                                                 </div>
+                                                <!-- NOW -->
+                                                <div class="exam_input col-sm-12 col-md-6 col-lg-4 form-group">
+                                                    <label class="form-control-label" for="input-expiration">{{ __('Exam Activate Months') }} <br> {{ __('(course_elearning_exam_activate_months)') }}</label>
+                                                    <div class="input-group">
+                                                        <input type="number" min="1" name="course[{{'delivery'}}][{{'elearning'}}][{{'exam'}}][{{'activate_months'}}]" id="input-exam-activate-months" class="form-control" placeholder="{{ __('Months') }}" value="{{ old('exam_activate_months', (isset($info['elearning']['exam']['activate_months']) && $info['elearning']['exam']['activate_months'] != null) ? $info['elearning']['exam']['activate_months'] : '' ) }}"autofocus>
 
+                                                    </div>
+                                                </div>
 
-
+                                                 <!-- END NOW -->
 
                                                 <div class="form-group col-12 accordion" id="accordionExample">
                                                     <div class="card">
@@ -1176,6 +1183,11 @@
                                                             </div>
                                                     </div>
                                                 </div>
+
+
+
+
+
 
                                             </div>
 
@@ -1887,7 +1899,7 @@
                                                 <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-10-tab_inside" data-toggle="tab" href="#tabs-icons-text-10_inside" role="tab" aria-controls="tabs-icons-text-10_inside" aria-selected="false"><i class="ni ni-bell-55 mr-2"></i>Faqs</a>
                                             </li>
                                             <li class="nav-item">
-                                                <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-11-tab_inside" data-toggle="tab" href="#tabs-icons-text-11_inside" role="tab" aria-controls="tabs-icons-text-11_inside" aria-selected="false"><i class="far fa-images mr-2"></i>Image</a>
+                                                <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-12-tab_inside" data-toggle="tab" href="#tabs-icons-text-11_inside" role="tab" aria-controls="tabs-icons-text-11_inside" aria-selected="false"><i class="far fa-images mr-2"></i>Image</a>
                                             </li>
                                             <li class="nav-item">
                                                 <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-11-tab_inside" data-toggle="tab" href="#testimonials-tab" role="tab" aria-controls="tabs-icons-text-11_inside" aria-selected="false"><i class="far fa-images mr-2"></i>Testimonials</a>
@@ -1901,6 +1913,7 @@
                                         </ul>
                                     </div>
                                     <div class="nav-wrapper">
+
                                             <ul id="tab_inside_tab" class="nav nav-pills nav-fill flex-column flex-md-row" id="tabs-icons-text" role="tablist">
                                                 <li class="nav-item">
                                                     <a class="nav-link mb-sm-3 mb-md-0 active" id="tabs-icons-text-1-tab_inside" data-toggle="tab" href="#tabs-icons-text-1_inside" role="tab" aria-controls="tabs-icons-text-1_inside" aria-selected="true"><i class="ni ni-cloud-upload-96 mr-2"></i>Overview</a>
@@ -1921,7 +1934,7 @@
                                                     <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-10-tab_inside" data-toggle="tab" href="#tabs-icons-text-10_inside" role="tab" aria-controls="tabs-icons-text-10_inside" aria-selected="false"><i class="ni ni-bell-55 mr-2"></i>Faqs</a>
                                                 </li>
                                                 <li class="nav-item">
-                                                    <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-11-tab_inside" data-toggle="tab" href="#tabs-icons-text-11_inside" role="tab" aria-controls="tabs-icons-text-11_inside" aria-selected="false"><i class="far fa-images mr-2"></i>Image</a>
+                                                    <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-12-tab_inside" data-toggle="tab" href="#tabs-icons-text-12_inside" role="tab" aria-controls="tabs-icons-text-11_inside" aria-selected="false"><i class="far fa-images mr-2"></i>Image</a>
                                                 </li>
                                                 <li class="nav-item">
                                                     <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-11-tab_inside" data-toggle="tab" href="#testimonials-tab" role="tab" aria-controls="tabs-icons-text-11_inside" aria-selected="false"><i class="far fa-images mr-2"></i>Testimonials</a>
@@ -2069,9 +2082,9 @@
                                                     <div class="tab-pane fade" id="tabs-icons-text-10_inside" role="tabpanel" aria-labelledby="tabs-icons-text-10-tab_inside">
                                                         @include('admin.faq.index', ['model' => $event,'sections' => $sections])
                                                     </div>
-                                                    <div class="tab-pane fade" id="tabs-icons-text-11_inside" role="tabpanel" aria-labelledby="tabs-icons-text-11-tab_inside">
+                                                    <div class="tab-pane fade" id="tabs-icons-text-12_inside" role="tabpanel" aria-labelledby="tabs-icons-text-12-tab_inside">
 
-                                                        @include('admin.upload.upload', ['event' => ($event->medias != null) ? $event->medias : null, 'versions' => ['event-card', 'header-image', 'social-media-sharing']])
+                                                       @include('admin.upload.upload', ['event' => ($event->medias != null) ? $event->medias : null,'image_version' => 'null', 'versions' => ['header-image', 'social-media-sharing']])
 
                                                         <input type="hidden" name="creator_id" id="input-creator_id" class="form-control" value="{{$event->creator_id}}">
                                                         <input type="hidden" name="author_id" id="input-author_id" class="form-control" value="{{$event->author_id}}">
@@ -3309,8 +3322,8 @@
     $(document).ready(function(){
 
         if('{{old('tab')}}' != ''){
-            $('#'+'{{old('tab')}}').trigger('click')
-            $('#tabs-icons-text-11-tab_inside').trigger('click')
+            //$('#'+'{{old('tab')}}').trigger('click')
+            $('#tab_inside_tab #tabs-icons-text-12-tab_inside').trigger('click')
         }
 
         $("#input-syllabus1").select2({
@@ -3605,9 +3618,53 @@ var datePickerOptions = {
                 footer: ''
             })
 
-
-
         }
+
+        var getUrl = window.location;
+        var pathname = getUrl.pathname
+        var event = pathname.split("/");
+        event = event[event.length - 2]
+
+
+        $.ajax({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            type: 'GET',
+            url: '/admin/events/statistics/'+event,
+            success: function (data) {
+
+                let stats = data.data;
+
+                let income = stats.income;
+                let count = stats.count;
+                let incomeInstalments = stats.incomeInstalments;
+
+                $('#student_total').text(count.total)
+                $('#students_paid').text(count.regular + count.special + count.alumni + count.early)
+                $('#students_free').text(count.free)
+
+                $('#income-total').text('€ '+(income.total).toLocaleString())
+                $('#income-early').text('€ '+(income.early).toLocaleString())
+                $('#income-alumni').text('€ '+(income.alumni).toLocaleString())
+                $('#income-special').text('€ '+(income.special).toLocaleString())
+                $('#income-regular').text('€ '+(income.regular).toLocaleString())
+                $('#income-subscription').text('€ '+(income.subscription).toLocaleString())
+
+                $('#installments-total').text('€ '+(Math.round(incomeInstalments.total)).toLocaleString())
+                $('#installments-early').text('€ '+(Math.round(incomeInstalments.early)).toLocaleString())
+                $('#installments-alumni').text('€ '+(Math.round(incomeInstalments.alumni)).toLocaleString())
+                $('#installments-special').text('€ '+(Math.round(incomeInstalments.special)).toLocaleString())
+                $('#installments-regular').text('€ '+(Math.round(incomeInstalments.regular)).toLocaleString())
+                $('#installments-subscription').text('€ '+(Math.round(incomeInstalments.subscription)).toLocaleString())
+
+                $('.widget .loader').addClass('d-none')
+                $('.widget .info').removeClass('d-none')
+
+
+            }
+        });
+
 
 
     });

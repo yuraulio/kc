@@ -255,8 +255,14 @@ class Event extends Model
 
     public function users()
     {
-        return $this->belongsToMany(User::class, 'event_user')->withPivot('expiration','payment_method');
+        return $this->belongsToMany(User::class, 'event_user')->withPivot('expiration', 'expiration_email', 'payment_method');
     }
+
+    public function users_with_transactions()
+    {
+        return $this->belongsToMany(User::class, 'event_user')->select('event_user.user_id as id','firstname', 'lastname', 'email', 'mobile')->with('transactions')->withPivot('expiration','payment_method');
+    }
+
     public function usersPaid()
     {
         return $this->belongsToMany(User::class, 'event_user')->withPivot('expiration','payment_method','paid')->wherePivot('paid', true);
@@ -369,13 +375,13 @@ class Event extends Model
                 if(isset($videos[$vimeoVideo]) && (int) $videos[$vimeoVideo]['seen'] == 1){
                     $topicsSeen[$key]++;
                 }
-                
+
                 $sum1 = $sum1 + $sum;
                 $data['keys'][$key] = $sum1;
 
             }
             $topicsSeen[$key] = $topicsSeen[$key] == count($lesson1);
-            
+
         }
 
 
@@ -562,12 +568,13 @@ class Event extends Model
     public function examAccess( $user,$accessMonths = 2, $checkForCetification = true){
 
         if($accessMonths < 1){
+            // accessMonths var is video progress for this condition
+            $accessMonths = 80;
             $periodAfterHasCourse = $this->progress($user);
         }else{
             $periodAfterHasCourse = $this->period($user);
         }
 
-    
         $studentsEx = [1353,1866,1753,1882,1913,1923];
 
         if(in_array($user->id, $studentsEx)){
@@ -581,9 +588,10 @@ class Event extends Model
         if(!$event->created_at || $event->pivot->comment == 'enroll||0' || (strpos($event->pivot->comment, 'enroll from') !== false && explode('||', $event->pivot->comment)[1] == 0)){
             return false;
         }else if( $event->pivot->comment == 'enroll||1' || (strpos($event->pivot->comment, 'enroll from') !== false && explode('||', $event->pivot->comment)[1] == 1)){
-            $periodAfterHasCourse = $accessMonths;
+            //$periodAfterHasCourse = $accessMonths;
+            $accessMonths = 80;
+            $periodAfterHasCourse = $this->progress($user);
         }
-
 
 
         $certification = $checkForCetification && count($this->certificatesByUser($user->id)) > 0;
@@ -710,7 +718,7 @@ class Event extends Model
     }
 
     public function transactions(){
-        return $this->morphToMany(Transaction::class, 'transactionable');
+        return $this->morphToMany(Transaction::class, 'transactionable')->with('user.ticket','isSubscription');
     }
 
     public function invoicesByUser($user){
@@ -721,7 +729,7 @@ class Event extends Model
     }
 
     public function transactionsByUserNew($user){
-        return $this->transactions()->whereHas('user', function ($query) use($user) {
+        return $this->transactions()->with('invoice')->whereHas('user', function ($query) use($user) {
             $query->where('id', $user);
         });
     }
@@ -815,7 +823,7 @@ class Event extends Model
 
         $certification = count($this->certificatesByUser($user->id)) > 0;
         $infos = $this->event_info();
-        
+
         if($this->examAccess($user,$successPer) && !$certification){
 
             $cert = new Certificate;
@@ -980,6 +988,9 @@ class Event extends Model
                 $data['elearning']['exam']['visible'] = $infos['course_elearning_exam_visible'] != null ? json_decode($infos['course_elearning_exam_visible'], true) : null;
                 $data['elearning']['exam']['icon'] = $infos['course_elearning_exam_icon'] != null ? json_decode($infos['course_elearning_exam_icon'], true) : null;
                 $data['elearning']['exam']['text'] = $infos['course_elearning_exam_text'] != null ? $infos['course_elearning_exam_text'] : null;
+
+                $data['elearning']['exam']['activate_months'] = $infos['course_elearning_exam_activate_months'] != null ? json_decode($infos['course_elearning_exam_activate_months'], true) : null;
+
             }else if($data['delivery'] == 215){
                 $data['inclass']['absences'] = $infos['course_inclass_absences'];
                 $data['inclass']['dates'] = ($infos['course_inclass_dates'] != null && $infos['course_inclass_dates'] != '[]') ? json_decode($infos['course_inclass_dates'], true) : null;

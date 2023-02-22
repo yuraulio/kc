@@ -19,7 +19,7 @@
             @foreach ($logos as $image)
                 <div class="col-md-3 col-6 self-align-center mb-5">
                     <a href="{{ $image['ext_url'] ?? "" }}" target="_blank">
-                        <img src="{{ cdn(get_image($image['medias']))}}" class="center grayscale image-grid-hover" alt="{{ $image['name'] }}">
+                        <img loading="lazy" src="{{ cdn(get_image($image['medias']))}}" class="center grayscale image-grid-hover resp-img" alt="{{ $image['name'] }}" title="{{ $image['name'] }}" width="108" height="108">
                     </a>
                 </div>
             @endforeach
@@ -32,7 +32,7 @@
             @foreach ($brands as $image)
                 <div class="col-md-3 col-6 self-align-center mb-5">
                     <a href="{{ $image['ext_url'] ?? "" }}" target="_blank">
-                        <img src="{{ cdn(get_image($image['medias']))}}" class="center grayscale image-grid-hover" alt="{{ $image['name'] }}">
+                        <img loading="lazy" src="{{ cdn(get_image($image['medias']))}}" class="center grayscale image-grid-hover resp-img" alt="{{ $image['name'] }}" title="{{ $image['name'] }}" width="108" height="108">
                     </a>
                 </div>
             @endforeach
@@ -51,7 +51,7 @@
                     <div class="col-md-3 col-6 self-align-center mb-5">
                         <a href="{{ $image->link ?? "" }}" target="_blank">
                             {{--<img src="{{ $image->url ?? "" }}" class="center grayscale image-grid-hover" alt="{{ $image->alt_text ?? "" }}">--}}
-                            <img src="{{ isset($image->path) && $image->path != null ? get_image('uploads/'.$image->path) : "" }}" class="center grayscale image-grid-hover" alt="{{ $image->alt_text ?? "" }}">
+                            <img loading="lazy" src="{{ isset($image->path) && $image->path != null ? get_image('uploads/'.$image->path) : "" }}" class="center grayscale image-grid-hover resp-img" alt="{{ $image->alt_text ?? "" }}" title="{{ $image->alt_text ?? "" }}" width="108" height="108">
                         </a>
                     </div>
                 @endif
@@ -68,7 +68,7 @@
                     <div class="logos-carousel owl-carousel">
                         @foreach ($gallery["gallery"] as $image)
                             <div class="slide">
-                                <img class="center grayscale" style="max-width: 100%;" src="{{ $image->url ?? "" }}" title="{{ $image->name }}" alt="{{ $image->alt_text ?? "" }}">
+                                <img loading="lazy" class="center grayscale resp-img" style="max-width: 100%;" src="{{ $image->url ?? "" }}" title="{{ $image->name }}" alt="{{ $image->alt_text ?? "" }}"  width="108" height="108">
                             </div>
                         @endforeach
                     </div>
@@ -95,7 +95,7 @@
             <div class="row">
                 @foreach ($gallery["gallery"] as $image)
                     <div class="col-md-2 col-6 self-align-center mb-5">
-                        <img src="{{ $image->url ?? "" }}" class="center grayscale image-grid-hover" alt="{{ $image->alt_text ?? "" }}">
+                        <img loading="lazy" src="{{ $image->url ?? "" }}" class="center grayscale image-grid-hover resp-img" alt="{{ $image->alt_text ?? "" }}" width="108" height="108">
                     </div>
                 @endforeach
             </div>

@@ -21,6 +21,7 @@ Auth::routes(['register' => false]);
 //Route::get('dashboard', 'HomeController@index')->name('home');
 Route::get('pricing', 'PageController@pricing')->name('page.pricing');
 Route::get('lock', 'PageController@lock')->name('page.lock');
+Route::get('mycertificateview/{id}/{title}', 'Theme\CertificateController@view_results')->name('certificate.results');
 
 Route::group(['middleware' => 'auth.aboveauthor', 'prefix' => 'admin'], function () {
 
@@ -61,6 +62,7 @@ Route::group(['middleware' => 'auth.aboveauthor', 'prefix' => 'admin'], function
 
     // Events
     Route::post('/events/export-students', 'EventController@exportStudent')->name('event.export-students');
+    Route::get('/events/statistics/{id}', 'EventController@event_statistics')->name('event.statistics');
 
 
     Route::post('/summary/update/{summary}', 'SummaryController@update')->name('summary.update');
@@ -75,6 +77,9 @@ Route::group(['middleware' => 'auth.aboveauthor', 'prefix' => 'admin'], function
     Route::post('transaction/export-excel', 'TransactionController@exportExcel')->name('transaction.export-excel');
     Route::post('transaction/export-invoice', 'TransactionController@exportInvoices')->name('transaction.export-invoice');
     Route::post('home/fetchDashboardData', ['as' => 'home.fetchData', 'uses' => 'HomeController@fetchByDate']);
+    Route::get('home/fetchDashboardStudentStatistics', ['as' => 'home.fetchDashboardStudentStatistics', 'uses' => 'HomeController@fetchDashboardStudentStatistics']);
+    Route::get('home/fetchDashboardStudentAllStatistics', ['as' => 'home.fetchDashboardStudentAllStatistics', 'uses' => 'HomeController@fetchDashboardStudentAllStatistics']);
+    Route::get('home/fetchDashboardInstructorStatistics', ['as' => 'home.fetchDashboardInstructorStatistics', 'uses' => 'HomeController@fetchDashboardInstructorStatistics']);
 
     //Subscriptions
     Route::get('subscriptions', ['as' => 'subscriptions.index', 'uses' => 'SubscriptionController@index']);
@@ -549,6 +554,16 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'myaccount'], function () {
 
         Route::get('/elearning/{course?}',  'Theme\StudentController@elearning');
 
+        Route::get('/twitter/{id}', function ($id) {
+
+
+            Session::forget('certId');
+            Session::put('certId', $id);
+
+
+            return redirect()->away('https://twitter.com/i/oauth2/authorize?response_type=code&client_id='.env('TWITTER_CLIENT_ID').'&redirect_uri='.env('MIX_APP_URL').'/mycertificate/share-twitter/n'.'&scope=tweet.read%20users.read%20follows.read%20follows.write&state=state&code_challenge=challenge&code_challenge_method=plain');
+        });
+
 
         Route::get('/subscription/{event}/{plan}',  'Theme\SubscriptionController@index');
         Route::post('/subscription/checkout/{event}/{plan}',  'Theme\SubscriptionController@checkoutIndex')->name('subscription.checkoutIndex');
@@ -585,7 +600,13 @@ Route::group(['middleware' => ['web']], function () {
 
     Route::get('/mycertificate/{certificate}', 'Theme\CertificateController@getCertificate');
     Route::get('/mycertificate/convert-pdf-to-image/{certificate}', 'Theme\CertificateController@getCertificateImage');
+    Route::post('/mycertificate/save-success-chart', 'Theme\CertificateController@getSuccessChart');
+    Route::get('/mycertificate/save-success-chart', 'Theme\CertificateController@getSuccessChart');
+
+    //Route::get('/mycertificate1/twitter', 'Theme\CertificateController@parseTwitterToken');
+
 });
+
 
 Route::group(['middleware' => 'auth'], function () {
 
@@ -663,6 +684,8 @@ Route::get('/dropbox/KUBnqOX1FNyTh74', 'DropboxController@refreshDropBoxKey');
 Route::get('/unroll-elearning-users', 'Dashboard\CronjobsController@unroll');
 Route::get('/sendNonpaymentEmail', 'Dashboard\CronjobsController@sendNonPayment');
 Route::get('/sendSubscriptionNonPayment', 'Dashboard\CronjobsController@sendSubscriptionNonPayment');
+Route::get('/sendReminderAfterExpirationSubscription', 'Dashboard\CronjobsController@sendReminderForExpiredSubscription');
+
 //Route::get('/sendWarningElearning', 'Dashboard\CronjobsController@sendElearningWarning');//out
 //Route::get('/sendHalfPeriodElearning', 'Dashboard\CronjobsController@sendElearningHalfPeriod');//out
 Route::get('/fb-google-csv', 'Dashboard\CronjobsController@fbGoogleCsv');

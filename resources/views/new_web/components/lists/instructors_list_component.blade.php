@@ -26,6 +26,8 @@
                                                 <div class="instructor-inner">
                                                     <?php
                                                         $img = '';
+                                                        $width = 0;
+                                                        $height = 0;
                                                         $inst_url = $lvalue['slugable']['slug'];
                                                         $ext_url = $lvalue['ext_url'];
                                                         $fb = '';
@@ -40,7 +42,11 @@
                                                         $field2 =$lvalue['company'];
 
                                                         if(isset($lvalue['medias'])){
+
                                                             $img =  get_image($lvalue['medias'], 'instructors-testimonials');
+                                                            $imageDetails = get_image_version_details('instructors-testimonials');
+                                                            $width = $imageDetails['w'];
+                                                            $height = $imageDetails['h'];
                                                         }
 
                                                         if(isset($lvalue['header'])){
@@ -70,31 +76,31 @@
                                                         }
                                                     ?>
                                                     <div class="profile-img">
-                                                        <a href="{{env('NEW_PAGES_LINK') . '/' . $lvalue['slugable']['slug']}}"><img src="{{cdn($img)}}"  title="{{$name}}" alt="{{$name}}"></a>
+                                                        <a href="{{env('NEW_PAGES_LINK') . '/' . $lvalue['slugable']['slug']}}"><img loading="lazy" src="{{cdn($img)}}" width="{{ $width }}" height="{{ $height }}"  title="{{$name}}" alt="{{$name}}"></a>
                                                     </div>
                                                     <h3><a style="color:#81be00;" href="{{env('NEW_PAGES_LINK') . '/' . $lvalue['slugable']['slug']}}">{{$name}}</a></h3>
                                                     <p>{{$field1}}, <a style="color:#81be00;" target="_blank" title="{{$field1}}" @if($ext_url!='') href="{{$ext_url}}"@endif>{{$field2}}</a>.</p>
                                                     <ul class="social-wrapper">
                                                         @if($fb != '')
-                                                            <li><a target="_blank" href="{{$fb}}"><img class="replace-with-svg"  src="/theme/assets/images/icons/social/Facebook.svg" width="16" alt="Visit"></a></li>
+                                                            <li><a target="_blank" href="{{$fb}}"><img class="replace-with-svg"  src="/theme/assets/images/icons/social/Facebook.svg" width="16" height="16" alt="Visit" title="Visit Facebook"></a></li>
                                                         @endif
                                                         @if($inst !='')
-                                                            <li><a target="_blank" href="{{$inst}}"><img class="replace-with-svg"  src="{{cdn('/theme/assets/images/icons/social/Instagram.svg')}}" width="16" alt="Visit"></a></li>
+                                                            <li><a target="_blank" href="{{$inst}}"><img class="replace-with-svg"  src="{{cdn('/theme/assets/images/icons/social/Instagram.svg')}}" width="16" height="16" alt="Visit" title="Visit Instagram"></a></li>
                                                         @endif
                                                         @if($linkedIn !='')
-                                                            <li><a target="_blank" href="{{$linkedIn}}"><img class="replace-with-svg"  src="{{cdn('/theme/assets/images/icons/social/Linkedin.svg')}}" width="16" alt="Visit"></a></li>
+                                                            <li><a target="_blank" href="{{$linkedIn}}"><img class="replace-with-svg"  src="{{cdn('/theme/assets/images/icons/social/Linkedin.svg')}}" width="16" height="16" alt="Visit" title="Visit Linkedin"></a></li>
                                                         @endif
                                                         @if($pint !='')
-                                                            <li><a target="_blank" href="{{$pint}}"><img class="replace-with-svg"  src="{{cdn('/theme/assets/images/icons/social/Pinterest.svg')}}" width="16" alt="Visit"></a></li>
+                                                            <li><a target="_blank" href="{{$pint}}"><img class="replace-with-svg"  src="{{cdn('/theme/assets/images/icons/social/Pinterest.svg')}}" width="16" height="16" alt="Visit" title="Visit Pinterest"></a></li>
                                                         @endif
                                                         @if($twitter !='')
-                                                            <li><a target="_blank" href="{{$twitter}}"><img class="replace-with-svg"  src="{{cdn('/theme/assets/images/icons/social/Twitter.svg')}}" width="16" alt="Visit"></a></li>
+                                                            <li><a target="_blank" href="{{$twitter}}"><img class="replace-with-svg"  src="{{cdn('/theme/assets/images/icons/social/Twitter.svg')}}" width="16" height="16" alt="Visit" title="Visit Twitter"></a></li>
                                                         @endif
                                                         @if($yt !='')
-                                                            <li><a target="_blank" href="{{$yt}}"><img class="replace-with-svg"  src="{{cdn('/theme/assets/images/icons/social/Youtube.svg')}}" width="16" alt="Visit"></a></li>
+                                                            <li><a target="_blank" href="{{$yt}}"><img class="replace-with-svg"  src="{{cdn('/theme/assets/images/icons/social/Youtube.svg')}}" width="16" height="16" alt="Visit" title="Visit Youtube"></a></li>
                                                         @endif
                                                         @if($med !='')
-                                                            <li><a target="_blank" href="#"><img class="replace-with-svg"  src="{{cdn('/theme/assets/images/icons/social/Medium.svg')}}" width="16" alt="Visit"></a></li>
+                                                            <li><a target="_blank" href="#"><img class="replace-with-svg"  src="{{cdn('/theme/assets/images/icons/social/Medium.svg')}}" width="16" height="16" alt="Visit" title="Visit Medium"></a></li>
                                                         @endif
                                                     </ul>
                                                 </div>
@@ -107,6 +113,8 @@
                                                 <div class="instructor-inner">
                                                     <?php
                                                         $img = '';
+                                                        $width = 0;
+                                                        $height = 0;
                                                         $inst_url = $lvalue['slugable']['slug'];
                                                         $ext_url = $lvalue['ext_url'];
                                                         $fb = '';
@@ -122,6 +130,9 @@
 
                                                         if(isset($lvalue['medias'])){
                                                             $img =  get_image($lvalue['medias'], 'instructors-testimonials');
+                                                            $imageDetails = get_image_version_details('instructors-testimonials');
+                                                            $width = $imageDetails['w'];
+                                                            $height = $imageDetails['h'];
                                                         }
 
                                                         if(isset($lvalue['header'])){
@@ -155,7 +166,7 @@
                                                         <div class="row" style="width: 100%;">
                                                             <div class="col-md-3">
                                                                 <div class='text-center blogpagex-blog-image d-flex'>
-                                                                    <img style="align-self: center;" src="{{cdn($img)}}">
+                                                                    <img loading="lazy" style="align-self: center;" src="{{cdn($img)}}" width="{{ $width }}" height="{{ $height }}" alt="{{ $name }}" title="{{ $name }}">
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-9">

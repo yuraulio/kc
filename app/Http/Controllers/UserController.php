@@ -86,6 +86,170 @@ class UserController extends Controller
         $this->authorizeResource(User::class);
     }
 
+    public function statistics($users){
+
+        $data = [];
+
+        $data['active'] = 0;
+        $data['inactive'] = 0;
+        $data['usersInClass'] = 0;
+        $data['usersElearning'] = 0;
+        $data['usersInClassAll'] = 0;
+        $data['usersElearningAll'] = 0;
+
+        foreach($users->toArray() as $user){
+
+            // Active Or Inactive
+            if(isset($user['status_account'])){
+                $completed = $user['status_account']['completed'];
+
+                if($completed){
+                    $data['active']++;
+
+                }else{
+                    $data['inactive']++;
+                }
+                if($completed){
+                    // UserInclass
+                    if(!empty($user['events_for_user_list1'])){
+                        $events = $user['events_for_user_list1'];
+
+                        $foundInClass = false;
+                        $foundInClassAll = false;
+                        $foundElearning = false;
+                        $foundElearningAll = false;
+
+                        foreach($events as $event){
+
+                            if($event['published'] && $event['status'] == 0 && $event['pivot']['paid'] == 1 && (empty($event['delivery']) || $event['delivery'][0]['id'] != 143)){
+
+                                $foundInClass = true;
+                            }
+
+
+
+                            if($event['published'] && $event['pivot']['expiration'] >= date('Y-m-d') && $event['status'] == 0 && $event['pivot']['paid'] == 1 && !empty($event['delivery']) && $event['delivery'][0]['id'] == 143 ){
+                                $foundElearning = true;
+                            }
+
+                            if(empty($event['delivery']) || (!empty($event['delivery']) && $event['delivery'][0]['id'] != 143) ){
+                                $foundInClassAll = true;
+                            }
+
+                            if(!empty($event['delivery']) && $event['delivery'][0]['id'] == 143){
+                                $foundElearningAll = true;
+                            }
+                        }
+
+                        if($foundInClass){
+                            $data['usersInClass']++;
+                        }
+                        if($foundElearning){
+                            $data['usersElearning']++;
+                        }
+                        if($foundInClassAll){
+                            $data['usersInClassAll']++;
+                        }
+                        if($foundElearningAll){
+                            $data['usersElearningAll']++;
+                        }
+                    }
+                }
+            }
+
+
+
+
+
+        }
+
+        // SUM Active Or Inactive
+        $data['all'] = $data['active'] + $data['inactive'];
+
+
+        return $data;
+
+    }
+
+    public function statistics1()
+    {
+        $data = [];
+
+
+        $users = User::with('statusAccount')->get();
+
+        $data['active'] = 0;
+        $data['inactive'] = 0;
+        foreach($users as $user){
+
+            if(!empty($user['statusAccount'])){
+                $completed = $user['statusAccount']['completed'];
+
+                if($completed){
+                    $data['active']++;
+                }else{
+                    $data['inactive']++;
+                }
+            }
+
+
+
+        }
+
+
+
+        $data['active'] = User::WhereHas('statusAccount', function($q) {
+            $q->where('completed', true);
+        })->count();
+
+        $data['inactive'] = User::WhereHas('statusAccount', function($q) {
+            $q->where('completed', false);
+        })->count();
+
+        $data['all'] = $data['active'] + $data['inactive'];
+
+
+        $data['usersInClass'] = User::WhereHas('events_for_user_list1', function($q) {
+            $q->wherePublished(true)->where('event_user.paid', true)->whereStatus(0)->where(function ($q1) {
+                $q1->doesntHave('delivery')->OrWhereHas('delivery', function ($q2) {
+                    return $q2->where('deliveries.id', '<>', 143);
+                });
+            });
+        })->count();
+
+
+        $data['usersElearning'] = User::WhereHas('events_for_user_list1', function($q) {
+            $q->wherePublished(true)->where('event_user.expiration', '>=',date('Y-m-d'))->where('event_user.paid', true)->whereStatus(0)->whereHas('delivery', function ($q1) {
+                return $q1->where('deliveries.id', 143);
+            });
+        })->count();
+
+        // dd($data['usersElearning']);
+
+
+
+        $data['usersInClassAll'] = User::WhereHas('events_for_user_list1', function($q) {
+            $q->where(function ($q1) {
+                $q1->doesntHave('delivery')->OrWhereHas('delivery', function ($q2) {
+                    return $q2->where('deliveries.id', '<>', 143);
+                });
+            });
+        })->count();
+        //dd($data['userInclassAll']);
+
+        $data['usersElearningAll'] = User::WhereHas('events_for_user_list1', function($q) {
+            $q->whereHas('delivery', function ($q1) {
+                return $q1->where('deliveries.id', 143);
+            });
+        })->count();
+
+
+        //$data['usersElearning']
+
+        return $data;
+
+    }
+
     /**
      * Display a listing of the users
      *
@@ -96,10 +260,13 @@ class UserController extends Controller
     {
 
         $user = Auth::user();
-
-        $data['all_users'] = $model::count();
-        $data['total_graduates'] = total_graduate();
-
+        $users = $model->select('firstname', 'lastname', 'mobile', 'email', 'id', 'job_title', 'company', 'kc_id')->with([
+            'role',
+            'image',
+            'statusAccount',
+            'events_for_user_list1:id,title,published,status',
+            'events_for_user_list1.delivery'
+            ])->get();
 
         $data['events'] = (new EventController)->fetchAllEvents();
         $data['transactions'] = (new TransactionController)->participants();
@@ -113,14 +280,17 @@ class UserController extends Controller
             $data['transactions'][$key] = group_by('event_id', $item);
         }
 
-        //dd($model->with('role', 'image','statusAccount', 'events_for_user_list')->get()[0]);
+        //dd($model->with('role', 'image','statusAccount', 'events_for_user_list1')->get()[0]);
         //dd($data['transactions']);
         //dd($model->with('role', 'image')->get()[0]);
 
         //dd($model->with('role', 'image')->get()->toArray()[0]['image']);
-        //dd($model->with('role', 'image','statusAccount', 'events_for_user_list')->get()->toArray()[10]);
+        //dd($model->with('role', 'image','statusAccount', 'events_for_user_list1')->get()->toArray()[10]);
+        $data = $data + $this->statistics($users);
+        //$data = $data + $this->statistics1();
 
-        return view('users.index', ['users' => $model->with('role', 'image','statusAccount', 'events_for_user_list')->get(), 'data' => $data]);
+
+        return view('users.index', ['users' => $users, 'data' => $data]);
     }
 
     private $rules = array(
@@ -582,7 +752,7 @@ class UserController extends Controller
         $data['all_users'] = $model::count();
         $data['total_graduates'] = total_graduate();
 
-        $data['users'] = $model->with('role', 'image','statusAccount', 'events_for_user_list','statisticGroupByEvent','events','ticket','transactionss')->get();
+        $data['users'] = $model->with('role', 'image','statusAccount', 'events_for_user_list1','statisticGroupByEvent','events','ticket','transactionss')->get();
 
         //$this->getAllTransactions($data['users']);
 
@@ -605,7 +775,7 @@ class UserController extends Controller
         //dd($model->with('role', 'image')->get()[0]);
 
         //dd($model->with('role', 'image')->get()->toArray()[0]['image']);
-        //dd($model->with('role', 'image','statusAccount', 'events_for_user_list')->get()->toArray()[10]);
+        //dd($model->with('role', 'image','statusAccount', 'events_for_user_list1')->get()->toArray()[10]);
 		dd('fsa');
         return view('users.index', ['users'=>$data['users'],'data' => $data]);
     }
@@ -690,7 +860,7 @@ class UserController extends Controller
         //dd($user);
         $user->ticket()->attach($ticket_id, ['event_id' => $event_id]);
 
-        $data['event'] = Event::with('delivery', 'ticket')->find($event_id);
+        $data['event'] = Event::with('delivery', 'ticket', 'event_info1')->find($event_id);
         //dd($data['event']['ticket']);
         foreach($data['event']->ticket as $ticket){
             //dd($ticket);
@@ -705,7 +875,7 @@ class UserController extends Controller
 
 
         }
-        $extra_month = $data['event']['expiration'];
+        $extra_month = $data['event']->getAccessInMonths();
 
         $ticket = Ticket::find($ticket_id);
 
@@ -713,7 +883,7 @@ class UserController extends Controller
 
 
 
-       if($data['event']['expiration'] != null){
+       if($extra_month != null && is_numeric($extra_month) && $extra_month != 0){
             $exp_date = date('Y-m-d', strtotime("+".$extra_month." months", strtotime('now')));
        }else{
            $exp_date = null;
@@ -940,7 +1110,8 @@ class UserController extends Controller
         $data['events'] = Event::has('ticket')->whereIn('status',[0,2,3])->get();
 
         //dd($data['events']);
-        $data['user'] = $user::with('ticket','role','events_for_user_list','image','transactions')->find($user['id']);
+        $data['user'] = User::with('ticket','role','events_for_user_list','image','transactions')->find($user['id']);
+
 
         $data['transactions'] = [];
 
@@ -955,6 +1126,7 @@ class UserController extends Controller
             $data['user']['events_for_user_list'][$key]['ticket_id'] = isset($ticket->pivot) ? $ticket->pivot->ticket_id : null;
             $data['user']['events_for_user_list'][$key]['ticket_title'] = isset($ticket['title']) ? $ticket['title'] : '';
             $data['user']['events_for_user_list'][$key]['certifications'] = [];
+
 
             if(!empty($event->certificatesByUser($user_id))){
                 $data['user']['events_for_user_list'][$key]['certifications'] = $event->certificatesByUser($user_id)->toArray();
@@ -1299,7 +1471,7 @@ class UserController extends Controller
 
         $paid = $request->paid == 'true' ? 1 : 0;
 
-        $user->events_for_user_list()->wherePivot('event_id',$request->event_id)->updateExistingPivot($request->event_id,[
+        $user->events_for_user_list1()->wherePivot('event_id',$request->event_id)->updateExistingPivot($request->event_id,[
             'paid' => $paid
         ], false);
     }
@@ -1335,11 +1507,21 @@ class UserController extends Controller
 
     public function generateConsentPdf(User $user)
     {
-        $terms = Page::find(6);
-        $terms = json_decode($terms->content, true)[3]['columns'][0]['template']['inputs'][0]['value'];
 
-        $privacy = Page::select('content')->find(4);
-        $privacy = json_decode($privacy->content, true)[3]['columns'][0]['template']['inputs'][0]['value'];
+        if(!$user->instructor){
+            $terms = Page::find(6);
+            $terms = json_decode($terms->content, true)[3]['columns'][0]['template']['inputs'][0]['value'];
+
+            $privacy = Page::select('content')->find(4);
+            $privacy = json_decode($privacy->content, true)[3]['columns'][0]['template']['inputs'][0]['value'];
+        }else{
+            $privacy = null;
+            $terms = Page::find(48);
+            $terms = json_decode($terms->content, true)[5]['columns'][0]['template']['inputs'][0]['value'];
+
+        }
+
+
 
         $pdf = PDF::loadView('users.consent_pdf', compact('user', 'terms', 'privacy'));
 

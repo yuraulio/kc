@@ -6,6 +6,11 @@
         <slot></slot>
     </div>
 
+    <!-- <div v-if="type == 'button'" class="">
+        <button @click="click()" class="btn btn-secondary">{{ label }}</button>
+
+    </div> -->
+
     <div v-if="type == 'image'" :key="keyput + 'media'" class="">
         <label v-if="label && label == 'Shareable image'" :for="keyput" class="form-label">{{ label }}</label>
         <div
@@ -31,7 +36,13 @@
             <div v-if="value" class="d-grid text-center">
 
                 <div class="image-hover">
-                    <img :src="value.url + '?i=' + (Math.random() * 100000)" alt="image" class="img-fluid rounded" :style="'width:' + width">
+                    <img
+                    :src="(value.url) + '?i=' + (Math.random() * 100000)"
+                    alt="image"
+                    class="img-fluid rounded"
+                    :style="'width:' + width"
+                    @error="setAltImg"
+                    >
                     <div class="middle">
                         <i @click="startingImage=null; $set(loadstart, (keyput + 'media'),  true)" data-bs-toggle="offcanvas" :data-bs-target="'#mediaCanvas' + keyput" class="fa fa-plus cursor-pointer" aria-hidden="true"></i>
                         <i @click="startingImage=value; $set(loadstart, (keyput + 'media'),  true)" data-bs-toggle="offcanvas" :data-bs-target="'#mediaCanvas' + keyput" class="fa fa-pencil-alt cursor-pointer" aria-hidden="true"></i>
@@ -239,6 +250,7 @@ export default {
             type: String,
             default: "Pick some",
         },
+        default_image: {}
     },
     data() {
         return {
@@ -246,15 +258,27 @@ export default {
             editorData: this.value,
             tinymce: process.env.MIX_PUSHER_TINYMCE,
             startingImage: null,
+            updatedImage: null
         };
     },
     methods: {
-        updatedmedia($event, ref) {
+        setAltImg(event) {
+
+            if(this.default_image){
+                event.target.src = this.default_image.url
+            }
+
+        },
+        updatedmedia($event,ref) {
             // $event.siblings = null;
             // $event.subfiles = null;
             this.$emit('inputed', { 'data': $event, 'key': this.keyput})
-            this.$refs[ref+'btn'].click()
-            this.$set(this.loadstart, ref,  false);
+            //this.startingImage = $event
+            // if($event.load === undefined){
+            //     this.$refs[ref+'btn'].click()
+            //     this.$set(this.loadstart, ref,  false);
+            // }
+
         },
         updatedgallery($event, ref) {
             $event.siblings = null;
@@ -303,6 +327,10 @@ export default {
                 eventHub.$emit('updateslug', editorData);
             }
         },
+        // click($event){
+        //     console.log('has clicked')
+        //     this.$emit('clicked', { 'data': $event, 'key': this.keyput})
+        // },
         limit (string = '', limit = 0) {
             return string.substring(0, limit)
         },
@@ -310,8 +338,10 @@ export default {
             this.value.splice(index, 1);
         },
         removeImage() {
+            //this.value = {}
             this.startingImage = null;
             this.editorData = null;
+            this.default_image = null;
         }
     },
     watch: {
@@ -320,7 +350,7 @@ export default {
         },
         "value": function() {
             this.editorData = this.value;
-        }
+        },
     },
     mounted() {
         if (this.value) {

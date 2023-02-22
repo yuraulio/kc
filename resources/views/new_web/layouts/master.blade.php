@@ -28,11 +28,19 @@
 
         <!-- OneTrust Cookies Consent Notice (Production CDN, knowcrunch.com, en-GB) start -->
         @if(Agent::isDesktop())
-            <script type="text/javascript">
+            {{--<script type="text/javascript">
             var _iub = _iub || [];
             _iub.csConfiguration = {"cookiePolicyInOtherWindow":true,"perPurposeConsent":true,"whitelabel":false,"lang":"en","siteId":1874776,"countryDetection":true,"gdprAppliesGlobally":false,"consentOnDocument":true,"cookiePolicyId":76147833,"cookiePolicyUrl":"https://knowcrunch.com/cookies-notice", "banner":{ "acceptButtonDisplay":true,"customizeButtonDisplay":true,"acceptButtonColor":"#c8d151","acceptButtonCaptionColor":"#010000","customizeButtonColor":"#DADADA","customizeButtonCaptionColor":"#4D4D4D","position":"float-top-center","textColor":"black","backgroundColor":"white","rejectButtonColor":"#0073CE","rejectButtonCaptionColor":"white" }};
             </script>
+            <script type="text/javascript" src="//cdn.iubenda.com/cs/iubenda_cs.js" charset="UTF-8" async></script>--}}
+
+            <script type="text/javascript">
+                var _iub = _iub || [];
+                    _iub.csConfiguration = {"askConsentAtCookiePolicyUpdate":true,"consentOnContinuedBrowsing":false,"countryDetection":true,"enableLgpd":true,"enableUspr":true,"floatingPreferencesButtonDisplay":"bottom-right","invalidateConsentWithoutLog":true,"lang":"en","lgpdAppliesGlobally":false,"perPurposeConsent":true,"siteId":2409873,"whitelabel":false,"cookiePolicyId":41154288,"cookiePolicyUrl":"https://knowcrunch.com/cookies-notice","privacyPolicyUrl":"https://knowcrunch.com/data-privacy-policy","privacyPolicyNoticeAtCollectionUrl":"https://knowcrunch.com/terms-and-conditions", "banner":{ "acceptButtonColor":"#40CE00","acceptButtonDisplay":true,"closeButtonDisplay":false,"customizeButtonDisplay":true,"explicitWithdrawal":true,"listPurposes":true,"position":"float-top-center","rejectButtonColor":"#C8CFD6","rejectButtonDisplay":true }};
+            </script>
+            <script type="text/javascript" src="//cdn.iubenda.com/cs/gpp/stub.js"></script>
             <script type="text/javascript" src="//cdn.iubenda.com/cs/iubenda_cs.js" charset="UTF-8" async></script>
+
         @endif
 
         {{-- Linkedin Code --}}

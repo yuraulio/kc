@@ -415,6 +415,22 @@ li.select2-results__option:empty {
     margin-top: 50px
 }
 
+.widget .card-body{
+    min-height: 13rem;
+}
+
+.widget-instructor .widget .card-body{
+    min-height: 9rem;
+}
+
+.widget-event .widget.card-body,
+.widget-user .widget.card-body{
+    min-height: 11rem;
+}
+.widget-dashboard .widget.card-body{
+    min-height: 12rem;
+}
+
 .none {
     display: none;
 }
@@ -512,6 +528,10 @@ li.select2-results__option:empty {
 
 .card.card-stats {
     min-height: 101px;
+}
+
+.card.card-stats .info .mt-3.mb-0.text-sm span{
+    display: inline-flex;
 }
 
 .logo-area {

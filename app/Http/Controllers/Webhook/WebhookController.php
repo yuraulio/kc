@@ -460,7 +460,8 @@ class WebhookController extends BaseWebhookController
 			$subscription->ends_at = date('Y-m-d H:i:s', $ends_at);
 			$subscription->save();
 
-			if($exp = $user->events()->wherePivot('event_id',$eventId)->first()){
+			//if($exp = $user->events()->wherePivot('event_id',$eventId)->first()){
+			if($exp = $user->events_for_user_list()->wherePivot('event_id',$eventId)->first()){
 
 				$exp = $exp->pivot->expiration;
 				$exp = strtotime($exp);
@@ -479,7 +480,9 @@ class WebhookController extends BaseWebhookController
 
             	}
 
-				$user->events()->updateExistingPivot($eventId,['expiration' => $ends_at]);
+				//$user->events()->updateExistingPivot($eventId,['expiration' => $ends_at]);
+				$user->events_for_user_list()->updateExistingPivot($eventId,['expiration' => $ends_at]);
+
 				//$user->events()->where('event_id',$eventId)->first()->pivot->expiration  = date('Y-m-d', $ends_at);
 				//$user->events()->where('event_id',$eventId)->first()->pivot->comment  = 'hello';
 				//$user->events()->where('event_id',$eventId)->first()->pivot->save();

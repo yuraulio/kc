@@ -44,7 +44,7 @@ class Transaction extends Model
 
     public function user()
     {
-        return $this->morphedByMany(User::class, 'transactionable');
+        return $this->morphedByMany(User::class, 'transactionable')->with('ticket');
     }
 
     public function event()
@@ -58,6 +58,11 @@ class Transaction extends Model
     }
 
     public function subscription()
+    {
+        return $this->morphedByMany(Sub::class, 'transactionable');
+    }
+
+    public function isSubscription()
     {
         return $this->morphedByMany(Sub::class, 'transactionable');
     }

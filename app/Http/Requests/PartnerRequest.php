@@ -28,8 +28,8 @@ class PartnerRequest extends FormRequest
                 'required', 'min:3'
             ],
             'url' => [
-                'nullable','url'
-            ],
+                'nullable', 'url'
+            ]
         ];
     }
 }

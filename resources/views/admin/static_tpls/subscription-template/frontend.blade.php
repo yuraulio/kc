@@ -130,13 +130,13 @@
                         <h3 class="form-h3 subscription">Get full access for one year</h3>
                         <ul class="subs-page-list">
                            <li>
-						   		<img class="replace-with-svg" width="20" src="{{cdn('/theme/assets/images/icons/checkmark-sqaure.svg')}}" alt=""> <span class="subs-page-span">Access to presentations</span>
+						   		<img class="replace-with-svg" width="20" src="{{cdn('/theme/assets/images/icons/checkmark-sqaure.svg')}}" alt=""> <span class="subs-page-span">Videos</span>
                            </li>
                            <li>
-						   <img class="replace-with-svg" width="20" src="{{cdn('/theme/assets/images/icons/checkmark-sqaure.svg')}}" alt=""> <span class="subs-page-span"> Access to bonus files</span>
+						   <img class="replace-with-svg" width="20" src="{{cdn('/theme/assets/images/icons/checkmark-sqaure.svg')}}" alt=""> <span class="subs-page-span"> Presentations</span>
                            </li>
                            <li>
-						   <img class="replace-with-svg" width="20" src="{{cdn('/theme/assets/images/icons/checkmark-sqaure.svg')}}" alt=""> <span class="subs-page-span"> Access to videos</span>
+						   <img class="replace-with-svg" width="20" src="{{cdn('/theme/assets/images/icons/checkmark-sqaure.svg')}}" alt=""> <span class="subs-page-span"> Bonus files</span>
                            </li>
                            <li>
 						   <img class="replace-with-svg" width="20" src="{{cdn('/theme/assets/images/icons/checkmark-sqaure.svg')}}" alt=""> <span class="subs-page-span"> Personal notes</span>

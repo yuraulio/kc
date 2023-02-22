@@ -463,30 +463,43 @@ class PagesController extends Controller
     {
         return [
             [
-                "Pages",
-                $this->pagesCount($request),
+                "PAGES CREATED",
+                $data = [
+                    'all' => $this->pagesCount($request),
+                    'published' => $this->publishedPagesCount($request),
+                    'unpublished' => $this->unpublishedPagesCount($request)
+                ],
+                'All pages created by admins.'
             ],
             [
-                "Published pages",
-                $this->publishedPagesCount($request),
-            ],
-            [
-                "Unpublished pages",
-                $this->unpublishedPagesCount($request),
-            ],
-            [
-                "Blog articles",
-                $this->articlePagesCount($request),
+                "ARTICLES CREATED",
+                $data = [
+                    'published' => $this->articlePagesCount($request),
+                    'unpublished' => $this->articleUnpublishedPagesCount($request),
+                ],
+                "All articles created by admins."
             ]
+            // [
+            //     "Published pages",
+            //     $this->publishedPagesCount($request),
+            // ],
+            // [
+            //     "Unpublished pages",
+            //     $this->unpublishedPagesCount($request),
+            // ],
+            // [
+            //     "Blog articles",
+            //     $this->articlePagesCount($request),
+            // ]
 
         ];
     }
 
-    public function pagesCount($request)
+    public function PagesCount($request)
     {
         try {
             $pages = Page::withoutGlobalScopes();
-            $pages = $this->filters($request, $pages);
+            //$pages = $this->filters($request, $pages);
             return $pages->count();
         } catch (Exception $e) {
             Log::warning("(pages widget) Failed to get pages count. " . $e->getMessage());
@@ -498,7 +511,7 @@ class PagesController extends Controller
     {
         try {
             $pages = Page::withoutGlobalScopes()->wherePublished(true);
-            $pages = $this->filters($request, $pages);
+            //$pages = $this->filters($request, $pages);
             return $pages->count();
         } catch (Exception $e) {
             Log::warning("(pages widget) Failed to get published pages count. " . $e->getMessage());
@@ -510,7 +523,7 @@ class PagesController extends Controller
     {
         try {
             $pages = Page::withoutGlobalScopes()->wherePublished(false);
-            $pages = $this->filters($request, $pages);
+            //$pages = $this->filters($request, $pages);
             return $pages->count();
         } catch (Exception $e) {
             Log::warning("(pages widget) Failed to get ubpublished pages count. " . $e->getMessage());
@@ -521,8 +534,20 @@ class PagesController extends Controller
     public function articlePagesCount($request)
     {
         try {
-            $pages = Page::withoutGlobalScopes()->whereType("Blog");
-            $pages = $this->filters($request, $pages);
+            $pages = Page::withoutGlobalScopes()->whereType("Blog")->wherePublished(true);
+            //$pages = $this->filters($request, $pages);
+            return $pages->count();
+        } catch (Exception $e) {
+            Log::warning("(pages widget) Failed to get ubpublished pages count. " . $e->getMessage());
+            return "0";
+        }
+    }
+
+    public function articleUnpublishedPagesCount($request)
+    {
+        try {
+            $pages = Page::withoutGlobalScopes()->whereType("Blog")->wherePublished(false);
+            //$pages = $this->filters($request, $pages);
             return $pages->count();
         } catch (Exception $e) {
             Log::warning("(pages widget) Failed to get ubpublished pages count. " . $e->getMessage());

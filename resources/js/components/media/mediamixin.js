@@ -3,6 +3,8 @@ import _ from "lodash";
 var mediaMixin = {
     data() {
         return {
+            tempDelete: null,
+            firstLoadedData: [],
             versions: [
                 {
                   "w": 470,
@@ -66,6 +68,7 @@ var mediaMixin = {
     methods: {
         updatedMediaImage(img) {
             this.$emit('updatedimg', img);
+
         },
         openFile(file, ref) {
             this.opImage = file;
@@ -225,6 +228,10 @@ var mediaMixin = {
             }
         },
         imageAdded($event) {
+
+            //console.log('from function imageAdded in js file')
+
+
             this.currentImage = $event;
             var formData = new FormData();
             var imagefile = $event;
@@ -235,6 +242,7 @@ var mediaMixin = {
             if (this.$refs.crpr.prevalue) {
                 formData.append('edited', this.$refs.crpr.prevalue.id);
             }
+            //console.log(this)
             formData.append('original_file', this.$refs.crpr.originalFile);
             formData.append('directory', this.move_file_to.id);
             if (imagefile) {
@@ -267,31 +275,72 @@ var mediaMixin = {
             }
         },
         imageEdit($event) {
-            var id = this.selectedFile.id;
+
+            let value = $event
             var formData = new FormData();
-            formData.append('imgname', this.$refs.crpr.imgname);
-            formData.append('alttext', this.$refs.crpr.alttext);
-            formData.append('link', this.$refs.crpr.link);
-            formData.append('jpg', this.$refs.crpr.jpg);
-            formData.append('version', this.$refs.crpr.version);
-            formData.append('parent_id', this.$refs.crpr.parrentImage.id);
-            formData.append('crop_data', JSON.stringify(this.$refs.crpr.cropBoxData));
-            formData.append('width_ratio', this.$refs.crpr.width_ratio);
-            formData.append('height_ratio', this.$refs.crpr.height_ratio);
-            formData.append('directory', this.selectedFile.folder_id);
-            formData.append('id', this.$refs.crpr.id);
+
+            //console.log('event: ', value)
+
+            // edit image version
+            if(value != null && value.imgname){
+
+                if(this.$refs.crpr.forUpdate[value.version] === undefined){
+                    return false;
+                }
+
+                //console.log('inside edit image version')
+
+                formData.append('imgname', value.imgname);
+                formData.append('alttext', value.alttext);
+                formData.append('link', value.link);
+                formData.append('jpg', value.jpg);
+                formData.append('version', value.version);
+                formData.append('parent_id', value.parent_id);
+                formData.append('crop_data', JSON.stringify(value.crop_data));
+                formData.append('width_ratio', value.width_ratio);
+                formData.append('height_ratio', value.height_ratio);
+                formData.append('directory', this.selectedFile.folder_id);
+                formData.append('id', value.id);
+
+            }else{
+
+                if(this.$refs.crpr.forUpdate[this.$refs.crpr.version] === undefined){
+                    return false;
+                }
+
+                //Create Image version
+
+                formData.append('imgname', this.$refs.crpr.imgname);
+                formData.append('alttext', this.$refs.crpr.alttext);
+                formData.append('link', this.$refs.crpr.link);
+                formData.append('jpg', this.$refs.crpr.jpg);
+                formData.append('version', this.$refs.crpr.version);
+                formData.append('parent_id', this.$refs.crpr.parrentImage.id);
+                formData.append('crop_data', JSON.stringify(this.$refs.crpr.cropBoxData));
+                formData.append('width_ratio', this.$refs.crpr.width_ratio);
+                formData.append('height_ratio', this.$refs.crpr.height_ratio);
+                formData.append('directory', this.selectedFile.folder_id);
+                formData.append('id', this.$refs.crpr.id);
+            }
+
             this.$refs.crpr.isUploading = true;
+
+
             axios.post('/api/media_manager/edit_image', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
             }).then((response) => {
                 this.$toast.success('Uploaded Successfully!');
-                this.getFiles(response.data.data.folder_id);
-                this.$refs.crpr.isUploading = false;
+
+
+                if(this.$refs.crpr !== undefined){
+                    this.$refs.crpr.isUploading = false;
+                }
+
                 this.imageKey = Math.random().toString().substr(2, 8);
                 // this.$modal.hide('edit-image-modal');
-                if (response.data.data.version == 'original') {
+                if (this.$refs.crpr && response.data.data.version == 'original') {
                     var image = response.data.data;
                     this.$refs.crpr.imgname = image.name;
                     this.$refs.crpr.alttext = image.alt_text;
@@ -300,23 +349,100 @@ var mediaMixin = {
                     this.$refs.crpr.height = image.height;
                     this.$refs.crpr.width = image.width;
                 } else {
-                    this.$refs.crpr.imgname = this.$refs.crpr.parrentImage.name;
-                    this.$refs.crpr.alttext = this.$refs.crpr.parrentImage.alttext;
-                    this.$refs.crpr.link = this.$refs.crpr.parrentImage.link;
-                    this.$refs.crpr.size = this.$refs.crpr.parrentImage.size;
-                    this.$refs.crpr.height = this.$refs.crpr.parrentImage.height;
-                    this.$refs.crpr.width = this.$refs.crpr.parrentImage.width;
+                    if(this.$refs.crpr !== undefined){
+
+                        this.$refs.crpr.imgname = this.$refs.crpr.parrentImage.name;
+                        this.$refs.crpr.alttext = this.$refs.crpr.parrentImage.alttext;
+                        this.$refs.crpr.link = this.$refs.crpr.parrentImage.link;
+                        this.$refs.crpr.size = this.$refs.crpr.parrentImage.size;
+                        this.$refs.crpr.height = this.$refs.crpr.parrentImage.height;
+                        this.$refs.crpr.width = this.$refs.crpr.parrentImage.width;
+
+                    }
                 }
-                this.$refs.crpr.jpg = false;
-                this.$refs.crpr.version = 'original';
-                this.$refs.crpr.disable();
-                this.$refs.crpr.versionData = null;
+
+                let version = null;
+                if(value != null && value.imgname){
+                    version = value.version
+                }else{
+                    version = this.$refs.crpr.version
+                }
+
+
+                if(response){
+                    this.getFiles(response.data.data.folder_id, true);
+
+                    delete this.$refs.crpr.forUpdate[version]
+
+                    this.selectedFile = response.data.data
+
+                    if(this.$parent.imageVersion && version == this.$parent.imageVersion){
+                        // this.$parent.imageVersionResponseData = response.data.data
+
+                        let baseUrl = location.protocol + '//' + location.host;
+
+
+                        if (baseUrl.includes('admin')){
+                            //this.$refs.crpr.confirmSelection(response.data.data)
+                        }
+
+
+                    }else if(this.$parent.imageVersion){
+
+                        delete this.$refs.crpr.tempVersionsForUpdate[response.data.data.version]
+
+                    }
+
+
+                }
+
+                if(this.$refs.crpr !== undefined){
+
+                    this.$refs.crpr.jpg = false;
+                    this.$refs.crpr.version = 'original';
+                    this.$refs.crpr.disable();
+                    this.$refs.crpr.versionData = null;
+
+                    if(this.$parent.imageVersion == null && this.$refs.crpr.selectedVersion != null && this.$refs.crpr.selectedVersion.version == version){
+                        this.$refs.crpr.confirmSelection(response.data.data)
+                    }else if(this.$parent.imageVersion == null && this.$refs.crpr.selectedVersion == null ){
+                        this.$refs.crpr.confirmSelection(response.data.data)
+                    }
+                }
+
+
+
+                let baseUrl = location.protocol + '//' + location.host;
+
+                if (!baseUrl.includes('admin')){
+                    if(version != null && version != 'original'){
+                        if(this.$refs.crpr){
+
+                            delete this.$refs.crpr.versionsForUpdate[version]
+
+                        }
+
+                    }
+                }
+
+
             })
             .catch((error) => {
-                console.log("edit error", error.response.data.message);
-                this.$refs.crpr.isUploading = false;
-                this.$toast.error("Failed to update. " + error.response.data.message);
+                console.log('ERROR: ', error)
+                //console.log("edit error", error.response.data.message);
+                if(this.$refs.crpr !== undefined){
+
+                    this.$refs.crpr.isUploading = false;
+                }
+
+                if(error.response !== undefined && error.response.data !== undefined){
+                    this.$toast.error("Failed to update. " + error.response.data.message);
+                }else{
+                    this.$toast.error("Failed to update. " + error);
+                }
+
             })
+        // })
         },
         addFolder() {
             this.errors = null;
@@ -426,7 +552,9 @@ var mediaMixin = {
 
             this.getFiles(folderId);
         },
-        getFiles(folderId) {
+        getFiles(folderId, from_save_btn = false) {
+            //console.log('from get files')
+
             this.errors = null;
             this.loading = true;
             axios
@@ -438,22 +566,81 @@ var mediaMixin = {
                     }
                 })
                 .then((response) => {
+
+
                     this.mediaFiles = response.data.data;
                     this.loading = false;
-                    this.updateSelectedFile();
+                    this.updateSelectedFile(from_save_btn);
+
                 })
                 .catch((error) => {
-                    console.log(error)
-                    this.errors = error.response.data.errors;
+                    //console.log('here is an error')
+
+                    if (error.response) {
+
+                        // client received an error response (5xx, 4xx)
+                        //console.log(error.response)
+                      } else if (error.request) {
+
+                        this.getFiles(folderId,from_save_btn);
+
+                        // client never received a response, or request never left
+                        //console.log('after second time call')
+                      } else {
+
+                        console.log(error)
+                        // anything else
+                      }
+                      //return false;
+                    //   if(error.response !== undefined){
+                    //     this.errors = error.response.data.errors;
+                    //   }
+
                     this.loading = false;
                 });
         },
         userSelectedFiles($event) {
-            this.selectedFile = $event;
+            let baseUrl = location.protocol + '//' + location.host;
+
+            // console.log('first load data',this.firstLoadedData)
+            // console.log(this)
+
+
+            if (!baseUrl.includes('admin') && this.withoutImage){
+                this.updatedMediaImage($event)
+            }
+
+            if(this.firstLoadedData.length == 0){
+                this.firstLoadedData = $event
+
+            }            
             this.warning = false;
-            this.$modal.show('edit-image-modal');
+
+            
+
+           
+                if (this.selectedFile && this.selectedFile.id != $event.id && !baseUrl.includes('admin')){
+
+                    this.updatedMediaImage($event)
+                    //this.$modal.show('edit-image-modal');
+                }else if(this.selectedFile == null && this.withoutImage && !baseUrl.includes('admin')){
+
+                }
+                else{
+                    //alert('not different image')
+                    this.selectedFile = $event;
+                    this.$modal.show('edit-image-modal');
+                }
+            
+            
         },
         deleteFile($event) {
+
+            // console.log('triggered function delete File')
+            // console.log($event)
+
+            this.tempDelete = $event.version
+
             var pagesText = "";
             var pages_count = $event.pages_count;
             if (pages_count) {
@@ -462,53 +649,123 @@ var mediaMixin = {
             if ($event.parrent == null) {
                 pagesText = pagesText + "This is an original image, this action will delete all its subimages that exist.";
             }
-            Swal.fire({
-                title: 'Are you sure?\n ' + pagesText,
-                text: "You won't be able to revert this! Delete file?",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Yes, delete it!',
-                showLoaderOnConfirm: true,
-                buttonsStyling: false,
-                customClass: {
-                    cancelButton: 'btn btn-soft-secondary',
-                    confirmButton: 'btn btn-soft-danger',
-                },
-                preConfirm: () => {
-                    return axios
-                        .delete('/api/media_manager/file/' + $event.id)
-                        .then((response) => {
-                            if (response.status == 200) {
-                                this.getFiles($event.folder_id);
-                            }
-                        })
-                        .catch(error => {
-                            Swal.showValidationMessage(
-                                `Request failed: ${error}`
-                            )
-                        })
-                },
-                allowOutsideClick: () => !Swal.isLoading()
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    Swal.fire(
+        
+            let baseUrl = location.protocol + '//' + location.host;
+
+
+            if (baseUrl.includes('admin'))
+            {
+                Swal.fire({
+                    title: 'Are you sure?\n ' + pagesText,
+                    text: "You won't be able to revert this! Delete file?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, delete it!',
+                    showLoaderOnConfirm: true,
+                    buttonsStyling: false,
+                    customClass: {
+                        cancelButton: 'btn btn-soft-secondary',
+                        confirmButton: 'btn btn-soft-danger',
+                    },
+                    preConfirm: () => {
+                        return axios
+                            .delete('/api/media_manager/file/' + $event.id)
+                            .then((response) => {
+                                if (response.status == 200) {
+                                    //console.log('test folder: ', $event.folder_id)
+                                    this.getFiles($event.folder_id);
+                                }
+                            })
+                            .catch(error => {
+                                Swal.showValidationMessage(
+                                    `Request failed: ${error}`
+                                )
+                            })
+                    },
+                    allowOutsideClick: () => !Swal.isLoading()
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        Swal.fire(
+                            'Deleted!',
+                            'Item has been deleted.',
+                            'success'
+                        )
+                    }
+                })
+            }else{
+
+                Swal.fire({
+                    type: 'warning',
+                    title: 'Are you sure?\n ' + pagesText,
+                    text: "You won't be able to revert this! Delete file?",
+                    showCancelButton: true,
+                    confirmButtonColor: '#f1556c',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: 'Yes, delete it!',
+                    preConfirm: () => {
+                        return axios
+                            .delete('/api/media_manager/file/' + $event.id)
+                            .then((response) => {
+                                if (response.status == 200) {
+                                    //console.log('test folder: ', $event.folder_id)
+
+                                    if(this.imageVersion != null && this.imageVersion == $event.version){
+                                        this.getFiles($event.folder_id, true);
+                                    }else if(this.imageVersion != null && this.imageVersion != $event.version){
+                                        this.getFiles($event.folder_id);
+                                    }else{
+                                        this.getFiles($event.folder_id, true);
+                                    }
+                                }
+                            })
+                            .catch(error => {
+                                Swal.showValidationMessage(
+                                    `Request failed: ${error}`
+                                )
+                            })
+                    },
+                  }).then((result) => {
+                    if (result.isConfirmed) {
+                      Swal.fire(
                         'Deleted!',
-                        'Item has been deleted.',
+                        'Your file has been deleted.',
                         'success'
-                    )
-                }
-            })
+                      )
+                    }
+                  })
+            }
+
         },
-        updateSelectedFile() {
+        updateSelectedFile(from_save_btn = false) {
+
             if (this.selectedFile) {
+
                 var oldFile = this.selectedFile;
+
+                let versionImages = null
+                versionImages = oldFile.subfiles
+                let versionImageForUpdateWindow = null;
+
+
+                if(this.selectedFile.parrent == null){
+                    oldFile = this.selectedFile;
+                }else{
+                    oldFile = this.selectedFile.parrent;
+                }
+
                 var index = this.mediaFiles.findIndex(function(file) {
                     return file.id == oldFile.id;
                 });
+
                 if (this.mediaFiles[index]) {
                     this.selectedFile = this.mediaFiles[index];
                     setTimeout(() => {
-                        this.$refs.crpr.setupPrevalue();
+                        if(from_save_btn){
+                            this.$refs.crpr.setupPrevalue();
+                        }else{
+                            this.$refs.crpr.setupPrevalue(true);
+                        }
+
                     }, 1000);
                 }
             }

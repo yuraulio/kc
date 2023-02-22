@@ -6,7 +6,7 @@
 
     <div class="col-md-12">
 
-        <div class="card" >
+        {{--<div class="card" >
 
             <div class="card-header">
 
@@ -18,7 +18,7 @@
 
             </div>
 
-        </div>
+        </div>--}}
 
         <div class = "row border-bot">
 
@@ -26,15 +26,16 @@
 
 
 
-                    <div class="col-md-6 chart">
-                        <!-- Chart wrapper -->
-                        <canvas id="chart-pie" style="height: 370px; width: 100%;" class="chart-canvas"></canvas>
-                    </div>
+            <div class="col-md-6 chart">
+                <!-- Chart wrapper -->
+                <canvas id="chart-pie" style="height: 370px; width: 100%;" class="chart-canvas"></canvas>
+            </div>
 
 
 
 
-            <div class="col-md-6 success-fail-text @if($success) pass @else fail @endif">
+            <div class="col-md-6 success-fail-text">
+                <h2 style="font-weight:700">Thank you for taking your exam with us.<br>Here are your results.</h2>
                 <?php
 
                     if (isset($_GET['s'])) {
@@ -51,39 +52,128 @@
                     }
                 ?>
 
-            <p> <span class="score"> Score :</span> {{ $score }}%</p>
+                {{-- <p> <span class="score"> Score :</span> {{ $score }}%</p> --}}
 
-            @if(isset($_GET['t']))
-                {!! $endOfTime !!}
-            @endif
+                {{--@if(isset($_GET['t']))
+                    {!! $endOfTime !!}
+                @endif--}}
             </div>
 
-            </div>
+            <?php
+            $certiTitle = preg_replace( "/\r|\n/", " ", $certificate->certificate_title );
+            if(strpos($certificate->certificate_title, '</p><p>')){
+                $certiTitle = substr_replace($certificate->certificate_title, ' ', strpos($certificate->certificate_title, '</p>'), 0);
+            }else{
+                $certiTitle = $certificate->certificate_title;
+            }
 
-        <div class="action">
-            <button class="btn" type="button"  onclick="closee()" id ="closee"> close </button>
+            $certiTitle = urlencode(htmlspecialchars_decode(strip_tags($certiTitle),ENT_QUOTES));
+
+            $certiTitle = str_replace('+','_', $certiTitle);
+
+
+/*
+                $expirationMonth = '';
+                $expirationYear = '';
+                $certUrl = trim(url('/') . '/mycertificate/' . base64_encode(Auth::user()->email."--".$certificate->id));
+                if($certificate->expiration_date){
+                $expirationMonth = date('m',$certificate->expiration_date);
+                $expirationYear = date('Y',$certificate->expiration_date);
+                }
+
+                $certiTitle = preg_replace( "/\r|\n/", " ", $certificate->certificate_title );
+
+                if(strpos($certificate->certificate_title, '</p><p>')){
+                    $certiTitle = substr_replace($certificate->certificate_title, ' ', strpos($certificate->certificate_title, '</p>'), 0);
+                }else{
+                    $certiTitle = $certificate->certificate_title;
+                }
+
+                $certiTitle = urlencode(htmlspecialchars_decode(strip_tags($certiTitle),ENT_QUOTES));
+
+                */
+
+
+        ?>
+            {{--<div class="col-md-6 offset-md-6 share-wrapper">
+                <p>Share my results:</p>
+                <div>
+                    <a class="facebook-post-cert" data-certTitle="{{$certiTitle}}" data-certid="{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" title="Add this certification to your Facebook profile" href="javascript:void(0)">
+                        <img class="linkdein-image-add" src="{{cdn('theme/assets/images/icons/social/events/Facebook.svg')}}" alt="Facebook Add to Profile button">
+                    </a>
+                    <a class="twitter-post-cert" data-certTitle="{{$certiTitle}}" data-certid="{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" title="Add this certification to your Twitter profile" href="javascript:void(0)">
+                        <img class="linkdein-image-add" src="{{cdn('theme/assets/images/icons/social/events/Twitter.svg')}}" alt="Twitter Add to Profile button">
+                    </a>
+                    <a type="button" class="linkedin-post cert-post" data-certTitle="{{$certiTitle}}" data-certid="{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}">
+                        <img class="linkdein-image-add" src="{{cdn('theme/assets/images/icons/social/events/Linkedin.svg')}}" alt="LinkedIn Add to Profile button">
+                    </a>
+                </div>
+            </div>--}}
+
+            </div>
             @if($showAnswers)
-            <button class="btn" type="button" onclick="viewResults()" id="view-results"> view results </button>
-            <button class="btn" type="button" onclick="hideResults()" id="hide-results"> hide results </button>
+            <div class="row action-wrapper">
+                <div class="col-sm-12 col-md-6 col-lg-6">
+                    <h2 class="text-sm-center text-md-left text-lg-left" style="font-weight:700">Your answers summary</h2>
+                </div>
+
+                <div class="col-sm-12 col-md-6 col-lg-6 text-sm-center text-md-right text-lg-right">
+
+                    <button class="btn button-quaternary" type="button" onclick="toggleResults()" id="toggle-results"> SHOW/HIDE ANSWERS SUMMARY </button>
+
+                </div>
+            </div>
             @endif
 
-        </div>
+
+
 
         <div class="row ">
             @if($showAnswers)
-            <div id="answers">
+            <div class="col-12" id="answers">
 
                     @foreach($answers as $key => $answer)
                     <div class="col-md-12">
-                        <h3><div class="resulttitle">({{$key+1}}). {!! $answer['question'] !!}</div></h3>
-                        @if($indicate_crt_incrt_answers)
-                            <p class="result_answer {{$answer['classname']}}"> Your Answer :{!! $answer['given_answer'] !!} </p>
-                        @endif
+                        <div class="row resulttitle">
+                            <div class="col-1">
+                                <span>{{$key+1}}</span>
+                            </div>
+                            <div class="col-11 question-title">
+                                <h4>{!! $answer['question'] !!}</h4>
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-sm-12 col-md-3 col-lg-3 desc-answer">
+                                            <p>Correct Answer:</p>
+                                        </div>
+                                        <div class="col-sm-12 col-md-9 col-lg-9 desc-question">
+                                            @if($displayCorrectAnswer)
+                                                <p class="result_answer">{!! $answer['correct_answer'] !!}</p>
+                                            @endif
+                                        </div>
 
-                        @if($displayCorrectAnswer)
-                            <p class="result_answer"> Correct Answer : {!! $answer['correct_answer'] !!}</p>
-                        @endif
+                                        <div class="col-sm-12 col-md-3 col-lg-3 desc-answer">
+                                            <p>Your Answer:</p>
+                                        </div>
+                                        <div class="col-sm-12 col-md-9 col-lg-9 desc-question">
+                                            @if($indicate_crt_incrt_answers)
+                                                <p class="result_answer {{$answer['classname']}}"> {!! $answer['given_answer'] !!} </p>
+                                            @endif
+                                        </div>
+
+
+
+                                    </div>
+                                </div>
+
+
+
+
+                            </div>
+                        </div>
+
+
                     </div>
+                    <hr>
                     @endforeach
 
                 </div>
@@ -103,6 +193,7 @@
 <script src="{{ asset('argon') }}/vendor/chart.js/dist/Chart.min.js"></script>
 <script src="{{ asset('argon') }}/vendor/chart.js/dist/Chart.extension.js"></script>
 <script>
+    let chartImage = null;
 
     function pieChart(){
 
@@ -194,39 +285,33 @@
         var score = <?php echo $score;?>
 
 
-        @if($success)
+        const data = {
 
-            const data = {
+            labels: ['correct','incorrect'],
+            datasets: [{
+                data: [score.toFixed(2),(100-score).toFixed(2)],
+                backgroundColor: [
+                    'green',
+                    'red',
 
-                labels: ['correct','incorrect'],
-                datasets: [{
-                    data: [score,100-score],
-                    backgroundColor: [
-                      'green',
-                      'grey',
+                ],
+                borderWidth:5,
 
-                    ],
-                    borderWidth:5,
+            }]
+        };
 
-                }]
-            };
+        const plugin = {
+            id: 'customCanvasBackgroundColor',
+            beforeDraw: (chart, args, options) => {
+                const {ctx} = chart;
+                ctx.save();
+                ctx.globalCompositeOperation = 'destination-over';
+                ctx.fillStyle = options.color || '#99ffff';
+                ctx.fillRect(0, 0, chart.width, chart.height);
+                ctx.restore();
+            }
+        };
 
-
-        @else
-            const data = {
-                labels: ['correct','incorrect'],
-                    datasets: [{
-                    data: [score,100-score],
-                    backgroundColor: [
-                      'red',
-                      'grey',
-
-                    ],
-                    borderWidth:5,
-
-                }]
-            };
-        @endif
 
         var $this = document.getElementById("chart-pie").getContext("2d");
         //var $this = $("#chart-pie")
@@ -234,6 +319,11 @@
             type: 'doughnut',
             data,
             options: {
+                plugins: {
+                    customCanvasBackgroundColor: {
+                        color: 'white',
+                    }
+                },
                 elements: {
                   center: {
                     text: score+"%",
@@ -243,13 +333,148 @@
                     minFontSize: 25, // Default is 20 (in px), set to false and text will not wrap.
                     lineHeight: 25 // Default is 25 (in px), used for when text wraps
                   }
+                },
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        padding: 30,
+                        boxWidth: 10
+                    }
+                },
+                animation: {
+                    onComplete: function() {
+                        chartImage = chart.toBase64Image();
+
+
+                        // var a = document.createElement('a');
+                        // a.href = chartImage;
+                        // a.download = 'my_file_name.png';
+
+                        // // Trigger the download
+                        // a.click();
+                    }
                 }
-            }
+            },
+            plugins: [plugin],
         });
+
+
 
     }
 
     setTimeout("pieChart()", 1000);
+
+    $(document).on('click', '.facebook-post-cert', function() {
+      var getUrl = window.location;
+      var baseUrl = getUrl .protocol + "//" + getUrl.host;
+      var pathname = getUrl.pathname
+
+      var certificateId = $(this).attr('data-certid');
+      var certificateTitle = $(this).attr('data-certTitle');
+
+
+      $.ajax({
+            headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+          type: 'POST',
+          url: "/mycertificate/save-success-chart",
+          data:{
+                image: chartImage,
+                certificate_id: certificateId
+            },
+
+
+          success: function(data) {
+            url = data.path
+            url = url.replace('\\','/')
+
+            if(data){
+                var fbpopup = window.open(`http://www.facebook.com/sharer.php?u=${decodeURI(baseUrl)}/${decodeURI(url)}/${decodeURI(certificateTitle)}`, "pop", "width=600, height=400, scrollbars=no");
+                return false;
+            }
+
+          }
+      });
+   })
+
+
+    $(document).on('click', '.linkedin-post', function() {
+
+        var getUrl = window.location;
+        var baseUrl = getUrl .protocol + "//" + getUrl.host;
+        var pathname = getUrl.pathname
+        var certificateId = $(this).attr('data-certid');
+        var exam = pathname.split("/").pop();
+        var certificateTitle = $(this).attr('data-certTitle');
+
+         $.ajax({
+         headers: {
+                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+         },
+           type: 'POST',
+           url: "/mycertificate/save-success-chart",
+           data:{
+                image: chartImage,
+                certificate_id: certificateId,
+                exam: exam
+            },
+            success: function(data) {
+
+                let path = data.path
+                let certiUrl = path.replace('\\','/')
+                let url = encodeURIComponent(baseUrl+'/'+certiUrl+'/'+certificateTitle);
+
+                if(data){
+                    //<a href="https://www.linkedin.com/shareArticle?mini=true&url=https%3A%2F%2Fstevenwestmoreland.com%2F2018%2F07%2Fcreating-social-sharing-links-without-javascript.html&title=Creating+social+sharing+links+without+third-party+JavaScript&summary=How+to+create+social+sharing+links+for+your+website+without+having+to+load+third-party+JavaScript.&source=stevenwestmoreland.com" rel="noopener" target="_blank">Share on LinkedIn</a>
+                    var fbpopup = window.open(`https://www.linkedin.com/shareArticle?mini=true&url=${url}`, "pop", "width=600, height=400, scrollbars=no");
+                    return false;
+
+
+
+                    // var fbpopup = window.open(`https://www.linkedin.com/profile/add?startTask=${certiTitle}&name=${certiTitle}&organizationId=3152129&issueYear=${certiIssueYear}
+                    // &issueMonth=${certiIssueMonth}&expirationYear=${certiExpYear}&expirationMonth=${certiExpMonth}&certUrl=${baseUrl+'/'+certiUrl+'/'+certificateTitle}&certId=${certiCredential}`, "pop", "width=600, height=400, scrollbars=no");
+                    // return false;
+                }
+            }
+        });
+
+    })
+
+
+   $(document).on('click', '.twitter-post-cert', function() {
+      var getUrl = window.location;
+      var baseUrl = getUrl .protocol + "//" + getUrl.host;
+      var pathname = getUrl.pathname
+
+      var certificateId = $(this).attr('data-certid');
+      var certificateTitle = $(this).attr('data-certTitle');
+
+      certificateTitle = certificateTitle.replace('+','_')
+
+      $.ajax({
+        headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+          type: 'POST',
+          url: "/mycertificate/save-success-chart",
+          data:{image: chartImage,certificate_id: certificateId},
+          success: function(data) {
+
+            url = data.path
+            url = url.replace('\\','/')
+
+
+            if(data){
+                var fbpopup = window.open(`http://twitter.com/share?url=${decodeURI(baseUrl)}/${decodeURI(url)}/${certificateTitle}&title=I just completed my exams at Knowcrunch. Join Knowcrunch’s community:http://bit.ly/3iG2q9D`, "pop", "width=600, height=400, scrollbars=no");
+                return false;
+            }
+
+          }
+      });
+   })
+
+
 
 </script>
 
@@ -264,25 +489,28 @@
 
     }
     @if($showAnswers)
-        function viewResults(){
-
-            document.getElementById("answers").style.display = "block";;
-            document.getElementById("hide-results").style.display = "inline";;
-            document.getElementById("view-results").style.display = "none";;
-
-            //$("#answers").css({"display": "block"});
-
+        function toggleResults(){
+            $('#answers').toggle();
         }
+        // function viewResults(){
 
-        function hideResults(){
+        //     document.getElementById("answers").style.display = "block";;
+        //     document.getElementById("hide-results").style.display = "inline";;
+        //     document.getElementById("view-results").style.display = "none";;
 
-            document.getElementById("answers").style.display = "none";;
-            document.getElementById("hide-results").style.display = "none";;
-            document.getElementById("view-results").style.display = "inline";;
+        //     //$("#answers").css({"display": "block"});
 
-            //$("#answers").css({"display": "block"});
+        // }
 
-        }
+        // function hideResults(){
+
+        //     document.getElementById("answers").style.display = "none";;
+        //     document.getElementById("hide-results").style.display = "none";;
+        //     document.getElementById("view-results").style.display = "inline";;
+
+        //     //$("#answers").css({"display": "block"});
+
+        // }
     @endif
 </script>
 @stop

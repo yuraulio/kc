@@ -79,9 +79,13 @@
                   </button>
                   <a tabindex="0" href="/myaccount" title="Back to my courses">
                   <img
+                     loading="lazy"
                      id="logo"
                      src="/theme/assets/img/new/logo-knowcrunch-seminars.svg"
                      alt="knowcruch logo"
+                     title="knowcruch logo"
+                     width="120"
+                     height="40"
                      /></a>
 
                </header>
@@ -96,7 +100,7 @@
                         placeholder="SEARCH"
                         name="search"
                         />
-                     <img id="jsSearchButton" src="theme/assets/img/new/search-icon.svg" alt="search" />
+                     <img loading="lazy" id="jsSearchButton" src="theme/assets/img/new/search-icon.svg" width="25" height="25" alt="search" title="Search" />
                   </form>
                </div>
                <!-- ./searchbar-wrapper -->
@@ -149,19 +153,27 @@
 
                                  </span>
                                  @if($topic['topic_seen'])
-                                    <img class="topic-progress" src="{{cdn('/theme/assets/img/new/completed_lesson_icon.svg')}}">
+                                    <img loading="lazy" class="topic-progress" src="{{cdn('/theme/assets/img/new/completed_lesson_icon.svg')}}" title="completed_lesson_icon" alt="completed_lesson_icon">
                                  @endif
                               </div>
                               <!-- ./topic-info -->
                               <img
+                                 loading="lazy"
                                  class="topic-open jsTopicOpen"
                                  src="theme/assets/img/new/arrow-down.svg"
                                  alt="open topic"
+                                 width="32"
+                                 height="32"
+                                 title="open topic"
                                  />
                               <img
+                                 loading="lazy"
                                  class="topic-close jsTopicClose"
                                  src="theme/assets/img/new/arrow-up.svg"
                                  alt="close topic"
+                                 width="32"
+                                 height="32"
+                                 title="clos topic"
                                  />
                            </a>
                            <?php
@@ -176,7 +188,7 @@
 
 
 
-                              ?>
+                              ?>{{--dd($video_seen)--}}
                            <!-- ./topic-header -->
                            <ul class="lessons-list">
 
@@ -201,8 +213,18 @@
                                   }
 
                                 ?>
-                              <li class="lesson {{$vimeoVideo[1]}}" data-completed="{{$video_seen[$vimeoVideo[1]]['seen']}}" data-link="{{$lesson['links']}}" data-note="{{$notesss[$vimeoVideo[1]]}}" id="{{$frame1}}">
-                                 <a class="" href="javascript:void(0)" onclick="play_video('{{$path}}','{{$frame1}}','{video{{$lesson['id']}}}', '{{$lesson['id']}}')" tabindex="0">
+
+                              <li class="lesson {{$vimeoVideo[1]}}" data-completed="{{isset($video_seen[$vimeoVideo[1]]) ? $video_seen[$vimeoVideo[1]]['seen'] : 0}}" data-link="{{$lesson['links']}}" data-note="{{$notesss[$vimeoVideo[1]]}}" id="{{$frame1}}">
+
+                                <a class="" href="javascript:void(0)" onclick="play_video('{{$path}}','{{$frame1}}','{video{{$lesson['id']}}}', '{{$lesson['id']}}')" tabindex="0">
+                                    <?php
+                                    if($video_seen[$vimeoVideo[1]]['is_new'] == 1)
+                                    {
+                                        echo '<div class="newLesson notification-lesson"><img src="/theme/assets/images/notification-dot.gif"></img></div>';
+
+
+                                        }
+                                    ?>
                                     <img
                                        class="lesson-progress"
                                        src="
@@ -230,13 +252,19 @@
                                     </div>
                                     <!-- ./lesson-info -->
                                     <div class="lesson-teacher-wrapper">
-                                       <?php $instructor = $topics['instructors'][$lesson['instructor_id']][0];?>
+                                       <?php
+                                        $instructor = $topics['instructors'][$lesson['instructor_id']][0];
+                                        $imageDetails = get_image_version_details('instructors-small');
+                                       ?>
                                        <img
+                                          loading="lazy"
                                           class="lesson-teacher"
                                           src="{{cdn(get_image($instructor['mediable'],'instructors-small'))}}"
                                           alt="{{$instructor['title']}} {{$instructor['subtitle']}}"
                                           title="{{$instructor['title']}} {{$instructor['subtitle']}}"
                                           data-slug="{{$instructor['slugable']['slug']}}"
+                                          width="{{ $imageDetails['w'] }}"
+                                          height="{{ $imageDetails['h'] }}"
                                           />
                                     </div>
                                     <!-- ./lesson-teacher-wrapper -->
@@ -273,10 +301,13 @@
                   --}}
 
                   <img
+                     loading="lazy"
                      id="second-logo"
                      src="/theme/assets/img/new/logo-knowcrunch-seminars.svg"
                      alt="knowcruch logo"
                      title="Back to my courses"
+                     width="120"
+                     height="40"
                      />
 
                   <h1 class="lesson-header-title">
@@ -339,7 +370,7 @@
                            class="tab-button resources-button jsOpenResourcesTab active"
                            >
                            <div tabindex="-1" class="inner-tab-button">
-                              <img src="theme/assets/img/new/resources-icon.svg" alt="resources" />
+                              <img loading="lazy" src="theme/assets/img/new/resources-icon.svg" alt="resources" width="27" height="27" title="resources" />
                               <span>Resources</span>
                            </div>
                         </a>
@@ -350,7 +381,7 @@
                            class="tab-button notes-button jsOpenNotesTab"
                            >
                            <div tabindex="-1" class="inner-tab-button">
-                              <img src="theme/assets/img/new/notes-icon.svg" alt="notes" />
+                              <img loading="lazy" src="theme/assets/img/new/notes-icon.svg" alt="notes" width="27" height="27" title="notes" />
                               <span>Notes</span>
                            </div>
                         </a>
@@ -365,7 +396,7 @@
                            class="change-lesson-button previous-video-button"
                            >
                            <div tabindex="-1" class="inner-change-lesson-button">
-                              <img src="theme/assets/img/new/previous_video_icon.svg" alt="previous video" />
+                              <img loading="lazy" src="theme/assets/img/new/previous_video_icon.svg" alt="previous video" width="40" height="40" title="previous video"/>
                               <span>Previous video</span>
                            </div>
                         </a>
@@ -378,7 +409,7 @@
                            >
                            <div tabindex="-1" class="inner-change-lesson-button">
                               <span>Next video</span>
-                              <img src="theme/assets/img/new/next_video_icon.svg" alt="next video" />
+                              <img loading="lazy" src="theme/assets/img/new/next_video_icon.svg" alt="next video" width="40" height="40" title="next video"/>
                            </div>
                         </a>
                         <!-- ./next-video-button -->
@@ -478,8 +509,12 @@
                                             @if($folderIsSelected)
                                                 <li id="{{$folder['dirname']}}" data-folder-id="{{$topic_name}}" class="resource hidden">
                                                     <a class="download-file getdropboxlink"  data-dirname="{{ $file['dirname'] }}" data-filename="{{ $file['filename'] }}" href="javascript:void(0)" ><img
+                                                        loading="lazy"
                                                         src="/theme/assets/images/icons/Access-Files.svg"
-                                                        alt="download resource" />{{ $file['filename'] }}</a
+                                                        alt="download resource"
+                                                        width="20"
+                                                        height="20"
+                                                        title="download resource" />{{ $file['filename'] }}</a
                                                         >
                                                     <span class="last-modified">Last modified:  {{$file['last_mod']}}</span>
                                                 </li>
@@ -488,8 +523,12 @@
                                                     @if($file['dirname'] == $selectedFile)
                                                         <li id="{{$folder['dirname']}}" data-folder-id="{{$topic_name}}" class="resource hidden">
                                                             <a class="download-file getdropboxlink"  data-dirname="{{ $file['dirname'] }}" data-filename="{{ $file['filename'] }}" href="javascript:void(0)" ><img
+                                                                loading="lazy"
                                                                 src="/theme/assets/images/icons/Access-Files.svg"
-                                                                alt="download resource" />{{ $file['filename'] }}</a
+                                                                alt="download resource"
+                                                                width="20"
+                                                                height="20"
+                                                                title="download resource" />{{ $file['filename'] }}</a
                                                                 >
                                                             <span class="last-modified">Last modified:  {{$file['last_mod']}}</span>
                                                         </li>
@@ -500,7 +539,6 @@
                                     @endforeach
                                  @endforeach
                                  @endif
-
                                  @if(isset($selectedFiles))
                                  @if(isset($files_bonus) && count($files_bonus) > 0 && isset($files) && count($files) > 0)
 
@@ -531,8 +569,12 @@
                                                     @if($folderIsSelected)
                                                         <li id="{{$folder_bonus['dirname']}}" data-folder-id="{{$topicNames[$folder_bonus['parent']]}}" class="resource bonus-files hidden">
                                                             <a class="download-file getdropboxlink"  data-dirname="{{ $file_bonus['dirname'] }}" data-filename="{{ $file_bonus['filename'] }}" href="javascript:void(0)" ><img
+                                                                loading="lazy"
                                                                 src="/theme/assets/images/icons/Access-Files.svg"
-                                                                alt="download resource" />{{ $file_bonus['filename'] }}</a>
+                                                                alt="download resource"
+                                                                width="20"
+                                                                height="20"
+                                                                title="download resource" />{{ $file_bonus['filename'] }}</a>
                                                             <span class="last-modified">Last modified:  {{$file_bonus['last_mod']}}</span>
                                                         </li>
                                                     @else
@@ -543,8 +585,12 @@
 
                                                                 <li id="{{$folder_bonus['dirname']}}" data-folder-id="{{$topicNames[$folder_bonus['parent']]}}" class="resource bonus-files hidden">
                                                                     <a class="download-file getdropboxlink"  data-dirname="{{ $file_bonus['dirname'] }}" data-filename="{{ $file_bonus['filename'] }}" href="javascript:void(0)" ><img
+                                                                        loading="lazy"
                                                                         src="/theme/assets/images/icons/Access-Files.svg"
-                                                                        alt="download resource" />{{ $file_bonus['filename'] }}</a>
+                                                                        alt="download resource"
+                                                                        width="20"
+                                                                        height="20"
+                                                                        title="download resource" />{{ $file_bonus['filename'] }}</a>
                                                                     <span class="last-modified">Last modified:  {{$file_bonus['last_mod']}}</span>
                                                                 </li>
                                                             @endif
@@ -590,7 +636,7 @@
                                  class="tab-button save-button jsOpenNotesTab"
                                  >
                                  <div tabindex="-1" style="text-align: end;" class="inner-tab-button">
-                                    <img src="theme/assets/img/new/floppy-save-new.svg" width="30" height="20" alt="notes" />
+                                    <img loading="lazy" src="theme/assets/img/new/floppy-save-new.svg" width="30" height="20" alt="notes" title="notes"/>
                                     <!-- <span>Notes</span> -->
                                  </div>
                               </a>
@@ -775,6 +821,8 @@
 
           function tabclick(videos,event,seen,statisticId,frame,notes,progress){
 
+
+
             $('.progress-bar').css('width', progress + '%')
 
                notes = JSON.parse(notes)
@@ -860,6 +908,7 @@
              if(seen != -1){
 
                 if(tabWatching != false){
+                    $('.isWatching').removeClass('isWatching')
                    document.getElementById(tabWatching).classList.remove('isWatching')
                 }
 
@@ -934,6 +983,9 @@
                    $('.status').addClass('saveDone');
 
 
+                   setTimeout(() => {
+                        checkIsNewVideo(videoId)
+                    }, "5000")
 
 
 
@@ -984,6 +1036,7 @@
 
                    if(playVi){
                       playVi = false;
+                      videos[videoId]['is_new'] = 0
                       videos[videoId]['stop_time'] = e['seconds'];
                       videos[videoId]['percentMinutes'] = e['percent'];
 
@@ -1043,6 +1096,7 @@
 
                          videos[videoId]['stop_time'] = e['seconds'];
                          videos[videoId]['percentMinutes'] = e['percent'];
+                         videos[videoId]['is_new'] = 0
                          videos[videoId]['seen'] = 1;
                          $('.isWatching').find('.lesson-progress').attr('src','/theme/assets/img/new/completed_lesson_icon.svg')
 
@@ -1091,14 +1145,78 @@
           var prevId = 0;
           let array = [];
 
+          function current_open_topic(){
+
+            let topicId = $('.isWatching').parent().parent().data('count')
+            //alert(topicId)
+
+            let watchingTopic = $('.isWatching').closest('.topic')[0]
+            watchingTopic = $(watchingTopic).find('.topic-info_title')[0]
+            let topicTitle = $(watchingTopic).data('topic-slug');
+
+            let last = prev_topicId[prev_topicId.length - 1]
+
+            if(topicTitle != last){
+            $('*[data-folder-id='+last+']').addClass('hidden')
+
+            }
+
+            $('*[data-folder-id='+topicTitle+']').removeClass('hidden')
+
+            prev_topicId.push(topicTitle)
+            $('.open').children('.lessons-list').css('display','block')
+          }
+
+          // is_new video is lesson has update with new link video
+          function checkIsNewVideo(elem){
+
+            elem = $('.'+elem)[0]
+            let elemHasNew = $(elem).find('.newLesson')
+
+            if(elemHasNew.length != 0){
+
+                elemHasNew = elemHasNew[0];
+                elemHasNew.remove()
+            }
+
+            let topic = $(elem).parent();
+            //console.log('curr: ', topic)
+            let lessons = $(topic).find('li');
+
+            let findHasNewLesson = false;
+            $.each(lessons, function(index, value) {
+                if($(value).find('.newLesson').length != 0){
+                    findHasNewLesson = true;
+                    return false;
+                }
+
+            })
+
+            if(!findHasNewLesson){
+                //console.log('TOPIC: ', topic)
+                topic = topic.parent()
+                let newLessonElem = $(topic).find('.newLesson')
+                if(newLessonElem.length != 0){
+
+                    newLessonElem.remove();
+                }
+
+            }
+
+            //console.log(lesson)
+          }
+
           function play_video(video,playingVideo,vk,lesson){
-              video = video + '?title=false'
 
-             if(previousVideo !==false){
+            video = video + '?title=false'
 
-                document.getElementById(previousVideo).classList.remove('isWatching')
+            if(previousVideo !==false){
 
-             }
+            $('.isWatching').removeClass('isWatching')
+
+            document.getElementById(previousVideo).classList.remove('isWatching')
+
+            }
 
 
 
@@ -1124,27 +1242,9 @@
 
              this.videoPlayers[frame] = new Vimeo.Player(vimeoID);
 
-             let topicId = $('.isWatching').parent().parent().data('count')
-                //alert(topicId)
-                let topicTitle = $('.topic.open .topic-info_title').data('topic-slug');
 
 
-                let last = prev_topicId[prev_topicId.length - 1]
-
-
-
-
-                 if(topicTitle != last){
-                   $('*[data-folder-id='+last+']').addClass('hidden')
-
-                 }
-
-                 $('*[data-folder-id='+topicTitle+']').removeClass('hidden')
-
-               prev_topicId.push(topicTitle)
-               $('.open').children('.lessons-list').css('display','block')
-
-
+             current_open_topic()
 
              videoPlayers[frame].loadVideo(video).then(function(id) {
 
@@ -1155,14 +1255,14 @@
                 $.each(video_link,function(key, value) {
 
 
-                //let strArray = e.split("|")
-                 $('#links').append( `<li class="resource linkitem">
-                                         <a target="_blank" href="${value.link}">
-                                           <img
-                                             src="theme/assets/img/new/link.svg"
-                                             alt="external resource link" />${value.name}</a>
-                                       </li>`
-                                     )
+                    //let strArray = e.split("|")
+                    $('#links').append( `<li class="resource linkitem">
+                                            <a target="_blank" href="${value.link}">
+                                            <img
+                                                src="theme/assets/img/new/link.svg"
+                                                alt="external resource link" />${value.name}</a>
+                                        </li>`
+                                        )
 
                 });
                 //viewDownloads()
@@ -1194,6 +1294,8 @@
                 this.videoPlayers[this.frame].setCurrentTime(videos[id]['stop_time'])
                 this.videoPlayers[this.frame].setLoop(false)
 
+                checkIsNewVideo(this.videoId)
+
                 array.push(id)
 
                  let prev_vid_id = array[array.length - 2]
@@ -1201,26 +1303,6 @@
 
                 $('.isWatching').find('a').addClass('current-lesson')
 
-
-                let topicId = $('.isWatching').parent().parent().data('count')
-                let topicTitle = $('.topic.open .topic-info_title').data('topic-slug');
-
-
-
-
-               let last = prev_topicId[prev_topicId.length - 1]
-
-
-
-                 if(topicTitle != last){
-                   $('*[data-folder-id='+last+']').addClass('hidden')
-
-                 }
-
-                 $('*[data-folder-id='+topicTitle+']').removeClass('hidden')
-
-               prev_topicId.push(topicTitle)
-               $('.open').children('.lessons-list').css('display','block')
 
              }).catch(function(error) {
                 switch (error.name) {
@@ -1529,7 +1611,7 @@
             })
 
             $(window).on('load', function() {
-               
+
               setTimeout( function(){
                 //scrollIsWatchingClass()
               var container = $('.sidebar-wrapper'),
@@ -1596,6 +1678,31 @@ $('#notes').on('focusin', function() {
     .on('focusout', function(e) {
       noteFocus = false;
     });
+
+</script>
+
+<script>
+     $(document).ready(function() {
+        let topics = $('.topics-list').find('.topic')
+
+        let hasNewLesson = []
+        $.each(topics, function(index, value) {
+            let lessons_list = $(value).find('.lessons-list')[0]
+
+            hasNewLesson = $(lessons_list).find('.newLesson');
+
+            if(hasNewLesson.length != 0){
+
+                let a = $(value).find('.topic-info')[0]
+
+                $(a).before('<div class="newLesson notification-topic"><img src="/theme/assets/images/notification-dot.gif"></img></div>')
+            }
+            //return false;
+            // $.each(lessons, function(index1, lesson) {
+            //     let hasNewLesson = $(lesson).find('.newLesson')
+            // })
+        })
+     })
 
 </script>
 

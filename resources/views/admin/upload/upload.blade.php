@@ -44,6 +44,11 @@
     if(isset($versions)){
         $versions = json_encode($versions);
     }
+    if(isset($image_version)){
+        $image_version = $image_version;
+    }else{
+        $image_version = '';
+    }
 
     $imageedit = "false";
     use App\Model\Admin\MediaFile;
@@ -59,16 +64,35 @@
             $str = substr($str, strlen($prefix));
         }
 
-        $path = $str . $name;
+        $version_image = explode('.',$name);
+        $extension = $version_image[1];
+        $version_image = $version_image[0].'-'.$image_version.$extension;
+
+        if(file_exists( public_path($prefix.$str.$version_image)) ){
+
+            $path = $str . $version_image;
+        }else{
+            $path = $str . $name;
+        }
+
+        $default_image = '';
+        $default_image = MediaFile::wherePath($str . $name)->first();
+
+        if(isset($default_image) && $default_image){
+            $default_image = json_encode($default_image);
+        }
 
         $image = MediaFile::wherePath($path)->first();
         $image = json_encode($image);
     }
+
 ?>
 
 <div id="app" class="bootstrap-classes ubold mt-5 mb-5 pl-lg-4">
     <manager-for-old-admin
         starting-image="{{ $image }}"
+        default-image="{{ isset($default_image) ? $default_image : null }}"
+        image-version="{{ isset($image_version) ? $image_version : null}}"
     ></manager-for-old-admin>
 </div>
 

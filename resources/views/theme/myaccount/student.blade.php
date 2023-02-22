@@ -17,10 +17,11 @@
                   @if(isset($user['image']))
                   <?php
                      $img_src = get_profile_image($user['image']);
+                     //dd($user['image']);
                      ?>
-                  <img id="user-img-up" src="{{cdn($img_src)}}" onerror="this.src='{{cdn('/theme/assets/images/icons/user-circle-placeholder.svg')}}'" alt="{{ $currentuser['firstname'] }} {{ $currentuser['lastname'] }}"/>
+                  <img loading="lazy" id="user-img-up" width="20" height="20" src="{{cdn($img_src)}}" onerror="this.src='{{cdn('/theme/assets/images/icons/user-circle-placeholder.svg')}}'" title="{{ $currentuser['firstname'] }} {{ $currentuser['lastname'] }}" alt="{{ $currentuser['firstname'] }} {{ $currentuser['lastname'] }}"/>
                   @else
-                  <img id="user-img-up" src="{{cdn('/theme/assets/images/icons/user-circle-placeholder.svg')}}" alt="user-circle"/>
+                  <img loading="lazy" id="user-img-up" width="20" height="20" src="{{cdn('/theme/assets/images/icons/user-circle-placeholder.svg')}}" alt="user-circle" title="user-circle"/>
                   @endif
                </div>
                <div class="account-hero-info">
@@ -43,8 +44,8 @@
       <div id="favDialog" hidden>
          <div class="alert-wrapper error-alert">
             <div class="alert-inner">
-               <p><img src="{{cdn('theme/assets/images/icons/alert-icons/icon-error-alert.svg')}}" alt="Info Alert">Do you really want to remove your profile picture?</p>
-               <a href="javascript:void(0)" class="close-alert"><img src="{{cdn('/theme/assets/images/icons/alert-icons/icon-close-alert.svg')}}" alt="Close Alert"/></a>
+               <p><img loading="lazy" src="{{cdn('theme/assets/images/icons/alert-icons/icon-error-alert.svg')}}" alt="Info Alert" width="24" height="24" title="Info Alert">Do you really want to remove your profile picture?</p>
+               <a href="javascript:void(0)" class="close-alert"><img src="{{cdn('/theme/assets/images/icons/alert-icons/icon-close-alert.svg')}}" alt="Close Alert" width="22" height="22" title="Closed Alert"/></a>
             </div>
             <button class="btn btn-del btn--sm deleteImg"> ok </button>
             <button class="btn btn-del btn--sm cancelImg"> cancel </button>
@@ -74,18 +75,6 @@
             <!-- /.alert-outer -->
          </div>
       </div>
-      <div id="favDialogUnPaid" hidden>
-    <div class="alert-outer" >
-        <div class="container">
-            <div class="alert-wrapper error-alert">
-                <div class="alert-inner">
-                    <p id ="message"></p>
-                </div>
-            </div>
-        </div>
-    <!-- /.alert-outer -->
-    </div>
-</div>
       <div id="examDialog" hidden>
          <div class="alert-wrapper success-alert">
             <div class="alert-inner">
@@ -125,25 +114,25 @@
                         <div class="account-image-actions"  id="logo_dropzone">
                            <div class="acc-img">
                               @if(isset($user['image']) && $user['image']['name'] != '')
-                              <img id="user-img" src="{{cdn($img_src)}}" onerror="this.src='{{cdn('/theme/assets/images/icons/user-circle-placeholder.svg')}}'" alt="{{ $currentuser['firstname'] }} {{ $currentuser['lastname'] }}"/>
+                              <img loading="lazy" id="user-img" src="{{cdn($img_src)}}" onerror="this.src='{{cdn('/theme/assets/images/icons/user-circle-placeholder.svg')}}'" alt="{{ $currentuser['firstname'] }} {{ $currentuser['lastname'] }}" title="{{ $currentuser['firstname'] }} {{ $currentuser['lastname'] }}" width="230" height="230"/>
                               @else
-                              <img id="user-img" src="{{cdn('/theme/assets/images/icons/user-circle-placeholder.svg')}}" alt="user-circle"/>
+                              <img loading="lazy" id="user-img" src="{{cdn('/theme/assets/images/icons/user-circle-placeholder.svg')}}" alt="user-circle" title="user-circle" width="233" height="233"/>
                               @endif
                            </div>
                            <div class="actions">
                               <ul id='user-media'>
-                                 <li class="change-photo"><a id="logoDropzone" class="custFieldMediaDrop dz-message" href="javascript:void(0)"><img src="{{cdn('/theme/assets/images/icons/icon-edit.svg')}}" alt="Change photo"/><span>Change photo</span>
+                                 <li class="change-photo"><a id="logoDropzone" class="custFieldMediaDrop dz-message" href="javascript:void(0)"><img loading="lazy" src="{{cdn('/theme/assets/images/icons/icon-edit.svg')}}" alt="Change photo" title="Change photo" width="16" height="16"/><span>Change photo</span>
                                     </a>
                                  </li>
                                  @if(isset($user['image']))
-                                 <li class="remove-photo delete_media"><a data-dp-media-id="{{ $user['image']['id'] }}" href="javascript:void(0)"><img src="{{cdn('/theme/assets/images/icons/icon-remove.svg')}}" alt="Remove photo"/><span>Remove photo</span></a></li>
+                                 <li class="remove-photo delete_media"><a data-dp-media-id="{{ $user['image']['id'] }}" href="javascript:void(0)"><img loading="lazy" src="{{cdn('/theme/assets/images/icons/icon-remove.svg')}}" alt="Remove photo" title="Remove photo" width="10" height="10"/><span>Remove photo</span></a></li>
                                  @endif
                               </ul>
                            </div>
                         </div>
                         <div class="download-area">
                            <div class="download-area-inner">
-                              <a id="gdpr-download" href="javascript:void(0)"><span><img src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}" alt="Remove photo"/>Download all my data.</span></a>
+                              <a id="gdpr-download" href="javascript:void(0)"><span><img loading="lazy" src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}" alt="Remove photo" title="Remove photo" width="16" height="16"/>Download all my data.</span></a>
                            </div>
                         </div>
                      </div>
@@ -635,6 +624,7 @@
                               </div>
                            </div>
                         </div>
+
                      </div>
                   </div>
                   <!-- /.container -->
@@ -725,728 +715,772 @@
 
                      <?php $tab = 0; ?>
                      <?php //dd($events); ?>
+
                      @if(isset($events) && count($events) > 0)
 
-                     @foreach($events as $keyType => $event)
-                     {{--@if($event['view_tpl'] != 'elearning_free' && $event['view_tpl'] != 'elearning_event')--}}
-                     @if($event['delivery'] != 143)
-                     <div class="col12 dynamic-courses-wrapper dynamic-courses-wrapper--style2">
-                        <div class="item">
-                           <h2>{{ $event['title'] }}</h2>
-                           <div class="inside-tabs">
-                              <div class="tabs-ctrl">
-                                 <ul>
-                                    {{--<li class="active"><a href="#c-info-inner{{$tab}}">Info</a></li>--}}
-                                    @if(isset($event['topics']) && count($event['topics']) > 0)<li class="active"><a href="#c-shedule-inner{{$tab}}">Schedule </a></li>@endif
-                                    <?php  $fa = strtotime(date('Y-m-d',strtotime($event['release_date_files']))) >= strtotime(date('Y-m-d'))?>
-                                    {{--@if(!$instructor && isset($event['category'][0]['dropbox']) && count($event['category'][0]['dropbox']) != 0 &&--}}
-                                    @if(isset($event['dropbox']) && count($event['dropbox']) != 0 &&
-                                       $event['status'] == 3 &&  $fa)
-                                    <li><a href="#c-files-inner{{$tab}}">Files</a></li>
-                                    @endif
-                                    @if(isset($event['exams']) && count($event['exams']) >0 )
-                                    <li><a href="#c-exams-inner{{$tab}}">Exams</a></li>
-                                    @endif
-                                    @if(count($event['certs']) > 0)
-                                    <li><a href="#c-cert-inner{{$tab}}">Certificate</a></li>
-                                    @endif
-                                    {{--
-                                    <li><a href="#c-subs-inner{{$tab}}">Subscription</a></li>
-                                    --}}
-                                 </ul>
-                              </div>
-                              <div class="inside-tabs-wrapper">
-                                 {{--<div id="c-info-inner{{$tab}}" class="in-tab-wrapper" style="display: block;">
-                                    <div class="bottom">
-                                       <?php
-
-                                          /*$summaryDate = '';
-                                          foreach($event['summary1'] as $summary){
-                                             if($summary['section'] == 'date'){
-                                                $summaryDate = $summary['title'];
-                                             }
-                                          }*/
-                                          ?>
-                                       @if(isset($event['summaryDate']))<div class="duration"><img class="replace-with-svg" onerror="this.src='{{cdn('/theme/assets/images/icons/Duration_Hours.svg')}}'" src="{{cdn($event['summaryDate_icon'])}}" alt="">{{$event['summaryDate']}}</div>@endif
-                                       @if($event['hours'])
-                                       <div class="expire-date"><img class="replace-with-svg" onerror="this.src='{{cdn('/theme/assets/images/icons/Start-Finish.svg')}}'"  src="{{cdn($event['hours_icon'])}}" alt="">{{$event['hours']}}h</div>
-                                       @endif
-
+                        @foreach($events as $keyType => $event)
+                        {{--@if($event['view_tpl'] != 'elearning_free' && $event['view_tpl'] != 'elearning_event')--}}
+                        @if($event['delivery'] != 143)
+                        <div class="col12 dynamic-courses-wrapper dynamic-courses-wrapper--style2 @if(isset($event['paid']) && $event['paid'] == 0){{'unpaid'}}@endif">
+                            <div class="item">
+                                <h2>{{ $event['title'] }}</h2>
+                                <div class="inside-tabs">
+                                    <div class="tabs-ctrl">
+                                        <ul>
+                                            {{--<li class="active"><a href="#c-info-inner{{$tab}}">Info</a></li>--}}
+                                            @if(isset($event['topics']) && count($event['topics']) > 0)<li class="active"><a href="#c-shedule-inner{{$tab}}">Schedule </a></li>@endif
+                                            <?php  $fa = strtotime(date('Y-m-d',strtotime($event['release_date_files']))) >= strtotime(date('Y-m-d'))?>
+                                            {{--@if(!$instructor && isset($event['category'][0]['dropbox']) && count($event['category'][0]['dropbox']) != 0 &&--}}
+                                            @if(isset($event['dropbox']) && count($event['dropbox']) != 0 &&
+                                            $event['status'] == 3 &&  $fa)
+                                            <li><a href="#c-files-inner{{$tab}}">Files</a></li>
+                                            @endif
+                                            @if(isset($event['exams']) && count($event['exams']) >0 )
+                                            <li><a href="#c-exams-inner{{$tab}}">Exams</a></li>
+                                            @endif
+                                            @if(count($event['certs']) > 0)
+                                            <li><a href="#c-cert-inner{{$tab}}">Certificate</a></li>
+                                            @endif
+                                            {{--
+                                            <li><a href="#c-subs-inner{{$tab}}">Subscription</a></li>
+                                            --}}
+                                        </ul>
                                     </div>
-                                    @if($event['status'] == 5)
-                                       <div>
-                                          You are on the waiting list.
-                                       </div>
-                                    @endif
-                                 </div>--}}
+                                    <div class="inside-tabs-wrapper">
+                                        {{--<div id="c-info-inner{{$tab}}" class="in-tab-wrapper" style="display: block;">
+                                            <div class="bottom">
+                                            <?php
 
-                                 <div id="c-shedule-inner{{$tab}}" class="in-tab-wrapper" style="display: block;">
-                                    <div class="bottom">
-                                       @if(isset($event['summaryDate']))<div class="duration"><img class="replace-with-svg" onerror="this.src='{{cdn('/theme/assets/images/icons/Duration_Hours.svg')}}'" src="{{cdn($event['summaryDate_icon'])}}" alt="">{{$event['summaryDate']}}</div>@endif
-                                       @if($event['hours'])
-                                       <div class="expire-date"><img class="replace-with-svg" onerror="this.src='{{cdn('/theme/assets/images/icons/Start-Finish.svg')}}'"  src="{{cdn($event['hours_icon'])}}" alt="">{{$event['hours']}}h</div>
-                                       @endif
-                                       @if($event['status'] == 5)
-                                       <div>
-                                          You are on the waiting list.
-                                       </div>
-                                       @endif
-                                    </div>
-                                    @if(isset($event['topics']) && count($event['topics']) > 0)
-                                    <div class="bottom tabs-bottom">
+                                                /*$summaryDate = '';
+                                                foreach($event['summary1'] as $summary){
+                                                    if($summary['section'] == 'date'){
+                                                        $summaryDate = $summary['title'];
+                                                    }
+                                                }*/
+                                                ?>
+                                            @if(isset($event['summaryDate']))<div class="duration"><img loading="lazy" class="replace-with-svg resp-img" onerror="this.src='{{cdn('/theme/assets/images/icons/Duration_Hours.svg')}}'" src="{{cdn($event['summaryDate_icon'])}}" title="summaryDate_icon" alt="summaryDate_icon">{{$event['summaryDate']}}</div>@endif
+                                            @if($event['hours'])
+                                            <div class="expire-date"><img loading="lazy" class="replace-with-svg" onerror="this.src='{{cdn('/theme/assets/images/icons/Start-Finish.svg')}}'"  src="{{cdn($event['hours_icon'])}}" title="hours" alt="hours_icon">{{$event['hours']}}h</div>
+                                            @endif
 
-                                       <div class="expire-date exp-date"><img src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}" alt="">Schedule available in PDF</div>
-                                       <div class="right">
-                                          <a target="_blank" href="/print/syllabus/{{$event['slugable']['slug']}}" class="btn btn--secondary btn--md"> DOWNLOAD SCHEDULE </a>
-                                       </div>
-                                    </div>
-                                    <div class="acc-topic-accordion">
-                                       <div class="accordion-wrapper accordion-big">
-                                          <?php $catId = -1?>
-                                          <?php //dd($event['topics']); ?>
-                                          @foreach($event['topics'] as $keyTopic => $topic)
-                                          <?php //dd($keyTopic); ?>
-                                          @if(isset($topic) && count($topic) != 0 )
-                                          <div class="accordion-item">
-                                             <h3 class="accordion-title title-blue-gradient scroll-to-top">{{$keyTopic}}</h3>
-                                             <div class="accordion-content no-padding">
-                                                <?php //dd($topic[0]['lessons']); ?>
-                                                @foreach($topic['lessons'] as $keyLesso => $lesso)
-                                                <div class="topic-wrapper-big">
-                                                   <div class="topic-title-meta">
-                                                      <h4>{{$lesso['title']}}</h4>
-                                                      <!-- Feedback 18-11 changed -->
-                                                      <div class="topic-meta">
-                                                         @if(count($lesso['type']) >0)
-                                                         <div class="category">{{$lesso['type'][0]['name']}}</div>
-                                                         @endif
+                                            </div>
+                                            @if($event['status'] == 5)
+                                            <div>
+                                                You are on the waiting list.
+                                            </div>
+                                            @endif
+                                        </div>--}}
 
-                                                         <!-- Feedback 18-11 changed -->
-                                                         <span class="meta-item duration"><img src="{{cdn('/theme/assets/images/icons/Duration_Hours.svg')}}" alt="" /><?= date( "l d M Y", strtotime($lesso['pivot']['time_starts']) ) ?></span> <!-- Feedback 18-11 changed -->
-                                                         <span class="meta-item duration"><img src="{{cdn('/theme/assets/images/icons/Times.svg')}}" alt="" /><?= date( "H:i", strtotime($lesso['pivot']['time_starts']) ) ?> ({{$lesso['pivot']['duration']}})</span> <!-- Feedback 18-11 changed -->
-                                                         <span class="meta-item duration"><img src="{{cdn('/theme/assets/images/icons/icon-marker.svg')}}" alt="" />@if(isset($lesso['pivot']['location_url']) && $lesso['pivot']['location_url']) <a href="{{$lesso['pivot']['location_url']}}" target="_blank"> {{$lesso['pivot']['room']}} </a> @else {{$lesso['pivot']['room']}} @endif</span> <!-- Feedback 18-11 changed -->
-                                                        </div>
-                                                      <!-- /.topic-title-meta -->
-                                                   </div>
-                                                   <div class="author-img">
-                                                      <!-- Feedback 18-11 changed -->
-                                                      <a href="{{$instructors[$lesso['instructor_id']][0]['slugable']['slug']}}">
-                                                      <span class="custom-tooltip"><?= $instructors[$lesso['instructor_id']][0]['title'].' '.$instructors[$lesso['instructor_id']][0]['subtitle']; ?></span>
-                                                      <img src="{{cdn( get_image($instructors[$lesso['instructor_id']][0]['mediable'],'instructors-small') )}}" alt="<?= $instructors[$lesso['instructor_id']][0]['title']; $instructors[$lesso['instructor_id']][0]['subtitle']; ?>"/>
-                                                      </a>
-                                                   </div>
-                                                   <!-- /.topic-wrapper-big -->
+                                        <div id="c-shedule-inner{{$tab}}" class="in-tab-wrapper" style="display: block;">
+
+                                            <div class="bottom">
+                                            @if(isset($event['summaryDate']))<div class="duration"><img loading="lazy" class="replace-with-svg resp-img" onerror="this.src='{{cdn('/theme/assets/images/icons/Duration_Hours.svg')}}'" width="20" height="20" src="{{cdn($event['summaryDate_icon'])}}" title="summary_icon" alt="summary_icon">{{$event['summaryDate']}}</div>@endif
+                                            @if($event['hours'])
+                                            <div class="expire-date"><img loading="lazy" class="replace-with-svg resp-img" onerror="this.src='{{cdn('/theme/assets/images/icons/Start-Finish.svg')}}'"  src="{{cdn($event['hours_icon'])}}" width="20" height="20" title="summary_icon" alt="summary_icon">{{$event['hours']}}h</div>
+                                            @endif
+                                            @if($event['status'] == 5)
+                                            <div>
+                                                You are on the waiting list.
+                                            </div>
+                                            @endif
+                                            </div>
+
+                                            @if(isset($event['topics']) && count($event['topics']) > 0)
+                                            <div class="bottom  @if((isset($event['paid']) && $event['paid']) || !isset($event['paid'])) {{ 'tabs-bottom'}} @endif">
+
+                                            <div class="expire-date exp-date"><img loading="lazy" src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}" width="20" height="20" title="Access-Files-icon" alt="Access-Files-icon">Schedule available in PDF</div>
+                                            <div class="right">
+                                                <a target="_blank" href="/print/syllabus/{{$event['slugable']['slug']}}" class="btn btn--secondary btn--md"> DOWNLOAD SCHEDULE </a>
+                                            </div>
+                                            </div>
+                                            <div class="acc-topic-accordion">
+                                            @if((isset($event['paid']) && $event['paid']) || !isset($event['paid']))
+                                            <div class="accordion-wrapper accordion-big">
+                                                <?php $catId = -1?>
+                                                <?php //dd($event['topics']); ?>
+                                                @foreach($event['topics'] as $keyTopic => $topic)
+                                                <?php //dd($keyTopic); ?>
+                                                @if(isset($topic) && count($topic) != 0 )
+
+                                                <div class="accordion-item">
+                                                    <h3 class="accordion-title title-blue-gradient scroll-to-top">{{$keyTopic}}</h3>
+                                                    <div class="accordion-content no-padding">
+                                                        <?php //dd($topic[0]['lessons']); ?>
+                                                        @foreach($topic['lessons'] as $keyLesso => $lesso)
+                                                            <div class="topic-wrapper-big">
+                                                            <div class="topic-title-meta">
+                                                                <h4>{{$lesso['title']}}</h4>
+                                                                <!-- Feedback 18-11 changed -->
+                                                                <div class="topic-meta">
+                                                                    @if(count($lesso['type']) >0)
+                                                                    <div class="category">{{$lesso['type'][0]['name']}}</div>
+                                                                    @endif
+
+                                                                    <!-- Feedback 18-11 changed -->
+                                                                    <span class="meta-item duration"><img loading="lazy" class="resp-img" src="{{cdn('/theme/assets/images/icons/Duration_Hours.svg')}}" alt="Duration_Hours_icon" title="Duration_Hours_icon" /><?= date( "l d M Y", strtotime($lesso['pivot']['time_starts']) ) ?></span> <!-- Feedback 18-11 changed -->
+                                                                    <span class="meta-item duration"><img loading="lazy" class="resp-img" src="{{cdn('/theme/assets/images/icons/Times.svg')}}" alt="Times_icon" title="Times_icon" /><?= date( "H:i", strtotime($lesso['pivot']['time_starts']) ) ?> ({{$lesso['pivot']['duration']}})</span> <!-- Feedback 18-11 changed -->
+                                                                    <span class="meta-item duration"><img loading="lazy" class="resp-img" src="{{cdn('/theme/assets/images/icons/icon-marker.svg')}}" alt="icon-marker" title="icon-marker"/>@if(isset($lesso['pivot']['location_url']) && $lesso['pivot']['location_url']) <a href="{{$lesso['pivot']['location_url']}}" target="_blank"> {{$lesso['pivot']['room']}} </a> @else {{$lesso['pivot']['room']}} @endif</span> <!-- Feedback 18-11 changed -->
+                                                                    </div>
+                                                                <!-- /.topic-title-meta -->
+                                                            </div>
+                                                            <div class="author-img">
+                                                                <!-- Feedback 18-11 changed -->
+                                                                <a href="{{$instructors[$lesso['instructor_id']][0]['slugable']['slug']}}">
+                                                                <span class="custom-tooltip"><?= $instructors[$lesso['instructor_id']][0]['title'].' '.$instructors[$lesso['instructor_id']][0]['subtitle']; ?></span>
+                                                                <?php
+                                                                    $imageDetails = get_image_version_details('instructors-small');
+                                                                ?>
+                                                                <img loading="lazy" class="resp-img" src="{{cdn( get_image($instructors[$lesso['instructor_id']][0]['mediable'],'instructors-small') )}}" width="{{ $imageDetails['w'] }}" height="{{ $imageDetails['h'] }}" title="<?= $instructors[$lesso['instructor_id']][0]['title']; $instructors[$lesso['instructor_id']][0]['subtitle']; ?> alt="<?= $instructors[$lesso['instructor_id']][0]['title']; $instructors[$lesso['instructor_id']][0]['subtitle']; ?>"/>
+                                                                </a>
+                                                            </div>
+                                                            <!-- /.topic-wrapper-big -->
+                                                            </div>
+                                                            {{--@if($lesso['type'])
+                                                            @endif--}}
+                                                        @endforeach
+                                                        <!-- /.accordion-content -->
+                                                    </div>
+                                                    <!-- /.accordion-item -->
                                                 </div>
-                                                {{--@if($lesso['type'])
-                                                @endif--}}
+                                                @endif
                                                 @endforeach
-                                                <!-- /.accordion-content -->
-                                             </div>
-                                             <!-- /.accordion-item -->
-                                          </div>
-                                          @endif
-                                          @endforeach
 
-                                          <!-- /.accordion-wrapper -->
-                                       </div>
-                                       <!-- /.acc-topic-accordion -->
-                                    </div>
-                                    @endif
-                                 </div>
+                                                <!-- /.accordion-wrapper -->
+                                            </div>
+                                            @endif
+                                            <!-- /.acc-topic-accordion -->
+                                            </div>
+                                            @endif
 
-                                <?php
-                                    $now1 = strtotime(date("Y-m-d"));
-                                    $display = false;
-                                    if(!$event['release_date_files'] && $event['status'] == 3){
-                                        $display = true;
+                                        </div>
 
-                                    }else if(strtotime(date('Y-m-d',strtotime($event['release_date_files']))) >= $now1 && $event['status'] == 3){
-
-                                        $display = true;
-                                    }
-
-                                    ?>
-
-
-                                 @if(isset($event['dropbox']))
-                                <div id="c-files-inner{{$tab}}" class="in-tab-wrapper">
                                         <?php
 
-                                            foreach($event['dropbox'] as $dropbox){
-                                                $folders = isset($dropbox['folders'][0]) ? $dropbox['folders'][0] : [];
-                                                //dd($folders);
-
-                                                //dd($dropbox);
-                                                if(isset($dropbox['pivot'])){
-                                                $selectedFiles = $dropbox['pivot']['selectedFolders'];
-                                                $selectedFiles = json_decode($selectedFiles, true);
-                                                }
-
-
-                                                $folders_bonus = isset($dropbox['folders'][1]) ? $dropbox['folders'][1] : [];
-                                                //dd($folders_bonus);
-                                                $files = isset($dropbox['files'][1]) ? $dropbox['files'][1] : [];
-                                                $files_bonus = isset($dropbox['files'][2]) ? $dropbox['files'][2] : [];
-
-
-
-
-
-                                        ?>
-                                    @if($display)
-                                    <div class="acc-topic-accordion">
-                                       <div class="accordion-wrapper accordion-big">
-                                          @if(isset($folders) && count($folders) > 0)
-                                          <?php
-                                            if($event['slugable']['slugable_id'] == 4612){
-                                                //dd($dropbox['folder_name']);
+                                            $now1 = strtotime(date("Y-m-d"));
+                                            $display = false;
+                                            if(!isset($event['release_date_files'])){
+                                             $display = false;
                                             }
-                                          ?>
-                                          <div class="accordion-item">
-                                            <h3 class="accordion-title title-blue-gradient scroll-to-top"> {{ $dropbox['folder_name'] }}</h3>
+                                            else if(!$event['release_date_files'] && $event['status'] == 3){
+                                                $display = true;
 
-                                            <div class="accordion-content accordion-content-root">
-                                                @foreach($folders as $folder)
-                                                    <?php
-                                                        $folderIsSelected = false;
-                                                        if($selectedFiles['selectedAllFolders']){
-                                                            $folderIsSelected = true;
-                                                        }else{
-                                                            foreach($selectedFiles['selectedFolders'] as $key10 => $selectedFile){
-                                                                if($folder['dirname'] == $selectedFile){
-                                                                    $folderIsSelected = true;
-                                                                }
-                                                            }
+                                            }else if(strtotime(date('Y-m-d',strtotime($event['release_date_files']))) >= $now1 && $event['status'] == 3){
+
+                                                $display = true;
+                                            }
+
+                                            ?>
+
+
+                                        @if(isset($event['dropbox']))
+                                        <div id="c-files-inner{{$tab}}" class="in-tab-wrapper">
+                                                <?php
+
+                                                    foreach($event['dropbox'] as $dropbox){
+                                                        $folders = isset($dropbox['folders'][0]) ? $dropbox['folders'][0] : [];
+                                                        //dd($folders);
+
+                                                        //dd($dropbox);
+                                                        $selectedFiles = [];
+                                                        if(isset($dropbox['pivot']['selectedFolders'])){
+                                                        $selectedFiles = $dropbox['pivot']['selectedFolders'];
+                                                        $selectedFiles = json_decode($selectedFiles, true);
                                                         }
 
-                                                        $checkedF = [];
-                                                        $fs = [];
-                                                        $fk = 1;
-                                                        $bonus = [];
-                                                        $subfolder = [];
-                                                        $subfiles = [];
-                                                        ?>
-                                                    <div class="accordion-item d-none">
-                                                        <h3 class="accordion-title title-blue-gradient scroll-to-top"> {{ $folder['foldername'] }}</h3>
-                                                        <div class="accordion-content no-padding">
-                                                            @if(isset($files) && count($files) > 0)
-                                                            @foreach($folders_bonus as $folder_bonus)
-                                                                @if(isset($folder_bonus['parent']) && $folder_bonus['parent'] == $folder['id']  && !in_array($folder_bonus['foldername'],$bonusFiles))
-                                                                <?php
-                                                                    $checkedF[] = $folder_bonus['id'] + 1 ;
-                                                                    $fs[$folder_bonus['id']+1]=[];
-                                                                    $fs[$folder_bonus['id']+1] = $folder_bonus;
 
-                                                                    ?>
-                                                                @endif
-                                                            @endforeach
-                                                            @if(count($fs) > 0)
+                                                        $folders_bonus = isset($dropbox['folders'][1]) ? $dropbox['folders'][1] : [];
+                                                        //dd($folders_bonus);
+                                                        $files = isset($dropbox['files'][1]) ? $dropbox['files'][1] : [];
+                                                        $files_bonus = isset($dropbox['files'][2]) ? $dropbox['files'][2] : [];
 
-                                                                @foreach($fs as $subf)
-                                                                    @foreach($files_bonus as $folder_bonus)
-                                                                    <?php
-                                                                        if(in_array($subf['foldername'],$subfolder)){
-                                                                        continue;
-                                                                        }
-                                                                        ?>
-                                                                        @if(isset($folder_bonus['parent']) && $folder_bonus['parent'] == $folder['id'])
 
-                                                                        <?php $folderIsSelected = false; ?>
 
-                                                                        @if($selectedFiles['selectedAllFolders'])
-                                                                            <?php $folderIsSelected = true; ?>
-                                                                        @else
-                                                                            @foreach($selectedFiles['selectedFolders'] as $key10 => $selectedFile)
-                                                                                @if($folder_bonus['dirname'] == $selectedFile)
-                                                                                    <?php $folderIsSelected = true; ?>
-                                                                                @endif
-                                                                            @endforeach
+
+
+                                                ?>
+                                            @if($display)
+                                            <div class="acc-topic-accordion">
+                                            <div class="accordion-wrapper accordion-big">
+                                                @if(isset($folders) && count($folders) > 0)
+                                                <?php
+                                                    if($event['slugable']['slugable_id'] == 4612){
+                                                        //dd($dropbox['folder_name']);
+                                                    }
+                                                ?>
+                                                <div class="accordion-item">
+                                                    {{--<h3 class="accordion-title title-blue-gradient scroll-to-top"> {{ $dropbox['folder_name'] }}</h3>--}}
+
+                                                    {{--<div class="accordion-content accordion-content-root">--}}
+                                                        @foreach($folders as $folder)
+                                                            <?php
+                                                                $folderIsSelected = false;
+                                                                if(isset($selectedFiles['selectedAllFolders']))
+                                                                {
+                                                                  if($selectedFiles['selectedAllFolders']){
+                                                                     $folderIsSelected = true;
+                                                                  }else{
+                                                                     foreach($selectedFiles['selectedFolders'] as $key10 => $selectedFile){
+                                                                         if($folder['dirname'] == $selectedFile){
+                                                                             $folderIsSelected = true;
+                                                                         }
+                                                                     }
+                                                                  }
+                                                                }
+
+
+                                                                $checkedF = [];
+                                                                $fs = [];
+                                                                $fk = 1;
+                                                                $bonus = [];
+                                                                $subfolder = [];
+                                                                $subfiles = [];
+                                                                ?>
+                                                            <div class="accordion-item d-none">
+                                                                <h3 class="accordion-title title-blue-gradient scroll-to-top"> {{ $folder['foldername'] }}</h3>
+                                                                <div class="accordion-content no-padding">
+                                                                    @if(isset($files) && count($files) > 0)
+                                                                    @foreach($folders_bonus as $folder_bonus)
+                                                                        @if(isset($folder_bonus['parent']) && $folder_bonus['parent'] == $folder['id']  && !in_array($folder_bonus['foldername'],$bonusFiles))
+                                                                        <?php
+                                                                            $checkedF[] = $folder_bonus['id'] + 1 ;
+                                                                            $fs[$folder_bonus['id']+1]=[];
+                                                                            $fs[$folder_bonus['id']+1] = $folder_bonus;
+
+                                                                            ?>
                                                                         @endif
+                                                                    @endforeach
+                                                                    @if(count($fs) > 0)
 
+                                                                        @foreach($fs as $subf)
+                                                                            @foreach($files_bonus as $folder_bonus)
+                                                                            <?php
+                                                                                if(in_array($subf['foldername'],$subfolder)){
+                                                                                continue;
+                                                                                }
+                                                                                ?>
+                                                                                @if(isset($folder_bonus['parent']) && $folder_bonus['parent'] == $folder['id'])
 
-                                                                        <?php $subfolder[] =  $subf['foldername']; ?>
-                                                                        <div class="files-wrapper bonus-files d-none">
-                                                                        <h4 class="bonus-title">{{ $subf['foldername'] }}</h4>
-                                                                        <span><i class="icon-folder-open"></i>   </span>
-                                                                            @foreach($files_bonus as $file_bonus)
-                                                                                @if(isset($file_bonus['parent']) && $file_bonus['fid'] == $subf['id'] && $file_bonus['parent'] == $subf['parent'] )
-
-                                                                                @if($folderIsSelected)
-                                                                                    <?php $subfiles[]= $file_bonus['filename'] ?>
-                                                                                    <div class="file-wrapper">
-                                                                                        <h4 class="file-title">{{ $file_bonus['filename'] }}</h4>
-                                                                                        <span class="last-modified">Last modified:  {{$file_bonus['last_mod']}}</span>
-                                                                                        <a  class="download-file getdropboxlink"  data-dirname="{{ $file_bonus['dirname'] }}" data-filename="{{ $file_bonus['filename'] }}" href="javascript:void(0)" >
-                                                                                        <img src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}"  alt="Download File"/></a>
-                                                                                    </div>
+                                                                                <?php $folderIsSelected = false; ?>
+                                                                                @if(isset($selectedFiles['selectedAllFolders']))
+                                                                                @if($selectedFiles['selectedAllFolders'])
+                                                                                    <?php $folderIsSelected = true; ?>
                                                                                 @else
-
                                                                                     @foreach($selectedFiles['selectedFolders'] as $key10 => $selectedFile)
+                                                                                        @if($folder_bonus['dirname'] == $selectedFile)
+                                                                                            <?php $folderIsSelected = true; ?>
+                                                                                        @endif
+                                                                                    @endforeach
+                                                                                @endif
+                                                                                @endif
 
-                                                                                        @if($file_bonus['dirname'] == $selectedFile)
-                                                                                        <?php $subfiles[]= $file_bonus['filename'] ?>
+                                                                                <?php $subfolder[] =  $subf['foldername']; ?>
+                                                                                <div class="files-wrapper bonus-files d-none">
+                                                                                <h4 class="bonus-title">{{ $subf['foldername'] }}</h4>
+                                                                                <span><i class="icon-folder-open"></i>   </span>
+                                                                                    @foreach($files_bonus as $file_bonus)
+                                                                                        @if(isset($file_bonus['parent']) && $file_bonus['fid'] == $subf['id'] && $file_bonus['parent'] == $subf['parent'] )
+
+                                                                                        @if($folderIsSelected)
+                                                                                            <?php $subfiles[]= $file_bonus['filename'] ?>
                                                                                             <div class="file-wrapper">
                                                                                                 <h4 class="file-title">{{ $file_bonus['filename'] }}</h4>
                                                                                                 <span class="last-modified">Last modified:  {{$file_bonus['last_mod']}}</span>
                                                                                                 <a  class="download-file getdropboxlink"  data-dirname="{{ $file_bonus['dirname'] }}" data-filename="{{ $file_bonus['filename'] }}" href="javascript:void(0)" >
-                                                                                                <img src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}"  alt="Download File"/></a>
+                                                                                                <img loading="lazy" src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}" class="resp-img" width="34" height="34" alt="Download File" title="Download File"/></a>
                                                                                             </div>
+                                                                                        @else
+                                                                                          @if(isset($selectedFiles['selectedFolders']))
+                                                                                            @foreach($selectedFiles['selectedFolders'] as $key10 => $selectedFile)
+
+                                                                                                @if($file_bonus['dirname'] == $selectedFile)
+                                                                                                <?php $subfiles[]= $file_bonus['filename'] ?>
+                                                                                                    <div class="file-wrapper">
+                                                                                                        <h4 class="file-title">{{ $file_bonus['filename'] }}</h4>
+                                                                                                        <span class="last-modified">Last modified:  {{$file_bonus['last_mod']}}</span>
+                                                                                                        <a  class="download-file getdropboxlink"  data-dirname="{{ $file_bonus['dirname'] }}" data-filename="{{ $file_bonus['filename'] }}" href="javascript:void(0)" >
+                                                                                                        <img loading="lazy" src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}" class="resp-img" width="34" height="34" alt="Download File" title="Download File"/></a>
+                                                                                                    </div>
+                                                                                                @endif
+                                                                                            @endforeach
+                                                                                          @endif
+                                                                                        @endif
+
+
                                                                                         @endif
                                                                                     @endforeach
-                                                                                @endif
-
-
+                                                                                </div>
                                                                                 @endif
                                                                             @endforeach
-                                                                        </div>
-                                                                        @endif
-                                                                    @endforeach
-                                                                @endforeach
-                                                            @endif
-                                                            @foreach($files as $file)
-                                                                @if($folder['id'] == $file['fid'])
+                                                                        @endforeach
+                                                                    @endif
+                                                                    @foreach($files as $file)
+                                                                        @if($folder['id'] == $file['fid'])
 
-                                                                    @if($folderIsSelected)
-                                                                        <div class="files-wrapper no-bonus">
-                                                                            <div class="file-wrapper">
-                                                                                <h4 class="file-title">{{ $file['filename'] }}</h4>
-                                                                                <span class="last-modified">Last modified:  {{ $file['last_mod'] }}</span>
-                                                                                <a  class="download-file getdropboxlink"  data-dirname="{{ $file['dirname'] }}" data-filename="{{ $file['filename'] }}" href="javascript:void(0)" >
-                                                                                <img src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}"  alt="Download File"/></a>
-                                                                            </div>
-                                                                        </div>
-                                                                    @else
-                                                                        @foreach($selectedFiles['selectedFolders'] as $key10 => $selectedFile)
-                                                                            @if($file['dirname'] == $selectedFile)
+                                                                            @if($folderIsSelected)
                                                                                 <div class="files-wrapper no-bonus">
                                                                                     <div class="file-wrapper">
                                                                                         <h4 class="file-title">{{ $file['filename'] }}</h4>
                                                                                         <span class="last-modified">Last modified:  {{ $file['last_mod'] }}</span>
                                                                                         <a  class="download-file getdropboxlink"  data-dirname="{{ $file['dirname'] }}" data-filename="{{ $file['filename'] }}" href="javascript:void(0)" >
-                                                                                        <img src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}"  alt="Download File"/></a>
+                                                                                        <img loading="lazy" src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}" class="resp-img" width="34" height="34" alt="Download File" title="Download File"/></a>
                                                                                     </div>
                                                                                 </div>
+                                                                            @else
+                                                                            @if(isset($selectedFiles['selectedFolders']))
+                                                                                @foreach($selectedFiles['selectedFolders'] as $key10 => $selectedFile)
+                                                                                    @if($file['dirname'] == $selectedFile)
+                                                                                        <div class="files-wrapper no-bonus">
+                                                                                            <div class="file-wrapper">
+                                                                                                <h4 class="file-title">{{ $file['filename'] }}</h4>
+                                                                                                <span class="last-modified">Last modified:  {{ $file['last_mod'] }}</span>
+                                                                                                <a  class="download-file getdropboxlink"  data-dirname="{{ $file['dirname'] }}" data-filename="{{ $file['filename'] }}" href="javascript:void(0)" >
+                                                                                                <img loading="lazy" src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}" class="resp-img" width="34" height="34" alt="Download File" title="Download File"/></a>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    @endif
+                                                                                @endforeach
+                                                                              @endif
                                                                             @endif
-                                                                        @endforeach
+                                                                            <!-- <div class="files-wrapper">
+                                                                                <div class="file-wrapper">
+                                                                                    <h4 class="file-title">{{ $file['filename'] }}</h4>
+                                                                                    <span class="last-modified">Last modified:  {{ $file['last_mod'] }}</span>
+                                                                                    <a  class="download-file getdropboxlink"  data-dirname="{{ $file['dirname'] }}" data-filename="{{ $file['filename'] }}" href="javascript:void(0)" >
+                                                                                    <img src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}"  alt="Download File"/></a>
+                                                                                </div>
+                                                                            </div> -->
+                                                                            @endif
+                                                                    @endforeach
                                                                     @endif
-                                                                    <!-- <div class="files-wrapper">
-                                                                        <div class="file-wrapper">
-                                                                            <h4 class="file-title">{{ $file['filename'] }}</h4>
-                                                                            <span class="last-modified">Last modified:  {{ $file['last_mod'] }}</span>
-                                                                            <a  class="download-file getdropboxlink"  data-dirname="{{ $file['dirname'] }}" data-filename="{{ $file['filename'] }}" href="javascript:void(0)" >
-                                                                            <img src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}"  alt="Download File"/></a>
-                                                                        </div>
-                                                                    </div> -->
-                                                                    @endif
-                                                            @endforeach
-                                                            @endif
-                                                            @if(isset($folders_bonus) && count($folders_bonus) > 0)
-                                                            <div class="files-wrapper bonus-files d-none">
-                                                            @foreach($folders_bonus as $folder_bonus)
-                                                            <?php
-                                                                if(in_array($folder_bonus['foldername'],$subfolder)){
-                                                                    continue;
-                                                                }
-                                                                ?>
-                                                            @if(isset($folder_bonus['parent']) && $folder_bonus['parent'] == $folder['id'])
+                                                                    @if(isset($folders_bonus) && count($folders_bonus) > 0)
+                                                                    <div class="files-wrapper bonus-files d-none">
+                                                                    @foreach($folders_bonus as $folder_bonus)
+                                                                    <?php
+                                                                        if(in_array($folder_bonus['foldername'],$subfolder)){
+                                                                            continue;
+                                                                        }
+                                                                        ?>
+                                                                    @if(isset($folder_bonus['parent']) && $folder_bonus['parent'] == $folder['id'])
 
-                                                                    <?php $folderIsSelected = false; ?>
-                                                                    @if($selectedFiles['selectedAllFolders'])
-                                                                        <?php $folderIsSelected = true; ?>
-                                                                    @else
-                                                                        @foreach($selectedFiles['selectedFolders'] as $key10 => $selectedFile)
-                                                                            @if($folder_bonus['dirname'] == $selectedFile)
+                                                                            <?php $folderIsSelected = false; ?>
+                                                                            @if(isset($selectedFiles['selectedFolders']))
+                                                                            @if($selectedFiles['selectedAllFolders'])
                                                                                 <?php $folderIsSelected = true; ?>
+                                                                            @else
+                                                                                @foreach($selectedFiles['selectedFolders'] as $key10 => $selectedFile)
+                                                                                    @if($folder_bonus['dirname'] == $selectedFile)
+                                                                                        <?php $folderIsSelected = true; ?>
+                                                                                    @endif
+                                                                                @endforeach
                                                                             @endif
-                                                                        @endforeach
-                                                                    @endif
+                                                                            @endif
 
 
 
-                                                            <h4 class="bonus-title">{{ $folder_bonus['foldername'] }}</h4>
-                                                            <span><i class="icon-folder-open"></i>   </span>
-                                                            @if(isset($files_bonus) && count($files_bonus) > 0)
-                                                            @foreach($files_bonus as $file_bonus)
-                                                            @if(isset($file_bonus['parent']) && $file_bonus['parent'] == $folder_bonus['parent'] && !in_array($file_bonus['filename'],$subfiles))
+                                                                    <h4 class="bonus-title">{{ $folder_bonus['foldername'] }}</h4>
+                                                                    <span><i class="icon-folder-open"></i>   </span>
+                                                                    @if(isset($files_bonus) && count($files_bonus) > 0)
+                                                                    @foreach($files_bonus as $file_bonus)
+                                                                    @if(isset($file_bonus['parent']) && $file_bonus['parent'] == $folder_bonus['parent'] && !in_array($file_bonus['filename'],$subfiles))
 
-                                                                @if($folderIsSelected)
-                                                                    <div class="file-wrapper">
-                                                                        <h4 class="file-title">{{ $file_bonus['filename'] }}</h4>
-                                                                        <span class="last-modified">Last modified:  {{$file_bonus['last_mod']}}</span>
-                                                                        <a  class="download-file getdropboxlink"  data-dirname="{{ $file_bonus['dirname'] }}" data-filename="{{ $file_bonus['filename'] }}" href="javascript:void(0)" >
-                                                                        <img src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}"  alt="Download File"/></a>
-                                                                    </div>
-                                                                @else
-                                                                    @foreach($selectedFiles['selectedFolders'] as $key10 => $selectedFile)
-                                                                        @if($file_bonus['dirname'] == $selectedFile)
+                                                                        @if($folderIsSelected)
                                                                             <div class="file-wrapper">
                                                                                 <h4 class="file-title">{{ $file_bonus['filename'] }}</h4>
                                                                                 <span class="last-modified">Last modified:  {{$file_bonus['last_mod']}}</span>
                                                                                 <a  class="download-file getdropboxlink"  data-dirname="{{ $file_bonus['dirname'] }}" data-filename="{{ $file_bonus['filename'] }}" href="javascript:void(0)" >
-                                                                                <img src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}"  alt="Download File"/></a>
+                                                                                <img loading="lazy" src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}" class="resp-img" width="34" height="34" alt="Download File" title="Download File"/></a>
                                                                             </div>
+                                                                        @else
+                                                                        @if(isset($selectedFiles['selectedFolders']))
+                                                                            @foreach($selectedFiles['selectedFolders'] as $key10 => $selectedFile)
+                                                                                @if($file_bonus['dirname'] == $selectedFile)
+                                                                                    <div class="file-wrapper">
+                                                                                        <h4 class="file-title">{{ $file_bonus['filename'] }}</h4>
+                                                                                        <span class="last-modified">Last modified:  {{$file_bonus['last_mod']}}</span>
+                                                                                        <a  class="download-file getdropboxlink"  data-dirname="{{ $file_bonus['dirname'] }}" data-filename="{{ $file_bonus['filename'] }}" href="javascript:void(0)" >
+                                                                                        <img loading="lazy" src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}" class="resp-img" width="34" height="34" alt="Download File" title="Download File"/></a>
+                                                                                    </div>
+                                                                                @endif
+                                                                            @endforeach
+                                                                           @endif
                                                                         @endif
+
+                                                                    @endif
                                                                     @endforeach
-                                                                @endif
-
-                                                            @endif
-                                                            @endforeach
-                                                            @endif
-                                                            @endif
-                                                            @endforeach
+                                                                    @endif
+                                                                    @endif
+                                                                    @endforeach
+                                                                    </div>
+                                                                    @endif
+                                                                </div>
                                                             </div>
-                                                            @endif
-                                                        </div>
-                                                    </div>
-                                                @endforeach
-                                            </div>
-                                          </div>
-                                          @endif
-                                       </div>
-                                    </div>
-                                    @endif
-                                    <?php } ?>
-                                 </div>
-                                 @endif
-                                 @if(isset($event['exams']) && count($event['exams']) >0 )
-                                 <?php $nowTime = \Carbon\Carbon::now(); ?>
-                                 <div id="c-exams-inner{{$tab}}" class="in-tab-wrapper">
-                                    <div class="dynamic-courses-wrapper dynamic-courses-wrapper--style2">
-                                       <div class="bottom">
-                                          <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Customer_Access.svg')}}" alt="">Exams will activate in the end of your course.</div>
-                                          @foreach($event['exams'] as $p)
-                                          <div class="right">
-                                             <!-- Feedback 8-12 changed -->
-
-                                             <?php $userExam = isset($user['hasExamResults'][$p->id][0]) ? $user['hasExamResults'][$p->id][0] : null ?>
-
-                                             @if( $userExam  && $nowTime->diffInHours($userExam->end_time) < 48)
-                                             <a target="_blank" href="{{ route('exam-results', [$p->id,'s'=>1]) }}" title="{{$p['title']}}" class="btn btn--secondary btn--md">VIEW RESULT</a>
-                                             @elseif($userExam )
-                                             <a target="_blank" href="{{ url('exam-results/' . $p->id) }}?s=1" title="{{$p['title']}}" class="btn btn--secondary btn--md btn--completed">VIEW RESULT</a>
-                                             @elseif($p->islive == 1)
-                                             <a target="_blank" onclick="window.open('{{ route('attempt-exam', [$p->id]) }}', 'newwindow', 'width=1400,height=650'); return false;" title="{{$p['title']}}" class="btn btn--secondary btn--md">TAKE EXAM</a>
-                                             @elseif($p->isupcom == 1)
-                                             <a  title="{{$p['title'] }}" class="btn btn--secondary btn--md">{{ date('F j, Y', strtotime($p->publish_time)) }}</a>
-                                             @endif
-                                          </div>
-                                          <!-- ./item -->
-                                          @endforeach
-                                       </div>
-                                    </div>
-                                    <!-- ./dynamic-courses-wrapper -->
-                                 </div>
-                                 @endif
-
-                                 @if(count($event['certs']) > 0)
-                                 <div id="c-cert-inner{{$tab}}" class="in-tab-wrapper">
-                                    <div class="bottom">
-                                       <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}" alt="">@if(isset($newlayoutExamsEvent[$keyType]) && count($newlayoutExamsEvent[$keyType])>0)Certificate download after completing your exams. @else Your certification is ready @endif</div>
-                                       @foreach($event['certs'] as $certificate)
-                                       <?php
-                                             $expirationMonth = '';
-                                             $expirationYear = '';
-                                             $certUrl = trim(url('/') . '/mycertificate/' . base64_encode(Auth::user()->email."--".$certificate->id));
-                                             if($certificate->expiration_date){
-                                                $expirationMonth = date('m',$certificate->expiration_date);
-                                                $expirationYear = date('Y',$certificate->expiration_date);
-                                             }
-
-                                             $certiTitle = preg_replace( "/\r|\n/", " ", $certificate->certificate_title );
-
-                                             if(strpos($certificate->certificate_title, '</p><p>')){
-                                                $certiTitle = substr_replace($certificate->certificate_title, ' ', strpos($certificate->certificate_title, '</p>'), 0);
-                                             }else{
-                                                $certiTitle = $certificate->certificate_title;
-                                             }
-                                             $certiTitle = str_replace('&nbsp;',' ',$certiTitle);
-                                             $certiTitle = urlencode(htmlspecialchars_decode(strip_tags($certiTitle),ENT_QUOTES));
-
-                                          ?>
-                                       <div class="right">
-                                          <a  class="btn btn--secondary btn--md" target="_blank" href="/mycertificate/{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" >DOWNLOAD </a>
-                                          <a class="linkedin-post cert-post"  target="_blank" href="https://www.linkedin.com/profile/add?startTask={{$certiTitle}}&name={{$certiTitle}}&organizationId=3152129&issueYear={{date('Y',$certificate->create_date)}}
-                                                &issueMonth={{date('m',$certificate->create_date)}}&expirationYear={{$expirationYear}}&expirationMonth={{$expirationMonth}}&certUrl={{$certUrl}}&certId={{$certificate->credential}}">
-                                                <img class="linkdein-image-add" src="{{cdn('theme/assets/images/icons/social/events/Linkedin.svg')}}" alt="LinkedIn Add to Profile button">
-                                          </a>
-                                          @if($user->id == 1359)
-                                          <a class="facebook-post-cert" data-certid="{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" title="Add this certification to your Facebook profile" href="javascript:void(0)">
-                                                <img class="linkdein-image-add" src="{{cdn('theme/assets/images/icons/social/events/Facebook.svg')}}" alt="Facebook Add to Profile button">
-                                          </a>
-                                          <a class="twitter-post-cert" data-certid="{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" title="Add this certification to your Facebook profile" href="javascript:void(0)">
-                                                <img class="linkdein-image-add" src="{{cdn('theme/assets/images/icons/social/events/Twitter.svg')}}" alt="Twitter Add to Profile button">
-                                          </a>
-                                          @endif
-
-                                        </div>
-
-
-                                       @endforeach
-                                    </div>
-                                 </div>
-                                 @endif
-                              </div>
-                           </div>
-                        </div>
-                     </div>
-                     @else
-                     <div class="col12 dynamic-courses-wrapper">
-                        <div class="item">
-                           <h2>{{ $event['title'] }}</h2>
-                           <div class="inside-tabs">
-                              <div class="tabs-ctrl">
-                                 <ul>
-                                    {{--<li ><a href="#c-info-inner{{$tab}}">Info</a></li>--}}
-                                    <li class="active"><a href="#c-watch-inner{{$tab}}">Watch</a></li>
-
-
-                                    @if(isset($event['exams']) && count($event['exams']) >0 )
-                                       <li><a href="#c-exams-inner{{$tab}}">Exams</a></li>
-                                    @endif
-                                    @if(count($event['certs']) > 0)
-                                       <li><a href="#c-cert-inner{{$tab}}">Certificate</a></li>
-                                    @endif
-
-                                    @if($event['mySubscription'])
-                                    <li><a href="#c-subs-inner{{$tab}}">Subscription</a></li>
-                                    @endif
-                                 </ul>
-                              </div>
-                              <div class="inside-tabs-wrapper">
-                                 {{--<div id="c-info-inner{{$tab}}" class="in-tab-wrapper" style="display: block;">
-                                    <div class="bottom">
-                                       <?php //dd($event['videos_progress']); ?>
-                                       @if($event['expiration'])
-                                       <div class="expire-date exp-date"><img src="{{cdn('/theme/assets/images/icons/Days-Week.svg')}}" alt="">Expiration date: {{$event['expiration']}}</div>
-                                       @endif
-                                       @if (isset($event['hours']))
-                                       <div  class="duration"><img class="replace-with-svg" width="20" onerror="this.src='{{cdn('/theme/assets/images/icons/Start-Finish.svg')}}'"  src="{{cdn($event['hours_icon'])}}" alt=""> {{$event['hours']}}h </div>
-                                       @endif
-                                       @if (isset($event['videos_progress']))
-                                       <?php //dd($event); ?>
-                                       <div  class="duration"><img class="replace-with-svg" width="20" src="{{cdn('/theme/assets/images/icons/E-Learning.svg')}}" alt=""> {{$event['videos_progress']}}% </div>
-                                       @endif
-                                    </div>
-                                 </div>--}}
-                                 @if($event['mySubscription'])
-                                 <div id="c-subs-inner{{$tab}}" class="in-tab-wrapper">
-                                    <div class="bottom">
-                                       @if($event['mySubscription'])
-                                       <div class="left">
-                                          <div class="bottom">
-                                             @if($event['mySubscription']['trial_ends_at'])
-                                             <?php
-                                                $date_timestamp = strtotime($event['mySubscription']['trial_ends_at']);
-                                                $now_date = strtotime(date('d/m/Y'));
-                                                $date = date('d-m-Y',$date_timestamp);
-                                                ?>
-                                             @if($date_timestamp > $now_date )
-                                             <?php //dd('not expired'); ?>
-                                             <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/clock-coins.svg')}}" alt=""><?php echo 'Your trial expiration: '.$date; ?></div>
-                                             @if($event['mySubscription']['status'])
-                                             <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt=""><?php echo 'You will be charged: '.date('d-m-Y',$event['mySubscription']['must_be_updated']); ?></div>
-                                             @endif
-                                             @else
-                                             @if($event['mySubscription'])
-                                             <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt=""><?php echo 'You will be charged: '.date('d-m-Y',$event['mySubscription']['must_be_updated']); ?></div>
-                                             @endif
-                                             @endif
-                                             @else
-                                             <?php
-                                                $date_timestamp = strtotime($event['mySubscription']['trial_ends_at']);
-                                                $now_date = strtotime(date('d/m/Y'));
-                                                $date = date('d-m-Y',$date_timestamp);
-                                                ?>
-                                             @if($date_timestamp > $now_date )
-                                             @if($event['mySubscription']['status'])
-                                             <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt=""><?php echo 'You will be charged: '.date('d-m-Y',$event['mySubscription']['must_be_updated']); ?></div>
-                                             @endif
-                                             @else
-                                             @if($event['mySubscription'])
-                                             <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt=""><?php echo 'You will be charged: '.date('d-m-Y',$event['mySubscription']['must_be_updated']); ?></div>
-                                             @endif
-                                             @endif
-                                             @endif
-                                             @if(isset($event['mySubscription']))
-                                             <div class="status_wrapper">
-                                                <div class="status_label"><label> Status:  </label></div>
-                                                <?php
-                                                   //dd($event['mySubscription']['active']);
-                                                      $a = '';
-                                                      $status = '';
-                                                      $row_status = '';
-                                                      $showToggle = isset($event['mySubscription']['stripe_status']) && $event['mySubscription']['stripe_status'] == 'active' ? true : false;
-                                                      if($event['mySubscription']['status']){
-                                                         $a = 'checked';
-                                                         $status = 'Active';
-                                                         //row_status = ` style="color:green;" `;
-
-                                                      }else{
-                                                         $status = 'Cancel';
-                                                         //row_status = ` style="color:red;" `;
-                                                      }
-                                                   ?>
-                                                @if($showToggle)
-                                                <div class="status_switch">
-                                                   <div class="onoffswitch" data-status="{{$status}}" data-id="{{$event['mySubscription']['id']}}" id="onoffswitch">
-                                                      <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" tabindex="0" <?php echo $a; ?>>
-                                                      <label class="onoffswitch-label" for="myonoffswitch">
-                                                      <span class="onoffswitch-inner"></span>
-                                                      <span class="onoffswitch-switch"></span>
-                                                      </label>
-                                                   </div>
+                                                        @endforeach
+                                                    {{--</div>--}}
                                                 </div>
                                                 @endif
-                                             </div>
-                                             @endif
-                                          </div>
-                                       </div>
-                                       @endif
-                                       <?php //dd($event['mySubscription']); ?>
-                                       @if(!$event['mySubscription'])
-                                       <div class="left">
-                                          <div  class="duration"><img class="replace-with-svg" width="20" src="{{cdn('/theme/assets/images/icons/checklist-graduate-hat.svg')}}" alt="">Get annual access to updated videos & files. 15 days free trial.</div>
-                                       </div>
-                                       @endif
-                                       <div class="right">
-                                          <?php //dd($event) ?>
-                                          @if(!$event['mySubscription'])
-                                          @foreach($event['plans'] as $key => $plan)
-                                          <a href="/myaccount/subscription/{{$event['title']}}/{{ $plan->name }}" class="btn btn--secondary btn--md">SUBSCRIBE NOW</a>
-                                          @endforeach
-                                          @endif
-                                       </div>
+                                            </div>
+                                            </div>
+                                            @endif
+                                            <?php } ?>
+                                        </div>
+                                        @endif
+                                        @if(isset($event['exams']) && count($event['exams']) >0 )
+                                        <?php $nowTime = \Carbon\Carbon::now(); ?>
+                                        <div id="c-exams-inner{{$tab}}" class="in-tab-wrapper">
+                                            <div class="dynamic-courses-wrapper dynamic-courses-wrapper--style2">
+                                            <div class="bottom">
+                                                <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Customer_Access.svg')}}" title="customer_Access_icon" alt="customer_Access_icon">Exams will activate in the end of your course.</div>
+                                                @foreach($event['exams'] as $p)
+                                                <div class="right">
+                                                    <!-- Feedback 8-12 changed -->
+
+                                                    <?php $userExam = isset($user['hasExamResults'][$p->id][0]) ? $user['hasExamResults'][$p->id][0] : null ?>
+
+                                                    @if( $userExam  && $nowTime->diffInHours($userExam->end_time) < 48)
+                                                    <a target="_blank" href="{{ route('exam-results', [$p->id,'s'=>1]) }}" title="{{$p['title']}}" class="btn btn--secondary btn--md">VIEW RESULT</a>
+                                                    @elseif($userExam )
+                                                    <a target="_blank" href="{{ url('exam-results/' . $p->id) }}?s=1" title="{{$p['title']}}" class="btn btn--secondary btn--md btn--completed">VIEW RESULT</a>
+                                                    @elseif($p->islive == 1)
+                                                    <a target="_blank" onclick="window.open('{{ route('attempt-exam', [$p->id]) }}', 'newwindow', 'width=1400,height=650'); return false;" title="{{$p['title']}}" class="btn btn--secondary btn--md">TAKE EXAM</a>
+                                                    @elseif($p->isupcom == 1)
+                                                    <a  title="{{$p['title'] }}" class="btn btn--secondary btn--md">{{ date('F j, Y', strtotime($p->publish_time)) }}</a>
+                                                    @endif
+                                                </div>
+                                                <!-- ./item -->
+                                                @endforeach
+                                            </div>
+                                            </div>
+                                            <!-- ./dynamic-courses-wrapper -->
+                                        </div>
+                                        @endif
+
+                                        @if(count($event['certs']) > 0)
+                                        <div id="c-cert-inner{{$tab}}" class="in-tab-wrapper">
+                                            <div class="bottom">
+                                            <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}" title="customer_Access_icon" alt="Access-Files-icon">@if(isset($newlayoutExamsEvent[$keyType]) && count($newlayoutExamsEvent[$keyType])>0)Certificate download after completing your exams. @else Your certification is ready @endif</div>
+                                            @foreach($event['certs'] as $certificate)
+                                            <?php
+                                                    $expirationMonth = '';
+                                                    $expirationYear = '';
+                                                    $certUrl = trim(url('/') . '/mycertificate/' . base64_encode(Auth::user()->email."--".$certificate->id));
+                                                    if($certificate->expiration_date){
+                                                        $expirationMonth = date('m',$certificate->expiration_date);
+                                                        $expirationYear = date('Y',$certificate->expiration_date);
+                                                    }
+
+                                                    $certiTitle = preg_replace( "/\r|\n/", " ", $certificate->certificate_title );
+
+                                                    if(strpos($certificate->certificate_title, '</p><p>')){
+                                                        $certiTitle = substr_replace($certificate->certificate_title, ' ', strpos($certificate->certificate_title, '</p>'), 0);
+                                                    }else{
+                                                        $certiTitle = $certificate->certificate_title;
+                                                    }
+                                                    $certiTitle = str_replace('&nbsp;',' ',$certiTitle);
+                                                    $certiTitle = urlencode(htmlspecialchars_decode(strip_tags($certiTitle),ENT_QUOTES));
+                                                ?>
+                                            <div class="right">
+                                                <a  class="btn btn--secondary btn--md" target="_blank" href="/mycertificate/{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" >DOWNLOAD </a>
+                                                <a class="linkedin-post cert-post"  target="_blank" href="https://www.linkedin.com/profile/add?startTask={{$certiTitle}}&name={{$certiTitle}}&organizationId=3152129&issueYear={{date('Y',$certificate->create_date)}}
+                                                        &issueMonth={{date('m',$certificate->create_date)}}&expirationYear={{$expirationYear}}&expirationMonth={{$expirationMonth}}&certUrl={{$certUrl}}&certId={{$certificate->credential}}">
+                                                        <img loading="lazy" class="linkdein-image-add resp-img" width="36" height="36" src="{{cdn('theme/assets/images/icons/social/events/Linkedin.svg')}}"  title="LinkedIn Add to Profile button" alt="LinkedIn Add to Profile button">
+                                                </a>
+                                                @if($user->id == 1359)
+                                                <a class="facebook-post-cert" data-certTitle="{{$certiTitle}}" data-certid="{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" title="Add this certification to your Facebook profile" href="javascript:void(0)">
+                                                        <img loading="lazy" class="linkdein-image-add resp-img" width="36" height="36" src="{{cdn('theme/assets/images/icons/social/events/Facebook.svg')}}" title="Facebook Add to Profile button" alt="Facebook Add to Profile button">
+                                                </a>
+                                                <a class="twitter-post-cert" data-certTitle="{{$certiTitle}}" data-certid="{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" title="Add this certification to your Twitter profile" href="javascript:void(0)">
+                                                        <img loading="lazy" class="linkdein-image-add resp-img" width="36" height="36" src="{{cdn('theme/assets/images/icons/social/events/Twitter.svg')}}" title="Twitter Add to Profile button" alt="Twitter Add to Profile button">
+                                                </a>
+                                                @endif
+
+                                                </div>
+
+
+                                            @endforeach
+                                            </div>
+                                        </div>
+                                        @endif
                                     </div>
+                                </div>
+                                @if(isset($event['paid']) && $event['paid'] == 0)
+                                 <div class="unpaidMessage d-none">
+                                     <h3>You have an unpaid amount for this course. Please contact us to arrange payment and retrieve your access.</h3>
                                  </div>
                                  @endif
-                                 <?php //dd($event); ?>
-                                 <div id="c-watch-inner{{$tab}}" class="in-tab-wrapper" style="display: block;">
-                                    <div class="bottom">
-                                       @if (isset($event['hours']))
-                                       <div  class="duration"><img class="replace-with-svg" width="20" onerror="this.src='{{cdn('/theme/assets/images/icons/Start-Finish.svg')}}'"  src="{{cdn($event['hours_icon'])}}" alt=""> {{$event['hours']}}h </div>
-                                       @endif
-                                       @if (isset($event['videos_progress']))
-                                       <div  class="duration"><img class="replace-with-svg" width="20" src="{{cdn('/theme/assets/images/icons/E-Learning.svg')}}" alt=""> {{$event['videos_progress']}}% </div>
-                                       @endif
-                                       @if (isset($event['videos_seen']))
-                                       <div  class="duration"><img class="replace-with-svg" width="20" src="{{cdn('/theme/assets/images/icons/Recap-Events.svg')}}" alt=""> {{str_replace('/','of',$event['videos_seen'])}} </div>
-                                       @endif
-                                       @if(isset($event['expiration']) && $event['expiration'])
-                                       <div class="expire-date exp-date"><img src="{{cdn('/theme/assets/images/icons/Days-Week.svg')}}" alt="">Expiration date: {{$event['expiration']}}</div>
-                                       @endif
-                                       <div class="right">
-                                          <?php $expire = false; ?>
-                                          @foreach($mySubscriptions as $key => $sub)
-                                          @foreach($plans as $key1 => $plan)
-                                          <?php //dd($plan['stipe_plan']); ?>
-                                          @if($sub['stripe_plan'] == $plan['stripe_plan'])
-                                          @if($event['id'] == $plan['event_id'])
-                                          <?php
-                                             if(date("Y-m-d h:i:s") < $sub['must_be_updated']){
-                                                $expire = false;
-                                             }else{
-                                                $expire = true;
-                                             }
-                                             ?>
-                                          @endif
-                                          @endif
-                                          @endforeach
-                                          @endforeach
-                                          @if(!$event['video_access'])
-                                          {{--<a style="cursor:not-allowed; opacity: 0.5; pointer-events: none;" href="/myaccount/elearning/{{ $event['title'] }}" class="btn btn--secondary btn--md">@if((isset($event['videos_progress']) && $event['videos_progress'] == 100) || count($event['cert'])>0) WATCH AGAIN @else WATCH NOW @endif</a>--}}
-                                          @else
-                                          <a href="/myaccount/elearning/{{ $event['title'] }}" class="btn btn--secondary btn--md">@if( (isset($event['videos_progress']) && $event['videos_progress'] == 100) ) WATCH AGAIN @else WATCH NOW @endif</a>
-                                          @endif
-                                       </div>
-                                    </div>
-                                 </div>
-
-                                 @if(isset($event['exams']))
-                                 <?php $nowTime = \Carbon\Carbon::now(); ?>
-                                 <div id="c-exams-inner{{$tab}}" class="in-tab-wrapper">
-                                    <div class="bottom">
-                                       @foreach($event['exams'] as $p)
-                                       <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Customer_Access.svg')}}" alt="">Exams activate automatically after 2 months </div>
-                                       <div class="right">
-                                          <!-- Feedback 8-12 changed -->
-
-                                          <?php $userExam = isset($user['hasExamResults'][$p->id][0]) ? $user['hasExamResults'][$p->id][0] : null ?>
-
-                                          @if($event['exam_access'] && !$userExam)
-                                             @if($p->islive == 1)
-                                             <a target="_blank" onclick="window.open('{{ route('attempt-exam', [$p->id]) }}', 'newwindow', 'width=1400,height=650'); return false;" title="{{$p['exam_name']}}" class="btn btn--secondary btn--md">TAKE EXAM</a>
-                                             @endif
-                                          @elseif($userExam)
-                                             @if($nowTime->diffInHours($userExam->end_time) < 48)
-                                             <a target="_blank" href="{{ url('exam-results/' . $p->id) }}?s=1" title="{{$p['exam_name']}}" class="btn btn--secondary btn--md">VIEW RESULT</a>
-                                             @else
-                                             <a target="_blank" href="{{ url('exam-results/' . $p->id) }}?s=1" title="{{$p['exam_name']}}" class="btn btn--secondary btn--md btn--completed">VIEW RESULT</a>
-                                             @endif
-                                          @else
-                                          <div class="right">
-                                             <a href="javascript:void(0)" title="{{$p['exam_name']}}" class="btn btn--secondary btn--md btn--completed">TAKE EXAM</a>
-                                          </div>
-                                          @endif
-                                       </div>
-                                       @endforeach
-                                    </div>
-                                 </div>
-                                 @endif
-                                 @if(count($event['certs']) > 0)
-                                 <div id="c-cert-inner{{$tab}}" class="in-tab-wrapper">
-                                    <div class="bottom">
-                                       <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}" alt="">@if(isset($newlayoutExamsEvent[$keyType]) && count($newlayoutExamsEvent[$keyType])>0)Certificate download after completing your exams. @else Your certification is ready @endif</div>
-                                       @foreach($event['certs'] as $certificate)
-                                          <?php
-                                             $expirationMonth = '';
-                                             $expirationYear = '';
-                                             $certUrl = trim(url('/') . '/mycertificate/' . base64_encode(Auth::user()->email."--".$certificate->id));
-                                             if($certificate->expiration_date){
-                                                $expirationMonth = date('m',$certificate->expiration_date);
-                                                $expirationYear = date('Y',$certificate->expiration_date);
-                                             }
-
-                                             //dd(strpos($certificate->certificate_title, '</p>'));
-
-                                             if(strpos($certificate->certificate_title, '</p><p>')){
-                                                $certiTitle = substr_replace($certificate->certificate_title, ' ', strpos($certificate->certificate_title, '</p>'), 0);
-                                             }else{
-                                                $certiTitle = $certificate->certificate_title;
-                                             }
-
-                                             $certiTitle = str_replace('&nbsp;',' ',$certiTitle);
-                                             $certiTitle = urlencode(htmlspecialchars_decode(strip_tags($certiTitle),ENT_QUOTES));
-
-                                             //dd($certiTitle);
-
-                                             ?>
-                                       <div class="right">
-
-                                             <a  class="btn btn--secondary btn--md" target="_blank" href="/mycertificate/{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" >DOWNLOAD </a>
-                                             <a class="linkedin-post cert-post"  target="_blank" href="https://www.linkedin.com/profile/add?startTask={{$certiTitle}}&name={{$certiTitle}}&organizationId=3152129&issueYear={{date('Y',$certificate->create_date)}}
-                                                   &issueMonth={{date('m',$certificate->create_date)}}&expirationYear={{$expirationYear}}&expirationMonth={{$expirationMonth}}&certUrl={{$certUrl}}&certId={{$certificate->credential}}">
-                                                   <img class="linkdein-image-add" src="{{cdn('theme/assets/images/icons/social/events/Linkedin.svg')}}" alt="LinkedIn Add to Profile button">
-                                             </a>
-                                          @if($user->id == 1359)
-                                          <a class="facebook-post-cert cert-post" data-certid="{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" title="Add this certification to your Facebook profile" href="javascript:void(0)">
-                                                <img class="linkdein-image-add" src="{{cdn('theme/assets/images/icons/social/events/Facebook.svg')}}" alt="Facebook Add to Profile button">
-                                          </a>
-                                          <a class="twitter-post-cert" data-certid="{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" title="Add this certification to your Facebook profile" href="javascript:void(0)">
-                                                <img class="linkdein-image-add" src="{{cdn('theme/assets/images/icons/social/events/Twitter.svg')}}" alt="Twitter Add to Profile button">
-                                          </a>
-                                          @endif
-                                       </div>
-
-                                       @endforeach
-                                    </div>
-                                 </div>
-                                 @endif
-
-                              </div>
-                           </div>
-                           <!-- ./item -->
+                            </div>
                         </div>
-                     </div>
+                     @else
+
+
+                        <div class="col12 dynamic-courses-wrapper @if(isset($event['paid']) && $event['paid'] == 0){{'unpaid'}}@endif">
+                            <div class="item">
+                            <h2>{{ $event['title'] }}</h2>
+                            <div class="inside-tabs">
+                                <div class="tabs-ctrl">
+                                    <ul>
+                                        {{--<li ><a href="#c-info-inner{{$tab}}">Info</a></li>--}}
+                                        <li class="active"><a href="#c-watch-inner{{$tab}}">Watch</a></li>
+
+
+                                        @if(isset($event['exams']) && count($event['exams']) >0 )
+                                        <li><a href="#c-exams-inner{{$tab}}">Exams</a></li>
+                                        @endif
+                                        @if(count($event['certs']) > 0)
+                                        <li><a href="#c-cert-inner{{$tab}}">Certificate</a></li>
+                                        @endif
+
+                                        @if($event['mySubscription'])
+                                        <li><a href="#c-subs-inner{{$tab}}">Subscription</a></li>
+                                        @endif
+                                    </ul>
+                                </div>
+                                <div class="inside-tabs-wrapper">
+                                    {{--<div id="c-info-inner{{$tab}}" class="in-tab-wrapper" style="display: block;">
+                                        <div class="bottom">
+                                        <?php //dd($event['videos_progress']); ?>
+                                        @if($event['expiration'])
+                                        <div class="expire-date exp-date"><img src="{{cdn('/theme/assets/images/icons/Days-Week.svg')}}" alt="">Expiration date: {{$event['expiration']}}</div>
+                                        @endif
+                                        @if (isset($event['hours']))
+                                        <div  class="duration"><img class="replace-with-svg" width="20" onerror="this.src='{{cdn('/theme/assets/images/icons/Start-Finish.svg')}}'"  src="{{cdn($event['hours_icon'])}}" alt=""> {{$event['hours']}}h </div>
+                                        @endif
+                                        @if (isset($event['videos_progress']))
+                                        <?php //dd($event); ?>
+                                        <div  class="duration"><img class="replace-with-svg" width="20" src="{{cdn('/theme/assets/images/icons/E-Learning.svg')}}" alt=""> {{$event['videos_progress']}}% </div>
+                                        @endif
+                                        </div>
+                                    </div>--}}
+                                    @if($event['mySubscription'])
+                                    <div id="c-subs-inner{{$tab}}" class="in-tab-wrapper">
+                                        <div class="bottom">
+                                        @if($event['mySubscription'])
+                                        <div class="left">
+                                            <div class="bottom">
+                                                @if($event['mySubscription']['trial_ends_at'])
+                                                <?php
+                                                    $date_timestamp = strtotime($event['mySubscription']['trial_ends_at']);
+                                                    $now_date = strtotime(date('d/m/Y'));
+                                                    $date = date('d-m-Y',$date_timestamp);
+                                                    ?>
+                                                @if($date_timestamp > $now_date )
+                                                <?php //dd('not expired'); ?>
+                                                <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/clock-coins.svg')}}" alt="clock-coins-icon" title="clock-coins-icon"><?php echo 'Your trial expiration: '.$date; ?></div>
+                                                @if($event['mySubscription']['status'])
+                                                <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt="credit-icon" title="credit-icon"><?php echo 'You will be charged: '.date('d-m-Y',$event['mySubscription']['must_be_updated']); ?></div>
+                                                @endif
+                                                @else
+                                                @if($event['mySubscription'])
+                                                <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt="credit-icon" title="credit-icon"><?php echo 'You will be charged: '.date('d-m-Y',$event['mySubscription']['must_be_updated']); ?></div>
+                                                @endif
+                                                @endif
+                                                @else
+                                                <?php
+                                                    $date_timestamp = strtotime($event['mySubscription']['trial_ends_at']);
+                                                    $now_date = strtotime(date('d/m/Y'));
+                                                    $date = date('d-m-Y',$date_timestamp);
+                                                    ?>
+                                                @if($date_timestamp > $now_date )
+                                                @if($event['mySubscription']['status'])
+                                                <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt="credit-icon" title="credit-icon"><?php echo 'You will be charged: '.date('d-m-Y',$event['mySubscription']['must_be_updated']); ?></div>
+                                                @endif
+                                                @else
+                                                @if($event['mySubscription'])
+                                                <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt="credit-icon" title="credit-icon"><?php echo 'You will be charged: '.date('d-m-Y',$event['mySubscription']['must_be_updated']); ?></div>
+                                                @endif
+                                                @endif
+                                                @endif
+                                                @if(isset($event['mySubscription']))
+                                                <div class="status_wrapper">
+                                                    <div class="status_label"><label> Status:  </label></div>
+                                                    <?php
+                                                    //dd($event['mySubscription']['active']);
+                                                        $a = '';
+                                                        $status = '';
+                                                        $row_status = '';
+                                                        $showToggle = isset($event['mySubscription']['stripe_status']) && $event['mySubscription']['stripe_status'] == 'active' ? true : false;
+                                                        if($event['mySubscription']['status']){
+                                                            $a = 'checked';
+                                                            $status = 'Active';
+                                                            //row_status = ` style="color:green;" `;
+
+                                                        }else{
+                                                            $status = 'Cancel';
+                                                            //row_status = ` style="color:red;" `;
+                                                        }
+                                                    ?>
+                                                    @if($showToggle)
+                                                    <div class="status_switch">
+                                                    <div class="onoffswitch" data-status="{{$status}}" data-id="{{$event['mySubscription']['id']}}" id="onoffswitch">
+                                                        <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" tabindex="0" <?php echo $a; ?>>
+                                                        <label class="onoffswitch-label" for="myonoffswitch">
+                                                        <span class="onoffswitch-inner"></span>
+                                                        <span class="onoffswitch-switch"></span>
+                                                        </label>
+                                                    </div>
+                                                    </div>
+                                                    @endif
+                                                </div>
+                                                @endif
+                                            </div>
+                                        </div>
+                                        @endif
+                                        <?php //dd($event['mySubscription']); ?>
+                                        @if(!$event['mySubscription'])
+                                        <div class="left">
+                                            <div  class="duration"><img class="replace-with-svg" width="20" src="{{cdn('/theme/assets/images/icons/checklist-graduate-hat.svg')}}" alt="">Get annual access to updated videos & files. 15 days free trial.</div>
+                                        </div>
+                                        @endif
+                                        <div class="right">
+                                            <?php //dd($event) ?>
+                                            @if(!$event['mySubscription'])
+                                            @foreach($event['plans'] as $key => $plan)
+                                            <a href="/myaccount/subscription/{{$event['title']}}/{{ $plan->name }}" class="btn btn--secondary btn--md">SUBSCRIBE NOW</a>
+                                            @endforeach
+                                            @endif
+                                        </div>
+                                        </div>
+                                    </div>
+                                    @endif
+                                    <?php //dd($event); ?>
+                                    <div id="c-watch-inner{{$tab}}" class="in-tab-wrapper" style="display: block;">
+                                        <div class="bottom">
+                                        @if (isset($event['hours']))
+                                        <div  class="duration"><img loading="lazy" class="replace-with-svg resp-img" height="20" width="20" onerror="this.src='{{cdn('/theme/assets/images/icons/Start-Finish.svg')}}'"  src="{{cdn($event['hours_icon'])}}" title="hours" alt="hours"> {{$event['hours']}}h </div>
+                                        @endif
+                                        @if (isset($event['videos_progress']))
+                                        <div  class="duration"><img class="replace-with-svg" width="20" src="{{cdn('/theme/assets/images/icons/E-Learning.svg')}}" alt="elearning" title="elearning"> {{$event['videos_progress']}}% </div>
+                                        @endif
+                                        @if (isset($event['videos_seen']))
+                                        <div  class="duration"><img class="replace-with-svg" width="20" src="{{cdn('/theme/assets/images/icons/Recap-Events.svg')}}" alt="recap-events" title="recap-events"> {{str_replace('/','of',$event['videos_seen'])}} </div>
+                                        @endif
+                                        @if(isset($event['expiration']) && $event['expiration'])
+                                        <div class="expire-date exp-date"><img src="{{cdn('/theme/assets/images/icons/Days-Week.svg')}}" alt="days-week">Expiration date: {{$event['expiration']}}</div>
+                                        @endif
+                                        <div class="right">
+                                            <?php $expire = false; ?>
+                                            @foreach($mySubscriptions as $key => $sub)
+                                            @foreach($plans as $key1 => $plan)
+                                            <?php //dd($plan['stipe_plan']); ?>
+                                            @if($sub['stripe_plan'] == $plan['stripe_plan'])
+                                            @if($event['id'] == $plan['event_id'])
+                                            <?php
+                                                if(date("Y-m-d h:i:s") < $sub['must_be_updated']){
+                                                    $expire = false;
+                                                }else{
+                                                    $expire = true;
+                                                }
+                                                ?>
+                                            @endif
+                                            @endif
+                                            @endforeach
+                                            @endforeach
+                                            @if(!$event['video_access'])
+                                            {{--<a style="cursor:not-allowed; opacity: 0.5; pointer-events: none;" href="/myaccount/elearning/{{ $event['title'] }}" class="btn btn--secondary btn--md">@if((isset($event['videos_progress']) && $event['videos_progress'] == 100) || count($event['cert'])>0) WATCH AGAIN @else WATCH NOW @endif</a>--}}
+                                            @else
+                                            <a href="/myaccount/elearning/{{ $event['title'] }}" class="btn btn--secondary btn--md">@if( (isset($event['videos_progress']) && $event['videos_progress'] == 100) ) WATCH AGAIN @else WATCH NOW @endif</a>
+                                            @endif
+                                        </div>
+                                        </div>
+                                    </div>
+
+                                    @if(isset($event['exams']))
+                                    <?php $nowTime = \Carbon\Carbon::now(); ?>
+                                    <div id="c-exams-inner{{$tab}}" class="in-tab-wrapper">
+                                        <div class="bottom">
+                                        @foreach($event['exams'] as $p)
+
+                                        <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Customer_Access.svg')}}" alt="Customer_Access_icon" title="Customer_Access_icon">
+                                        @if(isset($event['exam_activate_months']) && $event['exam_activate_months'] != null)
+                                                {{ 'Exams activate automatically after' }} {{ $event['exam_activate_months'] }} {{'months' }}
+                                        @else
+                                                {{ 'Exams activate automatically after 80% progress' }}
+                                        @endif
+
+                                        </div>
+                                        <div class="right">
+                                            <!-- Feedback 8-12 changed -->
+
+                                            <?php $userExam = isset($user['hasExamResults'][$p->id][0]) ? $user['hasExamResults'][$p->id][0] : null ?>
+
+                                            @if($event['exam_access'] && !$userExam)
+                                                @if($p->islive == 1)
+                                                <a target="_blank" onclick="window.open('{{ route('attempt-exam', [$p->id]) }}', 'newwindow', 'width=1400,height=650'); return false;" title="{{$p['exam_name']}}" class="btn btn--secondary btn--md">TAKE EXAM</a>
+                                                @endif
+                                            @elseif($userExam)
+                                                @if($nowTime->diffInHours($userExam->end_time) < 48)
+                                                <a target="_blank" href="{{ url('exam-results/' . $p->id) }}?s=1" title="{{$p['exam_name']}}" class="btn btn--secondary btn--md">VIEW RESULT</a>
+                                                @else
+                                                <a target="_blank" href="{{ url('exam-results/' . $p->id) }}?s=1" title="{{$p['exam_name']}}" class="btn btn--secondary btn--md btn--completed">VIEW RESULT</a>
+                                                @endif
+                                            @else
+                                            <div class="right">
+                                                <a href="javascript:void(0)" title="{{$p['exam_name']}}" class="btn btn--secondary btn--md btn--completed">TAKE EXAM</a>
+                                            </div>
+                                            @endif
+                                        </div>
+                                        @endforeach
+                                        </div>
+                                    </div>
+                                    @endif
+
+                                    @if(count($event['certs']) > 0)
+                                    <div id="c-cert-inner{{$tab}}" class="in-tab-wrapper">
+                                        <div class="bottom">
+                                        <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}" alt="Access-Files-icon" title="Access-Files-icon">@if(isset($newlayoutExamsEvent[$keyType]) && count($newlayoutExamsEvent[$keyType])>0)Certificate download after completing your exams. @else Your certification is ready @endif</div>
+                                        @foreach($event['certs'] as $certificate)
+                                            <?php
+                                                $expirationMonth = '';
+                                                $expirationYear = '';
+                                                $certUrl = trim(url('/') . '/mycertificate/' . base64_encode(Auth::user()->email."--".$certificate->id));
+                                                if($certificate->expiration_date){
+                                                    $expirationMonth = date('m',$certificate->expiration_date);
+                                                    $expirationYear = date('Y',$certificate->expiration_date);
+                                                }
+
+                                                //dd(strpos($certificate->certificate_title, '</p>'));
+
+                                                if(strpos($certificate->certificate_title, '</p><p>')){
+                                                    $certiTitle = substr_replace($certificate->certificate_title, ' ', strpos($certificate->certificate_title, '</p>'), 0);
+                                                }else{
+                                                    $certiTitle = $certificate->certificate_title;
+                                                }
+                                                $certiTitle = str_replace('&nbsp;',' ',$certiTitle);
+                                                $certiTitle = urlencode(htmlspecialchars_decode(strip_tags($certiTitle),ENT_QUOTES));
+
+                                                ?>
+                                        <div class="right">
+
+                                                <a  class="btn btn--secondary btn--md" target="_blank" href="/mycertificate/{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" >DOWNLOAD </a>
+                                                <a class="linkedin-post cert-post"  target="_blank" href="https://www.linkedin.com/profile/add?startTask={{$certiTitle}}&name={{$certiTitle}}&organizationId=3152129&issueYear={{date('Y',$certificate->create_date)}}
+                                                    &issueMonth={{date('m',$certificate->create_date)}}&expirationYear={{$expirationYear}}&expirationMonth={{$expirationMonth}}&certUrl={{$certUrl}}&certId={{$certificate->credential}}">
+                                                    <img loading="lazy" class="linkdein-image-add resp-img" width="36" height="36" src="{{cdn('theme/assets/images/icons/social/events/Linkedin.svg')}}" alt="LinkedIn Add to Profile button" title="LinkedIn Add to Profile button">
+                                                </a>
+                                            @if($user->id == 1359)
+                                            <a class="facebook-post-cert cert-post" data-certTitle="{{$certiTitle}}" data-certid="{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" title="Add this certification to your Facebook profile" href="javascript:void(0)">
+                                                    <img loading="lazy" class="linkdein-image-add resp-img" width="36" height="36" src="{{cdn('theme/assets/images/icons/social/events/Facebook.svg')}}" alt="Facebook Add to Profile button" title="Facebook Add to Profile button">
+                                            </a>
+                                            <a class="twitter-post-cert" data-certTitle="{{$certiTitle}}" data-certid="{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" title="Add this certification to your Facebook profile" href="javascript:void(0)">
+                                                    <img loading="lazy" class="linkdein-image-add resp-img" width="36" height="36" src="{{cdn('theme/assets/images/icons/social/events/Twitter.svg')}}" alt="Twitter Add to Profile button" title="Twitter Add to Profile button">
+                                            </a>
+                                            @endif
+                                        </div>
+
+                                        @endforeach
+                                        </div>
+                                    </div>
+                                    @endif
+
+                                </div>
+                            </div>
+                            @if(isset($event['paid']) && $event['paid'] == 0)
+                                <div class="unpaidMessage d-none">
+                                    <h3>You have an unpaid amount for this course. Please contact us to arrange payment and retrieve your access.</h3>
+                                </div>
+                            @endif
+                            <!-- ./item -->
+                            </div>
+                        </div>
+
                      @endif
                      <?php $tab += 1; ?>
                      @endforeach
@@ -1491,7 +1525,7 @@
                                  <div id="c-watch-inner{{$tab}}" class="in-tab-wrapper" style="display: block;">
                                     <div class="bottom">
                                        @if (isset($event['hours']) && $event['hours'])
-                                       <div  class="duration"><img class="replace-with-svg" width="20" onerror="this.src='{{cdn('/theme/assets/images/icons/Start-Finish.svg')}}'"  src="{{cdn($event['hours_icon'])}}" alt=""> {{$event['hours']}}h </div>
+                                       <div  class="duration"><img loading="lazy" class="replace-with-svg resp-img" width="20" height="20" onerror="this.src='{{cdn('/theme/assets/images/icons/Start-Finish.svg')}}'"  src="{{cdn($event['hours_icon'])}}" alt="hours" title="hours"> {{$event['hours']}}h </div>
                                        @endif
                                        @if (isset($event['videos_progress']))
                                        <div  class="duration"><img class="replace-with-svg" width="20" src="{{cdn('/theme/assets/images/icons/E-Learning.svg')}}" alt=""> {{$event['videos_progress']}}% </div>
@@ -1533,7 +1567,13 @@
                                  <div id="c-exams-inner{{$tab}}" class="in-tab-wrapper">
                                     <div class="bottom">
                                        @foreach($event['exams'] as $p)
-                                       <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Customer_Access.svg')}}" alt="">Exams activate automatically after 2 months </div>
+                                       <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Customer_Access.svg')}}" alt="Customer_Access_icon" title="Customer_Access_icon">
+                                        @if(isset($event['exam_activate_months']) && $event['exam_activate_months'] != null)
+                                                {{ 'Exams activate automatically after' }} {{ $event['exam_activate_months'] }} {{ 'months' }}
+                                        @else
+                                                {{ 'Exams activate automatically after 80% progress' }}
+                                        @endif
+                                        </div>
                                        <div class="right">
                                           <!-- Feedback 8-12 changed -->
                                           <?php $userExam = isset($user['hasExamResults'][$p->id][0]) ? $user['hasExamResults'][$p->id][0] : null ?>
@@ -1577,7 +1617,6 @@
                                              }else{
                                                 $certiTitle = $certificate->certificate_title;
                                              }
-
                                              $certiTitle = str_replace('&nbsp;',' ',$certiTitle);
                                              $certiTitle = urlencode(htmlspecialchars_decode(strip_tags($certiTitle),ENT_QUOTES));
 
@@ -1586,14 +1625,14 @@
                                              <a  class="btn btn--secondary btn--md" target="_blank" href="/mycertificate/{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" >DOWNLOAD </a>
                                              <a class="linkedin-post cert-post"  target="_blank" href="https://www.linkedin.com/profile/add?startTask={{$certiTitle}}&name={{$certiTitle}}&organizationId=3152129&issueYear={{date('Y',$certificate->create_date)}}
                                                    &issueMonth={{date('m',$certificate->create_date)}}&expirationYear={{$expirationYear}}&expirationMonth={{$expirationMonth}}&certUrl={{$certUrl}}&certId={{$certificate->credential}}">
-                                                   <img class="linkdein-image-add" src="{{cdn('theme/assets/images/icons/social/events/Linkedin.svg')}}" alt="LinkedIn Add to Profile button">
+                                                   <img loading="lazy" class="linkdein-image-add resp-img" width="36" height="36" src="{{cdn('theme/assets/images/icons/social/events/Linkedin.svg')}}" alt="LinkedIn Add to Profile button" title="LinkedIn Add to Profile button">
                                              </a>
                                           @if($user->id == 1359)
-                                          <a class="facebook-post-cert" data-certid="{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" title="Add this certification to your Facebook profile" href="javascript:void(0)">
-                                                <img class="linkdein-image-add" src="{{cdn('theme/assets/images/icons/social/events/Facebook.svg')}}" alt="Facebook Add to Profile button">
+                                          <a class="facebook-post-cert" data-certTitle="{{$certiTitle}}" data-certid="{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" title="Add this certification to your Facebook profile" href="javascript:void(0)">
+                                                <img loading="lazy" class="linkdein-image-add resp-img" width="36" height="36" src="{{cdn('theme/assets/images/icons/social/events/Facebook.svg')}}" alt="Facebook Add to Profile button" title="Facebook Add to Profile button">
                                           </a>
-                                          <a class="twitter-post-cert" data-certid="{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" title="Add this certification to your Facebook profile" href="javascript:void(0)">
-                                                <img class="linkdein-image-add" src="{{cdn('theme/assets/images/icons/social/events/Twitter.svg')}}" alt="Twitter Add to Profile button">
+                                          <a class="twitter-post-cert" data-certTitle="{{$certiTitle}}" data-certid="{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" title="Add this certification to your Facebook profile" href="javascript:void(0)">
+                                                <img loading="lazy" class="linkdein-image-add resp-img" width="36" height="36" src="{{cdn('theme/assets/images/icons/social/events/Twitter.svg')}}" alt="Twitter Add to Profile button" title="Twitter Add to Profile button">
                                           </a>
 
                                           @endif
@@ -1620,13 +1659,13 @@
                                                 ?>
                                              @if($date_timestamp > $now_date )
                                              <?php //dd('not expired'); ?>
-                                             <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/clock-coins.svg')}}" alt=""><?php echo 'Your trial expiration: '.$date; ?></div>
+                                             <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/clock-coins.svg')}}" alt="clock-coins" title="clock-coins"><?php echo 'Your trial expiration: '.$date; ?></div>
                                              @if($event['mySubscription']['status'])
-                                             <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt=""><?php  echo 'You will be charged: '.date('d-m-Y',$event['mySubscription']['must_be_updated']); ?></div>
+                                             <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt="credit" title="credit"><?php  echo 'You will be charged: '.date('d-m-Y',$event['mySubscription']['must_be_updated']); ?></div>
                                              @endif
                                              @else
                                              @if($event['mySubscription'])
-                                             <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt=""><?php echo 'You will be charged: '.date('d-m-Y',$event['mySubscription']['must_be_updated']); ?></div>
+                                             <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt="credit" title="credit"><?php echo 'You will be charged: '.date('d-m-Y',$event['mySubscription']['must_be_updated']); ?></div>
                                              @endif
                                              @endif
                                              @else
@@ -1637,11 +1676,11 @@
                                                 ?>
                                              @if($date_timestamp > $now_date )
                                              @if($event['mySubscription']['status'])
-                                             <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt=""><?php echo 'You will be charged: '.date('d-m-Y',$event['mySubscription']['must_be_updated']); ?></div>
+                                             <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt="credit" title="credit"><?php echo 'You will be charged: '.date('d-m-Y',$event['mySubscription']['must_be_updated']); ?></div>
                                              @endif
                                              @else
                                              @if($event['mySubscription'])
-                                             <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt=""><?php echo 'You will be charged: '.date('d-m-Y',$event['mySubscription']['must_be_updated']); ?></div>
+                                             <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt="credit" title="credit"><?php echo 'You will be charged: '.date('d-m-Y',$event['mySubscription']['must_be_updated']); ?></div>
                                              @endif
                                              @endif
                                              @endif
@@ -1734,15 +1773,20 @@
       var getUrl = window.location;
       var baseUrl = getUrl .protocol + "//" + getUrl.host;
       var certificateId = $(this).attr('data-certid');
+      var certificateTitle = $(this).attr('data-certTitle');
+
+      certificateTitle = certificateTitle.split('+').join('_')
+
 
       $.ajax({
           type: 'GET',
           url: "/mycertificate/convert-pdf-to-image/"+certificateId,
           success: function(data) {
+            let url = data.path
 
-              data = data.replace('\\','/')
+              data = url.replace('\\','/')
               if(data){
-                  var fbpopup = window.open(`http://www.facebook.com/sharer.php?u=${decodeURI(baseUrl)}/${decodeURI(data)}`, "pop", "width=600, height=400, scrollbars=no");
+                  var fbpopup = window.open(`http://www.facebook.com/sharer.php?u=${decodeURI(baseUrl)}/${decodeURI(data)}/${decodeURI(certificateTitle)}`, "pop", "width=600, height=400, scrollbars=no");
                   return false;
               }
 
@@ -1754,17 +1798,24 @@
       var getUrl = window.location;
       var baseUrl = getUrl .protocol + "//" + getUrl.host;
       var certificateId = $(this).attr('data-certid');
+      var certificateTitle = $(this).attr('data-certTitle');
+
+      certificateTitle = certificateTitle.split('+').join('_')
 
       $.ajax({
           type: 'GET',
-          url: "/mycertificate/convert-pdf-to-image/"+certificateId,
+          url: "/mycertificate/share-twitter/"+certificateId,
           success: function(data) {
 
-              data = data.replace('\\','/')
-              if(data){
-                  var fbpopup = window.open(`http://twitter.com/share?url=${decodeURI(baseUrl)}/${decodeURI(data)}`, "pop", "width=600, height=400, scrollbars=no");
-                  return false;
-              }
+
+
+            // let url = data.path
+
+            //   data = url.replace('\\','/')
+            //   if(data){
+            //       var fbpopup = window.open(`http://twitter.com/share?url=${decodeURI(baseUrl)}/${decodeURI(data)}/${decodeURI(certificateTitle)}`, "pop", "width=600, height=400, scrollbars=no");
+            //       return false;
+            //   }
 
           }
       });
@@ -2251,30 +2302,6 @@
    }
 </script>
 
-@if(isset($eventsUnPaid))
-<script>
-    $(document).ready(function() {
-        let events = @json($eventsUnPaid);
-
-        let row = '';
-        let hasUnpaid = false
-        $.each(events, function(index, value) {
-            hasUnpaid = true;
-            row = row + `<p>Course: ${value.title}</p>`
-        })
-
-        if(hasUnpaid){
-            $('#favDialogUnPaid').removeAttr('hidden')
-            row = row + '<br><p>Installment payment has failed!!</p>'
-
-            $('#favDialogUnPaid #message').html(row)
-        }
-
-
-    })
-</script>
-@endif
-
 <script>
    $(document).ready(function() {
 
@@ -2419,6 +2446,54 @@
     $("#birthday").datepicker(datePickerOptions);
 
 
+</script>
+
+<script>
+    $( document ).ready(function() {
+        let unpaidLinks = $('.dynamic-courses-wrapper.unpaid').find('a')
+
+        $.each(unpaidLinks, function(index, value) {
+            $(value).attr('href', 'javascript:void(0)')
+        })
+
+        $( '.dynamic-courses-wrapper.unpaid' ).mouseenter( handlerIn ).mouseleave( handlerOut );
+
+        function handlerIn(){
+            let tabsElem = $(this).find('.inside-tabs')[0];
+            let messageElem = $(this).find('.unpaidMessage')[0];
+
+            $(tabsElem).addClass('d-none');
+            $(messageElem).removeClass('d-none');
+        }
+
+        function handlerOut(){
+            let tabsElem = $(this).find('.inside-tabs')[0];
+            let messageElem = $(this).find('.unpaidMessage')[0];
+
+            $(tabsElem).removeClass('d-none');
+            $(messageElem).addClass('d-none');
+        }
+
+        // $(document).on('mouseover', '.dynamic-courses-wrapper.unpaid', function(){
+        //     console.log('test')
+        //     let tabsElem = $(this).find('.inside-tabs')[0];
+        //     let messageElem = $(this).find('.unpaidMessage')[0];
+
+        //     $(tabsElem).addClass('d-none');
+        //     $(messageElem).removeClass('d-none');
+        // })
+
+        // $(document).on('mouseleave', '.dynamic-courses-wrapper.unpaid', function(){
+
+        //     let tabsElem = $(this).find('.inside-tabs')[0];
+        //     let messageElem = $(this).find('.unpaidMessage')[0];
+
+        //     $(tabsElem).removeClass('d-none');
+        //     $(messageElem).addClass('d-none');
+        // })
+
+
+    })
 </script>
 
 @stop

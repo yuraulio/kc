@@ -131,6 +131,9 @@
                             <li>
                                 <a href="{{route('admin-countdown')}}">Countdown management</a>
                             </li>
+                            <li>
+                                <a href="{{route('admin-reports')}}">Report Tools</a>
+                            </li>
                         </ul>
                     </div>
                 </li>
@@ -141,7 +144,6 @@
                         <span> Settings </span>
                     </a>
                 </li>
-
             </ul>
 
         </div>

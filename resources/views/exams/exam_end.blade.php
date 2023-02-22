@@ -20,9 +20,9 @@
 
                 </div>
 
-                <div class="card-body">
+                <div style="font-size: initial" class="card-body">
 
-                  You have already given the test earlier. 
+                  You have already given the test earlier.
 
                 </div>
 
@@ -32,7 +32,7 @@
 
     </div>
 
-</div>                
+</div>
 
 
 

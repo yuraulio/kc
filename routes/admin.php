@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin_api\MenuController;
 use App\Http\Controllers\Auth\AdminLoginController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin_api\ExportController;
 
 
 //Route::domain('admin.' . env('APP_DOMAIN'))->group(function () {
@@ -31,6 +32,8 @@ Route::domain(env('PREFIX_NEW_ADMIN_DOMAIN_URL') . env('APP_DOMAIN'))->group(fun
         Route::get('/countdown', [DashboardController::class, 'countdown'])->name("admin-countdown");
         Route::get('/new_countdown', [DashboardController::class, 'countdownNew']);
 
+        Route::get('/reports', [DashboardController::class, 'reports'])->name("admin-reports");
+
         Route::prefix('users')->group(function () {
             Route::get('/admins', [UserController::class, 'admins'])->name("admins-management");
         });
@@ -42,6 +45,9 @@ Route::domain(env('PREFIX_NEW_ADMIN_DOMAIN_URL') . env('APP_DOMAIN'))->group(fun
         Route::get('/new_template', [DashboardController::class, 'templateNew']);
 
         Route::get('/settings', [SettingsController::class, 'index'])->name("settings");
+
+        Route::get('/export', [ExportController::class, 'subscriptionEnd'])->name("export");
+
     });
 });
 Route::group(['middleware' => ['auth:admin_web']], function () {

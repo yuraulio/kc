@@ -223,7 +223,12 @@ class StudentController extends Controller
 
                 $data['events'][$event->id]['certs'] = isset($event['certificates']) && $event['certificates'] ? $event['certificates'] : [];//$event->certificatesByUser($user->id);
                 $data['events'][$event->id]['exams'] = $event->getExams();
-                $data['events'][$event->id]['exam_access'] = $event->examAccess($user,2);//$user->examAccess(0.8,$event->id);
+                if(isset($eventInfo['elearning']['exam']['activate_months']) &&  $eventInfo['elearning']['exam']['activate_months'] != null  ){
+                    $data['events'][$event->id]['exam_access'] = $event->examAccess($user,$eventInfo['elearning']['exam']['activate_months']);
+                }else{
+                    $data['events'][$event->id]['exam_access'] = $event->examAccess($user,0);
+                }
+                //$data['events'][$event->id]['exam_access'] = $event->examAccess($user,2);//$user->examAccess(0.8,$event->id);
                 $data['events'][$event->id]['view_tpl'] = $event['view_tpl'];
                 $data['events'][$event->id]['category'] = $event['category'];
                 //$data['events'][$event->id]['summary1'] = $event['summary1'];
@@ -312,7 +317,18 @@ class StudentController extends Controller
                 $data['mySubscriptionEvents'][$key]['view_tpl'] = $event['view_tpl'];
 
                 $data['mySubscriptionEvents'][$key]['exams'] = $event->getExams();
-                $data['mySubscriptionEvents'][$key]['exam_access'] = $event->examAccess($user,0.8,$statistic);
+
+                if($event->id == 2304){
+                    //dd($eventInfo['elearning']['exam']['activate_months']);
+                }
+
+                if(isset($eventInfo['elearning']['exam']['activate_months']) &&  $eventInfo['elearning']['exam']['activate_months'] != null  ){
+                    $data['mySubscriptionEvents'][$key]['exam_access'] = $event->examAccess($user,$eventInfo['elearning']['exam']['activate_months']);
+                }else{
+                    $data['mySubscriptionEvents'][$key]['exam_access'] = $event->examAccess($user,0);
+                }
+
+                //$data['mySubscriptionEvents'][$key]['exam_access'] = $event->examAccess($user,0.8,$statistic);
                 $data['mySubscriptionEvents'][$key]['certs'] = isset($event['certificates']) && $event['certificates'] ? $event['certificates'] : [];//$event->certificatesByUser($user->id);
                 $data['mySubscriptionEvents'][$key]['mySubscription'] = $user->subscriptions()->where('id',$subEvent['id'])->first();
                 $data['mySubscriptionEvents'][$key]['delivery'] = isset($eventInfo['delivery'])  ? $eventInfo['delivery'] : -1;
@@ -411,31 +427,19 @@ class StudentController extends Controller
         $data['instructors'] = new \Illuminate\Database\Eloquent\Collection;;
         $eventSubscriptions = [];
 
-        $data['eventsUnPaid'] = [];
+        $data['unpaidEvents'] = [];
 
-        if(!empty($data['user']['eventsUnPaid'])){
-            foreach($data['user']['eventsUnPaid'] as $key => $event){
+        $events = $data['user']['events']->merge($data['user']['eventsUnPaid']);
 
-                if($event->pivot['comment'] == null ){
-                    $data['eventsUnPaid'][$key]['title'] = $event['title'];
-                }else{
-                    if(!str_contains($event->pivot['comment'], 'enroll from')){
-                        $data['eventsUnPaid'][$key]['title'] = $event['title'];
-
-                    }
-                }
-
-            }
-        }
-
-
-        foreach($data['user']['events'] as $key => $event){
+        foreach($events as $key => $event){
             $after20Days = null;
             /*if($event->id == 2304){
                 dd($event);
 
             }*/
             $eventInfo = $event->event_info();
+
+            $data['events'][$event->id]['paid'] = $event['pivot']['paid'];
 
 
             //if elearning assign progress for this event
@@ -453,8 +457,15 @@ class StudentController extends Controller
                 $data['events'][$event->id]['plans'] = $event['plans'];
 
                 $data['events'][$event->id]['certs'] = isset($event['certificates']) && $event['certificates'] ? $event['certificates'] : [];;
+
+                // if($event->id == 4641){
+                //     dd($event['certificates']);
+                // }
                 $data['events'][$event->id]['exams'] = $event->getExams();
-                $data['events'][$event->id]['exam_access'] = $event->examAccess($user,2);//$user->examAccess(0.8,$event->id);
+
+
+
+                $data['events'][$event->id]['exam_activate_months'] = isset($eventInfo['elearning']['exam'])  ?  $eventInfo['elearning']['exam']['activate_months'] : null;
 
                 $data['events'][$event->id]['view_tpl'] = $event['view_tpl'];
                 $data['events'][$event->id]['category'] = $event['category'];
@@ -472,6 +483,12 @@ class StudentController extends Controller
                 $data['events'][$event->id]['summaryDate'] = isset($eventInfo['elearning']['expiration'])  ? $eventInfo['elearning']['expiration'] : null;
                 $data['events'][$event->id]['summaryDate_icon'] = isset($eventInfo['elearning']['icon'])  ?  $eventInfo['elearning']['icon'] : null;
 
+
+                if(isset($eventInfo['elearning']['exam']['activate_months']) &&  $eventInfo['elearning']['exam']['activate_months'] != null  ){
+                    $data['events'][$event->id]['exam_access'] = $event->examAccess($user,$eventInfo['elearning']['exam']['activate_months']);
+                }else{
+                    $data['events'][$event->id]['exam_access'] = $event->examAccess($user,0);
+                }
                 //$data['user']['events'][$event->id]['exam_results'] = $user->examAccess(0.8,$event->id);
 
                 $eventSubscriptions[] = $user->eventSubscriptions()->wherePivot('event_id',$event['id'])->first() ?
@@ -553,7 +570,17 @@ class StudentController extends Controller
 
                 $data['mySubscriptionEvents'][$key]['certs'] = isset($event['certificates']) && $event['certificates'] ? $event['certificates'] : [];;//$event->certificatesByUser($user->id);
                 $data['mySubscriptionEvents'][$key]['exams'] = $event->getExams();
-                $data['mySubscriptionEvents'][$key]['exam_access'] = $event->examAccess($user,2);
+
+                if(isset($eventInfo['elearning']['exam']['activate_months']) &&  $eventInfo['elearning']['exam']['activate_months'] != null  ){
+                    $data['mySubscriptionEvents'][$key]['exam_access'] = $event->examAccess($user,$eventInfo['elearning']['exam']['activate_months']);
+                }else{
+                    $data['mySubscriptionEvents'][$key]['exam_access'] = $event->examAccess($user,0);
+                }
+
+                //$data['mySubscriptionEvents'][$key]['exam_access'] = $event->examAccess($user,2);
+
+                $data['mySubscriptionEvents'][$key]['exam_activate_months'] = isset($eventInfo['elearning']['exam'])  ?  $eventInfo['elearning']['exam']['activate_months'] : null;
+
 
                 $data['mySubscriptionEvents'][$key]['mySubscription'] = $user->subscriptions()->where('id',$subEvent['id'])->first();
                 $data['mySubscriptionEvents'][$key]['plans'] = $event['plans'];
@@ -715,7 +742,7 @@ class StudentController extends Controller
         $media->save();
 
         // Convert webp image format
-        dispatch((new UploadImageConvertWebp('profile_user/', $media->original_name))->delay(now()->addSeconds(3)));
+        dispatch((new UploadImageConvertWebp('profile_user/', $media->original_name))->delay(now()->addSeconds(300)));
 
 
 
@@ -917,7 +944,7 @@ class StudentController extends Controller
 
             if(!$eventt){
                 $data['instructor_topics'] = false;
-                $eventt = $user->events()->wherePivot('event_id', $event['id'])->first() ? $user->events()->wherePivot('event_id', $event['id'])->first() :
+                $eventt = $user->events_for_user_list()->wherePivot('event_id', $event['id'])->first() ? $user->events_for_user_list()->wherePivot('event_id', $event['id'])->first() :
                             $user->subscriptionEvents->where('id',$event['id'])->first();
             }
             $event = $eventt;
@@ -1041,6 +1068,7 @@ class StudentController extends Controller
                 //$videos[$key]['seen'] = isset($video['seen']) ? $video['seen'] : 0;
                 $videos[$key]['stop_time'] = isset($video['stop_time']) ? $video['stop_time'] : 0;
                 $videos[$key]['percentMinutes'] = isset($video['stop_time']) ? $video['percentMinutes'] : 0;
+                $videos[$key]['is_new'] = $video['is_new'];
 
                 if( (int) $video['seen'] == 1 && (int) $videos[$key]['seen'] == 0){
                     $videos[$key]['seen'] = (int) $video['seen'];
@@ -1073,19 +1101,19 @@ class StudentController extends Controller
 
             }else if( $event && count($event->getExams()) > 0 ){
 
-                $examAccess = $event->examAccess($user);
+                $examAccess = false;//$event->examAccess($user);
 
                 if($examAccess){
 
                     $adminemail = 'info@knowcrunch.com';
-                    
+
                     $data['firstName'] = $user->firstname;
                     $data['eventTitle'] = $event->title;
                     $data['fbGroup'] = $event->fb_group;
                     $data['subject'] = 'Knowcrunch - ' . $data['firstName'] .'  you exams are active now';
                     $data['template'] = 'emails.user.exam_activate';
 
-                    $user->notify(new ExamActive($data));
+                    //$user->notify(new ExamActive($data));
 
                     /*$muser['name'] = $user->firstname . ' ' . $user->lastname;
                     $muser['first'] = $user->firstname;
@@ -1122,7 +1150,7 @@ class StudentController extends Controller
             'success' => true,
             'videos' => $request->videos,
             'loged_in' => true,
-            'exam_access' => $examAccess,
+            'exam_access' => false,//$examAccess,
             // 'progress' => $progress
         ]);
 

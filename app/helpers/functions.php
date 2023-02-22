@@ -14,6 +14,140 @@ use Spatie\Dropbox\Client;
 use App\Model\Admin\Page;
 use App\Model\Admin\Ticker;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
+use Coderjerk\BirdElephant\BirdElephant;
+use Illuminate\Support\Facades\Http;
+
+
+if(!function_exists('twitter_get_auth_token')){
+    function twitter_get_auth_token(){
+
+        $request_token_url = 'https://twitter.com/i/oauth2/authorize?response_type=code&client_id=M2VoNlN6YXhzVUQtOVQwTDREbXI6MTpjaQ&redirect_uri=https://www.example.com&scope=tweet.read%20users.read%20follows.read%20follows.write&state=state&code_challenge=challenge&code_challenge_method=plain';
+
+        //$response = Http::accept('application/json')->asForm()->post($request_token_url, $options);
+
+        $response = Http::accept('application/json')->post($request_token_url, [
+            'consumer_key' => env('TWITTER_CONSUMER_KEY'),
+            'version' => '1.0',
+            'oauth_signature_method'=>'HMAC-SHA1',
+            'oauth_token' => env('TWITTER_ACCESS_TOKEN'),
+            'oauth_nonce' => 'IcIhgRiUdn5'
+
+
+
+        ]);
+        dd($response);
+
+        // if($response->failed()) {
+        //     $message = $response->json('error_message', 'unknown error');
+        //     throw HttpException::new($request_token_url, $response->status(), $message, $response->json());
+        // }
+
+        dd($response->json());
+
+        return $response->json();
+
+
+
+    }
+}
+
+if(!function_exists('twitter_upload_image')){
+    function twitter_upload_image($image, $title){
+
+        $credentials = array(
+            //these are values that you can obtain from developer portal:
+            'consumer_key' => env('consumer_key'), // identifies your app, always needed
+            'consumer_secret' => env('consumer_secret'), // app secret, always needed
+            'bearer_token' => env('bearer_token'), // OAuth 2.0 Bearer Token requests
+
+            //this is a value created duting an OAuth 2.0 with PKCE authentication flow:
+            'auth_token' => '' // OAuth 2.0 auth token
+
+            //these are values created during an OAuth 1.0a authentication flow to act ob behalf of other users, but these can also be obtained for your app from the developer portal in order to act on behalf of your app.
+            //'token_identifier' => '2730333663-wXgzTVzrvCcO059uGq1JjWF1iEXqLY0imaKkBju', // OAuth 1.0a User Context requests
+            //'token_secret' => 'srCFCU1WPW9dnxVQyAGNvg1yT6C0fwrZq8B4LvgyyVJ2r', // OAuth 1.0a User Context requests
+        );
+
+        $twitter = new BirdElephant($credentials);
+
+        $image = $twitter->tweets()->upload($image);
+        // //pass the returned media id to a media object as an array
+        $media = (new \Coderjerk\BirdElephant\Compose\Media)->mediaIds(
+            [
+                $image->media_id_string
+            ]
+        );
+
+        // //compose the tweet and pass along the media object
+        $tweet = (new \Coderjerk\BirdElephant\Compose\Tweet)->text($title)->media($media);
+        $twitter->tweets()->tweet($tweet);
+
+
+    }
+}
+
+if(!function_exists('add_event_statistic_queue')){
+    function add_event_statistic_queue($eventId){
+
+
+        if($eventId){
+            $exist = DB::table('event_statistics_queue')->where('event_id', $eventId)->first();
+
+
+            if($exist){
+
+                DB::table('event_statistics_queue')
+                    ->where('event_id', $eventId)
+                    ->update(
+                        ['updated_at' => date('Y-m-d H:i:s')]
+                );
+
+            }else{
+                DB::table('event_statistics_queue')
+                    ->where('event_id', $eventId)
+                    ->insert(
+                        [
+                            'event_id' => $eventId,
+                            'created_at' => date('Y-m-d H:i:s'),
+                            'updated_at' => date('Y-m-d H:i:s')
+                        ]
+                );
+            }
+
+
+        }
+
+
+
+    }
+}
+
+if(!function_exists('instagram_posts')){
+    function instagram_posts($limit = 15){
+
+        $post = [];
+        if(env('instagram_profile')){
+            $post = \Dymantic\InstagramFeed\InstagramFeed::for(env('instagram_profile'), $limit, 'posts');
+        }
+
+        return $post;
+    }
+
+}
+
+if(!function_exists('instagram_stories')){
+    function instagram_stories($limit = 15){
+        $stories = [];
+
+        if(env('instagram_profile')){
+            $stories = \Dymantic\InstagramFeed\InstagramFeed::for(env('instagram_profile'), $limit, 'stories');
+        }
+
+        return $stories;
+    }
+
+}
 
 if(!function_exists('get_tickers')){
     function get_tickers(){
@@ -94,6 +228,16 @@ if(!function_exists('get_image_versions')){
     function get_image_versions($ver = 'versions')
     {
         $versions = isset(config('image_versions')[$ver]) ? config('image_versions')[$ver] : [];
+        return $versions;
+    }
+
+}
+
+if(!function_exists('get_image_version_details')){
+
+    function get_image_version_details($ver)
+    {
+        $versions = isset(config('image_versions')['versions'][$ver]) ? config('image_versions')['versions'][$ver] : [];
         return $versions;
     }
 

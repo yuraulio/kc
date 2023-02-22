@@ -59,7 +59,7 @@
                                 </p>
                             </td>
                             <td>
-                                
+
                                 {{ size(file.size) }}
                             </td>
                             <td>
@@ -197,8 +197,11 @@ export default {
                     }
                 })
                 .catch((error) => {
-                    console.log(error);
-                    this.$parent.errors = error.response.data.errors;
+
+                    if(error.response){
+                        this.$parent.errors = error.response.data.errors;
+                    }
+
                 });
         },
         size(size){

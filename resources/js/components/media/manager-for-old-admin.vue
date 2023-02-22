@@ -14,7 +14,9 @@
         :uuid="$uuid.v4()"
         mode="single"
         :value="this.getStartingImage"
+        :default_image="this.getDefaultImage"
         :hideAltText="true"
+        :imageVersion="this.imageVersion"
     />
 
 </div>
@@ -24,6 +26,8 @@
 export default {
     props: {
         startingImage: null,
+        defaultImage: null,
+        imageVersion: null
     },
     data() {
         return {
@@ -32,14 +36,22 @@ export default {
     },
     methods: {
         imageSelected($event) {
-            $('#image_upload').val("/uploads/" + $event.data.path);
+            if($event.data != null){
+                $('#image_upload').val("/uploads/" + $event.data.path);
+            }else{
+                $('#image_upload').val('');
+            }
+
             $("#upload_form").submit();
         },
     },
     computed: {
         getStartingImage() {
             return this.startingImage ? JSON.parse(this.startingImage) : null;
+        },
+        getDefaultImage() {
+            return this.defaultImage ? JSON.parse(this.defaultImage) : null;
         }
-    }
+    },
 }
 </script>

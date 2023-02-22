@@ -1,107 +1,66 @@
 <div id="participants_info" class="row d-none">
 
-    <div class="card-body col-xl-3 col-md-6 total-revenue">
+    <div class="card-body col-xl-4 col-md-6 total-revenue widget">
         <div class="card">
             <div class="card-body">
                 <div class="row">
                     <div class="col">
-                    <h5 class="card-title text-uppercase text-muted mb-0">Total Sales:</h5>
-                        <span id="total" class="h2 font-weight-bold mb-0"></span>
+                    <h5 class="card-title text-uppercase text-muted mb-0">REGISTRATIONS ALL TIME</h5>
+                        <span class="h2 font-weight-bold mb-0">{{ $total_users }}</span>
                     </div>
 
                 </div>
+                <div class="row">
+                    <div class="col">
+                        <p class="mt-3 mb-0 text-sm">
+                            <span class="text-muted mr-3">CLASS: <span class="text-success">{{ $usersInClassAll }}</span></span>
+                            <span class="text-muted mr-3">VIDEO: <span class="text-success">{{ $usersElearningAll }}</span></span>
+                        </p>
+                        <p class="mb-0 text-sm">
+                            <span class="">All people who registered in a free or paid course (class or video).</span>
+                        </p>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
 
-    <div class="card-body col-xl-3 col-md-6">
+    <div class="card-body col-xl-4 col-md-6 total-revenue widget">
         <div class="card">
             <div class="card-body">
                 <div class="row">
                     <div class="col">
-                       <h5 class="card-title text-uppercase text-muted mb-0" id="count_alumni">Alumni:</h5>
-                       <span id="alumni" class="h2 font-weight-bold mb-0"></span>
+                    <h5 class="card-title text-uppercase text-muted mb-0">REGISTRATIONS INCOME</h5>
+                        <span class="h2 font-weight-bold mb-0" id="total_income_by_type"></span>
                     </div>
-                    <div class="col-auto">
-                       <button type="button" class="btn btn-sm btn-neutral mr-0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fas fa-ellipsis-h"></i>
-                       </button>
-                       <div class="ticket-choices dropdown-menu dropdown-menu-right alumni-action">
-                       </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <div class="card-body col-xl-3 col-md-6">
-        <div class="card">
-            <div class="card-body">
-                <div class="row">
-                    <div class="col">
-                       <h5 class="card-title text-uppercase text-muted mb-0" id="count_early-bird">Early Bird:</h5>
-                       <span id="early-bird" class="h2 font-weight-bold mb-0"></span>
-                    </div>
-                    <div class="col-auto">
-                       <button type="button" class="btn btn-sm btn-neutral mr-0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fas fa-ellipsis-h"></i>
-                       </button>
-                       <div class="ticket-choices dropdown-menu dropdown-menu-right early-bird-action">
-                       </div>
-                    </div>
                 </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="card-body col-xl-3 col-md-6">
-        <div class="card">
-            <div class="card-body">
+                <div class="loader text-center">
+                    <img class="img-responsive" src="{{url('/theme/assets/img/ajax-loader-blue.gif')}}" alt="loader">
+                </div>
                 <div class="row">
-                    <div class="col">
-                       <h5 class="card-title text-uppercase text-muted mb-0" id="count_regular">Regular:</h5>
-                       <span id="regular" class="h2 font-weight-bold mb-0"></span>
-                    </div>
-                    <div class="col-auto">
-                       <button type="button" class="btn btn-sm btn-neutral mr-0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fas fa-ellipsis-h"></i>
-                       </button>
-                       <div class="ticket-choices dropdown-menu dropdown-menu-right regular-action">
-                       </div>
+                    <div class="col info d-none">
+                        <p class="mt-3 mb-0 text-sm">
+                            <span class="text-muted mr-3">CLASS: <span class="text-success" id="incomeInclassAll"></span></span>
+                            <span class="text-muted mr-3">VIDEO: <span class="text-success" id="incomeElearningAll"></span></span>
+                        </p>
+                        <p class="mb-0 text-sm">
+                            <span class="">All gross income from our paid courses (class or video).</span>
+                        </p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-
-    <div class="card-body col-xl-3 col-md-6">
+    <div class="card-body col-xl-4 col-md-6 total-revenue widget">
         <div class="card">
             <div class="card-body">
                 <div class="row">
                     <div class="col">
-                       <h5 class="card-title text-uppercase text-muted mb-0" id="count_special">Special:</h5>
-                       <span id="special" class="h2 font-weight-bold mb-0"></span>
-                    </div>
-                    <div class="col-auto">
-                       <button type="button" class="btn btn-sm btn-neutral mr-0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fas fa-ellipsis-h"></i>
-                       </button>
-                       <div class="ticket-choices dropdown-menu dropdown-menu-right special-action">
-                       </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="card-body col-xl-3 col-md-6">
-        <div class="card">
-            <div class="card-body">
-                <div class="row">
-                    <div class="col">
-                        <h5 class="card-title text-uppercase text-muted mb-0"><div id="count_sponsored"></div> Sponsored:</h5>
-                        <span id="sponsored" class="h2 font-weight-bold mb-0"></span>
+                    <h5 class="card-title text-uppercase text-muted mb-0">TICKETS INCOME</h5>
+                        <span class="h2 font-weight-bold mb-0"><span id="total_income">{{-- number_format($income['total'],2,',','.') --}}</span></span>
                     </div>
 
                 </div>
@@ -113,11 +72,17 @@
         <div class="card">
             <div class="card-body">
                 <div class="row">
-                    <div class="col">
-                    <h5 class="card-title text-uppercase text-muted mb-0">Total Students:</h5>
-                        <span id="total_students" class="h2 font-weight-bold mb-0">{{ $total_users }}</span>
+                    <div class="col info d-none">
+                        <p class="mt-3 mb-0 text-sm">
+                            <span class="text-muted mr-3">EARLY: <span class="text-success" id="early-bird">{{-- number_format($income['early'],2,',','.') --}}</span></span>
+                            <span class="text-muted mr-3">SPECIAL: <span class="text-success" id="special">{{-- number_format($income['special'],2,',','.') --}}</span></span>
+                            <span class="text-muted mr-3">REGULAR: <span class="text-success" id="regular">{{-- number_format($income['regular'],2,',','.') --}}</span></span>
+                            <span class="text-muted mr-3">ALUMNI: <span class="text-success" id="alumni">{{-- number_format($income['alumni'],2,',','.') --}}</span></span>
+                        </p>
+                        <p class="mb-0 text-sm">
+                            <span class="">All income from our paid courses (class or video) by ticket type.</span>
+                        </p>
                     </div>
-
                 </div>
             </div>
         </div>

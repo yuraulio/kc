@@ -44,7 +44,9 @@
                         ?>
 
                         @if ( isset($event['mediable']) && isset($event['slugable']))
-                        <a href="{{ $event['slugable']['slug'] }}"><img src="{{ cdn(get_image($event['mediable'],'event-card')) }}" alt="{{ $until}}"/></a>
+                        <a href="{{ $event['slugable']['slug'] }}">
+                            <img loading="lazy" class="resp-img" src="{{ cdn(get_image($event['mediable'],'event-card')) }}" alt="{{ $until }}" width="{{ get_image_version_details('event-card')['w'] }}" height="{{ get_image_version_details('event-card')['h']}}" />
+                        </a>
                         @endif
 
                         <div class="box-text">
@@ -79,7 +81,7 @@
                                     if(isset($hours_visible['home']) && $hours_visible['home'] && isset($event['event_info1']['course_hours']) && $event['event_info1']['course_hours'] > 0){
                                         $dateLaunch .= ', ' . $event['event_info1']['course_hours'] . ' hours';
                                     }
-                                    
+
 
                                 ?>
 
@@ -92,7 +94,7 @@
                                 <span class="days">@if(isset($inclass_days['visible']['home']) && $inclass_days['visible']['home'] && isset($inclass_days['text']) && $inclass_days['text'] != null) {{ $inclass_days['text'] }} @endif</span>
                                 <span class="times">@if(isset($inclass_times['visible']['home']) && $inclass_times['visible']['home'] && isset($inclass_times['text']) && $inclass_times['text'] != null) {{ $inclass_times['text'] }} @endif</span>--}}
 
-                                
+
                                 <?php
                                     $sumStudents = $sumStudentsByCategory[$event['pivot']['category_id']];
                                 ?>
@@ -120,6 +122,7 @@
 @if($homepage["list_source"]->id == 7)
     <div class="row homepage-events mt-5">
         @foreach($elearningEvents as $data)
+
             @foreach($data['events'] as $event)
                 <div class="col-sm-6 col-md-3 mb-5">
                     <div class="slide d-inline-block">
@@ -133,7 +136,9 @@
                             }
                         ?>
                         @if ( isset($event['mediable']) && isset($event['slugable']))
-                        <a href="{{ $event['slugable']['slug'] }}"><img src="{{ cdn(get_image($event['mediable'],'event-card')) }}" alt="{{ $until}}"/></a>
+                        <a href="{{ $event['slugable']['slug'] }}">
+
+                            <img loading="lazy" class="resp-img" src="{{ cdn(get_image($event['mediable'],'event-card')) }}" alt="{{ $until}}" width="{{ get_image_version_details('event-card')['w'] }}" height="{{ get_image_version_details('event-card')['h']}}" /></a>
                         @endif
                         <div class="box-text box-text-orange">
                             <?php

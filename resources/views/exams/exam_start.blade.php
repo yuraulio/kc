@@ -30,6 +30,32 @@ var SPENT_TIME                      = [];
 var LOOP_AGAIN                      = 0;
 
 
+function scrollCurrentQuestionRow(){
+
+//var offset = $('.not-answered').offsetTop; // Contains .top and .left
+
+
+
+// console.log($('.136').offset())
+// let elem = $('.not-answered.106')
+
+
+// container.animate({
+//           scrollTop: elem.offset().top
+//       });
+
+const elementInScrollableDiv = document.querySelector('.active-question')
+if(elementInScrollableDiv != null){
+    const positionFromTopOfScrollableDiv = elementInScrollableDiv.offsetTop
+
+    const scrollableDivElement = document.querySelector('.content1')
+    scrollableDivElement.scrollTop = positionFromTopOfScrollableDiv - 10
+}
+
+
+}
+
+
 
 // onclick of next button
 function nextQues(mark) {
@@ -48,6 +74,8 @@ function nextQues(mark) {
     var firstNonConfirm = 0;
     var allUnanswered = [];
     var allUnansweredPlus = [];
+    var pavlosAllUnanswered = [];
+    var pavlosAnswerLater = [];
 
 
     jQuery.each(eJson, function(index, quest) {
@@ -56,9 +84,9 @@ function nextQues(mark) {
             firstNonConfirm = quest.id;
         }
         if(showx==1 && LOOP_AGAIN ==0) {
-            showSpecificQuestion(quest.id);
-            showx = 0;
-            currQues = quest.id;
+            // showSpecificQuestion(quest.id);
+            // showx = 0;
+            // currQues = quest.id;
         }
         if(quest.id==window.actQues) {
             var given_ans = "";
@@ -111,11 +139,18 @@ function nextQues(mark) {
             allUnanswered.push(quest.id);
             allUnansweredPlus.push(quest.id);
         }
+        if(quest.mark_status==1){
+            pavlosAnswerLater.push(quest.id);
+        }
+        if(quest.given_ans=="" && quest.mark_status!=1){
+            pavlosAllUnanswered.push(quest.id);
+        }
     });
 
     window.examVar = JSON.stringify(eJson);
     updateStats();
     window.actQues = currQues;
+
     if(currQues==lastQues) {
       //  jQuery('.next').addClass('hide');
 
@@ -127,49 +162,100 @@ function nextQues(mark) {
            // alert("You have completed the exam. Please click 'I AM FINISHED WITH MY EXAM' ");
         }
         else {
-            showSpecificQuestion(firstNonConfirm);
-            LOOP_AGAIN = 1;
-            showx = 0;
-            currQues = firstNonConfirm;
-            window.actQues = currQues;
+            if(pavlosAllUnanswered.length==0) {
+                //  alert("You have completed the exam. Please click 'I AM FINISHED WITH MY EXAM' ");
+                // SHOW ANSWER LATER QUESTION IF EXIST
+
+                jQuery.each(pavlosAnswerLater,function(index, value){
+                    showSpecificQuestion(value);
+                    currQues = value;
+                    window.actQues = currQues;
+                    return false;
+                })
+
+            }
+            else {
+                let nextQues = firstUnanswered;
+
+                let find = false;
+
+                jQuery(pavlosAllUnanswered,function(index, value) {
+
+                    if(value > currQues){
+                        find = true;
+                        nextQues = value;
+                        return false;
+                    }
+                })
+
+                if(!find){
+                    nextQues = pavlosAllUnanswered[0]
+                }
+                showSpecificQuestion(nextQues);
+                currQues = nextQues;
+                window.actQues = currQues;
+
+                return false;
+            }
         }
     }
     else if(showx==1 && mark!=5) {
         var lastInArray = 1;
         var firstUnanswered = 0;
         showx = 0;
-        if(allUnanswered.length==0) {
+        let nextQuest = 0;
+        if(pavlosAllUnanswered.length==0) {
             //  alert("You have completed the exam. Please click 'I AM FINISHED WITH MY EXAM' ");
-              showSpecificQuestion(lastQues);
-              currQues = lastQues;
-              window.actQues = currQues;
+            // SHOW ANSWER LATER QUESTION IF EXIST
+
+
+            let find = false;
+            let nextQuest = firstUnanswered
+            jQuery.each(pavlosAnswerLater,function(index, value){
+
+                if(value > currQues){
+                    find = true
+                    nextQuest = value;
+                    return false;
+                }
+            })
+
+            if(!find){
+                nextQuest = pavlosAnswerLater[0]
+            }
+            showSpecificQuestion(nextQuest);
+            currQues = nextQuest;
+            window.actQues = currQues;
+
+            return false;
+
         }
         else {
-             jQuery.each(allUnansweredPlus, function(index, quest) {
-         //    console.log(currQues);
-              if(lastInArray==0) {
-                return;
-              }
-              if(firstUnanswered==0) {
-                firstUnanswered = quest;
-              }
-              if(showx==1) {
-                showSpecificQuestion(quest);
-                currQues = quest;
+                nextQuest = firstUnanswered;
+                let find = false;
+
+                jQuery.each(pavlosAllUnanswered,function(index, value) {
+                    if(value > currQues){
+                        find = true;
+                        nextQuest = value;
+                        return false;
+                    }
+
+                })
+
+                if(!find){
+                    nextQuest = pavlosAllUnanswered[0]
+
+                }
+                showSpecificQuestion(nextQuest);
+                currQues = nextQuest;
                 window.actQues = currQues;
-                lastInArray = 0;
-              }
-              if(quest==currQues) {
-                showx = 1;
-              }
-             });
-            if(lastInArray==1) {
-                showSpecificQuestion(firstUnanswered);
-                currQues = firstUnanswered;
-                window.actQues = currQues;
-            }
+
         }
+
+
     }
+    scrollCurrentQuestionRow()
     TOTAL_NOT_ANSWERED  = jQuery(".not-answered").length;
     TOTAL_NOT_VISITED   = jQuery(".not-visited").length;
     TOTAL_MARKED = jQuery(".marked").length;
@@ -200,6 +286,8 @@ function prevQues() {
     } else {
       //  jQuery('.prev').removeClass('hide');
     }
+
+    scrollCurrentQuestionRow()
 }
 
 
@@ -232,13 +320,24 @@ function showSpecificQuestion(qid, changeactive) {
       //  jQuery('.prev').removeClass('hide');
     }
 
+    // remove active-question class
+
+    $.each($('#pallete_list li'), function(index, value){
+        if($(value).hasClass('active-question')){
+            $(value).removeClass('active-question')
+        }
+    })
+
 
     $('.question_div').css('display', 'none');
     $('#'+qid).css('display', 'block');
     $('#pallete_list li').css('border', 'none');
     $('#pallete_list li.'+qid).css('border', 'solid 2px black');
+    $('#pallete_list li.'+qid).css('border-radius', '20%');
     $('#pallete_list li').css('box-shadow', 'none');
-    $('#pallete_list li.'+qid).css('box-shadow', 'black 1px 2px 8px');
+    // $('#pallete_list li.'+qid).css('box-shadow', 'black 1px 2px 8px');
+    $('#pallete_list li.'+qid).addClass('active-question')
+
 }
 
 function clearAnswer() {
@@ -279,6 +378,89 @@ function clearAnswer() {
     updateStats();
 }
 
+function outOfTimeDialog(){
+    closeGeneralDialog()
+
+    if($('#outOfTimeDialog').length == 0){
+        let dialog = `
+            <div id="outOfTimeDialog" hidden>
+                <div class="alert-wrapper error-alert">
+                    <div class="alert-inner">
+                        <div class="text-white">${@json($exam->end_of_time_text)}</div>
+                    </div>
+
+                    <div class="close-dialog-general-buttons">
+                        <a id="close-exam-dialog1" href="javascript:void(0)" onclick="closeOutOfTimeExam()" class="close-alert"><img src="{{cdn('/theme/assets/images/icons/alert-icons/icon-close-alert.svg')}}" alt="Close Alert"/></a>
+                    <!-- <button onclick="closeOutOfTimeExam()" class="btn btn-not-exit-exam btn-sm">OK </button>-->
+                    </div>
+
+                    <!-- /.alert-outer -->
+                </div>
+            </div>
+        `
+        $('#outOfTimeDialog-wrapper').append(dialog)
+    }
+
+    $('#outOfTimeDialog').removeAttr('hidden')
+}
+
+function finishExamDialog(){
+    closeGeneralDialog()
+
+    if($('#closeDialog').length == 0){
+        let dialog = `
+            <div id="closeDialog" hidden>
+                <div class="alert-wrapper">
+                    <div class="alert-inner">
+                        <p style="color:black;">Are you sure you want to finish the exam?</p>
+                    </div>
+
+                    <div class="close-dialog-buttons">
+                        <button onclick="finishExam()" class="btn btn-exit-exam btn-sm button-secondary-next">Yes, finish my exam. </button>
+                        <button style="border-radius:0" onclick="closeFinishExam()" class="btn btn-not-exit-exam btn-sm btn-danger">Do not finish my exam. </button>
+                    </div>
+
+                    <!-- /.alert-outer -->
+                </div>
+            </div>
+        `
+        $('#finishDialog').append(dialog)
+    }
+
+    $('#closeDialog').removeAttr('hidden')
+
+
+}
+
+function closeFinishExam(){
+    $('#closeDialog').attr('hidden', '')
+}
+function closeGeneralDialog(){
+
+    $('#generalDialog').empty()
+}
+
+function showAlert(msg, type){
+    closeFinishExam()
+    let dialog = `
+            <div>
+                <div class="alert-wrapper ${type}-alert">
+                    <div class="alert-inner">
+                        <p>${msg}</p>
+                    </div>
+
+                    <div class="close-dialog-general-buttons">
+                        <button onclick="closeGeneralDialog()" class="btn btn-not-exit-exam btn-sm"> OK </button>
+                    </div>
+
+                    <!-- /.alert-outer -->
+                </div>
+            </div>
+        `
+    $('#generalDialog').append(dialog)
+
+}
+
 function finishExam() {
 
 
@@ -286,15 +468,16 @@ function finishExam() {
     TOTAL_NOT_VISITED   = jQuery(".not-visited").length;
     TOTAL_MARKED = jQuery(".marked").length;
 
-    var r = confirm("Are you sure you want to finish the exam?");
-    if (r == true) {
+    // var r = confirm("Are you sure you want to finish the exam?");
+    // if (r == true) {
 
 
 
         nextQues(5);
         if(TOTAL_NOT_ANSWERED!=0 || TOTAL_NOT_VISITED != 0 || TOTAL_MARKED !=0) {
             prevQues();
-            alert("You need to answer all questions to finish the exam!");
+            //alert("You need to answer all questions to finish the exam!");
+            showAlert('You need to answer all questions to finish the exam!', 'warning');
             return;
         }
 
@@ -302,11 +485,15 @@ function finishExam() {
         window.exam_finish = 1;
         var retrievedObject = window.examVar;
         var startTime = localStorage.getItem("examStart<?php echo $exam->id;?>-{{$user_id}}");
+
+        $('.btn.btn-exit-exam.btn-sm').prop('disabled', true);
+
         jQuery.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
             }
         });
+        $('.btn.btn-exit-exam.btn-sm').prop('disabled', true);
         jQuery.ajax({
         method: "POST",
         url: "{{ route('save-data') }}",
@@ -327,8 +514,12 @@ function finishExam() {
             ?>
         }
         });
-    } else {
-    }
+    // } else {
+    // }
+}
+
+function closeOutOfTimeExam(){
+    window.location = "{{ url('exam-results/' . $exam->id) }}?s=1&t=1";
 }
 
 function outOfTime() {
@@ -347,14 +538,17 @@ function outOfTime() {
     success: function() {
        // alert("Time Over. Exam Completed Successfully");
 
-       window.location = "{{ url('exam-results/' . $exam->id) }}?s=1&t=1";
+       outOfTimeDialog()
+
+
     }
     });
 }
 
 function forceFinish() {
 
-    jQuery("#endExamText").removeClass("hidden");
+    outOfTimeDialog()
+    //jQuery("#endExamText").removeClass("hidden");
     jQuery(".container-fluid").addClass("hidden");
     nextQues(5);
     window.exam_finish = 1;
@@ -463,9 +657,9 @@ function tictac(){
 
 
     if(TOTAL_NOT_ANSWERED!=0 || TOTAL_NOT_VISITED != 0  || TOTAL_MARKED != 0){
-        document.getElementById("ExamFinish").style.display = 'none';
+        document.getElementById("ExamFinish").setAttribute('disabled', 'disabled');
     }else{
-        document.getElementById("ExamFinish").style.display = 'inline-block';
+        document.getElementById("ExamFinish").removeAttribute('disabled');
     }
 
     SECONDS--;
@@ -520,9 +714,10 @@ function tictac(){
 function initializeView() {
 
 
-    document.getElementById("ExamFinish").style.display = 'none';
+    document.getElementById("ExamFinish").setAttribute('disabled', 'disabled');
 
     var eJson = JSON.parse( window.examVar );
+    //console.log(eJson)
     window.startTime = localStorage.getItem("examStart<?php echo $exam->id;?>-{{$user_id}}");
     currentTime = '<?php echo date( "Y-m-d")."T".date( "H:i:s") ?>';
     var sTime = new Date(window.startTime);
@@ -671,7 +866,8 @@ if (typeof(Storage) !== "undefined") {
     }
 } else {
     setTimeout(function(){ jQuery("#overlay-loading").hide(); }, 500);
-    alert("Your browser does not support latest Session Storage. Please upgrade your browser to give the exam.")
+    showAlert('Your browser does not support latest Session Storage. Please upgrade your browser to give the exam.', 'warning')
+    //alert("Your browser does not support latest Session Storage. Please upgrade your browser to give the exam.")
     window.examVar = examJson;
     window.close('fs');
 }
@@ -681,245 +877,254 @@ window.actQues = 0;
 <div id="overlay-loading" class="overlay">
     <i class="fa fa-refresh fa-spin"></i>
 </div>
-<div class="row justify-content-center hidden" id="endExamText" style="
-    text-align: center;
-">
-        <div class="col-md-12">
-            <h5>{!! $exam->end_of_time_text !!}</h5>
-        </div>
-    </div>
-<div class="container-fluid">
+
+<div class="container">
 
     <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
 
-                <div class="card-body" style="padding:0">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
-                    @endif
-                    <form method="post" action="">
-                    <input type="hidden" name="time_spent" id="time_spent" value="0">
+    <div id="outOfTimeDialog-wrapper"></div>
+    <div id="finishDialog"></div>
+    <div id="generalDialog"></div>
 
-                                 @foreach($ex_contents as $exam_content_id => $ex_content)
-                                 <?php $last_id = $exam_content_id; ?>
-                                    <div class="question_div {{$exam->id}}" name="question[{{ $exam_content_id }}]" id="{{ $exam_content_id}}" style="display:none;" value="0">
-                                        <div style="padding: .75rem 1.25rem;
-    margin-bottom: 0;
-    background-color: rgba(0,0,0,.03);
-    border-bottom: 1px solid rgba(0,0,0,.125);"><h4>{!!$ex_content['question_title'] !!}</h4>
-         <div class="q_description">
-                                            <?php  echo $ex_content['question_description']; ?>
+
+    <div class="col-12" style="margin-bottom: 2rem">
+        <div id="container1" class="container1">
+            <div class="header1">
+
+            </div>
+            <div class="content1">
+                <ul class="question-palette" id="pallete_list">
+                    <?php
+                    $i = 1;
+                    foreach($ex_contents as $exam_content_id => $ex_content) {
+                        if($i==1)
+                            $activeQuestion = $exam_content_id;
+                        ?>
+                        <li class="palette pallete-elements not-visited {{ $exam_content_id }}" onclick="showSpecificQuestion({{ $exam_content_id }}, 1);">
+                            <span>{{ $i++ }}</span>
+                        </li>
+                    <?php } ?>
+                </ul>
+
+                <div id="arrow-expanded"></div>
+
+                <div id="hover-palette-expand"><p>Expand</p></div>
+
+
+
+            </div>
+        </div>
+        <div id="hover-palette-expand-arrow"><p>Expand</p></div>
+    </div>
+        <div class="col-12" style="margin-bottom: 2rem">
+
+            @if (session('status'))
+                <div class="alert alert-success" role="alert">
+                    {{ session('status') }}
+                </div>
+            @endif
+            <form method="post" action="">
+                <input type="hidden" name="time_spent" id="time_spent" value="0">
+
+                            @foreach($ex_contents as $exam_content_id => $ex_content)
+                            <?php $last_id = $exam_content_id; ?>
+                            <div class="question_div {{$exam->id}}" name="question[{{ $exam_content_id }}]" id="{{ $exam_content_id}}" style="display:none;" value="0">
+                                <div><h4>{!!$ex_content['question_title'] !!}</h4>
+                                        <div class="q_description">
+                                    <?php  echo $ex_content['question_description']; ?>
+                                </div>
+                                </div>
+
+                                <div class="row">
+                                <div class="col-md-12 questions-wrapper">
+                                    <?php
+                                        if($ex_content['question-type'] == 1) { //For True False Type
+                                            echo '
+                                                <div class="col-md-12">
+                                                    <div class="form-check form-check-inline">
+
+                                                        <label class="form-check-label checkradio" >
+                                                        <input class="form-check-input " type="radio" name="'.$exam_content_id.'" value="True">  <span class="checkmark"></span>
+                                                        True
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check form-check-inline">
+
+                                                        <label class="form-check-label checkradio" >
+                                                        <input class="form-check-input " type="radio" name="'.$exam_content_id.'"  value="False">  <span class="checkmark"></span>
+                                                        False
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                ';
+
+                                        } elseif($ex_content['question-type'] == 'radio buttons') { //For Multiple Choice Type
+
+                                            $unser_data = $ex_content['answers_keys'];
+
+                                            $opt1 = $unser_data[0];
+                                            $opt2 = $unser_data[1];
+                                            $opt3 = $unser_data[2];
+                                            $opt4 = $unser_data[3];
+
+                                            echo '<div class="col-md-12">
+                                                    <div class="form-check form-check-inline">
+                                                    <label class="form-check-label checkradio" ><input class="form-check-input" type="radio" name="'.$exam_content_id.'"  value="'.$opt1.'"><span class="checkmark"></span>
+                                                        <div class="answeralign">'
+                                                            . $opt1 .
+                                                        '</div></label>
+                                                    </div>
+                                                    <div class="form-check form-check-inline">
+                                                    <label class="form-check-label checkradio" ><input class="form-check-input" type="radio" name="'.$exam_content_id.'"  value="'.$opt2.'"><span class="checkmark"></span>
+                                                    <div class="answeralign">'
+                                                            . $opt2 .
+                                                        '</div></label>
+                                                    </div><br/>
+                                                    <div class="form-check form-check-inline">
+                                                    <label class="form-check-label checkradio" ><input class="form-check-input" type="radio" name="'.$exam_content_id.'"  value="'.$opt3.'"><span class="checkmark"></span>
+                                                    <div class="answeralign">'
+                                                            . $opt3 .
+                                                        '</div></label>
+                                                    </div>
+                                                    <div class="form-check form-check-inline">
+                                                    <label class="form-check-label checkradio" ><input class="form-check-input" type="radio" name="'.$exam_content_id.'"  value="'.$opt4.'"><span class="checkmark"></span>
+                                                    <div class="answeralign"> '
+                                                            . $opt4 .
+                                                        '</div></label>
+                                                    </div>
+                                                </div>
+                                                ';
+
+                                        } elseif($ex_content['question-type'] == 3) { //For Several Answer Type
+
+                                            $unser_data = $ex_content['answers_keys'];
+
+                                            $opt1 = $unser_data[0];
+                                            $opt2 = $unser_data[1];
+                                            $opt3 = $unser_data[2];
+                                            $opt4 = $unser_data[3];
+
+                                            // array_push($options, $opt1, $opt2, $opt3, $opt4);
+                                            echo '<div class="col-md-12">
+                                                    <div class="form-check form-check-inline">
+                                                    <label class="form-check-label checklabel" ><input class="form-check-input" type="checkbox" name="'.$exam_content_id.'"  value="'.$opt1.'"><span class="checkmark"></span>
+                                                    <div class="answeralign">'
+                                                            . $opt1 .
+                                                        '</div></label>
+                                                    </div>
+                                                    <div class="form-check form-check-inline">
+                                                    <label class="form-check-label checklabel" ><input class="form-check-input" type="checkbox" name="'.$exam_content_id.'" value="'.$opt2.'"><span class="checkmark"></span>
+                                                    <div class="answeralign">'
+                                                            . $opt2 .
+                                                        '</div></label>
+                                                    </div><br/>
+                                                    <div class="form-check form-check-inline">
+                                                    <label class="form-check-label checklabel" ><input class="form-check-input" type="checkbox" name="'.$exam_content_id.'"  value="'.$opt3.'"><span class="checkmark"></span>
+                                                    <div class="answeralign">'
+                                                            . $opt3 .
+                                                        '</div></label>
+                                                    </div>
+                                                    <div class="form-check form-check-inline">
+                                                    <label class="form-check-label checklabel" ><input class="form-check-input" type="checkbox" name="'.$exam_content_id.'"  value="'.$opt4.'"><span class="checkmark"></span>
+                                                    <div class="answeralign">'
+                                                            . $opt4 .
+                                                        '</div></label>
+                                                    </div>
+                                                </div>
+                                                ';
+                                        }
+                                    ?>
+                                </div>
+                                </div>
+                            </div>
+                        @endforeach
+                        <br/>
+
+            </form>
+        </div>
+
+
+
+        <div class="col-12">
+            <div class="buttons-wrapper">
+
+            <!-- col-sm-12 col-md-6 col-lg-3 -->
+
+                            <button class=" btn btn-lg button-secondary-previous button prev" type="button"  onclick="prevQues();" style="width: 25%; min-width: fit-content;">
+                            <img src="{{cdn('new_cart/images/arrow-previous-white.svg')}}" width="20px" height="12px" alt="">
+                            PREVIOUS QUESTION
+                            </button>
+
+                            <button class=" btn btn-lg button clear-answer button-quinary" type="button" onclick="clearAnswer();" style="width: 20%; min-width: fit-content;">
+                                CLEAR SELECTION
+                            </button>
+
+                            <button class=" btn btn-lg button next button-senary" style="width: 20%; min-width: fit-content;" id="markbtn" type="button"  onclick="nextQues(1);" >
+                                ANSWER LATER
+                            </button>
+
+                            <button class=" btn btn-lg button-secondary-next button next" type="button" onclick="nextQues();" style="width: 25%; min-width: fit-content;">
+                                NEXT QUESTION
+                                <img src="{{cdn('new_cart/images/arrow-next-white.svg')}}" width="20px" height="12px" alt="">
+                            </button>
+
+
+
+                        <!--<button class="btn btn-lg btn-danger button   finish" type="submit" onclick="finishExam();">
+                        Ολοκλήρωση
+                        </button>-->
+
+            </div>
+            <hr>
+
+        </div>
+
+        <div class="col-12">
+            <div class="details-end-exam">
+                <div style="display:flex" class="mark_question_details">
+                    <p class="unanswered"><span class="icon">&#9632;</span> <span class="text">unanswered</span> </p>
+                    <p class="answered"><span class="icon">&#9632;</span> <span class="text">answered</span> </p>
+                    <p class="answer_later"><span class="icon">&#9632;</span> <span class="text">answer later</span> </p>
+                </div>
+                @if(Request::segment(1) == 'exam-start')
+                <div class="finish-exams">
+                        <button class="btn btn-lg btn-danger button finish" disabled type="submit" onclick="finishExamDialog();" id="ExamFinish">SUBMIT YOUR EXAM</button>
+                    </div>
+                @endif
+            </div>
+        </div>
+
+
+
+
+
+
+                        {{--<!--
+                                    <div class="card" style="margin: 0px 0px 25px 0px;">
+                                        <div class="card-header text-center">
+                                            <h5>Επισκόπηση</h5>
                                         </div>
-                                        </div>
-
-                                        <div class="row">
-                                        <div class="col-md-10 offset-1" style="padding-top: 2%;">
-                                            <?php
-                                                if($ex_content['question-type'] == 1) { //For True False Type
-                                                    echo '
-                                                        <div class="col-md-12">
-                                                            <div class="form-check form-check-inline">
-
-                                                                <label class="form-check-label checkradio" >
-                                                                <input class="form-check-input " type="radio" name="'.$exam_content_id.'" value="True">  <span class="checkmark"></span>
-                                                                True
-                                                                </label>
-                                                            </div>
-                                                            <div class="form-check form-check-inline">
-
-                                                                <label class="form-check-label checkradio" >
-                                                                <input class="form-check-input " type="radio" name="'.$exam_content_id.'"  value="False">  <span class="checkmark"></span>
-                                                                False
-                                                                </label>
-                                                            </div>
-                                                        </div>
-                                                        ';
-
-                                                } elseif($ex_content['question-type'] == 'radio buttons') { //For Multiple Choice Type
-
-                                                    $unser_data = $ex_content['answers_keys'];
-
-                                                    $opt1 = $unser_data[0];
-                                                    $opt2 = $unser_data[1];
-                                                    $opt3 = $unser_data[2];
-                                                    $opt4 = $unser_data[3];
-
-                                                    echo '<div class="col-md-12">
-                                                            <div class="form-check form-check-inline">
-                                                            <label class="form-check-label checkradio" ><input class="form-check-input" type="radio" name="'.$exam_content_id.'"  value="'.$opt1.'"><span class="checkmark"></span>
-                                                                <div class="answeralign">'
-                                                                    . $opt1 .
-                                                                '</div></label>
-                                                            </div>
-                                                            <div class="form-check form-check-inline">
-                                                            <label class="form-check-label checkradio" ><input class="form-check-input" type="radio" name="'.$exam_content_id.'"  value="'.$opt2.'"><span class="checkmark"></span>
-                                                            <div class="answeralign">'
-                                                                    . $opt2 .
-                                                                '</div></label>
-                                                            </div><br/>
-                                                            <div class="form-check form-check-inline">
-                                                            <label class="form-check-label checkradio" ><input class="form-check-input" type="radio" name="'.$exam_content_id.'"  value="'.$opt3.'"><span class="checkmark"></span>
-                                                            <div class="answeralign">'
-                                                                    . $opt3 .
-                                                                '</div></label>
-                                                            </div>
-                                                            <div class="form-check form-check-inline">
-                                                            <label class="form-check-label checkradio" ><input class="form-check-input" type="radio" name="'.$exam_content_id.'"  value="'.$opt4.'"><span class="checkmark"></span>
-                                                            <div class="answeralign"> '
-                                                                    . $opt4 .
-                                                                '</div></label>
-                                                            </div>
-                                                        </div>
-                                                        ';
-
-                                                } elseif($ex_content['question-type'] == 3) { //For Several Answer Type
-
-                                                    $unser_data = $ex_content['answers_keys'];
-
-                                                    $opt1 = $unser_data[0];
-                                                    $opt2 = $unser_data[1];
-                                                    $opt3 = $unser_data[2];
-                                                    $opt4 = $unser_data[3];
-
-                                                    // array_push($options, $opt1, $opt2, $opt3, $opt4);
-                                                    echo '<div class="col-md-12">
-                                                            <div class="form-check form-check-inline">
-                                                            <label class="form-check-label checklabel" ><input class="form-check-input" type="checkbox" name="'.$exam_content_id.'"  value="'.$opt1.'"><span class="checkmark"></span>
-                                                            <div class="answeralign">'
-                                                                    . $opt1 .
-                                                                '</div></label>
-                                                            </div>
-                                                            <div class="form-check form-check-inline">
-                                                            <label class="form-check-label checklabel" ><input class="form-check-input" type="checkbox" name="'.$exam_content_id.'" value="'.$opt2.'"><span class="checkmark"></span>
-                                                            <div class="answeralign">'
-                                                                    . $opt2 .
-                                                                '</div></label>
-                                                            </div><br/>
-                                                            <div class="form-check form-check-inline">
-                                                            <label class="form-check-label checklabel" ><input class="form-check-input" type="checkbox" name="'.$exam_content_id.'"  value="'.$opt3.'"><span class="checkmark"></span>
-                                                            <div class="answeralign">'
-                                                                    . $opt3 .
-                                                                '</div></label>
-                                                            </div>
-                                                            <div class="form-check form-check-inline">
-                                                            <label class="form-check-label checklabel" ><input class="form-check-input" type="checkbox" name="'.$exam_content_id.'"  value="'.$opt4.'"><span class="checkmark"></span>
-                                                            <div class="answeralign">'
-                                                                    . $opt4 .
-                                                                '</div></label>
-                                                            </div>
-                                                        </div>
-                                                        ';
-                                                }
-                                            ?>
-                                        </div>
+                                        <div class="card-body">
+                                            <ul class="legends">
+                                                <li class="palette answered"><span id="palette_total_answered">0</span> Απαντημένες</li>
+                                                <li class="palette marked"><span id="palette_total_marked">0</span> Σημειωμένες</li>
+                                                <li class="palette not-answered"><span id="palette_total_not_answered">0</span> Μη απαντημένες</li>
+                                                <li class="palette not-visited"><span id="palette_total_not_visited"><?php echo $i-1; ?></span> Δεν έχουν εμφανιστεί</li>
+                                            </ul>
                                         </div>
                                     </div>
-                                @endforeach
-                                <br/>
-
-                    </form>
-                </div>
-                <div class="card-footer text-center">
-                    <div class="question-paginate">
-                  <div class="controls_up" style="padding-bottom: 5px;height: 55px;">
-
-                        <button class="btn btn-lg btn-success button prev" type="button"  onclick="prevQues();" style="width: 186px;float:left">
-                            <i class="fa fa-arrow-circle-o-left"> </i> PREVIOUS
-                        </button>
-
-                        <button class="btn btn-lg btn-success button next" type="button" onclick="nextQues();" style="width: 186px;float:right">
-                            NEXT <i class="fa fa-arrow-circle-o-right"> </i>
-                        </button>
+                                </div>
                             </div>
-                            <div class="controls_down">
-                            <button class="btn btn-lg btn-dark button clear-answer" type="button" onclick="clearAnswer();" style="width: 186px;float:left">
-                            CLEAR
-                        </button>
-                             <button class="btn btn-lg btn-dark button next" style="background: orange;border-color: orange;width: 186px;float:right" id="markbtn" type="button"  onclick="nextQues(1);" >
-                             ANSWER LATER
-                        </button>
-
                         </div>
-                        <!--<button class="btn btn-lg btn-danger button   finish" type="submit" onclick="finishExam();">
-                            Ολοκλήρωση
-                        </button>-->
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card text-center" style="margin: 0px 0px 25px 0px;">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-12">
-
-                            <div id="timerdiv" class="countdown-styled ">
-                                <span id="hours">{{$hours}}</span> :
-                                <span id="mins"><?php if($minutes<10){ echo '0'; }?>{{$minutes}}</span> :
-                                <span id="seconds">00</span>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-            @if(Request::segment(1) == 'exam-start')
-
-<div style="margin-bottom: 25px;text-align:center"><button class="btn btn-danger button finish" style="display: none;" type="submit" onclick="finishExam();" id="ExamFinish">
-
-    I AM FINISHED WITH MY EXAM
-
-</button>
-</div>
-@endif
-
-            <div class="card text-center" style="margin: 0px 0px 25px 0px;">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <ul class="question-palette" id="pallete_list">
-                                <?php
-                                $i = 1;
-                                foreach($ex_contents as $exam_content_id => $ex_content) {
-                                    if($i==1)
-                                        $activeQuestion = $exam_content_id;
-                                    ?>
-                                    <li class="palette pallete-elements not-visited {{ $exam_content_id }}" onclick="showSpecificQuestion({{ $exam_content_id }}, 1);">
-                                        <span>{{ $i++ }}</span>
-                                    </li>
-                                <?php } ?>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-<!--
-            <div class="card" style="margin: 0px 0px 25px 0px;">
-                <div class="card-header text-center">
-                    <h5>Επισκόπηση</h5>
-                </div>
-                <div class="card-body">
-                    <ul class="legends">
-                        <li class="palette answered"><span id="palette_total_answered">0</span> Απαντημένες</li>
-                        <li class="palette marked"><span id="palette_total_marked">0</span> Σημειωμένες</li>
-                        <li class="palette not-answered"><span id="palette_total_not_answered">0</span> Μη απαντημένες</li>
-                        <li class="palette not-visited"><span id="palette_total_not_visited"><?php echo $i-1; ?></span> Δεν έχουν εμφανιστεί</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
--->
+                        -->--}}
 
 
 <script>
 
     jQuery( document ).ready(function() {
+
+        $('.time_remaining_header').removeAttr('hidden')
+
         window.actQues = <?php echo $activeQuestion; ?>;
         var eJson = JSON.parse( window.examVar );
         var showx = 0;
@@ -955,7 +1160,8 @@ window.actQues = 0;
             }
             else if(isOnline==1) {
                 isOnline = 0;
-                alert('You can continue the exam and wait until internet connection is back');
+                showAlert('You can continue the exam and wait until internet connection is back', 'warning')
+                //alert('You can continue the exam and wait until internet connection is back');
             }
 
             if(window.actQues=={{$last_id}}) {
@@ -1015,7 +1221,124 @@ window.actQues = 0;
         }, 1000 * 60);
     });
 
+    function preventScroll(e){
+        e.preventDefault();
+        e.stopPropagation();
+
+        return false;
+    };
+
 jQuery(document).ready(function(){
+
+    document.querySelector('.content1').addEventListener('wheel', preventScroll, {passive: false});
+
+
+
+    $(document).on('click', '.container1', function(){
+        let rotate = 0
+
+        if($('.content1').hasClass('expanded')){
+
+        }else{
+            rotate = 180;
+        }
+
+        $('#arrow-expanded').css('-webkit-transform','rotate('+rotate+'deg)');
+        $('#arrow-expanded').css('-moz-transform','rotate('+rotate+'deg)');
+        $('#arrow-expanded').css('transform','rotate('+rotate+'deg)');
+
+
+    })
+
+    $(document).on('click', '.container1', function(){
+        $header = $(this);
+        //getting the next element
+        $content = $header.next();
+        //open up the content needed - toggle the slide- if visible, slide up, if not slidedown.
+        if($('.content1').hasClass('expanded')){
+            //$('.content1').removeClass('expanded').slideUp();
+            $('.content1').removeClass('expanded')
+
+            scrollCurrentQuestionRow()
+
+
+        }else{
+            $('.content1').addClass('expanded').slideDown();
+        }
+        // $content.slideToggle(500, function () {
+        //     //execute this after slideToggle is done
+        //     //change text of header based on visibility of content div
+        //     $header.text(function () {
+        //         //change text based on condition
+
+
+
+        //         //return $content.is(":visible") ? "Collapse" : "Expand";
+        //     });
+        // });
+        checkIfExpanded()
+    })
+
+    function checkIfExpanded(){
+        if($('.content1').hasClass('expanded')){
+            $('#hover-palette-expand').css('display', 'none')
+            $('#hover-palette-expand-arrow').css('display', 'none')
+        }
+
+    }
+
+    $( ".content1" ).on('mouseover', function(){
+
+        checkIfExpanded()
+
+    });
+
+
+
+
+
+
+    $( ".content1" ).on('mouseleave', function(){
+
+        //$('#hover-palette-expand').addClass('hidden')
+        $('#hover-palette-expand').css('display', 'none')
+    });
+
+    $('#pallete_list span').on('mouseover',function(){
+        //$('#hover-palette-expand').toggleClass('hidden')
+        //$('#hover-palette-expand').css('display', 'none')
+        //document.getElementById('hover-palette-expand').style.display = 'none';
+        $('#hover-palette-expand').css('display', 'none')
+    })
+
+    $( "#pallete_list span" ).on('mouseleave', function(){
+
+        //$('#hover-palette-expand').toggleClass('hidden')
+        $('#hover-palette-expand').css('display', 'block')
+    });
+
+    $('#pallete_list li').click(function(e){
+        e.stopPropagation();
+    })
+
+    $('#arrow-expanded').hover(function(){
+        $('#hover-palette-expand-arrow').css('display', 'block');
+        $('#hover-palette-expand').css('display', 'none');
+    })
+
+    $('#arrow-expanded').on('mouseleave',function(){
+        $('#hover-palette-expand-arrow').css('display', 'none');
+        $('#hover-palette-expand').css('display', 'block');
+    })
+
+
+
+
+
+
+
+
+
     jQuery("body").on("change",function(){
         mark = 0;
         var eJson = JSON.parse(window.examVar);

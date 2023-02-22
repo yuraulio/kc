@@ -9,12 +9,16 @@
     "license": "MIT",
     "require": {
         "php": "^7.3.0|^8.0",
+        "abraham/twitteroauth": "^4.0",
         "alexusmai/laravel-file-manager": "^2.5",
+        "atymic/twitter": "^3.1",
         "barryvdh/laravel-dompdf": "^1.0.2",
         "binshops/laravel-blog": "^9.2",
+        "coderjerk/bird-elephant": "^0.6.1",
         "codexshaper/laravel-menu-builder": "2.5",
         "doctrine/dbal": "^3.1",
         "dompdf/dompdf": "^1.0",
+        "dymantic/laravel-instagram-feed": "^3.2",
         "embed/embed": "^3.0",
         "facebook/php-business-sdk": "11.0.0",
         "fideloper/proxy": "^4.0",
@@ -37,7 +41,7 @@
         "phpoffice/phpspreadsheet": "^1.25",
         "propaganistas/laravel-phone": "^4.3",
         "rosell-dk/webp-convert": "^2.9",
-        "sentry/sentry-laravel": "^2.10",
+        "sentry/sentry-laravel": "^3.2",
         "spatie/flysystem-dropbox": "^1.0",
         "stripe/stripe-php": "^7.87",
         "teamtnt/laravel-scout-tntsearch-driver": "^11.5",
@@ -80,7 +84,8 @@
             "Alexusmai\\LaravelFileManager\\":"app/overrides/file-manager/model/",
             "Laravel\\Cashier\\Concerns\\": "app/Concerns",
             "Library\\": "app/Library/",
-            "Illuminate\\Queue\\Connectors\\": "app/overrides/Connectors"
+            "Illuminate\\Queue\\Connectors\\": "app/overrides/Connectors",
+            "Dymantic\\InstagramFeed\\": "app/Overrides/Instagram-feed/"
 
         },
         "classmap": [

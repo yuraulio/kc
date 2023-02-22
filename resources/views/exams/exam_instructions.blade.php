@@ -3,10 +3,12 @@
 
 
 @section('content')
+
 @if($exam->examCheckbox !== "" && $exam->examCheckbox)
 <div class="container">
 
         <div class="row justify-content-center">
+            <div id="generalDialog"></div>
 
             <div class="col-md-12">
 
@@ -39,12 +41,12 @@
 
                     </div>
 
-                    <div class="card-footer" style="text-align:center">
+                    <div class="">
 
                             <div class="checkbox">
 
 								  <label>
-PASSWORD<br/>
+                                        PASSWORD<br/>
 									<input type="password" required name="examPassword" id="examPassword">
 
                                     <i style="cursor: pointer;" id="togglePassword" class="fa fa-eye"></i>
@@ -54,7 +56,7 @@ PASSWORD<br/>
 
 								</div>
 
-                            <button id="submitPass" class="btn btn-primary">START THE EXAM NOW</button>
+                            <button id="submitPass" class="btn btn-lg button-secondary-next">START YOUR EXAM NOW</button>
 
 					</div>
 
@@ -104,9 +106,9 @@ PASSWORD<br/>
 
                     </div>
 
-                    <div class="card-footer" style="text-align:center">
+                    <div class="">
 
-                        <button id="submitPassΝο" class="btn btn-primary">START THE EXAM NOW</button>
+                        <button id="submitPassΝο" class="btn btn-lg button-secondary-next">START YOUR EXAM NOW</button>
 
 					</div>
 
@@ -122,6 +124,11 @@ PASSWORD<br/>
     @endif
 
     <script>
+
+        function closeGeneralDialog(){
+
+            $('#generalDialog').empty()
+        }
 
         jQuery(document).ready(function(){
 
@@ -153,7 +160,8 @@ PASSWORD<br/>
                     window.location = '{{ route('exam-start', [$exam->id]) }}';
                 }
                 else {
-                    alert('Sorry, wrong password!');
+                    showAlert('Sorry, wrong password!', 'error')
+                    //alert('Sorry, wrong password!');
                 }
             });
 
@@ -163,9 +171,36 @@ PASSWORD<br/>
                     window.location = '{{ route('exam-start', [$exam->id]) }}';
                 }
                 else {
-                    alert('Sorry, wrong password!');
+                    showAlert('Sorry, wrong password!', 'error')
+                    //alert('Sorry, wrong password!');
                 }
             });
+
+
+
+            function showAlert(msg, type){
+
+                let dialog = `
+                        <div>
+                            <div class="alert-wrapper ${type}-alert">
+                                <div class="alert-inner">
+                                    <p>${msg}</p>
+                                </div>
+
+                                <div class="close-dialog-general-buttons">
+                                    <button onclick="closeGeneralDialog()" class="btn btn-not-exit-exam btn-sm"> OK </button>
+                                </div>
+
+                                <!-- /.alert-outer -->
+                            </div>
+                        </div>
+                    `
+                $('#generalDialog').append(dialog)
+
+            }
+
+
+
         });
 
 

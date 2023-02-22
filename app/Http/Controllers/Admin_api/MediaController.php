@@ -146,14 +146,14 @@ class MediaController extends Controller
             // if is non image file (or non supported image file)
             $tmp = explode('.', $image_name);
             $extension = end($tmp);
-            if (!in_array($extension, ["jpg", "jpeg", "png"])) {
+            if (!in_array($extension, ["jpg", "jpeg", "png", 'JPG'])) {
                 return $this->uploadRegFile($request);
             }
 
             $file = Storage::disk('public')->putFileAs($path, $image, $image_name, 'public');
 
             // convert uploaded image to webp format
-            dispatch((new UploadImageConvertWebp($path, $image_name1))->delay(now()->addSeconds(3)));
+            dispatch((new UploadImageConvertWebp($path, $image_name1))->delay(now()->addSeconds(180)));
 
             $data = getimagesize($request->file);
             $original_image_width = $data[0];
@@ -212,11 +212,14 @@ class MediaController extends Controller
                 $width_offset = ($image_width / 2) - ($crop_width / 2);
                 $width_offset = $width_offset > 0 ? (int) $width_offset : null;
 
-                $image->crop($crop_width, $crop_height, $width_offset, $height_offset);
-                $image->save(public_path("/uploads" . $path . $version_name), 50, $extension);
+                $image->resize($crop_width, $crop_height);
+                $image->fit($crop_width, $crop_height);
+
+                //$image->crop($crop_width, $crop_height, $width_offset, $height_offset);
+                $image->save(public_path("/uploads" . $path . $version_name), 80, $extension);
 
                 // Convert version image to webp format
-                dispatch((new UploadImageConvertWebp($path, $version_name))->delay(now()->addSeconds(3)));
+                dispatch((new UploadImageConvertWebp($path, $version_name))->delay(now()->addSeconds(180)));
 
                 // save to db
                 $mfile = $this->storeFile(
@@ -233,7 +236,7 @@ class MediaController extends Controller
                 );
                 $files[] = new MediaFileResource($mfile);
 
-                TinifyImage::dispatch(public_path() . $mfile->full_path, $mfile->id);
+                TinifyImage::dispatch(public_path() . $mfile->full_path, $mfile->id)->delay(now()->addSeconds(180));
             }
 
             $original = MediaFile::find($mfile_original->id);
@@ -253,6 +256,9 @@ class MediaController extends Controller
                 $image = $this->editOriginalImage($request->id, $request->imgname, $request->alttext, $request->link);
                 return response()->json(['data' => new MediaFileResource($image)], 200);
             }
+            $height = null;
+            $width = null;
+            $crop_data = null;
 
             $folder = $this->getFolder($request);
             $path = $folder["path"];
@@ -288,7 +294,8 @@ class MediaController extends Controller
 
             $cropData = null;
 
-            if ($request->version != 'original') {
+            // if crop data undefined only alttext and link set
+            if ($request->version != 'original' && $request->crop_data != 'undefined') {
                 // delete old file
 
                 if ($file && Storage::disk('public')->exists($file->path)) {
@@ -309,11 +316,11 @@ class MediaController extends Controller
 
                 $crop_data = json_decode($request->crop_data);
 
-                $crop_height = $crop_data->height * (1 / $request->height_ratio);
-                $crop_width = $crop_data->width * (1 / $request->width_ratio);
+                $crop_height = $crop_data->height * (1 / (float)$request->height_ratio);
+                $crop_width = $crop_data->width * (1 / (float)$request->width_ratio);
 
-                $height_offset = $crop_data->top * (1 / $request->height_ratio);
-                $width_offset = $crop_data->left * (1 / $request->width_ratio);
+                $height_offset = $crop_data->top * (1 / (float)$request->height_ratio);
+                $width_offset = $crop_data->left * (1 / (float)$request->width_ratio);
 
                 $cropData = [
                     "crop_height" => $crop_height,
@@ -332,7 +339,7 @@ class MediaController extends Controller
                 $image->save(public_path("/uploads" . $folderPath . "/" . $image_name), 50, $extension);
 
                 // Convert webp image format
-                dispatch((new UploadImageConvertWebp($folderPath , '/'.$image_name))->delay(now()->addSeconds(3)));
+                dispatch((new UploadImageConvertWebp($folderPath , '/'.$image_name))->delay(now()->addSeconds(180)));
 
                 $size = $image ? $image->filesize() : null;
                 $height = $image ? $image->height() : null;
@@ -360,8 +367,9 @@ class MediaController extends Controller
                 $cropData
             );
 
+
             if ($request->version != 'original') {
-                TinifyImage::dispatch(public_path() . $mfile->full_path, $mfile->id);
+                TinifyImage::dispatch(public_path() . $mfile->full_path, $mfile->id)->delay(now()->addSeconds(180));
             }
 
             return response()->json(['data' => new MediaFileResource($mfile)], 200);
@@ -482,9 +490,20 @@ class MediaController extends Controller
             $mediaFile->user_id = Auth::user()->id;
             $mediaFile->version = $version;
             $mediaFile->parent_id = $parent_id;
-            $mediaFile->height = $height;
-            $mediaFile->width = $width;
-            $mediaFile->crop_data = $cropData;
+
+
+            if($height != null){
+                $mediaFile->height = $height;
+            }
+
+            if($width != null){
+                $mediaFile->width = $width;
+            }
+
+            if($cropData != null){
+                $mediaFile->crop_data = $cropData;
+            }
+
             $mediaFile->save();
 
             if (!Storage::disk('public')->exists($mediaFile->path)) {
@@ -501,7 +520,7 @@ class MediaController extends Controller
             return $e->getMessage();
         }
 
-        RenameFile::dispatch($oldUrl, $url, $alttext, $link);
+        RenameFile::dispatch($oldUrl, $url, $alttext, $link)->delay(now()->addSeconds(180));
 
         $mediaFile->load(["pages", "siblings", "subfiles"]);
 

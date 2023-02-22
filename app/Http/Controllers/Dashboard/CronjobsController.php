@@ -28,6 +28,7 @@ use App\Notifications\InClassReminder;
 use App\Notifications\SendTopicAutomateMail;
 use App\Model\Instructor;
 use App\Notifications\InstructorsMail;
+use App\Notifications\SubscriptionExpireReminder;
 
 class CronjobsController extends Controller
 {
@@ -154,6 +155,108 @@ class CronjobsController extends Controller
 
 
         }
+
+    }
+
+    public function sendReminderForExpiredSubscription(){
+
+        $now = Carbon::now();
+
+        // $events = User::with('events_for_user_list1')->whereHas('events_for_user_list1', function($query){
+        //     return $query->where('expiration', '<=', date('Y-m-d H:s:i'));
+        // })->get();
+
+        $users = User::with('events_for_user_list1_expired')->get();
+
+        foreach($users as $user){
+
+            foreach($user['events_for_user_list1_expired'] as $event){
+                $data = [];
+
+                $expiration = Carbon::parse($event->pivot->expiration);
+                $expiration_status = $event->pivot->expiration_email;
+
+                $diffInMonths = $expiration->diffInMonths($now);
+
+                //dd($diffInMonths);
+
+                if($expiration_status == 0 && $diffInMonths == 0){
+                    //expired NOW
+                    $status = 0;
+                    $data['template'] = 'emails.user.courses.expired';
+                    $data['subject'] = 'Knowcrunch | ' . (($user['firstname']) ? $user['firstname'] : '')." want to keep watching?";
+
+                    $updatedStatus = 1;
+
+
+                }else if($expiration_status == 1 && $diffInMonths == 6){
+                    // expired 6 MOMTHS
+                    $status = 1;
+                    $data['template'] = 'emails.user.courses.expired_after_six_months';
+                    $data['subject'] = 'Knowcrunch | ' . (($user['firstname']) ? $user['firstname'] : '')." don't you want to be updated?";
+
+                    $updatedStatus = 2;
+
+                }else if($expiration_status == 2 && $diffInMonths == 12){
+                    // expired 12 MONTHS
+                    $status = 2;
+                    $data['template'] = 'emails.user.courses.expired_after_one_year';
+                    $data['subject'] = 'Knowcrunch | ' . (($user['firstname']) ? $user['firstname'] : '')." it's been a long time";
+
+                    $updatedStatus = 3;
+                }
+
+
+                if($expiration_status < 3 && isset($data['template'])){
+
+                    $data['firstname'] = $user['firstname'];
+                    $data['event_name'] = $event['title'];
+                    $data['subscription_price'] = $event['plans'][0]['cost'];
+
+                    $user->notify(new SubscriptionExpireReminder($data));
+
+                    // Update Pivot Table
+                    $user->events_for_user_list1_expired()->updateExistingPivot($event,['expiration_email' => $updatedStatus], false);
+                }
+
+            }
+        }
+
+        /*
+        foreach($events as $sub){
+
+            $data = [];
+
+
+            $event = $sub['event']->first();
+
+            if(!$event){
+                continue;
+            }
+
+            $subscription_expiration_email = $event['expiration_email'];
+
+            $status = 999;
+            if($subscription_expiration_email == 0){
+                //expired NOW
+                $status = 0;
+                $data['template'] = '';
+
+
+            }else if($subscription_expiration_email == 1){
+                // expired 6 MOMTHS
+                $status = 1;
+                $data['template'] = '';
+
+            }else if($subscription_expiration_email == 2){
+                // expired 12 MONTHS
+                $status = 2;
+                $data['template'] = '';
+            }
+
+            $sub->user->notify(new SubscriptionExpireReminder($status, $data));
+        }
+        */
 
     }
 
@@ -602,15 +705,14 @@ class CronjobsController extends Controller
 
 
         //$events = Event::has('transactions')->where('published',true)->with('users')->where('view_tpl','event')->get();
-        $events = Event::has('transactions')->where('published',true)->whereIn('status',[0,3])->with('users')
+        $events = []; /*Event::has('transactions')->where('published',true)->whereIn('status',[0,3])->with('users')
         ->whereHas('event_info1',function($query){
             $query->where('course_delivery','!=',143);
         })
-        ->get();
+        ->get();*/
 
         $today = date_create( date('Y/m/d'));
         $today1 = date('Y-m-d');
-
 
         foreach($events as $event){
 
@@ -642,8 +744,8 @@ class CronjobsController extends Controller
                 $expiration =  date_diff($date, $startDate);
                 $date = date_diff($date, $today);
 
-                if( $date->y==0 && $date->m == ($expiration->m/2)  && $date->d == 0){
-
+                //if( $date->y==0 && $date->m == ($expiration->m/2)  && $date->d == 0){
+                if( $date->y==0 && $date->m == ($expiration->m/2)  && $date->d == 0 && $expiration->y == 0 && $expiration->d == 0){
                     // dd('edww');
 
                     $data['firstName'] = $user->firstname;
@@ -1090,5 +1192,6 @@ class CronjobsController extends Controller
         }
 
     }
+
 
 }

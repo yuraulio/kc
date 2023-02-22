@@ -43,11 +43,33 @@ class EventController extends Controller
         $this->authorize('manage-users', User::class);
         $user = Auth::user();
 
-        $data['live_courses'] = count(Event::where('published', 1)->where('status', [0,2])->get());
-        $data['completed_courses'] = count(Event::where('published', 1)->where('status', '3')->get());
-        $data['total_courses'] = count(Event::all());
+        // $data['live_courses'] = count(Event::where('published', 1)->where('status', [0,2])->get());
+        // $data['completed_courses'] = count(Event::where('published', 1)->where('status', '3')->get());
+        // $data['total_courses'] = count(Event::all());
+        $data = $this->statistics();
 
         return view('event.index', ['events' => $model->with('category', 'type','delivery')->orderBy('published', 'asc')->get(), 'user' => $user, 'data' => $data]);
+    }
+
+    public function statistics(){
+        $data = [];
+
+        $data['active'] = Event::where('status', 0)->count();
+
+        $data['completed'] = Event::where('status', 3)->count();
+
+        $data['all'] = Event::all()->count();
+
+        $data['inclass'] = Event::where('status', 0)->whereHas('event_info1', function($q) {
+            return $q->where('event_info.course_delivery','<>', 143);
+        })->count();
+
+        $data['elearning'] = Event::where('status', 0)->whereHas('event_info1', function($q) {
+            return $q->where('event_info.course_delivery', 143);
+        })->count();
+
+
+        return $data;
     }
 
     public function assign_ticket(Request $request)
@@ -382,13 +404,13 @@ class EventController extends Controller
      */
     public function edit(Event $event)
     {
+        //dd($event->transactions->sum('amount'));
         //dd($show_popup);
         //$faq = Faq::find(16);
         //dd($faq->category);
 
-        $data['sumOfStudents'] = count($event->users);
-        $data['totalRevenue'] = $event->transactions->sum('amount');
-
+        // $data['sumOfStudents'] = count($event->users);
+        // $data['totalRevenue'] = $event->transactions->sum('amount');
         $user = Auth::user();
         $id = $event['id'];
         //$event = $event->with('coupons','delivery','category', 'summary1', 'benefits', 'ticket', 'city', 'venues', 'topic', 'lessons', 'instructors', 'users', 'partners', 'sections','paymentMethod','slugable','metable', 'medias', 'sectionVideos');
@@ -465,17 +487,21 @@ class EventController extends Controller
         $data['delivery'] = Delivery::all();
         $data['isInclassCourse'] = $event->is_inclass_course();
         $data['eventFaqs'] = $event->faqs->pluck('id')->toArray();
-        $data['eventUsers'] = $event->users;//$event->users->toArray();
+        $data['eventUsers'] = $event->users_with_transactions()->with('ticket')->get();//$event->users->toArray();
         $data['eventWaitingUsers'] = $event->waitingList()->with('user')->get();
         $data['coupons'] = Coupon::all();
         $data['activeMembers'] = 0;
         $data['sections'] = $event->sections->groupBy('section');
         $data['info'] = !empty($event->event_info()) ? $event->event_info() : null;
 
+
+        //$data = $data + $this->event_statistics($event, $data['eventUsers']);
+
         //if elearning course (id = 143)
         $elearning_events = Delivery::with('event:id,title')->where('id',143)->whereHas('event', function ($query) {
             return $query->where('published', true);
         })->first()->toArray()['event'];
+
 
 
         $data['elearning_events'] = $elearning_events;
@@ -515,6 +541,249 @@ class EventController extends Controller
 
         return view('event.edit', $data);
     }
+
+    public function event_statistics($id)
+    {
+
+        $event = Event::find($id);
+        $users = $event->users_with_transactions()->with('ticket')->get();
+
+        $data = [];
+        //return [];
+        $eventId = $event['id'];
+        $cUsers = 0;
+        $eventTickets = [];
+
+        foreach($event->ticket as $ticket){
+
+            $eventTickets[$ticket->id] = $ticket['pivot']['price'] != null ?$ticket['pivot']['price'] : 0;
+        }
+
+        $count = [];
+        $income = [];
+
+        $count['free'] = 0;
+        $count['special'] = 0;
+        $count['early'] = 0;
+        $count['alumni'] = 0;
+        $count['regular'] = 0;
+        $count['total'] = 0;
+
+        $income['special'] = 0.0;
+        $income['alumni'] = 0.0;
+        $income['early'] = 0.0;
+        $income['regular'] = 0.0;
+        $income['other'] = 0.0;
+        $income['subscription'] = 0.0;
+        $income['total'] = 0.0;
+
+        $incomeInstalments['special'] = 0.0;
+        $incomeInstalments['early'] = 0.0;
+        $incomeInstalments['regular'] = 0.0;
+        $incomeInstalments['alumni'] = 0.0;
+        $incomeInstalments['other'] = 0.0;
+        $incomeInstalments['subscription'] = 0.0;
+        $incomeInstalments['total'] = 0.0;
+
+        $arr = [];
+        //$arr_income = [];
+
+
+        //dd($event->transactions);
+        $countUsersU = [];
+        foreach($event->transactions as $transaction){
+
+            //$amount += $transaction->amount;
+
+            //dd($transaction->user);
+            $users = $transaction->user;
+            foreach($users as $user){
+
+                $countUsersU[] = $user->id;;
+
+                $tickets = $user['ticket']->groupBy('event_id');
+                $ticketType = isset($tickets[$event->id]) ? $tickets[$event->id]->first()->type : '-';
+
+                $isSubscription = $transaction->isSubscription()->first();
+
+                if(isset($tickets[$event->id]) && !$isSubscription){
+                    $ticketType = $tickets[$event->id]->first()->type;
+                    $ticketName = $tickets[$event->id]->first()->title;
+
+                }else if($isSubscription){
+                    $ticketType = '-';
+                    $ticketName = '-';
+
+                }else{
+                    $ticketType = '-';
+                    $ticketName = '-';
+                }
+
+                $countUsers = count($users);
+
+                $amount = $transaction['amount'] != null ? round($transaction['amount'] / $countUsers) : 0;
+
+                if($isSubscription != null){
+                    $income['subscription'] += $amount;
+                    $incomeInstalments['subscription'] += $amount;
+                }
+
+                if($ticketType == 'Special'){
+
+                    //$arr_income[$transaction->id] = $transaction->amount;
+
+
+
+                    $count['special']++;
+                    $income['special'] +=  ($amount);
+
+
+                }else if($ticketType == 'Early Bird'){
+
+                    $count['early']++;
+
+                    $income['early'] += ($amount) ;
+
+
+                }else if($ticketType == 'Regular'){
+
+                    $count['regular']++;
+
+                    $income['regular'] += ($amount) ;
+
+                }else if($ticketType == 'Sponsored'){
+
+                    $count['free']++;
+
+
+                }else if($ticketType == 'Alumni'){
+
+                    $count['alumni']++;
+                    $income['alumni'] +=  ($amount) ;
+
+
+                }else{
+                    $income['other'] += ($amount) ;
+                }
+
+                if(count($transaction['invoice']) > 0 ){
+
+
+                    foreach($transaction['invoice'] as $invoice){
+
+                        if($invoice['amount'] != null){
+                            //dd($transaction);
+                            $amount = $invoice['amount'] / $countUsers;
+                        }
+
+
+
+
+
+                        if($ticketType == 'Special'){
+
+                            //$arr[$transaction->id][$invoice->id] = $amount;
+
+
+
+                            $incomeInstalments['special'] = $incomeInstalments['special'] + $amount;
+                            //$incomeInstalments['total'] = $incomeInstalments['total'] + $amount;
+
+                        }else if($ticketType == 'Early Bird'){
+
+                            $incomeInstalments['early'] = $incomeInstalments['early'] + $amount;
+                            //$incomeInstalments['total'] = $incomeInstalments['total'] + $amount;
+
+                        }else if($ticketType == 'Regular'){
+
+                            $arr[$transaction->id][$invoice->id] = $amount;
+
+                            $incomeInstalments['regular'] = $incomeInstalments['regular'] + $amount;
+                            //$incomeInstalments['total'] = $incomeInstalments['total'] + $amount;
+
+                        }else if($ticketType == 'Sponsored'){
+
+                        }else if($ticketType == 'Alumni'){
+
+                            $incomeInstalments['alumni'] = $incomeInstalments['alumni'] + $amount;
+                            //$incomeInstalments['total'] = $incomeInstalments['total'] + ($transaction['amount'] != null ? ($transaction['amount'] / $countUsers) : 0) / $countUsers;
+                        }else{
+                            $incomeInstalments['other'] = $incomeInstalments['other'] + $amount;
+                            //$incomeInstalments['total'] = $incomeInstalments['total'] + ($transaction['amount'] != null ? ($transaction['amount'] / $countUsers) : 0) / $countUsers;
+
+                        }
+
+                    }
+
+                }
+                else{
+                    $amount = $transaction['amount'] != null ? $transaction['amount'] / $countUsers : 0;
+
+                    if(!isset($transaction['status_history'][0]['installments'])){
+
+                        if($ticketType == 'Special'){
+
+                            //$arr[$transaction->id] = $amount;
+
+                            $incomeInstalments['special'] = $incomeInstalments['special'] + $amount;
+                            //$incomeInstalments['total'] = $incomeInstalments['total'] + $amount;
+
+                        }else if($ticketType == 'Early Bird'){
+
+
+                            $incomeInstalments['early'] = $incomeInstalments['early'] + $amount;
+                            //$incomeInstalments['total'] = $incomeInstalments['total'] + $amount;
+
+                        }else if($ticketType == 'Regular'){
+
+
+
+                            $incomeInstalments['regular'] = $incomeInstalments['regular'] + $amount;
+                            //$incomeInstalments['total'] = $incomeInstalments['total'] + $amount;
+
+                        }else if($ticketType == 'Sponsored'){
+
+                        }else if($ticketType == 'Alumni'){
+                            $incomeInstalments['alumni'] = $incomeInstalments['alumni'] + $amount;
+                            //$incomeInstalments['total'] = $incomeInstalments['total'] + ($transaction['amount'] / $countUsers);
+                        }else{
+                            $incomeInstalments['other'] = $incomeInstalments['other'] + $amount;
+                            //$incomeInstalments['total'] = $incomeInstalments['total'] + ($transaction['amount'] / $countUsers);
+
+                        }
+                    }
+                }
+
+
+
+
+            }
+        }
+
+
+        //dd($income);
+        $countUsersU = array_unique($countUsersU);
+        $countUsersU = count($countUsersU);
+        $count['total'] = $countUsersU;
+
+        $data['incomeInstalments'] = $incomeInstalments;
+        $data['incomeInstalments']['total'] = array_sum($incomeInstalments);
+        //dd($data['incomeInstalments']);
+        $data['count'] = $count;
+        $data['income'] = $income;
+
+        $data['income']['total'] = array_sum($income);
+        //dd($count);
+
+
+        return response()->json([
+            'success' => __('Event Statistic successfully fetched.'),
+            'data' => $data,
+        ]);
+
+
+    }
+
     /**
      * Update the specified resource in storage.
      *
@@ -684,6 +953,8 @@ class EventController extends Controller
         }
 
         $infoData = $request->course;
+
+
         $event_info = $this->prepareInfo($infoData, $request->status, $request->delivery, $partner, $request->syllabus, $request->city_id, $event);
 
         $this->updateEventInfo($event_info, $event->id);
@@ -824,10 +1095,12 @@ class EventController extends Controller
             $data['course_elearning_expiration'] = (isset($requestData['delivery']['elearning']['expiration']) && $requestData['delivery']['elearning']['expiration'] != null) ? $requestData['delivery']['elearning']['expiration'] : null;
             $data['course_elearning_text'] = (isset($requestData['delivery']['elearning']['text']) && $requestData['delivery']['elearning']['text'] != null) ? $requestData['delivery']['elearning']['text'] : null;
 
+
             $visible_loaded_data = isset($requestData['delivery']['elearning']['exam']['visible']) ? $requestData['delivery']['elearning']['exam']['visible'] : null;
             $data['course_elearning_exam_visible'] = json_encode($this->prepareVisibleData($visible_loaded_data));
             $data['course_elearning_exam_icon'] = isset($requestData['delivery']['elearning']['exam']['icon']) ?  json_encode($requestData['delivery']['elearning']['exam']['icon']) : null;
             $data['course_elearning_exam_text'] = (isset($requestData['delivery']['elearning']['exam']['text']) && $requestData['delivery']['elearning']['exam']['text'] != null) ? $requestData['delivery']['elearning']['exam']['text'] : null;
+            $data['course_elearning_exam_activate_months'] = (isset($requestData['delivery']['elearning']['exam']['activate_months']) && $requestData['delivery']['elearning']['exam']['activate_months'] != null) ? $requestData['delivery']['elearning']['exam']['activate_months'] : null;
 
 
             if(isset($requestData['delivery']['inclass'])){
@@ -1159,6 +1432,7 @@ class EventController extends Controller
         $infos->course_elearning_exam_icon = isset($event_info['course_elearning_exam_icon']) ? $event_info['course_elearning_exam_icon'] : null;
         $infos->course_elearning_exam_text = isset($event_info['course_elearning_exam_text']) ? $event_info['course_elearning_exam_text'] : null;
         $infos->course_elearning_exam = isset($event_info['course_elearning_exam']) ? true : false;
+        $infos->course_elearning_exam_activate_months = isset($event_info['course_elearning_exam_activate_months']) ? $event_info['course_elearning_exam_activate_months'] : null;
 
 
         /*if($event->paymentMethod()->first()){

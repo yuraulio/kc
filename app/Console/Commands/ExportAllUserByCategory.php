@@ -43,21 +43,21 @@ class ExportAllUserByCategory extends Command
     public function handle()
     {
 
-        //$this->complicatedQuery();
+        $this->complicatedQuery();
         //$this->queryForBigElearningAccess();
         //$this->queryForbUYBigElearningAccess();
         //$this->queryForUsesHasOnlyFreeEvents();
       	//$this->queryForUsesHasSmallElearning();
         //$this->queryForInclassElearning();
         //$this->queryForUsersHaveTransactionsByDate('2022-11-17');
-        $this->queryForSponsorded();
+        //$this->queryForSponsorded();
     }
 
 
     private function complicatedQuery(){
 
-        $users = User::doesntHave('subscriptionEvents')->whereHas('transactions',function($transaction){
-
+        //$users = User::doesntHave('subscriptionEvents')->whereHas('transactions',function($transaction){
+        $users = User::whereHas('transactions',function($transaction){
             $transaction->whereHas('event', function($event){
                 $event->whereHas('category', function($category){
                     return $category->whereIn('categoryables.category_id',[46,277,183]);
@@ -70,13 +70,17 @@ class ExportAllUserByCategory extends Command
                 return $event->wherePivot('paid',true)->whereHas('category', function($category){
                     return $category->whereIn('categoryables.category_id',[46,277,183]);
                 });
-            }
+            },
+            'eventSubscriptions'
         ])
         ->get();
 
         echo count($users);
         echo "####";
         $today = strtotime(date('Y-m-d'));
+
+        $userss = [];
+        $doubleU = [];
         foreach($users as $key => $user){
 
             $instrunctorId = -1;
@@ -86,46 +90,92 @@ class ExportAllUserByCategory extends Command
 
             }
 
+            
             foreach($user->events_for_user_list as $event){
+                
+                $isElearning = $event->is_elearning_course();
 
                 if(!$event->pivot->paid){
-                    continue;
+                    //continue;
                 }
 
                 if(in_array($instrunctorId,$event->instructors()->pluck('instructor_id')->toArray())){
                     unset($users[$key]);
+                    unset($userss[$user->id]);
                 }
 
                 if($event->category->first()->id == 46 && $event->status == 0){
 
                     unset($users[$key]);
-                    
+                    unset($userss[$user->id]);
                     
                 }
-                if(strtotime($event->pivot->expiration) >= $today || !$event->pivot->expiration){
+                if((strtotime($event->pivot->expiration) >= $today || !$event->pivot->expiration) && $isElearning){
 
                     unset($users[$key]);
+                    unset($userss[$user->id]);
 
                 }
 
                 if(!$event->pivot->paid){
-                    unset($users[$key]);
+                    //unset($users[$key]);
                 }
 
-            
+
+                if(isset($users[$key]) && !in_array($user->id,$doubleU)){
+
+                    /*if($user->id == 5726){
+                        dd($event);
+                    }*/
+
+                    $userss[$user->id] = $users[$key];
+                    $doubleU[] = $user->id;
+                }
+            }
+
+            if(!isset($users[$key])){
+                continue;
+            }
+            foreach($user->eventSubscriptions as $event){
+
+                if(!$event->pivot->paid){
+                    //continue;
+                }
+
+              
+                if(strtotime($event->pivot->expiration) >= $today || !$event->pivot->expiration){
+                  
+                    unset($users[$key]);
+                    unset($userss[$user->id]);
+                }
+
+                if(!$event->pivot->paid){
+                    //unset($users[$key]);
+                }
+
+
+                if(isset($users[$key]) && !in_array($user->id,$doubleU)){
+                    
+                    
+
+                    $userss[$user->id] = $users[$key];
+                    $doubleU[] = $user->id;
+                }
             }
 
 
         }
-
-        echo count($users);
+        
+        echo count($userss);
         
         $columns = array("ID", "First Name", "Last Name", "email",'Mobile');
 
         $file = fopen('users_masterclass_big_elearning_no_subsctription_expired_access_completed.csv', 'w');
         fputcsv($file, $columns);
 
-        foreach($users as $user){
+        foreach($userss as $user){
+
+
             fputcsv($file, array($user->id, $user->firstname,  $user->lastname, $user->email,$user->mobile));
         }
 

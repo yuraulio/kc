@@ -20,7 +20,6 @@
             <li class="breadcrumb-item active" aria-current="page">{{ __('List') }}</li>
         @endcomponent
         @include('users.layouts.cards')
-        @include('admin.transaction.layouts.cards')
     @endcomponent
 
     <div class="container-fluid mt--6">
@@ -185,7 +184,7 @@
                                         <td>{{ date('Y-m-d', strtotime($user['created_at'])) }}</td>
 
                                         <td class="d-none">
-                                            @foreach($user['events_for_user_list'] as $event){{ $event['title'] }}--@if(isset($data['transactions'][$user['id']]))@if(isset($data['transactions'][$user['id']][$event['id']])){{$data['transactions'][$user['id']][$event['id']][0]['type']}}--{{$data['transactions'][$user['id']][$event['id']][0]['amount']}}--{{$data['transactions'][$user['id']][$event['id']][0]['coupon_code']}}--{{$data['transactions'][$user['id']][$event['id']][0]['date']}}||@else||@endif
+                                            @foreach($user['events_for_user_list1'] as $event){{ $event['title'] }}--@if(isset($data['transactions'][$user['id']]))@if(isset($data['transactions'][$user['id']][$event['id']])){{$data['transactions'][$user['id']][$event['id']][0]['type']}}--{{$data['transactions'][$user['id']][$event['id']][0]['amount']}}--{{$data['transactions'][$user['id']][$event['id']][0]['coupon_code']}}--{{$data['transactions'][$user['id']][$event['id']][0]['date']}}||@else||@endif
                                             @endif
                                             @endforeach
                                         </td>
@@ -336,7 +335,7 @@
 
                 //console.log(data[9])
                 //row = data[9]
-                row = data[9].split('||')
+                row = data[10].split('||')
                 selected_event = removeSpecial($('#select2-col9_filter-container').attr('title'))
                 //console.log('MY EVENT'+selected_event)
                 //console.log(row)
@@ -437,7 +436,7 @@
         //console.log('from change min!!')
         table.draw();
         //console.log(table.column(1).data())
-        events = table.column( 9 ).data()
+        events = table.column( 10 ).data()
         //console.log(price)
 
         initCounters()
@@ -514,7 +513,7 @@
              //returns 'filtered' or visible rows
              table.rows({filter: 'applied'}).every( function ( rowIdx, tableLoop, rowLoop ) {
                 let user_id = this.data()[5]
-                var data = this.data()[9];
+                var data = this.data()[10];
                 events = data.split('||')
                 $.each(events, function(key, value) {
                     let type = ''
@@ -642,7 +641,7 @@
 
             //returns 'filtered' or visible rows
             table.rows({filter: 'applied'}).every( function ( rowIdx, tableLoop, rowLoop ) {
-                var data = this.data()[9];
+                var data = this.data()[10];
                 //console.log(data)
                 events = data.split('||')
 
@@ -724,7 +723,7 @@
 
             //returns 'filtered' or visible rows
             table.rows({filter: 'applied'}).every( function ( rowIdx, tableLoop, rowLoop ) {
-                var data = this.data()[9];
+                var data = this.data()[10];
                 //console.log(data)
                 events = data.split('||')
 
@@ -803,15 +802,15 @@
 
         function filterColumn ( i ) {
 
-            console.log('fasd = ', i);
 
             initCounters()
             if(i == 9) {
-                $('#datatable-basic45').DataTable().column( 9 ).search(
+                $('#datatable-basic45').DataTable().column( 10 ).search(
                     $('#col9_filter').val(), true,false
                 ).draw();
 
                 selected_event = removeSpecial(selected_event = removeSpecial($('#select2-col9_filter-container').attr('title')))
+
 
                 if(selected_event.search('E-Learning') != -1){
                     stats_elearning()
@@ -828,7 +827,7 @@
 
 
             }else if(i == 10){
-                $('#datatable-basic45').DataTable().column( 9 ).search(
+                $('#datatable-basic45').DataTable().column( 10 ).search(
                     $('#col10_filter').val(), true,false
                 ).draw();
 

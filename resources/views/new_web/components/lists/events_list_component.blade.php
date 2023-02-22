@@ -224,7 +224,7 @@
                 ?>
                 @foreach($completedlist as $row)
 
-            
+
                     {{--@if($row->view_tpl != 'elearning_event' && $row->view_tpl != 'elearning_greek' && $row->view_tpl != 'elearning_free' && $row->view_tpl != 'elearning_pending')--}}
                     @if($row->is_inclass_course())
                         <?php
@@ -257,7 +257,7 @@
 
                                     <h2><a href="{{ $slug }}">{{ $row->title}}</a></h2>
                                     <div class="bottom">
-                                        
+
                                         @include('new_web.components.event_infos',['type' => 'inclass'])
 
 

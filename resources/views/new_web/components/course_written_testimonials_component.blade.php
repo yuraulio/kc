@@ -45,7 +45,10 @@
                         <div class="testimonial-box">
                             <div class="author-infos">
                                 <div class="author-img">
-                                    <img onerror="this.src='{{cdn('/theme/assets/images/icons/user-circle-placeholder.svg')}}'" src="{{ cdn(get_image($row['mediable'],'users')) }}" alt="{!! $row['name'] !!}">
+                                    <?php
+                                    $imageDetails = get_image_version_details('users');
+                                    ?>
+                                    <img loading="lazy" onerror="this.src='{{cdn('/theme/assets/images/icons/user-circle-placeholder.svg')}}'" src="{{ cdn(get_image($row['mediable'],'users')) }}" alt="{!! $row['name'] !!}" title="{!! $row['name'] !!}" width="{{ $imageDetails['w'] }}" height="{{ $imageDetails['h'] }}">
                                 </div>
                                 <span class="author-name">
                                 {!! $row['name'] !!} {!! $row['lastname'] !!}</span>

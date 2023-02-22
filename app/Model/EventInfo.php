@@ -38,6 +38,8 @@ class EventInfo extends Model
         'course_elearning_exam',
         'course_elearning_exam_icon',
         'course_elearning_exam_visible',
+        'course_elearning_exam_activate_months',
+        'course_elearning_exam_activate_months_icon',
         'course_payment_method',
         'course_payment_icon',
         'course_files_icon',

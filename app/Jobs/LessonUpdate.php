@@ -22,7 +22,7 @@ class LessonUpdate implements ShouldQueue
 
     private $request;
     private $lesson;
-    
+
     public function __construct($request,$lesson)
     {
         $this->request = $request;
@@ -40,13 +40,13 @@ class LessonUpdate implements ShouldQueue
         {
             $catsIds = [];
             $topic = Topic::with('category')->find($topic);
-           
+
             foreach($topic->category as $cat){
-                
+
                 if($cat->id != $this->request['category']){
                     continue;
                 }
-                
+
                 if(in_array($cat->id,$catsIds)){
                     //continue;
                 }
@@ -60,18 +60,20 @@ class LessonUpdate implements ShouldQueue
 
                 foreach($allEvents as $event)
                 {
-                    
+
+                    add_event_statistic_queue($event->id);
+
                     $allLessons = $event->allLessons->groupBy('id');
-                    
+
                     $date = '';
-                    $time_starts = '';
+                    $time_starts = null;
                     $time_ends = '';
                     $duration = '';
                     $room = '';
                     $instructor_id = '';
                     $automate_mail = false;
                     $send_automate_mail = false;
-                    
+
                     if($existLesson = $event->allLessons()->wherePivot('topic_id',$topic->id)->wherePivot('lesson_id',$this->lesson->id)->first()){
                         $priority =  $existLesson->pivot->priority;
                     }else{
@@ -98,7 +100,7 @@ class LessonUpdate implements ShouldQueue
                         'automate_mail' => $automate_mail,'send_automate_mail'=>$send_automate_mail
                     ]);
                     $event->fixOrder();
-                    
+
                     $this->lesson->topic()->wherePivot('category_id',$this->request['category'])->detach();
                     $cat->changeOrder($priority);
                     $cat->topic()->attach($topic, ['lesson_id' => $this->lesson->id,'priority'=>$priority]);
@@ -111,7 +113,7 @@ class LessonUpdate implements ShouldQueue
                 //$cat->fixOrder();
 
             }
-                
+
         }
     }
 }

@@ -6,6 +6,17 @@
       0 => 'Alexusmai\\LaravelFileManager\\FileManagerServiceProvider',
     ),
   ),
+  'atymic/twitter' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Atymic\\Twitter\\ServiceProvider\\LaravelServiceProvider',
+    ),
+    'aliases' => 
+    array (
+      'Twitter' => 'Atymic\\Twitter\\Facade\\Twitter',
+    ),
+  ),
   'barryvdh/laravel-debugbar' => 
   array (
     'providers' => 
@@ -61,6 +72,13 @@
     'providers' => 
     array (
       0 => 'Cviebrock\\EloquentSluggable\\ServiceProvider',
+    ),
+  ),
+  'dymantic/laravel-instagram-feed' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Dymantic\\InstagramFeed\\InstagramFeedServiceProvider',
     ),
   ),
   'facade/ignition' => 

@@ -48,8 +48,8 @@ class ExportCertificateByEvent extends Command
         foreach($events as $event){
             //dd($event->pivot);
             foreach($event->usersPaid as $user){
-
-                $event->pivot = $user->pivot;
+                
+                //$event->pivot = $user->pivot;
                 $event->certification($user,0);
             }
 

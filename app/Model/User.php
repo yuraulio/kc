@@ -190,6 +190,7 @@ class User extends Authenticatable
             ->with('summary1', 'category', 'slugable', 'dropbox')->wherePivot('paid', true);
     }*/
 
+
     public function events()
     {
         return $this->belongsToMany(Event::class, 'event_user')->withPivot('paid', 'expiration', 'comment', 'payment_method')
@@ -216,10 +217,24 @@ class User extends Authenticatable
            ->wherePivot('paid', false);
     }
 
-
     public function events_for_user_list()
     {
         return $this->belongsToMany(Event::class, 'event_user')->with('summary1', 'category','slugable', 'dropbox')->withPivot('event_id', 'paid', 'expiration', 'comment', 'payment_method');
+    }
+
+    public function events_for_user_list1()
+    {
+        return $this->belongsToMany(Event::class, 'event_user')->withPivot('event_id', 'paid', 'expiration', 'expiration_email');
+    }
+
+    public function events_for_user_list1_expired()
+    {
+        return $this->belongsToMany(Event::class, 'event_user')
+            ->has('plans')
+            ->with('plans')
+            ->wherePivot('event_user.expiration', '!=', '')
+            ->wherePivot('event_user.expiration', '<=', date('Y-m-d H:s:i'))
+            ->withPivot('event_id', 'paid', 'expiration', 'expiration_email');
     }
 
     public function subscriptionEvents()
@@ -336,7 +351,7 @@ class User extends Authenticatable
 
     public function eventSubscriptions()
     {
-        return $this->belongsToMany(Subscription::class, 'subscription_user_event')->with('event');
+        return $this->belongsToMany(Subscription::class, 'subscription_user_event')->with('event')->withPivot('expiration');
     }
 
     public function cookiesSMS()
@@ -745,6 +760,8 @@ class User extends Authenticatable
         $createdAt = Carbon::now();
         $updatedAt = Carbon::now();
 
+        $is_new = 1;
+
         if (isset($statistic['videos']) && $statistic['videos'] != '') {
             $notes = json_decode($statistic['notes'], true);
             $videos = json_decode($statistic['videos'], true);
@@ -764,11 +781,12 @@ class User extends Authenticatable
                 if ($firstTime) {
                     $firstTime = false;
                     $lastVideoSeen = $vimeo_id;
+                    $is_new = 0;
                 }
                 if (!isset($videos[$vimeo_id])) {
                     $change+=1;
                     $videos[$vimeo_id] = ['seen' => 0, 'tab' =>$tab.$vimeo_id, 'lesson_id' => $lesson['id'], 'stop_time' => 0, 'total_seen' => 0,
-                                               'percentMinutes' => 0, 'total_duration' => getLessonDurationToSec($lesson['vimeo_duration'])];
+                                               'percentMinutes' => 0, 'total_duration' => getLessonDurationToSec($lesson['vimeo_duration']), 'is_new' => $is_new];
                     $notes[$vimeo_id] = '';
                 }
                 $countVideos += 1;

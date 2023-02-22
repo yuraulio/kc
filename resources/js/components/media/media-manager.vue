@@ -322,7 +322,7 @@
                         <a href="#" @click.prevent="getFolders(); filesView = false; folderId=null;" class="list-group-item border-0 font-14"><i class="mdi mdi-folder-outline font-18 align-middle me-1"></i>Recent Updated</a>
                         <a href="#" @click.prevent="getFiles(); filesView = true; folderId=null;" class="list-group-item border-0 font-14"><i class="mdi mdi-folder-outline font-18 align-middle me-1"></i> All Files</a>
 
-                        <vue-nestable ref="folders" v-model="mediaFolders" :threshold="10000000000000" 
+                        <vue-nestable ref="folders" v-model="mediaFolders" :threshold="10000000000000"
                         :hooks="{'beforeMove': validateMove}" class="dd-list" @change="saveFolderOrderMove">
                             <vue-nestable-handle slot-scope="{ item, isChild }" :item="item">
                                 <li :key="item.id + uncolapsed.length" v-show="!isChild || uncolapsed.includes(item.id)" class="dd-item" :data-id="item.id">
@@ -394,18 +394,18 @@
                         </div>
                     </div>
                     <div v-if="!loading && loadstart">
-                        <files 
-                            :key="view" 
-                            :view="view" 
-                            v-if="!loading" 
-                            :mediaFiles="mediaFiles" 
-                            @selected="userSelectedFiles" 
-                            @delete="deleteFile" 
-                            @open="openFile" 
+                        <files
+                            :key="view"
+                            :view="view"
+                            v-if="!loading"
+                            :mediaFiles="mediaFiles"
+                            @selected="userSelectedFiles"
+                            @delete="deleteFile"
+                            @open="openFile"
                             @move="openMoveModal"
                             @moveMulti="openMoveModalMulti"
                             @deleteMulti="deleteFiles"
-                            :imageExtensions="imageExtensions" 
+                            :imageExtensions="imageExtensions"
                             :folderId="folderId">
                         </files>
                     </div>
@@ -492,6 +492,7 @@ export default {
             ],
             warning: false,
             startingImageData: null,
+            withoutImage: false
         };
     },
     methods: {
@@ -499,10 +500,14 @@ export default {
             this.regFile = $event.target.files[0];
         },
         setImage(image) {
-            if (image.parrent) {
-                this.userSelectedFiles(image);
-            } else {
-                axios
+
+            if(image.parrent != null){
+                image = image.parrent
+            }else if(image.parrent_id == null){
+                image = image
+            }
+
+            axios
                 .get('/api/media_manager/getFile/' + image.id)
                 .then((response) => {
                     if (response.status == 200) {
@@ -516,7 +521,15 @@ export default {
                         `Request failed: ${error}`
                     )
                 })
-            }
+
+            // console.log('here is set image')
+            // console.log(image)
+            // //here demo
+            // if (image.parrent) {
+            //     this.userSelectedFiles(image.parrent);
+            // } else {
+
+            // }
         },
         validateMove(dragItem, pathFrom, pathTo) {
             if (dragItem.pathFrom && dragItem.pathTo && dragItem.pathFrom.length == dragItem.pathTo.length) {
@@ -614,9 +627,13 @@ export default {
             this.getFolders();
         }
 
+
         if (this.startingImage) {
             this.setImage(this.startingImage);
+        }else{
+            this.withoutImage = true;
         }
+
     },
     beforeDestroy() {
         // console.log('unsetted');

@@ -257,7 +257,8 @@ class LessonController extends Controller
         $data['room'] = $request->room;
         $data['location_url'] = $location_url;
 
-        dispatch((new UpdateStatisticJson($request->event_id))->delay(now()->addSeconds(3)));
+        add_event_statistic_queue($request->event_id);
+        //dispatch((new UpdateStatisticJson($request->event_id))->delay(now()->addSeconds(3)));
 
         dispatch((new UpdateEventAccessToFiles($request->event_id))->delay(now()));
 
@@ -448,7 +449,9 @@ class LessonController extends Controller
 
         //$event->fixOrder();
         dispatch(new FixOrder($event,''));
-        dispatch((new UpdateStatisticJson($request->event_id))->delay(now()->addSeconds(3)));
+
+        add_event_statistic_queue($request->event_id);
+        //dispatch((new UpdateStatisticJson($request->event_id))->delay(now()->addSeconds(3)));
 
         echo json_encode($request->all());
     }
@@ -614,7 +617,7 @@ class LessonController extends Controller
                     //dd($pLesson);
 
                     $date = '';
-                    $time_starts = '';
+                    $time_starts = null;
                     $time_ends = '';
                     $duration = '';
                     $room = '';

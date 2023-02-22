@@ -13,9 +13,15 @@
                         <div class="author-img">
                             <?php
                                 $alt='';
+                                $width = 0;
+                                $height = 0;
                                 $img = get_image($syllabus[0]['mediable'],'instructors-small');
+
+                                $imageDetails = get_image_version_details('instructors-small');
+                                $width = $imageDetails['w'];
+                                $height = $imageDetails['h'];
                             ?>
-                            <a id="syllabus-link" href="{{env("NEW_PAGES_LINK") . "/" . $syllabus[0]['slugable']['slug']}}"><img src="{{cdn($img)}}" alt="{{$alt}}"></a>
+                            <a id="syllabus-link" href="{{env("NEW_PAGES_LINK") . "/" . $syllabus[0]['slugable']['slug']}}"><img loading="lazy" src="{{cdn($img)}}" alt="{{$alt}}" width="{{ $width }}" height="{{ $height }}" title="{{$alt}}"></a>
                         </div>
                         <div class="ibox-text">
                             <p>Syllabus Manager<br></p>
