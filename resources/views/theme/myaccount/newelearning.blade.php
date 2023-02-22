@@ -218,7 +218,7 @@
 
                                 <a class="" href="javascript:void(0)" onclick="play_video('{{$path}}','{{$frame1}}','{video{{$lesson['id']}}}', '{{$lesson['id']}}')" tabindex="0">
                                     <?php
-                                    if($video_seen[$vimeoVideo[1]]['is_new'] == 1)
+                                    if(isset($video_seen[$vimeoVideo[1]]['is_new']) && $video_seen[$vimeoVideo[1]]['is_new'] == 1)
                                     {
                                         echo '<div class="newLesson notification-lesson"><img src="/theme/assets/images/notification-dot.gif"></img></div>';
 
@@ -1036,7 +1036,10 @@
 
                    if(playVi){
                       playVi = false;
-                      videos[videoId]['is_new'] = 0
+                      if(isset($video_seen[$vimeoVideo[1]]['is_new'])){
+                        videos[videoId]['is_new'] = 0
+
+                      }
                       videos[videoId]['stop_time'] = e['seconds'];
                       videos[videoId]['percentMinutes'] = e['percent'];
 
@@ -1096,7 +1099,10 @@
 
                          videos[videoId]['stop_time'] = e['seconds'];
                          videos[videoId]['percentMinutes'] = e['percent'];
-                         videos[videoId]['is_new'] = 0
+                         if(isset($video_seen[$vimeoVideo[1]]['is_new'])){
+                           videos[videoId]['is_new'] = 0
+
+                         }
                          videos[videoId]['seen'] = 1;
                          $('.isWatching').find('.lesson-progress').attr('src','/theme/assets/img/new/completed_lesson_icon.svg')
 
