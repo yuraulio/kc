@@ -389,18 +389,12 @@ var mediaMixin = {
 
                     }else if(this.$parent.imageVersion){
 
-                        //console.log('temp', this.$refs.crpr.tempVersionsForUpdate)
                         delete this.$refs.crpr.tempVersionsForUpdate[response.data.data.version]
-                        //console.log('version: ', response.data.data.version)
-                        //console.log('temp11', this.$refs.crpr.tempVersionsForUpdate)
+
                     }
-                    //this.updatedMediaImage(response.data.data)
 
 
                 }
-
-
-
 
                 if(this.$refs.crpr !== undefined){
 
@@ -420,10 +414,7 @@ var mediaMixin = {
 
                 let baseUrl = location.protocol + '//' + location.host;
 
-                //console.log(baseUrl.includes('admin'))
-                //console.log('11');
                 if (!baseUrl.includes('admin')){
-                    //console.log('22')
                     if(version != null && version != 'original'){
                         if(this.$refs.crpr){
 
@@ -588,7 +579,7 @@ var mediaMixin = {
                     if (error.response) {
 
                         // client received an error response (5xx, 4xx)
-                        console.log(error.response)
+                        //console.log(error.response)
                       } else if (error.request) {
 
                         this.getFiles(folderId,from_save_btn);
@@ -611,10 +602,21 @@ var mediaMixin = {
         userSelectedFiles($event) {
             if(this.firstLoadedData.length == 0){
                 this.firstLoadedData = $event
-            }
-            this.selectedFile = $event;
+            }            
             this.warning = false;
-            this.$modal.show('edit-image-modal');
+
+            let baseUrl = location.protocol + '//' + location.host;
+
+            if (this.selectedFile && this.selectedFile.id != $event.id && !baseUrl.includes('admin')){
+
+                this.updatedMediaImage($event)
+                //this.$modal.show('edit-image-modal');
+            }else{
+                //alert('not different image')
+                this.selectedFile = $event;
+                this.$modal.show('edit-image-modal');
+            }
+            
         },
         deleteFile($event) {
 
@@ -631,17 +633,9 @@ var mediaMixin = {
             if ($event.parrent == null) {
                 pagesText = pagesText + "This is an original image, this action will delete all its subimages that exist.";
             }
-            // var url = "{{ env('MIX_APP_URL') }}";
-
-            // alert(url)
-            // if("{{env('MIX_APP_URL')}}"){
-
-            // }
-            // console.log('ENV: ', @json(env("MIX_APP_URL")))
-            // console.log('Url: ', location.protocol + '//' + location.host)
+        
             let baseUrl = location.protocol + '//' + location.host;
 
-            //console.log(baseUrl.includes('admin'))
 
             if (baseUrl.includes('admin'))
             {
