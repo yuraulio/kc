@@ -10,6 +10,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use App\Model\Event;
 use App\Model\User;
+use Illuminate\Support\Facades\DB;
 
 class UpdateStatisticJson implements ShouldQueue
 {
@@ -122,7 +123,12 @@ class UpdateStatisticJson implements ShouldQueue
         foreach($this->users as $user){
 
             $statistics = isset($user['statistic'][0]['pivot']) ? $user['statistic'][0]['pivot'] : [];
-            $user->updateUserStatistic($this->event,$statistics,$eventTopics);
+
+            try{
+                $user->updateUserStatistic($this->event,$statistics,$eventTopics);
+            }catch(\Exception $e){
+                DB::table('event_statistics_queue')->where('event_id', $eventId)->update(['running' => false]);
+            }
 
         }
 
