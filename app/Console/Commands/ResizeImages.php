@@ -16,14 +16,33 @@ class ResizeImages extends Command
      *
      * @var string
      */
-    protected $signature = 'resize:image {folder_name}';
+    protected $signature = 'resize:image';
 
-    /**
+    /*
      * The console command description.
      *
      * @var string
      */
     protected $description = 'Command description';
+
+    public $paths = [
+        'Benefit',
+        'blog',
+        'blog_image',
+        'courses',
+        'headers',
+        'instructors',
+        'pages',
+    ];
+
+    public $paths_originals =[
+        'corporate_brands',
+        'events',
+        'instructors',
+        'logos',
+        'pages',
+        'testimonials'
+    ];
 
     public $versions = [
         'instructors-testimonials'=>[
@@ -104,25 +123,67 @@ class ResizeImages extends Command
      */
     public function handle()
     {
-        $folders = Storage::disk('public')->directories();
-        
-        foreach($folders as $folder){
-            if($folder == $this->argument('folder_name')){
-                $files = Storage::disk('public')->files($this->argument('folder_name'));
-                foreach($files as $file){
-                    $this->convert($file);
-                }
-                
 
+        $folders = Storage::disk('public')->directories();
+
+        $files = Storage::disk('public')->files();
+        foreach($files as $file){
+            $this->convert($file);
+        }
+
+        foreach($folders as $folder){
+
+
+                foreach($this->paths as $key => $fol){
+                    if($folder == $fol){
+                        print_r($fol);
+                        //dd($fol);
+
+
+                        $files = Storage::disk('public')->files($fol);
+
+                        foreach($files as $file){
+                            $this->convert($file);
+                        }
+
+
+
+                    }
+                }
+
+
+
+        }
+
+
+        $folders = Storage::disk('public')->directories('originals');
+        //dd($folders);
+
+        foreach($folders as $fol){
+            foreach($this->paths_originals as $path){
+
+                if(str_contains($fol, $path)){
+                    print_r($fol);
+                    $files = Storage::disk('public')->files($fol);
+                    foreach($files as $file){
+                        $this->convert($file);
+                    }
+                    //dd($files);
+                }
             }
         }
+
+
+
+
+
 
 
         return 0;
     }
 
 
-    public function convert($file){
+    public function convert($file, $from = false){
 
         $versions = Page::VERSIONS;
 
@@ -131,23 +192,27 @@ class ResizeImages extends Command
 
             $crop_height = $version[2];
             $crop_width = $version[1];
+
             if(str_contains($file, $ver)){
+                // dd($file.'  '.$ver);
 
                 $pos = strrpos($file, '/');
-                
+
                 $image_name = $pos === false ? $file : substr($file, $pos + 1);
                 $path = explode($image_name, $file)[0];
-                
 
 
-                
                 $tmp = explode('.', $image_name);
-              
+
                 $extension = end($tmp);
                 if ($tmp[1] == "jpg") {
                     $extension = "jpg";
                 }else if($tmp[1] == "png"){
                     $extension = "png";
+                }else if($tmp[1] == "JPG"){
+                    $extension = "JPG";
+                }else{
+                    continue;
                 }
 
                 $image_name = $tmp[0];
@@ -160,8 +225,6 @@ class ResizeImages extends Command
 
                 // save image
                 // $file = Storage::disk('public')->putFileAs($path, $request->file('file'), $version_name, 'public');
-              
-                
 
                 // crop image
                 $manager = new ImageManager();
@@ -183,7 +246,11 @@ class ResizeImages extends Command
                 $image->fit($crop_width, $crop_height);
 
                 //$image->crop($crop_width, $crop_height, $width_offset, $height_offset);
-                $image->save(public_path("/uploads/" . $path . $version_name), 80, $extension);
+                $image->save(public_path("/uploads/" . $path . $version_name), 100, $extension);
+
+                echo nl2br("/uploads/" . $path . $version_name);
+
+
 
             }
         }
