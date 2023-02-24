@@ -9,7 +9,6 @@
     "license": "MIT",
     "require": {
         "php": "^7.3.0|^8.0",
-        "abraham/twitteroauth": "^4.0",
         "alexusmai/laravel-file-manager": "^2.5",
         "atymic/twitter": "^3.1",
         "barryvdh/laravel-dompdf": "^1.0.2",
@@ -33,6 +32,7 @@
         "laravel/scout": "^9.3",
         "laravel/tinker": "^2.0",
         "laravel/ui": "^3.0",
+        "league/oauth2-client": "^2.6",
         "maatwebsite/excel": "^3.1",
         "mikehaertl/php-pdftk": "^0.12.1",
         "msonowal/laravel-tinify": "^1.0",

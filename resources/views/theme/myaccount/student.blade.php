@@ -75,6 +75,19 @@
             <!-- /.alert-outer -->
          </div>
       </div>
+      <div id="share-twitter-modal" hidden>
+
+
+            <div class="alert-wrapper">
+                <div class="alert-inner">
+                    <p class="message"></p>
+                </div>
+                <button class="btn btn--sm close-btn" style="margin-top:1.5rem">ok </button>
+            </div>
+
+            <!-- /.alert-outer -->
+
+      </div>
       <div id="examDialog" hidden>
          <div class="alert-wrapper success-alert">
             <div class="alert-inner">
@@ -1800,12 +1813,16 @@
       var certificateId = $(this).attr('data-certid');
       var certificateTitle = $(this).attr('data-certTitle');
 
-      certificateTitle = certificateTitle.split('+').join('_')
+      certificateTitle = certificateTitle.split('+').join(' ')
 
       $.ajax({
           type: 'GET',
-          url: "/mycertificate/share-twitter/"+certificateId,
+          url: "/myaccount/twitter/"+certificateId+'/'+certificateTitle,
           success: function(data) {
+
+            if(data){
+                window.open(data.url, '_blank');
+            }
 
 
 
@@ -2491,6 +2508,42 @@
         //     $(tabsElem).removeClass('d-none');
         //     $(messageElem).addClass('d-none');
         // })
+
+        // Getting the page href
+        const pageHref = window.location.search;
+        if(pageHref != ''){
+
+            let params = pageHref.substring(pageHref.indexOf('?'))
+            params = params.split('=');
+
+
+            if(params[1] !== undefined && params[1] == 'ok'){
+
+                $('#share-twitter-modal .message').text('Share certificate on twitter successfuly!!');
+                $('#share-twitter-modal .alert-wrapper').addClass('success-alert')
+                $('#share-twitter-modal').show();
+
+            }else if(params[1] !== undefined && params[1] == 'error'){
+
+                $('#share-twitter-modal .message').text('Share certificate on twitter not successfuly!!');
+                $('#share-twitter-modal .alert-wrapper').addClass('error-alert')
+                $('#share-twitter-modal').show();
+            }
+
+            params = new URLSearchParams(pageHref);
+            params.delete('twitter_share');
+        }
+
+
+
+        $( "#share-twitter-modal .close-btn" ).on( "click", function() {
+            $('#share-twitter-modal').hide();
+            $('#share-twitter-modal .alert-wrapper').removeClass('success-alert')
+            $('#share-twitter-modal .alert-wrapper').removeClass('error-alert')
+            $('#share-twitter-modal .message').text('');
+        });
+
+
 
 
     })

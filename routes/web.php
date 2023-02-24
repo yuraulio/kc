@@ -554,15 +554,32 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'myaccount'], function () {
 
         Route::get('/elearning/{course?}',  'Theme\StudentController@elearning');
 
-        Route::get('/twitter/{id}', function ($id) {
-
+        Route::get('/twitter/{id}/{title}', function ($id, $title) {
 
             Session::forget('certId');
             Session::put('certId', $id);
 
+            Session::forget('certTitle');
+            Session::put('certTitle', $title);
 
-            return redirect()->away('https://twitter.com/i/oauth2/authorize?response_type=code&client_id='.env('TWITTER_CLIENT_ID').'&redirect_uri='.env('MIX_APP_URL').'/mycertificate/share-twitter/n'.'&scope=tweet.read%20users.read%20follows.read%20follows.write&state=state&code_challenge=challenge&code_challenge_method=plain');
+            $url = twitter_get_auth_token_v1();
+
+
+
+            return response()->json([
+                'message' => 'Change profile photo successfully!!',
+                'url' => $url
+            ]);
+
+
+
+            // $url = 'https://twitter.com/i/oauth2/authorize?response_type=code&client_id='.env('TWITTER_CLIENT_ID').'&redirect_uri='.env('MIX_APP_URL').'/myaccount/share-twitter'.'&scope=tweet.read%20tweet.write%20users.read%20follows.read%20follows.write&state=state&code_challenge=challenge&code_challenge_method=plain';
+
+
+            // return redirect()->away($url);
         });
+
+        Route::get('/share-twitter', 'Theme\StudentController@parseTwitterToken');
 
 
         Route::get('/subscription/{event}/{plan}',  'Theme\SubscriptionController@index');
@@ -602,8 +619,6 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('/mycertificate/convert-pdf-to-image/{certificate}', 'Theme\CertificateController@getCertificateImage');
     Route::post('/mycertificate/save-success-chart', 'Theme\CertificateController@getSuccessChart');
     Route::get('/mycertificate/save-success-chart', 'Theme\CertificateController@getSuccessChart');
-
-    //Route::get('/mycertificate1/twitter', 'Theme\CertificateController@parseTwitterToken');
 
 });
 

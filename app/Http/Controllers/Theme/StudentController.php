@@ -30,6 +30,7 @@ use App\Model\Invoice;
 use App\Notifications\ExamActive;
 use Illuminate\Support\Str;
 use App\Jobs\UploadImageConvertWebp;
+use App\Http\Controllers\Theme\CertificateController;
 
 class StudentController extends Controller
 {
@@ -69,6 +70,43 @@ class StudentController extends Controller
         }
 
     }
+
+    public function parseTwitterToken(Request $request){
+
+        $oauth_token = $request->oauth_token;
+        $oauth_verifier = $request->oauth_verifier;
+
+
+
+        //Request access token
+        $data = request_access_token($oauth_token, $oauth_verifier);
+
+        if(!empty($data)){
+            if(Session::get('certId')){
+                $certificateController = new CertificateController;
+                $image = $certificateController->getCertificateImage(Session::get('certId'), true);
+
+
+                twitter_upload_image($image, Session::get('certTitle'), $data['oauth_token'], $data['oauth_token_secret']);
+
+                Session::forget('certId');
+                Session::forget('certTitle');
+                return redirect('/myaccount?twitter_share=ok');
+            }
+        }else{
+            Session::forget('certId');
+            Session::forget('certTitle');
+            return redirect('/myaccount?twitter_share=error');
+        }
+
+
+
+
+
+
+
+
+      }
 
     protected function logout(){
 

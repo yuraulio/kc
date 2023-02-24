@@ -27,7 +27,7 @@
     margin: auto;
     top:50%;
 }
-#favDialog1,#examDialog {
+#favDialog1,#examDialog, #share-twitter-modal {
     position: fixed;
     z-index: 9999;
     text-align: center;

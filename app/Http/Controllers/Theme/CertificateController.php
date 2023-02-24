@@ -125,10 +125,9 @@ class CertificateController extends Controller
     return $data;
 
   }
-  public function parseTwitterToken(){
-    dd('asd');
-  }
 
+
+  /*
   public function shareTwitter(){
     dd('asd');
 
@@ -206,9 +205,10 @@ class CertificateController extends Controller
 
     ]);
   }
+  */
 
 
-  public function getCertificateImage($certificate){
+  public function getCertificateImage($certificate, $from_student_controller = false){
 
     $certId = $certificate;
 
@@ -276,6 +276,10 @@ class CertificateController extends Controller
     $image->save(public_path('cert/'.$name.'_og_version.jpg'), 60, 'jpg');
 
     //twitter_upload_image(public_path('cert/'.$name.'_og_version.jpg'), );
+
+    if($from_student_controller){
+        return public_path('cert/'.$name.'.jpg');
+    }
 
 
 
