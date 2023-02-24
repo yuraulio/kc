@@ -31,24 +31,20 @@ if(!function_exists('request_access_token')){
         curl_setopt($ch, CURLOPT_POST, 1);
 
         $result = curl_exec($ch);
-        $httpInfo = curl_getinfo($ch);
-        dd($httpInfo);
-
 
 
         if (curl_errno($ch)) {
-            dd(curl_error($ch));
             echo 'Error:' . curl_error($ch);
         }
-        dd('asd');
 
-        if($result && $result != 'Request token missing'){
-            dd($result);
-
+        if($result && $result != 'Request token missing' && $result != 'This feature is temporarily unavailable'){
             $result = explode('&', $result);
             foreach($result as $key => $res){
                 $res = explode('=',$res);
-                $arr[$res[0]] = $res[1];
+                if(isset($res[1])){
+                    $arr[$res[0]] = $res[1];
+                }
+
 
             }
 
@@ -98,7 +94,7 @@ if(!function_exists('sendRequest')){
         if($httpInfo['http_code'] <> 200) {
             return [
                 'success' => false,
-                'message' => curl_error($response),
+                'message' => curl_error(),
                 'code' => curl_errno(),
                 'http_info' => (object) $httpInfo,
             ];
