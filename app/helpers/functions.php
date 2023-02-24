@@ -159,8 +159,9 @@ if(!function_exists('twitter_get_auth_token_v1')){
 
         // parse Token
         //dd(sendRequest($oauthParams, $baseURI));
-        $oauth_token = sendRequest($oauthParams, $baseURI)['oauth_token'];
-        $oauth_secret = sendRequest($oauthParams, $baseURI)['oauth_secret'];
+        $data = sendRequest($oauthParams, $baseURI);
+        $oauth_token = $data['oauth_token'];
+        $oauth_secret = $data['oauth_secret'];
 
         $url = 'https://api.twitter.com/oauth/authorize?oauth_token='.$oauth_token.'&oauth_token_secret='.$oauth_secret.'&oauth_callback_confirmed=true';
 
