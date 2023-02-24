@@ -564,19 +564,17 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'myaccount'], function () {
 
             $url = twitter_get_auth_token_v1();
 
+            if($url){
+                return response()->json([
+                    'message' => 'Redirect url.',
+                    'url' => $url
+                ]);
+            }else{
+                return response()->json([
+                    'message' => 'Not generate redirect url.',
+                ]);
+            }
 
-
-            return response()->json([
-                'message' => 'Change profile photo successfully!!',
-                'url' => $url
-            ]);
-
-
-
-            // $url = 'https://twitter.com/i/oauth2/authorize?response_type=code&client_id='.env('TWITTER_CLIENT_ID').'&redirect_uri='.env('MIX_APP_URL').'/myaccount/share-twitter'.'&scope=tweet.read%20tweet.write%20users.read%20follows.read%20follows.write&state=state&code_challenge=challenge&code_challenge_method=plain';
-
-
-            // return redirect()->away($url);
         });
 
         Route::get('/share-twitter', 'Theme\StudentController@parseTwitterToken');

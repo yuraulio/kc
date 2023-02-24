@@ -31,14 +31,19 @@ if(!function_exists('request_access_token')){
         curl_setopt($ch, CURLOPT_POST, 1);
 
         $result = curl_exec($ch);
+        $httpInfo = curl_getinfo($ch);
+        dd($httpInfo);
 
 
 
         if (curl_errno($ch)) {
+            dd(curl_error($ch));
             echo 'Error:' . curl_error($ch);
         }
+        dd('asd');
 
         if($result && $result != 'Request token missing'){
+            dd($result);
 
             $result = explode('&', $result);
             foreach($result as $key => $res){
@@ -93,7 +98,7 @@ if(!function_exists('sendRequest')){
         if($httpInfo['http_code'] <> 200) {
             return [
                 'success' => false,
-                'message' => curl_error(),
+                'message' => curl_error($response),
                 'code' => curl_errno(),
                 'http_info' => (object) $httpInfo,
             ];
