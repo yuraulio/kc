@@ -32,6 +32,9 @@ if(!function_exists('request_access_token')){
 
         $result = curl_exec($ch);
 
+        Log::info('request_access_token: response form twitter api');
+        Log::info($result);
+
 
         if (curl_errno($ch)) {
             echo 'Error:' . curl_error($ch);
@@ -88,6 +91,9 @@ if(!function_exists('sendRequest')){
         curl_setopt_array($ch, $options);
         $response = curl_exec($ch);
         $httpInfo = curl_getinfo($ch);
+
+        Log::info('sendRequest: response form twitter api');
+        Log::info($response);
 
         curl_close($ch);
 
