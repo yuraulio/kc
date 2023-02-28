@@ -98,6 +98,7 @@ if(!function_exists('sendRequest')){
             CURLOPT_POST => true,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_LOCALPORT => 6000
         ];
 
         Log::info('Options ::');
@@ -174,9 +175,7 @@ if(!function_exists('twitter_get_auth_token_v1')){
             'oauth_nonce' => md5(uniqid()),
             'oauth_signature_method' => 'HMAC-SHA1',
             'oauth_timestamp' => time(),
-            'oauth_version' => '1.0',
-            'Content-Type' = 'text/html',
-            'Accept' => 'text/html'
+            'oauth_version' => '1.0'
         ];
 
 
