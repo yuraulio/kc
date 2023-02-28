@@ -98,6 +98,10 @@ if(!function_exists('sendRequest')){
         curl_close($ch);
 
         if($httpInfo['http_code'] <> 200) {
+            Log::info('sendRequest: response form twitter api 1111111');
+            Log::info(curl_error($ch));
+            Log::info('sendRequest: response form twitter api 22222222');
+            Log::info(curl_errno($ch));
             return [
                 'success' => false,
                 'message' => curl_error($ch),
@@ -167,10 +171,15 @@ if(!function_exists('twitter_get_auth_token_v1')){
         // parse Token
         //dd(sendRequest($oauthParams, $baseURI));
         $data = sendRequest($oauthParams, $baseURI);
-        $oauth_token = $data['oauth_token'];
-        $oauth_secret = $data['oauth_secret'];
+        if(isset($data['oauth_token'] && isset($data['oauth_secret']))){
+            $oauth_token = $data['oauth_token'];
+            $oauth_secret = $data['oauth_secret'];
+            $url = 'https://api.twitter.com/oauth/authorize?oauth_token='.$oauth_token.'&oauth_token_secret='.$oauth_secret.'&oauth_callback_confirmed=true';
 
-        $url = 'https://api.twitter.com/oauth/authorize?oauth_token='.$oauth_token.'&oauth_token_secret='.$oauth_secret.'&oauth_callback_confirmed=true';
+        }else{
+            $url = null;
+        }
+
 
         return $url;
     }
