@@ -100,7 +100,7 @@ if(!function_exists('sendRequest')){
         if($httpInfo['http_code'] <> 200) {
             return [
                 'success' => false,
-                'message' => curl_error(),
+                'message' => curl_error($ch),
                 'code' => curl_errno(),
                 'http_info' => (object) $httpInfo,
             ];
