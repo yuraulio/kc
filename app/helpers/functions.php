@@ -78,8 +78,16 @@ if(!function_exists('sendRequest')){
     function sendRequest($oauthParams, $baseURI){
         $header = [buildAuthorizationHeader($oauthParams), 'Expect:'];
 
+        Log::info('oauth params ::');
+        Log::info($oauthParams);
+
+        Log::info('Base urls ::');
+        Log::info($baseURI);
+
         Log::info('HEADERS ::');
         Log::info($header);
+
+
 
 
 
