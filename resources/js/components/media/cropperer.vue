@@ -272,7 +272,7 @@ export default {
                     q: 60,
                     fit: "crop",
                     version: "event-card",
-                    title: "Home page boxes",
+                    title: "Preview boxes",
                     description: "The image of courses on our home page.",
                 },
                 {
@@ -329,15 +329,15 @@ export default {
                 //     title: "Blog top image",
                 //     description: "The image on top of a blog post.",
                 // },
-                {
-                    w: 343,
-                    h: 193,
-                    q: 60,
-                    fit: "crop",
-                    version: "blog-featured",
-                    title: "Blog boxes",
-                    description: "The image of blog article on /blog.",
-                },
+                // {
+                //     w: 343,
+                //     h: 193,
+                //     q: 60,
+                //     fit: "crop",
+                //     version: "blog-featured",
+                //     title: "Blog boxes",
+                //     description: "The image of blog article on /blog.",
+                // },
             ]
 
         };

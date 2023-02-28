@@ -63,11 +63,11 @@ class Page extends Model implements Auditable
         //     680,
         //     320
         // ],
-        [
-            "blog-featured",
-            343,
-            193
-        ]
+        // [
+        //     "blog-featured",
+        //     343,
+        //     193
+        // ]
     ];
 
     /**
