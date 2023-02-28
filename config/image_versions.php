@@ -53,14 +53,14 @@ return[
             'description' => 'feed-image',
             'version' => 'feed-image',
         ],
-        'social-media-sharing'=>[
-            'w' => 1920,
-            'h' => 832,
-            'q' => 60,
-            'fit' => 'crop',
-            'version' => 'social-media-sharing',
-            'description' => 'Applies to: Social media sharing default image'
-        ]
+        // 'social-media-sharing'=>[
+        //     'w' => 1920,
+        //     'h' => 832,
+        //     'q' => 60,
+        //     'fit' => 'crop',
+        //     'version' => 'social-media-sharing',
+        //     'description' => 'Applies to: Social media sharing default image'
+        // ]
 
     ],
 

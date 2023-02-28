@@ -54,9 +54,13 @@
                                                 <table class="patates">
                                                     <thead>
                                                         <tr>
-                                                        <th>Date</th>
-                                                        <th>Time</th>
-                                                        <th>Location</th>
+                                                        @if($content->is_inclass_course())
+                                                            <th>Date</th>
+                                                            <th>Time</th>
+                                                            <th>Location</th>
+                                                        @else
+                                                            <th>Duration</th>
+                                                        @endif
                                                         <th>Type</th>
                                                         <th>Lesson</th>
                                                         <th>Instructor</th>
@@ -65,14 +69,17 @@
                                                     <tbody>
 
                                                     @foreach($value['lessons'] as $lke => $lvalue)
-                                                    
+
                                                          {{--@foreach($lvalu as $lkey => $lvalue)--}}
 
                                                         <tr >
+                                                            @if($content->is_inclass_course())
                                                             <td><img height="10" src="theme/assets/img/calendar.svg" alt="Date" /> <?= date( "l d M Y", strtotime($lvalue['pivot']['time_starts']) ) ?></td>
                                                             <td><?= date( "H:i", strtotime($lvalue['pivot']['time_starts']) ) ?> ({!! $lvalue['pivot']['duration'] !!})</td>
                                                             <td>@if(isset($lvalue['pivot']['location_url']) && $lvalue['pivot']['location_url']) <a href="{{ $lvalue['pivot']['location_url'] }}" target="_blank"> {{$lvalue['pivot']['room'] }} </a> @else {{$lvalue['pivot']['room'] }} @endif</td>
-
+                                                            @else
+                                                            <td>{{ $lvalue['vimeo_duration'] }}</td>
+                                                            @endif
                                                             <td>{{-- $level --}} @if(count($lvalue['type']) > 0) {!! $lvalue['type'][0]['name'] !!} @endif</td>
                                                             <td>{{ $lvalue['title'] }}</td>
                                                             <td>{!! $instructors[$lvalue['pivot']['instructor_id']][0]['title'] !!} {!! $instructors[$lvalue['pivot']['instructor_id']][0]['subtitle'] !!}</td>

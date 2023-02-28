@@ -775,14 +775,18 @@ class HomeController extends Controller
         $slug = Slug::where('slug', $slug)->firstOrFail();
         $data['content'] = $slug->slugable;
 
-        $data['content'] = Event::with('category', 'city', 'topic', )->find($data['content']['id']);
+        $data['content'] = Event::with('category', 'city', 'topic')->find($data['content']['id']);
         $data['eventtopics']= $data['content']->topicsLessonsInstructors()['topics'];
         $topicDescription = [];
 
         foreach ($data['eventtopics'] as $key => $topic) {
+            //dd($topic);
             //dd($key);
             $topic = Topic::where('title', $key)->first();
             $topicDescription[$key] = $topic['summary'];
+        }
+        if(!$data['content']->is_inclass_course()){
+            uasort($data['eventtopics'], fn($a, $b) => strcmp($a['priority'], $b['priority']));
         }
 
         $data['eventorganisers']=array();

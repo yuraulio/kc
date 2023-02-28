@@ -101,7 +101,7 @@ if(!function_exists('sendRequest')){
             return [
                 'success' => false,
                 'message' => curl_error($ch),
-                'code' => curl_errno(),
+                'code' => curl_errno($ch),
                 'http_info' => (object) $httpInfo,
             ];
         }

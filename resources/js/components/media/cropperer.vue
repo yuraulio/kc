@@ -311,24 +311,24 @@ export default {
                     version: "feed-image",
                     description: "The image we send to dynamic ad creatives via feed.",
                 },
-                {
-                    w: 1920,
-                    h: 832,
-                    q: 60,
-                    fit: "crop",
-                    version: "social-media-sharing",
-                    title: "Social media posts image",
-                    description: "The image visible on social media posts.",
-                },
-                {
-                    w: 680,
-                    h: 320,
-                    q: 60,
-                    fit: "crop",
-                    version: "blog-content",
-                    title: "Blog top image",
-                    description: "The image on top of a blog post.",
-                },
+                // {
+                //     w: 1920,
+                //     h: 832,
+                //     q: 60,
+                //     fit: "crop",
+                //     version: "social-media-sharing",
+                //     title: "Social media posts image",
+                //     description: "The image visible on social media posts.",
+                // },
+                // {
+                //     w: 680,
+                //     h: 320,
+                //     q: 60,
+                //     fit: "crop",
+                //     version: "blog-content",
+                //     title: "Blog top image",
+                //     description: "The image on top of a blog post.",
+                // },
                 {
                     w: 343,
                     h: 193,
@@ -468,11 +468,11 @@ export default {
                 this.uploadedVersions.forEach(value => {
                     if(value.version == this.imageVersion){
 
-                        
+
                         if (!baseUrl.includes('admin')){
-                    
+
                             this.confirmSelection(value)
-                            
+
                         }else{
                             this.confirmSelection(value)
                         }
@@ -496,7 +496,7 @@ export default {
                     }else{
                         this.confirmSelection(value)
                     }
-                    
+
                 }
             }
         },

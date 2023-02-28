@@ -90,7 +90,7 @@ class Event extends Model
             return $this->belongsToMany(Topic::class, 'event_topic_lesson_instructor')->select('topics.*','topic_id','instructor_id')->where('instructor_id','!=', NULL)->where('instructor_id','!=', 0)
             ->withPivot('event_id','topic_id','lesson_id','instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room', 'priority','automate_mail','send_automate_mail')->with('lessons.instructor')->orderBy('event_topic_lesson_instructor.priority','asc');
         }else{
-            
+
             return $this->belongsToMany(Topic::class, 'event_topic_lesson_instructor')->select('topics.*','topic_id','instructor_id')->where('instructor_id','!=', NULL)->where('instructor_id','!=', 0)
             ->withPivot('event_id','topic_id','lesson_id','instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room', 'priority','automate_mail','send_automate_mail')->with('lessons.instructor')->orderBy('event_topic_lesson_instructor.time_starts','asc');
         }
@@ -447,6 +447,7 @@ class Event extends Model
 
             $data['topics'][$key]['topic_duration'] = $data['keys'][$topic_id];
             $data['topics'][$key]['topic_seen'] = $topicsSeen[$topic_id];
+            $data['topics'][$key]['priority'] = $topics['pivot']['priority'];
         }
 
         return $data;

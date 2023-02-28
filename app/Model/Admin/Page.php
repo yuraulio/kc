@@ -53,16 +53,16 @@ class Page extends Model implements Auditable
             300,
             300
         ],
-        [
-            "social-media-sharing",
-            1920,
-            832
-        ],
-        [
-            "blog-content",
-            680,
-            320
-        ],
+        // [
+        //     "social-media-sharing",
+        //     1920,
+        //     832
+        // ],
+        // [
+        //     "blog-content",
+        //     680,
+        //     320
+        // ],
         [
             "blog-featured",
             343,
