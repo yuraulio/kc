@@ -78,6 +78,11 @@ if(!function_exists('sendRequest')){
     function sendRequest($oauthParams, $baseURI){
         $header = [buildAuthorizationHeader($oauthParams), 'Expect:'];
 
+        Log::info('HEADERS ::');
+        Log::info($header);
+
+
+
         $options = [
             CURLOPT_HTTPHEADER => $header,
             CURLOPT_HEADER => false,
@@ -87,10 +92,16 @@ if(!function_exists('sendRequest')){
             CURLOPT_SSL_VERIFYPEER => false,
         ];
 
+        Log::info('Options ::');
+        Log::info($options);
+
         $ch = curl_init();
         curl_setopt_array($ch, $options);
         $response = curl_exec($ch);
         $httpInfo = curl_getinfo($ch);
+
+        Log::info('get info:: ');
+        Log::info($httpInfo);
 
         Log::info('sendRequest: response form twitter api');
         Log::info($response);
