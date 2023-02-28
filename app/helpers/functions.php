@@ -175,6 +175,8 @@ if(!function_exists('twitter_get_auth_token_v1')){
             'oauth_signature_method' => 'HMAC-SHA1',
             'oauth_timestamp' => time(),
             'oauth_version' => '1.0',
+            'Content-Type' = 'text/html',
+            'Accept' => 'text/html'
         ];
 
 

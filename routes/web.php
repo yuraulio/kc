@@ -570,7 +570,9 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'myaccount'], function () {
                     'url' => $url
                 ]);
             }else{
-                return redirect('/myaccount?twitter_share=error');
+                return response()->json([
+                    'message' => 'Not generate redirect url.',
+                ]);
             }
 
         });
