@@ -43,7 +43,7 @@
                             </div>
                             <div class="ibox-text">
                                 <div class="ibox-text">
-                                <p>Official Partner<br></p>
+                                <p>Supported By<br></p>
                                     @if($partner->url != null)
                                     <p><a target="_blank" href="{{$partner->url}}">{!! $partner->name !!}</a><p>
                                     @else

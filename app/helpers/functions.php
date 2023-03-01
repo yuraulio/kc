@@ -89,16 +89,13 @@ if(!function_exists('sendRequest')){
 
 
 
-
-
         $options = [
             CURLOPT_HTTPHEADER => $header,
             CURLOPT_HEADER => false,
             CURLOPT_URL => $baseURI,
             CURLOPT_POST => true,
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_SSL_VERIFYPEER => false,
-            CURLOPT_LOCALPORT => 6000
+            CURLOPT_SSL_VERIFYPEER => false
         ];
 
         Log::info('Options ::');

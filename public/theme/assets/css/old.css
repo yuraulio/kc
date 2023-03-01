@@ -362,6 +362,41 @@ input[type="number"]#mobile_phone::-webkit-inner-spin-button {
     height: auto;
 }
 
+.details{
+    border-bottom: 5px #245DAE solid;
+    padding: 2rem;
+    margin: auto;
+    margin-bottom: 2rem;
+}
+
+.details .info-text{
+    max-width: 10rem;
+    /* min-height: 5.2rem; */
+    margin: 1rem auto;
+}
+
+.details .info-text p{
+    line-height: 19px;
+    height: 20%;
+    margin: 0px;
+    /* display: table-cell; */
+    vertical-align: middle;
+    padding: 1px;
+    font-size: 16px;
+
+}
+
+.details:hover{
+    border-bottom: 5px #92CC16 solid;
+}
+
+.details img{
+    display: block;
+    width: 60%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 #favDialog1,
 #examDialog,
 #closeDialog,
@@ -1684,6 +1719,11 @@ img.linkdein-image-add {
     .countdown-text{
         max-width: 28% !important;
     }
+
+    /* .details .info-text {
+        max-width: 10rem;
+        min-height: 5.2rem;
+    } */
 }
 
 /* Medium devices (landscape tablets, 768px and up) */
@@ -1863,6 +1903,12 @@ img.linkdein-image-add {
 
 /* Mobile */
 @media only screen and (max-width: 680px) {
+
+    /* .details .info-text {
+        max-width: unset !important;
+        min-height: 5.2rem;
+    } */
+
     .non-video-height {
         height: 650px;
     }

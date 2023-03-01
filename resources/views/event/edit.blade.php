@@ -299,11 +299,16 @@
 
 
                                                 <?php
-                                                    if(isset($info['course_hours_icon']) && $info['course_hours_icon'] != null){
-                                                        $course_hours_icon = json_decode($info['course_hours_icon'], true);
-                                                    }else{
-                                                        $course_hours_icon = null;
-                                                    }
+                                                    //dd(isset($info['course_hours_icon']));
+
+                                                    // if(isset($info['course_hours_icon']) && $info['course_hours_icon'] != null){
+                                                    //     dd('asd');
+                                                    //     $course_hours_icon = json_decode($info['course_hours_icon'], true);
+                                                    // }else{
+                                                    //     $course_hours_icon = null;
+                                                    // }
+                                                    // //dd($course_hours_icon);
+                                                    //dd($info);
                                                 ?>
 
                                                 <div class="row">
@@ -325,6 +330,29 @@
                                                                 @endif
                                                             </span>
                                                         </span>
+                                                    </div>
+
+                                                    <div class="col-12">
+                                                        <div class="row">
+                                                            <div class="col-12 col-md-4">
+                                                                <div class="form-group">
+                                                                    <span class="toggle-btn-inline-text">Icon Link</span>
+                                                                    <label class="custom-toggle enroll-toggle visible">
+                                                                        <input class="icon_link" name="course[{{'hours'}}][{{'icon'}}][{{'link_status'}}]" type="checkbox" {{ (isset($info['hours']['icon']['link_status']) && $info['hours']['icon']['link_status'] == 'on') ? 'checked' : ''}}>
+                                                                        <span class="custom-toggle-slider rounded-circle" data-label-off="No" data-label-on="Yes"></span>
+                                                                    </label>
+                                                                </div>
+
+
+                                                            </div>
+
+                                                            <div class="col-12 col-md-4 input @if((isset($info['hours']['icon']['link_status']) && $info['hours']['icon']['link_status'] == 'off') || !isset($info['hours']['icon']['link_status'])) {{'d-none'}} @endif">
+                                                                <input placeholder="https://example.com" type="text" class="form-control" name="course[{{'hours'}}][{{'icon'}}][{{'link'}}]" value="{{ old('hours_icon_link', (isset($info['hours']['icon']) && $info['hours']['icon'] != null && isset($info['hours']['icon']['link'])) ? $info['hours']['icon']['link'] : '' ) }}">
+                                                            </div>
+                                                        </div>
+
+
+
                                                     </div>
 
                                                     <input type="hidden" value="{{ old('hours_icon_path', (isset($info['hours']['icon']) && $info['hours']['icon'] != null) ? $info['hours']['icon']['path'] : '' ) }}" id="hours_path" name="course[{{'hours'}}][{{'icon'}}][{{'path'}}]">
@@ -446,6 +474,29 @@
                                                         </span>
                                                     </div>
 
+                                                    <div class="col-12">
+                                                        <div class="row">
+                                                            <div class="col-12 col-md-4">
+                                                                <div class="form-group">
+                                                                    <span class="toggle-btn-inline-text">Icon Link</span>
+                                                                    <label class="custom-toggle enroll-toggle visible">
+                                                                        <input class="icon_link" name="course[{{'language'}}][{{'icon'}}][{{'link_status'}}]" type="checkbox" {{ (isset($course_language_icon['link_status']) && $course_language_icon['link_status'] == 'on') ? 'checked' : ''}}>
+                                                                        <span class="custom-toggle-slider rounded-circle" data-label-off="No" data-label-on="Yes"></span>
+                                                                    </label>
+                                                                </div>
+
+
+                                                            </div>
+
+                                                            <div class="col-12 col-md-4 input @if((isset($course_language_icon['link_status']) && $course_language_icon['link_status'] == 'off') || (!isset($course_language_icon['link_status']))) {{'d-none'}} @endif">
+                                                                <input placeholder="https://example.com" type="text" class="form-control" name="course[{{'language'}}][{{'icon'}}][{{'link'}}]" value="{{ old('language_icon_link', (isset($course_language_icon) && $course_language_icon != null && isset($course_language_icon['link'])) ? $course_language_icon['link'] : '' ) }}">
+                                                            </div>
+                                                        </div>
+
+
+
+                                                    </div>
+
                                                     <input type="hidden" value="{{ old('language_icon_path', ($course_language_icon != null) ? $course_language_icon['path'] : '' ) }}" id="language_path" name="course[{{'language'}}][{{'icon'}}][{{'path'}}]">
                                                     <input type="hidden" value="{{ old('language_icon_alt_text', ($course_language_icon != null) ? $course_language_icon['alt_text'] : '' ) }}" id="language_alt_text" name="course[{{'language'}}][{{'icon'}}][{{'alt_text'}}]">
                                                 </div>
@@ -558,6 +609,8 @@
 
                                                 @include('alerts.feedback', ['field' => 'delivery'])
                                             </div>
+
+
                                         </div>
 
 
@@ -607,6 +660,26 @@
                                                         </span>
 
                                                     </div>
+                                                    <div class="col-12">
+                                                        <div class="row">
+                                                            <div class="col-12 col-md-4">
+                                                                <div class="form-group">
+                                                                    <span class="toggle-btn-inline-text">Icon Link</span>
+                                                                    <label class="custom-toggle enroll-toggle visible">
+                                                                        <input class="icon_link" name="course[{{'delivery'}}][{{'inclass'}}][{{'city'}}][{{'icon'}}][{{'link_status'}}]" type="checkbox" {{ ((isset($course_inclass_city_icon['link_status']) && $course_inclass_city_icon['link_status'] == 'on') ) ? 'checked' : ''}}>
+                                                                        <span class="custom-toggle-slider rounded-circle" data-label-off="No" data-label-on="Yes"></span>
+                                                                    </label>
+                                                                </div>
+
+
+                                                            </div>
+
+                                                            <div class="col-12 col-md-4 input @if((isset($course_inclass_city_icon['link_status']) && $course_inclass_city_icon['link_status'] == 'off') || !isset($course_inclass_city_icon['link_status'])) {{'d-none'}} @endif">
+                                                                <input placeholder="https://example.com" type="text" class="form-control" name="course[{{'delivery'}}][{{'inclass'}}][{{'city'}}][{{'icon'}}][{{'link'}}]" value="{{ old('certificate_icon_link', (isset($course_inclass_city_icon) && $course_inclass_city_icon != null && isset($course_inclass_city_icon['link'])) ? $course_inclass_city_icon['link'] : '' ) }}">
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
                                                     <input type="hidden" value="{{ old('inclass_city_icon_path', ($course_inclass_city_icon != null && $course_inclass_city_icon['path'] != '') ? $course_inclass_city_icon['path'] : '' ) }}" id="inclass_city_path" name="course[{{'delivery'}}][{{'inclass'}}][{{'city'}}][{{'icon'}}][{{'path'}}]">
                                                     <input type="hidden" value="{{ old('inclass_city_icon_alt_text', ($course_inclass_city_icon != null && $course_inclass_city_icon['alt_text'] != '') ? $course_inclass_city_icon['alt_text'] : '' ) }}" id="inclass_city_alt_text" name="course[{{'delivery'}}][{{'inclass'}}][{{'city'}}][{{'icon'}}][{{'alt_text'}}]">
 
@@ -648,6 +721,27 @@
                                                             <input type="hidden" value="{{ old('inclass_dates_icon_path', ($course_inclass_dates_icon != null && $course_inclass_dates_icon['path'] != '') ? $course_inclass_dates_icon['path'] : '' ) }}" id="inclass_dates_path" name="course[{{'delivery'}}][{{'inclass'}}][{{'dates'}}][{{'icon'}}][{{'path'}}]">
                                                             <input type="hidden" value="{{ old('inclass_dates_icon_alt_text', ($course_inclass_dates_icon != null && $course_inclass_dates_icon['alt_text'] != '') ? $course_inclass_dates_icon['alt_text'] : '' ) }}" id="inclass_dates_alt_text" id="inclass_dates_alt_text" name="course[{{'delivery'}}][{{'inclass'}}][{{'dates'}}][{{'icon'}}][{{'alt_text'}}]">
                                                         </div>
+                                                    </div>
+
+                                                    <div class="col-12">
+                                                        <div class="row">
+                                                            <div class="col-12 col-md-4">
+                                                                <div class="form-group">
+                                                                    <span class="toggle-btn-inline-text">Icon Link</span>
+                                                                    <label class="custom-toggle enroll-toggle visible">
+                                                                        <input class="icon_link" name="course[{{'delivery'}}][{{'inclass'}}][{{'dates'}}][{{'icon'}}][{{'link_status'}}]" type="checkbox" {{ ((isset($course_inclass_dates_icon['link_status']) && $course_inclass_dates_icon['link_status'] == 'on') ) ? 'checked' : ''}}>
+                                                                        <span class="custom-toggle-slider rounded-circle" data-label-off="No" data-label-on="Yes"></span>
+                                                                    </label>
+                                                                </div>
+
+
+                                                            </div>
+
+                                                            <div class="col-12 col-md-4 input @if((isset($course_inclass_dates_icon['link_status']) && $course_inclass_dates_icon['link_status'] == 'off') || !isset($course_inclass_dates_icon['link_status'])) {{'d-none'}} @endif">
+                                                                <input placeholder="https://example.com" type="text" class="form-control" name="course[{{'delivery'}}][{{'inclass'}}][{{'dates'}}][{{'icon'}}][{{'link'}}]" value="{{ old('certificate_icon_link', (isset($course_inclass_dates_icon) && $course_inclass_dates_icon != null && isset($course_inclass_dates_icon['link'])) ? $course_inclass_dates_icon['link'] : '' ) }}">
+                                                            </div>
+                                                        </div>
+
                                                     </div>
 
 
@@ -736,6 +830,27 @@
                                                             <input type="hidden" value="{{ old('inclass_day_icon_path', ($course_inclass_day_icon != null && $course_inclass_day_icon['path'] != '') ? $course_inclass_day_icon['path'] : '' ) }}" id="inclass_day_path" name="course[{{'delivery'}}][{{'inclass'}}][{{'day'}}][{{'icon'}}][{{'path'}}]">
                                                             <input type="hidden" value="{{ old('inclass_day_icon_alt_text', ($course_inclass_day_icon != null && $course_inclass_day_icon['alt_text'] != '') ? $course_inclass_day_icon['alt_text'] : '' ) }}" id="inclass_day_alt_text" name="course[{{'delivery'}}][{{'inclass'}}][{{'day'}}][{{'icon'}}][{{'alt_text'}}]">
                                                         </div>
+                                                    </div>
+
+                                                    <div class="col-12">
+                                                        <div class="row">
+                                                            <div class="col-12 col-md-4">
+                                                                <div class="form-group">
+                                                                    <span class="toggle-btn-inline-text">Icon Link</span>
+                                                                    <label class="custom-toggle enroll-toggle visible">
+                                                                        <input class="icon_link" name="course[{{'delivery'}}][{{'inclass'}}][{{'day'}}][{{'icon'}}][{{'link_status'}}]" type="checkbox" {{ ((isset($course_inclass_day_icon['link_status']) && $course_inclass_day_icon['link_status'] == 'on') ) ? 'checked' : ''}}>
+                                                                        <span class="custom-toggle-slider rounded-circle" data-label-off="No" data-label-on="Yes"></span>
+                                                                    </label>
+                                                                </div>
+
+
+                                                            </div>
+
+                                                            <div class="col-12 col-md-4 input @if((isset($course_inclass_day_icon['link_status']) && $course_inclass_day_icon['link_status'] == 'off') || !isset($course_inclass_day_icon['link_status'])) {{'d-none'}} @endif">
+                                                                <input placeholder="https://example.com" type="text" class="form-control" name="course[{{'delivery'}}][{{'inclass'}}][{{'day'}}][{{'icon'}}][{{'link'}}]" value="{{ old('certificate_icon_link', (isset($course_inclass_day_icon) && $course_inclass_day_icon != null && isset($course_inclass_day_icon['link'])) ? $course_inclass_day_icon['link'] : '' ) }}">
+                                                            </div>
+                                                        </div>
+
                                                     </div>
 
 
@@ -835,6 +950,27 @@
                                                             <input type="hidden" value="{{ old('inclass_times_icon_path', ($course_inclass_times_icon != null && $course_inclass_times_icon['path'] != '') ? $course_inclass_times_icon['path'] : '' ) }}" id="inclass_times_path" name="course[{{'delivery'}}][{{'inclass'}}][{{'times'}}][{{'icon'}}][{{'path'}}]">
                                                             <input type="hidden" value="{{ old('inclass_times_icon_alt_text', ($course_inclass_times_icon != null && $course_inclass_times_icon['alt_text'] != '') ? $course_inclass_times_icon['alt_text'] : '' ) }}" id="inclass_times_alt_text" name="course[{{'delivery'}}][{{'inclass'}}][{{'times'}}][{{'icon'}}][{{'alt_text'}}]">
                                                         </div>
+                                                    </div>
+
+                                                    <div class="col-12">
+                                                        <div class="row">
+                                                            <div class="col-12 col-md-4">
+                                                                <div class="form-group">
+                                                                    <span class="toggle-btn-inline-text">Icon Link</span>
+                                                                    <label class="custom-toggle enroll-toggle visible">
+                                                                        <input class="icon_link" name="course[{{'delivery'}}][{{'inclass'}}][{{'times'}}][{{'icon'}}][{{'link_status'}}]" type="checkbox" {{ ((isset($course_inclass_times_icon['link_status']) && $course_inclass_times_icon['link_status'] == 'on') ) ? 'checked' : ''}}>
+                                                                        <span class="custom-toggle-slider rounded-circle" data-label-off="No" data-label-on="Yes"></span>
+                                                                    </label>
+                                                                </div>
+
+
+                                                            </div>
+
+                                                            <div class="col-12 col-md-4 input @if((isset($course_inclass_times_icon['link_status']) && $course_inclass_times_icon['link_status'] == 'off') || !isset($course_inclass_times_icon['link_status'])) {{'d-none'}} @endif">
+                                                                <input placeholder="https://example.com" type="text" class="form-control" name="course[{{'delivery'}}][{{'inclass'}}][{{'times'}}][{{'icon'}}][{{'link'}}]" value="{{ old('certificate_icon_link', (isset($course_inclass_times_icon) && $course_inclass_times_icon != null && isset($course_inclass_times_icon['link'])) ? $course_inclass_times_icon['link'] : '' ) }}">
+                                                            </div>
+                                                        </div>
+
                                                     </div>
 
 
@@ -1000,6 +1136,7 @@
                                                     $course_elearning_icon = (isset($info['elearning']['icon']) && $info['elearning']['icon']) ? $info['elearning']['icon'] : null;
 
                                                 ?>
+
                                                 <label class="form-control-label" for="input-expiration">{{ __('Months access') }} (course_elearning_expiration)</label>
                                                 <div class="input-group">
                                                     <input type="number" min="1" name="course[{{'delivery'}}][{{'elearning'}}][{{'expiration'}}]" id="input-expiration" class="form-control{{ $errors->has('expiration') ? ' is-invalid' : '' }}" placeholder="{{ __('Enter number of months') }}" value="{{ old('expiration', (isset($info['elearning']['expiration']) && $info['elearning']['expiration'] != null) ? $info['elearning']['expiration'] : '' ) }}"autofocus>
@@ -1019,6 +1156,29 @@
                                                     <input type="hidden" value="{{ old('elearning_icon_path', ($course_elearning_icon != null && $course_elearning_icon['path'] != '') ? $course_elearning_icon['path'] : '' ) }}" id="elearning_path" name="course[{{'delivery'}}][{{'elearning'}}][{{'icon'}}][{{'path'}}]">
                                                     <input type="hidden" value="{{ old('elearning_icon_alt_text', ($course_elearning_icon != null && $course_elearning_icon['alt_text'] != '') ? $course_elearning_icon['alt_text'] : '' ) }}" id="elearning_alt_text" id="elearning_alt_text" name="course[{{'delivery'}}][{{'elearning'}}][{{'icon'}}][{{'alt_text'}}]">
                                                 </div>
+
+                                                <div class="input-group">
+                                                        <div class="row">
+                                                            <div class="col-12 col-md-4">
+                                                                <div class="form-group">
+                                                                    <span class="toggle-btn-inline-text">Icon Link</span>
+                                                                    <label class="custom-toggle enroll-toggle visible">
+                                                                        <input class="icon_link" name="course[{{'delivery'}}][{{'elearning'}}][{{'icon'}}][{{'link_status'}}]" type="checkbox" {{ (isset($course_elearning_icon['link_status']) && $course_elearning_icon['link_status'] == 'on') ? 'checked' : ''}}>
+                                                                        <span class="custom-toggle-slider rounded-circle" data-label-off="No" data-label-on="Yes"></span>
+                                                                    </label>
+                                                                </div>
+
+
+                                                            </div>
+
+                                                            <div class="col-12 col-md-4 input @if((isset($course_elearning_icon['link_status']) && $course_elearning_icon['link_status'] == 'off') || !isset($course_elearning_icon['link_status'])) {{'d-none'}} @endif">
+                                                                <input placeholder="https://example.com" type="text" class="form-control" name="course[{{'delivery'}}][{{'elearning'}}][{{'icon'}}][{{'link'}}]" value="{{ old('elearning_icon_link', (isset($course_elearning_icon) && $course_elearning_icon != null && isset($info['hours']['icon']['link'])) ? $info['hours']['icon']['link'] : '' ) }}">
+                                                            </div>
+                                                        </div>
+
+
+
+                                                    </div>
 
                                             </div>
 
@@ -1122,6 +1282,30 @@
                                                         <input type="hidden" value="{{ old('elearning_icon_exam_path', ($course_elearning_exam_icon != null && $course_elearning_exam_icon['path'] != '') ? $course_elearning_exam_icon['path'] : '' ) }}" id="elearning_exam_path" name="course[{{'delivery'}}][{{'elearning'}}][{{'exam'}}][{{'icon'}}][{{'path'}}]">
                                                         <input type="hidden" value="{{ old('elearning_icon_exam_alt_text', ($course_elearning_exam_icon != null && $course_elearning_exam_icon['alt_text'] != '') ? $course_elearning_exam_icon['alt_text'] : '' ) }}" id="elearning_exam_alt_text" name="course[{{'delivery'}}][{{'elearning'}}][{{'exam'}}][{{'icon'}}][{{'alt_text'}}]">
                                                     </div>
+                                                    <div class="input-group">
+                                                        <div class="row">
+                                                            <div class="col-12 col-md-4">
+                                                                <div class="form-group">
+                                                                    <span class="toggle-btn-inline-text">Icon Link</span>
+                                                                    <label class="custom-toggle enroll-toggle visible">
+                                                                        <input class="icon_link" name="course[{{'delivery'}}][{{'elearning'}}][{{'exam'}}][{{'icon'}}][{{'link_status'}}]" type="checkbox" {{ (isset($course_elearning_exam_icon['link_status']) && $course_elearning_exam_icon['link_status'] == 'on') ? 'checked' : ''}}>
+                                                                        <span class="custom-toggle-slider rounded-circle" data-label-off="No" data-label-on="Yes"></span>
+                                                                    </label>
+                                                                </div>
+
+
+                                                            </div>
+
+                                                            <div class="col-12 col-md-4 input @if((isset($course_elearning_exam_icon['link_status']) && $course_elearning_exam_icon['link_status'] == 'off') || !isset($course_elearning_exam_icon['link_status'])) {{'d-none'}} @endif">
+                                                                <input placeholder="https://example.com" type="text" class="form-control" name="course[{{'delivery'}}][{{'elearning'}}][{{'exam'}}][{{'icon'}}][{{'link'}}]" value="{{ old('elearning_icon_link', (isset($course_elearning_exam_icon) && $course_elearning_exam_icon != null && isset($info['hours']['icon']['link'])) ? $info['hours']['icon']['link'] : '' ) }}">
+                                                            </div>
+                                                        </div>
+
+
+
+                                                    </div>
+
+                                            </div>
 
                                                 </div>
                                                 <!-- NOW -->
@@ -1569,6 +1753,30 @@
                                                         </span>
                                                     </div>
 
+
+                                                    <div class="col-12">
+                                                        <div class="row">
+                                                            <div class="col-12 col-md-4">
+                                                                <div class="form-group">
+                                                                    <span class="toggle-btn-inline-text">Icon Link</span>
+                                                                    <label class="custom-toggle enroll-toggle visible">
+                                                                        <input class="icon_link" name="course[{{'certificate'}}][{{'icon'}}][{{'link_status'}}]" type="checkbox" {{ ((isset($course_certification_icon['link_status']) && $course_certification_icon['link_status'] == 'on') ) ? 'checked' : ''}}>
+                                                                        <span class="custom-toggle-slider rounded-circle" data-label-off="No" data-label-on="Yes"></span>
+                                                                    </label>
+                                                                </div>
+
+
+                                                            </div>
+
+                                                            <div class="col-12 col-md-4 input @if((isset($course_certification_icon['link_status']) && $course_certification_icon['link_status'] == 'off') || !isset($course_certification_icon['link_status'])) {{'d-none'}} @endif">
+                                                                <input placeholder="https://example.com" type="text" class="form-control" name="course[{{'certificate'}}][{{'icon'}}][{{'link'}}]" value="{{ old('certificate_icon_link', (isset($course_certification_icon) && $course_certification_icon != null && isset($course_certification_icon['link'])) ? $course_certification_icon['link'] : '' ) }}">
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+
+
+
                                                     <input type="hidden" value="{{ old('course_certification_icon_path', ($course_certification_icon != null && $course_certification_icon['path'] != '') ? $course_certification_icon['path'] : '' ) }}" id="certificate_path" name="course[{{'certificate'}}][{{'icon'}}][{{'path'}}]">
                                                     <input type="hidden" value="{{ old('course_certification_icon_alt_text', ($course_certification_icon != null && $course_certification_icon['alt_text'] != '') ? $course_certification_icon['alt_text'] : '' ) }}" id="certificate_alt_text" name="course[{{'certificate'}}][{{'icon'}}][{{'alt_text'}}]">
                                                 </div>
@@ -1738,6 +1946,29 @@
                                                                 @endif
                                                             </span>
                                                         </span>
+                                                    </div>
+
+                                                    <div class="col-12">
+                                                        <div class="row">
+                                                            <div class="col-12 col-md-4">
+                                                                <div class="form-group">
+                                                                    <span class="toggle-btn-inline-text">Icon Link</span>
+                                                                    <label class="custom-toggle enroll-toggle visible">
+                                                                        <input class="icon_link" name="course[{{'students'}}][{{'icon'}}][{{'link_status'}}]" type="checkbox" {{ (isset($course_students_icon['link_status']) && $course_students_icon['link_status'] == 'on') ? 'checked' : ''}}>
+                                                                        <span class="custom-toggle-slider rounded-circle" data-label-off="No" data-label-on="Yes"></span>
+                                                                    </label>
+                                                                </div>
+
+
+                                                            </div>
+
+                                                            <div class="col-12 col-md-4 input @if((isset($course_students_icon['link_status']) && $course_students_icon['link_status'] == 'off') || !isset($course_students_icon['link_status'])) {{'d-none'}} @endif">
+                                                                <input placeholder="https://example.com" type="text" class="form-control" name="course[{{'students'}}][{{'icon'}}][{{'link'}}]" value="{{ old('course_students_icon_link', (isset($course_students_icon) && $course_students_icon != null && isset($course_students_icon['link'])) ? $course_students_icon['link'] : '' ) }}">
+                                                            </div>
+                                                        </div>
+
+
+
                                                     </div>
 
                                                     <input type="hidden" value="{{ old('course_students_icon_path', ($course_students_icon != null && $course_students_icon['path'] != '') ? $course_students_icon['path'] : '' ) }}" id="students_path" name="course[{{'students'}}][{{'icon'}}][{{'path'}}]">
@@ -2749,6 +2980,20 @@
         }
     })
 
+    $('.icon_link').change(function() {
+        let status = $(this).prop('checked');
+        let elem = $(this).parent().parent().parent().parent().parent();
+        elem = $(elem).find('.input')[0]
+
+        if(status){
+
+            $(elem).removeClass('d-none');
+
+        }else{
+            $(elem).addClass('d-none');
+        }
+    })
+
 
     $(document).ready(function(){
         let status = $('#certification-toggle').prop('checked');
@@ -3361,6 +3606,11 @@
 
     return $state;
     }
+
+    $(document).on('click', '.icon_link .custom-toggle-slider', function(){
+
+        let status = $(this).prop('checked');
+    })
 
 
     $(document).on('click', '.coupon.custom-toggle-slider', function(){

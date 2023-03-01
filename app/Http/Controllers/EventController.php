@@ -957,6 +957,8 @@ class EventController extends Controller
 
         $event_info = $this->prepareInfo($infoData, $request->status, $request->delivery, $partner, $request->syllabus, $request->city_id, $event);
 
+        //dd($event_info);
+
         $this->updateEventInfo($event_info, $event->id);
 
         if($event->status == 0 && $request->old_status == 5){
@@ -1049,6 +1051,10 @@ class EventController extends Controller
                         $dates['visible'] = $this->prepareVisibleData();
                     }
 
+
+                    if(!isset($requestData['delivery']['inclass']['dates']['icon']['link_status'])){
+                        $requestData['delivery']['inclass']['dates']['icon']['link_status'] = 'off';
+                    }
                     $dates['icon'] = $requestData['delivery']['inclass']['dates']['icon'];
 
 
@@ -1066,6 +1072,10 @@ class EventController extends Controller
                         $days['visible'] = $this->prepareVisibleData();
                     }
 
+                    if(!isset($requestData['delivery']['inclass']['day']['icon']['link_status'])){
+                        $requestData['delivery']['inclass']['day']['icon']['link_status'] = 'off';
+                    }
+
                     $days['icon'] = $requestData['delivery']['inclass']['day']['icon'];
                 }
                 $data['course_inclass_days'] = json_encode($days);
@@ -1081,6 +1091,10 @@ class EventController extends Controller
                         $times['visible'] = $this->prepareVisibleData();
                     }
 
+                    if(!isset($requestData['delivery']['inclass']['times']['icon']['link_status'])){
+                        $requestData['delivery']['inclass']['times']['icon']['link_status'] = 'off';
+                    }
+
 
                     $times['icon'] = $requestData['delivery']['inclass']['times']['icon'];
                 }
@@ -1091,14 +1105,13 @@ class EventController extends Controller
             // Video E-learning
             $visible_loaded_data = isset($requestData['delivery']['elearning']['visible']) ? $requestData['delivery']['elearning']['visible'] : null;
             $data['course_elearning_visible'] = json_encode($this->prepareVisibleData($visible_loaded_data));
-            $data['course_elearning_icon'] = $requestData['delivery']['elearning']['icon'] != null ?  json_encode($requestData['delivery']['elearning']['icon']) : null;
+            $data['course_elearning_icon'] = $requestData['delivery']['elearning']['icon'] != null ?  $this->prepareIconLinkStatus($requestData['delivery']['elearning']['icon']) : null;
             $data['course_elearning_expiration'] = (isset($requestData['delivery']['elearning']['expiration']) && $requestData['delivery']['elearning']['expiration'] != null) ? $requestData['delivery']['elearning']['expiration'] : null;
             $data['course_elearning_text'] = (isset($requestData['delivery']['elearning']['text']) && $requestData['delivery']['elearning']['text'] != null) ? $requestData['delivery']['elearning']['text'] : null;
 
-
             $visible_loaded_data = isset($requestData['delivery']['elearning']['exam']['visible']) ? $requestData['delivery']['elearning']['exam']['visible'] : null;
             $data['course_elearning_exam_visible'] = json_encode($this->prepareVisibleData($visible_loaded_data));
-            $data['course_elearning_exam_icon'] = isset($requestData['delivery']['elearning']['exam']['icon']) ?  json_encode($requestData['delivery']['elearning']['exam']['icon']) : null;
+            $data['course_elearning_exam_icon'] = isset($requestData['delivery']['elearning']['exam']['icon']) ?  $this->prepareIconLinkStatus($requestData['delivery']['elearning']['exam']['icon']) : null;
             $data['course_elearning_exam_text'] = (isset($requestData['delivery']['elearning']['exam']['text']) && $requestData['delivery']['elearning']['exam']['text'] != null) ? $requestData['delivery']['elearning']['exam']['text'] : null;
             $data['course_elearning_exam_activate_months'] = (isset($requestData['delivery']['elearning']['exam']['activate_months']) && $requestData['delivery']['elearning']['exam']['activate_months'] != null) ? $requestData['delivery']['elearning']['exam']['activate_months'] : null;
 
@@ -1183,6 +1196,10 @@ class EventController extends Controller
                         $dates['visible'] = $this->prepareVisibleData();
                     }
 
+                    if(!isset($requestData['delivery']['inclass']['dates']['icon']['link_status'])){
+                        $requestData['delivery']['inclass']['dates']['icon']['link_status'] = 'off';
+                    }
+
                     $dates['icon'] = $requestData['delivery']['inclass']['dates']['icon'];
 
 
@@ -1200,6 +1217,10 @@ class EventController extends Controller
                         $days['visible'] = $this->prepareVisibleData();
                     }
 
+                    if(!isset($requestData['delivery']['inclass']['day']['icon']['link_status'])){
+                        $requestData['delivery']['inclass']['day']['icon']['link_status'] = 'off';
+                    }
+
                     $days['icon'] = $requestData['delivery']['inclass']['day']['icon'];
                 }
                 $data['course_inclass_days'] = json_encode($days);
@@ -1215,6 +1236,9 @@ class EventController extends Controller
                         $times['visible'] = $this->prepareVisibleData();
                     }
 
+                    if(!isset($requestData['delivery']['inclass']['times']['icon']['link_status'])){
+                        $requestData['delivery']['inclass']['times']['icon']['link_status'] = 'off';
+                    }
 
                     $times['icon'] = $requestData['delivery']['inclass']['times']['icon'];
                 }
@@ -1235,8 +1259,7 @@ class EventController extends Controller
             $data['course_hours_visible'] = json_encode($this->prepareVisibleData());
         }
 
-
-        $data['course_hours_icon'] = json_encode($requestData['hours']['icon']);
+        $data['course_hours_icon'] = $this->prepareIconLinkStatus($requestData['hours']['icon']);
         /////////////////
 
 
@@ -1251,7 +1274,7 @@ class EventController extends Controller
             $data['course_language_visible'] = json_encode($this->prepareVisibleData());
         }
 
-        $data['course_language_icon'] = json_encode($requestData['language']['icon']);
+        $data['course_language_icon'] = $this->prepareIconLinkStatus($requestData['language']['icon']);
         ///////////////
 
         // Partner
@@ -1339,7 +1362,7 @@ class EventController extends Controller
 
             //dd($requestData['certificate']);
 
-            $data['course_certificate_icon'] = json_encode($requestData['certificate']['icon']);
+            $data['course_certificate_icon'] = $this->prepareIconLinkStatus($requestData['certificate']['icon']);
         }
 
 
@@ -1358,12 +1381,28 @@ class EventController extends Controller
                 $data['course_students_visible'] = json_encode($this->prepareVisibleData());
             }
 
-            $data['course_students_icon'] = json_encode($requestData['students']['icon']);
+            $data['course_students_icon'] = $this->prepareIconLinkStatus($requestData['students']['icon']);
         }
 
 
         return $data;
 
+    }
+
+    public function prepareIconLinkStatus($data){
+
+        if($data){
+
+            if(!isset($data['link_status'])){
+                $data['link_status'] = 'off';
+            }
+
+            // if(isset($data['link_status'])){
+
+            // }
+        }
+
+        return json_encode($data);
     }
 
     public function prepareVisibleData($data = false)

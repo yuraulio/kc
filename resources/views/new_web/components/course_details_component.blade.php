@@ -5,149 +5,229 @@
     $sumStudents = $dynamic_page_data["sumStudents"] ?? null;
     $info = $dynamic_page_data['info'] ?? null;
     //dd($info);
+    $has_info = false;
 @endphp
 
-<div class="course-tab-sidebar mt-5 mb-5" style="width: 100%;">
-    <div class="course-details @if(!isset($section_fullvideo)) non-video-height @endif">
-        <ul class="two-column-list">
+
+<div class="row mt-5 mb-5 course_details_infos">
+    {{--dd($info['hours'])--}}
 
 
-            @if(isset($info['hours']['visible']['landing']) && $info['hours']['visible']['landing'] && isset($info['hours']['hour']) && $info['hours']['hour'] )
-            <li>
-                @if(isset($info['hours']['icon']) && $info['hours']['icon']['path'] ) <img loading="lazy" class="info-icon resp-img" onerror="this.src='/theme/assets/images/icons/Start-Finish.svg'" src="{{cdn($info['hours']['icon']['path'])}}" width="30" height="30" alt="{{$info['hours']['icon']['alt_text']}}" title="{{$info['hours']['icon']['alt_text']}}" /> @else <img class="info-icon resp-img" width="30" height="30" src="/theme/assets/images/icons/Start-Finish.svg" alt="start-finish-icon" title="start-finish-icon"> @endif
-                <div class="info-text">
-                        <p>
-                            {{  $info['hours']['hour'] }} {!!  $info['hours']['text'] !!}
-                        </p>
-                    </div>
-            </li>
-            @endif
+@if(isset($info['hours']['visible']['landing']) && $info['hours']['visible']['landing'] && isset($info['hours']['hour']) && $info['hours']['hour'] )
+    <?php $has_info = false; ?>
+    <div class="col-10 col-sm-5 col-md-auto col-lg-auto details">
+        @if(isset($info['hours']['icon']) && $info['hours']['icon']['path'] )
 
-
-            @if(isset($info['inclass']['dates']['visible']['landing']) && $info['inclass']['dates']['visible']['landing'] && isset($info['inclass']['dates']['text']) && $info['inclass']['dates']['text'] )
-
-            <li>
-                @if(isset($info['inclass']['dates']['icon']['path']) && $info['inclass']['dates']['icon']['path'] )<img loading="lazy" class="info-icon resp-img"  src="{{cdn($info['inclass']['dates']['icon']['path'])}}" onerror="this.onerror=null;this.src='/theme/assets/img/summary_icons/Duration_Hours.svg'" width="30" height="30" alt="{{$info['inclass']['dates']['icon']['alt_text']}}" title="{{$info['inclass']['dates']['icon']['alt_text']}}"/> @else <img class="info-icon resp-img" width="30" height="30" src="/theme/assets/img/summary_icons/Duration_Hours.svg" alt="Duration_Hours_icon" title="Duration_Hours_icon">@endif
-                <div class="info-text">
-                    <p>
-                        {{  $info['inclass']['dates']['text'] }}
-                        </br>
-
-                    </p>
-                </div>
-            </li>
-            @endif
-
-            @if(isset($info['elearning']['visible']['landing']) && $info['elearning']['visible']['landing'] && isset($info['elearning']['expiration']) && $info['elearning']['expiration'] )
-            <li>
-                @if(isset($info['elearning']['icon']['path']) && $info['elearning']['icon']['path'] )<img loading="lazy" class="info-icon resp-img" src="{{cdn($info['elearning']['icon']['path'])}}" width="30" height="30" onerror="this.onerror=null;this.src='/theme/assets/img/summary_icons/Days-Week.svg'" alt="{{$info['elearning']['icon']['alt_text']}}" title="{{$info['elearning']['icon']['alt_text']}}" /> @else <img class="info-icon resp-img"  src="/theme/assets/img/summary_icons/Days-Week.svg" width="30" height="30" alt="Days-Week-icon" title="Days-Week-icon"/> @endif
-                <div class="info-text">
-                    <p>
-                        {{  $info['elearning']['expiration'] }} {{ (isset($info['elearning']['text']) && $info['elearning']['text'] ) ? $info['elearning']['text'] : ''}}
-                        </br>
-
-                    </p>
-                </div>
-            </li>
-            @endif
-
-
-            @if(isset($info['inclass']['days']['visible']['landing']) && $info['inclass']['days']['visible']['landing'] && isset($info['inclass']['days']['text']) && $info['inclass']['days']['text'] )
-
-            <li>
-                @if(isset($info['inclass']['days']['icon']['path']) && $info['inclass']['days']['icon']['path'] )<img loading="lazy" class="info-icon resp-img" onerror="this.onerror=null;this.src='/theme/assets/img/summary_icons/Days-Week.svg'"  src="{{cdn($info['inclass']['days']['icon']['path'])}}" alt="{{$info['inclass']['days']['icon']['alt_text']}}"> @else <img class="info-icon resp-img" width="30" height="30" src="/theme/assets/img/summary_icons/Days-Week.svg" alt="/theme/assets/img/summary_icons/Days-Week.svg"> @endif
-                <div class="info-text">
-                    <p>
-                        {{  $info['inclass']['days']['text'] }}
-                        </br>
-
-                    </p>
-                </div>
-            </li>
-            @endif
-
-            @if(isset($info['language']['visible']['landing']) && $info['language']['visible']['landing'] && isset($info['language']['text']) && $info['language']['text'] )
-            <li>
-                @if(isset($info['language']['icon']['path']) && isset($info['language']['icon']) && $info['language']['icon']['path'] ) <img loading="lazy" class="info-icon resp-img" src="{{cdn($info['language']['icon']['path'])}}" onerror="this.onerror=null;this.src='theme/assets/images/icons/Language.svg'" width="30" height="30" alt="{{$info['language']['icon']['alt_text']}}"/> @else <img class="info-icon resp-img" src="/theme/assets/images/icons/Language.svg" width="30" height="30" alt="Language_icon"/>  @endif
-                <div class="info-text">
-                    <p>
-                        {{  $info['language']['text'] }}
-                        </br>
-
-                    </p>
-                </div>
-            </li>
-            @endif
-
-            @if(isset($info['elearning']['exam']['visible']) && $info['elearning']['exam']['visible'] && isset($info['elearning']['exam']['text']) && $info['elearning']['exam']['text'] )
-            <li>
-
-                <img loading="lazy" class="info-icon resp-img" src="{{cdn($info['elearning']['exam']['icon']['path'])}}" onerror="this.src='{{cdn('/theme/assets/img/summary_icons/messages-warning-information.svg')}}'" width="30" height="30" alt="{{$info['elearning']['exam']['icon']['alt_text']}}"/>
-
-                <div class="info-text">
-                    <p>
-                        {{  $info['elearning']['exam']['text'] }}
-                        </br>
-
-                    </p>
-                </div>
-            </li>
-            @endif
-
-            @if(isset($info['certificate']['visible']['landing']) && $info['certificate']['visible']['landing'] && isset($info['certificate']['type']) && $info['certificate']['type'] )
-            <li>
-                @if(isset($info['certificate']['icon']['path']) && $info['certificate']['icon']['path'] ) <img loading="lazy" class="info-icon resp-img" src="{{cdn($info['certificate']['icon']['path'])}}" onerror="this.onerror=null;this.src='/theme/assets/images/icons/Level.svg'" width="30" height="30" alt="{{$info['certificate']['icon']['alt_text']}}" /> @else <img class="info-icon resp-img" width="30" height="30" src="/theme/assets/images/icons/Level.svg" alt="level_icon"> @endif
-                <div class="info-text">
-                    <p>
-                        {{  $info['certificate']['type'] }}
-                        </br>
-
-                    </p>
-                </div>
-            </li>
-            @endif
-
-            {{--@if(isset($info['students']['visible']['landing']) && $info['students']['visible']['landing'] && isset($info['students']['number']) && $sumStudents >= (int)$info['students']['number'])
-            <li>
-                @if(isset($info['students']['icon']['path']) && $info['students']['icon']['path'] )<img loading="lazy" class="info-icon resp-img" src="{{cdn($info['students']['icon']['path'])}}" width="30" height="30" onerror="this.onerror=null;this.src='/theme/assets/images/icons/Group_User.1.svg'" alt="{{$info['students']['icon']['alt_text']}}" /> @else <img class="info-icon resp-img"  src="/theme/assets/images/icons/Group_User.1.svg" width="30" height="30" alt="user_icon" /> @endif
-                <div class="info-text">
-                    <p>
-                        {{$sumStudents}} {{  $info['students']['text'] }}
-                        </br>
-
-                    </p>
-                </div>
-            </li>
-            @endif--}}
-
-            @if( isset($info['students']['visible']['landing']) && $info['students']['visible']['landing'] && isset($info['students']['text']) && $info['students']['text'])
-            <li>
-                @if(isset($info['students']['icon']['path']) && $info['students']['icon']['path'] )<img loading="lazy" class="info-icon resp-img" src="{{cdn($info['students']['icon']['path'])}}" width="30" height="30" onerror="this.onerror=null;this.src='/theme/assets/images/icons/Group_User.1.svg'" alt="{{$info['students']['icon']['alt_text']}}" /> @else <img class="info-icon resp-img"  src="/theme/assets/images/icons/Group_User.1.svg" width="30" height="30" alt="user_icon" /> @endif
-                <div class="info-text">
-                    <p>
-                        {{$sumStudents + (int)$info['students']['number']}} {{  $info['students']['text'] }}
-                        </br>
-                        {{--{!!  $sum['description'] !!}--}}
-                    </p>
-                </div>
-            </li>
-            @endif
-
-
-            @if(isset($info['inclass']['times']['visible']['landing']) && $info['inclass']['times']['visible']['landing'] && isset($info['inclass']['times']['text']) && $info['inclass']['times']['text'] )
-
-            <li>
-                @if(isset($info['inclass']['times']['icon']['path']) && $info['inclass']['times']['icon']['path'] )<img loading="lazy" class="info-icon resp-img" onerror="this.onerror=null;this.src='/theme/assets/img/summary_icons/Days-Week.svg'" src="{{cdn($info['inclass']['times']['icon']['path'])}}" width="30" height="30" alt="{{$info['inclass']['times']['icon']['alt_text']}}" />@else<img class="info-icon resp-img" width="30" height="30" src="/theme/assets/img/summary_icons/Days-Week.svg" alt="days-week-icon">@endif
-                <div class="info-text">
-                    <p>
-                        {{  $info['inclass']['times']['text'] }}
-                        </br>
-
-                    </p>
-                </div>
-            </li>
-            @endif
-
-        </ul>
+            @if(isset($info['hours']['icon']['link_status']) && $info['hours']['icon']['link'] != null) <a href="{{$info['hours']['icon']['link']}}" target="_blank"> @endif
+            <img loading="lazy" class="info-icon" onerror="this.src='/theme/assets/images/icons/Start-Finish.svg'" src="{{cdn($info['hours']['icon']['path'])}}" width="60" height="60" alt="{{$info['hours']['icon']['alt_text']}}" title="{{$info['hours']['icon']['alt_text']}}" />
+            @if(isset($info['hours']['icon']['link_status']) && $info['hours']['icon']['link'] != null) </a> @endif
+        @else
+            @if(isset($info['hours']['icon']['link_status']) && $info['hours']['icon']['link'] != null) <a href="{{$info['hours']['icon']['link']}}" target="_blank"> @endif
+            <img class="info-icon" width="60" height="60" src="/theme/assets/images/icons/Start-Finish.svg" alt="start-finish-icon" title="start-finish-icon">
+            @if(isset($info['hours']['icon']['link_status']) && $info['hours']['icon']['link'] != null) </a> @endif
+        @endif
+        <div class="info-text text-center">
+                <p>
+                    {{  $info['hours']['hour'] }} {!!  $info['hours']['text'] !!}
+                </p>
+            </div>
     </div>
+@endif
+
+@if(isset($info['inclass']['dates']['visible']['landing']) && $info['inclass']['dates']['visible']['landing'] && isset($info['inclass']['dates']['text']) && $info['inclass']['dates']['text'] )
+    <?php $has_info = false; ?>
+    <div class="col-10 col-sm-5 col-md-auto col-lg-auto details">
+        @if(isset($info['inclass']['dates']['icon']['path']) && $info['inclass']['dates']['icon']['path'] )
+
+            @if(isset($info['inclass']['dates']['icon']['link_status']) && $info['inclass']['dates']['icon']['link'] != null) <a href="{{$info['inclass']['dates']['icon']['link']}}" target="_blank"> @endif
+            <img loading="lazy" class="info-icon" src="{{cdn($info['inclass']['dates']['icon']['path'])}}" onerror="this.onerror=null;this.src='/theme/assets/img/summary_icons/Duration_Hours.svg'" width="60" height="60" alt="{{$info['inclass']['dates']['icon']['alt_text']}}" title="{{$info['inclass']['dates']['icon']['alt_text']}}"/>
+            @if(isset($info['inclass']['dates']['icon']['link_status']) && $info['inclass']['dates']['icon']['link'] != null) </a> @endif
+        @else
+            @if(isset($info['inclass']['dates']['icon']['link_status']) && $info['inclass']['dates']['icon']['link'] != null) <a href="{{$info['inclass']['dates']['icon']['link']}}" target="_blank"> @endif
+            <img class="info-icon" width="60" height="60" src="/theme/assets/img/summary_icons/Duration_Hours.svg" alt="Duration_Hours_icon" title="Duration_Hours_icon">
+            @if(isset($info['inclass']['dates']['icon']['link_status']) && $info['inclass']['dates']['icon']['link'] != null) </a> @endif
+        @endif
+        <div class="info-text text-center">
+            <p>
+                {{  $info['inclass']['dates']['text'] }}
+                </br>
+
+            </p>
+        </div>
+    </div>
+@endif
+@if(isset($info['elearning']['visible']['landing']) && $info['elearning']['visible']['landing'] && isset($info['elearning']['expiration']) && $info['elearning']['expiration'] )
+    <?php $has_info = true; ?>
+    <div class="col-10 col-sm-5 col-md-auto col-lg-auto details">
+        @if(isset($info['elearning']['icon']['path']) && $info['elearning']['icon']['path'] )
+            @if(isset($info['elearning']['icon']['link_status']) && $info['elearning']['icon']['link'] != null) <a href="{{$info['elearning']['icon']['link']}}" target="_blank"> @endif
+            <img loading="lazy" class="info-icon" src="{{cdn($info['elearning']['icon']['path'])}}" width="60" height="60" onerror="this.onerror=null;this.src='/theme/assets/img/summary_icons/Days-Week.svg'" alt="{{$info['elearning']['icon']['alt_text']}}" title="{{$info['elearning']['icon']['alt_text']}}" />
+            @if(isset($info['elearning']['icon']['link_status']) && $info['elearning']['icon']['link'] != null) </a> @endif
+        @else
+            @if(isset($info['elearning']['icon']['link_status']) && $info['elearning']['icon']['link'] != null) <a href="{{$info['elearning']['icon']['link']}}" target="_blank"> @endif
+            <img class="info-icon"  src="/theme/assets/img/summary_icons/Days-Week.svg" width="60" height="60" alt="Days-Week-icon" title="Days-Week-icon"/>
+            @if(isset($info['elearning']['icon']['link_status']) && $info['elearning']['icon']['link'] != null) </a> @endif
+        @endif
+        <div class="info-text text-center">
+            <p>
+                {{  $info['elearning']['expiration'] }} {{ (isset($info['elearning']['text']) && $info['elearning']['text'] ) ? $info['elearning']['text'] : ''}}
+                </br>
+
+            </p>
+        </div>
+    </div>
+@endif
+
+@if(isset($info['inclass']['days']['visible']['landing']) && $info['inclass']['days']['visible']['landing'] && isset($info['inclass']['days']['text']) && $info['inclass']['days']['text'] )
+    <?php $has_info = true; ?>
+    <div class="col-10 col-sm-5 col-md-auto col-lg-auto details">
+        @if(isset($info['inclass']['days']['icon']['path']) && $info['inclass']['days']['icon']['path'] )
+            @if(isset($info['inclass']['days']['icon']['link_status']) && $info['inclass']['days']['icon']['link'] != null) <a href="{{$info['inclass']['days']['icon']['link']}}" target="_blank"> @endif
+            <img loading="lazy" class="info-icon" onerror="this.onerror=null;this.src='/theme/assets/img/summary_icons/Days-Week.svg'"  src="{{cdn($info['inclass']['days']['icon']['path'])}}" alt="{{$info['inclass']['days']['icon']['alt_text']}}">
+            @if(isset($info['inclass']['days']['icon']['link_status']) && $info['inclass']['days']['icon']['link'] != null) </a> @endif
+        @else
+            @if(isset($info['inclass']['days']['icon']['link_status']) && $info['inclass']['days']['icon']['link'] != null) <a href="{{$info['inclass']['days']['icon']['link']}}" target="_blank"> @endif
+            <img class="info-icon" width="60" height="60" src="/theme/assets/img/summary_icons/Days-Week.svg" alt="/theme/assets/img/summary_icons/Days-Week.svg">
+            @if(isset($info['inclass']['days']['icon']['link_status']) && $info['inclass']['days']['icon']['link'] != null) </a> @endif
+        @endif
+        <div class="info-text text-center">
+            <p>
+                {{  $info['inclass']['days']['text'] }}
+                </br>
+
+            </p>
+        </div>
+    </div>
+@endif
+
+@if(isset($info['language']['visible']['landing']) && $info['language']['visible']['landing'] && isset($info['language']['text']) && $info['language']['text'] )
+    <?php $has_info = true; ?>
+    <div class="col-10 col-sm-5 col-md-auto col-lg-auto details">
+        @if(isset($info['language']['icon']['path']) && isset($info['language']['icon']) && $info['language']['icon']['path'] )
+            @if(isset($info['language']['icon']['link_status']) && $info['language']['icon']['link'] != null) <a href="{{$info['language']['icon']['link']}}" target="_blank"> @endif
+            <img loading="lazy" class="info-icon" src="{{cdn($info['language']['icon']['path'])}}" onerror="this.onerror=null;this.src='theme/assets/images/icons/Language.svg'" width="60" height="60" alt="{{$info['language']['icon']['alt_text']}}"/>
+            @if(isset($info['language']['icon']['link_status']) && $info['language']['icon']['link'] != null) </a> @endif
+
+        @else
+            @if(isset($info['language']['icon']['link_status']) && $info['language']['icon']['link'] != null) <a href="{{$info['language']['icon']['link']}}" target="_blank"> @endif
+            <img class="info-icon" src="/theme/assets/images/icons/Language.svg" width="60" height="60" alt="Language_icon"/>
+            @if(isset($info['language']['icon']['link_status']) && $info['language']['icon']['link'] != null) </a> @endif
+
+        @endif
+        <div class="info-text text-center">
+            <p>
+                {{  $info['language']['text'] }}
+                </br>
+
+            </p>
+        </div>
+    </div>
+@endif
+@if(isset($info['elearning']['exam']['visible']) && $info['elearning']['exam']['visible']['landing'] && isset($info['elearning']['exam']['text']) && $info['elearning']['exam']['text'] )
+    <?php $has_info = true; ?>
+    <div class="col-10 col-sm-5 col-md-auto col-lg-auto details">
+
+        @if(isset($info['elearning']['exam']['icon']['link_status']) && $info['elearning']['exam']['icon']['link'] != null) <a href="{{$info['elearning']['exam']['icon']['link']}}" target="_blank"> @endif
+
+        <img loading="lazy" class="info-icon" src="{{cdn($info['elearning']['exam']['icon']['path'])}}" onerror="this.src='{{cdn('/theme/assets/img/summary_icons/messages-warning-information.svg')}}'" width="60" height="60" alt="{{$info['elearning']['exam']['icon']['alt_text']}}"/>
+        @if(isset($info['elearning']['exam']['icon']['link_status']) && $info['elearning']['exam']['icon']['link'] != null) </a> @endif
+
+        <div class="info-text text-center">
+            <p>
+                {{  $info['elearning']['exam']['text'] }}
+                </br>
+
+            </p>
+        </div>
+    </div>
+@endif
+
+@if(isset($info['certificate']['visible']['landing']) && $info['certificate']['visible']['landing'] && isset($info['certificate']['type']) && $info['certificate']['type'] )
+    <?php $has_info = true; ?>
+    <div class="col-10 col-sm-5 col-md-auto col-lg-auto details">
+        @if(isset($info['certificate']['icon']['path']) && $info['certificate']['icon']['path'] )
+
+            @if(isset($info['certificate']['icon']['link_status']) && $info['certificate']['icon']['link'] != null) <a href="{{$info['certificate']['icon']['link']}}" target="_blank"> @endif
+
+            <img loading="lazy" class="info-icon" src="{{$info['certificate']['icon']['path']}}" onerror="this.onerror=null;this.src='/theme/assets/images/icons/Level.svg'" width="60" height="60" alt="{{$info['certificate']['icon']['alt_text']}}" />
+            @if(isset($info['certificate']['icon']['link_status']) && $info['certificate']['icon']['link'] != null) </a> @endif
+
+        @else
+            @if(isset($info['certificate']['icon']['link_status']) && $info['certificate']['icon']['link'] != null) <a href="{{$info['certificate']['icon']['link']}}" target="_blank"> @endif
+            <img class="info-icon" width="60" height="60" src="/theme/assets/images/icons/Level.svg" alt="level_icon">
+            @if(isset($info['certificate']['icon']['link_status']) && $info['certificate']['icon']['link'] != null) </a> @endif
+
+        @endif
+        <div class="info-text text-center">
+            <p>
+                {{  $info['certificate']['type'] }}
+                </br>
+
+            </p>
+        </div>
+    </div>
+@endif
+
+@if( isset($info['students']['visible']['landing']) && $info['students']['visible']['landing'] && isset($info['students']['text']) && $info['students']['text'])
+    <?php $has_info = true; ?>
+    <div class="col-10 col-sm-5 col-md-auto col-lg-auto details">
+        @if(isset($info['students']['icon']['path']) && $info['students']['icon']['path'] )
+            @if(isset($info['students']['icon']['link_status']) && $info['students']['icon']['link'] != null) <a href="{{$info['students']['icon']['link']}}" target="_blank"> @endif
+
+            <img loading="lazy" class="info-icon" src="{{$info['students']['icon']['path']}}" width="60" height="60" onerror="this.onerror=null;this.src='/theme/assets/images/icons/Group_User.1.svg'" alt="{{$info['students']['icon']['alt_text']}}" />
+            @if(isset($info['students']['icon']['link_status']) && $info['students']['icon']['link'] != null) </a> @endif
+
+        @else
+            @if(isset($info['students']['icon']['link_status']) && $info['students']['icon']['link'] != null) <a href="{{$info['students']['icon']['link']}}" target="_blank"> @endif
+
+            <img class="info-icon"  src="/theme/assets/images/icons/Group_User.1.svg" width="60" height="60" alt="user_icon" />
+            @if(isset($info['students']['icon']['link_status']) && $info['students']['icon']['link'] != null) </a> @endif
+
+        @endif
+        <div class="info-text text-center">
+            <p>
+                {{$sumStudents + (int)$info['students']['number']}} {{  $info['students']['text'] }}
+                </br>
+                {{--{!!  $sum['description'] !!}--}}
+            </p>
+        </div>
+    </div>
+@endif
+
+@if(isset($info['inclass']['times']['visible']['landing']) && $info['inclass']['times']['visible']['landing'] && isset($info['inclass']['times']['text']) && $info['inclass']['times']['text'] )
+    <?php $has_info = true; ?>
+    <div class="col-10 col-sm-5 col-md-auto col-lg-auto details">
+        @if(isset($info['inclass']['times']['icon']['path']) && $info['inclass']['times']['icon']['path'] )
+            @if(isset($info['inclass']['times']['icon']['link_status']) && $info['inclass']['times']['icon']['link'] != null) <a href="{{$info['inclass']['times']['icon']['link']}}" target="_blank"> @endif
+
+            <img loading="lazy" class="info-icon" onerror="this.onerror=null;this.src='/theme/assets/img/summary_icons/Days-Week.svg'" src="{{$info['inclass']['times']['icon']['path']}}" width="60" height="60" alt="{{$info['inclass']['times']['icon']['alt_text']}}" />
+            @if(isset($info['inclass']['times']['icon']['link_status']) && $info['inclass']['times']['icon']['link'] != null) </a> @endif
+
+        @else
+            @if(isset($info['inclass']['times']['icon']['link_status']) && $info['inclass']['times']['icon']['link'] != null) <a href="{{$info['inclass']['times']['icon']['link']}}" target="_blank"> @endif
+
+            <img class="info-icon" width="60" height="60" src="/theme/assets/img/summary_icons/Days-Week.svg" alt="days-week-icon">
+            @if(isset($info['inclass']['times']['icon']['link_status']) && $info['inclass']['times']['icon']['link'] != null) </a> @endif
+        @endif
+        <div class="info-text text-center">
+            <p>
+                {{  $info['inclass']['times']['text'] }}
+                </br>
+
+            </p>
+        </div>
+    </div>
+@endif
+
+
 </div>
+
+<script type="application/javascript">
+        $( document ).ready(function() {
+            let has_info = @json($has_info);
+            if(!has_info){
+                $('.course_details_infos').hide();
+            }
+        });
+</script>
+

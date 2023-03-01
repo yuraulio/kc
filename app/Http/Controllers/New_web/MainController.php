@@ -160,6 +160,7 @@ class MainController extends Controller
                 'dynamic_page_data' => $dynamicPageData,
             ]);
         } else {
+            //dd($dynamicPageData);
             return view('new_web.page', [
                 'content' => json_decode($page->content ? $page->content : $page->rows),
                 'page_id' => $page->id,
