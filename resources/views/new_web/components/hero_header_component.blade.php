@@ -104,7 +104,7 @@
                 <div class="row">
                     @if(isset($students_visible['landing']) && $students_visible['landing'] && isset($info['course_students_number']) && $info['course_students_text'])
                     <div class="col-12 col-md-auto students">
-                        {{ $sumStudents + (int)$info['course_students_number'] }} {{ ((isset($info['course_students_text']) && $info['course_students_text'] != null) ? $info['course_students_text'] : '') }}
+                        {{ $sumStudents + (int)$info['course_students_number'] }} {{ ((isset($info['course_students_text']) && $info['course_students_text'] != null) ? strip_tags($info['course_students_text']) : '') }}
                     </div>
                     <?php $hasStudentColumn = true; ?>
                     @endif

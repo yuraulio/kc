@@ -11,6 +11,16 @@
     }
 
     $metaData = $post->metaData();
+
+    $image_version = [];
+    if($metaData["meta_image"]){
+        if($metaData["meta_image"]->version == 'event-card'){
+
+            $image_version = get_image_version_details($metaData["meta_image"]->version);
+
+        }
+        $image_version = get_image_version_details($metaData["meta_image"]->version);
+    }
     $source = strtolower($source->title);
     $title = $post->getTitle() ?? "";
 
@@ -28,7 +38,11 @@
             <div class='text-center blogpagex-blog-image'>
                 <a href="{{env("NEW_PAGES_LINK") . "/$source/$post->slug"}}">
                     {{--<img src="{{$metaData["meta_image"]->url ?? ''}}" alt="{{$metaData["meta_image"]->alt_text ?? ''}}">--}}
-                    <img loading="lazy" width="{{$metaData["meta_image"]->width}}" height="{{$metaData["meta_image"]->height}}" class="resp-img" src="{{get_image($metaData["meta_image"]->full_path)}}" alt="{{$metaData["meta_image"]->alt_text ?? ''}}" title="{{$metaData["meta_image"]->alt_text ?? ''}}">
+
+
+                    @if(isset($metaData["meta_image"]) && $metaData["meta_image"]->version == 'event-card')
+                    @endif
+                    <img loading="lazy" width="@if(!empty($image_version)){{$image_version['w']}}@else{{$metaData["meta_image"]->height}}@endif" height="@if(!empty($image_version)){{$image_version['h']}}@else{{$metaData["meta_image"]->height}}@endif" class="resp-img" src="{{get_image($metaData["meta_image"]->full_path)}}" alt="{{$metaData["meta_image"]->alt_text ?? ''}}" title="{{$metaData["meta_image"]->alt_text ?? ''}}">
                 </a>
             </div>
         </div>

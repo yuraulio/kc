@@ -31,7 +31,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-6 col-xs-12">
+                {{--<div class="col-sm-6 col-xs-12">
                     <div class="ibox">
                     @foreach($partners as $partner)
                             <?php
@@ -39,7 +39,7 @@
                                 $img = get_image($partner['mediable']);
                             ?>
                             <div class="ibox-img partner">
-                                <img class="resp-img" loading="lazy" src="{{cdn($img)}}" width="90" height="90" alt="{{$alt}}">
+                                <img class="resp-img" loading="lazy" src="{{cdn($img)}}" width="{{isset($partner['mediable']) ? $partner['mediable']['width'] : ''}}" height="{{isset($partner['mediable']) ? $partner['mediable']['height'] : ''}}" alt="{{$alt}}">
                             </div>
                             <div class="ibox-text">
                                 <div class="ibox-text">
@@ -56,7 +56,7 @@
 
                         @endforeach
                     </div>
-                </div>
+                </div>--}}
             @endif
         </div>
     </div>

@@ -1,5 +1,6 @@
 @php
     $sections = $dynamic_page_data["sections"] ?? null;
+    $partners = $dynamic_page_data["partners"] ?? null;
     $section_fullvideo = $dynamic_page_data["section_fullvideo"] ?? null;
     $summary = $dynamic_page_data["summary"] ?? null;
     $sumStudents = $dynamic_page_data["sumStudents"] ?? null;
@@ -10,7 +11,6 @@
 
 
 <div class="row mt-5 mb-5 course_details_infos">
-    {{--dd($info['hours'])--}}
 
 
 @if(isset($info['hours']['visible']['landing']) && $info['hours']['visible']['landing'] && isset($info['hours']['hour']) && $info['hours']['hour'] )
@@ -49,7 +49,7 @@
         @endif
         <div class="info-text text-center">
             <p>
-                {{  $info['inclass']['dates']['text'] }}
+                {!!  $info['inclass']['dates']['text'] !!}
                 </br>
 
             </p>
@@ -70,7 +70,7 @@
         @endif
         <div class="info-text text-center">
             <p>
-                {{  $info['elearning']['expiration'] }} {{ (isset($info['elearning']['text']) && $info['elearning']['text'] ) ? $info['elearning']['text'] : ''}}
+                {{  $info['elearning']['expiration'] }} {!! (isset($info['elearning']['text']) && $info['elearning']['text'] ) ? $info['elearning']['text'] : '' !!}
                 </br>
 
             </p>
@@ -92,7 +92,7 @@
         @endif
         <div class="info-text text-center">
             <p>
-                {{  $info['inclass']['days']['text'] }}
+                {!!  $info['inclass']['days']['text'] !!}
                 </br>
 
             </p>
@@ -116,7 +116,7 @@
         @endif
         <div class="info-text text-center">
             <p>
-                {{  $info['language']['text'] }}
+                {!!  $info['language']['text'] !!}
                 </br>
 
             </p>
@@ -134,7 +134,7 @@
 
         <div class="info-text text-center">
             <p>
-                {{  $info['elearning']['exam']['text'] }}
+                {!!  $info['elearning']['exam']['text'] !!}
                 </br>
 
             </p>
@@ -160,7 +160,7 @@
         @endif
         <div class="info-text text-center">
             <p>
-                {{  $info['certificate']['type'] }}
+                {!!  $info['certificate']['type'] !!}
                 </br>
 
             </p>
@@ -186,7 +186,7 @@
         @endif
         <div class="info-text text-center">
             <p>
-                {{$sumStudents + (int)$info['students']['number']}} {{  $info['students']['text'] }}
+                {{$sumStudents + (int)$info['students']['number']}} {!!  $info['students']['text'] !!}
                 </br>
                 {{--{!!  $sum['description'] !!}--}}
             </p>
@@ -211,10 +211,33 @@
         @endif
         <div class="info-text text-center">
             <p>
-                {{  $info['inclass']['times']['text'] }}
+                {!!  $info['inclass']['times']['text'] !!}
                 </br>
 
             </p>
+        </div>
+    </div>
+@endif
+@if($partners != null && !empty($partners))
+    <?php $has_info = true; ?>
+    <div class="col-10 col-sm-5 col-md-auto col-lg-auto details">
+
+        @if($partners[0]['mediable'] && isset($partners[0]['mediable']) && $partners[0]['mediable']['name'] != null)
+
+        <img loading="lazy" class="info-icon" onerror="this.onerror=null;this.src='/theme/assets/img/summary_icons/Days-Week.svg'" src="{{$partners[0]['mediable']['path']}}/{{$partners[0]['mediable']['original_name']}}" width="60" height="60" alt="" />
+        @else
+        <img loading="lazy" class="info-icon" onerror="this.onerror=null;this.src='/theme/assets/img/summary_icons/Days-Week.svg'" src="/theme/assets/img/summary_icons/Days-Week.svg" width="60" height="60" alt="" />
+        @endif
+
+
+
+        <div class="info-text text-center">
+            <p>Supported By
+
+                </br>
+
+            </p>
+            <p>@if($partners[0]['url'] != null && $partners[0]['url'] != "")<a href="{{$partners[0]['url']}}" target="_blank">@endif {{$partners[0]['name']}} @if($partners[0]['url'] != null && $partners[0]['name'] != "")</a>@endif</p>
         </div>
     </div>
 @endif

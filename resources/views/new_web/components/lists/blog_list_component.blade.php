@@ -53,7 +53,7 @@
     }
 
     $blog = $blog->with("subcategories")->paginate(10);
-    
+
 @endphp
 
 <div class="row mb-5">
