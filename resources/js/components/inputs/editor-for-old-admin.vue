@@ -10,8 +10,8 @@
             v-model="editorData"
             :api-key="tinymce"
             :init="{
-                plugins: 'preview importcss searchreplace autolink autosave save directionality code visualblocks visualchars fullscreen image link media template codesample table charmap pagebreak nonbreaking anchor insertdatetime advlist lists wordcount help charmap quickbars emoticons',
-                toolbar: 'fullscreen styles | undo redo | h1 h2 h3 h4 h5 h6 | bold italic underline strikethrough | fontfamily fontsize blocks | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | preview print | insertfile image media link anchor codesample | ltr rtl',
+                plugins: plugins,
+                toolbar: toolbar,
                 toolbar_sticky: true,
                 toolbar_mode: 'wrap',
                 height: 300,
@@ -70,6 +70,14 @@ export default {
         imageVersion: null,
         hideAltText: false,
         imageEdit:false,
+        plugins: {
+            type: String,
+            default: 'preview importcss searchreplace autolink autosave save directionality code visualblocks visualchars fullscreen image link media template codesample table charmap pagebreak nonbreaking anchor insertdatetime advlist lists wordcount help charmap quickbars emoticons'
+        },
+        toolbar:{
+            type: String,
+            default: 'fullscreen styles | undo redo | h1 h2 h3 h4 h5 h6 | bold italic underline strikethrough | fontfamily fontsize blocks | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | preview print | insertfile image media link anchor codesample | ltr rtl'
+        }
     },
     data() {
         return {

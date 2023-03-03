@@ -57,7 +57,7 @@ class TransactionExport implements FromArray,WithHeadings, ShouldAutoSize
         $transactions = Transaction::query();
 
         $transactions = $transactions->whereBetween('created_at', [$this->fromDate,$this->toDate])->
-                                with('user.events_for_user_list','user.ticket','subscription','event','event.delivery');
+                                with('user','user.ticket','subscription','event','event.delivery', 'event.category');
 
                                 //dd($transactions->get());
 
@@ -97,16 +97,16 @@ class TransactionExport implements FromArray,WithHeadings, ShouldAutoSize
         $data = array();
         foreach($transactions as $transaction){
 
-            if(!$transaction->subscription->first() && $transaction->user->first() && $transaction->event->first() && in_array($transaction->event->first()->id,$this->event)/*&& $transaction->event->first()->id == $this->event*/){
+            if(!$transaction->subscription->first() && $transaction['user'] && isset($transaction['user'][0]) && isset($transaction['event'][0]) && in_array($transaction['event'][0]['id'],$this->event)/*&& $transaction['event'][0]->id == $this->event*/){
 
-                $category =  $transaction->event->first()->category->first() ? $transaction->event->first()->category->first()->id : -1;
+                $category =  isset($transaction['event'][0]) && isset($transaction['event'][0]['category'][0]) ? $transaction['event'][0]['category'][0]['id'] : -1;
 
                 if(in_array(9,$userRole) &&  ($category !== 46)){
                     continue;
                 }
 
                 $tickets = $transaction->user->first()['ticket']->groupBy('event_id');
-                $ticketType = isset($tickets[$transaction->event->first()->id]) ? $tickets[$transaction->event->first()->id]->first()->type : '-';
+                $ticketType = isset($tickets[$transaction['event'][0]['id']]) ? $tickets[$transaction['event'][0]['id']]->first()->type : '-';
 
                 $statusHistory = $transaction->status_history;
                 $billingDetails = json_decode($transaction->billing_details,true);
@@ -123,14 +123,14 @@ class TransactionExport implements FromArray,WithHeadings, ShouldAutoSize
                 $city = '';
                 $bankDetails = '';
 
-                $event = $transaction->event->first()->title;
+                $event = $transaction['event'][0]['title'];
                 //$name = $transaction->user->first()->firstname;
                 //$last = $transaction->user->first()->lastname;
                 //$email = $transaction->user->first()->email;
                 //$mobile = $transaction->user->first()->mobile;
                 //$jobTitle = isset($statusHistory[0]['pay_seats_data']['jobtitles'][0]) ? $statusHistory[0]['pay_seats_data']['jobtitles'][0] : '' ;
                 //$company = isset($statusHistory[0]['pay_seats_data']['companies'][0]) ? $statusHistory[0]['pay_seats_data']['companies'][0] : '' ;
-                $amount = round(($transaction->amount/count($transaction->user)),2);
+                $amount = round(($transaction->amount/count($transaction['user'])),2);
                 //$kcId =  $transaction->user->first()->kc_id;
                 //$partnerId = $transaction->user->first()->partner_id;
                 //$ticketType = $transaction->type;

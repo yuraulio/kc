@@ -982,7 +982,7 @@ class EventController extends Controller
         }
 
         //return back()->withStatus(__('Event successfully updated.'));
-        return redirect()->route('events.edit',['event'=>$event->id, 'show_popup'=>$show_popup])->withStatus(__('Event successfully created.'));
+        return redirect()->route('events.edit',['event'=>$event->id, 'show_popup'=>$show_popup])->withStatus(__('Event successfully updated.'));
         //return redirect()->route('events.index')->withStatus(__('Event successfully updated.'));
     }
 
@@ -1279,7 +1279,8 @@ class EventController extends Controller
 
         // Partner
 
-        $data['course_partner_icon'] = json_encode($requestData['partner']['icon']);
+
+        $data['course_partner_icon'] = $this->prepareIconLinkStatus($requestData['partner']['icon']);
 
 
         // Manager

@@ -370,9 +370,10 @@ input[type="number"]#mobile_phone::-webkit-inner-spin-button {
 }
 
 .details .info-text{
-    max-width: 10rem;
-    /* min-height: 5.2rem; */
-    margin: 1rem auto;
+    width: 8rem;
+    min-height: 5rem;
+    margin: auto;
+
 }
 
 .details .info-text p{

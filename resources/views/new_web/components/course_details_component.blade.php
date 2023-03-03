@@ -224,9 +224,16 @@
 
         @if($partners[0]['mediable'] && isset($partners[0]['mediable']) && $partners[0]['mediable']['name'] != null)
 
-        <img loading="lazy" class="info-icon" onerror="this.onerror=null;this.src='/theme/assets/img/summary_icons/Days-Week.svg'" src="{{$partners[0]['mediable']['path']}}/{{$partners[0]['mediable']['original_name']}}" width="60" height="60" alt="" />
+            @if(isset($info['partner']['icon']) && $info['partner']['icon']['link_status'] == 'on' && $info['partner']['icon']['link'] != '') <a href="{{$info['partner']['icon']['link']}}" target="_blank"> @endif
+            <img loading="lazy" class="info-icon" onerror="this.onerror=null;this.src='/theme/assets/img/summary_icons/Days-Week.svg'" src="{{$partners[0]['mediable']['path']}}/{{$partners[0]['mediable']['original_name']}}" width="60" height="60" alt="" />
+            @if(isset($info['partner']['icon']) && $info['partner']['icon']['link_status'] == 'on' && $info['partner']['icon']['link'] != '') </a> @endif
+
         @else
-        <img loading="lazy" class="info-icon" onerror="this.onerror=null;this.src='/theme/assets/img/summary_icons/Days-Week.svg'" src="/theme/assets/img/summary_icons/Days-Week.svg" width="60" height="60" alt="" />
+
+            @if(isset($info['partner']['icon']) && $info['partner']['icon']['link_status'] == 'on' && $info['partner']['icon']['link'] != '') <a href="{{$info['inclass']['times']['icon']['link']}}" target="_blank"> @endif
+            <img loading="lazy" class="info-icon" onerror="this.onerror=null;this.src='/theme/assets/img/summary_icons/Days-Week.svg'" src="/theme/assets/img/summary_icons/Days-Week.svg" width="60" height="60" alt="" />
+            @if(isset($info['partner']['icon']) && $info['partner']['icon']['link_status'] == 'on' && $info['partner']['icon']['link'] != '') </a> @endif
+
         @endif
 
 
@@ -244,7 +251,6 @@
 
 
 </div>
-
 <script type="application/javascript">
         $( document ).ready(function() {
             let has_info = @json($has_info);

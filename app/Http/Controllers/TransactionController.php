@@ -207,7 +207,7 @@ class TransactionController extends Controller
 
                     $total_users[$u['firstname'].'_'.$u['lastname']] = $u['firstname'].'_'.$u['lastname'];
 
-                    
+
                     if(!$homepage){
                         $statistic = $u->statisticGroupByEvent->groupBy('event_id');
 
@@ -219,7 +219,7 @@ class TransactionController extends Controller
                         $paymentMethodId = isset($events[$transaction->event->first()->id]) ? $events[$transaction->event->first()->id]->first()->pivot->payment_method : 0;
                         $paymentMethod = isset($paymentMethods[$paymentMethodId]) ? $paymentMethods[$paymentMethodId] :'Alpha Bank';
                     }
-                    
+
                     $city = !empty($transaction->event[0]['city']) && isset($transaction->event[0]['city'][0]) ? $transaction->event[0]['city'][0]['name'] : '';
 
 
@@ -241,7 +241,7 @@ class TransactionController extends Controller
                                                 'city' => $city,
                                                 'category' => isset($transaction->event[0]['category'][0]['name']) ? $transaction->event[0]['category'][0]['name'] : ''];
                     }
-            
+
                 }
 
             }
@@ -693,8 +693,12 @@ class TransactionController extends Controller
         //$fromDate = date('Y-m-d',strtotime($request->fromDate));
         //$toDate = $request->toDate ? date('Y-m-d',strtotime($request->toDate)) : date('Y-m-d');
 
-        Excel::store(new TransactionExport($request), 'TransactionsExport.xlsx', 'export');
-        return Excel::download(new TransactionExport($request), 'TransactionsExport.xlsx');
+        $data = new TransactionExport($request);
+
+        Excel::store($data, 'TransactionsExport.xlsx', 'export');
+
+        return response()->json(['data' => ['success' => true]]);
+        //return Excel::download($data, 'TransactionsExport.xlsx');
     }
 
     public function exportInvoices(Request $request){

@@ -64,13 +64,6 @@
                     </div>
 
                 </div>
-            </div>
-        </div>
-    </div>
-    @if(isset($total_users))
-    <div class="card-body col-xl-3 col-md-6">
-        <div class="card">
-            <div class="card-body">
                 <div class="row">
                     <div class="col info d-none">
                         <p class="mt-3 mb-0 text-sm">
@@ -87,7 +80,7 @@
             </div>
         </div>
     </div>
-    @endif
+
 
 </div>
 
