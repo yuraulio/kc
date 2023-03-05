@@ -1169,7 +1169,7 @@
                                 </div>
 
                                 <div class="form-group col-sm-12 col-md-6 col-lg-4">
-                                    <label class="form-control-label" for="input-hours">{{ __('Text after the number of students:') }} {{ __('(course_students_text)') }}</label>
+                                    <label class="form-control-label" for="input-hours">{{ __('Text after the number of students:') }}<br> {{ __('(course_students_text)') }}</label>
                                     <input style="background: aliceblue;" name="course[{{'students'}}][{{'text'}}]" type="text" class="form-control" placeholder="{{ __('alphanumeric text') }}" value="{{ old('count_text') }}" autofocus>
                                 </div>
 

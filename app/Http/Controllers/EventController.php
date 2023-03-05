@@ -1398,9 +1398,9 @@ class EventController extends Controller
                 $data['link_status'] = 'off';
             }
 
-            // if(isset($data['link_status'])){
-
-            // }
+            if(isset($data['link_status']) && $data['link_status'] == 'on'){
+                $data['link'] = str_replace('http://', 'https://',$data['link']);
+            }
         }
 
         return json_encode($data);

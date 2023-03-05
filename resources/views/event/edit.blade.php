@@ -355,16 +355,16 @@
                                                 </div>
                                             </div>
 
-                                            <div class="form-group col-sm-12 col-md-4 hours-input-wrapper">
+                                            <div class="form-group col-sm-12 col-md-6 col-lg-4 hours-input-wrapper">
                                                 <input type="text" id="input-hours" name="course[{{'hours'}}][{{'hour'}}]" class="form-control" placeholder="{{ __('Course Hours') }}" value="{{ old('hours', (isset($info['hours']['hour']) && $info['hours']['hour'] != null) ? $info['hours']['hour'] : '' ) }}" autofocus>
 
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-4 hours-input-wrapper">
+                                            <div class="form-group col-sm-12 col-md-6 col-lg-4 hours-input-wrapper">
                                                 <button id="calculate-total-hours-btn" type="button" class="btn btn-primary">Automatically calculate & add lessons hours</button>
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="form-group col-12 col-md-4 hours-input-wrapper">
+                                            <div class="form-group col-12 col-md-6 col-lg-4 hours-input-wrapper">
 
                                                 <label class="form-control-label">Hours Text (course_hours_text)</label>
 
@@ -1153,7 +1153,7 @@
 
                                             </div>
 
-                                            <div class="exp_input col-sm-12 col-md-auto col-lg-auto form-group">
+                                            <div class="exp_input col-12 form-group">
                                                 <?php
 
                                                     $course_elearning_icon = (isset($info['elearning']['icon']) && $info['elearning']['icon']) ? $info['elearning']['icon'] : null;
@@ -1209,7 +1209,7 @@
                                                 </div>
 
                                                 <div class="row form-group">
-                                                    <div class="col-12 col-md-5">
+                                                    <div class="col-12 col-md-6 col-lg-4">
                                                         <input type="number" min="1" name="course[{{'delivery'}}][{{'elearning'}}][{{'expiration'}}]" id="input-expiration" class="form-control{{ $errors->has('expiration') ? ' is-invalid' : '' }}" placeholder="{{ __('Enter number of months') }}" value="{{ old('expiration', (isset($info['elearning']['expiration']) && $info['elearning']['expiration'] != null) ? $info['elearning']['expiration'] : '' ) }}"autofocus>
 
                                                     </div>
@@ -1309,7 +1309,7 @@
                                             ?>
                                             <div class="row elearning_exam_visible_wrapper @if(isset($event['delivery'][0]['id']) && $event['delivery'][0]['id'] != 143) ? 'd-none' : '' @endif">
 
-                                                <div class="exam_input col-sm-12 col-md-auto col-lg-auto form-group">
+                                                <div class="exam_input col-12 form-group">
                                                     <?php
 
                                                         $course_elearning_exam_icon = (isset($info['elearning']['exam']['icon']) && $info['elearning']['exam']['icon']) ? $info['elearning']['exam']['icon'] : null;
@@ -1352,7 +1352,7 @@
 
                                                     </div>
                                                     <div class="row">
-                                                        <div class="col-12 form-group">
+                                                        <div class="col-12 col-md-6 col-lg-4 form-group">
 
                                                             <input class="hidden" id="input-exam" name="course[{{'delivery'}}][{{'elearning'}}][{{'exam'}}][{{'text'}}]" value="{{ old('exam', (isset($info['elearning']['exam']['text']) && $info['elearning']['exam']['text'] != null) ? $info['elearning']['exam']['text'] : '' ) }}"/>
                                                             <?php $data = isset($info['elearning']['exam']['text']) && $info['elearning']['exam']['text'] != null ? $info['elearning']['exam']['text'] : '' ?>
@@ -1365,7 +1365,7 @@
 
                                                     </div>
                                                     <div class="row">
-                                                        <div class="exam_input col-12 form-group">
+                                                        <div class="exam_input col-12 col-md-6 col-lg-4 form-group">
                                                             <label class="form-control-label" for="input-expiration">{{ __('Exam Activate Months') }} <br> {{ __('(course_elearning_exam_activate_months)') }}</label>
                                                             <div class="input-group">
                                                                 <input type="number" min="1" name="course[{{'delivery'}}][{{'elearning'}}][{{'exam'}}][{{'activate_months'}}]" id="input-exam-activate-months" class="form-control" placeholder="{{ __('Months') }}" value="{{ old('exam_activate_months', (isset($info['elearning']['exam']['activate_months']) && $info['elearning']['exam']['activate_months'] != null) ? $info['elearning']['exam']['activate_months'] : '' ) }}"autofocus>
