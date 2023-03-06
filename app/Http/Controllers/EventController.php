@@ -948,6 +948,7 @@ class EventController extends Controller
 
         if(isset($request->partner_enabled)){
             $partner = true;
+
         }else{
             $partner = false;
         }
@@ -1021,6 +1022,19 @@ class EventController extends Controller
         $data['course_hours_hour'] = isset($requestData['hours']['hour']) ? $requestData['hours']['hour'] : null;
 
         $data['course_partner'] = $partner;
+        $data['course_partner_text'] = $requestData['partner']['text'];
+
+        if(isset($requestData['partner']['visible'])){
+
+            $visible_loaded_data = $requestData['partner']['visible'];
+            $data['course_partner_visible'] = json_encode($this->prepareVisibleData($visible_loaded_data));
+
+        }else{
+
+            $data['course_partner_visible'] = json_encode($this->prepareVisibleData());
+
+        }
+
         $data['course_manager'] = ($syllabus != null) ? true : false;
 
 
@@ -1448,7 +1462,9 @@ class EventController extends Controller
         $infos->course_language_icon = $event_info['course_language_icon'];
 
         $infos->course_partner = $event_info['course_partner'];
+        $infos->course_partner_text = $event_info['course_partner_text'];
         $infos->course_partner_icon = $event_info['course_partner_icon'];
+        $infos->course_partner_visible = $event_info['course_partner_visible'];
 
         $infos->course_manager = $event_info['course_manager'];
         $infos->course_manager_icon = $event_info['course_manager_icon'];

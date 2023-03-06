@@ -218,7 +218,8 @@
         </div>
     </div>
 @endif
-@if($partners != null && count($partners) != 0)
+
+@if($partners != null && count($partners) != 0 && isset($info['partner']['visible']['landing']) && $info['partner']['visible']['landing'] && isset($info['partner']['text']) && $info['partner']['text'] )
     <?php $has_info = true; ?>
     <div class="col-10 col-sm-5 col-md-auto col-lg-auto details">
 
@@ -239,12 +240,9 @@
 
 
         <div class="info-text text-center">
-            <p>Supported By
 
-                </br>
+            {!!  $info['partner']['text'] !!}
 
-            </p>
-            <p>@if($partners[0]['url'] != null && $partners[0]['url'] != "")<a href="{{$partners[0]['url']}}" target="_blank">@endif {{$partners[0]['name']}} @if($partners[0]['url'] != null && $partners[0]['name'] != "")</a>@endif</p>
         </div>
     </div>
 @endif

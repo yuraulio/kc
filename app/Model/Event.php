@@ -1012,7 +1012,9 @@ class Event extends Model
 
 
             $data['partner']['status'] = $infos['course_partner'];
+            $data['partner']['text'] = $infos['course_partner_text'];
             $data['partner']['icon'] = $infos['course_partner_icon'] != null ? json_decode($infos['course_partner_icon'], true) : null;
+            $data['partner']['visible'] = $infos['course_partner_visible'] != null ? json_decode($infos['course_partner_visible'], true) : null;
 
             $data['manager']['status'] = $infos['course_manager'];
             $data['manager']['icon'] = $infos['course_manager_icon'] != null ? json_decode($infos['course_manager_icon'], true) : null;

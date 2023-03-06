@@ -1032,6 +1032,70 @@
                                         @endforeach
                                     </select>
                                     @include('alerts.feedback', ['field' => 'type_id'])
+
+                                    <input class="hidden" id="input-partner" name="course[{{'partner'}}][{{'text'}}]" value="{{ old('partner_text', (isset($info['partner']['text']) && $info['partner']['text'] != null) ? $info['partner']['text'] : '' ) }}"/>
+                                    <?php $data = isset($info['partner']['text']) && $info['partner']['text'] != null ? $info['partner']['text'] : '' ?>
+                                    @include('event.editor.editor', ['toolbar' => 'insertfile image media link anchor codesample','plugins' => 'link','keyinput' => "input-partner-text", 'data'=> "$data", 'inputname' => "'course[partner][text]'" ])
+                                    <!-- anto's editor -->
+                                </div>
+                                <div class="form-group col-12 accordion course-partner-list-visible d-none" id="accordionExample">
+                                    <div class="card">
+                                        <div class="card-header" id="headingThree1" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
+                                            <h5 class="mb-0">Visible on:</h5>
+                                        </div>
+                                        <div id="collapseThree" class="collapse" aria-labelledby="headingThree1" data-parent="#accordionExample">
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col-sm-12 col-md-6 col-lg-2">
+
+                                                        <div class="custom-control custom-checkbox mb-3">
+                                                            <input class="custom-control-input" name="course[{{'partner'}}][{{'visible'}}][{{'landing'}}]" id="input-partner-landing" type="checkbox">
+                                                            <label class="custom-control-label" for="input-partner-landing">Course landing page (summary)</label>
+                                                        </div>
+
+                                                    </div>
+
+                                                    {{--<div class="col-sm-12 col-md-6 col-lg-2">
+
+                                                        <div class="custom-control custom-checkbox mb-3">
+                                                            <input class="custom-control-input" name="course[{{'partner'}}][{{'visible'}}][{{'home'}}]" id="input-partner-home" type="checkbox">
+                                                            <label class="custom-control-label" for="input-partner-home">Course box in home page</label>
+                                                        </div>
+
+                                                    </div>
+
+                                                    <div class="col-sm-12 col-md-6 col-lg-2">
+
+                                                        <div class="custom-control custom-checkbox mb-3">
+                                                            <input class="custom-control-input" name="course[{{'partner'}}][{{'visible'}}][{{'list'}}]" id="input-partner-list" type="checkbox">
+                                                            <label class="custom-control-label" for="input-partner-list">Course box in list page</label>
+                                                        </div>
+
+                                                    </div>
+
+                                                    <div class="col-sm-12 col-md-6 col-lg-2">
+
+                                                        <div class="custom-control custom-checkbox mb-3">
+                                                            <input class="custom-control-input" name="course[{{'partner'}}][{{'visible'}}][{{'invoice'}}]" id="input-partner-invoice" type="checkbox">
+                                                            <label class="custom-control-label" for="input-partner-invoice">Invoice description</label>
+                                                        </div>
+
+                                                    </div>
+
+                                                    <div class="col-sm-12 col-md-6 col-lg-2">
+
+                                                        <div class="custom-control custom-checkbox mb-3">
+                                                            <input class="custom-control-input" name="course[{{'partner'}}][{{'visible'}}][{{'emails'}}]" id="input-partner-emails" type="checkbox">
+                                                            <label class="custom-control-label" for="input-partner-emails">Automated emails</label>
+                                                        </div>
+
+                                                    </div>--}}
+
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
@@ -1976,11 +2040,13 @@
 
         if(status){
             $('.course-partner-list').removeClass('d-none');
+            $('.course-partner-list-visible').removeClass('d-none');
 
             $('#input-partner_id').val([])
 
         }else{
             $('.course-partner-list').addClass('d-none');
+            $('.course-partner-list-visible').addClass('d-none');
 
             $('#input-partner_id').val([])
         }
