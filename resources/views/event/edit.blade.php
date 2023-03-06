@@ -867,7 +867,7 @@
                                                         </label>
                                                     </div>
 
-                                                    <div class="col-12 col-md-5 col-lg-4 input align-self-center @if((isset($course_elearning_icon['link_status']) && $course_elearning_icon['link_status'] == 'off') || !isset($course_elearning_icon['link_status'])) {{'d-none'}} @endif">
+                                                    <div class="col-12 col-md-5 col-lg-4 input align-self-center @if((isset($course_inclass_day_icon['link_status']) && $course_inclass_day_icon['link_status'] == 'off') || !isset($course_inclass_day_icon['link_status'])) {{'d-none'}} @endif">
                                                         <input placeholder="https://example.com" type="text" class="form-control" name="course[{{'delivery'}}][{{'inclass'}}][{{'day'}}][{{'icon'}}][{{'link'}}]" value="{{ old('certificate_icon_link', (isset($course_inclass_day_icon) && $course_inclass_day_icon != null && isset($course_inclass_day_icon['link'])) ? $course_inclass_day_icon['link'] : '' ) }}">
                                                     </div>
                                                 </div>
@@ -987,7 +987,7 @@
                                                         </label>
                                                     </div>
 
-                                                    <div class="col-12 col-md-5 col-lg-4 input align-self-center @if((isset($course_elearning_icon['link_status']) && $course_elearning_icon['link_status'] == 'off') || !isset($course_elearning_icon['link_status'])) {{'d-none'}} @endif">
+                                                    <div class="col-12 col-md-5 col-lg-4 input align-self-center @if((isset($course_inclass_times_icon['link_status']) && $course_inclass_times_icon['link_status'] == 'off') || !isset($course_inclass_times_icon['link_status'])) {{'d-none'}} @endif">
                                                         <input placeholder="https://example.com" type="text" class="form-control" name="course[{{'delivery'}}][{{'inclass'}}][{{'times'}}][{{'icon'}}][{{'link'}}]" value="{{ old('certificate_icon_link', (isset($course_inclass_times_icon) && $course_inclass_times_icon != null && isset($course_inclass_times_icon['link'])) ? $course_inclass_times_icon['link'] : '' ) }}">
                                                     </div>
                                                 </div>

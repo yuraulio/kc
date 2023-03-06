@@ -573,7 +573,7 @@ if (!function_exists('get_image')){
                 //$image = $image . '.webp';
                 $version = false;
             }
-            else if(file_exists(public_path('/')   .$image . '-' . $version . $media['ext'])){
+            else if(isset($media['ext']) && file_exists(public_path('/')   .$image . '-' . $version . $media['ext'])){
                 $image = $image . '-' . $version . $media['ext'];
             }
             else if($image!=''){

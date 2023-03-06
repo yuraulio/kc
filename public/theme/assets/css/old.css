@@ -373,7 +373,7 @@ input[type="number"]#mobile_phone::-webkit-inner-spin-button {
     width: 8rem;
     min-height: 5rem;
     margin: auto;
-
+    padding: 1rem 0;
 }
 
 .details .info-text p{
