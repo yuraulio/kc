@@ -14,7 +14,7 @@
 
 
 @if(isset($info['hours']['visible']['landing']) && $info['hours']['visible']['landing'] && isset($info['hours']['hour']) && $info['hours']['hour'] )
-    <?php $has_info = false; ?>
+    <?php $has_info = true; ?>
     <div class="col-10 col-sm-5 col-md-auto col-lg-auto details">
         @if(isset($info['hours']['icon']) && $info['hours']['icon']['path'] )
 
@@ -35,7 +35,7 @@
 @endif
 
 @if(isset($info['inclass']['dates']['visible']['landing']) && $info['inclass']['dates']['visible']['landing'] && isset($info['inclass']['dates']['text']) && $info['inclass']['dates']['text'] )
-    <?php $has_info = false; ?>
+    <?php $has_info = true; ?>
     <div class="col-10 col-sm-5 col-md-auto col-lg-auto details">
         @if(isset($info['inclass']['dates']['icon']['path']) && $info['inclass']['dates']['icon']['path'] )
 
@@ -218,7 +218,7 @@
         </div>
     </div>
 @endif
-@if($partners != null && !empty($partners))
+@if($partners != null && count($partners) != 0)
     <?php $has_info = true; ?>
     <div class="col-10 col-sm-5 col-md-auto col-lg-auto details">
 

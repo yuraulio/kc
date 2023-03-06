@@ -1018,7 +1018,7 @@ class EventController extends Controller
         $data['course_status'] = $status;
         $data['course_delivery'] = $deliveryId;
         $data['course_hours_text'] = $requestData['hours']['text'];
-        $data['course_hours_hour'] = $requestData['hours']['hour'];
+        $data['course_hours_hour'] = isset($requestData['hours']['hour']) ? $requestData['hours']['hour'] : null;
 
         $data['course_partner'] = $partner;
         $data['course_manager'] = ($syllabus != null) ? true : false;

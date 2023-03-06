@@ -494,7 +494,8 @@ export default {
                         }
 
                     }else{
-                        this.confirmSelection(value)
+
+                        //this.confirmSelection(value)
                     }
 
                 }
