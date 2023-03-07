@@ -350,8 +350,14 @@ export default {
         // console.log('version for update:', this.versionsForUpdate)
         if (this.prevalue) {
             this.setupPrevalue(true);
+            this.init(this.prevalue);
 
 
+
+        }
+    },
+    methods: {
+        init(prevalue){
             if (typeof FileReader === "function") {
                 const reader = new FileReader();
                 reader.onload = (event) => {
@@ -388,7 +394,7 @@ export default {
             }
 
             setTimeout(() => {
-                this.version = this.prevalue.version;
+                this.version = prevalue.version;
                 this.selectedVersion = this.findVersion(this.version);
                 this.versionSelected();
                 if (this.version == 'original' || this.version == 'Original' || this.version == null) {
@@ -396,9 +402,7 @@ export default {
                 }
 
             }, 600);
-        }
-    },
-    methods: {
+        },
         setupPrevalue(from_function = false) {
 
             if(this.prevalue.parrent == null){

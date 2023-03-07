@@ -337,6 +337,7 @@ var mediaMixin = {
                     'Content-Type': 'multipart/form-data'
                 }
             }).then((response) => {
+
                 this.$toast.success('Uploaded Successfully!');
 
 
@@ -453,7 +454,10 @@ var mediaMixin = {
             })
             .catch((error) => {
                 console.log('ERROR: ', error)
-                this.$refs.crpr.setupPrevalue();
+
+                this.$refs.crpr.setupPrevalue(true);
+                this.$refs.crpr.init(this.$refs.crpr.prevalue);
+
                 //console.log("edit error", error.response.data.message);
                 if(this.$refs.crpr !== undefined){
 
