@@ -339,7 +339,7 @@ class MediaController extends Controller
                 $image->save(public_path("/uploads" . $folderPath . "/" . $image_name), 50, $extension);
 
                 // Convert webp image format
-                dispatch((new UploadImageConvertWebp($folderPath , '/'.$image_name))->delay(now()->addSeconds(180)));
+                //dispatch((new UploadImageConvertWebp($folderPath , '/'.$image_name))->delay(now()->addSeconds(180)));
 
                 $size = $image ? $image->filesize() : null;
                 $height = $image ? $image->height() : null;
@@ -520,7 +520,7 @@ class MediaController extends Controller
             return $e->getMessage();
         }
 
-        RenameFile::dispatch($oldUrl, $url, $alttext, $link)->delay(now()->addSeconds(180));
+        //RenameFile::dispatch($oldUrl, $url, $alttext, $link)->delay(now()->addSeconds(180));
 
         $mediaFile->load(["pages", "siblings", "subfiles"]);
 

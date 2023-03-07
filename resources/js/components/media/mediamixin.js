@@ -781,20 +781,17 @@ var mediaMixin = {
                     return file.id == oldFile.id;
                 });
 
-                console.log('MEDIA FILES:')
-                console.log(this.mediaFiles[index])
+                if (this.mediaFiles[index]) {
+                    this.selectedFile = this.mediaFiles[index];
+                    setTimeout(() => {
+                        if(from_save_btn){
+                            this.$refs.crpr.setupPrevalue();
+                        }else{
+                            this.$refs.crpr.setupPrevalue(true);
+                        }
 
-                // if (this.mediaFiles[index]) {
-                //     this.selectedFile = this.mediaFiles[index];
-                //     setTimeout(() => {
-                //         if(from_save_btn){
-                //             this.$refs.crpr.setupPrevalue();
-                //         }else{
-                //             this.$refs.crpr.setupPrevalue(true);
-                //         }
-
-                //     }, 1000);
-                // }
+                    }, 1000);
+                }
             }
         }
     }
