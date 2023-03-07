@@ -231,9 +231,9 @@ export default {
             originalFile: null,
             uploadedVersions: [],
             forUpdate: [],
+            forUpdate1: [],
             uploadedVersionsSiblings: [],
             versionsForUpdate: {},
-            tempVersionsForUpdate: {},
             imgSrc: null,
             cropImg: "",
             data: null,
@@ -581,6 +581,7 @@ export default {
 
             if (this.selectedVersion) {
                 this.forUpdate[this.selectedVersion.version] = this.selectedVersion.version;
+                this.forUpdate1[this.selectedVersion.version] = this.selectedVersion.version;
 
                 this.getCropBoxData()
 
@@ -618,6 +619,7 @@ export default {
             }else{
 
                 this.forUpdate['original'] = 'original';
+                this.forUpdate1['original'] = 'original';
 
                 if(this.versionsForUpdate['original'] === undefined){
                     this.versionsForUpdate['original'] = {
@@ -835,7 +837,8 @@ export default {
 
             let versions = this.versionsForUpdate
 
-            this.tempVersionsForUpdate = this.versionsForUpdate;
+            console.log('Versions pre ajax: ', versions)
+            console.log('length 12:: ',  Object.keys(versions)[Object.keys(versions).length-1])
 
 
            Object.values(versions).forEach(value => {

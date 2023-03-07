@@ -241,7 +241,8 @@
 
 
         <div class="info-text text-center">
-            
+            <p>Supported By</p>
+
             {!!  $info['partner']['text'] !!}
 
         </div>

@@ -284,6 +284,8 @@ var mediaMixin = {
             // edit image version
             if(value != null && value.imgname){
 
+                console.log('VERSION inside image edit: (value)', value.version)
+
                 if(this.$refs.crpr.forUpdate[value.version] === undefined){
                     return false;
                 }
@@ -324,8 +326,6 @@ var mediaMixin = {
             }
 
             this.$refs.crpr.isUploading = true;
-
-            console.log('form Data: ', formData)
 
 
             axios.post('/api/media_manager/edit_image', formData, {
@@ -370,9 +370,29 @@ var mediaMixin = {
                     version = this.$refs.crpr.version
                 }
 
+                // console.log('VERSION: ', version)
+                // console.log('1111: ',this.$refs.crpr.forUpdate)
+
 
                 if(response){
-                    this.getFiles(response.data.data.folder_id, true);
+
+
+
+                    if(this.$refs.crpr !== undefined){
+                        console.log('inside reposnse: version: ', version)
+                        console.log('inside reposnse: forUpdate1: ', Object.keys(this.$refs.crpr.forUpdate1)[Object.keys(this.$refs.crpr.forUpdate1).length-1])
+                        console.log('PRE CALL: ', Object.keys(this.$refs.crpr.forUpdate1)[Object.keys(this.$refs.crpr.forUpdate1).length-1] == version)
+                        if(Object.keys(this.$refs.crpr.forUpdate1)[Object.keys(this.$refs.crpr.forUpdate1).length-1] == version){
+                            console.log('CALL GET FILES')
+                            this.getFiles(response.data.data.folder_id, true);
+
+                            //return false;
+                        }
+                    }
+
+                    //console.log('last item response :', version)
+
+
 
                     delete this.$refs.crpr.forUpdate[version]
 
@@ -388,10 +408,6 @@ var mediaMixin = {
                             //this.$refs.crpr.confirmSelection(response.data.data)
                         }
 
-
-                    }else if(this.$parent.imageVersion){
-
-                        delete this.$refs.crpr.tempVersionsForUpdate[response.data.data.version]
 
                     }
 
