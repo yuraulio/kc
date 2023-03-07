@@ -337,7 +337,6 @@ var mediaMixin = {
                     'Content-Type': 'multipart/form-data'
                 }
             }).then((response) => {
-
                 this.$toast.success('Uploaded Successfully!');
 
 
@@ -454,10 +453,6 @@ var mediaMixin = {
             })
             .catch((error) => {
                 console.log('ERROR: ', error)
-
-                this.$refs.crpr.setupPrevalue(true);
-                this.$refs.crpr.init(this.$refs.crpr.prevalue);
-
                 //console.log("edit error", error.response.data.message);
                 if(this.$refs.crpr !== undefined){
 
@@ -469,7 +464,6 @@ var mediaMixin = {
                 }else{
                     this.$toast.error("Failed to update. " + error);
                 }
-
 
             })
         // })
@@ -787,17 +781,20 @@ var mediaMixin = {
                     return file.id == oldFile.id;
                 });
 
-                if (this.mediaFiles[index]) {
-                    this.selectedFile = this.mediaFiles[index];
-                    setTimeout(() => {
-                        if(from_save_btn){
-                            this.$refs.crpr.setupPrevalue();
-                        }else{
-                            this.$refs.crpr.setupPrevalue(true);
-                        }
+                console.log('MEDIA FILES:')
+                console.log(this.mediaFiles[index])
 
-                    }, 1000);
-                }
+                // if (this.mediaFiles[index]) {
+                //     this.selectedFile = this.mediaFiles[index];
+                //     setTimeout(() => {
+                //         if(from_save_btn){
+                //             this.$refs.crpr.setupPrevalue();
+                //         }else{
+                //             this.$refs.crpr.setupPrevalue(true);
+                //         }
+
+                //     }, 1000);
+                // }
             }
         }
     }
