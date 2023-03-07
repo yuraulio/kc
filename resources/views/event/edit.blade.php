@@ -1619,7 +1619,7 @@
 
 
 
-                                                    <div class="form-group col-12 accordion d-none course-partner-list-visible" id="accordionExample">
+                                                    <div class="form-group col-12 accordion {{(count($eventPartners) != 0) ? '' : 'd-none'}} course-partner-list-visible" id="accordionExample">
                                                         <div class="card">
                                                             <div class="card-header" id="headingThree1" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
                                                                 <h5 class="mb-0">Visible on:</h5>

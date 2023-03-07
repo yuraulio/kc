@@ -325,6 +325,8 @@ var mediaMixin = {
 
             this.$refs.crpr.isUploading = true;
 
+            console.log('form Data: ', formData)
+
 
             axios.post('/api/media_manager/edit_image', formData, {
                 headers: {
@@ -613,12 +615,12 @@ var mediaMixin = {
             if(this.firstLoadedData.length == 0){
                 this.firstLoadedData = $event
 
-            }            
+            }
             this.warning = false;
 
-            
 
-           
+
+
                 if (this.selectedFile && this.selectedFile.id != $event.id && !baseUrl.includes('admin')){
 
                     this.updatedMediaImage($event)
@@ -631,8 +633,8 @@ var mediaMixin = {
                     this.selectedFile = $event;
                     this.$modal.show('edit-image-modal');
                 }
-            
-            
+
+
         },
         deleteFile($event) {
 
@@ -649,7 +651,7 @@ var mediaMixin = {
             if ($event.parrent == null) {
                 pagesText = pagesText + "This is an original image, this action will delete all its subimages that exist.";
             }
-        
+
             let baseUrl = location.protocol + '//' + location.host;
 
 
