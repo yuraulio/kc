@@ -153,7 +153,7 @@ class MediaController extends Controller
             $file = Storage::disk('public')->putFileAs($path, $image, $image_name, 'public');
 
             // convert uploaded image to webp format
-            dispatch((new UploadImageConvertWebp($path, $image_name1))->delay(now()->addSeconds(5)));
+            dispatch((new UploadImageConvertWebp($path, $image_name1))->delay(now()->addSeconds(120)));
 
             $data = getimagesize($request->file);
             $original_image_width = $data[0];
@@ -219,7 +219,7 @@ class MediaController extends Controller
                 $image->save(public_path("/uploads" . $path . $version_name), 80, $extension);
 
                 // Convert version image to webp format
-                dispatch((new UploadImageConvertWebp($path, $version_name))->delay(now()->addSeconds(5)));
+                dispatch((new UploadImageConvertWebp($path, $version_name))->delay(now()->addSeconds(120)));
 
                 // save to db
                 $mfile = $this->storeFile(
@@ -339,7 +339,7 @@ class MediaController extends Controller
                 $image->save(public_path("/uploads" . $folderPath . "/" . $image_name), 50, $extension);
 
                 // Convert webp image format
-                dispatch((new UploadImageConvertWebp($folderPath , '/'.$image_name))->delay(now()->addSeconds(5)));
+                dispatch((new UploadImageConvertWebp($folderPath , '/'.$image_name))->delay(now()->addSeconds(120)));
 
                 $size = $image ? $image->filesize() : null;
                 $height = $image ? $image->height() : null;
