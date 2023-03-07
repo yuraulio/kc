@@ -284,11 +284,7 @@ var mediaMixin = {
             // edit image version
             if(value != null && value.imgname){
 
-                console.log('VERSION inside image edit: (value)', value.version)
-
-
                 if(this.$refs.crpr.forUpdate[value.version] === undefined){
-                    console.log('why: ', value.version)
                     return false;
                 }
 
@@ -305,8 +301,6 @@ var mediaMixin = {
                 formData.append('height_ratio', value.height_ratio);
                 formData.append('directory', this.selectedFile.folder_id);
                 formData.append('id', value.id);
-
-                console.log('TEST: ', value.version)
 
             }else{
 
@@ -374,33 +368,11 @@ var mediaMixin = {
                     version = this.$refs.crpr.version
                 }
 
-                console.log('VERSION: ', version)
-                console.log('1111: ',this.$refs.crpr.forUpdate)
-
 
                 if(response){
-
-
-
-                    if(this.$refs.crpr !== undefined){
-                        console.log('inside reposnse: version: ', version)
-                        console.log('inside reposnse: forUpdate1 latest version: ', Object.keys(this.$refs.crpr.forUpdate1)[Object.keys(this.$refs.crpr.forUpdate1).length-1])
-                        console.log('PRE CALL: ', Object.keys(this.$refs.crpr.forUpdate1)[Object.keys(this.$refs.crpr.forUpdate1).length-1] == version)
-                        if(Object.keys(this.$refs.crpr.forUpdate1)[Object.keys(this.$refs.crpr.forUpdate1).length-1] == version){
-                            console.log('CALL GET FILES')
-                            this.getFiles(response.data.data.folder_id, true);
-
-                            //return false;
-                        }
-                    }
-
-                    //console.log('last item response :', version)
-
-
+                    this.getFiles(response.data.data.folder_id, true);
 
                     delete this.$refs.crpr.forUpdate[version]
-
-                    console.log('new ', this.$refs.crpr.forUpdate)
 
                     this.selectedFile = response.data.data
 
@@ -414,6 +386,10 @@ var mediaMixin = {
                             //this.$refs.crpr.confirmSelection(response.data.data)
                         }
 
+
+                    }else if(this.$parent.imageVersion){
+
+                        delete this.$refs.crpr.tempVersionsForUpdate[response.data.data.version]
 
                     }
 
