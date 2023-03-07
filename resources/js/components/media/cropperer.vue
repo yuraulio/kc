@@ -842,6 +842,7 @@ export default {
 
             console.log('Versions pre ajax: ', versions)
             console.log('length 12:: ',  Object.keys(versions)[Object.keys(versions).length-1])
+            console.log('pre FOR UPDATE:', this.forUpdate)
 
 
            Object.values(versions).forEach(value => {

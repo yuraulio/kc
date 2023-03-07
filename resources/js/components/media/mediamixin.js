@@ -286,7 +286,9 @@ var mediaMixin = {
 
                 console.log('VERSION inside image edit: (value)', value.version)
 
+
                 if(this.$refs.crpr.forUpdate[value.version] === undefined){
+                    console.log('why: ', value.version)
                     return false;
                 }
 
@@ -303,6 +305,8 @@ var mediaMixin = {
                 formData.append('height_ratio', value.height_ratio);
                 formData.append('directory', this.selectedFile.folder_id);
                 formData.append('id', value.id);
+
+                console.log('TEST: ', value.version)
 
             }else{
 
@@ -449,6 +453,7 @@ var mediaMixin = {
             })
             .catch((error) => {
                 console.log('ERROR: ', error)
+                this.getFiles(this.selectedFile.folder_id, true)
                 //console.log("edit error", error.response.data.message);
                 if(this.$refs.crpr !== undefined){
 
@@ -460,6 +465,7 @@ var mediaMixin = {
                 }else{
                     this.$toast.error("Failed to update. " + error);
                 }
+
 
             })
         // })
