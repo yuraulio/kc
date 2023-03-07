@@ -370,8 +370,8 @@ var mediaMixin = {
                     version = this.$refs.crpr.version
                 }
 
-                // console.log('VERSION: ', version)
-                // console.log('1111: ',this.$refs.crpr.forUpdate)
+                console.log('VERSION: ', version)
+                console.log('1111: ',this.$refs.crpr.forUpdate)
 
 
                 if(response){
@@ -380,7 +380,7 @@ var mediaMixin = {
 
                     if(this.$refs.crpr !== undefined){
                         console.log('inside reposnse: version: ', version)
-                        console.log('inside reposnse: forUpdate1: ', Object.keys(this.$refs.crpr.forUpdate1)[Object.keys(this.$refs.crpr.forUpdate1).length-1])
+                        console.log('inside reposnse: forUpdate1 latest version: ', Object.keys(this.$refs.crpr.forUpdate1)[Object.keys(this.$refs.crpr.forUpdate1).length-1])
                         console.log('PRE CALL: ', Object.keys(this.$refs.crpr.forUpdate1)[Object.keys(this.$refs.crpr.forUpdate1).length-1] == version)
                         if(Object.keys(this.$refs.crpr.forUpdate1)[Object.keys(this.$refs.crpr.forUpdate1).length-1] == version){
                             console.log('CALL GET FILES')
@@ -395,6 +395,8 @@ var mediaMixin = {
 
 
                     delete this.$refs.crpr.forUpdate[version]
+
+                    console.log('new ', this.$refs.crpr.forUpdate)
 
                     this.selectedFile = response.data.data
 

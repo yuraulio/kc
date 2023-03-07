@@ -500,6 +500,9 @@ export default {
 
                 }
             }
+
+            this.forUpdate =[]
+            this.forUpdate1 = []
         },
         confirmSelection(image) {
             if (image == null) {
