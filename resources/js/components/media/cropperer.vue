@@ -231,9 +231,9 @@
                 originalFile: null,
                 uploadedVersions: [],
                 forUpdate: [],
+                forUpdate1: [],
                 uploadedVersionsSiblings: [],
                 versionsForUpdate: {},
-                tempVersionsForUpdate: {},
                 imgSrc: null,
                 cropImg: "",
                 data: null,
@@ -409,7 +409,6 @@
 
                 if(this.$parent.$parent.firstLoadedData.parrent == null){
                     if((this.$parent.$parent.firstLoadedData.id != this.parrentImage.id && from_function)){
-
                         this.confirmSelection(this.parrentImage)
                     }
                 }else{
@@ -474,6 +473,7 @@
                                 this.confirmSelection(value)
 
                             }else{
+
                                 this.confirmSelection(value)
                             }
 
@@ -490,7 +490,8 @@
                         if (!baseUrl.includes('admin')){
 
                             if(this.$parent.$parent.firstLoadedData.id != this.parrentImage.id && value.version == 'original'){
-                                    this.confirmSelection(value)
+
+                                this.confirmSelection(value)
                             }
 
                         }else{
@@ -500,6 +501,9 @@
 
                     }
                 }
+
+                this.forUpdate =[]
+                this.forUpdate1 = []
             },
             confirmSelection(image) {
                 if (image == null) {
@@ -581,6 +585,7 @@
 
                 if (this.selectedVersion) {
                     this.forUpdate[this.selectedVersion.version] = this.selectedVersion.version;
+                    this.forUpdate1[this.selectedVersion.version] = this.selectedVersion.version;
 
                     this.getCropBoxData()
 
@@ -618,6 +623,7 @@
                 }else{
 
                     this.forUpdate['original'] = 'original';
+                    this.forUpdate1['original'] = 'original';
 
                     if(this.versionsForUpdate['original'] === undefined){
                         this.versionsForUpdate['original'] = {
@@ -835,7 +841,9 @@
 
                 let versions = this.versionsForUpdate
 
-                this.tempVersionsForUpdate = this.versionsForUpdate;
+                console.log('Versions pre ajax: ', versions)
+                console.log('length 12:: ',  Object.keys(versions)[Object.keys(versions).length-1])
+                console.log('pre FOR UPDATE:', this.forUpdate)
 
 
                Object.values(versions).forEach(value => {
