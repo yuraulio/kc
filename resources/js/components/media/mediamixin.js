@@ -453,7 +453,7 @@ var mediaMixin = {
             })
             .catch((error) => {
                 console.log('ERROR: ', error)
-                this.getFiles(this.selectedFile.folder_id, true)
+                this.$refs.crpr.setupPrevalue();
                 //console.log("edit error", error.response.data.message);
                 if(this.$refs.crpr !== undefined){
 
