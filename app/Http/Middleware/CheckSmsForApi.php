@@ -56,7 +56,7 @@ class CheckSmsForApi
         require_once("../app/Apifon/Model/SubscriberInformation.php");
 
 
-
+        return $next($request);
         if (Auth::guest() || env('APP_DEBUG') == true) {
             return $next($request);
         }

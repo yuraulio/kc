@@ -64,7 +64,7 @@ class CheckForSMSCoockie
             //dd($user);
 
             if($user){
-                if(isset($_COOKIE['auth-'.$user->id])){
+                /*if(isset($_COOKIE['auth-'.$user->id])){
                     $cookie = $_COOKIE['auth-'. $user->id];
 
                     if(!$user->cookiesSMS()->where('coockie_value',$cookie)->first()){
@@ -99,9 +99,9 @@ class CheckForSMSCoockie
 
                 //dd($user->cookiesSMS()->where('coockie_value',$cookie)->first());
                 //dd($cookie);
-                $cookieSms = $user->cookiesSMS()->where('coockie_value',$cookie)->first();
+                $cookieSms = $user->cookiesSMS()->where('coockie_value',$cookie)->first();*/
                 
-                if(!$cookieSms->sms_verification && $user->mobile != ''){
+                /*if(!$cookieSms->sms_verification && $user->mobile != ''){
                 
                     $codeExpired = strtotime($cookieSms->updated_at);
                     $codeExpired  = (time() - $codeExpired) / 60;
@@ -150,7 +150,7 @@ class CheckForSMSCoockie
                     }
                     //return $next($request);
                     return redirect('/sms-verification/' . $cookie );
-                }
+                }*/
                 /*else if(($user->consent == '' || $user->terms == 0)){
                     if($request->is("data-privacy-policy") || $request->is("logmeout") || $request->is("update-consent")) {
                         return $next($request);
@@ -159,7 +159,7 @@ class CheckForSMSCoockie
                         return redirect('/data-privacy-policy');
                     }
                 }*/
-                else if(($user->consent == '' || $user->terms == 0) && !$user->instructor->first()){
+                /*else*/ if(($user->consent == '' || $user->terms == 0) && !$user->instructor->first()){
                     
                     $page = Page::find(4);
                     $pageSlug = $page->slug;
