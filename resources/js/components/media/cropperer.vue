@@ -846,7 +846,7 @@
                 // console.log('pre FOR UPDATE:', this.forUpdate)
 
 
-               Object.values(versions).forEach(value => {
+               Object.values(versions).forEach(async value => {
 
                     let cropper = value.instance
 
@@ -857,17 +857,20 @@
                             width: value.crop_data.width,
                             height: value.crop_data.height,
                         }).toBlob(
-                            (blob) => {
+                            async (blob) => {
+                                console.log('emit')
                                 // blob.version = this.version;
-                                this.$emit(event, value);
+                                await this.$emit(event, value);
+                                console.log('emit2')
                             },
                             "image/jpeg",
                             this.compression / 100
                         );
                     }else{
+                        console.log('emit3')
                         //console.log('update only alt text')
                         //update only link and alt text
-                        this.$emit(event, value);
+                        await this.$emit(event, value);
                     }
 
                 })
