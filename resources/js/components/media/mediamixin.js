@@ -275,8 +275,8 @@ var mediaMixin = {
                 })
             }
         },
-        makeRequest(formData){
-            let res = axios.post('/api/media_manager/edit_image', formData, {
+        async makeRequest(formData){
+            let res = await axios.post('/api/media_manager/edit_image', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
@@ -286,6 +286,7 @@ var mediaMixin = {
         parseRequest(response, value){
 
             console.log('test test test')
+            console.log(response)
             console.log(value)
 
                 this.$toast.success('Uploaded Successfully!');
