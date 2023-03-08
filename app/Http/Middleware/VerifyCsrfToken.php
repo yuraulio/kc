@@ -24,7 +24,8 @@ class VerifyCsrfToken extends Middleware
         'payment-dispatch/ok/*',
         '/elearning/saveNote',
         '/elearning/save',
-        '/getdropbox'
+        '/getdropbox',
+        '/api/media_manager/edit_image',
 
     ];
 }

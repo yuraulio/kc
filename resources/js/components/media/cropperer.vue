@@ -144,7 +144,7 @@
                 </div>
                 <div class="row mb-2">
                     <div class="col-lg-12">
-                        <button @click="upload('edit')" class="btn btn-soft-success btn-block w-100 mt-2" :disabled="isUploading">
+                        <button type="button" @click="upload('edit')" class="btn btn-soft-success btn-block w-100 mt-2" :disabled="isUploading">
                             <span v-if="isUploading"><i class="fas fa-spinner fa-spin"></i> Saving...</span>
                             <span v-else>
                                 Save
@@ -155,12 +155,12 @@
                         <a :href="getUrl()" target="_blank" class="btn btn-soft-warning w-100 mt-2">View</a>
                     </div>
                     <div class="col-4">
-                        <button @click="reset();" class="btn btn-soft-info btn-block w-100 mt-2">
+                        <button type="button" @click="reset();" class="btn btn-soft-info btn-block w-100 mt-2">
                             Reset
                         </button>
                     </div>
                     <div class="col-4">
-                        <button @click="close()" class="btn btn-soft-secondary btn-block w-100 mt-2">
+                        <button type="button" @click="close()" class="btn btn-soft-secondary btn-block w-100 mt-2">
                             Cancel
                         </button>
                     </div>
@@ -841,9 +841,9 @@
 
                 let versions = this.versionsForUpdate
 
-                console.log('Versions pre ajax: ', versions)
-                console.log('length 12:: ',  Object.keys(versions)[Object.keys(versions).length-1])
-                console.log('pre FOR UPDATE:', this.forUpdate)
+                // console.log('Versions pre ajax: ', versions)
+                // console.log('length 12:: ',  Object.keys(versions)[Object.keys(versions).length-1])
+                // console.log('pre FOR UPDATE:', this.forUpdate)
 
 
                Object.values(versions).forEach(value => {
