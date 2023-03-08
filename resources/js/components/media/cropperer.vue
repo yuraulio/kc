@@ -852,22 +852,24 @@
 
                     // update crop data
                     if(cropper && value.crop_data !== undefined){
+
                         //console.log('update all infos')
                         cropper.getCroppedCanvas({
                             width: value.crop_data.width,
                             height: value.crop_data.height,
                         }).toBlob(
                             async (blob) => {
-                                console.log('emit')
+                                //console.log('emit')
                                 // blob.version = this.version;
                                 await this.$emit(event, value);
-                                console.log('emit2')
+                                //console.log('emit2')
                             },
                             "image/jpeg",
                             this.compression / 100
                         );
+                        //console.log('version: ', value.version)
                     }else{
-                        console.log('emit3')
+                        //console.log('emit3')
                         //console.log('update only alt text')
                         //update only link and alt text
                         await this.$emit(event, value);

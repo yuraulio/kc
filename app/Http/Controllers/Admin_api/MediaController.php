@@ -344,6 +344,8 @@ class MediaController extends Controller
                 $size = $image ? $image->filesize() : null;
                 $height = $image ? $image->height() : null;
                 $width = $image ? $image->width() : null;
+
+
             }
 
             $parent_id = $request->parent_id;
