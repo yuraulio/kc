@@ -497,7 +497,8 @@ export default {
     },
     methods: {
         // imageEdit(){
-        //     console.log(this.mediaMixin.imageEdit)
+        //     alert('from media manager')
+        //     this.mediaMixin.imageEdit
         // },
         registerFile($event) {
             this.regFile = $event.target.files[0];

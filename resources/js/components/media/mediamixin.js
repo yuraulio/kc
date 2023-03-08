@@ -276,11 +276,19 @@ var mediaMixin = {
             }
         },
         async makeRequest(formData){
-            let res = await axios.post('/api/media_manager/edit_image', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-            });
+            console.log(formData)
+            let res = fetch("/api/media_manager/edit_image", {
+                method: 'post',
+
+                body: formData
+            })
+                console.log(res)
+
+            // let res = await axios.post('/api/media_manager/edit_image', formData, {
+            //     headers: {
+            //         'Content-Type': 'multipart/form-data'
+            //     }
+            // });
             return res
         },
         parseRequest(response, value){
@@ -403,7 +411,6 @@ var mediaMixin = {
 
         },
         async imageEdit($event) {
-            //alert('image edit func')
 
             let value = $event
             var formData = new FormData();
