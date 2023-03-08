@@ -285,9 +285,9 @@ var mediaMixin = {
         },
         parseRequest(response, value){
 
-            console.log('test test test')
-            console.log(response)
-            console.log(value)
+            //console.log('test test test')
+            //console.log(response)
+            //console.log(value)
 
                 this.$toast.success('Uploaded Successfully!');
 
@@ -403,6 +403,7 @@ var mediaMixin = {
 
         },
         async imageEdit($event) {
+            //alert('image edit func')
 
             let value = $event
             var formData = new FormData();
@@ -454,14 +455,14 @@ var mediaMixin = {
 
             this.$refs.crpr.isUploading = true;
 
-            console.log('1')
+            //console.log('1')
             let response = await this.makeRequest(formData)
-            console.log(response)
-            console.log('2')
+            //console.log(response)
+            //console.log('2')
 
 
            this.parseRequest(response,value)
-            console.log('3')
+            //console.log('3')
 
             //console.log("await response => ", response)
 
