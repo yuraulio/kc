@@ -276,6 +276,7 @@
                                         <input class="required" id="mobile" onkeyup="checkPhoneNumber(this)" type="number" readonly  name="mobile[]" value="{{old('mobile',$mobile[0])}}"/>
                                         <label id="mobile-error1" style="display:none" class="error error-mobile" for="mobile"></label>
                                         <input type="hidden" name="mobileCheck[]" id="mobileCheck" value="{{old('mobile',$mobile[0])}}">
+										<input type="hidden" name="country_code[]" id="country_code_hidden" value="{{isset($country_code[0]) ? $country_code[0] : ''}}">
 									</div>
 								</div>	
 								<div class="form-row">
