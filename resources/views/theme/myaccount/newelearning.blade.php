@@ -214,7 +214,7 @@
 
                                 ?>
 
-                              <li class="lesson {{$vimeoVideo[1]}}" data-completed="{{isset($video_seen[$vimeoVideo[1]]) ? $video_seen[$vimeoVideo[1]]['seen'] : 0}}" data-link="{{$lesson['links']}}" data-note="{{$notesss[$vimeoVideo[1]]}}" id="{{$frame1}}">
+                              <li class="lesson {{$vimeoVideo[1]}} {{$lesson['id']}}" data-completed="{{isset($video_seen[$vimeoVideo[1]]) ? $video_seen[$vimeoVideo[1]]['seen'] : 0}}" data-link="{{$lesson['links']}}" data-note="{{$notesss[$vimeoVideo[1]]}}" id="{{$frame1}}">
 
                                 <a class="" href="javascript:void(0)" onclick="play_video('{{$path}}','{{$frame1}}','{video{{$lesson['id']}}}', '{{$lesson['id']}}')" tabindex="0">
                                     <?php
@@ -1152,8 +1152,8 @@
 
             let watchingTopic = $('.isWatching').closest('.topic')[0]
             watchingTopic = $(watchingTopic).find('.topic-info_title')[0]
+            
             let topicTitle = $(watchingTopic).data('topic-slug');
-
             let last = prev_topicId[prev_topicId.length - 1]
 
             if(topicTitle != last){
@@ -1209,18 +1209,19 @@
           function play_video(video,playingVideo,vk,lesson){
 
             video = video + '?title=false'
-
+            
             if(previousVideo !==false){
-
-            $('.isWatching').removeClass('isWatching')
-
-            document.getElementById(previousVideo).classList.remove('isWatching')
-
+               $('.isWatching').removeClass('isWatching')
+               document.getElementById(previousVideo).classList.remove('isWatching')
             }
 
+            if(previousVideo != playingVideo){
+               document.getElementById(playingVideo).classList.add('isWatching')
+            }else{
 
-
-             document.getElementById(playingVideo).classList.add('isWatching')
+               $('.' + lesson).addClass('isWatching')
+            }
+             
 
              tabWatching = playingVideo;
              previousVideo = playingVideo;
