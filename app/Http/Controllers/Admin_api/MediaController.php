@@ -374,11 +374,7 @@ class MediaController extends Controller
             //     TinifyImage::dispatch(public_path() . $mfile->full_path, $mfile->id)->delay(now()->addSeconds(5));
             // }
 
-            $data_res = new MediaFileResource($mfile);
-
-            Log::debug((array) $data_res);
-
-            return response()->json(['data' => $data_res], 200);
+            return response()->json(['data' => new MediaFileResource($mfile)], 200);
         } catch (Exception $e) {
             Log::error("Failed update file . " . $e->getMessage());
             return response()->json(['message' => $e->getMessage()], 400);
