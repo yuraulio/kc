@@ -1215,12 +1215,12 @@
                document.getElementById(previousVideo).classList.remove('isWatching')
             }
 
-            if(previousVideo != playingVideo){
+            /*if(previousVideo != playingVideo){
                document.getElementById(playingVideo).classList.add('isWatching')
-            }else{
+            }else{*/
 
                $('.' + lesson).addClass('isWatching')
-            }
+            //}
              
 
              tabWatching = playingVideo;
