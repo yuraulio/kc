@@ -18,6 +18,7 @@ class FBPixelService
 
     public function __construct()
     {
+        return;
         //knowcrunch
         $this->accessToken = 'EAA3qLyUpL7kBAI4e5zZBqa2g3jxyNIZBLofS6Nk85UG5mMs9QuVHpokkgYHzxfZBNm0t1Ty2uAbpxqBSyj5yrhBGInDr9DW6u3RRbijMSw6XN27NoEMzcOnskWZAVjQ8quN53YX1XhFZAa1aanQ3BZAgRUiT4ZAAtdU3GJOpjWhIjRdzWsVyqZCP';//env('ACCESS_TOKEN');
         $this->pixelID = '1745172385734431';
@@ -28,6 +29,7 @@ class FBPixelService
 
     public function sendEvent($event, $data)
     {
+        return;
         $user_data = (new UserData())
             ->setClientIpAddress($_SERVER['REMOTE_ADDR'])
             ->setClientUserAgent($_SERVER['HTTP_USER_AGENT']);
@@ -58,6 +60,7 @@ class FBPixelService
 
     private function getUserData()
     {
+        return;
         $remoteAddress = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : "127.0.0.1";
         $httpUSER = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.54 Safari/537.36";
 
@@ -80,6 +83,7 @@ class FBPixelService
 
     public function sendLeaderEvent($data)
     {
+        return;
         $eventData = ['event_id' => $data['Event_ID'],'event_name'=>'Lead','event_source_url'=>url('/'),'action_source'=>'website'];
 
         $event = (new Event($eventData))
@@ -97,6 +101,7 @@ class FBPixelService
 
     public function sendViewContentEvent($data)
     {
+        return;
         if (!isset($data['tigran'])) {
             return;
         }
@@ -128,7 +133,7 @@ class FBPixelService
 
     public function sendAddToCart($data)
     {
-
+        return;
         if (!isset($data['tigran'])) {
             return;
         }
@@ -161,6 +166,7 @@ class FBPixelService
 
     public function sendPurchaseEvent($data)
     {
+        return;
         if (!isset($data['tigran'])) {
             return;
         }
@@ -194,6 +200,7 @@ class FBPixelService
 
     public function sendPageViewEvent()
     {
+        return;
         $eventData = ['event_id' => 'kc_' . time(),'event_name'=>'PageView','event_source_url'=>url('/'),'action_source'=>'website'];
 
         $event = (new Event($eventData))
@@ -211,7 +218,7 @@ class FBPixelService
 
     public function sendAddBillingInfoEvent($data)
     {
-
+        return;
         if (!isset($data['tigran'])) {
             return;
         }
@@ -242,7 +249,7 @@ class FBPixelService
 
     public function sendAddPaymentInfoEvent($data)
     {
-
+        return;
         if (!isset($data['tigran'])) {
             return;
         }
@@ -273,6 +280,7 @@ class FBPixelService
 
     public function sendCompleteRegistrationEvent($data)
     {
+        return;
         if (!isset($data['tigran'])) {
             return;
         }
@@ -302,6 +310,7 @@ class FBPixelService
 
     public function sendContactEvent()
     {
+        return;
         $eventData = ['event_id' => 'kc_' . time(),'event_name'=>'Contact','event_source_url'=>url('/'),'action_source'=>'website'];
 
         $event = (new Event($eventData))
@@ -319,6 +328,7 @@ class FBPixelService
 
     public function sendStartTrialEvent()
     {
+        return;
         $eventData = ['event_id' => 'kc_' . time(),'event_name'=>'Start Trial','event_source_url'=>url('/'),'action_source'=>'website'];
 
         $event = (new Event($eventData))
