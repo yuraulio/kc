@@ -100,13 +100,14 @@ class Event extends Model
     //forEventEdit
     public function allTopics()
     {
+
         if($this->delivery->first() && $this->delivery->first()->id == 143){
-            return $this->belongsToMany(Topic::class, 'event_topic_lesson_instructor')->select('topics.*','topic_id','instructor_id')->where('instructor_id','!=', NULL)->where('instructor_id','!=', 0)
+            return $this->belongsToMany(Topic::class, 'event_topic_lesson_instructor')->select('topics.*','topic_id','instructor_id')
             ->withPivot('event_id','topic_id','lesson_id','instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room', 'priority','automate_mail','send_automate_mail')->with('lessons.instructor')->orderBy('event_topic_lesson_instructor.priority','asc');
         }else{
 
-            return $this->belongsToMany(Topic::class, 'event_topic_lesson_instructor')->select('topics.*','topic_id','instructor_id')->where('instructor_id','!=', NULL)->where('instructor_id','!=', 0)
-            ->withPivot('event_id','topic_id','lesson_id','instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room', 'priority','automate_mail','send_automate_mail')->with('lessons.instructor')->orderBy('event_topic_lesson_instructor.time_starts','asc');
+            return $this->belongsToMany(Topic::class, 'event_topic_lesson_instructor')->select('topics.*','topic_id','instructor_id')
+            ->withPivot('event_id','topic_id','lesson_id','instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room', 'priority','automate_mail','send_automate_mail')->with('lessons.instructor')->with('lessons.instructor')->orderBy('event_topic_lesson_instructor.time_starts','asc');
         }
 
     }
