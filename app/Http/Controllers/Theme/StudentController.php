@@ -1054,8 +1054,12 @@ class StudentController extends Controller
         if($notess != ""){
             $notes = json_decode($notess->pivot['notes'],true);
             //dd($notes);
+
+            $vimeoKey = explode(' ',$request->vimeoId);
+            $vimeoKey = isset($vimeoKey[0]) ? $vimeoKey[0] : $key;
+
             foreach($notes as $key => $note){
-                if($key == $request->vimeoId){
+                if($key == $vimeoKey){
 
                     //dd($request->text);
                     //$note =  preg_replace( '/[^A-Za-z0-9\-]/', ' ',  $request->text );
@@ -1081,7 +1085,7 @@ class StudentController extends Controller
         return response()->json([
             'success' => true,
             'text' => $request->text,
-            'vimeoId' =>$request->vimeoId
+            'vimeoId' =>$vimeoKey
         ]);
 
     }
