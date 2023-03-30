@@ -45,14 +45,14 @@ class CartController extends Controller
         $this->middleware('registration.check')->except('cartIndex','completeRegistration','validation','checkCode','add');
         //$this->middleware('registration.check');
         $this->middleware('billing.check')->only('billingIndex','billing','checkoutIndex');
-        
+
         $fbp->sendPageViewEvent();
 
     }
 
 
     private function initCartDetails($data){
-        
+
         $event_id = 0;
         $data['price'] = 'free';
         $data['type'] = -1;
@@ -71,9 +71,9 @@ class CartController extends Controller
                 $totalitems += $item->qty;
                 $event_id = $item->options->event;
                 $event_type = $item->options->type;
-                
+
                 $data['itemid'] = $item->rowId;
-            
+
                 break;
             }
 
@@ -82,7 +82,7 @@ class CartController extends Controller
 
                 $data['elearning'] = $ev->delivery->first() && $ev->delivery->first()->id == 143 ? true : false;
                 $data['eventId'] = $event_id;
-               
+
                 if($ev->view_tpl == 'event_free_coupon'){
                     $data['couponEvent'] = true;
                 }
@@ -114,22 +114,22 @@ class CartController extends Controller
                 $eventInfo = $ev->event_info();
                 if(isset($eventInfo['delivery']) && $eventInfo['delivery'] == 143){
 
-                    $data['duration'] = isset($eventInfo['elearning']['visible']['emails']) && isset($eventInfo['elearning']['expiration']) && 
-                                        $eventInfo['elearning']['visible']['emails'] && isset($eventInfo['elearning']['text']) ?  
+                    $data['duration'] = isset($eventInfo['elearning']['visible']['emails']) && isset($eventInfo['elearning']['expiration']) &&
+                                        $eventInfo['elearning']['visible']['emails'] && isset($eventInfo['elearning']['text']) ?
                                                     $eventInfo['elearning']['expiration'] . ' ' . $eventInfo['elearning']['text']: '';
-        
+
                 }else if(isset($eventInfo['delivery']) && $eventInfo['delivery'] == 139){
-        
-                    $data['duration'] = isset($eventInfo['inclass']['dates']['visible']['emails']) && isset($eventInfo['inclass']['dates']['text']) && 
+
+                    $data['duration'] = isset($eventInfo['inclass']['dates']['visible']['emails']) && isset($eventInfo['inclass']['dates']['text']) &&
                                             $eventInfo['inclass']['dates']['visible']['emails'] ?  $eventInfo['inclass']['dates']['text'] : '';
-        
+
                 }
 
                 $data['hours'] = isset($eventInfo['hours']['hour']) && isset( $eventInfo['hours']['text']) ? $eventInfo['hours']['hour'] . ' ' . $eventInfo['hours']['text'] : '';
 
                 $data['city_event'] = $ev->city->first() ? $ev->city->first()->name : '';
                 $data['coupons'] = $ev->coupons->where('price','>',0)->toArray();
-                
+
             }
 
             $data['eventId'] = $event_id;
@@ -137,7 +137,7 @@ class CartController extends Controller
 
             $cart_contents = Cart::content();
             foreach ($cart_contents as $item){
-               
+
                 if($item->options->has('type')){
                     $data['type'] = $item->options->type;
                 }
@@ -156,14 +156,14 @@ class CartController extends Controller
                 break;
             }
         }
-    
+
         if(Session::get('coupon_code')){
-           
+
             $data['price'] = Session::get('coupon_price') * $totalitems;
             $data['savedPrice'] = $oldPrice - Session::get('coupon_price') * $totalitems;
             $data['showPrice'] = number_format($data['price'], 2, ".", ",");//$tvalue->pivot->price * $totalitems;
             $tr_price = Session::get('coupon_price') * $totalitems;
-            
+
         }
 
         if(Session::get('priceOf')){
@@ -192,7 +192,7 @@ class CartController extends Controller
             $data['eventFree'] = true;
         }
 
- 
+
         if(is_numeric($data['price']) && ($data['price'] - floor($data['price'])>0)){
             $data['showPrice'] = number_format($data['price'] , 2 , '.', ',');
             $data['oldPrice'] = number_format($oldPrice , 2 , '.', ',');
@@ -215,10 +215,10 @@ class CartController extends Controller
 
 
         $data['tigran'] = ['Price' => $tr_price,'Product_id' => $data['eventId'], 'Product_SKU' => $data['eventId'],
-                    'ProductCategory' => $data['categoryScript'], 'ProductName' =>  $ev->title, 'Quantity' => $totalitems,'TicketType'=>$ticketType,'Event_ID' => 'kc_' . time() 
+                    'ProductCategory' => $data['categoryScript'], 'ProductName' =>  $ev->title, 'Quantity' => $totalitems,'TicketType'=>$ticketType,'Event_ID' => 'kc_' . time()
         ];
 
-       
+
         if(Auth::user()){
             $data['tigran']['User_id'] = Auth::user()->id;
         }else{
@@ -231,9 +231,9 @@ class CartController extends Controller
 
 
     public function mobileCheck(Request $request){
-        
-        
-        $data = array();        
+
+
+        $data = array();
         $validatorArray = [];
 
         $phones = [];
@@ -250,7 +250,7 @@ class CartController extends Controller
 
         $request->request->add(['mobileCheck' => $phones]);
         $validatorArray['mobileCheck.*'] = 'phone:AUTO';
-        
+
 
         $validator = Validator::make($request->all(), $validatorArray);
         //dd($validator);
@@ -262,11 +262,11 @@ class CartController extends Controller
             ];
 
         } else {
-           
+
         	return [
                 'status' => 1,
                 'message' => 'Done go checkout',
-    
+
             ];
 
 
@@ -342,7 +342,7 @@ class CartController extends Controller
             //$data['cur_user'][$i] =  isset($data['pay_seats_data']['cur_user'][$i-1]) ? $data['pay_seats_data']['cur_user'][$i-1] : '';
             $data['firstname'][$i-1] = isset($data['pay_seats_data']['names'][$i-1]) ? $data['pay_seats_data']['names'][$i-1] : '';
             $data['lastname'][$i-1] = isset($data['pay_seats_data']['surnames'][$i-1]) ? $data['pay_seats_data']['surnames'][$i-1] : '';
-            
+
             $data['country_code'][$i-1] = isset($data['pay_seats_data']['countryCodes'][$i-1]) ? $data['pay_seats_data']['countryCodes'][$i-1] : '';
             $data['city'][$i-1] = isset($data['pay_seats_data']['cities'][$i-1]) ? $data['pay_seats_data']['cities'][$i-1] : '';
             $data['mobile'][$i-1] = isset($data['pay_seats_data']['mobiles'][$i-1]) ? $data['pay_seats_data']['mobiles'][$i-1] : '';
@@ -357,13 +357,13 @@ class CartController extends Controller
                 $data['email'][$i-1] = isset($data['pay_seats_data']['emails'][$i-1]) ? $data['pay_seats_data']['emails'][$i-1] : '';
             }
 
-            
+
         }
-        
+
         $data['cur_user'][0] = $loggedin_user;
         $data['kc_id'] = '';
         if($loggedin_user && $data['firstname'][0] =="") {
-            
+
             $data['firstname'][0] = $loggedin_user->firstname;
             $data['lastname'][0] = $loggedin_user->lastname;
             $data['email'][0] = $loggedin_user->email;
@@ -373,7 +373,7 @@ class CartController extends Controller
             $data['job_title'][0] = $loggedin_user->job_title;
             $data['company'][0] = $loggedin_user->company;
             $data['student_type_id'][0] = $loggedin_user->student_type_id;
-            
+
 
             if(isset($data['pay_bill_data']) && empty($data['pay_bill_data'])) {
                 $inv = []; $rec = [];
@@ -408,10 +408,10 @@ class CartController extends Controller
         }
 
         if($data['type'] == 3){
-            
+
             return view('theme.cart.new_cart.participant_alumni', $data);
         }
-        
+
         if($data['type'] == 'free_code'){
             return view('theme.cart.new_cart.participant_code_event', $data);
         }
@@ -425,7 +425,7 @@ class CartController extends Controller
         }
 
         return view('theme.cart.new_cart.participant', $data);
-            
+
     }
 
     public function registration(Request $request)
@@ -444,13 +444,13 @@ class CartController extends Controller
             unset($formData['terms_condition']);
             unset($formData['update']);
             unset($formData['type']);
-            
+
             foreach($formData as $key => $value){
                 $input[$key] = $value[0];
             }
 
             $input['password'] = Hash::make(date('Y-m-dTH:i:s'));
-            
+
             $user = User::create($input);
 
             $connow = Carbon::now();
@@ -464,13 +464,13 @@ class CartController extends Controller
             if($user->afm){
                 $consent['afm'] = $user->afm;
             }
-    
+
             $billing = json_decode($user->receipt_details,true);
-    
+
             if(isset($billing['billafm']) && $billing['billafm']){
                 $consent['billafm'] = $billing['billafm'];
             }
-    
+
             $user->consent = json_encode($consent);;
             $user->save();
             $code = Activation::create([
@@ -484,7 +484,7 @@ class CartController extends Controller
             $existingcheck = ShoppingCart::where('identifier', $user->id)->first();
             //Cart::restore($user->id
             if($existingcheck) {
-                
+
                 //$user edww
                 if($user->cart){
                     $user->cart->delete();
@@ -496,10 +496,10 @@ class CartController extends Controller
                 $timecheck->updated_at = Carbon::now();
                 $timecheck->save();
 
-                
+
             }
             else {
-               
+
                 Cart::store($user->id);
                 $timecheck = ShoppingCart::where('identifier', $user->id)->first();
                 $timecheck->created_at = Carbon::now();
@@ -527,12 +527,12 @@ class CartController extends Controller
             $cartCache->user_id = $user->id;
             $cartCache->slug =  base64_encode($tid. $user->id . $event);
             $cartCache->save();
- 
+
         }else if($user || $user = $userCheck){
             $existingcheck = ShoppingCart::where('identifier', $user->id)->first();
             //Cart::restore($user->id
             if($existingcheck) {
-                
+
                 //$user edww
                 if($user->cart){
                     $user->cart->delete();
@@ -544,10 +544,10 @@ class CartController extends Controller
                 $timecheck->updated_at = Carbon::now();
                 $timecheck->save();
 
-                
+
             }
             else {
-               
+
                 Cart::store($user->id);
                 $timecheck = ShoppingCart::where('identifier', $user->id)->first();
                 $timecheck->created_at = Carbon::now();
@@ -578,7 +578,7 @@ class CartController extends Controller
         }
 
         $seats_data = array();
-        
+
         if($data['type'] == 3 && $userCheck  && $userCheck ->kc_id ){
 
             $seats_data['names'][] = $userCheck ->firstname;
@@ -620,17 +620,17 @@ class CartController extends Controller
             Session::forget('coupon_price');
             Session::forget('priceOf');
         }
-        
+
 
         if($userCheck && isset($seats_data['emails'][0])){
             $seats_data['emails'][0] = $userCheck->email;
         }
 
         Session::put('pay_seats_data', $seats_data);
-        
-        
+
+
         return redirect('/billing');
-            
+
 
     }
 
@@ -661,7 +661,7 @@ class CartController extends Controller
         }*/
 
         if (Session::has('pay_bill_data')) {
-            
+
             $data['pay_bill_data'] = Session::get('pay_bill_data');
         }
         else {
@@ -689,7 +689,7 @@ class CartController extends Controller
         $loggedin_user = Auth::user();
 
 
-       
+
         $data['billname'] = '';
         $data['billsurname'] = '';
         $data['billaddress'] ='';
@@ -714,10 +714,10 @@ class CartController extends Controller
 
         if($loggedin_user) {
 
-            
-            
+
+
             if(isset($data['pay_bill_data']) && empty($data['pay_bill_data'])) {
-               
+
                 $inv = []; $rec = [];
                 if($loggedin_user->invoice_details != '') {
                     $inv = json_decode($loggedin_user->invoice_details, true);
@@ -733,7 +733,7 @@ class CartController extends Controller
 
                 $data['pay_bill_data'] = array_merge($inv, $rec);
             }
-            
+
             $data['billname'] = isset($data['pay_bill_data']['billname']) ? $data['pay_bill_data']['billname'] : '';
             $data['billsurname'] = isset($data['pay_bill_data']['billsurname']) ? $data['pay_bill_data']['billsurname'] : '';
             $data['billaddress'] = isset($data['pay_bill_data']['billaddress']) ? $data['pay_bill_data']['billaddress'] : '';
@@ -749,7 +749,7 @@ class CartController extends Controller
         }
         $this->fbp->sendCompleteRegistrationEvent($data);
         return view('theme.cart.new_cart.billing', $data);
-            
+
 
 
         //return view('theme.cart.cart', $data);
@@ -758,7 +758,7 @@ class CartController extends Controller
     public function billing(Request $request){
 
         $pay_bill_data = [];
-       
+
         $pay_bill_data['billing'] = 1;
         $pay_bill_data['billname'] = $request->get('billname');
 		$pay_bill_data['billemail'] = $request->get('billemail');
@@ -769,15 +769,15 @@ class CartController extends Controller
         $pay_bill_data['billcountry'] = $request->get('billcountry');
         $pay_bill_data['billstate'] = $request->get('billstate');
         $pay_bill_data['billafm'] = $request->get('billafm');
-       
+
         if(!$user = Auth::user()){
-            
+
             $user = User::find(Session::get('user_id'));
         }
 
         if($user) {
             //UPDATE billing in user profile
-            
+
             $user->receipt_details = json_encode($pay_bill_data);
             $user->afm = $pay_bill_data['billafm'];
             $user->save();
@@ -840,7 +840,7 @@ class CartController extends Controller
         $this->fbp->sendAddBillingInfoEvent($data);
 
         return view('theme.cart.new_cart.checkout', $data);
-            
+
         //return view('theme.cart.cart', $data);
     }
 
@@ -853,12 +853,12 @@ class CartController extends Controller
     */
     public function add($id, $ticket, $type, Request $request)
     {
-        
+
         if((!Auth::user() || (Auth::user() && !Auth::user()->kc_id)) && $type == 3){
             return back();
         }
-        
-        
+
+
         Cart::instance('default')->destroy();
         Session::forget('pay_seats_data');
         Session::forget('transaction_id');
@@ -877,7 +877,7 @@ class CartController extends Controller
         $isAjax = $request->ajax();
         // Get the product from the database
         $product = Event::find($id);
-        
+
         // Check if the product exists on the database
         if (! $product ) {
             if ($isAjax) {
@@ -885,7 +885,7 @@ class CartController extends Controller
             }
             return redirect()->to('/');
         }
-        
+
         if($ticket == 'free' || $ticket == 'waiting'){
             $this->addFreeToCart($product, $ticket, $ticket);
         }else{
@@ -927,7 +927,7 @@ class CartController extends Controller
 
     protected function addToCart($product, $ticket, $type)
     {
-    
+
        // Let only one event in the cart added on 5/6/2018
 
        Cart::instance('default')->destroy();
@@ -1036,7 +1036,7 @@ class CartController extends Controller
         if(Session::get('coupon_code')){
             $input['coupon'] = Session::get('coupon_code');
         }
-        
+
         $data = $this->initCartDetails($data);
         $this->fbp->sendAddPaymentInfoEvent($data);
 
@@ -1052,7 +1052,7 @@ class CartController extends Controller
 
     public function postPaymentWithStripe($input)
     {
-     
+
         Session::forget('dperror');
         Session::forget('error');
 
@@ -1073,15 +1073,15 @@ class CartController extends Controller
             $eventInfo = $ev->event_info();
             if(isset($eventInfo['delivery']) && $eventInfo['delivery'] == 143){
 
-                $ev_date_help = isset($eventInfo['elearning']['visible']['emails']) && isset($eventInfo['elearning']['expiration']) && 
-                                    $eventInfo['elearning']['visible']['emails'] && isset($eventInfo['elearning']['text']) ?  
+                $ev_date_help = isset($eventInfo['elearning']['visible']['emails']) && isset($eventInfo['elearning']['expiration']) &&
+                                    $eventInfo['elearning']['visible']['emails'] && isset($eventInfo['elearning']['text']) ?
                                                 $eventInfo['elearning']['expiration'] . ' ' . $eventInfo['elearning']['text']: '';
-    
+
             }else if(isset($eventInfo['delivery']) && $eventInfo['delivery'] == 139){
-    
-                $ev_date_help = isset($eventInfo['inclass']['dates']['visible']['emails']) && isset($eventInfo['inclass']['dates']['text']) && 
+
+                $ev_date_help = isset($eventInfo['inclass']['dates']['visible']['emails']) && isset($eventInfo['inclass']['dates']['text']) &&
                                         $eventInfo['inclass']['dates']['visible']['emails'] ?  $eventInfo['inclass']['dates']['text'] : '';
-    
+
             }
 
             $ev_title = $ev->title;
@@ -1139,7 +1139,7 @@ class CartController extends Controller
                 $coupon = $coupon->first();
                 if (isset($input['coupon'])){
                     if($input['coupon'] && trim($input['coupon']) != '' && trim($coupon->code_coupon)!= '' && $coupon->status && trim($input['coupon']) == trim($coupon->code_coupon)){
-                        
+
                         if($coupon->percentage){
                             $couponPrice = ($amount/Cart::count()) * $coupon->price / 100;
                             $couponPrice = ($amount/Cart::count()) - $couponPrice;
@@ -1148,7 +1148,7 @@ class CartController extends Controller
                         }else{
                             $amount = $coupon->price * $qty;
                         }
-                        
+
                         $couponCode = $input['coupon'];
                     }
                 }
@@ -1164,13 +1164,13 @@ class CartController extends Controller
                     $address['country'] = 'GR';
 
                     $temp['billing'] = 'Receipt requested';
-                    
+
                     $st_name =  $temp['billname'];
                     $st_tax_id = 'EL'.$temp['billafm'];
 
                     if(isset($temp['billaddress'])){
                         $st_line1 = $temp['billaddress'] ;
-                        
+
                         if(isset($temp['billaddressnum'])){
                             $st_line1 .= ' ' . $temp['billaddressnum'];
                         }
@@ -1182,13 +1182,13 @@ class CartController extends Controller
                         $st_city = $temp['billcity'];
                         $address['city'] = $st_city;
                     }
-                    
+
                     if(isset($temp['billpostcode'])){
                         $st_postal_code = $temp['billpostcode'];
                         $address['postal_code'] = $st_postal_code;
                     }
-                    
-                    
+
+
                     //$st_phone = $temp['billmobile'];
 
                 }
@@ -1213,14 +1213,14 @@ class CartController extends Controller
                 Stripe::setApiKey($eventC->paymentMethod->first()->test_processor_options['secret_key']);
             }
             session()->put('payment_method',$eventC->paymentMethod->first()->id);
-            
+
             $dpuser->asStripeCustomer();
 
             if(!$dpuser->stripe_id){
-                
+
                 $options=['name' => $dpuser['firstname'] . ' ' . $dpuser['lastname'], 'email' => $dpuser['email']];
                 $dpuser->createAsStripeCustomer($options);
-               
+
                 $stripe_ids = json_decode($dpuser->stripe_ids,true) ? json_decode($dpuser->stripe_ids,true) : [];
                 $stripe_ids[] =$dpuser->stripe_id;
 
@@ -1272,35 +1272,35 @@ class CartController extends Controller
 
                 $payment_method_id = -1;
                 if($ev->paymentMethod->first()){
-                    
+
                     $payment_method_id = $ev->paymentMethod->first()->id;
-                       
+
                 }
 
-              
+
                 try{
-                    
+
                     $ev->users()->wherePivot('user_id',$dpuser->id)->detach();
                     $ev->users()->save($dpuser,['paid'=>false,'payment_method'=>$payment_method_id]);
 
                     $charge = $dpuser->newSubscription($name, $plan->id)->noProrate()->create($input['payment_method'],
                     ['email' => $dpuser->email],
                                 ['metadata' => ['installments_paid' => 0, 'installments' => $installments]]);
-    
+
                     $charge->metadata = json_encode(['installments_paid' => 0, 'installments' => $installments]);
                     $charge->price = $instamount;
                     $charge->save();
 
-                
+
                 }catch(\Laravel\Cashier\Exceptions\IncompletePayment $exception){
 
                     $payment_method_id = -1;
                     if($ev->paymentMethod->first()){
-                        
+
                         $payment_method_id = $ev->paymentMethod->first()->id;
-                           
+
                     }
-        
+
                     $ev->users()->wherePivot('user_id',$dpuser->id)->detach();
                     $ev->users()->save($dpuser,['paid'=>false,'payment_method'=>$payment_method_id]);
 
@@ -1319,12 +1319,12 @@ class CartController extends Controller
                     return 'summary/' . $exception->payment->id . '/' . $input;
                 }
 
-                
+
 
                 //$namount = $instamount;
              }
 
-             
+
             if($dpuser && $installments > 1) {
 
                 $charge['status'] = 'succeeded';
@@ -1332,7 +1332,7 @@ class CartController extends Controller
             }
             else {
 
-         
+
                 $stripeAmount = $namount * 100;
                 $dpuser->updateStripeCustomer([
                     'name' => $st_name,
@@ -1343,15 +1343,15 @@ class CartController extends Controller
                     //'tax_info' => ['tax_id' => $st_tax_id, 'type' => 'vat'],
                     'shipping' => ['name' => $st_name, 'address' => $address],
                     'address' => $address,
-                    
+
                 ]);
-               
+
                 $temp['customer'] = $dpuser->email;
                 $nevent = $ev_title . ' ' . $ev_date_help;
 
-               
+
                 try{
-                    
+
                     //$ev->users()->where('id',$dpuser->id)->detach();
                     //$ev->users()->save($dpuser,['paid'=>false,'payment_method'=>$payment_method_id]);
 
@@ -1366,16 +1366,16 @@ class CartController extends Controller
                             'customer' => $dpuser->stripe_id,
                             //'metadata' => $temp,
                         ],
-                        
+
                     );
                 }catch (\Laravel\Cashier\Exceptions\IncompletePayment $exception) {
                     //dd('gfds3')
 
                     $payment_method_id = -1;
                     if($ev->paymentMethod->first()){
-                        
+
                         $payment_method_id = $ev->paymentMethod->first()->id;
-                           
+
                     }
 
                     $ev->users()->wherePivot('user_id',$dpuser->id)->detach();
@@ -1387,7 +1387,7 @@ class CartController extends Controller
                     $input['couponCode'] = $couponCode;
 
                     $input = encrypt($input);
-                    
+
                     //return 'stripe/payment/' . $exception->payment->id . '/' . $input;
                     return 'summary/' . $exception->payment->id . '/' . $input;
                     //return '/stripe/payment/'.$exception->payment->id;
@@ -1555,7 +1555,7 @@ class CartController extends Controller
         $bd['billzip'] = $input['billpostcode'];
         $bd['city'] = greeklish($input['billcity']);
         $bd['billcountry'] = 'GR';
-      
+
         if(Auth::check()) {
             $cuser = Auth::user();
             $uid = $cuser->id;
@@ -1597,7 +1597,7 @@ class CartController extends Controller
 
     public function dpremove($item)
     {
-        
+
         //dd('sex');
         /*$t = Cart::get($id);
         $t->remove($id);*/
@@ -1680,20 +1680,20 @@ class CartController extends Controller
                     $newPrice = $request->price - $price;
                     $priceOf = $coupon->price . '%';
                 }else{
-                    
+
                     $newPrice = $coupon->price;
                     $priceOf = 100 - ($coupon->price / $request->price) * 100;
                     $priceOf = round($priceOf,2) . '%';
                 }
 
-                
+
 
                 $savedPrice = $request->price - $newPrice;
 
                 Session::put('coupon_code',$request->coupon);
                 Session::put('coupon_price',$newPrice);
                 Session::put('priceOf',$priceOf);
-                
+
                 $instOne = $newPrice * $request->totalItems;
                 $instTwo = round($newPrice / 2, 2) * $request->totalItems;
                 $instThree = round($newPrice / 3, 2) * $request->totalItems;
@@ -1805,7 +1805,7 @@ class CartController extends Controller
 
     public function completeRegistration(Request $request){
 
-        
+
         $data = [];
         $option = Option::where('abbr','deree-codes')->first();
         //$dereelist = json_decode($option->settings, true);
@@ -1814,7 +1814,7 @@ class CartController extends Controller
         //dd($dereelist);
 
         $c = Cart::content()->count();
-       
+
         if((!$user = User::where('email',$request->email[0])->first())){
             $input = [];
             $formData = $request->all();
@@ -1822,13 +1822,13 @@ class CartController extends Controller
             unset($formData['terms_condition']);
             unset($formData['update']);
             unset($formData['type']);
-            
+
             foreach($formData as $key => $value){
                 $input[$key] = $value[0];
             }
 
             $input['password'] = Hash::make(date('Y-m-dTH:i:s'));
-            
+
             $user = User::create($input);
 
             $code = Activation::create([
@@ -1837,7 +1837,7 @@ class CartController extends Controller
                 'completed' => false,
             ]);
             $user->role()->attach(7);
-            
+
             $connow = Carbon::now();
             $clientip = '';
             $clientip = \Request::ip();
@@ -1857,7 +1857,7 @@ class CartController extends Controller
             }
 
             $user->consent = json_encode($consent);;
-        
+
         }
 
 
@@ -1909,7 +1909,7 @@ class CartController extends Controller
 
         if ($transaction) {
             // set transaction id in session
-            
+
             $pay_seats_data = ["names" => [$request->firstname[0]],"surnames" => [$request->lastname[0]],"emails" => [$request->email[0]],
             "mobiles" => [$request->mobile[0]],"addresses" => [$user->address],"addressnums" => [$user->address_num],
             "postcodes" => [$user->postcode],"cities" => [$user->city],"jobtitles" => [$user->job_title],
@@ -1949,9 +1949,9 @@ class CartController extends Controller
 
             $data['event']['title'] = $content->title;
             $data['event']['slug'] = $content->slugable->slug;
-            $data['event']['facebook'] = url('/') . '/' .$content->slugable->slug .'?utm_source=Facebook&utm_medium=Post_Student&utm_campaign=KNOWCRUNCH_BRANDING&quote='.urlencode("Proudly participating in ". $content->title . " by Knowcrunch.");
-            $data['event']['twitter'] = urlencode("Proudly participating in ". $content->title . " by Knowcrunch. 💙");
-            $data['event']['linkedin'] = urlencode(url('/') . '/' .$content->slugable->slug .'?utm_source=LinkedIn&utm_medium=Post_Student&utm_campaign=KNOWCRUNCH_BRANDING&title='."Proudly participating in ". $content->title . " by Knowcrunch. 💙");
+            $data['event']['facebook'] = url('/') . '/' .$content->slugable->slug .'?utm_source=Facebook&utm_medium=Post_Student&utm_campaign=KNOWCRUNCH_BRANDING&quote='.urlencode("Proudly participating in ". $content->title .' '.url('/') . '/' .$content->slugable->slug.  " by Knowcrunch.");
+            $data['event']['twitter'] = urlencode("Proudly participating in ". $content->title .' '.url('/') . '/' .$content->slugable->slug.  " by Knowcrunch. 💙");
+            $data['event']['linkedin'] = urlencode(url('/') . '/' .$content->slugable->slug .'?utm_source=LinkedIn&utm_medium=Post_Student&utm_campaign=KNOWCRUNCH_BRANDING&title='."Proudly participating in ". $content->title .' '.url('/') . '/' .$content->slugable->slug.  " by Knowcrunch. 💙");
 
             $categoryScript = $content->delivery->first() && $content->delivery->first()->id == 143 ? 'Video e-learning courses' : 'In-class courses'; //'Event > ' . $content->category->first()->name;
 
@@ -2003,7 +2003,7 @@ class CartController extends Controller
         return redirect('/thankyou');
 
         //return view('theme.cart.new_cart.thank_you',$data);
-       
+
     }
 
     public function sendEmails($transaction,$content,$user)
@@ -2040,31 +2040,31 @@ class CartController extends Controller
 
         if(isset($eventInfo['delivery']) && $eventInfo['delivery'] == 143){
 
-            $data['duration'] = isset($eventInfo['elearning']['visible']['emails']) && isset($eventInfo['elearning']['expiration']) && 
-                                $eventInfo['elearning']['visible']['emails'] && isset($eventInfo['elearning']['text']) ?  
+            $data['duration'] = isset($eventInfo['elearning']['visible']['emails']) && isset($eventInfo['elearning']['expiration']) &&
+                                $eventInfo['elearning']['visible']['emails'] && isset($eventInfo['elearning']['text']) ?
                                             $eventInfo['elearning']['expiration'] . ' ' . $eventInfo['elearning']['text'] : '';
 
         }else if(isset($eventInfo['delivery']) && $eventInfo['delivery'] == 139){
 
-            $data['duration'] = isset($eventInfo['inclass']['dates']['visible']['emails']) && isset($eventInfo['inclass']['dates']['text']) && 
+            $data['duration'] = isset($eventInfo['inclass']['dates']['visible']['emails']) && isset($eventInfo['inclass']['dates']['text']) &&
                                         $eventInfo['inclass']['dates']['visible']['emails'] ?  $eventInfo['inclass']['dates']['text'] : '';
 
         }
 
-        $data['hours'] = isset($eventInfo['hours']['visible']['emails']) &&  $eventInfo['hours']['visible']['emails'] && isset($eventInfo['hours']['hour']) && 
+        $data['hours'] = isset($eventInfo['hours']['visible']['emails']) &&  $eventInfo['hours']['visible']['emails'] && isset($eventInfo['hours']['hour']) &&
                         isset( $eventInfo['hours']['text']) ? $eventInfo['hours']['hour'] . ' ' . $eventInfo['hours']['text'] : '';
 
         $data['language'] = isset($eventInfo['language']['visible']['emails']) &&  $eventInfo['language']['visible']['emails'] && isset( $eventInfo['language']['text']) ? $eventInfo['language']['text'] : '';
 
-        $data['certificate_type'] =isset($eventInfo['certificate']['visible']['emails']) &&  $eventInfo['certificate']['visible']['emails'] && 
+        $data['certificate_type'] =isset($eventInfo['certificate']['visible']['emails']) &&  $eventInfo['certificate']['visible']['emails'] &&
                     isset( $eventInfo['certificate']['type']) ? $eventInfo['certificate']['type'] : '';
 
         $eventStudents = get_sum_students_course($content->category->first());
         $data['students_number'] = isset($eventInfo['students']['number']) ? $eventInfo['students']['number'] :  $eventStudents + 1;
 
-        $data['students'] = isset($eventInfo['students']['visible']['emails']) &&  $eventInfo['students']['visible']['emails'] && 
+        $data['students'] = isset($eventInfo['students']['visible']['emails']) &&  $eventInfo['students']['visible']['emails'] &&
                         isset( $eventInfo['students']['text']) && $data['students_number'] >= $eventStudents  ? $eventInfo['students']['text'] : '';
-  
+
         //send elearning Invoice
         $transdata = [];
         $transdata['trans'] = $transaction;
@@ -2082,11 +2082,11 @@ class CartController extends Controller
         });
 
         if(!$user->statusAccount->completed){
-                    
+
             $data['user']['createAccount'] = true;
             $cookieValue = base64_encode($user->id . date("H:i"));
             setcookie('auth-'.$user->id, $cookieValue, time() + (1 * 365 * 86400), "/"); // 86400 = 1 day
-        
+
             $coockie = new CookiesSMS;
             $coockie->coockie_name = 'auth-'.$user->id;
             $coockie->coockie_value = $cookieValue;
@@ -2171,15 +2171,15 @@ class CartController extends Controller
             $eventInfo = $ev->event_info();
             if(isset($eventInfo['delivery']) && $eventInfo['delivery'] == 143){
 
-                $ev_date_help = isset($eventInfo['elearning']['visible']['emails']) && isset($eventInfo['elearning']['expiration']) && 
-                                    $eventInfo['elearning']['visible']['emails'] && isset($eventInfo['elearning']['text']) ?  
+                $ev_date_help = isset($eventInfo['elearning']['visible']['emails']) && isset($eventInfo['elearning']['expiration']) &&
+                                    $eventInfo['elearning']['visible']['emails'] && isset($eventInfo['elearning']['text']) ?
                                                 $eventInfo['elearning']['expiration'] . ' ' . $eventInfo['elearning']['text']: '';
-    
+
             }else if(isset($eventInfo['delivery']) && $eventInfo['delivery'] == 139){
-    
-                $ev_date_help = isset($eventInfo['inclass']['dates']['visible']['emails']) && isset($eventInfo['inclass']['dates']['text']) && 
+
+                $ev_date_help = isset($eventInfo['inclass']['dates']['visible']['emails']) && isset($eventInfo['inclass']['dates']['text']) &&
                                         $eventInfo['inclass']['dates']['visible']['emails'] ?  $eventInfo['inclass']['dates']['text'] : '';
-    
+
             }
 
             $ev_title = $ev->title;
@@ -2187,7 +2187,7 @@ class CartController extends Controller
             break;
             //$item->id  <-ticket id
         }
-        
+
         $data = [];
         if (Session::has('pay_seats_data')) {
             $pay_seats_data = Session::get('pay_seats_data');
@@ -2223,13 +2223,13 @@ class CartController extends Controller
                 $address['country'] = 'GR';
 
                 $temp['billing'] = 'Receipt requested';
-                
+
                 $st_name =  $temp['billname'];
                 $st_tax_id = 'EL'.$temp['billafm'];
 
                 if(isset($temp['billaddress'])){
                     $st_line1 = $temp['billaddress'] ;
-                    
+
                     if(isset($temp['billaddressnum'])){
                         $st_line1 .= ' ' . $temp['billaddressnum'];
                     }
@@ -2241,13 +2241,13 @@ class CartController extends Controller
                     $st_city = $temp['billcity'];
                     $address['city'] = $st_city;
                 }
-                
+
                 if(isset($temp['billpostcode'])){
                     $st_postal_code = $temp['billpostcode'];
                     $address['postal_code'] = $st_postal_code;
                 }
-                
-                
+
+
            //     $st_phone = $temp['billmobile'];
 
             }
@@ -2350,7 +2350,7 @@ class CartController extends Controller
                 'success' => true,
                 'redirect' => '/order-success',
             ]);
-        
+
         }
 
 

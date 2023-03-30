@@ -55,7 +55,7 @@ class PaymentController extends Controller
 
         $paymentIntent['payment_method'] = Arr::only($paymentIntent['payment_method'] ?? [], 'id');
         $input = encrypt($input);
-        
+
         $price = $payment->amount();
 
         return view('cashier.payment', [
@@ -92,7 +92,7 @@ class PaymentController extends Controller
         ]);
 
         $paymentIntent['payment_method'] = Arr::only($paymentIntent['payment_method'] ?? [], 'id');
-    
+
         $payment = new Payment(Cashier::stripe()->paymentIntents->retrieve(
             $id, ['expand' => ['payment_method']])
         );
@@ -120,9 +120,9 @@ class PaymentController extends Controller
         $data['info']['message'] = __('thank_you_page.message');
         $data['event']['title'] = $event->title;
         $data['event']['slug'] = $event->slugable->slug;
-        $data['event']['facebook'] = url('/') . '/' .$event->slugable->slug .'?utm_source=Facebook&utm_medium=Post_Student&utm_campaign=KNOWCRUNCH_BRANDING&quote='.urlencode("Proudly participating in ". $event->title . " by Knowcrunch.");
-        $data['event']['twitter'] = urlencode("Proudly participating in ". $event->title . " by Knowcrunch. 💙");
-        $data['event']['linkedin'] = urlencode(url('/') . '/' .$event->slugable->slug .'?utm_source=LinkedIn&utm_medium=Post_Student&utm_campaign=KNOWCRUNCH_BRANDING&title='."Proudly participating in ". $event->title . " by Knowcrunch. 💙");
+        $data['event']['facebook'] = url('/') . '/' .$event->slugable->slug .'?utm_source=Facebook&utm_medium=Post_Student&utm_campaign=KNOWCRUNCH_BRANDING&quote='.urlencode("Proudly participating in ". $event->title.' '.url('/') . '/' .$content->slugable->slug. " by Knowcrunch.");
+        $data['event']['twitter'] = urlencode("Proudly participating in ". $event->title .' '.url('/') . '/' .$content->slugable->slug.  " by Knowcrunch. 💙 ");
+        $data['event']['linkedin'] = urlencode(url('/') . '/' .$event->slugable->slug .'?utm_source=LinkedIn&utm_medium=Post_Student&utm_campaign=KNOWCRUNCH_BRANDING&title='."Proudly participating in ". $event->title .' '.url('/') . '/' .$content->slugable->slug.  " by Knowcrunch. 💙");
 
         return view('cashier.action_required', [
             'stripeKey' => env('PAYMENT_PRODUCTION') ? $paymentMethod->processor_options['key'] : $paymentMethod->test_processor_options['key'],
@@ -145,7 +145,7 @@ class PaymentController extends Controller
 
     public function dpremove($item)
     {
-        
+
         //dd('sex');
         /*$t = Cart::get($id);
         $t->remove($id);*/

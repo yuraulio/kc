@@ -398,9 +398,9 @@ class HomeController extends Controller
 
         $data['event']['title'] = $content->title;
         $data['event']['slug'] = $content->slugable->slug;
-        $data['event']['facebook'] = url('/') . '/' .$content->slugable->slug .'?utm_source=Facebook&utm_medium=Post_Student&utm_campaign=KNOWCRUNCH_BRANDING&quote='.urlencode("Proudly participating in ". $content->title . " by Knowcrunch.");
-        $data['event']['twitter'] = urlencode("Proudly participating in ". $content->title . " by Knowcrunch. 💙 ". url('/') . '/' .$content->slugable->slug);
-        $data['event']['linkedin'] = urlencode(url('/') . '/' .$content->slugable->slug .'?utm_source=LinkedIn&utm_medium=Post_Student&utm_campaign=KNOWCRUNCH_BRANDING&title='."Proudly participating in ". $content->title . " by Knowcrunch. 💙");
+        $data['event']['facebook'] = url('/') . '/' .$content->slugable->slug .'?utm_source=Facebook&utm_medium=Post_Student&utm_campaign=KNOWCRUNCH_BRANDING&quote='.urlencode("Proudly participating in ". $content->title .' '.url('/') . '/' .$content->slugable->slug. " by Knowcrunch.");
+        $data['event']['twitter'] = urlencode("Proudly participating in ". $content->title .' '. url('/') . '/' .$content->slugable->slug. " by Knowcrunch. 💙");
+        $data['event']['linkedin'] = urlencode(url('/') . '/' .$content->slugable->slug .'?utm_source=LinkedIn&utm_medium=Post_Student&utm_campaign=KNOWCRUNCH_BRANDING&title='."Proudly participating in ". $content->title .' '.url('/') . '/' .$content->slugable->slug. " by Knowcrunch. 💙");
 
         Session::put('thankyouData', $data);
         session_start();
@@ -596,9 +596,9 @@ class HomeController extends Controller
 
         $data['event']['title'] = $content->title;
         $data['event']['slug'] = $content->slugable->slug;
-        $data['event']['facebook'] = url('/') . '/' .$content->slugable->slug .'?utm_source=Facebook&utm_medium=Post_Student&utm_campaign=KNOWCRUNCH_BRANDING&quote='.urlencode("Proudly participating in ". $content->title . " by Knowcrunch.");
-        $data['event']['twitter'] = urlencode("Proudly participating in ". $content->title . " by Knowcrunch. 💙");
-        $data['event']['linkedin'] = urlencode(url('/') . '/' .$content->slugable->slug .'?utm_source=LinkedIn&utm_medium=Post_Student&utm_campaign=KNOWCRUNCH_BRANDING&title='."Proudly participating in ". $content->title . " by Knowcrunch. 💙");
+        $data['event']['facebook'] = url('/') . '/' .$content->slugable->slug .'?utm_source=Facebook&utm_medium=Post_Student&utm_campaign=KNOWCRUNCH_BRANDING&quote='.urlencode("Proudly participating in ". $content->title .' '.url('/') . '/' .$content->slugable->slug. " by Knowcrunch.");
+        $data['event']['twitter'] = urlencode("Proudly participating in ". $content->title.' '.url('/') . '/' .$content->slugable->slug. " by Knowcrunch. 💙");
+        $data['event']['linkedin'] = urlencode(url('/') . '/' .$content->slugable->slug .'?utm_source=LinkedIn&utm_medium=Post_Student&utm_campaign=KNOWCRUNCH_BRANDING&title='."Proudly participating in ". $content->title .' '.url('/') . '/' .$content->slugable->slug.  " by Knowcrunch. 💙");
 
 
         Session::put('thankyouData',$data);
