@@ -24,17 +24,17 @@
                   <div class="text-area social-icons">
                      <p></p>
                   <p>Share your experience with the world!</p>
-                    
+
 
                      <ul class="clearfix">
                         <li><a target="_blank" title="Share on facebook" href="http://www.facebook.com/sharer.php?u={{$event['facebook']}}" onclick="javascript:window.open(this.href,
                             '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=300');return false;">
                             <img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/social/Facebook.svg')}}" width="23" alt="Share on facebook"></a></li>
-                        
+
                         <li><a target="_blank" title="Share on Twitter" href="http://twitter.com/share?text={{$event['twitter']}}&url={{ url('/') }}/{{$event['slug']}}?utm_source=Twitter&utm_medium=Post_Student&utm_campaign=KNOWCRUNCH_BRANDING" onclick="javascript:window.open(this.href,
                            '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;">
                            <img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/social/Twitter.svg')}}" width="23" alt="Share on Twitter"></a></li>
-                           
+
                         <li><a target="_blank" title="Share on LinkedIn" href="https://www.linkedin.com/shareArticle?mini=true&url={{$event['linkedin']}};" onclick="javascript:window.open(this.href,
                               '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;">
                               <img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/social/Linkedin.svg')}}" width="23" alt="Share on LinkedIn"></a></li>
@@ -57,7 +57,7 @@
 @stop
 
 @section('scripts')
-   
+
 @if(isset($tigran) && isset($tigran['Price']) && $tigran['Price'] > 0 && !env('APP_DEBUG'))
 
 <script>
@@ -79,23 +79,23 @@ $(document).ready(function(){
    let products = {};
 
    //dataLayer.push({"event": 'purchase'})
-   
+
    @foreach($ecommerce['actionField'] as $key => $ti)
-      
+
       @if($ti != '')
          actionField["{{$key}}"] =  $.parseHTML("{{$ti}}")[0].data
 
       @endif
-  
+
    @endforeach
 
    @foreach($ecommerce['products'] as $key => $ti)
       @if($ti != '')
          products["{{$key}}"] = $.parseHTML("{{$ti}}")[0].data
       @endif
-      
+
    @endforeach
-   
+
    //dataLayer.push({"ecommerce": ecommerce})
 
 
@@ -123,21 +123,21 @@ $(document).ready(function(){
       let products = {};
 
       @foreach($gt3['gt3'] as $key => $ti)
-      
+
         @if($ti != '')
             gt3["{{$key}}"] = "{{$ti}}"
 
          @endif
-  
+
       @endforeach
 
       @foreach($gt3['transactionProducts'] as $key => $ti)
-      
+
         @if($ti != '')
             products["{{$key}}"] = "{{$ti}}"
 
          @endif
-  
+
       @endforeach
 
       gt3['transactionProducts'] = products;
