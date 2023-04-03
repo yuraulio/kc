@@ -394,6 +394,7 @@
             url = data.path
             url = url.replace('\\','/')
 
+            console.log(`${decodeURI(baseUrl)}/${decodeURI(url)}/${decodeURI(certificateTitle)}`)
             if(data){
                 var fbpopup = window.open(`http://www.facebook.com/sharer.php?u=${decodeURI(baseUrl)}/${decodeURI(url)}/${decodeURI(certificateTitle)}`, "pop", "width=600, height=400, scrollbars=no");
                 return false;
