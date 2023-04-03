@@ -101,9 +101,9 @@ class InfoController extends Controller
 
                 $data['event']['title'] = $thisevent->title;
                 $data['event']['slug'] = $thisevent->slugable->slug;
-                $data['event']['facebook'] = url('/') . '/' .$thisevent->slugable->slug .'?utm_source=Facebook&utm_medium=Post_Student&utm_campaign=KNOWCRUNCH_BRANDING&quote='.urlencode("Proudly participating in ". $thisevent->title." ".url('/') . '/' .$thisevent->slugable->slug. " by Knowcrunch.");
+                $data['event']['facebook'] = url('/') . '/' .$thisevent->slugable->slug .'?utm_source=Facebook&utm_medium=Post_Student&utm_campaign=KNOWCRUNCH_BRANDING&quote='.urlencode("Proudly participating in ". $thisevent->title. " by Knowcrunch.");
                 $data['event']['twitter'] = urlencode("Proudly participating in ". $thisevent->title .' '. url('/') . '/' .$thisevent->slugable->slug." by Knowcrunch. 💙");
-                $data['event']['linkedin'] = urlencode(url('/') . '/' .$thisevent->slugable->slug .'?utm_source=LinkedIn&utm_medium=Post_Student&utm_campaign=KNOWCRUNCH_BRANDING&title='."Proudly participating in ". $thisevent->title." ".url('/') . '/' .$thisevent->slugable->slug. " by Knowcrunch. 💙");
+                $data['event']['linkedin'] = urlencode(url('/') . '/' .$thisevent->slugable->slug .'?utm_source=LinkedIn&utm_medium=Post_Student&utm_campaign=KNOWCRUNCH_BRANDING&title='."Proudly participating in ". $thisevent->title. " by Knowcrunch. 💙");
                 //$data['event']['linkedin'] = urlencode('https://knowcrunch.com/' . '/' .$thisevent->slugable->slug .'?utm_source=LinkedIn&utm_medium=Post_Student&utm_campaign=KNOWCRUNCH_BRANDING&title='."Proudly participating in ". $thisevent->title . " by Knowcrunch. 💙");
 
 	        	$stockHelper = $thisevent->ticket->where('ticket_id', $item->id)->first();
