@@ -32,7 +32,7 @@
     <div class="social-share">
         <ul class="clearfix">
             @if($facebookCheckbox)
-                <a target="_blank" title="Share on facebook" href="http://www.facebook.com/sharer.php?u=@if(Session::get('thankyouData') && isset(Session::get('thankyouData')['event']['facebook'])) {{Session::get('thankyouData')['event']['facebook']}} @else {{ Request::url() }} @endif" onclick="javascript:window.open(this.href,'', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=300');return false;">
+                <a target="_blank" title="Share on facebook test" href="http://www.facebook.com/sharer.php?u=@if(Session::get('thankyouData') && isset(Session::get('thankyouData')['event']['facebook'])) {{Session::get('thankyouData')['event']['facebook']}} @else {{ Request::url() }} @endif" onclick="javascript:window.open(this.href,'', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=300');return false;">
                     <img class="replace-with-svg" src="{{cdn($facebookIcon)}}" width="23" alt="Share on facebook">
                 </a>
             @endif
