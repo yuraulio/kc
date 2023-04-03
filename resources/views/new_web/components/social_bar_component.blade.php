@@ -8,13 +8,13 @@
 
     if ($socials === []) {
         $facebookCheckbox = true;
-        $facebookIcon = '/theme/assets/images/icons/social/events/Facebook.svg';
+        $facebookIcon = '/theme/assets/images/icons/social/events/Facebook-white.svg';
 
         $twitterCheckbox = true;
-        $twitterIcon = '/theme/assets/images/icons/social/events/Twitter.svg';
+        $twitterIcon = '/theme/assets/images/icons/social/events/Twitter-white.svg';
 
         $linkedinCheckbox = true;
-        $linkedinIcon = '/theme/assets/images/icons/social/events/Linkedin.svg';
+        $linkedinIcon = '/theme/assets/images/icons/social/events/Linkedin-white.svg';
     } else {
         $facebookCheckbox = $socials["social_facebook_checkbox"] ?? "";
         $facebookIcon = $socials["social_facebook_icon"]->full_path ?? '/theme/assets/images/icons/social/events/Facebook-white.svg';
