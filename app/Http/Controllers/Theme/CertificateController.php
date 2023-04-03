@@ -277,6 +277,7 @@ class CertificateController extends Controller
 
     //twitter_upload_image(public_path('cert/'.$name.'_og_version.jpg'), );
 
+    dd($name);
     if($from_student_controller){
         return public_path('cert/'.$name.'.jpg');
     }

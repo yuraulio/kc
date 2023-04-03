@@ -377,7 +377,6 @@
       var certificateId = $(this).attr('data-certid');
       var certificateTitle = $(this).attr('data-certTitle');
 
-
       $.ajax({
             headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -394,7 +393,6 @@
             url = data.path
             url = url.replace('\\','/')
 
-            console.log(`${decodeURI(baseUrl)}/${decodeURI(url)}/${decodeURI(certificateTitle)}`)
             if(data){
                 var fbpopup = window.open(`http://www.facebook.com/sharer.php?u=${decodeURI(baseUrl)}/${decodeURI(url)}/${decodeURI(certificateTitle)}`, "pop", "width=600, height=400, scrollbars=no");
                 return false;
@@ -429,7 +427,12 @@
 
                 let path = data.path
                 let certiUrl = path.replace('\\','/')
-                let url = encodeURIComponent(baseUrl+'/'+certiUrl+'/'+certificateTitle);
+                console.log(baseUrl+'/'+certiUrl+'/'+certificateTitle)
+                //let url = encodeURIComponent(baseUrl+'/'+certiUrl+'/'+certificateTitle);
+
+                console.log('url')
+                console.log(`${decodeURI(baseUrl)}/${decodeURI(certiUrl)}/${decodeURI(certificateTitle)}`)
+                url = decodeURI(baseUrl+'/'+certiUrl+'/'+certificateTitle)
 
                 if(data){
                     //<a href="https://www.linkedin.com/shareArticle?mini=true&url=https%3A%2F%2Fstevenwestmoreland.com%2F2018%2F07%2Fcreating-social-sharing-links-without-javascript.html&title=Creating+social+sharing+links+without+third-party+JavaScript&summary=How+to+create+social+sharing+links+for+your+website+without+having+to+load+third-party+JavaScript.&source=stevenwestmoreland.com" rel="noopener" target="_blank">Share on LinkedIn</a>
