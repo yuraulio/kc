@@ -60,16 +60,18 @@
             </div>
 
             <?php
-            $certiTitle = preg_replace( "/\r|\n/", " ", $certificate->certificate_title );
-            if(strpos($certificate->certificate_title, '</p><p>')){
-                $certiTitle = substr_replace($certificate->certificate_title, ' ', strpos($certificate->certificate_title, '</p>'), 0);
-            }else{
-                $certiTitle = $certificate->certificate_title;
-            }
+                if(isset($certificate)){
+                    $certiTitle = preg_replace( "/\r|\n/", " ", $certificate->certificate_title );
+                    if(strpos($certificate->certificate_title, '</p><p>')){
+                        $certiTitle = substr_replace($certificate->certificate_title, ' ', strpos($certificate->certificate_title, '</p>'), 0);
+                    }else{
+                        $certiTitle = $certificate->certificate_title;
+                    }
 
-            $certiTitle = urlencode(htmlspecialchars_decode(strip_tags($certiTitle),ENT_QUOTES));
+                    $certiTitle = urlencode(htmlspecialchars_decode(strip_tags($certiTitle),ENT_QUOTES));
 
-            $certiTitle = str_replace('+','_', $certiTitle);
+                    $certiTitle = str_replace('+','_', $certiTitle);
+                }
 
 
 /*
@@ -95,7 +97,8 @@
 
 
         ?>
-            {{--<div class="col-md-6 offset-md-6 share-wrapper">
+        @if(isset($certificate))
+            <div class="col-md-6 offset-md-6 share-wrapper">
                 <p>Share my results:</p>
                 <div>
                     <a class="facebook-post-cert" data-certTitle="{{$certiTitle}}" data-certid="{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" title="Add this certification to your Facebook profile" href="javascript:void(0)">
@@ -108,7 +111,9 @@
                         <img class="linkdein-image-add" src="{{cdn('theme/assets/images/icons/social/events/Linkedin.svg')}}" alt="LinkedIn Add to Profile button">
                     </a>
                 </div>
-            </div>--}}
+            </div>
+
+        @endif
 
             </div>
             @if($showAnswers)

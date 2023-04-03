@@ -1414,7 +1414,6 @@
                                             <!-- Feedback 8-12 changed -->
 
                                             <?php $userExam = isset($user['hasExamResults'][$p->id][0]) ? $user['hasExamResults'][$p->id][0] : null ?>
-
                                             @if($event['exam_access'] && !$userExam)
                                                 @if($p->islive == 1)
                                                 <a target="_blank" onclick="window.open('{{ route('attempt-exam', [$p->id]) }}', 'newwindow', 'width=1400,height=650'); return false;" title="{{$p['exam_name']}}" class="btn btn--secondary btn--md">TAKE EXAM</a>

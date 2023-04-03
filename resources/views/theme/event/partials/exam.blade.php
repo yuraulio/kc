@@ -1,7 +1,7 @@
-@if(isset($newlayoutExamsEvent[$content->id])) 
+@if(isset($newlayoutExamsEvent[$content->id]))
                               <div class="dynamic-courses-wrapper dynamic-courses-wrapper--style2">
                                  @foreach($newlayoutExamsEvent[$content->id] as $p)
-                                 
+
                                  @foreach($p['exams'] as $pe)
                                  <div class="item">
                                     <div class="left">
@@ -20,7 +20,7 @@
                                        <a target="_blank" href="{{ url('student-summary/' . $pe->id . '/' . Sentinel::getUser()->id) }}?s=1" title="{{$p['title']}}" class="btn btn--secondary btn--md">VIEW RESULT</a>
                                        @elseif($pe->islive == 1)
                                        <a target="_blank" onclick="window.open('{{ route('attempt-exam', [$pe->id]) }}', 'newwindow', 'width=1400,height=650'); return false;" title="{{$p['title']}}" class="btn btn--secondary btn--md">TAKE EXAM</a>
-                                       @elseif($pe->isupcom == 1)	
+                                       @elseif($pe->isupcom == 1)
                                        <a  title="{{$p['title'] }}" class="btn btn--secondary btn--md">{{ date('F j, Y', strtotime($pe->publish_time)) }}</a>
                                        @endif
                                     </div>

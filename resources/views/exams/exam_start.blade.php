@@ -488,6 +488,11 @@ function finishExam() {
 
         $('.btn.btn-exit-exam.btn-sm').prop('disabled', true);
 
+        // if(!navigator.onLine) {
+        //     showAlert('You can continue the exam and wait until internet connection is back', 'warning')
+        //     return false;
+        // }
+
         jQuery.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
@@ -1156,6 +1161,10 @@ window.actQues = 0;
             });
 
             if(navigator.onLine) {
+                if(isOnline == 0){
+                    // ean prin den upirxe internet kai twra yparxei energopoihse to button
+                    $('.btn.btn-exit-exam.btn-sm').prop('disabled', false);
+                }
                 isOnline = 1;
             }
             else if(isOnline==1) {
