@@ -488,7 +488,8 @@ class CertificateController extends Controller
         $img = env('MIX_APP_URL').'/cert/'.$image;
 
         $og_image = explode('.',$image);
-        $og_image =  env('MIX_APP_URL').'/cert/'.$og_image[0].'_og_version.'.$og_image[1];
+
+        $og_image =  env('MIX_APP_URL').'/cert/'.$og_image[0].'_og_version.jpg';
 
         return view('exams.results_view', compact('img', 'title', 'og_image'));
     }
