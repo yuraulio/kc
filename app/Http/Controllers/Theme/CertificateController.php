@@ -254,36 +254,13 @@ class CertificateController extends Controller
     imagejpeg($image1, $saveImagePath, 50);
 
 
-    // OG IMAGE WITH SPECIFIC DIMENSION
-    $manager = new ImageManager();
-    $image = $manager->make(public_path($newFile));
-    $image_height = $image->height();
-    $image_width = $image->width();
-
-    $crop_height = 627;
-    $crop_width = 1200;
-
-    $height_offset = ($image_height / 2) - ($crop_height / 2);
-    $height_offset = $height_offset > 0 ? (int) $height_offset : null;
-
-    $width_offset = ($image_width / 2) - ($crop_width / 2);
-    $width_offset = $width_offset > 0 ? (int) $width_offset : null;
-
-    $image->resize($crop_width, $crop_height);
-    $image->fit($crop_width, $crop_height);
-
-    //$image->crop($crop_width, $crop_height, $width_offset, $height_offset);
-    $image->save(public_path('cert/'.$name.'_og_version.jpg'), 60, 'jpg');
+    $this->og_image_version($newFile, $name);
 
     //twitter_upload_image(public_path('cert/'.$name.'_og_version.jpg'), );
 
-    dd($name);
     if($from_student_controller){
         return public_path('cert/'.$name.'.jpg');
     }
-
-
-
 
 
     return response()->json([
@@ -295,6 +272,31 @@ class CertificateController extends Controller
 
     //return $newFile;
   }
+
+    public function og_image_version($newFile, $name){
+
+        //dd($newFile);
+        // OG IMAGE WITH SPECIFIC DIMENSION
+        $manager = new ImageManager();
+        $image = $manager->make(public_path($newFile));
+        $image_height = $image->height();
+        $image_width = $image->width();
+
+        $crop_height = 627;
+        $crop_width = 1200;
+
+        $height_offset = ($image_height / 2) - ($crop_height / 2);
+        $height_offset = $height_offset > 0 ? (int) $height_offset : null;
+
+        $width_offset = ($image_width / 2) - ($crop_width / 2);
+        $width_offset = $width_offset > 0 ? (int) $width_offset : null;
+
+        $image->resize($crop_width, $crop_height);
+        $image->fit($crop_width, $crop_height);
+
+        //$image->crop($crop_width, $crop_height, $width_offset, $height_offset);
+        $image->save(public_path('cert/'.$name.'_og_version.jpg'), 60, 'jpg');
+    }
 
 
   public function getCertificate($certificate){
@@ -461,7 +463,13 @@ class CertificateController extends Controller
             File::makeDirectory('cert', 0777, true, true);
         }
 
+        if(File::exists($destination)){
+            unlink($destination);
+        }
+
         file_put_contents($destination, $data);
+
+        $this->og_image_version($imageName, $certificateId);
 
         return response()->json([
             'success' => true,

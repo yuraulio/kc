@@ -427,11 +427,11 @@
 
                 let path = data.path
                 let certiUrl = path.replace('\\','/')
-                console.log(baseUrl+'/'+certiUrl+'/'+certificateTitle)
+                //console.log(baseUrl+'/'+certiUrl+'/'+certificateTitle)
                 //let url = encodeURIComponent(baseUrl+'/'+certiUrl+'/'+certificateTitle);
 
-                console.log('url')
-                console.log(`${decodeURI(baseUrl)}/${decodeURI(certiUrl)}/${decodeURI(certificateTitle)}`)
+                //console.log('url')
+                //console.log(`${decodeURI(baseUrl)}/${decodeURI(certiUrl)}/${decodeURI(certificateTitle)}`)
                 url = decodeURI(baseUrl+'/'+certiUrl+'/'+certificateTitle)
 
                 if(data){
@@ -473,9 +473,9 @@
             url = data.path
             url = url.replace('\\','/')
 
-
             if(data){
-                var fbpopup = window.open(`http://twitter.com/share?url=${decodeURI(baseUrl)}/${decodeURI(url)}/${certificateTitle}&title=I just completed my exams at Knowcrunch. Join Knowcrunch’s community:http://bit.ly/3iG2q9D`, "pop", "width=600, height=400, scrollbars=no");
+                // var fbpopup = window.open(`http://twitter.com/share?url=${decodeURI(baseUrl)}/${decodeURI(url)}/${certificateTitle}&title=I just completed my exams at Knowcrunch. Join Knowcrunch’s community:http://bit.ly/3iG2q9D`, "pop", "width=600, height=400, scrollbars=no");
+                    var fbpopup = window.open(`http://twitter.com/share?url=${decodeURI(baseUrl)}/${decodeURI(url)}/${certificateTitle}&title=I just completed my exams at Knowcrunch`, "pop", "width=600, height=400, scrollbars=no");
                 return false;
             }
 
