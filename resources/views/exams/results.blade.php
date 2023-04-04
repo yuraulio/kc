@@ -405,8 +405,6 @@
 
     $(document).on('click', '.linkedin-post', function() {
 
-        alert('test')
-
         var getUrl = window.location;
         var baseUrl = getUrl .protocol + "//" + getUrl.host;
         var pathname = getUrl.pathname
@@ -435,10 +433,12 @@
                 //console.log('url')
                 //console.log(`${decodeURI(baseUrl)}/${decodeURI(certiUrl)}/${decodeURI(certificateTitle)}`)
                 url = encodeURIComponent(baseUrl+'/'+certiUrl+'/'+certificateTitle)
+                title = encodeURIComponent(certificateTitle)
+                baseUrl = encodeURIComponent(baseUrl)
 
                 if(data){
                     //<a href="https://www.linkedin.com/shareArticle?mini=true&url=https%3A%2F%2Fstevenwestmoreland.com%2F2018%2F07%2Fcreating-social-sharing-links-without-javascript.html&title=Creating+social+sharing+links+without+third-party+JavaScript&summary=How+to+create+social+sharing+links+for+your+website+without+having+to+load+third-party+JavaScript.&source=stevenwestmoreland.com" rel="noopener" target="_blank">Share on LinkedIn</a>
-                    var fbpopup = window.open(`https://www.linkedin.com/shareArticle?mini=true&url=${url}&title=test&summary=testtesttest&source=dev2021.knowcrunch.com`, "pop", "width=600, height=400, scrollbars=no");
+                    var fbpopup = window.open(`https://www.linkedin.com/shareArticle?mini=true&url=${url}&title=results&summary=${title}&source=${baseUrl}`, "pop", "width=600, height=400, scrollbars=no");
                     return false;
 
 
