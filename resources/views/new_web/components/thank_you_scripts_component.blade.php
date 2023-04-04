@@ -22,20 +22,20 @@
         dataLayer.push({ ecommerce: null });
         let actionField = {};
         let products = {};
-        
+
         @foreach($thankyouData['ecommerce']['actionField'] as $key => $ti)
             @if($ti != '')
                 actionField["{{$key}}"] =  $.parseHTML("{{$ti}}")[0].data
-        
+
             @endif
         @endforeach
-        
+
         @foreach($thankyouData['ecommerce']['products'] as $key => $ti)
             @if($ti != '')
                 products["{{$key}}"] = $.parseHTML("{{$ti}}")[0].data
             @endif
         @endforeach
-        
+
         dataLayer.push({
             'event': 'purchase',
             'ecommerce': {
@@ -65,7 +65,7 @@
             dataLayer.push({ ecommerce: null });
             let actionField = {};
             let products = {};
-            
+
             @foreach($ecommerce['actionField'] as $key => $ti)
                 @if($ti != '')
                     actionField["{{$key}}"] =  $.parseHTML("{{$ti}}")[0].data
