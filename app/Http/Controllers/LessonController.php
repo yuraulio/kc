@@ -388,7 +388,7 @@ class LessonController extends Controller
     }
 
 
-    private function formatDuration($duration){
+    public function formatDuration($duration){
         $duration = gmdate("H:i:s", $duration);
         $duration = explode(":",$duration);
 

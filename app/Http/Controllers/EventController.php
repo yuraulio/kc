@@ -1018,6 +1018,21 @@ class EventController extends Controller
 
         $data['course_status'] = $status;
         $data['course_delivery'] = $deliveryId;
+
+        $data['course_delivery_icon'] = $this->prepareIconLinkStatus($requestData['delivery_icon']);
+        $data['course_delivery_text'] = $requestData['delivery_info']['text'];
+
+        if(isset($requestData['delivery_info']['visible'])){
+
+            $visible_loaded_data = $requestData['delivery_info']['visible'];
+            $data['course_delivery_visible'] = json_encode($this->prepareVisibleData($visible_loaded_data));
+
+        }else{
+
+            $data['course_delivery_visible'] = json_encode($this->prepareVisibleData());
+
+        }
+
         $data['course_hours_text'] = $requestData['hours']['text'];
         $data['course_hours_hour'] = isset($requestData['hours']['hour']) ? $requestData['hours']['hour'] : null;
 
@@ -1470,6 +1485,9 @@ class EventController extends Controller
         $infos->course_manager_icon = $event_info['course_manager_icon'];
 
         $infos->course_delivery = $event_info['course_delivery'];
+        $infos->course_delivery_icon = $event_info['course_delivery_icon'];
+        $infos->course_delivery_text = $event_info['course_delivery_text'];
+        $infos->course_delivery_visible = $event_info['course_delivery_visible'];
 
         $infos->course_inclass_absences = isset($event_info['course_inclass_city_icon']) ? $event_info['course_inclass_absences'] : null;
         $infos->course_inclass_city = isset($event_info['course_inclass_city_icon']) ? $event_info['course_inclass_city'] : null;

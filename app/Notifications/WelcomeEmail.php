@@ -50,13 +50,14 @@ class WelcomeEmail extends Notification
         $slug['id'] = $this->user->id;
         $slug['email'] = $this->user->email;
         $slug['create'] = true;
-        
-        
+
+
         $slug = encrypt($slug);
 
         $template = isset($this->data['template']) ? 'emails.user.'.$this->data['template'] : 'emails.user.welcome';
 
-        $subject = !isset($this->data['subject']) ? 'Knowcrunch - Welcome ' .  $this->user->firstname . '. Activate your account​ now' : 'Knowcrunch - Welcome ' . $this->data['subject'];
+        // $subject = !isset($this->data['subject']) ? 'Knowcrunch - Welcome ' .  $this->user->firstname . '. Activate your account​ now' : 'Knowcrunch - Welcome ' . $this->data['subject'];
+        $subject = !isset($this->data['subject']) ? 'Knowcrunch - Welcome to our course ' .  $this->user->firstname : 'Knowcrunch – Welcome to our course ' . $this->data['subject'];
 
         $this->data['slug'] = $this->data['user']['createAccount'] ? url('/') . '/create-your-password/' . $slug : url('/') . '/myaccount';
 

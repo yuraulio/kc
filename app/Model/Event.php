@@ -963,8 +963,10 @@ class Event extends Model
             $data['language']['icon'] = $infos['course_language_icon'] != null ? json_decode($infos['course_language_icon'], true) : null;
             $data['language']['visible'] = $infos['course_language_visible'] != null ? json_decode($infos['course_language_visible'], true) : null;
 
-            //dd($infos['course_delivery']);
             $data['delivery'] = $infos['course_delivery'];
+            $data['delivery_icon'] = $infos['course_delivery_icon'] != null ? json_decode($infos['course_delivery_icon'],true) : null;
+            $data['delivery_info']['text'] = $infos['course_delivery_text'];
+            $data['delivery_info']['visible'] = $infos['course_delivery_visible'] != null ? json_decode($infos['course_delivery_visible'], true) : null;
 
             if($data['delivery'] == 139){
 

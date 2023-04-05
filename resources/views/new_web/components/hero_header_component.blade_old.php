@@ -47,7 +47,7 @@
                         $course_enable = (isset($info['course_awards']) && $info['course_awards']) ? $info['course_awards'] : false;
 
                         ?>
-                        @if(isset($certificate_visible['landing']) && $certificate_visible['landing'] && isset($info['course_certification_type']) && $info['course_certification_type'] != null)
+                        {{--@if(isset($certificate_visible['landing']) && $certificate_visible['landing'] && isset($info['course_certification_type']) && $info['course_certification_type'] != null)
                         <div class="col-auto certificate text-center">
                             {{ $info['course_certification_type'] }}
                         </div>
@@ -61,7 +61,7 @@
                         <div class="col-auto hours text-center">
                             {{ $info['course_hours'] }} hours
                         </div>
-                        @endif
+                        @endif--}}
                     </div>
                 </div>
                 @if($column->template->dynamic)
@@ -104,7 +104,7 @@
                 <div class="row">
                     @if(isset($students_visible['landing']) && $students_visible['landing'] && isset($info['course_students_number']) && $info['course_students_text'])
                     <div class="col-12 col-md-auto students">
-                        {{ $sumStudents + (int)$info['course_students_number'] }} {{ ((isset($info['course_students_text']) && $info['course_students_text'] != null) ? $info['course_students_text'] : '') }}
+                        {{ $sumStudents + (int)$info['course_students_number'] }} {{ ((isset($info['course_students_text']) && $info['course_students_text'] != null) ? strip_tags($info['course_students_text']) : '') }}
                     </div>
                     <?php $hasStudentColumn = true; ?>
                     @endif

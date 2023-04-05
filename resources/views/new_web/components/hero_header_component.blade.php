@@ -71,26 +71,6 @@
                     {!! $title !!}
                 @endif
 
-                <div class="event-infos-mobile">
-
-
-                        @if(isset($certificate_visible['landing']) && $certificate_visible['landing'] && isset($info['course_certification_type']) && $info['course_certification_type'] != null)
-                        <span class="col-auto certificate text-center">
-                            {{ $info['course_certification_type'] }}
-                        </span>
-                        @endif
-                        @if(isset($event['delivery'][0]['name']))
-                        <span class="col-auto delivery text-center">
-                            {{ $event['delivery'][0]['name'] }}
-                        </span>
-                        @endif
-                        @if(isset($hours_visible['landing']) && $hours_visible['landing'] && isset($info['course_hours']) && $info['course_hours'] > 0)
-                        <span class="col-auto hours text-center">
-                            {{ $info['course_hours'] }} hours
-                        </span>
-                        @endif
-
-                </div>
 
                 <?php
                     if(isset($students_visible['landing']) && $students_visible['landing'] && isset($event['category'][0]['id'])){

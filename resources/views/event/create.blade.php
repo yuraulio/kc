@@ -329,18 +329,80 @@
                                     </div>
                                 </div>
 
+                                <div class="col-12 form-group">
 
-                                <div class="col-sm-12 col-md-6 col-lg-4 form-group{{ $errors->has('delivery') ? ' has-danger' : '' }}">
+                                    <div class="row form_group">
+                                        <div class="col-9 col-md-6 col-lg-4 {{ $errors->has('delivery') ? ' has-danger' : '' }}">
+
+                                            <select name="delivery" id="input-delivery" class="form-control" placeholder="{{ __('Delivery') }}" required>
+                                                <option disabled selected value="">Please select where this course takes place</option>
+                                                @foreach ($delivery as $delivery)
+                                                    <option value="{{ $delivery->id }}" >{{ $delivery->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
 
 
-                                    <select name="delivery" id="input-delivery" class="form-control" placeholder="{{ __('Delivery') }}" required>
-                                        <option disabled selected value="">Please select where this course takes place</option>
-                                        @foreach ($delivery as $delivery)
-                                            <option value="{{ $delivery->id }}" >{{ $delivery->name }}</option>
-                                        @endforeach
-                                    </select>
+                                        <div class="col-2 col-md-auto col-lg-auto align-self-center">
+                                            <span data-infowrapper="partner" class="input-group-addon input-group-append input-icon-wrapper">
+                                                <span class="btn btn-outline-primary input-icon">
+                                                    <i class="fa fa-university"></i>
+                                                </span>
+                                            </span>
+                                            <input type="hidden" value="{{ old('course_delivery_icon_path') }}" id="delivery_path" name="course[{{'delivery_icon'}}][{{'path'}}]">
+                                            <input type="hidden" value="{{ old('course_delivery_icon_alt_text') }}" id="delivery_alt_text" name="course[{{'delivery_icon'}}][{{'alt_text'}}]">
+                                        </div>
 
-                                    @include('alerts.feedback', ['field' => 'delivery'])
+                                        <div class="col-12 col-md-auto col-lg-auto align-self-center">
+
+                                            <label class="custom-toggle enroll-toggle visible">
+                                                <input class="icon_link" name="course[{{'delivery_icon'}}][{{'link_status'}}]" type="checkbox">
+                                                <span class="custom-toggle-slider rounded-circle" data-label-off="No Link" data-label-on="Link"></span>
+                                            </label>
+                                        </div>
+
+                                        <div class="col-12 col-md-5 col-lg-4 align-self-center input d-none">
+                                            <input placeholder="https://example.com" type="text" class="form-control" name="course[{{'delivery_icon'}}][{{'link'}}]" value="{{ old('delivery_icon_link', (isset($course_delivery_icon) && $course_delivery_icon != null && isset($course_delivery_icon['link'])) ? $course_delivery_icon['link'] : '' ) }}">
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-9 col-md-6 col-lg-4">
+
+                                    <!-- anto's editor -->
+                                    <input class="hidden" id="input-delivery-text" name="course[{{'delivery_info'}}][{{'text'}}]" value=""/>
+                                    @include('event.editor.editor', ['toolbar' => 'insertfile image media link anchor codesample','plugins' => 'link','keyinput' => "input-delivery_title", 'data'=> "", 'inputname' => "'course[delivery_info][text]'" ])
+                                    <!-- anto's editor -->
+
+                                </div>
+                            </div>
+                            <div class="row">
+
+                                <div class="form-group col-12 accordion course-delivery-list-visible" id="accordionExample">
+                                    <div class="card">
+                                        <div class="card-header" id="headingThree1" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
+                                            <h5 class="mb-0">Visible on:</h5>
+                                        </div>
+                                        <div id="collapseThree" class="collapse" aria-labelledby="headingThree1" data-parent="#accordionExample">
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col-sm-12 col-md-6 col-lg-2">
+
+                                                        <div class="custom-control custom-checkbox mb-3">
+                                                            <input class="custom-control-input" name="course[{{'delivery_info'}}][{{'visible'}}][{{'landing'}}]" id="input-delivery-landing" type="checkbox">
+                                                            <label class="custom-control-label" for="input-delivery-landing">Course landing page (summary)</label>
+                                                        </div>
+
+                                                    </div>
+
+
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
@@ -1926,6 +1988,10 @@
 
             rules: {
                 "course[hours][icon][link]" : {
+                    checkIfRequired: true,
+                    url: true
+                },
+                "course[delivery_icon][link]" : {
                     checkIfRequired: true,
                     url: true
                 },

@@ -665,7 +665,7 @@
                                     <div class="left">
                                         <div class="location">
 
-                                        You are one of the selected graduates who have access to our annual subscription. Access all of our course's updated videos & files for €199/year.
+                                        You are now eligible for one year access to our award winning course. Subscribe for €199/year and get access to all updated videos & files. Renew every year if you want.
 
                                         </div>
                                     </div>

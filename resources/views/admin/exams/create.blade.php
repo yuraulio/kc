@@ -71,14 +71,14 @@
                                   </div>
                                   <div class="form-group{{ $errors->has('title') ? ' has-danger' : '' }}">
                                      <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" name="indicate_crt_incrt_answers" class="custom-control-input checkboxes" id="indicate_crt_incrt_answers" checked>
+                                        <input type="checkbox" name="indicate_crt_incrt_answers" class="custom-control-input checkboxes" id="indicate_crt_incrt_answers" @if($exam->indicate_crt_incrt_answers) {{'checked'}} @endif >
                                         <label class="custom-control-label" for="indicate_crt_incrt_answers">{{ __('Indicate correct or incorrect answers') }}</label>
                                      </div>
                                      @include('alerts.feedback', ['field' => 'indicate_crt_incrt_answers'])
                                   </div>
                                   <div class="form-group{{ $errors->has('random_questions') ? ' has-danger' : '' }}">
                                      <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" name="random_questions" class="custom-control-input checkboxes" id="random_questions" checked>
+                                        <input type="checkbox" name="random_questions" class="custom-control-input checkboxes" id="random_questions" @if($exam->random_questions) {{'checked'}} @endif>
                                         <label class="custom-control-label" for="random_questions">{{ __('Randomize questions ') }}</label>
                                      </div>
                                      @include('alerts.feedback', ['field' => 'random_questions'])
@@ -119,14 +119,14 @@
                                   </div>
                                   <div class="form-group{{ $errors->has('display_crt_answers') ? ' has-danger' : '' }}">
                                      <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" name="display_crt_answers" class="custom-control-input checkboxes" id="display_crt_answers" checked>
+                                        <input type="checkbox" name="display_crt_answers" class="custom-control-input checkboxes" id="display_crt_answers" @if($exam->display_crt_answers) {{'checked'}} @endif>
                                         <label class="custom-control-label" for="display_crt_answers">{{ __('Display correct answer') }}</label>
                                      </div>
                                      @include('alerts.feedback', ['field' => 'display_crt_answers'])
                                   </div>
                                   <div class="form-group{{ $errors->has('random_answers') ? ' has-danger' : '' }}">
                                      <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" name="random_answers" class="custom-control-input checkboxes" id="random_answers" checked>
+                                        <input type="checkbox" name="random_answers" class="custom-control-input checkboxes" id="random_answers" @if($exam->random_answers) {{'checked'}} @endif>
                                         <label class="custom-control-label" for="random_answers">{{ __('Randomize answers ') }}</label>
                                      </div>
                                      @include('alerts.feedback', ['field' => 'random_answers'])
@@ -1237,14 +1237,14 @@
                            value1['totalAnswers'],
                            value1['started_at'],
                            value1['finish_at']
-                        
+
                         ]).draw();
-                        
+
                      })
 
                    }else{
                      tl.row.add([
-                        
+
                         '',
                         '',
                         '',
@@ -1252,12 +1252,12 @@
                         '',
                         '',
                         ''
-                        
+
                      ]).draw();
-                        
+
                    }
 
-                   
+
                   //$('avScoreBar')
                    $('#avScore').html(data['averageScore'])
                    $('#avHour').html(data['averageHour'])

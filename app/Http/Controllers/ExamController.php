@@ -114,13 +114,13 @@ class ExamController extends Controller
 
             }
 
-            
+
             $eventsData[$event->id] = trim($event->htmlTitle . ' ' . $date);
 
-            
+
 
         }
-        
+
         $liveResults = [];
         $syncDatas = ExamSyncData::where('exam_id', $exam->id)->get();
 
@@ -187,6 +187,12 @@ class ExamController extends Controller
     public function update(ExamRequest $request, Exam $exam)
     {
         $input =  $request->all();
+
+        $input['indicate_crt_incrt_answers'] = isset($input['indicate_crt_incrt_answers']) && $input['indicate_crt_incrt_answers'] == 1 ? 1 : 0;
+        $input['random_questions'] = isset($input['random_questions']) && $input['random_questions'] == 1 ? 1 : 0;
+        $input['display_crt_answers'] = isset($input['display_crt_answers']) && $input['display_crt_answers'] == 1 ? 1 : 0;
+        $input['random_answers'] = isset($input['random_answers']) && $input['random_answers'] == 1 ? 1 : 0;
+
         $input['status'] = $request->status && $request->status ='on' ? true : false;
         $input['publish_time'] = date('Y-m-d H:i',strtotime($request->publish_time));
         $exam->update($input);
