@@ -29,9 +29,6 @@ use App\Notifications\SendTopicAutomateMail;
 use App\Model\Instructor;
 use App\Notifications\InstructorsMail;
 use App\Notifications\SubscriptionExpireReminder;
-use Vimeo\Vimeo;
-use App\Model\Lesson;
-use Illuminate\Support\Facades\Log;
 
 class CronjobsController extends Controller
 {
@@ -1193,26 +1190,6 @@ class CronjobsController extends Controller
             }
 
         }
-
-    }
-
-    public function updateVimeoDuration()
-    {
-        Lesson::where('vimeo_video','!=', '')->chunk(10, function ($lessons) {
-            foreach ($lessons as $lesson) {
-
-                $vimeoVideo = explode("/",$lesson->vimeo_video);
-
-                $client = new Vimeo(env('client_id'), env('client_secret'), env('vimeo_token'));
-                $response = $client->request("/videos/". end($vimeoVideo) . "/?password=".env('video_password'), array(), 'GET');
-
-                if($response['status'] === 200){
-                    $duration = $response['body']['duration'];
-                    $lesson->vimeo_duration = app('App\Http\Controllers\LessonController')->formatDuration($duration);
-                    $lesson->save();
-                }
-            }
-        });
 
     }
 
