@@ -28,6 +28,7 @@ var MINUTES                         = 0;
 var SECONDS                         = 0;
 var SPENT_TIME                      = [];
 var LOOP_AGAIN                      = 0;
+var OUT_OF_TIME                     = false
 
 
 function scrollCurrentQuestionRow(){
@@ -59,6 +60,10 @@ if(elementInScrollableDiv != null){
 
 // onclick of next button
 function nextQues(mark) {
+    if(OUT_OF_TIME){
+        return false;
+    }
+
     if (mark === undefined) {
     mark = 0;
     }
@@ -262,6 +267,11 @@ function nextQues(mark) {
 }
 
 function prevQues() {
+
+    if(OUT_OF_TIME){
+        return false;
+    }
+
     jQuery('.next').removeClass('hide');
     var eJson = JSON.parse( window.examVar );
     var showx = 0;
@@ -341,6 +351,9 @@ function showSpecificQuestion(qid, changeactive) {
 }
 
 function clearAnswer() {
+    if(OUT_OF_TIME){
+        return false;
+    }
     var eJson = JSON.parse( window.examVar );
     list = $('#'+window.actQues + ' input ');
     answer_status = 0;
@@ -378,8 +391,9 @@ function clearAnswer() {
     updateStats();
 }
 
-function outOfTimeDialog(){
+function outOfTimeDialog(executeAgain = false){
     closeGeneralDialog()
+    $('#outOfTimeDialog-wrapper').empty()
 
     if($('#outOfTimeDialog').length == 0){
         let dialog = `
@@ -390,7 +404,7 @@ function outOfTimeDialog(){
                     </div>
 
                     <div class="close-dialog-general-buttons">
-                        <a id="close-exam-dialog1" href="javascript:void(0)" onclick="closeOutOfTimeExam()" class="close-alert"><img src="{{cdn('/theme/assets/images/icons/alert-icons/icon-close-alert.svg')}}" alt="Close Alert"/></a>
+                        <a id="close-exam-dialog1" href="javascript:void(0)" onclick="closeOutOfTimeExam(${executeAgain})" class="close-alert"><img src="{{cdn('/theme/assets/images/icons/alert-icons/icon-close-alert.svg')}}" alt="Close Alert"/></a>
                     <!-- <button onclick="closeOutOfTimeExam()" class="btn btn-not-exit-exam btn-sm">OK </button>-->
                     </div>
 
@@ -517,17 +531,48 @@ function finishExam() {
             <?php
             }
             ?>
+        },
+        error: function() {
+            $('.btn.btn-exit-exam.btn-sm').prop('disabled', false);
         }
         });
     // } else {
     // }
 }
 
-function closeOutOfTimeExam(){
-    window.location = "{{ url('exam-results/' . $exam->id) }}?s=1&t=1";
+function closeOutOfTimeExam(executeAgain){
+
+    $('#close-exam-dialog1').css('pointer-events','none');
+
+    if(executeAgain){
+        outOfTime(true)
+    }else{
+        window.location = "{{ url('exam-results/' . $exam->id) }}?s=1&t=1";
+    }
+
+
 }
 
-function outOfTime() {
+function disable_after_out_of_time(){
+
+    $('#main-section-exam').click(false);
+    $('#select-section').click(false);
+    $('#btn-section button').prop('disabled', true);
+
+    $(".question-palette span").on("click",function(e){
+       e.preventDefault();
+       return false;
+    });
+
+
+
+}
+
+function outOfTime(from_loop) {
+    OUT_OF_TIME = true
+
+    disable_after_out_of_time()
+
     jQuery.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
@@ -543,9 +588,17 @@ function outOfTime() {
     success: function() {
        // alert("Time Over. Exam Completed Successfully");
 
-       outOfTimeDialog()
+       if(from_loop){
+        closeOutOfTimeExam()
+        $('#close-exam-dialog1').css('pointer-events','none');
+       }else{
+        outOfTimeDialog()
+       }
 
-
+    },
+    error: function() {
+        outOfTimeDialog(executeAgain = true)
+        $('#close-exam-dialog1').css('pointer-events','auto');
     }
     });
 }
@@ -584,6 +637,9 @@ function forceFinish() {
             <?php
             }
             ?>
+    },
+    error: function() {
+        $('.btn.btn-exit-exam.btn-sm').prop('disabled', false);
     }
     });
 }
@@ -885,14 +941,14 @@ window.actQues = 0;
 
 <div class="container">
 
-    <div class="row justify-content-center">
+    <div id="main-section-exam" class="row justify-content-center">
 
     <div id="outOfTimeDialog-wrapper"></div>
     <div id="finishDialog"></div>
     <div id="generalDialog"></div>
 
 
-    <div class="col-12" style="margin-bottom: 2rem">
+    <div id="header-section" class="col-12" style="margin-bottom: 2rem">
         <div id="container1" class="container1">
             <div class="header1">
 
@@ -921,7 +977,7 @@ window.actQues = 0;
         </div>
         <div id="hover-palette-expand-arrow"><p>Expand</p></div>
     </div>
-        <div class="col-12" style="margin-bottom: 2rem">
+        <div id="select-section" class="col-12" style="margin-bottom: 2rem">
 
             @if (session('status'))
                 <div class="alert alert-success" role="alert">
@@ -1050,7 +1106,7 @@ window.actQues = 0;
 
 
 
-        <div class="col-12">
+        <div id="btn-section" class="col-12">
             <div class="buttons-wrapper">
 
             <!-- col-sm-12 col-md-6 col-lg-3 -->

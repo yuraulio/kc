@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Vimeo\Vimeo;
 use App\Model\Lesson;
+use App\Model\Event;
 
 class UpdateVimeoDuration extends Command
 {
@@ -54,5 +55,18 @@ class UpdateVimeoDuration extends Command
                 }
             }
         });
+
+        $events = Event::has('lessons')->get();
+        $request = new \Illuminate\Http\Request();
+
+        foreach($events as $event){
+
+            $duration = app('App\Http\Controllers\EventController')->calculateTotalHours($request,$event->id);
+            $hours = ceil($duration/60);
+
+            $event->hours = $hours;
+            $event->save();
+
+        }
     }
 }

@@ -989,19 +989,22 @@ class EventController extends Controller
 
 
 
-    public function calculateTotalHours($id)
+    public function calculateTotalHours(Request $request, $id)
     {
         $event = Event::find($id);
-
         $totalHours = $event->getTotalHours();
 
+        if($request->ajax()){
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Calculate successfully total hours for this event!',
-            'data'  => $totalHours
-        ]);
+            return response()->json([
+                'success' => true,
+                'message' => 'Calculate successfully total hours for this event!',
+                'data'  => $totalHours
+            ]);
 
+        }
+
+        return $totalHours;
     }
 
 
