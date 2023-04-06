@@ -577,8 +577,8 @@ class Event extends Model
             $periodAfterHasCourse = $this->period($user);
         }
 
-        $studentsEx = [1353,1866,1753,1882,1913,1923,1359];
-        //$studentsEx = [1353,1866,1753,1882,1913,1923];
+        //$studentsEx = [1353,1866,1753,1882,1913,1923,1359];
+        $studentsEx = [1353,1866,1753,1882,1913,1923];
 
         if(in_array($user->id, $studentsEx)){
             return true;

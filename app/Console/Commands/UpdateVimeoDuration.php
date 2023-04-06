@@ -40,21 +40,21 @@ class UpdateVimeoDuration extends Command
      */
     public function handle()
     {
-        Lesson::where('vimeo_video','!=', '')->chunk(10, function ($lessons) {
-            foreach ($lessons as $lesson) {
+        // Lesson::where('vimeo_video','!=', '')->chunk(10, function ($lessons) {
+        //     foreach ($lessons as $lesson) {
 
-                $vimeoVideo = explode("/",$lesson->vimeo_video);
+        //         $vimeoVideo = explode("/",$lesson->vimeo_video);
 
-                $client = new Vimeo(env('client_id'), env('client_secret'), env('vimeo_token'));
-                $response = $client->request("/videos/". end($vimeoVideo) . "/?password=".env('video_password'), array(), 'GET');
+        //         $client = new Vimeo(env('client_id'), env('client_secret'), env('vimeo_token'));
+        //         $response = $client->request("/videos/". end($vimeoVideo) . "/?password=".env('video_password'), array(), 'GET');
 
-                if($response['status'] === 200){
-                    $duration = $response['body']['duration'];
-                    $lesson->vimeo_duration = app('App\Http\Controllers\LessonController')->formatDuration($duration);
-                    $lesson->save();
-                }
-            }
-        });
+        //         if($response['status'] === 200){
+        //             $duration = $response['body']['duration'];
+        //             $lesson->vimeo_duration = app('App\Http\Controllers\LessonController')->formatDuration($duration);
+        //             $lesson->save();
+        //         }
+        //     }
+        // });
 
         $events = Event::has('lessons')->get();
         $request = new \Illuminate\Http\Request();
@@ -64,8 +64,9 @@ class UpdateVimeoDuration extends Command
             $duration = app('App\Http\Controllers\EventController')->calculateTotalHours($request,$event->id);
             $hours = ceil($duration/60);
 
-            $event->hours = $hours;
-            $event->save();
+            $info = $event->event_info1;
+            $info->course_hours = $hours;
+            $info->save();
 
         }
     }
