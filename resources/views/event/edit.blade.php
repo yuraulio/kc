@@ -673,58 +673,59 @@
                                                         <input placeholder="https://example.com" type="text" class="form-control" name="course[{{'delivery_icon'}}][{{'link'}}]" value="{{ old('delivery_icon_link', (isset($course_delivery_icon) && $course_delivery_icon != null && isset($course_delivery_icon['link'])) ? $course_delivery_icon['link'] : '' ) }}">
                                                     </div>
 
-                                                @include('alerts.feedback', ['field' => 'delivery'])
-                                            </div>
 
-                                            <div class="row">
-                                                <div class="col-9 col-md-6 col-lg-4">
-
-                                                    <!-- anto's editor -->
-                                                    <input class="hidden" id="input-delivery-text" name="course[{{'delivery_info'}}][{{'text'}}]" value="{{ isset($delivery_text) ? $delivery_text : '' }}"/>
-                                                    <?php $data = isset($delivery_text) ? $delivery_text : '' ?>
-                                                    @include('event.editor.editor', ['toolbar' => 'insertfile image media link anchor codesample','plugins' => 'link','keyinput' => "input-delivery_title", 'data'=> "$data", 'inputname' => "'course[delivery_info][text]'" ])
-                                                    <!-- anto's editor -->
-
+                                                    @include('alerts.feedback', ['field' => 'delivery'])
                                                 </div>
-                                            </div>
 
-                                            <div class="row">
-                                                <?php
+                                                <div class="row">
+                                                    <div class="col-9 col-md-6 col-lg-4">
 
-                                                    $visible_delivery = (isset($info['delivery_info']['visible']) && $info['delivery_info']['visible'] != null) ? $info['delivery_info']['visible'] : null;
+                                                        <!-- anto's editor -->
+                                                        <input class="hidden" id="input-delivery-text" name="course[{{'delivery_info'}}][{{'text'}}]" value="{{ isset($delivery_text) ? $delivery_text : '' }}"/>
+                                                        <?php $data = isset($delivery_text) ? $delivery_text : '' ?>
+                                                        @include('event.editor.editor', ['toolbar' => 'insertfile image media link anchor codesample','plugins' => 'link','keyinput' => "input-delivery_title", 'data'=> "$data", 'inputname' => "'course[delivery_info][text]'" ])
+                                                        <!-- anto's editor -->
 
-                                                ?>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <?php
+
+                                                        $visible_delivery = (isset($info['delivery_info']['visible']) && $info['delivery_info']['visible'] != null) ? $info['delivery_info']['visible'] : null;
+
+                                                    ?>
 
 
 
-                                                <div class="form-group col-12 accordion course-delivery-list-visible" id="accordionExample">
-                                                    <div class="card">
-                                                        <div class="card-header" id="headingThree1" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
-                                                            <h5 class="mb-0">Visible on:</h5>
-                                                        </div>
-                                                        <div id="collapseThree" class="collapse" aria-labelledby="headingThree1" data-parent="#accordionExample">
-                                                            <div class="card-body">
-                                                                <div class="row">
-                                                                    <div class="col-sm-12 col-md-6 col-lg-2">
+                                                    <div class="form-group col-12 accordion course-delivery-list-visible" id="accordionExample">
+                                                        <div class="card">
+                                                            <div class="card-header" id="headingThree1" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
+                                                                <h5 class="mb-0">Visible on:</h5>
+                                                            </div>
+                                                            <div id="collapseThree" class="collapse" aria-labelledby="headingThree1" data-parent="#accordionExample">
+                                                                <div class="card-body">
+                                                                    <div class="row">
+                                                                        <div class="col-sm-12 col-md-6 col-lg-2">
 
-                                                                        <div class="custom-control custom-checkbox mb-3">
-                                                                            <input class="custom-control-input" {{ ($visible_delivery != null && $visible_delivery['landing']) ? 'checked' : '' }} name="course[{{'delivery_info'}}][{{'visible'}}][{{'landing'}}]" id="input-delivery-landing" type="checkbox">
-                                                                            <label class="custom-control-label" for="input-delivery-landing">Course landing page (summary)</label>
+                                                                            <div class="custom-control custom-checkbox mb-3">
+                                                                                <input class="custom-control-input" {{ ($visible_delivery != null && $visible_delivery['landing']) ? 'checked' : '' }} name="course[{{'delivery_info'}}][{{'visible'}}][{{'landing'}}]" id="input-delivery-landing" type="checkbox">
+                                                                                <label class="custom-control-label" for="input-delivery-landing">Course landing page (summary)</label>
+                                                                            </div>
+
                                                                         </div>
+
 
                                                                     </div>
 
-
                                                                 </div>
-
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
 
 
-                                                </div>
+
                                             </div>
 
                                         </div>
