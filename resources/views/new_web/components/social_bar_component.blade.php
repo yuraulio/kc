@@ -64,3 +64,9 @@
         </ul>
     </div>
 </div>
+
+@php
+
+Session::forget('thankyouData');
+
+@endphp
