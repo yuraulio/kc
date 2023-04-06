@@ -8,22 +8,34 @@
 
     if ($socials === []) {
         $facebookCheckbox = true;
-        $facebookIcon = '/theme/assets/images/icons/social/events/Facebook-white.svg';
+        $facebookIcon = '/theme/assets/images/icons/social/events/Facebook.svg';
 
         $twitterCheckbox = true;
-        $twitterIcon = '/theme/assets/images/icons/social/events/Twitter-white.svg';
+        $twitterIcon = '/theme/assets/images/icons/social/events/Twitter.svg';
 
         $linkedinCheckbox = true;
-        $linkedinIcon = '/theme/assets/images/icons/social/events/Linkedin-white.svg';
+        $linkedinIcon = '/theme/assets/images/icons/social/events/Linkedin.svg';
+
+        if(Session::get('thankyouData')){
+            $facebookIcon = '/theme/assets/images/icons/social/events/Facebook-white.svg';
+            $twitterIcon = '/theme/assets/images/icons/social/events/Twitter-white.svg';
+            $linkedinIcon = '/theme/assets/images/icons/social/events/Linkedin-white.svg';
+        }
     } else {
         $facebookCheckbox = $socials["social_facebook_checkbox"] ?? "";
-        $facebookIcon = $socials["social_facebook_icon"]->full_path ?? '/theme/assets/images/icons/social/events/Facebook-white.svg';
+        $facebookIcon = $socials["social_facebook_icon"]->full_path ?? '/theme/assets/images/icons/social/events/Facebook.svg';
 
         $twitterCheckbox = $socials["social_twitter_checkbox"] ?? "";
-        $twitterIcon = $socials["social_twitter_icon"]->full_path ?? '/theme/assets/images/icons/social/events/Twitter-white.svg';
+        $twitterIcon = $socials["social_twitter_icon"]->full_path ?? '/theme/assets/images/icons/social/events/Twitter.svg';
 
         $linkedinCheckbox = $socials["social_linkedin_checkbox"] ?? "";
-        $linkedinIcon = $socials["social_linkedin_icon"]->full_path ?? '/theme/assets/images/icons/social/events/Linkedin-white.svg';
+        $linkedinIcon = $socials["social_linkedin_icon"]->full_path ?? '/theme/assets/images/icons/social/events/Linkedin.svg';
+
+        if(Session::get('thankyouData')){
+            $facebookIcon = $socials["social_facebook_icon"]->full_path ?? '/theme/assets/images/icons/social/events/Facebook-white.svg';
+            $twitterIcon = $socials["social_twitter_icon"]->full_path ?? '/theme/assets/images/icons/social/events/Twitter-white.svg';
+            $linkedinIcon = $socials["social_linkedin_icon"]->full_path ?? '/theme/assets/images/icons/social/events/Linkedin-white.svg';
+        }
     }
 
 @endphp
