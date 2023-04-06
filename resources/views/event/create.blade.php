@@ -344,7 +344,7 @@
 
 
                                         <div class="col-2 col-md-auto col-lg-auto align-self-center">
-                                            <span data-infowrapper="partner" class="input-group-addon input-group-append input-icon-wrapper">
+                                            <span data-infowrapper="delivery" class="input-group-addon input-group-append input-icon-wrapper">
                                                 <span class="btn btn-outline-primary input-icon">
                                                     <i class="fa fa-university"></i>
                                                 </span>
