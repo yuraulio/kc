@@ -711,7 +711,9 @@
                 this.$modal.hide('edit-image-modal');
             },
             setCropBox(image_width, image_height) {
-                // console.log('from set crop box data')
+                console.log('from set crop box data')
+                console.log('selected version: ',this.selectedVersion)
+                console.log(image_width, image_height)
                 // console.log(this.versionsForUpdate)
 
 
@@ -731,6 +733,7 @@
 
                 if(this.versionsForUpdate[this.selectedVersion.version] && this.versionsForUpdate[this.selectedVersion.version].crop_data !== undefined && !this.versionsForUpdate[this.selectedVersion.version].hasDeleted){
 
+                    console.log('1')
                     let data = this.versionsForUpdate[this.selectedVersion.version].crop_data;
 
                     //this.$refs.cropper.setAspectRatio(data.width / data.height);
@@ -753,6 +756,7 @@
                 }
 
                 if (this.uploadedVersions) {
+                    console.log('2')
 
 
                     let data = this.findVersionPavlos(this.selectedVersion.version)
@@ -765,6 +769,8 @@
 
                     if(data != null && data.crop_data == null){
 
+                        console.log('3')
+
                         this.$set(this.cropBoxData, 'width', this.selectedVersion.w * this.width_ratio);
                         this.$set(this.cropBoxData, 'height', this.selectedVersion.h * this.height_ratio);
                         this.$set(this.cropBoxData, 'left', ((container_width - (this.selectedVersion.w * this.width_ratio))/2));
@@ -772,6 +778,8 @@
 
 
                     }else if(data != null){
+
+                        console.log('4')
 
                         if (typeof data.crop_data === "string") {
                             data.crop_data = JSON.parse(data.crop_data);
@@ -782,6 +790,8 @@
                         this.$set(this.cropBoxData, 'top', (((container_height - canvas_height)/2) + (data.crop_data.height_offset * this.width_ratio)));
 
                     }else{
+
+                        console.log('5')
                         this.$set(this.cropBoxData, 'width', this.selectedVersion.w * this.width_ratio);
                         this.$set(this.cropBoxData, 'height', this.selectedVersion.h * this.height_ratio);
                         this.$set(this.cropBoxData, 'left', ((container_width - (this.selectedVersion.w * this.width_ratio))/2));
@@ -790,6 +800,7 @@
 
 
                 } else {
+                    console.log('6')
                     this.$set(this.cropBoxData, 'width', this.selectedVersion.w * this.width_ratio);
                     this.$set(this.cropBoxData, 'height', this.selectedVersion.h * this.height_ratio);
                     this.$set(this.cropBoxData, 'left', ((container_width - (this.selectedVersion.w * this.width_ratio))/2));

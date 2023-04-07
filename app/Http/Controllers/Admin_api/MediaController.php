@@ -329,9 +329,10 @@ class MediaController extends Controller
                     "width_offset" => $width_offset,
 
                 ];
+
                 $cropData = json_encode($cropData);
 
-                $image->crop((int) $crop_width, (int) $crop_height, (int) $width_offset, (int) $height_offset);
+                $image->crop((int) 300, (int) 300, (int) $width_offset, (int) $height_offset);
 
                 $folderPath = ltrim($mediaFolder->path, "/");
                 $folderPath = "/" . $folderPath;
