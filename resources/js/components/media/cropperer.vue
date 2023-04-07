@@ -727,7 +727,6 @@
 
                 if(this.versionsForUpdate[this.selectedVersion.version] && this.versionsForUpdate[this.selectedVersion.version].crop_data !== undefined && !this.versionsForUpdate[this.selectedVersion.version].hasDeleted){
 
-                    console.log('1')
                     let data = this.versionsForUpdate[this.selectedVersion.version].crop_data;
 
                     //this.$refs.cropper.setAspectRatio(data.width / data.height);
@@ -750,7 +749,6 @@
                 }
 
                 if (this.uploadedVersions) {
-                    console.log('2')
 
 
                     let data = this.findVersionPavlos(this.selectedVersion.version)
@@ -763,8 +761,6 @@
 
                     if(data != null && data.crop_data == null){
 
-                        console.log('3')
-
                         this.$set(this.cropBoxData, 'width', this.selectedVersion.w * this.width_ratio);
                         this.$set(this.cropBoxData, 'height', this.selectedVersion.h * this.height_ratio);
                         this.$set(this.cropBoxData, 'left', ((container_width - (this.selectedVersion.w * this.width_ratio))/2));
@@ -773,7 +769,6 @@
 
                     }else if(data != null){
 
-                        console.log('4')
 
                         if (typeof data.crop_data === "string") {
                             data.crop_data = JSON.parse(data.crop_data);
@@ -785,7 +780,6 @@
 
                     }else{
 
-                        console.log('5')
                         this.$set(this.cropBoxData, 'width', this.selectedVersion.w * this.width_ratio);
                         this.$set(this.cropBoxData, 'height', this.selectedVersion.h * this.height_ratio);
                         this.$set(this.cropBoxData, 'left', ((container_width - (this.selectedVersion.w * this.width_ratio))/2));
@@ -794,7 +788,6 @@
 
 
                 } else {
-                    console.log('6')
                     this.$set(this.cropBoxData, 'width', this.selectedVersion.w * this.width_ratio);
                     this.$set(this.cropBoxData, 'height', this.selectedVersion.h * this.height_ratio);
                     this.$set(this.cropBoxData, 'left', ((container_width - (this.selectedVersion.w * this.width_ratio))/2));
