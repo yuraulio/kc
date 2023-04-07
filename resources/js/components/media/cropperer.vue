@@ -711,12 +711,6 @@
                 this.$modal.hide('edit-image-modal');
             },
             setCropBox(image_width, image_height) {
-                console.log('from set crop box data')
-                console.log('selected version: ',this.selectedVersion)
-                console.log(image_width, image_height)
-                // console.log(this.versionsForUpdate)
-
-
 
                 var canvas_height = this.$refs.cropper.getCanvasData().height;
                 var canvas_width = this.$refs.cropper.getCanvasData().width;
