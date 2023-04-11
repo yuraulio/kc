@@ -100,7 +100,7 @@ class UserController extends Controller
             if($user->email == 'burak@softweb.gr'){
                 $smsCode = 9999;
             }
-            
+
 
             $cookieSms = $user->cookiesSMS()->where('coockie_value',$cookie_value)->first();
             $sms_code = $cookieSms->sms_code;
@@ -170,7 +170,7 @@ class UserController extends Controller
         require_once("../app/Apifon/Model/SubscriberInformation.php");
 
         $user = Auth::user();
-        
+
         $cookie_value = '-11111111';
         if($request->hasHeader('auth-sms')){
             $cookie_value = base64_encode('auth-api-' . decrypt($request->header('auth-sms')));
@@ -285,6 +285,15 @@ class UserController extends Controller
         $instructors = Instructor::with('medias')->get()->groupby('id');
         foreach($user['events_for_user_list']->whereNotIn('id',$exceptEvents) as $key => $event)
         {
+
+
+            if($event->pivot['expiration'] != ''){
+
+                if(strtotime($event->pivot['expiration']) <= strtotime("now")){
+                    continue;
+                }
+            }
+
 
             if($event->pivot && !$event->pivot->paid){
                 continue;
@@ -604,9 +613,9 @@ class UserController extends Controller
 
                 // if inclass, parse dropbox files without attach by topic
                 //$data[$key]['files']['folders'][] = $foldersNew;
-                if(isset($foldersNew[0]) && count($foldersNew[0]) > 0){ 
+                if(isset($foldersNew[0]) && count($foldersNew[0]) > 0){
                     foreach($foldersNew as $key1 => $folderNew){
-                     
+
                         $eventFiles = [];
                         $folderName = '';
                         foreach($folderNew as $folderkey => $files){
@@ -615,9 +624,9 @@ class UserController extends Controller
                             //dd($file['files']);
                             $eventFiles= array_merge($eventFiles, $file['files']);;
                           }
-                             
+
                         }
-                        
+
                         $data[$key]['files']['folders'][] = ['name' => $folderName, 'files' => $eventFiles];
                     }
                 }else{
@@ -1201,9 +1210,9 @@ class UserController extends Controller
 
                 // if inclass, parse dropbox files without attach by topic
                 //$data[$key]['files']['folders'][] = $foldersNew;
-                if(isset($foldersNew[0]) && count($foldersNew[0]) > 0){ 
+                if(isset($foldersNew[0]) && count($foldersNew[0]) > 0){
                     foreach($foldersNew as $key1 => $folderNew){
-                     
+
                         $eventFiles = [];
                         $folderName = '';
                         foreach($folderNew as $folderkey => $files){
@@ -1212,9 +1221,9 @@ class UserController extends Controller
                             //dd($file['files']);
                             $eventFiles= array_merge($eventFiles, $file['files']);;
                           }
-                             
+
                         }
-                        
+
                         $data[$key]['files']['folders'][] = ['name' => $folderName, 'files' => $eventFiles];
                     }
                 }else{
