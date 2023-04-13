@@ -113,7 +113,7 @@ class PagesController extends Controller
 
         if($page->id == 4754){
 
-           
+
         }elseif($page->id == 4753 && $request->terms){
             dispatch((new UpdateTerms($page->id))->delay(now()->addSeconds(3)));
         }

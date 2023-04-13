@@ -2155,5 +2155,9 @@ img.linkdein-image-add {
     pointer-events: none;
 }
 
+.exam_text{
+    display: inline-flex;
+}
+
 
 

@@ -407,8 +407,6 @@ var mediaMixin = {
             let value = $event
             var formData = new FormData();
 
-            //console.log('event: ', value)
-
             // edit image version
             if(value != null && value.imgname){
 
@@ -453,158 +451,11 @@ var mediaMixin = {
             }
 
             this.$refs.crpr.isUploading = true;
-
-            //console.log('1')
             let response = await this.makeRequest(formData)
-            //console.log(response)
-            //console.log('2')
 
 
            this.parseRequest(response,value)
-            //console.log('3')
 
-            //console.log("await response => ", response)
-
-
-            /*
-
-            */
-
-            /*axios.post('/api/media_manager/edit_image', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-            }).then((response) => {
-                this.$toast.success('Uploaded Successfully!');
-
-
-                if(this.$refs.crpr !== undefined){
-                    this.$refs.crpr.isUploading = false;
-                }
-
-                this.imageKey = Math.random().toString().substr(2, 8);
-                // this.$modal.hide('edit-image-modal');
-                if (this.$refs.crpr && response.data.data.version == 'original') {
-                    var image = response.data.data;
-                    this.$refs.crpr.imgname = image.name;
-                    this.$refs.crpr.alttext = image.alt_text;
-                    this.$refs.crpr.link = image.link;
-                    this.$refs.crpr.size = image.size;
-                    this.$refs.crpr.height = image.height;
-                    this.$refs.crpr.width = image.width;
-                } else {
-                    if(this.$refs.crpr !== undefined){
-
-                        this.$refs.crpr.imgname = this.$refs.crpr.parrentImage.name;
-                        this.$refs.crpr.alttext = this.$refs.crpr.parrentImage.alttext;
-                        this.$refs.crpr.link = this.$refs.crpr.parrentImage.link;
-                        this.$refs.crpr.size = this.$refs.crpr.parrentImage.size;
-                        this.$refs.crpr.height = this.$refs.crpr.parrentImage.height;
-                        this.$refs.crpr.width = this.$refs.crpr.parrentImage.width;
-
-                    }
-                }
-
-                let version = null;
-                if(value != null && value.imgname){
-                    version = value.version
-                }else{
-                    version = this.$refs.crpr.version
-                }
-
-                // console.log('VERSION: ', version)
-                // console.log('1111: ',this.$refs.crpr.forUpdate)
-
-
-                if(response){
-
-
-
-                    if(this.$refs.crpr !== undefined){
-                        //console.log('inside reposnse: version: ', version)
-                        //console.log('inside reposnse: forUpdate1 latest version: ', Object.keys(this.$refs.crpr.forUpdate1)[Object.keys(this.$refs.crpr.forUpdate1).length-1])
-                        //console.log('PRE CALL: ', Object.keys(this.$refs.crpr.forUpdate1)[Object.keys(this.$refs.crpr.forUpdate1).length-1] == version)
-                        if(Object.keys(this.$refs.crpr.forUpdate1)[Object.keys(this.$refs.crpr.forUpdate1).length-1] == version){
-                            //console.log('CALL GET FILES')
-                            this.getFiles(response.data.data.folder_id, true);
-
-                            //return false;
-                        }
-                    }
-
-                    //console.log('last item response :', version)
-
-
-
-                    delete this.$refs.crpr.forUpdate[version]
-
-                    //console.log('new ', this.$refs.crpr.forUpdate)
-
-                    this.selectedFile = response.data.data
-
-                    if(this.$parent.imageVersion && version == this.$parent.imageVersion){
-                        // this.$parent.imageVersionResponseData = response.data.data
-
-                        let baseUrl = location.protocol + '//' + location.host;
-
-
-                        if (baseUrl.includes('admin')){
-                            //this.$refs.crpr.confirmSelection(response.data.data)
-                        }
-
-
-                    }
-
-
-                }
-
-                if(this.$refs.crpr !== undefined){
-
-                    this.$refs.crpr.jpg = false;
-                    this.$refs.crpr.version = 'original';
-                    this.$refs.crpr.disable();
-                    this.$refs.crpr.versionData = null;
-
-                    if(this.$parent.imageVersion == null && this.$refs.crpr.selectedVersion != null && this.$refs.crpr.selectedVersion.version == version){
-                        this.$refs.crpr.confirmSelection(response.data.data)
-                    }else if(this.$parent.imageVersion == null && this.$refs.crpr.selectedVersion == null ){
-                        this.$refs.crpr.confirmSelection(response.data.data)
-                    }
-                }
-
-
-
-                let baseUrl = location.protocol + '//' + location.host;
-
-                if (!baseUrl.includes('admin')){
-                    if(version != null && version != 'original'){
-                        if(this.$refs.crpr){
-
-                            delete this.$refs.crpr.versionsForUpdate[version]
-
-                        }
-
-                    }
-                }
-
-
-            })
-            .catch((error) => {
-                console.log('ERROR: ', error)
-                //console.log("edit error", error.response.data.message);
-                if(this.$refs.crpr !== undefined){
-
-                    this.$refs.crpr.isUploading = false;
-                }
-
-                if(error.response !== undefined && error.response.data !== undefined){
-                    this.$toast.error("Failed to update. " + error.response.data.message);
-                }else{
-                    this.$toast.error("Failed to update. " + error);
-                }
-
-            })*/
-        // })
         },
         addFolder() {
             this.errors = null;

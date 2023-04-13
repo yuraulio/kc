@@ -9,7 +9,7 @@
     @can('create', App\Model\User::class)
         <div class="col-4 text-right">
             {{--<a href="{{ route('venue.create', ['id' => $event['id']]) }}" class="btn btn-sm btn-primary">{{ __('Assign Venue') }}</a>--}}
-            <button data-toggle="modal" data-target="#venueModal" class="btn btn-sm btn-primary">{{ __('Assign Venue') }}</button>
+            <button data-toggle="modal" type="button" data-target="#venueModal" class="btn btn-sm btn-primary">{{ __('Assign Venue') }}</button>
         </div>
     @endcan
 </div>

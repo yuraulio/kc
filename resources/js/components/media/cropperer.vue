@@ -379,7 +379,7 @@
                         'id': this.parrentImage.id,
                         'jpg': this.jpg,
                         'instance': this.$refs.cropper,
-                        'alttext': this.parrentImage.alttext != 'null' ? this.parrentImage.alttext : '',
+                        'alttext': this.originalFile.alt_text != 'null' ? this.originalFile.alt_text : '',
                         'link': this.parrentImage.link != 'null' ? this.parrentImage.link : '',
                         'hasDeleted': false
                     }
@@ -439,8 +439,18 @@
 
                 if(this.version == 'original'){
                     this.imgname = this.parrentImage ? this.parrentImage.name : '';
-                    this.alttext = this.parrentImage.alt_text ? this.parrentImage.alt_text : '';
-                    this.link = this.parrentImage.link ? this.parrentImage.link : '';
+                    if(this.versionsForUpdate['original']){
+                        this.alttext = this.versionsForUpdate['original'].alttext ? this.versionsForUpdate['original'].alttext : '';
+                    }else{
+                        this.alttext = this.parrentImage.alt_text ? this.parrentImage.alt_text : '';
+                    }
+
+                    if(this.versionsForUpdate['original']){
+                        this.link = this.versionsForUpdate['original'].link ? this.versionsForUpdate['original'].link : '';
+                    }else{
+                        this.link = this.parrentImage.link ? this.parrentImage.link : '';
+                    }
+
                     this.id = this.parrentImage.id ? this.parrentImage.id : null;
                     this.date = this.versionData ? this.versionData.created_at : this.parrentImage.created_at;
                 }else{
@@ -451,7 +461,6 @@
                     this.id = this.originalFile.id ? this.originalFile.id : null;
                     this.date = this.versionData ? this.versionData.created_at : this.originalFile.created_at;
                 }
-
 
                 // this.size = this.versionData ? this.versionData.size : this.parrentImage.size;
                 // this.height = this.versionData ? this.versionData.height : this.parrentImage.height;
@@ -533,11 +542,6 @@
                 return null;
             },
             versionSelected() {
-                // console.log('version selected: ')
-
-                // console.log('selected version: ',this.selectedVersion)
-
-                // console.log('versionsForUpdate: ', this.versionsForUpdate)
 
                 if (this.selectedVersion) {
                     this.$refs.cropper.enable();
