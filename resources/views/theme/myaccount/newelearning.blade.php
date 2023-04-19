@@ -220,7 +220,7 @@
                                     <?php
                                     if($video_seen[$vimeoVideo[1]]['is_new'] == 1)
                                     {
-                                        echo '<div class="newLesson notification-lesson"><img src="/theme/assets/images/notification-dot.gif"></img></div>';
+                                        echo '<div class="newLesson notification-lesson"><img src="/theme/assets/images/notification-dot.png"></img></div>';
 
 
                                         }
@@ -1152,7 +1152,7 @@
 
             let watchingTopic = $('.isWatching').closest('.topic')[0]
             watchingTopic = $(watchingTopic).find('.topic-info_title')[0]
-            
+
             let topicTitle = $(watchingTopic).data('topic-slug');
             let last = prev_topicId[prev_topicId.length - 1]
 
@@ -1209,7 +1209,7 @@
           function play_video(video,playingVideo,vk,lesson){
 
             video = video + '?title=false'
-            
+
             if(previousVideo !==false){
                $('.isWatching').removeClass('isWatching')
                document.getElementById(previousVideo).classList.remove('isWatching')
@@ -1221,7 +1221,7 @@
 
                $('.' + lesson).addClass('isWatching')
             //}
-             
+
 
              tabWatching = playingVideo;
              previousVideo = playingVideo;
@@ -1696,7 +1696,7 @@ $('#notes').on('focusin', function() {
 
                 let a = $(value).find('.topic-info')[0]
 
-                $(a).before('<div class="newLesson notification-topic"><img src="/theme/assets/images/notification-dot.gif"></img></div>')
+                $(a).before('<div class="newLesson notification-topic"><img src="/theme/assets/images/notification-dot.png"></img></div>')
             }
             //return false;
             // $.each(lessons, function(index1, lesson) {
