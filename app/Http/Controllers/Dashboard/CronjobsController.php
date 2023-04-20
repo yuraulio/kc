@@ -32,7 +32,7 @@ use App\Notifications\SubscriptionExpireReminder;
 
 class CronjobsController extends Controller
 {
-
+    //'enroll from 4620||0'
     public function unroll(){
 
         $students = User::has('events')->with('events')->get();
@@ -40,10 +40,10 @@ class CronjobsController extends Controller
         $today = strtotime($today);
         foreach($students as $student){
 
-            $events = $student->events()->wherePivot('comment','enroll||0')->get();
+            $events = $student->events()->wherePivot('comment', 'LIKE','%enroll from%')->get();
 
             foreach($events as $event){
-
+                
                 if(!$event->pivot->expiration){
                     continue;
                 }

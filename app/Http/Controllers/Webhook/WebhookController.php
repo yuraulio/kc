@@ -481,7 +481,7 @@ class WebhookController extends BaseWebhookController
             	}
 
 				//$user->events()->updateExistingPivot($eventId,['expiration' => $ends_at]);
-				$user->events_for_user_list()->updateExistingPivot($eventId,['expiration' => $ends_at]);
+				$user->events_for_user_list()->updateExistingPivot($eventId,['expiration' => $ends_at,'comment'=>null,'payment_method'=>2]);
 
 				//$user->events()->where('event_id',$eventId)->first()->pivot->expiration  = date('Y-m-d', $ends_at);
 				//$user->events()->where('event_id',$eventId)->first()->pivot->comment  = 'hello';
