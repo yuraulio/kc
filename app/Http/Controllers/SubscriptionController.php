@@ -42,7 +42,6 @@ class SubscriptionController extends Controller
                     $subEvId = -1;
                     $titleE = '-';
                     $plId = -1;
-                    
                 }else{
                     $subEvId = $sub['subscription'][0]['event'][0]['id'];
                     $titleE = $sub['subscription'][0]['event'][0]['title'];

@@ -1,17 +1,17 @@
 @extends('theme.cart.new_cart.master')
 
 @section('content')
- 
+
 <!---------------- checkout progress-bar start --------------->
 <div class="suscription checkout-step">
-		<div class="container">		
+		<div class="container">
 			<ul>
 				<li><span class="counter">1.</span><i>Billing</i></li>
 				<li class="active"><span class="counter">2.</span><i>Checkout</i></li>
 			</ul>
 		</div>
 	</div>
-<!---------------- checkout progress-bar end --------------->	
+<!---------------- checkout progress-bar end --------------->
 @if(\Session('dperror'))
    <div class="alert-outer">
 			<div class="container">
@@ -28,25 +28,25 @@
     <?php Session::forget('dperror') ?>
    @endif
 <div class="form-wrap">
-	<div class="container padding-no">			
-        <h1 class="hidden-xs">Checkout</h1>				
+	<div class="container padding-no">
+        <h1 class="hidden-xs">Checkout</h1>
 			<div class="row">
-        	
-        	<div class="col-md-6 col-xl-6 selection-order">
-			<h1 class="hidden-lg">Checkout</h1>				
 
-				<div class="checkout-full-wrap">												
-					
+        	<div class="col-md-6 col-xl-6 selection-order">
+			<h1 class="hidden-lg">Checkout</h1>
+
+				<div class="checkout-full-wrap">
+
 					<form id="checkout-form" action="{{route('subscription.store',[$event->title,$plan->name])}}" method="post">
 						@csrf
-				
+
 						<div class="card-info">
 							<h2>Card information</h2>
 							<div class="card-input">
     		                    <div id="card-element"></div>
 							</div>
 							<p>We do not store your card’s information.</p>
-							<div class="form-row my-5 align-items-center prev-next-wrap">									
+							<div class="form-row my-5 align-items-center prev-next-wrap">
 								<div class="d-flex align-items-center previous-participant-link">
 									<img src="{{cdn('new_cart/images/arrow-previous-green.svg')}}" width="20px" height="12px" class="without-hover" alt="">
 									<img src="{{cdn('new_cart/images/arrow-previous-green2.svg')}}" width="20px" height="12px" class="with-hover" alt="">
@@ -61,7 +61,7 @@
 			</div>
 			@include('theme.cart.new_cart.subscription.selection')
 		</div>
-	</div>						
+	</div>
 </div>
 @stop
 
@@ -87,21 +87,24 @@
     	]
 	});
     var cardElement = elements.create('card',{
-		
+
 		style: {
            base: {
             	fontSize: '18px',
 				fontFamily: 'Foco',
           },
         },
-			
+
         hidePostalCode: true,
     });
-	
+
     cardElement.mount('#card-element');
 
 	const cardButton = document.getElementById('pay-now');
 	cardButton.addEventListener('click', async (e) => {
+        $("#card-error").remove();
+
+        $("#pay-now").prop('disabled',true);
 
     	const { paymentMethod, error } = await stripe.createPaymentMethod(
     	    'card', cardElement
@@ -109,6 +112,8 @@
 
     	if (error) {
     	    // Display "error.message" to the user...
+            $('<p id="card-error">Enter valid data.</p>').insertAfter('.card-input')
+            $("#pay-now").prop('disabled',false);
     	} else {
 			$('#payment_method').val(paymentMethod.id);
 
@@ -122,6 +127,10 @@ $(".close-alert").on("click", function () {
 
 	$('.alert-outer').hide()
 
+});
+
+$('form').submit(function() {
+  $("#pay-now").prop('disabled',true);
 });
 
 </script>
