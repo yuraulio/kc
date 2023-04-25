@@ -410,22 +410,7 @@ class Invoice extends Model
             }
 
         }
-        //dd($this->id);
-        //dd($this->transaction->first()->invoice->groupBy('id'));
-        $installmentsText = '';
 
-        if($this->instalments > 1){
-            $transactionInvoices  = $this->transaction->first() ? $this->transaction->first()->invoice : [] ;
-            $installmentsText = ($this->instalments - $this->instalments_remaining) . ' of ' . $this->instalments ;
-            foreach($transactionInvoices as $key => $transactionInvoice){
-                //dd($transactionInvoice);
-                if($this->id == $transactionInvoice->id){
-                    $installmentsText = ($key+1) .' of ' . $this->instalments ;
-                    break;
-                }
-            }
-        }
-        
 
         $billing = json_decode($this->transaction->first()->billing_details,true);
         //$billing = json_decode($this->user->first()->billing_details,true);
@@ -468,7 +453,7 @@ class Invoice extends Model
         //$data['footer'] = $this->event->first()->paymentMethod->first() ? $this->event->first()->paymentMethod->first()->footer : '';
         $data['footer'] = ($paymentMethod = PaymentMethod::find($paymentMethodId)) ? $paymentMethod->footer : '';
 
-        $data['installments']= $installmentsText;//($this->instalments > 1) ? ($this->instalments - $this->instalments_remaining) . ' of ' . $this->instalments : '';
+        $data['installments']= ($this->instalments > 1) ? ($this->instalments - $this->instalments_remaining) . ' of ' . $this->instalments : '';
 
         if($planDecription){
 
