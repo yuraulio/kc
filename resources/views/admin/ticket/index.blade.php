@@ -5,7 +5,7 @@
     </div>
     @can('create', App\Model\User::class)
         <div class="col-4 text-right">
-        <button data-toggle="modal" data-target="#ticketModal" class="btn btn-sm btn-primary">{{ __('Add ticket') }}</button>
+        <button data-toggle="modal" type="button" data-target="#ticketModal" class="btn btn-sm btn-primary">{{ __('Add tickettt') }}</button>
         </div>
     @endcan
 </div>
