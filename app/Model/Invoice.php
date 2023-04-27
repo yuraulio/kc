@@ -99,6 +99,20 @@ class Invoice extends Model
 
         }
 
+        $installmentsText = '';
+
+        if($this->instalments > 1){
+            $transactionInvoices  = $this->transaction->first() ? $this->transaction->first()->invoice : [] ;
+            $installmentsText = ($this->instalments - $this->instalments_remaining) . ' of ' . $this->instalments ;
+            foreach($transactionInvoices as $key => $transactionInvoice){
+                //dd($transactionInvoice);
+                if($this->id == $transactionInvoice->id){
+                    $installmentsText = ($key+1) .' of ' . $this->instalments ;
+                    break;
+                }
+            }
+        }
+
         $billing = json_decode($this->transaction->first()->billing_details,true);
 
         //dd($this);
@@ -152,7 +166,7 @@ class Invoice extends Model
         $this->save();
 
         //$data['description'] = $this->event->first()->summary1->where('section','date')->first() ? $this->event->first()->summary1->where('section','date')->first()->title : '';
-        $data['installments']= ($this->instalments > 1) ? ($this->instalments - $this->instalments_remaining) . ' of ' . $this->instalments : '';
+        $data['installments']= $installmentsText;//($this->instalments > 1) ? ($this->instalments - $this->instalments_remaining) . ' of ' . $this->instalments : '';
 
 
         $data['description'] = '';
