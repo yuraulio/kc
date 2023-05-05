@@ -71,10 +71,13 @@ class FixOrder extends Command
     {
         
         
-        $events = Event::
+        /*$events = Event::
         whereHas('event_info1',function($query){
             $query->where('course_delivery',143);
         })
+        ->get();*/
+
+        $events = Event::where('id',4653)
         ->get();
         
         foreach($events as $event){
