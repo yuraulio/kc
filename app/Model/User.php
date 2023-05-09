@@ -789,6 +789,19 @@ class User extends Authenticatable
                                                'percentMinutes' => 0, 'total_duration' => getLessonDurationToSec($lesson['vimeo_duration']), 'is_new' => $is_new];
                     $notes[$vimeo_id] = '';
                 }
+
+                if(!isset($videos[$vimeo_id]['tab'])){
+
+                    $stopTimee = isset($videos[$vimeo_id]['stop_time']) ? $videos[$vimeo_id]['stop_time'] : 0;
+                    $totalSeenn = isset($videos[$vimeo_id]['total_seen']) ? $videos[$vimeo_id]['total_seen'] : 0;
+                    $percentMinutess = isset($videos[$vimeo_id]['percentMinutes']) ? $videos[$vimeo_id]['percentMinutes'] : 0;
+                    $seenn = isset($videos[$vimeo_id]['seen']) ? $videos[$vimeo_id]['seen'] : 0;
+                    $isNeww = isset($videos[$vimeo_id]['is_new']) ? $videos[$vimeo_id]['is_new'] : 0;
+
+                    $videos[$vimeo_id] = ['seen' => $seenn, 'tab' =>$tab.$vimeo_id, 'lesson_id' => $lesson['id'], 'stop_time' => $stopTimee, 'total_seen' => $totalSeenn,
+                    'percentMinutes' => $percentMinutess, 'total_duration' => getLessonDurationToSec($lesson['vimeo_duration']), 'is_new' => $isNeww];
+                }
+
                 $countVideos += 1;
             }
             //$countVideos += 1;
