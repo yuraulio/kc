@@ -135,13 +135,28 @@ class StudentController extends Controller
 
     }
 
+    public function checkInstructorEvent($event){
+        $pass = false;
+
+        $year = date("Y");
+        $event_year = Carbon::parse($event['published_at'])->format('Y');
+
+
+        if(($event['status'] == 0 || $event['status'] == 3) && $year == $event_year){
+            $pass = true;
+        }
+
+        return $pass;
+
+    }
+
     public function instructorEvents(){
 
 
         $user = Auth::user();
-        $data['user'] = User::with('image', 'instructor','events')->find($user->id);
+        $data['user'] = User::with('image', 'instructor', 'events')->find($user->id);
         $data['masterClassAccess'] = true;
-        $instructor = $user->instructor->first();
+        $instructor = $data['user']['instructor'][0];
 
         $data['elearningAccess'] = 0;
         $data['cards'] = [];
@@ -158,9 +173,13 @@ class StudentController extends Controller
 
         $eventSubscriptions = [];
         $data['user']['events'] = $instructor['event'];
-        //dd($data['user']['events']);
         $data['eventss'] = [];
+
+
+
+
         foreach($data['user']['events'] as $key => $event){
+
 
             if(!$event->published){
                 continue;
@@ -171,64 +190,73 @@ class StudentController extends Controller
             if($event->is_elearning_course()){
 
                 //$data['user']['events'][$event->id]['topics'] = $event['topic']->unique()->groupBy('topic_id')->toArray();
-                $data['events'][$event->id]['videos_progress'] = 0;//intval(round($event->progress($user),2));
-                $data['events'][$event->id]['videos_seen'] = 0;//$event->video_seen($user);
-                $data['events'][$event->id]['certs'] = [];
+                $data['events'][$event['id']]['videos_progress'] = 0;//intval(round($event->progress($user),2));
+                $data['events'][$event['id']]['videos_seen'] = 0;//$event->video_seen($user);
+                $data['events'][$event['id']]['certs'] = [];
 
-                $data['events'][$event->id]['mySubscription'] = [];
-                $data['events'][$event->id]['plans'] = [];
+                $data['events'][$event['id']]['mySubscription'] = [];
+                $data['events'][$event['id']]['plans'] = [];
 
-                $data['events'][$event->id]['exams'] = [];
-                $data['events'][$event->id]['exam_access'] = false;
+                $data['events'][$event['id']]['exams'] = [];
+                $data['events'][$event['id']]['exam_access'] = false;
 
                 $eventSubscriptions[] = [];
-                $data['events'][$event->id]['video_access'] = true;
-                $data['events'][$event->id]['title'] = $event->title;
-                $data['events'][$event->id]['view_tpl'] = $event->view_tpl;
-                $data['events'][$event->id]['delivery'] = isset($eventInfo['delivery'])  ? $eventInfo['delivery'] : -1;
-                $data['events'][$event->id]['category'] = $event->category;
-                //$data['events'][$event->id]['summary1'] = $event->summary1;
-                $data['events'][$event->id]['hours'] = isset($eventInfo['hours']['hour']) && $eventInfo['hours']['hour'] > 0  ? $eventInfo['hours']['hour']  : '';
-                $data['events'][$event->id]['hours_icon'] = isset($eventInfo['hours']['icon']['path'])  ? $eventInfo['hours']['icon']['path'] : null;
+                $data['events'][$event['id']]['video_access'] = true;
+                $data['events'][$event['id']]['title'] = $event['title'];
+                $data['events'][$event['id']]['view_tpl'] = $event['view_tpl'];
+                $data['events'][$event['id']]['delivery'] = isset($eventInfo['delivery'])  ? $eventInfo['delivery'] : -1;
+                $data['events'][$event['id']]['category'] = $event->category;
+                //$data['events'][$event['id']]['summary1'] = $event->summary1;
+                $data['events'][$event['id']]['hours'] = isset($eventInfo['hours']['hour']) && $eventInfo['hours']['hour'] > 0  ? $eventInfo['hours']['hour']  : '';
+                $data['events'][$event['id']]['hours_icon'] = isset($eventInfo['hours']['icon']['path'])  ? $eventInfo['hours']['icon']['path'] : null;
 
-                $data['events'][$event->id]['slugable'] = $event->slugable;
-                $data['events'][$event->id]['release_date_files'] = $event->release_date_files;
-                $data['events'][$event->id]['plans'] = [];
-                $data['events'][$event->id]['exam_access'] =false;
-                $data['events'][$event->id]['videos_progress'] = 0;
-                $data['events'][$event->id]['expiration'] = false;
-                $data['events'][$event->id]['status'] = $event->status;
+                $data['events'][$event['id']]['slugable'] = $event['slugable'];
+                $data['events'][$event['id']]['release_date_files'] = $event['release_date_files'];
+                $data['events'][$event['id']]['plans'] = [];
+                $data['events'][$event['id']]['exam_access'] =false;
+                $data['events'][$event['id']]['videos_progress'] = 0;
+                $data['events'][$event['id']]['expiration'] = false;
+                $data['events'][$event['id']]['status'] = $event['status'];
 
-                $data['events'][$event->id]['summaryDate'] = isset($eventInfo['elearning']['expiration'])  ? $eventInfo['elearning']['expiration'] : null;
-                $data['events'][$event->id]['summaryDate_icon'] = isset($eventInfo['elearning']['icon'])  ?  $eventInfo['elearning']['icon'] : null;
+                $data['events'][$event['id']]['published_at'] = $event['published_at'];
+
+                $data['events'][$event['id']]['summaryDate'] = isset($eventInfo['elearning']['expiration'])  ? $eventInfo['elearning']['expiration'] : null;
+                $data['events'][$event['id']]['summaryDate_icon'] = isset($eventInfo['elearning']['icon'])  ?  $eventInfo['elearning']['icon'] : null;
 
                 $eventSubscriptions[] = $user->eventSubscriptions()->wherePivot('event_id',$event['id'])->first() ?
-                $user->eventSubscriptions()->wherePivot('event_id',$event['id'])->first()->id : -1;
+                $user->eventSubscriptions()->wherePivot('event_id',$event['id'])->first()['id'] : -1;
 
             }else{
-                $data['events'][$event->id]['topics'] = $event->topicsLessonsInstructors(null,$event['topic'],$event['lessons'],$event['instructors'])['topics'];;
-                $data['events'][$event->id]['exams'] = [];
-                $data['events'][$event->id]['certs'] = [];
-                $data['events'][$event->id]['view_tpl'] = $event['view_tpl'];
-                $data['events'][$event->id]['category'] = $event['category'];
-                $data['events'][$event->id]['delivery'] = isset($eventInfo['delivery'])  ? $eventInfo['delivery'] : -1;
-                //$data['events'][$event->id]['summary1'] = $event['summary1'];
-                $data['events'][$event->id]['hours'] = isset($eventInfo['hours']['hour']) && $eventInfo['hours']['hour'] > 0  ? $eventInfo['hours']['hour']  : '';
-                $data['events'][$event->id]['hours_icon'] = isset($eventInfo['hours']['icon']['path'])  ? $eventInfo['hours']['icon']['path'] : null;
 
-                $data['events'][$event->id]['slugable'] = $event['slugable']->toArray();
-                $data['events'][$event->id]['title'] = $event['title'];
-                $data['events'][$event->id]['release_date_files'] = $event->release_date_files;
-                $data['events'][$event->id]['plans'] = [];
-                $data['events'][$event->id]['status'] = $event->status;
-                $data['events'][$event->id]['dropbox'] = $event->dropbox;
+                if($this->checkInstructorEvent($event)){
 
-                $data['events'][$event->id]['summaryDate'] = isset($eventInfo['inclass']['dates']['text']) ?  $eventInfo['inclass']['dates']['text'] : '';
-                $data['events'][$event->id]['summaryDate_icon'] = isset($eventInfo['inclass']['dates']['icon']['path'])  ?  $eventInfo['inclass']['dates']['icon']['path'] : null;
+                    $data['events'][$event['id']]['topics'] = $event->topicsLessonsInstructors(null,$event['topic'],$event['lessons'],$event['instructors'])['topics'];;
+                    $data['events'][$event['id']]['exams'] = [];
+                    $data['events'][$event['id']]['certs'] = [];
+                    $data['events'][$event['id']]['view_tpl'] = $event['view_tpl'];
+                    $data['events'][$event['id']]['category'] = $event['category'];
+                    $data['events'][$event['id']]['delivery'] = isset($eventInfo['delivery'])  ? $eventInfo['delivery'] : -1;
+                    //$data['events'][$event['id']]['summary1'] = $event['summary1'];
+                    $data['events'][$event['id']]['hours'] = isset($eventInfo['hours']['hour']) && $eventInfo['hours']['hour'] > 0  ? $eventInfo['hours']['hour']  : '';
+                    $data['events'][$event['id']]['hours_icon'] = isset($eventInfo['hours']['icon']['path'])  ? $eventInfo['hours']['icon']['path'] : null;
+
+                    $data['events'][$event['id']]['slugable'] = $event['slugable']->toArray();
+                    $data['events'][$event['id']]['title'] = $event['title'];
+                    $data['events'][$event['id']]['release_date_files'] = $event['release_date_files'];
+                    $data['events'][$event['id']]['plans'] = [];
+                    $data['events'][$event['id']]['status'] = $event['status'];
+                    $data['events'][$event['id']]['dropbox'] = $event['dropbox'];
+                    $data['events'][$event['id']]['published_at'] = $event['published_at'];
 
 
+                    $data['events'][$event['id']]['summaryDate'] = isset($eventInfo['inclass']['dates']['text']) ?  $eventInfo['inclass']['dates']['text'] : '';
+                    $data['events'][$event['id']]['summaryDate_icon'] = isset($eventInfo['inclass']['dates']['icon']['path'])  ?  $eventInfo['inclass']['dates']['icon']['path'] : null;
+
+                }
 
             }
+
+            //dd($data);
 
 
             $find = false;
@@ -250,43 +278,45 @@ class StudentController extends Controller
             $eventInfo = $event->event_info();
 
             if($event->is_elearning_course()){
-                $statistic = isset($statistics[$event->id][0]) ? $statistics[$event->id][0] : 'no_videos';
+                $statistic = isset($statistics[$event['id']][0]) ? $statistics[$event['id']][0] : 'no_videos';
                 //$data['user']['events'][$event->id]['topics'] = $event['topic']->unique()->groupBy('topic_id');
-                $data['events'][$event->id]['videos_progress'] = round($event->progress($user,$statistic),2);
-                $data['events'][$event->id]['videos_seen'] = $event->video_seen($user,$statistic);
-                $data['events'][$event->id]['cert'] = [];
+                $data['events'][$event['id']]['videos_progress'] = round($event->progress($user,$statistic),2);
+                $data['events'][$event['id']]['videos_seen'] = $event->video_seen($user,$statistic);
+                $data['events'][$event['id']]['cert'] = [];
 
-                $data['events'][$event->id]['mySubscription'] = $user->eventSubscriptions()->wherePivot('event_id',$event['id'])->first();
-                $data['events'][$event->id]['plans'] = $event['plans'];
+                $data['events'][$event['id']]['mySubscription'] = $user->eventSubscriptions()->wherePivot('event_id',$event['id'])->first();
+                $data['events'][$event['id']]['plans'] = $event['plans'];
 
-                $data['events'][$event->id]['certs'] = isset($event['certificates']) && $event['certificates'] ? $event['certificates'] : [];//$event->certificatesByUser($user->id);
-                $data['events'][$event->id]['exams'] = $event->getExams();
+                $data['events'][$event['id']]['certs'] = isset($event['certificates']) && $event['certificates'] ? $event['certificates'] : [];//$event->certificatesByUser($user['id']);
+                $data['events'][$event['id']]['exams'] = $event->getExams();
                 if(isset($eventInfo['elearning']['exam']['activate_months']) &&  $eventInfo['elearning']['exam']['activate_months'] != null  ){
-                    $data['events'][$event->id]['exam_access'] = $event->examAccess($user,$eventInfo['elearning']['exam']['activate_months']);
+                    $data['events'][$event['id']]['exam_access'] = $event->examAccess($user,$eventInfo['elearning']['exam']['activate_months']);
                 }else{
-                    $data['events'][$event->id]['exam_access'] = $event->examAccess($user,0);
+                    $data['events'][$event['id']]['exam_access'] = $event->examAccess($user,0);
                 }
-                //$data['events'][$event->id]['exam_access'] = $event->examAccess($user,2);//$user->examAccess(0.8,$event->id);
-                $data['events'][$event->id]['view_tpl'] = $event['view_tpl'];
-                $data['events'][$event->id]['category'] = $event['category'];
-                //$data['events'][$event->id]['summary1'] = $event['summary1'];
-                $data['events'][$event->id]['hours'] = isset($eventInfo['hours']['hour']) && $eventInfo['hours']['hour'] > 0 ? $eventInfo['hours']['hour']  : '';
-                $data['events'][$event->id]['hours_icon'] = isset($eventInfo['hours']['icon']['path'])  ? $eventInfo['hours']['icon']['path'] : null;
+                //$data['events'][$event['id']]['exam_access'] = $event->examAccess($user,2);//$user->examAccess(0.8,$event['id']);
+                $data['events'][$event['id']]['view_tpl'] = $event['view_tpl'];
+                $data['events'][$event['id']]['category'] = $event['category'];
+                //$data['events'][$event['id']]['summary1'] = $event['summary1'];
+                $data['events'][$event['id']]['hours'] = isset($eventInfo['hours']['hour']) && $eventInfo['hours']['hour'] > 0 ? $eventInfo['hours']['hour']  : '';
+                $data['events'][$event['id']]['hours_icon'] = isset($eventInfo['hours']['icon']['path'])  ? $eventInfo['hours']['icon']['path'] : null;
 
-                $data['events'][$event->id]['slugable'] = $event['slugable']->toArray();
-                $data['events'][$event->id]['title'] = $event['title'];
-                $data['events'][$event->id]['release_date_files'] = $event->release_date_files;
-                $data['events'][$event->id]['expiration'] = date('d M Y',strtotime($event->pivot->expiration));
-                $data['events'][$event->id]['status'] = $event->status;
-                $data['events'][$event->id]['delivery'] = isset($eventInfo['delivery'])  ? $eventInfo['delivery'] : -1;
+                $data['events'][$event['id']]['slugable'] = $event['slugable']->toArray();
+                $data['events'][$event['id']]['title'] = $event['title'];
+                $data['events'][$event['id']]['release_date_files'] = $event['release_date_files'];
+                $data['events'][$event['id']]['expiration'] = date('d M Y',strtotime($event->pivot->expiration));
+                $data['events'][$event['id']]['status'] = $event['status'];
+                $data['events'][$event['id']]['delivery'] = isset($eventInfo['delivery'])  ? $eventInfo['delivery'] : -1;
 
-                $data['events'][$event->id]['summaryDate'] = isset($eventInfo['elearning']['expiration'])  ? $eventInfo['elearning']['expiration'] : null;
-                $data['events'][$event->id]['summaryDate_icon'] = isset($eventInfo['elearning']['icon'])  ?  $eventInfo['elearning']['icon'] : null;
+                $data['events'][$event['id']]['published_at'] = $event['published_at'];
 
-                //$data['user']['events'][$event->id]['exam_results'] = $user->examAccess(0.8,$event->id);
+                $data['events'][$event['id']]['summaryDate'] = isset($eventInfo['elearning']['expiration'])  ? $eventInfo['elearning']['expiration'] : null;
+                $data['events'][$event['id']]['summaryDate_icon'] = isset($eventInfo['elearning']['icon'])  ?  $eventInfo['elearning']['icon'] : null;
+
+                //$data['user']['events'][$event['id']]['exam_results'] = $user->examAccess(0.8,$event['id']);
 
                 $eventSubscriptions[] = $user->eventSubscriptions()->wherePivot('event_id',$event['id'])->first() ?
-                                            $user->eventSubscriptions()->wherePivot('event_id',$event['id'])->first()->id : -1;
+                                            $user->eventSubscriptions()->wherePivot('event_id',$event['id'])->first()['id'] : -1;
 
                 //$eventSubscriptions[] =  array_values($user->eventSubscriptions()->wherePivot('event_id',$event['id'])->pluck('id')->toArray());
 
@@ -301,31 +331,36 @@ class StudentController extends Controller
                 if($expiration_event >= $now || !$expiration_event)
                     $video_access = true;
 
-                $data['events'][$event->id]['video_access'] = $video_access;
+                $data['events'][$event['id']]['video_access'] = $video_access;
 
                 //$this->updateUserStatistic($event,$statistics,$user);
 
             }else{
 
-                $data['events'][$event->id]['topics'] = $event->topicsLessonsInstructors(null,$event['topic'],$event['lessons'],$event['instructors'])['topics'];;
-                $data['events'][$event->id]['exams'] = [];
-                $data['events'][$event->id]['certs'] = isset($event['certificates']) && $event['certificates'] ? $event['certificates'] : [];
-                $data['events'][$event->id]['view_tpl'] = $event['view_tpl'];
-                $data['events'][$event->id]['category'] = $event['category'];
-                //$data['events'][$event->id]['summary1'] = $event['summary1'];
-                $data['events'][$event->id]['hours'] = isset($eventInfo['hours']['hour']) && $eventInfo['hours']['hour'] > 0 ? $eventInfo['hours']['hour']  : '';
-                $data['events'][$event->id]['hours_icon'] = isset($eventInfo['hours']['icon']['path'])  ? $eventInfo['hours']['icon']['path'] : null;
+                if($this->checkInstructorEvent($event)){
+                    $data['events'][$event['id']]['topics'] = $event->topicsLessonsInstructors(null,$event['topic'],$event['lessons'],$event['instructors'])['topics'];;
+                    $data['events'][$event['id']]['exams'] = [];
+                    $data['events'][$event['id']]['certs'] = isset($event['certificates']) && $event['certificates'] ? $event['certificates'] : [];
+                    $data['events'][$event['id']]['view_tpl'] = $event['view_tpl'];
+                    $data['events'][$event['id']]['category'] = $event['category'];
+                    //$data['events'][$event['id']]['summary1'] = $event['summary1'];
+                    $data['events'][$event['id']]['hours'] = isset($eventInfo['hours']['hour']) && $eventInfo['hours']['hour'] > 0 ? $eventInfo['hours']['hour']  : '';
+                    $data['events'][$event['id']]['hours_icon'] = isset($eventInfo['hours']['icon']['path'])  ? $eventInfo['hours']['icon']['path'] : null;
 
-                $data['events'][$event->id]['slugable'] = $event['slugable']->toArray();
-                $data['events'][$event->id]['title'] = $event['title'];
-                $data['events'][$event->id]['release_date_files'] = $event->release_date_files;
-                $data['events'][$event->id]['plans'] = [];
-                $data['events'][$event->id]['status'] = $event->status;
-                $data['events'][$event->id]['dropbox'] = $event->dropbox;
-                $data['events'][$event->id]['delivery'] = isset($eventInfo['delivery'])  ? $eventInfo['delivery'] : -1;
+                    $data['events'][$event['id']]['slugable'] = $event['slugable']->toArray();
+                    $data['events'][$event['id']]['title'] = $event['title'];
+                    $data['events'][$event['id']]['release_date_files'] = $event['release_date_files'];
+                    $data['events'][$event['id']]['plans'] = [];
+                    $data['events'][$event['id']]['status'] = $event['status'];
+                    $data['events'][$event['id']]['dropbox'] = $event['dropbox'];
+                    $data['events'][$event['id']]['delivery'] = isset($eventInfo['delivery'])  ? $eventInfo['delivery'] : -1;
+                    $data['events'][$event['id']]['published_at'] = $event['published_at'];
 
-                $data['events'][$event->id]['summaryDate'] = isset($eventInfo['inclass']['dates']['text']) ?  $eventInfo['inclass']['dates']['text'] : '';
-                $data['events'][$event->id]['summaryDate_icon'] = isset($eventInfo['inclass']['dates']['icon']['path'])  ?  $eventInfo['inclass']['dates']['icon']['path'] : null;
+                    $data['events'][$event['id']]['summaryDate'] = isset($eventInfo['inclass']['dates']['text']) ?  $eventInfo['inclass']['dates']['text'] : '';
+                    $data['events'][$event['id']]['summaryDate_icon'] = isset($eventInfo['inclass']['dates']['icon']['path'])  ?  $eventInfo['inclass']['dates']['icon']['path'] : null;
+                }
+
+
 
 
             }
@@ -404,8 +439,16 @@ class StudentController extends Controller
 
         }
 
-        $data['instructors'] = Instructor::with('slugable', 'medias')->get()->groupby('id');
+        usort($data['events'], function($a, $b) {
+            return strcasecmp(strtotime($b['published_at']), strtotime($a['published_at']));
+        });
+
+
+        $data['instructors'] = Instructor::select('subtitle','id','title')->with('slugable', 'medias')->get()->groupby('id');
+
         $data['subscriptionEvents'] = Event::whereIn('id',$subscriptionEvents)->with('slugable')->get();
+
+
         //dd($data);
         return $data;
     }
