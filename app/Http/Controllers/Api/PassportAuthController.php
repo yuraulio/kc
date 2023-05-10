@@ -21,8 +21,8 @@ class PassportAuthController extends Controller
         ];
 
         if (auth()->attempt($data)) {
-            auth()->user()->AauthAcessToken()->delete();
-            Auth::logoutOtherDevices($request->password);
+            //auth()->user()->AauthAcessToken()->delete();
+            //Auth::logoutOtherDevices($request->password);
             $token_ = auth()->user()->createToken('LaravelAuthApp');
             $token = $token_->accessToken;
             $expire = $token_->token->expires_at->diffForHumans();
@@ -32,7 +32,7 @@ class PassportAuthController extends Controller
             if(!User::where('email',$data['email'])->first()){
                 return response()->json(['error' => 'Incorrect email, please try again.'], 403);
             }
-            
+
             return response()->json(['error' => 'Incorrect password, please try again.'], 403);
         }
     }

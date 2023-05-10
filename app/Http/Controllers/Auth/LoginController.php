@@ -66,9 +66,9 @@ class LoginController extends Controller
     {
         $credentials = $request->only('email', 'password');
         //dd($credentials);
-        
+
         if (Auth::attempt($credentials)) {
-            
+
             if(!Auth::user()->statusAccount->completed){
                 Auth::logout();
                 $data['status'] = 0;
@@ -77,12 +77,12 @@ class LoginController extends Controller
                     'success' => false,
                     'data' => $data
                 ]);
-                
+
             }
 
             if (Session::has('pay_seats_data')) {
                 $pay_seats_data = Session::get('pay_seats_data');
-    
+
                 if(isset($pay_seats_data['emails'][0])){
                     $pay_seats_data['emails'][0] = Auth::user()->email;
                     Session::forget('pay_seats_data');
@@ -91,13 +91,13 @@ class LoginController extends Controller
 
             }
 
-            auth()->user()->AauthAcessToken()->delete();
-            Auth::logoutOtherDevices($request->password);
+            //auth()->user()->AauthAcessToken()->delete();
+            //Auth::logoutOtherDevices($request->password);
             $user = Auth::user();
             if(!isset($_COOKIE['auth-'.$user->id])){
                 $cookieValue = base64_encode($user->id . date("H:i"));
                 setcookie('auth-'.$user->id, $cookieValue, time() + (1 * 365 * 86400), "/"); // 86400 = 1 day
-            
+
                 $coockie = new CookiesSMS;
                 $coockie->coockie_name = 'auth-'.$user->id;
                 $coockie->coockie_value = $cookieValue;
@@ -105,10 +105,10 @@ class LoginController extends Controller
                 $coockie->sms_code = rand(1111,9999);
 
                 $coockie->save();
-            
+
             }
 
-        
+
             $this->checkForCacheItems(Auth::user());
 
             $c = Cart::content()->count();
@@ -126,7 +126,7 @@ class LoginController extends Controller
                 $data['redirect'] = Url::to('/myaccount');
                 $data['message'] = 'Welcome back ' . $user->firstname . ' ' . $user->lastname . '. Redirecting you to your profile page.';
 
-    
+
             }
 
             return response()->json([
@@ -176,13 +176,13 @@ class LoginController extends Controller
                     $coockie->save();
 
                 }
-                
+
                 $existingcheck = ShoppingCart::where('identifier', $user->id)->first();
-               
+
                 if($existingcheck) {
                     $existingcheck->delete($user->id);
                     Cart::store($user->id);
-               
+
                    // dd('fdafd');
 
                     $timecheck = ShoppingCart::where('identifier', $user->id)->first();
@@ -198,7 +198,7 @@ class LoginController extends Controller
                     $timecheck->save();
                 }
                 $this->checkForCacheItems($user);
-               
+
                 return redirect('cart');
             }
             $errors = 'Invalid login or password.';
@@ -218,15 +218,15 @@ class LoginController extends Controller
 
     private function checkForCacheItems($dpuser){
 
-        
+
         if($dpuser->cart && Cart::content()->count() == 0){
-            
+
             $cart = $dpuser->cart;
             Cart::add($cart->ticket_id, $cart->product_title, $cart->quantity, $cart->price, ['type' => $cart->type, 'event' => $cart->event])->associate(Ticket::class);
             //Cart::store($dpuser->id);
 
         }else if(Cart::content()->count() > 0){
-           
+
             $cart = Cart::content();
             $event = $cart->first()->options->event;
             $tid = $cart->first()->id;
