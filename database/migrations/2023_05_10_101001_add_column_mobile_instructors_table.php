@@ -14,7 +14,7 @@ class AddColumnMobileInstructorsTable extends Migration
     public function up()
     {
         Schema::table('instructors', function(Blueprint $table) {
-            $table->string('mobile')->nullable();
+            $table->string('mobile')->nullable()->after('ext_url');
 
         });
     }

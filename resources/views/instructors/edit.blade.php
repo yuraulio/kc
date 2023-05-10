@@ -62,35 +62,35 @@
                                         </div>
 
                                         <div class="form-group{{ $errors->has('title') ? ' has-danger' : '' }}">
-                                            <label class="form-control-label" for="input-title">{{ __('Title') }}</label>
-                                            <input type="text" name="title" id="input-title" class="form-control{{ $errors->has('title') ? ' is-invalid' : '' }}" placeholder="{{ __('Title') }}" value="{{ old('title', $instructor->title) }}" required autofocus>
+                                            <label class="form-control-label" for="input-title">{{ __('First name') }}</label>
+                                            <input type="text" name="title" id="input-title" class="form-control{{ $errors->has('title') ? ' is-invalid' : '' }}" placeholder="{{ __('First name') }}" value="{{ old('title', $instructor->title) }}" required autofocus>
 
                                             @include('alerts.feedback', ['field' => 'title'])
                                         </div>
-                                        <div class="form-group{{ $errors->has('short_title') ? ' has-danger' : '' }}">
+                                        {{--<div class="form-group{{ $errors->has('short_title') ? ' has-danger' : '' }}">
                                             <label class="form-control-label" for="input-short_title">{{ __('Short title') }}</label>
                                             <input type="text" name="short_title" id="input-short_title" class="form-control{{ $errors->has('short_title') ? ' is-invalid' : '' }}" placeholder="{{ __('short_title') }}" value="{{ old('Short title', $instructor->short_title) }}" autofocus>
 
                                             @include('alerts.feedback', ['field' => 'short_title'])
-                                        </div>
+                                        </div>--}}
 
                                         <div class="form-group{{ $errors->has('subtitle') ? ' has-danger' : '' }}">
-                                            <label class="form-control-label" for="input-subtitle">{{ __('Subtitle') }}</label>
-                                            <input type="text" name="subtitle" id="input-subtitle" class="form-control{{ $errors->has('subtitle') ? ' is-invalid' : '' }}" placeholder="{{ __('subtitle') }}" value="{{ old('Subtitle', $instructor->subtitle) }}" autofocus>
+                                            <label class="form-control-label" for="input-subtitle">{{ __('Last name') }}</label>
+                                            <input type="text" name="subtitle" id="input-subtitle" class="form-control{{ $errors->has('subtitle') ? ' is-invalid' : '' }}" placeholder="{{ __('Last name') }}" value="{{ old('subtitle', $instructor->subtitle) }}" autofocus>
 
                                             @include('alerts.feedback', ['field' => 'subtitle'])
                                         </div>
 
                                         <div class="form-group{{ $errors->has('header') ? ' has-danger' : '' }}">
-                                            <label class="form-control-label" for="input-header">{{ __('Header') }}</label>
-                                            <input type="text" name="header" id="input-header" class="form-control{{ $errors->has('header') ? ' is-invalid' : '' }}" placeholder="{{ __('Header') }}" value="{{ old('header', $instructor->header) }}" autofocus>
+                                            <label class="form-control-label" for="input-header">{{ __('Job title') }}</label>
+                                            <input type="text" name="header" id="input-header" class="form-control{{ $errors->has('header') ? ' is-invalid' : '' }}" placeholder="{{ __('Job title') }}" value="{{ old('header', $instructor->header) }}" autofocus>
 
                                             @include('alerts.feedback', ['field' => 'header'])
                                         </div>
 
-                                        <div class="form-group{{ $errors->has('summary') ? ' has-danger' : '' }}">
+                                        {{--<div class="form-group{{ $errors->has('summary') ? ' has-danger' : '' }}">
                                             <label class="form-control-label" for="input-summary">{{ __('Summary') }}</label>
-                                            {{--<textarea name="summary" id="input-summary"  class="ckeditor form-control{{ $errors->has('summary') ? ' is-invalid' : '' }}" placeholder="{{ __('Summary') }}" required autofocus>{{ old('summary', $instructor->summary) }}</textarea>--}}
+
 
                                             <!-- anto's editor -->
                                             <input class="hidden" name="summary" value="{{ old('summary', $instructor->summary) }}"/>
@@ -99,7 +99,7 @@
                                             <!-- anto's editor -->
 
                                             @include('alerts.feedback', ['field' => 'summary'])
-                                        </div>
+                                        </div>--}}
 
                                         <div class="form-group{{ $errors->has('body') ? ' has-danger' : '' }}">
                                             <label class="form-control-label" for="input-body">{{ __('Body') }}</label>
@@ -126,6 +126,13 @@
                                             <input type="text" name="ext_url" id="input-ext_url" class="form-control{{ $errors->has('ext_url') ? ' is-invalid' : '' }}" placeholder="{{ __('External url') }}" value="{{ old('ext_url', $instructor->ext_url) }}"autofocus>
 
                                             @include('alerts.feedback', ['field' => 'ext_url'])
+                                        </div>
+
+                                        <div class="form-group{{ $errors->has('mobile') ? ' has-danger' : '' }}">
+                                            <label class="form-control-label" for="input-mobile">{{ __('Mobile') }}</label>
+                                            <input type="number" name="mobile" id="input-mobile" class="form-control{{ $errors->has('mobile') ? ' is-invalid' : '' }}" placeholder="{{ __('Mobile') }}" value="{{ old('mobile', $instructor->mobile) }}"  autofocus>
+
+                                            @include('alerts.feedback', ['field' => 'mobile'])
                                         </div>
 
                                         <div class="form-group{{ $errors->has('user_id') ? ' has-danger' : '' }}">

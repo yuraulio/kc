@@ -66,7 +66,7 @@
                                     <th scope="col">{{ __('Image') }}</th>
                                     <th scope="col">{{ __('Status') }}</th>
                                     <th scope="col">{{ __('Firstname') }}</th>
-                                    <th scope="col">{{ __('Laststname') }}</th>
+                                    <th scope="col">{{ __('Lastname') }}</th>
                                     <th scope="col">{{ __('Created at') }}</th>
                                     <th scope="col"></th>
                                 </tr>

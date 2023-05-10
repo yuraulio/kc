@@ -44,7 +44,23 @@ class InstructorRequest extends FormRequest
             ],
             'ext_url' => [
 
+            ],
+            'mobile' => [
+                'nullable',
+                'numeric',
+                'digits:10'
             ]
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'title.required' => 'The first name field is required.',
+            'title.min' => 'The first name must be at least 3 characters.',
+
+            'subtitle.required' => 'The last name field is required.',
+            'subtitle.min' => 'The last name must be at least 3 characters.',
         ];
     }
 }

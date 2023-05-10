@@ -144,7 +144,7 @@ class InstructorController extends Controller
      * @param  \App\Model\Instructor  $instructor
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Instructor $instructor)
+    public function update(InstructorRequest $request, Instructor $instructor)
     {
         $social_media = array();
 
