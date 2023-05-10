@@ -160,7 +160,7 @@ class LoginController extends Controller
                 }
 
                 auth()->user()->AauthAcessToken()->delete();
-                Auth::logoutOtherDevices($request->password);
+                //Auth::logoutOtherDevices($request->password);
                 $user = Auth::user();
                 if(!isset($_COOKIE['auth-'.$user->id])){
 
