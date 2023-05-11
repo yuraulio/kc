@@ -95,16 +95,18 @@
                         </div>--}}
                         <input type="hidden" name="type" value="{{$template}}">
 
+                        @if($logo->id)
                         <div class="form-group{{ $errors->has('summary') ? ' has-danger' : '' }}">
                            <label class="form-control-label" for="input-summary">{{ __('Logo Summary') }}</label>
                            {{--<textarea name="summary" id="input-summary"  class="ckeditor form-control{{ $errors->has('summary') ? ' is-invalid' : '' }}" placeholder="{{ __('Logo summary') }}"  required autofocus>{{ old('summary',$logo->summary) }}</textarea>--}}
                             <!-- anto's editor -->
                             <input class="hidden" name="summary" value="{{ old('summary',$logo->summary) }}"/>
-                            <?php $data = $logo->summary?>
+                            <?php $data = isset($logo->summary) && $logo->summary != null ? $logo->summary : ''?>
                             @include('event.editor.editor', ['keyinput' => "input-summary", 'data'=> "$data", 'inputname' => "'summary'" ])
                             <!-- anto's editor -->
                            @include('alerts.feedback', ['field' => 'summary'])
                         </div>
+                        @endif
 
 
                      </div>
@@ -143,7 +145,7 @@
       <div class="tab-pane fade" id="media" role="tabpanel" aria-labelledby="tabs-icons-text-1-tab">
          <div class="row">
             <div class="col-xl-12 order-xl-1">
-               @include('admin.upload.upload', ['event' => ($media != null) ? $media : null, 'versions' => ['event-card', 'header-image', 'social-media-sharing']])
+               @include('admin.upload.upload', ['event' => ($media != null) ? $media : null,'image_version' => 'null', 'versions' => ['event-card', 'header-image', 'social-media-sharing']])
             </div>
 
          </div>
@@ -169,6 +171,6 @@
 @endsection
 
 @push('js')
-<script src="{{asset('js/app.js')}}"></script>
-<script src="{{asset('admin_assets/js/vendor.min.js')}}"></script>
+{{--<script src="{{asset('js/app.js')}}"></script>
+<script src="{{asset('admin_assets/js/vendor.min.js')}}"></script>--}}
 @endpush
