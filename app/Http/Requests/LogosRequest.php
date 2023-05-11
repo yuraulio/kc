@@ -39,9 +39,6 @@ class LogosRequest extends FormRequest
 
             'ext_url' => [
                 'required', 'min:3'
-            ],
-            'summary' => [
-                'required'
             ]
         ];
     }

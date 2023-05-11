@@ -87,14 +87,19 @@ class PagesController extends Controller
 
         if($page->template == "corporate-template"){
             $data['brands'] = Logos::with('medias')->where('type', 'corporate_brands')->get();
+
             return view('admin.pages.create_corporate',$data);
+
         }else if($page->template == 'logos_page'){
+
             if($page['id'] == 800){
                 $data['brands'] = Logos::with('medias')->where('type', 'brands')->get();
             }else if($page['id'] == 801){
                 $data['logos'] = Logos::with('medias')->where('type', 'logos')->get();
             }
+
             return view('admin.pages.create_logos',$data);
+
         }else{
             return view('admin.pages.create',$data);
         }
