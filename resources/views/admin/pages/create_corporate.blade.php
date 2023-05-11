@@ -249,6 +249,6 @@
 
 
 @push('js')
-<script src="{{asset('js/app.js')}}"></script>
-<script src="{{asset('admin_assets/js/vendor.min.js')}}"></script>
+{{--<script src="{{asset('js/app.js')}}"></script>
+<script src="{{asset('admin_assets/js/vendor.min.js')}}"></script>--}}
 @endpush
