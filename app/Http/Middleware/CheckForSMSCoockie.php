@@ -50,16 +50,16 @@ class CheckForSMSCoockie
         require_once("../app/Apifon/Model/MessageContent.php");
         require_once("../app/Apifon/Model/SmsRequest.php");
         require_once("../app/Apifon/Model/SubscriberInformation.php");
-       
+
         if (Auth::guest() || env('APP_DEBUG') == true) {
             return $next($request);
         }
 
         $roles = Auth::user()->role->pluck('name')->toArray();
-        if (in_array('Super Administrator',$roles) || in_array('Administrator',$roles) || in_array('Manager',$roles) || in_array('Author',$roles)) {           
+        if (in_array('Super Administrator',$roles) || in_array('Administrator',$roles) || in_array('Manager',$roles) || in_array('Author',$roles)) {
             return $next($request);
         }else{
-            
+
             $user = Auth::user();
             //dd($user);
 
@@ -73,7 +73,7 @@ class CheckForSMSCoockie
                         $coockie->coockie_value = $cookie;
                         $coockie->user_id = $user->id;
                         $coockie->sms_code = rand(1111,9999);
-    
+
                         $coockie->save();
 
                         $cookie = $coockie->coockie_value;
@@ -81,10 +81,10 @@ class CheckForSMSCoockie
                     }
 
                 }else{
-                  
+
                     $cookieValue = base64_encode($user->id . date("H:i"));
                     setcookie('auth-'.$user->id, $cookieValue, time() + (1 * 365 * 86400), "/"); // 86400 = 1 day
-                
+
                     $coockie = new CookiesSMS;
                     $coockie->coockie_name = 'auth-'.$user->id;
                     $coockie->coockie_value = $cookieValue;
@@ -95,14 +95,14 @@ class CheckForSMSCoockie
 
                     $cookie = $cookieValue;
                 }
-                
+
 
                 //dd($user->cookiesSMS()->where('coockie_value',$cookie)->first());
                 //dd($cookie);
                 $cookieSms = $user->cookiesSMS()->where('coockie_value',$cookie)->first();*/
-                
+
                 /*if(!$cookieSms->sms_verification && $user->mobile != ''){
-                
+
                     $codeExpired = strtotime($cookieSms->updated_at);
                     $codeExpired  = (time() - $codeExpired) / 60;
                     if($codeExpired >= 5){
@@ -117,10 +117,10 @@ class CheckForSMSCoockie
                         //dd($user);
                         Mookee::addCredentials("sms",$this->token, $this->secretId);
                         Mookee::setActiveCredential("sms");
-                
+
                         $smsResource = new SMSResource();
                         $smsRequest = new SmsRequest();
-                        
+
                         //$mobile = "*******";
                         $mob = trim($user->mobile);
                         $mob = trim($user->country_code) . trim($user->mobile);
@@ -133,15 +133,15 @@ class CheckForSMSCoockie
                         $mobileNumber = trim($mob);
                         //$nums = ["30" . $mobileNumber];
                         $nums = [$mobileNumber];
-                
+
                         $message = new MessageContent();
                         $messageText = 'Knowcrunch code: '. $cookieSms->sms_code . ' Valid for 5 minutes';
                         $message->setText($messageText);
                         $message->setSenderId("Knowcrunch");
-                
+
                         $smsRequest->setStrSubscribers($nums);
                         $smsRequest->setMessage($message);
-                
+
                         $response = $smsResource->send($smsRequest);
                     // var_dump($response);
                         $cookieSms->send = true;
@@ -160,7 +160,7 @@ class CheckForSMSCoockie
                     }
                 }*/
                 /*else*/ if(($user->consent == '' || $user->terms == 0) && !$user->instructor->first()){
-                    
+
                     $page = Page::find(4);
                     $pageSlug = $page->slug;
 
@@ -184,11 +184,11 @@ class CheckForSMSCoockie
                     }
                 }
             }
-            
+
         }
 
-        
+
         return $next($request);
-        
+
     }
 }

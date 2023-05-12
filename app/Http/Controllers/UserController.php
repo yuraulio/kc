@@ -1508,7 +1508,8 @@ class UserController extends Controller
     public function generateConsentPdf(User $user)
     {
 
-        if(!$user->instructor){
+        if(count($user->instructor) == 0){
+
             $terms = Page::find(6);
             $terms = json_decode($terms->content, true)[3]['columns'][0]['template']['inputs'][0]['value'];
 

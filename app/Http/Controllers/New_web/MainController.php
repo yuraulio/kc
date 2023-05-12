@@ -18,6 +18,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use App\Model\Event;
+use Auth;
 
 class MainController extends Controller
 {
@@ -147,10 +148,25 @@ class MainController extends Controller
 
         $this->fbp->sendPageViewEvent();
 
-        if ($request->has('terms')) {
+        if ($slug == 'terms-and-conditions') {
+
+            $user = Auth::user();
+
             $terms = Page::withoutGlobalScope("published")->whereId(6)->first();
+
+            if(Auth::check() && $user->instructor){
+
+                if(count($user->instructor) != 0){
+                    $terms = Page::withoutGlobalScope("published")->whereId(48)->first();
+                }
+            }
+
+            //dd($terms);
+
             $contents[] = json_decode($terms->content);
             $contents[] = json_decode($page->content);
+
+            //dd($contents);
 
             return view('new_web.page_consent', [
                 'contents' => $contents,
