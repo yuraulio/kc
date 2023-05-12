@@ -148,25 +148,10 @@ class MainController extends Controller
 
         $this->fbp->sendPageViewEvent();
 
-        if ($slug == 'terms-and-conditions') {
-
-            $user = Auth::user();
-
+        if ($request->has('terms')) {
             $terms = Page::withoutGlobalScope("published")->whereId(6)->first();
-
-            if(Auth::check() && $user->instructor){
-
-                if(count($user->instructor) != 0){
-                    $terms = Page::withoutGlobalScope("published")->whereId(48)->first();
-                }
-            }
-
-            //dd($terms);
-
             $contents[] = json_decode($terms->content);
             $contents[] = json_decode($page->content);
-
-            //dd($contents);
 
             return view('new_web.page_consent', [
                 'contents' => $contents,
