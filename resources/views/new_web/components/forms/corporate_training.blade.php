@@ -34,7 +34,7 @@
                             <input type="checkbox" id="accept" name="receive-messages" value="accept">
                             <span></span>
                         </div>
-                        
+
                         <label class="contact-form" for="receive-messages">
                             {!! $form["consent_text"] ?? "" !!}
                         </label>

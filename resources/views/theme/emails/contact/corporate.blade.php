@@ -158,6 +158,26 @@
                                                                         <tr>
                                                                            <td align="left" valign="top" class="r15-i nl2go-default-textstyle" style="color: #3b3f44; font-family: arial,helvetica,sans-serif; font-size: 16px; line-height: 1.5; text-align: left;">
                                                                               <div>
+                                                                                 <p style="margin: 0px;">{{$cemail}}</p>
+                                                                              </div>
+                                                                           </td>
+                                                                        </tr>
+                                                                        <tr class="nl2go-responsive-hide">
+                                                                           <td height="15" style="font-size: 15px; line-height: 15px;">­</td>
+                                                                        </tr>
+                                                                     </table>
+                                                                  </td>
+                                                               </tr>
+
+                                                               <tr>
+                                                                  <td class="r12-c" align="left">
+                                                                     <table cellspacing="0" cellpadding="0" border="0" role="presentation" width="100%" class="r13-o" style="table-layout: fixed; width: 100%;">
+                                                                        <tr class="nl2go-responsive-hide">
+                                                                           <td height="15" style="font-size: 15px; line-height: 15px;">­</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                           <td align="left" valign="top" class="r15-i nl2go-default-textstyle" style="color: #3b3f44; font-family: arial,helvetica,sans-serif; font-size: 16px; line-height: 1.5; text-align: left;">
+                                                                              <div>
                                                                                  <p style="margin: 0px;">{{$ctel}}</p>
                                                                               </div>
                                                                            </td>
@@ -168,7 +188,7 @@
                                                                      </table>
                                                                   </td>
                                                                </tr>
-                                                               
+
                                                             </table>
                                                          </td>
                                                          <td class="nl2go-responsive-hide" width="10" style="font-size: 0px; line-height: 1px;">­ </td>
@@ -191,7 +211,7 @@
                </table>
             </td>
          </tr>
-       
+
 
 @stop
 
