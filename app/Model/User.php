@@ -749,6 +749,8 @@ class User extends Authenticatable
         $tab = str_replace('_', '', $tab);
         $tab = str_replace(',', '', $tab);
         $tab = str_replace(':', '', $tab);
+        $tab = str_replace(')', '', $tab);
+        $tab = str_replace('(', '', $tab);
 
 
         $statistic = $statistics;
@@ -785,8 +787,16 @@ class User extends Authenticatable
                 }
                 if (!isset($videos[$vimeo_id])) {
                     $change+=1;
-                    $videos[$vimeo_id] = ['seen' => 0, 'tab' =>$tab.$vimeo_id, 'lesson_id' => $lesson['id'], 'stop_time' => 0, 'total_seen' => 0,
-                                               'percentMinutes' => 0, 'total_duration' => getLessonDurationToSec($lesson['vimeo_duration']), 'is_new' => $is_new];
+                    $videos[$vimeo_id] = [
+                        'seen' => 0,
+                        'tab' =>$tab.$vimeo_id,
+                        'lesson_id' => $lesson['id'],
+                        'stop_time' => 0,
+                        'total_seen' => 0,
+                        'percentMinutes' => 0,
+                        'total_duration' => getLessonDurationToSec($lesson['vimeo_duration']),
+                        'is_new' => $is_new
+                    ];
                     $notes[$vimeo_id] = '';
                 }
 
@@ -798,8 +808,16 @@ class User extends Authenticatable
                     $seenn = isset($videos[$vimeo_id]['seen']) ? $videos[$vimeo_id]['seen'] : 0;
                     $isNeww = isset($videos[$vimeo_id]['is_new']) ? $videos[$vimeo_id]['is_new'] : 0;
 
-                    $videos[$vimeo_id] = ['seen' => $seenn, 'tab' =>$tab.$vimeo_id, 'lesson_id' => $lesson['id'], 'stop_time' => $stopTimee, 'total_seen' => $totalSeenn,
-                    'percentMinutes' => $percentMinutess, 'total_duration' => getLessonDurationToSec($lesson['vimeo_duration']), 'is_new' => $isNeww];
+                    $videos[$vimeo_id] = [
+                        'seen' => $seenn,
+                        'tab' =>$tab.$vimeo_id,
+                        'lesson_id' => $lesson['id'],
+                        'stop_time' => $stopTimee,
+                        'total_seen' => $totalSeenn,
+                        'percentMinutes' => $percentMinutess,
+                        'total_duration' => getLessonDurationToSec($lesson['vimeo_duration']),
+                        'is_new' => $isNeww
+                    ];
                 }
 
                 $countVideos += 1;

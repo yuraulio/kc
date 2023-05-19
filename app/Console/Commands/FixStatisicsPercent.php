@@ -42,13 +42,13 @@ class FixStatisicsPercent extends Command
         $users = User::whereHas('statistic')->get();
 
         foreach($users as $user){
-            
+
             foreach($user->statistic as $st){
                 $newVideos = [];
                 if(!($videos = json_decode($st->pivot->videos,true))){
                     continue;
                 }
-                
+
                 foreach($videos as $key => $video){
                     if(!isset($video['tab'])){
                         continue;
@@ -61,6 +61,8 @@ class FixStatisicsPercent extends Command
                     $tab = str_replace('_', '', $tab);
                     $tab = str_replace(',', '', $tab);
                     $tab = str_replace(':', '', $tab);
+                    $tab = str_replace(')', '', $tab);
+                    $tab = str_replace('(', '', $tab);
 
                     $newVideos[$key]['seen'] = $video['seen'];
                     $newVideos[$key]['stop_time'] = $video['stop_time'];
@@ -68,6 +70,7 @@ class FixStatisicsPercent extends Command
                     $newVideos[$key]['lesson_id'] = isset($video['lesson_id']) ? $video['lesson_id'] : $video['lesson'];
                     $newVideos[$key]['tab'] = $tab;
                     $newVideos[$key]['total_duration'] = $video['total_duration'];
+                    $newVideos[$key]['is_new'] = isset($video['is_new']) ? $video['is_new'] : 1;
 
                     if($video['seen'] == 1){
                         $newVideos[$key]['total_seen'] = $video['total_duration'];

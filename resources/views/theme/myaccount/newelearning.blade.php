@@ -182,6 +182,8 @@
                               $frame = str_replace('-','',$frame);
                               $frame = str_replace('&','',$frame);
                               $frame = str_replace('_','',$frame);
+                              $frame = str_replace('(','',$frame);
+                              $frame = str_replace(')','',$frame);
 
                               $frame2 = '{'.$frame.'}';
                               $frame = $frame;
@@ -832,6 +834,8 @@
              frame = frame.replace(/\s/g, '')
              frame = frame.replace(/-/g, '')
              frame = frame.replace(/&/g, '')
+             frame = frame.replace(/\(/g, '')
+             frame = frame.replace(/\)/g, '')
              frame = '{'+frame+'}'
 
              if(previousFrame){
@@ -928,6 +932,8 @@
 
 
                 let vimeoID ='"{ video'+videos[seen]['lesson_id'] + frame + '}"';
+                console.log('frame VI:',this.frameVi[this.frame])
+                console.log('frame: ', this.frame)
                 var cvl = document.getElementById(this.frameVi[this.frame]).cloneNode(true);;
                 cvl = document.getElementById(this.frameVi[this.frame]).setAttribute('id',vimeoID);
 
@@ -1013,7 +1019,6 @@
                 });
 
              }
-
 
              courseName = $('#'+ this.currentWatchingVideo).find('.lesson-info_title');
              courseName = $(courseName).text();
