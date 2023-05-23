@@ -53,7 +53,7 @@ class CheckForSubscription
             abort(404);
         }
 
-        if($user->subscriptions()->where('stripe_price',$plan->stripe_plan)->where('stripe_status','active')->first()){
+        if($user->subscriptions()->where('stripe_price',$plan->stripe_plan)->first()){
             Session::flash('opmessage', 'You have already been subscribed to this event.');
             Session::flash('opstatus', 1);
             return redirect('/myaccount');
