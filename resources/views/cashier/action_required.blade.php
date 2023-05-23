@@ -146,7 +146,7 @@
 						    <h2>My selection:</h2>
                     
 						    <h3> {{$eventName}} </h3>	
-						    @if($duration)<datetime="YYYY-MM-DDThh:mm:ssTZD"><span class="datetime">{{$duration}}</span></datetime="YYYY-MM-DDThh:mm:ssTZD">@endif
+						    @if($duration)<datetime="YYYY-MM-DDThh:mm:ssTZD"><span class="datetime">{!!$duration!!}</span></datetime="YYYY-MM-DDThh:mm:ssTZD">@endif
 						    <div class="checkout-price-wrap">
 						    	
 

@@ -18,6 +18,7 @@ class Billing
      */
     public function handle(Request $request, Closure $next)
     {
+        
         if(!Session::get('pay_seats_data')){
             return redirect('/registration');
         }
