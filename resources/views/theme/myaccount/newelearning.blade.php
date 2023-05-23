@@ -932,8 +932,6 @@
 
 
                 let vimeoID ='"{ video'+videos[seen]['lesson_id'] + frame + '}"';
-                console.log('frame VI:',this.frameVi[this.frame])
-                console.log('frame: ', this.frame)
                 var cvl = document.getElementById(this.frameVi[this.frame]).cloneNode(true);;
                 cvl = document.getElementById(this.frameVi[this.frame]).setAttribute('id',vimeoID);
 
