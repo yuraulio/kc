@@ -20,7 +20,7 @@
 				<div class="col-md-6 col-xl-6 selection-order">
 					<h1 class="hidden-lg">Billing</h1>	
 					<div class="billing-full-wrap">
-						<form action="{{route('subscription.checkoutIndex',[$event->title,$plan->name])}}" method="post" name="billing">
+						<form action="{{route('subscription.checkoutIndex',[$event->title,$plan->name])}}" method="get" name="billing">
 						@csrf
 						<div class="form-wrp box" id="clone-box">
 							<p class="validation-info">Fields marked with an asterisk <span class="checkout-required-data">(*)</span> are required.</p>
