@@ -259,7 +259,7 @@ class SubscriptionController extends Controller
 
     public function store(Request $request, $event,$plan)
     {
-
+        
         $user = Auth::user();
 
         $plan = Plan::where('name',$plan)->first();
@@ -327,8 +327,9 @@ class SubscriptionController extends Controller
             $days = $plan->interval_count;
             $sub_end = strtotime("+" . $days . "day");
         }
-
+        
         $user->asStripeCustomer();
+       
         if(!$user->stripe_id){
 
             $options=['name' => $user['firstname'] . ' ' . $user['lastname'], 'email' => $user['email']];
@@ -340,7 +341,7 @@ class SubscriptionController extends Controller
             $user->stripe_ids = json_encode($stripe_ids);
             $user->save();
         }
-
+        
         //$anchor = Carbon::now()->addDays(16);;
         //$anchor = $anchor->startOfMonth();
         try {
@@ -356,7 +357,7 @@ class SubscriptionController extends Controller
 
             $charge['status'] = 'succeeded';
             $date_sub_end = date('Y/m/d H:i:s', $sub_end);
-
+         
             if($charge){
 
                 $subscription = $user->subscriptions()->where('id',$charge['id'])->first();
@@ -468,13 +469,7 @@ class SubscriptionController extends Controller
             }else{
                 return 'have error';
             }
-        }catch (Exception $e) {
-            //dd('edwww2');
-             \Session::put('dperror',$e->getMessage());
-             return back();
-            // return redirect('/info/order_error');
-        }
-        catch(\Cartalyst\Stripe\Exception\CardErrorException $e) {
+        }catch(\Cartalyst\Stripe\Exception\CardErrorException $e) {
             //dd('edwww3');
             \Session::put('dperror',$e->getMessage());
             return back();
@@ -492,8 +487,17 @@ class SubscriptionController extends Controller
             //return redirect('/info/order_error');
             return back();
         }catch(\Stripe\Exception\CardException $e) {
+        
             \Session::put('dperror',$e->getMessage());
             return back();
+        }catch(\Stripe\Exception\InvalidRequestException $e) {
+            \Session::put('dperror',$e->getMessage());
+            return back();
+        }catch (Exception $e) {
+            //dd('edwww2');
+             \Session::put('dperror',$e->getMessage());
+             return back();
+            // return redirect('/info/order_error');
         }
     }
 

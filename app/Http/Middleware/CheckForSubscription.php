@@ -29,7 +29,7 @@ class CheckForSubscription
         }
         
         $plan = $request->route()->parameters['plan'];
-        $plan = Plan::where('name',$plan)->first();
+        $plan = Plan::where('name',$plan)->wherePublished(true)->first();
         //$plan = Plan::find($plan);
 
         $event = $request->route()->parameters['event'];
@@ -49,10 +49,10 @@ class CheckForSubscription
         if(!$dpuser->checkUserSubscriptionByEventId($event->id)){
             abort(404);
         }
+       
         if(!$dpuser->checkUserPlansById($event->plans,$plan->id)){
             abort(404);
         }
-
         if($user->subscriptions()->where('stripe_price',$plan->stripe_plan)->where('stripe_status','active')->first()){
             Session::flash('opmessage', 'You have already been subscribed to this event.');
             Session::flash('opstatus', 1);

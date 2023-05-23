@@ -581,7 +581,9 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'myaccount'], function () {
 
 
         Route::get('/subscription/{event}/{plan}',  'Theme\SubscriptionController@index');
-        Route::post('/subscription/checkout/{event}/{plan}',  'Theme\SubscriptionController@checkoutIndex')->name('subscription.checkoutIndex');
+        //Route::post('/subscription/checkout/{event}/{plan}',  'Theme\SubscriptionController@checkoutIndex')->name('subscription.checkoutIndex');
+        Route::get('/subscription/checkout/{event}/{plan}',  'Theme\SubscriptionController@checkoutIndex')->name('subscription.checkoutIndex');
+
         Route::post('/subscription/store/{event}/{plan}',  'Theme\SubscriptionController@store')->name('subscription.store');
         Route::get('/subscription-success', 'Theme\SubscriptionController@orderSuccess');
         Route::post('/subscription/change_status',  'Theme\SubscriptionController@change_status')->name('subscription.change_status');
