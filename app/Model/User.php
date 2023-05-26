@@ -818,6 +818,12 @@ class User extends Authenticatable
                         'total_duration' => getLessonDurationToSec($lesson['vimeo_duration']),
                         'is_new' => $isNeww
                     ];
+
+                    $notes[$vimeo_id] = isset($notes[$vimeo_id]) ? $notes[$vimeo_id] : '';
+                }
+
+                if(!isset($notes[$vimeo_id])){
+                    $notes[$vimeo_id] =  '';
                 }
 
                 $countVideos += 1;
