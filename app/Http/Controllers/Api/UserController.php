@@ -724,7 +724,12 @@ class UserController extends Controller
 
 
                     if($lesson['vimeo_video'] != ''){
-                        $vimeo_id = explode('https://vimeo.com/', $lesson['vimeo_video'])[1];
+                        
+                        $vimeo_id = explode('https://vimeo.com/', $lesson['vimeo_video']);
+                        if(!isset($vimeo_id[1])){
+                            continue;
+                        }
+                        $vimeo_id = $vimeo_id[1];
 
                         if(isset($notes[$vimeo_id]))
                             $arr_lesson['note'] = $notes[$vimeo_id];
