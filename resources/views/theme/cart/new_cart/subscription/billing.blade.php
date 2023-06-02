@@ -4,21 +4,21 @@
 
 <!---------------- checkout progress-bar start --------------->
 <div class="suscription checkout-step">
-		<div class="container">		
+		<div class="container">
 			<ul>
 				<li class="active"><span class="counter">1.</span><i>Billing</i></li>
 				<li><span class="counter">2.</span><i>Checkout</i></li>
 			</ul>
 		</div>
 	</div>
-<!---------------- checkout progress-bar end --------------->	
+<!---------------- checkout progress-bar end --------------->
 <div class="form-wrap">
-		<div class="container padding-no">			
-			<h1 class="hidden-xs">Billing</h1>			
+		<div class="container padding-no">
+			<h1 class="hidden-xs">Billing</h1>
 			<div class="row">
 				<!---------------- billing form start--------------->
 				<div class="col-md-6 col-xl-6 selection-order">
-					<h1 class="hidden-lg">Billing</h1>	
+					<h1 class="hidden-lg">Billing</h1>
 					<div class="billing-full-wrap">
 						<form action="{{route('subscription.checkoutIndex',[$event->title,$plan->name])}}" method="get" name="billing">
 						@csrf
@@ -35,7 +35,7 @@
 									<label class="input-label">VAT or tax ID</label>
 									<input type="text" name="billafm" value="{{old('billafm',$billafm)}}" class="form-control" placeholder="" aria-describedby="inputGroupPrepend3">
 									<div class="invalid-feedback">
-										
+
 									</div>
 								</div>
 							</div>
@@ -44,14 +44,14 @@
 									<label class="input-label">Street</label>
 									<input type="text" class="form-control" value="{{old('billaddress',$billaddress)}}" name="billaddress" placeholder="">
 									<div class="valid-feedback">
-										
+
 									</div>
 								</div>
 								<div class="col-md-12 col-xl-4 mb-4 pl-xl-3">
 									<label class="input-label">Street number</label>
 									<input type="text" class="form-control" value="{{old('billaddressnum',$billaddressnum)}}" name="billaddressnum" placeholder="">
 									<div class="valid-feedback">
-										
+
 									</div>
 								</div>
 							</div>
@@ -60,41 +60,42 @@
 									<label class="input-label">Town/city</label>
 									<input type="text" name="billcity" value="{{old('billcity',$billcity)}}" class="form-control" placeholder="">
 									<div class="valid-feedback">
-										
+
 									</div>
 								</div>
 								<div class="col-md-12 col-xl-4 mb-4 pl-xl-3">
 									<label class="input-label">Postcode (ZIP)</label>
 									<input type="text" name="billpostcode" value="{{old('billpostcode',$billpostcode)}}" class="form-control"  placeholder="">
 									<div class="valid-feedback">
-										
+
 									</div>
 								</div>
 							</div>
 							<div class="form-row">
 								<div class="col-md-12 mb-4">
 									<label class="input-label">State</label>
-									<input type="text" class="form-control" value="{{old('billstate',$billstate)}}" placeholder="" aria-describedby="inputGroupPrepend3">
+									<input type="text" name="billstate" class="form-control" value="{{old('billstate',$billstate)}}" placeholder="" aria-describedby="inputGroupPrepend3">
 									<div class="invalid-feedback">
-										
+
 									</div>
 								</div>
 							</div>
 							<div class="form-row">
 								<div class="col-md-12 mb-4">
 									<label class="input-label">Country</label>
-									<input type="text" class="form-control" value="{{old('billcountry',$billcountry)}}" placeholder="" aria-describedby="inputGroupPrepend3">
+									<input type="text" name="billcountry" class="form-control" value="{{old('billcountry',$billcountry)}}" placeholder="" aria-describedby="inputGroupPrepend3">
 									<div class="invalid-feedback">
-										
+
 									</div>
 								</div>
 							</div>
+
 							<div class="form-row">
 								<div class="col-md-12 mb-4">
 									<label class="input-label">Please send this receipt to this email address</label>
-									<input type="email" value="{{old('billemail',$billemail)}}" class="form-control" placeholder="" aria-describedby="inputGroupPrepend3">
+									<input type="email" name="billemail" value="{{old('billemail',$billemail)}}" class="form-control" placeholder="" aria-describedby="inputGroupPrepend3">
 									<div class="invalid-feedback">
-										
+
 									</div>
 								</div>
 							</div>
@@ -111,6 +112,6 @@
 				@include('theme.cart.new_cart.subscription.selection')
 				<!---------------- My Selection end--------------->
 			</div>
-		</div>						
+		</div>
 	</div>
 @stop

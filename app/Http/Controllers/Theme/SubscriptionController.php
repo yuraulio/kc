@@ -123,8 +123,8 @@ class SubscriptionController extends Controller
             $data['billpostcode'] = isset( $data['pay_bill_data']['billpostcode']) ? $data['pay_bill_data']['billpostcode'] : '';
             $data['billcity'] = isset($data['pay_bill_data']['billcity']) ? $data['pay_bill_data']['billcity'] : '';
             $data['billafm'] = isset($data['pay_bill_data']['billafm']) ? $data['pay_bill_data']['billafm'] : '';
-            $data['billcountry'] = isset($data['pay_bill_data']['country']) ? $data['pay_bill_data']['billcountry'] : '';
-            $data['billstate'] = isset($data['pay_bill_data']['state']) ? $data['pay_bill_data']['billstate'] : '';
+            $data['billcountry'] = isset($data['pay_bill_data']['billcountry']) ? $data['pay_bill_data']['billcountry'] : '';
+            $data['billstate'] = isset($data['pay_bill_data']['billstate']) ? $data['pay_bill_data']['billstate'] : '';
             $data['billemail'] = isset($data['pay_bill_data']['billemail']) ? $data['pay_bill_data']['billemail'] : '';
 
             $ukcid = $user->kc_id;
@@ -137,7 +137,9 @@ class SubscriptionController extends Controller
 
     public function checkoutIndex($event,$plan)
     {
+        $user = Auth::user();
 
+        //dd(request()->all());
         $pay_bill_data = [];
 
         $pay_bill_data['billing'] = 1;
@@ -152,6 +154,9 @@ class SubscriptionController extends Controller
         $pay_bill_data['billstate'] = request()->get('billstate');
         $pay_bill_data['billafm'] = request()->get('billafm');
 
+        $user->receipt_details = json_encode($pay_bill_data);
+        $user->save();
+
 
         $plan = Plan::where('name',$plan)->first();
         $event = Event::where('title',$event)->first();
@@ -160,7 +165,8 @@ class SubscriptionController extends Controller
         $secretKey = env('PAYMENT_PRODUCTION') ? $this->paymentMethod->processor_options['secret_key'] : $this->paymentMethod->test_processor_options['secret_key'];
         Stripe::setApiKey($secretKey);
 
-        $user = Auth::user();
+
+
         $user->asStripeCustomer();
         $data['plan'] = $plan;
         $data['event'] = $event;
@@ -259,7 +265,7 @@ class SubscriptionController extends Controller
 
     public function store(Request $request, $event,$plan)
     {
-        
+
         $user = Auth::user();
 
         $plan = Plan::where('name',$plan)->first();
@@ -327,9 +333,9 @@ class SubscriptionController extends Controller
             $days = $plan->interval_count;
             $sub_end = strtotime("+" . $days . "day");
         }
-        
+
         $user->asStripeCustomer();
-       
+
         if(!$user->stripe_id){
 
             $options=['name' => $user['firstname'] . ' ' . $user['lastname'], 'email' => $user['email']];
@@ -341,7 +347,7 @@ class SubscriptionController extends Controller
             $user->stripe_ids = json_encode($stripe_ids);
             $user->save();
         }
-        
+
         //$anchor = Carbon::now()->addDays(16);;
         //$anchor = $anchor->startOfMonth();
         try {
@@ -357,7 +363,7 @@ class SubscriptionController extends Controller
 
             $charge['status'] = 'succeeded';
             $date_sub_end = date('Y/m/d H:i:s', $sub_end);
-         
+
             if($charge){
 
                 $subscription = $user->subscriptions()->where('id',$charge['id'])->first();
@@ -487,7 +493,7 @@ class SubscriptionController extends Controller
             //return redirect('/info/order_error');
             return back();
         }catch(\Stripe\Exception\CardException $e) {
-        
+
             \Session::put('dperror',$e->getMessage());
             return back();
         }catch(\Stripe\Exception\InvalidRequestException $e) {
