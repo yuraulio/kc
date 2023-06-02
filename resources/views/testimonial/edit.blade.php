@@ -68,8 +68,8 @@
                                         </div>
 
                                         <div class="form-group{{ $errors->has('title') ? ' has-danger' : '' }}">
-                                            <label class="form-control-label" for="input-title">{{ __('Title') }}</label>
-                                            <input type="text" name="title" id="input-title" class="form-control{{ $errors->has('title') ? ' is-invalid' : '' }}" placeholder="{{ __('Title') }}" value="{{ old('title', $testimonial->title) }}" required autofocus>
+                                            <label class="form-control-label" for="input-title">{{ __('Job Title') }}</label>
+                                            <input type="text" name="title" id="input-title" class="form-control{{ $errors->has('title') ? ' is-invalid' : '' }}" placeholder="{{ __('Job Title') }}" value="{{ old('title', $testimonial->title) }}" required autofocus>
 
                                             @include('alerts.feedback', ['field' => 'title'])
                                         </div>
