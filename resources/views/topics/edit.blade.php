@@ -119,7 +119,7 @@
                                         <div class="form-group{{ $errors->has('category_id') ? ' has-danger' : '' }} topic-list">
                                             <label class="form-control-label" for="input-category_id">{{ __('Category') }}</label>
                                             <select multiple name="category_id[]" id="input-category_id" class="form-control" placeholder="{{ __('Category') }}" required>
-                                                <option value="">-</option>
+                                                <option value=" ">-</option>
                                                 @foreach ($categories as $category)
                                                     <option <?php if(count($topic->category) != 0){
 
@@ -140,14 +140,14 @@
 
                                         <div class="form-group{{ $errors->has('short_title') ? ' has-danger' : '' }}">
                                             <label class="form-control-label" for="input-short_title">{{ __('Short title') }}</label>
-                                            <input type="text" name="short_title" id="input-short_title" class="form-control{{ $errors->has('short_title') ? ' is-invalid' : '' }}" placeholder="{{ __('short_title') }}" value="{{ old('Short title', $topic->short_title) }}" autofocus>
+                                            <input type="text" name="short_title" id="input-short_title" class="form-control{{ $errors->has('short_title') ? ' is-invalid' : '' }}" placeholder="{{ __('short_title') }}" value="{{ old('short_title', $topic->short_title) }}" autofocus>
 
                                             @include('alerts.feedback', ['field' => 'short_title'])
                                         </div>
 
                                         <div class="form-group{{ $errors->has('subtitle') ? ' has-danger' : '' }}">
                                             <label class="form-control-label" for="input-subtitle">{{ __('Subtitle') }}</label>
-                                            <input type="text" name="subtitle" id="input-subtitle" class="form-control{{ $errors->has('subtitle') ? ' is-invalid' : '' }}" placeholder="{{ __('subtitle') }}" value="{{ old('Subtitle', $topic->subtitle) }}" autofocus>
+                                            <input type="text" name="subtitle" id="input-subtitle" class="form-control{{ $errors->has('subtitle') ? ' is-invalid' : '' }}" placeholder="{{ __('subtitle') }}" value="{{ old('subtitle', $topic->subtitle) }}" autofocus>
 
                                             @include('alerts.feedback', ['field' => 'subtitle'])
                                         </div>

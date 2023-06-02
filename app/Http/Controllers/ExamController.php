@@ -22,7 +22,7 @@ class ExamController extends Controller
         $this->authorize('manage-users', User::class);
         $user = Auth::user();
 
-        $exams = Exam::all();
+        $exams = Exam::withCount('results')->get();
 
         return view('admin.exams.index', ['exams' => $exams, 'user' => $user]);
     }
@@ -210,7 +210,13 @@ class ExamController extends Controller
      */
     public function destroy(Exam $exam)
     {
-        //
+        if (!$exam->results->isEmpty()) {
+            return redirect()->route('exams.index')->withErrors(__('This exam has items attached and can\'t be deleted.'));
+        }
+
+        $exam->delete();
+
+        return redirect()->route('exams.index')->withStatus(__('Exam successfully deleted.'));
     }
 
     public function addQuestion(Request $request, Exam $exam){

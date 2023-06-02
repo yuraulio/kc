@@ -178,10 +178,10 @@ class TopicController extends Controller
         $fromCategory = $request->fromCategory ?: $request->fromCategory;
         $request->request->add(['status' => $status]);
         $topic->update($request->all());
-        
+
         $lessons = [];
         $lessonsAttached = [];
-        
+
         $fromCategoryModel = Category::findOrFail($fromCategory);
 
         foreach($request->category_id as $category_id){
@@ -202,13 +202,13 @@ class TopicController extends Controller
                     $lessons[] = $lesson->id;
                     $category->topic()->attach($topic,['category_id' => $category_id, 'lesson_id' => $lesson->id,'priority'=>$lastPriority]);
                     $lastPriority += 1;
-                    
+
 
                 }
-                
+
                 $topic = Topic::find($topic->id);
                 foreach($fromCategoryModel->events as $fromEvent){
-                    
+
                     dispatch(new CopyTopicFromOneCategoryToAnother($category, $fromEvent->id, $fromCategory, $topic, $lessonsAttached));
 
                 }
@@ -225,11 +225,11 @@ class TopicController extends Controller
      * @param  \App\Model\Topic  $topic
      * @return \Illuminate\Http\Response
      */
-    
+
 
     public function destroy(Request $request, Topic $topic)
     {
-       
+
         $catgegoriesAssignded = '';
         $error = false;
 
@@ -242,13 +242,13 @@ class TopicController extends Controller
                 $catgegoriesAssignded .= 'The topic <strong>' . $topic->title . '</strong> cannot be delete because is attached to more than one categries.<br>';
 
                 foreach($topic['category'] as $category){
-                    
+
                     $catgegoriesAssignded .= $category['name'] . '<br>';
-    
+
                 }
 
                 $catgegoriesAssignded .= '<br>';
-    
+
             }else{
                 $topic->delete();
             }
@@ -266,7 +266,6 @@ class TopicController extends Controller
 
     public function detachTopic(Request $request)
     {
-        //dd($request->all());
         $catgegoriesAssignded = '';
         $error = false;
 
@@ -283,7 +282,7 @@ class TopicController extends Controller
                 dispatch(new FixOrder($category,''));
 
                 foreach($category->events as $event){
-                    
+
                     if($event->status != 0){
                         continue;
                     }
@@ -302,7 +301,10 @@ class TopicController extends Controller
 
 
         }
-        return redirect()->route('topics.index')->withStatus(__('Topics successfully deleted.'));
+
+        $openCategoryId = $request->category[count($request->category) - 1];
+
+        return redirect()->route('topics.index', ['open_category' => $openCategoryId])->withStatus(__('Topics successfully deleted.'));
     }
 
 
@@ -313,7 +315,7 @@ class TopicController extends Controller
         $validatorArray['category'] = 'required';
 
         $validator = Validator::make($request->all(), $validatorArray);
-        
+
         if ($validator->fails()) {
             return [
                 'success' => false,
@@ -331,7 +333,7 @@ class TopicController extends Controller
         foreach($request->order as $key => $orderTopic){
             $orderTopics[] = explode('-',$key)[1];
         }*/
-      
+
         foreach($category->topics as $topic){
             //dd($category->id);
             $index = $category->id . '-' . $topic->id;
@@ -340,11 +342,11 @@ class TopicController extends Controller
             }
             $topic->pivot->priority = $request->order[$index];
             $topic->pivot->save();
-            
+
         }
-        
+
         foreach($request->order as $key => $ct){
-            
+
             $index = $key;
 
             $categoryIndex = explode('-',$key)[0];
@@ -352,24 +354,24 @@ class TopicController extends Controller
             if(!isset($request->order[$index]) || $request->category != $categoryIndex){
                 continue;
             }
-            
+
             foreach($category->lessons()->wherePivot('topic_id',$topic)->orderBy('priority','ASC')->get() as $topicc){
-                
+
                 $topicc->pivot->priority = $order;
                 $topicc->pivot->save();
                 $order += 1;
-    
+
             }
 
             foreach($category->events as $event){
-    
+
                 foreach($event->allLessons()->wherePivot('topic_id',$topic)->orderBy('priority','ASC')->get() as $lesson){
-                   
+
                     $lesson->pivot->priority = $orderLessons;
                     $lesson->pivot->save();
 
                     $orderLessons += 1;
-    
+
                 }
             }
 

@@ -61,6 +61,16 @@
                                                 <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
                                                     <a class="dropdown-item" href="{{ route('exams.edit', $exam->id) }}">{{ __('Edit') }}</a>
                                                     <a class="dropdown-item" href="{{ route('exam.clone', $exam->id) }}">{{ __('Clone') }}</a>
+                                                    @if($exam->results_count == 0)
+                                                    <form action="{{ route('exams.destroy', $exam) }}" method="post">
+                                                        @csrf
+                                                        @method('delete')
+
+                                                        <button type="button" class="dropdown-item" onclick="confirm('{{ __("Are you sure you want to delete this exam?") }}') ? this.parentElement.submit() : ''">
+                                                            {{ __('Delete') }}
+                                                        </button>
+                                                    </form>
+                                                    @endif
                                                 </div>
 
 

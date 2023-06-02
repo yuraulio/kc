@@ -46,23 +46,9 @@
                                 @include('alerts.feedback', ['field' => 'status'])
                             </div>
 
-                                <div class="form-group{{ $errors->has('title') ? ' has-danger' : '' }}">
-                                    <label class="form-control-label" for="input-title">{{ __('Title') }}</label>
-                                    <input type="text" name="title" id="input-title" class="form-control{{ $errors->has('title') ? ' is-invalid' : '' }}" placeholder="{{ __('Title') }}" value="{{ old('title') }}" required autofocus>
-
-                                    @include('alerts.feedback', ['field' => 'title'])
-                                </div>
-
                                 <div class="form-group{{ $errors->has('name') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-name">{{ __('Name') }}</label>
                                     <input type="text" name="name" id="input-name" class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" placeholder="{{ __('Name') }}" value="{{ old('name') }}" required autofocus>
-
-                                    @include('alerts.feedback', ['field' => 'name'])
-                                </div>
-
-                                <div class="form-group{{ $errors->has('lastname') ? ' has-danger' : '' }}">
-                                    <label class="form-control-label" for="input-name">{{ __('Last Name') }}</label>
-                                    <input type="text" name="lastname" id="input-lastname" class="form-control{{ $errors->has('lastname') ? ' is-invalid' : '' }}" placeholder="{{ __('Last Name') }}" value="{{ old('lastname') }}" required autofocus>
 
                                     @include('alerts.feedback', ['field' => 'name'])
                                 </div>
@@ -72,6 +58,13 @@
                                     <input type="text" name="lastname" id="input-lastname" class="form-control{{ $errors->has('lastname') ? ' is-invalid' : '' }}" placeholder="{{ __('Last name') }}" value="{{ old('lastname') }}" required autofocus>
 
                                     @include('alerts.feedback', ['field' => 'lastname'])
+                                </div>
+
+                                <div class="form-group{{ $errors->has('title') ? ' has-danger' : '' }}">
+                                    <label class="form-control-label" for="input-title">{{ __('Title') }}</label>
+                                    <input type="text" name="title" id="input-title" class="form-control{{ $errors->has('title') ? ' is-invalid' : '' }}" placeholder="{{ __('Title') }}" value="{{ old('title') }}" required autofocus>
+
+                                    @include('alerts.feedback', ['field' => 'title'])
                                 </div>
 
                                 <div class="form-group{{ $errors->has('category_id') ? ' has-danger' : '' }}">

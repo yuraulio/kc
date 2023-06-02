@@ -31,8 +31,23 @@ class AppServiceProvider extends ServiceProvider
             $count = DB::table('cms_folders')->where('name', $value)
                                         ->where('parent_id', $parameters[0])
                                         ->count();
-        
+
             return $count === 0;
+        });
+
+        Validator::extend('check_array_first_value_is_numeric', function ($attribute, $value, $parameters, $validator) {
+
+            if(gettype($value) == 'array'){
+
+                if (is_array($value) && count($value) > 0) {
+                    $firstElement = $value[0];
+                    return is_numeric($firstElement);
+                }
+
+            }else{
+                return true;
+            }
+
         });
 
         Item::observe(ItemObserver::class);

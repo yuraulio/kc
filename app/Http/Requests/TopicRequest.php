@@ -46,7 +46,16 @@ class TopicRequest extends FormRequest
             ],
             'body' => [
 
+            ],
+            'category_id' => [
+                'required', 'check_array_first_value_is_numeric'
             ]
+        ];
+    }
+
+    public function messages(){
+        return [
+            'check_array_first_value_is_numeric' => 'Select a category'
         ];
     }
 }

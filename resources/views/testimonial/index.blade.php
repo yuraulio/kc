@@ -25,7 +25,7 @@
                             <div class="col-8">
                                 <h3 class="mb-0">{{ __('Testimonials') }}</h3>
                             </div>
-                            
+
                             <div class="col-4 text-right">
 
                                 <form hidden id="submit-file" action="{{ route('testimonials.file.import') }}" method="post" enctype="multipart/form-data">
@@ -50,7 +50,7 @@
                             <thead class="thead-light">
                                 <tr>
                                     <th scope="col">{{ __('Name') }}</th>
-                                    <th scope="col">{{ __('Title') }}</th>
+                                    <th scope="col">{{ __('Job Title') }}</th>
                                     <th scope="col">{{ __('Assigned Category') }}</th>
                                     <th scope="col">{{ __('Created at') }}</th>
                                     <th scope="col"></th>

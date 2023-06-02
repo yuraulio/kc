@@ -489,7 +489,7 @@ class EventController extends Controller
         $data['eventFaqs'] = $event->faqs->pluck('id')->toArray();
         $data['eventUsers'] = $event->users_with_transactions()->with('ticket')->get();//$event->users->toArray();
         $data['eventWaitingUsers'] = $event->waitingList()->with('user')->get();
-        $data['coupons'] = Coupon::all();
+        $data['coupons'] = $event->coupons;
         $data['activeMembers'] = 0;
         $data['sections'] = $event->sections->groupBy('section');
         $data['info'] = !empty($event->event_info()) ? $event->event_info() : null;

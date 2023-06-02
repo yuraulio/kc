@@ -135,7 +135,7 @@
                     </div> -->
 
                     <div class="accordion" id="accordionTopicMain">
-                        
+
                         @foreach($categories as $category)
 
                         <div id="{{$category['id']}}" class="card card-tables">
@@ -155,28 +155,28 @@
                                                     <th scope="col">{{ __('Title') }}</th>
                                                     <th class="hidden" scope="col">{{ __('Assigned Category') }}</th>
                                                     <th scope="col">{{ __('Created at') }}</th>
-                                                    <th class="hidden" scope="col">{{ __('Order') }}</th>                                                    
+                                                    <th class="hidden" scope="col">{{ __('Order') }}</th>
                                                     <th scope="col"></th>
                                                 </tr>
                                             </thead>
                                             <tbody class="topics-order">
-                                        
+
                                                 @foreach ($category->topics as $topic)
                                                     <tr class="topic-list">
-                                                        <td> 
+                                                        <td>
                                                             <div class="input-group-prepend lesson-select">
                                                                 <div class="input-group-text">
                                                                     <input data-category-id="{{$category->id}}" data-topic-id="{{$topic->id}}" class="check-topic" type="checkbox" aria-label="Checkbox for following text input">
-                                                                    
+
                                                                 </div>
-                                                            </div> 
+                                                            </div>
                                                         </td>
                                                         <td><?= ($topic->status == 1) ? 'Published' : 'Unpublished'; ?></td>
                                                         <td> <a href="{{ route('topics.edit', [$topic,'selectedCategory' => $category->id]) }}">{{ $topic->title }}</a></td>
                                                         <td class="hidden">
-                                                        
+
                                                             {{$category->name}}
-                                                       
+
                                                         </td>
                                                         <td>{{ $topic->created_at ? date_format($topic->created_at, 'Y-m-d' ) : '' }}</td>
 
@@ -251,7 +251,7 @@
     <script src="{{ asset('argon') }}/vendor/datatables.net-buttons/js/buttons.flash.min.js"></script>
     <script src="{{ asset('argon') }}/vendor/datatables.net-buttons/js/buttons.print.min.js"></script>
     <script src="{{ asset('argon') }}/vendor/datatables.net-select/js/dataTables.select.min.js"></script>
-   
+
     <script type="text/javascript">
         let categories = @json($categories);
         var table = $('.datatable-basic39').DataTable({
@@ -301,12 +301,12 @@
                 $('#col1_filter').append(row)
             })
 
-            
+
         });
 
 
         function initCheckBox(){
-            
+
             $('.check-topic').each(function(){
                 $(this).prop('checked', false);
             });
@@ -322,8 +322,8 @@
         let topics;
 
         (function( $ ){
-        
-        
+
+
             topics = {};
             var el
 
@@ -331,10 +331,10 @@
 
             el = document.getElementsByClassName('topics-order')[index];
             new Sortable(el, {
-               
+
                 multiDrag: true,
                 selectedClass: 'selected',
-                
+
                 onSelect: function ( /**Event*/ evt) {
                     initOrder()
                 },
@@ -344,26 +344,26 @@
                 },*/
 
                 // Element dragging ended
-                onEnd: function ( /**Event*/ evt) {           
-                   
+                onEnd: function ( /**Event*/ evt) {
+
                     orderLessons()
                 },
 
             });
-           
+
 
             });
 
-       
+
         })( jQuery );
 
     function initOrder(){
-        
+
         topics = {};
         let order = 0;
 
         $( ".topic-list .order-priority" ).each(function( index ) {
-            
+
             if(index == 0){
                 order = Number($(this).html());
                 topics[$(this).data('priority')] = order;
@@ -375,7 +375,7 @@
             }
 
         });
-    
+
    }
 
     function orderLessons(){
@@ -416,21 +416,21 @@
                         $(this).html(topics[index])
                     });
 
-                    
+
                     window.swal({
                         title: data['message'],
                         showConfirmButton: false,
                         timer: 2000
                     });
 
-                   
+
                 }else{
                     let errorMessage = '';
                     $.each(data.errors,function(index, value){
                         $.each(value,function(index1, value1){
                             errorMessage += value1 + ' ';
                         });
-                       
+
                     });
 
                     window.swal({
@@ -439,7 +439,7 @@
                         timer: 2000
                     });
 
-                    
+
                 }
 
                 initCheckBox();
@@ -447,7 +447,7 @@
             }
         });
 
-       
+
     }
 
 </script>
@@ -489,11 +489,25 @@
 </script>
 
 <script>
-
+const pageHref = window.location.href;
+const searchParams = new URLSearchParams(pageHref.substring(pageHref.indexOf('?')));
 
     $(document).ready(function(){
         countTopics();
         initCheckBox();
+
+        if(searchParams.get('open_category') !== null){
+
+            $("#catt_"+searchParams.get('open_category')).collapse("show");
+            $("#cat_"+searchParams.get('open_category')).collapse("show");
+
+            var targetElm = document.querySelector("#catt_"+searchParams.get('open_category'))
+            targetElm.scrollIntoView()
+
+        }
+
+
+
     })
 
     function countTopics(){
@@ -506,13 +520,13 @@
                 topicsSum += $(this).find('.datatable-basic39').DataTable().rows().count();
 
             }
-            
+
         });
 
         $("#total").text(topicsSum);
         $('#topics_info').removeClass('d-none')
     }
-   
+
 </script>
 
 @endpush
