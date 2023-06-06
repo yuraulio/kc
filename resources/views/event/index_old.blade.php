@@ -79,38 +79,25 @@
 
                     <div class="table-responsive py-4">
 
-                    <?php
-                        $status = [
-                            1 => 'Close',
-                            0 => 'Open',
-                            3 => 'Completed',
-                            4 => 'My Account Only',
-                            5 => 'Waiting',
-                            2 => 'Soldout'
-                        ];
-                    ?>
-
 
 
                         <table class="table align-items-center table-flush"  id="datatable-basic26">
                             <thead class="thead-light">
                                 <tr>
-                                    <th class="sort" scope="col">{{ __('Course') }}</th>
-                                    <th class="sort" scope="col">{{ __('Published') }}</th>
-                                    <th class="sort" scope="col">{{ __('Status') }}</th>
-                                    <th hidden class="sort" scope="col">{{ __('Assigned to Category') }}</th>
-                                    <th hidden class="sort" scope="col">{{ __('Assigned to Type') }}</th>
-                                    <th class="sort" scope="col">{{ __('Created at') }}</th>
+                                    <th scope="col">{{ __('Title') }}</th>
+                                    <th scope="col">{{ __('Published') }}</th>
+                                    <th scope="col">{{ __('Status') }}</th>
+                                    <th scope="col">{{ __('Assigned to Category') }}</th>
+                                    <th scope="col">{{ __('Assigned to Type') }}</th>
+                                    <th scope="col">{{ __('Created at') }}</th>
                                     <th hidden scope="col">{{ __('Delivery') }}</th>
-                                    <th class="no-sort" scope="col"></th>
+                                    <th scope="col"></th>
                                 </tr>
                             </thead>
-                            <tbody class="list">
+                            <tbody>
                                 @foreach ($events as $event)
                                     <tr>
-                                        <th scope="row">
-                                            <a href="{{ route('events.edit', $event) }}">{{ $event->htmlTitle }}</a>
-                                        </th>
+                                        <td><a href="{{ route('events.edit', $event) }}">{{ $event->htmlTitle }}</a></td>
                                         <td>
                                             @if($event->published == 0)
                                                 {{'Unpublished'}}
@@ -118,85 +105,35 @@
                                                 {{'Published'}}
                                             @endif
                                         </td>
-                                        <td data-search="{{ $status[$event->status] }}">
+                                        <td>
                                             @if($event->status == 1)
-                                                <span data-status="{{ $status[$event->status] }}" class="badge badge-dot mr-4">
-                                                    <i class="bg-dark"></i>
-                                                    <span class="status">{{$status[$event->status]}}</span>
-                                                </span>
-
-
+                                                {{'Close'}}
                                             @elseif($event->status == 0)
-                                                <span data-status="{{ $status[$event->status] }}" class="badge badge-dot mr-4">
-                                                    <i class="bg-warning"></i>
-                                                    <span class="status">{{$status[$event->status]}}</span>
-                                                </span>
-
+                                                {{'Open'}}
                                             @elseif($event->status == 3)
-                                                <span data-status="{{ $status[$event->status] }}" class="badge badge-dot mr-4">
-                                                    <i class="bg-success"></i>
-                                                    <span class="status">{{$status[$event->status]}}</span>
-                                                </span>
-
+                                                {{'Completed'}}
                                             @elseif($event->status == 2)
-                                                <span data-status="{{ $status[$event->status] }}" class="badge badge-dot mr-4">
-                                                    <i class="bg-danger"></i>
-                                                    <span class="status">{{$status[$event->status]}}</span>
-                                                </span>
-
+                                                {{'Soldout'}}
                                             @elseif($event->status == 4)
-                                               <span data-status="{{ $status[$event->status] }}" class="badge badge-dot mr-4">
-                                                    <i class="bg-secondary"></i>
-                                                    <span class="status">{{ $status[$event->status] }}</span>
-                                                </span>
-
+                                                {{ __('My Account Only') }}
                                             @elseif($event->status == 5)
-                                                <span data-status="{{ $status[$event->status] }}" class="badge badge-dot mr-4">
-                                                    <i class="bg-info"></i>
-                                                    <span class="status">{{ $status[$event->status] }}</span>
-                                                </span>
-
-
+                                                {{ __('Waiting') }}
                                             @endif
                                         </td>
 
-                                        <td hidden>
-                                            @foreach($event->category as $category)
-                                                {{ $category->name }}
-                                            @endforeach
+                                        <td>
+                                        @foreach($event->category as $category)
+                                            {{ $category->name }}
+                                        @endforeach
                                         </td>
-                                        <td hidden>
-                                            @foreach($event->type as $type)
-                                                {{ $type->name }}
-                                            @endforeach
+                                        <td>
+                                        @foreach($event->type as $type)
+                                            {{ $type->name }}
+                                        @endforeach
                                         </td>
-
                                         <td>{{ date_format($event->created_at, 'Y-m-d' ) }}</td>
                                         <td hidden >@if(isset($event['delivery'][0])) {{$event['delivery'][0]['name']}} @else none @endif </td>
-                                        <td class="table-actions">
-                                            <a href="{{ route('events.edit', $event) }}" class="table-action" data-toggle="tooltip" data-original-title="Edit event">
-                                                <i class="fas fa-edit"></i>
-                                            </a>
-                                            <form action="{{ route('events.destroy', $event) }}" method="post" class="d-inline-block">
-                                                @csrf
-                                                @method('delete')
-
-                                                <a href="javascript:void(0)" type="button" class="table-action table-action-delete" data-toggle="tooltip" data-original-title="Delete event" onclick="confirm('{{ __("Are you sure you want to delete this user?") }}') ? this.parentElement.submit() : ''">
-                                                    <i class="fas fa-trash"></i>
-                                                </a>
-
-                                            </form>
-
-                                            <form action="{{ route('event.clone', $event) }}" method="post" class="d-inline-block">
-                                                @csrf
-
-                                                <a href="javascript:void(0)" onclick="this.parentElement.submit()" class="table-action table-action-delete" data-toggle="tooltip" data-original-title="Clone event">
-                                                    <i class="fas fa-clone"></i>
-                                                </a>
-                                            </form>
-
-                                        </td>
-                                        {{--<td class="text-right">
+                                        <td class="text-right">
 
                                             <div class="dropdown">
                                                 <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -224,7 +161,7 @@
                                                 </div>
                                             </div>
 
-                                        </td>--}}
+                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -301,18 +238,8 @@
             paginate: {
             next: '&#187;', // or '→'
             previous: '&#171;' // or '←'
-        },
-        rowReorder: true,
-
-        },
-        columnDefs: [
-            { orderable: true, className: 'reorder', targets: 0 },
-            { orderable: true, className: 'reorder', targets: 1 },
-            { orderable: true, className: 'reorder', targets: 2 },
-            { orderable: true, className: 'reorder', targets: 5 },
-            { orderable: true, className: 'reorder', targets: 6 },
-            { orderable: false, targets: '_all' }
-        ]
+            }
+        }
     });
 
       </script>
@@ -334,9 +261,7 @@
 
             $.each(status, function(key, value){
 
-                let val = $($(value)[0]).data('status')
-
-                $('#col2_filter').append(`<option value="${val}">${val}</option>`)
+                $('#col2_filter').append(`<option value="${value}">${value}</option>`)
 
             })
 
@@ -353,8 +278,6 @@
         });
 
         function filterColumn ( i ) {
-
-            console.log('column filter: ', i)
 
             if($('#col'+i+'_filter').val() && i != 8){
                 $('#datatable-basic26').DataTable().column( i ).search(

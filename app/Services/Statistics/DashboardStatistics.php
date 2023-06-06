@@ -31,6 +31,39 @@ class DashboardStatistics
         return $results;
     }
 
+
+
+    // public function students(): array{
+
+    //     $results['usersInclass'] = 0;
+    //     $results['usersElearning'] = 0;
+    //     //$results['usersInclass'] = 5;
+    //     $results['usersInclass'] = User::whereHas('events_for_user_list1', function ($q) {
+    //         $q->wherePublished(true)
+    //         ->where(function ($q3) {
+    //             return $q3->where('status', 0)->orWhere('status', 3);
+    //         })
+    //         ->whereHas('allLessons',function($q4) {
+    //             return $q4->where('date', '>=', date('Y-m-d'));
+    //         })
+    //         ->where(function ($q1) {
+    //             $q1->doesntHave('delivery')->OrWhereHas('delivery', function ($q2) {
+    //                 return $q2->where('deliveries.id', '<>', 143);
+    //             });
+    //         });
+    //     })->count();
+
+    //     //$results['usersElearning'] = 5;
+    //     $results['usersElearning'] = User::whereHas('events_for_user_list1', function ($q) {
+
+    //         $q->wherePublished(true)->whereStatus(0)->where('event_user.expiration', '>=',date('Y-m-d'))->whereHas('delivery', function ($q1) {
+    //             return $q1->where('deliveries.id', 143);
+    //         });
+    //     })->count();
+
+    //     return $results;
+    // }
+
     public function students(): array{
 
         $results['usersInclass'] = 0;

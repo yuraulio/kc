@@ -232,6 +232,11 @@ class Event extends Model
         return $this->belongsToMany(Ticket::class, 'event_user_ticket');
     }
 
+    public function tickets_users()
+    {
+        return $this->belongsToMany(User::class, 'event_user_ticket');
+    }
+
     public function city()
     {
         return $this->belongsToMany(City::class, 'event_city')->with('slugable');

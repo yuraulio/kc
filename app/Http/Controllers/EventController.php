@@ -48,6 +48,8 @@ class EventController extends Controller
         // $data['total_courses'] = count(Event::all());
         $data = $this->statistics();
 
+        //dd($model->with('category', 'type','delivery')->orderBy('published', 'asc')->first());
+
         return view('event.index', ['events' => $model->with('category', 'type','delivery')->orderBy('published', 'asc')->get(), 'user' => $user, 'data' => $data]);
     }
 

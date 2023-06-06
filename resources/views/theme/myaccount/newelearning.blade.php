@@ -632,7 +632,7 @@
                               rows="10"
                               ></textarea>
                            <div class="lesson-notes_status">
-                              <a
+                              {{--<a
                                  tabindex="0"
                                  href="javascript:void(0)"
                                  class="tab-button save-button jsOpenNotesTab"
@@ -642,6 +642,7 @@
                                     <!-- <span>Notes</span> -->
                                  </div>
                               </a>
+                              --}}
                               <div class="status saveDone">Your notes are <span>saved.</span></div>
                            </div>
                         </div>
@@ -716,39 +717,115 @@
           var nextWatchingVideo;
           var currentWatchingVideo;
           let courseName;
+          let timeoutID = null;
 
-          $(".save-button").click(function() {
-               let note = $("#notes").val();
-               let vimeoId = $('.isWatching').attr('class');
-               vimeoId=vimeoId.replace(" ", "");
+          function saveNoteAjax(){
+            let note = $("#notes").val();
+                let vimeoId = $('.isWatching').attr('class');
+                vimeoId=vimeoId.replace(" ", "");
 
-               vimeoId=vimeoId.replace("isWatching", "");
-               vimeoId=vimeoId.replace("lesson", "");
+                vimeoId=vimeoId.replace("isWatching", "");
+                vimeoId=vimeoId.replace("lesson", "");
 
 
 
-               let event = $('.topics-list').attr('id');
+                let event = $('.topics-list').attr('id');
 
-               $.ajax({
-               headers: {
-                       'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                     },
-                 type: 'PUT',
-                 url: '/elearning/saveNote',
-                 data:{'text':note,'vimeoId':vimeoId, 'event':event},
-                 success: function(data) {
-                       if(data){
-                           $('#notes').val(data['text']);
-                           $('.isWatching').data("note", data['text'])
-                           $('.saveDone').removeClass('saveDone');
-                       }else{
-                       }
-                       //playVi = true;
+                $.ajax({
+                headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                    type: 'PUT',
+                    url: '/elearning/saveNote',
+                    data:{'text':note,'vimeoId':vimeoId, 'event':event},
+                    success: function(data) {
+                        if(data){
+                            $('#notes').val(data['text']);
+                            $('.isWatching').data("note", data['text'])
+                            //$('.saveDone').removeClass('saveDone');
 
-                 }
-               });
+                            $('.saveDone').fadeIn();
 
-           })
+                            setTimeout(function() {
+                                $('.saveDone').fadeOut(4000);
+                            }, 1000); // <-- time in milliseconds
+                        }else{
+                        }
+                        //playVi = true;
+
+                    }
+                });
+          }
+
+        //   $("#notes").change(function(){
+        //     console.log('test')
+        //   })
+          $('#notes').bind( "input", function(e) {
+            clearTimeout(timeoutID);
+            timeoutID = setTimeout(() => {
+
+                saveNoteAjax()
+
+
+                // $('.mobile-search-modal.super-search').removeClass('search-finished');
+                // $('.mobile-search-modal .search-result').fadeOut();
+                // $.ajax({
+                //     type: 'GET',
+                //     cache: false,
+                //     url: $('.mobile-search-modal.super-search').data('search-url'),
+                //     data: {
+                //         'q': keyword
+                //     },
+                //     success: res => {
+                //         if (!res.error) {
+                //             $('.mobile-search-modal .search-result').html(res.data.items);
+                //             $('.mobile-search-modal.super-search').addClass('search-finished');
+                //         } else {
+                //             $('.mobile-search-modal .search-result').html(res.message);
+                //         }
+                //         $('.mobile-search-modal .search-result').fadeIn(500);
+                //     },
+                //     error: res => {
+                //         $('.mobile-search-modal .search-result').html(res.responseText);
+                //         $('.mobile-search-modal .search-result').fadeIn(500);
+                //     }
+                // });
+
+            }, 2000);
+            } );
+
+        //   $(".save-button").click(function() {
+        //        let note = $("#notes").val();
+        //        let vimeoId = $('.isWatching').attr('class');
+        //        vimeoId=vimeoId.replace(" ", "");
+
+        //        vimeoId=vimeoId.replace("isWatching", "");
+        //        vimeoId=vimeoId.replace("lesson", "");
+
+
+
+        //        let event = $('.topics-list').attr('id');
+
+        //        $.ajax({
+        //        headers: {
+        //                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        //              },
+        //          type: 'PUT',
+        //          url: '/elearning/saveNote',
+        //          data:{'text':note,'vimeoId':vimeoId, 'event':event},
+        //          success: function(data) {
+        //                if(data){
+        //                    $('#notes').val(data['text']);
+        //                    $('.isWatching').data("note", data['text'])
+        //                    $('.saveDone').removeClass('saveDone');
+        //                }else{
+        //                }
+        //                //playVi = true;
+
+        //          }
+        //        });
+
+        //    })
 
 
 
