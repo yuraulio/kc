@@ -30,6 +30,7 @@ use App\Jobs\EnrollStudentsToElearningEvents;
 use App\Jobs\EventSoldOut;
 use App\Exports\StudentExport;
 use Excel;
+use App\Exports\ExportStudentResults;
 
 class EventController extends Controller
 {
@@ -1733,6 +1734,14 @@ class EventController extends Controller
 
         Excel::store(new StudentExport($request), $filename, 'export');
         return Excel::download(new StudentExport($request), $filename);
+    }
+
+    public function exportStudentExams(Request $request){
+
+        $filename = 'StudentsExamsResultsExport.xlsx';
+
+        Excel::store(new ExportStudentResults($request), $filename, 'export');
+        return Excel::download(new ExportStudentResults($request), $filename);
     }
 
 }

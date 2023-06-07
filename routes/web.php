@@ -63,6 +63,7 @@ Route::group(['middleware' => 'auth.aboveauthor', 'prefix' => 'admin'], function
     // Events
     Route::post('/events/export-students', 'EventController@exportStudent')->name('event.export-students');
     Route::get('/events/statistics/{id}', 'EventController@event_statistics')->name('event.statistics');
+    Route::post('/events/export-students-exams', 'EventController@exportStudentExams')->name('event.export-students-exams');
 
 
     Route::post('/summary/update/{summary}', 'SummaryController@update')->name('summary.update');

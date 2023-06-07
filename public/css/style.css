@@ -194,6 +194,12 @@
     top: -10px;
 }
 
+#export-student-exam-button{
+    position: absolute;
+    right: 27em;
+    top: -10px;
+}
+
 .input-icon-wrapper-city .input-icon{
     margin-top: 0.2rem;
 }

@@ -104,6 +104,11 @@
                         <span class="btn-inner--icon"><i class="ni ni-cloud-download-95"></i></span>
                     </button>
                 </div>
+                <div id="export-student-exam-button">
+                    <button id="export-exam-button" class="btn btn-primary" type="button">
+                    Download exam results
+                    </button>
+                </div>
                 `
             )
 
@@ -120,6 +125,23 @@
                     data:{state: state, id: @json($event->id)} ,
                     success: function(data) {
                         window.location.href = '/tmp/exports/StudentsListExport.xlsx'
+                    }
+                });
+            });
+
+            $(document).on("click","#export-exam-button",function() {
+
+                //let state = 'student_list';
+
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: "{{route('event.export-students-exams')}}",
+                    type: "POST",
+                    data:{id: @json($event->id)} ,
+                    success: function(data) {
+                        window.location.href = '/tmp/exports/StudentsExamsResultsExport.xlsx'
                     }
                 });
             });
