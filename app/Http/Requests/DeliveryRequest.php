@@ -27,6 +27,9 @@ class DeliveryRequest extends FormRequest
             'name' => [
                 'required', 'min:3'
             ],
+            'installments' => [
+                'required'
+            ]
         ];
     }
 }

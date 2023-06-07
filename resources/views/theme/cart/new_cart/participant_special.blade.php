@@ -4,7 +4,7 @@
 
 <!---------------- checkout progress-bar start --------------->
 <div class="checkout-step">
-		<div class="container">		
+		<div class="container">
 			<ul>
 				<li class="active"><span class="counter">1.</span><i>Participant(s)</i></li>
 				<li><span class="counter">2.</span><i>Billing</i></li>
@@ -13,38 +13,38 @@
 		</div>
 	</div>
 
-<!---------------- checkout progress-bar end --------------->	
+<!---------------- checkout progress-bar end --------------->
 	<div class="form-wrap">
-		<div class="container padding-no">			
-			<h1 class="hidden-xs">Participant(s)</h1>			
+		<div class="container padding-no">
+			<h1 class="hidden-xs">Participant(s)</h1>
 			<div class="row">
 				<!---------------- Participant form start--------------->
 				<div class="col-md-6 col-xl-6 selection-order">
 				<h1 class="hidden-lg">Participant(s)</h1>
 					<div class="participant-full-wrap">
-						@if(!Auth::check())<p class="login-link">Already have an account? <a href="#" class="link-color">Log in</a></p>@endif					
+						@if(!Auth::check())<p class="login-link">Already have an account? <a href="#" class="link-color">Log in</a></p>@endif
 						<form action="{{route('registration')}}" method="post" id="participant-form" name="participant-form">
                         	@csrf
-							@for ($i=1; $i <= $totalitems; $i++) 
+							@for ($i=1; $i <= $totalitems; $i++)
 
-							<div class="form-wrp box" @if($i==1) id="clone-box" @else id="clone-box-{{$i}}" @endif>		
-																	
+							<div class="form-wrp box" @if($i==1) id="clone-box" @else id="clone-box-{{$i}}" @endif>
+
 								@if($type == 5) <h2 class="participant-number">Participant {{$i}}</h2> @endif
-								<p class="validation-info">Fields marked with an asterisk <span class="checkout-required-data">(*)</span> are required.</p>	
+								<p class="validation-info">Fields marked with an asterisk <span class="checkout-required-data">(*)</span> are required.</p>
 								<div class="form-row">
 									<div class="col-md-12 mb-4">
 										@if($type == 1)
-										<label class="input-label">My unemployment ID is <span class="checkout-required-data">(*)</span></label>	
+										<label class="input-label">My unemployment ID is <span class="checkout-required-data">(*)</span></label>
 										<input name="student_type_id[{{$i-1}}]" type="text" class="form-control" value="{{old('student_type_id',$student_type_id[$i-1])}}" aria-describedby="inputGroupPrepend3" required>
-										<div class="invalid-feedback">											
+										<div class="invalid-feedback">
 										</div>
 										@elseif($type == 2)
-										<label class="input-label">My student ID is <span class="checkout-required-data">(*)</span></label>	
+										<label class="input-label">My student ID is <span class="checkout-required-data">(*)</span></label>
 										<input name="student_type_id[{{$i-1}}]" type="text" class="form-control" value="{{old('student_type_id',$student_type_id[$i-1])}}" aria-describedby="inputGroupPrepend3" required>
-										<div class="invalid-feedback">											
+										<div class="invalid-feedback">
 										</div>
 										@endif
-									
+
 									</div>
 								</div>
 								<div class="form-row">
@@ -52,16 +52,16 @@
 										<label class="input-label">My first name is  <span class="checkout-required-data">(*)</span></label>
 										<input type="text" name="firstname[{{$i-1}}]" class="form-control with-focus-visible" value="{{old('firstname',$firstname[$i-1])}}"  required>
 										<div class="valid-feedback">
-											
+
 										</div>
 									</div>
 									<div class="col-md-6 mb-4 pl-md-3">
 										<label class="input-label">My last name is <span class="checkout-required-data">(*)</span></label>
 										<input type="text" name="lastname[{{$i - 1}}]" class="form-control" value="{{old('lastname',$lastname[$i-1])}}"  required>
 										<div class="valid-feedback">
-											
+
 										</div>
-									</div>					
+									</div>
 								</div>
 								<div class="form-row">
 									<div class="col-md-12 mb-4">
@@ -126,7 +126,7 @@
 											<option value="216" label="Tunisia (+216)">Tunisia</option>
 											<option value="256" label="Uganda (+256)">Uganda</option>
 											<option value="260" label="Zambia (+260)">Zambia</option>
-											<option value="263" label="Zimbabwe (+263)">Zimbabwe</option>										
+											<option value="263" label="Zimbabwe (+263)">Zimbabwe</option>
 											<option value="1264" label="Anguilla (+1264)">Anguilla </option>
 											<option value="595" label="Paraguay (+595)">Paraguay </option>
 											<option value="51" label="Peru (+51)">Peru </option>
@@ -176,7 +176,7 @@
 											<option value="84" label="U.S. Virgin Islands (+84)">U.S. Virgin Islands</option>
 											<option value="1" label="United States (+1)">United States</option>
 											<option value="598" label="Uruguay (+598)">Uruguay</option>
-											<option value="58" label="Venezuela (+58)">Venezuela</option>										
+											<option value="58" label="Venezuela (+58)">Venezuela</option>
 											<option value="374" label="Armenia (+374)">Armenia </option>
 											<option value="994" label="Azerbaijan (+994)">Azerbaijan</option>
 											<option value="973" label="Bahrain (+973)">Bahrain </option>
@@ -223,7 +223,7 @@
 											<option value="971" label="United Arab Emirates (+971)">United Arab Emirates</option>
 											<option value="7" label="Uzbekistan (+7)">Uzbekistan</option>
 											<option value="84" label="Vietnam (+84)">Vietnam</option>
-											<option value="967" label="Yemen (+967)">Yemen</option>									
+											<option value="967" label="Yemen (+967)">Yemen</option>
 											<option value="376" label="Andorra (+376)">Andorra </option>
 											<option value="43" label="Austria (+43)">Austria </option>
 											<option value="375" label="Belarus (+375)">Belarus </option>
@@ -297,38 +297,38 @@
                                         <label id="mobile-error{{$i}}" style="display:none" class="error error-mobile" for="mobile"></label>
                                         <input type="hidden" name="mobileCheck[{{$i - 1}}]" id="mobileCheck{{$i}}" value="{{old('mobile',$mobile[$i-1])}}">
 									</div>
-								</div>	
+								</div>
 								<div class="form-row">
 									<div class="col-md-12 mb-4">
-										<label class="input-label">The town or city I live in is</label>								
+										<label class="input-label">The town or city I live in is</label>
 										<input type="text" name="city[{{$i - 1}}]" class="form-control" value="{{old('city',$city[$i-1])}}"  aria-describedby="inputGroupPrepend3">
-										<div class="invalid-feedback">										
+										<div class="invalid-feedback">
 										</div>
 									</div>
-								</div>	
+								</div>
 
 								@if($type != 1 && $type != 2)
 								<div class="form-row">
 									<div class="col-md-12 mb-4">
-										<label class="input-label">My company or employer is</label>													
-										<input name="company[{{$i - 1}}]"  type="text" class="form-control" value="{{old('company',$company[$i - 1])}}"  aria-describedby="inputGroupPrepend3">			
+										<label class="input-label">My company or employer is</label>
+										<input name="company[{{$i - 1}}]"  type="text" class="form-control" value="{{old('company',$company[$i - 1])}}"  aria-describedby="inputGroupPrepend3">
 									</div>
 								</div>
 								@endif
-								
+
 								<div class="form-row">
 									<div class="col-md-12 mb-4">
-										<label class="input-label">My occupation or title is</label>													
-										<input type="text" name="jobtitle[{{$i - 1}}]" value="{{old('jobtitle',$job_title[$i - 1])}}" class="form-control" placeholder="E.g. Marketing specialist" aria-describedby="inputGroupPrepend3">			
+										<label class="input-label">My occupation or title is</label>
+										<input type="text" name="jobtitle[{{$i - 1}}]" value="{{old('jobtitle',$job_title[$i - 1])}}" class="form-control" placeholder="E.g. Marketing specialist" aria-describedby="inputGroupPrepend3">
 									</div>
-								</div>	
+								</div>
 								@if($type == 5 && $i>2)
 								<div class="remove-participant" data-participant-number="{{ $totalitems }}">
 									<a href="javascript:void(0)">Remove participant <img src="{{cdn('new_cart/images/close-green.svg')}}" width="9px" height="10px"  class="without-hover">
 										<img src="{{cdn('new_cart/images/close-green2.svg')}}" width="9px" height="10px" class="with-hover"></a>
-								</div>	
+								</div>
 								@endif
-								
+
 							</div>
 							@endfor
 							<div class="form-row">
@@ -347,18 +347,18 @@
 								@endif
 							</div>
 							@if($type == 5)
-							<div class="add-participant-wrap d-flex justify-content-between">												
+							<div class="add-participant-wrap d-flex justify-content-between">
 								<button class="add-participant" data-participant-number="{{ $totalitems }}" type="button">
 									<img src="{{cdn('new_cart/images/plus-full-green.svg')}}" class="without-hover" width="44px" height="44px">
 									<img src="{{cdn('new_cart/images/plus-full-green2.svg')}}" class="with-hover"  width="44px" height="44px"> <span>Add another participant</span>
-								</button>							
+								</button>
 							</div>
 							<input id="item-quantity" type="hidden" value="{{ $totalitems }}" name="update[{{$itemid}}][quantity]" />
 							@endif
 							<div class="checkout-btn-wrap form-row mb-4 my-md-5 align-items-center">
 								<button id="btn" type="submit" class="btn registration checkout-button-secondary">Next: Billing <img src="{{cdn('new_cart/images/arrow-next-red.svg')}}" width="20px" height="12px" class="without-hover" alt=""> <img src="{{cdn('new_cart/images/arrow-next-red2.svg')}}" width="20px" height="12px" class="with-hover" alt=""> </button>
 							</div>
-						</form>	
+						</form>
 					</div>
 				</div>
 				<!---------------- Participant form end--------------->
@@ -367,7 +367,7 @@
                 @include('theme.cart.new_cart.selection')
 				<!---------------- My Selection end--------------->
 			</div>
-		</div>						
+		</div>
 	</div>
 @stop
 
@@ -387,8 +387,8 @@ dataLayer.push({
   'event': 'addToCart',
   'ecommerce': {
     'currencyCode': 'EUR',
-    'add': {                                
-      'products': [{                       
+    'add': {
+      'products': [{
         'name': $.parseHTML("{{ $tigran['ProductName'] }}")[0].data,
         'id': "{{$tigran['Product_id']}}",
         'price': "{{$tigran['Price']}}",
@@ -411,10 +411,10 @@ dataLayer.push({
 	}
 
     function checkPhoneNumber(phone,index){
-		
+
     	phone = phone.value.replace(/\s/g,'')
       	let validatePhone = false;
-	  
+
       if(phone.length > 3){
 
          if(phone.substring(0, 3) == '+30' || phone.substring(0, 2) == '30'){
@@ -469,12 +469,12 @@ dataLayer.push({
     }
 
 $(document).ready(function(){
-	
+
 	@for($i = 1; $i <= $totalitems; $i++)
 		@if(old('country_code',$country_code[$i-1]))
     		$(".country{{$i}}").val("{{old('country_code',$country_code[$i-1])}}")
     		$(".country{{$i}}").change();
-			
+
 		@endif
 		alphabetizeList('.country{{$i}}');
 
@@ -485,7 +485,7 @@ $(document).ready(function(){
 @if($type == 5)
 <script>
    $("button.add-participant").on("click", function() {
-		
+
    		var number = $(this).attr('data-participant-number');
         //var maxticket = $(this).attr('data-ticket-max');
          //maxticket = parseInt(maxticket);
@@ -495,7 +495,7 @@ $(document).ready(function(){
 			return;
 		}
 
- 
+
 
    		document.getElementById('item-quantity').setAttribute('value',newNumber)
 
@@ -510,18 +510,18 @@ $(document).ready(function(){
 
    $(".remove-participant").on("click", function() {
 
-	var number = Number($(this).attr('data-participant-number'));    
+	var number = Number($(this).attr('data-participant-number'));
 	if(number <= 2){
 		return;
 	}
-	
+
     var newNumber = number-1;
 	document.getElementById('item-quantity').setAttribute('value',newNumber)
 
    	  	$.ajax({ url: '/cart/update', type: "post",
              data: $("#participant-form ").serialize(),
              success: function(data) {
-				
+
    				window.location.replace('registration');
              }
          });

@@ -80,7 +80,7 @@ class DeliveryController extends Controller
      * @param  \App\Model\Delivery  $delivery
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Delivery $delivery)
+    public function update(DeliveryRequest $request, Delivery $delivery)
     {
         $delivery->update($request->all());
 

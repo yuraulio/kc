@@ -34,33 +34,37 @@
 			<div class="row">
         	<?php
 
-                $availableInstallments = $installments;
-                $installments = [];
+                $instOne = $price;
+        	    $instTwo = round($price / 2, 2);
+        	    $instThree = round($price / 3, 2);
+				$instFour = round($price / 4, 2);
 
-                $count = 1;
-                if($availableInstallments != 0){
+				//$instTwo = number_format($instTwo , 2 , '.', '');
+				//$instThree = number_format($instThree , 2 , '.', ',');
 
-                    while($count <= $availableInstallments){
-                        if($count == 1){
-                            $installments[$count] = $price;
 
-                        }else if($count > 1){
-                            $installments[$count] = round($price / $count, 2);
-                        }
-                        $count++;
-                    }
-
+				if($instOne - floor($instOne)>0){
+                    $instOne = number_format($instOne , 2 , '.', ',');
+                }else{
+                    $instOne = number_format($instOne , 0 , '.', ',');
                 }
 
-                foreach($installments as $inst_num => $installment){
-                    if($inst_num != 0){
-                        if($installment - floor($installment)>0){
-                            $installments[$inst_num] = number_format($installments[$inst_num] , 2 , '.', ',');
-                        }else{
-                            $installments[$inst_num] = number_format($installments[$inst_num] , 0 , '.', ',');
-                        }
-                    }
+                if($instTwo - floor($instTwo)>0){
+                    $instTwo = number_format($instTwo , 2 , '.', ',');
+                }else{
+                    $instTwo = number_format($instTwo , 0 , '.', ',');
+                }
 
+                if($instThree - floor($instThree)>0){
+                    $instThree = number_format($instThree , 2 , '.', ',');
+                }else{
+                    $instThree = number_format($instThree , 0 , '.', ',');
+                }
+
+				if($instFour - floor($instFour)>0){
+                    $instFour = number_format($instFour , 2 , '.', ',');
+                }else{
+                    $instFour = number_format($instFour , 0 , '.', ',');
                 }
 
         	?>
@@ -73,23 +77,22 @@
 					<form id="checkout-form" action="{{route('userPaySbt')}}" method="post">
 						@csrf
 						<div class="radio-group">
-                            @if(isset($installments) && !empty($installments) && count($installments) > 1)
-                                @foreach($installments as $inst_num => $installment)
-                                    @if($inst_num == 1)
-                                        <div class="custom-control custom-radio mb-3">
-                                            <input type="radio" id="customRadio{{$inst_num}}" name="installments" value="{{$inst_num}}" checked="" class="custom-control-input">
-                                            <label class="custom-control-label" for="customRadio{{$inst_num}}"></label><p id="inst{{$inst_num}}">I will pay in full: €{{$showPrice}}</p>
-                                        </div>
-                                    @else
-                                        <div class="custom-control custom-radio mb-3">
-                                            <input type="radio" id="customRadio{{$inst_num}}" name="installments" value="{{$inst_num}}" checked="" class="custom-control-input">
-                                            <label class="custom-control-label" for="customRadio{{$inst_num}}"></label><p id="inst{{$inst_num}}">I will pay in {{$inst_num}} installments: {{$inst_num}}x €{{$installment}}</p>
-                                        </div>
-                                    @endif
-
-                                @endforeach
-                            @endif
-
+							<div class="custom-control custom-radio mb-3">
+								<input type="radio" id="customRadio1" name="installments" value="1" checked="" class="custom-control-input">
+								<label class="custom-control-label" for="customRadio1"></label><p id="inst1">I will pay in full: €{{$showPrice}}</p>
+							</div>
+							<div class="custom-control custom-radio mb-3">
+								<input type="radio" id="customRadio2" name="installments" value="2" class="custom-control-input">
+								<label class="custom-control-label" for="customRadio2"></label><p id="inst2">I will pay in 2 installments: 2x €{{$instTwo}}</p>
+							</div>
+							<div class="custom-control custom-radio mb-3">
+								<input type="radio" id="customRadio3" name="installments" value="3" class="custom-control-input">
+								<label class="custom-control-label" for="customRadio3"></label><p id="inst3">I will pay in 3 installments: 3x €{{$instThree}}</p>
+							</div>
+							<div class="custom-control custom-radio mb-3">
+								<input type="radio" id="customRadio4" name="installments" value="4" class="custom-control-input">
+								<label class="custom-control-label" for="customRadio4"></label><p id="inst4">I will pay in 4 installments: 4x €{{$instFour}}</p>
+							</div>
 						</div>
 						<div class="card-info">
 							<h2>Card information</h2>

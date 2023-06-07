@@ -44,6 +44,13 @@
                                 </div>
                                 @include('admin.slug.slug',['slug' => isset($slug) ? $slug : null])
 
+                                <div class="form-group{{ $errors->has('installments') ? ' has-danger' : '' }}">
+                                    <label class="form-control-label" for="input-name">{{ __('Installments') }}</label>
+                                    <input min='0' type="number" name="installments" id="input-installments" class="form-control{{ $errors->has('installments') ? ' is-invalid' : '' }}" placeholder="{{ __('Installments') }}" value="{{ old('installments') }}"  required autofocus>
+
+                                    @include('alerts.feedback', ['field' => 'name'])
+                                </div>
+
                                 <div class="text-center">
                                     <button type="submit" class="btn btn-success mt-4">{{ __('Save') }}</button>
                                 </div>

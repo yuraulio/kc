@@ -31,6 +31,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Model\CookiesSMS;
 use App\Notifications\WelcomeEmail;
 use App\Services\FBPixelService;
+use App\Model\Delivery;
 
 class CartController extends Controller
 {
@@ -47,6 +48,26 @@ class CartController extends Controller
         $this->middleware('billing.check')->only('billingIndex','billing','checkoutIndex');
 
         $fbp->sendPageViewEvent();
+
+    }
+
+    public function calculateInstallments($eventInfo){
+
+        $availableInstallments = 0;
+
+        $delivery = Delivery::find($eventInfo['delivery']);
+
+        $exceptInstallmentsDates = [env('BLACKFRIDAY'), env('CYBERMONDAY')];
+
+        if(!in_array(date('d-m-Y'),$exceptInstallmentsDates)){
+
+            if($delivery['installments'] != null && $delivery['installments'] != 0){
+                $availableInstallments = (int)$delivery['installments'];
+            }
+
+        }
+
+        return $availableInstallments;
 
     }
 
@@ -134,6 +155,8 @@ class CartController extends Controller
 
             $data['eventId'] = $event_id;
             $data['categoryScript'] = $categoryScript;
+
+            $data['installments'] = $this->calculateInstallments($eventInfo);
 
             $cart_contents = Cart::content();
             foreach ($cart_contents as $item){
@@ -674,7 +697,6 @@ class CartController extends Controller
         else {
             $data['cardtype'] = [];
         }
-
         if (Session::has('installments')) {
             $data['installments'] = Session::get('installments');
         }
@@ -838,6 +860,8 @@ class CartController extends Controller
         $data = $this->initCartDetails($data);
         //$this->fbp->sendAddPaymentInfoEvent($data);
         $this->fbp->sendAddBillingInfoEvent($data);
+
+        //dd($data);
 
         return view('theme.cart.new_cart.checkout', $data);
 
