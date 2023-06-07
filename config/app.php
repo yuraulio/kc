@@ -189,6 +189,7 @@ return [
         OwenIt\Auditing\AuditingServiceProvider::class,
 
         msonowal\LaravelTinify\LaravelTinifyServiceProvider::class,
+        Yajra\DataTables\DataTablesServiceProvider::class,
     ],
 
     /*
@@ -245,6 +246,7 @@ return [
         'Sitemap'   => Watson\Sitemap\Facades\Sitemap::class,
 
         'Tinify' => msonowal\LaravelTinify\Facades\Tinify::class,
+        'DataTables' => Yajra\DataTables\Facades\DataTables::class,
 
     ],
 

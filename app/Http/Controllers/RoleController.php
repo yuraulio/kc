@@ -102,4 +102,12 @@ class RoleController extends Controller
         return redirect()->route('role.index')->withStatus(__('Role successfully deleted.'));
     }
 
+    public function fetchAllRoles()
+    {
+        $roles = Role::select('name')->get()->toArray();
+
+        return $roles;
+
+    }
+
 }

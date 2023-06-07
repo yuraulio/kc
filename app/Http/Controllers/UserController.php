@@ -49,6 +49,7 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Reader\IReadFilter;
 use Illuminate\Support\Str;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use DataTables;
 
 class ChunkReadFilter implements IReadFilter
 {
@@ -248,6 +249,112 @@ class UserController extends Controller
 
         return $data;
 
+    }
+
+    private function generateQuery($request)
+    {
+        $query = User::query();
+        $query->select('*');
+        $query->with([
+            'image',
+            'statusAccount',
+            'role',
+        ]);
+
+        if($request->event != ""){
+            $query->whereHas('events_for_user_list1', function($q) use ($request) {
+                $q->where('title', $request->event);
+            });
+        }
+
+        if($request->coupon != ""){
+            // $query->whereHas('events_for_user_list1', function($q) use ($request) {
+            //     $q->where('title', $request->event);
+            // });
+        }
+
+        return $query;
+    }
+
+    public function indexNew(User $model, Request $request){
+
+        if ($request->ajax()) {
+
+            $data = $this->generateQuery($request);
+
+            return Datatables::of($data)
+
+                    ->addColumn('image', function($row){
+
+                        $image = cdn('/theme/assets/images/icons/user-circle.svg');
+                        if($row['image'] != null && $row['image']['name'] != ''){
+                            $image = cdn(get_image($row['image']));
+                        }
+
+                        return '<span class="avatar avatar-sm rounded-circle"><img src="'.$image.'" alt="'.$row['firstname'].'" style="max-width: 100px; border-radius: 25px"></span>';
+                    })
+                    ->addColumn('firstname', function($row){
+
+                        return '<a href='.route('user.edit', $row->id).'>'.$row->firstname.'</a>';
+                    })
+                    ->addColumn('lastname', function($row){
+
+                        return $row->lastname;
+                    })
+                    ->addColumn('mobile', function($row){
+
+                        return $row->mobile;
+                    })
+                    ->addColumn('email', function($row){
+
+                        return '<a href="mailto:'.$row->email.'">'.$row->email.'</a>';
+                    })
+                    ->addColumn('kc_id', function($row){
+
+                        return $row->kc_id;
+                    })
+                    ->addColumn('id', function($row){
+
+                        return $row->id;
+                    })
+                    ->addColumn('role', function($row){
+
+                        if(isset($row['role'][0])){
+                            return $row['role'][0]['name'];
+                        }
+                        return '';
+
+                    })
+                    ->addColumn('status', function($row){
+
+                        $status = 'Inactive';
+
+                        if(isset($row['statusAccount']) && $row['statusAccount']['completed'] == 1){
+                            $status = 'Active';
+                        }
+
+                        return $status;
+                    })
+                    ->addColumn('created_at', function($row){
+
+                        return $row->created_at;
+                    })
+                    ->rawColumns(['firstname', 'email', 'image'])
+
+                    ->make(true);
+
+        }else{
+
+            $data = [];
+
+            $data['events'] = (new EventController)->fetchAllEvents();
+            $data['coupons'] = (new CouponController)->fetchAllCoupons();
+            $data['roles'] = (new RoleController)->fetchAllRoles();
+            $data['job_positions'] = User::groupBy('job_title')->pluck('job_title')->toArray();
+            $data['companies'] = User::groupBy('company')->pluck('company')->toArray();
+        }
+
+        return view('users.index_new', compact('data'));
     }
 
     /**

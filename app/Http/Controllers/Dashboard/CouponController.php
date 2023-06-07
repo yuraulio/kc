@@ -41,7 +41,7 @@ class CouponController extends Controller
     }
 
     public function store(Request $request){
-        
+
 
         $coupon = new Coupon;
 
@@ -95,7 +95,7 @@ class CouponController extends Controller
     }
 
     public function fetchAllCoupons(){
-        $coupons = Coupon::all();
+        $coupons = Coupon::select('code_coupon')->get()->toArray();
 
         return $coupons;
     }
