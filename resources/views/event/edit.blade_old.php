@@ -605,6 +605,19 @@
 
                                         <div class="row">
 
+                                            <?php
+
+                                                if(isset($info['delivery_icon']) && $info['delivery_icon'] != null){
+                                                    $course_delivery_icon = $info['delivery_icon'];
+                                                }else{
+                                                    $course_delivery_icon = null;
+                                                }
+
+
+                                                $delivery_text = $info['delivery_info']['text'];
+                                                $delivery_visible = $info['delivery_info']['visible'];
+                                            ?>
+
                                             <div class="form-group col-12">
 
                                                 <div class="input-group">
@@ -612,25 +625,108 @@
                                                 </div>
                                             </div>
 
+                                            <div class="col-12 form-group">
 
-                                            <div class="col-sm-12 col-md-6 col-lg-4 form-group{{ $errors->has('delivery') ? ' has-danger' : '' }}">
-                                                <select name="delivery" id="input-delivery" class="form-control" placeholder="{{ __('Delivery') }}" required>
-                                                    <option disabled selected value="">Please select where this course takes place</option>
-                                                    @foreach ($delivery as $delivery)
-                                                        <option <?php if(count($event->delivery) != 0){
-                                                            if($event->delivery[0]->id == $delivery->id){
-                                                                echo 'selected';
-                                                            }else{
-                                                                echo '';
-                                                            }
-                                                        }
-                                                        ?> value="{{ $delivery->id }}" >{{ $delivery->name }}</option>
-                                                    @endforeach
-                                                </select>
+                                                <div class="row form_group">
 
-                                                @include('alerts.feedback', ['field' => 'delivery'])
+                                                    <div class="col-9 col-md-6 col-lg-4 {{ $errors->has('delivery') ? ' has-danger' : '' }}">
+
+                                                        <select name="delivery" id="input-delivery" class="form-control" placeholder="{{ __('Delivery') }}" required>
+                                                            <option disabled selected value="">Please select where this course takes place</option>
+                                                            @foreach ($delivery as $delivery)
+                                                                <option <?php if(count($event->delivery) != 0){
+                                                                    if($event->delivery[0]->id == $delivery->id){
+                                                                        echo 'selected';
+                                                                    }else{
+                                                                        echo '';
+                                                                    }
+                                                                }
+                                                                ?> value="{{ $delivery->id }}" >{{ $delivery->name }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-2 col-md-auto col-lg-auto align-self-center">
+                                                        <span data-infowrapper="delivery" class="input-group-addon input-group-append input-icon-wrapper">
+                                                            <span class="btn btn-outline-primary input-icon">
+
+                                                                @if($course_delivery_icon != null && $course_delivery_icon['path'] != null)
+                                                                    <img src="{{ asset($course_delivery_icon['path']) }}"/>
+                                                                @else
+                                                                    <i class="fa fa-university"></i>
+
+                                                                @endif
+                                                            </span>
+                                                        </span>
+                                                        <input type="hidden" value="{{ old('course_delivery_icon_path', ($course_delivery_icon != null && $course_delivery_icon['path'] != '') ? $course_delivery_icon['path'] : '' ) }}" id="delivery_path" name="course[{{'delivery_icon'}}][{{'path'}}]">
+                                                        <input type="hidden" value="{{ old('course_delivery_icon_alt_text', ($course_delivery_icon != null && $course_delivery_icon['alt_text'] != '') ? $course_delivery_icon['alt_text'] : '' ) }}" id="delivery_alt_text" name="course[{{'delivery_icon'}}][{{'alt_text'}}]">
+                                                    </div>
+
+                                                    <div class="col-12 col-md-auto col-lg-auto align-self-center">
+
+                                                        <label class="custom-toggle enroll-toggle visible">
+                                                            <input class="icon_link" name="course[{{'delivery_icon'}}][{{'link_status'}}]" type="checkbox" {{ (isset($course_delivery_icon['link_status']) && $course_delivery_icon['link_status'] == 'on') ? 'checked' : ''}}>
+                                                            <span class="custom-toggle-slider rounded-circle" data-label-off="No Link" data-label-on="Link"></span>
+                                                        </label>
+                                                    </div>
+
+                                                    <div class="col-12 col-md-5 col-lg-4 align-self-center input @if((isset($course_delivery_icon['link_status']) && $course_delivery_icon['link_status'] == 'off') || !isset($course_delivery_icon['link_status'])) {{'d-none'}} @endif">
+                                                        <input placeholder="https://example.com" type="text" class="form-control" name="course[{{'delivery_icon'}}][{{'link'}}]" value="{{ old('delivery_icon_link', (isset($course_delivery_icon) && $course_delivery_icon != null && isset($course_delivery_icon['link'])) ? $course_delivery_icon['link'] : '' ) }}">
+                                                    </div>
+
+
+                                                    @include('alerts.feedback', ['field' => 'delivery'])
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-9 col-md-6 col-lg-4">
+
+                                                        <!-- anto's editor -->
+                                                        <input class="hidden" id="input-delivery-text" name="course[{{'delivery_info'}}][{{'text'}}]" value="{{ isset($delivery_text) ? $delivery_text : '' }}"/>
+                                                        <?php $data = isset($delivery_text) ? $delivery_text : '' ?>
+                                                        @include('event.editor.editor', ['toolbar' => 'insertfile image media link anchor codesample','plugins' => 'link','keyinput' => "input-delivery_title", 'data'=> "$data", 'inputname' => "'course[delivery_info][text]'" ])
+                                                        <!-- anto's editor -->
+
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <?php
+
+                                                        $visible_delivery = (isset($info['delivery_info']['visible']) && $info['delivery_info']['visible'] != null) ? $info['delivery_info']['visible'] : null;
+
+                                                    ?>
+
+
+
+                                                    <div class="form-group col-12 accordion course-delivery-list-visible" id="accordionExample">
+                                                        <div class="card">
+                                                            <div class="card-header" id="headingThree1" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
+                                                                <h5 class="mb-0">Visible on:</h5>
+                                                            </div>
+                                                            <div id="collapseThree" class="collapse" aria-labelledby="headingThree1" data-parent="#accordionExample">
+                                                                <div class="card-body">
+                                                                    <div class="row">
+                                                                        <div class="col-sm-12 col-md-6 col-lg-2">
+
+                                                                            <div class="custom-control custom-checkbox mb-3">
+                                                                                <input class="custom-control-input" {{ ($visible_delivery != null && $visible_delivery['landing']) ? 'checked' : '' }} name="course[{{'delivery_info'}}][{{'visible'}}][{{'landing'}}]" id="input-delivery-landing" type="checkbox">
+                                                                                <label class="custom-control-label" for="input-delivery-landing">Course landing page (summary)</label>
+                                                                            </div>
+
+                                                                        </div>
+
+
+                                                                    </div>
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+
                                             </div>
-
 
                                         </div>
 
@@ -2809,6 +2905,10 @@
                     url: true
                 },
                 "course[language][icon][link]" : {
+                    checkIfRequired: true,
+                    url: true
+                },
+                "course[delivery_icon][link]" : {
                     checkIfRequired: true,
                     url: true
                 },

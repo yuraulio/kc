@@ -2011,7 +2011,7 @@
 
                                                 <div class="row">
                                                     <div class="col-9 col-md-auto col-lg-auto align-self-center">
-                                                        <h3 class="mb-0 title">{{ __('Course Certification') }}</h3>
+                                                        <h3 class="mb-1 title">{{ __('Course Certification') }}</h3>
                                                     </div>
 
 
@@ -2068,6 +2068,10 @@
 
 
                                             <div class="form-group col-12 course-certification-visible-wrapper {{ isset($info['certificate']['has_certificate']) && $info['certificate']['has_certificate'] ? '' : 'd-none'  }}">
+
+                                                <div>
+                                                    <h4 class="mb-1 title" for="input-hours">{{ __('Courses with exams') }}</h4>
+                                                </div>
                                                 <div class="row">
                                                     <div class="col-sm-12 col-md-6 form-group{{ $errors->has('fb_') ? ' has-danger' : '' }}">
                                                         <label class="form-control-label" for="input-hours">{{ __('Certificate Title') }}  (course_certification_name_success)</label>
@@ -2078,7 +2082,7 @@
                                                         <input class="hidden" id="input-certificate_title_hidden" name="course[{{'certificate'}}][{{'success_text'}}]" value="{{ old('certificate_title', (isset($info['certificate']['messages']['success']) && $info['certificate']['messages']['success'] != null) ? $info['certificate']['messages']['success'] : '') }}"/>
                                                         <?php $data = isset($info['certificate']['messages']['success']) && $info['certificate']['messages']['success'] != null ? $info['certificate']['messages']['success'] : '' ?>
                                                         @include('event.editor.editor', ['keyinput' => "input-certificate_title", 'data'=> "$data", 'inputname' => "'course[certificate][success_text]'" ])
-                                                         <!-- anto's editor -->
+                                                        <!-- anto's editor -->
 
                                                         @include('alerts.feedback', ['field' => 'certificate_title'])
 
@@ -2096,15 +2100,15 @@
                                                         <!-- anto's editor -->
 
                                                     </div>
-                                                    <div class="col-sm-12 col-md-6 form-group">
-                                                        <label class="form-control-label" for="input-hours">{{ __('Certificate Event Title') }} (course_certification_event_title)</label>
-                                                        <!-- anto's editor -->
-                                                        <input class="hidden" id="input-certificate_event_title_hidden" name="course[{{'certificate'}}][{{'event_title'}}]" value="{{ old('certificate_event_title', (isset($info['certificate']['event_title']) && $info['certificate']['event_title'] != null) ?$info['certificate']['event_title'] : '') }}"/>
-                                                        <?php $data = isset($info['certificate']['event_title']) && $info['certificate']['event_title'] ? $info['certificate']['event_title'] : explode(',',$event->title)[0] ?>
-                                                        @include('event.editor.editor', ['keyinput' => "input-certificate_event_title", 'data'=> "$data", 'inputname' => "'course[certificate][event_title]'" ])
-                                                        <!-- anto's editor -->
 
-                                                    </div>
+                                                </div>
+
+                                                <div>
+                                                    <h4 class="mb-0 title" for="input-hours">{{ __('Courses without exams') }}</h4>
+                                                </div>
+
+                                                <div class="row">
+
                                                     <div class="col-sm-12 col-md-6 form-group">
                                                         <label class="form-control-label" for="input-hours">{{ __('Certificate Type') }} (course_certification_type)</label>
 
@@ -2119,6 +2123,17 @@
                                                     </div>
 
                                                 </div>
+                                                {{--<div class="row">
+                                                    <div class="col-sm-12 col-md-6 form-group">
+                                                        <label class="form-control-label" for="input-hours">{{ __('Certificate Event Title') }} (course_certification_event_title)</label>
+                                                        <!-- anto's editor -->
+                                                        <input class="hidden" id="input-certificate_event_title_hidden" name="course[{{'certificate'}}][{{'event_title'}}]" value="{{ old('certificate_event_title', (isset($info['certificate']['event_title']) && $info['certificate']['event_title'] != null) ?$info['certificate']['event_title'] : '') }}"/>
+                                                        <?php $data = isset($info['certificate']['event_title']) && $info['certificate']['event_title'] ? $info['certificate']['event_title'] : explode(',',$event->title)[0] ?>
+                                                        @include('event.editor.editor', ['keyinput' => "input-certificate_event_title", 'data'=> "$data", 'inputname' => "'course[certificate][event_title]'" ])
+                                                        <!-- anto's editor -->
+
+                                                    </div>
+                                                </div>--}}
 
                                                     <div class="row">
 

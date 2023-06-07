@@ -100,13 +100,13 @@
             $('#datatable-basic-students1_filter').append(
                 `
                 <div id="export-student-button" class='export-student-waiting-button '>
-                    <button title="export students to csv" class="btn btn-primary" type="button">
-                        <span class="btn-inner--icon"><i class="ni ni-cloud-download-95"></i></span>
+                    <button title="export students to csv" class="btn btn-primary btn-sm" type="button">
+                        Export students to csv
                     </button>
                 </div>
                 <div id="export-student-exam-button">
-                    <button id="export-exam-button" class="btn btn-primary" type="button">
-                    Download exam results
+                    <button id="export-exam-button" class="btn btn-primary btn-sm" type="button">
+                    Export students result
                     </button>
                 </div>
                 `

@@ -1346,6 +1346,9 @@
                                 </div>
 
                                 <div class="form-group col-12 course-certification-visible-wrapper d-none">
+                                    <div>
+                                        <h4 class="mb-0 title" for="input-hours">{{ __('Courses with exams') }}</h4>
+                                    </div>
                                     <div class="row">
                                         <div class="col-sm-12 col-md-6 form-group{{ $errors->has('fb_') ? ' has-danger' : '' }}">
                                             <label class="form-control-label" for="input-hours">{{ __('Certificate Title') }}  (course_certification_name_success)</label>
@@ -1372,8 +1375,14 @@
                                             @include('event.editor.editor', ['keyinput' => "input-certificate_text_failure", 'data'=> "$data", 'inputname' => "'course[certificate][failure_text]'" ])
                                             <!-- anto's editor -->
                                         </div>
+                                    </div>
+                                    <div>
+                                        <h4 class="mb-0 title" for="input-hours">{{ __('Courses without exams') }}</h4>
+                                    </div>
+                                    <div class="row">
 
-                                        <div class="col-sm-12 col-md-6 form-group">
+
+                                        {{--<div class="col-sm-12 col-md-6 form-group">
                                             <label class="form-control-label" for="input-hours">{{ __('Certificate Event Title') }} (course_certification_event_title)</label>
                                             <!-- anto's editor -->
                                             <input class="hidden" id="input-certificate_event_title_hidden" name="course[{{'certificate'}}][{{'event_title'}}]" value="{{ old('certificate_event_title') }}"/>
@@ -1381,7 +1390,7 @@
                                             @include('event.editor.editor', ['keyinput' => "input-certificate_event_title", 'data'=> "$data", 'inputname' => "'course[certificate][event_title]'" ])
                                             <!-- anto's editor -->
 
-                                        </div>
+                                        </div>--}}
 
                                         <div class="col-sm-12 col-md-6 form-group">
                                             <label class="form-control-label" for="input-hours">{{ __('Certificate Type') }} (course_certification_type)</label>

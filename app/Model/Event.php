@@ -1024,7 +1024,7 @@ class Event extends Model
             $data['manager']['icon'] = $infos['course_manager_icon'] != null ? json_decode($infos['course_manager_icon'], true) : null;
 
 
-            $data['certificate']['event_title'] = $infos['course_certification_event_title'];
+            //$data['certificate']['event_title'] = $infos['course_certification_event_title'];
             $data['certificate']['messages']['success'] = $infos['course_certification_name_success'];
             $data['certificate']['messages']['failure'] = $infos['course_certification_name_failure'];
             $data['certificate']['type'] = $infos['course_certification_type'];

@@ -98,7 +98,8 @@ class CertificateController extends Controller
 
       }
       $certificateTitle = str_replace('&nbsp;','',$certificateTitle);
-      $certificateEventTitle = $certificate->event->first()->event_info()['certificate']['event_title'];
+      //$certificateEventTitle = $certificate->event->first()->event_info()['certificate']['event_title'];
+      $certificateEventTitle = $certificate->event->first()->title;
 
     }
 
@@ -335,7 +336,7 @@ class CertificateController extends Controller
 
     $successMessage = isset($event->event_info()['certificate']['messages']['success']) ? $event->event_info()['certificate']['messages']['success'] : '';
     $failureMessage = isset($event->event_info()['certificate']['messages']['failure']) ? strip_tags($event->event_info()['certificate']['messages']['failure']) : '';
-    $certificateEventTitle = isset($event->event_info()['certificate']['event_title']) ? $event->event_info()['certificate']['event_title'] : $event->title;
+    $certificateEventTitle = $event->title;
 
     if ($zip->open(public_path($fileName), ZipArchive::CREATE) === TRUE) {
 
