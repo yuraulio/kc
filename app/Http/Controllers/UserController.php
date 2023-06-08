@@ -393,11 +393,11 @@ class UserController extends Controller
                     ->make(true);
 
         }else{
-            $users = $model->select('firstname', 'lastname', 'mobile', 'email', 'id', 'job_title', 'company', 'kc_id')->with([
-                'statusAccount',
-                'events_for_user_list1:id,title,published,status',
-                'events_for_user_list1.delivery'
-                ])->get();
+            // $users = $model->select('firstname', 'lastname', 'mobile', 'email', 'id', 'job_title', 'company', 'kc_id')->with([
+            //     'statusAccount',
+            //     'events_for_user_list1:id,title,published,status',
+            //     'events_for_user_list1.delivery'
+            //     ])->get();
 
             $data = [];
 
@@ -407,7 +407,7 @@ class UserController extends Controller
             $data['roles'] = (new RoleController)->fetchAllRoles();
             $data['job_positions'] = User::where('job_title', '!=', 'null')->groupBy('job_title')->pluck('job_title')->toArray();
             $data['companies'] = User::where('company', '!=', 'null')->groupBy('company')->pluck('company')->toArray();
-            $data = $data + $this->statistics($users);
+            //$data = $data + $this->statistics($users);
         }
 
         return view('users.index_new', compact('data'));
