@@ -275,10 +275,11 @@ class UserController extends Controller
 
         if($request->status != ""){
 
-            $requestStatus = 0;
 
             if($request->status == 'Active'){
                 $requestStatus = 1;
+            }else if($request->status == 'Inactive'){
+                $requestStatus = 0;
             }
 
 
@@ -366,8 +367,8 @@ class UserController extends Controller
                     })
                     ->editColumn('role', function($row){
 
-                        if(isset($row['role'][0])){
-                            return $row['role'][0]['name'];
+                        if(isset($row['role'][count($row['role']) - 1])){
+                            return $row['role'][count($row['role']) - 1]['name'];
                         }
                         return '';
 
@@ -387,7 +388,8 @@ class UserController extends Controller
                         return date_format(date_create($row->created_at), 'd-m-Y');
                     })
                     ->rawColumns(['firstname', 'email', 'image'])
-                    ->orderColumns(['role'], '-:column $1')
+                    //->orderColumns(['role'], '-:column $1')
+                    ->smart(false)
 
                     ->make(true);
 

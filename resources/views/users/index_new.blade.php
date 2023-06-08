@@ -388,7 +388,7 @@
                         previous: '&#171;' // or '←'
                     }
                 },
-                pageLength: 25,
+                pageLength: 50,
                 processing: true,
                 serverSide: true,
                 ajax: {
@@ -414,14 +414,13 @@
                     {data: 'email', name: 'email'},
                     {data: 'kc_id', name: 'kc_id'},
                     {data: 'id', name: 'id'},
-                    {data: 'role', name: 'role.name',title: 'role'},
+                    {data: 'role', name: 'role.name',title: 'role',orderable: false},
                     {data: 'status', name: 'status',orderable: true},
                     {data: 'created_at',name: 'created_at'},
 
                     // {data: 'action', name: 'action', orderable: false, searchable: false},
 
                 ],
-                responsive: true
 
             });
 

@@ -97,7 +97,7 @@ class Event extends Model
 
     }
 
-    public function topic1()
+    public function topic_with_no_instructor()
     {
         if($this->delivery->first() && $this->delivery->first()->id == 143){
             return $this->belongsToMany(Topic::class, 'event_topic_lesson_instructor')->select('topics.*','topic_id','instructor_id')
@@ -403,7 +403,7 @@ class Event extends Model
 
         // Ean einai sto status = waiting tote fere ta topics xwris na exoyn instructor
         if($this->status == 5){
-            $topicEvent = $topicEvent ? $topicEvent->unique()->groupBy('topic_id') : $this->topic1->unique()->groupBy('topic_id');
+            $topicEvent = $topicEvent ? $topicEvent->unique()->groupBy('topic_id') : $this->topic_with_no_instructor->unique()->groupBy('topic_id');
         }else{
             $topicEvent = $topicEvent ? $topicEvent->unique()->groupBy('topic_id') : $this->topic->unique()->groupBy('topic_id');
         }
