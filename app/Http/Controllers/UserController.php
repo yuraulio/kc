@@ -401,7 +401,6 @@ class UserController extends Controller
 
             $data = [];
 
-            $data['transactions'] = (new TransactionController)->participants();
             $data['events'] = (new EventController)->fetchAllEvents();
             $data['coupons'] = (new CouponController)->fetchAllCoupons();
             $data['roles'] = (new RoleController)->fetchAllRoles();
