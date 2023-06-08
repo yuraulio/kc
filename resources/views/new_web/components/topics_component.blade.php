@@ -21,10 +21,12 @@
     @if(isset($topics))
         <div class="tab-faq-wrapper topic-content">
             <div class="accordion-wrapper accordion-big">
+
                 @foreach($topics as $key => $topic)
                     <div class="accordion-item">
                         <h3 class="accordion-title title-blue-gradient scroll-to-top">{!! $key !!}</h3>
                         <div class="accordion-content">
+
                             @foreach($topic['lessons'] as $lkey => $lesson)
                                 <div class="topic-wrapper-big">
                                     <div class="topic-title-meta">
@@ -42,6 +44,7 @@
 
                                         </div>
                                     </div>
+                                    @if(isset($instructors[$lesson['instructor_id']]) )
                                     <div class="author-img">
                                         <?php
                                             $instructor = reset($instructors[$lesson['instructor_id']]);
@@ -50,18 +53,20 @@
                                             $width = $imageDetails['w'];
                                             $height = $imageDetails['h'];
                                         ?>
-                                        @if($instructor['status'])
-                                            <a href="{{env('NEW_PAGES_LINK') . '/' .  $instructor['slugable']['slug']}}">
-                                                <span class="custom-tooltip">{{ $instructor['title'] }} {{$instructor['subtitle']}}</span>
-                                                <img loading="lazy" alt="{{ $instructor['title']}} {{$instructor['subtitle']}}" title="{{ $instructor['title']}} {{$instructor['subtitle']}}" src="{{ cdn(get_image($instructor['mediable'],'instructors-small')) }}" width="{{ $width }}" height="{{ $height }}"/>
-                                            </a>
-                                        @else
-                                            <a class="non-pointer" href="javascript:void(0)">
-                                                <span class="custom-tooltip">{{ $instructor['title'] }} {{$instructor['subtitle']}}</span>
-                                                <img loading="lazy" alt="{{ $instructor['title']}} {{$instructor['subtitle']}}" title="{{ $instructor['title']}} {{$instructor['subtitle']}}" src="{{ cdn('') }}" width="{{ $width }}" height="{{ $height }}"/>
-                                            </a>
-                                        @endif
+
+                                            @if($instructor['status'])
+                                                <a href="{{env('NEW_PAGES_LINK') . '/' .  $instructor['slugable']['slug']}}">
+                                                    <span class="custom-tooltip">{{ $instructor['title'] }} {{$instructor['subtitle']}}</span>
+                                                    <img loading="lazy" alt="{{ $instructor['title']}} {{$instructor['subtitle']}}" title="{{ $instructor['title']}} {{$instructor['subtitle']}}" src="{{ cdn(get_image($instructor['mediable'],'instructors-small')) }}" width="{{ $width }}" height="{{ $height }}"/>
+                                                </a>
+                                            @else
+                                                <a class="non-pointer" href="javascript:void(0)">
+                                                    <span class="custom-tooltip">{{ $instructor['title'] }} {{$instructor['subtitle']}}</span>
+                                                    <img loading="lazy" alt="{{ $instructor['title']}} {{$instructor['subtitle']}}" title="{{ $instructor['title']}} {{$instructor['subtitle']}}" src="{{ cdn('') }}" width="{{ $width }}" height="{{ $height }}"/>
+                                                </a>
+                                            @endif
                                     </div>
+                                    @endif
                                 </div>
                             @endforeach
                         </div>

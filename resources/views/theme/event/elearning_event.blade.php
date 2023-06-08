@@ -300,7 +300,6 @@
                   <!-- /.tab-content-wrapper -->
                </div>
 
-
                <div id="topics" class="tab-content-wrapper">
                   <div class="container">
                      <div class="course-full-text">

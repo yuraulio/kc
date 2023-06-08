@@ -10,7 +10,7 @@
 	        		<div class="panel-group panel-shadow" id="topicsaccordion" role="tablist" aria-multiselectable="true">
 			            @if(isset($topics))
 			                @foreach($topics as $key => $value)
-								
+
 			                    	<div class="panel panel-default">
 			                            <div class="panel-heading" role="tab" id="theading{{ $key }}">
 			                                <h3 class="panel-title">
@@ -28,7 +28,7 @@
 						                         @if(isset($etax))
 						                         	<?php $lastid = []; ?>
 						                            @foreach($etax as $lkey => $lvalue)
-													
+
 						                            	@foreach($lvalue['lesson']['categories'] as $catkey => $catvalue)
 						                            		@if($catvalue['parent_id'] == $blockcat)
 						                            			<?php $thislessonintopic = $catvalue['id']; ?>
@@ -38,12 +38,12 @@
 						                            	@if(!in_array($lvalue['lesson_id'], $lastid))
 							                            <li>
 									                        <div class="lesson-list-main">
-									                            
+
 								                                <div class="lesson-list-title">
 																<h4>{!! $lvalue['lesson']['title'] !!}</h4>
 								                                    {{-- $tvalue['content']['title'] --}}
 																</div>
-																
+
 																<div class="lesson-list-quickbar">
 
 									                            	 @if($content->view_tpl == 'elearning_event' || $content->view_tpl == 'elearning_greek')
@@ -60,7 +60,7 @@
 										                            	   @endif
 										                               @endif
 																	 @else
-																	 
+
 
 																	 @if (isset($lvalue['lesson']['custom_fields'][2]))
 
@@ -68,16 +68,16 @@
 																			@if(isset($cfield) && isset($cfield['alltypes']) && !empty($cfield['alltypes']))
 																				<?php
 																				$type_index = $lvalue['lesson']['custom_fields'][2]['value'];
-																				
+
 																				$type = $cfield['alltypes'][$type_index];
 																				//echo $type; ?>
 																			@else
 																			<?php $type = false;?>
-																			
+
 																			@endif
 
-	
-																		
+
+
 																		@endif
 
 
@@ -94,7 +94,7 @@
 							                            				@endif
 							                            			@endif
 
-							                            					
+
 
 							                            					{{-- break --}}
 							                            				{{-- endif --}}
@@ -102,7 +102,7 @@
 							                            			endif --}}
 
 																</div>
-																
+
 																<div class="lesson-list-inst">
 							                            			@foreach($etax as $seclkey => $seclvalue)
 							                            				@if($seclvalue['lesson_id'] == $lvalue['lesson']['id'])

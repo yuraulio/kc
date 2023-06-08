@@ -267,11 +267,58 @@ class UserController extends Controller
             });
         }
 
-        if($request->coupon != ""){
-            // $query->whereHas('events_for_user_list1', function($q) use ($request) {
-            //     $q->where('title', $request->event);
-            // });
+        // if($request->coupon != ""){
+        //     $query->whereHas('events_for_user_list1', function($q) use ($request) {
+        //         $q->where('title', $request->event);
+        //     });
+        // }
+
+        if($request->status != ""){
+
+            $requestStatus = 0;
+
+            if($request->status == 'Active'){
+                $requestStatus = 1;
+            }
+
+
+            $query->whereHas('statusAccount', function($q) use ($requestStatus) {
+                $q->where('completed', $requestStatus);
+            });
         }
+
+        if($request->role != ""){
+            $query->whereHas('role', function($q) use ($request) {
+                $q->where('name', $request->role);
+            });
+        }
+
+        if($request->job != ""){
+            $query->where('job_title', $request->job);
+        }
+
+        if($request->company != ""){
+            $query->where('company', $request->company);
+        }
+
+        if($request->from_date != ""){
+
+            $date = date_parse_from_format("m/d/Y", $request->from_date);
+            $date = date_create($date['year'].'-'.$date['month'].'-'.$date['day']);
+
+            $query->where('created_at', '>=' , $date);
+        }
+
+        if($request->until_date != ""){
+
+            $date = date_parse_from_format("m/d/Y", $request->until_date);
+            $date = date_create($date['year'].'-'.$date['month'].'-'.$date['day']);
+
+            $query->where('created_at', '<=' , $date);
+
+        }
+
+
 
         return $query;
     }
@@ -284,7 +331,7 @@ class UserController extends Controller
 
             return Datatables::of($data)
 
-                    ->addColumn('image', function($row){
+                    ->editColumn('image', function($row){
 
                         $image = cdn('/theme/assets/images/icons/user-circle.svg');
                         if($row['image'] != null && $row['image']['name'] != ''){
@@ -293,31 +340,31 @@ class UserController extends Controller
 
                         return '<span class="avatar avatar-sm rounded-circle"><img src="'.$image.'" alt="'.$row['firstname'].'" style="max-width: 100px; border-radius: 25px"></span>';
                     })
-                    ->addColumn('firstname', function($row){
+                    ->editColumn('firstname', function($row){
 
                         return '<a href='.route('user.edit', $row->id).'>'.$row->firstname.'</a>';
                     })
-                    ->addColumn('lastname', function($row){
+                    ->editColumn('lastname', function($row){
 
                         return $row->lastname;
                     })
-                    ->addColumn('mobile', function($row){
+                    ->editColumn('mobile', function($row){
 
                         return $row->mobile;
                     })
-                    ->addColumn('email', function($row){
+                    ->editColumn('email', function($row){
 
                         return '<a href="mailto:'.$row->email.'">'.$row->email.'</a>';
                     })
-                    ->addColumn('kc_id', function($row){
+                    ->editColumn('kc_id', function($row){
 
                         return $row->kc_id;
                     })
-                    ->addColumn('id', function($row){
+                    ->editColumn('id', function($row){
 
                         return $row->id;
                     })
-                    ->addColumn('role', function($row){
+                    ->editColumn('role', function($row){
 
                         if(isset($row['role'][0])){
                             return $row['role'][0]['name'];
@@ -325,7 +372,7 @@ class UserController extends Controller
                         return '';
 
                     })
-                    ->addColumn('status', function($row){
+                    ->editColumn('status', function($row){
 
                         $status = 'Inactive';
 
@@ -335,11 +382,12 @@ class UserController extends Controller
 
                         return $status;
                     })
-                    ->addColumn('created_at', function($row){
+                    ->editColumn('created_at', function($row){
 
-                        return $row->created_at;
+                        return date_format(date_create($row->created_at), 'd-m-Y');
                     })
                     ->rawColumns(['firstname', 'email', 'image'])
+                    ->orderColumns(['role'], '-:column $1')
 
                     ->make(true);
 
@@ -350,8 +398,8 @@ class UserController extends Controller
             $data['events'] = (new EventController)->fetchAllEvents();
             $data['coupons'] = (new CouponController)->fetchAllCoupons();
             $data['roles'] = (new RoleController)->fetchAllRoles();
-            $data['job_positions'] = User::groupBy('job_title')->pluck('job_title')->toArray();
-            $data['companies'] = User::groupBy('company')->pluck('company')->toArray();
+            $data['job_positions'] = User::where('job_title', '!=', 'null')->groupBy('job_title')->pluck('job_title')->toArray();
+            $data['companies'] = User::where('company', '!=', 'null')->groupBy('company')->pluck('company')->toArray();
         }
 
         return view('users.index_new', compact('data'));

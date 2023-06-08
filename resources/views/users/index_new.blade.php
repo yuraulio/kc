@@ -78,15 +78,6 @@
                                         <label>Roles</label>
                                         <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..." name="Name" class="column_filter" id="col6_filter">
                                             <option selected value> -- All -- </option>
-                                            <option value="Administrator"> Administrator </option>
-                                            <option value="Author"> Author </option>
-                                            <option value="Collaborator"> Collaborator </option>
-                                            <option value="Knowcrunch Partner"> Knowcrunch Partner </option>
-                                            <option value="Knowcrunch Payer"> Knowcrunch Payer </option>
-                                            <option value="Knowcrunch Student"> Knowcrunch Student </option>
-                                            <option value="Manager"> Manager </option>
-                                            <option value="Member"> Member </option>
-                                            <option value="Super Administrator"> Super Administrator </option>
                                         </select>
                                     </div>
 
@@ -393,47 +384,50 @@
             var table = $('#datatable-basic45').DataTable({
                 language: {
                     paginate: {
-                    next: '&#187;', // or '→'
-                    previous: '&#171;' // or '←'
+                        next: '&#187;', // or '→'
+                        previous: '&#171;' // or '←'
                     }
                 },
-                pageLength: 50,
-
+                pageLength: 25,
                 processing: true,
-
                 serverSide: true,
-
                 ajax: {
                     url: "{{ route('users.index') }}",
                     data: function(d) {
                         d.event = $('#col9_filter').val(),
-                        d.coupon = $('#col10_filter').val(),
-                    }
+                        d.status = $('#col7_filter').val(),
+                        d.role = $('#col6_filter').val(),
+                        d.job = $('#col12_filter').val(),
+                        d.company = $('#col13_filter').val(),
+                        d.from_date = $('#min').val(),
+                        d.until_date = $('#max').val()
+                        //d.until_date
+                        //d.coupon = $('#col10_filter').val(),
+                    },
                 },
-
                 columns: [
 
-                    {data: 'image', name: 'image'},
-
+                    {data: 'image', name: 'image', orderable: false},
                     {data: 'firstname', name: 'firstname'},
                     {data: 'lastname', name: 'lastname'},
                     {data: 'mobile', name: 'mobile'},
                     {data: 'email', name: 'email'},
                     {data: 'kc_id', name: 'kc_id'},
                     {data: 'id', name: 'id'},
-                    {data: 'role', name: 'role'},
-                    {data: 'status', name: 'status'},
-                    {data: 'created_at', name: 'created_at'},
+                    {data: 'role', name: 'role.name',title: 'role'},
+                    {data: 'status', name: 'status',orderable: true},
+                    {data: 'created_at',name: 'created_at'},
 
                     // {data: 'action', name: 'action', orderable: false, searchable: false},
 
-                ]
+                ],
+                responsive: true
 
             });
 
 
 
-            $(document).on('change', '#filter_col1', function() {
+            $(document).on('change', '#filter_col1, #filter_col7, #filter_col6, #filter_col12, #filter_col13, #min, #max', function() {
                 table.draw();
             });
 

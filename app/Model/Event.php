@@ -97,6 +97,19 @@ class Event extends Model
 
     }
 
+    public function topic1()
+    {
+        if($this->delivery->first() && $this->delivery->first()->id == 143){
+            return $this->belongsToMany(Topic::class, 'event_topic_lesson_instructor')->select('topics.*','topic_id','instructor_id')
+            ->withPivot('event_id','topic_id','lesson_id','instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room', 'priority','automate_mail','send_automate_mail')->with('lessons.instructor')->orderBy('event_topic_lesson_instructor.priority','asc');
+        }else{
+
+            return $this->belongsToMany(Topic::class, 'event_topic_lesson_instructor')->select('topics.*','topic_id','instructor_id')
+            ->withPivot('event_id','topic_id','lesson_id','instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room', 'priority','automate_mail','send_automate_mail')->with('lessons.instructor')->orderBy('event_topic_lesson_instructor.time_starts','asc');
+        }
+
+    }
+
     //forEventEdit
     public function allTopics()
     {
@@ -388,7 +401,14 @@ class Event extends Model
 
         $instructors = $instructors ? $instructors->unique()->groupBy('instructor_id')->toArray() : $this->instructors->unique()->groupBy('instructor_id')->toArray();
 
-        $topicEvent = $topicEvent ? $topicEvent->unique()->groupBy('topic_id') : $this->topic->unique()->groupBy('topic_id');
+        // Ean einai sto status = waiting tote fere ta topics xwris na exoyn instructor
+        if($this->status == 5){
+            $topicEvent = $topicEvent ? $topicEvent->unique()->groupBy('topic_id') : $this->topic1->unique()->groupBy('topic_id');
+        }else{
+            $topicEvent = $topicEvent ? $topicEvent->unique()->groupBy('topic_id') : $this->topic->unique()->groupBy('topic_id');
+        }
+
+
 
         foreach($topicEvent as $key => $topic){
             foreach($topic as $t){
@@ -402,11 +422,13 @@ class Event extends Model
                 }
                 $lessonsArray = $lessons[$t->id]->toArray();
                 foreach( $lessonsArray as $key => $lesson){
-                    if(!$lesson['instructor_id']){
+                    // ean einai se waiting list to event na mhn to kanei unset
+                    if(!$lesson['instructor_id'] && $this->status != 5){
                         unset($lessonsArray[$key]);
                     }
                     //if(($this->view_tpl=='elearning_event' || $this->view_tpl == 'elearnig_free') && $lesson['vimeo_video'] ==''){
-                    if($this->is_elearning_course() && $lesson['vimeo_video'] ==''){
+                    // ean einai se waiting list to event na mhn to kanei unset
+                    if($this->is_elearning_course() && $lesson['vimeo_video'] =='' && $this->status != 5){
 
                         unset($lessonsArray[$key]);
                     }
