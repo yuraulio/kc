@@ -267,11 +267,11 @@ class UserController extends Controller
             });
         }
 
-        // if($request->coupon != ""){
-        //     $query->whereHas('events_for_user_list1', function($q) use ($request) {
-        //         $q->where('title', $request->event);
-        //     });
-        // }
+        if($request->coupon != ""){
+            $query->whereHas('transactions', function($q) use ($request) {
+                $q->where('coupon_code', $request->coupon);
+            });
+        }
 
         if($request->status != ""){
 
@@ -389,19 +389,25 @@ class UserController extends Controller
                     })
                     ->rawColumns(['firstname', 'email', 'image'])
                     //->orderColumns(['role'], '-:column $1')
-                    ->smart(false)
 
                     ->make(true);
 
         }else{
+            $users = $model->select('firstname', 'lastname', 'mobile', 'email', 'id', 'job_title', 'company', 'kc_id')->with([
+                'statusAccount',
+                'events_for_user_list1:id,title,published,status',
+                'events_for_user_list1.delivery'
+                ])->get();
 
             $data = [];
 
+            $data['transactions'] = (new TransactionController)->participants();
             $data['events'] = (new EventController)->fetchAllEvents();
             $data['coupons'] = (new CouponController)->fetchAllCoupons();
             $data['roles'] = (new RoleController)->fetchAllRoles();
             $data['job_positions'] = User::where('job_title', '!=', 'null')->groupBy('job_title')->pluck('job_title')->toArray();
             $data['companies'] = User::where('company', '!=', 'null')->groupBy('company')->pluck('company')->toArray();
+            $data = $data + $this->statistics($users);
         }
 
         return view('users.index_new', compact('data'));

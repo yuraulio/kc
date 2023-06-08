@@ -19,8 +19,10 @@
             <li class="breadcrumb-item"><a href="{{ route('user.index') }}">{{ __('User Management') }}</a></li>
             <li class="breadcrumb-item active" aria-current="page">{{ __('List') }}</li>
         @endcomponent
-        {{--@include('users.layouts.cards')--}}
+        @include('users.layouts.cards')
     @endcomponent
+
+    {{--dd($data['transactions']['transactions'])--}}
 
     <div class="container-fluid mt--6">
         <div class="row">
@@ -401,8 +403,7 @@
                         d.company = $('#col13_filter').val(),
                         d.from_date = $('#min').val(),
                         d.until_date = $('#max').val()
-                        //d.until_date
-                        //d.coupon = $('#col10_filter').val(),
+                        d.coupon = $('#col10_filter').val()
                     },
                 },
                 columns: [
@@ -415,7 +416,7 @@
                     {data: 'kc_id', name: 'kc_id'},
                     {data: 'id', name: 'id'},
                     {data: 'role', name: 'role.name',title: 'role',orderable: false},
-                    {data: 'status', name: 'status',orderable: true},
+                    {data: 'status', name: 'status',orderable: false},
                     {data: 'created_at',name: 'created_at'},
 
                     // {data: 'action', name: 'action', orderable: false, searchable: false},
@@ -426,7 +427,7 @@
 
 
 
-            $(document).on('change', '#filter_col1, #filter_col7, #filter_col6, #filter_col12, #filter_col13, #min, #max', function() {
+            $(document).on('change', '#filter_col1, #filter_col7, #filter_col6, #filter_col12, #filter_col13, #min, #max, #filter_col4', function() {
                 table.draw();
             });
 
