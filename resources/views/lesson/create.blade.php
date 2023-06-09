@@ -128,13 +128,13 @@
                                             <label class="form-control-label" for="input-topic_id">{{ __('Topic') }}</label>
                                             <select multiple name="topic_id[]" id="input-topic_id" class="form-control topics" placeholder="{{ __('Topic') }}">
                                                 @foreach ($topics as $topic)
-                                                   
+
                                                     @foreach($topic->category as $key => $tcategory)
                                                         <option @if($key>0) style="display:none" @endif data-category="{{$tcategory->name}}"  value="{{ $topic->id }}" > {{ $topic->title }}</option>
                                                     @endforeach
                                                 @endforeach
 
-                                             
+
                                             </select>
                                         </div>
 
@@ -145,7 +145,7 @@
                                     @include('alerts.feedback', ['field' => 'topic_id'])
                                 </div>
 
-                               
+
                                 <div class="form-group">
                                     <button class="btn btn-primary add-dynamic-link" type="button">Add Link</button>
                                     <div id="dynamic-link">

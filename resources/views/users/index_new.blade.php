@@ -19,7 +19,7 @@
             <li class="breadcrumb-item"><a href="{{ route('user.index') }}">{{ __('User Management') }}</a></li>
             <li class="breadcrumb-item active" aria-current="page">{{ __('List') }}</li>
         @endcomponent
-        {{--@include('users.layouts.cards')--}}
+        @include('users.layouts.cards')
     @endcomponent
 
     {{--dd($data['transactions']['transactions'])--}}
@@ -419,7 +419,7 @@
                     {data: 'status', name: 'status',orderable: false},
                     {data: 'created_at',name: 'created_at'},
 
-                    // {data: 'action', name: 'action', orderable: false, searchable: false},
+                    {data: 'action', name: 'action', orderable: false, searchable: false},
 
                 ],
 

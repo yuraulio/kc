@@ -387,17 +387,36 @@ class UserController extends Controller
 
                         return date_format(date_create($row->created_at), 'd-m-Y');
                     })
-                    ->rawColumns(['firstname', 'email', 'image'])
+                    ->addColumn('action', function($row){
+                        return '<div class="dropdown">
+                        <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-ellipsis-v"></i>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                            <a class="dropdown-item" href="'.route("user.edit", $row->id).'">Edit</a>
+
+                            <form action="'.route("user.destroy", $row->id) .'" method="post">
+                                @csrf
+                                @method("delete")
+
+                                <button type="button" class="dropdown-item">
+                                    Delete
+                                </button>
+                            </form>
+                        </div>
+                    </div>';
+                    })
+                    ->rawColumns(['firstname', 'email', 'image', 'action'])
                     //->orderColumns(['role'], '-:column $1')
 
                     ->make(true);
 
         }else{
-            // $users = $model->select('firstname', 'lastname', 'mobile', 'email', 'id', 'job_title', 'company', 'kc_id')->with([
-            //     'statusAccount',
-            //     'events_for_user_list1:id,title,published,status',
-            //     'events_for_user_list1.delivery'
-            //     ])->get();
+            $users = $model->select('firstname', 'lastname', 'mobile', 'email', 'id', 'job_title', 'company', 'kc_id')->with([
+                'statusAccount',
+                'events_for_user_list1:id,title,published,status',
+                'events_for_user_list1.delivery'
+            ])->get();
 
             $data = [];
 
@@ -406,7 +425,9 @@ class UserController extends Controller
             $data['roles'] = (new RoleController)->fetchAllRoles();
             $data['job_positions'] = User::where('job_title', '!=', 'null')->groupBy('job_title')->pluck('job_title')->toArray();
             $data['companies'] = User::where('company', '!=', 'null')->groupBy('company')->pluck('company')->toArray();
-            //$data = $data + $this->statistics($users);
+
+            $data = $data + $this->statistics($users);
+
         }
 
         return view('users.index_new', compact('data'));
