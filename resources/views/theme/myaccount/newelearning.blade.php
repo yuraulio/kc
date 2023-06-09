@@ -45,7 +45,7 @@
 
       ?>
    <?php $bonusFiles = ['_Bonus', 'Bonus', 'Bonus Files', 'Βonus', '_Βonus', 'Βonus', 'Βonus Files'] ?>
-   <body onload="tabclick('{{ $videos }}', '{{$details['id']}}', '{{$lastVideoSeen}}', '{{$event_statistic_id}}','{{$course}}','{{$notes}}', '{{$videos_progress}}')">
+   <body onload="tabclick('{{ $videos }}', '{{$details['id']}}', '{{$lastVideoSeen}}', '{{$event_statistic_id}}','{{$course}}', '{{$videos_progress}}')">
       <div id="favDialog1" hidden>
          <div class="alert-outer" >
             <div class="container">
@@ -691,7 +691,7 @@
            let title = $(this).text();
            let vimeoId = $(this).parent().parent().parent()[0]
            vimeoId = $(vimeoId).data('vimeoid')
-           console.log(vimeoId);
+           //console.log(vimeoId);
            $('.lesson-main-title').text(title);
            $('#notes').attr('data-vimeoid', videoId)
          });
@@ -749,10 +749,10 @@
                 success: function(data) {
                     if(data){
                         //$('#notes').val(data['text']);
-                        console.log(data)
+                        //console.log(data)
 
                         let elemNote = $('.'+data['vimeoId']).find('a')[0]
-                        console.log('elem note: ', elemNote)
+                        //console.log('elem note: ', elemNote)
                         elemNote = $(elemNote).parent()
                         $(elemNote).attr("data-note", data['text'])
                         //$('.saveDone').removeClass('saveDone');
@@ -781,7 +781,11 @@
                 clearTimeout(timeoutID);
                 timeoutID = setTimeout(() => {
 
-                    saveNoteAjax($(this).data('vimeoid'))
+                     // console.log('pre save')
+                     // console.log($(this))
+                     // console.log('exit save')
+
+                    saveNoteAjax($(this).attr('data-vimeoid'))
 
 
                         // $('.mobile-search-modal.super-search').removeClass('search-finished');
@@ -918,13 +922,13 @@
                })
            }
 
-          function tabclick(videos,event,seen,statisticId,frame,notes,progress){
+          function tabclick(videos,event,seen,statisticId,frame,progress){
 
 
 
             $('.progress-bar').css('width', progress + '%')
 
-               notes = JSON.parse(notes)
+               //notes = JSON.parse(notes)
 
              videos = JSON.parse(videos)
 

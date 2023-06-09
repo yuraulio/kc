@@ -300,16 +300,16 @@
         },
         {
             "name": "binshops/laravel-blog",
-            "version": "v9.3.5",
+            "version": "v9.3.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/binshops/laravel-blog.git",
-                "reference": "0fe838e15f981015f425243aa368d2e32c352dd3"
+                "reference": "e51ee691b7234b2927d4f28301207e70934a415f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/binshops/laravel-blog/zipball/0fe838e15f981015f425243aa368d2e32c352dd3",
-                "reference": "0fe838e15f981015f425243aa368d2e32c352dd3",
+                "url": "https://api.github.com/repos/binshops/laravel-blog/zipball/e51ee691b7234b2927d4f28301207e70934a415f",
+                "reference": "e51ee691b7234b2927d4f28301207e70934a415f",
                 "shasum": ""
             },
             "require": {
@@ -368,9 +368,9 @@
             "support": {
                 "docs": "https://github.com/binshops/laravel-blog",
                 "issues": "https://github.com/binshops/laravel-blog/issues",
-                "source": "https://github.com/binshops/laravel-blog/tree/v9.3.5"
+                "source": "https://github.com/binshops/laravel-blog/tree/v9.3.6"
             },
-            "time": "2023-05-31T08:25:19+00:00"
+            "time": "2023-06-07T17:55:40+00:00"
         },
         {
             "name": "brick/math",
@@ -9624,28 +9624,27 @@
         },
         {
             "name": "spatie/dropbox-api",
-            "version": "1.21.2",
+            "version": "1.22.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/dropbox-api.git",
-                "reference": "9769c737b8d91a75b466ce14ed01b205da276597"
+                "reference": "5b012d68568a560d1cd8888c0be2c2805c4b7c65"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/dropbox-api/zipball/9769c737b8d91a75b466ce14ed01b205da276597",
-                "reference": "9769c737b8d91a75b466ce14ed01b205da276597",
+                "url": "https://api.github.com/repos/spatie/dropbox-api/zipball/5b012d68568a560d1cd8888c0be2c2805c4b7c65",
+                "reference": "5b012d68568a560d1cd8888c0be2c2805c4b7c65",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
-                "graham-campbell/guzzle-factory": "^3.0|^4.0|^5.0|^6.0|^7.0",
+                "graham-campbell/guzzle-factory": "^4.0.2|^5.0|^6.0|^7.0",
                 "guzzlehttp/guzzle": "^6.2|^7.0",
-                "php": "^7.1|^8.0"
-            },
-            "conflict": {
-                "guzzlehttp/psr7": "<1.7.0"
+                "php": "^8.1"
             },
             "require-dev": {
+                "laravel/pint": "^1.10.1",
+                "phpstan/phpstan": "^1.10.16",
                 "phpunit/phpunit": "^9.4"
             },
             "type": "library",
@@ -9683,7 +9682,7 @@
             ],
             "support": {
                 "issues": "https://github.com/spatie/dropbox-api/issues",
-                "source": "https://github.com/spatie/dropbox-api/tree/1.21.2"
+                "source": "https://github.com/spatie/dropbox-api/tree/1.22.0"
             },
             "funding": [
                 {
@@ -9695,7 +9694,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-06-07T11:45:23+00:00"
+            "time": "2023-06-08T07:13:00+00:00"
         },
         {
             "name": "spatie/flysystem-dropbox",
