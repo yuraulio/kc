@@ -469,16 +469,14 @@ class EventController extends Controller
             if(!$found){
                 $unassigned[$allTopics['id']] = $allTopics;
 
-                //dd(Topic::with('lessonsCategory')->find($allTopics['id'])->lessonsCategory()->wherePivot('category_id', $event->category()->first)->get());
+                $lessons = Topic::with('lessonsCategory')->find($allTopics['id'])->lessonsCategory;
+                $newArrLessons = [];
 
-                $les = Topic::with('lessonsCategory')->find($allTopics['id'])->lessonsCategory;
-                $lesArr = [];
-                foreach($les as $key => $le){
-                    $lesArr[$le->id] = $le;
+                foreach($lessons as $lesson){
+                    $newArrLessons[$lesson->id] = $lesson;
                 }
 
-
-                $unassigned[$allTopics['id']]['lessons'] = $lesArr;
+                $unassigned[$allTopics['id']]['lessons'] = $newArrLessons;
                 //$unassigned[$allTopics['id']]['lessons'] =Topic::with('lessonsCategory')->find($allTopics['id'])->lessonsCategory()->wherePivot('category_id',219)->get();
 
 
