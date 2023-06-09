@@ -118,19 +118,31 @@ class EventController extends Controller
         //dd($event);
 
         $allLessons = Topic::with('lessonsCategory')->find($request->topic_id);
-        //dd($allLessons);
 
-        foreach($allLessons->lessonsCategory as $key => $lesson)
+        //dd(count($allLessons));
+        //dd($allLessons->lessonsCategory->groupBy('id'));
+        //foreach($allLessons->lessonsCategory as $key => $lesson)
+        $dataLesson = $allLessons->lessonsCategory;
+        $dataArr = [];
+        foreach($dataLesson as $les){
+            $dataArr[$les['id']] = $les;
+        }
+        //dd($dataLesson);
+
+        foreach($dataArr as $key => $lesson)
         {
+
+            //dd($lesson);
+            //dd($lesson);
             //var_dump($lesson['id']);
-            $find = $event->topic()->wherePivot('topic_id', $request->topic_id)->wherePivot('lesson_id', $lesson['id'])->first();
+            $find = $event->topic_with_no_instructor()->wherePivot('topic_id', $request->topic_id)->wherePivot('lesson_id', $lesson['id'])->first();
 
             if($find == null && $request->status1 == '0')
             {
-                $a = $event->topic()->attach($request->topic_id,['lesson_id' => $lesson['id']]);
+                $a = $event->topic_with_no_instructor()->attach($request->topic_id,['lesson_id' => $lesson['id'], 'priority' => $lesson->pivot->priority]);
 
             }else{
-                $topicLesson_for_detach = $event->topic()->detach($request->topic_id);
+                $topicLesson_for_detach = $event->topic_with_no_instructor()->detach($request->topic_id);
             }
 
         }
@@ -425,7 +437,6 @@ class EventController extends Controller
         $types = Type::all();
         $partners = Partner::all();
 
-        //dd($event->category->first());
         if($event->category->first() != null){
             $allTopicsByCategory = Category::with('topics')->find($event->category->first()->id);
         }else{
@@ -458,7 +469,16 @@ class EventController extends Controller
             if(!$found){
                 $unassigned[$allTopics['id']] = $allTopics;
 
-                $unassigned[$allTopics['id']]['lessons'] = Topic::with('lessonsCategory')->find($allTopics['id'])->lessonsCategory;
+                //dd(Topic::with('lessonsCategory')->find($allTopics['id'])->lessonsCategory()->wherePivot('category_id', $event->category()->first)->get());
+
+                $les = Topic::with('lessonsCategory')->find($allTopics['id'])->lessonsCategory;
+                $lesArr = [];
+                foreach($les as $key => $le){
+                    $lesArr[$le->id] = $le;
+                }
+
+
+                $unassigned[$allTopics['id']]['lessons'] = $lesArr;
                 //$unassigned[$allTopics['id']]['lessons'] =Topic::with('lessonsCategory')->find($allTopics['id'])->lessonsCategory()->wherePivot('category_id',219)->get();
 
 
@@ -471,7 +491,7 @@ class EventController extends Controller
         $data['unassigned'] = $unassigned;
         //dd($data['unassigned']);
         $data['event'] = $event;
-        //dd($event);
+        //dd($event['topic']);
         $data['categories'] = $categories;
         $data['cities'] = City::all();
         $data['partners'] = Partner::all();
@@ -890,6 +910,7 @@ class EventController extends Controller
         // }
 
         if($request->category_id != $request->oldCategory){
+            //dd($request->category_id);
             $category = Category::with('topics')->find($request->category_id);
 
 
