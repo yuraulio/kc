@@ -121,20 +121,20 @@
                                         <td data-search="{{ $status[$event->status] }}">
                                             @if($event->status == 1)
                                                 <span data-status="{{ $status[$event->status] }}" class="badge badge-dot mr-4">
-                                                    <i class="bg-dark"></i>
+                                                    <i class="bg-danger"></i>
                                                     <span class="status">{{$status[$event->status]}}</span>
                                                 </span>
 
 
                                             @elseif($event->status == 0)
                                                 <span data-status="{{ $status[$event->status] }}" class="badge badge-dot mr-4">
-                                                    <i class="bg-warning"></i>
+                                                    <i class="bg-success"></i>
                                                     <span class="status">{{$status[$event->status]}}</span>
                                                 </span>
 
                                             @elseif($event->status == 3)
                                                 <span data-status="{{ $status[$event->status] }}" class="badge badge-dot mr-4">
-                                                    <i class="bg-success"></i>
+                                                    <i class="bg-danger"></i>
                                                     <span class="status">{{$status[$event->status]}}</span>
                                                 </span>
 

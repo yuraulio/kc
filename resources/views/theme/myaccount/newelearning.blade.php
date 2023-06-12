@@ -757,6 +757,12 @@
                         $(elemNote).attr("data-note", data['text'])
                         //$('.saveDone').removeClass('saveDone');
 
+                        let currentNoteTextarea = $('#notes').attr('data-vimeoid')
+
+                        if(currentNoteTextarea == vimeoId){
+                            $('#notes').val(data['text'])
+                        }
+
                         $('.saveDone').fadeIn();
 
 
