@@ -396,10 +396,10 @@ class UserController extends Controller
                             <a class="dropdown-item" href="'.route("user.edit", $row->id).'">Edit</a>
 
                             <form action="'.route("user.destroy", $row->id) .'" method="post">
-                                @csrf
-                                @method("delete")
+                            '. $this->csrf_field() .'
+                            <input type="hidden" name="_method" value="DELETE">
 
-                                <button type="button" class="dropdown-item">
+                                <button type="button" class="dropdown-item delete-btn">
                                     Delete
                                 </button>
                             </form>
@@ -432,6 +432,11 @@ class UserController extends Controller
 
         return view('users.index_new', compact('data'));
     }
+
+    function csrf_field()
+        {
+        return '<input type="hidden" name="_token" value="'.csrf_token().'">';
+        }
 
     /**
      * Display a listing of the users

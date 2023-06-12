@@ -1393,7 +1393,6 @@
                $( ".isWatching" ).parent().css('display', 'block')
 
                 let videoNote = $('.'+id).attr('data-note')
-                console.log('video bote: ', videoNote)
                 videoNote = videoNote.replaceAll('||','\n');
                 //videoNote = videoNote.replace("||", "\n");
                 $('#notes').val(videoNote)

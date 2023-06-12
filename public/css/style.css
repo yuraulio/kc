@@ -594,7 +594,11 @@ li.select2-results__option:empty {
 }
 
 .custom-toggle.custom-published {
-    width: 100px;
+    width: 120px;
+}
+
+.custom-published-only::before{
+    left: -17px;
 }
 
 #event_edit_form .custom-toggle.custom-published,

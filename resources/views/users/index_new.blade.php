@@ -262,6 +262,10 @@
     </script>
     <script>
 
+        $(document).on('click', '.delete-btn', e => {
+            confirm('Are you sure you want to delete this user?') ? $(e.currentTarget).parent().submit() : '';
+        })
+
 
 
         // Custom filtering function which will search data in column four between two values

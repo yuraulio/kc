@@ -15,7 +15,7 @@
             <li class="breadcrumb-item active" aria-current="page">{{ __('Edit Lesson') }}</li>
         @endcomponent
     @endcomponent
-    
+
     <div class="container-fluid mt--6">
         <div class="col-12 mt-2">
             @include('alerts.success')
@@ -44,7 +44,7 @@
                             <div class="pl-lg-4">
                                 <div class="row">
                                     <div style="margin:auto 0;" class="form-group{{ $errors->has('status') ? ' has-danger' : '' }}">
-                                        <label class="custom-toggle custom-published">
+                                        <label class="custom-toggle custom-published ">
                                             <input name="status" id="input-status" type="checkbox" @if($lesson->status) checked @endif>
                                             <span class="custom-toggle-slider rounded-circle" data-label-off="unpublished" data-label-on="published"></span>
                                         </label>
@@ -52,7 +52,7 @@
                                     </div>
 
                                     <div style="margin:auto 40px;" class="form-group{{ $errors->has('bold') ? ' has-danger' : '' }}">
-                                        <label class="form-control-label" for="input-bold">{{ __('Bold') }}</label>
+                                        <label style="margin-top: 1.5rem" class="form-control-label" for="input-bold">{{ __('Bold') }}</label>
                                         <label class="custom-toggle custom-published toggle-bold">
                                             <input name="bold" id="input-bold" type="checkbox" @if($lesson->bold) checked @endif>
                                             <span class="custom-toggle-slider rounded-circle" data-label-off="off" data-label-on="on"></span>
@@ -67,7 +67,7 @@
 
                                     @include('alerts.feedback', ['field' => 'title'])
                                 </div>
-                            
+
                                 <div class="form-group{{ $errors->has('type_id') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-type_id">{{ __('Type') }}</label>
                                     <select name="type_id" id="input-type_id" class="form-control" placeholder="{{ __('Type') }}">
@@ -137,7 +137,7 @@
                                     @include('alerts.feedback', ['field' => 'topic_id'])
                                 </div>
 
-                            
+
                                 <div class="form-group">
                                     <button class="btn btn-primary add-dynamic-link" type="button">Add Link</button>
                                     <div id="dynamic-link">
@@ -200,9 +200,9 @@
             placeholder: "By Category",
             allowClear: true
         });
-         
+
         $.each(topics, function(key, value) {
-            
+
 
             $.each(value.category, function(key1, value1) {
 
@@ -212,7 +212,7 @@
                     uniqueTopics[categoryName] = categoryName
 
                     let selected = '';
-                    
+
                     if(value1.id == "{{ $selectedCategory }}"){
                         selected = 'selected'
                     }
@@ -220,16 +220,16 @@
                     $('#category').append(`<option ${selected} value="${value1.id}">${categoryName}</option>`)
                 }
             });
-            
 
-            
+
+
         })
 
         //on select filter category Show or Hide topics
         $('#category').on('select2:select', function (e) {
             var data = e.params.data;
             selectedCategory = data.text
-            
+
             $.each($('#input-topic_id option'), function(key, value) {
 
                 if($(value).data('categoryname') !== undefined){

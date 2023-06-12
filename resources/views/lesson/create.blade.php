@@ -47,7 +47,7 @@
                                 <div class="row">
 
                                     <div style="margin:auto 0;" class="form-group{{ $errors->has('status') ? ' has-danger' : '' }}">
-                                        <label class="custom-toggle custom-published">
+                                        <label class="custom-toggle custom-published ">
                                             <input name="status" id="input-status" type="checkbox">
                                             <span class="custom-toggle-slider rounded-circle" data-label-off="unpublished" data-label-on="published"></span>
                                         </label>
@@ -55,7 +55,7 @@
                                     </div>
 
                                     <div style="margin:auto 40px;" class="form-group{{ $errors->has('bold') ? ' has-danger' : '' }}">
-                                        <label class="form-control-label" for="input-bold">{{ __('Bold') }}</label>
+                                        <label style="margin-top: 1.5rem" class="form-control-label" for="input-bold">{{ __('Bold') }}</label>
                                         <label class="custom-toggle custom-published toggle-bold">
                                             <input name="bold" id="input-bold" type="checkbox">
                                             <span class="custom-toggle-slider rounded-circle" data-label-off="off" data-label-on="on"></span>
