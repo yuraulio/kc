@@ -978,16 +978,19 @@ class Event extends Model
 
             $data['hours']['hour'] = $infos['course_hours'];
             $data['hours']['text'] = $infos['course_hours_text'];
+            $data['hours']['title'] = $infos['course_hours_title'];
             $data['hours']['icon'] = $infos['course_hours_icon'] != null ? json_decode($infos['course_hours_icon'],true) : null;
             $data['hours']['visible'] = $infos['course_hours_visible'] != null ? json_decode($infos['course_hours_visible'], true) : null;
 
             $data['language']['text'] = $infos['course_language'];
+            $data['language']['title'] = $infos['course_language_title'];
             $data['language']['icon'] = $infos['course_language_icon'] != null ? json_decode($infos['course_language_icon'], true) : null;
             $data['language']['visible'] = $infos['course_language_visible'] != null ? json_decode($infos['course_language_visible'], true) : null;
 
             $data['delivery'] = $infos['course_delivery'];
             $data['delivery_icon'] = $infos['course_delivery_icon'] != null ? json_decode($infos['course_delivery_icon'],true) : null;
             $data['delivery_info']['text'] = $infos['course_delivery_text'];
+            $data['delivery_info']['title'] = $infos['course_delivery_title'];
             $data['delivery_info']['visible'] = $infos['course_delivery_visible'] != null ? json_decode($infos['course_delivery_visible'], true) : null;
 
             if($data['delivery'] == 139){
@@ -1011,10 +1014,12 @@ class Event extends Model
                 $data['elearning']['icon'] = $infos['course_elearning_icon'] != null ? json_decode($infos['course_elearning_icon'], true) : null;
                 $data['elearning']['expiration'] = $infos['course_elearning_expiration'] != null ? $infos['course_elearning_expiration'] : null;
                 $data['elearning']['text'] = $infos['course_elearning_text'] != null ? $infos['course_elearning_text'] : null;
+                $data['elearning']['title'] = $infos['course_elearning_expiration_title'] != null ? $infos['course_elearning_expiration_title'] : null;
 
                 $data['elearning']['exam']['visible'] = $infos['course_elearning_exam_visible'] != null ? json_decode($infos['course_elearning_exam_visible'], true) : null;
                 $data['elearning']['exam']['icon'] = $infos['course_elearning_exam_icon'] != null ? json_decode($infos['course_elearning_exam_icon'], true) : null;
                 $data['elearning']['exam']['text'] = $infos['course_elearning_exam_text'] != null ? $infos['course_elearning_exam_text'] : null;
+                $data['elearning']['exam']['title'] = $infos['course_elearning_exam_title'] != null ? $infos['course_elearning_exam_title'] : null;
 
                 $data['elearning']['exam']['activate_months'] = $infos['course_elearning_exam_activate_months'] != null ? json_decode($infos['course_elearning_exam_activate_months'], true) : null;
 
@@ -1050,12 +1055,14 @@ class Event extends Model
             $data['certificate']['messages']['success'] = $infos['course_certification_name_success'];
             $data['certificate']['messages']['failure'] = $infos['course_certification_name_failure'];
             $data['certificate']['type'] = $infos['course_certification_type'];
+            $data['certificate']['title'] = $infos['course_certification_title'];
             $data['certificate']['visible'] = $infos['course_certification_visible'] != null ? json_decode($infos['course_certification_visible'], true) : null;
             $data['certificate']['icon'] = $infos['course_certification_icon'] != null ? json_decode($infos['course_certification_icon'], true) : null;
             $data['certificate']['has_certificate'] = $infos['has_certificate'];
 
             $data['students']['number'] = (int)$infos['course_students_number'];
             $data['students']['text'] = $infos['course_students_text'];
+            $data['students']['title'] = $infos['course_students_title'];
             $data['students']['visible'] = $infos['course_students_visible'] != null ? json_decode($infos['course_students_visible'], true) : null;
             $data['students']['icon'] = $infos['course_students_icon'] != null ? json_decode($infos['course_students_icon'], true) : null;
         }

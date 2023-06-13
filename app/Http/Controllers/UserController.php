@@ -324,7 +324,7 @@ class UserController extends Controller
         return $query;
     }
 
-    public function indexNew(User $model, Request $request){
+    public function index(User $model, Request $request){
 
         if ($request->ajax()) {
 
@@ -444,42 +444,42 @@ class UserController extends Controller
      * @param  \App\Model\User  $model
      * @return \Illuminate\View\View
      */
-    public function index(User $model)
-    {
+    // public function index(User $model)
+    // {
 
-        $user = Auth::user();
-        $users = $model->select('firstname', 'lastname', 'mobile', 'email', 'id', 'job_title', 'company', 'kc_id')->with([
-            'role',
-            'image',
-            'statusAccount',
-            'events_for_user_list1:id,title,published,status',
-            'events_for_user_list1.delivery'
-            ])->get();
+    //     $user = Auth::user();
+    //     $users = $model->select('firstname', 'lastname', 'mobile', 'email', 'id', 'job_title', 'company', 'kc_id')->with([
+    //         'role',
+    //         'image',
+    //         'statusAccount',
+    //         'events_for_user_list1:id,title,published,status',
+    //         'events_for_user_list1.delivery'
+    //         ])->get();
 
-        $data['events'] = (new EventController)->fetchAllEvents();
-        $data['transactions'] = (new TransactionController)->participants();
-        $data['coupons'] = (new CouponController)->fetchAllCoupons();
+    //     $data['events'] = (new EventController)->fetchAllEvents();
+    //     $data['transactions'] = (new TransactionController)->participants();
+    //     $data['coupons'] = (new CouponController)->fetchAllCoupons();
 
-        //groupby user_id(level1)
-        $data['transactions'] = group_by('user_id', $data['transactions']['transactions']);
+    //     //groupby user_id(level1)
+    //     $data['transactions'] = group_by('user_id', $data['transactions']['transactions']);
 
-        //groupby event_id(level2)
-        foreach($data['transactions'] as $key => $item){
-            $data['transactions'][$key] = group_by('event_id', $item);
-        }
+    //     //groupby event_id(level2)
+    //     foreach($data['transactions'] as $key => $item){
+    //         $data['transactions'][$key] = group_by('event_id', $item);
+    //     }
 
-        //dd($model->with('role', 'image','statusAccount', 'events_for_user_list1')->get()[0]);
-        //dd($data['transactions']);
-        //dd($model->with('role', 'image')->get()[0]);
+    //     //dd($model->with('role', 'image','statusAccount', 'events_for_user_list1')->get()[0]);
+    //     //dd($data['transactions']);
+    //     //dd($model->with('role', 'image')->get()[0]);
 
-        //dd($model->with('role', 'image')->get()->toArray()[0]['image']);
-        //dd($model->with('role', 'image','statusAccount', 'events_for_user_list1')->get()->toArray()[10]);
-        $data = $data + $this->statistics($users);
-        //$data = $data + $this->statistics1();
+    //     //dd($model->with('role', 'image')->get()->toArray()[0]['image']);
+    //     //dd($model->with('role', 'image','statusAccount', 'events_for_user_list1')->get()->toArray()[10]);
+    //     $data = $data + $this->statistics($users);
+    //     //$data = $data + $this->statistics1();
 
 
-        return view('users.index', ['users' => $users, 'data' => $data]);
-    }
+    //     return view('users.index', ['users' => $users, 'data' => $data]);
+    // }
 
     private $rules = array(
         'firstname'     => 'min:3',

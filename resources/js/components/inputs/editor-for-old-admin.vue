@@ -15,7 +15,8 @@
                 toolbar_sticky: true,
                 toolbar_mode: 'wrap',
                 height: 400,
-                font_css: '/theme/assets/css/editor.css'
+                font_css: '/theme/assets/css/editor.css',
+
             }"
         ></editor>
     </div>
@@ -173,12 +174,15 @@ export default {
 </script>
 
 <style>
+    .tox.tox-tinymce{
+        border: 2px solid #ccc !important;
+    }
     .tox-statusbar__branding {
         display: none;
     }
 
     .tox.tox-tinymce, .tox.tox-tinymce div {
-        border: 0px!important;
+        /* border: 0px!important; */
     }
     .tox-toolbar, .tox-menubar {
         background: none!important;

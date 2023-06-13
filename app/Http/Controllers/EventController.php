@@ -1046,6 +1046,7 @@ class EventController extends Controller
 
         $data['course_delivery_icon'] = $this->prepareIconLinkStatus($requestData['delivery_icon']);
         $data['course_delivery_text'] = $requestData['delivery_info']['text'];
+        $data['course_delivery_title'] = isset($requestData['delivery_info']['title']) ? $requestData['delivery_info']['title'] : '';
 
         if(isset($requestData['delivery_info']['visible'])){
 
@@ -1059,6 +1060,7 @@ class EventController extends Controller
         }
 
         $data['course_hours_text'] = $requestData['hours']['text'];
+        $data['course_hours_title'] = isset($requestData['hours']['title']) ? $requestData['hours']['title'] : '';
         $data['course_hours_hour'] = isset($requestData['hours']['hour']) ? $requestData['hours']['hour'] : null;
 
         $data['course_partner'] = $partner;
@@ -1097,6 +1099,7 @@ class EventController extends Controller
                 // Dates
                 if(isset($requestData['delivery']['inclass']['dates'])){
                     $dates['text'] = $requestData['delivery']['inclass']['dates']['text'];
+                    $dates['title'] = $requestData['delivery']['inclass']['dates']['title'];
 
                     if(isset($requestData['delivery']['inclass']['dates']['visible'])){
                         $visible_loaded_data = $requestData['delivery']['inclass']['dates']['visible'];
@@ -1118,6 +1121,7 @@ class EventController extends Controller
                 // Days
                 if(isset($requestData['delivery']['inclass']['day'])){
                     $days['text'] = $requestData['delivery']['inclass']['day']['text'];
+                    $days['title'] = $requestData['delivery']['inclass']['day']['title'];
 
                     if(isset($requestData['delivery']['inclass']['day']['visible'])){
                         $visible_loaded_data = $requestData['delivery']['inclass']['day']['visible'];
@@ -1137,6 +1141,7 @@ class EventController extends Controller
                 // Times
                 if(isset($requestData['delivery']['inclass']['times'])){
                     $times['text'] = $requestData['delivery']['inclass']['times']['text'];
+                    $times['title'] = $requestData['delivery']['inclass']['times']['title'];
 
                     if(isset($requestData['delivery']['inclass']['times']['visible'])){
                         $visible_loaded_data = $requestData['delivery']['inclass']['times']['visible'];
@@ -1162,11 +1167,14 @@ class EventController extends Controller
             $data['course_elearning_icon'] = $requestData['delivery']['elearning']['icon'] != null ?  $this->prepareIconLinkStatus($requestData['delivery']['elearning']['icon']) : null;
             $data['course_elearning_expiration'] = (isset($requestData['delivery']['elearning']['expiration']) && $requestData['delivery']['elearning']['expiration'] != null) ? $requestData['delivery']['elearning']['expiration'] : null;
             $data['course_elearning_text'] = (isset($requestData['delivery']['elearning']['text']) && $requestData['delivery']['elearning']['text'] != null) ? $requestData['delivery']['elearning']['text'] : null;
+            $data['course_elearning_title'] = (isset($requestData['delivery']['elearning']['title']) && $requestData['delivery']['elearning']['title'] != null) ? $requestData['delivery']['elearning']['title'] : null;
 
+            //dd($requestData['delivery']['elearning']);
             $visible_loaded_data = isset($requestData['delivery']['elearning']['exam']['visible']) ? $requestData['delivery']['elearning']['exam']['visible'] : null;
             $data['course_elearning_exam_visible'] = json_encode($this->prepareVisibleData($visible_loaded_data));
             $data['course_elearning_exam_icon'] = isset($requestData['delivery']['elearning']['exam']['icon']) ?  $this->prepareIconLinkStatus($requestData['delivery']['elearning']['exam']['icon']) : null;
             $data['course_elearning_exam_text'] = (isset($requestData['delivery']['elearning']['exam']['text']) && $requestData['delivery']['elearning']['exam']['text'] != null) ? $requestData['delivery']['elearning']['exam']['text'] : null;
+            $data['course_elearning_exam_title'] = (isset($requestData['delivery']['elearning']['exam']['title']) && $requestData['delivery']['elearning']['exam']['title'] != null) ? $requestData['delivery']['elearning']['exam']['title'] : null;
             $data['course_elearning_exam_activate_months'] = (isset($requestData['delivery']['elearning']['exam']['activate_months']) && $requestData['delivery']['elearning']['exam']['activate_months'] != null) ? $requestData['delivery']['elearning']['exam']['activate_months'] : null;
 
 
@@ -1319,6 +1327,7 @@ class EventController extends Controller
 
         // Language
         $data['course_language'] = $requestData['language']['text'];
+        $data['course_language_title'] = isset($requestData['language']['title']) ? $requestData['language']['title'] : '';
         if(isset($requestData['language']['visible'])){
 
             $visible_loaded_data = $requestData['language']['visible'];
@@ -1397,13 +1406,13 @@ class EventController extends Controller
         $data['course_awards_icon'] = json_encode($requestData['awards']['icon']);
 
 
-
         // Certificate
         if(isset($requestData['certificate'])){
             $data['course_certification_name_success'] = $requestData['certificate']['success_text'];
             $data['course_certification_name_failure'] = $requestData['certificate']['failure_text'];
             //$data['course_certification_event_title'] = $requestData['certificate']['event_title'];
             $data['course_certification_type'] = $requestData['certificate']['type'];
+            $data['course_certification_title'] = $requestData['certificate']['title'];
             $data['has_certificate'] = isset($requestData['certificate']['certification']) && $requestData['certificate']['certification'] == 'on';
 
             if(isset($requestData['certificate']['visible'])){
@@ -1426,6 +1435,7 @@ class EventController extends Controller
         if(isset($requestData['students'])){
             $data['course_students_number'] = $requestData['students']['count_start'];
             $data['course_students_text'] = $requestData['students']['text'];
+            $data['course_students_title'] = $requestData['students']['title'];
 
             if(isset($requestData['students']['visible'])){
 
@@ -1494,10 +1504,12 @@ class EventController extends Controller
 
         $infos->course_hours = $event_info['course_hours_hour'];
         $infos->course_hours_text = $event_info['course_hours_text'];
+        $infos->course_hours_title = $event_info['course_hours_title'];
         $infos->course_hours_visible = $event_info['course_hours_visible'];
         $infos->course_hours_icon = $event_info['course_hours_icon'];
 
         $infos->course_language = $event_info['course_language'];
+        $infos->course_language_title = $event_info['course_language_title'];
         $infos->course_language_visible = $event_info['course_language_visible'];
         $infos->course_language_icon = $event_info['course_language_icon'];
 
@@ -1512,6 +1524,7 @@ class EventController extends Controller
         $infos->course_delivery = $event_info['course_delivery'];
         $infos->course_delivery_icon = $event_info['course_delivery_icon'];
         $infos->course_delivery_text = $event_info['course_delivery_text'];
+        $infos->course_delivery_title = $event_info['course_delivery_title'];
         $infos->course_delivery_visible = $event_info['course_delivery_visible'];
 
         $infos->course_inclass_absences = isset($event_info['course_inclass_city_icon']) ? $event_info['course_inclass_absences'] : null;
@@ -1524,12 +1537,14 @@ class EventController extends Controller
         $infos->course_elearning_visible = isset($event_info['course_elearning_visible']) ? $event_info['course_elearning_visible'] : null;
         $infos->course_elearning_icon = isset($event_info['course_elearning_icon']) ? $event_info['course_elearning_icon'] : null;
         $infos->course_elearning_expiration = isset($event_info['course_elearning_expiration']) ? $event_info['course_elearning_expiration'] : null;
+        $infos->course_elearning_expiration_title = isset($event_info['course_elearning_title']) ? $event_info['course_elearning_title'] : null;
         $infos->course_elearning_text = isset($event_info['course_elearning_text']) ? $event_info['course_elearning_text'] : null;
 
 
         $infos->course_elearning_exam_visible = isset($event_info['course_elearning_exam_visible']) ? $event_info['course_elearning_exam_visible'] : null;
         $infos->course_elearning_exam_icon = isset($event_info['course_elearning_exam_icon']) ? $event_info['course_elearning_exam_icon'] : null;
         $infos->course_elearning_exam_text = isset($event_info['course_elearning_exam_text']) ? $event_info['course_elearning_exam_text'] : null;
+        $infos->course_elearning_exam_title = isset($event_info['course_elearning_exam_title']) ? $event_info['course_elearning_exam_title'] : null;
         $infos->course_elearning_exam = isset($event_info['course_elearning_exam']) ? true : false;
         $infos->course_elearning_exam_activate_months = isset($event_info['course_elearning_exam_activate_months']) ? $event_info['course_elearning_exam_activate_months'] : null;
 
@@ -1552,12 +1567,14 @@ class EventController extends Controller
         $infos->course_certification_name_failure = $event_info['course_certification_name_failure'];
         //$infos->course_certification_event_title = $event_info['course_certification_event_title'];
         $infos->course_certification_type = $event_info['course_certification_type'];
+        $infos->course_certification_title = $event_info['course_certification_title'];
         $infos->has_certificate = $event_info['has_certificate'];
         $infos->course_certification_visible = $event_info['course_certificate_visible'];
         $infos->course_certification_icon = $event_info['course_certificate_icon'];
 
         $infos->course_students_number = $event_info['course_students_number'];
         $infos->course_students_text = $event_info['course_students_text'];
+        $infos->course_students_title = $event_info['course_students_title'];
         $infos->course_students_visible = $event_info['course_students_visible'];
         $infos->course_students_icon = $event_info['course_students_icon'];
 

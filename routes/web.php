@@ -54,7 +54,7 @@ Route::group(['middleware' => 'auth.aboveauthor', 'prefix' => 'admin'], function
     Route::resource('delivery', 'DeliveryController', ['except' => ['show']]);
     Route::resource('menu', 'MenuController', ['except' => ['show']]);
 
-    Route::get('/user/indexnew', 'UserController@indexNew')->name('users.index');
+    //Route::get('/user/indexnew', 'UserController@indexNew')->name('users.index');
     // Download Consent PDF
     Route::get('/user/{user}/generateConsent', 'UserController@generateConsentPdf')->name('user.generate_consent_pdf');
 

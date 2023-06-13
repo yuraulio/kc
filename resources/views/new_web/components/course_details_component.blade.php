@@ -29,6 +29,9 @@
             @if(isset($info['hours']['icon']['link_status']) && $info['hours']['icon']['link_status'] == 'on' && $info['hours']['icon']['link'] != null) </a> @endif
         @endif
         <div class="info-text text-center">
+                @if($info['hours']['title'])
+                    <h5>{{ $info['hours']['title'] }}</h5>
+                @endif
                 <p>
                     {{  $info['hours']['hour'] }} {!!  $info['hours']['text'] !!}
                 </p>
@@ -50,6 +53,9 @@
             @if(isset($info['inclass']['dates']['icon']['link_status']) && $info['inclass']['dates']['icon']['link_status'] == 'on' && $info['inclass']['dates']['icon']['link'] != null) </a> @endif
         @endif
         <div class="info-text text-center">
+            @if($info['inclass']['dates']['title'])
+                <h5>{{ $info['inclass']['dates']['title'] }}</h5>
+            @endif
             <p>
                 {!!  $info['inclass']['dates']['text'] !!}
                 </br>
@@ -71,6 +77,9 @@
             @if(isset($info['elearning']['icon']['link_status']) && $info['elearning']['icon']['link_status'] == 'on' && $info['elearning']['icon']['link'] != null) </a> @endif
         @endif
         <div class="info-text text-center">
+            @if($info['elearning']['title'])
+                <h5>{{ $info['elearning']['title'] }}</h5>
+            @endif
             <p>
                 {{  $info['elearning']['expiration'] }} {!! (isset($info['elearning']['text']) && $info['elearning']['text'] ) ? $info['elearning']['text'] : '' !!}
                 </br>
@@ -93,6 +102,9 @@
             @if(isset($info['inclass']['days']['icon']['link_status']) && $info['inclass']['days']['icon']['link_status'] == 'on' && $info['inclass']['days']['icon']['link'] != null) </a> @endif
         @endif
         <div class="info-text text-center">
+            @if($info['inclass']['days']['title'])
+                <h5>{{ $info['inclass']['days']['title'] }}</h5>
+            @endif
             <p>
                 {!!  $info['inclass']['days']['text'] !!}
                 </br>
@@ -117,6 +129,9 @@
 
         @endif
         <div class="info-text text-center">
+            @if($info['language']['title'])
+                <h5>{{ $info['language']['title'] }}</h5>
+            @endif
             <p>
                 {!!  $info['language']['text'] !!}
                 </br>
@@ -145,6 +160,9 @@
             @if($event_delivery != '')
             <p>{{ $event_delivery }}</p>
             @endif
+            @if($info['delivery_info']['title'])
+                <h5>{{ $info['delivery_info']['title'] }}</h5>
+            @endif
             <p>
                 {!!  $info['delivery_info']['text'] !!}
                 </br>
@@ -163,6 +181,9 @@
         @if(isset($info['elearning']['exam']['icon']['link_status']) && $info['elearning']['exam']['icon']['link_status'] == 'on' && $info['elearning']['exam']['icon']['link'] != null) </a> @endif
 
         <div class="info-text text-center">
+            @if($info['elearning']['exam']['title'])
+                <h5>{{ $info['elearning']['exam']['title'] }}</h5>
+            @endif
             <p>
                 {!!  $info['elearning']['exam']['text'] !!}
                 </br>
@@ -189,6 +210,9 @@
 
         @endif
         <div class="info-text text-center">
+            @if($info['certificate']['title'])
+                <h5>{{ $info['certificate']['title'] }}</h5>
+            @endif
             <p>
                 {!!  $info['certificate']['type'] !!}
                 </br>
@@ -215,6 +239,9 @@
 
         @endif
         <div class="info-text text-center">
+            @if($info['students']['title'])
+                <h5>{{ $info['students']['title'] }}</h5>
+            @endif
             <p>
                 {{$sumStudents + (int)$info['students']['number']}} {!!  $info['students']['text'] !!}
                 </br>
@@ -240,11 +267,14 @@
             @if(isset($info['inclass']['times']['icon']['link_status']) && $info['inclass']['times']['icon']['link_status'] == 'on' && $info['inclass']['times']['icon']['link'] != null) </a> @endif
         @endif
         <div class="info-text text-center">
-            <p>
+            @if($info['inclass']['times']['title'])
+                <h5>{{ $info['inclass']['times']['title'] }}</h5>
+            @endif
+
                 {!!  $info['inclass']['times']['text'] !!}
                 </br>
 
-            </p>
+
         </div>
     </div>
 @endif

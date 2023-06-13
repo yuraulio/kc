@@ -29,11 +29,11 @@
             <div class="col">
                 <div class="card">
                     <div class="card-header">
-                        <div class="row align-items-center">
-                            <div class="col-8">
+                        <div class="row justify-content-between">
+                            <div class="col-auto">
                                 <h3 class="mb-0">{{ __('Users') }}</h3>
                             </div>
-                            <div class="col-4 text-right">
+                            <div class="col-auto">
 
                                 <form hidden id="submit-file" action="{{ route('users.file.import') }}" method="post" enctype="multipart/form-data">
                                     @csrf
@@ -398,7 +398,7 @@
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    url: "{{ route('users.index') }}",
+                    url: "{{ route('user.index') }}",
                     data: function(d) {
                         d.event = $('#col9_filter').val(),
                         d.status = $('#col7_filter').val(),
@@ -412,7 +412,7 @@
                 },
                 columns: [
 
-                    {data: 'image', name: 'image', orderable: false},
+                    {data: 'image', name: 'image', orderable: false, searchable: false},
                     {data: 'firstname', name: 'firstname'},
                     {data: 'lastname', name: 'lastname'},
                     {data: 'mobile', name: 'mobile'},
@@ -420,7 +420,7 @@
                     {data: 'kc_id', name: 'kc_id'},
                     {data: 'id', name: 'id'},
                     {data: 'role', name: 'role.name',title: 'role',orderable: false},
-                    {data: 'status', name: 'status',orderable: false},
+                    {data: 'status', name: 'status', orderable: false,searchable: false},
                     {data: 'created_at',name: 'created_at'},
 
                     {data: 'action', name: 'action', orderable: false, searchable: false},

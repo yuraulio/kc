@@ -309,7 +309,6 @@ class TopicController extends Controller
 
 
     public function orderTopic(Request $request){
-        //dd($request->all());
 
         $validatorArray['order'] = 'required';
         $validatorArray['category'] = 'required';
