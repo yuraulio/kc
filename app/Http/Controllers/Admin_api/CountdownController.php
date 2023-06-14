@@ -80,7 +80,11 @@ class CountdownController extends Controller
 
                 $countdown->delivery()->detach();
 
-                $countdown->delivery()->attach([$request->delivery['id']]);
+                foreach($request->delivery as $delivery){
+                    $countdown->delivery()->attach($delivery['id']);
+                }
+
+
 
             }else if($updated){
                 $countdown->delivery()->detach();

@@ -6,24 +6,25 @@
                 <h4 v-if="type != 'new'" class="page-title d-inline-block">Edit countdown</h4>
                 <h4 v-else class="page-title d-inline-block">New Countdown</h4>
 
-                <button v-if="type == 'new'" @click="add()" type="button" class="btn btn-soft-success waves-effect waves-light me-2 float-end" :disabled="loading"><i v-if="loading" class="fas fa-spinner fa-spin"></i> Create</button>
+                <button v-if="type == 'new'" @click="add()" type="button" class="btn btn-soft-success waves-effect waves-light me-2 float-end" :disabled="loading"><i v-if="loading" class="fas fa-spinner fa-spin"></i> Save</button>
                 <button v-if="type == 'edit'" :disabled="loading" @click="edit()" type="button" class="btn btn-soft-success waves-effect waves-light me-2 float-end"><i v-if="loading" class="fas fa-spinner fa-spin"></i> Save</button>
                 <a href="/countdown" type="button" class="btn btn-soft-secondary waves-effect waves-light me-2 float-end">Cancel</a>
             </div>
         </div>
 
         <div class="col-lg-9" >
-
             <template v-for="input in (type == 'edit' ? config.editInputs : config.addInputs)" >
                 <multiput
                     :key="input.key"
                     :keyput="input.key"
                     :label="input.label"
+                    :options="input.options"
                     :type="input.type"
                     :size="input.size"
                     :value="item[input.key]"
                     :existing-value="item[input.key]"
                     @inputed="inputed($event, input)"
+                    @selectAll="selectAll($event)"
                     :multi="input.multi"
                     :taggable="input.taggable"
                     :fetch="input.fetch"
@@ -31,6 +32,29 @@
                     :placeholder="input.placeholder"
                 >
                 </multiput>
+                <div v-if="input.key == 'should_visible'" class="row">
+                    <div class="col-12">
+                        <multidropdown
+                                title="Delivery"
+                                :multi="true"
+                                @updatevalue="update_delivery"
+                                :prop-value="delivery"
+                                :fetch="false"
+                                route="getDeliveries"
+                                :data="deliveries"
+                            ></multidropdown>
+
+                            <multidropdown
+                                title="Category"
+                                :multi="true"
+                                @updatevalue="update_category"
+                                :prop-value="category_value"
+                                :fetch="false"
+                                :data="categories"
+                            ></multidropdown>
+                    </div>
+
+                </div>
                 <ul v-if="errors && errors[input.key]" class="parsley-errors-list filled" id="parsley-id-7" aria-hidden="false">
                     <li class="parsley-required">{{ errors[input.key][0] }}</li>
                 </ul>
@@ -54,23 +78,7 @@
                     <div class="row">
                         <div class="col-xl-12">
 
-                            <multidropdown
-                                title="Delivery"
-                                :multi="false"
-                                @updatevalue="update_delivery"
-                                :prop-value="delivery"
-                                :fetch="true"
-                                route="getDeliveries"
-                            ></multidropdown>
 
-                            <multidropdown
-                                title="Category"
-                                :multi="true"
-                                @updatevalue="update_category"
-                                :prop-value="category_value"
-                                :fetch="true"
-                                route="getCategories"
-                            ></multidropdown>
 
                             <div :key="'ck'"  class="form-check form-switch mb-3" style="cursor: pointer">
                                 <input :key="'on'" @click="published = !published" :id="'cinput'" type="checkbox" class="form-check-input" name="color-scheme-mode" value="light" :for="'cinput'" :checked="published">
@@ -128,6 +136,8 @@ export default {
                 item: {},
                 published_from_value: null,
                 published_to_value: null,
+                categories: [],
+                deliveries: []
 
             }
         },
@@ -135,6 +145,29 @@ export default {
             inputed($event, key) {
                 this.$set(this.item, $event.key, $event.data);
 
+            },
+            selectAll($event){
+                // data for save
+                this.item.category = null
+                this.item.delivery = null
+
+
+
+
+                //data for selected render frontend
+                this.category_value = null
+                this.delivery = null
+
+                if($event.key == 'delivery'){
+                    this.item.delivery = this.deliveries
+                    this.delivery = this.deliveries
+
+                }else if($event.key == 'category'){
+                    this.item.category = this.categories
+                    this.category_value = this.categories
+
+                    console.log(this.item.category)
+                }
             },
             update_delivery(value = []) {
 
@@ -145,6 +178,7 @@ export default {
                 this.item.delivery = value;
             },
             update_category(value){
+
                 this.item.category = value;
                 // this.subcategory_value = [];
             },
@@ -155,14 +189,25 @@ export default {
             //     this.item.published_to = value;
             // },
             setCategories(data){
-
+                console.log('trig cat')
 
                 if(typeof(data.delivery) !== 'undefined' && data.delivery.length != 0){
 
-                    this.delivery = {
-                        id: data.delivery[0].id,
-                        title: data.delivery[0].name
-                    }
+                    let del = []
+
+                    data.delivery.forEach(function(delivery, index) {
+
+                        let obj = {
+                            id: delivery.id,
+                            title: delivery.name
+                        }
+                        del.push(obj);
+
+                    });
+
+                    this.delivery = del;
+
+
 
                 }
 
@@ -183,6 +228,46 @@ export default {
                     this.category_value = cat;
 
                 }
+
+                //this.selectRadio()
+            },
+            getCategories(){
+                axios
+                .get('/api/getCategories')
+                .then((response) => {
+
+                    if (response.status == 200){
+                        var data = response.data.data;
+
+                        //console.log('data fetch: ', data)
+                        this.categories = data
+
+                        this.selectRadio()
+                    }
+                })
+                .catch((error) => {
+                    console.log(error)
+                });
+
+
+            },
+            getDeliveries(){
+                axios
+                .get('/api/getDeliveries')
+                .then((response) => {
+
+                    if (response.status == 200){
+                        var data = response.data.data;
+
+                        this.deliveries = data
+
+                        this.selectRadio()
+
+                    }
+                })
+                .catch((error) => {
+                    console.log(error)
+                });
             },
             add(){
                 this.errors = null;
@@ -208,8 +293,8 @@ export default {
                 .then((response) => {
                     if (response.status == 201){
                         //this.$emit('refreshcategories');
-                        // this.$emit('created', response.data.data);
-                        // this.$emit('updatemode', 'list');
+                        //this.$emit('created', response.data.data);
+                        //this.$emit('updatemode', 'list');
                         this.$toast.success('Created Successfully!')
                         window.location="/countdown/" + response.data.data.id;
 
@@ -228,9 +313,9 @@ export default {
 
                 this.item.published = this.published
 
-                if(this.item.delivery !== undefined && this.item.delivery[0] !== undefined){
-                    this.item.delivery = this.item.delivery[0]
-                }
+                // if(this.item.delivery !== undefined && this.item.delivery[0] !== undefined){
+                //     this.item.delivery = this.item.delivery[0]
+                // }
 
                 axios
                     .patch('/api/' + this.route + '/' + this.id, this.item)
@@ -268,24 +353,51 @@ export default {
                         .catch((error) => {
                             console.log(error)
                         });
+
+
                 }
 
             },
+            selectRadio(){
+
+                if(this.item.category !== undefined){
+
+
+                    if(this.categories.length != 0 && this.item.category.length == this.categories.length){
+                        this.item['should_visible'] = 'category'
+
+                    }else if(this.deliveries.length != 0 && this.item.delivery.length == this.deliveries.length){
+
+                        this.item['should_visible'] = 'delivery'
+                    }
+                }
+            }
 
         },
         mounted() {
 
+            this.getDeliveries()
+            this.getCategories()
+
+
             if (this.data) {
+                console.log('trig data')
 
                 this.item = this.data
                 this.setCategories(this.data)
 
+
                 this.loader = false;
             } else {
+                console.log('trig mounten')
 
                 this.get()
 
             }
+
+
+
+
 
         },
         watch: {

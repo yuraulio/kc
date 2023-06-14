@@ -108,6 +108,23 @@
         <textarea :id="keyput" v-model="editorData" class="form-control" maxlength="10000" rows="3" placeholder=""></textarea>
     </div>
 
+    <div v-if="type == 'radio'" class="">
+        <label v-if="label" :for="keyput" class="form-label">{{ label }}</label>
+
+
+
+        <div v-if="options.length != 0">
+            <div class="row">
+
+                <div v-for="(val, index) in options" class="col-12 ml-2 mb-2">
+
+                    <input :checked="existingValue == val.key" @change="selectAll($event)" type="radio" :id="val.key" :name="keyput" :value="val.key">
+                    <label :for="val.key">{{ val.name }}</label><br>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div v-if="type == 'text_editor'" class="text-editor-input">
         <!--
         <label v-if="label" :for="keyput" class="form-label">{{ label }}</label>
@@ -230,6 +247,7 @@ export default {
             type: String,
             default: ''
         },
+        options: [],
         existingValue: {},
         title: {},
         route: {},
@@ -262,6 +280,9 @@ export default {
         };
     },
     methods: {
+        selectAll($event){
+            this.$emit('selectAll', { 'key': $event.target.value})
+        },
         setAltImg(event) {
 
             if(this.default_image){

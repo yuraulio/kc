@@ -1302,11 +1302,11 @@ class UserController extends Controller
 
         $data['transactions'] = [];
 
-        foreach($user->events_for_user_list as $key => $value){
+        foreach($data['user']['events_for_user_list'] as $key => $value){
 
             $user_id = $value->pivot->user_id;
             $event_id = $value->pivot->event_id;
-            $event = Event::with('certificates')->find($event_id);
+            $event = Event::with('certificates', 'tickets')->find($event_id);
 
             $ticket = $event->tickets()->wherePivot('event_id', '=', $event_id)->wherePivot('user_id', '=', $user_id)->first();
 

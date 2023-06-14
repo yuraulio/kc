@@ -6,6 +6,22 @@ const collectiveInputs = [
         "size": "col-lg-12"
     },
     {
+        "type": "radio",
+        "key": "should_visible",
+        "label": "This countdown should be visible in:",
+        "size": "col-lg-12",
+        "options": {
+            "1" : {
+                "name":"All courses of this category",
+                "key": 'category',
+            },
+            "2" : {
+                "name":"All courses delivered online or in a class",
+                "key": 'delivery'
+            }
+        }
+    },
+    {
         "type": "text_editor",
         "key": "content",
         "label": "Content",
