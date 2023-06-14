@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\SearchFilter;
 use App\Traits\PaginateTable;
-use App\Model\Delivery;
+use App\Model\Event;
 use App\Model\Category;
 
 class Countdown extends Model
@@ -27,9 +27,9 @@ class Countdown extends Model
         return $this->toArray();
     }
 
-    public function delivery()
+    public function events()
     {
-        return $this->belongsToMany(Delivery::class, 'cms_countdown_delivery', 'countdown_id', 'delivery_id');
+        return $this->belongsToMany(Event::class, 'cms_countdown_event', 'countdown_id', 'event_id');
     }
 
     public function category()

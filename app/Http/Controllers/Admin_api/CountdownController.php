@@ -76,18 +76,18 @@ class CountdownController extends Controller
 
             $countdown = new CountdownResource($countdown);
 
-            if($updated && !empty($request->delivery)){
+            if($updated && !empty($request->events)){
 
-                $countdown->delivery()->detach();
+                $countdown->events()->detach();
 
-                foreach($request->delivery as $delivery){
-                    $countdown->delivery()->attach($delivery['id']);
+                foreach($request->events as $event){
+                    $countdown->events()->attach($event['id']);
                 }
 
 
 
             }else if($updated){
-                $countdown->delivery()->detach();
+                $countdown->events()->detach();
             }
 
             if($updated && !empty($request->category)){
