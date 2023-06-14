@@ -113,7 +113,7 @@
                                 </div>
                             </div>
                         </div>
-                        <table class="table align-items-center table-flush"  id="datatable-basic45">
+                        <table style="width:100%" class="table align-items-center table-flush"  id="datatable-basic45">
                             <thead class="thead-light">
                                 <tr>
                                     <th scope="col">Photo</th>

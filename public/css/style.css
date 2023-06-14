@@ -23,6 +23,10 @@
     position: absolute;
 }
 
+#datatable-basic45_processing{
+    top: 4rem;
+}
+
 /* Event Edit New */
 
 #event_edit_form #input-status,

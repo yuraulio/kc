@@ -93,7 +93,7 @@
                                 @if(isset($lessons[$key]))
                                 @foreach($lessons[$key] as $key1 => $lesson)
                                 <tr id="{{$lesson['id']}}" class="topic_{{$topic->id}} lessons-list">
-                                <td><a class="edit_btn_topic1" href="#">{{ $lesson->title }}</td>
+                                <td><a class="edit_btn_topic1" href="javascript:void(0)">{{ $lesson->title }}</td>
                                 <?php //dd($instructors[$lesson->id]->first()); ?>
                                 <td id="inst_lesson_edit_{{$lesson['id']}}">
 

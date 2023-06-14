@@ -421,8 +421,8 @@
                                                     <div class="col-sm-12 col-md-6 col-lg-2">
 
                                                         <div class="custom-control custom-checkbox mb-3">
-                                                            <input class="custom-control-input" name="course[{{'delivery_info'}}][{{'visible'}}][{{'landing'}}]" id="input-delivery-landing" type="checkbox">
-                                                            <label class="custom-control-label" for="input-delivery-landing">Course landing page (summary)</label>
+                                                            <input class="custom-control-input" name="course[{{'delivery_info'}}][{{'visible'}}][{{'landing'}}]" id="input-delivery-landing1" type="checkbox">
+                                                            <label class="custom-control-label" for="input-delivery-landing1">Course landing page (summary)</label>
                                                         </div>
 
                                                     </div>

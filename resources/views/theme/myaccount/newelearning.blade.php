@@ -216,7 +216,7 @@
 
                                 ?>
 
-                              <li class="lesson {{$vimeoVideo[1]}} {{$lesson['id']}}" data-vimeoid="{{$vimeoVideo[1]}}" data-completed="{{isset($video_seen[$vimeoVideo[1]]) ? $video_seen[$vimeoVideo[1]]['seen'] : 0}}" data-link="{{$lesson['links']}}" data-note="{{$notesss[$vimeoVideo[1]]}}" id="{{$frame1}}">
+                              <li class="lesson {{$vimeoVideo[1]}} {{$lesson['id']}}" data-vimeoid="{{$vimeoVideo[1]}}" data-completed="{{isset($video_seen[$vimeoVideo[1]]) ? $video_seen[$vimeoVideo[1]]['seen'] : 0}}" data-link="{{$lesson['links']}}" id="{{$frame1}}">
 
                                 <a class="" href="javascript:void(0)" onclick="play_video('{{$path}}','{{$frame1}}','{video{{$lesson['id']}}}', '{{$lesson['id']}}')" tabindex="0">
                                     <?php
@@ -703,6 +703,8 @@
       <script>
          var prev_topicId = [];
 
+         let notes = @json($notesss);
+
          var note;
 
          var noteFocus = false;
@@ -727,15 +729,7 @@
           let courseName;
           let timeoutID = null;
 
-          function saveNoteAjax(vimeoId){
-            let note = $("#notes").val();
-            // let vimeoId = $('.isWatching').attr('class');
-            // vimeoId=vimeoId.replace(" ", "");
-
-            // vimeoId=vimeoId.replace("isWatching", "");
-            // vimeoId=vimeoId.replace("lesson", "");
-
-
+          function saveNoteAjax(){
 
             let event = $('.topics-list').attr('id');
 
@@ -745,24 +739,9 @@
                     },
                 type: 'PUT',
                 url: '/elearning/saveNote',
-                data:{'text':note,'vimeoId':vimeoId, 'event':event},
+                data:{'text':JSON.stringify(notes), 'event':event},
                 success: function(data) {
                     if(data){
-                        //$('#notes').val(data['text']);
-                        //console.log(data)
-
-                        let elemNote = $('.'+data['vimeoId']).find('a')[0]
-                        //console.log('elem note: ', elemNote)
-                        elemNote = $(elemNote).parent()
-                        $(elemNote).attr("data-note", data['text'])
-                        //$('.saveDone').removeClass('saveDone');
-
-                        let currentNoteTextarea = $('#notes').attr('data-vimeoid')
-
-                        if(currentNoteTextarea == vimeoId){
-                            $('#notes').val(data['text'])
-                        }
-
                         $('.saveDone').fadeIn();
 
 
@@ -777,87 +756,20 @@
             });
           }
 
-        //   $("#notes").change(function(){
-        //     console.log('test')
-        //   })
-
           $('#notes').bind( "input", function(e) {
+
+            notes[$(this).attr('data-vimeoid')] = $('#notes').val()
 
             if(e){
                 clearTimeout(timeoutID);
                 timeoutID = setTimeout(() => {
 
-                     // console.log('pre save')
-                     // console.log($(this))
-                     // console.log('exit save')
-
-                    saveNoteAjax($(this).attr('data-vimeoid'))
-
-
-                        // $('.mobile-search-modal.super-search').removeClass('search-finished');
-                        // $('.mobile-search-modal .search-result').fadeOut();
-                        // $.ajax({
-                        //     type: 'GET',
-                        //     cache: false,
-                        //     url: $('.mobile-search-modal.super-search').data('search-url'),
-                        //     data: {
-                        //         'q': keyword
-                        //     },
-                        //     success: res => {
-                        //         if (!res.error) {
-                        //             $('.mobile-search-modal .search-result').html(res.data.items);
-                        //             $('.mobile-search-modal.super-search').addClass('search-finished');
-                        //         } else {
-                        //             $('.mobile-search-modal .search-result').html(res.message);
-                        //         }
-                        //         $('.mobile-search-modal .search-result').fadeIn(500);
-                        //     },
-                        //     error: res => {
-                        //         $('.mobile-search-modal .search-result').html(res.responseText);
-                        //         $('.mobile-search-modal .search-result').fadeIn(500);
-                        //     }
-                        // });
+                    saveNoteAjax()
 
                 }, 2000);
             }
 
             });
-
-
-                    //   $(".save-button").click(function() {
-                    //        let note = $("#notes").val();
-                    //        let vimeoId = $('.isWatching').attr('class');
-                    //        vimeoId=vimeoId.replace(" ", "");
-
-                    //        vimeoId=vimeoId.replace("isWatching", "");
-                    //        vimeoId=vimeoId.replace("lesson", "");
-
-
-
-                    //        let event = $('.topics-list').attr('id');
-
-                    //        $.ajax({
-                    //        headers: {
-                    //                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    //              },
-                    //          type: 'PUT',
-                    //          url: '/elearning/saveNote',
-                    //          data:{'text':note,'vimeoId':vimeoId, 'event':event},
-                    //          success: function(data) {
-                    //                if(data){
-                    //                    $('#notes').val(data['text']);
-                    //                    $('.isWatching').data("note", data['text'])
-                    //                    $('.saveDone').removeClass('saveDone');
-                    //                }else{
-                    //                }
-                    //                //playVi = true;
-
-                    //          }
-                    //        });
-
-                    //    })
-
-
 
           function prevVideo(){
             let currTopic;
@@ -1061,11 +973,10 @@
 
                    $('#notes').attr('data-vimeoid', videoId)
                    //when load video load NOTES
-                   let videoNote = $('.'+videoId)[0]
-                   videoNote = $(videoNote).attr('data-note')
+                   let videoNote = notes[videoId];
+                   videoNote = videoNote.replace("||", "\n");
+                   $('#notes').val(videoNote)
 
-                   //let videoNote = notes[videoId];
-                   //videoNote = videoNote.replace("||", "\n");
                    array.push(id)
 
                    prev_topicId.push($('.topic.open .topic-info_title').data('topic-slug'))
@@ -1193,7 +1104,7 @@
 
              this.videoPlayers[frame].on('ended', function(ended) {
              if(ended['percent'] == 1){
-                saveNoteAjax(videoId)
+                saveNoteAjax()
                nextVideo();
                closeTopic()
                $('.isWatching').find('.lesson-progress').attr('src','/theme/assets/img/new/completed_lesson_icon.svg')
@@ -1366,9 +1277,11 @@
              videoPlayers[frame].loadVideo(video).then(function(id) {
 
 
-
-
                 $('#notes').attr('data-vimeoid', id)
+
+                let videoNote = notes[id];
+                videoNote = videoNote.replace("||", "\n");
+                $('#notes').val(videoNote)
 
                 let video_link = $('.isWatching').data('link')
 
@@ -1392,10 +1305,11 @@
                $( ".isWatching" ).parent().parent().addClass('open');
                $( ".isWatching" ).parent().css('display', 'block')
 
-                let videoNote = $('.'+id).attr('data-note')
-                videoNote = videoNote.replaceAll('||','\n');
-                //videoNote = videoNote.replace("||", "\n");
-                $('#notes').val(videoNote)
+                // let videoNote = $('.'+id).attr('data-note')
+                // videoNote = videoNote.replaceAll('||','\n');
+                // //videoNote = videoNote.replace("||", "\n");
+                // $('#notes').val(videoNote)
+
                 $('.status').addClass('saveDone');
 
                if($('.isWatching').data("completed") == 1){
@@ -1658,7 +1572,7 @@
                     $('.topic.open').children('.lessons-list').css('display','block')
                     scrollIsWatchingClass()
 
-            }, 2000 );
+            }, 3000 );
 
 
             $(window).resize(function(){

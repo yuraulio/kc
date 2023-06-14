@@ -1092,31 +1092,35 @@ class StudentController extends Controller
         $user = Auth::user();
         $user = User::find($user['id']);
 
+
+        $requestedNotes = json_decode(($request->text), true);
+
+
         //dd($user->statistic()->wherePivot('event_id', $request->event)->get());
         $notess = $user->statistic()->wherePivot('event_id', $request->event)->first();
         if($notess != ""){
             $notes = json_decode($notess->pivot['notes'],true);
             //dd($notes);
 
-            $vimeoKey = explode(' ',$request->vimeoId);
-            $vimeoKey = isset($vimeoKey[0]) ? $vimeoKey[0] : $key;
+            //$vimeoKey = explode(' ',$request->vimeoId);
+            //$vimeoKey = isset($vimeoKey[0]) ? $vimeoKey[0] : $key;
 
             foreach($notes as $key => $note){
-                if($key == $vimeoKey){
+                //if($key == $vimeoKey){
 
                     //dd($request->text);
                     //$note =  preg_replace( '/[^A-Za-z0-9\-]/', ' ',  $request->text );
                     //$note = preg_replace('/\s+/', ' ', $note);
                     //$note =  preg_replace( "/\r|\n/", "||", $request->text );
                     //dd(preg_replace( "/\r|\n/", "||", $request->text ));
-                    $notes[$key] = preg_replace( "/\r|\n/", "||", $request->text );
+                    $notes[$key] = preg_replace( "/\r|\n/", "||", $requestedNotes[$key] );
                     $notes[$key] = str_replace(['"',"'"], "", $notes[$key]);
                     $notes[$key] = str_replace(['\\'], "", $notes[$key]);
 
                     //dd($notes);
 
 
-                }
+                //}
             }
         }
 
@@ -1127,8 +1131,8 @@ class StudentController extends Controller
 
         return response()->json([
             'success' => true,
-            'text' => $request->text,
-            'vimeoId' =>$vimeoKey
+            'text' => $request->text
+            // 'vimeoId' =>$vimeoKey
         ]);
 
     }
