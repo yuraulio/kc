@@ -319,7 +319,7 @@ class UserController extends Controller
 
         }
 
-
+        $query->orderBy('id', 'desc');
 
         return $query;
     }
@@ -407,7 +407,6 @@ class UserController extends Controller
                     </div>';
                     })
                     ->rawColumns(['firstname', 'email', 'image', 'action'])
-                    //->orderColumns(['role'], '-:column $1')
 
                     ->make(true);
 
