@@ -82,14 +82,23 @@
                                                 <tr>
                                                   <td align="left" valign="top" class="r15-i nl2go-default-textstyle" style="color: #3b3f44; font-family: arial,helvetica,sans-serif; font-size: 16px; line-height: 1.5; padding-bottom: 15px; padding-top: 15px; text-align: left;">
                                                     <div>
+                                                        <h3 class="default-heading2" style="margin: 0; color: #1f2d3d; font-family: arial,helvetica,sans-serif; font-size: 28px;">
+                                                            <span style="font-family: Tahoma, geneva, sans-serif;">Your annual subscription will renew soon. </span>
+                                                        </h3>
                                                       <p style="margin: 0;">
-                                                        <span style="font-family: Tahoma, geneva, sans-serif;">Thanks for spending the year with us on our subscription. We remind you that your subscription plan to the {{$eventTitle}} is set to auto-renew on <strong>{{$expirationDate}}</strong>.  </span>
+                                                        <span style="font-family: Tahoma, geneva, sans-serif;">Thanks for spending a year with our {{$eventTitle}}. We hope you're enjoying all the latest updates. </span>
                                                       </p>
                                                       <br>
                                                       <p style="margin: 0;"></p>
                                                       <p style="margin: 0;">
-                                                        <span style="font-family: Tahoma, geneva, sans-serif;">­We encourage you to keep having full access to the course's updated videos, files and your personal notes for one more year. In case you want to cancel your subscription just visit your account and turn off the auto renewal.</span>
+                                                        <span style="font-family: Tahoma, geneva, sans-serif;">As you're an existing annual subscriber, your annual plan will automatically renew for another 12 months on <strong>{{$expirationDate}}</strong>. You’ll still pay the same current standard price of € {{$subscription_price}}, and it’ll be charged through your registered payment method. So, just sit back, relax, and continue learning: you don’t have to do a thing. </span>
                                                       </p>
+                                                      <br>
+                                                      <p style="margin: 0;"></p>
+                                                      <p style="margin: 0;">
+                                                        <span style="font-family: Tahoma, geneva, sans-serif;">If you do not want to continue your subscription, simply go to Account > My courses and switch your subscription to "OFF". You will still have access until the end of your current billing period. We are always here to help. If you have any questions, please contact us. </span>
+                                                      </p>
+
                                                     </div>
                                                   </td>
                                                 </tr>

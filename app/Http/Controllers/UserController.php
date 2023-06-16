@@ -319,7 +319,7 @@ class UserController extends Controller
 
         }
 
-        $query->orderBy('id', 'desc');
+        //$query->orderBy('id', 'desc');
 
         return $query;
     }
