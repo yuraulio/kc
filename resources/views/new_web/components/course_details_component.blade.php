@@ -53,7 +53,7 @@
             @if(isset($info['inclass']['dates']['icon']['link_status']) && $info['inclass']['dates']['icon']['link_status'] == 'on' && $info['inclass']['dates']['icon']['link'] != null) </a> @endif
         @endif
         <div class="info-text text-center">
-            @if($info['inclass']['dates']['title'])
+            @if(isset($info['inclass']['dates']['title']))
                 <h5>{{ $info['inclass']['dates']['title'] }}</h5>
             @endif
             <p>
@@ -77,7 +77,7 @@
             @if(isset($info['elearning']['icon']['link_status']) && $info['elearning']['icon']['link_status'] == 'on' && $info['elearning']['icon']['link'] != null) </a> @endif
         @endif
         <div class="info-text text-center">
-            @if($info['elearning']['title'])
+            @if(isset($info['elearning']['title']))
                 <h5>{{ $info['elearning']['title'] }}</h5>
             @endif
             <p>
@@ -102,7 +102,7 @@
             @if(isset($info['inclass']['days']['icon']['link_status']) && $info['inclass']['days']['icon']['link_status'] == 'on' && $info['inclass']['days']['icon']['link'] != null) </a> @endif
         @endif
         <div class="info-text text-center">
-            @if($info['inclass']['days']['title'])
+            @if(isset($info['inclass']['days']['title']))
                 <h5>{{ $info['inclass']['days']['title'] }}</h5>
             @endif
             <p>
@@ -129,7 +129,7 @@
 
         @endif
         <div class="info-text text-center">
-            @if($info['language']['title'])
+            @if(isset($info['language']['title']))
                 <h5>{{ $info['language']['title'] }}</h5>
             @endif
             <p>
@@ -160,7 +160,7 @@
             @if($event_delivery != '')
             <p>{{ $event_delivery }}</p>
             @endif
-            @if($info['delivery_info']['title'])
+            @if(isset($info['delivery_info']['title']))
                 <h5>{{ $info['delivery_info']['title'] }}</h5>
             @endif
             <p>
@@ -181,7 +181,7 @@
         @if(isset($info['elearning']['exam']['icon']['link_status']) && $info['elearning']['exam']['icon']['link_status'] == 'on' && $info['elearning']['exam']['icon']['link'] != null) </a> @endif
 
         <div class="info-text text-center">
-            @if($info['elearning']['exam']['title'])
+            @if(isset($info['elearning']['exam']['title']))
                 <h5>{{ $info['elearning']['exam']['title'] }}</h5>
             @endif
             <p>
@@ -210,7 +210,7 @@
 
         @endif
         <div class="info-text text-center">
-            @if($info['certificate']['title'])
+            @if(isset($info['certificate']['title']))
                 <h5>{{ $info['certificate']['title'] }}</h5>
             @endif
             <p>
@@ -239,7 +239,7 @@
 
         @endif
         <div class="info-text text-center">
-            @if($info['students']['title'])
+            @if(isset($info['students']['title']))
                 <h5>{{ $info['students']['title'] }}</h5>
             @endif
             <p>
@@ -267,7 +267,7 @@
             @if(isset($info['inclass']['times']['icon']['link_status']) && $info['inclass']['times']['icon']['link_status'] == 'on' && $info['inclass']['times']['icon']['link'] != null) </a> @endif
         @endif
         <div class="info-text text-center">
-            @if($info['inclass']['times']['title'])
+            @if(isset($info['inclass']['times']['title']))
                 <h5>{{ $info['inclass']['times']['title'] }}</h5>
             @endif
 

@@ -43,7 +43,7 @@ class CronjobsController extends Controller
             $events = $student->events()->wherePivot('comment', 'LIKE','%enroll from%')->get();
 
             foreach($events as $event){
-                
+
                 if(!$event->pivot->expiration){
                     continue;
                 }
