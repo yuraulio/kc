@@ -114,7 +114,7 @@ Vue.use(VueClipboard)
 
 if($("#app").length > 0) {
     new Vue({
-        el: '#app'
+        el: '#app',
     })
 }
 

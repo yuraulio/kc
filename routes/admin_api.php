@@ -59,7 +59,9 @@ Route::domain(env('PREFIX_NEW_ADMIN_DOMAIN_URL') . env('APP_DOMAIN'))->group(fun
         Route::get('getCategories', ['App\Http\Controllers\Admin_api\CategoryEventController', 'getList']);
 
         // Delivery
-        Route::get('getDeliveries', ['App\Http\Controllers\Admin_api\DeliveryController', 'getList']);
+        //Route::get('getDeliveries', ['App\Http\Controllers\Admin_api\DeliveryController', 'getList']);
+        // Event
+        Route::get('getEventsList', ['App\Http\Controllers\Admin_api\EventController', 'getList']);
 
         // pages
         Route::post('pages/deleteMultiple', [PagesController::class, 'deleteMultiple']);

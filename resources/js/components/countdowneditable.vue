@@ -30,18 +30,19 @@
                     :fetch="input.fetch"
                     :route="input.route"
                     :placeholder="input.placeholder"
+                    ref="input"
                 >
                 </multiput>
                 <div v-if="input.key == 'should_visible'" class="row">
                     <div class="col-12">
                         <multidropdown
-                                title="Delivery"
+                                title="Event"
                                 :multi="true"
-                                @updatevalue="update_delivery"
-                                :prop-value="delivery"
+                                @updatevalue="update_event"
+                                :prop-value="event"
                                 :fetch="false"
-                                route="getDeliveries"
-                                :data="deliveries"
+                                route="getEvents"
+                                :data="events"
                             ></multidropdown>
 
                             <multidropdown
@@ -123,8 +124,9 @@ export default {
             config: {}
         },
         data() {
+            // event, category_value einai oi timew toy countdown pou einai assigned
             return {
-                delivery: null,
+                event: null,
                 category_value: [],
                 errors: null,
                 test: null,
@@ -137,7 +139,7 @@ export default {
                 published_from_value: null,
                 published_to_value: null,
                 categories: [],
-                deliveries: []
+                events: [],
 
             }
         },
@@ -147,40 +149,43 @@ export default {
 
             },
             selectAll($event){
-                // data for save
-                this.item.category = null
-                this.item.delivery = null
+                    // data for save
+                    this.item.category = null
+                    this.item.event = null
+
+
+                    //data for selected render frontend
+                    this.category_value = null
+                    this.event = null
+
+                    if($event.key == 'event'){
+                        this.item.event = this.events
+                        this.event = this.events
+
+                    }else if($event.key == 'category'){
+                        this.item.category = this.categories
+                        this.category_value = this.categories
+                    }
 
 
 
 
-                //data for selected render frontend
-                this.category_value = null
-                this.delivery = null
-
-                if($event.key == 'delivery'){
-                    this.item.delivery = this.deliveries
-                    this.delivery = this.deliveries
-
-                }else if($event.key == 'category'){
-                    this.item.category = this.categories
-                    this.category_value = this.categories
-
-                    console.log(this.item.category)
-                }
             },
-            update_delivery(value = []) {
+            update_event(value = []) {
 
                 if(value == null){
                     value = []
                 }
 
-                this.item.delivery = value;
+                this.item.event = value;
+
+                this.selectRadio()
             },
             update_category(value){
 
                 this.item.category = value;
                 // this.subcategory_value = [];
+                this.selectRadio()
             },
             // update_published_from(value){
             //     this.item.published_from = value;
@@ -189,25 +194,22 @@ export default {
             //     this.item.published_to = value;
             // },
             setCategories(data){
-                console.log('trig cat')
 
-                if(typeof(data.delivery) !== 'undefined' && data.delivery.length != 0){
+                if(typeof(data.event) !== 'undefined' && data.event.length != 0){
 
                     let del = []
 
-                    data.delivery.forEach(function(delivery, index) {
+                    data.event.forEach(function(event, index) {
 
                         let obj = {
-                            id: delivery.id,
-                            title: delivery.name
+                            id: event.id,
+                            title: event.title
                         }
                         del.push(obj);
 
                     });
 
-                    this.delivery = del;
-
-
+                    this.event = del;
 
                 }
 
@@ -251,15 +253,15 @@ export default {
 
 
             },
-            getDeliveries(){
+            getEvents(){
                 axios
-                .get('/api/getDeliveries')
+                .get('/api/getEventsList')
                 .then((response) => {
 
                     if (response.status == 200){
                         var data = response.data.data;
 
-                        this.deliveries = data
+                        this.events = data
 
                         this.selectRadio()
 
@@ -269,7 +271,9 @@ export default {
                     console.log(error)
                 });
             },
+
             add(){
+
                 this.errors = null;
                 this.loading = true;
                 axios
@@ -283,7 +287,7 @@ export default {
                         published_to: this.item.published_to,
                         countdown_to: this.item.countdown_to,
                         published: this.published,
-                        delivery: this.item.delivery,
+                        event: this.item.event,
                         category: this.item.category,
                         button_status: this.item.button_status ? this.item.button_status : this.button_status,
                         button_title: this.item.button_title
@@ -292,11 +296,15 @@ export default {
                 )
                 .then((response) => {
                     if (response.status == 201){
-                        //this.$emit('refreshcategories');
-                        //this.$emit('created', response.data.data);
-                        //this.$emit('updatemode', 'list');
+                        this.item = { content:''}
+
                         this.$toast.success('Created Successfully!')
-                        window.location="/countdown/" + response.data.data.id;
+
+                        this.config.addInputs = {}
+
+                        setTimeout(() =>{
+                            window.location.href="/countdown/" + response.data.data.id;
+                        }, 300);
 
                     }
                     this.loading = false;
@@ -306,15 +314,20 @@ export default {
                     this.errors = error.response.data.errors;
                     this.loading = false;
                     this.$toast.error("Failed to create. " + this.errors[Object.keys(this.errors)[0]]);
+                })
+                .finally(() => {
+
+
                 });
             },
 
             edit() {
+                this.loading = true;
 
                 this.item.published = this.published
 
-                // if(this.item.delivery !== undefined && this.item.delivery[0] !== undefined){
-                //     this.item.delivery = this.item.delivery[0]
+                // if(this.item.event !== undefined && this.item.event[0] !== undefined){
+                //     this.item.event = this.item.event[0]
                 // }
 
                 axios
@@ -324,6 +337,7 @@ export default {
                             this.route == 'categories' ? this.$emit('edited', response.data) : this.$emit('refreshcategories');
                             // this.$emit('updatemode', 'list');
                             this.$toast.success('Saved Successfully!');
+
                             this.loading = false;
                         }
                     })
@@ -360,28 +374,32 @@ export default {
             },
             selectRadio(){
 
-                if(this.item.category !== undefined){
+                if(this.item.category !== undefined || this.event.category !== undefined){
 
 
                     if(this.categories.length != 0 && this.item.category.length == this.categories.length){
                         this.item['should_visible'] = 'category'
+                        this.$refs.input[1].existingValue = 'category'
 
-                    }else if(this.deliveries.length != 0 && this.item.delivery.length == this.deliveries.length){
+                    }else if(this.events !== undefined && this.events.length != 0 && this.item.event != null && this.item.event.length == this.events.length){
 
-                        this.item['should_visible'] = 'delivery'
+                        this.item['should_visible'] = 'event'
+                        this.$refs.input[1].existingValue = 'event'
+                    }else{
+                        this.$refs.input[1].existingValue = undefined
+
                     }
                 }
-            }
+            },
 
         },
         mounted() {
 
-            this.getDeliveries()
+            this.getEvents()
             this.getCategories()
 
 
             if (this.data) {
-                console.log('trig data')
 
                 this.item = this.data
                 this.setCategories(this.data)
@@ -389,15 +407,10 @@ export default {
 
                 this.loader = false;
             } else {
-                console.log('trig mounten')
 
                 this.get()
 
             }
-
-
-
-
 
         },
         watch: {

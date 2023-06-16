@@ -76,11 +76,11 @@ class CountdownController extends Controller
 
             $countdown = new CountdownResource($countdown);
 
-            if($updated && !empty($request->events)){
+            if($updated && !empty($request->event)){
 
                 $countdown->events()->detach();
 
-                foreach($request->events as $event){
+                foreach($request->event as $event){
                     $countdown->events()->attach($event['id']);
                 }
 
@@ -152,9 +152,11 @@ class CountdownController extends Controller
 
             $countdown = new CountdownResource($countdown);
 
-            if($stored && isset($request->delivery) && !empty($request->delivery)){
+            if($stored && isset($request->event) && !empty($request->event)){
 
-                $countdown->delivery()->attach([$request->delivery['id']]);
+                foreach($request->event as $event){
+                    $countdown->events()->attach($event['id']);
+                }
 
             }
 
@@ -186,7 +188,7 @@ class CountdownController extends Controller
 
             $this->authorize('delete', $countdown, Auth::user());
 
-            $countdown->delivery()->detach();
+            $countdown->events()->detach();
             $countdown->category()->detach();
 
             $countdown->delete();

@@ -17,7 +17,7 @@ const collectiveInputs = [
             },
             "2" : {
                 "name":"All courses delivered online or in a class",
-                "key": 'delivery'
+                "key": 'event'
             }
         }
     },

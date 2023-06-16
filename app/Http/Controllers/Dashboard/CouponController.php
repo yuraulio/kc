@@ -9,13 +9,20 @@ use App\Model\Coupon;
 
 class CouponController extends Controller
 {
-    private function getEvents($view_tpl = null){
+    // private function getEvents($view_tpl = null){
 
-        if(!$view_tpl){
-            $events =  Event::where('published',true)->get();
-        }else{
-            $events = Event::where('view_tpl',$view_tpl)->where('published',true)->get();
-        }
+    //     if(!$view_tpl){
+    //         $events =  Event::where('published',true)->get();
+    //     }else{
+    //         $events = Event::where('view_tpl',$view_tpl)->where('published',true)->get();
+    //     }
+
+    //     return $events;
+    // }
+
+    private function getEvents(){
+
+        $events =  Event::where('published',true)->where('status', 0)->get();
 
         return $events;
     }
@@ -32,7 +39,7 @@ class CouponController extends Controller
 
         $coupon = new Coupon;
 
-        $data['events'] = $this->getEvents('elearning_event');
+        $data['events'] = $this->getEvents();
         $data['coupon'] = $coupon;
         $data['event_coupons'] = $coupon->event->pluck('id')->toArray();
 
@@ -63,7 +70,7 @@ class CouponController extends Controller
 
     public function edit(Coupon $coupon){
 
-        $data['events'] = $this->getEvents('elearning_event');
+        $data['events'] = $this->getEvents();
         $data['coupon'] = $coupon;
         $data['event_coupons'] = $coupon->event->pluck('id')->toArray();
 

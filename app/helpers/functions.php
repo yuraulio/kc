@@ -326,7 +326,7 @@ if(!function_exists('get_countdowns')){
     function get_countdowns($event){
 
         //$countdowns = $event->delivery->first()->countdown()->where('published_from', '>=', date('Y-m-d'))->where('published_to', '=', date('Y-m-d'))->where('countdown_from', '>=', date('Y-m-d H:s'))->where('countdown_to', '<=', date('Y-m-d H:s'))->get();
-        $countdowns = $event->delivery->first() ? $event->delivery->first()->countdown()
+        $countdowns = $event->countdown()->first() ? $event->countdown()
                         ->where('published', true)
                         // ->where('published_from', '<=', date('Y-m-d'))
                         // ->where('published_to', '>=', date('Y-m-d'))

@@ -71,7 +71,7 @@
         "vue-nestable": "^2.6.0",
         "vue-notif": "^2.0.0",
         "vue-picture-swipe": "^2.1.0",
-        "vue-router": "^4.2.2",
+        "vue-router": "^3.6.5",
         "vue-scrollto": "^2.20.0",
         "vue-simple-alert": "^1.1.1",
         "vue-tippy": "^2.1.3",

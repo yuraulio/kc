@@ -36,6 +36,7 @@ use App\Model\WaitingList;
 use App\Model\EventInfo;
 use App\Notifications\CertificateAvaillable;
 use Carbon\Carbon;
+use App\Model\Admin\Countdown;
 
 class Event extends Model
 {
@@ -1246,6 +1247,11 @@ class Event extends Model
 
         return $accessMonths;
 
+    }
+
+    public function countdown()
+    {
+        return $this->belongsToMany(Countdown::class, 'cms_countdown_event');
     }
 
 
