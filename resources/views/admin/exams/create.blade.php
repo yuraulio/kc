@@ -49,6 +49,10 @@
           <div class="tab-pane fade show active" id="settings" role="tabpanel" aria-labelledby="tabs-icons-text-1-tab">
              <div class="row">
                 <div class="col-xl-12 order-xl-1">
+                <form hidden id="submit-file" action="{{ route('exam.questions.import') }}" method="post" enctype="multipart/form-data">
+                    @csrf
+                    <input id="file-input" name="file" type="file" class="btn btn-sm btn-primary"  accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" value="{{ __('Import Testimonials From file') }}" style="display: none;">
+                </form>
                    <div class="card-body">
                       @if($edit)
                       <form method="post" action="{{ route('exams.update',$exam->id) }}" autocomplete="off"
@@ -591,6 +595,11 @@
     <script src="{{ asset('js/sortable/Sortable.js') }}"></script>
     <script>
        $(document).ready(function(){
+
+            $("#file-input").change(function(){
+                $("#submit-file").submit();
+            })
+
            $(".checkboxes").each(function( ) {
                if($(this).is(':checked')){
                    $(this).val(1)
@@ -1142,7 +1151,29 @@
            questionOrder();
            var t = $('#datatable-basic6').DataTable( {
                "ordering": false,
-               "paging": false
+               "paging": false,
+               dom: 'Bfltip',
+                buttons: [
+                    {
+                        className: 'btn btn-sm btn-primary',
+                        text: "<a id='download-sample' href='javascript:void(0)' class=''/>{{ __('Sample File') }}</a>",
+                        action: function ( e, dt, node, config ) {
+
+                            // $('#myTable').DataTable().ajax.reload();
+                        },
+                        titleAttr: 'Refresh Log'
+                    },
+                    {
+                        className: 'btn btn-sm btn-primary',
+                        text: "<a id='import-from-file' href='javascript:void(0)' class=''/>{{ __('Import Questions from file') }}</a>",
+                        action: function ( e, dt, node, config ) {
+
+                           // $('#myTable').DataTable().ajax.reload();
+                           $("#file-input").trigger('click');
+                        },
+                        titleAttr: 'Refresh Log'
+                    }
+                ],
            });
 
            t.on('order.dt search.dt', function () {

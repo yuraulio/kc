@@ -9,6 +9,40 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\ExamRequest;
 use App\Model\ExamResult;
 use App\Model\ExamSyncData;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use Validator;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Reader\IReadFilter;
+use ZipArchive;
+
+class ChunkReadFilter implements IReadFilter
+{
+    private $startRow = 0;
+
+    private $endRow = 0;
+
+    /**
+     * Set the list of rows that we want to read.
+     *
+     * @param mixed $startRow
+     * @param mixed $chunkSize
+     */
+    public function setRows($startRow, $chunkSize): void
+    {
+        $this->startRow = $startRow;
+        $this->endRow = $startRow + $chunkSize;
+    }
+
+    public function readCell($columnAddress, $row, $worksheetName = '')
+    {
+        //  Only read the heading row, and the rows that are configured in $this->_startRow and $this->_endRow
+        if (($row == 1) || ($row >= $this->startRow && $row < $this->endRow)) {
+            return true;
+        }
+
+        return false;
+    }
+}
 
 class ExamController extends Controller
 {
@@ -367,6 +401,58 @@ class ExamController extends Controller
             'averageHour' => $averageHour,
             'averageScore' => $averageScore
             ]);
+
+    }
+
+    public function importFromFile(Request $request){
+
+        $error_msg = '';
+
+        $validator = Validator::make(request()->all(), [
+            'file' => 'required|mimes:xlsx,xls|max:2048'
+        ]);
+
+        if ($validator->fails()) {
+            return back()->withErrors('Upload a valid csv file!');
+        }
+
+        $file = $request->file('file');
+
+        if($file){
+
+            $filename = $file->getClientOriginalName();
+            $tempPath = $file->getRealPath();
+            //dd($tempPath);
+            $extension = explode('.',$filename)[1];
+
+
+            $reader = IOFactory::createReader(ucfirst($extension));
+            // Define how many rows we want to read for each "chunk"
+            $chunkSize = 2048;
+            // Create a new Instance of our Read Filter
+            $chunkFilter = new ChunkReadFilter();
+
+            // Tell the Reader that we want to use the Read Filter that we've Instantiated
+            $reader->setReadFilter($chunkFilter);
+
+            // Loop to read our worksheet in "chunk size" blocks
+            for ($startRow = 2; $startRow <= 240; $startRow += $chunkSize) {
+                // Tell the Read Filter, the limits on which rows we want to read this iteration
+                $chunkFilter->setRows($startRow, $chunkSize);
+                // Load only the rows that match our filter from $inputFileName to a PhpSpreadsheet Object
+                $spreadsheet = $reader->load($tempPath);
+
+                // Do some processing here
+
+                $sheetData = $spreadsheet->getActiveSheet()->toArray(null, true, true, true);
+
+            }
+
+            if($sheetData){
+                dd($sheetData);
+            }
+
+        }
 
     }
 
