@@ -141,8 +141,8 @@
 }
 
 #chatbase-bubble-button{
-    bottom: 0.5rem;
-    right: 4rem;
+    bottom: 0.5rem !important;
+    right: 4rem !important;
 }
 
 #access-student {

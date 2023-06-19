@@ -786,7 +786,8 @@ class HomeController extends Controller
             $topicDescription[$key] = $topic['summary'];
         }
         if(!$data['content']->is_inclass_course()){
-            uasort($data['eventtopics'], fn($a, $b) => strcmp($a['priority'], $b['priority']));
+            array_multisort(array_column($data['eventtopics'],'priority'), SORT_ASC, $data['eventtopics']);
+            //uasort($data['eventtopics'], fn($a, $b) => strcmp($a['priority'], $b['priority']));
         }
 
         $data['eventorganisers']=array();

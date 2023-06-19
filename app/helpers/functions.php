@@ -561,6 +561,9 @@ if (!function_exists('get_image')){
 
         // if object image
         if($version){
+            if(strpos($media['path'], '//')){
+                $media['path'] = str_replace('//','/',$media['path']);
+            }
 
             $image = isset($media['name']) ? $media['path']  . $media['name'] : '';
 
@@ -584,6 +587,10 @@ if (!function_exists('get_image')){
         }
 
         if(!$version){
+            if(strpos($media['path'], '//')){
+                $media['path'] = str_replace('//','/',$media['path']);
+            }
+           
             if(file_exists(public_path('/')   .$media['path'] . $media['name'] . '.webp') && support_webp()){
                 return $media['path'] . $media['name'] . '.webp';
             }
