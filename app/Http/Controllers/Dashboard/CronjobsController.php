@@ -627,6 +627,10 @@ class CronjobsController extends Controller
                 continue;
             }
 
+            if(!$invoiceUser->transaction->first()){
+                continue;
+            }
+
             //dd($invoiceUser);
             $date = date_create($invoiceUser->date);
             $today = date_create( date('Y/m/d'));
