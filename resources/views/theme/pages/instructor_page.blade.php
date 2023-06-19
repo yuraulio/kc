@@ -51,7 +51,7 @@
                                         $field2 = str_replace ( "https://www.", "", $field2 );
                                         $field2 = str_replace ( "https://.", "", $field2 );
                                         $field2 = str_replace ( "http://www.", "", $field2 );
-                                        
+
                                     }*/
 
                                     $field2 = $content['company'];
@@ -77,7 +77,6 @@
                             </ul>
                         </div><!-- ./instructor-area -->
                         @endif
-
                         @if(isset($instructorEvents) && count($instructorEvents) > 0)
 
                             <div class="instructor-area instructor-courses">

@@ -11,6 +11,17 @@
                 {{ __('') }}
             @endslot
 
+            @slot('buttons')
+                <form hidden id="submit-file" action="{{ route('testimonials.file.import') }}" method="post" enctype="multipart/form-data">
+                    @csrf
+                    <input id="file-input" name="file" type="file" class="btn btn-sm btn-outline-success custom-btn-breadcrum"  accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" value="{{ __('Import Testimonials From file') }}" style="display: none;">
+                </form>
+
+                <a id="download-sample" href="javascript:void(0)" class="btn btn-sm btn-outline-success custom-btn-breadcrum">{{ __('Sample File') }}</a>
+                <a id="import-from-file" href="javascript:void(0)" class="btn btn-sm btn-outline-success custom-btn-breadcrum">{{ __('Import Testimonials From file') }}</a>
+                <a href="{{ route('testimonials.create') }}" class="btn btn-sm btn-outline-success custom-btn-breadcrum">{{ __('Add Testimonial') }}</a>
+            @endslot
+
             <li class="breadcrumb-item"><a href="{{ route('testimonials.index') }}">{{ __('Testimonials Management') }}</a></li>
             <li class="breadcrumb-item active" aria-current="page">{{ __('List') }}</li>
         @endcomponent
@@ -28,14 +39,7 @@
 
                             <div class="col-4 text-right">
 
-                                <form hidden id="submit-file" action="{{ route('testimonials.file.import') }}" method="post" enctype="multipart/form-data">
-                                    @csrf
-                                    <input id="file-input" name="file" type="file" class="btn btn-sm btn-primary"  accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" value="{{ __('Import Testimonials From file') }}" style="display: none;">
-                                </form>
 
-                                <a id="download-sample" href="javascript:void(0)" class="btn btn-sm btn-primary">{{ __('Sample File') }}</a>
-                                <a id="import-from-file" href="javascript:void(0)" class="btn btn-sm btn-primary">{{ __('Import Testimonials From file') }}</a>
-                                <a href="{{ route('testimonials.create') }}" class="btn btn-sm btn-primary">{{ __('Add Testimonial') }}</a>
                             </div>
                         </div>
                     </div>

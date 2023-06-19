@@ -49,7 +49,7 @@
           <div class="tab-pane fade show active" id="settings" role="tabpanel" aria-labelledby="tabs-icons-text-1-tab">
              <div class="row">
                 <div class="col-xl-12 order-xl-1">
-                <form hidden id="submit-file" action="{{ route('exam.questions.import') }}" method="post" enctype="multipart/form-data">
+                <form hidden id="submit-file" action="{{ route('exam.questions.import', ['id'=>$exam->id]) }}" method="post" enctype="multipart/form-data">
                     @csrf
                     <input id="file-input" name="file" type="file" class="btn btn-sm btn-primary"  accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" value="{{ __('Import Testimonials From file') }}" style="display: none;">
                 </form>
@@ -229,7 +229,7 @@
                    <div id="questions-list" class="collapse" aria-labelledby="questions-list" data-parent="#accordionExample">
                       <div class="card-body">
                          <div class="table-responsive py-4">
-                            <table class="table align-items-center table-flush"  id="datatable-basic6">
+                            <table class="table align-items-center table-flush" style="width:100%" id="datatable-basic6">
                                <thead class="thead-light">
                                   <tr>
                                      <th scope="col">{{ __('No') }}</th>
@@ -243,7 +243,7 @@
                                   <tr id="question-{{$key}}" data-id="{{$key}}" class="question-list">
                                      <td class="sortable-number"></td>
                                      <td>
-                                     <span>{!! $question['question'] !!}</span>
+                                        <span>{!! $question['question'] !!}</span>
                                      </td>
                                      <td class="text-right">
                                         <div class="dropdown">
@@ -576,6 +576,21 @@
     <script src="{{ asset('assets/vendor/bootstrap-datetimepicker.js') }}"></script>
     <script type="text/javascript">
         $(function () {
+
+
+
+            const url = new URL(window.location.href);
+
+            console.log(url.searchParams.get('from_import'))
+
+            if(url.searchParams.get('from_import') != null){
+                $('#tabs-icons-text-2-tab').click()
+                $('#questions-list').collapse()
+            }
+
+
+
+
             $('#datetimepicker1').datetimepicker({
               icons: {
                 time: "fa fa-clock",
@@ -1159,9 +1174,9 @@
                         text: "<a id='download-sample' href='javascript:void(0)' class=''/>{{ __('Sample File') }}</a>",
                         action: function ( e, dt, node, config ) {
 
-                            // $('#myTable').DataTable().ajax.reload();
+                            window.location = '/import/import_exam_question_sample.xlsx'
                         },
-                        titleAttr: 'Refresh Log'
+                        titleAttr: 'Download Sample File'
                     },
                     {
                         className: 'btn btn-sm btn-primary',
@@ -1171,7 +1186,7 @@
                            // $('#myTable').DataTable().ajax.reload();
                            $("#file-input").trigger('click');
                         },
-                        titleAttr: 'Refresh Log'
+                        titleAttr: 'Upload Import File'
                     }
                 ],
            });

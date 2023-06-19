@@ -138,7 +138,7 @@
                                         </div>
                                 </div>
 
-                                <div class="form-group col-sm-12 col-md-6 col-lg-4">
+                                <div class="form-group col-12">
 
                                     <!-- anto's editor -->
                                     <input class="hidden" id="input-hours-text" name="course[{{'hours'}}][{{'text'}}]" value="{{ old('hours_text', (isset($info['hours']['text']) && $info['hours']['text'] != null) ? $info['hours']['text'] : '' ) }}"/>
@@ -261,7 +261,7 @@
 
                             </div>
                             <div class="row">
-                                <div class="form-group col-sm-12 col-md-6 col-lg-4">
+                                <div class="form-group col-12">
                                      <!-- anto's editor -->
                                      <input class="hidden" id="input-language" name="course[{{'language'}}][{{'text'}}]" value="{{ old('language_text', (isset($info['language']['text']) && $info['certificate']['messages']['success'] != null) ? $info['certificate']['messages']['success'] : '') }}"/>
                                     <?php $data = isset($info['language']['text']) && $info['language']['text'] != null ? $info['language']['text'] : '' ?>
@@ -399,7 +399,7 @@
 
                             </div>
                             <div class="row">
-                                <div class="col-9 col-md-6 col-lg-4">
+                                <div class="col-12 form-group">
 
                                     <!-- anto's editor -->
                                     <input class="hidden" id="input-delivery-text" name="course[{{'delivery_info'}}][{{'text'}}]" value=""/>
@@ -483,7 +483,7 @@
 
 
                                     </div>
-                                    <div class="row ">
+                                    <div class="row form-group">
 
                                         <div class="col-9 col-md-auto col-lg-auto align-self-center">
                                             <label class="form-control-label">{{ __('(course_inclass_dates)') }}</label>
@@ -523,7 +523,7 @@
 
                                     </div>
                                     <div class="row">
-                                        <div class="col-9 col-md-6 col-lg-4">
+                                        <div class="col-12 form-group">
 
                                             <!-- anto's editor -->
                                             <input class="hidden" id="input-dates" name="course[{{'delivery'}}][{{'inclass'}}][{{'dates'}}][{{'text'}}]" value="{{ (isset($dates) && isset($dates['text']) ) ? $dates['text'] : '' }}"/>
@@ -591,7 +591,7 @@
 
 
 
-                                    <div class="row">
+                                    <div class="row form-group">
 
                                         <div class="col-9 col-md-auto col-lg-auto align-self-center">
                                             <label class="form-control-label">{{ __('(course_inclass_days)') }}</label>
@@ -630,7 +630,7 @@
                                     </div>
                                     <div class="row">
 
-                                            <div class="col-9 col-md-6 col-lg-4">
+                                            <div class="col-12 form-group">
 
                                                 <!-- anto's editor -->
                                                 <input class="hidden" id="input-days" name="course[{{'delivery'}}][{{'inclass'}}][{{'day'}}][{{'text'}}]" value=""/>
@@ -697,7 +697,7 @@
                                     </div>
 
 
-                                    <div class="row">
+                                    <div class="row form-group">
                                         <div class="col-9 col-md-auto col-lg-auto align-self-center">
                                             <label class="form-control-label">{{ __('(course_inclass_times)') }}</label>
                                         </div>
@@ -735,7 +735,7 @@
                                     </div>
                                     <div class="row">
 
-                                        <div class="col-9 col-md-6 col-lg-4">
+                                        <div class="col-12 form-group">
 
 
                                             <!-- anto's editor -->
@@ -1176,10 +1176,14 @@
                                     </select>
                                     @include('alerts.feedback', ['field' => 'type_id'])
 
-                                    <input class="hidden" id="input-partner" name="course[{{'partner'}}][{{'text'}}]" value="{{ old('partner_text', (isset($info['partner']['text']) && $info['partner']['text'] != null) ? $info['partner']['text'] : '' ) }}"/>
-                                    <?php $data = isset($info['partner']['text']) && $info['partner']['text'] != null ? $info['partner']['text'] : '' ?>
-                                    @include('event.editor.editor', ['toolbar' => 'insertfile image media link anchor codesample','plugins' => 'link','keyinput' => "input-partner-text", 'data'=> "$data", 'inputname' => "'course[partner][text]'" ])
-                                    <!-- anto's editor -->
+                                    <div style="margin-top:2rem;" class="">
+                                        <input class="hidden" id="input-partner" name="course[{{'partner'}}][{{'text'}}]" value="{{ old('partner_text', (isset($info['partner']['text']) && $info['partner']['text'] != null) ? $info['partner']['text'] : '' ) }}"/>
+                                        <?php $data = isset($info['partner']['text']) && $info['partner']['text'] != null ? $info['partner']['text'] : '' ?>
+                                        @include('event.editor.editor', ['toolbar' => 'insertfile image media link anchor codesample','plugins' => 'link','keyinput' => "input-partner-text", 'data'=> "$data", 'inputname' => "'course[partner][text]'" ])
+                                        <!-- anto's editor -->
+                                    </div>
+
+
                                 </div>
                                 <div class="form-group col-12 accordion course-partner-list-visible d-none" id="accordionExample">
                                     <div class="card">
@@ -1440,7 +1444,7 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-sm-12 col-md-6 form-group{{ $errors->has('fb_') ? ' has-danger' : '' }}">
-                                            <label class="form-control-label" for="input-hours">{{ __('Certificate Title') }}  (course_certification_name_success)</label>
+                                            <label class="form-control-label" for="input-hours">{{ __('Certificate Title') }} <br> (course_certification_name_success)</label>
 
                                             {{--<textarea type="text" name="course[{{'certificate'}}][{{'success_text'}}]" id="input-certificate_title" class="ckeditor form-control" autofocus>{{ old('certificate_title') }}</textarea>--}}
                                             <!-- anto's editor -->
@@ -1454,7 +1458,7 @@
                                         </div>
 
                                         <div class="col-sm-12 col-md-6 form-group">
-                                            <label class="form-control-label" for="input-hours">{{ __('Title Of Certification (in case of exams failure)') }} (course_certification_name_failure)</label>
+                                            <label class="form-control-label" for="input-hours">{{ __('Title Of Certification (in case of exams failure)') }} <br> (course_certification_name_failure)</label>
 
                                             {{--<textarea type="text" id="input-certificate_text_failure_hidden" name="course[{{'certificate'}}][{{'failure_text'}}]" id="input-certificate_text_failure" class="form-control ckeditor"  autofocus>{{old('certificate_failure')}}</textarea>--}}
 
@@ -1622,7 +1626,7 @@
 
                             <div class="row">
 
-                                <div class="form-group col-sm-12 col-md-6 col-lg-4">
+                                <div class="form-group col-12">
                                     <label class="form-control-label" for="input-hours">{{ __('Text after the number of students:') }}<br> {{ __('(course_students_text)') }}</label>
 
                                     <!-- anto's editor -->

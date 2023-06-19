@@ -129,12 +129,14 @@
                                 </button>
                             </li>
 
+                            @if(count($eventWaitingUsers) != 0)
                             <li class="nav-item">
                                 <button class="btn btn-icon btn-primary" data-toggle="tab"  href="#waiting_list" role="tab" type="button">
                                     <span class="btn-inner--icon"><i class="ni ni-hat-3"></i></span>
                                     <span class="btn-inner--text">Waiting List Students</span>
                                 </button>
                             </li>
+                            @endif
 
                             <li class="nav-item">
                                 <button class="btn btn-icon btn-primary" data-toggle="tab"  href="#tabs-icons-text-5" role="tab" type="button">
@@ -363,7 +365,7 @@
                                                 <input type="text" id="input-hours" name="course[{{'hours'}}][{{'hour'}}]" class="form-control" placeholder="{{ __('Course Hours') }}" value="{{ old('hours', (isset($info['hours']['hour']) && $info['hours']['hour'] != null) ? $info['hours']['hour'] : '' ) }}" autofocus>
 
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-6 col-lg-4 hours-input-wrapper">
+                                            <div class="form-group col-sm-12 col-md-6 col-lg-8 hours-input-wrapper">
                                                 <button id="calculate-total-hours-btn" type="button" class="btn btn-outline-primary">Automatically calculate & add lessons hours</button>
                                             </div>
                                         </div>
@@ -378,7 +380,7 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="form-group col-12 col-md-6 col-lg-4 hours-input-wrapper">
+                                            <div class="form-group col-12 hours-input-wrapper">
 
                                                 <label class="form-control-label">Hours Text (course_hours_text)</label>
 
@@ -537,7 +539,7 @@
 
 
 
-                                            <div class="form-group col-sm-12 col-md-6 col-lg-4">
+                                            <div class="form-group col-12">
 
 
                                                 <!-- anto's editor -->
@@ -712,8 +714,8 @@
 
                                                 </div>
 
-                                                <div class="row">
-                                                    <div class="col-9 col-md-6 col-lg-4">
+                                                <div class="row form-group">
+                                                    <div class="col-12">
 
                                                         <!-- anto's editor -->
                                                         <input class="hidden" id="input-delivery-text" name="course[{{'delivery_info'}}][{{'text'}}]" value="{{ isset($delivery_text) ? $delivery_text : '' }}"/>
@@ -905,7 +907,7 @@
                                                 </div>
 
                                                 <div class="row">
-                                                    <div class="col-9 col-md-6 col-lg-4">
+                                                    <div class="col-12">
 
                                                         <!-- anto's editor -->
                                                         <input class="hidden" id="input-dates" name="course[{{'delivery'}}][{{'inclass'}}][{{'dates'}}][{{'text'}}]" value="{{ (isset($dates) && isset($dates['text']) ) ? $dates['text'] : '' }}"/>
@@ -1025,7 +1027,7 @@
                                                 </div>
                                                 <div class="row">
 
-                                                    <div class="col-9 col-md-6 col-lg-4">
+                                                    <div class="col-12">
 
                                                         <!-- anto's editor -->
                                                         <input class="hidden" id="input-days" name="course[{{'delivery'}}][{{'inclass'}}][{{'day'}}][{{'text'}}]" value="{{ (isset($days) && isset($days['text']) ) ? $days['text'] : '' }}"/>
@@ -1156,7 +1158,7 @@
                                                 </div>
 
                                                 <div class="row">
-                                                    <div class="col-9 col-md-6 col-lg-4">
+                                                    <div class="col-12">
 
 
                                                         <!-- anto's editor -->
@@ -1406,7 +1408,7 @@
                                         <!-- End City Section -->
 
                                         <div class="row">
-                                            <div class="exp_input col-sm-12 col-md-6 col-lg-4 form-group">
+                                            <div class="exp_input col-12 form-group">
                                                 <label class="form-control-label" for="input-test">{{ __('Months access text') }} (course_elearning_expiration)</label>
 
                                                 <!-- anto's editor -->
@@ -1491,7 +1493,7 @@
                                             ?>
                                             <div class="row elearning_exam_visible_wrapper @if(isset($event['delivery'][0]['id']) && $event['delivery'][0]['id'] != 143) ? 'd-none' : '' @endif">
 
-                                                <div class="exam_input col-12 form-group">
+                                                <div class="exam_input col-12">
                                                     <?php
 
                                                         $course_elearning_exam_icon = (isset($info['elearning']['exam']['icon']) && $info['elearning']['exam']['icon']) ? $info['elearning']['exam']['icon'] : null;
@@ -1546,7 +1548,7 @@
                                                     </div>
 
                                                     <div class="row">
-                                                        <div class="col-12 col-md-6 col-lg-4 form-group">
+                                                        <div class="col-12 form-group">
 
                                                             <input class="hidden" id="input-exam" name="course[{{'delivery'}}][{{'elearning'}}][{{'exam'}}][{{'text'}}]" value="{{ old('exam', (isset($info['elearning']['exam']['text']) && $info['elearning']['exam']['text'] != null) ? $info['elearning']['exam']['text'] : '' ) }}"/>
                                                             <?php $data = isset($info['elearning']['exam']['text']) && $info['elearning']['exam']['text'] != null ? $info['elearning']['exam']['text'] : '' ?>
@@ -1786,11 +1788,12 @@
                                                 </select>
                                                 @include('alerts.feedback', ['field' => 'type_id'])
 
-
-                                                <input class="hidden" id="input-partner" name="course[{{'partner'}}][{{'text'}}]" value="{{ old('partner_text', (isset($info['partner']['text']) && $info['partner']['text'] != null) ? $info['partner']['text'] : '' ) }}"/>
-                                                <?php $data = isset($info['partner']['text']) && $info['partner']['text'] != null ? $info['partner']['text'] : '' ?>
-                                                @include('event.editor.editor', ['toolbar' => 'insertfile image media link anchor codesample','plugins' => 'link','keyinput' => "input-partner-text", 'data'=> "$data", 'inputname' => "'course[partner][text]'" ])
-                                                <!-- anto's editor -->
+                                                <div style="margin-top:2rem;" class="">
+                                                    <input class="hidden" id="input-partner" name="course[{{'partner'}}][{{'text'}}]" value="{{ old('partner_text', (isset($info['partner']['text']) && $info['partner']['text'] != null) ? $info['partner']['text'] : '' ) }}"/>
+                                                    <?php $data = isset($info['partner']['text']) && $info['partner']['text'] != null ? $info['partner']['text'] : '' ?>
+                                                    @include('event.editor.editor', ['toolbar' => 'insertfile image media link anchor codesample','plugins' => 'link','keyinput' => "input-partner-text", 'data'=> "$data", 'inputname' => "'course[partner][text]'" ])
+                                                    <!-- anto's editor -->
+                                                </div>
 
                                                 {{--<input type="text" name="course[{{'partner'}}][{{'text'}}]" id="input-partner" class="form-control" placeholder="{{ __('alphanumeric text') }}" value="{{ old('exam', (isset($info['elearning']['exam']['text']) && $info['elearning']['exam']['text'] != null) ? $info['elearning']['exam']['text'] : '' ) }}"autofocus>--}}
 
@@ -2173,7 +2176,7 @@
                                                 </div>
                                                 <div class="row">
                                                     <div class="col-sm-12 col-md-6 form-group{{ $errors->has('fb_') ? ' has-danger' : '' }}">
-                                                        <label class="form-control-label" for="input-hours">{{ __('Certificate Title') }}  (course_certification_name_success)</label>
+                                                        <label class="form-control-label" for="input-hours">{{ __('Certificate Title') }} <br>  (course_certification_name_success)</label>
 
                                                         {{--<textarea type="text" name="course[{{'certificate'}}][{{'success_text'}}]" id="input-certificate_title" class="ckeditor form-control" placeholder="{{ __('alphanumeric text ') }}" autofocus>{{ old('certificate_title', (isset($info['certificate']['messages']['success']) && $info['certificate']['messages']['success'] != null) ? $info['certificate']['messages']['success'] : '') }}</textarea>--}}
 
@@ -2188,7 +2191,7 @@
                                                     </div>
 
                                                     <div class="col-sm-12 col-md-6 form-group">
-                                                        <label class="form-control-label" for="input-hours">{{ __('Title Of Certification (in case of exams failure)') }}  (course_certification_name_failure)</label>
+                                                        <label class="form-control-label" for="input-hours">{{ __('Title Of Certification (in case of exams failure)') }} <br>  (course_certification_name_failure)</label>
 
                                                         {{--<textarea type="text" name="course[{{'certificate'}}][{{'failure_text'}}]" id="input-certificate_text_failure" class="form-control ckeditor" placeholder="{{ __('alphanumeric text ') }}"  autofocus>{{ old('certificate_failure', (isset($info['certificate']['messages']['failure']) && $info['certificate']['messages']['failure'] != null) ? $info['certificate']['messages']['failure'] : '') }}</textarea>--}}
 
@@ -2372,7 +2375,7 @@
                                             </div>
                                             <div class="col-sm-12 col-md-6 col-lg-8 form-group"></div>
 
-                                            <div class="col-sm-12 col-md-6 col-lg-4 form-group">
+                                            <div class="col-12 form-group">
                                                 <label class="form-control-label" for="input-hours">{{ __('Text after the number of students:') }} (course_students_text)</label>
 
 
@@ -2813,10 +2816,11 @@
                                         @include('event.students')
                                     </div>
 
-
+                                    @if(count($eventWaitingUsers) != 0)
                                     <div class="tab-pane fade" id="waiting_list" role="tabpanel" aria-labelledby="tabs-icons-text-3-tab">
                                         @include('event.students_waiting_list')
                                     </div>
+                                    @endif
 
                                     <div class="tab-pane fade" id="xml_fields" role="tabpanel" aria-labelledby="tabs-icons-text-3-tab">
 
