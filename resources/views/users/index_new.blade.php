@@ -116,7 +116,7 @@
                         <table style="width:100%" class="table align-items-center table-flush"  id="datatable-basic45">
                             <thead class="thead-light">
                                 <tr>
-                                    <th scope="col">Photo</th>
+                                    <!-- <th scope="col">Photo</th>
                                     <th scope="col">{{ __('Name') }}</th>
                                     <th scope="col">{{ __('Lastname') }}</th>
                                     <th scope="col">{{ __('Mobile') }}</th>
@@ -131,7 +131,7 @@
                                     <th class="elearning-infos d-none" scope="col">{{ __('Exams') }}</th>
                                     <th class="d-none" scope="col">{{ __('Job Position') }}</th>
                                     <th class="d-none" scope="col">{{ __('Company') }}</th>
-                                    <th scope="col"></th>
+                                    <th scope="col"></th> -->
                                 </tr>
                             </thead>
                             <tbody>
@@ -388,6 +388,7 @@
             fillFilters(data);
 
             var table = $('#datatable-basic45').DataTable({
+                order: [ [6, 'desc'] ],
                 language: {
                     paginate: {
                         next: '&#187;', // or '→'
@@ -412,16 +413,16 @@
                 },
                 columns: [
 
-                    {data: 'image', name: 'image', orderable: false, searchable: false},
-                    {data: 'firstname', name: 'firstname'},
-                    {data: 'lastname', name: 'lastname'},
-                    {data: 'mobile', name: 'mobile'},
-                    {data: 'email', name: 'email'},
-                    {data: 'kc_id', name: 'kc_id'},
-                    {data: 'id', name: 'id'},
+                    {data: 'image', name: 'image', title: 'photo', orderable: false, searchable: false},
+                    {data: 'firstname', name: 'firstname', title: 'Name'},
+                    {data: 'lastname', name: 'lastname', title: 'Lastname'},
+                    {data: 'mobile', name: 'mobile', title: 'mobile'},
+                    {data: 'email', name: 'email', title: 'email'},
+                    {data: 'kc_id', name: 'kc_id', title: 'kc-id'},
+                    {data: 'id', name: 'id', title: 'id'},
                     {data: 'role', name: 'role.name',title: 'role',orderable: false},
-                    {data: 'status', name: 'status', orderable: false,searchable: false},
-                    {data: 'created_at',name: 'created_at'},
+                    {data: 'status', name: 'status', title: 'status',orderable: false,searchable: false},
+                    {data: 'created_at',name: 'created_at', title: 'created at'},
 
                     {data: 'action', name: 'action', orderable: false, searchable: false},
 

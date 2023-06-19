@@ -99,10 +99,10 @@
                                                                         <tr>
                                                                            <td align="left" valign="top" class="r15-i nl2go-default-textstyle" style="color: #3b3f44; font-family: arial,helvetica,sans-serif; font-size: 16px; line-height: 1.5; text-align: left;">
                                                                               <div>
-                                                                                 <p style="margin: 0px;"><span style="font-family: Tahoma, geneva, sans-serif;">­We remind you that your access to the {{$eventTitle}} expires on <strong>{{$expirationDate}}</strong>. </span></p>
+                                                                                 <p style="margin: 0px;"><span style="font-family: Tahoma, geneva, sans-serif;">­We remind you that your access to the {{$eventTitle}} is completed in <strong>{{$expirationDate}}</strong>. </span></p>
                                                                                  <p style="margin: 0px;"> </p>
                                                                                  <br>
-                                                                                 <p style="margin: 0px;"><span style="font-family: Tahoma, geneva, sans-serif;">­You can continue having full access to the course's updated videos, files and your personal notes for one whole year by purchasing an annual subscription.</span></p>
+                                                                                 <p style="margin: 0px;"><span style="font-family: Tahoma, geneva, sans-serif;">You can keep enjoying the course's updated videos, files and your personal notes by extending your access to this course for 12 more months for € {{$subscription_price}}. You can do this anytime you want from now on. </span></p>
                                                                               </div>
                                                                            </td>
                                                                         </tr>
@@ -120,11 +120,11 @@
                                                                         </tr>
                                                                         <tr>
                                                                            <td height="18" align="center" valign="top" class="r17-i nl2go-default-textstyle" style="color: #3b3f44; font-family: arial,helvetica,sans-serif; font-size: 16px; line-height: 1.5;">
-                                                                           
+
                                                                               <a href="{{$subscriptionSlug}}?utm_source=Knowcrunch.com&utm_medium=Expiration_Email" class="r18-r default-button" target="_blank" data-btn="1" style="line-height: 1.15; text-decoration: none; border-style: solid; display: inline-block; -webkit-text-size-adjust: none; mso-hide: all; background-color: #c8d151; border-color: #c8d151; border-radius: 4px; border-width: 0px; color: #ffffff; font-family: arial,helvetica,sans-serif; font-size: 16px; height: 18px; padding-bottom: 12px; padding-left: 5px; padding-right: 5px; padding-top: 12px; width: 270px;">
                                                                                  <p style="margin: 0px;"><span style="color: #000000;"><strong>Learn about the subscription</strong></span></p>
                                                                               </a>
-                                                                              <!--<![endif]--> 
+                                                                              <!--<![endif]-->
                                                                            </td>
                                                                         </tr>
                                                                         <tr class="nl2go-responsive-hide">
@@ -156,4 +156,3 @@
             </td>
          </tr>
 @stop
-      

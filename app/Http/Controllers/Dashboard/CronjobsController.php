@@ -401,6 +401,7 @@ class CronjobsController extends Controller
                     $data['firstName'] = $subscription->user->firstname;
                     $data['eventTitle'] = $subscription->event->first()->title;
                     $data['expirationDate'] = date('d/m/Y',strtotime($subscription->event->first()->pivot->expiration));
+                    $data['subscription_price'] = $subscription->event->first()->plans[0]['cost'];
                     $data['template'] = 'emails.user.subscription_reminder';
                     $subscription->user->notify(new SubscriptionReminder($data));
 
@@ -580,6 +581,7 @@ class CronjobsController extends Controller
                 $date = date_create($user->pivot->expiration);
                 $date = date_diff($date, $today);
 
+                //if( $event->id == 2304 && ($date->y == 0 && $date->m ==  11 && $date->d == 23 )){
                 if( $event->id == 2304 && ($date->y == 0 && $date->m ==  0 && $date->d == 7 )){
 
                     $data['firstName'] = $user->firstname;
@@ -591,6 +593,7 @@ class CronjobsController extends Controller
                     $data['subscriptionSlug'] =  url('/') . '/' . $page->getSlug() ;
                     $data['template'] = 'emails.user.courses.masterclass_expiration';
                     $data['subject'] = 'Knowcrunch | ' . $data['firstName'] . ' your course expires soon';
+                    $data['subscription_price'] = $event->plans[0]['cost'];
 
                     $user->notify(new ExpirationMails($data));
 

@@ -7,7 +7,10 @@
     $data = $dynamic_page_data;
     $content = $data["content"];
     $instructorEvents = $data["instructorEvents"];
+
+
 @endphp
+
 
 <div class="pb-4 pt-4">
     @if(isset($instructorEvents) && count($instructorEvents) > 0)
@@ -33,7 +36,10 @@
                 @endforeach
             </div>
 
+
+
             <div class="dynamic-courses-wrapper dynamic-courses-wrapper--style2">
+
                 @foreach($instructorEvents as $key => $row)
                     <?php $estatus = $row['status']; ?>
                     @if($estatus == 0 || $estatus == 2)
@@ -57,10 +63,10 @@
                                                 {{ $row['city'][0]['name'] }}
                                             </a>
                                         @endif
-                                        @if (isset($date) && $date != '') 
+                                        @if (isset($date) && $date != '')
                                             <div class="duration">
                                                 <img width="20" src="theme/assets/images/icons/icon-calendar.svg" alt="">
-                                                {{ $date }} 
+                                                {{ $date }}
                                             </div>
                                         @endif
                                         @if($row['hours'] && (is_numeric(substr($row['hours'], 0, 1))))
@@ -83,4 +89,14 @@
         </div>
     @endif
 </div>
+
+<script>
+    $( document ).ready(function() {
+
+        if($('.dynamic-courses-wrapper').text() == '' && $('.dynamic-courses-wrapper.dynamic-courses-wrapper--style2').text() == ''){
+            $('.instructor-area.instructor-courses').hide()
+        }
+
+    });
+</script>
 

@@ -123,6 +123,19 @@
 
 }
 
+.custom-btn-breadcrum{
+    background-color: #fff;
+}
+
+.custom-btn-breadcrum:hover{
+    color: #fff;
+    background-color: #2dce89!important;
+    border-color: #2dce89;
+}
+.custom-btn-breadcrum.btn:not(:last-child){
+    margin-right: 0rem;
+}
+
 .toggle-btn-inline-text {
     margin-right: 2%;
 }

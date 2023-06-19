@@ -132,6 +132,10 @@ class CMS
             if(!$event->published){
                 continue;
             }
+            // if($event->status != 0 || $event->status != 2){
+            //     continue;
+            // }
+
             if ($key == 0) {
                 $category[$event['id']] = $event;
             } else {

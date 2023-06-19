@@ -9,6 +9,42 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\ExamRequest;
 use App\Model\ExamResult;
 use App\Model\ExamSyncData;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use Validator;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Reader\IReadFilter;
+use ZipArchive;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use Storage;
+
+class ChunkReadFilter implements IReadFilter
+{
+    private $startRow = 0;
+
+    private $endRow = 0;
+
+    /**
+     * Set the list of rows that we want to read.
+     *
+     * @param mixed $startRow
+     * @param mixed $chunkSize
+     */
+    public function setRows($startRow, $chunkSize): void
+    {
+        $this->startRow = $startRow;
+        $this->endRow = $startRow + $chunkSize;
+    }
+
+    public function readCell($columnAddress, $row, $worksheetName = '')
+    {
+        //  Only read the heading row, and the rows that are configured in $this->_startRow and $this->_endRow
+        if (($row == 1) || ($row >= $this->startRow && $row < $this->endRow)) {
+            return true;
+        }
+
+        return false;
+    }
+}
 
 class ExamController extends Controller
 {
@@ -367,6 +403,190 @@ class ExamController extends Controller
             'averageHour' => $averageHour,
             'averageScore' => $averageScore
             ]);
+
+    }
+
+    public function importFromFile1(Request $request){
+
+        $error_msg = '';
+
+        $validator = Validator::make(request()->all(), [
+            'file' => 'required|mimes:xlsx,xls|max:2048'
+        ]);
+
+        if ($validator->fails()) {
+            return back()->withErrors('Upload a valid csv file!');
+        }
+
+        $file = $request->file('file');
+
+        if($file){
+
+            $filename = $file->getClientOriginalName();
+            $tempPath = $file->getRealPath();
+            //dd($tempPath);
+            $extension = explode('.',$filename)[1];
+
+
+            $reader = IOFactory::createReader(ucfirst($extension));
+            // Define how many rows we want to read for each "chunk"
+            $chunkSize = 2048;
+            // Create a new Instance of our Read Filter
+            $chunkFilter = new ChunkReadFilter();
+
+            // Tell the Reader that we want to use the Read Filter that we've Instantiated
+            $reader->setReadFilter($chunkFilter);
+
+            // Loop to read our worksheet in "chunk size" blocks
+            for ($startRow = 2; $startRow <= 240; $startRow += $chunkSize) {
+                // Tell the Read Filter, the limits on which rows we want to read this iteration
+                $chunkFilter->setRows($startRow, $chunkSize);
+                // Load only the rows that match our filter from $inputFileName to a PhpSpreadsheet Object
+                $spreadsheet = $reader->load($tempPath);
+
+                // Do some processing here
+
+                $sheetData = $spreadsheet->getActiveSheet()->toArray(null, true, true, true);
+
+            }
+
+            if($sheetData){
+                dd($sheetData);
+
+                foreach ($sheetData as $key => $importData) {
+                    if( $key == 1 ){
+                        continue;
+                    }
+
+                    // A CELL No
+                    // B CELL Exam Question
+                    // C CELL Exam Question
+                    // D CELL Answer Credit
+                    // E CELL Options
+                    // F CELL Correct Answer
+
+                    $questionNo = $importData['A'];
+                    $questionExam = '<p>'.$importData['B'].'</p>';
+                    $questionType = $importData['C'];
+                    $questionCredit = isset($importData['D']) ? $importData['D'] : 1;
+                    $questionOptions = $importData['E'];
+                    $questionCorrect = $importData['F'];
+
+
+
+
+
+                    $prepareData = [];
+
+                    $prepare['question'] = $questionExam;
+                    $prepare['answer-credit'] = $questionCredit;
+                    $prepare['question-type'] = $questionType;
+
+
+                    // Todo
+                    $prepare['answers'] = [];
+                    // Todo
+                    $prepare['correct_answer'] = [];
+
+
+
+
+                    /*
+
+                        $exam = new Exam
+
+
+                        // Validations
+                        $validations = null;
+
+                        $validations = $this->validateCsv($user->toArray());
+
+
+                        //dd($importData);
+
+
+
+                    */
+
+                }
+            }
+
+        }
+
+    }
+
+    public function importFromFile(Request $request)
+    {
+
+        $validator = Validator::make(request()->all(), [
+            'file' => 'required|mimes:xlsx,xls|max:2048'
+        ]);
+
+        if ($validator->fails()) {
+            return back()->withErrors('Upload a valid csv file!');
+        }
+
+        $file = $request->file('file');
+
+        if($file){
+
+
+            $filename = $file->getClientOriginalName();
+            $tempPath = $file->getRealPath();
+            //dd($tempPath);
+            $extension = explode('.',$filename)[1];
+
+            $path = $request->file('file')->storeAs('import', $filename,'storage');
+
+            //dd($path);
+
+            $spreadsheet = new Spreadsheet();
+            $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReaderForFile(storage_path('app/'.$path));
+            $reader->setReadDataOnly(true);
+            $file = $reader->load(storage_path('app/'.$path));
+            $file = $file->getActiveSheet();
+
+            $file = $file->toArray();
+
+            $questions = [];
+
+
+            foreach($file as $key =>  $line){
+                if($key == 0 || !$line[1]){
+                    continue;
+                }
+
+
+                $qInsert = trim(str_replace(['"',"'"], "", $line[1]));
+                $qInsert = preg_replace('~^\s+|\s+$~us', '\1', $qInsert);
+
+                $answer1 = str_replace(['"',"'"], "", $line[2]);
+                $answer1 = preg_replace('~^\s+|\s+$~us', '\1', $answer1);
+
+                $answer2 = str_replace(['"',"'"], "", $line[3]);
+                $answer2 = preg_replace('~^\s+|\s+$~us', '\1', $answer2);
+
+                $answer3 = str_replace(['"',"'"], "", $line[4]);
+                $answer3 = preg_replace('~^\s+|\s+$~us', '\1', $answer3);
+
+                $answer4 = str_replace(['"',"'"], "", $line[5]);
+                $answer4 = preg_replace('~^\s+|\s+$~us', '\1', $answer4);
+
+                $questions[] = ['question' => trim($qInsert), 'answer-credit' => 1,
+                                'answers' => [trim($answer1),trim($answer2),trim($answer3),trim($answer4)],
+                                'question-type' => "radio buttons",
+                                'correct_answer' => [trim($answer2)]
+                            ];
+
+
+            }
+
+            $exam = Exam::find($request->id);
+            $exam->questions = json_encode($questions);
+            $exam->save();
+
+        }
+        return \Redirect::route('exams.edit', ['exam' => $request->id, 'from_import' => "finish"]);
 
     }
 

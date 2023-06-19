@@ -428,6 +428,8 @@ Route::group(['middleware' => 'auth.aboveauthor', 'prefix' => 'admin'], function
     //set automate email status for topics
     Route::post('automate-mails-status', 'TopicController@automateMailStatus')->name('topics.automate.mails.status');
 
+    //import questions
+    Route::post('exam-import-questions-from-file', 'ExamController@importFromFile')->name('exam.questions.import');
 
     //import users from file
     Route::post('users-import-from-file', 'UserController@importFromFile')->name('users.file.import');

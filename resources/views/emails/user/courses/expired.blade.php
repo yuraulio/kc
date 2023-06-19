@@ -81,13 +81,15 @@
                                                       <p style="margin: 0;">
                                                         <span style="font-family: Tahoma, geneva, sans-serif;">We hope you enjoyed our <strong>{{$event_name}}</strong>. Your access is now expired.  </span>
                                                       </p>
+                                                      <p style="margin: 0px;"> </p>
+                                                        <br>
                                                       <p style="margin: 0;"></p>
                                                       <p style="margin: 0;">
-                                                        <span style="font-family: Tahoma, geneva, sans-serif;">We remind you that you can </span>
+                                                        <span style="font-family: Tahoma, geneva, sans-serif;">We remind you that you can keep enjoying the course's updated videos, files and your personal notes by </span>
                                                         <a href="https://knowcrunch.com/knowcrunch-elite?utm_source=Knowcrunch&utm_medium=Email%20&utm_content=Promo&utm_campaign=SUBSCRIPTION" target="_blank" style="color: #0092ff; text-decoration: underline;">
-                                                          <span style="font-family: Tahoma, geneva, sans-serif;">extend your access</span>
+                                                          <span style="font-family: Tahoma, geneva, sans-serif;">extending your access</span>
                                                         </a>
-                                                        <span style="font-family: Tahoma, geneva, sans-serif;"> to this course for <strong>one (1) year</strong> for € <strong>{{$subscription_price}}</strong>. </span>
+                                                        <span style="font-family: Tahoma, geneva, sans-serif;"> to this course for <strong>12 more months</strong> for € <strong>{{$subscription_price}}</strong>. You can do this anytime you want from now on. </span>
                                                       </p>
                                                     </div>
                                                   </td>
@@ -103,15 +105,15 @@
                                                 </tr>
                                                 <tr>
                                                   <td height="18" align="center" valign="top" class="r17-i nl2go-default-textstyle" style="color: #3b3f44; font-family: arial,helvetica,sans-serif; font-size: 16px; line-height: 1.5;">
-                                                   
+
                                                     <a href="https://knowcrunch.com/knowcrunch-elite?utm_source=Knowcrunch&utm_medium=Email%20&utm_content=Promo&utm_campaign=SUBSCRIPTION" class="r18-r default-button" target="_blank" data-btn="1" style="font-style: normal; font-weight: normal; line-height: 1.15; text-decoration: none; border-style: solid; word-wrap: break-word; display: inline-block; -webkit-text-size-adjust: none; mso-hide: all; background-color: #c8d151; border-color: #c8d151; border-radius: 4px; border-width: 0px; color: #ffffff; font-family: arial,helvetica,sans-serif; font-size: 16px; height: 18px; padding-bottom: 12px; padding-left: 5px; padding-right: 5px; padding-top: 12px; width: 280px;">
                                                       <p style="margin: 0;">
                                                         <span style="color: #000000;">
-                                                          <strong>Enjoy more updates</strong>
+                                                          <strong>Keep learning</strong>
                                                         </span>
                                                       </p>
                                                     </a>
-                                                    
+
                                                   </td>
                                                 </tr>
                                                 <tr class="nl2go-responsive-hide">

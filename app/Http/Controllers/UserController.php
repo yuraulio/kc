@@ -319,7 +319,7 @@ class UserController extends Controller
 
         }
 
-        $query->orderBy('id', 'desc');
+        //$query->orderBy('id', 'desc');
 
         return $query;
     }
@@ -433,9 +433,9 @@ class UserController extends Controller
     }
 
     function csrf_field()
-        {
+    {
         return '<input type="hidden" name="_token" value="'.csrf_token().'">';
-        }
+    }
 
     /**
      * Display a listing of the users
