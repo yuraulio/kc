@@ -576,8 +576,6 @@ class TransactionController extends Controller
 
         $data = $this->participantsNew();
 
-        dd($data);
-
         return view('admin.transaction.revenue', $data);
     }
 
