@@ -87,7 +87,7 @@
                                                 <tr>
                                                   <td align="left" valign="top" class="r14-i nl2go-default-textstyle" style="color: #3b3f44; font-family: arial,helvetica,sans-serif; font-size: 16px; line-height: 1.5; text-align: left;">
                                                     <div>
-                                                      <h3 class="default-heading3" style="margin: 0; color: #1f2d3d; font-family: arial,helvetica,sans-serif; font-size: 24px;">
+                                                      <h3 class="default-heading3" style="margin: 0; color: #1f2d3d; font-family: arial,helvetica,sans-serif; font-size: 26px;">
                                                         <span style="font-family: Tahoma, geneva, sans-serif;">{{$firstname}},</span>
                                                       </h3>
                                                     </div>
@@ -106,97 +106,109 @@
                                                   <td align="left" valign="top" class="r15-i nl2go-default-textstyle" style="color: #3b3f44; font-family: arial,helvetica,sans-serif; font-size: 16px; line-height: 1.5; text-align: left; word-wrap: break-word;">
                                                     <div>
                                                       <p style="-webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; caret-color: rgb(0, 0, 0); color: rgb(0, 0, 0); font-family: Calibri, sans-serif; font-size: medium; font-style: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; margin: 0cm; orphans: auto; text-align: start; text-decoration: none; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px;">
-                                                        <span style="color: #3b3f44; font-family: Arial, sans-serif;">Υπενθυμίζουμε τις οδηγίες για την αυριανή σου εκπαίδευση. </span>
+                                                        <span style="color: #3b3f44; font-family: Arial, sans-serif;">Οδηγίες για την αυριανή σου εκπαίδευση. </span>
                                                       </p>
                                                       <br>
-                                                      <p style="-webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; caret-color: rgb(0, 0, 0); color: rgb(0, 0, 0); font-family: Calibri, sans-serif; font-size: medium; font-style: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; margin: 0cm; orphans: auto; text-align: start; text-decoration: none; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px;"></p>
-                                                      <h3 class="default-heading3" style="margin: 0; color: #1f2d3d; font-family: arial,helvetica,sans-serif; font-size: 24px;">
-                                                        <span style="color: #3b3f44;">Αναγκαίος ρουχισμός </span>
+
+                                                      <h3 class="default-heading3" style="margin: 0; color: #1f2d3d; font-family: arial,helvetica,sans-serif; font-size: 26px;">Τι έχουμε μαζί μας</h3>
+                                                      <ul style="margin: 0;">
+
+                                                        <li>
+                                                          <span style="color: #3b3f44; font-family: Arial, sans-serif;">Τις παρουσιάσεις κατεβασμένες την ίδια μέρα</span>
+                                                        </li>
+                                                        <li>
+                                                          <span style="color: #3b3f44; font-family: Arial, sans-serif;">Personal laptop &amp; φορτιστής </span>
+                                                        </li>
+                                                        <li>
+                                                          <span style="color: #3b3f44; font-family: Arial, sans-serif;">Knowcrunch font (Foco) στο σύστημα</span>
+                                                        </li>
+                                                        <li>
+                                                          <span style="color: #3b3f44; font-family: Arial, sans-serif;">Microsoft PowerPoint νόμιμο και updated</span>
+                                                        </li>
+                                                        <li>
+                                                          <span style="color: #3b3f44; font-family: Arial, sans-serif;">HDMI είσοδο στο laptop ή adaptor για HDMI </span>
+                                                        </li>
+                                                        <li>
+                                                          <span style="color: #3b3f44; font-family: Arial, sans-serif;">Pointer </span>
+                                                        </li>
+                                                      </ul>
+                                                      <p style="margin: 0;"></p>
+                                                      <br>
+                                                      <h3 class="default-heading3" style="margin: 0; color: #1f2d3d; font-family: arial,helvetica,sans-serif; font-size: 26px;">
+                                                        <span style="color: #3b3f44; font-family: Arial, sans-serif;">Τι ελέγχουμε στην αίθουσα</span>
+                                                      </h3>
+                                                      <ol style="margin: 0;">
+                                                        <li>
+                                                          <span style="color: #3b3f44; font-family: Arial, sans-serif;">Συνδέουμε το jack του ήχου και τo HDMI για την εικόνα </span>
+                                                        </li>
+                                                        <li>
+                                                          <span style="color: #3b3f44; font-family: Arial, sans-serif;">Ο ήχος πάει στα εξωτερικά ηχεία της αίθουσας και όχι στα ηχεία του laptop </span>
+                                                        </li>
+                                                        <li>
+                                                          <span style="color: #3b3f44; font-family: Arial, sans-serif;">Οι οθόνες (TVs) της αίθουσας δείχνουν ό,τι και το laptop ή ο projector</span>
+                                                        </li>
+                                                        <li>
+                                                          <span style="color: #3b3f44; font-family: Arial, sans-serif;">Ο pointer λειτουργεί μέσα στην αίθουσα και από μακριά</span>
+                                                        </li>
+                                                        <li>
+                                                          <span style="color: #3b3f44; font-family: Arial, sans-serif;">Αν δείχνουμε από κινητό, μοίρασμα οθόνης κινητού με το laptop </span>
+                                                        </li>
+                                                      </ol>
+                                                      <p style="margin: 0;"></p>
+                                                      <br>
+                                                      <h3 class="default-heading3" style="margin: 0; color: #1f2d3d; font-family: arial,helvetica,sans-serif; font-size: 26px;">
+                                                        <span style="color: #3b3f44;">Τι αλλάζουμε στο σύστημα μας</span>
+                                                      </h3>
+                                                      <ul style="margin: 0;">
+                                                        <li>
+                                                          <span style="color: #3b3f44;">O browser ή το tool μας σε full screen window</span>
+                                                        </li>
+                                                        <li>
+                                                          <span style="color: #3b3f44;">O browser ή το tool μας σε light, όχι dark mode</span>
+                                                        </li>
+                                                        <li>
+                                                          <span style="color: #3b3f44;">O browser χωρίς πολλά ανοιχτά tabs και bookmarks</span>
+                                                        </li>
+                                                        <li>
+                                                          <span style="color: #3b3f44;">O browser σε zoom ώστε φαίνονται όλα σωστά από μακριά</span>
+                                                        </li>
+                                                        <li>
+                                                          <span style="color: #3b3f44;">To menu bar του συστήματος σε auto-hide </span>
+                                                        </li>
+                                                      </ul>
+                                                      <p style="margin: 0;"></p>
+                                                      <br>
+                                                      <h3 class="default-heading3" style="margin: 0; color: #1f2d3d; font-family: arial,helvetica,sans-serif; font-size: 26px;">
+                                                        <span style="color: #3b3f44;">Τι φοράμε; </span>
                                                       </h3>
                                                       <p style="margin: 0;">
-                                                        <span style="color: #3b3f44;">Παρακαλούμε να υπάρχει professional ντύσιμο στην τάξη καθώς αποτελεί τη δική σου αλλά και τη δική μας εικόνα. Λαμβάνουμε πολύ σοβαρά το κομμάτι της εικόνας μας και των συνεργατών μας.</span>
+                                                        <span style="color: #3b3f44;">Η professional εμφάνιση είναι απαραίτητη.</span>
                                                       </p>
                                                       <p style="margin: 0;"></p>
                                                       <br>
                                                       <p style="margin: 0;">
                                                         <span style="color: #3b3f44;">
                                                           <strong>
-                                                            <u>Άνδρες</u>
-                                                          </strong>: business παντελόνι, business πουκάμισο μέσα στο παντελόνι με ζώνη, business παπούτσια ή business style μονόχρωμα sneakers (π.χ. αθλητικά παπούτσια τρεξίματος δεν θεωρούνται business). </span>
+                                                            Άνδρες
+                                                          </strong>: business παντελόνι, business πουκάμισο, business παπούτσια ή business style μονόχρωμα sneakers. </span>
                                                       </p>
                                                       <p style="margin: 0;">
                                                         <span style="color: #3b3f44;"></span>
                                                         <br>
                                                         <span style="color: #3b3f44;">
                                                           <strong>
-                                                            <u>Γυναίκες</u>: </strong> business παντελόνι ή φούστα ή ολόσωμο φόρεμα, business πουκάμισο, business παπούτσια ή business style μονοχρωμα sneakers (π.χ. αθλητικά παπούτσια τρεξίματος δεν θεωρούνται business). </span>
+                                                            Γυναίκες: </strong> business παντελόνι ή φούστα ή φόρεμα, business πουκάμισο, business παπούτσια ή business style μονοχρωμα sneakers. </span>
                                                       </p>
                                                       <p style="margin: 0;"></p>
+
                                                       <br>
-                                                      <h3 class="default-heading3" style="margin: 0; color: #1f2d3d; font-family: arial,helvetica,sans-serif; font-size: 24px;">Αναγκαίος εξοπλισμός </h3>
-                                                      <ul style="margin: 0;">
-                                                        <li>
-                                                          <span style="color: #3b3f44; font-family: Arial, sans-serif;">Personal laptop &amp; τον φορτιστή του</span>
-                                                        </li>
-                                                        <li>
-                                                          <span style="color: #3b3f44; font-family: Arial, sans-serif;">Το font της Knowcrunch (Foco)</span>
-                                                        </li>
-                                                        <li>
-                                                          <span style="color: #3b3f44; font-family: Arial, sans-serif;">Microsoft Office PowerPoint ενεργό &amp; updated για να λειτουργεί άρτια</span>
-                                                        </li>
-                                                        <li>
-                                                          <span style="color: #3b3f44; font-family: Arial, sans-serif;">HDMI port ή adaptor για HDMI καλώδιο projector, που έχει δοκιμαστεί &amp; αλλού και λειτουργεί επιβεβαιωμένα σωστά</span>
-                                                        </li>
-                                                        <li>
-                                                          <span style="color: #3b3f44; font-family: Arial, sans-serif;">Pointer που δοκιμασμένα λειτουργεί με το laptop απο μακριά</span>
-                                                        </li>
-                                                      </ul>
-                                                      <p style="margin: 0;"></p>
-                                                      <br>
-                                                      <h3 class="default-heading3" style="margin: 0; color: #1f2d3d; font-family: arial,helvetica,sans-serif; font-size: 24px;">
-                                                        <span style="color: #3b3f44; font-family: Arial, sans-serif;">Δοκιμές πριν την έναρξη</span>
-                                                      </h3>
-                                                      <ol style="margin: 0;">
-                                                        <li>
-                                                          <span style="color: #3b3f44; font-family: Arial, sans-serif;">Έλεγχος πως ο ήχος πάει στα εξωτερικά ηχεία της αίθουσας και όχι στα ηχεία του laptop </span>
-                                                        </li>
-                                                        <li>
-                                                          <span style="color: #3b3f44; font-family: Arial, sans-serif;">Έλεγχος ότι οι οθόνες (TVs) της αίθουσας λαμβάνουν κανονικά το σήμα και δείχνουν ό,τι και το laptop ή ο projector</span>
-                                                        </li>
-                                                        <li>
-                                                          <span style="color: #3b3f44; font-family: Arial, sans-serif;">Έλεγχος ότι το pointer όντως λειτουργεί σε κάθε σημείο της αίθουσας</span>
-                                                        </li>
-                                                      </ol>
-                                                      <p style="margin: 0;"></p>
-                                                      <br>
-                                                      <h3 class="default-heading3" style="margin: 0; color: #1f2d3d; font-family: arial,helvetica,sans-serif; font-size: 24px;">
-                                                        <span style="color: #3b3f44;">Τρόπος παρουσίασης live tutorial</span>
-                                                      </h3>
-                                                      <ul style="margin: 0;">
-                                                        <li>
-                                                          <span style="color: #3b3f44;">Πάντοτε με τον browser σε full screen window <strong>χωρίς</strong> άλλα ανοιχτά tabs, bookmarks και με auto-hide στο menu bar, κοινώς <strong>τίποτα</strong> άλλο στην οθόνη, να είναι καθαρή από περισπασμούς </span>
-                                                        </li>
-                                                        <li>
-                                                          <span style="color: #3b3f44;">Πάντοτε σε light mode &amp; όχι dark mode για καλύτερη θέαση &amp; κατανόηση από τους μαθητές</span>
-                                                        </li>
-                                                        <li>
-                                                          <span style="color: #3b3f44;">Πάντοτε σε αρκετό zoom ώστε να γεμίζει ο browser</span>
-                                                        </li>
-                                                      </ul>
-                                                      <p style="-webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; caret-color: rgb(0, 0, 0); color: rgb(0, 0, 0); font-family: Calibri, sans-serif; font-size: medium; font-style: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; margin: 0cm; orphans: auto; text-align: start; text-decoration: none; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px;"></p>
-                                                      <p style="-webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; caret-color: rgb(0, 0, 0); color: rgb(0, 0, 0); font-family: Calibri, sans-serif; font-size: medium; font-style: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; margin: 0cm; orphans: auto; text-align: start; text-decoration: none; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px;">
-                                                        <br>
-                                                        <span style="color: #3b3f44; font-family: Arial, sans-serif;">Εάν δεν γνωρίζεις κάτι από τα παραπάνω ενημέρωσέ μας άμεσα ώστε βοηθήσουμε ή να έχουμε δικό μας laptop στον χώρο στο </span>
+                                                        <span style="color: #3b3f44; font-family: Arial, sans-serif;">Για βοήθεια στα παραπάνω ενημέρωσέ μας άμεσα στο </span>
                                                         <a href="mailto:info@knowcrunch.com?subject=%CE%92%CE%BF%CE%AE%CE%B8%CE%B5%CE%B9%CE%B1%20%CE%B3%CE%B9%CE%B1%20%CE%B1%CF%8D%CF%81%CE%B9%CE%BF" target="_blank" style="color: #0092ff; text-decoration: underline;">
                                                           <span style="color: #3b3f44; font-family: Arial, sans-serif;">info@knowcrunch.com</span>
                                                         </a>
                                                         <span style="color: #3b3f44; font-family: Arial, sans-serif;">.</span>
                                                       </p>
-                                                      <p style="-webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; caret-color: rgb(0, 0, 0); color: rgb(0, 0, 0); font-family: Calibri, sans-serif; font-size: medium; font-style: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; margin: 0cm; orphans: auto; text-align: start; text-decoration: none; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px;"></p>
-                                                      <p style="-webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; caret-color: rgb(0, 0, 0); color: rgb(0, 0, 0); font-family: Calibri, sans-serif; font-size: medium; font-style: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; margin: 0cm; orphans: auto; text-align: start; text-decoration: none; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px;">
-                                                        <br>
-                                                        <span style="color: #3b3f44; font-family: Arial, sans-serif;">Thank you,</span>
-                                                      </p>
+
                                                     </div>
                                                   </td>
                                                 </tr>

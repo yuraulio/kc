@@ -364,7 +364,8 @@ class CronjobsController extends Controller
 
         $adminemail = 'info@knowcrunch.com';
         $today = strtotime( date('Y/m/d'));
-        $subscriptions = Subscription::where('must_be_updated','>',$today)->where('stripe_status','active')->get();
+        //if user not set of status off subscription from my account page
+        $subscriptions = Subscription::where('must_be_updated','>',$today)->where('stripe_status','active')->where('status', false)->get();
 
         $today = date_create( date('Y/m/d'));
         foreach($subscriptions as $subscription){

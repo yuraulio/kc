@@ -10,6 +10,11 @@
             @slot('title')
                 {{ __('') }}
             @endslot
+            @slot('filter')
+                <!-- <a href="#" class="btn btn-sm btn-neutral">{{ __('Filters') }}</a> -->
+                <a class="btn btn-sm btn-neutral" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">{{ __('Filters') }}</a>
+
+            @endslot
 
             <li class="breadcrumb-item"><a href="#">{{ __('Coupon Management') }}</a></li>
             <li class="breadcrumb-item active" aria-current="page">{{ __('List') }}</li>
@@ -40,6 +45,22 @@
                     </div>
 
                     <div class="table-responsive py-4">
+                    <div class="collapse" id="collapseExample">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-sm-3 filter_col" id="filter_col7" data-column="7">
+                                        <label>Status</label>
+                                        <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..." name="Name" class="column_filter" id="col7_filter">
+                                        <option value="">All</option>
+                                        <option value="1"> Published </option>
+                                        <option value="0"> Unpublished </option>
+                                        </select>
+                                    </div>
+
+                                    <!-- <Button type="button" onclick="ClearFields();" class="btn btn-secondary btn-lg "> Clear Filter</Button> -->
+                                </div>
+                            </div>
+                        </div>
                         <table class="table table-flush"  id="datatable-basic3">
                             <thead class="thead-light">
                                 <tr>
@@ -114,6 +135,20 @@
                 }
             }
         });
+
+        $('select.column_filter').on('change', function () {
+            filterColumn( $(this).parents('div').attr('data-column') );
+
+        } );
+
+        function filterColumn ( i ) {
+
+            $('#datatable-basic3').DataTable().column( 1 ).search(
+                $('#col7_filter').val(), true,false
+            ).draw();
+
+
+        }
     </script>
 
 

@@ -290,7 +290,7 @@
                         q: 60,
                         fit: "crop",
                         version: "header-image",
-                        title: "Top image",
+                        title: "Top image & Share image",
                         description: "The image on top of a page.",
                     },
                     {

@@ -588,7 +588,6 @@ class SubscriptionController extends Controller
 
             }else if($request->status == 'Active'){
 
-
                 $subscription->status = true;
                 $subscription->stripe_status = 'active';
                 $subscription->save();

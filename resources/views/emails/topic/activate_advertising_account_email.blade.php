@@ -96,7 +96,7 @@
                                                                                     <tr>
                                                                                         <td align="left" valign="top" class="r15-i nl2go-default-textstyle" style="color: #3b3f44; font-family: arial,helvetica,sans-serif; font-size: 16px; line-height: 1.5; text-align: left;">
                                                                                             <div>
-                                                                                                <p style="margin: 0px;">As you are about to start the Advertising Platforms section, in which you will learn all features of the ad campaigns, <strong>we encourage you to activate your personal ad accounts</strong>. The ad platforms we suggest to start using are the following:</p>
+                                                                                                <p style="margin: 0px;">As you are about to start the Advertising Platforms section, <strong>we encourage you to activate your personal ad accounts</strong>. The ad platforms we suggest to start using are the following:</p>
                                                                                             </div>
                                                                                         </td>
                                                                                     </tr>
@@ -106,6 +106,7 @@
                                                                                 </table>
                                                                             </td>
                                                                         </tr>
+
                                                                         <tr>
                                                                             <td class="r12-c" align="left">
                                                                                 <table cellspacing="0" cellpadding="0" border="0" role="presentation" width="100%" class="r13-o" style="table-layout: fixed; width: 100%;">
@@ -115,16 +116,44 @@
                                                                                     <tr>
                                                                                         <td align="left" valign="top" class="r15-i nl2go-default-textstyle" style="color: #3b3f44; font-family: arial,helvetica,sans-serif; font-size: 16px; line-height: 1.5; text-align: left; word-wrap: break-word;">
                                                                                             <div>
+                                                                                            <p style="margin: 0px;">(required)</p>
                                                                                                 <ul style="margin: 0px;">
-                                                                                                    <li><a href="https://www.facebook.com/adsmanager" title="Facebook ad manager" target="_blank" style="color: #0092ff; text-decoration: underline;">Facebook.com/adsmanager</a></li>
-                                                                                                    <li><a href="https://ads.google.com/" title="Google ads" target="_blank" style="color: #0092ff; text-decoration: underline;">Ads.google.com</a></li>
-                                                                                                    <li><a href="https://www.linkedin.com/campaignmanager" title="LinkedIn campaign manager" target="_blank" style="color: #0092ff; text-decoration: underline;">Linkedin.com/campaignmanager</a></li>
-                                                                                                    <li><a href="https://ads.twitter.com/" title="Twitter ads" target="_blank" style="color: #0092ff; text-decoration: underline;">Ads.twitter.com</a></li>
-                                                                                                    <li><a href="https://ads.pinterest.com/" title="Pinterest ads" target="_blank" style="color: #0092ff; text-decoration: underline;">Ads.pinterest.com</a></li>
+                                                                                                    <li><a href="https://www.facebook.com/adsmanager" title="Facebook ad manager" target="_blank" style="color: #0092ff; text-decoration: underline;">Facebook</a></li>
+                                                                                                    <li><a href="https://ads.google.com/" title="Google ads" target="_blank" style="color: #0092ff; text-decoration: underline;">Google</a></li>
+                                                                                                    <li><a href="https://www.linkedin.com/campaignmanager" title="LinkedIn campaign manager" target="_blank" style="color: #0092ff; text-decoration: underline;">Linkedin</a></li>
+                                                                                                    <li><a href="https://ads.twitter.com/" title="Twitter ads" target="_blank" style="color: #0092ff; text-decoration: underline;">Twitter</a></li>
+                                                                                                    <li><a href="https://ads.pinterest.com/" title="Pinterest ads" target="_blank" style="color: #0092ff; text-decoration: underline;">Pinterest</a></li>
+                                                                                                    <li><a href="https://ads.tiktok.com/" title="TikTok ads" target="_blank" style="color: #0092ff; text-decoration: underline;">Ads.tiktok.com</a></li>
                                                                                                     <li><a href="https://www.quora.com/business" title="Quora advertising" target="_blank" style="color: #0092ff; text-decoration: underline;">Quora.com/business</a></li>
                                                                                                     <li><a href="https://forbusiness.snapchat.com/" title="Snapchat advertising" target="_blank" style="color: #0092ff; text-decoration: underline;">Forbusiness.snapchat.com</a></li>
                                                                                                     <li><a href="https://ads.reddit.com/" title="Reddit ads" target="_blank" style="color: #0092ff; text-decoration: underline;">Ads.reddit.com</a></li>
-                                                                                                    <li><a href="https://ads.tiktok.com/" title="TikTok ads" target="_blank" style="color: #0092ff; text-decoration: underline;">Ads.tiktok.com</a></li>
+
+                                                                                                </ul>
+                                                                                            </div>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                    <tr class="nl2go-responsive-hide">
+                                                                                        <td height="15" style="font-size: 15px; line-height: 15px;">­</td>
+                                                                                    </tr>
+                                                                                </table>
+                                                                            </td>
+                                                                        </tr>
+
+                                                                        <tr>
+                                                                            <td class="r12-c" align="left">
+                                                                                <table cellspacing="0" cellpadding="0" border="0" role="presentation" width="100%" class="r13-o" style="table-layout: fixed; width: 100%;">
+                                                                                    <tr class="nl2go-responsive-hide">
+                                                                                        <td height="15" style="font-size: 15px; line-height: 15px;">­</td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <td align="left" valign="top" class="r15-i nl2go-default-textstyle" style="color: #3b3f44; font-family: arial,helvetica,sans-serif; font-size: 16px; line-height: 1.5; text-align: left; word-wrap: break-word;">
+                                                                                            <div>
+                                                                                            <p style="margin: 0px;">(optional)</p>
+                                                                                                <ul style="margin: 0px;">
+
+                                                                                                    <li><a href="https://forbusiness.snapchat.com/" title="Snapchat advertising" target="_blank" style="color: #0092ff; text-decoration: underline;">SnapChat</a></li>
+                                                                                                    <li><a href="https://ads.reddit.com/" title="Reddit ads" target="_blank" style="color: #0092ff; text-decoration: underline;">Reddit</a></li>
+
                                                                                                 </ul>
                                                                                             </div>
                                                                                         </td>

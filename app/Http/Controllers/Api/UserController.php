@@ -308,9 +308,10 @@ class UserController extends Controller
 
             //$category = $event->category[0];
 
-            $data[$key]['event'] = $event;//$event->toArray();
-            $data[$key]['user_absences'] = $user->getAbsencesByEvent($event)['user_absences_percent'];
-            $data[$key]['absences_limit'] = isset($eventInfo['inclass']['absences']) ? $eventInfo['inclass']['absences'] : 0;
+            $newArr = [];
+            $newArr['event'] = $event;//$event->toArray();
+            $newArr['user_absences'] = $user->getAbsencesByEvent($event)['user_absences_percent'];
+            $newArr['absences_limit'] = isset($eventInfo['inclass']['absences']) ? $eventInfo['inclass']['absences'] : 0;
 
             //$dropbox = $category['dropbox'][0];
 
@@ -581,10 +582,10 @@ class UserController extends Controller
             }
             // Summary
             /*foreach($event['summary1'] as $key_summary => $summary){
-                $data[$key]['summary'][$key_summary]['title'] = $summary->title;
-                $data[$key]['summary'][$key_summary]['description'] = $summary->description;
-                $data[$key]['summary'][$key_summary]['icon'] = $summary->icon;
-                $data[$key]['summary'][$key_summary]['section'] = $summary->section;
+                $newArr['summary'][$key_summary]['title'] = $summary->title;
+                $newArr['summary'][$key_summary]['description'] = $summary->description;
+                $newArr['summary'][$key_summary]['icon'] = $summary->icon;
+                $newArr['summary'][$key_summary]['section'] = $summary->section;
 
                 if($summary->section == 'date'){
                     $date = $summary->section;
@@ -596,32 +597,32 @@ class UserController extends Controller
 
             $date = isset($eventInfo['inclass']['dates']['text']) ? $eventInfo['inclass']['dates']['text'] : null;
 
-            $data[$key]['summary'][0]['title'] = $date;
-            $data[$key]['summary'][0]['description'] = '';
-            $data[$key]['summary'][0]['icon'] = null;
-            $data[$key]['summary'][0]['section'] = 'date';
+            $newArr['summary'][0]['title'] = $date;
+            $newArr['summary'][0]['description'] = '';
+            $newArr['summary'][0]['icon'] = null;
+            $newArr['summary'][0]['section'] = 'date';
 
             // is Inclass?
             if($event->is_inclass_course()){
                 //dd($key);
-                $data[$key]['is_inclass'] = true;
-                $data[$key]['date'] = $date;
-                //$data[$key]['city'] = $event->city->toArray();
+                $newArr['is_inclass'] = true;
+                $newArr['date'] = $date;
+                //$newArr['city'] = $event->city->toArray();
                 if(isset($event->city)){
                     //dd($event->city);
                     foreach($event->city as $key_city => $city){
-                        $data[$key]['city'][$key_city]['name'] = ($city->name) ? $city->name : '' ;
-                        $data[$key]['city'][$key_city]['description'] =  ($city->description) ? $city->description : '' ;
+                        $newArr['city'][$key_city]['name'] = ($city->name) ? $city->name : '' ;
+                        $newArr['city'][$key_city]['description'] =  ($city->description) ? $city->description : '' ;
                     }
                 }
 
                 if(isset($event->venues)){
                     foreach($event->venues as $key_venue => $venue ){
-                        $data[$key]['venues'][$key_venue]['name'] = ($venue->name) ? $venue->name : '';
-                        $data[$key]['venues'][$key_venue]['description'] = ($venue->description) ? $venue->description : '';
-                        $data[$key]['venues'][$key_venue]['direction_description'] = ($venue->direction_description) ? $venue->direction_description : '';
-                        $data[$key]['venues'][$key_venue]['longitude'] = ($venue->longtitude) ? $venue->longtitude : '';
-                        $data[$key]['venues'][$key_venue]['latitude'] = ($venue->latitude) ? $venue->latitude : '';
+                        $newArr['venues'][$key_venue]['name'] = ($venue->name) ? $venue->name : '';
+                        $newArr['venues'][$key_venue]['description'] = ($venue->description) ? $venue->description : '';
+                        $newArr['venues'][$key_venue]['direction_description'] = ($venue->direction_description) ? $venue->direction_description : '';
+                        $newArr['venues'][$key_venue]['longitude'] = ($venue->longtitude) ? $venue->longtitude : '';
+                        $newArr['venues'][$key_venue]['latitude'] = ($venue->latitude) ? $venue->latitude : '';
                     }
 
                 }
@@ -629,7 +630,7 @@ class UserController extends Controller
                 $eventLessons = $event['lessonsForApp']->sortBy('time_starts');
 
                 // if inclass, parse dropbox files without attach by topic
-                //$data[$key]['files']['folders'][] = $foldersNew;
+                //$newArr['files']['folders'][] = $foldersNew;
                 if(isset($foldersNew[0]) && count($foldersNew[0]) > 0){
                     foreach($foldersNew as $key1 => $folderNew){
 
@@ -644,17 +645,17 @@ class UserController extends Controller
 
                         }
 
-                        $data[$key]['files']['folders'][] = ['name' => $folderName, 'files' => $eventFiles];
+                        $newArr['files']['folders'][] = ['name' => $folderName, 'files' => $eventFiles];
                     }
                 }else{
-                  $data[$key]['files']['folders'] = [];
+                  $newArr['files']['folders'] = [];
                 }
             }else if($event->is_elearning_course()){
-                $data[$key]['is_elearning'] = true;
+                $newArr['is_elearning'] = true;
                 $isElearning = true;
                 //progress here
-                $data[$key]['progress'] = round($event->progress($user),2).'%';
-                $data[$key]['videos_seen'] = $event->video_seen($user);
+                $newArr['progress'] = round($event->progress($user),2).'%';
+                $newArr['videos_seen'] = $event->video_seen($user);
                 // Statistics
                 $statistics =  ($statistics = $user->statistic()->wherePivot('event_id',$event['id'])->first()) ?
                             $statistics->toArray() : ['pivot' => [], 'videos' => ''];
@@ -666,13 +667,13 @@ class UserController extends Controller
 
                 //dd($statistics);
 
-                $data[$key]['lastVideoSeen'] = isset($statistics['pivot']['lastVideoSeen']) ? $statistics['pivot']['lastVideoSeen'] : -1;
+                $newArr['lastVideoSeen'] = isset($statistics['pivot']['lastVideoSeen']) ? $statistics['pivot']['lastVideoSeen'] : -1;
 
                 $eventLessons = $event['lessonsForApp']->sortBy('priority');
 
             }
             else{
-                $data[$key]['is_inClass'] = false;
+                $newArr['is_inClass'] = false;
                 $eventLessons =[];
             }
 
@@ -724,7 +725,7 @@ class UserController extends Controller
 
 
                     if($lesson['vimeo_video'] != ''){
-                        
+
                         $vimeo_id = explode('https://vimeo.com/', $lesson['vimeo_video']);
                         if(!isset($vimeo_id[1])){
                             continue;
@@ -845,16 +846,16 @@ class UserController extends Controller
                         $time = strtotime($date_split[1]);
                         $date_time = strtotime($date_lesson);
 
-                        //$data[$key]['calendar'][$topics[$topic->id]['calendar_count']]['time'] = $date_lesson ?? '';
-                        //$data[$key]['calendar'][$topics[$topic->id]['calendar_count']]['date_time'] = date_format(date_create($date_lesson), 'd/m/Y');
-                        //$data[$key]['calendar'][$topics[$topic->id]['calendar_count']]['title'] = $lesson['title'];
-                        //$data[$key]['calendar'][$topics[$topic->id]['calendar_count']]['room'] = $lesson['pivot']['room'];
-                        ////$data[$key]['calendar'][$topics[$topic->id]['calendar_count']]['instructor_image'] = asset(get_image($instructors[$lesson['instructor_id']][0]->medias, 'instructors-small'));
-                        ////$data[$key]['calendar'][$topics[$topic->id]['calendar_count']]['instructor_name'] = $instructors[$lesson['instructor_id']][0]['title'].' '.$instructors[$lesson['instructor_id']][0]['subtitle'];
-                        //$data[$key]['calendar'][$topics[$topic->id]['calendar_count']]['instructor_image'] = $inst['media'];
-                        //$data[$key]['calendar'][$topics[$topic->id]['calendar_count']]['instructor_name'] = $inst['name'];
+                        //$newArr['calendar'][$topics[$topic->id]['calendar_count']]['time'] = $date_lesson ?? '';
+                        //$newArr['calendar'][$topics[$topic->id]['calendar_count']]['date_time'] = date_format(date_create($date_lesson), 'd/m/Y');
+                        //$newArr['calendar'][$topics[$topic->id]['calendar_count']]['title'] = $lesson['title'];
+                        //$newArr['calendar'][$topics[$topic->id]['calendar_count']]['room'] = $lesson['pivot']['room'];
+                        ////$newArr['calendar'][$topics[$topic->id]['calendar_count']]['instructor_image'] = asset(get_image($instructors[$lesson['instructor_id']][0]->medias, 'instructors-small'));
+                        ////$newArr['calendar'][$topics[$topic->id]['calendar_count']]['instructor_name'] = $instructors[$lesson['instructor_id']][0]['title'].' '.$instructors[$lesson['instructor_id']][0]['subtitle'];
+                        //$newArr['calendar'][$topics[$topic->id]['calendar_count']]['instructor_image'] = $inst['media'];
+                        //$newArr['calendar'][$topics[$topic->id]['calendar_count']]['instructor_name'] = $inst['name'];
 
-                        $data[$key]['calendar'][]=[
+                        $newArr['calendar'][]=[
                             'time' => $date_lesson ?? '',
                             'date_time' => date_format(date_create($date_lesson), 'd/m/Y'),
                             'title' =>  htmlspecialchars_decode($lesson['title'],ENT_QUOTES),
@@ -876,7 +877,7 @@ class UserController extends Controller
 
             }
 
-            $data[$key]['topics'] = [];
+            $newArr['topics'] = [];
             foreach($topics as $key11 =>  $topic){
                 //dd($topic);
 
@@ -914,9 +915,10 @@ class UserController extends Controller
 
                 }
 
-                array_push($data[$key]['topics'], $arr);
+                array_push($newArr['topics'], $arr);
             }
 
+            array_push($data, $newArr);
 
         }
         return $data;
@@ -1308,7 +1310,12 @@ class UserController extends Controller
 
 
                     if($lesson['vimeo_video'] != ''){
-                        $vimeo_id = explode('https://vimeo.com/', $lesson['vimeo_video'])[1];
+
+                        $vimeo_id = explode('https://vimeo.com/', $lesson['vimeo_video']);
+                        if(!isset($vimeo_id[1])){
+                            continue;
+                        }
+                        $vimeo_id = $vimeo_id[1];
 
                         if(isset($notes[$vimeo_id]))
                             $arr_lesson['note'] = $notes[$vimeo_id];

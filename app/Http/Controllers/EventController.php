@@ -394,7 +394,6 @@ class EventController extends Controller
         $event_info = $this->prepareInfo($infoData, $request->status, $request->delivery, $partner, $request->syllabus, $request->city_id, $event);
         $this->updateEventInfo($event_info, $event->id);
 
-
         return redirect()->route('events.edit',$event->id)->withStatus(__('Event successfully created.'));
         //return redirect()->route('events.index')->withStatus(__('Event successfully created.'));
     }
@@ -519,9 +518,13 @@ class EventController extends Controller
         //$data = $data + $this->event_statistics($event, $data['eventUsers']);
 
         //if elearning course (id = 143)
-        $elearning_events = Delivery::with('event:id,title')->where('id',143)->whereHas('event', function ($query) {
-            return $query->where('published', true);
-        })->first()->toArray()['event'];
+        $elearning_events_new = Delivery::with('event:id,title,published')->where('id',143)->first()->toArray()['event'];
+
+        foreach($elearning_events_new as $ev){
+            if($ev['published'] == 1){
+                $elearning_events[] = $ev;
+            }
+        }
 
 
 
@@ -990,18 +993,20 @@ class EventController extends Controller
 
         }
 
-        if(isset($infoData['free_courses']['list'])){
-            // todo parse exams
+        if($request->status == 3){
+            if(isset($infoData['free_courses']['list'])){
+                // todo parse exams
 
-            if(isset($infoData['free_courses']['exams'])){
-                dispatch((new EnrollStudentsToElearningEvents($event->id,$infoData['free_courses']['list'], true))->delay(now()->addSeconds(3)));
+                if(isset($infoData['free_courses']['exams'])){
+                    dispatch((new EnrollStudentsToElearningEvents($event->id,$infoData['free_courses']['list'], true))->delay(now()->addSeconds(3)));
+                }else{
+                    dispatch((new EnrollStudentsToElearningEvents($event->id,$infoData['free_courses']['list'], false))->delay(now()->addSeconds(3)));
+                }
+
             }else{
-                dispatch((new EnrollStudentsToElearningEvents($event->id,$infoData['free_courses']['list'], false))->delay(now()->addSeconds(3)));
+                // todo parse exams
+                dispatch((new EnrollStudentsToElearningEvents($event->id, false, false))->delay(now()->addSeconds(3)));
             }
-
-        }else{
-            // todo parse exams
-            dispatch((new EnrollStudentsToElearningEvents($event->id, false, false))->delay(now()->addSeconds(3)));
         }
 
         //return back()->withStatus(__('Event successfully updated.'));

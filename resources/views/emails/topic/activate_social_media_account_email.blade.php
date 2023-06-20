@@ -96,7 +96,7 @@
                                                                                     <tr>
                                                                                         <td align="left" valign="top" class="r15-i nl2go-default-textstyle" style="color: #3b3f44; font-family: arial,helvetica,sans-serif; font-size: 16px; line-height: 1.5; text-align: left;">
                                                                                             <div>
-                                                                                                <p style="margin: 0px;">As you are about to start the Social Media Platforms section of the course, which describes the features of the important social networks, <strong>we encourage you to create a personal account</strong> so that you can better comprehend your training. The social networks we suggest to start using are the following:</p>
+                                                                                                <p style="margin: 0px;">As you are about to start the Social Media Platforms section of our course, <strong>we encourage you to create a personal account</strong> so that you can follow our training. </p>
                                                                                             </div>
                                                                                         </td>
                                                                                     </tr>
@@ -115,6 +115,7 @@
                                                                                     <tr>
                                                                                         <td align="left" valign="top" class="r15-i nl2go-default-textstyle" style="color: #3b3f44; font-family: arial,helvetica,sans-serif; font-size: 16px; line-height: 1.5; text-align: left; word-wrap: break-word;">
                                                                                             <div>
+                                                                                                <p>(required)</p>
                                                                                                 <ul style="margin: 0px;">
                                                                                                     <li><a href="https://www.facebook.com/" style="color: #0092ff; text-decoration: underline;">Facebook.com</a></li>
                                                                                                     <li><a href="https://www.instagram.com/" style="color: #0092ff; text-decoration: underline;">Instagram.com</a></li>
@@ -123,11 +124,32 @@
                                                                                                     <li><a href="https://www.tiktok.com" style="color: #0092ff; text-decoration: underline;">Tiktok.com</a></li>
                                                                                                     <li><a href="https://www.youtube.com/" style="color: #0092ff; text-decoration: underline;">Youtube.com</a></li>
                                                                                                     <li><a href="https://www.pinterest.com/" style="color: #0092ff; text-decoration: underline;">Pinterest.com</a></li>
+                                                                                                    <li><a href="https://www.quora.com/" style="color: #0092ff; text-decoration: underline;">Quora.com</a></li>
+                                                                                                </ul>
+                                                                                            </div>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                    <tr class="nl2go-responsive-hide">
+                                                                                        <td height="15" style="font-size: 15px; line-height: 15px;">­</td>
+                                                                                    </tr>
+                                                                                </table>
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="r12-c" align="left">
+                                                                                <table cellspacing="0" cellpadding="0" border="0" role="presentation" width="100%" class="r13-o" style="table-layout: fixed; width: 100%;">
+                                                                                    <tr class="nl2go-responsive-hide">
+                                                                                        <td height="15" style="font-size: 15px; line-height: 15px;">­</td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <td align="left" valign="top" class="r15-i nl2go-default-textstyle" style="color: #3b3f44; font-family: arial,helvetica,sans-serif; font-size: 16px; line-height: 1.5; text-align: left; word-wrap: break-word;">
+                                                                                            <div>
+                                                                                                <p>(optional)</p>
+                                                                                                <ul style="margin: 0px;">
+
                                                                                                     <li><a href="https://www.snapchat.com/" style="color: #0092ff; text-decoration: underline;">Snapchat.com</a></li>
                                                                                                     <li><a href="https://www.reddit.com/" style="color: #0092ff; text-decoration: underline;">Reddit.com</a></li>
-                                                                                                    <li><a href="https://www.clubhouse.com/" style="color: #0092ff; text-decoration: underline;">Clubhouse.com</a></li>
                                                                                                     <li><a href="https://www.twitch.tv/" style="color: #0092ff; text-decoration: underline;">Twitch.tv</a></li>
-                                                                                                    <li><a href="https://www.quora.com/" style="color: #0092ff; text-decoration: underline;">Quora.com</a></li>
                                                                                                 </ul>
                                                                                             </div>
                                                                                         </td>
@@ -147,10 +169,10 @@
                                                                                     <tr>
                                                                                         <td align="left" valign="top" class="r15-i nl2go-default-textstyle" style="color: #3b3f44; font-family: arial,helvetica,sans-serif; font-size: 16px; line-height: 1.5; text-align: left;">
                                                                                             <div>
-                                                                                                <p style="margin: 0px;"><strong>For all of them:</strong></p>
+                                                                                                <p style="margin: 0px;"><strong>What you can do:</strong></p>
                                                                                                 <p style="margin: 0px;"> </p>
                                                                                                 <ol style="margin: 0px;">
-                                                                                                    <li>Create a personal account - if you do not already have one</li>
+                                                                                                    <li>Create an account - if you do not already have one</li>
                                                                                                     <li>Fill in the basics (photo, about)</li>
                                                                                                     <li>Remember your username &amp; password</li>
                                                                                                 </ol>
