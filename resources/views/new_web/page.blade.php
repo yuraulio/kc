@@ -9,6 +9,13 @@
 @stop
 @section('blog-custom-css')
     <link type="text/css" href="{{ asset('binshops-blog.css') }}" rel="stylesheet">
+
+    <style>
+        #chatbase-bubble-button{
+            bottom: 0.5rem !important;
+            right: 4rem !important;
+        }
+    </style>
 @endsection
 
 @section("content")
