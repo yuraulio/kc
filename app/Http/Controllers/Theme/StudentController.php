@@ -514,10 +514,10 @@ class StudentController extends Controller
 
         foreach($events as $key => $event){
             $after20Days = null;
-            /*if($event->id == 2304){
-                dd($event);
+            // if($event->id != 2304){
+            //     continue;
 
-            }*/
+            // }
             $eventInfo = $event->event_info();
 
             $data['events'][$event->id]['paid'] = $event['pivot']['paid'];
@@ -636,7 +636,11 @@ class StudentController extends Controller
             //$data['elearningAccess'] = $event->is_elearning_course();
         }
 
-        foreach($user['eventSubscriptions']->whereNotIn('id',$eventSubscriptions) as $key => $subEvent){
+        $eventSubs = $user['eventSubscriptions']->whereNotIn('id',$eventSubscriptions)->filter(function($item) {
+                            return  $item->stripe_status != 'cancelled' && $item->stripe_status != 'canceled';
+                        });
+
+        foreach($eventSubs as $key => $subEvent){
             if(!($event = $subEvent['event']->first())){
             	continue;
             }
