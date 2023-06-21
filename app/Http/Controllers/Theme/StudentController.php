@@ -601,6 +601,8 @@ class StudentController extends Controller
                     $data['masterClassAccess'] = true;
                 }
 
+
+
                 //$this->updateUserStatistic($event,$statistics,$user);
 
 

@@ -42,14 +42,14 @@ class AbsenceController extends Controller
         }
 
         $lessons = $event->lessons()->where('date',$date)->get();
-        
+        $eventInfo = $event->event_info();
         $timeStarts = false;
         $timeEnds = false;
         $missedHours = 0;
 
-        foreach($lessons as $key => $lesson){  
-            
-            
+        foreach($lessons as $key => $lesson){
+
+
             $lessonHour = date('H', strtotime($lesson->pivot->time_starts));
 
             if($lessonHour < $hour){
@@ -62,12 +62,12 @@ class AbsenceController extends Controller
             }
             $timeEnds = (int) date('H', strtotime($lesson->pivot->time_ends));
         }
-        
+
         if($timeStarts && $timeEnds){
-           
+
             $totalMinutesUser = ($timeEnds - $timeStarts) * 60;
             $totalMinutesEvent = $totalMinutesUser + ($missedHours * 60);
-            
+
             $absence = new Absence;
             $absence->user_id = $user->id;
             $absence->event_id = $event->id;
@@ -79,7 +79,9 @@ class AbsenceController extends Controller
 
             return response()->json([
                 'success' => true,
-                "message" => 'Successfully checked-in'
+                "message" => 'Successfully checked-in',
+                'user_absences' => $user->getAbsencesByEvent($event)['user_absences_percent'],
+                'absences_limit' => isset($eventInfo['inclass']['absences']) ? $eventInfo['inclass']['absences'] : 0,
             ]);
 
         }

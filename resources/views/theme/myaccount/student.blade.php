@@ -653,8 +653,33 @@
             @else
             <div id="courses" class="tab-content-wrapper active-tab new-tab-content-wrapper">
 
+                @php
+                $has_plan = false;
+                $availablePlans = [];
+                $showPlan = null;
 
-               @if(!$masterClassAccess && $subscriptionAccess)
+
+                foreach($plans as $key => $plan){
+                    foreach($plan->events as $ev){
+                        $availablePlans[$ev->id] = $ev;
+                    }
+
+                    if($plan->events->first()){
+                        $has_plan = true;
+                    }
+                }
+
+                if(isset($availablePlans[2304])){
+                    $showPlan = $availablePlans[2304];
+                }else if(isset($availablePlans[1350])){
+                    $showPlan = $availablePlans[1350];
+                }
+
+
+                @endphp
+
+
+               @if($showPlan != null && $has_plan && !$masterClassAccess && $subscriptionAccess)
                     <div class="subscription-div">
                         <div class="col12 dynamic-courses-wrapper subscription-card">
                                 <div class="item">
@@ -670,8 +695,9 @@
                                         </div>
                                     </div>
                                     <div class="right subscription-button">
+
                                     @foreach($plans as $key => $plan)
-                                        <a href="/myaccount/subscription/{{$plan->events->first()->title}}/{{ $plan->name }}" class="btn btn--primary btn--lg">GET ANNUAL ACCESS NOW</a>
+                                        <a href="/myaccount/subscription/{{$showPlan['title']}}/{{ $plan->name }}" class="btn btn--primary btn--lg">GET ANNUAL ACCESS NOW</a>
                                     @endforeach
                                     </div>
                                     </div>

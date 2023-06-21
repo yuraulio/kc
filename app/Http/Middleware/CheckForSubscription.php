@@ -3,7 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use App\Model\Event; 
+use App\Model\Event;
 use App\Model\Plan;
 use App\Model\User;
 use Auth;
@@ -20,14 +20,14 @@ class CheckForSubscription
      */
     public function handle($request, Closure $next)
     {
-    
+
         $user = Auth::user();
         $dpuser = $user;
-   
+
         if(!isset($request->route()->parameters['plan']) || !isset($request->route()->parameters['event'])){
             abort(404);
         }
-        
+
         $plan = $request->route()->parameters['plan'];
         $plan = Plan::where('name',$plan)->wherePublished(true)->first();
         //$plan = Plan::find($plan);
@@ -39,9 +39,9 @@ class CheckForSubscription
         if(!$plan || !$event){
             abort(404);
         }
-        
+
         $plans = $plan->events->where('id',$event->id);
-        
+
         if($event->plans->count() <= 0 || count($plans) == 0){
             abort(404);
         }
@@ -49,8 +49,10 @@ class CheckForSubscription
         if(!$dpuser->checkUserSubscriptionByEventId($event->id)){
             abort(404);
         }
-       
+        //dd($event->plans);
+
         if(!$dpuser->checkUserPlansById($event->plans,$plan->id)){
+            //dd('3');
             abort(404);
         }
         if($user->subscriptions()->where('stripe_price',$plan->stripe_plan)->where('stripe_status','active')->first()){
