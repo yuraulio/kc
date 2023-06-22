@@ -278,211 +278,114 @@ class UserController extends Controller
 
     }
 
+    private function load_event_data($event, $user, $instructors, $bonusFiles){
 
-    private function userEvents($data,$user,$exceptEvents = []){
+        $eventInfo = $event->event_info();
+        //dd($event->lessons);
+        $data1 = [];
 
-        $bonusFiles = ['_Bonus', 'Bonus', 'Bonus Files', 'Βonus', '_Βonus', 'Βonus', 'Βonus Files'];
-        $instructors = Instructor::with('medias')->get()->groupby('id');
-        foreach($user['events_for_user_list']->whereNotIn('id',$exceptEvents) as $key => $event)
-        {
+        $isElearning = false;
+        //$event = Event::find($event['id']);
 
+        //$category = $event->category[0];
 
-            if($event->pivot['expiration'] != ''){
+        $newArr = [];
+        $newArr['event'] = $event;//$event->toArray();
+        $newArr['user_absences'] = $user->getAbsencesByEvent($event)['user_absences_percent'];
+        $newArr['absences_limit'] = isset($eventInfo['inclass']['absences']) ? $eventInfo['inclass']['absences'] : 0;
 
-                if(strtotime($event->pivot['expiration']) <= strtotime("now")){
-                    continue;
-                }
-            }
+        //$dropbox = $category['dropbox'][0];
 
+        // Display
+        $now1 = strtotime(date("Y-m-d"));
+        $display = false;
+        if(!$event['release_date_files'] && $event['status'] == 3){
+            $display = true;
 
-            if($event->pivot && !$event->pivot->paid){
-                continue;
-            }
+        }else if(strtotime(date('Y-m-d',strtotime($event['release_date_files']))) >= $now1 && $event['status'] == 3){
 
-            $eventInfo = $event->event_info();
-            //dd($event->lessons);
-            $data1 = [];
-
-            $isElearning = false;
-            //$event = Event::find($event['id']);
-
-            //$category = $event->category[0];
-
-            $newArr = [];
-            $newArr['event'] = $event;//$event->toArray();
-            $newArr['user_absences'] = $user->getAbsencesByEvent($event)['user_absences_percent'];
-            $newArr['absences_limit'] = isset($eventInfo['inclass']['absences']) ? $eventInfo['inclass']['absences'] : 0;
-
-            //$dropbox = $category['dropbox'][0];
-
-            // Display
-            $now1 = strtotime(date("Y-m-d"));
-            $display = false;
-            if(!$event['release_date_files'] && $event['status'] == 3){
-                $display = true;
-
-            }else if(strtotime(date('Y-m-d',strtotime($event['release_date_files']))) >= $now1 && $event['status'] == 3){
-
-                $display = true;
-            }else if(isset($event['delivery'][0]['id']) && $event['delivery'][0]['id'] == 143){
-                $display = true;
-            }
-            //End Display
+            $display = true;
+        }else if(isset($event['delivery'][0]['id']) && $event['delivery'][0]['id'] == 143){
+            $display = true;
+        }
+        //End Display
 
 
-            $foldersNew = [];
+        $foldersNew = [];
 
-            foreach($event['dropbox'] as $keyDrop => $dropbox) {
-                //dd($dropbox);
+        foreach($event['dropbox'] as $keyDrop => $dropbox) {
+            //dd($dropbox);
 
-                //$dropbox = isset($event['dropbox'][0]) ? $event['dropbox'][0] : [];
-                $folders = isset($dropbox['folders'][0]) ? $dropbox['folders'][0] : [];
-                $folders_bonus = isset($dropbox['folders'][1]) ? $dropbox['folders'][1] : [];
-                //dd($folders_bonus);
-                $files = isset($dropbox['files'][1]) ? $dropbox['files'][1] : [];
-                $files_bonus = isset($dropbox['files'][2]) ? $dropbox['files'][2] : [];
+            //$dropbox = isset($event['dropbox'][0]) ? $event['dropbox'][0] : [];
+            $folders = isset($dropbox['folders'][0]) ? $dropbox['folders'][0] : [];
+            $folders_bonus = isset($dropbox['folders'][1]) ? $dropbox['folders'][1] : [];
+            //dd($folders_bonus);
+            $files = isset($dropbox['files'][1]) ? $dropbox['files'][1] : [];
+            $files_bonus = isset($dropbox['files'][2]) ? $dropbox['files'][2] : [];
 
 
-                if(isset($dropbox) && $folders != null && $display)
-                {
-                    if(isset($folders) && count($folders) > 0){
+            if(isset($dropbox) && $folders != null && $display)
+            {
+                if(isset($folders) && count($folders) > 0){
 
-                        if(isset($dropbox['pivot']) && isset($dropbox['pivot']['selectedFolders'])){
-                            $selectedFiles = $dropbox['pivot']['selectedFolders'];
-                            $selectedFiles = json_decode($selectedFiles, true);
+                    if(isset($dropbox['pivot']) && isset($dropbox['pivot']['selectedFolders'])){
+                        $selectedFiles = $dropbox['pivot']['selectedFolders'];
+                        $selectedFiles = json_decode($selectedFiles, true);
+                    }
+                    $data1 = [];
+                    foreach($folders as $folder){
+
+                        $folderIsSelected = false;
+
+                        if(isset($selectedFiles)){
+
+                            if($selectedFiles['selectedAllFolders']){
+                                $folderIsSelected = true;
+                            }else{
+                                foreach($selectedFiles['selectedFolders'] as $key10 => $selectedFile){
+                                    if($folder['dirname'] == $selectedFile){
+                                        $folderIsSelected = true;
+                                    }
+                                }
+                            }
+
                         }
-                        $data1 = [];
-                        foreach($folders as $folder){
 
-                            $folderIsSelected = false;
+                        $data1[$folder['id']]['subfolders'] = [];
+                        $data1[$folder['id']]['id'] = $folder['id'];
+                        $data1[$folder['id']]['dirname'] = $folder['dirname'];
+                        $data1[$folder['id']]['foldername'] = $folder['foldername'];
+                        $data1[$folder['id']]['files'] = [];
+                        $data1[$folder['id']]['bonus'] = [];
 
-                            if(isset($selectedFiles)){
+                        $checkedF = [];
+                        $fs = [];
+                        $fk = 1;
+                        $bonus = [];
+                        $subfolder = [];
+                        $subfiles = [];
 
-                                if($selectedFiles['selectedAllFolders']){
-                                    $folderIsSelected = true;
-                                }else{
-                                    foreach($selectedFiles['selectedFolders'] as $key10 => $selectedFile){
-                                        if($folder['dirname'] == $selectedFile){
-                                            $folderIsSelected = true;
-                                        }
-                                    }
+                        if(isset($files) && count($files) > 0){
+
+                            foreach($folders_bonus as $folder_bonus){
+
+                                if(isset($folder_bonus['parent']) && $folder_bonus['parent'] == $folder['id']  && !in_array($folder_bonus['foldername'],$bonusFiles)){
+                                    $checkedF[] = $folder_bonus['id'] + 1 ;
+                                    $fs[$folder_bonus['id']+1]=[];
+                                    $fs[$folder_bonus['id']+1] = $folder_bonus;
+
                                 }
 
                             }
+                        }
 
-                            $data1[$folder['id']]['subfolders'] = [];
-                            $data1[$folder['id']]['id'] = $folder['id'];
-                            $data1[$folder['id']]['dirname'] = $folder['dirname'];
-                            $data1[$folder['id']]['foldername'] = $folder['foldername'];
-                            $data1[$folder['id']]['files'] = [];
-                            $data1[$folder['id']]['bonus'] = [];
+                        if(count($fs)>0){
+                            foreach($fs as $subf){
+                                foreach($files_bonus as $folder_bonus){
 
-                            $checkedF = [];
-                            $fs = [];
-                            $fk = 1;
-                            $bonus = [];
-                            $subfolder = [];
-                            $subfiles = [];
-
-                            if(isset($files) && count($files) > 0){
-
-                                foreach($folders_bonus as $folder_bonus){
-
-                                    if(isset($folder_bonus['parent']) && $folder_bonus['parent'] == $folder['id']  && !in_array($folder_bonus['foldername'],$bonusFiles)){
-                                        $checkedF[] = $folder_bonus['id'] + 1 ;
-                                        $fs[$folder_bonus['id']+1]=[];
-                                        $fs[$folder_bonus['id']+1] = $folder_bonus;
-
-                                    }
-
-                                }
-                            }
-
-                            if(count($fs)>0){
-                                foreach($fs as $subf){
-                                    foreach($files_bonus as $folder_bonus){
-
-                                        if(in_array($subf['foldername'],$subfolder)){
-                                        continue;
-                                        }
-                                        if(isset($folder_bonus['parent']) && $folder_bonus['parent'] == $folder['id']){
-
-                                            $folderIsSelected = false;
-
-                                            if(isset($selectedFiles)){
-                                                if($selectedFiles['selectedAllFolders']){
-                                                    $folderIsSelected = true;
-                                                }else{
-                                                    foreach($selectedFiles['selectedFolders'] as $key10 => $selectedFile){
-                                                        if($folder_bonus['dirname'] == $selectedFile){
-                                                            $folderIsSelected = true;
-                                                        }
-                                                    }
-
-                                                }
-
-                                            }
-
-                                            $subfolder[] =  $subf['foldername'];
-                                            $data1[$folder_bonus['parent']]['subfolders'][$subf['foldername']]=[];
-
-                                            foreach($files_bonus as $file_bonus){
-                                                if($file_bonus['fid'] == $subf['id'] && $file_bonus['parent'] == $subf['parent'] ){
-
-                                                    if($folderIsSelected){
-                                                        $subfiles[]= $file_bonus['filename'];
-
-                                                        $data1[$folder_bonus['parent']]['subfolders'][$subf['foldername']][]=['fid'=>$file_bonus['parent'], 'foldername'=>$subf['foldername'], 'filename' => $file_bonus['filename'], 'dirname' => $file_bonus['dirname'],'ext' => $file_bonus['ext'], 'last_mod' => $file_bonus['last_mod']];
-
-                                                    }else{
-                                                        if(isset($selectedFiles)){
-                                                            foreach($selectedFiles['selectedFolders'] as $key10 => $selectedFile){
-
-                                                                if($file_bonus['dirname'] == $selectedFile){
-                                                                    $subfiles[]= $file_bonus['filename'];
-
-                                                                    $data1[$folder_bonus['parent']]['subfolders'][$subf['foldername']][]=['fid'=>$file_bonus['parent'], 'foldername'=>$subf['foldername'], 'filename' => $file_bonus['filename'], 'dirname' => $file_bonus['dirname'],'ext' => $file_bonus['ext'], 'last_mod' => $file_bonus['last_mod']];
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-
-
-                                                }
-                                            }
-
-                                        }
-                                    }
-                                }
-
-                            }
-
-                            foreach($files as $file){
-                                if($folder['id'] == $file['fid']){
-                                    //dd($file);
-                                    if($folderIsSelected){
-                                        $data1[$folder['id']]['files'][] = ['fid'=>$file['fid'], 'filename' => $file['filename'], 'dirname' => $file['dirname'],'ext' => $file['ext'], 'last_mod' => $file['last_mod']];
-                                    }else{
-                                        if(isset($selectedFiles)){
-                                            foreach($selectedFiles['selectedFolders'] as $key10 => $selectedFile){
-                                                if($file['dirname'] == $selectedFile){
-                                                    $data1[$folder['id']]['files'][] = ['fid'=>$file['fid'], 'filename' => $file['filename'], 'dirname' => $file['dirname'],'ext' => $file['ext'], 'last_mod' => $file['last_mod']];
-                                                }
-                                            }
-                                        }
-                                    }
-
-                                }
-                            }
-
-                            if(isset($folders_bonus) && count($folders_bonus) > 0){
-
-                                foreach($folders_bonus as $folder_bonus){
-
-                                    if(in_array($folder_bonus['foldername'],$subfolder)){
+                                    if(in_array($subf['foldername'],$subfolder)){
                                     continue;
                                     }
-
                                     if(isset($folder_bonus['parent']) && $folder_bonus['parent'] == $folder['id']){
 
                                         $folderIsSelected = false;
@@ -496,431 +399,572 @@ class UserController extends Controller
                                                         $folderIsSelected = true;
                                                     }
                                                 }
+
                                             }
+
                                         }
 
+                                        $subfolder[] =  $subf['foldername'];
+                                        $data1[$folder_bonus['parent']]['subfolders'][$subf['foldername']]=[];
 
+                                        foreach($files_bonus as $file_bonus){
+                                            if($file_bonus['fid'] == $subf['id'] && $file_bonus['parent'] == $subf['parent'] ){
 
+                                                if($folderIsSelected){
+                                                    $subfiles[]= $file_bonus['filename'];
 
-                                        $data1[$folder['foldername']]['bonus'] = [];
-                                        if(isset($files_bonus) && count($files_bonus) > 0){
-                                            foreach($files_bonus as $file_bonus){
-                                                if(isset($file_bonus['parent']) && $file_bonus['parent'] == $folder_bonus['parent'] && !in_array($file_bonus['filename'],$subfiles)){
+                                                    $data1[$folder_bonus['parent']]['subfolders'][$subf['foldername']][]=['fid'=>$file_bonus['parent'], 'foldername'=>$subf['foldername'], 'filename' => $file_bonus['filename'], 'dirname' => $file_bonus['dirname'],'ext' => $file_bonus['ext'], 'last_mod' => $file_bonus['last_mod']];
 
-                                                    if($folderIsSelected){
-                                                        $data1[$folder_bonus['parent']]['bonus'][] = ['fid'=>$file_bonus['parent'], 'filename' => $file_bonus['filename'], 'dirname' => $file_bonus['dirname'],'ext' => $file_bonus['ext'], 'last_mod' => $file_bonus['last_mod']];
-                                                    }else{
-                                                        if(isset($selectedFiles)){
-                                                            foreach($selectedFiles['selectedFolders'] as $key10 => $selectedFile){
-                                                                if($file_bonus['dirname'] == $selectedFile){
-                                                                    $data1[$folder_bonus['parent']]['bonus'][] = ['fid'=>$file_bonus['parent'], 'filename' => $file_bonus['filename'], 'dirname' => $file_bonus['dirname'],'ext' => $file_bonus['ext'], 'last_mod' => $file_bonus['last_mod']];
-                                                                }
+                                                }else{
+                                                    if(isset($selectedFiles)){
+                                                        foreach($selectedFiles['selectedFolders'] as $key10 => $selectedFile){
+
+                                                            if($file_bonus['dirname'] == $selectedFile){
+                                                                $subfiles[]= $file_bonus['filename'];
+
+                                                                $data1[$folder_bonus['parent']]['subfolders'][$subf['foldername']][]=['fid'=>$file_bonus['parent'], 'foldername'=>$subf['foldername'], 'filename' => $file_bonus['filename'], 'dirname' => $file_bonus['dirname'],'ext' => $file_bonus['ext'], 'last_mod' => $file_bonus['last_mod']];
                                                             }
                                                         }
                                                     }
-
                                                 }
+
+
+                                            }
+                                        }
+
+                                    }
+                                }
+                            }
+
+                        }
+
+                        foreach($files as $file){
+                            if($folder['id'] == $file['fid']){
+                                //dd($file);
+                                if($folderIsSelected){
+                                    $data1[$folder['id']]['files'][] = ['fid'=>$file['fid'], 'filename' => $file['filename'], 'dirname' => $file['dirname'],'ext' => $file['ext'], 'last_mod' => $file['last_mod']];
+                                }else{
+                                    if(isset($selectedFiles)){
+                                        foreach($selectedFiles['selectedFolders'] as $key10 => $selectedFile){
+                                            if($file['dirname'] == $selectedFile){
+                                                $data1[$folder['id']]['files'][] = ['fid'=>$file['fid'], 'filename' => $file['filename'], 'dirname' => $file['dirname'],'ext' => $file['ext'], 'last_mod' => $file['last_mod']];
                                             }
                                         }
                                     }
                                 }
 
                             }
-
                         }
 
-                    }
+                        if(isset($folders_bonus) && count($folders_bonus) > 0){
 
-                }
+                            foreach($folders_bonus as $folder_bonus){
 
-                //dd($folders);
-
-
-
-                //dd($data1);
-                $test = [];
-                if($event->id == 2027 && $keyDrop == 1){
-                    //dd($data1);
-                }
-                foreach($data1 as $keyFile => $file){
-                    //dd($file);
-
-
-                    $bonus = [];
-                    $subfolders = [];
-
-                    if(!isset($file['id'])){
-                        continue;
-
-                    }
-
-                    $newSubfolders = [];
-                    foreach($file['subfolders'] as $subf){
-
-                        $newSubfolders[] = $subf;
-                    //    //$newSubfolders['foldername'] = $key;
-                    }
-
-
-
-                    if($event->is_inclass_course()){
-                        $test[$dropbox['folder_name']][] = ['id'=>$file['id'],'dirname'=>$file['dirname'],'foldername'=>$file['foldername'],'files'=>$file['files'],'bonus'=>$file['bonus'],
-                            'subfolders'=>$newSubfolders];
-                    }else{
-                        $test[] = ['id'=>$file['id'],'dirname'=>$file['dirname'],'foldername'=>$file['foldername'],'files'=>$file['files'],'bonus'=>$file['bonus'],
-                    'subfolders'=>$newSubfolders];
-
-                    }
-
-                }
-                $foldersNew[] = $test;
-
-            }
-
-            if($event->id == 2027){
-                //dd($foldersNew);
-            }
-            // Summary
-            /*foreach($event['summary1'] as $key_summary => $summary){
-                $newArr['summary'][$key_summary]['title'] = $summary->title;
-                $newArr['summary'][$key_summary]['description'] = $summary->description;
-                $newArr['summary'][$key_summary]['icon'] = $summary->icon;
-                $newArr['summary'][$key_summary]['section'] = $summary->section;
-
-                if($summary->section == 'date'){
-                    $date = $summary->section;
-                }else{
-                    $date = "null";
-                }
-            }*/
-
-
-            $date = isset($eventInfo['inclass']['dates']['text']) ? $eventInfo['inclass']['dates']['text'] : null;
-
-            $newArr['summary'][0]['title'] = $date;
-            $newArr['summary'][0]['description'] = '';
-            $newArr['summary'][0]['icon'] = null;
-            $newArr['summary'][0]['section'] = 'date';
-
-            // is Inclass?
-            if($event->is_inclass_course()){
-                //dd($key);
-                $newArr['is_inclass'] = true;
-                $newArr['date'] = $date;
-                //$newArr['city'] = $event->city->toArray();
-                if(isset($event->city)){
-                    //dd($event->city);
-                    foreach($event->city as $key_city => $city){
-                        $newArr['city'][$key_city]['name'] = ($city->name) ? $city->name : '' ;
-                        $newArr['city'][$key_city]['description'] =  ($city->description) ? $city->description : '' ;
-                    }
-                }
-
-                if(isset($event->venues)){
-                    foreach($event->venues as $key_venue => $venue ){
-                        $newArr['venues'][$key_venue]['name'] = ($venue->name) ? $venue->name : '';
-                        $newArr['venues'][$key_venue]['description'] = ($venue->description) ? $venue->description : '';
-                        $newArr['venues'][$key_venue]['direction_description'] = ($venue->direction_description) ? $venue->direction_description : '';
-                        $newArr['venues'][$key_venue]['longitude'] = ($venue->longtitude) ? $venue->longtitude : '';
-                        $newArr['venues'][$key_venue]['latitude'] = ($venue->latitude) ? $venue->latitude : '';
-                    }
-
-                }
-
-                $eventLessons = $event['lessonsForApp']->sortBy('time_starts');
-
-                // if inclass, parse dropbox files without attach by topic
-                //$newArr['files']['folders'][] = $foldersNew;
-                if(isset($foldersNew[0]) && count($foldersNew[0]) > 0){
-                    foreach($foldersNew as $key1 => $folderNew){
-
-                        $eventFiles = [];
-                        $folderName = '';
-                        foreach($folderNew as $folderkey => $files){
-                          $folderName = $folderkey;
-                          foreach($files as $file){
-                            //dd($file['files']);
-                            $eventFiles= array_merge($eventFiles, $file['files']);;
-                          }
-
-                        }
-
-                        $newArr['files']['folders'][] = ['name' => $folderName, 'files' => $eventFiles];
-                    }
-                }else{
-                  $newArr['files']['folders'] = [];
-                }
-            }else if($event->is_elearning_course()){
-                $newArr['is_elearning'] = true;
-                $isElearning = true;
-                //progress here
-                $newArr['progress'] = round($event->progress($user),2).'%';
-                $newArr['videos_seen'] = $event->video_seen($user);
-                // Statistics
-                $statistics =  ($statistics = $user->statistic()->wherePivot('event_id',$event['id'])->first()) ?
-                            $statistics->toArray() : ['pivot' => [], 'videos' => ''];
-
-                //$statistics = $user->updateUserStatistic($event,$statistics['pivot']);
-
-                $notes = isset($statistics['pivot']['notes']) ? json_decode($statistics['pivot']['notes'], true) : [];
-                $videos = isset($statistics['pivot']['videos']) ? json_decode($statistics['pivot']['videos'], true) : [];
-
-                //dd($statistics);
-
-                $newArr['lastVideoSeen'] = isset($statistics['pivot']['lastVideoSeen']) ? $statistics['pivot']['lastVideoSeen'] : -1;
-
-                $eventLessons = $event['lessonsForApp']->sortBy('priority');
-
-            }
-            else{
-                $newArr['is_inClass'] = false;
-                $eventLessons =[];
-            }
-
-
-            $topics = [];
-            //dd($event);
-            foreach($eventLessons as $lesson){
-
-                if(!$lesson['instructor_id']){
-                    continue;
-                }
-
-                if($isElearning && !$lesson['vimeo_video']){
-                    continue;
-                }
-
-                $inst['name'] = $instructors[$lesson['instructor_id']][0]['title'].' '.$instructors[$lesson['instructor_id']][0]['subtitle'];
-                $inst['media'] = asset(get_image($instructors[$lesson['instructor_id']][0]['medias'], 'instructors-small'));
-
-                $sum= 0;
-                $arr_lesson = array();
-                $topic = $lesson['topic']->first();
-                if(!$topic){
-                    continue;
-                }
-                //$topic = $lesson->topic()->wherePivot('category_id',$category->id)->first();
-
-                if(!isset($topics[$topic->id])){
-                    $topics[$topic->id] = [];
-                    $topics[$topic->id]['calendar_count'] = 0;
-                    $topics[$topic->id]['sumHour'] = 0;
-                    $topics[$topic->id]['lessons'] = [];
-                }
-
-
-                $topics[$topic->id]['name'] = htmlspecialchars_decode($topic->title,ENT_QUOTES);
-
-                if($isElearning){
-
-                    //$m = isset($topic['topic_duration']) ?  floor(($topic['topic_duration'] / 60) % 60) : 0;
-                    //$h =isset($topic['topic_duration']) ? $hours = floor($topic['topic_duration'] / 3600) : 0;
-                    //$arr['topic_content']['total_duration'] = intval($h) . 'h ' . $m . 'm';
-
-
-                    $arr_lesson['title'] = htmlspecialchars_decode($lesson['title'],ENT_QUOTES);
-                    $arr_lesson['vimeo_video'] = $lesson['vimeo_video'];
-                    $arr_lesson['vimeo_duration'] = $lesson['vimeo_duration'];
-                    $arr_lesson['bold'] = $lesson['bold'];
-
-
-                    if($lesson['vimeo_video'] != ''){
-
-                        $vimeo_id = explode('https://vimeo.com/', $lesson['vimeo_video']);
-                        if(!isset($vimeo_id[1])){
-                            continue;
-                        }
-                        $vimeo_id = $vimeo_id[1];
-
-                        if(isset($notes[$vimeo_id]))
-                            $arr_lesson['note'] = $notes[$vimeo_id];
-
-
-                        if(isset($videos[$vimeo_id])){
-
-                            $arr_lesson['video_info']['seen'] = strval($videos[$vimeo_id]['seen']);
-                            $arr_lesson['video_info']['stop_time'] = strval($videos[$vimeo_id]['stop_time']);
-                            $arr_lesson['video_info']['percentMinutes'] = strval($videos[$vimeo_id]['percentMinutes']);
-                        }else{
-                            $arr_lesson['video_info']['seen'] = "0";
-                            $arr_lesson['video_info']['stop_time'] = "0";
-                            $arr_lesson['video_info']['percentMinutes'] = "0";
-                        }
-
-
-
-
-                    }else{
-                        $arr_lesson['note'] = '';
-                    }
-
-                    if($lesson['vimeo_duration'] != null && $lesson['vimeo_duration'] != '0'){
-
-                        $vimeo_duration = explode(' ', $lesson['vimeo_duration']);
-                        $hour = 0;
-                        $min = 0;
-                        $sec = 0;
-
-
-
-                        if(count($vimeo_duration) == 3){
-                            $string_hour = $vimeo_duration[0];
-                            $string_hour = intval(explode('h',$string_hour)[0]);
-                            $hour = $string_hour * 3600;
-
-                            $string_min = $vimeo_duration[1];
-                            $string_min = intval(explode('m',$string_min)[0]);
-                            $min = $string_min * 60;
-
-                            $string_sec = $vimeo_duration[2];
-                            $string_sec = intval(explode('s',$string_sec)[0]);
-                            $sec = $string_sec;
-
-                            $sum = $hour + $min + $sec;
-
-                        }else if(count($vimeo_duration) == 2){
-                            $string_min = $vimeo_duration[0];
-                            $string_min = intval(explode('m',$string_min)[0]);
-                            $min = $string_min * 60;
-
-                            $string_sec = $vimeo_duration[1];
-                            $string_sec = intval(explode('s',$string_sec)[0]);
-                            $sec = $string_sec;
-
-                            $sum = $min + $sec;
-                        }else if(count($vimeo_duration) == 1){
-                            //dd($vimeo_duration);
-                            $a = strpos( $vimeo_duration[0], 's');
-                            //dd($a);
-                            if($a === false ){
-                                $sum = 0;
-                                if(strpos( $vimeo_duration[0], 'm')){
-                                    $string_min = $vimeo_duration[0];
-                                    $string_min = intval(explode('m',$string_min)[0]);
-                                    $min = $string_min * 60;
-                                    $sum = $min;
+                                if(in_array($folder_bonus['foldername'],$subfolder)){
+                                continue;
                                 }
 
-                            }else if($a !== false ){
-                                $string_sec = intval(explode('s',$vimeo_duration[0])[0]);
-                                $sec = $string_sec;
-                                $sum = $sec;
+                                if(isset($folder_bonus['parent']) && $folder_bonus['parent'] == $folder['id']){
 
+                                    $folderIsSelected = false;
+
+                                    if(isset($selectedFiles)){
+                                        if($selectedFiles['selectedAllFolders']){
+                                            $folderIsSelected = true;
+                                        }else{
+                                            foreach($selectedFiles['selectedFolders'] as $key10 => $selectedFile){
+                                                if($folder_bonus['dirname'] == $selectedFile){
+                                                    $folderIsSelected = true;
+                                                }
+                                            }
+                                        }
+                                    }
+
+
+
+
+                                    $data1[$folder['foldername']]['bonus'] = [];
+                                    if(isset($files_bonus) && count($files_bonus) > 0){
+                                        foreach($files_bonus as $file_bonus){
+                                            if(isset($file_bonus['parent']) && $file_bonus['parent'] == $folder_bonus['parent'] && !in_array($file_bonus['filename'],$subfiles)){
+
+                                                if($folderIsSelected){
+                                                    $data1[$folder_bonus['parent']]['bonus'][] = ['fid'=>$file_bonus['parent'], 'filename' => $file_bonus['filename'], 'dirname' => $file_bonus['dirname'],'ext' => $file_bonus['ext'], 'last_mod' => $file_bonus['last_mod']];
+                                                }else{
+                                                    if(isset($selectedFiles)){
+                                                        foreach($selectedFiles['selectedFolders'] as $key10 => $selectedFile){
+                                                            if($file_bonus['dirname'] == $selectedFile){
+                                                                $data1[$folder_bonus['parent']]['bonus'][] = ['fid'=>$file_bonus['parent'], 'filename' => $file_bonus['filename'], 'dirname' => $file_bonus['dirname'],'ext' => $file_bonus['ext'], 'last_mod' => $file_bonus['last_mod']];
+                                                            }
+                                                        }
+                                                    }
+                                                }
+
+                                            }
+                                        }
+                                    }
+                                }
                             }
+
                         }
 
                     }
 
-                    $topics[$topic->id]['sumHour'] += $sum;
+                }
+
+            }
+
+            //dd($folders);
+
+
+
+            //dd($data1);
+            $test = [];
+            if($event->id == 2027 && $keyDrop == 1){
+                //dd($data1);
+            }
+            foreach($data1 as $keyFile => $file){
+                //dd($file);
+
+
+                $bonus = [];
+                $subfolders = [];
+
+                if(!isset($file['id'])){
+                    continue;
+
+                }
+
+                $newSubfolders = [];
+                foreach($file['subfolders'] as $subf){
+
+                    $newSubfolders[] = $subf;
+                //    //$newSubfolders['foldername'] = $key;
+                }
+
+
+
+                if($event->is_inclass_course()){
+                    $test[$dropbox['folder_name']][] = ['id'=>$file['id'],'dirname'=>$file['dirname'],'foldername'=>$file['foldername'],'files'=>$file['files'],'bonus'=>$file['bonus'],
+                        'subfolders'=>$newSubfolders];
+                }else{
+                    $test[] = ['id'=>$file['id'],'dirname'=>$file['dirname'],'foldername'=>$file['foldername'],'files'=>$file['files'],'bonus'=>$file['bonus'],
+                'subfolders'=>$newSubfolders];
+
+                }
+
+            }
+            $foldersNew[] = $test;
+
+        }
+
+        if($event->id == 2027){
+            //dd($foldersNew);
+        }
+        // Summary
+        /*foreach($event['summary1'] as $key_summary => $summary){
+            $newArr['summary'][$key_summary]['title'] = $summary->title;
+            $newArr['summary'][$key_summary]['description'] = $summary->description;
+            $newArr['summary'][$key_summary]['icon'] = $summary->icon;
+            $newArr['summary'][$key_summary]['section'] = $summary->section;
+
+            if($summary->section == 'date'){
+                $date = $summary->section;
+            }else{
+                $date = "null";
+            }
+        }*/
+
+
+        $date = isset($eventInfo['inclass']['dates']['text']) ? $eventInfo['inclass']['dates']['text'] : null;
+
+        $newArr['summary'][0]['title'] = $date;
+        $newArr['summary'][0]['description'] = '';
+        $newArr['summary'][0]['icon'] = null;
+        $newArr['summary'][0]['section'] = 'date';
+
+        // is Inclass?
+        if($event->is_inclass_course()){
+            //dd($key);
+            $newArr['is_inclass'] = true;
+            $newArr['date'] = $date;
+            //$newArr['city'] = $event->city->toArray();
+            if(isset($event->city)){
+                //dd($event->city);
+                foreach($event->city as $key_city => $city){
+                    $newArr['city'][$key_city]['name'] = ($city->name) ? $city->name : '' ;
+                    $newArr['city'][$key_city]['description'] =  ($city->description) ? $city->description : '' ;
+                }
+            }
+
+            if(isset($event->venues)){
+                foreach($event->venues as $key_venue => $venue ){
+                    $newArr['venues'][$key_venue]['name'] = ($venue->name) ? $venue->name : '';
+                    $newArr['venues'][$key_venue]['description'] = ($venue->description) ? $venue->description : '';
+                    $newArr['venues'][$key_venue]['direction_description'] = ($venue->direction_description) ? $venue->direction_description : '';
+                    $newArr['venues'][$key_venue]['longitude'] = ($venue->longtitude) ? $venue->longtitude : '';
+                    $newArr['venues'][$key_venue]['latitude'] = ($venue->latitude) ? $venue->latitude : '';
+                }
+
+            }
+
+            $eventLessons = $event['lessonsForApp']->sortBy('time_starts');
+
+            // if inclass, parse dropbox files without attach by topic
+            //$newArr['files']['folders'][] = $foldersNew;
+            if(isset($foldersNew[0]) && count($foldersNew[0]) > 0){
+                foreach($foldersNew as $key1 => $folderNew){
+
+                    $eventFiles = [];
+                    $folderName = '';
+                    foreach($folderNew as $folderkey => $files){
+                      $folderName = $folderkey;
+                      foreach($files as $file){
+                        //dd($file['files']);
+                        $eventFiles= array_merge($eventFiles, $file['files']);;
+                      }
+
+                    }
+
+                    $newArr['files']['folders'][] = ['name' => $folderName, 'files' => $eventFiles];
+                }
+            }else{
+              $newArr['files']['folders'] = [];
+            }
+        }else if($event->is_elearning_course()){
+            $newArr['is_elearning'] = true;
+            $isElearning = true;
+            //progress here
+            $newArr['progress'] = round($event->progress($user),2).'%';
+            $newArr['videos_seen'] = $event->video_seen($user);
+            // Statistics
+            $statistics =  ($statistics = $user->statistic()->wherePivot('event_id',$event['id'])->first()) ?
+                        $statistics->toArray() : ['pivot' => [], 'videos' => ''];
+
+            //$statistics = $user->updateUserStatistic($event,$statistics['pivot']);
+
+            $notes = isset($statistics['pivot']['notes']) ? json_decode($statistics['pivot']['notes'], true) : [];
+            $videos = isset($statistics['pivot']['videos']) ? json_decode($statistics['pivot']['videos'], true) : [];
+
+            //dd($statistics);
+
+            $newArr['lastVideoSeen'] = isset($statistics['pivot']['lastVideoSeen']) ? $statistics['pivot']['lastVideoSeen'] : -1;
+
+            $eventLessons = $event['lessonsForApp']->sortBy('priority');
+
+        }
+        else{
+            $newArr['is_inClass'] = false;
+            $eventLessons =[];
+        }
+
+
+        $topics = [];
+        //dd($event);
+        foreach($eventLessons as $lesson){
+
+            if(!$lesson['instructor_id']){
+                continue;
+            }
+
+            if($isElearning && !$lesson['vimeo_video']){
+                continue;
+            }
+
+            $inst['name'] = $instructors[$lesson['instructor_id']][0]['title'].' '.$instructors[$lesson['instructor_id']][0]['subtitle'];
+            $inst['media'] = asset(get_image($instructors[$lesson['instructor_id']][0]['medias'], 'instructors-small'));
+
+            $sum= 0;
+            $arr_lesson = array();
+            $topic = $lesson['topic']->first();
+            if(!$topic){
+                continue;
+            }
+            //$topic = $lesson->topic()->wherePivot('category_id',$category->id)->first();
+
+            if(!isset($topics[$topic->id])){
+                $topics[$topic->id] = [];
+                $topics[$topic->id]['calendar_count'] = 0;
+                $topics[$topic->id]['sumHour'] = 0;
+                $topics[$topic->id]['lessons'] = [];
+            }
+
+
+            $topics[$topic->id]['name'] = htmlspecialchars_decode($topic->title,ENT_QUOTES);
+
+            if($isElearning){
+
+                //$m = isset($topic['topic_duration']) ?  floor(($topic['topic_duration'] / 60) % 60) : 0;
+                //$h =isset($topic['topic_duration']) ? $hours = floor($topic['topic_duration'] / 3600) : 0;
+                //$arr['topic_content']['total_duration'] = intval($h) . 'h ' . $m . 'm';
+
+
+                $arr_lesson['title'] = htmlspecialchars_decode($lesson['title'],ENT_QUOTES);
+                $arr_lesson['vimeo_video'] = $lesson['vimeo_video'];
+                $arr_lesson['vimeo_duration'] = $lesson['vimeo_duration'];
+                $arr_lesson['bold'] = $lesson['bold'];
+
+
+                if($lesson['vimeo_video'] != ''){
+
+                    $vimeo_id = explode('https://vimeo.com/', $lesson['vimeo_video']);
+                    if(!isset($vimeo_id[1])){
+                        continue;
+                    }
+                    $vimeo_id = $vimeo_id[1];
+
+                    if(isset($notes[$vimeo_id]))
+                        $arr_lesson['note'] = $notes[$vimeo_id];
+
+
+                    if(isset($videos[$vimeo_id])){
+
+                        $arr_lesson['video_info']['seen'] = strval($videos[$vimeo_id]['seen']);
+                        $arr_lesson['video_info']['stop_time'] = strval($videos[$vimeo_id]['stop_time']);
+                        $arr_lesson['video_info']['percentMinutes'] = strval($videos[$vimeo_id]['percentMinutes']);
+                    }else{
+                        $arr_lesson['video_info']['seen'] = "0";
+                        $arr_lesson['video_info']['stop_time'] = "0";
+                        $arr_lesson['video_info']['percentMinutes'] = "0";
+                    }
 
 
 
 
                 }else{
-
-                    if($lesson['pivot']['date'] != ''){
-                        $arr_lesson['date'] = date_format(date_create($lesson['pivot']['date']),"d/m/Y");
-
-
-                    }else{
-                        $arr_lesson['date'] = date_format(date_create($lesson['pivot']['time_starts']),"d/m/Y");
-
-                    }
-
-                    $arr_lesson['title'] = htmlspecialchars_decode($lesson['title'],ENT_QUOTES);
-                    $arr_lesson['time_starts'] = $lesson['pivot']['time_starts'];
-                    $arr_lesson['time_ends'] = $lesson['pivot']['time_ends'];
-                    $arr_lesson['duration'] = $lesson['pivot']['duration'];
-                    $arr_lesson['room'] = $lesson['pivot']['room'];
-                    // Calendar
-
-                    //
-                    //parse date
-                    $date_lesson = ($lesson['pivot']['date'] != null) ? $lesson['pivot']['date'] : null;
-
-                    if($lesson['pivot']['time_starts'] != ''){
-
-                        $date_lesson = $lesson['pivot']['time_starts'];
-                        $date_split = explode(" ", $date_lesson);
-                        $date = strtotime($date_split[0]);
-                        $time = strtotime($date_split[1]);
-                        $date_time = strtotime($date_lesson);
-
-                        //$newArr['calendar'][$topics[$topic->id]['calendar_count']]['time'] = $date_lesson ?? '';
-                        //$newArr['calendar'][$topics[$topic->id]['calendar_count']]['date_time'] = date_format(date_create($date_lesson), 'd/m/Y');
-                        //$newArr['calendar'][$topics[$topic->id]['calendar_count']]['title'] = $lesson['title'];
-                        //$newArr['calendar'][$topics[$topic->id]['calendar_count']]['room'] = $lesson['pivot']['room'];
-                        ////$newArr['calendar'][$topics[$topic->id]['calendar_count']]['instructor_image'] = asset(get_image($instructors[$lesson['instructor_id']][0]->medias, 'instructors-small'));
-                        ////$newArr['calendar'][$topics[$topic->id]['calendar_count']]['instructor_name'] = $instructors[$lesson['instructor_id']][0]['title'].' '.$instructors[$lesson['instructor_id']][0]['subtitle'];
-                        //$newArr['calendar'][$topics[$topic->id]['calendar_count']]['instructor_image'] = $inst['media'];
-                        //$newArr['calendar'][$topics[$topic->id]['calendar_count']]['instructor_name'] = $inst['name'];
-
-                        $newArr['calendar'][]=[
-                            'time' => $date_lesson ?? '',
-                            'date_time' => date_format(date_create($date_lesson), 'd/m/Y'),
-                            'title' =>  htmlspecialchars_decode($lesson['title'],ENT_QUOTES),
-                            'room' => $lesson['pivot']['room'],
-                            'instructor_image' => $inst['media'],
-                            'instructor_name' => $inst['name'],
-
-                        ];
-
-                        $topics[$topic->id]['calendar_count']++;
-
-                    }
-
+                    $arr_lesson['note'] = '';
                 }
 
+                if($lesson['vimeo_duration'] != null && $lesson['vimeo_duration'] != '0'){
 
-                $arr_lesson['instructor'] = $inst;
-                array_push($topics[$topic->id]['lessons'], $arr_lesson);
-
-            }
-
-            $newArr['topics'] = [];
-            foreach($topics as $key11 =>  $topic){
-                //dd($topic);
-
-                $arr['topic_content'] = array();
-                $arr['topic_content']['lessons'] = array();
-
-                $m = floor(($topic['sumHour'] / 60) % 60) ;
-                $h =$hours = floor($topic['sumHour'] / 3600) ;
-                $arr['topic_content']['total_duration'] = intval($h) . 'h ' . $m . 'm';
-                $arr['topic_content']['topic_id'] = $key11;
-                $arr['topic_name'] = $topic['name'];
-
-                $arr['topic_content']['lessons'] = $topic['lessons'];
-                if($isElearning){
-                    //$arr['topic_content']['lessons'] = $topic['lessons'];
-
-                    $topic1 = preg_replace('/[0-9]+/', '', $topic['name']);
-                    $topic1 = Str::slug($topic1);
+                    $vimeo_duration = explode(' ', $lesson['vimeo_duration']);
+                    $hour = 0;
+                    $min = 0;
+                    $sec = 0;
 
 
-                    foreach($foldersNew as $fol){
-                        foreach($fol as $key12 => $folder){
 
-                            $folderName = $folder['foldername'];
-                            $folderName = preg_replace('/[0-9]+/', '', $folderName);
+                    if(count($vimeo_duration) == 3){
+                        $string_hour = $vimeo_duration[0];
+                        $string_hour = intval(explode('h',$string_hour)[0]);
+                        $hour = $string_hour * 3600;
 
-                            $folderName = Str::slug($folderName);
-                            if($topic1 == $folderName){
-                                $arr['topic_content']['files'] = $folder;
+                        $string_min = $vimeo_duration[1];
+                        $string_min = intval(explode('m',$string_min)[0]);
+                        $min = $string_min * 60;
+
+                        $string_sec = $vimeo_duration[2];
+                        $string_sec = intval(explode('s',$string_sec)[0]);
+                        $sec = $string_sec;
+
+                        $sum = $hour + $min + $sec;
+
+                    }else if(count($vimeo_duration) == 2){
+                        $string_min = $vimeo_duration[0];
+                        $string_min = intval(explode('m',$string_min)[0]);
+                        $min = $string_min * 60;
+
+                        $string_sec = $vimeo_duration[1];
+                        $string_sec = intval(explode('s',$string_sec)[0]);
+                        $sec = $string_sec;
+
+                        $sum = $min + $sec;
+                    }else if(count($vimeo_duration) == 1){
+                        //dd($vimeo_duration);
+                        $a = strpos( $vimeo_duration[0], 's');
+                        //dd($a);
+                        if($a === false ){
+                            $sum = 0;
+                            if(strpos( $vimeo_duration[0], 'm')){
+                                $string_min = $vimeo_duration[0];
+                                $string_min = intval(explode('m',$string_min)[0]);
+                                $min = $string_min * 60;
+                                $sum = $min;
                             }
+
+                        }else if($a !== false ){
+                            $string_sec = intval(explode('s',$vimeo_duration[0])[0]);
+                            $sec = $string_sec;
+                            $sum = $sec;
+
                         }
                     }
 
+                }
 
+                $topics[$topic->id]['sumHour'] += $sum;
+
+
+
+
+            }else{
+
+                if($lesson['pivot']['date'] != ''){
+                    $arr_lesson['date'] = date_format(date_create($lesson['pivot']['date']),"d/m/Y");
+
+
+                }else{
+                    $arr_lesson['date'] = date_format(date_create($lesson['pivot']['time_starts']),"d/m/Y");
 
                 }
 
-                array_push($newArr['topics'], $arr);
+                $arr_lesson['title'] = htmlspecialchars_decode($lesson['title'],ENT_QUOTES);
+                $arr_lesson['time_starts'] = $lesson['pivot']['time_starts'];
+                $arr_lesson['time_ends'] = $lesson['pivot']['time_ends'];
+                $arr_lesson['duration'] = $lesson['pivot']['duration'];
+                $arr_lesson['room'] = $lesson['pivot']['room'];
+                // Calendar
+
+                //
+                //parse date
+                $date_lesson = ($lesson['pivot']['date'] != null) ? $lesson['pivot']['date'] : null;
+
+                if($lesson['pivot']['time_starts'] != ''){
+
+                    $date_lesson = $lesson['pivot']['time_starts'];
+                    $date_split = explode(" ", $date_lesson);
+                    $date = strtotime($date_split[0]);
+                    $time = strtotime($date_split[1]);
+                    $date_time = strtotime($date_lesson);
+
+                    //$newArr['calendar'][$topics[$topic->id]['calendar_count']]['time'] = $date_lesson ?? '';
+                    //$newArr['calendar'][$topics[$topic->id]['calendar_count']]['date_time'] = date_format(date_create($date_lesson), 'd/m/Y');
+                    //$newArr['calendar'][$topics[$topic->id]['calendar_count']]['title'] = $lesson['title'];
+                    //$newArr['calendar'][$topics[$topic->id]['calendar_count']]['room'] = $lesson['pivot']['room'];
+                    ////$newArr['calendar'][$topics[$topic->id]['calendar_count']]['instructor_image'] = asset(get_image($instructors[$lesson['instructor_id']][0]->medias, 'instructors-small'));
+                    ////$newArr['calendar'][$topics[$topic->id]['calendar_count']]['instructor_name'] = $instructors[$lesson['instructor_id']][0]['title'].' '.$instructors[$lesson['instructor_id']][0]['subtitle'];
+                    //$newArr['calendar'][$topics[$topic->id]['calendar_count']]['instructor_image'] = $inst['media'];
+                    //$newArr['calendar'][$topics[$topic->id]['calendar_count']]['instructor_name'] = $inst['name'];
+
+                    $newArr['calendar'][]=[
+                        'time' => $date_lesson ?? '',
+                        'date_time' => date_format(date_create($date_lesson), 'd/m/Y'),
+                        'title' =>  htmlspecialchars_decode($lesson['title'],ENT_QUOTES),
+                        'room' => $lesson['pivot']['room'],
+                        'instructor_image' => $inst['media'],
+                        'instructor_name' => $inst['name'],
+
+                    ];
+
+                    $topics[$topic->id]['calendar_count']++;
+
+                }
+
             }
 
-            array_push($data, $newArr);
+
+            $arr_lesson['instructor'] = $inst;
+            array_push($topics[$topic->id]['lessons'], $arr_lesson);
 
         }
+
+        $newArr['topics'] = [];
+        foreach($topics as $key11 =>  $topic){
+            //dd($topic);
+
+            $arr['topic_content'] = array();
+            $arr['topic_content']['lessons'] = array();
+
+            $m = floor(($topic['sumHour'] / 60) % 60) ;
+            $h =$hours = floor($topic['sumHour'] / 3600) ;
+            $arr['topic_content']['total_duration'] = intval($h) . 'h ' . $m . 'm';
+            $arr['topic_content']['topic_id'] = $key11;
+            $arr['topic_name'] = $topic['name'];
+
+            $arr['topic_content']['lessons'] = $topic['lessons'];
+            if($isElearning){
+                //$arr['topic_content']['lessons'] = $topic['lessons'];
+
+                $topic1 = preg_replace('/[0-9]+/', '', $topic['name']);
+                $topic1 = Str::slug($topic1);
+
+
+                foreach($foldersNew as $fol){
+                    foreach($fol as $key12 => $folder){
+
+                        $folderName = $folder['foldername'];
+                        $folderName = preg_replace('/[0-9]+/', '', $folderName);
+
+                        $folderName = Str::slug($folderName);
+                        if($topic1 == $folderName){
+                            $arr['topic_content']['files'] = $folder;
+                        }
+                    }
+                }
+
+
+
+            }
+
+            array_push($newArr['topics'], $arr);
+        }
+
+
+
+        return $newArr;
+
+    }
+
+
+    private function userEvents($data,$user,$exceptEvents = []){
+
+        $eventSubscriptions = [];
+        $data = [];
+        $bonusFiles = ['_Bonus', 'Bonus', 'Bonus Files', 'Βonus', '_Βonus', 'Βonus', 'Βonus Files'];
+        $instructors = Instructor::with('medias')->get()->groupby('id');
+        foreach($user['events_for_user_list']->whereNotIn('id',$exceptEvents) as $key => $event)
+        {
+
+            if($event->pivot['expiration'] != ''){
+
+                if(strtotime($event->pivot['expiration']) <= strtotime("now")){
+                    continue;
+                }
+            }
+
+            if($event->pivot && !$event->pivot->paid){
+                continue;
+            }
+
+            $datar = $this->load_event_data($event, $user, $instructors, $bonusFiles);
+
+            if(!empty($datar)){
+                array_push($data, $datar);
+            }
+
+            $eventSubscriptions[] = $user->eventSubscriptions()->wherePivot('event_id',$event['id'])->first() ?
+             $user->eventSubscriptions()->wherePivot('event_id',$event['id'])->first()->id : -1;
+
+        }
+
+
+        $eventSubs = $user['eventSubscriptions']->whereNotIn('id',$eventSubscriptions)->filter(function($item) {
+            return  $item->stripe_status != 'cancelled' && $item->stripe_status != 'canceled';
+        });
+
+
+        foreach($eventSubs as $key => $subEvent){
+
+            if($subEvent->pivot['expiration'] != ''){
+
+                if(strtotime($subEvent->pivot['expiration']) <= strtotime("now")){
+                    continue;
+                }
+            }
+
+            if(!($event = $subEvent['event']->first())){
+            	continue;
+            }
+
+
+            $datar = $this->load_event_data($event, $user, $instructors, $bonusFiles);
+
+            if(!empty($datar)){
+                array_push($data, $datar);
+            }
+        }
+
+
         return $data;
 
     }
