@@ -608,14 +608,14 @@ ul.subs-page-list span {
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
-    width: 100%;
+    width: 80%;
     display: inline-block;
 }
 
 .status_switch {
     display: inline-block;
     position: absolute;
-    margin-left: 20px;
+    margin-left: 1rem;
 }
 
 .status_label {
@@ -665,14 +665,14 @@ ul.subs-page-list span {
 }
 
 .onoffswitch-inner:before {
-    content: "ON";
+    content: "ACTIVE";
     padding-left: 10px;
     background-color: #245DAE;
     color: #FFFFFF;
 }
 
 .onoffswitch-inner:after {
-    content: "OFF";
+    content: "DEACTIVATED";
     padding-right: 10px;
     background-color: #EEEEEE;
     color: #999999;
@@ -687,7 +687,7 @@ ul.subs-page-list span {
     position: absolute;
     top: 0;
     bottom: 0;
-    right: 56px;
+    right: 120px;
     border: 2px solid #999999;
     border-radius: 20px;
     transition: all 0.3s ease-in 0s;

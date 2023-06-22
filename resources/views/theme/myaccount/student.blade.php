@@ -1305,11 +1305,11 @@
                                                 <?php //dd('not expired'); ?>
                                                 <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/clock-coins.svg')}}" alt="clock-coins-icon" title="clock-coins-icon"><?php echo 'Your trial expiration: '.$date; ?></div>
                                                 @if($event['mySubscription']['status'])
-                                                <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt="credit-icon" title="credit-icon"><?php echo 'You will be charged: '.date('d-m-Y',$event['mySubscription']['must_be_updated']); ?></div>
+                                                <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt="credit-icon" title="credit-icon"><?php echo 'You will be billed the amount of € '.intval($event['mySubscription']['price']).' on '.date('d-m-Y',$event['mySubscription']['must_be_updated']).' unless you deactivate it.'; ?></div>
                                                 @endif
                                                 @else
                                                 @if($event['mySubscription'])
-                                                <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt="credit-icon" title="credit-icon"><?php echo 'You will be charged: '.date('d-m-Y',$event['mySubscription']['must_be_updated']); ?></div>
+                                                <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt="credit-icon" title="credit-icon"><?php echo 'You will be billed the amount of € '.intval($event['mySubscription']['price']).' on '.date('d-m-Y',$event['mySubscription']['must_be_updated']).' unless you deactivate it.'; ?></div>
                                                 @endif
                                                 @endif
                                                 @else
@@ -1320,17 +1320,17 @@
                                                     ?>
                                                 @if($date_timestamp > $now_date )
                                                 @if($event['mySubscription']['status'])
-                                                <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt="credit-icon" title="credit-icon"><?php echo 'You will be charged: '.date('d-m-Y',$event['mySubscription']['must_be_updated']); ?></div>
+                                                <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt="credit-icon" title="credit-icon"><?php echo 'You will be billed the amount of € '.intval($event['mySubscription']['price']).' on '.date('d-m-Y',$event['mySubscription']['must_be_updated']).' unless you deactivate it.'; ?></div>
                                                 @endif
                                                 @else
                                                 @if($event['mySubscription'])
-                                                <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt="credit-icon" title="credit-icon"><?php echo 'You will be charged: '.date('d-m-Y',$event['mySubscription']['must_be_updated']); ?></div>
+                                                <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt="credit-icon" title="credit-icon"><?php echo 'You will be billed the amount of € '.intval($event['mySubscription']['price']).' on '.date('d-m-Y',$event['mySubscription']['must_be_updated']).' unless you deactivate it.'; ?></div>
                                                 @endif
                                                 @endif
                                                 @endif
                                                 @if(isset($event['mySubscription']))
                                                 <div class="status_wrapper">
-                                                    <div class="status_label"><label> Status:  </label></div>
+                                                    <div class="status_label"><label> My subscription:  </label></div>
                                                     <?php
                                                     //dd($event['mySubscription']['active']);
                                                         $a = '';
@@ -1699,11 +1699,11 @@
                                              <?php //dd('not expired'); ?>
                                              <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/clock-coins.svg')}}" alt="clock-coins" title="clock-coins"><?php echo 'Your trial expiration: '.$date; ?></div>
                                              @if($event['mySubscription']['status'])
-                                             <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt="credit" title="credit"><?php  echo 'You will be charged: '.date('d-m-Y',$event['mySubscription']['must_be_updated']); ?></div>
+                                             <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt="credit" title="credit"><?php  echo 'You will be billed the amount of € '.intval($event['mySubscription']['price']).' on '.date('d-m-Y',$event['mySubscription']['must_be_updated']).' unless you deactivate it.'; ?></div>
                                              @endif
                                              @else
                                              @if($event['mySubscription'])
-                                             <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt="credit" title="credit"><?php echo 'You will be charged: '.date('d-m-Y',$event['mySubscription']['must_be_updated']); ?></div>
+                                             <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt="credit" title="credit"><?php echo 'You will be billed the amount of € '.intval($event['mySubscription']['price']).' on '.date('d-m-Y',$event['mySubscription']['must_be_updated']).' unless you deactivate it.'; ?></div>
                                              @endif
                                              @endif
                                              @else
@@ -1714,11 +1714,11 @@
                                                 ?>
                                              @if($date_timestamp > $now_date )
                                              @if($event['mySubscription']['status'])
-                                             <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt="credit" title="credit"><?php echo 'You will be charged: '.date('d-m-Y',$event['mySubscription']['must_be_updated']); ?></div>
+                                             <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt="credit" title="credit"><?php echo 'You will be billed the amount of € '.intval($event['mySubscription']['price']).' on '.date('d-m-Y',$event['mySubscription']['must_be_updated']).' unless you deactivate it.'; ?></div>
                                              @endif
                                              @else
                                              @if($event['mySubscription'])
-                                             <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt="credit" title="credit"><?php echo 'You will be charged: '.date('d-m-Y',$event['mySubscription']['must_be_updated']); ?></div>
+                                             <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt="credit" title="credit"><?php echo 'You will be billed the amount of € '.intval($event['mySubscription']['price']).' on '.date('d-m-Y',$event['mySubscription']['must_be_updated']).' unless you deactivate it.'; ?></div>
                                              @endif
                                              @endif
                                              @endif
