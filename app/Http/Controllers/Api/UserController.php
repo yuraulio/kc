@@ -238,7 +238,7 @@ class UserController extends Controller
     {
 
         $user = Auth::user();;//->with('events.summary1','events.lessons.topic','instructor.event')->first();
-        $user = User::where('id',$user->id)->with('events_for_user_list.dropbox','events_for_user_list','events_for_user_list.lessonsForApp','events_for_user_list.lessonsForApp.topic')->first();
+        $user = User::where('id',$user->id)->with('eventSubscriptions','events_for_user_list.dropbox','events_for_user_list','events_for_user_list.lessonsForApp','events_for_user_list.lessonsForApp.topic')->first();
         $data = [];
         $instructor = count($user->instructor) > 0;
 
@@ -267,6 +267,7 @@ class UserController extends Controller
             unset($data[$key]['event']['event_info']);
             unset($data[$key]['event']['event_info1']);
             unset($data[$key]['event']['absences_limit']);
+            unset($data[$key]['event']['plans']);
         }
 
 
