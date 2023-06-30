@@ -21,7 +21,7 @@ class InstructorResource extends JsonResource
             'subtitle' => $this->subtitle,
             'header' => $this->header,
             'company' => $this->company,
-            'created_at' => Carbon::parse($this->created_at)->toFormattedDateString(),
+            'cache_income' => '€ '. $this->cache_income
         ];
     }
 }

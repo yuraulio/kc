@@ -52,30 +52,36 @@ export default {
         //     },
         // },
         {
-            name: 'created_at',
-            title: 'Created at',
+            name: 'cache_income',
+            title: 'Total Royalties',
             dataClass: 'text-center',
             titleClass: 'text-center',
-            sortField: 'created_at',
+            sortField: 'cache_income',
             dataClass: 'align-middle text-center',
             titleClass: 'text-center'
         },
+        // {
+        //     name: 'actions',
+        //     title: 'Actions',
+        //     titleClass: 'text-end',
+        //     dataClass: 'align-middle actions-width'
+        // }
         {
-            name: 'actions',
+            name: 'actions_without_delete',
             title: 'Actions',
             titleClass: 'text-end',
             dataClass: 'align-middle actions-width'
         }
     ],
-    apiUrl: '/api/royalties/',
+    apiUrl: '/api/royalties',
     create: false,
     createLink: '',
     editLink: '/royalties/',
     edit: true,
     editInputs: collectiveInputs,
-    loadWidgets: false,
+    loadWidgets: true,
     showFilters: false,
-    // perPage: 25,
+    perPage: 25,
     filters: [
     ],
     addInputs: collectiveInputs,

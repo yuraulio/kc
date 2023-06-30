@@ -13,16 +13,17 @@
 
 <div class="mb-3">
     <label for="projectname" class="form-label">{{title}} <span v-if="required">*</span> </label>
-    <datepicker 
-        @input="$emit('updatevalue', value)" 
-        v-model="value" 
+    <datepicker
+        @input="$emit('updatevalue', value)"
+        v-model="value"
         :monday-first="true"
         :clear-button="true"
         input-class="form-control"
         calendar-class="calendar-left"
         clear-button-icon="fa fa-times"
+        :placeholder="placeholder"
     ></datepicker>
-    
+
 </div>
 
 </template>
@@ -37,7 +38,8 @@
         props: {
             title: String,
             propValue: {},
-            required: false
+            required: false,
+            placeholder: String
         },
         data() {
             return {

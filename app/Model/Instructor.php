@@ -37,7 +37,7 @@ class Instructor extends Model
     }
 
     protected $fillable = [
-        'priority', 'status', 'comment_status', 'title', 'short_title', 'subtitle', 'header', 'summary', 'mobile', 'body', 'ext_url', 'social_media','author_id', 'creator_id','company'
+        'priority', 'status', 'comment_status', 'title', 'short_title', 'subtitle', 'header', 'summary', 'mobile', 'body', 'ext_url', 'social_media','author_id', 'creator_id','company', 'cache_income'
     ];
 
     public function lesson()
@@ -52,13 +52,17 @@ class Instructor extends Model
         return $this->belongsToMany(Event::class, 'event_topic_lesson_instructor')->with('summary1', 'category', 'slugable','dropbox')->whereIn('status',[0,2,3,4])->where('published',true)->with('slugable','category','city')->distinct();
     }
 
-    public function elearningEventsV1()
+    public function elearningEventsForRoyalties()
     {
         $now = date('Y-m-d');
         //return $this->belongsToMany(Event::class, 'event_topic_lesson_instructor')->with('summary1', 'category', 'slugable','dropbox')->wherePivot('instructor_id',$this->user()->first()->id)->wherePivot('time_starts','>=',$now)->orWhere('time_starts',null)->whereIn('status',[0,2,3])->where('published',true)->with('slugable','category','city')->distinct();
-        return $this->belongsToMany(Event::class, 'event_topic_lesson_instructor')->whereIn('status',[0,2,3,4])->where('published',true)->whereHas('delivery' , function($q) {
-            $q->where('delivery_id', 143);
-        })->distinct();
+        return $this->belongsToMany(Event::class, 'event_topic_lesson_instructor')->whereIn('status',[0,2,3,4])->where('published',true)
+                ->whereHas('event_info1', function($q){
+                    $q->where('course_payment_method', '!=', 'free');
+                })
+                ->whereHas('delivery' , function($q) {
+                    $q->where('delivery_id', 143);
+                })->distinct();
     }
 
 

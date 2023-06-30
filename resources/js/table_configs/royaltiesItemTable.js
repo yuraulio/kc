@@ -26,8 +26,29 @@ export default {
         },
         {
             name: 'income',
-            title: 'Income',
+            title: 'Royalties',
             sortField: 'income',
+            dataClass: 'align-middle',
+            titleClass: ''
+        },
+        {
+            name: 'total_event_minutes',
+            title: 'Total Event Minutes',
+            sortField: 'total_event_minutes',
+            dataClass: 'align-middle',
+            titleClass: ''
+        },
+        {
+            name: 'total_instructor_minutes',
+            title: 'Total Instructor Minutes',
+            sortField: 'total_instructor_minutes',
+            dataClass: 'align-middle',
+            titleClass: ''
+        },
+        {
+            name: 'percent',
+            title: 'Percent',
+            sortField: 'percent',
             dataClass: 'align-middle',
             titleClass: ''
         },
@@ -44,15 +65,6 @@ export default {
         //         return '<i class="fa fa-times-circle text-danger" aria-hidden="true"></i>';
         //     },
         // },
-        {
-            name: 'created_at',
-            title: 'Created at',
-            dataClass: 'text-center',
-            titleClass: 'text-center',
-            sortField: 'created_at',
-            dataClass: 'align-middle text-center',
-            titleClass: 'text-center'
-        },
         // {
         //     name: 'actions',
         //     title: 'Actions',
@@ -67,7 +79,7 @@ export default {
     edit: false,
     editInputs: collectiveInputs,
     showFilters: true,
-    loadWidgets: false,
+    loadWidgets: true,
     filters: [
         'events',
         'from_date',

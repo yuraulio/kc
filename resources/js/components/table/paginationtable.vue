@@ -85,17 +85,17 @@
 
             <div v-if="showFilter('from_date')" class="px-3 py-2">
                 <datepicker-component
-                    title="Transaction from"
                     @updatevalue="update_transaction_from"
                     :prop-value="transaction_from"
+                    placeholder="Transaction from"
                 ></datepicker-component>
             </div>
 
             <div v-if="showFilter('until_date')" class="px-3 py-2">
                 <datepicker-component
-                    title="Transaction to"
                     @updatevalue="update_transaction_to"
                     :prop-value="transaction_to"
+                    placeholder="Transaction to"
                 ></datepicker-component>
             </div>
 
@@ -238,7 +238,7 @@
 
     </b-sidebar>
 
-    <div v-if="config.loadWidgets !== false">
+    <div v-if="config.loadWidgets !== false && !config.apiUrl.includes('royalties')">
         <div v-if="widgets" class="row">
 
             <div v-if="widgets[0]" class="col-lg-3 col-md-6">
@@ -270,15 +270,46 @@
             </vue-loaders-ball-grid-beat>
         </div>
     </div>
+    <div v-if="config.loadWidgets !== false && config.apiUrl.includes('royalties')">
+
+        <div v-if="widgets" class="row">
+            <div v-if="widgets[0]" class="col-lg-3 col-md-6">
+                <div class="card bg-pattern mb-3">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <h4 class="text-dark my-1 text-truncate" :title="widgets[0]"><span>{{widgets[0]}}</span></h4>
+                            </div>
+                            <div class="col-12">
+                                <div class="text-start">
+                                    <p class="text-muted mb-0 text-truncate">Total: € {{widgets[1]['sum']}}</p>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="text-start">
+
+                                    <p class="text-muted mt-2 mb-0 text-truncate">{{widgets[2]}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
 
     <!-- end card-->
     <div class="card mb-2">
         <div class="card-body pt-0" style="overflow: auto;">
 
             <div class="row mb-1">
-                <div class="col-md-auto pt-3 d-flex align-items-center">
-                    <input v-model="filter" type="search" class="form-control my-1 my-md-0 d-inline-block w-auto" id="inputPassword2" placeholder="Search..." style="transform: translateY(1px);"/>
-                </div>
+
+                    <div v-if="!config.apiUrl.includes('royalties') || (config.apiUrl.includes('royalties') && config.royaltyView != 'single')" class="col-md-auto pt-3 d-flex align-items-center">
+                        <input v-model="filter" type="search" class="form-control my-1 my-md-0 d-inline-block w-auto" id="inputPassword2" placeholder="Search..." style="transform: translateY(1px);"/>
+                    </div>
+
 
                 <div class="col-md-auto pt-3 d-flex align-items-center">
                     <div>
@@ -291,6 +322,8 @@
                         </template>
                         <span @click="category_value=null, refreshTable()" v-if="category_value && showFilter('category')" class="badge bg-primary ms-1 cursor-pointer">{{category_value.title}} <i class="fa fa-times" aria-hidden="true"></i></span>
                         <span @click="subcategory_value=null, refreshTable()" v-if="subcategory_value && showFilter('subcategory')" class="badge bg-primary ms-1 cursor-pointer">{{subcategory_value.title}} <i class="fa fa-times" aria-hidden="true"></i></span>
+                        <span @click="transaction_from=null, refreshTable()" v-if="transaction_from" class="badge bg-primary ms-1 cursor-pointer">Transaction From: {{formatdate(transaction_from)}} <i class="fa fa-times" aria-hidden="true"></i></span>
+                        <span @click="transaction_to=null, refreshTable()" v-if="transaction_to" class="badge bg-primary ms-1 cursor-pointer">Transaction To: {{formatdate(transaction_to)}} <i class="fa fa-times" aria-hidden="true"></i></span>
                     </div>
                 </div>
 
@@ -318,7 +351,7 @@
                             </a>
                         </div>
                     </div>
-                    <div v-show="!this.config.apiUrl.includes('royalties')">
+                    <div v-show="!config.apiUrl.includes('royalties') || (config.apiUrl.includes('royalties') && config.royaltyView != 'single')">
                         <div class="btn-group dropleft multiselect-actions float-end ms-2 pt-3">
 
                                 <button class="btn btn-soft-secondary dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -344,10 +377,7 @@
                         </div>
                     </div>
 
-                    <div v-show="this.config.royaltyView == 'list'" class="btn-group dropleft multiselect-actions float-end pt-3">
-                        <button @click="viewAllInstrictorRoyalties()" class="btn btn-soft-secondary dropdown-toggle">View All Instructor Royalties</button>
-                    </div>
-                    <div v-show="this.config.royaltyView == 'single'" class="btn-group dropleft multiselect-actions float-end pt-3">
+                    <div v-show="config.apiUrl.includes('royalties')" class="btn-group dropleft multiselect-actions float-end pt-3">
                         <button @click="exportData()" class="btn btn-soft-secondary dropdown-toggle">Export</button>
                     </div>
 
@@ -409,9 +439,22 @@
                             </div>
                     </template>
 
-
-
-
+                </template>
+                <template slot="actions_without_delete" slot-scope="props">
+                    <div class="text-sm-end">
+                        <template v-if="config.edit">
+                            <template v-if="config.editLink">
+                                <a :href="config.editLink + props.rowData.id" class="action-icon">
+                                    <i class="mdi mdi-square-edit-outline"></i>
+                                </a>
+                            </template>
+                            <template v-else>
+                                <a @click="edit(props.rowData)" href="javascript:void(0);" class="action-icon">
+                                    <i class="mdi mdi-square-edit-outline"></i>
+                                </a>
+                            </template>
+                        </template>
+                    </div>
                 </template>
 
                 <template slot="actions" slot-scope="props">
@@ -483,7 +526,7 @@ export default {
             multiselectShow: false,
             selectAllCheckbox: false,
             perPage: 50,
-            widgets: null,
+            widgets: ['test',5],
             dynamic: null,
             published_value: null,
             type_value: null,
@@ -508,8 +551,12 @@ export default {
         },
     },
     methods: {
-        viewAllInstrictorRoyalties(){
-            return window.location.href = 'royalties/0';
+        formatdate(date){
+            let d = new Date(date);
+
+            d = d.toLocaleDateString();
+
+            return d;
         },
         exportData(){
 
@@ -591,6 +638,8 @@ export default {
 
         hideLoader() {
             this.loading = false;
+
+            console.log(this)
         },
         created($event) {
             this.templates["data"].unshift($event);
@@ -776,6 +825,10 @@ export default {
             }
         },
         getWidgets(type) {
+
+            console.log('get widget inside paginationable')
+            console.log(type)
+
             if (this.config.loadWidgets !== false) {
                 axios
                 .post(this.config.apiUrl + '/widgets',
@@ -790,14 +843,18 @@ export default {
                     pagefilter: this.page_value ? this.page_value.id : null,
                 })
                 .then((response) => {
+                    console.log('inside response')
                     if (response.status == 200) {
                         if(type == 'pages'){
                             this.widgets = response.data[0];
                         }else if(type == 'blog'){
                             this.widgets = response.data[1];
+                        }else if(type == 'royalties'){
+                            this.widgets = response.data[0];
                         }
 
                         this.hideLoader();
+
                     }
                 })
                 .catch((error) => {
@@ -913,10 +970,23 @@ export default {
             this.getWidgets('blog');
         }else if(window.location.pathname == "/pages"){
             this.getWidgets('pages');
+        }else if(window.location.pathname == '/royalties'){
+            this.getWidgets('royalties');
         }
 
     },
     created() {
+        if(this.config.apiUrl.includes('/api/royalties')){
+
+            const timeElapsed = Date.now();
+            const today = new Date(timeElapsed);
+            var d = new Date(new Date().getFullYear(), 0, 1);
+
+            this.transaction_from = d.toISOString();
+            this.transaction_to = today.toISOString();
+
+        }
+
         if (this.config.apiUrl == "/api/pages") {
             this.published_value = {
                 title: 'Published',

@@ -15,7 +15,9 @@ use App\Http\Resources\InstructorResource;
 use App\Http\Resources\EventResourceRoyalty;
 use Auth;
 use App\Exports\RoyaltiesExport;
+use App\Exports\RoyaltiesExportInstructorsList;
 use Storage;
+use DateTime;
 
 class RoyaltiesController extends Controller
 {
@@ -33,13 +35,9 @@ class RoyaltiesController extends Controller
 
             $instructors = Instructor::tableSort($request);
 
-            //dd($instructors);
-
             $instructors = $this->filters($instructors, $request);
 
-            // $instructors = $instructors->paginate($request->per_page ?? 25);
-
-            $instructors = $instructors->has('elearningEventsV1')->get();
+            $instructors = $instructors->has('elearningEventsForRoyalties')->whereStatus(1)->paginate($request->per_page ?? 50);
             return InstructorResource::collection($instructors);
 
 
@@ -95,14 +93,37 @@ class RoyaltiesController extends Controller
         return $finalIncomeForInstructor;
     }
 
-    // public function filters()
-    // {
-    //     $data = Post::query();
+    public function exportInstructorList()
+    {
+        $year = new DateTime();
 
-    //     $data = $data->whereHas('crops' , function($q) use ($ids) {
-    //         return $q->whereIn('crops.id', $ids);
-    //     });
-    // }
+        $request = new \Illuminate\Http\Request();
+
+        $request->replace([
+            'transaction_from' => $year->setDate($year->format('Y'), 1, 1)->format('Y-m-d'),
+            'transaction_to' => date("Y-m-d")
+        ]);
+
+
+
+        try {
+
+            $instructors = Instructor::has('elearningEventsForRoyalties')->whereStatus(1)->get();
+
+            $filename = 'Royalties_Export.xlsx';
+
+            $path = Storage::disk('royalties')->path($filename);
+
+            Excel::store(new RoyaltiesExportInstructorsList($instructors), $filename, 'royalties');
+            return Excel::download(new RoyaltiesExportInstructorsList($instructors), $filename);
+
+
+
+        }catch (Exception $e) {
+            Log::error("Failed to get countdown. " . $e->getMessage());
+            return response()->json(['message' => $e->getMessage()], 400);
+        }
+    }
 
     public function export(int $id, Request $request)
     {
@@ -112,16 +133,16 @@ class RoyaltiesController extends Controller
             //$events = Event::tableSort($request);
 
             if($id != 0){
-                $instructor = Instructor::with('elearningEventsV1:id,title','elearningEventsV1.lessons','elearningEventsV1.delivery')->where('id',$id)->get();
+                $instructor = Instructor::has('elearningEventsForRoyalties')->with('elearningEventsForRoyalties:id,title','elearningEventsForRoyalties.lessons','elearningEventsForRoyalties.delivery')->whereStatus(1)->where('id',$id)->get();
 
             }else{
-                $instructor = Instructor::with('elearningEventsV1:id,title','elearningEventsV1.lessons','elearningEventsV1.delivery')->get();
+                $instructor = Instructor::has('elearningEventsForRoyalties')->with('elearningEventsForRoyalties:id,title','elearningEventsForRoyalties.lessons','elearningEventsForRoyalties.delivery')->whereStatus(1)->get();
 
             }
 
             foreach($instructor as $key => $instr){
 
-                $instructor[$key]['events'] = $instr->elearningEventsV1()->tableSort($request);
+                $instructor[$key]['events'] = $instr->elearningEventsForRoyalties()->tableSort($request);
                 $instructor[$key]['events'] = $this->filters($instructor[$key]['events'], $request);
                 $instructor[$key]['events'] = $instructor[$key]['events']->get();
 
@@ -134,6 +155,9 @@ class RoyaltiesController extends Controller
                 foreach($instructor[$key]['events'] as $key2 => $event){
                     //dd($this->calculateIncomeByPercentHours($data['events'][$event->id]));
                     $instructor[$key]['events'][$key2]['income'] = $this->calculateIncomeByPercentHours($data['events'][$event->id]);
+                    $instructor[$key]['events'][$key2]['total_event_minutes'] = $data['events'][$event->id]['total_event_minutes'];
+                    $instructor[$key]['events'][$key2]['total_instructor_minutes'] = $data['events'][$event->id]['total_lessons_instructor_minutes'];
+                    $instructor[$key]['events'][$key2]['percent'] = $data['events'][$event->id]['instructor_percent'];
                 }
 
             }
@@ -169,25 +193,20 @@ class RoyaltiesController extends Controller
         try {
             //$events = Event::tableSort($request);
 
-            if($id != 0){
-                $instructor = Instructor::has('elearningEventsV1')->with('elearningEventsV1:id,title','elearningEventsV1.lessons','elearningEventsV1.delivery')->where('id',$id)->get();
-            }else{
-                $instructor = Instructor::has('elearningEventsV1')->with('elearningEventsV1:id,title','elearningEventsV1.lessons','elearningEventsV1.delivery')->get();
-            }
+            $instructor = Instructor::has('elearningEventsForRoyalties')->with('elearningEventsForRoyalties:id,title','elearningEventsForRoyalties.lessons','elearningEventsForRoyalties.delivery')->whereStatus(1)->where('id',$id)->get();
 
             $preResponseData = [];
             $i = 0;
 
             foreach($instructor as $key => $instr){
 
-                $instructor[$key]['events'] = $instr->elearningEventsV1()->tableSort($request);
+                $instructor[$key]['events'] = $instr->elearningEventsForRoyalties()->tableSort($request);
 
                 $instructor[$key]['events'] = $this->filters($instructor[$key]['events'], $request);
                 $instructor[$key]['events'] = $instructor[$key]['events']->get();
 
 
                 $data = $this->getInstructorEventData($instr, $instructor[$key]['events'], $request);
-
 
 
 
@@ -199,7 +218,9 @@ class RoyaltiesController extends Controller
                     $preResponseData[$i]['title'] = $event['title'];
                     $preResponseData[$i]['id'] = $instr['id'];
                     $preResponseData[$i]['income'] = $this->calculateIncomeByPercentHours($data['events'][$event->id]);
-                    $preResponseData[$i]['created_at'] = $event['created_at'];
+                    $preResponseData[$i]['total_event_minutes'] = $data['events'][$event->id]['total_event_minutes'];
+                    $preResponseData[$i]['total_instructor_minutes'] = $data['events'][$event->id]['total_lessons_instructor_minutes'];
+                    $preResponseData[$i]['percent'] = $data['events'][$event->id]['instructor_percent'];
 
                     $i++;
                 }
@@ -207,16 +228,13 @@ class RoyaltiesController extends Controller
             }
 
 
-
-
-
-
             if($request->sort != null){
 
                 if(explode('|',$request->sort)[1] == 'desc'){
-                    return EventResourceRoyalty::collection(collect($preResponseData)->sortByDesc('income'));
-                }else{
-                    return EventResourceRoyalty::collection(collect($preResponseData)->sortBy('income'));
+                    return EventResourceRoyalty::collection(collect($preResponseData)->sortByDesc(explode('|',$request->sort)[0]));
+                }
+                else{
+                    return EventResourceRoyalty::collection(collect($preResponseData)->sortBy(explode('|',$request->sort)[0]));
                 }
 
 
@@ -232,48 +250,6 @@ class RoyaltiesController extends Controller
         }
     }
 
-    /**
-     * Get page
-     *
-     * @return PageResource
-     */
-    // public function show(int $id, Request $request)
-    // {
-    //     //dd($id);
-    //     try {
-    //         $events = Event::tableSort($request);
-
-    //         $instructor = Instructor::with('elearningEventsV1','elearningEventsV1.delivery')->find($id);
-    //         $events = $instructor->elearningEventsV1();
-    //         $events = $this->filters($events, $request);
-    //         $events = $events->get();
-
-    //         foreach($events as $key => $event){
-
-    //             if($event['delivery']->first()->id != 143){
-    //                 unset($events[$key]);
-    //                 continue;
-    //             }
-
-    //         }
-
-
-    //         $data = $this->getInstructorEventData($instructor, $events, $request);
-
-    //         foreach($events as $key => $event){
-    //             $events[$key]['income'] = $this->calculateIncomeByPercentHours($data['events'][$event->id]);
-    //         }
-
-    //         dd($events);
-
-
-    //         return EventResourceRoyalty::collection(collect($events));
-
-    //     } catch (Exception $e) {
-    //         Log::error("Failed to get countdown. " . $e->getMessage());
-    //         return response()->json(['message' => $e->getMessage()], 400);
-    //     }
-    // }
 
     public function getEventData($events, $request)
     {
@@ -290,6 +266,8 @@ class RoyaltiesController extends Controller
         if($request->transaction_to != null){
             $filterForTransaction['created_at']['to'] = $request->transaction_to;
         }
+
+        $filterForTransaction['calculateSubscription'] = false;
 
         foreach($events as $key => $event){
 
@@ -350,5 +328,69 @@ class RoyaltiesController extends Controller
 
         return $data;
     }
+
+    public function widgetsByInstructor(int $id, Request $request){
+        return [
+            [
+                "TOTAL ROYALTIES",
+                $data = [
+                    'sum' => $this->getCacheIncome($request)
+                ],
+                'Total royalties for all instructors'
+            ],
+
+
+        ];
+    }
+
+    public function widgets(Request $request)
+    {
+        return [
+            [
+                "TOTAL ROYALTIES",
+                $data = [
+                    'sum' => $this->getCacheIncome($request)
+                ],
+                'Total royalties for all instructors'
+            ],
+
+
+        ];
+    }
+
+    public function getCacheIncome($request){
+        try {
+                    $income = Instructor::has('elearningEventsForRoyalties')->whereStatus(1)->sum('cache_income');
+                    //$pages = $this->filters($request, $pages);
+                    return $income;
+                } catch (Exception $e) {
+                    Log::warning("(pages widget) Failed to get pages count. " . $e->getMessage());
+                    return "0";
+                }
+    }
+
+    // public function PagesCount($request)
+    // {
+    //     try {
+    //         $pages = Page::withoutGlobalScopes();
+    //         //$pages = $this->filters($request, $pages);
+    //         return $pages->count();
+    //     } catch (Exception $e) {
+    //         Log::warning("(pages widget) Failed to get pages count. " . $e->getMessage());
+    //         return "0";
+    //     }
+    // }
+
+    // public function publishedPagesCount($request)
+    // {
+    //     try {
+    //         $pages = Page::withoutGlobalScopes()->wherePublished(true);
+    //         //$pages = $this->filters($request, $pages);
+    //         return $pages->count();
+    //     } catch (Exception $e) {
+    //         Log::warning("(pages widget) Failed to get published pages count. " . $e->getMessage());
+    //         return "0";
+    //     }
+    // }
 
 }

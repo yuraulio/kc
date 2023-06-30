@@ -724,6 +724,7 @@ Route::get('/absences', 'Dashboard\CronjobsController@absences');//in
 Route::get('/sendInClassReminder', 'Dashboard\CronjobsController@sendInClassReminder');//in
 Route::get('/automateTopicMail', 'Dashboard\CronjobsController@sendAutomateMailBasedOnTopic');//in
 Route::get('/automateInstructorsMail', 'Dashboard\CronjobsController@sendAutomateEmailForInstructors');//in
+Route::get('/calculateRoyaltiesInstructor', 'Dashboard\CronjobsController@calculateTotalRoyaltiesForInstructors');//in
 
 //SITEMAP
 Route::get('feed/{feed_type?}', 'Theme\FeedController@index');

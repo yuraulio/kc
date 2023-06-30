@@ -29,6 +29,8 @@ use App\Notifications\SendTopicAutomateMail;
 use App\Model\Instructor;
 use App\Notifications\InstructorsMail;
 use App\Notifications\SubscriptionExpireReminder;
+use App\Http\Controllers\Admin_api\RoyaltiesController;
+use DateTime;
 
 class CronjobsController extends Controller
 {
@@ -1199,6 +1201,42 @@ class CronjobsController extends Controller
 
         }
 
+    }
+
+    public function calculateTotalRoyaltiesForInstructors()
+    {
+        $year = new DateTime();
+
+        $request = new \Illuminate\Http\Request();
+
+        $request->replace([
+            'transaction_from' => $year->setDate($year->format('Y'), 1, 1)->format('Y-m-d'),
+            'transaction_to' => date("Y-m-d")
+        ]);
+
+        $instructor = Instructor::has('elearningEventsForRoyalties')->whereStatus(1)->get();
+
+        foreach($instructor as $key => $instr){
+
+            $instructor[$key]['events'] = $instr->elearningEventsForRoyalties();
+
+            $instructor[$key]['events'] = $instructor[$key]['events']->get();
+
+            $instructor[$key]['income'] = 0;
+
+
+            $data = (new RoyaltiesController)->getInstructorEventData($instr, $instructor[$key]['events'], $request);
+
+
+            foreach($instructor[$key]['events'] as $key2 => $event){
+
+                $instructor[$key]['income'] = $instructor[$key]['income'] + (new RoyaltiesController)->calculateIncomeByPercentHours($data['events'][$event->id]);
+
+            }
+
+            Instructor::where('id', $instr->id)->update(['cache_income' => $instructor[$key]['income']]);
+
+        }
     }
 
 }
