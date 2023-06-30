@@ -7,6 +7,7 @@ use App\Library\CMS;
 use Illuminate\Http\Request;
 use App\Model\Admin\Page;
 use App\Model\Logos;
+use App\Model\Instructor;
 
 class DashboardController extends Controller
 {
@@ -154,5 +155,25 @@ class DashboardController extends Controller
     public function reports()
     {
         return view('new_admin.pages.reports');
+    }
+
+    public function royalties()
+    {
+        return view('new_admin.pages.royalties');
+    }
+
+    public function royaltiesShow($id)
+    {
+        if($id != 0){
+            $instructor = Instructor::select('id', 'title', 'subtitle')->where('id',$id)->get();
+            $view = 'single';
+        }else{
+            $instructor = Instructor::select('id', 'title', 'subtitle')->get();
+            $view = 'list';
+        }
+        $data['instructor'] = $instructor;
+        $data['view'] = $view;
+
+        return view('new_admin.pages.royalties_show', ["data" => json_encode($data)]);
     }
 }

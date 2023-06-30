@@ -659,20 +659,24 @@
                 $showPlan = null;
 
 
-                foreach($plans as $key => $plan){
-                    foreach($plan->events as $ev){
-                        $availablePlans[$ev->id] = $ev;
+                if(isset($plans)){
+
+                    foreach($plans as $key => $plan){
+                        foreach($plan->events as $ev){
+                            $availablePlans[$ev->id] = $ev;
+                        }
+
+                        if($plan->events->first()){
+                            $has_plan = true;
+                        }
                     }
 
-                    if($plan->events->first()){
-                        $has_plan = true;
+                    if(isset($availablePlans[2304])){
+                        $showPlan = $availablePlans[2304];
+                    }else if(isset($availablePlans[1350])){
+                        $showPlan = $availablePlans[1350];
                     }
-                }
 
-                if(isset($availablePlans[2304])){
-                    $showPlan = $availablePlans[2304];
-                }else if(isset($availablePlans[1350])){
-                    $showPlan = $availablePlans[1350];
                 }
 
 

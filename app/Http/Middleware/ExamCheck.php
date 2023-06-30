@@ -61,7 +61,8 @@ class ExamCheck
                 $eventId = $event->id;
               	$event = $user->events_for_user_list()->wherePivot('event_id',$event->id)->first();
               	if(!$event){
-                    $event = $user->subscriptionEvents->where('id',$eventId)->first();
+                    $event = $user->subscriptionEvents->where('id',$eventId)->last();
+
                 }
                 //return$event->examAccess($user,0.8,false,false);
                 $event_infos = $event->event_info1;

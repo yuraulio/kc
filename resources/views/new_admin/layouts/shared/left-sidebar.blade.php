@@ -144,6 +144,12 @@
                         <span> Settings </span>
                     </a>
                 </li>
+                <li>
+                    <a href="{{route('royalties')}}">
+                        <i data-feather="trending-up"></i>
+                        <span> Royalties </span>
+                    </a>
+                </li>
             </ul>
 
         </div>

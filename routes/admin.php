@@ -48,6 +48,9 @@ Route::domain(env('PREFIX_NEW_ADMIN_DOMAIN_URL') . env('APP_DOMAIN'))->group(fun
 
         Route::get('/export', [ExportController::class, 'subscriptionEnd'])->name("export");
 
+        Route::get('/royalties', [DashboardController::class, 'royalties'])->name("royalties");
+        Route::get('/royalties/{id}', [DashboardController::class, 'royaltiesShow']);
+
     });
 });
 Route::group(['middleware' => ['auth:admin_web']], function () {

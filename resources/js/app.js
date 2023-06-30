@@ -46,6 +46,7 @@ Vue.use(VueNestable)
 require('datatables.net-bs4');
 require('nestable2');
 
+Vue.component('royalties', require('./components/royalties.vue').default);
 Vue.component('countdown', require('./components/countdown.vue').default);
 Vue.component('ticker', require('./components/ticker.vue').default);
 Vue.component('dashboard-widget', require('./components/dashboard-widget.vue').default);
@@ -107,6 +108,9 @@ Vue.component('page-edit-simple', require('./components/page-edit-simple.vue').d
 
 Vue.component('countdown-new', require('./components/countdown-new.vue').default);
 Vue.component('countdown-edit', require('./components/countdown-edit.vue').default);
+
+Vue.component('royalties-show', require('./components/royalties-show.vue').default);
+Vue.component('royalty-item', require('./components/royalty-item.vue').default);
 
 import VueClipboard from 'vue-clipboard2'
 VueClipboard.config.autoSetContainer = true // add this line

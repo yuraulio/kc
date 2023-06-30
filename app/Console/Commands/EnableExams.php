@@ -46,7 +46,7 @@ class EnableExams extends Command
         }
 
         $videos = $user->statistic()->wherePivot('event_id', $this->argument('event'))->first();
-        
+
         if(!$videos){
             return;
         }
@@ -55,8 +55,10 @@ class EnableExams extends Command
 
         foreach($videos as $key => $video){
 
-            $videos[$key]['total_seen'] = $video['total_duration'];
-        
+            if(isset($video['total_duration'])){
+                $videos[$key]['total_seen'] = $video['total_duration'];
+            }
+
         }
 
         $user->statistic()->wherePivot('event_id',$this->argument('event'))->updateExistingPivot($this->argument('event'),[

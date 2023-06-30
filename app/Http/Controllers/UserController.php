@@ -1214,14 +1214,12 @@ class UserController extends Controller
     public function remove_ticket_user(Request $request)
     {
 
-        //dd($request->all());
-
         $user = User::find($request->user_id);
         $event = Event::find($request->event_id);
-        //dd($event);
+
         $user->ticket()->wherePivot('event_id', '=', $request->event_id)->wherePivot('ticket_id', '=', $request->ticket_id)->detach($request->ticket_id);
         $user->events()->wherePivot('event_id', '=', $request->event_id)->detach($request->event_id);
-        //dd($user->transactions()->get());
+
 
 
         $transaction = $event->transactionsByUser($user->id)->first();

@@ -37,6 +37,8 @@ use App\Model\EventInfo;
 use App\Notifications\CertificateAvaillable;
 use Carbon\Carbon;
 use App\Model\Admin\Countdown;
+use App\Traits\SearchFilter;
+use App\Traits\PaginateTable;
 
 class Event extends Model
 {
@@ -45,8 +47,15 @@ class Event extends Model
     use MetasTrait;
     use BenefitTrait;
     use MediaTrait;
+    use SearchFilter;
+    use PaginateTable;
 
     protected $table = 'events';
+
+    public function toSearchableArray()
+    {
+        return $this->toArray();
+    }
 
     protected $fillable = [
         'published', 'published_at', 'release_date_files', 'expiration' ,'status', 'title', 'htmlTitle', 'subtitle', 'header', 'summary', 'body', 'hours','author_id', 'creator_id', 'view_tpl', 'view_counter',
@@ -757,7 +766,7 @@ class Event extends Model
     public function transactionsByUserNew($user){
         return $this->transactions()->with('invoice')->whereHas('user', function ($query) use($user) {
             $query->where('id', $user);
-        });
+        })->latest();
     }
 
     public function subscriptionInvoicesByUser($user){
@@ -1109,62 +1118,7 @@ class Event extends Model
             foreach($lesson1 as $key1 => $lesson){
                 $sum = 0;
 
-                if($lesson['vimeo_duration'] != null && $lesson['vimeo_duration'] != '0'){
-
-                    $vimeo_duration = explode(' ', $lesson['vimeo_duration']);
-                    $hour = 0;
-                    $min = 0;
-                    $sec = 0;
-
-                    if(count($vimeo_duration) == 3){
-                        $string_hour = $vimeo_duration[0];
-                        $string_hour = intval(explode('h',$string_hour)[0]);
-                        $hour = $string_hour * 3600;
-
-                        $string_min = $vimeo_duration[1];
-                        $string_min = intval(explode('m',$string_min)[0]);
-                        $min = $string_min * 60;
-
-                        $string_sec = $vimeo_duration[2];
-                        $string_sec = intval(explode('s',$string_sec)[0]);
-                        $sec = $string_sec;
-
-                        $sum = $hour + $min + $sec;
-
-                    }else if(count($vimeo_duration) == 2){
-                        $string_min = $vimeo_duration[0];
-                        $string_min = intval(explode('m',$string_min)[0]);
-                        $min = $string_min * 60;
-
-                        $string_sec = $vimeo_duration[1];
-                        $string_sec = intval(explode('s',$string_sec)[0]);
-                        $sec = $string_sec;
-
-                        $sum = $min + $sec;
-                    }else if(count($vimeo_duration) == 1){
-                        //dd($vimeo_duration);
-                        $a = strpos( $vimeo_duration[0], 's');
-                        //dd($a);
-                        if($a === false ){
-                            $sum = 0;
-                            if(strpos( $vimeo_duration[0], 'm')){
-                                $string_min = $vimeo_duration[0];
-                                $string_min = intval(explode('m',$string_min)[0]);
-                                $min = $string_min * 60;
-                                $sum = $min;
-                            }
-
-                        }else if($a !== false ){
-                            $string_sec = intval(explode('s',$vimeo_duration[0])[0]);
-                            $sec = $string_sec;
-                            $sum = $sec;
-
-                        }
-                    }
-
-                }
-
-                $sum1 = $sum1 + $sum;
+                $sum1 = $sum1 + getSumLessonSecond($lesson);
 
             }
 

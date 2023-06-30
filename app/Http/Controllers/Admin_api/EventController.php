@@ -35,4 +35,21 @@ class EventController extends Controller
         }
     }
 
+    public function getAllList()
+    {
+        $this->authorize('viewAny', Event::class, Auth::user());
+
+        try {
+
+            $events = Event::whereHas('delivery' , function($q) {
+                $q->where('delivery_id', '=',143);
+            })->get();
+
+            return EventResource::collection($events);
+        } catch (Exception $e) {
+            Log::error("Failed to get categories. " . $e->getMessage());
+            return response()->json(['message' => $e->getMessage()], 400);
+        }
+    }
+
 }

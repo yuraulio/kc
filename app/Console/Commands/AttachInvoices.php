@@ -55,7 +55,7 @@ class AttachInvoices extends Command
                     //dd($event->transactionsByUser($invoice->user->first()->id)->first()->id);
                 }
             //}
-            
+
         }
         return 0;
     }

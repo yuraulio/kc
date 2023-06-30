@@ -60,6 +60,68 @@ if(!function_exists('request_access_token')){
     }
 }
 
+if(!function_exists('getSumLessonSecond')){
+    function getSumLessonSecond($lesson){
+        $sum = 0;
+        if($lesson['vimeo_duration'] != null && $lesson['vimeo_duration'] != '0'){
+
+            $vimeo_duration = explode(' ', $lesson['vimeo_duration']);
+            $hour = 0;
+            $min = 0;
+            $sec = 0;
+
+            if(count($vimeo_duration) == 3){
+                $string_hour = $vimeo_duration[0];
+                $string_hour = intval(explode('h',$string_hour)[0]);
+                $hour = $string_hour * 3600;
+
+                $string_min = $vimeo_duration[1];
+                $string_min = intval(explode('m',$string_min)[0]);
+                $min = $string_min * 60;
+
+                $string_sec = $vimeo_duration[2];
+                $string_sec = intval(explode('s',$string_sec)[0]);
+                $sec = $string_sec;
+
+                $sum = $hour + $min + $sec;
+
+            }else if(count($vimeo_duration) == 2){
+                $string_min = $vimeo_duration[0];
+                $string_min = intval(explode('m',$string_min)[0]);
+                $min = $string_min * 60;
+
+                $string_sec = $vimeo_duration[1];
+                $string_sec = intval(explode('s',$string_sec)[0]);
+                $sec = $string_sec;
+
+                $sum = $min + $sec;
+            }else if(count($vimeo_duration) == 1){
+                //dd($vimeo_duration);
+                $a = strpos( $vimeo_duration[0], 's');
+                //dd($a);
+                if($a === false ){
+                    $sum = 0;
+                    if(strpos( $vimeo_duration[0], 'm')){
+                        $string_min = $vimeo_duration[0];
+                        $string_min = intval(explode('m',$string_min)[0]);
+                        $min = $string_min * 60;
+                        $sum = $min;
+                    }
+
+                }else if($a !== false ){
+                    $string_sec = intval(explode('s',$vimeo_duration[0])[0]);
+                    $sec = $string_sec;
+                    $sum = $sec;
+
+                }
+            }
+
+        }
+
+        return $sum;
+    }
+}
+
 if(!function_exists('buildAuthorizationHeader')){
     function buildAuthorizationHeader($oauthParams){
         $authHeader = 'Authorization: OAuth ';
@@ -590,7 +652,7 @@ if (!function_exists('get_image')){
             if(strpos($media['path'], '//')){
                 $media['path'] = str_replace('//','/',$media['path']);
             }
-           
+
             if(file_exists(public_path('/')   .$media['path'] . $media['name'] . '.webp') && support_webp()){
                 return $media['path'] . $media['name'] . '.webp';
             }

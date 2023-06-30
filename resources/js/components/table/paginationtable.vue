@@ -83,6 +83,22 @@
         </template>
         <template v-else>
 
+            <div v-if="showFilter('from_date')" class="px-3 py-2">
+                <datepicker-component
+                    title="Transaction from"
+                    @updatevalue="update_transaction_from"
+                    :prop-value="transaction_from"
+                ></datepicker-component>
+            </div>
+
+            <div v-if="showFilter('until_date')" class="px-3 py-2">
+                <datepicker-component
+                    title="Transaction to"
+                    @updatevalue="update_transaction_to"
+                    :prop-value="transaction_to"
+                ></datepicker-component>
+            </div>
+
              <div v-if="showFilter('dynamic')" class="px-3 py-2">
                 <multidropdown
                     :multi="false"
@@ -180,6 +196,17 @@
                     :prop-value="category_value"
                     route="categories"
                     placeholder="All category groups"
+                    marginbottom="mb-0"
+                ></multidropdown>
+            </div>
+
+            <div v-if="showFilter('events')" class="px-3 py-2">
+                <multidropdown
+                    :multi="true"
+                    @updatevalue="update_event"
+                    :prop-value="event_value"
+                    route="getAllEventsList"
+                    placeholder="All events groups"
                     marginbottom="mb-0"
                 ></multidropdown>
             </div>
@@ -291,25 +318,37 @@
                             </a>
                         </div>
                     </div>
+                    <div v-show="!this.config.apiUrl.includes('royalties')">
+                        <div class="btn-group dropleft multiselect-actions float-end ms-2 pt-3">
 
-                    <div class="btn-group dropleft multiselect-actions float-end pt-3">
-                        <button class="btn btn-soft-secondary dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            {{perPage ? perPage : "All"}}
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
-                            <a class="dropdown-item" href="#" @click="changePerPage(10)">
-                                10
-                            </a>
-                            <a class="dropdown-item" href="#" @click="changePerPage(50)">
-                                50
-                            </a>
-                            <a class="dropdown-item" href="#" @click="changePerPage(100)">
-                                100
-                            </a>
-                            <a class="dropdown-item" href="#" @click="changePerPage(0)">
-                                All
-                            </a>
+                                <button class="btn btn-soft-secondary dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    {{perPage ? perPage : "All"}}
+                                </button>
+
+
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
+                                <a class="dropdown-item" href="#" @click="changePerPage(10)">
+                                    10
+                                </a>
+                                <a class="dropdown-item" href="#" @click="changePerPage(50)">
+                                    50
+                                </a>
+                                <a class="dropdown-item" href="#" @click="changePerPage(100)">
+                                    100
+                                </a>
+                                <a class="dropdown-item" href="#" @click="changePerPage(0)">
+                                    All
+                                </a>
+                            </div>
+
                         </div>
+                    </div>
+
+                    <div v-show="this.config.royaltyView == 'list'" class="btn-group dropleft multiselect-actions float-end pt-3">
+                        <button @click="viewAllInstrictorRoyalties()" class="btn btn-soft-secondary dropdown-toggle">View All Instructor Royalties</button>
+                    </div>
+                    <div v-show="this.config.royaltyView == 'single'" class="btn-group dropleft multiselect-actions float-end pt-3">
+                        <button @click="exportData()" class="btn btn-soft-secondary dropdown-toggle">Export</button>
                     </div>
 
                 </div>
@@ -342,6 +381,9 @@
                         'category': this.category_value ? this.category_value.id : null,
                         'subcategory': this.subcategory_value ? this.subcategory_value.id : null,
                         'pagefilter': this.page_value ? this.page_value.id : null,
+                        'events': this.event_value ? this.event_value : null,
+                        'transaction_from': this.transaction_from ? this.transaction_from : null,
+                        'transaction_to': this.transaction_to ? this.transaction_to : null,
                 }"
             >
 
@@ -447,9 +489,12 @@ export default {
             type_value: null,
             category_value: null,
             subcategory_value: null,
+            event_value: null,
             subcategories: [],
             template_value: null,
             page_value: null,
+            transaction_to: null,
+            transaction_from: null
 
         };
     },
@@ -463,6 +508,58 @@ export default {
         },
     },
     methods: {
+        viewAllInstrictorRoyalties(){
+            return window.location.href = 'royalties/0';
+        },
+        exportData(){
+
+            if(this.config.apiUrl.includes('royalties')){
+
+                let events = this.$refs.vuetable._props.httpOptions.params.events
+                let transaction_from = this.$refs.vuetable._props.httpOptions.params.transaction_from;
+                let transaction_to = this.$refs.vuetable._props.httpOptions.params.transaction_to;
+
+
+                axios({
+                    url: this.config.apiUrl+'/export',
+                    method: "POST",
+                    responseType: "blob",
+                    data:{
+                        events: events,
+                        transaction_from: transaction_from,
+                        transaction_to: transaction_to
+                    }
+                })
+                .then((response) => {
+                    console.log(response)
+                    if (response.status == 200) {
+
+                        var fileURL = window.URL.createObjectURL(
+                            new Blob([response.data])
+                        );
+                        var fileLink = document.createElement("a");
+
+                        fileLink.href = fileURL;
+                        var namefile = 'Royalties_Export.xlsx'
+                        if(this.config.instructor !== undefined){
+                            namefile = `${this.config.instructor.title}_${this.config.instructor.subtitle}_Royalties_Export.xlsx`
+                        }
+
+                        fileLink.setAttribute("download", namefile);
+                        document.body.appendChild(fileLink);
+
+                        fileLink.click();
+                        self.showLottie = false;
+                    }
+                })
+                .catch((error) => {
+                    console.log(error)
+                    this.$toast.error('Filed to get widget data.')
+                });
+            }
+
+
+        },
         changePerPage(number) {
             var hash = window.location.hash;
             this.perPage = number;
@@ -737,6 +834,14 @@ export default {
             this.dynamic = value;
             this.refreshTable();
         },
+        update_transaction_from(value) {
+            this.transaction_from = value;
+            this.refreshTable();
+        },
+        update_transaction_to(value) {
+            this.transaction_to = value;
+            this.refreshTable();
+        },
         update_published(value){
             this.published_value = value;
             this.refreshTable();
@@ -767,6 +872,10 @@ export default {
         },
         update_subcategory(value){
             this.subcategory_value = value;
+            this.refreshTable();
+        },
+        update_event(value){
+            this.event_value = value;
             this.refreshTable();
         },
         refreshTable() {

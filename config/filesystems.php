@@ -59,6 +59,10 @@ return [
             'driver' => 'local',
             'root' => storage_path('app')
         ],
+        'royalties' => [
+            'driver' => 'local',
+            'root' => storage_path('app/export/royalties')
+        ],
         'uploads' => [
             'driver' => 'local',
             'root' => public_path('/uploads'),

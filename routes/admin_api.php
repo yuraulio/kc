@@ -55,6 +55,13 @@ Route::domain(env('PREFIX_NEW_ADMIN_DOMAIN_URL') . env('APP_DOMAIN'))->group(fun
         Route::put('countdown/update_published/{id}', ['App\Http\Controllers\Admin_api\CountdownController', 'updatePublished']);
 
 
+        //Royalties
+        Route::resource('royalties', Admin_api\RoyaltiesController::class)->only([
+            'index', 'show'
+        ]);
+
+        Route::post('royalties/{id}/export', ['App\Http\Controllers\Admin_api\RoyaltiesController', 'export']);
+
         // Categories Event
         Route::get('getCategories', ['App\Http\Controllers\Admin_api\CategoryEventController', 'getList']);
 
@@ -62,6 +69,8 @@ Route::domain(env('PREFIX_NEW_ADMIN_DOMAIN_URL') . env('APP_DOMAIN'))->group(fun
         //Route::get('getDeliveries', ['App\Http\Controllers\Admin_api\DeliveryController', 'getList']);
         // Event
         Route::get('getEventsList', ['App\Http\Controllers\Admin_api\EventController', 'getList']);
+        // Event
+        Route::get('getAllEventsList', ['App\Http\Controllers\Admin_api\EventController', 'getAllList']);
 
         // pages
         Route::post('pages/deleteMultiple', [PagesController::class, 'deleteMultiple']);

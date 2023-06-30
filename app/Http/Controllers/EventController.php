@@ -31,6 +31,7 @@ use App\Jobs\EventSoldOut;
 use App\Exports\StudentExport;
 use Excel;
 use App\Exports\ExportStudentResults;
+use DateTime;
 
 class EventController extends Controller
 {
@@ -566,7 +567,7 @@ class EventController extends Controller
         return view('event.edit', $data);
     }
 
-    public function event_statistics($id)
+    public function event_statistics($id, $from_controller = null, $filters = null)
     {
 
         $event = Event::find($id);
@@ -616,6 +617,48 @@ class EventController extends Controller
         //dd($event->transactions);
         $countUsersU = [];
         foreach($event->transactions as $transaction){
+
+            if($filters != null && isset($filters['created_at'])){
+
+
+
+                $transactionCreatedAt = \Carbon\Carbon::parse($transaction['created_at']);
+                //dd($transaction);
+
+
+
+
+                $transaction_from = isset($filters['created_at']['from']) ? \Carbon\Carbon::parse(explode('T',$filters['created_at']['from'])[0]) : null;
+                $transaction_to = isset($filters['created_at']['to']) ? \Carbon\Carbon::parse(explode('T',$filters['created_at']['to'])[0]) : null;
+
+                if(isset($filters['created_at']['from']) && isset($filters['created_at']['to'])){
+
+                    $check = $transactionCreatedAt->between($filters['created_at']['from'],$filters['created_at']['to']);
+
+                    if(!$check){
+                        continue;
+                    }
+
+
+                }else if(isset($filters['created_at']['from']) && !isset($filters['created_at']['to'])){
+
+                    $check = $transactionCreatedAt->gte($transaction_from);
+
+                    if(!$check){
+                        continue;
+                    }
+
+                }else if(!isset($filters['created_at']['from']) && isset($filters['created_at']['to'])){
+
+                    $check = $transactionCreatedAt->lte($transaction_to);
+
+                    if(!$check){
+                        continue;
+                    }
+                }
+
+
+            }
 
             //$amount += $transaction->amount;
 
@@ -690,6 +733,97 @@ class EventController extends Controller
                     $income['other'] += ($amount) ;
                 }
 
+                if($from_controller == null){
+                    if(count($transaction['invoice']) > 0 ){
+
+
+                        foreach($transaction['invoice'] as $invoice){
+
+                            if($invoice['amount'] != null){
+                                //dd($transaction);
+                                $amount = $invoice['amount'] / $countUsers;
+                            }
+
+
+
+
+
+                            if($ticketType == 'Special'){
+
+                                //$arr[$transaction->id][$invoice->id] = $amount;
+
+
+
+                                $incomeInstalments['special'] = $incomeInstalments['special'] + $amount;
+                                //$incomeInstalments['total'] = $incomeInstalments['total'] + $amount;
+
+                            }else if($ticketType == 'Early Bird'){
+
+                                $incomeInstalments['early'] = $incomeInstalments['early'] + $amount;
+                                //$incomeInstalments['total'] = $incomeInstalments['total'] + $amount;
+
+                            }else if($ticketType == 'Regular'){
+
+                                $arr[$transaction->id][$invoice->id] = $amount;
+
+                                $incomeInstalments['regular'] = $incomeInstalments['regular'] + $amount;
+                                //$incomeInstalments['total'] = $incomeInstalments['total'] + $amount;
+
+                            }else if($ticketType == 'Sponsored'){
+
+                            }else if($ticketType == 'Alumni'){
+
+                                $incomeInstalments['alumni'] = $incomeInstalments['alumni'] + $amount;
+                                //$incomeInstalments['total'] = $incomeInstalments['total'] + ($transaction['amount'] != null ? ($transaction['amount'] / $countUsers) : 0) / $countUsers;
+                            }else{
+                                $incomeInstalments['other'] = $incomeInstalments['other'] + $amount;
+                                //$incomeInstalments['total'] = $incomeInstalments['total'] + ($transaction['amount'] != null ? ($transaction['amount'] / $countUsers) : 0) / $countUsers;
+
+                            }
+
+                        }
+
+                    }
+                    else{
+                        $amount = $transaction['amount'] != null ? $transaction['amount'] / $countUsers : 0;
+
+                        if(!isset($transaction['status_history'][0]['installments'])){
+
+                            if($ticketType == 'Special'){
+
+                                //$arr[$transaction->id] = $amount;
+
+                                $incomeInstalments['special'] = $incomeInstalments['special'] + $amount;
+                                //$incomeInstalments['total'] = $incomeInstalments['total'] + $amount;
+
+                            }else if($ticketType == 'Early Bird'){
+
+
+                                $incomeInstalments['early'] = $incomeInstalments['early'] + $amount;
+                                //$incomeInstalments['total'] = $incomeInstalments['total'] + $amount;
+
+                            }else if($ticketType == 'Regular'){
+
+
+
+                                $incomeInstalments['regular'] = $incomeInstalments['regular'] + $amount;
+                                //$incomeInstalments['total'] = $incomeInstalments['total'] + $amount;
+
+                            }else if($ticketType == 'Sponsored'){
+
+                            }else if($ticketType == 'Alumni'){
+                                $incomeInstalments['alumni'] = $incomeInstalments['alumni'] + $amount;
+                                //$incomeInstalments['total'] = $incomeInstalments['total'] + ($transaction['amount'] / $countUsers);
+                            }else{
+                                $incomeInstalments['other'] = $incomeInstalments['other'] + $amount;
+                                //$incomeInstalments['total'] = $incomeInstalments['total'] + ($transaction['amount'] / $countUsers);
+
+                            }
+                        }
+                    }
+                }
+
+                /*
                 if(count($transaction['invoice']) > 0 ){
 
 
@@ -777,6 +911,7 @@ class EventController extends Controller
                         }
                     }
                 }
+                */
 
 
 
@@ -790,8 +925,11 @@ class EventController extends Controller
         $countUsersU = count($countUsersU);
         $count['total'] = $countUsersU;
 
-        $data['incomeInstalments'] = $incomeInstalments;
-        $data['incomeInstalments']['total'] = array_sum($incomeInstalments);
+        if($from_controller == null){
+            $data['incomeInstalments'] = $incomeInstalments;
+            $data['incomeInstalments']['total'] = array_sum($incomeInstalments);
+        }
+
         //dd($data['incomeInstalments']);
         $data['count'] = $count;
         $data['income'] = $income;

@@ -378,7 +378,11 @@ class StudentController extends Controller
 
         }
 
-        foreach($user['eventSubscriptions']->whereNotIn('id',$eventSubscriptions) as $key => $subEvent){
+        $eventSubs = $user['eventSubscriptions']->whereNotIn('id',$eventSubscriptions)->filter(function($item) {
+            return  $item->stripe_status != 'cancelled' && $item->stripe_status != 'canceled';
+        });
+
+        foreach($eventSubs as $key => $subEvent){
             $event = $subEvent['event']->first();
             $eventInfo = $event->event_info();
             if($event->is_elearning_course()){
@@ -449,7 +453,6 @@ class StudentController extends Controller
         $data['subscriptionEvents'] = Event::whereIn('id',$subscriptionEvents)->with('slugable')->get();
 
 
-        //dd($data);
         return $data;
     }
 
@@ -1032,12 +1035,12 @@ class StudentController extends Controller
             if(!$eventt){
                 $data['instructor_topics'] = false;
                 $eventt = $user->events_for_user_list()->wherePivot('event_id', $event['id'])->first() ? $user->events_for_user_list()->wherePivot('event_id', $event['id'])->first() :
-                            $user->subscriptionEvents->where('id',$event['id'])->first();
+                            $user->subscriptionEvents->where('id',$event['id'])->last();
             }
             $event = $eventt;
         }else{
             $event = $user->events_for_user_list()->wherePivot('event_id', $event['id'])->first() ? $user->events_for_user_list()->wherePivot('event_id', $event['id'])->first() :
-            $user->subscriptionEvents->where('id',$event['id'])->first();
+            $user->subscriptionEvents->where('id',$event['id'])->last();
             $data['instructor_topics'] = false;
         }
 
