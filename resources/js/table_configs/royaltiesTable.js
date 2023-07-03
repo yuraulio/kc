@@ -88,7 +88,7 @@ export default {
     edit: true,
     editInputs: collectiveInputs,
     loadWidgets: true,
-    showFilters: true,
+    showFilters: false,
     perPage: 25,
     filters: [
         'from_date',
