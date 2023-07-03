@@ -29,6 +29,7 @@ class RoyaltiesController extends Controller
      */
     public function index(Request $request)
     {
+        //dd($request->all());
         $this->authorize('viewAny', Instructor::class, Auth::user());
 
         try {

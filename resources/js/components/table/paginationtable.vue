@@ -449,6 +449,9 @@
                 <template slot="page_title" slot-scope="props">
                     <a :href="'/page/' + props.rowData.id" target="_blank">{{ props.rowData.title }}</a>
                 </template>
+                <template slot="royalties_title" slot-scope="props">
+                    <a :href="'/royalties/' + props.rowData.id">{{ props.rowData.subtitle }}</a>
+                </template>
                 <template slot="visibility" slot-scope="props">
                     <!-- if dynamic var exist -> current page is Pages -->
                     <template v-if="props.rowData.dynamic !== undefined">

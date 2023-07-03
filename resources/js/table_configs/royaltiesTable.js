@@ -18,11 +18,19 @@ export default {
             titleClass: ''
         },
         {
-            name: 'subtitle',
+            name: 'royalties_title',
             title: 'Lastname',
             sortField: 'subtitle',
             dataClass: 'align-middle',
-            titleClass: ''
+            titleClass: '',
+            formatter (value) {
+                var template = "";
+                if (value) {
+
+                    template = "<td class='vuetable-td-title align-middle'><a href='/royalties/'>" + value + "</span></td>";
+                }
+                return template;
+            },
         },
         {
             name: 'header',
@@ -80,9 +88,11 @@ export default {
     edit: true,
     editInputs: collectiveInputs,
     loadWidgets: true,
-    showFilters: false,
+    showFilters: true,
     perPage: 25,
     filters: [
+        'from_date',
+        'until_date'
     ],
     addInputs: collectiveInputs,
 }

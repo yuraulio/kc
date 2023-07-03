@@ -16,6 +16,7 @@ class PageResource extends JsonResource
     public function toArray($request)
     {
         // dd($this->metaData()["meta_image"]->url);
+        dd($this->title);
         return [
             'id' => $this->id,
             'uuid' => $this->uuid,
