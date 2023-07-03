@@ -82,13 +82,14 @@ export default {
         }
     ],
     apiUrl: '/api/royalties',
+    loadSelectedFilterUrl: '/api/royalties-settings',
     create: false,
     createLink: '',
     editLink: '/royalties/',
     edit: true,
     editInputs: collectiveInputs,
     loadWidgets: true,
-    showFilters: false,
+    showFilters: true,
     perPage: 25,
     filters: [
         'from_date',

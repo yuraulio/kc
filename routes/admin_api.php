@@ -60,6 +60,7 @@ Route::domain(env('PREFIX_NEW_ADMIN_DOMAIN_URL') . env('APP_DOMAIN'))->group(fun
             'index', 'show'
         ]);
 
+        Route::get('royalties-settings', ['App\Http\Controllers\Admin_api\RoyaltiesController', 'getRoyaltiesSettings']);
         Route::post('royalties/export', ['App\Http\Controllers\Admin_api\RoyaltiesController', 'exportInstructorList']);
         Route::post('royalties/{id}/export', ['App\Http\Controllers\Admin_api\RoyaltiesController', 'export']);
         Route::post('royalties/widgets', ['App\Http\Controllers\Admin_api\RoyaltiesController', 'widgets']);

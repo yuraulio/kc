@@ -1039,6 +1039,26 @@ if(!function_exists('formatBytes')){
         }
     }
 
+    if (!function_exists('update_env_general')) {
+        function update_env_general( $data = [] ) : void
+        {
+
+
+            $newData=[$data['key'] => $data['value']];
+            $path = base_path('.env');
+
+            if (file_exists($path)) {
+
+                foreach ($newData as $key => $value) {
+                    print_r($key . '=' . env($key));
+                    print_r($key . '=' . $value);
+                    file_put_contents($path, str_replace($key . '=' . env($key), $key . '=' . $value, file_get_contents($path)));
+                }
+            }
+
+        }
+    }
+
 
     if (!function_exists('automateEmailTemplates')) {
         function automateEmailTemplates(){

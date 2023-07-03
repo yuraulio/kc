@@ -18,9 +18,62 @@ use App\Exports\RoyaltiesExport;
 use App\Exports\RoyaltiesExportInstructorsList;
 use Storage;
 use DateTime;
+use Carbon\Carbon;
 
 class RoyaltiesController extends Controller
 {
+
+    private function setTransactionFilter($request){
+        $env_from = env('ROYALTIES_FROM');
+        dd($env_from);
+
+
+        if($request->transaction_from != ''){
+
+            $requested_transaction_from = Carbon::createFromFormat('Y-m-d', Carbon::parse($request->transaction_from)->format('Y-m-d'))->format('Y-m-d');
+
+
+            if($requested_transaction_from != $env_from){
+
+                
+
+                update_env_general(['key'=>'ROYALTIES_FROM', 'value' => $requested_transaction_from]);
+                //env('ROYALTIES_FROM' , $requested_transaction_from );
+            }
+                       
+        }
+
+        if($request->transaction_to != null){
+            $requested_transaction_to = Carbon::createFromFormat('Y-m-d', Carbon::parse($request->transaction_to)->format('Y-m-d'))->format('Y-m-d');
+
+
+            if($requested_transaction_to == date('Y-m-d')){
+
+            }else{
+                update_env_general(['key'=>'ROYALTIES_TO', 'value' => $requested_transaction_to]);
+            }
+
+
+
+
+            // if($requested_transaction_to != null){
+            //     //dd($requested_transaction_to);
+            //     update_env_general(['key'=>'ROYALTIES_TO', 'value' => $requested_transaction_to]);
+            //     //env( 'ROYALTIES_TO', $requested_transaction_to );
+               
+            // }else{
+                
+            //     //env( 'ROYALTIES_TO', $requested_transaction_to );
+            //     update_env_general(['key'=>'ROYALTIES_TO', 'value' => $requested_transaction_to]);
+            // }
+        }else if($request->transaction_to == null){
+            update_env_general(['key'=> 'ROYALTIES_TO', 'value' => null]);
+            //env( 'ROYALTIES_TO' , '' );
+        }
+        
+        //env('royalties_date_from')
+
+    }
 
     /**
      * Get countdown
@@ -33,6 +86,8 @@ class RoyaltiesController extends Controller
         $this->authorize('viewAny', Instructor::class, Auth::user());
 
         try {
+
+            $this->setTransactionFilter($request);
 
             $instructors = Instructor::tableSort($request);
 
@@ -355,6 +410,30 @@ class RoyaltiesController extends Controller
             Log::warning("(pages widget) Failed to get pages count. " . $e->getMessage());
             return "0";
         }
+    }
+
+    public function getRoyaltiesSettings()
+    {
+        
+        try{
+            $data = [];
+
+            $data['transaction_from'] = env('ROYALTIES_FROM') != null ? Carbon::createFromFormat('Y-m-d', Carbon::parse(env('ROYALTIES_FROM'))->format('Y-m-d'))->addDays()->format('Y-m-d') : null;
+            $data['transaction_to'] = env('ROYALTIES_TO') != null ? Carbon::createFromFormat('Y-m-d', Carbon::parse(env('ROYALTIES_TO'))->format('Y-m-d'))->addDays()->format('Y-m-d') : null;
+
+
+            return response()->json(['data' => $data], 200);
+            
+        } catch (Exception $e) {
+
+
+            Log::error("Failed to get countdown. " . $e->getMessage());
+            return response()->json(['message' => $e->getMessage()], 400);
+
+        }
+
+        
+
     }
 
 }

@@ -1010,7 +1010,27 @@ export default {
         },
         fixError(message, subcategoryError, subcategory) {
             return message.replace(subcategoryError, " subcategory '" + subcategory + "' ") + " (Titles through categories and subcategories must be unique.)";
-        }
+        },
+        loadLastTransactionRangeFilter(){
+            axios({
+                url: this.config.loadSelectedFilterUrl,
+                method: "GET",
+            })
+            .then((response) => {
+
+                if (response.status == 200) {
+                    this.transaction_from = response.data.data['transaction_from'] != null ? subtractDays(date,new Date(response.data.data['transaction_from'],1)) : null
+                    this.transaction_to = response.data.data['transaction_to'] != null ? subtractDays(new Date(response.data.data['transaction_to'],1)) : Date.now()
+
+                    console.log(this.transaction_to)
+                    
+                }
+            })
+            .catch((error) => {
+                console.log(error)
+                this.$toast.error('Filed to get widget data.')
+            });
+    },
     },
     mounted() {
         this.perPage = this.config.perPage;
@@ -1024,7 +1044,11 @@ export default {
 
     },
     created() {
-        if(this.config.apiUrl.includes('/api/royalties')){
+
+        
+
+        console.log('2')
+        if(this.config.apiUrl.includes('royalties')){
 
             const timeElapsed = Date.now();
             const today = new Date(timeElapsed);
@@ -1035,6 +1059,8 @@ export default {
 
             if(this.config.royaltyView == 'single'){
                 this.widgets = ['TOTAL ROYALTIES',[0],'Total royalties for all instructors']
+            }else if(this.config.royaltyView == 'list'){
+                this.loadLastTransactionRangeFilter();
             }
 
         }
