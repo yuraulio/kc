@@ -299,6 +299,35 @@
         </div>
 
     </div>
+    <div v-if="config.loadWidgets === false && config.apiUrl.includes('royalties')">
+
+<div v-if="widgets" class="row">
+    <div v-if="widgets[0]" class="col-lg-3 col-md-6">
+        <div class="card bg-pattern mb-3">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12">
+                        <h4 class="text-dark my-1 text-truncate" :title="widgets[0]"><span>{{widgets[0]}}</span></h4>
+                    </div>
+                    <div class="col-12">
+                        <div class="text-start">
+                            <p class="text-muted mb-0 text-truncate">Total: € {{widgets[1]['sum']}}</p>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="text-start">
+
+                            <p class="text-muted mt-2 mb-0 text-truncate">{{widgets[2]}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+</div>
 
     <!-- end card-->
     <div class="card mb-2">
@@ -526,7 +555,7 @@ export default {
             multiselectShow: false,
             selectAllCheckbox: false,
             perPage: 50,
-            widgets: ['test',5],
+            widgets: [],
             dynamic: null,
             published_value: null,
             type_value: null,
@@ -578,7 +607,6 @@ export default {
                     }
                 })
                 .then((response) => {
-                    console.log(response)
                     if (response.status == 200) {
 
                         var fileURL = window.URL.createObjectURL(
@@ -638,8 +666,6 @@ export default {
 
         hideLoader() {
             this.loading = false;
-
-            console.log(this)
         },
         created($event) {
             this.templates["data"].unshift($event);
@@ -826,8 +852,6 @@ export default {
         },
         getWidgets(type) {
 
-            console.log('get widget inside paginationable')
-            console.log(type)
 
             if (this.config.loadWidgets !== false) {
                 axios
@@ -843,15 +867,20 @@ export default {
                     pagefilter: this.page_value ? this.page_value.id : null,
                 })
                 .then((response) => {
-                    console.log('inside response')
+
                     if (response.status == 200) {
                         if(type == 'pages'){
                             this.widgets = response.data[0];
+
                         }else if(type == 'blog'){
                             this.widgets = response.data[1];
+
                         }else if(type == 'royalties'){
                             this.widgets = response.data[0];
                         }
+                        // else if(type == 'royalties' && this.config.royaltyView == 'single'){
+                        //     this.widgets = response.data[0];
+                        // }
 
                         this.hideLoader();
 
@@ -861,6 +890,22 @@ export default {
                     this.$toast.error('Filed to get widget data.')
                 });
             } else {
+
+                if(this.config.apiUrl.includes('royalties') && this.config.royaltyView == 'single'){
+
+                    let total = 0;
+                    this.$refs.vuetable.tableData.forEach(e => {
+                        let income = e.income.split(' ')
+
+                        income = parseFloat(income[1]);
+                        total = total + income
+
+                    })
+
+                    this.widgets[1]['sum'] = total
+
+                }
+
                 this.hideLoader();
             }
         },
@@ -984,6 +1029,10 @@ export default {
 
             this.transaction_from = d.toISOString();
             this.transaction_to = today.toISOString();
+
+            if(this.config.royaltyView == 'single'){
+                this.widgets = ['TOTAL ROYALTIES',[0],'Total royalties for all instructors']
+            }
 
         }
 

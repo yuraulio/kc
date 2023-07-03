@@ -329,19 +329,6 @@ class RoyaltiesController extends Controller
         return $data;
     }
 
-    public function widgetsByInstructor(int $id, Request $request){
-        return [
-            [
-                "TOTAL ROYALTIES",
-                $data = [
-                    'sum' => $this->getCacheIncome($request)
-                ],
-                'Total royalties for all instructors'
-            ],
-
-
-        ];
-    }
 
     public function widgets(Request $request)
     {
@@ -360,37 +347,13 @@ class RoyaltiesController extends Controller
 
     public function getCacheIncome($request){
         try {
-                    $income = Instructor::has('elearningEventsForRoyalties')->whereStatus(1)->sum('cache_income');
-                    //$pages = $this->filters($request, $pages);
-                    return $income;
-                } catch (Exception $e) {
-                    Log::warning("(pages widget) Failed to get pages count. " . $e->getMessage());
-                    return "0";
-                }
+            $income = Instructor::has('elearningEventsForRoyalties')->whereStatus(1)->sum('cache_income');
+            //$pages = $this->filters($request, $pages);
+            return $income;
+        } catch (Exception $e) {
+            Log::warning("(pages widget) Failed to get pages count. " . $e->getMessage());
+            return "0";
+        }
     }
-
-    // public function PagesCount($request)
-    // {
-    //     try {
-    //         $pages = Page::withoutGlobalScopes();
-    //         //$pages = $this->filters($request, $pages);
-    //         return $pages->count();
-    //     } catch (Exception $e) {
-    //         Log::warning("(pages widget) Failed to get pages count. " . $e->getMessage());
-    //         return "0";
-    //     }
-    // }
-
-    // public function publishedPagesCount($request)
-    // {
-    //     try {
-    //         $pages = Page::withoutGlobalScopes()->wherePublished(true);
-    //         //$pages = $this->filters($request, $pages);
-    //         return $pages->count();
-    //     } catch (Exception $e) {
-    //         Log::warning("(pages widget) Failed to get published pages count. " . $e->getMessage());
-    //         return "0";
-    //     }
-    // }
 
 }

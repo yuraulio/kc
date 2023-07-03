@@ -63,8 +63,6 @@ Route::domain(env('PREFIX_NEW_ADMIN_DOMAIN_URL') . env('APP_DOMAIN'))->group(fun
         Route::post('royalties/export', ['App\Http\Controllers\Admin_api\RoyaltiesController', 'exportInstructorList']);
         Route::post('royalties/{id}/export', ['App\Http\Controllers\Admin_api\RoyaltiesController', 'export']);
         Route::post('royalties/widgets', ['App\Http\Controllers\Admin_api\RoyaltiesController', 'widgets']);
-        Route::post('royalties/{id}/widgets', ['App\Http\Controllers\Admin_api\RoyaltiesController', 'widgetsByInstructor']);
-
         // Categories Event
         Route::get('getCategories', ['App\Http\Controllers\Admin_api\CategoryEventController', 'getList']);
 

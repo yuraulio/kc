@@ -79,7 +79,7 @@ export default {
     edit: false,
     editInputs: collectiveInputs,
     showFilters: true,
-    loadWidgets: true,
+    loadWidgets: false,
     filters: [
         'events',
         'from_date',
