@@ -78,7 +78,7 @@
                             <div class="col-sm-3 filter_col">
                                 <div class="form-group">
                                     <label>From - To</label>
-                                    <input class="select2-css" type="text" name="daterange" value="" autocomplete="off"/>
+                                    <input class="select2-css" type="text" name="daterange" value="" />
                                 </div>
                             </div>
                             <!-- <div class="col-sm-3 filter_col">
@@ -310,8 +310,6 @@ $.fn.dataTable.ext.search.push(
 
 $(document).ready(function() {
 
-    var eventsDb = @json($events);
-    eventsDb = JSON.parse(eventsDb)
     var datepicker = $('input[name="daterange"]').daterangepicker()
 
     $('input[name="daterange"]').val('')
@@ -375,16 +373,53 @@ $(document).ready(function() {
     delivery = table.column(12).data().unique().sort()
     prices = table.column(3).data()
 
+    // let sum = 0
+    // $.each(prices, function(key, value) {
 
-    $.each(eventsDb, function(key, value){
-        //let data = sort_events[length];
-        if(value.published_at != null){
-            let a = value.published_at.split(' ')
-            let DateParts = a[0].split("-")
-            let date = DateParts[2]+'-'+DateParts[1]+'-'+DateParts[0]
-            $('#col1_filter').append(`<option value="${value.title} / ${date}">${value.title} / ${date}</option>`)
-        }
-       
+    //     value = value.replace("€", "")
+    //     sum = sum + parseFloat(value)
+
+    // })
+
+    // var sum = prices.reduce(function(a, b){
+    //     return parseFloat(a) + parseFloat(b);
+    // }, 0);
+    //$('.total').text('€'+sum)
+
+    //let sum = 0;
+
+    $.each(events, function(key, value){
+        let d = value.split(' / ')
+        let DateParts = d[1].split("-")
+        let t= new Date(+DateParts[2], DateParts[1] - 1, +DateParts[0]).setUTCHours(
+      0,
+      0,
+      0,
+      0
+    )
+    let date = new Date(t)
+
+    let arr = []
+    arr['name'] = value
+    arr['date'] = date
+
+    sort_events.push(arr)
+
+    })
+
+    sort_events.sort(function compare(a, b) {
+        var dateA = new Date(a.date);
+        var dateB = new Date(b.date);
+        return dateA - dateB;
+    });
+
+    let length = parseFloat(sort_events.length) -1
+
+    $.each(sort_events, function(key, value){
+        let data = sort_events[length];
+        $('#col1_filter').append(`<option value="${sort_events[length].name}">${sort_events[length].name}</option>`)
+
+        length = length - 1;
     })
 
 

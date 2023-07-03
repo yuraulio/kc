@@ -70,7 +70,16 @@ class DashboardStatistics
         $results['usersElearning'] = 0;
         //$results['usersInclass'] = 5;
         $results['usersInclass'] = User::whereHas('events_for_user_list1', function ($q) {
-            $q->wherePublished(true)->whereStatus(0)->where(function ($q1) {
+            //open, completed
+            $q->wherePublished(true)
+            ->where(function ($q3) {
+                return $q3->whereIn('status', [0,3]);
+            })
+            ->whereHas('lessons',function($q4) {
+                return $q4->where('date', '>=', date('Y-m-d'));
+            })
+
+            ->where(function ($q1) {
                 $q1->doesntHave('delivery')->OrWhereHas('delivery', function ($q2) {
                     return $q2->where('deliveries.id', '<>', 143);
                 });

@@ -91,7 +91,16 @@
         </div>
     </div>
 
-
-
-
 </div>
+
+<div class="row">
+    <div class="col-12 text-right general-save-wrapper">
+        <div class="save_event_btn" >@include('admin.save.save',['event' => isset($event) ? $event : null])</div>
+        <div class="preview_event_btn">@include('admin.preview.preview',['slug' => isset($slug) ? $slug : null])</div>
+        <div class="save_event_btn" >@include('admin.download.schedule',['event' => isset($event) ? $event : null])</div>
+    </div>
+    <div class="col-12 text-right d-none seo-save-wrapper">
+        <button id="submit-seo-btn" type="button" class="submit-btn btn btn-outline-success mt-4 custom-btn-breadcrum">{{ __('Save ').' ' }}</button>
+    </div>
+</div>
+

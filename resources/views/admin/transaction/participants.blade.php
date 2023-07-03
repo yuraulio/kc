@@ -93,7 +93,7 @@
                             <div class="col-sm-3 filter_col">
                                 <div class="form-group">
                                     <label>From - To</label>
-                                    <input class="select2-css" type="text" name="daterange">
+                                    <input class="select2-css" type="text" autocomplete="off" name="daterange">
                                 </div>
                             </div>
                             <!-- <div class="col-sm-3 filter_col">

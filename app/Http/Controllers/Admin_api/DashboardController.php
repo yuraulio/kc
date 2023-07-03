@@ -51,7 +51,14 @@ class DashboardController extends Controller
 
 
         $students_in_class = User::whereHas('events_for_user_list1', function ($q) {
-            $q->wherePublished(true)->whereStatus(0)->where(function ($q1) {
+            $q->wherePublished(true)
+            ->where(function ($q3) {
+                return $q3->whereIn('status', [0,3]);
+            })
+            ->whereHas('lessons',function($q4) {
+                return $q4->where('date', '>=', date('Y-m-d'));
+            })
+            ->where(function ($q1) {
                 $q1->doesntHave('delivery')->OrWhereHas('delivery', function ($q2) {
                     return $q2->where('deliveries.id', '<>', 143);
                 });

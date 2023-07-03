@@ -64,7 +64,7 @@
                                        <span class="input-group-text"><i class="ni ni-calendar-grid-58"></i></span>
                                     </div>
 
-                                    <input class="form-control select2-css" type="text" name="daterange" value="" />
+                                    <input class="form-control select2-css" type="text" name="daterange" autocomplete="off" value="" />
                                  </div>
                               </div>
                             </div>
@@ -244,7 +244,7 @@
 
             unique_users.push($(this.data()[1]).data('name'))
 
-            if( $("#col3_filter").val() !== 'cancelled' &&  $("#filter_col3").val() !== 'trialing' ){
+            if( $("#col3_filter").val() !== 'cancelled' &&  $("#col3_filter").val() !== 'trialing' ){
 
                 sum = sum + amount
             }

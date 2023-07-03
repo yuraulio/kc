@@ -8,7 +8,6 @@ use App\Model\Transaction;
 use App\Model\Event;
 use Excel;
 use App\Exports\SubscriptionExport;
-use Carbon\Carbon;
 
 use App\Model\Plan;
 
@@ -60,31 +59,12 @@ class SubscriptionController extends Controller
 
                 if($sub['trial'] && $status == 'trialing'){
                     $status = 'trialing';
-                }else if($status == 'active' && $sub['subscription'][0]['status'] == 1 && !$sub['trial']){
-
-                    $nowDate = Carbon::now();
-
-                    
-                    if($sub['ends_at']){
-                        $sub_ends_at = Carbon::createFromFormat('Y-m-d H:i:s',$sub['ends_at']);
-                    
-
-                        if($sub_ends_at->gte($nowDate)){
-                            
-                            $status = 'active';
-                        }
-                    }
-                }
-                else if($status == 'active' && $sub['subscription'][0]['status'] == 0 && !$sub['trial']){
-                    $status = 'paid_not_active_user_canceled';
-                }
-                else if(($status == 'cancelled' || $status == 'cancel' || $status == 'canceled') && !$sub['trial']){
+                }else if($status == 'active' && $sub['subscription'][0]['status'] && !$sub['trial']){
+                    $status = 'active';
+                }else if(($status == 'cancelled' || $status == 'cancel' || $status == 'canceled') && !$sub['trial']){
                     $status = 'paid_and_cancelled';
                 }else if(($status == 'cancelled' || $status == 'cancel' || $status == 'canceled') && $sub['trial']){
                     $status = 'cancelled';
-                }else{
-                    $status = '';
-                    
                 }
                 //dd($sub['user']);
                 $registrationEvent = null;

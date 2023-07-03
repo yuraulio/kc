@@ -576,6 +576,8 @@ class TransactionController extends Controller
 
         $data = $this->participantsNew();
 
+        $data['events'] = Event::select('title', 'published_at')->orderBy('published_at', 'desc')->get()->toJson();
+
         return view('admin.transaction.revenue', $data);
     }
 

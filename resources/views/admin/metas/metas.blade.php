@@ -1,4 +1,4 @@
-<form method="post" action="{{ route('metas.update',$metas->id) }}" autocomplete="off" enctype="multipart/form-data">
+<form method="post" id="seo-form" action="{{ route('metas.update',$metas->id) }}" autocomplete="off" enctype="multipart/form-data">
 @csrf
 <div class="form-group{{ $errors->has('metas') ? ' has-danger' : '' }}">
    <label class="form-control-label  pl-lg-4" for="input-title">{{ __('Metas') }}</label>
@@ -23,9 +23,9 @@
                            
                         </div>
                   
-                        <div class="text-right">
+                        {{--<div class="text-right">
                            <button type="submit" class="btn btn-success mt-4">{{ __('Save') }}</button>
-                        </div>
+                        </div>--}}
                      </div>
 
    @include('alerts.feedback', ['field' => 'metas'])

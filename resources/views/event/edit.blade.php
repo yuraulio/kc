@@ -14,7 +14,11 @@
 
             <li class="breadcrumb-item"><a href="{{ route('events.index') }}">{{ __('Events Management') }}</a></li>
             <li class="breadcrumb-item active" aria-current="page">{{ __('Edit Event') }}</li>
-        @endcomponent
+
+            
+            
+    
+    @endcomponent
 
         @include('event.layouts.event_card')
 
@@ -168,11 +172,12 @@
                                 @include('alerts.errors')
                             </div>
 
-                            <div class="form_event_btn_new d-none">
+                            {{--<div class="form_event_btn_new d-none">
                                 <div class="save_event_btn" >@include('admin.save.save',['event' => isset($event) ? $event : null])</div>
                                 <div class="preview_event_btn">@include('admin.preview.preview',['slug' => isset($slug) ? $slug : null])</div>
                                 <div class="save_event_btn" >@include('admin.download.schedule',['event' => isset($event) ? $event : null])</div>
-                            </div>
+                            </div>--}}
+                            
                             <form id="event_edit_form" method="POST" action="{{ route('events.update', $event) }}" autocomplete="off"
                                         enctype="multipart/form-data">
                                                 @csrf
@@ -261,11 +266,11 @@
 
 
                                             {{--<div class="col-lg-2 col-md-12 col-sm-6 col-6  form_event_btn">--}}
-                                            <div class="col-md-12 col-sm-12 text-sm-center text-lg-right text-md-right form_event_btn">
+                                            {{--<div class="col-md-12 col-sm-12 text-sm-center text-lg-right text-md-right form_event_btn">
                                                 <div class="save_event_btn" >@include('admin.save.save',['event' => isset($event) ? $event : null])</div>
                                                 <div class="preview_event_btn">@include('admin.preview.preview',['slug' => isset($slug) ? $slug : null])</div>
                                                 <div class="save_event_btn" >@include('admin.download.schedule',['event' => isset($event) ? $event : null])</div>
-                                            </div>
+                                            </div>--}}
 
 
 
@@ -4033,6 +4038,23 @@
             }else{
                 $('#event_edit_form').submit();
                 //document.getElementById('event_edit_form').submit();
+            }
+        })
+
+        $('#submit-seo-btn').on('click', function() {
+            $('#seo-form').submit();
+        })
+
+        $('#tabs-icons-text button, #mobile_menu .dropdown-item').on('click', function(){
+
+            let btn_clicked = $(this).attr('href')
+
+            if(btn_clicked == '#metas'){
+                $('.general-save-wrapper').addClass('d-none')
+                $('.seo-save-wrapper').removeClass('d-none')
+            }else{
+                $('.general-save-wrapper').removeClass('d-none')
+                $('.seo-save-wrapper').addClass('d-none')
             }
         })
 
