@@ -23,58 +23,30 @@ use Carbon\Carbon;
 class RoyaltiesController extends Controller
 {
 
-    private function setTransactionFilter($request){
-        $env_from = env('ROYALTIES_FROM');
-        dd($env_from);
+    public function parseDataFormCache($request)
+    {
+        $status = true;
 
 
-        if($request->transaction_from != ''){
+        $request_transasction_from = $request->transaction_from != null ? explode('T', $request->transaction_from)[0] : null;
+        $request_transasction_to = $request->transaction_to != null ? explode('T', $request->transaction_to)[0] : null;
 
-            $requested_transaction_from = Carbon::createFromFormat('Y-m-d', Carbon::parse($request->transaction_from)->format('Y-m-d'))->format('Y-m-d');
-
-
-            if($requested_transaction_from != $env_from){
-
-                
-
-                update_env_general(['key'=>'ROYALTIES_FROM', 'value' => $requested_transaction_from]);
-                //env('ROYALTIES_FROM' , $requested_transaction_from );
-            }
-                       
-        }
-
-        if($request->transaction_to != null){
-            $requested_transaction_to = Carbon::createFromFormat('Y-m-d', Carbon::parse($request->transaction_to)->format('Y-m-d'))->format('Y-m-d');
+        //dd($request_transasction_from);
+    
+        $firstDayOfYear = new DateTime();
+        $firstDayOfYear->setDate($firstDayOfYear->format('Y'), 1, 1);
+        $currentDateOfYear = date('Y-m-d');
 
 
-            if($requested_transaction_to == date('Y-m-d')){
+        if($currentDateOfYear == $request_transasction_to){
+            $status = false;
+        }   
 
-            }else{
-                update_env_general(['key'=>'ROYALTIES_TO', 'value' => $requested_transaction_to]);
-            }
-
-
-
-
-            // if($requested_transaction_to != null){
-            //     //dd($requested_transaction_to);
-            //     update_env_general(['key'=>'ROYALTIES_TO', 'value' => $requested_transaction_to]);
-            //     //env( 'ROYALTIES_TO', $requested_transaction_to );
-               
-            // }else{
-                
-            //     //env( 'ROYALTIES_TO', $requested_transaction_to );
-            //     update_env_general(['key'=>'ROYALTIES_TO', 'value' => $requested_transaction_to]);
-            // }
-        }else if($request->transaction_to == null){
-            update_env_general(['key'=> 'ROYALTIES_TO', 'value' => null]);
-            //env( 'ROYALTIES_TO' , '' );
-        }
         
-        //env('royalties_date_from')
 
+
+        return $status;
     }
-
     /**
      * Get countdown
      *
@@ -82,19 +54,57 @@ class RoyaltiesController extends Controller
      */
     public function index(Request $request)
     {
-        //dd($request->all());
         $this->authorize('viewAny', Instructor::class, Auth::user());
 
         try {
-
-            $this->setTransactionFilter($request);
 
             $instructors = Instructor::tableSort($request);
 
             $instructors = $this->filters($instructors, $request);
 
-            $instructors = $instructors->has('elearningEventsForRoyalties')->whereStatus(1)->paginate($request->per_page ?? 50);
-            return InstructorResource::collection($instructors);
+            if($this->parseDataFormCache($request)){
+                $instructors = $instructors->has('elearningEventsForRoyalties')->whereStatus(1)->paginate($request->per_page ?? 50);
+                return InstructorResource::collection($instructors);
+            }else{
+                $instructor = Instructor::has('elearningEventsForRoyalties')->with('elearningEventsForRoyalties:id,title','elearningEventsForRoyalties.lessons','elearningEventsForRoyalties.delivery')->whereStatus(1)->get();
+
+                //dd($instructor[0]);
+                
+
+                foreach($instructor as $key => $instr){
+
+                    $instructor[$key]['events'] = $instr->elearningEventsForRoyalties()->tableSort($request);
+
+                    $instructor[$key]['events'] = $this->filters($instructor[$key]['events'], $request);
+                    $instructor[$key]['events'] = $instructor[$key]['events']->get();
+
+
+                    $data = $this->getInstructorEventData($instr, $instructor[$key]['events'], $request);
+
+                    $instructor[$key]['cache_income'] = 0.0;
+
+                    foreach($instructor[$key]['events'] as $key2 => $event){
+                        //dd($this->calculateIncomeByPercentHours($data['events'][$event->id]));
+                        //$instructor[$key]['events'][$key2]['cache_income'] = $this->calculateIncomeByPercentHours($data['events'][$event->id]);
+
+                        // $preResponseData[$i]['instructor'] = $instr['title'].' '.$instr['subtitle'];
+                        // $preResponseData[$i]['id'] = $instr['id'];
+                       //dd($this->calculateIncomeByPercentHours($data['events'][$event->id]));
+                        $instructor[$key]['cache_income'] = $instructor[$key]['cache_income'] + $this->calculateIncomeByPercentHours($data['events'][$event->id]);
+
+                       
+                    }
+
+                    //dd($instructor[$key]['events']['cache_income']);
+
+                }
+
+                return InstructorResource::collection($instructor);
+            }
+
+
+            
+            
 
 
         } catch (Exception $e) {
@@ -325,6 +335,7 @@ class RoyaltiesController extends Controller
 
         $filterForTransaction['calculateSubscription'] = false;
 
+
         foreach($events as $key => $event){
 
             $data['events'][$event->id] = $event->getTotalHours() * 60;
@@ -410,30 +421,6 @@ class RoyaltiesController extends Controller
             Log::warning("(pages widget) Failed to get pages count. " . $e->getMessage());
             return "0";
         }
-    }
-
-    public function getRoyaltiesSettings()
-    {
-        
-        try{
-            $data = [];
-
-            $data['transaction_from'] = env('ROYALTIES_FROM') != null ? Carbon::createFromFormat('Y-m-d', Carbon::parse(env('ROYALTIES_FROM'))->format('Y-m-d'))->addDays()->format('Y-m-d') : null;
-            $data['transaction_to'] = env('ROYALTIES_TO') != null ? Carbon::createFromFormat('Y-m-d', Carbon::parse(env('ROYALTIES_TO'))->format('Y-m-d'))->addDays()->format('Y-m-d') : null;
-
-
-            return response()->json(['data' => $data], 200);
-            
-        } catch (Exception $e) {
-
-
-            Log::error("Failed to get countdown. " . $e->getMessage());
-            return response()->json(['message' => $e->getMessage()], 400);
-
-        }
-
-        
-
     }
 
 }

@@ -569,7 +569,6 @@ class EventController extends Controller
 
     public function event_statistics($id, $from_controller = null, $filters = null)
     {
-
         $event = Event::find($id);
         $users = $event->users_with_transactions()->with('ticket')->get();
 
