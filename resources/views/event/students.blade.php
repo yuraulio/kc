@@ -28,11 +28,14 @@
                 @if($isInclassCourse)
                 <th scope="col">{{ __('Absences') }}</th>
                 @endif
+                @if(!$isInclassCourse)
+                <th scope="col">{{ __('Status')}}</th>
+                @endif
 
             </tr>
         </thead>
         <tbody>
-        <?php //dd($allTopicsByCategory); ?>
+        <?php //dd($allTopicsByCategory); $i ?>
             @foreach ($eventUsers as $user)
 
                 <tr>
@@ -50,6 +53,30 @@
                         <td> <button class="absences btn btn-info btn-sm" style="margin-top:10px;" type="button"
                                                 data-user_id="{{$user['id']}}" data-event_id="{{$event->id}}"
                                                 data-toggle="modal" data-target="#absences-info">Absences</button> </td>
+                    @endif
+
+                    @if(!$isInclassCourse)
+                    <td>
+                        @if($user->pivot['expiration'])
+                        <?php 
+                        //dd($user->pivot['expiration']);
+                            $now = \Carbon\Carbon::createFromFormat('Y-m-d', date('Y-m-d'));
+                            $ends_at = \Carbon\Carbon::createFromFormat('Y-m-d', $user->pivot['expiration']);
+                        ?>
+
+                        @if($now->lte($ends_at))
+                        <span data-status="Open" class="badge badge-dot mr-4">
+                            <i class="bg-success"></i>
+                        </span>
+                        @else
+                        <span data-status="Open" class="badge badge-dot mr-4">
+                            <i class="bg-danger"></i>
+                        </span>
+                        @endif
+
+                        @endif
+                        
+                    </td>
                     @endif
 
                 </tr>
