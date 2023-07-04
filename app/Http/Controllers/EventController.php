@@ -612,7 +612,6 @@ class EventController extends Controller
         $arr = [];
         //$arr_income = [];
 
-
         //dd($event->transactions);
         $countUsersU = [];
         foreach($event->transactions as $transaction){

@@ -26,6 +26,35 @@
             </div>
         </div>
     </div>
+    <div class="col-xl-4 col-md-6">
+        <div class="card card-stats">
+            <!-- Card body -->
+            <div class="card-body widget">
+                <div class="row">
+                    <div class="col">
+                        <h5 class="card-title text-uppercase text-muted mb-0">TOTAL ACTIVE</h5>
+                        <span class="h2 font-weight-bold mb-0"> <span id="active-total">0</span></span>
+                    </div>
+                </div>
+                <div class="loader text-center">
+                    <img class="img-responsive" src="{{url('/theme/assets/img/ajax-loader-blue.gif')}}" alt="loader">
+                </div>
+                <div class="row">
+                    <div class="col info d-none">
+                        <p class="mt-3 mb-0 text-sm">
+                            <span class="text-muted mr-3">INCLASS ACTIVE: <span class="text-success" id="inclass-active">0</span></span>
+                            <span class="text-muted mr-3">E-LEARNING ACTIVE: <span class="text-success" id="elearning-active">0</span></span>
+                            
+                        </p>
+                        <p class="mb-0 text-sm">
+                            <span class="">All actual and accrued revenue for this course.</span>
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
 
     <div class="col-xl-4 col-md-6">
         <div class="card card-stats">
