@@ -25,26 +25,20 @@ class RoyaltiesController extends Controller
 
     public function parseDataFormCache($request)
     {
-        $status = true;
+        $status = false;
 
-
-        $request_transasction_from = $request->transaction_from != null ? explode('T', $request->transaction_from)[0] : null;
-        $request_transasction_to = $request->transaction_to != null ? explode('T', $request->transaction_to)[0] : null;
-
-        //dd($request_transasction_from);
+        $request_transasction_from = $request->transaction_from != null ? Carbon::createFromFormat('Y-m-d',explode('T', $request->transaction_from)[0])->addDays()->format('Y-m-d') : null;
+        $request_transasction_to = $request->transaction_to != null ? Carbon::createFromFormat('Y-m-d',explode('T', $request->transaction_to)[0])->format('Y-m-d') : null;
     
         $firstDayOfYear = new DateTime();
         $firstDayOfYear->setDate($firstDayOfYear->format('Y'), 1, 1);
+        $firstDayOfYear = $firstDayOfYear->format('Y-m-d');
         $currentDateOfYear = date('Y-m-d');
 
-
-        if($currentDateOfYear == $request_transasction_to){
-            $status = false;
-        }   
-
+        if(($currentDateOfYear == $request_transasction_to || $request_transasction_to == null) && $request_transasction_from == $firstDayOfYear){
+            $status = true;
+        }  
         
-
-
         return $status;
     }
     /**
@@ -56,26 +50,34 @@ class RoyaltiesController extends Controller
     {
         $this->authorize('viewAny', Instructor::class, Auth::user());
 
+
+        if($request->sort != null && str_contains($request->sort, 'income')){
+           
+            $request->sort = str_replace("income",'cache_income',$request->sort);
+        }
+
         try {
+
+            
 
             $instructors = Instructor::tableSort($request);
 
             $instructors = $this->filters($instructors, $request);
 
             if($this->parseDataFormCache($request)){
-                $instructors = $instructors->has('elearningEventsForRoyalties')->whereStatus(1)->paginate($request->per_page ?? 50);
+
+
+                $instructors = $instructors->has('elearningEventsForRoyalties')->tableSort($request)->whereStatus(1)->paginate($request->per_page ?? 50);
+                
                 return InstructorResource::collection($instructors);
             }else{
-                $instructor = Instructor::has('elearningEventsForRoyalties')->with('elearningEventsForRoyalties:id,title','elearningEventsForRoyalties.lessons','elearningEventsForRoyalties.delivery')->whereStatus(1)->get();
-
-                //dd($instructor[0]);
                 
-
+                $instructor = $instructors->has('elearningEventsForRoyalties')->with('elearningEventsForRoyalties:id,title','elearningEventsForRoyalties.lessons','elearningEventsForRoyalties.delivery')->whereStatus(1)->get();
+                
                 foreach($instructor as $key => $instr){
 
-                    $instructor[$key]['events'] = $instr->elearningEventsForRoyalties()->tableSort($request);
+                    $instructor[$key]['events'] = $instr->elearningEventsForRoyalties();
 
-                    $instructor[$key]['events'] = $this->filters($instructor[$key]['events'], $request);
                     $instructor[$key]['events'] = $instructor[$key]['events']->get();
 
 
@@ -84,19 +86,37 @@ class RoyaltiesController extends Controller
                     $instructor[$key]['cache_income'] = 0.0;
 
                     foreach($instructor[$key]['events'] as $key2 => $event){
-                        //dd($this->calculateIncomeByPercentHours($data['events'][$event->id]));
-                        //$instructor[$key]['events'][$key2]['cache_income'] = $this->calculateIncomeByPercentHours($data['events'][$event->id]);
-
-                        // $preResponseData[$i]['instructor'] = $instr['title'].' '.$instr['subtitle'];
-                        // $preResponseData[$i]['id'] = $instr['id'];
-                       //dd($this->calculateIncomeByPercentHours($data['events'][$event->id]));
                         $instructor[$key]['cache_income'] = $instructor[$key]['cache_income'] + $this->calculateIncomeByPercentHours($data['events'][$event->id]);
 
                        
                     }
 
-                    //dd($instructor[$key]['events']['cache_income']);
+                }
 
+                if($request->sort != null && str_contains($request->sort, 'income')){
+           
+                    $request->sort = str_replace("income",'cache_income',$request->sort);
+                }
+
+                if($request->sort != null && str_contains($request->sort,'income')){
+
+                    $column = explode('|', $request->sort);
+
+                    if($column[0] == 'income'){
+                        $column = 'cache_income';
+                    }                   
+
+                    if(explode('|',$request->sort)[1] == 'desc'){
+                        
+                       
+                        
+                        return InstructorResource::collection(collect($instructor)->sortByDesc($column));
+                    }
+                    else{
+                        return InstructorResource::collection(collect($instructor)->sortBy($column));
+                    }
+    
+    
                 }
 
                 return InstructorResource::collection($instructor);
@@ -159,22 +179,65 @@ class RoyaltiesController extends Controller
         return $finalIncomeForInstructor;
     }
 
-    public function exportInstructorList()
+    public function exportInstructorList(Request $request)
     {
-        $year = new DateTime();
+        //dd($request->all());
 
-        $request = new \Illuminate\Http\Request();
 
-        $request->replace([
-            'transaction_from' => $year->setDate($year->format('Y'), 1, 1)->format('Y-m-d'),
-            'transaction_to' => date("Y-m-d")
-        ]);
+
+        // $year = new DateTime();
+
+        // $request = new \Illuminate\Http\Request();
+
+        // $request->replace([
+        //     'transaction_from' => $year->setDate($year->format('Y'), 1, 1)->format('Y-m-d'),
+        //     'transaction_to' => date("Y-m-d")
+        // ]);
+
+
 
 
 
         try {
 
-            $instructors = Instructor::has('elearningEventsForRoyalties')->whereStatus(1)->get();
+            if($this->parseDataFormCache($request)){
+                $instructors = Instructor::has('elearningEventsForRoyalties')->whereStatus(1)->get();
+            }else{
+
+                $instructors = Instructor::has('elearningEventsForRoyalties')->with('elearningEventsForRoyalties:id,title','elearningEventsForRoyalties.lessons','elearningEventsForRoyalties.delivery')->whereStatus(1)->get();
+                
+                foreach($instructors as $key => $instr){
+
+                    $instructors[$key]['events'] = $instr->elearningEventsForRoyalties()->tableSort($request);
+
+                    $instructors[$key]['events'] = $this->filters($instructors[$key]['events'], $request);
+                    $instructors[$key]['events'] = $instructors[$key]['events']->get();
+
+
+                    $data = $this->getInstructorEventData($instr, $instructors[$key]['events'], $request);
+
+                    $instructors[$key]['cache_income'] = 0.0;
+                    $instructors[$key]['title'] = $instr['title'];
+                    $instructors[$key]['subtitle'] = $instr['subtitle'];
+                    $instructors[$key]['header'] = $instr['header'];
+                    $instructors[$key]['company'] = $instr['company'];
+
+                    foreach($instructors[$key]['events'] as $key2 => $event){
+                        
+
+                        $instructors[$key]['cache_income'] = $instructors[$key]['cache_income'] + $this->calculateIncomeByPercentHours($data['events'][$event->id]);
+
+                       
+                    }
+
+                }
+
+
+            }
+
+            
+
+            
 
             $filename = 'Royalties_Export.xlsx';
 
@@ -412,15 +475,47 @@ class RoyaltiesController extends Controller
         ];
     }
 
-    public function getCacheIncome($request){
-        try {
-            $income = Instructor::has('elearningEventsForRoyalties')->whereStatus(1)->sum('cache_income');
-            //$pages = $this->filters($request, $pages);
-            return $income;
-        } catch (Exception $e) {
-            Log::warning("(pages widget) Failed to get pages count. " . $e->getMessage());
-            return "0";
-        }
-    }
+    // public function getCacheIncome($request){
+    //     try {
+
+    //         $income = 0.0;
+
+    //         dd($this->parseDataFormCache($request));
+
+    //         if($this->parseDataFormCache($request)){
+    //             $income = Instructor::has('elearningEventsForRoyalties')->whereStatus(1)->sum('cache_income');
+    //         }else{
+
+    //             $instructor = Instructor::has('elearningEventsForRoyalties')->with('elearningEventsForRoyalties:id,title','elearningEventsForRoyalties.lessons','elearningEventsForRoyalties.delivery')->whereStatus(1)->get();
+    //             $sum = 0;
+    //             foreach($instructor as $key => $instr){
+
+    //                 $instructor[$key]['events'] = $instr->elearningEventsForRoyalties();
+
+    //                 $instructor[$key]['events'] = $this->filters($instructor[$key]['events'], $request);
+    //                 $instructor[$key]['events'] = $instructor[$key]['events']->get();
+
+
+    //                 $data = $this->getInstructorEventData($instr, $instructor[$key]['events'], $request);
+
+                    
+
+    //                 foreach($instructor[$key]['events'] as $key2 => $event){
+    //                     $sum = $sum + $this->calculateIncomeByPercentHours($data['events'][$event->id]);
+    //                 }
+
+    //             }
+    //             $income = $sum;
+
+    //         }
+
+            
+    //         //$pages = $this->filters($request, $pages);
+    //         return $income;
+    //     } catch (Exception $e) {
+    //         Log::warning("(pages widget) Failed to get pages count. " . $e->getMessage());
+    //         return "0";
+    //     }
+    // }
 
 }

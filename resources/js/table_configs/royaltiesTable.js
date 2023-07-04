@@ -60,11 +60,11 @@ export default {
         //     },
         // },
         {
-            name: 'cache_income',
+            name: 'income',
             title: 'Total Royalties',
             dataClass: 'text-center',
             titleClass: 'text-center',
-            sortField: 'cache_income',
+            sortField: 'income',
             dataClass: 'align-middle text-center',
             titleClass: 'text-center'
         },
@@ -88,9 +88,9 @@ export default {
     editLink: '/royalties/',
     edit: true,
     editInputs: collectiveInputs,
-    loadWidgets: true,
+    loadWidgets: false,
     showFilters: true,
-    perPage: 25,
+    perPage: 500,
     filters: [
         'from_date',
         'until_date'

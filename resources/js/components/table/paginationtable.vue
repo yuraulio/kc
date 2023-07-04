@@ -380,7 +380,7 @@
                             </a>
                         </div>
                     </div>
-                    <div v-show="!config.apiUrl.includes('royalties') || (config.apiUrl.includes('royalties') && config.royaltyView != 'single')">
+                    <div v-show="!config.apiUrl.includes('royalties') ">
                         <div class="btn-group dropleft multiselect-actions float-end ms-2 pt-3">
 
                                 <button class="btn btn-soft-secondary dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -894,10 +894,11 @@ export default {
                 });
             } else {
 
-                if(this.config.apiUrl.includes('royalties') && this.config.royaltyView == 'single'){
+                if(this.config.apiUrl.includes('royalties')){
 
                     let total = 0;
-                    this.$refs.vuetable.tableData.forEach(e => {
+                    if(this.$refs.vuetable.tableData != null){
+                        this.$refs.vuetable.tableData.forEach(e => {
                         let income = e.income.split(' ')
 
                         income = parseFloat(income[1]);
@@ -905,7 +906,9 @@ export default {
 
                     })
 
-                    this.widgets[1]['sum'] = total
+                    this.widgets[1]['sum'] = total.toFixed(2)
+                    }
+                    
 
                 }
 
@@ -1037,7 +1040,7 @@ export default {
             if(this.config.royaltyView == 'single'){
                 this.widgets = ['TOTAL ROYALTIES',[0],'Total royalties for all instructors']
             }else if(this.config.royaltyView == 'list'){
-                
+                this.widgets = ['TOTAL ROYALTIES',[0],'Total royalties for all instructors']
             }
 
         }
