@@ -73,7 +73,7 @@ class MainController extends Controller
     public function page(String $slug, Request $request)
     {
         $page = null;
-        $renderFbChat = true;
+        $renderFbChat = false;
 
         if (!cache($request->path()) && Cache::getCmsMode() == Setting::NEW_PAGES) {
             $dynamicPageData = null;
