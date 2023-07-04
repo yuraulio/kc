@@ -40,7 +40,7 @@ class MainController extends Controller
     public function index(Request $request)
     {
         $page = null;
-        $renderFbChat = true;
+        $renderFbChat = false;
 
         if (Cache::getCmsMode() == Setting::NEW_PAGES) {
             $page = Page::whereSlug("homepage")->first();
