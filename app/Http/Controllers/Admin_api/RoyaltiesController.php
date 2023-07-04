@@ -67,7 +67,7 @@ class RoyaltiesController extends Controller
             if($this->parseDataFormCache($request)){
 
 
-                $instructors = $instructors->has('elearningEventsForRoyalties')->tableSort($request)->whereStatus(1)->paginate($request->per_page ?? 50);
+                $instructors = $instructors->has('elearningEventsForRoyalties')->tableSort($request)->whereStatus(1)->get();
                 
                 return InstructorResource::collection($instructors);
             }else{

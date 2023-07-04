@@ -25,7 +25,7 @@ class Instructor extends Model
     use PaginateTable;
 
     protected $table = 'instructors';
-
+    // public $asYouType = true;
     /**
      * Get the indexable data array for the model.
      *
