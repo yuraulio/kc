@@ -35,6 +35,18 @@ class ClearOldSessionsMiddleware
             ->whereNotIn('id', $latestSessions)
             ->delete();
 
+
+        // DB::table('sessions')
+        // ->where('user_id', $user->id)
+        // ->whereNotIn('id', function ($query) use ($user) {
+        //     $query->select('id')
+        //         ->from('sessions')
+        //         ->where('user_id', $user->id)
+        //         ->orderByDesc('created_at')
+        //         ->limit(2);
+        // })
+        // ->delete();
+
         return $next($request);
         
     }
