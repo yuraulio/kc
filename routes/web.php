@@ -544,7 +544,7 @@ Route::post('/file-manager/saveAlt', '\Alexusmai\LaravelFileManager\Controllers\
 
 Route::get('search/term', ['as' => 'search.term', 'uses' => 'Theme\SearchController@searchForTerm']);
 
-Route::group(['middleware' => ['auth'], 'prefix' => 'myaccount'], function () {
+Route::group(['middleware' => ['auth', 'logout.devices'], 'prefix' => 'myaccount'], function () {
     Route::group(['middleware' => 'auth.sms'], function () {
         Route::get('/', 'Theme\StudentController@index')->name('myaccount');
         Route::post('/remove-avatar', 'Theme\StudentController@removeProfileImage')->name('remove.avatar');

@@ -1,0 +1,41 @@
+<?php
+
+namespace App\Http\Middleware;
+
+use Closure;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Auth;
+use DateTime;
+
+class ClearOldSessionsMiddleware
+{
+    /**
+     * Handle an incoming request.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
+     * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
+     */
+    public function handle(Request $request, Closure $next)
+    {
+
+        $user = Auth::user();
+
+        $latestSessions = DB::table('sessions')
+            ->where('user_id', $user->id)
+            ->orderByDesc('last_activity')
+            ->take(2)
+            ->pluck('id')
+            ->toArray();
+
+
+        DB::table('sessions')
+            ->where('user_id', $user->id)
+            ->whereNotIn('id', $latestSessions)
+            ->delete();
+
+        return $next($request);
+        
+    }
+}

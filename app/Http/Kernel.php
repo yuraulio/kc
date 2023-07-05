@@ -85,6 +85,7 @@ class Kernel extends HttpKernel
         'billing.check' => \App\Http\Middleware\Billing::class,
         'instructor-terms' => \App\Http\Middleware\CheckInstructorTermsPage::class,
 
+        'logout.devices' => \App\Http\Middleware\ClearOldSessionsMiddleware::class,
     ];
 
     /**
