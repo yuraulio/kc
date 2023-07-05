@@ -435,19 +435,19 @@ class RoyaltiesController extends Controller
     }
 
 
-    public function widgets(Request $request)
-    {
-        return [
-            [
-                "TOTAL ROYALTIES",
-                $data = [
-                    'sum' => $this->getCacheIncome($request)
-                ],
-                'Total royalties for all instructors'
-            ],
+    // public function widgets(Request $request)
+    // {
+    //     return [
+    //         [
+    //             "TOTAL ROYALTIES",
+    //             $data = [
+    //                 'sum' => $this->getCacheIncome($request)
+    //             ],
+    //             'Total royalties for all instructors'
+    //         ],
 
 
-        ];
-    }
+    //     ];
+    // }
 
 }

@@ -4386,10 +4386,15 @@ var datePickerOptions = {
                 let income = stats.income;
                 let count = stats.count;
                 let incomeInstalments = stats.incomeInstalments;
+                let active = stats.active;
 
                 $('#student_total').text(count.total)
                 $('#students_paid').text(count.regular + count.special + count.alumni + count.early)
                 $('#students_free').text(count.free)
+
+                $('#active-total').text(active.fromElearning + active.fromInclass)
+                $('#inclass-active').text(active.fromInclass)
+                $('#elearning-active').text(active.fromElearning)
 
                 $('#income-total').text('€ '+(income.total).toLocaleString())
                 $('#income-early').text('€ '+(income.early).toLocaleString())

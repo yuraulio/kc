@@ -569,9 +569,12 @@ class EventController extends Controller
 
     public function event_statistics($id, $from_controller = null, $filters = null)
     {
-        $event = Event::find($id);
+        $event = Event::with('users')->find($id);
         $users = $event->users_with_transactions()->with('ticket')->get();
 
+        $event_users = $event['users'];
+
+        
         $data = [];
         //return [];
         $eventId = $event['id'];
@@ -609,6 +612,34 @@ class EventController extends Controller
         $incomeInstalments['subscription'] = 0.0;
         $incomeInstalments['total'] = 0.0;
 
+        $countActive['fromElearning'] = 0;
+        $countActive['fromInclass'] = 0;
+
+
+        //calculate active users
+       foreach($event_users as $event_user){
+
+            if($event_user->pivot->expiration && $event_user->pivot->paid == '1'){
+
+                $expiration_event = strtotime($event_user->pivot->expiration);
+                $now = strtotime(date('Y-m-d'));
+                
+
+                if($event_user->pivot->paid == 1 && $expiration_event >= $now && ($event_user->pivot->comment == null || $event_user->pivot->comment == '' || $event_user->pivot->comment == ' '))
+                {
+                    $countActive['fromElearning'] = $countActive['fromElearning'] + 1;
+                }
+                else if($event_user->pivot->paid == 1 && $expiration_event >= $now && $event_user->pivot->comment != null && str_contains($event_user->pivot->comment, 'enroll from'))
+                {
+                    $countActive['fromInclass'] = $countActive['fromInclass'] + 1;
+                }
+                
+                
+                
+            }
+
+       }
+        
         $arr = [];
         //$arr_income = [];
 
@@ -661,9 +692,9 @@ class EventController extends Controller
             //$amount += $transaction->amount;
 
             //dd($transaction->user);
-            $users = $transaction->user;
+            $users = $transaction->user;   
             foreach($users as $user){
-
+                
                 $countUsersU[] = $user->id;;
 
                 $tickets = $user['ticket']->groupBy('event_id');
@@ -844,6 +875,7 @@ class EventController extends Controller
         //dd($data['incomeInstalments']);
         $data['count'] = $count;
         $data['income'] = $income;
+        $data['active'] = $countActive;
 
         $data['income']['total'] = array_sum($income);
         //dd($count);

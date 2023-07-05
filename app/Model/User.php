@@ -224,7 +224,7 @@ class User extends Authenticatable
 
     public function events_for_user_list1()
     {
-        return $this->belongsToMany(Event::class, 'event_user')->withPivot('event_id', 'paid', 'expiration', 'expiration_email');
+        return $this->belongsToMany(Event::class, 'event_user')->withPivot('event_id', 'paid', 'expiration', 'expiration_email','comment');
     }
 
     public function events_for_user_list1_expired()

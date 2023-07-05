@@ -450,7 +450,10 @@
                     <a :href="'/page/' + props.rowData.id" target="_blank">{{ props.rowData.title }}</a>
                 </template>
                 <template slot="royalties_title" slot-scope="props">
-                    <a :href="'/royalties/' + props.rowData.id">{{ props.rowData.subtitle }}</a>
+                    <a :href="'/royalties/' + props.rowData.id + '?transaction_from='+formatDate(transaction_from)+'&transaction_to='+formatDate(transaction_to)">{{ props.rowData.title }}</a>
+                </template>
+                <template slot="royalties_subtitle" slot-scope="props">
+                    <a :href="'/royalties/' + props.rowData.id + '?transaction_from='+formatDate(transaction_from)+'&transaction_to='+formatDate(transaction_to)">{{ props.rowData.subtitle }}</a>
                 </template>
                 <template slot="visibility" slot-scope="props">
                     <!-- if dynamic var exist -> current page is Pages -->
@@ -476,7 +479,7 @@
                     <div class="text-sm-end">
                         <template v-if="config.edit">
                             <template v-if="config.editLink">
-                                <a :href="config.editLink + props.rowData.id" class="action-icon">
+                                <a :href="'/royalties/' + props.rowData.id + '?transaction_from='+formatDate(transaction_from)+'&transaction_to='+formatDate(transaction_to)" class="action-icon">
                                     <i class="mdi mdi-square-edit-outline"></i>
                                 </a>
                             </template>
@@ -583,13 +586,28 @@ export default {
         },
     },
     methods: {
+        formatDate(date) {
+            var d = new Date(date),
+                month = '' + (d.getMonth() + 1),
+                day = '' + d.getDate(),
+                year = d.getFullYear();
+
+            if (month.length < 2) 
+                month = '0' + month;
+            if (day.length < 2) 
+                day = '0' + day;
+
+            return [year, month, day].join('-');
+        },
         formatdate(date){
+            // d/m/Y
             let d = new Date(date);
 
             d = d.toLocaleDateString();
 
             return d;
         },
+        
         exportData(){
 
             if(this.config.apiUrl.includes('royalties')){
@@ -878,7 +896,8 @@ export default {
                         }else if(type == 'blog'){
                             this.widgets = response.data[1];
 
-                        }else if(type == 'royalties'){
+                        }
+                        else if(type == 'royalties'){
                             this.widgets = response.data[0];
                         }
                         // else if(type == 'royalties' && this.config.royaltyView == 'single'){
@@ -895,18 +914,18 @@ export default {
             } else {
 
                 if(this.config.apiUrl.includes('royalties')){
-
-                    let total = 0;
+                    
                     if(this.$refs.vuetable.tableData != null){
+                        let total = 0;
                         this.$refs.vuetable.tableData.forEach(e => {
-                        let income = e.income.split(' ')
+                            let income = e.income.split(' ')
 
-                        income = parseFloat(income[1]);
-                        total = total + income
+                            income = parseFloat(income[1]);
+                            total = total + income
 
-                    })
+                        })
 
-                    this.widgets[1]['sum'] = total.toFixed(2)
+                        this.widgets[1]['sum'] = total.toFixed(2)
                     }
                     
 
@@ -1030,16 +1049,43 @@ export default {
 
         if(this.config.apiUrl.includes('royalties')){
 
-            const timeElapsed = Date.now();
-            const today = new Date(timeElapsed);
-            var d = new Date(new Date().getFullYear(), 0, 1);
+            var query = window.location.search
 
-            this.transaction_from = d.toISOString();
-            this.transaction_to = today.toISOString();
+            const searchParams = new URLSearchParams(query.substring(query.indexOf('?')));
+
+
+            if(searchParams.size != 0){
+
+                if(searchParams.get('transaction_from')){
+                    //this.transaction_from = searchParams.get('transaction_from');
+                    this.transaction_from = searchParams.get('transaction_from');
+                }
+                if(searchParams.get('transaction_to')){
+                    this.transaction_to = searchParams.get('transaction_to');
+                }
+
+                const pageNumber = searchParams.get('page');
+                
+                
+
+
+            }else{
+
+                const timeElapsed = Date.now();
+                const today = new Date(timeElapsed);
+                var d = new Date(new Date().getFullYear(), 0, 1);
+
+                this.transaction_from = d.toISOString();
+                this.transaction_to = today.toISOString();
+            }
+
+            
 
             if(this.config.royaltyView == 'single'){
+                
                 this.widgets = ['TOTAL ROYALTIES',[0],'Total royalties for all instructors']
             }else if(this.config.royaltyView == 'list'){
+                
                 this.widgets = ['TOTAL ROYALTIES',[0],'Total royalties for all instructors']
             }
 

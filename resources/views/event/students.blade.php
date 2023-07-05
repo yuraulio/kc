@@ -35,7 +35,8 @@
             </tr>
         </thead>
         <tbody>
-        <?php //dd($allTopicsByCategory); $i ?>
+        <?php //dd($allTopicsByCategory); 
+        $i=0; ?>
             @foreach ($eventUsers as $user)
 
                 <tr>
@@ -57,23 +58,30 @@
 
                     @if(!$isInclassCourse)
                     <td>
-                        @if($user->pivot['expiration'])
-                        <?php 
-                        //dd($user->pivot['expiration']);
-                            $now = \Carbon\Carbon::createFromFormat('Y-m-d', date('Y-m-d'));
-                            $ends_at = \Carbon\Carbon::createFromFormat('Y-m-d', $user->pivot['expiration']);
-                        ?>
+                        
+                        @if($user->pivot['paid'] == 1 && $user->pivot['expiration'])
+                            <?php 
+                            
+                                $expiration_event = strtotime($user->pivot->expiration);
+                                $now = strtotime(date('Y-m-d'));
+                            
+                            ?>
 
-                        @if($now->lte($ends_at))
-                        <span data-status="Open" class="badge badge-dot mr-4">
-                            <i class="bg-success"></i>
-                        </span>
+                            @if($expiration_event >= $now)
+                            <?php $i++;?>
+                            <span data-status="Open" class="badge badge-dot mr-4">
+                                <i class="bg-success"></i>
+                            </span>
+                            @else
+                            <span data-status="Open" class="badge badge-dot mr-4">
+                                <i class="bg-danger"></i>
+                            </span>
+                            @endif
+
                         @else
-                        <span data-status="Open" class="badge badge-dot mr-4">
-                            <i class="bg-danger"></i>
-                        </span>
-                        @endif
-
+                            <span data-status="Open" class="badge badge-dot mr-4">
+                                <i class="bg-danger"></i>
+                            </span>
                         @endif
                         
                     </td>
@@ -83,6 +91,8 @@
             @endforeach
         </tbody>
     </table>
+
+    {{--dd($i)--}}
 
 
 

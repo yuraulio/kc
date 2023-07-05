@@ -11,14 +11,22 @@ export default {
         //     model: 'countdown'
         // },
         {
-            name: 'title',
+            name: 'royalties_title',
             title: 'Firstname',
             sortField: 'title',
             dataClass: 'align-middle',
-            titleClass: ''
+            titleClass: '',
+            formatter (value) {
+                var template = "";
+                if (value) {
+
+                    template = "<td class='vuetable-td-title align-middle'><a href='/royalties/'>" + value + "</span></td>";
+                }
+                return template;
+            },
         },
         {
-            name: 'royalties_title',
+            name: 'royalties_subtitle',
             title: 'Lastname',
             sortField: 'subtitle',
             dataClass: 'align-middle',

@@ -33,14 +33,14 @@ export default {
         },
         {
             name: 'total_event_minutes',
-            title: 'Total Event Minutes',
+            title: 'Total Event Hours',
             sortField: 'total_event_minutes',
             dataClass: 'align-middle',
             titleClass: ''
         },
         {
             name: 'total_instructor_minutes',
-            title: 'Total Instructor Minutes',
+            title: 'Total Instructor Hours',
             sortField: 'total_instructor_minutes',
             dataClass: 'align-middle',
             titleClass: ''
