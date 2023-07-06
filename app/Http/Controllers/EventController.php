@@ -641,53 +641,11 @@ class EventController extends Controller
        }
         
         $arr = [];
-        //$arr_income = [];
+        
 
         //dd($event->transactions);
         $countUsersU = [];
         foreach($event->transactions as $transaction){
-
-            if($filters != null && isset($filters['created_at'])){
-
-
-
-                $transactionCreatedAt = \Carbon\Carbon::parse($transaction['created_at']);
-                //dd($transaction);
-
-
-
-
-                $transaction_from = isset($filters['created_at']['from']) ? \Carbon\Carbon::parse(explode('T',$filters['created_at']['from'])[0]) : null;
-                $transaction_to = isset($filters['created_at']['to']) ? \Carbon\Carbon::parse(explode('T',$filters['created_at']['to'])[0]) : null;
-
-                if(isset($filters['created_at']['from']) && isset($filters['created_at']['to'])){
-
-                    $check = $transactionCreatedAt->between($filters['created_at']['from'],$filters['created_at']['to']);
-
-                    if(!$check){
-                        continue;
-                    }
-
-
-                }else if(isset($filters['created_at']['from']) && !isset($filters['created_at']['to'])){
-
-                    $check = $transactionCreatedAt->gte($transaction_from);
-
-                    if(!$check){
-                        continue;
-                    }
-
-                }else if(!isset($filters['created_at']['from']) && isset($filters['created_at']['to'])){
-
-                    $check = $transactionCreatedAt->lte($transaction_to);
-
-                    if(!$check){
-                        continue;
-                    }
-                }
-
-
-            }
 
             //$amount += $transaction->amount;
 
@@ -862,7 +820,6 @@ class EventController extends Controller
         }
 
 
-        //dd($income);
         $countUsersU = array_unique($countUsersU);
         $countUsersU = count($countUsersU);
         $count['total'] = $countUsersU;

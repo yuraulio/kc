@@ -11,6 +11,7 @@ use App\Model\Instructor;
 use App\Model\Event;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\TransactionController;
 use App\Http\Resources\InstructorResource;
 use App\Http\Resources\EventResourceRoyalty;
 use Auth;
@@ -19,6 +20,8 @@ use App\Exports\RoyaltiesExportInstructorsList;
 use Storage;
 use DateTime;
 use Carbon\Carbon;
+use App\Model\PaymentMethod;
+use App\Model\Transaction;
 
 class RoyaltiesController extends Controller
 {
@@ -377,10 +380,84 @@ class RoyaltiesController extends Controller
         foreach($events as $key => $event){
 
             $data['events'][$event->id] = $event->getTotalHours() * 60;
-            $data['incomes'][$event->id] = (new EventController)->event_statistics($event->id, true, $filterForTransaction)->getOriginalContent()['data']['income'];
+            $data['incomes'][$event->id] = $this->participants($event->id, $request);
         }
 
         return $data;
+    }
+
+    private function participants($eventId, $request){
+        $amount = 0;
+
+        //$userRole = Auth::user()->role->pluck('id')->toArray();
+
+        if(isset($request->transaction_from) && isset($request->transaction_to)){
+
+            $start_date = date_create($request->transaction_from);
+            $start_date = date_format($start_date,"Y-m-d");
+            $from = date($start_date);
+
+            $end_date = date_create($request->transaction_to);
+            $end_date = date_format($end_date,"Y-m-d");
+            $to = date($end_date);
+
+
+            $transactions = Transaction::with('subscription','event')
+                ->whereHas('event', function($q) use ($eventId){
+                    $q->where('id', $eventId);
+                })
+                ->whereBetween('created_at', [$from,$to])
+                ->get();
+
+
+
+        }else if(isset($request->transaction_from) && !isset($request->transaction_to)){
+            $start_date = date_create($request->transaction_from);
+            $start_date = date_format($start_date,"Y-m-d");
+
+            
+
+            $transactions = Transaction::with('subscription','event')
+                ->whereHas('event', function($q) use ($eventId){
+                    $q->where('id', $eventId);
+                })
+                ->whereDate('created_at', '>=',$start_date)
+                ->get();
+
+        }
+        else if(!isset($request->transaction_from) && isset($request->transaction_to)){
+
+            $end_date = date_create($request->transaction_to);
+            $end_date = date_format($end_date,"Y-m-d");
+            
+            
+            $transactions = Transaction::with('subscription','event')
+                ->whereHas('event', function($q) use ($eventId){
+                    $q->where('id', $eventId);
+                })
+                ->whereDate('created_at', '<=',$end_date)
+                ->get();
+
+
+        }
+
+        foreach($transactions as $key => $transaction){
+
+            if(!$transaction->subscription->first() && $transaction->user->first() && $transaction->event->first()){
+
+                //$category =  $transaction->event->first()->category->first() ? $transaction->event->first()->category->first()->id : -1;
+
+                // if(in_array(9,$userRole) &&  ($category !== 46)){
+                //     continue;
+                // }
+
+                $amount = $amount + $transaction['amount'];
+ 
+            }
+
+        }
+
+        return $amount;
     }
 
     public function getInstructorEventData($instructor, $events,$request)
@@ -401,7 +478,7 @@ class RoyaltiesController extends Controller
                     //$data['events'][$event->id]['lessons'] = [];
 
                     $sum1 = 0;
-                    $data['events'][$event->id]['total_income'] = $responseDataEvent['incomes'][$event->id]['total'];
+                    $data['events'][$event->id]['total_income'] = $responseDataEvent['incomes'][$event->id];
                     $data['events'][$event->id]['total_event_minutes'] = $responseDataEvent['events'][$event->id];
                     $data['events'][$event->id]['total_lessons_instructor_minutes'] = 0;
 
@@ -415,9 +492,6 @@ class RoyaltiesController extends Controller
                             }
                             $data['events'][$event->id]['total_lessons_instructor_minutes'] = $data['events'][$event->id]['total_lessons_instructor_minutes'] + $sum;
                         }
-
-
-
 
                     }
 
@@ -434,20 +508,5 @@ class RoyaltiesController extends Controller
         return $data;
     }
 
-
-    // public function widgets(Request $request)
-    // {
-    //     return [
-    //         [
-    //             "TOTAL ROYALTIES",
-    //             $data = [
-    //                 'sum' => $this->getCacheIncome($request)
-    //             ],
-    //             'Total royalties for all instructors'
-    //         ],
-
-
-    //     ];
-    // }
 
 }
