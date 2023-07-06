@@ -915,9 +915,9 @@ export default {
             } else {
 
                 if(this.config.apiUrl.includes('royalties')){
-                   
-                    
-                    if(this.onInitWidget){
+
+
+                    if(this.onInitWidget && this.config.royaltyView == 'list'){
                         axios
                         .post(this.config.apiUrl + '/widgets',
                         {
@@ -947,10 +947,22 @@ export default {
                             this.$toast.error('Filed to get widget data.')
                         });
                     }
-                   
+
+                    if(this.config.royaltyView == 'single' && this.$refs.vuetable.tableData !== undefined){
+                            let total = 0;
+                            this.$refs.vuetable.tableData.forEach(e => {
+                                let income = e.income.split(' ')
+
+                                income = parseFloat(income[1]);
+                                total = total + income
+
+                            })
+
+                            this.widgets[1][0] = total.toFixed(2)
+                        }
                     
-        
-                                
+                    
+                    
 
                 }
 
