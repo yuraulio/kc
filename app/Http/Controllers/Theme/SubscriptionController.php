@@ -499,6 +499,10 @@ class SubscriptionController extends Controller
         }catch(\Stripe\Exception\InvalidRequestException $e) {
             \Session::put('dperror',$e->getMessage());
             return back();
+        }catch(\Laravel\Cashier\Exceptions\IncompletePayment $e) {
+            
+            \Session::put('dperror','Your card or bank account has insufficient funds or a limit. Please contact your bank and try again later.');
+            return back();
         }catch (Exception $e) {
             //dd('edwww2');
              \Session::put('dperror',$e->getMessage());

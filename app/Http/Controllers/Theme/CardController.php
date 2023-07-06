@@ -195,6 +195,13 @@ class CardController extends Controller
 
               ]);
             //\Session::flash('stripe-error',$e->getMessage());
+        }catch(\Laravel\Cashier\Exceptions\IncompletePayment $e) {
+            return response()->json([
+                'success' => false,
+              	'message' => 'Your card or bank account has insufficient funds or a limit. Please contact your bank and try again later.'
+
+              ]);
+            
         }
         catch(\Cartalyst\Stripe\Api\Exception\ServerErrorException $e) {
 
@@ -246,6 +253,13 @@ class CardController extends Controller
 
               ]);
             //\Session::flash('stripe-error',$e->getMessage());
+        }catch(\Laravel\Cashier\Exceptions\IncompletePayment $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Your card or bank account has insufficient funds or a limit. Please contact your bank and try again later.'
+
+            ]);
+            
         }
         catch(\Cartalyst\Stripe\Api\Exception\ServerErrorException $e) {
 
@@ -298,6 +312,13 @@ class CardController extends Controller
 
               ]);
             //\Session::flash('stripe-error',$e->getMessage());
+        }catch(\Laravel\Cashier\Exceptions\IncompletePayment $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Your card or bank account has insufficient funds or a limit. Please contact your bank and try again later.'
+
+            ]);
+            
         }
         catch(\Cartalyst\Stripe\Api\Exception\ServerErrorException $e) {
 

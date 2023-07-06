@@ -282,7 +282,7 @@
                             </div>
                             <div class="col-12">
                                 <div class="text-start">
-                                    <p class="text-muted mb-0 text-truncate">Total: € {{widgets[1]['sum']}}</p>
+                                    <p class="text-muted mb-0 text-truncate">Total1: € {{widgets[1]['sum']}}</p>
                                 </div>
                             </div>
                             <div class="col-12">
@@ -311,7 +311,7 @@
                     </div>
                     <div class="col-12">
                         <div class="text-start">
-                            <p class="text-muted mb-0 text-truncate">Total: € {{widgets[1]['sum']}}</p>
+                            <p class="text-muted mb-0 text-truncate">Total: € {{widgets[1][0] !== undefined ? widgets[1][0] : 0}}</p>
                         </div>
                     </div>
                     <div class="col-12">
@@ -915,7 +915,7 @@ export default {
 
                 if(this.config.apiUrl.includes('royalties')){
                     
-                    if(this.$refs.vuetable.tableData != null){
+                    if(this.$refs.vuetable.tableData !== undefined){
                         let total = 0;
                         this.$refs.vuetable.tableData.forEach(e => {
                             let income = e.income.split(' ')
@@ -925,7 +925,7 @@ export default {
 
                         })
 
-                        this.widgets[1]['sum'] = total.toFixed(2)
+                        this.widgets[1][0] = total.toFixed(2)
                     }
                     
 
