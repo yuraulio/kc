@@ -572,7 +572,8 @@ export default {
             template_value: null,
             page_value: null,
             transaction_to: null,
-            transaction_from: null
+            transaction_from: null,
+            onInitWidget: true
 
         };
     },
@@ -914,20 +915,42 @@ export default {
             } else {
 
                 if(this.config.apiUrl.includes('royalties')){
+                   
                     
-                    if(this.$refs.vuetable.tableData !== undefined){
-                        let total = 0;
-                        this.$refs.vuetable.tableData.forEach(e => {
-                            let income = e.income.split(' ')
-
-                            income = parseFloat(income[1]);
-                            total = total + income
-
+                    if(this.onInitWidget){
+                        axios
+                        .post(this.config.apiUrl + '/widgets',
+                        {
+                            filter: this.filter ? this.filter : null,
+                            dynamic: this.dynamic ? this.dynamic.id : null,
+                            published: this.published_value ? this.published_value.id : null,
+                            template: this.template_value ? this.template_value.id : null,
+                            type: this.type_value ? this.type_value.title : null,
+                            category: this.category_value ? this.category_value.id : null,
+                            subcategory: this.subcategory_value ? this.subcategory_value.id : null,
+                            pagefilter: this.page_value ? this.page_value.id : null,
                         })
+                        .then((response) => {
 
-                        this.widgets[1][0] = total.toFixed(2)
+                            if (response.status == 200) {
+                                this.widgets = response.data[0];
+                                // else if(type == 'royalties' && this.config.royaltyView == 'single'){
+                                //     this.widgets = response.data[0];
+                                // }
+
+                                this.hideLoader();
+                                this.onInitWidget = false;
+
+                            }
+                        })
+                        .catch((error) => {
+                            this.$toast.error('Filed to get widget data.')
+                        });
                     }
+                   
                     
+        
+                                
 
                 }
 

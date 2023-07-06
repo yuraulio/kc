@@ -508,5 +508,28 @@ class RoyaltiesController extends Controller
         return $data;
     }
 
+    public function getCacheIncome($request){
+        try {
+            $income = Instructor::has('elearningEventsForRoyalties')->whereStatus(1)->sum('cache_income');
+            //$pages = $this->filters($request, $pages);
+            return [$income];
+        } catch (Exception $e) {
+            Log::warning("(pages widget) Failed to get pages count. " . $e->getMessage());
+            return "0";
+        }
+    }
+
+    public function widgets(Request $request)
+    {
+        return [
+            [
+                "TOTAL ROYALTIES",
+                $this->getCacheIncome($request),
+                'Total royalties for all instructors'
+            ],
+
+
+        ];
+    }
 
 }
