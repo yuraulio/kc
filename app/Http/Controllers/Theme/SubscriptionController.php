@@ -544,6 +544,22 @@ class SubscriptionController extends Controller
 
             ];
 
+            $data['new_event'] = [
+                'transaction_id'=> $transaction['id'],
+                'value' => $tr_price,
+                'currency' => 'EUR',
+                'coupon' => $transaction->coupon_code,
+                'items' => [
+                    'item_id' => $thisevent->id,
+                    'item_name' => $thisevent->title,
+                    'item_brand' => 'Knowcrunch',
+                    'item_category' => $categoryScript,
+                    'price' => $tr_price,
+                    'quantity' => 1
+                ]
+            ];
+
+
 
             /*$data['gt3'] = ['gt3' => ['transactionId' => $transaction['id'], 'transactionTotal' => $tr_price],
                                     'transactionProducts' => ['name' => $thisevent->title, 'sku' => $thisevent->id, 'price' => $tr_price, 'quantity' => 1, '' =>  $categoryScript] ];*/

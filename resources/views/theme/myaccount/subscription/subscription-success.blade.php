@@ -71,21 +71,57 @@ $(document).ready(function(){
    
    //dataLayer.push({"ecommerce": ecommerce})
 
-
-   dataLayer.push({
-  'event': 'purchase',
-  'ecommerce': {
-    'purchase': {
-      'actionField': actionField,
-      'products': [products]
-    }
-  }
-});
+   // dataLayer.push({
+   //    'event': 'purchase',
+   //    'ecommerce': {
+   //       'purchase': {
+   //          'actionField': actionField,
+   //          'products': [products]
+   //       }
+   //    }
+   // });
 
    })
 </script>
 
 
+@endif
+
+@if(isset($new_event) && isset($new_event['value']) && count($new_event['items']) > 0 && !env('APP_DEBUG'))
+<script>
+   $(document).ready(function(){
+      dataLayer.push({ });
+      let a = {};
+      let items = {};
+
+      @foreach($new_event as $key => $ti)
+      
+      
+         @if($ti != '' && gettype($ti) == 'string')
+            a["{{$key}}"] =  $.parseHTML("{{$ti}}")[0].data
+
+         @endif
+   
+      @endforeach
+
+      @foreach($new_event['items'] as $key => $ti)
+         @if($ti != '')
+            items["{{$key}}"] = $.parseHTML("{{$ti}}")[0].data
+         @endif
+         
+      @endforeach
+
+      dataLayer.push({
+         'event': 'purchase',
+         'value': a['value'] !== undefined ? a['value'] : '',
+         'currency': a['currency'] !== undefined ? a['currency'] : '',
+         'items': [items]
+      });
+
+      
+   });
+
+</script>
 @endif
 
 

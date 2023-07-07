@@ -36,17 +36,54 @@
             @endif
         @endforeach
 
-        dataLayer.push({
-            'event': 'purchase',
-            'ecommerce': {
-                'purchase': {
-                'actionField': actionField,
-                'products': [products]
-                }
-            }
-        });
+        // dataLayer.push({
+        //     'event': 'purchase',
+        //     'ecommerce': {
+        //         'purchase': {
+        //         'actionField': actionField,
+        //         'products': [products]
+        //         }
+        //     }
+        // });
     })
     </script>
+@endif
+
+
+@if(isset($thankyouData['new_event']) && isset($thankyouData['new_event']['value']) && count($thankyouData['new_event']['items']) > 0 && !env('APP_DEBUG'))
+<script>
+   $(document).ready(function(){
+      let a = {};
+      let items = {};
+
+      @foreach($thankyouData['new_event'] as $key => $ti)
+      
+      
+         @if(gettype($ti) == 'string' && $ti != '')
+            a["{{$key}}"] =  $.parseHTML("{{$ti}}")[0].data
+
+         @endif
+   
+      @endforeach
+
+      @foreach($thankyouData['new_event']['items'] as $key => $ti)
+         @if($ti != '')
+            items["{{$key}}"] = $.parseHTML("{{$ti}}")[0].data
+         @endif
+         
+      @endforeach
+
+      dataLayer.push({
+         'event': 'purchase',
+         'value': a['value'] !== undefined ? a['value'] : '',
+         'currency': a['currency'] !== undefined ? a['currency'] : '',
+         'items': [items]
+      });
+
+      
+   });
+
+</script>
 @endif
 
 @if(isset($tigran) && isset($tigran['Price']) && $tigran['Price'] > 0 && !env('APP_DEBUG'))
@@ -78,15 +115,18 @@
                 @endif
             @endforeach
 
-            dataLayer.push({
-                'event': 'purchase',
-                'ecommerce': {
-                    'purchase': {
-                    'actionField': actionField,
-                    'products': [products]
-                    }
-                }
-            });
+            console.log('test 23: ')
+           console.log(dataLayer)
+
+            // dataLayer.push({
+            //     'event': 'purchase',
+            //     'ecommerce': {
+            //         'purchase': {
+            //         'actionField': actionField,
+            //         'products': [products]
+            //         }
+            //     }
+            // });
         })
     </script>
 

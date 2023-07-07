@@ -1272,7 +1272,7 @@
                                         <li><a href="#c-cert-inner{{$tab}}">Certificate</a></li>
                                         @endif
 
-                                        @if($event['mySubscription'])
+                                        @if(isset($event['mySubscription']) && $event['mySubscription'])
                                         <li><a href="#c-subs-inner{{$tab}}">Subscription</a></li>
                                         @endif
                                     </ul>
@@ -1293,7 +1293,7 @@
                                         @endif
                                         </div>
                                     </div>--}}
-                                    @if($event['mySubscription'])
+                                    @if(isset($event['mySubscription']) && $event['mySubscription'])
                                     <div id="c-subs-inner{{$tab}}" class="in-tab-wrapper">
                                         <div class="bottom">
                                         @if($event['mySubscription'])
@@ -1417,7 +1417,7 @@
                                             @endif
                                             @endforeach
                                             @endforeach
-                                            @if(!$event['video_access'])
+                                            @if(isset($event['video_access']) && !$event['video_access'])
                                             {{--<a style="cursor:not-allowed; opacity: 0.5; pointer-events: none;" href="/myaccount/elearning/{{ $event['title'] }}" class="btn btn--secondary btn--md">@if((isset($event['videos_progress']) && $event['videos_progress'] == 100) || count($event['cert'])>0) WATCH AGAIN @else WATCH NOW @endif</a>--}}
                                             @else
                                             <a href="/myaccount/elearning/{{ $event['title'] }}" class="btn btn--secondary btn--md">@if( (isset($event['videos_progress']) && $event['videos_progress'] == 100) ) WATCH AGAIN @else WATCH NOW @endif</a>

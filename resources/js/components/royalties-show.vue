@@ -71,7 +71,6 @@
             //this.getPage();
         },
         created(){
-            console.log(this.data)
         }
     }
 </script>

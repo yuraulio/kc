@@ -341,7 +341,7 @@
 	})
 </script>
 
-<script>
+<script type="text/javascript">
 $(document).ready(function(){
 dataLayer.push({ ecommerce: null });
 dataLayer.push({
@@ -360,6 +360,22 @@ dataLayer.push({
     }
   }
 });
+
+
+dataLayer.push({
+  	'event': 'add_to_cart',
+  	'currency': 'EUR',
+	'value': "{{$tigran['Price']}}",
+	'items': [{
+		'item_id': "{{$tigran['Product_id']}}",
+		'item_name': $.parseHTML("{{ $tigran['ProductName'] }}")[0].data,
+		'item_brand': 'Knowcrunch',
+		'item_category': "{{$tigran['ProductCategory']}}",
+		'price': "{{$tigran['Price']}}",
+		'quantity': 1
+	}]
+});
+
 })
 </script>
 

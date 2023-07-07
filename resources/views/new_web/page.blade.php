@@ -79,6 +79,18 @@
 
 @push('components-scripts')
 
+    @if(isset($dynamic_page_data['new_event']) && !env('APP_DEBUG'))
+    
+
+    <script>
+        $(document).ready(function(){
+            dataLayer.push({ 'event': "{{$dynamic_page_data['new_event']['event']}}"})
+
+        })
+    </script>
+    @endif
+
+
     @if(isset($dynamic_page_data['tigran']) && !env('APP_DEBUG'))
         <script>
             $(document).ready(function(){
@@ -104,6 +116,21 @@
                     }
                     }
                 });
+
+                dataLayer.push({
+                    'event': 'view_item',
+                    'currency': 'EUR',
+                    'value': "{{$dynamic_page_data['tigran']['Price']}}",
+                    'items': [{
+                        'item_id': "{{$dynamic_page_data['tigran']['Product_id']}}",
+                        'item_name': $.parseHTML("{{ $dynamic_page_data['tigran']['ProductName'] }}")[0].data,
+                        'item_brand': "Knowcrunch",
+                        'item_category': "{{$dynamic_page_data['tigran']['ProductCategory']}}",
+                        'price': "{{$dynamic_page_data['tigran']['Price']}}",
+                        'quantity': 1
+                    }]
+                });
+                                
             })
 
         </script>
@@ -152,14 +179,14 @@
 
 
            dataLayer.push({
-          'event': 'purchase',
-          'ecommerce': {
-            'purchase': {
-              'actionField': actionField,
-              'products': [products]
-            }
-          }
-        });
+                'event': 'purchase',
+                'ecommerce': {
+                    'purchase': {
+                    'actionField': actionField,
+                    'products': [products]
+                    }
+                }
+            });
 
            })
         </script>

@@ -101,6 +101,14 @@ class MainController extends Controller
                 $page = Page::withoutGlobalScope("published")->whereSlug($slug)->first();
                 $useRedirect = true;
 
+                if($page->type == 'Blog'){
+                    $dynamicPageData = [
+                        'new_event' => [
+                            'event' => 'kc_blog'
+                        ]
+                    ];
+                }
+
                 if ($page && !$page->published) {
                     $page = null;
                     $useRedirect = false;

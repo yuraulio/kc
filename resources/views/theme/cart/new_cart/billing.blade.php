@@ -120,3 +120,26 @@
 		</div>						
 	</div>
 @stop
+
+
+@push('scripts')
+
+@if(isset($tigran) && !env('APP_DEBUG'))
+<script type="text/javascript">
+
+dataLayer.push({
+    'event': 'begin_checkout',
+    'currency': 'EUR',
+	'value': "{{$tigran['Price']}}",
+	'items': [{
+		'item_id': "{{$tigran['Product_id']}}",
+		'item_name': $.parseHTML("{{ $tigran['ProductName'] }}")[0].data,
+		'item_brand': 'Knowcrunch',
+		'item_category': "{{$tigran['ProductCategory']}}",
+		'price': "{{$tigran['Price']}}",
+		'quantity': 1
+	}]
+});	
+	</script>
+@endif
+@endpush

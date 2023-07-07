@@ -98,16 +98,15 @@ $(document).ready(function(){
 
    //dataLayer.push({"ecommerce": ecommerce})
 
-
    dataLayer.push({
-  'event': 'purchase',
-  'ecommerce': {
-    'purchase': {
-      'actionField': actionField,
-      'products': [products]
-    }
-  }
-});
+      'event': 'purchase',
+      'ecommerce': {
+         'purchase': {
+            'actionField': actionField,
+            'products': [products]
+         }
+      }
+   });
 
    })
 </script>

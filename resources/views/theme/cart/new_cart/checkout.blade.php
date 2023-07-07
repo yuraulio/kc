@@ -174,16 +174,16 @@
 	});
 
 
-$(".close-alert").on("click", function () {
+	$(".close-alert").on("click", function () {
 
-	$('.alert-outer').hide()
+		$('.alert-outer').hide()
 
-});
+	});
 
 
-$('form').submit(function() {
-  $("#pay-now").prop('disabled',true);
-});
+	$('form').submit(function() {
+	$("#pay-now").prop('disabled',true);
+	});
 
 </script>
 
@@ -196,7 +196,7 @@ $(document).ready(function(){
 })
 </script>
 
-<script>
+<script type="text/javascript">
 $(document).ready(function(){
 dataLayer.push({ ecommerce: null });  // Clear the previous ecommerce object.
 dataLayer.push({
@@ -215,6 +215,21 @@ dataLayer.push({
      }
    }
 });
+
+dataLayer.push({
+    'event': 'add_payment_info',
+    'currency': 'EUR',
+	'value': "{{$tigran['Price']}}",
+	'items': [{
+		'item_id': "{{$tigran['Product_id']}}",
+		'item_name': $.parseHTML("{{ $tigran['ProductName'] }}")[0].data,
+		'item_brand': 'Knowcrunch',
+		'item_category': "{{$tigran['ProductCategory']}}",
+		'price': "{{$tigran['Price']}}",
+		'quantity': "{{$totalitems}}"
+	}]
+});
+
 })
 </script>
 
