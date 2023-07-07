@@ -59,7 +59,7 @@
       @foreach($thankyouData['new_event'] as $key => $ti)
       
       
-         @if(gettype($ti) == 'string' && $ti != '')
+         @if(gettype($ti) != 'array' && $ti != '')
             a["{{$key}}"] =  $.parseHTML("{{$ti}}")[0].data
 
          @endif
@@ -73,12 +73,14 @@
          
       @endforeach
 
-      dataLayer.push({
+      let data = {
          'event': 'purchase',
-         'value': a['value'] !== undefined ? a['value'] : '',
-         'currency': a['currency'] !== undefined ? a['currency'] : '',
          'items': [items]
-      });
+        }
+
+        data = {...data,...a}
+
+      dataLayer.push(data);
 
       
    });

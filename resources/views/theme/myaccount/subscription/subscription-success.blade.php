@@ -97,7 +97,7 @@ $(document).ready(function(){
       @foreach($new_event as $key => $ti)
       
       
-         @if($ti != '' && gettype($ti) == 'string')
+         @if($ti != '' && gettype($ti) != 'array')
             a["{{$key}}"] =  $.parseHTML("{{$ti}}")[0].data
 
          @endif
@@ -111,12 +111,14 @@ $(document).ready(function(){
          
       @endforeach
 
-      dataLayer.push({
+      let data = {
          'event': 'purchase',
-         'value': a['value'] !== undefined ? a['value'] : '',
-         'currency': a['currency'] !== undefined ? a['currency'] : '',
          'items': [items]
-      });
+        }
+
+        data = {...data,...a}
+
+      dataLayer.push(data);
 
       
    });
