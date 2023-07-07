@@ -11,7 +11,12 @@
       <style type="text/css" emogrify="no">@import url("https://fonts.googleapis.com/css2?family=Montserrat"); @import url("https://fonts.googleapis.com/css2?family=Roboto"); </style>
       <!--<![endif]-->
       <style type="text/css">p, h1, h2, h3, h4, ol, ul { margin: 0; } a, a:link { color: #0092ff; text-decoration: underline } .nl2go-default-textstyle { color: #3b3f44; font-family: arial,helvetica,sans-serif; font-size: 16px; line-height: 1.5 } .default-button { border-radius: 4px; color: #ffffff; font-family: arial,helvetica,sans-serif; font-size: 16px; font-style: normal; font-weight: normal; line-height: 1.15; text-decoration: none; width: 50% } .default-heading1 { color: #1F2D3D; font-family: arial,helvetica,sans-serif; font-size: 36px } .default-heading2 { color: #1F2D3D; font-family: arial,helvetica,sans-serif; font-size: 32px } .default-heading3 { color: #1F2D3D; font-family: arial,helvetica,sans-serif; font-size: 24px } .default-heading4 { color: #1F2D3D; font-family: arial,helvetica,sans-serif; font-size: 18px } a[x-apple-data-detectors] { color: inherit !important; text-decoration: inherit !important; font-size: inherit !important; font-family: inherit !important; font-weight: inherit !important; line-height: inherit !important; } .no-show-for-you { border: none; display: none; float: none; font-size: 0; height: 0; line-height: 0; max-height: 0; mso-hide: all; overflow: hidden; table-layout: fixed; visibility: hidden; width: 0; } </style>
-      <style type="text/css">a:link{color: #0092ff; text-decoration: underline}</style>
+      <style type="text/css">
+         a:link{color: #0092ff; text-decoration: underline} 
+         .inline-myaccount-text p:first-of-type{
+            display: inline !important;
+         }
+      </style>
    </head>
    <body text="#3b3f44" link="#0092ff" yahoo="fix" style="">
         <table cellspacing="0" cellpadding="0" border="0" role="presentation" class="nl2go-body-table" width="100%" style="width: 100%;">

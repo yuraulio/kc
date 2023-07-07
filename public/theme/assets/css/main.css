@@ -1438,3 +1438,7 @@
        .content-wrapper .tabs-wrapper .tab-controls ul li .child-menu li a.active{ color: #d2ff00; }
 
    }
+
+   .inline-myaccount-text p:first-of-type {
+      display: inline;
+   }

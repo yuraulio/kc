@@ -815,9 +815,9 @@
                                         </div>--}}
 
                                         <div id="c-shedule-inner{{$tab}}" class="in-tab-wrapper" style="display: block;">
-
+             
                                             <div class="bottom">
-                                            @if(isset($event['summaryDate']))<div class="duration"><img loading="lazy" class="replace-with-svg resp-img" onerror="this.src='{{cdn('/theme/assets/images/icons/Duration_Hours.svg')}}'" width="20" height="20" src="{{cdn($event['summaryDate_icon'])}}" title="summary_icon" alt="summary_icon">{{$event['summaryDate']}}</div>@endif
+                                            @if(isset($event['summaryDate']))<div class="duration"><img loading="lazy" class="replace-with-svg resp-img" onerror="this.src='{{cdn('/theme/assets/images/icons/Duration_Hours.svg')}}'" width="20" height="20" src="{{cdn($event['summaryDate_icon'])}}" title="summary_icon" alt="summary_icon"><span class="inline-myaccount-text">{!! $event['summaryDate'] !!}<span></div>@endif
                                             @if($event['hours'])
                                             <div class="expire-date"><img loading="lazy" class="replace-with-svg resp-img" onerror="this.src='{{cdn('/theme/assets/images/icons/Start-Finish.svg')}}'"  src="{{cdn($event['hours_icon'])}}" width="20" height="20" title="summary_icon" alt="summary_icon">{{$event['hours']}}h</div>
                                             @endif

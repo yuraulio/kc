@@ -25,6 +25,11 @@ class WelcomeEmail extends Notification
     {
         $this->user = $user;
         $this->data = $data;
+
+        
+        if(isset($data['duration'])){
+            $this->data['duration'] = strip_tags($data['duration']);
+        }
     }
 
     /**

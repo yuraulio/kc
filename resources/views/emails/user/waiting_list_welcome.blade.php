@@ -122,7 +122,7 @@
                                                                <tr>
                                                                   <td align="left" valign="top" class="r15-i nl2go-default-textstyle" style="color: #3b3f44; font-family: arial,helvetica,sans-serif; font-size: 16px; line-height: 1.5; text-align: left;">
                                                                      <div>
-                                                                        <p style="margin: 0px;"><span style="font-family: Tahoma, geneva, sans-serif;"><strong>Course's duration:</strong> {{$duration}}</span></p>
+                                                                        <p style="margin: 0px;"><span style="font-family: Tahoma, geneva, sans-serif;"><strong>Course's duration:</strong><span class="inline-myaccount-text"> {!! $duration !!}</span></span></p>
                                                                      </div>
                                                                   </td>
                                                                </tr>

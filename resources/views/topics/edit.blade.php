@@ -102,7 +102,7 @@
 
                                         </div>
 
-                                        <div class="form-group{{ $errors->has('comment_status') ? ' has-danger' : '' }}">
+                                        <div class="d-none form-group{{ $errors->has('comment_status') ? ' has-danger' : '' }}">
                                             <label class="form-control-label" for="input-comment_status">{{ __('Comment status') }}</label>
                                             <input type="text" name="comment_status" id="input-comment_status" class="form-control{{ $errors->has('comment_status') ? ' is-invalid' : '' }}" placeholder="{{ __('Comment status') }}" value="{{ old('comment_status', $topic->comment_status) }}" autofocus>
 

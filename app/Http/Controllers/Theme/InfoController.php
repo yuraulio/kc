@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Theme;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use \Cart as Cart;
+use PhpOffice\PhpSpreadsheet\Style\NumberFormat\Wizard\Duration;
 use Redirect;
 use Mail;
 use App\Model\Transaction;
@@ -825,10 +826,13 @@ class InfoController extends Controller
                                 $eventInfo['elearning']['visible']['emails'] && isset($eventInfo['elearning']['text']) ?
                                             $eventInfo['elearning']['expiration'] . ' ' . $eventInfo['elearning']['text']: '';
 
+
         }else if(isset($eventInfo['delivery']) && $eventInfo['delivery'] == 139){
 
             $data['duration'] = isset($eventInfo['inclass']['dates']['visible']['emails']) && isset($eventInfo['inclass']['dates']['text']) &&
                                     $eventInfo['inclass']['dates']['visible']['emails'] ?  $eventInfo['inclass']['dates']['text'] : '';
+
+            $data['duration'] = strip_tags($data['duration']);
 
         }
 
