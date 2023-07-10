@@ -87,7 +87,7 @@ li.topic.seen {
 img.topic-progress{
   max-width: 12px;
   vertical-align: middle;
-  margin-left: 10px;
+  /* margin-left: 10px; */
 }
 
 .content-wrapper {
@@ -410,7 +410,9 @@ img.topic-progress{
 }
 
 .content-wrapper .sidebar-wrapper .sidebar-content .lessons-list .lesson a .lesson-progress {
-  max-width: 24px;
+  /* max-width: 24px; */
+  max-width: 12px;
+  vertical-align: sub;
 }
 
 .content-wrapper .sidebar-wrapper .sidebar-content .lessons-list .lesson a .lesson-info {
@@ -434,11 +436,14 @@ img.topic-progress{
 
 .newLesson.notification-topic {
     position: absolute;
-    left: 0.5rem;
+    /* left: 0.5rem; */
+}
+.newLesson.notification-lesson-inside{
+  position: absolute;
 }
 .newLesson.notification-lesson{
     position: absolute;
-    left: 1rem;
+    /* left: 1rem; */
 }
 .newLesson img{
     height: 1.5rem;

@@ -467,7 +467,6 @@ class RoyaltiesController extends Controller
             $responseDataEvent = $this->getEventData($events, $request);
 
 
-
             if(count($events) > 0){
                 $data['events'] = [];
 
@@ -488,7 +487,7 @@ class RoyaltiesController extends Controller
                         if($lesson['vimeo_duration'] != "" && $lesson['vimeo_duration'] != 0 ){
 
                             if($lesson->pivot->instructor_id == $instructor->id){
-                                 $sum = $sum + getSumLessonSecond($lesson);
+                                $sum = $sum + getSumLessonSecond($lesson);
                             }
                             $data['events'][$event->id]['total_lessons_instructor_minutes'] = $data['events'][$event->id]['total_lessons_instructor_minutes'] + $sum;
                         }

@@ -153,7 +153,9 @@
 
                                  </span>
                                  @if($topic['topic_seen'])
-                                    <img loading="lazy" class="topic-progress" src="{{cdn('/theme/assets/img/new/completed_lesson_icon.svg')}}" title="completed_lesson_icon" alt="completed_lesson_icon">
+                                    <span class="white-separator"> |<span>
+                                       <img loading="lazy" class="topic-progress" src="{{cdn('/theme/assets/img/new/completed_lesson_icon.svg')}}" title="completed_lesson_icon" alt="completed_lesson_icon">
+                                    
                                  @endif
                               </div>
                               <!-- ./topic-info -->
@@ -219,15 +221,21 @@
                               <li class="lesson {{$vimeoVideo[1]}} {{$lesson['id']}}" data-vimeoid="{{$vimeoVideo[1]}}" data-completed="{{isset($video_seen[$vimeoVideo[1]]) ? $video_seen[$vimeoVideo[1]]['seen'] : 0}}" data-link="{{$lesson['links']}}" id="{{$frame1}}">
 
                                 <a class="" href="javascript:void(0)" onclick="play_video('{{$path}}','{{$frame1}}','{video{{$lesson['id']}}}', '{{$lesson['id']}}')" tabindex="0">
-                                    <?php
-                                    if($video_seen[$vimeoVideo[1]]['is_new'] == 1)
-                                    {
-                                        echo '<div class="newLesson notification-lesson"><img src="/theme/assets/images/notification-dot.png"></img></div>';
+                                    
+                                    
+                                    <div class="lesson-info">
+                                       <h3
+                                          class="lesson-info_title @if($lesson['bold'])bold-topic @endif"
+                                          data-title="{!! $lesson['title'] !!}"
+                                          >
+                                          {!! $lesson['title'] !!}
+                                       </h3>
+                                       <span class="lesson-info_duration">{{$lesson['vimeo_duration']}}</span>
+                                       <span class="white-separator"> | </span>
+                                       @if(isset($lesson['type'][0]['name']))<span class="lesson-info_topic-type">{{$lesson['type'][0]['name']}}</span><span class="white-separator"> | </span>@endif
 
-
-                                        }
-                                    ?>
-                                    <img
+                                       <span>
+                                       <img
                                        class="lesson-progress"
                                        src="
                                        <?php
@@ -240,16 +248,18 @@
                                        "
                                        alt="lesson progress"
                                        />
-                                    <div class="lesson-info">
-                                       <h3
-                                          class="lesson-info_title @if($lesson['bold'])bold-topic @endif"
-                                          data-title="{!! $lesson['title'] !!}"
-                                          >
-                                          {!! $lesson['title'] !!}
-                                       </h3>
-                                       <span class="lesson-info_duration">{{$lesson['vimeo_duration']}}</span>
-                                       <span class="white-separator"> | </span>
-                                       @if(isset($lesson['type'][0]['name']))<span class="lesson-info_topic-type">{{$lesson['type'][0]['name']}}</span>@endif
+                                       </span>
+
+                                       
+                                       <?php
+                                          if($video_seen[$vimeoVideo[1]]['is_new'] == 1)
+                                          {
+                                             echo '<span class="newLesson notification-lesson-inside"><img src="/theme/assets/images/notification-dot.png"></img></span>';
+
+
+                                             }
+                                          ?>
+                                       
 
                                     </div>
                                     <!-- ./lesson-info -->
@@ -1729,9 +1739,9 @@ $('#notes').on('focusin', function() {
 
             if(hasNewLesson.length != 0){
 
-                let a = $(value).find('.topic-info')[0]
+                let a = $(value).find('.topic-info_duration')[0]
 
-                $(a).before('<div class="newLesson notification-topic"><img src="/theme/assets/images/notification-dot.png"></img></div>')
+                $(a).after('<span class="white-separator"> | </span><span class="newLesson notification-topic"><img src="/theme/assets/images/notification-dot.png"></img></span>')
             }
             //return false;
             // $.each(lessons, function(index1, lesson) {
