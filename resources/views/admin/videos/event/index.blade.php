@@ -6,7 +6,7 @@
         </p>
     </div>
     <div class="col-4 text-right">
-        <button data-toggle="modal" data-target="#videoModal" class="btn btn-sm btn-primary">{{ __('Assign video') }}</button>
+        <button type="button" data-toggle="modal" data-target="#videoModal" class="btn btn-sm btn-primary">{{ __('Assign video') }}</button>
     </div>
 </div>
 <div class="table-responsive py-4">

@@ -55,7 +55,7 @@
                                 <div class="col-sm-4 filter_col" id="filter_col1" data-column="2">
                                     <label>Topics</label>
                                     <select data-topic="" data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..."  name="Name" class="column_filter" id="col1_filter">
-                                    <option data-topic="" selected id="allTop" value="-- All --"> -- All -- </option>
+                                    <option style="display:none;" data-topic="" selected id="allTop" value="-- All --"> -- All -- </option>
                                     </select>
                                 </div>
 
@@ -236,18 +236,20 @@
 
 
     $("#col1_filter").select2({
-    templateResult: function(option, container) {
+        allowClear: true,
+        placeholder: "Search for a topic",
+        templateResult: function(option, container) {
 
-        if(selectedCategory != null){
-            if (selectedCategory != '' && $(option.element).attr("data-category") !== undefined && removeSpecial($(option.element).attr("data-category")) != selectedCategory){
-                $(container).css("display","none");
+            if(selectedCategory != null){
+                if (selectedCategory != '' && $(option.element).attr("data-category") !== undefined && removeSpecial($(option.element).attr("data-category")) != selectedCategory){
+                    $(container).css("display","none");
+                }
+                return option.text;
+            }else{
+                return option.text;
             }
-            return option.text;
-        }else{
-            return option.text;
-        }
 
-    }
+        }
     });
 
     $("#col1_move").select2({
@@ -461,7 +463,12 @@
 
         initCheckBox();
         $("#col1_filter").data('topic',$("option:selected", this).data('topic'))
-        selectedTopic = removeSpecial($(this).val())
+
+        if(!$(this).val()){
+            $("#col1_filter").val("-- All --").change();
+        }else{
+            selectedTopic = removeSpecial($(this).val())
+        }
 
         searchByFilters()
         table.draw();
@@ -475,6 +482,10 @@
 
     $('#col2_filter').change(function() {
         initCheckBox();
+        if(count != 0){
+            $("#col1_filter").val("-- All --").change();
+        }
+        
         $("#col2_filter").data('categoryy',$("option:selected", this).data('categoryy'))
 
         if(count != 0){
