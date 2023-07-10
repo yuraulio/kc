@@ -40,7 +40,7 @@ class MainController extends Controller
     public function index(Request $request)
     {
         $page = null;
-        $renderFbChat = false;
+        $renderFbChat = true;
 
         if (Cache::getCmsMode() == Setting::NEW_PAGES) {
             $page = Page::whereSlug("homepage")->first();
@@ -73,7 +73,7 @@ class MainController extends Controller
     public function page(String $slug, Request $request)
     {
         $page = null;
-        $renderFbChat = false;
+        $renderFbChat = true;
 
         if (!cache($request->path()) && Cache::getCmsMode() == Setting::NEW_PAGES) {
             $dynamicPageData = null;

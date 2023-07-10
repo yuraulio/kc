@@ -58,7 +58,7 @@ a:active {
 }
 
 img {
-  max-width: 100%;
+  /* max-width: 100%; */
   height: auto;
 }
 
@@ -411,8 +411,8 @@ img.topic-progress{
 
 .content-wrapper .sidebar-wrapper .sidebar-content .lessons-list .lesson a .lesson-progress {
   /* max-width: 24px; */
-  max-width: 12px;
-  vertical-align: sub;
+  max-width: 15px;
+  vertical-align: middle;
 }
 
 .content-wrapper .sidebar-wrapper .sidebar-content .lessons-list .lesson a .lesson-info {
@@ -437,6 +437,8 @@ img.topic-progress{
 .newLesson.notification-topic {
     position: absolute;
     /* left: 0.5rem; */
+    margin-left: -0.2rem;
+    margin-top: -0.15rem;
 }
 .newLesson.notification-lesson-inside{
   position: absolute;
@@ -499,6 +501,7 @@ img.topic-progress{
 
 .content-wrapper .sidebar-wrapper .sidebar-content .lessons-list .lesson a .lesson-teacher-wrapper .lesson-teacher {
   width: 32px;
+  width: 26px;
   clip-path: circle(50% at 50% 50%);
   z-index: 2;
   position: relative;

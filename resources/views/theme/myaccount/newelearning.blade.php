@@ -220,16 +220,42 @@
 
                               <li class="lesson {{$vimeoVideo[1]}} {{$lesson['id']}}" data-vimeoid="{{$vimeoVideo[1]}}" data-completed="{{isset($video_seen[$vimeoVideo[1]]) ? $video_seen[$vimeoVideo[1]]['seen'] : 0}}" data-link="{{$lesson['links']}}" id="{{$frame1}}">
 
-                                <a class="" href="javascript:void(0)" onclick="play_video('{{$path}}','{{$frame1}}','{video{{$lesson['id']}}}', '{{$lesson['id']}}')" tabindex="0">
+                                <a style="flex-wrap:wrap;" class="" href="javascript:void(0)" onclick="play_video('{{$path}}','{{$frame1}}','{video{{$lesson['id']}}}', '{{$lesson['id']}}')" tabindex="0">
                                     
+                                 <!-- Left wapper -->
+                                  <div style="flex: 70%;" class="lesson-info">
+                                    <h3
+                                       class="lesson-info_title @if($lesson['bold'])bold-topic @endif"
+                                       data-title="{!! $lesson['title'] !!}"
+                                       >
+                                       {!! $lesson['title'] !!}
+                                    </h3>
                                     
-                                    <div class="lesson-info">
-                                       <h3
-                                          class="lesson-info_title @if($lesson['bold'])bold-topic @endif"
-                                          data-title="{!! $lesson['title'] !!}"
-                                          >
-                                          {!! $lesson['title'] !!}
-                                       </h3>
+
+
+                                  </div>
+
+                                  <!-- right wrapper -->
+                                 <div style="flex:0; margin:auto;" class="lesson-teacher-wrapper">
+                                       <?php
+                                        $instructor = $topics['instructors'][$lesson['instructor_id']][0];
+                                        $imageDetails = get_image_version_details('instructors-small');
+                                       ?>
+                                       <img
+                                          loading="lazy"
+                                          class="lesson-teacher"
+                                          src="{{cdn(get_image($instructor['mediable'],'instructors-small'))}}"
+                                          alt="{{$instructor['title']}} {{$instructor['subtitle']}}"
+                                          title="{{$instructor['title']}} {{$instructor['subtitle']}}"
+                                          data-slug="{{$instructor['slugable']['slug']}}"
+                                          width="{{ $imageDetails['w'] }}"
+                                          height="{{ $imageDetails['h'] }}"
+                                          />
+                                 </div>
+                                    
+                                  
+                                    <div class="lesson-info 1">
+                                       
                                        <span class="lesson-info_duration">{{$lesson['vimeo_duration']}}</span>
                                        <span class="white-separator"> | </span>
                                        @if(isset($lesson['type'][0]['name']))<span class="lesson-info_topic-type">{{$lesson['type'][0]['name']}}</span><span class="white-separator"> | </span>@endif
@@ -263,22 +289,7 @@
 
                                     </div>
                                     <!-- ./lesson-info -->
-                                    <div class="lesson-teacher-wrapper">
-                                       <?php
-                                        $instructor = $topics['instructors'][$lesson['instructor_id']][0];
-                                        $imageDetails = get_image_version_details('instructors-small');
-                                       ?>
-                                       <img
-                                          loading="lazy"
-                                          class="lesson-teacher"
-                                          src="{{cdn(get_image($instructor['mediable'],'instructors-small'))}}"
-                                          alt="{{$instructor['title']}} {{$instructor['subtitle']}}"
-                                          title="{{$instructor['title']}} {{$instructor['subtitle']}}"
-                                          data-slug="{{$instructor['slugable']['slug']}}"
-                                          width="{{ $imageDetails['w'] }}"
-                                          height="{{ $imageDetails['h'] }}"
-                                          />
-                                    </div>
+                                    
                                     <!-- ./lesson-teacher-wrapper -->
                                  </a>
                               </li>
