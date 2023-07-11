@@ -335,6 +335,7 @@ class RoyaltiesController extends Controller
             }
 
 
+
             if($request->sort != null){
 
                 if(explode('|',$request->sort)[1] == 'desc'){
@@ -481,12 +482,18 @@ class RoyaltiesController extends Controller
                     $data['events'][$event->id]['total_event_minutes'] = $responseDataEvent['events'][$event->id];
                     $data['events'][$event->id]['total_lessons_instructor_minutes'] = 0;
 
+                    
+
+                    //$arr = [];
+
 
                     foreach($event['lessons'] as $lesson){
+                       
                         $sum = 0;
                         if($lesson['vimeo_duration'] != "" && $lesson['vimeo_duration'] != 0 ){
 
                             if($lesson->pivot->instructor_id == $instructor->id){
+                                //$arr[$lesson->topic()->first()->title]['lessons'][$lesson->id] = $lesson->title;
                                 $sum = $sum + getSumLessonSecond($lesson);
                             }
                             $data['events'][$event->id]['total_lessons_instructor_minutes'] = $data['events'][$event->id]['total_lessons_instructor_minutes'] + $sum;
@@ -494,6 +501,11 @@ class RoyaltiesController extends Controller
 
                     }
 
+                    // if($event->id == 2304){
+                    //     dd($arr);
+                    // }
+
+                
 
                     $data['events'][$event->id]['instructor_percent'] = $data['events'][$event->id]['total_lessons_instructor_minutes'] / $data['events'][$event->id]['total_event_minutes'] * 100;
 
