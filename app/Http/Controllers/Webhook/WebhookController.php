@@ -19,9 +19,48 @@ use Session;
 use App\Notifications\CourseInvoice;
 use App\Model\PaymentMethod;
 use App\Services\FBPixelService;
+use Illuminate\Support\Facades\Log;
 
 class WebhookController extends BaseWebhookController
 {
+
+	public function handleChargeRefunded(array $payload){
+		Log::debug('trigger refund');
+		//City::create(['name'=> 'subid: ']);
+
+		if ($user = $this->getUserByStripeId($payload['data']['object']['customer'])) {
+
+			$subscription = $user->subscriptions()->active()->first();
+
+			$event = $subscription->event()->first();
+			$eventId = $event->id;
+
+
+			if($subscription){
+		
+				
+				$transaction = $subscription->transactions()->first();
+
+				//$transaction->ends_at = date('Y-m-d H:i:s');
+				$transaction->save();
+
+
+				$user->events_for_user_list1()->wherePivot('event_id', $eventId)->updateExistingPivot($eventId,[
+					'paid' => 0,
+					'expiration' => date('Y-m-d')
+				], false);
+
+
+				//$subscription->ends_at = 0;
+				$subscription->status = 0;
+				$subscription->stripe_status = 'canceled';
+				$subscription->save();
+
+			}
+		}
+	
+	}
+
 
 	public function handleInvoicePaymentSucceeded(array $payload){
 

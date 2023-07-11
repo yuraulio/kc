@@ -22,6 +22,7 @@ use DateTime;
 use Carbon\Carbon;
 use App\Model\PaymentMethod;
 use App\Model\Transaction;
+use Carbon\CarbonInterval;
 
 class RoyaltiesController extends Controller
 {
@@ -493,8 +494,14 @@ class RoyaltiesController extends Controller
                         if($lesson['vimeo_duration'] != "" && $lesson['vimeo_duration'] != 0 ){
 
                             if($lesson->pivot->instructor_id == $instructor->id){
-                                //$arr[$lesson->topic()->first()->title]['lessons'][$lesson->id] = $lesson->title;
-                                $sum = $sum + getSumLessonSecond($lesson);
+                                
+                                // if($lesson->topic()->first()){
+                                //     $arr[$lesson->topic()->first()->title]['lessons'][$lesson->id] = $lesson->title . ' -- '.CarbonInterval::seconds(getSumLessonSecond($lesson))->cascade()->forHumans();;
+                                    
+                                // }
+                               
+                                
+                                $sum = $sum + (getSumLessonSecond($lesson)-1);
                             }
                             $data['events'][$event->id]['total_lessons_instructor_minutes'] = $data['events'][$event->id]['total_lessons_instructor_minutes'] + $sum;
                         }
