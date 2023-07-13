@@ -91,28 +91,12 @@
                             @endif
 
 						</div>
-
 						<div class="card-info">
-							<!-- <div id="payment-request-button"></div> -->
-							<div id="express-checkout-element">
-  <!-- Express Checkout Element will be inserted here -->
-</div>
-<div id="error-message">
-  <!-- Display error message to your customers here -->
-</div>
-							<hr>
-						</div>
-						
-						<div class="card-info">
-							
 							<h2>Card information</h2>
-							
 							<div class="card-input">
     		                    <div id="card-element"></div>
-							
-								
-							</div>
 
+							</div>
 							<p>We do not store your card’s information.</p>
 							<div class="form-row my-5 align-items-center prev-next-wrap">
 								<div class="d-flex align-items-center previous-participant-link">
@@ -145,7 +129,7 @@
 		locale: 'en',
 	});
 
-	const elements = stripe.elements({
+    const elements = stripe.elements({
     	fonts: [
     	    {
 					family: 'Foco',
@@ -174,15 +158,13 @@
         $("#card-error").remove();
 		$("#pay-now").prop('disabled',true);
     	const { paymentMethod, error } = await stripe.createPaymentMethod(
-			'card', cardElement
+    	    'card', cardElement
     	);
 
     	if (error) {
 			$('<p id="card-error">Enter valid data.</p>').insertAfter('.card-input')
 			$("#pay-now").prop('disabled',false);
     	} else {
-
-			console.log('payment: ',paymentMethod.id)
 			$('#payment_method').val(paymentMethod.id);
 
 			$("#checkout-form").submit();
@@ -202,215 +184,6 @@
 	$('form').submit(function() {
 	$("#pay-now").prop('disabled',true);
 	});
-
-	
-
-
-// 	const paymentRequest = stripe.paymentRequest({
-// 		country: 'GR',
-// 		currency: 'eur',
-// 		total: {
-// 			label: 'Demo total',
-// 			amount: 1099,
-// 		},
-// 		requestPayerName: true,
-// 		requestPayerEmail: true,
-// 	});
-
-// 	//const elements = stripe.elements();
-// const prButton = elements.create('paymentRequestButton', {
-//   paymentRequest,
-// });
-
-// (async () => {
-//   // Check the availability of the Payment Request API first.
-//   const result = await paymentRequest.canMakePayment();
-//   if (result) {
-//     prButton.mount('#payment-request-button');
-//   } else {
-//     document.getElementById('payment-request-button').style.display = 'none';
-//   }
-// })();
-
-
-const options = {
-  mode: 'payment',
-  amount: 1099,
-  currency: 'eur',
-  // Customizable with appearance API.
-
-};
-
-// Set up Stripe.js and Elements to use in checkout form
-const elements1 = stripe.elements(options);
-
-// Create and mount the Express Checkout Element
-const expressCheckoutElement = elements1.create('expressCheckout');
-expressCheckoutElement.mount('#express-checkout-element');
-
-const handleError = (error) => {
-  const messageContainer = document.querySelector('#error-message');
-  messageContainer.textContent = error.message;
-}
-
-//let clientSecret = 'pi_3NT2kYHnPmfgPmgK1LZvCEM1_secret_F6i5DNN81iu3tig6fn7EE1QPH';
-console.log('pre confirm')
-	
-
-	expressCheckoutElement.on('click', async (event) => {
-		console.log(event)
-		console.log('on click')
-		let total = '123';
-
-		total = await getTotalCart();
-
-		console.log('total: ', total)
-		elements1.update({amount: parseInt(total)});
-		
-
-		event.resolve()
-
-	});
-
-
-
-	expressCheckoutElement.on('confirm', async (event) => {
-
-		console.log(event)
-
-	
-console.log(expressCheckoutElement)
-		
-		console.log('before create payment method')
-		
-			const {error, paymentMethod} = await stripe.createPaymentMethod('',expressCheckoutElement);
-
-			console.log(error,paymentMethod)
-	
-			console.log('test')
-
-			
-
-			
-
-
-
-		
-		
-    	// if (error) {
-		// 	handleError(error)
-			
-			
-    	// } else {
-
-		// 	console.log('payment: ',paymentMethod.id)
-		// 	$('#payment_method').val(paymentMethod.id);
-
-			
-
-    	// }
-
-
-
-		await apiRequest('/walletPay')
-		event.resolve()
-		
-		/*
-		// Send the PaymentMethod ID to your server for additional logic and attach the PaymentMethod
-		let clientSecret = await apiRequest('/walletPay');
-
-		console.log('test4', clientSecret)
-		//clientSecret = 'pi_3NT3nwHnPmfgPmgK04ihvAea_secret_ImoqA2VsQUYX77YMQ88mUnRrJ'
-
-		console.log(clientSecret)
-
-		// Confirm the PaymentIntent
-		const {error: confirmError} = await stripe.confirmPayment({
-			elements,
-			clientSecret,
-			confirmParams: {
-			return_url: 'https://example.com/order/123/complete',
-			},
-		});
-
-		console.log('test5')
-
-		if (confirmError) {
-			// This point is only reached if there's an immediate error when
-			// confirming the payment. Show the error to your customer (for example, payment details incomplete)
-			const messageContainer = document.querySelector('#error-message');
-			messageContainer.textContent = error.message;
-		} else {
-			// The payment UI automatically closes with a success animation.
-			// Your customer is redirected to your `return_url`.
-		}
-		*/
-		
-	});
-
-	async function apiRequest(url){
-		let a;
-		let installments = 1
-		installments = $('input[type=radio][name=installments]:checked').val();
-
-		$.ajax({
-			headers: {
-					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-			},
-			method: 'POST',
-			url: url,
-			async:false,  
-			data:{
-				installments: installments,
-				payment_method_id: "{{$pay_methods['id']}}",
-				payment_method: ''
-			},  
-			success: function(data) {
-				
-				window.location = data
-			}
-		})
-		
-		return a;
-	}
-
-	async function getTotalCart(){
-		let total = null;
-		let installments = $('input[type=radio][name=installments]:checked').val();
-
-		
-
-		$.ajax({
-			headers: {
-					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-			},
-			method: 'POST',
-			url: '/getTotalCart',
-			async:false,    
-			data:{
-				installments: installments,
-				payment_method_id: "{{$pay_methods['id']}}"
-			},
-			success: function(data) {
-				total = data
-			}
-		})
-
-
-		return total;
-
-	}
-
-
-	// $('input[type=radio][name=installments]').change(function() {
-	// 	console.log($(this).val())
-
-		
-		
-		
-	// });
-
-
 
 </script>
 

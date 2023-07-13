@@ -1045,7 +1045,70 @@ class CartController extends Controller
 
     }
 
+    public function walletGetTotal(Request $request){
+        $input = $request->all();
+        $payment_method_id = intval($input["payment_method_id"]);
+        $data = [];
+
+        Session::put('payment_method_id', $payment_method_id);
+
+        if(isset($input['installments'])){
+            Session::put('installments', $input['installments']);
+        }else{
+            Session::put('installments', 1);
+        }
+
+        if(Session::get('coupon_code')){
+            $input['coupon'] = Session::get('coupon_code');
+        }
+
+        $data = $this->initCartDetails($data);
+
+        
+        $installments = $input['installments'];
+
+        $instamount = $data['price'];
+
+        if($installments > 1) {
+
+            $instamount =  round($instamount / $installments, 2);
+        }
+
+        return $instamount * 100;
+    }
+
+    public function walletPay(Request $request){
+
+        $input = $request->all();
+        //dd($input);
+
+        
+        $payment_method_id = intval($input["payment_method_id"]);
+        $data = [];
+
+        if(isset($input['installments'])){
+            Session::put('installments', $input['installments']);
+        }else{
+            Session::put('installments', 1);
+        }
+
+        if(Session::get('coupon_code')){
+            $input['coupon'] = Session::get('coupon_code');
+        }
+
+        $data = $this->initCartDetails($data);
+        $this->fbp->sendAddPaymentInfoEvent($data);
+
+        if($payment_method_id != 1) {
+            $url = $this->postPaymentWithStripe($input);
+        }
+
+        return $url;
+
+    }
+
     public function userPaySbt(Request $request){
+        
 
         $input = $request->all();
         $payment_method_id = intval($input["payment_method_id"]);
@@ -1076,6 +1139,7 @@ class CartController extends Controller
 
     public function postPaymentWithStripe($input)
     {
+        dd($input);
 
         Session::forget('dperror');
         Session::forget('error');
@@ -1376,8 +1440,14 @@ class CartController extends Controller
 
                 try{
 
+                    // if($input['payment_method'] == null){
+                    //     $dpuser->addPaymentMethod($paymentMethod);
+                    // }
+
                     //$ev->users()->where('id',$dpuser->id)->detach();
                     //$ev->users()->save($dpuser,['paid'=>false,'payment_method'=>$payment_method_id]);
+
+                    // dd($dpuser->paymentMethods('link'));
 
                     $charge = $dpuser->charge(
                         $stripeAmount,
@@ -1389,6 +1459,7 @@ class CartController extends Controller
                             //'shipping' => ['name' => $st_name, 'address' => ['line1' => $st_line1,'postal_code' => 59100,'city' => 'gsdf','country' => 'GR']],
                             'customer' => $dpuser->stripe_id,
                             //'metadata' => $temp,
+                            'payment_method_types' => ['link', 'card'],
                         ],
 
                     );

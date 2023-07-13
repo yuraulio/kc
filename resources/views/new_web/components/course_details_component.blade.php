@@ -30,7 +30,7 @@
         @endif
         <div class="info-text text-center">
                 @if(isset($info['hours']['title']) && $info['hours']['title'] != '')
-                    <h5>{{ $info['hours']['title'] }}</h5>
+                    <div class="elem-title">{{ $info['hours']['title'] }}</div>
                 @endif
                 <p>
                     {{  $info['hours']['hour'] }} {!!  $info['hours']['text'] !!}
@@ -54,7 +54,7 @@
         @endif
         <div class="info-text text-center">
             @if(isset($info['inclass']['dates']['title']) && $info['inclass']['dates']['title'] != '')
-                <h5>{{ $info['inclass']['dates']['title'] }}</h5>
+            <div class="elem-title">{{ $info['inclass']['dates']['title'] }}</div>
             @endif
             <p>
                 {!!  $info['inclass']['dates']['text'] !!}
@@ -78,7 +78,7 @@
         @endif
         <div class="info-text text-center">
             @if(isset($info['elearning']['title']) && $info['elearning']['title'] != '')
-                <h5>{{ $info['elearning']['title'] }}</h5>
+                <div class="elem-title">{{ $info['elearning']['title'] }}</div>
             @endif
             <p>
                 {{  $info['elearning']['expiration'] }} {!! (isset($info['elearning']['text']) && $info['elearning']['text'] ) ? $info['elearning']['text'] : '' !!}
@@ -103,7 +103,7 @@
         @endif
         <div class="info-text text-center">
             @if(isset($info['inclass']['days']['title']) && $info['inclass']['days']['title'] != '')
-                <h5>{{ $info['inclass']['days']['title'] }}</h5>
+            <div class="elem-title">{{ $info['inclass']['days']['title'] }}</div>
             @endif
             <p>
                 {!!  $info['inclass']['days']['text'] !!}
@@ -130,7 +130,7 @@
         @endif
         <div class="info-text text-center">
             @if(isset($info['language']['title']) && $info['language']['title'] != '')
-                <h5>{{ $info['language']['title'] }}</h5>
+            <div class="elem-title">{{ $info['language']['title'] }}</div>
             @endif
             <p>
                 {!!  $info['language']['text'] !!}
@@ -161,7 +161,7 @@
             <p>{{ $event_delivery }}</p>
             @endif
             @if(isset($info['delivery_info']['title']) && $info['delivery_info']['title'] != '')
-                <h5>{{ $info['delivery_info']['title'] }}</h5>
+            <div class="elem-title">{{ $info['delivery_info']['title'] }}</div>
             @endif
             <p>
                 {!!  $info['delivery_info']['text'] !!}
@@ -182,7 +182,7 @@
 
         <div class="info-text text-center">
             @if(isset($info['elearning']['exam']['title']) && $info['elearning']['exam']['title'] != '')
-                <h5>{{ $info['elearning']['exam']['title'] }}</h5>
+            <div class="elem-title">{{ $info['elearning']['exam']['title'] }}</div>
             @endif
             <p>
                 {!!  $info['elearning']['exam']['text'] !!}
@@ -211,7 +211,7 @@
         @endif
         <div class="info-text text-center">
             @if(isset($info['certificate']['title']) && $info['certificate']['title'] != '')
-                <h5>{{ $info['certificate']['title'] }}</h5>
+            <div class="elem-title">{{ $info['certificate']['title'] }}</div>
             @endif
             <p>
                 {!!  $info['certificate']['type'] !!}
@@ -240,7 +240,7 @@
         @endif
         <div class="info-text text-center">
             @if(isset($info['students']['title']) && $info['students']['title'] != '')
-                <h5>{{ $info['students']['title'] }}</h5>
+            <div class="elem-title">{{ $info['students']['title'] }}</div>
             @endif
             <p>
                 {{$sumStudents + (int)$info['students']['number']}} {!!  $info['students']['text'] !!}
@@ -268,7 +268,7 @@
         @endif
         <div class="info-text text-center">
             @if(isset($info['inclass']['times']['title']) && $info['inclass']['times']['title'] != '')
-                <h5>{{ $info['inclass']['times']['title'] }}</h5>
+            <div class="elem-title">{{ $info['inclass']['times']['title'] }}</div>
             @endif
 
                 {!!  $info['inclass']['times']['text'] !!}

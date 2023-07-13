@@ -25,8 +25,6 @@ class WebhookController extends BaseWebhookController
 {
 
 	public function handleChargeRefunded(array $payload){
-		Log::debug('trigger refund');
-		//City::create(['name'=> 'subid: ']);
 
 		if ($user = $this->getUserByStripeId($payload['data']['object']['customer'])) {
 
@@ -41,7 +39,7 @@ class WebhookController extends BaseWebhookController
 				
 				$transaction = $subscription->transactions()->first();
 
-				//$transaction->ends_at = date('Y-m-d H:i:s');
+				$transaction->ends_at = date('Y-m-d H:i:s');
 				$transaction->save();
 
 
@@ -51,10 +49,17 @@ class WebhookController extends BaseWebhookController
 				], false);
 
 
-				//$subscription->ends_at = 0;
+				$subscription->event()->wherePivot('event_id', $eventId)->updateExistingPivot($eventId,[
+					'expiration' => date('Y-m-d')
+				], false);
+
+
+				$subscription->ends_at = date('Y-m-d H:i:s');
 				$subscription->status = 0;
 				$subscription->stripe_status = 'canceled';
 				$subscription->save();
+
+				
 
 			}
 		}

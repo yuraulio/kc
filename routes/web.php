@@ -2,6 +2,10 @@
 
 use App\Http\Controllers\NotificationController;
 use App\Model\Admin\Setting;
+use Auth as Auth;
+use Illuminate\Http\Request;
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -15,6 +19,36 @@ use App\Model\Admin\Setting;
 */
 
 //Route::get('/', 'Auth\LoginController@showLoginForm')->name('welcome');
+
+// Route::post('/pay', function (Request $request) {
+
+//     $dpuser = Auth::user();
+
+//     //$dpuser->asStripeCustomer();
+
+
+
+//     $stripe = new \Stripe\StripeClient('sk_test_51IdYeZHnPmfgPmgK8xh8OuZLSiIY0xZuUgpW7xsgc0qIwxOCIrvPYHO4GtEHiEDJIZvbeye1DyNpn9hzFzw7edqi00ajurn9Cf');
+//     $payment = $stripe->paymentIntents->create([
+//         'amount' => 2000,
+//         'currency' => 'eur',
+//         'automatic_payment_methods' => [
+//             'enabled' => true,
+//         ],
+//         'customer' => $dpuser->stripe_id,
+//         // 'payment_method' => 'pm_1NShZjHnPmfgPmgKEVdnHLDM',
+//         'setup_future_usage' => 'off_session'
+//     ]);
+
+   
+    
+   
+    
+//     echo $payment->client_secret;
+
+
+
+// });
 
 Auth::routes(['register' => false]);
 
@@ -506,6 +540,9 @@ Route::post('/card/store_from_payment',  'Theme\CardController@store_from_paymen
 Route::post('pay-sbt', [
     'as' => 'userPaySbt', 'uses' => 'Theme\CartController@userPaySbt'
 ]);
+
+Route::post('getTotalCart', 'Theme\CartController@walletGetTotal');
+Route::post('walletPay', 'Theme\CartController@walletPay');
 
 Route::group(['prefix' => 'info'], function () {
     Route::get('order_error', [

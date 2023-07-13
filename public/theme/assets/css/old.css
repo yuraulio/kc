@@ -376,6 +376,10 @@ input[type="number"]#mobile_phone::-webkit-inner-spin-button {
     padding: 1rem 0;
 }
 
+.details .info-text .elem-title{
+    font-size: 24px;
+}
+
 .details .info-text p{
     line-height: 19px;
     height: 20%;

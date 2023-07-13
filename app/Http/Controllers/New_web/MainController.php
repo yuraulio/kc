@@ -40,7 +40,7 @@ class MainController extends Controller
     public function index(Request $request)
     {
         $page = null;
-        $renderFbChat = true;
+        $renderFbChat = false;
 
         if (Cache::getCmsMode() == Setting::NEW_PAGES) {
             $page = Page::whereSlug("homepage")->first();
@@ -73,7 +73,7 @@ class MainController extends Controller
     public function page(String $slug, Request $request)
     {
         $page = null;
-        $renderFbChat = true;
+        $renderFbChat = false;
 
         if (!cache($request->path()) && Cache::getCmsMode() == Setting::NEW_PAGES) {
             $dynamicPageData = null;
@@ -82,7 +82,7 @@ class MainController extends Controller
 
             if ($modelSlug && $modelSlug->slugable != null && get_class($modelSlug->slugable) == "App\Model\Event") {
                 $event = $modelSlug->slugable;
-                //$renderFbChat = true;
+                $renderFbChat = true;
                 $page = Template::whereType("Course page")->whereDynamic(true)->first();
                 $dynamicPageData = CMS::getEventData($event);
 

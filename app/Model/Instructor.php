@@ -60,8 +60,8 @@ class Instructor extends Model
                 ->whereHas('event_info1', function($q){
                     $q->where('course_payment_method', '!=', 'free');
                 })
-                ->whereHas('delivery' , function($q) {
-                    $q->where('delivery_id', 143);
+                ->whereHas('event_info1' , function($q) {
+                    $q->where('course_delivery', 143);
                 })->distinct();
     }
 
