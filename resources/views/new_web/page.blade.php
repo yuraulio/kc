@@ -47,7 +47,7 @@
 
 @if(isset($renderFbChat) && $renderFbChat)
 @section('fbchat')
-{{--<script>
+<script>
   window.chatbaseConfig = {
     chatbotId: "XsnNyFmqIh9qjjBBG7JUp",
   }
@@ -56,8 +56,8 @@
   src="https://www.chatbase.co/embed.min.js"
   id="XsnNyFmqIh9qjjBBG7JUp"
   defer>
-</script>--}}
-        <div id="fb-root"></div>
+</script>
+        {{--<div id="fb-root"></div>
         <script>
             window.fbAsyncInit = function() {
             FB.init({
@@ -77,7 +77,7 @@
         <div class="fb-customerchat"
         attribution=install_email
         page_id="486868751386439">
-        </div>
+        </div>--}}
 @endsection
 @endif
 

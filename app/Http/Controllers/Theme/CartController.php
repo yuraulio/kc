@@ -1077,6 +1077,28 @@ class CartController extends Controller
         return $instamount * 100;
     }
 
+    public function walletNewPay(Request $request){
+
+
+        $dpuser = Auth::user();
+
+        //$dpuser->asStripeCustomer();
+    
+        $stripe = new \Stripe\StripeClient('sk_test_51IdYeZHnPmfgPmgK8xh8OuZLSiIY0xZuUgpW7xsgc0qIwxOCIrvPYHO4GtEHiEDJIZvbeye1DyNpn9hzFzw7edqi00ajurn9Cf');
+        $payment = $stripe->paymentIntents->create([
+            'amount' => (int)$this->walletGetTotal($request),
+            'currency' => 'eur',
+            'automatic_payment_methods' => [
+                'enabled' => true,
+            ],
+            'customer' => $dpuser->stripe_id,
+            // 'payment_method' => 'pm_1NShZjHnPmfgPmgKEVdnHLDM',
+            'setup_future_usage' => "off_session"
+        ]);
+    
+        return $payment->client_secret;
+    }
+
     public function walletPay(Request $request){
 
         $input = $request->all();
@@ -1139,8 +1161,7 @@ class CartController extends Controller
 
     public function postPaymentWithStripe($input)
     {
-        dd($input);
-
+        
         Session::forget('dperror');
         Session::forget('error');
 
@@ -1494,7 +1515,13 @@ class CartController extends Controller
 
 
             if( (is_array($charge)  &&  $charge['status'] == 'succeeded' ) || (isset($charge) && $charge->status == 'succeeded')) {
-                 /**
+               
+                //$dpuser->updateDefaultPaymentMethod($input['payment_method']);
+                // if ($dpuser->hasPaymentMethod()) {
+                //     $dpuser->addPaymentMethod($input['payment_method']);
+                // }
+                
+                /**
                  * Write Here Your Database insert logic.
                  */
 
