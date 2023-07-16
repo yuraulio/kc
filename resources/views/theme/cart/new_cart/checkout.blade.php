@@ -269,10 +269,8 @@ const prButton = elements.create('paymentRequestButton', {
   // Check the availability of the Payment Request API first.
   const result = await paymentRequest.canMakePayment();
   if (result) {
-	console.log('1')
     prButton.mount('#payment-request-button');
   } else {
-	console.log('2')
     document.getElementById('payment-request-button').style.display = 'none';
   }
 })();
@@ -301,8 +299,8 @@ paymentRequest.on('paymentmethod', async (ev) => {
 
 	console.log('//////')
 
-		console.log(ev)
-		$('#payment_method').val(ev.paymentMethod.id);
+	console.log(ev)
+	$('#payment_method').val(ev.paymentMethod.id);
 
 	console.log('//////')
 	await apiRequest('/walletPay', ev.paymentMethod.id)
@@ -318,11 +316,13 @@ paymentRequest.on('paymentmethod', async (ev) => {
 
 
   if (confirmError) {
+	alert('has error')
     // Report to the browser that the payment failed, prompting it to
     // re-show the payment interface, or show an error message and close
     // the payment interface.
     ev.complete('fail');
   } else {
+	alert('success')
     // Report to the browser that the confirmation was successful, prompting
     // it to close the browser payment method collection interface.
     ev.complete('success');
@@ -346,6 +346,7 @@ paymentRequest.on('paymentmethod', async (ev) => {
 });
 
 
+/*
 const options = {
   mode: 'payment',
   amount: 1099,
@@ -388,6 +389,7 @@ console.log('pre confirm')
 	expressCheckoutElement.on('confirm', async (event) => {
 		console.log(event)
 	})
+	*/
 
 
 
@@ -576,6 +578,7 @@ console.log('return from func: ', total)
 	});
 
 	async function updateAmount(){
+		console.log('111111')
 		total = await getTotalCart()
 		console.log('total: ', Math.round(total))
 		
@@ -586,10 +589,8 @@ console.log('return from func: ', total)
 			},
 			
 		});
+		cosnole.log('22222')
 	}
-
-	
-
 
 
 </script>

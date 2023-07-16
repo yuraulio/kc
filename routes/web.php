@@ -2,10 +2,6 @@
 
 use App\Http\Controllers\NotificationController;
 use App\Model\Admin\Setting;
-use Auth as Auth;
-use Illuminate\Http\Request;
-
-
 
 /*
 |--------------------------------------------------------------------------
@@ -18,37 +14,7 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::get('/', 'Auth\LoginController@showLoginForm')->name('welcome');
-Route::post('/pay', 'Theme\CartController@walletNewPay');
-// Route::post('/pay', function (Request $request) {
-
-//     $dpuser = Auth::user();
-
-//     //$dpuser->asStripeCustomer();
-
-
-
-//     $stripe = new \Stripe\StripeClient('sk_test_51IdYeZHnPmfgPmgK8xh8OuZLSiIY0xZuUgpW7xsgc0qIwxOCIrvPYHO4GtEHiEDJIZvbeye1DyNpn9hzFzw7edqi00ajurn9Cf');
-//     $payment = $stripe->paymentIntents->create([
-//         'amount' => 4000,
-//         'currency' => 'eur',
-//         'automatic_payment_methods' => [
-//             'enabled' => true,
-//         ],
-//         'customer' => $dpuser->stripe_id,
-//         // 'payment_method' => 'pm_1NShZjHnPmfgPmgKEVdnHLDM',
-//         'setup_future_usage' => "off_session"
-//     ]);
-
-   
-    
-   
-    
-//     return $payment->client_secret;
-
-
-
-// });
+//Route::get('/', 'Auth\LoginController@showLoginForm')->name('welcome');
 
 Auth::routes(['register' => false]);
 
