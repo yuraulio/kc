@@ -207,288 +207,108 @@
 	$("#pay-now").prop('disabled',true);
 	});
 
-	
 
-
-// 	const paymentRequest = stripe.paymentRequest({
-// 		country: 'GR',
-// 		currency: 'eur',
-// 		total: {
-// 			label: 'Demo total',
-// 			amount: 1099,
-// 		},
-// 		requestPayerName: true,
-// 		requestPayerEmail: true,
-// 	});
-
-// 	//const elements = stripe.elements();
-// const prButton = elements.create('paymentRequestButton', {
-//   paymentRequest,
-// });
-
-// (async () => {
-//   // Check the availability of the Payment Request API first.
-//   const result = await paymentRequest.canMakePayment();
-//   if (result) {
-//     prButton.mount('#payment-request-button');
-//   } else {
-//     document.getElementById('payment-request-button').style.display = 'none';
-//   }
-// })();
-
-
-
-// $('#primary').on('click', async (event) => {
-// 	alert('HERE')
-	
-
-// 	event.resolve()
-
-// });
-
-
-const paymentRequest = stripe.paymentRequest({
-  country: 'GR',
-  currency: 'eur',
-  total: {
-    label: 'Demo total',
-    amount: 20000,
-  },
-  requestPayerName: false,
-  requestPayerEmail: false,
-});
-
-updateAmount()
-
-const elements2 = stripe.elements();
-const prButton = elements.create('paymentRequestButton', {
-  paymentRequest,
-});
-
-(async () => {
-  // Check the availability of the Payment Request API first.
-  const result = await paymentRequest.canMakePayment();
-  if (result) {
-    prButton.mount('#payment-request-button');
-  } else {
-    document.getElementById('payment-request-button').style.display = 'none';
-  }
-})();
-
-// prButton.addEventListener("click", async (event) => {
-// 	alert('asd')
-	
-
-// 	total = await getTotalCart();
-// 	console.log('total: ', total)
-
-// 	paymentRequest.update({
-		
-// 		total: {
-// 			label: 'Demo total',
-// 			amount: total,
-// 		},
-		
-// 	});
-
-
-// });
-
-paymentRequest.on('paymentmethod', async (ev) => {
-
-
-	console.log('//////')
-
-	console.log(ev)
-	$('#payment_method').val(ev.paymentMethod.id);
-
-	console.log('//////')
-	await apiRequest('/walletPay', ev.paymentMethod.id)
-
-	
-// 	clientSecret = await apiRequest1('/pay')
-//   // Confirm the PaymentIntent without handling potential next actions (yet).
-//   const {paymentIntent, error: confirmError} = await stripe.confirmCardPayment(
-//     clientSecret,
-//     {payment_method: ev.paymentMethod.id},
-//     {handleActions: false}
-//   );
-
-
-  if (confirmError) {
-	alert('has error')
-    // Report to the browser that the payment failed, prompting it to
-    // re-show the payment interface, or show an error message and close
-    // the payment interface.
-    ev.complete('fail');
-  } else {
-	alert('success')
-    // Report to the browser that the confirmation was successful, prompting
-    // it to close the browser payment method collection interface.
-    ev.complete('success');
-	
-    // Check if the PaymentIntent requires any actions and, if so, let Stripe.js
-    // handle the flow. If using an API version older than "2019-02-11"
-    // instead check for: `paymentIntent.status === "requires_source_action"`.
-    if (paymentIntent.status === "requires_action") {
-      // Let Stripe.js handle the rest of the payment flow.
-      const {error} = await stripe.confirmCardPayment(clientSecret);
-      if (error) {
-        // The payment failed -- ask your customer for a new payment method.
-      } else {
-        // The payment has succeeded.
-      }
-    } else {
-      // The payment has succeeded.
-	  alert('asd')
-    }
-  }
-});
-
-
-/*
-const options = {
-  mode: 'payment',
-  amount: 1099,
-  currency: 'eur',
-  // Customizable with appearance API.
-
-};
-
-// Set up Stripe.js and Elements to use in checkout form
-const elements1 = stripe.elements(options);
-
-// Create and mount the Express Checkout Element
-const expressCheckoutElement = elements1.create('expressCheckout');
-expressCheckoutElement.mount('#express-checkout-element');
-
-const handleError = (error) => {
-  const messageContainer = document.querySelector('#error-message');
-  messageContainer.textContent = error.message;
-}
-
-//let clientSecret = 'pi_3NT2kYHnPmfgPmgK1LZvCEM1_secret_F6i5DNN81iu3tig6fn7EE1QPH';
-console.log('pre confirm')
-	
-
-	expressCheckoutElement.on('click', async (event) => {
-		console.log(event)
-		console.log('on click')
-		let total = '123';
-
-		total = await getTotalCart();
-
-		console.log('total: ', total)
-		elements1.update({amount: parseInt(total)});
-		
-
-		event.resolve()
-
+	//DIGITAL WALLET
+	const paymentRequest = stripe.paymentRequest({
+	country: 'GR',
+	currency: 'eur',
+	total: {
+		label: 'Demo total',
+		amount: 20000,
+	},
+	requestPayerName: false,
+	requestPayerEmail: false,
 	});
 
-	expressCheckoutElement.on('confirm', async (event) => {
-		console.log(event)
-	})
-	*/
+	updateAmount()
 
+	const elements2 = stripe.elements();
+	const prButton = elements2.create('paymentRequestButton', {
+	paymentRequest: paymentRequest,
+	});
 
+	(async () => {
+	// Check the availability of the Payment Request API first.
+	const result = await paymentRequest.canMakePayment();
+	if (result) {
+		prButton.mount('#payment-request-button');
+	} else {
+		document.getElementById('payment-request-button').style.display = 'none';
+	}
+	})();
 
-	// expressCheckoutElement.on('confirm', async (event) => {
-	// 	console.log('before create payment method')
-
-
+	// prButton.addEventListener("click", async (event) => {
+	// 	alert('asd')
 		
-	// 	// const { paymentIntent, paymentMethod } = event;
 
-	// 	const {error, paymentMethod} = await stripe.createPaymentMethod({
-	// 		type: event.expressPaymentType,
-	// 		link: {},
+	// 	total = await getTotalCart();
+	// 	console.log('total: ', total)
+
+	// 	paymentRequest.update({
 			
-	// 	})
-
-	// 	console.log(paymentMethod)
-
-
-
-	// 	// console.log(error,payme1)
-	
-	// 	//console.log('test')
-
-	// 		// clientSecret = await apiRequest1('/pay')
-
-	// 		// await stripe
-	// 		// 	.confirmCardPayment(clientSecret, {
-	// 		// 		payment_method: {
-	// 		// 		card: elements1,
-	// 		// 			billing_details: {
-	// 		// 				name: 'Jenny Rosen',
-	// 		// 			},
-	// 		// 		},
-	// 		// 	})
-	// 		// 	.then(function(result) {
-	// 		// 		console.log('results from wwhere')
-	// 		// 		console.log(result)
-	// 		// 		// Handle result.error or result.paymentIntent
-	// 		// 	});
-
-			
-
-			
-
-
-
-		
-		
-    // 	// if (error) {
-	// 	// 	handleError(error)
-			
-			
-    // 	// } else {
-
-	// 	// 	console.log('payment: ',paymentMethod.id)
-	// 	// 	$('#payment_method').val(paymentMethod.id);
-
-			
-
-    // 	// }
-
-
-
-	// 	//await apiRequest('/walletPay')
-	// 	event.resolve('completed')
-		
-	// 	/*
-	// 	// Send the PaymentMethod ID to your server for additional logic and attach the PaymentMethod
-	// 	let clientSecret = await apiRequest('/walletPay');
-
-	// 	console.log('test4', clientSecret)
-	// 	//clientSecret = 'pi_3NT3nwHnPmfgPmgK04ihvAea_secret_ImoqA2VsQUYX77YMQ88mUnRrJ'
-
-	// 	console.log(clientSecret)
-
-	// 	// Confirm the PaymentIntent
-	// 	const {error: confirmError} = await stripe.confirmPayment({
-	// 		elements,
-	// 		clientSecret,
-	// 		confirmParams: {
-	// 		return_url: 'https://example.com/order/123/complete',
+	// 		total: {
+	// 			label: 'Demo total',
+	// 			amount: total,
 	// 		},
+			
 	// 	});
 
-	// 	console.log('test5')
 
-	// 	if (confirmError) {
-	// 		// This point is only reached if there's an immediate error when
-	// 		// confirming the payment. Show the error to your customer (for example, payment details incomplete)
-	// 		const messageContainer = document.querySelector('#error-message');
-	// 		messageContainer.textContent = error.message;
-	// 	} else {
-	// 		// The payment UI automatically closes with a success animation.
-	// 		// Your customer is redirected to your `return_url`.
-	// 	}
-	// 	*/
-		
 	// });
+
+	paymentRequest.on('paymentmethod', async (ev) => {
+
+
+		console.log('//////')
+
+		console.log(ev)
+		$('#payment_method').val(ev.paymentMethod.id);
+
+		console.log('//////')
+		await apiRequest('/walletPay', ev.paymentMethod.id)
+
+		
+		// 	clientSecret = await apiRequest1('/pay')
+		//   // Confirm the PaymentIntent without handling potential next actions (yet).
+		//   const {paymentIntent, error: confirmError} = await stripe.confirmCardPayment(
+		//     clientSecret,
+		//     {payment_method: ev.paymentMethod.id},
+		//     {handleActions: false}
+		//   );
+
+
+		if (confirmError) {
+			alert('has error')
+			// Report to the browser that the payment failed, prompting it to
+			// re-show the payment interface, or show an error message and close
+			// the payment interface.
+			ev.complete('fail');
+		} else {
+			alert('success')
+			// Report to the browser that the confirmation was successful, prompting
+			// it to close the browser payment method collection interface.
+			ev.complete('success');
+			
+			// Check if the PaymentIntent requires any actions and, if so, let Stripe.js
+			// handle the flow. If using an API version older than "2019-02-11"
+			// instead check for: `paymentIntent.status === "requires_source_action"`.
+			if (paymentIntent.status === "requires_action") {
+			// Let Stripe.js handle the rest of the payment flow.
+			const {error} = await stripe.confirmCardPayment(clientSecret);
+			if (error) {
+				// The payment failed -- ask your customer for a new payment method.
+			} else {
+				// The payment has succeeded.
+			}
+			} else {
+			// The payment has succeeded.
+			}
+		}
+	});
+
+	//END DIGITAL WALLET
+
+
 
 	async function apiRequest1(url){
 		let a;
@@ -548,8 +368,6 @@ console.log('pre confirm')
 		let total = null;
 		let installments = $('input[type=radio][name=installments]:checked').val();
 
-		
-
 		$.ajax({
 			headers: {
 					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -566,7 +384,7 @@ console.log('pre confirm')
 			}
 		})
 
-console.log('return from func: ', total)
+		//console.log('return from func: ', total)
 		return total;
 
 	}
@@ -574,7 +392,6 @@ console.log('return from func: ', total)
 
 	$('input[type=radio][name=installments]').change(function() {
 		updateAmount()
-
 	});
 
 	async function updateAmount(){
