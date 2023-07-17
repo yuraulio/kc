@@ -94,15 +94,12 @@
 
 						<div class="card-info">
 							<!-- <div id="payment-request-button"></div> -->
-							<div id="express-checkout-element">
-  <!-- Express Checkout Element will be inserted here -->
-</div>
-<div id="error-message">
-  <!-- Display error message to your customers here -->
-</div>
-<div id="payment-request-button">
-  <!-- A Stripe Element will be inserted here. -->
-</div>
+							<div id="error-message">
+							<!-- Display error message to your customers here -->
+							</div>
+							<div id="payment-request-button">
+							<!-- A Stripe Element will be inserted here. -->
+							</div>
 							<hr>
 						</div>
 						
