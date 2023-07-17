@@ -1924,6 +1924,36 @@ class CartController extends Controller
 
     }
 
+    public function createSepa(Request $request)
+    {
+        
+        Stripe::setApiKey('sk_test_51IdYeZHnPmfgPmgK8xh8OuZLSiIY0xZuUgpW7xsgc0qIwxOCIrvPYHO4GtEHiEDJIZvbeye1DyNpn9hzFzw7edqi00ajurn9Cf');
+        $customer = \Stripe\Customer::create();
+        header('Content-Type: application/json');
+        try {
+
+        
+            // Create a PaymentIntent with amount and currency
+            $paymentIntent = \Stripe\PaymentIntent::create([
+                'amount' => 1099,
+                'currency' => 'eur',
+                'setup_future_usage' => 'off_session',
+                'customer' => $customer->id,
+                'payment_method_types' => ['sepa_debit'],
+                'metadata' => ['integration_check' => 'sepa_debit_accept_a_payment'],
+            ]);
+        
+            $output = [
+                'clientSecret' => $paymentIntent->client_secret,
+            ];
+        
+            echo json_encode($output);
+        } catch (Error $e) {
+            http_response_code(500);
+            echo json_encode(['error' => $e->getMessage()]);
+        }
+    }
+
     public function completeRegistration(Request $request){
 
 

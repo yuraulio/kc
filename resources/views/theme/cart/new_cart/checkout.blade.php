@@ -94,9 +94,7 @@
 
 						<div class="card-info">
 							<!-- <div id="payment-request-button"></div> -->
-							<div id="error-message">
-							<!-- Display error message to your customers here -->
-							</div>
+							<!-- <div id="error-message"></div> -->
 							<div id="payment-request-button">
 							<!-- A Stripe Element will be inserted here. -->
 							</div>
@@ -126,6 +124,79 @@
     		            <input type="hidden" id="payment_method_id" name="payment_method_id" value="{{$pay_methods['id']}}">
 						<input type="hidden" id="payment_method" name="payment_method" value="">
 					</form>
+
+
+
+				<hr>
+
+				<form action="/charge" method="post" id="payment-form">
+					<div class="form-row inline">
+						<div class="col">
+						<label for="accountholder-name">
+							Name
+						</label>
+						<input
+							id="accountholder-name"
+							name="accountholder-name"
+							placeholder="Jenny Rosen"
+							required
+						/>
+						</div>
+
+						<div class="col">
+						<label for="email">
+							Email Address
+						</label>
+						<input
+							id="email"
+							name="email"
+							type="email"
+							placeholder="jenny.rosen@example.com"
+							required
+						/>
+						</div>
+					</div>
+
+					<div class="form-row">
+						<!--
+						Using a label with a for attribute that matches the ID of the
+						Element container enables the Element to automatically gain focus
+						when the customer clicks on the label.
+						-->
+						<label for="iban-element1">
+						IBAN
+						</label>
+						<div id="iban-element">
+						<!-- A Stripe Element will be inserted here. -->
+						</div>
+					</div>
+
+					<!-- Add the client_secret from the PaymentIntent as a data attribute   -->
+					<button id="submit-button" data-secret="">Submit Payment</button>
+
+					<!-- Display mandate acceptance text. -->
+					<div id="mandate-acceptance">
+						By providing your payment information and confirming this payment, you
+						authorise (A) asd and Stripe, our payment service provider
+						and/or PPRO, its local service provider, to send instructions to your
+						bank to debit your account and (B) your bank to debit your account in
+						accordance with those instructions. As part of your rights, you are
+						entitled to a refund from your bank under the terms and conditions of
+						your agreement with your bank. A refund must be claimed within 8 weeks
+						starting from the date on which your account was debited. Your rights
+						are explained in a statement that you can obtain from your bank. You
+						agree to receive notifications for future debits up to 2 days before
+						they occur.
+					</div>
+					<!-- Used to display form errors. -->
+					<div id="error-message" role="alert"></div>
+				</form>
+
+
+
+
+
+
 				</div>
 			</div>
 			@include('theme.cart.new_cart.selection')
@@ -289,9 +360,70 @@
 
 	//END DIGITAL WALLET
 
+	fetchIntent('/createSepa')
+
+	//SEPA
+	const elements3 = stripe.elements();
+	const style = {
+		base: {
+			color: '#32325d',
+			fontSize: '16px',
+			'::placeholder': {
+			color: '#aab7c4'
+			},
+			':-webkit-autofill': {
+			color: '#32325d',
+			},
+		},
+		invalid: {
+			color: '#fa755a',
+			iconColor: '#fa755a',
+			':-webkit-autofill': {
+			color: '#fa755a',
+			},
+		},
+		};
+
+		const options = {
+			style,
+			supportedCountries: ['SEPA'],
+			// Elements can use a placeholder as an example IBAN that reflects
+			// the IBAN format of your customer's country. If you know your
+			// customer's country, we recommend passing it to the Element as the
+			// placeholderCountry.
+			placeholderCountry: 'DE',
+		};
+
+		// Create an instance of the IBAN Element
+		const iban = elements3.create('iban', options);
+
+		// Add an instance of the IBAN Element into the `iban-element` <div>
+		iban.mount('#iban-element');
+
+		const form = document.getElementById('payment-form');
+		const accountholderName = document.getElementById('accountholder-name');
+		const email = document.getElementById('email');
+		const submitButton = document.getElementById('submit-button');
+		const clientSecret = submitButton.dataset.secret;
+
+		form.addEventListener('submit', (event) => {
+		event.preventDefault();
+		stripe.confirmSepaDebitPayment(
+			clientSecret,
+			{
+			payment_method: {
+				sepa_debit: iban,
+				billing_details: {
+				name: accountholderName.value,
+				email: email.value,
+				},
+			},
+			}
+		);
+		});
 
 
-	async function apiRequest1(url){
+		async function fetchIntent(url){
 		let a;
 		let installments = 1
 		installments = $('input[type=radio][name=installments]:checked').val();
@@ -304,13 +436,40 @@
 			url: url,
 			async:false,  
 			data:{
-				installments: installments,
-				payment_method_id: "{{$pay_methods['id']}}",
-				payment_method: ''
+				
 			},  
 			success: function(data) {
 				
-				a = data
+				$('#submit-button').attr('data-secret', JSON.parse(data)['clientSecret'])
+				
+				
+			}
+		})
+		
+		return a;
+	}
+											
+	
+
+
+	//END SEPA
+
+
+
+	async function apiRequest1(url){
+		
+		$.ajax({
+			headers: {
+					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			},
+			method: 'POST',
+			url: url,
+			async:false,  
+			data:{},  
+			success: function(data) {
+				
+				console.log(data)
+
 				
 			}
 		})

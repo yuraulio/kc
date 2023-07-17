@@ -507,11 +507,18 @@ Route::post('pay-sbt', [
     'as' => 'userPaySbt', 'uses' => 'Theme\CartController@userPaySbt'
 ]);
 
+// DIGITAL WALLETS
 Route::post('getTotalCart', 'Theme\CartController@walletGetTotal');
 Route::post('getTotalCartSubscription', 'Theme\SubscriptionController@walletGetTotal');
 
 Route::post('walletPay', 'Theme\CartController@walletPay');
 Route::post('walletPaySubscription', 'Theme\SubscriptionController@walletPay');
+// END DIGITAL WALLETS
+
+// SEPA
+Route::post('/createSepa', 'Theme\CartController@createSepa');
+
+// END SEPA
 
 Route::group(['prefix' => 'info'], function () {
     Route::get('order_error', [
