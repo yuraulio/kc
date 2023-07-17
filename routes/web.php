@@ -508,7 +508,10 @@ Route::post('pay-sbt', [
 ]);
 
 Route::post('getTotalCart', 'Theme\CartController@walletGetTotal');
+Route::post('getTotalCartSubscription', 'Theme\SubscriptionController@walletGetTotal');
+
 Route::post('walletPay', 'Theme\CartController@walletPay');
+Route::post('walletPaySubscription', 'Theme\SubscriptionController@walletPay');
 
 Route::group(['prefix' => 'info'], function () {
     Route::get('order_error', [

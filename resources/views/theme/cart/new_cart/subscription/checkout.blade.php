@@ -41,6 +41,17 @@
 						@csrf
 
 						<div class="card-info">
+							<!-- <div id="payment-request-button"></div> -->
+							<div id="error-message">
+							<!-- Display error message to your customers here -->
+							</div>
+							<div id="payment-request-button">
+							<!-- A Stripe Element will be inserted here. -->
+							</div>
+							<hr>
+						</div>
+
+						<div class="card-info">
 							<h2>Card information</h2>
 							<div class="card-input">
     		                    <div id="card-element"></div>
@@ -74,6 +85,7 @@
 
     const stripe = Stripe('{{$stripe_key}}',{
 		locale: 'en',
+		apiVersion: "2022-11-15",
 	});
 
     const elements = stripe.elements({
@@ -121,17 +133,129 @@
 
     	}
 	});
+	
+
+	//DIGITAL WALLET
+	const paymentRequest = stripe.paymentRequest({
+		country: 'US',
+		currency: 'eur',
+		total: {
+			label: @json($event->title),
+			amount: 20000,
+		},
+		requestPayerName: false,
+		requestPayerEmail: false,
+	});
+
+	updateAmount()
 
 
-$(".close-alert").on("click", function () {
+	const elements2 = stripe.elements();
+	const prButton = elements2.create('paymentRequestButton', {
+		paymentRequest: paymentRequest,
+	});
 
-	$('.alert-outer').hide()
+	(async () => {
+	// Check the availability of the Payment Request API first.
+	const result = await paymentRequest.canMakePayment();
+	
 
-});
+	if (result) {
+		console.log('enabled')
+		prButton.mount('#payment-request-button');
+	} else {
+		console.log('disabled')
+		document.getElementById('payment-request-button').style.display = 'none';
+	}
+	})();
 
-$('form').submit(function() {
-  $("#pay-now").prop('disabled',true);
-});
+	paymentRequest.on('paymentmethod', async (ev) => {
+		
+
+		//await apiRequest('/walletPaySubscription/', ev.paymentMethod.id)
+		await apiRequest(`/walletPaySubscription`, ev.paymentMethod.id)
+
+		
+
+	});
+
+	async function apiRequest(url, payment_method){
+		$("#card-error").remove();
+		let a;
+
+		$.ajax({
+			headers: {
+					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			},
+			method: 'POST',
+			url: url,
+			async:false,  
+			data:{
+				payment_method: payment_method,
+				event: @json($event->title),
+				plan: '{{$plan->name}}'
+			},  
+			success: function(data) {
+				//a = data
+				window.location = data
+			},
+			error: function(data){
+
+				location.reload()
+
+			}
+		})
+		
+		return a;
+	}
+
+	//END DIGITAL WALLET
+
+
+	$(".close-alert").on("click", function () {
+
+		$('.alert-outer').hide()
+
+	});
+
+	$('form').submit(function() {
+	$("#pay-now").prop('disabled',true);
+	});
+
+	async function updateAmount(){
+		total = await getTotalCart()
+		
+		paymentRequest.update({
+			total: {
+				label: @json($event->title),
+				amount: Math.round(total),
+			},
+			
+		});
+	}
+
+	async function getTotalCart(){
+		let total = null;
+
+		$.ajax({
+			headers: {
+					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			},
+			method: 'POST',
+			url: '/getTotalCartSubscription',
+			async:false,    
+			data:{
+				plan: '{{$plan->name}}',
+			},
+			success: function(data) {
+				total = data
+			}
+		})
+
+		//console.log('return from func: ', total)
+		return total;
+
+	}
 
 </script>
 
