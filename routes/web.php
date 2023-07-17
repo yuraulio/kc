@@ -15,6 +15,10 @@ use App\Model\Admin\Setting;
 */
 
 //Route::get('/', 'Auth\LoginController@showLoginForm')->name('welcome');
+Route::get('.well-known/apple-developer-merchantid-domain-association', function () {
+    $filepath = public_path('apple-developer-merchantid-domain-association');
+    return $filepath; 
+});
 
 Auth::routes(['register' => false]);
 

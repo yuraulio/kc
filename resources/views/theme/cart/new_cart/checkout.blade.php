@@ -210,7 +210,7 @@
 
 	//DIGITAL WALLET
 	const paymentRequest = stripe.paymentRequest({
-	country: 'GR',
+	country: 'US',
 	currency: 'eur',
 	total: {
 		label: 'Demo total',
@@ -224,7 +224,7 @@
 
 	const elements2 = stripe.elements();
 	const prButton = elements2.create('paymentRequestButton', {
-	paymentRequest: paymentRequest,
+		paymentRequest: paymentRequest,
 	});
 
 	(async () => {
@@ -395,7 +395,6 @@
 	});
 
 	async function updateAmount(){
-		console.log('111111')
 		total = await getTotalCart()
 		console.log('total: ', Math.round(total))
 		
@@ -406,7 +405,6 @@
 			},
 			
 		});
-		cosnole.log('22222')
 	}
 
 
