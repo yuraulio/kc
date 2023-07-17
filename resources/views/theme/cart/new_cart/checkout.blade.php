@@ -183,7 +183,6 @@
 			$("#pay-now").prop('disabled',false);
     	} else {
 
-			console.log('payment: ',paymentMethod.id)
 			$('#payment_method').val(paymentMethod.id);
 
 			$("#checkout-form").submit();
@@ -210,7 +209,7 @@
 	country: 'US',
 	currency: 'eur',
 	total: {
-		label: 'Demo total',
+		label: @json($productName),
 		amount: 20000,
 	},
 	requestPayerName: false,
@@ -255,52 +254,37 @@
 
 	paymentRequest.on('paymentmethod', async (ev) => {
 
-
-		console.log('//////')
-
-		console.log(ev)
 		$('#payment_method').val(ev.paymentMethod.id);
 
-		console.log('//////')
 		await apiRequest('/walletPay', ev.paymentMethod.id)
 
-		
-		// 	clientSecret = await apiRequest1('/pay')
-		//   // Confirm the PaymentIntent without handling potential next actions (yet).
-		//   const {paymentIntent, error: confirmError} = await stripe.confirmCardPayment(
-		//     clientSecret,
-		//     {payment_method: ev.paymentMethod.id},
-		//     {handleActions: false}
-		//   );
 
-
-		if (confirmError) {
-			alert('has error')
-			// Report to the browser that the payment failed, prompting it to
-			// re-show the payment interface, or show an error message and close
-			// the payment interface.
-			ev.complete('fail');
-		} else {
-			alert('success')
-			// Report to the browser that the confirmation was successful, prompting
-			// it to close the browser payment method collection interface.
-			ev.complete('success');
+		// if (confirmError) {
+		// 	// Report to the browser that the payment failed, prompting it to
+		// 	// re-show the payment interface, or show an error message and close
+		// 	// the payment interface.
+		// 	ev.complete('fail');
+		// } else {
+		// 	alert('success')
+		// 	// Report to the browser that the confirmation was successful, prompting
+		// 	// it to close the browser payment method collection interface.
+		// 	ev.complete('success');
 			
-			// Check if the PaymentIntent requires any actions and, if so, let Stripe.js
-			// handle the flow. If using an API version older than "2019-02-11"
-			// instead check for: `paymentIntent.status === "requires_source_action"`.
-			if (paymentIntent.status === "requires_action") {
-			// Let Stripe.js handle the rest of the payment flow.
-			const {error} = await stripe.confirmCardPayment(clientSecret);
-			if (error) {
-				// The payment failed -- ask your customer for a new payment method.
-			} else {
-				// The payment has succeeded.
-			}
-			} else {
-			// The payment has succeeded.
-			}
-		}
+		// 	// Check if the PaymentIntent requires any actions and, if so, let Stripe.js
+		// 	// handle the flow. If using an API version older than "2019-02-11"
+		// 	// instead check for: `paymentIntent.status === "requires_source_action"`.
+		// 	if (paymentIntent.status === "requires_action") {
+		// 	// Let Stripe.js handle the rest of the payment flow.
+		// 	const {error} = await stripe.confirmCardPayment(clientSecret);
+		// 	if (error) {
+		// 		// The payment failed -- ask your customer for a new payment method.
+		// 	} else {
+		// 		// The payment has succeeded.
+		// 	}
+		// 	} else {
+		// 	// The payment has succeeded.
+		// 	}
+		// }
 	});
 
 	//END DIGITAL WALLET
@@ -393,11 +377,10 @@
 
 	async function updateAmount(){
 		total = await getTotalCart()
-		console.log('total: ', Math.round(total))
 		
 		paymentRequest.update({
 			total: {
-				label: 'Demo total',
+				label: @json($productName),
 				amount: Math.round(total),
 			},
 			

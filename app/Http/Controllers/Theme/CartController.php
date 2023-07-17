@@ -103,6 +103,7 @@ class CartController extends Controller
 
                 $data['elearning'] = $ev->delivery->first() && $ev->delivery->first()->id == 143 ? true : false;
                 $data['eventId'] = $event_id;
+                $data['productName'] = $ev->title;
 
                 if($ev->view_tpl == 'event_free_coupon'){
                     $data['couponEvent'] = true;
@@ -861,7 +862,6 @@ class CartController extends Controller
         //$this->fbp->sendAddPaymentInfoEvent($data);
         $this->fbp->sendAddBillingInfoEvent($data);
 
-        //dd($data);
 
         return view('theme.cart.new_cart.checkout', $data);
 

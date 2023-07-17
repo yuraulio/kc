@@ -263,7 +263,263 @@ class SubscriptionController extends Controller
 
     }
 
-    public function store(Request $request, $event,$plan)
+    public function walletGetTotal(Request $request)
+    {
+        $plan = Plan::select('cost')->where('name',$request->plan)->first();
+
+        return $plan->cost * 100;
+    }
+
+    public function walletPay(Request $request){
+
+        $user = Auth::user();
+
+        $plan = Plan::where('name',$request->plan)->first();
+        $event = Event::where('title',$request->event)->first();
+
+
+        if(env('PAYMENT_PRODUCTION')){
+            Stripe::setApiKey($this->paymentMethod->processor_options['secret_key']);
+        }else{
+            Stripe::setApiKey($this->paymentMethod->test_processor_options['secret_key']);
+        }
+		session()->put('payment_method',$this->paymentMethod->id);
+
+
+        if (Session::has('pay_bill_data')) {
+
+            $pay_bill_data = Session::get('pay_bill_data');
+            $bd = json_encode($pay_bill_data);
+        }
+        else {
+
+            $bd = '';
+            $pay_bill_data = [];
+        }
+
+        $temp = [];
+        if(isset($pay_bill_data)) {
+            $temp = $pay_bill_data;
+            if($temp['billing'] == 1) {
+                $temp['billing'] = 'Receipt requested';
+                $st_name =  $temp['billname'] . ' ' . $temp['billsurname'];
+                $st_tax_id = 'EL'.$temp['billafm'];
+                $st_line1 = $temp['billaddress'] . ' ' . $temp['billaddressnum'];
+                $st_postal_code = $temp['billpostcode'];
+                $st_city = $temp['billcity'];
+           //     $st_phone = $temp['billmobile'];
+
+            }
+            else {
+                $temp['billing'] = 'Invoice requested';
+
+                $st_name = $temp['companyname'] . ' ' . $temp['companyprofession'];
+                $st_tax_id = $temp['companyafm'] . ' ' . $temp['companydoy'];
+                $st_line1 = $temp['companyaddress'] . ' ' . $temp['companyaddressnum'];
+                $st_postal_code = $temp['companypostcode'];
+                $st_city = $temp['companycity'];
+                $st_email = $temp['companyemail'];
+                $st_phone = '';
+
+            }
+        }
+
+        if($plan->interval == 'month')
+        {
+            $days = $plan->interval_count * 30;
+            $sub_end = strtotime("+" . $days . "day");
+        }
+        elseif($plan->interval == 'year')
+        {
+            $sub_end = strtotime("+365 day");
+        }elseif($plan->interval == 'week'){
+            $days = $plan->interval_count * 7;
+            $sub_end = strtotime("+" . $days . "day");
+        }
+        elseif($plan->interval == 'day'){
+            $days = $plan->interval_count;
+            $sub_end = strtotime("+" . $days . "day");
+        }
+
+        $user->asStripeCustomer();
+
+        if(!$user->stripe_id){
+
+            $options=['name' => $user['firstname'] . ' ' . $user['lastname'], 'email' => $user['email']];
+            $user->createAsStripeCustomer($options);
+
+            $stripe_ids = json_decode($user->stripe_ids,true) ? json_decode($user->stripe_ids,true) : [];
+            $stripe_ids[] =$user->stripe_id;
+
+            $user->stripe_ids = json_encode($stripe_ids);
+            $user->save();
+        }
+
+        //$anchor = Carbon::now()->addDays(16);;
+        //$anchor = $anchor->startOfMonth();
+        try {
+
+            $charge = $user->newSubscription($plan->name, $plan->stripe_plan)
+            //->anchorBillingCycleOn($anchor->startOfDay())
+            ->noProrate()
+            //->trialDays($plan->trial_days)
+            ->create($request->payment_method, ['email' => $user->email]);
+
+            $charge->price = $plan->cost;
+            $charge->save();
+
+            $charge['status'] = 'succeeded';
+            $date_sub_end = date('Y/m/d H:i:s', $sub_end);
+
+            if($charge){
+
+                $subscription = $user->subscriptions()->where('id',$charge['id'])->first();
+                //dd($user->events()->where('event_id',$event->id)->first());
+                /*if(!$user->events()->where('event_id',$event)->first()){
+                    $user->events()->attach($event->id);
+                }*/
+
+                $user->subscriptionEvents()->attach($event->id,['subscription_id'=>$charge['id'],'payment_method'=>$this->paymentMethod->id]);
+
+
+                $data = [];
+                /*$muser = [];
+                $muser['name'] = $user->firstname;
+                $muser['first'] = $user->firstname;
+                $muser['email'] = $user->email;*/
+                //$muser['event_title'] = $sub->eventable->event->title;
+
+                //$subEnds = $plan->trial_days && $plan->trial_days > 0 ? $plan->trial_days : $plan->getDays();
+                $subEnds = $plan->getDays();
+                $subEnds=date('d-m-Y', strtotime("+$subEnds days"));
+
+                //if($exp = $user->events()->wherePivot('event_id',$event->id)->first()){
+                if($exp = $user->events_for_user_list()->wherePivot('event_id',$event->id)->first()){
+
+                    $exp = $exp->pivot->expiration;
+                    $exp = strtotime($exp);
+                    $today = strtotime(date('Y-m-d'));
+
+                    if($exp && $exp > $today){
+
+                        $exp = date_create(date('Y-m-d',$exp));
+                        $today = date_create(date('Y-m-d',$today));
+
+                        $days = date_diff($exp, $today);
+
+                        $subEnds = date('Y-m-d', strtotime($subEnds. ' + ' . $days->d .' days'));
+
+                    }
+
+                }
+
+
+                //if($exp = $user->events()->wherePivot('event_id',$event->id)->first()){
+                if($exp = $user->events_for_user_list()->wherePivot('event_id',$event->id)->first()){
+                    $exp = $exp->pivot->expiration;
+                    $exp = strtotime($exp);
+                    $today = strtotime(date('Y-m-d'));
+
+                    if($exp && $exp > $today){
+
+                        $exp = date_create(date('Y-m-d',$exp));
+                        $today = date_create(date('Y-m-d',$today));
+
+                        $days = date_diff($exp, $today);
+
+                        $subEnds = date('Y-m-d', strtotime($subEnds. ' + ' . $days->d .' days'));
+
+                    }
+
+                }
+
+                $data['firstName'] = $user->firstname;
+
+                $data['name'] = $user->firstname . ' ' . $user->lastname;
+                $data['email'] = $user->email;
+                $data['amount'] = $charge->price;
+                $data['position'] = $user->job_title;
+                $data['company'] = $user->company;
+                $data['mobile'] = $user->mobile;
+                $data['userLink'] = url('/') . "/admin/user/" . $user['id'] ."/edit";
+
+                $data['eventTitle'] = $event->title;
+                $data['eventFaq'] = url('/') . '/' .$event->getSlug().'#faq';
+                $data['eventSlug'] = url('/') . '/myaccount/elearning/' . $event->title;
+                $data['subject'] = 'Knowcrunch - ' . $data['firstName'] .' to our annual subscription';
+                $data['template'] = 'emails.user.subscription_welcome';
+                $data['subscriptionEnds'] = $subEnds;
+                /*$data['sub_type'] = $plan->name;
+                $data['sub_price'] = $plan->cost;
+                $data['sub_period'] = $plan->period();*/
+
+                $user->notify(new SubscriptionWelcome($data));
+
+                $adminemail = 'info@knowcrunch.com';
+
+                /*$sent = Mail::send('emails.admin.admin_info_subscription_registration', $data, function ($m) use ($adminemail) {
+
+
+                    $sub = 'Knowcrunch - New subscription';
+                    $m->from($adminemail, 'Knowcrunch');
+                    $m->to($adminemail, 'Knowcrunch');
+                    $m->subject($sub);
+
+                });*/
+
+                Session::forget('pay_seats_data');
+                Session::forget('transaction_id');
+                Session::forget('cardtype');
+                Session::forget('installments');
+                //Session::forget('pay_invoice_data');
+                Session::forget('pay_bill_data');
+                Session::forget('deree_user_data');
+
+                Session::put('subscription-user',$charge['id']);
+
+                return response()->json('/myaccount/subscription-success', 200);
+                //return redirect('/myaccount');
+            }else{
+                return 'have error';
+            }
+        }catch(\Cartalyst\Stripe\Exception\CardErrorException $e) {
+            //dd('edwww3');
+            \Session::put('dperror',$e->getMessage());
+            return response()->json([], 404);
+             //return redirect('/info/order_error');
+        }
+        catch(\Cartalyst\Stripe\Exception\MissingParameterException $e) {
+            //dd($e);
+            \Session::put('dperror',$e->getMessage());
+            //return redirect('/info/order_error');
+            return response()->json([], 404);
+        }
+        catch(\Cartalyst\Stripe\Api\Exception\ServerErrorException $e) {
+            //dd($e);
+            \Session::put('dperror',$e->getMessage());
+            //return redirect('/info/order_error');
+            return response()->json([], 404);
+        }catch(\Stripe\Exception\CardException $e) {
+
+            \Session::put('dperror',$e->getMessage());
+            return response()->json([], 404);
+        }catch(\Stripe\Exception\InvalidRequestException $e) {
+            \Session::put('dperror',$e->getMessage());
+            return response()->json([], 404);
+        }catch(\Laravel\Cashier\Exceptions\IncompletePayment $e) {
+            
+            \Session::put('dperror','Your card or bank account has insufficient funds or a limit. Please contact your bank and try again later.');
+            return response()->json([], 404);
+        }catch (Exception $e) {
+            //dd('edwww2');
+             \Session::put('dperror',$e->getMessage());
+             return response()->json([], 404);
+            // return redirect('/info/order_error');
+        }
+    }
+
+
+    public function store(Request $request, $event, $plan)
     {
 
         $user = Auth::user();
