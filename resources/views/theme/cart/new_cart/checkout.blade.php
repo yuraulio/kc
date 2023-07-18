@@ -2,6 +2,145 @@
 
 @section('content')
 
+<style>
+	/* Variables */
+* {
+  box-sizing: border-box;
+}
+
+
+#payment-form {
+  width: 30vw;
+  min-width: 500px;
+  align-self: center;
+  box-shadow: 0px 0px 0px 0.5px rgba(50, 50, 93, 0.1),
+    0px 2px 5px 0px rgba(50, 50, 93, 0.1), 0px 1px 1.5px 0px rgba(0, 0, 0, 0.07);
+  border-radius: 7px;
+  padding: 40px;
+}
+
+.hidden {
+  display: none;
+}
+
+#iban-element {
+	width: -webkit-fill-available;
+	width: -moz-available;
+}
+
+#payment-message {
+  color: rgb(105, 115, 134);
+  font-size: 16px;
+  line-height: 20px;
+  padding-top: 12px;
+  text-align: center;
+}
+
+#payment-element {
+  margin-bottom: 24px;
+}
+
+/* Buttons and links */
+#payment-form button {
+  background: #5469d4;
+  font-family: Arial, sans-serif;
+  color: #ffffff;
+  border-radius: 4px;
+  border: 0;
+  padding: 12px 16px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  display: block;
+  transition: all 0.2s ease;
+  box-shadow: 0px 4px 5.5px 0px rgba(0, 0, 0, 0.07);
+  width: 100%;
+}
+#payment-form button:hover {
+  filter: contrast(115%);
+}
+#payment-form button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+/* spinner/processing state, errors */
+.spinner,
+.spinner:before,
+.spinner:after {
+  border-radius: 50%;
+}
+.spinner {
+  color: #ffffff;
+  font-size: 22px;
+  text-indent: -99999px;
+  margin: 0px auto;
+  position: relative;
+  width: 20px;
+  height: 20px;
+  box-shadow: inset 0 0 0 2px;
+  -webkit-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  transform: translateZ(0);
+}
+.spinner:before,
+.spinner:after {
+  position: absolute;
+  content: "";
+}
+.spinner:before {
+  width: 10.4px;
+  height: 20.4px;
+  background: #5469d4;
+  border-radius: 20.4px 0 0 20.4px;
+  top: -0.2px;
+  left: -0.2px;
+  -webkit-transform-origin: 10.4px 10.2px;
+  transform-origin: 10.4px 10.2px;
+  -webkit-animation: loading 2s infinite ease 1.5s;
+  animation: loading 2s infinite ease 1.5s;
+}
+.spinner:after {
+  width: 10.4px;
+  height: 10.2px;
+  background: #5469d4;
+  border-radius: 0 10.2px 10.2px 0;
+  top: -0.1px;
+  left: 10.2px;
+  -webkit-transform-origin: 0px 10.2px;
+  transform-origin: 0px 10.2px;
+  -webkit-animation: loading 2s infinite ease;
+  animation: loading 2s infinite ease;
+}
+
+@-webkit-keyframes loading {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@keyframes loading {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  form {
+    width: 80vw;
+    min-width: initial;
+  }
+}
+</style>
 <!---------------- checkout progress-bar start --------------->
 <div class="checkout-step">
 		<div class="container">
@@ -138,7 +277,7 @@
 						<input
 							id="accountholder-name"
 							name="accountholder-name"
-							placeholder="Jenny Rosen"
+							placeholder="Cardholder Name"
 							required
 						/>
 						</div>
@@ -151,7 +290,8 @@
 							id="email"
 							name="email"
 							type="email"
-							placeholder="jenny.rosen@example.com"
+							placeholder="email"
+							value="{{$pay_seats_data['emails'][0]}}"
 							required
 						/>
 						</div>
@@ -360,8 +500,6 @@
 
 	//END DIGITAL WALLET
 
-	fetchIntent('/createSepa')
-
 	//SEPA
 	const elements3 = stripe.elements();
 	const style = {
@@ -391,7 +529,7 @@
 			// the IBAN format of your customer's country. If you know your
 			// customer's country, we recommend passing it to the Element as the
 			// placeholderCountry.
-			placeholderCountry: 'DE',
+			placeholderCountry: 'GR',
 		};
 
 		// Create an instance of the IBAN Element
@@ -404,50 +542,92 @@
 		const accountholderName = document.getElementById('accountholder-name');
 		const email = document.getElementById('email');
 		const submitButton = document.getElementById('submit-button');
-		const clientSecret = submitButton.dataset.secret;
+		
 
-		form.addEventListener('submit', (event) => {
-		event.preventDefault();
-		stripe.confirmSepaDebitPayment(
-			clientSecret,
-			{
-			payment_method: {
-				sepa_debit: iban,
-				billing_details: {
-				name: accountholderName.value,
-				email: email.value,
-				},
-			},
-			}
-		);
+		form.addEventListener('submit', async (event) => {
+			event.preventDefault();
+
+			console.log('11')
+
+			const { paymentMethod, error1 } = await stripe.createPaymentMethod({
+					type: 'sepa_debit',
+					sepa_debit: iban,
+					billing_details: {
+							name: accountholderName.value,
+							email: email.value,
+						},
+				});
+
+			
+			//console.log('1')
+			//await setupIntent('/setupIntent')
+			url = await createIntent('/createSepa', paymentMethod.id)
+			console.log('33')
+			console.log('payment method: ',paymentMethod)
+
+			var clientSecret = document.getElementById('submit-button');
+			clientSecret = $(clientSecret).attr('data-secret')
+
+			console.log(clientSecret)
+
+			console.log('4')
+			
+			stripe.confirmSepaDebitPayment(
+				clientSecret,
+				{
+					payment_method: {
+						sepa_debit: iban,
+						billing_details: {
+							name: accountholderName.value,
+							email: email.value,
+						},
+					},
+				}
+			).then(function(result){
+
+				if(result.error){
+					console.log('inside error')
+					console.log(result.error)
+				}
+				if(result.paymentIntent){
+					console.log(result.paymentIntent)
+
+
+					window.location.href = url;
+				}
+			});
+
+
 		});
 
 
-		async function fetchIntent(url){
-		let a;
-		let installments = 1
-		installments = $('input[type=radio][name=installments]:checked').val();
+		async function createIntent(url, payment_method){
+			console.log('2')
+			let return_url;
+			let installments = 1
+			installments = $('input[type=radio][name=installments]:checked').val();
 
-		$.ajax({
-			headers: {
-					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-			},
-			method: 'POST',
-			url: url,
-			async:false,  
-			data:{
-				
-			},  
-			success: function(data) {
-				
-				$('#submit-button').attr('data-secret', JSON.parse(data)['clientSecret'])
-				
-				
-			}
-		})
+			$.ajax({
+				headers: {
+						'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+				},
+				method: 'POST',
+				url: url,
+				async:false,  
+				data:{
+					installments: installments,
+					payment_method: payment_method
+				},  
+				success: function(data) {
+					
+					$('#submit-button').attr('data-secret', JSON.parse(data)['clientSecret'])
+					return_url = JSON.parse(data)['return_url']
+					
+				}
+			})
 		
-		return a;
-	}
+			return return_url;
+		}
 											
 	
 
@@ -532,6 +712,14 @@
 
 	$('input[type=radio][name=installments]').change(function() {
 		updateAmount()
+
+		// val = 1 (no installments)
+
+		if($(this).val() != 1){
+			$('#payment-form').hide()
+		}else{
+			$('#payment-form').show()
+		}
 	});
 
 	async function updateAmount(){

@@ -24,6 +24,21 @@ use Illuminate\Support\Facades\Log;
 class WebhookController extends BaseWebhookController
 {
 
+	public function handleChargeSucceeded(array $payload){
+		//Log::info(var_export($payload, true));
+		//Log::info(var_export($payload, true));
+		if(isset($payload['data']['object']['metadata']['integration_check']) && $payload['data']['object']['metadata']['integration_check'] == 'sepa_debit_accept_a_payment' && $payload['data']['object']['paid'] === true && $payload['data']['object']['failure_code'] == NULL){
+			Log::info('HAS SEPA DATA IS NOW AVAILABLE');
+
+			$paymentIntent = $payload['data']['object']['payment_intent'];
+
+			//$user = $this->getUserByStripeId($payload['data']['object']['customer']);
+
+			$transaction = Transaction::whereJsonContains('payment_response->id',$paymentIntent)->first();
+			Log::info(var_export($transaction, true));
+		}
+	}
+
 	public function handleChargeRefunded(array $payload){
 
 		if ($user = $this->getUserByStripeId($payload['data']['object']['customer'])) {

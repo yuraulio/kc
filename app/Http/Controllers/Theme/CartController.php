@@ -1336,7 +1336,7 @@ class CartController extends Controller
                 $dpuser->save();
             }
 
-             if($installments > 1) {
+            if($installments > 1) {
 
                 $instamount =  round($namount / $installments, 2);
 
@@ -1430,7 +1430,7 @@ class CartController extends Controller
 
 
                 //$namount = $instamount;
-             }
+            }
 
 
             if($dpuser && $installments > 1) {
@@ -1438,7 +1438,8 @@ class CartController extends Controller
                 $charge['status'] = 'succeeded';
                 $charge['type'] = $installments . ' Installments';
             }
-            else {
+            else 
+            {
 
 
                 $stripeAmount = $namount * 100;
@@ -1514,93 +1515,10 @@ class CartController extends Controller
 
 
             if( (is_array($charge)  &&  $charge['status'] == 'succeeded' ) || (isset($charge) && $charge->status == 'succeeded')) {
+
+                $this->createTransaction($dpuser, $pay_seats_data, $installments, $cart, $bd, $ev,$couponCode,$namount, $pay_bill_data, $charge,$eventC);
                
-                //$dpuser->updateDefaultPaymentMethod($input['payment_method']);
-                // if ($dpuser->hasPaymentMethod()) {
-                //     $dpuser->addPaymentMethod($input['payment_method']);
-                // }
                 
-                /**
-                 * Write Here Your Database insert logic.
-                 */
-
-                 $status_history = [];
-                //$payment_cardtype = intval($input["cardtype"]);
-                 $status_history[] = [
-                    'datetime' => Carbon::now()->toDateTimeString(),
-                    'status' => 1,
-                    'user' => [
-                        'id' => $dpuser->id,
-                        'email' => $dpuser->email
-                    ],
-                    'pay_seats_data' => $pay_seats_data,
-                    'pay_bill_data' => $pay_bill_data,
-                    'deree_user_data' => [$dpuser->email => ''],
-                    //'cardtype' => $payment_cardtype,
-                    'installments' => $installments,
-                    'cart_data' => $cart
-
-                ];
-                $transaction_arr = [
-
-                    "payment_method_id" => 100,//$input['payment_method_id'],
-                    "account_id" => 17,
-                    "payment_status" => 2,
-                    "billing_details" => $bd,
-                    "status_history" => json_encode($status_history),
-                    "placement_date" => Carbon::now()->toDateTimeString(),
-                    "ip_address" => \Request::ip(),
-                    "status" => 1, //2 PENDING, 0 FAILED, 1 COMPLETED
-                    "is_bonus" => 0,
-                    "order_vat" => 0,
-                    "payment_response" => json_encode($charge),
-                    "surcharge_amount" => 0,
-                    "discount_amount" => 0,
-                    "coupon_code" => $couponCode,
-                    "amount" => $namount,
-                    "total_amount" => $namount,
-                    'trial' => false,
-                ];
-
-                $transaction = Transaction::create($transaction_arr);
-
-                if($transaction) {
-
-                    //$transaction->user()->save($dpuser);
-                    $transaction->event()->save($ev);
-
-                    if($installments <= 1){
-                        /*if(!Invoice::latest()->doesntHave('subscription')->first()){
-                        //if(!Invoice::has('event')->latest()->first()){
-                            $invoiceNumber = sprintf('%04u', 1);
-                        }else{
-                            //$invoiceNumber = Invoice::has('event')->latest()->first()->invoice;
-                            $invoiceNumber = Invoice::latest()->doesntHave('subscription')->first()->invoice;
-                            $invoiceNumber = (int) $invoiceNumber + 1;
-                            $invoiceNumber = sprintf('%04u', $invoiceNumber);
-                        }*/
-
-
-                        $elearningInvoice = new Invoice;
-                        $elearningInvoice->name = json_decode($transaction->billing_details,true)['billname'];
-                        $elearningInvoice->amount = round($namount / $installments, 2);
-                        $elearningInvoice->invoice = generate_invoice_number($eventC->paymentMethod->first()->id);
-                        $elearningInvoice->date = date('Y-m-d');//Carbon::today()->toDateString();
-                        $elearningInvoice->instalments_remaining = $installments;
-                        $elearningInvoice->instalments = $installments;
-
-                        $elearningInvoice->save();
-
-
-                        //$elearningInvoice->user()->save($dpuser);
-                        $elearningInvoice->event()->save($ev);
-                        $elearningInvoice->transaction()->save($transaction);
-                    }else{
-                        //$transaction->subscription()->save($dpuser->subscriptions->where('id',$charge['id'])->first());
-                    }
-
-                    \Session::put('transaction_id', $transaction->id);
-                }
 
                 return '/order-success';
                 //return '/info/order_success';
@@ -1655,6 +1573,96 @@ class CartController extends Controller
 
 
 
+    }
+
+    private function createTransaction($dpuser, $pay_seats_data, $installments, $cart, $bd, $ev,$couponCode,$namount, $pay_bill_data, $charge,$eventC)
+    {
+        //$dpuser->updateDefaultPaymentMethod($input['payment_method']);
+        // if ($dpuser->hasPaymentMethod()) {
+        //     $dpuser->addPaymentMethod($input['payment_method']);
+        // }
+        
+        /**
+         * Write Here Your Database insert logic.
+         */
+
+            $status_history = [];
+        //$payment_cardtype = intval($input["cardtype"]);
+            $status_history[] = [
+            'datetime' => Carbon::now()->toDateTimeString(),
+            'status' => 1,
+            'user' => [
+                'id' => $dpuser->id,
+                'email' => $dpuser->email
+            ],
+            'pay_seats_data' => $pay_seats_data,
+            'pay_bill_data' => $pay_bill_data,
+            'deree_user_data' => [$dpuser->email => ''],
+            //'cardtype' => $payment_cardtype,
+            'installments' => $installments,
+            'cart_data' => $cart
+
+        ];
+        $transaction_arr = [
+
+            "payment_method_id" => 100,//$input['payment_method_id'],
+            "account_id" => 17,
+            "payment_status" => 2,
+            "billing_details" => $bd,
+            "status_history" => json_encode($status_history),
+            "placement_date" => Carbon::now()->toDateTimeString(),
+            "ip_address" => \Request::ip(),
+            "status" => 1, //2 PENDING, 0 FAILED, 1 COMPLETED
+            "is_bonus" => 0,
+            "order_vat" => 0,
+            "payment_response" => json_encode($charge),
+            "surcharge_amount" => 0,
+            "discount_amount" => 0,
+            "coupon_code" => $couponCode,
+            "amount" => $namount,
+            "total_amount" => $namount,
+            'trial' => false,
+        ];
+
+        $transaction = Transaction::create($transaction_arr);
+
+        if($transaction) {
+
+            //$transaction->user()->save($dpuser);
+            $transaction->event()->save($ev);
+
+            if($installments <= 1){
+                /*if(!Invoice::latest()->doesntHave('subscription')->first()){
+                //if(!Invoice::has('event')->latest()->first()){
+                    $invoiceNumber = sprintf('%04u', 1);
+                }else{
+                    //$invoiceNumber = Invoice::has('event')->latest()->first()->invoice;
+                    $invoiceNumber = Invoice::latest()->doesntHave('subscription')->first()->invoice;
+                    $invoiceNumber = (int) $invoiceNumber + 1;
+                    $invoiceNumber = sprintf('%04u', $invoiceNumber);
+                }*/
+
+
+                $elearningInvoice = new Invoice;
+                $elearningInvoice->name = json_decode($transaction->billing_details,true)['billname'];
+                $elearningInvoice->amount = round($namount / $installments, 2);
+                $elearningInvoice->invoice = generate_invoice_number($eventC->paymentMethod->first()->id);
+                $elearningInvoice->date = date('Y-m-d');//Carbon::today()->toDateString();
+                $elearningInvoice->instalments_remaining = $installments;
+                $elearningInvoice->instalments = $installments;
+
+                $elearningInvoice->save();
+
+
+                //$elearningInvoice->user()->save($dpuser);
+                $elearningInvoice->event()->save($ev);
+                $elearningInvoice->transaction()->save($transaction);
+            }else{
+                //$transaction->subscription()->save($dpuser->subscriptions->where('id',$charge['id'])->first());
+            }
+
+            \Session::put('transaction_id', $transaction->id);
+        }
     }
 
     public function alphaBankPayment($input,$request){
@@ -1926,32 +1934,274 @@ class CartController extends Controller
 
     public function createSepa(Request $request)
     {
-        
-        Stripe::setApiKey('sk_test_51IdYeZHnPmfgPmgK8xh8OuZLSiIY0xZuUgpW7xsgc0qIwxOCIrvPYHO4GtEHiEDJIZvbeye1DyNpn9hzFzw7edqi00ajurn9Cf');
-        $customer = \Stripe\Customer::create();
-        header('Content-Type: application/json');
+
+        $input = $request->all();
+        $data = [];
+
+        if(isset($input['installments'])){
+            Session::put('installments', $input['installments']);
+        }else{
+            Session::put('installments', 1);
+        }
+
+        if(Session::get('coupon_code')){
+            $input['coupon'] = Session::get('coupon_code');
+        }
+
+        $data = $this->initCartDetails($data);
+        $this->fbp->sendAddPaymentInfoEvent($data);
+
+        Session::forget('dperror');
+        Session::forget('error');
+
+        //$current_user = Auth::user();
+
+        $dpuser = Auth::user() ? Auth::user() : User::find(Session::get('user_id'));
+        $cart = Cart::content();
+        $ev_title = '';
+        $ev_date_help = '';
+        $eventId = 0;
+        $qty = 1;
+        $ticket_id = 0;
+        foreach ($cart as $item) {
+            $qty = $item->qty;
+            $ev = Event::where('id', $item->options['event'])->first();
+            $eventId = $item->options['event'];
+            //$ev_date_help = $ev->summary1->where('section','date')->first() ? $ev->summary1->where('section','date')->first()->title : 'date';
+            $eventInfo = $ev->event_info();
+            if(isset($eventInfo['delivery']) && $eventInfo['delivery'] == 143){
+
+                $ev_date_help = isset($eventInfo['elearning']['visible']['emails']) && isset($eventInfo['elearning']['expiration']) &&
+                                    $eventInfo['elearning']['visible']['emails'] && isset($eventInfo['elearning']['text']) ?
+                                                $eventInfo['elearning']['expiration'] . ' ' . $eventInfo['elearning']['text']: '';
+
+            }else if(isset($eventInfo['delivery']) && $eventInfo['delivery'] == 139){
+
+                $ev_date_help = isset($eventInfo['inclass']['dates']['visible']['emails']) && isset($eventInfo['inclass']['dates']['text']) &&
+                                        $eventInfo['inclass']['dates']['visible']['emails'] ?  $eventInfo['inclass']['dates']['text'] : '';
+
+            }
+
+            $ev_title = $ev->title;
+            $ticket_id = $item->id;
+            break;
+            //$item->id  <-ticket id
+        }
+        //dd($cart['CartItem']->CartItemOptions);
+        //dd($ev_title . $ev_date_help);
+        $data = [];
+        if (Session::has('pay_seats_data')) {
+            $pay_seats_data = Session::get('pay_seats_data');
+        }
+        else {
+            $pay_seats_data  = [];
+        }
+
+        if (Session::has('pay_bill_data')) {
+            $pay_bill_data = Session::get('pay_bill_data');
+            $bd = json_encode($pay_bill_data);
+        }
+        else {
+            $bd = '';
+            $pay_bill_data = [];
+        }
+
+        if (Session::has('installments')) {
+            $installments = Session::get('installments');
+        }
+        else {
+            $installments = 0;
+        }
+
+        $input = Arr::except($input,array('_token'));
+
         try {
 
-        
-            // Create a PaymentIntent with amount and currency
-            $paymentIntent = \Stripe\PaymentIntent::create([
-                'amount' => 1099,
-                'currency' => 'eur',
-                'setup_future_usage' => 'off_session',
-                'customer' => $customer->id,
-                'payment_method_types' => ['sepa_debit'],
-                'metadata' => ['integration_check' => 'sepa_debit_accept_a_payment'],
+            $amount = Cart::total();
+            $coupon = [];
+            $eventC = Event::find($eventId);
+            if ($eventC && isset($input['coupon'])){
+                $coupon = $eventC->coupons()->where('status', true)->get();
+            }
+
+            if(isset($input['coupon']) && count($coupon) > 0){
+                foreach($coupon as $key => $c){
+                    if(!($c->code_coupon === $input['coupon'])){
+                        unset($coupon[$key]);
+                    }
+                }
+            }
+
+            $couponCode = '';
+            if(count($coupon) > 0){
+                $coupon = $coupon->first();
+                if (isset($input['coupon'])){
+                    if($input['coupon'] && trim($input['coupon']) != '' && trim($coupon->code_coupon)!= '' && $coupon->status && trim($input['coupon']) == trim($coupon->code_coupon)){
+
+                        if($coupon->percentage){
+                            $couponPrice = ($amount/Cart::count()) * $coupon->price / 100;
+                            $couponPrice = ($amount/Cart::count()) - $couponPrice;
+                            $amount =  $couponPrice * $qty;
+
+                        }else{
+                            $amount = $coupon->price * $qty;
+                        }
+
+                        $couponCode = $input['coupon'];
+                    }
+                }
+            }
+            $namount = (float)$amount;
+
+            $temp = [];
+            if(isset($pay_bill_data)) {
+                $temp = $pay_bill_data;
+                if($temp['billing'] == 1) {
+
+                    $address = [];
+                    $address['country'] = 'GR';
+
+                    $temp['billing'] = 'Receipt requested';
+
+                    $st_name =  $temp['billname'];
+                    $st_tax_id = 'EL'.$temp['billafm'];
+
+                    if(isset($temp['billaddress'])){
+                        $st_line1 = $temp['billaddress'] ;
+
+                        if(isset($temp['billaddressnum'])){
+                            $st_line1 .= ' ' . $temp['billaddressnum'];
+                        }
+
+                        $address['line1'] = $st_line1;
+                    }
+
+                    if(isset($temp['billcity'])){
+                        $st_city = $temp['billcity'];
+                        $address['city'] = $st_city;
+                    }
+
+                    if(isset($temp['billpostcode'])){
+                        $st_postal_code = $temp['billpostcode'];
+                        $address['postal_code'] = $st_postal_code;
+                    }
+
+
+                    //$st_phone = $temp['billmobile'];
+
+                }
+                else {
+                    $temp['billing'] = 'Invoice requested';
+                    //generate array for stripe billing
+                 //   $st_desc = $temp['companyname'] . ' ' . $temp['companyprofession'];
+                    $st_name = $temp['companyname'] . ' ' . $temp['companyprofession'];
+                    $st_tax_id = $temp['companyafm'] . ' ' . $temp['companydoy'];
+                    $st_line1 = $temp['companyaddress'] . ' ' . $temp['companyaddressnum'];
+                    $st_postal_code = $temp['companypostcode'];
+                    $st_city = $temp['companycity'];
+                    $st_email = $temp['companyemail'];
+                    $st_phone = '';
+
+                }
+            }
+
+            if(env('PAYMENT_PRODUCTION')){
+                Stripe::setApiKey($eventC->paymentMethod->first()->processor_options['secret_key']);
+            }else{
+                Stripe::setApiKey($eventC->paymentMethod->first()->test_processor_options['secret_key']);
+            }
+            session()->put('payment_method',$eventC->paymentMethod->first()->id);
+
+            $dpuser->asStripeCustomer();
+
+            if(!$dpuser->stripe_id){
+
+                $options=['name' => $dpuser['firstname'] . ' ' . $dpuser['lastname'], 'email' => $dpuser['email']];
+                $dpuser->createAsStripeCustomer($options);
+
+                $stripe_ids = json_decode($dpuser->stripe_ids,true) ? json_decode($dpuser->stripe_ids,true) : [];
+                $stripe_ids[] =$dpuser->stripe_id;
+
+                $dpuser->stripe_ids = json_encode($stripe_ids);
+                $dpuser->save();
+            }
+
+            
+
+            $stripeAmount = $namount * 100;
+            $dpuser->updateStripeCustomer([
+                'name' => $st_name,
+                'email' => $dpuser->email,
+                'metadata' => $temp,
+                //'description' => $st_desc,
+
+                //'tax_info' => ['tax_id' => $st_tax_id, 'type' => 'vat'],
+                'shipping' => ['name' => $st_name, 'address' => $address],
+                'address' => $address,
+
             ]);
-        
-            $output = [
-                'clientSecret' => $paymentIntent->client_secret,
-            ];
-        
-            echo json_encode($output);
-        } catch (Error $e) {
-            http_response_code(500);
-            echo json_encode(['error' => $e->getMessage()]);
+
+            $temp['customer'] = $dpuser->email;
+            $nevent = $ev_title . ' ' . $ev_date_help;
+
+
+            try{
+
+                // if($input['payment_method'] == null){
+                //     $dpuser->addPaymentMethod($paymentMethod);
+                // }
+
+                //$ev->users()->where('id',$dpuser->id)->detach();
+                //$ev->users()->save($dpuser,['paid'=>false,'payment_method'=>$payment_method_id]);
+
+                // dd($dpuser->paymentMethods('link'));
+
+                
+                header('Content-Type: application/json');
+                
+                // Create a PaymentIntent with amount and currency
+                $paymentIntent = \Stripe\PaymentIntent::create([
+                    'amount' => $stripeAmount,
+                    'currency' => 'eur',
+                    'customer' => $dpuser->stripe_id,
+                    'payment_method_types' => ['sepa_debit'],
+                    'metadata' => ['integration_check' => 'sepa_debit_accept_a_payment'],
+                ]);
+
+
+                $payment_method_id = -1;
+                if($ev->paymentMethod->first()){
+
+                    $payment_method_id = $ev->paymentMethod->first()->id;
+
+                }
+
+                $ev->users()->wherePivot('user_id',$dpuser->id)->detach();
+                $ev->users()->save($dpuser,['paid'=>false,'payment_method'=>$payment_method_id]);
+
+                if( (is_array($paymentIntent)  &&  $paymentIntent['status'] == 'requires_payment_method' ) || (isset($paymentIntent) && $paymentIntent->status == 'requires_payment_method')) {
+
+                    $this->createTransaction($dpuser, $pay_seats_data, $installments, $cart, $bd, $ev,$couponCode,$namount, $pay_bill_data, $paymentIntent,$eventC);
+                   
+                    Session::put('payment_method_is_sepa',true);
+                
+                    $output = [
+                        'clientSecret' => $paymentIntent->client_secret,
+                        'return_url' => '/order-success',
+                        'status' => $paymentIntent->status
+                    ];
+
+                    echo json_encode($output);
+    
+                }
+   
+            }catch(Error $e){
+
+            }
+        }catch(Error $e){
+
         }
+  
     }
 
     public function completeRegistration(Request $request){

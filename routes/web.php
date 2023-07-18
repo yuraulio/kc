@@ -517,6 +517,7 @@ Route::post('walletPaySubscription', 'Theme\SubscriptionController@walletPay');
 
 // SEPA
 Route::post('/createSepa', 'Theme\CartController@createSepa');
+Route::post('/charge', 'Theme\CartController@charge');
 
 // END SEPA
 

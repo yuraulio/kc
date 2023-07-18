@@ -230,6 +230,24 @@ class InfoController extends Controller
             return redirect('/thankyou');
         	//return view('theme.cart.new_cart.thank_you', $data);
         }
+        else if(Session::has('payment_method_is_sepa')){
+
+            Session::forget('ppayment_method_is_sepa');
+
+            $data['info']['success'] = true;
+            $data['info']['title'] = __('thank_you_page.title');
+            $data['info']['message'] = __('thank_you_page.message');
+            $data['info']['statusClass'] = 'success';
+            $data['event'] = [];
+            $data['event']['title'] = '';
+            $data['event']['facebook'] = '';
+            $data['event']['twitter'] = '';
+            $data['event']['linkedin'] = '';
+            $data['event']['slug'] = '';
+            
+
+            return view('theme.cart.new_cart.thank_you_sepa', $data);
+        }
         else {
         	return Redirect::to('/');
         }
