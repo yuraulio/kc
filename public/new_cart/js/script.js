@@ -1,6 +1,5 @@
 $(document).ready(function() {
     $('.radio-group .custom-radio .custom-control-input').click(function() {
-      console.log('fsdf2');
         $('.radio-group .custom-radio p').removeClass('active');
         $(this).next('p').addClass('active');
     });
