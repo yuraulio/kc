@@ -83,6 +83,13 @@ mix.js('resources/js/app.js', 'public/js')
 
       ],'public/theme/assets/js/front.js')
 
+
+      mix.scripts([
+
+        'public/new_cart/js/script.js',
+        
+    ],'public/new_cart/js/script_new_cart_ver.js')
+
       mix.version([
           'public/theme/assets/css/style_ver.css',
           'public/theme/assets/js/front.js',
