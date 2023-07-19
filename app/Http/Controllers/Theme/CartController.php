@@ -1516,7 +1516,8 @@ class CartController extends Controller
 
             if( (is_array($charge)  &&  $charge['status'] == 'succeeded' ) || (isset($charge) && $charge->status == 'succeeded')) {
 
-                $this->createTransaction($dpuser, $pay_seats_data, $installments, $cart, $bd, $ev,$couponCode,$namount, $pay_bill_data, $charge,$eventC);
+                $status = 1;
+                $this->createTransaction($dpuser, $pay_seats_data, $installments, $cart, $bd, $ev,$couponCode,$namount, $pay_bill_data, $charge,$eventC, $status);
                
                 
 
@@ -1575,7 +1576,7 @@ class CartController extends Controller
 
     }
 
-    private function createTransaction($dpuser, $pay_seats_data, $installments, $cart, $bd, $ev,$couponCode,$namount, $pay_bill_data, $charge,$eventC)
+    private function createTransaction($dpuser, $pay_seats_data, $installments, $cart, $bd, $ev,$couponCode,$namount, $pay_bill_data, $charge,$eventC, $status)
     {
         //$dpuser->updateDefaultPaymentMethod($input['payment_method']);
         // if ($dpuser->hasPaymentMethod()) {
@@ -1612,7 +1613,7 @@ class CartController extends Controller
             "status_history" => json_encode($status_history),
             "placement_date" => Carbon::now()->toDateTimeString(),
             "ip_address" => \Request::ip(),
-            "status" => 1, //2 PENDING, 0 FAILED, 1 COMPLETED
+            "status" => $status, //2 PENDING, 0 FAILED, 1 COMPLETED
             "is_bonus" => 0,
             "order_vat" => 0,
             "payment_response" => json_encode($charge),
@@ -2163,6 +2164,7 @@ class CartController extends Controller
                 $paymentIntent = \Stripe\PaymentIntent::create([
                     'amount' => $stripeAmount,
                     'currency' => 'eur',
+                    'description' => $nevent,
                     'customer' => $dpuser->stripe_id,
                     'payment_method_types' => ['sepa_debit'],
                     'metadata' => ['integration_check' => 'sepa_debit_accept_a_payment'],
@@ -2181,7 +2183,8 @@ class CartController extends Controller
 
                 if( (is_array($paymentIntent)  &&  $paymentIntent['status'] == 'requires_payment_method' ) || (isset($paymentIntent) && $paymentIntent->status == 'requires_payment_method')) {
 
-                    $this->createTransaction($dpuser, $pay_seats_data, $installments, $cart, $bd, $ev,$couponCode,$namount, $pay_bill_data, $paymentIntent,$eventC);
+                    $status = 2;
+                    $this->createTransaction($dpuser, $pay_seats_data, $installments, $cart, $bd, $ev,$couponCode,$namount, $pay_bill_data, $paymentIntent,$eventC,$status);
                    
                     Session::put('payment_method_is_sepa',true);
                 

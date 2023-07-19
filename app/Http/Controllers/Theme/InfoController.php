@@ -187,7 +187,9 @@ class InfoController extends Controller
 
 	        if ($transaction) {
 
-	    		$this->createUsersFromTransaction($transaction);
+                $sepa = Session::has('payment_method_is_sepa') ? true : false;
+
+	    		$this->createUsersFromTransaction($transaction, $sepa);
 
 			}
 	    }
@@ -372,7 +374,7 @@ class InfoController extends Controller
         return view('theme.cart.cart', $data);
     }
 
-    public function createUsersFromTransaction($transaction)
+    public function createUsersFromTransaction($transaction, $sepa = false)
     {
     	/*
     	1. Knowcrunch Student ID
@@ -566,14 +568,14 @@ class InfoController extends Controller
                     $thisevent->users()->wherePivot('user_id',$checkemailuser->id)->detach();
                     if($tickettypedrop == 7){
                         //$tmp = EventStudent::firstOrCreate(['event_id' => $evid, 'student_id' => $checkemailuser->id, 'trans_id' => $transaction->id,'comment'=>'unilever']);
-                        $thisevent->users()->save($checkemailuser,['comment'=>'unilever','expiration'=>$expiration_date,'paid'=>true,'payment_method'=>$paymentMethodId]);
+                        $thisevent->users()->save($checkemailuser,['comment'=>'unilever','expiration'=>$expiration_date,'paid'=>!$sepa,'payment_method'=>$paymentMethodId]);
                     }else{
 
                         if($transaction->coupon_code != ''){
                             //$tmp = EventStudent::firstOrCreate(['event_id' => $evid, 'student_id' => $checkemailuser->id, 'trans_id' => $transaction->id,'comment'=>'coupon']);
-                            $thisevent->users()->save($checkemailuser,['comment'=>'coupon','expiration'=>$expiration_date,'paid'=>true,'payment_method'=>$paymentMethodId]);
+                            $thisevent->users()->save($checkemailuser,['comment'=>'coupon','expiration'=>$expiration_date,'paid'=>!$sepa,'payment_method'=>$paymentMethodId]);
                         }else{
-                            $thisevent->users()->save($checkemailuser,['expiration'=>$expiration_date,'paid'=>true,'payment_method'=>$paymentMethodId]);
+                            $thisevent->users()->save($checkemailuser,['expiration'=>$expiration_date,'paid'=>!$sepa,'payment_method'=>$paymentMethodId]);
                         }
 
                     }
@@ -793,13 +795,13 @@ class InfoController extends Controller
                 }
 
                 if($tickettypedrop == 7){
-                        $thisevent->users()->save($user,['comment'=>'unilever','expiration'=>$expiration_date,'paid'=>true,'payment_method'=>$paymentMethodId]);
+                        $thisevent->users()->save($user,['comment'=>'unilever','expiration'=>$expiration_date,'paid'=>!$sepa,'payment_method'=>$paymentMethodId]);
                 }else{
 
                     if($transaction->coupon_code != ''){
-                        $thisevent->users()->save($user,['comment'=>'coupon','expiration'=>$expiration_date,'paid'=>true,'payment_method'=>$paymentMethodId]);
+                        $thisevent->users()->save($user,['comment'=>'coupon','expiration'=>$expiration_date,'paid'=>!$sepa,'payment_method'=>$paymentMethodId]);
                     }else{
-                        $thisevent->users()->save($user,['expiration'=>$expiration_date,'paid'=>true,'payment_method'=>$paymentMethodId]);
+                        $thisevent->users()->save($user,['expiration'=>$expiration_date,'paid'=>!$sepa,'payment_method'=>$paymentMethodId]);
                     }
 
                 }
