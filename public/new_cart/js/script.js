@@ -1,5 +1,6 @@
 $(document).ready(function() {
     $('.radio-group .custom-radio .custom-control-input').click(function() {
+      console.log('fsdf2');
         $('.radio-group .custom-radio p').removeClass('active');
         $(this).next('p').addClass('active');
     });
@@ -22,6 +23,19 @@ $(document).ready(function() {
     $('form').on('click', '.remove-participant', function() {
         $('.remove-participant').closest('form').find('.form-wrp').not(':first').last().remove();
     });
+
+
+    $('.payment-method .custom-control-input').click(function() {
+
+      $('.payment-method').prop('checked', false);
+      $(this).parent().find('.payment-method').prop('checked', true);
+
+      $('.card-info1').addClass('payment-method-hidden');
+      $(this).parent().find('.card-info1').removeClass('payment-method-hidden');
+
+  });
+
+
 });
 
 

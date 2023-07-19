@@ -197,6 +197,10 @@ footer .bank-details{background-color:#ededed;padding:2.5em 0;}
 .custom-radio .custom-control-input:checked~.custom-control-label::before{background-color:#ffffff;border:1px solid #419cff;}
 .custom-radio .custom-control-input:checked~.custom-control-label::after{background-image:none;}
 .custom-radio .custom-control-input:checked~.custom-control-label + p {color: #5dabff;}
+
+.payment-method-hidden{display: none;}
+
+.payment-method .custom-control-input:checked~.custom-control-label + p {color: #5dabff;}
 label.custom-control-label{font-size:19px;}
 .custom-control.custom-radio p{font-size:25px;line-height:1.4em;margin-left: 10px;}
 .custom-radio.active label.custom-control-label{color:#419cff;}

@@ -134,13 +134,6 @@
   }
 }
 
-@media only screen and (max-width: 993px) {
-	#payment-form {
-  		min-width: 312px;
- 
-	}
-}
-
 @media only screen and (max-width: 600px) {
   form {
     width: 80vw;
@@ -238,149 +231,108 @@
 
 						</div>
 
-
-						<div class="radio-group">
-						<h2>Card Information</h2>
-							<div class="custom-control custom-radio mb-3">
-								
-								<div class="card-info payment-method">
-							
-									<input type="radio" id="customRadioPayment0" name="paymentmethod" value="5" checked="" class="custom-control-input payment-method">
-									<label class="custom-control-label" for="customRadioPayment0"></label>
-									<p>Card</p>
-									<div class="card-input card-info1">
-    		                		    <div id="card-element"></div>
-
-
-									</div>
-
-									<p class="card-info1">We do not store your card’s information.</p>
-									<div class="form-row my-5 align-items-center prev-next-wrap card-info1">
-										
-										<button id="pay-now" type="button" class="btn btn-3 checkout-button-primary ">Pay now</button>
-									</div>
-								</div>
+						<div class="card-info">
+							<!-- <div id="payment-request-button"></div> -->
+							<!-- <div id="error-message"></div> -->
+							<div id="payment-request-button">
+							<!-- A Stripe Element will be inserted here. -->
 							</div>
-
-							<div class="custom-control custom-radio mb-3">
-								
-								<div class="card-info payment-method">
-							
-								<input type="radio" id="customRadioPayment1" name="paymentmethod" value="6"  class="custom-control-input payment-method">
-									<label class="custom-control-label" for="customRadioPayment1"></label>
-									<p >Google/Apple Pay</p>
-									<div class="card-info card-info1 payment-method-hidden">
-							
-										<div id="payment-request-button">
-										<!-- A Stripe Element will be inserted here. -->
-										</div>
-										<hr>
-									</div>
-								</div>
-							</div>
-
-							
-
+							<hr>
 						</div>
-
 						
-						
-    		            <input type="hidden" id="payment_method_id" name="payment_method_id" value="{{$pay_methods['id']}}">
-						<input type="hidden" id="payment_method" name="payment_method" value="">
-					</form>
-
-
-
-					<div class="radio-group">
-					<div class="custom-control custom-radio mb-3">
+						<div class="card-info">
+							
+							<h2>Card information</h2>
+							
+							<div class="card-input">
+    		                    <div id="card-element"></div>
+							
 								
-								<div class="card-info payment-method">
-							
-									<input type="radio" id="customRadioPayment2" name="paymentmethod" value="7"  class="custom-control-input payment-method">
-									<label class="custom-control-label" for="customRadioPayment2"></label>
-									<p >SEPA</p>
-									<div class="card-info card-info1 payment-method-hidden">
-							
-										<form action="/charge" method="post" id="payment-form">
-											<div class="form-row inline">
-												<div class="col">
-												<label for="accountholder-name">
-													Name
-												</label>
-												<input
-													id="accountholder-name"
-													name="accountholder-name"
-													placeholder="Cardholder Name"
-													required
-												/>
-												</div>
-				
-												<div class="col">
-												<label for="email">
-													Email Address
-												</label>
-												<input
-													id="email"
-													name="email"
-													type="email"
-													placeholder="email"
-													value="{{$pay_seats_data['emails'][0]}}"
-													required
-												/>
-												</div>
-											</div>
-				
-											<div class="form-row">
-												<!--
-												Using a label with a for attribute that matches the ID of the
-												Element container enables the Element to automatically gain focus
-												when the customer clicks on the label.
-												-->
-												<label for="iban-element1">
-												IBAN
-												</label>
-												<div id="iban-element">
-												<!-- A Stripe Element will be inserted here. -->
-												</div>
-											</div>
-				
-											<!-- Add the client_secret from the PaymentIntent as a data attribute   -->
-											<button type="button" id="submit-button" data-secret="">Submit Payment</button>
-				
-											<!-- Display mandate acceptance text. -->
-											<div id="mandate-acceptance">
-												By providing your payment information and confirming this payment, you
-												authorise (A) asd and Stripe, our payment service provider
-												and/or PPRO, its local service provider, to send instructions to your
-												bank to debit your account and (B) your bank to debit your account in
-												accordance with those instructions. As part of your rights, you are
-												entitled to a refund from your bank under the terms and conditions of
-												your agreement with your bank. A refund must be claimed within 8 weeks
-												starting from the date on which your account was debited. Your rights
-												are explained in a statement that you can obtain from your bank. You
-												agree to receive notifications for future debits up to 2 days before
-												they occur.
-											</div>
-											<!-- Used to display form errors. -->
-											<div id="error-message" role="alert"></div>
-										</form>
-									</div>
-								</div>
 							</div>
 
-					</div>
-
-					<div class="card-info">
-							
-							
+							<p>We do not store your card’s information.</p>
 							<div class="form-row my-5 align-items-center prev-next-wrap">
 								<div class="d-flex align-items-center previous-participant-link">
 									<img src="{{cdn('new_cart/images/arrow-previous-green.svg')}}" width="20px" height="12px" class="without-hover" alt="">
 									<img src="{{cdn('new_cart/images/arrow-previous-green2.svg')}}" width="20px" height="12px" class="with-hover" alt="">
 									<a href="/billing" class="link-color">Previous: Billing</a>
 								</div>
+								<button id="pay-now" type="button" class="btn btn-3 checkout-button-primary">Pay now</button>
 							</div>
 						</div>
+    		            <input type="hidden" id="payment_method_id" name="payment_method_id" value="{{$pay_methods['id']}}">
+						<input type="hidden" id="payment_method" name="payment_method" value="">
+					</form>
+
+
+
+				<hr>
+
+				<form action="/charge" method="post" id="payment-form">
+					<div class="form-row inline">
+						<div class="col">
+						<label for="accountholder-name">
+							Name
+						</label>
+						<input
+							id="accountholder-name"
+							name="accountholder-name"
+							placeholder="Cardholder Name"
+							required
+						/>
+						</div>
+
+						<div class="col">
+						<label for="email">
+							Email Address
+						</label>
+						<input
+							id="email"
+							name="email"
+							type="email"
+							placeholder="email"
+							value="{{$pay_seats_data['emails'][0]}}"
+							required
+						/>
+						</div>
+					</div>
+
+					<div class="form-row">
+						<!--
+						Using a label with a for attribute that matches the ID of the
+						Element container enables the Element to automatically gain focus
+						when the customer clicks on the label.
+						-->
+						<label for="iban-element1">
+						IBAN
+						</label>
+						<div id="iban-element">
+						<!-- A Stripe Element will be inserted here. -->
+						</div>
+					</div>
+
+					<!-- Add the client_secret from the PaymentIntent as a data attribute   -->
+					<button id="submit-button" data-secret="">Submit Payment</button>
+
+					<!-- Display mandate acceptance text. -->
+					<div id="mandate-acceptance">
+						By providing your payment information and confirming this payment, you
+						authorise (A) asd and Stripe, our payment service provider
+						and/or PPRO, its local service provider, to send instructions to your
+						bank to debit your account and (B) your bank to debit your account in
+						accordance with those instructions. As part of your rights, you are
+						entitled to a refund from your bank under the terms and conditions of
+						your agreement with your bank. A refund must be claimed within 8 weeks
+						starting from the date on which your account was debited. Your rights
+						are explained in a statement that you can obtain from your bank. You
+						agree to receive notifications for future debits up to 2 days before
+						they occur.
+					</div>
+					<!-- Used to display form errors. -->
+					<div id="error-message" role="alert"></div>
+				</form>
+
+
 
 
 
