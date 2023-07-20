@@ -28,14 +28,28 @@ class WebhookController extends BaseWebhookController
 		//Log::info(var_export($payload, true));
 		//Log::info(var_export($payload, true));
 		if(isset($payload['data']['object']['metadata']['integration_check']) && $payload['data']['object']['metadata']['integration_check'] == 'sepa_debit_accept_a_payment' && $payload['data']['object']['paid'] === true && $payload['data']['object']['failure_code'] == NULL){
-			Log::info('HAS SEPA DATA IS NOW AVAILABLE');
+			//Log::info('HAS SEPA DATA IS NOW AVAILABLE');
 
 			$paymentIntent = $payload['data']['object']['payment_intent'];
+			$transaction = Transaction::with('user')->where('payment_response','LIKE','%'.$paymentIntent.'%')->first();
+			$event = $transaction->event()->first();
 
-			//$user = $this->getUserByStripeId($payload['data']['object']['customer']);
+			foreach($transaction->user as $user){
+				//Log::info('user id: '.$user->id);
 
-			$transaction = Transaction::whereJsonContains('payment_response->id',$paymentIntent)->first();
-			Log::info(var_export($transaction, true));
+				$event->users()->updateExistingPivot($user->id, array('paid' => 1), false);
+
+                // $ev->pivot->paid = 1;
+                // $ev->pivot->save();
+			}
+
+			$transaction->status = 1; //Completed = 1
+			$transaction->save();
+
+
+			// Log::info('TRANSACTION');
+			// Log::info(var_export($transaction, true));
+			
 		}
 	}
 
