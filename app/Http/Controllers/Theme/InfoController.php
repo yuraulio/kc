@@ -189,8 +189,8 @@ class InfoController extends Controller
 
                 $sepa = Session::has('payment_method_is_sepa') ? true : false;
 
-	    		$this->createUsersFromTransaction($transaction, $sepa);
-
+                $this->createUsersFromTransaction($transaction, $sepa);
+                
 			}
 	    }
 
@@ -821,7 +821,10 @@ class InfoController extends Controller
 
         $paymentMethod = PaymentMethod::find($paymentMethodId);
 
-        $this->sendEmails($transaction, $emailsCollector, $extrainfo, $helperdetails, $elearning, $eventslug, $stripe,$billingEmail,$paymentMethod);
+        if(!$sepa){
+            $this->sendEmails($transaction, $emailsCollector, $extrainfo, $helperdetails, $elearning, $eventslug, $stripe,$billingEmail,$paymentMethod);
+        }
+
 
     }
 

@@ -23,6 +23,28 @@ use Illuminate\Support\Facades\Log;
 
 class WebhookController extends BaseWebhookController
 {
+	public function handleChargeDisputeCreated(array $payload){
+
+		//TODO
+		
+		//(1) Remove Invoice
+		//(2) Remove Event From User
+		//(3) Remove Transaction
+		
+		//Log::info(var_export($payload, true));
+		$paymentIntent = $payload['data']['object']['payment_intent'];
+
+		$transaction = Transaction::with('user')->where('payment_response','LIKE','%'.$paymentIntent.'%')->first();
+		$event = $transaction->event()->first();
+
+
+		$transaction->invoice()->delete();
+		$event->users()->detach();
+		$transaction->delete();
+
+
+		
+	}
 
 	public function handleChargeSucceeded(array $payload){
 		//Log::info(var_export($payload, true));
@@ -47,9 +69,8 @@ class WebhookController extends BaseWebhookController
 			$transaction->save();
 
 
-			// Log::info('TRANSACTION');
-			// Log::info(var_export($transaction, true));
-			
+			//SEND EMAILS
+						
 		}
 	}
 
