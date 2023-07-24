@@ -222,6 +222,7 @@ class InfoController extends Controller
        Session::forget('coupon_code');
        Session::forget('coupon_price');
        Session::forget('priceOf');
+       Session::forget('payment_method_is_sepa');
         ///dd($data);
 
 
@@ -231,26 +232,7 @@ class InfoController extends Controller
             $_SESSION["thankyouData"] = $data;
             return redirect('/thankyou');
         	//return view('theme.cart.new_cart.thank_you', $data);
-        }
-        else if(Session::has('payment_method_is_sepa')){
-
-            Session::forget('ppayment_method_is_sepa');
-
-            $data['info']['success'] = true;
-            $data['info']['title'] = __('thank_you_page.title');
-            $data['info']['message'] = __('thank_you_page.message');
-            $data['info']['statusClass'] = 'success';
-            $data['event'] = [];
-            $data['event']['title'] = '';
-            $data['event']['facebook'] = '';
-            $data['event']['twitter'] = '';
-            $data['event']['linkedin'] = '';
-            $data['event']['slug'] = '';
-            
-
-            return view('theme.cart.new_cart.thank_you_sepa', $data);
-        }
-        else {
+        }else {
         	return Redirect::to('/');
         }
 
@@ -824,12 +806,16 @@ class InfoController extends Controller
         if(!$sepa){
             $this->sendEmails($transaction, $emailsCollector, $extrainfo, $helperdetails, $elearning, $eventslug, $stripe,$billingEmail,$paymentMethod);
         }
+        
+        
+        
 
 
     }
 
-    public function sendEmails($transaction, $emailsCollector, $extrainfo, $helperdetails, $elearning, $eventslug,$stripe,$billingEmail,$paymentMethod = null)
+    public function sendEmails($transaction, $emailsCollector, $extrainfo, $helperdetails, $elearning, $eventslug,$stripe,$billingEmail,$paymentMethod = null, $sepa = false)
     {
+        
        // dd($elearning);
         // 5 email, admin, user, 2 deree, darkpony
     	//$generalInfo = \Config::get('dpoptions.website_details.settings');
@@ -895,7 +881,10 @@ class InfoController extends Controller
 
 
                 $data['firstName'] = $user->firstname;
-                $user->notify(new WelcomeEmail($user,$data));
+                
+                    $user->notify(new WelcomeEmail($user,$data));
+                
+                
 
                 /*if($elearning){
                     $user->notify(new InstructionMail($data));
@@ -918,7 +907,7 @@ class InfoController extends Controller
             $data['eventTitle'] = $muser['event_title'];
 
 
-            if(Session::has('installments') && Session::get('installments') <= 1){
+            if((Session::has('installments') && Session::get('installments') <= 1 ) || $sepa){
 
 
                 $data['slugInvoice'] = encrypt($muser['id'] . '-' . $transaction->invoice->first()->id);
@@ -977,24 +966,27 @@ class InfoController extends Controller
         $transdata['installments'] = Session::has('installments') ? Session::get('installments') : 1;
         $transdata['coupon'] = $transaction->coupon_code != '' ? $transaction->coupon_code : null;
 
-        foreach ($emailsCollector as $key => $muser) {
 
-        	$transdata['user'] = $muser;
-        	$transdata['trans'] = $transaction;
-        	$transdata['extrainfo'] = $extrainfo;
-        	$transdata['helperdetails'] = $helperdetails;
+            foreach ($emailsCollector as $key => $muser) {
 
-
-            $sentadmin = Mail::send('emails.admin.admin_info_new_registration', $transdata, function ($m) use ($adminemail) {
-
-                $m->from('info@knowcrunch.com', 'Knowcrunch');
-                $m->to('info@knowcrunch.com', 'Knowcrunch');
-
-                $m->subject('Knowcrunch - New Registration');
-            });
-
-
-        }
+                $transdata['user'] = $muser;
+                $transdata['trans'] = $transaction;
+                $transdata['extrainfo'] = $extrainfo;
+                $transdata['helperdetails'] = $helperdetails;
+    
+    
+                $sentadmin = Mail::send('emails.admin.admin_info_new_registration', $transdata, function ($m) use ($adminemail) {
+    
+                    $m->from('info@knowcrunch.com', 'Knowcrunch');
+                    $m->to('info@knowcrunch.com', 'Knowcrunch');
+    
+                    $m->subject('Knowcrunch - New Registration');
+                });
+    
+    
+            }
+        
+        
 
     }
 }

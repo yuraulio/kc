@@ -23,6 +23,23 @@ use Illuminate\Support\Facades\Log;
 
 class WebhookController extends BaseWebhookController
 {
+
+	public function handleChargeFailed(array $payload){
+		// Log::info('failed');
+		// Log::info(var_export($payload, true));
+		if(isset($payload['data']['object']['metadata']['integration_check']) && $payload['data']['object']['metadata']['integration_check'] == 'sepa_debit_accept_a_payment' && $payload['data']['object']['paid'] === true && $payload['data']['object']['failure_code'] != NULL){
+			$paymentIntent = $payload['data']['object']['payment_intent'];
+
+			$transaction = Transaction::with('user')->where('payment_response','LIKE','%'.$paymentIntent.'%')->first();
+			$event = $transaction->event()->first();
+	
+	
+			$transaction->invoice()->delete();
+			$event->users()->detach();
+			$transaction->delete();
+		}
+	}
+
 	public function handleChargeDisputeCreated(array $payload){
 
 		//TODO
@@ -70,6 +87,9 @@ class WebhookController extends BaseWebhookController
 
 
 			//SEND EMAILS
+
+			$data = loadSendEmailsData($transaction);
+			app('App\Http\Controllers\Theme\InfoController')->sendEmails($data['transaction'], $data['emailsCollector'], $data['extrainfo'], $data['helperdetails'], $data['elearning'], $data['eventslug'], $data['stripe'],$data['billingEmail'],$data['paymentMethod'], $sepa = true);
 						
 		}
 	}

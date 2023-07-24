@@ -17,7 +17,283 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Coderjerk\BirdElephant\BirdElephant;
 use Illuminate\Support\Facades\Http;
+use App\Model\Event;
+use App\Model\User;
+use App\Model\CookiesSMS;
 
+
+if(!function_exists('loadSendEmailsData')){
+    function loadSendEmailsData($transaction){
+
+        Log::info(var_export($transaction, true));
+        $data = [];
+
+        $pay_seats_data = $transaction['status_history'][0]['pay_seats_data'];
+        $billDet = json_decode($transaction['billing_details'],true);
+        $billingEmail = isset( $billDet['billemail']) &&  $billDet['billemail'] != '' ?  $billDet['billemail'] : false;
+        if(isset($transaction['status_history'][0]['deree_user_data'])) {
+            $deree_user_data = $transaction['status_history'][0]['deree_user_data'];
+        }
+        else {
+                $deree_user_data = [];
+        }
+
+        if (isset($transaction->status_history[0]['cart_data'])) {
+            $cart = $transaction->status_history[0]['cart_data'];
+
+            foreach ($cart as $akey => $avalue) {
+                $evid = $avalue['options']['event'];
+            }
+            //get event name and date from cart
+            $thisevent = Event::where('id', '=', $evid)->first();
+
+            $elearning = false;
+            if ($thisevent) {
+                $paymentMethodId = $thisevent->paymentMethod->first() ? $thisevent->paymentMethod->first()->id : 0;
+                $stripe = ($thisevent->paymentMethod->first() && $thisevent->paymentMethod->first()->id !== 1);
+                if($thisevent->view_tpl === 'elearning_event'){
+
+                    $elearning = true;
+                    $eventslug = $thisevent->slug;
+
+                    $eventname = $thisevent->title;
+                    $eventcity = '';
+                    if($thisevent->city->first() != null){
+                        $eventcity = $thisevent->city->first()->name;
+                    }
+                }else{
+                    $eventname = 'EventName';
+                    $eventdate = '';
+    
+                    $eventcity  = 'EventCity';
+                }
+            }
+
+        }
+
+        if (isset($transaction->status_history[0]['cart_data'])) {
+
+            $cart = $transaction->status_history[0]['cart_data'];
+
+            foreach ($cart as $akey => $avalue) {
+                $evid = $avalue['options']['event'];
+                $tickettypedrop = $avalue['options']['type'];
+                $ticketid = $avalue['id'];
+                if ($evid && $evid > 0) {
+                    break;
+                }
+            }
+
+
+
+            //get event name and date from cart
+            $thisevent = Event::where('id', '=', $evid)->first();
+
+
+
+            $specialseats = 0;
+            $thisticket = $thisevent->ticket->where('ticket_id', $ticketid)->first();
+            $tickettypename = $thisticket->type; // e.g. Early Birds
+
+            $eventname = '';
+            $eventdate = '';
+            $eventcity  = '';
+            $elearning = false;
+            $expirationDate = '';
+            $eventslug = '';
+            $stripe = false;
+            $paymentMethodId = 0;
+
+            if ($thisevent) {
+
+                $paymentMethodId = $thisevent->paymentMethod->first() ? $thisevent->paymentMethod->first()->id : 0;
+                $stripe = ($thisevent->paymentMethod->first() && $thisevent->paymentMethod->first()->id !== 1);
+                if($thisevent->view_tpl === 'elearning_event'){
+
+                    $elearning = true;
+                    $eventslug = $thisevent->slug;
+                }else{
+
+                }
+              //  dd($eventslug);
+                $eventname = $thisevent->title;
+                $eventcity = '';//$thisevent->categories->where('parent_id',9)->first()->name;
+                //$eventdate = $thisevent->summary1->where('section','date')->first() ? $thisevent->summary1->where('section','date')->first()->title : '';
+
+
+                /*$visibleDates = isset($eventInfo['inclass']['dates']['visible']['emails']) ? $eventInfo['inclass']['dates']['visible']['emails'] : null;
+                if($visibleDates){
+                    $eventdate = isset($eventInfo['inclass']['dates']['text']) ? $eventInfo['inclass']['dates']['text'] : null;
+                }*/
+
+
+                if($thisevent->city->first() != null){
+                    $eventcity = $thisevent->city->first()->name;
+                }
+
+            }
+            else {
+                $eventname = 'EventName';
+                $eventdate = '';
+
+                $eventcity  = 'EventCity';
+            }
+        }
+
+        //Collect all users from seats
+        $newmembersdetails = [];
+        //dd($pay_seats_data['emails']);
+        foreach ($pay_seats_data['emails'] as $key => $value) {
+
+    		$thismember = [];
+    		$thismember['firstname'] = $pay_seats_data['names'][$key];
+    		$thismember['lastname'] = $pay_seats_data['surnames'][$key];
+    		$thismember['email'] = $pay_seats_data['emails'][$key];
+
+            if(isset($deree_user_data[$value])) {
+                $thismember['password'] = $deree_user_data[$value];
+            }
+            else {
+                $thismember['password'] = $thismember['email'] . '-knowcrunch';
+            }
+
+            $thismember['mobile'] = $pay_seats_data['mobiles'][$key];
+            $thismember['country_code'] = $pay_seats_data['countryCodes'][$key];
+
+            $thismember['job_title'] = '';
+            $thismember['company'] = '';
+
+            if(isset($pay_seats_data['jobtitles'][$key])){
+                $thismember['job_title'] = $pay_seats_data['jobtitles'][$key];
+            }
+
+            if(isset($pay_seats_data['companies'][$key])){
+                    $thismember['company'] = $pay_seats_data['companies'][$key];
+            }
+
+            if(isset($pay_seats_data['afms'][$key]))
+                $thismember['afm'] = $pay_seats_data['afms'][$key];
+
+            if(isset($pay_seats_data['cities'][$key]))
+                $thismember['city'] = $pay_seats_data['cities'][$key];
+
+    		$checkemailuser = User::where('email', '=', $thismember['email'])->first();
+            $expiration_date = '';
+    		if ($checkemailuser) {
+                //if(!$elearning){
+                    //$transaction->user()->save($checkemailuser);
+                //}
+
+                //if($elearning){
+                    $invoice = $transaction->invoice()->first();
+                    if($invoice){
+                        //$invoice->user()->save($checkemailuser);
+
+                    }
+                //}
+                //SHOULD but back used deree id?
+
+                $fullname = $checkemailuser->firstname . ' ' . $checkemailuser->lastname;
+                $firstname = $checkemailuser->firstname;
+
+
+
+                //Update user details with the given ones
+
+                $checkemailuser->firstname = $thismember['firstname'];
+                $checkemailuser->lastname = $thismember['lastname'];
+                $checkemailuser->mobile = $thismember['mobile'];
+                $checkemailuser->country_code = $thismember['country_code'];
+                $checkemailuser->job_title = isset($thismember['job_title']) ? $thismember['job_title'] : '';
+                $checkemailuser->company = isset($thismember['company']) ? $thismember['company'] : '';
+                $checkemailuser->city = isset($thismember['city']) ? $thismember['city'] : '';
+
+
+                if(isset($thismember['afm']))
+                    $checkemailuser->afm = $thismember['afm'];
+
+                if($checkemailuser->partner_id == '' && isset($deree_user_data[$value]))
+                    $checkemailuser->partner_id = $deree_user_data[$value];
+
+                
+
+                //$checkemailuser->save();
+                $creatAccount = false;
+
+                if($checkemailuser->statusAccount && !$checkemailuser->statusAccount->completed){
+
+                    $creatAccount = true;
+
+
+                    $cookieValue = base64_encode($checkemailuser->id . date("H:i"));
+                    setcookie('auth-'.$checkemailuser->id, $cookieValue, time() + (1 * 365 * 86400), "/"); // 86400 = 1 day
+
+                    $coockie = new CookiesSMS;
+                    $coockie->coockie_name = 'auth-'.$checkemailuser->id;
+                    $coockie->coockie_value = $cookieValue;
+                    $coockie->user_id = $checkemailuser->id;
+                    $coockie->sms_code = -1;
+                    $coockie->sms_verification = true;
+
+                    $coockie->save();
+
+                }
+
+
+                $emailsCollector[] = ['email' => $checkemailuser->email, 'name' => $fullname, 'first' => $firstname,'id' => $checkemailuser->id,
+                    'mobile' => $checkemailuser->mobile, 'company' => $checkemailuser->company, 'jobTitle' => $checkemailuser->job_title,'createAccount'=>$creatAccount];
+
+
+    		}
+    		else{
+
+    			$newmembersdetails[] = $thismember;
+    			$fullname = $thismember['firstname'] . ' ' . $thismember['lastname'];
+    			$firstname = $thismember['firstname'];
+                $emailsCollector[] = ['id' => null, 'email' => $thismember['email'], 'name' => $fullname, 'first' => $firstname, 'company' => $thismember['company'], 'first' => $firstname,
+                    'mobile' => $thismember['mobile'], 'jobTitle' => $thismember['job_title'],'createAccount'=>true
+                ];
+
+
+    		}
+        }
+
+        $groupEmailLink = $thisevent && $thisevent->fb_group ? $thisevent->fb_group : '';
+
+		$extrainfo = [$tickettypedrop, $tickettypename, $eventname, $eventdate, $specialseats, 'YES',$eventcity,$groupEmailLink,$expiration_date];
+
+        //Create new collected users
+
+        $helperdetails = [];
+
+        foreach ($newmembersdetails as $key => $member) {
+
+            $user = User::whereEmail($member['email'])->first();
+
+            $helperdetails[$user->email] = ['kcid' => $user->kc_id, 'deid' => $user->partner_id, 'stid' => $user->student_type_id, 'jobtitle' => $user->job_title, 'company' => $user->company, 'mobile' => $user->mobile];
+
+        }
+
+        //$this->sendEmails($transaction, $emailsCollector, $extrainfo, $helperdetails, $elearning, $eventslug, $stripe,$billingEmail,$paymentMethod);
+        
+        $paymentMethod = PaymentMethod::find($paymentMethodId);
+
+        $data['transaction'] = $transaction;
+        $data['emailsCollector'] = $emailsCollector;
+        $data['extrainfo'] = $extrainfo;
+        $data['helperdetails'] = $helperdetails;
+        $data['elearning'] = $elearning;
+        $data['eventslug'] = $eventslug;
+        $data['stripe'] = $stripe;
+        $data['billingEmail'] = $billingEmail;
+        $data['paymentMethod'] = $paymentMethod;
+
+
+
+
+        return $data;
+    }
+}
 
 if(!function_exists('request_access_token')){
     function request_access_token($token, $verifier){

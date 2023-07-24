@@ -540,7 +540,7 @@ class ExamAttemptController extends Controller
             $certificate = $event->certificatesByUser($user->id)[0];
             $data['certificate'] = $certificate;
         }
-
+        
         return view('exams.results',$data);
 
     }
