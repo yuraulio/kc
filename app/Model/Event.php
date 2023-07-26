@@ -284,7 +284,7 @@ class Event extends Model
 
     public function users_with_transactions()
     {
-        return $this->belongsToMany(User::class, 'event_user')->select('event_user.user_id as id','firstname', 'lastname', 'email', 'mobile')->with('transactions')->withPivot('expiration','payment_method', 'paid');
+        return $this->belongsToMany(User::class, 'event_user')->select('event_user.user_id as id','firstname', 'lastname', 'email', 'mobile')->with('transactions')->withPivot('expiration','payment_method', 'paid', 'comment');
     }
 
     public function usersPaid()

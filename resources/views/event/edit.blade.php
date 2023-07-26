@@ -4388,7 +4388,7 @@ var datePickerOptions = {
                 let incomeInstalments = stats.incomeInstalments;
                 let active = stats.active;
 
-                $('#student_total').text(count.total)
+                $('#student_total').text(count.totalWithoutEnrollForFree)
                 $('#students_paid').text(count.regular + count.special + count.alumni + count.early)
                 $('#students_free').text(count.free)
 

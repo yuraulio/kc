@@ -76,6 +76,12 @@ class StudentExport implements FromArray,WithHeadings, ShouldAutoSize
             $datePlaced = '';
             $status = '';
 
+            $enrollfromOtherEventPivot = $user->events_for_user_list1()->wherePivot('event_id',$this->event->id)->first();
+
+            if($enrollfromOtherEventPivot && str_contains($enrollfromOtherEventPivot->pivot->comment, 'enroll from')){
+                continue;
+            }
+
 
             $transaction = $this->event->transactionsByUserNew($user->id)->first();
 
