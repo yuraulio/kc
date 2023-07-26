@@ -45,6 +45,14 @@ a.cert-post{
     font-size: 25px;
 }
 
+a:disabled,
+a[disabled]{
+  border: 1px solid #999999;
+  background-color: #cccccc;
+  color: #666666;
+  pointer-events: none;
+}
+
 .hero-message .students {
     color: rgb(214, 184, 15);
     font-size: 20px;
