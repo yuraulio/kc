@@ -23,9 +23,9 @@
                            
                         </div>
                   
-                        {{--<div class="text-right">
+                        <div class="text-right">
                            <button type="submit" class="btn btn-success mt-4">{{ __('Save') }}</button>
-                        </div>--}}
+                        </div>
                      </div>
 
    @include('alerts.feedback', ['field' => 'metas'])
