@@ -153,6 +153,10 @@ class ExamAttemptController extends Controller
 
             $getSyncData = ExamSyncData::where(['exam_id' => $exam_id, 'user_id' => $st_id])->value('id');
 
+            if($getSyncData && $request->init){
+                return false;
+            }
+
 
             if(isset($getSyncData) && !empty($getSyncData)) {
 

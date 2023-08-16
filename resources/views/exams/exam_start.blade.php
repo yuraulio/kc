@@ -1181,34 +1181,10 @@ window.actQues = 0;
 
 
 <script>
+    var isOnline = 1;
 
-    jQuery( document ).ready(function() {
-
-        $('.time_remaining_header').removeAttr('hidden')
-
-        window.actQues = <?php echo $activeQuestion; ?>;
-        var eJson = JSON.parse( window.examVar );
-        var showx = 0;
-        var currQues = window.actQues;
-        var firstQues = 0;
-        var lastQues = 0;
-        var isOnline = 1;
-        jQuery.each(eJson, function(index, quest) {
-            if(firstQues==0) {
-                firstQues = quest.id;
-            }
-            lastQues = quest.id;
-        });
-        if(currQues==firstQues) {
-            jQuery('.prev').addClass('hide');
-        }
-        if(currQues==lastQues) {
-         //   jQuery('.next').addClass('hide');
-        }
-        showSpecificQuestion(<?php echo $activeQuestion; ?>);
-        setInterval(function(){
-
-            var retrievedObject = localStorage.getItem('examStorage<?php echo $exam->id;?>-{{$user_id}}');
+    function syncData(init = false){
+        var retrievedObject = localStorage.getItem('examStorage<?php echo $exam->id;?>-{{$user_id}}');
             var startTime = localStorage.getItem("examStart<?php echo $exam->id;?>-{{$user_id}}");
             jQuery.ajaxSetup({
                 headers: {
@@ -1278,11 +1254,43 @@ window.actQues = 0;
                 jQuery.ajax({
                 method: "POST",
                 url: "{{ route('sync-data') }}",
-                data: { examJson: retrievedObject, start_time: startTime, student_id: {{$user_id}}, exam_id: {{$exam->id}} },
+                data: { examJson: retrievedObject, start_time: startTime, student_id: {{$user_id}}, exam_id: {{$exam->id}}, init: init },
                 success: function() {
                 }
                 });
             }
+    }
+
+    jQuery( document ).ready(function() {
+
+        $('.time_remaining_header').removeAttr('hidden')
+
+        window.actQues = <?php echo $activeQuestion; ?>;
+        var eJson = JSON.parse( window.examVar );
+        var showx = 0;
+        var currQues = window.actQues;
+        var firstQues = 0;
+        var lastQues = 0;
+        
+        jQuery.each(eJson, function(index, quest) {
+            if(firstQues==0) {
+                firstQues = quest.id;
+            }
+            lastQues = quest.id;
+        });
+        if(currQues==firstQues) {
+            jQuery('.prev').addClass('hide');
+        }
+        if(currQues==lastQues) {
+         //   jQuery('.next').addClass('hide');
+        }
+        showSpecificQuestion(<?php echo $activeQuestion; ?>);
+
+        // otan yparxei orisma true sthn syncData tote kanoyme initialize ston pinaka
+        syncData(true);
+        setInterval(function(){
+            syncData()
+           
         }, 1000 * 60);
     });
 
