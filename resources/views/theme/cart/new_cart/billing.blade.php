@@ -27,7 +27,7 @@
 							<p class="validation-info">Fields marked with an asterisk <span class="checkout-required-data">(*)</span> are required.</p>
 							<div class="form-row">
 								<div class="col-md-12 mb-4">
-									<label class="input-label">Company name (for invoice) or personal full name (for receipt) <span class="checkout-required-data">(*)</span> </label>
+									<label class="input-label">Business name or personal name for the invoice <span class="checkout-required-data">(*)</span> </label>
 									<input type="text" name="billname" class="form-control" value="{{old('billname',$billname)}}" placeholder="" aria-describedby="inputGroupPrepend3" required="">
 								</div>
 							</div>

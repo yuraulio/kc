@@ -929,7 +929,7 @@
                         <h6 class="heading-small text-muted mb-4">{{ __('Student receipt details') }}</h6>
 
                         <div class="form-group{{ $errors->has('billname') ? ' has-danger' : '' }}">
-                            <label class="form-control-label" for="input-billname">{{ __('Company name (for invoice) or personal full name (for receipt) ') }}</label>
+                            <label class="form-control-label" for="input-billname">{{ __('Business name or personal name for the invoice ') }}</label>
                             <input type="text" name="billname" id="input-billname" class="form-control{{ $errors->has('billname') ? ' is-invalid' : '' }}" placeholder="{{ __('Firstname') }}" value="{{ (isset($receipt['billname']) ) ? $receipt['billname'] : '' }}" autofocus>
 
                             @include('alerts.feedback', ['field' => 'billname'])

@@ -210,7 +210,17 @@ class CMS
         $data['elearningFree'] = [];
         $data['inclassFree'] = [];
 
-        $categories = Category::with('slugable', 'events.slugable', 'events.city', 'events', 'events.mediable', 'events.event_info1')->orderBy('priority', 'asc')->get();
+        $categories = Category::with([
+            'slugable', 
+            'events.slugable', 
+            'events.city', 
+            'events', 
+            'events.mediable', 
+            'events.event_info1', 
+            'events.ticket' => function($q) {
+                $q->where('type', 'regular');
+            }
+            ])->orderBy('priority', 'asc')->get();
 
         $newCategoriesArr = [];
         //dd($categories);
@@ -256,7 +266,7 @@ class CMS
                         $data['elearningEvents'][$category['id']]['events'][] = $event;
                         $data['elearningEvents'][$category['id']]['view_tpl'] = $event['view_tpl'];
 
-                    //dd($event);
+                    //dd($event['ticket']);
                     } elseif ($event['view_tpl'] == 'event_free' || $event['view_tpl'] == 'event_free_coupon') {
                         //$event['sumStudents'] = get_sum_students_course((isset($event['category']) ? $category : null));
                         $data['inclassFree'][$category['id']]['events'][] = $event;

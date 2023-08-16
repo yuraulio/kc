@@ -107,7 +107,7 @@
                                     @elseif($event['status'] == 5)
                                         <a href="{{ $event['slugable']['slug'] }}" class="btn btn--sm btn--secondary">JOIN WAITING LIST</a>
                                     @else
-                                        <a href="{{ $event['slugable']['slug'] }}" class="btn btn--sm btn--secondary">course details</a>
+                                        <a href="{{ $event['slugable']['slug'] }}" class="btn btn--sm btn--primary">ENROLL FOR € {{ $event['ticket'][0]['price'] }} </a>
                                     @endif
                                 @endif
                             </div>
@@ -205,7 +205,7 @@
                                     @elseif($event['status'] == 5)
                                         <a href="{{ $event['slugable']['slug'] }}" class="btn btn--sm btn--secondary">JOIN WAITING LIST</a>
                                     @else
-                                        <a href="{{ $event['slugable']['slug'] }}" class="btn btn--sm btn--secondary">course details</a>
+                                        <a href="{{ $event['slugable']['slug'] }}" class="btn btn--sm btn--primary">ENROLL FOR € {{ $event['ticket'][0]['price'] }}</a>
                                     @endif
                                 @endif
                             </div>

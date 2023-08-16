@@ -52,7 +52,7 @@
 						</div>
 
 						<div class="card-info">
-							<h2>Card information</h2>
+							<h2>Payment Information</h2>
 							<div class="card-input">
     		                    <div id="card-element"></div>
 							</div>
