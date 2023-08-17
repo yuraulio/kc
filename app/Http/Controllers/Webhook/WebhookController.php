@@ -86,6 +86,7 @@ class WebhookController extends BaseWebhookController
 			$transaction->save();
 
 
+			//Log::info('PRE SEND EMAIL ');
 			//SEND EMAILS
 
 			$data = loadSendEmailsData($transaction);

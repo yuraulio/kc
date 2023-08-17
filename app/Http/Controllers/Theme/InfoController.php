@@ -28,6 +28,7 @@ use App\Notifications\WelcomeEmail;
 use App\Notifications\CourseInvoice;
 use App\Notifications\InstructionMail;
 use App\Services\FBPixelService;
+use Illuminate\Support\Facades\Log;
 
 class InfoController extends Controller
 {
@@ -905,6 +906,9 @@ class InfoController extends Controller
 
             $data['firstName'] = $muser['name'];
             $data['eventTitle'] = $muser['event_title'];
+
+            //Log::info('info controller transaction');
+            //Log::info(var_export($transaction->invoice->first(), true));
 
 
             if((Session::has('installments') && Session::get('installments') <= 1 ) || $sepa){

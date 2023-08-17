@@ -10,13 +10,13 @@
 
 
 #payment-form {
-  /* width: 100vw; */
-  /* min-width: 500px; */
+  width: 30vw;
+  min-width: 500px;
   align-self: center;
-  /* box-shadow: 0px 0px 0px 0.5px rgba(50, 50, 93, 0.1),
-    0px 2px 5px 0px rgba(50, 50, 93, 0.1), 0px 1px 1.5px 0px rgba(0, 0, 0, 0.07); */
+  box-shadow: 0px 0px 0px 0.5px rgba(50, 50, 93, 0.1),
+    0px 2px 5px 0px rgba(50, 50, 93, 0.1), 0px 1px 1.5px 0px rgba(0, 0, 0, 0.07);
   border-radius: 7px;
-  /* padding: 40px; */
+  padding: 40px;
 }
 
 .hidden {
@@ -134,6 +134,13 @@
   }
 }
 
+@media only screen and (max-width: 993px) {
+	#payment-form {
+  		min-width: 312px;
+ 
+	}
+}
+
 @media only screen and (max-width: 600px) {
   form {
     width: 80vw;
@@ -230,138 +237,153 @@
                             @endif
 
 						</div>
-						<input type="hidden" id="payment_method_id" name="payment_method_id" value="{{$pay_methods['id']}}">
+
+
+						<div class="radio-group">
+						<h2>Card Information</h2>
+							<div class="custom-control custom-radio mb-3">
+								
+								<div class="card-info payment-method">
+							
+									<input type="radio" id="customRadioPayment0" name="paymentmethod" value="5" checked="" class="custom-control-input payment-method">
+									<label class="custom-control-label" for="customRadioPayment0"></label>
+									<p>Card</p>
+									<div class="card-input card-info1">
+    		                		    <div id="card-element"></div>
+
+
+									</div>
+
+									<p class="card-info1">We do not store your card’s information.</p>
+									<div class="form-row my-5 align-items-center prev-next-wrap card-info1">
+										
+										<button id="pay-now" type="button" class="btn btn-3 checkout-button-primary ">Pay now</button>
+									</div>
+								</div>
+							</div>
+
+							<div class="custom-control custom-radio mb-3">
+								
+								<div class="card-info payment-method">
+							
+								<input type="radio" id="customRadioPayment1" name="paymentmethod" value="6"  class="custom-control-input payment-method">
+									<label class="custom-control-label" for="customRadioPayment1"></label>
+									<p >Google/Apple Pay</p>
+									<div class="card-info card-info1 payment-method-hidden">
+							
+										<div id="payment-request-button">
+										<!-- A Stripe Element will be inserted here. -->
+										</div>
+										<hr>
+									</div>
+								</div>
+							</div>
+
+							
+
+						</div>
+
+						
+						
+    		            <input type="hidden" id="payment_method_id" name="payment_method_id" value="{{$pay_methods['id']}}">
 						<input type="hidden" id="payment_method" name="payment_method" value="">
-					</form>		
+					</form>
 
-					<h2>Payment information</h2>
 
-						<div class="tab card-information flex-container">
-							<button type="button" class="tablinks btn btn-outline-primary Tab active" onclick="openPaymentMethod(event, 'card')">
-								<img src="{{cdn('new_cart/images/credit-card.svg')}}" width="30px" height="20px" class="without-hover" alt="">	
-								<p class="payment-title p-TabLabel">Card</p>	
-							</button>
-							<button type="button" class="tablinks btn btn-outline-primary Tab" onclick="openPaymentMethod(event, 'digital-wallets')">
-								<img src="{{cdn('new_cart/images/wallet.png')}}" width="30px" height="20px" class="without-hover" alt="">	
-								<p class="payment-title p-TabLabel">Wallet</p>
-							</button>
-							<button type="button" class="tablinks btn btn-outline-primary Tab" onclick="openPaymentMethod(event, 'sepa')">
-							<img src="{{cdn('new_cart/images/sepa-2.svg')}}" width="30px" height="20px" class="without-hover" alt="">	
-								<p class="payment-title p-TabLabel">SEPA</p>
-							</button>
-						</div>
 
-						<div id="card" class="tabcontent card-information" style="display:block;">
-
-							<div class="card-info">
+					<div class="radio-group">
+					<div class="custom-control custom-radio mb-3">
 								
-								<div class="card-input"><div id="card-element"></div></div>
-
-								<p>We do not store your card’s information.</p>
-								<div class="form-row my-5 align-items-center prev-next-wrap">
-									{{--<div class="d-flex align-items-center previous-participant-link">
-										<img src="{{cdn('new_cart/images/arrow-previous-green.svg')}}" width="20px" height="12px" class="without-hover" alt="">
-										<img src="{{cdn('new_cart/images/arrow-previous-green2.svg')}}" width="20px" height="12px" class="with-hover" alt="">
-										<a href="/billing" class="link-color">Previous: Billing</a>
-									</div>--}}
-									<button id="pay-now" type="button" class="btn btn-3 checkout-button-primary">Pay now</button>
-								</div>
-							</div>
-
-						</div>
-
-						<div id="digital-wallets" class="tabcontent card-information">
-
-							<!-- DIGITAL WALLETS BUTTON  START START START -->
-
-							<div class="card-info">
-								<!-- <div id="payment-request-button"></div> -->
-								<!-- <div id="error-message"></div> -->
-								<div id="payment-request-button">
-								<!-- A Stripe Element will be inserted here. -->
-								</div>
-							</div>
-
-							<!-- DIGITAL WALLETS BUTTON  END END END -->
-
-						</div>
-
-						<div id="sepa" class="tabcontent card-information">
-							<form action="/charge" method="post" class="card-info" id="payment-form">
-								
-								<div class="form-row inline">
-									<div class="col">
-									<label for="accountholder-name">
-										Name
-									</label>
-									<input
-										class="card-input-cardholder"
-										id="accountholder-name"
-										name="accountholder-name"
-										placeholder="Cardholder Name"
-										required
-									/>
-									</div>
-
-									<div class="col d-none">
-										<label for="email">
-											Email Address
-										</label>
-										<input
-											id="email"
-											name="email"
-											type="email"
-											placeholder="email"
-											value="{{$pay_seats_data['emails'][0]}}"
-											required
-										/>
-									</div>
-								</div>
-
-								<div class="form-row">
-									<div class="col">
-										<!--
-										Using a label with a for attribute that matches the ID of the
-										Element container enables the Element to automatically gain focus
-										when the customer clicks on the label.
-										-->
-										<label for="iban-element1">
-										IBAN
-										</label>
-										<div id="iban-element" class="card-input"><!-- A Stripe Element will be inserted here. --></div>
-									</div>
-
-									
-								</div>
-
-								<div class="form-row my-3 align-items-center prev-next-wrap">
-								
-									<button id="submit-button" data-secret="" class="btn btn-3 checkout-button-primary">Pay Now</button>
-								
-									<!-- Add the client_secret from the PaymentIntent as a data attribute   -->
-									
-								</div>
-
-								<!-- Display mandate acceptance text. -->
-								<div id="mandate-acceptance">
+								<div class="card-info payment-method">
 							
-								</div>
-								<!-- Used to display form errors. -->
-								<div id="error-message" role="alert"></div>
-							</form>
-						</div>
-
-
-						<div class="form-row my-5 align-items-center prev-next-wrap">
-							<div class="d-flex align-items-center previous-participant-link">
-								<img src="{{cdn('new_cart/images/arrow-previous-green.svg')}}" width="20px" height="12px" class="without-hover" alt="">
-								<img src="{{cdn('new_cart/images/arrow-previous-green2.svg')}}" width="20px" height="12px" class="with-hover" alt="">
-								<a href="/billing" class="link-color">Previous: Billing</a>
-							</div>
+									<input type="radio" id="customRadioPayment2" name="paymentmethod" value="7"  class="custom-control-input payment-method">
+									<label class="custom-control-label" for="customRadioPayment2"></label>
+									<p >SEPA</p>
+									<div class="card-info card-info1 payment-method-hidden">
 							
+										<form action="/charge" method="post" id="payment-form">
+											<div class="form-row inline">
+												<div class="col">
+												<label for="accountholder-name">
+													Name
+												</label>
+												<input
+													id="accountholder-name"
+													name="accountholder-name"
+													placeholder="Cardholder Name"
+													required
+												/>
+												</div>
+				
+												<div class="col">
+												<label for="email">
+													Email Address
+												</label>
+												<input
+													id="email"
+													name="email"
+													type="email"
+													placeholder="email"
+													value="{{$pay_seats_data['emails'][0]}}"
+													required
+												/>
+												</div>
+											</div>
+				
+											<div class="form-row">
+												<!--
+												Using a label with a for attribute that matches the ID of the
+												Element container enables the Element to automatically gain focus
+												when the customer clicks on the label.
+												-->
+												<label for="iban-element1">
+												IBAN
+												</label>
+												<div id="iban-element">
+												<!-- A Stripe Element will be inserted here. -->
+												</div>
+											</div>
+				
+											<!-- Add the client_secret from the PaymentIntent as a data attribute   -->
+											<button type="button" id="submit-button" data-secret="">Submit Payment</button>
+				
+											<!-- Display mandate acceptance text. -->
+											<div id="mandate-acceptance">
+												By providing your payment information and confirming this payment, you
+												authorise (A) asd and Stripe, our payment service provider
+												and/or PPRO, its local service provider, to send instructions to your
+												bank to debit your account and (B) your bank to debit your account in
+												accordance with those instructions. As part of your rights, you are
+												entitled to a refund from your bank under the terms and conditions of
+												your agreement with your bank. A refund must be claimed within 8 weeks
+												starting from the date on which your account was debited. Your rights
+												are explained in a statement that you can obtain from your bank. You
+												agree to receive notifications for future debits up to 2 days before
+												they occur.
+											</div>
+											<!-- Used to display form errors. -->
+											<div id="error-message" role="alert"></div>
+										</form>
+									</div>
+								</div>
+							</div>
+
+					</div>
+
+					<div class="card-info">
+							
+							
+							<div class="form-row my-5 align-items-center prev-next-wrap">
+								<div class="d-flex align-items-center previous-participant-link">
+									<img src="{{cdn('new_cart/images/arrow-previous-green.svg')}}" width="20px" height="12px" class="without-hover" alt="">
+									<img src="{{cdn('new_cart/images/arrow-previous-green2.svg')}}" width="20px" height="12px" class="with-hover" alt="">
+									<a href="/billing" class="link-color">Previous: Billing</a>
+								</div>
+							</div>
 						</div>
 
-    		            		
+
+
 
 				</div>
 			</div>
@@ -377,26 +399,6 @@
 <script src="https://js.stripe.com/v3/"></script>
 
 <script>
-
-
-$( document ).ready(function() {
-    $('#payment-form button').removeAttr('style');
-});
-
-
-function openPaymentMethod(evt, paymentMethod) {
-  var i, tabcontent, tablinks;
-  tabcontent = document.getElementsByClassName("tabcontent");
-  for (i = 0; i < tabcontent.length; i++) {
-    tabcontent[i].style.display = "none";
-  }
-  tablinks = document.getElementsByClassName("tablinks");
-  for (i = 0; i < tablinks.length; i++) {
-    tablinks[i].className = tablinks[i].className.replace(" active", "");
-  }
-  document.getElementById(paymentMethod).style.display = "block";
-  evt.currentTarget.className += " active";
-}
 
     const stripe = Stripe('{{$stripe_key}}',{
 		locale: 'en',
@@ -607,15 +609,17 @@ function openPaymentMethod(evt, paymentMethod) {
 			
 			//console.log('1')
 			//await setupIntent('/setupIntent')
-			return_data = await createIntent('/createSepa', paymentMethod.id)
-
-			console.log('return data: ', return_data)
+			url = await createIntent('/createSepa', paymentMethod.id)
+			console.log('33')
+			console.log('payment method: ',paymentMethod)
 
 			var clientSecret = document.getElementById('submit-button');
-			
 			clientSecret = $(clientSecret).attr('data-secret')
 
+			console.log(clientSecret)
 
+			console.log('4')
+			
 			stripe.confirmSepaDebitPayment(
 				clientSecret,
 				{
@@ -625,22 +629,21 @@ function openPaymentMethod(evt, paymentMethod) {
 							name: accountholderName.value,
 							email: email.value,
 						},
-					}, 
-				}).then(function(result){
+					},
+				}
+			).then(function(result){
 
-					if(result.error){
-						console.log('inside error')
-						console.log(result.error)
-					}
-					if(result.paymentIntent){
-						console.log(result.paymentIntent)
+				if(result.error){
+					console.log('inside error')
+					console.log(result.error)
+				}
+				if(result.paymentIntent){
+					console.log(result.paymentIntent)
 
 
-						window.location.href = return_data.return_url;
-					}
-				});
-			
-			
+					window.location.href = url;
+				}
+			});
 
 
 		});
@@ -648,7 +651,6 @@ function openPaymentMethod(evt, paymentMethod) {
 
 		async function createIntent(url, payment_method){
 			console.log('2')
-			let data1 = {};
 			let return_url;
 			let installments = 1
 			installments = $('input[type=radio][name=installments]:checked').val();
@@ -665,18 +667,14 @@ function openPaymentMethod(evt, paymentMethod) {
 					payment_method: payment_method
 				},  
 				success: function(data) {
-
-					console.log('after success')
-					console.log(JSON.parse(data))
 					
 					$('#submit-button').attr('data-secret', JSON.parse(data)['clientSecret'])
-					
-					data1['return_url'] = JSON.parse(data)['return_url']
+					return_url = JSON.parse(data)['return_url']
 					
 				}
 			})
 		
-			return data1;
+			return return_url;
 		}
 											
 	
@@ -765,11 +763,11 @@ function openPaymentMethod(evt, paymentMethod) {
 
 		// val = 1 (no installments)
 
-		// if($(this).val() != 1){
-		// 	$('#payment-form').hide()
-		// }else{
-		// 	$('#payment-form').show()
-		// }
+		if($(this).val() != 1){
+			$('#payment-form').hide()
+		}else{
+			$('#payment-form').show()
+		}
 	});
 
 	async function updateAmount(){

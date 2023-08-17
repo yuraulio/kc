@@ -83,6 +83,7 @@ body button:focus {
 .btn-3:focus{filter:drop-shadow(9.326px 7.552px 12px rgba(76,76,76,0.3));background-color:#bd1500;color:#fff;border-color: #bd1500;}
 button{padding-top:12px!important;}
 
+
 /* button-design-end*/
 
 input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0;}
@@ -571,6 +572,128 @@ form input[type="text"], form input[type="email"]{font-size:15px;}
 
 
 }
+
+.payment_selector button{
+    color: #007bff !important;
+    background-color: transparent;
+    background-image: none;
+    border-color: #007bff !important;
+    min-width: 30%;
+}
+
+/* Style the tab */
+.tab {
+    overflow: hidden;
+    border: 1px solid #ccc;
+    background-color: #f1f1f1;
+  }
+  
+  /* Style the buttons inside the tab */
+  .tab button {
+    background-color: inherit;
+    float: left;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    transition: 0.3s;
+    font-size: 17px;
+    margin-right: 1rem;
+  }
+  
+  /* Change background color of buttons on hover */
+  .tab button:hover {
+    background-color: #ddd;
+  }
+  
+  /* Create an active/current tablink class */
+  .tab button.active {
+    background-color: #ccc;
+  }
+  
+  /* Style the tab content */
+  .tabcontent {
+    display: none;
+    border-top: none;
+  }
+
+  .card-info{
+    margin: 2rem 0;
+  }
+
+  .tab.card-information{
+    border: unset !important;
+    background: unset !important;
+  }
+
+  .tab.card-information button{
+    width: 25%;
+  }
+
+  .flex-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  @media (max-width: 360px) {
+    .flex-container {
+      flex-direction: row;
+    }
+
+    .Tab{
+        width: auto;
+    }
+  }
+
+  .payment-title{
+    font-size: smaller;
+    margin-right: 2rem;
+  }
+
+  .btn-outline-primary{
+    color: #0d6efd !important;
+    border-color: unset;
+  }
+
+  .p-TabLabel{
+    color: #6d6e78;
+  }
+
+  .btn-outline-primary:not(:disabled):not(.disabled).active{
+    background-color: unset !important;
+  }
+
+  .Tab{
+    padding: 0.75rem;
+    padding-top: 0.75rem;
+    background-color: #f7fafc;
+    border-radius: 5px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #6d6e78;
+    transition: background .15s ease, border .15s ease, box-shadow .15s ease;
+    border: 1px solid #e6e6e6;
+  }
+  .Tab:hover{
+    border-color: #0d6efd !important;
+  }
+
+  /* .btn-outline-primary:not(:disabled):not(.disabled).active:focus{
+    box-shadow: unset;
+  } */
+
+  .btn-outline-primary:not(:disabled):not(.disabled).active:focus{
+    box-shadow: unset;
+  }
+
+  .Tab.active .p-TabLabel{
+    color: #007bff;
+  }
+
+  .card-input-cardholder{
+    margin-bottom:  1rem;
+  }
+
 
 
 
