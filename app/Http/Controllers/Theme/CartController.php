@@ -1139,6 +1139,7 @@ class CartController extends Controller
 
     public function postPaymentWithStripe($input)
     {
+
         Session::forget('dperror');
         Session::forget('error');
 
@@ -1314,7 +1315,7 @@ class CartController extends Controller
                 $dpuser->save();
             }
 
-            if($installments > 1) {
+             if($installments > 1) {
 
                 $instamount =  round($namount / $installments, 2);
 
@@ -1408,7 +1409,7 @@ class CartController extends Controller
 
 
                 //$namount = $instamount;
-            }
+             }
 
 
             if($dpuser && $installments > 1) {
@@ -1416,8 +1417,7 @@ class CartController extends Controller
                 $charge['status'] = 'succeeded';
                 $charge['type'] = $installments . ' Installments';
             }
-            else 
-            {
+            else {
 
 
                 $stripeAmount = $namount * 100;
@@ -1439,14 +1439,8 @@ class CartController extends Controller
 
                 try{
 
-                    // if($input['payment_method'] == null){
-                    //     $dpuser->addPaymentMethod($paymentMethod);
-                    // }
-
                     //$ev->users()->where('id',$dpuser->id)->detach();
                     //$ev->users()->save($dpuser,['paid'=>false,'payment_method'=>$payment_method_id]);
-
-                    // dd($dpuser->paymentMethods('link'));
 
                     $charge = $dpuser->charge(
                         $stripeAmount,
@@ -1458,7 +1452,6 @@ class CartController extends Controller
                             //'shipping' => ['name' => $st_name, 'address' => ['line1' => $st_line1,'postal_code' => 59100,'city' => 'gsdf','country' => 'GR']],
                             'customer' => $dpuser->stripe_id,
                             //'metadata' => $temp,
-                            // 'payment_method_types' => ['link', 'card'],
                         ],
 
                     );
@@ -1493,11 +1486,87 @@ class CartController extends Controller
 
 
             if( (is_array($charge)  &&  $charge['status'] == 'succeeded' ) || (isset($charge) && $charge->status == 'succeeded')) {
+                 /**
+                 * Write Here Your Database insert logic.
+                 */
 
-                $status = 1;
-                //$this->createTransaction($dpuser, $pay_seats_data, $installments, $cart, $bd, $ev,$couponCode,$namount, $pay_bill_data, $charge,$eventC, $status);
-               
-                
+                 $status_history = [];
+                //$payment_cardtype = intval($input["cardtype"]);
+                 $status_history[] = [
+                    'datetime' => Carbon::now()->toDateTimeString(),
+                    'status' => 1,
+                    'user' => [
+                        'id' => $dpuser->id,
+                        'email' => $dpuser->email
+                    ],
+                    'pay_seats_data' => $pay_seats_data,
+                    'pay_bill_data' => $pay_bill_data,
+                    'deree_user_data' => [$dpuser->email => ''],
+                    //'cardtype' => $payment_cardtype,
+                    'installments' => $installments,
+                    'cart_data' => $cart
+
+                ];
+                $transaction_arr = [
+
+                    "payment_method_id" => 100,//$input['payment_method_id'],
+                    "account_id" => 17,
+                    "payment_status" => 2,
+                    "billing_details" => $bd,
+                    "status_history" => json_encode($status_history),
+                    "placement_date" => Carbon::now()->toDateTimeString(),
+                    "ip_address" => \Request::ip(),
+                    "status" => 1, //2 PENDING, 0 FAILED, 1 COMPLETED
+                    "is_bonus" => 0,
+                    "order_vat" => 0,
+                    "payment_response" => json_encode($charge),
+                    "surcharge_amount" => 0,
+                    "discount_amount" => 0,
+                    "coupon_code" => $couponCode,
+                    "amount" => $namount,
+                    "total_amount" => $namount,
+                    'trial' => false,
+                ];
+
+                $transaction = Transaction::create($transaction_arr);
+
+                if($transaction) {
+
+                    //$transaction->user()->save($dpuser);
+                    $transaction->event()->save($ev);
+
+                    if($installments <= 1){
+                        /*if(!Invoice::latest()->doesntHave('subscription')->first()){
+                        //if(!Invoice::has('event')->latest()->first()){
+                            $invoiceNumber = sprintf('%04u', 1);
+                        }else{
+                            //$invoiceNumber = Invoice::has('event')->latest()->first()->invoice;
+                            $invoiceNumber = Invoice::latest()->doesntHave('subscription')->first()->invoice;
+                            $invoiceNumber = (int) $invoiceNumber + 1;
+                            $invoiceNumber = sprintf('%04u', $invoiceNumber);
+                        }*/
+
+
+                        $elearningInvoice = new Invoice;
+                        $elearningInvoice->name = json_decode($transaction->billing_details,true)['billname'];
+                        $elearningInvoice->amount = round($namount / $installments, 2);
+                        $elearningInvoice->invoice = generate_invoice_number($eventC->paymentMethod->first()->id);
+                        $elearningInvoice->date = date('Y-m-d');//Carbon::today()->toDateString();
+                        $elearningInvoice->instalments_remaining = $installments;
+                        $elearningInvoice->instalments = $installments;
+
+                        $elearningInvoice->save();
+
+
+                        //$elearningInvoice->user()->save($dpuser);
+                        $elearningInvoice->event()->save($ev);
+                        $elearningInvoice->transaction()->save($transaction);
+                    }else{
+                        //$transaction->subscription()->save($dpuser->subscriptions->where('id',$charge['id'])->first());
+                    }
+
+                    \Session::put('transaction_id', $transaction->id);
+                }
 
                 return '/order-success';
                 //return '/info/order_success';
