@@ -1077,28 +1077,6 @@ class CartController extends Controller
         return $instamount * 100;
     }
 
-    // public function walletNewPay(Request $request){
-
-
-    //     $dpuser = Auth::user();
-
-    //     //$dpuser->asStripeCustomer();
-    
-    //     $stripe = new \Stripe\StripeClient('sk_test_51IdYeZHnPmfgPmgK8xh8OuZLSiIY0xZuUgpW7xsgc0qIwxOCIrvPYHO4GtEHiEDJIZvbeye1DyNpn9hzFzw7edqi00ajurn9Cf');
-    //     $payment = $stripe->paymentIntents->create([
-    //         'amount' => (int)$this->walletGetTotal($request),
-    //         'currency' => 'eur',
-    //         'automatic_payment_methods' => [
-    //             'enabled' => true,
-    //         ],
-    //         'customer' => $dpuser->stripe_id,
-    //         // 'payment_method' => 'pm_1NShZjHnPmfgPmgKEVdnHLDM',
-    //         'setup_future_usage' => "off_session"
-    //     ]);
-    
-    //     return $payment->client_secret;
-    // }
-
     public function walletPay(Request $request){
 
         $input = $request->all();
@@ -1517,7 +1495,7 @@ class CartController extends Controller
             if( (is_array($charge)  &&  $charge['status'] == 'succeeded' ) || (isset($charge) && $charge->status == 'succeeded')) {
 
                 $status = 1;
-                $this->createTransaction($dpuser, $pay_seats_data, $installments, $cart, $bd, $ev,$couponCode,$namount, $pay_bill_data, $charge,$eventC, $status);
+                //$this->createTransaction($dpuser, $pay_seats_data, $installments, $cart, $bd, $ev,$couponCode,$namount, $pay_bill_data, $charge,$eventC, $status);
                
                 
 
@@ -2179,36 +2157,47 @@ class CartController extends Controller
                 
                   //dd($client_secret);
 
+
+
                 try{
 
                     //header('Content-Type: application/json');
                 
                     //Create a PaymentIntent with amount and currency
-                    $paymentIntent = \Stripe\PaymentIntent::create([
-                        'description' => 'Subscription creation',
-                        'amount' => $planAmount,
-                        'currency' => 'eur',
-                        'customer' => $dpuser->stripe_id,
-                        'payment_method_types' => ['sepa_debit'],
-                        'metadata' => ['integration_check' => 'sepa_debit_accept_a_payment'],
-                        'confirm' => false
-                    ]);
+                    // $paymentIntent = \Stripe\PaymentIntent::create([
+                    //     'description' => 'Subscription creation',
+                    //     'amount' => $planAmount,
+                    //     'currency' => 'eur',
+                    //     'customer' => $dpuser->stripe_id,
+                    //     'payment_method_types' => ['sepa_debit'],
+                    //     'metadata' => ['integration_check' => 'sepa_debit_accept_a_payment'],
+                    //     'confirm' => false
+                    // ]);
                     
                     // $paymentIntent = \Stripe\SetupIntent::create([
                     //     'payment_method_types' => ['sepa_debit'],
                     //     'customer' => $dpuser->stripe_id,
                     //   ]);
                       
-
                       
 
                     $ev->users()->wherePivot('user_id',$dpuser->id)->detach();
                     $ev->users()->save($dpuser,['paid'=>false,'payment_method'=>$payment_method_id]);
 
                     
-                    // $charge = $dpuser->newSubscription($name, $plan->id)->noProrate()->create($input['payment_method'],
-                    // ['email' => $dpuser->email],
-                    //             ['metadata' => ['installments_paid' => 0, 'installments' => $installments]]);
+                    $dpuser->newSubscription($name, $plan->id)->noProrate()->create(
+                        $input['payment_method'],
+                        ['email' => $dpuser->email],
+                        [
+                            'metadata' => [
+                                'installments_paid' => 0, 
+                                'installments' => $installments,
+                            ],
+                        ]
+                    );
+                    //after new subscription payment is incomplete because pay with SEPA
+
+                    //dd($charge);
 
                     // $charge->metadata = json_encode(['installments_paid' => 0, 'installments' => $installments]);
                     // $charge->price = $instamount;
@@ -2218,6 +2207,25 @@ class CartController extends Controller
 
                 }catch(\Laravel\Cashier\Exceptions\IncompletePayment $exception){
 
+                    $sub = $dpuser->subscriptions()->where('user_id',$dpuser->id)->first();
+
+                    $dpuser->subscriptions()->find($sub->id)->update([
+                        'price' => $instamount
+                    ]);
+
+                    // TODO
+                    // (1) update subscription price
+
+                    //after new subscription payment is incomplete because pay with SEPA
+                    $output = [
+                        'clientSecret' => $exception->payment->client_secret,
+                        'return_url' => '/order-success',
+                        'status' => ''
+                    ];
+    
+                    return json_encode($output);
+
+                    
                     
                 }
 
@@ -2313,17 +2321,19 @@ class CartController extends Controller
             }
 
 
-            
+            /*
             if( (isset($charge) && $charge['status'] == 'succeeded')) {
                
 
                 $status = 2;
-                $this->createTransaction($dpuser, $pay_seats_data, $installments, $cart, $bd, $ev,$couponCode,$namount, $pay_bill_data, $paymentIntent,$eventC,$status);
+                $this->createTransaction($dpuser, $pay_seats_data, $installments, $cart, $bd, $ev,$couponCode,$namount, $pay_bill_data, $charge,$eventC,$status);
 
                 Session::put('payment_method_is_sepa',true);
 
+                dd($charge);
+
                 $output = [
-                    'clientSecret' => $paymentIntent->client_secret,
+                    'clientSecret' => $charge->client_secret,
                     'return_url' => '/order-success',
                     'status' => ''
                 ];
@@ -2336,86 +2346,13 @@ class CartController extends Controller
                 //return redirect('/info/order_error');
                   return '/checkout';
             }
+            */
             
 
 
 
             //endddddddddd
 
-            
-
-            // $stripeAmount = $namount * 100;
-            // $dpuser->updateStripeCustomer([
-            //     'name' => $st_name,
-            //     'email' => $dpuser->email,
-            //     'metadata' => $temp,
-            //     //'description' => $st_desc,
-
-            //     //'tax_info' => ['tax_id' => $st_tax_id, 'type' => 'vat'],
-            //     'shipping' => ['name' => $st_name, 'address' => $address],
-            //     'address' => $address,
-
-            // ]);
-
-            // $temp['customer'] = $dpuser->email;
-            // $nevent = $ev_title . ' ' . $ev_date_help;
-
-
-            // try{
-
-            //     // if($input['payment_method'] == null){
-            //     //     $dpuser->addPaymentMethod($paymentMethod);
-            //     // }
-
-            //     //$ev->users()->where('id',$dpuser->id)->detach();
-            //     //$ev->users()->save($dpuser,['paid'=>false,'payment_method'=>$payment_method_id]);
-
-            //     // dd($dpuser->paymentMethods('link'));
-
-                
-            //     header('Content-Type: application/json');
-                
-            //     // Create a PaymentIntent with amount and currency
-            //     $paymentIntent = \Stripe\PaymentIntent::create([
-            //         'amount' => $stripeAmount,
-            //         'currency' => 'eur',
-            //         'description' => $nevent,
-            //         'customer' => $dpuser->stripe_id,
-            //         'payment_method_types' => ['sepa_debit'],
-            //         'metadata' => ['integration_check' => 'sepa_debit_accept_a_payment'],
-            //     ]);
-
-
-            //     $payment_method_id = -1;
-            //     if($ev->paymentMethod->first()){
-
-            //         $payment_method_id = $ev->paymentMethod->first()->id;
-
-            //     }
-
-            //     $ev->users()->wherePivot('user_id',$dpuser->id)->detach();
-            //     $ev->users()->save($dpuser,['paid'=>false,'payment_method'=>$payment_method_id]);
-
-            //     if( (is_array($paymentIntent)  &&  $paymentIntent['status'] == 'requires_payment_method' ) || (isset($paymentIntent) && $paymentIntent->status == 'requires_payment_method')) {
-
-            //         $status = 2;
-            //         $this->createTransaction($dpuser, $pay_seats_data, $installments, $cart, $bd, $ev,$couponCode,$namount, $pay_bill_data, $paymentIntent,$eventC,$status);
-                   
-            //         Session::put('payment_method_is_sepa',true);
-                
-            //         $output = [
-            //             'clientSecret' => $paymentIntent->client_secret,
-            //             'return_url' => '/order-success',
-            //             'status' => $paymentIntent->status
-            //         ];
-
-            //         echo json_encode($output);
-    
-            //     }
-   
-            // }catch(Error $e){
-
-            // }
         }catch(Error $e){
 
         }

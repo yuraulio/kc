@@ -140,13 +140,15 @@ class WebhookController extends BaseWebhookController
 
 	public function handleInvoicePaymentSucceeded(array $payload){
 
-
+		Log::info('TRIGGER handleInvoicePaymentSucceeded');
 		if ($user = $this->getUserByStripeId($payload['data']['object']['customer'])) {
 
 			$sub = $payload['data']['object']['lines']['data'][0];
 			if(isset($sub['metadata']['installments'])){
+				Log::info('installments');
 				$this->installments($payload,$sub,$user);
 			}else{
+				Log::info('subscription');
 				$this->subscription($payload,$user,$sub);
 			}
 
@@ -203,6 +205,7 @@ class WebhookController extends BaseWebhookController
 		$invoices = $user->events_for_user_list()->wherePivot('event_id',$eventId)->first()->invoicesByUser($user->id)->get();
 
 		if(count($invoices) > 0){
+			Log::info('has invoice');
 			$invoice = $invoices->last();
 			$transaction = $user->events_for_user_list()->wherePivot('event_id',$eventId)->first()->transactionsByUser($user->id)->first();
 			$billDet = json_decode($transaction['billing_details'],true);
@@ -211,6 +214,7 @@ class WebhookController extends BaseWebhookController
 			[$pdf,$invoice] = $invoice->generateCronjobInvoice();
 			$this->sendEmail($invoice,$pdf,$paymentMethod,false,$billingEmail);
 		}else{
+			Log::info('has not invoice');
 			if(!Invoice::doesntHave('subscription')->latest()->first()){
 				//$invoiceNumber = sprintf('%04u', 1);
 				$invoiceNumber = generate_invoice_number($subscriptionPaymentMethod->pivot->payment_method);
@@ -246,6 +250,9 @@ class WebhookController extends BaseWebhookController
                 	    'installments' => $totalinst,
 
                 	];
+
+					// Log::info(var_export($subscription, true));
+					// Log::info($subscription);
                 	$transaction_arr = [
 
                 	    "payment_method_id" => 100,//$input['payment_method_id'],

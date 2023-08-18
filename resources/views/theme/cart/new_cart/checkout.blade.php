@@ -593,8 +593,6 @@ function openPaymentMethod(evt, paymentMethod) {
 		form.addEventListener('submit', async (event) => {
 			event.preventDefault();
 
-			console.log('11')
-
 			const { paymentMethod, error1 } = await stripe.createPaymentMethod({
 					type: 'sepa_debit',
 					sepa_debit: iban,
@@ -604,12 +602,7 @@ function openPaymentMethod(evt, paymentMethod) {
 						},
 				});
 
-			
-			//console.log('1')
-			//await setupIntent('/setupIntent')
 			return_data = await createIntent('/createSepa', paymentMethod.id)
-
-			console.log('return data: ', return_data)
 
 			var clientSecret = document.getElementById('submit-button');
 			
@@ -633,8 +626,6 @@ function openPaymentMethod(evt, paymentMethod) {
 						console.log(result.error)
 					}
 					if(result.paymentIntent){
-						console.log(result.paymentIntent)
-
 
 						window.location.href = return_data.return_url;
 					}
@@ -667,7 +658,7 @@ function openPaymentMethod(evt, paymentMethod) {
 				success: function(data) {
 
 					console.log('after success')
-					console.log(JSON.parse(data))
+					console.log(JSON.parse(data)['clientSecret'])
 					
 					$('#submit-button').attr('data-secret', JSON.parse(data)['clientSecret'])
 					
