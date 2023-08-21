@@ -259,11 +259,11 @@
 
 								<p>We do not store your card’s information.</p>
 								<div class="form-row my-5 align-items-center prev-next-wrap">
-									{{--<div class="d-flex align-items-center previous-participant-link">
+									<div class="d-flex align-items-center previous-participant-link">
 										<img src="{{cdn('new_cart/images/arrow-previous-green.svg')}}" width="20px" height="12px" class="without-hover" alt="">
 										<img src="{{cdn('new_cart/images/arrow-previous-green2.svg')}}" width="20px" height="12px" class="with-hover" alt="">
 										<a href="/billing" class="link-color">Previous: Billing</a>
-									</div>--}}
+									</div>
 									<button id="pay-now" type="button" class="btn btn-3 checkout-button-primary">Pay now</button>
 								</div>
 							</div>
@@ -277,9 +277,20 @@
 							<div class="card-info">
 								<!-- <div id="payment-request-button"></div> -->
 								<!-- <div id="error-message"></div> -->
-								<div id="payment-request-button">
-								<!-- A Stripe Element will be inserted here. -->
+
+								<div class="form-row my-5 align-items-center prev-next-wrap">
+									<div class="d-flex align-items-center previous-participant-link">
+										<img src="{{cdn('new_cart/images/arrow-previous-green.svg')}}" width="20px" height="12px" class="without-hover" alt="">
+										<img src="{{cdn('new_cart/images/arrow-previous-green2.svg')}}" width="20px" height="12px" class="with-hover" alt="">
+										<a href="/billing" class="link-color">Previous: Billing</a>
+
+
+									</div>
+									<div id="payment-request-button"></div>
 								</div>
+								
+								
+								
 							</div>
 
 							<!-- DIGITAL WALLETS BUTTON  END END END -->
@@ -312,7 +323,7 @@
 											name="email"
 											type="email"
 											placeholder="email"
-											value="{{$pay_seats_data['emails'][0]}}"
+											value="{{$pay_bill_data['billemail']}}"
 											required
 										/>
 									</div>
@@ -335,12 +346,16 @@
 								</div>
 
 								<div class="form-row my-3 align-items-center prev-next-wrap">
-								
+									<div class="d-flex align-items-center previous-participant-link">
+										<img src="{{cdn('new_cart/images/arrow-previous-green.svg')}}" width="20px" height="12px" class="without-hover" alt="">
+										<img src="{{cdn('new_cart/images/arrow-previous-green2.svg')}}" width="20px" height="12px" class="with-hover" alt="">
+										<a href="/billing" class="link-color">Previous: Billing</a>
+									</div>
 									<button id="submit-button" data-secret="" class="btn btn-3 checkout-button-primary">Pay Now</button>
-								
-									<!-- Add the client_secret from the PaymentIntent as a data attribute   -->
-									
 								</div>
+								
+
+								
 
 								<!-- Display mandate acceptance text. -->
 								<div id="mandate-acceptance">
@@ -350,18 +365,6 @@
 								<div id="error-message" role="alert"></div>
 							</form>
 						</div>
-
-
-						<div class="form-row my-5 align-items-center prev-next-wrap">
-							<div class="d-flex align-items-center previous-participant-link">
-								<img src="{{cdn('new_cart/images/arrow-previous-green.svg')}}" width="20px" height="12px" class="without-hover" alt="">
-								<img src="{{cdn('new_cart/images/arrow-previous-green2.svg')}}" width="20px" height="12px" class="with-hover" alt="">
-								<a href="/billing" class="link-color">Previous: Billing</a>
-							</div>
-							
-						</div>
-
-    		            		
 
 				</div>
 			</div>
@@ -384,19 +387,19 @@ $( document ).ready(function() {
 });
 
 
-function openPaymentMethod(evt, paymentMethod) {
-  var i, tabcontent, tablinks;
-  tabcontent = document.getElementsByClassName("tabcontent");
-  for (i = 0; i < tabcontent.length; i++) {
-    tabcontent[i].style.display = "none";
-  }
-  tablinks = document.getElementsByClassName("tablinks");
-  for (i = 0; i < tablinks.length; i++) {
-    tablinks[i].className = tablinks[i].className.replace(" active", "");
-  }
-  document.getElementById(paymentMethod).style.display = "block";
-  evt.currentTarget.className += " active";
-}
+	function openPaymentMethod(evt, paymentMethod) {
+		var i, tabcontent, tablinks;
+		tabcontent = document.getElementsByClassName("tabcontent");
+		for (i = 0; i < tabcontent.length; i++) {
+			tabcontent[i].style.display = "none";
+		}
+		tablinks = document.getElementsByClassName("tablinks");
+		for (i = 0; i < tablinks.length; i++) {
+			tablinks[i].className = tablinks[i].className.replace(" active", "");
+		}
+		document.getElementById(paymentMethod).style.display = "block";
+		evt.currentTarget.className += " active";
+	}
 
     const stripe = Stripe('{{$stripe_key}}',{
 		locale: 'en',
@@ -684,29 +687,6 @@ function openPaymentMethod(evt, paymentMethod) {
 
 
 	//END SEPA
-
-
-
-	async function apiRequest1(url){
-		
-		$.ajax({
-			headers: {
-					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-			},
-			method: 'POST',
-			url: url,
-			async:false,  
-			data:{},  
-			success: function(data) {
-				
-				console.log(data)
-
-				
-			}
-		})
-		
-		return a;
-	}
 
 	async function apiRequest(url, payment_method){
 		let a;
