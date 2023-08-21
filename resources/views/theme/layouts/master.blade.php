@@ -92,12 +92,17 @@ _iub.csConfiguration = {"cookiePolicyInOtherWindow":true,"perPurposeConsent":tru
 <script type="text/javascript" src="//cdn.iubenda.com/cs/iubenda_cs.js" charset="UTF-8" async></script>--}}
 
 
-<script type="text/javascript">
+{{--<script type="text/javascript">
 var _iub = _iub || [];
 _iub.csConfiguration = {"askConsentAtCookiePolicyUpdate":true,"consentOnContinuedBrowsing":false,"countryDetection":true,"enableLgpd":true,"enableUspr":true,"floatingPreferencesButtonDisplay":"bottom-right","invalidateConsentWithoutLog":true,"lang":"en","lgpdAppliesGlobally":false,"perPurposeConsent":true,"siteId":2409873,"whitelabel":false,"cookiePolicyId":41154288,"cookiePolicyUrl":"https://knowcrunch.com/cookies-notice","privacyPolicyUrl":"https://knowcrunch.com/data-privacy-policy","privacyPolicyNoticeAtCollectionUrl":"https://knowcrunch.com/terms-and-conditions", "banner":{ "acceptButtonColor":"#40CE00","acceptButtonDisplay":true,"closeButtonDisplay":false,"customizeButtonDisplay":true,"explicitWithdrawal":true,"listPurposes":true,"position":"float-top-center","rejectButtonColor":"#C8CFD6","rejectButtonDisplay":true }};
 </script>
 <script type="text/javascript" src="//cdn.iubenda.com/cs/gpp/stub.js"></script>
-<script type="text/javascript" src="//cdn.iubenda.com/cs/iubenda_cs.js" charset="UTF-8" async></script>
+<script type="text/javascript" src="//cdn.iubenda.com/cs/iubenda_cs.js" charset="UTF-8" async></script>--}}
+
+<!-- Start cookieyes banner -->
+<script id="cookieyes" type="text/javascript" src=https://cdn-cookieyes.com/client_data/2428d5ba225ff1e2703356e8/script.js>
+</script>
+<!-- End cookieyes banner -->
 
 @endif
 

@@ -237,15 +237,15 @@
 					<h2>Payment information</h2>
 
 						<div class="tab card-information flex-container">
-							<button type="button" class="tablinks btn btn-outline-primary Tab active" onclick="openPaymentMethod(event, 'card')">
+							<button type="button" class="tablinks btn btn-outline-dark Tab active" onclick="openPaymentMethod(event, 'card')">
 								<img src="{{cdn('new_cart/images/credit-card.svg')}}" width="30px" height="20px" class="without-hover" alt="">	
 								<p class="payment-title p-TabLabel">Card</p>	
 							</button>
-							<button type="button" class="tablinks btn btn-outline-primary Tab" onclick="openPaymentMethod(event, 'digital-wallets')">
+							<button type="button" class="tablinks btn btn-outline-dark Tab" onclick="openPaymentMethod(event, 'digital-wallets')">
 								<img src="{{cdn('new_cart/images/wallet.png')}}" width="30px" height="20px" class="without-hover" alt="">	
 								<p class="payment-title p-TabLabel">Wallet</p>
 							</button>
-							<button type="button" class="tablinks btn btn-outline-primary Tab" onclick="openPaymentMethod(event, 'sepa')">
+							<button type="button" class="tablinks btn btn-outline-dark Tab" onclick="openPaymentMethod(event, 'sepa')">
 							<img src="{{cdn('new_cart/images/sepa-2.svg')}}" width="30px" height="20px" class="without-hover" alt="">	
 								<p class="payment-title p-TabLabel">SEPA</p>
 							</button>
@@ -592,6 +592,8 @@ function openPaymentMethod(evt, paymentMethod) {
 
 		form.addEventListener('submit', async (event) => {
 			event.preventDefault();
+			$('#error-message').text('')
+			submitButton.disabled = true;
 
 			const { paymentMethod, error1 } = await stripe.createPaymentMethod({
 					type: 'sepa_debit',
@@ -602,6 +604,10 @@ function openPaymentMethod(evt, paymentMethod) {
 						},
 				});
 
+			if(!paymentMethod){
+				submitButton.disabled = false;
+			}
+
 			return_data = await createIntent('/createSepa', paymentMethod.id)
 
 			var clientSecret = document.getElementById('submit-button');
@@ -609,27 +615,34 @@ function openPaymentMethod(evt, paymentMethod) {
 			clientSecret = $(clientSecret).attr('data-secret')
 
 
-			stripe.confirmSepaDebitPayment(
-				clientSecret,
-				{
-					payment_method: {
-						sepa_debit: iban,
-						billing_details: {
-							name: accountholderName.value,
-							email: email.value,
-						},
-					}, 
-				}).then(function(result){
+			if(clientSecret != ''){
+				stripe.confirmSepaDebitPayment(
+					clientSecret,
+					{
+						payment_method: {
+							sepa_debit: iban,
+							billing_details: {
+								name: accountholderName.value,
+								email: email.value,
+							},
+						}, 
+					}).then(function(result){
 
-					if(result.error){
-						console.log('inside error')
-						console.log(result.error)
-					}
-					if(result.paymentIntent){
+						if(result.error){
+							
+							submitButton.disabled = false;
+						}
+						if(result.paymentIntent){
 
-						window.location.href = return_data.return_url;
-					}
-				});
+							window.location.href = return_data.return_url;
+						}
+					});
+			}else{
+				submitButton.disabled = false;
+				$('#error-message').css('color', 'red')
+				$('#error-message').text('Please try again!!')
+			}
+			
 			
 			
 
@@ -656,9 +669,6 @@ function openPaymentMethod(evt, paymentMethod) {
 					payment_method: payment_method
 				},  
 				success: function(data) {
-
-					console.log('after success')
-					console.log(JSON.parse(data)['clientSecret'])
 					
 					$('#submit-button').attr('data-secret', JSON.parse(data)['clientSecret'])
 					

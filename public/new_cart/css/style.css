@@ -596,8 +596,9 @@ form input[type="text"], form input[type="email"]{font-size:15px;}
     cursor: pointer;
     padding: 14px 16px;
     transition: 0.3s;
-    font-size: 17px;
+    /* font-size: 17px; */
     margin-right: 1rem;
+    height: 4rem;
   }
   
   /* Change background color of buttons on hover */
@@ -648,11 +649,16 @@ form input[type="text"], form input[type="email"]{font-size:15px;}
   .payment-title{
     font-size: smaller;
     margin-right: 2rem;
+    margin-top: 0.4rem;
   }
 
   .btn-outline-primary{
     color: #0d6efd !important;
     border-color: unset;
+  }
+
+  .btn-outline-dark:not(:disabled):not(.disabled).active{
+    background-color: white;
   }
 
   .p-TabLabel{
@@ -675,14 +681,14 @@ form input[type="text"], form input[type="email"]{font-size:15px;}
     border: 1px solid #e6e6e6;
   }
   .Tab:hover{
-    border-color: #0d6efd !important;
+    border-color: #343a40 !important;
   }
 
   /* .btn-outline-primary:not(:disabled):not(.disabled).active:focus{
     box-shadow: unset;
   } */
 
-  .btn-outline-primary:not(:disabled):not(.disabled).active:focus{
+  .checkout-full-wrap .btn-outline-primary:not(:disabled):not(.disabled).active:focus{
     box-shadow: unset;
   }
 
@@ -693,6 +699,41 @@ form input[type="text"], form input[type="email"]{font-size:15px;}
   .card-input-cardholder{
     margin-bottom:  1rem;
   }
+
+  .checkout-full-wrap .btn-outline-dark:not(:disabled):not(.disabled).active:focus{
+    box-shadow: unset;
+  }
+
+  #payment-form button{
+    filter: drop-shadow(9.326px 7.552px 12px rgba(76,76,76,0.19)) !important;
+    background-color: #f53000 !important;
+    color: #fff !important;
+    min-width: 300px !important;
+    border: 1px solid #f53000 !important;
+  
+    min-height: 50px !important;
+    font-size: 22px !important;
+    line-height: 1.2em !important;
+    letter-spacing: 2px !important;
+    text-align: center !important;
+    text-transform: uppercase !important;
+    border-radius: 0 !important;
+    margin-left: auto !important;
+    font-weight: unset !important;
+    width: 30% !important;
+    font-family: unset !important;
+  }
+
+
+
+  #payment-form button:hover{
+        filter:drop-shadow(9.326px 7.552px 12px rgba(76,76,76,0.3)) !important;
+        background-color:#d52c16 !important;
+        color:#fff !important;
+        border-color: #d52c16 !important;
+    }
+
+  
 
 
 
