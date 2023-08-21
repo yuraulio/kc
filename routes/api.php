@@ -30,6 +30,7 @@ Route::middleware('auth:api')->group(function () {
     //
     Route::post('lesson/save_note', [LessonController::class, 'saveNote']);
     Route::post('lesson/save_video_progress', [LessonController::class, 'saveVideoProgress']);
+    Route::post('lesson/update_is_new', [LessonController::class, 'updateVideoIsNew']);
 
 
     //SMS

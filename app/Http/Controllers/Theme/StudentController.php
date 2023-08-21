@@ -1092,6 +1092,8 @@ class StudentController extends Controller
         $expiration_event_user = $event['pivot']['expiration'];
         //$data['topics'] = $event->topicsLessonsInstructors($data['videos']);
 
+        dd(json_decode($data['videos'], true));
+
 
         return view('theme.myaccount.newelearning', $data);
 

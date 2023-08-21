@@ -704,6 +704,7 @@ class UserController extends Controller
                 $arr_lesson['vimeo_video'] = $lesson['vimeo_video'];
                 $arr_lesson['vimeo_duration'] = $lesson['vimeo_duration'];
                 $arr_lesson['bold'] = $lesson['bold'];
+                
 
 
                 if($lesson['vimeo_video'] != ''){
@@ -718,12 +719,16 @@ class UserController extends Controller
                         $arr_lesson['note'] = $notes[$vimeo_id];
 
 
+                    $arr_lesson['vimeo_id'] = strval($vimeo_id);
                     if(isset($videos[$vimeo_id])){
-
+                        
+                        $arr_lesson['video_info']['is_new'] = strval($videos[$vimeo_id]['is_new']);
                         $arr_lesson['video_info']['seen'] = strval($videos[$vimeo_id]['seen']);
                         $arr_lesson['video_info']['stop_time'] = strval($videos[$vimeo_id]['stop_time']);
                         $arr_lesson['video_info']['percentMinutes'] = strval($videos[$vimeo_id]['percentMinutes']);
                     }else{
+                        
+                        $arr_lesson['video_info']['is_new'] = "1";
                         $arr_lesson['video_info']['seen'] = "0";
                         $arr_lesson['video_info']['stop_time'] = "0";
                         $arr_lesson['video_info']['percentMinutes'] = "0";
@@ -1352,6 +1357,7 @@ class UserController extends Controller
                     $arr_lesson['vimeo_video'] = $lesson['vimeo_video'];
                     $arr_lesson['vimeo_duration'] = $lesson['vimeo_duration'];
                     $arr_lesson['bold'] = $lesson['bold'];
+                   
 
 
                     if($lesson['vimeo_video'] != ''){
@@ -1366,12 +1372,16 @@ class UserController extends Controller
                             $arr_lesson['note'] = $notes[$vimeo_id];
 
 
+                        $arr_lesson['vimeo_id'] = strval($vimeo_id);
                         if(isset($videos[$vimeo_id])){
 
+                            
+                            $arr_lesson['video_info']['is_new'] = strval($videos[$vimeo_id]['is_new']);
                             $arr_lesson['video_info']['seen'] = strval($videos[$vimeo_id]['seen']);
                             $arr_lesson['video_info']['stop_time'] = strval($videos[$vimeo_id]['stop_time']);
                             $arr_lesson['video_info']['percentMinutes'] = strval($videos[$vimeo_id]['percentMinutes']);
                         }else{
+                            $arr_lesson['video_info']['is_new'] = "1";
                             $arr_lesson['video_info']['seen'] = "0";
                             $arr_lesson['video_info']['stop_time'] = "0";
                             $arr_lesson['video_info']['percentMinutes'] = "0";
