@@ -695,11 +695,82 @@ class WebhookController extends BaseWebhookController
 				$billDet = json_decode($transaction['billing_details'],true);
         		$billingEmail = isset( $billDet['billemail']) &&  $billDet['billemail'] != '' ?  $billDet['billemail'] : false;
 
+
+				if($subscription['metadata'] != null){
+					$subPayMethod = json_decode($subscription['metadata'], true);
+
+
+					if(isset($subPayMethod['payment_method']) && $subPayMethod['payment_method'] == 'sepa'){
+						$this->welcomeEmail($user, $subscription);
+					}
+					
+					
+				}
+				
+
+				
+				
 				$this->sendEmail($elearningInvoice,$pdf,$paymentMethod,true,$billingEmail);
 
 
 			}
 
+	}
+
+	private function welcomeEmail($user, $subscription){
+		$event = $subscription->event->first();
+		$plan = $event->plans->first();
+		$data = [];
+		/*$muser = [];
+		$muser['name'] = $user->firstname;
+		$muser['first'] = $user->firstname;
+		$muser['email'] = $user->email;*/
+		//$muser['event_title'] = $sub->eventable->event->title;
+
+		//$subEnds = $plan->trial_days && $plan->trial_days > 0 ? $plan->trial_days : $plan->getDays();
+		$subEnds = $plan->getDays();
+		$subEnds=date('d-m-Y', strtotime("+$subEnds days"));
+
+		//if($exp = $user->events()->wherePivot('event_id',$event->id)->first()){
+		if($exp = $user->events_for_user_list()->wherePivot('event_id',$event->id)->first()){
+
+			$exp = $exp->pivot->expiration;
+			$exp = strtotime($exp);
+			$today = strtotime(date('Y-m-d'));
+
+			if($exp && $exp > $today){
+
+				$exp = date_create(date('Y-m-d',$exp));
+				$today = date_create(date('Y-m-d',$today));
+
+				$days = date_diff($exp, $today);
+
+				$subEnds = date('Y-m-d', strtotime($subEnds. ' + ' . $days->d .' days'));
+
+			}
+
+		}
+		$data['firstName'] = $user->firstname;
+
+                $data['name'] = $user->firstname . ' ' . $user->lastname;
+                $data['email'] = $user->email;
+                $data['amount'] = $subscription->price;
+                $data['position'] = $user->job_title;
+                $data['company'] = $user->company;
+                $data['mobile'] = $user->mobile;
+                $data['userLink'] = url('/') . "/admin/user/" . $user['id'] ."/edit";
+
+                $data['eventTitle'] = $event->title;
+                $data['eventFaq'] = url('/') . '/' .$event->getSlug().'#faq';
+                $data['eventSlug'] = url('/') . '/myaccount/elearning/' . $event->title;
+                $data['subject'] = 'Knowcrunch - ' . $data['firstName'] .' to our annual subscription';
+                $data['template'] = 'emails.user.subscription_welcome';
+                $data['subscriptionEnds'] = $subEnds;
+                /*$data['sub_type'] = $plan->name;
+                $data['sub_price'] = $plan->cost;
+                $data['sub_period'] = $plan->period();*/
+
+                $user->notify(new SubscriptionWelcome($data));
 	}
 
 	private function sendEmail($elearningInvoice, $pdf, $paymentMethod = null, $planSubscription = false, $billingEmail = false){

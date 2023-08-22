@@ -619,7 +619,8 @@ class SubscriptionController extends Controller
             $sub = $user->subscriptions()->where('user_id',$user->id)->first();
 
             $user->subscriptions()->find($sub->id)->update([
-                'price' => $plan->cost
+                'price' => $plan->cost,
+                'metadata' => json_encode(['payment_method' => 'sepa'])
             ]);
             
             $user->subscriptionEvents()->attach($event->id,['subscription_id'=>$sub->id,'payment_method'=>$this->paymentMethod->id]);
