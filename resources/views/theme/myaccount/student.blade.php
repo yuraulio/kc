@@ -762,9 +762,11 @@
                      @if(isset($events) && count($events) > 0)
 
                         @foreach($events as $keyType => $event)
+                           
+                        
                         {{--@if($event['view_tpl'] != 'elearning_free' && $event['view_tpl'] != 'elearning_event')--}}
                         @if($event['delivery'] != 143)
-                        <div class="col12 dynamic-courses-wrapper dynamic-courses-wrapper--style2 @if(isset($event['paid']) && $event['paid'] == 0){{'unpaid'}}@endif">
+                        <div class="col12 dynamic-courses-wrapper dynamic-courses-wrapper--style2 @if(isset($event['paid']) && $event['paid'] == 0 && isset($event['transactionPending']) && $event['transactionPending'] == 2){{'pendingSepa'}}@elseif(isset($event['paid']) && $event['paid'] == 0){{'unpaid'}}@endif">
                             <div class="item">
                                 <h2>{{ $event['title'] }}</h2>
                                 <div class="inside-tabs">
@@ -1245,17 +1247,22 @@
                                         @endif
                                     </div>
                                 </div>
-                                @if(isset($event['paid']) && $event['paid'] == 0)
+                                @if(isset($event['paid']) && $event['paid'] == 0 && isset($event['transactionPending']) && $event['transactionPending'] == 2)
+                                 <div class="pendingSepaMessage d-none">
+                                     <h3>Your course will be available once the SEPA payment has cleared. This usually takes a few days.</h3>
+                                 </div>
+                                @elseif(isset($event['paid']) && $event['paid'] == 0)
                                  <div class="unpaidMessage d-none">
                                      <h3>You have an unpaid amount for this course. Please contact us to arrange payment and retrieve your access.</h3>
                                  </div>
+                                 
                                  @endif
                             </div>
                         </div>
                      @else
 
 
-                        <div class="col12 dynamic-courses-wrapper @if(isset($event['paid']) && $event['paid'] == 0){{'unpaid'}}@endif">
+                        <div class="col12 dynamic-courses-wrapper @if(isset($event['paid']) && $event['paid'] == 0 && isset($event['transactionPending']) && $event['transactionPending'] == 2){{'pendingSepa'}}@elseif(isset($event['paid']) && $event['paid'] == 0){{'unpaid'}}@endif">
                             <div class="item">
                             <h2>{{ $event['title'] }}</h2>
                             <div class="inside-tabs">
@@ -1522,11 +1529,16 @@
 
                                 </div>
                             </div>
-                            @if(isset($event['paid']) && $event['paid'] == 0)
+                            @if(isset($event['paid']) && $event['paid'] == 0 && isset($event['transactionPending']) && $event['transactionPending'] == 2)
+                           <div class="pendingSepaMessage d-none">
+                                 <h3>Your course will be available once the SEPA payment has cleared. This usually takes a few days.</h3>
+                           </div>
+                            @elseif(isset($event['paid']) && $event['paid'] == 0)
                                 <div class="unpaidMessage d-none">
                                     <h3>You have an unpaid amount for this course. Please contact us to arrange payment and retrieve your access.</h3>
                                 </div>
-                            @endif
+                             
+                           @endif
                             <!-- ./item -->
                             </div>
                         </div>
@@ -2523,6 +2535,30 @@
         function handlerOut(){
             let tabsElem = $(this).find('.inside-tabs')[0];
             let messageElem = $(this).find('.unpaidMessage')[0];
+
+            $(tabsElem).removeClass('d-none');
+            $(messageElem).addClass('d-none');
+        }
+
+        let pendingLinks = $('.dynamic-courses-wrapper.pendingSepa').find('a')
+
+        $.each(pendingLinks, function(index, value) {
+            $(value).attr('href', 'javascript:void(0)')
+        })
+
+        $( '.dynamic-courses-wrapper.pendingSepa' ).mouseenter( handlerIn1 ).mouseleave( handlerOut1 );
+
+        function handlerIn1(){
+            let tabsElem = $(this).find('.inside-tabs')[0];
+            let messageElem = $(this).find('.pendingSepaMessage')[0];
+
+            $(tabsElem).addClass('d-none');
+            $(messageElem).removeClass('d-none');
+        }
+
+        function handlerOut1(){
+            let tabsElem = $(this).find('.inside-tabs')[0];
+            let messageElem = $(this).find('.pendingSepaMessage')[0];
 
             $(tabsElem).removeClass('d-none');
             $(messageElem).addClass('d-none');

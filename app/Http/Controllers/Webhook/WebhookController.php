@@ -21,6 +21,8 @@ use App\Model\PaymentMethod;
 use App\Services\FBPixelService;
 use Illuminate\Support\Facades\Log;
 use App\Notifications\SubscriptionWelcome;
+use App\Model\User;
+use App\Notifications\WelcomeEmail;
 
 class WebhookController extends BaseWebhookController
 {
@@ -67,32 +69,16 @@ class WebhookController extends BaseWebhookController
 	public function handleChargeSucceeded(array $payload){
 		Log::info('charge');
 		Log::info(var_export($payload, true));
-		//Log::info(var_export($payload, true));
 
-		if(isset($payload['data']['object']['payment_method_details']['sepa_debit'])){
-
-			
-			$paymentIntent = $payload['data']['object']['payment_intent'];
-			
-			$transaction = Transaction::with('user', 'event')->where('payment_response','LIKE','%'.$paymentIntent.'%')->first();
-			// here return null why
-			$event = $transaction['event'][0];
-			$user = $transaction['user'][0];
-
-			// TODO
-			//(1) EAN EINAI SEPA PAYMENT NA STELNEI TO WELCOME EMAIL THS SUNDROMHS
-			$this->sendWelcomeEmailSubscription($payload,$user,$transaction);
-			
-		}
-
-
-		if(isset($payload['data']['object']['metadata']['integration_check']) && $payload['data']['object']['metadata']['integration_check'] == 'sepa_debit_accept_a_payment' && $payload['data']['object']['paid'] === true && $payload['data']['object']['failure_code'] == NULL){
+		// run when sepa debit without installments
+		if((isset($payload['data']['object']['metadata']['integration_check']) && $payload['data']['object']['metadata']['integration_check'] == 'sepa_debit_accept_a_payment' && $payload['data']['object']['paid'] === true && $payload['data']['object']['failure_code'] == NULL) ){
 			Log::info('HAS SEPA DATA IS NOW AVAILABLE');
 
 			$paymentIntent = $payload['data']['object']['payment_intent'];
-			$transaction = Transaction::with('user')->where('payment_response','LIKE','%'.$paymentIntent.'%')->first();
-			$event = $transaction->event()->first();
-
+			$transaction = Transaction::with('user', 'event')->where('payment_response','LIKE','%'.$paymentIntent.'%')->first();
+			
+			//Log::info(var_export($transaction, true));
+			$event = $transaction['event'][0];
 			foreach($transaction->user as $user){
 				//Log::info('user id: '.$user->id);
 
@@ -105,15 +91,9 @@ class WebhookController extends BaseWebhookController
 			$transaction->status = 1; //Completed = 1
 			$transaction->save();
 
-			
-
-
-			//Log::info('PRE SEND EMAIL ');
-			//SEND EMAILS
-
 			$data = loadSendEmailsData($transaction);
-			app('App\Http\Controllers\Theme\InfoController')->sendEmails($data['transaction'], $data['emailsCollector'], $data['extrainfo'], $data['helperdetails'], $data['elearning'], $data['eventslug'], $data['stripe'],$data['billingEmail'],$data['paymentMethod'], $sepa = true);
-						
+				app('App\Http\Controllers\Theme\InfoController')->sendEmails($data['transaction'], $data['emailsCollector'], $data['extrainfo'], $data['helperdetails'], $data['elearning'], $data['eventslug'], $data['stripe'],$data['billingEmail'],$data['paymentMethod'], $sepa = true);
+				
 		}
 	}
 
@@ -162,12 +142,16 @@ class WebhookController extends BaseWebhookController
 
 	public function handleInvoicePaymentSucceeded(array $payload){
 
+		Log::info('invoice trigger');
+
 		if ($user = $this->getUserByStripeId($payload['data']['object']['customer'])) {
 
 			$sub = $payload['data']['object']['lines']['data'][0];
 			if(isset($sub['metadata']['installments'])){
+				Log::info('installments');
 				$this->installments($payload,$sub,$user);
 			}else{
+				Log::info('subscription');
 				$this->subscription($payload,$user,$sub);
 			}
 
@@ -179,6 +163,9 @@ class WebhookController extends BaseWebhookController
 	}*/
 
 	private function installments($payload,$sub,$user){
+
+		Log::info('payload from installments');
+		Log::info(var_export($payload, true));
 
 		$count = $sub['metadata']['installments_paid'];
 		if(isset($sub['metadata']['installments']))
@@ -474,71 +461,6 @@ class WebhookController extends BaseWebhookController
 
 
 	}*/
-
-	private function sendWelcomeEmailSubscription($payload,$user, $transaction){
-		Log::info(var_export($payload, true));
-
-		$subscription = $transaction->subscription()->first();
-
-		$event = $subscription->event()->first();
-		$user = $transaction->user()->first();
-
-		$plan = $event['plans'][0];
-
-		$data = [];
-                /*$muser = [];
-                $muser['name'] = $user->firstname;
-                $muser['first'] = $user->firstname;
-                $muser['email'] = $user->email;*/
-                //$muser['event_title'] = $sub->eventable->event->title;
-
-                //$subEnds = $plan->trial_days && $plan->trial_days > 0 ? $plan->trial_days : $plan->getDays();
-                $subEnds = $plan->getDays();
-                $subEnds=date('d-m-Y', strtotime("+$subEnds days"));
-
-                //if($exp = $user->events()->wherePivot('event_id',$event->id)->first()){
-                if($exp = $user->events_for_user_list()->wherePivot('event_id',$event->id)->first()){
-
-                    $exp = $exp->pivot->expiration;
-                    $exp = strtotime($exp);
-                    $today = strtotime(date('Y-m-d'));
-
-                    if($exp && $exp > $today){
-
-                        $exp = date_create(date('Y-m-d',$exp));
-                        $today = date_create(date('Y-m-d',$today));
-
-                        $days = date_diff($exp, $today);
-
-                        $subEnds = date('Y-m-d', strtotime($subEnds. ' + ' . $days->d .' days'));
-
-                    }
-
-                }
-
-
-                $data['firstName'] = $user->firstname;
-
-                $data['name'] = $user->firstname . ' ' . $user->lastname;
-                $data['email'] = $user->email;
-                $data['amount'] = $plan->cost;
-                $data['position'] = $user->job_title;
-                $data['company'] = $user->company;
-                $data['mobile'] = $user->mobile;
-                $data['userLink'] = url('/') . "/admin/user/" . $user['id'] ."/edit";
-
-                $data['eventTitle'] = $event->title;
-                $data['eventFaq'] = url('/') . '/' .$event->getSlug().'#faq';
-                $data['eventSlug'] = url('/') . '/myaccount/elearning/' . $event->title;
-                $data['subject'] = 'Knowcrunch - ' . $data['firstName'] .' to our annual subscription';
-                $data['template'] = 'emails.user.subscription_welcome';
-                $data['subscriptionEnds'] = $subEnds;
-                /*$data['sub_type'] = $plan->name;
-                $data['sub_price'] = $plan->cost;
-                $data['sub_period'] = $plan->period();*/
-
-                $user->notify(new SubscriptionWelcome($data));
-	}
 
 	private function subscription($payload,$user,$sub){
 

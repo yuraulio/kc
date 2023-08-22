@@ -32,6 +32,7 @@ use App\Model\CookiesSMS;
 use App\Notifications\WelcomeEmail;
 use App\Services\FBPixelService;
 use App\Model\Delivery;
+use Illuminate\Support\Facades\Log;
 
 class CartController extends Controller
 {
@@ -1708,7 +1709,7 @@ class CartController extends Controller
             //}else{
                 //$transaction->subscription()->save($dpuser->subscriptions->where('id',$charge['id'])->first());
             //}
-
+            
             \Session::put('transaction_id', $transaction->id);
         }
     }
@@ -2278,12 +2279,18 @@ class CartController extends Controller
 
                     $sub = $dpuser->subscriptions()->where('user_id',$dpuser->id)->first();
 
+                    // TODO
+                    // (1) update subscription price
                     $dpuser->subscriptions()->find($sub->id)->update([
                         'price' => $instamount
                     ]);
 
-                    // TODO
-                    // (1) update subscription price
+                    Session::put('payment_method_is_sepa',true);
+
+                    Log::info('pre create transaction');
+                    $this->createTransaction($dpuser, $pay_seats_data, $installments, $cart, $bd, $ev,$couponCode,$namount, $pay_bill_data, $exception->payment,$eventC,$status = 2);
+                    Log::info('after transaction');
+                    
 
                     //after new subscription payment is incomplete because pay with SEPA
                     $output = [

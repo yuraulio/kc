@@ -100,8 +100,16 @@
                                                                            <td align="left" valign="top" class="r15-i nl2go-default-textstyle" style="color: #3b3f44; font-family: arial,helvetica,sans-serif; font-size: 16px; line-height: 1.5; text-align: left;">
                                                                               <div>
                                                                                  <p style="margin: 0;"><span style="font-family: Tahoma, geneva, sans-serif;">Your enrollment is successful. </span></p>
-                                                                                 <p style="margin: 0;"> </p>
-                                                                                 <p style="margin: 0;"><span style="font-family: Tahoma, geneva, sans-serif;">You are one of the privileged students of <strong>{{ $extrainfo[2] }}</strong>. We are glad you have chosen us and we promise you a wonderful experience full of inspiration &amp; creativity! <a href="{{ $slug }}" target="_blank" style="color: #0092ff; text-decoration: underline;">Access your account</a> and your course.</span></p>                                                                              </div>
+                                                                              </div>
+                                                                           </td>
+                                                                        </tr>
+                                                                        <tr class="nl2go-responsive-hide">
+                                                                           <td height="15" style="font-size: 15px; line-height: 15px;">­</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                           <td align="left" valign="top" class="r15-i nl2go-default-textstyle" style="color: #3b3f44; font-family: arial,helvetica,sans-serif; font-size: 16px; line-height: 1.5; text-align: left;">
+                                                                              <div>
+                                                                                 <p style="margin: 0;"><span style="font-family: Tahoma, geneva, sans-serif;">You are one of the privileged students of <strong>{{ $extrainfo[2] }}</strong>. We are glad you have chosen us and we promise you a wonderful experience full of inspiration &amp; creativity! <a href="{{ $slug }}" target="_blank" style="color: #0092ff; text-decoration: underline;">Access your account</a> now.</span></p>                                                                              </div>
                                                                            </td>
                                                                         </tr>
                                                                         <tr class="nl2go-responsive-hide">

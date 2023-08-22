@@ -223,9 +223,8 @@ class InfoController extends Controller
        Session::forget('coupon_code');
        Session::forget('coupon_price');
        Session::forget('priceOf');
-       Session::forget('payment_method_is_sepa');
+       //Session::forget('payment_method_is_sepa');
         ///dd($data);
-
 
         if (isset($this->transaction['payment_response'])) {
             Session::put('thankyouData',$data);
@@ -804,14 +803,87 @@ class InfoController extends Controller
 
         $paymentMethod = PaymentMethod::find($paymentMethodId);
 
-        if(!$sepa){
+        //if(!$sepa){
             $this->sendEmails($transaction, $emailsCollector, $extrainfo, $helperdetails, $elearning, $eventslug, $stripe,$billingEmail,$paymentMethod);
+        //}
+    }
+
+    public function sendWelcomeEmails($transaction, $emailsCollector, $extrainfo, $helperdetails, $elearning, $eventslug,$stripe,$billingEmail,$paymentMethod = null){
+        // dd($elearning);
+        // 5 email, admin, user, 2 deree, darkpony
+    	//$generalInfo = \Config::get('dpoptions.website_details.settings');
+        $adminemail = ($paymentMethod && $paymentMethod->payment_email) ? $paymentMethod->payment_email : 'info@knowcrunch.com';
+
+        $data = [];
+        $data['fbGroup'] = $extrainfo[7];
+        $data['duration'] = '';//$extrainfo[3];
+
+        $data['eventSlug'] = $transaction->event->first() ? url('/') . '/' . $transaction->event->first()->getSlug() : url('/');
+
+        $eventInfo = $transaction->event->first() ? $transaction->event->first()->event_info() : [];
+
+        if(isset($eventInfo['delivery']) && $eventInfo['delivery'] == 143){
+
+            $data['duration'] = isset($eventInfo['elearning']['visible']['emails']) && isset($eventInfo['elearning']['expiration']) &&
+                                $eventInfo['elearning']['visible']['emails'] && isset($eventInfo['elearning']['text']) ?
+                                            $eventInfo['elearning']['expiration'] . ' ' . $eventInfo['elearning']['text']: '';
+
+
+        }else if(isset($eventInfo['delivery']) && $eventInfo['delivery'] == 139){
+
+            $data['duration'] = isset($eventInfo['inclass']['dates']['visible']['emails']) && isset($eventInfo['inclass']['dates']['text']) &&
+                                    $eventInfo['inclass']['dates']['visible']['emails'] ?  $eventInfo['inclass']['dates']['text'] : '';
+
+            $data['duration'] = strip_tags($data['duration']);
+
         }
-        
-        
-        
+
+        $data['hours'] = isset($eventInfo['hours']['visible']['emails']) &&  $eventInfo['hours']['visible']['emails'] && isset($eventInfo['hours']['hour']) &&
+                        isset( $eventInfo['hours']['text']) ? $eventInfo['hours']['hour'] . ' ' . $eventInfo['hours']['text'] : '';
+
+        $data['language'] = isset($eventInfo['language']['visible']['emails']) &&  $eventInfo['language']['visible']['emails'] && isset( $eventInfo['language']['text']) ? $eventInfo['language']['text'] : '';
+
+        $data['certificate_type'] =isset($eventInfo['certificate']['visible']['emails']) &&  $eventInfo['certificate']['visible']['emails'] &&
+                    isset( $eventInfo['certificate']['type']) ? $eventInfo['certificate']['type'] : '';
+
+        $eventStudents = get_sum_students_course($transaction->event->first()->category->first());
+        $data['students_number'] = isset($eventInfo['students']['number']) ? $eventInfo['students']['number'] :  $eventStudents + 1;
+
+        $data['students'] = isset($eventInfo['students']['visible']['emails']) &&  $eventInfo['students']['visible']['emails'] &&
+                        isset( $eventInfo['students']['text']) && $data['students_number'] >= $eventStudents  ? $eventInfo['students']['text'] : '';
 
 
+    	foreach ($emailsCollector as $key => $muser) {
+            $data['user'] = $muser;
+
+    		$data['trans'] = $transaction;
+    		$data['extrainfo'] = $extrainfo;
+            $data['helperdetails'] = $helperdetails;
+            $data['elearning'] = $elearning;
+            $data['eventslug'] = $eventslug;
+
+
+            if(($user = User::where('email',$muser['email'])->first())){
+
+                if($user->cart){
+                    $user->cart->delete();
+                }
+
+                $data['template'] = $transaction->event->first() && $user->waitingList()->where('event_id',$transaction->event->first()->id)->first()
+                                        ? 'waiting_list_welcome' : 'welcome';
+
+
+                $data['firstName'] = $user->firstname;
+                
+                    $user->notify(new WelcomeEmail($user,$data));
+                
+                
+
+                /*if($elearning){
+                    $user->notify(new InstructionMail($data));
+                }*/
+            }
+    	}
     }
 
     public function sendEmails($transaction, $emailsCollector, $extrainfo, $helperdetails, $elearning, $eventslug,$stripe,$billingEmail,$paymentMethod = null, $sepa = false)
@@ -992,5 +1064,69 @@ class InfoController extends Controller
         
         
 
+    }
+
+    public function sendEmailsSubscription($payload, $user, $transaction){
+
+        $subscription = $transaction->subscription()->first();
+
+		$event = $subscription->event()->first();
+		$user = $transaction->user()->first();
+
+		$plan = $event['plans'][0];
+
+		$data = [];
+                /*$muser = [];
+                $muser['name'] = $user->firstname;
+                $muser['first'] = $user->firstname;
+                $muser['email'] = $user->email;*/
+                //$muser['event_title'] = $sub->eventable->event->title;
+
+                //$subEnds = $plan->trial_days && $plan->trial_days > 0 ? $plan->trial_days : $plan->getDays();
+                $subEnds = $plan->getDays();
+                $subEnds=date('d-m-Y', strtotime("+$subEnds days"));
+
+                //if($exp = $user->events()->wherePivot('event_id',$event->id)->first()){
+                if($exp = $user->events_for_user_list()->wherePivot('event_id',$event->id)->first()){
+
+                    $exp = $exp->pivot->expiration;
+                    $exp = strtotime($exp);
+                    $today = strtotime(date('Y-m-d'));
+
+                    if($exp && $exp > $today){
+
+                        $exp = date_create(date('Y-m-d',$exp));
+                        $today = date_create(date('Y-m-d',$today));
+
+                        $days = date_diff($exp, $today);
+
+                        $subEnds = date('Y-m-d', strtotime($subEnds. ' + ' . $days->d .' days'));
+
+                    }
+
+                }
+
+
+                $data['firstName'] = $user->firstname;
+
+                $data['name'] = $user->firstname . ' ' . $user->lastname;
+                $data['email'] = $user->email;
+                $data['amount'] = $plan->cost;
+                $data['position'] = $user->job_title;
+                $data['company'] = $user->company;
+                $data['mobile'] = $user->mobile;
+                $data['userLink'] = url('/') . "/admin/user/" . $user['id'] ."/edit";
+
+                $data['eventTitle'] = $event->title;
+                $data['eventFaq'] = url('/') . '/' .$event->getSlug().'#faq';
+                $data['eventSlug'] = url('/') . '/myaccount/elearning/' . $event->title;
+                $data['subject'] = 'Knowcrunch - ' . $data['firstName'] .' to our annual subscription';
+                $data['template'] = 'emails.user.subscription_welcome';
+                $data['subscriptionEnds'] = $subEnds;
+                /*$data['sub_type'] = $plan->name;
+                $data['sub_price'] = $plan->cost;
+                $data['sub_period'] = $plan->period();*/
+
+                $user->notify(new SubscriptionWelcome($data));
     }
 }

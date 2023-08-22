@@ -512,8 +512,6 @@ class StudentController extends Controller
         $data['instructors'] = new \Illuminate\Database\Eloquent\Collection;;
         $eventSubscriptions = [];
 
-        $data['unpaidEvents'] = [];
-
         $events = $data['user']['events']->merge($data['user']['eventsUnPaid']);
 
         foreach($events as $key => $event){
@@ -524,8 +522,14 @@ class StudentController extends Controller
             // }
             $eventInfo = $event->event_info();
 
+
             $data['events'][$event->id]['paid'] = $event['pivot']['paid'];
 
+            $transactionStatus = $event->transactionsByUser($user->id)->first();
+
+            if($transactionStatus != null){
+                $data['events'][$event->id]['transactionPending'] =  $transactionStatus['status'];
+            }
 
             //if elearning assign progress for this event
             if($event->is_elearning_course()){
@@ -1091,8 +1095,6 @@ class StudentController extends Controller
         //expiration event for user
         $expiration_event_user = $event['pivot']['expiration'];
         //$data['topics'] = $event->topicsLessonsInstructors($data['videos']);
-
-        dd(json_decode($data['videos'], true));
 
 
         return view('theme.myaccount.newelearning', $data);

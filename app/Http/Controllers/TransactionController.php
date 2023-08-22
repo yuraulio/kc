@@ -12,6 +12,7 @@ use App\Model\PaymentMethod;
 use App\Exports\TransactionExport;
 use ZipArchive;
 use File;
+use App\Notifications\WelcomeEmail;
 
 class TransactionController extends Controller
 {

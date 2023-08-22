@@ -15,6 +15,7 @@
             <div class="row row-flex">
                <div class="col-7 col-sm-12">
                   <div class="text-area">
+                     <p>TEST TEST TEST SEPA</p>
                      <?php echo ((isset($info) && isset($info['title'])) ? $info['title'] : 'Info') ?>
                      <?php ///$res = json_decode($info['transaction']['payment_response'], true); ?>
                      {!! $info['message'] !!}

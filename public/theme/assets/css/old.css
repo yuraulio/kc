@@ -2167,6 +2167,18 @@ img.linkdein-image-add {
     pointer-events: none;
 }
 
+.dynamic-courses-wrapper.pendingSepa{
+    background-color: #d8d8d8;
+}
+.dynamic-courses-wrapper.pendingSepa:hover{
+    background-color: orange;
+}
+
+.dynamic-courses-wrapper.pendingSepa a,
+.dynamic-courses-wrapper.pendingSepa .accordion-title.title-blue-gradient{
+    pointer-events: none;
+}
+
 .exam_text{
     display: inline-flex;
 }
