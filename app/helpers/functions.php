@@ -22,6 +22,100 @@ use App\Model\User;
 use App\Model\CookiesSMS;
 use App\Notifications\AfterSepaPaymentEmail;
 
+if(!function_exists('updateStripeCustomer')){
+
+    function updateStripeCustomer($dpuser, $st_name, $temp, $address, $payment_method = false){
+        $userId = $dpuser['id'];
+        try{
+
+            $dpuser->updateStripeCustomer([
+            
+                'name' => $st_name,
+                'email' => $dpuser->email,
+                'metadata' => $temp,
+                //'description' => $st_desc,
+
+                //'tax_info' => ['tax_id' => $st_tax_id, 'type' => 'vat'],
+                'shipping' => ['name' => $st_name, 'address' => $address],
+                'address' => $address,
+
+            ]);
+
+        }catch(\Stripe\Exception\InvalidRequestException $e){
+
+               
+             $dpuser = User::where('id',$userId)->update([
+                'stripe_id' => null,
+                'stripe_ids' => null
+            ]);
+
+            $dpuser = User::where('id',$userId)->first();
+    
+
+            // $options=['name' => $dpuser['firstname'] . ' ' . $dpuser['lastname'], 'email' => $dpuser['email'], 'invoice_settings' => ['default_payment_method' =>  $payment_method]];
+            // $a = $dpuser->createAsStripeCustomer($options);
+
+            // //dd($a);
+
+            // $dpuser->stripe_id = $a['id'];
+            // $dpuser->save();
+
+            // $dpuser->stripe_id = null;
+            // $dpuser->save();
+
+            // $stripe_ids = json_decode($dpuser->stripe_ids,true) ? json_decode($dpuser->stripe_ids,true) : [];
+            // $stripe_ids[] =$dpuser->stripe_id;
+
+            // $dpuser->stripe_ids = json_encode($stripe_ids);
+            // $dpuser->save();
+        
+            
+            // $dpuser = User::where('id',$dpuser->id)->update([
+            //     'stripe_ids' => json_encode([])
+            // ]);
+            
+
+            
+           // $options=['name' => $dpuser['firstname'] . ' ' . $dpuser['lastname'], 'email' => $dpuser['email']];
+            //$user->createAsStripeCustomer($options);
+            //$stripeCustomer = $dpuser->createAsStripeCustomer($options);
+
+            
+            //$dpuser = User::where('id',$userId)->first();
+
+            //dd($dpuser);
+
+           // $stripe_ids = json_decode($dpuser->stripe_ids,true) ? json_decode($dpuser->stripe_ids,true) : [];
+            //$stripe_ids[] = $stripeCustomer['id'];
+
+            //dd($dpuser);
+            // $dpuser->stripe_ids = json_encode($stripe_ids);
+            // $dpuser->save();
+            //$dpuser->save();
+
+        }
+
+
+        $user = User::find($userId);
+
+        
+
+            $options=['name' => $user['firstname'] . ' ' . $user['lastname'], 'email' => $user['email']];
+            $user->createAsStripeCustomer($options);
+
+            //dd($cus);
+
+            $stripe_ids = json_decode($user->stripe_ids,true) ? json_decode($user->stripe_ids,true) : [];
+            $stripe_ids[] =$user->stripe_id;
+
+            $user->stripe_ids = json_encode($stripe_ids);
+            $user->stripe_id = null;
+            $user->save();
+        
+        
+    }
+}
+
 
 if(!function_exists('loadSendEmailsData')){
     function sendAfterSuccessPaymentSepa($transaction, $emailsCollector, $extrainfo, $helperdetails, $elearning, $eventslug,$stripe,$billingEmail,$paymentMethod = null, $sepa = false){

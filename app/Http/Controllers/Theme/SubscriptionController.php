@@ -15,6 +15,7 @@ use App\Model\PaymentMethod;
 use App\Notifications\SubscriptionWelcome;
 use Carbon\Carbon;
 use Laravel\Cashier\Subscription;
+use App\Model\User;
 
 class SubscriptionController extends Controller
 {
@@ -557,6 +558,12 @@ class SubscriptionController extends Controller
                 $st_city = $temp['billcity'];
            //     $st_phone = $temp['billmobile'];
 
+                $address = [];
+                $address['country'] = 'GR';
+                $address['line1'] = $st_line1;
+                $address['city'] = $st_city;
+                $address['postal_code'] = $st_postal_code;
+
             }
             else {
                 $temp['billing'] = 'Invoice requested';
@@ -591,6 +598,9 @@ class SubscriptionController extends Controller
 
         $user->asStripeCustomer();
 
+
+
+
         if(!$user->stripe_id){
 
             $options=['name' => $user['firstname'] . ' ' . $user['lastname'], 'email' => $user['email']];
@@ -603,9 +613,13 @@ class SubscriptionController extends Controller
             $user->save();
         }
 
+        updateStripeCustomer($user, $st_name, $temp, $address, $input['payment_method']);
+
         //$anchor = Carbon::now()->addDays(16);;
         //$anchor = $anchor->startOfMonth();
         try {
+
+            
 
             $charge = $user->newSubscription($plan->name, $plan->stripe_plan)
             //->anchorBillingCycleOn($anchor->startOfDay())
@@ -685,7 +699,13 @@ class SubscriptionController extends Controller
                 $st_line1 = $temp['billaddress'] . ' ' . $temp['billaddressnum'];
                 $st_postal_code = $temp['billpostcode'];
                 $st_city = $temp['billcity'];
-           //     $st_phone = $temp['billmobile'];
+                //     $st_phone = $temp['billmobile'];
+
+                $address = [];
+                $address['country'] = 'GR';
+                $address['line1'] = $st_line1;
+                $address['city'] = $st_city;
+                $address['postal_code'] = $st_postal_code;
 
             }
             else {
@@ -720,6 +740,7 @@ class SubscriptionController extends Controller
         }
 
         $user->asStripeCustomer();
+        //$stripeCustomer = $user->createOrGetStripeCustomer();
 
         if(!$user->stripe_id){
 
@@ -735,6 +756,7 @@ class SubscriptionController extends Controller
 
         //$anchor = Carbon::now()->addDays(16);;
         //$anchor = $anchor->startOfMonth();
+        updateStripeCustomer($user, $st_name, $temp, $address);
         try {
 
             $charge = $user->newSubscription($plan->name, $plan->stripe_plan)

@@ -1422,17 +1422,9 @@ class CartController extends Controller
 
 
                 $stripeAmount = $namount * 100;
-                $dpuser->updateStripeCustomer([
-                    'name' => $st_name,
-                    'email' => $dpuser->email,
-                    'metadata' => $temp,
-                    //'description' => $st_desc,
 
-                    //'tax_info' => ['tax_id' => $st_tax_id, 'type' => 'vat'],
-                    'shipping' => ['name' => $st_name, 'address' => $address],
-                    'address' => $address,
-
-                ]);
+                updateStripeCustomer($dpuser, $st_name, $temp, $address);
+                
 
                 $temp['customer'] = $dpuser->email;
                 $nevent = $ev_title . ' ' . $ev_date_help;
@@ -2162,7 +2154,6 @@ class CartController extends Controller
             session()->put('payment_method',$eventC->paymentMethod->first()->id);
 
             $dpuser->asStripeCustomer();
-
             if(!$dpuser->stripe_id){
 
                 $options=['name' => $dpuser['firstname'] . ' ' . $dpuser['lastname'], 'email' => $dpuser['email']];
@@ -2321,74 +2312,56 @@ class CartController extends Controller
 
 
                 $stripeAmount = $namount * 100;
-                $dpuser->updateStripeCustomer([
-                    'name' => $st_name,
-                    'email' => $dpuser->email,
-                    'metadata' => $temp,
-                    //'description' => $st_desc,
 
-                    //'tax_info' => ['tax_id' => $st_tax_id, 'type' => 'vat'],
-                    'shipping' => ['name' => $st_name, 'address' => $address],
-                    'address' => $address,
-
-                ]);
-
+                updateStripeCustomer($dpuser, $st_name, $temp, $address);
+                
                 $temp['customer'] = $dpuser->email;
                 $nevent = $ev_title . ' ' . $ev_date_help;
 
 
                 try{
 
-                    // if($input['payment_method'] == null){
-                    //     $dpuser->addPaymentMethod($paymentMethod);
-                    // }
-
-                    //$ev->users()->where('id',$dpuser->id)->detach();
-                    //$ev->users()->save($dpuser,['paid'=>false,'payment_method'=>$payment_method_id]);
-
-                    // dd($dpuser->paymentMethods('link'));
-
                     header('Content-Type: application/json');
                 
-                // Create a PaymentIntent with amount and currency
-                $paymentIntent = \Stripe\PaymentIntent::create([
-                    'amount' => $stripeAmount,
-                    'currency' => 'eur',
-                    'description' => $nevent,
-                    'customer' => $dpuser->stripe_id,
-                    'payment_method_types' => ['sepa_debit'],
-                    'metadata' => ['integration_check' => 'sepa_debit_accept_a_payment'],
-                ]);
+                    // Create a PaymentIntent with amount and currency
+                    $paymentIntent = \Stripe\PaymentIntent::create([
+                        'amount' => $stripeAmount,
+                        'currency' => 'eur',
+                        'description' => $nevent,
+                        'customer' => $dpuser->stripe_id,
+                        'payment_method_types' => ['sepa_debit'],
+                        'metadata' => ['integration_check' => 'sepa_debit_accept_a_payment'],
+                    ]);
 
 
-                $payment_method_id = -1;
-                if($ev->paymentMethod->first()){
+                    $payment_method_id = -1;
+                    if($ev->paymentMethod->first()){
 
-                    $payment_method_id = $ev->paymentMethod->first()->id;
+                        $payment_method_id = $ev->paymentMethod->first()->id;
 
-                }
+                    }
 
-                $ev->users()->wherePivot('user_id',$dpuser->id)->detach();
-                $ev->users()->save($dpuser,['paid'=>false,'payment_method'=>$payment_method_id]);
+                    $ev->users()->wherePivot('user_id',$dpuser->id)->detach();
+                    $ev->users()->save($dpuser,['paid'=>false,'payment_method'=>$payment_method_id]);
 
-                if( (is_array($paymentIntent)  &&  $paymentIntent['status'] == 'requires_payment_method' ) || (isset($paymentIntent) && $paymentIntent->status == 'requires_payment_method')) {
+                    if( (is_array($paymentIntent)  &&  $paymentIntent['status'] == 'requires_payment_method' ) || (isset($paymentIntent) && $paymentIntent->status == 'requires_payment_method')) {
 
-                    $status = 2;
-                    $this->createTransaction($dpuser, $pay_seats_data, $installments, $cart, $bd, $ev,$couponCode,$namount, $pay_bill_data, $paymentIntent,$eventC,$status);
-                   
-                    Session::put('payment_method_is_sepa',true);
-                
-                    $output = [
-                        'clientSecret' => $paymentIntent->client_secret,
-                        'status' => $paymentIntent->status,
-                        'return_url' => '/order-success',
-                    ];
-
+                        $status = 2;
+                        $this->createTransaction($dpuser, $pay_seats_data, $installments, $cart, $bd, $ev,$couponCode,$namount, $pay_bill_data, $paymentIntent,$eventC,$status);
                     
+                        Session::put('payment_method_is_sepa',true);
+                    
+                        $output = [
+                            'clientSecret' => $paymentIntent->client_secret,
+                            'status' => $paymentIntent->status,
+                            'return_url' => '/order-success',
+                        ];
 
-                    return json_encode($output);
-    
-                }
+                        
+
+                        return json_encode($output);
+        
+                    }
                 }catch (\Laravel\Cashier\Exceptions\IncompletePayment $exception) {
                     
 

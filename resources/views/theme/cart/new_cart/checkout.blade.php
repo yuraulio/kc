@@ -672,6 +672,12 @@ $( document ).ready(function() {
 					payment_method: payment_method
 				},  
 				success: function(data) {
+
+					if(data.error){
+						window.location = data.return_url 
+					}
+
+					console.log(data)
 					
 					$('#submit-button').attr('data-secret', JSON.parse(data)['clientSecret'])
 					
