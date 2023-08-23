@@ -16,6 +16,7 @@ use App\Notifications\SubscriptionWelcome;
 use Carbon\Carbon;
 use Laravel\Cashier\Subscription;
 use App\Model\User;
+use App\Notifications\WelcomeEmail;
 
 class SubscriptionController extends Controller
 {
@@ -644,6 +645,13 @@ class SubscriptionController extends Controller
                 'return_url' => '/myaccount/subscription-success',
                 'status' => ''
             ];
+
+            $data1 = loadSendEmailsDataSubscription($sub);
+
+            
+
+            $user->notify(new WelcomeEmail($user, $data1));
+            
 
             Session::forget('pay_seats_data');
             Session::forget('transaction_id');

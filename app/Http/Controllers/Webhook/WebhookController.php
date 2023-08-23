@@ -91,11 +91,13 @@ class WebhookController extends BaseWebhookController
 			$transaction->status = 1; //Completed = 1
 			$transaction->save();
 
+			Log::info('HAS SEPA DATA IS NOW AVAILABLE2');
+
 			$data = loadSendEmailsData($transaction);
 			//send after sepa payment success
 			// TODO
 			sendAfterSuccessPaymentSepa($data['transaction'], $data['emailsCollector'], $data['extrainfo'], $data['helperdetails'], $data['elearning'], $data['eventslug'], $data['stripe'],$data['billingEmail'],$data['paymentMethod'], $sepa = true);
-
+			Log::info('HAS SEPA DATA IS NOW AVAILABLE end');
 
 			app('App\Http\Controllers\Theme\InfoController')->sendEmails($data['transaction'], $data['emailsCollector'], $data['extrainfo'], $data['helperdetails'], $data['elearning'], $data['eventslug'], $data['stripe'],$data['billingEmail'],$data['paymentMethod'], $sepa = true);
 				
@@ -852,6 +854,8 @@ class WebhookController extends BaseWebhookController
                 $data['sub_price'] = $plan->cost;
                 $data['sub_period'] = $plan->period();*/
 
+
+				// help
                 $user->notify(new SubscriptionWelcome($data));
 	}
 

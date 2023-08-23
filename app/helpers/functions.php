@@ -117,7 +117,7 @@ if(!function_exists('updateStripeCustomer')){
 }
 
 
-if(!function_exists('loadSendEmailsData')){
+if(!function_exists('sendAfterSuccessPaymentSepa')){
     function sendAfterSuccessPaymentSepa($transaction, $emailsCollector, $extrainfo, $helperdetails, $elearning, $eventslug,$stripe,$billingEmail,$paymentMethod = null, $sepa = false){
 
         // dd($elearning);
@@ -466,6 +466,23 @@ if(!function_exists('loadSendEmailsData')){
         $data['stripe'] = $stripe;
         $data['billingEmail'] = $billingEmail;
         $data['paymentMethod'] = $paymentMethod;
+
+
+
+
+        return $data;
+    }
+}
+if(!function_exists('loadSendEmailsDataSubscription')){
+    function loadSendEmailsDataSubscription($transaction){
+
+    
+
+        $data['duration'] = '14';
+        $data['firstName'] = 'asd';
+        $data['extrainfo'] = ['test1', 'test2', 'teasd'];
+        $data['slug'] = 'asd';
+        $data['eventSlug'] = 'asd';
 
 
 
