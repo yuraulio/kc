@@ -96,21 +96,21 @@ if(!function_exists('updateStripeCustomer')){
         }
 
 
-        $user = User::find($userId);
+        // $user = User::find($userId);
 
         
 
-            $options=['name' => $user['firstname'] . ' ' . $user['lastname'], 'email' => $user['email']];
-            $user->createAsStripeCustomer($options);
+        //     $options=['name' => $user['firstname'] . ' ' . $user['lastname'], 'email' => $user['email']];
+        //     $user->createAsStripeCustomer($options);
 
-            //dd($cus);
+        //     //dd($cus);
 
-            $stripe_ids = json_decode($user->stripe_ids,true) ? json_decode($user->stripe_ids,true) : [];
-            $stripe_ids[] =$user->stripe_id;
+        //     $stripe_ids = json_decode($user->stripe_ids,true) ? json_decode($user->stripe_ids,true) : [];
+        //     $stripe_ids[] =$user->stripe_id;
 
-            $user->stripe_ids = json_encode($stripe_ids);
-            $user->stripe_id = null;
-            $user->save();
+        //     $user->stripe_ids = json_encode($stripe_ids);
+        //     $user->stripe_id = null;
+        //     $user->save();
         
         
     }
