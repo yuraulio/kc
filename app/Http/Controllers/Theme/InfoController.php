@@ -803,12 +803,14 @@ class InfoController extends Controller
 
         $paymentMethod = PaymentMethod::find($paymentMethodId);
 
-        //if(!$sepa){
+        if(!$sepa){
             $this->sendEmails($transaction, $emailsCollector, $extrainfo, $helperdetails, $elearning, $eventslug, $stripe,$billingEmail,$paymentMethod);
-        //}
+        }else{
+            $this->sendWelcomeEmailsSepa($transaction, $emailsCollector, $extrainfo, $helperdetails, $elearning, $eventslug, $stripe,$billingEmail,$paymentMethod);
+        }
     }
 
-    public function sendWelcomeEmails($transaction, $emailsCollector, $extrainfo, $helperdetails, $elearning, $eventslug,$stripe,$billingEmail,$paymentMethod = null){
+    public function sendWelcomeEmailsSepa($transaction, $emailsCollector, $extrainfo, $helperdetails, $elearning, $eventslug,$stripe,$billingEmail,$paymentMethod = null){
         // dd($elearning);
         // 5 email, admin, user, 2 deree, darkpony
     	//$generalInfo = \Config::get('dpoptions.website_details.settings');
@@ -954,8 +956,24 @@ class InfoController extends Controller
 
 
                 $data['firstName'] = $user->firstname;
+
                 
+
+                if(isset($transaction['payment_response']) && $transaction['payment_response'] != null){
+
+                    $paymentResponse = json_decode($transaction['payment_response'], true);
+                    if(isset($paymentResponse['metadata']) && isset($paymentResponse['metadata']['integration_check']) && $paymentResponse['metadata']['integration_check'] == 'sepa_debit_accept_a_payment'){
+
+                    }else{
+                        $user->notify(new WelcomeEmail($user,$data));
+                    }
+					
+					
+				}else{
                     $user->notify(new WelcomeEmail($user,$data));
+                }
+                
+                    
                 
                 
 

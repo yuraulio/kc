@@ -2262,6 +2262,7 @@ class CartController extends Controller
                             'metadata' => [
                                 'installments_paid' => 0, 
                                 'installments' => $installments,
+                                'payment_method' => 'sepa'
                             ],
                         ]
                     );

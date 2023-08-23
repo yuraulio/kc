@@ -92,7 +92,12 @@ class WebhookController extends BaseWebhookController
 			$transaction->save();
 
 			$data = loadSendEmailsData($transaction);
-				app('App\Http\Controllers\Theme\InfoController')->sendEmails($data['transaction'], $data['emailsCollector'], $data['extrainfo'], $data['helperdetails'], $data['elearning'], $data['eventslug'], $data['stripe'],$data['billingEmail'],$data['paymentMethod'], $sepa = true);
+			//send after sepa payment success
+			// TODO
+			sendAfterSuccessPaymentSepa($data['transaction'], $data['emailsCollector'], $data['extrainfo'], $data['helperdetails'], $data['elearning'], $data['eventslug'], $data['stripe'],$data['billingEmail'],$data['paymentMethod'], $sepa = true);
+
+
+			app('App\Http\Controllers\Theme\InfoController')->sendEmails($data['transaction'], $data['emailsCollector'], $data['extrainfo'], $data['helperdetails'], $data['elearning'], $data['eventslug'], $data['stripe'],$data['billingEmail'],$data['paymentMethod'], $sepa = true);
 				
 		}
 	}
@@ -165,7 +170,7 @@ class WebhookController extends BaseWebhookController
 	private function installments($payload,$sub,$user){
 
 		Log::info('payload from installments');
-		Log::info(var_export($payload, true));
+		//Log::info(var_export($payload, true));
 
 		$count = $sub['metadata']['installments_paid'];
 		if(isset($sub['metadata']['installments']))
@@ -200,7 +205,28 @@ class WebhookController extends BaseWebhookController
         //session()->put('payment_method',Event::findOrFail($eventId)->paymentMethod->first()->id);
         session()->put('payment_method',$subscriptionPaymentMethod->pivot->payment_method);
 
-		$subscription->metadata = ['installments_paid' => $count, 'installments' => $totalinst];
+		$fromSepaPayment = false;
+		Log::info('from sepa payment');
+		Log::info(var_export($sub, true));
+
+		if($sub['metadata'] != null && isset($sub['metadata']['payment_method']) && $sub['metadata']['payment_method'] == 'sepa'){
+			Log::info('from sepa payment INSIDE METADATA');
+			
+			
+			Log::info('from sepa payment INSIDE METADATA SEPA');
+			$fromSepaPayment = true;
+			
+		}
+
+		Log::info('from sepa payment ::/');
+		Log::info($fromSepaPayment);
+		
+		if($fromSepaPayment){
+			$subscription->metadata = ['installments_paid' => $count, 'installments' => $totalinst, 'payment_method' => 'sepa'];
+		}else{
+			$subscription->metadata = ['installments_paid' => $count, 'installments' => $totalinst];
+		}
+		
 		$subscription->save();
 
 		$stripeSubscription = $user->subscriptions()->where('stripe_id',$payload['data']['object']['subscription'])->first()->asStripeSubscription();
@@ -210,6 +236,8 @@ class WebhookController extends BaseWebhookController
 		//$invoices = $user->events->where('id',$eventId)->first()->invoicesByUser($user->id)->get();
 		$invoices = $user->events_for_user_list()->wherePivot('event_id',$eventId)->first()->invoicesByUser($user->id)->get();
 
+			
+
 		if(count($invoices) > 0){
 			Log::info('has invoice');
 			$invoice = $invoices->last();
@@ -218,6 +246,18 @@ class WebhookController extends BaseWebhookController
         	$billingEmail = isset( $billDet['billemail']) &&  $billDet['billemail'] != '' ?  $billDet['billemail'] : false;
 			//$invoice = $invoices->first();
 			[$pdf,$invoice] = $invoice->generateCronjobInvoice();
+
+
+			if($fromSepaPayment){
+				//NEW12
+				$datamail = loadSendEmailsData($transaction);
+				//send after sepa payment success
+				// TODO
+				sendAfterSuccessPaymentSepa($datamail['transaction'], $datamail['emailsCollector'], $datamail['extrainfo'], $datamail['helperdetails'], $datamail['elearning'], $datamail['eventslug'], $datamail['stripe'],$datamail['billingEmail'],$datamail['paymentMethod'], $sepa = true);
+			}
+			
+
+			
 			$this->sendEmail($invoice,$pdf,$paymentMethod,false,$billingEmail);
 		}else{
 			Log::info('has not invoice');
@@ -315,6 +355,16 @@ class WebhookController extends BaseWebhookController
 
 				$billDet = json_decode($transaction['billing_details'],true);
         		$billingEmail = isset( $billDet['billemail']) &&  $billDet['billemail'] != '' ?  $billDet['billemail'] : false;
+
+
+
+				if($fromSepaPayment){
+					//NEW12
+					$datamail = loadSendEmailsData($transaction);
+					//send after sepa payment success
+					// TODO
+					sendAfterSuccessPaymentSepa($datamail['transaction'], $datamail['emailsCollector'], $datamail['extrainfo'], $datamail['helperdetails'], $datamail['elearning'], $datamail['eventslug'], $datamail['stripe'],$datamail['billingEmail'],$datamail['paymentMethod'], $sepa = true);
+				}
 
 				$this->sendEmail($elearningInvoice,$pdf,$paymentMethod,false,$billingEmail);
 
@@ -613,11 +663,43 @@ class WebhookController extends BaseWebhookController
 				//$user->events()->where('event_id',$eventId)->first()->pivot->save();
 			}
 
+			Log::info('test');
+			Log::info(var_export($subscription,true));
+			$fromSepaPayment = false;
+			if($subscription['metadata'] != null ){
+
+				
+
+				$metadata = json_decode($subscription['metadata'],true);
+				if($metadata['payment_method'] && $metadata['payment_method'] == 'sepa'){
+					Log::info('from sepa payment INSIDE METADATA');
+				
+				
+					Log::info('from sepa payment INSIDE METADATA SEPA');
+					$fromSepaPayment = true;
+				}
+				
+				
+			}
+
+			
+
 
 			$transaction = Transaction::create($transaction_arr);
 			$transaction->subscription()->save($subscription);
 			$transaction->user()->save($user);
 			$transaction->event()->save($subscription->event->first());
+
+			/*
+			if($fromSepaPayment){
+				//NEW12
+				$datamail = loadSendEmailsData($transaction);
+				//send after sepa payment success
+				// TODO
+				sendAfterSuccessPaymentSepa($datamail['transaction'], $datamail['emailsCollector'], $datamail['extrainfo'], $datamail['helperdetails'], $datamail['elearning'], $datamail['eventslug'], $datamail['stripe'],$datamail['billingEmail'],$datamail['paymentMethod'], $sepa = true);
+			}
+			*/
+			
 			//$invoiceNumber = Invoice::has('event')->latest()->first()->invoice;
 			if($sub['amount']/100 > 0){
 
