@@ -614,7 +614,7 @@ class SubscriptionController extends Controller
             $user->save();
         }
 
-        updateStripeCustomer($user, $st_name, $temp, $address, $input['payment_method']);
+        $user = updateStripeCustomer($user, $st_name, $temp, $address);
 
         //$anchor = Carbon::now()->addDays(16);;
         //$anchor = $anchor->startOfMonth();
@@ -646,7 +646,7 @@ class SubscriptionController extends Controller
                 'status' => ''
             ];
 
-            $data1 = loadSendEmailsDataSubscription($sub);
+            $data1 = loadSendEmailsDataSubscription($sub, $user);
 
             
 
@@ -764,7 +764,8 @@ class SubscriptionController extends Controller
 
         //$anchor = Carbon::now()->addDays(16);;
         //$anchor = $anchor->startOfMonth();
-        updateStripeCustomer($user, $st_name, $temp, $address);
+        $user = updateStripeCustomer($user, $st_name, $temp, $address);
+
         try {
 
             $charge = $user->newSubscription($plan->name, $plan->stripe_plan)

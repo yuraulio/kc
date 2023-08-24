@@ -23,6 +23,7 @@ use Illuminate\Support\Facades\Log;
 use App\Notifications\SubscriptionWelcome;
 use App\Model\User;
 use App\Notifications\WelcomeEmail;
+use App\Notifications\AfterSepaPaymentEmail;
 
 class WebhookController extends BaseWebhookController
 {
@@ -692,15 +693,16 @@ class WebhookController extends BaseWebhookController
 			$transaction->user()->save($user);
 			$transaction->event()->save($subscription->event->first());
 
-			/*
+			
 			if($fromSepaPayment){
 				//NEW12
-				$datamail = loadSendEmailsData($transaction);
+				$datamail = loadSendEmailsDataSubscription($subscription, $user);
 				//send after sepa payment success
 				// TODO
-				sendAfterSuccessPaymentSepa($datamail['transaction'], $datamail['emailsCollector'], $datamail['extrainfo'], $datamail['helperdetails'], $datamail['elearning'], $datamail['eventslug'], $datamail['stripe'],$datamail['billingEmail'],$datamail['paymentMethod'], $sepa = true);
+				$user->notify(new AfterSepaPaymentEmail($user,$datamail));
+				//sendAfterSuccessPaymentSepa1($datamail['transaction'], $datamail['emailsCollector'], $datamail['extrainfo'], $datamail['helperdetails'], $datamail['elearning'], $datamail['eventslug'], $datamail['stripe'],$datamail['billingEmail'],$datamail['paymentMethod'], $sepa = true);
 			}
-			*/
+			
 			
 			//$invoiceNumber = Invoice::has('event')->latest()->first()->invoice;
 			if($sub['amount']/100 > 0){

@@ -50,67 +50,22 @@ if(!function_exists('updateStripeCustomer')){
             ]);
 
             $dpuser = User::where('id',$userId)->first();
+
+            $options=['name' => $dpuser['firstname'] . ' ' . $dpuser['lastname'], 'email' => $dpuser['email']];
+            $dpuser->createAsStripeCustomer($options);
+
+            $stripe_ids = json_decode($dpuser->stripe_ids,true) ? json_decode($dpuser->stripe_ids,true) : [];
+            $stripe_ids[] =$dpuser->stripe_id;
+
+            $dpuser->stripe_ids = json_encode($stripe_ids);
+            $dpuser->save();
+
+            $dpuser = User::find($dpuser->id);
     
-
-            // $options=['name' => $dpuser['firstname'] . ' ' . $dpuser['lastname'], 'email' => $dpuser['email'], 'invoice_settings' => ['default_payment_method' =>  $payment_method]];
-            // $a = $dpuser->createAsStripeCustomer($options);
-
-            // //dd($a);
-
-            // $dpuser->stripe_id = $a['id'];
-            // $dpuser->save();
-
-            // $dpuser->stripe_id = null;
-            // $dpuser->save();
-
-            // $stripe_ids = json_decode($dpuser->stripe_ids,true) ? json_decode($dpuser->stripe_ids,true) : [];
-            // $stripe_ids[] =$dpuser->stripe_id;
-
-            // $dpuser->stripe_ids = json_encode($stripe_ids);
-            // $dpuser->save();
-        
-            
-            // $dpuser = User::where('id',$dpuser->id)->update([
-            //     'stripe_ids' => json_encode([])
-            // ]);
-            
-
-            
-           // $options=['name' => $dpuser['firstname'] . ' ' . $dpuser['lastname'], 'email' => $dpuser['email']];
-            //$user->createAsStripeCustomer($options);
-            //$stripeCustomer = $dpuser->createAsStripeCustomer($options);
-
-            
-            //$dpuser = User::where('id',$userId)->first();
-
-            //dd($dpuser);
-
-           // $stripe_ids = json_decode($dpuser->stripe_ids,true) ? json_decode($dpuser->stripe_ids,true) : [];
-            //$stripe_ids[] = $stripeCustomer['id'];
-
-            //dd($dpuser);
-            // $dpuser->stripe_ids = json_encode($stripe_ids);
-            // $dpuser->save();
-            //$dpuser->save();
 
         }
 
-
-        // $user = User::find($userId);
-
-        
-
-        //     $options=['name' => $user['firstname'] . ' ' . $user['lastname'], 'email' => $user['email']];
-        //     $user->createAsStripeCustomer($options);
-
-        //     //dd($cus);
-
-        //     $stripe_ids = json_decode($user->stripe_ids,true) ? json_decode($user->stripe_ids,true) : [];
-        //     $stripe_ids[] =$user->stripe_id;
-
-        //     $user->stripe_ids = json_encode($stripe_ids);
-        //     $user->stripe_id = null;
-        //     $user->save();
+        return $dpuser;
         
         
     }
@@ -474,15 +429,51 @@ if(!function_exists('loadSendEmailsData')){
     }
 }
 if(!function_exists('loadSendEmailsDataSubscription')){
-    function loadSendEmailsDataSubscription($transaction){
+    function loadSendEmailsDataSubscription($subscription, $user){
+
+        $event = $subscription->event->first();
+
+
+        $data = [];
+        $data['duration'] = '';
+        $data['eventSlug'] = $subscription->event->first() ? url('/') . '/' . $subscription->event->first()->getSlug() : url('/');
+
+        $eventInfo = $subscription->event->first() ? $subscription->event->first()->event_info() : [];
+
+        if(isset($eventInfo['delivery']) && $eventInfo['delivery'] == 143){
+
+            $data['duration'] = isset($eventInfo['elearning']['visible']['emails']) && isset($eventInfo['elearning']['expiration']) &&
+                                $eventInfo['elearning']['visible']['emails'] && isset($eventInfo['elearning']['text']) ?
+                                            $eventInfo['elearning']['expiration'] . ' ' . $eventInfo['elearning']['text']: '';
+
+
+        }else if(isset($eventInfo['delivery']) && $eventInfo['delivery'] == 139){
+
+            $data['duration'] = isset($eventInfo['inclass']['dates']['visible']['emails']) && isset($eventInfo['inclass']['dates']['text']) &&
+                                    $eventInfo['inclass']['dates']['visible']['emails'] ?  $eventInfo['inclass']['dates']['text'] : '';
+
+            $data['duration'] = strip_tags($data['duration']);
+
+        }
+
+        $data['hours'] = isset($eventInfo['hours']['visible']['emails']) &&  $eventInfo['hours']['visible']['emails'] && isset($eventInfo['hours']['hour']) &&
+                        isset( $eventInfo['hours']['text']) ? $eventInfo['hours']['hour'] . ' ' . $eventInfo['hours']['text'] : '';
+
+
+        $data['firstName'] = $user['firstname'];
+        $data['slug'] = 'asd';
+        $groupEmailLink = $event && $event->fb_group ? $event->fb_group : '';
+        $data['extrainfo'] = ['', '', $subscription->event->first()->title, '', '', '', '',$groupEmailLink];
+        
+
 
     
 
-        $data['duration'] = '14';
-        $data['firstName'] = 'asd';
-        $data['extrainfo'] = ['test1', 'test2', 'teasd'];
-        $data['slug'] = 'asd';
-        $data['eventSlug'] = 'asd';
+        // $data['duration'] = '14';
+        // $data['firstName'] = 'asd';
+        // $data['extrainfo'] = ['test1', 'test2', 'teasd'];
+        // $data['slug'] = 'asd';
+        // $data['eventSlug'] = 'asd';
 
 
 

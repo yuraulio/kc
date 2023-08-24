@@ -1423,8 +1423,8 @@ class CartController extends Controller
 
                 $stripeAmount = $namount * 100;
 
-                updateStripeCustomer($dpuser, $st_name, $temp, $address);
-                
+                $dpuser = updateStripeCustomer($dpuser, $st_name, $temp, $address);
+
 
                 $temp['customer'] = $dpuser->email;
                 $nevent = $ev_title . ' ' . $ev_date_help;
@@ -2313,7 +2313,7 @@ class CartController extends Controller
 
                 $stripeAmount = $namount * 100;
 
-                updateStripeCustomer($dpuser, $st_name, $temp, $address);
+                $dpuser = updateStripeCustomer($dpuser, $st_name, $temp, $address);
                 
                 $temp['customer'] = $dpuser->email;
                 $nevent = $ev_title . ' ' . $ev_date_help;
