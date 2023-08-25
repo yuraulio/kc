@@ -766,7 +766,7 @@
                         
                         {{--@if($event['view_tpl'] != 'elearning_free' && $event['view_tpl'] != 'elearning_event')--}}
                         @if($event['delivery'] != 143)
-                        <div class="col12 dynamic-courses-wrapper dynamic-courses-wrapper--style2 @if(isset($event['paid']) && $event['paid'] == 0 && isset($event['transactionPending']) && $event['transactionPending'] == 2){{'pendingSepa'}}@elseif(isset($event['paid']) && $event['paid'] == 0){{'unpaid'}}@endif">
+                        <div class="col12 dynamic-courses-wrapper dynamic-courses-wrapper--style2 @if((isset($event['paid']) && $event['paid'] == 0 && isset($event['transactionPending']) && $event['transactionPending'] == 2) || (isset($event['transactionPendingSepa']) && $event['transactionPendingSepa'] == 1)){{'pendingSepa'}}@elseif(isset($event['paid']) && $event['paid'] == 0 ){{'unpaid'}}@endif">
                             <div class="item">
                                 <h2>{{ $event['title'] }}</h2>
                                 <div class="inside-tabs">
@@ -1247,7 +1247,7 @@
                                         @endif
                                     </div>
                                 </div>
-                                @if(isset($event['paid']) && $event['paid'] == 0 && isset($event['transactionPending']) && $event['transactionPending'] == 2)
+                                @if((isset($event['paid']) && $event['paid'] == 0 && isset($event['transactionPending']) && $event['transactionPending'] == 2) || (isset($event['transactionPendingSepa']) && $event['transactionPendingSepa'] == 1))
                                  <div class="pendingSepaMessage d-none">
                                      <h3>Your course will be available once the SEPA payment has cleared. This usually takes a few days.</h3>
                                  </div>
@@ -1262,7 +1262,7 @@
                      @else
 
 
-                        <div class="col12 dynamic-courses-wrapper @if(isset($event['paid']) && $event['paid'] == 0 && isset($event['transactionPending']) && $event['transactionPending'] == 2){{'pendingSepa'}}@elseif(isset($event['paid']) && $event['paid'] == 0){{'unpaid'}}@endif">
+                        <div class="col12 dynamic-courses-wrapper @if((isset($event['paid']) && $event['paid'] == 0 && isset($event['transactionPending']) && $event['transactionPending'] == 2) || (isset($event['transactionPendingSepa']) && $event['transactionPendingSepa'] == 1)){{'pendingSepa'}}@elseif(isset($event['paid']) && $event['paid'] == 0){{'unpaid'}}@endif">
                             <div class="item">
                             <h2>{{ $event['title'] }}</h2>
                             <div class="inside-tabs">
@@ -1529,7 +1529,7 @@
 
                                 </div>
                             </div>
-                            @if(isset($event['paid']) && $event['paid'] == 0 && isset($event['transactionPending']) && $event['transactionPending'] == 2)
+                            @if((isset($event['paid']) && $event['paid'] == 0 && isset($event['transactionPending']) && $event['transactionPending'] == 2) || (isset($event['transactionPendingSepa']) && $event['transactionPendingSepa'] == 1))
                            <div class="pendingSepaMessage d-none">
                                  <h3>Your course will be available once the SEPA payment has cleared. This usually takes a few days.</h3>
                            </div>

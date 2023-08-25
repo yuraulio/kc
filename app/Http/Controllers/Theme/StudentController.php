@@ -515,6 +515,8 @@ class StudentController extends Controller
 
         $events = $data['user']['events']->merge($data['user']['eventsUnPaid']);
 
+        $latestSubscription = $user->subscriptionEvents()->latest()->first();
+
         foreach($events as $key => $event){
             $after20Days = null;
             // if($event->id != 2304){
@@ -525,8 +527,13 @@ class StudentController extends Controller
 
 
             $data['events'][$event->id]['paid'] = $event['pivot']['paid'];
-
+            
             $transactionStatus = $event->transactionsByUser($user->id)->first();
+            
+
+            if($latestSubscription && $latestSubscription->id == $event->id && $latestSubscription->pivot->expiration == null){
+                $data['events'][$event->id]['transactionPendingSepa'] =  true;
+            }
 
             if($transactionStatus != null){
                 $data['events'][$event->id]['transactionPending'] =  $transactionStatus['status'];
@@ -729,6 +736,7 @@ class StudentController extends Controller
             array_unshift($data['events'], $value);
         }
 
+        //dd($data);
         return $data;
 
     }
