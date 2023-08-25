@@ -223,7 +223,7 @@ class InfoController extends Controller
        Session::forget('coupon_code');
        Session::forget('coupon_price');
        Session::forget('priceOf');
-       //Session::forget('payment_method_is_sepa');
+       Session::forget('payment_method_is_sepa');
         ///dd($data);
 
         if (isset($this->transaction['payment_response'])) {

@@ -29,23 +29,32 @@ class WebhookController extends BaseWebhookController
 {
 
 	public function handleChargeFailed(array $payload){
-		// Log::info('failed');
-		// Log::info(var_export($payload, true));
-		if(isset($payload['data']['object']['metadata']['integration_check']) && $payload['data']['object']['metadata']['integration_check'] == 'sepa_debit_accept_a_payment' && $payload['data']['object']['paid'] === true && $payload['data']['object']['failure_code'] != NULL){
+		Log::info('failed');
+		Log::info(var_export($payload, true));
+		if(isset($payload['data']['object']['metadata']['integration_check']) && $payload['data']['object']['metadata']['integration_check'] == 'sepa_debit_accept_a_payment' && $payload['data']['object']['paid'] === false && $payload['data']['object']['failure_code'] != NULL){
 			$paymentIntent = $payload['data']['object']['payment_intent'];
-
+			Log::info('failed 123');
 			$transaction = Transaction::with('user')->where('payment_response','LIKE','%'.$paymentIntent.'%')->first();
 			$event = $transaction->event()->first();
+
+			foreach($transaction->user as $user){
+			
+				$event->users()->wherePivot('user_id',$user->id)->detach();
+			}
 	
 	
 			$transaction->invoice()->delete();
-			$event->users()->detach();
+			$transaction->user()->detach();
 			$transaction->delete();
+
+			// TODO 
+			//(1) FAILURE EMAIL
 		}
 	}
 
 	public function handleChargeDisputeCreated(array $payload){
-
+		Log::info('dispute trigger');
+		Log::info(var_export($payload, true));
 		//TODO
 		
 		//(1) Remove Invoice
@@ -55,12 +64,20 @@ class WebhookController extends BaseWebhookController
 		//Log::info(var_export($payload, true));
 		$paymentIntent = $payload['data']['object']['payment_intent'];
 
-		$transaction = Transaction::with('user')->where('payment_response','LIKE','%'.$paymentIntent.'%')->first();
+		$transaction = Transaction::with('user', 'event')->where('payment_response','LIKE','%'.$paymentIntent.'%')->first();
 		$event = $transaction->event()->first();
+
+		
+		//$event = $transaction['event'];
+		foreach($transaction->user as $user){
+			
+			$event->users()->wherePivot('user_id',$user->id)->detach();
+		}
+
 
 
 		$transaction->invoice()->delete();
-		$event->users()->detach();
+		$transaction->user()->detach();
 		$transaction->delete();
 
 
@@ -73,7 +90,7 @@ class WebhookController extends BaseWebhookController
 
 		// run when sepa debit without installments
 		if((isset($payload['data']['object']['metadata']['integration_check']) && $payload['data']['object']['metadata']['integration_check'] == 'sepa_debit_accept_a_payment' && $payload['data']['object']['paid'] === true && $payload['data']['object']['failure_code'] == NULL) ){
-			//Log::info('HAS SEPA DATA IS NOW AVAILABLE');
+			Log::info('HAS SEPA DATA IS NOW AVAILABLE');
 
 			$paymentIntent = $payload['data']['object']['payment_intent'];
 			$transaction = Transaction::with('user', 'event')->where('payment_response','LIKE','%'.$paymentIntent.'%')->first();

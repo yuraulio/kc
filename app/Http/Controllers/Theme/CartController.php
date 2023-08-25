@@ -1316,6 +1316,7 @@ class CartController extends Controller
                 $dpuser->stripe_ids = json_encode($stripe_ids);
                 $dpuser->save();
             }
+            $dpuser = updateStripeCustomer($dpuser, $st_name, $temp, $address);
 
              if($installments > 1) {
 
@@ -2170,6 +2171,8 @@ class CartController extends Controller
                 $dpuser->stripe_ids = json_encode($stripe_ids);
                 $dpuser->save();
             }
+
+            $dpuser = updateStripeCustomer($dpuser, $st_name, $temp, $address);
 
             if($installments > 1) {
 
