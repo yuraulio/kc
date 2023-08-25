@@ -2284,9 +2284,7 @@ class CartController extends Controller
 
                     Session::put('payment_method_is_sepa',true);
 
-                    Log::info('pre create transaction');
                     $this->createTransaction($dpuser, $pay_seats_data, $installments, $cart, $bd, $ev,$couponCode,$namount, $pay_bill_data, $exception->payment,$eventC,$status = 2, true);
-                    Log::info('after transaction');
                     
 
                     //after new subscription payment is incomplete because pay with SEPA

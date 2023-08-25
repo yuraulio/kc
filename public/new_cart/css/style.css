@@ -227,7 +227,7 @@ label.custom-control-label{font-size:19px;}
 .card-input-wrap span{position:absolute;right:20px;top:14px;}
 .card-input-wrap i { font-style: normal; padding-left: 20px; }
 .card-info h2{margin-bottom:1em;}
-.card-input{margin-bottom:2.3em;border-radius: 5px; border: 1px solid #ccc;padding: 10px;}
+.card-input{margin-bottom:2.3em; border: 1px solid #000;padding: 10px;}
 .card-input:focus{border: 1px solid #343a40;}
 .card-input-wrap input{padding-left:75px;}
 .card-input-wrap img{position:absolute;top:8px;left:15px;max-width:44px;cursor:pointer;}
@@ -556,7 +556,8 @@ form input[type="text"], form input[type="email"]{font-size:15px;}
     transition: 0.3s;
     /* font-size: 17px; */
     margin-right: 0.5rem;
-    height: 5rem;
+    height: auto;
+    border: 1px solid #6d6e78 !important;
   }
   
   /* Change background color of buttons on hover */
@@ -567,6 +568,7 @@ form input[type="text"], form input[type="email"]{font-size:15px;}
   /* Create an active/current tablink class */
   .tab button.active {
     background-color: #ccc;
+    border: 1px solid #000 !important;
   }
   
   /* Style the tab content */
@@ -608,6 +610,7 @@ form input[type="text"], form input[type="email"]{font-size:15px;}
     font-size: smaller;
     /* margin-right: 2rem; */
     margin-top: 0.4rem;
+    margin-bottom: 0.4rem;
     text-overflow: ellipsis;
     overflow: hidden;
     word-wrap: break-word;
@@ -635,7 +638,6 @@ form input[type="text"], form input[type="email"]{font-size:15px;}
     padding: 0.75rem;
     padding-top: 0.75rem;
     background-color: #f7fafc;
-    border-radius: 5px;
     font-size: 0.875rem;
     font-weight: 600;
     color: #6d6e78;
@@ -667,8 +669,7 @@ form input[type="text"], form input[type="email"]{font-size:15px;}
 
   .card-input-cardholder{
     margin-bottom:  1rem;
-    border-radius: 5px;
-    border: 1px solid #ccc
+    border: 1px solid #000;
   }
 
   .card-input-cardholder::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
@@ -777,6 +778,10 @@ form input[type="text"], form input[type="email"]{font-size:15px;}
   .stripe-payment-button {white-space: normal;}
   .input-label { font-size: 18px; }
   .checkout-button-secondary{width:100%;justify-content:center;margin-top:20px;margin-right:0;font-size:22px;}
+}
+
+#iban-element:hover{
+  background-color: #f5f5f5;
 }
 
 

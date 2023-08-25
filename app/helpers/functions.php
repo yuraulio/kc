@@ -495,8 +495,8 @@ if(!function_exists('request_access_token')){
 
         $result = curl_exec($ch);
 
-        Log::info('request_access_token: response form twitter api');
-        Log::info($result);
+        //::info('request_access_token: response form twitter api');
+        //Log::info($result);
 
 
         if (curl_errno($ch)) {

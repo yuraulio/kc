@@ -206,11 +206,11 @@
 					<div id="card" class="tabcontent card-information" style="display:block;">
 
 							<div class="card-info">
+
+								<p class="info">Submit your card data and proceed securely with your transaction. We do not store your card's data. </p>
 								
 								<div class="card-input"><div id="card-element"></div></div>
 								
-
-								<p class="info">Submit your card data and proceed securely with your transaction. We do not store your card's data. </p>
 								<div class="form-row my-5 align-items-center prev-next-wrap">
 									<div class="d-flex align-items-center previous-participant-link">
 										<img src="{{cdn('new_cart/images/arrow-previous-green.svg')}}" width="20px" height="12px" class="without-hover" alt="">
@@ -251,6 +251,8 @@
 
 						<div id="sepa" class="tabcontent card-information">
 							<form action="/charge" method="post" class="card-info" id="payment-form">
+
+								<p class="info">Submit your IBAN to charge your EU bank account directly and proceed securely with your transaction. </p>
 								
 								<div class="">
 									<div class="">
@@ -297,7 +299,7 @@
 
 									
 								</div>
-								<p class="info">Submit your IBAN to charge your EU bank account directly and proceed securely with your transaction. </p>
+								
 
 								<div class="form-row my-3 align-items-center prev-next-wrap">
 									<div class="d-flex align-items-center previous-participant-link">
@@ -425,10 +427,10 @@
 	
 
 	if (result) {
-		console.log('enabled')
+
 		prButton.mount('#payment-request-button');
 	} else {
-		console.log('disabled')
+
 		document.getElementById('payment-request-button').style.display = 'none';
 	}
 	})();
@@ -557,9 +559,6 @@
 			
 			clientSecret = $(clientSecret).attr('data-secret')
 
-			console.log('CLIENT SECRET:::')
-			console.log(clientSecret)
-
 
 			if(clientSecret != ''){
 				stripe.confirmSepaDebitPayment(
@@ -597,7 +596,6 @@
 
 
 		async function createIntent(url, payment_method){
-			console.log('2')
 			let data1 = {};
 			let return_url;
 
