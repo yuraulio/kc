@@ -24,16 +24,16 @@
 						<form action="billing" method="post" name="billing">
 						@csrf
 						<div class="form-wrp box" id="clone-box">
-							<p class="validation-info">Fields marked with an asterisk <span class="checkout-required-data">(*)</span> are required.</p>
+							<p class="validation-info">Fields marked with an asterisk <span class="checkout-required-data">*</span> are required.</p>
 							<div class="form-row">
 								<div class="col-md-12 mb-4">
-									<label class="input-label">Business name or personal name for the invoice <span class="checkout-required-data">(*)</span> </label>
+									<label class="input-label">Business name or personal name for the invoice <span class="checkout-required-data">*</span> </label>
 									<input type="text" name="billname" class="form-control" value="{{old('billname',$billname)}}" placeholder="" aria-describedby="inputGroupPrepend3" required="">
 								</div>
 							</div>
 							<div class="form-row">
 								<div class="col-md-12 mb-4">
-									<label class="input-label">VAT or tax ID @if($pay_methods && ($pay_methods->id == 3 || $pay_methods->id == 4))<span class="checkout-required-data">(*)</span>@endif</label>
+									<label class="input-label">VAT or tax ID @if($pay_methods && ($pay_methods->id == 3 || $pay_methods->id == 4))<span class="checkout-required-data">*</span>@endif</label>
 									<input type="text" name="billafm" value="{{old('billafm',$billafm)}}" class="form-control" placeholder="" aria-describedby="inputGroupPrepend3" @if($pay_methods && ($pay_methods->id == 3 || $pay_methods->id == 4)) required="" @endif>
 									<div class="invalid-feedback">
 										

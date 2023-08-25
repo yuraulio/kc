@@ -75,7 +75,6 @@ class MainController extends Controller
         $page = null;
         $renderFbChat = true;
 
-
         if (!cache($request->path()) && Cache::getCmsMode() == Setting::NEW_PAGES) {
             $dynamicPageData = null;
 

@@ -207,22 +207,22 @@
 			<h1 class="hidden-lg">Checkout</h1>
 
 				<div class="checkout-full-wrap">
-					<h2>Payment flexibility</h2>
-					<p {{--class="my-4"--}}>Some international credit cards and AMEX cards do not accept installments.</p>
+					<h2>Monthly payment plan</h2>
+					<p class="info" {{--class="my-4"--}}>We allow flexible monthly payments. Some international credit cards do not accept monthly payments.</p>
 					<form id="checkout-form" action="{{route('userPaySbt')}}" method="post">
 						@csrf
 						<div class="radio-group">
                             @if(isset($installments) && !empty($installments) && count($installments) > 1)
                                 @foreach($installments as $inst_num => $installment)
                                     @if($inst_num == 1)
-                                        <div class="custom-control custom-radio mb-3">
+                                        <div class="custom-control custom-radio">
                                             <input type="radio" id="customRadio{{$inst_num}}" name="installments" value="{{$inst_num}}" checked="" class="custom-control-input">
-                                            <label class="custom-control-label" for="customRadio{{$inst_num}}"></label><p id="inst{{$inst_num}}">I will pay in full: €{{$showPrice}}</p>
+                                            <label class="custom-control-label" for="customRadio{{$inst_num}}"></label><p id="inst{{$inst_num}}">Pay full amount now: €{{$showPrice}}</p>
                                         </div>
                                     @else
-                                        <div class="custom-control custom-radio mb-3">
+                                        <div class="custom-control custom-radio">
                                             <input type="radio" id="customRadio{{$inst_num}}" name="installments" value="{{$inst_num}}" class="custom-control-input">
-                                            <label class="custom-control-label" for="customRadio{{$inst_num}}"></label><p id="inst{{$inst_num}}">I will pay in {{$inst_num}} installments: {{$inst_num}}x €{{$installment}}</p>
+                                            <label class="custom-control-label" for="customRadio{{$inst_num}}"></label><p id="inst{{$inst_num}}">Amount in {{$inst_num}} monthly payments of: €{{$installment}}</p>
                                         </div>
                                     @endif
 
@@ -234,20 +234,20 @@
 						<input type="hidden" id="payment_method" name="payment_method" value="">
 					</form>		
 
-					<h2>Payment information</h2>
+					<h2>Payment method</h2>
 
 						<div class="tab card-information flex-container">
-							<button type="button" class="tablinks btn btn-outline-dark Tab active" onclick="openPaymentMethod(event, 'card')">
-								<img src="{{cdn('new_cart/images/credit-card.svg')}}" width="30px" height="20px" class="without-hover" alt="">	
-								<p class="payment-title p-TabLabel">Card</p>	
+							<button type="button" class="tablinks btn-4 btn-outline-dark Tab active" onclick="openPaymentMethod(event, 'card')">
+								<img src="{{cdn('new_cart/images/credit-card.png')}}" width="30px" height="20px" class="without-hover" alt="">	
+								<p class="payment-title p-TabLabel">DEBIT/CREDIT CARD</p>	
 							</button>
-							<button type="button" class="tablinks btn btn-outline-dark Tab" onclick="openPaymentMethod(event, 'digital-wallets')">
+							<button type="button" class="tablinks btn-4 btn-outline-dark Tab" onclick="openPaymentMethod(event, 'digital-wallets')">
 								<img src="{{cdn('new_cart/images/wallet.png')}}" width="30px" height="20px" class="without-hover" alt="">	
-								<p class="payment-title p-TabLabel">Wallet</p>
+								<p class="payment-title p-TabLabel">APPLE/GOOGLE WALLET</p>
 							</button>
-							<button type="button" class="tablinks btn btn-outline-dark Tab" onclick="openPaymentMethod(event, 'sepa')">
+							<button type="button" class="tablinks btn-4 btn-outline-dark Tab" onclick="openPaymentMethod(event, 'sepa')">
 							<img src="{{cdn('new_cart/images/sepa-2.svg')}}" width="30px" height="20px" class="without-hover" alt="">	
-								<p class="payment-title p-TabLabel">SEPA</p>
+								<p class="payment-title p-TabLabel">SEPA DIRECT DEBIT</p>
 							</button>
 						</div>
 
@@ -257,7 +257,7 @@
 								
 								<div class="card-input"><div id="card-element"></div></div>
 
-								<p>We do not store your card’s information.</p>
+								<p class="info">Submit your card data and proceed securely with your transaction. We do not store your card's data. </p>
 								<div class="form-row my-5 align-items-center prev-next-wrap">
 									<div class="d-flex align-items-center previous-participant-link">
 										<img src="{{cdn('new_cart/images/arrow-previous-green.svg')}}" width="20px" height="12px" class="without-hover" alt="">
@@ -278,6 +278,7 @@
 								<!-- <div id="payment-request-button"></div> -->
 								<!-- <div id="error-message"></div> -->
 
+								<p class="info">Choose your preferred digital wallet and proceed securely with your transaction. </p>
 								<div class="form-row my-5 align-items-center prev-next-wrap">
 									<div class="d-flex align-items-center previous-participant-link">
 										<img src="{{cdn('new_cart/images/arrow-previous-green.svg')}}" width="20px" height="12px" class="without-hover" alt="">
@@ -303,13 +304,13 @@
 								<div class="form-row inline">
 									<div class="col">
 									<label for="accountholder-name">
-										Name
+										Bank account
 									</label>
 									<input
 										class="card-input-cardholder"
 										id="accountholder-name"
 										name="accountholder-name"
-										placeholder="Cardholder Name"
+										placeholder="Please enter your account name as registered with your bank."
 										required
 									/>
 									</div>
@@ -344,6 +345,7 @@
 
 									
 								</div>
+								<p class="info">Submit your IBAN to charge your EU bank account directly and proceed securely with your transaction. </p>
 
 								<div class="form-row my-3 align-items-center prev-next-wrap">
 									<div class="d-flex align-items-center previous-participant-link">
@@ -356,7 +358,7 @@
 								
 
 								
-
+								
 								<!-- Display mandate acceptance text. -->
 								<div id="mandate-acceptance">
 							
@@ -384,6 +386,7 @@
 
 $( document ).ready(function() {
     $('#payment-form button').removeAttr('style');
+
 });
 
 
@@ -422,6 +425,7 @@ $( document ).ready(function() {
            base: {
             	fontSize: '18px',
 				fontFamily: 'Foco',
+				
           },
         },
 
@@ -550,11 +554,21 @@ $( document ).ready(function() {
 	//END DIGITAL WALLET
 
 	//SEPA
-	const elements3 = stripe.elements();
+	const elements3 = stripe.elements({
+		fonts: [
+    	    {
+					family: 'Foco',
+					src: `url("new_cart/font/Foco-Light.woff2") format("woff2"),
+							url("new_cart/font/Foco-Light.woff") format("woff")`,
+					weight: '100',
+			   	},
+    	]
+	});
 	const style = {
 		base: {
 			color: '#32325d',
-			fontSize: '16px',
+			fontSize: '18px',
+			fontFamily: 'Foco',
 			'::placeholder': {
 			color: '#aab7c4'
 			},
@@ -591,6 +605,10 @@ $( document ).ready(function() {
 		const accountholderName = document.getElementById('accountholder-name');
 		const email = document.getElementById('email');
 		const submitButton = document.getElementById('submit-button');
+
+		if($(email).val() == ''){
+			$(email).val('{{$pay_seats_data["emails"][0]}}')
+		}
 		
 
 		form.addEventListener('submit', async (event) => {

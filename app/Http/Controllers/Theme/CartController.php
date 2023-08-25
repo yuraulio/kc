@@ -433,7 +433,6 @@ class CartController extends Controller
         }
 
         if($data['type'] == 3){
-
             return view('theme.cart.new_cart.participant_alumni', $data);
         }
 
@@ -448,6 +447,8 @@ class CartController extends Controller
         if($data['type'] == 'waiting'){
             return view('theme.cart.new_cart.participant_waiting_event', $data);
         }
+
+
 
         return view('theme.cart.new_cart.participant', $data);
 
@@ -1616,7 +1617,7 @@ class CartController extends Controller
 
     }
 
-    private function createTransaction($dpuser, $pay_seats_data, $installments, $cart, $bd, $ev,$couponCode,$namount, $pay_bill_data, $charge,$eventC, $status)
+    private function createTransaction($dpuser, $pay_seats_data, $installments, $cart, $bd, $ev,$couponCode,$namount, $pay_bill_data, $charge,$eventC, $status, $sepa = false)
     {
         //$dpuser->updateDefaultPaymentMethod($input['payment_method']);
         // if ($dpuser->hasPaymentMethod()) {
@@ -1683,21 +1684,25 @@ class CartController extends Controller
                     $invoiceNumber = sprintf('%04u', $invoiceNumber);
                 }*/
 
+                if(!$sepa){
+                    $elearningInvoice = new Invoice;
+                    $elearningInvoice->name = json_decode($transaction->billing_details,true)['billname'];
+                    $elearningInvoice->amount = round($namount / $installments, 2);
+                    $elearningInvoice->invoice = generate_invoice_number($eventC->paymentMethod->first()->id);
+                    $elearningInvoice->date = date('Y-m-d');//Carbon::today()->toDateString();
+                    $elearningInvoice->instalments_remaining = $installments;
+                    $elearningInvoice->instalments = $installments;
+    
+                    $elearningInvoice->save();
+    
+    
+                    //$elearningInvoice->user()->save($dpuser);
+                    $elearningInvoice->event()->save($ev);
+                    $elearningInvoice->transaction()->save($transaction);
+                }
 
-                $elearningInvoice = new Invoice;
-                $elearningInvoice->name = json_decode($transaction->billing_details,true)['billname'];
-                $elearningInvoice->amount = round($namount / $installments, 2);
-                $elearningInvoice->invoice = generate_invoice_number($eventC->paymentMethod->first()->id);
-                $elearningInvoice->date = date('Y-m-d');//Carbon::today()->toDateString();
-                $elearningInvoice->instalments_remaining = $installments;
-                $elearningInvoice->instalments = $installments;
 
-                $elearningInvoice->save();
-
-
-                //$elearningInvoice->user()->save($dpuser);
-                $elearningInvoice->event()->save($ev);
-                $elearningInvoice->transaction()->save($transaction);
+                
             //}else{
                 //$transaction->subscription()->save($dpuser->subscriptions->where('id',$charge['id'])->first());
             //}
@@ -2280,7 +2285,7 @@ class CartController extends Controller
                     Session::put('payment_method_is_sepa',true);
 
                     Log::info('pre create transaction');
-                    $this->createTransaction($dpuser, $pay_seats_data, $installments, $cart, $bd, $ev,$couponCode,$namount, $pay_bill_data, $exception->payment,$eventC,$status = 2);
+                    $this->createTransaction($dpuser, $pay_seats_data, $installments, $cart, $bd, $ev,$couponCode,$namount, $pay_bill_data, $exception->payment,$eventC,$status = 2, true);
                     Log::info('after transaction');
                     
 

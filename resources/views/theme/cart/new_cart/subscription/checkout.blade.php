@@ -186,18 +186,18 @@
 					</form>
 					
 
-					<h2>Payment information</h2>
+					<h2>Payment method</h2>
 
 					<div class="tab card-information flex-container">
-						<button type="button" class="tablinks btn btn-outline-dark Tab active" onclick="openPaymentMethod(event, 'card')">
-							<img src="{{cdn('new_cart/images/credit-card.svg')}}" width="30px" height="20px" class="without-hover" alt="">	
+						<button type="button" class="tablinks btn-4 btn-outline-dark Tab active" onclick="openPaymentMethod(event, 'card')">
+							<img src="{{cdn('new_cart/images/credit-card.png')}}" width="30px" height="20px" class="without-hover" alt="">	
 							<p class="payment-title p-TabLabel">Card</p>	
 						</button>
-						<button type="button" class="tablinks btn btn-outline-dark Tab" onclick="openPaymentMethod(event, 'digital-wallets')">
+						<button type="button" class="tablinks btn-4 btn-outline-dark Tab" onclick="openPaymentMethod(event, 'digital-wallets')">
 							<img src="{{cdn('new_cart/images/wallet.png')}}" width="30px" height="20px" class="without-hover" alt="">	
 							<p class="payment-title p-TabLabel">Wallet</p>
 						</button>
-						<button type="button" class="tablinks btn btn-outline-dark Tab" onclick="openPaymentMethod(event, 'sepa')">
+						<button type="button" class="tablinks btn-4 btn-outline-dark Tab" onclick="openPaymentMethod(event, 'sepa')">
 						<img src="{{cdn('new_cart/images/sepa-2.svg')}}" width="30px" height="20px" class="without-hover" alt="">	
 							<p class="payment-title p-TabLabel">SEPA</p>
 						</button>
@@ -208,8 +208,9 @@
 							<div class="card-info">
 								
 								<div class="card-input"><div id="card-element"></div></div>
+								
 
-								<p>We do not store your card’s information.</p>
+								<p class="info">Submit your card data and proceed securely with your transaction. We do not store your card's data. </p>
 								<div class="form-row my-5 align-items-center prev-next-wrap">
 									<div class="d-flex align-items-center previous-participant-link">
 										<img src="{{cdn('new_cart/images/arrow-previous-green.svg')}}" width="20px" height="12px" class="without-hover" alt="">
@@ -227,6 +228,7 @@
 							<!-- DIGITAL WALLETS BUTTON  START START START -->
 
 							<div class="card-info">
+							<p class="info">Choose your preferred digital wallet and proceed securely with your transaction. </p>
 								<!-- <div id="payment-request-button"></div> -->
 								<!-- <div id="error-message"></div> -->
 								<div class="form-row my-5 align-items-center prev-next-wrap">
@@ -253,13 +255,13 @@
 								<div class="">
 									<div class="">
 									<label for="accountholder-name">
-										Name
+										Bank account
 									</label>
 									<input
 										class="card-input-cardholder"
 										id="accountholder-name"
 										name="accountholder-name"
-										placeholder="Cardholder Name"
+										placeholder="Please enter your account name as registered with your bank."
 										required
 									/>
 									</div>
@@ -295,6 +297,7 @@
 
 									
 								</div>
+								<p class="info">Submit your IBAN to charge your EU bank account directly and proceed securely with your transaction. </p>
 
 								<div class="form-row my-3 align-items-center prev-next-wrap">
 									<div class="d-flex align-items-center previous-participant-link">
@@ -473,16 +476,26 @@
 	//END DIGITAL WALLET
 
 	//SEPA
-	const elements3 = stripe.elements();
+	const elements3 = stripe.elements({
+		fonts: [
+    	    {
+					family: 'Foco',
+					src: `url("new_cart/font/Foco-Light.woff2") format("woff2"),
+							url("new_cart/font/Foco-Light.woff") format("woff")`,
+					weight: '100',
+			   	},
+    	]
+	});
 	const style = {
 		base: {
 			color: '#32325d',
-			fontSize: '16px',
+			fontFamily: 'Foco',
+			fontSize: '18px',
 			'::placeholder': {
-			color: '#aab7c4'
+				color: '#aab7c4'
 			},
 			':-webkit-autofill': {
-			color: '#32325d',
+				color: '#32325d',
 			},
 		},
 		invalid: {
@@ -514,6 +527,10 @@
 		const accountholderName = document.getElementById('accountholder-name');
 		const email = document.getElementById('email');
 		const submitButton = document.getElementById('submit-button');
+
+		if($(email).val() == ''){
+			$(email).val('{{$cur_user["email"]}}')
+		}
 		
 
 		form.addEventListener('submit', async (event) => {

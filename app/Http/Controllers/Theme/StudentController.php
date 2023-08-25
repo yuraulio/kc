@@ -129,6 +129,7 @@ class StudentController extends Controller
             $data = $this->studentsEvent();
 
         }
+        dd($data);
         $data['instructor'] = $instructor;
         $data['user']['hasExamResults'] = $user->hasExamResults();
 

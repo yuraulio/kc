@@ -18,23 +18,23 @@
 				<div class="col-md-6 col-xl-6 selection-order">
 				<h1 class="hidden-lg">Participant(s)</h1>
 					<div class="participant-full-wrap">
-					@if(!Auth::check())<p class="login-link">Already have an account? <a href="#" class="link-color">Log in</a></p>@endif			
+					@if(!Auth::check())<p class="login-link info">Already have an account? <a href="#" class="link-color">Log in</a> to retrieve your data. Fields marked with an asterisk (*) are required.</p>@endif			
 						<form action="{{route('registration.code_event')}}" method="post" id="participant-form" name="participant-form">
                         @csrf
 							<div class="form-wrp box" id="clone-box">												
 								
-								<p class="validation-info">Fields marked with an asterisk <span class="checkout-required-data">(*)</span> are required.</p>	
+							@if(Auth::check())<p class="validation-info">Fields marked with an asterisk <span class="checkout-required-data">*</span> are required.</p>@endif
 								
 								<div class="form-row">
 									<div class="col-md-6 mb-4 pr-md-3">
-										<label class="input-label">My first name is  <span class="checkout-required-data">(*)</span></label>
+										<label class="input-label">My first name is  <span class="checkout-required-data">*</span></label>
 										<input type="text" name="firstname[]" class="form-control with-focus-visible" value="{{old('firstname',$firstname[0])}}"  required>
 										<div class="valid-feedback">
 											
 										</div>
 									</div>
 									<div class="col-md-6 mb-4 pl-md-3">
-										<label class="input-label">My last name is <span class="checkout-required-data">(*)</span></label>
+										<label class="input-label">My last name is <span class="checkout-required-data">*</span></label>
 										<input type="text" name="lastname[]" class="form-control" value="{{old('lastname',$lastname[0])}}"  required>
 										<div class="valid-feedback">
 											
@@ -43,14 +43,14 @@
 								</div>
 								<div class="form-row">
 									<div class="col-md-12 mb-4">
-										<label class="input-label">My e-mail is  <span class="checkout-required-data">(*)</span></label>							<div class="email-wrap">
+										<label class="input-label">My e-mail is  <span class="checkout-required-data">*</span></label>							<div class="email-wrap">
 												<input type="text" name="email[]" id="email" value="{{old('email',$email[0])}}" class="form-control" required>
 										  	</div>
 									</div>
 								</div>
 								<div class="form-row">
 									<div class="col-md-12 mb-4 position-relative country-dropdown">
-										<label class="input-label">My mobile phone number is <span class="checkout-required-data">(*)</span></label>
+										<label class="input-label">My mobile phone number is <span class="checkout-required-data">*</span></label>
 										<select name="country_code[]"  class="form-control" id="country">
 										{{--<option value="0" label="Select a country">Select a country</option>--}}
 											<option value="213" label="Algeria (+213)">Algeria </option>
@@ -299,7 +299,7 @@
 									<div class="custom-control custom-checkbox">
 										<input type="checkbox" name="terms_condition" class="custom-control-input" id="customCheck1">
 										{{--<label class="custom-control-label" for="customCheck1"></label><p>I have read, agree upon & accept the <a href="/terms" class="link-color">terms & conditions</a> and <a href="/data-privacy-policy" class="link-color">data privacy policy.</a></p>--}}
-										<label class="custom-control-label" for="customCheck1"></label><p>I accept the <a href="/terms" class="link-color">Terms & Conditions</a> and I confirm that I have read the <a href="/data-privacy-policy" class="link-color">Data Privacy Policy.</a></p>
+										<label class="custom-control-label" for="customCheck1"></label><p>I accept the <a href="/terms" target="_blank" class="link-color">Terms & Conditions</a> and I confirm that I have read the <a target="_blank" href="/data-privacy-policy" class="link-color">Data Privacy Policy.</a></p>
 										<label id="terms_condition-error" class="error" for="terms_condition" style="display:none;"> </label>
 									</div>
 									@if($elearning)

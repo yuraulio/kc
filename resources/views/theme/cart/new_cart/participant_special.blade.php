@@ -22,7 +22,7 @@
 				<div class="col-md-6 col-xl-6 selection-order">
 				<h1 class="hidden-lg">Participant(s)</h1>
 					<div class="participant-full-wrap">
-						@if(!Auth::check())<p class="login-link">Already have an account? <a href="#" class="link-color">Log in</a></p>@endif
+						@if(!Auth::check())<p class="login-link info">Already have an account? <a href="#" class="link-color">Log in</a> to retrieve your data. Fields marked with an asterisk (*) are required.</p>@endif
 						<form action="{{route('registration')}}" method="post" id="participant-form" name="participant-form">
                         	@csrf
 							@for ($i=1; $i <= $totalitems; $i++)
@@ -30,16 +30,16 @@
 							<div class="form-wrp box" @if($i==1) id="clone-box" @else id="clone-box-{{$i}}" @endif>
 
 								@if($type == 5) <h2 class="participant-number">Participant {{$i}}</h2> @endif
-								<p class="validation-info">Fields marked with an asterisk <span class="checkout-required-data">(*)</span> are required.</p>
+								@if(Auth::check())<p class="validation-info">Fields marked with an asterisk <span class="checkout-required-data">*</span> are required.</p>@endif
 								<div class="form-row">
 									<div class="col-md-12 mb-4">
 										@if($type == 1)
-										<label class="input-label">My unemployment ID is <span class="checkout-required-data">(*)</span></label>
+										<label class="input-label">My unemployment ID is <span class="checkout-required-data">*</span></label>
 										<input name="student_type_id[{{$i-1}}]" type="text" class="form-control" value="{{old('student_type_id',$student_type_id[$i-1])}}" aria-describedby="inputGroupPrepend3" required>
 										<div class="invalid-feedback">
 										</div>
 										@elseif($type == 2)
-										<label class="input-label">My student ID is <span class="checkout-required-data">(*)</span></label>
+										<label class="input-label">My student ID is <span class="checkout-required-data">*</span></label>
 										<input name="student_type_id[{{$i-1}}]" type="text" class="form-control" value="{{old('student_type_id',$student_type_id[$i-1])}}" aria-describedby="inputGroupPrepend3" required>
 										<div class="invalid-feedback">
 										</div>
@@ -49,14 +49,14 @@
 								</div>
 								<div class="form-row">
 									<div class="col-md-6 mb-4 pr-md-3">
-										<label class="input-label">My first name is  <span class="checkout-required-data">(*)</span></label>
+										<label class="input-label">My first name is  <span class="checkout-required-data">*</span></label>
 										<input type="text" name="firstname[{{$i-1}}]" class="form-control with-focus-visible" value="{{old('firstname',$firstname[$i-1])}}"  required>
 										<div class="valid-feedback">
 
 										</div>
 									</div>
 									<div class="col-md-6 mb-4 pl-md-3">
-										<label class="input-label">My last name is <span class="checkout-required-data">(*)</span></label>
+										<label class="input-label">My last name is <span class="checkout-required-data">*</span></label>
 										<input type="text" name="lastname[{{$i - 1}}]" class="form-control" value="{{old('lastname',$lastname[$i-1])}}"  required>
 										<div class="valid-feedback">
 
@@ -65,14 +65,14 @@
 								</div>
 								<div class="form-row">
 									<div class="col-md-12 mb-4">
-										<label class="input-label">My e-mail is  <span class="checkout-required-data">(*)</span></label>							<div class="email-wrap">
+										<label class="input-label">My e-mail is  <span class="checkout-required-data">*</span></label>							<div class="email-wrap">
 												<input type="text" name="email[{{$i - 1}}]"  value="{{old('email',$email[$i-1])}}" class="form-control" required>
 										  	</div>
 									</div>
 								</div>
 								<div class="form-row">
 									<div class="col-md-12 mb-4 position-relative country-dropdown">
-										<label class="input-label">My mobile phone number is <span class="checkout-required-data">(*)</span></label>
+										<label class="input-label">My mobile phone number is <span class="checkout-required-data">*</span></label>
 										<select name="country_code[{{$i - 1}}]" onchange="selectCountryCode(this,'{{$i}}')" class="form-control country{{$i}}" id="country">
 										<option value="0" label="Select a country">Select a country</option>
 										{{--<option value="0" label="Select a country">Select a country</option>--}}
@@ -335,7 +335,7 @@
 								<div class="custom-control custom-checkbox">
 									<input type="checkbox" name="terms_condition" class="custom-control-input" id="customCheck1">
 									{{--<label class="custom-control-label" for="customCheck1"></label><p>I have read, agree upon & accept the <a href="/terms" class="link-color">terms & conditions</a> and <a href="/data-privacy-policy" class="link-color">data privacy policy.</a></p>--}}
-									<label class="custom-control-label" for="customCheck1"></label><p>I accept the <a href="/terms" class="link-color">Terms & Conditions</a> and I confirm that I have read the <a href="/data-privacy-policy" class="link-color">Data Privacy Policy.</a></p>
+									<label class="custom-control-label" for="customCheck1"></label><p>I accept the <a href="/terms" target="_blank" class="link-color">Terms & Conditions</a> and I confirm that I have read the <a target="_blank" href="/data-privacy-policy" class="link-color">Data Privacy Policy.</a></p>
 									<label id="terms_condition-error" class="error" for="terms_condition" style="display:none;"> </label>
 								</div>
 								@if($elearning)
