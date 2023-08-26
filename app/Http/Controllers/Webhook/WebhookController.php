@@ -37,8 +37,10 @@ class WebhookController extends BaseWebhookController
 			$transaction = Transaction::with('user')->where('payment_response','LIKE','%'.$paymentIntent.'%')->first();
 			$event = $transaction->event()->first();
 
-			foreach($transaction->user as $user){
 			
+
+			foreach($transaction->user as $user){
+				failedPaymentEmail($payload, $event, $user);
 				$event->users()->wherePivot('user_id',$user->id)->detach();
 			}
 	
@@ -124,6 +126,61 @@ class WebhookController extends BaseWebhookController
 
 	public function handleChargeRefunded(array $payload){
 
+		/*
+		Log::info('Refund Trigger');
+		Log::info(var_export($payload, true));
+
+		$paymentIntent = $payload['data']['object']['payment_intent'];
+
+		$transaction = Transaction::with('user', 'event', 'subscription')->where('payment_response','LIKE','%'.$paymentIntent.'%')->first();
+		$event = $transaction->event->first();
+		Log::info('EVE');
+		Log::info(var_export($event, true));
+		$transaction->ends_at = date('Y-m-d H:i:s');
+		$transaction->save();
+
+		foreach($transaction['user'] as $user){
+			$user->events_for_user_list1()->wherePivot('event_id', $event->id)->updateExistingPivot($event->id,[
+				'paid' => 0,
+				'expiration' => date('Y-m-d')
+			], false);
+		}
+
+		
+
+		Log::info('Refund Trigger');
+		$isSubscription = $transaction->isSubscription()->first();
+		Log::info(var_export($isSubscription, true));
+
+		// check if subscription
+
+		if($isSubscription != null){
+
+			Log::info('Transaction has subscription');
+
+			$subscription = $transaction['subscription']->last();
+
+			Log::info(var_export($subscription, true));
+
+			if($subscription){
+				$subscription->event()->wherePivot('event_id', $event->id)->updateExistingPivot($event->id,[
+					'expiration' => date('Y-m-d')
+				], false);
+	
+	
+				$subscription->ends_at = date('Y-m-d H:i:s');
+				$subscription->status = 0;
+				$subscription->stripe_status = 'canceled';
+				$subscription->save();
+			}
+
+			
+
+
+		}
+		*/
+
+		
 		if ($user = $this->getUserByStripeId($payload['data']['object']['customer'])) {
 
 			$subscription = $user->subscriptions()->active()->first();
@@ -133,6 +190,9 @@ class WebhookController extends BaseWebhookController
 
 
 			if($subscription){
+
+				// Log::info('subscription');
+				// Log::info(var_export($subscription, true));
 		
 				
 				$transaction = $subscription->transactions()->first();
@@ -160,7 +220,7 @@ class WebhookController extends BaseWebhookController
 				
 
 			}
-		}
+		}	
 	
 	}
 

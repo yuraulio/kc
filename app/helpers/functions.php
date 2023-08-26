@@ -21,6 +21,41 @@ use App\Model\Event;
 use App\Model\User;
 use App\Model\CookiesSMS;
 use App\Notifications\AfterSepaPaymentEmail;
+use Illuminate\Support\Facades\Log;
+
+if(!function_exists('failedPaymentEmail')){
+
+    function failedPaymentEmail($payload, $event, $user){
+
+        Log::info('inside failed payment email');
+        Log::info(var_export($payload, true));
+
+        $adminemail = $event->paymentMethod->first() && $event->paymentMethod->first()->payment_email ?
+            															$event->paymentMethod->first()->payment_email : 'info@knowcrunch.com';
+
+        $data['subject'] = 'Knowcrunch - All payments failed';
+        $data['name'] = $user->firstname . ' ' . $user->lastname ;
+        $data['firstName'] = $user->firstname;
+        $data['eventTitle'] = $event->title;
+
+        $amount = $payload['data']['object']['amount'] / 100;
+        $data['amount'] = round($amount,2);
+
+        $data['template'] = 'emails.user.failed_payment';
+        $data['userLink'] = url('/') . '/admin/user/' . $user->id . '/edit';
+
+        $sent = Mail::send('emails.admin.failed_stripe_payment', $data, function ($m) use ($adminemail,$data) {
+
+            $sub =  $data['subject'];
+            $m->from('info@knowcrunch.com', 'Knowcrunch');
+            $m->to($adminemail, $data['firstName']);
+            $m->subject($sub);
+
+        });
+
+    }
+}
+
 
 if(!function_exists('updateStripeCustomer')){
 
