@@ -53,7 +53,7 @@
                     <div class="col-md-3 col-6 self-align-center mb-5">
                         <a href="{{ $image->link ?? "" }}" target="_blank">
                             {{--<img src="{{ $image->url ?? "" }}" class="center grayscale image-grid-hover" alt="{{ $image->alt_text ?? "" }}">--}}
-                            <img loading="lazy" src="{{ isset($image->path) && $image->path != null ? get_image('uploads/'.$image->path) : "" }}" class="center grayscale image-grid-hover resp-img" alt="{{ $image->alt_text ?? "" }}" title="{{ $image->alt_text ?? "" }}" width="108" height="108">
+                            <img loading="lazy" src="{{ isset($image->path) && $image->path != null ? get_image('uploads'.$image->path) : "" }}" class="center grayscale image-grid-hover resp-img" alt="{{ $image->alt_text ?? "" }}" title="{{ $image->alt_text ?? "" }}" width="108" height="108">
                         </a>
                     </div>
                 @elseif(isset($image->url) && $image->url != null)

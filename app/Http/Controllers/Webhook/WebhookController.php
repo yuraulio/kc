@@ -124,20 +124,40 @@ class WebhookController extends BaseWebhookController
 		}
 	}
 
+	private function updateSubscriptionRow($event, $subscription){
+
+		Log::info('updateSubscriptionRow');
+		Log::info(var_export($subscription, true));
+
+		$subscription->event()->wherePivot('event_id', $event->id)->updateExistingPivot($event->id,[
+			'expiration' => date('Y-m-d')
+		], false);
+
+
+		$subscription->ends_at = date('Y-m-d H:i:s');
+		$subscription->status = 0;
+		$subscription->stripe_status = 'canceled';
+		$subscription->save();
+	}
+
 	public function handleChargeRefunded(array $payload){
 
-		/*
+		
 		Log::info('Refund Trigger');
+
+		if($payload == null){
+			return false;
+		}
+
 		Log::info(var_export($payload, true));
 
 		$paymentIntent = $payload['data']['object']['payment_intent'];
 
 		$transaction = Transaction::with('user', 'event', 'subscription')->where('payment_response','LIKE','%'.$paymentIntent.'%')->first();
+		Log::info('TRANSACTION');
+		Log::info(var_export($transaction, true));
+
 		$event = $transaction->event->first();
-		Log::info('EVE');
-		Log::info(var_export($event, true));
-		$transaction->ends_at = date('Y-m-d H:i:s');
-		$transaction->save();
 
 		foreach($transaction['user'] as $user){
 			$user->events_for_user_list1()->wherePivot('event_id', $event->id)->updateExistingPivot($event->id,[
@@ -148,9 +168,9 @@ class WebhookController extends BaseWebhookController
 
 		
 
-		Log::info('Refund Trigger');
+		
 		$isSubscription = $transaction->isSubscription()->first();
-		Log::info(var_export($isSubscription, true));
+		//Log::info(var_export($isSubscription, true));
 
 		// check if subscription
 
@@ -162,25 +182,49 @@ class WebhookController extends BaseWebhookController
 
 			Log::info(var_export($subscription, true));
 
-			if($subscription){
-				$subscription->event()->wherePivot('event_id', $event->id)->updateExistingPivot($event->id,[
-					'expiration' => date('Y-m-d')
-				], false);
-	
-	
-				$subscription->ends_at = date('Y-m-d H:i:s');
-				$subscription->status = 0;
-				$subscription->stripe_status = 'canceled';
-				$subscription->save();
-			}
+			if($subscription)
+				$this->updateSubscriptionRow($event, $subscription);
+
+			
 
 			
 
 
+		}else{
+			Log::info('Transaction has NOT subscription');
+
+			foreach($transaction['user'] as $user){
+				$user->events_for_user_list1()->wherePivot('event_id', $event->id)->updateExistingPivot($event->id,[
+					'paid' => 0,
+					'expiration' => date('Y-m-d')
+				], false);
+			}
+
+			if($transaction->payment_response != null){
+				$transArrayResponse = json_decode($transaction->payment_response, true);
+
+				if(isset($transArrayResponse['stripe_id'])){
+
+					$stripe_id = $transArrayResponse['stripe_id'];
+
+					$subscription = Subscription::where('stripe_id', $stripe_id)->first();
+					$this->updateSubscriptionRow($event, $subscription);
+				}else{
+
+					$subscription = $transaction->subscription->last();
+					$this->updateSubscriptionRow($event, $subscription);
+				}
+			}			
+
+			Log::info('Refund SUCCESS');
 		}
-		*/
+
+		$transaction->ends_at = date('Y-m-d H:i:s');
+		$transaction->save();
+		
 
 		
+		/*
 		if ($user = $this->getUserByStripeId($payload['data']['object']['customer'])) {
 
 			$subscription = $user->subscriptions()->active()->first();
@@ -221,6 +265,7 @@ class WebhookController extends BaseWebhookController
 
 			}
 		}	
+		*/
 	
 	}
 
@@ -249,8 +294,19 @@ class WebhookController extends BaseWebhookController
 
 	private function installments($payload,$sub,$user){
 
-		//Log::info('payload from installments');
-		//Log::info(var_export($payload, true));
+		Log::info('payload from installments');
+		Log::info(var_export($payload, true));
+
+		$payment_intent = null;
+		if(isset($payload['data']['object']['payment_intent'])){
+			
+			$payment_intent = $payload['data']['object']['payment_intent'];
+
+			Log::info('payload from installments ROW');
+			Log::info(var_export($payment_intent, true));
+
+		
+		}
 
 		$count = $sub['metadata']['installments_paid'];
 		if(isset($sub['metadata']['installments']))
@@ -319,7 +375,7 @@ class WebhookController extends BaseWebhookController
 			
 
 		if(count($invoices) > 0){
-			//Log::info('has invoice');
+			Log::info('has invoice');
 			$invoice = $invoices->last();
 			$transaction = $user->events_for_user_list()->wherePivot('event_id',$eventId)->first()->transactionsByUser($user->id)->first();
 			$billDet = json_decode($transaction['billing_details'],true);
@@ -327,6 +383,17 @@ class WebhookController extends BaseWebhookController
 			//$invoice = $invoices->first();
 			[$pdf,$invoice] = $invoice->generateCronjobInvoice();
 
+
+			// add payment intent in payment_response
+			if($payment_intent != null){
+				$tranRespArray = json_decode($transaction->payment_response, true);
+				$tranRespArray['payment_intent'] = $payment_intent;
+
+				$transaction->update([
+					'payment_response' => json_encode($tranRespArray)
+				]);
+			}
+			
 
 			if($fromSepaPayment){
 				//NEW12
@@ -340,7 +407,7 @@ class WebhookController extends BaseWebhookController
 			
 			$this->sendEmail($invoice,$pdf,$paymentMethod,false,$billingEmail);
 		}else{
-			//Log::info('has not invoice');
+			Log::info('has not invoice');
 			if(!Invoice::doesntHave('subscription')->latest()->first()){
 				//$invoiceNumber = sprintf('%04u', 1);
 				$invoiceNumber = generate_invoice_number($subscriptionPaymentMethod->pivot->payment_method);
@@ -352,8 +419,15 @@ class WebhookController extends BaseWebhookController
 
 				if(!$transaction){
 
+					Log::info('has not transaction, CREATE');
+
 					$charge['status'] = 'succeeded';
 					$charge['type'] = $totalinst . ' Installments';
+
+					if($payment_intent != null){
+						$charge['payment_intent'] = $payment_intent;
+					}
+					
 
 					$pay_seats_data = ["names" => [$user->firstname],"surnames" => [$user->lastname],"emails" => [$user->email],
             							"mobiles" => [$user->mobile],"addresses" => [$user->address],"addressnums" => [$user->address_num],
@@ -407,6 +481,24 @@ class WebhookController extends BaseWebhookController
 
 					$transaction->user()->save($user);
 
+				}else{
+					// add payment intent in transaction Payment Response
+					Log::info('has transaction, payment response');
+
+					Log::info(var_export($transaction->payment_response, true));
+
+					if($payment_intent != null){
+
+						$tranRespArray = json_decode($transaction->payment_response, true);
+						$tranRespArray['payment_intent'] = $payment_intent;
+	
+						$transaction->update([
+							'payment_response' => json_encode($tranRespArray),
+							'status' => 1
+						]);
+
+					}
+					
 				}
 
 				//$invoiceNumber = Invoice::has('event')->latest()->first()->invoice;
@@ -594,6 +686,8 @@ class WebhookController extends BaseWebhookController
 
 	private function subscription($payload,$user,$sub){
 
+		Log::info('TRIGGER subscription');
+
 		$subscription = $user->eventSubscriptions()->where('stripe_id',$payload['data']['object']['subscription'])->first();
 		$ends_at = isset($sub['period']) ? $sub['period']['end'] : null;
 
@@ -662,7 +756,12 @@ class WebhookController extends BaseWebhookController
 			//$transaction = $user->events->where('id',$eventId)->first()->subscriptionΤransactionsByUser($user->id)->first();
 
 
+			Log::info('has atest');
+			Log::info(var_export($data['payment_intent'], true));
+
+			$charge['payment_intent'] = $data['payment_intent'];
 			$charge['status'] = 'succeeded';
+
             $status_history = [];
             $status_history[] = [
                      'datetime' => Carbon::now()->toDateTimeString(),
