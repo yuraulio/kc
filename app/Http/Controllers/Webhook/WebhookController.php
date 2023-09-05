@@ -128,7 +128,7 @@ class WebhookController extends BaseWebhookController
 
 		if($event && $subscription){
 
-			Log::info('updateSubscriptionRow ////');
+			//Log::info('updateSubscriptionRow ////');
 
 			$subscription->event()->wherePivot('event_id', $event->id)->updateExistingPivot($event->id,[
 				'expiration' => date('Y-m-d')
