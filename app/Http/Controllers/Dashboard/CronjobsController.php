@@ -262,6 +262,148 @@ class CronjobsController extends Controller
 
     }
 
+    public function generateXMLForPinterest(){
+        $destinationPath = public_path().'/xml/pinterest/';
+
+        if(!File::exists($destinationPath)) {
+            //dd('ddd');
+            File::makeDirectory($destinationPath, $mode = 0777, true, true);
+        }
+
+        $events = Event::wherePublished(1)->whereFeed(1)->with('category', 'ticket','mediable')->get();
+
+        $template = '<?xml version="1.0" encoding="utf-8"?>
+<rss xmlns:g="http://base.google.com/ns/1.0" version="2.0">
+    <channel>';
+
+        $template_finish = '
+    </channel>
+</rss>';
+
+        $row = ''. $template;
+
+        foreach($events as $key => $event){
+
+            if($event->feed == 0){
+                continue;
+            }
+
+            $amount = 0;
+            $quantity_status = 'in stock';
+
+
+            foreach($event->ticket as $price){
+                if($price->pivot->price > 0 && $price->type != 'Alumni' && $price->type != 'Special') {
+                    $amount = $price->pivot->price;
+                    $quantity_status = $price->pivot->quantity > 0 ? 'in stock' : 'out of stock';
+                }
+
+            }
+
+            $eventTitle = $event->xml_title ? htmlspecialchars($event->xml_title) : htmlspecialchars($event->title);
+            $summary = htmlspecialchars($event->xml_description);
+
+            $img = url('/') . get_image($event['mediable'],'header-image');
+            $img = str_replace(' ', '%20', $img);
+            
+
+            $item = 
+            '
+        <item>
+            <g:id>'.$event->id.'</g:id>
+            <title>'.$eventTitle.'</title>
+            <description>'.$summary.'</description>
+            <link>'.url('/').'/'.$event->slugable->slug.'</link>
+            <g:image_link>'.$img.'</g:image_link>
+            <g:price>'.$amount.' EUR</g:price> 
+            <g:availability>'.$quantity_status.'</g:availability>
+        </item>';
+
+            
+
+            $row = $row . $item;
+        }
+
+        $row = $row . $template_finish;
+
+       
+        File::put($destinationPath.'pinterest_feed.xml', $row);
+
+        
+    }
+
+    public function generateXMLForTikTok(){
+        $destinationPath = public_path().'/xml/tiktok/';
+
+
+        if(!File::exists($destinationPath)) {
+            //dd('ddd');
+            File::makeDirectory($destinationPath, $mode = 0777, true, true);
+        }
+
+        $events = Event::wherePublished(1)->whereFeed(1)->with('category', 'ticket','mediable')->get();
+
+        $template = '<?xml version="1.0" encoding="utf-8"?>
+<rss xmlns:g="http://base.google.com/ns/1.0" version="2.0">
+    <channel>';
+
+        $template_finish = '
+    </channel>
+</rss>';
+
+        $row = ''. $template;
+
+        foreach($events as $key => $event){
+
+            if($event->feed == 0){
+                continue;
+            }
+
+            $amount = 0;
+            $quantity_status = 'in stock';
+
+
+            foreach($event->ticket as $price){
+                if($price->pivot->price > 0 && $price->type != 'Alumni' && $price->type != 'Special') {
+                    $amount = $price->pivot->price;
+                    $quantity_status = $price->pivot->quantity > 0 ? 'in stock' : 'out of stock';
+                }
+
+            }
+
+            $eventTitle = $event->xml_title ? htmlspecialchars($event->xml_title) : htmlspecialchars($event->title);
+            $summary = htmlspecialchars($event->xml_description);
+
+            $img = url('/') . get_image($event['mediable'],'header-image');
+            $img = str_replace(' ', '%20', $img);
+            
+
+            $item = 
+            '
+        <item>
+            <g:id>'.$event->id.'</g:id>
+            <g:title>'.$eventTitle.'</g:title>
+            <g:description>'.$summary.'</g:description>
+            <g:availability>'.$quantity_status.'</g:availability>
+            <g:condition>new</g:condition>
+            <g:price>'.$amount.' EUR</g:price>
+            <g:link>'.url('/').'/'.$event->slugable->slug.'</g:link>
+            <g:image_link>'.$img.'</g:image_link>
+            <g:brand>Knowcrunch</g:brand> 
+        </item>';
+
+            
+
+            $row = $row . $item;
+        }
+
+        $row = $row . $template_finish;
+
+       
+        File::put($destinationPath.'tiktok_feed.xml', $row);
+        
+    }
+
     public function generateCSVForFB(){
 
         $destinationPath = public_path().'/csv/fb/';
