@@ -75,7 +75,9 @@ class FeedController extends Controller
 
         }
 
-        return Sitemap::render();
+        
+        echo Sitemap::render();
+        //return Sitemap::render();
         //echo Sitemap::render();
     }
 }

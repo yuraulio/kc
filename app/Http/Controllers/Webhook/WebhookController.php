@@ -143,19 +143,19 @@ class WebhookController extends BaseWebhookController
 	public function handleChargeRefunded(array $payload){
 
 		
-		//Log::info('Refund Trigger');
+		Log::info('Refund Trigger');
 
 		if($payload == null){
 			return false;
 		}
 
-		//Log::info(var_export($payload, true));
+		Log::info(var_export($payload, true));
 
 		$paymentIntent = $payload['data']['object']['payment_intent'];
 
 		$transaction = Transaction::with('user', 'event', 'subscription')->where('payment_response','LIKE','%'.$paymentIntent.'%')->first();
-		// Log::info('TRANSACTION');
-		// Log::info(var_export($transaction, true));
+		Log::info('TRANSACTION');
+		Log::info(var_export($transaction, true));
 
 		$event = $transaction->event->first();
 
@@ -170,7 +170,8 @@ class WebhookController extends BaseWebhookController
 
 		
 		$isSubscription = $transaction->isSubscription()->first();
-		//Log::info(var_export($isSubscription, true));
+		Log::info('Is Subscription');
+		Log::info(var_export($isSubscription, true));
 
 		// check if subscription
 
@@ -191,9 +192,12 @@ class WebhookController extends BaseWebhookController
 
 
 		}else{
-			//Log::info('Transaction has NOT subscription');
+			Log::info('Transaction has NOT subscription');
 
 			foreach($transaction['user'] as $user){
+
+				Log::info('paid 0 for a user');
+
 				$user->events_for_user_list1()->wherePivot('event_id', $event->id)->updateExistingPivot($event->id,[
 					'paid' => 0,
 					'expiration' => date('Y-m-d')
@@ -201,9 +205,12 @@ class WebhookController extends BaseWebhookController
 			}
 
 			if($transaction->payment_response != null){
+				Log::info('1111');
 				$transArrayResponse = json_decode($transaction->payment_response, true);
 
 				if(isset($transArrayResponse['stripe_id'])){
+
+					Log::info('2222');
 
 					$stripe_id = $transArrayResponse['stripe_id'];
 
@@ -211,16 +218,20 @@ class WebhookController extends BaseWebhookController
 					$this->updateSubscriptionRow($event, $subscription);
 				}else{
 
+					Log::info('33333');
+
 					$subscription = $transaction->subscription->last();
 					$this->updateSubscriptionRow($event, $subscription);
 				}
 			}			
 
-			//Log::info('Refund SUCCESS');
+			Log::info('Refund SUCCESS');
 		}
 
 		$transaction->ends_at = date('Y-m-d H:i:s');
 		$transaction->save();
+
+		Log::info('transaction updated');
 		
 
 		
