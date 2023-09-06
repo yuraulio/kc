@@ -142,6 +142,9 @@
                             $('.alert-outer').show()
                             $('#doall').find('input[type=text], input[type=email], textarea').val('');
                             $('#doall').slideUp();
+
+                            dataLayer.push({'event': 'kc_corporate_leads'});
+
                         }
                     }
                 });

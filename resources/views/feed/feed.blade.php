@@ -62,6 +62,17 @@
                     <a href="https://knowcrunch.com/csv/fb/fb.csv" class="btn btn-primary">Feed for Facebook advertising</a>
 
                 </div>
+
+                <div class="form-group">
+
+                    <a href="{{url('/')}}.{{'/xml/tiktok/tiktok_feed.xml'}}" class="btn btn-primary">Feed for TikTok advertising</a>
+
+                </div>
+                <div class="form-group">
+
+                    <a href="{{url('/')}}.{{'/xml/pinterest/pinterest_feed.xml'}}" class="btn btn-primary">Feed for Pinterest advertising</a>
+
+                </div>
             </div>
 
             <div class="form-group" style="width:415px;">
@@ -79,6 +90,24 @@
                     <span class="input-group-text">Facebook</span>
                   </div>
                   <input value="https://knowcrunch.com/csv/fb/fb.csv" type="text" aria-label="facebook-csv" class="form-control" readonly>
+                </div>
+            </div>
+
+            <div class="form-group" style="width:415px;">
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">TikTok</span>
+                  </div>
+                  <input value="https://knowcrunch.com/xml/tiktok/tiktok_feed.xml" type="text" aria-label="tiktok-xml" class="form-control" readonly>
+                </div>
+            </div>
+            
+            <div class="form-group" style="width:415px;">
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">Pinterest</span>
+                  </div>
+                  <input value="https://knowcrunch.com/xml/pinterest/pinterest_feed.xml" type="text" aria-label="pinterest-xml" class="form-control" readonly>
                 </div>
             </div>
 

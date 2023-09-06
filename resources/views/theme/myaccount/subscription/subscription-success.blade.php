@@ -106,7 +106,7 @@ $(document).ready(function(){
 
       @foreach($new_event['items'] as $key => $ti)
          @if($ti != '')
-            items["{{$key}}"] = $.parseHTML("{{$ti}}")[0].data
+         items["{{$key}}"] = $.parseHTML("{{$ti}}")[0].data
          @endif
          
       @endforeach
@@ -117,6 +117,24 @@ $(document).ready(function(){
         }
 
         data = {...data,...a}
+
+       
+
+      data.value = Number(data.value)
+
+      data['items'].forEach((item, index) => {
+        
+
+         if(item.price !== undefined){
+            data['items'][index].price = Number(item.price)
+         }
+         if(item.quantity !== undefined){
+            data['items'][index].quantity = Number(item.quantity)
+         }
+
+         
+      });
+      
 
       dataLayer.push(data);
 

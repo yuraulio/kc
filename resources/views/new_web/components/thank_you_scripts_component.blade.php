@@ -79,8 +79,18 @@
         }
 
         data = {...data,...a}
+        data.value = Number(data.value)
 
-      dataLayer.push(data);
+        data['items'].forEach((item, index) => {
+            if(item.price !== undefined){
+                data['items'][index].price = Number(item.price)
+            }
+            if(item.quantity !== undefined){
+                data['items'][index].quantity = Number(item.quantity)
+            }  
+        });
+
+        dataLayer.push(data);
 
       
    });

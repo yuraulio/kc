@@ -51,8 +51,8 @@
                 <input type="hidden" name="success" value="{{ $form["success_text"] ?? "" }}">
                 <input type="hidden" name="qed_form" value="1">
                 <input type="hidden" name="recipient" id="recipient" value="{{ $form["contact_form_recipient"] ?? "" }}">
-
                 <div class="submit-area-custom">
+                 
                     <button onClick="contactUsSubmit()" type="button" id="sendme" class="btn btn--md btn--secondary contactUsSubmit">
                         {{ $form["contact_form_button"] ?? "" }}
                     </button>
@@ -102,6 +102,8 @@
                             $('.contactUsForm').find('input[type=text], input[type=email], textarea').val('');
                             $(".contactUsForm").slideUp();
                             $(".contact-wrap").slideUp();
+                            
+                            dataLayer.push({'event': 'kc_contact_leads'});
                         }
                     }
                 });

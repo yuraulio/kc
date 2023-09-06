@@ -742,8 +742,8 @@ Route::get('/automateInstructorsMail', 'Dashboard\CronjobsController@sendAutomat
 Route::get('/calculateRoyaltiesInstructor', 'Dashboard\CronjobsController@calculateTotalRoyaltiesForInstructors');//in
 
 // Generate XML
-Route::get('/generate_tiktok_feed', 'Dashboard\CronjobsController@generateXMLForTikTok');
-Route::get('/generate_pinterest_feed', 'Dashboard\CronjobsController@generateXMLForPinterest');//in
+// Route::get('/generate_tiktok_feed', 'Dashboard\CronjobsController@generateXMLForTikTok');
+// Route::get('/generate_pinterest_feed', 'Dashboard\CronjobsController@generateXMLForPinterest');//in
 
 
 

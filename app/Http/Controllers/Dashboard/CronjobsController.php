@@ -502,6 +502,8 @@ class CronjobsController extends Controller
     public function fbGoogleCsv(){
         $this->generateCSVForGoogle();
         $this->generateCSVForFB();
+        $this->generateXMLForPinterest();
+        $this->generateXMLForTikTok();
     }
 
     public function sendSubscriptionRemind(){

@@ -358,6 +358,8 @@
                             $('#beForm').find('input[type=text], input[type=email], textarea').val('');
                             $('#beForm').slideUp();
                             $('.successHide').hide();
+
+                            dataLayer.push({'event': 'kc_instructor_leads'});
                         }
                     }
                 });
