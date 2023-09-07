@@ -15,6 +15,7 @@ use Validator;
 use App\Jobs\FixOrder;
 use App\Jobs\SetAutomateEmailStatusForTopics;
 use App\Jobs\CopyTopicFromOneCategoryToAnother;
+use App\Model\Lesson;
 
 class TopicController extends Controller
 {

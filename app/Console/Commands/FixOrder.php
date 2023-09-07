@@ -77,7 +77,7 @@ class FixOrder extends Command
         })
         ->get();*/
 
-        $events = Event::where('id',4653)
+        $events = Event::where('id',4632)
         ->get();
         
         foreach($events as $event){

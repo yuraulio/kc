@@ -774,9 +774,15 @@ var mediaMixin = {
                     this.selectedFile = this.mediaFiles[index];
                     setTimeout(() => {
                         if(from_save_btn){
-                            this.$refs.crpr.setupPrevalue();
+                            
+                            if(this.$refs.crpr !== undefined){
+                                this.$refs.crpr.setupPrevalue();
+                            }
                         }else{
-                            this.$refs.crpr.setupPrevalue(true);
+                            if(this.$refs.crpr !== undefined){
+                                this.$refs.crpr.setupPrevalue(true);
+                            }
+                            
                         }
 
                     }, 1000);
