@@ -2,6 +2,7 @@
 /public/hot
 /public/uploads
 /public/csv
+/public/xml
 /public/tmp
 /public/storage
 /storage/*.key
