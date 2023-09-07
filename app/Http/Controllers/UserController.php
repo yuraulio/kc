@@ -1041,9 +1041,16 @@ class UserController extends Controller
         $event_id = $request->event_id;
         $ticket_id = $request->ticket_id;
         $custom_price = isset($request->custom_price) ? $request->custom_price : null;
-        $isNewUser = ($request->newUser != null) ? true : false;
 
         $user = User::find($user_id);
+        $isNewUser = true;
+
+        if($user->statusAccount){
+            if($user->statusAccount->completed != false){
+                $isNewUser = false;
+            }
+        }
+        
         //dd($user);
         $user->ticket()->attach($ticket_id, ['event_id' => $event_id]);
 
@@ -1278,7 +1285,7 @@ class UserController extends Controller
         $user->consent = json_encode($consent);;
         $user->save();
 
-        $user->notify(new userActivationLink($user,'activate'));
+        //$user->notify(new userActivationLink($user,'activate'));
 
         return redirect()->route('user.edit', $user->id)->withStatus(__('User successfully created.'));
     }

@@ -7,6 +7,8 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Carbon\Carbon;
+use App\Model\Activation;
+use Illuminate\Support\Str;
 
 class WelcomeEmail extends Notification
 {
@@ -75,6 +77,15 @@ class WelcomeEmail extends Notification
             $this->user->statusAccount->completed = true;
             $this->user->statusAccount->completed_at = Carbon::now();
             $this->user->statusAccount->save();
+        }else{
+
+            $activation = Activation::firstOrCreate(array('user_id' => $this->user['id']));
+
+            if($activation->code == ''){
+                $activation->code = Str::random(40);
+                $activation->completed = true;
+                $activation->save();
+            }
         }
 
         return (new MailMessage)
