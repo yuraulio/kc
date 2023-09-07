@@ -65,12 +65,12 @@
 
                 <div class="form-group">
 
-                    <a href="{{url('/')}}{{'/xml/tiktok/tiktok_feed.xml'}}" class="btn btn-primary">Feed for TikTok advertising</a>
+                    <a href="javascript:void(0)" data-filename="tiktok_feed.xml" data-path="{{url('/')}}{{'/xml/tiktok/tiktok_feed.xml'}}" class="btn btn-primary xml">Feed for TikTok advertising</a>
 
                 </div>
                 <div class="form-group">
 
-                    <a href="{{url('/')}}{{'/xml/pinterest/pinterest_feed.xml'}}" class="btn btn-primary">Feed for Pinterest advertising</a>
+                    <a href="javascript:void(0)" data-filename="pinterest_feed.xml" data-path="{{url('/')}}{{'/xml/pinterest/pinterest_feed.xml'}}" class="btn btn-primary xml">Feed for Pinterest advertising</a>
 
                 </div>
             </div>
@@ -122,6 +122,35 @@
 @push('js')
 
 <script>
+
+    function downloadFile(url, fileName) {
+    const downloadLink = document.createElement('a');
+    downloadLink.href = url;
+    downloadLink.download = fileName;
+    downloadLink.target = "_blank";
+
+    // Append the link to the DOM (this is required for the download to work in some browsers)
+    document.body.appendChild(downloadLink);
+
+    // Click the link to start the download
+    downloadLink.click();
+
+    // Remove the link (it's not needed anymore)
+    document.body.removeChild(downloadLink);
+    }
+
+
+
+    $(document).on("click", ".xml", function(){
+  
+        let elem = $(this)[0];
+        let fileURL = $(elem).data('path');
+        let fileName = $(elem).data('filename');
+
+        downloadFile(fileURL, fileName);
+
+
+    })
 
     $(document).on("click", "#update-feed-btn", function(){
 
