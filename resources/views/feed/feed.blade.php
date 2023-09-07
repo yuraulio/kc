@@ -65,12 +65,12 @@
 
                 <div class="form-group">
 
-                    <a href="{{url('/')}}.{{'/xml/tiktok/tiktok_feed.xml'}}" class="btn btn-primary">Feed for TikTok advertising</a>
+                    <a href="{{url('/')}}{{'/xml/tiktok/tiktok_feed.xml'}}" class="btn btn-primary">Feed for TikTok advertising</a>
 
                 </div>
                 <div class="form-group">
 
-                    <a href="{{url('/')}}.{{'/xml/pinterest/pinterest_feed.xml'}}" class="btn btn-primary">Feed for Pinterest advertising</a>
+                    <a href="{{url('/')}}{{'/xml/pinterest/pinterest_feed.xml'}}" class="btn btn-primary">Feed for Pinterest advertising</a>
 
                 </div>
             </div>
