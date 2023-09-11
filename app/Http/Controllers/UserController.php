@@ -711,10 +711,10 @@ class UserController extends Controller
                             $user->role()->attach(7);
 
                             // check if activate user
-                            $activation = Activation::firstOrCreate(array('user_id' => $user['id']));
-                            $activation->code = Str::random(40);
-                            $activation->completed = true;
-                            $activation->save();
+                            // $activation = Activation::firstOrCreate(array('user_id' => $user['id']));
+                            // $activation->code = Str::random(40);
+                            // $activation->completed = true;
+                            // $activation->save();
 
 
                             // get kc id
@@ -877,7 +877,7 @@ class UserController extends Controller
                     //dd($arr);
                     $this->errorImportCsvReport($arr);
 
-                    return back()->withErrors(__('File is not imported, email faild to import: '. $error_msg));
+                    return back()->withErrors(__('File is not imported, email failed to import: '. $error_msg));
 
                 }
 
