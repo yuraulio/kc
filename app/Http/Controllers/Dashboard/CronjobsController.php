@@ -1199,6 +1199,33 @@ class CronjobsController extends Controller
 
     }
 
+    private function findFirstLessons($lessons){
+        $time = null;
+        $earlyLesson = null;
+
+        foreach($lessons as $key => $lesson){
+            $lesson = $lesson[0];
+
+            //dd(strtotime($lesson->pivot->time_starts));
+
+            if(isset($lesson->pivot->time_starts)){
+                if($time == null){
+                    $time = $lesson->pivot->time_starts;
+                    $earlyLesson = $lesson;
+                }else{
+                    if(strtotime($lesson->pivot->time_starts) < strtotime($time)  ){
+                        $time = $lesson->pivot->time_starts;
+                        $earlyLesson = $lesson;
+                    }
+                }
+                
+            }
+ 
+        }
+
+        return $earlyLesson;
+    }
+
     public function sendAutomateEmailForInstructors(){
 
         $data = [];
@@ -1229,9 +1256,9 @@ class CronjobsController extends Controller
 
                 $diff = $date->diffInDays($lesson_start);
 
-                // for one day change number
+                // for 1 day or 7 day
                 //7 is demo day
-                if($diff == 1){
+                if($diff == 1 || $diff == 7){
                     $data[$lesson->pivot->instructor_id][] = [$lesson];
                 }
             }
@@ -1239,15 +1266,20 @@ class CronjobsController extends Controller
 
 
 
-
         foreach($data as $instructor_id => $lessons){
 
+            $lesson = null;
+
+            $lesson = $this->findFirstLessons($lessons);
             $instructor = Instructor::find($instructor_id);
 
             $email_data = [];
             $email_data['firstname'] = $instructor['user'][0]['firstname'];
             $email_data['template'] = 'emails.instructor.automate_instructor';
             $email_data['subject'] = 'Knowcrunch | '.$email_data['firstname'].', reminder about your course';
+            $email_data['location'] = isset($lesson->pivot->room) ? $lesson->pivot->room : '';
+            $email_data['date'] = isset($lesson->pivot->time_starts) ? date("d-m-Y H:s", strtotime($lesson->pivot->time_starts)) : '';
+            $email_data['title'] = isset($lesson) ? $lesson->title : '';
 
             $instructor['user'][0]->notify(new InstructorsMail($email_data));
 

@@ -106,18 +106,18 @@
                                                   <td align="left" valign="top" class="r15-i nl2go-default-textstyle" style="color: #3b3f44; font-family: arial,helvetica,sans-serif; font-size: 16px; line-height: 1.5; text-align: left; word-wrap: break-word;">
                                                     <div>
                                                       <p style="-webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; caret-color: rgb(0, 0, 0); color: rgb(0, 0, 0); font-family: Calibri, sans-serif; font-size: medium; font-style: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; margin: 0cm; orphans: auto; text-align: start; text-decoration: none; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px;">
-                                                        <span style="color: #3b3f44; font-family: Arial, sans-serif;">Οδηγίες για την αυριανή σου εκπαίδευση. </span>
+                                                        <span style="color: #3b3f44; font-family: Arial, sans-serif;">Οδηγίες για την αυριανή σου εκπαίδευση σου στο <strong>{{$title}}</strong> την <strong>{{$date}}</strong> στο <strong>{{$location}}</strong>. </span>
                                                       </p>
                                                       <br>
 
-                                                      <h3 class="default-heading3" style="margin: 0; color: #1f2d3d; font-family: arial,helvetica,sans-serif; font-size: 26px;">Τι έχουμε μαζί μας</h3>
+                                                      <h3 class="default-heading3" style="margin: 0; color: #1f2d3d; font-family: arial,helvetica,sans-serif; font-size: 26px;">Τι έχουμε οπωσδήποτε μαζί μας</h3>
                                                       <ul style="margin: 0;">
 
                                                         <li>
-                                                          <span style="color: #3b3f44; font-family: Arial, sans-serif;">Τις παρουσιάσεις κατεβασμένες την ίδια μέρα</span>
+                                                          <span style="color: #3b3f44; font-family: Arial, sans-serif;">Τις παρουσιάσεις (κατεβασμένες την ίδια μέρα)</span>
                                                         </li>
                                                         <li>
-                                                          <span style="color: #3b3f44; font-family: Arial, sans-serif;">Personal laptop &amp; φορτιστής </span>
+                                                          <span style="color: #3b3f44; font-family: Arial, sans-serif;">Laptop &amp; τον φορτιστή του </span>
                                                         </li>
                                                         <li>
                                                           <span style="color: #3b3f44; font-family: Arial, sans-serif;">Knowcrunch font (Foco) στο σύστημα</span>
@@ -129,7 +129,7 @@
                                                           <span style="color: #3b3f44; font-family: Arial, sans-serif;">HDMI είσοδο στο laptop ή adaptor για HDMI </span>
                                                         </li>
                                                         <li>
-                                                          <span style="color: #3b3f44; font-family: Arial, sans-serif;">Pointer </span>
+                                                          <span style="color: #3b3f44; font-family: Arial, sans-serif;">Pointer που λειτουργεί μέσα στην αίθουσα και από μακριά</span>
                                                         </li>
                                                       </ul>
                                                       <p style="margin: 0;"></p>
@@ -148,7 +148,7 @@
                                                           <span style="color: #3b3f44; font-family: Arial, sans-serif;">Οι οθόνες (TVs) της αίθουσας δείχνουν ό,τι και το laptop ή ο projector</span>
                                                         </li>
                                                         <li>
-                                                          <span style="color: #3b3f44; font-family: Arial, sans-serif;">Ο pointer λειτουργεί μέσα στην αίθουσα και από μακριά</span>
+                                                          <span style="color: #3b3f44; font-family: Arial, sans-serif;">Ο pointer</span>
                                                         </li>
                                                         <li>
                                                           <span style="color: #3b3f44; font-family: Arial, sans-serif;">Αν δείχνουμε από κινητό, μοίρασμα οθόνης κινητού με το laptop </span>
@@ -179,11 +179,11 @@
                                                       <p style="margin: 0;"></p>
                                                       <br>
                                                       <h3 class="default-heading3" style="margin: 0; color: #1f2d3d; font-family: arial,helvetica,sans-serif; font-size: 26px;">
-                                                        <span style="color: #3b3f44;">Τι φοράμε; </span>
+                                                        <span style="color: #3b3f44;">Η απαραίτητη εμφάνιση </span>
                                                       </h3>
-                                                      <p style="margin: 0;">
+                                                      <!-- <p style="margin: 0;">
                                                         <span style="color: #3b3f44;">Η professional εμφάνιση είναι απαραίτητη.</span>
-                                                      </p>
+                                                      </p> -->
                                                       <p style="margin: 0;"></p>
                                                       <br>
                                                       <p style="margin: 0;">
@@ -197,7 +197,7 @@
                                                         <br>
                                                         <span style="color: #3b3f44;">
                                                           <strong>
-                                                            Γυναίκες: </strong> business παντελόνι ή φούστα ή φόρεμα, business πουκάμισο, business παπούτσια ή business style μονοχρωμα sneakers. </span>
+                                                            Γυναίκες: </strong> business παντελόνι ή φούστα ή φόρεμα, business πουκάμισο, business παπούτσια ή business style μονόχρωμα sneakers. </span>
                                                       </p>
                                                       <p style="margin: 0;"></p>
 
