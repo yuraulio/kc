@@ -82,17 +82,16 @@ class CertificateController extends Controller
 
     ]);
 
-
     $certificateTitle = $certificate->certificate_title;
     $certificateEventTitle =  $certificate->event->first() ? $certificate->event->first()->title : '';
     //dd($certificate->event->first()->event_info()['certificate']);
     if($certificate->event->first() && isset($certificate->event->first()->event_info()['certificate']['messages'])){
 
-      if($certificate->success && isset($certificate->event->first()->event_info()['certificate']['messages']['success'])){
+      if(count(($certificate->exam)) != 0 && $certificate->success && isset($certificate->event->first()->event_info()['certificate']['messages']['success'])){
 
         $certificateTitle = $certificate->event->first()->event_info()['certificate']['messages']['success'];
 
-      }else if(!$certificate->success && isset($certificate->event->first()->event_info()['certificate']['messages']['failure'])){
+      }else if(count(($certificate->exam)) != 0 && !$certificate->success && isset($certificate->event->first()->event_info()['certificate']['messages']['failure'])){
 
         $certificateTitle = strip_tags($certificate->event->first()->event_info()['certificate']['messages']['failure']);
 

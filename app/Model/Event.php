@@ -870,7 +870,8 @@ class Event extends Model
             $cert->firstname = $user->firstname;
             $cert->lastname = $user->lastname;
             $cert->credential = get_certifation_crendetial();
-            $cert->certificate_title = isset($infos['certificate']['messages']['success']) && $infos['certificate']['messages']['success'] ? $infos['certificate']['messages']['success'] : $this->title;
+            $cert->certificate_title = isset($infos['certificate']['type']) && $infos['certificate']['type'] ? $infos['certificate']['type'] : $this->title;
+
 
             $createDate = strtotime(date('Y-m-d'));
             $cert->create_date = $createDate;

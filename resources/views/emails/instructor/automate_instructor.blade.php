@@ -106,7 +106,7 @@
                                                   <td align="left" valign="top" class="r15-i nl2go-default-textstyle" style="color: #3b3f44; font-family: arial,helvetica,sans-serif; font-size: 16px; line-height: 1.5; text-align: left; word-wrap: break-word;">
                                                     <div>
                                                       <p style="-webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; caret-color: rgb(0, 0, 0); color: rgb(0, 0, 0); font-family: Calibri, sans-serif; font-size: medium; font-style: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; margin: 0cm; orphans: auto; text-align: start; text-decoration: none; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px;">
-                                                        <span style="color: #3b3f44; font-family: Arial, sans-serif;">Οδηγίες για την αυριανή σου εκπαίδευση σου στο <strong>{{$title}}</strong> την <strong>{{$date}}</strong> στο <strong>{{$location}}</strong>. </span>
+                                                        <span style="color: #3b3f44; font-family: Arial, sans-serif;">Οδηγίες για την ερχόμενη εκπαίδευση σου στο <strong>{{$title}}</strong> την <strong>{{$date}}</strong> στο <strong>{{$location}}</strong>. </span>
                                                       </p>
                                                       <br>
 

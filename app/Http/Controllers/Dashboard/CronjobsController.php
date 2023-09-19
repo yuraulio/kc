@@ -1069,11 +1069,13 @@ class CronjobsController extends Controller
         //$date2 = date("Y-m-d", strtotime($date . "+20 days"));
 
         $date1 =  date("Y-m-d", strtotime("+7 days"));
-        $date2 =  date("Y-m-d", strtotime("+20 days"));
+        //$date2 =  date("Y-m-d", strtotime("+20 days"));
         $date3 =  date("Y-m-d", strtotime("+1 days"));
-        $date4 =  date("Y-m-d", strtotime("+30 days"));
+        //$date4 =  date("Y-m-d", strtotime("+30 days"));
 
-        $dates = [$date1,$date2,$date3,$date4];
+        $dates = [$date1,$date3];
+
+        //dd($dates);
 
         $events = Event::
             where('published',true)
@@ -1085,8 +1087,17 @@ class CronjobsController extends Controller
             ->with('users')
             ->get();
 
-        foreach($events as $event){
+            
 
+        foreach($events as $event){
+        
+            $first_lesson = $event->lessons->first();
+
+            if($first_lesson){
+                $data['first_lesson_date'] = isset($first_lesson->pivot->date) ? date('d-m-Y', strtotime($first_lesson->pivot->date)) : '';
+                $data['first_lesson_time'] = isset($first_lesson->pivot->time_starts) ? date('H:i', strtotime($first_lesson->pivot->time_starts)) : '' ;
+            }
+            
             $info = $event->event_info();
             $venues = $event->venues;
 
@@ -1101,8 +1112,9 @@ class CronjobsController extends Controller
 
             foreach($event->users as $user){
 
+                $data['button_text'] = 'Activate your account';
                 $data['activateAccount'] = false;
-                $data['activate_slug'] = '';
+                $data['slug'] = '';
 
                 $slug = [];
                 $slug['id'] = $user->id;
@@ -1112,12 +1124,14 @@ class CronjobsController extends Controller
                 $slug = encrypt($slug);
 
                 $data['firstname'] = $user->firstname;
-                $data['activate_slug'] = url('/') . '/create-your-password/' . $slug;
+                $data['lastname'] = $user->lastname;
+                $data['slug'] = url('/') . '/create-your-password/' . $slug;
 
 
                 if($user->statusAccount && $user->statusAccount->completed){
                     $data['activateAccount'] = false;
-
+                    $data['button_text'] = 'Access your account';
+                    $data['slug'] = url('/').'/myaccount';
                 }
 
                 $user->notify(new InClassReminder($data));
