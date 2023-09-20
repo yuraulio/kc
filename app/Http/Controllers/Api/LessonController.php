@@ -98,6 +98,7 @@ class LessonController extends Controller
             $arr['percentMinutes'] = $progress;
             $arr['total_seen'] = $stop_time;
             $arr['is_new'] = strval(0);
+            $arr['send_automate_email'] = strval(0);
             
             //$arr = json_encode($arr);
             $db_video[$vimeo_id] = $arr;

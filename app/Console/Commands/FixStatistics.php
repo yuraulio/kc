@@ -75,6 +75,7 @@ class FixStatistics extends Command
                     $newVideos[$key]['lesson_id'] = isset($video['lesson_id']) ? $video['lesson_id'] : $video['lesson'];
                     $newVideos[$key]['tab'] = $tab;
                     $newVideos[$key]['is_new'] = isset($video['is_new']) ? $video['is_new'] : 1;
+                    $newVideos[$key]['send_automate_email'] = isset($video['send_automate_email']) ? $video['send_automate_email'] : 0;
 
                     $lesson = Lesson::find($newVideos[$key]['lesson_id']);
                     $newVideos[$key]['total_duration'] = $lesson ? getLessonDurationToSec($lesson['vimeo_duration']) : 0;

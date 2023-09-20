@@ -71,6 +71,7 @@ class FixStatisicsPercent extends Command
                     $newVideos[$key]['tab'] = $tab;
                     $newVideos[$key]['total_duration'] = $video['total_duration'];
                     $newVideos[$key]['is_new'] = isset($video['is_new']) ? $video['is_new'] : 1;
+                    $newVideos[$key]['send_automate_email'] = isset($video['send_automate_email']) ? $video['send_automate_email'] : 0;
 
                     if($video['seen'] == 1){
                         $newVideos[$key]['total_seen'] = $video['total_duration'];

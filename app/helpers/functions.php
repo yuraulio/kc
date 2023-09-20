@@ -1563,6 +1563,7 @@ if(!function_exists('formatBytes')){
 
             $emailTemplates['activate_social_media_account_email'] = 'Activate Social Media Account Email';
             $emailTemplates['activate_advertising_account_email'] = 'Activate Advertising Account Email';
+            $emailTemplates['activate_content_production_account_email'] = 'Activate Content Production Account Email';
 
             return $emailTemplates;
 

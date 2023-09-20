@@ -1315,7 +1315,9 @@ class CronjobsController extends Controller
         //$date1 = date("Y-m-d");
 
 
-        $date1 = date("Y-m-d");
+        //$date1 = date("Y-m-d");
+        $date1 =  date("Y-m-d", strtotime("+1 days"));
+
 
         //$dates = [$date1,$date2,$date3,$date4];
         $dates = [$date1];
@@ -1369,6 +1371,8 @@ class CronjobsController extends Controller
                     $subject = 'activate your social media accounts!';
                 }else if($topic->email_template == 'activate_advertising_account_email'){
                     $subject = 'activate your personal advertising accounts!';
+                }else if($topic->email_template == 'activate_production_content_account_email'){
+                    $subject = 'activate your content production accounts!';
                 }
 
                 $data['email_template'] = $topic->email_template;

@@ -120,11 +120,10 @@
                                                                                                     <li><a href="https://www.facebook.com/" style="color: #0092ff; text-decoration: underline;">Facebook.com</a></li>
                                                                                                     <li><a href="https://www.instagram.com/" style="color: #0092ff; text-decoration: underline;">Instagram.com</a></li>
                                                                                                     <li><a href="https://www.linkedin.com" style="color: #0092ff; text-decoration: underline;">Linkedin.com</a></li>
-                                                                                                    <li><a href="https://twitter.com/" style="color: #0092ff; text-decoration: underline;">Twitter.com</a></li>
+                                                                                                    <li><a href="https://twitter.com/" style="color: #0092ff; text-decoration: underline;">X (Twitter).com</a></li>
                                                                                                     <li><a href="https://www.tiktok.com" style="color: #0092ff; text-decoration: underline;">Tiktok.com</a></li>
                                                                                                     <li><a href="https://www.youtube.com/" style="color: #0092ff; text-decoration: underline;">Youtube.com</a></li>
                                                                                                     <li><a href="https://www.pinterest.com/" style="color: #0092ff; text-decoration: underline;">Pinterest.com</a></li>
-                                                                                                    <li><a href="https://www.quora.com/" style="color: #0092ff; text-decoration: underline;">Quora.com</a></li>
                                                                                                 </ul>
                                                                                             </div>
                                                                                         </td>
@@ -146,7 +145,7 @@
                                                                                             <div>
                                                                                                 <p>(optional)</p>
                                                                                                 <ul style="margin: 0px;">
-
+                                                                                                    <li><a href="https://www.quora.com/" style="color: #0092ff; text-decoration: underline;">Quora.com</a></li>
                                                                                                     <li><a href="https://www.snapchat.com/" style="color: #0092ff; text-decoration: underline;">Snapchat.com</a></li>
                                                                                                     <li><a href="https://www.reddit.com/" style="color: #0092ff; text-decoration: underline;">Reddit.com</a></li>
                                                                                                     <li><a href="https://www.twitch.tv/" style="color: #0092ff; text-decoration: underline;">Twitch.tv</a></li>

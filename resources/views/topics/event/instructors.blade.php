@@ -54,14 +54,14 @@
                         <span class="topic custom-toggle-slider rounded-circle" data-label-off="unassign" data-label-on="assigned" ></span>
                     </label>
                 </div>
-                @if($isInclassCourse)
+                {{--@if($isInclassCourse)--}}
                 <div class="assign-toggle automate-mail" id="toggle_automate_mail_{{$key}}">
                     <label class="custom-toggle custom-published">
                         <input type="checkbox" data-email-template="{{$topic['email_template']}}" data-checked="@if(isset($topic['pivot']['automate_mail']) && $topic['pivot']['automate_mail']) $topic['pivot']['automate_mail'] @else 0 @endif" data-event-id="{{$event['id']}}" data-topic-id="{{$topic['id']}}" @if(isset($topic['pivot']['automate_mail']) && $topic['pivot']['automate_mail']) checked @endif>
                         <span class="automate-mail custom-toggle-slider rounded-circle" data-label-on="no automate mail" data-label-off="automate mail" ></span>
                     </label>
                 </div>
-                @endif
+                {{--@endif--}}
             </div>
 
         </div>

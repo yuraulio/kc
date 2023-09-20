@@ -121,13 +121,9 @@
                                                                                                     <li><a href="https://www.facebook.com/adsmanager" title="Facebook ad manager" target="_blank" style="color: #0092ff; text-decoration: underline;">Facebook</a></li>
                                                                                                     <li><a href="https://ads.google.com/" title="Google ads" target="_blank" style="color: #0092ff; text-decoration: underline;">Google</a></li>
                                                                                                     <li><a href="https://www.linkedin.com/campaignmanager" title="LinkedIn campaign manager" target="_blank" style="color: #0092ff; text-decoration: underline;">Linkedin</a></li>
-                                                                                                    <li><a href="https://ads.twitter.com/" title="Twitter ads" target="_blank" style="color: #0092ff; text-decoration: underline;">Twitter</a></li>
+                                                                                                    <li><a href="https://ads.twitter.com/" title="Twitter ads" target="_blank" style="color: #0092ff; text-decoration: underline;">X (Twitter)</a></li>
                                                                                                     <li><a href="https://ads.pinterest.com/" title="Pinterest ads" target="_blank" style="color: #0092ff; text-decoration: underline;">Pinterest</a></li>
-                                                                                                    <li><a href="https://ads.tiktok.com/" title="TikTok ads" target="_blank" style="color: #0092ff; text-decoration: underline;">Ads.tiktok.com</a></li>
-                                                                                                    <li><a href="https://www.quora.com/business" title="Quora advertising" target="_blank" style="color: #0092ff; text-decoration: underline;">Quora.com/business</a></li>
-                                                                                                    <li><a href="https://forbusiness.snapchat.com/" title="Snapchat advertising" target="_blank" style="color: #0092ff; text-decoration: underline;">Forbusiness.snapchat.com</a></li>
-                                                                                                    <li><a href="https://ads.reddit.com/" title="Reddit ads" target="_blank" style="color: #0092ff; text-decoration: underline;">Ads.reddit.com</a></li>
-
+                                                                                                    <li><a href="https://ads.tiktok.com/" title="TikTok ads" target="_blank" style="color: #0092ff; text-decoration: underline;">Tiktok</a></li>
                                                                                                 </ul>
                                                                                             </div>
                                                                                         </td>
@@ -150,7 +146,7 @@
                                                                                             <div>
                                                                                             <p style="margin: 0px;">(optional)</p>
                                                                                                 <ul style="margin: 0px;">
-
+                                                                                                    <li><a href="https://www.quora.com/business" title="Quora advertising" target="_blank" style="color: #0092ff; text-decoration: underline;">Quora</a></li>
                                                                                                     <li><a href="https://forbusiness.snapchat.com/" title="Snapchat advertising" target="_blank" style="color: #0092ff; text-decoration: underline;">SnapChat</a></li>
                                                                                                     <li><a href="https://ads.reddit.com/" title="Reddit ads" target="_blank" style="color: #0092ff; text-decoration: underline;">Reddit</a></li>
 

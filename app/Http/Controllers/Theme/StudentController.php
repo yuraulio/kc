@@ -31,6 +31,7 @@ use App\Notifications\ExamActive;
 use Illuminate\Support\Str;
 use App\Jobs\UploadImageConvertWebp;
 use App\Http\Controllers\Theme\CertificateController;
+use App\Notifications\SendTopicAutomateMail;
 
 class StudentController extends Controller
 {
@@ -1197,7 +1198,7 @@ class StudentController extends Controller
                 'videos' => json_encode($videos)
             ], false);
 
-
+            
             /*if($user->events()->where('event_id',2068)->first() && $user->events()->where('event_id',2068)->first() &&
                 $user->events()->where('event_id',2068)->first()->tickets()->wherePivot('user_id',$user->id)->first()){
 
@@ -1256,6 +1257,8 @@ class StudentController extends Controller
                 $event->certification($user);
             }
 
+            $request->videos = $this->checkSendEmailTopic($request->lastVideoSeen, $request->event, $user, $videos);
+
         }
 
         return response()->json([
@@ -1265,6 +1268,90 @@ class StudentController extends Controller
             'exam_access' => false,//$examAccess,
             // 'progress' => $progress
         ]);
+
+    }
+
+    private function checkSendEmailTopic($videoId, $eventId, $user, $video){
+        $event = Event::find($eventId);
+        $subject = null;
+
+        $topicId = null;
+        $isAutomateEmailEnable = 0;
+        //$alreadySend = 1;
+
+        if(!$event){
+            return false;
+        }
+
+        $lessonForUpdate = [];
+        $checkDbValueSendAutomateEmail = (int) $video[$videoId]['send_automate_email'];
+
+        // dd($video[$videoId]);
+        // dd($videoId.'//'.$checkDbValueSendAutomateEmail);
+
+        // find topic
+        foreach($event->lessons as $lesson){
+            if(str_contains($lesson->vimeo_video, $videoId)){
+                $topicId = $lesson->pivot->topic_id;
+                $isAutomateEmailEnable = $lesson->pivot->automate_mail;
+            }
+        }
+
+        if($isAutomateEmailEnable == 1){
+
+            $topic = Topic::find($topicId);
+
+            // dd($checkDbValueSendAutomateEmail);
+ 
+            if($topic && $topic->email_template != '' && $checkDbValueSendAutomateEmail == 0 ){
+
+                
+                if($topic->email_template == 'activate_social_media_account_email'){
+                    $subject = 'activate your social media accounts!';
+                }else if($topic->email_template == 'activate_advertising_account_email'){
+                    $subject = 'activate your personal advertising accounts!';
+                }else if($topic->email_template == 'activate_content_production_account_email'){
+                    $subject = 'activate your content production accounts!';
+                }
+
+
+                if($subject){
+                    $data['firstname'] = $user->firstname;
+                    $data['subject'] = 'Knowcrunch | ' . $user->firstname . ', ' . $subject;
+                    $data['email_template'] = $topic->email_template;
+            
+                    $user->notify(new SendTopicAutomateMail($data));
+                    
+                    // find all topic lessons for update
+                    foreach($event->lessons()->wherePivot('topic_id',$topic->id)->get() as $lesson){
+                        
+                        $lessonForUpdate[] = str_replace("https://vimeo.com/","",$lesson->vimeo_video);
+                        // $lesson->pivot->send_automate_mail = true;
+                        // $lesson->pivot->save();
+                    }
+                }
+               
+
+            }
+
+            
+            if(!empty($lessonForUpdate)){
+
+                foreach($lessonForUpdate as $vimeoId){
+
+                    $video[$vimeoId]['send_automate_email'] = 1;
+
+                }
+
+                $user->statistic()->wherePivot('event_id',$eventId)->updateExistingPivot($eventId,[
+                    'videos' => json_encode($video)
+                ], false);
+            }
+
+
+        }
+
+        return $video;
 
     }
 
