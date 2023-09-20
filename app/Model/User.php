@@ -796,7 +796,7 @@ class User extends Authenticatable
                         'percentMinutes' => 0,
                         'total_duration' => getLessonDurationToSec($lesson['vimeo_duration']),
                         'is_new' => $is_new,
-                        'send_automate_email' => $lesson['send_automate_email']
+                        'send_automate_email' => isset($videos[$vimeo_id]['send_automate_email']) ? $videos[$vimeo_id]['send_automate_email'] : 0
                     ];
                     $notes[$vimeo_id] = '';
                 }
@@ -818,7 +818,7 @@ class User extends Authenticatable
                         'percentMinutes' => $percentMinutess,
                         'total_duration' => getLessonDurationToSec($lesson['vimeo_duration']),
                         'is_new' => $isNeww,
-                        'send_automate_email' => $lesson['send_automate_email']
+                        'send_automate_email' => isset($videos[$vimeo_id]['send_automate_email']) ? $videos[$vimeo_id]['send_automate_email'] : 0
                     ];
 
                     $notes[$vimeo_id] = isset($notes[$vimeo_id]) ? $notes[$vimeo_id] : '';
