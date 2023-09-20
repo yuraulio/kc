@@ -546,7 +546,9 @@ class UserController extends Controller
 
 
                 if($event->is_inclass_course()){
-                    $test[$dropbox['folder_name']][] = ['id'=>$file['id'],'dirname'=>$file['dirname'],'foldername'=>$file['foldername'],'files'=>$file['files'],'bonus'=>$file['bonus'],
+                    // $test[$dropbox['folder_name']][] = ['id'=>$file['id'],'dirname'=>$file['dirname'],'foldername'=>$file['foldername'],'files'=>$file['files'],'bonus'=>$file['bonus'],
+                    //     'subfolders'=>$newSubfolders];
+                    $test[] = ['id'=>$file['id'],'dirname'=>$file['dirname'],'foldername'=>$file['foldername'],'files'=>$file['files'],'bonus'=>$file['bonus'],
                         'subfolders'=>$newSubfolders];
                 }else{
                     $test[] = ['id'=>$file['id'],'dirname'=>$file['dirname'],'foldername'=>$file['foldername'],'files'=>$file['files'],'bonus'=>$file['bonus'],
@@ -612,26 +614,31 @@ class UserController extends Controller
             $eventLessons = $event['lessonsForApp']->sortBy('time_starts');
 
             // if inclass, parse dropbox files without attach by topic
-            //$newArr['files']['folders'][] = $foldersNew;
-            if(isset($foldersNew[0]) && count($foldersNew[0]) > 0){
-                foreach($foldersNew as $key1 => $folderNew){
-
-                    $eventFiles = [];
-                    $folderName = '';
-                    foreach($folderNew as $folderkey => $files){
-                      $folderName = $folderkey;
-                      foreach($files as $file){
-                        //dd($file['files']);
-                        $eventFiles= array_merge($eventFiles, $file['files']);;
-                      }
-
-                    }
-
-                    $newArr['files']['folders'][] = ['name' => $folderName, 'files' => $eventFiles];
-                }
-            }else{
-              $newArr['files']['folders'] = [];
-            }
+            $newArr['files']['folders'] = $foldersNew;
+            
+                // $newArr['files']['folders'][] = $foldersNew;
+                // if(isset($foldersNew[0]) && count($foldersNew[0]) > 0){
+                //     foreach($foldersNew as $key1 => $folderNew){
+    
+                //         $eventFiles = [];
+                //         $folderName = '';
+                //         foreach($folderNew as $folderkey => $files){
+                //           $folderName = $folderkey;
+                //           foreach($files as $file){
+                //             //dd($file['files']);
+                //             $eventFiles= array_merge($eventFiles, $file['files']);;
+                //           }
+    
+                //         }
+    
+                //         $newArr['files']['folders'][] = ['name' => $folderName, 'files' => $eventFiles];
+                //     }
+                // }else{
+                //   $newArr['files']['folders'] = [];
+                // }
+            
+            
+            
         }else if($event->is_elearning_course()){
             $newArr['is_elearning'] = true;
             $isElearning = true;
@@ -865,6 +872,7 @@ class UserController extends Controller
 
         }
 
+        //dd($foldersNew);
         $newArr['topics'] = [];
         foreach($topics as $key11 =>  $topic){
             //dd($topic);
