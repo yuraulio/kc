@@ -191,15 +191,15 @@
 					<div class="tab card-information flex-container">
 						<button type="button" class="tablinks btn-4 btn-outline-dark Tab active" onclick="openPaymentMethod(event, 'card')">
 							<img src="{{cdn('new_cart/images/credit-card.png')}}" width="30px" height="20px" class="without-hover" alt="">	
-							<p class="payment-title p-TabLabel">Card</p>	
+							<p class="payment-title p-TabLabel">DEBIT/CREDIT CARD</p>	
 						</button>
 						<button type="button" class="tablinks btn-4 btn-outline-dark Tab" onclick="openPaymentMethod(event, 'digital-wallets')">
 							<img src="{{cdn('new_cart/images/wallet.png')}}" width="30px" height="20px" class="without-hover" alt="">	
-							<p class="payment-title p-TabLabel">Wallet</p>
+							<p class="payment-title p-TabLabel">APPLE/GOOGLE WALLET</p>
 						</button>
 						<button type="button" class="tablinks btn-4 btn-outline-dark Tab" onclick="openPaymentMethod(event, 'sepa')">
 						<img src="{{cdn('new_cart/images/sepa-2.svg')}}" width="30px" height="20px" class="without-hover" alt="">	
-							<p class="payment-title p-TabLabel">SEPA</p>
+							<p class="payment-title p-TabLabel">SEPA DIRECT DEBIT</p>
 						</button>
 					</div>
 
@@ -252,7 +252,7 @@
 						<div id="sepa" class="tabcontent card-information">
 							<form action="/charge" method="post" class="card-info" id="payment-form">
 
-								<p class="info">Submit your IBAN to charge your EU bank account directly and proceed securely with your transaction. </p>
+								<p class="info">Please provide your IBAN so we can directly debit your EU bank account and ensure a secure transaction. Kindly note that a SEPA payment may take up to 14 days to process. Your access will be granted once we have confirmation of your payment in our system. </p>
 								
 								<div class="">
 									<div class="">
