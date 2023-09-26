@@ -46,8 +46,50 @@ class MainController extends Controller
             $page = Page::whereSlug("homepage")->first();
             $dynamicPageData = CMS::getHomepageData();
 
-            $dynamicPageData['homeBrands'] = Logos::with('medias')->where('type', 'brands')->inRandomOrder()->take(6)->get()->toArray();
-            $dynamicPageData['homeLogos'] = Logos::with('medias')->where('type', 'logos')->inRandomOrder()->take(6)->get()->toArray();
+
+            //
+            //corporate
+            $corp = Page::select('content')->find(10);
+
+            if($corp){
+                $corp = json_decode($corp->content, true)[6]['columns'][0]['template']['inputs'][1]['value'];
+            }
+
+            $inthemedia = Page::select('content')->find(20);
+            //dd($inthemedia);
+
+            if($inthemedia){
+                
+                $inthemedia = json_decode($inthemedia->content, true)[4]['columns'][0]['template']['inputs'][1]['value'];
+            }
+            //dd($inthemedia);
+
+            //in the media
+            //dd(Page::find(21));
+            // corpot
+            $rand_corp_keys = array_rand($corp,6);
+
+            foreach($corp as $key => $co){
+                if(!in_array($key, $rand_corp_keys)){
+                    unset($corp[$key]);
+                }
+            }
+
+            $rand_inthemedia_keys = array_rand($inthemedia,6);
+
+            foreach($inthemedia as $key => $co){
+                if(!in_array($key, $rand_inthemedia_keys)){
+                    unset($inthemedia[$key]);
+                }
+            }
+
+   
+            $dynamicPageData['homeBrands'] = $corp;
+            //$dynamicPageData['homeBrands'] = Logos::with('medias')->where('type', 'brands')->inRandomOrder()->take(6)->get()->toArray();
+            //in the media
+            $dynamicPageData['homeLogos'] = $inthemedia;
+            
+            //$dynamicPageData['homeLogos'] = Logos::with('medias')->where('type', 'logos')->inRandomOrder()->take(6)->get()->toArray();
         }
 
         if (!$page) {
