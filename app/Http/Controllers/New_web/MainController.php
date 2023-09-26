@@ -52,36 +52,48 @@ class MainController extends Controller
             $corp = Page::select('content')->find(10);
 
             if($corp){
-                $corp = json_decode($corp->content, true)[6]['columns'][0]['template']['inputs'][1]['value'];
+    
+                if(isset(json_decode($corp->content, true)[6]['columns'][0]['template']['inputs'][1])){
+                    $corp = json_decode($corp->content, true)[6]['columns'][0]['template']['inputs'][1]['value'];
+
+                    $rand_corp_keys = array_rand($corp,6);
+
+                    foreach($corp as $key => $co){
+                        if(!in_array($key, $rand_corp_keys)){
+                            unset($corp[$key]);
+                        }
+                    }
+                }
+                
             }
 
             $inthemedia = Page::select('content')->find(20);
             //dd($inthemedia);
 
             if($inthemedia){
+
+                if(isset(json_decode($inthemedia->content, true)[4]['columns'][0]['template']['inputs'][1])){
+                    $inthemedia = json_decode($inthemedia->content, true)[4]['columns'][0]['template']['inputs'][1]['value'];
+
+                    $rand_inthemedia_keys = array_rand($inthemedia,6);
+
+                    foreach($inthemedia as $key => $co){
+                        if(!in_array($key, $rand_inthemedia_keys)){
+                            unset($inthemedia[$key]);
+                        }
+                    }
+                }
                 
-                $inthemedia = json_decode($inthemedia->content, true)[4]['columns'][0]['template']['inputs'][1]['value'];
+                
             }
             //dd($inthemedia);
 
             //in the media
             //dd(Page::find(21));
             // corpot
-            $rand_corp_keys = array_rand($corp,6);
+           
 
-            foreach($corp as $key => $co){
-                if(!in_array($key, $rand_corp_keys)){
-                    unset($corp[$key]);
-                }
-            }
-
-            $rand_inthemedia_keys = array_rand($inthemedia,6);
-
-            foreach($inthemedia as $key => $co){
-                if(!in_array($key, $rand_inthemedia_keys)){
-                    unset($inthemedia[$key]);
-                }
-            }
+            
 
    
             $dynamicPageData['homeBrands'] = $corp;
