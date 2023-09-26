@@ -1227,13 +1227,14 @@ class UserController extends Controller
         $user->ticket()->wherePivot('event_id', '=', $request->event_id)->wherePivot('ticket_id', '=', $request->ticket_id)->detach($request->ticket_id);
         $user->events()->wherePivot('event_id', '=', $request->event_id)->detach($request->event_id);
 
-
-
         $transaction = $event->transactionsByUser($user->id)->first();
 
-        $transaction->event()->detach($request->event_id);
-        $transaction->user()->detach($request->user_id);
-        $transaction->delete();
+        if($transaction){
+            $transaction->event()->detach($request->event_id);
+            $transaction->user()->detach($request->user_id);
+            $transaction->delete();
+        }
+
 
         //$user->ticket()->attach($ticket_id, ['event_id' => $event_id]);
         //dd($user->transactions()->get());
