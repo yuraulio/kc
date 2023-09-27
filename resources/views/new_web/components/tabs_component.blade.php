@@ -46,7 +46,7 @@
         <div class="tabs-wrapper fixed-tab-controls">
             <div class="tab-controls @if(count(get_tickers()) != 0) {{ 'has_ticker'}} @else {{''}} @endif">
                 <div class="container tabs-container">
-                            <a href="#" class="mobile-tabs-menu">Menu</a>
+                            <a href="#" class="mobile-tabs-menu">Details</a>
                             <ul class="clearfix tab-controls-list">
                                 @if(isset($sections['overview']) && $sections['overview']->first())<li><a href="#overview" class="active">{{$sections['overview']->first()->tab_title}}</a></li>@endif
 
