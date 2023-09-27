@@ -1225,8 +1225,9 @@ class UserController extends Controller
         $event = Event::find($request->event_id);
 
         $user->ticket()->wherePivot('event_id', '=', $request->event_id)->wherePivot('ticket_id', '=', $request->ticket_id)->detach($request->ticket_id);
-        $user->events()->wherePivot('event_id', '=', $request->event_id)->detach($request->event_id);
+        $user->events_for_user_list()->wherePivot('event_id', '=', $request->event_id)->detach($request->event_id);
 
+        
         $transaction = $event->transactionsByUser($user->id)->first();
 
         if($transaction){
@@ -1238,7 +1239,7 @@ class UserController extends Controller
 
         //$user->ticket()->attach($ticket_id, ['event_id' => $event_id]);
         //dd($user->transactions()->get());
-        $user->events()->wherePivot('event_id', '=', $request->event_id)->detach();
+        //$user->events()->wherePivot('event_id', '=', $request->event_id)->detach();
         //$user->transactions()->wherePivot('event_id', '=', $request->event_id)->updateExistingPivot($event_id,['paid' => 0], false);
         return response()->json([
             'success' => 'Ticket assigned removed from user',
