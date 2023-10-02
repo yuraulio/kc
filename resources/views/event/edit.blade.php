@@ -1705,6 +1705,21 @@
 
                                                 @include('alerts.feedback', ['field' => 'payment_method'])
                                             </div>
+
+                                            <div class="form-group col-12">
+
+                                                <div class="row">
+                                                    <div class="form-group col-sm-12 col-md-6 col-lg-4 payment-method-wrapper @if(!$event['paymentMethod']->first()) {{ 'd-none' }} @endif">
+                                                        <label class="form-control-label">Installments</label>
+                                                        <input type="number" id="input-payment-installments" name="course[{{'payment'}}][{{'installments'}}]" min="0" class="form-control" placeholder="{{ __('Course Installments') }}" value="{{ old('payment_installments', (isset($info['payment_installments']) ? $info['payment_installments'] : '' )) }}" autofocus>
+
+                                                        @include('alerts.feedback', ['field' => 'payment_installments'])
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            
+
                                             @endif
                                         </div>
 

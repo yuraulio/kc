@@ -1057,7 +1057,6 @@ class EventController extends Controller
 
         $event_info = $this->prepareInfo($infoData, $request->status, $request->delivery, $partner, $request->syllabus, $request->city_id, $event);
 
-        //dd($event_info);
 
         $this->updateEventInfo($event_info, $event->id);
 
@@ -1455,11 +1454,14 @@ class EventController extends Controller
         if(isset($requestData['payment'])){
             if(isset($requestData['payment']['paid'])){
                 $data['course_payment_method'] = 'paid';
+                $data['course_payment_installments'] = $requestData['payment']['installments'];
             }else{
                 $data['course_payment_method'] = 'free';
+                $data['course_payment_installments'] = null;
             }
         }else{
             $data['course_payment_method'] = 'free';
+            $data['course_payment_installments'] = null;
         }
 
         if(isset($requestData['payment'])){
@@ -1635,6 +1637,8 @@ class EventController extends Controller
 
         $infos->course_payment_method = isset($event_info['course_payment_method']) && $event->paymentMethod()->first()  ? $event_info['course_payment_method'] : 'free';
         $infos->course_payment_icon = (isset($event_info['course_payment_icon']) && $event_info['course_payment_icon'] != null) ? $event_info['course_payment_icon'] : null;
+
+        $infos->course_payment_installments = (isset($event_info['course_payment_installments']) && $event_info['course_payment_installments'] != null) ? $event_info['course_payment_installments'] : null;
 
         $infos->course_files_icon = (isset($event_info['course_files_icon']) && $event_info['course_files_icon'] != null) ? $event_info['course_files_icon'] : null;
 

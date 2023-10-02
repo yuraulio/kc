@@ -66,8 +66,14 @@ class CartController extends Controller
                 $availableInstallments = (int)$delivery['installments'];
             }
 
-        }
+            if($eventInfo['payment_installments'] != null){
+                
+                $availableInstallments = (int)$eventInfo['payment_installments'];
+            }else if($eventInfo['payment_installments'] == 0){
+                $availableInstallments = 0;
+            }
 
+        }
         return $availableInstallments;
 
     }

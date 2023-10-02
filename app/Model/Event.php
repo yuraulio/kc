@@ -1051,6 +1051,7 @@ class Event extends Model
 
             $data['payment_method'] = $infos['course_payment_method'];
             $data['payment_icon'] = $infos['course_payment_icon'] != null ? json_decode($infos['course_payment_icon'], true) : null;
+            $data['payment_installments'] = $infos['course_payment_installments'];
 
 
             $data['partner']['status'] = $infos['course_partner'];
