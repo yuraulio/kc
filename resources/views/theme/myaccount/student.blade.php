@@ -763,7 +763,6 @@
 
                         @foreach($events as $keyType => $event)
                            
-                        
                         {{--@if($event['view_tpl'] != 'elearning_free' && $event['view_tpl'] != 'elearning_event')--}}
                         @if($event['delivery'] != 143)
                         <div class="col12 dynamic-courses-wrapper dynamic-courses-wrapper--style2 @if((isset($event['paid']) && $event['paid'] == 0 && isset($event['transactionPending']) && $event['transactionPending'] == 2) || (isset($event['transactionPendingSepa']) && $event['transactionPendingSepa'] == 1)){{'pendingSepa'}}@elseif(isset($event['paid']) && $event['paid'] == 0 ){{'unpaid'}}@endif">
@@ -1261,8 +1260,7 @@
                         </div>
                      @else
 
-                        {{--dd($event)--}}
-                        <div class="col12 test dynamic-courses-wrapper @if((isset($event['paid']) && $event['paid'] == 0 && isset($event['transactionPending']) && $event['transactionPending'] == 2) || (isset($event['transactionPendingSepa']) && $event['transactionPendingSepa'] == 1)){{'pendingSepa'}}@elseif(isset($event['paid']) && $event['paid'] == 0){{'unpaid'}}@endif">
+                        <div class="col12 dynamic-courses-wrapper @if((isset($event['paid']) && $event['paid'] == 0 && isset($event['transactionPending']) && $event['transactionPending'] == 2) || (isset($event['transactionPendingSepa']) && $event['transactionPendingSepa'] == 1)){{'pendingSepa'}}@elseif(isset($event['paid']) && $event['paid'] == 0){{'unpaid'}}@endif">
                             <div class="item">
                             <h2>{{ $event['title'] }}</h2>
                             <div class="inside-tabs">
@@ -1553,7 +1551,7 @@
                      {{--@if($event['view_tpl'] != 'elearning_event' && $event['view_tpl'] != 'elearning_free')--}}
                      @if($event['delivery'] != 143)
                      @else
-                     <div class="col12 dynamic-courses-wrapper shit">
+                     <div class="col12 dynamic-courses-wrapper">
                         <div class="item">
                            <h2>{{ $event['title'] }}</h2>
                            <div class="inside-tabs">
