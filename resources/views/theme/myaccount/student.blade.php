@@ -1261,8 +1261,8 @@
                         </div>
                      @else
 
-
-                        <div class="col12 dynamic-courses-wrapper @if((isset($event['paid']) && $event['paid'] == 0 && isset($event['transactionPending']) && $event['transactionPending'] == 2) || (isset($event['transactionPendingSepa']) && $event['transactionPendingSepa'] == 1)){{'pendingSepa'}}@elseif(isset($event['paid']) && $event['paid'] == 0){{'unpaid'}}@endif">
+                        {{--dd($event)--}}
+                        <div class="col12 test dynamic-courses-wrapper @if((isset($event['paid']) && $event['paid'] == 0 && isset($event['transactionPending']) && $event['transactionPending'] == 2) || (isset($event['transactionPendingSepa']) && $event['transactionPendingSepa'] == 1)){{'pendingSepa'}}@elseif(isset($event['paid']) && $event['paid'] == 0){{'unpaid'}}@endif">
                             <div class="item">
                             <h2>{{ $event['title'] }}</h2>
                             <div class="inside-tabs">
@@ -1338,7 +1338,7 @@
                                                 <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt="credit-icon" title="credit-icon"><?php echo 'You will be billed the amount of € '.intval($event['mySubscription']['price']).' on '.date('d-m-Y',$event['mySubscription']['must_be_updated']).' unless you deactivate it.'; ?></div>
                                                 @endif
                                                 @endif
-                                                @endif
+                                                @endif                                   
                                                 @if(isset($event['mySubscription']))
                                                 <div class="status_wrapper">
                                                     <div class="status_label"><label> My subscription:  </label></div>
@@ -1553,7 +1553,7 @@
                      {{--@if($event['view_tpl'] != 'elearning_event' && $event['view_tpl'] != 'elearning_free')--}}
                      @if($event['delivery'] != 143)
                      @else
-                     <div class="col12 dynamic-courses-wrapper">
+                     <div class="col12 dynamic-courses-wrapper shit">
                         <div class="item">
                            <h2>{{ $event['title'] }}</h2>
                            <div class="inside-tabs">

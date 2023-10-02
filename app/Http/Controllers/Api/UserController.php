@@ -954,8 +954,8 @@ class UserController extends Controller
                 array_push($data, $datar);
             }
 
-            $eventSubscriptions[] = $user->eventSubscriptions()->wherePivot('event_id',$event['id'])->first() ?
-             $user->eventSubscriptions()->wherePivot('event_id',$event['id'])->first()->id : -1;
+            $eventSubscriptions[] = $user->eventSubscriptions()->wherePivot('event_id',$event['id'])->orderByPivot('expiration', 'DESC')->first() ?
+             $user->eventSubscriptions()->wherePivot('event_id',$event['id'])->orderByPivot('expiration', 'DESC')->first()->id : -1;
 
         }
 

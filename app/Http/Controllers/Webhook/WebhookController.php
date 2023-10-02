@@ -651,7 +651,7 @@ class WebhookController extends BaseWebhookController
 
 		//Log::info('TRIGGER subscription');
 
-		$subscription = $user->eventSubscriptions()->where('stripe_id',$payload['data']['object']['subscription'])->first();
+		$subscription = $user->eventSubscriptions()->where('stripe_id',$payload['data']['object']['subscription'])->orderByPivot('expiration', 'DESC')->first();
 		$ends_at = isset($sub['period']) ? $sub['period']['end'] : null;
 
 		$data = $payload['data']['object'];
@@ -1093,7 +1093,7 @@ class WebhookController extends BaseWebhookController
         }
 
 		$user = $this->getUserByStripeId($payload['data']['object']['customer']);
-		$subscription = $user->eventSubscriptions()->where('stripe_id',$payload['data']['object']['subscription'])->first();
+		$subscription = $user->eventSubscriptions()->where('stripe_id',$payload['data']['object']['subscription'])->orderByPivot('expiration', 'DESC')->first();
 		$paymentMethodId = 0;
 
 		if($subscription){

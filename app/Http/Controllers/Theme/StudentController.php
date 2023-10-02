@@ -226,8 +226,8 @@ class StudentController extends Controller
                 $data['events'][$event['id']]['summaryDate'] = isset($eventInfo['elearning']['expiration'])  ? $eventInfo['elearning']['expiration'] : null;
                 $data['events'][$event['id']]['summaryDate_icon'] = isset($eventInfo['elearning']['icon'])  ?  $eventInfo['elearning']['icon'] : null;
 
-                $eventSubscriptions[] = $user->eventSubscriptions()->wherePivot('event_id',$event['id'])->first() ?
-                $user->eventSubscriptions()->wherePivot('event_id',$event['id'])->first()['id'] : -1;
+                $eventSubscriptions[] = $user->eventSubscriptions()->wherePivot('event_id',$event['id'])->orderByPivot('expiration', 'DESC')->first() ?
+                $user->eventSubscriptions()->wherePivot('event_id',$event['id'])->orderByPivot('expiration', 'DESC')->first()['id'] : -1;
 
             }else{
 
@@ -287,7 +287,7 @@ class StudentController extends Controller
                 $data['events'][$event['id']]['videos_seen'] = $event->video_seen($user,$statistic);
                 $data['events'][$event['id']]['cert'] = [];
 
-                $data['events'][$event['id']]['mySubscription'] = $user->eventSubscriptions()->wherePivot('event_id',$event['id'])->first();
+                $data['events'][$event['id']]['mySubscription'] = $user->eventSubscriptions()->wherePivot('event_id',$event['id'])->orderByPivot('expiration', 'DESC')->first();
                 $data['events'][$event['id']]['plans'] = $event['plans'];
 
                 $data['events'][$event['id']]['certs'] = isset($event['certificates']) && $event['certificates'] ? $event['certificates'] : [];//$event->certificatesByUser($user['id']);
@@ -318,8 +318,8 @@ class StudentController extends Controller
 
                 //$data['user']['events'][$event['id']]['exam_results'] = $user->examAccess(0.8,$event['id']);
 
-                $eventSubscriptions[] = $user->eventSubscriptions()->wherePivot('event_id',$event['id'])->first() ?
-                                            $user->eventSubscriptions()->wherePivot('event_id',$event['id'])->first()['id'] : -1;
+                $eventSubscriptions[] = $user->eventSubscriptions()->wherePivot('event_id',$event['id'])->orderByPivot('expiration', 'DESC')->first() ?
+                                            $user->eventSubscriptions()->wherePivot('event_id',$event['id'])->orderByPivot('expiration', 'DESC')->first()['id'] : -1;
 
                 //$eventSubscriptions[] =  array_values($user->eventSubscriptions()->wherePivot('event_id',$event['id'])->pluck('id')->toArray());
 
@@ -516,7 +516,7 @@ class StudentController extends Controller
 
         $events = $data['user']['events']->merge($data['user']['eventsUnPaid']);
 
-        $latestSubscription = $user->subscriptionEvents()->latest()->first();
+        $latestSubscription = $user->subscriptionEvents()->orderByPivot('expiration', 'DESC')->first();
 
         foreach($events as $key => $event){
             $after20Days = null;
@@ -551,7 +551,8 @@ class StudentController extends Controller
                 $data['events'][$event->id]['videos_seen'] = $event->video_seen($user,$statistic);
                 $data['events'][$event->id]['cert'] = [];
 
-                $data['events'][$event->id]['mySubscription'] = $user->eventSubscriptions()->wherePivot('event_id',$event['id'])->first();
+                $data['events'][$event->id]['mySubscription'] = $user->eventSubscriptions()->wherePivot('event_id',$event['id'])->orderByPivot('expiration', 'DESC')->first();
+                //dd($data['events'][$event->id]['mySubscription']);
                 $data['events'][$event->id]['plans'] = $event['plans'];
 
                 $data['events'][$event->id]['certs'] = isset($event['certificates']) && $event['certificates'] ? $event['certificates'] : [];;
@@ -589,9 +590,9 @@ class StudentController extends Controller
                 }
                 //$data['user']['events'][$event->id]['exam_results'] = $user->examAccess(0.8,$event->id);
 
-                $eventSubscriptions[] = $user->eventSubscriptions()->wherePivot('event_id',$event['id'])->first() ?
-                                            $user->eventSubscriptions()->wherePivot('event_id',$event['id'])->first()->id : -1;
-
+                $eventSubscriptions[] = $user->eventSubscriptions()->wherePivot('event_id',$event['id'])->orderByPivot('expiration', 'DESC')->first() ?
+                                            $user->eventSubscriptions()->wherePivot('event_id',$event['id'])->orderByPivot('expiration', 'DESC')->first()->id : -1;
+                
                 //$eventSubscriptions[] =  array_values($user->eventSubscriptions()->wherePivot('event_id',$event['id'])->pluck('id')->toArray());
 
                 $video_access = false;
@@ -655,9 +656,12 @@ class StudentController extends Controller
             //$data['elearningAccess'] = $event->is_elearning_course();
         }
 
+        //dd('asd');
+        //dd($eventSubscriptions);
         $eventSubs = $user['eventSubscriptions']->whereNotIn('id',$eventSubscriptions)->filter(function($item) {
                             return  $item->stripe_status != 'cancelled' && $item->stripe_status != 'canceled';
                         });
+        //dd($eventSubs);
 
         foreach($eventSubs as $key => $subEvent){
             if(!($event = $subEvent['event']->first())){
