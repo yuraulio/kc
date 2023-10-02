@@ -54,7 +54,7 @@ class CartController extends Controller
 
     public function calculateInstallments($eventInfo){
 
-        $availableInstallments = 0;
+        $availableInstallments = 1;
 
         $delivery = Delivery::find($eventInfo['delivery']);
 
@@ -1072,7 +1072,7 @@ class CartController extends Controller
         $data = $this->initCartDetails($data);
 
         
-        $installments = $input['installments'];
+        $installments = isset($input['installments']) ? $input['installments'] : 0;
 
         $instamount = $data['price'];
 
