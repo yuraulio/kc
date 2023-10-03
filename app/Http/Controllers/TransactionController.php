@@ -664,13 +664,19 @@ class TransactionController extends Controller
 
                 if($data['status'][$key] > 0){
 
-                    $us->events_for_user_list()->detach($request->oldevents[$key]);
+                    //dd($us->events_for_user_list()->wherePivot('event_id', $request->oldevents[$key])->first());
 
-                    if($data['status'][$key] == 1){
-                        $us->events_for_user_list()->attach($request->newevents[$key],['paid' => true]);
+                    if($us->events_for_user_list()->wherePivot('event_id', $request->oldevents[$key])->first()){
+                        $oldEventPivotData = $us->events_for_user_list()->wherePivot('event_id', $request->oldevents[$key])->first()->pivot;
+                        $us->events_for_user_list()->detach($request->oldevents[$key]);
 
-                    }else{
-                        $us->events_for_user_list()->attach($request->newevents[$key],['paid' => false]);
+                        $us->events_for_user_list()->attach($request->newevents[$key],[
+                            'paid' => $data['status'][$key] == 1 ? true : false,
+                            'expiration' => $oldEventPivotData['expiration'], 
+                            'payment_method' => $oldEventPivotData['payment_method'],
+                            'expiration_email' => $oldEventPivotData['expiration_email'] ? $oldEventPivotData['expiration_email'] : 0,
+                            'comment' => $oldEventPivotData['comment']
+                        ]);
 
                     }
 
