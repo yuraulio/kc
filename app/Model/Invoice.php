@@ -136,6 +136,14 @@ class Invoice extends Model
             $billInfo .= ' ' . $billing['billcity'];
         }
 
+        if(isset($billing['billstate'])){
+            $billInfo .= ' ' . $billing['billstate'];
+        }
+
+        if(isset($billing['billcountry'])){
+            $billInfo .= ' ' . $billing['billcountry'];
+        }
+
         if(isset($billing['billafm'])){
             $billafm = $billing['billafm'];
         }
@@ -278,6 +286,14 @@ class Invoice extends Model
 
         if(isset($billing['billcity'])){
             $billInfo .= ' ' . $billing['billcity'];
+        }
+
+        if(isset($billing['billstate'])){
+            $billInfo .= ' ' . $billing['billstate'];
+        }
+
+        if(isset($billing['billcountry'])){
+            $billInfo .= ' ' . $billing['billcountry'];
         }
 
         if(isset($billing['billafm'])){
@@ -463,6 +479,14 @@ class Invoice extends Model
             $billInfo .= ' ' . $billing['billcity'];
         }
 
+        if(isset($billing['billstate'])){
+            $billInfo .= ' ' . $billing['billstate'];
+        }
+
+        if(isset($billing['billcountry'])){
+            $billInfo .= ' ' . $billing['billcountry'];
+        }
+
         if(isset($billing['billafm'])){
             $billafm = $billing['billafm'];
         }
@@ -606,6 +630,14 @@ class Invoice extends Model
 
         if(isset($billing['billcity'])){
             $billInfo .= ' ' . $billing['billcity'];
+        }
+
+        if(isset($billing['billstate'])){
+            $billInfo .= ' ' . $billing['billstate'];
+        }
+
+        if(isset($billing['billcountry'])){
+            $billInfo .= ' ' . $billing['billcountry'];
         }
 
         if(isset($billing['billafm'])){
