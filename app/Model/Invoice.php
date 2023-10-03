@@ -119,6 +119,7 @@ class Invoice extends Model
 
         $billInfo = '';
         $billafm = '';
+        $billState = '';
 
         if(isset($billing['billaddress'])){
             $billInfo .= $billing['billaddress'];
@@ -137,11 +138,11 @@ class Invoice extends Model
         }
 
         if(isset($billing['billstate'])){
-            $billInfo .= ' ' . $billing['billstate'];
+            $billState .= ' ' . $billing['billstate'];
         }
 
         if(isset($billing['billcountry'])){
-            $billInfo .= ' ' . $billing['billcountry'];
+            $billState .= ' ' . $billing['billcountry'];
         }
 
         if(isset($billing['billafm'])){
@@ -159,6 +160,7 @@ class Invoice extends Model
         $data['title'] = $this->event->first()->title;
         $data['name'] = $this->name;
         $data['billInfo'] = $billInfo ;
+        $data['billState'] = $billState ;
         $data['invoice'] = $this->invoice ;
         $data['country'] = 'Ελλάδα';
         $data['vat'] = $billafm;
@@ -271,6 +273,7 @@ class Invoice extends Model
 
         $billInfo = '';
         $billafm = '';
+        $billState = '';
 
         if(isset($billing['billaddress'])){
             $billInfo .= $billing['billaddress'];
@@ -289,11 +292,11 @@ class Invoice extends Model
         }
 
         if(isset($billing['billstate'])){
-            $billInfo .= ' ' . $billing['billstate'];
+            $billState .= ' ' . $billing['billstate'];
         }
 
         if(isset($billing['billcountry'])){
-            $billInfo .= ' ' . $billing['billcountry'];
+            $billState .= ' ' . $billing['billcountry'];
         }
 
         if(isset($billing['billafm'])){
@@ -358,6 +361,7 @@ class Invoice extends Model
         $data['title'] = $newInvoice->event->first()->title;
         $data['name'] = $newInvoice->name;
         $data['billInfo'] = $billInfo ;
+        $data['billState'] = $billState ;
         $data['invoice'] = $newInvoice->invoice ;
         $data['country'] = 'Ελλάδα';
         $data['vat'] = $billafm;
@@ -462,6 +466,7 @@ class Invoice extends Model
 
         $billInfo = '';
         $billafm = '';
+        $billState = '';
 
         if(isset($billing['billaddress'])){
             $billInfo .= $billing['billaddress'];
@@ -480,16 +485,17 @@ class Invoice extends Model
         }
 
         if(isset($billing['billstate'])){
-            $billInfo .= ' ' . $billing['billstate'];
+            $billState .= ' ' . $billing['billstate'];
         }
 
         if(isset($billing['billcountry'])){
-            $billInfo .= ' ' . $billing['billcountry'];
+            $billState .= ' ' . $billing['billcountry'];
         }
 
         if(isset($billing['billafm'])){
             $billafm = $billing['billafm'];
         }
+        
         if($this->amount - floor($this->amount)>0){
             $data['amount'] = number_format ($this->amount , 2 , ',', '.');
         }else{
@@ -500,6 +506,7 @@ class Invoice extends Model
         $data['name'] = $this->name;
         //$data['name'] = isset($billing['billname']) ? $billing['billname'] : '';
         $data['billInfo'] = $billInfo ;
+        $data['billState'] = $billState ;
         $data['invoice'] = $this->invoice ;
         $data['country'] = 'Ελλάδα';
         $data['vat'] = $billafm;
@@ -615,6 +622,7 @@ class Invoice extends Model
 
         $billInfo = '';
         $billafm = '';
+        $billState = '';
 
         if(isset($billing['billaddress'])){
             $billInfo .= $billing['billaddress'];
@@ -633,11 +641,11 @@ class Invoice extends Model
         }
 
         if(isset($billing['billstate'])){
-            $billInfo .= ' ' . $billing['billstate'];
+            $billState .= ' ' . $billing['billstate'];
         }
 
         if(isset($billing['billcountry'])){
-            $billInfo .= ' ' . $billing['billcountry'];
+            $billState .= ' ' . $billing['billcountry'];
         }
 
         if(isset($billing['billafm'])){
@@ -653,6 +661,7 @@ class Invoice extends Model
         $data['name'] = $this->name;
         //$data['name'] = isset($billing['billname']) ? $billing['billname'] : '';
         $data['billInfo'] = $billInfo ;
+        $data['billState'] = $billState;
         $data['invoice'] = $this->invoice ;
         $data['country'] = 'Ελλάδα';
         $data['vat'] = $billafm;

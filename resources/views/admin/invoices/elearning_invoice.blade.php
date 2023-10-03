@@ -183,6 +183,7 @@ td p{
                 <p class="name">{{$data['name']}}</p>
                 <p> {{$data['vat']}} </p>
                 <p>{{$data['billInfo']}}</p>
+                <p>{{$data['billState']}}</p>
             </td>
         </tr>
   
