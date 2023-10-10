@@ -44,7 +44,7 @@ class ConvertWebp extends Command
 
         //awards folder
 
-        /*
+        
         $files = Storage::disk('awards')->files();
         foreach($files as $file){
             $source = $file;
@@ -63,7 +63,7 @@ class ConvertWebp extends Command
 
             }
         }
-        */
+        
 
 
         // upload folder
@@ -134,7 +134,7 @@ class ConvertWebp extends Command
 
         }
 
-        /*
+        
         $files = Storage::disk('public')->files();
         foreach($files as $file){
             $source = $file;
@@ -155,7 +155,7 @@ class ConvertWebp extends Command
 
 
         }
-        */
+        
 
 
 
