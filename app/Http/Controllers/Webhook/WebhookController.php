@@ -649,7 +649,6 @@ class WebhookController extends BaseWebhookController
 
 	private function subscription($payload,$user,$sub){
 
-		//Log::info('TRIGGER subscription');
 
 		$subscription = $user->eventSubscriptions()->where('stripe_id',$payload['data']['object']['subscription'])->orderByPivot('expiration', 'DESC')->first();
 		$ends_at = isset($sub['period']) ? $sub['period']['end'] : null;
