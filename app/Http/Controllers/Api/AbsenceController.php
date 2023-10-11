@@ -33,6 +33,16 @@ class AbsenceController extends Controller
             ]);
         }
 
+        //TODO 
+        //(1) CHECK IF HAS EVENT
+        $userHasEvent = $user->events()->wherePivot('event_id',$event->id)->first();
+        if(!$userHasEvent){
+            return response()->json([
+                'success' => false,
+                "message" => 'User have not event!'
+            ]);
+        }
+
 
         if(Absence::where('user_id',$user->id)->where('event_id',$event->id)->where('date',$date)->first()){
             return response()->json([
