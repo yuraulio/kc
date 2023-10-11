@@ -588,7 +588,7 @@ class UserController extends Controller
         }*/
 
 
-        $date = isset($eventInfo['inclass']['dates']['text']) ? $eventInfo['inclass']['dates']['text'] : null;
+        $date = isset($eventInfo['inclass']['dates']['text']) ? strip_tags($eventInfo['inclass']['dates']['text']) : null;
 
         $newArr['summary'][0]['title'] = $date;
         $newArr['summary'][0]['description'] = '';
@@ -1266,7 +1266,7 @@ class UserController extends Controller
             }*/
 
 
-            $date = isset($eventInfo['inclass']['dates']['text']) ? $eventInfo['inclass']['dates']['text'] : null;
+            $date = isset($eventInfo['inclass']['dates']['text']) ? strip_tags($eventInfo['inclass']['dates']['text']) : null;
 
             $data[$key]['summary'][0]['title'] = $date;
             $data[$key]['summary'][0]['description'] = '';
