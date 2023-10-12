@@ -57,14 +57,42 @@ class AbsenceController extends Controller
         $timeEnds = false;
         $missedHours = 0;
 
+        $a = 0;
+
         foreach($lessons as $key => $lesson){
 
 
             $lessonHour = date('H', strtotime($lesson->pivot->time_starts));
+            $lessonHourEnd = date('H', strtotime($lesson->pivot->time_ends));
+
+            // if($lessonHour < $hour){
+            //     $missedHours += 1;
+            //     continue;
+            // }
+           
 
             if($lessonHour < $hour){
-                $missedHours += 1;
-                continue;
+                
+
+                if($lessonHourEnd - $hour >= 1){
+                    // if($lessonHour == 20){
+
+
+                    //     dd(($lessonHourEnd - $lessonHour) - ($lessonHourEnd - $hour));
+                       
+                    //     // dd($lessonHourEnd - $hour);
+                    //     // dd($lessonHourEnd - $lessonHour - ($hour -$lessonHour));
+                    // }
+                    $a = ($lessonHourEnd - $lessonHour) - ($lessonHourEnd - $hour);
+                    //dd($lessonHourEnd - $lessonHour);
+                    $missedHours += $a;
+ 
+                }
+                else{
+                    $missedHours += 1;
+                    continue;
+                }
+                
             }
 
             if(!$timeStarts){
@@ -73,10 +101,14 @@ class AbsenceController extends Controller
             $timeEnds = (int) date('H', strtotime($lesson->pivot->time_ends));
         }
 
+        //dd($missedHours);
+
         if($timeStarts && $timeEnds){
 
-            $totalMinutesUser = ($timeEnds - $timeStarts) * 60;
+            $totalMinutesUser = ($timeEnds - ($timeStarts + $a)) * 60;
+            //dd($totalMinutesUser);
             $totalMinutesEvent = $totalMinutesUser + ($missedHours * 60);
+            
 
             $absence = new Absence;
             $absence->user_id = $user->id;
@@ -93,8 +125,12 @@ class AbsenceController extends Controller
                 'user_absences' => $user->getAbsencesByEvent($event)['user_absences_percent'],
                 'absences_limit' => isset($eventInfo['inclass']['absences']) ? $eventInfo['inclass']['absences'] : 0,
             ]);
+            //dd('has ');
 
         }
+        // else{
+        //     dd($timeEnds);
+        // }
 
         return response()->json([
             'success' => false,
