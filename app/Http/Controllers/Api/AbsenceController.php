@@ -77,14 +77,8 @@ class AbsenceController extends Controller
                 if($lessonHourEnd - $hour >= 1){
                     // if($lessonHour == 20){
 
-
-                    //     dd(($lessonHourEnd - $lessonHour) - ($lessonHourEnd - $hour));
-                       
-                    //     // dd($lessonHourEnd - $hour);
-                    //     // dd($lessonHourEnd - $lessonHour - ($hour -$lessonHour));
                     // }
                     $a = ($lessonHourEnd - $lessonHour) - ($lessonHourEnd - $hour);
-                    //dd($lessonHourEnd - $lessonHour);
                     $missedHours += $a;
  
                 }
