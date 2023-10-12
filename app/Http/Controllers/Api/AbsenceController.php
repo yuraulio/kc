@@ -125,12 +125,8 @@ class AbsenceController extends Controller
                 'user_absences' => $user->getAbsencesByEvent($event)['user_absences_percent'],
                 'absences_limit' => isset($eventInfo['inclass']['absences']) ? $eventInfo['inclass']['absences'] : 0,
             ]);
-            //dd('has ');
 
         }
-        // else{
-        //     dd($timeEnds);
-        // }
 
         return response()->json([
             'success' => false,
