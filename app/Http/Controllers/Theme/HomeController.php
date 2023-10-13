@@ -862,7 +862,7 @@ class HomeController extends Controller
             'cname' => 'required',
             'csurname' => 'required',
             'ctel' => 'required',
-            'cemail' => 'required|email|unique:give_aways,email'
+            //'cemail' => 'required|email|unique:give_aways,email'
         ]);
 
         if ($validator->fails()) {
