@@ -237,15 +237,15 @@
 					<h2>Payment method</h2>
 
 						<div class="tab card-information flex-container">
-							<button type="button" class="tablinks btn-4 btn-outline-dark Tab active" onclick="openPaymentMethod(event, 'card')">
+							<button type="button" class="tablinks btn-4 btn-outline-dark Tab active card" onclick="openPaymentMethod(event, 'card')">
 								<img src="{{cdn('new_cart/images/credit-card.png')}}" width="30px" height="20px" class="without-hover" alt="">	
 								<p class="payment-title p-TabLabel">DEBIT/CREDIT CARD</p>	
 							</button>
-							<button type="button" class="tablinks btn-4 btn-outline-dark Tab" onclick="openPaymentMethod(event, 'digital-wallets')">
+							<button type="button" class="tablinks btn-4 btn-outline-dark Tab wallet" onclick="openPaymentMethod(event, 'digital-wallets')">
 								<img src="{{cdn('new_cart/images/wallet.png')}}" width="30px" height="20px" class="without-hover" alt="">	
 								<p class="payment-title p-TabLabel">APPLE/GOOGLE WALLET</p>
 							</button>
-							<button type="button" class="tablinks btn-4 btn-outline-dark Tab" onclick="openPaymentMethod(event, 'sepa')">
+							<button type="button" class="tablinks btn-4 btn-outline-dark Tab sepa" onclick="openPaymentMethod(event, 'sepa')">
 							<img src="{{cdn('new_cart/images/sepa-2.svg')}}" width="30px" height="20px" class="without-hover" alt="">	
 								<p class="payment-title p-TabLabel">SEPA DIRECT DEBIT</p>
 							</button>
@@ -406,7 +406,15 @@ $( document ).ready(function() {
 			tablinks[i].className = tablinks[i].className.replace(" active", "");
 		}
 		document.getElementById(paymentMethod).style.display = "block";
-		evt.currentTarget.className += " active";
+
+		if(evt.currentTarget !== undefined){
+			evt.currentTarget.className += " active";
+		}else{
+			var element = document.getElementsByClassName("card")[0];
+
+  			element.classList.add("active");
+		}
+		
 	}
 
     const stripe = Stripe('{{$stripe_key}}',{
@@ -559,6 +567,30 @@ $( document ).ready(function() {
 	//END DIGITAL WALLET
 
 	//SEPA
+	// Disable SEPA ON INSTALLMENTS
+	$( ".custom-control.custom-radio input" ).on( "click", function() {
+		
+
+		const selectedRadioBtn = $(
+			"input[type='radio'][name=installments]:checked"
+		).val();
+
+
+		if(selectedRadioBtn != 1){
+
+			$('.tablinks.sepa').addClass('d-none')
+			$('.tablinks.card').click()
+			openPaymentMethod(this, 'card')
+			
+		}else{
+			$('.tablinks.sepa').removeClass('d-none')
+		}
+	});
+
+	// END Disable SEPA ON INSTALLMENTS
+	
+
+
 	const elements3 = stripe.elements({
 		fonts: [
     	    {
