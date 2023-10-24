@@ -136,12 +136,7 @@
                         <span class="form-control invisible-input text-end">{{ user ? (user.firstname + ' ' + user.lastname) : '' }}</span>
                     </div>
                 </div>
-                <div v-if="extension == 'png'" class="row mb-2">
-                    <div class="col-lg-12">
-                        <input v-model="jpg" type="checkbox" id="jpg" class="form-check-input me-1" style="position: relative;">
-                        <label for="jpg" class="form-label">Convert image versions to jpg format. (Reduces size.)</label>
-                    </div>
-                </div>
+                
                 <div class="row mb-2">
                     <div class="col-lg-12">
                         <button type="button" @click="upload('edit')" class="btn btn-soft-success btn-block w-100 mt-2" :disabled="isUploading">

@@ -32,21 +32,6 @@ class TopicRequest extends FormRequest
             'title' => [
                 'required', 'min:3'
             ],
-            'short_title' => [
-
-            ],
-            'subtitle' => [
-
-            ],
-            'header' => [
-
-            ],
-            'summary' => [
-
-            ],
-            'body' => [
-
-            ],
             'category_id' => [
                 'required', 'check_array_first_value_is_numeric'
             ]

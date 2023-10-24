@@ -76,7 +76,52 @@
                                     @include('alerts.feedback', ['field' => 'category_id'])
                                 </div>
 
-                                
+                                <div class="form-group{{ $errors->has('short_title') ? ' has-danger' : '' }}">
+                                    <label class="form-control-label" for="input-short_title">{{ __('Short title') }}</label>
+                                    <input type="text" name="short_title" id="input-short_title" class="form-control{{ $errors->has('short_title') ? ' is-invalid' : '' }}" placeholder="{{ __('short_title') }}" value="{{ old('short_title') }}" autofocus>
+
+                                    @include('alerts.feedback', ['field' => 'short_title'])
+                                </div>
+
+                                <div class="form-group{{ $errors->has('subtitle') ? ' has-danger' : '' }}">
+                                    <label class="form-control-label" for="input-subtitle">{{ __('Subtitle') }}</label>
+                                    <input type="text" name="subtitle" id="input-subtitle" class="form-control{{ $errors->has('subtitle') ? ' is-invalid' : '' }}" placeholder="{{ __('subtitle') }}" value="{{ old('subtitle') }}" autofocus>
+
+                                    @include('alerts.feedback', ['field' => 'subtitle'])
+                                </div>
+
+                                <div class="form-group{{ $errors->has('header') ? ' has-danger' : '' }}">
+                                    <label class="form-control-label" for="input-header">{{ __('Header') }}</label>
+                                    <input type="text" name="header" id="input-header" class="form-control{{ $errors->has('header') ? ' is-invalid' : '' }}" placeholder="{{ __('Header') }}" value="{{ old('header') }}" autofocus>
+
+                                    @include('alerts.feedback', ['field' => 'header'])
+                                </div>
+
+                                <div class="form-group{{ $errors->has('summary') ? ' has-danger' : '' }}">
+                                    <label class="form-control-label" for="input-summary">{{ __('Summary') }}</label>
+                                    {{--<textarea name="summary" id="input-summary"  class="ckeditor form-control{{ $errors->has('summary') ? ' is-invalid' : '' }}" placeholder="{{ __('Summary') }}"  required autofocus></textarea>--}}
+
+                                    <!-- anto's editor -->
+                                    <input class="hidden" name="summary" value="{{ old('summary') }}"/>
+                                    <?php $data = old('summary')?>
+                                    @include('event.editor.editor', ['keyinput' => "input-summary", 'data'=> "$data", 'inputname' => "'summary'" ])
+                                    <!-- anto's editor -->
+
+                                    @include('alerts.feedback', ['field' => 'summary'])
+                                </div>
+
+                                <div class="form-group{{ $errors->has('body') ? ' has-danger' : '' }}">
+                                    <label class="form-control-label" for="input-body">{{ __('Body') }}</label>
+                                    {{--<textarea name="body" id="input-body"  class="ckeditor form-control{{ $errors->has('body') ? ' is-invalid' : '' }}" placeholder="{{ __('Body') }}"  required autofocus></textarea>--}}
+
+                                    <!-- anto's editor -->
+                                    <input class="hidden" name="body" value="{{ old('body') }}"/>
+                                    <?php $data = old('body')?>
+                                    @include('event.editor.editor', ['keyinput' => "input-body", 'data'=> "$data", 'inputname' => "'body'" ])
+                                    <!-- anto's editor -->
+
+                                    @include('alerts.feedback', ['field' => 'body'])
+                                </div>
 
                                     <input type="hidden" name="creator_id" id="input-creator_id" class="form-control" value="{{$user->id}}">
                                     <input type="hidden" name="author_id" id="input-author_id" class="form-control" value="{{$user->id}}">

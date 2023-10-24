@@ -126,6 +126,7 @@ class MainController extends Controller
      */
     public function page(String $slug, Request $request)
     {
+        dd('asd');
         $page = null;
         $renderFbChat = true;
 
