@@ -52,7 +52,7 @@
         $blog = $blog->where('title', 'like', '%' . $search_term . '%');
     }
 
-    $blog = $blog->with("subcategories")->paginate(10);
+    $blog = $blog->with("subcategories")->paginate(12);
 
 @endphp
 
