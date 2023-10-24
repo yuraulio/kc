@@ -251,7 +251,7 @@ class LessonController extends Controller
 
         $data['instructor'] = Instructor::with('medias')->find($request->instructor_id);
         $data['lesson_id'] = $request->lesson_id;
-        $data['date1'] = $date;
+        $data['date1'] = date_format(date_create($date),"d-m-Y");
         $data['start'] = $start_response;
         $data['end'] = $end_response;
         $data['room'] = $request->room;
