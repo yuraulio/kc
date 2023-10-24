@@ -292,9 +292,9 @@ let minDate = null, maxDate = null;
 $.fn.dataTable.ext.search.push(
 
     function( settings, data, dataIndex ) {
-        var min = new Date(minDate);
-        var max = new Date(maxDate);
-        var date = new Date( data[6] );
+        var min = new Date(minDate).setHours(0, 0, 0, 0);
+        var max = new Date(maxDate).setHours(0, 0, 0, 0);
+        var date = new Date( data[6] ).setHours(0, 0, 0, 0);
         if (
             ( min === null && max === null ) ||
             ( min === null && date <= max ) ||
@@ -333,7 +333,7 @@ $(document).ready(function() {
     // });
 
     minDate = null;
-    maxDate = moment().endOf('day').format('MM/DD/YYYY');
+    maxDate = moment().add(1, 'day').endOf('day').format('MM/DD/YYYY');
 
 
     $('#participants_table').on( 'search.dt', function () {
@@ -411,6 +411,9 @@ $(document).ready(function() {
 
         minDate = min;
         maxDate = max;
+
+        // maxDate = moment(maxDate).add(1,'d').format('MM/DD/YYYY');    
+
         table.draw();
 
         coupons = table.column(4,{filter: 'applied'}).data().unique().sort();

@@ -239,11 +239,11 @@
 						<div class="tab card-information flex-container">
 							<button type="button" class="tablinks btn-4 btn-outline-dark Tab active card" onclick="openPaymentMethod(event, 'card')">
 								<img src="{{cdn('new_cart/images/credit-card.png')}}" width="30px" height="20px" class="without-hover" alt="">	
-								<p class="payment-title p-TabLabel">DEBIT/CREDIT CARD</p>	
+								<p class="payment-title p-TabLabel">DEBIT / CREDIT CARD</p>	
 							</button>
 							<button type="button" class="tablinks btn-4 btn-outline-dark Tab wallet" onclick="openPaymentMethod(event, 'digital-wallets')">
 								<img src="{{cdn('new_cart/images/wallet.png')}}" width="30px" height="20px" class="without-hover" alt="">	
-								<p class="payment-title p-TabLabel">APPLE/GOOGLE WALLET</p>
+								<p class="payment-title p-TabLabel">APPLE / GOOGLE WALLET</p>
 							</button>
 							<button type="button" class="tablinks btn-4 btn-outline-dark Tab sepa" onclick="openPaymentMethod(event, 'sepa')">
 							<img src="{{cdn('new_cart/images/sepa-2.svg')}}" width="30px" height="20px" class="without-hover" alt="">	
