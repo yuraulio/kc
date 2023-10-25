@@ -135,9 +135,22 @@ class MediaController extends Controller
             $path = '/' . $folder["path"];
             $mediaFolder = $folder["mediaFolder"];
 
-            $image_name = $image->getClientOriginalName();
             $image_name1 = $image->getClientOriginalName();
+            $image_name = $image->getClientOriginalName();
+
             $imgpath_original = $path . '' . $image_name;
+           
+            $i=1;
+            while(Storage::disk('public')->exists($imgpath_original)){
+            
+                $name = explode(".", $image_name1);
+                $name[0] = $name[0]."_". $i;
+                $image_name = $name[0].'.'.$name[1];
+                $imgpath_original = $path . '' . $image_name;
+    
+                $i++;
+            }
+
 
             if (Storage::disk('public')->exists($imgpath_original)) {
                 return response()->json(['message' => "File already exists at this location."], 422);
@@ -153,7 +166,7 @@ class MediaController extends Controller
             $file = Storage::disk('public')->putFileAs($path, $image, $image_name, 'public');
 
             // convert uploaded image to webp format
-            dispatch((new UploadImageConvertWebp($path, $image_name1))->delay(now()->addSeconds(5)));
+            dispatch((new UploadImageConvertWebp($path, $image_name))->delay(now()->addSeconds(5)));
 
             $data = getimagesize($request->file);
             $original_image_width = $data[0];
