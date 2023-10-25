@@ -311,7 +311,6 @@ class CertificateController extends Controller
     //$fn = strip_tags($fn);
     $fn = htmlspecialchars_decode($fn,ENT_QUOTES);
     //$data['pdf']->render();
-
     return $data['pdf']->stream($fn);
     //return view('admin.certificates.'.$certificate->template,compact('certificate'));
 
