@@ -80,7 +80,7 @@
 			margin: 0;
   			display:inline;
   			float:none;
-			/* text-transform: lowercase; */
+			text-transform: lowercase;
 
 		}
 
@@ -98,7 +98,7 @@
 			.certi-title-new p{
 
 				font-size:25px;
-				text-transform: uppercase;
+				/* text-transform: uppercase; */
 				letter-spacing:5px;
 
 			}
