@@ -23,13 +23,13 @@
         }
     } else {
         $facebookCheckbox = $socials["social_facebook_checkbox"] ?? "";
-        $facebookIcon = $socials["social_facebook_icon"]->full_path ?? '/theme/assets/images/icons/social/events/Facebook.svg';
+        $facebookIcon = $socials["social_facebook_icon"]->full_path ?? '/theme/assets/images/icons/social/events/Facebook-white.svg';
 
         $twitterCheckbox = $socials["social_twitter_checkbox"] ?? "";
-        $twitterIcon = $socials["social_twitter_icon"]->full_path ?? '/theme/assets/images/icons/social/events/Twitter.svg';
+        $twitterIcon = $socials["social_twitter_icon"]->full_path ?? '/theme/assets/images/icons/social/events/Twitter-white.svg';
 
         $linkedinCheckbox = $socials["social_linkedin_checkbox"] ?? "";
-        $linkedinIcon = $socials["social_linkedin_icon"]->full_path ?? '/theme/assets/images/icons/social/events/Linkedin.svg';
+        $linkedinIcon = $socials["social_linkedin_icon"]->full_path ?? '/theme/assets/images/icons/social/events/Linkedin-white.svg';
 
         if(Session::get('thankyouData')){
             $facebookIcon = $socials["social_facebook_icon"]->full_path ?? '/theme/assets/images/icons/social/events/Facebook-white.svg';
