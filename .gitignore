@@ -57,3 +57,7 @@ big-elearning_access_buy.csv
 big-elearning_access.csv
 users_masterclass_big_elearning_no_subsctription_expired_access_completed.csv
 storage
+
+public/js/blog.js.LICENSE.txt
+public/js/app.js.LICENSE.txt
+storage/logs/laravel.log
