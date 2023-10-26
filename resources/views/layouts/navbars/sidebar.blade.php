@@ -100,16 +100,16 @@
                         <div class="collapse show" id="navbar-sites">
                             <ul class="nav nav-sm flex-column">
                                     <li class="nav-item  {{ isset($elementName) and $elementName  == 'role1-management' ? 'active' : '' }}">
-                                        <a href="#" class="nav-link">{{ __('Notifications') }}</a>
+                                        <a href="#" class="nav-link">{{ __('Notifications') }} <span class="badge bg-primary mt-0 align-middle ml-1 mt-1 text-white">Comming soon</span></a>
                                     </li>
                                     <li class="nav-item {{ isset($elementName) and $elementName  == 'user1-management' ? 'active' : '' }}">
-                                        <a href="#" class="nav-link">{{ __('Site map settings') }}</a>
+                                        <a href="#" class="nav-link">{{ __('Site map settings') }} <span class="badge bg-primary mt-0 align-middle ml-1 mt-1 text-white">Comming soon</span></a>
                                     </li>
                                     <li class="nav-item {{ isset($elementName) and $elementName  == 'social-management' ? 'active' : '' }}">
                                         <a href="{{ route('social.index') }}" class="nav-link">{{ __('Social sharing settings') }}</a>
                                     </li>
                                     <li class="nav-item {{ isset($elementName) and $elementName  == 'user1-management' ? 'active' : '' }}">
-                                        <a href="#" class="nav-link">{{ __('Error log') }}</a>
+                                        <a href="#" class="nav-link">{{ __('Error log') }} <span class="badge bg-primary mt-0 align-middle ml-1 mt-1 text-white">Comming soon</span></a>
                                     </li>
                                     {{--<li class="nav-item {{ isset($elementName) and $elementName  == 'media-management' ? 'active' : '' }}">
                                         <a href="{{ route('media2.index') }}" class="nav-link">{{ __('Media library') }}</a>
@@ -136,23 +136,6 @@
                     @endcan
 
                     @can('manage-users', App\Model\User::class)
-                    <li class="nav-item active">
-                        <a class="nav-link active" href="#navbar-pages" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="navbar-pages">
-                            <i class="fas fa-columns" style="color: #f4645f;"></i>
-                            <span class="nav-link-text" style="color: #f4645f;">{{ __('Pages') }}</span>
-                        </a>
-                        <div class="collapse show" id="navbar-pages">
-                            <ul class="nav nav-sm flex-column">
-                                    {{--<li class="nav-item  {{ isset($elementName) and $elementName  == 'pages-management' ? 'active' : '' }}">
-                                        <a href="{{ route('pages.index') }}" class="nav-link">{{ __('Pages') }}</a>
-                                    </li>--}}
-                                    <li class="nav-item {{ isset($elementName) and $elementName  == 'user2-management' ? 'active' : '' }}">
-                                        <a href="{{ route('binshopsblog.admin.index') }}" class="nav-link">{{ __('Blog posts') }}</a>
-                                    </li>
-
-                            </ul>
-                        </div>
-                    </li>
 
                     <li class="nav-item active">
                         <a class="nav-link active" href="#navbar-courses" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="navbar-courses">
@@ -261,10 +244,10 @@
                                         <a href="{{ route('coupons') }}" class="nav-link">{{ __('Coupons') }}</a>
                                     </li>
                                     <li class="nav-item {{ isset($elementName) and $elementName  == 'discounts-management' ? 'active' : '' }}">
-                                        <a href="#" class="nav-link">{{ __('Discounts') }}</a>
+                                        <a href="#" class="nav-link">{{ __('Discounts') }} <span class="badge bg-primary mt-0 align-middle ml-1 mt-1 text-white">Comming soon</span></a>
                                     </li>
                                     <li class="nav-item {{ isset($elementName) and $elementName  == 'affiliates-management' ? 'active' : '' }}">
-                                        <a href="#" class="nav-link">{{ __('Affiliates') }}</a>
+                                        <a href="#" class="nav-link">{{ __('Affiliates') }} <span class="badge bg-primary mt-0 align-middle ml-1 mt-1 text-white">Comming soon</span></a>
                                     </li>
                                     @endcan
                             </ul>
@@ -281,7 +264,7 @@
                         <div class="collapse show" id="navbar-messages">
                             <ul class="nav nav-sm flex-column">
                                     <li class="nav-item  {{ isset($elementName) and $elementName  == 'api-management' ? 'active' : '' }}">
-                                        <a href="#" class="nav-link">{{ __('API Settings') }}</a>
+                                        <a href="#" class="nav-link">{{ __('API Settings') }} <span class="badge bg-primary mt-0 align-middle ml-1 mt-1 text-white">Comming soon</span></a>
                                     </li>
                             </ul>
                         </div>
