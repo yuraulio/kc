@@ -1366,38 +1366,7 @@ if(!function_exists('formatBytes')){
                 return 0;
             }
 
-            $sumStudents = $category->getSumOfStudents();
-
-           if($category->id == 276){
-                $category = Category::find(49);
-
-                if($category){
-                    $sumStudents += $category->getSumOfStudents();
-                }
-
-           }else if($category->id == 219){
-                $categories = Category::whereIn('id',[104,268])->get();
-
-                foreach($categories as $category){
-                    $sumStudents += $category->getSumOfStudents();
-                }
-
-            }
-            else if($category->id == 183){
-                $categories = Category::whereIn('id',[277])->get();
-
-                foreach($categories as $category){
-                    $sumStudents += $category->getSumOfStudents();
-                }
-
-            }else if($category->id == 250){
-                $categories = Category::whereIn('id',[50,244])->get();
-
-                foreach($categories as $category){
-                    $sumStudents += $category->getSumOfStudents();
-                }
-
-            }
+            $sumStudents = $category->getSumOfStudentsByCategory();
 
             return $sumStudents;
 

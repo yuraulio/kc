@@ -1,22 +1,15 @@
 @php
-    $menus = [];
-    foreach ($column->template->inputs as $input){
-        $menus[$input->key] = $input->value ?? "";
-    }
-@endphp
-
-{{-- get menus --}}
-@php
-    $mainMenuDesktop = $page->getMenu($menus['main_menu_desktop']->id ?? "");
-    $mainMenuMobile = $page->getMenu($menus['main_menu_mobile']->id ?? "");
-    $footerMenu1Desktop = $page->getMenu($menus['footer_menu_1_desktop']->id ?? "");
-    $footerMenu1Mobile = $page->getMenu($menus['footer_menu_1_mobile']->id ?? "");
-    $footerMenu2Desktop = $page->getMenu($menus['footer_menu_2_desktop']->id ?? "");
-    $footerMenu2Mobile = $page->getMenu($menus['footer_menu_2_mobile']->id ?? "");
-    $footerMenu3Desktop = $page->getMenu($menus['footer_menu_3_desktop']->id ?? "");
-    $footerMenu3Mobile = $page->getMenu($menus['footer_menu_3_mobile']->id ?? "");
-
-    $accountMenu = $page->getMenu($menus['account_menu']->id ?? "");
+    list(
+        $mainMenuDesktop,
+        $mainMenuMobile,
+        $footerMenu1Desktop,
+        $footerMenu1Mobile,
+        $footerMenu2Desktop,
+        $footerMenu2Mobile,
+        $footerMenu3Desktop,
+        $footerMenu3Mobile,
+        $accountMenu
+    ) = App\Model\Menu::getMenuElementsToDisplayInFront($column->template->inputs);
 @endphp
 
 {{-- main menu --}}
