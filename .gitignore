@@ -61,3 +61,5 @@ storage
 public/js/blog.js.LICENSE.txt
 public/js/app.js.LICENSE.txt
 storage/logs/laravel.log
+
+storage/app/version-commit.txt
