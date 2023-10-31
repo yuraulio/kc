@@ -80,7 +80,7 @@
 			margin: 0;
   			display:inline;
   			float:none;
-			text-transform: lowercase;
+			/* text-transform: lowercase; */
 
 		}
 

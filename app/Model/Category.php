@@ -27,6 +27,7 @@ use App\Model\Faq;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\SlugTrait;
 use App\Model\Admin\Countdown;
+use Illuminate\Support\Facades\Cache;
 
 class Category extends Model
 {
@@ -43,10 +44,19 @@ class Category extends Model
      * Get all of the events that are assigned this tag.
      */
 
-    public function events()
-    {
-        return $this->morphedByMany(Event::class, 'categoryable');
-    }
+     public function events()
+     {
+         return $this->morphedByMany(Event::class, 'categoryable');
+     }
+
+     /**
+      * Get all of the events that are assigned this tag.
+      */
+ 
+     public function eventsWithUsers()
+     {
+         return $this->morphedByMany(Event::class, 'categoryable')->with('users');
+     }
 
     /**
      * Get all of the topics that are assigned this tag.
@@ -137,7 +147,7 @@ class Category extends Model
     public function getSumOfStudents(){
 
         $students = 0;
-        foreach($this->events as $event){
+        foreach($this->eventsWithUsers as $event){
             $students += $event->users->count();
         }
         return $students;
@@ -145,40 +155,44 @@ class Category extends Model
 
     public function getSumOfStudentsByCategory()
     {
-        $sumStudents = $this->getSumOfStudents();
+        // This number is not modified each second. 
+        // So, we can cachce this number and refresh onle each 60 minutes to increase the speed of the page.
+        return Cache::remember('Category-getSumOfStudentsByCategory-'.$this->id,60*60,function(){
+            $sumStudents = $this->getSumOfStudents();
 
-        if($this['id'] == 276){
-            $category = Category::find(49);
-
-            if($category){
-                $sumStudents += $category->getSumOfStudents();
+            if($this['id'] == 276){
+                $category = Category::find(49);
+    
+                if($category){
+                    $sumStudents += $category->getSumOfStudents();
+                }
+    
+            }else if($this['id'] == 219){
+                $categories = Category::whereIn('id',[104,268])->get();
+    
+                foreach($categories as $category){
+                    $sumStudents += $category->getSumOfStudents();
+                }
+    
             }
-
-        }else if($this['id'] == 219){
-            $categories = Category::whereIn('id',[104,268])->get();
-
-            foreach($categories as $category){
-                $sumStudents += $category->getSumOfStudents();
+            else if($this['id'] == 183){
+                $categories = Category::whereIn('id',[277])->get();
+    
+                foreach($categories as $category){
+                    $sumStudents += $category->getSumOfStudents();
+                }
+    
+            }else if($this['id'] == 250){
+                $categories = Category::whereIn('id',[50,244])->get();
+    
+                foreach($categories as $category){
+                    $sumStudents += $category->getSumOfStudents();
+                }
+    
             }
-
-        }
-        else if($this['id'] == 183){
-            $categories = Category::whereIn('id',[277])->get();
-
-            foreach($categories as $category){
-                $sumStudents += $category->getSumOfStudents();
-            }
-
-        }else if($this['id'] == 250){
-            $categories = Category::whereIn('id',[50,244])->get();
-
-            foreach($categories as $category){
-                $sumStudents += $category->getSumOfStudents();
-            }
-
-        }
-
-        return $sumStudents;
+    
+            return $sumStudents;
+        });
     }
 
 

@@ -35,7 +35,7 @@
             <label for="blog_slug">Blog Post Slug</label>
             <input type="text" class="form-control" id="blog_slug" aria-describedby="blog_slug_help" name='slug'
                    value="{{old("slug",$post_translation->slug)}}">
-            <small id="blog_slug_help" class="form-text text-muted">The slug (leave blank to auto generate) - i.e.{{route("binshopsblog.single", [app('request')->get('locale'), "your-slug"])}}</small>
+            {{-- <small id="blog_slug_help" class="form-text text-muted">The slug (leave blank to auto generate) - i.e.{{route("binshopsblog.single", [app('request')->get('locale'), "your-slug"])}}</small> --}}
         </div>
 
     </div>

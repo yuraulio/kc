@@ -286,7 +286,7 @@
                                         }
                                     ?>
                                     <?php $etstatus = 0 ?>
-                                    <a href="{{ $slug }}" class="btn btn--secondary btn--md btn--completed">completed</a>
+                                    <a href="{{ $slug }}" class="btn btn--secondary btn--md btn--completed">@if($row['status'] == 3) {{'completed'}} @elseif($row['status'] == 2) {{'soldout'}} @endif</a>
                                 </div>
                             </div>
                         </div>

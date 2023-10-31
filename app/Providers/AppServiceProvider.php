@@ -24,8 +24,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        define('__ROOT__', dirname(dirname(__FILE__)));
-        require_once(__ROOT__.'/helpers/functions.php');
+        // define('__ROOT__', dirname(dirname(__FILE__)));
+        require_once(dirname(dirname(__FILE__)).'/helpers/functions.php');
 
         Validator::extend('uniqueNameAndParent', function ($attribute, $value, $parameters, $validator) {
             $count = DB::table('cms_folders')->where('name', $value)

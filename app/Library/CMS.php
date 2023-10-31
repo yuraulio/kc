@@ -178,7 +178,7 @@ class CMS
         $data['title'] = $delivery['name'];
         $data['delivery'] = $delivery;
         $data['openlistt'] = $delivery->event()->has('slugable')->with('category', 'city', 'ticket')->where('published', true)->whereIn('status', [0,5])->orderBy('created_at', 'desc')->get();
-        $data['completedlist'] = $delivery->event()->has('slugable')->with('category', 'slugable', 'city', 'ticket')->where('published', true)->where('status', 3)->orderBy('created_at', 'desc')->get();
+        $data['completedlist'] = $delivery->event()->has('slugable')->with('category', 'slugable', 'city', 'ticket')->where('published', true)->whereIn('status', [2,3])->orderBy('created_at', 'desc')->get();
 
         $data['openlist'] = [];
 

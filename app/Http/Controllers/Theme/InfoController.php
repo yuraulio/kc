@@ -117,7 +117,7 @@ class InfoController extends Controller
 
                 if ($newstock == 0) {
 
-                    $eventStockHelper = $thisevent->ticket;
+                    $eventStockHelper = $thisevent->ticket()->wherePivot('active', 1)->get();
 
                     $globalSoldOut = 1;
 
