@@ -45,6 +45,8 @@ class Menu extends Model
         $menus = [];
         foreach ($inputs as $input){
             $menus[$input->key] = $input->value ?? "";
+            if(!isset($input->value->id))
+                continue;
             foreach($allMenus as $menu){
                 if($input->value && $menu->id == $input->value->id){
                     switch($menu->id){
