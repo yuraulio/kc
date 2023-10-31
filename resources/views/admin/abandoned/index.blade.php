@@ -21,6 +21,10 @@
         @endcomponent
     @endcomponent
 
+    @php
+        $oldTickets = App\Services\OldTickets::get();
+    @endphp
+
     <div class="container-fluid mt--6">
         <div class="row">
             <div class="col">
@@ -82,35 +86,64 @@
                                 </tr>
                             </thead>
                             <tbody>
-                            <?php //dd($abcart); ?>
-                                @if(isset($list))
+                                @if(isset($list_by_shopping_cart))
+                                    @foreach($list_by_shopping_cart as $cart)
+                                        @php
+                                        $items = unserialize($cart->content);
+                                        @endphp
+                                        @foreach($items as $item)
+                                            @php
+                                            $event_id = $item->options['event'];
+                                            $event_selected = false;
+                                            foreach($events as $event){
+                                                if($event->id == $event_id){
+                                                    $event_selected = $event;
+                                                    break;
+                                                }
+                                            }
+                                            $item_id = isset($oldTickets[$item->id]) ? $oldTickets[$item->id] : $item->id;
+                                            @endphp
+                                            @foreach($cart->user as $user)
+                                                <tr>
+                                                    <td>@if($user != null)<a href="mailto:{{$user->email}}">{{$user->email}}</a><br />{{$user->firstname}} {{$user->lastname}}<br /><a target="_blank" href="admin/student/{{$user->id}}"><i class="fa fa-external-link"></i></a> @endif</td>
+                                                    <td class="text-center">{{ $item->name }}</td>
+                                                    <td class="text-center">{{$tickets[$item_id]->title ?? ''}}</td>
+                                                    <td class="text-center">{{$item->qty ?? 0}}</td>
+                                                    <td class="text-right">&euro;{{($item->qty ?? 0) * ($item->price ?? 0)}}</td>
 
-                                    <?php
-                                        $oldTickets[4756] = 1201;
-                                        $oldTickets[2249] = 1201;
-                                        $oldTickets[1921] = 1201;
+                                                    <td class="td_categories text-right">@if(isset($cart->created_at) && $cart->created_at != '') {{$cart->created_at->format('Y-m-d')}} @endif </td>
 
-                                        $oldTickets[1150] = 19;
-                                        $oldTickets[1230] = 19;
-                                        $oldTickets[983]  = 19;
+                                                    <td class="text-right">
+                                                    <div class="dropdown">
+                                                        <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                            <i class="fas fa-ellipsis-v"></i>
+                                                        </a>
+                                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
 
-                                        $oldTickets[4755] = 20;
-                                        $oldTickets[2248] = 20;
-                                        $oldTickets[1514] = 20;
-                                        $oldTickets[1151] = 20;
-                                        $oldTickets[1232] = 20;
-                                        $oldTickets[984]  = 20;
+                                                            <form action="{{ route('abandoned.remove', $cart->identifier) }}" method="post">
+                                                                @csrf
+                                                                @method('post')
 
-                                        $oldTickets[4757] = 21;
-                                        $oldTickets[2250] = 21;
-                                        $oldTickets[1513] = 21;
-                                        $oldTickets[1988] = 21;
-                                        $oldTickets[1152] = 21;
-                                        $oldTickets[1231] = 21;
-                                        $oldTickets[985]  = 21;
-
-                                        
-                                    ?>
+                                                                <button type="button" class="dropdown-item" onclick="confirm('{{ __("Are you sure you want to delete this item?") }}') ? this.parentElement.submit() : ''">
+                                                                    {{ __('Delete') }}
+                                                                </button>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                    </td>
+                                                    <td hidden>
+                                                        @if($event_selected)
+                                                        {{$event_selected->id}}
+                                                        @endif
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        @endforeach
+                                    @endforeach
+                                @endif
+                                
+                                <!-- TODO Delete the section below because we have reformated this section to improve the speed. -->
+                                @if(false && isset($list))
 
                                     @foreach($list as $user_id => $ucart)
                                     <?php $ucartId = isset($oldTickets[$ucart->id]) ? $oldTickets[$ucart->id] : $ucart->id; ?>
