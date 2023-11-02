@@ -265,7 +265,7 @@ class LessonController extends Controller
 
         echo json_encode($data);
 
-        Event::find($request->event_id)->fireModelEvent('updated');
+        Event::find($request->event_id)->resetCache();
     }
 
     public function edit_instructor(Request $request)
@@ -346,16 +346,18 @@ class LessonController extends Controller
         $lesson_id = $lesson['id'];
         $lesson->update($request->all());
 
-        $vimeoVideo = explode("/",$lesson->vimeo_video);
-        $duration = 0;
+        if(config('app.env') == 'production'){
+            $vimeoVideo = explode("/",$lesson->vimeo_video);
+            $duration = 0;
 
-        $client = new Vimeo(env('client_id'), env('client_secret'), env('vimeo_token'));
-        $response = $client->request("/videos/". end($vimeoVideo) . "/?password=".env('video_password'), array(), 'GET');
+            $client = new Vimeo(env('client_id'), env('client_secret'), env('vimeo_token'));
+            $response = $client->request("/videos/". end($vimeoVideo) . "/?password=".env('video_password'), array(), 'GET');
 
-        if($response['status'] === 200){
-            $duration = $response['body']['duration'];
-            $lesson->vimeo_duration = $this->formatDuration($duration);
-            $lesson->save();
+            if($response['status'] === 200){
+                $duration = $response['body']['duration'];
+                $lesson->vimeo_duration = $this->formatDuration($duration);
+                $lesson->save();
+            }
         }
 
         if($request->topic_id != null){
@@ -425,7 +427,7 @@ class LessonController extends Controller
 
             foreach($category->events as $event){
                 $event->allLessons()->detach($lesson);
-                $event->fireModelEvent('updated');
+                $event->resetCache();
             }
 
             $lesson = Lesson::find($lesson);
@@ -457,7 +459,7 @@ class LessonController extends Controller
         //dispatch((new UpdateStatisticJson($request->event_id))->delay(now()->addSeconds(3)));
 
         echo json_encode($request->all());
-        $event->fireModelEvent('updated');
+        $event->resetCache();
     }
 
     /*public function moveMultipleLessonToTopic(Request $request){
@@ -679,7 +681,7 @@ class LessonController extends Controller
                 //$category->changeOrder($priorityCat);
                 //$category->topic()->attach($toTopic, ['lesson_id' => $lesson,'priority'=>$priority]);
 
-                $event->fireModelEvent('updated');
+                $event->resetCache();
 
             }
 
@@ -740,7 +742,7 @@ class LessonController extends Controller
                 $lesson->pivot->save();
 
             }
-            $event->fireModelEvent('updated');
+            $event->resetCache();
         }
 
 

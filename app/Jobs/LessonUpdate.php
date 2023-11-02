@@ -105,7 +105,9 @@ class LessonUpdate implements ShouldQueue
                     $cat->changeOrder($priority);
                     $cat->topic()->attach($topic, ['lesson_id' => $this->lesson->id,'priority'=>$priority]);
                     $cat->fixOrder();
-                    $event->fireModelEvent('updated');
+                    
+                    $event->resetCache();
+
                 }
 
                 //$this->lesson->topic()->wherePivot('category_id',$this->request['category'])->detach();

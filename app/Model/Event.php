@@ -1239,6 +1239,10 @@ class Event extends Model
         return $this->belongsToMany(Countdown::class, 'cms_countdown_event');
     }
 
+    public function resetCache(){
+        Cache::forget('topics-event-status-'.$this->id);
+    }
+
 
 
 }
