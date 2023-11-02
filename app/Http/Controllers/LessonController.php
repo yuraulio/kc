@@ -21,6 +21,7 @@ use Excel;
 use App\Jobs\FixOrder;
 use App\Jobs\LessonUpdate;
 use App\Jobs\UpdateEventAccessToFiles;
+use Illuminate\Support\Facades\Cache;
 
 class LessonController extends Controller
 {
@@ -264,6 +265,7 @@ class LessonController extends Controller
 
         echo json_encode($data);
 
+        Event::find($request->event_id)->fireModelEvent('updated');
     }
 
     public function edit_instructor(Request $request)
@@ -423,6 +425,7 @@ class LessonController extends Controller
 
             foreach($category->events as $event){
                 $event->allLessons()->detach($lesson);
+                $event->fireModelEvent('updated');
             }
 
             $lesson = Lesson::find($lesson);
@@ -454,6 +457,7 @@ class LessonController extends Controller
         //dispatch((new UpdateStatisticJson($request->event_id))->delay(now()->addSeconds(3)));
 
         echo json_encode($request->all());
+        $event->fireModelEvent('updated');
     }
 
     /*public function moveMultipleLessonToTopic(Request $request){
@@ -675,8 +679,7 @@ class LessonController extends Controller
                 //$category->changeOrder($priorityCat);
                 //$category->topic()->attach($toTopic, ['lesson_id' => $lesson,'priority'=>$priority]);
 
-
-
+                $event->fireModelEvent('updated');
 
             }
 
@@ -737,6 +740,7 @@ class LessonController extends Controller
                 $lesson->pivot->save();
 
             }
+            $event->fireModelEvent('updated');
         }
 
 

@@ -5,6 +5,8 @@ namespace App\Providers;
 use App\Model\Item;
 use App\Model\User;
 use App\Model\Cashier as newCashier;
+use App\Model\Event;
+use App\Observers\EventObserver;
 use App\Observers\ItemObserver;
 use App\Observers\UserObserver;
 use Illuminate\Support\ServiceProvider;
@@ -52,6 +54,7 @@ class AppServiceProvider extends ServiceProvider
 
         Item::observe(ItemObserver::class);
         User::observe(UserObserver::class);
+        Event::observe(EventObserver::class);
         Cashier::useCustomerModel(User::class);
         Paginator::useBootstrap();
     }
