@@ -956,7 +956,11 @@
                    document.getElementById(tabWatching).classList.remove('isWatching')
                 }
 
-                previousVideo = videos[seen]['tab'];
+                if(!videos[seen]){
+                  seen = Object.keys(videos)[0]
+                }
+
+               previousVideo = videos[seen]['tab'];
 
 
                 tabWatching = videos[seen]['tab'];
@@ -1631,9 +1635,11 @@
 
             function scrollIsWatchingClass(){
                 setTimeout( function(){
+                  if(document.querySelector('.isWatching')){
                     document.querySelector('.isWatching').scrollIntoView({
                         behavior: 'smooth'
                     });
+                  }
                 }, 50)
 
             }
