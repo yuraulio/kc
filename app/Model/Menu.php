@@ -55,31 +55,31 @@ class Menu extends Model
                 ];
                 if($input->value && $menu->id == $input->value->id){
                     switch($menu->id){
-                        case $menus['main_menu_desktop']->id:
+                        case $menus['main_menu_desktop']->id ?? 0:
                             $mainMenuDesktop = $menu_formated;
                             break;
-                        case $menus['main_menu_mobile']->id:
+                        case $menus['main_menu_mobile']->id ?? 0:
                             $mainMenuMobile = $menu_formated;
                             break;
-                        case $menus['footer_menu_1_desktop']->id:
+                        case $menus['footer_menu_1_desktop']->id ?? 0:
                             $footerMenu1Desktop = $menu_formated;
                             break;
-                        case $menus['footer_menu_1_mobile']->id:
+                        case $menus['footer_menu_1_mobile']->id ?? 0:
                             $footerMenu1Mobile = $menu_formated;
                             break;
-                        case $menus['footer_menu_2_desktop']->id:
+                        case $menus['footer_menu_2_desktop']->id ?? 0:
                             $footerMenu2Desktop = $menu_formated;
                             break;
-                        case $menus['footer_menu_2_mobile']->id:
+                        case $menus['footer_menu_2_mobile']->id ?? 0:
                             $footerMenu2Mobile = $menu_formated;
                             break;
-                        case $menus['footer_menu_3_desktop']->id:
+                        case $menus['footer_menu_3_desktop']->id ?? 0:
                             $footerMenu3Desktop = $menu_formated;
                             break;
-                        case $menus['footer_menu_3_mobile']->id:
+                        case $menus['footer_menu_3_mobile']->id ?? 0:
                             $footerMenu3Mobile = $menu_formated;
                             break;
-                        case $menus['account_menu']->id:
+                        case $menus['account_menu']->id ?? 0:
                             $accountMenu = $menu_formated;
                             break;
                     }
