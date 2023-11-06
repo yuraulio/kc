@@ -692,14 +692,31 @@ class Event extends Model
     }*/
 
     public function period($user){
+  
+        $transaction1 = null;
+        $transactionAll = $this->transactionsByUserNew($user['id'])->where('status', 1)->get();
 
-        $transaction = $this->transactionsByUserNew($user['id'])->first();
+        if($transactionAll == null){
+            return 0;
+        }else{
+            // fetch order by first payment date
+            $transactions = $transactionAll->reverse();
 
-        if($transaction == null){
+            //parse first transaction has status = completed payment date
+            foreach($transactions as $transaction){
+               
+                if($transaction['status'] == 1){
+                    $transaction1 = $transaction;
+                    break;
+                }
+            }
+        }
+
+        if($transaction1 == null){
             return 0;
         }
 
-        $transactionDate = Carbon::parse($transaction['created_at']);
+        $transactionDate = Carbon::parse($transaction1['created_at']);
         $nowDate = Carbon::now();
         $months = $transactionDate->diffInMonths($nowDate);
 
