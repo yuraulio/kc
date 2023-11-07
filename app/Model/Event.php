@@ -320,28 +320,30 @@ class Event extends Model
         return $this->morphOne(Media::class, 'mediable');
     }
 
-    private function calcTopics($topicEvent, $lessons){
+    private function calcTopics($topicEvent, $lessons, $event_id = null, $cache = false){
         $topics = [];
         if($this->status == 5){
             $topicEvent = $topicEvent ? $topicEvent->unique()->groupBy('topic_id') : $this->topic_with_no_instructor->unique()->groupBy('topic_id');
         }else{
             $topicEvent = $topicEvent ? $topicEvent->unique()->groupBy('topic_id') : $this->topic->unique()->groupBy('topic_id');
         }
-        foreach($topicEvent as $topic_key => $topic){
-            if(isset($topic[0]->lessons)){
-                foreach($topic[0]->lessons as $lesson_key => $lesson){
-                    $lesson->pivot->instructor_id = $lesson->instructor[0]->id ?? 0;
-                    unset($lesson->instructor);
-                    unset($lesson->type);
-                    $topicEvent[$topic_key][0]->lessons[$lesson_key] = $lesson;
+        if($cache){
+            foreach($topicEvent as $topic_key => $topic){
+                if(isset($topic[0]->lessons)){
+                    foreach($topic[0]->lessons as $lesson_key => $lesson){
+                        $lesson->pivot->instructor_id = $lesson->instructor[0]->id ?? 0;
+                        unset($lesson->instructor);
+                        unset($lesson->type);
+                        $topicEvent[$topic_key][0]->lessons[$lesson_key] = $lesson;
+                    }
                 }
             }
+            $topicEvent = $topicEvent->toArray();
+            $topicEvent = array_map(function($topic){
+                return array_map(function($t){return (object)$t;},$topic);;
+            }, $topicEvent);
+            $topicEvent = array_values($topicEvent);
         }
-        $topicEvent = $topicEvent->toArray();
-        $topicEvent = array_map(function($topic){
-            return array_map(function($t){return (object)$t;},$topic);;
-        }, $topicEvent);
-        $topicEvent = array_values($topicEvent);
 
 
         foreach($topicEvent as $key => $topic){
@@ -376,9 +378,9 @@ class Event extends Model
     }
 
 
-    public function topicsLessonsInstructors($videos = null,$topicEvent = null, $lessons = null, $instructors = null){
+    public function topicsLessonsInstructors($videos = null,$topicEvent = null, $lessons = null, $instructors = null, $event_id = null){
 
-        // If there is no videos, topics, and instructors, it means the call of this function was topicsLessonsInstructors(), so, we can cache this request becasue we are not in the private area.
+        // If there is no videos, topics, and instructors, it means the call of this function was topicsLessonsInstructors(), so, we can cache this request because we are not in the private area.
         $emptyParameters = false;
         if($videos == null && $topicEvent == null && $lessons == null && $instructors == null){
             $emptyParameters = true;
@@ -475,11 +477,11 @@ class Event extends Model
 
         // Ean einai sto status = waiting tote fere ta topics xwris na exoyn instructor
         if($emptyParameters){
-            $topics = Cache::remember('topics-event-status-'.$this->id, 60*60*24, function() use ($topicEvent, $lessons){
-                return $this->calcTopics($topicEvent, $lessons);
+            $topics = Cache::remember('topics-event-status-'.$this->id, 60*60*24, function() use ($topicEvent, $lessons, $event_id){
+                return $this->calcTopics($topicEvent, $lessons, $event_id, true);
             });
         }else{
-            $topics = $this->calcTopics($topicEvent, $lessons);
+            $topics = $this->calcTopics($topicEvent, $lessons, $event_id, false);
         }
 
         $data['topics'] = $topics;
