@@ -71,7 +71,7 @@
 			.certi-title-new p{
 
 				font-size:42px;
-				text-transform: uppercase;
+				/* text-transform: uppercase; */
 				letter-spacing:6.2px;
 
 			}

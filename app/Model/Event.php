@@ -39,6 +39,7 @@ use Carbon\Carbon;
 use App\Model\Admin\Countdown;
 use App\Traits\SearchFilter;
 use App\Traits\PaginateTable;
+use Illuminate\Support\Facades\Cache;
 
 class Event extends Model
 {
@@ -319,8 +320,69 @@ class Event extends Model
         return $this->morphOne(Media::class, 'mediable');
     }
 
+    private function calcTopics($topicEvent, $lessons){
+        $topics = [];
+        if($this->status == 5){
+            $topicEvent = $topicEvent ? $topicEvent->unique()->groupBy('topic_id') : $this->topic_with_no_instructor->unique()->groupBy('topic_id');
+        }else{
+            $topicEvent = $topicEvent ? $topicEvent->unique()->groupBy('topic_id') : $this->topic->unique()->groupBy('topic_id');
+        }
+        foreach($topicEvent as $topic_key => $topic){
+            if(isset($topic[0]->lessons)){
+                foreach($topic[0]->lessons as $lesson_key => $lesson){
+                    $lesson->pivot->instructor_id = $lesson->instructor[0]->id ?? 0;
+                    unset($lesson->instructor);
+                    unset($lesson->type);
+                    $topicEvent[$topic_key][0]->lessons[$lesson_key] = $lesson;
+                }
+            }
+        }
+        $topicEvent = $topicEvent->toArray();
+        $topicEvent = array_map(function($topic){
+            return array_map(function($t){return (object)$t;},$topic);;
+        }, $topicEvent);
+        $topicEvent = array_values($topicEvent);
+
+
+        foreach($topicEvent as $key => $topic){
+            foreach($topic as $t){
+
+                if(!$t->status){
+                    continue;
+                }
+
+                if(!isset($lessons[$t->id])){
+                    continue;
+                }
+                $lessonsArray = $lessons[$t->id]->toArray();
+                foreach( $lessonsArray as $key => $lesson){
+                    // ean einai se waiting list to event na mhn to kanei unset
+                    if(!$lesson['instructor_id'] && $this->status != 5){
+                        unset($lessonsArray[$key]);
+                    }
+                    //if(($this->view_tpl=='elearning_event' || $this->view_tpl == 'elearnig_free') && $lesson['vimeo_video'] ==''){
+                    // ean einai se waiting list to event na mhn to kanei unset
+                    if($this->is_elearning_course() && $lesson['vimeo_video'] =='' && $this->status != 5){
+
+                        unset($lessonsArray[$key]);
+                    }
+                }
+                if(count($lessonsArray)>0){
+                    $topics[$t->title]['lessons'] = $lessonsArray;
+                }
+            }
+        }
+        return $topics;
+    }
+
 
     public function topicsLessonsInstructors($videos = null,$topicEvent = null, $lessons = null, $instructors = null){
+
+        // If there is no videos, topics, and instructors, it means the call of this function was topicsLessonsInstructors(), so, we can cache this request becasue we are not in the private area.
+        $emptyParameters = false;
+        if($videos == null && $topicEvent == null && $lessons == null && $instructors == null){
+            $emptyParameters = true;
+        }   
 
         $videos = json_decode($videos,true);
 
@@ -412,45 +474,12 @@ class Event extends Model
         $instructors = $instructors ? $instructors->unique()->groupBy('instructor_id')->toArray() : $this->instructors->unique()->groupBy('instructor_id')->toArray();
 
         // Ean einai sto status = waiting tote fere ta topics xwris na exoyn instructor
-        if($this->status == 5){
-            $topicEvent = $topicEvent ? $topicEvent->unique()->groupBy('topic_id') : $this->topic_with_no_instructor->unique()->groupBy('topic_id');
+        if($emptyParameters){
+            $topics = Cache::remember('topics-event-status-'.$this->id, 60*60*24, function() use ($topicEvent, $lessons){
+                return $this->calcTopics($topicEvent, $lessons);
+            });
         }else{
-            $topicEvent = $topicEvent ? $topicEvent->unique()->groupBy('topic_id') : $this->topic->unique()->groupBy('topic_id');
-        }
-
-
-
-        foreach($topicEvent as $key => $topic){
-            foreach($topic as $t){
-
-                if(!$t->status){
-                    continue;
-                }
-
-                if(!isset($lessons[$t->id])){
-                    continue;
-                }
-                $lessonsArray = $lessons[$t->id]->toArray();
-                foreach( $lessonsArray as $key => $lesson){
-                    // ean einai se waiting list to event na mhn to kanei unset
-                    if(!$lesson['instructor_id'] && $this->status != 5){
-                        unset($lessonsArray[$key]);
-                    }
-                    //if(($this->view_tpl=='elearning_event' || $this->view_tpl == 'elearnig_free') && $lesson['vimeo_video'] ==''){
-                    // ean einai se waiting list to event na mhn to kanei unset
-                    if($this->is_elearning_course() && $lesson['vimeo_video'] =='' && $this->status != 5){
-
-                        unset($lessonsArray[$key]);
-                    }
-                }
-                if(count($lessonsArray)>0){
-                    $topics[$t->title]['lessons'] = $lessonsArray;
-                }
-                //dd($topics);
-
-            }
-
-
+            $topics = $this->calcTopics($topicEvent, $lessons);
         }
 
         $data['topics'] = $topics;
@@ -663,14 +692,31 @@ class Event extends Model
     }*/
 
     public function period($user){
+  
+        $transaction1 = null;
+        $transactionAll = $this->transactionsByUserNew($user['id'])->where('status', 1)->get();
 
-        $transaction = $this->transactionsByUserNew($user['id'])->first();
+        if($transactionAll == null){
+            return 0;
+        }else{
+            // fetch order by first payment date
+            $transactions = $transactionAll->reverse();
 
-        if($transaction == null){
+            //parse first transaction has status = completed payment date
+            foreach($transactions as $transaction){
+               
+                if($transaction['status'] == 1){
+                    $transaction1 = $transaction;
+                    break;
+                }
+            }
+        }
+
+        if($transaction1 == null){
             return 0;
         }
 
-        $transactionDate = Carbon::parse($transaction['created_at']);
+        $transactionDate = Carbon::parse($transaction1['created_at']);
         $nowDate = Carbon::now();
         $months = $transactionDate->diffInMonths($nowDate);
 
@@ -1208,6 +1254,10 @@ class Event extends Model
     public function countdown()
     {
         return $this->belongsToMany(Countdown::class, 'cms_countdown_event');
+    }
+
+    public function resetCache(){
+        Cache::forget('topics-event-status-'.$this->id);
     }
 
 

@@ -39,8 +39,8 @@ class Menu extends Model
         $footerMenu3Mobile = $emptyElementMenu;
         $accountMenu = $emptyElementMenu;
     
-        $allMenus = Cache::remember('menus', 60*60, function(){
-            return Menu::all();
+        $allMenus = Cache::remember('CodexShaper-menus', 1, function(){
+            return \CodexShaper\Menu\Models\Menu::all();
         });
         $menus = [];
         foreach ($inputs as $input){
@@ -48,34 +48,39 @@ class Menu extends Model
             if(!isset($input->value->id))
                 continue;
             foreach($allMenus as $menu){
+                $menu_formated = [
+                    'name' => $menu->name ?? "",
+                    'title' => $menu->custom_class ?? "",
+                    'mobile' => $menu->url ?? "",
+                ];
                 if($input->value && $menu->id == $input->value->id){
                     switch($menu->id){
-                        case $menus['main_menu_desktop']->id:
-                            $mainMenuDesktop = $menu;
+                        case $menus['main_menu_desktop']->id ?? 0:
+                            $mainMenuDesktop = $menu_formated;
                             break;
-                        case $menus['main_menu_mobile']->id:
-                            $mainMenuMobile = $menu;
+                        case $menus['main_menu_mobile']->id ?? 0:
+                            $mainMenuMobile = $menu_formated;
                             break;
-                        case $menus['footer_menu_1_desktop']->id:
-                            $footerMenu1Desktop = $menu;
+                        case $menus['footer_menu_1_desktop']->id ?? 0:
+                            $footerMenu1Desktop = $menu_formated;
                             break;
-                        case $menus['footer_menu_1_mobile']->id:
-                            $footerMenu1Mobile = $menu;
+                        case $menus['footer_menu_1_mobile']->id ?? 0:
+                            $footerMenu1Mobile = $menu_formated;
                             break;
-                        case $menus['footer_menu_2_desktop']->id:
-                            $footerMenu2Desktop = $menu;
+                        case $menus['footer_menu_2_desktop']->id ?? 0:
+                            $footerMenu2Desktop = $menu_formated;
                             break;
-                        case $menus['footer_menu_2_mobile']->id:
-                            $footerMenu2Mobile = $menu;
+                        case $menus['footer_menu_2_mobile']->id ?? 0:
+                            $footerMenu2Mobile = $menu_formated;
                             break;
-                        case $menus['footer_menu_3_desktop']->id:
-                            $footerMenu3Desktop = $menu;
+                        case $menus['footer_menu_3_desktop']->id ?? 0:
+                            $footerMenu3Desktop = $menu_formated;
                             break;
-                        case $menus['footer_menu_3_mobile']->id:
-                            $footerMenu3Mobile = $menu;
+                        case $menus['footer_menu_3_mobile']->id ?? 0:
+                            $footerMenu3Mobile = $menu_formated;
                             break;
-                        case $menus['account_menu']->id:
-                            $accountMenu = $menu;
+                        case $menus['account_menu']->id ?? 0:
+                            $accountMenu = $menu_formated;
                             break;
                     }
                 }
