@@ -108,8 +108,11 @@ class LoginController extends Controller
 
             }
 
-
-            $this->checkForCacheItems(Auth::user());
+            try{
+                $this->checkForCacheItems(Auth::user());
+            }catch(\Exception $e){
+                
+            }
 
             $c = Cart::content()->count();
             if ($c > 0) {
