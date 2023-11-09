@@ -8,27 +8,6 @@
     @endif
     <div class="container">
         <div class="footer-row">
-            <div class="col12 award-section">
-                <h4 class="footer-title award-title">Our awards</h4>
-                <div class="mobile-toggle">
-                    <div class="row clearfix footer-award-menu">
-                        <div class="col4 col-sm-12 award-div">
-                            <div><img loading="lazy" alt_text="social media award" title="social media award" width="58" height="37" src="{{cdn(get_image('/awards/knowcrunch-award-marketing-education-leaders-2x.png'))}}"></div>
-                            <p> Best Digital Marketing E-learning
-                                Award by <span class="text-highlight2"> Education Leaders </span> </p>
-                        </div>
-                        <div class="col4 col-sm-12 award-div">
-                            <div><img loading="lazy" alt_text="social media award" title="social media award" width="41" height="38"  src="{{cdn(get_image('/awards/knowcrunch-award-marketing-education-best-social-media-learning-program-2x.png'))}}"></div>
-                            <p> Best Social Media Learning Program
-                            Award by <span class="text-highlight2"> Social Media World </span></p>
-                        </div>
-                        <div class="col4 col-sm-12 award-div">
-                            <div><img loading="lazy" alt_text="social media award" title="social media award" width="62" height="35"  src="{{cdn(get_image('/awards/knowcrunch-award-marketing-best-content-strategy-2x.png'))}}"></div>
-                            <p> Best Multi-Channel Content Strategy & Best Use of Multichannel Social Media in Content Marketing by <span class="text-highlight2">Digital Marketing Awards </span> </p>
-                        </div>
-                    </div>
-                </div>
-        </div>
         <div class="footer-col-1">
             <h4 class="footer-title">Get our news</h4>
             <div class="mobile-toggle">
