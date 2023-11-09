@@ -39,49 +39,50 @@ class Menu extends Model
         $footerMenu3Mobile = $emptyElementMenu;
         $accountMenu = $emptyElementMenu;
     
-        $allMenus = Cache::remember('CodexShaper-menus', 1, function(){
+        $allMenus = Cache::remember('CodexShaper-menus', 60*60, function(){
             return \CodexShaper\Menu\Models\Menu::all();
         });
         $menus = [];
+        $menus = [];
         foreach ($inputs as $input){
             $menus[$input->key] = $input->value ?? "";
-            if(!isset($input->value->id))
-                continue;
+        }
+        foreach ($inputs as $input){
             foreach($allMenus as $menu){
+                if(!isset($input->value->id))
+                    continue;
                 $menu_formated = [
                     'name' => $menu->name ?? "",
                     'title' => $menu->custom_class ?? "",
                     'mobile' => $menu->url ?? "",
                 ];
                 if($input->value && $menu->id == $input->value->id){
-                    switch($menu->id){
-                        case $menus['main_menu_desktop']->id ?? 0:
-                            $mainMenuDesktop = $menu_formated;
-                            break;
-                        case $menus['main_menu_mobile']->id ?? 0:
-                            $mainMenuMobile = $menu_formated;
-                            break;
-                        case $menus['footer_menu_1_desktop']->id ?? 0:
-                            $footerMenu1Desktop = $menu_formated;
-                            break;
-                        case $menus['footer_menu_1_mobile']->id ?? 0:
-                            $footerMenu1Mobile = $menu_formated;
-                            break;
-                        case $menus['footer_menu_2_desktop']->id ?? 0:
-                            $footerMenu2Desktop = $menu_formated;
-                            break;
-                        case $menus['footer_menu_2_mobile']->id ?? 0:
-                            $footerMenu2Mobile = $menu_formated;
-                            break;
-                        case $menus['footer_menu_3_desktop']->id ?? 0:
-                            $footerMenu3Desktop = $menu_formated;
-                            break;
-                        case $menus['footer_menu_3_mobile']->id ?? 0:
-                            $footerMenu3Mobile = $menu_formated;
-                            break;
-                        case $menus['account_menu']->id ?? 0:
-                            $accountMenu = $menu_formated;
-                            break;
+                    if($menu->id == ($menus['main_menu_desktop']->id ?? 0)){
+                        $mainMenuDesktop = $menu_formated;
+                    }
+                    if($menu->id == ($menus['main_menu_mobile']->id ?? 0)){
+                        $mainMenuMobile = $menu_formated;
+                    }
+                    if($menu->id == ($menus['footer_menu_1_desktop']->id ?? 0)){
+                        $footerMenu1Desktop = $menu_formated;
+                    }
+                    if($menu->id == ($menus['footer_menu_1_mobile']->id ?? 0)){
+                        $footerMenu1Mobile = $menu_formated;
+                    }
+                    if($menu->id == ($menus['footer_menu_2_desktop']->id ?? 0)){
+                        $footerMenu2Desktop = $menu_formated;
+                    }
+                    if($menu->id == ($menus['footer_menu_2_mobile']->id ?? 0)){
+                        $footerMenu2Mobile = $menu_formated;
+                    }
+                    if($menu->id == ($menus['footer_menu_3_desktop']->id ?? 0)){
+                        $footerMenu3Desktop = $menu_formated;
+                    }
+                    if($menu->id == ($menus['footer_menu_3_mobile']->id ?? 0)){
+                        $footerMenu3Mobile = $menu_formated;
+                    }
+                    if($menu->id == ($menus['account_menu']->id ?? 0)){
+                        $accountMenu = $menu_formated;
                     }
                 }
             }
