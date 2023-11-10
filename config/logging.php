@@ -93,6 +93,9 @@ return [
             'level'  => 'critical',
             'bubble' => true,
         ],
+        'bugsnag' => [
+            'driver' => 'bugsnag',
+        ],
 
     ],
 

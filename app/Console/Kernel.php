@@ -78,6 +78,15 @@ class Kernel extends ConsoleKernel
        Commands\ExportCertificateByEvent::class,
     ];
 
+
+    protected function bootstrappers()
+    {
+        return array_merge(
+            [\Bugsnag\BugsnagLaravel\OomBootstrapper::class],
+            parent::bootstrappers(),
+        );
+    }
+
     /**
      * Define the application's command schedule.
      *
