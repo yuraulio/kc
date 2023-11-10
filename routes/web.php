@@ -19,17 +19,13 @@ use Bugsnag\BugsnagLaravel\Facades\Bugsnag;
 
 Auth::routes(['register' => false]);
 
-Route::get('/debug-sentry', function () {
-    throw new Exception('My first Sentry error!');
-});
-
 Route::get('/debug-bugsnag', function () {
     Bugsnag::notifyException(new RuntimeException("Test error"));
     echo "Test notification sent to Bugsnag";
 });
 
 Route::get('/debug-infinite-loop/{seconds}', function ($seconds) {
-    echo "Test to break the website because infinite loop. Check if we track throw Bugsnag or Sentry";
+    echo "Test to break the website because infinite loop. Check if we track throw Bugsnag";
     echo "<br>Creating process that takes $seconds second to execute";
     for($i = 1; $i <= $seconds; $i++){
         echo "<br>Second $i";
