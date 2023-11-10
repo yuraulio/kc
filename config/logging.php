@@ -88,11 +88,6 @@ return [
             'driver' => 'errorlog',
             'level' => 'debug',
         ],
-        'sentry' => [
-            'driver' => 'sentry',
-            'level'  => 'critical',
-            'bubble' => true,
-        ],
         'bugsnag' => [
             'driver' => 'bugsnag',
         ],
