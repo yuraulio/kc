@@ -305,8 +305,11 @@ class HomeController extends Controller
 
 
         $student = $user->events->where('id', $content->id)->first();
-        if (!$student) {
 
+        //dd(($student && strtotime(now()) > strtotime($student->pivot->expiration)) || !$student);
+        // if (!$student) {
+        if(($student && strtotime(now()) > strtotime($student->pivot->expiration)) || !$student){
+            
             //ticket
             $eventticket = 'free';
 
@@ -372,10 +375,20 @@ class HomeController extends Controller
                     $expiration_date = date('Y-m-d', strtotime($monthsExp, strtotime($today)));
                 }
 
-                $content->users()->save($user, ['comment'=>'free','expiration'=>$expiration_date,'paid'=>true]);
+                if(!$student){
+                    $content->users()->save($user, ['comment'=>'free','expiration'=>$expiration_date,'paid'=>true]);
+                }else{
+                    $content->users()->updateExistingPivot($user,[
+                        'expiration'=>$expiration_date,
+                        'paid'=>true
+                    ]);
+                }
+                
                 $transaction->event()->save($content);
                 $transaction->user()->save($user);
             }
+        }else{
+            return redirect('/');
         }
 
         Cart::instance('default')->destroy();
