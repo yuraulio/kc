@@ -28,6 +28,12 @@ return [
 
     'env' => env('APP_ENV', 'production'),
 
+    /**
+     * Env variables related with the new admin panel
+     */
+    'prefix_new_admin' => env('PREFIX_NEW_ADMIN_DOMAIN_URL', 'admin.'),
+    'app_domain' => env('APP_DOMAIN', 'knowcrunch.com'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Debug Mode
