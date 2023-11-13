@@ -72,8 +72,6 @@
                                         <a href="{{ route('cart.add-item', [ $event->id,'free', 8 ]) }}" class="btn btn--lg btn--secondary  go-to-href">ENROLL FOR FREE</a>
                                     @elseif($is_event_paid==0 && Auth::user())
                                         <a href="{{ route('enrollForFree',  $event->id) }}" class="btn btn--lg btn--secondary go-to-href">ENROLL FOR FREE</a>
-                                    @elseif($is_event_paid==1 && Auth::user())
-                                        <a href="/myaccount/elearning/{{ $event['title'] }}" class="btn btn--md btn--secondary">WATCH NOW</a>
                                     @elseif(($is_event_paid==0 && Auth::user()) || ($is_event_paid==1 && $is_event_expired == 1))
                                         <a href="{{ route('enrollForFree',  $event->id) }}" class="btn btn--lg btn--secondary go-to-href">ENROLL FOR FREE</a>                                   
                                     @endif
