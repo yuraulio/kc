@@ -1261,7 +1261,7 @@
                      @else
 
                         <div class="col12 dynamic-courses-wrapper @if((isset($event['paid']) && $event['paid'] == 0 && isset($event['transactionPending']) && $event['transactionPending'] == 2) || (isset($event['transactionPendingSepa']) && $event['transactionPendingSepa'] == 1)){{'pendingSepa'}}@elseif(isset($event['paid']) && $event['paid'] == 0){{'unpaid'}}@endif">
-                            <div class="item">
+                           <div class="item">
                             <h2>{{ $event['title'] }}</h2>
                             <div class="inside-tabs">
                                 <div class="tabs-ctrl">
@@ -1407,21 +1407,27 @@
                                         <div class="right">
                                             <?php $expire = false; ?>
                                             @foreach($mySubscriptions as $key => $sub)
-                                            @foreach($plans as $key1 => $plan)
-                                            <?php //dd($plan['stipe_plan']); ?>
-                                            @if($sub['stripe_plan'] == $plan['stripe_plan'])
-                                            @if($event['id'] == $plan['event_id'])
-                                            <?php
-                                                if(date("Y-m-d h:i:s") < $sub['must_be_updated']){
-                                                    $expire = false;
-                                                }else{
-                                                    $expire = true;
-                                                }
-                                                ?>
-                                            @endif
-                                            @endif
+                                             @foreach($plans as $key1 => $plan)
+                                             <?php //dd($plan['stipe_plan']); ?>
+                                                @if($sub['stripe_plan'] == $plan['stripe_plan'])
+                                                   @if($event['id'] == $plan['event_id'])
+                                                   <?php
+                                                         if(date("Y-m-d h:i:s") < $sub['must_be_updated']){
+                                                            $expire = false;
+                                                         }else{
+                                                            $expire = true;
+                                                         }
+                                                         ?>
+                                                   @endif
+                                                @endif
+                                             @endforeach
                                             @endforeach
-                                            @endforeach
+
+                                            @if($event['view_tpl'] == 'elearning_free' && $event['status'] == 0 && $event['expiration'] && strtotime($event['expiration']) < strtotime(now()))
+                                             <a href="{{ $event['slugable']['slug'] }}" class="btn btn--secondary btn--md">ENROLL FOR FREE</a>                                   
+                                            @endif
+                                          
+                                            
                                             @if(isset($event['video_access']) && !$event['video_access'])
                                             {{--<a style="cursor:not-allowed; opacity: 0.5; pointer-events: none;" href="/myaccount/elearning/{{ $event['title'] }}" class="btn btn--secondary btn--md">@if((isset($event['videos_progress']) && $event['videos_progress'] == 100) || count($event['cert'])>0) WATCH AGAIN @else WATCH NOW @endif</a>--}}
                                             @else
