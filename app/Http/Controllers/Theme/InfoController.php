@@ -229,8 +229,12 @@ class InfoController extends Controller
 
         if (isset($this->transaction['payment_response'])) {
             Session::put('thankyouData',$data);
-            session_start();
-            $_SESSION["thankyouData"] = $data;
+            try{
+                session_start();
+                $_SESSION["thankyouData"] = $data;
+            }catch(\Exception $ex){
+                Bugsnag::notifyException($ex);
+            }
             return redirect('/thankyou');
         	//return view('theme.cart.new_cart.thank_you', $data);
         }else {
