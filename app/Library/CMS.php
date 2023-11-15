@@ -73,8 +73,16 @@ class CMS
 
         $data['tigran'] = $event->status == 0 ? ['Price' => $tr_price,'Product_id' => $event->id,'Product_SKU' => $event->id,'ProductCategory' => $categoryScript, 'ProductName' =>  $event->title,'Event_ID' => 'kc_' . time() ] : null;
 
-        if (Auth::user() && count(Auth::user()->events->where('id', $event->id)) > 0) {
+        $hasEvent = Auth::user()->events->where('id', $event->id);
+        if (Auth::user() && count($hasEvent) > 0) {
             $data['is_event_paid'] = 1;
+
+            if(strtotime($hasEvent->first()->pivot->expiration) < strtotime(now())){
+                $data['is_event_expired'] = 1;
+            }else{
+                $data['is_event_expired'] = 0;
+            }
+            //$data['hasExpired'] = 
         } elseif (Auth::user() && $event->waitingList()->where('user_id', Auth::user()->id)->first()) {
             $data['is_joined_waiting_list'] = 1;
         }
