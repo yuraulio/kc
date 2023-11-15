@@ -2615,12 +2615,8 @@ class CartController extends Controller
         //$this->fbp->sendPurchaseEvent($data);
 
         Session::put('thankyouData',$data);
-        try{
-            session_start();
-            $_SESSION["thankyouData"] = $data;
-        }catch(\Exception $ex){
-            Bugsnag::notifyException($ex);
-        }
+        session_start();
+        $_SESSION["thankyouData"] = $data;
         return redirect('/thankyou');
 
         //return view('theme.cart.new_cart.thank_you',$data);
