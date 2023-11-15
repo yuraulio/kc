@@ -417,12 +417,8 @@ class HomeController extends Controller
         $data['event']['linkedin'] = urlencode(url('/') . '/' .$content->slugable->slug .'?utm_source=LinkedIn&utm_medium=Post_Student&utm_campaign=KNOWCRUNCH_BRANDING&title='."Proudly participating in ". $content->title . " by Knowcrunch. 💙");
 
         Session::put('thankyouData', $data);
-        try{
-            session_start();
-            $_SESSION["thankyouData"] = $data;
-        }catch(\Exception $ex){
-            Bugsnag::notifyException($ex);
-        }
+        session_start();
+        $_SESSION["thankyouData"] = $data;
         return redirect('/thankyou');
         //return view('theme.cart.new_cart.thank_you_free',$data);
     }
