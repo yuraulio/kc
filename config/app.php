@@ -256,6 +256,8 @@ return [
         'Tinify' => msonowal\LaravelTinify\Facades\Tinify::class,
         'DataTables' => Yajra\DataTables\Facades\DataTables::class,
 
+        'Bugsnag' => Bugsnag\BugsnagLaravel\Facades\Bugsnag::class,
+
     ],
 
 ];

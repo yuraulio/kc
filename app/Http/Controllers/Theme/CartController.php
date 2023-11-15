@@ -2005,7 +2005,6 @@ class CartController extends Controller
 
         Session::forget('dperror');
         Session::forget('error');
-
         //$current_user = Auth::user();
 
         $dpuser = Auth::user() ? Auth::user() : User::find(Session::get('user_id'));
