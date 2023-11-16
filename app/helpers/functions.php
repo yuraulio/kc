@@ -23,6 +23,8 @@ use App\Model\CookiesSMS;
 use App\Notifications\AfterSepaPaymentEmail;
 use Illuminate\Support\Facades\Log;
 
+use Bugsnag\BugsnagLaravel\Facades\Bugsnag;
+
 if(!function_exists('failedPaymentEmail')){
 
     function failedPaymentEmail($payload, $event, $user){
@@ -64,7 +66,7 @@ if(!function_exists('updateStripeCustomer')){
         try{
 
             $dpuser->updateStripeCustomer([
-            
+
                 'name' => $st_name,
                 'email' => $dpuser->email,
                 'metadata' => $temp,
@@ -77,8 +79,9 @@ if(!function_exists('updateStripeCustomer')){
             ]);
 
         }catch(\Stripe\Exception\InvalidRequestException $e){
+            Bugsnag::notifyException($e);
 
-               
+
              $dpuser = User::where('id',$userId)->update([
                 'stripe_id' => null,
                 'stripe_ids' => null
@@ -86,6 +89,7 @@ if(!function_exists('updateStripeCustomer')){
 
             $dpuser = User::where('id',$userId)->first();
 
+            Log::info(json_encode($dpuser));
             $options=['name' => $dpuser['firstname'] . ' ' . $dpuser['lastname'], 'email' => $dpuser['email']];
             $dpuser->createAsStripeCustomer($options);
 
@@ -96,13 +100,14 @@ if(!function_exists('updateStripeCustomer')){
             $dpuser->save();
 
             $dpuser = User::find($dpuser->id);
-    
+
+            Log::info(json_encode($dpuser));
 
         }
 
         return $dpuser;
-        
-        
+
+
     }
 }
 
@@ -174,13 +179,13 @@ if(!function_exists('sendAfterSuccessPaymentSepa')){
 
                 $data['firstName'] = $user->firstname;
 
-                
+
 
                 $user->notify(new AfterSepaPaymentEmail($user,$data));
-                
-                    
-                
-                
+
+
+
+
 
                 /*if($elearning){
                     $user->notify(new InstructionMail($data));
@@ -233,7 +238,7 @@ if(!function_exists('loadSendEmailsData')){
                 }else{
                     $eventname = 'EventName';
                     $eventdate = '';
-    
+
                     $eventcity  = 'EventCity';
                 }
             }
@@ -384,7 +389,7 @@ if(!function_exists('loadSendEmailsData')){
                 if($checkemailuser->partner_id == '' && isset($deree_user_data[$value]))
                     $checkemailuser->partner_id = $deree_user_data[$value];
 
-                
+
 
                 //$checkemailuser->save();
                 $creatAccount = false;
@@ -444,7 +449,7 @@ if(!function_exists('loadSendEmailsData')){
         }
 
         //$this->sendEmails($transaction, $emailsCollector, $extrainfo, $helperdetails, $elearning, $eventslug, $stripe,$billingEmail,$paymentMethod);
-        
+
         $paymentMethod = PaymentMethod::find($paymentMethodId);
 
         $data['transaction'] = $transaction;
@@ -499,10 +504,10 @@ if(!function_exists('loadSendEmailsDataSubscription')){
         $data['slug'] = 'asd';
         $groupEmailLink = $event && $event->fb_group ? $event->fb_group : '';
         $data['extrainfo'] = ['', '', $subscription->event->first()->title, '', '', '', '',$groupEmailLink];
-        
 
 
-    
+
+
 
         // $data['duration'] = '14';
         // $data['firstName'] = 'asd';
