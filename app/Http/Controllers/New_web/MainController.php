@@ -204,8 +204,12 @@ class MainController extends Controller
         // thank you page exception
         $thankyouData = null;
         if ($slug == "thankyou") {
-            session_start();
-            $thankyouData = $_SESSION["thankyouData"] ?? null;
+            try{
+                session_start();
+                $thankyouData = $_SESSION["thankyouData"] ?? null;
+            }catch(\Exception $ex){
+                Bugsnag::notifyException($ex);
+            }
             if (!$thankyouData) {
                 return redirect('/');
             }
