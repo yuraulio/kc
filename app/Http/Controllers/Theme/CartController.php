@@ -2354,6 +2354,7 @@ class CartController extends Controller
                         'metadata' => ['integration_check' => 'sepa_debit_accept_a_payment'],
                     ]);
 
+                    Log::info(json_encode($paymentIntent));
 
                     $payment_method_id = -1;
                     if($ev->paymentMethod->first()){
@@ -2362,16 +2363,22 @@ class CartController extends Controller
 
                     }
 
+                    Log::info('json_encode($payment_method_id)');
+                    Log::info(json_encode($payment_method_id));
                     $ev->users()->wherePivot('user_id',$dpuser->id)->detach();
                     $ev->users()->save($dpuser,['paid'=>false,'payment_method'=>$payment_method_id]);
 
                     if( (is_array($paymentIntent)  &&  $paymentIntent['status'] == 'requires_payment_method' ) || (isset($paymentIntent) && $paymentIntent->status == 'requires_payment_method')) {
 
+                        Log::info('paymentIntent');
+                        Log::info(json_encode($paymentIntent));
                         $status = 2;
                         $this->createTransaction($dpuser, $pay_seats_data, $installments, $cart, $bd, $ev,$couponCode,$namount, $pay_bill_data, $paymentIntent,$eventC,$status);
 
                         Session::put('payment_method_is_sepa',true);
 
+                        Log::info('createTransaction');
+                        Log::info(json_encode($paymentIntent));
                         $output = [
                             'clientSecret' => $paymentIntent->client_secret,
                             'status' => $paymentIntent->status,
