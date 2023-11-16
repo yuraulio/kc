@@ -32,6 +32,7 @@ use App\Model\CookiesSMS;
 use App\Notifications\WelcomeEmail;
 use App\Services\FBPixelService;
 use App\Model\Delivery;
+use Bugsnag\BugsnagLaravel\Facades\Bugsnag;
 use Illuminate\Support\Facades\Log;
 
 class CartController extends Controller
@@ -2005,7 +2006,6 @@ class CartController extends Controller
 
         Session::forget('dperror');
         Session::forget('error');
-
         //$current_user = Auth::user();
 
         $dpuser = Auth::user() ? Auth::user() : User::find(Session::get('user_id'));
@@ -2615,8 +2615,12 @@ class CartController extends Controller
         //$this->fbp->sendPurchaseEvent($data);
 
         Session::put('thankyouData',$data);
-        session_start();
-        $_SESSION["thankyouData"] = $data;
+        try{
+            session_start();
+            $_SESSION["thankyouData"] = $data;
+        }catch(\Exception $ex){
+            Bugsnag::notifyException($ex);
+        }
         return redirect('/thankyou');
 
         //return view('theme.cart.new_cart.thank_you',$data);

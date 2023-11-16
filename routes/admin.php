@@ -10,7 +10,7 @@ use App\Http\Controllers\Admin_api\ExportController;
 
 
 //Route::domain('admin.' . env('APP_DOMAIN'))->group(function () {
-Route::domain(env('PREFIX_NEW_ADMIN_DOMAIN_URL') . env('APP_DOMAIN'))->group(function () {
+Route::domain(config('app.prefix_new_admin') . config('app.app_domain'))->group(function () {
     Route::get('/login', [AdminLoginController::class, 'showLoginPage'])->name("admin-login");
     Route::post('/authenticate', [AdminLoginController::class, 'authenticate'])->name("admin-authenticate");
 

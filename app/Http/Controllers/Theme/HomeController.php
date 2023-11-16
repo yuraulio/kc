@@ -39,6 +39,7 @@ use Session;
 use App\Services\FBPixelService;
 use App\Model\WaitingList;
 use App\Model\Option;
+use Bugsnag\BugsnagLaravel\Facades\Bugsnag;
 
 class HomeController extends Controller
 {
@@ -305,8 +306,11 @@ class HomeController extends Controller
 
 
         $student = $user->events->where('id', $content->id)->first();
-        if (!$student) {
 
+        //dd(($student && strtotime(now()) > strtotime($student->pivot->expiration)) || !$student);
+        // if (!$student) {
+        if(($student && strtotime(now()) > strtotime($student->pivot->expiration)) || !$student){
+            
             //ticket
             $eventticket = 'free';
 
@@ -372,10 +376,20 @@ class HomeController extends Controller
                     $expiration_date = date('Y-m-d', strtotime($monthsExp, strtotime($today)));
                 }
 
-                $content->users()->save($user, ['comment'=>'free','expiration'=>$expiration_date,'paid'=>true]);
+                if(!$student){
+                    $content->users()->save($user, ['comment'=>'free','expiration'=>$expiration_date,'paid'=>true]);
+                }else{
+                    $content->users()->updateExistingPivot($user,[
+                        'expiration'=>$expiration_date,
+                        'paid'=>true
+                    ]);
+                }
+                
                 $transaction->event()->save($content);
                 $transaction->user()->save($user);
             }
+        }else{
+            return redirect('/');
         }
 
         Cart::instance('default')->destroy();
@@ -403,8 +417,12 @@ class HomeController extends Controller
         $data['event']['linkedin'] = urlencode(url('/') . '/' .$content->slugable->slug .'?utm_source=LinkedIn&utm_medium=Post_Student&utm_campaign=KNOWCRUNCH_BRANDING&title='."Proudly participating in ". $content->title . " by Knowcrunch. 💙");
 
         Session::put('thankyouData', $data);
-        session_start();
-        $_SESSION["thankyouData"] = $data;
+        try{
+            session_start();
+            $_SESSION["thankyouData"] = $data;
+        }catch(\Exception $ex){
+            Bugsnag::notifyException($ex);
+        }
         return redirect('/thankyou');
         //return view('theme.cart.new_cart.thank_you_free',$data);
     }

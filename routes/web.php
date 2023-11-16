@@ -23,6 +23,15 @@ Route::get('/debug-bugsnag', function () {
     Bugsnag::notifyException(new RuntimeException("Test error"));
     echo "Test notification sent to Bugsnag";
 });
+Route::get('/debug-bugsnag-error-warning', function () {
+    trigger_error("Warning error", E_USER_WARNING);
+});
+Route::get('/debug-bugsnag-error-error', function () {
+    trigger_error("Error error", E_USER_ERROR);
+});
+Route::get('/debug-bugsnag-error-general', function () {
+    $variable = 123 / 0;
+});
 
 Route::get('/debug-infinite-loop/{seconds}', function ($seconds) {
     echo "Test to break the website because infinite loop. Check if we track throw Bugsnag";
