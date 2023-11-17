@@ -2368,7 +2368,7 @@ class CartController extends Controller
                     $ev->users()->wherePivot('user_id',$dpuser->id)->detach();
                     $ev->users()->save($dpuser,['paid'=>false,'payment_method'=>$payment_method_id]);
 
-                    if( (is_array($paymentIntent)  &&  $paymentIntent['status'] == 'requires_payment_method' ) || (isset($paymentIntent) && $paymentIntent->status == 'requires_payment_method')) {
+                    if( (is_array($paymentIntent)  &&  $paymentIntent['status'] == 'requires_payment_method' ) || (isset($paymentIntent) && $paymentIntent->status == 'requires_payment_method') ||  (is_array($paymentIntent)  &&  $paymentIntent['status'] == 'requires_source' ) || (isset($paymentIntent) && $paymentIntent->status == 'requires_source')) {
 
                         Log::info('paymentIntent');
                         Log::info(json_encode($paymentIntent));
