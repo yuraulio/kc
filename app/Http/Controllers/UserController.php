@@ -51,34 +51,6 @@ use Illuminate\Support\Str;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use DataTables;
 
-class ChunkReadFilter implements IReadFilter
-{
-    private $startRow = 0;
-
-    private $endRow = 0;
-
-    /**
-     * Set the list of rows that we want to read.
-     *
-     * @param mixed $startRow
-     * @param mixed $chunkSize
-     */
-    public function setRows($startRow, $chunkSize): void
-    {
-        $this->startRow = $startRow;
-        $this->endRow = $startRow + $chunkSize;
-    }
-
-    public function readCell($columnAddress, $row, $worksheetName = '')
-    {
-        //  Only read the heading row, and the rows that are configured in $this->_startRow and $this->_endRow
-        if (($row == 1) || ($row >= $this->startRow && $row < $this->endRow)) {
-            return true;
-        }
-
-        return false;
-    }
-}
 
 class UserController extends Controller
 {
@@ -1050,7 +1022,7 @@ class UserController extends Controller
                 $isNewUser = false;
             }
         }
-        
+
         //dd($user);
         $user->ticket()->attach($ticket_id, ['event_id' => $event_id]);
 
@@ -1227,7 +1199,7 @@ class UserController extends Controller
         $user->ticket()->wherePivot('event_id', '=', $request->event_id)->wherePivot('ticket_id', '=', $request->ticket_id)->detach($request->ticket_id);
         $user->events_for_user_list()->wherePivot('event_id', '=', $request->event_id)->detach($request->event_id);
 
-        
+
         $transaction = $event->transactionsByUser($user->id)->first();
 
         if($transaction){
