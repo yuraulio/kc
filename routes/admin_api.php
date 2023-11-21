@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin_api\AdminController;
 use App\Http\Controllers\Admin_api\CategoriesController;
 use App\Http\Controllers\Admin_api\CommentsController;
+use App\Http\Controllers\Admin_api\CountdownController;
 use App\Http\Controllers\Admin_api\PagesController;
 use App\Http\Controllers\Admin_api\MediaController;
 use App\Http\Controllers\Admin_api\DashboardController;
@@ -64,7 +65,7 @@ Route::domain(config('app.prefix_new_admin') . config('app.app_domain'))->group(
         Route::post('royalties/export', ['App\Http\Controllers\Admin_api\RoyaltiesController', 'exportInstructorList']);
         Route::post('royalties/{id}/export', ['App\Http\Controllers\Admin_api\RoyaltiesController', 'export']);
         Route::post('royalties/widgets', ['App\Http\Controllers\Admin_api\RoyaltiesController', 'widgets']);
-        
+
         // Categories Event
         Route::get('getCategories', ['App\Http\Controllers\Admin_api\CategoryEventController', 'getList']);
 

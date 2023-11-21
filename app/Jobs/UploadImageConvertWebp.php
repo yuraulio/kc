@@ -45,7 +45,7 @@ class UploadImageConvertWebp implements ShouldQueue
             $destination = str_replace($ext,'webp',$this->path.$this->name);
 
 
-            $a = Image::make(public_path('/uploads/').$this->path.$this->name)->stream("webp", 70);
+            $a = Image::make(public_path('/uploads/').$this->path.$this->name)->stream("webp", config('app.WEBP_IMAGE_QUALITY'));
             Storage::disk('public')->put($destination, $a, 'public');
 
 

@@ -56,7 +56,7 @@ class Authenticate extends Middleware
             if ($this->auth->guard($guard)->check()) {
                 $this->auth->shouldUse($guard);
 
-                if(!$this->auth->user()->statusAccount->completed){
+                if(!$this->auth->user()->statusAccount || !$this->auth->user()->statusAccount->completed){
                     $this->auth->user()->AauthAcessToken()->delete();
                     Session::invalidate();
                     Session::regenerateToken();
