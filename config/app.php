@@ -34,6 +34,7 @@ return [
     'prefix_new_admin' => env('PREFIX_NEW_ADMIN_DOMAIN_URL', 'admin.'),
     'app_domain' => env('APP_DOMAIN', 'knowcrunch.com'),
     'PAYMENT_PRODUCTION' => env('PAYMENT_PRODUCTION', true),
+    'WEBP_IMAGE_QUALITY' => env('WEBP_IMAGE_QUALITY', 100),
 
     /*
     |--------------------------------------------------------------------------
