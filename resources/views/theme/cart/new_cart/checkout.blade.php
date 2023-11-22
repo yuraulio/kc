@@ -208,7 +208,7 @@
 
 				<div class="checkout-full-wrap">
 					<h2>Monthly payment plan</h2>
-					<p class="info" {{--class="my-4"--}}>We allow flexible monthly payments. Some international credit cards do not accept monthly payments.</p>
+					<p class="info" {{--class="my-4"--}}>We allow flexible monthly payments. Some international credit cards do not accept monthly payments. Not available for SEPA payments</p>
 					<form id="checkout-form" action="{{route('userPaySbt')}}" method="post">
 						@csrf
 						<div class="radio-group">
@@ -232,21 +232,21 @@
 						</div>
 						<input type="hidden" id="payment_method_id" name="payment_method_id" value="{{$pay_methods['id']}}">
 						<input type="hidden" id="payment_method" name="payment_method" value="">
-					</form>		
+					</form>
 
 					<h2>Payment method</h2>
 
 						<div class="tab card-information flex-container">
 							<button type="button" class="tablinks btn-4 btn-outline-dark Tab active card" onclick="openPaymentMethod(event, 'card')">
-								<img src="{{cdn('new_cart/images/credit-card.png')}}" width="30px" height="20px" class="without-hover" alt="">	
-								<p class="payment-title p-TabLabel">DEBIT / CREDIT CARD</p>	
+								<img src="{{cdn('new_cart/images/credit-card.png')}}" width="30px" height="20px" class="without-hover" alt="">
+								<p class="payment-title p-TabLabel">DEBIT / CREDIT CARD</p>
 							</button>
 							<button type="button" class="tablinks btn-4 btn-outline-dark Tab wallet" onclick="openPaymentMethod(event, 'digital-wallets')">
-								<img src="{{cdn('new_cart/images/wallet.png')}}" width="30px" height="20px" class="without-hover" alt="">	
+								<img src="{{cdn('new_cart/images/wallet.png')}}" width="30px" height="20px" class="without-hover" alt="">
 								<p class="payment-title p-TabLabel">APPLE / GOOGLE WALLET</p>
 							</button>
 							<button type="button" class="tablinks btn-4 btn-outline-dark Tab sepa" onclick="openPaymentMethod(event, 'sepa')">
-							<img src="{{cdn('new_cart/images/sepa-2.svg')}}" width="30px" height="20px" class="without-hover" alt="">	
+							<img src="{{cdn('new_cart/images/sepa-2.svg')}}" width="30px" height="20px" class="without-hover" alt="">
 								<p class="payment-title p-TabLabel">SEPA DIRECT DEBIT</p>
 							</button>
 						</div>
@@ -256,10 +256,10 @@
 							<div class="card-info">
 
 								<p class="info">Submit your card data and proceed securely with your transaction. We do not store your card's data. </p>
-								
+
 								<div class="card-input"><div id="card-element"></div></div>
 
-								
+
 								<div class="form-row my-5 align-items-center prev-next-wrap">
 									<div class="d-flex align-items-center previous-participant-link">
 										<img src="{{cdn('new_cart/images/arrow-previous-green.svg')}}" width="20px" height="12px" class="without-hover" alt="">
@@ -291,9 +291,9 @@
 									</div>
 									<div id="payment-request-button"></div>
 								</div>
-								
-								
-								
+
+
+
 							</div>
 
 							<!-- DIGITAL WALLETS BUTTON  END END END -->
@@ -302,10 +302,10 @@
 
 						<div id="sepa" class="tabcontent card-information">
 
-						
+
 							<form action="/charge" method="post" class="card-info" id="payment-form">
 								<p class="info">Please provide your IBAN so we can directly debit your EU bank account and ensure a secure transaction. Kindly note that a SEPA payment may take up to 14 days to process. Your access will be granted once we have confirmation of your payment in our system. </p>
-								
+
 								<div class="form-row inline">
 									<div class="col">
 									<label for="accountholder-name">
@@ -348,9 +348,9 @@
 										<div id="iban-element" class="card-input"><!-- A Stripe Element will be inserted here. --></div>
 									</div>
 
-									
+
 								</div>
-								
+
 
 								<div class="form-row my-3 align-items-center prev-next-wrap">
 									<div class="d-flex align-items-center previous-participant-link">
@@ -360,13 +360,13 @@
 									</div>
 									<button id="submit-button" data-secret="" class="btn btn-3 checkout-button-primary">Pay Now</button>
 								</div>
-								
 
-								
-								
+
+
+
 								<!-- Display mandate acceptance text. -->
 								<div id="mandate-acceptance">
-							
+
 								</div>
 								<!-- Used to display form errors. -->
 								<div id="error-message" role="alert"></div>
@@ -396,6 +396,15 @@ $( document ).ready(function() {
 
 
 	function openPaymentMethod(evt, paymentMethod) {
+        if(paymentMethod == 'sepa'){
+            if($('input[name=installments]:checked').val() !== '1'){
+                $('input[name=installments][value=1]').props('checked', true);
+            }
+            $('input[name=installments]').parent().hide()
+            $('input[name=installments][value=1]').parent().show()
+        }else{
+            $('input[name=installments]').parent().show()
+        }
 		var i, tabcontent, tablinks;
 		tabcontent = document.getElementsByClassName("tabcontent");
 		for (i = 0; i < tabcontent.length; i++) {
@@ -414,7 +423,7 @@ $( document ).ready(function() {
 
   			element.classList.add("active");
 		}
-		
+
 	}
 
     const stripe = Stripe('{{$stripe_key}}',{
@@ -438,7 +447,7 @@ $( document ).ready(function() {
            base: {
             	fontSize: '18px',
 				fontFamily: 'Foco',
-				
+
           },
         },
 
@@ -512,18 +521,18 @@ $( document ).ready(function() {
 
 	// prButton.addEventListener("click", async (event) => {
 	// 	alert('asd')
-		
+
 
 	// 	total = await getTotalCart();
 	// 	console.log('total: ', total)
 
 	// 	paymentRequest.update({
-			
+
 	// 		total: {
 	// 			label: 'Demo total',
 	// 			amount: total,
 	// 		},
-			
+
 	// 	});
 
 
@@ -546,7 +555,7 @@ $( document ).ready(function() {
 		// 	// Report to the browser that the confirmation was successful, prompting
 		// 	// it to close the browser payment method collection interface.
 		// 	ev.complete('success');
-			
+
 		// 	// Check if the PaymentIntent requires any actions and, if so, let Stripe.js
 		// 	// handle the flow. If using an API version older than "2019-02-11"
 		// 	// instead check for: `paymentIntent.status === "requires_source_action"`.
@@ -569,7 +578,7 @@ $( document ).ready(function() {
 	//SEPA
 	// Disable SEPA ON INSTALLMENTS
 	$( ".custom-control.custom-radio input" ).on( "click", function() {
-		
+
 
 		const selectedRadioBtn = $(
 			"input[type='radio'][name=installments]:checked"
@@ -581,14 +590,14 @@ $( document ).ready(function() {
 			$('.tablinks.sepa').addClass('d-none')
 			$('.tablinks.card').click()
 			openPaymentMethod(this, 'card')
-			
+
 		}else{
 			$('.tablinks.sepa').removeClass('d-none')
 		}
 	});
 
 	// END Disable SEPA ON INSTALLMENTS
-	
+
 
 
 	const elements3 = stripe.elements({
@@ -646,7 +655,7 @@ $( document ).ready(function() {
 		if($(email).val() == ''){
 			$(email).val('{{$pay_seats_data["emails"][0]}}')
 		}
-		
+
 
 		form.addEventListener('submit', async (event) => {
 			event.preventDefault();
@@ -669,7 +678,7 @@ $( document ).ready(function() {
 			return_data = await createIntent('/createSepa', paymentMethod.id)
 
 			var clientSecret = document.getElementById('submit-button');
-			
+
 			clientSecret = $(clientSecret).attr('data-secret')
 
 
@@ -683,11 +692,11 @@ $( document ).ready(function() {
 								name: accountholderName.value,
 								email: email.value,
 							},
-						}, 
+						},
 					}).then(function(result){
 
 						if(result.error){
-							
+
 							submitButton.disabled = false;
 						}
 						if(result.paymentIntent){
@@ -700,9 +709,9 @@ $( document ).ready(function() {
 				$('#error-message').css('color', 'red')
 				$('#error-message').text('Please try again!!')
 			}
-			
-			
-			
+
+
+
 
 
 		});
@@ -721,30 +730,30 @@ $( document ).ready(function() {
 				},
 				method: 'POST',
 				url: url,
-				async:false,  
+				async:false,
 				data:{
 					installments: installments,
 					payment_method: payment_method
-				},  
+				},
 				success: function(data) {
 
 					if(data.error){
-						window.location = data.return_url 
+						window.location = data.return_url
 					}
 
 					//console.log(data)
-					
+
 					$('#submit-button').attr('data-secret', JSON.parse(data)['clientSecret'])
-					
+
 					data1['return_url'] = JSON.parse(data)['return_url']
-					
+
 				}
 			})
-		
+
 			return data1;
 		}
-											
-	
+
+
 
 
 	//END SEPA
@@ -760,19 +769,19 @@ $( document ).ready(function() {
 			},
 			method: 'POST',
 			url: url,
-			async:false,  
+			async:false,
 			data:{
 				installments: installments,
 				payment_method_id: "{{$pay_methods['id']}}",
 				payment_method: payment_method
-			},  
+			},
 			success: function(data) {
-				
+
 				//a = data
 				window.location = data
 			}
 		})
-		
+
 		return a;
 	}
 
@@ -786,7 +795,7 @@ $( document ).ready(function() {
 			},
 			method: 'POST',
 			url: '/getTotalCart',
-			async:false,    
+			async:false,
 			data:{
 				installments: installments,
 				payment_method_id: "{{$pay_methods['id']}}"
@@ -816,13 +825,13 @@ $( document ).ready(function() {
 
 	async function updateAmount(){
 		total = await getTotalCart()
-		
+
 		paymentRequest.update({
 			total: {
 				label: @json($productName),
 				amount: Math.round(total),
 			},
-			
+
 		});
 	}
 
@@ -836,7 +845,7 @@ $(document).ready(function(){
 			dataLayer.push({'Event_ID':"{{$tigran['Event_ID']}}", 'event': 'AddPaymentInfo', 'Product_id' : "{{$tigran['Product_id']}}", 'Price': "{{$tigran['Price']}}",'ProductCategory':"{{$tigran['ProductCategory']}}","product":"product"});
 		})
 
-		
+
 })
 </script>
 
