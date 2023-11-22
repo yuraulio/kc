@@ -30,6 +30,17 @@ class Handler extends ExceptionHandler
         'password_confirmation',
     ];
 
+
+    public function register()
+    {
+        $this->reportable(function (Throwable $e) {
+            if ($e instanceof OAuthServerException && $e->getMessage() == 'The resource owner or authorization server denied the request.') {
+                Log::info($e);
+                return false;
+            }
+        });
+    }
+
     /**
      * Report or log an exception.
      *
@@ -38,14 +49,6 @@ class Handler extends ExceptionHandler
      */
     public function report(Throwable $exception)
     {
-        $this->renderable(function (\Exception $e, Request $request) {
-            if ($request->is('api/*') && $e->getMessage() == 'Unauthenticated.') {
-                Log::info($e);
-                return response()->json([
-                    'message' => 'Authentication failed. Check token expired.'
-                ], 404);
-            }
-        });
         parent::report($exception);
     }
 
