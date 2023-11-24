@@ -1251,7 +1251,7 @@ class CartController extends Controller
             $namount = (float)$amount;
 
             $temp = [];
-            if(isset($pay_bill_data)) {
+            if(isset($pay_bill_data) && isset($temp['billing'])) {
                 $temp = $pay_bill_data;
                 if($temp['billing'] == 1) {
 
