@@ -398,7 +398,8 @@ $( document ).ready(function() {
 	function openPaymentMethod(evt, paymentMethod) {
         if(paymentMethod == 'sepa'){
             if($('input[name=installments]:checked').val() !== '1'){
-                $('input[name=installments][value=1]').props('checked', true);
+                if($('input[name=installments][value=1]').length)
+                    $('input[name=installments][value=1]').props('checked', true);
             }
             $('input[name=installments]').parent().hide()
             $('input[name=installments][value=1]').parent().show()
