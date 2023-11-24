@@ -1251,9 +1251,19 @@ class CartController extends Controller
             $namount = (float)$amount;
 
             $temp = [];
+
+            $st_name = '';
+            $st_tax_id = '';
+            $st_line1 = '';
+            $st_postal_code = '';
+            $st_city = '';
+            $st_email = '';
+            $st_phone = '';
+            $address = [];
+
             if(isset($pay_bill_data)) {
                 $temp = $pay_bill_data;
-                if($temp['billing'] == 1) {
+                if(isset($temp['billing']) && $temp['billing'] == 1) {
 
                     $address = [];
                     $address['country'] = 'GR';
