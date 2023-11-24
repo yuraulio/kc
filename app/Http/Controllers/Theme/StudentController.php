@@ -1142,9 +1142,9 @@ class StudentController extends Controller
                     //$note = preg_replace('/\s+/', ' ', $note);
                     //$note =  preg_replace( "/\r|\n/", "||", $request->text );
                     //dd(preg_replace( "/\r|\n/", "||", $request->text ));
-                    $notes[$key] = preg_replace( "/\r|\n/", "||", $requestedNotes[$key] );
-                    $notes[$key] = str_replace(['"',"'"], "", $notes[$key]);
-                    $notes[$key] = str_replace(['\\'], "", $notes[$key]);
+                    $notes[$key] = preg_replace( "/\r|\n/", "||", $requestedNotes[$key] ?? '' );
+                    $notes[$key] = str_replace(['"',"'"], "", $notes[$key] ?? '');
+                    $notes[$key] = str_replace(['\\'], "", $notes[$key] ?? '');
 
                     //dd($notes);
 
