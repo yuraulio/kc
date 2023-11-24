@@ -76,7 +76,10 @@ class LessonController extends Controller
         if(isset($db_video[$vimeo_id])){
             //dd($db_video[$vimeo_id]);
 
-            $db_video[$vimeo_id]['seen'] = $seen;
+            //dd($db_video[$vimeo_id]['seen']);
+
+
+            $db_video[$vimeo_id]['seen'] = $db_video[$vimeo_id]['seen'] == 1 ? 1 : $seen;
             $db_video[$vimeo_id]['stop_time'] = $stop_time;
             $db_video[$vimeo_id]['percentMinutes'] = $progress;
             $db_video[$vimeo_id]['is_new'] = strval(0);
