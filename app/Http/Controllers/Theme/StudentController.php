@@ -1289,7 +1289,10 @@ class StudentController extends Controller
         }
 
         $lessonForUpdate = [];
-        $checkDbValueSendAutomateEmail = (int) $video[$videoId]['send_automate_email'];
+        if(isset($video[$videoId]))
+            $checkDbValueSendAutomateEmail = (int) $video[$videoId]['send_automate_email'];
+        else
+            $checkDbValueSendAutomateEmail = 1;
 
         // dd($video[$videoId]);
         // dd($videoId.'//'.$checkDbValueSendAutomateEmail);
