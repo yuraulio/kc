@@ -22,7 +22,7 @@ use Bugsnag\BugsnagLaravel\Facades\Bugsnag;
 Auth::routes(['register' => false]);
 
 Route::get('/slack-test', function () {
-    $user = User::where('email', 'lucasmuley@gmail.com')->first();
+    $user = User::first();
     if($user){
         $response = $user->notify(new ErrorSlack('message'));
         echo "Test notification sent to Slack: ". json_encode($response);
