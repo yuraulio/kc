@@ -2225,13 +2225,13 @@
 
                                                 </div>
 
-                                                <div>
-                                                    <h4 class="mb-0 title" for="input-hours">{{ __('Courses without exams') }}</h4>
-                                                </div>
+                                              
 
                                                 <div class="row">
+                                                    
 
                                                     <div class="col-sm-12 col-md-6 form-group">
+                                                    <h4 class="mb-0 title" for="input-hours">{{ __('Courses without exams') }}</h4>
                                                         <label class="form-control-label" for="input-hours">{{ __('Certificate Type') }} (course_certification_type)</label>
 
                                                         <!-- anto's editor -->
@@ -2241,6 +2241,22 @@
                                                         <!-- anto's editor -->
 
                                                         {{--<input type="text" name="course[{{'certificate'}}][{{'type'}}]" id="input-certificate_type" class="form-control" placeholder="{{ __('alphanumeric text ') }}" value="{{old('certificate_type',(isset($info['certificate']['type']) && $info['certificate']['type'] != null) ? $info['certificate']['type'] : '' )}}" autofocus/>--}}
+
+                                                    </div>
+
+                                                    <div class="col-sm-12 col-md-6 form-group{{ $errors->has('fb_') ? ' has-danger' : '' }}">
+                                                    <h4 class="mb-0 title" for="input-hours">{{ __('Certificate Attendance Title') }}</h4>
+                                                        <label class="form-control-label" for="input-hours">{{ __('(course_certification_attendance_title)') }} </label>
+
+                                                        {{--<textarea type="text" name="course[{{'certificate'}}][{{'attendance_title'}}]" id="input-certificate_title" class="ckeditor form-control" placeholder="{{ __('alphanumeric text ') }}" autofocus>{{ old('certificate_title', (isset($info['certificate']['messages']['success']) && $info['certificate']['messages']['success'] != null) ? $info['certificate']['messages']['success'] : '') }}</textarea>--}}
+
+                                                        <!-- anto's editor -->
+                                                        <input class="hidden" id="input-certificate_attendance_title_hidden" name="course[{{'certificate'}}][{{'attendance_title'}}]" value="{{ old('certificate_attendance_title', (isset($info['certificate']['messages']['success']) && $info['certificate']['messages']['success'] != null) ? $info['certificate']['messages']['success'] : '') }}"/>
+                                                        <?php $data = isset($info['certificate']['attendance_title']) && $info['certificate']['attendance_title'] != null ? $info['certificate']['attendance_title'] : '' ?>
+                                                        @include('event.editor.editor', ['keyinput' => "input-certificate_attendance_title", 'data'=> "$data", 'inputname' => "'course[certificate][attendance_title]'" ])
+                                                        <!-- anto's editor -->
+
+                                                        @include('alerts.feedback', ['field' => 'certificate_attendance_title'])
 
                                                     </div>
 

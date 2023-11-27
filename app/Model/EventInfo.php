@@ -63,6 +63,7 @@ class EventInfo extends Model
         'course_awards_icon',
         'course_certification_name_failure',
         'course_certification_title',
+        'course_certification_attendance_title',
         'course_certification_type',
         'course_certification_icon',
         'has_certificate',
