@@ -962,5 +962,15 @@ class User extends Authenticatable
         return $this->hasMany(WaitingList::class);
     }
 
+    /**
+     * Route notifications for the Slack channel.
+     *
+     * @param  \Illuminate\Notifications\Notification  $notification
+     * @return string
+     */
+    public function routeNotificationForSlack($notification)
+    {
+        return 'https://hooks.slack.com/services/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';
+    }
 
 }
