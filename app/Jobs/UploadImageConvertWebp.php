@@ -60,7 +60,7 @@ class UploadImageConvertWebp implements ShouldQueue
                         $message .= ' Related with the user '.$user->name.' '.$user->email.'.';
                     }
                 }
-                $user->notify(new ErrorSlack());
+                $user->notify(new ErrorSlack($message));
             }
         }
     }

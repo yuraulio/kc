@@ -23,7 +23,7 @@ Auth::routes(['register' => false]);
 
 Route::get('/slack-test', function () {
     $user = User::where('email', 'lucasmuley@gmail.com')->firstOrFail();
-    $response = $user->notify(new ErrorSlack());
+    $response = $user->notify(new ErrorSlack('message'));
     echo "Test notification sent to Slack: ". json_encode($response);
 });
 Route::get('/debug-bugsnag', function () {

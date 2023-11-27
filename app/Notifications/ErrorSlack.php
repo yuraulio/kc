@@ -10,6 +10,12 @@ use Illuminate\Notifications\Messages\SlackMessage;
 
 class ErrorSlack extends Notification
 {
+
+    public $message;
+
+    public function __construct($message){
+
+    }
     public function via($notifiable)
     {
         return ['slack'];
@@ -18,6 +24,6 @@ class ErrorSlack extends Notification
     public function toSlack($notifiable)
     {
         return (new SlackMessage)
-            ->content('Testing message to <@'.env('SLACK_MEMEBER_ID_RESPONSIBLE_OF_ERRORS_MANAGING').'>');
+            ->content($this->message);
     }
 }
