@@ -18,7 +18,6 @@ class ErrorSlack extends Notification
     public function toSlack($notifiable)
     {
         return (new SlackMessage)
-            ->to('errors')
-            ->content('Here a custom message to test!');
+            ->content('Testing message to <@'.env('SLACK_MEMEBER_ID_RESPONSIBLE_OF_ERRORS_MANAGING').'>');
     }
 }
