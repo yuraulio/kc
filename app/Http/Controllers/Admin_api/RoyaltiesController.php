@@ -33,7 +33,7 @@ class RoyaltiesController extends Controller
 
         $request_transasction_from = $request->transaction_from != null ? Carbon::createFromFormat('Y-m-d',explode('T', $request->transaction_from)[0])->addDays()->format('Y-m-d') : null;
         $request_transasction_to = $request->transaction_to != null ? Carbon::createFromFormat('Y-m-d',explode('T', $request->transaction_to)[0])->format('Y-m-d') : null;
-    
+
         $firstDayOfYear = new DateTime();
         $firstDayOfYear->setDate($firstDayOfYear->format('Y'), 1, 1);
         $firstDayOfYear = $firstDayOfYear->format('Y-m-d');
@@ -41,8 +41,8 @@ class RoyaltiesController extends Controller
 
         if(($currentDateOfYear == $request_transasction_to || $request_transasction_to == null) && $request_transasction_from == $firstDayOfYear){
             $status = true;
-        }  
-        
+        }
+
         return $status;
     }
     /**
@@ -56,7 +56,7 @@ class RoyaltiesController extends Controller
 
 
         if($request->sort != null && str_contains($request->sort, 'income')){
-           
+
             $request->sort = str_replace("income",'cache_income',$request->sort);
         }
 
@@ -71,12 +71,12 @@ class RoyaltiesController extends Controller
 
 
                 $instructors = $instructors->has('elearningEventsForRoyalties')->whereStatus(1)->get();
-                
+
                 return InstructorResource::collection($instructors);
             }else{
-                
+
                 $instructor = $instructors->has('elearningEventsForRoyalties')->with('elearningEventsForRoyalties:id,title','elearningEventsForRoyalties.lessons','elearningEventsForRoyalties.delivery')->whereStatus(1)->get();
-                
+
                 foreach($instructor as $key => $instr){
 
                     $instructor[$key]['events'] = $instr->elearningEventsForRoyalties();
@@ -91,13 +91,13 @@ class RoyaltiesController extends Controller
                     foreach($instructor[$key]['events'] as $key2 => $event){
                         $instructor[$key]['cache_income'] = $instructor[$key]['cache_income'] + $this->calculateIncomeByPercentHours($data['events'][$event->id]);
 
-                       
+
                     }
 
                 }
 
                 if($request->sort != null && str_contains($request->sort, 'income')){
-           
+
                     $request->sort = str_replace("income",'cache_income',$request->sort);
                 }
 
@@ -107,25 +107,25 @@ class RoyaltiesController extends Controller
 
                     if($column[0] == 'income'){
                         $column = 'cache_income';
-                    }                   
+                    }
 
                     if(explode('|',$request->sort)[1] == 'desc'){
-                        
+
                         return InstructorResource::collection(collect($instructor)->sortByDesc($column));
                     }
                     else{
                         return InstructorResource::collection(collect($instructor)->sortBy($column));
                     }
-    
-    
+
+
                 }
 
                 return InstructorResource::collection($instructor);
             }
 
 
-            
-            
+
+
 
 
         } catch (Exception $e) {
@@ -180,7 +180,7 @@ class RoyaltiesController extends Controller
 
     public function exportInstructorList(Request $request)
     {
-    
+
         try {
 
             if($this->parseDataFormCache($request)){
@@ -188,7 +188,7 @@ class RoyaltiesController extends Controller
             }else{
 
                 $instructors = Instructor::has('elearningEventsForRoyalties')->with('elearningEventsForRoyalties:id,title','elearningEventsForRoyalties.lessons','elearningEventsForRoyalties.delivery')->whereStatus(1)->get();
-                
+
                 foreach($instructors as $key => $instr){
 
                     $instructors[$key]['events'] = $instr->elearningEventsForRoyalties()->tableSort($request);
@@ -206,11 +206,11 @@ class RoyaltiesController extends Controller
                     $instructors[$key]['company'] = $instr['company'];
 
                     foreach($instructors[$key]['events'] as $key2 => $event){
-                        
+
 
                         $instructors[$key]['cache_income'] = $instructors[$key]['cache_income'] + $this->calculateIncomeByPercentHours($data['events'][$event->id]);
 
-                       
+
                     }
 
                 }
@@ -392,7 +392,7 @@ class RoyaltiesController extends Controller
         $amount = 0;
 
         //$userRole = Auth::user()->role->pluck('id')->toArray();
-
+        $transactions = [];
         if(isset($request->transaction_from) && isset($request->transaction_to)){
 
             $start_date = date_create($request->transaction_from);
@@ -417,7 +417,7 @@ class RoyaltiesController extends Controller
             $start_date = date_create($request->transaction_from);
             $start_date = date_format($start_date,"Y-m-d");
 
-            
+
 
             $transactions = Transaction::with('subscription','event')
                 ->whereHas('event', function($q) use ($eventId){
@@ -431,8 +431,8 @@ class RoyaltiesController extends Controller
 
             $end_date = date_create($request->transaction_to);
             $end_date = date_format($end_date,"Y-m-d");
-            
-            
+
+
             $transactions = Transaction::with('subscription','event')
                 ->whereHas('event', function($q) use ($eventId){
                     $q->where('id', $eventId);
@@ -454,7 +454,7 @@ class RoyaltiesController extends Controller
                 // }
 
                 $amount = $amount + $transaction['amount'];
- 
+
             }
 
         }
@@ -483,24 +483,24 @@ class RoyaltiesController extends Controller
                     $data['events'][$event->id]['total_event_minutes'] = $responseDataEvent['events'][$event->id];
                     $data['events'][$event->id]['total_lessons_instructor_minutes'] = 0;
 
-                    
+
 
                     //$arr = [];
 
 
                     foreach($event['lessons'] as $lesson){
-                       
+
                         $sum = 0;
                         if($lesson['vimeo_duration'] != "" && $lesson['vimeo_duration'] != 0 ){
 
                             if($lesson->pivot->instructor_id == $instructor->id){
-                                
+
                                 // if($lesson->topic()->first()){
                                 //     $arr[$lesson->topic()->first()->title]['lessons'][$lesson->id] = $lesson->title . ' -- '.CarbonInterval::seconds(getSumLessonSecond($lesson))->cascade()->forHumans();;
-                                    
+
                                 // }
-                               
-                                
+
+
                                 $sum = $sum + (getSumLessonSecond($lesson)-1);
                             }
                             $data['events'][$event->id]['total_lessons_instructor_minutes'] = $data['events'][$event->id]['total_lessons_instructor_minutes'] + $sum;
@@ -512,7 +512,7 @@ class RoyaltiesController extends Controller
                     //     dd($arr);
                     // }
 
-                
+
 
                     $data['events'][$event->id]['instructor_percent'] = $data['events'][$event->id]['total_lessons_instructor_minutes'] / $data['events'][$event->id]['total_event_minutes'] * 100;
 
