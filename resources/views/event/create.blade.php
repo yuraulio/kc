@@ -1469,23 +1469,11 @@
                                             <!-- anto's editor -->
                                         </div>
                                     </div>
-                                    <div>
-                                        <h4 class="mb-0 title" for="input-hours">{{ __('Courses without exams') }}</h4>
-                                    </div>
+                                    
                                     <div class="row">
 
-
-                                        {{--<div class="col-sm-12 col-md-6 form-group">
-                                            <label class="form-control-label" for="input-hours">{{ __('Certificate Event Title') }} (course_certification_event_title)</label>
-                                            <!-- anto's editor -->
-                                            <input class="hidden" id="input-certificate_event_title_hidden" name="course[{{'certificate'}}][{{'event_title'}}]" value="{{ old('certificate_event_title') }}"/>
-                                            <?php $data = '' ?>
-                                            @include('event.editor.editor', ['keyinput' => "input-certificate_event_title", 'data'=> "$data", 'inputname' => "'course[certificate][event_title]'" ])
-                                            <!-- anto's editor -->
-
-                                        </div>--}}
-
                                         <div class="col-sm-12 col-md-6 form-group">
+                                            <h4 class="mb-0 title" for="input-hours">{{ __('Courses without exams') }}</h4>
                                             <label class="form-control-label" for="input-hours">{{ __('Certificate Type') }} (course_certification_type)</label>
                                             {{--<input type="text" name="course[{{'certificate'}}][{{'type'}}]" id="input-certificate_type" class="form-control" placeholder="{{ __('alphanumeric text ') }}" value="{{old('certificate_type')}}" autofocus/>--}}
 
@@ -1493,6 +1481,18 @@
                                             <input class="hidden" id="input-certificate" name="course[{{'certificate'}}][{{'type'}}]" value="{{old('certificate_type')}}"/>
                                             <?php $data = isset($info['certificate']['type']) && $info['certificate']['type'] != null ? $info['certificate']['type'] : '' ?>
                                             @include('event.editor.editor', ['toolbar' => 'insertfile image media link anchor codesample','plugins' => 'link','keyinput' => "input-certificate_type", 'data'=> "$data", 'inputname' => "'course[certificate][type]'" ])
+                                            <!-- anto's editor -->
+
+                                        </div>
+                                        <div class="col-sm-12 col-md-6 form-group">
+                                            <h4 class="mb-0 title" for="input-hours">{{ __('Certificate Attendance Title') }}</h4>
+                                            <label class="form-control-label" for="input-hours">{{ __('(course_certification_attendance_title)') }} </label>
+                                            {{--<input type="text" name="course[{{'certificate'}}][{{'type'}}]" id="input-certificate_type" class="form-control" placeholder="{{ __('alphanumeric text ') }}" value="{{old('certificate_type')}}" autofocus/>--}}
+
+                                            <!-- anto's editor -->
+                                            <input class="hidden" id="input-certificate_attendance_title" name="course[{{'certificate'}}][{{'attendance_title'}}]" value="{{old('certificate_attendance_title')}}"/>
+                                            <?php $data = isset($info['certificate']['attendance_title']) && $info['certificate']['attendance_title'] != null ? $info['certificate']['attendance_title'] : '' ?>
+                                            @include('event.editor.editor', ['toolbar' => 'insertfile image media link anchor codesample','plugins' => 'link','keyinput' => "input-certificate_attendance_title", 'data'=> "$data", 'inputname' => "'course[certificate][attendance_title]'" ])
                                             <!-- anto's editor -->
 
                                         </div>
