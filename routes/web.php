@@ -24,7 +24,7 @@ Auth::routes(['register' => false]);
 Route::get('/slack-test', function () {
     $user = User::first();
     if($user){
-        $response = $user->notify(new ErrorSlack('message'));
+        $response = $user->notify(new ErrorSlack('Error example message. We can name people, for example: Lucas <@U0617USV6NB> or Elli <@U064KHTQ6LX>'));
         echo "Test notification sent to Slack: ". json_encode($response);
     }else{
         echo "User not exist";
