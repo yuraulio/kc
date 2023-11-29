@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin_api\AdminController;
 use App\Http\Controllers\Admin_api\CategoriesController;
 use App\Http\Controllers\Admin_api\CommentsController;
+use App\Http\Controllers\Admin_api\CountdownController;
 use App\Http\Controllers\Admin_api\PagesController;
 use App\Http\Controllers\Admin_api\MediaController;
 use App\Http\Controllers\Admin_api\DashboardController;
@@ -12,7 +13,7 @@ use App\Http\Controllers\Admin_api\InstagramController;
 use Illuminate\Support\Facades\Route;
 
 //Route::domain('admin.' . env('APP_DOMAIN'))->group(function () {
-Route::domain(env('PREFIX_NEW_ADMIN_DOMAIN_URL') . env('APP_DOMAIN'))->group(function () {
+Route::domain(config('app.prefix_new_admin') . config('app.app_domain'))->group(function () {
     Route::group(['middleware' => ['auth:admin_web']], function () {
         Route::prefix('get_widget_data')->group(function () {
             Route::get('users', [DashboardController::class, 'get_widget_data_users']);
@@ -64,7 +65,7 @@ Route::domain(env('PREFIX_NEW_ADMIN_DOMAIN_URL') . env('APP_DOMAIN'))->group(fun
         Route::post('royalties/export', ['App\Http\Controllers\Admin_api\RoyaltiesController', 'exportInstructorList']);
         Route::post('royalties/{id}/export', ['App\Http\Controllers\Admin_api\RoyaltiesController', 'export']);
         Route::post('royalties/widgets', ['App\Http\Controllers\Admin_api\RoyaltiesController', 'widgets']);
-        
+
         // Categories Event
         Route::get('getCategories', ['App\Http\Controllers\Admin_api\CategoryEventController', 'getList']);
 

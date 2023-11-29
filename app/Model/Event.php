@@ -384,7 +384,7 @@ class Event extends Model
         $emptyParameters = false;
         if($videos == null && $topicEvent == null && $lessons == null && $instructors == null){
             $emptyParameters = true;
-        }   
+        }
 
         $videos = json_decode($videos,true);
 
@@ -509,8 +509,8 @@ class Event extends Model
             //    $topic_id = $topics['lessons'][1]['topic_id'];
             //}
 
-            $data['topics'][$key]['topic_duration'] = $data['keys'][$topic_id];
-            $data['topics'][$key]['topic_seen'] = $topicsSeen[$topic_id];
+            $data['topics'][$key]['topic_duration'] = $data['keys'][$topic_id] ?? 0;
+            $data['topics'][$key]['topic_seen'] = $topicsSeen[$topic_id] ?? 0;
             $data['topics'][$key]['priority'] = $topics['pivot']['priority'];
         }
 
@@ -694,7 +694,7 @@ class Event extends Model
     }*/
 
     public function period($user){
-  
+
         $transaction1 = null;
         $transactionAll = $this->transactionsByUserNew($user['id'])->where('status', 1)->get();
 
@@ -706,7 +706,7 @@ class Event extends Model
 
             //parse first transaction has status = completed payment date
             foreach($transactions as $transaction){
-               
+
                 if($transaction['status'] == 1){
                     $transaction1 = $transaction;
                     break;

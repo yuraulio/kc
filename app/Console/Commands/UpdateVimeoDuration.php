@@ -7,6 +7,9 @@ use Vimeo\Vimeo;
 use App\Model\Lesson;
 use App\Model\Event;
 
+use Bugsnag\BugsnagLaravel\Facades\Bugsnag;
+use RuntimeException;
+
 class UpdateVimeoDuration extends Command
 {
     /**
@@ -40,6 +43,9 @@ class UpdateVimeoDuration extends Command
      */
     public function handle()
     {
+
+        Bugsnag::notifyException(new RuntimeException('Start UpdateVimeoDuration command'));
+
         Lesson::where('vimeo_video','!=', '')->chunk(10, function ($lessons) {
             foreach ($lessons as $lesson) {
 

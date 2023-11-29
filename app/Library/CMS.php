@@ -73,7 +73,9 @@ class CMS
 
         $data['tigran'] = $event->status == 0 ? ['Price' => $tr_price,'Product_id' => $event->id,'Product_SKU' => $event->id,'ProductCategory' => $categoryScript, 'ProductName' =>  $event->title,'Event_ID' => 'kc_' . time() ] : null;
 
-        $hasEvent = Auth::user()->events->where('id', $event->id);
+        $hasEvent = [];
+        if(Auth::check())
+            $hasEvent = Auth::user()->events->where('id', $event->id);
         if (Auth::user() && count($hasEvent) > 0) {
             $data['is_event_paid'] = 1;
 

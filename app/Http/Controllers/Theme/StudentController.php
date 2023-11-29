@@ -528,9 +528,9 @@ class StudentController extends Controller
 
 
             $data['events'][$event->id]['paid'] = $event['pivot']['paid'];
-            
+
             $transactionStatus = $event->transactionsByUser($user->id)->first();
-            
+
 
             if($latestSubscription && $latestSubscription->id == $event->id && $latestSubscription->pivot->expiration == null){
                 $data['events'][$event->id]['transactionPendingSepa'] =  true;
@@ -592,7 +592,7 @@ class StudentController extends Controller
 
                 $eventSubscriptions[] = $user->eventSubscriptions()->wherePivot('event_id',$event['id'])->orderByPivot('expiration', 'DESC')->first() ?
                                             $user->eventSubscriptions()->wherePivot('event_id',$event['id'])->orderByPivot('expiration', 'DESC')->first()->id : -1;
-                
+
                 //$eventSubscriptions[] =  array_values($user->eventSubscriptions()->wherePivot('event_id',$event['id'])->pluck('id')->toArray());
 
                 $video_access = false;
@@ -851,7 +851,7 @@ class StudentController extends Controller
         $media->save();
 
         // Convert webp image format
-        dispatch((new UploadImageConvertWebp('profile_user/', $media->original_name))->delay(now()->addSeconds(300)));
+        dispatch((new UploadImageConvertWebp('profile_user/', $media->original_name, Auth::id()))->delay(now()->addSeconds(300)));
 
 
 
@@ -1125,6 +1125,7 @@ class StudentController extends Controller
 
 
         //dd($user->statistic()->wherePivot('event_id', $request->event)->get());
+        $notes = [];
         $notess = $user->statistic()->wherePivot('event_id', $request->event)->first();
         if($notess != ""){
             $notes = json_decode($notess->pivot['notes'],true);
@@ -1141,9 +1142,9 @@ class StudentController extends Controller
                     //$note = preg_replace('/\s+/', ' ', $note);
                     //$note =  preg_replace( "/\r|\n/", "||", $request->text );
                     //dd(preg_replace( "/\r|\n/", "||", $request->text ));
-                    $notes[$key] = preg_replace( "/\r|\n/", "||", $requestedNotes[$key] );
-                    $notes[$key] = str_replace(['"',"'"], "", $notes[$key]);
-                    $notes[$key] = str_replace(['\\'], "", $notes[$key]);
+                    $notes[$key] = preg_replace( "/\r|\n/", "||", $requestedNotes[$key] ?? '' );
+                    $notes[$key] = str_replace(['"',"'"], "", $notes[$key] ?? '');
+                    $notes[$key] = str_replace(['\\'], "", $notes[$key] ?? '');
 
                     //dd($notes);
 
@@ -1202,7 +1203,7 @@ class StudentController extends Controller
                 'videos' => json_encode($videos)
             ], false);
 
-            
+
             /*if($user->events()->where('event_id',2068)->first() && $user->events()->where('event_id',2068)->first() &&
                 $user->events()->where('event_id',2068)->first()->tickets()->wherePivot('user_id',$user->id)->first()){
 
@@ -1288,7 +1289,10 @@ class StudentController extends Controller
         }
 
         $lessonForUpdate = [];
-        $checkDbValueSendAutomateEmail = (int) $video[$videoId]['send_automate_email'];
+        if(isset($video[$videoId]))
+            $checkDbValueSendAutomateEmail = (int) $video[$videoId]['send_automate_email'];
+        else
+            $checkDbValueSendAutomateEmail = 1;
 
         // dd($video[$videoId]);
         // dd($videoId.'//'.$checkDbValueSendAutomateEmail);
@@ -1306,10 +1310,10 @@ class StudentController extends Controller
             $topic = Topic::find($topicId);
 
             // dd($checkDbValueSendAutomateEmail);
- 
+
             if($topic && $topic->email_template != '' && $checkDbValueSendAutomateEmail == 0 ){
 
-                
+
                 if($topic->email_template == 'activate_social_media_account_email'){
                     $subject = 'activate your social media accounts!';
                 }else if($topic->email_template == 'activate_advertising_account_email'){
@@ -1323,22 +1327,22 @@ class StudentController extends Controller
                     $data['firstname'] = $user->firstname;
                     $data['subject'] = 'Knowcrunch | ' . $user->firstname . ', ' . $subject;
                     $data['email_template'] = $topic->email_template;
-            
+
                     $user->notify(new SendTopicAutomateMail($data));
-                    
+
                     // find all topic lessons for update
                     foreach($event->lessons()->wherePivot('topic_id',$topic->id)->get() as $lesson){
-                        
+
                         $lessonForUpdate[] = str_replace("https://vimeo.com/","",$lesson->vimeo_video);
                         // $lesson->pivot->send_automate_mail = true;
                         // $lesson->pivot->save();
                     }
                 }
-               
+
 
             }
 
-            
+
             if(!empty($lessonForUpdate)){
 
                 foreach($lessonForUpdate as $vimeoId){

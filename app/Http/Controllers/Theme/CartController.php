@@ -6,14 +6,13 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Model\Event;
 use App\Model\Ticket;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use \Cart as Cart;
 use App\Model\ShoppingCart;
 use \Carbon\Carbon;
 use Redirect;
-use Session;
+use Illuminate\Support\Facades\Session;
 use App\Model\PaymentMethod;
-use Validator;
 use Illuminate\Support\Arr;
 use App\Model\Transaction;
 use App\Model\Invoice;
@@ -32,7 +31,9 @@ use App\Model\CookiesSMS;
 use App\Notifications\WelcomeEmail;
 use App\Services\FBPixelService;
 use App\Model\Delivery;
+use Bugsnag\BugsnagLaravel\Facades\Bugsnag;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 
 class CartController extends Controller
 {
@@ -67,7 +68,7 @@ class CartController extends Controller
             }
 
             if(!is_null($eventInfo['payment_installments'])){
-                
+
                 $availableInstallments = (int)$eventInfo['payment_installments'];
 
             }
@@ -129,7 +130,7 @@ class CartController extends Controller
                     if($ev->paymentMethod->first()->method_slug == 'stripe'){
                         $data['paywithstripe'] = 1;
                         session()->put('payment_method',$ev->paymentMethod->first()->id);
-                        $data['stripe_key'] = env('PAYMENT_PRODUCTION') ? $ev->paymentMethod->first()->processor_options['key'] :
+                        $data['stripe_key'] = config('app.PAYMENT_PRODUCTION') ? $ev->paymentMethod->first()->processor_options['key'] :
                                                                                 $ev->paymentMethod->first()->test_processor_options['key'];
                     }
 
@@ -1071,7 +1072,7 @@ class CartController extends Controller
 
         $data = $this->initCartDetails($data);
 
-        
+
         $installments = isset($input['installments']) ? $input['installments'] : 0;
 
         $instamount = $data['price'];
@@ -1089,7 +1090,7 @@ class CartController extends Controller
         $input = $request->all();
         //dd($input);
 
-        
+
         $payment_method_id = intval($input["payment_method_id"]);
         $data = [];
 
@@ -1115,7 +1116,7 @@ class CartController extends Controller
     }
 
     public function userPaySbt(Request $request){
-        
+
 
         $input = $request->all();
         $payment_method_id = intval($input["payment_method_id"]);
@@ -1250,9 +1251,19 @@ class CartController extends Controller
             $namount = (float)$amount;
 
             $temp = [];
+
+            $st_name = '';
+            $st_tax_id = '';
+            $st_line1 = '';
+            $st_postal_code = '';
+            $st_city = '';
+            $st_email = '';
+            $st_phone = '';
+            $address = [];
+
             if(isset($pay_bill_data)) {
                 $temp = $pay_bill_data;
-                if($temp['billing'] == 1) {
+                if(isset($temp['billing']) && $temp['billing'] == 1) {
 
                     $address = [];
                     $address['country'] = 'GR';
@@ -1301,7 +1312,7 @@ class CartController extends Controller
                 }
             }
 
-            if(env('PAYMENT_PRODUCTION')){
+            if(config('app.PAYMENT_PRODUCTION')){
                 Stripe::setApiKey($eventC->paymentMethod->first()->processor_options['secret_key']);
             }else{
                 Stripe::setApiKey($eventC->paymentMethod->first()->test_processor_options['secret_key']);
@@ -1629,7 +1640,7 @@ class CartController extends Controller
         // if ($dpuser->hasPaymentMethod()) {
         //     $dpuser->addPaymentMethod($input['payment_method']);
         // }
-        
+
         /**
          * Write Here Your Database insert logic.
          */
@@ -1698,21 +1709,21 @@ class CartController extends Controller
                     $elearningInvoice->date = date('Y-m-d');//Carbon::today()->toDateString();
                     $elearningInvoice->instalments_remaining = $installments;
                     $elearningInvoice->instalments = $installments;
-    
+
                     $elearningInvoice->save();
-    
-    
+
+
                     //$elearningInvoice->user()->save($dpuser);
                     $elearningInvoice->event()->save($ev);
                     $elearningInvoice->transaction()->save($transaction);
                 }
 
 
-                
+
             //}else{
                 //$transaction->subscription()->save($dpuser->subscriptions->where('id',$charge['id'])->first());
             //}
-            
+
             \Session::put('transaction_id', $transaction->id);
         }
     }
@@ -1987,6 +1998,7 @@ class CartController extends Controller
     public function createSepa(Request $request)
     {
 
+        Log::info('createSepa');
         $input = $request->all();
         $data = [];
 
@@ -2003,9 +2015,9 @@ class CartController extends Controller
         $data = $this->initCartDetails($data);
         $this->fbp->sendAddPaymentInfoEvent($data);
 
+        Log::info(json_encode($data));
         Session::forget('dperror');
         Session::forget('error');
-
         //$current_user = Auth::user();
 
         $dpuser = Auth::user() ? Auth::user() : User::find(Session::get('user_id'));
@@ -2039,6 +2051,7 @@ class CartController extends Controller
             break;
             //$item->id  <-ticket id
         }
+        Log::info(json_encode($cart));
         //dd($cart['CartItem']->CartItemOptions);
         //dd($ev_title . $ev_date_help);
         $data = [];
@@ -2157,7 +2170,7 @@ class CartController extends Controller
                 }
             }
 
-            if(env('PAYMENT_PRODUCTION')){
+            if(config('app.PAYMENT_PRODUCTION')){
                 Stripe::setApiKey($eventC->paymentMethod->first()->processor_options['secret_key']);
             }else{
                 Stripe::setApiKey($eventC->paymentMethod->first()->test_processor_options['secret_key']);
@@ -2179,7 +2192,9 @@ class CartController extends Controller
 
             $dpuser = updateStripeCustomer($dpuser, $st_name, $temp, $address);
 
+            Log::info(json_encode($dpuser));
             if($installments > 1) {
+                Log::info(json_encode($installments));
 
                 $instamount =  round($namount / $installments, 2);
 
@@ -2228,7 +2243,7 @@ class CartController extends Controller
 
                 }
 
-                
+
                   //dd($client_secret);
 
 
@@ -2236,7 +2251,7 @@ class CartController extends Controller
                 try{
 
                     //header('Content-Type: application/json');
-                
+
                     //Create a PaymentIntent with amount and currency
                     // $paymentIntent = \Stripe\PaymentIntent::create([
                     //     'description' => 'Subscription creation',
@@ -2247,24 +2262,25 @@ class CartController extends Controller
                     //     'metadata' => ['integration_check' => 'sepa_debit_accept_a_payment'],
                     //     'confirm' => false
                     // ]);
-                    
+
                     // $paymentIntent = \Stripe\SetupIntent::create([
                     //     'payment_method_types' => ['sepa_debit'],
                     //     'customer' => $dpuser->stripe_id,
                     //   ]);
-                      
-                      
+
+
+                    Log::info('try');
 
                     $ev->users()->wherePivot('user_id',$dpuser->id)->detach();
                     $ev->users()->save($dpuser,['paid'=>false,'payment_method'=>$payment_method_id]);
 
-                    
+
                     $dpuser->newSubscription($name, $plan->id)->noProrate()->create(
                         $input['payment_method'],
                         ['email' => $dpuser->email],
                         [
                             'metadata' => [
-                                'installments_paid' => 0, 
+                                'installments_paid' => 0,
                                 'installments' => $installments,
                                 'payment_method' => 'sepa'
                             ],
@@ -2277,10 +2293,11 @@ class CartController extends Controller
                     // $charge->metadata = json_encode(['installments_paid' => 0, 'installments' => $installments]);
                     // $charge->price = $instamount;
                     // $charge->save();
-                    
+
 
 
                 }catch(\Laravel\Cashier\Exceptions\IncompletePayment $exception){
+                    Bugsnag::notifyException($exception);
 
                     $sub = $dpuser->subscriptions()->where('user_id',$dpuser->id)->first();
 
@@ -2293,7 +2310,7 @@ class CartController extends Controller
                     Session::put('payment_method_is_sepa',true);
 
                     $this->createTransaction($dpuser, $pay_seats_data, $installments, $cart, $bd, $ev,$couponCode,$namount, $pay_bill_data, $exception->payment,$eventC,$status = 2, true);
-                    
+
 
                     //after new subscription payment is incomplete because pay with SEPA
                     $output = [
@@ -2301,11 +2318,11 @@ class CartController extends Controller
                         'return_url' => '/order-success',
                         'status' => ''
                     ];
-    
+
                     return json_encode($output);
 
-                    
-                    
+
+
                 }
 
 
@@ -2313,27 +2330,30 @@ class CartController extends Controller
                 //$namount = $instamount;
             }
 
+            Log::info('here');
             if($dpuser && $installments > 1) {
 
                 $charge['status'] = 'succeeded';
                 $charge['type'] = $installments . ' Installments';
+                Log::info('succeeded');
             }
-            else 
+            else
             {
 
 
                 $stripeAmount = $namount * 100;
 
                 $dpuser = updateStripeCustomer($dpuser, $st_name, $temp, $address);
-                
+
                 $temp['customer'] = $dpuser->email;
                 $nevent = $ev_title . ' ' . $ev_date_help;
 
 
                 try{
+                    Log::info('try2');
 
                     header('Content-Type: application/json');
-                
+
                     // Create a PaymentIntent with amount and currency
                     $paymentIntent = \Stripe\PaymentIntent::create([
                         'amount' => $stripeAmount,
@@ -2344,6 +2364,7 @@ class CartController extends Controller
                         'metadata' => ['integration_check' => 'sepa_debit_accept_a_payment'],
                     ]);
 
+                    Log::info(json_encode($paymentIntent));
 
                     $payment_method_id = -1;
                     if($ev->paymentMethod->first()){
@@ -2352,30 +2373,35 @@ class CartController extends Controller
 
                     }
 
+                    Log::info('json_encode($payment_method_id)');
+                    Log::info(json_encode($payment_method_id));
                     $ev->users()->wherePivot('user_id',$dpuser->id)->detach();
                     $ev->users()->save($dpuser,['paid'=>false,'payment_method'=>$payment_method_id]);
 
-                    if( (is_array($paymentIntent)  &&  $paymentIntent['status'] == 'requires_payment_method' ) || (isset($paymentIntent) && $paymentIntent->status == 'requires_payment_method')) {
+                    if( (is_array($paymentIntent)  &&  $paymentIntent['status'] == 'requires_payment_method' ) || (isset($paymentIntent) && $paymentIntent->status == 'requires_payment_method') ||  (is_array($paymentIntent)  &&  $paymentIntent['status'] == 'requires_source' ) || (isset($paymentIntent) && $paymentIntent->status == 'requires_source')) {
 
+                        Log::info('paymentIntent');
+                        Log::info(json_encode($paymentIntent));
                         $status = 2;
                         $this->createTransaction($dpuser, $pay_seats_data, $installments, $cart, $bd, $ev,$couponCode,$namount, $pay_bill_data, $paymentIntent,$eventC,$status);
-                    
+
                         Session::put('payment_method_is_sepa',true);
-                    
+
+                        Log::info('createTransaction');
+                        Log::info(json_encode($paymentIntent));
                         $output = [
                             'clientSecret' => $paymentIntent->client_secret,
                             'status' => $paymentIntent->status,
                             'return_url' => '/order-success',
                         ];
 
-                        
+
 
                         return json_encode($output);
-        
+
                     }
                 }catch (\Laravel\Cashier\Exceptions\IncompletePayment $exception) {
-                    
-
+                    Bugsnag::notifyException($exception);
                 }
 
 
@@ -2384,7 +2410,7 @@ class CartController extends Controller
 
             /*
             if( (isset($charge) && $charge['status'] == 'succeeded')) {
-               
+
 
                 $status = 2;
                 $this->createTransaction($dpuser, $pay_seats_data, $installments, $cart, $bd, $ev,$couponCode,$namount, $pay_bill_data, $charge,$eventC,$status);
@@ -2408,16 +2434,17 @@ class CartController extends Controller
                   return '/checkout';
             }
             */
-            
+
 
 
 
             //endddddddddd
 
+            Log::info('end');
         }catch(Error $e){
-
+            Bugsnag::notifyException($e);
         }
-  
+
     }
 
     public function completeRegistration(Request $request){
@@ -2615,8 +2642,12 @@ class CartController extends Controller
         //$this->fbp->sendPurchaseEvent($data);
 
         Session::put('thankyouData',$data);
-        session_start();
-        $_SESSION["thankyouData"] = $data;
+        try{
+            session_start();
+            $_SESSION["thankyouData"] = $data;
+        }catch(\Exception $ex){
+            Bugsnag::notifyException($ex);
+        }
         return redirect('/thankyou');
 
         //return view('theme.cart.new_cart.thank_you',$data);

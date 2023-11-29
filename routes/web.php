@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\NotificationController;
 use App\Model\Admin\Setting;
+use App\Model\User;
+use App\Notifications\ErrorSlack;
 use Bugsnag\BugsnagLaravel\Facades\Bugsnag;
 
 /*
@@ -19,9 +21,27 @@ use Bugsnag\BugsnagLaravel\Facades\Bugsnag;
 
 Auth::routes(['register' => false]);
 
+Route::get('/slack-test', function () {
+    $user = User::first();
+    if($user){
+        $response = $user->notify(new ErrorSlack('Error example message. We can name people, for example: Lucas <@U0617USV6NB> or Elli <@U064KHTQ6LX>'));
+        echo "Test notification sent to Slack: ". json_encode($response);
+    }else{
+        echo "User not exist";
+    }
+});
 Route::get('/debug-bugsnag', function () {
     Bugsnag::notifyException(new RuntimeException("Test error"));
     echo "Test notification sent to Bugsnag";
+});
+Route::get('/debug-bugsnag-error-warning', function () {
+    trigger_error("Warning error", E_USER_WARNING);
+});
+Route::get('/debug-bugsnag-error-error', function () {
+    trigger_error("Error error", E_USER_ERROR);
+});
+Route::get('/debug-bugsnag-error-general', function () {
+    $variable = 123 / 0;
 });
 
 Route::get('/debug-infinite-loop/{seconds}', function ($seconds) {

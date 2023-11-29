@@ -20,17 +20,16 @@ class TicketCheck
      */
     public function handle($request, Closure $next)
     {
-        
-        
+
         $user = Auth::user();
         if($user){
             if($user->cart){
-               
+
                 $event = Event::where('id',$user->cart->event)->with('ticket')->first();
                 if($event->view_tpl == 'event_free_coupon'){
                     $stock = 1;
                 }else{
-                    $stock = $event->ticket->where('ticket_id',$user->cart->ticket_id)->first()->pivot->quantity;
+                    $stock = $event->ticket->where('ticket_id',$user->cart->ticket_id)->first()->pivot->quantity ?? 0;
 
                 }
 
@@ -55,32 +54,26 @@ class TicketCheck
 
                 break;
             }
-            //dd($event_id);
             $event = Event::where('id',$event_id)->with('ticket')->first();
             if($event){
                 if($event->view_tpl == 'event_free_coupon' || $event->view_tpl == 'elearning_free' || $ticket_id == 'waiting'){
                     $stock = 1;
                 }else if($type == 5){
-                    $stock = $event->ticket->where('ticket_id',$ticket_id)->first() && $event->ticket->where('ticket_id',$ticket_id)->first()->pivot->quantity >= $requestQty 
+                    $stock = $event->ticket->where('ticket_id',$ticket_id)->first() && $event->ticket->where('ticket_id',$ticket_id)->first()->pivot->quantity >= $requestQty
                                 ? $event->ticket->where('ticket_id',$ticket_id)->first()->pivot->quantity : 0;
-    
                 }else{
                     $stock = $event->ticket->where('ticket_id',$ticket_id)->first() ? $event->ticket->where('ticket_id',$ticket_id)->first()->pivot->quantity : 0;
 
                 }
-    
+
                 if($stock <= 0){
                     Cart::instance('default')->destroy();
                     return redirect($event->slugable->slug);
                 }
             }
 
-            
-
-
         }
-        
-      //  dd('edw');
+
         return $next($request);
     }
 }
