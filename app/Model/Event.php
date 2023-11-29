@@ -1116,6 +1116,7 @@ class Event extends Model
             $data['certificate']['messages']['failure'] = $infos['course_certification_name_failure'];
             $data['certificate']['type'] = $infos['course_certification_type'];
             $data['certificate']['title'] = $infos['course_certification_title'];
+            $data['certificate']['attendance_title'] = $infos['course_certification_attendance_title'];
             $data['certificate']['visible'] = $infos['course_certification_visible'] != null ? json_decode($infos['course_certification_visible'], true) : null;
             $data['certificate']['icon'] = $infos['course_certification_icon'] != null ? json_decode($infos['course_certification_icon'], true) : null;
             $data['certificate']['has_certificate'] = $infos['has_certificate'];

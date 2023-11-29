@@ -87,18 +87,23 @@ class CertificateController extends Controller
     //dd($certificate->event->first()->event_info()['certificate']);
     if($certificate->event->first() && isset($certificate->event->first()->event_info()['certificate']['messages'])){
 
+      $certificateEventTitle = $certificate->event->first()->title;
+
       if(count(($certificate->exam)) != 0 && $certificate->success && isset($certificate->event->first()->event_info()['certificate']['messages']['success'])){
 
         $certificateTitle = $certificate->event->first()->event_info()['certificate']['messages']['success'];
 
       }else if(count(($certificate->exam)) != 0 && !$certificate->success && isset($certificate->event->first()->event_info()['certificate']['messages']['failure'])){
 
+        $certificateEventTitle = $certificate->event->first()->event_info()['certificate']['attendance_title'];
+        $certificateEventTitle = str_replace('&nbsp;','',$certificateEventTitle);
+
         $certificateTitle = strip_tags($certificate->event->first()->event_info()['certificate']['messages']['failure']);
 
       }
       $certificateTitle = str_replace('&nbsp;','',$certificateTitle);
       //$certificateEventTitle = $certificate->event->first()->event_info()['certificate']['event_title'];
-      $certificateEventTitle = $certificate->event->first()->title;
+      
 
     }
 
@@ -335,6 +340,8 @@ class CertificateController extends Controller
     $successMessage = isset($event->event_info()['certificate']['messages']['success']) ? $event->event_info()['certificate']['messages']['success'] : '';
     $failureMessage = isset($event->event_info()['certificate']['messages']['failure']) ? strip_tags($event->event_info()['certificate']['messages']['failure']) : '';
     $certificateEventTitle = $event->title;
+    $certificateEventAttendanceTitle = isset($event->event_info()['certificate']['attendance_title']) ? strip_tags($event->event_info()['certificate']['attendance_title']) : $certificateEventTitle;
+    $certificateEventAttendanceTitle = str_replace('&nbsp;','',$certificateEventAttendanceTitle);
 
     if ($zip->open(public_path($fileName), ZipArchive::CREATE) === TRUE) {
 
@@ -394,6 +401,10 @@ class CertificateController extends Controller
         $certificate['certification_title'] = $cert->certificate_title;
         $certificate['credential'] = $cert->credential;
         $certificate['certificate_event_title'] = $certificateEventTitle;
+
+        if(!$cert->success){
+          $certificate['certificate_event_title'] = $certificateEventAttendanceTitle;
+        }
         $certificate['meta_title'] =  strip_tags($cert->lastname . ' ' . $cert->firstname . ' ' . $cert->certificate_title . ' ' . $cert->user()->first()->kc_id);//$cert->lastname . ' ' . $cert->firstname . ' ' . $cert->certificate_title . ' ' . $cert->user()->first()->kc_id;
 
         $contxt = stream_context_create([

@@ -139,15 +139,15 @@ class MediaController extends Controller
             $image_name = $image->getClientOriginalName();
 
             $imgpath_original = $path . '' . $image_name;
-           
+
             $i=1;
             while(Storage::disk('public')->exists($imgpath_original)){
-            
+
                 $name = explode(".", $image_name1);
                 $name[0] = $name[0]."_". $i;
                 $image_name = $name[0].'.'.$name[1];
                 $imgpath_original = $path . '' . $image_name;
-    
+
                 $i++;
             }
 
@@ -166,7 +166,7 @@ class MediaController extends Controller
             $file = Storage::disk('public')->putFileAs($path, $image, $image_name, 'public');
 
             // convert uploaded image to webp format
-            dispatch((new UploadImageConvertWebp($path, $image_name))->delay(now()->addSeconds(5)));
+            dispatch((new UploadImageConvertWebp($path, $image_name, Auth::id()))->delay(now()->addSeconds(5)));
 
             $data = getimagesize($request->file);
             $original_image_width = $data[0];
@@ -232,7 +232,7 @@ class MediaController extends Controller
                 $image->save(public_path("/uploads" . $path . $version_name), 80, $extension);
 
                 // Convert version image to webp format
-                dispatch((new UploadImageConvertWebp($path, $version_name))->delay(now()->addSeconds(5)));
+                dispatch((new UploadImageConvertWebp($path, $version_name, Auth::id()))->delay(now()->addSeconds(5)));
 
                 // save to db
                 $mfile = $this->storeFile(
@@ -356,7 +356,7 @@ class MediaController extends Controller
                 $image->save(public_path("/uploads" . $folderPath . "/" . $image_name), 50, $extension);
 
                 // Convert webp image format
-                dispatch((new UploadImageConvertWebp($folderPath , '/'.$image_name))->delay(now()->addSeconds(5)));
+                dispatch((new UploadImageConvertWebp($folderPath , '/'.$image_name, Auth::id()))->delay(now()->addSeconds(5)));
 
                 $size = $image ? $image->filesize() : null;
                 $height = $image ? $image->height() : null;
