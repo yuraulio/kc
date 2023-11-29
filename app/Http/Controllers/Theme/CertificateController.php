@@ -85,24 +85,26 @@ class CertificateController extends Controller
     $certificateTitle = $certificate->certificate_title;
     $certificateEventTitle =  $certificate->event->first() ? $certificate->event->first()->title : '';
     //dd($certificate->event->first()->event_info()['certificate']);
+    
     if($certificate->event->first() && isset($certificate->event->first()->event_info()['certificate']['messages'])){
 
       $certificateEventTitle = $certificate->event->first()->title;
-
       if(count(($certificate->exam)) != 0 && $certificate->success && isset($certificate->event->first()->event_info()['certificate']['messages']['success'])){
-
         $certificateTitle = $certificate->event->first()->event_info()['certificate']['messages']['success'];
 
       }else if(count(($certificate->exam)) != 0 && !$certificate->success && isset($certificate->event->first()->event_info()['certificate']['messages']['failure'])){
-
-        $certificateEventTitle = $certificate->event->first()->event_info()['certificate']['attendance_title'];
-        $certificateEventTitle = str_replace('&nbsp;','',$certificateEventTitle);
-
+        
         $certificateTitle = strip_tags($certificate->event->first()->event_info()['certificate']['messages']['failure']);
 
       }
       $certificateTitle = str_replace('&nbsp;','',$certificateTitle);
       //$certificateEventTitle = $certificate->event->first()->event_info()['certificate']['event_title'];
+
+      if(str_contains($certificate['template'], 'attendance') && $certificate->event->first()->event_info()['certificate']['attendance_title'] && $certificate->event->first()->event_info()['certificate']['attendance_title'] != ''){
+        
+        $certificateEventTitle = $certificate->event->first()->event_info()['certificate']['attendance_title'];
+        $certificateEventTitle = str_replace('&nbsp;','',$certificateEventTitle);
+      }
       
 
     }
@@ -119,6 +121,7 @@ class CertificateController extends Controller
     $certificate['kc_id'] = $certificate->user()->first()->kc_id;
     $certificate['meta_title'] =  $certificate['kc_id'];//strip_tags($certificate->lastname . ' ' . $certificate->firstname . ' ' . $certificateTitle . ' ' . $certificate['kc_id']);
 
+    //dd($certificate);
     $pdf->getDomPDF()->setHttpContext($contxt)->add_info('title', 'Your meta title');
     //$customPaper = array(0,0,3507,2480);
     //$customPaper = array(0,0,842,595);;
@@ -402,7 +405,12 @@ class CertificateController extends Controller
         $certificate['credential'] = $cert->credential;
         $certificate['certificate_event_title'] = $certificateEventTitle;
 
-        if(!$cert->success){
+        // if(!$cert->success){
+        //   $certificate['certificate_event_title'] = $certificateEventAttendanceTitle;
+        // }
+
+
+        if(str_contains($cert->template, 'attendance') && $certificateEventAttendanceTitle && $certificateEventAttendanceTitle != ''){
           $certificate['certificate_event_title'] = $certificateEventAttendanceTitle;
         }
         $certificate['meta_title'] =  strip_tags($cert->lastname . ' ' . $cert->firstname . ' ' . $cert->certificate_title . ' ' . $cert->user()->first()->kc_id);//$cert->lastname . ' ' . $cert->firstname . ' ' . $cert->certificate_title . ' ' . $cert->user()->first()->kc_id;
