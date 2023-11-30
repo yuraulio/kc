@@ -60,6 +60,8 @@ Route::get('mycertificateview/{id}/{title}', 'Theme\CertificateController@view_r
 
 Route::group(['middleware' => 'auth.aboveauthor', 'prefix' => 'admin'], function () {
 
+    Route::get('/refresh-cache', 'UtilController@refreshCache')->name("admin.refresh-cache");
+
     Route::get('/', 'HomeController@index')->name('home');
 
 

@@ -271,6 +271,20 @@
                     </li>
                    @endcan
 
+                   <li class="nav-item active">
+                        <a class="nav-link active" href="#navbar-messages" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="navbar-messages">
+                            <i class="fas fa-envelope" style="color: #f4645f;"></i>
+                            <span class="nav-link-text" style="color: #f4645f;">{{ __('Utils') }}</span>
+                        </a>
+                        <div class="collapse show" id="navbar-messages">
+                            <ul class="nav nav-sm flex-column">
+                                <li class="nav-item {{ isset($elementName) and $elementName  == 'refresh-cache' ? 'active' : '' }}">
+                                    <a href="{{ route('admin.refresh-cache') }}" class="nav-link">{{ __('Refresh cache') }}</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+
                 </ul>
 
             </div>
