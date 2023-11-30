@@ -214,7 +214,7 @@
             <div class="elem-title">{{ $info['certificate']['title'] }}</div>
             @endif
             <p>
-                {!!  $info['certificate']['type'] !!}
+                {!!  $info['certificate']['text'] !!}
                 </br>
 
             </p>

@@ -83,29 +83,27 @@ class CertificateController extends Controller
     ]);
 
     $certificateTitle = $certificate->certificate_title;
-    $certificateEventTitle =  $certificate->event->first() ? $certificate->event->first()->title : '';
+    //$certificateEventTitle =  $certificate->event->first() ? $certificate->event->first()->title : '';
     //dd($certificate->event->first()->event_info()['certificate']);
+
+
+    $eventInfoCertificate = $certificate->event->first()->event_info()['certificate'];
+
     
-    if($certificate->event->first() && isset($certificate->event->first()->event_info()['certificate']['messages'])){
+    if($certificate->event->first() && isset($eventInfoCertificate['messages'])){
 
-      $certificateEventTitle = $certificate->event->first()->title;
-      if(count(($certificate->exam)) != 0 && $certificate->success && isset($certificate->event->first()->event_info()['certificate']['messages']['success'])){
-        $certificateTitle = $certificate->event->first()->event_info()['certificate']['messages']['success'];
+      if(count(($certificate->exam)) != 0 && $certificate->success && $eventInfoCertificate['has_certificate_exam'] && isset($eventInfoCertificate['messages']['success'])){
+       
+        $certificateTitle = $eventInfoCertificate['messages']['success'];
 
-      }else if(count(($certificate->exam)) != 0 && !$certificate->success && isset($certificate->event->first()->event_info()['certificate']['messages']['failure'])){
+      }else if(count(($certificate->exam)) != 0 && !$certificate->success && isset($eventInfoCertificate['messages']['completion'])){
         
-        $certificateTitle = strip_tags($certificate->event->first()->event_info()['certificate']['messages']['failure']);
+        $certificateTitle = strip_tags($eventInfoCertificate['messages']['completion']);
 
+      }else if(count(($certificate->exam)) == 0 && isset($eventInfoCertificate['messages']['completion'])){
+        $certificateTitle = strip_tags($eventInfoCertificate['messages']['completion']);
       }
       $certificateTitle = str_replace('&nbsp;','',$certificateTitle);
-      //$certificateEventTitle = $certificate->event->first()->event_info()['certificate']['event_title'];
-
-      if(str_contains($certificate['template'], 'attendance') && $certificate->event->first()->event_info()['certificate']['attendance_title'] && $certificate->event->first()->event_info()['certificate']['attendance_title'] != ''){
-        
-        $certificateEventTitle = $certificate->event->first()->event_info()['certificate']['attendance_title'];
-        $certificateEventTitle = str_replace('&nbsp;','',$certificateEventTitle);
-      }
-      
 
     }
 
@@ -114,7 +112,7 @@ class CertificateController extends Controller
     $certificate['certification_date'] = $certificate->certification_date;
     $certificate['expiration_date'] = $certificate->expiration_date ? date('F Y',$certificate->expiration_date) : null;
     $certificate['credential'] = $certificate->credential;
-    $certificate['certificate_event_title'] = $certificateEventTitle;
+    //$certificate['certificate_event_title'] = $certificateEventTitle;
     //$certificate['certification_title'] = $certificate->certificate_title;
     $certificate['certification_title'] = $certificateTitle;
 
@@ -340,11 +338,11 @@ class CertificateController extends Controller
     }
     //dd($zip->open(public_path($fileName), ZipArchive::CREATE));
 
-    $successMessage = isset($event->event_info()['certificate']['messages']['success']) ? $event->event_info()['certificate']['messages']['success'] : '';
-    $failureMessage = isset($event->event_info()['certificate']['messages']['failure']) ? strip_tags($event->event_info()['certificate']['messages']['failure']) : '';
+    $successMessage = (isset($event->event_info()['certificate']['has_certificate_exam']) && $event->event_info()['certificate']['has_certificate_exam'] && isset($event->event_info()['certificate']['messages']['success'])) ? $event->event_info()['certificate']['messages']['success'] : $event->title;
+    $failureMessage = isset($event->event_info()['certificate']['messages']['completion']) ? strip_tags($event->event_info()['certificate']['messages']['completion']) : '';
     $certificateEventTitle = $event->title;
-    $certificateEventAttendanceTitle = isset($event->event_info()['certificate']['attendance_title']) ? strip_tags($event->event_info()['certificate']['attendance_title']) : $certificateEventTitle;
-    $certificateEventAttendanceTitle = str_replace('&nbsp;','',$certificateEventAttendanceTitle);
+    // $certificateEventAttendanceTitle = isset($event->event_info()['certificate']['attendance_title']) ? strip_tags($event->event_info()['certificate']['attendance_title']) : $certificateEventTitle;
+    // $certificateEventAttendanceTitle = str_replace('&nbsp;','',$certificateEventAttendanceTitle);
 
     if ($zip->open(public_path($fileName), ZipArchive::CREATE) === TRUE) {
 
@@ -358,15 +356,18 @@ class CertificateController extends Controller
 
         $template = '';
         $template_failed = '';
-        if($paymentMethod == 1){
-          $view = 'admin.certificates.kc_deree_diploma_2022';
-          $template = 'kc_deree_diploma_2022';
-          $template_failed = 'kc_deree_attendance_2022';
-        }else /*if(in_array($paymentMethod,[3,2]))*/{
-          $view = 'admin.certificates.kc_diploma_2022b';
-          $template = 'kc_diploma_2022b';
-          $template_failed = 'kc_attendance_2022b';
-        }
+        // if($paymentMethod == 1){
+        //   $view = 'admin.certificates.kc_deree_diploma_2022';
+        //   $template = 'kc_deree_diploma_2022';
+        //   $template_failed = 'kc_deree_attendance_2022';
+        // }else /*if(in_array($paymentMethod,[3,2]))*/{
+        //   $view = 'admin.certificates.kc_diploma_2022b';
+        //   $template = 'kc_diploma_2022b';
+        //   $template_failed = 'kc_attendance_2022b';
+        // }
+          $view = 'admin.certificates.new_kc_certificate';
+          $template = 'new_kc_certificate';
+          $template_failed = 'new_kc_certificate';
 
         if( !($cert = $event->userHasCertificate($user->id)->first()) ){
 
@@ -410,9 +411,9 @@ class CertificateController extends Controller
         // }
 
 
-        if(str_contains($cert->template, 'attendance') && $certificateEventAttendanceTitle && $certificateEventAttendanceTitle != ''){
-          $certificate['certificate_event_title'] = $certificateEventAttendanceTitle;
-        }
+        // if(str_contains($cert->template, 'attendance') && $certificateEventAttendanceTitle && $certificateEventAttendanceTitle != ''){
+        //   $certificate['certificate_event_title'] = $certificateEventAttendanceTitle;
+        // }
         $certificate['meta_title'] =  strip_tags($cert->lastname . ' ' . $cert->firstname . ' ' . $cert->certificate_title . ' ' . $cert->user()->first()->kc_id);//$cert->lastname . ' ' . $cert->firstname . ' ' . $cert->certificate_title . ' ' . $cert->user()->first()->kc_id;
 
         $contxt = stream_context_create([
