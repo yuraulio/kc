@@ -171,7 +171,8 @@ class WebhookController extends BaseWebhookController
                 $firstname = $userWhoWantsRefundCourse->firstname;
                 $lastname = $userWhoWantsRefundCourse->lastname;
                 $email = $userWhoWantsRefundCourse->email;
-                $userWhoWantsRefundCourse->notify(new ErrorSlack("Stripe Webhook Error: Elli <@U064KHTQ6LX> check that the user $firstname $lastname ($email) has refund $amount_refunded and we don't know the course related. Check if we have to disable manually this course for this user."));
+                $amount_refunded_numeric = $amount_refunded/100;
+                $userWhoWantsRefundCourse->notify(new ErrorSlack("Stripe Webhook Error: Elli <@U064KHTQ6LX> check that the user $firstname $lastname ($email) has refund $amount_refunded_numeric and we don't know the course related. Check if we have to disable manually this course for this user."));
             }else{
                 $user = User::first();
                 $user->notify(new ErrorSlack("Stripe Webhook Error: Elli <@U064KHTQ6LX> there is an user refunding a course. Check the following data: ".json_encode($payload['data'])));
