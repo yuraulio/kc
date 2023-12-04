@@ -310,7 +310,7 @@ class HomeController extends Controller
         //dd(($student && strtotime(now()) > strtotime($student->pivot->expiration)) || !$student);
         // if (!$student) {
         if(($student && strtotime(now()) > strtotime($student->pivot->expiration)) || !$student){
-            
+
             //ticket
             $eventticket = 'free';
 
@@ -384,7 +384,7 @@ class HomeController extends Controller
                         'paid'=>true
                     ]);
                 }
-                
+
                 $transaction->event()->save($content);
                 $transaction->user()->save($user);
             }
@@ -792,39 +792,42 @@ class HomeController extends Controller
         // If someone tries not existing slug we should redirect them to the 404 page
         $slug = Slug::where('slug', $slug)->firstOrFail();
         $data['content'] = $slug->slugable;
+        if($slug->slugable_type == 'App\Model\Event'){
+            $data['content'] = Event::with('category', 'city', 'topic')->find($data['content']['id']);
+            $data['eventtopics']= $data['content']->topicsLessonsInstructors()['topics'];
+            $topicDescription = [];
 
-        $data['content'] = Event::with('category', 'city', 'topic')->find($data['content']['id']);
-        $data['eventtopics']= $data['content']->topicsLessonsInstructors()['topics'];
-        $topicDescription = [];
+            foreach ($data['eventtopics'] as $key => $topic) {
+                //dd($topic);
+                //dd($key);
+                $topic = Topic::where('title', $key)->first();
+                $topicDescription[$key] = $topic['summary'];
+            }
+            if(!$data['content']->is_inclass_course()){
+                array_multisort(array_column($data['eventtopics'],'priority'), SORT_ASC, $data['eventtopics']);
+                //uasort($data['eventtopics'], fn($a, $b) => strcmp($a['priority'], $b['priority']));
+            }
 
-        foreach ($data['eventtopics'] as $key => $topic) {
-            //dd($topic);
-            //dd($key);
-            $topic = Topic::where('title', $key)->first();
-            $topicDescription[$key] = $topic['summary'];
+            $data['eventorganisers']=array();
+            if (count($data['content']['city']) != 0) {
+                $data['location']= $data['content']['city'][0];
+            }
+
+            $data['etax'] = $data['content']['topic'];
+
+            $data['instructors'] = $data['content']->topicsLessonsInstructors()['instructors'];
+            //dd($data['instructors']);
+
+            $data['is_event_paid'] = 1;
+            $data['desc'] = $topicDescription;
+
+            $pdf = PDF::loadView('theme.event.syllabus_print', $data)->setPaper('a4', 'landscape');
+            $fn = $slug->slugable->title . '.pdf';
+
+            return $pdf->stream($fn);
+        }else{
+            return view('errors.custom', ['message' => 'This event not exists. Are you sure the url is correct?']);
         }
-        if(!$data['content']->is_inclass_course()){
-            array_multisort(array_column($data['eventtopics'],'priority'), SORT_ASC, $data['eventtopics']);
-            //uasort($data['eventtopics'], fn($a, $b) => strcmp($a['priority'], $b['priority']));
-        }
-
-        $data['eventorganisers']=array();
-        if (count($data['content']['city']) != 0) {
-            $data['location']= $data['content']['city'][0];
-        }
-
-        $data['etax'] = $data['content']['topic'];
-
-        $data['instructors'] = $data['content']->topicsLessonsInstructors()['instructors'];
-        //dd($data['instructors']);
-
-        $data['is_event_paid'] = 1;
-        $data['desc'] = $topicDescription;
-
-        $pdf = PDF::loadView('theme.event.syllabus_print', $data)->setPaper('a4', 'landscape');
-        $fn = $slug->slugable->title . '.pdf';
-
-        return $pdf->stream($fn);
     }
 
     public function getSMSVerification($slug)
