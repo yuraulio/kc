@@ -45,7 +45,7 @@
                             </ul>
                             @endif
 
-                            <form method="POST" action="/authenticate">
+                            <form method="POST" action="{{ route('admin_authenticate') }}">
                                 @csrf
 
                                 <div class="mb-3">

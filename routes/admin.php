@@ -8,11 +8,9 @@ use App\Http\Controllers\Auth\AdminLoginController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin_api\ExportController;
 
-
-//Route::domain('admin.' . env('APP_DOMAIN'))->group(function () {
-Route::domain(config('app.prefix_new_admin') . config('app.app_domain'))->group(function () {
+Route::prefix('admin2')->group(function () {
     Route::get('/login', [AdminLoginController::class, 'showLoginPage'])->name("admin-login");
-    Route::post('/authenticate', [AdminLoginController::class, 'authenticate'])->name("admin-authenticate");
+    Route::post('/authenticate', [AdminLoginController::class, 'authenticate'])->name('admin_authenticate');
 
     Route::group(['middleware' => ['auth:admin_web']], function () {
         Route::get('/', [DashboardController::class, 'dashboard'])->name("admin-dashboard");
@@ -53,6 +51,7 @@ Route::domain(config('app.prefix_new_admin') . config('app.app_domain'))->group(
 
     });
 });
+
 Route::group(['middleware' => ['auth:admin_web']], function () {
     Route::get('menus', '\CodexShaper\Menu\Http\Controllers\MenuController@index');
     Route::get('menus/builder/{id}', '\CodexShaper\Menu\Http\Controllers\MenuItemController@showMenuItems')->name('menu.builder');
