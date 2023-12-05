@@ -35,6 +35,9 @@ return [
     'app_domain' => env('APP_DOMAIN', 'knowcrunch.com'),
     'PAYMENT_PRODUCTION' => env('PAYMENT_PRODUCTION', true),
     'WEBP_IMAGE_QUALITY' => env('WEBP_IMAGE_QUALITY', 100),
+    'vimeo_client_id' => env('client_id', ''),
+    'vimeo_client_secret' => env('client_secret', ''),
+    'vimeo_token' => env('vimeo_token', ''),
 
     /*
     |--------------------------------------------------------------------------

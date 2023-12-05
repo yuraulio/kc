@@ -115,8 +115,7 @@ class LessonController extends Controller
 
         $vimeoVideo = explode("/",$lesson->vimeo_video);
         $duration = 0;
-
-        $client = new Vimeo(env('client_id'), env('client_secret'), env('vimeo_token'));
+        $client = new Vimeo(config('app.vimeo_client_id'), config('app.vimeo_client_secret'), config('app.vimeo_token'));
         $response = $client->request("/videos/". end($vimeoVideo) . "/?password=".env('video_password'), array(), 'GET');
 
         if($response['status'] === 200){
@@ -126,6 +125,10 @@ class LessonController extends Controller
         }
 
         if($request->topic_id != null){
+
+            $category = Category::find($request->category);
+            $topic = Topic::with('category')->find($request->topic_id[0]);
+            $category->updateLesson($topic, $lesson);
 
             dispatch(new LessonUpdate($request->all(),$lesson));
         }
