@@ -607,7 +607,7 @@ export default {
             // d/m/Y
             let d = new Date(date);
 
-            d = d.toLocaleDateString();
+            d = d.toLocaleDateString('el-GR');
 
             return d;
         },

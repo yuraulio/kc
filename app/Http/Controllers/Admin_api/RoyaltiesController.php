@@ -398,13 +398,16 @@ class RoyaltiesController extends Controller
             $start_date = date_create($request->transaction_from);
             $start_date = date_format($start_date,"Y-m-d");
             $from = date($start_date);
+            //dd($from);
+            //$from = date('2023-10-01');
 
             $end_date = date_create($request->transaction_to);
             $end_date = date_format($end_date,"Y-m-d");
             $to = date($end_date);
+            //$to = date('2023-10-31');
+            //dd($to);
 
-
-            $transactions = Transaction::with('subscription','event')
+            $transactions = Transaction::with('subscription','event', 'user')
                 ->whereHas('event', function($q) use ($eventId){
                     $q->where('id', $eventId);
                 })
@@ -447,11 +450,6 @@ class RoyaltiesController extends Controller
 
             if(!$transaction->subscription->first() && $transaction->user->first() && $transaction->event->first()){
 
-                //$category =  $transaction->event->first()->category->first() ? $transaction->event->first()->category->first()->id : -1;
-
-                // if(in_array(9,$userRole) &&  ($category !== 46)){
-                //     continue;
-                // }
 
                 $amount = $amount + $transaction['amount'];
 
