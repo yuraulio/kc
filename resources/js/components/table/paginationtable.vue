@@ -88,6 +88,7 @@
                     @updatevalue="update_transaction_from"
                     :prop-value="transaction_from"
                     placeholder="Transaction from"
+                    :disabled="loading"
                 ></datepicker-component>
             </div>
 
@@ -96,6 +97,7 @@
                     @updatevalue="update_transaction_to"
                     :prop-value="transaction_to"
                     placeholder="Transaction to"
+                    :disabled="loading"
                 ></datepicker-component>
             </div>
 
@@ -351,8 +353,8 @@
                         </template>
                         <span @click="category_value=null, refreshTable()" v-if="category_value && showFilter('category')" class="badge bg-primary ms-1 cursor-pointer">{{category_value.title}} <i class="fa fa-times" aria-hidden="true"></i></span>
                         <span @click="subcategory_value=null, refreshTable()" v-if="subcategory_value && showFilter('subcategory')" class="badge bg-primary ms-1 cursor-pointer">{{subcategory_value.title}} <i class="fa fa-times" aria-hidden="true"></i></span>
-                        <span @click="transaction_from=null, refreshTable()" v-if="transaction_from" class="badge bg-primary ms-1 cursor-pointer">Transaction From: {{formatdate(transaction_from)}} <i class="fa fa-times" aria-hidden="true"></i></span>
-                        <span @click="transaction_to=null, refreshTable()" v-if="transaction_to" class="badge bg-primary ms-1 cursor-pointer">Transaction To: {{formatdate(transaction_to)}} <i class="fa fa-times" aria-hidden="true"></i></span>
+                        <span @click="!loading ? (transaction_from=null, refreshTable()) : {}" v-if="transaction_from" class="badge bg-primary ms-1 cursor-pointer">Transaction From: {{formatdate(transaction_from)}} <i class="fa fa-times" aria-hidden="true"></i></span>
+                        <span @click="!loading ? (transaction_to=null, refreshTable()) : {}" v-if="transaction_to" class="badge bg-primary ms-1 cursor-pointer">Transaction To: {{formatdate(transaction_to)}} <i class="fa fa-times" aria-hidden="true"></i></span>
                     </div>
                 </div>
 
@@ -573,7 +575,8 @@ export default {
             page_value: null,
             transaction_to: null,
             transaction_from: null,
-            onInitWidget: true
+            onInitWidget: true,
+            disabled:true
 
         };
     },
