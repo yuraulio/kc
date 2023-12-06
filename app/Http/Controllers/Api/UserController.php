@@ -1184,7 +1184,7 @@ class UserController extends Controller
         }else{
             return response()->json([
                 'message' => 'Update profile failed',
-                'data' => $user,
+                'data' => $updated_user,
                 'billing' => $receiptDetails
             ]);
         }

@@ -1188,8 +1188,10 @@ class StudentController extends Controller
                 $videos[$key]['percentMinutes'] = isset($video['stop_time']) ? ($video['percentMinutes'] ?? 0) : 0;
                 $videos[$key]['is_new'] = isset($video['is_new']) ? $video['is_new'] : 0;
 
-                if( (int) $video['seen'] == 1 && (int) $videos[$key]['seen'] == 0){
-                    $videos[$key]['seen'] = (int) $video['seen'];
+                if(isset($video['seen']) && isset($videos[$key]['seen'])){
+                    if( (int) $video['seen'] == 1 && (int) $videos[$key]['seen'] == 0){
+                        $videos[$key]['seen'] = (int) $video['seen'];
+                    }
                 }
 
                 if(isset($video['stop_time']) && isset($video['total_seen'])){
