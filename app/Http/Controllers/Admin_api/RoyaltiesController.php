@@ -210,7 +210,6 @@ class RoyaltiesController extends Controller
 
                         $instructors[$key]['cache_income'] = $instructors[$key]['cache_income'] + $this->calculateIncomeByPercentHours($data['events'][$event->id]);
 
-
                     }
 
                 }
@@ -389,36 +388,53 @@ class RoyaltiesController extends Controller
     }
 
     private function participants($eventId, $request){
+        $userRole = Auth::user()->role->pluck('id')->toArray();
         $amount = 0;
+
+
+        if(count(explode('T',$request->transaction_from)) > 1){
+            $transaction_from = isset($request->transaction_from) ? explode('T',$request->transaction_from)[0] : null;
+       
+            if($transaction_from){
+                $transaction_from = Carbon::createFromFormat('Y-m-d', $transaction_from)->addDay()->format('Y-m-d');
+            }
+        }else{
+            $transaction_from = $request->transaction_from;
+        }
+        
+        if(count(explode('T',$request->transaction_to)) > 1){
+
+            $transaction_to = isset($request->transaction_to) ? explode('T',$request->transaction_to)[0] : null;
+            
+            if($transaction_to){
+                $transaction_to = Carbon::parse($transaction_to,'UTC')->format('Y-m-d');
+            }
+        }else{
+            $transaction_to = $request->transaction_to;
+        }
+
+
 
         //$userRole = Auth::user()->role->pluck('id')->toArray();
         $transactions = [];
-        if(isset($request->transaction_from) && isset($request->transaction_to)){
+        if($transaction_from && $transaction_to){
 
-            $start_date = date_create($request->transaction_from);
-            $start_date = date_format($start_date,"Y-m-d");
-            $from = date($start_date);
-            //dd($from);
-            //$from = date('2023-10-01');
-
-            $end_date = date_create($request->transaction_to);
-            $end_date = date_format($end_date,"Y-m-d");
-            $to = date($end_date);
-            //$to = date('2023-10-31');
-            //dd($to);
+            $from = $transaction_from;
+            $to = $transaction_to;
 
             $transactions = Transaction::with('subscription','event', 'user')
                 ->whereHas('event', function($q) use ($eventId){
                     $q->where('id', $eventId);
                 })
                 ->whereBetween('created_at', [$from,$to])
+                ->where('status', 1)
                 ->get();
 
 
 
-        }else if(isset($request->transaction_from) && !isset($request->transaction_to)){
-            $start_date = date_create($request->transaction_from);
-            $start_date = date_format($start_date,"Y-m-d");
+        }else if($transaction_from && !$transaction_to){
+
+            $start_date = $transaction_from;
 
 
 
@@ -427,13 +443,13 @@ class RoyaltiesController extends Controller
                     $q->where('id', $eventId);
                 })
                 ->whereDate('created_at', '>=',$start_date)
+                ->where('status', 1)
                 ->get();
 
         }
-        else if(!isset($request->transaction_from) && isset($request->transaction_to)){
+        else if(!$transaction_from && $transaction_to){
 
-            $end_date = date_create($request->transaction_to);
-            $end_date = date_format($end_date,"Y-m-d");
+            $end_date = $transaction_to;
 
 
             $transactions = Transaction::with('subscription','event')
@@ -441,6 +457,7 @@ class RoyaltiesController extends Controller
                     $q->where('id', $eventId);
                 })
                 ->whereDate('created_at', '<=',$end_date)
+                ->where('status', 1)
                 ->get();
 
 
@@ -450,12 +467,20 @@ class RoyaltiesController extends Controller
 
             if(!$transaction->subscription->first() && $transaction->user->first() && $transaction->event->first()){
 
-
-                $amount = $amount + $transaction['amount'];
+                if(in_array(9,$userRole) &&  ($category !== 46)){
+                    continue;
+                }
+               
+                $amount1 = $transaction['amount'];
+                
+                $amount = $amount + $amount1;
 
             }
 
         }
+        // if($eventId == 2304){
+        //    dd($amount);
+        // }
 
         return $amount;
     }
@@ -479,9 +504,9 @@ class RoyaltiesController extends Controller
                     $sum1 = 0;
                     $data['events'][$event->id]['total_income'] = $responseDataEvent['incomes'][$event->id];
                     $data['events'][$event->id]['total_event_minutes'] = $responseDataEvent['events'][$event->id];
-                    $data['events'][$event->id]['total_lessons_instructor_minutes'] = 0;
+                    $data['events'][$event->id]['total_lessons_instructor_minutes'] = 0.0;
 
-
+                    ///dd($data['events'][$event->id]['total_event_minutes']);
 
                     //$arr = [];
 
@@ -498,8 +523,8 @@ class RoyaltiesController extends Controller
 
                                 // }
 
-
-                                $sum = $sum + (getSumLessonSecond($lesson)-1);
+                                
+                                $sum = $sum + (getSumLessonSecond($lesson));
                             }
                             $data['events'][$event->id]['total_lessons_instructor_minutes'] = $data['events'][$event->id]['total_lessons_instructor_minutes'] + $sum;
                         }
@@ -515,6 +540,7 @@ class RoyaltiesController extends Controller
                     $data['events'][$event->id]['instructor_percent'] = $data['events'][$event->id]['total_lessons_instructor_minutes'] / $data['events'][$event->id]['total_event_minutes'] * 100;
 
                 }
+
 
             }
         }

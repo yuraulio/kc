@@ -449,6 +449,7 @@ $(document).ready(function() {
         min = picker.startDate.format('MM/DD/YYYY')
         max = picker.endDate.format('MM/DD/YYYY')
 
+
         minDate = min;
         maxDate = max;
         table.draw();
@@ -534,8 +535,8 @@ $(document).ready(function() {
         initCounters()
 
         let sum = 0
-        // let incomeElearningAll = 0.0;
-        // let incomeInclassAll = 0.0;
+        let incomeElearningAll = 0.0;
+        let incomeInclassAll = 0.0;
         //returns 'filtered' or visible rows
         table.rows({filter: 'applied'}).every( function ( rowIdx, tableLoop, rowLoop ) {
             var coupon = this.data()[2];
