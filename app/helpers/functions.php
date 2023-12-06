@@ -21,9 +21,11 @@ use App\Model\Event;
 use App\Model\User;
 use App\Model\CookiesSMS;
 use App\Notifications\AfterSepaPaymentEmail;
+use App\Notifications\ErrorSlack;
 use Illuminate\Support\Facades\Log;
 
 use Bugsnag\BugsnagLaravel\Facades\Bugsnag;
+use Illuminate\Notifications\Messages\SlackMessage;
 
 if(!function_exists('failedPaymentEmail')){
 
@@ -1458,30 +1460,36 @@ if(!function_exists('formatBytes')){
     if (!function_exists('update_dropbox_api')) {
         function update_dropbox_api() : void
         {
+            try{
+                $t = base64_encode(env("DROPBOX_APPKEY").":".env("DROPBOX_SECRET"));
 
-            $t = base64_encode(env("DROPBOX_APPKEY").":".env("DROPBOX_SECRET"));
+                $endpoint = "https://api.dropbox.com/oauth2/token";
+                $client = new \GuzzleHttp\Client(['headers' => ["Content-Type"=> 'application/json',"Authorization" => "Basic " . $t ]]);
 
-            $endpoint = "https://api.dropbox.com/oauth2/token";
-            $client = new \GuzzleHttp\Client(['headers' => ["Content-Type"=> 'application/json',"Authorization" => "Basic " . $t ]]);
-
-            $response = $client->request('POST', $endpoint,
-                [
-                    'form_params' => [
-                        'grant_type' =>  'refresh_token',
-                        'refresh_token' => env("DROPBOX_REFRESH_TOKEN")
-                ]
-            ]);
+                $response = $client->request('POST', $endpoint,
+                    [
+                        'form_params' => [
+                            'grant_type' =>  'refresh_token',
+                            'refresh_token' => env("DROPBOX_REFRESH_TOKEN")
+                    ]
+                ]);
 
 
-            $statusCode = $response->getStatusCode();
-            $content = $response->getBody()->getContents();
-            $accessToken = json_decode($content,true);
+                $statusCode = $response->getStatusCode();
+                $content = $response->getBody()->getContents();
+                $accessToken = json_decode($content,true);
 
-            if(isset($accessToken['access_token']) && $accessToken['access_token']){
-                //$client = new Client();
-                //$client->setAccessToken($accessToken['access_token']);
-                update_env( ['DROPBOX_TOKEN' => $accessToken['access_token']] );
-                //dd($client);
+                if(isset($accessToken['access_token']) && $accessToken['access_token']){
+                    //$client = new Client();
+                    //$client->setAccessToken($accessToken['access_token']);
+                    update_env( ['DROPBOX_TOKEN' => $accessToken['access_token']] );
+                    //dd($client);
+                }
+            }catch(\Exception $e){
+                $user = User::first();
+                if($user){
+                    $user->notify(new ErrorSlack('API Dropbox failed. Sometimes happens. Don\'t worry. Error message: '.$e->getMessage()));
+                }
             }
 
         }

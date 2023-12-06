@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Webhook;
 
 use App\Http\Controllers\Controller;
+use App\Notifications\ErrorSlack;
 use Illuminate\Http\Request;
 use Stripe\Stripe;
 use Laravel\Cashier\Http\Controllers\WebhookController as BaseWebhookController;
@@ -160,74 +161,94 @@ class WebhookController extends BaseWebhookController
 		//Log::info('TRANSACTION');
 		//Log::info(var_export($transaction, true));
 
-		$event = $transaction->event->first();
+        if(!$transaction){
+            // We can't find the refunded transaction in this way.
+            // Let's check if we can search the user.
+            $stripe_id = $payload['data']['object']['customer'];
+            $userWhoWantsRefundCourse = User::where('stripe_id', $stripe_id)->first();
+            if($userWhoWantsRefundCourse){
+                $amount_refunded = $payload['data']['object']['amount_refunded'];
+                $firstname = $userWhoWantsRefundCourse->firstname;
+                $lastname = $userWhoWantsRefundCourse->lastname;
+                $email = $userWhoWantsRefundCourse->email;
+                $amount_refunded_numeric = $amount_refunded/100;
+                $userWhoWantsRefundCourse->notify(new ErrorSlack("Stripe Webhook Error: Elli <@U064KHTQ6LX> check that the user $firstname $lastname ($email) has refund $amount_refunded_numeric and we don't know the course related. Check if we have to disable manually this course for this user."));
+            }else{
+                $user = User::first();
+                $user->notify(new ErrorSlack("Stripe Webhook Error: Elli <@U064KHTQ6LX> there is an user refunding a course. Check the following data: ".json_encode($payload['data'])));
+            }
 
-		foreach($transaction['user'] as $user){
-			$user->events_for_user_list1()->wherePivot('event_id', $event->id)->updateExistingPivot($event->id,[
-				'paid' => 0,
-				'expiration' => date('Y-m-d')
-			], false);
-		}
+        }else{
 
+            $event = $transaction->event->first();
 
-
-
-		$isSubscription = $transaction->isSubscription()->first();
-		//Log::info('Is Subscription');
-		//Log::info(var_export($isSubscription, true));
-
-		// check if subscription
-
-		if($isSubscription != null){
-
-			//Log::info('Transaction has subscription');
-
-			$subscription = $transaction['subscription']->last();
-
-			//Log::info(var_export($subscription, true));
-
-			if($subscription)
-				$this->updateSubscriptionRow($event, $subscription);
-
+            foreach($transaction['user'] as $user){
+                $user->events_for_user_list1()->wherePivot('event_id', $event->id)->updateExistingPivot($event->id,[
+                    'paid' => 0,
+                    'expiration' => date('Y-m-d')
+                ], false);
+            }
 
 
 
 
+            $isSubscription = $transaction->isSubscription()->first();
+            //Log::info('Is Subscription');
+            //Log::info(var_export($isSubscription, true));
 
-		}else{
-			//Log::info('Transaction has NOT subscription');
+            // check if subscription
 
-			foreach($transaction['user'] as $user){
+            if($isSubscription != null){
 
-				//Log::info('paid 0 for a user');
+                //Log::info('Transaction has subscription');
 
-				$user->events_for_user_list1()->wherePivot('event_id', $event->id)->updateExistingPivot($event->id,[
-					'paid' => 0,
-					'expiration' => date('Y-m-d')
-				], false);
-			}
+                $subscription = $transaction['subscription']->last();
 
-			if($transaction->payment_response != null){
-				$transArrayResponse = json_decode($transaction->payment_response, true);
+                //Log::info(var_export($subscription, true));
 
-				if(isset($transArrayResponse['stripe_id'])){
+                if($subscription)
+                    $this->updateSubscriptionRow($event, $subscription);
 
-					$stripe_id = $transArrayResponse['stripe_id'];
 
-					$subscription = Subscription::where('stripe_id', $stripe_id)->first();
-					$this->updateSubscriptionRow($event, $subscription);
-				}else{
 
-					$subscription = $transaction->subscription->last();
-					$this->updateSubscriptionRow($event, $subscription);
-				}
-			}
 
-			//Log::info('Refund SUCCESS');
-		}
 
-		$transaction->ends_at = date('Y-m-d H:i:s');
-		$transaction->save();
+
+            }else{
+                //Log::info('Transaction has NOT subscription');
+
+                foreach($transaction['user'] as $user){
+
+                    //Log::info('paid 0 for a user');
+
+                    $user->events_for_user_list1()->wherePivot('event_id', $event->id)->updateExistingPivot($event->id,[
+                        'paid' => 0,
+                        'expiration' => date('Y-m-d')
+                    ], false);
+                }
+
+                if($transaction->payment_response != null){
+                    $transArrayResponse = json_decode($transaction->payment_response, true);
+
+                    if(isset($transArrayResponse['stripe_id'])){
+
+                        $stripe_id = $transArrayResponse['stripe_id'];
+
+                        $subscription = Subscription::where('stripe_id', $stripe_id)->first();
+                        $this->updateSubscriptionRow($event, $subscription);
+                    }else{
+
+                        $subscription = $transaction->subscription->last();
+                        $this->updateSubscriptionRow($event, $subscription);
+                    }
+                }
+
+                //Log::info('Refund SUCCESS');
+            }
+
+            $transaction->ends_at = date('Y-m-d H:i:s');
+            $transaction->save();
+        }
 
 
 	}
