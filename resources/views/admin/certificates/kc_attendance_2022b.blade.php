@@ -225,7 +225,6 @@
 
 				<tr align="center">
 
-
 					<td class="certi-title-new">
 						<p>{{  htmlspecialchars_decode(strip_tags($certificate['certificate_event_title'],ENT_QUOTES)) }}</p>
 					</td>

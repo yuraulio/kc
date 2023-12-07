@@ -56,7 +56,7 @@ class FreeElearningCertification extends Command
                 }else if(count($event->getExams()) == 0 &&  ( $cert = $event->userHasCertificate($user->id)->first() )){
 
 
-                    $cert->template = 'kc_attendance';
+                    $cert->template = 'new_kc_certificate';
                     $cert->save();
                 }
             }

@@ -7,6 +7,10 @@
         top: 8px;
         right: 10px;
     }
+    .vdp-datepicker input[disabled="disabled"] {
+        opacity: 0.5;
+    }
+
 </style>
 
 <template>
@@ -22,6 +26,7 @@
         calendar-class="calendar-left"
         clear-button-icon="fa fa-times"
         :placeholder="placeholder"
+        :disabled="disabled"
     ></datepicker>
 
 </div>
@@ -39,7 +44,8 @@
             title: String,
             propValue: {},
             required: false,
-            placeholder: String
+            placeholder: String,
+            disabled: false
         },
         data() {
             return {

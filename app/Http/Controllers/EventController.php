@@ -1489,13 +1489,16 @@ class EventController extends Controller
 
         // Certificate
         if(isset($requestData['certificate'])){
+            $data['course_certification_completion'] = $requestData['certificate']['completion_text'];
             $data['course_certification_name_success'] = $requestData['certificate']['success_text'];
-            $data['course_certification_name_failure'] = $requestData['certificate']['failure_text'];
+            //$data['course_certification_name_failure'] = $requestData['certificate']['failure_text'];
             //$data['course_certification_event_title'] = $requestData['certificate']['event_title'];
-            $data['course_certification_type'] = $requestData['certificate']['type'];
+            //$data['course_certification_type'] = $requestData['certificate']['type'];
             $data['course_certification_title'] = $requestData['certificate']['title'];
-            $data['course_certification_attendance_title'] = $requestData['certificate']['attendance_title'] ?? '';
+            $data['course_certification_text'] = $requestData['certificate']['text'];
+            //$data['course_certification_attendance_title'] = $requestData['certificate']['attendance_title'] ?? '';
             $data['has_certificate'] = isset($requestData['certificate']['certification']) && $requestData['certificate']['certification'] == 'on';
+            $data['has_certificate_exam'] = isset($requestData['certificate']['certification_exam']) && $requestData['certificate']['certification_exam'] == 'on';
 
             if(isset($requestData['certificate']['visible'])){
 
@@ -1647,16 +1650,18 @@ class EventController extends Controller
         $infos->course_awards_text = $event_info['course_awards_text'];
         $infos->course_awards_icon = $event_info['course_awards_icon'];
 
+        $infos->course_certification_completion = $event_info['course_certification_completion'];
         $infos->course_certification_name_success = $event_info['course_certification_name_success'];
-        $infos->course_certification_name_failure = $event_info['course_certification_name_failure'];
+        //$infos->course_certification_name_failure = $event_info['course_certification_name_failure'];
         //$infos->course_certification_event_title = $event_info['course_certification_event_title'];
-        $infos->course_certification_type = $event_info['course_certification_type'];
+        //$infos->course_certification_type = $event_info['course_certification_type'];
         $infos->course_certification_title = $event_info['course_certification_title'];
-        $infos->course_certification_attendance_title = $event_info['course_certification_attendance_title'];
+        $infos->course_certification_text = $event_info['course_certification_text'];
+        //$infos->course_certification_attendance_title = $event_info['course_certification_attendance_title'];
         $infos->has_certificate = $event_info['has_certificate'];
+        $infos->has_certificate_exam = $event_info['has_certificate_exam'];
         $infos->course_certification_visible = $event_info['course_certificate_visible'];
         $infos->course_certification_icon = $event_info['course_certificate_icon'];
-
         $infos->course_students_number = $event_info['course_students_number'];
         $infos->course_students_text = $event_info['course_students_text'];
         $infos->course_students_title = $event_info['course_students_title'];
