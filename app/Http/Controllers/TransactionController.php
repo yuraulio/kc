@@ -110,19 +110,18 @@ class TransactionController extends Controller
             $to = date($end_date);
 
             if(!$homepage){
-                $transactions = Transaction::with('user.statisticGroupByEvent','user.events_for_user_list','user.ticket','subscription','event','event.delivery','event.category', 'event.city')->whereBetween('created_at', [$from,$to])->orderBy('created_at','desc')->get();
+                $transactions = Transaction::with('user.statisticGroupByEvent','user.events_for_user_list','user.ticket','subscription','event','event.delivery','event.category', 'event.city')->whereBetween('created_at', [$from,$to])->where('status', 1)->orderBy('created_at','desc')->get();
 
             }else{
-                $transactions = Transaction::with('user.ticket','subscription','event','event.delivery','event.category', 'event.city')->whereBetween('created_at', [$from,$to])->orderBy('created_at','desc')->get();
+                $transactions = Transaction::with('user.ticket','subscription','event','event.delivery','event.category', 'event.city')->whereBetween('created_at', [$from,$to])->where('status', 1)->orderBy('created_at','desc')->get();
 
             }
 
 
         }else{
-            //dd('fsad');
             if(!$homepage){
                 $transactions = Transaction::with('user.statisticGroupByEvent','user.events_for_user_list','user.ticket','subscription','event','event.delivery','event.category', 'event.city')->where('status', 1)->orderBy('created_at','desc')->get();
-
+                
             }else{
                 $transactions = Transaction::with('user.ticket','subscription','event','event.delivery','event.category', 'event.city')->where('status', 1)->orderBy('created_at','desc')->get();
 

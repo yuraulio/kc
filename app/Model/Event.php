@@ -924,7 +924,7 @@ class Event extends Model
             $createDate = strtotime(date('Y-m-d'));
             $cert->create_date = $createDate;
 
-            $cert->template = 'kc_attendance_2022b';
+            $cert->template = 'new_kc_certificate';
             $cert->show_certificate = true;
 
             $cert->save();
@@ -1112,14 +1112,17 @@ class Event extends Model
 
 
             //$data['certificate']['event_title'] = $infos['course_certification_event_title'];
+            $data['certificate']['messages']['completion'] = $infos['course_certification_completion'];
             $data['certificate']['messages']['success'] = $infos['course_certification_name_success'];
-            $data['certificate']['messages']['failure'] = $infos['course_certification_name_failure'];
+            //$data['certificate']['messages']['failure'] = $infos['course_certification_name_failure'];
             $data['certificate']['type'] = $infos['course_certification_type'];
             $data['certificate']['title'] = $infos['course_certification_title'];
-            $data['certificate']['attendance_title'] = $infos['course_certification_attendance_title'];
+            $data['certificate']['text'] = $infos['course_certification_text'];
+            //$data['certificate']['attendance_title'] = $infos['course_certification_attendance_title'];
             $data['certificate']['visible'] = $infos['course_certification_visible'] != null ? json_decode($infos['course_certification_visible'], true) : null;
             $data['certificate']['icon'] = $infos['course_certification_icon'] != null ? json_decode($infos['course_certification_icon'], true) : null;
             $data['certificate']['has_certificate'] = $infos['has_certificate'];
+            $data['certificate']['has_certificate_exam'] = $infos['has_certificate_exam'];
 
             $data['students']['number'] = (int)$infos['course_students_number'];
             $data['students']['text'] = $infos['course_students_text'];
@@ -1156,6 +1159,19 @@ class Event extends Model
         }
 
         return $hasCertificate;
+
+    }
+
+    public function hasCertificateExam(){
+
+        $hasCertificateExam = false;
+        $infos = $this->event_info();
+
+        if(isset($infos['certificate']['has_certificate_exam']) && $infos['certificate']['has_certificate_exam']){
+            $hasCertificateExam = true;
+        }
+
+        return $hasCertificateExam;
 
     }
 

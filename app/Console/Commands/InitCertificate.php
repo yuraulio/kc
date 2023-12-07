@@ -50,20 +50,21 @@ class InitCertificate extends Command
 
 
             if($certificate->event->first()->view_tpl == 'elearning_event' || $certificate->event->first()->view_tpl == 'elearning_free'){
-                if($certificate->success){
-                    $certificate->template ='kc_diploma_2022a'; 
-                }else{
-                    $certificate->template ='kc_attendance_2022a';
-                }
-
+                // if($certificate->success){
+                //     $certificate->template ='kc_diploma_2022a'; 
+                // }else{
+                //     $certificate->template ='kc_attendance_2022a';
+                // }
+                $certificate->template = 'new_kc_certificate';
                 $certificate->save();
             }else if( $certificate->event->first()->paymentMethod->first() && $certificate->event->first()->paymentMethod->first()->id != 1 ){
 
-                if($certificate->success){
-                    $certificate->template ='kc_diploma_2022a'; 
-                }else{
-                    $certificate->template ='kc_attendance_2022a';
-                }
+                // if($certificate->success){
+                //     $certificate->template ='kc_diploma_2022a'; 
+                // }else{
+                //     $certificate->template ='kc_attendance_2022a';
+                // }
+                $certificate->template = 'new_kc_certificate';
                 $certificate->save();
             }
 

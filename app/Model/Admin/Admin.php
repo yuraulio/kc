@@ -121,7 +121,7 @@ class Admin extends Authenticatable implements Auditable
       */
     public function role()
     {
-        return $this->belongsToMany(Role::class, 'role_users');
+        return $this->belongsToMany(Role::class, 'role_users', 'user_id');
     }
 
     public function instructor()

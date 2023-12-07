@@ -108,7 +108,7 @@ class CertificatesToOldEvents extends Command
                     $cert->expiration_date =strtotime(date('Y-m-d', strtotime('+24 months', strtotime($date))));
                     $cert->certification_date = date('F',$createDate) . ' ' . date('Y',$createDate);
                     $cert->credential = get_certifation_crendetial2(date('m',$createDate) . date('y',$createDate));
-                    $cert->template = 'kc_attendance_2022b';
+                    $cert->template = 'new_kc_certificate';
 
                     $cert->save();
     

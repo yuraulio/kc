@@ -1439,14 +1439,118 @@
                                             <input type="text" id="input-certification-title" name="course[{{'certificate'}}][{{'title'}}]" class="form-control" placeholder="{{ __('Course certificate Title') }}" value="{{ old('certificate-title') }}" autofocus>
                                         </div>
                                     </div>
-                                    <div>
-                                        <h4 class="mb-0 title" for="input-hours">{{ __('Courses with exams') }}</h4>
-                                    </div>
                                     <div class="row">
-                                        <div class="col-sm-12 col-md-6 form-group{{ $errors->has('fb_') ? ' has-danger' : '' }}">
-                                            <label class="form-control-label" for="input-hours">{{ __('Certificate Title') }} <br> (course_certification_name_success)</label>
+                                        <div class="col-sm-12 col-md-6 col-lg-4 form-group">
+                                            <label class="form-control-label">(course_certificate_text)</label>
 
-                                            {{--<textarea type="text" name="course[{{'certificate'}}][{{'success_text'}}]" id="input-certificate_title" class="ckeditor form-control" autofocus>{{ old('certificate_title') }}</textarea>--}}
+                                            <!-- anto's editor -->
+                                            <input class="hidden" id="input-certificate_text_hidden" name="course[{{'certificate'}}][{{'text'}}]" value="{{ old('certificate-text') }}"/>
+                                            <?php $data = isset($info['certificate']['text']) && $info['certificate']['text'] != null ? $info['certificate']['text'] : '' ?>
+                                            @include('event.editor.editor', ['keyinput' => "input-certificate_text1", 'data'=> "$data", 'inputname' => "'course[certificate][text]'" ])
+                                            <!-- anto's editor -->
+
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="form-group col-12 accordion">
+                                            <div class="card">
+                                                    <div class="card-header" id="headingEight" data-toggle="collapse" data-target="#collapseEight" aria-expanded="true" aria-controls="collapseEight">
+                                                        <h5 class="mb-0">Visible on:</h5>
+                                                    </div>
+                                                    <div id="collapseEight" class="collapse" aria-labelledby="headingEight" data-parent="#accordionExample">
+                                                        <div class="card-body">
+                                                            <div class="row">
+                                                                <div class="col-sm-12 col-md-6 col-lg-2">
+
+                                                                    <div class="custom-control custom-checkbox mb-3">
+                                                                        <input class="custom-control-input" name="course[{{'certificate'}}][{{'visible'}}][{{'landing'}}]" id="input-certificate-landing" type="checkbox">
+                                                                        <label class="custom-control-label" for="input-certificate-landing">Course landing page (summary)</label>
+                                                                    </div>
+
+                                                                </div>
+
+                                                                <div class="col-sm-12 col-md-6 col-lg-2">
+
+                                                                    <div class="custom-control custom-checkbox mb-3">
+                                                                        <input class="custom-control-input" name="course[{{'certificate'}}][{{'visible'}}][{{'home'}}]" id="input-certificate-home" type="checkbox">
+                                                                        <label class="custom-control-label" for="input-certificate-home">Course box in home page</label>
+                                                                    </div>
+
+                                                                </div>
+
+                                                                <div class="col-sm-12 col-md-6 col-lg-2">
+
+                                                                    <div class="custom-control custom-checkbox mb-3">
+                                                                        <input class="custom-control-input" name="course[{{'certificate'}}][{{'visible'}}][{{'list'}}]" id="input-certificate-list" type="checkbox">
+                                                                        <label class="custom-control-label" for="input-certificate-list">Course box in list page</label>
+                                                                    </div>
+
+                                                                </div>
+
+                                                                <div class="col-sm-12 col-md-6 col-lg-2">
+
+                                                                    <div class="custom-control custom-checkbox mb-3">
+                                                                        <input class="custom-control-input" name="course[{{'certificate'}}][{{'visible'}}][{{'invoice'}}]" id="input-certificate-invoice" type="checkbox">
+                                                                        <label class="custom-control-label" for="input-certificate-invoice">Invoice description</label>
+                                                                    </div>
+
+                                                                </div>
+
+                                                                <div class="col-sm-12 col-md-6 col-lg-2">
+
+                                                                    <div class="custom-control custom-checkbox mb-3">
+                                                                        <input class="custom-control-input" name="course[{{'certificate'}}][{{'visible'}}][{{'emails'}}]" id="input-certificate-emails" type="checkbox">
+                                                                        <label class="custom-control-label" for="input-certificate-emails">Automated emails</label>
+                                                                    </div>
+
+                                                                </div>
+
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    
+                                    
+                                        
+                                </div>
+
+                                <div class="form-group col-12">
+                                    <span class="toggle-btn-inline-text">Does this course offers a certification after exams? </span>
+                                    <label class="custom-toggle enroll-toggle visible">
+                                        <input name="course[{{'certificate'}}][{{'certification_exam'}}]" id="certification-after-exam-toggle" type="checkbox">
+                                        <span class="custom-toggle-slider rounded-circle" data-label-off="No" data-label-on="Yes"></span>
+                                    </label>
+                                </div>
+
+                                <div class="col-12">
+                                    <h4 id="has_exam_editors_text" class="form-control-label" for="input-hours">{{ __('Certification the participants get in PDF') }}</h4>
+                                </div>
+
+                                <div class="form-group col-12">
+                                    
+                                    <div class="row">
+                                        <div class="col-sm-12 col-md-6 completion-text form-group{{ $errors->has('fb_') ? ' has-danger' : '' }}">
+                                            <label class="form-control-label" for="input-hours">(course_certification_completion)</label>
+
+                                            <!-- anto's editor -->
+                                            <input class="hidden" id="input-certificate_completion_hidden" name="course[{{'certificate'}}][{{'completion_text'}}]" value="{{ old('certificate_title') }}"/>
+                                            <?php $data = isset($info['certificate']['messages']['completion']) && $info['certificate']['messages']['completion'] != null ? $info['certificate']['messages']['completion'] : '' ?>
+                                            @include('event.editor.editor', ['keyinput' => "input-certificate_completion", 'data'=> "$data", 'inputname' => "'course[certificate][completion_text]'" ])
+                                            <!-- anto's editor -->
+
+                                            @include('alerts.feedback', ['field' => 'certificate_completion'])
+
+                                        </div>
+
+                                        <div class="col-sm-12 col-md-6 success-text form-group{{ $errors->has('fb_') ? ' has-danger' : '' }} d-none">
+                                            <label class="form-control-label" for="input-hours">(course_certification_name_success)</label>
+
                                             <!-- anto's editor -->
                                             <input class="hidden" id="input-certificate_title_hidden" name="course[{{'certificate'}}][{{'success_text'}}]" value="{{ old('certificate_title') }}"/>
                                             <?php $data =  '' ?>
@@ -1457,111 +1561,9 @@
 
                                         </div>
 
-                                        <div class="col-sm-12 col-md-6 form-group">
-                                            <label class="form-control-label" for="input-hours">{{ __('Title Of Certification (in case of exams failure)') }} <br> (course_certification_name_failure)</label>
 
-                                            {{--<textarea type="text" id="input-certificate_text_failure_hidden" name="course[{{'certificate'}}][{{'failure_text'}}]" id="input-certificate_text_failure" class="form-control ckeditor"  autofocus>{{old('certificate_failure')}}</textarea>--}}
-
-                                            <!-- anto's editor -->
-                                            <input class="hidden" name="course[{{'certificate'}}][{{'failure_text'}}]" value="{{ old('certificate_failure') }}"/>
-                                            <?php $data =  '' ?>
-                                            @include('event.editor.editor', ['keyinput' => "input-certificate_text_failure", 'data'=> "$data", 'inputname' => "'course[certificate][failure_text]'" ])
-                                            <!-- anto's editor -->
-                                        </div>
                                     </div>
-                                    
-                                    <div class="row">
 
-                                        <div class="col-sm-12 col-md-6 form-group">
-                                            <h4 class="mb-0 title" for="input-hours">{{ __('Courses without exams') }}</h4>
-                                            <label class="form-control-label" for="input-hours">{{ __('Certificate Type') }} (course_certification_type)</label>
-                                            {{--<input type="text" name="course[{{'certificate'}}][{{'type'}}]" id="input-certificate_type" class="form-control" placeholder="{{ __('alphanumeric text ') }}" value="{{old('certificate_type')}}" autofocus/>--}}
-
-                                            <!-- anto's editor -->
-                                            <input class="hidden" id="input-certificate" name="course[{{'certificate'}}][{{'type'}}]" value="{{old('certificate_type')}}"/>
-                                            <?php $data = isset($info['certificate']['type']) && $info['certificate']['type'] != null ? $info['certificate']['type'] : '' ?>
-                                            @include('event.editor.editor', ['toolbar' => 'insertfile image media link anchor codesample','plugins' => 'link','keyinput' => "input-certificate_type", 'data'=> "$data", 'inputname' => "'course[certificate][type]'" ])
-                                            <!-- anto's editor -->
-
-                                        </div>
-                                        <div class="col-sm-12 col-md-6 form-group">
-                                            <h4 class="mb-0 title" for="input-hours">{{ __('Certificate Attendance Title') }}</h4>
-                                            <label class="form-control-label" for="input-hours">{{ __('(course_certification_attendance_title)') }} </label>
-                                            {{--<input type="text" name="course[{{'certificate'}}][{{'type'}}]" id="input-certificate_type" class="form-control" placeholder="{{ __('alphanumeric text ') }}" value="{{old('certificate_type')}}" autofocus/>--}}
-
-                                            <!-- anto's editor -->
-                                            <input class="hidden" id="input-certificate_attendance_title" name="course[{{'certificate'}}][{{'attendance_title'}}]" value="{{old('certificate_attendance_title')}}"/>
-                                            <?php $data = isset($info['certificate']['attendance_title']) && $info['certificate']['attendance_title'] != null ? $info['certificate']['attendance_title'] : '' ?>
-                                            @include('event.editor.editor', ['toolbar' => 'insertfile image media link anchor codesample','plugins' => 'link','keyinput' => "input-certificate_attendance_title", 'data'=> "$data", 'inputname' => "'course[certificate][attendance_title]'" ])
-                                            <!-- anto's editor -->
-
-                                        </div>
-                                    </div>
-                                        <div class="row">
-
-
-
-                                            <div class="form-group col-12 accordion">
-                                                <div class="card">
-                                                        <div class="card-header" id="headingEight" data-toggle="collapse" data-target="#collapseEight" aria-expanded="true" aria-controls="collapseEight">
-                                                            <h5 class="mb-0">Visible on:</h5>
-                                                        </div>
-                                                        <div id="collapseEight" class="collapse" aria-labelledby="headingEight" data-parent="#accordionExample">
-                                                            <div class="card-body">
-                                                                <div class="row">
-                                                                    <div class="col-sm-12 col-md-6 col-lg-2">
-
-                                                                        <div class="custom-control custom-checkbox mb-3">
-                                                                            <input class="custom-control-input" name="course[{{'certificate'}}][{{'visible'}}][{{'landing'}}]" id="input-certificate-landing" type="checkbox">
-                                                                            <label class="custom-control-label" for="input-certificate-landing">Course landing page (summary)</label>
-                                                                        </div>
-
-                                                                    </div>
-
-                                                                    <div class="col-sm-12 col-md-6 col-lg-2">
-
-                                                                        <div class="custom-control custom-checkbox mb-3">
-                                                                            <input class="custom-control-input" name="course[{{'certificate'}}][{{'visible'}}][{{'home'}}]" id="input-certificate-home" type="checkbox">
-                                                                            <label class="custom-control-label" for="input-certificate-home">Course box in home page</label>
-                                                                        </div>
-
-                                                                    </div>
-
-                                                                    <div class="col-sm-12 col-md-6 col-lg-2">
-
-                                                                        <div class="custom-control custom-checkbox mb-3">
-                                                                            <input class="custom-control-input" name="course[{{'certificate'}}][{{'visible'}}][{{'list'}}]" id="input-certificate-list" type="checkbox">
-                                                                            <label class="custom-control-label" for="input-certificate-list">Course box in list page</label>
-                                                                        </div>
-
-                                                                    </div>
-
-                                                                    <div class="col-sm-12 col-md-6 col-lg-2">
-
-                                                                        <div class="custom-control custom-checkbox mb-3">
-                                                                            <input class="custom-control-input" name="course[{{'certificate'}}][{{'visible'}}][{{'invoice'}}]" id="input-certificate-invoice" type="checkbox">
-                                                                            <label class="custom-control-label" for="input-certificate-invoice">Invoice description</label>
-                                                                        </div>
-
-                                                                    </div>
-
-                                                                    <div class="col-sm-12 col-md-6 col-lg-2">
-
-                                                                        <div class="custom-control custom-checkbox mb-3">
-                                                                            <input class="custom-control-input" name="course[{{'certificate'}}][{{'visible'}}][{{'emails'}}]" id="input-certificate-emails" type="checkbox">
-                                                                            <label class="custom-control-label" for="input-certificate-emails">Automated emails</label>
-                                                                        </div>
-
-                                                                    </div>
-
-                                                                </div>
-
-                                                            </div>
-                                                        </div>
-                                                </div>
-                                            </div>
-
-                                        </div>
                                 </div>
 
 
@@ -2277,9 +2279,37 @@
             $('#input-certificate_type').val('')
 
             tinymce.get("input-certificate_title").setContent("")
-            tinymce.get("input-certificate_text_failure").setContent("")
             $("#input-certificate_title_hidden").val("")
             $("#input-certificate_text_failure_hidden").val("")
+
+        }
+
+    });
+    $('#certification-after-exam-toggle').change(function() {
+        let status1 = $(this).prop('checked');
+
+
+        if(status1){
+            let elem = document.getElementsByClassName('tox-editor-header');
+
+            elem.forEach(function(element, index){
+                elem[index].style.removeProperty('position')
+                elem[index].style.removeProperty('left')
+                elem[index].style.removeProperty('top')
+                elem[index].style.removeProperty('width')
+            })
+
+            $('.success-text').removeClass('d-none')
+            $('#has_exam_editors_text').text('Certification the participants gets in PDF')
+            
+
+            
+        }else{
+            $('#has_exam_editors_text').text('Certification the participants get in PDF')
+            $('.success-text').addClass('d-none')
+
+            tinymce.get("input-certificate_title").setContent("")
+            $("#input-certificate_title_hidden").val("")
 
         }
 
