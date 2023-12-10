@@ -1403,7 +1403,7 @@ class StudentController extends Controller
         $data = $request->all();
         $dropboxPath = $data['dir'];
         $fileName = $data['fname'];
-        $accessToken = config('filesystem.disks.dropbox.accessToken.DROPBOX_TOKEN');
+        $accessToken = config('filesystems.disks.dropbox.accessToken');
         $client = new \Spatie\Dropbox\Client($accessToken);
         try{
             return $client->getTemporaryLink($dropboxPath);
