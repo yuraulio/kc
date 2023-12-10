@@ -31,6 +31,7 @@ use App\Notifications\ExamActive;
 use Illuminate\Support\Str;
 use App\Jobs\UploadImageConvertWebp;
 use App\Http\Controllers\Theme\CertificateController;
+use App\Notifications\ErrorSlack;
 use App\Notifications\SendTopicAutomateMail;
 
 class StudentController extends Controller
@@ -1402,9 +1403,16 @@ class StudentController extends Controller
         $data = $request->all();
         $dropboxPath = $data['dir'];
         $fileName = $data['fname'];
-        $accessToken = env('DROPBOX_TOKEN');
+        $accessToken = config('filesystem.disks.dropbox.accessToken.DROPBOX_TOKEN');
         $client = new \Spatie\Dropbox\Client($accessToken);
-        return $client->getTemporaryLink($dropboxPath);
+        try{
+            return $client->getTemporaryLink($dropboxPath);
+        }catch(\Exception $e){
+            $user = User::first();
+            if($user){
+                $user->notify(new ErrorSlack('API Dropbox failed. Unable to get route '.$dropboxPath.'. Error message: '.$e->getMessage()));
+            }
+        }
     }
 
     public function createPassIndex($slug){
