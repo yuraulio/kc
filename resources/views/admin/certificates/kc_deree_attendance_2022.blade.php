@@ -273,7 +273,7 @@
 				<tr align="center">
 
 					<td  class="info-title award">
-						<p > and is awarded this  </p><p class="bold">{{$certificate['certification_title']}}.</p>
+						<p > and is awarded this  </p><p class="bold">{{mb_strtoupper($certificate['certification_title'])}}.</p>
 					</td>
 
             	</tr>

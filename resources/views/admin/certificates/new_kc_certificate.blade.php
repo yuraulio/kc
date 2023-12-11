@@ -195,7 +195,7 @@
             	   <td class="certi-title-new" align="center">
 						<p class="certi-title">
 
-							{!! strtoupper($certificate['certification_title']) !!}
+							{!! mb_strtoupper($certificate['certification_title']) !!}
 
 			  			</p>
             	   </td>

@@ -238,7 +238,7 @@
 				<tr align="center">
 
 					<td  class="info-title award">
-						<p > and is awarded this  </p><p class="bold">{{  htmlspecialchars_decode(strip_tags($certificate['certification_title'],ENT_QUOTES))}}.</p>
+						<p > and is awarded this  </p><p class="bold">{{  mb_strtoupper(htmlspecialchars_decode(strip_tags($certificate['certification_title'],ENT_QUOTES)))}}.</p>
 					</td>
 
             	</tr>

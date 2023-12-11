@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">	
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <style>
 
 @page { margin: 0px; }
@@ -10,7 +10,7 @@
     max-width: 200px;
 }
 
-h1, h2, h3, p { 
+h1, h2, h3, p {
     font-family: 'foco';
 }
 
@@ -50,7 +50,7 @@ h2,h3{ font-size: 20px; padding: 0; font-weight:normal}
 
 .mar-top-50{
     margin-top: 50px;
-    
+
 }
 
 .mar-top-150{
@@ -81,7 +81,7 @@ h2,h3{ font-size: 20px; padding: 0; font-weight:normal}
 
 .signature-img{
     max-width:147px;
-    
+
 }
 
 .knowcrunch-signature-left{
@@ -107,7 +107,7 @@ h2,h3{ font-size: 20px; padding: 0; font-weight:normal}
 .hat-icon-mar{
 
     top:195px;
-    left:342px;   
+    left:342px;
 }
 
 .name-signature{
@@ -137,7 +137,7 @@ h2,h3{ font-size: 20px; padding: 0; font-weight:normal}
     text-align: center;
     color: #666666;
     font-size:14px;
-    
+
 }
 
 .mar-auto{
@@ -173,12 +173,12 @@ h2,h3{ font-size: 20px; padding: 0; font-weight:normal}
         </div>
 
         <div class="text-center user">
-        
+
             <h2 class="name"> {{$certificate['firstname']}} {{$certificate['lastname']}} </h2>
 
-                
+
             <p class="award">
-                has attended our course {!!$certificate['certification_title']!!} and is awarded this
+                has attended our course {!!mb_strtoupper($certificate['certification_title'])!!} and is awarded this
             </p>
 
 
@@ -193,9 +193,9 @@ h2,h3{ font-size: 20px; padding: 0; font-weight:normal}
                 <div class="border-bottom"></div>
                 <p class="name-signature"> APOSTOLIS AIVALIS</p>
                 <p class="title-signature"> Head of Curriculum, Knowcrunch</p>
-                
+
             </div>
-            
+
             <div class="col-4 hat-icon-mar">
                 <img class="hat-icon" src="{{asset('theme/assets/images/certificates2021/icon.png')}}">
             </div>
@@ -207,7 +207,7 @@ h2,h3{ font-size: 20px; padding: 0; font-weight:normal}
                 <p class="title-signature1"> and Professional Education </p>
             </div>
         </div>
-    
+
         <div class="footer">
         <p> Issue date: {{$certificate['certification_date']}} |   Credential #: {{$certificate['credential']}} </p>
         </div>
