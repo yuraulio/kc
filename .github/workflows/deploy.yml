@@ -1,0 +1,46 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.2
+
+      - name: composer install --ignore-platform-reqs
+        run: composer install --ignore-platform-reqs
+
+      - name: php artisan migrate --force
+        run: php artisan migrate --force
+
+      - name: Set up Node 15v
+        uses: actions/setup-node@v4
+        with:
+          node-version: 15
+
+      - name: Build Admin front-end
+        run: |
+          cd resources/admin
+          npm ci
+          npm run dev
+
+      - name: Set up Node 14v
+        uses: actions/setup-node@v4
+        with:
+          node-version: 14
+
+      - name: Build Site front-end
+        run: |
+          npm install --unsafe-perm=true --allow-root
+          npm run dev
+
