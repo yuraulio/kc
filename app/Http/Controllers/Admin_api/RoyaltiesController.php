@@ -388,24 +388,27 @@ class RoyaltiesController extends Controller
     }
 
     private function participants($eventId, $request){
-        $userRole = Auth::user()->role->pluck('id')->toArray();
+        if(isset(Auth::user()->role))
+            $userRole = Auth::user()->role->pluck('id')->toArray();
+        else
+            $userRole = -1;
         $amount = 0;
 
 
         if(count(explode('T',$request->transaction_from)) > 1){
             $transaction_from = isset($request->transaction_from) ? explode('T',$request->transaction_from)[0] : null;
-       
+
             if($transaction_from){
                 $transaction_from = Carbon::createFromFormat('Y-m-d', $transaction_from)->addDay()->format('Y-m-d');
             }
         }else{
             $transaction_from = $request->transaction_from;
         }
-        
+
         if(count(explode('T',$request->transaction_to)) > 1){
 
             $transaction_to = isset($request->transaction_to) ? explode('T',$request->transaction_to)[0] : null;
-            
+
             if($transaction_to){
                 $transaction_to = Carbon::parse($transaction_to,'UTC')->format('Y-m-d');
             }
@@ -470,9 +473,9 @@ class RoyaltiesController extends Controller
                 if(in_array(9,$userRole) &&  ($category !== 46)){
                     continue;
                 }
-               
+
                 $amount1 = $transaction['amount'];
-                
+
                 $amount = $amount + $amount1;
 
             }
@@ -523,7 +526,7 @@ class RoyaltiesController extends Controller
 
                                 // }
 
-                                
+
                                 $sum = $sum + (getSumLessonSecond($lesson));
                             }
                             $data['events'][$event->id]['total_lessons_instructor_minutes'] = $data['events'][$event->id]['total_lessons_instructor_minutes'] + $sum;
