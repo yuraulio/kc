@@ -225,7 +225,7 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 type: 'put',
-                url: '/admin/section/' + $sectionId,
+                url: '/admin1/section/' + $sectionId,
                 data: {'section':$('#edit-section').val(),'title':$('#edit-title-section').val(),'description':$('#edit-description-section').val()},
                 success: function (data) {
 
@@ -261,7 +261,7 @@
 
             title = $("#section-title-"+id).text();
             description = $("#section-desc-"+id).text();
-        
+
             modal.find("#sectionModalLabel").val(title)
 
         modal.find("#edit-section").val(section);

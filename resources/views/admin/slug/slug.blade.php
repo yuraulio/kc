@@ -32,7 +32,7 @@
 
    			$.ajax({
    			    type: 'GET',
-   			    url: '/admin/slug/create/' + $('#input-title').val(),
+   			    url: '/admin1/slug/create/' + $('#input-title').val(),
    			    success: function (data) {
    					$("#input-slug").val(data.slug)
    			    },
@@ -44,7 +44,7 @@
    		}else if($("#input-name").val()){
             $.ajax({
    			    type: 'GET',
-   			    url: '/admin/slug/create/' + $('#input-name').val(),
+   			    url: '/admin1/slug/create/' + $('#input-name').val(),
    			    success: function (data) {
    					$("#input-slug").val(data.slug)
    			    },
@@ -80,7 +80,7 @@
                   'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                },
    			    type: 'post',
-   			    url: '/admin/slug/update/' + "{{$slug->id}}",
+   			    url: '/admin1/slug/update/' + "{{$slug->id}}",
                 data: {'slug':$('#input-slug').val()},
    			    success: function (data) {
    					$("#input-slug").val(data.slug);

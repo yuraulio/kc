@@ -30,9 +30,9 @@ else {
 <?php if(isset($trans->status_history[0]['pay_seats_data']['student_type_id'])){
 
 	$stId = $trans->status_history[0]['pay_seats_data']['student_type_id'][0];
-	
+
 }else{
-	
+
 	$stId = null;
 }
 ?>
@@ -163,7 +163,7 @@ else {
                                                                               </div>
                                                                            </td>
                                                                         </tr>
-                                                                       
+
                                                                         <tr class="nl2go-responsive-hide">
                                                                            <td height="15" style="font-size: 15px; line-height: 15px;">­</td>
                                                                         </tr>
@@ -304,16 +304,16 @@ else {
                                                                         <tr>
                                                                            <td align="left" valign="top" class="r15-i nl2go-default-textstyle" style="color: #3b3f44; font-family: arial,helvetica,sans-serif; font-size: 16px; line-height: 1.5; text-align: left;">
                                                                               <div><strong>TICKET TYPE:</strong>  <br /><br />
-                                                                                 <?php 
+                                                                                 <?php
                                                                                     $ticketType  = $tickettype;
                                                                                     if($trans->total_amount == 0){
-                                                                                       $tickettype .=  ', Free'; 
-                                                                                    }else { 
+                                                                                       $tickettype .=  ', Free';
+                                                                                    }else {
                                                                                        $tickettype .= ', ' . round($trans->total_amount,2);
-                                                                                       
+
                                                                                     }
 
-                                                                                    if($stId){ 
+                                                                                    if($stId){
                                                                                        $tickettype .= ', ' . $stId ;
                                                                                     }
                                                                                  ?>
@@ -379,11 +379,11 @@ else {
                                                                         @if($user['id'])
                                                                         <tr>
                                                                            <td height="18" align="center" valign="top" class="r17-i nl2go-default-textstyle" style="color: #3b3f44; font-family: arial,helvetica,sans-serif; font-size: 16px; line-height: 1.5;">
-                                                                     
-                                                                              <a href="http://www.knowcrunch.com/admin/user/{{$user['id']}}/edit" class="r18-r default-button" target="_blank" data-btn="1" style="line-height: 1.15; text-decoration: none; border-style: solid; display: inline-block; -webkit-text-size-adjust: none; mso-hide: all; background-color: #c8d151; border-color: #c8d151; border-radius: 4px; border-width: 0px; color: #ffffff; font-family: arial,helvetica,sans-serif; font-size: 16px; height: 18px; padding-bottom: 12px; padding-left: 5px; padding-right: 5px; padding-top: 12px; width: 280px;">
+
+                                                                              <a href="http://www.knowcrunch.com/admin1/user/{{$user['id']}}/edit" class="r18-r default-button" target="_blank" data-btn="1" style="line-height: 1.15; text-decoration: none; border-style: solid; display: inline-block; -webkit-text-size-adjust: none; mso-hide: all; background-color: #c8d151; border-color: #c8d151; border-radius: 4px; border-width: 0px; color: #ffffff; font-family: arial,helvetica,sans-serif; font-size: 16px; height: 18px; padding-bottom: 12px; padding-left: 5px; padding-right: 5px; padding-top: 12px; width: 280px;">
                                                                                  <p style="margin: 0px;"><span style="color: #3b3f44;"><strong>Check this customer</strong></span></p>
                                                                               </a>
-                                                                          
+
                                                                            </td>
                                                                         </tr>
                                                                         @endif
@@ -417,4 +417,3 @@ else {
 </tr>
 
 @stop
-        

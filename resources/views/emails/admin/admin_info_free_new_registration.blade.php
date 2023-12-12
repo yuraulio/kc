@@ -66,7 +66,7 @@ else {
 
 <strong>TICKET TYPE:</strong> {{ $tickettype }} <br /><br />
 
-<a target="_blank" href="http://www.knowcrunch.com/admin/transaction/edit/{{ $trans->id }}">Check the registration details online</a>.<br /><br />
+<a target="_blank" href="http://www.knowcrunch.com/admin1/transaction/edit/{{ $trans->id }}">Check the registration details online</a>.<br /><br />
 </p>
 
 @include('emails.partials.the_team')

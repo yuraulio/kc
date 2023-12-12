@@ -55,7 +55,7 @@
                 </div>
 
             </div>
-            
+
         </div>
     </div>
 </div>
@@ -66,29 +66,29 @@
 <script>
 
     $(document).on('click','.absences',function(){
-       
 
-        let url =`/admin/user/absences/${$(this).data('user_id')}/${$(this).data('event_id')}`
 
-        
+        let url =`/admin1/user/absences/${$(this).data('user_id')}/${$(this).data('event_id')}`
+
+
         $.ajax({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             type: 'get',
             url: url,
-            
+
             success: function (data) {
 
                 if(data.success == true){
                     createAbsenceTable(data)
                 }else{
-                    
+
                 }
 
             }
         });
-        
+
     });
 
 
@@ -102,7 +102,7 @@
         $("#absence-percent").text(0 + '%');
         $(`.${absClass}`).removeClass(absClass);
         absClass = '';
-        
+
         var t = $('#absences-table').DataTable();
         t.clear();
         t.destroy();
@@ -120,10 +120,10 @@
         let id = $(this).data('absence-id');
 
         totalHours = ($(`#absence-input-${id}`).val()).split('/')[1];
-        $(`#absence-input-${id}`).attr("readonly", false); 
+        $(`#absence-input-${id}`).attr("readonly", false);
         $(`#absence-input-${id}`).addClass('absence-border');
-        $(`#absence-update-${id}`).removeClass("hidden"); 
-        
+        $(`#absence-update-${id}`).removeClass("hidden");
+
     })
 
     $(document).on('click','.absence-update',function(){
@@ -139,7 +139,7 @@
             return;
         }
 
-    
+
         $.ajax({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -151,28 +151,28 @@
 
                 if(data.success == true){
 
-                    $(`#absence-input-${id}`).attr("readonly", true); 
+                    $(`#absence-input-${id}`).attr("readonly", true);
                     $(`#absence-input-${id}`).removeClass('absence-border');
                     $(`#absence-update-${id}`).addClass('hidden');
-      
+
                     createAbsenceTable(data)
 
-                    
+
                 }else{
-                    
+
                 }
 
             }
         });
 
-        
+
     })
 
     function createAbsenceTable(data){
 
         absClass = data.data.class;
 
-        let tableHtml = 
+        let tableHtml =
                         `<table class="table align-items-center table-flush"  id="absences-table">
                             <thead class="thead-light">
                                 <tr>
@@ -196,7 +196,7 @@
                     $("#absence-hours").text((data.data.user_minutes_absences/60));
                     $("#absence-percent").text(data.data.user_absences_percent.toFixed(2) + '%');
                     $("#absence-percent").addClass(absClass);
-                    
+
                     $('#absences-table').DataTable( {
                         destroy: true,
                         dom: 'lrtip',
@@ -209,7 +209,7 @@
                                 previous: '&#171;' // or '←'
                             }
                         },
-                        
+
                     });
 
                     var t = $('#absences-table').DataTable();
@@ -222,7 +222,7 @@
                         totalUserHours = value1['user_minutes'] / 60;
 
                         t.row.add([
-                           
+
                             key1,
                             totalUserHours > 0 ? `<i class="ni ni-check-bold"></i>` : '',
                             `<input id="absence-input-${value1['id']}" value=${totalUserHours + '/' +  totalEventHours} readonly>`,
@@ -230,10 +230,10 @@
                             `<button class="btn btn-info btn-sm absence-edit" data-absence-id=${value1['id']} > Edit </button>`,
                             `<button id="absence-update-${value1['id']}" class="btn btn-info btn-sm absence-update hidden" data-absence-id=${value1['id']} data-event-id=${data.data.event_id}> Update </button>`,
                         ]).draw()
-                        
+
                     })
     }
-    
+
 </script>
 
 @endpush

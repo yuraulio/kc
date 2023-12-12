@@ -15,9 +15,9 @@
             <li class="breadcrumb-item"><a href="{{ route('events.index') }}">{{ __('Events Management') }}</a></li>
             <li class="breadcrumb-item active" aria-current="page">{{ __('Edit Event') }}</li>
 
-            
-            
-    
+
+
+
     @endcomponent
 
         @include('event.layouts.event_card')
@@ -177,7 +177,7 @@
                                 <div class="preview_event_btn">@include('admin.preview.preview',['slug' => isset($slug) ? $slug : null])</div>
                                 <div class="save_event_btn" >@include('admin.download.schedule',['event' => isset($event) ? $event : null])</div>
                             </div>--}}
-                            
+
                             <form id="event_edit_form" method="POST" action="{{ route('events.update', $event) }}" autocomplete="off"
                                         enctype="multipart/form-data">
                                                 @csrf
@@ -1717,8 +1717,8 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            
-                                            
+
+
 
                                             @endif
                                         </div>
@@ -2491,7 +2491,7 @@
                                                     <label class="form-control-label" for="input-method">{{ __('Export Certificates') }}</label>
                                                     <div class="form-group">
 
-                                                        <a href="/admin/events/export-certificates/{{$event->id}}"  class="btn btn-outline-primary"> {{ __('Export Certificates') }} </a>
+                                                        <a href="/admin1/events/export-certificates/{{$event->id}}"  class="btn btn-outline-primary"> {{ __('Export Certificates') }} </a>
 
                                                     </div>
                                                 </div>
@@ -3610,7 +3610,7 @@
                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
    			        type: 'GET',
-   			        url: '/admin/events/totalHours/' + "{{$event->id}}",
+   			        url: '/admin1/events/totalHours/' + "{{$event->id}}",
    			        success: function (data) {
 
                         if(data.success){
@@ -3656,7 +3656,7 @@
                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
    			        type: 'POST',
-   			        url: '/admin/events/remove-method/' + "{{$event->id}}",
+   			        url: '/admin1/events/remove-method/' + "{{$event->id}}",
                     data: {'payment_method': $(this).val()},
    			        success: function (data) {
 
@@ -3744,7 +3744,7 @@
                 'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
                },
                Accept: 'application/json',
-                url: "/admin/lesson/save_instructor",
+                url: "/admin1/lesson/save_instructor",
                 data:data,
                 success: function(data) {
                     data = JSON.parse(data)
@@ -3814,7 +3814,7 @@
                 'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
                },
                Accept: 'application/json',
-                url: "/admin/lesson/remove_lesson",
+                url: "/admin1/lesson/remove_lesson",
                 data:data,
                 success: function(data){
                     data = JSON.parse(data)
@@ -3851,7 +3851,7 @@
                 'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
                },
                Accept: 'application/json',
-                url: "/admin/lesson/edit_instructor",
+                url: "/admin1/lesson/edit_instructor",
                 data:data,
                 success: function(data) {
                     date = ''
@@ -4004,7 +4004,7 @@
                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
    			        type: 'POST',
-   			        url: '/admin/events/assing-method/' + "{{$event->id}}",
+   			        url: '/admin1/events/assing-method/' + "{{$event->id}}",
                     data: {'payment_method': $(this).val()},
    			        success: function (data) {
 
@@ -4145,7 +4145,7 @@
             'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
             },
             Accept: 'application/json',
-            url: "/admin/events/assing-coupon/" + event_id +"/" + coupon_id,
+            url: "/admin1/events/assing-coupon/" + event_id +"/" + coupon_id,
             data:data,
             success: function(data) {
 
@@ -4164,7 +4164,7 @@
             'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
             },
             Accept: 'application/json',
-            url: "/admin/enroll-to-elearning/" + "{{$event->id}}" +"/" + enroll,
+            url: "/admin1/enroll-to-elearning/" + "{{$event->id}}" +"/" + enroll,
             success: function(data) {
 
             }
@@ -4183,7 +4183,7 @@
            'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
            },
            Accept: 'application/json',
-           url: "/admin/change-index/" + "{{$event->id}}" +"/" + index,
+           url: "/admin1/change-index/" + "{{$event->id}}" +"/" + index,
            success: function(data) {
 
            }
@@ -4201,7 +4201,7 @@
            'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
            },
            Accept: 'application/json',
-           url: "/admin/change-feed/" + "{{$event->id}}" +"/" + feed,
+           url: "/admin1/change-feed/" + "{{$event->id}}" +"/" + feed,
            success: function(data) {
 
            }
@@ -4393,7 +4393,7 @@ var datePickerOptions = {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             type: 'GET',
-            url: '/admin/events/statistics/'+event,
+            url: '/admin1/events/statistics/'+event,
             success: function (data) {
 
                 let stats = data.data;

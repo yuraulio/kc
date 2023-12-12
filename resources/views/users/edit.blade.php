@@ -489,7 +489,7 @@
                                     @if(!empty($user_event['certifications']))
 
                                         @foreach($user_event['certifications'] as $cert)
-                                            <td><a class="btn btn-info btn-sm" href="/admin/get-certificate/{{$cert['id']}}">Download</a></td>
+                                            <td><a class="btn btn-info btn-sm" href="/admin1/get-certificate/{{$cert['id']}}">Download</a></td>
                                         @endforeach
 
                                     @else
@@ -579,7 +579,7 @@
                                             <div class="tab-content" >
 
                                                 <div class="tab-pane fade show active" id="transaction-info-{{$index}}" role="tabpanel" aria-labelledby="transaction-info-{{$index}}">
-                                                    <form action="/admin/transaction/update" method="post" autocomplete="off" enctype="multipart/form-data">
+                                                    <form action="/admin1/transaction/update" method="post" autocomplete="off" enctype="multipart/form-data">
                                                         @csrf
                                                         @foreach($transaction as  $tran)
                                                         <input name="transaction[]" value="{{$tran['id']}}" hidden>
@@ -799,7 +799,7 @@
                                                                         {{--<th scope="col"> {{$tra['amount']}} </th>--}}
                                                                         <th scope="col"> {{number_format($invoice['amount'] , 2 , '.', '')}} </th>
                                                                         <th scope="col"> {{date('d-m-y H:i',strtotime($invoice['created_at']))}} </th>
-                                                                        <th scope="col"> <a href="/admin/invoice/{{ $invoice['id'] }}">view </a> </th>
+                                                                        <th scope="col"> <a href="/admin1/invoice/{{ $invoice['id'] }}">view </a> </th>
 
                                                                 </tbody>
                                                                 @endforeach
@@ -860,7 +860,7 @@
                                                     <th scope="col"> {{date('d-m-Y H:i',strtotime($tra['created_at']))}} </th>
                                                     <th scope="col"> @if($tra['trial']) trial @else no trial @endif </th>
                                                     <th scope="col"> {{date('d-m-Y H:i',strtotime($tra['ends_at']))}} </th>
-                                                    <th> @if(isset($tra['invoice'][0])) <a href="/admin/invoice/{{$tra['invoice'][0]['id']}}" target="_blank"> view </a> @else - @endif </th>
+                                                    <th> @if(isset($tra['invoice'][0])) <a href="/admin1/invoice/{{$tra['invoice'][0]['id']}}" target="_blank"> view </a> @else - @endif </th>
                                             </tbody>
                                             @endforeach
                                         </table>
@@ -1197,7 +1197,7 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 type: 'post',
-                url: '/admin/ticket/fetchTicketsById',
+                url: '/admin1/ticket/fetchTicketsById',
                 data:{'eventId': event_id},
                 success: function (data) {
 
@@ -1272,7 +1272,7 @@ $(document).on('click', '.ticket-card', function () {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 type: 'post',
-                url: '/admin/user/assignEventToUserCreate',
+                url: '/admin1/user/assignEventToUserCreate',
                 data: {'cardtype':cardtype, 'billing':billing ,'event_id': event_id, 'ticket_id': ticket_id, 'user_id': user_id, 'sendInvoice': sendInvoice},
                 success: function (data) {
 
@@ -1344,7 +1344,7 @@ $(document).on('click', '.ticket-card', function () {
                 }).then((result) => {
                 if (result.value) {
                     $.ajax({
-                        url: '/admin/status-inform',
+                        url: '/admin1/status-inform',
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
@@ -1391,7 +1391,7 @@ $(document).on('click', '.ticket-card', function () {
                 if (result.value) {
 
                     $.ajax({
-                        url: '/admin/password-inform',
+                        url: '/admin1/password-inform',
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
@@ -1439,7 +1439,7 @@ $(document).on('click', '.ticket-card', function () {
                 if (result.value) {
 
                     $.ajax({
-                        url: '/admin/activation-inform',
+                        url: '/admin1/activation-inform',
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
@@ -1512,7 +1512,7 @@ $(document).on('click', '.ticket-card', function () {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 type: 'post',
-                url: '/admin/transaction/updateExpirationDate',
+                url: '/admin1/transaction/updateExpirationDate',
                 data: {'user_id': user_id ,'event_id': event_id , 'date': new_date},
                 success: function (data) {
                     if(data){
@@ -1542,7 +1542,7 @@ $(document).on('click', '.ticket-card', function () {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             type: 'post',
-            url: '/admin/user/change-paid-status',
+            url: '/admin1/user/change-paid-status',
             data: {'user_id': user_id ,'event_id': event_id , 'paid': paid},
             success: function (data) {
 
@@ -1563,7 +1563,7 @@ $(document).on('click', '.ticket-card', function () {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             type: 'post',
-            url: '/admin/user/save-notes',
+            url: '/admin1/user/save-notes',
             data: {'user_id': user_id , 'notes': notes},
             success: function (data) {
 
@@ -1579,7 +1579,7 @@ $(document).on('click', '.ticket-card', function () {
 
 <script>
 $(document).on('click', '#download-consent', function () {
-    window.location.href = '/admin/user/{{$user->id}}/generateConsent';
+    window.location.href = '/admin1/user/{{$user->id}}/generateConsent';
 })
 
 </script>

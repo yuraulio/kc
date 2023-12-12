@@ -10,7 +10,7 @@
             @slot('title')
                 {{ __('') }}
             @endslot
-            
+
             <li class="breadcrumb-item"><a href="{{ route('lessons.index') }}">{{ __('No Vimeo Link Lessons') }}</a></li>
             <li class="breadcrumb-item active" aria-current="page">{{ __('List') }}</li>
         @endcomponent
@@ -20,7 +20,7 @@
         <div class="row">
             <div class="col">
                 <div class="card">
-                
+
                     <div class="table-responsive py-4">
                         <table class="table align-items-center table-flush"  id="datatable-basic31">
                             <thead class="thead-light">
@@ -31,13 +31,13 @@
                             </thead>
                             <tbody class="lessons-order">
                                 @foreach ($lessons as $lesson)
-                             
+
                                     <tr class="lesson-list">
                                         <td>{{$lesson->id}}</td>
-                                        <td><a href="{{url('/')}}/admin/lessons/{{$lesson->id}}/edit">{{$lesson->title}}</a></td>
+                                        <td><a href="{{url('/')}}/admin1/lessons/{{$lesson->id}}/edit">{{$lesson->title}}</a></td>
                                     </tr>
-                                
-                               
+
+
                                 @endforeach
                             </tbody>
                         </table>

@@ -7,10 +7,10 @@
 </style>
 
 <div id="content_list_cont">
-	<!-- <a href="/admin/transaction/create">New</a> -->
+	<!-- <a href="/admin1/transaction/create">New</a> -->
     <div class="dp_filters_cont">
-    
-    
+
+
     <select id ="pag"  class="selectpicker" data-width="fit" onchange="filter()" name="pagination" data-dp-filter-scope="transactions" data-dp-filter="take">
             @foreach ($limit_arr as $take_limit)
             <option value="{!! $take_limit !!}" <?php if ($take_limit == $filters['take']) { echo 'selected="selected"'; }?>>{{ $take_limit }}</option>
@@ -47,7 +47,7 @@
                     <td class="th_author">Student</td>
                     <!-- <td class="th_author">Tx Details</td> -->
                     <td class="th_title">Event</td>
-                   
+
                     <td class="th_title">Total Installments</td>
 
                     <td class="th_title">Remaing Installments</td>
@@ -71,9 +71,9 @@
                         <td ><a href="admin/elearnigInvoice/{{$invoice->id}}">Download</a</td>
                     </tr>
                 @endforeach
-     
+
         </tbody>
-           
+
         </table>
     </div>
 
@@ -86,7 +86,7 @@
 var invoices;
 
 function filter(page=0){
-    
+
     var filterData = {};
 
     filterData['event'] = document.getElementById("myEvent").value;
@@ -108,11 +108,11 @@ function filter(page=0){
                 filterScopeTransactionNoResults()
 
             }else{
-                data = JSON.parse(data)            
-                tbody(data,1) 
+                data = JSON.parse(data)
+                tbody(data,1)
             }
 
-            
+
             NProgress.done();
         }
     })
@@ -135,19 +135,19 @@ function tbody(data = false){
         this.invoices = data;
     }
     $("#invoice-body").empty();
-    
+
     html = ''
     $.each(this.invoices['data'], function (idx, row) {
-        
+
         html +=
-        `<tr>` 
-        
+        `<tr>`
+
         + `<td >` + row.id + ` </td>`
 
         + `<td >` + row.name + ` </td>`
 
         + `<td >` + row.title + ` </td>`
-                
+
         + `<td >` + row.installments + ` </td>`
 
         + `<td >` + row.installmentsRemaining + ` </td>`
@@ -155,14 +155,14 @@ function tbody(data = false){
         + `<td >` + row.nextPayment + ` </td>`
 
         + `<td ><a href="admin/elearnigInvoice/` + row.id + `">Download</a> </td>`
-        
+
         + `</tr>`
 
     })
-    
+
     document.getElementById('invoice-body').innerHTML = html
     html = ''
-  
+
     $("#filter_paginator").empty();
     document.getElementById('filter_paginator').innerHTML =this.invoices['links']
 
@@ -175,15 +175,15 @@ $("body").on("click",  "#filter_paginator a", function (event) {
         event.preventDefault();
         var pagi_page = $(this).attr("href").split("?page=");
         var page = Number(pagi_page[1]);
-       
+
         $("#transaction_list").attr('data-dp-filter-page', page);
         filter(page)
-      
+
     });
 
 
     $('#searchTerm').keyup(function(){
-  
+
         filter()
 
     })

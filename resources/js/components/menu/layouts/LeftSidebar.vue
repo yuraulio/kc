@@ -14,7 +14,7 @@
 	              <div class="collapse" id="formMenubuilder" style="">
 	                <ul class="nav">
 	                  <li class="nav-item active">
-	                    <a class="nav-link" href="/admin/menus">
+	                    <a class="nav-link" href="/admin1/menus">
 	                         Menu Builder
 	                    </a>
 	                  </li>

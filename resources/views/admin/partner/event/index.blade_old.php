@@ -180,7 +180,7 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             type: 'post',
-            url: '/admin/partner/fetchAllPartners',
+            url: '/admin1/partner/fetchAllPartners',
             data: {'model_type':modelType,'model_id':modelId},
             success: function (data) {
 

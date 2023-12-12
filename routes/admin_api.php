@@ -13,7 +13,7 @@ use App\Http\Controllers\Admin_api\InstagramController;
 use Illuminate\Support\Facades\Route;
 
 //Route::domain('admin.' . env('APP_DOMAIN'))->group(function () {
-Route::domain(config('app.prefix_new_admin') . config('app.app_domain'))->group(function () {
+Route::domain(config('app.app_domain'))->group(function () {
     Route::group(['middleware' => ['auth:admin_web']], function () {
         Route::prefix('get_widget_data')->group(function () {
             Route::get('users', [DashboardController::class, 'get_widget_data_users']);

@@ -462,7 +462,7 @@
                             <i class="fas fa-ellipsis-v"></i>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                               <a class="dropdown-item" href="/admin/student-summary/{{$result['exam_id']}}/{{$result['user_id']}}" target="_blank">{{ __('Show') }}</a>
+                               <a class="dropdown-item" href="/admin1/student-summary/{{$result['exam_id']}}/{{$result['user_id']}}" target="_blank">{{ __('Show') }}</a>
                             </div>
                          </div>
                       </td>
@@ -1264,7 +1264,7 @@
                 type:'get',
                 datatType : 'json',
                 contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-                url:'/admin/live-results/{{$exam->id}}',
+                url:'/admin1/live-results/{{$exam->id}}',
                 success:function(data){
 
                    let resultsHtmll = '';
@@ -1345,7 +1345,7 @@
                                <i class="fas fa-ellipsis-v"></i>
                                </a>
                                <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                                  <a class="dropdown-item" href="/admin/student-summary/${value1['exam_id']}/${value1['user_id']}" target="_blank">{{ __('Show') }}</a>
+                                  <a class="dropdown-item" href="/admin1/student-summary/${value1['exam_id']}/${value1['user_id']}" target="_blank">{{ __('Show') }}</a>
                                </div>
                             </div>
                          </td></tr>`*/
@@ -1365,7 +1365,7 @@
                                   <i class="fas fa-ellipsis-v"></i>
                                   </a>
                                   <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                                     <a class="dropdown-item" href="/admin/student-summary/${value1['exam_id']}/${value1['user_id']}" target="_blank">{{ __('Show') }}</a>
+                                     <a class="dropdown-item" href="/admin1/student-summary/${value1['exam_id']}/${value1['user_id']}" target="_blank">{{ __('Show') }}</a>
                                   </div>
                                </div>`
                       ]).draw()

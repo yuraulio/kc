@@ -48,7 +48,7 @@
 				<td><input type="checkbox" class="chk_subscription" name="chk_subscription" value="{{$key}}" <?= $event['sub'] == 1 ? 'checked' : '' ?>/></td>
 				<td>
 					<!-- <a href="javascript:void(0)" id="save-subs" class="btn btn-info btn-sm">View/Set</button> -->
-					<!-- <button type="button" id="viewPlan" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#exampleModal">					
+					<!-- <button type="button" id="viewPlan" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#exampleModal">
 					View/Set
 					</button> -->
 					<a class="btn btn-primary btn-sm" id="viewPlan" href="admin/event/{{$key}}" data-toggle="modal" data-target="#mainModal">View/Edit</a>
@@ -59,10 +59,10 @@
 		</table>
 		<div class="text-right msg">
 		</div>
-		<div class="text-right">								
+		<div class="text-right">
 			<a class="btn" href="{{ route('subscription') }}">Cancel</a>
 			<a href="javascript:void(0)" id="save-subs" class="btn btn-primary">Save</button>
-			
+
 		</div>
 	</div>
 
@@ -106,17 +106,17 @@ $.ajax({
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
               },
           type: 'post',
-          url: '/admin/subscription/saveSubs',
+          url: '/admin1/subscription/saveSubs',
           data:{'data':array},
-          success: function(data) {  
+          success: function(data) {
                 if(data){
                     //console.log('save success')
 					$('.msg').append(`<p style="color:green;">Successfully Saved</p>`)
                 }else{
-                    $('.msg').append(`<p style="color:red;>Error</p>`)   
+                    $('.msg').append(`<p style="color:red;>Error</p>`)
                 }
                 //playVi = true;
-            
+
           }
         });
 

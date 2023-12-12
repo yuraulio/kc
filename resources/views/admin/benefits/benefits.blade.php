@@ -7,22 +7,22 @@
    </div>
 </div>
 
-<?php 
+<?php
 
    $id = isset($sections['benefits'][0]) ? $sections['benefits'][0]['id'] : '';
    $tab_title = isset($sections['benefits'][0]) ? $sections['benefits'][0]['tab_title'] : '' ;
    $title = isset($sections['benefits'][0]) ? $sections['benefits'][0]['title'] : '' ;
    $visible = isset($sections['benefits'][0]) ? $sections['benefits'][0]['visible'] : false ;
 
-?> 
+?>
 
 
 <div class="form-group">
 
-   <input hidden name="sections[benefits][id]" value="{{$id}}"> 
+   <input hidden name="sections[benefits][id]" value="{{$id}}">
 
    <label class="form-control-label" for="input-title">{{ __('Tab Title') }}</label>
-   <input type="text" name="sections[benefits][tab_title]" class="form-control" placeholder="{{ __('Tab Title') }}" value="{{ old("sections[benefits][tab_title]", $tab_title) }}" autofocus> 
+   <input type="text" name="sections[benefits][tab_title]" class="form-control" placeholder="{{ __('Tab Title') }}" value="{{ old("sections[benefits][tab_title]", $tab_title) }}" autofocus>
    <label class="form-control-label" for="input-title">{{ __('H2 Title') }}</label>
    <input type="text" name="sections[benefits][title]" class="form-control" placeholder="{{ __('H2 Title') }}" value="{{ old("sections[benefits][title]", $title) }}" autofocus>
 
@@ -36,7 +36,7 @@
        </label>
 
    </div>
-                                
+
 
 </div>
 
@@ -269,7 +269,7 @@
               'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             type: 'put',
-            url: '/admin/benefit/' + benefitId,
+            url: '/admin1/benefit/' + benefitId,
             data: {'name':$('#edit-name').val(),'description':CKEDITOR.instances['edit-description1'].getData(),'svg': $('#image_svg_upload-benefit').val()},
             success: function (data) {
                 let benefit = data.benefit;

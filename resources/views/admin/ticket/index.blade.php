@@ -1,7 +1,7 @@
 <div class="row align-items-center">
     <div class="col-8">
         <h3 class="mb-0">{{ __('Tickets') }}</h3>
-        
+
     </div>
     @can('create', App\Model\User::class)
         <div class="col-4 text-right">
@@ -16,23 +16,23 @@
 </div>
 
 
-<?php 
+<?php
 
    $id = isset($sections['tickets'][0]) ? $sections['tickets'][0]['id'] : '';
    $tab_title = isset($sections['tickets'][0]) ? $sections['tickets'][0]['tab_title'] : '' ;
    $title = isset($sections['tickets'][0]) ? $sections['tickets'][0]['title'] : '' ;
-   $visible = isset($sections['tickets'][0]) ? $sections['tickets'][0]['visible'] : false; 
+   $visible = isset($sections['tickets'][0]) ? $sections['tickets'][0]['visible'] : false;
 
-?> 
+?>
 
 
 
 <div class="form-group">
 
-   <input hidden name="sections[tickets][id]" value="{{$id}}"> 
+   <input hidden name="sections[tickets][id]" value="{{$id}}">
 
    <label class="form-control-label" for="input-title">{{ __('Tab Title') }}</label>
-   <input type="text" name="sections[tickets][tab_title]" class="form-control" placeholder="{{ __('Tab Title') }}" value="{{ old("sections[tickets][tab_title]", $tab_title) }}" autofocus> 
+   <input type="text" name="sections[tickets][tab_title]" class="form-control" placeholder="{{ __('Tab Title') }}" value="{{ old("sections[tickets][tab_title]", $tab_title) }}" autofocus>
    <label class="form-control-label" for="input-title">{{ __('H2 Title') }}</label>
    <input type="text" name="sections[tickets][title]" class="form-control" placeholder="{{ __('H2 Title') }}" value="{{ old("sections[tickets][title]", $title) }}" autofocus>
 
@@ -46,7 +46,7 @@
        </label>
 
    </div>
-                                
+
 
 </div>
 
@@ -92,7 +92,7 @@
                             <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-ellipsis-v"></i>
                             </a>
-                            
+
                             <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
                                 <a class="dropdown-item edit-to-open" data-toggle="modal" data-target="#editTicketModal" data-id="{{$ticket->id}}" data-price="{{$ticket->price}}" data-quantity="{{$ticket->pivot->quantity}}">{{ __('Edit') }}</a>
                                 {{--<a class="dropdown-item ticket-active ticket-active{{$ticket->id}}" data-ticket="{{$ticket->id}}" data-event="{{$event->id}}" data-active="{{$ticket->pivot->active ? 0 : 1}}">@if($ticket->pivot->active) <span class="ticket-span{{$ticket->id}}"> {{ __('Disable') }} </span> @else <span class="ticket-span{{$ticket->id}}"> {{ __('Enable') }} </span> @endif</a>--}}
@@ -268,12 +268,12 @@
 
                     <label class="form-control-label" for="input-method">{{ __('SHOW REMAINING SEATS') }}</label>
                         <div style="margin: auto;" class="form-group">
-    
+
                             <label class="custom-toggle enroll-toggle visible">
                                 <input type="checkbox"  name="seats_visible" id="input-show-seats">
                                 <span class="custom-toggle-slider rounded-circle" data-label-off="No" data-label-on="Yes"></span>
                             </label>
-    
+
                         </div>
                <input type="text" id="ticket-id"  value="" hidden>
                </form>
@@ -375,7 +375,7 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 type: 'post',
-                url: '/admin/ticket/fetchAllTickets',
+                url: '/admin1/ticket/fetchAllTickets',
                 data: {'modelType':modelType, 'modelId':modelId},
                 success: function (data) {
                     let ticket = data.data.tickets
@@ -421,7 +421,7 @@
                     }
                     let newTicket =
                     `<tr id="ticket_`+ticket['id'] +`">` +
-                    
+
                         `<td>
                             <div class="custom-control custom-checkbox visible-ticket">
                               <input  class="custom-control-input" type="checkbox" data-ticket="${ticket['id']}" data-event="{{$model->id}}"  checked >
@@ -447,12 +447,12 @@
                                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
                                             <a class="dropdown-item edit-to-open" data-toggle="modal" data-target="#editTicketModal" data-id="`+ticket['id']+`" data-price="`+ticket['price']+`" data-quantity="`+ticket['quantity']+`" data-public_title="`+ticket['public_title']+`">{{ __('Edit') }}</a>
                                             <a class="dropdown-item" id="remove_ticket" data-ticket-id="`+ticket['id']+`">{{ __('Delete') }}</a>
-                    
+
                                         </div>
                                     </div>
                         </td>
 
-                       
+
                         <td hidden id="public_title-${ticket['id']}">${ ticket['pivot']['public_title'] }</td>
                         <td hidden id="seats_visible-${ticket['id']}">${ ticket['pivot']['seats_visible'] }</td>
 
@@ -518,8 +518,8 @@
          features = $("#features-"+id).text();
          features = features ? JSON.parse(features) : [];
          options = options ? JSON.parse(options) : [];
-         
-         seatsVisible = $("#seats_visible-"+id).text() != 0 && $("#seats_visible-"+id).text() != 'false' ? true : false; 
+
+         seatsVisible = $("#seats_visible-"+id).text() != 0 && $("#seats_visible-"+id).text() != 'false' ? true : false;
          $("#input-show-seats").prop("checked",seatsVisible);
 
          $.each(options, function(key,value){
@@ -585,14 +585,14 @@
     var selected_option = $('#editTicketModel #ticketFormControlSelect option:selected');
 
     $ticketId = $("#ticket-id").val()
-   
+
 
     $.ajax({
             headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             type: 'put',
-            url: '/admin/ticket/' + $ticketId,
+            url: '/admin1/ticket/' + $ticketId,
             data: {'option1':$('#option1_edit').val(),'option2':$('#option2_edit').val(),'option3':$('#option3_edit').val(),
                     'features':features,'price':$('#edit-price').val(),'public_title':$('#edit-public_title').val(),'quantity':$('#edit-quantity1').val(),
                     'model_type':modelType,'model_id':modelId, 'seats_visible':$("#input-show-seats").is(':checked')},
@@ -610,7 +610,7 @@
         $("#price-"+ticket_id).html(price)
         $("#options-"+ticket_id).html(options);
         $("#features-"+ticket_id).html(features);
-        $("#seats_visible-"+ticket_id).html(seats_visible); 
+        $("#seats_visible-"+ticket_id).html(seats_visible);
         $("#public_title-"+ticket_id).html(public_title);
         $(".close-modal").click();
 
@@ -689,7 +689,7 @@
 
 
    {{--$('.ticket-active').click(function(){
-        
+
         let ticket = $(this).data('ticket');
         let event = $(this).data('event');
         let active = $(this).data('active');
@@ -700,7 +700,7 @@
          'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
          },
          Accept: 'application/json',
-         url: "/admin/ticket-active/" + event + "/" + ticket + "/" + active,
+         url: "/admin1/ticket-active/" + event + "/" + ticket + "/" + active,
          success: function(data) {
 
             $('.ticket-span' + data.ticket).html(data.text);
@@ -724,7 +724,7 @@
          'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
          },
          Accept: 'application/json',
-         url: "/admin/ticket-active/" + event + "/" + ticket + "/" + active,
+         url: "/admin1/ticket-active/" + event + "/" + ticket + "/" + active,
          success: function(data) {
 
             $('.ticket-span' + data.ticket).html(data.text);
@@ -733,7 +733,7 @@
          }
       });
     })
-  
+
 
 </script>
 

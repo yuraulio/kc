@@ -19,22 +19,22 @@
 </div>
 
 
-<?php 
+<?php
 
    $id = isset($sections['questions'][0]) ? $sections['questions'][0]['id'] : '';
    $tab_title = isset($sections['questions'][0]) ? $sections['questions'][0]['tab_title'] : '' ;
    $title = isset($sections['questions'][0]) ? $sections['questions'][0]['title'] : '' ;
    $visible = isset($sections['questions'][0]) ? $sections['questions'][0]['visible'] : false ;
 
-?> 
+?>
 
 
 <div class="form-group">
 
-   <input hidden name="sections[questions][id]" value="{{$id}}"> 
+   <input hidden name="sections[questions][id]" value="{{$id}}">
 
    <label class="form-control-label" for="input-title">{{ __('Tab Title') }}</label>
-   <input type="text" name="sections[questions][tab_title]" class="form-control" placeholder="{{ __('Tab Title') }}" value="{{ old("sections[questions][tab_title]", $tab_title) }}" autofocus> 
+   <input type="text" name="sections[questions][tab_title]" class="form-control" placeholder="{{ __('Tab Title') }}" value="{{ old("sections[questions][tab_title]", $tab_title) }}" autofocus>
    <label class="form-control-label" for="input-title">{{ __('H2 Title') }}</label>
    <input type="text" name="sections[questions][title]" class="form-control" placeholder="{{ __('H2 Title') }}" value="{{ old("sections[questions][title]", $title) }}" autofocus>
 
@@ -48,7 +48,7 @@
        </label>
 
    </div>
-                                
+
 
 </div>
 
@@ -155,7 +155,7 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 type: 'post',
-                url: '/admin/faqs/fetchAllFaqs',
+                url: '/admin1/faqs/fetchAllFaqs',
                 data:{'model_type':modelType,'model_id':modelId},
                 success: function (data) {
                     let faq = data.faqs
@@ -223,7 +223,7 @@
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
                         type: 'get',
-                        url: '/admin/faqs/assign-event/' + "{{$event->id}}" +'/' + $(this).data('faq'),
+                        url: '/admin1/faqs/assign-event/' + "{{$event->id}}" +'/' + $(this).data('faq'),
                         success: function (data) {
 
                             let faq = data.allFaqs
@@ -296,7 +296,7 @@
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
                         type: 'get',
-                        url: '/admin/faqs/unsign-event/' + "{{$event->id}}" +'/' + $(this).data('faq'),
+                        url: '/admin1/faqs/unsign-event/' + "{{$event->id}}" +'/' + $(this).data('faq'),
                         success: function (data) {
                             let faq = data.allFaqs
                             let assignedFaqs = data.eventFaqs;
