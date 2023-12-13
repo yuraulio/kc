@@ -63,3 +63,5 @@ public/js/app.js.LICENSE.txt
 storage/logs/laravel.log
 
 storage/app/version-commit.txt
+
+/resources/react/node_modules

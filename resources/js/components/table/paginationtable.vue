@@ -83,7 +83,7 @@
         </template>
         <template v-else>
 
-            <div v-if="showFilter('from_date')" class="px-3 py-2">
+            <div v-if="showFilter('from_date')" class="px-3 py-1">
                 <datepicker-component
                     @updatevalue="update_transaction_from"
                     :prop-value="transaction_from"
@@ -92,7 +92,7 @@
                 ></datepicker-component>
             </div>
 
-            <div v-if="showFilter('until_date')" class="px-3 py-2">
+            <div v-if="showFilter('until_date')" class="px-3 py-1">
                 <datepicker-component
                     @updatevalue="update_transaction_to"
                     :prop-value="transaction_to"
@@ -234,6 +234,10 @@
                     placeholder="All pages"
                     marginbottom="mb-0"
                 ></multidropdown>
+            </div>
+
+            <div class="px-3 py-1">
+                <button @click="refreshTable()" class="btn btn-soft-info waves-effect waves-light">Refresh Table</button>
             </div>
 
         </template>
@@ -596,9 +600,9 @@ export default {
                 day = '' + d.getDate(),
                 year = d.getFullYear();
 
-            if (month.length < 2) 
+            if (month.length < 2)
                 month = '0' + month;
-            if (day.length < 2) 
+            if (day.length < 2)
                 day = '0' + day;
 
             return [year, month, day].join('-');
@@ -611,7 +615,7 @@ export default {
 
             return d;
         },
-        
+
         exportData(){
 
             if(this.config.apiUrl.includes('royalties')){
@@ -963,9 +967,9 @@ export default {
 
                             this.widgets[1][0] = total.toFixed(2)
                         }
-                    
-                    
-                    
+
+
+
 
                 }
 
@@ -1001,11 +1005,11 @@ export default {
         },
         update_transaction_from(value) {
             this.transaction_from = value;
-            this.refreshTable();
+            // this.refreshTable();
         },
         update_transaction_to(value) {
             this.transaction_to = value;
-            this.refreshTable();
+            // this.refreshTable();
         },
         update_published(value){
             this.published_value = value;
@@ -1103,8 +1107,8 @@ export default {
                 }
 
                 const pageNumber = searchParams.get('page');
-                
-                
+
+
 
 
             }else{
@@ -1117,13 +1121,13 @@ export default {
                 this.transaction_to = today.toISOString();
             }
 
-            
+
 
             if(this.config.royaltyView == 'single'){
-                
+
                 this.widgets = ['TOTAL ROYALTIES',[0],'Total royalties for all instructors']
             }else if(this.config.royaltyView == 'list'){
-                
+
                 this.widgets = ['TOTAL ROYALTIES',[0],'Total royalties for all instructors']
             }
 
