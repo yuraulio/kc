@@ -27,6 +27,7 @@
         clear-button-icon="fa fa-times"
         :placeholder="placeholder"
         :disabled="disabled"
+        :use-utc="utc"
     ></datepicker>
 
 </div>
@@ -45,7 +46,11 @@
             propValue: {},
             required: false,
             placeholder: String,
-            disabled: false
+            disabled: false,
+            utc: {
+                type: Boolean,
+                default: false
+            }
         },
         data() {
             return {

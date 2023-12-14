@@ -89,6 +89,7 @@
                     :prop-value="transaction_from"
                     placeholder="Transaction from"
                     :disabled="loading"
+                    :utc="true"
                 ></datepicker-component>
             </div>
 
@@ -98,6 +99,7 @@
                     :prop-value="transaction_to"
                     placeholder="Transaction to"
                     :disabled="loading"
+                    :utc="true"
                 ></datepicker-component>
             </div>
 

@@ -52,7 +52,7 @@ class UploadImageConvertWebp implements ShouldQueue
                 $a = Image::make(public_path('/uploads/').$this->path.$this->name)->stream("webp", config('app.WEBP_IMAGE_QUALITY'));
                 Storage::disk('public')->put($destination, $a, 'public');
             }else{
-                $message = 'Error with the conversion of image. Please <@'.env('SLACK_MEMEBER_ID_RESPONSIBLE_OF_ERRORS_MANAGING', '').'>, check why the image located '.public_path('/uploads/').$this->path.$this->name.' is not visible.';
+                $message = 'Error with the conversion of image. Please <@'.config('app.SLACK_MEMEBER_ID_RESPONSIBLE_OF_ERRORS_MANAGING').'>, check why the image located '.public_path('/uploads/').$this->path.$this->name.' is not visible.';
                 $user = User::first();
                 if($this->user_id && $this->user_id != 0){
                     $userProblems = User::find($this->user_id);

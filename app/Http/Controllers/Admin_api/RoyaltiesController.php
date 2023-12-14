@@ -399,7 +399,7 @@ class RoyaltiesController extends Controller
             $transaction_from = isset($request->transaction_from) ? explode('T',$request->transaction_from)[0] : null;
 
             if($transaction_from){
-                $transaction_from = Carbon::createFromFormat('Y-m-d', $transaction_from)->addDay()->format('Y-m-d');
+                $transaction_from = Carbon::createFromFormat('Y-m-d', $transaction_from)->startOfDay()->format('Y-m-d');
             }
         }else{
             $transaction_from = $request->transaction_from;
@@ -410,7 +410,7 @@ class RoyaltiesController extends Controller
             $transaction_to = isset($request->transaction_to) ? explode('T',$request->transaction_to)[0] : null;
 
             if($transaction_to){
-                $transaction_to = Carbon::parse($transaction_to,'UTC')->format('Y-m-d');
+                $transaction_to = Carbon::parse($transaction_to,'UTC')->endOfDay()->format('Y-m-d');
             }
         }else{
             $transaction_to = $request->transaction_to;

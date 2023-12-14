@@ -38,6 +38,7 @@ return [
     'vimeo_client_id' => env('client_id', ''),
     'vimeo_client_secret' => env('client_secret', ''),
     'vimeo_token' => env('vimeo_token', ''),
+    'SLACK_MEMEBER_ID_RESPONSIBLE_OF_ERRORS_MANAGING' => env('SLACK_MEMEBER_ID_RESPONSIBLE_OF_ERRORS_MANAGING', 'D065P3RQX96'),
 
     /*
     |--------------------------------------------------------------------------
