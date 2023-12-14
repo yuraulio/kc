@@ -153,7 +153,7 @@ class ExamAttemptController extends Controller
 
             $getSyncData = ExamSyncData::where(['exam_id' => $exam_id, 'user_id' => $st_id])->value('id');
 
-            if($getSyncData && $request->init){
+            if($getSyncData && $request->init != 'false'){
                 return false;
             }
 
