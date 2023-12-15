@@ -25,6 +25,7 @@ use App\Notifications\SubscriptionWelcome;
 use App\Model\User;
 use App\Notifications\WelcomeEmail;
 use App\Notifications\AfterSepaPaymentEmail;
+use Illuminate\Support\Facades\DB;
 
 class WebhookController extends BaseWebhookController
 {
@@ -309,7 +310,16 @@ class WebhookController extends BaseWebhookController
                 $subscriptionPaymentMethod = $user->events_for_user_list()->wherePivot('event_id',$eventId)->first();
                 //$subscriptionPaymentMethod = $user->events()->wherePivot('event_id',$eventId)->first();
                 //return print_r(count($user->events_for_user_list));
-                $paymentMethod = PaymentMethod::find($subscriptionPaymentMethod->pivot->payment_method);
+
+                // TODO  Sometimes the payment method is 0. Why? I don't know. We have to check. But now, we solve this problem updating to be 2 (Knowcrunch Inc (USA)) self::DEFAULT_PAYMENT_METHOD
+                if($subscriptionPaymentMethod->pivot->payment_method == 0){
+                    DB::table('event_user')
+                        ->where('id', $subscriptionPaymentMethod->pivot->id)
+                        ->update(['payment_method' => PaymentMethod::DEFAULT_PAYMENT_METHOD]);
+                    $paymentMethod = PaymentMethod::find(PaymentMethod::DEFAULT_PAYMENT_METHOD);
+                }else{
+                    $paymentMethod = PaymentMethod::find($subscriptionPaymentMethod->pivot->payment_method);
+                }
 
                 $data = $payload['data']['object'];
 

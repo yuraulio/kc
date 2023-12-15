@@ -9,6 +9,8 @@ class PaymentMethod extends Model
 {
     use HasFactory;
 
+    const DEFAULT_PAYMENT_METHOD = 2; // (Knowcrunch Inc (USA))
+
     protected $fillable = [
         'status',
         'has_installments',
@@ -37,7 +39,7 @@ class PaymentMethod extends Model
 
     public function getProcessorOptionsAttribute($value)
     {
-        
+
         if ($value) {
             return json_decode(decrypt($value), true);
             //return json_decode($value, true);
@@ -58,7 +60,7 @@ class PaymentMethod extends Model
 
     public function getTestProcessorOptionsAttribute($value)
     {
-        
+
         if ($value) {
             return json_decode(decrypt($value), true);
             //return json_decode($value, true);
