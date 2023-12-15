@@ -419,6 +419,7 @@
                     {data: 'mobile', name: 'mobile', title: 'mobile'},
                     {data: 'email', name: 'email', title: 'email'},
                     {data: 'kc_id', name: 'kc_id', title: 'kc-id'},
+                    {data: 'stripe_id', name: 'stripe_id', title: 'Stripe Info'},
                     {data: 'id', name: 'id', title: 'id'},
                     {data: 'role', name: 'role.name',title: 'role',orderable: false},
                     {data: 'status', name: 'status', title: 'status',orderable: false,searchable: false},
@@ -427,6 +428,18 @@
                     {data: 'action', name: 'action', orderable: false, searchable: false},
 
                 ],
+                "columnDefs": [
+                    {
+                        "targets": 6,
+                        "data": null, // Use the full data source object for the renderer's source
+                        "render": function ( data, type, row, meta ) {
+                            if(data != '' && data != null)
+                                return '<a target="_blank" href="https://dashboard.stripe.com/customers/'+data+'">View in Stripe</a>';
+                            else
+                                return '';
+                        }
+                    }
+                ]
 
             });
 
