@@ -311,6 +311,25 @@ class WebhookController extends BaseWebhookController
                 //$subscriptionPaymentMethod = $user->events()->wherePivot('event_id',$eventId)->first();
                 //return print_r(count($user->events_for_user_list));
 
+                if(!$subscriptionPaymentMethod){
+                    $event = Event::find($eventId);
+                    if($event){
+                        DB::table('event_user')
+                            ->where('id', $subscriptionPaymentMethod->pivot->id)
+                            ->insert([
+                                'event_id' => $event->id,
+                                'user_id' => $user->id,
+                                'paid' => 1,
+                                'expiration_email' => 0,
+                                'comment' => 'automatically added from webhook',
+                                'payment_method' => PaymentMethod::DEFAULT_PAYMENT_METHOD
+                            ]);
+                        $user = User::first();
+                        $user->notify(new ErrorSlack("The user ".$user->firstname.' '.$user->lastname.' '.$user->email.', didn\'t have event_user register for the event '.$event->title.'. We have automatically inserted this register, but we have to check why it happens.'));
+                        $subscriptionPaymentMethod = $user->events_for_user_list()->wherePivot('event_id',$eventId)->first();
+                    }
+                }
+
                 // TODO  Sometimes the payment method is 0. Why? I don't know. We have to check. But now, we solve this problem updating to be 2 (Knowcrunch Inc (USA)) self::DEFAULT_PAYMENT_METHOD
                 if($subscriptionPaymentMethod->pivot->payment_method == 0){
                     DB::table('event_user')
