@@ -14,8 +14,8 @@ class Cache
                 return Setting::whereSetting("cms_mode")->firstOrFail()->value;
             });
         } catch (Exception $e) {
-            Log::error("Failed to get csmMode from cache.");
-            Log::error($e);
+            // Log::error("Failed to get csmMode from cache.");
+            // Log::error($e);
             return Setting::OLD_PAGES;
         }
     }
