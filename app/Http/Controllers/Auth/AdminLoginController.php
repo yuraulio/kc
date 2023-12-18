@@ -3,23 +3,27 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 class AdminLoginController extends Controller
 {
     use AuthenticatesUsers;
 
     /**
-     * Where to redirect users after login.
-     *
      * @var string
      */
-    protected $redirectTo = '/';
+    protected string $redirectTo = '/admin2';
 
-    public function showLoginPage()
+    /**
+     * @return Factory|View|Application
+     */
+    public function showLoginPage(): Factory|View|Application
     {
         return view('new_admin.auth.login');
     }
@@ -27,19 +31,21 @@ class AdminLoginController extends Controller
     /**
      * Handle an authentication attempt.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     *
+     * @return RedirectResponse
      */
-    public function authenticate(Request $request)
+    public function authenticate(Request $request): RedirectResponse
     {
-        $credentials = $request->validate([
+        $request->validate([
             'email' => ['required', 'email'],
             'password' => ['required'],
         ]);
 
         if (Auth::guard('admin_web')->attempt(['email' => $request->email, 'password' => $request->password, 'active' => 1])) {
             $request->session()->regenerate();
-            return redirect()->intended();
+
+            return redirect()->intended($this->redirectTo);
         }
 
         return back()->withErrors([
