@@ -1157,11 +1157,14 @@ class StudentController extends Controller
 
         $user->statistic()->wherePivot('event_id', $request->event)->updateExistingPivot($request->event,['notes' => json_encode($notes)], false);
 
-
+        $text = $request->text;
+        if (!mb_check_encoding($text, 'UTF-8')) {
+            $text = mb_convert_encoding($text, 'UTF-8', 'auto');
+        }
 
         return response()->json([
             'success' => true,
-            'text' => $request->text
+            'text' => $text
             // 'vimeoId' =>$vimeoKey
         ]);
 
