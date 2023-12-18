@@ -380,9 +380,13 @@ class WebhookController extends BaseWebhookController
 
                 $subscription->save();
 
-                $stripeSubscription = $user->subscriptions()->where('stripe_id',$payload['data']['object']['subscription'])->first()->asStripeSubscription();
-                $stripeSubscription->metadata = ['installments_paid' => $count, 'installments' => $totalinst];
-                $stripeSubscription->save();
+                try{
+                    $stripeSubscription = $user->subscriptions()->where('stripe_id',$payload['data']['object']['subscription'])->first()->asStripeSubscription();
+                    $stripeSubscription->metadata = ['installments_paid' => $count, 'installments' => $totalinst];
+                    $stripeSubscription->save();
+                }catch(\Exception $e){
+
+                }
 
                 //$invoices = $user->events->where('id',$eventId)->first()->invoicesByUser($user->id)->get();
                 $invoices = $user->events_for_user_list()->wherePivot('event_id',$eventId)->first()->invoicesByUser($user->id)->get();
