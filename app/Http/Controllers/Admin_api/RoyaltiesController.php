@@ -391,7 +391,7 @@ class RoyaltiesController extends Controller
         if(isset(Auth::user()->role))
             $userRole = Auth::user()->role->pluck('id')->toArray();
         else
-            $userRole = -1;
+            $userRole = [];
         $amount = 0;
 
 
