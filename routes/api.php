@@ -1,6 +1,9 @@
 <?php
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\Api\AbsenceController;
+use App\Http\Controllers\Api\EventController;
+use App\Http\Controllers\Api\ForgotPasswordController;
+use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\PassportAuthController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\LessonController;
@@ -24,7 +27,7 @@ Route::middleware('auth:api')->group(function () {
     // User
     //Route::get('user/{user}/edit', [UserController::class, 'edit']);
     Route::get('myprofile', [UserController::class, 'index']);
-    Route::post('myprofile/update', [UserController::class, 'update']);
+    Route::post('myprofile/update', [UserController::class, 'updateProfile']);
     Route::get('myprofile/events', [UserController::class, 'events']);
 
     //
@@ -41,14 +44,23 @@ Route::middleware('auth:api')->group(function () {
     Route::post('logout', [PassportAuthController::class, 'logout']);
 
     //Absences
-    Route::post('absences-store', 'Api\AbsenceController@store');
+    Route::post('absences', [AbsenceController::class, 'store']);
 
     //GetDropboxToken
     Route::get('get-dropbox-token', [UserController::class, 'getDropBoxToken']);
 
-   
+    // Users
+    Route::resource('users', UserController::class)
+        ->only(['show', 'update']);
 
+    // Events
+    Route::resource('events', EventController::class)
+        ->only(['index', 'show']);
+
+    // Notifications
+    Route::resource('notifications', NotificationController::class)
+        ->only(['index', 'update']);
 });
 
 
-Route::post('/myaccount/reset', 'Api\ForgotPasswordController@sendResetLinkEmail');
+Route::post('/myaccount/reset', [ForgotPasswordController::class, 'sendResetLinkEmail']);

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -11,15 +12,18 @@ class LessonController extends Controller
     public function saveNote(Request $request)
     {
         $user = Auth::user();
-        //dd($user);
         $event_id = $request->event_id;
         $new_note = $request->note;
-
-        //$new_note = preg_replace( "/\r|\n/", "||", $new_note );
-        //$new_note = str_replace(['"',"'"], "", $new_note);
-
         $vimeo_id = $request->vimeo_id;
-        $db_note = $user->statistic()->wherePivot('event_id',$event_id)->first()->pivot['notes'];
+        $statistic = $user->statistic()->wherePivot('event_id',$event_id)->first();
+
+        if (!$statistic) {
+            return new JsonResponse([
+                'message' => 'Event statistic has not been found.',
+            ], 404);
+        }
+
+        $db_note = $statistic->pivot['notes'];
         $db_note = json_decode($db_note, true);
 
         if(isset($db_note[$vimeo_id])){
@@ -63,9 +67,9 @@ class LessonController extends Controller
         $db_video_original = $user->statistic()->wherePivot('event_id',$event_id)->first();
 
         if(!$db_video_original){
-            return response()->json([
-                'message' => '',
-            ]);
+            return new JsonResponse([
+                'message' => 'Event statistic has not been found.',
+            ], 404);
         }
 
         $db_video = json_decode($db_video_original->pivot['videos'], true);
@@ -99,7 +103,7 @@ class LessonController extends Controller
             $arr['total_seen'] = $stop_time;
             $arr['is_new'] = strval(0);
             $arr['send_automate_email'] = strval(0);
-            
+
             //$arr = json_encode($arr);
             $db_video[$vimeo_id] = $arr;
             $db_video = json_encode($db_video);
@@ -140,9 +144,9 @@ class LessonController extends Controller
         $db_video_original = $user->statistic()->wherePivot('event_id',$event_id)->first();
 
         if(!$db_video_original){
-            return response()->json([
-                'message' => '',
-            ]);
+            return new JsonResponse([
+                'message' => 'Event statistic has not been found.',
+            ], 404);
         }
 
         $db_video = json_decode($db_video_original->pivot['videos'], true);
@@ -161,7 +165,7 @@ class LessonController extends Controller
             $arr['percentMinutes'] = strval(0);
             $arr['total_seen'] = strval(0);
             $arr['is_new'] = strval(0);
-            
+
             //$arr = json_encode($arr);
             $db_video[$vimeo_id] = $arr;
             $db_video = json_encode($db_video);

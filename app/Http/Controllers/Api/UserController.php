@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Model\User;
 use Illuminate\Support\Facades\Auth;
@@ -556,7 +557,7 @@ class UserController extends Controller
                 }
 
             }
-          
+
             if(!empty($test)){
                 //dd($test);
                 if($event->is_inclass_course()){
@@ -564,10 +565,10 @@ class UserController extends Controller
                 }else{
                     $foldersNew[] = $test;
                 }
-               
+
 
             }
-           
+
         }
 
         if($event->id == 2027){
@@ -597,7 +598,7 @@ class UserController extends Controller
 
         // is Inclass?
         if($event->is_inclass_course() ){
-           
+
             //dd($key);
             $newArr['is_inclass'] = true;
             $newArr['date'] = $date;
@@ -623,7 +624,7 @@ class UserController extends Controller
 
             $eventLessons = $event['lessonsForApp']->sortBy('time_starts');
 
-            
+
             if(!empty($foldersNew)){
                 //dd($foldersNew);
             }
@@ -649,7 +650,7 @@ class UserController extends Controller
             //   $newArr['files']['folders'] = [];
             // }
         }else if($event->is_elearning_course()){
-            
+
                 $newArr['is_elearning'] = true;
                 $isElearning = true;
                 //progress here
@@ -658,18 +659,18 @@ class UserController extends Controller
                 // Statistics
                 $statistics = ($statistics = $user->statistic()->wherePivot('event_id',$event['id'])->first()) ?
                             $statistics->toArray() : ['pivot' => [], 'videos' => ''];
-    
+
                 //$statistics = $user->updateUserStatistic($event,$statistics['pivot']);
-    
+
                 $notes = isset($statistics['pivot']['notes']) ? json_decode($statistics['pivot']['notes'], true) : [];
                 $videos = isset($statistics['pivot']['videos']) ? json_decode($statistics['pivot']['videos'], true) : [];
-    
+
                 //dd($statistics);
-    
+
                 $newArr['lastVideoSeen'] = isset($statistics['pivot']['lastVideoSeen']) ? $statistics['pivot']['lastVideoSeen'] : -1;
-    
-            
-            
+
+
+
             $eventLessons = $event['lessonsForApp']->sortBy('priority');
 
         }
@@ -680,7 +681,7 @@ class UserController extends Controller
 
 
         $topics = [];
-        
+
         foreach($eventLessons as $lesson){
 
             if(!$lesson['instructor_id']){
@@ -723,7 +724,7 @@ class UserController extends Controller
                 $arr_lesson['vimeo_video'] = $lesson['vimeo_video'];
                 $arr_lesson['vimeo_duration'] = $lesson['vimeo_duration'];
                 $arr_lesson['bold'] = $lesson['bold'];
-                
+
 
 
                 if($lesson['vimeo_video'] != ''){
@@ -740,7 +741,7 @@ class UserController extends Controller
 
                     $arr_lesson['vimeo_id'] = strval($vimeo_id);
                     if(isset($videos[$vimeo_id])){
-                        
+
                         $arr_lesson['video_info']['send_automate_email'] = strval($videos[$vimeo_id]['send_automate_email']);
                         $arr_lesson['video_info']['is_new'] = strval($videos[$vimeo_id]['is_new']);
                         $arr_lesson['video_info']['seen'] = strval($videos[$vimeo_id]['seen']);
@@ -1000,14 +1001,14 @@ class UserController extends Controller
         $bonusFiles = ['_Bonus', 'Bonus', 'Bonus Files', 'Βonus', '_Βonus', 'Βonus', 'Βonus Files'];
         $instructors = Instructor::with('medias')->get()->groupby('id');
         $instructor = $user->instructor()->with('event.summary1','event.lessons.topic')->first();
-        
+
         $now = date('Y-m-d H:i:s');
 
         foreach($instructor['event'] as $key => $event)
         {
-            
-        
-               
+
+
+
 
                 if(!$event->published){
                     continue;
@@ -1018,8 +1019,8 @@ class UserController extends Controller
                     continue;
                 }
                 //dd($event->lessons()->first());
-                
-         
+
+
 
             $datar = $this->load_event_data($event, $user, $instructors, $bonusFiles, true);
 
@@ -1030,7 +1031,7 @@ class UserController extends Controller
 
         }
 
-       
+
         $data = $this->userEvents($data,$user,$exceptEvents);
 
         return $data;
@@ -1048,14 +1049,14 @@ class UserController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display the User.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  User  $user
+     * @return JsonResponse
      */
-    public function show()
+    public function show(User $user): JsonResponse
     {
-
+        return new JsonResponse($user);
     }
 
     /**
@@ -1065,7 +1066,7 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request)
+    public function updateProfile(Request $request)
     {
         //dd($request->all());
 
@@ -1193,4 +1194,19 @@ class UserController extends Controller
         ]);
 
     }
+
+    /**
+     * Update the User in storage.
+     *
+     * @param  Request  $request
+     * @param  User  $user
+     * @return JsonResponse
+     */
+    public function update(Request $request, User $user): JsonResponse
+    {
+        $user->update($request->all());
+
+        return new JsonResponse($user);
+    }
+
 }

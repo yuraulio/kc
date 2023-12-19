@@ -2,9 +2,12 @@
 
 namespace App\Exceptions;
 
+use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
 use Throwable;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Illuminate\Foundation\Support\Providers\AuthServiceProvider;
 use League\OAuth2\Server\Exception\OAuthServerException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -31,7 +34,7 @@ class Handler extends ExceptionHandler
     ];
 
 
-    public function register()
+    public function register(): void
     {
         $this->reportable(function (Throwable $e) {
             if ($e instanceof OAuthServerException && $e->getMessage() == 'The resource owner or authorization server denied the request.') {
@@ -44,10 +47,11 @@ class Handler extends ExceptionHandler
     /**
      * Report or log an exception.
      *
-     * @param  \Exception  $exception
+     * @param Exception $exception
      * @return void
+     * @throws Throwable
      */
-    public function report(Throwable $exception)
+    public function report(Throwable $exception): void
     {
         parent::report($exception);
     }
@@ -55,12 +59,19 @@ class Handler extends ExceptionHandler
     /**
      * Render an exception into an HTTP response.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Exception  $exception
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param Exception $exception
+     * @return Response|JsonResponse
+     * @throws Throwable
      */
     public function render($request, Throwable $exception)
     {
+        if ($exception instanceof ModelNotFoundException) {
+            if ($request->acceptsJson() || $request->wantsJson() || $request->is('api/*')) {
+                return new JsonResponse(['message' => $exception->getMessage()], 404);
+            }
+        }
+
         return parent::render($request, $exception);
     }
 
