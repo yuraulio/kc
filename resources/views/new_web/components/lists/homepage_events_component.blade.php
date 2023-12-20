@@ -114,6 +114,9 @@
                         </div>
                     </div>
                 </div>
+                <script type="application/ld+json">
+                    {!! json_encode($event->schemadata()) !!}
+                </script>
             @endforeach
         @endforeach
     </div>
