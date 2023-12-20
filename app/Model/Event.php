@@ -67,7 +67,6 @@ class Event extends Model
         $schema =
         [
             "@context" => "https://schema.org/",
-            "@id" => "https://www.example.com/advancedCpp",
             "@type" => "Course",
             "name" => $this->title,
             "description" => $this->summary,
@@ -78,27 +77,14 @@ class Event extends Model
             // ],
             "provider" => [
                 "@type" => "Organization",
-                "name" => "Knowcrunch Inc.",
+                "name" => "Know Crunch",
                 "url" => "https://knowcrunch.com/"
             ],
-            // "image" => [
-            //     "https://example.com/photos/1x1/photo.jpg",
-            //     "https://example.com/photos/4x3/photo.jpg",
-            //     "https://example.com/photos/16x9/photo.jpg"
-            // ],
             // "aggregateRating" => [
             //     "@type" => "AggregateRating",
             //     "ratingValue" => 4,
             //     "ratingCount" => 1234,
             //     "reviewCount" => 450
-            // ],
-            // "offers" => [
-            //     [
-            //         "@type" => "Offer",
-            //         "category" => "Paid",
-            //         "priceCurrency" => "EUR",
-            //         "price" => 10.99
-            //     ]
             // ],
             // "totalHistoricalEnrollment" => 12345,
             // "datePublished" => "2019-03-21",
@@ -170,36 +156,36 @@ class Event extends Model
             //     "contentUrl" => "www.example.come/mp4",
             //     "thumbnailUrl" => "www.example.com/thumbnailurl.jpg"
             // ],
-            // "hasCourseInstance" => [
-            //     [
-            //         // Blended, instructor-led course meeting 3 hours per day in July.
-            //         "@type" => "CourseInstance",
-            //         "courseMode" => "Blended",
-            //         "location" => "Example University",
-            //         "courseSchedule" => [
-            //             "@type" => "Schedule",
-            //             "duration" => "PT3H",
-            //             "repeatFrequency" => "Daily",
-            //             "repeatCount" => 31,
-            //             "startDate" => "2023-07-01",
-            //             "endDate" => "2023-07-31"
-            //         ],
-            //         "instructor" => [
-            //             [
-            //                 "@type" => "Person",
-            //                 "name" => "Ira D.",
-            //                 "description" => "Professor at X-University",
-            //                 "image" => "http://example.com/person.jpg"
-            //             ]
-            //         ]
-            //     ],
-            //     [
-            //         // Online self-paced course that takes 2 days to complete.
-            //         "@type" => "CourseInstance",
-            //         "courseMode" => "Online",
-            //         "courseWorkload" => "P2D"
-            //     ]
-            // ],
+            "hasCourseInstance" => [
+                [
+                    // Blended, instructor-led course meeting 3 hours per day in July.
+                    "@type" => "CourseInstance",
+                    "courseMode" => "Blended",
+                    "location" => "Example University",
+                    "courseSchedule" => [
+                        "@type" => "Schedule",
+                        "duration" => "PT3H",
+                        "repeatFrequency" => "Daily",
+                        "repeatCount" => 31,
+                        "startDate" => "2023-07-01",
+                        "endDate" => "2023-07-31"
+                    ],
+                    "instructor" => [
+                        [
+                            "@type" => "Person",
+                            "name" => "Ira D.",
+                            "description" => "Professor at X-University",
+                            "image" => "http://example.com/person.jpg"
+                        ]
+                    ]
+                ],
+                [
+                    // Online self-paced course that takes 2 days to complete.
+                    "@type" => "CourseInstance",
+                    "courseMode" => "Online",
+                    "courseWorkload" => "P2D"
+                ]
+            ],
             // // Only required for course programs that link to child courses.
             // "hasPart" => [
             //     [
@@ -215,6 +201,108 @@ class Event extends Model
             //     ]
             // ]
         ];
+        if(isset($this->mediable)){
+            $schema['image'] = [
+                cdn(get_image($this->mediable,'event-card'))
+            ];
+        }
+        if(isset($this->slugable->slug)){
+            $schema['@id'] = $this->slugable->slug;
+        }
+        if(isset($this->ticket[0]->price)){
+            $schema['offers'] = [
+                [
+                    "@type" => "Offer",
+                    "category" => "Paid",
+                    "priceCurrency" => "EUR",
+                    "price" => $this->ticket[0]->price
+                ]
+            ];
+        }
+        if(isset($this->published_at)){
+            $schema['datePublished'] = Carbon::create($this->published_at)->format('Y-m-d');
+        }
+        if(isset($this->event_info1->course_delivery)){
+            $instructors = [
+                // [
+                //     "@type" => "Person",
+                //     "name" => "Ira D.",
+                //     "description" => "Professor at X-University",
+                //     "image" => "http://example.com/person.jpg"
+                // ]
+            ];
+            if(isset($this->instructors)){
+                foreach($this->instructors as $instr){
+                    $instructor = [
+                        "@type" => "Person",
+                        "name" => $instr->title.' '.$instr->subtitle,
+                        "description" => $instr->header
+                    ];
+                    if(isset($instr->mediable) && $instr->mediable->count() > 0){
+                        $instructor['image'] = config('app.url').$instr->mediable->path.'/'.$instr->mediable->original_name;
+                    }
+                    // Check if already added
+                    $alreadyInserted = false;
+                    foreach($instructors as $in){
+                        if($in['image'] == $instructor['image'])
+                            $alreadyInserted = true;
+                    }
+                    if(!$alreadyInserted)
+                        $instructors[] = $instructor;
+                }
+            }
+            $courseWorkload = 0;
+            if(isset($this->course_hours)){
+                $courseWorkload = $this->course_hours;
+            }
+            switch($this->event_info1->course_delivery){
+                case 139: // Classroom training
+                    $schema["hasCourseInstance"] = [
+                        [
+                            // Blended, instructor-led course meeting 3 hours per day in July.
+                            "@type" => "CourseInstance",
+                            "courseMode" => ["onsite", "synchronous", "part-time"],
+                            "location" => $this->event_info1->course_inclass_city ?? '',
+                            "instructor" => $instructors,
+                            "courseWorkload" => "P2H"
+                        ]
+                    ];
+                    break;
+                case 143: // Video e-learning
+                    $schema["hasCourseInstance"] = [
+                        [
+                            // Online self-paced course that takes 2 days to complete.
+                            "@type" => "CourseInstance",
+                            "courseMode" => ["online", "asynchronous", "part-time"],
+                            "courseWorkload" => $courseWorkload
+                        ]
+                    ];
+                    break;
+                case 215: // Zoom training
+                    $schema["hasCourseInstance"] = [
+                        [
+                            // Online self-paced course that takes 2 days to complete.
+                            "@type" => "CourseInstance",
+                            "courseMode" => ["online", "asynchronous", "part-time"],
+                            "courseWorkload" => $courseWorkload
+                        ]
+                    ];
+                    break;
+                case 216: // Corporate training
+                    $schema["hasCourseInstance"] = [
+                        [
+                            // Blended, instructor-led course meeting 3 hours per day in July.
+                            "@type" => "CourseInstance",
+                            "courseMode" => ["onsite", "synchronous", "part-time"],
+                            "location" => $this->course_inclass_city ?? '',
+                            "instructor" => $instructors,
+                            "courseWorkload" => "P2H"
+                        ]
+                    ];
+                    break;
+            }
+        }
+        // dd($this);
         return $schema;
     }
 
