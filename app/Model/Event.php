@@ -80,6 +80,14 @@ class Event extends Model
                 "name" => "Tolis Aivalis"
             ],
             "inLanguage" => "Greek/Ellinika",
+            "offers" => [
+                [
+                    "@type" => "Offer",
+                    "category" => "Free",
+                    "priceCurrency" => "EUR",
+                    "price" => 0
+                ]
+            ],
             "educationalCredentialAwarded" => "EQF 5+ level",
         ];
         if(isset($this->mediable)){
@@ -126,7 +134,7 @@ class Event extends Model
                         $instructors[] = $instructor;
                 }
             }
-            $courseWorkload = 0;
+            $courseWorkload = 'Not defined';
             if(isset($this->course_hours)){
                 $courseWorkload = $this->course_hours.' hours';
             }
@@ -136,48 +144,44 @@ class Event extends Model
                         [
                             // Blended, instructor-led course meeting 3 hours per day in July.
                             "@type" => "CourseInstance",
-                            "courseMode" => "onsite, synchronous, part-time",
+                            "courseMode" => "onsite",
                             "location" => $this->event_info1->course_inclass_city ?? '',
-                            "instructor" => $instructors
+                            "instructor" => $instructors,
+                            "courseWorkload" => $courseWorkload
                         ]
                     ];
-                    if($courseWorkload != 0)
-                        $schema["hasCourseInstance"][0]['courseWorkload'] = $courseWorkload;
                     break;
                 case 143: // Video e-learning
                     $schema["hasCourseInstance"] = [
                         [
                             // Online self-paced course that takes 2 days to complete.
                             "@type" => "CourseInstance",
-                            "courseMode" => "online, asynchronous, part-time"
+                            "courseMode" => "online",
+                            "courseWorkload" => $courseWorkload
                         ]
                     ];
-                    if($courseWorkload != 0)
-                        $schema["hasCourseInstance"][0]['courseWorkload'] = $courseWorkload;
                     break;
                 case 215: // Zoom training
                     $schema["hasCourseInstance"] = [
                         [
                             // Online self-paced course that takes 2 days to complete.
                             "@type" => "CourseInstance",
-                            "courseMode" => "online, asynchronous, part-time"
+                            "courseMode" => "online",
+                            "courseWorkload" => $courseWorkload
                         ]
                     ];
-                    if($courseWorkload != 0)
-                        $schema["hasCourseInstance"][0]['courseWorkload'] = $courseWorkload;
                     break;
                 case 216: // Corporate training
                     $schema["hasCourseInstance"] = [
                         [
                             // Blended, instructor-led course meeting 3 hours per day in July.
                             "@type" => "CourseInstance",
-                            "courseMode" => "onsite, synchronous, part-time",
+                            "courseMode" => "onsite",
                             "location" => $this->course_inclass_city ?? '',
-                            "instructor" => $instructors
+                            "instructor" => $instructors,
+                            "courseWorkload" => $courseWorkload
                         ]
                     ];
-                    if($courseWorkload != 0)
-                        $schema["hasCourseInstance"][0]['courseWorkload'] = $courseWorkload;
                     break;
             }
         }
