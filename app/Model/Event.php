@@ -134,9 +134,9 @@ class Event extends Model
                         $instructors[] = $instructor;
                 }
             }
-            $courseWorkload = '0 hours';
+            $courseWorkload = 'PT0H';
             if(isset($this->course_hours)){
-                $courseWorkload = $this->course_hours.' hours';
+                $courseWorkload = 'PT'.$this->course_hours.'H';
             }
             switch($this->event_info1->course_delivery){
                 case 139: // Classroom training
