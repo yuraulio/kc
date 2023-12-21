@@ -89,13 +89,6 @@
                                                 {
                                                     "@context": "https://schema.org/",
                                                     "@type": "UserReview",
-                                                    "itemReviewed": {
-                                                    "@type": "Course",
-                                                    "provider": "Know Crunch",
-                                                    "image": "",
-                                                    "name": "{!!$event->title!!}",
-                                                    "description": "{!! $event->subtitle !!}"
-                                                    },
                                                     "reviewRating": {
                                                     "@type": "Rating",
                                                     "ratingValue": "5"

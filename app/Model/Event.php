@@ -134,7 +134,7 @@ class Event extends Model
                         $instructors[] = $instructor;
                 }
             }
-            $courseWorkload = 'Not defined';
+            $courseWorkload = '0 hours';
             if(isset($this->course_hours)){
                 $courseWorkload = $this->course_hours.' hours';
             }
