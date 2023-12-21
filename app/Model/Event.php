@@ -64,127 +64,131 @@ class Event extends Model
     ];
 
     public function schemadata(){
-        $schema =
-        [
-            "@context" => "https://schema.org/",
-            "@type" => "Course",
-            "name" => $this->title,
-            "description" => $this->summary,
-            "provider" => [
-                "@type" => "Organization",
-                "name" => "Know Crunch",
-                "url" => "https://knowcrunch.com/"
-            ],
-            "author" => [
-                "@type" => "Person",
-                "name" => "Tolis Aivalis"
-            ],
-            "inLanguage" => "Greek/Ellinika",
-            "offers" => [
-                [
-                    "@type" => "Offer",
-                    "category" => "Free",
-                    "priceCurrency" => "EUR",
-                    "price" => 0
-                ]
-            ],
-            "educationalCredentialAwarded" => "EQF 5+ level",
-        ];
-        if(isset($this->mediable)){
-            $schema['image'] = [
-                cdn(get_image($this->mediable,'event-card'))
+        $schema = Cache::remember('schemadata-event-'.$this->id, 10, function(){
+            $schema =
+            [
+                "@context" => "https://schema.org/",
+                "@type" => "Course",
+                "name" => $this->title,
+                "description" => $this->summary,
+                "provider" => [
+                    "@type" => "Organization",
+                    "name" => "Know Crunch",
+                    "url" => "https://knowcrunch.com/"
+                ],
+                "author" => [
+                    "@type" => "Person",
+                    "name" => "Tolis Aivalis"
+                ],
+                "inLanguage" => "Greek/Ellinika",
+                "offers" => [
+                    [
+                        "@type" => "Offer",
+                        "category" => "Free",
+                        "priceCurrency" => "EUR",
+                        "price" => 0
+                    ]
+                ],
+                "educationalCredentialAwarded" => "EQF 5+ level",
             ];
-        }
-        if($this->relationLoaded('slugable') && isset($this->slugable->slug)){
-            $schema['@id'] = $this->slugable->slug;
-        }
-        if($this->relationLoaded('ticket') && isset($this->ticket[0]->price)){
-            $schema['offers'] = [
-                [
-                    "@type" => "Offer",
-                    "category" => "Paid",
-                    "priceCurrency" => "EUR",
-                    "price" => $this->ticket[0]->price
-                ]
-            ];
-        }
-        if(isset($this->published_at)){
-            $schema['datePublished'] = Carbon::create($this->published_at)->format('Y-m-d');
-        }
-        if($this->relationLoaded('event_info1') && isset($this->event_info1->course_delivery)){
-            // dd($this->topic[0]->lessons);
-            $instructors = [];
-            if($this->relationLoaded('instructors') && isset($this->instructors)){
-                foreach($this->instructors as $instr){
-                    $instructor = [
-                        "@type" => "Person",
-                        "name" => $instr->title.' '.$instr->subtitle,
-                        "description" => $instr->header
-                    ];
-                    if(isset($instr->mediable) && $instr->mediable->count() > 0){
-                        $instructor['image'] = config('app.url').$instr->mediable->path.'/'.$instr->mediable->original_name;
+            if(isset($this->mediable)){
+                $schema['image'] = [
+                    cdn(get_image($this->mediable,'event-card'))
+                ];
+            }
+            if($this->relationLoaded('slugable') && isset($this->slugable->slug)){
+                $schema['@id'] = $this->slugable->slug;
+            }
+            if($this->relationLoaded('ticket') && isset($this->ticket[0]->price)){
+                $schema['offers'] = [
+                    [
+                        "@type" => "Offer",
+                        "category" => "Paid",
+                        "priceCurrency" => "EUR",
+                        "price" => $this->ticket[0]->price
+                    ]
+                ];
+            }
+            if(isset($this->published_at)){
+                $schema['datePublished'] = Carbon::create($this->published_at)->format('Y-m-d');
+            }
+            if($this->relationLoaded('event_info1') && isset($this->event_info1->course_delivery)){
+                // dd($this->topic[0]->lessons);
+                $instructors = [];
+                if($this->relationLoaded('instructors') && isset($this->instructors)){
+                    foreach($this->instructors as $instr){
+                        $instructor = [
+                            "@type" => "Person",
+                            "name" => $instr->title.' '.$instr->subtitle,
+                            "description" => $instr->header
+                        ];
+                        if(isset($instr->mediable) && $instr->mediable->count() > 0){
+                            $instructor['image'] = config('app.url').$instr->mediable->path.'/'.$instr->mediable->original_name;
+                        }
+                        // Check if already added
+                        $alreadyInserted = false;
+                        foreach($instructors as $in){
+                            if($in['image'] == $instructor['image'])
+                                $alreadyInserted = true;
+                        }
+                        if(!$alreadyInserted)
+                            $instructors[] = $instructor;
                     }
-                    // Check if already added
-                    $alreadyInserted = false;
-                    foreach($instructors as $in){
-                        if($in['image'] == $instructor['image'])
-                            $alreadyInserted = true;
-                    }
-                    if(!$alreadyInserted)
-                        $instructors[] = $instructor;
+                }
+                $courseWorkload = 'PT0H';
+                if(isset($this->course_hours)){
+                    $courseWorkload = 'PT'.$this->course_hours.'H';
+                }
+                switch($this->event_info1->course_delivery){
+                    case 139: // Classroom training
+                        $schema["hasCourseInstance"] = [
+                            [
+                                // Blended, instructor-led course meeting 3 hours per day in July.
+                                "@type" => "CourseInstance",
+                                "courseMode" => "onsite",
+                                "location" => $this->event_info1->course_inclass_city ?? '',
+                                "instructor" => $instructors,
+                                "courseWorkload" => $courseWorkload
+                            ]
+                        ];
+                        break;
+                    case 143: // Video e-learning
+                        $schema["hasCourseInstance"] = [
+                            [
+                                // Online self-paced course that takes 2 days to complete.
+                                "@type" => "CourseInstance",
+                                "courseMode" => "online",
+                                "courseWorkload" => $courseWorkload
+                            ]
+                        ];
+                        break;
+                    case 215: // Zoom training
+                        $schema["hasCourseInstance"] = [
+                            [
+                                // Online self-paced course that takes 2 days to complete.
+                                "@type" => "CourseInstance",
+                                "courseMode" => "online",
+                                "courseWorkload" => $courseWorkload
+                            ]
+                        ];
+                        break;
+                    case 216: // Corporate training
+                        $schema["hasCourseInstance"] = [
+                            [
+                                // Blended, instructor-led course meeting 3 hours per day in July.
+                                "@type" => "CourseInstance",
+                                "courseMode" => "onsite",
+                                "location" => $this->course_inclass_city ?? '',
+                                "instructor" => $instructors,
+                                "courseWorkload" => $courseWorkload
+                            ]
+                        ];
+                        break;
                 }
             }
-            $courseWorkload = 'PT0H';
-            if(isset($this->course_hours)){
-                $courseWorkload = 'PT'.$this->course_hours.'H';
-            }
-            switch($this->event_info1->course_delivery){
-                case 139: // Classroom training
-                    $schema["hasCourseInstance"] = [
-                        [
-                            // Blended, instructor-led course meeting 3 hours per day in July.
-                            "@type" => "CourseInstance",
-                            "courseMode" => "onsite",
-                            "location" => $this->event_info1->course_inclass_city ?? '',
-                            "instructor" => $instructors,
-                            "courseWorkload" => $courseWorkload
-                        ]
-                    ];
-                    break;
-                case 143: // Video e-learning
-                    $schema["hasCourseInstance"] = [
-                        [
-                            // Online self-paced course that takes 2 days to complete.
-                            "@type" => "CourseInstance",
-                            "courseMode" => "online",
-                            "courseWorkload" => $courseWorkload
-                        ]
-                    ];
-                    break;
-                case 215: // Zoom training
-                    $schema["hasCourseInstance"] = [
-                        [
-                            // Online self-paced course that takes 2 days to complete.
-                            "@type" => "CourseInstance",
-                            "courseMode" => "online",
-                            "courseWorkload" => $courseWorkload
-                        ]
-                    ];
-                    break;
-                case 216: // Corporate training
-                    $schema["hasCourseInstance"] = [
-                        [
-                            // Blended, instructor-led course meeting 3 hours per day in July.
-                            "@type" => "CourseInstance",
-                            "courseMode" => "onsite",
-                            "location" => $this->course_inclass_city ?? '',
-                            "instructor" => $instructors,
-                            "courseWorkload" => $courseWorkload
-                        ]
-                    ];
-                    break;
-            }
-        }
+            return $schema;
+        });
+
         // dd($this);
         return $schema;
     }
