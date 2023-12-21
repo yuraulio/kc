@@ -27,7 +27,7 @@
          "addressLocality": "Suite B2 Newark",
          "addressRegion": "Delaware",
          "postalCode": "19702",
-         "addressCountry": "USA"
+         "addressCountry": "United States"
          },
       "contactPoint": {
          "@type": "ContactPoint",
