@@ -562,7 +562,7 @@
 														    "@type": "Person",
 														    "name": "{!! $row['name'] !!} {!! $row['lastname'] !!}"
 														  },
-														  "reviewBody": "{!! $rev !!}",
+														  "reviewBody": "CCCCC{!! $rev !!}",
 														  "publisher": {
 														    "@type": "Organization",
 														    "name": "Knowcrunch"
