@@ -265,6 +265,9 @@
         $(document).on('click', '.delete-btn', e => {
             confirm('Are you sure you want to delete this user?') ? $(e.currentTarget).parent().submit() : '';
         })
+        $(document).on('click', '.login-as-btn', e => {
+            confirm('Are you sure you want to login as this user?') ? $(e.currentTarget).parent().submit() : '';
+        })
 
 
 
@@ -284,16 +287,9 @@
                     max = null
                 }
 
-                //console.log('mindate::'+min)
-                //console.log('max'+max)
-
-
-                //console.log(data[9])
-                //row = data[9]
                 row = data[10].split('||')
                 selected_event = removeSpecial($('#select2-col9_filter-container').attr('title'))
-                //console.log('MY EVENT'+selected_event)
-                //console.log(row)
+
                 $.each(row, function(key1, value1) {
 
                     if(selected_event != '--All--'){
@@ -320,11 +316,6 @@
 
                             }
 
-                            //var date = new Date( date1 );
-
-                            //console.log('inside row:'+date >= min)
-
-
                         }
                     }else{
                         find = true
@@ -336,9 +327,6 @@
                         return true;
                     }
 
-
-                    //console.log('false')
-                        //return false;
                 })
                 if(find){
                     return true;
