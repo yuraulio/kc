@@ -73,7 +73,7 @@ class Authenticate extends Middleware
 
     protected function unauthenticated($request, $guards): JsonResponse
     {
-        if ($request->expectsJson() || $request->acceptsJson()) {
+        if ($request->expectsJson()) {
             abort(new JsonResponse([
                 'message' => 'Unauthenticated.'
             ], 401));

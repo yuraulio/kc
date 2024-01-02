@@ -1056,6 +1056,8 @@ class UserController extends Controller
      */
     public function show(User $user): JsonResponse
     {
+        $user->load('invoices', 'transactions');
+
         return new JsonResponse($user);
     }
 

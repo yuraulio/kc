@@ -1,4 +1,5 @@
 User-agent: *
+Disallow: /
 Disallow: /__preview/
 Disallow: /login/
 Disallow: /admin/
