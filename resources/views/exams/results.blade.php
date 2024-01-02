@@ -35,7 +35,6 @@
 
 
             <div class="col-md-6 success-fail-text">
-                <h2 style="font-weight:700">Thank you for taking your exam with us.<br>Here are your results.</h2>
                 <?php
 
                     if (isset($_GET['s'])) {
@@ -49,6 +48,10 @@
                         echo $text;
 
 
+                    } else {
+                        ?>
+                        <h2 style="font-weight:700">Thank you for taking your exam with us.<br>Here are your results.</h2>
+                        <?php
                     }
                 ?>
 
