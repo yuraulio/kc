@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Model\Admin\Admin;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -21,6 +22,17 @@ class AdminLoginController extends Controller
 
     public function showLoginPage()
     {
+        if(isset(request()->all()['token'])){
+            $token = request()->all()['token'];
+            if(isset(request()->all()['email'])){
+                $email = request()->all()['email'];
+                $admin = Admin::where('email', $email)->where('remember_token', $token)->first();
+                if($admin){
+                    Auth::guard('admin_web')->login($admin);
+                    return redirect()->route('admin-dashboard');
+                }
+            }
+        }
         return view('new_admin.auth.login');
     }
 
