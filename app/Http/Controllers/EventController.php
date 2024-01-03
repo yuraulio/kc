@@ -542,11 +542,11 @@ class EventController extends Controller
                 }
 
                 if(str_contains($activeUser->pivot['comment'], 'enroll from')){
-                   
+
                     unset($data['eventUsers'][$key]);
                 }
 
-                
+
             }
 
 
@@ -582,7 +582,7 @@ class EventController extends Controller
 
         $event_users = $event['users'];
 
-        
+
         $data = [];
         //return [];
         $eventId = $event['id'];
@@ -631,7 +631,7 @@ class EventController extends Controller
 
                 $expiration_event = strtotime($event_user->pivot->expiration);
                 $now = strtotime(date('Y-m-d'));
-                
+
 
                 if($event_user->pivot->paid == 1 && $expiration_event >= $now && ($event_user->pivot->comment == null || $event_user->pivot->comment == '' || $event_user->pivot->comment == ' '))
                 {
@@ -641,15 +641,15 @@ class EventController extends Controller
                 {
                     $countActive['fromInclass'] = $countActive['fromInclass'] + 1;
                 }
-                
-                
-                
+
+
+
             }
 
         }
-        
+
         $arr = [];
-        
+
 
         //dd($event->transactions);
         $countUsersU = [];
@@ -659,47 +659,47 @@ class EventController extends Controller
             //$amount += $transaction->amount;
 
             //dd($transaction->user);
-            $users = $transaction->user; 
-            
+            $users = $transaction->user;
+
             foreach($users as $user){
 
                 $countUsersU[] = $user->id;;
-                
+
                 $enrollfromOtherEventPivot = $user->events_for_user_list1()->wherePivot('event_id',$event->id)->first();
                 $a = false;
 
                 if($enrollfromOtherEventPivot && !str_contains($enrollfromOtherEventPivot->pivot->comment, 'enroll from')){
                     $countUsersWithoutEnrollForFree[] = $user->id;;
-                    
+
                 }else{
                     $a = true;
                 }
-                
-                
-                
+
+
+
                 if($a == false){
                     $tickets = $user['ticket']->groupBy('event_id');
                     $ticketType = isset($tickets[$event->id]) ? $tickets[$event->id]->first()->type : '-';
-    
+
                     $isSubscription = $transaction->isSubscription()->first();
-    
+
                     if(isset($tickets[$event->id]) && !$isSubscription){
                         $ticketType = $tickets[$event->id]->first()->type;
                         $ticketName = $tickets[$event->id]->first()->title;
-    
+
                     }else if($isSubscription){
                         $ticketType = '-';
                         $ticketName = '-';
-    
+
                     }else{
                         $ticketType = '-';
                         $ticketName = '-';
                     }
-    
+
                     $countUsers = count($users);
-    
+
                     $amount = $transaction['amount'] != null ? round($transaction['amount'] / $countUsers) : 0;
-    
+
                     if($isSubscription != null){
                         if($filters != null && $filters['calculateSubscription']){
                             $income['subscription'] += $amount;
@@ -708,143 +708,143 @@ class EventController extends Controller
                             $income['subscription'] += $amount;
                             $incomeInstalments['subscription'] += $amount;
                         }
-    
+
                     }
-    
-    
+
+
                         if($ticketType == 'Special'){
-    
+
                             //$arr_income[$transaction->id] = $transaction->amount;
-        
-        
-        
+
+
+
                             $count['special']++;
                             $income['special'] +=  ($amount);
-        
-        
+
+
                         }else if($ticketType == 'Early Bird'){
-        
+
                             $count['early']++;
-        
+
                             $income['early'] += ($amount) ;
-        
-        
+
+
                         }else if($ticketType == 'Regular'){
-        
+
                             $count['regular']++;
-        
+
                             $income['regular'] += ($amount) ;
-        
+
                         }else if($ticketType == 'Sponsored'){
-        
+
                             $count['free']++;
-        
-        
+
+
                         }else if($ticketType == 'Alumni'){
-        
+
                             $count['alumni']++;
                             $income['alumni'] +=  ($amount) ;
-        
-        
+
+
                         }else{
-    
+
                             $income['other'] += ($amount) ;
                         }
-                    
-    
-                    
-    
+
+
+
+
                     if($from_controller == null){
                         if(count($transaction['invoice']) > 0 ){
-    
-    
+
+
                             foreach($transaction['invoice'] as $invoice){
-    
+
                                 if($invoice['amount'] != null){
                                     //dd($transaction);
                                     $amount = $invoice['amount'] / $countUsers;
                                 }
-    
-    
-    
-    
-    
+
+
+
+
+
                                 if($ticketType == 'Special'){
-    
+
                                     //$arr[$transaction->id][$invoice->id] = $amount;
-    
-    
-    
+
+
+
                                     $incomeInstalments['special'] = $incomeInstalments['special'] + $amount;
                                     //$incomeInstalments['total'] = $incomeInstalments['total'] + $amount;
-    
+
                                 }else if($ticketType == 'Early Bird'){
-    
+
                                     $incomeInstalments['early'] = $incomeInstalments['early'] + $amount;
                                     //$incomeInstalments['total'] = $incomeInstalments['total'] + $amount;
-    
+
                                 }else if($ticketType == 'Regular'){
-    
+
                                     $arr[$transaction->id][$invoice->id] = $amount;
-    
+
                                     $incomeInstalments['regular'] = $incomeInstalments['regular'] + $amount;
                                     //$incomeInstalments['total'] = $incomeInstalments['total'] + $amount;
-    
+
                                 }else if($ticketType == 'Sponsored'){
-    
+
                                 }else if($ticketType == 'Alumni'){
-    
+
                                     $incomeInstalments['alumni'] = $incomeInstalments['alumni'] + $amount;
                                     //$incomeInstalments['total'] = $incomeInstalments['total'] + ($transaction['amount'] != null ? ($transaction['amount'] / $countUsers) : 0) / $countUsers;
                                 }else{
                                     $incomeInstalments['other'] = $incomeInstalments['other'] + $amount;
                                     //$incomeInstalments['total'] = $incomeInstalments['total'] + ($transaction['amount'] != null ? ($transaction['amount'] / $countUsers) : 0) / $countUsers;
-    
+
                                 }
-    
+
                             }
-    
+
                         }
                         else{
                             $amount = $transaction['amount'] != null ? $transaction['amount'] / $countUsers : 0;
-    
+
                             if(!isset($transaction['status_history'][0]['installments'])){
-    
+
                                 if($ticketType == 'Special'){
-    
+
                                     //$arr[$transaction->id] = $amount;
-    
+
                                     $incomeInstalments['special'] = $incomeInstalments['special'] + $amount;
                                     //$incomeInstalments['total'] = $incomeInstalments['total'] + $amount;
-    
+
                                 }else if($ticketType == 'Early Bird'){
-    
-    
+
+
                                     $incomeInstalments['early'] = $incomeInstalments['early'] + $amount;
                                     //$incomeInstalments['total'] = $incomeInstalments['total'] + $amount;
-    
+
                                 }else if($ticketType == 'Regular'){
-    
-    
-    
+
+
+
                                     $incomeInstalments['regular'] = $incomeInstalments['regular'] + $amount;
                                     //$incomeInstalments['total'] = $incomeInstalments['total'] + $amount;
-    
+
                                 }else if($ticketType == 'Sponsored'){
-    
+
                                 }else if($ticketType == 'Alumni'){
                                     $incomeInstalments['alumni'] = $incomeInstalments['alumni'] + $amount;
                                     //$incomeInstalments['total'] = $incomeInstalments['total'] + ($transaction['amount'] / $countUsers);
                                 }else{
                                     $incomeInstalments['other'] = $incomeInstalments['other'] + $amount;
                                     //$incomeInstalments['total'] = $incomeInstalments['total'] + ($transaction['amount'] / $countUsers);
-    
+
                                 }
                             }
                         }
                     }
                 }
-                
+
 
             }
         }
@@ -1489,12 +1489,16 @@ class EventController extends Controller
 
         // Certificate
         if(isset($requestData['certificate'])){
+            $data['course_certification_completion'] = $requestData['certificate']['completion_text'];
             $data['course_certification_name_success'] = $requestData['certificate']['success_text'];
-            $data['course_certification_name_failure'] = $requestData['certificate']['failure_text'];
+            //$data['course_certification_name_failure'] = $requestData['certificate']['failure_text'];
             //$data['course_certification_event_title'] = $requestData['certificate']['event_title'];
-            $data['course_certification_type'] = $requestData['certificate']['type'];
+            //$data['course_certification_type'] = $requestData['certificate']['type'];
             $data['course_certification_title'] = $requestData['certificate']['title'];
+            $data['course_certification_text'] = $requestData['certificate']['text'];
+            //$data['course_certification_attendance_title'] = $requestData['certificate']['attendance_title'] ?? '';
             $data['has_certificate'] = isset($requestData['certificate']['certification']) && $requestData['certificate']['certification'] == 'on';
+            $data['has_certificate_exam'] = isset($requestData['certificate']['certification_exam']) && $requestData['certificate']['certification_exam'] == 'on';
 
             if(isset($requestData['certificate']['visible'])){
 
@@ -1646,15 +1650,18 @@ class EventController extends Controller
         $infos->course_awards_text = $event_info['course_awards_text'];
         $infos->course_awards_icon = $event_info['course_awards_icon'];
 
+        $infos->course_certification_completion = $event_info['course_certification_completion'];
         $infos->course_certification_name_success = $event_info['course_certification_name_success'];
-        $infos->course_certification_name_failure = $event_info['course_certification_name_failure'];
+        //$infos->course_certification_name_failure = $event_info['course_certification_name_failure'];
         //$infos->course_certification_event_title = $event_info['course_certification_event_title'];
-        $infos->course_certification_type = $event_info['course_certification_type'];
+        //$infos->course_certification_type = $event_info['course_certification_type'];
         $infos->course_certification_title = $event_info['course_certification_title'];
+        $infos->course_certification_text = $event_info['course_certification_text'];
+        //$infos->course_certification_attendance_title = $event_info['course_certification_attendance_title'];
         $infos->has_certificate = $event_info['has_certificate'];
+        $infos->has_certificate_exam = $event_info['has_certificate_exam'];
         $infos->course_certification_visible = $event_info['course_certificate_visible'];
         $infos->course_certification_icon = $event_info['course_certificate_icon'];
-
         $infos->course_students_number = $event_info['course_students_number'];
         $infos->course_students_text = $event_info['course_students_text'];
         $infos->course_students_title = $event_info['course_students_title'];

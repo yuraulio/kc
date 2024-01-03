@@ -83,19 +83,23 @@
         </template>
         <template v-else>
 
-            <div v-if="showFilter('from_date')" class="px-3 py-2">
+            <div v-if="showFilter('from_date')" class="px-3 py-1">
                 <datepicker-component
                     @updatevalue="update_transaction_from"
                     :prop-value="transaction_from"
                     placeholder="Transaction from"
+                    :disabled="loading"
+                    :utc="true"
                 ></datepicker-component>
             </div>
 
-            <div v-if="showFilter('until_date')" class="px-3 py-2">
+            <div v-if="showFilter('until_date')" class="px-3 py-1">
                 <datepicker-component
                     @updatevalue="update_transaction_to"
                     :prop-value="transaction_to"
                     placeholder="Transaction to"
+                    :disabled="loading"
+                    :utc="true"
                 ></datepicker-component>
             </div>
 
@@ -234,6 +238,10 @@
                 ></multidropdown>
             </div>
 
+            <div class="px-3 py-1">
+                <button @click="refreshTable()" class="btn btn-soft-info waves-effect waves-light">Refresh Table</button>
+            </div>
+
         </template>
 
     </b-sidebar>
@@ -351,8 +359,8 @@
                         </template>
                         <span @click="category_value=null, refreshTable()" v-if="category_value && showFilter('category')" class="badge bg-primary ms-1 cursor-pointer">{{category_value.title}} <i class="fa fa-times" aria-hidden="true"></i></span>
                         <span @click="subcategory_value=null, refreshTable()" v-if="subcategory_value && showFilter('subcategory')" class="badge bg-primary ms-1 cursor-pointer">{{subcategory_value.title}} <i class="fa fa-times" aria-hidden="true"></i></span>
-                        <span @click="transaction_from=null, refreshTable()" v-if="transaction_from" class="badge bg-primary ms-1 cursor-pointer">Transaction From: {{formatdate(transaction_from)}} <i class="fa fa-times" aria-hidden="true"></i></span>
-                        <span @click="transaction_to=null, refreshTable()" v-if="transaction_to" class="badge bg-primary ms-1 cursor-pointer">Transaction To: {{formatdate(transaction_to)}} <i class="fa fa-times" aria-hidden="true"></i></span>
+                        <span @click="!loading ? (transaction_from=null, refreshTable()) : {}" v-if="transaction_from" class="badge bg-primary ms-1 cursor-pointer">Transaction From: {{formatdate(transaction_from)}} <i class="fa fa-times" aria-hidden="true"></i></span>
+                        <span @click="!loading ? (transaction_to=null, refreshTable()) : {}" v-if="transaction_to" class="badge bg-primary ms-1 cursor-pointer">Transaction To: {{formatdate(transaction_to)}} <i class="fa fa-times" aria-hidden="true"></i></span>
                     </div>
                 </div>
 
@@ -573,7 +581,8 @@ export default {
             page_value: null,
             transaction_to: null,
             transaction_from: null,
-            onInitWidget: true
+            onInitWidget: true,
+            disabled:true
 
         };
     },
@@ -593,9 +602,9 @@ export default {
                 day = '' + d.getDate(),
                 year = d.getFullYear();
 
-            if (month.length < 2) 
+            if (month.length < 2)
                 month = '0' + month;
-            if (day.length < 2) 
+            if (day.length < 2)
                 day = '0' + day;
 
             return [year, month, day].join('-');
@@ -604,11 +613,11 @@ export default {
             // d/m/Y
             let d = new Date(date);
 
-            d = d.toLocaleDateString();
+            d = d.toLocaleDateString('el-GR');
 
             return d;
         },
-        
+
         exportData(){
 
             if(this.config.apiUrl.includes('royalties')){
@@ -960,9 +969,9 @@ export default {
 
                             this.widgets[1][0] = total.toFixed(2)
                         }
-                    
-                    
-                    
+
+
+
 
                 }
 
@@ -998,11 +1007,11 @@ export default {
         },
         update_transaction_from(value) {
             this.transaction_from = value;
-            this.refreshTable();
+            // this.refreshTable();
         },
         update_transaction_to(value) {
             this.transaction_to = value;
-            this.refreshTable();
+            // this.refreshTable();
         },
         update_published(value){
             this.published_value = value;
@@ -1100,8 +1109,8 @@ export default {
                 }
 
                 const pageNumber = searchParams.get('page');
-                
-                
+
+
 
 
             }else{
@@ -1114,13 +1123,13 @@ export default {
                 this.transaction_to = today.toISOString();
             }
 
-            
+
 
             if(this.config.royaltyView == 'single'){
-                
+
                 this.widgets = ['TOTAL ROYALTIES',[0],'Total royalties for all instructors']
             }else if(this.config.royaltyView == 'list'){
-                
+
                 this.widgets = ['TOTAL ROYALTIES',[0],'Total royalties for all instructors']
             }
 

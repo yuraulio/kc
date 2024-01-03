@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\NotificationController;
 use App\Model\Admin\Setting;
+use App\Model\User;
+use App\Notifications\ErrorSlack;
 use Bugsnag\BugsnagLaravel\Facades\Bugsnag;
 
 /*
@@ -19,6 +21,15 @@ use Bugsnag\BugsnagLaravel\Facades\Bugsnag;
 
 Auth::routes(['register' => false]);
 
+Route::get('/slack-test', function () {
+    $user = User::first();
+    if($user){
+        $response = $user->notify(new ErrorSlack('Error example message. We can name people, for example: Lucas <@U0617USV6NB> or Elli <@U064KHTQ6LX>'));
+        echo "Test notification sent to Slack: ". json_encode($response);
+    }else{
+        echo "User not exist";
+    }
+});
 Route::get('/debug-bugsnag', function () {
     Bugsnag::notifyException(new RuntimeException("Test error"));
     echo "Test notification sent to Bugsnag";
@@ -48,6 +59,8 @@ Route::get('lock', 'PageController@lock')->name('page.lock');
 Route::get('mycertificateview/{id}/{title}', 'Theme\CertificateController@view_results')->name('certificate.results');
 
 Route::group(['middleware' => 'auth.aboveauthor', 'prefix' => 'admin1'], function () {
+
+    Route::get('/refresh-cache', 'UtilController@refreshCache')->name("admin.refresh-cache");
 
     Route::get('/', 'HomeController@index')->name('home');
 
@@ -160,6 +173,7 @@ Route::group(['middleware' => 'auth.aboveauthor', 'prefix' => 'admin1'], functio
     Route::get('user/edit_ticket', ['as' => 'user.edit_ticket', 'uses' => 'UserController@edit_ticket']);
     Route::post('user/remove_ticket_user', ['as' => 'user.remove_ticket_user', 'uses' => 'UserController@remove_ticket_user']);
     Route::get('user/absences/{user}/{event}', 'UserController@getAbsences');
+    Route::post('user/login_as/{id}', 'UserController@loginAs')->name('user.login_as');
 
 
     //Videos

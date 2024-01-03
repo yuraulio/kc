@@ -265,6 +265,9 @@
         $(document).on('click', '.delete-btn', e => {
             confirm('Are you sure you want to delete this user?') ? $(e.currentTarget).parent().submit() : '';
         })
+        $(document).on('click', '.login-as-btn', e => {
+            confirm('Are you sure you want to login as this user?') ? $(e.currentTarget).parent().submit() : '';
+        })
 
 
 
@@ -284,16 +287,9 @@
                     max = null
                 }
 
-                //console.log('mindate::'+min)
-                //console.log('max'+max)
-
-
-                //console.log(data[9])
-                //row = data[9]
                 row = data[10].split('||')
                 selected_event = removeSpecial($('#select2-col9_filter-container').attr('title'))
-                //console.log('MY EVENT'+selected_event)
-                //console.log(row)
+
                 $.each(row, function(key1, value1) {
 
                     if(selected_event != '--All--'){
@@ -320,11 +316,6 @@
 
                             }
 
-                            //var date = new Date( date1 );
-
-                            //console.log('inside row:'+date >= min)
-
-
                         }
                     }else{
                         find = true
@@ -336,9 +327,6 @@
                         return true;
                     }
 
-
-                    //console.log('false')
-                        //return false;
                 })
                 if(find){
                     return true;
@@ -419,6 +407,7 @@
                     {data: 'mobile', name: 'mobile', title: 'mobile'},
                     {data: 'email', name: 'email', title: 'email'},
                     {data: 'kc_id', name: 'kc_id', title: 'kc-id'},
+                    {data: 'stripe_id', name: 'stripe_id', title: 'Stripe Info'},
                     {data: 'id', name: 'id', title: 'id'},
                     {data: 'role', name: 'role.name',title: 'role',orderable: false},
                     {data: 'status', name: 'status', title: 'status',orderable: false,searchable: false},
@@ -427,6 +416,18 @@
                     {data: 'action', name: 'action', orderable: false, searchable: false},
 
                 ],
+                "columnDefs": [
+                    {
+                        "targets": 6,
+                        "data": null, // Use the full data source object for the renderer's source
+                        "render": function ( data, type, row, meta ) {
+                            if(data != '' && data != null)
+                                return '<a target="_blank" href="https://dashboard.stripe.com/customers/'+data+'">View in Stripe</a>';
+                            else
+                                return '';
+                        }
+                    }
+                ]
 
             });
 

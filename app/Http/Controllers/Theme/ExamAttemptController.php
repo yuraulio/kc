@@ -153,7 +153,7 @@ class ExamAttemptController extends Controller
 
             $getSyncData = ExamSyncData::where(['exam_id' => $exam_id, 'user_id' => $st_id])->value('id');
 
-            if($getSyncData && $request->init){
+            if($getSyncData && $request->init != 'false'){
                 return false;
             }
 
@@ -396,18 +396,12 @@ class ExamAttemptController extends Controller
                 }
 
                 if(($eventType->delivery->first() && $eventType->delivery->first()->id == 143) || date('Y') > 2021){
-                    if($success){
-                        $template ='kc_diploma_2022b';
-                    }else{
-                        $template ='kc_attendance_2022b';
-                    }
+                    $template ='new_kc_certificate';
                 }else{
-                    if($success){
-                        $template ='kc_deree_diploma_2022';
-                    }else{
-                        $template ='kc_deree_attendance_2022';
-                    }
+                    
+                    $template ='new_kc_deree_certificate';
                 }
+                
 
                 $certificateTitle = $eventType->title;
                 //dd($certificate->event->first()->event_info()['certificate']);
@@ -416,9 +410,9 @@ class ExamAttemptController extends Controller
                   if($success && isset($eventType->event_info()['certificate']['messages']['success'])){
 
                     $certificateTitle = $eventType->event_info()['certificate']['messages']['success'];
-                  }else if(!$success && isset($eventType->event_info()['certificate']['messages']['failure'])){
+                  }else if(!$success && isset($eventType->event_info()['certificate']['messages']['completion'])){
 
-                    $certificateTitle = $eventType->event_info()['certificate']['messages']['failure'];
+                    $certificateTitle = $eventType->event_info()['certificate']['messages']['completion'];
                   }
 
                 }

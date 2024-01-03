@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">	
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <style>
 
 @page { margin: 0px; }
@@ -10,7 +10,7 @@
     max-width: 200px;
 }
 
-h1, h2, h3, p { 
+h1, h2, h3, p {
     font-family: 'foco';
 }
 
@@ -44,7 +44,7 @@ h2,h3{ font-size: 20px; padding: 0; font-weight:normal}
 
 .mar-top-50{
     margin-top: 50px;
-    
+
 }
 
 .mar-top-150{
@@ -64,7 +64,7 @@ h2,h3{ font-size: 20px; padding: 0; font-weight:normal}
     margin:auto;
     letter-spacing:3px;
     max-width:650px;
-   
+
 }
 
 h3.certificate {
@@ -83,7 +83,7 @@ h3.certificate {
 
 .signature-img{
     max-width:150px;
-    
+
 }
 
 .knowcrunch-signature-left{
@@ -119,7 +119,7 @@ h3.certificate {
     text-align: center;
     color: #666666;
     font-size:14px;
-    
+
 }
 
 .mar-auto{
@@ -143,7 +143,7 @@ h3.certificate {
 </head>
 <body class="borders">
     <div class="mar-top-50">
-        
+
             <div class="logo">
                 <img class="knowcrunch-logo" src="{{asset('theme/assets/images/certificates2021/knowcrunch-logo.png')}}">
             </div>
@@ -152,19 +152,19 @@ h3.certificate {
 
             <h2 class="name"> {{$certificate['firstname']}} {{$certificate['lastname']}} </h2>
 
-                
+
             <p class="award">
-               
+
                 has successfully completed all exams and is hereby awarded this
 
             </p>
 
 
-            <h3 class="certificate">  {!!$certificate['certification_title']!!}  </h3>
+            <h3 class="certificate">  {!!mb_strtoupper($certificate['certification_title'])!!}  </h3>
 
-           
-               
-           
+
+
+
         </div>
 
         <div class="text-center mar-top-150">
@@ -173,13 +173,13 @@ h3.certificate {
                     <div class="border-bottom"></div>
                     <p class="name-signature"> APOSTOLIS AIVALIS</p>
                     <p class="title-signature"> Head of Curriculum, Knowcrunch</p>
-                    
-              
-                
-              
+
+
+
+
             </div>
         </div>
-    
+
         <div class="footer">
         <p> Issue date: {{$certificate['certification_date']}}  @if($certificate['expiration_date']) | Expiration date: {{$certificate['expiration_date']}} @endif |   Credential #: {{$certificate['credential']}} </p>
         </div>

@@ -114,6 +114,9 @@
                         </div>
                     </div>
                 </div>
+                <script type="application/ld+json">
+                    {!! json_encode($event->schemadata()) !!}
+                </script>
             @endforeach
         @endforeach
     </div>
@@ -124,6 +127,9 @@
         @foreach($elearningEvents as $data)
 
             @foreach($data['events'] as $event)
+                <script type="application/ld+json">
+                    {!! json_encode($event->schemadata()) !!}
+                </script>
                 <div class="col-sm-6 col-md-3 mb-5">
                     <div class="slide d-inline-block">
                         <?php

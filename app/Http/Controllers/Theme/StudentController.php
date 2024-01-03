@@ -31,6 +31,7 @@ use App\Notifications\ExamActive;
 use Illuminate\Support\Str;
 use App\Jobs\UploadImageConvertWebp;
 use App\Http\Controllers\Theme\CertificateController;
+use App\Notifications\ErrorSlack;
 use App\Notifications\SendTopicAutomateMail;
 
 class StudentController extends Controller
@@ -851,7 +852,7 @@ class StudentController extends Controller
         $media->save();
 
         // Convert webp image format
-        dispatch((new UploadImageConvertWebp('profile_user/', $media->original_name))->delay(now()->addSeconds(300)));
+        dispatch((new UploadImageConvertWebp('profile_user/', $media->original_name, Auth::id()))->delay(now()->addSeconds(300)));
 
 
 
@@ -1142,9 +1143,9 @@ class StudentController extends Controller
                     //$note = preg_replace('/\s+/', ' ', $note);
                     //$note =  preg_replace( "/\r|\n/", "||", $request->text );
                     //dd(preg_replace( "/\r|\n/", "||", $request->text ));
-                    $notes[$key] = preg_replace( "/\r|\n/", "||", $requestedNotes[$key] );
-                    $notes[$key] = str_replace(['"',"'"], "", $notes[$key]);
-                    $notes[$key] = str_replace(['\\'], "", $notes[$key]);
+                    $notes[$key] = preg_replace( "/\r|\n/", "||", $requestedNotes[$key] ?? '' );
+                    $notes[$key] = str_replace(['"',"'"], "", $notes[$key] ?? '');
+                    $notes[$key] = str_replace(['\\'], "", $notes[$key] ?? '');
 
                     //dd($notes);
 
@@ -1156,11 +1157,14 @@ class StudentController extends Controller
 
         $user->statistic()->wherePivot('event_id', $request->event)->updateExistingPivot($request->event,['notes' => json_encode($notes)], false);
 
-
+        $text = $request->text;
+        if (!mb_check_encoding($text, 'UTF-8')) {
+            $text = mb_convert_encoding($text, 'UTF-8', 'auto');
+        }
 
         return response()->json([
             'success' => true,
-            'text' => $request->text
+            'text' => $text
             // 'vimeoId' =>$vimeoKey
         ]);
 
@@ -1185,15 +1189,19 @@ class StudentController extends Controller
 
                 //$videos[$key]['seen'] = isset($video['seen']) ? $video['seen'] : 0;
                 $videos[$key]['stop_time'] = isset($video['stop_time']) ? $video['stop_time'] : 0;
-                $videos[$key]['percentMinutes'] = isset($video['stop_time']) ? $video['percentMinutes'] : 0;
+                $videos[$key]['percentMinutes'] = isset($video['stop_time']) ? ($video['percentMinutes'] ?? 0) : 0;
                 $videos[$key]['is_new'] = isset($video['is_new']) ? $video['is_new'] : 0;
 
-                if( (int) $video['seen'] == 1 && (int) $videos[$key]['seen'] == 0){
-                    $videos[$key]['seen'] = (int) $video['seen'];
+                if(isset($video['seen']) && isset($videos[$key]['seen'])){
+                    if( (int) $video['seen'] == 1 && (int) $videos[$key]['seen'] == 0){
+                        $videos[$key]['seen'] = (int) $video['seen'];
+                    }
                 }
 
-                if((float)$video['stop_time'] > (float)$videos[$key]['total_seen']){
-                    $videos[$key]['total_seen'] = $video['stop_time'];
+                if(isset($video['stop_time']) && isset($video['total_seen'])){
+                    if((float)$video['stop_time'] > (float)$videos[$key]['total_seen']){
+                        $videos[$key]['total_seen'] = $video['stop_time'];
+                    }
                 }
 
             }
@@ -1289,7 +1297,10 @@ class StudentController extends Controller
         }
 
         $lessonForUpdate = [];
-        $checkDbValueSendAutomateEmail = (int) $video[$videoId]['send_automate_email'];
+        if(isset($video[$videoId]))
+            $checkDbValueSendAutomateEmail = (int) $video[$videoId]['send_automate_email'];
+        else
+            $checkDbValueSendAutomateEmail = 1;
 
         // dd($video[$videoId]);
         // dd($videoId.'//'.$checkDbValueSendAutomateEmail);
@@ -1395,9 +1406,16 @@ class StudentController extends Controller
         $data = $request->all();
         $dropboxPath = $data['dir'];
         $fileName = $data['fname'];
-        $accessToken = env('DROPBOX_TOKEN');
+        $accessToken = config('filesystems.disks.dropbox.accessToken');
         $client = new \Spatie\Dropbox\Client($accessToken);
-        return $client->getTemporaryLink($dropboxPath);
+        try{
+            return $client->getTemporaryLink($dropboxPath);
+        }catch(\Exception $e){
+            $user = User::first();
+            if($user){
+                $user->notify(new ErrorSlack('API Dropbox failed. Unable to get route '.$dropboxPath.'. Error message: '.$e->getMessage()));
+            }
+        }
     }
 
     public function createPassIndex($slug){

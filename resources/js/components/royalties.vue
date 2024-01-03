@@ -4,7 +4,6 @@
 
 <template>
     <div>
-
         <paginationtable :config="config"></paginationtable>
 
     </div>

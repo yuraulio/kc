@@ -1097,6 +1097,24 @@ class UserController extends Controller
         $receiptDetails['billemail'] = $request->billemail ? $request->billemail : '';
 
         if($request->file('photo')){
+            if(!$user1->image){
+                $imgProfileEmpty = Media::create([
+                    'original_name' => '',
+                    'name' => '',
+                    'ext' => '',
+                    'file_info' => '',
+                    'size' => '',
+                    'height' => '',
+                    'width' => '',
+                    'dpi' => '',
+                    // 'mediable_id' => '',
+                    // 'mediable_type' => '',
+                    'details' => '',
+                    'path' => '',
+                ]);
+                $user1->image()->save($imgProfileEmpty);
+                $user1->refresh();
+            }
             (new MediaController)->uploadProfileImage($request, $user1->image);
         }
 
@@ -1169,7 +1187,7 @@ class UserController extends Controller
         }else{
             return response()->json([
                 'message' => 'Update profile failed',
-                'data' => $user,
+                'data' => $updated_user,
                 'billing' => $receiptDetails
             ]);
         }

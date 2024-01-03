@@ -2,19 +2,13 @@
 <html lang="en" >
    <head>
       <meta charset="UTF-8">
-      <title>{{$certificate['meta_title']}}</title>
+      <title>{!!$certificate['meta_title']!!}</title>
       <meta name="author" content="Knowcrunch">
       <style type="text/css">
          @font-face {
          font-family: 'Foco';
          	/*src: url("{{ storage_path('fonts\Foco_Lt.ttf') }}") format("truetype");*/
          	src: url("{{ asset('/fonts/Foco_Lt.ttf') }}") format("truetype");
-         }
-         @font-face {
-         font-family: 'Foco-Bold';
-         	/*src: url("{{ storage_path('fonts\Foco_Lt.ttf') }}") format("truetype");*/
-         	src: url("{{ asset('/fonts/Foco_Bd.ttf') }}") format("truetype");
-			 font-weight: bold;
          }
          @page {
          	margin: 0px;
@@ -44,43 +38,42 @@
 
 
 		.user-info {
-         	margin-top: 100px;
+         	margin-top: 80px;
          	margin-bottom: 10px;
          }
 
 
-         .info-title p{
-			font-size:25px!important;
-			line-height:15px;
-			letter-spacing:0.5px;
-			/*text-transform: uppercase;*/
-		}
-
-
-        .award p{
-
-        line-height:0.8;
-        margin: 0;
-        display:inline;
-        float:none;
-        text-transform: lowercase;
-
-        }
-
-			p.certi-title{
-				line-height:40px;
+			.info-title{
+				margin-top:-11px!important;
+				margin-left:15px!important;
+		    	font-size:42px;
+		    	letter-spacing:5px;
+				text-transform: uppercase;
 			}
 
 
+			.award{
+   				font-size:25px;
+   				line-height:1;
+				letter-spacing:0.4px;
+				margin-top:-2px!important;
+
+
+			}
+
+			.certi-title-new{
+				margin-top:10px!important;
+				margin-left:17px!important;
+				line-height:0.9;
+			}
+
 			.certi-title-new p{
 
-			font-size:27px;
-			line-height:35px;
-			text-transform: uppercase;
-			letter-spacing:3.8px;
-			margin-top: -3.3px!important;
-			margin-left: 20px!important;
-		}
+				font-size:40px;
+				text-transform: uppercase;
+				letter-spacing:5.8px;
+
+			}
 
 			p{
 				padding: 0;
@@ -92,7 +85,6 @@
                 margin-left:111px;
 				margin-top:18px
 			}
-
 
             .deree-logo{
                 max-width: 70px;
@@ -111,20 +103,20 @@
 				font-size:16px;
 				letter-spacing:3px;
 				margin-top:10px!important;
-				margin-right:10px!important;
+				margin-right:15px!important;
 			}
 
 			.name-signature-deree{
 				font-size:16px;
 				letter-spacing:3px;
 				margin-top:10px!important;
-				margin-left:25px!important;
+				margin-left:20px!important;
 			}
 
 			.after-name-signature{
 				font-size:12px!important;
 				letter-spacing:2px!important;
-				margin-top:-5.3px!important;
+				margin-top:-5.5px!important;
 				margin-right:18px!important;
 				line-height:0!important;
 			}
@@ -133,18 +125,24 @@
 				font-size:12px!important;
 				letter-spacing:2px!important;
 				margin-left:18px!important;
-				line-height:0.9!important;
+				line-height:0.8!important;
+			}
+
+			.signature-table {
+
+				position: absolute;
+				top: 68%;
 			}
 			.signature-line{
 				max-width: 280px;
 				margin-right:25px;
-				margin-top:0px;
+				margin-top:5px;
 
 			}
 
 			.signature-line-deree{
 				max-width: 280px;
-				margin-top:0px;
+				margin-top:5px;
 			}
 			.footer {
 				font-size:7px;
@@ -168,7 +166,7 @@
 
          }
 
-		 .background-element-left{
+		.background-element-left{
 			position: absolute;
 			max-width: 210px;
 			top:13%;
@@ -181,45 +179,25 @@
 			left:80.5%
 		}
 
-
-			.signature-img{
-			   max-width:200px;
-			   margin-right:26px;
-
-			}
-
-            .signature-img-deree{
-			   max-width:150px;
-			   margin-left:25px;
-
-			}
-
-            .knowcrunch-signature{
-                padding-left:120px;
-            }
-
-            .deree-signature{
-                padding-right:120px;
-            }
-
-            .bold {
-			font-family: 'Foco-Bold'!important;
-			font-weight:bold!important;
+		.signature-img{
+		   max-width:200px;
+		   margin-right:25px;
 
 		}
 
-        .user-name{
-			margin-top:-12px!important;
-			margin-left:10px!important;
-		    font-size:42px;
-		    letter-spacing:5px;
-			text-transform: uppercase;
-		}
-		.signature-table {
+        .signature-img-deree{
+		   max-width:150px;
 
-			position: absolute;
-			top: 68%;
 		}
+
+        .knowcrunch-signature{
+            padding-left:130px;
+        }
+
+        .deree-signature{
+            padding-right:120px;
+        }
+
 
       </style>
    </head>
@@ -241,50 +219,40 @@
                </tbody>
             </table>
 
-            <table class="user-info" width="100%">
+         <table class="user-info" width="100%">
 				<tbody>
             	<tr class="">
             	   <td align="center">
-						<p class="user-name">{{$certificate['firstname']}} {{$certificate['lastname']}} </p>
+							<p class="info-title"> {{$certificate['firstname']}} {{$certificate['lastname']}} </p>
             	   </td>
             	</tr>
 
-				<tr>
-            	    <td class="info-title" align="center">
-							<p > has attended our course </p>
-					</td>
+					<tr>
+            	   <td align="center">
+							<p class="award">
 
+								has completed our training and is hereby awarded this
 
+			  				</p>
+            	   </td>
             	</tr>
 
-				<tr align="center">
+					<tr>
+            	   <td class="certi-title-new" align="center">
+							<p class="certi-title">
 
+								{!! mb_strtoupper($certificate['certification_title']) !!}
 
-					<td class="certi-title-new">
-						<p>{!! $certificate['certificate_event_title'] !!}</p>
-					</td>
-
-
-
-
-
+			  				</p>
+            	   </td>
             	</tr>
-
-				<tr align="center">
-
-					<td  class="info-title award">
-						<p > and is awarded this  </p><p class="bold">{{mb_strtoupper($certificate['certification_title'])}}.</p>
-					</td>
-
-            	</tr>
-
 
 				</tbody>
          </table>
 
          <table class="signature-table" width="100%">
             <tbody>
-			<tr >
+				<tr >
 					<td class="knowcrunch-signature" align="center"><img class="signature-img" src="{{asset('theme/assets/images/certificates2022b/signature-aivalis.png')}}"></td>
                     <td  class="deree-signature" align="center"><img class="signature-img-deree" src="{{asset('theme/assets/images/certificates2022b/signature-krepapa.png')}}"></td>
                </tr>

@@ -193,7 +193,7 @@
     </div>
 @endif
 
-@if(isset($info['certificate']['visible']['landing']) && $info['certificate']['visible']['landing'] && isset($info['certificate']['type']) && $info['certificate']['type'] )
+@if(isset($info['certificate']['visible']['landing']) && $info['certificate']['visible']['landing'] && isset($info['certificate']['has_certificate']) && $info['certificate']['has_certificate'] )
     <?php $has_info = true; ?>
     <div class="col-10 col-sm-5 col-md-auto col-lg-auto details">
         @if(isset($info['certificate']['icon']['path']) && $info['certificate']['icon']['path'] )
@@ -209,12 +209,12 @@
             @if(isset($info['certificate']['icon']['link_status']) && $info['certificate']['icon']['link_status'] == 'on' && $info['certificate']['icon']['link'] != null) </a> @endif
 
         @endif
-        <div class="info-text text-center">
-            @if(isset($info['certificate']['title']) && $info['certificate']['title'] != '')
+        <div class="info-text text-center">  
+            @if(isset($info['certificate']['title']) && $info['certificate']['title'] && $info['certificate']['title'] != '')
             <div class="elem-title">{{ $info['certificate']['title'] }}</div>
             @endif
             <p>
-                {!!  $info['certificate']['type'] !!}
+                {!!  $info['certificate']['text'] !!}
                 </br>
 
             </p>

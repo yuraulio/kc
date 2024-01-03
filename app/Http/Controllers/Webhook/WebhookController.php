@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Webhook;
 
 use App\Http\Controllers\Controller;
+use App\Notifications\ErrorSlack;
 use Illuminate\Http\Request;
 use Stripe\Stripe;
 use Laravel\Cashier\Http\Controllers\WebhookController as BaseWebhookController;
@@ -24,6 +25,7 @@ use App\Notifications\SubscriptionWelcome;
 use App\Model\User;
 use App\Notifications\WelcomeEmail;
 use App\Notifications\AfterSepaPaymentEmail;
+use Illuminate\Support\Facades\DB;
 
 class WebhookController extends BaseWebhookController
 {
@@ -37,19 +39,19 @@ class WebhookController extends BaseWebhookController
 			$transaction = Transaction::with('user')->where('payment_response','LIKE','%'.$paymentIntent.'%')->first();
 			$event = $transaction->event()->first();
 
-			
+
 
 			foreach($transaction->user as $user){
 				failedPaymentEmail($payload, $event, $user);
 				$event->users()->wherePivot('user_id',$user->id)->detach();
 			}
-	
-	
+
+
 			$transaction->invoice()->delete();
 			$transaction->user()->detach();
 			$transaction->delete();
 
-			// TODO 
+			// TODO
 			//(1) FAILURE EMAIL
 		}
 	}
@@ -58,21 +60,21 @@ class WebhookController extends BaseWebhookController
 		//Log::info('dispute trigger');
 		//Log::info(var_export($payload, true));
 		//TODO
-		
+
 		//(1) Remove Invoice
 		//(2) Remove Event From User
 		//(3) Remove Transaction
-		
+
 		//Log::info(var_export($payload, true));
 		$paymentIntent = $payload['data']['object']['payment_intent'];
 
 		$transaction = Transaction::with('user', 'event')->where('payment_response','LIKE','%'.$paymentIntent.'%')->first();
 		$event = $transaction->event()->first();
 
-		
+
 		//$event = $transaction['event'];
 		foreach($transaction->user as $user){
-			
+
 			$event->users()->wherePivot('user_id',$user->id)->detach();
 		}
 
@@ -83,7 +85,7 @@ class WebhookController extends BaseWebhookController
 		$transaction->delete();
 
 
-		
+
 	}
 
 	public function handleChargeSucceeded(array $payload){
@@ -96,7 +98,7 @@ class WebhookController extends BaseWebhookController
 
 			$paymentIntent = $payload['data']['object']['payment_intent'];
 			$transaction = Transaction::with('user', 'event')->where('payment_response','LIKE','%'.$paymentIntent.'%')->first();
-			
+
 			//Log::info(var_export($transaction, true));
 			$event = $transaction['event'][0];
 			foreach($transaction->user as $user){
@@ -120,7 +122,7 @@ class WebhookController extends BaseWebhookController
 			//Log::info('HAS SEPA DATA IS NOW AVAILABLE end');
 
 			app('App\Http\Controllers\Theme\InfoController')->sendEmails($data['transaction'], $data['emailsCollector'], $data['extrainfo'], $data['helperdetails'], $data['elearning'], $data['eventslug'], $data['stripe'],$data['billingEmail'],$data['paymentMethod'], $sepa = true);
-				
+
 		}
 	}
 
@@ -133,8 +135,8 @@ class WebhookController extends BaseWebhookController
 			$subscription->event()->wherePivot('event_id', $event->id)->updateExistingPivot($event->id,[
 				'expiration' => date('Y-m-d')
 			], false);
-	
-	
+
+
 			$subscription->ends_at = date('Y-m-d H:i:s');
 			$subscription->status = 0;
 			$subscription->stripe_status = 'canceled';
@@ -145,7 +147,7 @@ class WebhookController extends BaseWebhookController
 
 	public function handleChargeRefunded(array $payload){
 
-		
+
 		//Log::info('Refund Trigger');
 
 		if($payload == null){
@@ -160,76 +162,96 @@ class WebhookController extends BaseWebhookController
 		//Log::info('TRANSACTION');
 		//Log::info(var_export($transaction, true));
 
-		$event = $transaction->event->first();
+        if(!$transaction){
+            // We can't find the refunded transaction in this way.
+            // Let's check if we can search the user.
+            $stripe_id = $payload['data']['object']['customer'];
+            $userWhoWantsRefundCourse = User::where('stripe_id', $stripe_id)->first();
+            if($userWhoWantsRefundCourse){
+                $amount_refunded = $payload['data']['object']['amount_refunded'];
+                $firstname = $userWhoWantsRefundCourse->firstname;
+                $lastname = $userWhoWantsRefundCourse->lastname;
+                $email = $userWhoWantsRefundCourse->email;
+                $amount_refunded_numeric = $amount_refunded/100;
+                $userWhoWantsRefundCourse->notify(new ErrorSlack("Stripe Webhook Error: Elli <@U064KHTQ6LX> check that the user $firstname $lastname ($email) has refund $amount_refunded_numeric and we don't know the course related. Check if we have to disable manually this course for this user."));
+            }else{
+                $user = User::first();
+                $user->notify(new ErrorSlack("Stripe Webhook Error: Elli <@U064KHTQ6LX> there is an user refunding a course. Check the following data: ".json_encode($payload['data'])));
+            }
 
-		foreach($transaction['user'] as $user){
-			$user->events_for_user_list1()->wherePivot('event_id', $event->id)->updateExistingPivot($event->id,[
-				'paid' => 0,
-				'expiration' => date('Y-m-d')
-			], false);
-		}
+        }else{
 
-		
+            $event = $transaction->event->first();
 
-		
-		$isSubscription = $transaction->isSubscription()->first();
-		//Log::info('Is Subscription');
-		//Log::info(var_export($isSubscription, true));
-
-		// check if subscription
-
-		if($isSubscription != null){
-
-			//Log::info('Transaction has subscription');
-
-			$subscription = $transaction['subscription']->last();
-
-			//Log::info(var_export($subscription, true));
-
-			if($subscription)
-				$this->updateSubscriptionRow($event, $subscription);
-
-			
-
-			
+            foreach($transaction['user'] as $user){
+                $user->events_for_user_list1()->wherePivot('event_id', $event->id)->updateExistingPivot($event->id,[
+                    'paid' => 0,
+                    'expiration' => date('Y-m-d')
+                ], false);
+            }
 
 
-		}else{
-			//Log::info('Transaction has NOT subscription');
 
-			foreach($transaction['user'] as $user){
 
-				//Log::info('paid 0 for a user');
+            $isSubscription = $transaction->isSubscription()->first();
+            //Log::info('Is Subscription');
+            //Log::info(var_export($isSubscription, true));
 
-				$user->events_for_user_list1()->wherePivot('event_id', $event->id)->updateExistingPivot($event->id,[
-					'paid' => 0,
-					'expiration' => date('Y-m-d')
-				], false);
-			}
+            // check if subscription
 
-			if($transaction->payment_response != null){
-				$transArrayResponse = json_decode($transaction->payment_response, true);
+            if($isSubscription != null){
 
-				if(isset($transArrayResponse['stripe_id'])){
+                //Log::info('Transaction has subscription');
 
-					$stripe_id = $transArrayResponse['stripe_id'];
+                $subscription = $transaction['subscription']->last();
 
-					$subscription = Subscription::where('stripe_id', $stripe_id)->first();
-					$this->updateSubscriptionRow($event, $subscription);
-				}else{
+                //Log::info(var_export($subscription, true));
 
-					$subscription = $transaction->subscription->last();
-					$this->updateSubscriptionRow($event, $subscription);
-				}
-			}			
+                if($subscription)
+                    $this->updateSubscriptionRow($event, $subscription);
 
-			//Log::info('Refund SUCCESS');
-		}
 
-		$transaction->ends_at = date('Y-m-d H:i:s');
-		$transaction->save();
-		
-	
+
+
+
+
+            }else{
+                //Log::info('Transaction has NOT subscription');
+
+                foreach($transaction['user'] as $user){
+
+                    //Log::info('paid 0 for a user');
+
+                    $user->events_for_user_list1()->wherePivot('event_id', $event->id)->updateExistingPivot($event->id,[
+                        'paid' => 0,
+                        'expiration' => date('Y-m-d')
+                    ], false);
+                }
+
+                if($transaction->payment_response != null){
+                    $transArrayResponse = json_decode($transaction->payment_response, true);
+
+                    if(isset($transArrayResponse['stripe_id'])){
+
+                        $stripe_id = $transArrayResponse['stripe_id'];
+
+                        $subscription = Subscription::where('stripe_id', $stripe_id)->first();
+                        $this->updateSubscriptionRow($event, $subscription);
+                    }else{
+
+                        $subscription = $transaction->subscription->last();
+                        $this->updateSubscriptionRow($event, $subscription);
+                    }
+                }
+
+                //Log::info('Refund SUCCESS');
+            }
+
+            $transaction->ends_at = date('Y-m-d H:i:s');
+            $transaction->save();
+        }
+
+
 	}
 
 
@@ -262,13 +284,13 @@ class WebhookController extends BaseWebhookController
 
 		$payment_intent = null;
 		if(isset($payload['data']['object']['payment_intent'])){
-			
+
 			$payment_intent = $payload['data']['object']['payment_intent'];
 
 			//Log::info('payload from installments ROW');
 			//Log::info(var_export($payment_intent, true));
 
-		
+
 		}
 
 		$count = $sub['metadata']['installments_paid'];
@@ -279,246 +301,282 @@ class WebhookController extends BaseWebhookController
 
 	    $count++;
 
-		$subscription = $user->subscriptions()->where('stripe_id',$payload['data']['object']['subscription'])->first();
-		$eventId = explode('_',$subscription->stripe_price)[3];
+        if($payload['data']['object']['subscription']){
+		    $subscription = $user->subscriptions()->where('stripe_id',$payload['data']['object']['subscription'])->first();
+            if($subscription){
+                $eventId = explode('_',$subscription->stripe_price)[3];
 
-		//$subscriptionPaymentMethod = $user->events->where('id',$eventId)->first();
-		$subscriptionPaymentMethod = $user->events_for_user_list()->wherePivot('event_id',$eventId)->first();
-		//$subscriptionPaymentMethod = $user->events()->wherePivot('event_id',$eventId)->first();
-		//return print_r(count($user->events_for_user_list));
-		$paymentMethod = PaymentMethod::find($subscriptionPaymentMethod->pivot->payment_method);
+                //$subscriptionPaymentMethod = $user->events->where('id',$eventId)->first();
+                $subscriptionPaymentMethod = $user->events_for_user_list()->wherePivot('event_id',$eventId)->first();
+                //$subscriptionPaymentMethod = $user->events()->wherePivot('event_id',$eventId)->first();
+                //return print_r(count($user->events_for_user_list));
 
-		$data = $payload['data']['object'];
+                if(!$subscriptionPaymentMethod){
+                    $event = Event::find($eventId);
+                    if($event){
+                        DB::table('event_user')
+                            ->where('id', $subscriptionPaymentMethod->pivot->id)
+                            ->insert([
+                                'event_id' => $event->id,
+                                'user_id' => $user->id,
+                                'paid' => 1,
+                                'expiration_email' => 0,
+                                'comment' => 'automatically added from webhook',
+                                'payment_method' => PaymentMethod::DEFAULT_PAYMENT_METHOD
+                            ]);
+                        $user = User::first();
+                        $user->notify(new ErrorSlack("The user ".$user->firstname.' '.$user->lastname.' '.$user->email.', didn\'t have event_user register for the event '.$event->title.'. We have automatically inserted this register, but we have to check why it happens.'));
+                        $subscriptionPaymentMethod = $user->events_for_user_list()->wherePivot('event_id',$eventId)->first();
+                    }
+                }
 
-		if(env('PAYMENT_PRODUCTION')){
-            //Stripe::setApiKey($user->events->where('id',$eventId)->first()->paymentMethod->first()->processor_options['secret_key']);
-            //Stripe::setApiKey(Event::findOrFail($eventId)->paymentMethod->first()->processor_options['secret_key']);
-			Stripe::setApiKey($paymentMethod->processor_options['secret_key']);
+                // TODO  Sometimes the payment method is 0. Why? I don't know. We have to check. But now, we solve this problem updating to be 2 (Knowcrunch Inc (USA)) self::DEFAULT_PAYMENT_METHOD
+                if($subscriptionPaymentMethod->pivot->payment_method == 0){
+                    DB::table('event_user')
+                        ->where('id', $subscriptionPaymentMethod->pivot->id)
+                        ->update(['payment_method' => PaymentMethod::DEFAULT_PAYMENT_METHOD]);
+                    $paymentMethod = PaymentMethod::find(PaymentMethod::DEFAULT_PAYMENT_METHOD);
+                }else{
+                    $paymentMethod = PaymentMethod::find($subscriptionPaymentMethod->pivot->payment_method);
+                }
 
-        }else{
-            //Stripe::setApiKey($user->events->where('id',$eventId)->first()->paymentMethod->first()->test_processor_options['secret_key']);
-			//Stripe::setApiKey(Event::findOrFail($eventId)->paymentMethod->first()->test_processor_options['secret_key']);
-			Stripe::setApiKey($paymentMethod->test_processor_options['secret_key']);
+                $data = $payload['data']['object'];
+
+                if(env('PAYMENT_PRODUCTION')){
+                    //Stripe::setApiKey($user->events->where('id',$eventId)->first()->paymentMethod->first()->processor_options['secret_key']);
+                    //Stripe::setApiKey(Event::findOrFail($eventId)->paymentMethod->first()->processor_options['secret_key']);
+                    Stripe::setApiKey($paymentMethod->processor_options['secret_key']);
+
+                }else{
+                    //Stripe::setApiKey($user->events->where('id',$eventId)->first()->paymentMethod->first()->test_processor_options['secret_key']);
+                    //Stripe::setApiKey(Event::findOrFail($eventId)->paymentMethod->first()->test_processor_options['secret_key']);
+                    Stripe::setApiKey($paymentMethod->test_processor_options['secret_key']);
+                }
+                //session()->put('payment_method',$user->events->where('id',$eventId)->first()->paymentMethod->first()->id);
+                //session()->put('payment_method',Event::findOrFail($eventId)->paymentMethod->first()->id);
+                session()->put('payment_method',$subscriptionPaymentMethod->pivot->payment_method);
+
+                $fromSepaPayment = false;
+                //Log::info('from sepa payment');
+                //Log::info(var_export($sub, true));
+
+                if($sub['metadata'] != null && isset($sub['metadata']['payment_method']) && $sub['metadata']['payment_method'] == 'sepa'){
+                    //Log::info('from sepa payment INSIDE METADATA');
+
+
+                    //Log::info('from sepa payment INSIDE METADATA SEPA');
+                    $fromSepaPayment = true;
+
+                }
+
+                //Log::info('from sepa payment ::/');
+                //Log::info($fromSepaPayment);
+
+                if($fromSepaPayment){
+                    $subscription->metadata = ['installments_paid' => $count, 'installments' => $totalinst, 'payment_method' => 'sepa'];
+                }else{
+                    $subscription->metadata = ['installments_paid' => $count, 'installments' => $totalinst];
+                }
+
+                $subscription->save();
+
+                try{
+                    $stripeSubscription = $user->subscriptions()->where('stripe_id',$payload['data']['object']['subscription'])->first()->asStripeSubscription();
+                    $stripeSubscription->metadata = ['installments_paid' => $count, 'installments' => $totalinst];
+                    $stripeSubscription->save();
+                }catch(\Exception $e){
+
+                }
+
+                //$invoices = $user->events->where('id',$eventId)->first()->invoicesByUser($user->id)->get();
+                $invoices = $user->events_for_user_list()->wherePivot('event_id',$eventId)->first()->invoicesByUser($user->id)->get();
+
+
+
+                if(count($invoices) > 0){
+                    //Log::info('has invoice');
+                    $invoice = $invoices->last();
+                    $transaction = $user->events_for_user_list()->wherePivot('event_id',$eventId)->first()->transactionsByUser($user->id)->first();
+                    $billDet = json_decode($transaction['billing_details'],true);
+                    $billingEmail = isset( $billDet['billemail']) &&  $billDet['billemail'] != '' ?  $billDet['billemail'] : false;
+                    //$invoice = $invoices->first();
+                    [$pdf,$invoice] = $invoice->generateCronjobInvoice();
+
+
+                    // add payment intent in payment_response
+                    if($payment_intent != null){
+                        $tranRespArray = json_decode($transaction->payment_response, true);
+                        $tranRespArray['payment_intent'] = $payment_intent;
+
+                        $transaction->update([
+                            'payment_response' => json_encode($tranRespArray)
+                        ]);
+                    }
+
+
+                    if($fromSepaPayment){
+                        //NEW12
+                        $datamail = loadSendEmailsData($transaction);
+                        //send after sepa payment success
+                        // TODO
+                        sendAfterSuccessPaymentSepa($datamail['transaction'], $datamail['emailsCollector'], $datamail['extrainfo'], $datamail['helperdetails'], $datamail['elearning'], $datamail['eventslug'], $datamail['stripe'],$datamail['billingEmail'],$datamail['paymentMethod'], $sepa = true);
+                    }
+
+
+
+                    $this->sendEmail($invoice,$pdf,$paymentMethod,false,$billingEmail);
+                }else{
+                    //Log::info('has not invoice');
+                    if(!Invoice::doesntHave('subscription')->latest()->first()){
+                        //$invoiceNumber = sprintf('%04u', 1);
+                        $invoiceNumber = generate_invoice_number($subscriptionPaymentMethod->pivot->payment_method);
+
+                    }else{
+
+                        //$transaction = $user->events->where('id',$eventId)->first()->transactionsByUser($user->id)->first();
+                        $transaction = $user->events_for_user_list()->wherePivot('event_id',$eventId)->first()->transactionsByUser($user->id)->first();
+
+                        if(!$transaction){
+
+                            //Log::info('has not transaction, CREATE');
+
+                            $charge['status'] = 'succeeded';
+                            $charge['type'] = $totalinst . ' Installments';
+
+                            if($payment_intent != null){
+                                $charge['payment_intent'] = $payment_intent;
+                            }
+
+
+                            $pay_seats_data = ["names" => [$user->firstname],"surnames" => [$user->lastname],"emails" => [$user->email],
+                                                "mobiles" => [$user->mobile],"addresses" => [$user->address],"addressnums" => [$user->address_num],
+                                                "postcodes" => [$user->postcode],"cities" => [$user->city],"jobtitles" => [$user->job_title],
+                                                "companies" => [$user->company],"students" => [""], "afms" => [$user->afm]];
+
+                            $status_history = [];
+                            //$payment_cardtype = intval($input["cardtype"]);
+                            $status_history[] = [
+                                'datetime' => Carbon::now()->toDateTimeString(),
+                                'status' => 1,
+                                'user' => [
+                                    'id' => $user->id,
+                                    'email' => $user->email
+                                ],
+                                'pay_seats_data' => $pay_seats_data,
+                                'pay_bill_data' => $user->receipt_details,
+                                'deree_user_data' => [$user->email => ''],
+                                //'cardtype' => $payment_cardtype,
+                                'installments' => $totalinst,
+
+                            ];
+
+                            // Log::info(var_export($subscription, true));
+                            // Log::info($subscription);
+                            $transaction_arr = [
+
+                                "payment_method_id" => 100,//$input['payment_method_id'],
+                                "account_id" => 17,
+                                "payment_status" => 2,
+                                "billing_details" => $user->receipt_details,
+                                "status_history" => json_encode($status_history),
+                                "placement_date" => Carbon::now()->toDateTimeString(),
+                                "ip_address" => \Request::ip(),
+                                "status" => 1, //2 PENDING, 0 FAILED, 1 COMPLETED
+                                "is_bonus" => 0,
+                                "order_vat" => 0,
+                                "payment_response" => json_encode($charge),
+                                "surcharge_amount" => 0,
+                                "discount_amount" => 0,
+                                "coupon_code" => '',
+                                "amount" => ceil($subscription->price * $totalinst),
+                                "total_amount" => ceil($subscription->price * $totalinst),
+                                'trial' => false,
+                            ];
+
+                            $transaction = Transaction::create($transaction_arr);
+
+                            //$transaction->event()->save($user->events->where('id',$eventId)->first());
+                            $transaction->event()->save($user->events_for_user_list()->wherePivot('event_id',$eventId)->first());
+
+                            $transaction->user()->save($user);
+
+                        }else{
+                            // add payment intent in transaction Payment Response
+                            //Log::info('has transaction, payment response');
+
+                            //Log::info(var_export($transaction->payment_response, true));
+
+                            if($payment_intent != null){
+
+                                $tranRespArray = json_decode($transaction->payment_response, true);
+                                $tranRespArray['payment_intent'] = $payment_intent;
+
+                                $transaction->update([
+                                    'payment_response' => json_encode($tranRespArray),
+                                    'status' => 1
+                                ]);
+
+                            }
+
+                        }
+
+                        //$invoiceNumber = Invoice::has('event')->latest()->first()->invoice;
+                        /*$invoiceNumber = Invoice::latest()->doesntHave('subscription')->first()->invoice;
+                        $invoiceNumber = (int) $invoiceNumber + 1;
+                        $invoiceNumber = sprintf('%04u', $invoiceNumber);*/
+
+                        $invoiceNumber = generate_invoice_number($subscriptionPaymentMethod->pivot->payment_method);
+
+                        $elearningInvoice = new Invoice;
+                        $elearningInvoice->name = json_decode($transaction->billing_details,true)['billname'];
+                        $elearningInvoice->amount = round($transaction->amount / $totalinst, 2);
+                        $elearningInvoice->invoice = $invoiceNumber;
+                        $elearningInvoice->date = date('Y-m-d');//Carbon::today()->toDateString();
+                        $elearningInvoice->instalments_remaining = $totalinst;
+                        $elearningInvoice->instalments = $totalinst;
+
+                        $elearningInvoice->save();
+
+                        $elearningInvoice->user()->save($user);
+                        $elearningInvoice->event()->save($user->events_for_user_list()->wherePivot('event_id',$eventId)->first());
+                        //$elearningInvoice->event()->save($user->events()->wherePivot('id',$eventId)->first());
+                        $elearningInvoice->transaction()->save($transaction);
+
+                        $pdf = $elearningInvoice->generateInvoice();
+
+                        $billDet = json_decode($transaction['billing_details'],true);
+                        $billingEmail = isset( $billDet['billemail']) &&  $billDet['billemail'] != '' ?  $billDet['billemail'] : false;
+
+
+
+                        if($fromSepaPayment){
+                            //NEW12
+                            $datamail = loadSendEmailsData($transaction);
+                            //send after sepa payment success
+                            // TODO
+                            sendAfterSuccessPaymentSepa($datamail['transaction'], $datamail['emailsCollector'], $datamail['extrainfo'], $datamail['helperdetails'], $datamail['elearning'], $datamail['eventslug'], $datamail['stripe'],$datamail['billingEmail'],$datamail['paymentMethod'], $sepa = true);
+                        }
+
+                        $this->sendEmail($elearningInvoice,$pdf,$paymentMethod,false,$billingEmail);
+
+                    }
+                }
+
+                $user->events_for_user_list()->wherePivot('event_id',$eventId)->updateExistingPivot($eventId,[
+                    'paid' => 1
+                ], false);
+
+                $enrollFromEvents = $user->events_for_user_list()->wherePivot('comment','enroll from '.$eventId.'||0')->orWherePivot('comment','enroll from '.$eventId.'||1')->get();
+                foreach($enrollFromEvents as $enrollFromEvent){
+                    $enrollFromEvent->pivot->paid = 1;
+                    $enrollFromEvent->pivot->save();
+                }
+
+                if ((int)$count >= (int)$totalinst) {
+                    $subscription->noProrate()->cancel();
+                }
+            }
         }
-		//session()->put('payment_method',$user->events->where('id',$eventId)->first()->paymentMethod->first()->id);
-        //session()->put('payment_method',Event::findOrFail($eventId)->paymentMethod->first()->id);
-        session()->put('payment_method',$subscriptionPaymentMethod->pivot->payment_method);
-
-		$fromSepaPayment = false;
-		//Log::info('from sepa payment');
-		//Log::info(var_export($sub, true));
-
-		if($sub['metadata'] != null && isset($sub['metadata']['payment_method']) && $sub['metadata']['payment_method'] == 'sepa'){
-			//Log::info('from sepa payment INSIDE METADATA');
-			
-			
-			//Log::info('from sepa payment INSIDE METADATA SEPA');
-			$fromSepaPayment = true;
-			
-		}
-
-		//Log::info('from sepa payment ::/');
-		//Log::info($fromSepaPayment);
-		
-		if($fromSepaPayment){
-			$subscription->metadata = ['installments_paid' => $count, 'installments' => $totalinst, 'payment_method' => 'sepa'];
-		}else{
-			$subscription->metadata = ['installments_paid' => $count, 'installments' => $totalinst];
-		}
-		
-		$subscription->save();
-
-		$stripeSubscription = $user->subscriptions()->where('stripe_id',$payload['data']['object']['subscription'])->first()->asStripeSubscription();
-		$stripeSubscription->metadata = ['installments_paid' => $count, 'installments' => $totalinst];
-		$stripeSubscription->save();
-
-		//$invoices = $user->events->where('id',$eventId)->first()->invoicesByUser($user->id)->get();
-		$invoices = $user->events_for_user_list()->wherePivot('event_id',$eventId)->first()->invoicesByUser($user->id)->get();
-
-			
-
-		if(count($invoices) > 0){
-			//Log::info('has invoice');
-			$invoice = $invoices->last();
-			$transaction = $user->events_for_user_list()->wherePivot('event_id',$eventId)->first()->transactionsByUser($user->id)->first();
-			$billDet = json_decode($transaction['billing_details'],true);
-        	$billingEmail = isset( $billDet['billemail']) &&  $billDet['billemail'] != '' ?  $billDet['billemail'] : false;
-			//$invoice = $invoices->first();
-			[$pdf,$invoice] = $invoice->generateCronjobInvoice();
-
-
-			// add payment intent in payment_response
-			if($payment_intent != null){
-				$tranRespArray = json_decode($transaction->payment_response, true);
-				$tranRespArray['payment_intent'] = $payment_intent;
-
-				$transaction->update([
-					'payment_response' => json_encode($tranRespArray)
-				]);
-			}
-			
-
-			if($fromSepaPayment){
-				//NEW12
-				$datamail = loadSendEmailsData($transaction);
-				//send after sepa payment success
-				// TODO
-				sendAfterSuccessPaymentSepa($datamail['transaction'], $datamail['emailsCollector'], $datamail['extrainfo'], $datamail['helperdetails'], $datamail['elearning'], $datamail['eventslug'], $datamail['stripe'],$datamail['billingEmail'],$datamail['paymentMethod'], $sepa = true);
-			}
-			
-
-			
-			$this->sendEmail($invoice,$pdf,$paymentMethod,false,$billingEmail);
-		}else{
-			//Log::info('has not invoice');
-			if(!Invoice::doesntHave('subscription')->latest()->first()){
-				//$invoiceNumber = sprintf('%04u', 1);
-				$invoiceNumber = generate_invoice_number($subscriptionPaymentMethod->pivot->payment_method);
-
-			}else{
-
-				//$transaction = $user->events->where('id',$eventId)->first()->transactionsByUser($user->id)->first();
-				$transaction = $user->events_for_user_list()->wherePivot('event_id',$eventId)->first()->transactionsByUser($user->id)->first();
-
-				if(!$transaction){
-
-					//Log::info('has not transaction, CREATE');
-
-					$charge['status'] = 'succeeded';
-					$charge['type'] = $totalinst . ' Installments';
-
-					if($payment_intent != null){
-						$charge['payment_intent'] = $payment_intent;
-					}
-					
-
-					$pay_seats_data = ["names" => [$user->firstname],"surnames" => [$user->lastname],"emails" => [$user->email],
-            							"mobiles" => [$user->mobile],"addresses" => [$user->address],"addressnums" => [$user->address_num],
-            							"postcodes" => [$user->postcode],"cities" => [$user->city],"jobtitles" => [$user->job_title],
-            							"companies" => [$user->company],"students" => [""], "afms" => [$user->afm]];
-
-					$status_history = [];
-                	//$payment_cardtype = intval($input["cardtype"]);
-                	 $status_history[] = [
-                	    'datetime' => Carbon::now()->toDateTimeString(),
-                	    'status' => 1,
-                	    'user' => [
-                	        'id' => $user->id,
-                	        'email' => $user->email
-                	    ],
-                	    'pay_seats_data' => $pay_seats_data,
-                	    'pay_bill_data' => $user->receipt_details,
-                	    'deree_user_data' => [$user->email => ''],
-                	    //'cardtype' => $payment_cardtype,
-                	    'installments' => $totalinst,
-
-                	];
-
-					// Log::info(var_export($subscription, true));
-					// Log::info($subscription);
-                	$transaction_arr = [
-
-                	    "payment_method_id" => 100,//$input['payment_method_id'],
-                	    "account_id" => 17,
-                	    "payment_status" => 2,
-                	    "billing_details" => $user->receipt_details,
-                	    "status_history" => json_encode($status_history),
-                	    "placement_date" => Carbon::now()->toDateTimeString(),
-                	    "ip_address" => \Request::ip(),
-                	    "status" => 1, //2 PENDING, 0 FAILED, 1 COMPLETED
-                	    "is_bonus" => 0,
-                	    "order_vat" => 0,
-                	    "payment_response" => json_encode($charge),
-                	    "surcharge_amount" => 0,
-                	    "discount_amount" => 0,
-                	    "coupon_code" => '',
-                	    "amount" => ceil($subscription->price * $totalinst),
-                	    "total_amount" => ceil($subscription->price * $totalinst),
-                	    'trial' => false,
-                	];
-
-                	$transaction = Transaction::create($transaction_arr);
-
-					//$transaction->event()->save($user->events->where('id',$eventId)->first());
-					$transaction->event()->save($user->events_for_user_list()->wherePivot('event_id',$eventId)->first());
-
-					$transaction->user()->save($user);
-
-				}else{
-					// add payment intent in transaction Payment Response
-					//Log::info('has transaction, payment response');
-
-					//Log::info(var_export($transaction->payment_response, true));
-
-					if($payment_intent != null){
-
-						$tranRespArray = json_decode($transaction->payment_response, true);
-						$tranRespArray['payment_intent'] = $payment_intent;
-	
-						$transaction->update([
-							'payment_response' => json_encode($tranRespArray),
-							'status' => 1
-						]);
-
-					}
-					
-				}
-
-				//$invoiceNumber = Invoice::has('event')->latest()->first()->invoice;
-				/*$invoiceNumber = Invoice::latest()->doesntHave('subscription')->first()->invoice;
-				$invoiceNumber = (int) $invoiceNumber + 1;
-				$invoiceNumber = sprintf('%04u', $invoiceNumber);*/
-
-				$invoiceNumber = generate_invoice_number($subscriptionPaymentMethod->pivot->payment_method);
-
-				$elearningInvoice = new Invoice;
-                $elearningInvoice->name = json_decode($transaction->billing_details,true)['billname'];
-                $elearningInvoice->amount = round($transaction->amount / $totalinst, 2);
-                $elearningInvoice->invoice = $invoiceNumber;
-                $elearningInvoice->date = date('Y-m-d');//Carbon::today()->toDateString();
-                $elearningInvoice->instalments_remaining = $totalinst;
-                $elearningInvoice->instalments = $totalinst;
-
-                $elearningInvoice->save();
-
-                $elearningInvoice->user()->save($user);
-                $elearningInvoice->event()->save($user->events_for_user_list()->wherePivot('event_id',$eventId)->first());
-				//$elearningInvoice->event()->save($user->events()->wherePivot('id',$eventId)->first());
-                $elearningInvoice->transaction()->save($transaction);
-
-				$pdf = $elearningInvoice->generateInvoice();
-
-				$billDet = json_decode($transaction['billing_details'],true);
-        		$billingEmail = isset( $billDet['billemail']) &&  $billDet['billemail'] != '' ?  $billDet['billemail'] : false;
-
-
-
-				if($fromSepaPayment){
-					//NEW12
-					$datamail = loadSendEmailsData($transaction);
-					//send after sepa payment success
-					// TODO
-					sendAfterSuccessPaymentSepa($datamail['transaction'], $datamail['emailsCollector'], $datamail['extrainfo'], $datamail['helperdetails'], $datamail['elearning'], $datamail['eventslug'], $datamail['stripe'],$datamail['billingEmail'],$datamail['paymentMethod'], $sepa = true);
-				}
-
-				$this->sendEmail($elearningInvoice,$pdf,$paymentMethod,false,$billingEmail);
-
-			}
-		}
-
-		$user->events_for_user_list()->wherePivot('event_id',$eventId)->updateExistingPivot($eventId,[
-			'paid' => 1
-		], false);
-
-		$enrollFromEvents = $user->events_for_user_list()->wherePivot('comment','enroll from '.$eventId.'||0')->orWherePivot('comment','enroll from '.$eventId.'||1')->get();
-        foreach($enrollFromEvents as $enrollFromEvent){
-            $enrollFromEvent->pivot->paid = 1;
-            $enrollFromEvent->pivot->save();
-        }
-
-		if ((int)$count >= (int)$totalinst) {
-			$subscription->noProrate()->cancel();
-		}
 	}
 
 	/*private function subscription($payload,$user,$sub){
@@ -809,21 +867,21 @@ class WebhookController extends BaseWebhookController
 			$fromSepaPayment = false;
 			if($subscription['metadata'] != null ){
 
-				
+
 
 				$metadata = json_decode($subscription['metadata'],true);
 				if($metadata['payment_method'] && $metadata['payment_method'] == 'sepa'){
 					//Log::info('from sepa payment INSIDE METADATA');
-				
-				
+
+
 					//Log::info('from sepa payment INSIDE METADATA SEPA');
 					$fromSepaPayment = true;
 				}
-				
-				
+
+
 			}
 
-			
+
 
 
 			$transaction = Transaction::create($transaction_arr);
@@ -831,7 +889,7 @@ class WebhookController extends BaseWebhookController
 			$transaction->user()->save($user);
 			$transaction->event()->save($subscription->event->first());
 
-			
+
 			if($fromSepaPayment){
 				//NEW12
 				$datamail = loadSendEmailsDataSubscription($subscription, $user);
@@ -840,8 +898,8 @@ class WebhookController extends BaseWebhookController
 				$user->notify(new AfterSepaPaymentEmail($user,$datamail));
 				//sendAfterSuccessPaymentSepa1($datamail['transaction'], $datamail['emailsCollector'], $datamail['extrainfo'], $datamail['helperdetails'], $datamail['elearning'], $datamail['eventslug'], $datamail['stripe'],$datamail['billingEmail'],$datamail['paymentMethod'], $sepa = true);
 			}
-			
-			
+
+
 			//$invoiceNumber = Invoice::has('event')->latest()->first()->invoice;
 			if($sub['amount']/100 > 0){
 
@@ -927,13 +985,13 @@ class WebhookController extends BaseWebhookController
 					if(isset($subPayMethod['payment_method']) && $subPayMethod['payment_method'] == 'sepa'){
 						$this->welcomeEmail($user, $subscription);
 					}
-					
-					
-				}
-				
 
-				
-				
+
+				}
+
+
+
+
 				$this->sendEmail($elearningInvoice,$pdf,$paymentMethod,true,$billingEmail);
 
 

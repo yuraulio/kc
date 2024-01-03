@@ -63,6 +63,138 @@ class Event extends Model
         'launch_date','certificate_title','fb_group','evaluate_topics','evaluate_instructors','fb_testimonial','absences_limit','xml_title','xml_description','xml_short_description', 'index', 'feed'
     ];
 
+    public function schemadata(){
+        $schema = Cache::remember('schemadata-event-'.$this->id, 10, function(){
+            $schema =
+            [
+                "@context" => "https://schema.org/",
+                "@type" => "Course",
+                "name" => $this->title,
+                "description" => $this->summary,
+                "provider" => [
+                    "@type" => "Organization",
+                    "name" => "Know Crunch",
+                    "url" => "https://knowcrunch.com/"
+                ],
+                "author" => [
+                    "@type" => "Person",
+                    "name" => "Tolis Aivalis"
+                ],
+                "inLanguage" => "Greek/Ellinika",
+                "offers" => [
+                    [
+                        "@type" => "Offer",
+                        "category" => "Free",
+                        "priceCurrency" => "EUR",
+                        "price" => 0
+                    ]
+                ],
+                "educationalCredentialAwarded" => "EQF 5+ level",
+            ];
+            if(isset($this->mediable)){
+                $schema['image'] = [
+                    cdn(get_image($this->mediable,'event-card'))
+                ];
+            }
+            if($this->relationLoaded('slugable') && isset($this->slugable->slug)){
+                $schema['@id'] = $this->slugable->slug;
+            }
+            if($this->relationLoaded('ticket') && isset($this->ticket[0]->price)){
+                $schema['offers'] = [
+                    [
+                        "@type" => "Offer",
+                        "category" => "Paid",
+                        "priceCurrency" => "EUR",
+                        "price" => $this->ticket[0]->price
+                    ]
+                ];
+            }
+            if(isset($this->published_at)){
+                $schema['datePublished'] = Carbon::create($this->published_at)->format('Y-m-d');
+            }
+            if($this->relationLoaded('event_info1') && isset($this->event_info1->course_delivery)){
+                // dd($this->topic[0]->lessons);
+                $instructors = [];
+                if($this->relationLoaded('instructors') && isset($this->instructors)){
+                    foreach($this->instructors as $instr){
+                        $instructor = [
+                            "@type" => "Person",
+                            "name" => $instr->title.' '.$instr->subtitle,
+                            "description" => $instr->header
+                        ];
+                        if(isset($instr->mediable) && $instr->mediable->count() > 0){
+                            $instructor['image'] = config('app.url').$instr->mediable->path.'/'.$instr->mediable->original_name;
+                        }
+                        // Check if already added
+                        $alreadyInserted = false;
+                        foreach($instructors as $in){
+                            if($in['image'] == $instructor['image'])
+                                $alreadyInserted = true;
+                        }
+                        if(!$alreadyInserted)
+                            $instructors[] = $instructor;
+                    }
+                }
+                $courseWorkload = 'PT0H';
+                if(isset($this->course_hours)){
+                    $courseWorkload = 'PT'.$this->course_hours.'H';
+                }
+                switch($this->event_info1->course_delivery){
+                    case 139: // Classroom training
+                        $schema["hasCourseInstance"] = [
+                            [
+                                // Blended, instructor-led course meeting 3 hours per day in July.
+                                "@type" => "CourseInstance",
+                                "courseMode" => "onsite",
+                                "location" => $this->event_info1->course_inclass_city ?? '',
+                                "instructor" => $instructors,
+                                "courseWorkload" => $courseWorkload
+                            ]
+                        ];
+                        break;
+                    case 143: // Video e-learning
+                        $schema["hasCourseInstance"] = [
+                            [
+                                // Online self-paced course that takes 2 days to complete.
+                                "@type" => "CourseInstance",
+                                "courseMode" => "online",
+                                "courseWorkload" => $courseWorkload
+                            ]
+                        ];
+                        break;
+                    case 215: // Zoom training
+                        $schema["hasCourseInstance"] = [
+                            [
+                                // Online self-paced course that takes 2 days to complete.
+                                "@type" => "CourseInstance",
+                                "courseMode" => "online",
+                                "courseWorkload" => $courseWorkload
+                            ]
+                        ];
+                        break;
+                    case 216: // Corporate training
+                        $schema["hasCourseInstance"] = [
+                            [
+                                // Blended, instructor-led course meeting 3 hours per day in July.
+                                "@type" => "CourseInstance",
+                                "courseMode" => "onsite",
+                                "location" => $this->course_inclass_city ?? '',
+                                "instructor" => $instructors,
+                                "courseWorkload" => $courseWorkload
+                            ]
+                        ];
+                        break;
+                }
+            }
+            return $schema;
+        });
+
+        // dd($this);
+        return $schema;
+    }
+
+
+
 
     public function category()
     {
@@ -924,7 +1056,7 @@ class Event extends Model
             $createDate = strtotime(date('Y-m-d'));
             $cert->create_date = $createDate;
 
-            $cert->template = 'kc_attendance_2022b';
+            $cert->template = 'new_kc_certificate';
             $cert->show_certificate = true;
 
             $cert->save();
@@ -1112,13 +1244,17 @@ class Event extends Model
 
 
             //$data['certificate']['event_title'] = $infos['course_certification_event_title'];
+            $data['certificate']['messages']['completion'] = $infos['course_certification_completion'];
             $data['certificate']['messages']['success'] = $infos['course_certification_name_success'];
-            $data['certificate']['messages']['failure'] = $infos['course_certification_name_failure'];
+            //$data['certificate']['messages']['failure'] = $infos['course_certification_name_failure'];
             $data['certificate']['type'] = $infos['course_certification_type'];
             $data['certificate']['title'] = $infos['course_certification_title'];
+            $data['certificate']['text'] = $infos['course_certification_text'];
+            //$data['certificate']['attendance_title'] = $infos['course_certification_attendance_title'];
             $data['certificate']['visible'] = $infos['course_certification_visible'] != null ? json_decode($infos['course_certification_visible'], true) : null;
             $data['certificate']['icon'] = $infos['course_certification_icon'] != null ? json_decode($infos['course_certification_icon'], true) : null;
             $data['certificate']['has_certificate'] = $infos['has_certificate'];
+            $data['certificate']['has_certificate_exam'] = $infos['has_certificate_exam'];
 
             $data['students']['number'] = (int)$infos['course_students_number'];
             $data['students']['text'] = $infos['course_students_text'];
@@ -1155,6 +1291,19 @@ class Event extends Model
         }
 
         return $hasCertificate;
+
+    }
+
+    public function hasCertificateExam(){
+
+        $hasCertificateExam = false;
+        $infos = $this->event_info();
+
+        if(isset($infos['certificate']['has_certificate_exam']) && $infos['certificate']['has_certificate_exam']){
+            $hasCertificateExam = true;
+        }
+
+        return $hasCertificateExam;
 
     }
 

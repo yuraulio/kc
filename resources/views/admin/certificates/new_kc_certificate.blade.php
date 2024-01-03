@@ -185,7 +185,7 @@
             	   <td align="center">
 							<p class="award">
 
-								has successfully completed all exams and is hereby awarded this
+								has completed our training and is hereby awarded this
 
 			  				</p>
             	   </td>

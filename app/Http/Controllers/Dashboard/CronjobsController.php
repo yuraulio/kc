@@ -305,9 +305,9 @@ class CronjobsController extends Controller
 
             $img = url('/') . get_image($event['mediable'],'header-image');
             $img = str_replace(' ', '%20', $img);
-            
 
-            $item = 
+
+            $item =
             '
         <item>
             <g:id>'.$event->id.'</g:id>
@@ -315,21 +315,21 @@ class CronjobsController extends Controller
             <description>'.$summary.'</description>
             <link>'.url('/').'/'.$event->slugable->slug.'</link>
             <g:image_link>'.$img.'</g:image_link>
-            <g:price>'.$amount.' EUR</g:price> 
+            <g:price>'.$amount.' EUR</g:price>
             <g:availability>'.$quantity_status.'</g:availability>
         </item>';
 
-            
+
 
             $row = $row . $item;
         }
 
         $row = $row . $template_finish;
 
-       
+
         File::put($destinationPath.'pinterest_feed.xml', $row);
 
-        
+
     }
 
     public function generateXMLForTikTok(){
@@ -376,9 +376,9 @@ class CronjobsController extends Controller
 
             $img = url('/') . get_image($event['mediable'],'header-image');
             $img = str_replace(' ', '%20', $img);
-            
 
-            $item = 
+
+            $item =
             '
         <item>
             <g:id>'.$event->id.'</g:id>
@@ -389,19 +389,19 @@ class CronjobsController extends Controller
             <g:price>'.$amount.' EUR</g:price>
             <g:link>'.url('/').'/'.$event->slugable->slug.'</g:link>
             <g:image_link>'.$img.'</g:image_link>
-            <g:brand>Knowcrunch</g:brand> 
+            <g:brand>Knowcrunch</g:brand>
         </item>';
 
-            
+
 
             $row = $row . $item;
         }
 
         $row = $row . $template_finish;
 
-       
+
         File::put($destinationPath.'tiktok_feed.xml', $row);
-        
+
     }
 
     public function generateCSVForFB(){
@@ -648,9 +648,14 @@ class CronjobsController extends Controller
             $data['faqs'] = url('/') . '/' . $event->slugable->slug . '/#faq';
             $data['slug'] = url('/') . '/registration?cart=' . $abandoned->slug;
 
-            $user->notify(new AbandonedCart($data));
-            $abandoned->send_email = 1;
-            $abandoned->save();
+            if (filter_var($user->email, FILTER_VALIDATE_EMAIL)) {
+                $user->notify(new AbandonedCart($data));
+                $abandoned->send_email = 1;
+                $abandoned->save();
+            }else{
+                $abandoned->send_email = 1;
+                $abandoned->save();
+            }
 
         }
 
@@ -1087,17 +1092,17 @@ class CronjobsController extends Controller
             ->with('users')
             ->get();
 
-            
+
 
         foreach($events as $event){
-        
+
             $first_lesson = $event->lessons->first();
 
             if($first_lesson){
                 $data['first_lesson_date'] = isset($first_lesson->pivot->date) ? date('d-m-Y', strtotime($first_lesson->pivot->date)) : '';
                 $data['first_lesson_time'] = isset($first_lesson->pivot->time_starts) ? date('H:i', strtotime($first_lesson->pivot->time_starts)) : '' ;
             }
-            
+
             $info = $event->event_info();
             $venues = $event->venues;
 
@@ -1232,9 +1237,9 @@ class CronjobsController extends Controller
                         $earlyLesson = $lesson;
                     }
                 }
-                
+
             }
- 
+
         }
 
         return $earlyLesson;

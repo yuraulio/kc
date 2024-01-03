@@ -89,26 +89,20 @@
                                                 {
                                                     "@context": "https://schema.org/",
                                                     "@type": "UserReview",
-                                                    "itemReviewed": {
-                                                    "@type": "Course",
-                                                    "provider": "Know Crunch",
-                                                    "image": "",
-                                                    "name": "{!!$event->title!!}",
-                                                    "description": "{!! $event->subtitle !!}"
-                                                    },
+                                                    "itemReviewed": {!! json_encode($event->schemadata()) !!},
                                                     "reviewRating": {
-                                                    "@type": "Rating",
-                                                    "ratingValue": "5"
+                                                        "@type": "Rating",
+                                                        "ratingValue": "5"
                                                     },
                                                     "name": "{!!$event->title!!}",
                                                     "author": {
-                                                    "@type": "Person",
-                                                    "name": "{!! $row['name'] !!} {!! $row['lastname'] !!}"
+                                                        "@type": "Person",
+                                                        "name": "{!! $row['name'] !!} {!! $row['lastname'] !!}"
                                                     },
-                                                    "reviewBody": "{!! $rev !!}",
+                                                    "reviewBody": "{!! htmlentities($rev, ENT_HTML401, "UTF-8") !!}",
                                                     "publisher": {
-                                                    "@type": "Organization",
-                                                    "name": "KnowCrunch"
+                                                        "@type": "Organization",
+                                                        "name": "KnowCrunch"
                                                     }
                                                 }
                                             </script>

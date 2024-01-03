@@ -225,9 +225,8 @@
 
 				<tr align="center">
 
-
 					<td class="certi-title-new">
-						<p>{!!$certificate['certificate_event_title']!!}</p>
+						<p>{{  htmlspecialchars_decode(strip_tags($certificate['certificate_event_title'],ENT_QUOTES)) }}</p>
 					</td>
 
 
@@ -239,7 +238,7 @@
 				<tr align="center">
 
 					<td  class="info-title award">
-						<p > and is awarded this  </p><p class="bold">{{  htmlspecialchars_decode(strip_tags($certificate['certification_title'],ENT_QUOTES))}}.</p>
+						<p > and is awarded this  </p><p class="bold">{{  mb_strtoupper(htmlspecialchars_decode(strip_tags($certificate['certification_title'],ENT_QUOTES)))}}.</p>
 					</td>
 
             	</tr>
