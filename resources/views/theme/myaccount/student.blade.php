@@ -762,7 +762,7 @@
                      @if(isset($events) && count($events) > 0)
 
                         @foreach($events as $keyType => $event)
-                           
+
                         {{--@if($event['view_tpl'] != 'elearning_free' && $event['view_tpl'] != 'elearning_event')--}}
                         @if($event['delivery'] != 143)
                         <div class="col12 dynamic-courses-wrapper dynamic-courses-wrapper--style2 @if((isset($event['paid']) && $event['paid'] == 0 && isset($event['transactionPending']) && $event['transactionPending'] == 2) || (isset($event['transactionPendingSepa']) && $event['transactionPendingSepa'] == 1)){{'pendingSepa'}}@elseif(isset($event['paid']) && $event['paid'] == 0 ){{'unpaid'}}@endif">
@@ -816,7 +816,7 @@
                                         </div>--}}
 
                                         <div id="c-shedule-inner{{$tab}}" class="in-tab-wrapper" style="display: block;">
-             
+
                                             <div class="bottom">
                                             @if(isset($event['summaryDate']))<div class="duration"><img loading="lazy" class="replace-with-svg resp-img" onerror="this.src='{{cdn('/theme/assets/images/icons/Duration_Hours.svg')}}'" width="20" height="20" src="{{cdn($event['summaryDate_icon'])}}" title="summary_icon" alt="summary_icon"><span class="inline-myaccount-text">{!! $event['summaryDate'] !!}<span></div>@endif
                                             @if($event['hours'])
@@ -1254,7 +1254,7 @@
                                  <div class="unpaidMessage d-none">
                                      <h3>You have an unpaid amount for this course. Please contact us to arrange payment and retrieve your access.</h3>
                                  </div>
-                                 
+
                                  @endif
                             </div>
                         </div>
@@ -1336,7 +1336,7 @@
                                                 <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt="credit-icon" title="credit-icon"><?php echo 'You will be billed the amount of € '.intval($event['mySubscription']['price']).' on '.date('d-m-Y',$event['mySubscription']['must_be_updated']).' unless you deactivate it.'; ?></div>
                                                 @endif
                                                 @endif
-                                                @endif                                   
+                                                @endif
                                                 @if(isset($event['mySubscription']))
                                                 <div class="status_wrapper">
                                                     <div class="status_label"><label> My subscription:  </label></div>
@@ -1424,21 +1424,22 @@
                                             @endforeach
 
                                             @if($event['view_tpl'] == 'elearning_free' && $event['status'] == 0 && $event['expiration'] && strtotime($event['expiration']) < strtotime(now()))
-                                             <a href="{{ $event['slugable']['slug'] }}" class="btn btn--secondary btn--md">ENROLL FOR FREE</a>                                   
+                                                <a href="{{ $event['slugable']['slug'] }}" class="btn btn--secondary btn--md">RENROLL FOR FREE</a>
+                                            @elseif($event['view_tpl'] != 'elearning_free' && $event['status'] == 0 && $event['expiration'] && strtotime($event['expiration']) < strtotime(now()) && (isset($event['video_access']) && !$event['video_access']))
+                                                <a href="{{ $event['slugable']['slug'] }}" class="btn btn--primary btn--md">REENROLL</a>
                                             @endif
-                                          
-                                            
+
                                             @if(isset($event['video_access']) && !$event['video_access'])
                                             {{--<a style="cursor:not-allowed; opacity: 0.5; pointer-events: none;" href="/myaccount/elearning/{{ $event['title'] }}" class="btn btn--secondary btn--md">@if((isset($event['videos_progress']) && $event['videos_progress'] == 100) || count($event['cert'])>0) WATCH AGAIN @else WATCH NOW @endif</a>--}}
                                             @else
                                             <a href="/myaccount/elearning/{{ $event['title'] }}" <?= isset($event['status']) && $event['status'] == 5 ? 'disabled' : ''; ?> class="btn btn--secondary btn--md">
-                                                
-                                                @if( (isset($event['videos_progress']) && $event['videos_progress'] == 100) ) 
-                                                   WATCH AGAIN 
-                                                @else 
-                                                   WATCH NOW 
+
+                                                @if( (isset($event['videos_progress']) && $event['videos_progress'] == 100) )
+                                                   WATCH AGAIN
+                                                @else
+                                                   WATCH NOW
                                                 @endif
-                                                
+
                                              </a>
                                             @endif
                                         </div>
@@ -1541,7 +1542,7 @@
                                 <div class="unpaidMessage d-none">
                                     <h3>You have an unpaid amount for this course. Please contact us to arrange payment and retrieve your access.</h3>
                                 </div>
-                             
+
                            @endif
                             <!-- ./item -->
                             </div>
