@@ -881,7 +881,7 @@ class EventController extends Controller
             FROM
                 event_user_ticket
             INNER JOIN tickets ON tickets.id = event_user_ticket.ticket_id
-            LEFT JOIN event_user ON event_user.event_id = event_user_ticket.event_id AND event_user.user_id = event_user_ticket.user_id
+            INNER JOIN event_user ON event_user.event_id = event_user_ticket.event_id AND event_user.user_id = event_user_ticket.user_id
             WHERE
                 event_user_ticket.event_id = 4672
             GROUP BY tickets.title
