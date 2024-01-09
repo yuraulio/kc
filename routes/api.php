@@ -25,8 +25,7 @@ Route::post('login', [PassportAuthController::class, 'login']);
 Route::middleware('auth:api')->group(function () {
 
     // User
-    //Route::get('user/{user}/edit', [UserController::class, 'edit']);
-    Route::get('myprofile', [UserController::class, 'index']);
+    Route::get('myprofile', [UserController::class, 'profile']);
     Route::post('myprofile/update', [UserController::class, 'updateProfile']);
     Route::get('myprofile/events', [UserController::class, 'events']);
 
@@ -51,7 +50,7 @@ Route::middleware('auth:api')->group(function () {
 
     // Users
     Route::resource('users', UserController::class)
-        ->only(['show', 'update']);
+        ->only(['show', 'update', 'index']);
 
     // Events
     Route::resource('events', EventController::class)

@@ -32,57 +32,17 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return JsonResponse
      */
-    public function index()
+    public function index(Request $request): JsonResponse
     {
-        $user1 = Auth::user();
+        $perPage = (int) $request->query->get('per_page', 15);
 
-        $user = User::with('image')->find($user1->id);
-        $billingDetails = $user['receipt_details'];
-        $billingDetails = json_decode($billingDetails,true);
+        $users = User::with('statusAccount')
+            ->paginate($perPage);
 
-        $billing = [];
-        $billing['billname'] = isset($billingDetails['billname']) ? $billingDetails['billname'] : '';
-        $billing['billafm'] = isset($billingDetails['billafm']) ? $billingDetails['billafm'] : '';
-        $billing['billaddress'] = isset($billingDetails['billaddress']) ? $billingDetails['billaddress'] : '';
-        $billing['billaddressnum'] = isset($billingDetails['billaddressnum']) ? $billingDetails['billaddressnum'] : '' ;
-        $billing['billcity'] = isset($billingDetails['billcity']) ? $billingDetails['billcity'] : '' ;
-        $billing['billpostcode'] = isset($billingDetails['billpostcode']) ? $billingDetails['billpostcode'] : '' ;
-        $billing['billstate'] = isset($billingDetails['billstate']) ? $billingDetails['billstate'] : '' ;
-        $billing['billcountry'] = isset($billingDetails['billcountry']) ? $billingDetails['billcountry'] : '' ;
-        $billing['billemail'] = isset($billingDetails['billemail']) ? $billingDetails['billemail'] : '' ;
-
-        //$user['stripe_ids'] = json_decode($user['stripe_ids'],true)  ? $user['stripe_ids'] : [];
-
-
-        if(isset($user['image']) && get_profile_image($user['image'])){
-
-            $user['profileImage'] = get_profile_image($user['image']);
-        }else{
-            $user['profileImage'] = '/theme/assets/images/icons/user-profile-placeholder-image.png';
-        }
-
-        unset($user['image']);
-        unset($user['stripe_ids']);
-        unset($user['receipt_details']);
-        unset($user['invoice_details']);
-
-        foreach($user->getAttributes() as $key => $attribute){
-
-            if($key == 'terms'){
-                continue;
-            }
-            if(!$attribute){
-                $user[$key] = '';
-            }
-        }
-
-        return response()->json([
-            'success' => true,
-            'data' => $user,
-            'billing' => $billing
-        ]);
+        return new JsonResponse($users);
     }
 
     public function smsVerification(Request $request){
@@ -932,7 +892,6 @@ class UserController extends Controller
 
     }
 
-
     private function userEvents($data,$user,$exceptEvents = []){
 
         $eventSubscriptions = [];
@@ -1038,17 +997,6 @@ class UserController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
      * Display the User.
      *
      * @param  User  $user
@@ -1056,7 +1004,7 @@ class UserController extends Controller
      */
     public function show(User $user): JsonResponse
     {
-        $user->load('invoices', 'transactions');
+        $user->load('invoices', 'transactions', 'statusAccount');
 
         return new JsonResponse($user);
     }
@@ -1195,17 +1143,6 @@ class UserController extends Controller
 
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
-
     public function getDropBoxToken(){
 
         return response()->json([
@@ -1227,6 +1164,58 @@ class UserController extends Controller
         $user->update($request->all());
 
         return new JsonResponse($user);
+    }
+
+    /**
+     * Returns profile data of the current auth user.
+     *
+     * @return JsonResponse
+     */
+    public function profile(): JsonResponse
+    {
+        $user = Auth::user()->load('image');
+        $billingDetails = $user['receipt_details'];
+        $billingDetails = json_decode($billingDetails, true);
+
+        $billing = [];
+        $billing['billname'] = isset($billingDetails['billname']) ? $billingDetails['billname'] : '';
+        $billing['billafm'] = isset($billingDetails['billafm']) ? $billingDetails['billafm'] : '';
+        $billing['billaddress'] = isset($billingDetails['billaddress']) ? $billingDetails['billaddress'] : '';
+        $billing['billaddressnum'] = isset($billingDetails['billaddressnum']) ? $billingDetails['billaddressnum'] : '';
+        $billing['billcity'] = isset($billingDetails['billcity']) ? $billingDetails['billcity'] : '';
+        $billing['billpostcode'] = isset($billingDetails['billpostcode']) ? $billingDetails['billpostcode'] : '';
+        $billing['billstate'] = isset($billingDetails['billstate']) ? $billingDetails['billstate'] : '';
+        $billing['billcountry'] = isset($billingDetails['billcountry']) ? $billingDetails['billcountry'] : '';
+        $billing['billemail'] = isset($billingDetails['billemail']) ? $billingDetails['billemail'] : '';
+
+
+        if (isset($user['image']) && get_profile_image($user['image'])) {
+
+            $user['profileImage'] = get_profile_image($user['image']);
+        } else {
+            $user['profileImage'] = '/theme/assets/images/icons/user-profile-placeholder-image.png';
+        }
+
+        unset($user['image']);
+        unset($user['stripe_ids']);
+        unset($user['receipt_details']);
+        unset($user['invoice_details']);
+
+        foreach ($user->getAttributes() as $key => $attribute) {
+
+            if ($key == 'terms') {
+                continue;
+            }
+            if (!$attribute) {
+                $user[$key] = '';
+            }
+        }
+
+        return new JsonResponse([
+            'success' => true,
+            'data' => $user,
+            'billing' => $billing
+        ]);
     }
 
 }
