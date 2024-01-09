@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Model\Activation;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Model\User;
@@ -1164,6 +1165,36 @@ class UserController extends Controller
         $user->update($request->all());
 
         return new JsonResponse($user);
+    }
+
+    /**
+     * Updates the status of the user.
+     *
+     * @param User $user
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function updateStatus(User $user, Request $request): JsonResponse
+    {
+        $request->validate([
+            'status' => 'required'
+        ]);
+
+        $user->load('statusAccount');
+
+        if ($user->statusAccount) {
+            $user->statusAccount->completed = (bool) $request->get('status');
+
+            $user->statusAccount->save();
+        } else {
+            $activation = new Activation();
+            $activation->user_id = $user->id;
+            $activation->completed = (bool) $request->get('status');
+
+            $activation->save();
+        }
+
+        return new JsonResponse([], 204);
     }
 
     /**
