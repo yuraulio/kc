@@ -31,12 +31,16 @@
                 @if(!$isInclassCourse)
                 <th scope="col">{{ __('Status')}}</th>
                 @endif
+                <th scope="col">{{ __('Last seen')}}</th>
 
             </tr>
         </thead>
         <tbody>
-        <?php //dd($allTopicsByCategory); 
+        <?php //dd($allTopicsByCategory);
         $i=0; ?>
+            @php
+            $statistics = Illuminate\Support\Facades\DB::table('event_statistics')->select('user_id','updated_at')->where('event_id', $event->id)->get();
+            @endphp
             @foreach ($eventUsers as $user)
 
                 <tr>
@@ -58,13 +62,13 @@
 
                     @if(!$isInclassCourse)
                     <td>
-                        
+
                         @if($user->pivot['paid'] == 1 && $user->pivot['expiration'])
-                            <?php 
-                            
+                            <?php
+
                                 $expiration_event = strtotime($user->pivot->expiration);
                                 $now = strtotime(date('Y-m-d'));
-                            
+
                             ?>
 
                             @if($expiration_event >= $now)
@@ -83,10 +87,17 @@
                                 <i class="bg-danger"></i>
                             </span>
                         @endif
-                        
+
                     </td>
                     @endif
-
+                    <td>
+                    @foreach($statistics as $stat)
+                        @if($stat->user_id == $user->id)
+                            <span style="color: transparent; font-size:1px">{{ date('Ymd', strtotime($stat->updated_at)) }}</span><span>{{ date('d/m/Y', strtotime($stat->updated_at)) }}</span>
+                            @break
+                        @endif
+                    @endforeach
+                    </td>
                 </tr>
             @endforeach
         </tbody>
