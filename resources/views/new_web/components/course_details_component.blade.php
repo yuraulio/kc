@@ -157,9 +157,9 @@
 
         @endif
         <div class="info-text text-center">
-            @if($event_delivery != '')
+            {{-- @if($event_delivery != '')
             <p>{{ $event_delivery }}</p>
-            @endif
+            @endif --}}
             @if(isset($info['delivery_info']['title']) && $info['delivery_info']['title'] != '')
             <div class="elem-title">{{ $info['delivery_info']['title'] }}</div>
             @endif
@@ -209,7 +209,7 @@
             @if(isset($info['certificate']['icon']['link_status']) && $info['certificate']['icon']['link_status'] == 'on' && $info['certificate']['icon']['link'] != null) </a> @endif
 
         @endif
-        <div class="info-text text-center">  
+        <div class="info-text text-center">
             @if(isset($info['certificate']['title']) && $info['certificate']['title'] && $info['certificate']['title'] != '')
             <div class="elem-title">{{ $info['certificate']['title'] }}</div>
             @endif
