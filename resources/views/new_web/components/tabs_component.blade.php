@@ -89,7 +89,11 @@
                                 @elseif($estatus != 3 && $estatus != 5 && $estatus != 1 && !$is_event_paid)
                                     <a href="#seats" class="btn btn--lg btn--primary go-to-href go-to-href soldout">SOLD OUT</a>
                                 @elseif($estatus == 0 && $is_event_paid)
-                                    <a href="#seats" class="btn btn--lg btn--primary go-to-href">REENROLL</a>
+                                    @if($is_event_expired == 1)
+                                        <a href="#seats" class="btn btn--lg btn--primary go-to-href">REENROLL</a>
+                                    @else
+                                        <a href="/myaccount/elearning/{{ $event['title'] }}" class="btn btn--md btn--secondary">WATCH NOW</a>
+                                    @endif
                                 @endif
                             @endif
 
