@@ -79,12 +79,12 @@ class CMS
         if (Auth::user() && count($hasEvent) > 0) {
             $data['is_event_paid'] = 1;
 
-            if(strtotime($hasEvent->first()->pivot->expiration) < strtotime(now())){
+            if($hasEvent->first()->pivot->expiration != '' && strtotime($hasEvent->first()->pivot->expiration) < strtotime(now())){
                 $data['is_event_expired'] = 1;
             }else{
                 $data['is_event_expired'] = 0;
             }
-            //$data['hasExpired'] = 
+            //$data['hasExpired'] =
         } elseif (Auth::user() && $event->waitingList()->where('user_id', Auth::user()->id)->first()) {
             $data['is_joined_waiting_list'] = 1;
         }
@@ -221,12 +221,12 @@ class CMS
         $data['inclassFree'] = [];
 
         $categories = Category::with([
-            'slugable', 
-            'events.slugable', 
-            'events.city', 
-            'events', 
-            'events.mediable', 
-            'events.event_info1', 
+            'slugable',
+            'events.slugable',
+            'events.city',
+            'events',
+            'events.mediable',
+            'events.event_info1',
             'events.ticket' => function($q) {
                 $q->where('type', 'regular');
             }
