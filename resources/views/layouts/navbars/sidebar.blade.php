@@ -28,9 +28,23 @@
                         </a>
                         <div class="collapse {{ isset($parentSection) and $parentSection  == 'dashboards' ? 'show' : '' }}" id="navbar-dashboards">
                             <ul class="nav nav-sm flex-column">
-
+                                @php
+                                // Code to allow autologin
+                                $url_autologin = '';
+                                $admin = App\Model\Admin\Admin::where('email', Auth::user()->email)->first();
+                                if($admin){
+                                    if((string)$admin->remember_token != '' && (string)$admin->remember_token != null){
+                                        $remember_token = $admin->remember_token;
+                                    }else{
+                                        $remember_token = Illuminate\Support\Str::random(60);
+                                        $admin->remember_token = $remember_token;
+                                        $admin->save();
+                                    }
+                                    $url_autologin = '?email='.$admin->email.'&token='.$remember_token;
+                                }
+                                @endphp
                                 <li class="nav-item">
-                                    <a href="{{env("ADMIN_URL")}}" class="nav-link">
+                                    <a href="{{ env("ADMIN_URL").'/login'.$url_autologin }}" class="nav-link">
                                         <span class="badge badge-primary">New</span> &nbsp
                                         {{ __('Dashboard') }}
                                     </a>

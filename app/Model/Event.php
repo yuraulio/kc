@@ -64,157 +64,132 @@ class Event extends Model
     ];
 
     public function schemadata(){
-        $schema =
-        [
-            "@context" => "https://schema.org/",
-            "@id" => "https://www.example.com/advancedCpp",
-            "@type" => "Course",
-            "name" => $this->title,
-            "description" => $this->summary,
-            // "publisher" => [
-            //     "@type" => "Organization",
-            //     "name" => "CourseWebsite",
-            //     "url" => "www.examplecoursewebsite.com"
-            // ],
-            "provider" => [
-                "@type" => "Organization",
-                "name" => "Knowcrunch Inc.",
-                "url" => "https://knowcrunch.com/"
-            ],
-            // "image" => [
-            //     "https://example.com/photos/1x1/photo.jpg",
-            //     "https://example.com/photos/4x3/photo.jpg",
-            //     "https://example.com/photos/16x9/photo.jpg"
-            // ],
-            // "aggregateRating" => [
-            //     "@type" => "AggregateRating",
-            //     "ratingValue" => 4,
-            //     "ratingCount" => 1234,
-            //     "reviewCount" => 450
-            // ],
-            // "offers" => [
-            //     [
-            //         "@type" => "Offer",
-            //         "category" => "Paid",
-            //         "priceCurrency" => "EUR",
-            //         "price" => 10.99
-            //     ]
-            // ],
-            // "totalHistoricalEnrollment" => 12345,
-            // "datePublished" => "2019-03-21",
-            // "educationalLevel" => "Advanced",
-            // "about" => ["C++ Coding", "Backend Engineering"],
-            // "teaches" => [
-            //     "Practice and apply systems thinking to plan for change",
-            //     "Understand how memory allocation works."
-            // ],
-            // "financialAidEligible" => "Scholarship Available",
-            // "inLanguage" => "en",
-            // "availableLanguage" => ["fr", "es"],
-            // "syllabusSections" => [
-            //     [
-            //         "@type" => "Syllabus",
-            //         "name" => "Memory Allocation",
-            //         "description" => "Learn how memory is allocated when creating C++ variables.",
-            //         "timeRequired" => "PT6H"
-            //     ],
-            //     [
-            //         "@type" => "Syllabus",
-            //         "name" => "C++ Pointers",
-            //         "description" => "Learn what a C++ pointer is and when they are used.",
-            //         "timeRequired" => "PT11H"
-            //     ]
-            // ],
-            // "review" => [
-            //     [
-            //         "@type" => "Review",
-            //         "author" => [
-            //             "@type" => "Person",
-            //             "name" => "Lou S."
-            //         ],
-            //         "datePublished" => "2020-08-31",
-            //         "reviewBody" => "My C++ skills improved, but the pace was too fast.",
-            //         "reviewRating" => [
-            //             "@type" => "Rating",
-            //             "bestRating" => 10,
-            //             "ratingValue" => 6
-            //         ]
-            //     ]
-            // ],
-            // "coursePrerequisites" => [
-            //     "Basic understanding of C++ up to arrays and functions.",
-            //     "https://www.example.com/beginnerCpp"
-            // ],
-            // "educationalCredentialAwarded" => [
-            //     [
-            //         "@type" => "EducationalOccupationalCredential",
-            //         "name" => "CourseProvider Certificate",
-            //         "url" => "www.example.com",
-            //         "credentialCategory" => "Certificate",
-            //         // offers only needed if the credential costs extra money.
-            //         "offers" => [
-            //             [
-            //                 "@type" => "Offer",
-            //                 "category" => "Paid",
-            //                 "price" => 5,
-            //                 "priceCurrency" => "USD"
-            //             ]
-            //         ]
-            //     ]
-            // ],
-            // "video" => [
-            //     "@type" => "VideoObject",
-            //     "name" => "Video name",
-            //     "description" => "A video previewing this course.",
-            //     "uploadDate" => "2022-03-28",
-            //     "contentUrl" => "www.example.come/mp4",
-            //     "thumbnailUrl" => "www.example.com/thumbnailurl.jpg"
-            // ],
-            // "hasCourseInstance" => [
-            //     [
-            //         // Blended, instructor-led course meeting 3 hours per day in July.
-            //         "@type" => "CourseInstance",
-            //         "courseMode" => "Blended",
-            //         "location" => "Example University",
-            //         "courseSchedule" => [
-            //             "@type" => "Schedule",
-            //             "duration" => "PT3H",
-            //             "repeatFrequency" => "Daily",
-            //             "repeatCount" => 31,
-            //             "startDate" => "2023-07-01",
-            //             "endDate" => "2023-07-31"
-            //         ],
-            //         "instructor" => [
-            //             [
-            //                 "@type" => "Person",
-            //                 "name" => "Ira D.",
-            //                 "description" => "Professor at X-University",
-            //                 "image" => "http://example.com/person.jpg"
-            //             ]
-            //         ]
-            //     ],
-            //     [
-            //         // Online self-paced course that takes 2 days to complete.
-            //         "@type" => "CourseInstance",
-            //         "courseMode" => "Online",
-            //         "courseWorkload" => "P2D"
-            //     ]
-            // ],
-            // // Only required for course programs that link to child courses.
-            // "hasPart" => [
-            //     [
-            //         "@type" => "Course",
-            //         "name" => "C++ Algorithms",
-            //         "url" => "https://www.example.com/cpp-algorithms",
-            //         "description" => "Learn how to code base algorithms in c++."
-            //     ], [
-            //         "@type" => "Course",
-            //         "name" => "C++ Data Structures",
-            //         "url" => "https://www.example.com/cpp-data-structures",
-            //         "description" => "Learn about core c++ data structures."
-            //     ]
-            // ]
-        ];
+        $schema = Cache::remember('schemadata-event-'.$this->id, 10, function(){
+            $schema =
+            [
+                "@context" => "https://schema.org/",
+                "@type" => "Course",
+                "name" => $this->title,
+                "description" => $this->summary,
+                "provider" => [
+                    "@type" => "Organization",
+                    "name" => "Know Crunch",
+                    "url" => "https://knowcrunch.com/"
+                ],
+                "author" => [
+                    "@type" => "Person",
+                    "name" => "Tolis Aivalis"
+                ],
+                "inLanguage" => "Greek/Ellinika",
+                "offers" => [
+                    [
+                        "@type" => "Offer",
+                        "category" => "Free",
+                        "priceCurrency" => "EUR",
+                        "price" => 0
+                    ]
+                ],
+                "educationalCredentialAwarded" => "EQF 5+ level",
+            ];
+            if(isset($this->mediable)){
+                $schema['image'] = [
+                    cdn(get_image($this->mediable,'event-card'))
+                ];
+            }
+            if($this->relationLoaded('slugable') && isset($this->slugable->slug)){
+                $schema['@id'] = $this->slugable->slug;
+            }
+            if($this->relationLoaded('ticket') && isset($this->ticket[0]->price)){
+                $schema['offers'] = [
+                    [
+                        "@type" => "Offer",
+                        "category" => "Paid",
+                        "priceCurrency" => "EUR",
+                        "price" => $this->ticket[0]->price
+                    ]
+                ];
+            }
+            if(isset($this->published_at)){
+                $schema['datePublished'] = Carbon::create($this->published_at)->format('Y-m-d');
+            }
+            if($this->relationLoaded('event_info1') && isset($this->event_info1->course_delivery)){
+                // dd($this->topic[0]->lessons);
+                $instructors = [];
+                if($this->relationLoaded('instructors') && isset($this->instructors)){
+                    foreach($this->instructors as $instr){
+                        $instructor = [
+                            "@type" => "Person",
+                            "name" => $instr->title.' '.$instr->subtitle,
+                            "description" => $instr->header
+                        ];
+                        if(isset($instr->mediable) && $instr->mediable->count() > 0){
+                            $instructor['image'] = config('app.url').$instr->mediable->path.'/'.$instr->mediable->original_name;
+                        }
+                        // Check if already added
+                        $alreadyInserted = false;
+                        foreach($instructors as $in){
+                            if($in['image'] == $instructor['image'])
+                                $alreadyInserted = true;
+                        }
+                        if(!$alreadyInserted)
+                            $instructors[] = $instructor;
+                    }
+                }
+                $courseWorkload = 'PT0H';
+                if(isset($this->course_hours)){
+                    $courseWorkload = 'PT'.$this->course_hours.'H';
+                }
+                switch($this->event_info1->course_delivery){
+                    case 139: // Classroom training
+                        $schema["hasCourseInstance"] = [
+                            [
+                                // Blended, instructor-led course meeting 3 hours per day in July.
+                                "@type" => "CourseInstance",
+                                "courseMode" => "onsite",
+                                "location" => $this->event_info1->course_inclass_city ?? '',
+                                "instructor" => $instructors,
+                                "courseWorkload" => $courseWorkload
+                            ]
+                        ];
+                        break;
+                    case 143: // Video e-learning
+                        $schema["hasCourseInstance"] = [
+                            [
+                                // Online self-paced course that takes 2 days to complete.
+                                "@type" => "CourseInstance",
+                                "courseMode" => "online",
+                                "courseWorkload" => $courseWorkload
+                            ]
+                        ];
+                        break;
+                    case 215: // Zoom training
+                        $schema["hasCourseInstance"] = [
+                            [
+                                // Online self-paced course that takes 2 days to complete.
+                                "@type" => "CourseInstance",
+                                "courseMode" => "online",
+                                "courseWorkload" => $courseWorkload
+                            ]
+                        ];
+                        break;
+                    case 216: // Corporate training
+                        $schema["hasCourseInstance"] = [
+                            [
+                                // Blended, instructor-led course meeting 3 hours per day in July.
+                                "@type" => "CourseInstance",
+                                "courseMode" => "onsite",
+                                "location" => $this->course_inclass_city ?? '',
+                                "instructor" => $instructors,
+                                "courseWorkload" => $courseWorkload
+                            ]
+                        ];
+                        break;
+                }
+            }
+            return $schema;
+        });
+
+        // dd($this);
         return $schema;
     }
 

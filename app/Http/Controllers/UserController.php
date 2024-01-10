@@ -375,6 +375,15 @@ class UserController extends Controller
                                     Delete
                                 </button>
                             </form>
+
+                            <form action="'.route("user.login_as", $row->id) .'" method="post">
+                                '. $this->csrf_field() .'
+
+                                <button type="button" class="dropdown-item login-as-btn">
+                                    Login as
+                                </button>
+                            </form>
+
                         </div>
                     </div>';
                     })
@@ -402,6 +411,16 @@ class UserController extends Controller
         }
 
         return view('users.index_new', compact('data'));
+    }
+
+    function loginAs($id)
+    {
+        if (!Auth::user()->role->whereIn('name', ['Super Administrator'])->isNotEmpty()) {
+            abort(403, 'Access not authorized');
+        }
+        $user = User::findOrFail($id);
+        Auth::login($user);
+        return redirect()->to('/');
     }
 
     function csrf_field()

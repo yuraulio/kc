@@ -15,8 +15,13 @@
                 <div class="row">
                     <div class="col info d-none">
                         <p class="mt-3 mb-0 text-sm">
-                            <span class="text-muted mr-3">PAID: <span class="text-success" id="students_paid"></span></span>
+                            <span class="text-muted mr-3">ALUMNI: <span class="text-success" id="students_alumni"></span></span>
+                            <span class="text-muted mr-3">EARLY: <span class="text-success" id="students_early"></span></span>
                             <span class="text-muted mr-3">FREE: <span class="text-success" id="students_free"></span></span>
+                            <span class="text-muted mr-3">REGULAR: <span class="text-success" id="students_regular"></span></span>
+                            <span class="text-muted mr-3">SPECIAL: <span class="text-success" id="students_special"></span></span>
+                            <span class="text-muted mr-3">TOTAL: <span class="text-success" id="students_total"></span></span>
+                            <span class="text-muted mr-3">PAID: <span class="text-success" id="students_paid"></span></span>
                         </p>
                         <p class="mb-0 text-sm">
                             <span class="">All students of this course.</span>
@@ -45,7 +50,7 @@
                         <p class="mt-3 mb-0 text-sm">
                             <span class="text-muted mr-3">INCLASS: <span class="text-success" id="inclass-active">0</span></span>
                             <span class="text-muted mr-3">E-LEARNING: <span class="text-success" id="elearning-active">0</span></span>
-                            
+
                         </p>
                         <p class="mb-0 text-sm">
                             <span class="">All active students of this course.</span>

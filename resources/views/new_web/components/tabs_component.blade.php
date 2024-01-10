@@ -63,20 +63,20 @@
                                     <li><a href="#{{Illuminate\Support\Str::slug("Instructors")}}" class="">Instructors</a></li>
                                 @endif
                             </ul>
-                            
+
                             @if ($event)
                                 {{--@if($event->view_tpl == "elearning_free")--}}
                                 @if($freeEvent)
-                            
-                                    @if($is_event_paid==0 && !Auth::user())             
+
+                                    @if($is_event_paid==0 && !Auth::user())
                                         <a href="{{ route('cart.add-item', [ $event->id,'free', 8 ]) }}" class="btn btn--lg btn--secondary  go-to-href">ENROLL FOR FREE</a>
                                     @elseif($is_event_paid==0 && Auth::user())
                                         <a href="{{ route('enrollForFree',  $event->id) }}" class="btn btn--lg btn--secondary go-to-href">ENROLL FOR FREE</a>
                                     @elseif(($is_event_paid==0 && Auth::user()) || ($is_event_paid==1 && $is_event_expired == 1))
-                                        <a href="{{ route('enrollForFree',  $event->id) }}" class="btn btn--lg btn--secondary go-to-href">ENROLL FOR FREE</a>          
+                                        <a href="{{ route('enrollForFree',  $event->id) }}" class="btn btn--lg btn--secondary go-to-href">ENROLL FOR FREE</a>
                                     @elseif($is_event_paid==1 && Auth::user())
                                         <a href="/myaccount/elearning/{{ $event['title'] }}" class="btn btn--md btn--secondary">WATCH NOW</a>
-                                                             
+
                                     @endif
                                 @elseif($estatus == 0 && !$is_event_paid)
                                     @if($is_event_paid==0 && $event['view_tpl'] == 'event_free_coupon')
@@ -88,6 +88,8 @@
                                     <a href="{{ route('cart.add-item', [ $event->id,'waiting', 8 ]) }}" class="btn btn--lg btn--primary go-to-href elearning-free">JOIN WAITING LIST</a>
                                 @elseif($estatus != 3 && $estatus != 5 && $estatus != 1 && !$is_event_paid)
                                     <a href="#seats" class="btn btn--lg btn--primary go-to-href go-to-href soldout">SOLD OUT</a>
+                                @elseif($estatus == 0 && $is_event_paid)
+                                    <a href="#seats" class="btn btn--lg btn--primary go-to-href">REENROLL</a>
                                 @endif
                             @endif
 

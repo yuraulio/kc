@@ -15,9 +15,9 @@
             <li class="breadcrumb-item"><a href="{{ route('events.index') }}">{{ __('Events Management') }}</a></li>
             <li class="breadcrumb-item active" aria-current="page">{{ __('Edit Event') }}</li>
 
-            
-            
-    
+
+
+
     @endcomponent
 
         @include('event.layouts.event_card')
@@ -177,7 +177,7 @@
                                 <div class="preview_event_btn">@include('admin.preview.preview',['slug' => isset($slug) ? $slug : null])</div>
                                 <div class="save_event_btn" >@include('admin.download.schedule',['event' => isset($event) ? $event : null])</div>
                             </div>--}}
-                            
+
                             <form id="event_edit_form" method="POST" action="{{ route('events.update', $event) }}" autocomplete="off"
                                         enctype="multipart/form-data">
                                                 @csrf
@@ -1717,8 +1717,8 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            
-                                            
+
+
 
                                             @endif
                                         </div>
@@ -2266,7 +2266,7 @@
                                                     </div>
                                                 </div>
 
-                                                    
+
                                             </div>
 
                                             <div class="form-group col-12">
@@ -2281,7 +2281,7 @@
                                                 <h4 id="has_exam_editors_text" class="form-control-label" for="input-hours">{{ isset($info['certificate']['has_certificate_exam']) && $info['certificate']['has_certificate_exam'] ? 'Certification the participants gets in PDF' : 'Certification the participants get in PDF' }}</h4>
                                             </div>
                                             <div class="form-group col-12">
-                                                
+
                                                 <div class="row">
                                                     <div class="col-sm-12 col-md-6 completion-text form-group{{ $errors->has('fb_') ? ' has-danger' : '' }}">
                                                         <label class="form-control-label" for="input-hours">(course_certification_completion)</label>
@@ -2295,9 +2295,9 @@
                                                         @include('alerts.feedback', ['field' => 'certificate_completion'])
 
                                                     </div>
-                                                  
+
                                                     <div class="col-sm-12 col-md-6 success-text form-group{{ $errors->has('fb_') ? ' has-danger' : '' }} {{isset($info['certificate']['has_certificate_exam']) && $info['certificate']['has_certificate_exam'] ? '' : 'd-none' }}">
-                                                        <label class="form-control-label" for="input-hours">(course_certification_name_success)</label>                                                   
+                                                        <label class="form-control-label" for="input-hours">(course_certification_name_success)</label>
 
                                                         <!-- anto's editor -->
                                                         <input class="hidden" id="input-certificate_title_hidden" name="course[{{'certificate'}}][{{'success_text'}}]" value="{{ old('certificate_title', (isset($info['certificate']['messages']['success']) && $info['certificate']['messages']['success'] != null) ? $info['certificate']['messages']['success'] : '') }}"/>
@@ -2309,15 +2309,15 @@
 
                                                     </div>
 
-                                            
 
-                                               
+
+
 
 
                                                 </div>
                                             </div>
-                                            
-                                            
+
+
 
 
 
@@ -3496,7 +3496,7 @@
             $('.course-certification-visible-wrapper').removeClass('d-none');
 
 
-           
+
             //$('#completion-wrapper').remove()
 
             // if(eventInfos !== undefined){
@@ -3524,7 +3524,7 @@
 
             if(status){
 
-               
+
 
                 let elem = document.getElementsByClassName('tox-editor-header');
 
@@ -3561,7 +3561,7 @@
 
             }
         });
-    
+
 
         let status1 = $('#certification-after-exam-toggle').prop('checked');
 
@@ -3571,21 +3571,21 @@
                 tinymce.get("input-certificate_completion").setContent(eventInfos.certificate.messages.completion)
                 $('#input-certificate_completion').val(eventInfos.certificate.messages.completion)
             }
-            
-            
+
+
             if(eventInfos.certificate.messages.success != null){
                 $('#input-certificate_title').val(eventInfos.certificate.messages.success)
             }
-                
+
         }
 
-        
+
 
         $('#certification-after-exam-toggle').change(function() {
             let status = $(this).prop('checked');
 
             if(status){
-               
+
                 $('.success-text').removeClass('d-none')
                 $('#has_exam_editors_text').text('Certification the participants gets in PDF')
 
@@ -3616,7 +3616,7 @@
         });
     })
 
-   
+
 
 
 
@@ -4456,9 +4456,13 @@ var datePickerOptions = {
                 let incomeInstalments = stats.incomeInstalments;
                 let active = stats.active;
 
-                $('#student_total').text(count.totalWithoutEnrollForFree)
+                $('#students_total').text(count.total)
                 $('#students_paid').text(count.regular + count.special + count.alumni + count.early)
                 $('#students_free').text(count.free)
+                $('#students_alumni').text(count.alumni)
+                $('#students_early').text(count.early)
+                $('#students_regular').text(count.regular)
+                $('#students_special').text(count.special)
 
                 $('#active-total').text(active.fromElearning + active.fromInclass)
                 $('#inclass-active').text(active.fromInclass)

@@ -173,6 +173,7 @@ Route::group(['middleware' => 'auth.aboveauthor', 'prefix' => 'admin'], function
     Route::get('user/edit_ticket', ['as' => 'user.edit_ticket', 'uses' => 'UserController@edit_ticket']);
     Route::post('user/remove_ticket_user', ['as' => 'user.remove_ticket_user', 'uses' => 'UserController@remove_ticket_user']);
     Route::get('user/absences/{user}/{event}', 'UserController@getAbsences');
+    Route::post('user/login_as/{id}', 'UserController@loginAs')->name('user.login_as');
 
 
     //Videos

@@ -1,6 +1,6 @@
 @php
     use App\Library\PageVariables;
-   
+
     if ($column->template->dynamic) {
         if ($dynamic_page_data && isset($dynamic_page_data["event"])){
             $sections = $dynamic_page_data["sections"] ?? null;
@@ -47,23 +47,6 @@
 
 @if (($column->template->dynamic && $dynamic_page_data && isset($dynamic_page_data["event"])))
     <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "Course",
-        "name": "{!!$event->title!!}",
-        "description": "{{ $event->subtitle }}",
-        "award": "Awarded as the 'Best Digital & Social Media Education', by Social Media World in 2016, 2017 and 2018.",
-        "inLanguage": "Greek/Ellinika",
-        "educationalCredentialAwarded": "EQF 5+ level",
-        "author": {
-        	"@type": "Person",
-        	"name": "Tolis Aivalis"
-        },
-        "provider": {
-          "@type": "Organization",
-          "name": "Know Crunch",
-          "sameAs": "https://knowcrunch.com/"
-        }
-      }
+        {!! json_encode($event->schemadata()) !!}
    </script>
 @endif

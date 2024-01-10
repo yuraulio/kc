@@ -32,6 +32,8 @@ use App\Exports\StudentExport;
 use Excel;
 use App\Exports\ExportStudentResults;
 use DateTime;
+use Illuminate\Support\Facades\DB;
+
 
 class EventController extends Controller
 {
@@ -865,6 +867,52 @@ class EventController extends Controller
 
         //dd($count);
 
+
+        $count['free'] = 0;
+        $count['special'] = 0;
+        $count['early'] = 0;
+        $count['alumni'] = 0;
+        $count['regular'] = 0;
+        $count['total'] = 0;
+
+        $results = DB::select("
+            SELECT
+                COUNT(tickets.title) as count, tickets.title
+            FROM
+                event_user_ticket
+            INNER JOIN tickets ON tickets.id = event_user_ticket.ticket_id
+            INNER JOIN event_user ON event_user.event_id = event_user_ticket.event_id AND event_user.user_id = event_user_ticket.user_id
+            WHERE
+                event_user_ticket.event_id = 4672
+            GROUP BY tickets.title
+        ");
+
+        // Ahora puedes trabajar con los resultados
+        foreach ($results as $result) {
+            switch($result->title){
+                case 'Alumni ticket':
+                    $count['alumni'] += $result->count;
+                    $count['total'] += $result->count;
+                    break;
+                case 'Regular ticket':
+                    $count['regular'] += $result->count;
+                    $count['total'] += $result->count;
+                    break;
+                case 'Special ticket':
+                    $count['special'] += $result->count;
+                    $count['total'] += $result->count;
+                    break;
+                case 'Sponsored ticket':
+                    $count['free'] += $result->count;
+                    $count['total'] += $result->count;
+                    break;
+                case 'Early Bird ticket':
+                    $count['early'] += $result->count;
+                    $count['total'] += $result->count;
+                    break;
+            }
+        }
+
         //dd($data['incomeInstalments']);
         $data['count'] = $count;
         $data['income'] = $income;
@@ -872,6 +920,7 @@ class EventController extends Controller
 
         $data['income']['total'] = array_sum($income);
         //dd($count);
+
 
 
         return response()->json([
