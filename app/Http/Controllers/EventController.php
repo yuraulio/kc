@@ -883,7 +883,7 @@ class EventController extends Controller
             INNER JOIN tickets ON tickets.id = event_user_ticket.ticket_id
             INNER JOIN event_user ON event_user.event_id = event_user_ticket.event_id AND event_user.user_id = event_user_ticket.user_id
             WHERE
-                event_user_ticket.event_id = 4672
+                event_user_ticket.event_id = $id
             GROUP BY tickets.title
         ");
 
