@@ -63,15 +63,8 @@ a[disabled]{
 }
 
 .info-icon-hero {
-    /* position: absolute; */
-    bottom: 3rem;
-    width: 45px;
-    height: 45px;
-    margin: 0 50%;
-    transform: translate(-50%);
-    margin-bottom: 0.5rem;
-
-
+    width: 135px;
+    height: 135px;
 }
 
 .form-wrapper form .custom-checkbox-wrapper{
@@ -89,7 +82,10 @@ a[disabled]{
 .awards-landing-container {
     position: absolute;
     right: -5px;
-    bottom: -1rem;
+    bottom: -4rem;
+}
+.awards-landing-container .info-text{
+    display: none;
 }
 
 .hero-message.cms-rich-text-editor .event-infos {
