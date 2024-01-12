@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\EventController;
 use App\Http\Controllers\Api\ForgotPasswordController;
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\PassportAuthController;
+use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\LessonController;
 
@@ -60,6 +61,10 @@ Route::middleware('auth:api')->group(function () {
     // Notifications
     Route::resource('notifications', NotificationController::class)
         ->only(['index', 'update']);
+
+    // Roles
+    Route::resource('roles', RoleController::class)
+        ->only('index');
 });
 
 
