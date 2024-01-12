@@ -889,29 +889,29 @@ class EventController extends Controller
 
         // Ahora puedes trabajar con los resultados
         foreach ($results as $result) {
-            switch($result->title){
-                case 'Alumni ticket':
+            switch($result->type){
+                case 'Alumni':
                     $count['alumni'] += $result->count;
                     $count['total'] += $result->count;
                     break;
-                case 'Regular ticket':
+                case 'Regular':
                     $count['regular'] += $result->count;
                     $count['total'] += $result->count;
                     break;
-                case 'Special ticket':
+                case 'Special':
                     $count['special'] += $result->count;
                     $count['total'] += $result->count;
                     break;
-                case 'Sponsored ticket':
+                case 'Sponsored':
                     $count['free'] += $result->count;
                     $count['total'] += $result->count;
                     break;
-                case 'Early Bird ticket':
+                case 'Early Bird':
                     $count['early'] += $result->count;
                     $count['total'] += $result->count;
                     break;
             }
-        }
+	    }
 
         //dd($data['incomeInstalments']);
         $data['count'] = $count;
