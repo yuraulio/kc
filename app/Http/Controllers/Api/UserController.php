@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Model\Activation;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Model\User;
@@ -15,6 +16,7 @@ use App\Model\Topic;
 use App\Model\Category;
 use App\Model\Testimonial;
 use App\Model\Instructor;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 
 use \Apifon\Mookee;
@@ -38,10 +40,42 @@ class UserController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        $perPage = (int) $request->query->get('per_page', 15);
+        $query = User::query()
+            ->with([
+                'statusAccount',
+                'role',
+            ]);
 
-        $users = User::with('statusAccount')
-            ->paginate($perPage);
+        // Order users by the field.
+        if ($request->query->has('sort_by')) {
+            $sortBy = $request->query->get('sort_by');
+
+            $query->orderBy(
+                Str::replaceFirst('-', '', $sortBy),
+                Str::startsWith($sortBy, '-') ? 'desc' : 'asc'
+            );
+        }
+
+        // Filter users by relations.
+        if ($request->query->has('filter')) {
+            $filters = $request->query->get('filter');
+
+            foreach ($filters as $key => $filter) {
+                [$relation, $field] = explode('.', $key);
+
+                // Because of the role relation realisation, we need to hardcode the field name for the role relation.
+                if ($relation === 'role') {
+                    $field = 'roles.' . $field;
+                }
+
+                $query->whereHas($relation, fn(Builder $query) => $query->whereIn($field, explode(',', $filter)));
+            }
+
+            // TODO: implement filtering by the user's fields.
+        }
+
+        $users = $query->paginate((int) $request->query->get('per_page', 50))
+            ->appends($request->query->all());
 
         return new JsonResponse($users);
     }
