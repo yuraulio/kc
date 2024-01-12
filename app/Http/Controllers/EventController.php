@@ -877,7 +877,7 @@ class EventController extends Controller
 
         $results = DB::select("
             SELECT
-                COUNT(tickets.title) as count, tickets.title
+                COUNT(tickets.title) as count, tickets.type
             FROM
                 event_user_ticket
             INNER JOIN tickets ON tickets.id = event_user_ticket.ticket_id
