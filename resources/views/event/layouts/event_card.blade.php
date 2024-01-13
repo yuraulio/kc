@@ -14,17 +14,28 @@
                 </div>
                 <div class="row">
                     <div class="col info d-none">
-                        <p class="mt-3 mb-0 text-sm">
-                            <span class="text-muted mr-3">ALUMNI: <span class="text-success" id="students_alumni"></span></span>
-                            <span class="text-muted mr-3">EARLY: <span class="text-success" id="students_early"></span></span>
-                            <span class="text-muted mr-3">FREE: <span class="text-success" id="students_free"></span></span>
-                            <span class="text-muted mr-3">REGULAR: <span class="text-success" id="students_regular"></span></span>
-                            <span class="text-muted mr-3">SPECIAL: <span class="text-success" id="students_special"></span></span>
-                            <span class="text-muted mr-3">TOTAL: <span class="text-success" id="students_total"></span></span>
-                            <span class="text-muted mr-3">PAID: <span class="text-success" id="students_paid"></span></span>
-                        </p>
                         <p class="mb-0 text-sm">
-                            <span class="">All students of this course.</span>
+                            <span class="">All tickets & sales for this course.</span>
+                        </p>
+                        <style>
+                            .fw-bold{
+                                font-weight: 600;
+                            }
+                        </style>
+                        <p class="mt-3 mb-0 text-sm">
+                            <span class="text-muted mr-3">EARLY:&nbsp;<span class="text-success fw-bold" id="students_early"></span>&nbsp;<span class="text-success students_early_amounts"></span></span>
+                            <span class="text-muted mr-3">ALUMNI:&nbsp;<span class="text-success fw-bold" id="students_alumni"></span>&nbsp;<span class="text-success students_alumni_amounts"></span></span>
+                            <br>
+                            <span class="text-muted mr-3">STUDENTS:&nbsp;<span class="text-success fw-bold" id="students"></span>&nbsp;<span class="text-success students_amounts"></span></span>
+                            <span class="text-muted mr-3">UNEMPLOYED:&nbsp;<span class="text-success fw-bold" id="unemployed"></span>&nbsp;<span class="text-success unemployed_amounts"></span></span>
+                            <span class="text-muted mr-3">GROUP:&nbsp;<span class="text-success fw-bold" id="group"></span>&nbsp;<span class="text-success group_amounts"></span></span>
+                            <br>
+                            <span class="text-muted mr-3">FREE:&nbsp;<span class="text-success fw-bold" id="students_free"></span>&nbsp;<span class="text-success students_free_amounts"></span></span>
+                            <span class="text-muted mr-3">REGULAR:&nbsp;<span class="text-success fw-bold" id="students_regular"></span>&nbsp;<span class="text-success students_regular_amounts"></span></span>
+                            <span class="text-muted mr-3">SPECIAL:&nbsp;<span class="text-success fw-bold" id="students_special"></span>&nbsp;<span class="text-success students_special_amounts"></span></span>
+                            <br>
+                            <span class="mr-3 fw-bold">TOTAL:&nbsp; <span class="text-success fw-bold" id="students_total"></span>&nbsp;<span class="text-success students_total_amounts"></span></span>
+                            {{-- <span class="text-muted mr-3">PAID: <span class="text-success" id="students_paid"></span>&nbsp;<span class="text-success" id="students_paid_amounts"></span></span> --}}
                         </p>
                     </div>
                 </div>
@@ -78,15 +89,20 @@
                 </div>
                 <div class="row">
                     <div class="col info d-none">
-                        <p class="mt-3 mb-0 text-sm">
-                            <span class="text-muted mr-3">EARLY: <span class="text-success" id="income-early"></span></span>
-                            <span class="text-muted mr-3">SPECIAL: <span class="text-success" id="income-special"></span></span>
-                            <span class="text-muted mr-3">REGULAR: <span class="text-success" id="income-regular"></span></span>
-                            <span class="text-muted mr-3">ALUMNI: <span class="text-success" id="income-alumni"></span></span>
-                            <span class="text-muted mr-3">SUBSCRIPTION: <span class="text-success" id="income-subscription"></span></span>
-                        </p>
                         <p class="mb-0 text-sm">
-                            <span class="">All gross income for this course.</span>
+                            <span class="">All actual revenue of payment plans</span>
+                        </p>
+                        <p class="mt-3 mb-0 text-sm">
+                            <span class="text-muted mr-3">EARLY: <span class="text-success students_early_amounts"></span></span>
+                            <span class="text-muted mr-3">ALUMNI: <span class="text-success students_alumni_amounts"></span></span>
+                            <br>
+                            <span class="text-muted mr-3">STUDENTS: <span class="text-success students_amounts"></span></span>
+                            <span class="text-muted mr-3">UNEMPLOYED: <span class="text-success unemployed_amounts"></span></span>
+                            <span class="text-muted mr-3">GROUP: <span class="text-success group_amounts"></span></span>
+                            <br>
+                            <span class="text-muted mr-3">REGULAR: <span class="text-success students_regular_amounts"></span></span>
+                            <span class="text-muted mr-3">SPECIAL: <span class="text-success students_special_amounts"></span></span>
+                            {{-- <span class="text-muted mr-3">SUBSCRIPTION: <span class="text-success" id="income-subscription"></span></span> --}}
                         </p>
                     </div>
                 </div>
@@ -111,11 +127,11 @@
                 <div class="row">
                     <div class="col info d-none">
                         <p class="mt-3 mb-0 text-sm">
-                            <span class="text-muted mr-3">EARLY: <span class="text-success" id="installments-early"></span></span>
-                            <span class="text-muted mr-3">SPECIAL: <span class="text-success" id="installments-special"></span></span>
-                            <span class="text-muted mr-3">REGULAR: <span class="text-success" id="installments-regular"></span></span>
-                            <span class="text-muted mr-3">ALUMNI: <span class="text-success" id="installments-alumni"></span></span>
-                            <span class="text-muted mr-3">SUBSCRIPTION: <span class="text-success" id="installments-subscription"></span></span>
+                            <span class="text-muted mr-3">EARLY:&nbsp;<span class="text-success" id="installments-early"></span></span>
+                            <span class="text-muted mr-3">SPECIAL:&nbsp;<span class="text-success" id="installments-special"></span></span>
+                            <span class="text-muted mr-3">REGULAR:&nbsp;<span class="text-success" id="installments-regular"></span></span>
+                            <span class="text-muted mr-3">ALUMNI:&nbsp;<span class="text-success" id="installments-alumni"></span></span>
+                            <span class="text-muted mr-3">SUBSCRIPTION:&nbsp;<span class="text-success" id="installments-subscription"></span></span>
                         </p>
                         <p class="mb-0 text-sm">
                             <span class="">All actual and accrued revenue for this course.</span>
