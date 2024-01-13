@@ -4457,12 +4457,28 @@ var datePickerOptions = {
                 let active = stats.active;
 
                 $('#students_total').text(count.total)
-                $('#students_paid').text(count.regular + count.special + count.alumni + count.early)
+                $('#students_paid').text((count.regular + count.special + count.alumni + count.early))
                 $('#students_free').text(count.free)
                 $('#students_alumni').text(count.alumni)
                 $('#students_early').text(count.early)
                 $('#students_regular').text(count.regular)
                 $('#students_special').text(count.special)
+
+                $('#students').text(count.students)
+                $('#unemployed').text(count.unemployed)
+                $('#group').text(count.group)
+
+                $('.students_total_amounts').text(' €'+count.total_amounts)
+                $('.students_paid_amounts').text(' €'+(count.regular_amounts + count.special_amounts + count.alumni_amounts + count.early_amounts))
+                $('.students_free_amounts').text(' €'+count.free_amounts)
+                $('.students_alumni_amounts').text(' €'+count.alumni_amounts)
+                $('.students_early_amounts').text(' €'+count.early_amounts)
+                $('.students_regular_amounts').text(' €'+count.regular_amounts)
+                $('.students_special_amounts').text(' €'+count.special_amounts)
+
+                $('.students_amounts').text(' €'+count.students_amounts)
+                $('.unemployed_amounts').text(' €'+count.unemployed_amounts)
+                $('.group_amounts').text(' €'+count.group_amounts)
 
                 $('#active-total').text(active.fromElearning + active.fromInclass)
                 $('#inclass-active').text(active.fromInclass)

@@ -868,6 +868,52 @@ class EventController extends Controller
         //dd($count);
 
 
+        // $count['free'] = 0;
+        // $count['special'] = 0;
+        // $count['early'] = 0;
+        // $count['alumni'] = 0;
+        // $count['regular'] = 0;
+        // $count['total'] = 0;
+
+        // $results = DB::select("
+        //     SELECT
+        //         COUNT(tickets.title) as count, tickets.type
+        //     FROM
+        //         event_user_ticket
+        //     INNER JOIN tickets ON tickets.id = event_user_ticket.ticket_id
+        //     INNER JOIN event_user ON event_user.event_id = event_user_ticket.event_id AND event_user.user_id = event_user_ticket.user_id
+        //     WHERE
+        //         event_user_ticket.event_id = $id
+        //     GROUP BY tickets.title
+        // ");
+
+        // // Ahora puedes trabajar con los resultados
+        // foreach ($results as $result) {
+        //     switch($result->type){
+        //         case 'Alumni':
+        //             $count['alumni'] += $result->count;
+        //             $count['total'] += $result->count;
+        //             break;
+        //         case 'Regular':
+        //             $count['regular'] += $result->count;
+        //             $count['total'] += $result->count;
+        //             break;
+        //         case 'Special':
+        //             $count['special'] += $result->count;
+        //             $count['total'] += $result->count;
+        //             break;
+        //         case 'Sponsored':
+        //             $count['free'] += $result->count;
+        //             $count['total'] += $result->count;
+        //             break;
+        //         case 'Early Bird':
+        //             $count['early'] += $result->count;
+        //             $count['total'] += $result->count;
+        //             break;
+        //     }
+	    // }
+
+
         $count['free'] = 0;
         $count['special'] = 0;
         $count['early'] = 0;
@@ -875,45 +921,133 @@ class EventController extends Controller
         $count['regular'] = 0;
         $count['total'] = 0;
 
-        $results = DB::select("
+        $count['free_amounts'] = 0;
+        $count['special_amounts'] = 0;
+        $count['early_amounts'] = 0;
+        $count['alumni_amounts'] = 0;
+        $count['regular_amounts'] = 0;
+        $count['total_amounts'] = 0;
+
+        $count['students'] = 0;
+        $count['unemployed'] = 0;
+        $count['group'] = 0;
+        $count['students_amounts'] = 0;
+        $count['unemployed_amounts'] = 0;
+        $count['group_amounts'] = 0;
+
+        $id = (int)$id;
+        $query = "
             SELECT
-                COUNT(tickets.title) as count, tickets.type
+                tickets.type as type,
+                transactions.id as transaction_id,
+                transactions.total_amount as total_amount,
+                transactions.status_history as status_history
             FROM
                 event_user_ticket
             INNER JOIN tickets ON tickets.id = event_user_ticket.ticket_id
             INNER JOIN event_user ON event_user.event_id = event_user_ticket.event_id AND event_user.user_id = event_user_ticket.user_id
+            INNER JOIN transactionables AS t1 ON t1.transactionable_id = event_user.user_id AND t1.transactionable_type = 'App\\\\Model\\\\User'
+            INNER JOIN transactionables AS t2 ON t2.transaction_id = t1.transaction_id AND t2.transactionable_type = 'App\\\\Model\\\\Event' AND t2.transactionable_id = $id
+            INNER JOIN transactions ON transactions.id = t2.transaction_id
             WHERE
                 event_user_ticket.event_id = $id
-            GROUP BY tickets.title
-        ");
+            ;
+        ";
+        $results = DB::select($query);
 
+        $transactions = []; // We have to count only one time each transaction
+        $transactions_2 = []; // We have to count only one time each transaction
         // Ahora puedes trabajar con los resultados
         foreach ($results as $result) {
+            $status_history = json_decode($result->status_history);
+            $student_type = 'students';
+
+            if(isset($status_history[0])){
+                foreach($status_history[0]->cart_data as $key => $cart_data){
+                    if(isset($cart_data->options)){
+                        switch($cart_data->options->type){
+                            case '1':
+                                $student_type = 'unemployed';
+                                break;
+                            case '2':
+                                $student_type = 'students';
+                                break;
+                            case '5':
+                                $student_type = 'group';
+                                break;
+                        }
+                    }
+                }
+                switch($student_type){
+                    case 'students':
+                        $count['students'] = $count['students'] + 1;
+                        $count['students_amounts'] = $count['students_amounts'] + (float)$result->total_amount;
+                        break;
+                    case 'unemployed':
+                        $count['unemployed'] = $count['unemployed'] + 1;
+                        $count['unemployed_amounts'] = $count['unemployed_amounts'] + (float)$result->total_amount;
+                        break;
+                    case 'group':
+                        if(!in_array($result->transaction_id, $transactions_2)){
+                            $transactions_2[] = $result->transaction_id;
+                            $count['group'] = $count['group'] + 1;
+                            $count['group_amounts'] = $count['group_amounts'] + (float)$result->total_amount;
+                        }
+                        break;
+                }
+            }
+
             switch($result->type){
                 case 'Alumni':
-                    $count['alumni'] += $result->count;
-                    $count['total'] += $result->count;
+                    $count['alumni']++;
+                    $count['total']++;
+                    if(!in_array($result->transaction_id, $transactions)){
+                        $transactions[] = $result->transaction_id;
+                        $count['alumni_amounts'] += (float)$result->total_amount;
+                        $count['total_amounts'] += (float)$result->total_amount;
+                    }
                     break;
                 case 'Regular':
-                    $count['regular'] += $result->count;
-                    $count['total'] += $result->count;
+                    $count['regular']++;
+                    $count['total']++;
+                    if(!in_array($result->transaction_id, $transactions)){
+                        $transactions[] = $result->transaction_id;
+                        $count['regular_amounts'] += (float)$result->total_amount;
+                        $count['total_amounts'] += (float)$result->total_amount;
+                    }
                     break;
                 case 'Special':
-                    $count['special'] += $result->count;
-                    $count['total'] += $result->count;
+                    $count['special']++;
+                    $count['total']++;
+                    if(!in_array($result->transaction_id, $transactions)){
+                        $transactions[] = $result->transaction_id;
+                        $count['special_amounts'] += (float)$result->total_amount;
+                        $count['total_amounts'] += (float)$result->total_amount;
+                    }
                     break;
                 case 'Sponsored':
-                    $count['free'] += $result->count;
-                    $count['total'] += $result->count;
+                    $count['free']++;
+                    $count['total']++;
+                    if(!in_array($result->transaction_id, $transactions)){
+                        $transactions[] = $result->transaction_id;
+                        $count['free_amounts'] += (float)$result->total_amount;
+                        $count['total_amounts'] += (float)$result->total_amount;
+                    }
                     break;
                 case 'Early Bird':
-                    $count['early'] += $result->count;
-                    $count['total'] += $result->count;
+                    $count['early']++;
+                    $count['total']++;
+                    if(!in_array($result->transaction_id, $transactions)){
+                        $transactions[] = $result->transaction_id;
+                        $count['early_amounts'] += (float)$result->total_amount;
+                        $count['total_amounts'] += (float)$result->total_amount;
+                    }
                     break;
             }
 	    }
 
         //dd($data['incomeInstalments']);
+        $data['results'] = $results;
         $data['count'] = $count;
         $data['income'] = $income;
         $data['active'] = $countActive;
@@ -921,13 +1055,10 @@ class EventController extends Controller
         $data['income']['total'] = array_sum($income);
         //dd($count);
 
-
-
         return response()->json([
             'success' => __('Event Statistic successfully fetched.'),
             'data' => $data,
         ]);
-
 
     }
 
