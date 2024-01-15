@@ -1238,24 +1238,26 @@ class UserController extends Controller
      */
     public function profile(): JsonResponse
     {
-        $user = Auth::user()->load('image');
+        $user = Auth::user()->load([
+            'image',
+            'role',
+        ]);
         $billingDetails = $user['receipt_details'];
         $billingDetails = json_decode($billingDetails, true);
 
         $billing = [];
-        $billing['billname'] = isset($billingDetails['billname']) ? $billingDetails['billname'] : '';
-        $billing['billafm'] = isset($billingDetails['billafm']) ? $billingDetails['billafm'] : '';
-        $billing['billaddress'] = isset($billingDetails['billaddress']) ? $billingDetails['billaddress'] : '';
-        $billing['billaddressnum'] = isset($billingDetails['billaddressnum']) ? $billingDetails['billaddressnum'] : '';
-        $billing['billcity'] = isset($billingDetails['billcity']) ? $billingDetails['billcity'] : '';
-        $billing['billpostcode'] = isset($billingDetails['billpostcode']) ? $billingDetails['billpostcode'] : '';
-        $billing['billstate'] = isset($billingDetails['billstate']) ? $billingDetails['billstate'] : '';
-        $billing['billcountry'] = isset($billingDetails['billcountry']) ? $billingDetails['billcountry'] : '';
-        $billing['billemail'] = isset($billingDetails['billemail']) ? $billingDetails['billemail'] : '';
+        $billing['billname'] = $billingDetails['billname'] ?? '';
+        $billing['billafm'] = $billingDetails['billafm'] ?? '';
+        $billing['billaddress'] = $billingDetails['billaddress'] ?? '';
+        $billing['billaddressnum'] = $billingDetails['billaddressnum'] ?? '';
+        $billing['billcity'] = $billingDetails['billcity'] ?? '';
+        $billing['billpostcode'] = $billingDetails['billpostcode'] ?? '';
+        $billing['billstate'] = $billingDetails['billstate'] ?? '';
+        $billing['billcountry'] = $billingDetails['billcountry'] ?? '';
+        $billing['billemail'] = $billingDetails['billemail'] ?? '';
 
 
         if (isset($user['image']) && get_profile_image($user['image'])) {
-
             $user['profileImage'] = get_profile_image($user['image']);
         } else {
             $user['profileImage'] = '/theme/assets/images/icons/user-profile-placeholder-image.png';
@@ -1267,10 +1269,10 @@ class UserController extends Controller
         unset($user['invoice_details']);
 
         foreach ($user->getAttributes() as $key => $attribute) {
-
             if ($key == 'terms') {
                 continue;
             }
+
             if (!$attribute) {
                 $user[$key] = '';
             }
