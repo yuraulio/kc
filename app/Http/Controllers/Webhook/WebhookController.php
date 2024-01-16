@@ -315,7 +315,6 @@ class WebhookController extends BaseWebhookController
                     $event = Event::find($eventId);
                     if($event){
                         DB::table('event_user')
-                            ->where('id', $subscriptionPaymentMethod->pivot->id)
                             ->insert([
                                 'event_id' => $event->id,
                                 'user_id' => $user->id,
