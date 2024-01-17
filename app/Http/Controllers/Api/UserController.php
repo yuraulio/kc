@@ -58,17 +58,49 @@ class UserController extends Controller
 
         // Filter users by relations.
         if ($request->query->has('filter')) {
+            $dateFormat = 'Y-m-d';
+            $operators = [
+              'eq' => '==', // equal
+              'lt' => '<',  // less
+              'le' => '<=', // less than or equal
+              'gt' => '>',  // greater
+              'ge' => '>=', // greater than or equal
+              'ne' => '!=', // not equal
+            ];
+
             $filters = $request->query->get('filter');
 
-            foreach ($filters as $key => $filter) {
-                [$relation, $field] = explode('.', $key);
+            foreach ($filters as $field => $value) {
+                if (Str::contains($field, '.')) {
+                    [$relation, $field] = explode('.', $field);
 
-                // Because of the role relation realisation, we need to hardcode the field name for the role relation.
-                if ($relation === 'role') {
-                    $field = 'roles.' . $field;
+                    // Because of the role relation realisation, we need to hardcode the field name for the role relation.
+                    if ($relation === 'role') {
+                        $field = 'roles.' . $field;
+                    }
+
+                    $query->whereHas($relation, function (Builder $query) use ($field, $value) {
+                        $values = explode(',', $value);
+
+                        if (count($values) === 1) {
+                            $query->where($field, $value);
+                        } else {
+                            $query->whereIn($field, $values);
+                        }
+
+                        return $query;
+                    });
+                } else {
+                    foreach ($value as $operator => $test) {
+                        $operator = $operators[$operator];
+
+                        if (strtotime($test)) {
+                            $query->whereDate($field, $operator, $test);
+                        } else {
+                            $query->where($field, $operator, $test);
+                        }
+                    }
                 }
-
-                $query->whereHas($relation, fn(Builder $query) => $query->whereIn($field, explode(',', $filter)));
             }
 
             // TODO: implement filtering by the user's fields.
