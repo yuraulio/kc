@@ -4457,6 +4457,7 @@ var datePickerOptions = {
                 let active = stats.active;
 
                 $('#students_total').text(count.total)
+                $('#students_total_students').text(count.total_students)
                 $('#students_paid').text((count.regular + count.special + count.alumni + count.early))
                 $('#students_free').text(count.free)
                 $('#students_alumni').text(count.alumni)

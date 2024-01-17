@@ -920,6 +920,7 @@ class EventController extends Controller
         $count['alumni'] = 0;
         $count['regular'] = 0;
         $count['total'] = 0;
+        $count['total_students'] = 0;
 
         $count['free_amounts'] = 0;
         $count['special_amounts'] = 0;
@@ -982,17 +983,23 @@ class EventController extends Controller
                     case 'students':
                         $count['students'] = $count['students'] + 1;
                         $count['students_amounts'] = $count['students_amounts'] + (float)$result->total_amount;
+                        $count['total']++;
+                        $count['total_students']++;
                         break;
                     case 'unemployed':
                         $count['unemployed'] = $count['unemployed'] + 1;
                         $count['unemployed_amounts'] = $count['unemployed_amounts'] + (float)$result->total_amount;
+                        $count['total']++;
+                        $count['total_students']++;
                         break;
                     case 'group':
                         if(!in_array($result->transaction_id, $transactions_2)){
                             $transactions_2[] = $result->transaction_id;
                             $count['group'] = $count['group'] + 1;
                             $count['group_amounts'] = $count['group_amounts'] + (float)$result->total_amount;
+                            $count['total']++;
                         }
+                        $count['total_students']++;
                         break;
                 }
             }
@@ -1000,7 +1007,6 @@ class EventController extends Controller
             switch($result->type){
                 case 'Alumni':
                     $count['alumni']++;
-                    $count['total']++;
                     if(!in_array($result->transaction_id, $transactions)){
                         $transactions[] = $result->transaction_id;
                         $count['alumni_amounts'] += (float)$result->total_amount;
@@ -1009,7 +1015,6 @@ class EventController extends Controller
                     break;
                 case 'Regular':
                     $count['regular']++;
-                    $count['total']++;
                     if(!in_array($result->transaction_id, $transactions)){
                         $transactions[] = $result->transaction_id;
                         $count['regular_amounts'] += (float)$result->total_amount;
@@ -1018,7 +1023,6 @@ class EventController extends Controller
                     break;
                 case 'Special':
                     $count['special']++;
-                    $count['total']++;
                     if(!in_array($result->transaction_id, $transactions)){
                         $transactions[] = $result->transaction_id;
                         $count['special_amounts'] += (float)$result->total_amount;
@@ -1027,7 +1031,6 @@ class EventController extends Controller
                     break;
                 case 'Sponsored':
                     $count['free']++;
-                    $count['total']++;
                     if(!in_array($result->transaction_id, $transactions)){
                         $transactions[] = $result->transaction_id;
                         $count['free_amounts'] += (float)$result->total_amount;
@@ -1036,7 +1039,6 @@ class EventController extends Controller
                     break;
                 case 'Early Bird':
                     $count['early']++;
-                    $count['total']++;
                     if(!in_array($result->transaction_id, $transactions)){
                         $transactions[] = $result->transaction_id;
                         $count['early_amounts'] += (float)$result->total_amount;
