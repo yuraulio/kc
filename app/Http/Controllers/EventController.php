@@ -962,9 +962,9 @@ class EventController extends Controller
             $status_history = json_decode($result->status_history);
             $student_type = 'students';
 
-            if(isset($status_history[0])){
+            if(isset($status_history[0]) && isset($status_history[0]->cart_data)){
                 foreach($status_history[0]->cart_data as $key => $cart_data){
-                    if(isset($cart_data->options)){
+                    if(isset($cart_data) && isset($cart_data->options)){
                         switch($cart_data->options->type){
                             case '1':
                                 $student_type = 'unemployed';
