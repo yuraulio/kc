@@ -531,6 +531,7 @@ class Event extends Model
 
             $sum1 = 0;
             $topicsSeen[$key] = 0;
+            $lessons_with_video_links = 0;
             foreach($lesson1 as $key1 => $lesson){
                 $sum = 0;
 
@@ -594,13 +595,18 @@ class Event extends Model
 
                 if(isset($videos[$vimeoVideo]) && (int) $videos[$vimeoVideo]['seen'] == 1){
                     $topicsSeen[$key]++;
+                }else{
+                    $topicsSeen[$key]++;
                 }
 
                 $sum1 = $sum1 + $sum;
                 $data['keys'][$key] = $sum1;
 
+                // Count all the lessons that have video link assigned
+                if($lesson->vimeo_video != '')
+                    $lessons_with_video_links++;
             }
-            $topicsSeen[$key] = $topicsSeen[$key] == count($lesson1);
+            $topicsSeen[$key] = $topicsSeen[$key] >= $lessons_with_video_links;
 
         }
 
