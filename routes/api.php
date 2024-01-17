@@ -29,6 +29,7 @@ Route::middleware('auth:api')->group(function () {
     Route::get('myprofile', [UserController::class, 'profile']);
     Route::post('myprofile/update', [UserController::class, 'updateProfile']);
     Route::get('myprofile/events', [UserController::class, 'events']);
+    Route::get('impersonate/{user}', [UserController::class, 'impersonate']);
 
     //
     Route::post('lesson/save_note', [LessonController::class, 'saveNote']);

@@ -11,18 +11,12 @@ use App\Model\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Model\Media;
-use App\Model\Event;
-use App\Model\Topic;
-use App\Model\Category;
-use App\Model\Testimonial;
 use App\Model\Instructor;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
-
-use \Apifon\Mookee;
-use \Apifon\Model\SmsRequest;
-use \Apifon\Model\MessageContent;
-use \Apifon\Resource\SMSResource;
+use Apifon\Mookee;
+use Apifon\Model\SmsRequest;
+use Apifon\Model\MessageContent;
+use Apifon\Resource\SMSResource;
 use App\Http\Controllers\MediaController;
 
 class UserController extends Controller
@@ -1314,6 +1308,25 @@ class UserController extends Controller
             'success' => true,
             'data' => $user,
             'billing' => $billing
+        ]);
+    }
+
+    /**
+     * Returns the user access token.
+     *
+     * It implements the Login As feature.
+     *
+     * @param User $user
+     * @return JsonResponse
+     */
+    public function impersonate(User $user): JsonResponse
+    {
+        if (!($token = $user->token())) {
+            $token = $user->createToken('LaravelAuthApp');
+        }
+
+        return new JsonResponse([
+            'token' => $token->accessToken,
         ]);
     }
 
