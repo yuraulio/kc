@@ -595,8 +595,6 @@ class Event extends Model
 
                 if(isset($videos[$vimeoVideo]) && (int) $videos[$vimeoVideo]['seen'] == 1){
                     $topicsSeen[$key]++;
-                }else{
-                    $topicsSeen[$key]++;
                 }
 
                 $sum1 = $sum1 + $sum;
