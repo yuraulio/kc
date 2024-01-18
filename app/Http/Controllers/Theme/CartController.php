@@ -2638,6 +2638,52 @@ class CartController extends Controller
                         'Encrypted_email' => hash('sha256', $user->email)
                 ];
 
+            $customerBillingFirstName = '';
+            $customerBillingLastName = '';
+            $customerBillingCompany = '';
+            $customerBillingAddress1 = '';
+            $customerBillingAddress2 = '';
+            $customerBillingCity = '';
+            $customerBillingPostcode = '';
+            $customerBillingEmail = '';
+            try{
+                $receipt_details = json_decode($user->receipt_details);
+                if(isset($receipt_details->billname))
+                    $customerBillingFirstName = $receipt_details->billname;
+                if(isset($receipt_details->billsurname))
+                    $customerBillingLastName = $receipt_details->billsurname;
+                if(isset($receipt_details->billemail))
+                    $customerBillingEmail = $receipt_details->billemail;
+                if(isset($receipt_details->billaddress))
+                    $customerBillingAddress1 = $receipt_details->billaddress;
+                if(isset($receipt_details->billaddressnum))
+                    $customerBillingAddress2 = $receipt_details->billaddressnum;
+                if(isset($receipt_details->billpostcode))
+                    $customerBillingPostcode = $receipt_details->billpostcode;
+                if(isset($receipt_details->billcity))
+                    $customerBillingCity = $receipt_details->billcity;
+                if(isset($receipt_details->billemail))
+                    $customerBillingEmail = $receipt_details->billemail;
+            }catch(\Exception $e){}
+
+
+            $data['customer'] = [
+                'customerTotalOrders' => '',
+                'customerTotalOrderValue' => '',
+                'customerFirstName' => $user->firstname,
+                'customerLastName' => $user->lastname,
+                'customerBillingFirstName' => $customerBillingFirstName,
+                'customerBillingLastName' => $customerBillingLastName,
+                'customerBillingCompany' => $user->company,
+                'customerBillingAddress1' => $customerBillingAddress1,
+                'customerBillingAddress2' => $customerBillingAddress2,
+                'customerBillingCity' => $customerBillingCity,
+                'customerBillingPostcode' => $customerBillingPostcode,
+                'customerBillingCountry' => '',
+                'customerBillingEmail' => $customerBillingEmail,
+                'customerBillingEmailHash' => hash('sha256', $customerBillingEmail),
+            ];
+
         }
         //$this->fbp->sendPurchaseEvent($data);
 
