@@ -41,8 +41,8 @@ class UserController extends Controller
             ]);
 
         // Order users by the field.
-        if ($request->query->has('sort_by')) {
-            $sortBy = $request->query->get('sort_by');
+        if ($request->query->has('sort')) {
+            $sortBy = $request->query->get('sort');
 
             $query->orderBy(
                 Str::replaceFirst('-', '', $sortBy),
@@ -96,10 +96,22 @@ class UserController extends Controller
                     }
                 }
             }
-
-            // TODO: implement filtering by the user's fields.
         }
 
+        // Search by user fields.
+        if ($request->query->has('search')) {
+            $keyword = sprintf('%%%s%%', $request->query->get('search'));
+
+            $query->where(function (Builder $query) use ($keyword) {
+                $query->orWhere('firstname', 'LIKE', $keyword)
+                    ->orWhere('lastname', 'LIKE', $keyword)
+                    ->orWhere('email', 'LIKE', $keyword)
+                    ->orWhere('company', 'LIKE', $keyword)
+                    ->orWhere('job_title', 'LIKE', $keyword);
+            });
+        }
+
+        // Get paginated users.
         $users = $query->paginate((int) $request->query->get('per_page', 50))
             ->appends($request->query->all());
 
