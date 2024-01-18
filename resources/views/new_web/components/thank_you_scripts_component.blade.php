@@ -15,6 +15,18 @@
 
 @endif
 
+@if(isset($thankyouData['customer']) && !env('APP_DEBUG'))
+
+    <script>
+    $(document).ready(function(){
+        @foreach($thankyouData['customer'] as $key => $ti)
+            dataLayer.push({"{{$key}}": $.parseHTML("{{$ti}}")[0].data})
+        @endforeach
+    })
+    </script>
+
+@endif
+
 @if(isset($thankyouData['ecommerce']) && isset($thankyouData['ecommerce']['actionField']['value']) && $thankyouData['ecommerce']['actionField']['value'] > 0 && !env('APP_DEBUG'))
 
     <script>
@@ -57,20 +69,20 @@
       let items = {};
 
       @foreach($thankyouData['new_event'] as $key => $ti)
-      
-      
+
+
          @if(gettype($ti) != 'array' && $ti != '')
             a["{{$key}}"] =  $.parseHTML("{{$ti}}")[0].data
 
          @endif
-   
+
       @endforeach
 
       @foreach($thankyouData['new_event']['items'] as $key => $ti)
          @if($ti != '')
             items["{{$key}}"] = $.parseHTML("{{$ti}}")[0].data
          @endif
-         
+
       @endforeach
 
       let data = {
@@ -87,12 +99,12 @@
             }
             if(item.quantity !== undefined){
                 data['items'][index].quantity = Number(item.quantity)
-            }  
+            }
         });
 
         dataLayer.push(data);
+        console.log('Here we are!!');
 
-      
    });
 
 </script>
