@@ -96,7 +96,7 @@
     ></manager-for-old-admin>
 </div>
 
-<script src="{{asset('js/app.js')}}"></script>
+<script src="{{mix('js/app.js')}}"></script>
 <script src="{{asset('admin_assets/js/vendor.min.js')}}"></script>
 
 <form method="post" id="upload_form" method="POST" action="{{ route('upload.versionImage', $event) }}" autocomplete="off" enctype="multipart/form-data">

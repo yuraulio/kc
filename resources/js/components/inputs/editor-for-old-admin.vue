@@ -16,7 +16,9 @@
                 toolbar_mode: 'wrap',
                 height: 400,
                 font_css: '/theme/assets/css/editor.css',
-
+                setup: setup,
+                variable_valid: Object.keys(variables),
+                variable_mapper: variables
             }"
         ></editor>
     </div>
@@ -28,8 +30,9 @@
 
 <script>
 
-
 import Editor from '@tinymce/tinymce-vue'
+import {Variable} from "../../vendors/tinymce/variables/plugin";
+
 
 export default {
     components: {
@@ -73,12 +76,16 @@ export default {
         imageEdit:false,
         plugins: {
             type: String,
-            default: 'preview importcss searchreplace autolink autosave save directionality code visualblocks visualchars fullscreen image link media template codesample table charmap pagebreak nonbreaking anchor insertdatetime advlist lists wordcount help charmap quickbars emoticons'
+            default: 'preview importcss searchreplace autolink autosave save directionality code visualblocks visualchars fullscreen image link media template codesample table charmap pagebreak nonbreaking anchor insertdatetime advlist lists wordcount help charmap quickbars emoticons variable'
         },
         toolbar:{
             type: String,
-            default: 'fullscreen styles | undo redo | h1 h2 h3 h4 h5 h6 | bold italic underline strikethrough | fontfamily fontsize blocks | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | preview print | insertfile image media link anchor codesample | ltr rtl'
-        }
+            default: 'fullscreen styles | undo redo | h1 h2 h3 h4 h5 h6 | bold italic underline strikethrough | fontfamily fontsize blocks | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | preview print | insertfile image media link anchor codesample | ltr rtl | variable'
+        },
+        variables: {
+          type: Object,
+          default: () => ({})
+        },
     },
     data() {
         return {
@@ -88,6 +95,9 @@ export default {
         };
     },
     methods: {
+        setup: () => {
+            tinymce.PluginManager.add('variable', Variable);
+        },
         updatedmedia($event, ref) {
             $event.siblings = null;
             $event.subfiles = null;
@@ -163,6 +173,8 @@ export default {
         }
     },
     mounted() {
+      window.test = this;
+      console.error("this", this.variableValid)
         if (this.value) {
             this.editorData = this.editorData;
             $('input[name='+ this.inputname +']').val(this.editorData);

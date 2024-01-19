@@ -18,7 +18,6 @@
             $subtitle = $dynamic_page_data["content"]["header"] ?? null;
             $company = $dynamic_page_data["content"]['company'] ?? null;
             $companyUrl = $dynamic_page_data["content"]['ext_url'] ?? null;
-            $editor_text = $dynamic_page_data["content"]['body'] ?? null;
             $editor_text = PageVariables::parseText($editor_text, $page, $dynamic_page_data ?? null);
         }
 

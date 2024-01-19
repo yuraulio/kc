@@ -392,7 +392,13 @@
                                                 <!-- anto's editor -->
                                                 <input class="hidden" id="input-hours-text" name="course[{{'hours'}}][{{'text'}}]" value="{{ old('hours_text', (isset($info['hours']['text']) && $info['hours']['text'] != null) ? $info['hours']['text'] : '' ) }}"/>
                                                 <?php $data = isset($info['hours']['text']) && $info['hours']['text'] != null ? $info['hours']['text'] : '' ?>
-                                                @include('event.editor.editor', ['toolbar' => 'insertfile image media link anchor codesample','plugins' => 'link','keyinput' => "input-hours_title", 'data'=> "$data", 'inputname' => "'course[hours][text]'" ])
+                                                @include('event.editor.editor', [
+                                                    'toolbar' => 'insertfile image media link anchor codesample',
+                                                    'plugins' => 'link',
+                                                    'keyinput' => "input-hours_title",
+                                                    'data'=> "$data",
+                                                    'inputname' => "'course[hours][text]'",
+                                                ])
                                                 <!-- anto's editor -->
 
                                                 {{--<input style="background: aliceblue;" type="text" name="course[{{'hours'}}][{{'text'}}]" id="input-hours-text" class="form-control" placeholder="{{ __('alphanumeric text') }}" value="{{ old('hours_text', (isset($info['hours']['text']) && $info['hours']['text'] != null) ? $info['hours']['text'] : '' ) }}" autofocus>--}}
@@ -2674,13 +2680,23 @@
                                                                     <label class="form-control-label" for="input-body">{{ __('Body') }}</label>
 
 
-
-                                                                    {{--<textarea name="body" id="input-body"  class="ckeditor form-control{{ $errors->has('body') ? ' is-invalid' : '' }}" placeholder="{{ __('Body') }}" required autofocus>{{ old('body', $event->body) }}</textarea>--}}
-
                                                                     <!-- anto's editor -->
                                                                     <input class="hidden" name="body" value="{{ old('body',$event->body) }}"/>
                                                                     <?php $data = $event->body?>
-                                                                    @include('event.editor.editor', ['toolbar' => 'insertfile image media link anchor codesample','plugins' => 'link','keyinput' => "input-body", 'data'=> "$data", 'inputname' => "'body'" ])
+                                                                    @include('event.editor.editor', [
+                                                                        'toolbar' => 'insertfile image media link anchor codesample',
+                                                                        'plugins' => 'link',
+                                                                        'keyinput' => "input-body",
+                                                                        'data'=> "$data",
+                                                                        'inputname' => "'body'",
+                                                                        'variables' => [
+                                                                            'course_hours' => 'Course Hours',
+                                                                            'launch_date' => 'Launch Date',
+                                                                            'course_inclass_dates' => 'Inclass Dates',
+                                                                            'course_inclass_days' => 'Inclass Days',
+                                                                            'course_certificate_type' => 'Certificate Type',
+                                                                        ],
+                                                                    ])
                                                                     <!-- anto's editor -->
 
 
