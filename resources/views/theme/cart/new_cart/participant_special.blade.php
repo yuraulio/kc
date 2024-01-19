@@ -328,7 +328,6 @@
 										<img src="{{cdn('new_cart/images/close-green2.svg')}}" width="9px" height="10px" class="with-hover"></a>
 								</div>
 								@endif
-
 							</div>
 							@endfor
 							<div class="form-row">
@@ -377,7 +376,7 @@
 <script>
 	$(document).ready(function(){
 	dataLayer.push({'Event_ID':"{{$tigran['Event_ID'].'p'}}", 'event': 'Add To Cart', 'Product_id' : "{{$tigran['Product_id']}}", 'Price': "{{$tigran['Price']}}",'ProductCategory':"{{$tigran['ProductCategory']}}"});
-	})
+	});
 </script>
 
 <script type="text/javascript">

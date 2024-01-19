@@ -18,7 +18,6 @@
 		<div class="container padding-no">
 		<h1 class="hidden-xs">Participant(s)</h1>
 			<div class="row">
-
 				<!---------------- Participant form start--------------->
 				<div class="col-md-6 col-xl-6 selection-order ">
 				<h1 class="hidden-lg">Participant(s)</h1>
@@ -26,21 +25,22 @@
 					@if(!Auth::check())<p class="login-link info">Already have an account? <a href="#" class="link-color">Log in</a> to retrieve your data. Fields marked with an asterisk (*) are required.</p>@endif
 						<form action="{{route('registration')}}" method="post" id="participant-form" name="participant-form">
                         @csrf
-							<div class="form-wrp box" id="clone-box">
-
+                            @for ($i=1; $i <= $totalitems; $i++)
+                            <div class="form-wrp box" @if($i==1) id="clone-box" @else id="clone-box-{{$i}}" @endif>
+                            @if($i > 1) <h2 class="participant-number">Participant {{$i}}</h2> @endif
 							@if(Auth::check())<p class="validation-info">Fields marked with an asterisk <span class="checkout-required-data">(*)</span> are required.</p>@endif
 
 								<div class="form-row">
 									<div class="col-md-6 mb-4 pr-md-3">
 										<label class="input-label">My first name is  <span class="checkout-required-data">*</span></label>
-										<input type="text" name="firstname[]" class="form-control with-focus-visible" value="{{old('firstname',$firstname[0])}}"  required>
+										<input type="text" name="firstname[{{$i-1}}]" class="form-control with-focus-visible" value="{{old('firstname',$firstname[$i-1])}}"  required>
 										<div class="valid-feedback">
 
 										</div>
 									</div>
 									<div class="col-md-6 mb-4 pl-md-3">
 										<label class="input-label">My last name is <span class="checkout-required-data">*</span></label>
-										<input type="text" name="lastname[]" class="form-control" value="{{old('lastname',$lastname[0])}}"  required>
+										<input type="text" name="lastname[{{$i - 1}}]" class="form-control" value="{{old('lastname',$lastname[$i-1])}}"  required>
 										<div class="valid-feedback">
 
 										</div>
@@ -49,14 +49,15 @@
 								<div class="form-row">
 									<div class="col-md-12 mb-4">
 										<label class="input-label">My e-mail is  <span class="checkout-required-data">*</span></label>							<div class="email-wrap">
-												<input type="text" name="email[]" id="email" value="{{old('email',$email[0])}}" class="form-control" required>
+												<input type="text" name="email[{{$i - 1}}]"  value="{{old('email',$email[$i-1])}}" class="form-control" required>
 										  	</div>
 									</div>
 								</div>
 								<div class="form-row">
 									<div class="col-md-12 mb-4 position-relative country-dropdown">
 										<label class="input-label">My mobile phone number is <span class="checkout-required-data">*</span></label>
-										<select name="country_code[]"  class="form-control" id="country">
+										<select name="country_code[{{$i - 1}}]" onchange="selectCountryCode(this,'{{$i}}')" class="form-control country{{$i}}" id="country">
+										<option value="0" label="Select a country">Select a country</option>
 											{{--<option value="0" label="Select a country">Select a country</option>--}}
 											<option value="213" label="Algeria (+213)">Algeria </option>
 											<option value="244" label="Angola (+244)">Angola </option>
@@ -275,15 +276,15 @@
 											<option value="681" label="Wallis and Futuna (+681)">Wallis and Futuna</option>
 										</select>
 
-                                        <input class="required" id="mobile" onkeyup="checkPhoneNumber(this)" type="number"  name="mobile[]" value="{{old('mobile',$mobile[0])}}"/>
-                                        <label id="mobile-error1" style="display:none" class="error error-mobile" for="mobile"></label>
-                                        <input type="hidden" name="mobileCheck[]" id="mobileCheck" value="{{old('mobile',$mobile[0])}}">
+                                        <input class="required" id="mobile{{$i}}" onkeyup="checkPhoneNumber(this,'{{$i}}')" type="number"  name="mobile[{{$i-1}}]" value="{{old('mobile',$mobile[$i-1])}}"/>
+                                        <label id="mobile-error{{$i}}" style="display:none" class="error error-mobile" for="mobile"></label>
+                                        <input type="hidden" name="mobileCheck[{{$i - 1}}]" id="mobileCheck{{$i}}" value="{{old('mobile',$mobile[$i-1])}}">
 									</div>
 								</div>
 								<div class="form-row">
 									<div class="col-md-12 mb-4">
 										<label class="input-label">The town or city I live in is</label>
-										<input type="text" name="city[]" class="form-control" value="{{old('city',$city[0])}}"  aria-describedby="inputGroupPrepend3">
+										<input type="text" name="city[{{$i - 1}}]" class="form-control" value="{{old('city',$city[$i-1])}}"  aria-describedby="inputGroupPrepend3">
 										<div class="invalid-feedback">
 										</div>
 									</div>
@@ -291,38 +292,46 @@
 								<div class="form-row">
 									<div class="col-md-12 mb-4">
 										<label class="input-label">My company or employer is</label>
-										<input name="company[]" value="{{old('company',$company[0])}}" type="text" class="form-control"  aria-describedby="inputGroupPrepend3">
+										<input name="company[{{$i - 1}}]"  type="text" class="form-control" value="{{old('company',$company[$i - 1])}}"  aria-describedby="inputGroupPrepend3">
 									</div>
 								</div>
 								<div class="form-row">
 									<div class="col-md-12 mb-4">
 										<label class="input-label">My occupation or title is</label>
-										<input type="text" name="jobtitle[]" value="{{old('jobtitle',$job_title[0])}}" class="form-control" placeholder="E.g. Marketing specialist" aria-describedby="inputGroupPrepend3">
+										<input type="text" name="jobtitle[{{$i - 1}}]" value="{{old('jobtitle',$job_title[$i - 1])}}" class="form-control" placeholder="E.g. Marketing specialist" aria-describedby="inputGroupPrepend3">
 									</div>
 								</div>
-								<div class="form-row">
-									<div class="custom-control custom-checkbox">
-										<input type="checkbox" name="terms_condition" class="custom-control-input" id="customCheck1">
-										{{--<label class="custom-control-label" for="customCheck1"></label><p>I have read, agree upon & accept the <a href="/terms" class="link-color">terms & conditions</a> and <a href="/data-privacy-policy" class="link-color">data privacy policy.</a></p>--}}
-										<label class="custom-control-label" for="customCheck1"></label><p>I accept the <a href="/terms" target="_blank" class="link-color">Terms & Conditions</a> and I confirm that I have read the <a target="_blank" href="/data-privacy-policy" class="link-color">Data Privacy Policy.</a></p>
-										<label id="terms_condition-error" class="error" for="terms_condition" style="display:none;"> </label>
-									</div>
-									@if($elearning)
-									<div id="customCheck2New" class="custom-control custom-checkbox">
-										<input type="checkbox" name="terms_condition2" class="custom-control-input" id="customCheck2">
-										<label class="custom-control-label" for="customCheck2"></label><p>Ι accept that by accessing this course, I can't withdraw from payment.</p>
-										<label id="terms_condition-error2" class="error" for="terms_condition2" style="display:none;"> </label>
-									</div>
-									@endif
+                                @if($i>2)
+                                <div class="remove-participant" data-participant-number="{{ $totalitems }}">
+                                    <a href="javascript:void(0)">Remove participant <img src="{{cdn('new_cart/images/close-green.svg')}}" width="9px" height="10px"  class="without-hover">
+                                        <img src="{{cdn('new_cart/images/close-green2.svg')}}" width="9px" height="10px" class="with-hover"></a>
+                                </div>
+                                @endif
+                            </div>
+                            @endfor
+                            <div class="form-row">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" name="terms_condition" class="custom-control-input" id="customCheck1">
+                                    {{--<label class="custom-control-label" for="customCheck1"></label><p>I have read, agree upon & accept the <a href="/terms" class="link-color">terms & conditions</a> and <a href="/data-privacy-policy" class="link-color">data privacy policy.</a></p>--}}
+                                    <label class="custom-control-label" for="customCheck1"></label><p>I accept the <a href="/terms" target="_blank" class="link-color">Terms & Conditions</a> and I confirm that I have read the <a target="_blank" href="/data-privacy-policy" class="link-color">Data Privacy Policy.</a></p>
+                                    <label id="terms_condition-error" class="error" for="terms_condition" style="display:none;"> </label>
+                                </div>
+                                @if($elearning)
+                                <div id="customCheck2New" class="custom-control custom-checkbox">
+                                    <input type="checkbox" name="terms_condition2" class="custom-control-input" id="customCheck2">
+                                    <label class="custom-control-label" for="customCheck2"></label><p>Ι accept that by accessing this course, I can't withdraw from payment.</p>
+                                    <label id="terms_condition-error2" class="error" for="terms_condition2" style="display:none;"> </label>
+                                </div>
+                                @endif
+                            </div>
 
-								</div>
-							</div>
-							{{--<div class="add-participant-wrap d-flex justify-content-between">
-								<button class="add-participant">
+							<div class="add-participant-wrap d-flex justify-content-between">
+								<button class="add-participant" data-participant-number="{{ $totalitems }}" type="button">
 									<img src="{{cdn('new_cart/images/plus-full-green.svg')}}" class="without-hover" width="44px" height="44px">
 									<img src="{{cdn('new_cart/images/plus-full-green2.svg')}}" class="with-hover"  width="44px" height="44px"> <span>Add another participant</span>
 								</button>
-							</div>--}}
+							</div>
+                            <input id="item-quantity" type="hidden" value="{{ $totalitems }}" name="update[{{$itemid}}][quantity]" />
 							<div class="checkout-btn-wrap form-row mb-4 my-md-5 align-items-center">
 								<button id="btn" type="submit" class="btn registration checkout-button-secondary">Next: Billing <img src="{{cdn('new_cart/images/arrow-next-red.svg')}}" width="20px" height="12px" class="without-hover" alt=""> <img src="{{cdn('new_cart/images/arrow-next-red2.svg')}}" width="20px" height="12px" class="with-hover" alt=""> </button>
 							</div>
@@ -361,7 +370,7 @@ dataLayer.push({
         'price': "{{$tigran['Price']}}",
         'brand': 'Knowcrunch',
         'category': "{{$tigran['ProductCategory']}}",
-        'quantity': 1
+        'quantity': "{{$totalitems}}"
        }]
     }
   }
@@ -377,24 +386,21 @@ dataLayer.push({
 		'item_brand': 'Knowcrunch',
 		'item_category': "{{$tigran['ProductCategory']}}",
 		'price': "{{$tigran['Price']}}",
-		'quantity': 1
+		'quantity': "{{$totalitems}}"
 	}]
 });
 
 })
 </script>
-
 @endif
 <script>
 
-    $("#country").change(function() {
-        let mobile = $("#mobile").val()
-        $("#mobileCheck").val("+" + this.value + mobile)
-    });
+	function selectCountryCode(code,index){
+		let mobile = $("#mobile"+index).val()
+		$("#mobileCheck"+index).val("+" + code.value + mobile)
+	}
 
-
-
-    function checkPhoneNumber(phone){
+    function checkPhoneNumber(phone,index){
 
       phone = phone.value.replace(/\s/g,'')
       let validatePhone = false;
@@ -402,24 +408,23 @@ dataLayer.push({
       if(phone.length > 3){
 
          if(phone.substring(0, 3) == '+30' || phone.substring(0, 2) == '30'){
-
-            $("#country").val("30").change();
+            $(".country"+index).val("30").change();
             //$("#selectCountry-reg").val("30").change();
             validatePhone = true;
          }else if(phone.substring(0, 2) == '69'){
             //phone = '+30'+phone
             validatePhone = true;
-            $("#country").val("30").change();
+            $(".country"+index).val("30").change();
             //$("#selectCountry-reg").val("30").change();
          }
          else if(phone.substring(0, 4) == '+357' || phone.substring(0, 3) == '357'){//cyprus
             validatePhone = true;
-            $("#country").val("357").change();
+            $(".country"+index).val("357").change();
             //$("#selectCountry-reg").val("357").change();
          }else if(phone.substring(0, 1) == '9'){
             //phone = '+357'+phone
             validatePhone = true;
-            $("#country").val("357").change();
+            $(".country"+index).val("357").change();
             //$("#selectCountry-reg").val("357").change();
          }
 
@@ -434,14 +439,14 @@ dataLayer.push({
 
          else if(phone.substring(0, 3) == '+44' || phone.substring(0, 2) == '44'){//england
             validatePhone = true;
-            $("#country").val("44").change();
+            $(".country"+index).val("44").change();
             //$("#selectCountry-reg").val("44").change();
          }else if(phone.substring(0, 2) == '07' /*|| phone.substring(0, 3) == '073' || phone.substring(0, 3) == '074' || phone.substring(0, 3) == '075' || phone.substring(0, 3) == '076'
             || phone.substring(0, 3) == '077' || phone.substring(0, 3) == '078' || phone.substring(0, 3) == '079'*/){
 
                //phone = '+44'+phone
                validatePhone = true;
-               $("#country").val("44").change();
+               $(".country"+index).val("44").change();
                //$("#selectCountry-reg").val("44").change();
          }
 
@@ -454,19 +459,69 @@ dataLayer.push({
     }
 
 	$(document).ready(function(){
-		$("#country").change();
-		@if(old('country_code',$country_code[0]))
-	    	$("#country").val("{{old('country_code',$country_code[0])}}")
-	    	$("#country").change();
+        @for($i = 1; $i <= $totalitems; $i++)
+            @if(old('country_code',$country_code[$i-1]))
+                $(".country{{$i}}").val("{{old('country_code',$country_code[$i-1])}}")
+            $(".country{{$i}}").change();
 
-		@endif
+        @endif
+            alphabetizeList('.country{{$i}}');
 
-		var options = $('#country option');
-		alphabetizeList('#country');
-
+        @endfor
 	})
 
+    $("button.add-participant").on("click", function() {
 
+        var number = $(this).attr('data-participant-number');
+        //var maxticket = $(this).attr('data-ticket-max');
+        //maxticket = parseInt(maxticket);
+        var newNumber = parseInt(number)+1;
+
+        if(newNumber > "{{$curStock}}"){
+            return;
+        }
+
+
+
+        document.getElementById('item-quantity').setAttribute('value',newNumber)
+
+        $.ajax({ url: '/cart/update', type: "post",
+            data: $("#participant-form ").serialize(),
+            success: function(data) {
+                window.location.replace('registration');
+            }
+        });
+    });
+
+
+    $(".remove-participant").on("click", function() {
+
+        var number = Number($(this).attr('data-participant-number'));
+        if(number <= 2){
+            return;
+        }
+
+        var newNumber = number-1;
+        document.getElementById('item-quantity').setAttribute('value',newNumber)
+
+        $.ajax({ url: '/cart/update', type: "post",
+            data: $("#participant-form ").serialize(),
+            success: function(data) {
+
+                window.location.replace('registration');
+            }
+        });
+    });
+
+
+    jQuery.validator.addMethod(
+        "emailWithDot",
+        function(value, element) {
+            var regex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            return regex.test(String(value).toLowerCase());
+        },
+        "Enter valid email address."
+    );
 
 </script>
 @endpush
