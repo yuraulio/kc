@@ -177,7 +177,7 @@ class StudentController extends Controller
 
         $eventSubscriptions = [];
         $data['user']['events'] = $instructor['event'];
-        $data['eventss'] = [];
+        $data['events'] = [];
 
 
 
@@ -447,9 +447,11 @@ class StudentController extends Controller
 
         }
 
-        usort($data['events'], function($a, $b) {
-            return strcasecmp(strtotime($b['published_at']), strtotime($a['published_at']));
-        });
+        if ($data['events']) {
+            usort($data['events'], function ($a, $b) {
+                return strcasecmp(strtotime($b['published_at']), strtotime($a['published_at']));
+            });
+        }
 
 
         $data['instructors'] = Instructor::select('subtitle','id','title')->with('slugable', 'medias')->get()->groupby('id');
@@ -467,7 +469,6 @@ class StudentController extends Controller
         if($user){
 
             $now = date('Y-m-d H:i:s');
-            $clientip = '';
             $clientip = \Request::ip();
             $user->terms = 1;
             $consent['ip'] = $clientip;
