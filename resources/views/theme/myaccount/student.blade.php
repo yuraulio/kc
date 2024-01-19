@@ -14,7 +14,7 @@
             <div class="hero-message">
                 <div class="account-infos">
                     <div class="account-thumb">
-                   {!! \App\Helpers\UserHelper::getUserProfileImage($user, ['width' => 20, 'height' => 20, 'id' => 'user-img-up' ]) !!}
+                        {!! \App\Helpers\UserHelper::getUserProfileImage($user, ['width' => 20, 'height' => 20, 'id' => 'user-img-up' ]) !!}
                     </div>
                     <div class="account-hero-info">
                         <h2>{{ $currentuser['firstname'] }} {{ $currentuser['lastname'] }}</h2>
@@ -118,7 +118,7 @@
                                 <div class="col4 col-sm-12">
                                     <div class="account-image-actions"  id="logo_dropzone">
                                         <div class="acc-img">
-                               {!! \App\Helpers\UserHelper::getUserProfileImage($user, ['width' => 230, 'height' => 230, 'id' => 'user-img' ]) !!}
+                                            {!! \App\Helpers\UserHelper::getUserProfileImage($user, ['width' => 230, 'height' => 230, 'id' => 'user-img' ]) !!}
                                         </div>
                                         <div class="actions">
                                             <ul id='user-media'>
@@ -1439,19 +1439,25 @@
                                                 <div id="c-exams-inner{{$tab}}" class="in-tab-wrapper">
                                                     <div class="bottom">
                                                         @foreach($event['exams'] as $p)
-
-                                                        <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Customer_Access.svg')}}" alt="Customer_Access_icon" title="Customer_Access_icon">
+                                        <?php $userExam = isset($user['hasExamResults'][$p->id][0]) ? $user['hasExamResults'][$p->id][0] : null ?>
+                                        <div class="location">
+                                            @if($userExam)
+                                            <div>
+                                                <img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Level.svg')}}" alt="Customer_Access_icon" title="Customer_Access_icon">
+                                                Your latest exam result: <b>{{ $userExam->score }} %</b>
+                                            </div>
+                                            @endif
+                                            <div>
+                                            <img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Customer_Access.svg')}}" alt="Customer_Access_icon" title="Customer_Access_icon">
                                                             @if(isset($event['exam_activate_months']) && $event['exam_activate_months'] != null)
                                                             {{ 'Exams activate automatically after' }} {{ $event['exam_activate_months'] }} {{'months' }}
                                                             @else
                                                             {{ 'Exams activate automatically after 80% progress' }}
                                                             @endif
-
+                                            </div>
                                                         </div>
                                                         <div class="right">
                                                             <!-- Feedback 8-12 changed -->
-
-                                                            <?php $userExam = isset($user['hasExamResults'][$p->id][0]) ? $user['hasExamResults'][$p->id][0] : null ?>
                                                             @if($event['exam_access'] && !$userExam)
                                                             @if($p->islive == 1)
                                                             <a target="_blank" onclick="window.open('{{ route('attempt-exam', [$p->id]) }}', 'newwindow', 'width=1400,height=650'); return false;" title="{{$p['exam_name']}}" class="btn btn--secondary btn--md">TAKE EXAM</a>
