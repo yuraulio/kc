@@ -5740,6 +5740,8 @@
 
                     $('#installments-total').text(money(incomeInstalments.total))
                     $('#installments-early').text(money(incomeInstalments.early))
+                    if(incomeInstalments.early == 0)
+                        $('#installments-early').parent().hide()
                     $('#installments-alumni').text(money(incomeInstalments.alumni))
                     $('#installments-special').text(money(incomeInstalments.special))
                     $('#installments-regular').text(money(incomeInstalments.regular))
@@ -5755,6 +5757,16 @@
                     $('#installments-alumni').text(money(incomeInstalments.alumni))
                     if(incomeInstalments.alumni == 0)
                         $('#installments-alumni').parent().hide()
+                    
+                    if(stats.alerts.length > 0){
+                        stats.alerts.forEach(al => {
+                            $('.alerts-to-show').append(
+                                `
+                                <div class="alert alert-danger" style="padding: 5px;margin-top: 10px;">${al}</div>
+                                `
+                            );
+                        })
+                    }
 
                     $('.widget .loader').addClass('d-none')
                     $('.widget .info').removeClass('d-none')

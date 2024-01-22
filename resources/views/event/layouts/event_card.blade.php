@@ -117,6 +117,7 @@
                             <span class="text-muted mr-3">Unemployed discounted:&nbsp;<span class="text-success unemployed_amounts"></span></span>
                             <span class="text-muted mr-3">Groups discounted:&nbsp;<span class="text-success group_amounts"></span></span>
                             <span class="text-muted mr-3">Other discounted:&nbsp;<span class="text-success other_amounts"></span></span>
+                            <span class="text-muted mr-3">Alumni:&nbsp;<span class="text-success students_alumni_amounts"></span></span>
                             <span class="text-muted mr-3">Regular:&nbsp;<span class="text-success"
                                     id="income-regular"></span></span>
                         </p>
@@ -169,7 +170,9 @@
                             <span class="text-muted mr-3">REGULAR:&nbsp;<span class="text-success" id="installments-regular"></span></span>
                             <span class="text-muted mr-3">ALUMNI:&nbsp;<span class="text-success" id="installments-alumni"></span></span>
                             <span class="text-muted mr-3">SUBSCRIPTION:&nbsp;<span class="text-success" id="installments-subscription"></span></span> --}}
+                            
                         </p>
+                        <div class="alerts-to-show"></div>
                     </div>
                 </div>
 

@@ -900,6 +900,8 @@ class EventController extends Controller
         $incomeInstalments['unemployed'] = 0;
         $incomeInstalments['group'] = 0;
 
+        $alerts = [];
+
         $id = (int)$id;
         $query = "
             SELECT
@@ -1007,7 +1009,9 @@ class EventController extends Controller
                     return $invoice->invoiceable_id == $result->user_id;
                 });
                 if(count($invoices) > 0){
+                    $totalAmountInvoice = 0;
                     foreach($invoices as $invoice){
+                        $totalAmountInvoice += $invoice->amount;
                         $amount = $invoice->amount;
                         if($result->type == 'Special'){
                             // $incomeInstalments['special'] = $incomeInstalments['special'] + $amount;
@@ -1037,6 +1041,12 @@ class EventController extends Controller
                             $incomeInstalments['alumni'] = $incomeInstalments['alumni'] + $amount;
                         }else{
                             $incomeInstalments['other'] = $incomeInstalments['other'] + $amount;
+                        }
+                    }
+                    if($totalAmountInvoice > $result->total_amount){
+                        $usser = User::find($result->user_id);
+                        if($usser){
+                            $alerts[] = 'The student '.$usser->name.'('.$usser->email.') has been charge more ('.round($totalAmountInvoice).') than expected ('.round($result->total_amount).').';
                         }
                     }
                 }else{
@@ -1110,11 +1120,13 @@ class EventController extends Controller
                 'type' => $result->type
             ];
 	    }
+
         unset($data['incomeInstalments']['total']);
         $data['incomeInstalments'] = $incomeInstalments;
         $data['incomeInstalments']['total'] = array_sum($incomeInstalments);
 
         //dd($data['incomeInstalments']);
+        $data['alerts'] = array_unique($alerts);
         $data['results'] = $results;
         $data['count'] = $count;
         $data['income'] = $income;
