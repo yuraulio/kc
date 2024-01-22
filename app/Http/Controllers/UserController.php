@@ -17,6 +17,7 @@
 */
 namespace App\Http\Controllers;
 
+use App\Events\EmailSent;
 use App\Model\Role;
 use App\Model\User;
 use App\Model\Event;
@@ -1555,11 +1556,13 @@ class UserController extends Controller
         }
 
         $user->notify(new WelcomeEmail($user,$data));
+        event(new EmailSent($user->email, 'WelcomeEmail'));
 
         if($elearningInvoice){
             $data['slugInvoice'] = encrypt($user->id . '-' . $elearningInvoice->id);
 
 		    $user->notify(new CourseInvoice($data));
+            event(new EmailSent($user->email, 'CourseInvoice'));
 		    $invoiceFileName = date('Y.m.d');
 		    if($paymentMethod){
 		      $invoiceFileName .= '_' . $paymentMethod->company_name;
@@ -1579,6 +1582,7 @@ class UserController extends Controller
                 //$m->attachData($pdf, $fn);
 
             });
+            event(new EmailSent($adminemail, 'elearning_invoice'));
         }
 	}
 

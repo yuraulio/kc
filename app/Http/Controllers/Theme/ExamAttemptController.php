@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Theme;
 
+use App\Events\EmailSent;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Auth;
@@ -461,6 +462,7 @@ class ExamAttemptController extends Controller
                 $data['template'] = 'emails.user.certificate';
                 $data['certUrl'] = trim(url('/') . '/mycertificate/' . base64_encode($student->email."--".$cert->id));
                 $student->notify(new CertificateAvaillable($data));
+                event(new EmailSent($student->email, 'CertificateAvaillable'));
 
                 /*if($exam->event_id === 1350 || $exam->event_id === 2304){
                     $adminemail = 'info@knowcrunch.com';

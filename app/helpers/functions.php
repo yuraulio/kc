@@ -1,5 +1,6 @@
 <?php
 
+use App\Events\EmailSent;
 use App\Model\Slug;
 use App\Model\Option;
 use App\Model\Media;
@@ -184,6 +185,7 @@ if(!function_exists('sendAfterSuccessPaymentSepa')){
 
 
                 $user->notify(new AfterSepaPaymentEmail($user,$data));
+                event(new EmailSent($user->email, 'AfterSepaPaymentEmail'));
 
 
 

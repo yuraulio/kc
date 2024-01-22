@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Dashboard;
 
+use App\Events\EmailSent;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Model\User;
@@ -88,6 +89,7 @@ class CronjobsController extends Controller
             //$data['installments'] =
 
             $invoiceUser->user->first()->notify(new FailedPayment($data));
+            event(new EmailSent($invoiceUser->user->first()->email, 'FailedPayment'));
 
 
             /*$adminemail = $invoiceUser->event->first()->paymentMethod->first() && $invoiceUser->event->first()->paymentMethod->first()->payment_email ?
@@ -141,6 +143,7 @@ class CronjobsController extends Controller
             $data['amount'] = round($subscription->price,2);
 
             $user->first()->notify(new FailedPayment($data));
+            event(new EmailSent($user->first()->email, 'FailedPayment'));
 
 
             /*$sent = Mail::send('emails.student.subscription.subscription_payment_declined', $data, function ($m) use ($adminemail, $muser) {
@@ -216,6 +219,7 @@ class CronjobsController extends Controller
                     $data['subscription_price'] = $event['plans'][0]['cost'];
 
                     $user->notify(new SubscriptionExpireReminder($data));
+                    event(new EmailSent($user->email, 'SubscriptionExpireReminder'));
 
                     // Update Pivot Table
                     $user->events_for_user_list1_expired()->updateExistingPivot($event,['expiration_email' => $updatedStatus], false);
@@ -551,6 +555,7 @@ class CronjobsController extends Controller
                     $data['subscription_price'] = $subscription->event->first()->plans[0]['cost'];
                     $data['template'] = 'emails.user.subscription_reminder';
                     $subscription->user->notify(new SubscriptionReminder($data));
+                    event(new EmailSent($subscription->user->email, 'SubscriptionReminder'));
 
                 }
             }
@@ -650,6 +655,7 @@ class CronjobsController extends Controller
 
             if (filter_var($user->email, FILTER_VALIDATE_EMAIL)) {
                 $user->notify(new AbandonedCart($data));
+                event(new EmailSent($user->email, 'AbandonedCart'));
                 $abandoned->send_email = 1;
                 $abandoned->save();
             }else{
@@ -702,6 +708,7 @@ class CronjobsController extends Controller
                 $data['slug'] = url('/') . '/registration?cart=' . $abandoned->slug;
 
                 $user->notify(new AbandonedCart($data, true));
+                event(new EmailSent($user->email, 'AbandonedCart'));
                 $abandoned->send_email = 2;
                 $abandoned->save();
 
@@ -748,6 +755,7 @@ class CronjobsController extends Controller
                     $data['subscription_price'] = $event->plans[0]['cost'];
 
                     $user->notify(new ExpirationMails($data));
+                    event(new EmailSent($user->email, 'ExpirationMails'));
 
                 }elseif( $event->id !== 2304 && ($date->y == 0 && $date->m ==  0 && $date->d == 7 )){
                     $data['firstName'] = $user->firstname;
@@ -758,6 +766,7 @@ class CronjobsController extends Controller
                     $data['subject'] = 'Knowcrunch | ' . $data['firstName'] . ' your course expires soon';
 
                     $user->notify(new ExpirationMails($data));
+                    event(new EmailSent($user->email, 'ExpirationMails'));
                 }
 
 
@@ -803,6 +812,7 @@ class CronjobsController extends Controller
 
 
                 $invoiceUser->user->first()->notify(new PaymentReminder($data));
+                event(new EmailSent($invoiceUser->user->first()->email, 'PaymentReminder'));
             }
 
         }
@@ -856,6 +866,7 @@ class CronjobsController extends Controller
                     $data['template'] = 'emails.user.half_period';
 
                     $user->notify(new HalfPeriod($data));
+                    event(new EmailSent($user->email, 'HalfPeriod'));
 
 
                 }
@@ -914,6 +925,7 @@ class CronjobsController extends Controller
                     $data['template'] = 'emails.user.half_period';
 
                     $user->notify(new HalfPeriod($data));
+                    event(new EmailSent($user->email, 'HalfPeriod'));
 
 
                 }
@@ -960,6 +972,7 @@ class CronjobsController extends Controller
                 $data['template'] = 'emails.user.elearning_f&qemail';
 
                 $user->notify(new ElearningFQ($data));
+                event(new EmailSent($user->email, 'ElearningFQ'));
 
 
             }
@@ -1001,6 +1014,7 @@ class CronjobsController extends Controller
 
                 if($sendEmail){
                     $user->notify(new SurveyEmail($data));
+                    event(new EmailSent($user->email, 'SurveyEmail'));
                 }
 
 
@@ -1058,6 +1072,7 @@ class CronjobsController extends Controller
 
                 if($sendEmail){
                     $user->notify(new SurveyEmail($data));
+                    event(new EmailSent($user->email, 'SurveyEmail'));
                 }
 
 
@@ -1140,6 +1155,7 @@ class CronjobsController extends Controller
                 }
 
                 $user->notify(new InClassReminder($data));
+                event(new EmailSent($user->email, 'InClassReminder'));
 
             }
 
@@ -1301,6 +1317,7 @@ class CronjobsController extends Controller
             $email_data['title'] = isset($lesson) ? $lesson->title : '';
 
             $instructor['user'][0]->notify(new InstructorsMail($email_data));
+            event(new EmailSent($instructor['user'][0]->email, 'InstructorsMail'));
 
         }
 
@@ -1387,6 +1404,7 @@ class CronjobsController extends Controller
                     $data['subject'] = 'Knowcrunch | ' . $user->firstname . ', ' . $subject;
 
                     $user->notify(new SendTopicAutomateMail($data));
+                    event(new EmailSent($user->email, 'SendTopicAutomateMail'));
 
                 }
 

@@ -17,6 +17,7 @@
 */
 namespace App\Http\Controllers\Api;
 
+use App\Events\EmailSent;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
 use Illuminate\Support\Facades\Password;
@@ -78,6 +79,7 @@ class ForgotPasswordController extends Controller
         if($user){     
             
             $user->notify(new userChangePassword($user));
+            event(new EmailSent($user->email, 'userChangePassword'));
             
             return response()->json([
                 'success' => true,

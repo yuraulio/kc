@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Theme;
 
+use App\Events\EmailSent;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Model\Event;
@@ -456,6 +457,7 @@ class SubscriptionController extends Controller
                 $data['sub_period'] = $plan->period();*/
 
                 $user->notify(new SubscriptionWelcome($data));
+                event(new EmailSent($user->email, 'SubscriptionWelcome'));
 
                 $adminemail = 'info@knowcrunch.com';
 
@@ -651,6 +653,7 @@ class SubscriptionController extends Controller
             
 
             $user->notify(new WelcomeEmail($user, $data1));
+            event(new EmailSent($user->email, 'WelcomeEmail'));
             
 
             Session::forget('pay_seats_data');
@@ -844,6 +847,7 @@ class SubscriptionController extends Controller
                 $data['sub_period'] = $plan->period();*/
 
                 $user->notify(new SubscriptionWelcome($data));
+                event(new EmailSent($user->email, 'SubscriptionWelcome'));
 
                 $adminemail = 'info@knowcrunch.com';
 

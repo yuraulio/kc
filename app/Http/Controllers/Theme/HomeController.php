@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Theme;
 
+use App\Events\EmailSent;
 use App\Http\Controllers\Controller;
 use App\Library\CMS;
 use Illuminate\Http\Request;
@@ -303,6 +304,7 @@ class HomeController extends Controller
         $data['firstName'] = $user->firstname;
 
         $user->notify(new WelcomeEmail($user, $data));
+        event(new EmailSent($user->email, 'WelcomeEmail'));
 
 
         $student = $user->events->where('id', $content->id)->first();
@@ -591,6 +593,7 @@ class HomeController extends Controller
 
 
         $user->notify(new WelcomeEmail($user,$data));
+        event(new EmailSent($user->email, 'WelcomeEmail'));
 
 
 

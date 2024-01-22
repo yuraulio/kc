@@ -2,6 +2,7 @@
 
 namespace App\Model;
 
+use App\Events\EmailSent;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Model\Topic;
@@ -1075,6 +1076,7 @@ class Event extends Model
             $data['template'] = 'emails.user.certificate';
             $data['certUrl'] = trim(url('/') . '/mycertificate/' . base64_encode($user->email."--".$cert->id));
             $user->notify(new CertificateAvaillable($data));
+            event(new EmailSent($user->email, 'CertificateAvaillable'));
 
         }
 

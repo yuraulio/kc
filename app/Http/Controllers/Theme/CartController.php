@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Theme;
 
+use App\Events\EmailSent;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Model\Event;
@@ -2796,6 +2797,7 @@ class CartController extends Controller
         }
 
         $user->notify(new WelcomeEmail($user,$data));
+        event(new EmailSent($user->email, 'WelcomeEmail'));
 
     }
 

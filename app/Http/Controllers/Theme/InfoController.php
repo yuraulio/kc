@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Theme;
 
+use App\Events\EmailSent;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use \Cart as Cart;
@@ -27,6 +28,7 @@ use App\Model\CookiesSMS;
 use App\Notifications\WelcomeEmail;
 use App\Notifications\CourseInvoice;
 use App\Notifications\InstructionMail;
+use App\Notifications\SubscriptionWelcome;
 use App\Services\FBPixelService;
 use Bugsnag\BugsnagLaravel\Facades\Bugsnag;
 use Illuminate\Support\Facades\Log;
@@ -192,7 +194,7 @@ class InfoController extends Controller
                 $sepa = Session::has('payment_method_is_sepa') ? true : false;
 
                 $this->createUsersFromTransaction($transaction, $sepa);
-                
+
 			}
 	    }
 
@@ -881,10 +883,11 @@ class InfoController extends Controller
 
 
                 $data['firstName'] = $user->firstname;
-                
+
                     $user->notify(new WelcomeEmail($user,$data));
-                
-                
+                    event(new EmailSent($user->email, 'WelcomeEmail'));
+
+
 
                 /*if($elearning){
                     $user->notify(new InstructionMail($data));
@@ -895,7 +898,7 @@ class InfoController extends Controller
 
     public function sendEmails($transaction, $emailsCollector, $extrainfo, $helperdetails, $elearning, $eventslug,$stripe,$billingEmail,$paymentMethod = null, $sepa = false)
     {
-        
+
        // dd($elearning);
         // 5 email, admin, user, 2 deree, darkpony
     	//$generalInfo = \Config::get('dpoptions.website_details.settings');
@@ -962,7 +965,7 @@ class InfoController extends Controller
 
                 $data['firstName'] = $user->firstname;
 
-                
+
 
                 if(isset($transaction['payment_response']) && $transaction['payment_response'] != null){
 
@@ -971,16 +974,18 @@ class InfoController extends Controller
 
                     }else{
                         $user->notify(new WelcomeEmail($user,$data));
+                        event(new EmailSent($user->email, 'WelcomeEmail'));
                     }
-					
-					
+
+
 				}else{
                     $user->notify(new WelcomeEmail($user,$data));
+                    event(new EmailSent($user->email, 'WelcomeEmail'));
                 }
-                
-                    
-                
-                
+
+
+
+
 
                 /*if($elearning){
                     $user->notify(new InstructionMail($data));
@@ -1032,6 +1037,7 @@ class InfoController extends Controller
                     $m->subject($sub);
 
                 });
+                event(new EmailSent($adminemail, 'elearning_invoice billingEmail '.$billingEmail));
 
                 $data['user'] =  $transaction->user->first();
 
@@ -1047,8 +1053,10 @@ class InfoController extends Controller
                         $m->subject($sub);
 
                     });
+                    event(new EmailSent($billingEmail, 'download your receipt'));
                 }else{
                     $data['user']->notify(new CourseInvoice($data));
+                    event(new EmailSent($data['user']->email, 'CourseInvoice'));
 
                 }
 
@@ -1072,20 +1080,20 @@ class InfoController extends Controller
                 $transdata['trans'] = $transaction;
                 $transdata['extrainfo'] = $extrainfo;
                 $transdata['helperdetails'] = $helperdetails;
-    
-    
+
+
                 $sentadmin = Mail::send('emails.admin.admin_info_new_registration', $transdata, function ($m) use ($adminemail) {
-    
+
                     $m->from('info@knowcrunch.com', 'Knowcrunch');
                     $m->to('info@knowcrunch.com', 'Knowcrunch');
-    
+
                     $m->subject('Knowcrunch - New Registration');
                 });
-    
-    
+
+
             }
-        
-        
+
+
 
     }
 
@@ -1151,5 +1159,6 @@ class InfoController extends Controller
                 $data['sub_period'] = $plan->period();*/
 
                 $user->notify(new SubscriptionWelcome($data));
+                event(new EmailSent($user->email, 'SubscriptionWelcome'));
     }
 }

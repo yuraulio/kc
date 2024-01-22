@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Theme;
 
+use App\Events\EmailSent;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -1338,6 +1339,7 @@ class StudentController extends Controller
                     $data['email_template'] = $topic->email_template;
 
                     $user->notify(new SendTopicAutomateMail($data));
+                    event(new EmailSent($user->email, 'SendTopicAutomateMail'));
 
                     // find all topic lessons for update
                     foreach($event->lessons()->wherePivot('topic_id',$topic->id)->get() as $lesson){

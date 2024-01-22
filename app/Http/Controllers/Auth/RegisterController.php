@@ -17,6 +17,7 @@
 */
 namespace App\Http\Controllers\Auth;
 
+use App\Events\EmailSent;
 use App\Model\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
@@ -189,6 +190,7 @@ class RegisterController extends Controller
                 }*/
 
                 $dpuser->notify(new userActivationLink($dpuser,'activate'));
+                event(new EmailSent($dpuser->email, 'userActivationLink'));
 
                 /*return redirect(route('user.login'))->withSuccess(
                     'Your accout was successfully created. Please check your email to activate your account.'

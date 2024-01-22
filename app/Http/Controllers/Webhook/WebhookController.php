@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Webhook;
 
+use App\Events\EmailSent;
 use App\Http\Controllers\Controller;
 use App\Notifications\ErrorSlack;
 use Illuminate\Http\Request;
@@ -895,6 +896,7 @@ class WebhookController extends BaseWebhookController
             //send after sepa payment success
             // TODO
             $user->notify(new AfterSepaPaymentEmail($user,$datamail));
+            event(new EmailSent($user->email, 'AfterSepaPaymentEmail'));
             //sendAfterSuccessPaymentSepa1($datamail['transaction'], $datamail['emailsCollector'], $datamail['extrainfo'], $datamail['helperdetails'], $datamail['elearning'], $datamail['eventslug'], $datamail['stripe'],$datamail['billingEmail'],$datamail['paymentMethod'], $sepa = true);
         }
 
@@ -1054,6 +1056,7 @@ class WebhookController extends BaseWebhookController
 
         // help
         $user->notify(new SubscriptionWelcome($data));
+        event(new EmailSent($user->email, 'SubscriptionWelcome'));
     }
 
     private function sendEmail($elearningInvoice, $pdf, $paymentMethod = null, $planSubscription = false, $billingEmail = false){
@@ -1111,8 +1114,10 @@ class WebhookController extends BaseWebhookController
                 //$m->attachData($pdf, $fn);
 
             });
+            event(new EmailSent($billingEmail, 'download your receipt'));
         }else{
             $user->notify(new CourseInvoice($data));
+            event(new EmailSent($user->first()->email, 'CourseInvoice'));
 
         }
 
@@ -1131,6 +1136,7 @@ class WebhookController extends BaseWebhookController
             //$m->attachData($pdf, $fn);
 
         });
+        event(new EmailSent($adminemail, 'elearning_invoice billingEmail '.$billingEmail));
     }
 
     protected function handleInvoicePaymentActionRequired(array $payload)
