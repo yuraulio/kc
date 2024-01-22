@@ -865,53 +865,6 @@ class EventController extends Controller
             $data['incomeInstalments']['total'] = array_sum($incomeInstalments);
         }
 
-        //dd($count);
-
-
-        // $count['free'] = 0;
-        // $count['special'] = 0;
-        // $count['early'] = 0;
-        // $count['alumni'] = 0;
-        // $count['regular'] = 0;
-        // $count['total'] = 0;
-
-        // $results = DB::select("
-        //     SELECT
-        //         COUNT(tickets.title) as count, tickets.type
-        //     FROM
-        //         event_user_ticket
-        //     INNER JOIN tickets ON tickets.id = event_user_ticket.ticket_id
-        //     INNER JOIN event_user ON event_user.event_id = event_user_ticket.event_id AND event_user.user_id = event_user_ticket.user_id
-        //     WHERE
-        //         event_user_ticket.event_id = $id
-        //     GROUP BY tickets.title
-        // ");
-
-        // // Ahora puedes trabajar con los resultados
-        // foreach ($results as $result) {
-        //     switch($result->type){
-        //         case 'Alumni':
-        //             $count['alumni'] += $result->count;
-        //             $count['total'] += $result->count;
-        //             break;
-        //         case 'Regular':
-        //             $count['regular'] += $result->count;
-        //             $count['total'] += $result->count;
-        //             break;
-        //         case 'Special':
-        //             $count['special'] += $result->count;
-        //             $count['total'] += $result->count;
-        //             break;
-        //         case 'Sponsored':
-        //             $count['free'] += $result->count;
-        //             $count['total'] += $result->count;
-        //             break;
-        //         case 'Early Bird':
-        //             $count['early'] += $result->count;
-        //             $count['total'] += $result->count;
-        //             break;
-        //     }
-	    // }
 
 
         $count['free'] = 0;
@@ -920,7 +873,7 @@ class EventController extends Controller
         $count['alumni'] = 0;
         $count['regular'] = 0;
         $count['total'] = 0;
-        $count['total_students'] = 0;
+        $count['total_tickets'] = 0;
 
         $count['free_amounts'] = 0;
         $count['special_amounts'] = 0;
@@ -929,12 +882,23 @@ class EventController extends Controller
         $count['regular_amounts'] = 0;
         $count['total_amounts'] = 0;
 
+        $count['other'] = 0;
         $count['students'] = 0;
         $count['unemployed'] = 0;
         $count['group'] = 0;
+        $count['other_amounts'] = 0;
         $count['students_amounts'] = 0;
         $count['unemployed_amounts'] = 0;
         $count['group_amounts'] = 0;
+
+        $incomeInstalments['special'] = 0;
+        $incomeInstalments['early'] = 0;
+        $incomeInstalments['regular'] = 0;
+        $incomeInstalments['alumni'] = 0;
+        $incomeInstalments['other'] = 0;
+        $incomeInstalments['students'] = 0;
+        $incomeInstalments['unemployed'] = 0;
+        $incomeInstalments['group'] = 0;
 
         $id = (int)$id;
         $query = "
@@ -942,13 +906,15 @@ class EventController extends Controller
                 tickets.type as type,
                 transactions.id as transaction_id,
                 transactions.total_amount as total_amount,
-                transactions.status_history as status_history
+                transactions.status_history as status_history,
+                event_user.user_id as user_id
             FROM
                 event_user_ticket
             INNER JOIN tickets ON tickets.id = event_user_ticket.ticket_id
             INNER JOIN event_user ON event_user.event_id = event_user_ticket.event_id AND event_user.user_id = event_user_ticket.user_id
             INNER JOIN transactionables AS t1 ON t1.transactionable_id = event_user.user_id AND t1.transactionable_type = 'App\\\\Model\\\\User'
             INNER JOIN transactionables AS t2 ON t2.transaction_id = t1.transaction_id AND t2.transactionable_type = 'App\\\\Model\\\\Event' AND t2.transactionable_id = $id
+            LEFT  JOIN transactionables AS t3 ON t2.transaction_id = t1.transaction_id AND t3.transactionable_type = 'Laravel\\\\Cashier\\\\Subscription' AND t3.transactionable_id = $id
             INNER JOIN transactions ON transactions.id = t2.transaction_id
             WHERE
                 event_user_ticket.event_id = $id
@@ -956,17 +922,39 @@ class EventController extends Controller
         ";
         $results = DB::select($query);
 
+        $invoiceables = DB::select("SELECT * FROM invoiceables WHERE invoiceable_id = $id AND invoiceable_type = 'App\\\\Model\\\\Event'");
+        $invoices_ids = array_map(function($invoiceable){
+            return $invoiceable->invoice_id;
+        }, $invoiceables);
+        if(count($invoices_ids) > 0){
+            $all_invoices = DB::select("
+                SELECT 
+                    * 
+                FROM 
+                    invoices 
+                LEFT JOIN invoiceables AS inv1 ON inv1.invoice_id = invoices.id AND inv1.invoiceable_type = 'App\\\\Model\\\\User'
+                WHERE 
+                    id IN (".implode(',', $invoices_ids).")
+            ");
+        }else{
+            $all_invoices = [];
+        }
+
         $transactions = []; // We have to count only one time each transaction
         $transactions_2 = []; // We have to count only one time each transaction
-        // Ahora puedes trabajar con los resultados
+        // dd($results);
+        $data['resum'] = [];
         foreach ($results as $result) {
             $status_history = json_decode($result->status_history);
-            $student_type = 'students';
 
+            $student_type = '';
             if(isset($status_history[0]) && isset($status_history[0]->cart_data)){
                 foreach($status_history[0]->cart_data as $key => $cart_data){
                     if(isset($cart_data) && isset($cart_data->options)){
                         switch($cart_data->options->type){
+                            case '0':
+                                $student_type = 'other';
+                                break;
                             case '1':
                                 $student_type = 'unemployed';
                                 break;
@@ -979,29 +967,99 @@ class EventController extends Controller
                         }
                     }
                 }
-                switch($student_type){
-                    case 'students':
-                        $count['students'] = $count['students'] + 1;
-                        $count['students_amounts'] = $count['students_amounts'] + (float)$result->total_amount;
-                        $count['total']++;
-                        $count['total_students']++;
-                        break;
-                    case 'unemployed':
-                        $count['unemployed'] = $count['unemployed'] + 1;
-                        $count['unemployed_amounts'] = $count['unemployed_amounts'] + (float)$result->total_amount;
-                        $count['total']++;
-                        $count['total_students']++;
-                        break;
-                    case 'group':
-                        if(!in_array($result->transaction_id, $transactions_2)){
-                            $transactions_2[] = $result->transaction_id;
-                            $count['group'] = $count['group'] + 1;
-                            $count['group_amounts'] = $count['group_amounts'] + (float)$result->total_amount;
+                if($result->type == 'Special'){
+                    switch($student_type){
+                        case 'students':
+                            $count['students'] = $count['students'] + 1;
+                            $count['students_amounts'] = $count['students_amounts'] + (float)$result->total_amount;
                             $count['total']++;
-                        }
-                        $count['total_students']++;
-                        break;
+                            $count['total_tickets']++;
+                            break;
+                        case 'unemployed':
+                            $count['unemployed'] = $count['unemployed'] + 1;
+                            $count['unemployed_amounts'] = $count['unemployed_amounts'] + (float)$result->total_amount;
+                            $count['total']++;
+                            $count['total_tickets']++;
+                            break;
+                        case 'group':
+                            if(!in_array($result->transaction_id, $transactions_2)){
+                                $transactions_2[] = $result->transaction_id;
+                                $count['group'] = $count['group'] + 1;
+                                $count['group_amounts'] = $count['group_amounts'] + (float)$result->total_amount;
+                                $count['total']++;
+                            }
+                            $count['total_tickets']++;
+                            break;
+                        default: 
+                            $count['other'] = $count['other'] + 1;
+                            $count['other_amounts'] = $count['other_amounts'] + (float)$result->total_amount;
+                            $count['total']++;
+                            $count['total_tickets']++;
+                            break;
+                            
+                    }
+                }else{
+                    $count['total']++;
+                    $count['total_tickets']++;
                 }
+
+                $invoices = array_filter($all_invoices, function($invoice) use ($result){
+                    return $invoice->invoiceable_id == $result->user_id;
+                });
+                if(count($invoices) > 0){
+                    foreach($invoices as $invoice){
+                        $amount = $invoice->amount;
+                        if($result->type == 'Special'){
+                            // $incomeInstalments['special'] = $incomeInstalments['special'] + $amount;
+                            switch($student_type){
+                                case 'students':
+                                    $incomeInstalments['students'] = $incomeInstalments['students'] + $amount;
+                                    break;
+                                case 'unemployed':
+                                    $incomeInstalments['unemployed'] = $incomeInstalments['unemployed'] + $amount;
+                                    break;
+                                case 'group':
+                                    $incomeInstalments['group'] = $incomeInstalments['group'] + $amount;
+                                    break;
+                                default: 
+                                    // $incomeInstalments['other'] = $incomeInstalments['other'] + $amount;
+                                    break;
+                                    
+                            }
+                        }else if($result->type == 'Early Bird'){
+                            $incomeInstalments['early'] = $incomeInstalments['early'] + $amount;
+                        }else if($result->type == 'Regular'){
+                            $arr[$transaction->id][$invoice->id] = $amount;
+                            $incomeInstalments['regular'] = $incomeInstalments['regular'] + $amount;
+                        }else if($result->type == 'Sponsored'){
+
+                        }else if($result->type == 'Alumni'){
+                            $incomeInstalments['alumni'] = $incomeInstalments['alumni'] + $amount;
+                        }else{
+                            $incomeInstalments['other'] = $incomeInstalments['other'] + $amount;
+                        }
+                    }
+                }else{
+                    // $amount = $result->amount != null ? $result->amount / $result->user : 0;
+                    // if(!isset($result->status_history[0]['installments'])){
+                    //     dd($result->status_history[0]['installments']);
+                    //     if($result->type == 'Special'){
+                    //         $incomeInstalments['special'] = $incomeInstalments['special'] + $amount;
+                    //     }else if($result->type == 'Early Bird'){
+                    //         $incomeInstalments['early'] = $incomeInstalments['early'] + $amount;
+                    //     }else if($result->type == 'Regular'){
+                    //         $incomeInstalments['regular'] = $incomeInstalments['regular'] + $amount;
+                    //     }else if($result->type == 'Sponsored'){
+
+                    //     }else if($result->type == 'Alumni'){
+                    //         $incomeInstalments['alumni'] = $incomeInstalments['alumni'] + $amount;
+                    //     }else{
+                    //         $incomeInstalments['other'] = $incomeInstalments['other'] + $amount;
+                    //     }
+                    // }
+                }
+
+
             }
 
             switch($result->type){
@@ -1046,7 +1104,15 @@ class EventController extends Controller
                     }
                     break;
             }
+
+            $data['resum'][] = [
+                'student_type' => $student_type,
+                'type' => $result->type
+            ];
 	    }
+        unset($data['incomeInstalments']['total']);
+        $data['incomeInstalments'] = $incomeInstalments;
+        $data['incomeInstalments']['total'] = array_sum($incomeInstalments);
 
         //dd($data['incomeInstalments']);
         $data['results'] = $results;
