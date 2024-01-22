@@ -118,8 +118,7 @@
                             <span class="text-muted mr-3">Groups discounted:&nbsp;<span class="text-success group_amounts"></span></span>
                             <span class="text-muted mr-3">Other discounted:&nbsp;<span class="text-success other_amounts"></span></span>
                             <span class="text-muted mr-3">Alumni:&nbsp;<span class="text-success students_alumni_amounts"></span></span>
-                            <span class="text-muted mr-3">Regular:&nbsp;<span class="text-success"
-                                    id="income-regular"></span></span>
+                            <span class="text-muted mr-3">Regular:&nbsp;<span class="text-success" id="income-regular"></span></span>
                         </p>
                     </div>
                 </div>
@@ -152,25 +151,14 @@
                         </p>
                         <hr style="margin: 5px 0px;" />
                         <p class="mt-3 mb-0 text-sm">
-                            <span class="text-muted mr-3">Early: <span
-                                    class="text-success" id="installments-early"></span></span>
-                            {{-- <span class="text-muted mr-3">ALUMNI: <span
-                                    class="text-success students_alumni_amounts"></span></span>
-                            <br> --}}
+                            <span class="text-muted mr-3">Early: <span class="text-success" id="installments-early"></span></span>
                             <span class="text-muted mr-3">Students discounted:&nbsp;<span class="text-success" id="installments-students"></span></span>
                             <span class="text-muted mr-3">Unemployed discounted:&nbsp;<span class="text-success" id="installments-unemployed"></span></span>
                             <span class="text-muted mr-3">Groups discounted:&nbsp;<span class="text-success" id="installments-group"></span></span>
                             <span class="text-muted mr-3">Regular:&nbsp;<span class="text-success" id="installments-regular"></span></span>
                             <span class="text-muted mr-3">Other:&nbsp;<span class="text-success" id="installments-other"></span></span>
                             <span class="text-muted mr-3">Alumni:&nbsp;<span class="text-success" id="installments-alumni"></span></span>
-                            {{-- <span class="text-muted mr-3">SPECIAL: <span
-                                    class="text-success students_special_amounts"></span></span> --}}
-                            {{-- <span class="text-muted mr-3">EARLY:&nbsp;<span class="text-success" id="installments-early"></span></span>
-                            <span class="text-muted mr-3">SPECIAL:&nbsp;<span class="text-success" id="installments-special"></span></span>
-                            <span class="text-muted mr-3">REGULAR:&nbsp;<span class="text-success" id="installments-regular"></span></span>
-                            <span class="text-muted mr-3">ALUMNI:&nbsp;<span class="text-success" id="installments-alumni"></span></span>
-                            <span class="text-muted mr-3">SUBSCRIPTION:&nbsp;<span class="text-success" id="installments-subscription"></span></span> --}}
-                            
+
                         </p>
                         <div class="alerts-to-show"></div>
                     </div>

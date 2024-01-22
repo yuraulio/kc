@@ -459,123 +459,6 @@
                                             //dd($info);
                                             ?>
 
-                                            <div class="row">
-
-                                                <div class="col-9 col-md-auto col-lg-auto align-self-center">
-                                                    <h3 class="mb-0 title">{{ __('Course Hours') }} (course_hours)</h3>
-
-                                                </div>
-
-                                                <div class="col-2 col-md-auto col-lg-auto align-self-center">
-                                                    <span data-infowrapper="hours"
-                                                        class="input-group-addon input-group-append input-icon-wrapper">
-                                                        <span class="btn btn-outline-primary input-icon">
-                                                            @if (isset($info['hours']['icon']) && $info['hours']['icon']['path'] != null)
-                                                                <img src="{{ asset($info['hours']['icon']['path']) }}" />
-                                                            @else
-                                                                <img src="/theme/assets/images/icons/Start-Finish.svg" />
-                                                            @endif
-                                                        </span>
-                                                    </span>
-                                                    <input type="hidden"
-                                                        value="{{ old('hours_icon_path', isset($info['hours']['icon']) && $info['hours']['icon'] != null ? $info['hours']['icon']['path'] : '') }}"
-                                                        id="hours_path"
-                                                        name="course[{{ 'hours' }}][{{ 'icon' }}][{{ 'path' }}]">
-                                                    <input type="hidden"
-                                                        value="{{ old('hours_icon_alt_text', isset($info['hours']['icon']) && $info['hours']['icon']['alt_text'] != '' ? $info['hours']['icon']['alt_text'] : '') }}"
-                                                        id="hours_alt_text"
-                                                        name="course[{{ 'hours' }}][{{ 'icon' }}][{{ 'alt_text' }}]">
-                                                </div>
-
-                                                <div class="col-2 col-md-auto col-lg-auto align-self-center">
-
-                                                    <label class="custom-toggle enroll-toggle visible">
-                                                        <input class="icon_link"
-                                                            name="course[{{ 'hours' }}][{{ 'icon' }}][{{ 'link_status' }}]"
-                                                            type="checkbox"
-                                                            {{ isset($info['hours']['icon']['link_status']) && $info['hours']['icon']['link_status'] == 'on' ? 'checked' : '' }}>
-                                                        <span class="custom-toggle-slider rounded-circle"
-                                                            data-label-off="No Link" data-label-on="Link"></span>
-                                                    </label>
-
-                                                </div>
-
-                                                <div
-                                                    class="col-12 col-md-5 col-lg-4 input align-self-center @if (
-                                                        (isset($info['hours']['icon']['link_status']) && $info['hours']['icon']['link_status'] == 'off') ||
-                                                            !isset($info['hours']['icon']['link_status'])) {{ 'd-none' }} @endif">
-                                                    <input placeholder="https://example.com" type="text"
-                                                        class="form-control"
-                                                        name="course[{{ 'hours' }}][{{ 'icon' }}][{{ 'link' }}]"
-                                                        value="{{ old('hours_icon_link', isset($info['hours']['icon']) && $info['hours']['icon'] != null && isset($info['hours']['icon']['link']) ? $info['hours']['icon']['link'] : '') }}">
-                                                </div>
-
-                                                <!-- <div class="col-12 col-md-auto col-lg-auto">
-                                                            <div class="row">
-
-
-                                                            </div>
-
-                                                        </div> -->
-
-
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group col-sm-12 col-md-6 col-lg-4 hours-input-wrapper">
-                                            <input type="text" id="input-hours"
-                                                name="course[{{ 'hours' }}][{{ 'hour' }}]"
-                                                class="form-control" placeholder="{{ __('Course Hours') }}"
-                                                value="{{ old('hours', isset($info['hours']['hour']) && $info['hours']['hour'] != null ? $info['hours']['hour'] : '') }}"
-                                                autofocus>
-
-                                        </div>
-                                        <div class="form-group col-sm-12 col-md-6 col-lg-8 hours-input-wrapper">
-                                            <button id="calculate-total-hours-btn" type="button"
-                                                class="btn btn-outline-primary">Automatically calculate & add lessons
-                                                hours</button>
-                                        </div>
-                                    </div>
-                                    <div class="row form-group">
-                                        <div class="col-12 col-md-6 col-lg-4 hours-input-wrapper">
-
-                                            <!-- <label class="form-control-label">Hours Title (course_hours_title)</label> -->
-
-                                            <input type="text" id="input-hours-title"
-                                                name="course[{{ 'hours' }}][{{ 'title' }}]"
-                                                class="form-control" placeholder="{{ __('Course Hours Title') }}"
-                                                value="{{ old('hours-title', isset($info['hours']['title']) && $info['hours']['title'] != null ? $info['hours']['title'] : '') }}"
-                                                autofocus>
-
-
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="form-group col-12 hours-input-wrapper">
-
-                                            <label class="form-control-label">Hours Text (course_hours_text)</label>
-
-                                            <!-- anto's editor -->
-                                            <input class="hidden" id="input-hours-text"
-                                                name="course[{{ 'hours' }}][{{ 'text' }}]"
-                                                value="{{ old('hours_text', isset($info['hours']['text']) && $info['hours']['text'] != null ? $info['hours']['text'] : '') }}" />
-                                            <?php $data = isset($info['hours']['text']) && $info['hours']['text'] != null ? $info['hours']['text'] : ''; ?>
-                                            @include('event.editor.editor', [
-                                                'toolbar' => 'insertfile image media link anchor codesample',
-                                                'plugins' => 'link',
-                                                'keyinput' => 'input-hours_title',
-                                                'data' => "$data",
-                                                'inputname' => "'course[hours][text]'",
-                                            ])
-                                            <!-- anto's editor -->
-
-                                            {{-- <input style="background: aliceblue;" type="text" name="course[{{'hours'}}][{{'text'}}]" id="input-hours-text" class="form-control" placeholder="{{ __('alphanumeric text') }}" value="{{ old('hours_text', (isset($info['hours']['text']) && $info['hours']['text'] != null) ? $info['hours']['text'] : '' ) }}" autofocus> --}}
-
-
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
 
                                         <?php
                                         $visible_hours = isset($info['hours']['visible']) ? $info['hours']['visible'] : null;
@@ -5757,7 +5640,7 @@
                     $('#installments-alumni').text(money(incomeInstalments.alumni))
                     if(incomeInstalments.alumni == 0)
                         $('#installments-alumni').parent().hide()
-                    
+
                     if(stats.alerts.length > 0){
                         stats.alerts.forEach(al => {
                             $('.alerts-to-show').append(
