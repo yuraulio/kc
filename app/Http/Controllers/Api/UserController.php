@@ -7,7 +7,6 @@ use App\Http\Requests\UserRequest;
 use App\Model\Activation;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Model\User;
@@ -1377,6 +1376,19 @@ class UserController extends Controller
         return new JsonResponse([
             'token' => $token->accessToken,
         ]);
+    }
+
+    /**
+     * Delete the user.
+     *
+     * @param User $user
+     * @return JsonResponse
+     */
+    public function destroy(User $user): JsonResponse
+    {
+        $user->delete();
+
+        return new JsonResponse([], 204);
     }
 
 }
