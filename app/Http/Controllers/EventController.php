@@ -67,7 +67,7 @@ class EventController extends Controller
         $data['all'] = Event::all()->count();
 
         $data['inclass'] = Event::where('status', 0)->whereHas('event_info1', function($q) {
-            return $q->where('event_info.course_delivery','<>', 143);
+            return $q->where('event_info.course_delivery','<a>', 143);
         })->count();
 
         $data['elearning'] = Event::where('status', 0)->whereHas('event_info1', function($q) {
@@ -886,6 +886,7 @@ class EventController extends Controller
         $count['students'] = 0;
         $count['unemployed'] = 0;
         $count['group'] = 0;
+        $count['group_sells'] = 0;
         $count['other_amounts'] = 0;
         $count['students_amounts'] = 0;
         $count['unemployed_amounts'] = 0;
@@ -930,24 +931,46 @@ class EventController extends Controller
         }, $invoiceables);
         if(count($invoices_ids) > 0){
             $all_invoices = DB::select("
-                SELECT 
-                    * 
-                FROM 
-                    invoices 
+                SELECT
+                    *
+                FROM
+                    invoices
                 LEFT JOIN invoiceables AS inv1 ON inv1.invoice_id = invoices.id AND inv1.invoiceable_type = 'App\\\\Model\\\\User'
-                WHERE 
+                WHERE
                     id IN (".implode(',', $invoices_ids).")
             ");
         }else{
             $all_invoices = [];
         }
 
-        $transactions = []; // We have to count only one time each transaction
-        $transactions_2 = []; // We have to count only one time each transaction
-        // dd($results);
-        $data['resum'] = [];
+        // If a transaction buys two tickets, the register will be duplicated. So, we don't want to calc twice the amounts. We only want to count twice the number of students, but not the amounts.
+        // So, we refactor the results to have only transactions, and the user_ids inside the object.
+        $transactions = [];
+        $transaction_ids = [];
         foreach ($results as $result) {
+            if(!in_array($result->transaction_id, $transaction_ids)){
+                $result_new = $result;
+                $result_new->user_ids = [$result->user_id];
+                $transactions[] = $result_new;
+                $transaction_ids[] = $result->transaction_id;
+            }else{
+                $transactions = array_map(function($transaction) use ($result){
+                    if($transaction->transaction_id == $result->transaction_id){
+                        $transaction->user_ids[] = $result->user_id;
+                        return $transaction;
+                    }
+                    return $transaction;
+                }, $transactions);
+            }
+        }
+
+        $data['resum'] = [];
+        foreach ($transactions as $result) {
             $status_history = json_decode($result->status_history);
+
+            $count['total'] = $count['total'] + count($result->user_ids);
+
+            $amount = (float)$result->total_amount;
 
             $student_type = '';
             if(isset($status_history[0]) && isset($status_history[0]->cart_data)){
@@ -969,150 +992,109 @@ class EventController extends Controller
                         }
                     }
                 }
-                if($result->type == 'Special'){
-                    switch($student_type){
-                        case 'students':
-                            $count['students'] = $count['students'] + 1;
-                            $count['students_amounts'] = $count['students_amounts'] + (float)$result->total_amount;
-                            $count['total']++;
-                            $count['total_tickets']++;
-                            break;
-                        case 'unemployed':
-                            $count['unemployed'] = $count['unemployed'] + 1;
-                            $count['unemployed_amounts'] = $count['unemployed_amounts'] + (float)$result->total_amount;
-                            $count['total']++;
-                            $count['total_tickets']++;
-                            break;
-                        case 'group':
-                            if(!in_array($result->transaction_id, $transactions_2)){
-                                $transactions_2[] = $result->transaction_id;
-                                $count['group'] = $count['group'] + 1;
-                                $count['group_amounts'] = $count['group_amounts'] + (float)$result->total_amount;
-                                $count['total']++;
-                            }
-                            $count['total_tickets']++;
-                            break;
-                        default: 
-                            $count['other'] = $count['other'] + 1;
-                            $count['other_amounts'] = $count['other_amounts'] + (float)$result->total_amount;
-                            $count['total']++;
-                            $count['total_tickets']++;
-                            break;
-                            
-                    }
-                }else{
-                    $count['total']++;
-                    $count['total_tickets']++;
-                }
-
-                $invoices = array_filter($all_invoices, function($invoice) use ($result){
-                    return $invoice->invoiceable_id == $result->user_id;
-                });
-                if(count($invoices) > 0){
-                    $totalAmountInvoice = 0;
-                    foreach($invoices as $invoice){
-                        $totalAmountInvoice += $invoice->amount;
-                        $amount = $invoice->amount;
-                        if($result->type == 'Special'){
-                            // $incomeInstalments['special'] = $incomeInstalments['special'] + $amount;
-                            switch($student_type){
-                                case 'students':
-                                    $incomeInstalments['students'] = $incomeInstalments['students'] + $amount;
-                                    break;
-                                case 'unemployed':
-                                    $incomeInstalments['unemployed'] = $incomeInstalments['unemployed'] + $amount;
-                                    break;
-                                case 'group':
-                                    $incomeInstalments['group'] = $incomeInstalments['group'] + $amount;
-                                    break;
-                                default: 
-                                    // $incomeInstalments['other'] = $incomeInstalments['other'] + $amount;
-                                    break;
-                                    
-                            }
-                        }else if($result->type == 'Early Bird'){
-                            $incomeInstalments['early'] = $incomeInstalments['early'] + $amount;
-                        }else if($result->type == 'Regular'){
-                            $arr[$transaction->id][$invoice->id] = $amount;
-                            $incomeInstalments['regular'] = $incomeInstalments['regular'] + $amount;
-                        }else if($result->type == 'Sponsored'){
-
-                        }else if($result->type == 'Alumni'){
-                            $incomeInstalments['alumni'] = $incomeInstalments['alumni'] + $amount;
-                        }else{
-                            $incomeInstalments['other'] = $incomeInstalments['other'] + $amount;
-                        }
-                    }
-                    if($totalAmountInvoice > $result->total_amount){
-                        $usser = User::find($result->user_id);
-                        if($usser){
-                            $alerts[] = 'The student '.$usser->name.'('.$usser->email.') has been charge more ('.round($totalAmountInvoice).') than expected ('.round($result->total_amount).').';
-                        }
-                    }
-                }else{
-                    // $amount = $result->amount != null ? $result->amount / $result->user : 0;
-                    // if(!isset($result->status_history[0]['installments'])){
-                    //     dd($result->status_history[0]['installments']);
-                    //     if($result->type == 'Special'){
-                    //         $incomeInstalments['special'] = $incomeInstalments['special'] + $amount;
-                    //     }else if($result->type == 'Early Bird'){
-                    //         $incomeInstalments['early'] = $incomeInstalments['early'] + $amount;
-                    //     }else if($result->type == 'Regular'){
-                    //         $incomeInstalments['regular'] = $incomeInstalments['regular'] + $amount;
-                    //     }else if($result->type == 'Sponsored'){
-
-                    //     }else if($result->type == 'Alumni'){
-                    //         $incomeInstalments['alumni'] = $incomeInstalments['alumni'] + $amount;
-                    //     }else{
-                    //         $incomeInstalments['other'] = $incomeInstalments['other'] + $amount;
-                    //     }
-                    // }
-                }
-
-
             }
+
+            if($result->type == 'Special'){
+                switch($student_type){
+                    case 'students':
+                        $count['students'] = $count['students'] + count($result->user_ids);
+                        $count['students_amounts'] = $count['students_amounts'] + $amount;
+                        break;
+                    case 'unemployed':
+                        $count['unemployed'] = $count['unemployed'] + count($result->user_ids);
+                        $count['unemployed_amounts'] = $count['unemployed_amounts'] + $amount;
+                        break;
+                    case 'group':
+                        $count['group'] = $count['group'] + count($result->user_ids);
+                        $count['group_amounts'] = $count['group_amounts'] + $amount;
+                        break;
+                    default:
+                        $count['other'] = $count['other'] + count($result->user_ids);
+                        $count['other_amounts'] = $count['other_amounts'] + $amount;
+                        break;
+
+                }
+            }
+
 
             switch($result->type){
                 case 'Alumni':
-                    $count['alumni']++;
-                    if(!in_array($result->transaction_id, $transactions)){
-                        $transactions[] = $result->transaction_id;
-                        $count['alumni_amounts'] += (float)$result->total_amount;
-                        $count['total_amounts'] += (float)$result->total_amount;
-                    }
+                    $count['alumni'] = $count['alumni'] + count($result->user_ids);
+                    $count['alumni_amounts'] += $amount;
+                    $count['total_amounts'] += $amount;
                     break;
                 case 'Regular':
-                    $count['regular']++;
-                    if(!in_array($result->transaction_id, $transactions)){
-                        $transactions[] = $result->transaction_id;
-                        $count['regular_amounts'] += (float)$result->total_amount;
-                        $count['total_amounts'] += (float)$result->total_amount;
-                    }
+                    $count['regular'] = $count['regular'] + count($result->user_ids);
+                    $count['regular_amounts'] += $amount;
+                    $count['total_amounts'] += $amount;
                     break;
                 case 'Special':
-                    $count['special']++;
-                    if(!in_array($result->transaction_id, $transactions)){
-                        $transactions[] = $result->transaction_id;
-                        $count['special_amounts'] += (float)$result->total_amount;
-                        $count['total_amounts'] += (float)$result->total_amount;
-                    }
+                    $count['special'] = $count['special'] + count($result->user_ids);
+                    $count['special_amounts'] += $amount;
+                    $count['total_amounts'] += $amount;
                     break;
                 case 'Sponsored':
-                    $count['free']++;
-                    if(!in_array($result->transaction_id, $transactions)){
-                        $transactions[] = $result->transaction_id;
-                        $count['free_amounts'] += (float)$result->total_amount;
-                        $count['total_amounts'] += (float)$result->total_amount;
-                    }
+                    $count['free'] = $count['free'] + count($result->user_ids);
+                    $count['free_amounts'] += $amount;
+                    $count['total_amounts'] += $amount;
                     break;
                 case 'Early Bird':
-                    $count['early']++;
-                    if(!in_array($result->transaction_id, $transactions)){
-                        $transactions[] = $result->transaction_id;
-                        $count['early_amounts'] += (float)$result->total_amount;
-                        $count['total_amounts'] += (float)$result->total_amount;
-                    }
+                    $count['early'] = $count['early'] + count($result->user_ids);
+                    $count['early_amounts'] += $amount;
+                    $count['total_amounts'] += $amount;
                     break;
+            }
+
+            $invoices = array_filter($all_invoices, function($invoice) use ($result){
+                return $invoice->invoiceable_id == $result->user_id;
+            });
+            // We want to delete duplicates
+            $invoices_refactored = [];
+            foreach ($invoices as $invoice) {
+                $invoices_refactored[$invoice->id] = $invoice;
+            }
+            $invoices = array_values($invoices_refactored);
+            if(count($invoices) > 0 && $amount > 0){ // $amount == 0 means that this register is duplicated (same transaction as other before)
+                $totalAmountInvoice = 0;
+                foreach($invoices as $invoice){
+                    $totalAmountInvoice += $invoice->amount;
+                    $amount = $invoice->amount;
+                    if($result->type == 'Special'){
+                        // $incomeInstalments['special'] = $incomeInstalments['special'] + $amount;
+                        switch($student_type){
+                            case 'students':
+                                $incomeInstalments['students'] = $incomeInstalments['students'] + $amount;
+                                break;
+                            case 'unemployed':
+                                $incomeInstalments['unemployed'] = $incomeInstalments['unemployed'] + $amount;
+                                break;
+                            case 'group':
+                                $incomeInstalments['group'] = $incomeInstalments['group'] + $amount;
+                                break;
+                            default:
+                                // $incomeInstalments['other'] = $incomeInstalments['other'] + $amount;
+                                break;
+
+                        }
+                    }else if($result->type == 'Early Bird'){
+                        $incomeInstalments['early'] = $incomeInstalments['early'] + $amount;
+                    }else if($result->type == 'Regular'){
+                        $arr[$transaction->id][$invoice->id] = $amount;
+                        $incomeInstalments['regular'] = $incomeInstalments['regular'] + $amount;
+                    }else if($result->type == 'Sponsored'){
+
+                    }else if($result->type == 'Alumni'){
+                        $incomeInstalments['alumni'] = $incomeInstalments['alumni'] + $amount;
+                    }else{
+                        $incomeInstalments['other'] = $incomeInstalments['other'] + $amount;
+                    }
+                }
+                if($totalAmountInvoice > $result->total_amount){
+                    $usser = User::find($result->user_id);
+                    if($usser){
+                        $alerts[] = 'The student <a href="/admin/user/'.$usser->id.'/edit#tabs-icons-text-4" target="_blank">'.$usser->name.'('.$usser->email.')</a> has been charged more ('.round($totalAmountInvoice).') than expected ('.round($result->total_amount).').';
+                    }
+                }
             }
 
             $data['resum'][] = [

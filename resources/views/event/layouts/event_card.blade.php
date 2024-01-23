@@ -118,7 +118,7 @@
                             <span class="text-muted mr-3">Groups discounted:&nbsp;<span class="text-success group_amounts"></span></span>
                             <span class="text-muted mr-3">Other discounted:&nbsp;<span class="text-success other_amounts"></span></span>
                             <span class="text-muted mr-3">Alumni:&nbsp;<span class="text-success students_alumni_amounts"></span></span>
-                            <span class="text-muted mr-3">Regular:&nbsp;<span class="text-success" id="income-regular"></span></span>
+                            <span class="text-muted mr-3">Regular:&nbsp;<span class="text-success students_regular_amounts"></span></span>
                         </p>
                     </div>
                 </div>
