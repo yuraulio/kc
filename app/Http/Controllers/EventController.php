@@ -867,13 +867,13 @@ class EventController extends Controller
 
 
 
-        $count['free'] = 0;
-        $count['special'] = 0;
-        $count['early'] = 0;
-        $count['alumni'] = 0;
-        $count['regular'] = 0;
-        $count['total'] = 0;
-        $count['total_tickets'] = 0;
+        $count['free'] = [];
+        $count['special'] = [];
+        $count['early'] = [];
+        $count['alumni'] = [];
+        $count['regular'] = [];
+        $count['total'] = [];
+        $count['total_tickets'] = [];
 
         $count['free_amounts'] = 0;
         $count['special_amounts'] = 0;
@@ -882,10 +882,10 @@ class EventController extends Controller
         $count['regular_amounts'] = 0;
         $count['total_amounts'] = 0;
 
-        $count['other'] = 0;
-        $count['students'] = 0;
-        $count['unemployed'] = 0;
-        $count['group'] = 0;
+        $count['other'] = [];
+        $count['students'] = [];
+        $count['unemployed'] = [];
+        $count['group'] = [];
         $count['group_sells'] = 0;
         $count['other_amounts'] = 0;
         $count['students_amounts'] = 0;
@@ -932,13 +932,24 @@ class EventController extends Controller
         if(count($invoices_ids) > 0){
             $all_invoices = DB::select("
                 SELECT
-                    *
+                    invoices.*,
+                    inv1.*,
+                    users.email as email
                 FROM
                     invoices
                 LEFT JOIN invoiceables AS inv1 ON inv1.invoice_id = invoices.id AND inv1.invoiceable_type = 'App\\\\Model\\\\User'
+                LEFT JOIN users ON users.id = inv1.invoiceable_id
                 WHERE
-                    id IN (".implode(',', $invoices_ids).")
+                invoices.id IN (".implode(',', $invoices_ids).")
             ");
+            // We want only the first invoice. Not two times.
+            $all_invoices_refactored = [];
+            // dump($all_invoices);
+            foreach($all_invoices as $invoice){
+                if(!isset($all_invoices_refactored[$invoice->invoice_id]))
+                    $all_invoices_refactored[$invoice->invoice_id] = $invoice;
+            }
+            $all_invoices = array_values($all_invoices_refactored);
         }else{
             $all_invoices = [];
         }
@@ -968,7 +979,7 @@ class EventController extends Controller
         foreach ($transactions as $result) {
             $status_history = json_decode($result->status_history);
 
-            $count['total'] = $count['total'] + count($result->user_ids);
+            $count['total'] = array_unique(array_merge($count['total'], $result->user_ids));
 
             $amount = (float)$result->total_amount;
 
@@ -997,19 +1008,19 @@ class EventController extends Controller
             if($result->type == 'Special'){
                 switch($student_type){
                     case 'students':
-                        $count['students'] = $count['students'] + count($result->user_ids);
+                        $count = $this->add_student_ids('students', $result->user_ids, $count);
                         $count['students_amounts'] = $count['students_amounts'] + $amount;
                         break;
                     case 'unemployed':
-                        $count['unemployed'] = $count['unemployed'] + count($result->user_ids);
+                        $count = $this->add_student_ids('unemployed', $result->user_ids, $count);
                         $count['unemployed_amounts'] = $count['unemployed_amounts'] + $amount;
                         break;
                     case 'group':
-                        $count['group'] = $count['group'] + count($result->user_ids);
+                        $count = $this->add_student_ids('group', $result->user_ids, $count);
                         $count['group_amounts'] = $count['group_amounts'] + $amount;
                         break;
                     default:
-                        $count['other'] = $count['other'] + count($result->user_ids);
+                        $count = $this->add_student_ids('other', $result->user_ids, $count);
                         $count['other_amounts'] = $count['other_amounts'] + $amount;
                         break;
 
@@ -1019,27 +1030,26 @@ class EventController extends Controller
 
             switch($result->type){
                 case 'Alumni':
-                    $count['alumni'] = $count['alumni'] + count($result->user_ids);
+                    $count = $this->add_student_ids('alumni', $result->user_ids, $count);
                     $count['alumni_amounts'] += $amount;
                     $count['total_amounts'] += $amount;
                     break;
                 case 'Regular':
-                    $count['regular'] = $count['regular'] + count($result->user_ids);
+                    $count = $this->add_student_ids('regular', $result->user_ids, $count);
                     $count['regular_amounts'] += $amount;
                     $count['total_amounts'] += $amount;
                     break;
                 case 'Special':
-                    $count['special'] = $count['special'] + count($result->user_ids);
                     $count['special_amounts'] += $amount;
                     $count['total_amounts'] += $amount;
                     break;
                 case 'Sponsored':
-                    $count['free'] = $count['free'] + count($result->user_ids);
+                    $count = $this->add_student_ids('free', $result->user_ids, $count);
                     $count['free_amounts'] += $amount;
                     $count['total_amounts'] += $amount;
                     break;
                 case 'Early Bird':
-                    $count['early'] = $count['early'] + count($result->user_ids);
+                    $count = $this->add_student_ids('early', $result->user_ids, $count);
                     $count['early_amounts'] += $amount;
                     $count['total_amounts'] += $amount;
                     break;
@@ -1103,6 +1113,8 @@ class EventController extends Controller
             ];
 	    }
 
+        $count['special'] = array_merge($count['students'],$count['unemployed'],$count['group'],$count['other']);
+
         unset($data['incomeInstalments']['total']);
         $data['incomeInstalments'] = $incomeInstalments;
         $data['incomeInstalments']['total'] = array_sum($incomeInstalments);
@@ -1122,6 +1134,16 @@ class EventController extends Controller
             'data' => $data,
         ]);
 
+    }
+
+    private function add_student_ids($type, $user_ids, $count){
+
+        foreach($user_ids as $user_id){
+            if(!in_array($user_id, array_merge($count['free'], $count['special'], $count['early'], $count['alumni'], $count['regular'], $count['other'], $count['unemployed'], $count['group']))){
+                $count[$type][] = $user_id;
+            }
+        }
+        return $count;
     }
 
     /**

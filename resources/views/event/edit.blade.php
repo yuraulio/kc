@@ -5565,30 +5565,30 @@
                     let incomeInstalments = stats.incomeInstalments;
                     let active = stats.active;
 
-                    $('#students_total').text(count.total)
+                    $('#students_total').text(count.total.length)
                     $('#students_total_tickets').text(count.total_tickets)
-                    $('#students_paid').text((count.regular + count.special + count.alumni + count
-                        .early))
-                    $('#students_free').text(count.free)
-                    if (count.free == 0)
+                    $('#students_paid').text((count.regular.length + count.special.length + count.alumni.length + count
+                        .early.length))
+                    $('#students_free').text(count.free.length)
+                    if (count.free.length == 0)
                         $('#students_free').parent().hide()
-                    $('#students_alumni').text(count.alumni)
-                    if (count.alumni == 0)
+                    $('#students_alumni').text(count.alumni.length)
+                    if (count.alumni.length == 0)
                         $('#students_alumni').parent().hide()
-                    $('#students_early').text(count.early)
-                    if (count.early == 0)
+                    $('#students_early').text(count.early.length)
+                    if (count.early.length == 0)
                         $('#students_early').parent().hide()
                     if (count.free == 0 && count.early == 0)
                         $('#students_early').parent().parent().hide()
-                    $('#students_regular').text(count.regular)
-                    $('#students_special').text(count.special)
+                    $('#students_regular').text(count.regular.length)
+                    $('#students_special').text(count.special.length)
 
-                    $('#other').text(count.other)
-                    if(count.other == 0)
+                    $('#other').text(count.other.length)
+                    if(count.other.length == 0)
                         $('#other').parent().hide();
-                    $('#students').text(count.students)
-                    $('#unemployed').text(count.unemployed)
-                    $('#group').text(count.group)
+                    $('#students').text(count.students.length)
+                    $('#unemployed').text(count.unemployed.length)
+                    $('#group').text(count.group.length)
 
                     $('.students_total_amounts').text(money(count.total_amounts))
                     $('.students_paid_amounts').text(money(count.regular_amounts + count

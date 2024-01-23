@@ -156,8 +156,8 @@
                             <span class="text-muted mr-3">Unemployed discounted:&nbsp;<span class="text-success" id="installments-unemployed"></span></span>
                             <span class="text-muted mr-3">Groups discounted:&nbsp;<span class="text-success" id="installments-group"></span></span>
                             <span class="text-muted mr-3">Regular:&nbsp;<span class="text-success" id="installments-regular"></span></span>
-                            <span class="text-muted mr-3">Other:&nbsp;<span class="text-success" id="installments-other"></span></span>
                             <span class="text-muted mr-3">Alumni:&nbsp;<span class="text-success" id="installments-alumni"></span></span>
+                            <span class="text-muted mr-3">Other:&nbsp;<span class="text-success" id="installments-other"></span></span>
 
                         </p>
                         <div class="alerts-to-show"></div>
