@@ -1099,7 +1099,7 @@ class EventController extends Controller
                         $incomeInstalments['other'] = $incomeInstalments['other'] + $amount;
                     }
                 }
-                if($totalAmountInvoice > $result->total_amount){
+                if((int)$totalAmountInvoice > (int)$result->total_amount){
                     $usser = User::find($result->user_id);
                     if($usser){
                         $alerts[] = 'The student <a href="/admin/user/'.$usser->id.'/edit#tabs-icons-text-4" target="_blank">'.$usser->name.'('.$usser->email.')</a> has been charged more ('.round($totalAmountInvoice).') than expected ('.round($result->total_amount).').';
