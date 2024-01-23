@@ -11,6 +11,7 @@ use App\Model\Admin\Comment;
 use App\Model\Event;
 use App\Model\Role;
 use App\Model\Instructor;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -106,7 +107,7 @@ class User extends Authenticatable
         return $this->belongsToMany(Instructor::class, 'instructors_user')->with('event');
     }
 
-    public function statusAccount()
+    public function statusAccount(): HasOne
     {
         return $this->hasOne(Activation::class);
     }

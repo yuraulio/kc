@@ -2,19 +2,17 @@
 
 namespace App\Http\Requests;
 
-use App\Model\Role;
-use App\Model\User;
-use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UserRequest extends FormRequest
 {
+
     /**
      * Determine if the user is authorized to make this request.
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return auth()->check();
     }
@@ -24,19 +22,18 @@ class UserRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'firstname' => ['required', 'min:3'],
             'lastname' => ['required', 'min:3'],
             'email' => [
-                'required', 'email','unique:users,email'
+                'required', 'email', 'unique:users,email'
             ],
             'password' => [
                 $this->route()->user ? 'nullable' : 'required', 'confirmed', 'min:6'
             ]
         ];
     }
-
 
 }

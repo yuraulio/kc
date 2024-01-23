@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UserRequest;
 use App\Model\Activation;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Model\User;
@@ -1080,6 +1083,40 @@ class UserController extends Controller
         $user->load('invoices', 'transactions', 'statusAccount');
 
         return new JsonResponse($user);
+    }
+
+    /**
+     * Store a new User.
+     *
+     * @param UserRequest $request
+     * @return JsonResponse
+     */
+    public function store(UserRequest $request): JsonResponse
+    {
+        $user = User::create(
+            $request
+                ->merge([
+                    'password' => Hash::make($request->get('password')),
+                    'consent' => json_encode([
+                        'ip' => $request->ip(),
+                        'date' => Carbon::now(),
+                        'firstname' => $request->get('firstname'),
+                        'lastname' => $request->get('lastname'),
+                    ])
+                ])
+                ->all()
+        );
+
+        $user->createMedia();
+        $user->role()->attach($request->role_id);
+        $user->statusAccount()
+            ->create([
+                'completed' => false,
+            ]);
+
+        return new JsonResponse([
+            'data' => $user->load(['role', 'statusAccount']),
+        ], 201);
     }
 
     /**

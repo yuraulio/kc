@@ -52,7 +52,7 @@ Route::middleware('auth:api')->group(function () {
 
     // Users
     Route::resource('users', UserController::class)
-        ->only(['show', 'update', 'index']);
+        ->only(['show', 'update', 'index', 'store']);
     Route::post('users/{user}/update-status', [UserController::class, 'updateStatus']);
 
     // Events
