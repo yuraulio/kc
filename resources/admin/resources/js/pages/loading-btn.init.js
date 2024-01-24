@@ -6,6 +6,7 @@ Contact: support@coderthemes.com
 File: Loading Button init js
 */
 
+import * as Ladda from 'ladda';
 
 
  // Bind normal buttons

@@ -1,6 +1,7 @@
 const mix = require("laravel-mix");
 const lodash = require("lodash");
 const fs = require("fs");
+const path = require('path');
 
 const folder = {
     src: "resources/", // source files
@@ -23,6 +24,7 @@ mix.setPublicPath(folder.dist_assets);
 
 // uglify
 mix.options({
+    processCssUrls: false,
     uglify: {
         uglifyOptions: {
             mangle: {
@@ -31,6 +33,7 @@ mix.options({
         },
     },
 });
+
 
 //done
 
@@ -56,13 +59,6 @@ mix.combine(third_party_js, folder.dist_assets + "js/vendor.js").minify(
 // // optional third party assets
 var third_party_assets = {
     css_js: [
-        {
-            name: "fullcalendar",
-            assets: [
-                "./node_modules/fullcalendar/main.min.js",
-                "./node_modules/fullcalendar/main.min.css",
-            ],
-        },
         {
             name: "admin-resources",
             assets: [
@@ -152,14 +148,10 @@ var third_party_assets = {
             ],
         },
         {
-            name: "chart.js",
-            assets: ["./node_modules/chart.js/dist/Chart.bundle.min.js"],
-        },
-        {
             name: "chartist",
             assets: [
-                "./node_modules/chartist/dist/chartist.min.css",
-                "./node_modules/chartist/dist/chartist.min.js",
+                "./node_modules/chartist/dist/index.css",
+                "./node_modules/chartist/dist/index.js",
             ],
         },
         {
@@ -352,14 +344,6 @@ var third_party_assets = {
             ],
         },
         {
-            name: "ladda",
-            assets: [
-                "./node_modules/ladda/dist/spin.min.js",
-                "./node_modules/ladda/dist/ladda.min.js",
-                "./node_modules/ladda/dist/ladda.min.css",
-            ],
-        },
-        {
             name: "magnific-popup",
             assets: [
                 "./node_modules/magnific-popup/dist/jquery.magnific-popup.min.js",
@@ -492,10 +476,6 @@ var third_party_assets = {
             ],
         },
         {
-            name: "tippy.js",
-            assets: ["./node_modules/tippy.js/dist/tippy.all.min.js"],
-        },
-        {
             name: "toastr",
             assets: [
                 "./node_modules/toastr/build/toastr.min.js",
@@ -606,7 +586,6 @@ var getFiles = function (dir) {
                 folder.src + scss_disc + "/" + filepath,
                 folder.dist_assets + "css" + demo
             )
-                .options({ processCssUrls: mix.inProduction() })
                 .minify(
                     folder.dist_assets + css_disc + "/" + fileName + ".css"
                 );
@@ -620,6 +599,28 @@ getFiles(folder.src + "js/pages").forEach(function (filepath) {
         folder.src + "js/pages/" + filepath,
         folder.dist_assets + "js/pages/" + filepath
     );
+});
+
+mix.webpackConfig({
+    module: {
+        rules: [
+            {
+                test: /\.jsx?$/,
+                exclude: /node_modules(?!\/foundation-sites)|bower_components/,
+                use: {
+                    loader: 'babel-loader',
+                    options: {
+                        presets: ['env']
+                    }
+                }
+            }
+        ]
+    },
+    resolve: {
+        alias: {
+            '~@': path.resolve('src')
+        }
+    }
 });
 
 // app theme file

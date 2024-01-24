@@ -6,6 +6,9 @@ Contact: support@coderthemes.com
 File: Main Js File
 */
 
+import tippy from 'tippy.js';
+
+
 !function ($) {
     "use strict";
 
@@ -104,7 +107,7 @@ File: Main Js File
     },
 
     Components.prototype.initTippyTooltips = function () {
-        
+
         // console.log($('[data-plugin="tippy"]').length);
         if($('[data-plugin="tippy"]').length > 0){
             tippy('[data-plugin="tippy"]');
@@ -132,9 +135,9 @@ File: Main Js File
             }
             var $subMenu = $(this).next(".dropdown-menu");
             $subMenu.toggleClass('show');
-    
+
             return false;
-        });   
+        });
     },
 
     //initilizing
@@ -198,7 +201,7 @@ function($) {
     },
     //
     $.Portlet = new Portlet, $.Portlet.Constructor = Portlet
-    
+
 }(window.jQuery),
 
 function ($) {
@@ -209,7 +212,7 @@ function ($) {
         this.$window = $(window)
     };
 
-    /** 
+    /**
      * Initlizes the controls
     */
     App.prototype.initControls = function () {
@@ -217,7 +220,7 @@ function ($) {
         setTimeout(function() {
             document.body.classList.remove('loading');
         }, 400);
-        
+
         // Preloader
         $(window).on('load', function () {
             $('#status').fadeOut();
@@ -268,10 +271,10 @@ function ($) {
         this.rightBar = $.RightBar;
         this.rightBar.layout = this.layout;
         this.layout.rightBar = this.rightBar;
-    
+
         this.layout.init();
         this.rightBar.init(this.layout);
-        
+
 
         // showing the sidebar on load if user is visiting the page first time only
         var bodyConfig = this.$body.data('layout');
