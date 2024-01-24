@@ -32,13 +32,12 @@ php artisan config:clear
 php artisan cache:clear
 
 ## Install new admin resource needs to be done before build in root
-nvm use 16
+nvm use --delete-prefix v16.20.2
 cd resources/admin
-npm -i
+npm i
 npm run prod
-
 cd ../..
-## TODO Temp solution we need to switch on 15 at least. Issue with python3 on prod
-## install packages in root folder
-npm install --unsafe-perm=true --allow-root
+
+## Install site resource
+npm i
 npm run prod
