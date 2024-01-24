@@ -121,10 +121,6 @@ class UserController extends Controller
         $users->through(function ($user) {
             $user['profileImage'] = get_profile_image($user['image']);
 
-            if (empty($user['profileImage'])) {
-                $user['profileImage'] = '/theme/assets/images/icons/user-profile-placeholder-image.png';
-            }
-
             unset($user['image']);
 
             return $user;
