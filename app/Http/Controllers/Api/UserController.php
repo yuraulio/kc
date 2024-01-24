@@ -38,6 +38,7 @@ class UserController extends Controller
     {
         $query = User::query()
             ->with([
+                'image',
                 'statusAccount',
                 'role',
             ]);
@@ -116,6 +117,18 @@ class UserController extends Controller
         // Get paginated users.
         $users = $query->paginate((int) $request->query->get('per_page', 50))
             ->appends($request->query->all());
+
+        $users->through(function ($user) {
+            $user['profileImage'] = get_profile_image($user['image']);
+
+            if (empty($user['profileImage'])) {
+                $user['profileImage'] = '/theme/assets/images/icons/user-profile-placeholder-image.png';
+            }
+
+            unset($user['image']);
+
+            return $user;
+        });
 
         return new JsonResponse($users);
     }
