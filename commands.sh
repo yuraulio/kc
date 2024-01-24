@@ -32,14 +32,13 @@ php artisan config:clear
 php artisan cache:clear
 
 ## Install new admin resource needs to be done before build in root
-nvm use 15
+nvm use 16
 cd resources/admin
 npm -i
-npm run dev
+npm run prod
 
 cd ../..
 ## TODO Temp solution we need to switch on 15 at least. Issue with python3 on prod
-nvm use 14
 ## install packages in root folder
 npm install --unsafe-perm=true --allow-root
-npm run dev
+npm run prod
