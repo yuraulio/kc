@@ -525,7 +525,7 @@ class CronjobsController extends Controller
                 $date = date_diff($date, $today);
 
                 //if( $date->y==0 && ( ($date->m == 1 &&  $date->d == 0) || ($date->m ==  0 && $date->d == 7))){
-                if( $date->y==0 && $date->m == 0 && $date->d == 7 ) {
+                if( ( $date->y==0 && $date->m == 0 && ( $date->d == 7 || $date->d == 1 ) ) || ( $date->y==0 && $date->m == 1 && $date->d == 0 ) ) {
 
                     $muser['name'] = $subscription->user->firstname . ' ' . $subscription->user->lastname;
                     $muser['first'] = $subscription->user->firstname;
