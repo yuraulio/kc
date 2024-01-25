@@ -1501,20 +1501,26 @@ if(!function_exists('formatBytes')){
     if (!function_exists('update_env')) {
         function update_env( $data = [] ) : void
         {
+            try{
+                if(!isset($data['DROPBOX_TOKEN'])){
+                    return;
+                }
 
-            if(!isset($data['DROPBOX_TOKEN'])){
-                return;
-            }
+                $newData=['DROPBOX_TOKEN' => $data['DROPBOX_TOKEN']];
+                $path = base_path('.env');
 
-            $newData=['DROPBOX_TOKEN' => $data['DROPBOX_TOKEN']];
-            $path = base_path('.env');
+                if (file_exists($path)) {
 
-            if (file_exists($path)) {
-
-                foreach ($newData as $key => $value) {
-                    file_put_contents($path, str_replace(
-                        $key . '=' . env($key), $key . '=' . $value, file_get_contents($path)
-                    ));
+                    foreach ($newData as $key => $value) {
+                        file_put_contents($path, str_replace(
+                            $key . '=' . env($key), $key . '=' . $value, file_get_contents($path)
+                        ));
+                    }
+                }
+            }catch(\Exception $e){
+                $user = User::first();
+                if($user){
+                    $user->notify(new ErrorSlack('API Dropbox failed 2. Sometimes happens. Don\'t worry. Error message: '.$e->getMessage()));
                 }
             }
 
