@@ -70,32 +70,31 @@ class ForgotPasswordController extends Controller
 
     public function sendResetLinkEmail(\Illuminate\Http\Request $request)
     {
-       
+
         $this->validateEmail($request);
-        
-       
+
+
         $user = User::where('email',$request->email)->first();
-      
-        if($user){     
-            
+
+        if($user){
+
             $user->notify(new userChangePassword($user));
             event(new EmailSent($user->email, 'userChangePassword'));
-            
+
             return response()->json([
                 'success' => true,
-                'message' => "We just sent you a link to your email so you can update your password"
+                'message' => "We just sent you a link to your email."
             ]);
-            
+
         }
 
-       
-      
+
+
         return response()->json([
             'success' => false,
             'message' => "No student found with this email address"
         ]);
-      
-        
+
     }
 
 }

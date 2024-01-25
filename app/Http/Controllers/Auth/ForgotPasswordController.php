@@ -80,8 +80,8 @@ class ForgotPasswordController extends Controller
     public function sendResetLinkEmail(\Illuminate\Http\Request $request)
     {
         $this->validateEmail($request);
-        
-        
+
+
         $user = User::where('email',$request->email)->first();
         if($user){
             $user->notify(new userChangePassword($user));
@@ -90,18 +90,18 @@ class ForgotPasswordController extends Controller
             if($request->ajax()){
                 return response()->json([
                     'success' => true,
-                    'message' => "We just sent you a link to your email so you can update your password"
+                    'message' => "We just sent you a link to your email."
                 ]);
             }else{
                 return back()->with('message',
-                    'We just sent you a link to your email so you can update your password'
+                    'We just sent you a link to your email.'
                 );
             }
 
-            
+
         }
 
-       
+
         if($request->ajax()){
             return response()->json([
                 'success' => false,
@@ -112,7 +112,7 @@ class ForgotPasswordController extends Controller
                 'No student found with this email address'
             );
         }
-        
+
     }
 
 
@@ -149,7 +149,7 @@ class ForgotPasswordController extends Controller
 
         $updatePassword = DB::table('password_resets')
         ->where([
-          'email' => $user->email, 
+          'email' => $user->email,
           'token' => $code
         ])
         ->first();
@@ -160,7 +160,7 @@ class ForgotPasswordController extends Controller
                 'pass_confirm' => false,
                 'message' => 'Invalid token!'
             ]);
-            
+
         }
 
         $user->password = Hash::make($request->password);

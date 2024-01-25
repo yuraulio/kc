@@ -98,8 +98,8 @@
 <div id="forgot-pass-input" class="login-popup" hidden>
 	<a href="#" class="close-btn"><img width="26" src="{{cdn('theme/assets/images/icons/icon-close.svg')}}" class="replace-with-svg" alt="Close"></a>
 	<div class="heading">
-	<span>Change your Password</span>
-		<p>Use your account email to change your password</p>
+	<span>Password</span>
+		<p>Use your account email to create or change your password.</p>
 	</div>
 	{{--<form method="post" action="/myaccount/reset" autocomplete="off" class="validate-form change-password-form"> --}}
 	<form autocomplete="off" class="login-form">
@@ -133,7 +133,7 @@
 		</div>
 		</div>
 
-		<button type="button" class="btn btn--lg btn--secondary change-password"  value="Change">Change</button>
+		<button type="button" class="btn btn--lg btn--secondary change-password"  value="Change">Create / Change</button>
 	</form>
 </div><!-- ./login-popup -->
 </div><!-- ./login-popup-wrapper -->

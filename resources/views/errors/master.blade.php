@@ -162,7 +162,7 @@
 
             <div class="form-group">
                 <label for="remember-me"><input id="remember-me" type="checkbox">Remember me</label>
-                <a id="forgot-pass" href="javascript:void(0)">Forgot password?</a>
+                <a id="forgot-pass" href="javascript:void(0)">Reset or create your password.</a>
             </div>
             <input type="submit" onclick="loginAjaxNew()" value="LOGIN">
 
@@ -171,8 +171,8 @@
     <div id="forgot-pass-input" class="login-popup" hidden>
         <a href="#" class="close-btn"><img width="26" src="{{cdn('theme/assets/images/icons/icon-close.svg')}}" alt="Close"></a>
         <div class="heading">
-        <span>Change your Password</span>
-            <p>Use your account email to change your password</p>
+        <span>Password</span>
+            <p>Use your account email to create or change your password.</p>
         </div>
         <form method="post" action="/myaccount/reset" autocomplete="off" class="validate-form">
             {!! csrf_field() !!}
