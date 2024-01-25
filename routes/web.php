@@ -83,7 +83,7 @@ Route::group(['middleware' => 'auth.aboveauthor', 'prefix' => 'admin'], function
     Route::resource('city', 'CityController', ['except' => ['show']]);
     Route::resource('section', 'SectionController', ['except' => ['show', 'index', 'edit', 'create']]);
     Route::resource('ticket', 'TicketController', ['except' => ['show']]);
-    Route::resource('summary', 'SummaryController', ['except' => ['show', 'index', 'edit', 'create']]);
+    Route::resource('summary', 'SummaryController', ['except' => ['show', 'index', 'edit', 'create', 'update']]);
     Route::resource('benefit', 'BenefitController', ['except' => ['show', 'index', 'edit', 'create']]);
     Route::resource('venue', 'VenueController', ['except' => ['show']]);
     Route::resource('partner', 'PartnerController', ['except' => ['show']]);
@@ -188,7 +188,6 @@ Route::group(['middleware' => 'auth.aboveauthor', 'prefix' => 'admin'], function
 
     //Custom Ticket
     //ticket.edit
-    Route::get('ticket/edit', ['as' => 'ticket.edit', 'uses' => 'TicketController@edit']);
     Route::get('ticket/create_main', ['as' => 'ticket.create_main', 'uses' => 'TicketController@create_main']);
     Route::get('ticket/edit_main/{ticket}', ['as' => 'ticket.edit_main', 'uses' => 'TicketController@edit_main']);
     Route::put('ticket/update_main/{ticket}', ['as' => 'ticket.update_main', 'uses' => 'TicketController@update_main']);
@@ -199,20 +198,20 @@ Route::group(['middleware' => 'auth.aboveauthor', 'prefix' => 'admin'], function
     Route::get('ticket-active/{event}/{ticket}/{active}', 'TicketController@enableDisable');
 
     //custom Topic (inside event)
-    Route::get('topics/index_event', ['as' => 'topics.index', 'uses' => 'TopicController@index']);
+    Route::get('topics/index_event', [ 'uses' => 'TopicController@index']);
     Route::get('topics/edit_event', ['as' => 'topics.edit_event', 'uses' => 'TopicController@edit_event']);
     Route::get('topics/create_event', ['as' => 'topics.create_event', 'uses' => 'TopicController@create_event']);
     Route::post('topics/store_event', ['as' => 'topics.store_event', 'uses' => 'TopicController@store_event']);
 
     //custom Partner (inside event)
-    Route::get('partner/index_event', ['as' => 'partner.index', 'uses' => 'PartnerController@index']);
+    Route::get('partner/index_event', ['uses' => 'PartnerController@index']);
     Route::get('partner/edit_event', ['as' => 'partner.edit_event', 'uses' => 'PartnerController@edit_event']);
     Route::get('partner/create_event', ['as' => 'partner.create_event', 'uses' => 'PartnerController@create_event']);
     Route::post('partner/store_event', ['as' => 'partner.store_event', 'uses' => 'PartnerController@store_event']);
 
     //Custom unssign user from event
 
-    Route::post('user/store_event', ['as' => 'topics.store_event', 'uses' => 'TopicController@store_event']);
+    Route::post('user/store_event', [ 'uses' => 'TopicController@store_event']);
 
     // Route::get('role/delete/{id}', ['as' => 'role.delete', 'uses' => 'RoleController@delete']);
 
@@ -523,7 +522,7 @@ Route::group(['middleware' => ['web']], function () {
             Route::get('/checkout', ['as' => 'checkout.index', 'uses' => 'Theme\CartController@checkoutIndex']);
 
             Route::get('/remove/{item}', ['as' => 'cart.remove-item', 'uses' => 'Theme\CartController@dpremove']);
-            Route::get('/summary/remove/{item}', ['as' => 'cart.remove-item', 'uses' => 'Theme\CartController@dpremove']);
+            Route::get('/summary/remove/{item}', [ 'uses' => 'Theme\CartController@dpremove']);
 
             Route::post('/cart/update', ['as' => 'cart.update', 'uses' => 'Theme\CartController@update']);
 
@@ -669,7 +668,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::post('checkoutlogin', 'Auth\LoginController@checkoutauth');
     Route::post('studentlogin', 'Auth\LoginController@studentauth');
     Route::post('kcregister', 'Auth\RegisterController@kcRegister');
-    Route::get('/logout', ['as' => 'logout', 'uses' => 'Theme\StudentController@logout']);
+    Route::get('/logout', [ 'uses' => 'Theme\StudentController@logout']);
     Route::get('/logmeout', 'Theme\StudentController@logout');
 
     Route::get('/mycertificate/{certificate}', 'Theme\CertificateController@getCertificate');

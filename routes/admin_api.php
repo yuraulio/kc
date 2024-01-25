@@ -79,26 +79,26 @@ Route::domain(config('app.prefix_new_admin') . config('app.app_domain'))->group(
         // pages
         Route::post('pages/deleteMultiple', [PagesController::class, 'deleteMultiple']);
         Route::post('pages/widgets', [PagesController::class, 'widgets']);
-        Route::resource('pages', Admin_api\PagesController::class)->only([
+        Route::resource('pages', \App\Http\Controllers\Admin_api\PagesController::class, ['as' => 'admin'])->only([
             'index', 'store', 'update', 'show', 'destroy'
         ]);
 
         // comments
         Route::post('comments/deleteMultiple', [CommentsController::class, 'deleteMultiple']);
         Route::post('comments/widgets', [CommentsController::class, 'widgets']);
-        Route::resource('comments', Admin_api\CommentsController::class)->only([
+        Route::resource('comments', \App\Http\Controllers\Admin_api\CommentsController::class)->only([
             'index', 'destroy'
         ]);
 
         // settings
-        Route::resource('settings', Admin_api\SettingsController::class)->only([
+        Route::resource('settings', \App\Http\Controllers\Admin_api\SettingsController::class)->only([
             'index', 'update'
         ]);
 
         // users
         Route::prefix('users')->group(function () {
             Route::post('admins/deleteMultiple', [AdminController::class, 'deleteMultiple']);
-            Route::resource('admins', Admin_api\AdminController::class)->only([
+            Route::resource('admins', \App\Http\Controllers\Admin_api\AdminController::class)->only([
                 'index', 'store', 'update', 'show', 'destroy'
             ]);
         });
@@ -107,7 +107,7 @@ Route::domain(config('app.prefix_new_admin') . config('app.app_domain'))->group(
         Route::put('ticker/update_published/{id}', [TickerController::class, 'updatePublished']);
 
         Route::post('pages/upload_image', [PagesController::class, 'uploadImage']);
-        Route::resource('media_manager', Admin_api\MediaController::class)->only([
+        Route::resource('media_manager', \App\Http\Controllers\Admin_api\MediaController::class, ['as' => 'admin'])->only([
             'index', 'store', 'update', 'destroy'
         ]);
         Route::post('media_manager/upload_image', [MediaController::class, 'uploadImage']);
