@@ -60,6 +60,13 @@ mix.combine(third_party_js, folder.dist_assets + "js/vendor.js").minify(
 var third_party_assets = {
     css_js: [
         {
+            name: "fullcalendar",
+            assets: [
+                "./node_modules/fullcalendar/main.min.js",
+                "./node_modules/fullcalendar/main.min.css",
+            ],
+        },
+        {
             name: "admin-resources",
             assets: [
                 "./node_modules/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.min.js",
@@ -146,6 +153,10 @@ var third_party_assets = {
                 "./node_modules/c3/c3.min.css",
                 "./node_modules/c3/c3.min.js",
             ],
+        },
+        {
+            name: "chart.js",
+            assets: ["./node_modules/chart.js/dist/chart.js"],
         },
         {
             name: "chartist",
@@ -344,6 +355,14 @@ var third_party_assets = {
             ],
         },
         {
+            name: "ladda",
+            assets: [
+                "./node_modules/ladda/dist/spin.min.js",
+                "./node_modules/ladda/dist/ladda.min.js",
+                "./node_modules/ladda/dist/ladda.min.css",
+            ],
+        },
+        {
             name: "magnific-popup",
             assets: [
                 "./node_modules/magnific-popup/dist/jquery.magnific-popup.min.js",
@@ -474,6 +493,10 @@ var third_party_assets = {
                 "./node_modules/tablesaw/dist/tablesaw.js",
                 "./node_modules/tablesaw/dist/tablesaw.css",
             ],
+        },
+        {
+            name: "tippy.js",
+            assets: ["./node_modules/tippy.js/dist/tippy.umd.min.js"],
         },
         {
             name: "toastr",

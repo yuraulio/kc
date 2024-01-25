@@ -6,8 +6,6 @@ Contact: support@coderthemes.com
 File: Dashboard init
 */
 
-import Chart from 'chart.js/auto';
-
 ! function ($) {
     "use strict";
 

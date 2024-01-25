@@ -6,8 +6,6 @@ Contact: support@coderthemes.com
 File: Project Detail init js
 */
 
-import Chart from 'chart.js/auto';
-
 ! function ($) {
     "use strict";
 

@@ -6,8 +6,6 @@ Contact: support@coderthemes.com
 File: Loading Button init js
 */
 
-import * as Ladda from 'ladda';
-
 
  // Bind normal buttons
  Ladda.bind( '.ladda-button', { timeout: 2000 } );

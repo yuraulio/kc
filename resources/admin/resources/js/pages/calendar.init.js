@@ -4,9 +4,6 @@
 * Component: Full-Calendar
 */
 
-import { Calendar } from '@fullcalendar/core';
-import { Draggable } from '@fullcalendar/interaction';
-
 !function($) {
     "use strict";
 
@@ -63,6 +60,7 @@ import { Draggable } from '@fullcalendar/interaction';
         /*  Initialize the calendar  */
         var today = new Date($.now());
 
+        var Draggable = FullCalendar.Draggable;
         var externalEventContainerEl = document.getElementById('external-events');
 
         // init dragable
@@ -103,7 +101,7 @@ import { Draggable } from '@fullcalendar/interaction';
         var $this = this;
 
         // cal - init
-        $this.$calendarObj = new Calendar($this.$calendar[0], {
+        $this.$calendarObj = new FullCalendar.Calendar($this.$calendar[0], {
             slotDuration: '00:15:00', /* If we want to split day time each 15minutes */
             slotMinTime: '08:00:00',
             slotMaxTime: '19:00:00',
