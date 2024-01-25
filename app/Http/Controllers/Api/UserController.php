@@ -1261,7 +1261,7 @@ class UserController extends Controller
 
     }
 
-    public function getDropBoxToken(){
+    public function getDropBoxToken() {
 
         return response()->json([
             'success' => true,
@@ -1396,6 +1396,24 @@ class UserController extends Controller
     public function destroy(User $user): JsonResponse
     {
         $user->delete();
+
+        return new JsonResponse([], 204);
+    }
+
+    /**
+     * Delete multiple users.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function batchDestroy(Request $request): JsonResponse
+    {
+        $request->validate([
+            'users' => 'required|array'
+        ]);
+
+        User::find($request->get('users'))
+            ->each(fn(User $user) => $user->delete());
 
         return new JsonResponse([], 204);
     }

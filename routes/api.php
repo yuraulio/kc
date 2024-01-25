@@ -30,6 +30,9 @@ Route::middleware('auth:api')->group(function () {
     Route::post('myprofile/update', [UserController::class, 'updateProfile']);
     Route::get('myprofile/events', [UserController::class, 'events']);
     Route::get('impersonate/{user}', [UserController::class, 'impersonate']);
+    Route::post('users/{user}/update-status', [UserController::class, 'updateStatus']);
+    Route::delete('users:batch', [UserController::class, 'batchDestroy']);
+    Route::apiResource('users', UserController::class);
 
     //
     Route::post('lesson/save_note', [LessonController::class, 'saveNote']);
@@ -49,11 +52,6 @@ Route::middleware('auth:api')->group(function () {
 
     //GetDropboxToken
     Route::get('get-dropbox-token', [UserController::class, 'getDropBoxToken']);
-
-    // Users
-    Route::resource('users', UserController::class)
-        ->only(['show', 'update', 'index', 'store', 'destroy']);
-    Route::post('users/{user}/update-status', [UserController::class, 'updateStatus']);
 
     // Events
     Route::resource('events', EventController::class)
