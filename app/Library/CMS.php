@@ -187,7 +187,7 @@ class CMS
     {
         $data['title'] = $delivery['name'];
         $data['delivery'] = $delivery;
-        $data['openlistt'] = $delivery->event()->has('slugable')
+        $data['openlist'] = $delivery->event()->has('slugable')
             ->with('category', 'city', 'ticket')
             ->where('published', true)
             ->whereIn('status', [0,5])
@@ -200,23 +200,9 @@ class CMS
             ->orderBy('launch_date', 'desc')
             ->get();
 
-        $data['openlist'] = [];
 
         $data['sumStudentsByCategories'] = getCategoriesWithSumStudents();
 
-        foreach ($data['openlistt'] as $openlist) {
-            if ($openlist->category->first() == null) {
-                $index = 0;
-            } else {
-                $index = $openlist->category->first()->priority ?  $openlist->category->first()->priority : 0;
-            }
-            while (in_array($index, array_keys($data['openlist']))) {
-                $index++;
-            }
-
-            $data['openlist'][$index] = $openlist;
-        }
-        ksort($data['openlist']);
 
         return $data;
     }
