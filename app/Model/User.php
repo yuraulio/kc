@@ -29,10 +29,11 @@ use App\Model\ExamResult;
 use App\Model\OauthAccessToken;
 use App\Model\Transaction;
 use App\Model\Absence;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Authenticatable
 {
-    use Notifiable, HasApiTokens, MediaTrait, Billable;
+    use Notifiable, HasApiTokens, MediaTrait, Billable, SoftDeletes;
     /**
      * The attributes that are mass assignable.
      *
