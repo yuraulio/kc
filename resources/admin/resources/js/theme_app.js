@@ -6,7 +6,6 @@ Contact: support@coderthemes.com
 File: Main Js File
 */
 
-import tippy from 'tippy.js';
 
 
 !function ($) {
