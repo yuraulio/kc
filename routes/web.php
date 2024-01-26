@@ -19,6 +19,8 @@ use Bugsnag\BugsnagLaravel\Facades\Bugsnag;
 
 //Route::get('/', 'Auth\LoginController@showLoginForm')->name('welcome');
 
+Route::redirect('/e-learning-masterclass-in-facebook-instagram-advertising', '/e-learning-masterclass-in-meta-advertising', 301);
+
 Auth::routes(['register' => false]);
 
 Route::get('/slack-test', function () {
