@@ -155,7 +155,7 @@
                                                     <th scope="col">{{ __('Title') }}</th>
                                                     <th class="hidden" scope="col">{{ __('Assigned Category') }}</th>
                                                     <th scope="col">{{ __('Created at') }}</th>
-                                                    <th class="hidden" scope="col">{{ __('Order') }}</th>
+                                                    <th class="col" scope="col">{{ __('Order') }}</th>
                                                     <th scope="col"></th>
                                                 </tr>
                                             </thead>
@@ -179,6 +179,7 @@
 
                                                         </td>
                                                         <td>{{ $topic->created_at ? date_format($topic->created_at, 'Y-m-d' ) : '' }}</td>
+                                                        <td class="order-priority" data-priority="{{$category->id}}-{{$topic->id}}" style="color: #cecece;"> {{$topic->pivot->priority}} </td>
 
                                                         <td class="text-right">
 
@@ -212,7 +213,6 @@
 
                                                         </td>
 
-                                                        <td class="hidden order-priority" data-priority="{{$category->id}}-{{$topic->id}}"> {{$topic->pivot->priority}} </td>
                                                     </tr>
                                                 @endforeach
                                             </tbody>
@@ -255,14 +255,17 @@
     <script type="text/javascript">
         let categories = @json($categories);
         var table = $('.datatable-basic39').DataTable({
-            "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+            "lengthMenu": [[-1], ["All"]],
             "order": [[ 5, "asc" ]],
             language: {
                 paginate: {
-                next: '&#187;', // or '→'
-                previous: '&#171;' // or '←'
+                    next: '&#187;', // or '→'
+                    previous: '&#171;' // or '←'
                 }
-            }
+            },
+            "columnDefs": [
+                { orderable: false, targets: [0, 1, 2, 3, 4, 5, 6] }
+            ]
         });
 
 
@@ -320,6 +323,7 @@
         let category ;
         let topic;
         let topics;
+        let indexInitial = 0;
 
         (function( $ ){
 
@@ -344,9 +348,32 @@
                 },*/
 
                 // Element dragging ended
+                onStart: function(evt) {
+                    indexInitial = evt.oldIndex;
+                },
                 onEnd: function ( /**Event*/ evt) {
-
-                    orderLessons()
+                    if($('.check-topic:checked').length === 1)
+                        orderLessons()
+                        .then(data => {
+                        })
+                        .catch(error => {
+                            var item = evt.item;
+                            var list = item.parentNode;
+                            list.removeChild(item);
+                            list.insertBefore(item, list.children[indexInitial]);
+                        });
+                    else{
+                        var item = evt.item;
+                        var list = item.parentNode;
+                        list.removeChild(item);
+                        list.insertBefore(item, list.children[indexInitial]);
+                        window.swal({
+                            title: "Select one topic",
+                            text: "Please, select one Topic before reordering",
+                            showConfirmButton: true,
+                            allowOutsideClick: true
+                        });
+                    }
                 },
 
             });
@@ -358,7 +385,7 @@
         })( jQuery );
 
     function initOrder(){
-
+        console.log('initOrder')
         topics = {};
         let order = 0;
 
@@ -378,76 +405,71 @@
 
    }
 
-    function orderLessons(){
+   function orderLessons() {
+        return new Promise((resolve, reject) => {
 
-        let newOrder = {};
-        category = $("#col1_filter").val();
+            let newOrder = {};
+            let category = $("#col1_filter").val();
 
-        $( ".topic-list .order-priority" ).each(function( index ) {
-            newOrder[$(this).data('priority')] = topics[index]
-        });
-
-        //console.log('old priority = ', topics)
-        //console.log('new priority = ', newOrder)
-
-        data = {'category':category,'order':newOrder}
-
-        $( document ).ajaxStart(function() {
-            window.swal({
-                title: "Change Order...",
-                text: "Please wait",
-                showConfirmButton: false,
-                allowOutsideClick: false
+            $(".topic-list .order-priority").each(function(index) {
+                newOrder[$(this).data('priority')] = topics[index]
             });
-        });
 
-        $.ajax({
-            type: 'POST',
-            headers: {
-            'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
-            },
-            Accept: 'application/json',
-            url: "{{ route ('sort-topics') }}",
-            data:data,
-            success: function(data) {
-                if(data['success']){
+            let data = {'category': category, 'order': newOrder}
 
-                    $( ".topic-list .order-priority" ).each(function( index ) {
-                        $(this).html(topics[index])
-                    });
+            $(document).ajaxStart(function() {
+                window.swal({
+                    title: "Change Order...",
+                    text: "Please wait",
+                    showConfirmButton: false,
+                    allowOutsideClick: false
+                });
+            });
 
+            $.ajax({
+                type: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+                },
+                Accept: 'application/json',
+                url: "{{ route ('sort-topics') }}",
+                data: data,
+                success: function(data) {
+                    if(data['success']){
 
-                    window.swal({
-                        title: data['message'],
-                        showConfirmButton: false,
-                        timer: 2000
-                    });
-
-
-                }else{
-                    let errorMessage = '';
-                    $.each(data.errors,function(index, value){
-                        $.each(value,function(index1, value1){
-                            errorMessage += value1 + ' ';
+                        $(".topic-list .order-priority").each(function(index) {
+                            $(this).html(topics[index])
                         });
 
-                    });
+                        window.swal({
+                            title: data['message'],
+                            showConfirmButton: false,
+                            timer: 2000
+                        });
+                        resolve(data);
 
-                    window.swal({
-                        title: errorMessage,
-                        showConfirmButton: false,
-                        timer: 2000
-                    });
+                    } else {
+                        let errorMessage = '';
+                        $.each(data.errors, function(index, value) {
+                            $.each(value, function(index1, value1) {
+                                errorMessage += value1 + ' ';
+                            });
+                        });
 
-
+                        window.swal({
+                            title: errorMessage,
+                            showConfirmButton: false,
+                            timer: 2000
+                        });
+                        reject(new Error(errorMessage));
+                    }
+                    initCheckBox();
+                },
+                error: function(xhr, status, error) {
+                    reject(new Error(error));
                 }
-
-                initCheckBox();
-
-            }
+            });
         });
-
-
     }
 
 </script>
