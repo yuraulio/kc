@@ -14,6 +14,11 @@ class Delivery extends Model
     use HasFactory;
     use SlugTrait;
 
+    public const CLASSROM_TRAINING = 139;
+    public const VIDEO_TRAINING = 143;
+    public const VIRTUAL_CLASS_TRAINING = 215;
+    public const CORPORATE_TRAINING = 216;
+
     protected $table = 'deliveries';
 
     protected $fillable = [

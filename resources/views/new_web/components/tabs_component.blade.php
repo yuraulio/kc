@@ -92,7 +92,9 @@
                                     @if($is_event_expired == 1)
                                         <a href="#seats" class="btn btn--lg btn--primary go-to-href">REENROLL</a>
                                     @else
+                                        @if($event->delivery->first()->id == App\Model\Delivery::VIDEO_TRAINING || $event->delivery->first()->id == App\Model\Delivery::VIRTUAL_CLASS_TRAINING)
                                         <a href="/myaccount/elearning/{{ $event['title'] }}" class="btn btn--md btn--secondary">WATCH NOW</a>
+                                        @endif
                                     @endif
                                 @endif
                             @endif
