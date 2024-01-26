@@ -193,6 +193,9 @@ class CMS
             ->where('published', true)
             ->whereIn('status', [0, 5])
             ->when($isVideoList, function ($query) {
+                $query->whereHas('event_info1', function ($query) {
+                    return $query->where('course_payment_method', 'free');
+                });
                 $query->orderBy('created_at', 'desc');
             })
             ->when(!$isVideoList, function ($query) {
@@ -202,11 +205,15 @@ class CMS
         $data['completedlist'] = $delivery->event()->has('slugable')
             ->with('category', 'slugable', 'city', 'ticket')
             ->where('published', true)
-            ->whereIn('status', [2, 3])
             ->when($isVideoList, function ($query) {
+                $query->whereIn('status', [0, 5]);
+                $query->whereHas('event_info1', function ($query) {
+                    return $query->where('course_payment_method', '<>', 'free');
+                });
                 $query->orderBy('created_at', 'desc');
             })
             ->when(!$isVideoList, function ($query) {
+                $query->whereIn('status', [2, 3]);
                 $query->orderBy('launch_date', 'desc');
             })
             ->get();
@@ -219,7 +226,7 @@ class CMS
                 if ($openlist->category->first() == null) {
                     $index = 0;
                 } else {
-                    $index = $openlist->category->first()->priority ?  $openlist->category->first()->priority : 0;
+                    $index = $openlist->category->first()->priority ? $openlist->category->first()->priority : 0;
                 }
                 while (in_array($index, array_keys($data['openlist']))) {
                     $index++;
