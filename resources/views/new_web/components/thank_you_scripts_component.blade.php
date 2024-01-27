@@ -85,10 +85,17 @@
 
       @endforeach
 
-      let data = {
-         'event': 'purchase',
-         'items': [items]
-        }
+        let data = {
+            'event': 'purchase',
+            'items': [items]
+        };
+
+      @foreach($thankyouData['customer'] as $key => $value)
+         @if($ti != '')
+            data["{{$key}}"] = $.parseHTML("{{$value}}")[0].data
+         @endif
+      @endforeach
+
 
         data = {...data,...a}
         data.value = Number(data.value)
@@ -103,7 +110,7 @@
         });
 
         dataLayer.push(data);
-        console.log('Here we are!!');
+        console.log('dataLayer:', data);
 
    });
 

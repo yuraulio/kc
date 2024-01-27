@@ -156,6 +156,58 @@ class InfoController extends Controller
                         'Encrypted_email' => hash('sha256', $userEmail)
                 ];
 
+                $customerBillingCompany = '';
+                $customerBillingFirstName = '';
+                $customerBillingLastName = '';
+                $customerBillingCompany = '';
+                $customerBillingAddress1 = '';
+                $customerBillingAddress2 = '';
+                $customerBillingCity = '';
+                $customerBillingCountry = '';
+                $customerBillingPostcode = '';
+                $customerBillingEmail = '';
+                try{
+                    $billDet = json_decode($this->transaction['billing_details']);
+                    if(isset($this->transaction['status_history'][0]['pay_seats_data']['names'][0]))
+                        $customerBillingFirstName = $this->transaction['status_history'][0]['pay_seats_data']['names'][0];
+                    if(isset($this->transaction['status_history'][0]['pay_seats_data']['surnames'][0]))
+                        $customerBillingLastName = $this->transaction['status_history'][0]['pay_seats_data']['surnames'][0];
+                    if(isset($billDet->billname))
+                        $customerBillingCompany = $billDet->billname;
+                    if(isset($billDet->billemail))
+                        $customerBillingEmail = $billDet->billemail;
+                    if(isset($billDet->billaddress))
+                        $customerBillingAddress1 = $billDet->billaddress;
+                    if(isset($billDet->billaddressnum))
+                        $customerBillingAddress2 = $billDet->billaddressnum;
+                    if(isset($billDet->billpostcode))
+                        $customerBillingPostcode = $billDet->billpostcode;
+                    if(isset($billDet->billcity))
+                        $customerBillingCity = $billDet->billcity;
+                    if(isset($billDet->billcountry))
+                        $customerBillingCountry = $billDet->billcountry;
+                    if(isset($billDet->billemail))
+                        $customerBillingEmail = $billDet->billemail;
+                }catch(\Exception $e){}
+
+
+                $data['customer'] = [
+                    'customerTotalOrders' => $item->qty,
+                    'customerTotalOrderValue' => $tr_price,
+                    'customerFirstName' => $customerBillingFirstName,
+                    'customerLastName' => $customerBillingLastName,
+                    'customerBillingFirstName' => $customerBillingFirstName,
+                    'customerBillingLastName' => $customerBillingLastName,
+                    'customerBillingCompany' => $customerBillingCompany,
+                    'customerBillingAddress1' => $customerBillingAddress1,
+                    'customerBillingAddress2' => $customerBillingAddress2,
+                    'customerBillingCity' => $customerBillingCity,
+                    'customerBillingPostcode' => $customerBillingPostcode,
+                    'customerBillingCountry' => $customerBillingCountry,
+                    'customerBillingEmail' => $customerBillingEmail,
+                    'customerBillingEmailHash' => hash('sha256', $customerBillingEmail),
+                ];
+
                 /*$data['ecommerce'] = ['ecommerce' => ['transaction_id' => $this->transaction['id'], 'value' => $tr_price, 'currency' => 'EUR', 'coupon' => $transaction->coupon_code],
                                     'items' => ['item_name' => $thisevent->title, 'item_id' => $thisevent->id, 'price' => $tr_price, 'quantity' => 1, 'item_category' =>  $categoryScript] ];*/
 
