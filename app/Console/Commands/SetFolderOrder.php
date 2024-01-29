@@ -45,7 +45,6 @@ class SetFolderOrder extends Command
         $rootFolder->save();
 
         $this->setOrder($rootFolder);
-
     }
 
     private function setOrder($folder)
@@ -61,6 +60,5 @@ class SetFolderOrder extends Command
                 $this->setOrder($child);
             }
         }
-
     }
 }

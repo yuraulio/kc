@@ -47,9 +47,9 @@ class PaymentController extends Controller
 
         $payment = new Payment(
             Cashier::stripe()->paymentIntents->retrieve(
-            $id,
-            ['expand' => ['payment_method']]
-        )
+                $id,
+                ['expand' => ['payment_method']]
+            )
         );
 
         $paymentIntent = Arr::only($payment->asStripePaymentIntent()->toArray(), [
@@ -86,9 +86,9 @@ class PaymentController extends Controller
 
         $payment = new Payment(
             Cashier::stripe()->paymentIntents->retrieve(
-            $id,
-            ['expand' => ['payment_method']]
-        )
+                $id,
+                ['expand' => ['payment_method']]
+            )
         );
 
         $price = $payment->amount();
@@ -101,9 +101,9 @@ class PaymentController extends Controller
 
         $payment = new Payment(
             Cashier::stripe()->paymentIntents->retrieve(
-            $id,
-            ['expand' => ['payment_method']]
-        )
+                $id,
+                ['expand' => ['payment_method']]
+            )
         );
 
         $paymentIntent = Arr::only($payment->asStripePaymentIntent()->toArray(), [

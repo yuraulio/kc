@@ -60,7 +60,6 @@ class NewAdminMediaManager extends Command
         $this->cleanDB();
 
         MediaFile::get()->searchable();
-
     }
 
     public function storeDirectories($directories)

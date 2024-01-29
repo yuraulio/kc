@@ -199,6 +199,5 @@ class Page extends Model implements Auditable
                 }
             }
         }
-
     }
 }

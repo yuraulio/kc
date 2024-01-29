@@ -19,6 +19,5 @@ class UserResolver implements \OwenIt\Auditing\Contracts\UserResolver
                 return Auth::guard($guard)->user();
             }
         }
-
     }
 }
