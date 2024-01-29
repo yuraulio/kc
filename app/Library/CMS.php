@@ -213,7 +213,8 @@ class CMS
                 $query->orderBy('created_at', 'desc');
             })
             ->when(!$isVideoList, function ($query) {
-                $query->whereIn('status', [2, 3]);
+                $query->whereIn('status', [1, 2, 3]);
+                $query->where('launch_date', '<', now());
                 $query->orderBy('launch_date', 'desc');
             })
             ->get();
