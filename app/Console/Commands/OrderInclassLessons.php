@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\Model\Event;
+use Illuminate\Console\Command;
 
 class OrderInclassLessons extends Command
 {
@@ -44,28 +44,26 @@ class OrderInclassLessons extends Command
 
         //
         $lessons = [];
-        foreach($events as $event){
+        foreach ($events as $event) {
             $priority = 1;
-            if($event->view_tpl == 'elearning_event' || $event->view_tpl == 'elearning_free'){
+            if ($event->view_tpl == 'elearning_event' || $event->view_tpl == 'elearning_free') {
                 continue;
             }
 
-            if($event->id == 4612 || $event->id == 4611){
+            if ($event->id == 4612 || $event->id == 4611) {
                 $event->lessons()->detach(1307);
             }
 
             //if($event->id == 4612){
-            
-                foreach($event->lessons as $lesson){
-                    //dd($event->title);
-                    $lesson->pivot->priority = $priority;
-                    $lesson->pivot->save();
-                    $priority += 1;
-                }
+
+            foreach ($event->lessons as $lesson) {
+                //dd($event->title);
+                $lesson->pivot->priority = $priority;
+                $lesson->pivot->save();
+                $priority += 1;
+            }
 
             //}
-
-            
         }
 
         return 0;

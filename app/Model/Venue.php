@@ -2,9 +2,9 @@
 
 namespace App\Model;
 
+use App\Model\Event;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Model\Event;
 
 class Venue extends Model
 {
@@ -13,9 +13,8 @@ class Venue extends Model
     protected $table = 'venues';
 
     protected $fillable = [
-        'name', 'address', 'longitude', 'latitude','direction_description'
+        'name', 'address', 'longitude', 'latitude', 'direction_description',
     ];
-
 
     public function events()
     {

@@ -3,20 +3,20 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Http\Requests\LogosRequest;
 use App\Model\Logos;
 use App\Model\Type;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Requests\LogosRequest;
 
 class LogosController extends Controller
 {
-    public function index(){
-
+    public function index()
+    {
         $data['logos'] = Logos::all();
         $data['user'] = Auth::user();
 
-        return view('admin.logos.index',$data);
+        return view('admin.logos.index', $data);
     }
 
     /* Show the form for creating a new resource.
@@ -27,7 +27,6 @@ class LogosController extends Controller
     {
         $data['logo'] = new Logos;
         $data['template'] = $request->template;
-
 
         return view('admin.logos.create', $data);
     }
@@ -44,11 +43,8 @@ class LogosController extends Controller
         $model = $model->create($input);
         $model->createMedia();
 
-        return redirect()->route('logos.edit',$model->id)->withStatus(__('Logo successfully created.'));
-
+        return redirect()->route('logos.edit', $model->id)->withStatus(__('Logo successfully created.'));
     }
-
-
 
     /**
      * Show the form for editing the specified resource.
@@ -62,8 +58,7 @@ class LogosController extends Controller
         $data['media'] = $logo->mediable;
         $data['template'] = $logo->type;
 
-        return view('admin.logos.create',$data);
-
+        return view('admin.logos.create', $data);
     }
 
     /**
@@ -76,7 +71,6 @@ class LogosController extends Controller
     public function update(LogosRequest $request, Logos $logo)
     {
         $logo->update($request->all());
-
 
         return redirect()->back();
     }
@@ -93,9 +87,7 @@ class LogosController extends Controller
         $logo->delete();
 
         return response()->json([
-            'success' => true
+            'success' => true,
         ]);
-
     }
-
 }

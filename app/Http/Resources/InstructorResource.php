@@ -21,7 +21,7 @@ class InstructorResource extends JsonResource
             'subtitle' => $this->subtitle,
             'header' => $this->header,
             'company' => $this->company,
-            'income' => '€ '. number_format((float)$this->cache_income,2,'.', '')
+            'income' => '€ ' . number_format((float) $this->cache_income, 2, '.', ''),
         ];
     }
 }

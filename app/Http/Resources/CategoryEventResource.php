@@ -15,12 +15,11 @@ class CategoryEventResource extends JsonResource
      */
     public function toArray($request)
     {
-
         return [
             'id' => $this->id,
             'title' => $this->name,
             'priority' => $this->priority,
-            'created_at' => Carbon::parse($this->created_at)->toFormattedDateString()
+            'created_at' => Carbon::parse($this->created_at)->toFormattedDateString(),
         ];
     }
 }

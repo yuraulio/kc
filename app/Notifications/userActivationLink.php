@@ -2,12 +2,12 @@
 
 namespace App\Notifications;
 
+use App\Model\Activation;
+use App\Model\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use App\Model\User;
-use App\Model\Activation;
 use Illuminate\Support\Str;
 
 class userActivationLink extends Notification
@@ -21,7 +21,7 @@ class userActivationLink extends Notification
      *
      * @return void
      */
-    public function __construct($user,$template)
+    public function __construct($user, $template)
     {
         $this->user = $user;
         $this->template = $template;
@@ -53,13 +53,13 @@ class userActivationLink extends Notification
 
         //$code = $activation->code;
         $loadForm = 'activation.emails.' . $this->template;
-       
-        $activation = Activation::firstOrCreate(array('user_id' => $this->user['id']));
+
+        $activation = Activation::firstOrCreate(['user_id' => $this->user['id']]);
 
         $email = $this->user['email'];
         $firstName = $this->user['firstname'];
-        
-        if($activation->code == ''){
+
+        if ($activation->code == '') {
             $activation->code = Str::random(40);
             $activation->completed = false;
             $activation->save();
@@ -67,12 +67,12 @@ class userActivationLink extends Notification
 
         //dd(Activation::exists(array('id' => $this->user['id'])));
         $code = $activation->code;
-        
-         //send the user
-        
+
+        //send the user
+
         return (new MailMessage)
                     ->subject('Knowcrunch - ' . $firstName . ' your account​ is active')
-                    ->view( $loadForm, ['code' => $code,'email'=>$email,'firstName'=>$firstName]);
+                    ->view($loadForm, ['code' => $code, 'email'=>$email, 'firstName'=>$firstName]);
     }
 
     /**
@@ -84,7 +84,7 @@ class userActivationLink extends Notification
     public function toArray($notifiable)
     {
         return [
-            'user_id' => $this->user
+            'user_id' => $this->user,
         ];
     }
 }

@@ -2,11 +2,10 @@
 
 namespace Apifon\Model;
 
-
 use Exception;
 
-class OtpRequest implements IRequest {
-
+class OtpRequest implements IRequest
+{
     public $reference_id;
     public $subscriber;
     public $code_length;

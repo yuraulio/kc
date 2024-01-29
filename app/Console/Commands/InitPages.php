@@ -2,11 +2,11 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
+use App\Model\Media;
 use App\Model\Metas;
 use App\Model\Pages;
-use App\Model\Media;
 use App\Model\Slug;
+use Illuminate\Console\Command;
 
 class InitPages extends Command
 {
@@ -89,8 +89,5 @@ class InitPages extends Command
         $page->metable()->save($metas);
         $page->mediable()->save($media);
         $page->slugable()->save($slug);
-
-
-
     }
 }

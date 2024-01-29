@@ -1,21 +1,21 @@
 <?php
 
-use App\Model\Slug;
-use App\Model\Option;
-use App\Model\Media;
-use Illuminate\Support\Str;
-use App\Model\Menu;
-use App\Model\Exam;
-use App\Model\Certificate;
-use App\Model\Category;
-use App\Model\PaymentMethod;
-use CodexShaper\Menu\Models\Menu as NewMenu;
-use Spatie\Dropbox\Client;
 use App\Model\Admin\Page;
 use App\Model\Admin\Ticker;
+use App\Model\Category;
+use App\Model\Certificate;
+use App\Model\Exam;
+use App\Model\Media;
+use App\Model\Menu;
+use App\Model\Option;
+use App\Model\PaymentMethod;
+use App\Model\Slug;
 use Carbon\Carbon;
+use CodexShaper\Menu\Models\Menu as NewMenu;
+use Illuminate\Support\Str;
+use Spatie\Dropbox\Client;
 
-if(!function_exists('support_webp')){
+if (!function_exists('support_webp')) {
     function support_webp(): bool
     {
         return isset($_SERVER['HTTP_ACCEPT']) &&
@@ -23,144 +23,129 @@ if(!function_exists('support_webp')){
     }
 }
 
-if(!function_exists('get_tickers')){
-    function get_tickers(){
-
-        $tickers = Ticker::where('published', true)->get()->filter(function($item) {
-
-            if($item->from_date && $item->until_date && Carbon::now()->between($item->from_date .' '.'00:00:00', $item->until_date .' '. '23:59:59')){
+if (!function_exists('get_tickers')) {
+    function get_tickers()
+    {
+        $tickers = Ticker::where('published', true)->get()->filter(function ($item) {
+            if ($item->from_date && $item->until_date && Carbon::now()->between($item->from_date . ' ' . '00:00:00', $item->until_date . ' ' . '23:59:59')) {
                 return $item;
-            }else if($item->from_date && !$item->until_date && Carbon::now() >= Carbon::parse($item->from_date .' '.'00:00:00')){
+            } elseif ($item->from_date && !$item->until_date && Carbon::now() >= Carbon::parse($item->from_date . ' ' . '00:00:00')) {
                 return $item;
-            }else if(!$item->from_date && $item->until_date && Carbon::now() <= Carbon::parse($item->until_date .' '. '23:59:59')){
+            } elseif (!$item->from_date && $item->until_date && Carbon::now() <= Carbon::parse($item->until_date . ' ' . '23:59:59')) {
                 return $item;
-            }else if(!$item->from_date && !$item->until_date){
+            } elseif (!$item->from_date && !$item->until_date) {
                 return $item;
             }
-
         });
 
         return $tickers;
     }
 }
 
-function get_social_media(){
+function get_social_media()
+{
     $social_media = Option::where('name', 'social_media')->get();
     $social_media = json_decode($social_media[0]['settings'], true);
 
     return $social_media;
-
 }
 
 function get_split_image_path($path)
-    {
-        $part = [];
+{
+    $part = [];
 
-        $pos = strrpos($path, '/');
-        $id = $pos === false ? $path : substr($path, $pos + 1);
-        $folder =substr($path, 0,strrpos($path, '/'));
-        $path = explode(".",$id);
+    $pos = strrpos($path, '/');
+    $id = $pos === false ? $path : substr($path, $pos + 1);
+    $folder = substr($path, 0, strrpos($path, '/'));
+    $path = explode('.', $id);
 
-        $part['folder'] = $folder;
-        $part['filename'] = $path[0];
-        $part['ext'] = $path[1];
+    $part['folder'] = $folder;
+    $part['filename'] = $path[0];
+    $part['ext'] = $path[1];
 
-        return $part;
-    }
+    return $part;
+}
 
-if(!function_exists('get_image_versions')){
-
+if (!function_exists('get_image_versions')) {
     function get_image_versions($ver = 'versions')
     {
         $versions = isset(config('image_versions')[$ver]) ? config('image_versions')[$ver] : [];
+
         return $versions;
     }
-
 }
 
 if (!function_exists('get_templates')) {
-
     function get_templates($model = 'pages')
     {
         $templates = isset(config('templates')[$model]) ? config('templates')[$model] : [];
+
         return $templates;
     }
 }
 
 if (!function_exists('check_for_slug')) {
-
     function check_for_slug($slug)
     {
-
         $slugConv = Str::slug($slug);
-        if(!Slug::where('slug',$slugConv)->first()){
+        if (!Slug::where('slug', $slugConv)->first()) {
             return $slugConv;
         }
 
         $index = 0;
-        while(Slug::where('slug',$slugConv)->first()){
+        while (Slug::where('slug', $slugConv)->first()) {
             $index += 1;
             $slugConv = Str::slug($slug . '-' . $index);
         }
 
         return $slugConv;
-
     }
 }
 
-if (!function_exists('get_status_by_slug')){
-
-    function get_status_by_slug($slugg){
-
-        $slug = Slug::where('slug',$slugg)->first();
+if (!function_exists('get_status_by_slug')) {
+    function get_status_by_slug($slugg)
+    {
+        $slug = Slug::where('slug', $slugg)->first();
 
         /*if($slug && $slug->slugable && (get_class($slug->slugable) == 'App\\Model\\Admin\\Page' || get_class($slug->slugable) == 'App\\Model\\Event')){
             return $slug->slugable->published;
         }*/
 
-        if($slug && $slug->slugable && get_class($slug->slugable) == 'App\\Model\\Event'){
+        if ($slug && $slug->slugable && get_class($slug->slugable) == 'App\\Model\\Event') {
             return $slug->slugable->published;
-        }
-
-        else if($slug && $slug->slugable && (get_class($slug->slugable) == 'App\\Model\\Instructor')){
+        } elseif ($slug && $slug->slugable && (get_class($slug->slugable) == 'App\\Model\\Instructor')) {
             return $slug->slugable->status == 1;
-        }
-
-        else if($slug && $slug->slugable && (get_class($slug->slugable) == 'App\\Model\\Category')){
-            return count($slug->slugable->events()->where('published',1)->where('status',0)->get()) > 0;
-        }
-
-        else if($page = Page::withoutGlobalScope("published")->whereSlug($slugg)->first()){
+        } elseif ($slug && $slug->slugable && (get_class($slug->slugable) == 'App\\Model\\Category')) {
+            return count($slug->slugable->events()->where('published', 1)->where('status', 0)->get()) > 0;
+        } elseif ($page = Page::withoutGlobalScope('published')->whereSlug($slugg)->first()) {
             return $page->published;
         }
 
-
-
         return true;
-
     }
-
 }
 
-if (!function_exists('get_processor_config')){
-    function get_processor_config($processor_id){
+if (!function_exists('get_processor_config')) {
+    function get_processor_config($processor_id)
+    {
         $available_processors = config('processors')['processors'];
         $processor_config = [];
         if (!empty($available_processors)) {
             foreach ($available_processors as $key => $row) {
-
                 if (intval($key) == intval($processor_id)) {
                     $processor_config = $row;
                     break;
                 }
             }
         }
+
         return $processor_config;
     }
 }
 
-if (!function_exists('cdn')){
-    function cdn($asset) {
+if (!function_exists('cdn')) {
+    function cdn($asset)
+    {
         // Verify if CDN URLs are present in the config file
         if (!Config::get('cdn_setup.cdn')) {
             return asset($asset);
@@ -171,7 +156,7 @@ if (!function_exists('cdn')){
         $assetName = basename($asset);
 
         // Remove query string
-        $assetName = explode("?", $assetName);
+        $assetName = explode('?', $assetName);
         $assetName = $assetName[0];
 
         // Select the CDN URL based on the extension
@@ -183,21 +168,23 @@ if (!function_exists('cdn')){
 
         // In case of no match use the last in the array
         end($cdns);
+
         return cdnPath(key($cdns), $asset);
     }
 }
 
-if (!function_exists('cdnPath')){
-    function cdnPath($cdn, $asset) {
+if (!function_exists('cdnPath')) {
+    function cdnPath($cdn, $asset)
+    {
         $parseRes = parse_url($asset);
         if ($parseRes) {
             if (isset($parseRes['query'])) {
-                return  "//" . rtrim($cdn, "/") . "/" . ltrim($parseRes['path'].'?'.$parseRes['query'], "/");
+                return  '//' . rtrim($cdn, '/') . '/' . ltrim($parseRes['path'] . '?' . $parseRes['query'], '/');
             } else {
-                return  "//" . rtrim($cdn, "/") . "/" . ltrim($parseRes['path'], "/");
+                return  '//' . rtrim($cdn, '/') . '/' . ltrim($parseRes['path'], '/');
             }
         } else {
-            return  "//" . rtrim($cdn, "/") . "/" . ltrim($asset, "/");
+            return  '//' . rtrim($cdn, '/') . '/' . ltrim($asset, '/');
         }
     }
 }
@@ -218,93 +205,80 @@ if (!function_exists('cdnPath')){
 //     }
 // }
 
+if (!function_exists('get_image')) {
+    function get_image($media, $version = null)
+    {
+        if ($version) {
+            $image = isset($media['name']) ? $media['path'] . $media['name'] : '';
 
-if (!function_exists('get_image')){
-    function get_image($media, $version = null) {
-
-
-        if($version){
-
-            $image = isset($media['name']) ? $media['path']  . $media['name'] : '';
-
-            if(file_exists(public_path('/')   .$image . '-' . $version . $media['ext'])){
+            if (file_exists(public_path('/') . $image . '-' . $version . $media['ext'])) {
                 $image = $image . '-' . $version . $media['ext'];
-            }else if($image!=''){
-               // dd($image . $media['ext']);
+            } elseif ($image != '') {
+                // dd($image . $media['ext']);
                 $image = $image . $media['ext'];
             }
-
         }
 
-        if(!$version){
-            return isset($media['original_name']) ? $media['path'] . $media['original_name']  : '';
+        if (!$version) {
+            return isset($media['original_name']) ? $media['path'] . $media['original_name'] : '';
         }
+
         return $image;
     }
 }
 
-if (!function_exists('get_profile_image')){
-    function get_profile_image($media) {
-
-
-
-        if(isset($media['original_name']) && $media['original_name']!=''){
-
+if (!function_exists('get_profile_image')) {
+    function get_profile_image($media)
+    {
+        if (isset($media['original_name']) && $media['original_name'] != '') {
             $name = explode('.', $media['original_name']);
-            $path = ltrim($media['path'] . $name[0] . '-crop.'. $name[1], $media['path'][0]);
+            $path = ltrim($media['path'] . $name[0] . '-crop.' . $name[1], $media['path'][0]);
 
-
-            if(file_exists($path)){
-
-                return $media['path'] . $name[0] . '-crop.'. $name[1];
-            }else{
+            if (file_exists($path)) {
+                return $media['path'] . $name[0] . '-crop.' . $name[1];
+            } else {
                 return $media['path'] . $media['original_name'];
             }
-
         }
-
-
     }
 }
 
-if (!function_exists('get_header')){
-    function get_header() {
+if (!function_exists('get_header')) {
+    function get_header()
+    {
         $menus = Menu::where('name', 'Header')->get()->toArray();
-        $result = array();
+        $result = [];
         foreach ($menus as $key => $element) {
-
-
             $model = app($element['menuable_type']);
             //dd($model::with('slugable')->find($element['menuable_id']));
 
             $element['data'] = $model::with('slugable')->find($element['menuable_id']);
             $result['menu'][$element['name']][] = $element;
 
-            if($element['menuable_id'] == 143){
+            if ($element['menuable_id'] == 143) {
                 $result['elearning_card'] = $element;
             }
 
             //dd($element);
-
         }
-        return $result;
 
+        return $result;
     }
 }
 
-if(!function_exists('total_graduate')){
-    function total_graduate() {
-
+if (!function_exists('total_graduate')) {
+    function total_graduate()
+    {
         $sum = 0;
         $exams = Exam::with('results')->get()->toArray();
-        foreach($exams as $key => $item){
+        foreach ($exams as $key => $item) {
             $success_percent = $item['q_limit'];
-            foreach($item['results'] as $res){
+            foreach ($item['results'] as $res) {
                 $total_score = $res['total_score'];
                 $score = $res['score'];
-                $percent = ($score/$total_score) * 100;
+                $percent = ($score / $total_score) * 100;
 
-                if($percent >= $success_percent){
+                if ($percent >= $success_percent) {
                     $sum++;
                 }
             }
@@ -314,15 +288,16 @@ if(!function_exists('total_graduate')){
     }
 }
 
-if(!function_exists('group_by')){
-    function group_by($key, $data) {
-        $result = array();
+if (!function_exists('group_by')) {
+    function group_by($key, $data)
+    {
+        $result = [];
 
-        foreach($data as $val) {
-            if(array_key_exists($key, $val)){
+        foreach ($data as $val) {
+            if (array_key_exists($key, $val)) {
                 $result[$val[$key]][] = $val;
-            }else{
-                $result[""][] = $val;
+            } else {
+                $result[''][] = $val;
             }
         }
 
@@ -330,314 +305,281 @@ if(!function_exists('group_by')){
     }
 }
 
-if(!function_exists('unique_multidim_array')){
-    function unique_multidim_array($array, $key) {
-        $temp_array = array();
+if (!function_exists('unique_multidim_array')) {
+    function unique_multidim_array($array, $key)
+    {
+        $temp_array = [];
         $i = 0;
-        $key_array = array();
+        $key_array = [];
 
-        foreach($array as $val) {
+        foreach ($array as $val) {
             if (!in_array($val[$key], $key_array)) {
                 $key_array[$i] = $val[$key];
                 $temp_array[$i] = $val;
             }
             $i++;
         }
+
         return $temp_array;
     }
 }
 
-if(!function_exists('formatBytes')){
-    function formatBytes($bytes) {
+if (!function_exists('formatBytes')) {
+    function formatBytes($bytes)
+    {
         if ($bytes > 0) {
             $i = floor(log($bytes) / log(1024));
-            $sizes = array('B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB');
-            return sprintf('%.02F', round($bytes / pow(1024, $i),1)) * 1 . ' ' . @$sizes[$i];
+            $sizes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+
+            return sprintf('%.02F', round($bytes / pow(1024, $i), 1)) * 1 . ' ' . @$sizes[$i];
         } else {
             return 0;
         }
     }
 }
 
-    if (!function_exists('get_certifation_crendetial')){
-
-        function get_certifation_crendetial($date = null){
-
-            if(!$date){
-                $date = date('Y-m');
-            }
-
-            $fromDate = strtotime($date . '-01');
-            $toDate = strtotime($date . '-31');
-
-            $date = strtotime($date);
-
-            $certCount = ( $certCount = Certificate::where('create_date','>=',$fromDate)->where('create_date','<=',$toDate)->count()) > 0 ? ($certCount + 1) : 1;
-            $certCount = str_pad($certCount, 6, '0', STR_PAD_LEFT);
-
-            $certificateNumber =  date('m',$date) . date('y',$date) . $certCount;
-
-            return $certificateNumber;
-
+if (!function_exists('get_certifation_crendetial')) {
+    function get_certifation_crendetial($date = null)
+    {
+        if (!$date) {
+            $date = date('Y-m');
         }
+
+        $fromDate = strtotime($date . '-01');
+        $toDate = strtotime($date . '-31');
+
+        $date = strtotime($date);
+
+        $certCount = ($certCount = Certificate::where('create_date', '>=', $fromDate)->where('create_date', '<=', $toDate)->count()) > 0 ? ($certCount + 1) : 1;
+        $certCount = str_pad($certCount, 6, '0', STR_PAD_LEFT);
+
+        $certificateNumber = date('m', $date) . date('y', $date) . $certCount;
+
+        return $certificateNumber;
     }
+}
 
-    if (!function_exists('get_certifation_crendetial2')){
+if (!function_exists('get_certifation_crendetial2')) {
+    function get_certifation_crendetial2($date = null)
+    {
+        if (!$date) {
+            $date = date('Y-m');
+        }
 
-        function get_certifation_crendetial2($date = null){
+        $index = 1;
 
-            if(!$date){
-                $date = date('Y-m');
-            }
+        $certNumber = $date . str_pad($index, 6, '0', STR_PAD_LEFT);
 
-            $index = 1;
-
+        while (Certificate::where('credential', $certNumber)->first()) {
+            $index += 1;
             $certNumber = $date . str_pad($index, 6, '0', STR_PAD_LEFT);
-
-            while(Certificate::where('credential',$certNumber)->first()){
-                $index += 1;
-                $certNumber = $date . str_pad($index, 6, '0', STR_PAD_LEFT);
-            }
-
-
-            $certificateNumber =  $certNumber = $date . str_pad($index, 6, '0', STR_PAD_LEFT);
-
-            return $certificateNumber;
-
         }
+
+        $certificateNumber = $certNumber = $date . str_pad($index, 6, '0', STR_PAD_LEFT);
+
+        return $certificateNumber;
     }
+}
 
-    if(!function_exists('getCategoriesWithSumStudents')){
-        function getCategoriesWithSumStudents(){
-            $categories = Category::whereHas('events', function($query) {
-                return $query->where('published',true);
-            })->get();
+if (!function_exists('getCategoriesWithSumStudents')) {
+    function getCategoriesWithSumStudents()
+    {
+        $categories = Category::whereHas('events', function ($query) {
+            return $query->where('published', true);
+        })->get();
 
-            $newCategoriesArr = [];
+        $newCategoriesArr = [];
 
-            foreach($categories as $key => $category){
-                $newCategoriesArr[$category['id']] = get_sum_students_course($category);
-            }
-
-            return $newCategoriesArr;
+        foreach ($categories as $key => $category) {
+            $newCategoriesArr[$category['id']] = get_sum_students_course($category);
         }
+
+        return $newCategoriesArr;
     }
+}
 
-    if (!function_exists('get_sum_students_course')){
-
-        function get_sum_students_course($category){
-
-            if(gettype($category) == 'array'){
-                $category = Category::find($category['id']);
-            }
-
-            if(!$category){
-                return 0;
-            }
-
-            $sumStudents = $category->getSumOfStudents();
-
-           if($category->id == 276){
-                $category = Category::find(49);
-
-                if($category){
-                    $sumStudents += $category->getSumOfStudents();
-                }
-
-           }else if($category->id == 219){
-                $categories = Category::whereIn('id',[104,268])->get();
-
-                foreach($categories as $category){
-                    $sumStudents += $category->getSumOfStudents();
-                }
-
-            }
-            else if($category->id == 183){
-                $categories = Category::whereIn('id',[277])->get();
-
-                foreach($categories as $category){
-                    $sumStudents += $category->getSumOfStudents();
-                }
-
-            }else if($category->id == 250){
-                $categories = Category::whereIn('id',[50,244])->get();
-
-                foreach($categories as $category){
-                    $sumStudents += $category->getSumOfStudents();
-                }
-
-            }
-
-            return $sumStudents;
-
+if (!function_exists('get_sum_students_course')) {
+    function get_sum_students_course($category)
+    {
+        if (gettype($category) == 'array') {
+            $category = Category::find($category['id']);
         }
-    }
 
-    if (!function_exists('generate_invoice_number')){
-
-        function generate_invoice_number($paymentMethod){
-
-            $paymentMethod = PaymentMethod::find($paymentMethod);
-            //dd($paymentMethod);
-            if(!$paymentMethod){
-                return 0;
-            }
-
-            $option = Option::where('name','payments_invoice')->first();
-            $invNumber = json_decode($option->settings,true);
-            $invoiceNumber = $paymentMethod->prefix . $invNumber[$paymentMethod->id];
-
-            $invNumber[$paymentMethod->id] = $invNumber[$paymentMethod->id] + 1;
-            $option->settings = json_encode($invNumber);
-            $option->save();
-
-            return $invoiceNumber;
-
+        if (!$category) {
+            return 0;
         }
-    }
 
-    if (!function_exists('getLessonDurationToSec')){
+        $sumStudents = $category->getSumOfStudents();
 
-        function getLessonDurationToSec($vimeoDuration){
+        if ($category->id == 276) {
+            $category = Category::find(49);
 
-            if(!$vimeoDuration){
-                return 0;
+            if ($category) {
+                $sumStudents += $category->getSumOfStudents();
             }
+        } elseif ($category->id == 219) {
+            $categories = Category::whereIn('id', [104, 268])->get();
 
-            $totalDuration = 0;
+            foreach ($categories as $category) {
+                $sumStudents += $category->getSumOfStudents();
+            }
+        } elseif ($category->id == 183) {
+            $categories = Category::whereIn('id', [277])->get();
 
-            $duration = explode(" ",$vimeoDuration);
-            if(count($duration) == 2){
+            foreach ($categories as $category) {
+                $sumStudents += $category->getSumOfStudents();
+            }
+        } elseif ($category->id == 250) {
+            $categories = Category::whereIn('id', [50, 244])->get();
 
-                $seconds = (float)preg_replace('/[^0-9.]+/', '', $duration[0]) * 60;
-                $seconds += (float)preg_replace('/[^0-9.]+/', '', $duration[1]);
+            foreach ($categories as $category) {
+                $sumStudents += $category->getSumOfStudents();
+            }
+        }
 
+        return $sumStudents;
+    }
+}
+
+if (!function_exists('generate_invoice_number')) {
+    function generate_invoice_number($paymentMethod)
+    {
+        $paymentMethod = PaymentMethod::find($paymentMethod);
+        //dd($paymentMethod);
+        if (!$paymentMethod) {
+            return 0;
+        }
+
+        $option = Option::where('name', 'payments_invoice')->first();
+        $invNumber = json_decode($option->settings, true);
+        $invoiceNumber = $paymentMethod->prefix . $invNumber[$paymentMethod->id];
+
+        $invNumber[$paymentMethod->id] = $invNumber[$paymentMethod->id] + 1;
+        $option->settings = json_encode($invNumber);
+        $option->save();
+
+        return $invoiceNumber;
+    }
+}
+
+if (!function_exists('getLessonDurationToSec')) {
+    function getLessonDurationToSec($vimeoDuration)
+    {
+        if (!$vimeoDuration) {
+            return 0;
+        }
+
+        $totalDuration = 0;
+
+        $duration = explode(' ', $vimeoDuration);
+        if (count($duration) == 2) {
+            $seconds = (float) preg_replace('/[^0-9.]+/', '', $duration[0]) * 60;
+            $seconds += (float) preg_replace('/[^0-9.]+/', '', $duration[1]);
+
+            $totalDuration += $seconds;
+        } else {
+            $isMinutes = strpos($duration[0], 'm');
+
+            if (!$isMinutes) {
+                $seconds = (float) preg_replace('/[^0-9.]+/', '', $duration[0]);
                 $totalDuration += $seconds;
-
-            }else{
-
-
-
-                $isMinutes = strpos($duration[0], 'm');
-
-                if(!$isMinutes){
-                    $seconds = (float)preg_replace('/[^0-9.]+/', '', $duration[0]);
-                    $totalDuration += $seconds;
-                }else{
-                    $seconds = (float)preg_replace('/[^0-9.]+/', '', $duration[0]) * 60;
-                    $totalDuration += $seconds;
-                }
-
-
-
+            } else {
+                $seconds = (float) preg_replace('/[^0-9.]+/', '', $duration[0]) * 60;
+                $totalDuration += $seconds;
             }
+        }
 
-            return $totalDuration;
+        return $totalDuration;
+    }
+}
 
+if (!function_exists('get_menu')) {
+    function get_menu($id)
+    {
+        $menu = NewMenu::find($id);
+
+        return [
+            'name' => $menu->name ?? '',
+            'title' => $menu->custom_class ?? '',
+        ];
+    }
+}
+
+if (!function_exists('update_dropbox_api')) {
+    function update_dropbox_api() : void
+    {
+        $t = base64_encode(env('DROPBOX_APPKEY') . ':' . env('DROPBOX_SECRET'));
+
+        $endpoint = 'https://api.dropbox.com/oauth2/token';
+        $client = new \GuzzleHttp\Client(['headers' => ['Content-Type'=> 'application/json', 'Authorization' => 'Basic ' . $t]]);
+
+        $response = $client->request(
+            'POST',
+            $endpoint,
+            [
+                'form_params' => [
+                    'grant_type' =>  'refresh_token',
+                    'refresh_token' => env('DROPBOX_REFRESH_TOKEN'),
+                ],
+            ]
+        );
+
+        $statusCode = $response->getStatusCode();
+        $content = $response->getBody()->getContents();
+        $accessToken = json_decode($content, true);
+
+        if (isset($accessToken['access_token']) && $accessToken['access_token']) {
+            //$client = new Client();
+            //$client->setAccessToken($accessToken['access_token']);
+            update_env(['DROPBOX_TOKEN' => $accessToken['access_token']]);
+            //dd($client);
         }
     }
+}
 
-
-
-    if (!function_exists('get_menu')){
-        function get_menu($id)
-        {
-            $menu = NewMenu::find($id);
-            return [
-                'name' => $menu->name ?? "",
-                'title' => $menu->custom_class ?? "",
-            ];
+if (!function_exists('update_env')) {
+    function update_env($data = []) : void
+    {
+        if (!isset($data['DROPBOX_TOKEN'])) {
+            return;
         }
-    }
 
-    if (!function_exists('update_dropbox_api')) {
-        function update_dropbox_api() : void
-        {
+        $newData = ['DROPBOX_TOKEN' => $data['DROPBOX_TOKEN']];
+        $path = base_path('.env');
 
-            $t = base64_encode(env("DROPBOX_APPKEY").":".env("DROPBOX_SECRET"));
-
-            $endpoint = "https://api.dropbox.com/oauth2/token";
-            $client = new \GuzzleHttp\Client(['headers' => ["Content-Type"=> 'application/json',"Authorization" => "Basic " . $t ]]);
-
-            $response = $client->request('POST', $endpoint,
-                [
-                    'form_params' => [
-                        'grant_type' =>  'refresh_token',
-                        'refresh_token' => env("DROPBOX_REFRESH_TOKEN")
-                ]
-            ]);
-
-
-            $statusCode = $response->getStatusCode();
-            $content = $response->getBody()->getContents();
-            $accessToken = json_decode($content,true);
-
-            if(isset($accessToken['access_token']) && $accessToken['access_token']){
-                //$client = new Client();
-                //$client->setAccessToken($accessToken['access_token']);
-                update_env( ['DROPBOX_TOKEN' => $accessToken['access_token']] );
-                //dd($client);
+        if (file_exists($path)) {
+            foreach ($newData as $key => $value) {
+                file_put_contents($path, str_replace(
+                    $key . '=' . env($key),
+                    $key . '=' . $value,
+                    file_get_contents($path)
+                ));
             }
-
         }
     }
+}
 
+if (!function_exists('automateEmailTemplates')) {
+    function automateEmailTemplates()
+    {
+        $emailTemplates['activate_social_media_account_email'] = 'Activate Social Media Account Email';
+        $emailTemplates['activate_advertising_account_email'] = 'Activate Advertising Account Email';
 
-    if (!function_exists('update_env')) {
-        function update_env( $data = [] ) : void
-        {
-
-            if(!isset($data['DROPBOX_TOKEN'])){
-                return;
-            }
-
-            $newData=['DROPBOX_TOKEN' => $data['DROPBOX_TOKEN']];
-            $path = base_path('.env');
-
-            if (file_exists($path)) {
-
-                foreach ($newData as $key => $value) {
-                    file_put_contents($path, str_replace(
-                        $key . '=' . env($key), $key . '=' . $value, file_get_contents($path)
-                    ));
-                }
-            }
-
-        }
+        return $emailTemplates;
     }
+}
 
+if (!function_exists('getLessonCategoryByTopic')) {
+    function getLessonCategoryByTopic($categories, $topics)
+    {
+        $topicsCategories = [];
 
-    if (!function_exists('automateEmailTemplates')) {
-        function automateEmailTemplates(){
+        $categories = $categories->groupBy('id');
 
-            $emailTemplates['activate_social_media_account_email'] = 'Activate Social Media Account Email';
-            $emailTemplates['activate_advertising_account_email'] = 'Activate Advertising Account Email';
-
-            return $emailTemplates;
-
+        foreach ($topics as $topic) {
+            $topicsCategories[$topic->id . '_' . $topic->pivot->category_id] = $categories[$topic->pivot->category_id][0];
         }
+
+        return $topicsCategories;
     }
-
-
-    if (!function_exists('getLessonCategoryByTopic')) {
-        function getLessonCategoryByTopic($categories,$topics){
-
-            $topicsCategories=[];
-
-            $categories = $categories->groupBy('id');
-
-            foreach($topics as $topic){
-                $topicsCategories[$topic->id . '_' . $topic->pivot->category_id] = $categories[$topic->pivot->category_id][0];
-            }
-
-            return $topicsCategories;
-
-        }
-    }
-
-
-
-
-
-
-
+}

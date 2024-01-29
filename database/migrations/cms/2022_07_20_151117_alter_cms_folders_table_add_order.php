@@ -14,7 +14,7 @@ class AlterCmsFoldersTableAddOrder extends Migration
     public function up()
     {
         Schema::table('cms_folders', function (Blueprint $table) {
-            $table->double("order")->nullable();
+            $table->double('order')->nullable();
         });
     }
 

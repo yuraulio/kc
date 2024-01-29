@@ -2,64 +2,62 @@
 
 namespace App\Exports;
 
-use Maatwebsite\Excel\Concerns\FromArray;
+use App\Model\Event;
 use App\Model\Transaction;
 use Auth;
+use Maatwebsite\Excel\Concerns\FromArray;
 use Maatwebsite\Excel\Concerns\WithHeadings;
-use App\Model\Event;
 
-class SubscriptionExport implements FromArray,WithHeadings
+class SubscriptionExport implements FromArray, WithHeadings
 {
     /**
-    * @return \Illuminate\Support\Collection
-    */
-
+     * @return \Illuminate\Support\Collection
+     */
     public $fromDate;
     public $toDate;
     public $transaction;
-    public function __construct($request){
 
+    public function __construct($request)
+    {
         $this->createDir(base_path('public/tmp/exports/'));
-        $this->fromDate = date('Y-m-d',strtotime($request->fromDate));
+        $this->fromDate = date('Y-m-d', strtotime($request->fromDate));
 
-        $this->toDate = $request->toDate ? date('Y-m-d',strtotime($request->toDate)) : date('Y-m-d');
+        $this->toDate = $request->toDate ? date('Y-m-d', strtotime($request->toDate)) : date('Y-m-d');
         $this->toDate = date('Y-m-d', strtotime($this->toDate . ' +1 day'));
 
-        if($request->transaction){
+        if ($request->transaction) {
             $this->transaction = $request->transaction;
-        }else{
+        } else {
             $this->transaction = Transactions::all()->pluck('id')->toArray();
         }
-
     }
-     /**
-    * @return \Illuminate\Support\Collection
-    */
+
+    /**
+     * @return \Illuminate\Support\Collection
+     */
     public function array(): array
     {
         $subscriptions = [];
 
-        $transactions = Transaction::whereBetween('created_at', [$this->fromDate,$this->toDate])->
-                                with('user.events','subscription.event')->get();
+        $transactions = Transaction::whereBetween('created_at', [$this->fromDate, $this->toDate])->
+                                with('user.events', 'subscription.event')->get();
 
         $userRole = Auth::user()->role->pluck('id')->toArray();
-        $data = array();
-        foreach($transactions as $key => $sub){
-
-            if(count($sub['subscription']) != 0 && in_array($sub['id'],$this->transaction)){
-
-                if(!isset($sub['subscription'][0]['event'][0]['title'])){
+        $data = [];
+        foreach ($transactions as $key => $sub) {
+            if (count($sub['subscription']) != 0 && in_array($sub['id'], $this->transaction)) {
+                if (!isset($sub['subscription'][0]['event'][0]['title'])) {
                     continue;
                 }
                 $status = $sub['subscription'][0]['stripe_status'];
 
-                if($sub['trial'] && $status == 'trialing'){
+                if ($sub['trial'] && $status == 'trialing') {
                     $status = 'trialing';
-                }else if($status == 'active' && $sub['subscription'][0]['status'] && !$sub['trial']){
+                } elseif ($status == 'active' && $sub['subscription'][0]['status'] && !$sub['trial']) {
                     $status = 'active';
-                }else if(($status == 'cancelled' || $status == 'cancel' || $status == 'canceled') && !$sub['trial']){
+                } elseif (($status == 'cancelled' || $status == 'cancel' || $status == 'canceled') && !$sub['trial']) {
                     $status = 'paid_and_cancelled';
-                }else if(($status == 'cancelled' || $status == 'cancel' || $status == 'canceled') && $sub['trial']){
+                } elseif (($status == 'cancelled' || $status == 'cancel' || $status == 'canceled') && $sub['trial']) {
                     $status = 'cancelled';
                 }
 
@@ -67,23 +65,22 @@ class SubscriptionExport implements FromArray,WithHeadings
                 $surname = $sub['user'][0]['lastname'];
                 $email = $sub['user'][0]['email'];
                 $mobile = $sub['user'][0]['mobile'];
-                $amount = '€'.number_format(intval($sub['total_amount']), 2, '.', '');
+                $amount = '€' . number_format(intval($sub['total_amount']), 2, '.', '');
 
-                $rowdata = array($name, $surname,$sub['subscription'][0]['event'][0]['title'], $email, $mobile, $status, $sub['ends_at'], $amount);
+                $rowdata = [$name, $surname, $sub['subscription'][0]['event'][0]['title'], $email, $mobile, $status, $sub['ends_at'], $amount];
                 array_push($data, $rowdata);
             }
-
-
         }
 
         return $data;
     }
 
-    public function headings(): array {
+    public function headings(): array
+    {
         return [
-            'Name', 'Surname', 'Event', 'Email', 'Mobile', 'Status', 'Sub End At', 'Amount'
+            'Name', 'Surname', 'Event', 'Email', 'Mobile', 'Status', 'Sub End At', 'Amount',
         ];
-      }
+    }
 
     public function createDir($dir, $permision = 0777, $recursive = true)
     {
@@ -93,5 +90,4 @@ class SubscriptionExport implements FromArray,WithHeadings
             return true;
         }
     }
-
 }

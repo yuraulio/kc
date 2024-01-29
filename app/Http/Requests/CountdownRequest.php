@@ -25,16 +25,16 @@ class CountdownRequest extends FormRequest
     {
         return [
             'title' => [
-                'required', 'min:3'
+                'required', 'min:3',
             ],
 
             'content' => [
-                'required', 'min:3'
+                'required', 'min:3',
             ],
 
             'countdown_to' => [
-                'required'
-            ]
+                'required',
+            ],
         ];
     }
 }

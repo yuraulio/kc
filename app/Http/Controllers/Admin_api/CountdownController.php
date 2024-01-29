@@ -4,22 +4,22 @@ namespace App\Http\Controllers\Admin_api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CountdownRequest;
+use App\Http\Resources\CountdownResource;
 use App\Model\Admin\Countdown;
+use App\Model\Category;
+use App\Model\Delivery;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
-use App\Http\Resources\CountdownResource;
 // use App\Jobs\DeleteMultipleTickers;
-use Carbon\Carbon;
-use App\Model\Delivery;
-use App\Model\Category;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class CountdownController extends Controller
 {
     /**
-     * Get countdown
+     * Get countdown.
      *
      * @return AnonymousResourceCollection
      */
@@ -38,7 +38,8 @@ class CountdownController extends Controller
 
             return CountdownResource::collection($countdowns);
         } catch (Exception $e) {
-            Log::error("Failed to get tickers. " . $e->getMessage());
+            Log::error('Failed to get tickers. ' . $e->getMessage());
+
             return response()->json(['message' => $e->getMessage()], 400);
         }
     }
@@ -51,13 +52,12 @@ class CountdownController extends Controller
     }
 
     /**
-     * Edit countdown
+     * Edit countdown.
      *
      * @return CountdownResource
      */
     public function update(CountdownRequest $request, int $id)
     {
-
         try {
             $countdown = Countdown::find($id);
 
@@ -76,41 +76,36 @@ class CountdownController extends Controller
 
             $countdown = new CountdownResource($countdown);
 
-            if($updated && !empty($request->event)){
-
+            if ($updated && !empty($request->event)) {
                 $countdown->events()->detach();
 
-                foreach($request->event as $event){
+                foreach ($request->event as $event) {
                     $countdown->events()->attach($event['id']);
                 }
-
-
-
-            }else if($updated){
+            } elseif ($updated) {
                 $countdown->events()->detach();
             }
 
-            if($updated && !empty($request->category)){
-
+            if ($updated && !empty($request->category)) {
                 $countdown->category()->detach();
 
-                foreach($request->category as $category){
+                foreach ($request->category as $category) {
                     $countdown->category()->attach($category['id']);
                 }
-
-            }else if($updated){
+            } elseif ($updated) {
                 $countdown->category()->detach();
             }
 
             return $countdown;
         } catch (Exception $e) {
-            Log::error("Failed to edit countdown. " . $e->getMessage());
+            Log::error('Failed to edit countdown. ' . $e->getMessage());
+
             return response()->json(['message' => $e->getMessage()], 400);
         }
     }
 
     /**
-     * Get page
+     * Get page.
      *
      * @return PageResource
      */
@@ -123,13 +118,14 @@ class CountdownController extends Controller
 
             return new CountdownResource($countdown);
         } catch (Exception $e) {
-            Log::error("Failed to get countdown. " . $e->getMessage());
+            Log::error('Failed to get countdown. ' . $e->getMessage());
+
             return response()->json(['message' => $e->getMessage()], 400);
         }
     }
 
     /**
-     * Add countdown
+     * Add countdown.
      *
      * @return CountdownResource
      */
@@ -152,32 +148,28 @@ class CountdownController extends Controller
 
             $countdown = new CountdownResource($countdown);
 
-            if($stored && isset($request->event) && !empty($request->event)){
-
-                foreach($request->event as $event){
+            if ($stored && isset($request->event) && !empty($request->event)) {
+                foreach ($request->event as $event) {
                     $countdown->events()->attach($event['id']);
                 }
-
             }
 
-            if($stored && isset($request->category) && !empty($request->category)){
-
-                foreach($request->category as $category){
+            if ($stored && isset($request->category) && !empty($request->category)) {
+                foreach ($request->category as $category) {
                     $countdown->category()->attach($category['id']);
                 }
-
             }
 
             return $countdown;
-
         } catch (Exception $e) {
-            Log::error("Failed to add new countdown. " . $e->getMessage());
+            Log::error('Failed to add new countdown. ' . $e->getMessage());
+
             return response()->json(['message' => $e->getMessage()], 400);
         }
     }
 
     /**
-     * Delete countdown
+     * Delete countdown.
      *
      * @return JsonResponse
      */
@@ -195,7 +187,8 @@ class CountdownController extends Controller
 
             return response()->json(['message' => 'success'], 200);
         } catch (Exception $e) {
-            Log::error("Failed to delete countdown. " . $e->getMessage());
+            Log::error('Failed to delete countdown. ' . $e->getMessage());
+
             return response()->json(['message' => $e->getMessage()], 400);
         }
     }
@@ -216,7 +209,8 @@ class CountdownController extends Controller
 
             return response()->json(['message' => 'success'], 200);
         } catch (Exception $e) {
-            Log::error("Failed to bulk delete templates. " . $e->getMessage());
+            Log::error('Failed to bulk delete templates. ' . $e->getMessage());
+
             return response()->json(['message' => $e->getMessage()], 400);
         }
     }
@@ -233,9 +227,9 @@ class CountdownController extends Controller
 
             return response()->json(['message' => 'success', 'data' => ['published' => $countdown->published]], 200);
         } catch (Exception $e) {
-            Log::error("Failed to publish countdown. " . $e->getMessage());
+            Log::error('Failed to publish countdown. ' . $e->getMessage());
+
             return response()->json(['message' => $e->getMessage()], 400);
         }
     }
-
 }

@@ -2,10 +2,10 @@
 
 namespace App\Console\Commands;
 
+use App\Jobs\UpdateStatisticJson;
+use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
-use Carbon\Carbon;
-use App\Jobs\UpdateStatisticJson;
 use Illuminate\Support\Facades\Log;
 
 class UpdateEventStatistics extends Command
@@ -43,17 +43,16 @@ class UpdateEventStatistics extends Command
     {
         $events = DB::table('event_statistics_queue')->whereRunning(true)->count();
 
-        if($events > 0 ){
+        if ($events > 0) {
             return 0;
         }
 
-        $events = DB::table('event_statistics_queue')->orderBy('created_at','asc')->get();
+        $events = DB::table('event_statistics_queue')->orderBy('created_at', 'asc')->get();
         $now = Carbon::parse(date('Y-m-d H:i:s'));
         $running = false;
 
-        foreach($events as $event){
-
-            if($running){
+        foreach ($events as $event) {
+            if ($running) {
                 continue;
             }
 
@@ -61,30 +60,24 @@ class UpdateEventStatistics extends Command
 
             $diff_in_minutes = $now->diffInMinutes($updated_event);
 
-            try{
-
-                if($diff_in_minutes >= 10){
-                   
+            try {
+                if ($diff_in_minutes >= 10) {
                     DB::table('event_statistics_queue')->where('event_id', $event->event_id)->update(['running' => true]);
                     $running = true;
 
                     $has_updated = new UpdateStatisticJson($event->event_id);
 
-                    if($has_updated->execute != null){
+                    if ($has_updated->execute != null) {
                         DB::table('event_statistics_queue')->where('event_id', $event->event_id)->delete();
-                    }else{
+                    } else {
                         DB::table('event_statistics_queue')->where('event_id', $event->id)->update(['running' => false]);
-                        Log::info('UpdateEventStatistics Command -> This event id: '.$event->event_id.', do not exist!!');
-                        
+                        Log::info('UpdateEventStatistics Command -> This event id: ' . $event->event_id . ', do not exist!!');
                     }
-
                 }
-
-            }catch(exception $e){
+            } catch(exception $e) {
                 DB::table('event_statistics_queue')->where('event_id', $event->event_id)->update(['running' => false]);
-                Log::info('UpdateEventStatistics  '.$e->getMessage());
+                Log::info('UpdateEventStatistics  ' . $e->getMessage());
             }
-
         }
 
         return 0;

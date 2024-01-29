@@ -2,10 +2,10 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
-use App\Model\Summary;
 use App\Model\Benefit;
 use App\Model\Media;
+use App\Model\Summary;
+use Illuminate\Console\Command;
 
 class AttachBenefitsSummaryMedia extends Command
 {
@@ -43,20 +43,18 @@ class AttachBenefitsSummaryMedia extends Command
         $summaries = Summary::all();
         $benefits = Benefit::all();
 
-        foreach($summaries as $summary){
-            if(!$summary->mediable){
+        foreach ($summaries as $summary) {
+            if (!$summary->mediable) {
                 $media = new Media;
                 $summary->mediable()->save($media);
             }
-            
         }
 
-        foreach($benefits as $summary){
-            if(!$summary->mediable){
+        foreach ($benefits as $summary) {
+            if (!$summary->mediable) {
                 $media = new Media;
                 $summary->mediable()->save($media);
             }
-            
         }
 
         return 0;

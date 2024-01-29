@@ -2,6 +2,7 @@
 
 namespace Laravel\Cashier;
 
+use App\Model\PaymentMethod;
 use Money\Currencies\ISOCurrencies;
 use Money\Currency;
 use Money\Formatter\IntlMoneyFormatter;
@@ -9,7 +10,6 @@ use Money\Money;
 use NumberFormatter;
 use Stripe\Customer as StripeCustomer;
 use Stripe\StripeClient;
-use App\Model\PaymentMethod;
 
 class Cashier
 {
@@ -74,7 +74,7 @@ class Cashier
      *
      * @var string
      */
-    public static $subscriptionModel = Subscription::class;//'App\\Model\\Subscription';//
+    public static $subscriptionModel = Subscription::class; //'App\\Model\\Subscription';//
 
     /**
      * The subscription item model class name.
@@ -91,11 +91,10 @@ class Cashier
      */
     public static function findBillable($stripeId)
     {
-    
         $stripeId = $stripeId instanceof StripeCustomer ? $stripeId->id : $stripeId;
+
         //return $stripeId ? (new static::$customerModel)->where('stripe_id', $stripeId)->first() : null;
-        return $stripeId ? (new static::$customerModel)->whereRaw('json_contains(stripe_ids, \'["'.$stripeId.'"]\')')->first() : null;
-        
+        return $stripeId ? (new static::$customerModel)->whereRaw('json_contains(stripe_ids, \'["' . $stripeId . '"]\')')->first() : null;
     }
 
     /**
@@ -106,12 +105,11 @@ class Cashier
      */
     public static function stripe(array $options = [])
     {
-       
         $paymentMethod = session()->get('payment_method');
 
         $paymentMethod = PaymentMethod::find($paymentMethod);
-        $stripeKey ='';
-        if($paymentMethod){
+        $stripeKey = '';
+        if ($paymentMethod) {
             $stripeKey = env('PAYMENT_PRODUCTION') ? $paymentMethod->processor_options['secret_key'] : $paymentMethod->test_processor_options['secret_key'];
         }
 
@@ -142,8 +140,7 @@ class Cashier
      */
     public static function formatAmount($amount, $currency = null, $locale = null)
     {
-
-        if(!$amount){
+        if (!$amount) {
             $amount = 0;
         }
 

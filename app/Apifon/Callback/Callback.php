@@ -1,13 +1,12 @@
 <?php
 
-    namespace Apifon\Callback {
-
-        class Callback {
-
+namespace Apifon\Callback {
+        class Callback
+        {
             public $url;
             public $request_id;
             public $reference_id;
-            public $data = array();
+            public $data = [];
             public $account_id;
             public $type;
 
@@ -15,52 +14,57 @@
             {
                 $data = json_decode($response);
 
-                if (isset($data->url))
+                if (isset($data->url)) {
                     $this->setUrl($data->url);
+                }
 
-                if (isset($data->request_id))
+                if (isset($data->request_id)) {
                     $this->setRequestId($data->request_id);
+                }
 
-                if (isset($data->reference_id))
+                if (isset($data->reference_id)) {
                     $this->setReferenceId($data->reference_id);
+                }
 
-                if (isset($data->account_id))
+                if (isset($data->account_id)) {
                     $this->setAccountId($data->account_id);
+                }
 
-                if (isset($data->type))
+                if (isset($data->type)) {
                     $this->setType($data->type);
+                }
 
                 $counter = 0;
-                foreach ($data->data as $val){
-                    if (isset($val->from)){
+                foreach ($data->data as $val) {
+                    if (isset($val->from)) {
                         $this->data[$counter]['from'] = $val->from;
                     }
 
-                    if (isset($val->to)){
+                    if (isset($val->to)) {
                         $this->data[$counter]['to'] = $val->to;
                     }
 
-                    if (isset($val->message_id)){
+                    if (isset($val->message_id)) {
                         $this->data[$counter]['message_id'] = $val->message_id;
                     }
 
-                    if (isset($val->status->code)){
+                    if (isset($val->status->code)) {
                         $this->data[$counter]['status']['code'] = $val->status->code;
                     }
 
-                    if (isset($val->status->text)){
+                    if (isset($val->status->text)) {
                         $this->data[$counter]['status']['text'] = $val->status->text;
                     }
 
-                    if (isset($val->error_code)){
+                    if (isset($val->error_code)) {
                         $this->data[$counter]['error_code'] = $val->error_code;
                     }
 
-                    if (isset($val->timestamp)){
+                    if (isset($val->timestamp)) {
                         $this->data[$counter]['timestamp'] = $val->timestamp;
                     }
 
-                    if (isset($val->mccmnc)){
+                    if (isset($val->mccmnc)) {
                         $this->data[$counter]['mccmnc'] = $val->mccmnc;
                     }
                 }
@@ -83,6 +87,7 @@
             public function setUrl($url)
             {
                 $this->url = $url;
+
                 return $this;
             }
 
@@ -101,6 +106,7 @@
             public function setRequestId($request_id)
             {
                 $this->request_id = $request_id;
+
                 return $this;
             }
 
@@ -119,6 +125,7 @@
             public function setReferenceId($reference_id)
             {
                 $this->reference_id = $reference_id;
+
                 return $this;
             }
 
@@ -137,6 +144,7 @@
             public function setData($data)
             {
                 $this->data = $data;
+
                 return $this;
             }
 
@@ -155,6 +163,7 @@
             public function setAccountId($account_id)
             {
                 $this->account_id = $account_id;
+
                 return $this;
             }
 
@@ -173,9 +182,8 @@
             public function setType($type)
             {
                 $this->type = $type;
+
                 return $this;
             }
-
-
         }
     }

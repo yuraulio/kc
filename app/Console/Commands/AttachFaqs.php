@@ -2,9 +2,9 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
-use App\Model\Event;
 use App\Model\Category;
+use App\Model\Event;
+use Illuminate\Console\Command;
 
 class AttachFaqs extends Command
 {
@@ -37,25 +37,22 @@ class AttachFaqs extends Command
      *
      * @return int
      */
-    public function handle(){
-        
+    public function handle()
+    {
         $masterEvent = Event::find(2304);
-        $events = Event::whereIn('id',[4628,4627,4626,4625,4624,4623,4622,4621])->get();
+        $events = Event::whereIn('id', [4628, 4627, 4626, 4625, 4624, 4623, 4622, 4621])->get();
 
         $faqs = $masterEvent->faqs;
 
-        foreach($events as $event){
+        foreach ($events as $event) {
             //$category = Category::find($event->category->first()->id);
 
-            foreach($faqs as $faq){
+            foreach ($faqs as $faq) {
                 $faq->categoryEvent()->attach($event->category->first()->id);
                 $faq->event()->attach($event->id);
             }
-            
-
-
-            
         }
+
         return 0;
     }
 }

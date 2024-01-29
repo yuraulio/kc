@@ -2,21 +2,22 @@
 
 namespace App\Model;
 
+use App\Model\Event;
+use App\Model\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Model\User;
-use App\Model\Event;
 
 class Absence extends Model
 {
     use HasFactory;
 
-    public function event(){
+    public function event()
+    {
         return $this->belongsTo(Event::class);
     }
 
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
-
 }

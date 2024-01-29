@@ -14,9 +14,9 @@ class CreateCmsLinkPagesSubcategoriesTable extends Migration
     public function up()
     {
         Schema::create('cms_link_pages_subcategories', function (Blueprint $table) {
-            $table->unsignedBigInteger("page_id");
+            $table->unsignedBigInteger('page_id');
             $table->foreign('page_id')->references('id')->on('cms_pages');
-            $table->unsignedBigInteger("category_id");
+            $table->unsignedBigInteger('category_id');
             $table->foreign('category_id')->references('id')->on('cms_categories');
         });
     }

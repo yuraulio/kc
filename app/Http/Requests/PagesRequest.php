@@ -3,8 +3,8 @@
 namespace App\Http\Requests;
 
 use App\Model\Pages;
-use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class PagesRequest extends FormRequest
 {
@@ -34,15 +34,15 @@ class PagesRequest extends FormRequest
         return [
 
             'name' => [
-                'required', 'min:3'
+                'required', 'min:3',
             ],
 
             'title' => [
-                'required', 'min:3'
+                'required', 'min:3',
             ],
             'content' => [
-                'required'
-            ]
+                'required',
+            ],
         ];
     }
 }

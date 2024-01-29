@@ -25,17 +25,17 @@ class VenueRequest extends FormRequest
     {
         return [
             'name' => [
-                'required', 'min:3'
+                'required', 'min:3',
             ],
             'address' => [
-                'required', 'min:3'
+                'required', 'min:3',
             ],
             'longitude' => [
-                'required', 'numeric', 'between:-180,180'
+                'required', 'numeric', 'between:-180,180',
             ],
             'latitude' => [
-                'required','numeric','between:-90,90'
-            ]
+                'required', 'numeric', 'between:-90,90',
+            ],
         ];
     }
 }

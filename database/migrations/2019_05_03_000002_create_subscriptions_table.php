@@ -26,7 +26,7 @@ class CreateSubscriptionsTable extends Migration
             $table->string('trial_ends_at')->nullable();
             $table->string('ends_at')->nullable();
             $table->text('metadata')->nullable();
-            $table->decimal('price',10,4)->default(0);	
+            $table->decimal('price', 10, 4)->default(0);
             $table->boolean('email_send')->default(false);
             $table->bigInteger('must_be_updated')->default(0);
             $table->timestamps();

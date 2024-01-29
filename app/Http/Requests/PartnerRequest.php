@@ -25,11 +25,11 @@ class PartnerRequest extends FormRequest
     {
         return [
             'name' => [
-                'required', 'min:3'
+                'required', 'min:3',
             ],
             'url' => [
-                'nullable', 'url'
-            ]
+                'nullable', 'url',
+            ],
         ];
     }
 }

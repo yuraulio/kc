@@ -3,16 +3,14 @@
 namespace App\Helpers;
 
 /**
- * Logged User Helper
+ * Logged User Helper.
  *
  * Class UserHelper
- * @package App\Helpers
  */
 class UserHelper
 {
-
     /**
-     * Get User profile image by $user
+     * Get User profile image by $user.
      * @param $user
      * @return string
      */
@@ -21,9 +19,8 @@ class UserHelper
         return self::prepareFileImage($user, $options);
     }
 
-
     /**
-     * Prepare user image
+     * Prepare user image.
      * @param $user
      * @param array $options
      * @param bool $returnImage
@@ -48,13 +45,14 @@ class UserHelper
                         'title="' . $user['firstname'] . '' . $user['lastname'] . '" alt="' . $user['firstname'] . '' . $user['lastname'] . '" ' .
                         'src="' . $imageUrl . '" onerror="this.src=\'' . $default . '\'"/>';
                 }
+
                 return $imageUrl;
             }
         }
         if (!empty($user['email'])) {
             $image = md5(strtolower($user['email']));
 
-            $imageUrl = "https://www.gravatar.com/avatar/" . $image . "?s=" . $options['width'] . "&d=" .
+            $imageUrl = 'https://www.gravatar.com/avatar/' . $image . '?s=' . $options['width'] . '&d=' .
                 urlencode(cdn('/theme/assets/images/icons/user-circle-placeholder.png'));
 
             if ($returnImage) {
@@ -63,6 +61,7 @@ class UserHelper
                     'title="' . $user['firstname'] . '' . $user['lastname'] . '" alt="' . $user['firstname'] . '' . $user['lastname'] . '" ' .
                     'src="' . $imageUrl . '" onerror="this.src=\'' . $default . '\'"/>';
             }
+
             return $imageUrl;
         }
 
@@ -71,6 +70,7 @@ class UserHelper
                 '" width="' . $options['width'] . '" height="' . $options['height'] . '" class="' . $options['class'] . '"' .
                 'src="' . $default . '" />';
         }
+
         return $default;
     }
 }

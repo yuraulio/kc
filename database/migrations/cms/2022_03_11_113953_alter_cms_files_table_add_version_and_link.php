@@ -14,8 +14,8 @@ class AlterCmsFilesTableAddVersionAndLink extends Migration
     public function up()
     {
         Schema::table('cms_files', function (Blueprint $table) {
-            $table->string("version")->nullable();
-            $table->string("link")->nullable();
+            $table->string('version')->nullable();
+            $table->string('link')->nullable();
         });
     }
 

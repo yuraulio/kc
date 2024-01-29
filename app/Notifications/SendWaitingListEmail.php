@@ -2,12 +2,12 @@
 
 namespace App\Notifications;
 
+use App\Model\Event;
+use App\Model\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use App\Model\User;
-use App\Model\Event;
 
 class SendWaitingListEmail extends Notification
 {
@@ -18,7 +18,6 @@ class SendWaitingListEmail extends Notification
      *
      * @return void
      */
-
     private $user;
     private $event;
 
@@ -47,7 +46,6 @@ class SendWaitingListEmail extends Notification
      */
     public function toMail($notifiable)
     {
-
         $data['urlEnrol'] = url('/') . '/' . $this->event->getSlug() . '?lo=' . encrypt($this->user->email);
         $data['eventTitle'] = $this->event->title;
         $data['firstname'] = $this->user->firstname;
@@ -55,8 +53,8 @@ class SendWaitingListEmail extends Notification
 
         return (new MailMessage)
                     ->from('info@knowcrunch.com', 'Knowcrunch')
-                    ->subject('Knowcrunch - Hi '. $data['firstname'] . '. Course is available')
-                    ->view($template,$data);
+                    ->subject('Knowcrunch - Hi ' . $data['firstname'] . '. Course is available')
+                    ->view($template, $data);
     }
 
     /**

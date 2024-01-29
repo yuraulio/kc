@@ -14,7 +14,7 @@ class AlterCmsPagesTableAddSlug extends Migration
     public function up()
     {
         Schema::table('cms_pages', function (Blueprint $table) {
-            $table->string("slug")->nullable();
+            $table->string('slug')->nullable();
         });
     }
 

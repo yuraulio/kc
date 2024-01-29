@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\Model\Event;
+use Illuminate\Console\Command;
 
 class StopAccessFilesDiplomas extends Command
 {
@@ -38,11 +38,10 @@ class StopAccessFilesDiplomas extends Command
      */
     public function handle()
     {
-        $events = Event::where('status',3)->get();
-    
-        foreach($events as $event){
-            if($event->category->first() && $event->category->first()->id == 46){
-                
+        $events = Event::where('status', 3)->get();
+
+        foreach ($events as $event) {
+            if ($event->category->first() && $event->category->first()->id == 46) {
                 $event->release_date_files = date('Y-m-d');
                 $event->save();
             }

@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\InstructorRequest;
 use App\Model\Instructor;
 use App\Model\User;
 use Illuminate\Http\Request;
-use App\Http\Requests\InstructorRequest;
 use Illuminate\Support\Facades\Auth;
 
 class InstructorController extends Controller
@@ -26,7 +26,7 @@ class InstructorController extends Controller
         // $data['all_instructors'] = $model::count();
         $data = $this->statistics();
 
-        return view('instructors.index', ['instructors' =>$model->with('medias')->get(), 'user' => $user, 'data' => $data ]);
+        return view('instructors.index', ['instructors' =>$model->with('medias')->get(), 'user' => $user, 'data' => $data]);
     }
 
     public function statistics()
@@ -36,7 +36,7 @@ class InstructorController extends Controller
         $data['active'] = Instructor::where('status', '1')->count();
         $data['inactive'] = Instructor::where('status', '0')->count();
 
-        $data['inclass'] = Instructor::whereStatus(true)->whereHas('event', function($q){
+        $data['inclass'] = Instructor::whereStatus(true)->whereHas('event', function ($q) {
             $q->whereStatus(0)->doesntHave('delivery')
                 ->OrWhereHas('delivery', function ($q2) {
                     return $q2->where('deliveries.id', '<>', 143);
@@ -44,7 +44,7 @@ class InstructorController extends Controller
         })->count();
         //$data['elearning']
 
-        $data['elearning'] = Instructor::whereStatus(true)->whereHas('event', function($q){
+        $data['elearning'] = Instructor::whereStatus(true)->whereHas('event', function ($q) {
             $q->whereStatus(0)
                 ->WhereHas('delivery', function ($q2) {
                     return $q2->where('deliveries.id', 143);
@@ -52,7 +52,6 @@ class InstructorController extends Controller
         })->count();
 
         return $data;
-
     }
 
     /**
@@ -78,24 +77,22 @@ class InstructorController extends Controller
     public function store(InstructorRequest $request, Instructor $model)
     {
         //dd($request->all());
-        if($request->status == 'on')
-        {
+        if ($request->status == 'on') {
             $status = 1;
-        }else
-        {
+        } else {
             $status = 0;
         }
 
         $link = $request->ext_url;
-        if($link){
+        if ($link) {
             $link = str_replace('https://', '', $link);
             $link = str_replace('http://', '', $link);
-            $link = 'https://'.$link;
+            $link = 'https://' . $link;
         }
 
         $request->request->add(['status' => $status, 'ext_url' => $link]);
         $isCreate = $model->create($request->all());
-        if($isCreate){
+        if ($isCreate) {
             /*if($request->image_upload != null){
                 $isCreate->createMedia($request->image_upload);
             }*/
@@ -104,11 +101,10 @@ class InstructorController extends Controller
             $isCreate->createSlug($request->subtitle);
             $isCreate->createMetas($request->all());
             //attach instructor-user
-            if($request->user_id != null){
+            if ($request->user_id != null) {
                 $isCreate->user()->attach(['user_id' => $request->user_id]);
             }
         }
-
 
         return redirect()->route('instructors.index')->withStatus(__('Instructor successfully created.'));
     }
@@ -134,7 +130,8 @@ class InstructorController extends Controller
     {
         $users = User::all();
         $metas = $instructor->metable;
-        return view('instructors.edit', compact('instructor', 'users','metas'));
+
+        return view('instructors.edit', compact('instructor', 'users', 'metas'));
     }
 
     /**
@@ -146,54 +143,55 @@ class InstructorController extends Controller
      */
     public function update(InstructorRequest $request, Instructor $instructor)
     {
-        $social_media = array();
+        $social_media = [];
 
-        if(isset($request->facebook))
+        if (isset($request->facebook)) {
             $social_media['facebook'] = $request->facebook;
+        }
 
-        if(isset($request->instagram))
+        if (isset($request->instagram)) {
             $social_media['instagram'] = $request->instagram;
+        }
 
-        if(isset($request->linkedin))
+        if (isset($request->linkedin)) {
             $social_media['linkedin'] = $request->linkedin;
+        }
 
-        if(isset($request->twitter))
+        if (isset($request->twitter)) {
             $social_media['twitter'] = $request->twitter;
+        }
 
-        if(isset($request->youtube))
+        if (isset($request->youtube)) {
             $social_media['youtube'] = $request->youtube;
+        }
 
         $social_media = json_encode($social_media);
 
-        if($request->status == 'on')
-        {
+        if ($request->status == 'on') {
             $status = 1;
-        }else
-        {
+        } else {
             $status = 0;
         }
 
         $link = $request->ext_url;
-        if($link){
+        if ($link) {
             $link = str_replace('https://', '', $link);
             $link = str_replace('http://', '', $link);
-            $link = 'https://'.$link;
+            $link = 'https://' . $link;
         }
 
         $request->request->add(['status' => $status, 'social_media' => $social_media, 'ext_url' => $link]);
         $isUpdate = $instructor->update($request->all());
 
-        if($isUpdate){
+        if ($isUpdate) {
             /*if($request->image_upload){
                 $instructor->updateMedia($request->image_upload);
             }*/
 
-            if($request->user_id){
+            if ($request->user_id) {
                 $instructor->user()->sync($request->user_id);
             }
-
         }
-
 
         return redirect()->route('instructors.index')->withStatus(__('Page successfully updated.'));
     }

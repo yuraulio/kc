@@ -2,9 +2,9 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
-use App\Model\Lesson;
 use App\Model\Instructor;
+use App\Model\Lesson;
+use Illuminate\Console\Command;
 
 class LessonLinksFixed extends Command
 {
@@ -39,52 +39,44 @@ class LessonLinksFixed extends Command
      */
     public function handle()
     {
-        $lessons = Lesson::where('links','!=',NULL)->get();
+        $lessons = Lesson::where('links', '!=', null)->get();
 
-        foreach($lessons as $lesson){
-
+        foreach ($lessons as $lesson) {
             $newLinks = [];
 
-            $links = json_decode($lesson->links,true);
+            $links = json_decode($lesson->links, true);
 
-            if(!$links){
+            if (!$links) {
                 continue;
             }
 
-            if(count($links) <= 0){
+            if (count($links) <= 0) {
                 continue;
             }
-           
 
-            foreach($links as $link){
+            foreach ($links as $link) {
                 $link['link'] = str_replace('https://', '', $link['link']);
                 $link['link'] = str_replace('http://', '', $link['link']);
-                $link['link'] = 'https://'.$link['link'];
+                $link['link'] = 'https://' . $link['link'];
                 //dd($link);
                 $newLinks[] = ['name' => $link['name'], 'link' => $link['link']];
-
             }
 
             $lesson->links = json_encode($newLinks);
             $lesson->save();
-
-
         }
-
 
         $instructors = Instructor::all();
 
-        foreach($instructors as $instructor){
-
+        foreach ($instructors as $instructor) {
             $link = $instructor->ext_url;
 
             $link = str_replace('https://', '', $link);
             $link = str_replace('http://', '', $link);
-            $link = 'https://'.$link;
-            
+            $link = 'https://' . $link;
+
             $instructor->ext_url = $link;
             $instructor->save();
-
         }
 
         return 0;

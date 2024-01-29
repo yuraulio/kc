@@ -30,7 +30,6 @@ class CreateCmsCountdownTable extends Migration
             $table->id();
             $table->integer('countdown_id');
             $table->integer('delivery_id');
-
         });
         Schema::create('cms_countdown_category', function (Blueprint $table) {
             $table->id();

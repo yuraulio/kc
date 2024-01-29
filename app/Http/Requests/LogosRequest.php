@@ -3,8 +3,8 @@
 namespace App\Http\Requests;
 
 use App\Model\Pages;
-use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class LogosRequest extends FormRequest
 {
@@ -34,12 +34,12 @@ class LogosRequest extends FormRequest
         return [
 
             'name' => [
-                'required', 'min:3'
+                'required', 'min:3',
             ],
 
             'ext_url' => [
-                'required', 'min:3'
-            ]
+                'required', 'min:3',
+            ],
         ];
     }
 }

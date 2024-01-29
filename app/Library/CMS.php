@@ -2,11 +2,11 @@
 
 namespace App\Library;
 
-use App\Model\Instructor;
-use Illuminate\Support\Facades\Auth;
 use App\Model\Category;
 use App\Model\City;
+use App\Model\Instructor;
 use App\Services\FBPixelService;
+use Illuminate\Support\Facades\Auth;
 
 class CMS
 {
@@ -17,7 +17,7 @@ class CMS
         $fbp = new FBPixelService;
         $data = $event->topicsLessonsInstructors();
         $data['event'] = $event;
-        $data['benefits'] = [];//$event->benefits->toArray();
+        $data['benefits'] = []; //$event->benefits->toArray();
         //$data['summary'] = $event->summary1()->get()->toArray();
         $data['sections'] = $event->sections->groupBy('section');
         $data['section_fullvideo'] = $event->sectionVideos->first();
@@ -47,7 +47,6 @@ class CMS
             $data['showSpecial'] = $event->ticket()->where('type', 'Special')->first() ? $event->ticket()->where('type', 'Special')->first()->pivot->active : false;
         }
 
-
         $price = -1;
 
         foreach ($data['tickets'] as $ticket) {
@@ -57,7 +56,7 @@ class CMS
         }
 
         if ($price <= 0) {
-            $price = (float)0;
+            $price = (float) 0;
         }
         $categoryScript = $event->delivery->first() && $event->delivery->first()->id == 143 ? 'Video e-learning courses' : 'In-class courses'; //$event->category->first() ? 'Event > ' . $event->category->first()->name : '';
 
@@ -67,14 +66,15 @@ class CMS
         } else {
             $tr_price = number_format($tr_price, 0, '.', '');
             $tr_price = strval($tr_price);
-            $tr_price .= ".00";
+            $tr_price .= '.00';
         }
 
         $data['tigran'] = $event->status == 0 ? ['Price' => $tr_price, 'Product_id' => $event->id, 'Product_SKU' => $event->id, 'ProductCategory' => $categoryScript, 'ProductName' => $event->title, 'Event_ID' => 'kc_' . time()] : null;
 
         $hasEvent = [];
-        if (Auth::check())
+        if (Auth::check()) {
             $hasEvent = Auth::user()->events->where('id', $event->id);
+        }
         if (Auth::user() && count($hasEvent) > 0) {
             $data['is_event_paid'] = 1;
 
@@ -83,7 +83,7 @@ class CMS
             } else {
                 $data['is_event_expired'] = 0;
             }
-            //$data['hasExpired'] =
+        //$data['hasExpired'] =
         } elseif (Auth::user() && $event->waitingList()->where('user_id', Auth::user()->id)->first()) {
             $data['is_joined_waiting_list'] = 1;
         }
@@ -93,11 +93,10 @@ class CMS
         return $data;
     }
 
-
     public static function getInstructorData($page)
     {
         $data['content'] = $page;
-        $events = array();
+        $events = [];
         $lessons = [];
         $instructor = Instructor::with('eventInstructorPage.category', 'mediable', 'eventInstructorPage.lessons', 'eventInstructorPage.slugable', 'eventInstructorPage.city', 'eventInstructorPage.summary1')->where('status', 1)->find($page['id']);
         $data['instructor'] = $instructor;
@@ -106,7 +105,7 @@ class CMS
             abort(404);
         }
 
-        $category = array();
+        $category = [];
 
         $data['title'] = '';
 
@@ -123,11 +122,11 @@ class CMS
             if (($event['status'] == 0 || $event['status'] == 2) && $event->is_inclass_course() && $event->published) {
                 foreach ($event['lessons'] as $lesson) {
                     if ($lesson->pivot['date'] != '') {
-                        $date = date("Y/m/d", strtotime($lesson->pivot['date']));
+                        $date = date('Y/m/d', strtotime($lesson->pivot['date']));
                     } else {
-                        $date = date("Y/m/d", strtotime($lesson->pivot['time_starts']));
+                        $date = date('Y/m/d', strtotime($lesson->pivot['time_starts']));
                     }
-                    if (strtotime("now") < strtotime($date)) {
+                    if (strtotime('now') < strtotime($date)) {
                         if ($lesson['instructor_id'] == $page['id']) {
                             $lessons[] = $lesson['title'];
                         }
@@ -135,7 +134,7 @@ class CMS
                 }
             }
         }
-        $category = array();
+        $category = [];
 
         foreach ($instructor['eventInstructorPage'] as $key => $event) {
             if (!$event->published) {
@@ -154,7 +153,7 @@ class CMS
             }
         }
 
-        $new_events = array();
+        $new_events = [];
 
         foreach ($category as $category) {
             if (count($new_events) == 0) {
@@ -219,7 +218,6 @@ class CMS
             })
             ->get();
 
-
         if ($isVideoList) {
             $list = $data['openlist'];
             $data['openlist'] = [];
@@ -239,7 +237,6 @@ class CMS
         }
 
         $data['sumStudentsByCategories'] = getCategoriesWithSumStudents();
-
 
         return $data;
     }
@@ -262,7 +259,7 @@ class CMS
             'events.event_info1',
             'events.ticket' => function ($q) {
                 $q->where('type', 'regular');
-            }
+            },
         ])->orderBy('priority', 'asc')->get();
 
         $newCategoriesArr = [];
@@ -302,18 +299,17 @@ class CMS
                         continue;
                     }
 
-
                     if ($event['view_tpl'] == 'elearning_event' || $event['view_tpl'] == 'elearning_pending' || $event['view_tpl'] == 'elearning_free') {
                         //$event['sumStudents'] = get_sum_students_course((isset($category) ? $category : null));
 
                         $data['elearningEvents'][$category['id']]['events'][] = $event;
                         $data['elearningEvents'][$category['id']]['view_tpl'] = $event['view_tpl'];
 
-                        //dd($event['ticket']);
+                    //dd($event['ticket']);
                     } elseif ($event['view_tpl'] == 'event_free' || $event['view_tpl'] == 'event_free_coupon') {
                         //$event['sumStudents'] = get_sum_students_course((isset($event['category']) ? $category : null));
                         $data['inclassFree'][$category['id']]['events'][] = $event;
-                        //$data['inclassFree'][$category['id']]['events'][]['sumStudents'] = get_sum_students_course((isset($event['category']) ? $event['category'][0] : null));
+                    //$data['inclassFree'][$category['id']]['events'][]['sumStudents'] = get_sum_students_course((isset($event['category']) ? $event['category'][0] : null));
                     } /*elseif ($event['view_tpl'] == 'elearning_free') {
                                 $data['elearningFree'][$category['id']]['events'][] = $event;
                             }*/ else {
@@ -336,7 +332,6 @@ class CMS
                 unset($data[$key]);
             }
         }
-
 
         $data['sumStudentsByCategories'] = $newCategoriesArr;
 

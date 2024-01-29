@@ -2,12 +2,10 @@
 
 namespace App\Model;
 
+use App\Model\Event;
+use App\Traits\SlugTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Model\Event;
-
-
-use App\Traits\SlugTrait;
 
 class Delivery extends Model
 {
@@ -22,13 +20,11 @@ class Delivery extends Model
     protected $table = 'deliveries';
 
     protected $fillable = [
-        'name', 'installments'
+        'name', 'installments',
     ];
-
 
     public function event()
     {
         return $this->belongsToMany(Event::class, 'event_delivery');
     }
-
 }

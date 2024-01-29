@@ -5,42 +5,41 @@ namespace App\Http\Controllers\Theme;
 use App\Events\EmailSent;
 use App\Http\Controllers\Controller;
 use App\Library\CMS;
-use Illuminate\Http\Request;
-
-use App\Model\Slug;
-use App\Model\Event;
-use App\Model\Delivery;
-use App\Model\Media;
-use App\Model\Logos;
-use App\Model\Menu;
-use App\Model\Type;
-use App\Model\City;
-use App\Model\Topic;
-use App\Model\Instructor;
-use App\Model\Category;
-use View;
-use App\Model\Pages;
-use Laravel\Cashier\Cashier;
-use App\Model\User;
-use App\Model\Invoice;
-use Illuminate\Support\Facades\Auth;
-use PDF;
-use Carbon\Carbon;
-use App\Model\Transaction;
-use Mail;
-use Validator;
-use App\Model\GiveAway;
-use App\Model\CookiesSMS;
-use App\Notifications\WelcomeEmail;
-use Illuminate\Support\Facades\Hash;
 use App\Model\Activation;
-use Illuminate\Support\Str;
-use \Cart as Cart;
-use Session;
-use App\Services\FBPixelService;
-use App\Model\WaitingList;
+use App\Model\Category;
+use App\Model\City;
+use App\Model\CookiesSMS;
+use App\Model\Delivery;
+use App\Model\Event;
+use App\Model\GiveAway;
+use App\Model\Instructor;
+use App\Model\Invoice;
+use App\Model\Logos;
+use App\Model\Media;
+use App\Model\Menu;
 use App\Model\Option;
+use App\Model\Pages;
+use App\Model\Slug;
+use App\Model\Topic;
+use App\Model\Transaction;
+use App\Model\Type;
+use App\Model\User;
+use App\Model\WaitingList;
+use App\Notifications\WelcomeEmail;
+use App\Services\FBPixelService;
 use Bugsnag\BugsnagLaravel\Facades\Bugsnag;
+use Carbon\Carbon;
+use Cart as Cart;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
+use Laravel\Cashier\Cashier;
+use Mail;
+use PDF;
+use Session;
+use Validator;
+use View;
 
 class HomeController extends Controller
 {
@@ -182,7 +181,6 @@ class HomeController extends Controller
             default:
                 abort(404);
                 break;
-
         }
     }
 
@@ -192,7 +190,6 @@ class HomeController extends Controller
         if ($published == 0) {
             return false;
         }
-
 
         $data['user']['createAccount'] = false;
 
@@ -221,9 +218,8 @@ class HomeController extends Controller
             ]);
             $user->role()->attach(7);
 
-
-            $cookieValue = base64_encode($user->id . date("H:i"));
-            setcookie('auth-' . $user->id, $cookieValue, time() + (1 * 365 * 86400), "/"); // 86400 = 1 day
+            $cookieValue = base64_encode($user->id . date('H:i'));
+            setcookie('auth-' . $user->id, $cookieValue, time() + (1 * 365 * 86400), '/'); // 86400 = 1 day
 
             $coockie = new CookiesSMS;
             $coockie->coockie_name = 'auth-' . $user->id;
@@ -235,12 +231,11 @@ class HomeController extends Controller
             $coockie->save();
         }
 
-
         if (!$user->kc_id) {
-            $KC = "KC-";
+            $KC = 'KC-';
             $time = strtotime(date('Y-m-d'));
-            $MM = date("m", $time);
-            $YY = date("y", $time);
+            $MM = date('m', $time);
+            $YY = date('y', $time);
 
             $optionKC = Option::where('abbr', 'website_details')->first();
             $next = $optionKC->value;
@@ -261,28 +256,23 @@ class HomeController extends Controller
             $optionKC->save();
         }
 
-
         $data['user']['first'] = $user->firstname;
         $data['user']['name'] = $user->firstname . ' ' . $user->lastname;
         $data['user']['email'] = $user->email;
         $data['extrainfo'] = ['', '', $content->title];
-        $data['duration'] = '';//$content->summary1->where('section', 'date')->first() ? $content->summary1->where('section', 'date')->first()->title : '';
+        $data['duration'] = ''; //$content->summary1->where('section', 'date')->first() ? $content->summary1->where('section', 'date')->first()->title : '';
 
         $data['eventSlug'] = url('/') . '/' . $content->getSlug();
 
         $eventInfo = $content ? $content->event_info() : [];
 
         if (isset($eventInfo['delivery']) && $eventInfo['delivery'] == 143) {
-
             $data['duration'] = isset($eventInfo['elearning']['visible']['emails']) && isset($eventInfo['elearning']['expiration']) &&
             $eventInfo['elearning']['visible']['emails'] && isset($eventInfo['elearning']['text']) ?
                 $eventInfo['elearning']['expiration'] . ' ' . $eventInfo['elearning']['text'] : '';
-
-        } else if (isset($eventInfo['delivery']) && $eventInfo['delivery'] == 139) {
-
+        } elseif (isset($eventInfo['delivery']) && $eventInfo['delivery'] == 139) {
             $data['duration'] = isset($eventInfo['inclass']['dates']['visible']['emails']) && isset($eventInfo['inclass']['dates']['text']) &&
             $eventInfo['inclass']['dates']['visible']['emails'] ? $eventInfo['inclass']['dates']['text'] : '';
-
         }
 
         $data['hours'] = isset($eventInfo['hours']['visible']['emails']) && $eventInfo['hours']['visible']['emails'] && isset($eventInfo['hours']['hour']) &&
@@ -304,29 +294,27 @@ class HomeController extends Controller
         $user->notify(new WelcomeEmail($user, $data));
         event(new EmailSent($user->email, 'WelcomeEmail'));
 
-
         $student = $user->events->where('id', $content->id)->first();
 
         //dd(($student && strtotime(now()) > strtotime($student->pivot->expiration)) || !$student);
         // if (!$student) {
         if (($student && strtotime(now()) > strtotime($student->pivot->expiration)) || !$student) {
-
             //ticket
             $eventticket = 'free';
 
-            $payment_method_id = 1;//intval($input["payment_method_id"]);
+            $payment_method_id = 1; //intval($input["payment_method_id"]);
             $payment_cardtype = 8; //free;
             $amount = 0;
-            $namount = (float)$amount;
+            $namount = (float) $amount;
             $transaction_arr = [
 
                 'payment_method_id' => $payment_method_id,
                 'account_id' => 17,
                 'payment_status' => 2,
-                'billing_details' => json_encode([]),//serialize($billing_details),
+                'billing_details' => json_encode([]), //serialize($billing_details),
                 'placement_date' => Carbon::now()->toDateTimeString(),
                 'ip_address' => '127.0.0.1',
-                'type' => $payment_cardtype,//((Sentinel::inRole('super_admin') || Sentinel::inRole('know-crunch')) ? 1 : 0),
+                'type' => $payment_cardtype, //((Sentinel::inRole('super_admin') || Sentinel::inRole('know-crunch')) ? 1 : 0),
                 'status' => 1, //2 PENDING, 0 FAILED, 1 COMPLETED
                 'is_bonus' => 0, //$input['is_bonus'],
                 'order_vat' => 0, //$input['credit'] - ($input['credit'] / (1 + Config::get('dpoptions.order_vat.value') / 100)),
@@ -334,7 +322,7 @@ class HomeController extends Controller
                 'discount_amount' => 0,
                 'amount' => $namount, //$input['credit'],
                 'total_amount' => $namount,
-                'trial' => false
+                'trial' => false,
             ];
 
             $transaction = Transaction::create($transaction_arr);
@@ -342,28 +330,27 @@ class HomeController extends Controller
             if ($transaction) {
                 // set transaction id in session
 
-                $pay_seats_data = ["names" => [$user->first_name], "surnames" => [$user->last_name], "emails" => [$user->email],
-                    "mobiles" => [$user->mobile], "addresses" => [$user->address], "addressnums" => [$user->address_num],
-                    "postcodes" => [$user->postcode], "cities" => [$user->city], "jobtitles" => [$user->job_title],
-                    "companies" => [$user->company], "students" => [""], "afms" => [$user->afm]];
-
+                $pay_seats_data = ['names' => [$user->first_name], 'surnames' => [$user->last_name], 'emails' => [$user->email],
+                    'mobiles' => [$user->mobile], 'addresses' => [$user->address], 'addressnums' => [$user->address_num],
+                    'postcodes' => [$user->postcode], 'cities' => [$user->city], 'jobtitles' => [$user->job_title],
+                    'companies' => [$user->company], 'students' => [''], 'afms' => [$user->afm]];
 
                 $deree_user_data = [$user->email => $user->partner_id];
-                $cart_data = ["manualtransaction" => ["rowId" => "manualtransaction", "id" => 'free', "name" => $content->title, "qty" => "1", "price" => $amount, "options" => ["type" => "8", "event" => $content->id], "tax" => 0, "subtotal" => $amount]];
+                $cart_data = ['manualtransaction' => ['rowId' => 'manualtransaction', 'id' => 'free', 'name' => $content->title, 'qty' => '1', 'price' => $amount, 'options' => ['type' => '8', 'event' => $content->id], 'tax' => 0, 'subtotal' => $amount]];
 
                 $status_history[] = [
                     'datetime' => Carbon::now()->toDateTimeString(),
                     'status' => 1,
                     'user' => [
                         'id' => $user->id, //0, $this->current_user->id,
-                        'email' => $user->email,//$this->current_user->email
+                        'email' => $user->email, //$this->current_user->email
                     ],
-                    'pay_seats_data' => $pay_seats_data,//$data['pay_seats_data'],
+                    'pay_seats_data' => $pay_seats_data, //$data['pay_seats_data'],
                     'pay_bill_data' => [],
                     'cardtype' => 8,
                     'installments' => 1,
                     'deree_user_data' => $deree_user_data, //$data['deree_user_data'],
-                    'cart_data' => $cart_data //$cart
+                    'cart_data' => $cart_data, //$cart
                 ];
 
                 $transaction->update(['status_history' => json_encode($status_history)/*, 'billing_details' => $tbd*/]);
@@ -381,7 +368,7 @@ class HomeController extends Controller
                 } else {
                     $content->users()->updateExistingPivot($user, [
                         'expiration' => $expiration_date,
-                        'paid' => true
+                        'paid' => true,
                     ]);
                 }
 
@@ -412,28 +399,27 @@ class HomeController extends Controller
 
         $data['event']['title'] = $content->title;
         $data['event']['slug'] = $content->slugable->slug;
-        $data['event']['facebook'] = url('/') . '/' . $content->slugable->slug . '?utm_source=Facebook&utm_medium=Post_Student&utm_campaign=KNOWCRUNCH_BRANDING&quote=' . urlencode("Proudly participating in " . $content->title . " by Knowcrunch.");
-        $data['event']['twitter'] = urlencode("Proudly participating in " . $content->title . " by Knowcrunch. 💙 " . url('/') . '/' . $content->slugable->slug);
-        $data['event']['linkedin'] = urlencode(url('/') . '/' . $content->slugable->slug . '?utm_source=LinkedIn&utm_medium=Post_Student&utm_campaign=KNOWCRUNCH_BRANDING&title=' . "Proudly participating in " . $content->title . " by Knowcrunch. 💙");
+        $data['event']['facebook'] = url('/') . '/' . $content->slugable->slug . '?utm_source=Facebook&utm_medium=Post_Student&utm_campaign=KNOWCRUNCH_BRANDING&quote=' . urlencode('Proudly participating in ' . $content->title . ' by Knowcrunch.');
+        $data['event']['twitter'] = urlencode('Proudly participating in ' . $content->title . ' by Knowcrunch. 💙 ' . url('/') . '/' . $content->slugable->slug);
+        $data['event']['linkedin'] = urlencode(url('/') . '/' . $content->slugable->slug . '?utm_source=LinkedIn&utm_medium=Post_Student&utm_campaign=KNOWCRUNCH_BRANDING&title=' . 'Proudly participating in ' . $content->title . ' by Knowcrunch. 💙');
 
         Session::put('thankyouData', $data);
         try {
             session_start();
-            $_SESSION["thankyouData"] = $data;
+            $_SESSION['thankyouData'] = $data;
         } catch (\Exception $ex) {
             Bugsnag::notifyException($ex);
         }
+
         return redirect('/thankyou');
         //return view('theme.cart.new_cart.thank_you_free',$data);
     }
 
     public function enrollToWaitingList(Event $content)
     {
-
         $published = $content->published;
         $status = $content->status;
         if ($published == 0 || $status != 5) {
-
             Cart::instance('default')->destroy();
             Session::forget('pay_seats_data');
             Session::forget('transaction_id');
@@ -450,11 +436,9 @@ class HomeController extends Controller
             return false;
         }
 
-
         $data['user']['createAccount'] = false;
 
         if (!($user = Auth::user()) && !($user = User::where('email', request()->email[0])->first())) {
-
             $data['user']['createAccount'] = true;
 
             $input = [];
@@ -479,9 +463,8 @@ class HomeController extends Controller
             ]);
             $user->role()->attach(7);
 
-
-            $cookieValue = base64_encode($user->id . date("H:i"));
-            setcookie('auth-' . $user->id, $cookieValue, time() + (1 * 365 * 86400), "/"); // 86400 = 1 day
+            $cookieValue = base64_encode($user->id . date('H:i'));
+            setcookie('auth-' . $user->id, $cookieValue, time() + (1 * 365 * 86400), '/'); // 86400 = 1 day
 
             $coockie = new CookiesSMS;
             $coockie->coockie_name = 'auth-' . $user->id;
@@ -494,7 +477,6 @@ class HomeController extends Controller
         }
 
         if (WaitingList::where('user_id', $user->id)->where('event_id', $content->id)->first()) {
-
             Cart::instance('default')->destroy();
             Session::forget('pay_seats_data');
             Session::forget('transaction_id');
@@ -529,16 +511,12 @@ class HomeController extends Controller
         $eventInfo = $content ? $content->event_info() : [];
 
         if (isset($eventInfo['delivery']) && $eventInfo['delivery'] == 143) {
-
             $data['duration'] = isset($eventInfo['elearning']['visible']['emails']) && isset($eventInfo['elearning']['expiration']) &&
             $eventInfo['elearning']['visible']['emails'] && isset($eventInfo['elearning']['text']) ?
                 $eventInfo['elearning']['expiration'] . ' ' . $eventInfo['elearning']['text'] : '';
-
-        } else if (isset($eventInfo['delivery']) && $eventInfo['delivery'] == 139) {
-
+        } elseif (isset($eventInfo['delivery']) && $eventInfo['delivery'] == 139) {
             $data['duration'] = isset($eventInfo['inclass']['dates']['visible']['emails']) && isset($eventInfo['inclass']['dates']['text']) &&
             $eventInfo['inclass']['dates']['visible']['emails'] ? $eventInfo['inclass']['dates']['text'] : '';
-
         }
 
         $data['hours'] = isset($eventInfo['hours']['visible']['emails']) && $eventInfo['hours']['visible']['emails'] && isset($eventInfo['hours']['hour']) &&
@@ -554,7 +532,6 @@ class HomeController extends Controller
 
         $data['students'] = isset($eventInfo['students']['visible']['emails']) && $eventInfo['students']['visible']['emails'] &&
         isset($eventInfo['students']['text']) && $data['students_number'] >= $eventStudents ? $eventInfo['students']['text'] : '';
-
 
         $data['firstName'] = $user->firstname;
 
@@ -572,23 +549,19 @@ class HomeController extends Controller
 
         $helperdetails[$user->email] = ['kcid' => $user->kc_id, 'deid' => $user->partner_id, 'stid' => $user->student_type_id, 'jobtitle' => $user->job_title, 'company' => $user->company, 'mobile' => $user->mobile];
 
-
         $transdata['user'] = $muser;
         $transdata['helperdetails'] = $helperdetails;
         $transdata['status'] = 5;
 
         $sentadmin = Mail::send('emails.admin.admin_info_new_registration', $transdata, function ($m) {
-
             $m->from('info@knowcrunch.com', 'Knowcrunch');
             $m->to('info@knowcrunch.com', 'Knowcrunch');
 
             $m->subject('Knowcrunch - New Registration Waiting List');
         });
 
-
         $user->notify(new WelcomeEmail($user, $data));
         event(new EmailSent($user->email, 'WelcomeEmail'));
-
 
         Cart::instance('default')->destroy();
         Session::forget('pay_seats_data');
@@ -610,21 +583,19 @@ class HomeController extends Controller
 
         $data['event']['title'] = $content->title;
         $data['event']['slug'] = $content->slugable->slug;
-        $data['event']['facebook'] = url('/') . '/' . $content->slugable->slug . '?utm_source=Facebook&utm_medium=Post_Student&utm_campaign=KNOWCRUNCH_BRANDING&quote=' . urlencode("Proudly participating in " . $content->title . " by Knowcrunch.");
-        $data['event']['twitter'] = urlencode("Proudly participating in " . $content->title . ' ' . url('/') . '/' . $content->slugable->slug . " by Knowcrunch. 💙");
-        $data['event']['linkedin'] = urlencode(url('/') . '/' . $content->slugable->slug . '?utm_source=LinkedIn&utm_medium=Post_Student&utm_campaign=KNOWCRUNCH_BRANDING&title=' . "Proudly participating in " . $content->title . " by Knowcrunch. 💙");
-
+        $data['event']['facebook'] = url('/') . '/' . $content->slugable->slug . '?utm_source=Facebook&utm_medium=Post_Student&utm_campaign=KNOWCRUNCH_BRANDING&quote=' . urlencode('Proudly participating in ' . $content->title . ' by Knowcrunch.');
+        $data['event']['twitter'] = urlencode('Proudly participating in ' . $content->title . ' ' . url('/') . '/' . $content->slugable->slug . ' by Knowcrunch. 💙');
+        $data['event']['linkedin'] = urlencode(url('/') . '/' . $content->slugable->slug . '?utm_source=LinkedIn&utm_medium=Post_Student&utm_campaign=KNOWCRUNCH_BRANDING&title=' . 'Proudly participating in ' . $content->title . ' by Knowcrunch. 💙');
 
         Session::put('thankyouData', $data);
-        $_SESSION["thankyouData"] = $data;
+        $_SESSION['thankyouData'] = $data;
+
         return redirect('/thankyou');
         //return view('theme.cart.new_cart.thank_you_free',$data);
-
     }
 
     private function city($page)
     {
-
         $data['content'] = $page;
 
         $city = City::with('event')->find($page['id']);
@@ -664,9 +635,11 @@ class HomeController extends Controller
             $data['instructors'] = Instructor::with('medias', 'slugable')->orderBy('subtitle', 'asc')->where('status', 1)->get();
         } elseif ($data['page']['id'] == 800) {
             $data['brands'] = Logos::with('medias')->where('type', 'brands')->orderBy('name', 'asc')->get();
+
             return view('admin.static_tpls.logos.backend', $data);
         } elseif ($data['page']['id'] == 801) {
             $data['logos'] = Logos::with('medias')->where('type', 'logos')->get();
+
             return view('admin.static_tpls.logos.backend', $data);
         } elseif ($data['page']['template'] == 'subscription-template') {
             $data['event'] = Event::find(2304);
@@ -730,7 +703,6 @@ class HomeController extends Controller
 
     private function event($event)
     {
-
         $data = $event->topicsLessonsInstructors();
         $data['event'] = $event;
         $data['benefits'] = $event->benefits->toArray();
@@ -743,9 +715,9 @@ class HomeController extends Controller
         $data['venues'] = $event->venues->toArray();
         $data['syllabus'] = $event->syllabus->toArray();
         $data['is_event_paid'] = 0;
-        $data['sumStudents'] = get_sum_students_course($event->category->first());//isset($event->category[0]) ? $event->category[0]->getSumOfStudents() : 0;
+        $data['sumStudents'] = get_sum_students_course($event->category->first()); //isset($event->category[0]) ? $event->category[0]->getSumOfStudents() : 0;
         $data['showSpecial'] = false;
-        $data['showAlumni'] = $event->ticket()->where('type', 'Alumni')->where('active', true)->first() ? true : false;;
+        $data['showAlumni'] = $event->ticket()->where('type', 'Alumni')->where('active', true)->first() ? true : false;
         $data['is_joined_waiting_list'] = 0;
         $data['partners'] = $event->partners;
 
@@ -754,22 +726,19 @@ class HomeController extends Controller
                 ($event->ticket()->where('type', 'Special')->first()->pivot->active
                     || ($event->ticket()->where('type', 'Early Bird')->first()->pivot->quantity > 0)) : false;
         } else {
-
             $data['showSpecial'] = $event->ticket()->where('type', 'Special')->first() ? $event->ticket()->where('type', 'Special')->first()->pivot->active : false;
         }
-
 
         $price = -1;
 
         foreach ($data['tickets'] as $ticket) {
-
             if ($ticket['pivot']['price'] && $ticket['pivot']['price'] > $price) {
                 $price = $ticket['pivot']['price'];
             }
         }
 
         if ($price <= 0) {
-            $price = (float)0;
+            $price = (float) 0;
         }
         $categoryScript = $event->delivery->first() && $event->delivery->first()->id == 143 ? 'Video e-learning courses' : 'In-class courses'; //$event->category->first() ? 'Event > ' . $event->category->first()->name : '';
 
@@ -779,12 +748,10 @@ class HomeController extends Controller
         } else {
             $tr_price = number_format($tr_price, 0, '.', '');
             $tr_price = strval($tr_price);
-            $tr_price .= ".00";
-
+            $tr_price .= '.00';
         }
 
         $data['tigran'] = ['Price' => $tr_price, 'Product_id' => $event->id, 'Product_SKU' => $event->id, 'ProductCategory' => $categoryScript, 'ProductName' => $event->title, 'Event_ID' => 'kc_' . time()];
-
 
         if (request()->has('lo')) {
             $user = User::where('email', decrypt(request()->get('lo')))->first();
@@ -793,10 +760,9 @@ class HomeController extends Controller
             }
         }
 
-
         if (Auth::user() && count(Auth::user()->events->where('id', $event->id)) > 0) {
             $data['is_event_paid'] = 1;
-        } else if (Auth::user() && $event->waitingList()->where('user_id', Auth::user()->id)->first()) {
+        } elseif (Auth::user() && $event->waitingList()->where('user_id', Auth::user()->id)->first()) {
             $data['is_joined_waiting_list'] = 1;
         }
 
@@ -807,9 +773,8 @@ class HomeController extends Controller
 
     public function printSyllabusBySlug($slug = '')
     {
-
         //Request $request
-        $data = array();
+        $data = [];
 
         // If someone tries not existing slug we should redirect them to the 404 page
         $slug = Slug::where('slug', $slug)->firstOrFail();
@@ -830,7 +795,7 @@ class HomeController extends Controller
                 //uasort($data['eventtopics'], fn($a, $b) => strcmp($a['priority'], $b['priority']));
             }
 
-            $data['eventorganisers'] = array();
+            $data['eventorganisers'] = [];
             if (count($data['content']['city']) != 0) {
                 $data['location'] = $data['content']['city'][0];
             }
@@ -896,7 +861,7 @@ class HomeController extends Controller
             }
         }
 
-        return redirect()->back();//->with('errors', 'sms ode is wrong');
+        return redirect()->back(); //->with('errors', 'sms ode is wrong');
     }
 
     public function giveAway(Request $request)
@@ -948,11 +913,11 @@ class HomeController extends Controller
         ];
     }
 
-
     public function thankyou()
     {
         if ($data = Session::get('thankyouData')) {
             Session::forget('thankyouData');
+
             return view('theme.cart.new_cart.thank_you', $data);
         }
 
@@ -963,6 +928,7 @@ class HomeController extends Controller
     {
         if ($data = json_decode($request->data, true)) {
             Session::forget('thankyouData');
+
             return view('theme.cart.new_cart.thank_you', $data);
         }
 

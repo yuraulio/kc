@@ -16,8 +16,8 @@ class CreateCmsGeneralSettingsTable extends Migration
         Schema::create('cms_general_settings', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->string("setting");
-            $table->string("value");
+            $table->string('setting');
+            $table->string('value');
         });
     }
 

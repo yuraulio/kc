@@ -13,7 +13,6 @@ class CartCaches extends Migration
      */
     public function up()
     {
-
         Schema::dropIfExists('cart_caches');
 
         Schema::create('cart_caches', function (Blueprint $table) {
@@ -28,7 +27,7 @@ class CartCaches extends Migration
             $table->integer('type');
             $table->integer('event');
             $table->text('slug');
-            
+
             $table->timestamps();
         });
     }

@@ -3,43 +3,43 @@
 namespace App\Model;
 
 use App\Events\EmailSent;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use App\Model\Topic;
-use App\Model\Ticket;
-use App\Model\Category;
-use App\Model\Type;
-use App\Model\City;
-use App\Model\Summary;
-use App\Model\Delivery;
-use App\Model\Section;
+use App\Model\Admin\Countdown;
 use App\Model\Benefit;
-use App\Model\Venue;
-use App\Model\User;
-use App\Model\Testimonial;
-use App\Model\Partner;
-use App\Model\Lesson;
-use App\Model\Faq;
+use App\Model\Category;
+use App\Model\Certificate;
+use App\Model\City;
+use App\Model\Coupon;
+use App\Model\Delivery;
+use App\Model\EventInfo;
 use App\Model\Exam;
 use App\Model\ExamResult;
-use App\Model\Media;
+use App\Model\Faq;
 use App\Model\Instructor;
-use App\Traits\SlugTrait;
-use App\Traits\MetasTrait;
-use App\Traits\BenefitTrait;
-use App\Traits\MediaTrait;
-use App\Traits\Invoices;
+use App\Model\Lesson;
+use App\Model\Media;
+use App\Model\Partner;
 use App\Model\Plan;
-use App\Model\Coupon;
+use App\Model\Section;
+use App\Model\Summary;
+use App\Model\Testimonial;
+use App\Model\Ticket;
+use App\Model\Topic;
+use App\Model\Type;
+use App\Model\User;
+use App\Model\Venue;
 use App\Model\Video;
-use App\Model\Certificate;
 use App\Model\WaitingList;
-use App\Model\EventInfo;
 use App\Notifications\CertificateAvaillable;
-use Carbon\Carbon;
-use App\Model\Admin\Countdown;
-use App\Traits\SearchFilter;
+use App\Traits\BenefitTrait;
+use App\Traits\Invoices;
+use App\Traits\MediaTrait;
+use App\Traits\MetasTrait;
 use App\Traits\PaginateTable;
+use App\Traits\SearchFilter;
+use App\Traits\SlugTrait;
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 
 class Event extends Model
@@ -60,133 +60,137 @@ class Event extends Model
     }
 
     protected $fillable = [
-        'published', 'published_at', 'release_date_files', 'expiration' ,'status', 'title', 'htmlTitle', 'subtitle', 'header', 'summary', 'body', 'hours','author_id', 'creator_id', 'view_tpl', 'view_counter',
-        'launch_date','certificate_title','fb_group','evaluate_topics','evaluate_instructors','fb_testimonial','absences_limit','xml_title','xml_description','xml_short_description', 'index', 'feed'
+        'published', 'published_at', 'release_date_files', 'expiration', 'status', 'title', 'htmlTitle', 'subtitle', 'header', 'summary', 'body', 'hours', 'author_id', 'creator_id', 'view_tpl', 'view_counter',
+        'launch_date', 'certificate_title', 'fb_group', 'evaluate_topics', 'evaluate_instructors', 'fb_testimonial', 'absences_limit', 'xml_title', 'xml_description', 'xml_short_description', 'index', 'feed',
     ];
 
-    public function schemadata(){
-        $schema = Cache::remember('schemadata-event-'.$this->id, 10, function(){
+    public function schemadata()
+    {
+        $schema = Cache::remember('schemadata-event-' . $this->id, 10, function () {
             $schema =
             [
-                "@context" => "https://schema.org/",
-                "@type" => "Course",
-                "name" => $this->title,
-                "description" => $this->summary,
-                "provider" => [
-                    "@type" => "Organization",
-                    "name" => "Know Crunch",
-                    "url" => "https://knowcrunch.com/"
+                '@context' => 'https://schema.org/',
+                '@type' => 'Course',
+                'name' => $this->title,
+                'description' => $this->summary,
+                'provider' => [
+                    '@type' => 'Organization',
+                    'name' => 'Know Crunch',
+                    'url' => 'https://knowcrunch.com/',
                 ],
-                "author" => [
-                    "@type" => "Person",
-                    "name" => "Tolis Aivalis"
+                'author' => [
+                    '@type' => 'Person',
+                    'name' => 'Tolis Aivalis',
                 ],
-                "inLanguage" => "Greek/Ellinika",
-                "offers" => [
+                'inLanguage' => 'Greek/Ellinika',
+                'offers' => [
                     [
-                        "@type" => "Offer",
-                        "category" => "Free",
-                        "priceCurrency" => "EUR",
-                        "price" => 0
-                    ]
+                        '@type' => 'Offer',
+                        'category' => 'Free',
+                        'priceCurrency' => 'EUR',
+                        'price' => 0,
+                    ],
                 ],
-                "educationalCredentialAwarded" => "EQF 5+ level",
+                'educationalCredentialAwarded' => 'EQF 5+ level',
             ];
-            if(isset($this->mediable)){
+            if (isset($this->mediable)) {
                 $schema['image'] = [
-                    cdn(get_image($this->mediable,'event-card'))
+                    cdn(get_image($this->mediable, 'event-card')),
                 ];
             }
-            if($this->relationLoaded('slugable') && isset($this->slugable->slug)){
+            if ($this->relationLoaded('slugable') && isset($this->slugable->slug)) {
                 $schema['@id'] = $this->slugable->slug;
             }
-            if($this->relationLoaded('ticket') && isset($this->ticket[0]->price)){
+            if ($this->relationLoaded('ticket') && isset($this->ticket[0]->price)) {
                 $schema['offers'] = [
                     [
-                        "@type" => "Offer",
-                        "category" => "Paid",
-                        "priceCurrency" => "EUR",
-                        "price" => $this->ticket[0]->price
-                    ]
+                        '@type' => 'Offer',
+                        'category' => 'Paid',
+                        'priceCurrency' => 'EUR',
+                        'price' => $this->ticket[0]->price,
+                    ],
                 ];
             }
-            if(isset($this->published_at)){
+            if (isset($this->published_at)) {
                 $schema['datePublished'] = Carbon::create($this->published_at)->format('Y-m-d');
             }
-            if($this->relationLoaded('event_info1') && isset($this->event_info1->course_delivery)){
+            if ($this->relationLoaded('event_info1') && isset($this->event_info1->course_delivery)) {
                 // dd($this->topic[0]->lessons);
                 $instructors = [];
-                if($this->relationLoaded('instructors') && isset($this->instructors)){
-                    foreach($this->instructors as $instr){
+                if ($this->relationLoaded('instructors') && isset($this->instructors)) {
+                    foreach ($this->instructors as $instr) {
                         $instructor = [
-                            "@type" => "Person",
-                            "name" => $instr->title.' '.$instr->subtitle,
-                            "description" => $instr->header
+                            '@type' => 'Person',
+                            'name' => $instr->title . ' ' . $instr->subtitle,
+                            'description' => $instr->header,
                         ];
-                        if(isset($instr->mediable) && $instr->mediable->count() > 0){
-                            $instructor['image'] = config('app.url').$instr->mediable->path.'/'.$instr->mediable->original_name;
+                        if (isset($instr->mediable) && $instr->mediable->count() > 0) {
+                            $instructor['image'] = config('app.url') . $instr->mediable->path . '/' . $instr->mediable->original_name;
                         }
                         // Check if already added
                         $alreadyInserted = false;
-                        foreach($instructors as $in){
-                            if($in['image'] == $instructor['image'])
+                        foreach ($instructors as $in) {
+                            if ($in['image'] == $instructor['image']) {
                                 $alreadyInserted = true;
+                            }
                         }
-                        if(!$alreadyInserted)
+                        if (!$alreadyInserted) {
                             $instructors[] = $instructor;
+                        }
                     }
                 }
                 $courseWorkload = 'PT0H';
-                if(isset($this->course_hours)){
-                    $courseWorkload = 'PT'.$this->course_hours.'H';
+                if (isset($this->course_hours)) {
+                    $courseWorkload = 'PT' . $this->course_hours . 'H';
                 }
-                switch($this->event_info1->course_delivery){
+                switch($this->event_info1->course_delivery) {
                     case 139: // Classroom training
-                        $schema["hasCourseInstance"] = [
+                        $schema['hasCourseInstance'] = [
                             [
                                 // Blended, instructor-led course meeting 3 hours per day in July.
-                                "@type" => "CourseInstance",
-                                "courseMode" => "onsite",
-                                "location" => $this->event_info1->course_inclass_city ?? '',
-                                "instructor" => $instructors,
-                                "courseWorkload" => $courseWorkload
-                            ]
+                                '@type' => 'CourseInstance',
+                                'courseMode' => 'onsite',
+                                'location' => $this->event_info1->course_inclass_city ?? '',
+                                'instructor' => $instructors,
+                                'courseWorkload' => $courseWorkload,
+                            ],
                         ];
                         break;
                     case 143: // Video e-learning
-                        $schema["hasCourseInstance"] = [
+                        $schema['hasCourseInstance'] = [
                             [
                                 // Online self-paced course that takes 2 days to complete.
-                                "@type" => "CourseInstance",
-                                "courseMode" => "online",
-                                "courseWorkload" => $courseWorkload
-                            ]
+                                '@type' => 'CourseInstance',
+                                'courseMode' => 'online',
+                                'courseWorkload' => $courseWorkload,
+                            ],
                         ];
                         break;
                     case 215: // Zoom training
-                        $schema["hasCourseInstance"] = [
+                        $schema['hasCourseInstance'] = [
                             [
                                 // Online self-paced course that takes 2 days to complete.
-                                "@type" => "CourseInstance",
-                                "courseMode" => "online",
-                                "courseWorkload" => $courseWorkload
-                            ]
+                                '@type' => 'CourseInstance',
+                                'courseMode' => 'online',
+                                'courseWorkload' => $courseWorkload,
+                            ],
                         ];
                         break;
                     case 216: // Corporate training
-                        $schema["hasCourseInstance"] = [
+                        $schema['hasCourseInstance'] = [
                             [
                                 // Blended, instructor-led course meeting 3 hours per day in July.
-                                "@type" => "CourseInstance",
-                                "courseMode" => "onsite",
-                                "location" => $this->course_inclass_city ?? '',
-                                "instructor" => $instructors,
-                                "courseWorkload" => $courseWorkload
-                            ]
+                                '@type' => 'CourseInstance',
+                                'courseMode' => 'onsite',
+                                'location' => $this->course_inclass_city ?? '',
+                                'instructor' => $instructors,
+                                'courseWorkload' => $courseWorkload,
+                            ],
                         ];
                         break;
                 }
             }
+
             return $schema;
         });
 
@@ -194,24 +198,20 @@ class Event extends Model
         return $schema;
     }
 
-
-
-
     public function category()
     {
-        return $this->morphToMany(Category::class, 'categoryable')->with('faqs','testimonials','dropbox');
+        return $this->morphToMany(Category::class, 'categoryable')->with('faqs', 'testimonials', 'dropbox');
     }
 
     public function faqs()
     {
-        return $this->morphToMany(Faq::class, 'faqable')->with('category')->withPivot('priority')->orderBy('faqables.priority','asc');
+        return $this->morphToMany(Faq::class, 'faqable')->with('category')->withPivot('priority')->orderBy('faqables.priority', 'asc');
     }
 
     public function sectionVideos()
     {
         return $this->belongsToMany(Video::class, 'event_video', 'event_id', 'video_id');
     }
-
 
     public function exam()
     {
@@ -230,121 +230,100 @@ class Event extends Model
 
     public function topic()
     {
-        if($this->delivery->first() && $this->delivery->first()->id == 143){
-            return $this->belongsToMany(Topic::class, 'event_topic_lesson_instructor')->select('topics.*','topic_id','instructor_id')->where('instructor_id','!=', NULL)->where('instructor_id','!=', 0)
-            ->withPivot('event_id','topic_id','lesson_id','instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room', 'priority','automate_mail','send_automate_mail')->with('lessons.instructor')->orderBy('event_topic_lesson_instructor.priority','asc');
-        }else{
-
-            return $this->belongsToMany(Topic::class, 'event_topic_lesson_instructor')->select('topics.*','topic_id','instructor_id')->where('instructor_id','!=', NULL)->where('instructor_id','!=', 0)
-            ->withPivot('event_id','topic_id','lesson_id','instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room', 'priority','automate_mail','send_automate_mail')->with('lessons.instructor')->orderBy('event_topic_lesson_instructor.time_starts','asc');
+        if ($this->delivery->first() && $this->delivery->first()->id == 143) {
+            return $this->belongsToMany(Topic::class, 'event_topic_lesson_instructor')->select('topics.*', 'topic_id', 'instructor_id')->where('instructor_id', '!=', null)->where('instructor_id', '!=', 0)
+            ->withPivot('event_id', 'topic_id', 'lesson_id', 'instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room', 'priority', 'automate_mail', 'send_automate_mail')->with('lessons.instructor')->orderBy('event_topic_lesson_instructor.priority', 'asc');
+        } else {
+            return $this->belongsToMany(Topic::class, 'event_topic_lesson_instructor')->select('topics.*', 'topic_id', 'instructor_id')->where('instructor_id', '!=', null)->where('instructor_id', '!=', 0)
+            ->withPivot('event_id', 'topic_id', 'lesson_id', 'instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room', 'priority', 'automate_mail', 'send_automate_mail')->with('lessons.instructor')->orderBy('event_topic_lesson_instructor.time_starts', 'asc');
         }
-
     }
 
     public function topic_with_no_instructor()
     {
-        if($this->delivery->first() && $this->delivery->first()->id == 143){
-            return $this->belongsToMany(Topic::class, 'event_topic_lesson_instructor')->select('topics.*','topic_id','instructor_id')
-            ->withPivot('event_id','topic_id','lesson_id','instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room', 'priority','automate_mail','send_automate_mail')->with('lessons.instructor')->orderBy('event_topic_lesson_instructor.priority','asc');
-        }else{
-
-            return $this->belongsToMany(Topic::class, 'event_topic_lesson_instructor')->select('topics.*','topic_id','instructor_id')
-            ->withPivot('event_id','topic_id','lesson_id','instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room', 'priority','automate_mail','send_automate_mail')->with('lessons.instructor')->orderBy('event_topic_lesson_instructor.time_starts','asc');
+        if ($this->delivery->first() && $this->delivery->first()->id == 143) {
+            return $this->belongsToMany(Topic::class, 'event_topic_lesson_instructor')->select('topics.*', 'topic_id', 'instructor_id')
+            ->withPivot('event_id', 'topic_id', 'lesson_id', 'instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room', 'priority', 'automate_mail', 'send_automate_mail')->with('lessons.instructor')->orderBy('event_topic_lesson_instructor.priority', 'asc');
+        } else {
+            return $this->belongsToMany(Topic::class, 'event_topic_lesson_instructor')->select('topics.*', 'topic_id', 'instructor_id')
+            ->withPivot('event_id', 'topic_id', 'lesson_id', 'instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room', 'priority', 'automate_mail', 'send_automate_mail')->with('lessons.instructor')->orderBy('event_topic_lesson_instructor.time_starts', 'asc');
         }
-
     }
 
     //forEventEdit
     public function allTopics()
     {
-
-        if($this->delivery->first() && $this->delivery->first()->id == 143){
-            return $this->belongsToMany(Topic::class, 'event_topic_lesson_instructor')->select('topics.*','topic_id','instructor_id')
-            ->withPivot('event_id','topic_id','lesson_id','instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room', 'priority','automate_mail','send_automate_mail')->with('lessons.instructor')->orderBy('event_topic_lesson_instructor.priority','asc');
-        }else{
-
-            return $this->belongsToMany(Topic::class, 'event_topic_lesson_instructor')->select('topics.*','topic_id','instructor_id')
-            ->withPivot('event_id','topic_id','lesson_id','instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room', 'priority','automate_mail','send_automate_mail')->with('lessons.instructor')->with('lessons.instructor')->orderBy('event_topic_lesson_instructor.time_starts','asc');
+        if ($this->delivery->first() && $this->delivery->first()->id == 143) {
+            return $this->belongsToMany(Topic::class, 'event_topic_lesson_instructor')->select('topics.*', 'topic_id', 'instructor_id')
+            ->withPivot('event_id', 'topic_id', 'lesson_id', 'instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room', 'priority', 'automate_mail', 'send_automate_mail')->with('lessons.instructor')->orderBy('event_topic_lesson_instructor.priority', 'asc');
+        } else {
+            return $this->belongsToMany(Topic::class, 'event_topic_lesson_instructor')->select('topics.*', 'topic_id', 'instructor_id')
+            ->withPivot('event_id', 'topic_id', 'lesson_id', 'instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room', 'priority', 'automate_mail', 'send_automate_mail')->with('lessons.instructor')->with('lessons.instructor')->orderBy('event_topic_lesson_instructor.time_starts', 'asc');
         }
-
     }
 
     public function topic_edit_instructor()
     {
-
-        return $this->belongsToMany(Topic::class, 'event_topic_lesson_instructor')->select('topics.*','topic_id')
-            ->withPivot('event_id','topic_id','lesson_id','instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room', 'priority','location_url','automate_mail','send_automate_mail');
+        return $this->belongsToMany(Topic::class, 'event_topic_lesson_instructor')->select('topics.*', 'topic_id')
+            ->withPivot('event_id', 'topic_id', 'lesson_id', 'instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room', 'priority', 'location_url', 'automate_mail', 'send_automate_mail');
     }
 
-    public function coupons(){
-        return $this->belongsToMany(Coupon::class,'event_coupons');
+    public function coupons()
+    {
+        return $this->belongsToMany(Coupon::class, 'event_coupons');
     }
-
 
     public function allLessons()
     {
-
-        return $this->belongsToMany(Lesson::class,'event_topic_lesson_instructor')->select('lessons.*')->withPivot('id','event_id','topic_id','lesson_id','instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room','priority','location_url','automate_mail','send_automate_mail');
+        return $this->belongsToMany(Lesson::class, 'event_topic_lesson_instructor')->select('lessons.*')->withPivot('id', 'event_id', 'topic_id', 'lesson_id', 'instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room', 'priority', 'location_url', 'automate_mail', 'send_automate_mail');
     }
 
     public function lessons()
     {
-
-        if(!$this->is_inclass_course()){
-
-            return $this->belongsToMany(Lesson::class,'event_topic_lesson_instructor')->where('status',true)->select('lessons.*','topic_id','event_id', 'lesson_id','instructor_id')
-            ->withPivot('event_id','topic_id','lesson_id','instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room','priority','location_url','automate_mail','send_automate_mail')->orderBy('event_topic_lesson_instructor.priority','asc')->with('type');//priority
-        }else{
-
-            return $this->belongsToMany(Lesson::class,'event_topic_lesson_instructor')->where('status',true)->select('lessons.*','topic_id','event_id', 'lesson_id','instructor_id')
-            ->withPivot('event_id','topic_id','lesson_id','instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room','priority','location_url','automate_mail','send_automate_mail')->orderBy('event_topic_lesson_instructor.time_starts','asc')->with('type');//priority
+        if (!$this->is_inclass_course()) {
+            return $this->belongsToMany(Lesson::class, 'event_topic_lesson_instructor')->where('status', true)->select('lessons.*', 'topic_id', 'event_id', 'lesson_id', 'instructor_id')
+            ->withPivot('event_id', 'topic_id', 'lesson_id', 'instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room', 'priority', 'location_url', 'automate_mail', 'send_automate_mail')->orderBy('event_topic_lesson_instructor.priority', 'asc')->with('type'); //priority
+        } else {
+            return $this->belongsToMany(Lesson::class, 'event_topic_lesson_instructor')->where('status', true)->select('lessons.*', 'topic_id', 'event_id', 'lesson_id', 'instructor_id')
+            ->withPivot('event_id', 'topic_id', 'lesson_id', 'instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room', 'priority', 'location_url', 'automate_mail', 'send_automate_mail')->orderBy('event_topic_lesson_instructor.time_starts', 'asc')->with('type'); //priority
         }
-
     }
 
     public function lessonsForApp()
     {
-
-        return $this->belongsToMany(Lesson::class,'event_topic_lesson_instructor')->where('status',true)
-            ->select('lessons.*','topic_id','event_id', 'lesson_id','instructor_id','event_topic_lesson_instructor.priority','event_topic_lesson_instructor.time_starts')
-            ->withPivot('event_id','topic_id','lesson_id','instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room','location_url','priority','automate_mail','send_automate_mail')->with('type');
-
-
+        return $this->belongsToMany(Lesson::class, 'event_topic_lesson_instructor')->where('status', true)
+            ->select('lessons.*', 'topic_id', 'event_id', 'lesson_id', 'instructor_id', 'event_topic_lesson_instructor.priority', 'event_topic_lesson_instructor.time_starts')
+            ->withPivot('event_id', 'topic_id', 'lesson_id', 'instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room', 'location_url', 'priority', 'automate_mail', 'send_automate_mail')->with('type');
     }
 
-    public function plans(){
-        return $this->belongsToMany(Plan::class,'plan_events')->where('published',true);
+    public function plans()
+    {
+        return $this->belongsToMany(Plan::class, 'plan_events')->where('published', true);
     }
-
 
     public function instructors()
     {
-        return $this->belongsToMany(Instructor::class,'event_topic_lesson_instructor')->with('mediable')->select('instructors.*','lesson_id','instructor_id','event_id')
-            ->withPivot('lesson_id','instructor_id')->orderBy('subtitle','asc')->with('slugable');
+        return $this->belongsToMany(Instructor::class, 'event_topic_lesson_instructor')->with('mediable')->select('instructors.*', 'lesson_id', 'instructor_id', 'event_id')
+            ->withPivot('lesson_id', 'instructor_id')->orderBy('subtitle', 'asc')->with('slugable');
     }
-
 
     public function summary1()
     {
         return $this->belongsToMany(Summary::class, 'events_summaryevent', 'event_id', 'summary_event_id')->orderBy('priority')->with('mediable');
     }
 
-
-
     public function is_inclass_course()
     {
-
         $eventInfo = $this->event_info();
         /*if(isset($eventInfo['delivery']) && $eventInfo['delivery'] == 139){
             return true;
         }*/
 
-        if(isset($eventInfo['delivery']) && $eventInfo['delivery'] != 143){
+        if (isset($eventInfo['delivery']) && $eventInfo['delivery'] != 143) {
             return true;
         }
 
         return false;
-
 
         //return $this->view_tpl !== 'elearning_event' && $this->view_tpl !== 'elearning_free';
 
@@ -357,10 +336,9 @@ class Event extends Model
 
     public function is_elearning_course()
     {
-
         $eventInfo = $this->event_info();
 
-        if(isset($eventInfo['delivery']) && $eventInfo['delivery'] == 143){
+        if (isset($eventInfo['delivery']) && $eventInfo['delivery'] == 143) {
             return true;
         }
 
@@ -381,7 +359,7 @@ class Event extends Model
 
     public function ticket()
     {
-        return $this->belongsToMany(Ticket::class, 'event_tickets')->select('tickets.*','event_tickets.ticket_id', 'event_tickets.price')->withPivot('id','priority','ticket_id', 'price', 'options', 'quantity', 'features','active','public_title','seats_visible')->orderBy('priority');
+        return $this->belongsToMany(Ticket::class, 'event_tickets')->select('tickets.*', 'event_tickets.ticket_id', 'event_tickets.price')->withPivot('id', 'priority', 'ticket_id', 'price', 'options', 'quantity', 'features', 'active', 'public_title', 'seats_visible')->orderBy('priority');
     }
 
     public function tickets()
@@ -404,8 +382,6 @@ class Event extends Model
         return $this->belongsToMany(Section::class, 'sectionTitles_event', 'event_id', 'section_title_id');
     }
 
-
-
     public function venues()
     {
         return $this->belongsToMany(Venue::class, 'event_venue');
@@ -418,14 +394,13 @@ class Event extends Model
 
     public function users_with_transactions()
     {
-        return $this->belongsToMany(User::class, 'event_user')->select('event_user.user_id as id','firstname', 'lastname', 'email', 'mobile')->with('transactions')->withPivot('expiration','payment_method', 'paid', 'comment');
+        return $this->belongsToMany(User::class, 'event_user')->select('event_user.user_id as id', 'firstname', 'lastname', 'email', 'mobile')->with('transactions')->withPivot('expiration', 'payment_method', 'paid', 'comment');
     }
 
     public function usersPaid()
     {
-        return $this->belongsToMany(User::class, 'event_user')->withPivot('expiration','payment_method','paid')->wherePivot('paid', true);
+        return $this->belongsToMany(User::class, 'event_user')->withPivot('expiration', 'payment_method', 'paid')->wherePivot('paid', true);
     }
-
 
     public function partners()
     {
@@ -434,7 +409,7 @@ class Event extends Model
 
     public function syllabus()
     {
-        return $this->belongsToMany(Instructor::class, 'event_syllabus_manager')->with('mediable','slugable');
+        return $this->belongsToMany(Instructor::class, 'event_syllabus_manager')->with('mediable', 'slugable');
     }
 
     public function paymentMethod()
@@ -447,23 +422,23 @@ class Event extends Model
         return $this->morphToMany(Dropbox::class, 'dropboxcacheable')->withPivot('selectedFolders');
     }
 
-
     public function medias()
     {
         return $this->morphOne(Media::class, 'mediable');
     }
 
-    private function calcTopics($topicEvent, $lessons, $event_id = null, $cache = false){
+    private function calcTopics($topicEvent, $lessons, $event_id = null, $cache = false)
+    {
         $topics = [];
-        if($this->status == 5){
+        if ($this->status == 5) {
             $topicEvent = $topicEvent ? $topicEvent->unique()->groupBy('topic_id') : $this->topic_with_no_instructor->unique()->groupBy('topic_id');
-        }else{
+        } else {
             $topicEvent = $topicEvent ? $topicEvent->unique()->groupBy('topic_id') : $this->topic->unique()->groupBy('topic_id');
         }
-        if($cache){
-            foreach($topicEvent as $topic_key => $topic){
-                if(isset($topic[0]->lessons)){
-                    foreach($topic[0]->lessons as $lesson_key => $lesson){
+        if ($cache) {
+            foreach ($topicEvent as $topic_key => $topic) {
+                if (isset($topic[0]->lessons)) {
+                    foreach ($topic[0]->lessons as $lesson_key => $lesson) {
                         $lesson->pivot->instructor_id = $lesson->instructor[0]->id ?? 0;
                         unset($lesson->instructor);
                         unset($lesson->type);
@@ -472,54 +447,53 @@ class Event extends Model
                 }
             }
             $topicEvent = $topicEvent->toArray();
-            $topicEvent = array_map(function($topic){
-                return array_map(function($t){return (object)$t;},$topic);;
+            $topicEvent = array_map(function ($topic) {
+                return array_map(function ($t) {
+                    return (object) $t;
+                }, $topic);
             }, $topicEvent);
             $topicEvent = array_values($topicEvent);
         }
 
-
-        foreach($topicEvent as $key => $topic){
-            foreach($topic as $t){
-
-                if(!$t->status){
+        foreach ($topicEvent as $key => $topic) {
+            foreach ($topic as $t) {
+                if (!$t->status) {
                     continue;
                 }
 
-                if(!isset($lessons[$t->id])){
+                if (!isset($lessons[$t->id])) {
                     continue;
                 }
                 $lessonsArray = $lessons[$t->id]->toArray();
-                foreach( $lessonsArray as $key => $lesson){
+                foreach ($lessonsArray as $key => $lesson) {
                     // ean einai se waiting list to event na mhn to kanei unset
-                    if(!$lesson['instructor_id'] && $this->status != 5){
+                    if (!$lesson['instructor_id'] && $this->status != 5) {
                         unset($lessonsArray[$key]);
                     }
                     //if(($this->view_tpl=='elearning_event' || $this->view_tpl == 'elearnig_free') && $lesson['vimeo_video'] ==''){
                     // ean einai se waiting list to event na mhn to kanei unset
-                    if($this->is_elearning_course() && $lesson['vimeo_video'] =='' && $this->status != 5){
-
+                    if ($this->is_elearning_course() && $lesson['vimeo_video'] == '' && $this->status != 5) {
                         unset($lessonsArray[$key]);
                     }
                 }
-                if(count($lessonsArray)>0){
+                if (count($lessonsArray) > 0) {
                     $topics[$t->title]['lessons'] = $lessonsArray;
                 }
             }
         }
+
         return $topics;
     }
 
-
-    public function topicsLessonsInstructors($videos = null,$topicEvent = null, $lessons = null, $instructors = null, $event_id = null){
-
+    public function topicsLessonsInstructors($videos = null, $topicEvent = null, $lessons = null, $instructors = null, $event_id = null)
+    {
         // If there is no videos, topics, and instructors, it means the call of this function was topicsLessonsInstructors(), so, we can cache this request because we are not in the private area.
         $emptyParameters = false;
-        if($videos == null && $topicEvent == null && $lessons == null && $instructors == null){
+        if ($videos == null && $topicEvent == null && $lessons == null && $instructors == null) {
             $emptyParameters = true;
         }
 
-        $videos = json_decode($videos,true);
+        $videos = json_decode($videos, true);
 
         $topics = [];
         $topicsSeen = [];
@@ -528,73 +502,67 @@ class Event extends Model
         //162
 
         // sum topic duration
-        foreach($lessons as $key => $lesson1){
-
+        foreach ($lessons as $key => $lesson1) {
             $sum1 = 0;
             $topicsSeen[$key] = 0;
             $lessons_with_video_links = 0;
-            foreach($lesson1 as $key1 => $lesson){
+            foreach ($lesson1 as $key1 => $lesson) {
                 $sum = 0;
 
-                if($lesson['vimeo_duration'] != null && $lesson['vimeo_duration'] != '0'){
-
+                if ($lesson['vimeo_duration'] != null && $lesson['vimeo_duration'] != '0') {
                     $vimeo_duration = explode(' ', $lesson['vimeo_duration']);
                     $hour = 0;
                     $min = 0;
                     $sec = 0;
 
-                    if(count($vimeo_duration) == 3){
+                    if (count($vimeo_duration) == 3) {
                         $string_hour = $vimeo_duration[0];
-                        $string_hour = intval(explode('h',$string_hour)[0]);
+                        $string_hour = intval(explode('h', $string_hour)[0]);
                         $hour = $string_hour * 3600;
 
                         $string_min = $vimeo_duration[1];
-                        $string_min = intval(explode('m',$string_min)[0]);
+                        $string_min = intval(explode('m', $string_min)[0]);
                         $min = $string_min * 60;
 
                         $string_sec = $vimeo_duration[2];
-                        $string_sec = intval(explode('s',$string_sec)[0]);
+                        $string_sec = intval(explode('s', $string_sec)[0]);
                         $sec = $string_sec;
 
                         $sum = $hour + $min + $sec;
-
-                    }else if(count($vimeo_duration) == 2){
+                    } elseif (count($vimeo_duration) == 2) {
                         $string_min = $vimeo_duration[0];
-                        $string_min = intval(explode('m',$string_min)[0]);
+                        $string_min = intval(explode('m', $string_min)[0]);
                         $min = $string_min * 60;
 
                         $string_sec = $vimeo_duration[1];
-                        $string_sec = intval(explode('s',$string_sec)[0]);
+                        $string_sec = intval(explode('s', $string_sec)[0]);
                         $sec = $string_sec;
 
                         $sum = $min + $sec;
-                    }else if(count($vimeo_duration) == 1){
+                    } elseif (count($vimeo_duration) == 1) {
                         //dd($vimeo_duration);
-                        $a = strpos( $vimeo_duration[0], 's');
+                        $a = strpos($vimeo_duration[0], 's');
                         //dd($a);
-                        if($a === false ){
+                        if ($a === false) {
                             $sum = 0;
-                            if(strpos( $vimeo_duration[0], 'm')){
+                            if (strpos($vimeo_duration[0], 'm')) {
                                 $string_min = $vimeo_duration[0];
-                                $string_min = intval(explode('m',$string_min)[0]);
+                                $string_min = intval(explode('m', $string_min)[0]);
                                 $min = $string_min * 60;
                                 $sum = $min;
                             }
-
-                        }else if($a !== false ){
-                            $string_sec = intval(explode('s',$vimeo_duration[0])[0]);
+                        } elseif ($a !== false) {
+                            $string_sec = intval(explode('s', $vimeo_duration[0])[0]);
                             $sec = $string_sec;
                             $sum = $sec;
-
                         }
                     }
-
                 }
 
-                $vimeoVideo = explode("/",$lesson->vimeo_video);
-                $vimeoVideo = end( $vimeoVideo );
+                $vimeoVideo = explode('/', $lesson->vimeo_video);
+                $vimeoVideo = end($vimeoVideo);
 
-                if(isset($videos[$vimeoVideo]) && (int) $videos[$vimeoVideo]['seen'] == 1){
+                if (isset($videos[$vimeoVideo]) && (int) $videos[$vimeoVideo]['seen'] == 1) {
                     $topicsSeen[$key]++;
                 }
 
@@ -602,39 +570,37 @@ class Event extends Model
                 $data['keys'][$key] = $sum1;
 
                 // Count all the lessons that have video link assigned
-                if($lesson->vimeo_video != '')
+                if ($lesson->vimeo_video != '') {
                     $lessons_with_video_links++;
+                }
             }
             $topicsSeen[$key] = $topicsSeen[$key] >= $lessons_with_video_links;
-
         }
-
 
         $instructors = $instructors ? $instructors->unique()->groupBy('instructor_id')->toArray() : $this->instructors->unique()->groupBy('instructor_id')->toArray();
 
         // Ean einai sto status = waiting tote fere ta topics xwris na exoyn instructor
-        if($emptyParameters){
-            $topics = Cache::remember('topics-event-status-'.$this->id, 60*60*24, function() use ($topicEvent, $lessons, $event_id){
+        if ($emptyParameters) {
+            $topics = Cache::remember('topics-event-status-' . $this->id, 60 * 60 * 24, function () use ($topicEvent, $lessons, $event_id) {
                 return $this->calcTopics($topicEvent, $lessons, $event_id, true);
             });
-        }else{
+        } else {
             $topics = $this->calcTopics($topicEvent, $lessons, $event_id, false);
         }
 
         $data['topics'] = $topics;
         $data['instructors'] = $instructors;
-        foreach($data['topics'] as $key => $topics){
-
+        foreach ($data['topics'] as $key => $topics) {
             //if(!isset($topics['lessons'][0]['topic_id'])){
-            if( !isset( $topics['lessons'] )){
+            if (!isset($topics['lessons'])) {
                 continue;
             }
 
-            if(!$topics = reset($topics['lessons'])){
+            if (!$topics = reset($topics['lessons'])) {
                 continue;
             }
 
-            if(!isset($topics['topic_id'])){
+            if (!isset($topics['topic_id'])) {
                 continue;
             }
 
@@ -654,19 +620,18 @@ class Event extends Model
         return $data;
     }
 
-    public function getFaqs(){
-
+    public function getFaqs()
+    {
         $faqs = [];
-        foreach($this->faqs->toArray() as $faq){
-            if(!isset($faq['category']['0'])){
+        foreach ($this->faqs->toArray() as $faq) {
+            if (!isset($faq['category']['0'])) {
                 continue;
             }
 
-            $faqs[$faq['category']['0']['name']][] = ['question' =>$faq['title'] , 'answer' => $faq['answer'] ];
-
-
+            $faqs[$faq['category']['0']['name']][] = ['question' =>$faq['title'], 'answer' => $faq['answer']];
         }
-       // dd($faqs);
+
+        // dd($faqs);
         return $faqs;
     }
 
@@ -713,39 +678,36 @@ class Event extends Model
     public function getFaqsByType()
     {
         $type = $this->is_elearning_course() ? 'elearning' : 'in_class';
-        $type = ['both',$type];
+        $type = ['both', $type];
 
-        return Faq::whereIn('type',$type)->with('category')->get();
+        return Faq::whereIn('type', $type)->with('category')->get();
     }
 
-    public function getFaqsByCategoryEvent(){
-
+    public function getFaqsByCategoryEvent()
+    {
         $faqs = [];
 
-        foreach($this->getFaqs() as $key => $faq){
-            if(key_exists($key,$faqs)){
+        foreach ($this->getFaqs() as $key => $faq) {
+            if (key_exists($key, $faqs)) {
                 continue;
             }
             $faqs[$key] = [];
         }
 
-
         $categoryFaqs = $this->getFaqsByType();
-        foreach($categoryFaqs as $faq){
-
-            foreach($faq->category as $categoryFaq){
-                $faqs[$categoryFaq['name']][] = array('id' => $faq['id'], 'question' =>  $faq['title']);
+        foreach ($categoryFaqs as $faq) {
+            foreach ($faq->category as $categoryFaq) {
+                $faqs[$categoryFaq['name']][] = ['id' => $faq['id'], 'question' =>  $faq['title']];
             }
         }
-
 
         //pt
 
         $new_faqs = [];
 
-        foreach($faqs as $key => $val){
-           $arr = unique_multidim_array($val, 'id');
-           $new_faqs[$key] = $arr;
+        foreach ($faqs as $key => $val) {
+            $arr = unique_multidim_array($val, 'id');
+            $new_faqs[$key] = $arr;
         }
 
         //dd($new_faqs);
@@ -753,34 +715,33 @@ class Event extends Model
 
         //pt
 
-
         //return $faqs;
     }
 
-
     public function statistic()
     {
-        return $this->belongsToMany(Event::class, 'event_statistics')->withPivot('videos','lastVideoSeen', 'notes', 'event_id', 'user_id');
+        return $this->belongsToMany(Event::class, 'event_statistics')->withPivot('videos', 'lastVideoSeen', 'notes', 'event_id', 'user_id');
     }
 
-    public function waitingList(){
+    public function waitingList()
+    {
         return $this->hasMany(WaitingList::class);
     }
 
-    public function examAccess( $user,$accessMonths = 2, $checkForCetification = true){
-
-        if($accessMonths < 1){
+    public function examAccess($user, $accessMonths = 2, $checkForCetification = true)
+    {
+        if ($accessMonths < 1) {
             // accessMonths var is video progress for this condition
             $accessMonths = 80;
             $periodAfterHasCourse = $this->progress($user);
-        }else{
+        } else {
             $periodAfterHasCourse = $this->period($user);
         }
 
         //$studentsEx = [1353,1866,1753,1882,1913,1923,1359];
-        $studentsEx = [1353,1866,1753,1882,1913,1923];
+        $studentsEx = [1353, 1866, 1753, 1882, 1913, 1923];
 
-        if(in_array($user->id, $studentsEx)){
+        if (in_array($user->id, $studentsEx)) {
             return true;
         }
 
@@ -788,19 +749,17 @@ class Event extends Model
         $event = $this;
         //if(!$event->created_at || $event->pivot->comment == 'enroll' /*|| $event->view_tpl == 'elearning_free'*/){
 
-        if(!$event->created_at || $event->pivot->comment == 'enroll||0' || (strpos($event->pivot->comment, 'enroll from') !== false && explode('||', $event->pivot->comment)[1] == 0)){
+        if (!$event->created_at || $event->pivot->comment == 'enroll||0' || (strpos($event->pivot->comment, 'enroll from') !== false && explode('||', $event->pivot->comment)[1] == 0)) {
             return false;
-        }else if( $event->pivot->comment == 'enroll||1' || (strpos($event->pivot->comment, 'enroll from') !== false && explode('||', $event->pivot->comment)[1] == 1)){
+        } elseif ($event->pivot->comment == 'enroll||1' || (strpos($event->pivot->comment, 'enroll from') !== false && explode('||', $event->pivot->comment)[1] == 1)) {
             //$periodAfterHasCourse = $accessMonths;
             $accessMonths = 80;
             $periodAfterHasCourse = $this->progress($user);
         }
 
-
         $certification = $checkForCetification && count($this->certificatesByUser($user->id)) > 0;
 
-        return $periodAfterHasCourse >=  $accessMonths && !$certification;
-
+        return $periodAfterHasCourse >= $accessMonths && !$certification;
     }
 
     /*public function progress($user)
@@ -830,28 +789,27 @@ class Event extends Model
         return 0 * 100;
     }*/
 
-    public function period($user){
-
+    public function period($user)
+    {
         $transaction1 = null;
         $transactionAll = $this->transactionsByUserNew($user['id'])->where('status', 1)->get();
 
-        if($transactionAll == null){
+        if ($transactionAll == null) {
             return 0;
-        }else{
+        } else {
             // fetch order by first payment date
             $transactions = $transactionAll->reverse();
 
             //parse first transaction has status = completed payment date
-            foreach($transactions as $transaction){
-
-                if($transaction['status'] == 1){
+            foreach ($transactions as $transaction) {
+                if ($transaction['status'] == 1) {
                     $transaction1 = $transaction;
                     break;
                 }
             }
         }
 
-        if($transaction1 == null){
+        if ($transaction1 == null) {
             return 0;
         }
 
@@ -862,15 +820,13 @@ class Event extends Model
         return $months;
     }
 
-
-    public function progress($user,$videos = false)
+    public function progress($user, $videos = false)
     {
-
-        if($videos == 'no_videos'){
+        if ($videos == 'no_videos') {
             return 0;
         }
 
-        if(!$videos && !$videos = $user->statistic()->wherePivot('event_id',$this['id'])->first()){
+        if (!$videos && !$videos = $user->statistic()->wherePivot('event_id', $this['id'])->first()) {
             return 0;
         }
 
@@ -879,34 +835,31 @@ class Event extends Model
 
         //dd($videos);
         $seenTime = 0;
-        if($videos != ''){
+        if ($videos != '') {
             $videos = json_decode($videos, true);
-            foreach($videos as $video){
-
-                if(!isset($video['total_duration'])){
+            foreach ($videos as $video) {
+                if (!isset($video['total_duration'])) {
                     continue;
                 }
 
-                $seen = (float)$video['total_seen'];
-                $seen = $seen > (float)$video['total_duration'] ? (float)$video['total_duration'] : $seen;
+                $seen = (float) $video['total_seen'];
+                $seen = $seen > (float) $video['total_duration'] ? (float) $video['total_duration'] : $seen;
 
                 $seenTime += $seen;
-                $totalDuration += (float)$video['total_duration'];
+                $totalDuration += (float) $video['total_duration'];
             }
-
         }
 
-        return $totalDuration > 0 ?  $seenTime /  $totalDuration * 100 : 0;
+        return $totalDuration > 0 ? $seenTime / $totalDuration * 100 : 0;
     }
 
-    public function video_seen($user,$videos = false)
+    public function video_seen($user, $videos = false)
     {
-
-        if($videos == 'no_videos'){
+        if ($videos == 'no_videos') {
             return 0;
         }
 
-        if(!$videos && !$videos = $user->statistic()->wherePivot('event_id',$this['id'])->first()){
+        if (!$videos && !$videos = $user->statistic()->wherePivot('event_id', $this['id'])->first()) {
             return '0 of ' . count($this->lessons);
         }
 
@@ -914,95 +867,94 @@ class Event extends Model
         $videos = json_decode($videos, true);
         //dd($videos);
         //dd($user->statistic()->wherePivot('event_id',$this['id'])->first());
-        if($videos){
+        if ($videos) {
             //$videos = json_decode($videos, true);
             //dd($videos);
             $sum = 0;
-            foreach($videos as $video){
-                if($video['seen'] == 1 || $video['seen'] == '1'){
+            foreach ($videos as $video) {
+                if ($video['seen'] == 1 || $video['seen'] == '1') {
                     $sum++;
                 }
-
             }
-            return $sum.' of '.count($videos);
+
+            return $sum . ' of ' . count($videos);
         }
 
         return'0 of ' . count($this->lessons);
         //return '0 of 0';
-
     }
 
-
-    public function invoices(){
-        return $this->morphToMany(Invoice::class, 'invoiceable','invoiceables');
+    public function invoices()
+    {
+        return $this->morphToMany(Invoice::class, 'invoiceable', 'invoiceables');
     }
 
-    public function transactions(){
-        return $this->morphToMany(Transaction::class, 'transactionable')->with('user.ticket','isSubscription');
+    public function transactions()
+    {
+        return $this->morphToMany(Transaction::class, 'transactionable')->with('user.ticket', 'isSubscription');
     }
 
-    public function invoicesByUser($user){
-
-        return $this->invoices()->doesntHave('subscription')->whereHas('user', function ($query) use($user) {
-                $query->where('id', $user);
-            })->withPivot('invoiceable_id','invoiceable_type');
+    public function invoicesByUser($user)
+    {
+        return $this->invoices()->doesntHave('subscription')->whereHas('user', function ($query) use ($user) {
+            $query->where('id', $user);
+        })->withPivot('invoiceable_id', 'invoiceable_type');
     }
 
-    public function transactionsByUserNew($user){
-        return $this->transactions()->with('invoice')->whereHas('user', function ($query) use($user) {
+    public function transactionsByUserNew($user)
+    {
+        return $this->transactions()->with('invoice')->whereHas('user', function ($query) use ($user) {
             $query->where('id', $user);
         })->latest();
     }
 
-    public function subscriptionInvoicesByUser($user){
-        return $this->invoices()->has('subscription')->whereHas('user', function ($query) use($user) {
-                $query->where('id', $user);
-            })->withPivot('invoiceable_id','invoiceable_type');
+    public function subscriptionInvoicesByUser($user)
+    {
+        return $this->invoices()->has('subscription')->whereHas('user', function ($query) use ($user) {
+            $query->where('id', $user);
+        })->withPivot('invoiceable_id', 'invoiceable_type');
     }
 
-
-    public function subscriptionΤransactionsByUser($user){
-
-        return $this->transactions()->has('subscription')->with('invoice','user')->whereHas('user', function ($query) use($user) {
-                $query->where('id', $user);
-            });
+    public function subscriptionΤransactionsByUser($user)
+    {
+        return $this->transactions()->has('subscription')->with('invoice', 'user')->whereHas('user', function ($query) use ($user) {
+            $query->where('id', $user);
+        });
 
         /*return $this->transactions()->whereHas('user', function ($query) use($user) {
             $query->where('id', $user);
         });*/
     }
 
-    public function transactionsByUser($user){
-
-        return $this->transactions()->doesntHave('subscription')->with('invoice','user')->whereHas('user', function ($query) use($user) {
-                $query->where('id', $user);
-            });
+    public function transactionsByUser($user)
+    {
+        return $this->transactions()->doesntHave('subscription')->with('invoice', 'user')->whereHas('user', function ($query) use ($user) {
+            $query->where('id', $user);
+        });
 
         /*return $this->transactions()->whereHas('user', function ($query) use($user) {
             $query->where('id', $user);
         });*/
     }
 
-
-    public function getExams(){
-
+    public function getExams()
+    {
         $curr_date_time = date('Y-m-d G:i:00');
         $curr_date = date('Y-m-d');
         $examsArray = [];
-        $exams = $this->exam->where('status',true);
+        $exams = $this->exam->where('status', true);
         //return $examsArray;
-        foreach($exams as $exam){
-
-            if($exam->publish_time >  $curr_date_time){
+        foreach ($exams as $exam) {
+            if ($exam->publish_time > $curr_date_time) {
                 $exam->exstatus = 0;
                 $exam->islive = 0;
                 $exam->isupcom = 1;
             //}else if($exam->publish_time <  $curr_date && $this->view_tpl != 'elearning_event'){
-            }else if($exam->publish_time <  $curr_date && !$this->is_elearning_course()){
+            } elseif ($exam->publish_time < $curr_date && !$this->is_elearning_course()) {
                 $exam->exstatus = 0;
                 $exam->islive = 0;
                 $exam->isupcom = 0;
-            }else{
+            } else {
                 $exam->exstatus = 0;
                 $exam->islive = 1;
                 $exam->isupcom = 0;
@@ -1014,38 +966,35 @@ class Event extends Model
         return $examsArray;
     }
 
-    public function certificates(){
+    public function certificates()
+    {
         return $this->morphToMany(Certificate::class, 'certificatable');
     }
 
-    public function certificatesByUser($user){
-
+    public function certificatesByUser($user)
+    {
         /*return $this->certificates()->whereHas('user', function ($query) use($user) {
             $query->where('id', $user);
         })->withPivot('certificatable_id','certificatable_type')->get();*/
 
-        return $this->certificates()->where('show_certificate',true)->whereHas('user', function ($query) use($user) {
-                $query->where('id', $user);
-            })->withPivot('certificatable_id','certificatable_type')->get();
-    }
-
-
-    public function userHasCertificate($user){
-
-        return $this->certificates()->whereHas('user', function ($query) use($user) {
+        return $this->certificates()->where('show_certificate', true)->whereHas('user', function ($query) use ($user) {
             $query->where('id', $user);
-        })->withPivot('certificatable_id','certificatable_type')->get();
+        })->withPivot('certificatable_id', 'certificatable_type')->get();
     }
 
+    public function userHasCertificate($user)
+    {
+        return $this->certificates()->whereHas('user', function ($query) use ($user) {
+            $query->where('id', $user);
+        })->withPivot('certificatable_id', 'certificatable_type')->get();
+    }
 
-    public function certification(User $user,$successPer = 0.9){
-
-
+    public function certification(User $user, $successPer = 0.9)
+    {
         $certification = count($this->certificatesByUser($user->id)) > 0;
         $infos = $this->event_info();
 
-        if($this->examAccess($user,$successPer) && !$certification){
-
+        if ($this->examAccess($user, $successPer) && !$certification) {
             $cert = new Certificate;
             $cert->success = true;
             $cert->create_date = strtotime(date('Y-m-d'));
@@ -1056,7 +1005,6 @@ class Event extends Model
             $cert->lastname = $user->lastname;
             $cert->credential = get_certifation_crendetial();
             $cert->certificate_title = isset($infos['certificate']['type']) && $infos['certificate']['type'] ? $infos['certificate']['type'] : $this->title;
-
 
             $createDate = strtotime(date('Y-m-d'));
             $cert->create_date = $createDate;
@@ -1072,16 +1020,13 @@ class Event extends Model
             $data['firstName'] = $user->firstname;
             $data['eventTitle'] = $this->title;
             $data['fbGroup'] = $this->fb_group;
-            $data['subject'] = 'Knowcrunch - ' . $data['firstName'] .' you certification is ready';
+            $data['subject'] = 'Knowcrunch - ' . $data['firstName'] . ' you certification is ready';
             $data['template'] = 'emails.user.certificate';
-            $data['certUrl'] = trim(url('/') . '/mycertificate/' . base64_encode($user->email."--".$cert->id));
+            $data['certUrl'] = trim(url('/') . '/mycertificate/' . base64_encode($user->email . '--' . $cert->id));
             $user->notify(new CertificateAvaillable($data));
             event(new EmailSent($user->email, 'CertificateAvaillable'));
-
         }
-
     }
-
 
     /*public function getTotalHours(){
 
@@ -1116,27 +1061,25 @@ class Event extends Model
         return $hours;
     }*/
 
-    public function getTotalHours(){
-
+    public function getTotalHours()
+    {
         $hours = 0;
         //In class
-        if($this->is_inclass_course()){
+        if ($this->is_inclass_course()) {
             $timeStarts = false;
             $timeEnds = false;
 
-            foreach($this->lessons as $lesson){
-
+            foreach ($this->lessons as $lesson) {
                 $timeStarts = false;
                 $timeEnds = false;
 
                 $timeStarts = strtotime($lesson->pivot->time_starts);
                 $timeEnds = strtotime($lesson->pivot->time_ends);
-                if($timeStarts && $timeEnds){
+                if ($timeStarts && $timeEnds) {
                     $hours += ($timeEnds - $timeStarts) / 60;
                 }
-
             }
-        }else{
+        } else {
             // E-learning
 
             // Return sec
@@ -1146,10 +1089,10 @@ class Event extends Model
             $totalVimeoSeconds = $this->getSumLessonHours($lessons);
             $hours = $totalVimeoSeconds;
         }
+
         //dd($lesson->pivot->time_starts);
         return $hours;
     }
-
 
     public function getXmlDescriptionAttribute($value)
     {
@@ -1158,6 +1101,7 @@ class Event extends Model
 
         return $value;
     }
+
     public function event_info1()
     {
         return $this->hasOne(EventInfo::class);
@@ -1167,16 +1111,16 @@ class Event extends Model
     {
         //return $this->hasOne(EventInfo::class);
 
-        $infos = $this->event_info1;//$this->hasOne(EventInfo::class)->first();
+        $infos = $this->event_info1; //$this->hasOne(EventInfo::class)->first();
         $data = [];
 
-        if($infos != null){
+        if ($infos != null) {
             $data['status'] = $infos['course_status'];
 
             $data['hours']['hour'] = $infos['course_hours'];
             $data['hours']['text'] = $infos['course_hours_text'];
             $data['hours']['title'] = $infos['course_hours_title'];
-            $data['hours']['icon'] = $infos['course_hours_icon'] != null ? json_decode($infos['course_hours_icon'],true) : null;
+            $data['hours']['icon'] = $infos['course_hours_icon'] != null ? json_decode($infos['course_hours_icon'], true) : null;
             $data['hours']['visible'] = $infos['course_hours_visible'] != null ? json_decode($infos['course_hours_visible'], true) : null;
 
             $data['language']['text'] = $infos['course_language'];
@@ -1185,18 +1129,16 @@ class Event extends Model
             $data['language']['visible'] = $infos['course_language_visible'] != null ? json_decode($infos['course_language_visible'], true) : null;
 
             $data['delivery'] = $infos['course_delivery'];
-            $data['delivery_icon'] = $infos['course_delivery_icon'] != null ? json_decode($infos['course_delivery_icon'],true) : null;
+            $data['delivery_icon'] = $infos['course_delivery_icon'] != null ? json_decode($infos['course_delivery_icon'], true) : null;
             $data['delivery_info']['text'] = $infos['course_delivery_text'];
             $data['delivery_info']['title'] = $infos['course_delivery_title'];
             $data['delivery_info']['visible'] = $infos['course_delivery_visible'] != null ? json_decode($infos['course_delivery_visible'], true) : null;
 
-            if($data['delivery'] == 139){
-
+            if ($data['delivery'] == 139) {
                 //dd($infos['course_inclass_city']);
                 $data['inclass']['absences'] = $infos['course_inclass_absences'];
                 $data['inclass']['city']['text'] = $infos['course_inclass_city'];
                 $data['inclass']['city']['icon'] = json_decode($infos['course_inclass_city_icon'], true);
-
 
                 $data['inclass']['dates'] = ($infos['course_inclass_dates'] != null && $infos['course_inclass_dates'] != '[]') ? json_decode($infos['course_inclass_dates'], true) : null;
                 $data['inclass']['days'] = ($infos['course_inclass_days'] != null && $infos['course_inclass_days'] != '[]') ? json_decode($infos['course_inclass_days'], true) : null;
@@ -1205,8 +1147,7 @@ class Event extends Model
                 $data['inclass']['elearning_access'] = ($infos['course_elearning_access'] != null) ? json_decode($infos['course_elearning_access'], true) : null;
                 $data['inclass']['elearning_access_icon'] = ($infos['course_elearning_access_icon'] != null) ? json_decode($infos['course_elearning_access_icon'], true) : null;
                 $data['inclass']['elearning_exam'] = ($infos['course_elearning_exam']) ? true : false;
-
-            }else if($data['delivery'] == 143){
+            } elseif ($data['delivery'] == 143) {
                 $data['elearning']['visible'] = $infos['course_elearning_visible'] != null ? json_decode($infos['course_elearning_visible'], true) : null;
                 $data['elearning']['icon'] = $infos['course_elearning_icon'] != null ? json_decode($infos['course_elearning_icon'], true) : null;
                 $data['elearning']['expiration'] = $infos['course_elearning_expiration'] != null ? $infos['course_elearning_expiration'] : null;
@@ -1219,8 +1160,7 @@ class Event extends Model
                 $data['elearning']['exam']['title'] = $infos['course_elearning_exam_title'] != null ? $infos['course_elearning_exam_title'] : null;
 
                 $data['elearning']['exam']['activate_months'] = $infos['course_elearning_exam_activate_months'] != null ? json_decode($infos['course_elearning_exam_activate_months'], true) : null;
-
-            }else if($data['delivery'] == 215){
+            } elseif ($data['delivery'] == 215) {
                 $data['inclass']['absences'] = $infos['course_inclass_absences'];
                 $data['inclass']['dates'] = ($infos['course_inclass_dates'] != null && $infos['course_inclass_dates'] != '[]') ? json_decode($infos['course_inclass_dates'], true) : null;
                 $data['inclass']['days'] = ($infos['course_inclass_days'] != null && $infos['course_inclass_days'] != '[]') ? json_decode($infos['course_inclass_days'], true) : null;
@@ -1234,11 +1174,9 @@ class Event extends Model
             $data['awards']['text'] = $infos['course_awards_text'];
             $data['awards']['icon'] = $infos['course_awards_icon'] != null ? json_decode($infos['course_awards_icon'], true) : null;
 
-
             $data['payment_method'] = $infos['course_payment_method'];
             $data['payment_icon'] = $infos['course_payment_icon'] != null ? json_decode($infos['course_payment_icon'], true) : null;
             $data['payment_installments'] = $infos['course_payment_installments'];
-
 
             $data['partner']['status'] = $infos['course_partner'];
             $data['partner']['text'] = $infos['course_partner_text'];
@@ -1247,7 +1185,6 @@ class Event extends Model
 
             $data['manager']['status'] = $infos['course_manager'];
             $data['manager']['icon'] = $infos['course_manager_icon'] != null ? json_decode($infos['course_manager_icon'], true) : null;
-
 
             //$data['certificate']['event_title'] = $infos['course_certification_event_title'];
             $data['certificate']['messages']['completion'] = $infos['course_certification_completion'];
@@ -1262,115 +1199,77 @@ class Event extends Model
             $data['certificate']['has_certificate'] = $infos['has_certificate'];
             $data['certificate']['has_certificate_exam'] = $infos['has_certificate_exam'];
 
-            $data['students']['number'] = (int)$infos['course_students_number'];
+            $data['students']['number'] = (int) $infos['course_students_number'];
             $data['students']['text'] = $infos['course_students_text'];
             $data['students']['title'] = $infos['course_students_title'];
             $data['students']['visible'] = $infos['course_students_visible'] != null ? json_decode($infos['course_students_visible'], true) : null;
             $data['students']['icon'] = $infos['course_students_icon'] != null ? json_decode($infos['course_students_icon'], true) : null;
         }
 
-
         return $data;
     }
 
-
-    public function isFree(){
-
+    public function isFree()
+    {
         $free = true;
         $infos = $this->event_info();
 
-        if(isset($infos['payment_method']) && $infos['payment_method'] != 'free'){
+        if (isset($infos['payment_method']) && $infos['payment_method'] != 'free') {
             $free = false;
         }
 
         return $free;
-
     }
 
-    public function hasCertificate(){
-
+    public function hasCertificate()
+    {
         $hasCertificate = false;
         $infos = $this->event_info();
 
-        if(isset($infos['certificate']['has_certificate']) && $infos['certificate']['has_certificate']){
+        if (isset($infos['certificate']['has_certificate']) && $infos['certificate']['has_certificate']) {
             $hasCertificate = true;
         }
 
         return $hasCertificate;
-
     }
 
-    public function hasCertificateExam(){
-
+    public function hasCertificateExam()
+    {
         $hasCertificateExam = false;
         $infos = $this->event_info();
 
-        if(isset($infos['certificate']['has_certificate_exam']) && $infos['certificate']['has_certificate_exam']){
+        if (isset($infos['certificate']['has_certificate_exam']) && $infos['certificate']['has_certificate_exam']) {
             $hasCertificateExam = true;
         }
 
         return $hasCertificateExam;
-
     }
 
     // Return seconds
-    public function getSumLessonHours($lessons){
+    public function getSumLessonHours($lessons)
+    {
         $total = 0;
-        foreach($lessons as $key => $lesson1){
-
+        foreach ($lessons as $key => $lesson1) {
             $sum1 = 0;
 
-            foreach($lesson1 as $key1 => $lesson){
+            foreach ($lesson1 as $key1 => $lesson) {
                 $sum = 0;
 
                 $sum1 = $sum1 + getSumLessonSecond($lesson);
-
             }
 
             $total = $total + $sum1;
-
         }
 
-        return $total/60;
+        return $total / 60;
     }
 
-
-    public function changeOrder($from = 0){
-
+    public function changeOrder($from = 0)
+    {
         $or = [];
 
-        foreach($this->allLessons()->wherePivot('priority','>=',$from)->get() as  $pLesson){
+        foreach ($this->allLessons()->wherePivot('priority', '>=', $from)->get() as  $pLesson) {
             $newPriorityLesson = $pLesson->pivot->priority + 1;
-            //$pLesson->pivot->priority = $newPriorityLesson;
-            //$pLesson->pivot->save();
-
-            $or[$pLesson->pivot->lesson_id] = [
-                                        'topic_id'=>$pLesson->pivot->topic_id,
-                                        'lesson_id'=>$pLesson->pivot->lesson_id,
-                                        'event_id' => $pLesson->pivot->event_id,
-                                        'instructor_id' => $pLesson->pivot->instructor_id,
-                                        'date' => $pLesson->pivot->date,
-                                        'time_starts' => $pLesson->pivot->time_starts,
-                                        'time_ends' => $pLesson->pivot->time_ends,
-                                        'duration' => $pLesson->pivot->duration,
-                                        'room' => $pLesson->pivot->room,
-                                        'location_url'=> $pLesson->pivot->location_url,
-                                        'automate_mail'=>$pLesson->pivot->automate_mail,
-                                        'send_automate_mail'=>$pLesson->pivot->send_automate_mail,
-                                        'priority' => $newPriorityLesson
-                                    ];
-        }
-
-        $this->allLessons()->detach(array_keys($or));
-        $this->allLessons()->attach($or);
-
-    }
-
-    public function fixOrder(){
-        $newPriorityLesson = 1;
-        $or = [];
-        foreach($this->allLessons()->orderBy('priority')->get() as  $pLesson){
-
             //$pLesson->pivot->priority = $newPriorityLesson;
             //$pLesson->pivot->save();
 
@@ -1387,25 +1286,50 @@ class Event extends Model
                 'location_url'=> $pLesson->pivot->location_url,
                 'automate_mail'=>$pLesson->pivot->automate_mail,
                 'send_automate_mail'=>$pLesson->pivot->send_automate_mail,
-                'priority' => $newPriorityLesson
+                'priority' => $newPriorityLesson,
             ];
-            $newPriorityLesson += 1;
-
         }
 
         $this->allLessons()->detach(array_keys($or));
         $this->allLessons()->attach($or);
-
     }
 
+    public function fixOrder()
+    {
+        $newPriorityLesson = 1;
+        $or = [];
+        foreach ($this->allLessons()->orderBy('priority')->get() as  $pLesson) {
+            //$pLesson->pivot->priority = $newPriorityLesson;
+            //$pLesson->pivot->save();
 
-    public function getAccessInMonths(){
+            $or[$pLesson->pivot->lesson_id] = [
+                'topic_id'=>$pLesson->pivot->topic_id,
+                'lesson_id'=>$pLesson->pivot->lesson_id,
+                'event_id' => $pLesson->pivot->event_id,
+                'instructor_id' => $pLesson->pivot->instructor_id,
+                'date' => $pLesson->pivot->date,
+                'time_starts' => $pLesson->pivot->time_starts,
+                'time_ends' => $pLesson->pivot->time_ends,
+                'duration' => $pLesson->pivot->duration,
+                'room' => $pLesson->pivot->room,
+                'location_url'=> $pLesson->pivot->location_url,
+                'automate_mail'=>$pLesson->pivot->automate_mail,
+                'send_automate_mail'=>$pLesson->pivot->send_automate_mail,
+                'priority' => $newPriorityLesson,
+            ];
+            $newPriorityLesson += 1;
+        }
 
+        $this->allLessons()->detach(array_keys($or));
+        $this->allLessons()->attach($or);
+    }
+
+    public function getAccessInMonths()
+    {
         $eventInfo = $this->event_info1;
         $accessMonths = isset($eventInfo['course_elearning_expiration']) ? $eventInfo['course_elearning_expiration'] : 0;
 
         return $accessMonths;
-
     }
 
     public function countdown()
@@ -1413,10 +1337,8 @@ class Event extends Model
         return $this->belongsToMany(Countdown::class, 'cms_countdown_event');
     }
 
-    public function resetCache(){
-        Cache::forget('topics-event-status-'.$this->id);
+    public function resetCache()
+    {
+        Cache::forget('topics-event-status-' . $this->id);
     }
-
-
-
 }

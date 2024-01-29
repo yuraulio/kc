@@ -1,9 +1,8 @@
 <?php
 
 namespace Apifon\Model {
-
-    class SubscriberInformation {
-
+    class SubscriberInformation
+    {
         public $number;
         public $custom_id;
         public $params = null;
@@ -16,6 +15,7 @@ namespace Apifon\Model {
         public function setNumber($number)
         {
             $this->number = $number;
+
             return $this;
         }
 
@@ -27,6 +27,7 @@ namespace Apifon\Model {
         public function setCustomId($custom_id)
         {
             $this->custom_id = $custom_id;
+
             return $this;
         }
 
@@ -38,6 +39,7 @@ namespace Apifon\Model {
         public function setParams($params)
         {
             $this->params = $params;
+
             return $this;
         }
 
@@ -46,9 +48,10 @@ namespace Apifon\Model {
          * @param $key
          * @param $value
          */
-        public function addParams($key, $value){
-            if(is_null($this->params)){
-                $this->params = array();
+        public function addParams($key, $value)
+        {
+            if (is_null($this->params)) {
+                $this->params = [];
             }
             $this->params[$key] = $value;
         }
@@ -57,15 +60,12 @@ namespace Apifon\Model {
          * Sends a landing page property to subscriber's Params.
          * @param $lp
          */
-        public function setLandingPage($lp){
-            if(is_null($this->params)){
-                $this->params = array();
+        public function setLandingPage($lp)
+        {
+            if (is_null($this->params)) {
+                $this->params = [];
             }
-            $this->params["apifon_lp"] = $lp;
+            $this->params['apifon_lp'] = $lp;
         }
-
-
     }
-
 }
-?>

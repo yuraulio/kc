@@ -20,6 +20,5 @@ class UserResolver implements \OwenIt\Auditing\Contracts\UserResolver
             }
         }
 
-        return null;
     }
 }

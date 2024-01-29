@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\Model\User;
+use Illuminate\Console\Command;
 
 class InitStatisticsTabs extends Command
 {
@@ -40,14 +40,13 @@ class InitStatisticsTabs extends Command
     {
         $users = User::has('statistic')->get();
 
-        foreach($users as $user){
+        foreach ($users as $user) {
             $count = 1;
-            foreach($user->statistic as $statistic){
-
+            foreach ($user->statistic as $statistic) {
                 $count = 1;
-                $videos = (array) json_decode($statistic->pivot->videos,true);
+                $videos = (array) json_decode($statistic->pivot->videos, true);
                 $newVideos = [];
-                foreach($videos as $key => $video){
+                foreach ($videos as $key => $video) {
                     //$video['tab']
                     //$video['tab']
                     //$video['tab']
@@ -61,12 +60,10 @@ class InitStatisticsTabs extends Command
                 }
                 //$statistic->pivot->videos = $newVideos;
                 //$statistic->save();
-     
-                $user->statistic()->wherePivot('event_id', $statistic['id'])->updateExistingPivot($statistic['id'],['videos' => json_encode($newVideos),
-                                           'notes' => $statistic->pivot->notes,'lastVideoSeen' => $statistic->pivot->lastVideoSeen], false);
 
+                $user->statistic()->wherePivot('event_id', $statistic['id'])->updateExistingPivot($statistic['id'], ['videos' => json_encode($newVideos),
+                    'notes' => $statistic->pivot->notes, 'lastVideoSeen' => $statistic->pivot->lastVideoSeen], false);
             }
-
         }
 
         return Command::SUCCESS;

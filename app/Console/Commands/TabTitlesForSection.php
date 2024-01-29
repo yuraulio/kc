@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\Model\Section;
+use Illuminate\Console\Command;
 
 class TabTitlesForSection extends Command
 {
@@ -40,7 +40,7 @@ class TabTitlesForSection extends Command
     {
         $sections = Section::all();
 
-        foreach($sections as $section){
+        foreach ($sections as $section) {
             $section->tab_title = $section->section;
             $section->visible = true;
             $section->save();

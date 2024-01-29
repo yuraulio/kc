@@ -5,10 +5,10 @@ namespace App\Console\Commands;
 use App\Model\Admin\MediaFile;
 use App\Model\Admin\MediaFolder;
 use App\Model\Admin\Page;
-use Illuminate\Console\Command;
-use App\Model\Topic;
-use App\Model\Event;
 use App\Model\Category;
+use App\Model\Event;
+use App\Model\Topic;
+use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -54,14 +54,13 @@ class NewAdminMediaManager extends Command
         $this->info("\nGetting directories in Upload disk\n");
 
         // $directories = \Storage::disk('public')->directories('/');
-        $this->storeDirectories(["/"]);
+        $this->storeDirectories(['/']);
 
         // delete records from db for deleted files
         $this->cleanDB();
 
         MediaFile::get()->searchable();
 
-        return;
     }
 
     public function storeDirectories($directories)
@@ -74,20 +73,20 @@ class NewAdminMediaManager extends Command
             $bar->start();
 
             if (!MediaFolder::wherePath($directory)->exists()) {
-                $prepath = $this->getRealName("/".$directory, false);
-                if ($prepath == "") {
-                    $prepath = "/";
+                $prepath = $this->getRealName('/' . $directory, false);
+                if ($prepath == '') {
+                    $prepath = '/';
                 }
                 $parent = MediaFolder::wherePath($prepath)->first();
                 $folderName = $this->getRealName($directory);
-                if ($folderName == "") {
-                    $folderName = "/";
+                if ($folderName == '') {
+                    $folderName = '/';
                 }
 
                 $mediaFolder = new MediaFolder();
                 $mediaFolder->name = $folderName;
-                $mediaFolder->path = $directory == "/" ? "/" : "/".$directory;
-                $mediaFolder->url = config('app.url'). "/uploads" . $mediaFolder->path;
+                $mediaFolder->path = $directory == '/' ? '/' : '/' . $directory;
+                $mediaFolder->url = config('app.url') . '/uploads' . $mediaFolder->path;
                 $mediaFolder->parent_id = $parent ? $parent->id : null;
                 $mediaFolder->save();
 
@@ -106,15 +105,15 @@ class NewAdminMediaManager extends Command
     public function syncFilesInDirectory($mediaFolder)
     {
         $this->info("\nSyncing files in $mediaFolder->path");
-        $files = \File::files(public_path('/uploads'). '/' . $mediaFolder->path);
+        $files = \File::files(public_path('/uploads') . '/' . $mediaFolder->path);
         $bar = $this->output->createProgressBar(count($files));
 
         $versions = Page::VERSIONS;
 
         foreach ($files as $key => $file) {
             $path = explode('/public/uploads', $file->getPath())[1];
-            $path = "/" . (ltrim($path, "/"));
-            $filepath = $path . "/" . basename($file);
+            $path = '/' . (ltrim($path, '/'));
+            $filepath = $path . '/' . basename($file);
             $parentFolder = MediaFolder::wherePath($path)->first();
 
             MediaFile::withoutSyncingToSearch(function () use ($parentFolder, $file, $versions, $filepath) {
@@ -122,9 +121,9 @@ class NewAdminMediaManager extends Command
                 $parentId = null;
 
                 $name = basename($file);
-                $name = Str::of($name)->basename("." . $file->getExtension());
-                
-                $fileVersion = "original";
+                $name = Str::of($name)->basename('.' . $file->getExtension());
+
+                $fileVersion = 'original';
 
                 // look for version in the name
                 foreach ($versions as $version) {
@@ -133,14 +132,14 @@ class NewAdminMediaManager extends Command
                         $fileVersion = $versionName;
 
                         $originalFileName = Str::of($name)->basename($fileVersion);
-                        $originalFile = MediaFile::whereName($originalFileName)->where("folder_id", $folderId)->first();
+                        $originalFile = MediaFile::whereName($originalFileName)->where('folder_id', $folderId)->first();
                         if ($originalFile) {
                             $parentId = $originalFile->id;
                         }
                     }
                 }
 
-                $path = "/" . (ltrim($filepath, "/"));
+                $path = '/' . (ltrim($filepath, '/'));
 
                 $mediaFile = MediaFile::wherePath($path)->firstOrNew();
                 $mediaFile->name = basename($file);
@@ -148,20 +147,20 @@ class NewAdminMediaManager extends Command
                 $mediaFile->extension = $file->getExtension();
                 $mediaFile->folder_id = $folderId;
                 $mediaFile->size = $file->getSize();
-                $mediaFile->url = config('app.url'). "/uploads" . $filepath;
+                $mediaFile->url = config('app.url') . '/uploads' . $filepath;
                 $mediaFile->created_at = filemtime($file);
                 $mediaFile->parent_id = $mediaFile->parent_id ? $mediaFile->parent_id : $parentId;
                 $mediaFile->version = $mediaFile->version ? $mediaFile->version : $fileVersion;
                 $mediaFile->save();
 
-                if ($fileVersion == "original") {
+                if ($fileVersion == 'original') {
                     // try to find child files
-                    $childFiles = MediaFile::where("name", "LIKE", $name."%")
-                        ->where("folder_id", $folderId)->where("id", "!=", $mediaFile->id)->get();
+                    $childFiles = MediaFile::where('name', 'LIKE', $name . '%')
+                        ->where('folder_id', $folderId)->where('id', '!=', $mediaFile->id)->get();
                     foreach ($childFiles as $childFile) {
                         $childVersion = Str::of($childFile->name)->afterLast($name);
-                        $childVersion = ltrim($childVersion, "-");
-                        $childVersion = Str::of($childVersion)->basename(".".$childFile->extension);
+                        $childVersion = ltrim($childVersion, '-');
+                        $childVersion = Str::of($childVersion)->basename('.' . $childFile->extension);
 
                         if ($childVersion) {
                             $childFile->parent_id = $mediaFile->id;
@@ -181,7 +180,7 @@ class NewAdminMediaManager extends Command
 
     public function getRealName($string, $last = true)
     {
-        $parts  = explode('/', $string);
+        $parts = explode('/', $string);
         $name = array_pop($parts);
         $string = implode('/', $parts);
 

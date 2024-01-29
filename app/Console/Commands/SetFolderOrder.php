@@ -39,14 +39,13 @@ class SetFolderOrder extends Command
      */
     public function handle()
     {
-        $rootFolder = MediaFolder::wherepath("/")->first();
+        $rootFolder = MediaFolder::wherepath('/')->first();
 
         $rootFolder->order = 0;
         $rootFolder->save();
 
         $this->setOrder($rootFolder);
 
-        return;
     }
 
     private function setOrder($folder)
@@ -63,6 +62,5 @@ class SetFolderOrder extends Command
             }
         }
 
-        return;
     }
 }

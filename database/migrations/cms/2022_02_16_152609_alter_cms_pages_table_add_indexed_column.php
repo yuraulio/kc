@@ -14,7 +14,7 @@ class AlterCmsPagesTableAddIndexedColumn extends Migration
     public function up()
     {
         Schema::table('cms_pages', function (Blueprint $table) {
-            $table->boolean("indexed")->default(true);
+            $table->boolean('indexed')->default(true);
         });
     }
 

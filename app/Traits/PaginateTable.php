@@ -2,13 +2,13 @@
 
 namespace App\Traits;
 
+use Carbon\Carbon;
 use Exception;
-use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\Schema;
 use ReflectionClass;
 use ReflectionMethod;
-use \Carbon\Carbon;
 
 trait PaginateTable
 {
@@ -32,8 +32,8 @@ trait PaginateTable
             return $query->orderBy($column, $option);
         }
 
-        if (strpos($column, ".") !== false) {
-            $elements = explode(".", $column);
+        if (strpos($column, '.') !== false) {
+            $elements = explode('.', $column);
 
             return $this->tryRelationshipQuery($query->getModel(), $query, $elements, $option, []);
         }
@@ -60,7 +60,7 @@ trait PaginateTable
                     $query = $query->select($parents[0] . '.*');
                 }
 
-                $query = $query->join($model, $model . "." . $modelKey, '=', $parent . "." . $parentKey);
+                $query = $query->join($model, $model . '.' . $modelKey, '=', $parent . '.' . $parentKey);
 
                 // If there is more then one subrelation repeat join
                 if (count($elements) > 2) {
@@ -70,7 +70,7 @@ trait PaginateTable
                     return $this->tryRelationshipQuery($child, $query, $elements, $option, $parents);
                 }
 
-                return $query->orderBy($model . "." . $column, $option);
+                return $query->orderBy($model . '.' . $column, $option);
             } else {
                 return $query;
             }
@@ -94,8 +94,8 @@ trait PaginateTable
         $params = $params->all();
         // parse table parameters column|option
         foreach ($params as $key => $value) {
-            if (strpos($key, "|") !== false) {
-                $elements = explode("|", $key);
+            if (strpos($key, '|') !== false) {
+                $elements = explode('|', $key);
 
                 $this->filterRelations($query, $elements, $value);
             } else {
@@ -107,7 +107,7 @@ trait PaginateTable
                         } else {
                             $query->whereIn($key, $value);
                         }
-                    } elseif (is_string($value) && substr($value, 0, 2) == "!=") {
+                    } elseif (is_string($value) && substr($value, 0, 2) == '!=') {
                         $query->where($key, '!=', $value);
                     } else {
                         $query->where($key, $value);
@@ -124,12 +124,13 @@ trait PaginateTable
         return $query->whereHas($elements[0], function ($q) use ($elements, $value) {
             if (count($elements) > 2) {
                 array_shift($elements);
+
                 return $this->filterRelations($q, $elements, $value);
             }
 
             if (is_array($value)) {
                 $q->whereIn(end($elements), $value);
-            } elseif (is_string($value) && substr($value, 0, 2) == "!=") {
+            } elseif (is_string($value) && substr($value, 0, 2) == '!=') {
                 $q->where(end($elements), '!=', $value);
             } else {
                 $q->where(end($elements), $value);
@@ -164,7 +165,7 @@ trait PaginateTable
                             'parent' => $return->getParent()->getTable(),
                             'model' => $return->getModel()->getTable(),
                             'model_key' => $return->getOwnerKeyName(),
-                            'parent_key' => $return->getForeignKeyName()
+                            'parent_key' => $return->getForeignKeyName(),
                         ];
                     }
                 }

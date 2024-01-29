@@ -2,18 +2,19 @@
 
 namespace App\Notifications;
 
+use Carbon\Carbon;
+use DB;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Str;
-use DB;
-use Carbon\Carbon;
 
 class userChangePassword extends Notification
 {
     use Queueable;
     private $user;
+
     /**
      * Create a new notification instance.
      *
@@ -43,18 +44,17 @@ class userChangePassword extends Notification
      */
     public function toMail($notifiable)
     {
-
         $token = Str::random(64);
-  
+
         DB::table('password_resets')->insert([
-            'email' => $this->user->email, 
-            'token' => $token, 
-            'created_at' => Carbon::now()
+            'email' => $this->user->email,
+            'token' => $token,
+            'created_at' => Carbon::now(),
         ]);
 
         return (new MailMessage)
-                    ->subject('Knowcrunch - ' .$this->user->firstname . ' change your password')
-                    ->view( 'activation.emails.student-reminder', ['user'=> $this->user, 'code' => $token]);
+                    ->subject('Knowcrunch - ' . $this->user->firstname . ' change your password')
+                    ->view('activation.emails.student-reminder', ['user'=> $this->user, 'code' => $token]);
     }
 
     /**

@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\Model\Event;
+use Illuminate\Console\Command;
 
 class SyllabusManager extends Command
 {
@@ -38,10 +38,9 @@ class SyllabusManager extends Command
      */
     public function handle()
     {
-
         $events = Event::all();
 
-        foreach($events as $event){
+        foreach ($events as $event) {
             $event->syllabus()->sync(10);
         }
 

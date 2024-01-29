@@ -2,11 +2,11 @@
 
 namespace App\Notifications;
 
+use App\Model\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use App\Model\User;
 
 class CreateYourPassword extends Notification
 {
@@ -43,11 +43,10 @@ class CreateYourPassword extends Notification
      */
     public function toMail($notifiable)
     {
-
         $slug['id'] = $this->user->id;
         $slug['email'] = $this->user->email;
         $slug['create'] = true;
-        
+
         $slug = encrypt($slug);
 
         return (new MailMessage)
@@ -64,7 +63,7 @@ class CreateYourPassword extends Notification
     public function toArray($notifiable)
     {
         return [
-            'user_id' => $this->user['id']
+            'user_id' => $this->user['id'],
         ];
     }
 }

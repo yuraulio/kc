@@ -181,35 +181,31 @@
         	<?php
 
                 $availableInstallments = $installments;
-                $installments = [];
+    $installments = [];
 
-                $count = 1;
-                if($availableInstallments != 0){
+    $count = 1;
+    if ($availableInstallments != 0) {
+        while ($count <= $availableInstallments) {
+            if ($count == 1) {
+                $installments[$count] = $price;
+            } elseif ($count > 1) {
+                $installments[$count] = round($price / $count, 2);
+            }
+            $count++;
+        }
+    }
 
-                    while($count <= $availableInstallments){
-                        if($count == 1){
-                            $installments[$count] = $price;
+    foreach ($installments as $inst_num => $installment) {
+        if ($inst_num != 0) {
+            if ($installment - floor($installment) > 0) {
+                $installments[$inst_num] = number_format($installments[$inst_num], 2, '.', ',');
+            } else {
+                $installments[$inst_num] = number_format($installments[$inst_num], 0, '.', ',');
+            }
+        }
+    }
 
-                        }else if($count > 1){
-                            $installments[$count] = round($price / $count, 2);
-                        }
-                        $count++;
-                    }
-
-                }
-
-                foreach($installments as $inst_num => $installment){
-                    if($inst_num != 0){
-                        if($installment - floor($installment)>0){
-                            $installments[$inst_num] = number_format($installments[$inst_num] , 2 , '.', ',');
-                        }else{
-                            $installments[$inst_num] = number_format($installments[$inst_num] , 0 , '.', ',');
-                        }
-                    }
-
-                }
-
-        	?>
+    ?>
         	<div class="col-md-6 col-xl-6 selection-order">
 			<h1 class="hidden-lg">Checkout</h1>
 

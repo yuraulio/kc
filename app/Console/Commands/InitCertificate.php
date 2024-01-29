@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\Model\Certificate;
+use Illuminate\Console\Command;
 
 class InitCertificate extends Command
 {
@@ -41,42 +41,37 @@ class InitCertificate extends Command
         $certificates = Certificate::all();
         $months = [];
         $sum = 0;
-        foreach($certificates as $certificate){
-
-
-            if(!$certificate->event->first()){
+        foreach ($certificates as $certificate) {
+            if (!$certificate->event->first()) {
                 continue;
             }
 
-
-            if($certificate->event->first()->view_tpl == 'elearning_event' || $certificate->event->first()->view_tpl == 'elearning_free'){
+            if ($certificate->event->first()->view_tpl == 'elearning_event' || $certificate->event->first()->view_tpl == 'elearning_free') {
                 // if($certificate->success){
-                //     $certificate->template ='kc_diploma_2022a'; 
+                //     $certificate->template ='kc_diploma_2022a';
                 // }else{
                 //     $certificate->template ='kc_attendance_2022a';
                 // }
                 $certificate->template = 'new_kc_certificate';
                 $certificate->save();
-            }else if( $certificate->event->first()->paymentMethod->first() && $certificate->event->first()->paymentMethod->first()->id != 1 ){
-
+            } elseif ($certificate->event->first()->paymentMethod->first() && $certificate->event->first()->paymentMethod->first()->id != 1) {
                 // if($certificate->success){
-                //     $certificate->template ='kc_diploma_2022a'; 
+                //     $certificate->template ='kc_diploma_2022a';
                 // }else{
                 //     $certificate->template ='kc_attendance_2022a';
                 // }
                 $certificate->template = 'new_kc_certificate';
                 $certificate->save();
             }
-
 
             /*if($certificate->credential){
                 continue;
             }
 
             /*if($certificate->event->first()->id == 2304){
-                
+
                 $certificate->certificate_title = 'Professional Diploma in Digital & Social Media Marketing';
-            
+
             }else{
 
                 $certificate->certificate_title = 'E-Learning Masterclass in Facebook Marketing';
@@ -85,13 +80,13 @@ class InitCertificate extends Command
 
             if($certificate->event->first()->delivery->first() && $certificate->event->first()->delivery->first()->id == 143){
                 if($certificate->success){
-                    $certificate->template ='kc_diploma_2022a'; 
+                    $certificate->template ='kc_diploma_2022a';
                 }else{
                     $certificate->template ='kc_attendance_2022a';
                 }
             }else{
                 if($certificate->success){
-                    $certificate->template ='kc_deree_diploma'; 
+                    $certificate->template ='kc_deree_diploma';
                 }else{
                     $certificate->template ='kc_deree_attendance';
                 }
@@ -100,7 +95,7 @@ class InitCertificate extends Command
             if(!key_exists(date('Y_m',$certificate->create_date),$months)){
                 $months[date('Y_m',$certificate->create_date)] = 1;
             }else{
-            
+
                 $months[date('Y_m',$certificate->create_date)] += 1;
             }
 
@@ -117,6 +112,7 @@ class InitCertificate extends Command
 
             $certificate->save();*/
         }
+
         return 0;
     }
 }

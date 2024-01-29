@@ -3,8 +3,8 @@
 namespace App\Http\Requests;
 
 use App\Model\Tag;
-use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class TagRequest extends FormRequest
 {
@@ -27,11 +27,11 @@ class TagRequest extends FormRequest
     {
         return [
             'name' => [
-                'required', 'min:3', Rule::unique((new Tag)->getTable())->ignore($this->route()->tag->id ?? null)
+                'required', 'min:3', Rule::unique((new Tag)->getTable())->ignore($this->route()->tag->id ?? null),
             ],
             'color' => [
-                'required'
-            ]
+                'required',
+            ],
         ];
     }
 }

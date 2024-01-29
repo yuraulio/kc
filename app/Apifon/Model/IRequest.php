@@ -2,17 +2,15 @@
 
 namespace Apifon\Model;
 
+interface IRequest
+{
+    public function getBody();
 
-    interface IRequest{
+    public function getCreateBody();
 
-        public function getBody();
+    public function getReadBody();
 
-        public function getCreateBody();
+    public function getUpdateBody();
 
-        public function getReadBody();
-
-        public function getUpdateBody();
-
-        public function getDeleteBody();
-
-    }
+    public function getDeleteBody();
+}

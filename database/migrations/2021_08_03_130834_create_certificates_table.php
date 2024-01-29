@@ -35,7 +35,6 @@ class CreateCertificatesTable extends Migration
             $table->text('body')->after('description')->nullable();
             $table->text('url')->nullable()->change();
         });
-
     }
 
     /**

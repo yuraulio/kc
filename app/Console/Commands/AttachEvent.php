@@ -2,11 +2,11 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
+use App\Model\Event;
 use App\Model\Media;
 use App\Model\Metas;
-use App\Model\Event;
 use App\Model\Pages;
+use Illuminate\Console\Command;
 
 class AttachEvent extends Command
 {
@@ -41,16 +41,15 @@ class AttachEvent extends Command
      */
     public function handle()
     {
-
         $events = Event::all();
 
-        foreach($events as $event){
-            if(!$event->mediable){
+        foreach ($events as $event) {
+            if (!$event->mediable) {
                 $media = new Media;
                 $event->mediable()->save($media);
             }
 
-            if(!$event->metable){
+            if (!$event->metable) {
                 $media = new Metas;
                 $event->metable()->save($media);
             }
@@ -58,13 +57,13 @@ class AttachEvent extends Command
 
         $events = Pages::all();
 
-        foreach($events as $event){
-            if(!$event->mediable){
+        foreach ($events as $event) {
+            if (!$event->mediable) {
                 $media = new Media;
                 $event->mediable()->save($media);
             }
 
-            if(!$event->metable){
+            if (!$event->metable) {
                 $media = new Metas;
                 $event->metable()->save($media);
             }

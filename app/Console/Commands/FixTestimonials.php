@@ -2,9 +2,9 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
-use App\Model\Testimonial;
 use App\Model\Media;
+use App\Model\Testimonial;
+use Illuminate\Console\Command;
 
 class FixTestimonials extends Command
 {
@@ -39,14 +39,12 @@ class FixTestimonials extends Command
      */
     public function handle()
     {
-        
         $testimonials = Testimonial::all();
-        foreach($testimonials as $event){
-            if(!$event->mediable){
+        foreach ($testimonials as $event) {
+            if (!$event->mediable) {
                 $media = new Media;
                 $event->mediable()->save($media);
             }
         }
-       
     }
 }

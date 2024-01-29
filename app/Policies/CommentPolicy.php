@@ -2,8 +2,8 @@
 
 namespace App\Policies;
 
-use App\Model\Admin\Comment;
 use App\Model\Admin\Admin;
+use App\Model\Admin\Comment;
 use App\Model\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 

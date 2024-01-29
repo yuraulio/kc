@@ -14,19 +14,18 @@ class SettingsSeeder extends Seeder
      */
     public function run()
     {
-        if (!Setting::whereSetting("cms_mode")->first()){
+        if (!Setting::whereSetting('cms_mode')->first()) {
             $setting = new Setting();
-            $setting->setting = "cms_mode";
-            $setting->value = "old";
+            $setting->setting = 'cms_mode';
+            $setting->value = 'old';
             $setting->save();
         }
 
-        if (!Setting::whereSetting("search_placeholder")->first()){
+        if (!Setting::whereSetting('search_placeholder')->first()) {
             $setting = new Setting();
-            $setting->setting = "search_placeholder";
-            $setting->value = "Search";
+            $setting->setting = 'search_placeholder';
+            $setting->value = 'Search';
             $setting->save();
         }
-
     }
 }

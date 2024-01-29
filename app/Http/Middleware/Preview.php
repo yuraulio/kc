@@ -2,9 +2,10 @@
 
 namespace App\Http\Middleware;
 
+use Auth;
 use Closure;
 use Illuminate\Http\Request;
-use Auth;
+
 class Preview
 {
     /**
@@ -16,27 +17,23 @@ class Preview
      */
     public function handle(Request $request, Closure $next)
     {
-    
-        if(isset($_GET['preview']) && $_GET['preview'] == 'true'){
+        if (isset($_GET['preview']) && $_GET['preview'] == 'true') {
             //dd(get_status_by_slug($request->path()));
-            //dd(Auth::user());   
+            //dd(Auth::user());
 
-            if(!Auth::check()){
+            if (!Auth::check()) {
                 abort(404);
             }
 
             $roles = Auth::user()->role->pluck('name')->toArray();
 
-            if (!(in_array('Super Administrator',$roles) || in_array('Administrator',$roles) || in_array('Manager',$roles) || in_array('Author',$roles))) {
+            if (!(in_array('Super Administrator', $roles) || in_array('Administrator', $roles) || in_array('Manager', $roles) || in_array('Author', $roles))) {
                 abort(404);
-            
             }
-
-
-        }else if( !get_status_by_slug($request->path())){
+        } elseif (!get_status_by_slug($request->path())) {
             abort(404);
         }
-    
+
         return $next($request);
     }
 }

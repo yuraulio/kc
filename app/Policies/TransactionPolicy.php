@@ -18,8 +18,6 @@ class TransactionPolicy
      */
     public function viewAny(User $user)
     {
-        
-        
     }
 
     /**
@@ -31,10 +29,10 @@ class TransactionPolicy
      */
     public function view(User $user)
     {
-
         $roles = $user->role->pluck('name')->toArray();
-        return (in_array('Super Administrator',$roles) || in_array('Administrator',$roles) || in_array('Manager',$roles) || 
-                        in_array('Author',$roles) || in_array('Knowcrunch Partner',$roles));
+
+        return in_array('Super Administrator', $roles) || in_array('Administrator', $roles) || in_array('Manager', $roles) ||
+                        in_array('Author', $roles) || in_array('Knowcrunch Partner', $roles);
     }
 
     /**

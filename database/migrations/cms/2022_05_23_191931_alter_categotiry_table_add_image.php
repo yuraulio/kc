@@ -14,7 +14,7 @@ class AlterCategotiryTableAddImage extends Migration
     public function up()
     {
         Schema::table('cms_categories', function (Blueprint $table) {
-            $table->bigInteger("image_id")->nullable();
+            $table->bigInteger('image_id')->nullable();
         });
     }
 

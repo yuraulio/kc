@@ -25,31 +25,31 @@ Auth::routes(['register' => false]);
 
 Route::get('/slack-test', function () {
     $user = User::first();
-    if($user){
+    if ($user) {
         $response = $user->notify(new ErrorSlack('Error example message. We can name people, for example: Lucas <@U0617USV6NB> or Elli <@U064KHTQ6LX>'));
-        echo "Test notification sent to Slack: ". json_encode($response);
-    }else{
-        echo "User not exist";
+        echo 'Test notification sent to Slack: ' . json_encode($response);
+    } else {
+        echo 'User not exist';
     }
 });
 Route::get('/debug-bugsnag', function () {
-    Bugsnag::notifyException(new RuntimeException("Test error"));
-    echo "Test notification sent to Bugsnag";
+    Bugsnag::notifyException(new RuntimeException('Test error'));
+    echo 'Test notification sent to Bugsnag';
 });
 Route::get('/debug-bugsnag-error-warning', function () {
-    trigger_error("Warning error", E_USER_WARNING);
+    trigger_error('Warning error', E_USER_WARNING);
 });
 Route::get('/debug-bugsnag-error-error', function () {
-    trigger_error("Error error", E_USER_ERROR);
+    trigger_error('Error error', E_USER_ERROR);
 });
 Route::get('/debug-bugsnag-error-general', function () {
     $variable = 123 / 0;
 });
 
 Route::get('/debug-infinite-loop/{seconds}', function ($seconds) {
-    echo "Test to break the website because infinite loop. Check if we track throw Bugsnag";
+    echo 'Test to break the website because infinite loop. Check if we track throw Bugsnag';
     echo "<br>Creating process that takes $seconds second to execute";
-    for($i = 1; $i <= $seconds; $i++){
+    for ($i = 1; $i <= $seconds; $i++) {
         echo "<br>Second $i";
         sleep(1);
     }
@@ -61,12 +61,9 @@ Route::get('lock', 'PageController@lock')->name('page.lock');
 Route::get('mycertificateview/{id}/{title}', 'Theme\CertificateController@view_results')->name('certificate.results');
 
 Route::group(['middleware' => 'auth.aboveauthor', 'prefix' => 'admin'], function () {
-
-    Route::get('/refresh-cache', 'UtilController@refreshCache')->name("admin.refresh-cache");
+    Route::get('/refresh-cache', 'UtilController@refreshCache')->name('admin.refresh-cache');
 
     Route::get('/', 'HomeController@index')->name('home');
-
-
 
     Route::resource('category', 'CategoryController', ['except' => ['show']]);
     Route::resource('tag', 'TagController', ['except' => ['show']]);
@@ -104,7 +101,6 @@ Route::group(['middleware' => 'auth.aboveauthor', 'prefix' => 'admin'], function
     Route::post('/events/export-students', 'EventController@exportStudent')->name('event.export-students');
     Route::get('/events/statistics/{id}', 'EventController@event_statistics')->name('event.statistics');
     Route::post('/events/export-students-exams', 'EventController@exportStudentExams')->name('event.export-students-exams');
-
 
     Route::post('/summary/update/{summary}', 'SummaryController@update')->name('summary.update');
 
@@ -170,13 +166,12 @@ Route::group(['middleware' => 'auth.aboveauthor', 'prefix' => 'admin'], function
 
     //User
     Route::post('user/assignEventToUserCreate', ['as' => 'user.assignToCourse', 'uses' => 'UserController@assignEventToUserCreate']);
-    Route::post('user/change-paid-status','UserController@changePaidStatus');
-    Route::post('user/save-notes','UserController@saveNotes');
+    Route::post('user/change-paid-status', 'UserController@changePaidStatus');
+    Route::post('user/save-notes', 'UserController@saveNotes');
     Route::get('user/edit_ticket', ['as' => 'user.edit_ticket', 'uses' => 'UserController@edit_ticket']);
     Route::post('user/remove_ticket_user', ['as' => 'user.remove_ticket_user', 'uses' => 'UserController@remove_ticket_user']);
     Route::get('user/absences/{user}/{event}', 'UserController@getAbsences');
     Route::post('user/login_as/{id}', 'UserController@loginAs')->name('user.login_as');
-
 
     //Videos
     Route::get('video/index', ['as' => 'video.index', 'uses' => 'VideoController@index']);
@@ -200,7 +195,7 @@ Route::group(['middleware' => 'auth.aboveauthor', 'prefix' => 'admin'], function
     Route::get('ticket-active/{event}/{ticket}/{active}', 'TicketController@enableDisable');
 
     //custom Topic (inside event)
-    Route::get('topics/index_event', [ 'uses' => 'TopicController@index']);
+    Route::get('topics/index_event', ['uses' => 'TopicController@index']);
     Route::get('topics/edit_event', ['as' => 'topics.edit_event', 'uses' => 'TopicController@edit_event']);
     Route::get('topics/create_event', ['as' => 'topics.create_event', 'uses' => 'TopicController@create_event']);
     Route::post('topics/store_event', ['as' => 'topics.store_event', 'uses' => 'TopicController@store_event']);
@@ -213,7 +208,7 @@ Route::group(['middleware' => 'auth.aboveauthor', 'prefix' => 'admin'], function
 
     //Custom unssign user from event
 
-    Route::post('user/store_event', [ 'uses' => 'TopicController@store_event']);
+    Route::post('user/store_event', ['uses' => 'TopicController@store_event']);
 
     // Route::get('role/delete/{id}', ['as' => 'role.delete', 'uses' => 'RoleController@delete']);
 
@@ -248,7 +243,6 @@ Route::group(['middleware' => 'auth.aboveauthor', 'prefix' => 'admin'], function
     Route::post('events/fetchElearningInfos', ['as' => 'events.fetchElearningInfos', 'uses' => 'EventController@elearning_infos_user_table']);
     Route::get('events/export-certificates/{event}', 'Theme\CertificateController@exportCertificates');
 
-
     //Notification
     Route::get('notification', ['as' => 'notification.show', 'uses' => 'NotificationController@index']);
 
@@ -269,9 +263,7 @@ Route::group(['middleware' => 'auth.aboveauthor', 'prefix' => 'admin'], function
     //EventAssingCoupon
     Route::post('events/assing-coupon/{event}/{coupon}', 'EventController@assignCoupon')->name('event.assign_coupon');
 
-
     Route::post('/events/fetchTopics', ['as' => 'events.fetchTopics', 'uses' => 'EventController@fetchTopics']);
-
 
     Route::get('/pages/{page}', ['as' => 'page.index', 'uses' => 'PageController@index']);
 
@@ -281,7 +273,6 @@ Route::group(['middleware' => 'auth.aboveauthor', 'prefix' => 'admin'], function
 
     /////Metas
     Route::post('/metas/update/{metas}', 'MetasController@update')->name('metas.update');
-
 
     ///DashboardController
     Route::get('/search-user/{search_term}', 'Dashboard\DashboardController@searchUser');
@@ -419,15 +410,15 @@ Route::group(['middleware' => 'auth.aboveauthor', 'prefix' => 'admin'], function
         //Removes post's photo
         Route::get('/remove_photo/{slug}/{lang_id}', 'BinshopsAdminController@remove_photo')->name('binshopsblog.admin.remove_photo');
 
-        Route::group(['prefix' => "image_uploads",], function () {
-            Route::get("/", "BinshopsImageUploadController@index")->name("binshopsblog.admin.images.all");
-            Route::get("/upload", "BinshopsImageUploadController@create")->name("binshopsblog.admin.images.upload");
-            Route::post("/upload", "BinshopsImageUploadController@store")->name("binshopsblog.admin.images.store");
+        Route::group(['prefix' => 'image_uploads'], function () {
+            Route::get('/', 'BinshopsImageUploadController@index')->name('binshopsblog.admin.images.all');
+            Route::get('/upload', 'BinshopsImageUploadController@create')->name('binshopsblog.admin.images.upload');
+            Route::post('/upload', 'BinshopsImageUploadController@store')->name('binshopsblog.admin.images.store');
         });
 
         Route::delete('/delete_post/{blogPostId}', 'BinshopsAdminController@destroy_post')->name('binshopsblog.admin.destroy_post');
 
-        Route::group(['prefix' => 'comments',], function () {
+        Route::group(['prefix' => 'comments'], function () {
             Route::get('/', 'BinshopsCommentsAdminController@index')->name('binshopsblog.admin.comments.index');
             Route::patch('/{commentId}', 'BinshopsCommentsAdminController@approve')->name('binshopsblog.admin.comments.approve');
             Route::delete('/{commentId}', 'BinshopsCommentsAdminController@destroy')->name('binshopsblog.admin.comments.delete');
@@ -451,12 +442,10 @@ Route::group(['middleware' => 'auth.aboveauthor', 'prefix' => 'admin'], function
         });
     });
 
-
-    Route::post('/absence-update','Dashboard\AbsenceController@update')->name('update-absences');
+    Route::post('/absence-update', 'Dashboard\AbsenceController@update')->name('update-absences');
 
     //import testimonial from file
     Route::post('testimonials-import-from-file', 'TestimonialController@importFromFile')->name('testimonials.file.import');
-
 
     //import faqs from file
     Route::post('faqs-import-from-file', 'FaqController@importFromFile')->name('faqs.file.import');
@@ -475,7 +464,6 @@ Route::group(['middleware' => 'auth.aboveauthor', 'prefix' => 'admin'], function
 
     //Get Certifcate Only for Admin
     Route::get('/get-certificate/{certificate}', 'Theme\CertificateController@getCertificateAdmin')->name('admin.get_certificate');
-
 });
 
 /*Route::group(['prefix' => 'cart','middleware' => ['web']], function () {
@@ -511,12 +499,11 @@ Route::get('/cart', function () {
 Route::group(['middleware' => ['web']], function () {
     Route::group(['middleware' => 'free.event'], function () {
         Route::group(['middleware' => 'auth.sms'], function () {
-
             Route::post('checkCoupon/{event}', 'Theme\CartController@checkCoupon');
 
             Route::get('/registration', ['as' => 'registration.index', 'uses' => 'Theme\CartController@registrationIndex']);
             Route::post('/registration', ['as' => 'registration', 'uses' => 'Theme\CartController@registration']);
-            Route::post('/mobile-check',  'Theme\CartController@mobileCheck');
+            Route::post('/mobile-check', 'Theme\CartController@mobileCheck');
 
             Route::get('/billing', ['as' => 'billing.index', 'uses' => 'Theme\CartController@billingIndex']);
             Route::post('/billing', ['as' => 'billing', 'uses' => 'Theme\CartController@billing']);
@@ -524,7 +511,7 @@ Route::group(['middleware' => ['web']], function () {
             Route::get('/checkout', ['as' => 'checkout.index', 'uses' => 'Theme\CartController@checkoutIndex']);
 
             Route::get('/remove/{item}', ['as' => 'cart.remove-item', 'uses' => 'Theme\CartController@dpremove']);
-            Route::get('/summary/remove/{item}', [ 'uses' => 'Theme\CartController@dpremove']);
+            Route::get('/summary/remove/{item}', ['uses' => 'Theme\CartController@dpremove']);
 
             Route::post('/cart/update', ['as' => 'cart.update', 'uses' => 'Theme\CartController@update']);
 
@@ -534,16 +521,15 @@ Route::group(['middleware' => ['web']], function () {
     });
 });
 
-
 Route::post('checkCode', 'Theme\CartController@checkCode');
 Route::get('/free-event-cart', 'Theme\CartController@cartIndex');
 Route::post('/complete-registration', 'Theme\CartController@completeRegistration')->name('registration.code_event');
 Route::post('/complete-registration-validation', 'Theme\CartController@validation');
-Route::post('/free-event-cart/remove',  'Theme\CartController@dpremove');
+Route::post('/free-event-cart/remove', 'Theme\CartController@dpremove');
 
-Route::post('/card/store_from_payment',  'Theme\CardController@store_from_payment');
+Route::post('/card/store_from_payment', 'Theme\CardController@store_from_payment');
 Route::post('pay-sbt', [
-    'as' => 'userPaySbt', 'uses' => 'Theme\CartController@userPaySbt'
+    'as' => 'userPaySbt', 'uses' => 'Theme\CartController@userPaySbt',
 ]);
 
 // DIGITAL WALLETS
@@ -563,7 +549,7 @@ Route::post('/createSepaSubscription', 'Theme\SubscriptionController@createSepa'
 
 Route::group(['prefix' => 'info'], function () {
     Route::get('order_error', [
-        'as' => 'info.Order.Error', 'uses' => 'Theme\InfoController@orderError'
+        'as' => 'info.Order.Error', 'uses' => 'Theme\InfoController@orderError',
     ]);
     /*Route::get('order_success', [
        'as' => 'info.Order.Success', 'uses' => 'Theme\InfoController@orderSuccess'
@@ -571,19 +557,16 @@ Route::group(['prefix' => 'info'], function () {
 });
 
 Route::get('order-success', [
-    'as' => 'info.Order.Success', 'uses' => 'Theme\InfoController@orderSuccess'
+    'as' => 'info.Order.Success', 'uses' => 'Theme\InfoController@orderSuccess',
 ]);
 // Route::get('thankyou', 'Theme\HomeController@thankyou');
 Route::post('thankyou', 'Theme\HomeController@thankyouInstallments')->name('installments.thankyou');
-
-
 
 Route::group(['prefix' => '{id}'], function () {
     /*Route::post('/dpremove', [ 'as' => 'cart.remove-item', 'uses' => 'Theme\CartController@dpremove']);*/
     Route::get('/{ticket}/{type}/add', ['as' => 'cart.add-item', 'uses' => 'Theme\CartController@add']);
 
     //Route::get('move', [ 'as' => 'cart.move-item', 'uses' => 'Theme\CartController@move']);
-
 });
 
 Route::post('webhook/stripe', ['as' => 'stripe.webhook', 'uses' => 'Webhook\WebhookController@handleWebhook']);
@@ -609,11 +592,9 @@ Route::group(['middleware' => ['auth', 'logout.devices'], 'prefix' => 'myaccount
         Route::post('/updrecbill', ['as' => 'updrecbill', 'uses' => 'Theme\StudentController@updateReceiptBilling']);
         Route::get('/mydata', ['as' => 'festudent.mydata', 'uses' => 'Theme\StudentController@downloadMyData']);
 
-
-        Route::get('/elearning/{course?}',  'Theme\StudentController@elearning');
+        Route::get('/elearning/{course?}', 'Theme\StudentController@elearning');
 
         Route::get('/twitter/{id}/{title}', function ($id, $title) {
-
             Session::forget('certId');
             Session::put('certId', $id);
 
@@ -622,36 +603,34 @@ Route::group(['middleware' => ['auth', 'logout.devices'], 'prefix' => 'myaccount
 
             $url = twitter_get_auth_token_v1();
 
-            if($url){
+            if ($url) {
                 return response()->json([
                     'message' => 'Redirect url.',
-                    'url' => $url
+                    'url' => $url,
                 ]);
-            }else{
+            } else {
                 return response()->json([
                     'message' => 'Not generate redirect url.',
                 ]);
             }
-
         });
 
         Route::get('/share-twitter', 'Theme\StudentController@parseTwitterToken');
 
-
-        Route::get('/subscription/{event}/{plan}',  'Theme\SubscriptionController@index');
+        Route::get('/subscription/{event}/{plan}', 'Theme\SubscriptionController@index');
         //Route::post('/subscription/checkout/{event}/{plan}',  'Theme\SubscriptionController@checkoutIndex')->name('subscription.checkoutIndex');
-        Route::get('/subscription/checkout/{event}/{plan}',  'Theme\SubscriptionController@checkoutIndex')->name('subscription.checkoutIndex');
+        Route::get('/subscription/checkout/{event}/{plan}', 'Theme\SubscriptionController@checkoutIndex')->name('subscription.checkoutIndex');
 
-        Route::post('/subscription/store/{event}/{plan}',  'Theme\SubscriptionController@store')->name('subscription.store');
+        Route::post('/subscription/store/{event}/{plan}', 'Theme\SubscriptionController@store')->name('subscription.store');
         Route::get('/subscription-success', 'Theme\SubscriptionController@orderSuccess');
-        Route::post('/subscription/change_status',  'Theme\SubscriptionController@change_status')->name('subscription.change_status');
+        Route::post('/subscription/change_status', 'Theme\SubscriptionController@change_status')->name('subscription.change_status');
 
         //Route::put('/elearning/saveNote', 'Theme\StudentController@saveNote');
         //Route::put('/elearning/save', 'Theme\StudentController@saveElearning');
 
         //Route::get('/mycertificate/{certificate}', 'Theme\CertificateController@getCertificate');
 
-        Route::post('/card/store_from_payment_myaccount',  'Theme\CardController@storePaymentMyaccount')->name('payment_method.store');
+        Route::post('/card/store_from_payment_myaccount', 'Theme\CardController@storePaymentMyaccount')->name('payment_method.store');
         Route::post('/update-methodPayment', 'Theme\CardController@updatePaymentMethod')->name('payment_method.update');
         Route::post('/remove-methodPayment', 'Theme\CardController@removePaymentMethod')->name('payment_method.remove');
     });
@@ -670,19 +649,16 @@ Route::group(['middleware' => ['web']], function () {
     Route::post('checkoutlogin', 'Auth\LoginController@checkoutauth');
     Route::post('studentlogin', 'Auth\LoginController@studentauth');
     Route::post('kcregister', 'Auth\RegisterController@kcRegister');
-    Route::get('/logout', [ 'uses' => 'Theme\StudentController@logout']);
+    Route::get('/logout', ['uses' => 'Theme\StudentController@logout']);
     Route::get('/logmeout', 'Theme\StudentController@logout');
 
     Route::get('/mycertificate/{certificate}', 'Theme\CertificateController@getCertificate');
     Route::get('/mycertificate/convert-pdf-to-image/{certificate}', 'Theme\CertificateController@getCertificateImage');
     Route::post('/mycertificate/save-success-chart', 'Theme\CertificateController@getSuccessChart');
     Route::get('/mycertificate/save-success-chart', 'Theme\CertificateController@getSuccessChart');
-
 });
 
-
 Route::group(['middleware' => 'auth'], function () {
-
     Route::group(['middleware' => 'exam.access'], function () {
         Route::get('attempt-exam/{ex_id}', 'Theme\ExamAttemptController@attemptExam')->name('attempt-exam');
         Route::get('exam-start/{exam}', 'Theme\ExamAttemptController@examStart')->name('exam-start');
@@ -697,31 +673,29 @@ Route::group(['prefix' => 'print'], function () {
 });
 
 Route::group(['prefix' => 'payment-dispatch'], function () {
-
-
     Route::get('checkout/{trans_id?}', [
-        'as' => 'pay.dispatch.checkout', 'uses' => 'Theme\PaymentDispatch@checkout'
+        'as' => 'pay.dispatch.checkout', 'uses' => 'Theme\PaymentDispatch@checkout',
     ]);
     Route::get('validation/{payment_method_slug?}', [
-        'as' => 'pay.dispatch.validation', 'uses' => 'Theme\PaymentDispatch@validation'
+        'as' => 'pay.dispatch.validation', 'uses' => 'Theme\PaymentDispatch@validation',
     ]);
 
     Route::post('notok/{payment_method_slug?}', [
-        'as' => 'pay.dispatch.notok', 'uses' => 'Theme\PaymentDispatch@notok'
+        'as' => 'pay.dispatch.notok', 'uses' => 'Theme\PaymentDispatch@notok',
     ]);
 
     Route::post('ok/{payment_method_slug?}', [
-        'as' => 'pay.dispatch.ok', 'uses' => 'Theme\PaymentDispatch@ok'
+        'as' => 'pay.dispatch.ok', 'uses' => 'Theme\PaymentDispatch@ok',
     ]);
 
     Route::get('back/{payment_method_slug?}', [
-        'as' => 'pay.dispatch.back', 'uses' => 'Theme\PaymentDispatch@back'
+        'as' => 'pay.dispatch.back', 'uses' => 'Theme\PaymentDispatch@back',
     ]);
     Route::get('pay/{payment_method_slug?}', [
-        'as' => 'pay.dispatch.pay', 'uses' => 'Theme\PaymentDispatch@pay'
+        'as' => 'pay.dispatch.pay', 'uses' => 'Theme\PaymentDispatch@pay',
     ]);
     Route::get('confirmation/{payment_method_slug?}', [
-        'as' => 'pay.dispatch.confirmation', 'uses' => 'Theme\PaymentDispatch@confirmation'
+        'as' => 'pay.dispatch.confirmation', 'uses' => 'Theme\PaymentDispatch@confirmation',
     ]);
 });
 
@@ -750,7 +724,6 @@ Route::group(['middleware' => ['web']], function () {
     Route::post('myaccount/reset/{id}/{code}', 'Auth\ForgotPasswordController@changePass');
 });
 
-
 //cronjobs
 Route::get('/dropbox/KUBnqOX1FNyTh72', 'DropboxController@cacheDropboxCLI');
 Route::get('/dropbox/KUBnqOX1FNyTh74', 'DropboxController@refreshDropBoxKey');
@@ -769,22 +742,20 @@ Route::get('/deree-notification', 'Dashboard\CronjobsController@dereeIDNotificat
 Route::get('/abanoded/user', 'Dashboard\CronjobsController@remindAbandonedUser');
 Route::get('/abanoded/userSecond', 'Dashboard\CronjobsController@remindAbandonedUserSecond');
 
-Route::get('/send-expiration-emails', 'Dashboard\CronjobsController@sendExpirationEmails');//in
-Route::get('/sendPaymentReminder', 'Dashboard\CronjobsController@sendPaymentReminder');//in
-Route::get('/sendHalfPeriod', 'Dashboard\CronjobsController@sendHalfPeriod');//in
-Route::get('/sendElearningFQ', 'Dashboard\CronjobsController@sendElearningFQ');//in
-Route::get('/sendSurveyMail', 'Dashboard\CronjobsController@sendSurveyMail');//in
-Route::get('/absences', 'Dashboard\CronjobsController@absences');//in
-Route::get('/sendInClassReminder', 'Dashboard\CronjobsController@sendInClassReminder');//in
-Route::get('/automateTopicMail', 'Dashboard\CronjobsController@sendAutomateMailBasedOnTopic');//in
-Route::get('/automateInstructorsMail', 'Dashboard\CronjobsController@sendAutomateEmailForInstructors');//in
-Route::get('/calculateRoyaltiesInstructor', 'Dashboard\CronjobsController@calculateTotalRoyaltiesForInstructors');//in
+Route::get('/send-expiration-emails', 'Dashboard\CronjobsController@sendExpirationEmails'); //in
+Route::get('/sendPaymentReminder', 'Dashboard\CronjobsController@sendPaymentReminder'); //in
+Route::get('/sendHalfPeriod', 'Dashboard\CronjobsController@sendHalfPeriod'); //in
+Route::get('/sendElearningFQ', 'Dashboard\CronjobsController@sendElearningFQ'); //in
+Route::get('/sendSurveyMail', 'Dashboard\CronjobsController@sendSurveyMail'); //in
+Route::get('/absences', 'Dashboard\CronjobsController@absences'); //in
+Route::get('/sendInClassReminder', 'Dashboard\CronjobsController@sendInClassReminder'); //in
+Route::get('/automateTopicMail', 'Dashboard\CronjobsController@sendAutomateMailBasedOnTopic'); //in
+Route::get('/automateInstructorsMail', 'Dashboard\CronjobsController@sendAutomateEmailForInstructors'); //in
+Route::get('/calculateRoyaltiesInstructor', 'Dashboard\CronjobsController@calculateTotalRoyaltiesForInstructors'); //in
 
 // Generate XML
 // Route::get('/generate_tiktok_feed', 'Dashboard\CronjobsController@generateXMLForTikTok');
 // Route::get('/generate_pinterest_feed', 'Dashboard\CronjobsController@generateXMLForPinterest');//in
-
-
 
 //SITEMAP
 Route::get('feed/{feed_type?}', 'Theme\FeedController@index');
@@ -804,14 +775,12 @@ Route::group(['middleware' => ['web']], function () {
 
 //Create Your Password
 Route::group(['middleware' => ['web']], function () {
-
     Route::get('/create-your-password/{slug}', 'Theme\StudentController@createPassIndex')->name('create.index');
     Route::post('/create-your-password/{slug}', 'Theme\StudentController@createPassStore')->name('create.store');
 });
 
 //DownloadInvoice
 Route::group(['middleware' => ['web']], function () {
-
     Route::get('/myinvoice/{slug}', 'Theme\StudentController@downloadMyInvoice');
 });
 
@@ -834,7 +803,6 @@ Route::get('/payment/required/{id}/{event}/{paymentMethod}/{subscriptionCheckout
 //     Route::get('/search', 'BinshopsReaderController@search')
 //         ->name('binshopsblog.search');
 
-
 //     Route::get('/category{subcategories}', 'BinshopsReaderController@view_category')->where('subcategories', '^[a-zA-Z0-9-_\/]+$')->name('binshopsblog.view_category');
 
 //     Route::get(
@@ -845,12 +813,10 @@ Route::get('/payment/required/{id}/{event}/{paymentMethod}/{subscriptionCheckout
 // });
 
 Route::group(['middleware' => ['web'], 'namespace' => '\BinshopsBlog\Controllers'], function () {
-    /** The main public facing blog routes - show all posts, view a category, rss feed, view a single post, also the add comment route */
-    Route::group(['prefix' => "/{locale?}/" . config('binshopsblog.blog_prefix', 'blog')], function () {
-
+    /* The main public facing blog routes - show all posts, view a category, rss feed, view a single post, also the add comment route */
+    Route::group(['prefix' => '/{locale?}/' . config('binshopsblog.blog_prefix', 'blog')], function () {
         // throttle to a max of 10 attempts in 3 minutes:
         Route::group(['middleware' => ['auth', 'throttle:10,3']], function () {
-
             Route::post(
                 'save_comment/{blogPostSlug}',
                 'BinshopsCommentWriterController@addNewComment'
@@ -862,7 +828,6 @@ Route::group(['middleware' => ['web'], 'namespace' => '\BinshopsBlog\Controllers
 
 //must be at the end of file
 Route::group(['middleware' => ['preview', 'web', 'auth.sms']], function () {
-
     Route::get('/regularly-mentioned-in-media', function () {
         return redirect('/in-the-media');
     });

@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\Model\Invoice;
+use Illuminate\Console\Command;
 
 class AttachInvoices extends Command
 {
@@ -38,25 +38,24 @@ class AttachInvoices extends Command
      */
     public function handle()
     {
-
-        $invoices = Invoice::with('event','transaction')->get();
+        $invoices = Invoice::with('event', 'transaction')->get();
 
         $s = 0;
 
-        foreach($invoices as $invoice){
+        foreach ($invoices as $invoice) {
             //if($invoice->id == 559){
-                if(count($invoice->transaction) == 0){
-                    $event = $invoice->event->first();
-                    //dd($invoice->user->first()->id);
-                    $transactionId = $event->transactionsByUser($invoice->user->first()->id)->first();
-                    //dd($transactionId);
-                    $invoice->transaction()->detach();
-                    $invoice->transaction()->attach($transactionId);
-                    //dd($event->transactionsByUser($invoice->user->first()->id)->first()->id);
-                }
+            if (count($invoice->transaction) == 0) {
+                $event = $invoice->event->first();
+                //dd($invoice->user->first()->id);
+                $transactionId = $event->transactionsByUser($invoice->user->first()->id)->first();
+                //dd($transactionId);
+                $invoice->transaction()->detach();
+                $invoice->transaction()->attach($transactionId);
+                //dd($event->transactionsByUser($invoice->user->first()->id)->first()->id);
+            }
             //}
-
         }
+
         return 0;
     }
 }

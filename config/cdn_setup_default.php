@@ -18,7 +18,6 @@ return [
     ]
     */
     'cdn' => [
-        "cdn.keycdn.com" => "png|tif|tiff|gif|jpeg|jpg|jif|jfif|jp2|jpx|j2k|j2c|ico|svg|asf|avi|flv|m1v|m2v|m4v|mkv|mpeg|mpg|mpe|ogg|rm|wmv|mp4|webm|css|js|eot|woff|ttf"
-    ]
+        'cdn.keycdn.com' => 'png|tif|tiff|gif|jpeg|jpg|jif|jfif|jp2|jpx|j2k|j2c|ico|svg|asf|avi|flv|m1v|m2v|m4v|mkv|mpeg|mpg|mpe|ogg|rm|wmv|mp4|webm|css|js|eot|woff|ttf',
+    ],
 ];
-

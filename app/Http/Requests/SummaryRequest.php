@@ -25,11 +25,11 @@ class SummaryRequest extends FormRequest
     {
         return [
             'title' => [
-                'required', 'min:3'
+                'required', 'min:3',
             ],
             'description' => [
-                'required', 'min:3'
-            ]
+                'required', 'min:3',
+            ],
         ];
     }
 }

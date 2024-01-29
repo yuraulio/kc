@@ -2,9 +2,9 @@
 
 namespace App\Model;
 
+use App\Model\Event;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Model\Event;
 
 class Career extends Model
 {
@@ -13,15 +13,11 @@ class Career extends Model
     protected $table = 'career_paths';
 
     protected $fillable = [
-        'name', 'priority'
+        'name', 'priority',
     ];
-
 
     public function events()
     {
         return $this->morphToMany(Event::class, 'careerpathables');
     }
-
-
-
 }

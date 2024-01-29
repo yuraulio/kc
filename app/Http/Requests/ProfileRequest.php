@@ -3,8 +3,8 @@
 namespace App\Http\Requests;
 
 use App\Model\User;
-use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class ProfileRequest extends FormRequest
 {
@@ -31,14 +31,14 @@ class ProfileRequest extends FormRequest
             //'company' => ['required', 'min:3'],
             //'birthday' => ['required', 'date_format:m/d/Y'],
             //'mobile' => 'required|digits:10',
-           // 'address' => ['required', 'min:3'],
-           // 'address_num' => ['required'],
+            // 'address' => ['required', 'min:3'],
+            // 'address_num' => ['required'],
             //'postcode' => ['required', 'digits:5'],
-           // 'city' => ['required', 'min:3'],
-           // 'afm' => ['required', 'max:9'],
+            // 'city' => ['required', 'min:3'],
+            // 'afm' => ['required', 'max:9'],
             //'photo' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'email' => [
-                'required', 'email','unique:users,email'
+                'required', 'email', 'unique:users,email',
             ],
         ];
     }

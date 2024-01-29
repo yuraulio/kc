@@ -16,8 +16,8 @@ class CreateCmsRedirectsTable extends Migration
         Schema::create('cms_redirects', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->string("old_slug");
-            $table->integer("page_id");
+            $table->string('old_slug');
+            $table->integer('page_id');
         });
     }
 

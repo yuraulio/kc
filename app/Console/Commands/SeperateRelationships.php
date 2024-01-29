@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\Model\Event;
+use Illuminate\Console\Command;
 
 class SeperateRelationships extends Command
 {
@@ -38,55 +38,45 @@ class SeperateRelationships extends Command
      */
     public function handle()
     {
+        $events = Event::where('status', 0)->get();
 
-        $events = Event::where('status',0)->get();
-        
-        foreach($events as $event){
-            
-            if(!$event->is_inclass_course()){
+        foreach ($events as $event) {
+            if (!$event->is_inclass_course()) {
                 continue;
             }
 
-            $event->load('summary1','sections','benefits');
+            $event->load('summary1', 'sections', 'benefits');
 
-            foreach ($event->getRelations() as $relationName => $values){
-                
+            foreach ($event->getRelations() as $relationName => $values) {
                 $newValues = [];
                 //dd($values);
                 //dd(count($values));
-                foreach($values as $value){
-
-    
+                foreach ($values as $value) {
                     $valuee = $value->replicate();
                     $valuee->push();
 
-                    if($value->medias){
+                    if ($value->medias) {
                         $valuee->medias()->delete();
                         //$valuee->createMedia();
-                        
+
                         $medias = $value->medias->replicate();
                         $medias->push();
                         //dd($medias);
                         $valuee->medias()->save($medias);
                     }
-                    
 
-                    $newValues[] = $valuee; 
-
+                    $newValues[] = $valuee;
                 }
-                
+
                 $newValues = collect($newValues);
                 $event->{$relationName}()->detach();
 
-                foreach($newValues as $value){
+                foreach ($newValues as $value) {
                     $event->{$relationName}()->attach($value);
                 }
-               
-               
             }
-           
         }
-        
+
         return 0;
     }
 }

@@ -35,11 +35,11 @@ trait ManagesSubscriptions
 
         $subscription = $this->subscription($name);
 
-        if (! $subscription || ! $subscription->onTrial()) {
+        if (!$subscription || !$subscription->onTrial()) {
             return false;
         }
 
-        return ! $price || $subscription->hasPrice($price);
+        return !$price || $subscription->hasPrice($price);
     }
 
     /**
@@ -82,11 +82,11 @@ trait ManagesSubscriptions
     {
         $subscription = $this->subscription($name);
 
-        if (! $subscription || ! $subscription->valid()) {
+        if (!$subscription || !$subscription->valid()) {
             return false;
         }
 
-        return ! $price || $subscription->hasPrice($price);
+        return !$price || $subscription->hasPrice($price);
     }
 
     /**
@@ -136,7 +136,7 @@ trait ManagesSubscriptions
     {
         $subscription = $this->subscription($name);
 
-        if (! $subscription || ! $subscription->valid()) {
+        if (!$subscription || !$subscription->valid()) {
             return false;
         }
 
@@ -160,7 +160,7 @@ trait ManagesSubscriptions
     {
         $subscription = $this->subscription($name);
 
-        if (! $subscription || ! $subscription->valid()) {
+        if (!$subscription || !$subscription->valid()) {
             return false;
         }
 
@@ -181,7 +181,7 @@ trait ManagesSubscriptions
      */
     public function onProduct($price)
     {
-        return ! is_null($this->subscriptions->first(function (Subscription $subscription) use ($price) {
+        return !is_null($this->subscriptions->first(function (Subscription $subscription) use ($price) {
             return $subscription->valid() && $subscription->hasProduct($price);
         }));
     }
@@ -194,7 +194,7 @@ trait ManagesSubscriptions
      */
     public function onPrice($price)
     {
-        return ! is_null($this->subscriptions->first(function (Subscription $subscription) use ($price) {
+        return !is_null($this->subscriptions->first(function (Subscription $subscription) use ($price) {
             return $subscription->valid() && $subscription->hasPrice($price);
         }));
     }

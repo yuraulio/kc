@@ -2,11 +2,10 @@
 
 namespace App\Model;
 
+use App\Model\Category;
+use App\Model\Event;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
-use App\Model\Event;
-use App\Model\Category;
 
 class Plan extends Model
 {
@@ -19,42 +18,48 @@ class Plan extends Model
         'slug',
         'stripe_plan',
         'cost',
-        'description'
+        'description',
     ];
 
-    public function plans() {
+    public function plans()
+    {
         return $this->belongsTo('PostRider\Plan');
     }
 
-    public function period(){
-        if($this->interval == 'day'){
+    public function period()
+    {
+        if ($this->interval == 'day') {
             return 'Daily';
-        }elseif($this->interval == 'month'){
+        } elseif ($this->interval == 'month') {
             return 'Monthly';
-        }elseif($this->interval == 'year'){
+        } elseif ($this->interval == 'year') {
             return 'Yearly';
         }
     }
 
-    public function getDays(){
-        if($this->interval == 'day'){
+    public function getDays()
+    {
+        if ($this->interval == 'day') {
             return $this->interval;
-        }elseif($this->interval == 'month'){
+        } elseif ($this->interval == 'month') {
             return $this->interval * 30;
-        }elseif($this->interval == 'year'){
+        } elseif ($this->interval == 'year') {
             return 365;
         }
     }
 
-    public function events(){
-        return $this->belongsToMany(Event::class,'plan_events');
+    public function events()
+    {
+        return $this->belongsToMany(Event::class, 'plan_events');
     }
 
-    public function categories(){
-        return $this->belongsToMany(Category::class,'plan_categories');
+    public function categories()
+    {
+        return $this->belongsToMany(Category::class, 'plan_categories');
     }
 
-    public function noEvents(){
-        return $this->belongsToMany(Event::class,'plan_noevents');
+    public function noEvents()
+    {
+        return $this->belongsToMany(Event::class, 'plan_noevents');
     }
 }

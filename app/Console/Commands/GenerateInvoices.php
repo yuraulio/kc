@@ -2,9 +2,9 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\Model\Event;
 use App\Model\User;
+use Illuminate\Console\Command;
 
 class GenerateInvoices extends Command
 {
@@ -39,19 +39,16 @@ class GenerateInvoices extends Command
      */
     public function handle()
     {
-
         $user = User::find($this->argument('user'));
         //$event = Event::find($this->argument('event'));
 
-        if(!$user /*|| !$event*/){
+        if (!$user /*|| !$event*/) {
             return;
         }
 
-        
-        for($i = 1; $i <= $this->argument('invoices'); $i++){
-            
-            $invoices = $user->events_for_user_list()->wherePivot('event_id',$this->argument('event'))->first()->invoicesByUser($user->id)->get();
-            if(count($invoices) > 0){
+        for ($i = 1; $i <= $this->argument('invoices'); $i++) {
+            $invoices = $user->events_for_user_list()->wherePivot('event_id', $this->argument('event'))->first()->invoicesByUser($user->id)->get();
+            if (count($invoices) > 0) {
                 $invoice = $invoices->last();
                 $invoice->generateCronjobInvoice();
             }

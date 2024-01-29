@@ -14,7 +14,7 @@ class AlterCmsCategoriesTableAddTypeColumn extends Migration
     public function up()
     {
         Schema::table('cms_categories', function (Blueprint $table) {
-            $table->integer("page_type_id")->nullable();
+            $table->integer('page_type_id')->nullable();
         });
     }
 

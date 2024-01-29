@@ -2,14 +2,13 @@
 
 namespace App\Http\Middleware;
 
+use Auth;
 use Closure;
 use Session;
-use Auth;
 
 class CheckUserLogeinForElearning
 {
-
-     /**
+    /**
      * The Sentinel instance.
      *
      * @var \Cartalyst\Sentinel\Sentinel
@@ -22,7 +21,6 @@ class CheckUserLogeinForElearning
      * @param  \Cartalyst\Sentinel\Sentinel  $auth
      * @return void
      */
-  
 
     /**
      * Handle an incoming request.
@@ -33,20 +31,17 @@ class CheckUserLogeinForElearning
      */
     public function handle($request, Closure $next)
     {
-
         if (!Auth::check()) {
-
             return response()->json([
                 'loged_in' => false,
                 'message' => 'it seems you try connect from a new device, all other devices will be disconnected.',
-                'redirect' => '/'
+                'redirect' => '/',
             ]);
-            
         }
 
-       /* return response()->json([
-            'loged_in' => true,
-        ]);*/
+        /* return response()->json([
+             'loged_in' => true,
+         ]);*/
 
         return $next($request);
     }

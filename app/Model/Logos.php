@@ -2,10 +2,10 @@
 
 namespace App\Model;
 
+use App\Model\Media;
+use App\Traits\MediaTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Traits\MediaTrait;
-use App\Model\Media;
 
 class Logos extends Model
 {
@@ -13,7 +13,7 @@ class Logos extends Model
     use MediaTrait;
 
     protected $fillable = [
-        'name', 'summary', 'status','ext_url', 'type'
+        'name', 'summary', 'status', 'ext_url', 'type',
     ];
 
     public function medias()

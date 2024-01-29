@@ -2,12 +2,12 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\Model\Category;
+use App\Model\Media;
 use App\Model\Testimonial;
+use Illuminate\Console\Command;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-use App\Model\Media;
 
 class InsertTestimonial extends Command
 {
@@ -42,38 +42,33 @@ class InsertTestimonial extends Command
      */
     public function handle()
     {
-
-        try{
-            $dir_path=public_path() ."/uploads/originals/testimonials/";
-            $files = array_diff(scandir($dir_path), array('.', '..'));
+        try {
+            $dir_path = public_path() . '/uploads/originals/testimonials/';
+            $files = array_diff(scandir($dir_path), ['.', '..']);
 
             $images = [];
 
-            foreach($files as $file){
-
-                $name = explode('.',$file)[0];
+            foreach ($files as $file) {
+                $name = explode('.', $file)[0];
                 $images[$name] = $file;
             }
 
             //$fileName = public_path() . '/import/Testimonials.xlsx';
             $fileName = public_path() . '/import/' . $this->argument('file_name');
 
-            if(!file_exists($fileName)){
+            if (!file_exists($fileName)) {
                 return 0;
             }
 
             $testimonials = Testimonial::all();
 
-            foreach($testimonials as $testimonial){
-
+            foreach ($testimonials as $testimonial) {
                 $testimonial->category()->detach();
                 $testimonial->instructors()->detach();
                 $testimonial->medias()->delete();
 
                 $testimonial->delete();
-
             }
-
 
             $spreadsheet = new Spreadsheet();
             $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReaderForFile($fileName);
@@ -82,10 +77,9 @@ class InsertTestimonial extends Command
             $file = $file->getSheet(0);
 
             $file = $file->toArray();
-        
-            foreach($file as $key =>  $line){
 
-                if($key == 0 ){
+            foreach ($file as $key =>  $line) {
+                if ($key == 0) {
                     continue;
                 }
                 //dd($line);
@@ -98,26 +92,23 @@ class InsertTestimonial extends Command
                 $testimonial->video_url = $line[5];
 
                 $socials = [];
-                if(isset($line[6])){
-
+                if (isset($line[6])) {
                     $link = $line[6];
-                    if($link){
+                    if ($link) {
                         $link = str_replace('https://', '', $link);
                         $link = str_replace('http://', '', $link);
-                        $link = 'https://'.$link;
+                        $link = 'https://' . $link;
                     }
 
                     $socials['facebook'] = $link;
-                
                 }
 
-                if(isset($line[7])){
-
+                if (isset($line[7])) {
                     $link = $line[7];
-                    if($link){
+                    if ($link) {
                         $link = str_replace('https://', '', $link);
                         $link = str_replace('http://', '', $link);
-                        $link = 'https://'.$link;
+                        $link = 'https://' . $link;
                     }
 
                     $socials['linkedin'] = $link;
@@ -128,53 +119,43 @@ class InsertTestimonial extends Command
 
                 $categories = [];
 
-                if(isset($line[4])){
+                if (isset($line[4])) {
                     //$categories[] = $line[4];
                 }
 
-                if(isset($line[5])){
+                if (isset($line[5])) {
                     //$categories[] = $line[5];
                 }
                 //$categories = Category::whereIn('id',[46,183])->get();
                 $categories = Category::all();
 
-                foreach($categories as $category){
+                foreach ($categories as $category) {
                     $testimonial->category()->attach([$category->id]);
                 }
 
-                if($line[0] && isset($images[$name]) ){
-
-                    $name = str_replace('.','',$line[0]);
+                if ($line[0] && isset($images[$name])) {
+                    $name = str_replace('.', '', $line[0]);
                     $media = new Media;
 
                     $media->path = '/uploads/originals/testimonials/';
-                    $media->ext = '.' . explode('.',$images[$name])[1];
-                    $media->name = str_replace('.','',$line[0]);
+                    $media->ext = '.' . explode('.', $images[$name])[1];
+                    $media->name = str_replace('.', '', $line[0]);
                     $media->original_name = $images[$name];
                     $media->mediable_id = $testimonial->id;
                     $media->mediable_type = get_class($testimonial);
 
                     $media->save();
 
-                    //$testimonial->mediable()->attach($media->id);
-
-                }else{
+                //$testimonial->mediable()->attach($media->id);
+                } else {
                     $testimonial->createMedia();
                 }
-
-            
-
             }
 
             return 1;
-
-        }catch(\Exception $e){
-
+        } catch(\Exception $e) {
             return 0;
-
         }
-        
-
 
         //return 0;
     }

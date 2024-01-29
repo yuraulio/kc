@@ -14,7 +14,7 @@ class AlterCmsTemplatesTableAddDynamic extends Migration
     public function up()
     {
         Schema::table('cms_templates', function (Blueprint $table) {
-            $table->boolean("dynamic")->default(false);
+            $table->boolean('dynamic')->default(false);
         });
     }
 

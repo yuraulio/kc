@@ -2,9 +2,9 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
-use App\Model\Event;
 use App\Model\Category;
+use App\Model\Event;
+use Illuminate\Console\Command;
 
 class FixOrder extends Command
 {
@@ -59,56 +59,46 @@ class FixOrder extends Command
             }
 
 
-            
+
         }
 
 
         return 0;
     }*/
 
-
     public function handle()
     {
-        
-        
         /*$events = Event::
         whereHas('event_info1',function($query){
             $query->where('course_delivery',143);
         })
         ->get();*/
 
-        $events = Event::where('id',4632)
+        $events = Event::where('id', 4632)
         ->get();
-        
-        foreach($events as $event){
+
+        foreach ($events as $event) {
             $event->fixOrder();
 
             $category = $event->category->first();
 
-            foreach($event->allLessons()->orderBy('priority')->get() as  $pLesson){
-        
+            foreach ($event->allLessons()->orderBy('priority')->get() as  $pLesson) {
                 $topicId = $pLesson->pivot->topic_id;
                 $lessonId = $pLesson->pivot->lesson_id;
-                $priority = $pLesson->pivot->priority;;
+                $priority = $pLesson->pivot->priority;
 
-
-                if( $lessonCategory = $category->lessons()->wherePivot('topic_id',$topicId)->wherePivot('lesson_id',$lessonId)->first()){
-
+                if ($lessonCategory = $category->lessons()->wherePivot('topic_id', $topicId)->wherePivot('lesson_id', $lessonId)->first()) {
                     $lessonCategory->pivot->priority = $priority;
                     $lessonCategory->pivot->save();
-                }else{
-                    
-                    $category->topic()->attach($topicId, ['lesson_id' => $lessonId,'priority'=>$priority]);
+                } else {
+                    $category->topic()->attach($topicId, ['lesson_id' => $lessonId, 'priority'=>$priority]);
                 }
-               
-
             }
-
         }
 
         $categories = Category::all();
 
-        foreach($categories as $category){
+        foreach ($categories as $category) {
             $category->fixOrder();
         }
 

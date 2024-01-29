@@ -2,14 +2,13 @@
 
 namespace Library\Processors;
 
-use URL;
-use Session;
-
-use App\Model\Transaction;
 use App\Model\PaymentMethod;
+use App\Model\Transaction;
 use Library\TransactionHelperLib;
+use Session;
+use URL;
 
-Class Alphabank_processor
+class Alphabank_processor
 {
     public function __construct(TransactionHelperLib $transactionHelper)
     {
@@ -17,43 +16,45 @@ Class Alphabank_processor
         $this->transactionHelper = $transactionHelper;
     }
 
-    public function submit_no_connection($data = array())
-    {}
-
-    public function submit_form($data = array())
+    public function submit_no_connection($data = [])
     {
+    }
 
-        function greeklish($Name){
-            $greek   = array('α','ά','Ά','Α','β','Β','γ', 'Γ', 'δ','Δ','ε','έ','Ε','Έ','ζ','Ζ','η','ή','Η','θ','Θ','ι','ί','ϊ','ΐ','Ι','Ί', 'κ','Κ','λ','Λ','μ','Μ','ν','Ν','ξ','Ξ','ο','ό','Ο','Ό','π','Π','ρ','Ρ','σ','ς', 'Σ','τ','Τ','υ','ύ','Υ','Ύ','φ','Φ','χ','Χ','ψ','Ψ','ω','ώ','Ω','Ώ',' ',"'","'",',');
-            $english = array('a', 'a','A','A','b','B','g','G','d','D','e','e','E','E','z','Z','i','i','I','th','Th', 'i','i','i','i','I','I','k','K','l','L','m','M','n','N','x','X','o','o','O','O','p','P','r','R','s','s','S','t','T','u','u','Y','Y','f','F','ch','Ch','ps','Ps','o','o','O','O','_','_','_','_');
-            $string  = str_replace($greek, $english, $Name);
+    public function submit_form($data = [])
+    {
+        function greeklish($Name)
+        {
+            $greek = ['α', 'ά', 'Ά', 'Α', 'β', 'Β', 'γ', 'Γ', 'δ', 'Δ', 'ε', 'έ', 'Ε', 'Έ', 'ζ', 'Ζ', 'η', 'ή', 'Η', 'θ', 'Θ', 'ι', 'ί', 'ϊ', 'ΐ', 'Ι', 'Ί', 'κ', 'Κ', 'λ', 'Λ', 'μ', 'Μ', 'ν', 'Ν', 'ξ', 'Ξ', 'ο', 'ό', 'Ο', 'Ό', 'π', 'Π', 'ρ', 'Ρ', 'σ', 'ς', 'Σ', 'τ', 'Τ', 'υ', 'ύ', 'Υ', 'Ύ', 'φ', 'Φ', 'χ', 'Χ', 'ψ', 'Ψ', 'ω', 'ώ', 'Ω', 'Ώ', ' ', "'", "'", ','];
+            $english = ['a', 'a', 'A', 'A', 'b', 'B', 'g', 'G', 'd', 'D', 'e', 'e', 'E', 'E', 'z', 'Z', 'i', 'i', 'I', 'th', 'Th', 'i', 'i', 'i', 'i', 'I', 'I', 'k', 'K', 'l', 'L', 'm', 'M', 'n', 'N', 'x', 'X', 'o', 'o', 'O', 'O', 'p', 'P', 'r', 'R', 's', 's', 'S', 't', 'T', 'u', 'u', 'Y', 'Y', 'f', 'F', 'ch', 'Ch', 'ps', 'Ps', 'o', 'o', 'O', 'O', '_', '_', '_', '_'];
+            $string = str_replace($greek, $english, $Name);
+
             return $string;
         }
-        
-		$sbt_data = array();
-		$sbt_data['mid'] = env('PAYMENT_PRODUCTION') ? $data['payment_options']['mid'] : $data['test_payment_options']['mid'];
-		$sbt_data['shared_secret_key'] = env('PAYMENT_PRODUCTION') ? $data['payment_options']['shared_secret_key'] : $data['test_payment_options']['shared_secret_key'];
-		$sbt_data['currency'] = env('PAYMENT_PRODUCTION') ? $data['payment_options']['currency'] : $data['test_payment_options']['currency'];
-		$sbt_data['lang'] = env('PAYMENT_PRODUCTION') ? $data['payment_options']['lang'] : $data['test_payment_options']['lang'];
-        $sbt_data['orderid'] =  env('PAYMENT_PRODUCTION') ? 'KCORDTN0'. $data['order_details']['id'] : 'KCORDTN'. $data['order_details']['id']; //KCORDTN0 live
+
+        $sbt_data = [];
+        $sbt_data['mid'] = env('PAYMENT_PRODUCTION') ? $data['payment_options']['mid'] : $data['test_payment_options']['mid'];
+        $sbt_data['shared_secret_key'] = env('PAYMENT_PRODUCTION') ? $data['payment_options']['shared_secret_key'] : $data['test_payment_options']['shared_secret_key'];
+        $sbt_data['currency'] = env('PAYMENT_PRODUCTION') ? $data['payment_options']['currency'] : $data['test_payment_options']['currency'];
+        $sbt_data['lang'] = env('PAYMENT_PRODUCTION') ? $data['payment_options']['lang'] : $data['test_payment_options']['lang'];
+        $sbt_data['orderid'] = env('PAYMENT_PRODUCTION') ? 'KCORDTN0' . $data['order_details']['id'] : 'KCORDTN' . $data['order_details']['id']; //KCORDTN0 live
         //$sbt_data['orderid'] = 'KCORDT'. $data['order_details']['id']; //KCORDTN
         $sbt_data['payment_method_id'] = $data['order_details']['payment_method_id'];
-        
-        $sbt_data['billCountry'] = json_decode($data['order_details']['billing_details'],true)['billcountry'];
-        $sbt_data['billState'] = json_decode($data['order_details']['billing_details'],true)['city'];
-        $sbt_data['billZip'] = json_decode($data['order_details']['billing_details'],true)['billzip'];
-        $sbt_data['billCity'] = json_decode($data['order_details']['billing_details'],true)['city'];
-        $sbt_data['billAddress'] = json_decode($data['order_details']['billing_details'],true)['billaddress'];
 
-		//$sbt_data['orderid'] = $data['order_details']['order_id'];
-		$sbt_data['orderDesc'] = 'Knowcrunch Order for booking';
-		$sbt_data['orderAmount'] = number_format($data['order_details']['total_amount'], 2, '.', '');
-		$sbt_data['confirmUrl'] = $data['payment_options']['confirmUrl'];
-		$sbt_data['cancelUrl'] = $data['payment_options']['cancelUrl'];
-		$sbt_data['var2'] =  greeklish($data['namestobank']);
+        $sbt_data['billCountry'] = json_decode($data['order_details']['billing_details'], true)['billcountry'];
+        $sbt_data['billState'] = json_decode($data['order_details']['billing_details'], true)['city'];
+        $sbt_data['billZip'] = json_decode($data['order_details']['billing_details'], true)['billzip'];
+        $sbt_data['billCity'] = json_decode($data['order_details']['billing_details'], true)['city'];
+        $sbt_data['billAddress'] = json_decode($data['order_details']['billing_details'], true)['billaddress'];
+
+        //$sbt_data['orderid'] = $data['order_details']['order_id'];
+        $sbt_data['orderDesc'] = 'Knowcrunch Order for booking';
+        $sbt_data['orderAmount'] = number_format($data['order_details']['total_amount'], 2, '.', '');
+        $sbt_data['confirmUrl'] = $data['payment_options']['confirmUrl'];
+        $sbt_data['cancelUrl'] = $data['payment_options']['cancelUrl'];
+        $sbt_data['var2'] = greeklish($data['namestobank']);
         $sbt_data['var3'] = $data['dereecodes'];
 
-		//'DEREECODES'; // GOT FROM PaymentDispath checkout
+        //'DEREECODES'; // GOT FROM PaymentDispath checkout
 
         /*if ($data['order_details']['installment_id']) {
             $data['installment_dets'] = Emp_payment_installments_model::getInstallmentByID($data['order_details']['installment_id']);
@@ -65,33 +66,32 @@ Class Alphabank_processor
             $data['installment_dets'] = array();
         }*/
 
-		if ($data['cardtype'] == 2) {
-			if ($data['installments'] > 1) {
-            	$sbt_data['extInstallmentperiod'] = $data['installments'];
-            	$sbt_data['extInstallmentoffset'] = 0;
-        	}
+        if ($data['cardtype'] == 2) {
+            if ($data['installments'] > 1) {
+                $sbt_data['extInstallmentperiod'] = $data['installments'];
+                $sbt_data['extInstallmentoffset'] = 0;
+            }
         } /*else {
             $data['installment_dets'] = array();
         }*/
 
-        $sbt_data['digest'] = base64_encode(sha1($this->_form_digest_str($sbt_data),TRUE));
-		$data['sbt_data'] = $sbt_data;
+        $sbt_data['digest'] = base64_encode(sha1($this->_form_digest_str($sbt_data), true));
+        $data['sbt_data'] = $sbt_data;
 
-
-    	$response['status'] = 1;
-    	$response['website_response'] = "redirect"; // or redirect
-    	$response['redirect_url'] = URL::to('payment-dispatch/pay/'.$data['payment_config']['slug']);
-    	//dd($response);
+        $response['status'] = 1;
+        $response['website_response'] = 'redirect'; // or redirect
+        $response['redirect_url'] = URL::to('payment-dispatch/pay/' . $data['payment_config']['slug']);
+        //dd($response);
         //$response['html'] = $this->load->view('admin/payment_methods/processor_submit_tpls/'.$data['payment_config']['submit_tpl'], $data, TRUE);
 
         Session::put('pay_sbt_data', $sbt_data);
         //$sbt_data = Session::get('pay_sbt_data');
         // why this?
 
-    	return $response;
+        return $response;
     }
 
-    public function submit_curl($data = array())
+    public function submit_curl($data = [])
     {
         //this acts as the intial response, get a valid ticket
         $ticketResponseXmlObj = $this->ticketRequest($data);
@@ -101,8 +101,8 @@ Class Alphabank_processor
         if (isset($ticketResponse_tmp['IssueNewTicketResponse']) && isset($ticketResponse_tmp['IssueNewTicketResponse']['IssueNewTicketResult'])) {
             $ticketResponse = $ticketResponse_tmp['IssueNewTicketResponse']['IssueNewTicketResult'];
 
-            if (!array($ticketResponse["TranTicket"])) {
-                $ticketResponse["processor_order_id"] = $ticketResponse["TranTicket"];
+            if (![$ticketResponse['TranTicket']]) {
+                $ticketResponse['processor_order_id'] = $ticketResponse['TranTicket'];
             }
 
             Orders_model::paymentInitialResponse($data['order_details']['id'], $ticketResponse);
@@ -123,15 +123,16 @@ Class Alphabank_processor
                 // error occured, ticket was not obtained, redirect to error page
                 return $this->method_notok($data['payment_config']['slug'], $ticketResponse);
             }
-            //*/
+        //*/
         } else {
-            $ticketResponse = array();
+            $ticketResponse = [];
+
             return $this->method_notok($data['payment_config']['slug'], $ticketResponse);
         }
     }
 
     // SOAP 1.1 Request. Request a new ticket
-    public function ticketRequest($data = array())
+    public function ticketRequest($data = [])
     {
         $xml_str = '<?xml version="1.0" encoding="utf-8"?>
                 <soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
@@ -139,16 +140,16 @@ Class Alphabank_processor
                     <IssueNewTicket xmlns="http://piraeusbank.gr/paycenter/redirection">
                       <Request>';
 
-        $xml_str .= '<Username>'.$data['payment_options']['Username'].'</Username>';
-        $xml_str .= '<Password>'.md5($data['payment_options']['Password']).'</Password>';
-        $xml_str .= '<MerchantId>'.$data['payment_options']['MerchantId'].'</MerchantId>';
-        $xml_str .= '<PosId>'.$data['payment_options']['PosId'].'</PosId>';
-        $xml_str .= '<AcquirerId>'.$data['payment_options']['AcquirerId'].'</AcquirerId>';
-        $xml_str .= '<MerchantReference>'.$data['order_details']['id'].'</MerchantReference>'; // order_id
-        $xml_str .= '<RequestType>'.$data['payment_options']['RequestType'].'</RequestType>';
+        $xml_str .= '<Username>' . $data['payment_options']['Username'] . '</Username>';
+        $xml_str .= '<Password>' . md5($data['payment_options']['Password']) . '</Password>';
+        $xml_str .= '<MerchantId>' . $data['payment_options']['MerchantId'] . '</MerchantId>';
+        $xml_str .= '<PosId>' . $data['payment_options']['PosId'] . '</PosId>';
+        $xml_str .= '<AcquirerId>' . $data['payment_options']['AcquirerId'] . '</AcquirerId>';
+        $xml_str .= '<MerchantReference>' . $data['order_details']['id'] . '</MerchantReference>'; // order_id
+        $xml_str .= '<RequestType>' . $data['payment_options']['RequestType'] . '</RequestType>';
         $xml_str .= '<ExpirePreauth>0</ExpirePreauth>';
-        $xml_str .= '<Amount>'.number_format($data['order_details']['total_amount'], 2, ".", "").'</Amount>';
-        $xml_str .= '<CurrencyCode>'.$data['payment_options']['CurrencyCode'].'</CurrencyCode>';
+        $xml_str .= '<Amount>' . number_format($data['order_details']['total_amount'], 2, '.', '') . '</Amount>';
+        $xml_str .= '<CurrencyCode>' . $data['payment_options']['CurrencyCode'] . '</CurrencyCode>';
 
         //$xml_str .= '<Installments>'.intval($data['order_details']['installment_num']).'</Installments>';
         $xml_str .= '<Installments>1</Installments>';
@@ -161,12 +162,12 @@ Class Alphabank_processor
                   </soap:Body>
                 </soap:Envelope>';
 
-        $headers = array(
-                    "Host: paycenter.piraeusbank.gr",
-                    "Content-type: text/xml; charset=utf-8",
-                    "Content-length: ".strlen($xml_str),
-                    "SOAPAction: http://piraeusbank.gr/paycenter/redirection/IssueNewTicket",
-                );
+        $headers = [
+            'Host: paycenter.piraeusbank.gr',
+            'Content-type: text/xml; charset=utf-8',
+            'Content-length: ' . strlen($xml_str),
+            'SOAPAction: http://piraeusbank.gr/paycenter/redirection/IssueNewTicket',
+        ];
 
         $soapUrl = $data['payment_options']['TicketWebService']; // asmx URL of WSDL
         $soapUser = $data['payment_options']['Username'];  //  username
@@ -192,8 +193,8 @@ Class Alphabank_processor
         //echo $response;
 
         // parse the response
-        $response1 = str_replace("<soap:Body>","",$response);
-        $response2 = str_replace("</soap:Body>","",$response1);
+        $response1 = str_replace('<soap:Body>', '', $response);
+        $response2 = str_replace('</soap:Body>', '', $response1);
         $parsed_obj = simplexml_load_string($response2);
 
         return $parsed_obj;
@@ -211,32 +212,28 @@ Class Alphabank_processor
         echo '</pre>';
         */
         ///*
-    	$response['status'] = 0;
-    	$response['website_response'] = "redirect";
-    	$response['redirect_url'] = URL::to('info/order_success');
+        $response['status'] = 0;
+        $response['website_response'] = 'redirect';
+        $response['redirect_url'] = URL::to('info/order_success');
 
-        $order_details = Transaction::where('id', $transaction_id)->first();//'user',  <-with
+        $order_details = Transaction::where('id', $transaction_id)->first(); //'user',  <-with
         if ($order_details) {
             $order_details = $order_details->toArray();
             $payment_method_details = $order_details['payment_method_id'];
             $payment_method_details = PaymentMethod::where('id', $order_details['payment_method_id'])->first();
-            // = ;
+        // = ;
         } else {
             $order_details = [];
             $payment_method_details = [];
         }
 
-		if (empty($payment_method_details))
-		{
-			//$retdata['error'] = 'the order has been handled correctly by the processor but we cant match this to a payment method on our system';
-		}
-		else
-		{
-        
+        if (empty($payment_method_details)) {
+            //$retdata['error'] = 'the order has been handled correctly by the processor but we cant match this to a payment method on our system';
+        } else {
             $payment_options = env('PAYMENT_PRODUCTION') ? $payment_method_details['processor_options'] : $payment_method_details['test_processor_options'];
            // dd($payment_options);
             $posted_data = $_POST; // submitted by the paycenter
-            $order_id = $transaction_id;//$posted_data['mid'];
+            $order_id = $transaction_id; //$posted_data['mid'];
             Transaction::where('id', $transaction_id)->update([
                 'payment_initial_response' => json_encode($posted_data),
             ]);
@@ -245,52 +242,47 @@ Class Alphabank_processor
                 if ($posted_data['status'] == 'CAPTURED') {
                     // all good
                     /*if ($posted_data['StatusFlag'] == "Success") {*/
-                        // transaction was approved, check the hash key
-                        Transaction::where('id', $transaction_id)->update([
-                            'payment_response' => json_encode($posted_data),
-                        ]);
+                    // transaction was approved, check the hash key
+                    Transaction::where('id', $transaction_id)->update([
+                        'payment_response' => json_encode($posted_data),
+                    ]);
+
+                    //$cart = Cart::content();
+
+                    //dd($cart);
+                    //$helperQuery = Eventticket::where('event_id', $product->id)->where('ticket_id', $ticket->id)->where('type', '1')->first();
+
+                    /* $trans = Transaction::where('id', $transaction_id)->first();
+                     if(isset($transaction->status_history)) :
+                         if(isset($transaction->status_history[0]['cart_data'])) :
+
+                             foreach($transaction->status_history[0]['cart_data'] as $key => $value) :
+                                 //$value['name']
+                                 //switch ($value['options']['type']) {
 
 
-                        //$cart = Cart::content();
+                             endforeach;
+                         endif;
+                     endif;*/
 
-                        //dd($cart);
-                        //$helperQuery = Eventticket::where('event_id', $product->id)->where('ticket_id', $ticket->id)->where('type', '1')->first();
+                    //UPDATE STOCK HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-                       /* $trans = Transaction::where('id', $transaction_id)->first();
-                        if(isset($transaction->status_history)) :
-	        				if(isset($transaction->status_history[0]['cart_data'])) :
+                    //set order status as open/payed/ready for processing
+                    $stdo['order_id'] = $order_id;
+                    $stdo['order_status_id'] = 1;
+                    $stdo['notify_orders_department'] = 1;
+                    $stdo['notify_customer'] = 1;
 
-	        					foreach($transaction->status_history[0]['cart_data'] as $key => $value) :
-	                                //$value['name']
-	                                //switch ($value['options']['type']) {
+                    $this->transactionHelper->handleStatusChange($transaction_id, 1);
 
-
-	                            endforeach;
-	        				endif;
-        				endif;*/
-
-
-
-                        //UPDATE STOCK HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-                        //set order status as open/payed/ready for processing
-                        $stdo['order_id'] = $order_id;
-                        $stdo['order_status_id'] = 1;
-                        $stdo['notify_orders_department'] = 1;
-                        $stdo['notify_customer'] = 1;
-
-
-                        $this->transactionHelper->handleStatusChange($transaction_id, 1);
-
-                        $response['status'] = 1;
-                        $response['redirect_url'] = URL::to('info/order_success');
-
+                    $response['status'] = 1;
+                    $response['redirect_url'] = URL::to('info/order_success');
                 } else {
                     // not good technical error.
                     //Emp_order_status_log_model::orderAdd($order_id, 5, 1); // rejected
                     $this->transactionHelper->handleStatusChange($transaction_id, 0);
                 }
-                //Orders_model::updateResponseOrderID($order_id, '');
+            //Orders_model::updateResponseOrderID($order_id, '');
             } else {
                 //not authendicated
                 //Emp_order_status_log_model::orderAdd($order_id, 5, 1); // rejected
@@ -299,14 +291,14 @@ Class Alphabank_processor
             }
         }
 
-		return $response;
+        return $response;
         //*/
     }
 
     // has 2 cases
     // can be called by the ticket
     // or pay the paycenter
-    public function method_notok($payment_method_slug = '', $ticket_res = array())
+    public function method_notok($payment_method_slug = '', $ticket_res = [])
     {
         Session::forget('pay_sbt_data');
 
@@ -322,32 +314,28 @@ Class Alphabank_processor
         echo '</pre>';
         */
         ///*
-    	$response['status'] = 0;
-    	$response['website_response'] = "redirect";
-    	$response['redirect_url'] = URL::to('info/order_error');
+        $response['status'] = 0;
+        $response['website_response'] = 'redirect';
+        $response['redirect_url'] = URL::to('info/order_error');
 
         $order_details = Transaction::where('id', $transaction_id)->first();
-      //  dd($order_details);
+        //  dd($order_details);
         //'user',->with('paymethod')  <-with
         //dd($order_details);
         if ($order_details) {
             $order_details = $order_details->toArray();
             $payment_method_details = $order_details['payment_method_id'];
             $payment_method_details = PaymentMethod::where('id', $order_details['payment_method_id'])->first();
-
         } else {
             $order_details = [];
             $payment_method_details = [];
         }
 
-		if (empty($payment_method_details))
-		{
-			//$retdata['error'] = 'the order has been handled correctly by the processor but we cant match this to a payment method on our system';
-		}
-		else
-		{
+        if (empty($payment_method_details)) {
+            //$retdata['error'] = 'the order has been handled correctly by the processor but we cant match this to a payment method on our system';
+        } else {
             //dd($payment_method_details);
-			$payment_options = $payment_method_details['processor_options'];
+            $payment_options = $payment_method_details['processor_options'];
 
             if (empty($ticket_res)) {
                 $posted_data = $_POST; // submitted by the paycenter
@@ -365,7 +353,7 @@ Class Alphabank_processor
                         //ALL OTHER ERRORS
                         $this->transactionHelper->handleStatusChange($transaction_id, 0);
                     }
-                    //Orders_model::updateResponseOrderID($order_id, '');
+                //Orders_model::updateResponseOrderID($order_id, '');
                 } else {
                     //not authendicated valid digest
 
@@ -383,18 +371,18 @@ Class Alphabank_processor
                 $this->transactionHelper->handleStatusChange($transaction_id, 0);
                 //Orders_model::updateResponseOrderID($order_id, '');
             }
-		}
+        }
 
-		return $response;
+        return $response;
         //*/
     }
 
-    public function method_back($data = array())
+    public function method_back($data = [])
     {
         Session::forget('pay_sbt_data');
 
         $response['status'] = 0;
-        $response['website_response'] = "redirect";
+        $response['website_response'] = 'redirect';
         $response['redirect_url'] = URL::to('info/order_error');
 
         //$order_id = $this->session->userdata('emp_order_id');
@@ -405,9 +393,9 @@ Class Alphabank_processor
         return $response;
     }
 
-    public function hashKeyValidation($order_id = 0, $payment_options = array(), $posted_data = array())
+    public function hashKeyValidation($order_id = 0, $payment_options = [], $posted_data = [])
     {
-    	//dd($payment_options);
+        //dd($payment_options);
         if (($order_id == 0) || (empty($posted_data))) {
             return 0;
         } else {
@@ -416,63 +404,60 @@ Class Alphabank_processor
             if ($order_basic_dets) {
                 $order_basic_dets = $order_basic_dets->toArray();
                 $ticketResponse = json_decode($order_basic_dets['payment_initial_response'], true);
-                $cart_hashkey_str = $ticketResponse["digest"];
-                if ($ticketResponse["status"] == 'CAPTURED') {
-                	$hashChain = array(
-	                    "mid" => $posted_data["mid"],
-	                    "orderid" => $posted_data['orderid'],
-	                    "status" => $posted_data['status'],
-	                    "orderAmount" => $posted_data['orderAmount'],
-	                    "currency" => $posted_data['currency'],
-	                    "paymentTotal" => $posted_data['paymentTotal'],
-	                    "riskScore" => $posted_data['riskScore'],
-	                    "payMethod" => $posted_data['payMethod'],
-	                    "txId" => $posted_data['txId'],
-	                    "paymentRef" => $posted_data['paymentRef'],
-	                    "" => "ZRYES4cWqT",
+                $cart_hashkey_str = $ticketResponse['digest'];
+                if ($ticketResponse['status'] == 'CAPTURED') {
+                    $hashChain = [
+                        'mid' => $posted_data['mid'],
+                        'orderid' => $posted_data['orderid'],
+                        'status' => $posted_data['status'],
+                        'orderAmount' => $posted_data['orderAmount'],
+                        'currency' => $posted_data['currency'],
+                        'paymentTotal' => $posted_data['paymentTotal'],
+                        'riskScore' => $posted_data['riskScore'],
+                        'payMethod' => $posted_data['payMethod'],
+                        'txId' => $posted_data['txId'],
+                        'paymentRef' => $posted_data['paymentRef'],
+                        '' => 'ZRYES4cWqT',
 
                         //ZRYES4cWqT 0020820221 - Cardlink  0020761284
 
-	                    //$payment_options['shared_secret_key'],
+                        //$payment_options['shared_secret_key'],
 
-	                    //"Cardlink",$sbt_data['shared_secret_key']
+                        //"Cardlink",$sbt_data['shared_secret_key']
 
-	                     //THIS IS THE CLIENT KEY FROM ALPHABANK
+                        //THIS IS THE CLIENT KEY FROM ALPHABANK
 
-	                );
-                }
-                else {
-                	 $hashChain = array(
-	                    "mid" => $posted_data["mid"],
-	                    "orderid" => $posted_data['orderid'],
-	                    "status" => $posted_data['status'],
-	                    "orderAmount" => $posted_data['orderAmount'],
-	                    "currency" => $posted_data['currency'],
-	                    "paymentTotal" => $posted_data['paymentTotal'],
-	                    "riskScore" => $posted_data['riskScore'],
-	                    "txId" => $posted_data['txId'],
-	                    "" => "ZRYES4cWqT",
+                    ];
+                } else {
+                    $hashChain = [
+                        'mid' => $posted_data['mid'],
+                        'orderid' => $posted_data['orderid'],
+                        'status' => $posted_data['status'],
+                        'orderAmount' => $posted_data['orderAmount'],
+                        'currency' => $posted_data['currency'],
+                        'paymentTotal' => $posted_data['paymentTotal'],
+                        'riskScore' => $posted_data['riskScore'],
+                        'txId' => $posted_data['txId'],
+                        '' => 'ZRYES4cWqT',
                         //ZRYES4cWqT
-	                    //$payment_options['shared_secret_key'],
-	                     //THIS IS THE CLIENT KEY FROM ALPHABANK
+                        //$payment_options['shared_secret_key'],
+                        //THIS IS THE CLIENT KEY FROM ALPHABANK
 
-	                );
-
+                    ];
                 }
                 //"message" => $posted_data['message'],  _initial
 
-
-               // $post_data = implode("", $hashChain);
-			    // $digest = base64_encode(sha1($post_data,true));
+                // $post_data = implode("", $hashChain);
+                // $digest = base64_encode(sha1($post_data,true));
 
                 //
 
                 ///Iye5cpIOr4NCgKAY/aMscl4lWE= dd($cart_hashkey_str);
-               // $cart_hashkey = strtoupper(hash( 'sha256', $cart_hashkey_str ));Cardlink
+                // $cart_hashkey = strtoupper(hash( 'sha256', $cart_hashkey_str ));Cardlink
 
                 //$hashKey = base64_encode(sha1($this->_form_digest_str($hashChain),TRUE));
 
-               // dd($digest.'|'.$cart_hashkey_str);
+                // dd($digest.'|'.$cart_hashkey_str);
                 /*$hashStr = '';
 
                 foreach ($hashChain as $key => $row) {
@@ -481,11 +466,11 @@ Class Alphabank_processor
 
                 $hashKey = strtoupper(hash("sha256", $hashStr));*/
 
-               /*  if ($digest == $cart_hashkey_str) {
-                    return 1;
-                } else {
-                    return 0;
-                }*/
+                /*  if ($digest == $cart_hashkey_str) {
+                     return 1;
+                 } else {
+                     return 0;
+                 }*/
                 return 1;
             } else {
                 return 0;
@@ -493,135 +478,131 @@ Class Alphabank_processor
         }
     }
 
- 	public function method_confirmation($data = array())
-    {}
+    public function method_confirmation($data = [])
+    {
+    }
 
     public function method_validation($payment_method_slug = '')
-    {}
+    {
+    }
 
     private function _digest_order()
     {
-    	$dorder = array(1 => 'mid',
-    					2 => 'lang',
-    					3 => 'deviceCategory ',
-    					4 => 'orderid',
-    					5 => 'orderDesc',
-    					6 => 'orderAmount',
-    					7 => 'currency',
-    					8 => 'payerEmail',
-    					9 => 'payerPhone',
-    					10 => 'billCountry',
-    					11 => 'billState',
-    					12 => 'billZip',
-    					13 => 'billCity',
-    					14 => 'billAddress',
-    					15 => 'weight',
-    					16 => 'dimensions',
-    					17 => 'shipCountry',
-    					18 => 'shipState',
-    					19 => 'shipZip',
-    					20 => 'shipCity',
-    					21 => 'shipAddress',
-    					22 => 'addFraudScore',
-    					23 => 'maxPayRetries',
-    					24 => 'reject3dsU',
-    					25 => 'payMethod',
-    					26 => 'trType',
-    					27 => 'extInstallmentoffset',
-    					28 => 'extInstallmentperiod',
-    					29 => 'extRecurringfrequency',
-    					30 => 'extRecurringenddate',
-    					31 => 'blockScore',
-    					32 => 'cssUrl',
-    					33 => 'confirmUrl',
-    					34 => 'cancelUrl',
-    					35 => 'var1',
-    					36 => 'var2',
-    					37 => 'var3',
-    					38 => 'var4',
-    					39 => 'var5',
-    					40 => 'shared_secret_key');
+        $dorder = [1 => 'mid',
+            2 => 'lang',
+            3 => 'deviceCategory ',
+            4 => 'orderid',
+            5 => 'orderDesc',
+            6 => 'orderAmount',
+            7 => 'currency',
+            8 => 'payerEmail',
+            9 => 'payerPhone',
+            10 => 'billCountry',
+            11 => 'billState',
+            12 => 'billZip',
+            13 => 'billCity',
+            14 => 'billAddress',
+            15 => 'weight',
+            16 => 'dimensions',
+            17 => 'shipCountry',
+            18 => 'shipState',
+            19 => 'shipZip',
+            20 => 'shipCity',
+            21 => 'shipAddress',
+            22 => 'addFraudScore',
+            23 => 'maxPayRetries',
+            24 => 'reject3dsU',
+            25 => 'payMethod',
+            26 => 'trType',
+            27 => 'extInstallmentoffset',
+            28 => 'extInstallmentperiod',
+            29 => 'extRecurringfrequency',
+            30 => 'extRecurringenddate',
+            31 => 'blockScore',
+            32 => 'cssUrl',
+            33 => 'confirmUrl',
+            34 => 'cancelUrl',
+            35 => 'var1',
+            36 => 'var2',
+            37 => 'var3',
+            38 => 'var4',
+            39 => 'var5',
+            40 => 'shared_secret_key'];
 
-		return $dorder;
+        return $dorder;
     }
 
-    private function _form_digest_str($data = array())
+    private function _form_digest_str($data = [])
     {
-    	$str = '';
+        $str = '';
 
-    	if (!empty($data))
-    	{
-    		$diget_order = $this->_digest_order();
+        if (!empty($data)) {
+            $diget_order = $this->_digest_order();
 
-    		foreach ($diget_order as $priority => $field)
-    		{
-    			if (isset($data[$field]))
-    			{
-    				$str .= $data[$field];
-    			}
-    		}
-    	}
+            foreach ($diget_order as $priority => $field) {
+                if (isset($data[$field])) {
+                    $str .= $data[$field];
+                }
+            }
+        }
 
-    	return utf8_encode($str);
+        return utf8_encode($str);
     }
 
     private function _digest_success()
     {
-    	$dorder = array(1 => 'mid',
-    					2 => 'orderid',
-    					3 => 'status',
-    					4 => 'orderAmount',
-    					5 => 'currency',
-    					6 => 'paymentTotal',
-    					7 => 'message',
-    					8 => 'riskScore',
-    					9 => 'payMethod',
-    					10 => 'txId',
-    					11 => 'paymentRef',
-                        //12 => 'extInstallmentperiod',
-    					12 => 'digest');
+        $dorder = [1 => 'mid',
+            2 => 'orderid',
+            3 => 'status',
+            4 => 'orderAmount',
+            5 => 'currency',
+            6 => 'paymentTotal',
+            7 => 'message',
+            8 => 'riskScore',
+            9 => 'payMethod',
+            10 => 'txId',
+            11 => 'paymentRef',
+            //12 => 'extInstallmentperiod',
+            12 => 'digest'];
 
-		return $dorder;
+        return $dorder;
     }
 
     private function _digest_success_recurring()
     {
-    	$dorder = array(1 => 'mid',
-    					2 => 'orderid',
-    					3 => 'status',
-    					4 => 'orderAmount',
-    					5 => 'currency',
-    					6 => 'paymentTotal',
-    					7 => 'message',
-    					8 => 'riskScore',
-    					9 => 'payMethod',
-    					10 => 'txId',
-    					11 => 'sequence',
-    					12 => 'seqTxId',
-    					13 => 'paymentRef',
-    					14 => 'digest');
+        $dorder = [1 => 'mid',
+            2 => 'orderid',
+            3 => 'status',
+            4 => 'orderAmount',
+            5 => 'currency',
+            6 => 'paymentTotal',
+            7 => 'message',
+            8 => 'riskScore',
+            9 => 'payMethod',
+            10 => 'txId',
+            11 => 'sequence',
+            12 => 'seqTxId',
+            13 => 'paymentRef',
+            14 => 'digest'];
 
-		return $dorder;
+        return $dorder;
     }
 
     private function _digest_failure()
     {
-    	$dorder = array(1 => 'mid',
-    					2 => 'orderid',
-    					3 => 'status',
-    					4 => 'orderAmount',
-    					5 => 'currency',
-    					6 => 'paymentTotal',
-    					7 => 'message',
-    					8 => 'riskScore',
-    					9 => 'payMethod',
-    					10 => 'txId',
-    					11 => 'paymentRef',
-    					12 => 'digest');
+        $dorder = [1 => 'mid',
+            2 => 'orderid',
+            3 => 'status',
+            4 => 'orderAmount',
+            5 => 'currency',
+            6 => 'paymentTotal',
+            7 => 'message',
+            8 => 'riskScore',
+            9 => 'payMethod',
+            10 => 'txId',
+            11 => 'paymentRef',
+            12 => 'digest'];
 
-		return $dorder;
+        return $dorder;
     }
-
-
 }
-

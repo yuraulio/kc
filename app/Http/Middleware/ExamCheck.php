@@ -2,11 +2,11 @@
 
 namespace App\Http\Middleware;
 
-use Closure;
-use Illuminate\Http\Request;
 use App\Model\Exam;
 use App\Model\User;
 use Auth;
+use Closure;
+use Illuminate\Http\Request;
 
 class ExamCheck
 {
@@ -19,24 +19,18 @@ class ExamCheck
      */
     public function handle(Request $request, Closure $next)
     {
-
-        if(isset($request->route()->parameters['ex_id'])){
-
-            if(!$this->checkForExamAccess($request->route()->parameters['ex_id'])){
+        if (isset($request->route()->parameters['ex_id'])) {
+            if (!$this->checkForExamAccess($request->route()->parameters['ex_id'])) {
                 abort(404);
             }
-
-        }else if(isset($request->route()->parameters['id'])){
-            if(!$this->checkForExamAccess($request->route()->parameters['id'])){
+        } elseif (isset($request->route()->parameters['id'])) {
+            if (!$this->checkForExamAccess($request->route()->parameters['id'])) {
                 abort(404);
             }
-        }
-
-        else if(isset($request->route()->parameters['exam'])){
-
+        } elseif (isset($request->route()->parameters['exam'])) {
             $eventId = $request->route()->parameters['exam']->id;
 
-            if(!$this->checkForExamAccess($eventId)){
+            if (!$this->checkForExamAccess($eventId)) {
                 abort(404);
             }
         }
@@ -44,45 +38,34 @@ class ExamCheck
         return $next($request);
     }
 
-    private function checkForExamAccess($examId){
-
+    private function checkForExamAccess($examId)
+    {
         $exam = Exam::find($examId);
 
-        if($exam && $exam->event->first()){
-
+        if ($exam && $exam->event->first()) {
             $user = Auth::user();
             $event = $exam->event->first();
-            if($event && $event->is_inclass_course()){
+            if ($event && $event->is_inclass_course()) {
+                $userEvents = $user->events_for_user_list()->wherePivot('event_id', $event->id)->pluck('event_id')->toArray();
 
-                $userEvents = $user->events_for_user_list()->wherePivot('event_id',$event->id)->pluck('event_id')->toArray();
                 return in_array($event->id, $userEvents);
-
-            }else if($event && $event->is_elearning_course()){
+            } elseif ($event && $event->is_elearning_course()) {
                 $eventId = $event->id;
-              	$event = $user->events_for_user_list()->wherePivot('event_id',$event->id)->first();
-              	if(!$event){
-                    $event = $user->subscriptionEvents->where('id',$eventId)->last();
-
+                $event = $user->events_for_user_list()->wherePivot('event_id', $event->id)->first();
+                if (!$event) {
+                    $event = $user->subscriptionEvents->where('id', $eventId)->last();
                 }
                 //return$event->examAccess($user,0.8,false,false);
                 $event_infos = $event->event_info1;
 
-                if(isset($event_infos['course_elearning_exam_activate_months']) && $event_infos['course_elearning_exam_activate_months'] != null){
+                if (isset($event_infos['course_elearning_exam_activate_months']) && $event_infos['course_elearning_exam_activate_months'] != null) {
                     return $event->examAccess($user, $event_infos['course_elearning_exam_activate_months'], false);
-                }else{
+                } else {
                     return $event->examAccess($user, 0, false);
                 }
-
             }
-
-
-
-
         }
 
-          return true;
-
-
+        return true;
     }
-
 }

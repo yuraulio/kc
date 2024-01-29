@@ -14,7 +14,7 @@ class AlterCmsCategoriesTableAddParentIdColumn extends Migration
     public function up()
     {
         Schema::table('cms_categories', function (Blueprint $table) {
-            $table->integer("parent_id")->nullable();
+            $table->integer('parent_id')->nullable();
             $table->dropColumn('description');
         });
     }
@@ -28,7 +28,7 @@ class AlterCmsCategoriesTableAddParentIdColumn extends Migration
     {
         Schema::table('cms_categories', function (Blueprint $table) {
             $table->dropColumn('parent_id');
-            $table->string("description")->nullable();
+            $table->string('description')->nullable();
         });
     }
 }

@@ -39,10 +39,9 @@ class PaymentMethod extends Model
 
     public function getProcessorOptionsAttribute($value)
     {
-
         if ($value) {
             return json_decode(decrypt($value), true);
-            //return json_decode($value, true);
+        //return json_decode($value, true);
         } else {
             return [];
         }
@@ -52,7 +51,7 @@ class PaymentMethod extends Model
     {
         if ($value) {
             return json_decode(decrypt($value), true);
-            //return json_decode($value, true);
+        //return json_decode($value, true);
         } else {
             return [];
         }
@@ -60,10 +59,9 @@ class PaymentMethod extends Model
 
     public function getTestProcessorOptionsAttribute($value)
     {
-
         if ($value) {
             return json_decode(decrypt($value), true);
-            //return json_decode($value, true);
+        //return json_decode($value, true);
         } else {
             return [];
         }
@@ -73,7 +71,7 @@ class PaymentMethod extends Model
     {
         if ($value) {
             return json_decode(decrypt($value), true);
-            //return json_decode($value, true);
+        //return json_decode($value, true);
         } else {
             return [];
         }

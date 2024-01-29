@@ -24,7 +24,7 @@ use Illuminate\Support\Facades\Log;
 class CommentsController extends Controller
 {
     /**
-     * Get comments
+     * Get comments.
      *
      * @return AnonymousResourceCollection
      */
@@ -38,26 +38,29 @@ class CommentsController extends Controller
             $comments = $this->filters($request, $comments);
 
             $comments = $comments->paginate($request->per_page ?? 50);
+
             return CommentResource::collection($comments);
         } catch (Exception $e) {
-            Log::error("Failed to get comments. " . $e->getMessage());
+            Log::error('Failed to get comments. ' . $e->getMessage());
+
             return response()->json(['message' => $e->getMessage()], 400);
         }
     }
 
     private function filters($request, $comments)
     {
-        $comments->lookForOriginal($request->filter)->with(["page", "user"]);
+        $comments->lookForOriginal($request->filter)->with(['page', 'user']);
         if ($request->pagefilter !== null) {
-            $comments->whereHas("page", function ($q) use ($request) {
-                $q->where("id", $request->pagefilter);
+            $comments->whereHas('page', function ($q) use ($request) {
+                $q->where('id', $request->pagefilter);
             });
         }
+
         return $comments;
     }
 
     /**
-     * Add comment
+     * Add comment.
      *
      * @return CommentResource
      */
@@ -74,13 +77,14 @@ class CommentsController extends Controller
 
             return new CommentResource($comment);
         } catch (Exception $e) {
-            Log::error("Failed to add new comment. " . $e->getMessage());
+            Log::error('Failed to add new comment. ' . $e->getMessage());
+
             return response()->json(['message' => $e->getMessage()], 400);
         }
     }
 
     /**
-     * Delete comment
+     * Delete comment.
      *
      * @return JsonResponse
      */
@@ -95,14 +99,16 @@ class CommentsController extends Controller
 
             return response()->json(['message' => 'success'], 200);
         } catch (Exception $e) {
-            Log::error("Failed to delete comment. " . $e->getMessage());
+            Log::error('Failed to delete comment. ' . $e->getMessage());
+
             return response()->json(['message' => $e->getMessage()], 400);
         }
     }
 
     public function getPageComments($page_id)
     {
-        $comments = Comment::with(["page", "user"])->where('page_id', $page_id)->orderBy("created_at", "desc")->limit(500)->get();
+        $comments = Comment::with(['page', 'user'])->where('page_id', $page_id)->orderBy('created_at', 'desc')->limit(500)->get();
+
         return CommentResource::collection($comments);
     }
 
@@ -122,7 +128,8 @@ class CommentsController extends Controller
 
             return response()->json(['message' => 'success'], 200);
         } catch (Exception $e) {
-            Log::error("Failed to bulk delete comments. " . $e->getMessage());
+            Log::error('Failed to bulk delete comments. ' . $e->getMessage());
+
             return response()->json(['message' => $e->getMessage()], 400);
         }
     }
@@ -131,11 +138,11 @@ class CommentsController extends Controller
     {
         return [
             [
-                "Comments",
+                'Comments',
                 $this->commentCount($request),
             ],
             [
-                "Last comment",
+                'Last comment',
                 $this->lastCommentCreated($request),
             ],
             // [
@@ -154,6 +161,7 @@ class CommentsController extends Controller
     {
         $comments = Comment::tableSort($request);
         $comments = $this->filters($request, $comments);
+
         return $comments->count();
     }
 
@@ -166,12 +174,14 @@ class CommentsController extends Controller
                 $pages->whereId($request->pagefilter);
             }
             $pages = $pages->get();
+
             return $pages->sortByDesc(function ($page) {
                 return $page->comments()->count();
-            })->first()->title ?? "-";
+            })->first()->title ?? '-';
         } catch (Exception $e) {
-            Log::warning("(comments widget) Failed to find popular comments page. " . $e->getMessage());
-            return "-";
+            Log::warning('(comments widget) Failed to find popular comments page. ' . $e->getMessage());
+
+            return '-';
         }
     }
 
@@ -180,11 +190,13 @@ class CommentsController extends Controller
         try {
             $comments = Comment::tableSort($request);
             $comments = $this->filters($request, $comments);
-            $comments = $comments->orderByDesc("created_at")->first();
+            $comments = $comments->orderByDesc('created_at')->first();
+
             return $comments->created_at->diffForHumans();
         } catch (Exception $e) {
-            Log::warning("(comments widget) Failed to find last comment created. " . $e->getMessage());
-            return "-";
+            Log::warning('(comments widget) Failed to find last comment created. ' . $e->getMessage());
+
+            return '-';
         }
     }
 
@@ -194,14 +206,17 @@ class CommentsController extends Controller
             $user = User::with('usersComments')->get()->sortByDesc(function ($user) use ($request) {
                 $data = $user->usersComments;
                 if ($request->pagefilter !== null) {
-                    $data = $data->where("page_id", $request->pagefilter);
+                    $data = $data->where('page_id', $request->pagefilter);
                 }
+
                 return $data->count();
             })->first();
-            return $user->firstname . " " . $user->lastname;
+
+            return $user->firstname . ' ' . $user->lastname;
         } catch (Exception $e) {
-            Log::warning("(comments widget) Failed to find user with most comments. " . $e->getMessage());
-            return "-";
+            Log::warning('(comments widget) Failed to find user with most comments. ' . $e->getMessage());
+
+            return '-';
         }
     }
 }

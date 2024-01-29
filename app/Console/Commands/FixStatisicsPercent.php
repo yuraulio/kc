@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\Model\User;
+use Illuminate\Console\Command;
 
 class FixStatisicsPercent extends Command
 {
@@ -38,22 +38,19 @@ class FixStatisicsPercent extends Command
      */
     public function handle()
     {
-
         $users = User::whereHas('statistic')->get();
 
-        foreach($users as $user){
-
-            foreach($user->statistic as $st){
+        foreach ($users as $user) {
+            foreach ($user->statistic as $st) {
                 $newVideos = [];
-                if(!($videos = json_decode($st->pivot->videos,true))){
+                if (!($videos = json_decode($st->pivot->videos, true))) {
                     continue;
                 }
 
-                foreach($videos as $key => $video){
-                    if(!isset($video['tab'])){
+                foreach ($videos as $key => $video) {
+                    if (!isset($video['tab'])) {
                         continue;
                     }
-
 
                     $tab = str_replace(' ', '_', $video['tab']);
                     $tab = str_replace('-', '', $tab);
@@ -73,19 +70,15 @@ class FixStatisicsPercent extends Command
                     $newVideos[$key]['is_new'] = isset($video['is_new']) ? $video['is_new'] : 1;
                     $newVideos[$key]['send_automate_email'] = isset($video['send_automate_email']) ? $video['send_automate_email'] : 0;
 
-                    if($video['seen'] == 1){
+                    if ($video['seen'] == 1) {
                         $newVideos[$key]['total_seen'] = $video['total_duration'];
-                    }else{
+                    } else {
                         $newVideos[$key]['total_seen'] = $newVideos[$key]['stop_time'];
                     }
-
-
                 }
                 $user->statistic()->wherePivot('event_id', $st->pivot->event_id)->updateExistingPivot($st->pivot->event_id, ['videos' => json_encode($newVideos)], false);
             }
-
         }
-
 
         return 0;
     }

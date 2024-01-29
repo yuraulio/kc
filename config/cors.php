@@ -59,7 +59,7 @@ return [
         'max_age' => 60 * 60 * 24,
 
         'allow_origins' => [
-            'knowcrunchls-sf.cdn.edgeport.net'
+            'knowcrunchls-sf.cdn.edgeport.net',
         ],
 
     ],

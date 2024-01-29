@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\Model\User;
+use Illuminate\Console\Command;
 
 class EnableExams extends Command
 {
@@ -38,32 +38,30 @@ class EnableExams extends Command
      */
     public function handle()
     {
-
         $user = User::find($this->argument('user'));
 
-        if(!$user){
+        if (!$user) {
             return;
         }
 
         $videos = $user->statistic()->wherePivot('event_id', $this->argument('event'))->first();
 
-        if(!$videos){
+        if (!$videos) {
             return;
         }
 
-        $videos = json_decode($videos->pivot['videos'],true);
+        $videos = json_decode($videos->pivot['videos'], true);
 
-        foreach($videos as $key => $video){
-
-            if(isset($video['total_duration'])){
+        foreach ($videos as $key => $video) {
+            if (isset($video['total_duration'])) {
                 $videos[$key]['total_seen'] = $video['total_duration'];
             }
-
         }
 
-        $user->statistic()->wherePivot('event_id',$this->argument('event'))->updateExistingPivot($this->argument('event'),[
-            'videos' => json_encode($videos)
+        $user->statistic()->wherePivot('event_id', $this->argument('event'))->updateExistingPivot($this->argument('event'), [
+            'videos' => json_encode($videos),
         ], false);
+
         return 0;
     }
 }

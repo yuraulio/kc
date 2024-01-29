@@ -2,9 +2,9 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
-use App\Model\User;
 use App\Model\Certificate;
+use App\Model\User;
+use Illuminate\Console\Command;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
@@ -41,7 +41,6 @@ class FixUsersName extends Command
      */
     public function handle()
     {
-
         /*$fileName = public_path() . '/certificates_import/Greek names.xlsx';
         $spreadsheet = new Spreadsheet();
         $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReaderForFile($fileName);
@@ -63,27 +62,26 @@ class FixUsersName extends Command
 
         $users = User::all();
 
-        foreach($users as $user){
-            
+        foreach ($users as $user) {
             $firstname = mb_strtolower(trim($user->firstname));
             $lastname = mb_strtolower(trim($user->lastname));
 
-            $firstnames = explode(" ",$firstname);
-            $lastnames = explode(" ",$lastname);
+            $firstnames = explode(' ', $firstname);
+            $lastnames = explode(' ', $lastname);
 
             $firstname = '';
-            foreach($firstnames as $first){
+            foreach ($firstnames as $first) {
                 $firstname .= trim(ucfirst($first)) . ' ';
             }
 
             $lastname = '';
-            foreach($lastnames as $last){
+            foreach ($lastnames as $last) {
                 $lastname .= trim(ucfirst($last)) . ' ';
             }
 
             $user->firstname = trim($firstname);
             $user->lastname = trim($lastname);
-            
+
             //$user->firstname = trim(ucfirst($firstname));
             //$user->lastname = trim(ucfirst($lastname));
             $user->save();
@@ -91,20 +89,20 @@ class FixUsersName extends Command
 
         $certificates = Certificate::all();
 
-        foreach($certificates as $certificate){
+        foreach ($certificates as $certificate) {
             $firstname = mb_strtolower(trim($certificate->firstname));
             $lastname = mb_strtolower(trim($certificate->lastname));
 
-            $firstnames = explode(" ",$firstname);
-            $lastnames = explode(" ",$lastname);
+            $firstnames = explode(' ', $firstname);
+            $lastnames = explode(' ', $lastname);
 
             $firstname = '';
-            foreach($firstnames as $first){
+            foreach ($firstnames as $first) {
                 $firstname .= trim(ucfirst($first)) . ' ';
             }
 
             $lastname = '';
-            foreach($lastnames as $last){
+            foreach ($lastnames as $last) {
                 $lastname .= trim(ucfirst($last)) . ' ';
             }
 

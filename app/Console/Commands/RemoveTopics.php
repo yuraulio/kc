@@ -2,10 +2,10 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
-use App\Model\Topic;
-use App\Model\Event;
 use App\Model\Category;
+use App\Model\Event;
+use App\Model\Topic;
+use Illuminate\Console\Command;
 
 class RemoveTopics extends Command
 {
@@ -44,42 +44,38 @@ class RemoveTopics extends Command
         $events = Event::all();
         $categories = Category::all();
 
-        foreach($topics as $topic){
-            
+        foreach ($topics as $topic) {
             $found = false;
 
-            foreach($events as $event){
-                if($event->allLessons()->wherePivot('topic_id',$topic->id)->first()){
+            foreach ($events as $event) {
+                if ($event->allLessons()->wherePivot('topic_id', $topic->id)->first()) {
                     $found = true;
                 }
             }
 
-            if(!$found){
+            if (!$found) {
                 $topic->lessonsCategory()->detach();
                 $topic->category()->detach();
                 $topic->delete();
             }
         }
 
-        foreach($topics as $topic){
+        foreach ($topics as $topic) {
             $found = false;
 
-            foreach($categories as $category){
-                foreach($category->events as $event){
-                    if($event->allLessons()->wherePivot('topic_id',$topic->id)->first()){
+            foreach ($categories as $category) {
+                foreach ($category->events as $event) {
+                    if ($event->allLessons()->wherePivot('topic_id', $topic->id)->first()) {
                         $found = true;
                     }
                 }
                 /*if($category->id == 183 && $topic->id == 186){
                     dd('found '. ' => '. $found);
                 }*/
-                if(!$found){
-                    $topic->category()->wherePivot('category_id',$category->id)->detach();
+                if (!$found) {
+                    $topic->category()->wherePivot('category_id', $category->id)->detach();
                 }
             }
-            
-
-            
         }
 
         return 0;

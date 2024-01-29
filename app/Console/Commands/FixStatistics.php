@@ -2,10 +2,10 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
-use App\Model\User;
-use App\Model\Lesson;
 use App\Jobs\UpdateStatisticJson;
+use App\Model\Lesson;
+use App\Model\User;
+use Illuminate\Console\Command;
 
 class FixStatistics extends Command
 {
@@ -42,11 +42,10 @@ class FixStatistics extends Command
     {
         $users = User::whereHas('statistic')->get();
         $doubleEvents = [];
-        foreach($users as $user){
-
-            foreach($user->statistic as $st){
+        foreach ($users as $user) {
+            foreach ($user->statistic as $st) {
                 $newVideos = [];
-                if(!($videos = json_decode($st->pivot->videos,true))){
+                if (!($videos = json_decode($st->pivot->videos, true))) {
                     continue;
                 }
 
@@ -56,8 +55,8 @@ class FixStatistics extends Command
                 $doubleEvents[] = $st->pivot->event_id;
                 dispatch((new UpdateStatisticJson($st->pivot->event_id))->delay(now()->addSeconds(180)));*/
 
-                foreach($videos as $key => $video){
-                    if(!isset($video['tab'])){
+                foreach ($videos as $key => $video) {
+                    if (!isset($video['tab'])) {
                         continue;
                     }
                     $tab = str_replace(' ', '_', $video['tab']);
@@ -80,16 +79,14 @@ class FixStatistics extends Command
                     $lesson = Lesson::find($newVideos[$key]['lesson_id']);
                     $newVideos[$key]['total_duration'] = $lesson ? getLessonDurationToSec($lesson['vimeo_duration']) : 0;
 
-                    if($newVideos[$key]['stop_time'] >= $newVideos[$key]['total_duration']){
+                    if ($newVideos[$key]['stop_time'] >= $newVideos[$key]['total_duration']) {
                         $newVideos[$key]['stop_time'] = $newVideos[$key]['total_duration'];
                     }
 
                     $newVideos[$key]['total_seen'] = $newVideos[$key]['stop_time'];
-
                 }
                 $user->statistic()->wherePivot('event_id', $st->pivot->event_id)->updateExistingPivot($st->pivot->event_id, ['videos' => json_encode($newVideos)], false);
             }
-
         }
 
         return 0;

@@ -8,10 +8,11 @@ use Illuminate\Support\Facades\Log;
 
 class Cache
 {
-    public static function getCmsMode() {
+    public static function getCmsMode()
+    {
         try {
-            return cache()->remember("cmsMode", 3600, function () {
-                return Setting::whereSetting("cms_mode")->firstOrFail()->value;
+            return cache()->remember('cmsMode', 3600, function () {
+                return Setting::whereSetting('cms_mode')->firstOrFail()->value;
             });
         } catch (Exception $e) {
             // Log::error("Failed to get csmMode from cache.");

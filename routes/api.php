@@ -1,9 +1,9 @@
 <?php
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\Api\LessonController;
 use App\Http\Controllers\Api\PassportAuthController;
 use App\Http\Controllers\Api\UserController;
-use App\Http\Controllers\Api\LessonController;
+use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,9 +18,7 @@ use App\Http\Controllers\Api\LessonController;
 
 Route::post('login', [PassportAuthController::class, 'login']);
 
-
 Route::middleware('auth:api')->group(function () {
-
     // User
     //Route::get('user/{user}/edit', [UserController::class, 'edit']);
     Route::get('myprofile', [UserController::class, 'index']);
@@ -31,7 +29,6 @@ Route::middleware('auth:api')->group(function () {
     Route::post('lesson/save_note', [LessonController::class, 'saveNote']);
     Route::post('lesson/save_video_progress', [LessonController::class, 'saveVideoProgress']);
     Route::post('lesson/update_is_new', [LessonController::class, 'updateVideoIsNew']);
-
 
     //SMS
     Route::post('smsVerification', [UserController::class, 'smsVerification']);
@@ -45,10 +42,6 @@ Route::middleware('auth:api')->group(function () {
 
     //GetDropboxToken
     Route::get('get-dropbox-token', [UserController::class, 'getDropBoxToken']);
-
-   
-
 });
-
 
 Route::post('/myaccount/reset', 'Api\ForgotPasswordController@sendResetLinkEmail');

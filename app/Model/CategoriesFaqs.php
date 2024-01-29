@@ -2,10 +2,10 @@
 
 namespace App\Model;
 
+use App\Model\Event;
+use App\Model\Faq;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Model\Faq;
-use App\Model\Event;
 
 class CategoriesFaqs extends Model
 {
@@ -21,14 +21,11 @@ class CategoriesFaqs extends Model
 
     public function faqs()
     {
-        return $this->morphToMany(Faq::class,'faqable');
+        return $this->morphToMany(Faq::class, 'faqable');
     }
-
 
     /*public function events()
     {
         return $this->morphedMany(Event::class, 'categoryfaqables');
     }*/
-
-   
 }

@@ -25,13 +25,13 @@ class FaqRequest extends FormRequest
     {
         return [
             'title' => [
-                'required', 'min:3'
+                'required', 'min:3',
             ],
             'answer' => [
-                'required', 'min:3'
+                'required', 'min:3',
             ],
             'priority' => [
-                'numeric'
+                'numeric',
             ],
         ];
     }

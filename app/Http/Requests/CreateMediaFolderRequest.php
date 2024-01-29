@@ -26,7 +26,7 @@ class CreateMediaFolderRequest extends FormRequest
     {
         return [
             'name' => "required|uniqueNameAndParent:{$this->directory}",
-            'directory' => "required"
+            'directory' => 'required',
         ];
     }
 }

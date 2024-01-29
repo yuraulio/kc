@@ -145,7 +145,7 @@
                                 @foreach ($users as $user)
                                     <tr id="user_{{$user['id']}}">
                                         <td>
-                                        <?php //dd(asset('profile_user').'/'.$user['image']['name'] ); ?>
+                                        <?php //dd(asset('profile_user').'/'.$user['image']['name'] );?>
                                             <span class="avatar avatar-sm rounded-circle">
 
                                             @if($user['image'] != null && $user['image']['name'] != '')
@@ -170,7 +170,7 @@
 
                                         <td>
 
-                                        <?php //dd($user); ?>
+                                        <?php //dd($user);?>
 
                                         @if($user['statusAccount'] != null)
                                         @if($user['statusAccount']['completed'] == 1)

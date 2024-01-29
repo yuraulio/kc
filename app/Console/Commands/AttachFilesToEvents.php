@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\Model\Category;
+use Illuminate\Console\Command;
 
 class AttachFilesToEvents extends Command
 {
@@ -38,23 +38,17 @@ class AttachFilesToEvents extends Command
      */
     public function handle()
     {
-
         $categories = Category::whereHas('dropbox')->whereHas('events')->get();
 
-        foreach($categories as $category){
-
+        foreach ($categories as $category) {
             $dropbox = $category->dropbox->first();
 
-            foreach($category->events as $event){
-                $event->dropbox()->sync($dropbox->id); 
+            foreach ($category->events as $event) {
+                $event->dropbox()->sync($dropbox->id);
             }
 
-
             $category->dropbox()->detach();
-
-
         }
-
 
         return 0;
     }

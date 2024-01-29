@@ -2,12 +2,12 @@
 
 namespace App\Model\Admin;
 
+use App\Model\Category;
+use App\Model\Event;
+use App\Traits\PaginateTable;
+use App\Traits\SearchFilter;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Traits\SearchFilter;
-use App\Traits\PaginateTable;
-use App\Model\Event;
-use App\Model\Category;
 
 class Countdown extends Model
 {

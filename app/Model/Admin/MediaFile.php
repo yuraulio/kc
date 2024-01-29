@@ -3,9 +3,9 @@
 namespace App\Model\Admin;
 
 use App\Model\User;
+use App\Traits\SearchFilter;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Traits\SearchFilter;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Contracts\Auditable;
 
@@ -39,22 +39,22 @@ class MediaFile extends Model implements Auditable
 
     public function user()
     {
-        return $this->belongsTo(Admin::class, "user_id");
+        return $this->belongsTo(Admin::class, 'user_id');
     }
 
     public function subfiles()
     {
-        return $this->hasMany(MediaFile::class, "parent_id", "id");
+        return $this->hasMany(MediaFile::class, 'parent_id', 'id');
     }
 
     public function parrent()
     {
-        return $this->belongsTo(MediaFile::class, "parent_id", "id");
+        return $this->belongsTo(MediaFile::class, 'parent_id', 'id');
     }
 
     public function siblings()
     {
-        return $this->hasMany(MediaFile::class, "parent_id", "parent_id");
+        return $this->hasMany(MediaFile::class, 'parent_id', 'parent_id');
     }
 
     public function pages()
@@ -64,6 +64,6 @@ class MediaFile extends Model implements Auditable
 
     public function categories()
     {
-        return $this->hasMany(Category::class, "image_id", "id");
+        return $this->hasMany(Category::class, 'image_id', 'id');
     }
 }

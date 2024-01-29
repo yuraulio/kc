@@ -15,11 +15,12 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
+
 namespace App\Http\Controllers;
 
-use App\Tag;
-use App\Model\User;
 use App\Http\Requests\TagRequest;
+use App\Model\User;
+use App\Tag;
 
 class TagController extends Controller
 {
@@ -29,20 +30,18 @@ class TagController extends Controller
     }
 
     /**
-     * Display a listing of the tags
+     * Display a listing of the tags.
      *
      * @param \App\Tag  $model
      * @return \Illuminate\View\View
      */
     public function index(Tag $model)
     {
-       
-
         return view('tags.index', ['tags' => $model->all()]);
     }
 
     /**
-     * Show the form for creating a new tag
+     * Show the form for creating a new tag.
      *
      * @return \Illuminate\View\View
      */
@@ -52,7 +51,7 @@ class TagController extends Controller
     }
 
     /**
-     * Store a newly created tag in storage
+     * Store a newly created tag in storage.
      *
      * @param  \App\Http\Requests\TagRequest  $request
      * @param  \App\Tag  $model
@@ -66,12 +65,12 @@ class TagController extends Controller
     }
 
     /**
-     * Show the form for editing the specified tag
+     * Show the form for editing the specified tag.
      *
      * @param  \App\Tag  $tag
      * @return \Illuminate\View\View
      */
-    public function edit(Tag  $tag)
+    public function edit(Tag $tag)
     {
         return view('tags.edit', compact('tag'));
     }
@@ -91,7 +90,7 @@ class TagController extends Controller
     }
 
     /**
-     * Remove the specified tag from storage
+     * Remove the specified tag from storage.
      *
      * @param  \App\Tag  $tag
      * @return \Illuminate\Http\RedirectResponse

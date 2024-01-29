@@ -2,9 +2,9 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
-use App\Model\User;
 use App\Model\Event;
+use App\Model\User;
+use Illuminate\Console\Command;
 
 class GetStatisitcs extends Command
 {
@@ -39,13 +39,12 @@ class GetStatisitcs extends Command
      */
     public function handle()
     {
-
         $user = User::findOrFail($this->argument('user'));
         $event = Event::findOrFail($this->argument('event'));
 
         $statistics = $user->statistic->groupBy('id');
         $statistic = isset($statistics[$event->id][0]) ? $statistics[$event->id][0] : 'no_videos';
-        dd($event->progress($user,$statistic));
+        dd($event->progress($user, $statistic));
 
         return 0;
     }

@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Log;
 class TemplatesController extends Controller
 {
     /**
-     * Get templates
+     * Get templates.
      *
      * @return AnonymousResourceCollection
      */
@@ -27,15 +27,17 @@ class TemplatesController extends Controller
         $this->authorize('viewAny', Template::class, Auth::user());
 
         try {
-            $templates = Template::with(["pages", "user"])
-                ->with(["pages", "user"])
+            $templates = Template::with(['pages', 'user'])
+                ->with(['pages', 'user'])
                 ->tableSort($request);
 
             $templates = $this->filters($templates, $request);
             $templates = $templates->paginate($request->per_page ?? 50);
+
             return TemplateResource::collection($templates);
         } catch (Exception $e) {
-            Log::error("Failed to get templates. " . $e->getMessage());
+            Log::error('Failed to get templates. ' . $e->getMessage());
+
             return response()->json(['message' => $e->getMessage()], 400);
         }
     }
@@ -44,13 +46,14 @@ class TemplatesController extends Controller
     {
         $templates->lookForOriginal($request->filter);
         if ($request->dynamic !== null) {
-            $templates->where("dynamic", $request->dynamic == "true" ? true : false);
+            $templates->where('dynamic', $request->dynamic == 'true' ? true : false);
         }
+
         return $templates;
     }
 
     /**
-     * Add template
+     * Add template.
      *
      * @return TemplateResource
      */
@@ -69,13 +72,14 @@ class TemplatesController extends Controller
 
             return new TemplateResource($template);
         } catch (Exception $e) {
-            Log::error("Failed to add new template. " . $e->getMessage());
+            Log::error('Failed to add new template. ' . $e->getMessage());
+
             return response()->json(['message' => $e->getMessage()], 400);
         }
     }
 
     /**
-     * Get template
+     * Get template.
      *
      * @return TemplateResource
      */
@@ -88,13 +92,14 @@ class TemplatesController extends Controller
 
             return new TemplateResource($template);
         } catch (Exception $e) {
-            Log::error("Failed to get template. " . $e->getMessage());
+            Log::error('Failed to get template. ' . $e->getMessage());
+
             return response()->json(['message' => $e->getMessage()], 400);
         }
     }
 
     /**
-     * Edit template
+     * Edit template.
      *
      * @return TemplateResource
      */
@@ -113,13 +118,14 @@ class TemplatesController extends Controller
 
             return new TemplateResource($template);
         } catch (Exception $e) {
-            Log::error("Failed to edit template. " . $e->getMessage());
+            Log::error('Failed to edit template. ' . $e->getMessage());
+
             return response()->json(['message' => $e->getMessage()], 400);
         }
     }
 
     /**
-     * Delete template
+     * Delete template.
      *
      * @return JsonResponse
      */
@@ -134,7 +140,8 @@ class TemplatesController extends Controller
 
             return response()->json(['message' => 'success'], 200);
         } catch (Exception $e) {
-            Log::error("Failed to delete template. " . $e->getMessage());
+            Log::error('Failed to delete template. ' . $e->getMessage());
+
             return response()->json(['message' => $e->getMessage()], 400);
         }
     }
@@ -155,7 +162,8 @@ class TemplatesController extends Controller
 
             return response()->json(['message' => 'success'], 200);
         } catch (Exception $e) {
-            Log::error("Failed to bulk delete templates. " . $e->getMessage());
+            Log::error('Failed to bulk delete templates. ' . $e->getMessage());
+
             return response()->json(['message' => $e->getMessage()], 400);
         }
     }
@@ -164,7 +172,7 @@ class TemplatesController extends Controller
     {
         return [
             [
-                "Templates",
+                'Templates',
                 $this->templatesCount($request),
             ],
             // [
@@ -188,10 +196,12 @@ class TemplatesController extends Controller
         try {
             $templates = Template::tableSort($request);
             $templates = $this->filters($templates, $request);
+
             return $templates->count();
         } catch (Exception $e) {
-            Log::warning("(templates widget) Failed to get templates count. " . $e->getMessage());
-            return "0";
+            Log::warning('(templates widget) Failed to get templates count. ' . $e->getMessage());
+
+            return '0';
         }
     }
 
@@ -203,10 +213,12 @@ class TemplatesController extends Controller
             $templates = $templates->get()->sortByDesc(function ($category) {
                 return $category->pages->count();
             });
+
             return $templates->first()->title;
         } catch (Exception $e) {
-            Log::warning("(templates widget) Failed to get most popular template. " . $e->getMessage());
-            return "-";
+            Log::warning('(templates widget) Failed to get most popular template. ' . $e->getMessage());
+
+            return '-';
         }
     }
 
@@ -215,10 +227,12 @@ class TemplatesController extends Controller
         try {
             $templates = Template::tableSort($request);
             $templates = $this->filters($templates, $request);
-            return $templates->orderByDesc("created_at")->first()->title;
+
+            return $templates->orderByDesc('created_at')->first()->title;
         } catch (Exception $e) {
-            Log::warning("(templates widget) Failed to find newest template. " . $e->getMessage());
-            return "-";
+            Log::warning('(templates widget) Failed to find newest template. ' . $e->getMessage());
+
+            return '-';
         }
     }
 
@@ -227,10 +241,12 @@ class TemplatesController extends Controller
         try {
             $templates = Template::tableSort($request);
             $templates = $this->filters($templates, $request);
-            return $templates->orderBy("created_at")->first()->title;
+
+            return $templates->orderBy('created_at')->first()->title;
         } catch (Exception $e) {
-            Log::warning("(templates widget) Failed to find oldest template. " . $e->getMessage());
-            return "-";
+            Log::warning('(templates widget) Failed to find oldest template. ' . $e->getMessage());
+
+            return '-';
         }
     }
 }

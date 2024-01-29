@@ -2,20 +2,20 @@
 
 namespace App\Jobs;
 
-use App\Model\Admin\Page;
-use Illuminate\Support\Str;
-use Illuminate\Bus\Queueable;
 use App\Model\Admin\MediaFile;
 use App\Model\Admin\MediaFolder;
+use App\Model\Admin\Page;
 use Exception;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class MoveFile implements ShouldQueue
 {
@@ -45,7 +45,7 @@ class MoveFile implements ShouldQueue
      */
     public function handle()
     {
-        Log::info("Move file job - start");
+        Log::info('Move file job - start');
         DB::beginTransaction();
         try {
             $parentFile = MediaFile::find($this->fileId);
@@ -55,7 +55,7 @@ class MoveFile implements ShouldQueue
             $files->push($parentFile);
 
             foreach ($files as $file) {
-                Log::info("Move file job - move file in db");
+                Log::info('Move file job - move file in db');
                 $newPath = '/' . trim(rtrim('/' . $folder->path, '/'), '/') . '/' . $file->name;
 
                 $oldFileUrl = $file->url;
@@ -82,16 +82,16 @@ class MoveFile implements ShouldQueue
                 }
 
                 // move file
-                Log::info("Move file job - move file on disk");
+                Log::info('Move file job - move file on disk');
                 Storage::disk('public')->move($oldFilePath, $newPath);
             }
 
-            Log::info("Move file job - commit");
+            Log::info('Move file job - commit');
             DB::commit();
-            Log::info("Move file job - success");
+            Log::info('Move file job - success');
         } catch (Exception $e) {
             DB::rollback();
-            Log::error("Failed to move file. " . $e->getMessage());
+            Log::error('Failed to move file. ' . $e->getMessage());
         }
     }
 }

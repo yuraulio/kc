@@ -2,12 +2,12 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
-use Storage;
-use App\Model\Media;
-use Intervention\Image\ImageManagerStatic as Image;
 use App\Model\Admin\Page;
+use App\Model\Media;
+use Illuminate\Console\Command;
 use Intervention\Image\ImageManager;
+use Intervention\Image\ImageManagerStatic as Image;
+use Storage;
 
 class ResizeImages extends Command
 {
@@ -35,15 +35,14 @@ class ResizeImages extends Command
         'pages',
     ];
 
-    public $paths_originals =[
+    public $paths_originals = [
         'corporate_brands',
         'events',
         'instructors',
         'logos',
         'pages',
-        'testimonials'
+        'testimonials',
     ];
-
 
     /**
      * Create a new command instance.
@@ -62,49 +61,37 @@ class ResizeImages extends Command
      */
     public function handle()
     {
-
         $folders = Storage::disk('public')->directories();
 
         $files = Storage::disk('public')->files();
-        foreach($files as $file){
+        foreach ($files as $file) {
             $this->convert($file);
         }
 
-        foreach($folders as $folder){
+        foreach ($folders as $folder) {
+            foreach ($this->paths as $key => $fol) {
+                if ($folder == $fol) {
+                    print_r($fol);
+                    //dd($fol);
 
+                    $files = Storage::disk('public')->files($fol);
 
-                foreach($this->paths as $key => $fol){
-                    if($folder == $fol){
-                        print_r($fol);
-                        //dd($fol);
-
-
-                        $files = Storage::disk('public')->files($fol);
-
-                        foreach($files as $file){
-                            $this->convert($file);
-                        }
-
-
-
+                    foreach ($files as $file) {
+                        $this->convert($file);
                     }
                 }
-
-
-
+            }
         }
-
 
         $folders = Storage::disk('public')->directories('originals');
         //dd($folders);
 
-        foreach($folders as $fol){
-            foreach($this->paths_originals as $path){
-
-                if(str_contains($fol, $path)){
+        foreach ($folders as $fol) {
+            foreach ($this->paths_originals as $path) {
+                if (str_contains($fol, $path)) {
                     print_r($fol);
                     $files = Storage::disk('public')->files($fol);
-                    foreach($files as $file){
+                    foreach ($files as $file) {
                         $this->convert($file);
                     }
                     //dd($files);
@@ -112,27 +99,20 @@ class ResizeImages extends Command
             }
         }
 
-
-
-
-
-
-
         return 0;
     }
 
-
-    public function convert($file, $from = false){
-
+    public function convert($file, $from = false)
+    {
         $versions = Page::VERSIONS;
 
-        foreach($versions as $version){
+        foreach ($versions as $version) {
             $ver = $version[0];
 
             $crop_height = $version[2];
             $crop_width = $version[1];
 
-            if(str_contains($file, $ver)){
+            if (str_contains($file, $ver)) {
                 // dd($file.'  '.$ver);
 
                 $pos = strrpos($file, '/');
@@ -140,24 +120,23 @@ class ResizeImages extends Command
                 $image_name = $pos === false ? $file : substr($file, $pos + 1);
                 $path = explode($image_name, $file)[0];
 
-
                 $tmp = explode('.', $image_name);
 
                 $extension = end($tmp);
-                if ($tmp[1] == "jpg") {
-                    $extension = "jpg";
-                }else if($tmp[1] == "png"){
-                    $extension = "png";
-                }else if($tmp[1] == "JPG"){
-                    $extension = "JPG";
-                }else{
+                if ($tmp[1] == 'jpg') {
+                    $extension = 'jpg';
+                } elseif ($tmp[1] == 'png') {
+                    $extension = 'png';
+                } elseif ($tmp[1] == 'JPG') {
+                    $extension = 'JPG';
+                } else {
                     continue;
                 }
 
                 $image_name = $tmp[0];
 
                 $version_name = pathinfo($image_name, PATHINFO_FILENAME);
-                $version_name = $version_name . "." . $extension;
+                $version_name = $version_name . '.' . $extension;
 
                 // set image path
                 $imgpath = $path . '' . $version_name;
@@ -167,7 +146,7 @@ class ResizeImages extends Command
 
                 // crop image
                 $manager = new ImageManager();
-                $image = $manager->make(Storage::disk('public')->get('\\'.$imgpath));
+                $image = $manager->make(Storage::disk('public')->get('\\' . $imgpath));
 
                 $image_height = $image->height();
                 $image_width = $image->width();
@@ -185,15 +164,10 @@ class ResizeImages extends Command
                 $image->fit($crop_width, $crop_height);
 
                 //$image->crop($crop_width, $crop_height, $width_offset, $height_offset);
-                $image->save(public_path("/uploads/" . $path . $version_name), 100, $extension);
+                $image->save(public_path('/uploads/' . $path . $version_name), 100, $extension);
 
-                echo nl2br("/uploads/" . $path . $version_name);
-
-
-
+                echo nl2br('/uploads/' . $path . $version_name);
             }
         }
-
-
     }
 }

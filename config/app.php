@@ -28,7 +28,7 @@ return [
 
     'env' => env('APP_ENV', 'production'),
 
-    /**
+    /*
      * Env variables related with the new admin panel
      */
     'prefix_new_admin' => env('PREFIX_NEW_ADMIN_DOMAIN_URL', 'admin.'),
@@ -176,7 +176,6 @@ return [
         Intervention\Image\ImageServiceProvider::class,
         Laravel\Passport\PassportServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
-
 
         /*
          * Package Service Providers...

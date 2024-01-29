@@ -12,7 +12,6 @@ class CourseInvoice extends Notification
     use Queueable;
     public $data;
 
-
     /**
      * Create a new notification instance.
      *
@@ -20,10 +19,8 @@ class CourseInvoice extends Notification
      */
     public function __construct($data)
     {
-        
         $this->data = $data;
     }
-
 
     /**
      * Get the notification's delivery channels.
@@ -44,11 +41,10 @@ class CourseInvoice extends Notification
      */
     public function toMail($notifiable)
     {
-
         return (new MailMessage)
                     ->from('info@knowcrunch.com', 'Knowcrunch')
                     ->subject('Knowcrunch | ' . $this->data['firstName'] . ' - download your receipt')
-                    ->view('emails.user.invoice',$this->data);
+                    ->view('emails.user.invoice', $this->data);
     }
 
     /**

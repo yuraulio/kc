@@ -14,7 +14,7 @@ return[
         /*'Trained-Media Page' => 'trained_media_page',*/
         'Logos Page' => 'logos_page',
         'Consent' => 'consent',
-        'Instructor Terms' => 'instructor_terms'
+        'Instructor Terms' => 'instructor_terms',
     ],
 
     'events' => [
@@ -25,6 +25,6 @@ return[
         'Event Free' => 'event_free',
         'Event Free Coupon' => 'event_free_coupon',
         'Elearning Pending' => 'elearning_pending',
-    ]
+    ],
 
 ];

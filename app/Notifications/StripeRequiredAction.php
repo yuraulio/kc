@@ -2,13 +2,13 @@
 
 namespace App\Notifications;
 
+use App\Model\Event;
+use App\Model\PaymentMethod;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Laravel\Cashier\Payment;
-use App\Model\Event;
-use App\Model\PaymentMethod;
 
 class StripeRequiredAction extends Notification
 {
@@ -38,7 +38,7 @@ class StripeRequiredAction extends Notification
      * @param  \Laravel\Cashier\Payment  $payment
      * @return void
      */
-    public function __construct(Payment $payment,$paymentMethod,$eventId,$subscriptionCheckout,$user)
+    public function __construct(Payment $payment, $paymentMethod, $eventId, $subscriptionCheckout, $user)
     {
         $this->paymentId = $payment->id;
         $this->amount = $payment->amount();
@@ -67,7 +67,7 @@ class StripeRequiredAction extends Notification
      */
     public function toMail($notifiable)
     {
-        $url = route('payment.required', ['id' => $this->paymentId, 'event'=>$this->event, 'paymentMethod' => encrypt($this->paymentMethod),'subscriptionCheckout' => $this->subscriptionCheckout]);
+        $url = route('payment.required', ['id' => $this->paymentId, 'event'=>$this->event, 'paymentMethod' => encrypt($this->paymentMethod), 'subscriptionCheckout' => $this->subscriptionCheckout]);
 
         /*return (new MailMessage)
             ->subject(__('Confirm Payment'))
@@ -75,20 +75,18 @@ class StripeRequiredAction extends Notification
             ->line(__('Extra confirmation is needed to process your payment. Please continue to the payment page by clicking on the button below.'))
             ->action(__('Confirm Payment'), $url);*/
 
-
         $data = [];
         $data['url'] = $url;
-        $data['firstName'] = $this->user['firstname']; 
-        $data['amount'] = $this->amount; 
+        $data['firstName'] = $this->user['firstname'];
+        $data['amount'] = $this->amount;
         $data['eventTitle'] = Event::find($this->event)->title;
-        $data['footer'] =  ($pm = PaymentMethod::find($this->paymentMethod)) ? $pm->footer : "";
+        $data['footer'] = ($pm = PaymentMethod::find($this->paymentMethod)) ? $pm->footer : '';
 
-        $subject = 'Knowcrunch -'. $data['firstName'] .' please confirm your payment';
+        $subject = 'Knowcrunch -' . $data['firstName'] . ' please confirm your payment';
 
         return (new MailMessage)
             ->from('info@knowcrunch.com', 'Knowcrunch')
             ->subject(__($subject))
-            ->view('emails.stripe.require_action',$data);
-        
+            ->view('emails.stripe.require_action', $data);
     }
 }

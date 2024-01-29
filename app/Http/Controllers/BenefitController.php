@@ -2,25 +2,23 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\MediaController;
+use App\Http\Requests\BenefitRequest;
 use App\Model\Benefit;
-use App\Model\Event;
 use App\Model\Category;
+use App\Model\Event;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Requests\BenefitRequest;
-use App\Http\Controllers\MediaController;
 
 class BenefitController extends Controller
 {
-
-
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(BenefitRequest $request,Benefit $benefit)
+    public function store(BenefitRequest $request, Benefit $benefit)
     {
         $model = app($request->model_type);
         $model = $model::find($request->model_id);
@@ -32,7 +30,6 @@ class BenefitController extends Controller
         $benefit = $benefit->create($input);
         $benefit->createMedia();
         $model->benefits()->save($benefit);
-
 
         return response()->json([
             'success' => __('Benefit successfully created.'),
@@ -54,7 +51,7 @@ class BenefitController extends Controller
         //dd($request->all());
         $benefit->update($request->all());
 
-        if($request->svg){
+        if ($request->svg) {
             (new MediaController)->uploadSvg($request, $benefit->medias);
         }
 
@@ -76,12 +73,10 @@ class BenefitController extends Controller
         //
     }
 
-    public function orderBenefits(Request $request){
-
+    public function orderBenefits(Request $request)
+    {
         $model = app($request->modelType);
         $model = $model::find($request->id);
         $model->orderBenefits($request->benefits);
-
     }
-
 }

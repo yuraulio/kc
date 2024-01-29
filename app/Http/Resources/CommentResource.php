@@ -23,13 +23,13 @@ class CommentResource extends JsonResource
                 $this->user,
                 function () {
                     return [
-                        'name' => $this->user->firstname . " " . $this->user->lastname,
+                        'name' => $this->user->firstname . ' ' . $this->user->lastname,
                         'image' => get_profile_image($this->user->image) ?? '/theme/assets/images/icons/user-circle-placeholder.svg',
                     ];
                 }
             ),
-            'page' => '<a target="_blank" href="' . ($this->page->type == 'Blog' ? '/blog/' : '') . $this->page->slug . '">' . $this->page->title . "</a>",
-            'created_at_formated' => Carbon::parse($this->created_at)->format("Y-m-d G:i:s"),
+            'page' => '<a target="_blank" href="' . ($this->page->type == 'Blog' ? '/blog/' : '') . $this->page->slug . '">' . $this->page->title . '</a>',
+            'created_at_formated' => Carbon::parse($this->created_at)->format('Y-m-d G:i:s'),
             'created_at' => Carbon::parse($this->created_at)->toFormattedDateString(),
             'diffForHumans' => $this->created_at->diffForHumans(),
         ];

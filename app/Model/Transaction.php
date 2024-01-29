@@ -2,10 +2,10 @@
 
 namespace App\Model;
 
+use App\Model\Invoice;
+use App\Model\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Model\User;
-use App\Model\Invoice;
 use Laravel\Cashier\Subscription as Sub;
 
 class Transaction extends Model
@@ -80,5 +80,4 @@ class Transaction extends Model
             return [];
         }
     }
-
 }

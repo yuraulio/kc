@@ -2,11 +2,11 @@
 
 namespace App\Http\Requests;
 
-use App\Model\Tag;
-use App\Model\Item;
 use App\Model\Category;
-use Illuminate\Validation\Rule;
+use App\Model\Item;
+use App\Model\Tag;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class ItemRequest extends FormRequest
 {
@@ -29,34 +29,34 @@ class ItemRequest extends FormRequest
     {
         return [
             'name' => [
-                'required', 'min:3', Rule::unique((new Item)->getTable())->ignore($this->route()->item->id ?? null)
+                'required', 'min:3', Rule::unique((new Item)->getTable())->ignore($this->route()->item->id ?? null),
             ],
             'category_id' => [
-                'required', 'exists:'.(new Category)->getTable().',id'
+                'required', 'exists:' . (new Category)->getTable() . ',id',
             ],
             'excerpt' => [
-                'required'
+                'required',
             ],
             'description' => [
-                'required'
+                'required',
             ],
             'photo' => [
-                $this->route()->item ? 'nullable' : 'required', 'image'
+                $this->route()->item ? 'nullable' : 'required', 'image',
             ],
             'tags' => [
-                'required'
+                'required',
             ],
             'tags.*' => [
-                'exists:'.(new Tag)->getTable().',id'
+                'exists:' . (new Tag)->getTable() . ',id',
             ],
             'status' => [
                 'required',
-                'in:published,draft,archive'
+                'in:published,draft,archive',
             ],
             'date' => [
                 'required',
-                'date_format:d-m-Y'
-            ]
+                'date_format:d-m-Y',
+            ],
         ];
     }
 
@@ -69,7 +69,7 @@ class ItemRequest extends FormRequest
     {
         return [
             'category_id' => 'category',
-            'photo' => 'picture'
+            'photo' => 'picture',
         ];
     }
 }

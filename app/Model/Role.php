@@ -15,6 +15,7 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
+
 namespace App\Model;
 
 use Illuminate\Database\Eloquent\Model;
@@ -30,7 +31,7 @@ class Role extends Model
     protected $fillable = ['name', 'permissions'];
 
     /**
-     * Get the users for the role
+     * Get the users for the role.
      *
      * @return void
      */

@@ -2,10 +2,10 @@
 
 namespace App\Http\Middleware;
 
+use App\Model\Pages;
+use Auth;
 use Closure;
 use Illuminate\Http\Request;
-use Auth;
-use App\Model\Pages;
 
 class CheckInstructorTermsPage
 {
@@ -20,15 +20,15 @@ class CheckInstructorTermsPage
     {
         $page = Pages::find(4753);
         $pageSlug = $page->slugable->slug;
-        
-        if(Auth::user() && $request->is($pageSlug) && !Auth::user()->instructor->first()) {
+
+        if (Auth::user() && $request->is($pageSlug) && !Auth::user()->instructor->first()) {
             abort(404);
         }
 
         $page = Pages::find(4754);
         $pageSlug = $page->slugable->slug;
-        
-        if(!Auth::user() && $request->is($pageSlug)) {
+
+        if (!Auth::user() && $request->is($pageSlug)) {
             abort(404);
         }
 

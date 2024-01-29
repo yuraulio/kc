@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Model\Partner;
-use App\Model\Event;
-use Illuminate\Http\Request;
 use App\Http\Requests\PartnerRequest;
+use App\Model\Event;
+use App\Model\Partner;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class PartnerController extends Controller
@@ -41,6 +41,7 @@ class PartnerController extends Controller
         $data['partners'] = Partner::all();
         //$data['event_id'] = $request->event_id;
         $data['event'] = Event::with('partners')->find($request->event_id);
+
         return view('partner.event.create', $data);
     }
 
@@ -54,6 +55,7 @@ class PartnerController extends Controller
     {
         $model->create($request->all());
         $model->createMedia();
+
         return redirect()->route('partner.index')->withStatus(__('Partner successfully created.'));
     }
 
@@ -95,13 +97,12 @@ class PartnerController extends Controller
      */
     public function edit(Partner $partner)
     {
-
         $media = $partner->mediable;
-        if(!$media){
+        if (!$media) {
             $media = $partner->createMedia();
         }
 
-        return view('partner.edit', compact('partner','media'));
+        return view('partner.edit', compact('partner', 'media'));
     }
 
     public function edit_event(Partner $partner)
@@ -149,7 +150,7 @@ class PartnerController extends Controller
 
         return response()->json([
             'success' => __('Partner successfully removed.'),
-            'partner_id' => $request->partner_id
+            'partner_id' => $request->partner_id,
         ]);
     }
 
@@ -160,11 +161,9 @@ class PartnerController extends Controller
         $event = Event::with('partners')->find($request->model_id);
         $data['assignedPartners'] = $event->partners()->get();
 
-
         return response()->json([
             'success' => __('Partners successfully fetched.'),
             'data' => $data,
         ]);
     }
-
 }

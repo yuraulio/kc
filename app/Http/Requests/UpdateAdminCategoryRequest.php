@@ -26,7 +26,7 @@ class UpdateAdminCategoryRequest extends FormRequest
     {
         return [
             'title' => "required|unique:cms_categories,title,{$this->id}",
-            'subcategories.*' => "unique:cms_categories,title",
+            'subcategories.*' => 'unique:cms_categories,title',
         ];
     }
 }

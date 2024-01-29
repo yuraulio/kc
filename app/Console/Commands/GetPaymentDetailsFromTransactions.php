@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\Model\Transaction;
+use Illuminate\Console\Command;
 
 class GetPaymentDetailsFromTransactions extends Command
 {
@@ -38,26 +38,20 @@ class GetPaymentDetailsFromTransactions extends Command
      */
     public function handle()
     {
-        
+        $transactions = Transaction::with('user.statisticGroupByEvent', 'user.events', 'user.ticket', 'subscription', 'event', 'event.delivery', 'event.category')->where('status', 1)->orderBy('created_at', 'desc')->get();
 
-  
-        $transactions = Transaction::with('user.statisticGroupByEvent','user.events','user.ticket','subscription','event','event.delivery','event.category')->where('status', 1)->orderBy('created_at','desc')->get();
-
-        foreach($transactions as $transaction){
-            if(!$transaction->subscription->first() && $transaction->user->first() && $transaction->event->first()){
+        foreach ($transactions as $transaction) {
+            if (!$transaction->subscription->first() && $transaction->user->first() && $transaction->event->first()) {
                 $user = $transaction->user->first();
 
-                $transactionBillingDetails = json_decode($transaction->billing_details,true);
-                if(isset($transactionBillingDetails['billing']) && $transactionBillingDetails['billing'] == 1){
-
-                    if($user->receipt_details){
+                $transactionBillingDetails = json_decode($transaction->billing_details, true);
+                if (isset($transactionBillingDetails['billing']) && $transactionBillingDetails['billing'] == 1) {
+                    if ($user->receipt_details) {
                         continue;
                     }
                     $user->receipt_details = $transactionBillingDetails;
-
-                }else if(isset($transactionBillingDetails['billing']) && $transactionBillingDetails['billing'] == 2){
-
-                    if($user->invoice_details){
+                } elseif (isset($transactionBillingDetails['billing']) && $transactionBillingDetails['billing'] == 2) {
+                    if ($user->invoice_details) {
                         continue;
                     }
                     $user->invoice_details = $transactionBillingDetails;

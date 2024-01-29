@@ -2,9 +2,9 @@
 
 namespace App\Model;
 
+use App\Model\Media;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Model\Media;
 
 class Image_alt extends Model
 {
@@ -13,6 +13,6 @@ class Image_alt extends Model
     protected $table = 'image_alt';
 
     protected $fillable = [
-        'name', 'alt'
+        'name', 'alt',
     ];
 }

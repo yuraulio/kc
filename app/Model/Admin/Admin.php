@@ -2,33 +2,32 @@
 
 namespace App\Model\Admin;
 
+use App\Model\Activation;
+use App\Model\CartCache;
+use App\Model\CookiesSMS;
+use App\Model\Event;
+use App\Model\ExamResult;
+use App\Model\Instructor;
+use App\Model\Invoice;
+use App\Model\Media;
+use App\Model\OauthAccessToken;
+use App\Model\Plan;
+use App\Model\Role;
+use App\Model\Transaction;
+use App\Traits\MediaTrait;
+use App\Traits\PaginateTable;
+use App\Traits\SearchFilter;
+use Carbon\Carbon;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
-use App\Model\Media;
-use App\Model\Activation;
-use App\Model\Event;
-use App\Model\Role;
-use App\Model\Instructor;
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Auth;
-use Carbon\Carbon;
-use Laravel\Passport\HasApiTokens;
+use Illuminate\Support\Facades\DB;
 use Laravel\Cashier\Billable;
-use App\Traits\MediaTrait;
-use App\Model\Invoice;
 use Laravel\Cashier\Subscription;
-use App\Model\CookiesSMS;
-use App\Model\Plan;
-use App\Model\CartCache;
-use App\Model\ExamResult;
-use App\Model\OauthAccessToken;
-use App\Model\Transaction;
-use App\Traits\SearchFilter;
-use App\Traits\PaginateTable;
+use Laravel\Passport\HasApiTokens;
 use OwenIt\Auditing\Contracts\Auditable;
 
 class Admin extends Authenticatable implements Auditable
@@ -102,23 +101,20 @@ class Admin extends Authenticatable implements Auditable
     public function scopeSearchUsers($query, $search_term)
     {
         $query->where(function ($query) use ($search_term) {
-            $search_term_str = '%'.implode("%", explode(" ", $search_term)).'%';
+            $search_term_str = '%' . implode('%', explode(' ', $search_term)) . '%';
             $query->where('email', 'like', $search_term_str)
                 ->orWhere('firstname', 'like', $search_term_str)
                 ->orWhere('lastname', 'like', $search_term_str);
         });
 
-
-
         return $query->select('id', 'firstname', 'lastname', 'email')->get();
     }
 
-
     /**
-      * Get the role of the user
-      *
-      * @return \App\Model\Role
-      */
+     * Get the role of the user.
+     *
+     * @return \App\Model\Role
+     */
     public function role()
     {
         return $this->belongsToMany(Role::class, 'role_users', 'user_id');
@@ -135,7 +131,7 @@ class Admin extends Authenticatable implements Auditable
     }
 
     /**
-     * Get the path to the profile picture
+     * Get the path to the profile picture.
      *
      * @return string
      */
@@ -149,13 +145,12 @@ class Admin extends Authenticatable implements Auditable
     }
 
     /**
-     * Check if the user has admin role
+     * Check if the user has admin role.
      *
-     * @return boolean
+     * @return bool
      */
     public function isAdmin()
     {
-
         /*dd($this->role);
         //dd($this->id);
         $role = DB::table('role_users')->where('user_id', $this->id)->first();
@@ -168,7 +163,6 @@ class Admin extends Authenticatable implements Auditable
 
     public function isAdministrator()
     {
-
         /*dd($this->role);
         //dd($this->id);
         $role = DB::table('role_users')->where('user_id', $this->id)->first();
@@ -180,9 +174,9 @@ class Admin extends Authenticatable implements Auditable
     }
 
     /**
-     * Check if the user has creator role
+     * Check if the user has creator role.
      *
-     * @return boolean
+     * @return bool
      */
     public function isCreator()
     {
@@ -190,9 +184,9 @@ class Admin extends Authenticatable implements Auditable
     }
 
     /**
-     * Check if the user has user role
+     * Check if the user has user role.
      *
-     * @return boolean
+     * @return bool
      */
     public function isMember()
     {
@@ -211,7 +205,6 @@ class Admin extends Authenticatable implements Auditable
     {
         return $this->belongsToMany(Event::class, 'event_user')->withPivot('paid', 'expiration', 'comment', 'payment_method')->with('summary1', 'category', 'slugable')->wherePivot('paid', true);
     }
-
 
     public function events_for_user_list()
     {
@@ -319,7 +312,6 @@ class Admin extends Authenticatable implements Auditable
 
     }*/
 
-
     public function invoices()
     {
         return $this->morphToMany(Invoice::class, 'invoiceable');
@@ -353,7 +345,7 @@ class Admin extends Authenticatable implements Auditable
         $eventCategories = [];
 
         if (count($plans) == 0) {
-            return [false,[]];
+            return [false, []];
         }
 
         foreach ($plans as $key => $plan) {
@@ -424,7 +416,7 @@ class Admin extends Authenticatable implements Auditable
         }
 
         if (count(array_diff($events, $nonEventPlans)) == 0) {
-            return [false,[]];
+            return [false, []];
         }
 
         foreach ($nonEventsCategory as $key => $plan) {
@@ -436,8 +428,6 @@ class Admin extends Authenticatable implements Auditable
                     unset($plans[$key]);
                 }
             }
-
-
 
             if ($planIndex == count($categoryPlans[$key])) {
                 unset($plans[$key]);
@@ -462,7 +452,7 @@ class Admin extends Authenticatable implements Auditable
         }
 
         if (count($plans) == 0) {
-            return [false,[]];
+            return [false, []];
         }
         /************
          * NEWW
@@ -472,11 +462,10 @@ class Admin extends Authenticatable implements Auditable
             $eventPlans = array_merge($plan->events()->pluck('event_id')->toArray(), $eventPlans);
         }
 
-
         $eventPlans = array_diff($eventPlans, $events);
         $eventPlans = array_diff($eventPlans, $this->subscriptionEvents->pluck('event_id')->toArray());
 
-        return [true,$eventPlans];
+        return [true, $eventPlans];
     }
 
     public function checkUserSubscriptionByEventId($eventId)
@@ -547,8 +536,6 @@ class Admin extends Authenticatable implements Auditable
                 }
             }
 
-
-
             if ($planIndex == count($categoryPlans[$key])) {
                 unset($plans[$key]);
             }
@@ -584,10 +571,8 @@ class Admin extends Authenticatable implements Auditable
         return in_array($eventId, $eventPlans);
     }
 
-
     public function checkUserPlans($plans)
     {
-
         //$plans = Plan::all();
         $eventPlans = [];
         $categoryPlans = [];
@@ -653,8 +638,6 @@ class Admin extends Authenticatable implements Auditable
                 }
             }
 
-
-
             if ($planIndex == count($categoryPlans[$key])) {
                 unset($plans[$key]);
             }
@@ -715,7 +698,6 @@ class Admin extends Authenticatable implements Auditable
         $tab = str_replace('&', '', $tab);
         $tab = str_replace('_', '', $tab);
 
-
         $statistic = $statistics;
 
         $videos = [];
@@ -743,9 +725,9 @@ class Admin extends Authenticatable implements Auditable
                     $lastVideoSeen = $vimeo_id;
                 }
                 if (!isset($videos[$vimeo_id])) {
-                    $change+=1;
-                    $videos[$vimeo_id] = ['seen' => 0, 'tab' =>$tab.$vimeo_id, 'lesson' => $lesson['id'], 'stop_time' => 0,'total_seen' => 0,
-                                               'percentMinutes' => 0];
+                    $change += 1;
+                    $videos[$vimeo_id] = ['seen' => 0, 'tab' =>$tab . $vimeo_id, 'lesson' => $lesson['id'], 'stop_time' => 0, 'total_seen' => 0,
+                        'percentMinutes' => 0];
                     $notes[$vimeo_id] = '';
                 }
                 $countVideos += 1;
@@ -754,7 +736,7 @@ class Admin extends Authenticatable implements Auditable
         }
 
         if (!in_array($lastVideoSeen, $oldVideos) && isset($oldVideos[0])) {
-            $lastVideoSeen =$oldVideos[0];
+            $lastVideoSeen = $oldVideos[0];
         }
 
         foreach ($videos as $key => $videoId) {
@@ -765,10 +747,10 @@ class Admin extends Authenticatable implements Auditable
 
         if (!$this->statistic()->wherePivot('event_id', $event['id'])->first()) {
             $this->statistic()->attach($event['id'], ['videos'=>json_encode($videos), 'notes' => json_encode($notes), 'lastVideoSeen' => $lastVideoSeen,
-                                        'created_at' => Carbon::now(),'updated_at' => Carbon::now()]);
+                'created_at' => Carbon::now(), 'updated_at' => Carbon::now()]);
         } else {
             $this->statistic()->wherePivot('event_id', $event['id'])->updateExistingPivot($event['id'], ['videos' => json_encode($videos),
-                                            'notes' => json_encode($notes),'lastVideoSeen' => $lastVideoSeen], false);
+                'notes' => json_encode($notes), 'lastVideoSeen' => $lastVideoSeen], false);
         }
 
         return $this->statistic()->wherePivot('event_id', $event['id'])->first();

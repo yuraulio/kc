@@ -35,39 +35,38 @@
         	<?php
 
                 $instOne = $price;
-        	    $instTwo = round($price / 2, 2);
-        	    $instThree = round($price / 3, 2);
-				$instFour = round($price / 4, 2);
+    $instTwo = round($price / 2, 2);
+    $instThree = round($price / 3, 2);
+    $instFour = round($price / 4, 2);
 
-				//$instTwo = number_format($instTwo , 2 , '.', '');
-				//$instThree = number_format($instThree , 2 , '.', ',');
+    //$instTwo = number_format($instTwo , 2 , '.', '');
+    //$instThree = number_format($instThree , 2 , '.', ',');
 
+    if ($instOne - floor($instOne) > 0) {
+        $instOne = number_format($instOne, 2, '.', ',');
+    } else {
+        $instOne = number_format($instOne, 0, '.', ',');
+    }
 
-				if($instOne - floor($instOne)>0){
-                    $instOne = number_format($instOne , 2 , '.', ',');
-                }else{
-                    $instOne = number_format($instOne , 0 , '.', ',');
-                }
+    if ($instTwo - floor($instTwo) > 0) {
+        $instTwo = number_format($instTwo, 2, '.', ',');
+    } else {
+        $instTwo = number_format($instTwo, 0, '.', ',');
+    }
 
-                if($instTwo - floor($instTwo)>0){
-                    $instTwo = number_format($instTwo , 2 , '.', ',');
-                }else{
-                    $instTwo = number_format($instTwo , 0 , '.', ',');
-                }
+    if ($instThree - floor($instThree) > 0) {
+        $instThree = number_format($instThree, 2, '.', ',');
+    } else {
+        $instThree = number_format($instThree, 0, '.', ',');
+    }
 
-                if($instThree - floor($instThree)>0){
-                    $instThree = number_format($instThree , 2 , '.', ',');
-                }else{
-                    $instThree = number_format($instThree , 0 , '.', ',');
-                }
+    if ($instFour - floor($instFour) > 0) {
+        $instFour = number_format($instFour, 2, '.', ',');
+    } else {
+        $instFour = number_format($instFour, 0, '.', ',');
+    }
 
-				if($instFour - floor($instFour)>0){
-                    $instFour = number_format($instFour , 2 , '.', ',');
-                }else{
-                    $instFour = number_format($instFour , 0 , '.', ',');
-                }
-
-        	?>
+    ?>
         	<div class="col-md-6 col-xl-6 selection-order">
 			<h1 class="hidden-lg">Checkout</h1>
 

@@ -28,11 +28,11 @@ class Comment extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class, "user_id");
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function page()
     {
-        return $this->belongsTo(Page::class, "page_id")->withoutGlobalScopes();
+        return $this->belongsTo(Page::class, 'page_id')->withoutGlobalScopes();
     }
 }

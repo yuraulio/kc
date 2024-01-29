@@ -16,7 +16,6 @@ class ExpirationMails extends Notification
      *
      * @return void
      */
-
     private $data;
 
     public function __construct($data)
@@ -46,9 +45,7 @@ class ExpirationMails extends Notification
         return (new MailMessage)
                     ->from('info@knowcrunch.com', 'Knowcrunch')
                     ->subject($this->data['subject'])
-                    ->view($this->data['template'],$this->data);
-                    
-                    
+                    ->view($this->data['template'], $this->data);
     }
 
     /**

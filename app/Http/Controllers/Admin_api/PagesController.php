@@ -7,12 +7,16 @@ use App\Http\Requests\CreateAdminPageRequest;
 use App\Http\Requests\UpdateAdminPageRequest;
 use App\Http\Resources\PageResource;
 use App\Jobs\DeleteMultiplePages;
+use App\Jobs\UpdateTerms;
 use App\Model\Admin\Category;
 use App\Model\Admin\Comment;
 use App\Model\Admin\MediaFile;
 use App\Model\Admin\Page;
+use App\Model\Admin\PageType;
 use App\Model\Admin\Redirect;
 use App\Model\Admin\Template;
+use App\Model\Event;
+use App\Model\Plan;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -22,15 +26,11 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Ramsey\Uuid\Uuid;
-use App\Jobs\UpdateTerms;
-use App\Model\Admin\PageType;
-use App\Model\Event;
-use App\Model\Plan;
 
 class PagesController extends Controller
 {
     /**
-     * Get pages
+     * Get pages.
      *
      * @return AnonymousResourceCollection
      */
@@ -45,9 +45,11 @@ class PagesController extends Controller
             $pages = $this->filters($request, $pages);
 
             $pages = $pages->paginate($request->per_page ?? 50);
+
             return PageResource::collection($pages);
         } catch (Exception $e) {
-            Log::error("Failed to get pages. " . $e->getMessage());
+            Log::error('Failed to get pages. ' . $e->getMessage());
+
             return response()->json(['message' => $e->getMessage()], 400);
         }
     }
@@ -56,11 +58,11 @@ class PagesController extends Controller
     {
         $pages->lookForOriginal($request->filter);
         if ($request->dynamic !== null) {
-            $pages->where("dynamic", $request->dynamic == "true" ? true : false);
+            $pages->where('dynamic', $request->dynamic == 'true' ? true : false);
         }
         if ($request->template !== null) {
-            $pages->whereHas("template", function ($q) use ($request) {
-                $q->where("id", $request->template);
+            $pages->whereHas('template', function ($q) use ($request) {
+                $q->where('id', $request->template);
             });
         }
         if ($request->published !== null) {
@@ -72,23 +74,24 @@ class PagesController extends Controller
                 $requestTypes[$key] = json_decode($type) ?? null;
             }
             $types = array_column($requestTypes, 'title');
-            $pages->whereIn("type", $types);
+            $pages->whereIn('type', $types);
         }
         if ($request->category) {
-            $pages->whereHas("categories", function ($q) use ($request) {
-                $q->where("id", $request->category);
+            $pages->whereHas('categories', function ($q) use ($request) {
+                $q->where('id', $request->category);
             });
         }
         if ($request->subcategory) {
-            $pages->whereHas("subcategories", function ($q) use ($request) {
-                $q->where("id", $request->subcategory);
+            $pages->whereHas('subcategories', function ($q) use ($request) {
+                $q->where('id', $request->subcategory);
             });
         }
+
         return $pages;
     }
 
     /**
-     * Add page
+     * Add page.
      *
      * @return PageResource
      */
@@ -127,13 +130,14 @@ class PagesController extends Controller
 
             return new PageResource($page);
         } catch (Exception $e) {
-            Log::error("Failed to add new page. " . $e->getMessage());
+            Log::error('Failed to add new page. ' . $e->getMessage());
+
             return response()->json(['message' => $e->getMessage()], 400);
         }
     }
 
     /**
-     * Get page
+     * Get page.
      *
      * @return PageResource
      */
@@ -146,13 +150,14 @@ class PagesController extends Controller
 
             return new PageResource($page);
         } catch (Exception $e) {
-            Log::error("Failed to get page. " . $e->getMessage());
+            Log::error('Failed to get page. ' . $e->getMessage());
+
             return response()->json(['message' => $e->getMessage()], 400);
         }
     }
 
     /**
-     * Edit page
+     * Edit page.
      *
      * @return PageResource
      */
@@ -197,19 +202,20 @@ class PagesController extends Controller
                 $redirect->save();
             }
 
-            if (isset($request->terms_val) && $request->terms_val == "yes") {
+            if (isset($request->terms_val) && $request->terms_val == 'yes') {
                 dispatch((new UpdateTerms($page->id))->delay(now()->addSeconds(3)));
             }
 
             return new PageResource($page);
         } catch (Exception $e) {
-            Log::error("Failed to edit page. ", [$e]);
+            Log::error('Failed to edit page. ', [$e]);
+
             return response()->json(['message' => $e->getMessage()], 400);
         }
     }
 
     /**
-     * Delete page
+     * Delete page.
      *
      * @return JsonResponse
      */
@@ -224,13 +230,14 @@ class PagesController extends Controller
             $page->subcategories()->detach();
             $page->files()->detach();
 
-            Comment::where("page_id", $page->id)->delete();
+            Comment::where('page_id', $page->id)->delete();
 
             $page->delete();
 
             return response()->json(['message' => 'success'], 200);
         } catch (Exception $e) {
-            Log::error("Failed to delete page. " . $e->getMessage());
+            Log::error('Failed to delete page. ' . $e->getMessage());
+
             return response()->json(['message' => $e->getMessage()], 400);
         }
     }
@@ -247,7 +254,8 @@ class PagesController extends Controller
 
             return response()->json(['message' => 'success'], 200);
         } catch (Exception $e) {
-            Log::error("Failed to publish page. " . $e->getMessage());
+            Log::error('Failed to publish page. ' . $e->getMessage());
+
             return response()->json(['message' => $e->getMessage()], 400);
         }
     }
@@ -258,10 +266,12 @@ class PagesController extends Controller
 
         try {
             $path = Storage::disk('public')->putFile('page_files', $request->file('file'), 'public');
-            $url = config('app.url'). "/uploads/" . $path;
+            $url = config('app.url') . '/uploads/' . $path;
+
             return response()->json(['url' => $url], 200);
         } catch (Exception $e) {
-            Log::error("Failed update file . " . $e->getMessage());
+            Log::error('Failed update file . ' . $e->getMessage());
+
             return response()->json(['message' => $e->getMessage()], 400);
         }
     }
@@ -269,152 +279,152 @@ class PagesController extends Controller
     public function getDisplayOptions()
     {
         return [
-            "data" => [
+            'data' => [
                 [
-                    "id" => 1,
-                    "title" => "List"
+                    'id' => 1,
+                    'title' => 'List',
                 ],
                 [
-                    "id" => 3,
-                    "title" => "List 2"
+                    'id' => 3,
+                    'title' => 'List 2',
                 ],
                 [
-                    "id" => 2,
-                    "title" => "Grid"
-                ]
-            ]
+                    'id' => 2,
+                    'title' => 'Grid',
+                ],
+            ],
         ];
     }
 
     public function getGaleryDisplayOptions()
     {
         return [
-            "data" => [
+            'data' => [
                 [
-                    "id" => 1,
-                    "title" => "Grid"
+                    'id' => 1,
+                    'title' => 'Grid',
                 ],
                 [
-                    "id" => 2,
-                    "title" => "Carousel"
+                    'id' => 2,
+                    'title' => 'Carousel',
                 ],
                 [
-                    "id" => 3,
-                    "title" => "Row"
-                ]
-            ]
+                    'id' => 3,
+                    'title' => 'Row',
+                ],
+            ],
         ];
     }
 
     public function getFormTypes()
     {
         return [
-            "data" => [
+            'data' => [
                 [
-                    "id" => 1,
-                    "title" => "Contact"
+                    'id' => 1,
+                    'title' => 'Contact',
                 ],
                 [
-                    "id" => 2,
-                    "title" => "Corporate training"
+                    'id' => 2,
+                    'title' => 'Corporate training',
                 ],
                 [
-                    "id" => 3,
-                    "title" => "Become an instructor"
+                    'id' => 3,
+                    'title' => 'Become an instructor',
                 ],
                 [
-                    "id" => 4,
-                    "title" => "Giveaway"
-                ]
-            ]
+                    'id' => 4,
+                    'title' => 'Giveaway',
+                ],
+            ],
         ];
     }
 
     public function getEventTypes()
     {
         return [
-            "data" => [
+            'data' => [
                 [
-                    "id" => 1,
-                    "title" => "In class Events"
+                    'id' => 1,
+                    'title' => 'In class Events',
                 ],
                 [
-                    "id" => 2,
-                    "title" => "Elearning Events"
-                ]
-            ]
+                    'id' => 2,
+                    'title' => 'Elearning Events',
+                ],
+            ],
         ];
     }
 
     public function getHomepageGalleryOptions()
     {
         return [
-            "data" => [
+            'data' => [
                 [
-                    "id" => 1,
-                    "title" => "Trusted Brands"
+                    'id' => 1,
+                    'title' => 'Trusted Brands',
                 ],
                 [
-                    "id" => 2,
-                    "title" => "Media Logos"
-                ]
-            ]
+                    'id' => 2,
+                    'title' => 'Media Logos',
+                ],
+            ],
         ];
     }
 
     public function getListSource()
     {
         return [
-            "data" => [
+            'data' => [
                 [
-                    "id" => 1,
-                    "title" => "Blog"
+                    'id' => 1,
+                    'title' => 'Blog',
                 ],
                 [
-                    "id" => 2,
-                    "title" => "Knowledge"
+                    'id' => 2,
+                    'title' => 'Knowledge',
                 ],
                 [
-                    "id" => 3,
-                    "title" => "Courses"
+                    'id' => 3,
+                    'title' => 'Courses',
                 ],
                 [
-                    "id" => 4,
-                    "title" => "Instructors"
+                    'id' => 4,
+                    'title' => 'Instructors',
                 ],
                 [
-                    "id" => 5,
-                    "title" => "City"
+                    'id' => 5,
+                    'title' => 'City',
                 ],
                 [
-                    "id" => 6,
-                    "title" => "Homepage - in class events"
+                    'id' => 6,
+                    'title' => 'Homepage - in class events',
                 ],
                 [
-                    "id" => 7,
-                    "title" => "Homepage - elearning events"
-                ]
-            ]
+                    'id' => 7,
+                    'title' => 'Homepage - elearning events',
+                ],
+            ],
         ];
     }
 
     public function getSearchSource()
     {
         return [
-            "data" => [
+            'data' => [
                 [
-                    "id" => 1,
-                    "title" => "Blog"
+                    'id' => 1,
+                    'title' => 'Blog',
                 ],
                 [
-                    "id" => 2,
-                    "title" => "Knowledge"
+                    'id' => 2,
+                    'title' => 'Knowledge',
                 ],
                 [
-                    "id" => 3,
-                    "title" => "Event"
-                ]
-            ]
+                    'id' => 3,
+                    'title' => 'Event',
+                ],
+            ],
         ];
     }
 
@@ -454,7 +464,8 @@ class PagesController extends Controller
 
             return response()->json(['message' => 'success'], 200);
         } catch (Exception $e) {
-            Log::error("Failed to bulk delete pages. " . $e->getMessage());
+            Log::error('Failed to bulk delete pages. ' . $e->getMessage());
+
             return response()->json(['message' => $e->getMessage()], 400);
         }
     }
@@ -463,22 +474,22 @@ class PagesController extends Controller
     {
         return [
             [
-                "PAGES CREATED",
+                'PAGES CREATED',
                 $data = [
                     'all' => $this->pagesCount($request),
                     'published' => $this->publishedPagesCount($request),
-                    'unpublished' => $this->unpublishedPagesCount($request)
+                    'unpublished' => $this->unpublishedPagesCount($request),
                 ],
-                'All pages created by admins.'
+                'All pages created by admins.',
             ],
             [
-                "ARTICLES CREATED",
+                'ARTICLES CREATED',
                 $data = [
                     'published' => $this->articlePagesCount($request),
                     'unpublished' => $this->articleUnpublishedPagesCount($request),
                 ],
-                "All articles created by admins."
-            ]
+                'All articles created by admins.',
+            ],
             // [
             //     "Published pages",
             //     $this->publishedPagesCount($request),
@@ -499,11 +510,13 @@ class PagesController extends Controller
     {
         try {
             $pages = Page::withoutGlobalScopes();
+
             //$pages = $this->filters($request, $pages);
             return $pages->count();
         } catch (Exception $e) {
-            Log::warning("(pages widget) Failed to get pages count. " . $e->getMessage());
-            return "0";
+            Log::warning('(pages widget) Failed to get pages count. ' . $e->getMessage());
+
+            return '0';
         }
     }
 
@@ -511,11 +524,13 @@ class PagesController extends Controller
     {
         try {
             $pages = Page::withoutGlobalScopes()->wherePublished(true);
+
             //$pages = $this->filters($request, $pages);
             return $pages->count();
         } catch (Exception $e) {
-            Log::warning("(pages widget) Failed to get published pages count. " . $e->getMessage());
-            return "0";
+            Log::warning('(pages widget) Failed to get published pages count. ' . $e->getMessage());
+
+            return '0';
         }
     }
 
@@ -523,35 +538,41 @@ class PagesController extends Controller
     {
         try {
             $pages = Page::withoutGlobalScopes()->wherePublished(false);
+
             //$pages = $this->filters($request, $pages);
             return $pages->count();
         } catch (Exception $e) {
-            Log::warning("(pages widget) Failed to get ubpublished pages count. " . $e->getMessage());
-            return "0";
+            Log::warning('(pages widget) Failed to get ubpublished pages count. ' . $e->getMessage());
+
+            return '0';
         }
     }
 
     public function articlePagesCount($request)
     {
         try {
-            $pages = Page::withoutGlobalScopes()->whereType("Blog")->wherePublished(true);
+            $pages = Page::withoutGlobalScopes()->whereType('Blog')->wherePublished(true);
+
             //$pages = $this->filters($request, $pages);
             return $pages->count();
         } catch (Exception $e) {
-            Log::warning("(pages widget) Failed to get ubpublished pages count. " . $e->getMessage());
-            return "0";
+            Log::warning('(pages widget) Failed to get ubpublished pages count. ' . $e->getMessage());
+
+            return '0';
         }
     }
 
     public function articleUnpublishedPagesCount($request)
     {
         try {
-            $pages = Page::withoutGlobalScopes()->whereType("Blog")->wherePublished(false);
+            $pages = Page::withoutGlobalScopes()->whereType('Blog')->wherePublished(false);
+
             //$pages = $this->filters($request, $pages);
             return $pages->count();
         } catch (Exception $e) {
-            Log::warning("(pages widget) Failed to get ubpublished pages count. " . $e->getMessage());
-            return "0";
+            Log::warning('(pages widget) Failed to get ubpublished pages count. ' . $e->getMessage());
+
+            return '0';
         }
     }
 
@@ -562,33 +583,37 @@ class PagesController extends Controller
         return response()->json(['data' => $data], 200);
     }
 
-    public function getEvents() {
+    public function getEvents()
+    {
         $events = Event::get();
         $data = [];
         foreach ($events as $event) {
             array_push(
                 $data,
                 [
-                    "id" => $event->id,
-                    "title" => $event->title
+                    'id' => $event->id,
+                    'title' => $event->title,
                 ]
             );
         }
-        return ["data" => $data];
+
+        return ['data' => $data];
     }
 
-    public function getPlans() {
+    public function getPlans()
+    {
         $events = Plan::get();
         $data = [];
         foreach ($events as $event) {
             array_push(
                 $data,
                 [
-                    "id" => $event->id,
-                    "title" => $event->name
+                    'id' => $event->id,
+                    'title' => $event->name,
                 ]
             );
         }
-        return ["data" => $data];
+
+        return ['data' => $data];
     }
 }

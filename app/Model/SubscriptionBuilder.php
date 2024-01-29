@@ -99,7 +99,7 @@ class SubscriptionBuilder
     {
         $options = is_array($price) ? $price : ['price' => $price];
 
-        if (! is_null($quantity)) {
+        if (!is_null($quantity)) {
             $options['quantity'] = $quantity;
         }
 
@@ -301,7 +301,7 @@ class SubscriptionBuilder
             'stripe_status' => $stripeSubscription->status,
             'stripe_price' => $isSinglePrice ? $firstItem->price->id : null,
             'quantity' => $isSinglePrice ? $firstItem->quantity : null,
-            'trial_ends_at' => ! $this->skipTrial ? $this->trialExpires : null,
+            'trial_ends_at' => !$this->skipTrial ? $this->trialExpires : null,
             'ends_at' => null,
         ]);
 
@@ -331,7 +331,7 @@ class SubscriptionBuilder
             throw new Exception('At least one price is required when starting subscriptions.');
         }
 
-        if (! $this->skipTrial && $this->trialExpires) {
+        if (!$this->skipTrial && $this->trialExpires) {
             // Checkout Sessions are active for 24 hours after their creation and within that time frame the customer
             // can complete the payment at any time. Stripe requires the trial end at least 48 hours in the future
             // so that there is still at least a one day trial if your customer pays at the end of the 24 hours.

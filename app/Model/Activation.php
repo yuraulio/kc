@@ -2,9 +2,9 @@
 
 namespace App\Model;
 
+use App\Model\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Model\User;
 
 class Activation extends Model
 {
@@ -18,8 +18,8 @@ class Activation extends Model
         'completed',
     ];
 
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
-
 }

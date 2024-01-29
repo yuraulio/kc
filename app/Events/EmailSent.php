@@ -16,6 +16,7 @@ class EmailSent
 
     public $email = '';
     public $type = '';
+
     /**
      * Create a new event instance.
      *

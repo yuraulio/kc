@@ -3,13 +3,13 @@
 
 
 						<?php
-        $amount_2_send = rand(1,5).".".rand(0,99);
-        $prod_array = array("Prod 1","Prod 2","Prod 3","Prod 4","Prod 5","Prod 6","Prod 7","Prod 8","Prod 9","Prod 10","Prod 11","Prod 12","Prod 13","Prod 14","Prod 15","Prod 16","Prod 17","Prod 18","Prod 19");
-		$prod_id = rand(0,count($prod_array)-1);
-		$prod_2_display = $prod_array[$prod_id];
-		$order_id = rand(0,99).date("YmdHms")
+        $amount_2_send = rand(1, 5) . '.' . rand(0, 99);
+						$prod_array = ['Prod 1', 'Prod 2', 'Prod 3', 'Prod 4', 'Prod 5', 'Prod 6', 'Prod 7', 'Prod 8', 'Prod 9', 'Prod 10', 'Prod 11', 'Prod 12', 'Prod 13', 'Prod 14', 'Prod 15', 'Prod 16', 'Prod 17', 'Prod 18', 'Prod 19'];
+						$prod_id = rand(0, count($prod_array) - 1);
+						$prod_2_display = $prod_array[$prod_id];
+						$order_id = rand(0, 99) . date('YmdHms')
 
-	?>
+						?>
 
 		<!-- <form name="demo" id="demo" method="POST" action="./checkout_route.php?act=send" accept-charset="UTF-8" > -->
 		<table>

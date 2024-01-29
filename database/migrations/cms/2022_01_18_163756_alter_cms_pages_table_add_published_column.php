@@ -14,7 +14,7 @@ class AlterCmsPagesTableAddPublishedColumn extends Migration
     public function up()
     {
         Schema::table('cms_pages', function (Blueprint $table) {
-            $table->boolean("published")->default(false);
+            $table->boolean('published')->default(false);
         });
     }
 

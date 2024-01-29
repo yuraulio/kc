@@ -16,8 +16,8 @@ class CreateCmsPageTypesTable extends Migration
         Schema::create('cms_page_types', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->string("title");
-            $table->string("description");
+            $table->string('title');
+            $table->string('description');
         });
     }
 

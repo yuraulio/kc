@@ -25,11 +25,11 @@ class TypeRequest extends FormRequest
     {
         return [
             'name' => [
-                'required', 'min:3'
+                'required', 'min:3',
             ],
             'description' => [
 
-            ]
+            ],
         ];
     }
 }

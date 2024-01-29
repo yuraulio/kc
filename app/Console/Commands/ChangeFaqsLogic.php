@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\Model\Faq;
+use Illuminate\Console\Command;
 
 class ChangeFaqsLogic extends Command
 {
@@ -38,55 +38,43 @@ class ChangeFaqsLogic extends Command
      */
     public function handle()
     {
-
         $idsChecked = [];
-        $faqsEl = Faq::whereHas('event', function($event){
-
-            return $event->whereHas('delivery',function($delivery){
-                return $delivery->where('delivery_id',143);
+        $faqsEl = Faq::whereHas('event', function ($event) {
+            return $event->whereHas('delivery', function ($delivery) {
+                return $delivery->where('delivery_id', 143);
             });
-
-            
-
         })
-        ->whereDoesntHave('event', function($event){
-
-            return $event->whereHas('delivery',function($delivery){
-                return $delivery->where('delivery_id','<>',143);
+        ->whereDoesntHave('event', function ($event) {
+            return $event->whereHas('delivery', function ($delivery) {
+                return $delivery->where('delivery_id', '<>', 143);
             });
         })
         ->get();
 
-        foreach($faqsEl as $faq){
-            
+        foreach ($faqsEl as $faq) {
             $idsChecked[] = $faq->id;
             $faq->type = 'elearning';
 
             $faq->save();
         }
 
-        $faqsINC = Faq::whereDoesntHave('event', function($event){
-
-            return $event->whereHas('delivery',function($delivery){
-                return $delivery->where('delivery_id',143);
+        $faqsINC = Faq::whereDoesntHave('event', function ($event) {
+            return $event->whereHas('delivery', function ($delivery) {
+                return $delivery->where('delivery_id', 143);
             });
         })
         ->get();
 
-        foreach($faqsINC as $faq){
-            
+        foreach ($faqsINC as $faq) {
             $idsChecked[] = $faq->id;
             $faq->type = 'in_class';
 
             $faq->save();
         }
 
-        
+        $faqsBoth = Faq::whereNotIn('id', $idsChecked)->get();
 
-        $faqsBoth = Faq::whereNotIn('id',$idsChecked)->get();
-
-        foreach($faqsBoth as $faq){
-            
+        foreach ($faqsBoth as $faq) {
             $idsChecked[] = $faq->id;
             $faq->type = 'both';
 
@@ -99,7 +87,6 @@ class ChangeFaqsLogic extends Command
         echo '++';
         echo count($faqsBoth);
         echo '++';
-  
 
         return 0;
     }

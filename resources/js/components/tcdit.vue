@@ -125,9 +125,7 @@
                                         aria-haspopup="true"
                                         aria-expanded="true"
                                     >
-                                        {{
-                                            val.width == 'full' ? 'Full' : val.width == 'content' ? 'Content' : 'Blog'
-                                        }}
+                                        {{ val.width == 'full' ? 'Full' : val.width == 'content' ? 'Content' : 'Blog' }}
                                         Width<i class="mdi mdi-chevron-down"></i>
                                     </button>
                                     <div
@@ -606,9 +604,7 @@
                                     aria-haspopup="true"
                                     aria-expanded="true"
                                 >
-                                    {{
-                                        val.width == 'full' ? 'Full' : val.width == 'content' ? 'Content' : 'Blog'
-                                    }}
+                                    {{ val.width == 'full' ? 'Full' : val.width == 'content' ? 'Content' : 'Blog' }}
                                     Width<i class="mdi mdi-chevron-down"></i>
                                 </button>
                                 <div

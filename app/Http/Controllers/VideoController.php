@@ -50,7 +50,7 @@ class VideoController extends Controller
         $video->body = $request->body;
         $video->save();
 
-        return redirect('/admin/video/edit/'.$video->id);
+        return redirect('/admin/video/edit/' . $video->id);
     }
 
     /**
@@ -87,8 +87,7 @@ class VideoController extends Controller
     public function update(Request $request, Video $video)
     {
         //dd($video);
-        if($video){
-
+        if ($video) {
             $video->title = $request->title;
 
             $video->description = $request->description;
@@ -97,8 +96,7 @@ class VideoController extends Controller
 
             $video->save();
 
-            return redirect('admin/video/edit/'.$video->id);
-
+            return redirect('admin/video/edit/' . $video->id);
         }
     }
 
@@ -113,29 +111,24 @@ class VideoController extends Controller
         //
     }
 
-    public function fetchAllVideos(){
-
+    public function fetchAllVideos()
+    {
         $videos = Video::all();
 
         return response()->json([
             'success' => __('Videos successfully fetched.'),
             'data' => $videos,
         ]);
-
     }
 
     public function store_event(Request $request)
     {
-
-
-
         $model = app($request->model_type);
         $model = $model::find($request->model_id);
 
         $model->sectionVideos()->sync($request->video_id);
 
         $video = Video::find($request->video_id);
-
 
         return response()->json([
             'success' => __('Video successfully assigned.'),

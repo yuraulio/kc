@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Requests\CareerRequest;
 use App\Model\Career;
 use App\Model\Event;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Requests\CareerRequest;
 
 class CareerController extends Controller
 {
@@ -18,8 +18,7 @@ class CareerController extends Controller
 
         $careers = $model->with('events')->get();
 
-
-        return view('career.index', ['user' => $user,'careers' => $careers]);
+        return view('career.index', ['user' => $user, 'careers' => $careers]);
     }
 
     public function create()
@@ -34,13 +33,12 @@ class CareerController extends Controller
     public function store(CareerRequest $request, Career $model)
     {
         $career = $model->create($request->all());
-        if($request->event_id != null){
-            foreach($request->event_id as $event){
+        if ($request->event_id != null) {
+            foreach ($request->event_id as $event) {
                 $event = Event::find($event);
                 $event->career()->attach($career->id);
             }
         }
-
 
         return redirect()->route('career.index')->withStatus(__('Career Path successfully created.'));
     }
@@ -61,12 +59,11 @@ class CareerController extends Controller
         $career_id = $career['id'];
         $career->update($request->all());
 
-        if($request->event_id != null){
+        if ($request->event_id != null) {
             $career->events()->detach();
-            foreach($request->event_id as $event)
-            {
+            foreach ($request->event_id as $event) {
                 //dd($event);
-                if($event != null){
+                if ($event != null) {
                     $event = Event::find($event);
                     //dd($event);
                     $career->events()->attach($event['id'], ['career_id' => $career_id]);

@@ -2,48 +2,42 @@
 
 namespace App\Exports;
 
-use Maatwebsite\Excel\Concerns\FromArray;
 use App\Model\User;
 use Auth;
-use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\FromArray;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
+use Maatwebsite\Excel\Concerns\WithHeadings;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 
-class RoyaltiesExportInstructorsList implements FromArray,WithHeadings, ShouldAutoSize,WithColumnFormatting
+class RoyaltiesExportInstructorsList implements FromArray, WithHeadings, ShouldAutoSize, WithColumnFormatting
 {
     /**
-    * @return \Illuminate\Support\Collection
-    */
-
-    public function __construct($instructors){
-
+     * @return \Illuminate\Support\Collection
+     */
+    public function __construct($instructors)
+    {
         $this->instructors = $instructors;
 
         $this->createDir(storage_path('app/export/royalties'));
-
     }
-     /**
-    * @return \Illuminate\Support\Collection
-    */
+
+    /**
+     * @return \Illuminate\Support\Collection
+     */
     public function array(): array
     {
+        $data = [];
 
-        $data = array();
-
-        foreach($this->instructors as $key => $inst){
-
-
-
-            $rowdata = array(
-                $inst['title'].' '.$inst['subtitle'],
+        foreach ($this->instructors as $key => $inst) {
+            $rowdata = [
+                $inst['title'] . ' ' . $inst['subtitle'],
                 $inst['header'],
                 $inst['company'],
-                $inst['cache_income']
-            );
+                $inst['cache_income'],
+            ];
 
             array_push($data, $rowdata);
-
         }
 
         return $data;
@@ -59,11 +53,10 @@ class RoyaltiesExportInstructorsList implements FromArray,WithHeadings, ShouldAu
         ];
     }
 
-    public function headings(): array {
-        return ['Instructor','Header', 'Company','Income'];
+    public function headings(): array
+    {
+        return ['Instructor', 'Header', 'Company', 'Income'];
     }
-
-    
 
     public function createDir($dir, $permision = 0775, $recursive = true)
     {
@@ -73,6 +66,4 @@ class RoyaltiesExportInstructorsList implements FromArray,WithHeadings, ShouldAu
             return true;
         }
     }
-
-
 }

@@ -25,33 +25,33 @@ class ExamRequest extends FormRequest
     {
         return [
             'exam_name' => [
-                'required', 'min:3'
+                'required', 'min:3',
             ],
             'duration' => [
-                'numeric'
+                'numeric',
             ],
-            
+
             'event_id' => [
-                'required'
+                'required',
             ],
             'examMethods' => [
-                'required'
+                'required',
             ],
             'q_limit' => [
-                'numeric'
+                'numeric',
             ],
-       
+
             'intro_text' => [
-                'required', 'min:3'
+                'required', 'min:3',
             ],
             'end_of_time_text' => [
-                'required', 'min:3'
+                'required', 'min:3',
             ],
             'success_text' => [
-                'required', 'min:3'
+                'required', 'min:3',
             ],
             'failure_text' => [
-                'required', 'min:3'
+                'required', 'min:3',
             ],
 
         ];

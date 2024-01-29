@@ -10,26 +10,25 @@ use Illuminate\Http\Request;
 
 class AbsenceController extends Controller
 {
-
-    public function update(Request $request){
-
+    public function update(Request $request)
+    {
         $user = User::find($request->user_id);
         //$absence = Absence::find($request->absence);
         $event = Event::find($request->event_id);
 
-        if(!$user || !$event){
+        if (!$user || !$event) {
             return response()->json([
                 'success' => false,
-                "message" => ''
+                'message' => '',
             ]);
         }
 
-        $absence = Absence::where('id',$request->absence)->where('user_id',$user->id)->where('event_id',$event->id)->first();
+        $absence = Absence::where('id', $request->absence)->where('user_id', $user->id)->where('event_id', $event->id)->first();
 
-        if(!$absence){
+        if (!$absence) {
             return response()->json([
                 'success' => false,
-                "message" => ''
+                'message' => '',
             ]);
         }
 
@@ -39,11 +38,8 @@ class AbsenceController extends Controller
         $data = $user->getAbsencesByEvent($event);
 
         return response()->json([
-            'success' => true,   
-            'data' => $data
+            'success' => true,
+            'data' => $data,
         ]);
-
-
     }
-
 }

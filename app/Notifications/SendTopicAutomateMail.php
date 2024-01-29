@@ -16,7 +16,6 @@ class SendTopicAutomateMail extends Notification
      *
      * @return void
      */
-
     private $data;
 
     public function __construct($data)
@@ -49,7 +48,7 @@ class SendTopicAutomateMail extends Notification
         return (new MailMessage)
                     ->from('info@knowcrunch.com', 'Knowcrunch')
                     ->subject($this->data['subject'])
-                    ->view($template,$data);
+                    ->view($template, $data);
     }
 
     /**

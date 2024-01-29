@@ -2,12 +2,11 @@
 
 namespace App\Services\Statistics;
 
-use App\Model\User;
 use App\Model\Instructor;
+use App\Model\User;
 
 class DashboardStatistics
 {
-
     public function studentsAll(): array
     {
         $results['usersInclassAll'] = 0;
@@ -22,7 +21,6 @@ class DashboardStatistics
         })->count();
 
         $results['usersElearningAll'] = User::whereHas('events_for_user_list1', function ($q) {
-
             $q->wherePublished(true)->where('event_user.paid', true)->whereHas('delivery', function ($q1) {
                 return $q1->where('deliveries.id', 143);
             });
@@ -30,8 +28,6 @@ class DashboardStatistics
 
         return $results;
     }
-
-
 
     // public function students(): array{
 
@@ -64,8 +60,8 @@ class DashboardStatistics
     //     return $results;
     // }
 
-    public function students(): array{
-
+    public function students(): array
+    {
         $results['usersInclass'] = 0;
         $results['usersElearning'] = 0;
         //$results['usersInclass'] = 5;
@@ -73,9 +69,9 @@ class DashboardStatistics
             //open, completed
             $q->wherePublished(true)
             ->where(function ($q3) {
-                return $q3->whereIn('status', [0,3]);
+                return $q3->whereIn('status', [0, 3]);
             })
-            ->whereHas('lessons',function($q4) {
+            ->whereHas('lessons', function ($q4) {
                 return $q4->where('date', '>=', date('Y-m-d'));
             })
 
@@ -88,8 +84,7 @@ class DashboardStatistics
 
         //$results['usersElearning'] = 5;
         $results['usersElearning'] = User::whereHas('events_for_user_list1', function ($q) {
-
-            $q->wherePublished(true)->whereStatus(0)->where('event_user.expiration', '>=',date('Y-m-d'))->whereHas('delivery', function ($q1) {
+            $q->wherePublished(true)->whereStatus(0)->where('event_user.expiration', '>=', date('Y-m-d'))->whereHas('delivery', function ($q1) {
                 return $q1->where('deliveries.id', 143);
             });
         })->count();
@@ -113,16 +108,14 @@ class DashboardStatistics
 
         $results['instructorsAll'] = Instructor::whereStatus(true)->has('event')->count();
 
-        $results['instructorsInClass'] = Instructor::whereStatus(true)->whereHas('event', function($q){
+        $results['instructorsInClass'] = Instructor::whereStatus(true)->whereHas('event', function ($q) {
             $q->whereStatus(0)->doesntHave('delivery')
                 ->OrWhereHas('delivery', function ($q2) {
                     return $q2->where('deliveries.id', '<>', 143);
                 });
         })->count();
 
-
-
-        $results['instructorsElearning'] = Instructor::whereStatus(true)->whereHas('event', function($q){
+        $results['instructorsElearning'] = Instructor::whereStatus(true)->whereHas('event', function ($q) {
             $q->whereStatus(0)
                 ->WhereHas('delivery', function ($q2) {
                     return $q2->where('deliveries.id', 143);

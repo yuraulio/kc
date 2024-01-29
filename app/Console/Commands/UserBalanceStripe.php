@@ -2,11 +2,11 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
-use App\Model\User;
 use App\Model\PaymentMethod;
+use App\Model\User;
+use Illuminate\Console\Command;
 use Stripe\Stripe;
-use \Stripe\StripeClient;
+use Stripe\StripeClient;
 
 class UserBalanceStripe extends Command
 {
@@ -41,30 +41,25 @@ class UserBalanceStripe extends Command
      */
     public function handle()
     {
+        $paymentMethod = PaymentMethod::find(2);
 
-      $paymentMethod = PaymentMethod::find(2);
-         
-   
-       $stripe = new StripeClient(array_merge([
+        $stripe = new StripeClient(array_merge([
             'api_key' => $paymentMethod->processor_options['secret_key'],
             'stripe_version' => '2020-08-27',
         ], []));
-      
-      
-      //dd($stripe->invoiceItems->all(['pending' => true,'limit' => 100]));
-      
-      	foreach($stripe->invoiceItems->all(['pending' => true,'limit' => 100]) as $invoice){
-          
-          if($invoice->amount < 0){
-            //dd($invoice);
-            $stripe->invoiceItems->delete(
-			        $invoice->id,
-  			      []
-			      );
-          }
-          	
+
+        //dd($stripe->invoiceItems->all(['pending' => true,'limit' => 100]));
+
+        foreach ($stripe->invoiceItems->all(['pending' => true, 'limit' => 100]) as $invoice) {
+            if ($invoice->amount < 0) {
+                //dd($invoice);
+                $stripe->invoiceItems->delete(
+                    $invoice->id,
+                    []
+                );
+            }
         }
-      
+
         return 0;
     }
 }

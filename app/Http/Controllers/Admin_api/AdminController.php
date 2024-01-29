@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Log;
 class AdminController extends Controller
 {
     /**
-     * Get admins
+     * Get admins.
      *
      * @return AnonymousResourceCollection
      */
@@ -30,15 +30,17 @@ class AdminController extends Controller
         try {
             $admins = Admin::lookForOriginal($request->filter)
                             ->tableSort($request)->paginate($request->per_page ?? 50);
+
             return AdminResource::collection($admins);
         } catch (Exception $e) {
-            Log::error("Failed to get admins. " . $e->getMessage());
+            Log::error('Failed to get admins. ' . $e->getMessage());
+
             return response()->json(['message' => $e->getMessage()], 400);
         }
     }
 
     /**
-     * Add admin
+     * Add admin.
      *
      * @return AdminResource
      */
@@ -58,13 +60,14 @@ class AdminController extends Controller
 
             return new AdminResource($admin);
         } catch (Exception $e) {
-            Log::error("Failed to add new admin. " . $e->getMessage());
+            Log::error('Failed to add new admin. ' . $e->getMessage());
+
             return response()->json(['message' => $e->getMessage()], 400);
         }
     }
 
     /**
-     * Get admin
+     * Get admin.
      *
      * @return AdminResource
      */
@@ -77,13 +80,14 @@ class AdminController extends Controller
 
             return new AdminResource($admin);
         } catch (Exception $e) {
-            Log::error("Failed to get admin. " . $e->getMessage());
+            Log::error('Failed to get admin. ' . $e->getMessage());
+
             return response()->json(['message' => $e->getMessage()], 400);
         }
     }
 
     /**
-     * Edit admin
+     * Edit admin.
      *
      * @return AdminResource
      */
@@ -108,7 +112,6 @@ class AdminController extends Controller
                 $user = Auth::user();
 
                 if ($admin->id !== $user->id) {
-
                     // logout user
                     Auth::setUser($admin);
                     Auth::logout();
@@ -120,13 +123,14 @@ class AdminController extends Controller
 
             return new AdminResource($admin);
         } catch (Exception $e) {
-            Log::error("Failed to edit admin. " . $e->getMessage());
+            Log::error('Failed to edit admin. ' . $e->getMessage());
+
             return response()->json(['message' => $e->getMessage()], 400);
         }
     }
 
     /**
-     * Delete admin
+     * Delete admin.
      *
      * @return JsonResponse
      */
@@ -141,7 +145,8 @@ class AdminController extends Controller
 
             return response()->json(['message' => 'success'], 200);
         } catch (Exception $e) {
-            Log::error("Failed to delete admin. " . $e->getMessage());
+            Log::error('Failed to delete admin. ' . $e->getMessage());
+
             return response()->json(['message' => $e->getMessage()], 400);
         }
     }
@@ -162,7 +167,8 @@ class AdminController extends Controller
 
             return response()->json(['message' => 'success'], 200);
         } catch (Exception $e) {
-            Log::error("Failed to bulk delete admins. " . $e->getMessage());
+            Log::error('Failed to bulk delete admins. ' . $e->getMessage());
+
             return response()->json(['message' => $e->getMessage()], 400);
         }
     }

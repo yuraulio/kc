@@ -3,55 +3,54 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Model\User;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
+use App\Model\Absence;
 use App\Model\Event;
 use App\Model\Instructor;
+use App\Model\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-use App\Model\Absence;
 
 class AbsenceController extends Controller
 {
-
-    public function __construct(){
-        $this->middleware('auth.sms.api')->except('smsVerification','getSMSVerification');
+    public function __construct()
+    {
+        $this->middleware('auth.sms.api')->except('smsVerification', 'getSMSVerification');
     }
 
-    public function store(Request $request){
-
+    public function store(Request $request)
+    {
         $user = Auth::user();
         $event = Event::find($request->event);
-        $date = $request->date;//'2022-01-17';//date('Y-m-d');
-        $hour = $request->hour;//date('H');
+        $date = $request->date; //'2022-01-17';//date('Y-m-d');
+        $hour = $request->hour; //date('H');
 
-        if(!$event){
+        if (!$event) {
             return response()->json([
                 'success' => false,
-                "message" => 'Something went wrong'
+                'message' => 'Something went wrong',
             ]);
         }
 
-        //TODO 
+        //TODO
         //(1) CHECK IF HAS EVENT
-        $userHasEvent = $user->events()->wherePivot('event_id',$event->id)->first();
-        if(!$userHasEvent){
+        $userHasEvent = $user->events()->wherePivot('event_id', $event->id)->first();
+        if (!$userHasEvent) {
             return response()->json([
                 'success' => false,
-                "message" => 'User have not event!'
+                'message' => 'User have not event!',
             ]);
         }
 
-
-        if(Absence::where('user_id',$user->id)->where('event_id',$event->id)->where('date',$date)->first()){
+        if (Absence::where('user_id', $user->id)->where('event_id', $event->id)->where('date', $date)->first()) {
             return response()->json([
                 'success' => false,
-                "message" => 'You already checked-in for today'
+                'message' => 'You already checked-in for today',
             ]);
         }
 
-        $lessons = $event->lessons()->where('date',$date)->get();
+        $lessons = $event->lessons()->where('date', $date)->get();
         $eventInfo = $event->event_info();
         $timeStarts = false;
         $timeEnds = false;
@@ -59,9 +58,7 @@ class AbsenceController extends Controller
 
         $a = 0;
 
-        foreach($lessons as $key => $lesson){
-
-
+        foreach ($lessons as $key => $lesson) {
             $lessonHour = date('H', strtotime($lesson->pivot->time_starts));
             $lessonHourEnd = date('H', strtotime($lesson->pivot->time_ends));
 
@@ -69,27 +66,21 @@ class AbsenceController extends Controller
             //     $missedHours += 1;
             //     continue;
             // }
-           
 
-            if($lessonHour < $hour){
-                
-
-                if($lessonHourEnd - $hour >= 1){
+            if ($lessonHour < $hour) {
+                if ($lessonHourEnd - $hour >= 1) {
                     // if($lessonHour == 20){
 
                     // }
                     $a = ($lessonHourEnd - $lessonHour) - ($lessonHourEnd - $hour);
                     $missedHours += $a;
- 
-                }
-                else{
+                } else {
                     $missedHours += 1;
                     continue;
                 }
-                
             }
 
-            if(!$timeStarts){
+            if (!$timeStarts) {
                 $timeStarts = (int) date('H', strtotime($lesson->pivot->time_starts));
             }
             $timeEnds = (int) date('H', strtotime($lesson->pivot->time_ends));
@@ -97,12 +88,10 @@ class AbsenceController extends Controller
 
         //dd($missedHours);
 
-        if($timeStarts && $timeEnds){
-
+        if ($timeStarts && $timeEnds) {
             $totalMinutesUser = ($timeEnds - ($timeStarts + $a)) * 60;
             //dd($totalMinutesUser);
             $totalMinutesEvent = $totalMinutesUser + ($missedHours * 60);
-            
 
             $absence = new Absence;
             $absence->user_id = $user->id;
@@ -115,18 +104,15 @@ class AbsenceController extends Controller
 
             return response()->json([
                 'success' => true,
-                "message" => 'Successfully checked-in',
+                'message' => 'Successfully checked-in',
                 'user_absences' => $user->getAbsencesByEvent($event)['user_absences_percent'],
                 'absences_limit' => isset($eventInfo['inclass']['absences']) ? $eventInfo['inclass']['absences'] : 0,
             ]);
-
         }
 
         return response()->json([
             'success' => false,
-            "message" => 'There are no lessons for today'
+            'message' => 'There are no lessons for today',
         ]);
-
     }
-
 }

@@ -4,10 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Library\CMS;
-use Illuminate\Http\Request;
 use App\Model\Admin\Page;
-use App\Model\Logos;
 use App\Model\Instructor;
+use App\Model\Logos;
+use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
@@ -86,7 +86,7 @@ class DashboardController extends Controller
 
             $dynamicPageData = null;
 
-            if ($page->slug == "homepage") {
+            if ($page->slug == 'homepage') {
                 $dynamicPageData = CMS::getHomepageData();
                 $dynamicPageData['homeBrands'] = Logos::with('medias')->where('type', 'brands')->inRandomOrder()->take(6)->get()->toArray();
                 $dynamicPageData['homeLogos'] = Logos::with('medias')->where('type', 'logos')->inRandomOrder()->take(6)->get()->toArray();
@@ -114,7 +114,7 @@ class DashboardController extends Controller
 
     public function pageEdit($id)
     {
-        return view('new_admin.pages.page_edit', ["id" => $id]);
+        return view('new_admin.pages.page_edit', ['id' => $id]);
     }
 
     public function pageNew()
@@ -124,7 +124,7 @@ class DashboardController extends Controller
 
     public function templateEdit($id)
     {
-        return view('new_admin.pages.template_edit', ["id" => $id]);
+        return view('new_admin.pages.template_edit', ['id' => $id]);
     }
 
     public function templateNew()
@@ -149,7 +149,7 @@ class DashboardController extends Controller
 
     public function countdownEdit($id)
     {
-        return view('new_admin.pages.countdown_edit', ["id" => $id]);
+        return view('new_admin.pages.countdown_edit', ['id' => $id]);
     }
 
     public function reports()
@@ -164,16 +164,16 @@ class DashboardController extends Controller
 
     public function royaltiesShow($id)
     {
-        if($id != 0){
-            $instructor = Instructor::select('id', 'title', 'subtitle')->where('id',$id)->get();
+        if ($id != 0) {
+            $instructor = Instructor::select('id', 'title', 'subtitle')->where('id', $id)->get();
             $view = 'single';
-        }else{
+        } else {
             $instructor = Instructor::select('id', 'title', 'subtitle')->get();
             $view = 'list';
         }
         $data['instructor'] = $instructor;
         $data['view'] = $view;
 
-        return view('new_admin.pages.royalties_show', ["data" => json_encode($data)]);
+        return view('new_admin.pages.royalties_show', ['data' => json_encode($data)]);
     }
 }

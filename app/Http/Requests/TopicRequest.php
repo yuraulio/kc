@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use App\Model\Event;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
 class TopicRequest extends FormRequest
@@ -30,17 +30,18 @@ class TopicRequest extends FormRequest
 
             ],
             'title' => [
-                'required', 'min:3'
+                'required', 'min:3',
             ],
             'category_id' => [
-                'required', 'check_array_first_value_is_numeric'
-            ]
+                'required', 'check_array_first_value_is_numeric',
+            ],
         ];
     }
 
-    public function messages(){
+    public function messages()
+    {
         return [
-            'check_array_first_value_is_numeric' => 'Select a category'
+            'check_array_first_value_is_numeric' => 'Select a category',
         ];
     }
 }

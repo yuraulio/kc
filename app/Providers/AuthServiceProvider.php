@@ -9,17 +9,17 @@ use App\Model\Admin\Page;
 use App\Model\Admin\Template;
 use App\Model\User;
 use App\Policies\AdminPolicy;
-use App\Policies\TagPolicy;
-use App\Policies\ItemPolicy;
-use App\Policies\RolePolicy;
-use App\Policies\UserPolicy;
 use App\Policies\CategoryPolicy;
 use App\Policies\CommentPolicy;
+use App\Policies\ItemPolicy;
 use App\Policies\PagePolicy;
+use App\Policies\RolePolicy;
 use App\Policies\SettingPolicy;
+use App\Policies\TagPolicy;
 use App\Policies\TemplatePolicy;
-use Illuminate\Support\Facades\Gate;
+use App\Policies\UserPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Gate;
 use Laravel\Passport\Passport;
 
 class AuthServiceProvider extends ServiceProvider

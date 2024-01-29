@@ -12,6 +12,7 @@ class InstructionMail extends Notification
     use Queueable;
 
     private $data;
+
     /**
      * Create a new notification instance.
      *
@@ -43,8 +44,8 @@ class InstructionMail extends Notification
     {
         return (new MailMessage)
                     ->from('info@knowcrunch.com', 'Knowcrunch')
-                    ->subject('Knowcrunch |' . $this->data['user']['first'] . ', welcome to ' . $this->data['extrainfo'][2].'!')
-                    ->view('emails.user.instructions_email',$this->data);
+                    ->subject('Knowcrunch |' . $this->data['user']['first'] . ', welcome to ' . $this->data['extrainfo'][2] . '!')
+                    ->view('emails.user.instructions_email', $this->data);
     }
 
     /**

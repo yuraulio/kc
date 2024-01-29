@@ -3,9 +3,9 @@
 namespace App\Model\Admin;
 
 use App\Model\User;
+use App\Traits\SearchFilter;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Traits\SearchFilter;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Storage;
 
@@ -35,12 +35,12 @@ class MediaFolder extends Model
 
     public function user()
     {
-        return $this->belongsTo(Admin::class, "user_id");
+        return $this->belongsTo(Admin::class, 'user_id');
     }
 
     public function children()
     {
-        return $this->hasMany(MediaFolder::class, "parent_id", "id")->orderBy('order');
+        return $this->hasMany(MediaFolder::class, 'parent_id', 'id')->orderBy('order');
     }
 
     public function childrenAll()
@@ -50,9 +50,8 @@ class MediaFolder extends Model
 
     public function parent()
     {
-        return $this->belongsTo(MediaFolder::class, "parent_id");
+        return $this->belongsTo(MediaFolder::class, 'parent_id');
     }
-
 
     public function getSizeAttribute()
     {

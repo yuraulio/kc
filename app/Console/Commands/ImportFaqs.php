@@ -2,10 +2,10 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
+use App\Model\CategoriesFaqs;
 use App\Model\Category;
 use App\Model\Faq;
-use App\Model\CategoriesFaqs;
+use Illuminate\Console\Command;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
@@ -42,25 +42,22 @@ class ImportFaqs extends Command
      */
     public function handle()
     {
-        try{
+        try {
             //$fileName = public_path() . '/import/FAQs.xlsx';
             $fileName = public_path() . '/import/' . $this->argument('file_name');
-        
-            if(!file_exists($fileName)){
+
+            if (!file_exists($fileName)) {
                 return 0;
             }
 
-
             $faqs = Faq::all();
 
-            foreach($faqs as $faq){
-
+            foreach ($faqs as $faq) {
                 $faq->category()->detach();
                 $faq->categoryEvent()->detach();
                 $faq->event()->detach();
 
                 $faq->delete();
-
             }
             //return;
 
@@ -71,85 +68,69 @@ class ImportFaqs extends Command
             $file = $reader->load($fileName);
             $sheets = $file->getSheetNames();
 
-        
-            foreach((array) $sheets as $key => $sheet){
-
-
-                if($key == 0){
+            foreach ((array) $sheets as $key => $sheet) {
+                if ($key == 0) {
                     $del = 'all';
                     $type = 'both';
-                }elseif($key == 1){
+                } elseif ($key == 1) {
                     $del = [143];
                     $type = 'elearning';
-                }elseif($key == 2){
-                    $del = [139,215];
+                } elseif ($key == 2) {
+                    $del = [139, 215];
                     $type = 'in_class';
                 }
 
-            
                 $events = [];
 
-
-                if($del == 'all'){
+                if ($del == 'all') {
                     $categories = Category::whereHas('events')->get();
-                }else{
-                    $categories = Category::whereHas('events',function($event) use($del){
-                        return $event->whereHas('event_info1',function($query) use ($del){
-                            $query->whereIn('course_delivery',$del);
+                } else {
+                    $categories = Category::whereHas('events', function ($event) use ($del) {
+                        return $event->whereHas('event_info1', function ($query) use ($del) {
+                            $query->whereIn('course_delivery', $del);
                         });
-
                     })->get();
                 }
 
-                foreach($categories as $category){
-
-                    foreach($category->events as $event){
+                foreach ($categories as $category) {
+                    foreach ($category->events as $event) {
                         $events[] = $event->id;
                     }
-
                 }
 
-                if($del == 'all'){
+                if ($del == 'all') {
                     $categories = Category::whereHas('events')->pluck('id')->toArray();
-                }else{
-
-                    $categories = Category::whereHas('events',function($event) use($del){
-                        return $event->whereHas('event_info1',function($query) use ($del){
-                            $query->whereIn('course_delivery',$del);
+                } else {
+                    $categories = Category::whereHas('events', function ($event) use ($del) {
+                        return $event->whereHas('event_info1', function ($query) use ($del) {
+                            $query->whereIn('course_delivery', $del);
                         });
                     })->pluck('id')->toArray();
                 }
 
-
                 $file1 = $file->getSheet($key);
                 $file1 = $file1->toArray();
 
-                foreach($file1 as $key1 =>  $line){
-
-                    if($key1 == 0 ){
+                foreach ($file1 as $key1 =>  $line) {
+                    if ($key1 == 0) {
                         continue;
                     }
 
                     $faq = new Faq;
                     $faq->title = $line[1];
-                    $faq->answer = $line[2];//htmlspecialchars($line[2], ENT_QUOTES);
+                    $faq->answer = $line[2]; //htmlspecialchars($line[2], ENT_QUOTES);
                     $faq->status = true;
                     $faq->priority = $key;
                     $faq->type = $type;
 
                     $faq->save();
 
-                    $categoryFaq = CategoriesFaqs::where('name',trim($line[0]))->first();
+                    $categoryFaq = CategoriesFaqs::where('name', trim($line[0]))->first();
 
-
-
-                    $faq->categoryEvent()->attach($categories,['priority' => $key1]);
-                    $faq->category()->attach($categoryFaq->id,['priority' => $key1]);
-                    $faq->event()->attach($events,['priority' => $key1]);
-
-
+                    $faq->categoryEvent()->attach($categories, ['priority' => $key1]);
+                    $faq->category()->attach($categoryFaq->id, ['priority' => $key1]);
+                    $faq->event()->attach($events, ['priority' => $key1]);
                 }
-
 
                 /*foreach($file1 as $key1 =>  $line){
                     if($key == 1){
@@ -195,22 +176,13 @@ class ImportFaqs extends Command
 
 
                 }*/
-
-
-
             }
 
             return 1;
-
-        }catch(\Exception $e){
+        } catch(\Exception $e) {
             return 0;
         }
-
-
-        
-
 
         return 0;
     }
 }
-

@@ -25,12 +25,12 @@ class TickerRequest extends FormRequest
     {
         return [
             'title' => [
-                'required', 'min:3'
+                'required', 'min:3',
             ],
 
             'content' => [
-                'required', 'min:3'
-            ]
+                'required', 'min:3',
+            ],
         ];
     }
 }

@@ -16,9 +16,9 @@ class CreateTemplatesTable extends Migration
         Schema::create('cms_templates', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->string("title");
-            $table->integer("category_id");
-            $table->string("description")->nullable();
+            $table->string('title');
+            $table->integer('category_id');
+            $table->string('description')->nullable();
         });
     }
 

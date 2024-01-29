@@ -13,8 +13,6 @@ class DatabaseSeeder extends Seeder
     {
         DB::statement('SET FOREIGN_KEY_CHECKS=0');
 
-
-
         $this->call([RoleSeeder::class, UserRoleSeeder::class, UsersSeeder::class, ActivationsSeeder::class]);
 
         DB::statement('SET FOREIGN_KEY_CHECKS=1');

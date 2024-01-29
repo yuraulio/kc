@@ -15,22 +15,23 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
+
 namespace App\Http\Controllers\Auth;
 
 use App\Events\EmailSent;
-use App\Model\User;
 use App\Http\Controllers\Controller;
+use App\Model\Activation;
+use App\Model\User;
+use App\Notifications\userActivationLink;
+use Carbon\Carbon;
+use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Foundation\Auth\RegistersUsers;
-use Propaganistas\LaravelPhone\PhoneNumber;
-use Illuminate\Http\Request;
-use Session;
-use App\Model\Activation;
 use Illuminate\Support\Str;
-use \Carbon\Carbon;
 use Mail;
-use App\Notifications\userActivationLink;
+use Propaganistas\LaravelPhone\PhoneNumber;
+use Session;
 
 class RegisterController extends Controller
 {
@@ -70,8 +71,6 @@ class RegisterController extends Controller
      * @param  array  $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
-
-
     protected function validator(array $data)
     {
         return Validator::make($data, [
@@ -98,38 +97,33 @@ class RegisterController extends Controller
         ]);
     }
 
-
     public function kcRegister(Request $request)
     {
-
-
         $input = $request->all();
 
         $check = User::where('email', $input['email'])->first();
 
-        if($check) {
-            return redirect('/cart')->withInput()->with('message',
-                    'This account email is already in use! Please sign in or if you forgot your password use the link below to get a new one.'
-                );
-        }
-        else {
-           
+        if ($check) {
+            return redirect('/cart')->withInput()->with(
+                'message',
+                'This account email is already in use! Please sign in or if you forgot your password use the link below to get a new one.'
+            );
+        } else {
             Session::flash('create_tab', true);
-            
+
             $this->validate($request, [
 
                 'email' => 'required|email|unique:users',
                 'password' => 'required',
                 'password_confirm' => 'required|same:password',
                 'mobileCheck' => 'phone:AUTO',
-                
-    
+
             ]);
-    
+
             //$input['mobile'] = (string) PhoneNumber::make($input['mobile']);
-            $input['mobile'] = preg_replace("/\s+/", "", PhoneNumber::make($input['mobileCheck'])->formatNational());
+            $input['mobile'] = preg_replace("/\s+/", '', PhoneNumber::make($input['mobileCheck'])->formatNational());
             // Register the user
-            
+
             $user = User::create([
                 'firstname' => $request->first_name,
                 'lastname' => $request->last_name,
@@ -151,8 +145,7 @@ class RegisterController extends Controller
 
                 $dpuser = $user;
 
-                if($dpuser) {
-                
+                if ($dpuser) {
                     //consent data
                     $connow = Carbon::now();
                     $clientip = '';
@@ -162,17 +155,17 @@ class RegisterController extends Controller
                     $consent['date'] = $connow;
                     $consent['firstname'] = $user->firstname;
                     $consent['lastname'] = $user->lastname;
-                    if($dpuser->afm){
+                    if ($dpuser->afm) {
                         $consent['afm'] = $user->afm;
                     }
-            
-                    $billing = json_decode($user->receipt_details,true);
-            
-                    if(isset($billing['billafm']) && $billing['billafm']){
+
+                    $billing = json_decode($user->receipt_details, true);
+
+                    if (isset($billing['billafm']) && $billing['billafm']) {
                         $consent['billafm'] = $billing['billafm'];
                     }
-            
-                    $dpuser->consent = json_encode($consent);;
+
+                    $dpuser->consent = json_encode($consent);
 
                     $dpuser->save();
                 }
@@ -189,21 +182,20 @@ class RegisterController extends Controller
                     );
                 }*/
 
-                $dpuser->notify(new userActivationLink($dpuser,'activate'));
+                $dpuser->notify(new userActivationLink($dpuser, 'activate'));
                 event(new EmailSent($dpuser->email, 'userActivationLink'));
 
                 /*return redirect(route('user.login'))->withSuccess(
                     'Your accout was successfully created. Please check your email to activate your account.'
                 );*/
                 Session::forget('create_tab');
-                 return redirect('/cart')->with('message',
+
+                return redirect('/cart')->with(
+                    'message',
                     'Your accout was successfully created. Please check your email to activate your account.'
                 );
             }
-
-         
         }
-
 
         return redirect(route('/cart'))->withInput()->withErrors(
             'Failed to register.'

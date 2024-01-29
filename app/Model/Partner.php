@@ -2,10 +2,10 @@
 
 namespace App\Model;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use App\Model\Event;
 use App\Traits\MediaTrait;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class Partner extends Model
 {
@@ -15,7 +15,7 @@ class Partner extends Model
     protected $table = 'partners';
 
     protected $fillable = [
-        'name','url'
+        'name', 'url',
     ];
 
     public function events()
@@ -25,7 +25,7 @@ class Partner extends Model
 
     public function setUrlAttribute($value)
     {
-        $value = str_replace('http://','https://',$value);
+        $value = str_replace('http://', 'https://', $value);
 
         $this->attributes['url'] = $value;
     }

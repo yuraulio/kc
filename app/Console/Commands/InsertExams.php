@@ -2,11 +2,11 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\Model\Exam;
-use GuzzleHttp\Client;
 use App\Model\ExamResult;
 use App\Model\ExamSyncData;
+use GuzzleHttp\Client;
+use Illuminate\Console\Command;
 
 class InsertExams extends Command
 {
@@ -41,19 +41,16 @@ class InsertExams extends Command
      */
     public function handle()
     {
-   
-
         //$client = new Client(['base_uri' => 'http://knowcrunchls.j.scaleforce.net','verify' => false]);
-        $client = new Client(['base_uri' => 'http://lcknowcrunch.test','verify' => false]);
+        $client = new Client(['base_uri' => 'http://lcknowcrunch.test', 'verify' => false]);
 
         //$response = $client->request('GET', 'http://knowcrunchls.j.scaleforce.net/get-exams');
         $response = $client->request('GET', 'http://lcknowcrunch.test/get-exams');
 
-        $data = json_decode($response->getBody()->getContents(),true);
+        $data = json_decode($response->getBody()->getContents(), true);
 
-        foreach($data['exams'] as $exam){
-
-            if(Exam::find($exam[0])){
+        foreach ($data['exams'] as $exam) {
+            if (Exam::find($exam[0])) {
                 continue;
             }
 
@@ -76,7 +73,7 @@ class InsertExams extends Command
             $questions = decrypt($exam[13]);
             $questions = json_decode($questions);
             $examm->questions = json_encode($questions);
-                        
+
             $examm->creator_id = $exam[14];
             $examm->publish_time = $exam[15];
             $examm->examCheckbox = $exam[16];
@@ -86,21 +83,18 @@ class InsertExams extends Command
 
             $examm->save();
 
-            foreach($data['examsEvent'][$examm->id] as $examEvent){
+            foreach ($data['examsEvent'][$examm->id] as $examEvent) {
                 $examm->event()->attach($examEvent);
             }
-            
-
         }
 
-        foreach($data['examResults'] as $examResult){
-            
-            if(ExamResult::where('user_id',$examResult[0])->where('exam_id',$examResult[1])->first()){
+        foreach ($data['examResults'] as $examResult) {
+            if (ExamResult::where('user_id', $examResult[0])->where('exam_id', $examResult[1])->first()) {
                 continue;
             }
 
             $examR = new ExamResult;
-            
+
             $examR->user_id = $examResult[0];
             $examR->exam_id = $examResult[1];
             $examR->first_name = $examResult[2];
@@ -111,35 +105,34 @@ class InsertExams extends Command
             $examR->start_time = $examResult[7];
             $examR->end_time = $examResult[8];
             $examR->total_time = $examResult[9];
-        
-            $examR->save();
 
+            $examR->save();
         }
 
         /*foreach($data['syncsData'] as $key1 => $dataSync){
-            
+
             foreach($dataSync as $key2 => $examResult){
-                
+
                 if(ExamSyncData::where('user_id',$key2)->where('exam_id',$key1)->first()){
                     continue;
                 }
 
-               
+
                 $exR = json_decode($examResult,true);
                 $data = $exR['data'];
                 $finish = $exR['finish'];
                 $started = $exR['finish'];
                 $examR = new ExamSyncData;
-    
+
                 $examR->user_id = $key2;
                 $examR->exam_id = $key1;
                 $examR->data = json_encode($data);
                 $examR->started_at = $started;
                 $examR->finish_at = $finish;
-    
+
                 $examR->save();
             }
-            
+
         }*/
 
         return 0;

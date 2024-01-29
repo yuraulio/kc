@@ -2,11 +2,11 @@
 
 namespace App\Notifications;
 
+use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use Carbon\Carbon;
 
 class AfterSepaPaymentEmail extends Notification
 {
@@ -14,7 +14,6 @@ class AfterSepaPaymentEmail extends Notification
 
     public $user;
     public $data;
-
 
     /**
      * Create a new notification instance.
@@ -26,8 +25,7 @@ class AfterSepaPaymentEmail extends Notification
         $this->user = $user;
         $this->data = $data;
 
-        
-        if(isset($data['duration'])){
+        if (isset($data['duration'])) {
             $this->data['duration'] = strip_tags($data['duration']);
         }
     }
@@ -56,20 +54,19 @@ class AfterSepaPaymentEmail extends Notification
         $slug['email'] = $this->user->email;
         $slug['create'] = true;
 
-
         $slug = encrypt($slug);
 
         $template = 'emails.user.after_sepa_payment';
 
         // $subject = !isset($this->data['subject']) ? 'Knowcrunch - Welcome ' .  $this->user->firstname . '. Activate your account​ now' : 'Knowcrunch - Welcome ' . $this->data['subject'];
-        $subject = !isset($this->data['subject']) ? 'Knowcrunch - Welcome to our course ' .  $this->user->firstname : 'Knowcrunch – Welcome to our course ' . $this->data['subject'];
+        $subject = !isset($this->data['subject']) ? 'Knowcrunch - Welcome to our course ' . $this->user->firstname : 'Knowcrunch – Welcome to our course ' . $this->data['subject'];
 
-        $this->data['slug'] =  url('/') . '/myaccount';
+        $this->data['slug'] = url('/') . '/myaccount';
 
         return (new MailMessage)
                     ->from('info@knowcrunch.com', 'Knowcrunch')
                     ->subject($subject)
-                    ->view($template,$this->data);
+                    ->view($template, $this->data);
     }
 
     /**

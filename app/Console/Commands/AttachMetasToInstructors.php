@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\Model\Instructor;
+use Illuminate\Console\Command;
 
 class AttachMetasToInstructors extends Command
 {
@@ -40,8 +40,8 @@ class AttachMetasToInstructors extends Command
     {
         $instructors = Instructor::all();
 
-        foreach($instructors as $instructor){
-            if(!$instructor->metable){
+        foreach ($instructors as $instructor) {
+            if (!$instructor->metable) {
                 $instructor->createMetas();
             }
         }

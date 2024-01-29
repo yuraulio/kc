@@ -2,10 +2,10 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
-use GuzzleHttp\Client;
 use App\Model\Lesson;
 use App\Model\Type;
+use GuzzleHttp\Client;
+use Illuminate\Console\Command;
 
 class GetLessonType extends Command
 {
@@ -40,22 +40,21 @@ class GetLessonType extends Command
      */
     public function handle()
     {
-        $client = new Client(['base_uri' => 'http://knowcrunchls.j.scaleforce.net','verify' => false]);
+        $client = new Client(['base_uri' => 'http://knowcrunchls.j.scaleforce.net', 'verify' => false]);
         //client = new Client(['base_uri' => 'http://lcknowcrunch.test','verify' => false]);
 
         $response = $client->request('GET', 'http://knowcrunchls.j.scaleforce.net/get-lesson-type');
         //$response = $client->request('GET', 'http://lcknowcrunch.test/get-lesson-type');
 
-        $lessons = json_decode($response->getBody()->getContents(),true);
+        $lessons = json_decode($response->getBody()->getContents(), true);
 
         //dd($lessons);
 
         $types = $lessons['types'];
         $lessonsType = $lessons['lessonsType'];
 
-        foreach($types as $type){
-
-            if(Type::where('name',$type)->first()){
+        foreach ($types as $type) {
+            if (Type::where('name', $type)->first()) {
                 continue;
             }
 
@@ -66,24 +65,21 @@ class GetLessonType extends Command
             $t->createSlug($type);
         }
 
-
-        foreach($lessonsType as $key => $lessonType){
+        foreach ($lessonsType as $key => $lessonType) {
             //dd($lessonsType);
-            $lessons = Lesson::where('title',$lessonType['name'])->get();
-            $type = Type::where('name',$lessonType['type'])->first();
-            foreach($lessons as $lesson){
+            $lessons = Lesson::where('title', $lessonType['name'])->get();
+            $type = Type::where('name', $lessonType['type'])->first();
+            foreach ($lessons as $lesson) {
                 $lesson->bold = $lessonType['bold'];
                 $lesson->links = $lessonType['links'];
                 $lesson->save();
 
-                if($type){
+                if ($type) {
                     $lesson->type()->detach(0);
                     $lesson->type()->detach($type->id);
                     $lesson->type()->attach($type->id);
                 }
             }
-                       
         }
-
     }
 }

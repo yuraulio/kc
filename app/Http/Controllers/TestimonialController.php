@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Model\Testimonial;
+use App\Http\Requests\TestimonialRequest;
 use App\Model\Category;
 use App\Model\Instructor;
+use App\Model\Testimonial;
+use Artisan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Requests\TestimonialRequest;
-use Artisan;
 use Storage;
 
 class TestimonialController extends Controller
@@ -52,18 +52,18 @@ class TestimonialController extends Controller
         $video = [];
 
         $link = $request->facebook;
-        if($link){
+        if ($link) {
             $link = str_replace('https://', '', $link);
             $link = str_replace('http://', '', $link);
-            $link = 'https://'.$link;
+            $link = 'https://' . $link;
         }
         $social['facebook'] = $link;
 
         $link = $request->facebook;
-        if($link){
+        if ($link) {
             $link = str_replace('https://', '', $link);
             $link = str_replace('http://', '', $link);
-            $link = 'https://'.$link;
+            $link = 'https://' . $link;
         }
         $social['linkedin'] = $link;
         $social = json_encode($social);
@@ -73,15 +73,13 @@ class TestimonialController extends Controller
 
         $video = $request->youtube;
 
-        if($request->status == 'on')
-        {
+        if ($request->status == 'on') {
             $status = 1;
-        }else
-        {
+        } else {
             $status = 0;
         }
 
-        $request->request->add(['status' => $status,'social_url' => $social, 'video_url' => $video]);
+        $request->request->add(['status' => $status, 'social_url' => $social, 'video_url' => $video]);
 
         $testimonial = $model->create($request->all());
 
@@ -91,7 +89,7 @@ class TestimonialController extends Controller
 
         $testimonial->createMedia($request->image_upload);
 
-        if($request->instructor_id != null){
+        if ($request->instructor_id != null) {
             $instructor = Instructor::find($request->instructor_id);
             $instructor->testimonials()->attach($testimonial->id);
         }
@@ -101,11 +99,10 @@ class TestimonialController extends Controller
             $testimonial->category()->attach([$category->id]);
         }*/
 
-        foreach($request->category_id as $category){
+        foreach ($request->category_id as $category) {
             $testimonial->category()->attach([$category]);
         }
 
-        
         return redirect()->route('testimonials.edit', $testimonial)->withStatus(__('Testimonial successfully created.'));
         //return redirect()->route('testimonials.index')->withStatus(__('Testimonial successfully created.'));
     }
@@ -134,7 +131,6 @@ class TestimonialController extends Controller
         //$instructors = Instructor::with('testimonials','medias')->get();
         $instructors = Instructor::with('medias')->get()->groupBy('id');
 
-        
         return view('testimonial.edit', compact('testimonial', 'categories', 'instructors'));
     }
 
@@ -150,21 +146,20 @@ class TestimonialController extends Controller
         $social = [];
         $video = [];
 
-
         $link = $request->facebook;
-        if($link){
+        if ($link) {
             $link = str_replace('https://', '', $link);
             $link = str_replace('http://', '', $link);
-            $link = 'https://'.$link;
+            $link = 'https://' . $link;
         }
 
         $social['facebook'] = $link;
 
         $link = $request->facebook;
-        if($link){
+        if ($link) {
             $link = str_replace('https://', '', $link);
             $link = str_replace('http://', '', $link);
-            $link = 'https://'.$link;
+            $link = 'https://' . $link;
         }
 
         $social['linkedin'] = $link;
@@ -174,29 +169,26 @@ class TestimonialController extends Controller
         //$video = json_encode($video);
         $video = $request->youtube;
 
-        if($request->status == 'on')
-        {
+        if ($request->status == 'on') {
             $status = 1;
-        }else
-        {
+        } else {
             $status = 0;
         }
 
         $request->request->add([]);
 
-        $request->request->add(['status' => $status,'social_url' => $social, 'video_url' => $video]);
+        $request->request->add(['status' => $status, 'social_url' => $social, 'video_url' => $video]);
         $isUpdate = $testimonial->update($request->all());
 
         /*if($isUpdate && $request->image_upload != null){
             $testimonial->updateMedia($request->image_upload);
         }*/
 
-        if($request->instructor_id != null){
+        if ($request->instructor_id != null) {
             $testimonial->instructors()->detach();
 
             $instructor = Instructor::find($request->instructor_id);
             $instructor->testimonials()->attach($testimonial->id);
-
         }
 
         //if($request->category_id != null){
@@ -206,10 +198,10 @@ class TestimonialController extends Controller
 
         $testimonial->category()->detach();
 
-        foreach($request->category_id as $category){
+        foreach ($request->category_id as $category) {
             $testimonial->category()->attach([$category]);
         }
-        
+
         return redirect()->route('testimonials.edit', $testimonial)->withStatus(__('Testimonial successfully updated.'));
         //return redirect()->route('testimonials.index')->withStatus(__('Testimonial successfully updated.'));
     }
@@ -231,33 +223,24 @@ class TestimonialController extends Controller
         return redirect()->route('testimonials.index')->withStatus(__('Testimonial successfully deleted.'));
     }
 
-    public function importFromFile(Request $request){
-
+    public function importFromFile(Request $request)
+    {
         $file = $request->file('file');
         $name = $file->hashName();
         //dd($name);
         //Storage::path('import/' . $name);
 
-        try{
-
+        try {
             Storage::disk('import')->put('', $request->file('file'), 'public');
-            $response = Artisan::call('insert:testimonials',['file_name' => $name]);
-            
-            if($response){
+            $response = Artisan::call('insert:testimonials', ['file_name' => $name]);
+
+            if ($response) {
                 return redirect()->route('testimonials.index')->withStatus(__('File is imported'));
-
-            }else{
+            } else {
                 return redirect()->route('testimonials.index')->withStatus(__('File is not imported'));
-
             }
-
-
-        }catch(\Exception $e){
+        } catch(\Exception $e) {
             return redirect()->route('testimonials.index')->withStatus('File is not imported');
         }
-       
-
-   
     }
-
 }
