@@ -7,7 +7,9 @@
         "watch-poll": "npm run watch -- --watch-poll",
         "hot": "cross-env NODE_ENV=development node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --hot --config=node_modules/laravel-mix/setup/webpack.config.js",
         "prod": "npm run production",
-        "production": "mix --production"
+        "production": "mix --production",
+        "prettify:fix": "prettier --write \"resources/js/**/*.{js,jsx,ts,tsx,vue}\"",
+        "prettify": "prettier --debug-check \"resources/js/**/*.{js,jsx,ts,tsx,vue}\""
     },
     "devDependencies": {
         "axios": "^1.6.5",
@@ -52,6 +54,7 @@
         "music-metadata-browser": "^2.5.10",
         "nestable2": "^1.6.0",
         "plyr": "^3.7.8",
+        "prettify": "^0.1.7",
         "process": "^0.11.10",
         "sweetalert2": "^11.10.3",
         "tinymce": "^6.3.1",

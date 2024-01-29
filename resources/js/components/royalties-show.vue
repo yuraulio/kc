@@ -1,11 +1,8 @@
-<style scoped>
-
-</style>
+<style scoped></style>
 
 <template>
-
-<div >
-    <royalty-item
+    <div>
+        <royalty-item
             title="true"
             category="true"
             type="edit"
@@ -19,58 +16,55 @@
             :key="NaN"
             :config="config"
         ></royalty-item>
-</div>
+    </div>
 </template>
 
 <script>
-    import royaltyItem from './royalty-item.vue'
-    import royaltiesConfig from "../table_configs/royaltiesTable";
+import royaltyItem from './royalty-item.vue';
+import royaltiesConfig from '../table_configs/royaltiesTable';
 
-    export default {
-        components: {
-            royaltyItem,
-            royaltiesConfig
-        },
-        props: {
-            data: Object
-        },
-        data() {
-            return {
-                item: {},
-                content: null,
-                simple: true,
-                config: royaltiesConfig,
-            }
-        },
-        methods: {
-            getPage() {
-
-                if (this.instructor.id){
-                    axios
+export default {
+    components: {
+        royaltyItem,
+        royaltiesConfig,
+    },
+    props: {
+        data: Object,
+    },
+    data() {
+        return {
+            item: {},
+            content: null,
+            simple: true,
+            config: royaltiesConfig,
+        };
+    },
+    methods: {
+        getPage() {
+            if (this.instructor.id) {
+                axios
                     .get('/api/royalties/' + this.instructor.id)
                     .then((response) => {
-                        if (response.status == 200){
+                        if (response.status == 200) {
                             this.item = response.data.data;
 
                             //this.content = JSON.parse(this.page.content);
                         }
                     })
                     .catch((error) => {
-                        console.log(error)
+                        console.log(error);
                     });
-                }
-            },
-            changeMode(page) {
-                this.page = page;
-                this.content = this.page.content;
-                this.simple = !this.simple;
             }
         },
-        mounted() {
-
-            //this.getPage();
+        changeMode(page) {
+            this.page = page;
+            this.content = this.page.content;
+            this.simple = !this.simple;
         },
-        created(){
-        }
-    }
+    },
+    mounted() {
+        //this.getPage();
+    },
+    created() {},
+};
 </script>

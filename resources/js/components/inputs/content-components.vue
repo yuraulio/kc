@@ -1,19 +1,12 @@
 <template>
-    <div>
-
-
-    </div>
+    <div></div>
 </template>
 
 <script>
-
-
 export default {
     data() {
-        return {}
+        return {};
     },
-    methods: {
-
-    }
-}
+    methods: {},
+};
 </script>

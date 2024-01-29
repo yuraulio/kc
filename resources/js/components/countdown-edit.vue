@@ -1,10 +1,8 @@
-<style scoped>
-
-</style>
+<style scoped></style>
 
 <template>
-<div >
-    <countdowneditable
+    <div>
+        <countdowneditable
             title="true"
             category="true"
             type="edit"
@@ -17,53 +15,53 @@
             :key="NaN"
             :config="config"
         ></countdowneditable>
-</div>
+    </div>
 </template>
 
 <script>
-    import countdowneditable from './countdowneditable.vue'
-    import countdownConfig from "../table_configs/countdownTable";
+import countdowneditable from './countdowneditable.vue';
+import countdownConfig from '../table_configs/countdownTable';
 
-    export default {
-        components: {
-            countdowneditable,
-            countdownConfig
-        },
-        props: {
-            countdownId: Number,
-        },
-        data() {
-            return {
-                item: {},
-                content: null,
-                simple: true,
-                config: countdownConfig,
-            }
-        },
-        methods: {
-            getPage() {
-                if (this.countdownId){
-                    axios
+export default {
+    components: {
+        countdowneditable,
+        countdownConfig,
+    },
+    props: {
+        countdownId: Number,
+    },
+    data() {
+        return {
+            item: {},
+            content: null,
+            simple: true,
+            config: countdownConfig,
+        };
+    },
+    methods: {
+        getPage() {
+            if (this.countdownId) {
+                axios
                     .get('/api/countdown/' + this.countdownId)
                     .then((response) => {
-                        if (response.status == 200){
+                        if (response.status == 200) {
                             this.item = response.data.data;
                             //this.content = JSON.parse(this.page.content);
                         }
                     })
                     .catch((error) => {
-                        console.log(error)
+                        console.log(error);
                     });
-                }
-            },
-            changeMode(page) {
-                this.page = page;
-                this.content = this.page.content;
-                this.simple = !this.simple;
             }
         },
-        mounted() {
-            this.getPage();
-        }
-    }
+        changeMode(page) {
+            this.page = page;
+            this.content = this.page.content;
+            this.simple = !this.simple;
+        },
+    },
+    mounted() {
+        this.getPage();
+    },
+};
 </script>

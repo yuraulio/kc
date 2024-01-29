@@ -1,6 +1,6 @@
 <template>
-<div class="card-body">
-    <!--
+    <div class="card-body">
+        <!--
     <h4 class="header-title">
         <button @click="confirmSelection" v-if="selectedImages.length" class="float-end btn btn-soft-success btn-rounded">
             Confirm Selection
@@ -8,89 +8,157 @@
     </h4>
     -->
 
-    <div class="row">
-        <div class="col">
-            <h3 v-if="mainDysplayImage" class="text-truncate pb-1" :title="mainDysplayImage.name">{{mainDysplayImage.name}}</h3>
-            <h3 v-else class="text-truncate pb-1" :title="opImage.name">{{opImage.name}}</h3>
+        <div class="row">
+            <div class="col">
+                <h3 v-if="mainDysplayImage" class="text-truncate pb-1" :title="mainDysplayImage.name">
+                    {{ mainDysplayImage.name }}
+                </h3>
+                <h3 v-else class="text-truncate pb-1" :title="opImage.name">{{ opImage.name }}</h3>
+            </div>
+
+            <div class="col-auto">
+                <button
+                    v-if="imageExtensions.includes(opImage.extension.toLowerCase())"
+                    @click="switchToEdit()"
+                    class="btn btn-soft-primary"
+                >
+                    Edit
+                </button>
+                <button @click="saveToClipboard()" class="btn btn-soft-primary">Copy URL to clipboard</button>
+                <a
+                    :href="mainDysplayImage ? mainDysplayImage.url : opImage.url"
+                    target="_blank"
+                    class="btn btn-soft-primary"
+                    >Open in new tab</a
+                >
+            </div>
         </div>
 
-        <div class="col-auto">
-            <button v-if="imageExtensions.includes(opImage.extension.toLowerCase())" @click="switchToEdit()" class="btn btn-soft-primary">Edit</button>
-            <button @click="saveToClipboard()" class="btn btn-soft-primary">Copy URL to clipboard</button>
-            <a :href="mainDysplayImage ? mainDysplayImage.url : opImage.url" target="_blank" class="btn btn-soft-primary">Open in new tab</a>
-        </div>
-    </div>
+        <div class="row">
+            <div class="col-md">
+                <div style="height: 600px" id="" class="carousel">
+                    <div class="carousel-inner" role="listbox">
+                        <div
+                            v-if="activeImg"
+                            v-for="(img, index) in selectedImage ? [selectedImage] : images"
+                            :class="'carousel-item ' + (activeImg.id == img.id ? ' active' : '')"
+                            :key="index"
+                        >
+                            <template v-if="!lodash.find(img.subfiles, { subselected: true })">
+                                <div
+                                    v-if="img.extension.toLowerCase() == 'pdf'"
+                                    style="width: 100%; height: 300px"
+                                    class="text-secondary rounded text-center"
+                                >
+                                    <i class="mdi mdi-file-pdf-outline" style="font-size: 160px"></i>
+                                </div>
 
-    <div class="row">
-        <div class="col-md">
-            <div style="height: 600px" id="" class="carousel">
-                <div class="carousel-inner" role="listbox">
-                    <div v-if="activeImg" v-for="(img, index) in selectedImage ? [selectedImage] : images" :class="'carousel-item ' + (activeImg.id == img.id ? ' active' : '')" :key="index">
-                        <template v-if="!lodash.find(img.subfiles, {'subselected' : true})">
-                            <div v-if="img.extension.toLowerCase() == 'pdf'" style="width: 100%; height: 300px" class=" text-secondary rounded text-center">
-                                <i class="mdi mdi-file-pdf-outline" style="font-size: 160px;"></i>
-                            </div>
+                                <img
+                                    v-else-if="imageExtensions.includes(img.extension.toLowerCase())"
+                                    @click="confirmSelection(img)"
+                                    :src="img.url"
+                                    alt="..."
+                                    class="d-block img-fluid cursor-pointer"
+                                />
 
-                            <img v-else-if="imageExtensions.includes(img.extension.toLowerCase())" @click="confirmSelection(img)" :src="img.url" alt="..." class="d-block img-fluid cursor-pointer" />
+                                <div
+                                    v-else
+                                    style="width: 100%; height: 300px"
+                                    class="text-secondary rounded text-center"
+                                >
+                                    <i class="mdi mdi-file" style="font-size: 160px"></i>
+                                </div>
+                            </template>
+                            <template v-else>
+                                <img
+                                    @click="confirmSelection(lodash.find(img.subfiles, { subselected: true }))"
+                                    :src="lodash.find(img.subfiles, { subselected: true }).url"
+                                    alt="..."
+                                    class="d-block img-fluid cursor-pointer"
+                                />
+                            </template>
+                        </div>
+                        <a
+                            class="carousel-control-prev"
+                            href="#"
+                            role="button"
+                            @click.prevent="list('back')"
+                            data-bs-slide="prev"
+                        >
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </a>
+                        <a
+                            class="carousel-control-next"
+                            href="#"
+                            role="button"
+                            @click.prevent="list('next')"
+                            data-bs-slide="next"
+                        >
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
 
-                            <div v-else style="width: 100%; height: 300px" class=" text-secondary rounded text-center">
-                                <i class="mdi mdi-file" style="font-size: 160px;"></i>
-                            </div>
-                            
-                        </template>
-                        <template v-else>
-                            <img @click="confirmSelection(lodash.find(img.subfiles, {'subselected' : true}))" :src="lodash.find(img.subfiles, {'subselected' : true}).url" alt="..." class="d-block img-fluid cursor-pointer" />
+            <div v-if="activeImg && activeImg.parrent == null && sidebarImages.length" class="col-md-3">
+                <div
+                    class="mt-4"
+                    style="
+                        max-height: 500px;
+                        overflow: hidden;
+                        overflow-y: scroll;
+                        text-align: center;
+                        background-color: #f3f7f9 !important;
+                        padding: 20px;
+                    "
+                >
+                    <div v-for="(im, index) in sidebarImages" style="cursor: pointer" :key="index" class="mb-2">
+                        <template v-if="matchVersions(im.version)">
+                            <template v-if="getVersion(im.version)">
+                                <h5 class="text-start">
+                                    {{ getVersion(im.version).version }}
+                                    <i @click="deleteFile(im)" class="mdi mdi-delete text-muted vertical-middle"></i>
+                                </h5>
+                                <p class="text-start text-muted d-block">
+                                    {{ size(im.size) }}
+                                </p>
+                                <p class="text-start text-muted d-block mb-2">
+                                    {{ getVersion(im.version).description }}
+                                </p>
+                            </template>
+                            <template v-else>
+                                <h5>
+                                    Custom
+                                    <i @click="deleteFile(im)" class="mdi mdi-delete text-muted vertical-middle"></i>
+                                </h5>
+                            </template>
+
+                            <img
+                                @click="selectImg(im)"
+                                :src="im.url"
+                                alt="image"
+                                class="img-fluid rounded"
+                                width="200"
+                                :style="
+                                    'height: 100px; width: auto; ' +
+                                    (im.subselected ? ' border: 4px solid #1abc9c;' : ' border: 4px solid #f3f7f9;')
+                                "
+                            />
+                            <p class="mb-0 text-truncate" :title="im.name">
+                                {{ im.name }}
+                            </p>
+                            <hr class="mt-2 mb-2" />
                         </template>
                     </div>
-                    <a class="carousel-control-prev" href="#" role="button" @click.prevent="list('back')" data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Previous</span>
-                    </a>
-                    <a class="carousel-control-next" href="#" role="button" @click.prevent="list('next')" data-bs-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Next</span>
-                    </a>
-                </div>
-            </div>
-        </div>
-
-        <div v-if="activeImg && activeImg.parrent == null && sidebarImages.length" class="col-md-3">
-            <div class="mt-4" style="max-height: 500px; overflow: hidden; overflow-y: scroll; text-align: center; background-color:#f3f7f9 !important; padding:20px;">
-                <div v-for="(im, index) in sidebarImages" style="cursor: pointer" :key="index" class="mb-2">
-                    <template v-if="matchVersions(im.version)">
-                        <template v-if="getVersion(im.version)">
-                            <h5 class="text-start">
-                                {{ getVersion(im.version).version }}
-                                <i @click="deleteFile(im)" class="mdi mdi-delete text-muted vertical-middle"></i>
-                            </h5>
-                            <p class="text-start text-muted d-block">
-                                {{ size(im.size) }}
-                            </p>
-                            <p class="text-start text-muted d-block mb-2">{{ getVersion(im.version).description }}</p>
-                        </template>
-                        <template v-else>
-                            <h5>
-                                Custom
-                                <i @click="deleteFile(im)" class="mdi mdi-delete text-muted vertical-middle"></i>
-                            </h5>
-                        </template>
-
-                        <img @click="selectImg(im)" :src="im.url" alt="image" class="img-fluid rounded" width="200" :style="'height: 100px; width: auto; ' + (im.subselected ? ' border: 4px solid #1abc9c;' : ' border: 4px solid #f3f7f9;')">
-                        <p class="mb-0 text-truncate" :title="im.name">
-                            {{im.name}}
-                        </p>
-                        <hr class="mt-2 mb-2">
-                    </template>
                 </div>
             </div>
         </div>
     </div>
-</div>
 </template>
 
 <script>
-
-
 export default {
     props: {
         images: {},
@@ -107,92 +175,93 @@ export default {
             subactiveImg: null,
             selectedImages: [],
             mainDysplayImage: null,
-            versions: [{
+            versions: [
+                {
                     w: 470,
                     h: 470,
                     q: 60,
-                    fit: "crop",
-                    version: "instructors-testimonials",
-                    description: "Applies to : Our Instructor Page (Footer) & Event -> Instructors",
+                    fit: 'crop',
+                    version: 'instructors-testimonials',
+                    description: 'Applies to : Our Instructor Page (Footer) & Event -> Instructors',
                 },
                 {
                     w: 542,
                     h: 291,
                     q: 60,
-                    fit: "crop",
-                    version: "event-card",
-                    description: "Applies to : Homepage Events list",
+                    fit: 'crop',
+                    version: 'event-card',
+                    description: 'Applies to : Homepage Events list',
                 },
                 {
                     w: 470,
                     h: 470,
                     q: 60,
-                    fit: "crop",
-                    version: "users",
-                    description: "Applies to : Testimonial square image",
+                    fit: 'crop',
+                    version: 'users',
+                    description: 'Applies to : Testimonial square image',
                 },
                 {
                     w: 2880,
                     h: 1248,
                     q: 60,
-                    fit: "crop",
-                    version: "header-image",
-                    description: "Applies to: Event header carousel (Main event page)",
+                    fit: 'crop',
+                    version: 'header-image',
+                    description: 'Applies to: Event header carousel (Main event page)',
                 },
                 {
                     w: 90,
                     h: 90,
                     q: 60,
-                    fit: "crop",
-                    version: "instructors-small",
-                    description: "Applies to : Event -> Topics (syllabus-block)",
+                    fit: 'crop',
+                    version: 'instructors-small',
+                    description: 'Applies to : Event -> Topics (syllabus-block)',
                 },
                 {
                     w: 300,
                     h: 300,
                     q: 60,
-                    fit: "crop",
-                    description: "feed-image",
-                    version: "feed-image",
+                    fit: 'crop',
+                    description: 'feed-image',
+                    version: 'feed-image',
                 },
                 {
                     w: 1920,
                     h: 832,
                     q: 60,
-                    fit: "crop",
-                    version: "social-media-sharing",
-                    description: "Applies to: Social media sharing default image",
+                    fit: 'crop',
+                    version: 'social-media-sharing',
+                    description: 'Applies to: Social media sharing default image',
                 },
                 {
                     w: 680,
                     h: 320,
                     q: 60,
-                    fit: "crop",
-                    version: "blog-content",
-                    description: "Applies to: Blog content image",
+                    fit: 'crop',
+                    version: 'blog-content',
+                    description: 'Applies to: Blog content image',
                 },
                 {
                     w: 343,
                     h: 193,
                     q: 60,
-                    fit: "crop",
-                    version: "blog-featured",
-                    description: "Applies to: Blog Featured image",
+                    fit: 'crop',
+                    version: 'blog-featured',
+                    description: 'Applies to: Blog Featured image',
                 },
             ],
         };
     },
     computed: {
         currentImages() {
-            return this.images ?
-                _.map(this.images, function (o) {
-                    return o.url;
-                }) :
-                [];
+            return this.images
+                ? _.map(this.images, function (o) {
+                      return o.url;
+                  })
+                : [];
         },
         sidebarImages() {
-            return this.activeImg ? this.lodash.find(this.images, {id: this.activeImg.id}).subfiles : [];
-        }
+            return this.activeImg ? this.lodash.find(this.images, { id: this.activeImg.id }).subfiles : [];
+        },
     },
     methods: {
         deleteFile(file) {
@@ -200,7 +269,7 @@ export default {
             this.$parent.$parent.deleteFile(file);
         },
         confirmSelection(image) {
-            if (this.$parent.$parent.mode != null ) {
+            if (this.$parent.$parent.mode != null) {
                 this.$parent.$parent.updatedMediaImage(image);
                 this.$modal.hide('gallery-modal');
                 this.$toast.success('New image selected!');
@@ -212,7 +281,7 @@ export default {
         },
         selectImg(img) {
             var subfiles = _.find(this.images, {
-                id: this.activeImg.id
+                id: this.activeImg.id,
             }).subfiles;
             if (img && !img.subselected) {
                 this.mainDysplayImage = img;
@@ -221,7 +290,7 @@ export default {
                 this.mainDysplayImage = this.opImage;
                 this.$set(img, 'subselected', false);
             }
-            subfiles.forEach(element => {
+            subfiles.forEach((element) => {
                 if (element.id != img.id) {
                     this.$set(element, 'subselected', false);
                 }
@@ -229,40 +298,51 @@ export default {
         },
         list(type) {
             if (type == 'back') {
-                this.activeImg = _.findIndex(this.images, {
-                        id: this.activeImg.id
-                    }) > 0 ?
-                    this.images[_.findIndex(this.images, {
-                        id: this.activeImg.id
-                    }) - 1] : this.images[this.images.length - 1]
+                this.activeImg =
+                    _.findIndex(this.images, {
+                        id: this.activeImg.id,
+                    }) > 0
+                        ? this.images[
+                              _.findIndex(this.images, {
+                                  id: this.activeImg.id,
+                              }) - 1
+                          ]
+                        : this.images[this.images.length - 1];
             } else {
-                this.activeImg = _.findIndex(this.images, {
-                        id: this.activeImg.id
-                    }) != this.images.length - 1 ?
-                    this.images[_.findIndex(this.images, {
-                        id: this.activeImg.id
-                    }) + 1] : this.images[0]
+                this.activeImg =
+                    _.findIndex(this.images, {
+                        id: this.activeImg.id,
+                    }) !=
+                    this.images.length - 1
+                        ? this.images[
+                              _.findIndex(this.images, {
+                                  id: this.activeImg.id,
+                              }) + 1
+                          ]
+                        : this.images[0];
             }
         },
         saveToClipboard() {
-            var text = "";
+            var text = '';
             if (this.mainDysplayImage) {
                 text = this.mainDysplayImage.url;
             } else {
                 text = this.opImage.url;
             }
-            this.$copyText(text)
-            .then((e) => {
-                this.$toast.success('Copied');
-                console.log(e)
-            }, function (e) {
-                console.log(e)
-            });
+            this.$copyText(text).then(
+                (e) => {
+                    this.$toast.success('Copied');
+                    console.log(e);
+                },
+                function (e) {
+                    console.log(e);
+                }
+            );
         },
         getVersion(version) {
             var return_value = null;
             if (version) {
-                this.versions.forEach(function(version1){
+                this.versions.forEach(function (version1) {
                     if (version1.version == version) {
                         return_value = version1;
                     }
@@ -270,11 +350,11 @@ export default {
             }
             return return_value;
         },
-        size(size){
+        size(size) {
             if (size < 1000000) {
-                return parseFloat(size * 0.001).toFixed(1) + " kB";
+                return parseFloat(size * 0.001).toFixed(1) + ' kB';
             } else {
-                return parseFloat(size * 0.000001).toFixed(1) + " MB";
+                return parseFloat(size * 0.000001).toFixed(1) + ' MB';
             }
         },
         matchVersions(version) {
@@ -285,14 +365,14 @@ export default {
                 return false;
             }
             return true;
-        }
+        },
     },
     mounted() {
         this.activeImg = this.opImage ? this.opImage : null;
         //console.log("cim", this.currentImages);
     },
     watch: {
-        "images": {
+        images: {
             handler: function () {
                 this.selectedImages = [];
                 this.images.forEach((element) => {
@@ -304,13 +384,12 @@ export default {
                         if (sub.selected == true) {
                             this.selectedImages.push(sub);
                         }
-                    })
-                })
+                    });
+                });
                 // console.log("selectedimgs", this.selectedImages, this.$parent)
-
             },
-            deep: true
-        }
+            deep: true,
+        },
     },
 };
 </script>
@@ -333,8 +412,8 @@ export default {
 
 .img-fluid {
     margin: 0 auto !important;
-    height: auto!important;
-    width: auto!important;
+    height: auto !important;
+    width: auto !important;
 }
 
 .carousel-inner {
@@ -350,11 +429,11 @@ export default {
 }
 
 .carousel-control-prev:hover {
-    background-color: rgba(0, 0, 0, 0.15)
+    background-color: rgba(0, 0, 0, 0.15);
 }
 
 .carousel-control-next:hover {
-    background-color: rgba(0, 0, 0, 0.15)
+    background-color: rgba(0, 0, 0, 0.15);
 }
 
 .carousel-caption {
@@ -363,12 +442,12 @@ export default {
 }
 
 .btn-soft-primary {
-    color: #6658dd!important;
-    background-color: rgba(102, 88, 221, 0.18)!important;
-    border-color: rgba(102, 88, 221, 0.12)!important;
+    color: #6658dd !important;
+    background-color: rgba(102, 88, 221, 0.18) !important;
+    border-color: rgba(102, 88, 221, 0.12) !important;
 }
 .btn-soft-primary:hover {
-    color: #fff!important;
-    background-color: #6658dd!important;
+    color: #fff !important;
+    background-color: #6658dd !important;
 }
 </style>

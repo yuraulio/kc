@@ -1,6 +1,4 @@
-<style scoped>
-
-</style>
+<style scoped></style>
 
 <template>
     <div>
@@ -12,23 +10,20 @@
 </template>
 
 <script>
-    import categoriesConfig from "../table_configs/categoriesTable";
-    import Paginationtable from './table/paginationtable.vue';
+import categoriesConfig from '../table_configs/categoriesTable';
+import Paginationtable from './table/paginationtable.vue';
 
-    export default {
-        components: {
-            Paginationtable,
-        },
-        props: {
-        },
-        data() {
-            return {
-                config: categoriesConfig,
-            }
-        },
-        methods: {
-        },
-        mounted() {
-        }
-    }
+export default {
+    components: {
+        Paginationtable,
+    },
+    props: {},
+    data() {
+        return {
+            config: categoriesConfig,
+        };
+    },
+    methods: {},
+    mounted() {},
+};
 </script>

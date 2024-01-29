@@ -1,49 +1,44 @@
-<style scoped>
-
-</style>
+<style scoped></style>
 
 <template>
-<div>
-
-    <multiput2
-        key="image"
-        keyput="image"
-        label="Image"
-        type="image"
-        @inputed="imageSelected($event)"
-        :uuid="$uuid.v4()"
-        mode="single"
-        :imageEdit="imageedit"
-    />
-
-</div>
+    <div>
+        <multiput2
+            key="image"
+            keyput="image"
+            label="Image"
+            type="image"
+            @inputed="imageSelected($event)"
+            :uuid="$uuid.v4()"
+            mode="single"
+            :imageEdit="imageedit"
+        />
+    </div>
 </template>
 
 <script>
 export default {
     props: {
-        imageedit: false
+        imageedit: false,
     },
     data() {
-        return {
-
-        }
+        return {};
     },
-    mounted()  {
-    },
+    mounted() {},
     methods: {
         imageSelected($event) {
             if ($event.data.path) {
-                $('#'+current_icon_input).val("/uploads" + $event.data.path);
-                $('#'+current_icon_input_alt_text).val($event.data.alt_text);
+                $('#' + current_icon_input).val('/uploads' + $event.data.path);
+                $('#' + current_icon_input_alt_text).val($event.data.alt_text);
 
-                let input_icon_wrapper = $('#'+current_icon_input).parent()[0]
-                input_icon_wrapper = $(input_icon_wrapper).find('.input-icon')
-                $(input_icon_wrapper).empty()
+                let input_icon_wrapper = $('#' + current_icon_input).parent()[0];
+                input_icon_wrapper = $(input_icon_wrapper).find('.input-icon');
+                $(input_icon_wrapper).empty();
 
-                $(input_icon_wrapper).append(`<img class="replace-with-svg" src="${"/uploads" + $event.data.path}" width="20px"> `)
+                $(input_icon_wrapper).append(
+                    `<img class="replace-with-svg" src="${'/uploads' + $event.data.path}" width="20px"> `
+                );
             }
         },
-    }
-}
+    },
+};
 </script>

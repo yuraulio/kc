@@ -1,18 +1,19 @@
 <template>
-<div class="cropper-outer p-2">
-    <div class="row cropper-data">
-        <div class="col-sm-8">
-            <div :class="version == 'original' ? 'no-cropper' : ''">
-                <div v-show="imgSrc" :key="imgSrc ? imgSrc : 'emp'" class="img-cropper" style>
-                    <vue-cropper
-                    ref="cropper"
-                    :checkCrossOrigin="false"
-                    :src="imgSrc"
-                    preview=".preview"
-                    @zoom.prevent
-                    :img-style="{'max-height': '680px'}"/>
-                </div>
-                <!--
+    <div class="cropper-outer p-2">
+        <div class="row cropper-data">
+            <div class="col-sm-8">
+                <div :class="version == 'original' ? 'no-cropper' : ''">
+                    <div v-show="imgSrc" :key="imgSrc ? imgSrc : 'emp'" class="img-cropper" style>
+                        <vue-cropper
+                            ref="cropper"
+                            :checkCrossOrigin="false"
+                            :src="imgSrc"
+                            preview=".preview"
+                            @zoom.prevent
+                            :img-style="{ 'max-height': '680px' }"
+                        />
+                    </div>
+                    <!--
                 <label v-show="imgSrc == null" :name="'image'" style="width: 100%; min-height: 300px">
                     <form method="post" class="dropzone dz-clickable" id="myAwesomeDropzone" data-plugin="dropzone" data-previews-container="#file-previews" data-upload-preview-template="#uploadPreviewTemplate">
                         <div class="dz-message needsclick" style="margin: 0 auto; min-height: 300px">
@@ -62,158 +63,235 @@
                         Reset
                     </button>
                 </div>
-                -->
+                --></div>
+            </div>
+            <div class="col-sm-4 image-data">
+                <div class="row mb-2">
+                    <div class="col-lg-12 d-grid">
+                        <span class="cropper-image-name">{{ imgname }}</span>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-sm-4">
+                        <label class="form-label">Image title:</label>
+                    </div>
+                    <div class="col">
+                        <input
+                            v-model="imgname"
+                            type="text"
+                            class="form-control invisible-input text-end"
+                            placeholder="Enter file name"
+                        />
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-sm-4">
+                        <label class="form-label">Image alternative text:</label>
+                    </div>
+                    <div class="col">
+                        <input
+                            v-model="alttext"
+                            type="text"
+                            class="form-control invisible-input text-end"
+                            placeholder="Enter alt text"
+                        />
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-sm-4">
+                        <label class="form-label">Image link:</label>
+                    </div>
+                    <div class="col">
+                        <input
+                            v-model="link"
+                            type="text"
+                            class="form-control invisible-input text-end"
+                            placeholder="Enter link"
+                        />
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-sm-4">
+                        <label class="form-label">Image version name:</label>
+                    </div>
+                    <div class="col">
+                        <span class="form-control invisible-input text-end">{{ version }}</span>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-sm-4">
+                        <label class="form-label">Image size:</label>
+                    </div>
+                    <div class="col">
+                        <span class="form-control invisible-input text-end">{{ formatSize(size) }}</span>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-sm-4">
+                        <label class="form-label">Image dimensions:</label>
+                    </div>
+                    <div class="col">
+                        <span class="form-control invisible-input text-end">{{
+                            width ? width + ' x ' + height : ''
+                        }}</span>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-sm-4">
+                        <label class="form-label">Date uploaded:</label>
+                    </div>
+                    <div class="col">
+                        <span class="form-control invisible-input text-end">{{ date }}</span>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-sm-4">
+                        <label class="form-label">Uploaded from:</label>
+                    </div>
+                    <div class="col">
+                        <span class="form-control invisible-input text-end">{{
+                            user ? user.firstname + ' ' + user.lastname : ''
+                        }}</span>
+                    </div>
+                </div>
+                <div v-if="extension == 'png'" class="row mb-2">
+                    <div class="col-lg-12">
+                        <input
+                            v-model="jpg"
+                            type="checkbox"
+                            id="jpg"
+                            class="form-check-input me-1"
+                            style="position: relative"
+                        />
+                        <label for="jpg" class="form-label"
+                            >Convert image versions to jpg format. (Reduces size.)</label
+                        >
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-lg-12">
+                        <button
+                            @click="upload('edit')"
+                            class="btn btn-soft-success btn-block w-100 mt-2"
+                            :disabled="isUploading"
+                        >
+                            <span v-if="isUploading"><i class="fas fa-spinner fa-spin"></i> Saving...</span>
+                            <span v-else> Save </span>
+                        </button>
+                    </div>
+                    <div class="col-4">
+                        <a :href="getUrl()" target="_blank" class="btn btn-soft-warning w-100 mt-2">View</a>
+                    </div>
+                    <div class="col-4">
+                        <button @click="reset()" class="btn btn-soft-info btn-block w-100 mt-2">Reset</button>
+                    </div>
+                    <div class="col-4">
+                        <button @click="close()" class="btn btn-soft-secondary btn-block w-100 mt-2">Cancel</button>
+                    </div>
+                    <div class="col-12">
+                        <button
+                            v-if="findVersionData(version)"
+                            @click="deleteFile(findVersionData(version))"
+                            class="btn btn-soft-danger btn-block w-100 mt-2"
+                        >
+                            Delete version
+                        </button>
+                    </div>
+                    <div class="col-12">
+                        <button
+                            v-if="parentMode"
+                            @click="confirmSelection(findVersionData(version))"
+                            class="btn btn-soft-primary btn-block w-100 mt-2"
+                        >
+                            Use
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="col-sm-4 image-data">
-            <div class="row mb-2">
-                <div class="col-lg-12 d-grid">
-                    <span class="cropper-image-name">{{ imgname }}</span>
-                </div>
-            </div>
-            <div class="row mb-2">
-                <div class="col-sm-4">
-                    <label class="form-label">Image title:</label>
-                </div>
-                <div class="col">
-                    <input v-model="imgname" type="text" class="form-control invisible-input text-end" placeholder="Enter file name"/>
-                </div>
-            </div>
-            <div class="row mb-2">
-                <div class="col-sm-4">
-                    <label class="form-label">Image alternative text:</label>
-                </div>
-                <div class="col">
-                    <input v-model="alttext" type="text" class="form-control invisible-input text-end" placeholder="Enter alt text"/>
-                </div>
-            </div>
-            <div class="row mb-2">
-                <div class="col-sm-4">
-                    <label class="form-label">Image link:</label>
-                </div>
-                <div class="col">
-                    <input v-model="link" type="text" class="form-control invisible-input text-end" placeholder="Enter link"/>
-                </div>
-            </div>
-            <div class="row mb-2">
-                <div class="col-sm-4">
-                    <label class="form-label">Image version name:</label>
-                </div>
-                <div class="col">
-                    <span class="form-control invisible-input text-end">{{ version }}</span>
-                </div>
-            </div>
-            <div class="row mb-2">
-                <div class="col-sm-4">
-                    <label class="form-label">Image size:</label>
-                </div>
-                <div class="col">
-                    <span class="form-control invisible-input text-end">{{ formatSize(size) }}</span>
-                </div>
-            </div>
-            <div class="row mb-2">
-                <div class="col-sm-4">
-                    <label class="form-label">Image dimensions:</label>
-                </div>
-                <div class="col">
-                    <span class="form-control invisible-input text-end">{{ width ? width + " x " + height : '' }}</span>
-                </div>
-            </div>
-            <div class="row mb-2">
-                <div class="col-sm-4">
-                    <label class="form-label">Date uploaded:</label>
-                </div>
-                <div class="col">
-                    <span class="form-control invisible-input text-end">{{ date }}</span>
-                </div>
-            </div>
-            <div class="row mb-2">
-                <div class="col-sm-4">
-                    <label class="form-label">Uploaded from:</label>
-                </div>
-                <div class="col">
-                    <span class="form-control invisible-input text-end">{{ user ? (user.firstname + ' ' + user.lastname) : '' }}</span>
-                </div>
-            </div>
-            <div v-if="extension == 'png'" class="row mb-2">
-                <div class="col-lg-12">
-                    <input v-model="jpg" type="checkbox" id="jpg" class="form-check-input me-1" style="position: relative;">
-                    <label for="jpg" class="form-label">Convert image versions to jpg format. (Reduces size.)</label>
-                </div>
-            </div>
-            <div class="row mb-2">
-                <div class="col-lg-12">
-                    <button @click="upload('edit')" class="btn btn-soft-success btn-block w-100 mt-2" :disabled="isUploading">
-                        <span v-if="isUploading"><i class="fas fa-spinner fa-spin"></i> Saving...</span>
-                        <span v-else>
-                            Save
-                        </span>
-                    </button>
-                </div>
-                <div class="col-4">
-                    <a :href="getUrl()" target="_blank" class="btn btn-soft-warning w-100 mt-2">View</a>
-                </div>
-                <div class="col-4">
-                    <button @click="reset();" class="btn btn-soft-info btn-block w-100 mt-2">
-                        Reset
-                    </button>
-                </div>
-                <div class="col-4">
-                    <button @click="close()" class="btn btn-soft-secondary btn-block w-100 mt-2">
-                        Cancel
-                    </button>
-                </div>
-                <div class="col-12">
-                    <button v-if="findVersionData(version)" @click="deleteFile(findVersionData(version))" class="btn btn-soft-danger btn-block w-100 mt-2">Delete version</button>
-                </div>
-                <div class="col-12">
-                    <button v-if="parentMode" @click="confirmSelection(findVersionData(version))" class="btn btn-soft-primary btn-block w-100 mt-2">Use</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div id="versions" class="row horizontal-scroll">
-        <div class="col-12">
-            <div class="p-1">
-                <img @click="disable(); version='original'; selectedVersion=null; imgname=parrentImage.name; alttext=parrentImage.alt_text; link=parrentImage.link; id=parrentImage.id; versionData=null; versionSelected();" crossorigin="anonymous" :src="parrentImage ? ('/uploads/' + parrentImage.path) : ''" alt="image" class="img-fluid rounded" :style="version == 'original' ? 'border: 4px solid #1abc9c;' : 'border: 4px solid #f3f7f9;'"/>
-                <h5>Original image</h5>
-            </div>
-
-            <template v-for="(version1, index) in versions" v-if="matchVersions(version1.version)">
+        <div id="versions" class="row horizontal-scroll">
+            <div class="col-12">
                 <div class="p-1">
-                    <template v-if="findVersionData(version1.version) != null">
-                        <img @click="version=version1.version; selectedVersion=version1; versionSelected();" crossorigin="anonymous" :src="'/uploads/' + findVersionData(version1.version).path + '?key=' + imageKey" alt="image" class="img-fluid rounded" :style="version == version1.version ? 'border: 4px solid #1abc9c;' : 'border: 4px solid #f3f7f9;'" />
-                        <!--
+                    <img
+                        @click="
+                            disable();
+                            version = 'original';
+                            selectedVersion = null;
+                            imgname = parrentImage.name;
+                            alttext = parrentImage.alt_text;
+                            link = parrentImage.link;
+                            id = parrentImage.id;
+                            versionData = null;
+                            versionSelected();
+                        "
+                        crossorigin="anonymous"
+                        :src="parrentImage ? '/uploads/' + parrentImage.path : ''"
+                        alt="image"
+                        class="img-fluid rounded"
+                        :style="version == 'original' ? 'border: 4px solid #1abc9c;' : 'border: 4px solid #f3f7f9;'"
+                    />
+                    <h5>Original image</h5>
+                </div>
+
+                <template v-for="(version1, index) in versions" v-if="matchVersions(version1.version)">
+                    <div class="p-1">
+                        <template v-if="findVersionData(version1.version) != null">
+                            <img
+                                @click="
+                                    version = version1.version;
+                                    selectedVersion = version1;
+                                    versionSelected();
+                                "
+                                crossorigin="anonymous"
+                                :src="'/uploads/' + findVersionData(version1.version).path + '?key=' + imageKey"
+                                alt="image"
+                                class="img-fluid rounded"
+                                :style="
+                                    version == version1.version
+                                        ? 'border: 4px solid #1abc9c;'
+                                        : 'border: 4px solid #f3f7f9;'
+                                "
+                            />
+                            <!--
                         <button v-if="parentMode" @click="confirmSelection(findVersionData(version1.version))" style="width: 100%" class="btn btn-soft-primary mt-2">Select image</button>
                         -->
-                    </template>
-                    <template v-else>
-                        <button @click="version=version1.version; selectedVersion=version1; versionSelected();" style="width: 100%" class="btn btn-soft-primary ms-1 me-1">Select version</button>
-                    </template>
-                    <h5 :id="version1.version" class="">
-                        {{ version1.title }}
-                        <!--
+                        </template>
+                        <template v-else>
+                            <button
+                                @click="
+                                    version = version1.version;
+                                    selectedVersion = version1;
+                                    versionSelected();
+                                "
+                                style="width: 100%"
+                                class="btn btn-soft-primary ms-1 me-1"
+                            >
+                                Select version
+                            </button>
+                        </template>
+                        <h5 :id="version1.version" class="">
+                            {{ version1.title }}
+                            <!--
                         <i v-if="findVersionData(version1.version)" @click="deleteFile(findVersionData(version1.version), index)" class="mdi mdi-delete text-muted vertical-middle cursor-pointer"></i>
-                        -->
-                    </h5>
-                    <p class="text-muted d-block mb-2">{{ version1.description }}</p>
-                </div>
-            </template>
+                        --></h5>
+                        <p class="text-muted d-block mb-2">{{ version1.description }}</p>
+                    </div>
+                </template>
+            </div>
         </div>
     </div>
-</div>
 </template>
 
 <script>
-import VueCropper from "vue-cropperjs";
-import "cropperjs/dist/cropper.css";
-import uploadImage from "../inputs/upload-image.vue";
-import VueScrollTo from "vue-scrollto";
+import VueCropper from 'vue-cropperjs';
+import 'cropperjs/dist/cropper.css';
+import uploadImage from '../inputs/upload-image.vue';
+import VueScrollTo from 'vue-scrollto';
 
 export default {
     props: {
         prevalue: {},
-        imageKey: "",
+        imageKey: '',
         warning: false,
         imageVersion: null,
     },
@@ -229,18 +307,18 @@ export default {
             originalFile: null,
             uploadedVersions: [],
             imgSrc: null,
-            cropImg: "",
+            cropImg: '',
             data: null,
-            imgname: "",
-            alttext: "",
-            link: "",
+            imgname: '',
+            alttext: '',
+            link: '',
             id: null,
             jpg: false,
             cropBoxData: {},
             imgData: {},
             compression: 100,
             parrentImage: null,
-            version: "original",
+            version: 'original',
             width_ratio: null,
             height_ratio: null,
             versionData: null,
@@ -251,86 +329,87 @@ export default {
             width: null,
             extension: null,
             user: {},
-            versions: [{
+            versions: [
+                {
                     w: 470,
                     h: 470,
                     q: 60,
-                    fit: "crop",
-                    version: "instructors-testimonials",
-                    title: "Portrait image",
-                    description: "The half body image of instructors.",
+                    fit: 'crop',
+                    version: 'instructors-testimonials',
+                    title: 'Portrait image',
+                    description: 'The half body image of instructors.',
                 },
                 {
                     w: 542,
                     h: 291,
                     q: 60,
-                    fit: "crop",
-                    version: "event-card",
-                    title: "Home page boxes",
-                    description: "The image of courses on our home page.",
+                    fit: 'crop',
+                    version: 'event-card',
+                    title: 'Home page boxes',
+                    description: 'The image of courses on our home page.',
                 },
                 {
                     w: 470,
                     h: 470,
                     q: 60,
-                    fit: "crop",
-                    version: "users",
-                    title: "Testimonial image",
-                    description: "The image of a user in testimonials.",
+                    fit: 'crop',
+                    version: 'users',
+                    title: 'Testimonial image',
+                    description: 'The image of a user in testimonials.',
                 },
                 {
                     w: 2880,
                     h: 1248,
                     q: 60,
-                    fit: "crop",
-                    version: "header-image",
-                    title: "Top image",
-                    description: "The image on top of a page.",
+                    fit: 'crop',
+                    version: 'header-image',
+                    title: 'Top image',
+                    description: 'The image on top of a page.',
                 },
                 {
                     w: 90,
                     h: 90,
                     q: 60,
-                    fit: "crop",
-                    version: "instructors-small",
-                    title: "Lessons image",
-                    description: "The image of an instructor next to a lesson.",
+                    fit: 'crop',
+                    version: 'instructors-small',
+                    title: 'Lessons image',
+                    description: 'The image of an instructor next to a lesson.',
                 },
                 {
                     w: 300,
                     h: 300,
                     q: 60,
-                    fit: "crop",
-                    title: "Advertising image",
-                    version: "feed-image",
-                    description: "The image we send to dynamic ad creatives via feed.",
+                    fit: 'crop',
+                    title: 'Advertising image',
+                    version: 'feed-image',
+                    description: 'The image we send to dynamic ad creatives via feed.',
                 },
                 {
                     w: 1920,
                     h: 832,
                     q: 60,
-                    fit: "crop",
-                    version: "social-media-sharing",
-                    title: "Social media posts image",
-                    description: "The image visible on social media posts.",
+                    fit: 'crop',
+                    version: 'social-media-sharing',
+                    title: 'Social media posts image',
+                    description: 'The image visible on social media posts.',
                 },
                 {
                     w: 680,
                     h: 320,
                     q: 60,
-                    fit: "crop",
-                    version: "blog-content",
-                    title: "Blog top image",
-                    description: "The image on top of a blog post.",
+                    fit: 'crop',
+                    version: 'blog-content',
+                    title: 'Blog top image',
+                    description: 'The image on top of a blog post.',
                 },
                 {
                     w: 343,
                     h: 193,
                     q: 60,
-                    fit: "crop",
-                    version: "blog-featured",
-                    title: "Blog boxes",
-                    description: "The image of blog article on /blog.",
+                    fit: 'crop',
+                    version: 'blog-featured',
+                    title: 'Blog boxes',
+                    description: 'The image of blog article on /blog.',
                 },
             ],
         };
@@ -339,7 +418,7 @@ export default {
         if (this.prevalue) {
             this.setupPrevalue();
 
-            if (typeof FileReader === "function") {
+            if (typeof FileReader === 'function') {
                 const reader = new FileReader();
                 reader.onload = (event) => {
                     this.imgSrc = event.target.result;
@@ -352,7 +431,6 @@ export default {
                         this.getData();
                         this.getCropBoxData();
                         this.setCropBoxData();
-
                     });
                 };
 
@@ -366,7 +444,6 @@ export default {
                 if (this.version == 'original' || this.version == 'Original' || this.version == null) {
                     this.disable();
                 }
-
             }, 600);
         }
     },
@@ -401,7 +478,7 @@ export default {
             if (image == null) {
                 image = this.parrentImage;
             }
-            if (this.$parent.$parent.mode != null ) {
+            if (this.$parent.$parent.mode != null) {
                 this.$parent.$parent.updatedMediaImage(image);
                 // this.$modal.hide('gallery-modal');
                 this.$toast.success('New image selected!');
@@ -436,13 +513,13 @@ export default {
                     this.$nextTick(() => {
                         this.setCropBox(image_width, image_height);
                     });
-                }
+                };
                 img.src = this.parrentImage.url;
 
                 this.versionData = this.findVersionData(this.selectedVersion.version);
-                this.imgname = this.versionData ? this.versionData.name : "";
-                this.alttext = this.versionData ? this.versionData.alt_text : "";
-                this.link = this.versionData ? this.versionData.link : "";
+                this.imgname = this.versionData ? this.versionData.name : '';
+                this.alttext = this.versionData ? this.versionData.alt_text : '';
+                this.link = this.versionData ? this.versionData.link : '';
                 this.id = this.versionData ? this.versionData.id : null;
                 this.date = this.versionData ? this.versionData.created_at : '';
                 this.size = this.versionData ? this.versionData.size : '';
@@ -459,10 +536,10 @@ export default {
                 this.extension = this.parrentImage.extension ? this.parrentImage.extension : '';
             }
 
-            if (this.imgname == "") {
-                var tmp = this.parrentImage.name.split(".");
+            if (this.imgname == '') {
+                var tmp = this.parrentImage.name.split('.');
                 var extension = tmp[tmp.length - 1];
-                this.imgname = tmp[0] + "-" + this.version + "." + extension;
+                this.imgname = tmp[0] + '-' + this.version + '.' + extension;
             }
         },
         resetData() {
@@ -487,84 +564,86 @@ export default {
             this.$refs.cropper.setAspectRatio(this.selectedVersion.w / this.selectedVersion.h);
 
             if (this.versionData.crop_data) {
-                if (typeof this.versionData.crop_data === "string") {
+                if (typeof this.versionData.crop_data === 'string') {
                     this.versionData.crop_data = JSON.parse(this.versionData.crop_data);
                 }
                 this.$set(this.cropBoxData, 'width', this.versionData.crop_data.crop_width * this.width_ratio);
                 this.$set(this.cropBoxData, 'height', this.versionData.crop_data.crop_height * this.height_ratio);
-                this.$set(this.cropBoxData, 'left', (((container_width - canvas_width)/2) + (this.versionData.crop_data.width_offset * this.width_ratio)));
-                this.$set(this.cropBoxData, 'top', (((container_height - canvas_height)/2) + (this.versionData.crop_data.height_offset * this.width_ratio)));
+                this.$set(
+                    this.cropBoxData,
+                    'left',
+                    (container_width - canvas_width) / 2 + this.versionData.crop_data.width_offset * this.width_ratio
+                );
+                this.$set(
+                    this.cropBoxData,
+                    'top',
+                    (container_height - canvas_height) / 2 + this.versionData.crop_data.height_offset * this.width_ratio
+                );
             } else {
                 this.$set(this.cropBoxData, 'width', this.selectedVersion.w * this.width_ratio);
                 this.$set(this.cropBoxData, 'height', this.selectedVersion.h * this.height_ratio);
-                this.$set(this.cropBoxData, 'left', ((container_width - (this.selectedVersion.w * this.width_ratio))/2));
-                this.$set(this.cropBoxData, 'top', ((container_height - (this.selectedVersion.h * this.height_ratio))/2));
+                this.$set(this.cropBoxData, 'left', (container_width - this.selectedVersion.w * this.width_ratio) / 2);
+                this.$set(this.cropBoxData, 'top', (container_height - this.selectedVersion.h * this.height_ratio) / 2);
             }
 
             this.setCropBoxData();
-
         },
-        calculateRatio(num_1, num_2){
-            for(num=num_2; num>1; num--) {
-                if((num_1 % num) == 0 && (num_2 % num) == 0) {
-                    num_1=num_1/num;
-                    num_2=num_2/num;
+        calculateRatio(num_1, num_2) {
+            for (num = num_2; num > 1; num--) {
+                if (num_1 % num == 0 && num_2 % num == 0) {
+                    num_1 = num_1 / num;
+                    num_2 = num_2 / num;
                 }
             }
-            var ratio = num_1+":"+num_2;
+            var ratio = num_1 + ':' + num_2;
             return ratio;
         },
-        nameWithLang({
-            version,
-            description
-        }) {
-            return `${version} — [${description}]`
+        nameWithLang({ version, description }) {
+            return `${version} — [${description}]`;
         },
         upload(event) {
-            console.log('event from upload: ', event)
+            console.log('event from upload: ', event);
             this.getCropBoxData();
-            this.$refs.cropper.getCroppedCanvas({
-                width: this.cropBoxData.width,
-                height: this.cropBoxData.height,
-            }).toBlob(
-                (blob) => {
-                    // blob.version = this.version;
-                    this.$emit(event, blob);
-                },
-                "image/jpeg",
-                this.compression / 100
-            );
+            this.$refs.cropper
+                .getCroppedCanvas({
+                    width: this.cropBoxData.width,
+                    height: this.cropBoxData.height,
+                })
+                .toBlob(
+                    (blob) => {
+                        // blob.version = this.version;
+                        this.$emit(event, blob);
+                    },
+                    'image/jpeg',
+                    this.compression / 100
+                );
         },
         imageAdded($event) {
             this.imgSrc = $event.url;
         },
         flipX() {
             const dom = this.$refs.flipX;
-            let scale = dom.getAttribute("data-scale");
+            let scale = dom.getAttribute('data-scale');
             scale = scale ? -scale : -1;
             this.$refs.cropper.scaleX(scale);
-            dom.setAttribute("data-scale", scale);
+            dom.setAttribute('data-scale', scale);
         },
         flipY() {
             const dom = this.$refs.flipY;
-            let scale = dom.getAttribute("data-scale");
+            let scale = dom.getAttribute('data-scale');
             scale = scale ? -scale : -1;
             this.$refs.cropper.scaleY(scale);
-            dom.setAttribute("data-scale", scale);
+            dom.setAttribute('data-scale', scale);
         },
         getCropBoxData() {
-            this.cropBoxData = JSON.parse(
-                JSON.stringify(this.$refs.cropper.getCropBoxData())
-            );
+            this.cropBoxData = JSON.parse(JSON.stringify(this.$refs.cropper.getCropBoxData()));
 
-            this.cropBoxData.left = (this.$refs.cropper.getCropBoxData().left - this.$refs.cropper.getCanvasData().left);
-            this.cropBoxData.top = (this.$refs.cropper.getCropBoxData().top - this.$refs.cropper.getCanvasData().top);
+            this.cropBoxData.left = this.$refs.cropper.getCropBoxData().left - this.$refs.cropper.getCanvasData().left;
+            this.cropBoxData.top = this.$refs.cropper.getCropBoxData().top - this.$refs.cropper.getCanvasData().top;
         },
         getData() {
             this.data = JSON.stringify(this.$refs.cropper.getData(), null, 4);
-            this.imgData = JSON.parse(
-                JSON.stringify(this.$refs.cropper.getData(), null, 4)
-            );
+            this.imgData = JSON.parse(JSON.stringify(this.$refs.cropper.getData(), null, 4));
         },
         move(offsetX, offsetY) {
             this.$refs.cropper.move(offsetX, offsetY);
@@ -593,13 +672,13 @@ export default {
         },
         setImage(e) {
             const file = e.target.files[0];
-            if (file.type.indexOf("image/") === -1) {
-                alert("Please select an image file");
+            if (file.type.indexOf('image/') === -1) {
+                alert('Please select an image file');
                 return;
             }
             this.originalFile = file;
             this.imgname = this.originalFile ? this.originalFile.name.replace(/(\.[^.]*)$/, '') : '';
-            if (typeof FileReader === "function") {
+            if (typeof FileReader === 'function') {
                 const reader = new FileReader();
                 reader.onload = (event) => {
                     this.imgSrc = event.target.result;
@@ -612,7 +691,7 @@ export default {
                 };
                 reader.readAsDataURL(file);
             } else {
-                alert("Sorry, FileReader API not supported");
+                alert('Sorry, FileReader API not supported');
             }
         },
         showFileChooser() {
@@ -623,24 +702,24 @@ export default {
         },
         findVersion(version1) {
             var return_value = null;
-            this.versions.forEach(function(version2){
+            this.versions.forEach(function (version2) {
                 if (version2.version == version1) {
                     return_value = version2;
                 }
             });
             return return_value;
         },
-        findVersionData(version){
+        findVersionData(version) {
             var return_value = null;
             if (this.prevalue.subfiles) {
-                this.prevalue.subfiles.forEach(function(image){
+                this.prevalue.subfiles.forEach(function (image) {
                     if (image.version == version) {
                         return_value = image;
                     }
                 });
             }
-            if(this.prevalue.siblings) {
-                this.prevalue.siblings.forEach(function(image){
+            if (this.prevalue.siblings) {
+                this.prevalue.siblings.forEach(function (image) {
                     if (image.version == version) {
                         return_value = image;
                     }
@@ -655,14 +734,14 @@ export default {
         updateUploadedVersions() {
             this.uploadedVersions = this.parrentImage.subfiles;
         },
-        formatSize(size){
+        formatSize(size) {
             if (!size) {
                 return '';
             }
             if (size < 1000000) {
-                return parseFloat(size * 0.001).toFixed(1) + " kB";
+                return parseFloat(size * 0.001).toFixed(1) + ' kB';
             } else {
-                return parseFloat(size * 0.000001).toFixed(1) + " MB";
+                return parseFloat(size * 0.000001).toFixed(1) + ' MB';
             }
         },
         matchVersions(version) {
@@ -673,12 +752,12 @@ export default {
                 return false;
             }
             return true;
-        }
+        },
     },
     beforeDestroy() {
         this.imgSrc = null;
         this.$parent.$parent.selectedFile = null;
-    }
+    },
 };
 </script>
 
@@ -695,7 +774,7 @@ export default {
     align-items: center;
 }
 
-input[type="file"] {
+input[type='file'] {
     display: none;
 }
 
@@ -775,67 +854,67 @@ textarea {
 }
 
 .btn-soft-success {
-    color: #1abc9c!important;
-    background-color: rgba(26, 188, 156, 0.18)!important;
-    border-color: rgba(26, 188, 156, 0.12)!important;
+    color: #1abc9c !important;
+    background-color: rgba(26, 188, 156, 0.18) !important;
+    border-color: rgba(26, 188, 156, 0.12) !important;
 }
 .btn-soft-success:hover {
-    color: #fff!important;
-    background-color: #1abc9c!important;
+    color: #fff !important;
+    background-color: #1abc9c !important;
 }
 .btn-soft-primary {
-    color: #6658dd!important;
-    background-color: rgba(102, 88, 221, 0.18)!important;
-    border-color: rgba(102, 88, 221, 0.12)!important;
+    color: #6658dd !important;
+    background-color: rgba(102, 88, 221, 0.18) !important;
+    border-color: rgba(102, 88, 221, 0.12) !important;
 }
 .btn-soft-primary:hover {
-    color: #fff!important;
-    background-color: #6658dd!important;
+    color: #fff !important;
+    background-color: #6658dd !important;
 }
 .btn-soft-warning {
-    color: #f7b84b!important;
-    background-color: rgba(247, 184, 75, 0.18)!important;
-    border-color: rgba(247, 184, 75, 0.12)!important;
+    color: #f7b84b !important;
+    background-color: rgba(247, 184, 75, 0.18) !important;
+    border-color: rgba(247, 184, 75, 0.12) !important;
 }
 .btn-soft-warning:hover {
-    color: #fff!important;
-    background-color: #f7b84b!important;
+    color: #fff !important;
+    background-color: #f7b84b !important;
 }
 .btn-soft-info {
-    color: #4fc6e1!important;
-    background-color: rgba(79, 198, 225, 0.18)!important;
-    border-color: rgba(79, 198, 225, 0.12)!important;
+    color: #4fc6e1 !important;
+    background-color: rgba(79, 198, 225, 0.18) !important;
+    border-color: rgba(79, 198, 225, 0.12) !important;
 }
 .btn-soft-info:hover {
-    color: #fff!important;
-    background-color: #4fc6e1!important;
+    color: #fff !important;
+    background-color: #4fc6e1 !important;
 }
 .btn-soft-secondary {
-    color: #6c757d!important;
-    background-color: rgba(108, 117, 125, 0.18)!important;
-    border-color: rgba(108, 117, 125, 0.12)!important;
+    color: #6c757d !important;
+    background-color: rgba(108, 117, 125, 0.18) !important;
+    border-color: rgba(108, 117, 125, 0.12) !important;
 }
 .btn-soft-secondary:hover {
-    color: #fff!important;
-    background-color: #6c757d!important;
+    color: #fff !important;
+    background-color: #6c757d !important;
 }
 .btn-soft-danger {
-    color: #f1556c!important;
-    background-color: rgba(241, 85, 108, 0.18)!important;
-    border-color: rgba(241, 85, 108, 0.12)!important;
+    color: #f1556c !important;
+    background-color: rgba(241, 85, 108, 0.18) !important;
+    border-color: rgba(241, 85, 108, 0.12) !important;
 }
 .btn-soft-danger:hover {
-    color: #fff!important;
-    background-color: #f1556c!important;
+    color: #fff !important;
+    background-color: #f1556c !important;
 }
 
-.horizontal-scroll>.col-12>div {
+.horizontal-scroll > .col-12 > div {
     height: 210px;
     width: 200px;
     flex-shrink: 0;
     text-align: center;
 }
-.horizontal-scroll>.col-12 {
+.horizontal-scroll > .col-12 {
     flex-direction: row;
     display: flex;
     overflow-x: scroll;
@@ -851,7 +930,7 @@ textarea {
 .cropper-data {
     flex: 1;
 }
-.cropper-data>.col-8 {
+.cropper-data > .col-8 {
     text-align: center;
 }
 .image-preview {
@@ -863,7 +942,7 @@ textarea {
 .invisible-input {
     background: transparent;
     outline: none;
-    border: 0px!important;
+    border: 0px !important;
     box-shadow: none;
 }
 .cropper-image-name {
@@ -877,11 +956,11 @@ textarea {
 .image-data label {
     margin-bottom: 0px;
 }
-.image-data>.row>div {
+.image-data > .row > div {
     align-items: center;
     display: flex;
 }
-.image-data>.row {
+.image-data > .row {
     min-height: 35px;
 }
 </style>
