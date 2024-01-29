@@ -15,6 +15,7 @@
         "binshops/laravel-blog": "^9.3",
         "bugsnag/bugsnag-laravel": "^2.26",
         "coderjerk/bird-elephant": "^0.6.1",
+        "codexshaper/laravel-menu-builder": "^2.5",
         "doctrine/dbal": "^3.8",
         "dompdf/dompdf": "^1.2",
         "dymantic/laravel-instagram-feed": "^3.3",
