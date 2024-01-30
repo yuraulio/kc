@@ -1021,9 +1021,13 @@ if (!function_exists('get_image')) {
                 $version = false;
             } elseif (isset($media['ext']) && file_exists(public_path('/') . $image . '-' . $version . $media['ext'])) {
                 $image = $image . '-' . $version . $media['ext'];
-            } elseif ($image != '') {
-                // dd($image . $media['ext']);
-                $image = $image . $media['ext'];
+            }
+            else if($image!=''){
+                if(file_exists(public_path('/')   .str_replace('/originals', '',$image . $media['ext']))){
+                    $image = str_replace('/originals', '',$image . $media['ext']);
+                }else{
+                    $image = $image . $media['ext'];
+                }
             }
         }
 
