@@ -27,7 +27,7 @@ class CMS
 
         $data['testimonials'] = ($category != null) ? $category->toArray()['testimonials'] : [];
         shuffle($data['testimonials']);
-        $data['tickets'] = $event->ticket()->where('price', '>', 0)->where('active', true)->orderBy('subtitle', 'asc')->get()->toArray();
+        $data['tickets'] = $event->ticket()->where('price', '>', 0)->where('active', true)->orderBy('public_title', 'asc')->get()->toArray();
         $data['venues'] = $event->venues->toArray();
         $data['syllabus'] = $event->syllabus->toArray();
         $data['is_event_paid'] = 0;
