@@ -273,12 +273,7 @@ class UserController extends Controller
             return Datatables::of($data)
 
                     ->editColumn('image', function ($row) {
-                        $image = cdn('/theme/assets/images/icons/user-circle.svg');
-                        if ($row['image'] != null && $row['image']['name'] != '') {
-                            $image = cdn(get_image($row['image']));
-                        }
-
-                        return '<span class="avatar avatar-sm rounded-circle"><img src="' . $image . '" alt="' . $row['firstname'] . '" style="max-width: 100px; border-radius: 25px"></span>';
+                        return  \App\Helpers\UserHelper::getUserProfileImage($row, ['width' => 30, 'height' => 30, 'id' => 'user-img-' . $row['id'], 'class' => 'login-image']);
                     })
                     ->editColumn('firstname', function ($row) {
                         return '<a href=' . route('user.edit', $row->id) . '>' . $row->firstname . '</a>';
