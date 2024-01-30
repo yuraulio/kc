@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "56a7487f6d72c6ee5bc3b9be5408f28b",
+    "content-hash": "a7aa478a8543afe22d5caa02387ef780",
     "packages": [
         {
             "name": "alexusmai/laravel-file-manager",
@@ -809,21 +809,15 @@
         },
         {
             "name": "codexshaper/laravel-menu-builder",
-            "version": "v2.5",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/Codexshaper/laravel-menu-builder.git",
-                "reference": "0dd9152c9560db9da38cdb25845dc7708a419ff1"
-            },
+            "version": "dev-feat/90-update-libraries-to-use-php-8-2",
             "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/Codexshaper/laravel-menu-builder/zipball/0dd9152c9560db9da38cdb25845dc7708a419ff1",
-                "reference": "0dd9152c9560db9da38cdb25845dc7708a419ff1",
-                "shasum": ""
+                "type": "path",
+                "url": "./local_packages/laravel-menu-builder",
+                "reference": "b1c71e68332c787552c202cdfcd7fe4019cc7b44"
             },
             "require": {
-                "illuminate/support": "~5.5.40|~5.6.0|~5.7.0|~5.8.0|^6.0|^7.0|^8.0",
-                "php": "~5.4|~5.5|5.6|~7.0|~7.1|^7.2|^7.3"
+                "illuminate/support": "^8.0|^9.0",
+                "php": "^8.2|^8.3"
             },
             "type": "library",
             "extra": {
@@ -841,7 +835,6 @@
                     "CodexShaper\\Menu\\": "src/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -854,13 +847,13 @@
             "description": "Laravel Drag and Drop Menu Builder",
             "homepage": "https://github.com/Codexshaper/laravel-menu-builder",
             "keywords": [
-                "MenuBuilder",
                 "drag",
                 "draggable",
                 "drop",
                 "jquery",
                 "laravel",
                 "menu",
+                "menubuilder",
                 "nestable",
                 "vuejs2"
             ],
@@ -868,7 +861,10 @@
                 "issues": "https://github.com/Codexshaper/laravel-menu-builder/issues",
                 "source": "https://github.com/Codexshaper/laravel-menu-builder"
             },
-            "time": "2020-09-27T22:26:27+00:00"
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
         },
         {
             "name": "composer/ca-bundle",
@@ -15111,7 +15107,9 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {
+        "codexshaper/laravel-menu-builder": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {

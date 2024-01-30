@@ -1,0 +1,38 @@
+{
+    "name": "codexshaper/laravel-menu-builder",
+    "description": "Laravel Drag and Drop Menu Builder",
+    "keywords": ["laravel", "menu", "menubuilder", "nestable", "vuejs2", "jquery", "draggable", "drag", "drop"],
+    "license": "MIT",
+    "homepage": "https://github.com/Codexshaper/laravel-menu-builder",
+    "support": {
+        "issues": "https://github.com/Codexshaper/laravel-menu-builder/issues",
+        "source": "https://github.com/Codexshaper/laravel-menu-builder"
+    },
+    "authors": [
+        {
+            "name": "Md Abu Ahsan Basir",
+            "email": "maab.career@gmail.com"
+        }
+    ],
+    "type": "library",
+    "minimum-stability": "dev",
+    "require": {
+        "php": "^8.2|^8.3",
+        "illuminate/support": "^8.0|^9.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "CodexShaper\\Menu\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "CodexShaper\\Menu\\MenuServiceProvider"
+            ],
+            "aliases": {
+                "MenuBuilder": "CodexShaper\\Menu\\Facades\\Menu"
+            }
+        }
+    }
+}
