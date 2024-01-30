@@ -219,26 +219,33 @@ class CMS
             ->get();
 
         if ($isVideoList) {
-            $list = $data['openlist'];
-            $data['openlist'] = [];
-            foreach ($list as $openlist) {
-                if ($openlist->category->first() == null) {
-                    $index = 0;
-                } else {
-                    $index = $openlist->category->first()->priority ? $openlist->category->first()->priority : 0;
-                }
-                while (in_array($index, array_keys($data['openlist']))) {
-                    $index++;
-                }
-
-                $data['openlist'][$index] = $openlist;
-            }
-            ksort($data['openlist']);
+            $data['openlist'] = self::resortCoursesByPriority($data['openlist']);
+            $data['completedlist'] = self::resortCoursesByPriority($data['completedlist']);
         }
 
         $data['sumStudentsByCategories'] = getCategoriesWithSumStudents();
 
         return $data;
+    }
+
+    protected static function resortCoursesByPriority($list)
+    {
+        $newlist = [];
+        foreach ($list as $openlist) {
+            if ($openlist->category->first() == null) {
+                $index = 0;
+            } else {
+                $index = $openlist->category->first()->priority ? $openlist->category->first()->priority : 0;
+            }
+            while (in_array($index, array_keys($newlist))) {
+                $index++;
+            }
+
+            $newlist[$index] = $openlist;
+        }
+        ksort($newlist);
+
+        return $newlist;
     }
 
     public static function getHomepageData()
