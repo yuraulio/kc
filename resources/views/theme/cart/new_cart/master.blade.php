@@ -164,7 +164,7 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	<script src="{{cdn('new_cart/js/jquery.validate.min.js')}}" type="text/javascript" charset="utf-8" async defer></script>
 	<script src="{{cdn('new_cart/js/additional-methods.min.js')}}" type="text/javascript" charset="utf-8" async defer></script>
-	<script src="{{cdn('new_cart/js/validation.js')}}" type="text/javascript" charset="utf-8" async defer></script>
+	<script src="{{cdn('new_cart/js/validation.js?1')}}" type="text/javascript" charset="utf-8" async defer></script>
 	<script src="{{cdn(mix('new_cart/js/script_new_cart_ver.js'))}}" type="text/javascript" charset="utf-8" async defer></script>
     <script src="{{cdn('new_cart/js/cart.js')}}" type="text/javascript" charset="utf-8" async defer></script>
 

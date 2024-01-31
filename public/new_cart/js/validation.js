@@ -1,4 +1,4 @@
-$(function() {  
+$(function() {
 
     jQuery.validator.addMethod(
         "emailWithDot",
@@ -7,18 +7,18 @@ $(function() {
             return regex.test(String(value).toLowerCase());
         },
         "Enter valid email address."
-    ); 
+    );
 
     jQuery.validator.addMethod(
         "symbols",
         function(value, element) {
-            
+
             var numberRegex = /\d/;
             return !String(value).toLowerCase().match(/[-!$%^&*()_+|~=`{}\[\]:";'<>?,.\/]/) && !numberRegex.test(String(value).toLowerCase());
         },
         "Enter valid data. Special characters are not allowed."
     );
-    
+
     jQuery.validator.addMethod(
         "lettersonly",
         function(value, element) {
@@ -31,8 +31,8 @@ $(function() {
 
     jQuery.validator.addMethod(
         "lettersonlyEmail",
-        function(value, element) {       
-            var regex = /^[a-z][a-z0-9\s\(+=@!#$%^*)&._-]*$/;  
+        function(value, element) {
+            var regex = /^[a-z][a-z0-9\s\(+=@!#$%^*)&._-]*$/;
             return regex.test(String(value).toLowerCase()) || String(value).toLowerCase() == '' ;
         },
         "Please write everything in English."
@@ -40,12 +40,12 @@ $(function() {
 
     jQuery.validator.addMethod(
         "afm",
-        function(value, element) {       
-            var regex = /^[a-z][a-z0-9\s\(+=@!#$%^*)&._-]*$/;  
+        function(value, element) {
+            var regex = /^[a-z][a-z0-9\s\(+=@!#$%^*)&._-]*$/;
             var numberRegex = /\d/;
-            
+
             console.log(regex.test(String(value).toLowerCase()) || String(value).toLowerCase() == '' || numberRegex.test(String(value).toLowerCase()));
-            
+
             return regex.test(String(value).toLowerCase()) || String(value).toLowerCase() == '' || numberRegex.test(String(value).toLowerCase()) ;
         },
         "Please write everything in English."
@@ -55,11 +55,9 @@ $(function() {
     jQuery.validator.addMethod(
         "billemail",
         function(value, element) {
-            
             var regex = /^[a-z][a-z0-9\s\(+=@!#$%^*)&._-]*$/;
             var regex1 = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-            
             return (regex1.test(String(value).toLowerCase())) || String(value).toLowerCase() == '' ;
         },
         "Enter valid email address."
@@ -69,21 +67,38 @@ $(function() {
     jQuery.validator.addMethod(
         "billemailGreek",
         function(value, element) {
-            
             var regex = /^[a-z][a-z0-9\s\(+=@!#$%^*)&._-]*$/;
 
-            
             return (regex.test(String(value).toLowerCase())) || String(value).toLowerCase() == '' ;
         },
         "Please write everything in English."
     );
+
+    jQuery.validator.addMethod(
+        "unique",
+        function(value, element, params) {
+            var prefix = params;
+            var selector = jQuery.validator.format("[name!='{0}'][unique='{1}']", element.name, prefix);
+            var matches = [];
+            $(selector).each(function(index, item) {
+                if (value === $(item).val()) {
+                    matches.push(item);
+                }
+            });
+
+            return matches.length === 0;
+        },
+        "You must use unique email."
+    );
+    jQuery.validator.classRuleSettings.unique = {
+        unique: true
+    };
 
 
     let messages = {};
     let rules = {};
 
     $("input[name^='firstname[']").each(function(index) {
-        
 
         messages[`firstname[]`] = {}
         messages[`firstname[]`]['required'] = "Required field, please enter your first name."
@@ -155,12 +170,12 @@ $(function() {
         rules[`firstname[${index}]`]['required'] = true
         rules[`firstname[${index}]`]['symbols'] = true
         rules[`firstname[${index}]`]['lettersonly'] = true
-       
+
         rules[`lastname[]`] = {}
         rules[`lastname[]`]['required'] = true
         rules[`lastname[]`]['symbols'] = true
         rules[`lastname[]`]['lettersonly'] = true
-        
+
         rules[`lastname[${index}]`] = {}
         rules[`lastname[${index}]`]['required'] = true
         rules[`lastname[${index}]`]['symbols'] = true
@@ -175,6 +190,7 @@ $(function() {
         rules[`email[${index}]`]['required'] = true
         rules[`email[${index}]`]['lettersonlyEmail'] = true
         rules[`email[${index}]`]['emailWithDot'] = true
+        rules[`email[${index}]`]['unique'] = 'email'
 
         rules[`company[]`] = {}
         rules[`company[]`]['lettersonlyEmail'] = true
@@ -198,7 +214,7 @@ $(function() {
 
         rules[`student_type_id[]`] = {}
         rules[`student_type_id[]`]['required'] =true
- 
+
         rules[`student_type_id[${index}]`] = {}
         rules[`student_type_id[${index}]`]['required'] =true
 
@@ -229,7 +245,7 @@ $(function() {
     $("form[name='participant-form']").validate({
 
         rules: rules,
-        messages: messages,     
+        messages: messages,
 
         submitHandler: function(form) {
             form.submit();
@@ -244,7 +260,7 @@ $(function() {
             'billname': {
                 required: true,
                 lettersonlyEmail: true,
-                
+
             },
 
             'billafm': {
@@ -269,41 +285,41 @@ $(function() {
             'billemail':{
                 billemailGreek:true,
                 billemail:true
-                
+
 
             }
 
-         
+
         },
 
         messages: {
 
             'billname': {
-                required: "Required field, please enter your company name or your full name.",      
-                lettersonly: "Please write everything in English."         
+                required: "Required field, please enter your company name or your full name.",
+                lettersonly: "Please write everything in English."
             },
             'billafm': {
-                required: "This field is required, Enter VAT or tax ID.",      
+                required: "This field is required, Enter VAT or tax ID.",
             },
-               
+
             'billaddress': {
-                lettersonly: "Please write everything in English."  
+                lettersonly: "Please write everything in English."
             },
             'billcity': {
-                lettersonly: "Please write everything in English."  
-            }, 
+                lettersonly: "Please write everything in English."
+            },
             'billstate': {
-                lettersonly: "Please write everything in English."  
-            },  
-            
+                lettersonly: "Please write everything in English."
+            },
+
             'billcountry': {
-                lettersonly: "Please write everything in English."  
-            }, 
+                lettersonly: "Please write everything in English."
+            },
 
             'billemail': {
                 required: "This field is required, enter your email.",
             },
-           
+
         },
         submitHandler: function(form) {
             form.submit();

@@ -373,7 +373,7 @@ if (!function_exists('loadSendEmailsData')) {
                 $newmembersdetails[] = $thismember;
                 $fullname = $thismember['firstname'] . ' ' . $thismember['lastname'];
                 $firstname = $thismember['firstname'];
-                $emailsCollector[] = ['id' => null, 'email' => $thismember['email'], 'name' => $fullname, 'first' => $firstname, 'company' => $thismember['company'], 'first' => $firstname,
+                $emailsCollector[] = ['id' => null, 'email' => $thismember['email'], 'name' => $fullname, 'first' => $firstname, 'company' => $thismember['company'],
                     'mobile' => $thismember['mobile'], 'jobTitle' => $thismember['job_title'], 'createAccount'=>true,
                 ];
             }
@@ -1021,15 +1021,14 @@ if (!function_exists('get_image')) {
                 $version = false;
             } elseif (isset($media['ext']) && file_exists(public_path('/') . $image . '-' . $version . $media['ext'])) {
                 $image = $image . '-' . $version . $media['ext'];
-            }
-            else if($image!=''){
-                $check_image_url = str_replace('/originals','',$image).'-instructors-testimonials'.$media['ext'];
-                if(file_exists(public_path('/').$check_image_url)){
+            } elseif ($image != '') {
+                $check_image_url = str_replace('/originals', '', $image) . '-instructors-testimonials' . $media['ext'];
+                if (file_exists(public_path('/') . $check_image_url)) {
                     $image = $check_image_url;
-                }else{
-                    if(file_exists(public_path('/').str_replace('/originals','',$image).$media['ext'])){
-                        $image = str_replace('/originals', '',$image . $media['ext']);
-                    }else{
+                } else {
+                    if (file_exists(public_path('/') . str_replace('/originals', '', $image) . $media['ext'])) {
+                        $image = str_replace('/originals', '', $image . $media['ext']);
+                    } else {
                         $image = $image . $media['ext'];
                     }
                 }

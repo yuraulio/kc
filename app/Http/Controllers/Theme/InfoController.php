@@ -660,7 +660,7 @@ class InfoController extends Controller
                 $newmembersdetails[] = $thismember;
                 $fullname = $thismember['firstname'] . ' ' . $thismember['lastname'];
                 $firstname = $thismember['firstname'];
-                $emailsCollector[] = ['id' => null, 'email' => $thismember['email'], 'name' => $fullname, 'first' => $firstname, 'company' => $thismember['company'], 'first' => $firstname,
+                $emailsCollector[] = ['id' => null, 'email' => $thismember['email'], 'name' => $fullname, 'first' => $firstname, 'company' => $thismember['company'],
                     'mobile' => $thismember['mobile'], 'jobTitle' => $thismember['job_title'], 'createAccount'=>true,
                 ];
             }

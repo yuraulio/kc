@@ -90,7 +90,8 @@ class WebhookController extends BaseWebhookController
             //Log::info('HAS SEPA DATA IS NOW AVAILABLE');
 
             $paymentIntent = $payload['data']['object']['payment_intent'];
-            $transaction = Transaction::with('user', 'event')->where('payment_response', 'LIKE', '%' . $paymentIntent . '%')->first();
+            $transaction = Transaction::with('user', 'event')
+                ->where('payment_response', 'LIKE', '%' . $paymentIntent . '%')->first();
 
             //Log::info(var_export($transaction, true));
             $event = $transaction['event'][0];
@@ -114,7 +115,8 @@ class WebhookController extends BaseWebhookController
             sendAfterSuccessPaymentSepa($data['transaction'], $data['emailsCollector'], $data['extrainfo'], $data['helperdetails'], $data['elearning'], $data['eventslug'], $data['stripe'], $data['billingEmail'], $data['paymentMethod'], $sepa = true);
             //Log::info('HAS SEPA DATA IS NOW AVAILABLE end');
 
-            app('App\Http\Controllers\Theme\InfoController')->sendEmails($data['transaction'], $data['emailsCollector'], $data['extrainfo'], $data['helperdetails'], $data['elearning'], $data['eventslug'], $data['stripe'], $data['billingEmail'], $data['paymentMethod'], $sepa = true);
+            app('App\Http\Controllers\Theme\InfoController')
+                ->sendEmails($data['transaction'], $data['emailsCollector'], $data['extrainfo'], $data['helperdetails'], $data['elearning'], $data['eventslug'], $data['stripe'], $data['billingEmail'], $data['paymentMethod'], $sepa = true);
         }
     }
 
@@ -347,7 +349,7 @@ class WebhookController extends BaseWebhookController
                     $stripeSubscription = $user->subscriptions()->where('stripe_id', $payload['data']['object']['subscription'])->first()->asStripeSubscription();
                     $stripeSubscription->metadata = ['installments_paid' => $count, 'installments' => $totalinst];
                     $stripeSubscription->save();
-                } catch(\Exception $e) {
+                } catch (\Exception $e) {
                 }
 
                 //$invoices = $user->events->where('id',$eventId)->first()->invoicesByUser($user->id)->get();
@@ -360,7 +362,7 @@ class WebhookController extends BaseWebhookController
                     $billDet = json_decode($transaction['billing_details'], true);
                     $billingEmail = isset($billDet['billemail']) && $billDet['billemail'] != '' ? $billDet['billemail'] : false;
                     //$invoice = $invoices->first();
-                    [$pdf,$invoice] = $invoice->generateCronjobInvoice();
+                    [$pdf, $invoice] = $invoice->generateCronjobInvoice();
 
                     // add payment intent in payment_response
                     if ($payment_intent != null) {
@@ -686,7 +688,7 @@ class WebhookController extends BaseWebhookController
             $subscription->save();
 
             $user->subscriptionEvents()->wherePivot('event_id', $eventId)->detach();
-            $user->subscriptionEvents()->attach($eventId, ['subscription_id'=>$subscription->id, 'payment_method' => $paymentMethodId]);
+            $user->subscriptionEvents()->attach($eventId, ['subscription_id' => $subscription->id, 'payment_method' => $paymentMethodId]);
 
             $paymentMethod = PaymentMethod::find($paymentMethodId);
         } else {
@@ -785,7 +787,7 @@ class WebhookController extends BaseWebhookController
             }
 
             //$user->events()->updateExistingPivot($eventId,['expiration' => $ends_at]);
-            $user->events_for_user_list()->updateExistingPivot($eventId, ['expiration' => $ends_at, 'comment'=>null, 'payment_method'=>2]);
+            $user->events_for_user_list()->updateExistingPivot($eventId, ['expiration' => $ends_at, 'comment' => null, 'payment_method' => 2]);
 
             //$user->events()->where('event_id',$eventId)->first()->pivot->expiration  = date('Y-m-d', $ends_at);
             //$user->events()->where('event_id',$eventId)->first()->pivot->comment  = 'hello';
@@ -879,10 +881,10 @@ class WebhookController extends BaseWebhookController
                 $tr_price .= '.00';
             }
 
-            $data['tigran'] = ['OrderSuccess_id' => $transaction->id, 'OrderSuccess_total' => $tr_price, 'Price' =>$tr_price,
+            $data['tigran'] = ['OrderSuccess_id' => $transaction->id, 'OrderSuccess_total' => $tr_price, 'Price' => $tr_price,
                 'Product_id' => $subscription->event->first()->id, 'Product_SKU' => $subscription->event->first()->id,
                 'Product_SKU' => $subscription->event->first()->id, 'ProductCategory' => 'Video e-learning courses',
-                'ProductName' =>  $subscription->event->first()->title, 'Quantity' =>1, 'TicketType'=>'Subscription', 'Event_ID' => 'kc_' . time(),
+                'ProductName' => $subscription->event->first()->title, 'Quantity' => 1, 'TicketType' => 'Subscription', 'Event_ID' => 'kc_' . time(),
                 //'Encrypted_email' => hash('sha256', $user->email)
             ];
 

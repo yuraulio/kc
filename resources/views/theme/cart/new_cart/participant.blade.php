@@ -48,9 +48,11 @@
 								</div>
 								<div class="form-row">
 									<div class="col-md-12 mb-4">
-										<label class="input-label">My e-mail is  <span class="checkout-required-data">*</span></label>							<div class="email-wrap">
-												<input type="text" name="email[{{$i - 1}}]"  value="{{old('email',$email[$i-1])}}" class="form-control" required>
-										  	</div>
+										<label class="input-label">My e-mail is  <span class="checkout-required-data">*</span></label>
+                                        <div class="email-wrap">
+                                            <input type="text" name="email[{{$i - 1}}]"  value="{{old('email',$email[$i-1])}}"
+                                                   class="form-control" required unique="email" />
+                                        </div>
 									</div>
 								</div>
 								<div class="form-row">
@@ -336,7 +338,7 @@
 								<button id="btn" type="submit" class="btn registration checkout-button-secondary">Next: Billing <img src="{{cdn('new_cart/images/arrow-next-red.svg')}}" width="20px" height="12px" class="without-hover" alt=""> <img src="{{cdn('new_cart/images/arrow-next-red2.svg')}}" width="20px" height="12px" class="with-hover" alt=""> </button>
 							</div>
 						</form>
-					</div>
+					</div>fv
 				</div>
 				<!---------------- Participant form end--------------->
 
@@ -512,16 +514,6 @@ dataLayer.push({
             }
         });
     });
-
-
-    jQuery.validator.addMethod(
-        "emailWithDot",
-        function(value, element) {
-            var regex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-            return regex.test(String(value).toLowerCase());
-        },
-        "Enter valid email address."
-    );
 
 </script>
 @endpush
