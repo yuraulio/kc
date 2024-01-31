@@ -3642,18 +3642,21 @@ $show_popup = isset($uri['show_popup']) ? $uri['show_popup'] : 0;
                                                             <input class="hidden" name="body" value="{{ old('body',$event->body) }}"/>
                                                             <?php $data = $event->body?>
                                                             @include('event.editor.editor', [
-                                                            'toolbar' => 'insertfile image media link anchor codesample',
-                                                            'plugins' => 'link',
-                                                            'keyinput' => "input-body",
-                                                            'data'=> "$data",
-                                                            'inputname' => "'body'",
-                                                            'variables' => [
-                                                            'course_hours' => 'Course Hours',
-                                                            'launch_date' => 'Launch Date',
-                                                            'course_inclass_dates' => 'Inclass Dates',
-                                                            'course_inclass_days' => 'Inclass Days',
-                                                            'course_certificate_type' => 'Certificate Type',
-                                                            ],
+                                                                'toolbar' => 'insertfile image media link anchor codesample',
+                                                                'plugins' => 'link',
+                                                                'keyinput' => "input-body",
+                                                                'data'=> "$data",
+                                                                'inputname' => "'body'",
+                                                                'variables' => [
+                                                                    'course_hours' => 'Course Hours',
+                                                                    'launch_date' => 'Launch Date',
+                                                                    'course_inclass_dates' => 'Inclass Dates',
+                                                                    'course_inclass_days' => 'Inclass Days',
+                                                                    'course_certificate_type' => 'Certificate Type',
+                                                                    'course_language' => 'Language',
+                                                                    'course_delivery' => 'Delivery',
+                                                                    'course_elearning_expiration' => 'Elearning Expiration'
+                                                                ],
                                                             ])
                                                             <!-- anto's editor -->
 

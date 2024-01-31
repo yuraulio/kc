@@ -14,6 +14,9 @@ class PageVariables
         'course_inclass_dates',
         'course_inclass_days',
         'course_certificate_type',
+        'course_language',
+        'course_delivery',
+        'course_elearning_expiration',
     ];
 
     public static function parseText($text, $page, $dynamic_page_data = null)
@@ -60,8 +63,17 @@ class PageVariables
                     $text = str_replace('{{course_inclass_days}}', $dynamicPageData['info']['days']['text'], $text);
                 }
             }
-            if (!empty($dynamicPageData['info']['certificate']) && !empty($dynamicPageData['info']['type'])) {
+            if (!empty($dynamicPageData['info']['certificate']) && !empty($dynamicPageData['info']['certificate']['type'])) {
                 $text = str_replace('{{course_certificate_type}}', $dynamicPageData['info']['certificate']['type'], $text);
+            }
+            if (!empty($dynamicPageData['info']['language']) && !empty($dynamicPageData['info']['language']['text'])) {
+                $text = str_replace('{{course_language}}', $dynamicPageData['info']['language']['text'], $text);
+            }
+            if (!empty($dynamicPageData['info']['delivery_info']) && !empty($dynamicPageData['info']['delivery_info']['text'])) {
+                $text = str_replace('{{course_delivery}}', $dynamicPageData['info']['delivery_info']['text'], $text);
+            }
+            if (!empty($dynamicPageData['info']['elearning']) && !empty($dynamicPageData['info']['elearning']['text'])) {
+                $text = str_replace('{{course_elearning_expiration}}', $dynamicPageData['info']['elearning']['text'], $text);
             }
         }
         if (!empty($dynamicPageData['event']) && $dynamicPageData['event']->launch_date) {
