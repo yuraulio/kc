@@ -1,7 +1,6 @@
 ### Task Id
 
-[X-XXX](https://trello.com/c/nkMY8Fkf/X-XXX)
-<!-- Example: [X-XXX] -->
+[WEB-XXX]
 
 ### Context/Purpose
 
