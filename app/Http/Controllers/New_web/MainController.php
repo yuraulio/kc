@@ -169,7 +169,20 @@ class MainController extends Controller
         if (!$page) {
             // Cache 5 minutes
             cache()->remember($request->path(), 300, function () use ($request) {
-                Log::warning('Failed to find page in new routes. URL:' . $request->path() . ' Method:' . $request->method());
+                $urls_to_hide = [
+                    'xmlrpc.php',
+                    'wp-login.php',
+                    'mobile-check',
+                    'Q%20&amp%20A%20session',
+                    'M1.php',
+                    'fm1.php',
+                    'apple-touch-icon-120x120.png',
+                    'apple-touch-icon-120x120-precomposed.png',
+                    '.env'
+                ];
+                if(!in_array($request->path(), $urls_to_hide)){
+                    Log::warning('Failed to find page in new routes. URL:' . $request->path() . ' Method:' . $request->method());
+                }
 
                 return true;
             });
