@@ -178,7 +178,26 @@ class MainController extends Controller
                     'fm1.php',
                     'apple-touch-icon-120x120.png',
                     'apple-touch-icon-120x120-precomposed.png',
-                    '.env'
+                    '.env',
+                    'ZGF0YS1wcm',
+                    'xxx',
+                    'apple-touch-icon-precomposed.png',
+                    'apple-touch-icon.png',
+                    'login.php',
+                    'Pitching',
+                    'aaa9',
+                    'aab9',
+                    'ads.txt',
+                    'null',
+                    'epixeirogr-logo-greyscale.jpg',
+                    'app-ads.txt',
+                    '.env.dev',
+                    '.env.backup',
+                    '.env_sample',
+                    '.env_1',
+                    '.env.www',
+                    'wordpress',
+                    'tages.php',
                 ];
                 if(!in_array($request->path(), $urls_to_hide)){
                     Log::warning('Failed to find page in new routes. URL:' . $request->path() . ' Method:' . $request->method());
