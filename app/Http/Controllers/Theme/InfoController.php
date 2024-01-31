@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Theme;
 
 use App\Events\EmailSent;
 use App\Http\Controllers\Controller;
+use App\Jobs\EventSoldOut;
 use App\Model\Activation;
 use App\Model\CookiesSMS;
 use App\Model\Event;
@@ -129,6 +130,7 @@ class InfoController extends Controller
                     if ($globalSoldOut == 1) {
                         $thisevent->status = 2;
                         $thisevent->save();
+                        dispatch((new EventSoldOut($thisevent->id))->delay(now()->addSeconds(3)));
                     }
                 }
 
