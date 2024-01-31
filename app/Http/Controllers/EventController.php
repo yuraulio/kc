@@ -16,6 +16,7 @@ use App\Model\Delivery;
 use App\Model\Dropbox;
 use App\Model\Event;
 use App\Model\EventInfo;
+use App\Model\Exam;
 use App\Model\Instructor;
 use App\Model\Media;
 use App\Model\Partner;
@@ -522,6 +523,21 @@ class EventController extends Controller
         $dropbox = Dropbox::all()->toArray();
 
         $data['dropbox'] = json_encode($dropbox);
+
+        /** @var Exam $exam */
+        $exam = $event->exam()->orderBy('created_at', 'desc')->first();
+        $data['lastExam'] = [
+            'exam' => $exam,
+            'results' => [],
+            'averageHour' => 0,
+            'averageScore' => 0,
+        ];
+        if ($exam) {
+            $list = $exam->getResults();
+            $data['lastExam']['results'] = $list[0];
+            $data['lastExam']['averageHour'] = $list[1];
+            $data['lastExam']['averageScore'] = $list[2];
+        }
 
         return view('event.edit', $data);
     }
