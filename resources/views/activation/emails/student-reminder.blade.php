@@ -98,7 +98,7 @@
                                                                         <tr>
                                                                            <td align="left" valign="top" class="r15-i nl2go-default-textstyle" style="color: #3b3f44; font-family: arial,helvetica,sans-serif; font-size: 16px; line-height: 1.5; text-align: left;">
                                                                               <div>
-                                                                                 <p style="margin: 0;"><span style="font-family: Tahoma, geneva, sans-serif;">There was a request to renew your password for your Knowcrunch account. If you did not make this request, ignore this email. Otherwise, </span><a href='{{ URL::to("myaccount/reset/{$user->id}/{$code}") }}?utm_source=Knowcrunch.com&utm_medium=Registration_Email' target="_blank" style="color: #0092ff; text-decoration: underline;"><span style="font-family: Tahoma, geneva, sans-serif;">change your password</span></a><span style="font-family: Tahoma, geneva, sans-serif;"> &amp; enter your account safely.</span></p>
+                                                                                 <p style="margin: 0;"><span style="font-family: Tahoma, geneva, sans-serif;">There was a request to create or change your password for your Knowcrunch account. If you did not make this request, ignore this email. Otherwise, </span><a href='{{ URL::to("myaccount/reset/{$user->id}/{$code}") }}?utm_source=Knowcrunch.com&utm_medium=Registration_Email' target="_blank" style="color: #0092ff; text-decoration: underline;"><span style="font-family: Tahoma, geneva, sans-serif;">change your password</span></a><span style="font-family: Tahoma, geneva, sans-serif;"> &amp; enter your account safely.</span></p>
                                                                               </div>
                                                                            </td>
                                                                         </tr>
@@ -116,11 +116,11 @@
                                                                         </tr>
                                                                         <tr>
                                                                            <td height="19" align="center" valign="top" class="r17-i nl2go-default-textstyle" style="color: #3b3f44; font-family: arial,helvetica,sans-serif; font-size: 16px; line-height: 1.5;">
-                                                                       
+
                                                                               <a href='{{ URL::to("myaccount/reset/{$user->id}/{$code}") }}?utm_source=Knowcrunch.com&utm_medium=Registration_Email' class="r18-r default-button" target="_blank" data-btn="1" style="font-style: normal; font-weight: normal; line-height: 1.15; text-decoration: none; border-style: solid; display: inline-block; -webkit-text-size-adjust: none; mso-hide: all; background-color: #c8d151; border-color: #c8d151; border-radius: 4px; border-width: 0px; color: #ffffff; font-family: arial,helvetica,sans-serif; font-size: 16px; height: 19px; padding-bottom: 12px; padding-left: 5px; padding-right: 5px; padding-top: 12px; width: 280px;">
                                                                                  <p style="margin: 0;"><span style="color: #030000; font-family: Tahoma, geneva, sans-serif;"><strong>Make a new password</strong></span></p>
                                                                               </a>
-                                                                             
+
                                                                            </td>
                                                                         </tr>
                                                                         <tr class="nl2go-responsive-hide">
