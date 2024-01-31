@@ -1023,10 +1023,15 @@ if (!function_exists('get_image')) {
                 $image = $image . '-' . $version . $media['ext'];
             }
             else if($image!=''){
-                if(file_exists(public_path('/')   .str_replace('/originals', '',$image . $media['ext']))){
-                    $image = str_replace('/originals', '',$image . $media['ext']);
+                $check_image_url = str_replace('/originals','',$image).'-instructors-testimonials'.$media['ext'];
+                if(file_exists(public_path('/').$check_image_url)){
+                    $image = $check_image_url;
                 }else{
-                    $image = $image . $media['ext'];
+                    if(file_exists(public_path('/').str_replace('/originals','',$image).$media['ext'])){
+                        $image = str_replace('/originals', '',$image . $media['ext']);
+                    }else{
+                        $image = $image . $media['ext'];
+                    }
                 }
             }
         }
