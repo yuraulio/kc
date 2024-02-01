@@ -56,11 +56,11 @@ class PageVariables
                 $text = str_replace('{{course_hours}}', $dynamicPageData['info']['hours']['hour'], $text);
             }
             if (!empty($dynamicPageData['info']['inclass'])) {
-                if (!empty($dynamicPageData['info']['dates'])) {
-                    $text = str_replace('{{course_inclass_dates}}', $dynamicPageData['info']['dates']['text'], $text);
+                if (!empty($dynamicPageData['info']['inclass']['dates'])) {
+                    $text = str_replace('{{course_inclass_dates}}', $dynamicPageData['info']['inclass']['dates']['text'], $text);
                 }
-                if (!empty($dynamicPageData['info']['days'])) {
-                    $text = str_replace('{{course_inclass_days}}', $dynamicPageData['info']['days']['text'], $text);
+                if (!empty($dynamicPageData['info']['inclass']['days'])) {
+                    $text = str_replace('{{course_inclass_days}}', $dynamicPageData['info']['inclass']['days']['text'], $text);
                 }
             }
             if (!empty($dynamicPageData['info']['certificate']) && !empty($dynamicPageData['info']['certificate']['type'])) {
