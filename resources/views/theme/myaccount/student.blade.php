@@ -14,7 +14,7 @@
             <div class="hero-message">
                 <div class="account-infos">
                     <div class="account-thumb">
-                        {!! \App\Helpers\UserHelper::getUserProfileImage($user, ['width' => 20, 'height' => 20, 'id' => 'user-img-up' ]) !!}
+                        {!! \App\Helpers\UserHelper::getUserProfileImage($user, ['width' => 43, 'height' => 43, 'id' => 'user-img-up' ]) !!}
                     </div>
                     <div class="account-hero-info">
                         <h2>{{ $currentuser['firstname'] }} {{ $currentuser['lastname'] }}</h2>

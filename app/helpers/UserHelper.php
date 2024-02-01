@@ -52,7 +52,7 @@ class UserHelper
         if (!empty($user['email'])) {
             $image = md5(strtolower($user['email']));
 
-            $imageUrl = 'https://www.gravatar.com/avatar/' . $image . '?s=' . $options['width'] . '&d=' .
+            $imageUrl = 'https://www.gravatar.com/avatar/' . $image . '?s=' . ($options['width'] < 64 ? 64 : $options['width'] ) . '&d=' .
                 urlencode(cdn('/theme/assets/images/icons/user-circle-placeholder.png'));
 
             if ($returnImage) {
