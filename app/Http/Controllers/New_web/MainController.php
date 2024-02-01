@@ -169,40 +169,7 @@ class MainController extends Controller
         if (!$page) {
             // Cache 5 minutes
             cache()->remember($request->path(), 300, function () use ($request) {
-                $urls_to_hide = [
-                    'xmlrpc.php',
-                    'wp-login.php',
-                    'mobile-check',
-                    'Q%20&amp%20A%20session',
-                    'M1.php',
-                    'fm1.php',
-                    'apple-touch-icon-120x120.png',
-                    'apple-touch-icon-120x120-precomposed.png',
-                    '.env',
-                    'ZGF0YS1wcm',
-                    'xxx',
-                    'apple-touch-icon-precomposed.png',
-                    'apple-touch-icon.png',
-                    'login.php',
-                    'Pitching',
-                    'aaa9',
-                    'aab9',
-                    'ads.txt',
-                    'null',
-                    'epixeirogr-logo-greyscale.jpg',
-                    'app-ads.txt',
-                    '.env.dev',
-                    '.env.backup',
-                    '.env_sample',
-                    '.env_1',
-                    '.env.www',
-                    'wordpress',
-                    'tages.php',
-                ];
-                if(!in_array($request->path(), $urls_to_hide)){
-                    Log::warning('Failed to find page in new routes. URL:' . $request->path() . ' Method:' . $request->method());
-                }
-
+                Log::channel('daily_errors_not_existing_pages')->warning('Failed to find page in new routes. URL:' . $request->path() . ' Method:' . $request->method());
                 return true;
             });
 

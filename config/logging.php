@@ -58,6 +58,13 @@ return [
             'days' => 14,
         ],
 
+        'daily_errors_not_existing_pages' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/not_existing_pages/laravel.log'),
+            'level' => 'debug',
+            'days' => 14,
+        ],
+
         'slack' => [
             'driver' => 'slack',
             'url' => env('LOG_SLACK_WEBHOOK_URL'),
