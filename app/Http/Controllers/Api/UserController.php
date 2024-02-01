@@ -1116,6 +1116,10 @@ class UserController extends Controller
         );
 
         $user->createMedia();
+        if ($request->hasFile('photo')) {
+            (new MediaController)->uploadProfileImage($request, $user->image);
+        }
+
         $user->role()->attach($request->role_id);
         $user->statusAccount()
             ->create([
