@@ -72,8 +72,8 @@ class PageVariables
             if (!empty($dynamicPageData['info']['delivery_info']) && !empty($dynamicPageData['info']['delivery_info']['text'])) {
                 $text = str_replace('{{course_delivery}}', $dynamicPageData['info']['delivery_info']['text'], $text);
             }
-            if (!empty($dynamicPageData['info']['elearning']) && !empty($dynamicPageData['info']['elearning']['text'])) {
-                $text = str_replace('{{course_elearning_expiration}}', $dynamicPageData['info']['elearning']['text'], $text);
+            if (!empty($dynamicPageData['info']['elearning']) && !empty($dynamicPageData['info']['elearning']['expiration'])) {
+                $text = str_replace('{{course_elearning_expiration}}', $dynamicPageData['info']['elearning']['expiration'], $text);
             }
         }
         if (!empty($dynamicPageData['event']) && $dynamicPageData['event']->launch_date) {
