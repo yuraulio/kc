@@ -7,9 +7,8 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 	<title>Knowcrunch Billing</title>
 	@include('theme.layouts.favicons')
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-	{{--<link rel="stylesheet" type="text/css" href="{{cdn('new_cart/css/style.css')}}">--}}
-	<link href="{{ cdn(mix('new_cart/version/style_ver.css')) }}" rel="stylesheet" media="all" />
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" />
+	<link href="{{ cdn(mix('new_cart/css/new_cart.css')) }}" rel="stylesheet" media="all" />
 
 	<!-- Google Tag Manager -->
 	<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -20,14 +19,12 @@
 	</script>
 	<!-- End Google Tag Manager -->
 
-	{{--<script src="https://js.stripe.com/v3/"></script>--}}
-
 </head>
 <body>
 
 	<!-- Google Tag Manager (noscript) -->
 	<noscript>
-		<iframe src="https://www.googletagmanager.com/ns.html?id=GTM-ML7649C"height="0" width="0" style="display:none;visibility:hidden"></iframe>
+		<iframe src="https://www.googletagmanager.com/ns.html?id=GTM-ML7649C" height="0" width="0" style="display:none;visibility:hidden"></iframe>
 	</noscript>
 	<!-- End Google Tag Manager (noscript) -->
 
@@ -79,7 +76,7 @@
 
             </div>
 
-            </br>
+            <br/>
 
             <label> Password <span class="required">(*)</span></label><span data-id="password" class="icon"><img width="20" src="{{cdn('/theme/assets/images/icons/eye-password.svg')}}" alt="">Show</span>
             <div class="input-wrapper input-wrapper--text">
@@ -161,20 +158,15 @@
 		</div>
 	</footer>
 	<!---------------- footer end--------------->
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-	<script src="{{cdn('new_cart/js/jquery.validate.min.js')}}" type="text/javascript" charset="utf-8" async defer></script>
-	<script src="{{cdn('new_cart/js/additional-methods.min.js')}}" type="text/javascript" charset="utf-8" async defer></script>
-	<script src="{{cdn('new_cart/js/validation.js?1')}}" type="text/javascript" charset="utf-8" async defer></script>
-	<script src="{{cdn(mix('new_cart/js/script_new_cart_ver.js'))}}" type="text/javascript" charset="utf-8" async defer></script>
-    <script src="{{cdn('new_cart/js/cart.js')}}" type="text/javascript" charset="utf-8" async defer></script>
+  <script src="{{cdn(mix('js/new_cart_app.js'))}}" type="text/javascript" charset="utf-8"></script>
 
 	@if (!Auth::check())
 
 	<script>
 
-var routesObj = {
+  var routesObj = {
     baseUrl : '{{ URL::to("/") }}/'
-};
+  };
 
   $('.login-link').click(function(e) {
       //  e.preventDefault();
@@ -261,32 +253,28 @@ $(document).keyup(function(event){
 
 
 })
-		</script>
-
-
-
-
+</script>
 
 @endif
 
 
 @if(isset($tigran) && !env('APP_DEBUG'))
 
-      <script>
+<script>
 		$(document).ready(function(){
-         @foreach($tigran as $key => $ti)
+      @foreach($tigran as $key => $ti)
 			@if($key == 'price')
 				dataLayer.push({"{{$key}}": {{$ti}}})
 			@else
 				dataLayer.push({"{{$key}}": $.parseHTML("{{$ti}}")[0].data})
 			@endif
-         @endforeach
+      @endforeach
 		})
-      </script>
+</script>
 
-   @endif
+@endif
 
-   	<script>
+<script>
 
 		function alphabetizeList(listField) {
     		var sel = $(listField);
@@ -298,8 +286,7 @@ $(document).keyup(function(event){
     		sel.html('').append(opts_list);
     		sel.val(selected); // set cached selected value
 		}
-
-	</script>
+</script>
 
 
 <script>

@@ -303,7 +303,7 @@
 										<input type="text" name="jobtitle[{{$i - 1}}]" value="{{old('jobtitle',$job_title[$i - 1])}}" class="form-control" placeholder="E.g. Marketing specialist" aria-describedby="inputGroupPrepend3">
 									</div>
 								</div>
-                                @if($i>2)
+                                @if($i>1)
                                 <div class="remove-participant" data-participant-number="{{ $totalitems }}">
                                     <a href="javascript:void(0)">Remove participant <img src="{{cdn('new_cart/images/close-green.svg')}}" width="9px" height="10px"  class="without-hover">
                                         <img src="{{cdn('new_cart/images/close-green2.svg')}}" width="9px" height="10px" class="with-hover"></a>
@@ -338,7 +338,7 @@
 								<button id="btn" type="submit" class="btn registration checkout-button-secondary">Next: Billing <img src="{{cdn('new_cart/images/arrow-next-red.svg')}}" width="20px" height="12px" class="without-hover" alt=""> <img src="{{cdn('new_cart/images/arrow-next-red2.svg')}}" width="20px" height="12px" class="with-hover" alt=""> </button>
 							</div>
 						</form>
-					</div>fv
+					</div>
 				</div>
 				<!---------------- Participant form end--------------->
 
