@@ -20,6 +20,8 @@ use Bugsnag\BugsnagLaravel\Facades\Bugsnag;
 //Route::get('/', 'Auth\LoginController@showLoginForm')->name('welcome');
 
 Route::redirect('/e-learning-masterclass-in-facebook-instagram-advertising', '/e-learning-masterclass-in-meta-advertising', 301);
+Route::redirect('/masterclass-in-x-twitter-platform-ad-manager', '/masterclass-in-x-twitter-platform', 301);
+
 
 Auth::routes(['register' => false]);
 
