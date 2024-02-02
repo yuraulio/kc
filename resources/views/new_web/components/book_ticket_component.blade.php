@@ -171,3 +171,18 @@
         </section>
     @endif
 @endif
+
+@php
+$show_awards = false;
+if(isset($event)){
+    foreach($event->delivery as $delivery){
+        if($delivery->id == \App\Model\Delivery::CLASSROM_TRAINING || $delivery->id == \App\Model\Delivery::VIDEO_TRAINING || $delivery->id == \App\Model\Delivery::VIRTUAL_CLASS_TRAINING){
+            $show_awards = true;
+        }
+    }
+}
+@endphp
+
+@if($show_awards)
+<div class="background-blue_gradient"><div class="container-fluid"><div class="row"><div class="col-md-12"><img src="/uploads/icons/knowcrunch-awards_2.webp" alt="Knowcrunch awards" class="center"></div></div></div></div>
+@endif
