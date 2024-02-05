@@ -1349,7 +1349,8 @@ if (!function_exists('update_dropbox_api')) {
         } catch(\Exception $e) {
             $user = User::first();
             if ($user) {
-                $user->notify(new ErrorSlack('API Dropbox failed. Sometimes happens. Don\'t worry. Error message: ' . $e->getMessage()));
+                if(strpos($e->getMessage(), 'app is disabled') === false)
+                    $user->notify(new ErrorSlack('API Dropbox failed. Sometimes happens. Don\'t worry. Error message: ' . $e->getMessage()));
             }
         }
     }
