@@ -1,4 +1,5 @@
 @php
+    use App\Library\PageVariables;
     $hero = [];
     foreach ($column->template->inputs as $input){
         $hero[$input->key] = $input->value ?? "";
@@ -22,6 +23,8 @@
         $small = $hero['hero_small'] ?? null;
         $left = $hero['hero_left'] ?? null;
     }
+  $title = PageVariables::parseText($title, $page, $dynamic_page_data ?? null);
+  $subtitle = PageVariables::parseText($subtitle, $page, $dynamic_page_data ?? null);
 @endphp
 
 @if(!$column->template->dynamic && !$image)

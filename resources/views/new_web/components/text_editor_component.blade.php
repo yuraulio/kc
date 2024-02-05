@@ -35,11 +35,11 @@
 
 <div class="mt-5 mb-5 m-0 cms-rich-text-editor text-editor-blockquote {{ $page->slug == "about" ? " about-static-page " : "" }}">
     @if (isset($title) && !isset($dynamic_page_data['event']))
-        <h1 class="tab-title">{{$title}}</h1>
+        <h1 class="tab-title">{{ PageVariables::parseText($title, $page, $dynamic_page_data ?? null) }}</h1>
     @endif
     @if (isset($subtitle))
         <h2 style="font-size: 30px;">
-            {{ $subtitle }}@if (isset($company)), <a target="_blank" title="{{ $company }}" href="{{ $companyUrl }}"> {{ $company }}</a>@endif
+            {{ PageVariables::parseText($subtitle, $page, $dynamic_page_data ?? null) }}@if (isset($company)), <a target="_blank" title="{{ $company }}" href="{{ $companyUrl }}"> {{ $company }}</a>@endif
         </h2>
     @endif
     {!! $editor_text !!}

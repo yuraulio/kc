@@ -3,6 +3,8 @@
 namespace App\Model;
 
 use App\Events\EmailSent;
+use App\Library\CMS;
+use App\Library\PageVariables;
 use App\Model\Admin\Countdown;
 use App\Model\Benefit;
 use App\Model\Category;
@@ -67,12 +69,16 @@ class Event extends Model
     public function schemadata()
     {
         $schema = Cache::remember('schemadata-event-' . $this->id, 10, function () {
+            $dynamicPageData = $dynamicPageData = CMS::getEventData($this);
+            if (empty($dynamicPageData['info'])) {
+                $dynamicPageData['info'] = $this->event_info();
+            }
             $schema =
             [
                 '@context' => 'https://schema.org/',
                 '@type' => 'Course',
-                'name' => $this->title,
-                'description' => $this->summary,
+                'name' => PageVariables::parseText($this->title, null, $dynamicPageData),
+                'description' => PageVariables::parseText($this->summary, null, $dynamicPageData),
                 'provider' => [
                     '@type' => 'Organization',
                     'name' => 'Know Crunch',
