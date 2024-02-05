@@ -1,5 +1,3 @@
-@include('theme.layouts.menu_component_myaccount')
-
 <!doctype html>
 <html lang="en" class="no-js">
 <head>
@@ -134,8 +132,8 @@ _iub.csConfiguration = {"askConsentAtCookiePolicyUpdate":true,"consentOnContinue
 @yield('blog-custom-css')
 
 </head>
-
 <body>
+@include('theme.layouts.menu_component_myaccount')
 
 @if(!env('APP_DEBUG'))
 {{--<script id="CookieDeclaration" src="https://consent.cookiebot.com/7c5a111b-df1a-4a4a-bd31-fbee0d6593ba/cd.js" type="text/javascript" async></script>--}}
@@ -344,20 +342,16 @@ $(document).on('click', '.close-btn', function(e){
 
 
 
-@if(isset($tigran) && env('APP_DEBUG'))
-
-      <script>
-            $(document).ready(function(){
-                     @foreach($tigran as $key => $ti)
-                        dataLayer.push({"{{$key}}": $.parseHTML("{{$ti}}")[0].data})
-                     @endforeach
-            });
-      </script>
-
-   @endif
-
-
-   <script>
+  @if(isset($tigran) && env('APP_DEBUG'))
+    <script>
+        $(document).ready(function(){
+           @foreach($tigran as $key => $ti)
+              dataLayer.push({"{{$key}}": $.parseHTML("{{$ti}}")[0].data})
+           @endforeach
+        });
+    </script>
+  @endif
+  <script>
 
         let url = window.location.href.split('#')
         if(url[1]){
@@ -373,10 +367,8 @@ $(document).on('click', '.close-btn', function(e){
 
             $(target).addClass('active-tab');
             $this.addClass('active');
-
         }
-
-</script>
+  </script>
 
 <script>
 

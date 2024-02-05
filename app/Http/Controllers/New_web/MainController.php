@@ -170,6 +170,7 @@ class MainController extends Controller
             // Cache 5 minutes
             cache()->remember($request->path(), 300, function () use ($request) {
                 Log::channel('daily_errors_not_existing_pages')->warning('Failed to find page in new routes. URL:' . $request->path() . ' Method:' . $request->method());
+
                 return true;
             });
 

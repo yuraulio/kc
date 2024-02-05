@@ -1,7 +1,5 @@
 <?php //$header_menus = get_header();?>
-
 <!doctype html>
-
 <html lang="en" class="no-js">
     <head>
         <base href="{!! URL::to('/') !!}/" target="_self" />
@@ -54,9 +52,7 @@
         @yield('blog-custom-css')
 
     </head>
-
     <body style="display: none;">
-
         <!-- Load Facebook SDK for JavaScript -->
         @yield('fbchat')
 

@@ -2139,7 +2139,7 @@ class CartController extends Controller
                         'customer' => $dpuser->stripe_id,
                         'payment_method_types' => ['sepa_debit'],
                         'metadata' => ['integration_check' => 'sepa_debit_accept_a_payment'],
-                        'statement_descriptor' => 'KNOWCRUNCH INC'
+                        'statement_descriptor' => 'KNOWCRUNCH INC',
                     ]);
 
                     Log::info(json_encode($paymentIntent));
