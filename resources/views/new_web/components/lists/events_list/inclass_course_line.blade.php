@@ -6,6 +6,14 @@ $month = date('F Y', strtotime($pubdate));
 $isonCart = Cart::search(function ($cartItem, $rowId) use ($row) {
     return $cartItem->id === $row->id;
 });
+
+$dynamicPageData = [
+  'event' => $row,
+  'info' => $row->event_info(),
+];
+
+$title = \App\Library\PageVariables::parseText($row->title, null, $dynamicPageData);
+
 ?>
 
 @if($chmonth != $lastmonth1)
@@ -29,7 +37,7 @@ $isonCart = Cart::search(function ($cartItem, $rowId) use ($row) {
             $info = $row->event_info();
 
             ?>
-            <h2><a href="{{env('NEW_PAGES_LINK') . '/' .  $slug }}">{{ $row->title}}</a></h2>
+            <h2><a href="{{env('NEW_PAGES_LINK') . '/' .  $slug }}">{{ $title }}</a></h2>
             <div class="bottom">
 
                 @include('new_web.components.event_infos',['type' => 'inclass'])

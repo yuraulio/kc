@@ -1797,8 +1797,7 @@ class EventController extends Controller
 
     public function cloneEvent(Request $request, Event $event)
     {
-        try{
-
+        try {
             DB::beginTransaction();
 
             $newEvent = $event->replicate();
@@ -1822,8 +1821,8 @@ class EventController extends Controller
 
             $event->load('category', 'faqs', 'sectionVideos', 'type', 'delivery', 'ticket', 'city', 'sections', 'venues', 'syllabus', 'paymentMethod', 'dropbox', 'event_info1');
 
-            if($event->medias){
-                if($event->medias->mediable_type == 'App\Model\Event'){
+            if($event->medias) {
+                if($event->medias->mediable_type == 'App\Model\Event') {
                     $new_media = $event->medias->replicate();
                     $new_media->mediable_id = $newEvent->id;
                     $new_media->save();
@@ -1861,7 +1860,7 @@ class EventController extends Controller
                     $valuee->course_elearning_access = null;
                     $valuee->push();
                     $newEvent->{$relationName}()->save($valuee);
-                } else if($relationName != 'medias') {
+                } elseif($relationName != 'medias') {
                     $newEvent->{$relationName}()->sync($values);
                 }
             }
@@ -1890,16 +1889,13 @@ class EventController extends Controller
                 $ticket->pivot->save();
             }
 
-
             DB::commit();
+
             return redirect()->route('events.edit', $newEvent->id)->withStatus(__('Event successfully cloned.'));
-
-        }catch(\Exception $e){
-
+        } catch(\Exception $e) {
             DB::rollback();
 
-            return redirect()->back()->with('danger', 'Error cloning event: '. $e->getMessage());
-
+            return redirect()->back()->with('danger', 'Error cloning event: ' . $e->getMessage());
         }
     }
 

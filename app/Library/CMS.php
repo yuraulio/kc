@@ -4,6 +4,7 @@ namespace App\Library;
 
 use App\Model\Category;
 use App\Model\City;
+use App\Model\Event;
 use App\Model\Instructor;
 use App\Services\FBPixelService;
 use Illuminate\Support\Facades\Auth;
@@ -12,6 +13,10 @@ class CMS
 {
     private $fbp;
 
+    /**
+     * @param Event $event
+     * @return mixed
+     */
     public static function getEventData($event)
     {
         $fbp = new FBPixelService;
@@ -27,7 +32,11 @@ class CMS
 
         $data['testimonials'] = ($category != null) ? $category->toArray()['testimonials'] : [];
         shuffle($data['testimonials']);
-        $data['tickets'] = $event->ticket()->where('price', '>', 0)->where('active', true)->orderBy('public_title', 'asc')->get()->toArray();
+        $data['tickets'] = $event->ticket()
+            ->where('price', '>', 0)
+            ->where('active', true)
+            ->get()
+            ->toArray();
         $data['venues'] = $event->venues->toArray();
         $data['syllabus'] = $event->syllabus->toArray();
         $data['is_event_paid'] = 0;

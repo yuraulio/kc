@@ -12,9 +12,14 @@
 
             $info = $row->event_info();
 
+            $dynamicPageData = [
+              'event' => $row,
+              'info' => $info,
+            ];
+            $title = \App\Library\PageVariables::parseText($row->title, null, $dynamicPageData);
 
             ?>
-            <h2><a href="{{env('NEW_PAGES_LINK') . '/' . $slug }}">{{ $row->title}}</a></h2>
+            <h2><a href="{{env('NEW_PAGES_LINK') . '/' . $slug }}">{{ $title }}</a></h2>
             <div class="bottom">
 
                 @include('new_web.components.event_infos',['type' => 'elearning'])
