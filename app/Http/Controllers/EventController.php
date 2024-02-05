@@ -1797,85 +1797,110 @@ class EventController extends Controller
 
     public function cloneEvent(Request $request, Event $event)
     {
-        $newEvent = $event->replicate();
+        try{
 
-        $newEvent->published = false;
-        $newEvent->title = $newEvent->title . ' - clone';
-        $newEvent->release_date_files = null;
-        $newEvent->published_at = null;
-        $newEvent->index = false;
-        $newEvent->feed = false;
-        $newEvent->launch_date = null;
-        $newEvent->enroll = false;
-        $newEvent->push();
+            DB::beginTransaction();
 
-        $newEvent->createMedia();
-        $newEvent->createSlug($newEvent->title);
-        //$event->createMetas($request->all());
-        //dd($event->lessons);
-        $event->load('category', 'faqs', 'sectionVideos', 'type', 'delivery', 'ticket', 'city', 'sections', 'venues', 'syllabus', 'paymentMethod', 'dropbox', 'event_info1');
+            $newEvent = $event->replicate();
 
-        foreach ($event->getRelations() as $relationName => $values) {
-            if($relationName == 'summary1' || $relationName == 'benefits' || $relationName == 'sections') {
-                $newValues = [];
-                foreach($values as $value) {
-                    $valuee = $value->replicate();
-                    $valuee->push();
+            $newEvent->published = false;
+            $newEvent->title = $newEvent->title . ' (COPY)';
+            $newEvent->htmlTitle = $newEvent->htmlTitle . ' (COPY)';
+            $newEvent->xml_title = $newEvent->xml_title . ' (COPY)';
+            $newEvent->xml_description = $newEvent->xml_description . ' (COPY)';
+            $newEvent->xml_short_description = $newEvent->xml_short_description . ' (COPY)';
+            $newEvent->release_date_files = null;
+            $newEvent->published_at = null;
+            $newEvent->index = false;
+            $newEvent->feed = false;
+            $newEvent->launch_date = null;
+            $newEvent->enroll = false;
+            $newEvent->push();
 
-                    if($value->medias) {
-                        $valuee->medias()->delete();
-                        //$valuee->createMedia();
+            $newEvent->createMedia();
+            $newEvent->createSlug($newEvent->title);
 
-                        $medias = $value->medias->replicate();
-                        $medias->push();
-                        //dd($medias);
-                        $valuee->medias()->save($medias);
+            $event->load('category', 'faqs', 'sectionVideos', 'type', 'delivery', 'ticket', 'city', 'sections', 'venues', 'syllabus', 'paymentMethod', 'dropbox', 'event_info1');
+
+            if($event->medias){
+                if($event->medias->mediable_type == 'App\Model\Event'){
+                    $new_media = $event->medias->replicate();
+                    $new_media->mediable_id = $newEvent->id;
+                    $new_media->save();
+                }
+            }
+
+            foreach ($event->getRelations() as $relationName => $values) {
+                if($relationName == 'summary1' || $relationName == 'benefits' || $relationName == 'sections') {
+                    $newValues = [];
+                    foreach($values as $value) {
+                        $valuee = $value->replicate();
+                        $valuee->push();
+
+                        // if($value->medias) {
+                        //     $valuee->medias()->delete();
+                        //     //$valuee->createMedia();
+
+                        //     $medias = $value->medias->replicate();
+                        //     $medias->push();
+                        //     //dd($medias);
+                        //     $valuee->medias()->save($medias);
+                        // }
+
+                        $newValues[] = $valuee;
                     }
 
-                    $newValues[] = $valuee;
+                    $newValues = collect($newValues);
+                    $newEvent->{$relationName}()->detach();
+
+                    foreach($newValues as $value) {
+                        $newEvent->{$relationName}()->attach($value);
+                    }
+                } elseif($relationName == 'event_info1') {
+                    $valuee = $values->replicate();
+                    $valuee->course_elearning_access = null;
+                    $valuee->push();
+                    $newEvent->{$relationName}()->save($valuee);
+                } else if($relationName != 'medias') {
+                    $newEvent->{$relationName}()->sync($values);
                 }
-
-                $newValues = collect($newValues);
-                $newEvent->{$relationName}()->detach();
-
-                foreach($newValues as $value) {
-                    $newEvent->{$relationName}()->attach($value);
-                }
-            } elseif($relationName == 'event_info1') {
-                $valuee = $values->replicate();
-                $valuee->course_elearning_access = null;
-                $valuee->push();
-                $newEvent->{$relationName}()->save($valuee);
-            } else {
-                $newEvent->{$relationName}()->sync($values);
-            }
-        }
-
-        foreach($event->lessons as $lesson) {
-            if(!$lesson->pivot) {
-                continue;
             }
 
-            $newEvent->lessons()->attach($lesson->pivot->lesson_id, ['topic_id'=>$lesson->pivot->topic_id, 'date'=>$lesson->pivot->date,
-                'time_starts'=>$lesson->pivot->time_starts, 'time_ends'=>$lesson->pivot->time_ends, 'duration' => $lesson->pivot->duration,
-                'room' => $lesson->pivot->room, 'instructor_id' => $lesson->pivot->instructor_id,
-                'priority' => $lesson->pivot->priority, 'automate_mail'=>$lesson->pivot->automate_mail]);
+            foreach($event->lessons as $lesson) {
+                if(!$lesson->pivot) {
+                    continue;
+                }
+
+                $newEvent->lessons()->attach($lesson->pivot->lesson_id, ['topic_id'=>$lesson->pivot->topic_id, 'date'=>$lesson->pivot->date,
+                    'time_starts'=>$lesson->pivot->time_starts, 'time_ends'=>$lesson->pivot->time_ends, 'duration' => $lesson->pivot->duration,
+                    'room' => $lesson->pivot->room, 'instructor_id' => $lesson->pivot->instructor_id,
+                    'priority' => $lesson->pivot->priority, 'automate_mail'=>$lesson->pivot->automate_mail]);
+            }
+
+            //$newEvent->lessons()->save($event->lessons());
+
+            $newEvent->createMetas();
+            $newEvent->metable->meta_title = $event->metable ? $event->metable->meta_title . ' (COPY)' : '';
+            $newEvent->metable->meta_keywords = $event->metable ? $event->metable->meta_keywords : '';
+            $newEvent->metable->meta_description = $event->metable ? $event->metable->meta_description . ' (COPY)' : '';
+            $newEvent->metable->save();
+
+            foreach($newEvent->ticket as $ticket) {
+                $ticket->pivot->active = false;
+                $ticket->pivot->save();
+            }
+
+
+            DB::commit();
+            return redirect()->route('events.edit', $newEvent->id)->withStatus(__('Event successfully cloned.'));
+
+        }catch(\Exception $e){
+
+            DB::rollback();
+
+            return redirect()->back()->with('danger', 'Error cloning event: '. $e->getMessage());
+
         }
-
-        //$newEvent->lessons()->save($event->lessons());
-
-        $newEvent->createMetas();
-        $newEvent->metable->meta_title = $event->metable ? $event->metable->meta_title : '';
-        $newEvent->metable->meta_keywords = $event->metable ? $event->metable->meta_keywords : '';
-        $newEvent->metable->meta_description = $event->metable ? $event->metable->meta_description : '';
-        $newEvent->metable->save();
-
-        foreach($newEvent->ticket as $ticket) {
-            $ticket->pivot->active = false;
-            $ticket->pivot->save();
-        }
-
-        return redirect()->route('events.edit', $newEvent->id)->withStatus(__('Event successfully cloned.'));
     }
 
     public function deleteExplainerVideo(Request $request, $eventId, $explainerVideo)
