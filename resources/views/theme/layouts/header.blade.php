@@ -12,8 +12,7 @@
 						<a href="/cart" title="Cart"><img loading="lazy" class="resp-img"
                                               src="{{cdn('/theme/assets/images/icons/icon-cart.svg')}}" width="18"
                                               height="18" alt="Cart" title="Cart">
-							  <span class="cart-number">{{ Cart
-                  ::content() - > count() }}</span>
+							  <span class="cart-number">{{ Cart::content()->count() }}</span>
 						</a>
 					</span>
       endif--}}
@@ -23,8 +22,7 @@
 						  	<span class="hamburger-box">
 						    	<span class="hamburger-inner"></span>
 								@if($cartitems > 0)
-								<span class="cart-number">{{ Cart
-                  ::content() - > count() }}</span>
+								<span class="cart-number">{{ Cart::content()->count() }}</span>
 								@endif
 						  	</span>
       </button>
@@ -37,8 +35,7 @@
             <a href="/cart" title="Cart"><img loading="lazy" src="{{cdn('/theme/assets/images/icons/icon-cart.svg')}}"
                                               class="replace-with-svg resp-img" width="18" height="18" alt="Cart"
                                               title="Cart">
-              <span class="cart-number">{{ Cart
-                ::content() - > count() }}</span>
+              <span class="cart-number">{{ Cart::content()->count() }}</span>
             </a>
           </li>
           @endif
