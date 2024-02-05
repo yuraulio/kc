@@ -69,10 +69,10 @@ class Event extends Model
     public function schemadata()
     {
         $schema = Cache::remember('schemadata-event-' . $this->id, 10, function () {
-            $dynamicPageData = $dynamicPageData = CMS::getEventData($this);
-            if (empty($dynamicPageData['info'])) {
-                $dynamicPageData['info'] = $this->event_info();
-            }
+            $dynamicPageData = [
+                'event' => $this,
+                'info' => $this->event_info(),
+            ];
             $schema =
             [
                 '@context' => 'https://schema.org/',
