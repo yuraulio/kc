@@ -1161,7 +1161,19 @@
                                                 <div id="c-exams-inner{{$tab}}" class="in-tab-wrapper">
                                                     <div class="dynamic-courses-wrapper dynamic-courses-wrapper--style2">
                                                         <div class="bottom">
-                                                            <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Customer_Access.svg')}}" title="customer_Access_icon" alt="customer_Access_icon">Exams will activate in the end of your course.</div>
+                                                            <div class="location">
+                                                              <img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Customer_Access.svg')}}" title="customer_Access_icon" alt="customer_Access_icon">
+                                                              Exams will activate in the end of your course.
+                                                              @foreach($event['exams'] as $p)
+                                                                <?php $userExam = isset($user['hasExamResults'][$p->id][0]) ? $user['hasExamResults'][$p->id][0] : null ?>
+                                                                @if($userExam)
+                                                                <div>
+                                                                  <img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Level.svg')}}" alt="Customer_Access_icon" title="Customer_Access_icon">
+                                                                  Your latest exam result: <b>{{ $userExam->score }} %</b>
+                                                                </div>
+                                                                @endif
+                                                              @endforeach
+                                                            </div>
                                                             @foreach($event['exams'] as $p)
                                                             <div class="right">
                                                                 <!-- Feedback 8-12 changed -->
