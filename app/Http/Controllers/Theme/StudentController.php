@@ -121,7 +121,7 @@ class StudentController extends Controller
                 foreach($dataStudent['events'] as $evSt){
                     $thereIs = false;
                     foreach($data['events'] as $eventt){
-                        if($eventt->title == $evSt->title){
+                        if($eventt['title'] == $evSt['title']){
                             $thereIs = true;
                         }
                     }
