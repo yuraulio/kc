@@ -2,3 +2,4 @@ User-agent: *
 Disallow: /__preview/
 Disallow: /login/
 Disallow: /admin/
+Disallow: /mycertificate/
