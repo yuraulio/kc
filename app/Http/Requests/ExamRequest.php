@@ -54,6 +54,17 @@ class ExamRequest extends FormRequest
                 'required', 'min:3',
             ],
 
+            'repeat_exam' => [
+                'nullable', 'boolean',
+            ],
+            'repeat_exam_in' => [
+                'nullable', 'numeric', 'min:0', 'max:255',
+            ],
         ];
+    }
+
+    protected function prepareForValidation()
+    {
+        $this->merge(['repeat_exam' => $this->has('repeat_exam') ? 1 : 0]);
     }
 }

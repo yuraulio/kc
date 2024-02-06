@@ -161,6 +161,29 @@
                                </div>
 
                             </div>
+                           <div class="row">
+                             <div class="col-md-6">
+                               <label class="form-control-label" for="repeat_exam">{{ __('Repeat Exam') }}</label>
+                               <div class="form-group{{ $errors->has('repeat_exam') ? ' has-danger' : '' }}">
+                                 <label class="custom-toggle">
+                                   <input name="repeat_exam" type="checkbox" @if($exam->repeat_exam) checked @endif value="1" />
+                                   <span class="custom-toggle-slider rounded-circle" data-label-off="Off" data-label-on="On"></span>
+                                 </label>
+                                 @include('alerts.feedback', ['field' => 'repeat_exam'])
+                               </div>
+                             </div>
+                             <div class="col-md-6">
+                               <div class="form-group{{ $errors->has('repeat_exam_in') ? ' has-danger' : '' }}">
+                                 <label class="form-control-label" for="repeat_exam_in">{{ __('Exams can be taken again in') }}</label>
+                                 <input type="number" min="0" step="1" name="repeat_exam_in" id="repeat_exam_in"
+                                        class="form-control{{ $errors->has('repeat_exam_in') ? ' is-invalid' : '' }}"
+                                        placeholder="{{ __('Exams can be taken again in') }}"
+                                        value="{{ old('repeat_exam_in', $exam->repeat_exam_in) }}"
+                                 />
+                                 @include('alerts.feedback', ['field' => 'repeat_exam_in'])
+                               </div>
+                             </div>
+                           </div>
 
                             <div class="form-group{{ $errors->has('intro_text') ? ' has-danger' : '' }}">
                                <label class="form-control-label" for="input-intro_text">{{ __('Exam Introduction Text') }}</label>

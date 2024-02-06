@@ -2,8 +2,6 @@
 
 namespace App\Model;
 
-use App\Model\Exam;
-use App\Model\ExamResult;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -14,7 +12,24 @@ class Exam extends Model
     protected $table = 'exams';
 
     protected $fillable = [
-        'status', 'exam_name', 'duration', 'display_crt_answers', 'indicate_crt_incrt_answers', 'random_questions', 'random_answers', 'q_limit', 'intro_text', 'end_of_time_text', 'success_text', 'failure_text', 'creator_id', 'publish_time', 'examCheckbox', 'examMethods',
+        'status',
+        'exam_name',
+        'duration',
+        'display_crt_answers',
+        'indicate_crt_incrt_answers',
+        'random_questions',
+        'random_answers',
+        'q_limit',
+        'intro_text',
+        'end_of_time_text',
+        'success_text',
+        'failure_text',
+        'creator_id',
+        'publish_time',
+        'examCheckbox',
+        'examMethods',
+        'repeat_exam',
+        'repeat_exam_in',
     ];
 
     public function event()
@@ -44,7 +59,7 @@ class Exam extends Model
             $averageScore += $result['score'];
 
             $results[] = ['first_name' => $result['first_name'], 'last_name' => $result['last_name'], 'score' => $score, 'scorePerc' => $scorePerc,
-                'start_time'=>date('F j, Y | h:i:s a', strtotime($result['start_time'])),
+                'start_time' => date('F j, Y | h:i:s a', strtotime($result['start_time'])),
                 'end_time' => date('F j, Y | h:i:s a', strtotime($result['end_time'])), 'total_time' => $duration,
                 'exam_id' => $this->id, 'user_id' => $result['user_id']];
 
