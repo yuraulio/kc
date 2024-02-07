@@ -1,3 +1,7 @@
+<script>
+  console.log('Stating dataLayer process purchase');
+</script>
+
 @php
     $thankyouData = $_SESSION["thankyouData"] ?? null;
     $_SESSION["thankyouData"] = null;
