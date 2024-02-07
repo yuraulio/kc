@@ -12,7 +12,13 @@
     <script>
     $(document).ready(function(){
         @foreach($thankyouData['tigran'] as $key => $ti)
+          try{
             dataLayer.push({"{{$key}}": $.parseHTML("{{$ti}}")[0].data})
+          }catch(e){
+            console.log('We have an error here1');
+            console.log("{{$key}}");
+            console.log(e);
+          }
         @endforeach
     })
     </script>
@@ -24,7 +30,13 @@
     <script>
     $(document).ready(function(){
         @foreach($thankyouData['customer'] as $key => $ti)
-            dataLayer.push({"{{$key}}": $.parseHTML("{{$ti}}")[0].data})
+            try{
+              dataLayer.push({"{{$key}}": $.parseHTML("{{$ti}}")[0].data})
+            }catch(e){
+              console.log('We have an error here2');
+              console.log("{{$key}}");
+              console.log(e);
+            }
         @endforeach
     })
     </script>
@@ -41,14 +53,25 @@
 
         @foreach($thankyouData['ecommerce']['actionField'] as $key => $ti)
             @if($ti != '')
+              try{
                 actionField["{{$key}}"] =  $.parseHTML("{{$ti}}")[0].data
-
+              }catch(e){
+                console.log('We have an error here3');
+                console.log("{{$key}}");
+                console.log(e);
+              }
             @endif
         @endforeach
 
         @foreach($thankyouData['ecommerce']['products'] as $key => $ti)
             @if($ti != '')
+              try{
                 products["{{$key}}"] = $.parseHTML("{{$ti}}")[0].data
+              }catch(e){
+                console.log('We have an error here4');
+                console.log("{{$key}}");
+                console.log(e);
+              }
             @endif
         @endforeach
 
@@ -77,15 +100,26 @@
 
 
           @if(gettype($ti) != 'array' && $ti != '')
-              a["{{$key}}"] =  $.parseHTML("{{$ti}}")[0].data
-
+              try{
+                a["{{$key}}"] =  $.parseHTML("{{$ti}}")[0].data
+              }catch(e){
+                console.log('We have an error here5');
+                console.log("{{$key}}");
+                console.log(e);
+              }
           @endif
 
         @endforeach
 
         @foreach($thankyouData['new_event']['items'] as $key => $ti)
           @if($ti != '')
-              items["{{$key}}"] = $.parseHTML("{{$ti}}")[0].data
+              try{
+                items["{{$key}}"] = $.parseHTML("{{$ti}}")[0].data
+              }catch(e){
+                console.log('We have an error here6');
+                console.log("{{$key}}");
+                console.log(e);
+              }
           @endif
 
         @endforeach
@@ -101,7 +135,13 @@
       try{
         @foreach($thankyouData['customer'] as $key => $value)
           @if($ti != '')
-              data["{{$key}}"] = $.parseHTML("{{$value}}")[0].data
+              try{
+                data["{{$key}}"] = $.parseHTML("{{$value}}")[0].data
+              }catch(e){
+                console.log('We have an error here7');
+                console.log("{{$key}}");
+                console.log(e);
+              }
           @endif
         @endforeach
       }catch(e){
@@ -133,7 +173,13 @@
     <script>
         $(document).ready(function(){
             @foreach($tigran as $key => $ti)
+              try{
                 dataLayer.push({"{{$key}}": $.parseHTML("{{$ti}}")[0].data})
+              }catch(e){
+                console.log('We have an error here8');
+                console.log("{{$key}}");
+                console.log(e);
+              }
             @endforeach
         })
     </script>
@@ -148,13 +194,25 @@
 
             @foreach($ecommerce['actionField'] as $key => $ti)
                 @if($ti != '')
+                  try{
                     actionField["{{$key}}"] =  $.parseHTML("{{$ti}}")[0].data
+                  }catch(e){
+                    console.log('We have an error here9');
+                    console.log("{{$key}}");
+                    console.log(e);
+                  }
                 @endif
             @endforeach
 
             @foreach($ecommerce['products'] as $key => $ti)
                 @if($ti != '')
+                  try{
                     products["{{$key}}"] = $.parseHTML("{{$ti}}")[0].data
+                  }catch(e){
+                    console.log('We have an error here10');
+                    console.log("{{$key}}");
+                    console.log(e);
+                  }
                 @endif
             @endforeach
 
