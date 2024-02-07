@@ -88,8 +88,6 @@ export default {
     {
       name: 'created_at',
       title: 'Created at',
-      dataClass: 'text-center',
-      titleClass: 'text-center',
       sortField: 'created_at',
       dataClass: 'align-middle text-center',
       titleClass: 'text-center',
@@ -111,4 +109,5 @@ export default {
   filters: ['dynamic', 'visibility', 'template', 'type', 'category', 'subcategory'],
   perPage: 50,
   addInputs: collectiveInputs.concat([]),
+  sortableRows: window.location.pathname === '/pages_blog',
 };

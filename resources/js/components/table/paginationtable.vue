@@ -540,6 +540,7 @@ button.close.text-dark {
             transaction_from: this.transaction_from ? this.transaction_from : null,
             transaction_to: this.transaction_to ? this.transaction_to : null,
           }"
+          :sort-params="getSortParam"
         >
           <template slot="page_title" slot-scope="props">
             <a :href="'/page/' + props.rowData.id" target="_blank">{{ props.rowData.title }}</a>
@@ -693,6 +694,8 @@ import VuetablePagination from 'vuetable-2/src/components/VuetablePagination';
 import VuetablePaginationDropdown from 'vuetable-2/src/components/VuetablePaginationDropdown.vue';
 import VuetablePaginationInfo from 'vuetable-2/src/components/VuetablePaginationInfo.vue';
 import multidropdown from '.././inputs/multidropdown.vue';
+import Sortable from 'sortablejs';
+
 export default {
   mixins: [VuetablePaginationMixin],
   components: {
@@ -1104,6 +1107,18 @@ export default {
 
         this.hideLoader();
       }
+      if (this.config.sortableRows) {
+        const self = this;
+        new Sortable($(this.$refs.vuetable.$el).find('.vuetable-body')[0], {
+          animation: 150,
+          ghostClass: 'blue-background-class',
+          onEnd: function (/** Event */ evt) {
+            const list = Array.from(self.$refs.vuetable.$data.tableData);
+            list.splice(evt.newIndex, 0, list.splice(evt.oldIndex, 1)[0]);
+            self.saveOrder(list);
+          },
+        });
+      }
     },
     changePublish(data, model = 'pages') {
       let id = data.id;
@@ -1206,14 +1221,43 @@ export default {
         ' (Titles through categories and subcategories must be unique.)'
       );
     },
+    saveOrder(list) {
+      if (list.length < 2) {
+        return;
+      }
+      this.showLoader();
+      let priority = list.reduce((a, v) => (!v.priority || a < v.priority ? a : v.priority), 1);
+      const items = list.reduce((a, v) => ({ ...a, [v.id]: priority++ }), {});
+      const self = this;
+      self.$refs.vuetable.setData([]);
+
+      axios
+        .post(this.config.apiUrl + '/priorities', {
+          items,
+        })
+        .then((response) => {
+          this.hideLoader();
+          self.$refs.vuetable.reload();
+        })
+        .catch((error) => {
+          this.$toast.error('Filed to update priorities.');
+          this.hideLoader();
+        });
+    },
+    getSortParam(sortOrder) {
+      if (this.config.sortableRows) {
+        return 'priority|asc';
+      }
+      return sortOrder.map((item) => `${item.sortField}|${item.direction}`).join(',');
+    },
   },
   mounted() {
     this.perPage = this.config.perPage;
-    if (window.location.pathname == '/pages_blog') {
+    if (window.location.pathname === '/pages_blog') {
       this.getWidgets('blog');
-    } else if (window.location.pathname == '/pages') {
+    } else if (window.location.pathname === '/pages') {
       this.getWidgets('pages');
-    } else if (window.location.pathname == '/royalties') {
+    } else if (window.location.pathname === '/royalties') {
       this.getWidgets('royalties');
     }
   },

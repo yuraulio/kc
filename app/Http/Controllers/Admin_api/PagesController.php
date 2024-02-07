@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin_api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\AdminApi\PagesPriorityRequest;
 use App\Http\Requests\CreateAdminPageRequest;
 use App\Http\Requests\UpdateAdminPageRequest;
 use App\Http\Resources\PageResource;
@@ -18,6 +19,7 @@ use App\Model\Admin\Template;
 use App\Model\Event;
 use App\Model\Plan;
 use Exception;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -468,6 +470,30 @@ class PagesController extends Controller
 
             return response()->json(['message' => $e->getMessage()], 400);
         }
+    }
+
+    public function priorities(PagesPriorityRequest $request)
+    {
+        $items = $request->input('items');
+        if (empty($items)) {
+            return response()->json(['message' => 'success'], 200);
+        }
+        $ids = array_filter(array_keys($items), function ($v) {
+            return is_numeric($v);
+        });
+        if (empty($ids)) {
+            return response()->json(['message' => 'success'], 200);
+        }
+        Page::withoutGlobalScopes()
+            ->whereIn('id', $ids)
+            ->chunkById(100, function (Collection $list) use ($items) {
+                foreach ($list as $item) {
+                    /** @type Page $item */
+                    $item->priority = $items[$item->id];
+                    $item->save();
+                }
+            });
+        return response()->json(['message' => 'success'], 200);
     }
 
     public function widgets(Request $request)

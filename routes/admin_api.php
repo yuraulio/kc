@@ -77,6 +77,7 @@ Route::domain(config('app.prefix_new_admin') . config('app.app_domain'))->group(
 
         // pages
         Route::post('pages/deleteMultiple', [PagesController::class, 'deleteMultiple']);
+        Route::post('pages/priorities', [PagesController::class, 'priorities']);
         Route::post('pages/widgets', [PagesController::class, 'widgets']);
         Route::resource('pages', Admin_api\PagesController::class, ['as' => 'admin'])->only([
             'index', 'store', 'update', 'show', 'destroy',
