@@ -1169,7 +1169,7 @@
                                                                 @if($userExam)
                                                                 <div>
                                                                   <img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Level.svg')}}" alt="Customer_Access_icon" title="Customer_Access_icon">
-                                                                  Your latest exam result: <b>{{ $userExam->score }} %</b>
+                                                                  Your latest exam result: <b>{{ round($userExam->score * 100 / $userExam->total_score, 2) }} %</b>
                                                                 </div>
                                                                 @endif
                                                               @endforeach
@@ -1456,7 +1456,7 @@
                                             @if($userExam)
                                             <div>
                                                 <img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Level.svg')}}" alt="Customer_Access_icon" title="Customer_Access_icon">
-                                                Your latest exam result: <b>{{ $userExam->score }} %</b>
+                                                Your latest exam result: <b>{{ round($userExam->score * 100 / $userExam->total_score, 2) }} %</b>
                                             </div>
                                             @endif
                                             <div>
