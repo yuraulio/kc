@@ -76,6 +76,7 @@ class Kernel extends ConsoleKernel
         Commands\FixStatisicsPercent::class,
         Commands\INSERTLESSONS::class,
         Commands\ExportCertificateByEvent::class,
+        Commands\ClassroomTrainingCertification::class,
     ];
 
     protected function bootstrappers()

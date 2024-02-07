@@ -43,6 +43,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
+use Laravel\Cashier\Subscription;
 
 class Event extends Model
 {
@@ -295,6 +296,16 @@ class Event extends Model
         }
     }
 
+    public function finishClassDuration(){
+        $lastTimestamp = '2000-01-01 00:00';
+        foreach($this->lessons as $lesson){
+            if($lesson->pivot->time_ends > $lastTimestamp){
+                $lastTimestamp = $lesson->pivot->time_ends;
+            }
+        }
+        return $lastTimestamp;
+    }
+
     public function lessonsForApp()
     {
         return $this->belongsToMany(Lesson::class, 'event_topic_lesson_instructor')->where('status', true)
@@ -361,6 +372,13 @@ class Event extends Model
     public function delivery()
     {
         return $this->belongsToMany(Delivery::class, 'event_delivery', 'event_id', 'delivery_id');
+    }
+
+    public function scopeWithDelivery($query, $deliveryId)
+    {
+        return $query->whereHas('delivery', function ($query) use ($deliveryId) {
+            $query->where('delivery_id', $deliveryId);
+        });
     }
 
     public function ticket()

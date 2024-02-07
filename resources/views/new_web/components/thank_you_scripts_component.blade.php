@@ -68,33 +68,41 @@
       let a = {};
       let items = {};
 
-      @foreach($thankyouData['new_event'] as $key => $ti)
+      try{
+        @foreach($thankyouData['new_event'] as $key => $ti)
 
 
-         @if(gettype($ti) != 'array' && $ti != '')
-            a["{{$key}}"] =  $.parseHTML("{{$ti}}")[0].data
+          @if(gettype($ti) != 'array' && $ti != '')
+              a["{{$key}}"] =  $.parseHTML("{{$ti}}")[0].data
 
-         @endif
+          @endif
 
-      @endforeach
+        @endforeach
 
-      @foreach($thankyouData['new_event']['items'] as $key => $ti)
-         @if($ti != '')
-            items["{{$key}}"] = $.parseHTML("{{$ti}}")[0].data
-         @endif
+        @foreach($thankyouData['new_event']['items'] as $key => $ti)
+          @if($ti != '')
+              items["{{$key}}"] = $.parseHTML("{{$ti}}")[0].data
+          @endif
 
-      @endforeach
+        @endforeach
+      }catch(e){
+        console.log('There is an error adding items 1');
+      }
 
         let data = {
             'event': 'purchase',
             'items': [items]
         };
 
-      @foreach($thankyouData['customer'] as $key => $value)
-         @if($ti != '')
-            data["{{$key}}"] = $.parseHTML("{{$value}}")[0].data
-         @endif
-      @endforeach
+      try{
+        @foreach($thankyouData['customer'] as $key => $value)
+          @if($ti != '')
+              data["{{$key}}"] = $.parseHTML("{{$value}}")[0].data
+          @endif
+        @endforeach
+      }catch(e){
+        console.log('There is an error adding items 2');
+      }
 
 
         data = {...data,...a}

@@ -1,0 +1,99 @@
+<?php
+
+namespace App\Console\Commands;
+
+use App\Model\Certificate;
+use App\Model\Delivery;
+use App\Model\Event;
+use App\Model\User;
+use Carbon\Carbon;
+use Illuminate\Console\Command;
+
+class ClassroomTrainingCertification extends Command
+{
+    /**
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
+    protected $signature = 'classroomtraining:certificates';
+
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'Generate Classroom Training certificates';
+
+    /**
+     * Create a new command instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
+    /**
+     * Execute the console command.
+     *
+     * @return int
+     */
+    public function handle()
+    {
+
+        $classroomTrainingEvents = Event::withDelivery(Delivery::CLASSROM_TRAINING)->with('lessons')->get();
+
+        foreach($classroomTrainingEvents as $event){
+            $finishClassDuration = $event->finishClassDuration();
+            $diff = Carbon::now()->diff($finishClassDuration);
+            if($diff->d < 2 && $diff->y == 0 && $diff->m == 0){
+                dump($event->title);
+                // It finished less than two days ago, we can create certificates.
+                foreach($event->users as $user){
+                    if (!$event->userHasCertificate($user)->first()) {
+
+                        $view = 'admin.certificates.new_kc_certificate';
+                        $template = 'new_kc_certificate';
+                        $template_failed = 'new_kc_certificate';
+
+                        $successMessage = (isset($event->event_info()['certificate']['has_certificate_exam']) && $event->event_info()['certificate']['has_certificate_exam'] && isset($event->event_info()['certificate']['messages']['success'])) ? $event->event_info()['certificate']['messages']['success'] : $event->title;
+                        $failureMessage = isset($event->event_info()['certificate']['messages']['completion']) ? strip_tags($event->event_info()['certificate']['messages']['completion']) : '';
+                        $certificateEventTitle = $event->title;
+
+                        if (!($cert = $event->userHasCertificate($user->id)->first())) {
+                            dump('Creating certificate');
+                            $date = date('Y');
+                            $cert = new Certificate;
+                            $cert->success = true;
+                            $cert->firstname = $user->firstname;
+                            $cert->lastname = $user->lastname;
+                            $cert->certificate_title = $successMessage;
+                            $cert->credential = get_certifation_crendetial();
+                            $createDate = strtotime(date('Y-m-d'));
+                            $cert->create_date = $createDate;
+                            $cert->expiration_date = strtotime(date('Y-m-d', strtotime('+24 months', strtotime(date('Y-m-d')))));
+                            $cert->certification_date = date('F') . ' ' . date('Y');
+                            $cert->template = $template;
+                            $cert->save();
+
+                            $cert->event()->save($event);
+                            $cert->user()->save($user);
+                        } else {
+                            // $cert->certificate_title = $cert->success ? $successMessage : $failureMessage;
+                            // $cert->template = $cert->success ? $template : $template_failed;
+                            // $cert->save();
+                            dump('Already have certificate');
+                        }
+
+                    }else{
+                        dump('Already have certificate');
+                    }
+                }
+            }
+        }
+
+        return 0;
+    }
+}
