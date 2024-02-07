@@ -25,6 +25,7 @@ use App\Notifications\SendTopicAutomateMail;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Image;
@@ -590,7 +591,12 @@ class StudentController extends Controller
                 $expiration_event = $event->pivot['expiration'];
                 $expiration_event = strtotime($expiration_event);
                 $data['events'][$event->id]['exams'] = $event->getExams();
-                $data['events'][$event->id]['certs'] = isset($event['certificates']) && $event['certificates'] ? $event['certificates'] : [];
+
+                $certificates = $event->userHasCertificate($user->id);
+                $data['events'][$event->id]['certs'] = isset($certificates) && $certificates ? $certificates : [];
+
+                // $event->refresh();
+                // $data['events'][$event->id]['certs'] = isset($event['certificates']) && $event['certificates'] ? $event['certificates'] : [];
                 $data['events'][$event->id]['view_tpl'] = $event['view_tpl'];
                 $data['events'][$event->id]['category'] = $event['category'];
                 //$data['events'][$event->id]['summary1'] = $event['summary1'];
