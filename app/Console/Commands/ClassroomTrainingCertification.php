@@ -43,14 +43,16 @@ class ClassroomTrainingCertification extends Command
      */
     public function handle()
     {
+        $report = [];
+
         $classroomTrainingEvents = Event::withDelivery(Delivery::CLASSROM_TRAINING)->with('lessons')->get();
 
         foreach ($classroomTrainingEvents as $event) {
             $finishClassDuration = $event->finishClassDuration();
             $diff = Carbon::now()->diff($finishClassDuration);
-
             if ($diff->d < 2 && $diff->y == 0 && $diff->m == 0) {
-                dump($event->title);
+
+                $report_users = [];
                 // It finished less than two days ago, we can create certificates.
                 foreach ($event->users as $user) {
                     if (!$event->userHasCertificate($user)->first()) {
