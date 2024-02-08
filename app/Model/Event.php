@@ -296,13 +296,15 @@ class Event extends Model
         }
     }
 
-    public function finishClassDuration(){
+    public function finishClassDuration()
+    {
         $lastTimestamp = '2000-01-01 00:00';
-        foreach($this->lessons as $lesson){
-            if($lesson->pivot->time_ends > $lastTimestamp){
+        foreach ($this->lessons as $lesson) {
+            if ($lesson->pivot->time_ends > $lastTimestamp) {
                 $lastTimestamp = $lesson->pivot->time_ends;
             }
         }
+
         return $lastTimestamp;
     }
 

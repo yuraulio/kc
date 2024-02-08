@@ -118,15 +118,15 @@ class StudentController extends Controller
         if ($instructor) {
             $data = $this->instructorEvents();
             $dataStudent = $this->studentsEvent();
-            if(isset($dataStudent['events'])){
-                foreach($dataStudent['events'] as $evSt){
+            if (isset($dataStudent['events'])) {
+                foreach ($dataStudent['events'] as $evSt) {
                     $thereIs = false;
-                    foreach($data['events'] as $eventt){
-                        if($eventt['title'] == $evSt['title']){
+                    foreach ($data['events'] as $eventt) {
+                        if ($eventt['title'] == $evSt['title']) {
                             $thereIs = true;
                         }
                     }
-                    if(!$thereIs){
+                    if (!$thereIs) {
                         $data['events'][] = $evSt;
                     }
                 }

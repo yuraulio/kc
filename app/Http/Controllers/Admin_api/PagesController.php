@@ -114,6 +114,14 @@ class PagesController extends Controller
             $page->type = (gettype($request->type) == 'string') ? $request->type : $request->type['title'];
             $page->type_slug = Str::slug((gettype($request->type) == 'string') ? $request->type : $request->type['title'], '-');
             $page->uuid = Uuid::uuid4();
+
+            if ($page->type_slug === 'blog') {
+                $priority = Page::where('type_slug', $page->type_slug)
+                    ->orderBy('priority', 'desc')
+                    ->value('priority');
+                $page->priority = $priority ? $priority + 1 : 1;
+            }
+
             $page->save();
 
             if ($request->slug) {
@@ -488,11 +496,12 @@ class PagesController extends Controller
             ->whereIn('id', $ids)
             ->chunkById(100, function (Collection $list) use ($items) {
                 foreach ($list as $item) {
-                    /** @type Page $item */
+                    /* @type Page $item */
                     $item->priority = $items[$item->id];
                     $item->save();
                 }
             });
+
         return response()->json(['message' => 'success'], 200);
     }
 
