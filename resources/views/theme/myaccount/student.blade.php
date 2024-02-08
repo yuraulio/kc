@@ -1162,8 +1162,21 @@
                                                     <div class="dynamic-courses-wrapper dynamic-courses-wrapper--style2">
                                                         <div class="bottom">
                                                             <div class="location">
-                                                              <img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Customer_Access.svg')}}" title="customer_Access_icon" alt="customer_Access_icon">
-                                                              Exams will activate in the end of your course.
+                                                              @php
+                                                                $isExamStart = false;
+                                                                foreach($event['exams'] as $p) {
+                                                                  $userExam = isset($user['hasExamResults'][$p->id][0]) ? $user['hasExamResults'][$p->id][0] : null;
+                                                                  if ($userExam) {
+                                                                    $isExamStart = true;
+                                                                  } elseif($p->islive == 1) {
+                                                                    $isExamStart = true;
+                                                                  }
+                                                                }
+                                                              @endphp
+                                                              @if(!$isExamStart)
+                                                                <img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Customer_Access.svg')}}" title="customer_Access_icon" alt="customer_Access_icon">
+                                                                Exams will activate in the end of your course.
+                                                              @endif
                                                               @foreach($event['exams'] as $p)
                                                                 <?php $userExam = isset($user['hasExamResults'][$p->id][0]) ? $user['hasExamResults'][$p->id][0] : null ?>
                                                                 @if($userExam)
