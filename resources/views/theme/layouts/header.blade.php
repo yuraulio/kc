@@ -47,10 +47,7 @@
               'user-img-up', 'class' => 'login-image' ]) !!}
             </a>
             <div class="account-submenu">
-              <ul>
-                <li class="account-menu"><a href="/myaccount">Account</a></li>
-                <li><a href="{{ route('logout') }}">Sign Out</a></li>
-              </ul>
+              @yield('account_menu')
             </div>
 
           </li>
