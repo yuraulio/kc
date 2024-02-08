@@ -43,25 +43,14 @@ class ClassroomTrainingCertification extends Command
      */
     public function handle()
     {
-<<<<<<< Updated upstream
-=======
-
-        $report = [];
-
->>>>>>> Stashed changes
         $classroomTrainingEvents = Event::withDelivery(Delivery::CLASSROM_TRAINING)->with('lessons')->get();
 
         foreach ($classroomTrainingEvents as $event) {
             $finishClassDuration = $event->finishClassDuration();
             $diff = Carbon::now()->diff($finishClassDuration);
-<<<<<<< Updated upstream
+
             if ($diff->d < 2 && $diff->y == 0 && $diff->m == 0) {
                 dump($event->title);
-=======
-            if($diff->d < 2 && $diff->y == 0 && $diff->m == 0){
-
-                $report_users = [];
->>>>>>> Stashed changes
                 // It finished less than two days ago, we can create certificates.
                 foreach ($event->users as $user) {
                     if (!$event->userHasCertificate($user)->first()) {
@@ -97,11 +86,6 @@ class ClassroomTrainingCertification extends Command
                             $cert->event()->save($event);
                             $cert->user()->save($user);
                         }
-<<<<<<< Updated upstream
-                    } else {
-                        dump('Already have certificate');
-=======
->>>>>>> Stashed changes
                     }
                 }
 
