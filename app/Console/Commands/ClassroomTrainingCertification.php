@@ -63,7 +63,7 @@ class ClassroomTrainingCertification extends Command
 
                         $successMessage = (isset($event->event_info()['certificate']['has_certificate_exam']) && $event->event_info()['certificate']['has_certificate_exam'] && isset($event->event_info()['certificate']['messages']['success'])) ? $event->event_info()['certificate']['messages']['success'] : $event->title;
                         $failureMessage = isset($event->event_info()['certificate']['messages']['completion']) ? strip_tags($event->event_info()['certificate']['messages']['completion']) : '';
-                        $certificateEventTitle = $event->title;
+                        $certificateEventTitle = (isset($event->event_info()['certificate']['has_certificate_exam']) && $event->event_info()['certificate']['has_certificate_exam'] && isset($event->event_info()['certificate']['messages']['completion'])) ? $event->event_info()['certificate']['messages']['completion'] : $event->title;
 
                         if (!($cert = $event->userHasCertificate($user->id)->first())) {
 
@@ -77,7 +77,7 @@ class ClassroomTrainingCertification extends Command
                             $cert->success = true;
                             $cert->firstname = $user->firstname;
                             $cert->lastname = $user->lastname;
-                            $cert->certificate_title = $successMessage;
+                            $cert->certificate_title = $certificateEventTitle;
                             $cert->credential = get_certifation_crendetial();
                             $createDate = strtotime(date('Y-m-d'));
                             $cert->create_date = $createDate;
