@@ -255,6 +255,7 @@ class CertificateController extends Controller
         return response()->json([
             'success' => true,
             'path' => 'mycertificateview/' . $name . '.jpg',
+            'certificate' => $certificate
 
         ]);
 
@@ -472,5 +473,61 @@ class CertificateController extends Controller
         $og_image = env('MIX_APP_URL') . '/cert/' . $og_image[0] . '_og_version.jpg';
 
         return view('exams.results_view', compact('img', 'title', 'og_image'));
+    }
+
+    public function share_facebook($certificate, $image)
+    {
+        $certId = $certificate;
+
+        $certificate = base64_decode($certificate);
+
+        //Demo line (Remove after Test)
+        // $certificate = explode('--',$certificate);
+        // dd($certificate);
+        //End demo line
+
+        $certificate = explode('--', $certificate)[1];
+
+        // $timestamp = strtotime('now');
+        $data = $this->loadCertificateData($certificate);
+        // $fn = $data['certificate']->firstname . '_' . $data['certificate']->lastname . '_' . $timestamp . '.pdf';
+
+        // $name = base64_encode($data['certificate']->firstname . '-' . $data['certificate']->lastname . ' - ' . Str::slug($data['certificate']['event'][0]['title']));
+        // $newFile = 'cert/' . $name . '.jpg';
+        // $saveImagePath = public_path($newFile);
+
+        ?>
+
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Tu Título de Página</title>
+            <!-- Etiquetas Open Graph básicas -->
+            <meta property="og:title" content="<?= $data['certificate']['event'][0]['title'] ?>" />
+            <meta property="og:type" content="website" />
+            <meta property="og:url" content="<?= config('app.url') ?>" />
+            <meta property="og:image" content="<?= $image ?>" />
+            <!-- Especifica la URL de la imagen que se utilizará como vista previa. -->
+
+            <meta property="og:description" content="<?= $data['certificate']['event'][0]['xml_description'] ?>" />
+            <!-- Proporciona una descripción que aparecerá en la vista previa. -->
+
+            <meta property="og:site_name" content="<?= $data['certificate']['event'][0]['title'] ?>" />
+            <!-- Opcional: Nombre de tu sitio o de la empresa. -->
+
+            <!-- Etiquetas adicionales de Open Graph para controlar más detalles -->
+            <meta property="og:locale" content="es_ES" />
+            <!-- Opcional: Define el idioma y la localización (p.ej., "es_ES" para español de España). -->
+
+            <!-- Otros metadatos -->
+            <meta name="description" content="<?= $data['certificate']['event'][0]['xml_description'] ?>" />
+        </head>
+        <body>
+            <a href="<?= config('app.url') ?>">
+                <img src="/cert/<?= $image ?>" style="width: 100%;">
+            </a>
+        </body>
+        </html>
+        <?php
     }
 }

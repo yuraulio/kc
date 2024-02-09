@@ -1872,8 +1872,10 @@
 
                 data = url.replace('\\','/')
                 if(data){
-                    var fbpopup = window.open(`http://www.facebook.com/sharer.php?u=${decodeURI(baseUrl)}/${decodeURI(data)}/${decodeURI(certificateTitle)}`, "pop", "width=600, height=400, scrollbars=no");
-                    return false;
+                  let link = `${decodeURI('{{ config('app.url') }}/mycertificateview/share/facebook/' + certificateId + '/' + data.split('mycertificateview/')[1])}`;
+
+                  var fbpopup = window.open(`http://www.facebook.com/sharer.php?u=${link}/${decodeURI(certificateTitle)}`, "pop", "width=600, height=400, scrollbars=no");
+                  return false;
                 }
 
             }
