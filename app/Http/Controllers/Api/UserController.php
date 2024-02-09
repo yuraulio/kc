@@ -1088,7 +1088,10 @@ class UserController extends Controller
      */
     public function show(User $user): JsonResponse
     {
-        $user->load('invoices', 'transactions', 'statusAccount');
+        $user->load('image', 'invoices', 'transactions', 'statusAccount');
+
+        $user['profileImage'] = get_profile_image($user->image);
+        unset($user['image']);
 
         return new JsonResponse($user);
     }
@@ -1140,10 +1143,6 @@ class UserController extends Controller
      */
     public function updateProfile(Request $request)
     {
-        //dd($request->all());
-
-
-
         if($request->password == $request->confirm_password){
             $hasPassword = $request->get("password");
         }else{
@@ -1154,7 +1153,7 @@ class UserController extends Controller
 
         $user1 = Auth::user();
 
-        $receiptDetails = [];//json_decode($user1->receipt_details,true);
+        $receiptDetails = [];
         $receiptDetails['billing'] = 1;
         $receiptDetails['billname'] = $request->billname ? $request->billname : '';
         $receiptDetails['billafm'] = $request->billafm ? $request->billafm : '';
@@ -1188,12 +1187,6 @@ class UserController extends Controller
             (new MediaController)->uploadProfileImage($request, $user1->image);
         }
 
-        // $isUpdateImage = $user1->update(
-        //     $request->merge(['picture' => $request->photo ? $path_name = $request->photo->store('profile_user', 'public') : null])
-        //             ->except([$request->hasFile('photo') ? '' : 'picture'])
-
-
-        // );
 
         $request->request->remove('billname');
         $request->request->remove('billafm');
@@ -1211,25 +1204,6 @@ class UserController extends Controller
             'password' => Hash::make($request->get('password')),
             'receipt_details' => json_encode($receiptDetails)
         ])->except([$hasPassword ? '' : 'password', 'picture', 'photo', 'confirm_password']));
-
-        // if($request->file('photo')){
-        //     $name = explode('profile_user/',$path_name);
-        //     $size = getimagesize('uploads/'.$path_name);
-        //     $media->original_name = $name[1];
-        //     $media->width = $size[0];
-        //     $media->height = $size[1];
-        //     $user1->image()->save($media);
-
-        //     //delete old image
-        //     //fetch old image
-
-        //     if($old_image != null){
-        //         //delete from folder
-        //         unlink('uploads/profile_user/'.$old_image['original_name']);
-        //         //delete from db
-        //         $old_image->delete();
-        //     }
-        // }
 
 
         $updated_user = User::with('image')->find($user1->id);
