@@ -27,7 +27,7 @@ class TestAdminSeeder extends Seeder
         $admin = Admin::create($adminToCreate);
         AdminActivation::create([
             'user_id' => $admin->id,
-            'completed' => 1
+            'completed' => 1,
         ]);
     }
 }

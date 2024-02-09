@@ -3,8 +3,8 @@
 use App\Http\Controllers\Api\AbsenceController;
 use App\Http\Controllers\Api\EventController;
 use App\Http\Controllers\Api\ForgotPasswordController;
-use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\LessonController;
+use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\PassportAuthController;
 use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\UserController;

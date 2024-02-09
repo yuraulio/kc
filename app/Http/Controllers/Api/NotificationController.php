@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Auth;
 
 class NotificationController extends Controller
 {
-
     public function index(): JsonResponse
     {
         return new JsonResponse(Auth::user()->unreadNotifications);
@@ -31,5 +30,4 @@ class NotificationController extends Controller
             'message' => sprintf('Notification with "%s" has not been found.', $notificationId),
         ], 404);
     }
-
 }

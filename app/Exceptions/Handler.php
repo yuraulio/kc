@@ -4,14 +4,14 @@ namespace App\Exceptions;
 
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Response;
-use Throwable;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use League\OAuth2\Server\Exception\OAuthServerException;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
+use League\OAuth2\Server\Exception\OAuthServerException;
+use Throwable;
 
 class Handler extends ExceptionHandler
 {
