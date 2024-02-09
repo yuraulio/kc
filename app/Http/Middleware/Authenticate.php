@@ -5,8 +5,8 @@ namespace App\Http\Middleware;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Auth\Middleware\Authenticate as Middleware;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 class Authenticate extends Middleware
 {
@@ -69,13 +69,14 @@ class Authenticate extends Middleware
     {
         if ($request->expectsJson()) {
             abort(new JsonResponse([
-                'message' => 'Unauthenticated.'
+                'message' => 'Unauthenticated.',
             ], 401));
         }
 
         throw new AuthenticationException(
-            'Unauthenticated.', $guards, $this->redirectTo($request)
+            'Unauthenticated.',
+            $guards,
+            $this->redirectTo($request)
         );
     }
-
 }

@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Role extends Model
 {
-
     /**
      * The attributes that are mass assignable.
      *
@@ -22,5 +21,4 @@ class Role extends Model
     {
         return $this->belongsToMany(User::class, 'role_users');
     }
-
 }

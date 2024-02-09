@@ -8,7 +8,6 @@ use Illuminate\Http\JsonResponse;
 
 class EventController extends Controller
 {
-
     /**
      * @return JsonResponse
      */
@@ -30,5 +29,4 @@ class EventController extends Controller
     {
         return new JsonResponse($event);
     }
-
 }

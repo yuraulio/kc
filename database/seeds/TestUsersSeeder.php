@@ -75,7 +75,7 @@ class TestUsersSeeder extends Seeder
 
             Activation::create([
                 'user_id' => $user->id,
-                'completed' => 1
+                'completed' => 1,
             ]);
 
             $user->role()->attach($roleId);
