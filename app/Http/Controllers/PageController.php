@@ -15,8 +15,8 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-namespace App\Http\Controllers;
 
+namespace App\Http\Controllers;
 
 // class PageController extends Controller
 // {
@@ -59,7 +59,7 @@ namespace App\Http\Controllers;
 class PageController extends Controller
 {
     /**
-     * Display all the static pages when authenticated
+     * Display all the static pages when authenticated.
      *
      * @param string $page
      * @return \Illuminate\View\View
@@ -74,7 +74,7 @@ class PageController extends Controller
     }
 
     /**
-     * Display the pricing page
+     * Display the pricing page.
      *
      * @return \Illuminate\View\View
      */
@@ -84,7 +84,7 @@ class PageController extends Controller
     }
 
     /**
-     * Display the lock page
+     * Display the lock page.
      *
      * @return \Illuminate\View\View
      */
@@ -93,5 +93,3 @@ class PageController extends Controller
         return view('pages.lock');
     }
 }
-
-

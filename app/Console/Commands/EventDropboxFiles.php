@@ -2,9 +2,9 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
-use App\Model\Event;
 use App\Model\Dropbox;
+use App\Model\Event;
+use Illuminate\Console\Command;
 
 class EventDropboxFiles extends Command
 {
@@ -41,10 +41,9 @@ class EventDropboxFiles extends Command
     {
         $events = Event::with('dropbox')->get();
 
-        foreach($events as $key => $event){
+        foreach ($events as $key => $event) {
             $dropbox = $event['dropbox'];
-            if(isset($dropbox) && isset($dropbox[0])){
-
+            if (isset($dropbox) && isset($dropbox[0])) {
                 $dropbox = $dropbox[0];
                 $row = [];
 
@@ -53,7 +52,6 @@ class EventDropboxFiles extends Command
 
                 $row = json_encode($row);
                 $event->dropbox()->sync([$dropbox['pivot']['dropbox_id'] => ['selectedFolders' => $row]]);
-
             }
         }
 
@@ -67,7 +65,7 @@ class EventDropboxFiles extends Command
         //dd($dropBoxs);
         $duplicateFiles = [];
         foreach($dropBoxs as $key => $dropBox){
-            
+
             if(!isset($duplicateFiles[$dropBox->folder_name])){
                 $duplicateFiles[$dropBox->folder_name] = [];
                 continue;

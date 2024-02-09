@@ -1,57 +1,51 @@
-<style scoped>
-
-</style>
+<style scoped></style>
 
 <template>
-<div>
-
+  <div>
     <multiput
-        key="image"
-        keyput="image"
-        label="Image"
-        type="image"
-        @inputed="imageSelected($event)"
-        :uuid="$uuid.v4()"
-        mode="single"
-        :value="this.getStartingImage"
-        :default_image="this.getDefaultImage"
-        :hideAltText="true"
-        :imageVersion="this.imageVersion"
+      key="image"
+      keyput="image"
+      label="Image"
+      type="image"
+      @inputed="imageSelected($event)"
+      :uuid="$uuid.v4()"
+      mode="single"
+      :value="this.getStartingImage"
+      :default_image="this.getDefaultImage"
+      :hideAltText="true"
+      :imageVersion="this.imageVersion"
     />
-
-</div>
+  </div>
 </template>
 
 <script>
 export default {
-    props: {
-        startingImage: null,
-        defaultImage: null,
-        imageVersion: null
-    },
-    data() {
-        return {
+  props: {
+    startingImage: null,
+    defaultImage: null,
+    imageVersion: null,
+  },
+  data() {
+    return {};
+  },
+  methods: {
+    imageSelected($event) {
+      if ($event.data != null) {
+        $('#image_upload').val('/uploads/' + $event.data.path);
+      } else {
+        $('#image_upload').val('');
+      }
 
-        }
+      $('#upload_form').submit();
     },
-    methods: {
-        imageSelected($event) {
-            if($event.data != null){
-                $('#image_upload').val("/uploads/" + $event.data.path);
-            }else{
-                $('#image_upload').val('');
-            }
-
-            $("#upload_form").submit();
-        },
+  },
+  computed: {
+    getStartingImage() {
+      return this.startingImage ? JSON.parse(this.startingImage) : null;
     },
-    computed: {
-        getStartingImage() {
-            return this.startingImage ? JSON.parse(this.startingImage) : null;
-        },
-        getDefaultImage() {
-            return this.defaultImage ? JSON.parse(this.defaultImage) : null;
-        }
+    getDefaultImage() {
+      return this.defaultImage ? JSON.parse(this.defaultImage) : null;
     },
-}
+  },
+};
 </script>

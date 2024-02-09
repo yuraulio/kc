@@ -3,8 +3,8 @@
 namespace App\Http\Requests;
 
 use App\Model\Category;
-use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class CategoryRequest extends FormRequest
 {
@@ -27,10 +27,10 @@ class CategoryRequest extends FormRequest
     {
         return [
             'name' => [
-                'required', 'min:3', Rule::unique((new Category)->getTable())->ignore($this->route()->category->id ?? null)
+                'required', 'min:3', Rule::unique((new Category)->getTable())->ignore($this->route()->category->id ?? null),
             ],
             'description' => [
-                'nullable', 'min:5'
+                'nullable', 'min:5',
             ],
         ];
     }

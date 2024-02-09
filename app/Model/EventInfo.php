@@ -2,9 +2,9 @@
 
 namespace App\Model;
 
+use App\Model\Event;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Model\Event;
 
 class EventInfo extends Model
 {
@@ -79,6 +79,6 @@ class EventInfo extends Model
 
     public function event()
     {
-        return $this->hasOne(Event::class, 'id','event_id');
+        return $this->hasOne(Event::class, 'id', 'event_id');
     }
 }

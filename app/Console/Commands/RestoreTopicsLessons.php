@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\Model\Category;
+use Illuminate\Console\Command;
 
 class RestoreTopicsLessons extends Command
 {
@@ -40,16 +40,12 @@ class RestoreTopicsLessons extends Command
     {
         $category = Category::findOrFail(276);
         $category->topic()->detach();
-        foreach($category->events as $event){
-
-            foreach($event->allLessons()->orderBy('priority','asc')->get() as $lesson){
-
-                $category->topic()->attach($lesson->pivot->topic_id,['lesson_id'=>$lesson->id, 'priority'=>$lesson->pivot->priority]);
-
+        foreach ($category->events as $event) {
+            foreach ($event->allLessons()->orderBy('priority', 'asc')->get() as $lesson) {
+                $category->topic()->attach($lesson->pivot->topic_id, ['lesson_id'=>$lesson->id, 'priority'=>$lesson->pivot->priority]);
             }
-            
-            break;
 
+            break;
         }
 
         return 0;

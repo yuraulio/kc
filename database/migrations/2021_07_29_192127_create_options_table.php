@@ -31,7 +31,6 @@ class CreateOptionsTable extends Migration
             $table->timestamps();
         });
 
-
         Schema::table('exams', function (Blueprint $table) {
             $table->string('publish_time')->change();
             $table->boolean('indicate_crt_incrt_answers')->change();
@@ -40,7 +39,6 @@ class CreateOptionsTable extends Migration
         Schema::table('transactions', function (Blueprint $table) {
             $table->longText('status_history')->change();
         });
-
     }
 
     /**

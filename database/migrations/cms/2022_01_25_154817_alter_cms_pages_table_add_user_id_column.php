@@ -14,7 +14,7 @@ class AlterCmsPagesTableAddUserIdColumn extends Migration
     public function up()
     {
         Schema::table('cms_pages', function (Blueprint $table) {
-            $table->integer("user_id");
+            $table->integer('user_id');
         });
     }
 

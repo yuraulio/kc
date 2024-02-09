@@ -2,15 +2,15 @@
 
 namespace App\Model;
 
+use App\Model\Event;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Model\Event;
 
 class Slug extends Model
 {
     use HasFactory;
 
-      /**
+    /**
      * @var array
      */
     protected $fillable = [
@@ -19,7 +19,8 @@ class Slug extends Model
         'slugable_id',
     ];
 
-    public function getRouteKeyName() {
+    public function getRouteKeyName()
+    {
         return 'slug';
     }
 
@@ -27,5 +28,4 @@ class Slug extends Model
     {
         return $this->morphTo();
     }
-
 }

@@ -14,7 +14,7 @@ class AddRowsColumnToTemplatesTable extends Migration
     public function up()
     {
         Schema::table('cms_templates', function (Blueprint $table) {
-            $table->text("rows");
+            $table->text('rows');
         });
     }
 

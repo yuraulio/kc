@@ -27,7 +27,7 @@ class CreateAdminCategoryRequest extends FormRequest
         return [
             'title' => 'required|unique:cms_categories',
             'subcategories.*.title' => [
-                "unique:cms_categories,title",
+                'unique:cms_categories,title',
                 Rule::notIn([$this->title]),
             ],
 

@@ -2,17 +2,17 @@
 
 namespace App\Jobs;
 
-use App\Model\Admin\Page;
-use Illuminate\Support\Str;
-use Illuminate\Bus\Queueable;
 use App\Model\Admin\MediaFolder;
+use App\Model\Admin\Page;
 use Exception;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class RenameFolder implements ShouldQueue
 {
@@ -50,14 +50,14 @@ class RenameFolder implements ShouldQueue
      */
     public function handle()
     {
-        Log::info("Rename folder job - start");
+        Log::info('Rename folder job - start');
         DB::beginTransaction();
         try {
             // rename files and folder
             $folder = MediaFolder::find($this->folderId);
             $folder->mediaFiles()->chunk(100, function ($files) {
                 foreach ($files as $file) {
-                    Log::info("Rename folder job - change db file");
+                    Log::info('Rename folder job - change db file');
                     $oldUrl = $file->url;
 
                     $file->path = Str::replaceLast($this->oldPath, $this->newPath, $file->path);
@@ -79,44 +79,44 @@ class RenameFolder implements ShouldQueue
                 }
             });
 
-            Log::info("Rename folder job - change db folder");
+            Log::info('Rename folder job - change db folder');
             $folder->path = Str::replaceLast($this->oldPath, $this->newPath, $folder->path);
             $folder->url = Str::replaceLast($this->oldPath, $this->newPath, $folder->url);
             $folder->save();
 
             // loop through subdirectories
             foreach ($folder->children()->get() as $subfolder) {
-                Log::info("Rename folder job - start new job for subfolder");
+                Log::info('Rename folder job - start new job for subfolder');
                 $subfolderName = $subfolder->name;
-                $oldPathSubfolder = $this->oldPath . "/" . $subfolderName;
-                $newPathSubfolder = $this->newPath . "/" . $subfolderName;
+                $oldPathSubfolder = $this->oldPath . '/' . $subfolderName;
+                $newPathSubfolder = $this->newPath . '/' . $subfolderName;
                 $subfolderID = $subfolder->id;
                 RenameFolder::dispatch($oldPathSubfolder, $newPathSubfolder, $subfolderID, false);
             }
 
             if ($this->renameFolder) {
-                Log::info("Rename folder job - rename folder on disk");
-                $oldFullPath = public_path("/uploads/" . $this->oldPath);
-                $newFullPath = public_path("/uploads/" . $this->newPath);
+                Log::info('Rename folder job - rename folder on disk');
+                $oldFullPath = public_path('/uploads/' . $this->oldPath);
+                $newFullPath = public_path('/uploads/' . $this->newPath);
                 $result = rename($oldFullPath, $newFullPath);
                 if ($result) {
                     $folder->name = $this->folderName;
                     $folder->save();
 
-                    Log::info("Rename folder job - commit");
+                    Log::info('Rename folder job - commit');
                     DB::commit();
-                    Log::info("Rename folder job - success");
+                    Log::info('Rename folder job - success');
                 } else {
-                    Log::error("Failed to rename folder in RenameFolder job.");
+                    Log::error('Failed to rename folder in RenameFolder job.');
                     DB::rollback();
                 }
             } else {
-                Log::info("Rename folder job - commit");
+                Log::info('Rename folder job - commit');
                 DB::commit();
-                Log::info("Rename folder job - success");
+                Log::info('Rename folder job - success');
             }
         } catch (Exception $e) {
-            Log::error("Failed to update files or pages when renaming folder (job). " . $e->getMessage());
+            Log::error('Failed to update files or pages when renaming folder (job). ' . $e->getMessage());
             DB::rollback();
         }
     }

@@ -4,27 +4,26 @@ namespace App\Http\Controllers\Admin_api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\TickerRequest;
-use App\Model\Admin\Ticker;
-use Exception;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use App\Http\Resources\TickerResource;
 use App\Jobs\DeleteMultipleTickers;
+use App\Model\Admin\Ticker;
 use Carbon\Carbon;
+use Exception;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class TickerController extends Controller
 {
     /**
-     * Get ticker
+     * Get ticker.
      *
      * @return AnonymousResourceCollection
      */
     public function index(Request $request)
     {
         $this->authorize('viewAny', Ticker::class, Auth::user());
-
 
         try {
             // $tickers = Ticker::with(["pages", "user"])
@@ -37,7 +36,8 @@ class TickerController extends Controller
 
             return TickerResource::collection($tickers);
         } catch (Exception $e) {
-            Log::error("Failed to get tickers. " . $e->getMessage());
+            Log::error('Failed to get tickers. ' . $e->getMessage());
+
             return response()->json(['message' => $e->getMessage()], 400);
         }
     }
@@ -50,7 +50,7 @@ class TickerController extends Controller
     }
 
     /**
-     * Edit ticker
+     * Edit ticker.
      *
      * @return TickerResource
      */
@@ -70,13 +70,14 @@ class TickerController extends Controller
 
             return new TickerResource($ticker);
         } catch (Exception $e) {
-            Log::error("Failed to edit ticker. " . $e->getMessage());
+            Log::error('Failed to edit ticker. ' . $e->getMessage());
+
             return response()->json(['message' => $e->getMessage()], 400);
         }
     }
 
     /**
-     * Add ticker
+     * Add ticker.
      *
      * @return TickerResource
      */
@@ -95,15 +96,15 @@ class TickerController extends Controller
             $ticker->save();
 
             return new TickerResource($ticker);
-
         } catch (Exception $e) {
-            Log::error("Failed to add new ticker. " . $e->getMessage());
+            Log::error('Failed to add new ticker. ' . $e->getMessage());
+
             return response()->json(['message' => $e->getMessage()], 400);
         }
     }
 
     /**
-     * Delete ticker
+     * Delete ticker.
      *
      * @return JsonResponse
      */
@@ -118,7 +119,8 @@ class TickerController extends Controller
 
             return response()->json(['message' => 'success'], 200);
         } catch (Exception $e) {
-            Log::error("Failed to delete ticker. " . $e->getMessage());
+            Log::error('Failed to delete ticker. ' . $e->getMessage());
+
             return response()->json(['message' => $e->getMessage()], 400);
         }
     }
@@ -139,7 +141,8 @@ class TickerController extends Controller
 
             return response()->json(['message' => 'success'], 200);
         } catch (Exception $e) {
-            Log::error("Failed to bulk delete templates. " . $e->getMessage());
+            Log::error('Failed to bulk delete templates. ' . $e->getMessage());
+
             return response()->json(['message' => $e->getMessage()], 400);
         }
     }
@@ -156,7 +159,8 @@ class TickerController extends Controller
 
             return response()->json(['message' => 'success', 'data' => ['published' => $ticker->published]], 200);
         } catch (Exception $e) {
-            Log::error("Failed to publish ticker. " . $e->getMessage());
+            Log::error('Failed to publish ticker. ' . $e->getMessage());
+
             return response()->json(['message' => $e->getMessage()], 400);
         }
     }

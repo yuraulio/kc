@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\VenueRequest;
+use App\Model\Event;
 use App\Model\Venue;
 use Illuminate\Http\Request;
-use App\Model\Event;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Requests\VenueRequest;
 
 class VenueController extends Controller
 {
@@ -28,8 +28,7 @@ class VenueController extends Controller
 
         $venues = $model->get();
 
-
-        return view('admin.venue.main.index', ['user' => $user,'venues' => $venues]);
+        return view('admin.venue.main.index', ['user' => $user, 'venues' => $venues]);
     }
 
     /**
@@ -62,9 +61,9 @@ class VenueController extends Controller
         $model = app($request->model_type);
         $model = $model::find($request->model_id);
 
-        if(in_array($request->venue_id,$model->venues()->pluck('venue_id')->toArray())){
+        if (in_array($request->venue_id, $model->venues()->pluck('venue_id')->toArray())) {
             $model->venues()->sync([$request->venue_id]);
-        }else{
+        } else {
             $model->venues()->attach([$request->venue_id]);
         }
 
@@ -115,7 +114,6 @@ class VenueController extends Controller
     {
         $user = Auth::user();
 
-
         return view('admin.venue.main.edit', compact('venue', 'user'));
     }
 
@@ -129,7 +127,6 @@ class VenueController extends Controller
     public function update(Request $request, Venue $venue)
     {
         $venue->update($request->all());
-
 
         return redirect()->route('venue.edit_main', $venue->id)->withStatus(__('Venue successfully updated.'));
     }
@@ -164,10 +161,9 @@ class VenueController extends Controller
 
         $model->venues()->detach([$request->venue_id]);
 
-
         return response()->json([
             'success' => __('Venue successfully removed.'),
-            'venue_id' => $request->venue_id
+            'venue_id' => $request->venue_id,
         ]);
     }
 }

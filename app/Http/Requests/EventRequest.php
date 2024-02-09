@@ -25,10 +25,10 @@ class EventRequest extends FormRequest
     {
         return [
             'status' => [
-                'digits:1'
+                'digits:1',
             ],
             'title' => [
-                'required', 'min:3'
+                'required', 'min:3',
             ],
             'htmlTitle' => [
 
@@ -46,17 +46,17 @@ class EventRequest extends FormRequest
 
             ],
             'hours' => [
-                'numeric'
+                'numeric',
             ],
             'release_date_files' => [
-                'date', 'nullable'
+                'date', 'nullable',
             ],
             'view_tpl' => [
 
             ],
             'image' => [
-                'image'
-            ]
+                'image',
+            ],
         ];
     }
 }

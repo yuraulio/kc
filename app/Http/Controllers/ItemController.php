@@ -15,13 +15,14 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
+
 namespace App\Http\Controllers;
 
-use App\Tag;
+use App\Http\Requests\ItemRequest;
 use App\Item;
 use App\Model\Category;
+use App\Tag;
 use Carbon\Carbon;
-use App\Http\Requests\ItemRequest;
 
 class ItemController extends Controller
 {
@@ -31,7 +32,7 @@ class ItemController extends Controller
     }
 
     /**
-     * Display a listing of the items
+     * Display a listing of the items.
      *
      * @param \App\Item  $model
      * @return \Illuminate\View\View
@@ -42,7 +43,7 @@ class ItemController extends Controller
     }
 
     /**
-     * Show the form for creating a new item
+     * Show the form for creating a new item.
      *
      * @param  \App\Tag $tagModel
      * @param  \App\Model\Category $categoryModel
@@ -52,12 +53,12 @@ class ItemController extends Controller
     {
         return view('items.create', [
             'tags' => $tagModel->get(['id', 'name']),
-            'categories' => $categoryModel->get(['id', 'name'])
+            'categories' => $categoryModel->get(['id', 'name']),
         ]);
     }
 
     /**
-     * Store a newly created item in storage
+     * Store a newly created item in storage.
      *
      * @param  \App\Http\Requests\ItemRequest  $request
      * @param  \App\Item  $model
@@ -69,7 +70,7 @@ class ItemController extends Controller
             'picture' => $request->photo->store('pictures', 'public'),
             'show_on_homepage' => $request->show_on_homepage ? 1 : 0,
             'options' => $request->options ? $request->options : null,
-            'date' => $request->date ? Carbon::parse($request->date)->format('Y-m-d') : null
+            'date' => $request->date ? Carbon::parse($request->date)->format('Y-m-d') : null,
         ])->all());
 
         $item->tags()->sync($request->get('tags'));
@@ -78,7 +79,7 @@ class ItemController extends Controller
     }
 
     /**
-     * Show the form for editing the specified item
+     * Show the form for editing the specified item.
      *
      * @param  \App\Item  $item
      * @param  \App\Tag   $tagModel
@@ -90,7 +91,7 @@ class ItemController extends Controller
         return view('items.edit', [
             'item' => $item->load('tags'),
             'tags' => $tagModel->get(['id', 'name']),
-            'categories' => $categoryModel->get(['id', 'name'])
+            'categories' => $categoryModel->get(['id', 'name']),
         ]);
     }
 
@@ -108,7 +109,7 @@ class ItemController extends Controller
                 'picture' => $request->photo ? $request->photo->store('pictures', 'public') : null,
                 'show_on_homepage' => $request->show_on_homepage ? 1 : 0,
                 'options' => $request->options ? $request->options : null,
-                'date' => $request->date ? Carbon::parse($request->date)->format('Y-m-d') : null
+                'date' => $request->date ? Carbon::parse($request->date)->format('Y-m-d') : null,
             ])->except([$request->hasFile('photo') ? '' : 'picture'])
         );
 

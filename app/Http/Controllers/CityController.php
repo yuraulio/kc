@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CityRequest;
 use App\Model\City;
 use App\Model\Event;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
-use App\Http\Requests\CityRequest;
+use Illuminate\Support\Facades\Auth;
 
 class CityController extends Controller
 {
@@ -17,7 +17,6 @@ class CityController extends Controller
     //     $user = Auth::user();
 
     //     $cities = $model->with('event')->get();
-
 
     //     return view('city.index', ['user' => $user,'cities' => $cities]);
     // }
@@ -30,8 +29,7 @@ class CityController extends Controller
 
         $cities = $model->with('event')->get();
 
-
-        return view('admin.city.main.index', ['user' => $user,'cities' => $cities]);
+        return view('admin.city.main.index', ['user' => $user, 'cities' => $cities]);
     }
 
     // public function create(Request $request)
@@ -88,7 +86,6 @@ class CityController extends Controller
 
     public function edit_main(City $city)
     {
-
         return view('admin.city.main.edit', compact('city'));
     }
 

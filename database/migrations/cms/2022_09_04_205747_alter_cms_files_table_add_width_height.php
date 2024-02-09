@@ -14,8 +14,8 @@ class AlterCmsFilesTableAddWidthHeight extends Migration
     public function up()
     {
         Schema::table('cms_files', function (Blueprint $table) {
-            $table->integer("height")->nullable();
-            $table->integer("width")->nullable();
+            $table->integer('height')->nullable();
+            $table->integer('width')->nullable();
         });
     }
 

@@ -2,26 +2,26 @@
 
 namespace App\Http\Controllers;
 
-use App\Model\Lesson;
-use App\Model\Event;
-use App\Model\Topic;
-use App\Model\Type;
-use App\Model\User;
-use App\Model\Instructor;
-use App\Model\Category;
-use Illuminate\Http\Request;
-use App\Http\Requests\LessonRequest;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Validator;
-use Vimeo\Vimeo;
-use App\Jobs\UpdateStatisticJson;
 use App\Exports\LessonsNoVimeoLinkExport;
-use Excel;
+use App\Http\Requests\LessonRequest;
 use App\Jobs\FixOrder;
 use App\Jobs\LessonUpdate;
 use App\Jobs\UpdateEventAccessToFiles;
+use App\Jobs\UpdateStatisticJson;
+use App\Model\Category;
+use App\Model\Event;
+use App\Model\Instructor;
+use App\Model\Lesson;
+use App\Model\Topic;
+use App\Model\Type;
+use App\Model\User;
+use Excel;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
+use Validator;
+use Vimeo\Vimeo;
 
 class LessonController extends Controller
 {
@@ -48,8 +48,7 @@ class LessonController extends Controller
         $this->authorize('manage-users', User::class);
         $user = Auth::user();
 
-        $data['lessons'] = $model->with('category','topic', 'type')->get();
-
+        $data['lessons'] = $model->with('category', 'topic', 'type')->get();
 
         $categories = Category::with('topics')->get()->groupBy('name')->toArray();
 
@@ -76,72 +75,67 @@ class LessonController extends Controller
      */
     public function store(Request $request, Lesson $model)
     {
-
         $this->validate($request, [
             'category' => 'required',
             'topic_id' => 'required',
         ]);
         //dd($request->all());
 
-        $arr = array();
+        $arr = [];
 
-        if(!empty($request->links)){
-            foreach($request->links as $key => $link){
+        if (!empty($request->links)) {
+            foreach ($request->links as $key => $link) {
                 $arr1[$key] = ['name'=> $request->names[$key], 'link'=>$link];
             }
-            //dd($links);
-        }else{
+        //dd($links);
+        } else {
             $arr1 = [];
         }
         $links = json_encode($arr1);
 
-        if($request->status == 'on'){
+        if ($request->status == 'on') {
             $status = 1;
-        }else{
+        } else {
             $status = 0;
         }
 
-        if($request->bold == 'on')
-        {
+        if ($request->bold == 'on') {
             $bold = 1;
-        }else
-        {
+        } else {
             $bold = 0;
         }
 
-        $request->request->add(['status' => $status, 'links' => $links,'bold'=>$bold]);
+        $request->request->add(['status' => $status, 'links' => $links, 'bold'=>$bold]);
 
         $lesson = $model->create($request->all());
 
-        $vimeoVideo = explode("/",$lesson->vimeo_video);
+        $vimeoVideo = explode('/', $lesson->vimeo_video);
         $duration = 0;
         $client = new Vimeo(config('app.vimeo_client_id'), config('app.vimeo_client_secret'), config('app.vimeo_token'));
-        $response = $client->request("/videos/". end($vimeoVideo) . "/?password=".env('video_password'), array(), 'GET');
+        $response = $client->request('/videos/' . end($vimeoVideo) . '/?password=' . env('video_password'), [], 'GET');
 
-        if($response['status'] === 200){
+        if ($response['status'] === 200) {
             $duration = $response['body']['duration'];
             $lesson->vimeo_duration = $this->formatDuration($duration);
             $lesson->save();
         }
 
-        if($request->topic_id != null){
-
+        if ($request->topic_id != null) {
             $category = Category::find($request->category);
             $topic = Topic::with('category')->find($request->topic_id[0]);
             $category->updateLesson($topic, $lesson);
 
-            dispatch(new LessonUpdate($request->all(),$lesson));
+            dispatch(new LessonUpdate($request->all(), $lesson));
         }
 
-        if($request->type_id != null){
+        if ($request->type_id != null) {
             $lesson->type()->detach();
             $type = Type::find($request->type_id);
 
             $lesson->type()->attach([$request->type_id]);
         }
 
-
-        return redirect()->route('lessons.edit',$lesson->id)->withStatus(__('Lesson successfully created.'));
+        return redirect()->route('lessons.edit', $lesson->id)->withStatus(__('Lesson successfully created.'));
     }
 
     /**
@@ -161,13 +155,11 @@ class LessonController extends Controller
      * @param  \App\Model\Lesson  $lesson
      * @return \Illuminate\Http\Response
      */
-    public function edit(Request $request,Lesson $lesson)
+    public function edit(Request $request, Lesson $lesson)
     {
-
-        $lesson = $lesson->with('topic', 'category','type')->find($lesson['id']);
+        $lesson = $lesson->with('topic', 'category', 'type')->find($lesson['id']);
         $topics = Topic::with('category')->get();
         $selectedCategory = $request->get('selectedCategory') ?: $request->get('selectedCategory');
-
 
         $types = Type::all();
 
@@ -181,66 +173,61 @@ class LessonController extends Controller
         $date = null;
         $topic = Topic::find($request->topic_id);
 
-        if($request->date != null){
+        if ($request->date != null) {
             $date = date('Y-m-d', strtotime($request->date));
 
             $date1 = date('Y-m-d', strtotime($request->date));
-
-        }else{
-            $date1 = date('Y-m-d', strtotime($request->date));;
+        } else {
+            $date1 = date('Y-m-d', strtotime($request->date));
         }
 
-        if($request->start != null){
-            $start = date('Y-m-d H:i:s', strtotime($date1." ".$request->start));
-            $start_response = date('H:i:s', strtotime($date1." ".$request->start));
-        }else{
+        if ($request->start != null) {
+            $start = date('Y-m-d H:i:s', strtotime($date1 . ' ' . $request->start));
+            $start_response = date('H:i:s', strtotime($date1 . ' ' . $request->start));
+        } else {
             $start_response = null;
         }
 
-        if($request->end != null){
-
-            if($request->start > $request->end){
+        if ($request->end != null) {
+            if ($request->start > $request->end) {
                 $date1 = strtotime($date1);
                 $date1 = date('Y-m-d', strtotime('+1 day', $date1));
                 //dd($date1);
             }
 
-            $end = date('Y-m-d H:i:s', strtotime($date1." ".$request->end));
-            $end_response = date('H:i:s', strtotime($date1." ".$request->end));
-            $end_response;
-        }else{
+            $end = date('Y-m-d H:i:s', strtotime($date1 . ' ' . $request->end));
+            $end_response = date('H:i:s', strtotime($date1 . ' ' . $request->end));
+        } else {
             $end_response = null;
         }
 
-
         $duration = null;
         //if($start_response && $end_response){
-        if($start && $end){
-
+        if ($start && $end) {
             //$startHour = date_create($start_response);
             //$endHour = date_create($end_response);
             $startHour = date_create($start);
             $endHour = date_create($end);
 
-            $durationH = date_diff($endHour, $startHour);;
-            if($durationH->h > 0){
-                $duration .=  $durationH->h.'h';
+            $durationH = date_diff($endHour, $startHour);
+            if ($durationH->h > 0) {
+                $duration .= $durationH->h . 'h';
             }
 
-            if($durationH->i > 0){
-                $duration .= ' ' .  $durationH->i.'m';
+            if ($durationH->i > 0) {
+                $duration .= ' ' . $durationH->i . 'm';
             }
             $duration = trim($duration);
         }
 
         $location_url = $request->location_url;
-        if($location_url){
+        if ($location_url) {
             $location_url = str_replace('https://', '', $location_url);
             $location_url = str_replace('http://', '', $location_url);
-            $location_url = 'https://'.$location_url;
+            $location_url = 'https://' . $location_url;
         }
 
-        $topic->event_topic()->wherePivot('lesson_id', '=', $request->lesson_id)->wherePivot('event_id', '=', $request->event_id)->updateExistingPivot($request->topic_id,[
+        $topic->event_topic()->wherePivot('lesson_id', '=', $request->lesson_id)->wherePivot('event_id', '=', $request->event_id)->updateExistingPivot($request->topic_id, [
             //'priority' => $request->priority,
             'date' => $date,
             'room' => $request->room,
@@ -248,14 +235,14 @@ class LessonController extends Controller
             'duration' => $duration,
             'instructor_id' => $request->instructor_id,
             'time_starts' => $start,
-            'time_ends' => $end
+            'time_ends' => $end,
         ], false);
 
         //dd(date_format($start,"H:i:sa"));
 
         $data['instructor'] = Instructor::with('medias')->find($request->instructor_id);
         $data['lesson_id'] = $request->lesson_id;
-        $data['date1'] = date_format(date_create($date),"d-m-Y");
+        $data['date1'] = date_format(date_create($date), 'd-m-Y');
         $data['start'] = $start_response;
         $data['end'] = $end_response;
         $data['room'] = $request->room;
@@ -286,7 +273,6 @@ class LessonController extends Controller
         $data['isInclassCourse'] = $event->is_inclass_course();
 
         echo json_encode($data);
-
     }
 
     /**
@@ -296,21 +282,17 @@ class LessonController extends Controller
      * @param  \App\Model\Lesson  $lesson
      * @return \Illuminate\Http\Response
      */
-
-
     public function update(Request $request, Lesson $lesson)
     {
-
         $this->validate($request, [
             'category' => 'required',
             //'topic_id' => 'required',
         ]);
 
-        $arr = array();
+        $arr = [];
 
-        if(!empty($request->links)){
-            foreach($request->links as $key => $link){
-
+        if (!empty($request->links)) {
+            foreach ($request->links as $key => $link) {
                 $link = str_replace('https://', '', $link);
                 $link = str_replace('http://', '', $link);
                 //$link = str_replace('www.', '', $link);
@@ -318,145 +300,124 @@ class LessonController extends Controller
 
                 $correct_link = strpos($link, 'https://');
 
-                if(!$correct_link){
-                    $link = 'https://'.$link;
+                if (!$correct_link) {
+                    $link = 'https://' . $link;
                 }
                 $arr1[$key] = ['name'=> $request->names[$key], 'link'=>$link];
             }
-        }else{
+        } else {
             $arr1 = [];
         }
         $links = json_encode($arr1);
 
-        if($request->status == 'on')
-        {
+        if ($request->status == 'on') {
             $status = 1;
-        }else
-        {
+        } else {
             $status = 0;
         }
 
-        if($request->bold == 'on')
-        {
+        if ($request->bold == 'on') {
             $bold = 1;
-        }else
-        {
+        } else {
             $bold = 0;
         }
 
-        $request->request->add(['status' => $status, 'links' => $links,'bold'=>$bold]);
+        $request->request->add(['status' => $status, 'links' => $links, 'bold'=>$bold]);
 
         $lesson_id = $lesson['id'];
         $lesson->update($request->all());
 
-        if(config('app.env') == 'production'){
-            $vimeoVideo = explode("/",$lesson->vimeo_video);
+        if (config('app.env') == 'production') {
+            $vimeoVideo = explode('/', $lesson->vimeo_video);
             $duration = 0;
 
             $client = new Vimeo(env('client_id'), env('client_secret'), env('vimeo_token'));
-            $response = $client->request("/videos/". end($vimeoVideo) . "/?password=".env('video_password'), array(), 'GET');
+            $response = $client->request('/videos/' . end($vimeoVideo) . '/?password=' . env('video_password'), [], 'GET');
 
-            if($response['status'] === 200){
+            if ($response['status'] === 200) {
                 $duration = $response['body']['duration'];
                 $lesson->vimeo_duration = $this->formatDuration($duration);
                 $lesson->save();
             }
         }
 
-        if($request->topic_id != null){
-
+        if ($request->topic_id != null) {
             $category = Category::find($request->category);
             $topic = Topic::with('category')->find($request->topic_id[0]);
             $category->updateLesson($topic, $lesson);
 
-            dispatch(new LessonUpdate($request->all(),$lesson));
-
-
-        }else {
-
-
+            dispatch(new LessonUpdate($request->all(), $lesson));
+        } else {
             $category = Category::find($request->category);
 
             $allEvents = $category->events;
-            foreach($allEvents as $event)
-            {
-
+            foreach ($allEvents as $event) {
                 $event->allLessons()->detach($lesson['id']);
-                $lesson->topic()->wherePivot('category_id',$request->category)->detach();
-
+                $lesson->topic()->wherePivot('category_id', $request->category)->detach();
             }
         }
 
         $lesson->type()->sync([$request->type_id]);
 
-
         return back()->withStatus(__('Lesson successfully updated.'));
         //return redirect()->route('lessons.index')->withStatus(__('Lesson successfully updated.'));
     }
 
-
-    public function formatDuration($duration){
-        $duration = gmdate("H:i:s", $duration);
-        $duration = explode(":",$duration);
+    public function formatDuration($duration)
+    {
+        $duration = gmdate('H:i:s', $duration);
+        $duration = explode(':', $duration);
 
         $finalFormat = '';
 
-        if($duration[0]!="00"){
-            $finalFormat = $finalFormat . $duration[0]."h ";
+        if ($duration[0] != '00') {
+            $finalFormat = $finalFormat . $duration[0] . 'h ';
         }
-        if($duration[1]!="00"){
-            $finalFormat =  $finalFormat . $duration[1]."m ";
+        if ($duration[1] != '00') {
+            $finalFormat = $finalFormat . $duration[1] . 'm ';
         }
 
-        if($duration[2]!="00"){
-            $finalFormat = $finalFormat . $duration[2]."s";
+        if ($duration[2] != '00') {
+            $finalFormat = $finalFormat . $duration[2] . 's';
         }
+
         return trim($finalFormat);
     }
 
-
     public function destroy(Request $request, Lesson $lesson)
     {
-
         $categories = $request->categories;
-        foreach( (array) $request->lessons as $key => $lesson){
-
-            if(!isset($categories[$key])){
+        foreach ((array) $request->lessons as $key => $lesson) {
+            if (!isset($categories[$key])) {
                 continue;
             }
 
             $category = Category::find($categories[$key]);
             $category->lessons()->detach($lesson);
 
-            foreach($category->events as $event){
+            foreach ($category->events as $event) {
                 $event->allLessons()->detach($lesson);
                 $event->resetCache();
             }
 
             $lesson = Lesson::find($lesson);
-            if(count($lesson->topic) == 0){
+            if (count($lesson->topic) == 0) {
                 $lesson->delete();
             }
-
-
         }
-
-
 
         return redirect()->route('lessons.index')->withStatus(__('Lesson successfully deleted.'));
     }
 
-
     public function remove_lesson(Request $request)
     {
-
         $event = Event::find($request->event_id);
 
         $topic = Topic::find($request->topic_id);
         $topic->event_topic()->wherePivot('lesson_id', '=', $request->lesson_id)->wherePivot('event_id', '=', $request->event_id)->detach($request->topic_id);
 
         //$event->fixOrder();
-        dispatch(new FixOrder($event,''));
+        dispatch(new FixOrder($event, ''));
 
         add_event_statistic_queue($request->event_id);
         //dispatch((new UpdateStatisticJson($request->event_id))->delay(now()->addSeconds(3)));
@@ -568,14 +529,13 @@ class LessonController extends Controller
 
     }*/
 
-    public function moveMultipleLessonToTopic(Request $request){
-
+    public function moveMultipleLessonToTopic(Request $request)
+    {
         //dd($request->all());
         $validatorArray['lessons'] = 'required';
         $validatorArray['category'] = 'required';
         $validatorArray['fromTopic'] = 'required';
         $validatorArray['toTopic'] = 'required';
-
 
         $validator = Validator::make($request->all(), $validatorArray);
 
@@ -585,7 +545,6 @@ class LessonController extends Controller
                 'errors' => $validator->errors(),
                 'message' => '',
             ];
-
         }
 
         $lessons = $request->lessons;
@@ -595,31 +554,26 @@ class LessonController extends Controller
 
         $category = Category::find($category);
         $newOrder = [];
-        if($category){
+        if ($category) {
             $allEvents = $category->events;
-            foreach($allEvents as $event)
-            {
-
-
-
+            foreach ($allEvents as $event) {
                 //$allEvents = $category->events()->whereHas('event_info1',function($query){
                 //    $query->where('course_delivery',143);
                 //})->get();
 
                 $allLessons = $event->allLessons->groupBy('id');
-                $priorityLesson = $event->allLessons()->wherePivot('topic_id',$toTopic)->orderBy('priority')->get();
-                $priority = isset($priorityLesson->last()['pivot']['priority']) ? $priorityLesson->last()['pivot']['priority'] + 1 :count($allLessons)+1 ;
+                $priorityLesson = $event->allLessons()->wherePivot('topic_id', $toTopic)->orderBy('priority')->get();
+                $priority = isset($priorityLesson->last()['pivot']['priority']) ? $priorityLesson->last()['pivot']['priority'] + 1 : count($allLessons) + 1;
 
                 $movedLessons = [];
                 $movedLessonsCate = [];
 
-                foreach($lessons as $pLesson){
-
+                foreach ($lessons as $pLesson) {
                     //$allLessons = $event->allLessons->groupBy('id');
                     //$priorityLesson = $event->allLessons()->wherePivot('topic_id',$toTopic)->orderBy('priority')->get();
 
                     //if(!$pLesson = $allLessons[$pLesson][0]){
-                    if(!isset($allLessons[$pLesson][0]) || !$pLesson = $allLessons[$pLesson][0]){
+                    if (!isset($allLessons[$pLesson][0]) || !$pLesson = $allLessons[$pLesson][0]) {
                         continue;
                     }
 
@@ -658,19 +612,18 @@ class LessonController extends Controller
                         'location_url'=> $pLesson->pivot->location_url,
                         'automate_mail'=>$pLesson->pivot->automate_mail,
                         'send_automate_mail'=>$pLesson->pivot->send_automate_mail,
-                        'priority' => $priority
+                        'priority' => $priority,
                     ];
 
                     $movedLessonsCate[$pLesson->pivot->lesson_id] = [
                         'topic_id'=>$toTopic,
                         'lesson_id'=>$pLesson->pivot->lesson_id,
                         'category_id' => $category->id,
-                        'priority' => $priority
+                        'priority' => $priority,
                     ];
 
                     $priority += 1;
                 }
-
 
                 $event->allLessons()->detach(array_keys($movedLessons));
                 $event->allLessons()->attach($movedLessons);
@@ -685,28 +638,26 @@ class LessonController extends Controller
                 //$category->topic()->attach($toTopic, ['lesson_id' => $lesson,'priority'=>$priority]);
 
                 $event->resetCache();
-
             }
 
-
-            $category->lessons()->wherePivot('topic_id',$fromTopic)->wherePivotIn('lesson_id',array_keys($movedLessonsCate))->detach();
+            $category->lessons()->wherePivot('topic_id', $fromTopic)->wherePivotIn('lesson_id', array_keys($movedLessonsCate))->detach();
             $category->lessons()->attach($movedLessonsCate);
 
             $newOrder = $category->fixOrder($fromTopic);
+
             return response()->json([
                 'success' => true,
                 'newOrder' => $newOrder,
             ]);
-
         }
+
         return response()->json([
             'success' => false,
         ]);
-
-
     }
 
-    public function orderLesson(Request $request){
+    public function orderLesson(Request $request)
+    {
         //dd($request->all());
 
         $validatorArray['order'] = 'required';
@@ -721,46 +672,41 @@ class LessonController extends Controller
                 'errors' => $validator->errors(),
                 'message' => '',
             ];
-
         }
 
         $category = Category::find($request->category);
 
         $lessons = [];
-        foreach($request->order as $key => $order){
-            $lessons[] = explode('-',$key)[2];
+        foreach ($request->order as $key => $order) {
+            $lessons[] = explode('-', $key)[2];
         }
 
-        foreach($category->events as $event){
+        foreach ($category->events as $event) {
             //dd($event->lessons()->wherePivotIn('lesson_id',$lessons)->get());
 
-            foreach($event->allLessons()->wherePivot('topic_id',$request->topic)->wherePivotIn('lesson_id',$lessons)->get() as $lesson){
+            foreach ($event->allLessons()->wherePivot('topic_id', $request->topic)->wherePivotIn('lesson_id', $lessons)->get() as $lesson) {
                 $index = $category->id . '-' . $lesson->pivot->topic_id . '-' . $lesson->pivot->lesson_id;
 
-                if(!isset($request->order[$index])){
+                if (!isset($request->order[$index])) {
                     continue;
                 }
 
                 $lesson->pivot->priority = $request->order[$index];
                 $lesson->pivot->save();
-
             }
             $event->resetCache();
         }
 
-
         $newOrder = [];
-        foreach($category->lessons()->wherePivot('topic_id',$request->topic)->wherePivotIn('lesson_id',$lessons)->get() as $lesson){
-
+        foreach ($category->lessons()->wherePivot('topic_id', $request->topic)->wherePivotIn('lesson_id', $lessons)->get() as $lesson) {
             $index = $lesson->pivot->category_id . '-' . $lesson->pivot->topic_id . '-' . $lesson->pivot->lesson_id;
 
-            if(!isset($request->order[$index])){
+            if (!isset($request->order[$index])) {
                 continue;
             }
 
             $lesson->pivot->priority = $request->order[$index];
             $lesson->pivot->save();
-
         }
         //$category = Category::find($request->category);
         //dispatch(rder($category,''));
@@ -770,26 +716,19 @@ class LessonController extends Controller
             'newOrder' => $request->order,
             'message' => 'Order has changed',
         ];
-
     }
 
-    public function extractElearningLessonsWithNoVimeoLink(){
-
-        $lessons = Lesson::whereHas('event', function($event){
-
-            return $event->whereHas('delivery', function($delivery){
+    public function extractElearningLessonsWithNoVimeoLink()
+    {
+        $lessons = Lesson::whereHas('event', function ($event) {
+            return $event->whereHas('delivery', function ($delivery) {
                 return $delivery->where('deliveries.id', 143);
             });
-
-        })->whereIn('vimeo_video',['',null])->get();
-
+        })->whereIn('vimeo_video', ['', null])->get();
 
         //Excel::store(new LessonsNoVimeoLinkExport($lessons), 'LessonsNoVimeoLinkExport.xlsx', 'export');
         //return Excel::download(new LessonsNoVimeoLinkExport($lessons), 'LessonsNoVimeoLinkExport.xlsx');
 
         return view('lesson.lessons_with_no_vimeo_link', ['lessons' => $lessons]);
-
-
     }
-
 }

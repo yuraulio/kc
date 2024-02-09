@@ -2,20 +2,20 @@
 
 namespace App\Jobs;
 
-use App\Model\Admin\Page;
-use Illuminate\Support\Str;
-use Illuminate\Bus\Queueable;
 use App\Model\Admin\MediaFile;
 use App\Model\Admin\MediaFolder;
+use App\Model\Admin\Page;
 use Exception;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class RenameFile implements ShouldQueue
 {
@@ -49,7 +49,7 @@ class RenameFile implements ShouldQueue
      */
     public function handle()
     {
-        Log::info("Rename file job - start");
+        Log::info('Rename file job - start');
         DB::beginTransaction();
         try {
             $pages = Page::withoutGlobalScopes()->get();
@@ -87,11 +87,11 @@ class RenameFile implements ShouldQueue
                 $page->save();
             }
 
-            Log::info("Rename file job - commit");
+            Log::info('Rename file job - commit');
             DB::commit();
-            Log::info("Rename file job - success");
+            Log::info('Rename file job - success');
         } catch (Exception $e) {
-            Log::error("Failed to update pages when editing file. " . $e->getMessage());
+            Log::error('Failed to update pages when editing file. ' . $e->getMessage());
             DB::rollback();
         }
     }

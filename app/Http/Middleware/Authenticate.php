@@ -6,6 +6,7 @@ use Illuminate\Auth\AuthenticationException;
 use Illuminate\Auth\Middleware\Authenticate as Middleware;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Auth;
 
 class Authenticate extends Middleware
 {
@@ -21,28 +22,19 @@ class Authenticate extends Middleware
             return route('login');
         }*/
 
+        if (!$request->expectsJson()) {
+            $url = explode('/', $request->getRequestUri());
+            $url = isset($url[1]) ? explode('?', $url[1]) : $url;
 
-        if (! $request->expectsJson()) {
-
-            $url = explode('/',$request->getRequestUri());
-            $url = isset($url[1]) ? explode('?',$url[1]) : $url;
-
-            if(isset($url[0]) && $url[0] == 'myaccount'){
-
-                if($request->login){
-                    return route('homepage',['login'=>true]);
-
-                }else{
+            if (isset($url[0]) && $url[0] == 'myaccount') {
+                if ($request->login) {
+                    return route('homepage', ['login'=>true]);
+                } else {
                     //dd('gsdf');
                     return route('homepage', ['login'=>true]);
-
                 }
             }
-
         }
-
-
-
     }
 
     protected function authenticate($request, array $guards)
@@ -55,15 +47,17 @@ class Authenticate extends Middleware
             if ($this->auth->guard($guard)->check()) {
                 $this->auth->shouldUse($guard);
 
-                if(!$this->auth->user()->statusAccount || !$this->auth->user()->statusAccount->completed){
+                if (!$this->auth->user()->statusAccount || !$this->auth->user()->statusAccount->completed) {
                     $this->auth->user()->AauthAcessToken()->delete();
                     Session::invalidate();
                     Session::regenerateToken();
 
-                    return redirect()->back()->with('message',
+                    return redirect()->back()->with(
+                        'message',
                         'Account is not activated!'
                     );
                 }
+
                 return $this->auth->shouldUse($guard);
             }
         }

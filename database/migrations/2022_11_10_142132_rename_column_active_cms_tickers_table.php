@@ -13,7 +13,7 @@ class RenameColumnActiveCmsTickersTable extends Migration
      */
     public function up()
     {
-        Schema::table('cms_ticker', function(Blueprint $table) {
+        Schema::table('cms_ticker', function (Blueprint $table) {
             $table->renameColumn('status', 'published');
         });
     }

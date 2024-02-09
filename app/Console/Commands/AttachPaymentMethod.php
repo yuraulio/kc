@@ -2,9 +2,9 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
-use App\Model\User;
 use App\Model\Event;
+use App\Model\User;
+use Illuminate\Console\Command;
 
 class AttachPaymentMethod extends Command
 {
@@ -39,21 +39,18 @@ class AttachPaymentMethod extends Command
      */
     public function handle()
     {
+        $users = User::has('transactions')->with('transactions', 'events')->get();
 
-        $users = User::has('transactions')->with('transactions','events')->get();
-
-        foreach($users as $user){
-            
-            foreach($user['transactions'] as $transaction){
-
-                if($transaction['payment_method_id'] != 100 || !$transaction->event->first()){
+        foreach ($users as $user) {
+            foreach ($user['transactions'] as $transaction) {
+                if ($transaction['payment_method_id'] != 100 || !$transaction->event->first()) {
                     continue;
                 }
 
                 //dd($transaction->event->first()->id);
-                $event = $user->events()->wherePivot('event_id',$transaction->event->first()->id)->first();
+                $event = $user->events()->wherePivot('event_id', $transaction->event->first()->id)->first();
 
-                if(!$event){
+                if (!$event) {
                     continue;
                 }
 
@@ -61,15 +58,12 @@ class AttachPaymentMethod extends Command
                 $event->pivot->save();
 
                 //dd($event->pivot->payment_method);
-
             }
 
-
-            foreach($user->subscriptionEvents as $event){
+            foreach ($user->subscriptionEvents as $event) {
                 $event->pivot->payment_method = 2;
                 $event->pivot->save();
             }
-
         }
 
         return 0;

@@ -11,13 +11,14 @@ class ImageTokenizer extends AbstractTokenizer implements TokenizerInterface
 
     public function tokenize($text, $stopwords = [])
     {
-        if(is_object($text)){
+        if (is_object($text)) {
             $text = json_encode($text);
-        }elseif(is_array($text)){
+        } elseif (is_array($text)) {
             $text = json_encode($text);
-        }else{
+        } else {
             $text = strval($text);
         }
-        return preg_split($this->getPattern(), strtolower((string)$text), -1, PREG_SPLIT_NO_EMPTY);
+
+        return preg_split($this->getPattern(), strtolower((string) $text), -1, PREG_SPLIT_NO_EMPTY);
     }
 }

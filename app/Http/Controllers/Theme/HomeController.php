@@ -2,44 +2,44 @@
 
 namespace App\Http\Controllers\Theme;
 
+use App\Events\EmailSent;
 use App\Http\Controllers\Controller;
 use App\Library\CMS;
-use Illuminate\Http\Request;
-
-use App\Model\Slug;
-use App\Model\Event;
-use App\Model\Delivery;
-use App\Model\Media;
-use App\Model\Logos;
-use App\Model\Menu;
-use App\Model\Type;
-use App\Model\City;
-use App\Model\Topic;
-use App\Model\Instructor;
-use App\Model\Category;
-use View;
-use App\Model\Pages;
-use Laravel\Cashier\Cashier;
-use App\Model\User;
-use App\Model\Invoice;
-use Illuminate\Support\Facades\Auth;
-use PDF;
-use Carbon\Carbon;
-use App\Model\Transaction;
-use Mail;
-use Validator;
-use App\Model\GiveAway;
-use App\Model\CookiesSMS;
-use App\Notifications\WelcomeEmail;
-use Illuminate\Support\Facades\Hash;
 use App\Model\Activation;
-use Illuminate\Support\Str;
-use \Cart as Cart;
-use Session;
-use App\Services\FBPixelService;
-use App\Model\WaitingList;
+use App\Model\Category;
+use App\Model\City;
+use App\Model\CookiesSMS;
+use App\Model\Delivery;
+use App\Model\Event;
+use App\Model\GiveAway;
+use App\Model\Instructor;
+use App\Model\Invoice;
+use App\Model\Logos;
+use App\Model\Media;
+use App\Model\Menu;
 use App\Model\Option;
+use App\Model\Pages;
+use App\Model\Slug;
+use App\Model\Topic;
+use App\Model\Transaction;
+use App\Model\Type;
+use App\Model\User;
+use App\Model\WaitingList;
+use App\Notifications\WelcomeEmail;
+use App\Services\FBPixelService;
 use Bugsnag\BugsnagLaravel\Facades\Bugsnag;
+use Carbon\Carbon;
+use Cart as Cart;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
+use Laravel\Cashier\Cashier;
+use Mail;
+use PDF;
+use Session;
+use Validator;
+use View;
 
 class HomeController extends Controller
 {
@@ -181,7 +181,6 @@ class HomeController extends Controller
             default:
                 abort(404);
                 break;
-
         }
     }
 
@@ -191,7 +190,6 @@ class HomeController extends Controller
         if ($published == 0) {
             return false;
         }
-
 
         $data['user']['createAccount'] = false;
 
@@ -220,13 +218,11 @@ class HomeController extends Controller
             ]);
             $user->role()->attach(7);
 
-
-
-            $cookieValue = base64_encode($user->id . date("H:i"));
-            setcookie('auth-'.$user->id, $cookieValue, time() + (1 * 365 * 86400), "/"); // 86400 = 1 day
+            $cookieValue = base64_encode($user->id . date('H:i'));
+            setcookie('auth-' . $user->id, $cookieValue, time() + (1 * 365 * 86400), '/'); // 86400 = 1 day
 
             $coockie = new CookiesSMS;
-            $coockie->coockie_name = 'auth-'.$user->id;
+            $coockie->coockie_name = 'auth-' . $user->id;
             $coockie->coockie_value = $cookieValue;
             $coockie->user_id = $user->id;
             $coockie->sms_code = -1;
@@ -235,98 +231,90 @@ class HomeController extends Controller
             $coockie->save();
         }
 
-
-        if(!$user->kc_id){
-            $KC = "KC-";
+        if (!$user->kc_id) {
+            $KC = 'KC-';
             $time = strtotime(date('Y-m-d'));
-            $MM = date("m",$time);
-            $YY = date("y",$time);
+            $MM = date('m', $time);
+            $YY = date('y', $time);
 
-            $optionKC = Option::where('abbr','website_details')->first();
-		    $next = $optionKC->value;
+            $optionKC = Option::where('abbr', 'website_details')->first();
+            $next = $optionKC->value;
 
             $next_kc_id = str_pad($next, 4, '0', STR_PAD_LEFT);
-            $knowcrunch_id = $KC.$YY.$MM.$next_kc_id;
+            $knowcrunch_id = $KC . $YY . $MM . $next_kc_id;
 
             $user->kc_id = $knowcrunch_id;
             $user->save();
 
             if ($next == 9999) {
                 $next = 1;
-            }
-            else {
+            } else {
                 $next = $next + 1;
             }
 
-            $optionKC->value=$next;
+            $optionKC->value = $next;
             $optionKC->save();
         }
-
 
         $data['user']['first'] = $user->firstname;
         $data['user']['name'] = $user->firstname . ' ' . $user->lastname;
         $data['user']['email'] = $user->email;
-        $data['extrainfo'] = ['','',$content->title];
-        $data['duration'] =  '';//$content->summary1->where('section', 'date')->first() ? $content->summary1->where('section', 'date')->first()->title : '';
+        $data['extrainfo'] = ['', '', $content->title];
+        $data['duration'] = ''; //$content->summary1->where('section', 'date')->first() ? $content->summary1->where('section', 'date')->first()->title : '';
 
-        $data['eventSlug'] =  url('/') . '/' . $content->getSlug();
+        $data['eventSlug'] = url('/') . '/' . $content->getSlug();
 
         $eventInfo = $content ? $content->event_info() : [];
 
-        if(isset($eventInfo['delivery']) && $eventInfo['delivery'] == 143){
-
+        if (isset($eventInfo['delivery']) && $eventInfo['delivery'] == 143) {
             $data['duration'] = isset($eventInfo['elearning']['visible']['emails']) && isset($eventInfo['elearning']['expiration']) &&
-                                $eventInfo['elearning']['visible']['emails'] && isset($eventInfo['elearning']['text']) ?
-                                            $eventInfo['elearning']['expiration'] . ' ' . $eventInfo['elearning']['text'] : '';
-
-        }else if(isset($eventInfo['delivery']) && $eventInfo['delivery'] == 139){
-
+            $eventInfo['elearning']['visible']['emails'] && isset($eventInfo['elearning']['text']) ?
+                $eventInfo['elearning']['expiration'] . ' ' . $eventInfo['elearning']['text'] : '';
+        } elseif (isset($eventInfo['delivery']) && $eventInfo['delivery'] == 139) {
             $data['duration'] = isset($eventInfo['inclass']['dates']['visible']['emails']) && isset($eventInfo['inclass']['dates']['text']) &&
-                                        $eventInfo['inclass']['dates']['visible']['emails'] ?  $eventInfo['inclass']['dates']['text'] : '';
-
+            $eventInfo['inclass']['dates']['visible']['emails'] ? $eventInfo['inclass']['dates']['text'] : '';
         }
 
-        $data['hours'] = isset($eventInfo['hours']['visible']['emails']) &&  $eventInfo['hours']['visible']['emails'] && isset($eventInfo['hours']['hour']) &&
-                        isset( $eventInfo['hours']['text']) ? $eventInfo['hours']['hour'] . ' ' . $eventInfo['hours']['text'] : '';
+        $data['hours'] = isset($eventInfo['hours']['visible']['emails']) && $eventInfo['hours']['visible']['emails'] && isset($eventInfo['hours']['hour']) &&
+        isset($eventInfo['hours']['text']) ? $eventInfo['hours']['hour'] . ' ' . $eventInfo['hours']['text'] : '';
 
-        $data['language'] = isset($eventInfo['language']['visible']['emails']) &&  $eventInfo['language']['visible']['emails'] && isset( $eventInfo['language']['text']) ? $eventInfo['language']['text'] : '';
+        $data['language'] = isset($eventInfo['language']['visible']['emails']) && $eventInfo['language']['visible']['emails'] && isset($eventInfo['language']['text']) ? $eventInfo['language']['text'] : '';
 
-        $data['certificate_type'] =isset($eventInfo['certificate']['visible']['emails']) &&  $eventInfo['certificate']['visible']['emails'] &&
-                    isset( $eventInfo['certificate']['type']) ? $eventInfo['certificate']['type'] : '';
+        $data['certificate_type'] = isset($eventInfo['certificate']['visible']['emails']) && $eventInfo['certificate']['visible']['emails'] &&
+        isset($eventInfo['certificate']['type']) ? $eventInfo['certificate']['type'] : '';
 
         $eventStudents = get_sum_students_course($content->category->first());
-        $data['students_number'] = isset($eventInfo['students']['number']) ? $eventInfo['students']['number'] :  $eventStudents + 1;
+        $data['students_number'] = isset($eventInfo['students']['number']) ? $eventInfo['students']['number'] : $eventStudents + 1;
 
-        $data['students'] = isset($eventInfo['students']['visible']['emails']) &&  $eventInfo['students']['visible']['emails'] &&
-                        isset( $eventInfo['students']['text']) && $data['students_number'] >= $eventStudents  ? $eventInfo['students']['text'] : '';
+        $data['students'] = isset($eventInfo['students']['visible']['emails']) && $eventInfo['students']['visible']['emails'] &&
+        isset($eventInfo['students']['text']) && $data['students_number'] >= $eventStudents ? $eventInfo['students']['text'] : '';
 
         $data['firstName'] = $user->firstname;
 
         $user->notify(new WelcomeEmail($user, $data));
-
+        event(new EmailSent($user->email, 'WelcomeEmail'));
 
         $student = $user->events->where('id', $content->id)->first();
 
         //dd(($student && strtotime(now()) > strtotime($student->pivot->expiration)) || !$student);
         // if (!$student) {
-        if(($student && strtotime(now()) > strtotime($student->pivot->expiration)) || !$student){
-
+        if (($student && strtotime(now()) > strtotime($student->pivot->expiration)) || !$student) {
             //ticket
             $eventticket = 'free';
 
-            $payment_method_id = 1;//intval($input["payment_method_id"]);
+            $payment_method_id = 1; //intval($input["payment_method_id"]);
             $payment_cardtype = 8; //free;
             $amount = 0;
-            $namount = (float)$amount;
+            $namount = (float) $amount;
             $transaction_arr = [
 
                 'payment_method_id' => $payment_method_id,
                 'account_id' => 17,
                 'payment_status' => 2,
-                'billing_details' => json_encode([]),//serialize($billing_details),
+                'billing_details' => json_encode([]), //serialize($billing_details),
                 'placement_date' => Carbon::now()->toDateTimeString(),
                 'ip_address' => '127.0.0.1',
-                'type' => $payment_cardtype,//((Sentinel::inRole('super_admin') || Sentinel::inRole('know-crunch')) ? 1 : 0),
+                'type' => $payment_cardtype, //((Sentinel::inRole('super_admin') || Sentinel::inRole('know-crunch')) ? 1 : 0),
                 'status' => 1, //2 PENDING, 0 FAILED, 1 COMPLETED
                 'is_bonus' => 0, //$input['is_bonus'],
                 'order_vat' => 0, //$input['credit'] - ($input['credit'] / (1 + Config::get('dpoptions.order_vat.value') / 100)),
@@ -334,7 +322,7 @@ class HomeController extends Controller
                 'discount_amount' => 0,
                 'amount' => $namount, //$input['credit'],
                 'total_amount' => $namount,
-                'trial' => false
+                'trial' => false,
             ];
 
             $transaction = Transaction::create($transaction_arr);
@@ -342,28 +330,27 @@ class HomeController extends Controller
             if ($transaction) {
                 // set transaction id in session
 
-                $pay_seats_data = ["names" => [$user->first_name],"surnames" => [$user->last_name],"emails" => [$user->email],
-                "mobiles" => [$user->mobile],"addresses" => [$user->address],"addressnums" => [$user->address_num],
-                "postcodes" => [$user->postcode],"cities" => [$user->city],"jobtitles" => [$user->job_title],
-                "companies" => [$user->company],"students" => [""], "afms" => [$user->afm]];
-
+                $pay_seats_data = ['names' => [$user->first_name], 'surnames' => [$user->last_name], 'emails' => [$user->email],
+                    'mobiles' => [$user->mobile], 'addresses' => [$user->address], 'addressnums' => [$user->address_num],
+                    'postcodes' => [$user->postcode], 'cities' => [$user->city], 'jobtitles' => [$user->job_title],
+                    'companies' => [$user->company], 'students' => [''], 'afms' => [$user->afm]];
 
                 $deree_user_data = [$user->email => $user->partner_id];
-                $cart_data = ["manualtransaction" => ["rowId" => "manualtransaction","id" => 'free',"name" => $content->title,"qty" => "1","price" => $amount,"options" => ["type" => "8","event"=> $content->id],"tax" => 0,"subtotal" => $amount]];
+                $cart_data = ['manualtransaction' => ['rowId' => 'manualtransaction', 'id' => 'free', 'name' => $content->title, 'qty' => '1', 'price' => $amount, 'options' => ['type' => '8', 'event' => $content->id], 'tax' => 0, 'subtotal' => $amount]];
 
                 $status_history[] = [
-                'datetime' => Carbon::now()->toDateTimeString(),
-                'status' => 1,
-                'user' => [
-                    'id' => $user->id, //0, $this->current_user->id,
-                    'email' => $user->email,//$this->current_user->email
+                    'datetime' => Carbon::now()->toDateTimeString(),
+                    'status' => 1,
+                    'user' => [
+                        'id' => $user->id, //0, $this->current_user->id,
+                        'email' => $user->email, //$this->current_user->email
                     ],
-                'pay_seats_data' => $pay_seats_data,//$data['pay_seats_data'],
-                'pay_bill_data' => [],
-                'cardtype' => 8,
-                'installments' => 1,
-                'deree_user_data' => $deree_user_data, //$data['deree_user_data'],
-                'cart_data' => $cart_data //$cart
+                    'pay_seats_data' => $pay_seats_data, //$data['pay_seats_data'],
+                    'pay_bill_data' => [],
+                    'cardtype' => 8,
+                    'installments' => 1,
+                    'deree_user_data' => $deree_user_data, //$data['deree_user_data'],
+                    'cart_data' => $cart_data, //$cart
                 ];
 
                 $transaction->update(['status_history' => json_encode($status_history)/*, 'billing_details' => $tbd*/]);
@@ -372,23 +359,23 @@ class HomeController extends Controller
                 $expiration_date = '';
 
                 if ($content->expiration) {
-                    $monthsExp = '+' . $content->expiration .'months';
+                    $monthsExp = '+' . $content->expiration . 'months';
                     $expiration_date = date('Y-m-d', strtotime($monthsExp, strtotime($today)));
                 }
 
-                if(!$student){
-                    $content->users()->save($user, ['comment'=>'free','expiration'=>$expiration_date,'paid'=>true]);
-                }else{
-                    $content->users()->updateExistingPivot($user,[
-                        'expiration'=>$expiration_date,
-                        'paid'=>true
+                if (!$student) {
+                    $content->users()->save($user, ['comment' => 'free', 'expiration' => $expiration_date, 'paid' => true]);
+                } else {
+                    $content->users()->updateExistingPivot($user, [
+                        'expiration' => $expiration_date,
+                        'paid' => true,
                     ]);
                 }
 
                 $transaction->event()->save($content);
                 $transaction->user()->save($user);
             }
-        }else{
+        } else {
             return redirect('/');
         }
 
@@ -412,27 +399,27 @@ class HomeController extends Controller
 
         $data['event']['title'] = $content->title;
         $data['event']['slug'] = $content->slugable->slug;
-        $data['event']['facebook'] = url('/') . '/' .$content->slugable->slug .'?utm_source=Facebook&utm_medium=Post_Student&utm_campaign=KNOWCRUNCH_BRANDING&quote='.urlencode("Proudly participating in ". $content->title . " by Knowcrunch.");
-        $data['event']['twitter'] = urlencode("Proudly participating in ". $content->title. " by Knowcrunch. 💙 ". url('/') . '/' .$content->slugable->slug);
-        $data['event']['linkedin'] = urlencode(url('/') . '/' .$content->slugable->slug .'?utm_source=LinkedIn&utm_medium=Post_Student&utm_campaign=KNOWCRUNCH_BRANDING&title='."Proudly participating in ". $content->title . " by Knowcrunch. 💙");
+        $data['event']['facebook'] = url('/') . '/' . $content->slugable->slug . '?utm_source=Facebook&utm_medium=Post_Student&utm_campaign=KNOWCRUNCH_BRANDING&quote=' . urlencode('Proudly participating in ' . $content->title . ' by Knowcrunch.');
+        $data['event']['twitter'] = urlencode('Proudly participating in ' . $content->title . ' by Knowcrunch. 💙 ' . url('/') . '/' . $content->slugable->slug);
+        $data['event']['linkedin'] = urlencode(url('/') . '/' . $content->slugable->slug . '?utm_source=LinkedIn&utm_medium=Post_Student&utm_campaign=KNOWCRUNCH_BRANDING&title=' . 'Proudly participating in ' . $content->title . ' by Knowcrunch. 💙');
 
         Session::put('thankyouData', $data);
-        try{
+        try {
             session_start();
-            $_SESSION["thankyouData"] = $data;
-        }catch(\Exception $ex){
+            $_SESSION['thankyouData'] = $data;
+        } catch (\Exception $ex) {
             Bugsnag::notifyException($ex);
         }
+
         return redirect('/thankyou');
         //return view('theme.cart.new_cart.thank_you_free',$data);
     }
 
-    public function enrollToWaitingList(Event $content){
-
+    public function enrollToWaitingList(Event $content)
+    {
         $published = $content->published;
         $status = $content->status;
-        if($published == 0 || $status != 5){
-
+        if ($published == 0 || $status != 5) {
             Cart::instance('default')->destroy();
             Session::forget('pay_seats_data');
             Session::forget('transaction_id');
@@ -449,12 +436,9 @@ class HomeController extends Controller
             return false;
         }
 
-
-
         $data['user']['createAccount'] = false;
 
-        if( !($user = Auth::user()) && !($user = User::where('email',request()->email[0])->first()) ){
-
+        if (!($user = Auth::user()) && !($user = User::where('email', request()->email[0])->first())) {
             $data['user']['createAccount'] = true;
 
             $input = [];
@@ -464,7 +448,7 @@ class HomeController extends Controller
             unset($formData['update']);
             unset($formData['type']);
 
-            foreach($formData as $key => $value){
+            foreach ($formData as $key => $value) {
                 $input[$key] = $value[0];
             }
 
@@ -479,13 +463,11 @@ class HomeController extends Controller
             ]);
             $user->role()->attach(7);
 
-
-
-            $cookieValue = base64_encode($user->id . date("H:i"));
-            setcookie('auth-'.$user->id, $cookieValue, time() + (1 * 365 * 86400), "/"); // 86400 = 1 day
+            $cookieValue = base64_encode($user->id . date('H:i'));
+            setcookie('auth-' . $user->id, $cookieValue, time() + (1 * 365 * 86400), '/'); // 86400 = 1 day
 
             $coockie = new CookiesSMS;
-            $coockie->coockie_name = 'auth-'.$user->id;
+            $coockie->coockie_name = 'auth-' . $user->id;
             $coockie->coockie_value = $cookieValue;
             $coockie->user_id = $user->id;
             $coockie->sms_code = -1;
@@ -494,8 +476,7 @@ class HomeController extends Controller
             $coockie->save();
         }
 
-        if(WaitingList::where('user_id',$user->id)->where('event_id',$content->id)->first()){
-
+        if (WaitingList::where('user_id', $user->id)->where('event_id', $content->id)->first()) {
             Cart::instance('default')->destroy();
             Session::forget('pay_seats_data');
             Session::forget('transaction_id');
@@ -520,42 +501,37 @@ class HomeController extends Controller
         $data['user']['first'] = $user->firstname;
         $data['user']['name'] = $user->firstname . ' ' . $user->lastname;
         $data['user']['email'] = $user->email;
-        $data['extrainfo'] = ['','',$content->title];
+        $data['extrainfo'] = ['', '', $content->title];
         $data['duration'] = ''; //$content->summary1->where('section','date')->first() ? $content->summary1->where('section','date')->first()->title : '';
         //$data['template'] = 'join_activation';
         $data['template'] = 'waiting_list_welcome';
-        $data['subject'] = 'Knowcrunch - Welcome ' .  $user->firstname;
-        $data['eventSlug'] =  url('/') . '/' . $content->getSlug();
+        $data['subject'] = 'Knowcrunch - Welcome ' . $user->firstname;
+        $data['eventSlug'] = url('/') . '/' . $content->getSlug();
 
         $eventInfo = $content ? $content->event_info() : [];
 
-        if(isset($eventInfo['delivery']) && $eventInfo['delivery'] == 143){
-
+        if (isset($eventInfo['delivery']) && $eventInfo['delivery'] == 143) {
             $data['duration'] = isset($eventInfo['elearning']['visible']['emails']) && isset($eventInfo['elearning']['expiration']) &&
-                                $eventInfo['elearning']['visible']['emails'] && isset($eventInfo['elearning']['text']) ?
-                                            $eventInfo['elearning']['expiration'] . ' ' . $eventInfo['elearning']['text'] : '';
-
-        }else if(isset($eventInfo['delivery']) && $eventInfo['delivery'] == 139){
-
+            $eventInfo['elearning']['visible']['emails'] && isset($eventInfo['elearning']['text']) ?
+                $eventInfo['elearning']['expiration'] . ' ' . $eventInfo['elearning']['text'] : '';
+        } elseif (isset($eventInfo['delivery']) && $eventInfo['delivery'] == 139) {
             $data['duration'] = isset($eventInfo['inclass']['dates']['visible']['emails']) && isset($eventInfo['inclass']['dates']['text']) &&
-                                        $eventInfo['inclass']['dates']['visible']['emails'] ?  $eventInfo['inclass']['dates']['text'] : '';
-
+            $eventInfo['inclass']['dates']['visible']['emails'] ? $eventInfo['inclass']['dates']['text'] : '';
         }
 
-        $data['hours'] = isset($eventInfo['hours']['visible']['emails']) &&  $eventInfo['hours']['visible']['emails'] && isset($eventInfo['hours']['hour']) &&
-                        isset( $eventInfo['hours']['text']) ? $eventInfo['hours']['hour'] . ' ' . $eventInfo['hours']['text'] : '';
+        $data['hours'] = isset($eventInfo['hours']['visible']['emails']) && $eventInfo['hours']['visible']['emails'] && isset($eventInfo['hours']['hour']) &&
+        isset($eventInfo['hours']['text']) ? $eventInfo['hours']['hour'] . ' ' . $eventInfo['hours']['text'] : '';
 
-        $data['language'] = isset($eventInfo['language']['visible']['emails']) &&  $eventInfo['language']['visible']['emails'] && isset( $eventInfo['language']['text']) ? $eventInfo['language']['text'] : '';
+        $data['language'] = isset($eventInfo['language']['visible']['emails']) && $eventInfo['language']['visible']['emails'] && isset($eventInfo['language']['text']) ? $eventInfo['language']['text'] : '';
 
-        $data['certificate_type'] =isset($eventInfo['certificate']['visible']['emails']) &&  $eventInfo['certificate']['visible']['emails'] &&
-                    isset( $eventInfo['certificate']['type']) ? $eventInfo['certificate']['type'] : '';
+        $data['certificate_type'] = isset($eventInfo['certificate']['visible']['emails']) && $eventInfo['certificate']['visible']['emails'] &&
+        isset($eventInfo['certificate']['type']) ? $eventInfo['certificate']['type'] : '';
 
         $eventStudents = get_sum_students_course($content->category->first());
-        $data['students_number'] = isset($eventInfo['students']['number']) ? $eventInfo['students']['number'] :  $eventStudents + 1;
+        $data['students_number'] = isset($eventInfo['students']['number']) ? $eventInfo['students']['number'] : $eventStudents + 1;
 
-        $data['students'] = isset($eventInfo['students']['visible']['emails']) &&  $eventInfo['students']['visible']['emails'] &&
-                        isset( $eventInfo['students']['text']) && $data['students_number'] >= $eventStudents  ? $eventInfo['students']['text'] : '';
-
+        $data['students'] = isset($eventInfo['students']['visible']['emails']) && $eventInfo['students']['visible']['emails'] &&
+        isset($eventInfo['students']['text']) && $data['students_number'] >= $eventStudents ? $eventInfo['students']['text'] : '';
 
         $data['firstName'] = $user->firstname;
 
@@ -565,7 +541,7 @@ class HomeController extends Controller
         $transdata['coupon'] = null;
 
         $muser = [];
-        $muser['name'] = $user->firstname . ' ' .$user->lastname;
+        $muser['name'] = $user->firstname . ' ' . $user->lastname;
         $muser['first'] = $user->firstname;
         $muser['email'] = $user->email;
         $muser['id'] = $user->id;
@@ -573,26 +549,19 @@ class HomeController extends Controller
 
         $helperdetails[$user->email] = ['kcid' => $user->kc_id, 'deid' => $user->partner_id, 'stid' => $user->student_type_id, 'jobtitle' => $user->job_title, 'company' => $user->company, 'mobile' => $user->mobile];
 
-
         $transdata['user'] = $muser;
         $transdata['helperdetails'] = $helperdetails;
         $transdata['status'] = 5;
 
-        $sentadmin = Mail::send('emails.admin.admin_info_new_registration', $transdata, function ($m)  {
-
+        $sentadmin = Mail::send('emails.admin.admin_info_new_registration', $transdata, function ($m) {
             $m->from('info@knowcrunch.com', 'Knowcrunch');
             $m->to('info@knowcrunch.com', 'Knowcrunch');
 
             $m->subject('Knowcrunch - New Registration Waiting List');
         });
 
-
-
-
-
-        $user->notify(new WelcomeEmail($user,$data));
-
-
+        $user->notify(new WelcomeEmail($user, $data));
+        event(new EmailSent($user->email, 'WelcomeEmail'));
 
         Cart::instance('default')->destroy();
         Session::forget('pay_seats_data');
@@ -614,20 +583,19 @@ class HomeController extends Controller
 
         $data['event']['title'] = $content->title;
         $data['event']['slug'] = $content->slugable->slug;
-        $data['event']['facebook'] = url('/') . '/' .$content->slugable->slug .'?utm_source=Facebook&utm_medium=Post_Student&utm_campaign=KNOWCRUNCH_BRANDING&quote='.urlencode("Proudly participating in ". $content->title . " by Knowcrunch.");
-        $data['event']['twitter'] = urlencode("Proudly participating in ". $content->title.' '.url('/') . '/' .$content->slugable->slug. " by Knowcrunch. 💙");
-        $data['event']['linkedin'] = urlencode(url('/') . '/' .$content->slugable->slug .'?utm_source=LinkedIn&utm_medium=Post_Student&utm_campaign=KNOWCRUNCH_BRANDING&title='."Proudly participating in ". $content->title .  " by Knowcrunch. 💙");
+        $data['event']['facebook'] = url('/') . '/' . $content->slugable->slug . '?utm_source=Facebook&utm_medium=Post_Student&utm_campaign=KNOWCRUNCH_BRANDING&quote=' . urlencode('Proudly participating in ' . $content->title . ' by Knowcrunch.');
+        $data['event']['twitter'] = urlencode('Proudly participating in ' . $content->title . ' ' . url('/') . '/' . $content->slugable->slug . ' by Knowcrunch. 💙');
+        $data['event']['linkedin'] = urlencode(url('/') . '/' . $content->slugable->slug . '?utm_source=LinkedIn&utm_medium=Post_Student&utm_campaign=KNOWCRUNCH_BRANDING&title=' . 'Proudly participating in ' . $content->title . ' by Knowcrunch. 💙');
 
+        Session::put('thankyouData', $data);
+        $_SESSION['thankyouData'] = $data;
 
-        Session::put('thankyouData',$data);
-        $_SESSION["thankyouData"] = $data;
         return redirect('/thankyou');
         //return view('theme.cart.new_cart.thank_you_free',$data);
-
     }
 
-    private function city($page){
-
+    private function city($page)
+    {
         $data['content'] = $page;
 
         $city = City::with('event')->find($page['id']);
@@ -635,8 +603,16 @@ class HomeController extends Controller
         //$data['content'] = $city;
         $data['title'] = $city['name'];
         $data['city'] = $city;
-        $data['openlist'] = $city->event()->with('category', 'slugable', 'city', 'ticket', 'summary1')->where('published', true)->whereIn('status', [0])->orderBy('published_at', 'desc')->get();
-        $data['completedlist'] = $city->event()->with('category', 'slugable', 'city', 'ticket', 'summary1')->where('published', true)->where('status', 3)->orderBy('published_at', 'desc')->get();
+        $data['openlist'] = $city->event()->with('category', 'slugable', 'city', 'ticket', 'summary1')
+            ->where('published', true)
+            ->whereIn('status', [0])
+            ->orderBy('launch_date', 'asc')
+            ->get();
+        $data['completedlist'] = $city->event()->with('category', 'slugable', 'city', 'ticket', 'summary1')
+            ->where('published', true)
+            ->where('status', 3)
+            ->orderBy('launch_date', 'desc')
+            ->get();
 
         return view('theme.pages.category', $data);
     }
@@ -656,12 +632,14 @@ class HomeController extends Controller
             $data['benefits'] = $page->benefits;
             $data['corporatebrands'] = Logos::with('medias')->where('type', 'corporate_brands')->where('status', true)->get();
         } elseif ($data['page']['template'] == 'instructors') {
-            $data['instructors'] =  Instructor::with('medias', 'slugable')->orderBy('subtitle', 'asc')->where('status', 1)->get();
+            $data['instructors'] = Instructor::with('medias', 'slugable')->orderBy('subtitle', 'asc')->where('status', 1)->get();
         } elseif ($data['page']['id'] == 800) {
             $data['brands'] = Logos::with('medias')->where('type', 'brands')->orderBy('name', 'asc')->get();
+
             return view('admin.static_tpls.logos.backend', $data);
         } elseif ($data['page']['id'] == 801) {
             $data['logos'] = Logos::with('medias')->where('type', 'logos')->get();
+
             return view('admin.static_tpls.logos.backend', $data);
         } elseif ($data['page']['template'] == 'subscription-template') {
             $data['event'] = Event::find(2304);
@@ -673,7 +651,7 @@ class HomeController extends Controller
             $data['event'] = $data['event']->title;
         }
 
-        return view('admin.static_tpls.'.$data['page']['template'].'.frontend', $data);
+        return view('admin.static_tpls.' . $data['page']['template'] . '.frontend', $data);
     }
 
     private function types($type)
@@ -681,8 +659,16 @@ class HomeController extends Controller
         $data['type'] = $type;
         $data['title'] = $type['name'];
 
-        $data['openlist'] = $type->events()->has('slugable')->with('category', 'slugable', 'city', 'ticket', 'summary1')->where('published', true)->where('status', 0)->orderBy('created_at', 'desc')->get();
-        $data['completedlist'] = $type->events()->has('slugable')->with('category', 'slugable', 'city', 'ticket', 'summary1')->where('published', true)->where('status', 3)->orderBy('published_at', 'desc')->get();
+        $data['openlist'] = $type->events()->has('slugable')->with('category', 'slugable', 'city', 'ticket', 'summary1')
+            ->where('published', true)
+            ->where('status', 0)
+            ->orderBy('launch_date', 'asc')
+            ->get();
+        $data['completedlist'] = $type->events()->has('slugable')
+            ->with('category', 'slugable', 'city', 'ticket', 'summary1')
+            ->where('published', true)->where('status', 3)
+            ->orderBy('launch_date', 'desc')
+            ->get();
 
         return view('theme.pages.category', $data);
     }
@@ -692,8 +678,18 @@ class HomeController extends Controller
         $data['type'] = $category;
         $data['title'] = $category['name'];
 
-        $data['openlist'] = $category->events()->has('slugable')->with('category', 'slugable', 'city', 'ticket', 'summary1')->where('published', true)->where('status', 0)->orderBy('created_at', 'desc')->get();
-        $data['completedlist'] = $category->events()->has('slugable')->with('category', 'slugable', 'city', 'ticket', 'summary1')->where('published', true)->where('status', 3)->orderBy('published_at', 'desc')->get();
+        $data['openlist'] = $category->events()->has('slugable')
+            ->with('category', 'slugable', 'city', 'ticket', 'summary1')
+            ->where('published', true)
+            ->where('status', 0)
+            ->orderBy('launch_date', 'asc')
+            ->get();
+        $data['completedlist'] = $category->events()->has('slugable')
+            ->with('category', 'slugable', 'city', 'ticket', 'summary1')
+            ->where('published', true)
+            ->where('status', 3)
+            ->orderBy('launch_date', 'desc')
+            ->get();
 
         return view('theme.pages.category', $data);
     }
@@ -705,8 +701,8 @@ class HomeController extends Controller
         return view('theme.pages.category', $data);
     }
 
-    private function event($event){
-
+    private function event($event)
+    {
         $data = $event->topicsLessonsInstructors();
         $data['event'] = $event;
         $data['benefits'] = $event->benefits->toArray();
@@ -715,66 +711,58 @@ class HomeController extends Controller
         $data['section_fullvideo'] = $event->sectionVideos->first();
         $data['faqs'] = $event->getFaqs();
         $data['testimonials'] = isset($event->category->toArray()[0]) ? $event->category->toArray()[0]['testimonials'] : [];
-        $data['tickets'] = $event->ticket()->where('price','>',0)->where('active',true)->get()->toArray();
+        $data['tickets'] = $event->ticket()->where('price', '>', 0)->where('active', true)->get()->toArray();
         $data['venues'] = $event->venues->toArray();
         $data['syllabus'] = $event->syllabus->toArray();
         $data['is_event_paid'] = 0;
-        $data['sumStudents'] = get_sum_students_course($event->category->first());//isset($event->category[0]) ? $event->category[0]->getSumOfStudents() : 0;
+        $data['sumStudents'] = get_sum_students_course($event->category->first()); //isset($event->category[0]) ? $event->category[0]->getSumOfStudents() : 0;
         $data['showSpecial'] = false;
-        $data['showAlumni'] = $event->ticket()->where('type','Alumni')->where('active',true)->first() ? true : false;;
+        $data['showAlumni'] = $event->ticket()->where('type', 'Alumni')->where('active', true)->first() ? true : false;
         $data['is_joined_waiting_list'] = 0;
         $data['partners'] = $event->partners;
 
-        if($event->ticket()->where('type','Early Bird')->first()){
-            $data['showSpecial'] = ($event->ticket()->where('type','Early Bird')->first() && $event->ticket()->where('type','Special')->first())  ?
-                                    ($event->ticket()->where('type','Special')->first()->pivot->active
-                                        || ($event->ticket()->where('type','Early Bird')->first()->pivot->quantity > 0)) : false;
-        }else{
-
-            $data['showSpecial'] = $event->ticket()->where('type','Special')->first() ? $event->ticket()->where('type','Special')->first()->pivot->active  : false;
+        if ($event->ticket()->where('type', 'Early Bird')->first()) {
+            $data['showSpecial'] = ($event->ticket()->where('type', 'Early Bird')->first() && $event->ticket()->where('type', 'Special')->first()) ?
+                ($event->ticket()->where('type', 'Special')->first()->pivot->active
+                    || ($event->ticket()->where('type', 'Early Bird')->first()->pivot->quantity > 0)) : false;
+        } else {
+            $data['showSpecial'] = $event->ticket()->where('type', 'Special')->first() ? $event->ticket()->where('type', 'Special')->first()->pivot->active : false;
         }
-
-
 
         $price = -1;
 
-        foreach($data['tickets'] as $ticket){
-
-            if($ticket['pivot']['price'] && $ticket['pivot']['price'] > $price){
+        foreach ($data['tickets'] as $ticket) {
+            if ($ticket['pivot']['price'] && $ticket['pivot']['price'] > $price) {
                 $price = $ticket['pivot']['price'];
             }
         }
 
-        if($price <= 0){
+        if ($price <= 0) {
             $price = (float) 0;
         }
         $categoryScript = $event->delivery->first() && $event->delivery->first()->id == 143 ? 'Video e-learning courses' : 'In-class courses'; //$event->category->first() ? 'Event > ' . $event->category->first()->name : '';
 
         $tr_price = $price;
-        if($tr_price - floor($tr_price)>0){
-            $tr_price = number_format($tr_price , 2 , '.', '');
-        }else{
-            $tr_price = number_format($tr_price , 0 , '.', '');
+        if ($tr_price - floor($tr_price) > 0) {
+            $tr_price = number_format($tr_price, 2, '.', '');
+        } else {
+            $tr_price = number_format($tr_price, 0, '.', '');
             $tr_price = strval($tr_price);
-            $tr_price .= ".00";
-
+            $tr_price .= '.00';
         }
 
-        $data['tigran'] = ['Price' => $tr_price,'Product_id' => $event->id,'Product_SKU' => $event->id,'ProductCategory' => $categoryScript, 'ProductName' =>  $event->title,'Event_ID' => 'kc_' . time() ];
+        $data['tigran'] = ['Price' => $tr_price, 'Product_id' => $event->id, 'Product_SKU' => $event->id, 'ProductCategory' => $categoryScript, 'ProductName' => $event->title, 'Event_ID' => 'kc_' . time()];
 
-
-        if(request()->has('lo')){
-            $user = User::where('email',decrypt(request()->get('lo')))->first();
-            if($user){
+        if (request()->has('lo')) {
+            $user = User::where('email', decrypt(request()->get('lo')))->first();
+            if ($user) {
                 Auth::login($user);
             }
         }
 
-
-
-        if(Auth::user() && count(Auth::user()->events->where('id',$event->id)) > 0){
+        if (Auth::user() && count(Auth::user()->events->where('id', $event->id)) > 0) {
             $data['is_event_paid'] = 1;
-        }else if(Auth::user() && $event->waitingList()->where('user_id',Auth::user()->id)->first()){
+        } elseif (Auth::user() && $event->waitingList()->where('user_id', Auth::user()->id)->first()) {
             $data['is_joined_waiting_list'] = 1;
         }
 
@@ -785,16 +773,15 @@ class HomeController extends Controller
 
     public function printSyllabusBySlug($slug = '')
     {
-
         //Request $request
-        $data = array();
+        $data = [];
 
         // If someone tries not existing slug we should redirect them to the 404 page
         $slug = Slug::where('slug', $slug)->firstOrFail();
         $data['content'] = $slug->slugable;
-        if($slug->slugable_type == 'App\Model\Event'){
+        if ($slug->slugable_type == 'App\Model\Event') {
             $data['content'] = Event::with('category', 'city', 'topic')->find($data['content']['id']);
-            $data['eventtopics']= $data['content']->topicsLessonsInstructors()['topics'];
+            $data['eventtopics'] = $data['content']->topicsLessonsInstructors()['topics'];
             $topicDescription = [];
 
             foreach ($data['eventtopics'] as $key => $topic) {
@@ -803,14 +790,14 @@ class HomeController extends Controller
                 $topic = Topic::where('title', $key)->first();
                 $topicDescription[$key] = $topic['summary'];
             }
-            if(!$data['content']->is_inclass_course()){
-                array_multisort(array_column($data['eventtopics'],'priority'), SORT_ASC, $data['eventtopics']);
+            if (!$data['content']->is_inclass_course()) {
+                array_multisort(array_column($data['eventtopics'], 'priority'), SORT_ASC, $data['eventtopics']);
                 //uasort($data['eventtopics'], fn($a, $b) => strcmp($a['priority'], $b['priority']));
             }
 
-            $data['eventorganisers']=array();
+            $data['eventorganisers'] = [];
             if (count($data['content']['city']) != 0) {
-                $data['location']= $data['content']['city'][0];
+                $data['location'] = $data['content']['city'][0];
             }
 
             $data['etax'] = $data['content']['topic'];
@@ -825,7 +812,7 @@ class HomeController extends Controller
             $fn = $slug->slugable->title . '.pdf';
 
             return $pdf->stream($fn);
-        }else{
+        } else {
             return view('errors.custom', ['message' => 'This event not exists. Are you sure the url is correct?']);
         }
     }
@@ -847,7 +834,7 @@ class HomeController extends Controller
             $sms_code = $cookieSms->sms_code;
 
             $codeExpired = strtotime($cookieSms->updated_at);
-            $codeExpired  = (time() - $codeExpired) / 60;
+            $codeExpired = (time() - $codeExpired) / 60;
 
             //dd($codeExpired);
 
@@ -874,7 +861,7 @@ class HomeController extends Controller
             }
         }
 
-        return redirect()->back();//->with('errors', 'sms ode is wrong');
+        return redirect()->back(); //->with('errors', 'sms ode is wrong');
     }
 
     public function giveAway(Request $request)
@@ -920,17 +907,17 @@ class HomeController extends Controller
         });
 
         return [
-           'success' => true,
-           'status' => 1,
-           'message' => 'Τhank you for your participation',
-       ];
+            'success' => true,
+            'status' => 1,
+            'message' => 'Τhank you for your participation',
+        ];
     }
-
 
     public function thankyou()
     {
         if ($data = Session::get('thankyouData')) {
             Session::forget('thankyouData');
+
             return view('theme.cart.new_cart.thank_you', $data);
         }
 
@@ -941,6 +928,7 @@ class HomeController extends Controller
     {
         if ($data = json_decode($request->data, true)) {
             Session::forget('thankyouData');
+
             return view('theme.cart.new_cart.thank_you', $data);
         }
 

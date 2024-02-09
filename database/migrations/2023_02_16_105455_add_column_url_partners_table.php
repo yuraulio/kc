@@ -17,7 +17,6 @@ class AddColumnUrlPartnersTable extends Migration
         Schema::table('partners', function (Blueprint $table) {
             $table->longtext('url')->nullable()->after('description');
         });
-
     }
 
     /**

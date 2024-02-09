@@ -2,24 +2,24 @@
 
 namespace App\Http\Middleware;
 
-use Closure;
-use \Apifon\Mookee;
-use \Apifon\Model\SmsRequest;
-use \Apifon\Model\MessageContent;
-use \Apifon\Resource\SMSResource;
-
-use Auth;
-use App\Model\User as DPUser;
-use App\Model\CookiesSMS;
+use Apifon\Model\MessageContent;
+use Apifon\Model\SmsRequest;
+use Apifon\Mookee;
+use Apifon\Resource\SMSResource;
 use App\Model\Admin\Page;
+use App\Model\CookiesSMS;
 use App\Model\Pages;
+use App\Model\User as DPUser;
+use Auth;
+use Closure;
 
 class CheckForSMSCoockie
 {
-
-
-    protected $auth,$token,$secretId;
+    protected $auth;
+    protected $token;
+    protected $secretId;
     protected $except = ['/data-privacy-policy'];
+
     /**
      * Handle an incoming request.
      *
@@ -27,43 +27,39 @@ class CheckForSMSCoockie
      * @param  \Closure  $next
      * @return mixed
      */
-
-
     public function __construct()
     {
         //$this->auth = Auth::user();
         $this->token = env('token');
         $this->secretId = env('secret_key');
-
     }
 
     public function handle($request, Closure $next)
     {
         //dd('edw');
-        require_once("../app/Apifon/Model/IRequest.php");
-        require_once("../app/Apifon/Model/SubscribersViewRequest.php");
-        require_once("../app/Apifon/Mookee.php");
-        require_once("../app/Apifon/Security/Hmac.php");
-        require_once("../app/Apifon/Resource/AbstractResource.php");
-        require_once("../app/Apifon/Resource/SMSResource.php");
-        require_once("../app/Apifon/Response/GatewayResponse.php");
-        require_once("../app/Apifon/Model/MessageContent.php");
-        require_once("../app/Apifon/Model/SmsRequest.php");
-        require_once("../app/Apifon/Model/SubscriberInformation.php");
+        require_once '../app/Apifon/Model/IRequest.php';
+        require_once '../app/Apifon/Model/SubscribersViewRequest.php';
+        require_once '../app/Apifon/Mookee.php';
+        require_once '../app/Apifon/Security/Hmac.php';
+        require_once '../app/Apifon/Resource/AbstractResource.php';
+        require_once '../app/Apifon/Resource/SMSResource.php';
+        require_once '../app/Apifon/Response/GatewayResponse.php';
+        require_once '../app/Apifon/Model/MessageContent.php';
+        require_once '../app/Apifon/Model/SmsRequest.php';
+        require_once '../app/Apifon/Model/SubscriberInformation.php';
 
         if (Auth::guest() || env('APP_DEBUG') == true) {
             return $next($request);
         }
 
         $roles = Auth::user()->role->pluck('name')->toArray();
-        if (in_array('Super Administrator',$roles) || in_array('Administrator',$roles) || in_array('Manager',$roles) || in_array('Author',$roles)) {
+        if (in_array('Super Administrator', $roles) || in_array('Administrator', $roles) || in_array('Manager', $roles) || in_array('Author', $roles)) {
             return $next($request);
-        }else{
-
+        } else {
             $user = Auth::user();
             //dd($user);
 
-            if($user){
+            if ($user) {
                 /*if(isset($_COOKIE['auth-'.$user->id])){
                     $cookie = $_COOKIE['auth-'. $user->id];
 
@@ -159,36 +155,29 @@ class CheckForSMSCoockie
                         return redirect('/data-privacy-policy');
                     }
                 }*/
-                /*else*/ if(($user->consent == '' || $user->terms == 0) && !$user->instructor->first()){
-
+                /*else*/ if (($user->consent == '' || $user->terms == 0) && !$user->instructor->first()) {
                     $page = Page::find(4);
                     $pageSlug = $page->slug;
 
-                    if($request->is($pageSlug) || $request->is("logmeout") || $request->is("update-consent")) {
+                    if ($request->is($pageSlug) || $request->is('logmeout') || $request->is('update-consent')) {
                         return $next($request);
-                    }
-                    else {
+                    } else {
                         //dd('fdsa');
-                        return redirect($pageSlug."?terms");
+                        return redirect($pageSlug . '?terms');
                     }
-                }else if(($user->consent == '' || $user->terms == 0) && $user->instructor->first()){
-
+                } elseif (($user->consent == '' || $user->terms == 0) && $user->instructor->first()) {
                     $page = Pages::find(4753);
                     $pageSlug = $page->slugable->slug;
 
-                    if($request->is($pageSlug) || $request->is("logmeout") || $request->is("update-consent")) {
+                    if ($request->is($pageSlug) || $request->is('logmeout') || $request->is('update-consent')) {
                         return $next($request);
-                    }
-                    else {
+                    } else {
                         return redirect($pageSlug);
                     }
                 }
             }
-
         }
 
-
         return $next($request);
-
     }
 }

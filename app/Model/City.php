@@ -2,11 +2,10 @@
 
 namespace App\Model;
 
+use App\Model\Event;
+use App\Traits\SlugTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Model\Event;
-
-use App\Traits\SlugTrait;
 
 class City extends Model
 {
@@ -16,7 +15,7 @@ class City extends Model
     protected $table = 'cities';
 
     protected $fillable = [
-        'name'
+        'name',
     ];
 
     public function event()

@@ -42,7 +42,6 @@ class SubscriptionExpireReminder extends Notification
      */
     public function toMail($notifiable)
     {
-
         return (new MailMessage)
             ->from('info@knowcrunch.com', 'Knowcrunch')
             ->subject($this->data['subject'])

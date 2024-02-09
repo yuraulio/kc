@@ -14,23 +14,20 @@ return [
 
     'include_default_routes' => false, // set to false to not include routes.php for BinshopsReaderController and admin related routes. Default: true. If you disable this, you will have to manually copy over the data from routes.php and add it to your web.php.
 
-    'blog_prefix' => "blog", // used in routes.php. If you want to your http://yoursite.com/latest-news (or anything else), then enter that here. Default: blog
-    'admin_prefix' => "blog", // similar to above, but used for the admin panel for the blog. Default: blog_admin
+    'blog_prefix' => 'blog', // used in routes.php. If you want to your http://yoursite.com/latest-news (or anything else), then enter that here. Default: blog
+    'admin_prefix' => 'blog', // similar to above, but used for the admin panel for the blog. Default: blog_admin
 
     'use_custom_view_files' => false, // set to false to disable the use of being able to make blog posts include a view from resources/views/custom_blog_posts/*.blade.php. Default: false. Set to true to use this feature. Default: false
 
     'per_page' => 9, // how many posts to show per page on the blog index page. Default: 10
 
-
     'image_upload_enabled' => true, // true or false, if image uploading is allowed.
-    'blog_upload_dir' => "uploads/blog_images", // this should be in public_path() (i.e. /public/blog_images), and should be writable
-
+    'blog_upload_dir' => 'uploads/blog_images', // this should be in public_path() (i.e. /public/blog_images), and should be writable
 
     'memory_limit' => '2048M', // This is used when uploading images :
     //                              @ini_set('memory_limit', config("binshopsblog.memory_limit"));
     //                            See PHP.net for detailso
     //                            Set to false to not set any value.
-
 
     //if true it will echo out  (with {!! !!}) the blog post with NO escaping! This is not safe if you don't trust your blog post writers! Understand the risks by leaving this to true
     // (you should disable this (set to false) if you don't trust your blog writers).
@@ -51,9 +48,7 @@ return [
     // echo_html must be set to true for this to have an effect.
     'use_wysiwyg' => true, // Default: true
 
-
     'image_quality' => 80, // what image quality to use when saving images. higher = better + bigger sizes. Around 80 is normal.
-
 
     'image_sizes' => [
 
@@ -64,28 +59,27 @@ return [
 
         // There must be only three sizes - image_large, image_medium, image_thumbnail.
 
-
         'image_large' => [ // this key must start with 'image_'. This is what the DB column must be named
             'w' => 3840, // width in pixels
             'h' => 2160, //height
-            'basic_key' => "large", // same as the main key, but WITHOUT 'image_'.
-            'name' => "Large", // description, used in the admin panel
+            'basic_key' => 'large', // same as the main key, but WITHOUT 'image_'.
+            'name' => 'Large', // description, used in the admin panel
             'enabled' => true, // see note above
             'crop' => false, // if true then we will crop and resize to exactly w/h. If false then it will maintain proportions, with a max width of 'w' and max height of 'h'
         ],
         'image_medium' => [ // this key must start with 'image_'. This is what the DB column must be named
             'w' => 680, // width in pixels
             'h' => 320, //height
-            'basic_key' => "medium", // same as the main key, but WITHOUT 'image_'.
-            'name' => "Medium", // description, used in the admin panel
+            'basic_key' => 'medium', // same as the main key, but WITHOUT 'image_'.
+            'name' => 'Medium', // description, used in the admin panel
             'enabled' => true, // see note above
             'crop' => false, // if true then we will crop and resize to exactly w/h. If false then it will maintain proportions, with a max width of 'w' and max height of 'h'. If you use these images as part of your website template then you should probably have this to true.
         ],
         'image_thumbnail' => [ // this key must start with 'image_'. This is what the DB column must be named
             'w' => 150, // width in pixels
             'h' => 150, //height
-            'basic_key' => "thumbnail", // same as the main key, but WITHOUT 'image_'.
-            'name' => "Thumbnail", // description, used in the admin panel
+            'basic_key' => 'thumbnail', // same as the main key, but WITHOUT 'image_'.
+            'name' => 'Thumbnail', // description, used in the admin panel
             'enabled' => true, // see note above
         ],
         // 'image_fullsize' => []
@@ -113,12 +107,11 @@ return [
         //   php artisan migrate
     ],
 
-
     'captcha' => [
         'captcha_enabled' => false, // true = we should use a captcha, false = turn it off. If comments are disabled this makes no difference.
         'captcha_type' => \BinshopsBlog\Captcha\Basic::class, // this should be a class that implements the \BinshopsBlog\Interfaces\CaptchaInterface interface
-        'basic_question' => "What is the opposite of white?", // a simple captcha question to always ask (if captcha_type is set to 'basic'
-        'basic_answers' => "black,dark", // comma separated list of possible answers. Don't worry about case.
+        'basic_question' => 'What is the opposite of white?', // a simple captcha question to always ask (if captcha_type is set to 'basic'
+        'basic_answers' => 'black,dark', // comma separated list of possible answers. Don't worry about case.
     ],
 
     ////////// RSS FEED
@@ -129,14 +122,13 @@ return [
         'text_limit' => 100, // max length of description text in the rss feed
         'posts_to_show_in_rss_feed' => 10,  // how many posts should we show in the rss feed
         'cache_in_minutes' => 60, // how long (in minutes) to cache the RSS blog feed for.
-        'description' => "Our blog post RSS feed", //description for the RSS feed
-        'language' => "en", // see https://www.w3.org/TR/REC-html40/struct/dirlang.html#langcodes
+        'description' => 'Our blog post RSS feed', //description for the RSS feed
+        'language' => 'en', // see https://www.w3.org/TR/REC-html40/struct/dirlang.html#langcodes
     ],
 
     ////////// comments:
 
     'comments' => [
-
 
         // What type (if any) of comments/comment form to show.
         // options:
@@ -151,14 +143,12 @@ return [
         // should we save the IP address in the database?
         'save_ip_address' => true, // Default: true
 
-
         //should comments appear straight away on the site (set this to true)? or wait for approval (set to false)
         'auto_approve_comments' => true, // default: false
 
-
         'save_user_id_if_logged_in' => true, // if user is logged in, should we save that user id? (if false it will always ask for an author name, which the commenter can provide
 
-        'user_field_for_author_name' => "firstname", // what field on your User model should we use when echoing out the author name? By default this should be 'name', but maybe you have it set up to use 'username' etc.
+        'user_field_for_author_name' => 'firstname', // what field on your User model should we use when echoing out the author name? By default this should be 'name', but maybe you have it set up to use 'username' etc.
 
         'ask_for_author_email' => true, // show 'author email' on the form ?
         'require_author_email' => false, // require an email (make sure ask_for_author_email is true if you want to use this)
@@ -171,7 +161,7 @@ return [
             //                          s.src = 'https://yourusername_or_sitename.disqus.com/embed.js';
             //
             //             You must enter the whole url (but not the "s.src = '" part!)
-            'src_url' => "https://GET_THIS_FROM_YOUR_EMBED_CODE.disqus.com/embed.js", // enter the url here, from the html snippet disqus provides
+            'src_url' => 'https://GET_THIS_FROM_YOUR_EMBED_CODE.disqus.com/embed.js', // enter the url here, from the html snippet disqus provides
 
         ],
     ],

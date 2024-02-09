@@ -25,10 +25,10 @@ class LessonRequest extends FormRequest
     {
         return [
             'htmlTitle' => [
-                'required', 'min:3'
+                'required', 'min:3',
             ],
             'title' => [
-                'required', 'min:3'
+                'required', 'min:3',
             ],
             'subtitle' => [
 
@@ -47,7 +47,7 @@ class LessonRequest extends FormRequest
             ],
             'vimeo_duration' => [
 
-            ]
+            ],
         ];
     }
 }

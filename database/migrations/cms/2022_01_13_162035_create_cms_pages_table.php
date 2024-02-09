@@ -16,10 +16,10 @@ class CreateCmsPagesTable extends Migration
         Schema::create('cms_pages', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->integer("category_id");
-            $table->integer("template_id");
-            $table->string("title");
-            $table->string("description")->nullable();
+            $table->integer('category_id');
+            $table->integer('template_id');
+            $table->string('title');
+            $table->string('description')->nullable();
         });
     }
 

@@ -15,10 +15,11 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
+
 namespace App\Model;
 
-use App\Model\Tag;
 use App\Model\Category;
+use App\Model\Tag;
 use Illuminate\Database\Eloquent\Model;
 
 class Item extends Model
@@ -29,7 +30,7 @@ class Item extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'excerpt' , 'description', 'picture', 'category_id', 'status', 'date', 'show_on_homepage', 'options'
+        'name', 'excerpt', 'description', 'picture', 'category_id', 'status', 'date', 'show_on_homepage', 'options',
     ];
 
     /**
@@ -42,7 +43,7 @@ class Item extends Model
     ];
 
     /**
-     * Get the category of the item
+     * Get the category of the item.
      *
      * @return \App\Model\Category
      */
@@ -52,7 +53,7 @@ class Item extends Model
     }
 
     /**
-     * Get the tags of the item
+     * Get the tags of the item.
      *
      * @return \Illuminate\Database\Eloquent\Collection
      */
@@ -62,7 +63,7 @@ class Item extends Model
     }
 
     /**
-     * Get the path to the picture
+     * Get the path to the picture.
      *
      * @return string
      */

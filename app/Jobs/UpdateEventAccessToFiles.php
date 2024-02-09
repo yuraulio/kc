@@ -2,14 +2,14 @@
 
 namespace App\Jobs;
 
+use App\Model\Event;
+use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use App\Model\Event;
-use Carbon\Carbon;
 
 class UpdateEventAccessToFiles implements ShouldQueue
 {
@@ -20,14 +20,13 @@ class UpdateEventAccessToFiles implements ShouldQueue
      *
      * @return void
      */
-
     private $event;
 
     public function __construct($event)
     {
         $this->event = Event::with('lessons')->find($event);
 
-        if($this->event->is_inclass_course()){
+        if ($this->event->is_inclass_course()) {
             return 0;
         }
     }
@@ -42,24 +41,20 @@ class UpdateEventAccessToFiles implements ShouldQueue
         $lessons = $this->event['lessons'];
 
         $maxDate = null;
-        foreach($lessons as $key => $lesson){
-
+        foreach ($lessons as $key => $lesson) {
             $lessonDate = Carbon::parse($lesson->pivot->date)->format('Y-m-d');
 
-            if($key == 0){
+            if ($key == 0) {
                 $maxDate = $lessonDate;
             }
 
-           if(strtotime($lessonDate) > strtotime($maxDate)){
+            if (strtotime($lessonDate) > strtotime($maxDate)) {
                 $maxDate = $lessonDate;
-           }
-
+            }
         }
 
-
         $this->event->update([
-            'release_date_files' => $maxDate
+            'release_date_files' => $maxDate,
         ]);
-
     }
 }

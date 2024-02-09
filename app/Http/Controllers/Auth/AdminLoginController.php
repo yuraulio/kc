@@ -3,13 +3,11 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Contracts\View\View;
+use App\Model\Admin\Admin;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class AdminLoginController extends Controller
 {
@@ -25,6 +23,19 @@ class AdminLoginController extends Controller
      */
     public function showLoginPage(): Factory|View|Application
     {
+        if (isset(request()->all()['token'])) {
+            $token = request()->all()['token'];
+            if (isset(request()->all()['email'])) {
+                $email = request()->all()['email'];
+                $admin = Admin::where('email', $email)->where('remember_token', $token)->first();
+                if ($admin) {
+                    Auth::guard('admin_web')->login($admin);
+
+                    return redirect()->route('admin-dashboard');
+                }
+            }
+        }
+
         return view('new_admin.auth.login');
     }
 
@@ -45,7 +56,7 @@ class AdminLoginController extends Controller
         if (Auth::guard('admin_web')->attempt(['email' => $request->email, 'password' => $request->password, 'active' => 1])) {
             $request->session()->regenerate();
 
-            return redirect()->intended($this->redirectTo);
+            return redirect()->intended();
         }
 
         return back()->withErrors([

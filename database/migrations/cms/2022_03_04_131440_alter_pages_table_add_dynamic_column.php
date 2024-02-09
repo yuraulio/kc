@@ -14,7 +14,7 @@ class AlterPagesTableAddDynamicColumn extends Migration
     public function up()
     {
         Schema::table('cms_pages', function (Blueprint $table) {
-            $table->boolean("dynamic")->default(false);
+            $table->boolean('dynamic')->default(false);
         });
     }
 

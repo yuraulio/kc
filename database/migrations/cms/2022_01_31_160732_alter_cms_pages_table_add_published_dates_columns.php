@@ -14,8 +14,8 @@ class AlterCmsPagesTableAddPublishedDatesColumns extends Migration
     public function up()
     {
         Schema::table('cms_pages', function (Blueprint $table) {
-            $table->date("published_from")->nullable();
-            $table->date("published_to")->nullable();
+            $table->date('published_from')->nullable();
+            $table->date('published_to')->nullable();
         });
     }
 

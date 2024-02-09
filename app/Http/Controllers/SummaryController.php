@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Model\Summary;
-use App\Model\Event;
 use App\Http\Controllers\MediaController;
+use App\Model\Event;
+use App\Model\Summary;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -23,7 +23,7 @@ class SummaryController extends Controller
 
         $input['title'] = $request->title;
 
-        if($request->description != null){
+        if ($request->description != null) {
             $input['description'] = $request->description;
         }
 
@@ -52,7 +52,7 @@ class SummaryController extends Controller
 
         $data['summary'] = $summary;
 
-        if($request->svg){
+        if ($request->svg) {
             (new MediaController)->uploadSvg($request, $summary->medias);
         }
 
@@ -70,18 +70,13 @@ class SummaryController extends Controller
      */
     public function destroy(Summary $summary)
     {
-
     }
 
-    public function orderSummaries(Request $request, Event $event){
-
-        foreach($event->summary1()->get() as $summary){
+    public function orderSummaries(Request $request, Event $event)
+    {
+        foreach ($event->summary1()->get() as $summary) {
             $summary->priority = $request->all()['summaries'][$summary['id']];
             $summary->save();
-
         }
-
-
-
     }
 }

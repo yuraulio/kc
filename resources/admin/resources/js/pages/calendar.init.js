@@ -26,7 +26,7 @@
     CalendarApp.prototype.onEventClick =  function (info) {
         this.$formEvent[0].reset();
         this.$formEvent.removeClass("was-validated");
-        
+
         this.$newEventData = null;
         this.$btnDeleteEvent.show();
         this.$modalTitle.text('Edit Event');
@@ -40,7 +40,7 @@
     CalendarApp.prototype.onSelect = function (info) {
         this.$formEvent[0].reset();
         this.$formEvent.removeClass("was-validated");
-        
+
         this.$selectedEvent = null;
         this.$newEventData = info;
         this.$btnDeleteEvent.hide();
@@ -49,14 +49,14 @@
         this.$modal.show();
         this.$calendarObj.unselect();
     },
-    
+
     /* Initializing */
     CalendarApp.prototype.init = function() {
 
         this.$modal = new bootstrap.Modal(document.getElementById('event-modal'), {
             keyboard: false
         });
-        
+
         /*  Initialize the calendar  */
         var today = new Date($.now());
 
@@ -104,7 +104,7 @@
         $this.$calendarObj = new FullCalendar.Calendar($this.$calendar[0], {
             slotDuration: '00:15:00', /* If we want to split day time each 15minutes */
             slotMinTime: '08:00:00',
-            slotMaxTime: '19:00:00',  
+            slotMaxTime: '19:00:00',
             themeSystem: 'bootstrap',
             bootstrapFontAwesome: false,
             buttonText: {
@@ -116,9 +116,9 @@
                 prev: 'Prev',
                 next: 'Next'
             },
-            initialView: 'dayGridMonth',  
-            handleWindowResize: true,   
-            height: $(window).height() - 200,   
+            initialView: 'dayGridMonth',
+            handleWindowResize: true,
+            height: $(window).height() - 200,
             headerToolbar: {
                 left: 'prev,next today',
                 center: 'title',
@@ -178,7 +178,7 @@
 
    //init CalendarApp
     $.CalendarApp = new CalendarApp, $.CalendarApp.Constructor = CalendarApp
-    
+
 }(window.jQuery),
 
 //initializing CalendarApp

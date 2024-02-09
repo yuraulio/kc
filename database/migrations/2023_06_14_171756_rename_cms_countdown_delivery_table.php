@@ -19,10 +19,7 @@ class RenameCmsCountdownDeliveryTable extends Migration
             $table->id();
             $table->integer('countdown_id');
             $table->integer('event_id');
-
         });
-
-
     }
 
     /**

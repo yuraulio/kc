@@ -2,12 +2,11 @@
 
 namespace App\Model;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use App\Model\CategoriesFaqs;
 use App\Model\Category;
 use App\Model\Event;
-
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class Faq extends Model
 {
@@ -16,7 +15,7 @@ class Faq extends Model
     protected $table = 'faqs';
 
     protected $fillable = [
-        'title', 'answer', 'priority','type','status'
+        'title', 'answer', 'priority', 'type', 'status',
     ];
 
     /*public function category()

@@ -3,23 +3,22 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Model\User;
 use App\Http\Controllers\NotificationController;
-use Validator;
-use Hash;
-use App\Model\Ticket;
-use App\Model\Event;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use App\Model\Activation;
+use App\Model\Event;
+use App\Model\Ticket;
+use App\Model\User;
+use Hash;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use Validator;
 
 class StudentController extends Controller
 {
     public function statusInform(Request $request)
     {
-        $user = User::find($request->input("content_id"));
+        $user = User::find($request->input('content_id'));
 
         $notification = new NotificationController;
 
@@ -38,7 +37,7 @@ class StudentController extends Controller
 
     public function passwordInform(Request $request)
     {
-        $user_id = $request->input("content_id");
+        $user_id = $request->input('content_id');
         $notification = new NotificationController;
         if ($notification->userChangePassword($user_id)) {
             return [
@@ -55,7 +54,7 @@ class StudentController extends Controller
 
     public function activationInform(Request $request)
     {
-        $user_id = $request->input("content_id");
+        $user_id = $request->input('content_id');
 
         $notification = new NotificationController;
         //dd($notification->userActivationLink($user_id));
@@ -72,5 +71,4 @@ class StudentController extends Controller
             ];
         }
     }
-
 }

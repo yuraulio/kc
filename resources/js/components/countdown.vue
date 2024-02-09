@@ -1,35 +1,27 @@
-<style scoped>
-
-</style>
+<style scoped></style>
 
 <template>
-    <div>
-
-        <paginationtable :config="config"></paginationtable>
-
-    </div>
+  <div>
+    <paginationtable :config="config"></paginationtable>
+  </div>
 </template>
 
 <script>
-    import countdownConfig from "../table_configs/countdownTable";
-    import Paginationtable from './table/paginationtable.vue';
+import countdownConfig from '../table_configs/countdownTable';
+import Paginationtable from './table/paginationtable.vue';
 
-    export default {
-        components: {
-            countdownConfig,
-            Paginationtable,
-        },
-        props: {
-        },
-        data() {
-            return {
-                config: countdownConfig,
-            }
-        },
-        methods: {
-        },
-        mounted() {
-        }
-    }
+export default {
+  components: {
+    countdownConfig,
+    Paginationtable,
+  },
+  props: {},
+  data() {
+    return {
+      config: countdownConfig,
+    };
+  },
+  methods: {},
+  mounted() {},
+};
 </script>
-

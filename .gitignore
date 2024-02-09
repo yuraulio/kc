@@ -29,6 +29,8 @@ docker-compose-sail.yml
 storage/*.index*
 *.unison*
 /public/js/app.js
+/public/js/new_cart_app.js
+/public/new_cart/css/new_cart.css
 /public/theme/assets/css/style_ver.css
 /public/theme/assets/css/style_ver.css.map
 /public/theme/assets/css/style_ver_new.css
@@ -36,7 +38,6 @@ storage/*.index*
 /public/theme/assets/css/bootstrap.css
 /public/theme/assets/css/editor.css
 /public/js/blog.js
-/public/new_cart/version/style_ver.css
 /public/theme/assets/js/front.js
 /public/theme/assets/js/front.js.map
 /public/assets/vendor/MediaManager/*

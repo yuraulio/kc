@@ -2,23 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Model\Section;
-use Illuminate\Http\Request;
 use App\Http\Requests\SectionRequest;
 use App\Model\Event;
+use App\Model\Section;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class SectionController extends Controller
 {
-
-
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(SectionRequest $request ,Section $section)
+    public function store(SectionRequest $request, Section $section)
     {
         $model = app($request->model_type);
         $model = $model::find($request->model_id);

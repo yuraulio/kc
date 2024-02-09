@@ -4,8 +4,8 @@ namespace App\Http\Requests\Admin;
 
 use App\Model\Role;
 use App\Model\User;
-use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateAdminRequest extends FormRequest
 {
@@ -30,11 +30,11 @@ class UpdateAdminRequest extends FormRequest
             'firstname' => ['required', 'min:3'],
             'lastname' => ['required', 'min:3'],
             'email' => [
-                'required', 'email', "unique:admins,email,{$this->id}"
+                'required', 'email', "unique:admins,email,{$this->id}",
             ],
             'password' => [
-                $this->route()->user ? 'nullable' : 'confirmed', 'min:6'
-            ]
+                $this->route()->user ? 'nullable' : 'confirmed', 'min:6',
+            ],
         ];
     }
 }

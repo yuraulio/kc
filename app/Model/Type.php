@@ -2,11 +2,11 @@
 
 namespace App\Model;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use App\Model\Event;
 use App\Model\Lesson;
 use App\Traits\SlugTrait;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class Type extends Model
 {
@@ -16,7 +16,7 @@ class Type extends Model
     protected $table = 'types';
 
     protected $fillable = [
-        'name', 'description', 'parent'
+        'name', 'description', 'parent',
     ];
 
     public function events()

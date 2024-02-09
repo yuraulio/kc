@@ -3,8 +3,8 @@
 namespace App\Http\Requests;
 
 use App\Model\Role;
-use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class RoleRequest extends FormRequest
 {
@@ -27,11 +27,11 @@ class RoleRequest extends FormRequest
     {
         return [
             'name' => [
-                'required', 'min:3', Rule::unique((new Role)->getTable())->ignore($this->route()->role->id ?? null)
+                'required', 'min:3', Rule::unique((new Role)->getTable())->ignore($this->route()->role->id ?? null),
             ],
             'permissions' => [
-                'required', 'min:3'
-            ]
+                'required', 'min:3',
+            ],
         ];
     }
 }

@@ -34,7 +34,7 @@ class TinifyImage implements ShouldQueue
     {
         Tinify::fromFile($this->path)->toFile($this->path);
 
-        $mediaFile = MediaFile::where("id", $this->id)->first();
+        $mediaFile = MediaFile::where('id', $this->id)->first();
         if ($mediaFile) {
             $mediaFile->size = filesize($this->path);
             $mediaFile->save();

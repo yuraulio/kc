@@ -25,7 +25,7 @@ trait ManagesInvoices
      */
     public function tab($description, $amount, array $options = [])
     {
-        if ($this->isAutomaticTaxEnabled() && ! array_key_exists('price_data', $options)) {
+        if ($this->isAutomaticTaxEnabled() && !array_key_exists('price_data', $options)) {
             throw new LogicException('When using automatic tax calculation, you need to define the "price_data" in the options.');
         }
 
@@ -158,7 +158,7 @@ trait ManagesInvoices
      */
     public function upcomingInvoice(array $options = [])
     {
-        if (! $this->hasStripeId()) {
+        if (!$this->hasStripeId()) {
             return;
         }
 
@@ -243,7 +243,7 @@ trait ManagesInvoices
      */
     public function invoicess($includePending = false, $parameters = [])
     {
-        if (! $this->hasStripeId()) {
+        if (!$this->hasStripeId()) {
             return new Collection();
         }
 
@@ -258,7 +258,7 @@ trait ManagesInvoices
         // Here we will loop through the Stripe invoices and create our own custom Invoice
         // instances that have more helper methods and are generally more convenient to
         // work with than the plain Stripe objects are. Then, we'll return the array.
-        if (! is_null($stripeInvoices)) {
+        if (!is_null($stripeInvoices)) {
             foreach ($stripeInvoices->data as $invoice) {
                 if ($invoice->paid || $includePending) {
                     $invoices[] = new Invoice($this, $invoice);

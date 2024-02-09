@@ -15,42 +15,43 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
+
 namespace App\Http\Controllers;
 
-use App\Model\Role;
-use App\Model\User;
-use App\Model\Event;
-use App\Model\Ticket;
-use App\Model\Activation;
-use App\Model\Transaction;
-use \Cart as Cart;
-use Carbon\Carbon;
-use App\Model\Media;
-use App\Model\Certificate;
-use Session;
-use App\Http\Requests\UserRequest;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Auth;
+use App\Events\EmailSent;
+use App\Http\Controllers\Dashboard\CouponController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\TransactionController;
-use App\Http\Controllers\Dashboard\CouponController;
-use App\Notifications\userActivationLink;
-use Mail;
-use App\Model\Option;
-use App\Model\Invoice;
-use App\Notifications\CourseInvoice;
-use App\Notifications\WelcomeEmail;
-use Illuminate\Http\Request;
-use App\Notifications\SendWaitingListEmail;
-use PDF;
+use App\Http\Requests\UserRequest;
+use App\Model\Activation;
 use App\Model\Admin\Page;
-use Validator;
+use App\Model\Certificate;
+use App\Model\Event;
+use App\Model\Invoice;
+use App\Model\Media;
+use App\Model\Option;
+use App\Model\Role;
+use App\Model\Ticket;
+use App\Model\Transaction;
+use App\Model\User;
+use App\Notifications\CourseInvoice;
+use App\Notifications\SendWaitingListEmail;
+use App\Notifications\userActivationLink;
+use App\Notifications\WelcomeEmail;
+use Carbon\Carbon;
+use Cart as Cart;
+use DataTables;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
+use Mail;
+use PDF;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Reader\IReadFilter;
-use Illuminate\Support\Str;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-use DataTables;
-
+use Session;
+use Validator;
 
 class UserController extends Controller
 {
@@ -59,8 +60,8 @@ class UserController extends Controller
         $this->authorizeResource(User::class);
     }
 
-    public function statistics($users){
-
+    public function statistics($users)
+    {
         $data = [];
 
         $data['active'] = 0;
@@ -70,21 +71,19 @@ class UserController extends Controller
         $data['usersInClassAll'] = 0;
         $data['usersElearningAll'] = 0;
 
-        foreach($users->toArray() as $user){
-
+        foreach ($users->toArray() as $user) {
             // Active Or Inactive
-            if(isset($user['status_account'])){
+            if (isset($user['status_account'])) {
                 $completed = $user['status_account']['completed'];
 
-                if($completed){
+                if ($completed) {
                     $data['active']++;
-
-                }else{
+                } else {
                     $data['inactive']++;
                 }
-                if($completed){
+                if ($completed) {
                     // UserInclass
-                    if(!empty($user['events_for_user_list1'])){
+                    if (!empty($user['events_for_user_list1'])) {
                         $events = $user['events_for_user_list1'];
 
                         $foundInClass = false;
@@ -92,97 +91,78 @@ class UserController extends Controller
                         $foundElearning = false;
                         $foundElearningAll = false;
 
-                        foreach($events as $event){
-
-                            if($event['published'] && $event['status'] == 0 && $event['pivot']['paid'] == 1 && (empty($event['delivery']) || $event['delivery'][0]['id'] != 143)){
-
+                        foreach ($events as $event) {
+                            if ($event['published'] && $event['status'] == 0 && $event['pivot']['paid'] == 1 && (empty($event['delivery']) || $event['delivery'][0]['id'] != 143)) {
                                 $foundInClass = true;
                             }
 
-
-
-                            if($event['published'] && $event['pivot']['expiration'] >= date('Y-m-d') && $event['status'] == 0 && $event['pivot']['paid'] == 1 && !empty($event['delivery']) && $event['delivery'][0]['id'] == 143 ){
+                            if ($event['published'] && $event['pivot']['expiration'] >= date('Y-m-d') && $event['status'] == 0 && $event['pivot']['paid'] == 1 && !empty($event['delivery']) && $event['delivery'][0]['id'] == 143) {
                                 $foundElearning = true;
                             }
 
-                            if(empty($event['delivery']) || (!empty($event['delivery']) && $event['delivery'][0]['id'] != 143) ){
+                            if (empty($event['delivery']) || (!empty($event['delivery']) && $event['delivery'][0]['id'] != 143)) {
                                 $foundInClassAll = true;
                             }
 
-                            if(!empty($event['delivery']) && $event['delivery'][0]['id'] == 143){
+                            if (!empty($event['delivery']) && $event['delivery'][0]['id'] == 143) {
                                 $foundElearningAll = true;
                             }
                         }
 
-                        if($foundInClass){
+                        if ($foundInClass) {
                             $data['usersInClass']++;
                         }
-                        if($foundElearning){
+                        if ($foundElearning) {
                             $data['usersElearning']++;
                         }
-                        if($foundInClassAll){
+                        if ($foundInClassAll) {
                             $data['usersInClassAll']++;
                         }
-                        if($foundElearningAll){
+                        if ($foundElearningAll) {
                             $data['usersElearningAll']++;
                         }
                     }
                 }
             }
-
-
-
-
-
         }
 
         // SUM Active Or Inactive
         $data['all'] = $data['active'] + $data['inactive'];
 
-
         return $data;
-
     }
 
     public function statistics1()
     {
         $data = [];
 
-
         $users = User::with('statusAccount')->get();
 
         $data['active'] = 0;
         $data['inactive'] = 0;
-        foreach($users as $user){
-
-            if(!empty($user['statusAccount'])){
+        foreach ($users as $user) {
+            if (!empty($user['statusAccount'])) {
                 $completed = $user['statusAccount']['completed'];
 
-                if($completed){
+                if ($completed) {
                     $data['active']++;
-                }else{
+                } else {
                     $data['inactive']++;
                 }
             }
-
-
-
         }
 
-
-
-        $data['active'] = User::WhereHas('statusAccount', function($q) {
+        $data['active'] = User::WhereHas('statusAccount', function ($q) {
             $q->where('completed', true);
         })->count();
 
-        $data['inactive'] = User::WhereHas('statusAccount', function($q) {
+        $data['inactive'] = User::WhereHas('statusAccount', function ($q) {
             $q->where('completed', false);
         })->count();
 
         $data['all'] = $data['active'] + $data['inactive'];
 
-
-        $data['usersInClass'] = User::WhereHas('events_for_user_list1', function($q) {
+        $data['usersInClass'] = User::WhereHas('events_for_user_list1', function ($q) {
             $q->wherePublished(true)->where('event_user.paid', true)->whereStatus(0)->where(function ($q1) {
                 $q1->doesntHave('delivery')->OrWhereHas('delivery', function ($q2) {
                     return $q2->where('deliveries.id', '<>', 143);
@@ -190,18 +170,15 @@ class UserController extends Controller
             });
         })->count();
 
-
-        $data['usersElearning'] = User::WhereHas('events_for_user_list1', function($q) {
-            $q->wherePublished(true)->where('event_user.expiration', '>=',date('Y-m-d'))->where('event_user.paid', true)->whereStatus(0)->whereHas('delivery', function ($q1) {
+        $data['usersElearning'] = User::WhereHas('events_for_user_list1', function ($q) {
+            $q->wherePublished(true)->where('event_user.expiration', '>=', date('Y-m-d'))->where('event_user.paid', true)->whereStatus(0)->whereHas('delivery', function ($q1) {
                 return $q1->where('deliveries.id', 143);
             });
         })->count();
 
         // dd($data['usersElearning']);
 
-
-
-        $data['usersInClassAll'] = User::WhereHas('events_for_user_list1', function($q) {
+        $data['usersInClassAll'] = User::WhereHas('events_for_user_list1', function ($q) {
             $q->where(function ($q1) {
                 $q1->doesntHave('delivery')->OrWhereHas('delivery', function ($q2) {
                     return $q2->where('deliveries.id', '<>', 143);
@@ -210,17 +187,15 @@ class UserController extends Controller
         })->count();
         //dd($data['userInclassAll']);
 
-        $data['usersElearningAll'] = User::WhereHas('events_for_user_list1', function($q) {
+        $data['usersElearningAll'] = User::WhereHas('events_for_user_list1', function ($q) {
             $q->whereHas('delivery', function ($q1) {
                 return $q1->where('deliveries.id', 143);
             });
         })->count();
 
-
         //$data['usersElearning']
 
         return $data;
-
     }
 
     private function generateQuery($request)
@@ -233,62 +208,56 @@ class UserController extends Controller
             'role',
         ]);
 
-        if($request->event != ""){
-            $query->whereHas('events_for_user_list1', function($q) use ($request) {
+        if ($request->event != '') {
+            $query->whereHas('events_for_user_list1', function ($q) use ($request) {
                 $q->where('title', $request->event);
             });
         }
 
-        if($request->coupon != ""){
-            $query->whereHas('transactions', function($q) use ($request) {
+        if ($request->coupon != '') {
+            $query->whereHas('transactions', function ($q) use ($request) {
                 $q->where('coupon_code', $request->coupon);
             });
         }
 
-        if($request->status != ""){
-
-
-            if($request->status == 'Active'){
+        if ($request->status != '') {
+            if ($request->status == 'Active') {
                 $requestStatus = 1;
-            }else if($request->status == 'Inactive'){
+            } elseif ($request->status == 'Inactive') {
                 $requestStatus = 0;
             }
 
-
-            $query->whereHas('statusAccount', function($q) use ($requestStatus) {
+            $query->whereHas('statusAccount', function ($q) use ($requestStatus) {
                 $q->where('completed', $requestStatus);
             });
         }
 
-        if($request->role != ""){
-            $query->whereHas('role', function($q) use ($request) {
+        if ($request->role != '') {
+            $query->whereHas('role', function ($q) use ($request) {
                 $q->where('name', $request->role);
             });
         }
 
-        if($request->job != ""){
+        if ($request->job != '') {
             $query->where('job_title', $request->job);
         }
 
-        if($request->company != ""){
+        if ($request->company != '') {
             $query->where('company', $request->company);
         }
 
-        if($request->from_date != ""){
+        if ($request->from_date != '') {
+            $date = date_parse_from_format('m/d/Y', $request->from_date);
+            $date = date_create($date['year'] . '-' . $date['month'] . '-' . $date['day']);
 
-            $date = date_parse_from_format("m/d/Y", $request->from_date);
-            $date = date_create($date['year'].'-'.$date['month'].'-'.$date['day']);
-
-            $query->where('created_at', '>=' , $date);
+            $query->where('created_at', '>=', $date);
         }
 
-        if($request->until_date != ""){
+        if ($request->until_date != '') {
+            $date = date_parse_from_format('m/d/Y', $request->until_date);
+            $date = date_create($date['year'] . '-' . $date['month'] . '-' . $date['day']);
 
-            $date = date_parse_from_format("m/d/Y", $request->until_date);
-            $date = date_create($date['year'].'-'.$date['month'].'-'.$date['day']);
-
-            $query->where('created_at', '<=' , $date);
-
+            $query->where('created_at', '<=', $date);
         }
 
         //$query->orderBy('id', 'desc');
@@ -296,79 +265,63 @@ class UserController extends Controller
         return $query;
     }
 
-    public function index(User $model, Request $request){
-
+    public function index(User $model, Request $request)
+    {
         if ($request->ajax()) {
-
             $data = $this->generateQuery($request);
 
             return Datatables::of($data)
 
-                    ->editColumn('image', function($row){
-
-                        $image = cdn('/theme/assets/images/icons/user-circle.svg');
-                        if($row['image'] != null && $row['image']['name'] != ''){
-                            $image = cdn(get_image($row['image']));
-                        }
-
-                        return '<span class="avatar avatar-sm rounded-circle"><img src="'.$image.'" alt="'.$row['firstname'].'" style="max-width: 100px; border-radius: 25px"></span>';
+                    ->editColumn('image', function ($row) {
+                        return  \App\Helpers\UserHelper::getUserProfileImage($row, ['width' => 30, 'height' => 30, 'id' => 'user-img-' . $row['id'], 'class' => 'login-image']);
                     })
-                    ->editColumn('firstname', function($row){
-
-                        return '<a href='.route('user.edit', $row->id).'>'.$row->firstname.'</a>';
+                    ->editColumn('firstname', function ($row) {
+                        return '<a href=' . route('user.edit', $row->id) . '>' . $row->firstname . '</a>';
                     })
-                    ->editColumn('lastname', function($row){
-
+                    ->editColumn('lastname', function ($row) {
                         return $row->lastname;
                     })
-                    ->editColumn('mobile', function($row){
-
+                    ->editColumn('mobile', function ($row) {
                         return $row->mobile;
                     })
-                    ->editColumn('email', function($row){
-
-                        return '<a href="mailto:'.$row->email.'">'.$row->email.'</a>';
+                    ->editColumn('email', function ($row) {
+                        return '<a href="mailto:' . $row->email . '">' . $row->email . '</a>';
                     })
-                    ->editColumn('kc_id', function($row){
-
+                    ->editColumn('kc_id', function ($row) {
                         return $row->kc_id;
                     })
-                    ->editColumn('id', function($row){
-
+                    ->editColumn('id', function ($row) {
                         return $row->id;
                     })
-                    ->editColumn('role', function($row){
-
-                        if(isset($row['role'][count($row['role']) - 1])){
+                    ->editColumn('role', function ($row) {
+                        if (isset($row['role'][count($row['role']) - 1])) {
                             return $row['role'][count($row['role']) - 1]['name'];
                         }
+
                         return '';
-
                     })
-                    ->editColumn('status', function($row){
-
+                    ->editColumn('status', function ($row) {
                         $status = 'Inactive';
 
-                        if(isset($row['statusAccount']) && $row['statusAccount']['completed'] == 1){
+                        if (isset($row['statusAccount']) && $row['statusAccount']['completed'] == 1) {
                             $status = 'Active';
                         }
 
                         return $status;
                     })
-                    ->editColumn('created_at', function($row){
-
+                    ->editColumn('created_at', function ($row) {
                         return date_format(date_create($row->created_at), 'd-m-Y');
                     })
-                    ->addColumn('action', function($row){
+                    ->addColumn('action', function ($row) {
                         return '<div class="dropdown">
                         <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="fas fa-ellipsis-v"></i>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                            <a class="dropdown-item" href="'.route("user.edit", $row->id).'">Edit</a>
+                            <a class="dropdown-item" href="' . route('user.edit', $row->id) . '">Edit</a>
 
-                            <form action="'.route("user.destroy", $row->id) .'" method="post">
-                            '. $this->csrf_field() .'
+                            <form action="' . route('user.destroy', $row->id) . '" method="post">
+                            ' . $this->csrf_field() . '
                             <input type="hidden" name="_method" value="DELETE">
 
                                 <button type="button" class="dropdown-item delete-btn">
@@ -376,8 +329,8 @@ class UserController extends Controller
                                 </button>
                             </form>
 
-                            <form action="'.route("user.login_as", $row->id) .'" method="post">
-                                '. $this->csrf_field() .'
+                            <form action="' . route('user.login_as', $row->id) . '" method="post">
+                                ' . $this->csrf_field() . '
 
                                 <button type="button" class="dropdown-item login-as-btn">
                                     Login as
@@ -390,12 +343,11 @@ class UserController extends Controller
                     ->rawColumns(['firstname', 'email', 'image', 'action'])
 
                     ->make(true);
-
-        }else{
+        } else {
             $users = $model->select('firstname', 'lastname', 'mobile', 'email', 'id', 'job_title', 'company', 'kc_id')->with([
                 'statusAccount',
                 'events_for_user_list1:id,title,published,status',
-                'events_for_user_list1.delivery'
+                'events_for_user_list1.delivery',
             ])->get();
 
             $data = [];
@@ -407,29 +359,29 @@ class UserController extends Controller
             $data['companies'] = User::where('company', '!=', 'null')->groupBy('company')->pluck('company')->toArray();
 
             $data = $data + $this->statistics($users);
-
         }
 
         return view('users.index_new', compact('data'));
     }
 
-    function loginAs($id)
+    public function loginAs($id)
     {
         if (!Auth::user()->role->whereIn('name', ['Super Administrator'])->isNotEmpty()) {
             abort(403, 'Access not authorized');
         }
         $user = User::findOrFail($id);
         Auth::login($user);
+
         return redirect()->to('/');
     }
 
-    function csrf_field()
+    public function csrf_field()
     {
-        return '<input type="hidden" name="_token" value="'.csrf_token().'">';
+        return '<input type="hidden" name="_token" value="' . csrf_token() . '">';
     }
 
     /**
-     * Display a listing of the users
+     * Display a listing of the users.
      *
      * @param  \App\Model\User  $model
      * @return \Illuminate\View\View
@@ -467,11 +419,10 @@ class UserController extends Controller
     //     $data = $data + $this->statistics($users);
     //     //$data = $data + $this->statistics1();
 
-
     //     return view('users.index', ['users' => $users, 'data' => $data]);
     // }
 
-    private $rules = array(
+    private $rules = [
         'firstname'     => 'min:3',
         'lastname'      => 'min:3',
         'email'         => 'required|email',
@@ -484,9 +435,9 @@ class UserController extends Controller
         'ticket_price'  => 'nullable|digits_between:-10000000,10000000',
         'afm'           => 'nullable|digits:8',
         'birthday'      => 'nullable|date_format:d-m-Y',
-        'event_id'      => 'required|numeric'
+        'event_id'      => 'required|numeric',
 
-    );
+    ];
 
     public function validateCsv($data, $billing_details = false)
     {
@@ -498,7 +449,7 @@ class UserController extends Controller
 
         $data['pass'] = $v->passes();
 
-        if($v->errors()){
+        if ($v->errors()) {
             $data['errors'] = $v->errors();
         }
 
@@ -506,21 +457,20 @@ class UserController extends Controller
         return $data;
     }
 
-    public function errorImportCsvReport($data){
+    public function errorImportCsvReport($data)
+    {
         $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
-        $worksheet = new \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet($spreadsheet, "Failed rows from import");
+        $worksheet = new \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet($spreadsheet, 'Failed rows from import');
         $spreadsheet->addSheet($worksheet, 0);
         $worksheet->fromArray($data);
 
-        foreach ($worksheet->getColumnIterator() as $column)
-        {
+        foreach ($worksheet->getColumnIterator() as $column) {
             $worksheet->getColumnDimension($column->getColumnIndex())->setAutoSize(true);
         }
 
         // Save to file.
         $writer = new Xlsx($spreadsheet);
         $writer->save('import/error_import_users.xlsx');
-
     }
 
     public function importFromFile(Request $request)
@@ -528,7 +478,7 @@ class UserController extends Controller
         $error_msg = '';
 
         $validator = Validator::make(request()->all(), [
-            'file' => 'required|mimes:xlsx,xls|max:2048'
+            'file' => 'required|mimes:xlsx,xls|max:2048',
         ]);
 
         if ($validator->fails()) {
@@ -537,13 +487,11 @@ class UserController extends Controller
 
         $file = $request->file('file');
 
-
-        if($file){
+        if ($file) {
             $filename = $file->getClientOriginalName();
             $tempPath = $file->getRealPath();
             //dd($tempPath);
-            $extension = explode('.',$filename)[1];
-
+            $extension = explode('.', $filename)[1];
 
             $reader = IOFactory::createReader(ucfirst($extension));
 
@@ -565,11 +513,9 @@ class UserController extends Controller
                 // Do some processing here
 
                 $sheetData = $spreadsheet->getActiveSheet()->toArray(null, true, true, true);
-
             }
 
-            if($sheetData){
-
+            if ($sheetData) {
                 $allUsers = User::select('email', 'password')->get()->keyBy('email')->toArray();
 
                 $userForUpdate = [];
@@ -579,7 +525,7 @@ class UserController extends Controller
 
                 $i = 0;
                 foreach ($sheetData as $key => $importData) {
-                    if($key == 1){
+                    if ($key == 1) {
                         continue;
                     }
 
@@ -590,9 +536,9 @@ class UserController extends Controller
 
                     $user->firstname = isset($importData['A']) ? $importData['A'] : null;
                     $user->lastname = isset($importData['B']) ? $importData['B'] : null;
-                    if(isset($importData['C']) && $importData['C'] != null){
+                    if (isset($importData['C']) && $importData['C'] != null) {
                         $user->email = $importData['C'];
-                    }else{
+                    } else {
                         continue;
                     }
 
@@ -611,7 +557,6 @@ class UserController extends Controller
                     $user->postcode = isset($importData['P']) ? intval($importData['P']) : null;
                     $user->city = isset($importData['Q']) ? $importData['Q'] : null;
                     $user->afm = isset($importData['R']) ? intval($importData['R']) : null;
-
 
                     $billing_details['billing'] = isset($importData['S']) ? $importData['S'] : null;
                     $billing_details['billname'] = isset($importData['T']) ? $importData['T'] : null;
@@ -632,9 +577,7 @@ class UserController extends Controller
                     //     continue;
                     // }
 
-
                     $user->receipt_details = json_encode($billing_details);
-
 
                     // $user->invoice_details = json_encode($invoice_details);
 
@@ -644,14 +587,12 @@ class UserController extends Controller
                     $user->ticket_price = isset($importData['AF']) ? $importData['AF'] : null;
                     $user->event_id = isset($importData['AG']) ? $importData['AG'] : null;
 
-
                     $validations = null;
                     //check if exist user
-                    if(isset($allUsers[$user->email])){
-
+                    if (isset($allUsers[$user->email])) {
                         $validations = $this->validateCsv($user->toArray());
 
-                        if(!$validations['pass']){
+                        if (!$validations['pass']) {
                             $userFailedImport[] = $user;
                             $validationErrors[] = $validations['errors'];
                             continue;
@@ -659,12 +600,10 @@ class UserController extends Controller
 
                         // update
                         $userForUpdate[] = $user;
-
-                    }else{
-
+                    } else {
                         $validations = $this->validateCsv($user->toArray());
 
-                        if(!$validations['pass']){
+                        if (!$validations['pass']) {
                             $userFailedImport[] = $user;
                             $validationErrors[] = $validations['errors'];
                             continue;
@@ -672,15 +611,13 @@ class UserController extends Controller
                         // create
                         $userForCreate[] = $user;
                     }
-
                 }
 
-                if(!empty($userForCreate)){
-                    foreach($userForCreate as $new_user){
-
+                if (!empty($userForCreate)) {
+                    foreach ($userForCreate as $new_user) {
                         $ticket_type = $new_user['ticket_type'];
                         $ticket_price = $new_user['ticket_price'];
-                        if($new_user->password == null || strlen($new_user->password) < 6){
+                        if ($new_user->password == null || strlen($new_user->password) < 6) {
                             $userFailedImport[] = $new_user;
                             $validationErrors[] = ['password'=>['Password required for new user']];
                             continue;
@@ -695,7 +632,7 @@ class UserController extends Controller
 
                         $new_user_saved = $new_user->save();
 
-                        if($new_user_saved){
+                        if ($new_user_saved) {
                             $user = User::where('email', $new_user['email'])->first();
 
                             // add role
@@ -707,11 +644,10 @@ class UserController extends Controller
                             // $activation->completed = true;
                             // $activation->save();
 
-
                             // get kc id
                             $request = new \Illuminate\Http\Request();
                             $request->replace([
-                                'user' => $user['id']
+                                'user' => $user['id'],
                             ]);
 
                             $this->createKC($request);
@@ -721,10 +657,8 @@ class UserController extends Controller
                     }
                 }
 
-
-                if(!empty($userForUpdate)){
-
-                    foreach($userForUpdate as $update_user){
+                if (!empty($userForUpdate)) {
+                    foreach ($userForUpdate as $update_user) {
                         $user = User::select(
                             'firstname',
                             'lastname',
@@ -751,7 +685,6 @@ class UserController extends Controller
                         ->where('email', $update_user->email)
                         ->first();
 
-
                         unset($update_user['password']);
                         // if($update_user['password'] != null && !Hash::check($update_user['password'], $allUsers[$update_user['email']]['password'])){
 
@@ -763,49 +696,47 @@ class UserController extends Controller
 
                         // }
 
-                        $ticket_info['ticket_type'] = isset($update_user['ticket_type']) ? $update_user['ticket_type'] : null ;
-                        $ticket_info['ticket_price'] = isset($update_user['ticket_price']) ? $update_user['ticket_price'] : null ;
-                        $event_id = isset($update_user['event_id']) ? $update_user['event_id'] : null ;
+                        $ticket_info['ticket_type'] = isset($update_user['ticket_type']) ? $update_user['ticket_type'] : null;
+                        $ticket_info['ticket_price'] = isset($update_user['ticket_price']) ? $update_user['ticket_price'] : null;
+                        $event_id = isset($update_user['event_id']) ? $update_user['event_id'] : null;
 
                         unset($update_user['ticket_type']);
                         unset($update_user['ticket_price']);
                         unset($update_user['event_id']);
 
-
-                        foreach($update_user->toArray() as $key => $us){
-                            if($us == null){
+                        foreach ($update_user->toArray() as $key => $us) {
+                            if ($us == null) {
                                 unset($update_user[$key]);
                             }
                         }
 
                         $diff = array_diff_assoc($update_user->toArray(), $user->toArray());
 
-                        if(!empty($diff)){
+                        if (!empty($diff)) {
                             $data_for_update = $diff;
                             //$user = User::where('email', $update_user['email'])->first();
 
-                            if(isset($data_for_update['receipt_details'])){
+                            if (isset($data_for_update['receipt_details'])) {
                                 $data_on_db = json_decode($user['receipt_details'], true);
 
                                 $data_on_update = json_decode($data_for_update['receipt_details'], true);
 
                                 //dd($data_on_update);
-                                foreach($data_on_update as $key => $a){
-                                    if($a == null){
+                                foreach ($data_on_update as $key => $a) {
+                                    if ($a == null) {
                                         unset($data_on_update[$key]);
                                         continue;
                                     }
 
-                                    if(!empty($data_on_db)){
-                                        foreach($data_on_db as $key1 => $b){
-                                            if($key == $key1){
+                                    if (!empty($data_on_db)) {
+                                        foreach ($data_on_db as $key1 => $b) {
+                                            if ($key == $key1) {
                                                 $data_on_db[$key1] = $a;
                                             }
                                         }
-                                    }else{
+                                    } else {
                                         $data_on_db = $data_on_update;
                                     }
-
                                 }
 
                                 $data_for_update['receipt_details'] = json_encode($data_on_db);
@@ -817,91 +748,82 @@ class UserController extends Controller
                             // get kc id
                             $request = new \Illuminate\Http\Request();
                             $request->replace([
-                                'user' => $user['id']
+                                'user' => $user['id'],
                             ]);
                             $this->createKC($request);
-
                         }
 
                         // check if ticket already assign
-                        if($ticket_info['ticket_type'] != null && $event_id != null){
+                        if ($ticket_info['ticket_type'] != null && $event_id != null) {
                             $user = User::with('ticket')->where('email', $update_user['email'])->first();
 
                             $foundTicket = false;
-                            foreach($user['ticket'] as $ticket){
-                                if(strtolower($ticket['type']) == strtolower($ticket_info['ticket_type']) && $ticket['event_id'] == $event_id){
+                            foreach ($user['ticket'] as $ticket) {
+                                if (strtolower($ticket['type']) == strtolower($ticket_info['ticket_type']) && $ticket['event_id'] == $event_id) {
                                     $foundTicket = true;
                                 }
                             }
 
-                            if(!$foundTicket){
+                            if (!$foundTicket) {
                                 $this->assigns($user, $event_id, $ticket_info['ticket_type'], $ticket_info['ticket_price'], $isNewUser = false);
                             }
                         }
-
                     }
-
                 }
 
                 //dd($validationErrors);
 
-                if(!empty($userFailedImport)){
-
+                if (!empty($userFailedImport)) {
                     $arr = [];
-                    foreach($userFailedImport as $key => $user){
+                    foreach ($userFailedImport as $key => $user) {
                         $arr[$key]['email'] = $user['email'];
-                       // dd($validationErrors[$key]->toArray());
-                        if(!empty($validationErrors[$key])){
+                        // dd($validationErrors[$key]->toArray());
+                        if (!empty($validationErrors[$key])) {
                             //dd($validationErrors);
-                            if(gettype($validationErrors[$key]) != 'array'){
+                            if (gettype($validationErrors[$key]) != 'array') {
                                 $validationErrors[$key] = $validationErrors[$key]->toArray();
                             }
-                            foreach($validationErrors[$key] as $input => $error){
-
-                                $arr[$key][$input] = $input .' : '. $error[0];
+                            foreach ($validationErrors[$key] as $input => $error) {
+                                $arr[$key][$input] = $input . ' : ' . $error[0];
                             }
                         }
-                        $error_msg = $error_msg.($key == 0 ? '' : ', ').$user['email'];
+                        $error_msg = $error_msg . ($key == 0 ? '' : ', ') . $user['email'];
                     }
-
 
                     //dd($arr);
                     $this->errorImportCsvReport($arr);
 
-                    return back()->withErrors(__('File is not imported, email failed to import: '. $error_msg));
-
+                    return back()->withErrors(__('File is not imported, email failed to import: ' . $error_msg));
                 }
 
                 return back()->withStatus(__('File is imported successfully'));
-
             }
         }
     }
 
-    public function assigns($user, $event_id, $ticket_type, $ticket_price, $isNewUser = false){
+    public function assigns($user, $event_id, $ticket_type, $ticket_price, $isNewUser = false)
+    {
         //Todo find ticket
 
-        if(!$event_id || !$ticket_type){
+        if (!$event_id || !$ticket_type) {
             return 0;
         }
 
         $event = Event::with('ticket')->find($event_id);
         $ticket_id = null;
 
-        if($event){
-            foreach($event['ticket'] as $ticket){
-                if($ticket->type != null && strtolower($ticket->type) == strtolower($ticket_type))
-                {
+        if ($event) {
+            foreach ($event['ticket'] as $ticket) {
+                if ($ticket->type != null && strtolower($ticket->type) == strtolower($ticket_type)) {
                     $ticket_id = $ticket['id'];
                     break;
                 }
             }
         }
 
-
         //create request event
 
-        if($ticket_id != null){
+        if ($ticket_id != null) {
             $request = new \Illuminate\Http\Request();
 
             $request->replace([
@@ -910,16 +832,12 @@ class UserController extends Controller
                 'ticket_id' => $ticket_id,
                 'sendInvoice' => false,
                 'custom_price' => $ticket_price,
-                'newUser' => $isNewUser
-             ]);
+                'newUser' => $isNewUser,
+            ]);
 
             $this->assignEventToUserCreate($request);
         }
-
-
-
     }
-
 
     /*
     public function index(User $model)
@@ -954,7 +872,7 @@ class UserController extends Controller
 
         //dd($model->with('role', 'image')->get()->toArray()[0]['image']);
         //dd($model->with('role', 'image','statusAccount', 'events_for_user_list1')->get()->toArray()[10]);
-		dd('fsa');
+        dd('fsa');
         return view('users.index', ['users'=>$data['users'],'data' => $data]);
     }
 
@@ -1016,7 +934,7 @@ class UserController extends Controller
     */
 
     /**
-     * Show the form for creating a new user
+     * Show the form for creating a new user.
      *
      * @param  \App\Model\Role  $model
      * @return \Illuminate\View\View
@@ -1036,8 +954,8 @@ class UserController extends Controller
         $user = User::find($user_id);
         $isNewUser = true;
 
-        if($user->statusAccount){
-            if($user->statusAccount->completed != false){
+        if ($user->statusAccount) {
+            if ($user->statusAccount->completed != false) {
                 $isNewUser = false;
             }
         }
@@ -1047,126 +965,118 @@ class UserController extends Controller
 
         $data['event'] = Event::with('delivery', 'ticket', 'event_info1')->find($event_id);
         //dd($data['event']['ticket']);
-        foreach($data['event']->ticket as $ticket){
+        foreach ($data['event']->ticket as $ticket) {
             //dd($ticket);
-            if($ticket->pivot->ticket_id == $ticket_id)
-            {
+            if ($ticket->pivot->ticket_id == $ticket_id) {
                 $data['event']['ticket_title'] = $ticket['title'];
                 $quantity = $ticket->pivot->quantity - 1;
 
-                if($quantity < 0)
+                if ($quantity < 0) {
                     $quantity = 0;
+                }
             }
-
-
         }
         $extra_month = $data['event']->getAccessInMonths();
 
         $ticket = Ticket::find($ticket_id);
 
-        $ticket->events()->updateExistingPivot($event_id,['quantity' => $quantity], false);
+        $ticket->events()->updateExistingPivot($event_id, ['quantity' => $quantity], false);
 
+        if ($extra_month != null && is_numeric($extra_month) && $extra_month != 0) {
+            $exp_date = date('Y-m-d', strtotime('+' . $extra_month . ' months', strtotime('now')));
+        } else {
+            $exp_date = null;
+        }
 
+        $user->events()->attach($event_id, ['paid' => 1, 'expiration' => $exp_date]);
 
-       if($extra_month != null && is_numeric($extra_month) && $extra_month != 0){
-            $exp_date = date('Y-m-d', strtotime("+".$extra_month." months", strtotime('now')));
-       }else{
-           $exp_date = null;
-       }
+        $payment_method = $request->cardtype;
+        $billing = $request->billing;
 
-       $user->events()->attach($event_id, ['paid' => 1, 'expiration' => $exp_date]);
+        $event = Event::find($event_id);
+        $price = $event->ticket()->wherePivot('ticket_id', $ticket_id)->first()->pivot->price;
 
-       $payment_method = $request->cardtype;
-       $billing = $request->billing;
+        //Create Transaction
 
-       $event = Event::find($event_id);
-       $price = $event->ticket()->wherePivot('ticket_id',$ticket_id)->first()->pivot->price;
+        $billingDetails = [];
 
-       //Create Transaction
-
-       $billingDetails = [];
-
-       //if($request->billing == 1){
-        $billingDetails = json_decode($user['receipt_details'],true);
+        //if($request->billing == 1){
+        $billingDetails = json_decode($user['receipt_details'], true);
         $billingDetails['billing'] = 1;
-       /*}else{
-        $billingDetails = json_decode($user['invoice_details'],true);
-        $billingDetails['billing'] = 2;
-       }*/
+        /*}else{
+         $billingDetails = json_decode($user['invoice_details'],true);
+         $billingDetails['billing'] = 2;
+        }*/
 
-       $transaction = new Transaction;
-       $transaction->placement_date = Carbon::now();
-       $transaction->ip_address = \Request::ip();
-       $transaction->type = $ticket['type'];
-       $transaction->billing_details = json_encode($billingDetails);
-       $transaction->total_amount = ($custom_price != null) ? $custom_price : $price;;
-       $transaction->amount = ($custom_price != null) ? $custom_price : $price;;
-       $transaction->status = 1;
-       $transaction->trial = 0;
+        $transaction = new Transaction;
+        $transaction->placement_date = Carbon::now();
+        $transaction->ip_address = \Request::ip();
+        $transaction->type = $ticket['type'];
+        $transaction->billing_details = json_encode($billingDetails);
+        $transaction->total_amount = ($custom_price != null) ? $custom_price : $price;
+        $transaction->amount = ($custom_price != null) ? $custom_price : $price;
+        $transaction->status = 1;
+        $transaction->trial = 0;
 
-       $cart_data = ["manualtransaction" => [
-           "rowId" => "manualtransaction",
-           //"id" => 'coupon code ' . $content->id,
-           "name" => $data['event']['title'],"qty" => "1",
-           "price" => ($custom_price != null) ? $custom_price : $price,
-           //"options" => ["type" => "9","event"=> $content->id],
-           "tax" => 0,"subtotal" => ($custom_price != null) ? $custom_price : $price
-           ]];
+        $cart_data = ['manualtransaction' => [
+            'rowId' => 'manualtransaction',
+            //"id" => 'coupon code ' . $content->id,
+            'name' => $data['event']['title'], 'qty' => '1',
+            'price' => ($custom_price != null) ? $custom_price : $price,
+            //"options" => ["type" => "9","event"=> $content->id],
+            'tax' => 0, 'subtotal' => ($custom_price != null) ? $custom_price : $price,
+        ]];
 
-       $status_history[] = [
-        'datetime' => Carbon::now()->toDateTimeString(),
-        'status' => 1,
-        'user' => [
-            'id' => $user->id, //0, $this->current_user->id,
-            'email' => $user->email,//$this->current_user->email
+        $status_history[] = [
+            'datetime' => Carbon::now()->toDateTimeString(),
+            'status' => 1,
+            'user' => [
+                'id' => $user->id, //0, $this->current_user->id,
+                'email' => $user->email, //$this->current_user->email
             ],
-        //'pay_seats_data' => $pay_seats_data,//$data['pay_seats_data'],
-        'pay_bill_data' => [],
-        'cardtype' => $request->cardtype,
-        //'installments' => 1,
-        //'deree_user_data' => $deree_user_data, //$data['deree_user_data'],
-        'cart_data' => $cart_data //$cart
+            //'pay_seats_data' => $pay_seats_data,//$data['pay_seats_data'],
+            'pay_bill_data' => [],
+            'cardtype' => $request->cardtype,
+            //'installments' => 1,
+            //'deree_user_data' => $deree_user_data, //$data['deree_user_data'],
+            'cart_data' => $cart_data, //$cart
         ];
         $transaction->status_history = json_encode($status_history);
 
-       $transaction->save();
+        $transaction->save();
 
         //attach transaction with user
-       $transaction->user()->attach($user['id']);
+        $transaction->user()->attach($user['id']);
 
-       //attach transaction with event
-       $transaction->event()->attach($event_id);
+        //attach transaction with event
+        $transaction->event()->attach($event_id);
 
-
-       /*if(!Invoice::latest()->doesntHave('subscription')->first()){
-        //if(!Invoice::has('event')->latest()->first()){
-            $invoiceNumber = sprintf('%04u', 1);
-        }else{
-            //$invoiceNumber = Invoice::has('event')->latest()->first()->invoice;
-            $invoiceNumber = Invoice::latest()->doesntHave('subscription')->first()->invoice;
-            $invoiceNumber = (int) $invoiceNumber + 1;
-            $invoiceNumber = sprintf('%04u', $invoiceNumber);
-        }*/
+        /*if(!Invoice::latest()->doesntHave('subscription')->first()){
+         //if(!Invoice::has('event')->latest()->first()){
+             $invoiceNumber = sprintf('%04u', 1);
+         }else{
+             //$invoiceNumber = Invoice::has('event')->latest()->first()->invoice;
+             $invoiceNumber = Invoice::latest()->doesntHave('subscription')->first()->invoice;
+             $invoiceNumber = (int) $invoiceNumber + 1;
+             $invoiceNumber = sprintf('%04u', $invoiceNumber);
+         }*/
         $elearningInvoice = null;
         $pdf = null;
 
-        if($request->sendInvoice == 'true'){
-
+        if ($request->sendInvoice == 'true') {
             $paymentMethodId = $event->paymentMethod->first() ? $event->paymentMethod->first()->id : -1;
 
-
-            if($price > 0 || $custom_price != null) {
+            if ($price > 0 || $custom_price != null) {
                 $elearningInvoice = new Invoice;
                 $elearningInvoice->name = isset($billingDetails['billname']) ? $billingDetails['billname'] : '';
                 // $elearningInvoice->amount = $price;
                 $elearningInvoice->amount = ($custom_price != null) ? $custom_price : $price;
                 $elearningInvoice->invoice = generate_invoice_number($paymentMethodId);
-                $elearningInvoice->date = date('Y-m-d');//Carbon::today()->toDateString();
+                $elearningInvoice->date = date('Y-m-d'); //Carbon::today()->toDateString();
                 $elearningInvoice->instalments_remaining = 1;
                 $elearningInvoice->instalments = 1;
 
                 $elearningInvoice->save();
-
 
                 //$elearningInvoice->user()->save($dpuser);
                 $elearningInvoice->event()->save($event);
@@ -1176,27 +1086,22 @@ class UserController extends Controller
 
             $pdf = $elearningInvoice ? $elearningInvoice->generateInvoice() : null;
 
-
-
             //$this->sendEmails($transaction,$event,$response_data);
-
         }
 
-        $this->sendEmail($elearningInvoice,$pdf,0,$transaction, $isNewUser);
+        $this->sendEmail($elearningInvoice, $pdf, 0, $transaction, $isNewUser);
 
+        $response_data['ticket']['event'] = $data['event']['title'];
+        $response_data['ticket']['ticket_title'] = $ticket['title'];
+        $response_data['ticket']['exp'] = $exp_date;
+        $response_data['ticket']['event_id'] = $data['event']['id'];
+        $response_data['user_id'] = $user['id'];
+        $response_data['ticket']['ticket_id'] = $ticket['id'];
+        $response_data['ticket']['type'] = $ticket['type'];
 
-       $response_data['ticket']['event'] = $data['event']['title'];
-       $response_data['ticket']['ticket_title'] = $ticket['title'];
-       $response_data['ticket']['exp'] = $exp_date;
-       $response_data['ticket']['event_id'] = $data['event']['id'];
-       $response_data['user_id'] = $user['id'];
-       $response_data['ticket']['ticket_id'] = $ticket['id'];;
-       $response_data['ticket']['type'] = $ticket['type'];;
-
-
-       return response()->json([
+        return response()->json([
             'success' => __('Ticket assigned succesfully.'),
-            'data' => $response_data
+            'data' => $response_data,
         ]);
     }
 
@@ -1206,27 +1111,24 @@ class UserController extends Controller
 
         $event = Event::with('ticket')->find($request->event_id);
 
-        return view('users.courses.edit_ticket', ['events' => $event ,'user' => $user]);
+        return view('users.courses.edit_ticket', ['events' => $event, 'user' => $user]);
     }
 
     public function remove_ticket_user(Request $request)
     {
-
         $user = User::find($request->user_id);
         $event = Event::find($request->event_id);
 
         $user->ticket()->wherePivot('event_id', '=', $request->event_id)->wherePivot('ticket_id', '=', $request->ticket_id)->detach($request->ticket_id);
         $user->events_for_user_list()->wherePivot('event_id', '=', $request->event_id)->detach($request->event_id);
 
-
         $transaction = $event->transactionsByUser($user->id)->first();
 
-        if($transaction){
+        if ($transaction) {
             $transaction->event()->detach($request->event_id);
             $transaction->user()->detach($request->user_id);
             $transaction->delete();
         }
-
 
         //$user->ticket()->attach($ticket_id, ['event_id' => $event_id]);
         //dd($user->transactions()->get());
@@ -1234,12 +1136,12 @@ class UserController extends Controller
         //$user->transactions()->wherePivot('event_id', '=', $request->event_id)->updateExistingPivot($event_id,['paid' => 0], false);
         return response()->json([
             'success' => 'Ticket assigned removed from user',
-            'data' => $request->event_id
+            'data' => $request->event_id,
         ]);
     }
 
     /**
-     * Store a newly created user in storage
+     * Store a newly created user in storage.
      *
      * @param  \App\Http\Requests\UserRequest
      * @param  \App\Model\User  $model
@@ -1265,17 +1167,17 @@ class UserController extends Controller
         $consent['date'] = $connow;
         $consent['firstname'] = $user->firstname;
         $consent['lastname'] = $user->lastname;
-        if($user->afm){
+        if ($user->afm) {
             $consent['afm'] = $user->afm;
         }
 
-        $billing = json_decode($user->receipt_details,true);
+        $billing = json_decode($user->receipt_details, true);
 
-        if(isset($billing['billafm']) && $billing['billafm']){
+        if (isset($billing['billafm']) && $billing['billafm']) {
             $consent['billafm'] = $billing['billafm'];
         }
 
-        $user->consent = json_encode($consent);;
+        $user->consent = json_encode($consent);
         $user->save();
 
         //$user->notify(new userActivationLink($user,'activate'));
@@ -1284,7 +1186,7 @@ class UserController extends Controller
     }
 
     /**
-     * Show the form for editing the specified user
+     * Show the form for editing the specified user.
      *
      * @param  \App\Model\User  $user
      * @param  \App\Model\Role  $model
@@ -1292,16 +1194,14 @@ class UserController extends Controller
      */
     public function edit(User $user, Role $model)
     {
-        $data['events'] = Event::has('ticket')->whereIn('status',[0,2,3])->get();
+        $data['events'] = Event::has('ticket')->whereIn('status', [0, 2, 3])->get();
 
         //dd($data['events']);
-        $data['user'] = User::with('ticket','role','events_for_user_list','image','transactions')->find($user['id']);
-
+        $data['user'] = User::with('ticket', 'role', 'events_for_user_list', 'image', 'transactions')->find($user['id']);
 
         $data['transactions'] = [];
 
-        foreach($data['user']['events_for_user_list'] as $key => $value){
-
+        foreach ($data['user']['events_for_user_list'] as $key => $value) {
             $user_id = $value->pivot->user_id;
             $event_id = $value->pivot->event_id;
             $event = Event::with('certificates', 'tickets')->find($event_id);
@@ -1312,42 +1212,39 @@ class UserController extends Controller
             $data['user']['events_for_user_list'][$key]['ticket_title'] = isset($ticket['title']) ? $ticket['title'] : '';
             $data['user']['events_for_user_list'][$key]['certifications'] = [];
 
-
-            if(!empty($event->certificatesByUser($user_id))){
+            if (!empty($event->certificatesByUser($user_id))) {
                 $data['user']['events_for_user_list'][$key]['certifications'] = $event->certificatesByUser($user_id)->toArray();
             }
 
-            if(!key_exists($value['title'],$data['transactions'])){
+            if (!key_exists($value['title'], $data['transactions'])) {
                 $data['transactions'][$value['title']] = [];
             }
 
             $data['transactions'][$value['title']] = $value->transactionsByUser($user_id)->get();
-
         }
-        $data['subscriptions']=[];
-        foreach($user->subscriptionEvents as $key => $value){
+        $data['subscriptions'] = [];
+        foreach ($user->subscriptionEvents as $key => $value) {
             $data['subscriptions'][$value['title']] = $value->subscriptionΤransactionsByUser($user_id)->get();
-
         }
 
-        if($data['user']['receipt_details'] != null){
+        if ($data['user']['receipt_details'] != null) {
             $data['receipt'] = json_decode($data['user']['receipt_details'], true);
-        }else{
+        } else {
             $data['receipt'] = null;
         }
 
-        if($data['user']['invoice_details'] != null){
+        if ($data['user']['invoice_details'] != null) {
             $data['invoice'] = json_decode($data['user']['invoice_details'], true);
-        }else{
+        } else {
             $data['invoice'] = null;
         }
+
         //dd($data['transactions']);
-        return view('users.edit', ['subscriptions'=>$data['subscriptions'], 'transactions'=>$data['transactions'],'events' => $data['events'] ,'user' => $data['user'],'receipt' => $data['receipt'],'invoice' => $data['invoice'] ,'roles' => $model->all()]);
+        return view('users.edit', ['subscriptions'=>$data['subscriptions'], 'transactions'=>$data['transactions'], 'events' => $data['events'], 'user' => $data['user'], 'receipt' => $data['receipt'], 'invoice' => $data['invoice'], 'roles' => $model->all()]);
     }
 
-
     /**
-     * Update the specified user in storage
+     * Update the specified user in storage.
      *
      * @param  \App\Http\Requests\UserRequest  $request
      * @param  \App\Model\User  $user
@@ -1355,20 +1252,19 @@ class UserController extends Controller
      */
     public function update(UserRequest $request, User $user)
     {
-        $hasPassword = $request->get("password");
+        $hasPassword = $request->get('password');
         $user->update(
             $request->merge([
                 'picture' => $request->photo ? $request->photo->store('profile_user', 'public') : $user->picture,
-                'password' => Hash::make($request->get('password'))
+                'password' => Hash::make($request->get('password')),
             ])->except([$hasPassword ? '' : 'password'])
         );
 
         return redirect()->route('user.index')->withStatus(__('User successfully updated.'));
     }
 
-
     /**
-     * Remove the specified user from storage
+     * Remove the specified user from storage.
      *
      * @param  \App\Model\User  $user
      * @return \Illuminate\Http\RedirectResponse
@@ -1383,7 +1279,6 @@ class UserController extends Controller
 
         return redirect()->route('user.index')->withStatus(__('User successfully deleted.'));
     }
-
 
     /*public function sendEmails($transaction,$content,$ticket)
     {
@@ -1474,17 +1369,17 @@ class UserController extends Controller
 
     }*/
 
-    private function sendEmail($elearningInvoice,$pdf,$paymentMethod = null,$transaction, $isNewUser){
+    private function sendEmail($elearningInvoice, $pdf, $paymentMethod = null, $transaction, $isNewUser)
+    {
+        $adminemail = ($paymentMethod && $paymentMethod->payment_email) ? $paymentMethod->payment_email : 'info@knowcrunch.com';
 
-		$adminemail = ($paymentMethod && $paymentMethod->payment_email) ? $paymentMethod->payment_email : 'info@knowcrunch.com';
-
-		//$pdf = $transaction->elearningInvoice()->first()->generateInvoice();
+        //$pdf = $transaction->elearningInvoice()->first()->generateInvoice();
         $pdf = $pdf ? $pdf->output() : null;
 
-		$data = [];
+        $data = [];
         $muser = [];
 
-		$user = $transaction->user->first();
+        $user = $transaction->user->first();
 
         $muser['name'] = $transaction->user->first()->firstname;
         $muser['first'] = $transaction->user->first()->firstname;
@@ -1494,225 +1389,195 @@ class UserController extends Controller
         $data['eventTitle'] = $transaction->event->first()->title;
 
         $data['fbGroup'] = $transaction->event->first()->fb_group;
-        $data['duration'] = '';//$elearningInvoice->event->first()->summary1->where('section','date')->first() ? $elearningInvoice->event->first()->summary1->where('section','date')->first()->title : '';
+        $data['duration'] = ''; //$elearningInvoice->event->first()->summary1->where('section','date')->first() ? $elearningInvoice->event->first()->summary1->where('section','date')->first()->title : '';
         $data['eventSlug'] = $transaction->event->first() ? url('/') . '/' . $transaction->event->first()->getSlug() : url('/');
         $data['user']['createAccount'] = false;
         $data['user']['name'] = $transaction->user->first()->firstname;
 
-        if($isNewUser){
+        if ($isNewUser) {
             $data['user']['createAccount'] = true;
         }
 
         $eventInfo = $transaction->event->first() ? $transaction->event->first()->event_info() : [];
 
-        if(isset($eventInfo['delivery']) && $eventInfo['delivery'] == 143){
-
+        if (isset($eventInfo['delivery']) && $eventInfo['delivery'] == 143) {
             $data['duration'] = isset($eventInfo['elearning']['visible']['emails']) && isset($eventInfo['elearning']['expiration']) &&
                                 $eventInfo['elearning']['visible']['emails'] && isset($eventInfo['elearning']['text']) ?
                                             $eventInfo['elearning']['expiration'] . ' ' . $eventInfo['elearning']['text'] : '';
-
-        }else if(isset($eventInfo['delivery']) && $eventInfo['delivery'] == 139){
-
+        } elseif (isset($eventInfo['delivery']) && $eventInfo['delivery'] == 139) {
             $data['duration'] = isset($eventInfo['inclass']['dates']['visible']['emails']) && isset($eventInfo['inclass']['dates']['text']) &&
-                                        $eventInfo['inclass']['dates']['visible']['emails'] ?  $eventInfo['inclass']['dates']['text'] : '';
-
+                                        $eventInfo['inclass']['dates']['visible']['emails'] ? $eventInfo['inclass']['dates']['text'] : '';
         }
 
-        $data['hours'] = isset($eventInfo['hours']['visible']['emails']) &&  $eventInfo['hours']['visible']['emails'] && isset($eventInfo['hours']['hour']) &&
-                        isset( $eventInfo['hours']['text']) ? $eventInfo['hours']['hour'] . ' ' . $eventInfo['hours']['text'] : '';
+        $data['hours'] = isset($eventInfo['hours']['visible']['emails']) && $eventInfo['hours']['visible']['emails'] && isset($eventInfo['hours']['hour']) &&
+                        isset($eventInfo['hours']['text']) ? $eventInfo['hours']['hour'] . ' ' . $eventInfo['hours']['text'] : '';
 
-        $data['language'] = isset($eventInfo['language']['visible']['emails']) &&  $eventInfo['language']['visible']['emails'] && isset( $eventInfo['language']['text']) ? $eventInfo['language']['text'] : '';
+        $data['language'] = isset($eventInfo['language']['visible']['emails']) && $eventInfo['language']['visible']['emails'] && isset($eventInfo['language']['text']) ? $eventInfo['language']['text'] : '';
 
-        $data['certificate_type'] =isset($eventInfo['certificate']['visible']['emails']) &&  $eventInfo['certificate']['visible']['emails'] &&
-                    isset( $eventInfo['certificate']['type']) ? $eventInfo['certificate']['type'] : '';
+        $data['certificate_type'] = isset($eventInfo['certificate']['visible']['emails']) && $eventInfo['certificate']['visible']['emails'] &&
+                    isset($eventInfo['certificate']['type']) ? $eventInfo['certificate']['type'] : '';
 
         $eventStudents = get_sum_students_course($transaction->event->first()->category->first());
-        $data['students_number'] = isset($eventInfo['students']['number']) ? $eventInfo['students']['number'] :  $eventStudents + 1;
+        $data['students_number'] = isset($eventInfo['students']['number']) ? $eventInfo['students']['number'] : $eventStudents + 1;
 
-        $data['students'] = isset($eventInfo['students']['visible']['emails']) &&  $eventInfo['students']['visible']['emails'] &&
-                        isset( $eventInfo['students']['text']) && $data['students_number'] >= $eventStudents  ? $eventInfo['students']['text'] : '';
+        $data['students'] = isset($eventInfo['students']['visible']['emails']) && $eventInfo['students']['visible']['emails'] &&
+                        isset($eventInfo['students']['text']) && $data['students_number'] >= $eventStudents ? $eventInfo['students']['text'] : '';
 
-
-
-        $extrainfo = ['','',$data['eventTitle']];
+        $extrainfo = ['', '', $data['eventTitle']];
         $data['extrainfo'] = $extrainfo;
 
-		/*$sent = Mail::send('emails.admin.elearning_invoice', $data, function ($m) use ($adminemail, $muser,$pdf) {
+        /*$sent = Mail::send('emails.admin.elearning_invoice', $data, function ($m) use ($adminemail, $muser,$pdf) {
 
-			$fullname = $muser['name'];
-			$first = $muser['first'];
-			$sub = 'Knowcrunch |' . $first . ' – Payment Successful in ' . $muser['event_title'];;
-			$m->from($adminemail, 'Knowcrunch');
-			$m->to($muser['email'], $fullname);
-			$m->subject($sub);
-			$m->attachData($pdf, "invoice.pdf");
+            $fullname = $muser['name'];
+            $first = $muser['first'];
+            $sub = 'Knowcrunch |' . $first . ' – Payment Successful in ' . $muser['event_title'];;
+            $m->from($adminemail, 'Knowcrunch');
+            $m->to($muser['email'], $fullname);
+            $m->subject($sub);
+            $m->attachData($pdf, "invoice.pdf");
 
-		});*/
+        });*/
 
-
-        if($user->cart){
+        if ($user->cart) {
             $user->cart->delete();
         }
 
-        $user->notify(new WelcomeEmail($user,$data));
+        $user->notify(new WelcomeEmail($user, $data));
+        event(new EmailSent($user->email, 'WelcomeEmail'));
 
-        if($elearningInvoice){
+        if ($elearningInvoice) {
             $data['slugInvoice'] = encrypt($user->id . '-' . $elearningInvoice->id);
 
-		    $user->notify(new CourseInvoice($data));
-		    $invoiceFileName = date('Y.m.d');
-		    if($paymentMethod){
-		      $invoiceFileName .= '_' . $paymentMethod->company_name;
-		    }
-		    $invoiceFileName .= '_' . $elearningInvoice->invoice . '.pdf';
+            $user->notify(new CourseInvoice($data));
+            event(new EmailSent($user->email, 'CourseInvoice'));
+            $invoiceFileName = date('Y.m.d');
+            if ($paymentMethod) {
+                $invoiceFileName .= '_' . $paymentMethod->company_name;
+            }
+            $invoiceFileName .= '_' . $elearningInvoice->invoice . '.pdf';
             $fn = $invoiceFileName;
 
-		    $sent = Mail::send('emails.admin.elearning_invoice', $data, function ($m) use ($adminemail, $muser,$pdf,$fn) {
-
+            $sent = Mail::send('emails.admin.elearning_invoice', $data, function ($m) use ($adminemail, $muser, $pdf, $fn) {
                 $fullname = $muser['name'];
                 $first = $muser['first'];
-                $sub =  'Knowcrunch |' . $first . ' – Payment Successful in ' . $muser['event_title'];;
+                $sub = 'Knowcrunch |' . $first . ' – Payment Successful in ' . $muser['event_title'];
                 $m->from('info@knowcrunch.com', 'Knowcrunch');
                 $m->to($adminemail, $fullname);
                 //$m->to('moulopoulos@lioncode.gr', $fullname);
                 $m->subject($sub);
                 //$m->attachData($pdf, $fn);
-
             });
+            event(new EmailSent($adminemail, 'elearning_invoice'));
         }
-	}
+    }
 
-
-    public function createKC(Request $request){
-
-        $KC = "KC-";
-		$time = strtotime(date('Y-m-d'));
-		$MM = date("m",$time);
-		$YY = date("y",$time);
+    public function createKC(Request $request)
+    {
+        $KC = 'KC-';
+        $time = strtotime(date('Y-m-d'));
+        $MM = date('m', $time);
+        $YY = date('y', $time);
 
         //dd($request->user);
         $user = User::find($request->user);
 
-        if($user && $user->kc_id == null){
-
-            $optionKC = Option::where('abbr','website_details')->first();
-		    $next = $optionKC->value;
+        if ($user && $user->kc_id == null) {
+            $optionKC = Option::where('abbr', 'website_details')->first();
+            $next = $optionKC->value;
 
             $next_kc_id = str_pad($next, 4, '0', STR_PAD_LEFT);
-            $knowcrunch_id = $KC.$YY.$MM.$next_kc_id;
+            $knowcrunch_id = $KC . $YY . $MM . $next_kc_id;
 
             $user->kc_id = $knowcrunch_id;
 
             if ($next == 9999) {
                 $next = 1;
-            }
-            else {
+            } else {
                 $next = $next + 1;
             }
 
-            $optionKC->value=$next;
+            $optionKC->value = $next;
             $optionKC->save();
 
             $user->save();
         }
 
-
-
-
         return back()->withStatus(__('User successfully updated.'));
     }
 
-    public function createDeree(Request $request){
-
-
-
-
+    public function createDeree(Request $request)
+    {
         $user = User::find($request->user);
-        $option = Option::where('abbr','deree_codes')->first();
+        $option = Option::where('abbr', 'deree_codes')->first();
         $dereelist = json_decode($option->settings, true);
 
-        if(count($dereelist) > 0 && !$user->partner_id){
+        if (count($dereelist) > 0 && !$user->partner_id) {
             $user->partner_id = $dereelist[0];
             unset($dereelist[0]);
 
             $option->settings = json_encode(array_values($dereelist));
-	        $option->save();
-
+            $option->save();
         }
 
-
         $user->save();
-
-
 
         return back()->withStatus(__('User successfully updated.'));
     }
 
-
-    public function changePaidStatus(Request $request){
-
-
+    public function changePaidStatus(Request $request)
+    {
         $user = User::findOrFail($request->user_id);
 
         $paid = $request->paid == 'true' ? 1 : 0;
 
-        $user->events_for_user_list1()->wherePivot('event_id',$request->event_id)->updateExistingPivot($request->event_id,[
-            'paid' => $paid
+        $user->events_for_user_list1()->wherePivot('event_id', $request->event_id)->updateExistingPivot($request->event_id, [
+            'paid' => $paid,
         ], false);
     }
 
-    public function saveNotes(Request $request){
-
+    public function saveNotes(Request $request)
+    {
         $user = User::findOrFail($request->user_id);
 
         $user->notes = $request->notes;
         $user->save();
     }
 
-    public function getAbsences(User $user, Event $event){
-
+    public function getAbsences(User $user, Event $event)
+    {
         $data = $user->getAbsencesByEvent($event);
 
-        if(empty($data)){
+        if (empty($data)) {
             return response()->json([
                 'success' => false,
-                'message' => 'There is no data!'
+                'message' => 'There is no data!',
 
             ]);
         }
 
         return response()->json([
             'success' => true,
-            'data' => $data
+            'data' => $data,
 
         ]);
-
-
     }
 
     public function generateConsentPdf(User $user)
     {
-
-        if(count($user->instructor) == 0){
-
+        if (count($user->instructor) == 0) {
             $terms = Page::find(6);
             $terms = json_decode($terms->content, true)[3]['columns'][0]['template']['inputs'][0]['value'];
 
             $privacy = Page::select('content')->find(4);
             $privacy = json_decode($privacy->content, true)[3]['columns'][0]['template']['inputs'][0]['value'];
-        }else{
+        } else {
             $privacy = null;
             $terms = Page::find(48);
             $terms = json_decode($terms->content, true)[5]['columns'][0]['template']['inputs'][0]['value'];
-
         }
-
-
 
         $pdf = PDF::loadView('users.consent_pdf', compact('user', 'terms', 'privacy'));
 
-
-        return $pdf->download($user->firstname.'_'.$user->lastname.'.pdf');
+        return $pdf->download($user->firstname . '_' . $user->lastname . '.pdf');
     }
-
 }

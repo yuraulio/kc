@@ -2,20 +2,19 @@
 
 namespace Library;
 
-use Carbon\Carbon;
-use Config;
-use Mail;
-use Sentinel;
-
-//use PostRider\Account;
-//use PostRider\CreditRequest;
 use App\Model\PaymentMethod;
 use App\Model\Transaction;
 use App\Model\User;
-use \Cart as Cart;
-use Session;
-//use PostRider\EventTicket;
 use Auth;
+//use PostRider\Account;
+//use PostRider\CreditRequest;
+use Carbon\Carbon;
+use Cart as Cart;
+use Config;
+use Mail;
+use Sentinel;
+//use PostRider\EventTicket;
+use Session;
 
 class TransactionHelperLib
 {
@@ -48,8 +47,6 @@ class TransactionHelperLib
                     $this->firstStatus($transaction, $new_status, $user_id);
                 }
 
-
-
                 //$this->creditOrDebitAccount($trans_id);
                 Transaction::where('id', $trans_id)->update(['status' => $new_status]);
 
@@ -63,7 +60,6 @@ class TransactionHelperLib
         }
     }
 
-
     public function sendEmails($trans_id)
     {
         return $this->emailNotify->transactionStatus($trans_id);
@@ -75,10 +71,9 @@ class TransactionHelperLib
             $this->current_user = User::where('id', $user_id)->first();
         }*/
 
-         if (Session::has('pay_seats_data')) {
+        if (Session::has('pay_seats_data')) {
             $data['pay_seats_data'] = Session::get('pay_seats_data');
-        }
-        else {
+        } else {
             $data['pay_seats_data'] = [];
         }
 
@@ -91,29 +86,25 @@ class TransactionHelperLib
 
         if (Session::has('pay_bill_data')) {
             $data['pay_bill_data'] = Session::get('pay_bill_data');
-        }
-        else {
+        } else {
             $data['pay_bill_data'] = [];
         }
 
         if (Session::has('cardtype')) {
             $data['cardtype'] = Session::get('cardtype');
-        }
-        else {
+        } else {
             $data['cardtype'] = 0;
         }
 
         if (Session::has('installments')) {
             $data['installments'] = Session::get('installments');
-        }
-        else {
+        } else {
             $data['installments'] = 0;
         }
 
         if (Session::has('deree_user_data')) {
             $data['deree_user_data'] = Session::get('deree_user_data');
-        }
-        else {
+        } else {
             $data['deree_user_data'] = [];
         }
 
@@ -124,15 +115,15 @@ class TransactionHelperLib
             'datetime' => Carbon::now()->toDateTimeString(),
             'status' => $new_status,
             'user' => [
-                'id' => 0,//$this->current_user->id,
-                'email' => 'cart',//$this->current_user->email
+                'id' => 0, //$this->current_user->id,
+                'email' => 'cart', //$this->current_user->email
             ],
             'pay_seats_data' => $data['pay_seats_data'],
             'pay_bill_data' => $data['pay_bill_data'],
             'cardtype' => $data['cardtype'],
             'installments' => $data['installments'],
             'deree_user_data' => $data['deree_user_data'],
-            'cart_data' => $cart
+            'cart_data' => $cart,
         ];
 
         Transaction::where('id', $transaction['id'])->update(['status_history' => json_encode($status_history), 'billing_details' => json_encode($data['pay_bill_data'])]);
@@ -140,44 +131,37 @@ class TransactionHelperLib
 
     public function setStatusSuccess($transaction, $user_id = 0)
     {
-    	$current_user = Auth::user();
+        $current_user = Auth::user();
         /*if ($user_id) {
             $this->current_user = User::where('id', $user_id)->first();
         }*/
         if (Session::has('pay_seats_data')) {
             $data['pay_seats_data'] = Session::get('pay_seats_data');
-        }
-        else {
+        } else {
             $data['pay_seats_data'] = [];
         }
 
-
         if (Session::has('pay_bill_data')) {
             $data['pay_bill_data'] = Session::get('pay_bill_data');
-        }
-        else {
+        } else {
             $data['pay_bill_data'] = [];
         }
 
         if (Session::has('cardtype')) {
             $data['cardtype'] = Session::get('cardtype');
-        }
-        else {
+        } else {
             $data['cardtype'] = 0;
         }
 
         if (Session::has('installments')) {
             $data['installments'] = Session::get('installments');
-        }
-        else {
+        } else {
             $data['installments'] = 0;
         }
 
-
         if (Session::has('deree_user_data')) {
             $data['deree_user_data'] = Session::get('deree_user_data');
-        }
-        else {
+        } else {
             $data['deree_user_data'] = [];
         }
 
@@ -186,20 +170,17 @@ class TransactionHelperLib
         $status_history = $transaction['status_history'];
 
         if (count($cart) > 0) {
-	       	$auth = 'cart';
-
-        }
-        else {
-        	$auth = 'user';
-        	if (isset($status_history[0])) {
-	        	$cart = $status_history[0]['cart_data'];
-	        	if ($current_user) {
-	        		$auth = $current_user->email;
-	        	}
-	        	else {
-	        		$auth = 'user';
-	        	}
-	        }
+            $auth = 'cart';
+        } else {
+            $auth = 'user';
+            if (isset($status_history[0])) {
+                $cart = $status_history[0]['cart_data'];
+                if ($current_user) {
+                    $auth = $current_user->email;
+                } else {
+                    $auth = 'user';
+                }
+            }
         }
 
         $status_history[] = [
@@ -207,7 +188,7 @@ class TransactionHelperLib
             'status' => 1,
             'user' => [
                 'id' => 0,
-                'email' => $auth
+                'email' => $auth,
             ],
             'pay_seats_data' => $data['pay_seats_data'],
             'deree_user_data' => $data['deree_user_data'],
@@ -220,19 +201,17 @@ class TransactionHelperLib
         ];
 
         Transaction::where('id', $transaction['id'])->update(['status_history' => json_encode($status_history), 'billing_details' => json_encode($data['pay_bill_data'])]);
-
     }
 
     public function setStatusFailure($transaction, $user_id = 0)
     {
-    	$current_user = Auth::user();
+        $current_user = Auth::user();
         /*if ($user_id) {
             $this->current_user = User::where('id', $user_id)->first();
         }*/
         if (Session::has('pay_seats_data')) {
             $data['pay_seats_data'] = Session::get('pay_seats_data');
-        }
-        else {
+        } else {
             $data['pay_seats_data'] = [];
         }
 
@@ -245,30 +224,25 @@ class TransactionHelperLib
 
         if (Session::has('pay_bill_data')) {
             $data['pay_bill_data'] = Session::get('pay_bill_data');
-        }
-        else {
+        } else {
             $data['pay_bill_data'] = [];
         }
 
         if (Session::has('cardtype')) {
             $data['cardtype'] = Session::get('cardtype');
-        }
-        else {
+        } else {
             $data['cardtype'] = 0;
         }
 
         if (Session::has('installments')) {
             $data['installments'] = Session::get('installments');
-        }
-        else {
+        } else {
             $data['installments'] = 0;
         }
 
-
         if (Session::has('deree_user_data')) {
             $data['deree_user_data'] = Session::get('deree_user_data');
-        }
-        else {
+        } else {
             $data['deree_user_data'] = [];
         }
 
@@ -276,30 +250,26 @@ class TransactionHelperLib
 
         $status_history = $transaction['status_history'];
 
-	    if (count($cart) > 0) {
-	       	$auth = 'cart';
-
-        }
-        else {
-
-        	if (isset($status_history[0])) {
-	        	$cart = $status_history[0]['cart_data'];
-	        	if ($current_user) {
-	        		$auth = $current_user->email;
-	        	}
-	        	else {
-	        		$auth = 'user';
-	        	}
-	        	 //'admin';
-	        }
+        if (count($cart) > 0) {
+            $auth = 'cart';
+        } else {
+            if (isset($status_history[0])) {
+                $cart = $status_history[0]['cart_data'];
+                if ($current_user) {
+                    $auth = $current_user->email;
+                } else {
+                    $auth = 'user';
+                }
+                //'admin';
+            }
         }
 
         $status_history[] = [
             'datetime' => Carbon::now()->toDateTimeString(),
             'status' => 0,
             'user' => [
-                'id' => 0,//$this->current_user->id,
-                'email' => $auth //$this->current_user->email
+                'id' => 0, //$this->current_user->id,
+                'email' => $auth, //$this->current_user->email
             ],
             'pay_seats_data' => $data['pay_seats_data'],
             'deree_user_data' => $data['deree_user_data'],
@@ -325,8 +295,7 @@ class TransactionHelperLib
         ];*/
         if (Session::has('pay_seats_data')) {
             $data['pay_seats_data'] = Session::get('pay_seats_data');
-        }
-        else {
+        } else {
             $data['pay_seats_data'] = [];
         }
 
@@ -339,29 +308,25 @@ class TransactionHelperLib
 
         if (Session::has('pay_bill_data')) {
             $data['pay_bill_data'] = Session::get('pay_bill_data');
-        }
-        else {
+        } else {
             $data['pay_bill_data'] = [];
         }
 
         if (Session::has('cardtype')) {
             $data['cardtype'] = Session::get('cardtype');
-        }
-        else {
+        } else {
             $data['cardtype'] = 0;
         }
 
         if (Session::has('installments')) {
             $data['installments'] = Session::get('installments');
-        }
-        else {
+        } else {
             $data['installments'] = 0;
         }
 
         if (Session::has('deree_user_data')) {
             $data['deree_user_data'] = Session::get('deree_user_data');
-        }
-        else {
+        } else {
             $data['deree_user_data'] = [];
         }
 
@@ -372,8 +337,8 @@ class TransactionHelperLib
             'datetime' => Carbon::now()->toDateTimeString(),
             'status' => 2,
             'user' => [
-                'id' => 0,//$this->current_user->id,
-                'email' => 'cart' //$this->current_user->email
+                'id' => 0, //$this->current_user->id,
+                'email' => 'cart', //$this->current_user->email
             ],
             'pay_seats_data' => $data['pay_seats_data'],
             'pay_bill_data' => $data['pay_bill_data'],
@@ -390,7 +355,7 @@ class TransactionHelperLib
 
     public function creditOrDebitAccount($trans_id = 0)
     {
-        $transaction = Transaction::where('id', $trans_id)->select('status_history','is_bonus','account_id')->first();
+        $transaction = Transaction::where('id', $trans_id)->select('status_history', 'is_bonus', 'account_id')->first();
 
         if ($transaction) {
             $increase = 0;
@@ -415,12 +380,11 @@ class TransactionHelperLib
 
             if ($increase != $decrease) {
                 if ($increase > $decrease) {
-                 //   $this->creditAccount($transaction, $increase-$decrease);
+                    //   $this->creditAccount($transaction, $increase-$decrease);
                 } else {
-                  //  $this->debitAccount($transaction, $decrease-$increase);
+                    //  $this->debitAccount($transaction, $decrease-$increase);
                 }
             } else {
-
             }
 
             return 1;

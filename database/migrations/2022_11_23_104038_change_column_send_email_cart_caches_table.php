@@ -13,7 +13,7 @@ class ChangeColumnSendEmailCartCachesTable extends Migration
      */
     public function up()
     {
-        Schema::table('cart_caches', function(Blueprint $table) {
+        Schema::table('cart_caches', function (Blueprint $table) {
             $table->integer('send_email')->change();
         });
     }

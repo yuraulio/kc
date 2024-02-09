@@ -2,38 +2,38 @@
 
 namespace App\Model;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-
-use App\Model\Media;
+use App\Model\Absence;
 use App\Model\Activation;
 use App\Model\Admin\Comment;
+use App\Model\CartCache;
+use App\Model\CookiesSMS;
 use App\Model\Event;
-use App\Model\Role;
+use App\Model\ExamResult;
 use App\Model\Instructor;
+use App\Model\Invoice;
+use App\Model\Media;
+use App\Model\OauthAccessToken;
+use App\Model\Plan;
+use App\Model\Role;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
-use Carbon\Carbon;
-use Laravel\Passport\HasApiTokens;
-use Laravel\Cashier\Billable;
-use App\Traits\MediaTrait;
-use App\Model\Invoice;
-use Laravel\Cashier\Subscription;
-use App\Model\CookiesSMS;
-use App\Model\Plan;
-use App\Model\CartCache;
-use App\Model\ExamResult;
-use App\Model\OauthAccessToken;
 use App\Model\Transaction;
-use App\Model\Absence;
+use App\Traits\MediaTrait;
+use Carbon\Carbon;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Laravel\Cashier\Billable;
+use Laravel\Cashier\Subscription;
+use Laravel\Passport\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use Notifiable, HasApiTokens, MediaTrait, Billable;
+    use Notifiable, HasApiTokens, MediaTrait, Billable, SoftDeletes;
     /**
      * The attributes that are mass assignable.
      *
@@ -77,27 +77,23 @@ class User extends Authenticatable
      */
     protected $hidden = ['password', 'remember_token'];
 
-
     public function scopeSearchUsers($query, $search_term)
     {
         $query->where(function ($query) use ($search_term) {
-            $search_term_str = '%'.implode("%", explode(" ", $search_term)).'%';
+            $search_term_str = '%' . implode('%', explode(' ', $search_term)) . '%';
             $query->where('email', 'like', $search_term_str)
                 ->orWhere('firstname', 'like', $search_term_str)
                 ->orWhere('lastname', 'like', $search_term_str);
         });
 
-
-
         return $query->select('id', 'firstname', 'lastname', 'email')->get();
     }
 
-
     /**
-      * Get the role of the user
-      *
-      * @return \App\Model\Role
-      */
+     * Get the role of the user.
+     *
+     * @return \App\Model\Role
+     */
     public function role()
     {
         return $this->belongsToMany(Role::class, 'role_users');
@@ -114,7 +110,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Get the path to the profile picture
+     * Get the path to the profile picture.
      *
      * @return string
      */
@@ -128,13 +124,12 @@ class User extends Authenticatable
     }
 
     /**
-     * Check if the user has admin role
+     * Check if the user has admin role.
      *
-     * @return boolean
+     * @return bool
      */
     public function isAdmin()
     {
-
         /*dd($this->role);
         //dd($this->id);
         $role = DB::table('role_users')->where('user_id', $this->id)->first();
@@ -147,7 +142,6 @@ class User extends Authenticatable
 
     public function isAdministrator()
     {
-
         /*dd($this->role);
         //dd($this->id);
         $role = DB::table('role_users')->where('user_id', $this->id)->first();
@@ -159,9 +153,9 @@ class User extends Authenticatable
     }
 
     /**
-     * Check if the user has creator role
+     * Check if the user has creator role.
      *
-     * @return boolean
+     * @return bool
      */
     public function isCreator()
     {
@@ -169,9 +163,9 @@ class User extends Authenticatable
     }
 
     /**
-     * Check if the user has user role
+     * Check if the user has user role.
      *
-     * @return boolean
+     * @return bool
      */
     public function isMember()
     {
@@ -192,24 +186,24 @@ class User extends Authenticatable
             ->with('summary1', 'category', 'slugable', 'dropbox')->wherePivot('paid', true);
     }*/
 
-
     public function events()
     {
         return $this->belongsToMany(Event::class, 'event_user')->withPivot('paid', 'expiration', 'comment', 'payment_method')
             ->with(['summary1',
-            'category',
-            'slugable',
-            'dropbox',
-            'lessons',
-            'topic',
-            'instructors',
-            'certificates' => function($certificate){
-                //dd($certificate->first());
-                $user = $this->id;
-                return $certificate->where('show_certificate',true)->whereHas('user', function ($query) use($user){
-                    $query->where('id', $user);;
-                });
-            }
+                'category',
+                'slugable',
+                'dropbox',
+                'lessons',
+                'topic',
+                'instructors',
+                'certificates' => function ($certificate) {
+                    //dd($certificate->first());
+                    $user = $this->id;
+
+                    return $certificate->where('show_certificate', true)->whereHas('user', function ($query) use ($user) {
+                        $query->where('id', $user);
+                    });
+                },
             ])->wherePivot('paid', true);
     }
 
@@ -221,12 +215,12 @@ class User extends Authenticatable
 
     public function events_for_user_list()
     {
-        return $this->belongsToMany(Event::class, 'event_user')->with('summary1', 'category','slugable', 'dropbox')->withPivot('event_id', 'paid', 'expiration', 'comment', 'payment_method');
+        return $this->belongsToMany(Event::class, 'event_user')->with('summary1', 'category', 'slugable', 'dropbox')->withPivot('event_id', 'paid', 'expiration', 'comment', 'payment_method');
     }
 
     public function events_for_user_list1()
     {
-        return $this->belongsToMany(Event::class, 'event_user')->withPivot('event_id', 'paid', 'expiration', 'expiration_email','comment');
+        return $this->belongsToMany(Event::class, 'event_user')->withPivot('event_id', 'paid', 'expiration', 'expiration_email', 'comment');
     }
 
     public function events_for_user_list1_expired()
@@ -256,12 +250,12 @@ class User extends Authenticatable
 
     public function statistic()
     {
-        return $this->belongsToMany(Event::class, 'event_statistics')->withPivot('id', 'videos', 'user_id','lastVideoSeen', 'notes', 'event_id','created_at');
+        return $this->belongsToMany(Event::class, 'event_statistics')->withPivot('id', 'videos', 'user_id', 'lastVideoSeen', 'notes', 'event_id', 'created_at');
     }
 
     public function statisticGroupByEvent()
     {
-        return $this->belongsToMany(Event::class, 'event_statistics')->select('user_id', 'event_id')->withPivot('id', 'videos', 'lastVideoSeen', 'notes', 'event_id','created_at');
+        return $this->belongsToMany(Event::class, 'event_statistics')->select('user_id', 'event_id')->withPivot('id', 'videos', 'lastVideoSeen', 'notes', 'event_id', 'created_at');
     }
 
     public function transactions()
@@ -340,7 +334,6 @@ class User extends Authenticatable
 
     }*/
 
-
     public function invoices()
     {
         return $this->morphToMany(Invoice::class, 'invoiceable');
@@ -363,11 +356,10 @@ class User extends Authenticatable
 
     public function checkUserSubscriptionByEvent($events = null)
     {
-
         //dd($events);
         $eventsData = $events ? $events : $this->events;
 
-        $plans = Plan::has('events')->with('events','categories')->get();
+        $plans = Plan::has('events')->with('events', 'categories')->get();
         $eventPlans = [];
         $categoryPlans = [];
         $nonEventPlans = [];
@@ -380,7 +372,7 @@ class User extends Authenticatable
         $subscriptionEvents = $this->subscriptionEvents;
 
         if (count($plans) == 0) {
-            return [false,[]];
+            return [false, []];
         }
 
         foreach ($plans as $key => $plan) {
@@ -451,7 +443,7 @@ class User extends Authenticatable
         }
 
         if (count(array_diff($events, $nonEventPlans)) == 0) {
-            return [false,[]];
+            return [false, []];
         }
 
         foreach ($nonEventsCategory as $key => $plan) {
@@ -463,8 +455,6 @@ class User extends Authenticatable
                     unset($plans[$key]);
                 }
             }
-
-
 
             if ($planIndex == count($categoryPlans[$key])) {
                 unset($plans[$key]);
@@ -489,7 +479,7 @@ class User extends Authenticatable
         }
 
         if (count($plans) == 0) {
-            return [false,[]];
+            return [false, []];
         }
         /************
          * NEWW
@@ -499,11 +489,10 @@ class User extends Authenticatable
             $eventPlans = array_merge($plan['events']->pluck('event_id')->toArray(), $eventPlans);
         }
 
-
         $eventPlans = array_diff($eventPlans, $events);
         $eventPlans = array_diff($eventPlans, $subscriptionEvents->pluck('event_id')->toArray());
 
-        return [true,$eventPlans];
+        return [true, $eventPlans];
     }
 
     public function checkUserSubscriptionByEventId($eventId)
@@ -574,8 +563,6 @@ class User extends Authenticatable
                 }
             }
 
-
-
             if ($planIndex == count($categoryPlans[$key])) {
                 unset($plans[$key]);
             }
@@ -611,10 +598,8 @@ class User extends Authenticatable
         return in_array($eventId, $eventPlans);
     }
 
-
     public function checkUserPlans($plans)
     {
-
         //$plans = Plan::all();
         $eventPlans = [];
         $categoryPlans = [];
@@ -680,8 +665,6 @@ class User extends Authenticatable
                 }
             }
 
-
-
             if ($planIndex == count($categoryPlans[$key])) {
                 unset($plans[$key]);
             }
@@ -734,11 +717,9 @@ class User extends Authenticatable
         return $this->hasOne(CartCache::class);
     }
 
-
-    public function getStatistsicsUpdate($event, $statistics,$eventTopics = null){
-
-
-        if(!$eventTopics){
+    public function getStatistsicsUpdate($event, $statistics, $eventTopics = null)
+    {
+        if (!$eventTopics) {
             $eventTopics = $event->topicsLessonsInstructors()['topics'];
         }
 
@@ -753,7 +734,6 @@ class User extends Authenticatable
         $tab = str_replace(':', '', $tab);
         $tab = str_replace(')', '', $tab);
         $tab = str_replace('(', '', $tab);
-
 
         $statistic = $statistics;
 
@@ -788,23 +768,22 @@ class User extends Authenticatable
                     $is_new = 0;
                 }
                 if (!isset($videos[$vimeo_id])) {
-                    $change+=1;
+                    $change += 1;
                     $videos[$vimeo_id] = [
                         'seen' => 0,
-                        'tab' =>$tab.$vimeo_id,
+                        'tab' =>$tab . $vimeo_id,
                         'lesson_id' => $lesson['id'],
                         'stop_time' => 0,
                         'total_seen' => 0,
                         'percentMinutes' => 0,
                         'total_duration' => getLessonDurationToSec($lesson['vimeo_duration']),
                         'is_new' => $is_new,
-                        'send_automate_email' => isset($videos[$vimeo_id]['send_automate_email']) ? $videos[$vimeo_id]['send_automate_email'] : 0
+                        'send_automate_email' => isset($videos[$vimeo_id]['send_automate_email']) ? $videos[$vimeo_id]['send_automate_email'] : 0,
                     ];
                     $notes[$vimeo_id] = '';
                 }
 
-                if(!isset($videos[$vimeo_id]['tab'])){
-
+                if (!isset($videos[$vimeo_id]['tab'])) {
                     $stopTimee = isset($videos[$vimeo_id]['stop_time']) ? $videos[$vimeo_id]['stop_time'] : 0;
                     $totalSeenn = isset($videos[$vimeo_id]['total_seen']) ? $videos[$vimeo_id]['total_seen'] : 0;
                     $percentMinutess = isset($videos[$vimeo_id]['percentMinutes']) ? $videos[$vimeo_id]['percentMinutes'] : 0;
@@ -813,21 +792,21 @@ class User extends Authenticatable
 
                     $videos[$vimeo_id] = [
                         'seen' => $seenn,
-                        'tab' =>$tab.$vimeo_id,
+                        'tab' =>$tab . $vimeo_id,
                         'lesson_id' => $lesson['id'],
                         'stop_time' => $stopTimee,
                         'total_seen' => $totalSeenn,
                         'percentMinutes' => $percentMinutess,
                         'total_duration' => getLessonDurationToSec($lesson['vimeo_duration']),
                         'is_new' => $isNeww,
-                        'send_automate_email' => isset($videos[$vimeo_id]['send_automate_email']) ? $videos[$vimeo_id]['send_automate_email'] : 0
+                        'send_automate_email' => isset($videos[$vimeo_id]['send_automate_email']) ? $videos[$vimeo_id]['send_automate_email'] : 0,
                     ];
 
                     $notes[$vimeo_id] = isset($notes[$vimeo_id]) ? $notes[$vimeo_id] : '';
                 }
 
-                if(!isset($notes[$vimeo_id])){
-                    $notes[$vimeo_id] =  '';
+                if (!isset($notes[$vimeo_id])) {
+                    $notes[$vimeo_id] = '';
                 }
 
                 $countVideos += 1;
@@ -836,7 +815,7 @@ class User extends Authenticatable
         }
 
         if (!in_array($lastVideoSeen, $oldVideos) && isset($oldVideos[0])) {
-            $lastVideoSeen =$oldVideos[0];
+            $lastVideoSeen = $oldVideos[0];
         }
 
         foreach ($videos as $key => $videoId) {
@@ -846,26 +825,21 @@ class User extends Authenticatable
         }
 
         $newStatistics = ['videos'=>json_encode($videos), 'notes' => json_encode($notes), 'lastVideoSeen' => $lastVideoSeen,
-                                        'created_at' => $createdAt,'updated_at' => $updatedAt, 'event_id' => $event['id'],'user_id' => $this->id];
+            'created_at' => $createdAt, 'updated_at' => $updatedAt, 'event_id' => $event['id'], 'user_id' => $this->id];
 
         return $newStatistics;
-
     }
-
 
     public function updateUserStatistic($event, $statistics, $eventTopics = null)
     {
-
-
         if (!$this->statistic()->wherePivot('event_id', $event['id'])->first()) {
-            $this->statistic()->attach($event['id'], $this->getStatistsicsUpdate($event, $statistics,$eventTopics));
+            $this->statistic()->attach($event['id'], $this->getStatistsicsUpdate($event, $statistics, $eventTopics));
         } else {
-            $this->statistic()->wherePivot('event_id', $event['id'])->updateExistingPivot($event['id'], $this->getStatistsicsUpdate($event, $statistics,$eventTopics), false);
+            $this->statistic()->wherePivot('event_id', $event['id'])->updateExistingPivot($event['id'], $this->getStatistsicsUpdate($event, $statistics, $eventTopics), false);
         }
 
         return $this->statistic()->wherePivot('event_id', $event['id'])->first();
     }
-
 
     public function hasExamResults()
     {
@@ -903,7 +877,7 @@ class User extends Authenticatable
         }
 
         $userMinutes = $absences->sum('minutes');
-        $eventMinutes =  $event->getTotalHours() > 0 ? $event->getTotalHours() : 1;//$absences->sum('total_minutes');
+        $eventMinutes = $event->getTotalHours() > 0 ? $event->getTotalHours() : 1; //$absences->sum('total_minutes');
         $userMinutesAbsences = $eventMinutes - $userMinutes;
         $eventLimitAbsence = $event->absences_limit;
 
@@ -918,11 +892,11 @@ class User extends Authenticatable
                 $eventM += $ab->total_minutes;
             }
 
-            $absencesByDate[$key] = ['id'=>$ab->id,'user_minutes' => $userM, 'event_minutes' => $eventM];
+            $absencesByDate[$key] = ['id'=>$ab->id, 'user_minutes' => $userM, 'event_minutes' => $eventM];
         }
 
         //$userAbsencesPercent = 100 - ( ( $userMinutes / $eventMinutes ) * 100 );
-        $userAbsencesPercent =  ($userMinutesAbsences / $eventMinutes) * 100 ;
+        $userAbsencesPercent = ($userMinutesAbsences / $eventMinutes) * 100;
 
         /*return response()->json([
 
@@ -953,7 +927,6 @@ class User extends Authenticatable
         return $data;
     }
 
-
     public function usersComments()
     {
         return $this->hasMany(Comment::class, 'user_id', 'id');
@@ -974,5 +947,4 @@ class User extends Authenticatable
     {
         return 'https://hooks.slack.com/services/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';
     }
-
 }

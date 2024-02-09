@@ -1,76 +1,74 @@
-<style scoped>
-
-</style>
+<style scoped></style>
 
 <template>
-<div >
+  <div>
     <template v-if="simple">
-        <page-edit-simple
-            :pageId="pageId"
-            :page="page"
-            :content="content"
-            @changeMode="changeMode"
-            :key="NaN"
-        ></page-edit-simple>
+      <page-edit-simple
+        :pageId="pageId"
+        :page="page"
+        :content="content"
+        @changeMode="changeMode"
+        :key="NaN"
+      ></page-edit-simple>
     </template>
     <template v-else>
-        <pageseditable
-            title="true"
-            category="true"
-            type="edit"
-            route="pages"
-            page-title="Edit Page"
-            :data="page"
-            :id="pageId"
-            :uuid="null"
-            @changeMode="changeMode"
-            :key="NaN"
-        ></pageseditable>
+      <pageseditable
+        title="true"
+        category="true"
+        type="edit"
+        route="pages"
+        page-title="Edit Page"
+        :data="page"
+        :id="pageId"
+        :uuid="null"
+        @changeMode="changeMode"
+        :key="NaN"
+      ></pageseditable>
     </template>
-</div>
+  </div>
 </template>
 
 <script>
-    import pageseditable from './pageseditable.vue'
+import pageseditable from './pageseditable.vue';
 
-    export default {
-        components: {
-            pageseditable,
-        },
-        props: {
-            pageId: Number,
-        },
-        data() {
-            return {
-                page: null,
-                content: null,
-                simple: true,
+export default {
+  components: {
+    pageseditable,
+  },
+  props: {
+    pageId: Number,
+  },
+  data() {
+    return {
+      page: null,
+      content: null,
+      simple: true,
+    };
+  },
+  methods: {
+    getPage() {
+      if (this.pageId) {
+        axios
+          .get('/api/pages/' + this.pageId)
+          .then((response) => {
+            if (response.status == 200) {
+              this.page = response.data.data;
+              this.content = JSON.parse(this.page.content);
             }
-        },
-        methods: {
-            getPage() {
-                if (this.pageId){
-                    axios
-                    .get('/api/pages/' + this.pageId)
-                    .then((response) => {
-                        if (response.status == 200){
-                            this.page = response.data.data;
-                            this.content = JSON.parse(this.page.content);
-                        }
-                    })
-                    .catch((error) => {
-                        console.log(error)
-                    });
-                }
-            },
-            changeMode(page) {
-                this.page = page;
-                this.content = this.page.content;
-                this.simple = !this.simple;
-            }
-        },
-        mounted() {
-            this.getPage();
-        }
-    }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+    },
+    changeMode(page) {
+      this.page = page;
+      this.content = this.page.content;
+      this.simple = !this.simple;
+    },
+  },
+  mounted() {
+    this.getPage();
+  },
+};
 </script>

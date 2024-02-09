@@ -21,7 +21,7 @@ class AdminResource extends JsonResource
             'lastname' => $this->lastname,
             'email' => $this->email,
             'created_at' => Carbon::parse($this->created_at)->toFormattedDateString(),
-            'active' => $this->active
+            'active' => $this->active,
         ];
     }
 }

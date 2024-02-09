@@ -2,9 +2,9 @@
 
 namespace App\Http\Middleware;
 
+use Auth;
 use Closure;
 use Illuminate\Http\Request;
-use Auth;
 use Session;
 
 class AuthAuthorsAndAbove
@@ -16,7 +16,6 @@ class AuthAuthorsAndAbove
      * @param  \Closure  $next
      * @return mixed
      */
-
     public function __construct()
     {
         $this->auth = Auth::user();
@@ -24,12 +23,11 @@ class AuthAuthorsAndAbove
 
     public function handle(Request $request, Closure $next)
     {
-        
-        if(!$this->auth){
+        if (!$this->auth) {
             return redirect()->to('admin')->withErrors(['You must login first.']);
         }
-        
-        if(!$this->auth->statusAccount->completed){
+
+        if (!$this->auth->statusAccount->completed) {
             Auth::logout();
             Session::invalidate();
             Session::regenerateToken();
@@ -39,12 +37,10 @@ class AuthAuthorsAndAbove
 
         $roles = $this->auth->role->pluck('name')->toArray();
 
-        if (in_array('Super Administrator',$roles) || in_array('Administrator',$roles) || in_array('Manager',$roles) || in_array('Author',$roles)) {
+        if (in_array('Super Administrator', $roles) || in_array('Administrator', $roles) || in_array('Manager', $roles) || in_array('Author', $roles)) {
             return $next($request);
-        }
-        elseif(in_array('Knowcrunch Partner',$roles)) {
-
-            if($request->route()->uri != 'admin/transaction/export-excel'){
+        } elseif (in_array('Knowcrunch Partner', $roles)) {
+            if ($request->route()->uri != 'admin/transaction/export-excel') {
                 $request->route()->action['uses'] = 'App\Http\Controllers\TransactionController@participants_inside_revenue';
                 $request->route()->action['controller'] = 'App\Http\Controllers\TransactionController@participants_inside_revenue';
                 $request->route()->action['as'] = 'transaction.participants';
@@ -52,9 +48,8 @@ class AuthAuthorsAndAbove
                 $request->route()->controller = (new \App\Http\Controllers\TransactionController);
                 $request->route()->controller->uri = 'admin/transaction/participants';
             }
-           
+
             return $next($request);
-           
         }
 
         abort(404);

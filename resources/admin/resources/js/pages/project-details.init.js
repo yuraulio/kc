@@ -130,7 +130,7 @@ File: Project Detail init js
                 charts.push(this.respChart($("#line-chart-example"), 'Line', lineChart, lineOpts));
             }
 
-            
+
             return charts;
         },
         //initializing various components and plugins
@@ -164,4 +164,3 @@ File: Project Detail init js
         "use strict";
         $.ChartJs.init()
     }(window.jQuery);
-    

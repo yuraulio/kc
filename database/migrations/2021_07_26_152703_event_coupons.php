@@ -17,16 +17,13 @@ class EventCoupons extends Migration
             $table->id();
             $table->string('event_id');
             $table->text('coupon_id');
-
         });
-
 
         Schema::table('coupons', function (Blueprint $table) {
             $table->boolean('status')->default(true)->after('price');
             $table->boolean('used')->default(false)->after('status');
             $table->string('price')->change();
         });
-
     }
 
     /**

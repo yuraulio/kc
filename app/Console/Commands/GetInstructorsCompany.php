@@ -2,9 +2,9 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
-use GuzzleHttp\Client;
 use App\Model\Instructor;
+use GuzzleHttp\Client;
+use Illuminate\Console\Command;
 
 class GetInstructorsCompany extends Command
 {
@@ -39,15 +39,13 @@ class GetInstructorsCompany extends Command
      */
     public function handle()
     {
-
-        $client = new Client(['base_uri' => 'http://knowcrunchls.j.scaleforce.net','verify' => false]);
+        $client = new Client(['base_uri' => 'http://knowcrunchls.j.scaleforce.net', 'verify' => false]);
         $response = $client->request('GET', 'http://knowcrunchls.j.scaleforce.net/get-company');
 
-        $companies = json_decode($response->getBody()->getContents(),true);
+        $companies = json_decode($response->getBody()->getContents(), true);
 
-        foreach($companies['companies'] as $key => $company){
-          
-            if($instructor = Instructor::find($key)){
+        foreach ($companies['companies'] as $key => $company) {
+            if ($instructor = Instructor::find($key)) {
                 $instructor->company = $company;
                 $instructor->save();
             }

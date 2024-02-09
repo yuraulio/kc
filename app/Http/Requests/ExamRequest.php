@@ -25,35 +25,46 @@ class ExamRequest extends FormRequest
     {
         return [
             'exam_name' => [
-                'required', 'min:3'
+                'required', 'min:3',
             ],
             'duration' => [
-                'numeric'
-            ],
-            
-            'event_id' => [
-                'required'
-            ],
-            'examMethods' => [
-                'required'
-            ],
-            'q_limit' => [
-                'numeric'
-            ],
-       
-            'intro_text' => [
-                'required', 'min:3'
-            ],
-            'end_of_time_text' => [
-                'required', 'min:3'
-            ],
-            'success_text' => [
-                'required', 'min:3'
-            ],
-            'failure_text' => [
-                'required', 'min:3'
+                'numeric',
             ],
 
+            'event_id' => [
+                'required',
+            ],
+            'examMethods' => [
+                'required',
+            ],
+            'q_limit' => [
+                'numeric',
+            ],
+
+            'intro_text' => [
+                'required', 'min:3',
+            ],
+            'end_of_time_text' => [
+                'required', 'min:3',
+            ],
+            'success_text' => [
+                'required', 'min:3',
+            ],
+            'failure_text' => [
+                'required', 'min:3',
+            ],
+
+            'repeat_exam' => [
+                'nullable', 'boolean',
+            ],
+            'repeat_exam_in' => [
+                'nullable', 'numeric', 'min:0', 'max:255',
+            ],
         ];
+    }
+
+    protected function prepareForValidation()
+    {
+        $this->merge(['repeat_exam' => $this->has('repeat_exam') ? 1 : 0]);
     }
 }

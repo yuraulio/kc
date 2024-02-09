@@ -3,11 +3,10 @@
 namespace App\Http\Controllers\Theme;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Model\Event;
 use App\Model\Instructor;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-
 
 class SearchController extends Controller
 {
@@ -69,7 +68,7 @@ class SearchController extends Controller
         $data = $request->only('search_term');
 
         if (!empty($data['search_term'])) {
-            $data['search_term_slug'] = Str::slug($data['search_term'], "-");
+            $data['search_term_slug'] = Str::slug($data['search_term'], '-');
         }
 
         $data['list'] = Event::with('city', 'summary1', 'slugable', 'ticket')

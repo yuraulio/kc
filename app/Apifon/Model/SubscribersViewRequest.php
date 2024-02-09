@@ -4,29 +4,24 @@ namespace Apifon\Model;
 
 use Exception;
 
-class SubscribersViewRequest implements IRequest {
-
-    public $subscribers = array();
+class SubscribersViewRequest implements IRequest
+{
+    public $subscribers = [];
 
     /**
      * Adds subscribers to the existing subscriber list.
      * @param $subscribers
      */
-    public function addSubscribers($subscribers){
-
-        if (is_array($subscribers))
-
+    public function addSubscribers($subscribers)
+    {
+        if (is_array($subscribers)) {
             $this->subscribers = $subscribers;
-
-        elseif (is_string($subscribers))
-
-            $this->subscribers = json_decode($subscribers,true);
-
-        else{
-            var_dump("Subscriber entry is not valid");
+        } elseif (is_string($subscribers)) {
+            $this->subscribers = json_decode($subscribers, true);
+        } else {
+            var_dump('Subscriber entry is not valid');
             die();
         }
-
     }
 
     /**
@@ -34,8 +29,9 @@ class SubscribersViewRequest implements IRequest {
      * Input is a list of phone numbers.
      * @param $subscribers
      */
-    public function addStrSubscribers($subscribers){
-        foreach ($subscribers as $sub){
+    public function addStrSubscribers($subscribers)
+    {
+        foreach ($subscribers as $sub) {
             $subscriber = new SubscriberInformation();
             $subscriber->setNumber($sub);
             $this->subscribers[] = $subscriber;
@@ -47,13 +43,11 @@ class SubscribersViewRequest implements IRequest {
      * Input is either a subscriber or a phone number.
      * @param $subscriber
      */
-    public function addSubscriber($subscriber){
-
+    public function addSubscriber($subscriber)
+    {
         if ($subscriber instanceof SubscriberInformation) {
-
-            $this->subscribers[]= $subscriber;
-
-        }elseif (is_string($subscriber)){
+            $this->subscribers[] = $subscriber;
+        } elseif (is_string($subscriber)) {
             $sub = new SubscriberInformation();
             $sub->setNumber($subscriber);
             $this->subscribers[] = $sub;
@@ -75,7 +69,8 @@ class SubscribersViewRequest implements IRequest {
      * Input is a list of phone numbers.
      * @param $subscribers
      */
-    public function setStrSubscribers($subscribers){
+    public function setStrSubscribers($subscribers)
+    {
         foreach ($subscribers as $subscriber) {
             $sub = new SubscriberInformation();
             $sub->setNumber($subscriber);

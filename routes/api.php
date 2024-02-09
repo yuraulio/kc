@@ -4,10 +4,11 @@ use App\Http\Controllers\Api\AbsenceController;
 use App\Http\Controllers\Api\EventController;
 use App\Http\Controllers\Api\ForgotPasswordController;
 use App\Http\Controllers\Api\NotificationController;
+use App\Http\Controllers\Api\LessonController;
 use App\Http\Controllers\Api\PassportAuthController;
 use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\UserController;
-use App\Http\Controllers\Api\LessonController;
+use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,9 +23,7 @@ use App\Http\Controllers\Api\LessonController;
 
 Route::post('login', [PassportAuthController::class, 'login']);
 
-
 Route::middleware('auth:api')->group(function () {
-
     // User
     Route::get('myprofile', [UserController::class, 'profile']);
     Route::post('myprofile/update', [UserController::class, 'updateProfile']);
@@ -38,7 +37,6 @@ Route::middleware('auth:api')->group(function () {
     Route::post('lesson/save_note', [LessonController::class, 'saveNote']);
     Route::post('lesson/save_video_progress', [LessonController::class, 'saveVideoProgress']);
     Route::post('lesson/update_is_new', [LessonController::class, 'updateVideoIsNew']);
-
 
     //SMS
     Route::post('smsVerification', [UserController::class, 'smsVerification']);
@@ -65,6 +63,5 @@ Route::middleware('auth:api')->group(function () {
     Route::resource('roles', RoleController::class)
         ->only('index');
 });
-
 
 Route::post('/myaccount/reset', [ForgotPasswordController::class, 'sendResetLinkEmail']);

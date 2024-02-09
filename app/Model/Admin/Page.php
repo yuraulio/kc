@@ -2,13 +2,13 @@
 
 namespace App\Model\Admin;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use App\Traits\PaginateTable;
 use App\Traits\SearchFilter;
+use CodexShaper\Menu\Models\Menu;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Builder;
-use CodexShaper\Menu\Models\Menu;
-use App\Traits\PaginateTable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
 
 class Page extends Model implements Auditable
@@ -24,34 +24,34 @@ class Page extends Model implements Auditable
 
     public const VERSIONS = [
         [
-            "instructors-testimonials",
+            'instructors-testimonials',
             470,
-            470
+            470,
         ],
         [
-            "event-card",
+            'event-card',
             542,
-            291
+            291,
         ],
         [
-            "users",
+            'users',
             470,
-            470
+            470,
         ],
         [
-            "header-image",
+            'header-image',
             2880,
-            1248
+            1248,
         ],
         [
-            "instructors-small",
+            'instructors-small',
             90,
-            90
+            90,
         ],
         [
-            "feed-image",
+            'feed-image',
             300,
-            300
+            300,
         ],
         // [
         //     "social-media-sharing",
@@ -82,7 +82,7 @@ class Page extends Model implements Auditable
         });
 
         static::addGlobalScope('knowledge', function (Builder $builder) {
-            $builder->where("type", "!=", "Knowledge")->orWhere("type", null);
+            $builder->where('type', '!=', 'Knowledge')->orWhere('type', null);
         });
     }
 
@@ -93,7 +93,7 @@ class Page extends Model implements Auditable
      */
     public function toSearchableArray()
     {
-        $array =  [
+        $array = [
             'id'    => $this->id,
             'title'    => $this->title,
         ];
@@ -110,18 +110,19 @@ class Page extends Model implements Auditable
     {
         $pageType = PageType::whereTitle($this->type)->first();
         $pageType_id = $pageType ? $pageType->id : null;
-        $category = Category::where("page_type_id", $pageType_id)->with("subcategories")->get();
+        $category = Category::where('page_type_id', $pageType_id)->with('subcategories')->get();
+
         return $category;
     }
 
     public function categories()
     {
-        return $this->belongsToMany(Category::class, 'cms_link_pages_categories', 'page_id', 'category_id')->whereNull("parent_id");
+        return $this->belongsToMany(Category::class, 'cms_link_pages_categories', 'page_id', 'category_id')->whereNull('parent_id');
     }
 
     public function subcategories()
     {
-        return $this->belongsToMany(Category::class, 'cms_link_pages_categories', 'page_id', 'category_id')->whereNotNull("parent_id");
+        return $this->belongsToMany(Category::class, 'cms_link_pages_categories', 'page_id', 'category_id')->whereNotNull('parent_id');
     }
 
     public function template()
@@ -131,12 +132,12 @@ class Page extends Model implements Auditable
 
     public function user()
     {
-        return $this->belongsTo(Admin::class, "user_id");
+        return $this->belongsTo(Admin::class, 'user_id');
     }
 
     public function comments()
     {
-        return $this->hasMany(Comment::class)->orderBy('created_at', "desc");
+        return $this->hasMany(Comment::class)->orderBy('created_at', 'desc');
     }
 
     /**
@@ -150,7 +151,7 @@ class Page extends Model implements Auditable
             'slug' => [
                 'source' => 'title',
                 'onUpdate' => false,
-            ]
+            ],
         ];
     }
 
@@ -159,29 +160,32 @@ class Page extends Model implements Auditable
         $content = json_decode($this->content);
         foreach ($content as $row) {
             foreach ($row->columns as $column) {
-                if ($column->component == "meta") {
+                if ($column->component == 'meta') {
                     $feature_data = [];
                     foreach ($column->template->inputs as $input) {
-                        $feature_data[$input->key] = $input->value ?? "";
+                        $feature_data[$input->key] = $input->value ?? '';
                     }
+
                     return $feature_data;
                 }
             }
         }
+
         return [
-            "feature_title" => $this->title,
-            "feature_description" => "",
-            "feature_image" => "",
+            'feature_title' => $this->title,
+            'feature_description' => '',
+            'feature_image' => '',
         ];
     }
 
     public function getMenu($id)
     {
         $menu = Menu::find($id);
+
         return [
-            'name' => $menu->name ?? "",
-            'title' => $menu->custom_class ?? "",
-            'mobile' => $menu->url ?? "",
+            'name' => $menu->name ?? '',
+            'title' => $menu->custom_class ?? '',
+            'mobile' => $menu->url ?? '',
         ];
     }
 
@@ -190,11 +194,10 @@ class Page extends Model implements Auditable
         $content = json_decode($this->content);
         foreach ($content as $row) {
             foreach ($row->columns as $column) {
-                if ($column->component == "blog_header") {
+                if ($column->component == 'blog_header') {
                     return $column->template->inputs[0]->value;
                 }
             }
         }
-        return null;
     }
 }

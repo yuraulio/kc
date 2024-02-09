@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 return [
 
@@ -10,7 +10,7 @@ return [
             'submit_tpl' => 'alphabank_submit_tpl',
             'connect_via' => 'form',
             'status' => 1,
-            'type_method' => 'bank'
+            'type_method' => 'bank',
         ],
 
         2 => [
@@ -20,9 +20,8 @@ return [
             'submit_tpl' => 'stripe_submit_tpl',
             'connect_via' => 'form',
             'status' => 1,
-            'type_method' => 'stripe'
+            'type_method' => 'stripe',
         ],
 
-
-    ]
+    ],
 ];

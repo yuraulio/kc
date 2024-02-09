@@ -15,7 +15,6 @@ class TickerResource extends JsonResource
      */
     public function toArray($request)
     {
-
         return [
             'id' => $this->id,
             'title' => $this->title,
@@ -23,7 +22,7 @@ class TickerResource extends JsonResource
             'published' => $this->published,
             'from_date' => $this->from_date,
             'until_date' => $this->until_date,
-            'created_at' => Carbon::parse($this->created_at)->toFormattedDateString()
+            'created_at' => Carbon::parse($this->created_at)->toFormattedDateString(),
         ];
     }
 }

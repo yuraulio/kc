@@ -4,12 +4,12 @@ return [
     'statuses' => [
         'published' => 'Published',
         'draft' => 'Draft',
-        'archive' => 'Archive'
+        'archive' => 'Archive',
     ],
 
     'options' => [
         0 => 'First',
         1 => 'Second',
-        2 => 'Third'
-    ]
+        2 => 'Third',
+    ],
 ];

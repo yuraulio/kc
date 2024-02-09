@@ -2,11 +2,11 @@
 
 namespace App\Http\Middleware;
 
-use Closure;
-use Illuminate\Http\Request;
-use \Cart as Cart; 
 use App\Model\CartCache;
 use App\Model\Ticket;
+use Cart as Cart;
+use Closure;
+use Illuminate\Http\Request;
 
 class Registration
 {
@@ -19,22 +19,24 @@ class Registration
      */
     public function handle(Request $request, Closure $next)
     {
-    
-        if(request()->has('cart')){
+        if (request()->has('cart')) {
             Cart::instance('default')->destroy();
             $cartCache = CartCache::where('slug', request('cart'))->first();
-            
-            if($cartCache){
-               Cart::add($cartCache->ticket_id, $cartCache->product_title, $cartCache->quantity, $cartCache->price, 
-                ['type' => $cartCache->type, 'event' => $cartCache->event])->associate(Ticket::class);
-            }
 
-          
+            if ($cartCache) {
+                Cart::add(
+                    $cartCache->ticket_id,
+                    $cartCache->product_title,
+                    $cartCache->quantity,
+                    $cartCache->price,
+                    ['type' => $cartCache->type, 'event' => $cartCache->event]
+                )->associate(Ticket::class);
+            }
 
             return redirect('/cart');
         }
 
-        if(Cart::content()->count() <= 0){
+        if (Cart::content()->count() <= 0) {
             return redirect('/');
         }
 

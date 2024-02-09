@@ -38,7 +38,7 @@ class ReindexAll extends Command
      */
     public function handle()
     {
-        $this->info("Reindexing - start");
+        $this->info('Reindexing - start');
 
         Artisan::call("scout:flush 'App\\\Model\\\Admin\\\Admin'");
         Artisan::call("scout:import 'App\\\Model\\\Admin\\\Admin'");
@@ -61,6 +61,6 @@ class ReindexAll extends Command
         Artisan::call("scout:flush 'App\\\Model\\\Admin\\\MediaFolder'");
         Artisan::call("scout:import 'App\\\Model\\\Admin\\\MediaFolder'");
 
-        $this->info("Reindexing - end");
+        $this->info('Reindexing - end');
     }
 }

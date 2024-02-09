@@ -15,7 +15,6 @@ class AddFeedFieldToEvents extends Migration
     {
         Schema::table('events', function (Blueprint $table) {
             $table->boolean('feed')->default(false)->after('index');
-
         });
     }
 

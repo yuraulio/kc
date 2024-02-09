@@ -2,19 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use BinshopsBlog\Helpers;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use BinshopsBlog\Events\CategoryEdited;
+use BinshopsBlog\Helpers;
 use BinshopsBlog\Middleware\LoadLanguage;
-use BinshopsBlog\Models\BinshopsCategory;
 use BinshopsBlog\Middleware\UserCanManageBlogPosts;
+use BinshopsBlog\Models\BinshopsCategory;
 use BinshopsBlog\Models\BinshopsCategoryTranslation;
 use BinshopsBlog\Requests\UpdateBinshopsBlogCategoryRequest;
+use Illuminate\Http\Request;
 
 /**
- * Class BinshopsCategoryAdminController
- * @package BinshopsBlog\Controllers
+ * Class BinshopsCategoryAdminController.
  */
 class BinshopsCategoryAdminControllerExtended extends Controller
 {
@@ -29,7 +28,7 @@ class BinshopsCategoryAdminControllerExtended extends Controller
     }
 
     /**
-     * Save submitted changes
+     * Save submitted changes.
      *
      * @param UpdateBinshopsBlogCategoryRequest $request
      * @param $categoryId
@@ -49,7 +48,7 @@ class BinshopsCategoryAdminControllerExtended extends Controller
         $translation = BinshopsCategoryTranslation::where(
             [
                 ['lang_id', '=', $language_id],
-                ['category_id', '=', $categoryId]
+                ['category_id', '=', $categoryId],
             ]
         )->first();
         $category->fill($request->all());
@@ -57,8 +56,9 @@ class BinshopsCategoryAdminControllerExtended extends Controller
         $category->save();
         $translation->save();
 
-        Helpers::flash_message("Saved category changes");
+        Helpers::flash_message('Saved category changes');
         event(new CategoryEdited($category));
+
         return redirect($translation->edit_url());
     }
 }

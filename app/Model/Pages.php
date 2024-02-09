@@ -2,13 +2,13 @@
 
 namespace App\Model;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use App\Traits\SlugTrait;
-use App\Traits\MetasTrait;
+use App\Model\Media;
 use App\Traits\BenefitTrait;
 use App\Traits\MediaTrait;
-use App\Model\Media;
+use App\Traits\MetasTrait;
+use App\Traits\SlugTrait;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class Pages extends Model
 {
@@ -21,12 +21,11 @@ class Pages extends Model
     protected $table = 'pages';
 
     protected $fillable = [
-        'title', 'content','template','name','summary','published',
+        'title', 'content', 'template', 'name', 'summary', 'published',
     ];
 
     public function medias()
     {
         return $this->morphOne(Media::class, 'mediable');
     }
-
 }

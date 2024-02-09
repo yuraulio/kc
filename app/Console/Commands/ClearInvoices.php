@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\Model\Invoice;
+use Illuminate\Console\Command;
 
 class ClearInvoices extends Command
 {
@@ -38,41 +38,28 @@ class ClearInvoices extends Command
      */
     public function handle()
     {
-
         //$invoices = Invoice::where('id',17)->get();
         $invoices = Invoice::all();
 
-        foreach($invoices as $invoice){
-
+        foreach ($invoices as $invoice) {
             $transaction = $invoice->transaction->first();
             $user = $invoice->user->first();
             $event = $invoice->event->first();
 
-            if(!$transaction || !$user || !$event || !$user->transactions){
+            if (!$transaction || !$user || !$event || !$user->transactions) {
                 continue;
             }
-            if(!in_array($transaction->id,$user->transactions->pluck('id')->toArray())){
+            if (!in_array($transaction->id, $user->transactions->pluck('id')->toArray())) {
                 //dd($user->transactions);
                 $invoice->transaction()->detach();
-                foreach($user->transactions as $newTransaction){
-                   
-                    foreach($newTransaction->event as $eventTrans){
-                        
-
-                        if($eventTrans->id == $event->id){
+                foreach ($user->transactions as $newTransaction) {
+                    foreach ($newTransaction->event as $eventTrans) {
+                        if ($eventTrans->id == $event->id) {
                             $invoice->transaction()->attach($newTransaction->id);
                         }
-
                     }
-
-                    
                 }
-
-
-            
             }
-
-            
         }
 
         return 0;

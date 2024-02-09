@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\Model\Category;
+use Illuminate\Console\Command;
 
 class ExportEvents extends Command
 {
@@ -38,30 +38,28 @@ class ExportEvents extends Command
      */
     public function handle()
     {
-
-        $categories = Category::where('id','!=',46)->get();
-        $columns = array("ID", "Title", "Published");
+        $categories = Category::where('id', '!=', 46)->get();
+        $columns = ['ID', 'Title', 'Published'];
 
         /*$file = fopen('events.csv', 'w');
         fputcsv($file, $columns);
 
         foreach($category->events as $event){
-            
+
             fputcsv($file, array($event->id, $event->title,  date('d-m-Y',strtotime($event->published_at))));
         }*/
-
 
         $file = fopen('events2.csv', 'w');
         fputcsv($file, $columns);
 
-        foreach($categories as $category){
-        foreach($category->events as $event){
-            
-            fputcsv($file, array($event->id, $event->title,  date('d-m-Y',strtotime($event->published_at))));
-        }
+        foreach ($categories as $category) {
+            foreach ($category->events as $event) {
+                fputcsv($file, [$event->id, $event->title,  date('d-m-Y', strtotime($event->published_at))]);
+            }
         }
 
         fclose($file);
+
         return 0;
     }
 }

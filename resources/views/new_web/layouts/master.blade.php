@@ -1,7 +1,5 @@
 <?php //$header_menus = get_header();?>
-
 <!doctype html>
-
 <html lang="en" class="no-js">
     <head>
         <base href="{!! URL::to('/') !!}/" target="_self" />
@@ -54,9 +52,7 @@
         @yield('blog-custom-css')
 
     </head>
-
     <body style="display: none;">
-
         <!-- Load Facebook SDK for JavaScript -->
         @yield('fbchat')
 
@@ -105,7 +101,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="remember-me"><input id="remember-me" type="checkbox">Remember me</label>
-                                <a id="forgot-pass" href="javascript:void(0)">Forgot password?</a>
+                                <a id="forgot-pass" href="javascript:void(0)">Reset or create your password.</a>
                             </div>
                             <input id="test-login" type="button" onclick="loginAjaxNew()" value="LOGIN">
                             <div class="row text-center loader d-none"><img class="img-responsive" src="theme/assets/img/ajax-loader-blue.gif" alt="Loader" title="Loader" /> </div>
@@ -130,8 +126,8 @@
                     <div id="forgot-pass-input" class="login-popup" hidden>
                         <a href="#" class="close-btn"><img width="26" src="{{cdn('theme/assets/images/icons/icon-close.svg')}}" class="replace-with-svg" alt="Close"></a>
                         <div class="heading">
-                        <span>Change your Password</span>
-                            <p>Use your account email to change your password</p>
+                        <span>Password</span>
+                            <p>Use your account email to create or change your password.</p>
                         </div>
                         <form autocomplete="off" class="login-form">
                             {!!csrf_field()!!}
@@ -161,7 +157,7 @@
                                 </div>
                             </div>
 
-                            <button type="button" class="btn btn--lg btn--secondary change-password"  value="Change">Change</button>
+                            <button type="button" class="btn btn--lg btn--secondary change-password"  value="Change">Create / Change</button>
                         </form>
                     </div>
                 </div>

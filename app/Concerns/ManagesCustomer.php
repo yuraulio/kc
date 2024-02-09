@@ -30,7 +30,7 @@ trait ManagesCustomer
      */
     public function hasStripeId()
     {
-        return ! is_null($this->stripe_id);
+        return !is_null($this->stripe_id);
     }
 
     /**
@@ -42,7 +42,7 @@ trait ManagesCustomer
      */
     protected function assertCustomerExists()
     {
-        if (! $this->hasStripeId()) {
+        if (!$this->hasStripeId()) {
             throw InvalidCustomer::notYetCreated($this);
         }
     }
@@ -61,19 +61,19 @@ trait ManagesCustomer
             throw CustomerAlreadyCreated::exists($this);
         }
 
-        if (! array_key_exists('name', $options) && $name = $this->stripeName()) {
+        if (!array_key_exists('name', $options) && $name = $this->stripeName()) {
             $options['name'] = $name;
         }
 
-        if (! array_key_exists('email', $options) && $email = $this->stripeEmail()) {
+        if (!array_key_exists('email', $options) && $email = $this->stripeEmail()) {
             $options['email'] = $email;
         }
 
-        if (! array_key_exists('phone', $options) && $phone = $this->stripePhone()) {
+        if (!array_key_exists('phone', $options) && $phone = $this->stripePhone()) {
             $options['phone'] = $phone;
         }
 
-        if (! array_key_exists('address', $options) && $address = $this->stripeAddress()) {
+        if (!array_key_exists('address', $options) && $address = $this->stripeAddress()) {
             $options['address'] = $address;
         }
 
@@ -100,7 +100,8 @@ trait ManagesCustomer
     public function updateStripeCustomer(array $options = [])
     {
         return $this->stripe()->customers->update(
-            $this->stripe_id, $options
+            $this->stripe_id,
+            $options
         );
     }
 
@@ -127,33 +128,29 @@ trait ManagesCustomer
      */
     public function asStripeCustomer(array $expand = [])
     {
-        
         $this->stripe_id = null;
         $this->save();
-        
-        foreach((array) json_decode($this->stripe_ids) as $stripe_id){
-            try{
-                if(!$stripe_id){
+
+        foreach ((array) json_decode($this->stripe_ids) as $stripe_id) {
+            try {
+                if (!$stripe_id) {
                     continue;
                 }
-                
+
                 $customer = $this->stripe()->customers->retrieve(
-                    $stripe_id, ['expand' => $expand]
+                    $stripe_id,
+                    ['expand' => $expand]
                 );
 
-                
                 $this->stripe_id = $stripe_id;
-                $this->save();  
-               
+                $this->save();
+
                 $this->assertCustomerExists();
+
                 return $customer;
-
-            }catch(\Stripe\Exception\InvalidRequestException $e){
-
+            } catch(\Stripe\Exception\InvalidRequestException $e) {
             }
         }
-
-       
     }
 
     /**
@@ -250,7 +247,7 @@ trait ManagesCustomer
      */
     public function rawBalance()
     {
-        if (! $this->hasStripeId()) {
+        if (!$this->hasStripeId()) {
             return 0;
         }
 
@@ -266,7 +263,7 @@ trait ManagesCustomer
      */
     public function balanceTransactions($limit = 10, array $options = [])
     {
-        if (! $this->hasStripeId()) {
+        if (!$this->hasStripeId()) {
             return new Collection();
         }
 
@@ -379,7 +376,9 @@ trait ManagesCustomer
 
         try {
             return $this->stripe()->customers->retrieveTaxId(
-                $this->stripe_id, $id, []
+                $this->stripe_id,
+                $id,
+                []
             );
         } catch (StripeInvalidRequestException $exception) {
             //

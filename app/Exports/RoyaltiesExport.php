@@ -2,60 +2,50 @@
 
 namespace App\Exports;
 
-use Maatwebsite\Excel\Concerns\FromArray;
+use App\Model\Event;
 use App\Model\User;
 use Auth;
-use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\FromArray;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
-use App\Model\Event;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
+use Maatwebsite\Excel\Concerns\WithHeadings;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 
-class RoyaltiesExport implements FromArray,WithHeadings, ShouldAutoSize, WithColumnFormatting
+class RoyaltiesExport implements FromArray, WithHeadings, ShouldAutoSize, WithColumnFormatting
 {
     /**
-    * @return \Illuminate\Support\Collection
-    */
-
+     * @return \Illuminate\Support\Collection
+     */
     public $events;
 
-
-    public function __construct($instructor){
-
+    public function __construct($instructor)
+    {
         $this->instructor = $instructor;
 
         $this->createDir(storage_path('app/export/royalties'));
-
     }
-     /**
-    * @return \Illuminate\Support\Collection
-    */
+
+    /**
+     * @return \Illuminate\Support\Collection
+     */
     public function array(): array
     {
+        $data = [];
 
-        $data = array();
-
-        foreach($this->instructor as $key => $inst){
-
-            foreach($inst['events'] as $key1 => $event){
-
-                $rowdata = array(
-                    $inst['title'].' '.$inst['subtitle'],
+        foreach ($this->instructor as $key => $inst) {
+            foreach ($inst['events'] as $key1 => $event) {
+                $rowdata = [
+                    $inst['title'] . ' ' . $inst['subtitle'],
                     $event['title'],
                     $event['income'],
-                    ($event['total_event_minutes']/ 3600),
+                    ($event['total_event_minutes'] / 3600),
                     ($event['total_instructor_minutes'] / 3600),
-                    ($event['percent'])
-                );
+                    ($event['percent']),
+                ];
 
                 array_push($data, $rowdata);
-
             }
-
         }
-
-
-
 
         return $data;
     }
@@ -72,8 +62,9 @@ class RoyaltiesExport implements FromArray,WithHeadings, ShouldAutoSize, WithCol
         ];
     }
 
-    public function headings(): array {
-        return ['Instructor','Event', 'Royalties', 'Total Event Hours', 'Total Instructor Hours', 'Percent'];
+    public function headings(): array
+    {
+        return ['Instructor', 'Event', 'Royalties', 'Total Event Hours', 'Total Instructor Hours', 'Percent'];
     }
 
     public function createDir($dir, $permision = 0775, $recursive = true)
@@ -84,6 +75,4 @@ class RoyaltiesExport implements FromArray,WithHeadings, ShouldAutoSize, WithCol
             return true;
         }
     }
-
-
 }

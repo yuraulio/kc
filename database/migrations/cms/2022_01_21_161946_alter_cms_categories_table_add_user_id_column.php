@@ -14,7 +14,7 @@ class AlterCmsCategoriesTableAddUserIdColumn extends Migration
     public function up()
     {
         Schema::table('cms_categories', function (Blueprint $table) {
-            $table->integer("user_id");
+            $table->integer('user_id');
         });
     }
 

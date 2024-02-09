@@ -2,12 +2,12 @@
 
 namespace App\Notifications;
 
+use App\Model\Activation;
+use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use Carbon\Carbon;
-use App\Model\Activation;
 use Illuminate\Support\Str;
 
 class WelcomeEmail extends Notification
@@ -16,7 +16,6 @@ class WelcomeEmail extends Notification
 
     public $user;
     public $data;
-
 
     /**
      * Create a new notification instance.
@@ -28,8 +27,7 @@ class WelcomeEmail extends Notification
         $this->user = $user;
         $this->data = $data;
 
-        
-        if(isset($data['duration'])){
+        if (isset($data['duration'])) {
             $this->data['duration'] = strip_tags($data['duration']);
         }
     }
@@ -58,30 +56,27 @@ class WelcomeEmail extends Notification
         $slug['email'] = $this->user->email;
         $slug['create'] = true;
 
-
         $slug = encrypt($slug);
 
-        $template = isset($this->data['template']) ? 'emails.user.'.$this->data['template'] : 'emails.user.welcome';
+        $template = isset($this->data['template']) ? 'emails.user.' . $this->data['template'] : 'emails.user.welcome';
 
         // $subject = !isset($this->data['subject']) ? 'Knowcrunch - Welcome ' .  $this->user->firstname . '. Activate your account​ now' : 'Knowcrunch - Welcome ' . $this->data['subject'];
-        $subject = !isset($this->data['subject']) ? 'Knowcrunch - Welcome to our course ' .  $this->user->firstname : 'Knowcrunch – Welcome to our course ' . $this->data['subject'];
+        $subject = !isset($this->data['subject']) ? 'Knowcrunch - Welcome to our course ' . $this->user->firstname : 'Knowcrunch – Welcome to our course ' . $this->data['subject'];
 
-        if(isset($this->data['user']['createAccount'])){
+        if (isset($this->data['user']['createAccount'])) {
             $this->data['slug'] = $this->data['user']['createAccount'] ? url('/') . '/create-your-password/' . $slug : url('/') . '/myaccount';
-
-        }else{
+        } else {
             $this->data['slug'] = url('/') . '/myaccount';
         }
 
-        if($this->user->statusAccount){
+        if ($this->user->statusAccount) {
             $this->user->statusAccount->completed = true;
             $this->user->statusAccount->completed_at = Carbon::now();
             $this->user->statusAccount->save();
-        }else{
+        } else {
+            $activation = Activation::firstOrCreate(['user_id' => $this->user['id']]);
 
-            $activation = Activation::firstOrCreate(array('user_id' => $this->user['id']));
-
-            if($activation->code == ''){
+            if ($activation->code == '') {
                 $activation->code = Str::random(40);
                 $activation->completed = true;
                 $activation->save();
@@ -91,7 +86,7 @@ class WelcomeEmail extends Notification
         return (new MailMessage)
                     ->from('info@knowcrunch.com', 'Knowcrunch')
                     ->subject($subject)
-                    ->view($template,$this->data);
+                    ->view($template, $this->data);
     }
 
     /**

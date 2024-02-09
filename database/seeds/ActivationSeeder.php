@@ -20,7 +20,7 @@ class ActivationSeeder extends Seeder
             'completed' => 1,
             'completed_at' => now(),
             'created_at' => now(),
-            'updated_at' => now()
+            'updated_at' => now(),
         ]);
     }
 }

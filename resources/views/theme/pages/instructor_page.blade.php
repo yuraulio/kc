@@ -120,11 +120,6 @@
                                             <div class="item">
                                                 <div class="left">
                                                     <h2>{{ $row['title'] }}</h2>
-                                                    {{--<?php
-                                                    if(isset($row['city']) && count($row['city']) > 0){
-                                                        dd($row['summary1']);
-                                                    }
-                                                     ?>--}}
                                                     <?php
                                                     if(isset($row['summary1']) && count($row['summary1']) >0){
                                                         foreach($row['summary1'] as $sum){

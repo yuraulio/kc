@@ -8,7 +8,7 @@
     $homeLogos = $dynamic_page_data["homeLogos"] ?? [];
 
     if ($gallery["homepage_gallery_type"]->id == 1) {
-        
+
         $gallery = $homeBrands;
         $link = "/brands-trained";
         $title = "Knowcrunch is trusted by hundreds of companies";
@@ -25,9 +25,8 @@
         <h2 class="section-title">{{ $title }}</h2>
     </div>
     <div class="row">
-        {{--dd($gallery)--}}
         @foreach ($gallery as $image)
-        <?php 
+        <?php
 
             if(!isset($image['url'])){
                 continue;

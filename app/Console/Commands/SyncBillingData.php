@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\Model\Transaction;
+use Illuminate\Console\Command;
 
 class SyncBillingData extends Command
 {
@@ -39,20 +39,18 @@ class SyncBillingData extends Command
     public function handle()
     {
         $transactions = Transaction::all();
-        foreach($transactions as $transaction){
-            if(!$transaction->subscription->first() && $transaction->user->first() && $transaction->event->first()){
-                if($billing_details = json_decode($transaction->billing_details,true)){
-                    
+        foreach ($transactions as $transaction) {
+            if (!$transaction->subscription->first() && $transaction->user->first() && $transaction->event->first()) {
+                if ($billing_details = json_decode($transaction->billing_details, true)) {
                     $user = $transaction->user->first();
-                    
+
                     $billing = [];
 
-                    if(isset($billing_details['billing']) && $billing_details['billing'] == 1){
-                        
+                    if (isset($billing_details['billing']) && $billing_details['billing'] == 1) {
                         $billname = '';
 
                         $billname .= isset($billing_details['billname']) ? $billing_details['billname'] : '';
-                        $billname .= isset($billing_details['billsurname']) ? ' '. $billing_details['billsurname'] : '';
+                        $billname .= isset($billing_details['billsurname']) ? ' ' . $billing_details['billsurname'] : '';
 
                         $billing['billname'] = trim($billname);
                         $billing['billafm'] = isset($billing_details['billafm']) ? $billing_details['billafm'] : $user->afm;
@@ -61,8 +59,7 @@ class SyncBillingData extends Command
                         $billing['billpostcode'] = isset($billing_details['billpostcode']) ? $billing_details['billpostcode'] : '';
                         $billing['billcity'] = isset($billing_details['billcity']) ? $billing_details['billcity'] : '';
                         $billing['billemail'] = isset($billing_details['billemail']) ? $billing_details['billemail'] : '';
-
-                    }else if(isset($billing_details['billing']) && $billing_details['billing'] == 2){
+                    } elseif (isset($billing_details['billing']) && $billing_details['billing'] == 2) {
                         $billing['billname'] = $billing_details['companyname'];
                         $billing['billafm'] = $billing_details['companyafm'];
                         $billing['billaddress'] = $billing_details['companyaddress'];
@@ -70,7 +67,6 @@ class SyncBillingData extends Command
                         $billing['billpostcode'] = $billing_details['companypostcode'];
                         $billing['billcity'] = $billing_details['companycity'];
                         $billing['billemail'] = isset($billing_details['companyemail']) ? $billing_details['companyemail'] : '';
-
                     }
 
                     $user->receipt_details = json_encode($billing_details);

@@ -2,12 +2,12 @@
 
 namespace App\Model;
 
+use App\Model\Category;
+use App\Model\Instructor;
+use App\Model\Media;
+use App\Traits\MediaTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Model\Category;
-use App\Model\Media;
-use App\Model\Instructor;
-use App\Traits\MediaTrait;
 
 class Testimonial extends Model
 {
@@ -17,9 +17,8 @@ class Testimonial extends Model
     protected $table = 'testimonials';
 
     protected $fillable = [
-        'status', 'title', 'name','lastname' , 'testimonial', 'video_url', 'social_url'
+        'status', 'title', 'name', 'lastname', 'testimonial', 'video_url', 'social_url',
     ];
-
 
     public function category()
     {
@@ -35,5 +34,4 @@ class Testimonial extends Model
     {
         return $this->morphOne(Media::class, 'mediable');
     }
-
 }

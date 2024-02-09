@@ -1,4 +1,3 @@
-
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -11,38 +10,35 @@ require('./bootstrap');
 //// mix v6
 // require('../assets/vendor/MediaManager/js/manager')
 
-
-
-
 import Vue from 'vue';
-window.eventHub = new Vue()
+window.eventHub = new Vue();
 //window.axios = require('axios').default;
 
 window.Swal = require('sweetalert2');
-var _ = require("lodash");
-import VModal from 'vue-js-modal'
-Vue.use(VModal)
+var _ = require('lodash');
+import VModal from 'vue-js-modal';
+Vue.use(VModal);
 import VueToast from 'vue-toast-notification';
 // Import one of the available themes
 //import 'vue-toast-notification/dist/theme-default.css';
 import 'vue-toast-notification/dist/theme-sugar.css';
 
 Vue.use(VueToast);
-import Multiselect from 'vue-multiselect'
+import Multiselect from 'vue-multiselect';
 
 // register globally
-Vue.component('multiselect', Multiselect)
+Vue.component('multiselect', Multiselect);
 //Vue.$toast.open({/*
 import 'vue-loaders/dist/vue-loaders.css';
 import VueLoaders from 'vue-loaders';
 Vue.use(VueLoaders);
 
-import UUID from "vue-uuid";
+import UUID from 'vue-uuid';
 Vue.use(UUID);
 
-import VueNestable from 'vue-nestable'
+import VueNestable from 'vue-nestable';
 
-Vue.use(VueNestable)
+Vue.use(VueNestable);
 require('datatables.net-bs4');
 require('nestable2');
 
@@ -97,10 +93,10 @@ Vue.component('editor-for-old-admin', require('./components/inputs/editor-for-ol
 import VuetableFieldCheckbox from 'vuetable-2/src/components/VuetableFieldCheckbox.vue';
 Vue.component('vuetable-field-checkbox', VuetableFieldCheckbox);
 
-import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
-Vue.use(BootstrapVue)
+import { BootstrapVue, IconsPlugin } from 'bootstrap-vue';
+Vue.use(BootstrapVue);
 
-import 'bootstrap-vue/dist/bootstrap-vue.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css';
 
 Vue.component('page-edit', require('./components/page-edit.vue').default);
 Vue.component('page-new', require('./components/page-new.vue').default);
@@ -112,27 +108,24 @@ Vue.component('countdown-edit', require('./components/countdown-edit.vue').defau
 Vue.component('royalties-show', require('./components/royalties-show.vue').default);
 Vue.component('royalty-item', require('./components/royalty-item.vue').default);
 
-import VueClipboard from 'vue-clipboard2'
-VueClipboard.config.autoSetContainer = true // add this line
-Vue.use(VueClipboard)
+import VueClipboard from 'vue-clipboard2';
+VueClipboard.config.autoSetContainer = true; // add this line
+Vue.use(VueClipboard);
 
-if($("#app").length > 0) {
-    new Vue({
-        el: '#app',
-    })
+if ($('#app').length > 0) {
+  new Vue({
+    el: '#app',
+  });
 }
 
-if($("#app1").length > 0) {
-    new Vue({
-        el: '#app1'
-    })
+if ($('#app1').length > 0) {
+  new Vue({
+    el: '#app1',
+  });
 }
 
-$('.editor-old-admin').each(function(i, obj) {
-    new Vue({
-        el: '#' + obj.id
-    })
+$('.editor-old-admin').each(function (i, obj) {
+  new Vue({
+    el: '#' + obj.id,
+  });
 });
-
-
-

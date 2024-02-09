@@ -33,7 +33,7 @@
             <div class="row">
                 <div class="col-md-6 col-xl-3">
                     <div class="card-body">
-                        <a href="/export" class="btn btn-secondary">Export Subscription Ends</a>
+                        <a href="/export" class="btn btn-secondary" title="{{ trans('reports.export_title')}}">Get 1 year access</a>
                     </div>
                 </div>
             </div>

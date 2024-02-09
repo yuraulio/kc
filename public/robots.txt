@@ -5,3 +5,4 @@ Disallow: /login/
 Disallow: /admin/
 Disallow: /admin1/
 Disallow: /admin2/
+Disallow: /mycertificate/

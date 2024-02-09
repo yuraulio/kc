@@ -2,8 +2,9 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\Model\Option;
+use Illuminate\Console\Command;
+
 class AddOption extends Command
 {
     /**
@@ -57,9 +58,9 @@ class AddOption extends Command
             'value' => 1532,
         ]);
 
-        $arr=[];
+        $arr = [];
         $arr['facebook']['title'] = 'Facebook';
-        $arr['facebook']['url'] ='https://www.facebook.com/Knowcrunch';
+        $arr['facebook']['url'] = 'https://www.facebook.com/Knowcrunch';
         $arr['facebook']['target'] = '_blank';
         $arr['twitter']['title'] = 'Twitter';
         $arr['twitter']['url'] = 'https://twitter.com/knowcrunch';
@@ -75,7 +76,7 @@ class AddOption extends Command
         $arr['medium']['target'] = '_blank';
         $arr['pinterest']['title'] = 'Pinterest';
         $arr['pinterest']['url'] = '';
-        $arr['pinterest']['target'] = "_blank";
+        $arr['pinterest']['target'] = '_blank';
         $arr['behance']['title'] = 'behance';
         $arr['behance']['url'] = 'https://www.behance.com';
         $arr['behance']['target'] = '_blank';
@@ -92,7 +93,7 @@ class AddOption extends Command
             'name' => 'social_media',
             'status' => true,
             'abbr' => 'social_media',
-            'settings' => json_encode($arr)
+            'settings' => json_encode($arr),
             //'settings' => json_encode("{\r\n    \"1\": {\r\n        \"facebook\": {\r\n            \"title\": \"Facebook\",\r\n            \"url\": \"https:\/\/www.facebook.com\/Knowcrunch\/\",\r\n            \"target\": \"_blank\"\r\n        },\r\n        \"twitter\": {\r\n            \"title\": \"Twitter\",\r\n            \"url\": \"https:\/\/twitter.com\/knowcrunch\",\r\n            \"target\": \"_blank\"\r\n        },\r\n        \"googleplus\": {\r\n            \"title\": \"Google Plus\",\r\n            \"url\": \"\",\r\n            \"target\": \"_blank\"\r\n        },\r\n        \"instagram\": {\r\n            \"title\": \"Instagram\",\r\n            \"url\": \"https:\/\/www.instagram.com\/knowcrunch\/\",\r\n            \"target\": \"_blank\"\r\n        },\r\n        \"medium\": {\r\n            \"title\": \"Medium\",\r\n            \"url\": \"\",\r\n            \"target\": \"_blank\"\r\n        },\r\n        \"pinterest\": {\r\n            \"title\": \"Pinterest\",\r\n            \"url\": \"\",\r\n            \"target\": \"_blank\"\r\n        },\r\n        \"behance\": {\r\n            \"title\": \"Behance\",\r\n            \"url\": \"https:\/\/www.behance.com\",\r\n            \"target\": \"_blank\"\r\n        },\r\n        \"linkedin\": {\r\n            \"title\": \"LinkedIn\",\r\n            \"url\": \"https:\/\/www.linkedin.com\/company\/knowcrunch\",\r\n            \"target\": \"_blank\"\r\n        },\r\n        \"youtube\": {\r\n            \"title\": \"Youtube\",\r\n            \"url\": \"https:\/\/www.youtube.com\/channel\/UCU5p3dauJLrdMpuLwB_mX1A\",\r\n            \"target\": \"_blank\"\r\n        }\r\n    }\r\n}"),
         ]);
 

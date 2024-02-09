@@ -18,7 +18,8 @@ class CreateAdminsTable extends Migration
         \DB::statement('CREATE TABLE admins LIKE users; ');
 
         $adminUsers = User::whereHas(
-            'role', function ($q) {
+            'role',
+            function ($q) {
                 return $q->where('roles.id', 1);
             }
         )->get();

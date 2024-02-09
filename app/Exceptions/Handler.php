@@ -9,6 +9,7 @@ use Illuminate\Http\Response;
 use Throwable;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use League\OAuth2\Server\Exception\OAuthServerException;
+use Illuminate\Foundation\Support\Providers\AuthServiceProvider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -33,12 +34,12 @@ class Handler extends ExceptionHandler
         'password_confirmation',
     ];
 
-
     public function register(): void
     {
         $this->reportable(function (Throwable $e) {
             if ($e instanceof OAuthServerException && $e->getMessage() == 'The resource owner or authorization server denied the request.') {
                 Log::info($e);
+
                 return false;
             }
         });
@@ -74,5 +75,4 @@ class Handler extends ExceptionHandler
 
         return parent::render($request, $exception);
     }
-
 }

@@ -17,7 +17,8 @@
                         @if (!empty($content->categories))
                         @foreach ($content->categories as $key => $category)
                             <?php if ($key == 0) : ?>
-                                <?php if ($category->id == 7) : $is_sports = true; else : $is_sports = false; endif; ?>
+                                <?php if ($category->id == 7) : $is_sports = true;
+                                else : $is_sports = false; endif; ?>
                             <?php endif; ?>
                             <?php if (($category->depth == 0) && (strlen($ga_category) == 0)) : ?>
                                 <?php $ga_category = $category->name; ?>

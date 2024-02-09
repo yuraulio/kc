@@ -65,17 +65,18 @@
 								</div>
 								<div class="form-row">
 									<div class="col-md-12 mb-4">
-										<label class="input-label">My e-mail is  <span class="checkout-required-data">*</span></label>							<div class="email-wrap">
-												<input type="text" name="email[{{$i - 1}}]"  value="{{old('email',$email[$i-1])}}" class="form-control" required>
-										  	</div>
+										<label class="input-label">My e-mail is  <span class="checkout-required-data">*</span></label>
+                                        <div class="email-wrap">
+                                            <input type="text" name="email[{{$i - 1}}]"  value="{{old('email',$email[$i-1])}}"
+                                                   class="form-control" required unique="email" />
+                                        </div>
 									</div>
 								</div>
 								<div class="form-row">
 									<div class="col-md-12 mb-4 position-relative country-dropdown">
 										<label class="input-label">My mobile phone number is <span class="checkout-required-data">*</span></label>
 										<select name="country_code[{{$i - 1}}]" onchange="selectCountryCode(this,'{{$i}}')" class="form-control country{{$i}}" id="country">
-										<option value="0" label="Select a country">Select a country</option>
-										{{--<option value="0" label="Select a country">Select a country</option>--}}
+										    <option value="0" label="Select a country">Select a country</option>
 											<option value="213" label="Algeria (+213)">Algeria </option>
 											<option value="244" label="Angola (+244)">Angola </option>
 											<option value="229" label="Benin (+229)">Benin </option>
@@ -328,7 +329,6 @@
 										<img src="{{cdn('new_cart/images/close-green2.svg')}}" width="9px" height="10px" class="with-hover"></a>
 								</div>
 								@endif
-
 							</div>
 							@endfor
 							<div class="form-row">
@@ -377,7 +377,7 @@
 <script>
 	$(document).ready(function(){
 	dataLayer.push({'Event_ID':"{{$tigran['Event_ID'].'p'}}", 'event': 'Add To Cart', 'Product_id' : "{{$tigran['Product_id']}}", 'Price': "{{$tigran['Price']}}",'ProductCategory':"{{$tigran['ProductCategory']}}"});
-	})
+	});
 </script>
 
 <script type="text/javascript">
@@ -525,13 +525,13 @@ $(document).ready(function(){
 
    $(".remove-participant").on("click", function() {
 
-	var number = Number($(this).attr('data-participant-number'));
-	if(number <= 2){
-		return;
-	}
+        var number = Number($(this).attr('data-participant-number'));
+        if(number <= 2){
+            return;
+        }
 
-    var newNumber = number-1;
-	document.getElementById('item-quantity').setAttribute('value',newNumber)
+        var newNumber = number-1;
+        document.getElementById('item-quantity').setAttribute('value',newNumber)
 
    	  	$.ajax({ url: '/cart/update', type: "post",
              data: $("#participant-form ").serialize(),
@@ -541,16 +541,6 @@ $(document).ready(function(){
              }
          });
    });
-
-
-   jQuery.validator.addMethod(
-        "emailWithDot",
-        function(value, element) {
-            var regex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-            return regex.test(String(value).toLowerCase());
-        },
-        "Enter valid email address."
-    );
 
 </script>
 @endif

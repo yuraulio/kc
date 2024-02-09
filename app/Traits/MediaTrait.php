@@ -1,17 +1,17 @@
 <?php
 
 namespace App\Traits;
-use App\Model\Media;
+
 use App\Model\Event;
+use App\Model\Media;
 use Eloquent;
-use Intervention\Image\ImageManagerStatic as Image;
 use Illuminate\Support\Facades\Storage;
+use Intervention\Image\ImageManagerStatic as Image;
 
 trait MediaTrait
 {
-
-    public function createMedia(){
-
+    public function createMedia()
+    {
         $media = new Media;
         $media->save();
 
@@ -48,58 +48,56 @@ trait MediaTrait
         }
     }*/
 
-    public function updateMedia($mediaKey){
+    public function updateMedia($mediaKey)
+    {
         //dd($mediaKey);
         $pos = strrpos($mediaKey, '/');
         $id = $pos === false ? $mediaKey : substr($mediaKey, $pos + 1);
 
-        $folders =substr($mediaKey, 0,strrpos($mediaKey, '/'));
+        $folders = substr($mediaKey, 0, strrpos($mediaKey, '/'));
 
-        $path = explode(".",$id);
+        $path = explode('.', $id);
 
         $image = Image::make(public_path($mediaKey));
 
-        if($this->mediable()->first()){
+        if ($this->mediable()->first()) {
             $this->mediable()->update([
                 'original_name' => $id,
                 'name' => $path[0],
-                'path' => $folders.'/',
-                'ext' => '.'.$path[1],
+                'path' => $folders . '/',
+                'ext' => '.' . $path[1],
                 'width' => $image->width(),
-                'height' => $image->height()
+                'height' => $image->height(),
             ]);
-        }else{
+        } else {
             $media = new Media;
             $media->original_name = $id;
-            $media->path = $folders.'/';
+            $media->path = $folders . '/';
             $media->name = $path[0];
-            $media->ext = '.'.$path[1];
+            $media->ext = '.' . $path[1];
             $media->width = $image->width();
             $media->height = $image->height();
 
             $this->mediable()->save($media);
         }
 
-
-
-        foreach(get_image_versions() as $value){
+        foreach (get_image_versions() as $value) {
             $image->resize($value['w'], $value['h']);
             $image->fit($value['w'], $value['h']);
-            $image->save(public_path($folders.'/'.$path[0].'-'.$value['version'].'.'.$path[1]), $value['q']);
+            $image->save(public_path($folders . '/' . $path[0] . '-' . $value['version'] . '.' . $path[1]), $value['q']);
         }
     }
 
     /**
      * @return string
      */
-
-     public function mediable()
+    public function mediable()
     {
-        return $this->morphOne(Media::class,'mediable');
+        return $this->morphOne(Media::class, 'mediable');
     }
 
-    public function getMedia(){
+    public function getMedia()
+    {
         return $this->media;
     }
-
 }

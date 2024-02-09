@@ -2,19 +2,19 @@
 
 namespace App\Providers;
 
-use App\Model\Item;
-use App\Model\User;
 use App\Model\Cashier as newCashier;
 use App\Model\Event;
+use App\Model\Item;
+use App\Model\User;
 use App\Observers\EventObserver;
 use App\Observers\ItemObserver;
 use App\Observers\UserObserver;
-use Illuminate\Support\ServiceProvider;
-use Laravel\Cashier\Cashier;
 use Auth;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\ServiceProvider;
+use Laravel\Cashier\Cashier;
 use View;
 
 class AppServiceProvider extends ServiceProvider
@@ -27,7 +27,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         // define('__ROOT__', dirname(dirname(__FILE__)));
-        require_once(dirname(dirname(__FILE__)).'/helpers/functions.php');
+        require_once dirname(dirname(__FILE__)) . '/helpers/functions.php';
 
         Validator::extend('uniqueNameAndParent', function ($attribute, $value, $parameters, $validator) {
             $count = DB::table('cms_folders')->where('name', $value)
@@ -38,18 +38,15 @@ class AppServiceProvider extends ServiceProvider
         });
 
         Validator::extend('check_array_first_value_is_numeric', function ($attribute, $value, $parameters, $validator) {
-
-            if(gettype($value) == 'array'){
-
+            if (gettype($value) == 'array') {
                 if (is_array($value) && count($value) > 0) {
                     $firstElement = $value[0];
+
                     return is_numeric($firstElement);
                 }
-
-            }else{
+            } else {
                 return true;
             }
-
         });
 
         Item::observe(ItemObserver::class);

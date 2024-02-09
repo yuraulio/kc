@@ -1,28 +1,25 @@
-<?php 
+<?php
 
 namespace App\Traits;
+
 use App\Model\Metas;
 use Eloquent;
 
 trait MetasTrait
 {
-    
-    public function createMetas(){
-        
+    public function createMetas()
+    {
         $metas = new Metas;
         $metas->save();
-        
+
         $this->metable()->save($metas);
-        
     }
-    
+
     /**
      * @return string
      */
-    
-     public function metable()
+    public function metable()
     {
-        return $this->morphOne(Metas::class,'metable');
+        return $this->morphOne(Metas::class, 'metable');
     }
-
 }

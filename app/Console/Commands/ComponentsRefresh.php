@@ -40,13 +40,13 @@ class ComponentsRefresh extends Command
      */
     public function handle()
     {
-        $components = json_decode(file_get_contents(base_path() . "/resources/js/components/template-components.json"), false);
+        $components = json_decode(file_get_contents(base_path() . '/resources/js/components/template-components.json'), false);
 
         // for pages
         $pages = Page::withoutGlobalScopes()->get();
         foreach ($pages as $page) {
             $content = $page->content;
-            
+
             $content = $this->refreshContent($content, $components);
 
             $page->content = $content;
@@ -59,7 +59,7 @@ class ComponentsRefresh extends Command
         $templates = Template::get();
         foreach ($templates as $template) {
             $content = $template->rows;
-            
+
             $content = $this->refreshContent($content, $components);
 
             $template->rows = $content;
@@ -68,7 +68,7 @@ class ComponentsRefresh extends Command
             $this->info("template $template->id done");
         }
 
-        $this->info("components refresh finished");
+        $this->info('components refresh finished');
     }
 
     private function refreshContent($content, $components)
@@ -76,7 +76,7 @@ class ComponentsRefresh extends Command
         $rows = json_decode($content);
         foreach ($rows as $row_key => $row) {
             foreach ($row->columns as $column_key => $column) {
-                $this->info("found column");
+                $this->info('found column');
                 $component_id = $column->id;
                 $component_order = $column->order;
                 $component = $column->component;
@@ -89,23 +89,23 @@ class ComponentsRefresh extends Command
                 $new_column->order = $component_order;
                 $new_column->component = $component;
                 $new_column->active = $component_active;
-                $new_column->template =  isset($components->$component) ? json_decode(json_encode($components->$component)) : null;
+                $new_column->template = isset($components->$component) ? json_decode(json_encode($components->$component)) : null;
                 if (isset($new_column->template->dynamic)) {
                     $new_column->template->dynamic = $component_dynamic;
                 }
-                
+
                 if (isset($new_column->template->inputs)) {
                     foreach ($new_column->template->inputs as $input_key => $new_input) {
                         if ($inputs) {
                             $key = array_search($new_input->key, array_column($inputs, 'key'));
 
                             if ($key !== false) {
-                                $this->info("found old value in column");
-                                if (property_exists($inputs[$key], "value")) {
+                                $this->info('found old value in column');
+                                if (property_exists($inputs[$key], 'value')) {
                                     $old_value = $inputs[$key]->value;
                                     $new_column->template->inputs[$input_key]->value = $old_value;
 
-                                    if ($new_input->key == "tabs") {
+                                    if ($new_input->key == 'tabs') {
                                         $old_tabs = $inputs[$key]->tabs;
                                         $new_column->template->inputs[$input_key]->tabs = $old_tabs;
                                     }

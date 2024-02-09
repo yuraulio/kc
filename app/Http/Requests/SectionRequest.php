@@ -25,10 +25,10 @@ class SectionRequest extends FormRequest
     {
         return [
             'section' => [
-                'required', 'min:3'
+                'required', 'min:3',
             ],
             'title' => [
-                'required', 'min:3'
+                'required', 'min:3',
             ],
             /*'description' => [
                 'required', 'min:3'

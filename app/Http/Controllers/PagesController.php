@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Model\Pages;
-use App\Model\Logos;
-use Illuminate\Http\Request;
 use App\Http\Requests\PagesRequest;
-use Illuminate\Support\Facades\Auth;
-use App\Model\User;
 use App\Jobs\UpdateTerms;
+use App\Model\Logos;
+use App\Model\Pages;
+use App\Model\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PagesController extends Controller
 {
-
-    public function __construct(){
+    public function __construct()
+    {
         //$this->middleware('static_page')->only('destroy');
     }
 
@@ -28,10 +28,10 @@ class PagesController extends Controller
         $data = [];
         $data['pages'] = Pages::all();
         $data['user'] = Auth::user();
+
         //dd($data);
         return view('pages.index', ['pages' => $model->all(), 'user' => $data['user'], 'pages' => $data['pages']]);
     }
-
 
     /**
      * Show the form for creating a new resource.
@@ -40,7 +40,6 @@ class PagesController extends Controller
      */
     public function create()
     {
-
         $data['page'] = new Pages;
         $data['templates'] = get_templates();
 
@@ -55,7 +54,6 @@ class PagesController extends Controller
      */
     public function store(PagesRequest $request, Pages $model)
     {
-
         //dd($request->all());
         $input = $request->all();
         unset($input['slug']);
@@ -65,11 +63,9 @@ class PagesController extends Controller
         $model->createMetas($input);
         $model->createMedia();
 
-        return redirect()->route('pages.edit',$model->id)->withStatus(__('Page successfully created.'));
+        return redirect()->route('pages.edit', $model->id)->withStatus(__('Page successfully created.'));
         //return redirect()->route('pages.index')->withStatus(__('Page successfully created.'));
     }
-
-
 
     /**
      * Show the form for editing the specified resource.
@@ -85,23 +81,20 @@ class PagesController extends Controller
         $data['metas'] = $page->metable;
         $data['media'] = $page->mediable;
 
-        if($page->template == "corporate-template"){
+        if ($page->template == 'corporate-template') {
             $data['brands'] = Logos::with('medias')->where('type', 'corporate_brands')->get();
 
-            return view('admin.pages.create_corporate',$data);
-
-        }else if($page->template == 'logos_page'){
-
-            if($page['id'] == 800){
+            return view('admin.pages.create_corporate', $data);
+        } elseif ($page->template == 'logos_page') {
+            if ($page['id'] == 800) {
                 $data['brands'] = Logos::with('medias')->where('type', 'brands')->get();
-            }else if($page['id'] == 801){
+            } elseif ($page['id'] == 801) {
                 $data['logos'] = Logos::with('medias')->where('type', 'logos')->get();
             }
 
-            return view('admin.pages.create_logos',$data);
-
-        }else{
-            return view('admin.pages.create',$data);
+            return view('admin.pages.create_logos', $data);
+        } else {
+            return view('admin.pages.create', $data);
         }
     }
 
@@ -116,14 +109,12 @@ class PagesController extends Controller
     {
         $page->update($request->all());
 
-        if($page->id == 4754){
-
-
-        }elseif($page->id == 4753 && $request->terms){
+        if ($page->id == 4754) {
+        } elseif ($page->id == 4753 && $request->terms) {
             dispatch((new UpdateTerms($page->id))->delay(now()->addSeconds(3)));
         }
 
-        return redirect()->route('pages.edit',$page->id)->withStatus(__('Page successfully updated.'));
+        return redirect()->route('pages.edit', $page->id)->withStatus(__('Page successfully updated.'));
         //return redirect()->route('pages.index')->withStatus(__('Page successfully updated.'));
     }
 

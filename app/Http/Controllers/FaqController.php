@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Model\Faq;
+use App\Http\Requests\Categories_faqsRequest;
+use App\Http\Requests\FaqRequest;
+use App\Model\CategoriesFaqs;
+use App\Model\Category;
 use App\Model\Event;
+use App\Model\Faq;
+use Artisan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Model\Category;
-use App\Model\CategoriesFaqs;
-use App\Http\Requests\FaqRequest;
-use App\Http\Requests\Categories_faqsRequest;
-use Artisan;
 use Storage;
 
 class FaqController extends Controller
@@ -24,7 +24,6 @@ class FaqController extends Controller
     {
         $this->authorize('manage-users', User::class);
         $user = Auth::user();
-      
 
         return view('faq.index', ['faqs' => $model->with('category')->get(), 'user' => $user]);
     }
@@ -46,7 +45,8 @@ class FaqController extends Controller
     {
         $user = Auth::user();
         $eventCategories = Category::has('events')->get();
-        return view('faq.create', ['user' => $user, 'categories' => CategoriesFaqs::all(),'eventCategories' => $eventCategories]);
+
+        return view('faq.create', ['user' => $user, 'categories' => CategoriesFaqs::all(), 'eventCategories' => $eventCategories]);
     }
 
     public function create_category()
@@ -64,23 +64,21 @@ class FaqController extends Controller
      */
     public function store(FaqRequest $request, Faq $model)
     {
-
         $request->request->add(['status' => 1]);
         $faq = $model->create($request->all());
 
-        if($request->category_id != null ){
-
-            $category = CategoriesFaqs::find($request->category_id);  
+        if ($request->category_id != null) {
+            $category = CategoriesFaqs::find($request->category_id);
             $faq->category()->attach($category);
             //$faq->category()->attach([$request->category_id]);
         }
 
         /*$faq->categoryEvent()->detach();
         foreach($request->eventcategory_id as $cat){
-            $category = Category::find($request->eventcategory_id);   
+            $category = Category::find($request->eventcategory_id);
             $faq->categoryEvent()->attach($category);
         }*/
-        
+
         return redirect()->route('faqs.index')->withStatus(__('Faq successfully created.'));
     }
 
@@ -93,7 +91,6 @@ class FaqController extends Controller
 
     public function store_event(Request $request)
     {
-
         ///dd($request->all());
 
         $model = app($request->model_type);
@@ -103,37 +100,34 @@ class FaqController extends Controller
         //dd($model->category->first()->faqs()->category);
         //$faqs = $model->category->first()->faqs;
 
-        $category = Category::find($model->category->first()->id);  
+        $category = Category::find($model->category->first()->id);
         $category->faqs()->detach($faqs);
         $category->faqs()->attach($faqs);
         //dd($category->faqs);
         //$model->faqs()->detach();
-        foreach($faqs->faqs as $key => $faq){
+        foreach ($faqs->faqs as $key => $faq) {
             //$faq->categoryEvent()->detach($category);
             //$faq->categoryEvent()->attach($category);
             //dd($faq->categoryEvent);
             //dd($faq->category);
-            
-            foreach($faq->categoryEvent as $categoryEvent){
-                if($categoryEvent['id'] == $category->id){
-                    
+
+            foreach ($faq->categoryEvent as $categoryEvent) {
+                if ($categoryEvent['id'] == $category->id) {
                     $categoryEvent->faqs()->detach($faq);
-                    $categoryEvent->faqs()->attach($faq,['priority'=>$key]);
+                    $categoryEvent->faqs()->attach($faq, ['priority'=>$key]);
 
                     $model->faqs()->detach($faq);
-                    $model->faqs()->attach($faq,['priority'=>$key]);
+                    $model->faqs()->attach($faq, ['priority'=>$key]);
                 }
             }
-            
+
             /*if($faq->category->first() && $faq->category->first()->id == $request->faqs_id){
-              
-                //$category = Category::find($model->category->first()->id);   
+
+                //$category = Category::find($model->category->first()->id);
                 //$faq->categoryEvent()->attach($category);
                 //$model->faqs()->detach($faq);
                 //$model->faqs()->attach($faq,['priority'=>$key]);
             }*/
-           
-            
         }
 
         return response()->json([
@@ -144,32 +138,28 @@ class FaqController extends Controller
 
     public function assignFaq(Event $event, Faq $faq)
     {
-       
-        $priority = count($event->faqs()->get())+1;
-      
+        $priority = count($event->faqs()->get()) + 1;
+
         $event->faqs()->detach($faq);
-        $event->faqs()->attach($faq,['priority'=> $priority]);
-      
+        $event->faqs()->attach($faq, ['priority'=> $priority]);
+
         return response()->json([
             'success' => __('Faqs successfully assigned.'),
             'allFaqs' => $event->getFaqsByCategoryEvent(),
-            'eventFaqs' => $event->faqs->pluck('id')->toArray()
+            'eventFaqs' => $event->faqs->pluck('id')->toArray(),
         ]);
     }
 
     public function unsignFaq(Event $event, Faq $faq)
     {
-        
         $event->faqs()->detach($faq);
-        
+
         return response()->json([
             'success' => __('Faqs successfully unsigned.'),
             'allFaqs' => $event->getFaqsByCategoryEvent(),
-            'eventFaqs' => $event->faqs->pluck('id')->toArray()
+            'eventFaqs' => $event->faqs->pluck('id')->toArray(),
         ]);
     }
-
-
 
     /**
      * Display the specified resource.
@@ -196,8 +186,8 @@ class FaqController extends Controller
         $eventCategories = Category::has('events')->get();
         $faqEventCategories = $faq->categoryEvent->pluck('id')->toArray();
         $faqCategories = $faq->category->pluck('id')->toArray();
-        
-        return view('faq.edit', compact('faq', 'categories','eventCategories','faqEventCategories','faqCategories'));
+
+        return view('faq.edit', compact('faq', 'categories', 'eventCategories', 'faqEventCategories', 'faqCategories'));
     }
 
     public function edit_category(CategoriesFaqs $category)
@@ -216,46 +206,45 @@ class FaqController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(FaqRequest $request, Faq $faq)
-    {   
-        
+    {
         $faq->update($request->all());
 
         $priorities = [];
         $lastPriority = 1;
-        foreach($faq->category as $fcat){
+        foreach ($faq->category as $fcat) {
             $priorities[$fcat->id] = $fcat->priority;
         }
 
         /*$faq->category()->detach();
-    
+
         $lastPriority = count($priorities) + 1;
-        
+
         foreach($request->category_id as $cat){
-            //$category = CategoriesFaqs::find($request->category_id);  
+            //$category = CategoriesFaqs::find($request->category_id);
             $faq->category()->attach($cat, ['priority' => isset($priorities[$cat]) ? $priorities[$cat] : $lastPriority]);
             $lastPriority + 1;
         }
-        
+
         $priorities = [];
         foreach($faq->categoryEvent as $fcat){
             $priorities[$fcat->id] = $fcat->priority;
         }
-       
+
         $faq->categoryEvent()->detach();
         $lastPriority = count($priorities) + 1;
         //dd($request->eventcategory_id);
         foreach($request->eventcategory_id as $cat){
-            //$category = Category::find($request->eventcategory_id);   
+            //$category = Category::find($request->eventcategory_id);
             $faq->categoryEvent()->attach($cat, ['priority' => isset($priorities[$cat]) ? $priorities[$cat] : $lastPriority]);
         }*/
-        
-        return redirect()->route('faqs.edit',$faq->id)->withStatus(__('Faq successfully updated.'));
+
+        return redirect()->route('faqs.edit', $faq->id)->withStatus(__('Faq successfully updated.'));
     }
 
     public function update_category(Categories_faqsRequest $request, CategoriesFaqs $model)
     {
         //dd($request->all());
-        $cat = CategoriesFaqs::where('id',$request->id)->update(['name' => $request->name, 'description' => $request->description]);
+        $cat = CategoriesFaqs::where('id', $request->id)->update(['name' => $request->name, 'description' => $request->description]);
         //$model->update($request->all());
 
         return redirect()->route('faqs.categories')->withStatus(__('Faq Category successfully updated.'));
@@ -297,52 +286,40 @@ class FaqController extends Controller
         ]);
     }
 
-    public function sortFaqs(Request $request, Event $event){
+    public function sortFaqs(Request $request, Event $event)
+    {
         //dd($request->all());
-      //  dd($event->faqs->pluck('id')->toArray());
-        foreach($event->faqs as $faq){
-            
-            if(!isset($request->all()['faqs'][$faq['id']])){
-                $event->faqs()->wherePivot('faq_id',$faq['id'])->detach();
+        //  dd($event->faqs->pluck('id')->toArray());
+        foreach ($event->faqs as $faq) {
+            if (!isset($request->all()['faqs'][$faq['id']])) {
+                $event->faqs()->wherePivot('faq_id', $faq['id'])->detach();
                 continue;
             }
             $faq->pivot->priority = $request->all()['faqs'][$faq['id']];
             $faq->pivot->save();
-
         }
-
     }
 
-
-    public function importFromFile(Request $request){
-
-        try{
-
+    public function importFromFile(Request $request)
+    {
+        try {
             $file = $request->file('file');
             $name = $file->hashName();
             //dd($name);
             //Storage::path('import/' . $name);
             Storage::disk('import')->put('', $request->file('file'), 'public');
-    
-            $response = Artisan::call('insert:faqs',['file_name' => $name]);
 
-            if($response){
+            $response = Artisan::call('insert:faqs', ['file_name' => $name]);
+
+            if ($response) {
                 return redirect()->route('faqs.index')->withStatus(__('File is imported'));
-
-            }else{
+            } else {
                 return redirect()->route('faqs.index')->withStatus(__('File is not imported'));
-
             }
-
-
-        }catch(\Exception $e){
+        } catch(\Exception $e) {
             return redirect()->route('faqs.index')->withStatus(__('File is not imported'));
         }
 
-        
-
         return back();
     }
-
-
 }

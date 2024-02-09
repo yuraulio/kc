@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\TypeRequest;
 use App\Model\Type;
 use Illuminate\Http\Request;
-use App\Http\Requests\TypeRequest;
 use Illuminate\Support\Facades\Auth;
 
 class TypeController extends Controller
@@ -21,7 +21,7 @@ class TypeController extends Controller
 
         //dd($model->get());
 
-        return view('type.index', ['types' => $model->get(), 'user' => $user ]);
+        return view('type.index', ['types' => $model->get(), 'user' => $user]);
     }
 
     /**
@@ -46,6 +46,7 @@ class TypeController extends Controller
     {
         $model->create($request->all());
         $model->createSlug($request->slug);
+
         return redirect()->route('types.index')->withStatus(__('Type successfully created.'));
     }
 
@@ -57,7 +58,6 @@ class TypeController extends Controller
      */
     public function show(Type $type)
     {
-
     }
 
     /**

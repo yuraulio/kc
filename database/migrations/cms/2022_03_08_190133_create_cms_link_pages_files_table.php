@@ -14,9 +14,9 @@ class CreateCmsLinkPagesFilesTable extends Migration
     public function up()
     {
         Schema::create('cms_link_pages_files', function (Blueprint $table) {
-            $table->unsignedBigInteger("page_id");
+            $table->unsignedBigInteger('page_id');
             $table->foreign('page_id')->references('id')->on('cms_pages');
-            $table->unsignedBigInteger("file_id");
+            $table->unsignedBigInteger('file_id');
             $table->foreign('file_id')->references('id')->on('cms_files');
         });
     }

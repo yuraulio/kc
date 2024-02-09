@@ -18,7 +18,6 @@ class AddEventUserTicketTable extends Migration
             $table->integer('event_id');
             $table->integer('user_id');
             $table->integer('ticket_id');
-
         });
     }
 

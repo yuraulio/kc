@@ -24,8 +24,6 @@ class CreateFaqsCategoryfaqsTable extends Migration
             $table->integer('faqable_id');
             $table->string('faqable_type');
             $table->integer('priority')->nullable();
-
-
         });
     }
 

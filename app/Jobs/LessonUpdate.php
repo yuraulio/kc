@@ -2,13 +2,13 @@
 
 namespace App\Jobs;
 
+use App\Model\Topic;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use App\Model\Topic;
 
 class LessonUpdate implements ShouldQueue
 {
@@ -19,11 +19,10 @@ class LessonUpdate implements ShouldQueue
      *
      * @return void
      */
-
     private $request;
     private $lesson;
 
-    public function __construct($request,$lesson)
+    public function __construct($request, $lesson)
     {
         $this->request = $request;
         $this->lesson = $lesson;
@@ -36,18 +35,16 @@ class LessonUpdate implements ShouldQueue
      */
     public function handle()
     {
-        foreach($this->request['topic_id'] as $topic)
-        {
+        foreach ($this->request['topic_id'] as $topic) {
             $catsIds = [];
             $topic = Topic::with('category')->find($topic);
 
-            foreach($topic->category as $cat){
-
-                if($cat->id != $this->request['category']){
+            foreach ($topic->category as $cat) {
+                if ($cat->id != $this->request['category']) {
                     continue;
                 }
 
-                if(in_array($cat->id,$catsIds)){
+                if (in_array($cat->id, $catsIds)) {
                     //continue;
                 }
 
@@ -58,9 +55,7 @@ class LessonUpdate implements ShouldQueue
                     $query->where('course_delivery',143);
                 })->get();*/
 
-                foreach($allEvents as $event)
-                {
-
+                foreach ($allEvents as $event) {
                     add_event_statistic_queue($event->id);
 
                     $allLessons = $event->allLessons->groupBy('id');
@@ -74,14 +69,14 @@ class LessonUpdate implements ShouldQueue
                     $automate_mail = false;
                     $send_automate_mail = false;
 
-                    if($existLesson = $event->allLessons()->wherePivot('topic_id',$topic->id)->wherePivot('lesson_id',$this->lesson->id)->first()){
-                        $priority =  $existLesson->pivot->priority;
-                    }else{
-                        $priorityLesson = $event->allLessons()->wherePivot('topic_id',$topic->id)->orderBy('priority')->get();
-                        $priority = isset($priorityLesson->last()['pivot']['priority']) ? $priorityLesson->last()['pivot']['priority'] + 1 :count($priorityLesson)+1 ;
+                    if ($existLesson = $event->allLessons()->wherePivot('topic_id', $topic->id)->wherePivot('lesson_id', $this->lesson->id)->first()) {
+                        $priority = $existLesson->pivot->priority;
+                    } else {
+                        $priorityLesson = $event->allLessons()->wherePivot('topic_id', $topic->id)->orderBy('priority')->get();
+                        $priority = isset($priorityLesson->last()['pivot']['priority']) ? $priorityLesson->last()['pivot']['priority'] + 1 : count($priorityLesson) + 1;
                     }
 
-                    if(isset($allLessons[$this->lesson['id']][0])){
+                    if (isset($allLessons[$this->lesson['id']][0])) {
                         $date = $allLessons[$this->lesson['id']][0]['pivot']['date'];
                         $time_starts = $allLessons[$this->lesson['id']][0]['pivot']['time_starts'];
                         $time_ends = $allLessons[$this->lesson['id']][0]['pivot']['time_ends'];
@@ -95,28 +90,25 @@ class LessonUpdate implements ShouldQueue
                     $event->allLessons()->detach($this->lesson['id']);
                     $event->changeOrder($priority);
 
-                    $event->topic()->attach($topic['id'],['lesson_id' => $this->lesson['id'],'date'=>$date,'time_starts'=>$time_starts,
+                    $event->topic()->attach($topic['id'], ['lesson_id' => $this->lesson['id'], 'date'=>$date, 'time_starts'=>$time_starts,
                         'time_ends'=>$time_ends, 'duration' => $duration, 'room' => $room, 'instructor_id' => $instructor_id, 'priority' => $priority,
-                        'automate_mail' => $automate_mail,'send_automate_mail'=>$send_automate_mail
+                        'automate_mail' => $automate_mail, 'send_automate_mail'=>$send_automate_mail,
                     ]);
                     $event->fixOrder();
 
-                    $this->lesson->topic()->wherePivot('category_id',$this->request['category'])->detach();
+                    $this->lesson->topic()->wherePivot('category_id', $this->request['category'])->detach();
                     $cat->changeOrder($priority);
-                    $cat->topic()->attach($topic, ['lesson_id' => $this->lesson->id,'priority'=>$priority]);
+                    $cat->topic()->attach($topic, ['lesson_id' => $this->lesson->id, 'priority'=>$priority]);
                     $cat->fixOrder();
-                    
-                    $event->resetCache();
 
+                    $event->resetCache();
                 }
 
                 //$this->lesson->topic()->wherePivot('category_id',$this->request['category'])->detach();
                 //$cat->changeOrder($priority);
                 //$cat->topic()->attach($topic, ['lesson_id' => $this->lesson->id,'priority'=>$priority]);
                 //$cat->fixOrder();
-
             }
-
         }
     }
 }

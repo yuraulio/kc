@@ -2,8 +2,8 @@
 
 namespace App\Policies;
 
-use App\Model\Admin\Category;
 use App\Model\Admin\Admin;
+use App\Model\Admin\Category;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class CategoryPolicy

@@ -4,19 +4,18 @@ namespace App\Http\Controllers\Admin_api;
 
 use App\Http\Controllers\Controller;
 use App\Model\Admin\Page;
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use CodexShaper\Menu\Models\Menu;
-use Illuminate\Support\Str;
 use CodexShaper\Menu\Models\MenuItem;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class MenuController extends Controller
 {
-
     /**
-     * Get comments
+     * Get comments.
      *
      * @return AnonymousResourceCollection
      */
@@ -27,10 +26,10 @@ class MenuController extends Controller
             $order = Menu::max('order');
             $menu = Menu::find($id);
 
-            $cloneName = $menu->name . " clone";
+            $cloneName = $menu->name . ' clone';
             // check if name exists
             if (Menu::whereName($cloneName)->first()) {
-                $cloneName = $cloneName . "-" . Str::random(8);
+                $cloneName = $cloneName . '-' . Str::random(8);
             }
 
             $clone = new Menu();
@@ -73,7 +72,8 @@ class MenuController extends Controller
                 'success' => true,
             ]);
         } catch (Exception $e) {
-            Log::error("Failed to clone menu. " . $e->getMessage());
+            Log::error('Failed to clone menu. ' . $e->getMessage());
+
             return response()->json(['message' => $e->getMessage()], 400);
         }
     }

@@ -15,12 +15,11 @@ class DeliveryResource extends JsonResource
      */
     public function toArray($request)
     {
-
         return [
             'id' => $this->id,
             'title' => $this->name,
             'content' => $this->description,
-            'created_at' => Carbon::parse($this->created_at)->toFormattedDateString()
+            'created_at' => Carbon::parse($this->created_at)->toFormattedDateString(),
         ];
     }
 }

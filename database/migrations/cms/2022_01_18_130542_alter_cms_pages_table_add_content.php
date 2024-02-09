@@ -14,7 +14,7 @@ class AlterCmsPagesTableAddContent extends Migration
     public function up()
     {
         Schema::table('cms_pages', function (Blueprint $table) {
-            $table->json("content")->nullable();
+            $table->json('content')->nullable();
         });
     }
 

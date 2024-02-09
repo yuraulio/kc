@@ -2,13 +2,13 @@
 
 namespace App\Jobs;
 
+use App\Model\Topic;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use App\Model\Topic;
 
 class FixOrder implements ShouldQueue
 {
@@ -19,15 +19,13 @@ class FixOrder implements ShouldQueue
      *
      * @return void
      */
-
     protected $model;
     protected $type;
 
-    public function __construct($model,$type)
+    public function __construct($model, $type)
     {
         $this->model = $model;
         $this->type = $type;
-
     }
 
     /**
@@ -37,7 +35,6 @@ class FixOrder implements ShouldQueue
      */
     public function handle()
     {
-
         $this->model->fixOrder();
 
         /*if(get_class($this->model) == 'App\\Model\\Category'){
@@ -47,14 +44,13 @@ class FixOrder implements ShouldQueue
         }*/
     }
 
-
-    function topicOrder(){
+    public function topicOrder()
+    {
         $this->model->fixOrder();
     }
 
-
-    function eventLessonOrder(){
+    public function eventLessonOrder()
+    {
         $this->model->fixOrder();
     }
-
 }

@@ -2,9 +2,9 @@
 
 namespace App\Model;
 
+use App\Model\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Model\User;
 
 class ShoppingCart extends Model
 {
@@ -18,12 +18,11 @@ class ShoppingCart extends Model
         'identifier',
         'instance',
         'content',
-        'email_sent'
+        'email_sent',
     ];
 
     public function user()
     {
-        return $this->belongsToMany(User::class, 'shoppingcart' , 'identifier', 'identifier')->with('events');
+        return $this->belongsToMany(User::class, 'shoppingcart', 'identifier', 'identifier')->with('events');
     }
-
 }

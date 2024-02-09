@@ -25,7 +25,7 @@ class TemplateResource extends JsonResource
             'user' => $this->when(
                 $this->user,
                 function () {
-                    return $this->user->firstname . " " . $this->user->lastname;
+                    return $this->user->firstname . ' ' . $this->user->lastname;
                 }
             ),
             'pages' => $pages > 0 ? '<a href="/pages?templateName=' . $this->title . '&templateID=' . $this->id . '">' . $pages . '</a>' : 0,

@@ -18,7 +18,7 @@ class CreateCmsFoldersTable extends Migration
             $table->string('name')->index();
             $table->string('path')->nullable();
             $table->string('url')->nullable();
-            $table->unsignedBigInteger("parent_id")->nullable();
+            $table->unsignedBigInteger('parent_id')->nullable();
             $table->integer('user_id')->unsigned()->nullable();
             $table->timestamps();
             $table->softDeletes();

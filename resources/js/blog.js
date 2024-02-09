@@ -9,5 +9,5 @@ Vue.use(VueLoaders);
 Vue.component('comments-frontend', require('./components/comments-frontend.vue').default);
 
 new Vue({
-    el: '#app'
- })
+  el: '#app',
+});

@@ -7,16 +7,16 @@ use App\Http\Resources\CommentResource;
 use App\Http\Resources\PageResource;
 use App\Model\Admin\Comment;
 use App\Model\Admin\Page;
+use App\Model\Event;
 use App\Model\Instructor;
 use App\Model\User;
-use App\Model\Event;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class DashboardController extends Controller
 {
     /**
-     * Return user count
+     * Return user count.
      *
      * @return JsonResponse
      */
@@ -26,7 +26,7 @@ class DashboardController extends Controller
     }
 
     /**
-     * Return admin count
+     * Return admin count.
      *
      * @return JsonResponse
      */
@@ -42,20 +42,18 @@ class DashboardController extends Controller
     }
 
     /**
-     * Return active students count
+     * Return active students count.
      *
      * @return JsonResponse
      */
     public function get_widget_data_students(): JsonResponse
     {
-
-
         $students_in_class = User::whereHas('events_for_user_list1', function ($q) {
             $q->wherePublished(true)
             ->where(function ($q3) {
-                return $q3->whereIn('status', [0,3]);
+                return $q3->whereIn('status', [0, 3]);
             })
-            ->whereHas('lessons',function($q4) {
+            ->whereHas('lessons', function ($q4) {
                 return $q4->where('date', '>=', date('Y-m-d'));
             })
             ->where(function ($q1) {
@@ -66,22 +64,19 @@ class DashboardController extends Controller
         })->count();
 
         $students_online = User::whereHas('events_for_user_list1', function ($q) {
-
-            $q->wherePublished(true)->whereStatus(0)->where('event_user.expiration', '>=',date('Y-m-d'))->whereHas('delivery', function ($q1) {
+            $q->wherePublished(true)->whereStatus(0)->where('event_user.expiration', '>=', date('Y-m-d'))->whereHas('delivery', function ($q1) {
                 return $q1->where('deliveries.id', 143);
             });
         })->count();
 
-
         return response()->json(['data' => [
             $students_in_class,
-            $students_online
+            $students_online,
         ]], 200);
     }
 
     public function get_widget_data_students_all(): JsonResponse
     {
-
         $students_in_class = User::whereHas('events_for_user_list1', function ($q) {
             $q->wherePublished(true)->where('event_user.paid', true)->where(function ($q1) {
                 $q1->doesntHave('delivery')->OrWhereHas('delivery', function ($q2) {
@@ -91,16 +86,14 @@ class DashboardController extends Controller
         })->count();
 
         $students_online = User::whereHas('events_for_user_list1', function ($q) {
-
             $q->wherePublished(true)->where('event_user.paid', true)->whereHas('delivery', function ($q1) {
                 return $q1->where('deliveries.id', 143);
             });
         })->count();
 
-
         return response()->json(['data' => [
             $students_in_class,
-            $students_online
+            $students_online,
         ]], 200);
     }
 
@@ -110,16 +103,14 @@ class DashboardController extends Controller
         $instructors_online = [];
         $all_instructors = 0;
 
-        $instructors_in_class = Instructor::whereStatus(true)->whereHas('event', function($q){
+        $instructors_in_class = Instructor::whereStatus(true)->whereHas('event', function ($q) {
             $q->whereStatus(0)->doesntHave('delivery')
                 ->OrWhereHas('delivery', function ($q2) {
                     return $q2->where('deliveries.id', '<>', 143);
                 });
         })->count();
 
-
-
-        $instructors_online = Instructor::whereStatus(true)->whereHas('event', function($q){
+        $instructors_online = Instructor::whereStatus(true)->whereHas('event', function ($q) {
             $q->whereStatus(0)
                 ->WhereHas('delivery', function ($q2) {
                     return $q2->where('deliveries.id', 143);
@@ -128,17 +119,15 @@ class DashboardController extends Controller
 
         $all_instructors = Instructor::whereStatus(true)->has('event')->count();
 
-
-
         return response()->json(['data' => [
             $instructors_in_class,
             $instructors_online,
-            $all_instructors
+            $all_instructors,
         ]], 200);
     }
 
     /**
-     * Return active graduates count
+     * Return active graduates count.
      *
      * @return JsonResponse
      */
@@ -148,7 +137,7 @@ class DashboardController extends Controller
         $events = Event::where('published', true)->with('delivery', 'type', 'users')->get();
 
         foreach ($events as $event) {
-            if (count($event->type()->whereIn('id', [13,14])->get()) > 0) {
+            if (count($event->type()->whereIn('id', [13, 14])->get()) > 0) {
                 $graduates = array_merge($graduates, $event->users()->pluck('user_id')->toArray());
             }
         }
@@ -157,25 +146,25 @@ class DashboardController extends Controller
     }
 
     /**
-     * Return last 5 comments
+     * Return last 5 comments.
      *
      * @return JsonResponse
      */
     public function get_widget_comments(): AnonymousResourceCollection
     {
-        $comments = Comment::orderBy("created_at", "desc")->limit(5)->get();
+        $comments = Comment::orderBy('created_at', 'desc')->limit(5)->get();
 
         return CommentResource::collection($comments);
     }
 
     /**
-     * Return last 5 comments
+     * Return last 5 comments.
      *
      * @return JsonResponse
      */
     public function get_widget_pages(): AnonymousResourceCollection
     {
-        $pages = Page::orderBy("created_at", "desc")->limit(5)->get();
+        $pages = Page::orderBy('created_at', 'desc')->limit(5)->get();
 
         return PageResource::collection($pages);
     }

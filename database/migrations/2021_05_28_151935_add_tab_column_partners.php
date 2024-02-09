@@ -16,7 +16,6 @@ class AddTabColumnPartners extends Migration
         Schema::table('partners', function (Blueprint $table) {
             $table->string('description')->after('name')->nullable();
             $table->string('abbr')->after('description')->nullable();
-
         });
     }
 

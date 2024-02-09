@@ -62,7 +62,6 @@ class CreateEventInfoTable extends Migration
             $table->longtext('course_students_visible')->nullable();
             $table->longtext('course_students_icon')->nullable();
 
-
             $table->timestamps();
         });
     }

@@ -3,21 +3,21 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Model\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Model\User;
 use Illuminate\Support\Facades\Hash;
 
 class PassportAuthController extends Controller
 {
     /**
-     * Login
+     * Login.
      */
     public function login(Request $request)
     {
         $data = [
             'email' => $request->email,
-            'password' => $request->password
+            'password' => $request->password,
         ];
 
         if (auth()->attempt($data)) {
@@ -26,10 +26,10 @@ class PassportAuthController extends Controller
             $token_ = auth()->user()->createToken('LaravelAuthApp');
             $token = $token_->accessToken;
             $expire = $token_->token->expires_at->diffForHumans();
-            return response()->json(['token' => $token, 'expire' => $expire,'sms'=>encrypt(Auth::user()->id.'-'.date("H:i:s"))], 200);
-        } else {
 
-            if(!User::where('email',$data['email'])->first()){
+            return response()->json(['token' => $token, 'expire' => $expire, 'sms'=>encrypt(Auth::user()->id . '-' . date('H:i:s'))], 200);
+        } else {
+            if (!User::where('email', $data['email'])->first()) {
                 return response()->json(['error' => 'Incorrect email, please try again.'], 403);
             }
 
@@ -38,7 +38,7 @@ class PassportAuthController extends Controller
     }
 
     /**
-     * Logout
+     * Logout.
      */
     public function logout(Request $request)
     {
@@ -46,7 +46,7 @@ class PassportAuthController extends Controller
 
         //Auth::logout();
         return response()->json([
-            'message' => 'Logged out successfully.'
+            'message' => 'Logged out successfully.',
         ], 200);
     }
 }

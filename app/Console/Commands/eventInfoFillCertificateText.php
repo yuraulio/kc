@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\Model\Event;
+use Illuminate\Console\Command;
 
 class eventInfoFillCertificateText extends Command
 {
@@ -40,36 +40,25 @@ class eventInfoFillCertificateText extends Command
     {
         $events = Event::all();
 
-        foreach($events as $event){
-
+        foreach ($events as $event) {
             $info = $event->event_info1;
 
-            if($info->course_certification_type != null){
-
+            if ($info->course_certification_type != null) {
                 $info->course_certification_text = $info->course_certification_type;
-                
             }
 
-            if($info->course_certification_name_success != null){
-
+            if ($info->course_certification_name_success != null) {
                 $info->has_certificate_exam = 1;
-
-            }else{
+            } else {
                 $info->has_certificate_exam = 0;
             }
 
-            if($info->course_certification_name_failure != null){
-
-                
+            if ($info->course_certification_name_failure != null) {
                 $info->course_certification_completion = $info->course_certification_name_failure;
-
             }
 
             $info->save();
-            
-
         }
-
 
         return 0;
     }

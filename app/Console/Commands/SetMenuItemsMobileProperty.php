@@ -41,14 +41,14 @@ class SetMenuItemsMobileProperty extends Command
     {
         $menuItems = MenuItem::get();
         foreach ($menuItems as $item) {
-            $item->middleware = "1";
+            $item->middleware = '1';
             $item->save();
         }
 
         // also setting menu mobile property (using url)
         $menus = Menu::get();
         foreach ($menus as $menu) {
-            $menu->url = "1";
+            $menu->url = '1';
             $menu->save();
         }
     }

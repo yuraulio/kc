@@ -2,10 +2,10 @@
 
 namespace App\Console\Commands;
 
+use App\Model\Exam;
 use Illuminate\Console\Command;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-use App\Model\Exam;
 
 class InsertExamQuestion extends Command
 {
@@ -51,35 +51,33 @@ class InsertExamQuestion extends Command
         $file = $file->toArray();
 
         $questions = [];
-        foreach($file as $key =>  $line){
-
-            if($key == 0 || !$line[1]){
+        foreach ($file as $key =>  $line) {
+            if ($key == 0 || !$line[1]) {
                 continue;
             }
-            
-            $qInsert = trim(str_replace(['"',"'"], "", $line[1]));
+
+            $qInsert = trim(str_replace(['"', "'"], '', $line[1]));
             $qInsert = preg_replace('~^\s+|\s+$~us', '\1', $qInsert);
 
-            $answer1 = str_replace(['"',"'"], "", $line[2]);
+            $answer1 = str_replace(['"', "'"], '', $line[2]);
             $answer1 = preg_replace('~^\s+|\s+$~us', '\1', $answer1);
 
-            $answer2 = str_replace(['"',"'"], "", $line[3]);
+            $answer2 = str_replace(['"', "'"], '', $line[3]);
             $answer2 = preg_replace('~^\s+|\s+$~us', '\1', $answer2);
 
-            $answer3 = str_replace(['"',"'"], "", $line[4]);
+            $answer3 = str_replace(['"', "'"], '', $line[4]);
             $answer3 = preg_replace('~^\s+|\s+$~us', '\1', $answer3);
 
-            $answer4 = str_replace(['"',"'"], "", $line[5]);
+            $answer4 = str_replace(['"', "'"], '', $line[5]);
             $answer4 = preg_replace('~^\s+|\s+$~us', '\1', $answer4);
 
-            $questions[] = ['question' => trim($qInsert), 'answer-credit' => 1, 
-                            'answers' => [trim($answer1),trim($answer2),trim($answer3),trim($answer4)], 
-                            'question-type' => "radio buttons", 
-                            'correct_answer' => [trim($answer2)]
-                        ];
-                    
+            $questions[] = ['question' => trim($qInsert), 'answer-credit' => 1,
+                'answers' => [trim($answer1), trim($answer2), trim($answer3), trim($answer4)],
+                'question-type' => 'radio buttons',
+                'correct_answer' => [trim($answer2)],
+            ];
         }
-        
+
         $exam = Exam::find(99);
         $exam->questions = json_encode($questions);
         $exam->save();

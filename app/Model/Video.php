@@ -12,6 +12,6 @@ class Video extends Model
     protected $table = 'video';
 
     protected $fillable = [
-        'title', 'description', 'url'
+        'title', 'description', 'url',
     ];
 }

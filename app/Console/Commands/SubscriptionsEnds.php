@@ -38,15 +38,13 @@ class SubscriptionsEnds extends Command
      */
     public function handle()
     {
-
         $subscriptions = Subscription::whereHas('event')->get();
 
-        foreach($subscriptions as $subscription){
-            $subscription->event->first()->pivot->expiration  = date('Y-m-d', strtotime($subscription->ends_at));
-			$subscription->event->first()->pivot->save();
+        foreach ($subscriptions as $subscription) {
+            $subscription->event->first()->pivot->expiration = date('Y-m-d', strtotime($subscription->ends_at));
+            $subscription->event->first()->pivot->save();
         }
 
-        
         return 0;
     }
 }

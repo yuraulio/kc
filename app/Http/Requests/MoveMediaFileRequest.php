@@ -25,7 +25,7 @@ class MoveMediaFileRequest extends FormRequest
     {
         return [
             'file' => 'required',
-            'folder' => 'required'
+            'folder' => 'required',
         ];
     }
 }

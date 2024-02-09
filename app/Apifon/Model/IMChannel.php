@@ -1,9 +1,8 @@
 <?php
 
 namespace Apifon\Model {
-
-    class IMChannel {
-
+    class IMChannel
+    {
         public $id;
         public $sender_id;
         public $text;
@@ -12,7 +11,8 @@ namespace Apifon\Model {
         public $ttl;
         public $expiry_text;
 
-        function __construct() {
+        public function __construct()
+        {
         }
 
         public function getId()
@@ -23,6 +23,7 @@ namespace Apifon\Model {
         public function setId($id)
         {
             $this->id = $id;
+
             return $this;
         }
 
@@ -34,6 +35,7 @@ namespace Apifon\Model {
         public function setSenderId($sender_id)
         {
             $this->sender_id = $sender_id;
+
             return $this;
         }
 
@@ -45,6 +47,7 @@ namespace Apifon\Model {
         public function setText($text)
         {
             $this->text = $text;
+
             return $this;
         }
 
@@ -56,6 +59,7 @@ namespace Apifon\Model {
         public function setImages($images)
         {
             $this->images = $images;
+
             return $this;
         }
 
@@ -63,9 +67,10 @@ namespace Apifon\Model {
          * Adds an image to the existing list.
          * @param $image
          */
-        public function addImage($image){
-            if(is_null($this->images)){
-                $this->images = array();
+        public function addImage($image)
+        {
+            if (is_null($this->images)) {
+                $this->images = [];
             }
             $this->images[] = $image;
         }
@@ -78,6 +83,7 @@ namespace Apifon\Model {
         public function setActions($actions)
         {
             $this->actions = $actions;
+
             return $this;
         }
 
@@ -85,9 +91,10 @@ namespace Apifon\Model {
          * Adds an action to the existing list.
          * @param $action
          */
-        public function addAction($action){
-            if(is_null($this->actions)){
-                $this->actions= array();
+        public function addAction($action)
+        {
+            if (is_null($this->actions)) {
+                $this->actions = [];
             }
             $this->actions[] = $action;
         }
@@ -100,6 +107,7 @@ namespace Apifon\Model {
         public function setTtl($ttl)
         {
             $this->ttl = $ttl;
+
             return $this;
         }
 
@@ -111,11 +119,8 @@ namespace Apifon\Model {
         public function setExpiryText($expiry_text)
         {
             $this->expiry_text = $expiry_text;
+
             return $this;
         }
-
-
     }
-
 }
-?>

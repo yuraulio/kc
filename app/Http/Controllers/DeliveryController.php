@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\DeliveryRequest;
 use App\Model\Delivery;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Requests\DeliveryRequest;
 
 class DeliveryController extends Controller
 {
@@ -22,8 +22,7 @@ class DeliveryController extends Controller
 
         $deliveries = $model::all();
 
-
-        return view('admin.delivery.index', ['user' => $user,'deliveries' => $deliveries]);
+        return view('admin.delivery.index', ['user' => $user, 'deliveries' => $deliveries]);
     }
 
     /**
@@ -48,6 +47,7 @@ class DeliveryController extends Controller
     {
         $model->create($request->all());
         $model->createSlug($request->slug);
+
         return redirect()->route('delivery.index')->withStatus(__('Delivery successfully created.'));
     }
 

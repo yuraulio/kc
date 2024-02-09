@@ -2,11 +2,11 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
+use App\Model\City;
+use App\Model\Delivery;
 use App\Model\Event;
 use App\Model\EventInfo;
-use App\Model\Delivery;
-use App\Model\City;
+use Illuminate\Console\Command;
 
 class FixEventInfoTable extends Command
 {
@@ -42,34 +42,34 @@ class FixEventInfoTable extends Command
     public function handle()
     {
         $events = Event::all();
-        
-        foreach($events as $event){
+
+        foreach ($events as $event) {
             $requestData = [];
             /*if($event->id == 4633){
                 continue;
             }*/
 
-            $delivery =  $event->delivery->first() ? $event->delivery->first()->id : -1;
+            $delivery = $event->delivery->first() ? $event->delivery->first()->id : -1;
             $paymentMethod = $event->paymentMethod->first() ? $event->paymentMethod->first()->id : false;
             $status = $event->status;
-            $absences =  $event->absences_limit;
+            $absences = $event->absences_limit;
             $partner = count($event->partners) > 0;
-            $syllabus =$event->syllabus->first();
+            $syllabus = $event->syllabus->first();
             $certification_title = $event->certificate_title;
             $cityId = $event->city->first() ? $event->city->first()->id : -1;
 
-            $visibleHours = ['landing' => "on", "home"=> "on", 'list' => "on","emails" => "on"];
-            $visible = ['landing' => "on","emails" => "on"];
-            $visibleHours2 = ['landing' => "on",'list' => "on","emails" => "on"];
-            
+            $visibleHours = ['landing' => 'on', 'home'=> 'on', 'list' => 'on', 'emails' => 'on'];
+            $visible = ['landing' => 'on', 'emails' => 'on'];
+            $visibleHours2 = ['landing' => 'on', 'list' => 'on', 'emails' => 'on'];
+
             $eventHour = ceil($event->getTotalHours() / 60);
 
-            if($event->view_tpl == 'elearning_event'){
-                $keys = ['hours','d','language','certificate','online_exam','students'];
-            }else if($delivery == 143){
-                $keys = ['hours','language','d','d','certificate','students'];
-            }else{
-                $keys = ['hours','dates','day','language','certificate','students'];
+            if ($event->view_tpl == 'elearning_event') {
+                $keys = ['hours', 'd', 'language', 'certificate', 'online_exam', 'students'];
+            } elseif ($delivery == 143) {
+                $keys = ['hours', 'language', 'd', 'd', 'certificate', 'students'];
+            } else {
+                $keys = ['hours', 'dates', 'day', 'language', 'certificate', 'students'];
             }
 
             /*if($delivery == 143){
@@ -77,148 +77,123 @@ class FixEventInfoTable extends Command
             }else{
                 $keys = ['hours','dates','day','language','certificate','students'];
             }*/
-            
+
             //$keys = ['hours','day','certificate','dates','times','language','students'];
-           
+
             $delyveryy = [];
-            $inclass =  [];
-            $elearning =  [];
+            $inclass = [];
+            $elearning = [];
             $examText = '';
             /*if($event->id == 4619){
                 //dd($event->summary1()->get()->toArray());
             }*/
 
-            foreach($event->summary1()->get()->toArray() as $key => $summary1){
-                        
+            foreach ($event->summary1()->get()->toArray() as $key => $summary1) {
                 $t = [];
-                if(!isset($keys[$key])){
+                if (!isset($keys[$key])) {
                     continue;
                 }
-
-
 
                 /*if($event->id == 4619){
                     echo $key . ' => ' .  $keys[$key] . ' => ' . $summary1['title'] . ' ++ ';
                 }*/
 
-                if($keys[$key] == 'hours'){
+                if ($keys[$key] == 'hours') {
                     $hourText = $summary1['title'];
-                    $hourText = explode(" ",$hourText);
+                    $hourText = explode(' ', $hourText);
 
-                    if(isset($hourText[1])){
+                    if (isset($hourText[1])) {
                         unset($hourText[0]);
-                        $hourText = implode(" ", $hourText);
-                    }else{
-                        $hourText = implode(" ", $hourText);
+                        $hourText = implode(' ', $hourText);
+                    } else {
+                        $hourText = implode(' ', $hourText);
                     }
 
                     $hours = [
                         'hour' => $eventHour,
                         'icon' => ['path'=> null, 'alt_text' => null],
-                        'text' => $hourText,//str_replace($eventHour,"",$hourText),
-                        'visible' => $visibleHours
+                        'text' => $hourText, //str_replace($eventHour,"",$hourText),
+                        'visible' => $visibleHours,
                     ];
 
                     $requestData[$keys[$key]] = $hours;
-
-                }else if($keys[$key] == 'certificate'){
-
+                } elseif ($keys[$key] == 'certificate') {
                     $t = [
                         'icon' => ['path'=> null, 'alt_text' => null],
                         'failure_text' => $event->title,
                         'type' => $summary1['title'],
-                        'visible' => $visibleHours2
+                        'visible' => $visibleHours2,
                     ];
 
                     $requestData[$keys[$key]] = $t;
-
-                }else if($keys[$key] == 'students'){
-
+                } elseif ($keys[$key] == 'students') {
                     $st = $summary1['title'];
                     $t = [
                         'icon' => ['path'=> null, 'alt_text' => null],
                         'count_start' => 1,
-                        "text" => preg_replace('/[0-9]+/', "", $st),
-                        "visible" => $visible
+                        'text' => preg_replace('/[0-9]+/', '', $st),
+                        'visible' => $visible,
                     ];
                     $requestData[$keys[$key]] = $t;
-
-                }else if($keys[$key] == 'dates'){
-
-                    if($delivery!=143){
+                } elseif ($keys[$key] == 'dates') {
+                    if ($delivery != 143) {
                         $inclass['dates'] = [
-                            
+
                             'text' => $summary1['title'],
                             'icon' => ['path'=> null, 'alt_text' => null],
                             'visible' => $visibleHours2,
-                            
+
                         ];
-                        
+
                         $deliveryy['inclass'] = $inclass;
-
                     }
-
-                }else if($keys[$key] == 'day'){
-
-                    if($delivery!=143){
-
+                } elseif ($keys[$key] == 'day') {
+                    if ($delivery != 143) {
                         $inclass['day'] = [
-                             
+
                             'text' =>$summary1['title'],
                             'icon' => ['path'=> null, 'alt_text' => null],
                             'visible' => $visibleHours2,
-                            
+
                         ];
-                        
+
                         $deliveryy['inclass'] = $inclass;
-
                     }
-
-                }else if($keys[$key] == 'times'){
+                } elseif ($keys[$key] == 'times') {
                     //dd('gfsd');
-                    if($delivery!=143){
-
-
+                    if ($delivery != 143) {
                         $inclass['hour'] = [
-                            
+
                             'text' => $summary1['title'],
                             'icon' => ['path'=> null, 'alt_text' => null],
                             'visible' => $visibleHours2,
-                            
+
                         ];
-                        
+
                         $deliveryy['inclass'] = $inclass;
-
                     }
-
-                }else if($keys[$key] == 'online_exam'){
+                } elseif ($keys[$key] == 'online_exam') {
                     //dd('gfsd');
-                    
+
                     $examText = $summary1['title'];
 
-                    /*$deliveryy['elearning']['exam'] = [
-                            'icon' => ['path'=> null, 'alt_text' => null],
-                            'visible' => $visible,
-                            'text' => $summary1['title']
-                        
-                    ];*/
-                    
-                   
-                }
-                else{
+                /*$deliveryy['elearning']['exam'] = [
+                        'icon' => ['path'=> null, 'alt_text' => null],
+                        'visible' => $visible,
+                        'text' => $summary1['title']
 
+                ];*/
+                } else {
                     $t = [
                         'icon' => ['path'=> null, 'alt_text' => null],
                         'text' => $summary1['title'],
-                        'visible' => $visible
+                        'visible' => $visible,
                     ];
                     $requestData[$keys[$key]] = $t;
                 }
-
             }
 
-            if($delivery == 143){
-                
+            if ($delivery == 143) {
                 /*$deliveryy = [
                     'elearning' => [
                          'expiration' => $event->expiration,
@@ -229,20 +204,19 @@ class FixEventInfoTable extends Command
                 ];*/
 
                 $deliveryy['elearning'] = [
-                     
+
                     'expiration' => $event->expiration,
                     'icon' => ['path'=> null, 'alt_text' => null],
                     'text' => 'months access to videos & files',
-                    'visible' => $visibleHours
-                    
+                    'visible' => $visibleHours,
+
                 ];
 
                 $deliveryy['elearning']['exam'] = [
                     'icon' => ['path'=> null, 'alt_text' => null],
                     'visible' => $visible,
-                    'text' => $examText
+                    'text' => $examText,
                 ];
-
             }
 
             $requestData['delivery'] = $deliveryy;
@@ -250,8 +224,6 @@ class FixEventInfoTable extends Command
                 dd($requestData);
             }*/
             //dd($deliveryy);
-            
-
 
             /*$hourText = $event->summary1()->where('section','access')->first() ? $event->summary1()->where('section','access')->first()->title : null;
             $hours = [
@@ -268,7 +240,7 @@ class FixEventInfoTable extends Command
                 'visible' => $visible
             ];
             $requestData['language'] = $language;*/
-            
+
             /*if($delivery!=143){
                 $deliveryy = [
                     'inclass' => [
@@ -291,9 +263,9 @@ class FixEventInfoTable extends Command
                 ];
 
                 $requestData['delivery'] = $deliveryy;
-     
+
             }else{
-                
+
                 $deliveryy = [
                     'elearning' => [
                          'expiration' => $event->expiration,
@@ -305,33 +277,31 @@ class FixEventInfoTable extends Command
 
                 $requestData['delivery'] = $deliveryy;
             }*/
-           
-            
-            if($event->view_tpl == 'elearning_event' || $event->view_tpl == 'event'){
+
+            if ($event->view_tpl == 'elearning_event' || $event->view_tpl == 'event') {
                 $payment = [
-                
-                    "icon" => ["path" => null,"alt_text" => null],
-                    'enabled' =>  'on'
-                        
+
+                    'icon' => ['path' => null, 'alt_text' => null],
+                    'enabled' =>  'on',
+
                 ];
-                
+
                 $requestData['payment'] = $payment;
             }
-      
-            if($event->enroll){
+
+            if ($event->enroll) {
                 $freeCourses = [
                     'icon' => ['path'=> null, 'alt_text' => null],
-                    "enabled" => 'on',
-                    "list" => [
-                        2304
-                    ]
+                    'enabled' => 'on',
+                    'list' => [
+                        2304,
+                    ],
                 ];
 
                 $requestData['free_courses'] = $freeCourses;
-
             }
 
-            if($partner){
+            if ($partner) {
                 $partner = [
                     'icon' => ['path'=> null, 'alt_text' => null],
                 ];
@@ -344,7 +314,7 @@ class FixEventInfoTable extends Command
             ];
 
             $requestData['manager'] = $manager;
-            
+
             /*$certificate = [
                 'icon' => ['path'=> null, 'alt_text' => null],
                 'failure_text' => $event->title,
@@ -352,7 +322,7 @@ class FixEventInfoTable extends Command
                 'visible' => $visibleHours2,
             ];
             $requestData['certificate'] = $certificate;*/
-            
+
             /*$st = $event->summary1()->where('section','students')->first() ? $event->summary1()->where('section','students')->first()->title : null;
             $students = [
                 'icon' => ['path'=> null, 'alt_text' => null],
@@ -365,14 +335,10 @@ class FixEventInfoTable extends Command
             $eventInfo = $this->prepareInfo($requestData, $status, $delivery, $absences, $partner, $syllabus, $certification_title, $cityId);
             $this->updateEventInfo($eventInfo, $event->id);
             //dd($requestData);
-
         }
-
-        
 
         return 0;
     }
-
 
     public function prepareInfo($requestData, $status, $delivery, $absences, $partner, $syllabus, $certification_title, $cityId)
     {
@@ -414,13 +380,11 @@ class FixEventInfoTable extends Command
         //dd($requestData['hours']);
 
         $data['course_hours_text'] = isset($requestData['hours']['text']) ? $requestData['hours']['text'] : null;
-        
-        if(isset($requestData['hours']['visible'])){
 
+        if (isset($requestData['hours']['visible'])) {
             $visible_loaded_data = $requestData['hours']['visible'];
             $data['course_hours_visible'] = json_encode($this->prepareVisibleData($visible_loaded_data));
-
-        }else{
+        } else {
             $data['course_hours_visible'] = json_encode($this->prepareVisibleData());
         }
 
@@ -430,139 +394,128 @@ class FixEventInfoTable extends Command
 
         // Language
         $data['course_language'] = isset($requestData['language']['text']) ? $requestData['language']['text'] : null;
-        if(isset($requestData['language']['visible'])){
-
+        if (isset($requestData['language']['visible'])) {
             $visible_loaded_data = $requestData['language']['visible'];
             $data['course_language_visible'] = json_encode($this->prepareVisibleData($visible_loaded_data));
-
-        }else{
+        } else {
             $data['course_language_visible'] = json_encode($this->prepareVisibleData());
         }
         //Language Icons
 
         //end language icon
 
-        if(isset($requestData['delivery']['inclass'])){
+        if (isset($requestData['delivery']['inclass'])) {
             $dates = [];
             $days = [];
             $times = [];
 
-
             // Dates
-            if(isset($requestData['delivery']['inclass']['dates'])){
+            if (isset($requestData['delivery']['inclass']['dates'])) {
                 $dates['text'] = $requestData['delivery']['inclass']['dates']['text'];
 
-                if(isset($requestData['delivery']['inclass']['dates']['visible'])){
+                if (isset($requestData['delivery']['inclass']['dates']['visible'])) {
                     $visible_loaded_data = $requestData['delivery']['inclass']['dates']['visible'];
                     $dates['visible'] = $this->prepareVisibleData($visible_loaded_data);
-                }else{
+                } else {
                     $dates['visible'] = $this->prepareVisibleData();
                 }
             }
             $data['course_inclass_dates'] = json_encode($dates);
 
             // Days
-            if(isset($requestData['delivery']['inclass']['day'])){
+            if (isset($requestData['delivery']['inclass']['day'])) {
                 $days['text'] = $requestData['delivery']['inclass']['day']['text'];
 
-                if(isset($requestData['delivery']['inclass']['day']['visible'])){
+                if (isset($requestData['delivery']['inclass']['day']['visible'])) {
                     $visible_loaded_data = $requestData['delivery']['inclass']['day']['visible'];
                     $days['visible'] = $this->prepareVisibleData($visible_loaded_data);
-                }else{
+                } else {
                     $days['visible'] = $this->prepareVisibleData();
                 }
             }
             $data['course_inclass_days'] = json_encode($days);
 
             // Times
-            if(isset($requestData['delivery']['inclass']['times'])){
+            if (isset($requestData['delivery']['inclass']['times'])) {
                 $times['text'] = $requestData['delivery']['inclass']['times']['text'];
 
-                if(isset($requestData['delivery']['inclass']['times']['visible'])){
+                if (isset($requestData['delivery']['inclass']['times']['visible'])) {
                     $visible_loaded_data = $requestData['delivery']['inclass']['times']['visible'];
                     $times['visible'] = $this->prepareVisibleData($visible_loaded_data);
-                }else{
+                } else {
                     $times['visible'] = $this->prepareVisibleData();
                 }
             }
             $data['course_inclass_times'] = json_encode($times);
         }
 
-
         // Free E-learning
-        if(isset($requestData['free_courses']['list'])){
+        if (isset($requestData['free_courses']['list'])) {
             $data['course_elearning_access'] = json_encode($requestData['free_courses']['list']);
-        }else{
+        } else {
             $data['course_elearning_access'] = null;
         }
 
         // Payment
-        
-        if(isset($requestData['payment'])){
-            
+
+        if (isset($requestData['payment'])) {
             /*if(isset($requestData['payment']['paid'])){
                 $data['course_payment_method'] = 'paid';
             }else{
                 $data['course_payment_method'] = 'free';
             }*/
             $data['course_payment_method'] = 'paid';
-        }else{
+        } else {
             $data['course_payment_method'] = 'free';
         }
 
         // Award
-        if(isset($requestData['awards'])){
+        if (isset($requestData['awards'])) {
             $data['course_awards'] = true;
             $data['course_awards_text'] = $requestData['awards']['text'];
-        }else{
+        } else {
             $data['course_awards'] = false;
             $data['course_awards_text'] = null;
         }
 
         // Certificate
-        if(isset($requestData['certificate'])){
+        if (isset($requestData['certificate'])) {
             $data['course_certification_completion'] = $requestData['certificate']['completion'];
             //$data['course_certification_type'] = $requestData['certificate']['type'];
 
-            if(isset($requestData['certificate']['visible'])){
-
+            if (isset($requestData['certificate']['visible'])) {
                 $visible_loaded_data = $requestData['certificate']['visible'];
                 $data['course_certificate_visible'] = json_encode($this->prepareVisibleData($visible_loaded_data));
-
-            }else{
+            } else {
                 $data['course_certificate_visible'] = json_encode($this->prepareVisibleData());
             }
         }
 
         // Students
-        if(isset($requestData['students'])){
+        if (isset($requestData['students'])) {
             $data['course_students_number'] = $requestData['students']['count_start'];
             $data['course_students_text'] = $requestData['students']['text'];
 
-            if(isset($requestData['students']['visible'])){
-
+            if (isset($requestData['students']['visible'])) {
                 $visible_loaded_data = $requestData['students']['visible'];
                 $data['course_students_visible'] = json_encode($this->prepareVisibleData($visible_loaded_data));
-
-            }else{
+            } else {
                 $data['course_students_visible'] = json_encode($this->prepareVisibleData());
             }
         }
-   
+
         $visible_loaded_data = isset($requestData['delivery']['elearning']['visible']) ? $requestData['delivery']['elearning']['visible'] : null;
         $data['course_elearning_visible'] = json_encode($this->prepareVisibleData($visible_loaded_data));
-        $data['course_elearning_icon'] = isset($requestData['delivery']['elearning']['icon']) ?  json_encode($requestData['delivery']['elearning']['icon']) : null;
+        $data['course_elearning_icon'] = isset($requestData['delivery']['elearning']['icon']) ? json_encode($requestData['delivery']['elearning']['icon']) : null;
         $data['course_elearning_expiration'] = (isset($requestData['delivery']['elearning']['expiration']) && $requestData['delivery']['elearning']['expiration'] != null) ? $requestData['delivery']['elearning']['expiration'] : null;
         $data['course_elearning_text'] = (isset($requestData['delivery']['elearning']['text']) && $requestData['delivery']['elearning']['text'] != null) ? $requestData['delivery']['elearning']['text'] : null;
 
-
         $visible_loaded_data = isset($requestData['delivery']['elearning']['exam']['visible']) ? $requestData['delivery']['elearning']['exam']['visible'] : null;
         $data['course_elearning_exam_visible'] = json_encode($this->prepareVisibleData($visible_loaded_data));
-        $data['course_elearning_exam_icon'] = isset($requestData['delivery']['elearning']['exam']['icon']) ?  json_encode($requestData['delivery']['elearning']['exam']['icon']) : null;
+        $data['course_elearning_exam_icon'] = isset($requestData['delivery']['elearning']['exam']['icon']) ? json_encode($requestData['delivery']['elearning']['exam']['icon']) : null;
         $data['course_elearning_exam_text'] = (isset($requestData['delivery']['elearning']['exam']['text']) && $requestData['delivery']['elearning']['exam']['text'] != null) ? $requestData['delivery']['elearning']['exam']['text'] : null;
 
         return $data;
-
     }
 
     public function updateEventInfo($event_info, $event_id)
@@ -574,10 +527,10 @@ class FixEventInfoTable extends Command
 
         $info = $event->event_info1;
 
-        if($info === null){
+        if ($info === null) {
             $infos = new EventInfo();
             $infos->event_id = $event->id;
-        }else{
+        } else {
             $infos = $info;
         }
 
@@ -599,10 +552,10 @@ class FixEventInfoTable extends Command
         $infos->course_hours_text = $event_info['course_hours_text'];
         //$infos->course_payment_method = (isset($event->paymentMethod) && count($event->paymentMethod) != 0) ? 'paid' : 'free';
         $infos->course_payment_method = (isset($event_info['course_payment_method']) && $event_info['course_payment_method'] == 'paid') ? 'paid' : 'free';
-        $infos->course_awards = (isset($event_info['course_awards_text']) && $event_info['course_awards_text'] != "") ? true : false;
+        $infos->course_awards = (isset($event_info['course_awards_text']) && $event_info['course_awards_text'] != '') ? true : false;
         $infos->course_awards_text = $event_info['course_awards_text'];
         //$infos->course_certification_name_failure = isset($event_info['course_certification_name_failure']) ? $event_info['course_certification_name_failure'] : null;
-        $infos->course_certification_type = isset($event_info['course_certification_type']) ? $event_info['course_certification_type'] : null ;
+        $infos->course_certification_type = isset($event_info['course_certification_type']) ? $event_info['course_certification_type'] : null;
         $infos->course_certification_visible = isset($event_info['course_certificate_visible']) ? $event_info['course_certificate_visible'] : null;
         $infos->course_students_number = isset($event_info['course_students_number']) ? $event_info['course_students_number'] : null;
         $infos->has_certificate = true;
@@ -615,35 +568,32 @@ class FixEventInfoTable extends Command
         $infos->course_elearning_icon = isset($event_info['course_elearning_icon']) ? $event_info['course_elearning_icon'] : null;
         $infos->course_elearning_expiration = isset($event_info['course_elearning_expiration']) ? $event_info['course_elearning_expiration'] : null;
         $infos->course_elearning_text = isset($event_info['course_elearning_text']) ? $event_info['course_elearning_text'] : null;
-        
+
         $infos->course_elearning_exam_visible = isset($event_info['course_elearning_exam_visible']) ? $event_info['course_elearning_exam_visible'] : null;
         $infos->course_elearning_exam_icon = isset($event_info['course_elearning_exam_icon']) ? $event_info['course_elearning_exam_icon'] : null;
         $infos->course_elearning_exam_text = isset($event_info['course_elearning_exam_text']) ? $event_info['course_elearning_exam_text'] : null;
 
-
-        if($info === null){
+        if ($info === null) {
             $infos->save();
-        }else{
+        } else {
             $infos->update();
         }
-
     }
 
     public function prepareVisibleData($data = false)
     {
         $visible_returned_data = ['landing' => 0, 'home' => 0, 'list' => 0, 'invoice' => 0, 'emails' => 0];
 
-        if(!$data){
+        if (!$data) {
             return $visible_returned_data;
         }
 
-        foreach($data as $key => $item){
-            if(in_array($item,$data)){
+        foreach ($data as $key => $item) {
+            if (in_array($item, $data)) {
                 $visible_returned_data[$key] = 1;
             }
         }
 
         return $visible_returned_data;
     }
-
 }

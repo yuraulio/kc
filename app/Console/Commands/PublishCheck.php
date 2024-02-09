@@ -39,9 +39,9 @@ class PublishCheck extends Command
     public function handle()
     {
         // find unpublished pages that should be published and publish them
-        Page::withoutGlobalScope('published')->wherePublished(false)->whereDate('published_from', "<=", now())->update(['published' => true]);
+        Page::withoutGlobalScope('published')->wherePublished(false)->whereDate('published_from', '<=', now())->update(['published' => true]);
 
         // find published pages that should be unpublished and unpublish them
-        Page::withoutGlobalScope('published')->wherePublished(true)->whereDate('published_to', "<", now())->update(['published' => false]);
+        Page::withoutGlobalScope('published')->wherePublished(true)->whereDate('published_to', '<', now())->update(['published' => false]);
     }
 }

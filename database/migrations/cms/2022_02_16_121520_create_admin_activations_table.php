@@ -18,7 +18,8 @@ class CreateAdminActivationsTable extends Migration
         \DB::statement('CREATE TABLE admin_activations LIKE activations; ');
 
         $adminUsers = User::whereHas(
-            'role', function ($q) {
+            'role',
+            function ($q) {
                 return $q->where('roles.id', 1);
             }
         )->get();

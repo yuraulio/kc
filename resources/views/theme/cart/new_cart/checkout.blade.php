@@ -207,34 +207,8 @@
 			<h1 class="hidden-lg">Checkout</h1>
 
 				<div class="checkout-full-wrap">
-					<h2>Monthly payment plan</h2>
-					<p class="info" {{--class="my-4"--}}>We allow flexible monthly payments. Some international credit cards do not accept monthly payments. Not available for SEPA payments</p>
-					<form id="checkout-form" action="{{route('userPaySbt')}}" method="post">
-						@csrf
-						<div class="radio-group">
-                            @if(isset($installments) && !empty($installments) && count($installments) > 1)
-                                @foreach($installments as $inst_num => $installment)
-                                    @if($inst_num == 1)
-                                        <div class="custom-control custom-radio">
-                                            <input type="radio" id="customRadio{{$inst_num}}" name="installments" value="{{$inst_num}}" checked="" class="custom-control-input">
-                                            <label class="custom-control-label" for="customRadio{{$inst_num}}"></label><p id="inst{{$inst_num}}">Pay full amount now: €{{$showPrice}}</p>
-                                        </div>
-                                    @else
-                                        <div class="custom-control custom-radio">
-                                            <input type="radio" id="customRadio{{$inst_num}}" name="installments" value="{{$inst_num}}" class="custom-control-input">
-                                            <label class="custom-control-label" for="customRadio{{$inst_num}}"></label><p id="inst{{$inst_num}}">Amount in {{$inst_num}} monthly payments of: €{{$installment}}</p>
-                                        </div>
-                                    @endif
 
-                                @endforeach
-                            @endif
-
-						</div>
-						<input type="hidden" id="payment_method_id" name="payment_method_id" value="{{$pay_methods['id']}}">
-						<input type="hidden" id="payment_method" name="payment_method" value="">
-					</form>
-
-					<h2>Payment method</h2>
+					    <h4>Please choose your preferred payment method</h4>
 
 						<div class="tab card-information flex-container">
 							<button type="button" class="tablinks btn-4 btn-outline-dark Tab active card" onclick="openPaymentMethod(event, 'card')">
@@ -251,11 +225,39 @@
 							</button>
 						</div>
 
+                        <div class="installment-box">
+                            <p class="info" {{--class="my-4"--}} style="font-size: 16px !important; margin-top: 30px;">We allow flexible monthly payments. Some international credit cards do not accept monthly payments. Not available for SEPA payments</p>
+                            <form id="checkout-form" action="{{route('userPaySbt')}}" method="post">
+                                @csrf
+                                <div class="radio-group">
+                                    @if(isset($installments) && !empty($installments) && count($installments) > 1)
+                                        @foreach($installments as $inst_num => $installment)
+                                            @if($inst_num == 1)
+                                                <div class="custom-control custom-radio">
+                                                    <input type="radio" id="customRadio{{$inst_num}}" name="installments" value="{{$inst_num}}" checked="" class="custom-control-input">
+                                                    <label class="custom-control-label" for="customRadio{{$inst_num}}"></label><p id="inst{{$inst_num}}">Pay full amount now: €{{$showPrice}}</p>
+                                                </div>
+                                            @else
+                                                <div class="custom-control custom-radio">
+                                                    <input type="radio" id="customRadio{{$inst_num}}" name="installments" value="{{$inst_num}}" class="custom-control-input">
+                                                    <label class="custom-control-label" for="customRadio{{$inst_num}}"></label><p id="inst{{$inst_num}}">Amount in {{$inst_num}} monthly payments of: €{{$installment}}</p>
+                                                </div>
+                                            @endif
+
+                                        @endforeach
+                                    @endif
+
+                                </div>
+                                <input type="hidden" id="payment_method_id" name="payment_method_id" value="{{$pay_methods['id']}}">
+                                <input type="hidden" id="payment_method" name="payment_method" value="">
+                            </form>
+                        </div>
+
 						<div id="card" class="tabcontent card-information" style="display:block;">
 
 							<div class="card-info">
 
-								<p class="info">Submit your card data and proceed securely with your transaction. We do not store your card's data. </p>
+								<p class="info" style="font-size: 16px !important;">Submit your card data and proceed securely with your transaction. We do not store your card's data. </p>
 
 								<div class="card-input"><div id="card-element"></div></div>
 
@@ -280,7 +282,7 @@
 								<!-- <div id="payment-request-button"></div> -->
 								<!-- <div id="error-message"></div> -->
 
-								<p class="info">Choose your preferred digital wallet and proceed securely with your transaction. </p>
+								<p class="info" style="font-size: 16px !important">Choose your preferred digital wallet and proceed securely with your transaction. </p>
 								<div class="form-row my-5 align-items-center prev-next-wrap">
 									<div class="d-flex align-items-center previous-participant-link">
 										<img src="{{cdn('new_cart/images/arrow-previous-green.svg')}}" width="20px" height="12px" class="without-hover" alt="">
@@ -304,7 +306,7 @@
 
 
 							<form action="/charge" method="post" class="card-info" id="payment-form">
-								<p class="info">Please provide your IBAN so we can directly debit your EU bank account and ensure a secure transaction. Kindly note that a SEPA payment may take up to 14 days to process. Your access will be granted once we have confirmation of your payment in our system. </p>
+								<p class="info" style="font-size: 16px !important">Please provide your IBAN so we can directly debit your EU bank account and ensure a secure transaction. Kindly note that a SEPA payment may take up to 14 days to process. Your access will be granted once we have confirmation of your payment in our system. </p>
 
 								<div class="form-row inline">
 									<div class="col">
@@ -403,8 +405,10 @@ $( document ).ready(function() {
             }
             $('input[name=installments]').parent().hide()
             $('input[name=installments][value=1]').parent().show()
+            $('.installment-box').hide()
         }else{
             $('input[name=installments]').parent().show()
+            $('.installment-box').show()
         }
 		var i, tabcontent, tablinks;
 		tabcontent = document.getElementsByClassName("tabcontent");

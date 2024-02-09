@@ -3,9 +3,9 @@
 namespace App\Model\Admin;
 
 use App\Model\Admin\Admin;
+use App\Model\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Model\User;
 
 class AdminActivation extends Model
 {
@@ -19,8 +19,8 @@ class AdminActivation extends Model
         'completed',
     ];
 
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo(Admin::class);
     }
-
 }

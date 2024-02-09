@@ -2,23 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\MenuRequest;
+use App\Model\Category;
+use App\Model\Delivery;
 use App\Model\Menu;
 use App\Model\Type;
-use App\Model\Delivery;
-use App\Model\Category;
 use Illuminate\Http\Request;
-use App\Http\Requests\MenuRequest;
 
 class MenuController extends Controller
 {
-
-
     public function index(Menu $model)
     {
-       
-
         //Group by key
-        $result = array();
+        $result = [];
         foreach ($model->all() as $element) {
             $result[$element['name']][] = $element;
         }
@@ -48,10 +44,9 @@ class MenuController extends Controller
      */
     public function store(MenuRequest $request, Menu $model)
     {
-        foreach($request->menu as $menu)
-        {
-            $menu1 = explode("-", $menu);
-            $model1 = app("App\\Model"."\\" . $menu1[0]);
+        foreach ($request->menu as $menu) {
+            $menu1 = explode('-', $menu);
+            $model1 = app('App\\Model' . '\\' . $menu1[0]);
             $id = $menu1[1];
 
             $a = $model1::find($id);
@@ -59,19 +54,19 @@ class MenuController extends Controller
             $menu = new Menu(['name' => $request->name]);
 
             $menu->menuable_id = $id;
-            $menu->menuable_type = "App\\Model\\". $menu1[0];
+            $menu->menuable_type = 'App\\Model\\' . $menu1[0];
 
             $menu->save();
-
         }
+
         return redirect()->route('menu.index')->withStatus(__('Menu successfully created.'));
     }
 
-    public function store_item(Request $request){
-
-        $menu1 = explode("-", $request->menu);
+    public function store_item(Request $request)
+    {
+        $menu1 = explode('-', $request->menu);
         //dd($menu);
-        $type = app("App\\Model"."\\" . $menu1[0]);
+        $type = app('App\\Model' . '\\' . $menu1[0]);
         $id = $menu1[1];
 
         $find_item = $type::find($id);
@@ -79,7 +74,7 @@ class MenuController extends Controller
         $menu = new Menu(['name' => $request->name]);
 
         $menu->menuable_id = $id;
-        $menu->menuable_type = "App\\Model"."\\" . $menu1[0];
+        $menu->menuable_type = 'App\\Model' . '\\' . $menu1[0];
 
         $menu->save();
 
@@ -90,7 +85,6 @@ class MenuController extends Controller
             'success' => __('Item successfully assigned.'),
             'data' => $data,
         ]);
-
     }
 
     /**
@@ -115,13 +109,12 @@ class MenuController extends Controller
         $name = $menu['name'];
 
         $menus = Menu::where('name', $name)->get();
-        $result = array();
+        $result = [];
         foreach ($menus as $key => $element) {
             $result[$element['name']][] = $element;
 
             $model = app($element['menuable_type']);
             $element->data = $model::find($element['menuable_id']);
-
         }
 
         return view('admin.menu.edit', compact('result', 'name'));
@@ -147,7 +140,6 @@ class MenuController extends Controller
      */
     public function destroy(Request $request)
     {
-
         $menu = Menu::find($request->id);
         $menu->delete();
 
@@ -175,61 +167,46 @@ class MenuController extends Controller
         //dd($categories);
         $data = [];
 
-        foreach($categories as $key => $cat){
+        foreach ($categories as $key => $cat) {
             $found = false;
             //dd($cat->getTable());
-            foreach($assigned_menu as $ass_cat){
-
-                if($cat['id'] == $ass_cat['menuable_id'] && $ass_cat['menuable_type'] == 'App\Model\Category'){
+            foreach ($assigned_menu as $ass_cat) {
+                if ($cat['id'] == $ass_cat['menuable_id'] && $ass_cat['menuable_type'] == 'App\Model\Category') {
                     $found = true;
                 }
-
             }
-            if(!$found){
-
+            if (!$found) {
                 $data['categories'][$key] = $cat;
-
-
             }
         }
 
         $types = Type::all();
 
-        foreach($types as $key => $cat){
+        foreach ($types as $key => $cat) {
             $found = false;
             //dd($cat->getTable());
-            foreach($assigned_menu as $ass_cat){
-
-                if($cat['id'] == $ass_cat['menuable_id'] && $ass_cat['menuable_type'] == 'App\Model\Type'){
+            foreach ($assigned_menu as $ass_cat) {
+                if ($cat['id'] == $ass_cat['menuable_id'] && $ass_cat['menuable_type'] == 'App\Model\Type') {
                     $found = true;
                 }
-
             }
-            if(!$found){
-
+            if (!$found) {
                 $data['types'][$key] = $cat;
-
-
             }
         }
 
         $deliveries = Delivery::all();
 
-        foreach($deliveries as $key => $cat){
+        foreach ($deliveries as $key => $cat) {
             $found = false;
             //dd($cat->getTable());
-            foreach($assigned_menu as $ass_cat){
-
-                if($cat['id'] == $ass_cat['menuable_id'] && $ass_cat['menuable_type'] == 'App\Model\Delivery'){
+            foreach ($assigned_menu as $ass_cat) {
+                if ($cat['id'] == $ass_cat['menuable_id'] && $ass_cat['menuable_type'] == 'App\Model\Delivery') {
                     $found = true;
                 }
-
             }
-            if(!$found){
-
+            if (!$found) {
                 $data['deliveries'][$key] = $cat;
-
-
             }
         }
 

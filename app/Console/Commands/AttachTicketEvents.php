@@ -2,9 +2,9 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
-use App\Model\User;
 use App\Model\Event;
+use App\Model\User;
+use Illuminate\Console\Command;
 
 class AttachTicketEvents extends Command
 {
@@ -39,31 +39,24 @@ class AttachTicketEvents extends Command
      */
     public function handle()
     {
-
         $users = User::has('ticket')->get();
-        $events = []; 
-        foreach($users as $user){
+        $events = [];
+        foreach ($users as $user) {
+            $tickets = $user->ticket()->wherePivot('ticket_id', 19)->get();
 
-            $tickets = $user->ticket()->wherePivot('ticket_id',19)->get();
-
-            foreach($tickets as $ticket){
-                
-
+            foreach ($tickets as $ticket) {
                 //dd($ticket->event_id);
                 //dd($ticket->ticket_id);
 
-                if(in_array($ticket->event_id,$events)){
+                if (in_array($ticket->event_id, $events)) {
                     continue;
                 }
                 $events[] = $ticket->event_id;
-                $options = json_encode(["featured"=>true,"dropdown"=>false,"alumni"=>false]);
-                $features = json_encode(["The first & faster."]);
+                $options = json_encode(['featured'=>true, 'dropdown'=>false, 'alumni'=>false]);
+                $features = json_encode(['The first & faster.']);
                 //dd($options);
-                $ticket->events()->attach($ticket->event_id,['priority'=>0,'options'=>$options,'features'=>$features,'quantity'=>0,'active'=>true]);
-
-
+                $ticket->events()->attach($ticket->event_id, ['priority'=>0, 'options'=>$options, 'features'=>$features, 'quantity'=>0, 'active'=>true]);
             }
-
         }
 
         return Command::SUCCESS;

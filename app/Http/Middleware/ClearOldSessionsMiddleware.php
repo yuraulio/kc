@@ -2,11 +2,11 @@
 
 namespace App\Http\Middleware;
 
+use Auth;
 use Closure;
+use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Auth;
-use DateTime;
 
 class ClearOldSessionsMiddleware
 {
@@ -19,7 +19,6 @@ class ClearOldSessionsMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-
         $user = Auth::user();
 
         $latestSessions = DB::table('sessions')
@@ -29,12 +28,10 @@ class ClearOldSessionsMiddleware
             ->pluck('id')
             ->toArray();
 
-
         DB::table('sessions')
             ->where('user_id', $user->id)
             ->whereNotIn('id', $latestSessions)
             ->delete();
-
 
         // DB::table('sessions')
         // ->where('user_id', $user->id)
@@ -48,6 +45,5 @@ class ClearOldSessionsMiddleware
         // ->delete();
 
         return $next($request);
-        
     }
 }

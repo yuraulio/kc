@@ -30,7 +30,7 @@ return [
             'web',
             'api',
             'admin_api',
-            'admin_web'
+            'admin_web',
         ],
         'resolver'     => App\Resolvers\UserResolver::class,
     ],
@@ -62,7 +62,7 @@ return [
         'created',
         'updated',
         'deleted',
-        'restored'
+        'restored',
     ],
 
     /*
@@ -104,7 +104,7 @@ return [
 
     'empty_values'         => true,
     'allowed_empty_values' => [
-        'retrieved'
+        'retrieved',
     ],
 
     /*

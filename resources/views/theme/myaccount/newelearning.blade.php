@@ -155,7 +155,7 @@
                                  @if($topic['topic_seen'])
                                     <span class="white-separator"> |<span>
                                        <img loading="lazy" class="topic-progress" src="{{cdn('/theme/assets/img/new/completed_lesson_icon.svg')}}" title="completed_lesson_icon" alt="completed_lesson_icon">
-                                    
+
                                  @endif
                               </div>
                               <!-- ./topic-info -->
@@ -192,7 +192,7 @@
 
 
 
-                              ?>{{--dd($video_seen)--}}
+                              ?>
                            <!-- ./topic-header -->
                            <ul class="lessons-list">
 
@@ -221,7 +221,7 @@
                               <li class="lesson {{$vimeoVideo[1]}} {{$lesson['id']}}" data-vimeoid="{{$vimeoVideo[1]}}" data-completed="{{isset($video_seen[$vimeoVideo[1]]) ? $video_seen[$vimeoVideo[1]]['seen'] : 0}}" data-link="{{$lesson['links']}}" id="{{$frame1}}">
 
                                 <a style="flex-wrap:wrap;" class="" href="javascript:void(0)" onclick="play_video('{{$path}}','{{$frame1}}','{video{{$lesson['id']}}}', '{{$lesson['id']}}')" tabindex="0">
-                                    
+
                                  <!-- Left wapper -->
                                   <div style="flex: 70%;" class="lesson-info">
                                     <h3
@@ -230,7 +230,7 @@
                                        >
                                        {!! $lesson['title'] !!}
                                     </h3>
-                                    
+
 
 
                                   </div>
@@ -252,10 +252,10 @@
                                           height="{{ $imageDetails['h'] }}"
                                           />
                                  </div>
-                                    
-                                  
+
+
                                     <div class="lesson-info 1">
-                                       
+
                                        <span class="lesson-info_duration">{{$lesson['vimeo_duration']}}</span>
                                        <span class="white-separator"> | </span>
                                        @if(isset($lesson['type'][0]['name']))<span class="lesson-info_topic-type">{{$lesson['type'][0]['name']}}</span><span class="white-separator"> | </span>@endif
@@ -276,7 +276,7 @@
                                        />
                                        </span>
 
-                                       
+
                                        <?php
                                           if($video_seen[$vimeoVideo[1]]['is_new'] == 1)
                                           {
@@ -285,11 +285,11 @@
 
                                              }
                                           ?>
-                                       
+
 
                                     </div>
                                     <!-- ./lesson-info -->
-                                    
+
                                     <!-- ./lesson-teacher-wrapper -->
                                  </a>
                               </li>

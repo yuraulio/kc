@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Model\Media;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -9,7 +10,6 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Intervention\Image\ImageManagerStatic as Image;
-use App\Model\Media;
 
 class SaveImageWebp implements ShouldQueue
 {
@@ -17,6 +17,7 @@ class SaveImageWebp implements ShouldQueue
 
     private $request;
     private $details;
+
     /**
      * Create a new job instance.
      *
@@ -39,12 +40,10 @@ class SaveImageWebp implements ShouldQueue
 
         //dd(public_path($media['path'].$media['original_name'].$media['ext']));
 
-        $image = Image::make(public_path($media['path'].$media['original_name']));
+        $image = Image::make(public_path($media['path'] . $media['original_name']));
 
         $image->crop($this->request['width'], $this->request['height'], $this->request['x'], $this->request['y']);
         $name = explode('.', $media['original_name']);
-        $image->save(public_path($media['path'].$name[0].'-crop'.'.webp'), 80);
-
-
+        $image->save(public_path($media['path'] . $name[0] . '-crop' . '.webp'), 80);
     }
 }

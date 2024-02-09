@@ -25,13 +25,13 @@ class InstructorRequest extends FormRequest
     {
         return [
             'title' => [
-                'required', 'min:3'
+                'required', 'min:3',
             ],
             'short_title' => [
 
             ],
             'subtitle' => [
-                'required', 'min:3'
+                'required', 'min:3',
             ],
             'header' => [
 
@@ -48,8 +48,8 @@ class InstructorRequest extends FormRequest
             'mobile' => [
                 'nullable',
                 'numeric',
-                'digits:10'
-            ]
+                'digits:10',
+            ],
         ];
     }
 

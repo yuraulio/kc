@@ -13,7 +13,7 @@ class AddColumnInstallmentsDeliveryTable extends Migration
      */
     public function up()
     {
-        Schema::table('deliveries', function(Blueprint $table) {
+        Schema::table('deliveries', function (Blueprint $table) {
             $table->integer('installments')->after('description')->default(0);
         });
     }

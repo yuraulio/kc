@@ -2,11 +2,11 @@
 
 namespace App\Notifications;
 
+use App\Model\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use App\Model\User;
 
 class userStatusChange extends Notification
 {
@@ -21,7 +21,6 @@ class userStatusChange extends Notification
     public function __construct($user)
     {
         $this->user = $user;
-
     }
 
     /**
@@ -52,7 +51,7 @@ class userStatusChange extends Notification
 
         return (new MailMessage)
             ->subject('User Status Change')
-            ->view( $loadForm, ['user' => $this->user]);
+            ->view($loadForm, ['user' => $this->user]);
     }
 
     /**
@@ -64,7 +63,7 @@ class userStatusChange extends Notification
     public function toArray($notifiable)
     {
         return [
-            'user_id' => $this->user
+            'user_id' => $this->user,
         ];
     }
 }

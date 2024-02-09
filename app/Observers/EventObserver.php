@@ -26,7 +26,7 @@ class EventObserver
      */
     public function updated(Event $event)
     {
-        Cache::forget('topics-event-status-'.$event->id);
+        Cache::forget('topics-event-status-' . $event->id);
     }
 
     /**
@@ -37,7 +37,7 @@ class EventObserver
      */
     public function deleted(Event $event)
     {
-        Cache::forget('topics-event-status-'.$event->id);
+        Cache::forget('topics-event-status-' . $event->id);
     }
 
     /**
@@ -48,7 +48,7 @@ class EventObserver
      */
     public function restored(Event $event)
     {
-        Cache::forget('topics-event-status-'.$event->id);
+        Cache::forget('topics-event-status-' . $event->id);
     }
 
     /**
@@ -59,6 +59,6 @@ class EventObserver
      */
     public function forceDeleted(Event $event)
     {
-        Cache::forget('topics-event-status-'.$event->id);
+        Cache::forget('topics-event-status-' . $event->id);
     }
 }

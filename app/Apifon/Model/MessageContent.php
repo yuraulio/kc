@@ -1,14 +1,14 @@
 <?php
 
 namespace Apifon\Model {
-
-    class MessageContent {
-
+    class MessageContent
+    {
         public $text;
         public $dc;
         public $sender_id;
 
-        function __construct() {
+        public function __construct()
+        {
         }
 
         public function getText()
@@ -19,6 +19,7 @@ namespace Apifon\Model {
         public function setText($text)
         {
             $this->text = $text;
+
             return $this;
         }
 
@@ -30,6 +31,7 @@ namespace Apifon\Model {
         public function setDc($dc)
         {
             $this->dc = $dc;
+
             return $this;
         }
 
@@ -41,11 +43,8 @@ namespace Apifon\Model {
         public function setSenderId($sender_id)
         {
             $this->sender_id = $sender_id;
+
             return $this;
         }
-
-
     }
-
 }
-?>

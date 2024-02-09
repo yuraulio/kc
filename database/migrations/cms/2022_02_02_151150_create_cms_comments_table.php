@@ -16,9 +16,9 @@ class CreateCmsCommentsTable extends Migration
         Schema::create('cms_comments', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->bigInteger("page_id");
-            $table->bigInteger("user_id");
-            $table->string("comment");
+            $table->bigInteger('page_id');
+            $table->bigInteger('user_id');
+            $table->string('comment');
         });
     }
 

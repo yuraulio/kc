@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\Model\ShoppingCart;
+use Illuminate\Console\Command;
 
 class deteleAbandoned extends Command
 {
@@ -40,16 +40,13 @@ class deteleAbandoned extends Command
     {
         $shoppinCarts = ShoppingCart::all();
 
-
-        foreach($shoppinCarts as $shoppingCart){
-           
+        foreach ($shoppinCarts as $shoppingCart) {
             $content = unserialize($shoppingCart->content);
-            foreach($content as $c){
-                if($c->associatedModel == 'PostRider\Content'){
+            foreach ($content as $c) {
+                if ($c->associatedModel == 'PostRider\Content') {
                     $shoppingCart->delete();
                 }
             }
-            
         }
 
         return 0;

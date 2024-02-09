@@ -13,10 +13,10 @@ class ItemObserver
      * @param  \App\Item  $item
      * @return void
      */
-    public function deleting(Item  $item)
+    public function deleting(Item $item)
     {
         File::delete(storage_path("/app/public/{$item->picture}"));
-        
+
         $item->tags()->detach();
     }
 

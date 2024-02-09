@@ -7,7 +7,6 @@ File: Loading Button init js
 */
 
 
-
  // Bind normal buttons
  Ladda.bind( '.ladda-button', { timeout: 2000 } );
 

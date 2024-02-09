@@ -57,11 +57,11 @@ return [
         ],
         'storage' => [
             'driver' => 'local',
-            'root' => storage_path('app')
+            'root' => storage_path('app'),
         ],
         'royalties' => [
             'driver' => 'local',
-            'root' => storage_path('app/export/royalties')
+            'root' => storage_path('app/export/royalties'),
         ],
         'uploads' => [
             'driver' => 'local',
@@ -107,6 +107,6 @@ return [
     ],
     'links' => [
         public_path('uploads') => storage_path('app/public/uploads'),
-    ]
+    ],
 
 ];

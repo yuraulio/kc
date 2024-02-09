@@ -4,9 +4,9 @@ namespace App\Model\Admin;
 
 use App\Model\User;
 use App\Traits\PaginateTable;
+use App\Traits\SearchFilter;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Traits\SearchFilter;
 
 class Category extends Model
 {
@@ -44,17 +44,17 @@ class Category extends Model
 
     public function subcategories()
     {
-        return $this->hasMany(Category::class, "parent_id");
+        return $this->hasMany(Category::class, 'parent_id');
     }
 
     public function parent()
     {
-        return $this->belongsTo(Category::class, "parent_id");
+        return $this->belongsTo(Category::class, 'parent_id');
     }
 
     public function user()
     {
-        return $this->belongsTo(Admin::class, "user_id");
+        return $this->belongsTo(Admin::class, 'user_id');
     }
 
     public function getPagesCountAttribute()
@@ -64,11 +64,11 @@ class Category extends Model
 
     public function image()
     {
-        return $this->belongsTo(MediaFile::class, "image_id");
+        return $this->belongsTo(MediaFile::class, 'image_id');
     }
 
     public function type()
     {
-        return $this->belongsTo(PageType::class, "page_type_id");
+        return $this->belongsTo(PageType::class, 'page_type_id');
     }
 }

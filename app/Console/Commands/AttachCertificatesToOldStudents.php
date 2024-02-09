@@ -2,12 +2,12 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
-use App\Model\Event;
 use App\Model\Certificate;
+use App\Model\Event;
+use DateTime;
+use Illuminate\Console\Command;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-use DateTime;
 
 class AttachCertificatesToOldStudents extends Command
 {
@@ -32,7 +32,6 @@ class AttachCertificatesToOldStudents extends Command
      */
     public function __construct()
     {
-
         parent::__construct();
     }
 
@@ -43,7 +42,6 @@ class AttachCertificatesToOldStudents extends Command
      */
     public function handle()
     {
-
         /*$nonEvents = [96,1347,4611,4612,4613,4614,2035,4616];
 
         $fileName =  public_path() . '/certificates_import/Users with kc id and events.xlsx';
@@ -54,9 +52,9 @@ class AttachCertificatesToOldStudents extends Command
         $file = $file->getActiveSheet();
 
         $file = $file->toArray();
-        
+
         foreach($file as $key =>  $line){
-            
+
             if(in_array($line[0],$nonEvents) || $key == 0){
                 continue;
             }
@@ -77,17 +75,17 @@ class AttachCertificatesToOldStudents extends Command
 
             $users = $event->users;
             foreach($users as $user){
-                
+
                 if($user->instructor->first() && in_array($event->id,$user->instructor->first()->event->pluck('id')->toArray())){
-                   
+
                     continue;
                 }
-        
+
                 if(count($event->certificatesByUser($user->id))){
                     continue;
                 }
 
-        
+
                 $cert = new Certificate;
                 $cert->success = true;
                 $cert->firstname = $user->firstname;
@@ -99,33 +97,31 @@ class AttachCertificatesToOldStudents extends Command
                 $cert->certification_date = date('F',$createDate) . ' ' . date('Y',$createDate);
                 $cert->template = 'kc_deree_diploma';
                 $cert->save();
-        
+
                 $cert->event()->save($event);
                 $cert->user()->save($user);
                 if($event->exam()->first()){
                     $cert->exam()->save($event->exam()->first());
                 }
-        
-            
+
+
             }
 
-            
-        }*/
 
+        }*/
 
         $certificates = Certificate::all();
 
-        foreach($certificates as $certificate){
-            if($certificate->event->first() && $certificate->event->first()->paymentMethod->first() && $certificate->event->first()->paymentMethod->first()->id == 1){
-                if($certificate->success){
+        foreach ($certificates as $certificate) {
+            if ($certificate->event->first() && $certificate->event->first()->paymentMethod->first() && $certificate->event->first()->paymentMethod->first()->id == 1) {
+                if ($certificate->success) {
                     $certificate->template = 'kc_deree_diploma';
-                }else{
+                } else {
                     $certificate->template = 'kc_deree_attendance';
                 }
             }
             $certificate->save();
         }
-
 
         return 0;
     }

@@ -38,24 +38,21 @@ class AddIsNewColumnEventStatistic extends Command
      */
     public function handle()
     {
-        $event_statistics = DB::table('event_statistics')->select('id','videos')->get();
+        $event_statistics = DB::table('event_statistics')->select('id', 'videos')->get();
         //$event_statistics = DB::table('event_statistics')->where('id',3701)->select('id','videos')->get();
 
-        foreach($event_statistics as $key => $row){
-
+        foreach ($event_statistics as $key => $row) {
             $statistic_videos = json_decode($row->videos, true);
 
-
-            foreach($statistic_videos as $key => $video){
-
+            foreach ($statistic_videos as $key => $video) {
                 // if(!isset($video['is_new'])){
-                    $statistic_videos[$key]['is_new'] = 0;
+                $statistic_videos[$key]['is_new'] = 0;
                 //}
             }
 
             $statistic_videos = json_encode($statistic_videos);
 
-            DB::table('event_statistics')->where('id',$row->id)->update(['videos' => $statistic_videos]);
+            DB::table('event_statistics')->where('id', $row->id)->update(['videos' => $statistic_videos]);
         }
 
         return 0;

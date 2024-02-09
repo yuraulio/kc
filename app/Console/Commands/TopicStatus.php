@@ -2,9 +2,9 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
-use GuzzleHttp\Client;
 use App\Model\Topic;
+use GuzzleHttp\Client;
+use Illuminate\Console\Command;
 
 class TopicStatus extends Command
 {
@@ -39,19 +39,19 @@ class TopicStatus extends Command
      */
     public function handle()
     {
-        $client = new Client(['base_uri' => 'http://knowcrunchls.j.scaleforce.net','verify' => false]);
+        $client = new Client(['base_uri' => 'http://knowcrunchls.j.scaleforce.net', 'verify' => false]);
         //$client = new Client(['base_uri' => 'http://lcknowcrunch.test','verify' => false]);
 
         $response = $client->request('GET', 'http://knowcrunchls.j.scaleforce.net/get-topic-status');
         //$response = $client->request('GET', 'http://lcknowcrunch.test/get-topic-status');
 
-        $topics = json_decode($response->getBody()->getContents(),true);
-        
-        foreach($topics['topics'] as $key => $topic){
+        $topics = json_decode($response->getBody()->getContents(), true);
+
+        foreach ($topics['topics'] as $key => $topic) {
             $t = Topic::find($key);
             $t->status = $topic;
             $t->save();
-        }   
+        }
 
         return 0;
     }

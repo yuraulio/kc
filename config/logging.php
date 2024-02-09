@@ -45,9 +45,22 @@ return [
             'level' => 'debug',
         ],
 
+        'email' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/email.log'),
+            'level' => 'debug',
+        ],
+
         'daily' => [
             'driver' => 'daily',
             'path' => storage_path('logs/laravel.log'),
+            'level' => 'debug',
+            'days' => 14,
+        ],
+
+        'daily_errors_not_existing_pages' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/not_existing_pages/laravel.log'),
             'level' => 'debug',
             'days' => 14,
         ],

@@ -26,7 +26,7 @@ class AlterCmsPagesTableRemoveDiscriptionColumn extends Migration
     public function down()
     {
         Schema::table('cms_pages', function (Blueprint $table) {
-            $table->string("description")->nullable();
+            $table->string('description')->nullable();
         });
     }
 }

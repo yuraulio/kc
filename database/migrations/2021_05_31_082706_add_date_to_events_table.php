@@ -14,7 +14,7 @@ class AddDateToEventsTable extends Migration
     public function up()
     {
         Schema::table('events', function (Blueprint $table) {
-            $table->datetime("release_date_files")->after('published')->nullable();
+            $table->datetime('release_date_files')->after('published')->nullable();
         });
     }
 

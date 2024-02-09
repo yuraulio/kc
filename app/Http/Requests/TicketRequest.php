@@ -25,14 +25,14 @@ class TicketRequest extends FormRequest
     {
         return [
             'title' => [
-                'required', 'min:3'
+                'required', 'min:3',
             ],
             'subtitle' => [
-                'required'
+                'required',
             ],
             'type' => [
-                'required'
-            ]
+                'required',
+            ],
         ];
     }
 }

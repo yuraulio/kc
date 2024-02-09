@@ -2,13 +2,13 @@
 
 namespace App\Jobs;
 
+use App\Model\Event;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use App\Model\Event;
 
 class EventSoldOut implements ShouldQueue
 {
@@ -19,13 +19,11 @@ class EventSoldOut implements ShouldQueue
      *
      * @return void
      */
-
     private $event;
 
     public function __construct($event)
     {
         $this->event = Event::with('ticket')->find($event);
-
     }
 
     /**
@@ -35,17 +33,15 @@ class EventSoldOut implements ShouldQueue
      */
     public function handle()
     {
-        if($this->event){
+        if ($this->event) {
             Event::where('id', $this->event->id)->update([
                 'index' => 0,
                 'feed' => 0,
             ]);
 
-            foreach($this->event['ticket'] as $ticket){
-
+            foreach ($this->event['ticket'] as $ticket) {
                 $this->event->ticket()->updateExistingPivot($ticket->id, ['quantity' => 0]);
             }
-
         }
     }
 }

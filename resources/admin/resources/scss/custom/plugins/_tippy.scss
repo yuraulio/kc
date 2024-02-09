@@ -2,6 +2,9 @@
 // tippy.scss
 //
 
+@import 'tippy.js/dist/tippy.css';
+
+
 .tippy-tooltip {
     .light-theme[data-animatefill] {
         background-color: transparent;
@@ -16,7 +19,7 @@
     .tippy-backdrop {
         background-color: $white;
     }
-    
+
     .tippy-roundarrow {
         fill: $white;
     }
@@ -25,7 +28,7 @@
 .gradient-theme {
     .tippy-backdrop {
         background: $primary;
-        background: linear-gradient(to left, $danger, $primary); 
+        background: linear-gradient(to left, $danger, $primary);
     }
 }
 
@@ -50,7 +53,7 @@
                     border-left: 7px solid transparent;
                 }
             }
-        }    
+        }
     }
     &[x-placement^=left] {
         .tippy-tooltip{

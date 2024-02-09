@@ -161,6 +161,29 @@
                                </div>
 
                             </div>
+                           <div class="row">
+                             <div class="col-md-6">
+                               <label class="form-control-label" for="repeat_exam">{{ __('Repeat Exam') }}</label>
+                               <div class="form-group{{ $errors->has('repeat_exam') ? ' has-danger' : '' }}">
+                                 <label class="custom-toggle">
+                                   <input name="repeat_exam" type="checkbox" @if($exam->repeat_exam) checked @endif value="1" />
+                                   <span class="custom-toggle-slider rounded-circle" data-label-off="Off" data-label-on="On"></span>
+                                 </label>
+                                 @include('alerts.feedback', ['field' => 'repeat_exam'])
+                               </div>
+                             </div>
+                             <div class="col-md-6">
+                               <div class="form-group{{ $errors->has('repeat_exam_in') ? ' has-danger' : '' }}">
+                                 <label class="form-control-label" for="repeat_exam_in">{{ __('Exams can be taken again in') }}</label>
+                                 <input type="number" min="0" step="1" name="repeat_exam_in" id="repeat_exam_in"
+                                        class="form-control{{ $errors->has('repeat_exam_in') ? ' is-invalid' : '' }}"
+                                        placeholder="{{ __('Exams can be taken again in') }}"
+                                        value="{{ old('repeat_exam_in', $exam->repeat_exam_in) }}"
+                                 />
+                                 @include('alerts.feedback', ['field' => 'repeat_exam_in'])
+                               </div>
+                             </div>
+                           </div>
 
                             <div class="form-group{{ $errors->has('intro_text') ? ' has-danger' : '' }}">
                                <label class="form-control-label" for="input-intro_text">{{ __('Exam Introduction Text') }}</label>
@@ -376,101 +399,9 @@
              </div>
           </div>
 
-          <div class="tab-pane fade" id="results" role="tabpanel" aria-labelledby="tabs-icons-text-3-tab">
-             <div class="row">
-             <div class="col-md-6 col-sm-6 col-xs-12">
-
-                <div class="progress-wrapper">
-                  <div class="progress-info">
-                    <div class="progress-label">
-                      <span>The average percentage of the exam</span>
-
-                      <span id="avScore">{{$averageScore}}%</span>
-                    </div>
-                  </div>
-                  <div class="progress">
-                    <div id="avScoreBar" class="progress-bar bg-success" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{$averageScore}}%;"></div>
-                  </div>
-                </div>
-
-             </div>
-
-             <div class="col-md-6 col-sm-6 col-xs-12">
-
-                <div class="progress-wrapper">
-                  <div class="progress-info">
-                    <div class="progress-label">
-                      <span>The average time of every participant</span>
-
-                      <span id="avHour">{{$averageHour}}</span>
-                    </div>
-                  </div>
-                  <div class="progress">
-                    <div class="progress-bar bg-info" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
-                  </div>
-                </div>
-
-             </div>
-             </div>
-             <table class="table align-items-center table-flush"  id="results-table">
-                <thead class="thead-light">
-                   <tr>
-                      <th scope="col">{{ __('SL NO.') }}</th>
-                      <th scope="col">{{ __('Name') }}</th>
-                      <th scope="col">{{ __('Score') }}</th>
-                      <th scope="col">{{ __('Percentage') }}</th>
-                      <th scope="col">{{ __('Start Time') }}</th>
-                      <th scope="col">{{ __('End Time') }}</th>
-                      <th scope="col">{{ __('Total Time') }}</th>
-                      <th scope="col">{{ __('Action') }}</th>
-
-                   </tr>
-                </thead>
-                <tbody id="resultsBody">
-               @foreach($results as $key => $result)
-                   <tr>
-                      <td>
-                         {{ $key + 1 }}
-                      </td>
-                      <td>
-                         {{ $result['first_name'] }} {{ $result['last_name'] }}
-                      </td>
-
-                      <td>
-                         {{ $result['score'] }}
-                      </td>
-
-                      <td>
-                         {{ $result['scorePerc'] }}
-                      </td>
-
-                      <td>
-                         {{ $result['start_time'] }}
-                      </td>
-
-                      <td>
-                         {{ $result['end_time'] }}
-                      </td>
-
-                      <td>
-                         {{ $result['total_time'] }}
-                      </td>
-
-                      <td class="text-right">
-                         <div class="dropdown">
-                            <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fas fa-ellipsis-v"></i>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                               <a class="dropdown-item" href="/admin1/student-summary/{{$result['exam_id']}}/{{$result['user_id']}}" target="_blank">{{ __('Show') }}</a>
-                            </div>
-                         </div>
-                      </td>
-                   </tr>
-                  @endforeach
-                </tbody>
-             </table>
-          </div>
+           <div class="tab-pane fade" id="results" role="tabpanel" aria-labelledby="tabs-icons-text-3-tab">
+               @include('admin.exams.tabs.results',['averageScore' => $averageScore, 'averageHour' => $averageHour, 'results' => $results])
+           </div>
 
           @if(count($liveResults)>0)
              <?php
@@ -1264,7 +1195,7 @@
                 type:'get',
                 datatType : 'json',
                 contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-                url:'/admin1/live-results/{{$exam->id}}',
+                url:'/admin/live-results/{{$exam->id}}',
                 success:function(data){
 
                    let resultsHtmll = '';
@@ -1345,7 +1276,7 @@
                                <i class="fas fa-ellipsis-v"></i>
                                </a>
                                <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                                  <a class="dropdown-item" href="/admin1/student-summary/${value1['exam_id']}/${value1['user_id']}" target="_blank">{{ __('Show') }}</a>
+                                  <a class="dropdown-item" href="/admin/student-summary/${value1['exam_id']}/${value1['user_id']}" target="_blank">{{ __('Show') }}</a>
                                </div>
                             </div>
                          </td></tr>`*/
@@ -1365,7 +1296,7 @@
                                   <i class="fas fa-ellipsis-v"></i>
                                   </a>
                                   <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                                     <a class="dropdown-item" href="/admin1/student-summary/${value1['exam_id']}/${value1['user_id']}" target="_blank">{{ __('Show') }}</a>
+                                     <a class="dropdown-item" href="/admin/student-summary/${value1['exam_id']}/${value1['user_id']}" target="_blank">{{ __('Show') }}</a>
                                   </div>
                                </div>`
                       ]).draw()

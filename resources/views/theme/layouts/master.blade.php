@@ -1,5 +1,3 @@
-@include('theme.layouts.menu_component_myaccount')
-
 <!doctype html>
 <html lang="en" class="no-js">
 <head>
@@ -134,8 +132,8 @@ _iub.csConfiguration = {"askConsentAtCookiePolicyUpdate":true,"consentOnContinue
 @yield('blog-custom-css')
 
 </head>
-
 <body>
+@include('theme.layouts.menu_component_myaccount')
 
 @if(!env('APP_DEBUG'))
 {{--<script id="CookieDeclaration" src="https://consent.cookiebot.com/7c5a111b-df1a-4a4a-bd31-fbee0d6593ba/cd.js" type="text/javascript" async></script>--}}
@@ -201,7 +199,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
             <div class="form-group">
                 <label for="remember-me"><input id="remember-me" type="checkbox">Remember me</label>
-                <a id="forgot-pass" href="javascript:void(0)">Forgot password?</a>
+                <a id="forgot-pass" href="javascript:void(0)">Reset or create your password.</a>
             </div>
             <input type="button" onclick="loginAjaxNew()" value="LOGIN">
         </form>
@@ -210,8 +208,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div id="forgot-pass-input" class="login-popup" hidden>
         <a href="#" class="close-btn"><img width="26" src="{{cdn('theme/assets/images/icons/icon-close.svg')}}" class="replace-with-svg" alt="Close"></a>
         <div class="heading">
-        <span>Change your Password</span>
-            <p>Use your account email to change your password</p>
+        <span>Password</span>
+            <p>Use your account email to create or change your password.</p>
         </div>
         {{--<form method="post" action="/myaccount/reset" autocomplete="off" class="validate-form change-password-form"> --}}
         <form autocomplete="off" class="login-form">
@@ -245,7 +243,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             </div>
             </div>
 
-            <button type="button" class="btn btn--lg btn--secondary change-password"  value="Change">Change</button>
+            <button type="button" class="btn btn--lg btn--secondary change-password"  value="Change">Create / Change</button>
         </form>
     </div><!-- ./login-popup -->
 </div><!-- ./login-popup-wrapper -->
@@ -344,20 +342,16 @@ $(document).on('click', '.close-btn', function(e){
 
 
 
-@if(isset($tigran) && env('APP_DEBUG'))
-
-      <script>
-            $(document).ready(function(){
-                     @foreach($tigran as $key => $ti)
-                        dataLayer.push({"{{$key}}": $.parseHTML("{{$ti}}")[0].data})
-                     @endforeach
-            });
-      </script>
-
-   @endif
-
-
-   <script>
+  @if(isset($tigran) && env('APP_DEBUG'))
+    <script>
+        $(document).ready(function(){
+           @foreach($tigran as $key => $ti)
+              dataLayer.push({"{{$key}}": $.parseHTML("{{$ti}}")[0].data})
+           @endforeach
+        });
+    </script>
+  @endif
+  <script>
 
         let url = window.location.href.split('#')
         if(url[1]){
@@ -373,10 +367,8 @@ $(document).on('click', '.close-btn', function(e){
 
             $(target).addClass('active-tab');
             $this.addClass('active');
-
         }
-
-</script>
+  </script>
 
 <script>
 

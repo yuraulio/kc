@@ -2,13 +2,13 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use App\Model\Category;
 use App\Model\Event;
 use App\Model\Lesson;
 use App\Model\Topic;
+use Illuminate\Console\Command;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class INSERTLESSONS extends Command
 {
@@ -43,17 +43,13 @@ class INSERTLESSONS extends Command
      */
     public function handle()
     {
-
-
-        ########     EVENT   ##########3
+        //#######     EVENT   ##########3
         $fileName = public_path() . '/import/' . 'EVENT_LESSON1.csv';
-        
-        if(!file_exists($fileName)){
-            
+
+        if (!file_exists($fileName)) {
             return 0;
         }
 
-        
         $spreadsheet = new Spreadsheet();
         $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReaderForFile($fileName);
         $reader->setReadDataOnly(true);
@@ -64,21 +60,18 @@ class INSERTLESSONS extends Command
 
         //dd($sheets);
 
-        foreach((array) $sheets as $key => $sheet){
-            
+        foreach ((array) $sheets as $key => $sheet) {
             $file1 = $file->getSheet($key);
             $file1 = $file1->toArray();
             $movedLessons = [];
-            $noMovedLessons =[];
-            foreach($file1 as $key1 =>  $line){
-
-                if($key1 == 0){
+            $noMovedLessons = [];
+            foreach ($file1 as $key1 =>  $line) {
+                if ($key1 == 0) {
                     continue;
                 }
 
                 $event = Event::find($line[1]);
-                if($event){
-                    
+                if ($event) {
                     $movedLessons[$line[3]] = [
                         'topic_id'=>$line[2],
                         'lesson_id'=>$line[3],
@@ -92,30 +85,25 @@ class INSERTLESSONS extends Command
                         'location_url'=> $line[10],
                         'automate_mail'=>$line[12],
                         'send_automate_mail'=>$line[13],
-                        'priority' => $line[11]
+                        'priority' => $line[11],
                     ];
 
                     //$category->lessons()->wherePivot('topic_id',$line[2])->wherePivotIn('lesson_id',array_keys($movedLessonsCate))->detach();
                     //$category->lessons()->attach($movedLessonsCate);
-
                 }
-                
-
             }
 
             $nonPrio = [];
-            $nonPrio2= [];
-            foreach($event->allLessons as $l){
-                
-                if(!in_array($l->pivot->lesson_id, array_keys($movedLessons))){
+            $nonPrio2 = [];
+            foreach ($event->allLessons as $l) {
+                if (!in_array($l->pivot->lesson_id, array_keys($movedLessons))) {
+                    $priorityLesson = $event->allLessons()->wherePivot('topic_id', $l->pivot->topic_id)->orderBy('priority')->get();
+                    $priority = isset($priorityLesson->last()['pivot']['priority']) ? $priorityLesson->last()['pivot']['priority'] + 1 : count($priorityLesson) + 1;
 
-                    $priorityLesson = $event->allLessons()->wherePivot('topic_id',$l->pivot->topic_id)->orderBy('priority')->get();
-                    $priority = isset($priorityLesson->last()['pivot']['priority']) ? $priorityLesson->last()['pivot']['priority'] + 1 :count($priorityLesson)+1 ;
-
-                    if(!isset($nonPrio[$l->pivot->topic_id])){
+                    if (!isset($nonPrio[$l->pivot->topic_id])) {
                         $nonPrio[$l->pivot->topic_id] = $priority;
-                    }else{
-                        $priority = $nonPrio[$l->pivot->topic_id] +1;
+                    } else {
+                        $priority = $nonPrio[$l->pivot->topic_id] + 1;
                         $nonPrio[$l->pivot->topic_id] = $priority;
                     }
 
@@ -134,10 +122,8 @@ class INSERTLESSONS extends Command
                         'location_url'=> '',
                         'automate_mail'=> null,
                         'send_automate_mail'=> null,
-                        'priority' => $priority
+                        'priority' => $priority,
                     ];
-
-
                 }
             }
 
@@ -147,15 +133,13 @@ class INSERTLESSONS extends Command
             //dd($key1);
         }
         //dd('hello');
-        #category
+        //category
         $fileName = public_path() . '/import/' . 'CAT_TOPIC1.csv';
-        
-        if(!file_exists($fileName)){
-            
+
+        if (!file_exists($fileName)) {
             return 0;
         }
 
-        
         $spreadsheet = new Spreadsheet();
         $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReaderForFile($fileName);
         $reader->setReadDataOnly(true);
@@ -166,54 +150,44 @@ class INSERTLESSONS extends Command
 
         //dd($sheets);
 
-        foreach((array) $sheets as $key => $sheet){
-            
+        foreach ((array) $sheets as $key => $sheet) {
             $file1 = $file->getSheet($key);
             $file1 = $file1->toArray();
 
             $movedLessonsCate = [];
             $noLessonsCat = [];
-            foreach($file1 as $key1 =>  $line){
-
-                if($key1 == 0){
+            foreach ($file1 as $key1 =>  $line) {
+                if ($key1 == 0) {
                     continue;
                 }
 
                 $category = Category::find($line[1]);
-                if($category){
-                    
+                if ($category) {
                     //$allEvents = $category->events;
                     /*foreach($allEvents as $event)
                     {
 
                     }*/
 
-                    
                     $movedLessonsCate[$line[3]] = [
                         'topic_id'=>$line[2],
                         'lesson_id'=>$line[3],
                         'category_id' => $line[1],
-                        'priority' => $line[4]
+                        'priority' => $line[4],
                     ];
-
-                    
 
                     //$category->lessons()->wherePivot('topic_id',$line[2])->wherePivotIn('lesson_id',array_keys($movedLessonsCate))->detach();
                     //$category->lessons()->attach($movedLessonsCate);
-
                 }
-                
-
             }
-           
-            foreach($category->lessons as $l){
-                
-                if(!in_array($l->pivot->lesson_id, array_keys($movedLessonsCate))){
+
+            foreach ($category->lessons as $l) {
+                if (!in_array($l->pivot->lesson_id, array_keys($movedLessonsCate))) {
                     $noLessonsCat[$l->pivot->lesson_id] = [
                         'topic_id'=>$l->pivot->topic_id,
                         'lesson_id'=>$l->pivot->lesson_id,
                         'category_id' => $l->pivot->category_id,
-                        'priority' => $nonPrio2[$l->pivot->category_id][$l->pivot->topic_id][$l->pivot->lesson_id]
+                        'priority' => $nonPrio2[$l->pivot->category_id][$l->pivot->topic_id][$l->pivot->lesson_id],
                     ];
                 }
             }
@@ -230,11 +204,7 @@ class INSERTLESSONS extends Command
                 $category->updateLesson($topic,$lesson);
             }*/
 
-
             //dd($key1);
         }
-
-        
-
     }
 }

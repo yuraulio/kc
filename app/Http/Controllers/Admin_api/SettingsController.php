@@ -7,14 +7,14 @@ use App\Model\Admin\Page;
 use App\Model\Admin\Setting;
 use Exception;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Http\Request;
 
 class SettingsController extends Controller
 {
     /**
-     * Return settings
+     * Return settings.
      *
      * @return JsonResponse
      */
@@ -26,7 +26,7 @@ class SettingsController extends Controller
     }
 
     /**
-     * Update settings
+     * Update settings.
      *
      * @return JsonResponse
      */
@@ -40,13 +40,14 @@ class SettingsController extends Controller
             $setting->value = $request->value;
             $setting->save();
 
-            if ($setting->setting == "cms_mode") {
-                cache()->forget("cmsMode");
+            if ($setting->setting == 'cms_mode') {
+                cache()->forget('cmsMode');
             }
 
             return $setting;
         } catch (Exception $e) {
-            Log::error("Failed to edit setting. ", [$e]);
+            Log::error('Failed to edit setting. ', [$e]);
+
             return response()->json(['message' => $e->getMessage()], 400);
         }
     }

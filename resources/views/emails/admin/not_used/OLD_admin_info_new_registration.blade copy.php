@@ -1,60 +1,56 @@
 <?php
     /**
-     * Inform admin about a new company registration
+     * Inform admin about a new company registration.
      * @user : the new registration user (object)
      * @account : the account (array), has the following linked arrays
      * @account['default_store']
      * @account['users']
      */
-?>
+    ?>
 @extends('emails.email_master_tpl')
 @section('content')
 <?php $res = $trans->payment_response;
-	if ($res) {
-		$res = json_decode($res, true);
-	}
- ?>
+    if ($res) {
+        $res = json_decode($res, true);
+    }
+    ?>
 
 <h1>
 New registration has been received
 </h1>
 <?php
-	switch ($extrainfo[0]) {
-		case 1:
-			$type = 'UNEMPLOYED';
-			break;
-		case 2:
-			$type = 'STUDENT';
-			break;
-		case 3:
-			$type = 'KNOWCRUNCH ALUMNI';
-			break;
-		case 4:
-			$type = 'DEREE ALUMNI';
-			break;
-		case 5:
-			$type = 'GROUP OF 2+';
-			break;
+       switch ($extrainfo[0]) {
+           case 1:
+               $type = 'UNEMPLOYED';
+               break;
+           case 2:
+               $type = 'STUDENT';
+               break;
+           case 3:
+               $type = 'KNOWCRUNCH ALUMNI';
+               break;
+           case 4:
+               $type = 'DEREE ALUMNI';
+               break;
+           case 5:
+               $type = 'GROUP OF 2+';
+               break;
 
+           default:
+               $type = 'NORMAL';
+               break;
+       }
 
-		default:
-			$type = 'NORMAL';
-			break;
-	}
-
-if(isset($helperdetails[$user['email']])) {
-
+if (isset($helperdetails[$user['email']])) {
     $did = $helperdetails[$user['email']]['deid'];
     $stid = $helperdetails[$user['email']]['stid'];
     $dereeid = $did; //substr($did, 0, -2);
-}
-else {
-
+} else {
     $did = '-';
     $stid = '-';
     $dereeid = '-';
 }
-?>
+    ?>
 <p>
 <strong>EVENT NAME:</strong> {{ $extrainfo[2] }}<br /><br />
 <strong>EVENT DATE:</strong> {{ $extrainfo[3] }}<br /><br />

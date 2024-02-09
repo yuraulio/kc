@@ -2,9 +2,9 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
+use App\Model\Event;
 use App\Model\Ticket;
-use App\Model\Event; 
+use Illuminate\Console\Command;
 
 class TicketsTitle extends Command
 {
@@ -41,19 +41,18 @@ class TicketsTitle extends Command
     {
         $tickets = Ticket::all();
 
-        foreach($tickets as $ticket){
+        foreach ($tickets as $ticket) {
             $ticket->public_title = $ticket->title;
             $ticket->save();
         }
 
         $events = Event::all();
 
-        foreach($events as $event){
-            foreach($event->ticket as $ticket){
-
+        foreach ($events as $event) {
+            foreach ($event->ticket as $ticket) {
                 $t = Ticket::find($ticket->pivot->ticket_id);
 
-                if(!$t){
+                if (!$t) {
                     continue;
                 }
 

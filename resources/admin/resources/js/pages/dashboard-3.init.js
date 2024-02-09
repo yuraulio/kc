@@ -22,7 +22,7 @@ File: Dashboard init
         //default config
         Chart.defaults.global.defaultFontColor = "#8391a2";
         Chart.defaults.scale.gridLines.color = "#8391a2";
-        
+
         // pointing parent container to make chart js inherit its width
         var container = $(selector).parent();
 

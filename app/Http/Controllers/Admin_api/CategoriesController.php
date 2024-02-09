@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Log;
 class CategoriesController extends Controller
 {
     /**
-     * Get categories
+     * Get categories.
      *
      * @return AnonymousResourceCollection
      */
@@ -28,16 +28,18 @@ class CategoriesController extends Controller
         $this->authorize('viewAny', Category::class, Auth::user());
 
         try {
-            $categories = Category::where("parent_id", null);
+            $categories = Category::where('parent_id', null);
 
             $categories = $this->filters($categories, $request);
 
-            $categories->with(["pages", "subcategories", "user", "image", "type"]);
+            $categories->with(['pages', 'subcategories', 'user', 'image', 'type']);
             $categories->tableSort($request);
             $categories = $categories->paginate($request->per_page ?? 50);
+
             return CategoryResource::collection($categories);
         } catch (Exception $e) {
-            Log::error("Failed to get categories. " . $e->getMessage());
+            Log::error('Failed to get categories. ' . $e->getMessage());
+
             return response()->json(['message' => $e->getMessage()], 400);
         }
     }
@@ -45,11 +47,12 @@ class CategoriesController extends Controller
     private function filters($categories, $request)
     {
         $categories->lookForOriginal($request->filter);
+
         return $categories;
     }
 
     /**
-     * Add category
+     * Add category.
      *
      * @return CategoryResource
      */
@@ -62,9 +65,9 @@ class CategoriesController extends Controller
             $category->title = $request->title;
             $category->parent_id = $request->parent_id ?? null;
             $category->user_id = Auth::user()->id;
-            $category->page_type_id = $request->type["id"] ?? null;
+            $category->page_type_id = $request->type['id'] ?? null;
             if ($request->category_image) {
-                $category->image_id = $request->category_image["id"] ?? null;
+                $category->image_id = $request->category_image['id'] ?? null;
             }
             $category->save();
 
@@ -73,45 +76,47 @@ class CategoriesController extends Controller
             if ($request->subcategories) {
                 foreach ($request->subcategories as $item) {
                     $subcategory = new Category();
-                    $subcategory->title = $item["title"];
+                    $subcategory->title = $item['title'];
                     $subcategory->parent_id = $parent_id;
                     $subcategory->user_id = Auth::user()->id;
                     $subcategory->save();
                 }
             }
 
-            $category->load("subcategories");
+            $category->load('subcategories');
 
             Category::all()->searchable();
 
             return new CategoryResource($category);
         } catch (Exception $e) {
-            Log::error("Failed to add new category. " . $e->getMessage());
+            Log::error('Failed to add new category. ' . $e->getMessage());
+
             return response()->json(['message' => $e->getMessage()], 400);
         }
     }
 
     /**
-     * Get catrgory
+     * Get catrgory.
      *
      * @return CategoryResource
      */
     public function show(Request $request, int $id)
     {
         try {
-            $category = Category::find($id)->load("subcategories");
+            $category = Category::find($id)->load('subcategories');
 
             $this->authorize('view', $category, Auth::user());
 
             return new CategoryResource($category);
         } catch (Exception $e) {
-            Log::error("Failed to get categories. " . $e->getMessage());
+            Log::error('Failed to get categories. ' . $e->getMessage());
+
             return response()->json(['message' => $e->getMessage()], 400);
         }
     }
 
     /**
-     * Edit category
+     * Edit category.
      *
      * @return CategoryResource
      */
@@ -123,9 +128,9 @@ class CategoriesController extends Controller
             $this->authorize('update', $category, Auth::user());
 
             $category->title = $request->title;
-            $category->page_type_id = $request->type["id"] ?? null;
+            $category->page_type_id = $request->type['id'] ?? null;
             if ($request->category_image) {
-                $category->image_id = $request->category_image["id"] ?? null;
+                $category->image_id = $request->category_image['id'] ?? null;
             }
             $category->save();
 
@@ -133,15 +138,16 @@ class CategoriesController extends Controller
 
             Category::all()->searchable();
 
-            return new CategoryResource($category->load(["pages", "subcategories", "user"]));
+            return new CategoryResource($category->load(['pages', 'subcategories', 'user']));
         } catch (Exception $e) {
-            Log::error("Failed to edit category. " . $e->getMessage());
+            Log::error('Failed to edit category. ' . $e->getMessage());
+
             return response()->json(['message' => $e->getMessage()], 400);
         }
     }
 
     /**
-     * Delete category
+     * Delete category.
      *
      * @return JsonResponse
      */
@@ -167,13 +173,14 @@ class CategoriesController extends Controller
             return response()->json(['message' => 'success'], 200);
         } catch (Exception $e) {
             DB::rollBack();
-            Log::error("Failed to delete category. " . $e->getMessage());
+            Log::error('Failed to delete category. ' . $e->getMessage());
+
             return response()->json(['message' => $e->getMessage()], 400);
         }
     }
 
     /**
-     * Sync Subcategories
+     * Sync Subcategories.
      *
      * @param Category $category
      * @param Category $subcategories
@@ -220,7 +227,8 @@ class CategoriesController extends Controller
 
             return response()->json(['message' => 'success'], 200);
         } catch (Exception $e) {
-            Log::error("Failed to bulk delete categories. " . $e->getMessage());
+            Log::error('Failed to bulk delete categories. ' . $e->getMessage());
+
             return response()->json(['message' => $e->getMessage()], 400);
         }
     }
@@ -229,11 +237,11 @@ class CategoriesController extends Controller
     {
         return [
             [
-                "Categories",
+                'Categories',
                 $this->categoryCount($request),
             ],
             [
-                "Subcategories",
+                'Subcategories',
                 $this->subcategoryCount($request),
             ],
             // [
@@ -251,12 +259,14 @@ class CategoriesController extends Controller
     public function categoryCount($request)
     {
         try {
-            $categories = Category::where("parent_id", null);
+            $categories = Category::where('parent_id', null);
             $categories = $this->filters($categories, $request);
+
             return $categories->count();
         } catch (Exception $e) {
-            Log::warning("(categories widget) Failed to get category count. " . $e->getMessage());
-            return "0";
+            Log::warning('(categories widget) Failed to get category count. ' . $e->getMessage());
+
+            return '0';
         }
     }
 
@@ -264,27 +274,31 @@ class CategoriesController extends Controller
     {
         try {
             // this does not work, full text search is being done on categories and subcategories, that messes it up
-            $categories = Category::where("parent_id", '!=', null);
+            $categories = Category::where('parent_id', '!=', null);
             $categories = $this->filters($categories, $request);
+
             return $categories->count();
         } catch (Exception $e) {
-            Log::warning("(categories widget) Failed to get subcategory count. " . $e->getMessage());
-            return "0";
+            Log::warning('(categories widget) Failed to get subcategory count. ' . $e->getMessage());
+
+            return '0';
         }
     }
 
     public function popularCategory($request)
     {
         try {
-            $categories = Category::where("parent_id", null);
+            $categories = Category::where('parent_id', null);
             $categories = $this->filters($categories, $request);
-            $categories->where("parent_id", null)->with('pages')->get()->sortByDesc(function ($category) {
+            $categories->where('parent_id', null)->with('pages')->get()->sortByDesc(function ($category) {
                 return $category->pages->count();
             });
+
             return $categories->first()->title;
         } catch (Exception $e) {
-            Log::warning("(categories widget) Failed to get most popular category. " . $e->getMessage());
-            return "-";
+            Log::warning('(categories widget) Failed to get most popular category. ' . $e->getMessage());
+
+            return '-';
         }
     }
 
@@ -292,18 +306,21 @@ class CategoriesController extends Controller
     {
         try {
             // this does not work, full text search is being done on categories and subcategories, that messes it up
-            $categories = Category::where("parent_id", '!=', null);
+            $categories = Category::where('parent_id', '!=', null);
             $categories = $this->filters($categories, $request);
-            return $categories->where("parent_id", '!=', null)->with('pages')->get()->sortByDesc(function ($category) {
+
+            return $categories->where('parent_id', '!=', null)->with('pages')->get()->sortByDesc(function ($category) {
                 return $category->pages->count();
             })->first()->title;
         } catch (Exception $e) {
-            Log::warning("(categories widget) Failed to get most popular subcategory. " . $e->getMessage());
-            return "-";
+            Log::warning('(categories widget) Failed to get most popular subcategory. ' . $e->getMessage());
+
+            return '-';
         }
     }
 
-    public function getCategoriesForPageType($id) {
-        return response()->json(['data' => Category::where("page_type_id", $id)->with("subcategories")->get()]);
+    public function getCategoriesForPageType($id)
+    {
+        return response()->json(['data' => Category::where('page_type_id', $id)->with('subcategories')->get()]);
     }
 }

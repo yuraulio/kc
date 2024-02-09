@@ -2,11 +2,13 @@
 
 namespace Apifon\Model;
 
-class IMAction {
+class IMAction
+{
     public $title;
     public $target_url;
 
-    function __construct() {
+    public function __construct()
+    {
     }
 
     public function getTitle()
@@ -17,6 +19,7 @@ class IMAction {
     public function setTitle($title)
     {
         $this->title = $title;
+
         return $this;
     }
 
@@ -28,8 +31,7 @@ class IMAction {
     public function setTargetUrl($target_url)
     {
         $this->target_url = $target_url;
+
         return $this;
     }
-
-
 }

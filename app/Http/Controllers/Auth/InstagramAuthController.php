@@ -2,22 +2,20 @@
 
 namespace App\Http\Controllers\Auth;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Auth;
+use Illuminate\Http\Request;
 
 class InstagramAuthController extends Controller
 {
-    public function response(Request $request) {
-
-
+    public function response(Request $request)
+    {
         //dd($request->all());
 
-        if(request()->get('error') == null){
-
+        if (request()->get('error') == null) {
             $profile = \Dymantic\InstagramFeed\Profile::usingIdentityToken($request->state);
 
-            if(request('code') != null){
+            if (request('code') != null) {
                 $profile->requestToken(request());
             }
         }

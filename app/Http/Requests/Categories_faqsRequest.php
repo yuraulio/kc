@@ -25,8 +25,8 @@ class Categories_faqsRequest extends FormRequest
     {
         return [
             'name' => [
-                'required', 'min:3'
-            ]
+                'required', 'min:3',
+            ],
         ];
     }
 }

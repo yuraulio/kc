@@ -140,7 +140,7 @@ if(!isset($info)){
                                        <!-- /.remember-wrapper -->
                                     </div>
                                     <div class="forgot-pass-wrapper">
-                                       <a id="forgot-pass2" href="javascript:void(0)">Forgot password?</a>
+                                       <a id="forgot-pass2" href="javascript:void(0)">Reset or create your password.</a>
                                     </div>
                                  </div>
                                  <button type="submit" class="btn btn--md btn--secondary">Login</button>
@@ -1452,9 +1452,9 @@ if(!isset($info)){
       var cardButton = document.getElementById('card-button');
       var clientSecret = cardButton.dataset.secret;
       let { setupIntent, error } = await stripe.confirmCardSetup(
-           
+
            clientSecret, {
-            
+
                payment_method: {
                    card: cardElement,
                    billing_details: { name: cardHolderName.value },

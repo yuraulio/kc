@@ -2,9 +2,8 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\Model\Instructor;
-
+use Illuminate\Console\Command;
 
 class ExportInstructorsConsent extends Command
 {
@@ -40,38 +39,28 @@ class ExportInstructorsConsent extends Command
     public function handle()
     {
         $file = fopen('inststructor_consent.csv', 'w');
-        $columns = array("Firstname", "Lastname", "Email", "Consent");
+        $columns = ['Firstname', 'Lastname', 'Email', 'Consent'];
         fputcsv($file, $columns);
 
         $instructors = Instructor::with('user')->get();
 
-
-        foreach($instructors as $instructor){
-
-            if(isset($instructor['user'][0])){
+        foreach ($instructors as $instructor) {
+            if (isset($instructor['user'][0])) {
                 $user = $instructor['user'][0];
                 $consent = null;
 
-                if($user['consent'] != null){
+                if ($user['consent'] != null) {
                     $consent = json_decode($user['consent'], true);
 
-                    if($consent['date']){
-                        fputcsv($file, array($user['firstname'], $user['lastname'], $user['email'], $consent['date']));
-                    }else{
-                        fputcsv($file, array($user['firstname'], $user['lastname'], $user['email'], ''));
+                    if ($consent['date']) {
+                        fputcsv($file, [$user['firstname'], $user['lastname'], $user['email'], $consent['date']]);
+                    } else {
+                        fputcsv($file, [$user['firstname'], $user['lastname'], $user['email'], '']);
                     }
-
-                }else{
-                    fputcsv($file, array($user['firstname'], $user['lastname'], $user['email'], ''));
+                } else {
+                    fputcsv($file, [$user['firstname'], $user['lastname'], $user['email'], '']);
                 }
-
-
-
             }
-
-
-
-
         }
 
         // foreach($categories as $category){

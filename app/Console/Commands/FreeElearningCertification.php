@@ -2,9 +2,9 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\Model\Event;
 use App\Model\User;
+use Illuminate\Console\Command;
 
 class FreeElearningCertification extends Command
 {
@@ -39,23 +39,17 @@ class FreeElearningCertification extends Command
      */
     public function handle()
     {
-
         $users = User::whereHas('events')->get();
 
-        foreach($users as $user){
-            foreach($user->events as $event){
-               
-
-                if($event->view_tpl == 'elearning_free' ){
-                    if( $event->userHasCertificate($user)->first() ){
+        foreach ($users as $user) {
+            foreach ($user->events as $event) {
+                if ($event->view_tpl == 'elearning_free') {
+                    if ($event->userHasCertificate($user)->first()) {
                         continue;
                     }
 
                     $event->certification($user);
-
-                }else if(count($event->getExams()) == 0 &&  ( $cert = $event->userHasCertificate($user->id)->first() )){
-
-
+                } elseif (count($event->getExams()) == 0 && ($cert = $event->userHasCertificate($user->id)->first())) {
                     $cert->template = 'new_kc_certificate';
                     $cert->save();
                 }

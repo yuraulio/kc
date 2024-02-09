@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\Model\Topic;
+use Illuminate\Console\Command;
 
 class AttachTopicCategory extends Command
 {
@@ -38,20 +38,16 @@ class AttachTopicCategory extends Command
      */
     public function handle()
     {
-
         $topics = Topic::all();
 
-        foreach($topics as $topic){
-            if($topic->id == 4){
+        foreach ($topics as $topic) {
+            if ($topic->id == 4) {
 //                dd($topic->lessonsCategory->first()->pivot->category_id);
             }
             //dd(count($topic->lessonsCategory));
-            foreach($topic->lessonsCategory as $key => $lesson){
-
+            foreach ($topic->lessonsCategory as $key => $lesson) {
                 $topic->category()->detach($lesson->pivot->category_id);
                 $topic->category()->attach($lesson->pivot->category_id);
-
-                
             }
         }
 

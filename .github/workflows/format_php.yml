@@ -1,0 +1,34 @@
+name: Format (PHP)
+
+on:
+  pull_request:
+    # Trigger the workflow on pull request activity when at least one php file in changes
+    paths:
+      - '**.php'
+
+jobs:
+  php-cs-fixer:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.head_ref }}
+
+      - name: Setup PHP 8.2
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+
+      - name: Install
+        run: composer install
+        working-directory: ./tools/php-cs-fixer
+
+      - name: Run php-cs-fixer
+        run: ./vendor/bin/php-cs-fixer fix --config ./php_cs.laravel.php -vvv
+        working-directory: ./tools/php-cs-fixer
+
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: Apply php-cs-fixer changes

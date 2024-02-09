@@ -3,13 +3,13 @@
 namespace App\Http\Controllers;
 
 //use Notification;
-use Illuminate\Http\Request;
-use App\Notifications\userStatusChange;
+use App\Model\Activation;
+use App\Model\Notification;
+use App\Model\User;
 use App\Notifications\userActivationLink;
 use App\Notifications\userChangePassword;
-use App\Model\Activation;
-use App\Model\User;
-use App\Model\Notification;
+use App\Notifications\userStatusChange;
+use Illuminate\Http\Request;
 
 class NotificationController extends Controller
 {
@@ -17,6 +17,7 @@ class NotificationController extends Controller
     {
         $this->middleware('auth.aboveauthor');
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -27,6 +28,7 @@ class NotificationController extends Controller
         //
         $data = [];
         $data['notifications'] = Notification::all();
+
         return view('notification.index', $data);
     }
 
@@ -96,24 +98,22 @@ class NotificationController extends Controller
         //
     }
 
-    public function userStatusChange($user) {
-
+    public function userStatusChange($user)
+    {
         $user->notify(new userStatusChange($user));
 
         return true;
-
     }
 
     public function userChangePassword($user_id = 0)
     {
         //$user = User::where('id', $user_id)->with('activation')->first();
         $user = User::find($user_id);
-       
+
         if ($user) {
             $user->notify(new userChangePassword($user));
-            return 1;
 
-          
+            return 1;
         } else {
             return 0;
         }
@@ -125,10 +125,9 @@ class NotificationController extends Controller
         //echo $user['email'];
         //User::where('id', $user_id)->with('activation')->first();
         if ($user) {
-            $user->notify(new userActivationLink($user,'re-activate'));
+            $user->notify(new userActivationLink($user, 're-activate'));
 
             return true;
-            
         } else {
             return false;
         }

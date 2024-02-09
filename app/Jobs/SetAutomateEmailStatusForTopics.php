@@ -2,13 +2,13 @@
 
 namespace App\Jobs;
 
+use App\Model\Event;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use App\Model\Event;
 
 class SetAutomateEmailStatusForTopics implements ShouldQueue
 {
@@ -19,8 +19,6 @@ class SetAutomateEmailStatusForTopics implements ShouldQueue
      *
      * @return void
      */
-
-    
     private $data;
 
     public function __construct($data)
@@ -35,18 +33,15 @@ class SetAutomateEmailStatusForTopics implements ShouldQueue
      */
     public function handle()
     {
-        
         $event = Event::find($this->data['event_id']);
 
-        if(!$event){
+        if (!$event) {
             return 0;
         }
 
-        foreach($event->lessons()->wherePivot('topic_id',$this->data['topic_id'])->get() as $lesson){
+        foreach ($event->lessons()->wherePivot('topic_id', $this->data['topic_id'])->get() as $lesson) {
             $lesson->pivot->automate_mail = $this->data['status'];
             $lesson->pivot->save();
         }
-
-        
     }
 }

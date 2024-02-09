@@ -25,11 +25,11 @@ class BenefitRequest extends FormRequest
     {
         return [
             'name' => [
-                'required', 'min:3'
+                'required', 'min:3',
             ],
             'description' => [
-                'required', 'min:3'
-            ]
+                'required', 'min:3',
+            ],
 
         ];
     }

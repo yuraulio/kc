@@ -15,7 +15,7 @@ class Tag extends Model
     protected $fillable = ['name', 'color'];
 
     /**
-     * Get the items of the tag
+     * Get the items of the tag.
      *
      * @return \Illuminate\Database\Eloquent\Collection
      */

@@ -16,9 +16,7 @@ class InClassReminder extends Notification
      *
      * @return void
      */
-
     private $data;
-
 
     public function __construct($data)
     {
@@ -44,13 +42,12 @@ class InClassReminder extends Notification
      */
     public function toMail($notifiable)
     {
-        
         $template = 'emails.user.inclass_reminder';
 
         return (new MailMessage)
                     ->from('info@knowcrunch.com', 'Knowcrunch')
-                    ->subject('Knowcrunch - Welcome ' .  $this->data['firstname'] . '. Reminder about your course')
-                    ->view($template,$this->data);
+                    ->subject('Knowcrunch - Welcome ' . $this->data['firstname'] . '. Reminder about your course')
+                    ->view($template, $this->data);
     }
 
     /**

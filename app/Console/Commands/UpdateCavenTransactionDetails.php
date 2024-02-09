@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\Model\Transaction;
+use Illuminate\Console\Command;
 
 class UpdateCavenTransactionDetails extends Command
 {
@@ -38,36 +38,25 @@ class UpdateCavenTransactionDetails extends Command
      */
     public function handle()
     {
-
-        $transactions = Transaction::whereHas('user',function($q1){
-
-            $q1->whereHas('events',function($q2){
-                return $q2->where('payment_method',3);
+        $transactions = Transaction::whereHas('user', function ($q1) {
+            $q1->whereHas('events', function ($q2) {
+                return $q2->where('payment_method', 3);
             });
         })->get();
 
-        foreach($transactions as $transaction){
-
+        foreach ($transactions as $transaction) {
             $eventId = $transaction->event->first()->id;
 
-            foreach($transaction->user as $user){
-                
-                foreach($user->events()->wherePivot('event_id',$eventId)->get() as $event){
-                    if($event->pivot->payment_method == 3){
-                            
+            foreach ($transaction->user as $user) {
+                foreach ($user->events()->wherePivot('event_id', $eventId)->get() as $event) {
+                    if ($event->pivot->payment_method == 3) {
                         $transaction->billing_details = $user->receipt_details;
                         $transaction->save();
-
-                        
-                        
                     }
                 }
-             
-
             }
-
         }
-        
+
         return 0;
     }
 }

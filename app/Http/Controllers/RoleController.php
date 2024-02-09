@@ -15,11 +15,12 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
+
 namespace App\Http\Controllers;
 
+use App\Http\Requests\RoleRequest;
 use App\Model\Role;
 use App\Model\User;
-use App\Http\Requests\RoleRequest;
 
 class RoleController extends Controller
 {
@@ -29,7 +30,7 @@ class RoleController extends Controller
     }
 
     /**
-     * Display a listing of the roles
+     * Display a listing of the roles.
      *
      * @param \App\Model\Role  $model
      * @return \Illuminate\View\View
@@ -42,7 +43,7 @@ class RoleController extends Controller
     }
 
     /**
-     * Show the form for creating a new role
+     * Show the form for creating a new role.
      *
      * @return \Illuminate\View\View
      */
@@ -52,7 +53,7 @@ class RoleController extends Controller
     }
 
     /**
-     * Store a newly created role in storage
+     * Store a newly created role in storage.
      *
      * @param  \App\Http\Requests\RoleRequest  $request
      * @param  \App\Model\Role  $model
@@ -66,7 +67,7 @@ class RoleController extends Controller
     }
 
     /**
-     * Show the form for editing the specified role
+     * Show the form for editing the specified role.
      *
      * @param  \App\Model\Role  $role
      * @return \Illuminate\View\View
@@ -77,7 +78,7 @@ class RoleController extends Controller
     }
 
     /**
-     * Update the specified role in storage
+     * Update the specified role in storage.
      *
      * @param  \App\Http\Requests\RoleRequest  $request
      * @param  \App\Model\Role  $role
@@ -107,7 +108,5 @@ class RoleController extends Controller
         $roles = Role::select('name')->get()->toArray();
 
         return $roles;
-
     }
-
 }

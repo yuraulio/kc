@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Model\Ticket;
 use App\Model\Event;
+use App\Model\Ticket;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -73,7 +73,7 @@ class TicketController extends Controller
             'options' => $options,
             'priority' => count($model->ticket) + 1,
             'public_title' => $ticket->public_title,
-            'seats_visible' => $request->seats_visible
+            'seats_visible' => $request->seats_visible,
         ]);
         //$ticket->features = $features;
         ////$ticket->public_title = $request->public_title;
@@ -82,13 +82,12 @@ class TicketController extends Controller
         //$ticket->quantity = $request->quantity;
         //$ticket->price = $request->price;
 
-       $ticket = $model->ticket()->wherePivot('ticket_id',$request->ticket_id)->first();
+        $ticket = $model->ticket()->wherePivot('ticket_id', $request->ticket_id)->first();
 
-       return response()->json([
+        return response()->json([
             'success' => __('Ticket successfully assigned.'),
             'ticket' => $ticket ? $ticket : false,
         ]);
-
     }
 
     public function remove_event(Request $request, Ticket $ticket)
@@ -98,22 +97,18 @@ class TicketController extends Controller
 
         $model->ticket()->wherePivot('event_id', '=', $request->model_id)->wherePivot('ticket_id', '=', $request->ticket_id)->detach($request->ticket_id);
 
-
         return response()->json([
             'success' => __('Ticket successfully removed.'),
-            'ticket_id' => $request->ticket_id
+            'ticket_id' => $request->ticket_id,
         ]);
     }
-
 
     public function store_main(Request $request, Ticket $model)
     {
         $ticket = $model->create($request->all());
 
         return redirect()->route('ticket.index')->withStatus(__('Ticket successfully created.'));
-
     }
-
 
     /**
      * Display the specified resource.
@@ -137,8 +132,6 @@ class TicketController extends Controller
         //dd($request->all());
         $event_id = $request->event_id;
         $event = Event::with('ticket')->find($event_id);
-
-
 
         $ticket = Ticket::with('events')->find($request->ticket_id);
         $event = $event->ticket()->wherePivot('ticket_id', $request->ticket_id)->first();
@@ -175,13 +168,13 @@ class TicketController extends Controller
 
         //dd($event->ticket()->wherePivot('event_id', '=', $request->model_id)->wherePivot('ticket_id', '=', $ticket_id)->get());
 
-        $event->ticket()->wherePivot('event_id', '=', $request->model_id)->wherePivot('ticket_id', '=', $ticket_id)->updateExistingPivot($ticket_id,[
+        $event->ticket()->wherePivot('event_id', '=', $request->model_id)->wherePivot('ticket_id', '=', $ticket_id)->updateExistingPivot($ticket_id, [
             'quantity' => $request->quantity,
             'price' => $request->price,
             'options' => $options,
             'features' => $features,
             'public_title' => $request->public_title,
-            'seats_visible' => $request->seats_visible == 'true' ? 1 : 0
+            'seats_visible' => $request->seats_visible == 'true' ? 1 : 0,
         ], false);
 
         $data['ticket_id'] = $ticket_id;
@@ -196,7 +189,6 @@ class TicketController extends Controller
             'success' => __('Ticket successfully updated.'),
             'data' => $data,
         ]);
-
     }
 
     public function update_main(Request $request, Ticket $ticket)
@@ -214,7 +206,6 @@ class TicketController extends Controller
      */
     public function destroy(Ticket $ticket)
     {
-
         $ticket->events()->detach();
 
         $ticket->delete();
@@ -228,14 +219,14 @@ class TicketController extends Controller
         $model = $model::with('ticket')->find($request->modelId);
         $data['tickets'] = Ticket::all();
 
-        foreach($model->ticket as $key => $ticket){
-            foreach($data['tickets'] as $key1 => $allTicket){
-                if($ticket['ticket_id'] == $allTicket['id']){
+        foreach ($model->ticket as $key => $ticket) {
+            foreach ($data['tickets'] as $key1 => $allTicket) {
+                if ($ticket['ticket_id'] == $allTicket['id']) {
                     unset($data['tickets'][$key1]);
                 }
             }
-
         }
+
         //dd($data['tickets']);
         return response()->json([
             'success' => __('Ticket successfully fetched.'),
@@ -252,43 +243,38 @@ class TicketController extends Controller
             'success' => __('Ticket by id successfully fetched.'),
             'data' => $data['tickets'],
         ]);
-
     }
 
-    public function sortTickets(Request $request, Event $event){
-
-        foreach($event->ticket as $ticket){
+    public function sortTickets(Request $request, Event $event)
+    {
+        foreach ($event->ticket as $ticket) {
             $ticket->pivot->priority = $request->all()['tickets'][$ticket['id']];
             $ticket->pivot->save();
-
         }
-
     }
 
-    public function enableDisable(Event $event, $ticket, $active){
-
+    public function enableDisable(Event $event, $ticket, $active)
+    {
         //$event->ticket()->wherePivot('ticket_id',$ticket)->first()->active = $active;
         //$event->ticket()->wherePivot('ticket_id',$ticket)->first()->save();
 
-        $event->ticket()->wherePivot('ticket_id',$ticket)->updateExistingPivot($ticket,[
-            'active' => $active
+        $event->ticket()->wherePivot('ticket_id', $ticket)->updateExistingPivot($ticket, [
+            'active' => $active,
         ], false);
 
-        if($active == 1){
+        if ($active == 1) {
             return response()->json([
                 'active' => 0,
                 'text' => 'Disable',
-                'ticket' => $ticket
+                'ticket' => $ticket,
             ]);
-        }else{
+        } else {
             return response()->json([
                 'active' => 1,
                 'text' => 'Enable',
-                'ticket' => $ticket
+                'ticket' => $ticket,
 
             ]);
         }
-
     }
-
 }

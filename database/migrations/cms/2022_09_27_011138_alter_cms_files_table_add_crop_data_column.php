@@ -14,7 +14,7 @@ class AlterCmsFilesTableAddCropDataColumn extends Migration
     public function up()
     {
         Schema::table('cms_files', function (Blueprint $table) {
-            $table->text("crop_data")->nullable();
+            $table->text('crop_data')->nullable();
         });
     }
 

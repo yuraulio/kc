@@ -2,9 +2,9 @@
 
 namespace App\Model;
 
+use App\Model\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Model\User;
 
 class ExamSyncData extends Model
 {
@@ -26,6 +26,4 @@ class ExamSyncData extends Model
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
-
-
 }
