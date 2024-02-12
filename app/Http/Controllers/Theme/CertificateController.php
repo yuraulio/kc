@@ -255,7 +255,7 @@ class CertificateController extends Controller
         return response()->json([
             'success' => true,
             'path' => 'mycertificateview/' . $name . '.jpg',
-            'certificate' => $certificate
+            'certificate' => $certificate,
 
         ]);
 
