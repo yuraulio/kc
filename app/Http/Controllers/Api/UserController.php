@@ -12,6 +12,7 @@ use App\Http\Requests\UserRequest;
 use App\Model\Activation;
 use App\Model\Instructor;
 use App\Model\Media;
+use App\Model\Role;
 use App\Model\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
@@ -979,12 +980,24 @@ class UserController extends Controller
                 ->all()
         );
 
+        // Upload the user image.
         $user->createMedia();
         if ($request->hasFile('photo')) {
             (new MediaController)->uploadProfileImage($request, $user->image);
         }
 
-        $user->role()->attach($request->role_id);
+        // Attach user roles for the just-created user.
+        if ($request->has('roles')) {
+            $user->role()->attach($request->roles);
+        } else {
+            $studentRole = Role::where('name', 'LIKE', '% student')->first();
+
+            if ($studentRole) {
+                $user->role()->attach($studentRole->id);
+            }
+        }
+
+        // Add the account status for the just-created user.
         $user->statusAccount()
             ->create([
                 'completed' => false,
