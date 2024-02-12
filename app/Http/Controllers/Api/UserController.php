@@ -1004,7 +1004,7 @@ class UserController extends Controller
      */
     public function updateProfile(Request $request)
     {
-        if($request->password == $request->confirm_password){
+        if ($request->password == $request->confirm_password) {
             $hasPassword = $request->get('password');
         } else {
             return response()->json([
@@ -1048,7 +1048,6 @@ class UserController extends Controller
             (new MediaController)->uploadProfileImage($request, $user1->image);
         }
 
-
         $request->request->remove('billname');
         $request->request->remove('billafm');
         $request->request->remove('billaddress');
@@ -1065,7 +1064,6 @@ class UserController extends Controller
                 'receipt_details' => json_encode($receiptDetails),
             ])->except([$hasPassword ? '' : 'password', 'picture', 'photo', 'confirm_password'])
         );
-
 
         $updated_user = User::with('image')->find($user1->id);
 
