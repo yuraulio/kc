@@ -59,6 +59,7 @@ Route::get('/debug-infinite-loop/{seconds}', function ($seconds) {
 //Route::get('dashboard', 'HomeController@index')->name('home');
 Route::get('pricing', 'PageController@pricing')->name('page.pricing');
 Route::get('lock', 'PageController@lock')->name('page.lock');
+Route::get('mycertificateview/share/facebook/{certificate}/{image}', 'Theme\CertificateController@share_facebook')->name('certificate.image');
 Route::get('mycertificateview/{id}/{title}', 'Theme\CertificateController@view_results')->name('certificate.results');
 
 Route::group(['middleware' => 'auth.aboveauthor', 'prefix' => 'admin1'], function () {
