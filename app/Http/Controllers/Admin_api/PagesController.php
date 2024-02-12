@@ -115,6 +115,10 @@ class PagesController extends Controller
             $page->type_slug = Str::slug((gettype($request->type) == 'string') ? $request->type : $request->type['title'], '-');
             $page->uuid = Uuid::uuid4();
 
+            if ($page->published) {
+                $page->published_at = now();
+            }
+
             if ($page->type_slug === 'blog') {
                 $priority = Page::where('type_slug', $page->type_slug)
                     ->orderBy('priority', 'desc')
@@ -179,11 +183,16 @@ class PagesController extends Controller
             $this->authorize('update', $page, Auth::user());
 
             $old_slug = $page->slug;
+            $isPublished = $request->published;
+
+            if ($page->published !== $isPublished) {
+                $page->published_at = $isPublished ? now() : null;
+            }
 
             $page->title = $request->title;
             $page->template_id = $request->template_id;
             $page->content = $request->content;
-            $page->published = $request->published;
+            $page->published = $isPublished;
             $page->indexed = $request->indexed;
             $page->dynamic = $request->dynamic;
             $page->published_from = $request->published_from;

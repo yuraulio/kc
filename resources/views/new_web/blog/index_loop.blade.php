@@ -47,13 +47,19 @@
             </div>
         </div>
         <div class="bottom">
-            <div class="duration">
-                @forelse($post->subcategories as $category)
-                    <a class="me-2" href="{{env("NEW_PAGES_LINK") . "/$source?c=$category->id"}}">{{ $category->title }}</a>
-                @empty
-                    Uncategorized
-                @endforelse
-                | {{date('d M Y ', strtotime($post->created_at))}}
+            <div class="d-block">
+              @forelse($post->subcategories as $category)
+              <a class="me-2" href="{{env("NEW_PAGES_LINK") . "/$source?c=$category->id"}}">{{ $category->title }}</a>
+              @empty
+              Uncategorized
+              @endforelse
+            </div>
+            <div class="duration d-block">
+              @if(Carbon::parse($post->published_at)->add(1, 'minutes')->gte(Carbon::parse($post->updated_at)))
+                Published: {{ Carbon::parse($post->published_at)->format('d M Y') }}
+              @else
+                Last updated: {{ Carbon::parse($post->updated_at)->format('d M Y') }}
+              @endif
             </div>
         </div>
         <div class="blog-list-title">

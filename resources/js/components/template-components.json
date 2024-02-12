@@ -974,6 +974,18 @@
         "simple_view": true,
         "inputs": []
     },
+    "publish_date_line": {
+        "version": 1,
+        "title": "Publish Date line",
+        "width": "content",
+        "icon": "dripicons-calendar",
+        "key": "publish_date_line_component",
+        "tab": "Content",
+        "mobile": true,
+        "simple_view": true,
+        "one_column": true,
+        "inputs": []
+    },
     "post_feature": {
         "version": 3,
         "title": "Blog post list item",
