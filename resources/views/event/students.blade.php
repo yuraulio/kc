@@ -32,7 +32,7 @@
                 <th scope="col">{{ __('Status')}}</th>
                 @endif
                 <th scope="col">{{ __('Last seen')}}</th>
-
+                <th scope="col">&nbsp;</th>
             </tr>
         </thead>
         <tbody>
@@ -97,6 +97,23 @@
                             @break
                         @endif
                     @endforeach
+                    </td>
+                    <td>
+                      <div class="dropdown">
+                        <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          <i class="fas fa-ellipsis-v"></i>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+
+                          <form action="{{ route('user.login_as', $user->id) }}" method="post">
+                            {{ csrf_field() }}
+                            <button type="button" class="dropdown-item login-as-btn">
+                              Login as
+                            </button>
+                          </form>
+
+                        </div>
+                      </div>
                     </td>
                 </tr>
             @endforeach
@@ -194,6 +211,9 @@
                 });
             });
 
+          $(document).on('click', '.login-as-btn', e => {
+            confirm('Are you sure you want to login as this user?') ? $(e.currentTarget).parent().submit() : '';
+          });
         } );
     </script>
 
