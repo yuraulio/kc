@@ -1,0 +1,34 @@
+{
+  "name": "msonowal/laravel-tinify",
+  "type": "library",
+  "description": "Laravel Facade for tinify API",
+  "keywords": ["tinify","tinypng"],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Manash Jyoti Sonowal",
+      "email": "manash149@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=7.4",
+    "illuminate/support": "^8.0|^9.0|^10.0",
+    "tinify/tinify":"~1.5"
+  },
+  "autoload": {
+    "psr-4": {
+      "msonowal\\LaravelTinify\\": "src"
+    }
+  },
+  "minimum-stability": "stable",
+  "extra": {
+      "laravel": {
+          "providers": [
+              "msonowal\\LaravelTinify\\LaravelTinifyServiceProvider"
+          ],
+          "aliases": {
+              "Tinify": "msonowal\\LaravelTinify\\Facades\\Tinify"
+          }
+      }
+    }
+}

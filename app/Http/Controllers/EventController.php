@@ -32,8 +32,8 @@ use Excel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Intervention\Image\ImageManagerStatic as Image;
-use Storage;
 
 class EventController extends Controller
 {
@@ -507,9 +507,10 @@ class EventController extends Controller
         }
 
         $data['folders'] = [];
+        /** @type \League\Flysystem\Filesystem $li */
         $li = Storage::disk('dropbox');
         if($li) {
-            $folders = $li->listContents();
+            $folders = $li->listContents('/');
 
             foreach ($folders as $key => $row) {
                 if($row['type'] == 'dir') :
