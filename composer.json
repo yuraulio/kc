@@ -18,13 +18,6 @@
             "options": {
                 "symlink": true
             }
-        },
-        {
-            "type": "path",
-            "url": "./local_packages/laravel-tinify",
-            "options": {
-                "symlink": true
-            }
         }
     ],
     "require": {
@@ -56,7 +49,6 @@
         "league/oauth2-client": "^2.7",
         "maatwebsite/excel": "*",
         "mikehaertl/php-pdftk": "^0.12.1",
-        "msonowal/laravel-tinify": "@dev",
         "org_heigl/ghostscript": "^2.3",
         "owen-it/laravel-auditing": "^13.6",
         "phpoffice/phpspreadsheet": "^1.29",
@@ -66,7 +58,6 @@
         "stripe/stripe-php": "^7.128",
         "symfony/http-client": "^6.2",
         "teamtnt/laravel-scout-tntsearch-driver": "^12.5",
-        "tinify/tinify": "^1.6",
         "vemcogroup/laravel-sparkpost-driver": "^5.0",
         "vimeo/vimeo-api": "^3.0",
         "watson/sitemap": "^5.1",

@@ -201,7 +201,6 @@ return [
 
         OwenIt\Auditing\AuditingServiceProvider::class,
 
-        msonowal\LaravelTinify\LaravelTinifyServiceProvider::class,
         Yajra\DataTables\DataTablesServiceProvider::class,
     ],
 
@@ -259,7 +258,6 @@ return [
         'PDF' => Barryvdh\DomPDF\Facade::class,
         'Sitemap'   => Watson\Sitemap\Facades\Sitemap::class,
 
-        'Tinify' => msonowal\LaravelTinify\Facades\Tinify::class,
         'DataTables' => Yajra\DataTables\Facades\DataTables::class,
 
         'Bugsnag' => Bugsnag\BugsnagLaravel\Facades\Bugsnag::class,
