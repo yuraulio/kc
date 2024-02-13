@@ -513,7 +513,7 @@ class EventController extends Controller
             $folders = $li->listContents('/');
 
             foreach ($folders as $key => $row) {
-                if($row['type'] == 'dir') :
+                if($row['type'] == 'dir' && isset($row['basename'])) :
                     $data['folders'][$row['basename']] = $row['basename'];
                 endif;
             }
