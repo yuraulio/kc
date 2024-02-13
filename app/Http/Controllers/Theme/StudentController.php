@@ -1147,10 +1147,10 @@ class StudentController extends Controller
                 }
             }
 
+            // Calc the total seen
+            $total_seen = 0;
+            $total_duration = 0;
             try{
-                // Calc the total seen
-                $total_seen = 0;
-                $total_duration = 0;
                 foreach($videos as $video){
                     $total_seen     += (float)$video['total_seen'];
                     $total_duration += (float)$video['total_duration'];
@@ -1178,6 +1178,8 @@ class StudentController extends Controller
             $user->statistic()->wherePivot('event_id', $request->event)->updateExistingPivot($request->event, [
                 'lastVideoSeen' => $request->lastVideoSeen,
                 'videos' => json_encode($videos),
+                'total_seen' => $total_seen,
+                'total_duration' => $total_duration
             ], false);
 
             /*if($user->events()->where('event_id',2068)->first() && $user->events()->where('event_id',2068)->first() &&
