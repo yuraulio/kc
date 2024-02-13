@@ -1157,6 +1157,8 @@ class StudentController extends Controller
                 }
                 $past_total_duration = (float)$user->statistic()->wherePivot('event_id', $request->event)->first()->pivot['total_duration'];
                 $past_total_seen     = (float)$user->statistic()->wherePivot('event_id', $request->event)->first()->pivot['total_seen'];
+                Log::channel('daily')->warning('past_total_duration'. $past_total_duration);
+                Log::channel('daily')->warning('past_total_seen'. $past_total_duration);
                 if($total_duration == $past_total_duration){
                     if($total_seen < $past_total_seen){
                         // Here we have a problem. Create Slack alert.
@@ -1172,7 +1174,7 @@ class StudentController extends Controller
                     }
                 }
             }catch(\Exception $e){
-
+                $user->notify(new ErrorSlack($e));
             }
 
             $user->statistic()->wherePivot('event_id', $request->event)->updateExistingPivot($request->event, [
