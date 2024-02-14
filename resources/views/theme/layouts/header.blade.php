@@ -1,9 +1,7 @@
 {{-- Navigation {{ !Request::is('/') ? "top-nav-collapse short" : "" }}--}}
 <header id="header">
   <div class="container clearfix">
-    <div class="logo-area">
-      <a href="/" class="logo">Know Crunch</a>
-    </div>
+    @include('layouts.headers.logo')
     <div class="menu-area xs-flex">
 
       <?php $cartitems = Cart::content()->count(); ?>

@@ -481,3 +481,5 @@ footer {
   font-size: .8rem;
   letter-spacing: .04em;
 }
+
+#header h1.logo-area{ padding-bottom: 0px; }
