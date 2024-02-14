@@ -950,7 +950,7 @@ class UserController extends Controller
      */
     public function show(User $user): JsonResponse
     {
-        $user->load('image', 'invoices', 'transactions', 'statusAccount');
+        $user->load('image', 'invoices', 'transactions', 'statusAccount', 'role');
 
         $user['profileImage'] = get_profile_image($user->image);
         unset($user['image']);
