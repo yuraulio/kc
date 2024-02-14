@@ -366,7 +366,7 @@ $(document).on('click', '.close-btn', function(e){
             self.next('.tab-controls-list').slideToggle(300);
 
             $(target).addClass('active-tab');
-            $this.addClass('active');
+            $(this).addClass('active');
         }
   </script>
 

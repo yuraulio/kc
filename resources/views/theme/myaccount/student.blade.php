@@ -1855,7 +1855,9 @@
 
 
     {{--@if($user->id == 1359)--}}
+    console.log(1);
     $(document).on('click', '.facebook-post-cert', function() {
+        console.log('click');
         var getUrl = window.location;
         var baseUrl = getUrl .protocol + "//" + getUrl.host;
         var certificateId = $(this).attr('data-certid');
@@ -1869,10 +1871,13 @@
             url: "/mycertificate/convert-pdf-to-image/"+certificateId,
             success: function(data) {
                 let url = data.path
+                console.log('url', url);
 
                 data = url.replace('\\','/')
+                console.log('data', data);
                 if(data){
-                  let link = `${decodeURI('{{ config('app.url') }}/mycertificateview/share/facebook/' + certificateId + '/' + data.split('mycertificateview/')[1])}`;
+                  let link = `${decodeURI('{{ config('app.url') }}/mycertificateview/share/facebook/' + certificateId + '/' + data.split('/')[1])}`;
+                  console.log('link', link);
 
                   var fbpopup = window.open(`http://www.facebook.com/sharer.php?u=${link}/${decodeURI(certificateTitle)}`, "pop", "width=600, height=400, scrollbars=no");
                   return false;
