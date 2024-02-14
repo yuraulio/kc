@@ -2590,8 +2590,26 @@ class CartController extends Controller
             }
         }
 
+        $data = $request->only([
+            'firstname', 'lastname', 'email', 'mobile', 'country_code', 'city',
+            'jobtitle', 'company', 'student_type_id',
+        ]);
+
+        Session::put('pay_seats_data', [
+            'names' => $data['firstname'] ?? [],
+            'surnames' => $data['lastname'] ?? [],
+            'emails' => $data['email'] ?? [],
+            'mobiles' => $data['mobile'] ?? [],
+            'countryCodes' =>  $data['country_code'] ?? [],
+            'cities' => $data['city'] ?? [],
+            'jobtitles' => $data['jobtitle'] ?? [],
+            'companies' => $data['company'] ?? [],
+            'student_type_id' => $data['student_type_id'] ?? [],
+        ]);
+
         //Cart::update();
-        return Redirect::to('/registration')->with('success', 'Shopping cart was successfully updated.');
+        return Redirect::to('/registration')
+            ->with('success', 'Shopping cart was successfully updated.');
         /*return redirect()->route('cart')->with('success', 'Shopping cart was successfully updated.');*/
     }
 

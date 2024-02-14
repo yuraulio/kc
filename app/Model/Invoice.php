@@ -420,65 +420,72 @@ class Invoice extends Model
 
         if (isset($billing['billaddress'])) {
             $billInfo .= $billing['billaddress'];
-        }else{
-            if(isset($receipt_details->billaddress))
+        } else {
+            if (isset($receipt_details->billaddress)) {
                 $billInfo .= $receipt_details->billaddress;
-            else if(isset($invoice_details->billaddress))
+            } elseif (isset($invoice_details->billaddress)) {
                 $billInfo .= $invoice_details->billaddress;
+            }
         }
 
         if (isset($billing['billaddressnum'])) {
             $billInfo .= ' ' . $billing['billaddressnum'];
-        }else{
-            if(isset($receipt_details->billaddressnum))
+        } else {
+            if (isset($receipt_details->billaddressnum)) {
                 $billInfo .= $receipt_details->billaddressnum;
-            else if(isset($invoice_details->billaddressnum))
+            } elseif (isset($invoice_details->billaddressnum)) {
                 $billInfo .= $invoice_details->billaddressnum;
+            }
         }
 
         if (isset($billing['billpostcode'])) {
             $billInfo .= ' ' . $billing['billpostcode'];
-        }else{
-            if(isset($receipt_details->billpostcode))
+        } else {
+            if (isset($receipt_details->billpostcode)) {
                 $billInfo .= ' ' . $receipt_details->billpostcode;
-            else if(isset($invoice_details->billpostcode))
+            } elseif (isset($invoice_details->billpostcode)) {
                 $billInfo .= ' ' . $invoice_details->billpostcode;
+            }
         }
 
         if (isset($billing['billcity'])) {
             $billInfo .= ' ' . $billing['billcity'];
-        }else{
-            if(isset($receipt_details->billcity))
+        } else {
+            if (isset($receipt_details->billcity)) {
                 $billInfo .= ' ' . $receipt_details->billcity;
-            else if(isset($invoice_details->billcity))
+            } elseif (isset($invoice_details->billcity)) {
                 $billInfo .= ' ' . $invoice_details->billcity;
+            }
         }
 
         if (isset($billing['billstate'])) {
             $billState .= ' ' . $billing['billstate'];
-        }else{
-            if(isset($receipt_details->billstate))
+        } else {
+            if (isset($receipt_details->billstate)) {
                 $billState .= ' ' . $receipt_details->billstate;
-            else if(isset($invoice_details->billstate))
+            } elseif (isset($invoice_details->billstate)) {
                 $billState .= ' ' . $invoice_details->billstate;
+            }
         }
 
         if (isset($billing['billcountry'])) {
             $billState .= ' ' . $billing['billcountry'];
-        }else{
-            if(isset($receipt_details->billcountry))
+        } else {
+            if (isset($receipt_details->billcountry)) {
                 $billState .= ' ' . $receipt_details->billcountry;
-            else if(isset($invoice_details->billcountry))
+            } elseif (isset($invoice_details->billcountry)) {
                 $billState .= ' ' . $invoice_details->billcountry;
+            }
         }
 
         if (isset($billing['billafm'])) {
             $billafm = $billing['billafm'];
-        }else{
-            if(isset($receipt_details->billafm))
+        } else {
+            if (isset($receipt_details->billafm)) {
                 $billafm .= $receipt_details->billafm;
-            else if(isset($invoice_details->billafm))
+            } elseif (isset($invoice_details->billafm)) {
                 $billafm .= $invoice_details->billafm;
+            }
         }
 
         if ($this->amount - floor($this->amount) > 0) {
