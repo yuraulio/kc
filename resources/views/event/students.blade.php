@@ -39,7 +39,7 @@
         <?php //dd($allTopicsByCategory);
         $i=0; ?>
             @php
-            $statistics = Illuminate\Support\Facades\DB::table('event_statistics')->select('user_id','updated_at')->where('event_id', $event->id)->get();
+            $statistics = Illuminate\Support\Facades\DB::table('event_statistics')->select('user_id','updated_at','last_seen')->where('event_id', $event->id)->get();
             @endphp
             @foreach ($eventUsers as $user)
 
@@ -93,7 +93,7 @@
                     <td>
                     @foreach($statistics as $stat)
                         @if($stat->user_id == $user->id)
-                            <span style="color: transparent; font-size:1px">{{ date('Ymd', strtotime($stat->updated_at)) }}</span><span>{{ date('d/m/Y', strtotime($stat->updated_at)) }}</span>
+                            <span style="color: transparent; font-size:1px">{{ date('Ymd', strtotime($stat->last_seen)) }}</span><span>{{ date('d/m/Y', strtotime($stat->last_seen)) }}</span>
                             @break
                         @endif
                     @endforeach

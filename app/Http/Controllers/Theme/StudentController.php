@@ -1181,6 +1181,7 @@ class StudentController extends Controller
                 'videos' => json_encode($videos),
                 'total_seen' => $total_seen,
                 'total_duration' => $total_duration,
+                'last_seen' => date('Y-m-d H:i:s'),
             ], false);
 
             /*if($user->events()->where('event_id',2068)->first() && $user->events()->where('event_id',2068)->first() &&
