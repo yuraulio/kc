@@ -127,7 +127,7 @@ class CategoryController extends Controller
             //$data['folders'][0] = 'Select Dropbox Folder';
             foreach ($folders as $key => $row) {
                 //dd($row);
-                if($row['type'] == 'dir') :
+                if($row['type'] == 'dir' && isset($row['basename'])) :
                     $data['folders'][$row['basename']] = $row['basename'];
                 endif;
             }

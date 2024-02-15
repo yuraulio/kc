@@ -510,18 +510,15 @@ class EventController extends Controller
         /** @type \League\Flysystem\Filesystem $li */
         $li = Storage::disk('dropbox');
         if($li) {
-            $folders = $li->listContents('/');
-
-            foreach ($folders as $key => $row) {
-                if($row['type'] == 'dir' && isset($row['basename'])) :
-                    $data['folders'][$row['basename']] = $row['basename'];
-                endif;
-            }
-
             $data['already_assign'] = $event->dropbox;
         }
 
         $dropbox = Dropbox::all()->toArray();
+        $dropbox = array_filter($dropbox, function($folder){
+            if(!$folder['folders'])
+                return false;
+            return true;
+        });
 
         $data['dropbox'] = json_encode($dropbox);
 
