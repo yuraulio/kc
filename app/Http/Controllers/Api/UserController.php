@@ -988,7 +988,7 @@ class UserController extends Controller
 
         // Attach user roles for the just-created user.
         if ($request->has('roles')) {
-            $user->role()->attach($request->roles);
+            $user->role()->attach(explode(',', $request->roles));
         } else {
             $studentRole = Role::where('name', 'LIKE', '% student')->first();
 
