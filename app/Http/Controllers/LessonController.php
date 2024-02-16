@@ -331,7 +331,7 @@ class LessonController extends Controller
             $vimeoVideo = explode('/', $lesson->vimeo_video);
             $duration = 0;
 
-            $client = new Vimeo(env('client_id'), env('client_secret'), env('vimeo_token'));
+            $client = new Vimeo(config('app.vimeo_client_id'), config('app.vimeo_client_secret'), config('app.vimeo_token'));
             $response = $client->request('/videos/' . end($vimeoVideo) . '/?password=' . env('video_password'), [], 'GET');
 
             if ($response['status'] === 200) {
