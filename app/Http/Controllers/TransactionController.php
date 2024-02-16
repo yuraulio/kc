@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\TransactionExport;
+use App\Helpers\EventHelper;
 use App\Model\Event;
 use App\Model\PaymentMethod;
 use App\Model\Transaction;
@@ -212,7 +213,9 @@ class TransactionController extends Controller
                             'event_id' => $transaction->event[0]['id'], 'event_title' => $transaction->event[0]['title'] . ' / ' . date('d-m-Y', strtotime($transaction->event[0]['published_at'])), 'coupon_code' => $coupon_code, 'type' => trim($ticketType), 'ticketName' => $ticketName,
                             'date' => date_format($transaction['created_at'], 'Y-m-d'), 'amount' => $amount,
                             'is_elearning' => $isElearning,
-                            'coupon_code' => $transaction['coupon_code'], 'videos_seen' => $this->getVideosSeen($videos), 'expiration'=>$expiration,
+                            'coupon_code' => $transaction['coupon_code'],
+                            'videos_seen' => $this->getVideosSeen($videos),
+                            'expiration'=>$expiration,
                             'paymentMethod' => $paymentMethod,
                             'city' => $city,
                             'category' => isset($transaction->event[0]['category'][0]['name']) ? $transaction->event[0]['category'][0]['name'] : ''];
@@ -493,7 +496,7 @@ class TransactionController extends Controller
 
     public function participants_inside_revenue()
     {
-        $this->authorize('view', User::class, Transaction::class);
+        $this->authorize('view', [User::class, Transaction::class]);
         $data = $this->participants();
 
         return view('admin.transaction.participants', $data);
@@ -549,18 +552,7 @@ class TransactionController extends Controller
 
     public function getVideosSeen($videos)
     {
-        if (!$videos) {
-            return' 0 of 0';
-        }
-
-        $sum = 0;
-        foreach ($videos as $video) {
-            if ($video['seen'] == 1 || $video['seen'] == '1') {
-                $sum++;
-            }
-        }
-
-        return $sum . ' of ' . count($videos);
+        return EventHelper::getVideosSeen($videos);
     }
 
     public function update(Request $request)

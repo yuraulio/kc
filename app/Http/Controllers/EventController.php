@@ -102,7 +102,7 @@ class EventController extends Controller
     public function fetchTopics(Request $request)
     {
         $topics = [];
-        foreach($request->topics_ids as $key => $topic) {
+        foreach ($request->topics_ids as $key => $topic) {
             //dd($topic);
             $topic1 = Topic::with('lessons', 'event_topic')->find($topic['value']);
             //dd($topic1);
@@ -125,24 +125,24 @@ class EventController extends Controller
         //foreach($allLessons->lessonsCategory as $key => $lesson)
         $dataLesson = $allLessons->lessonsCategory;
         $dataArr = [];
-        foreach($dataLesson as $les) {
+        foreach ($dataLesson as $les) {
             $dataArr[$les['id']] = $les;
         }
         //dd($dataLesson);
 
-        foreach($dataArr as $key => $lesson) {
+        foreach ($dataArr as $key => $lesson) {
             //dd($lesson);
             //dd($lesson);
             //var_dump($lesson['id']);
             $find = $event->topic_with_no_instructor()->wherePivot('topic_id', $request->topic_id)->wherePivot('lesson_id', $lesson['id'])->first();
 
-            if($find == null && $request->status1 == '0') {
+            if ($find == null && $request->status1 == '0') {
                 $a = $event->topic_with_no_instructor()->attach($request->topic_id, ['lesson_id' => $lesson['id'], 'priority' => $lesson->pivot->priority]);
             } else {
                 $topicLesson_for_detach = $event->topic_with_no_instructor()->detach($request->topic_id);
             }
         }
-        if($request->status1 == '1') {
+        if ($request->status1 == '1') {
             $status1 = '0';
         } else {
             $status1 = '1';
@@ -160,7 +160,7 @@ class EventController extends Controller
 
     public function assignCoupon(Request $request, Event $event, Coupon $coupon)
     {
-        if(!$request->status) {
+        if (!$request->status) {
             $event->coupons()->detach($coupon->id);
             $event->coupons()->attach($coupon->id);
         } else {
@@ -182,7 +182,7 @@ class EventController extends Controller
 
         $info = $event->event_info()->first();
 
-        if($info) {
+        if ($info) {
             $info->update([
                 'course_payment_method' => 'paid',
             ]);
@@ -203,12 +203,12 @@ class EventController extends Controller
             ]);
         }*/
 
-        if(count($event->paymentMethod()->get()) != 0) {
+        if (count($event->paymentMethod()->get()) != 0) {
             $event->paymentMethod()->detach();
 
             $info = $event->event_info()->first();
 
-            if($info) {
+            if ($info) {
                 $info->update([
                     'course_payment_method' => 'free',
                 ]);
@@ -263,7 +263,7 @@ class EventController extends Controller
      */
     public function store(EventRequest $request, Event $model)
     {
-        if($request->published == 'on') {
+        if ($request->published == 'on') {
             $published = 1;
             $published_at = date('Y-m-d');
         } else {
@@ -287,7 +287,7 @@ class EventController extends Controller
             $event->createMedia($request->image_upload);
         }*/
         $event->createMedia();
-        if($request->syllabus) {
+        if ($request->syllabus) {
             $event->syllabus()->attach(['instructor_id' => $request->syllabus]);
         }
         //dd($request->all());
@@ -295,20 +295,20 @@ class EventController extends Controller
         $event->createSlug($request->slug ? $request->slug : $request->title);
         $event->createMetas($request->all());
 
-        if($request->category_id != null) {
+        if ($request->category_id != null) {
             $category = Category::with('topics')->find($request->category_id);
 
             $event->category()->attach([$category->id]);
 
             //assign all topics with lesson
 
-            foreach($category->topics as $topic) {
+            foreach ($category->topics as $topic) {
                 //dd($topic);
                 //$lessons = Topic::with('lessons')->find($topic['id']);
                 //$lessons = $topic->lessonsCategory;
                 $lessons = $topic->lessonsCategory()->wherePivot('category_id', $category->id)->get();
 
-                foreach($lessons as $lesson) {
+                foreach ($lessons as $lesson) {
                     $event->topic()->attach($topic['id'], ['lesson_id' => $lesson['id'], 'priority'=>$lesson->pivot->priority]);
                 }
             }
@@ -317,42 +317,42 @@ class EventController extends Controller
         $event->city()->sync([$request->city_id]);
 
         $event->partners()->detach();
-        foreach((array) $request->partner_id as $partner_id) {
+        foreach ((array) $request->partner_id as $partner_id) {
             $event->partners()->attach($partner_id);
         }
 
-        if($request->type_id != null) {
+        if ($request->type_id != null) {
             //dd($request->type_id);
             $event->type()->sync($request->type_id);
         }
 
-        if($request->delivery != null) {
+        if ($request->delivery != null) {
             $event->delivery()->attach($request->delivery);
         }
 
         $priority = 0;
 
-        if($event->category()->first() != null) {
-            foreach($event->category->first()->faqs->unique() as $faq) {
+        if ($event->category()->first() != null) {
+            foreach ($event->category->first()->faqs->unique() as $faq) {
                 $event->faqs()->attach($faq, ['priority'=> $priority]);
                 $priority += 1;
             }
         }
 
-        if(isset($request->partner_enabled)) {
+        if (isset($request->partner_enabled)) {
             $partner = true;
         } else {
             $partner = false;
         }
 
         $selectedFiles = null;
-        if($request->selectedFiles != null) {
+        if ($request->selectedFiles != null) {
             $selectedFiles = json_decode($request->selectedFiles, true);
         }
 
-        if($selectedFiles != null && $selectedFiles['selectedDropbox'] != null) {
+        if ($selectedFiles != null && $selectedFiles['selectedDropbox'] != null) {
             $exist_dropbox = Dropbox::where('folder_name', $selectedFiles['selectedDropbox'])->first();
-            if($exist_dropbox) {
+            if ($exist_dropbox) {
                 unset($selectedFiles['selectedDropbox']);
                 $event->dropbox()->sync([$exist_dropbox->id => ['selectedFolders' => json_encode($selectedFiles)]]);
             }
@@ -406,7 +406,7 @@ class EventController extends Controller
         $types = Type::all();
         $partners = Partner::all();
 
-        if($event->category->first() != null) {
+        if ($event->category->first() != null) {
             $allTopicsByCategory = Category::with('topics')->find($event->category->first()->id);
         } else {
             $allTopicsByCategory = Category::with('topics')->first();
@@ -425,21 +425,21 @@ class EventController extends Controller
         //dd($allTopicsByCategory->topics[1]);
         //dd($allTopicsByCategory1);
 
-        foreach($allTopicsByCategory->topics as $key => $allTopics) {
+        foreach ($allTopicsByCategory->topics as $key => $allTopics) {
             $found = false;
-            foreach($allTopicsByCategory1 as $key1 => $assig) {
+            foreach ($allTopicsByCategory1 as $key1 => $assig) {
                 //dd($assig);
-                if($allTopics['id'] == $key1) {
+                if ($allTopics['id'] == $key1) {
                     $found = true;
                 }
             }
-            if(!$found) {
+            if (!$found) {
                 $unassigned[$allTopics['id']] = $allTopics;
 
                 $lessons = Topic::with('lessonsCategory')->find($allTopics['id'])->lessonsCategory;
                 $newArrLessons = [];
 
-                foreach($lessons as $lesson) {
+                foreach ($lessons as $lesson) {
                     $newArrLessons[$lesson->id] = $lesson;
                 }
 
@@ -485,8 +485,8 @@ class EventController extends Controller
         //if elearning course (id = 143)
         $elearning_events_new = Delivery::with('event:id,title,published')->where('id', 143)->first()->toArray()['event'];
 
-        foreach($elearning_events_new as $ev) {
-            if($ev['published'] == 1) {
+        foreach ($elearning_events_new as $ev) {
+            if ($ev['published'] == 1) {
                 $elearning_events[] = $ev;
             }
         }
@@ -494,13 +494,13 @@ class EventController extends Controller
         $data['elearning_events'] = $elearning_events;
 
         $today = strtotime(date('Y-m-d'));
-        if(!$data['isInclassCourse']) {
-            foreach($data['eventUsers'] as $key => $activeUser) {
-                if(!$activeUser['pivot']['expiration'] || $today <= strtotime($activeUser['pivot']['expiration'])) {
+        if (!$data['isInclassCourse']) {
+            foreach ($data['eventUsers'] as $key => $activeUser) {
+                if (!$activeUser['pivot']['expiration'] || $today <= strtotime($activeUser['pivot']['expiration'])) {
                     $data['activeMembers'] += 1;
                 }
 
-                if(str_contains($activeUser->pivot['comment'], 'enroll from')) {
+                if (str_contains($activeUser->pivot['comment'], 'enroll from')) {
                     unset($data['eventUsers'][$key]);
                 }
             }
@@ -509,14 +509,16 @@ class EventController extends Controller
         $data['folders'] = [];
         /** @type \League\Flysystem\Filesystem $li */
         $li = Storage::disk('dropbox');
-        if($li) {
+        if ($li) {
             $data['already_assign'] = $event->dropbox;
         }
 
         $dropbox = Dropbox::all()->toArray();
-        $dropbox = array_filter($dropbox, function($folder){
-            if(!$folder['folders'])
+        $dropbox = array_filter($dropbox, function ($folder) {
+            if (!$folder['folders']) {
                 return false;
+            }
+
             return true;
         });
 
@@ -553,7 +555,7 @@ class EventController extends Controller
         $cUsers = 0;
         $eventTickets = [];
 
-        foreach($event->ticket as $ticket) {
+        foreach ($event->ticket as $ticket) {
             $eventTickets[$ticket->id] = $ticket['pivot']['price'] != null ? $ticket['pivot']['price'] : 0;
         }
 
@@ -587,14 +589,14 @@ class EventController extends Controller
         $countActive['fromInclass'] = 0;
 
         //calculate active users
-        foreach($event_users as $event_user) {
-            if($event_user->pivot->expiration && $event_user->pivot->paid == '1') {
+        foreach ($event_users as $event_user) {
+            if ($event_user->pivot->expiration && $event_user->pivot->paid == '1') {
                 $expiration_event = strtotime($event_user->pivot->expiration);
                 $now = strtotime(date('Y-m-d'));
 
-                if($event_user->pivot->paid == 1 && $expiration_event >= $now && ($event_user->pivot->comment == null || $event_user->pivot->comment == '' || $event_user->pivot->comment == ' ')) {
+                if ($event_user->pivot->paid == 1 && $expiration_event >= $now && ($event_user->pivot->comment == null || $event_user->pivot->comment == '' || $event_user->pivot->comment == ' ')) {
                     $countActive['fromElearning'] = $countActive['fromElearning'] + 1;
-                } elseif($event_user->pivot->paid == 1 && $expiration_event >= $now && $event_user->pivot->comment != null && str_contains($event_user->pivot->comment, 'enroll from')) {
+                } elseif ($event_user->pivot->paid == 1 && $expiration_event >= $now && $event_user->pivot->comment != null && str_contains($event_user->pivot->comment, 'enroll from')) {
                     $countActive['fromInclass'] = $countActive['fromInclass'] + 1;
                 }
             }
@@ -605,34 +607,34 @@ class EventController extends Controller
         //dd($event->transactions);
         $countUsersU = [];
         $countUsersWithoutEnrollForFree = [];
-        foreach($event->transactions as $transaction) {
+        foreach ($event->transactions as $transaction) {
             //$amount += $transaction->amount;
 
             //dd($transaction->user);
             $users = $transaction->user;
 
-            foreach($users as $user) {
+            foreach ($users as $user) {
                 $countUsersU[] = $user->id;
 
                 $enrollfromOtherEventPivot = $user->events_for_user_list1()->wherePivot('event_id', $event->id)->first();
                 $a = false;
 
-                if($enrollfromOtherEventPivot && !str_contains($enrollfromOtherEventPivot->pivot->comment, 'enroll from')) {
+                if ($enrollfromOtherEventPivot && !str_contains($enrollfromOtherEventPivot->pivot->comment, 'enroll from')) {
                     $countUsersWithoutEnrollForFree[] = $user->id;
                 } else {
                     $a = true;
                 }
 
-                if($a == false) {
+                if ($a == false) {
                     $tickets = $user['ticket']->groupBy('event_id');
                     $ticketType = isset($tickets[$event->id]) ? $tickets[$event->id]->first()->type : '-';
 
                     $isSubscription = $transaction->isSubscription()->first();
 
-                    if(isset($tickets[$event->id]) && !$isSubscription) {
+                    if (isset($tickets[$event->id]) && !$isSubscription) {
                         $ticketType = $tickets[$event->id]->first()->type;
                         $ticketName = $tickets[$event->id]->first()->title;
-                    } elseif($isSubscription) {
+                    } elseif ($isSubscription) {
                         $ticketType = '-';
                         $ticketName = '-';
                     } else {
@@ -644,61 +646,61 @@ class EventController extends Controller
 
                     $amount = $transaction['amount'] != null ? round($transaction['amount'] / $countUsers) : 0;
 
-                    if($isSubscription != null) {
-                        if($filters != null && $filters['calculateSubscription']) {
+                    if ($isSubscription != null) {
+                        if ($filters != null && $filters['calculateSubscription']) {
                             $income['subscription'] += $amount;
                             $incomeInstalments['subscription'] += $amount;
-                        } elseif($filters == null) {
+                        } elseif ($filters == null) {
                             $income['subscription'] += $amount;
                             $incomeInstalments['subscription'] += $amount;
                         }
                     }
 
-                    if($ticketType == 'Special') {
+                    if ($ticketType == 'Special') {
                         //$arr_income[$transaction->id] = $transaction->amount;
 
                         $count['special']++;
                         $income['special'] += ($amount);
-                    } elseif($ticketType == 'Early Bird') {
+                    } elseif ($ticketType == 'Early Bird') {
                         $count['early']++;
 
                         $income['early'] += ($amount);
-                    } elseif($ticketType == 'Regular') {
+                    } elseif ($ticketType == 'Regular') {
                         $count['regular']++;
 
                         $income['regular'] += ($amount);
-                    } elseif($ticketType == 'Sponsored') {
+                    } elseif ($ticketType == 'Sponsored') {
                         $count['free']++;
-                    } elseif($ticketType == 'Alumni') {
+                    } elseif ($ticketType == 'Alumni') {
                         $count['alumni']++;
                         $income['alumni'] += ($amount);
                     } else {
                         $income['other'] += ($amount);
                     }
 
-                    if($from_controller == null) {
-                        if(count($transaction['invoice']) > 0) {
-                            foreach($transaction['invoice'] as $invoice) {
-                                if($invoice['amount'] != null) {
+                    if ($from_controller == null) {
+                        if (count($transaction['invoice']) > 0) {
+                            foreach ($transaction['invoice'] as $invoice) {
+                                if ($invoice['amount'] != null) {
                                     //dd($transaction);
                                     $amount = $invoice['amount'] / $countUsers;
                                 }
 
-                                if($ticketType == 'Special') {
+                                if ($ticketType == 'Special') {
                                     //$arr[$transaction->id][$invoice->id] = $amount;
 
                                     $incomeInstalments['special'] = $incomeInstalments['special'] + $amount;
                                 //$incomeInstalments['total'] = $incomeInstalments['total'] + $amount;
-                                } elseif($ticketType == 'Early Bird') {
+                                } elseif ($ticketType == 'Early Bird') {
                                     $incomeInstalments['early'] = $incomeInstalments['early'] + $amount;
                                 //$incomeInstalments['total'] = $incomeInstalments['total'] + $amount;
-                                } elseif($ticketType == 'Regular') {
+                                } elseif ($ticketType == 'Regular') {
                                     $arr[$transaction->id][$invoice->id] = $amount;
 
                                     $incomeInstalments['regular'] = $incomeInstalments['regular'] + $amount;
                                 //$incomeInstalments['total'] = $incomeInstalments['total'] + $amount;
-                                } elseif($ticketType == 'Sponsored') {
-                                } elseif($ticketType == 'Alumni') {
+                                } elseif ($ticketType == 'Sponsored') {
+                                } elseif ($ticketType == 'Alumni') {
                                     $incomeInstalments['alumni'] = $incomeInstalments['alumni'] + $amount;
                                 //$incomeInstalments['total'] = $incomeInstalments['total'] + ($transaction['amount'] != null ? ($transaction['amount'] / $countUsers) : 0) / $countUsers;
                                 } else {
@@ -709,20 +711,20 @@ class EventController extends Controller
                         } else {
                             $amount = $transaction['amount'] != null ? $transaction['amount'] / $countUsers : 0;
 
-                            if(!isset($transaction['status_history'][0]['installments'])) {
-                                if($ticketType == 'Special') {
+                            if (!isset($transaction['status_history'][0]['installments'])) {
+                                if ($ticketType == 'Special') {
                                     //$arr[$transaction->id] = $amount;
 
                                     $incomeInstalments['special'] = $incomeInstalments['special'] + $amount;
                                 //$incomeInstalments['total'] = $incomeInstalments['total'] + $amount;
-                                } elseif($ticketType == 'Early Bird') {
+                                } elseif ($ticketType == 'Early Bird') {
                                     $incomeInstalments['early'] = $incomeInstalments['early'] + $amount;
                                 //$incomeInstalments['total'] = $incomeInstalments['total'] + $amount;
-                                } elseif($ticketType == 'Regular') {
+                                } elseif ($ticketType == 'Regular') {
                                     $incomeInstalments['regular'] = $incomeInstalments['regular'] + $amount;
                                 //$incomeInstalments['total'] = $incomeInstalments['total'] + $amount;
-                                } elseif($ticketType == 'Sponsored') {
-                                } elseif($ticketType == 'Alumni') {
+                                } elseif ($ticketType == 'Sponsored') {
+                                } elseif ($ticketType == 'Alumni') {
                                     $incomeInstalments['alumni'] = $incomeInstalments['alumni'] + $amount;
                                 //$incomeInstalments['total'] = $incomeInstalments['total'] + ($transaction['amount'] / $countUsers);
                                 } else {
@@ -744,7 +746,7 @@ class EventController extends Controller
         $countUsersWithoutEnrollForFree = count($countUsersWithoutEnrollForFree);
         $count['totalWithoutEnrollForFree'] = $countUsersWithoutEnrollForFree;
 
-        if($from_controller == null) {
+        if ($from_controller == null) {
             $data['incomeInstalments'] = $incomeInstalments;
             $data['incomeInstalments']['total'] = array_sum($incomeInstalments);
         }
@@ -811,7 +813,7 @@ class EventController extends Controller
         $invoices_ids = array_map(function ($invoiceable) {
             return $invoiceable->invoice_id;
         }, $invoiceables);
-        if(count($invoices_ids) > 0) {
+        if (count($invoices_ids) > 0) {
             $all_invoices = DB::select("
                 SELECT
                     invoices.*,
@@ -827,8 +829,8 @@ class EventController extends Controller
             // We want only the first invoice. Not two times.
             $all_invoices_refactored = [];
             // dump($all_invoices);
-            foreach($all_invoices as $invoice) {
-                if(!isset($all_invoices_refactored[$invoice->invoice_id])) {
+            foreach ($all_invoices as $invoice) {
+                if (!isset($all_invoices_refactored[$invoice->invoice_id])) {
                     $all_invoices_refactored[$invoice->invoice_id] = $invoice;
                 }
             }
@@ -842,14 +844,14 @@ class EventController extends Controller
         $transactions = [];
         $transaction_ids = [];
         foreach ($results as $result) {
-            if(!in_array($result->transaction_id, $transaction_ids)) {
+            if (!in_array($result->transaction_id, $transaction_ids)) {
                 $result_new = $result;
                 $result_new->user_ids = [$result->user_id];
                 $transactions[] = $result_new;
                 $transaction_ids[] = $result->transaction_id;
             } else {
                 $transactions = array_map(function ($transaction) use ($result) {
-                    if($transaction->transaction_id == $result->transaction_id) {
+                    if ($transaction->transaction_id == $result->transaction_id) {
                         $transaction->user_ids[] = $result->user_id;
 
                         return $transaction;
@@ -869,9 +871,9 @@ class EventController extends Controller
             $amount = (float) $result->total_amount;
 
             $student_type = '';
-            if(isset($status_history[0]) && isset($status_history[0]->cart_data)) {
-                foreach($status_history[0]->cart_data as $key => $cart_data) {
-                    if(isset($cart_data) && isset($cart_data->options)) {
+            if (isset($status_history[0]) && isset($status_history[0]->cart_data)) {
+                foreach ($status_history[0]->cart_data as $key => $cart_data) {
+                    if (isset($cart_data) && isset($cart_data->options)) {
                         switch($cart_data->options->type) {
                             case '0':
                                 $student_type = 'other';
@@ -890,7 +892,7 @@ class EventController extends Controller
                 }
             }
 
-            if($result->type == 'Special') {
+            if ($result->type == 'Special') {
                 switch($student_type) {
                     case 'students':
                         $count = $this->add_student_ids('students', $result->user_ids, $count);
@@ -947,12 +949,12 @@ class EventController extends Controller
                 $invoices_refactored[$invoice->id] = $invoice;
             }
             $invoices = array_values($invoices_refactored);
-            if(count($invoices) > 0 && $amount > 0) { // $amount == 0 means that this register is duplicated (same transaction as other before)
+            if (count($invoices) > 0 && $amount > 0) { // $amount == 0 means that this register is duplicated (same transaction as other before)
                 $totalAmountInvoice = 0;
-                foreach($invoices as $invoice) {
+                foreach ($invoices as $invoice) {
                     $totalAmountInvoice += $invoice->amount;
                     $amount = $invoice->amount;
-                    if($result->type == 'Special') {
+                    if ($result->type == 'Special') {
                         // $incomeInstalments['special'] = $incomeInstalments['special'] + $amount;
                         switch($student_type) {
                             case 'students':
@@ -968,21 +970,21 @@ class EventController extends Controller
                                 // $incomeInstalments['other'] = $incomeInstalments['other'] + $amount;
                                 break;
                         }
-                    } elseif($result->type == 'Early Bird') {
+                    } elseif ($result->type == 'Early Bird') {
                         $incomeInstalments['early'] = $incomeInstalments['early'] + $amount;
-                    } elseif($result->type == 'Regular') {
+                    } elseif ($result->type == 'Regular') {
                         $arr[$transaction->id][$invoice->id] = $amount;
                         $incomeInstalments['regular'] = $incomeInstalments['regular'] + $amount;
-                    } elseif($result->type == 'Sponsored') {
-                    } elseif($result->type == 'Alumni') {
+                    } elseif ($result->type == 'Sponsored') {
+                    } elseif ($result->type == 'Alumni') {
                         $incomeInstalments['alumni'] = $incomeInstalments['alumni'] + $amount;
                     } else {
                         $incomeInstalments['other'] = $incomeInstalments['other'] + $amount;
                     }
                 }
-                if((int) $totalAmountInvoice > (int) $result->total_amount) {
+                if ((int) $totalAmountInvoice > (int) $result->total_amount) {
                     $usser = User::find($result->user_id);
-                    if($usser) {
+                    if ($usser) {
                         $alerts[] = 'The student <a href="/admin/user/' . $usser->id . '/edit#tabs-icons-text-4" target="_blank">' . $usser->name . '(' . $usser->email . ')</a> has been charged more (' . round($totalAmountInvoice) . ') than expected (' . round($result->total_amount) . ').';
                     }
                 }
@@ -1018,8 +1020,8 @@ class EventController extends Controller
 
     private function add_student_ids($type, $user_ids, $count)
     {
-        foreach($user_ids as $user_id) {
-            if(!in_array($user_id, array_merge($count['free'], $count['special'], $count['early'], $count['alumni'], $count['regular'], $count['other'], $count['unemployed'], $count['group']))) {
+        foreach ($user_ids as $user_id) {
+            if (!in_array($user_id, array_merge($count['free'], $count['special'], $count['early'], $count['alumni'], $count['regular'], $count['other'], $count['unemployed'], $count['group']))) {
                 $count[$type][] = $user_id;
             }
         }
@@ -1037,7 +1039,7 @@ class EventController extends Controller
     public function update(Request $request, Event $event)
     {
         $show_popup = false;
-        if($request->published == 'on') {
+        if ($request->published == 'on') {
             $published = 1;
             $published_at = !$event->published_at ? date('Y-m-d') : $event->published_at;
         } else {
@@ -1062,7 +1064,7 @@ class EventController extends Controller
         //dd($request->all());
         $event_has_updated = $event->update($request->all());
 
-        if($event_has_updated && ($request->status == 2 || $request->status == 3 || $request->status == 1) && ($old_status != 2 && $old_status != 3 && $old_status != 1)) {
+        if ($event_has_updated && ($request->status == 2 || $request->status == 3 || $request->status == 1) && ($old_status != 2 && $old_status != 3 && $old_status != 1)) {
             $show_popup = true;
             dispatch((new EventSoldOut($event->id))->delay(now()->addSeconds(3)));
         }
@@ -1071,7 +1073,7 @@ class EventController extends Controller
             $event->updateMedia($request->image_upload);
         }*/
 
-        if($request->syllabus) {
+        if ($request->syllabus) {
             $event->syllabus()->sync($request->syllabus);
         } else {
             $event->syllabus()->detach();
@@ -1080,9 +1082,9 @@ class EventController extends Controller
         $event->category()->sync([$request->category_id]);
         $event->city()->sync([$request->city_id]);
 
-        if($request->partner_enabled) {
+        if ($request->partner_enabled) {
             $event->partners()->detach();
-            foreach((array) $request->partner_id as $partner_id) {
+            foreach ((array) $request->partner_id as $partner_id) {
                 $event->partners()->attach($partner_id);
             }
         } else {
@@ -1090,18 +1092,18 @@ class EventController extends Controller
         }
 
         $selectedFiles = null;
-        if($request->selectedFiles != null) {
+        if ($request->selectedFiles != null) {
             $selectedFiles = json_decode($request->selectedFiles, true);
         }
 
-        if($selectedFiles != null) {
+        if ($selectedFiles != null) {
             $event->dropbox()->detach();
             //dd($selectedFiles);
 
-            foreach($selectedFiles as $key => $folder) {
-                if(isset($folder['selectedDropbox']) && $folder['selectedDropbox'] != null) {
+            foreach ($selectedFiles as $key => $folder) {
+                if (isset($folder['selectedDropbox']) && $folder['selectedDropbox'] != null) {
                     $exist_dropbox = Dropbox::where('folder_name', $folder['selectedDropbox'])->first();
-                    if($exist_dropbox) {
+                    if ($exist_dropbox) {
                         unset($folder['selectedDropbox']);
                         $event->dropbox()->attach([$exist_dropbox->id => ['selectedFolders' => json_encode($folder)]]);
                     }
@@ -1121,21 +1123,21 @@ class EventController extends Controller
         //     $event->dropbox()->detach();
         // }
 
-        if($request->category_id != $request->oldCategory) {
+        if ($request->category_id != $request->oldCategory) {
             //dd($request->category_id);
             $category = Category::with('topics')->find($request->category_id);
 
-            if($category) {
+            if ($category) {
                 $event->topic()->detach();
                 //assign all topics with lesson
 
-                foreach($category->topics as $topic) {
+                foreach ($category->topics as $topic) {
                     //dd($topic);
                     //$lessons = Topic::with('lessons')->find($topic['id']);
                     //$lessons = $topic->lessonsCategory;
                     $lessons = $topic->lessonsCategory()->wherePivot('category_id', $category->id)->get();
 
-                    foreach($lessons as $lesson) {
+                    foreach ($lessons as $lesson) {
                         $event->topic()->attach($topic['id'], ['lesson_id' => $lesson['id'], 'priority'=>$lesson->pivot->priority]);
                     }
                 }
@@ -1144,17 +1146,17 @@ class EventController extends Controller
 
         $event->type()->sync($request->type_id);
 
-        if($request->delivery != null) {
+        if ($request->delivery != null) {
             $event->delivery()->detach();
 
             $event->delivery()->attach($request->delivery);
         }
 
-        if($request->video != null) {
+        if ($request->video != null) {
             $event->video()->attach($request->video);
         }
-        foreach((array) $request->sections as $key => $sectionn) {
-            if($section = Section::find($sectionn['id'])) {
+        foreach ((array) $request->sections as $key => $sectionn) {
+            if ($section = Section::find($sectionn['id'])) {
                 $section->tab_title = $sectionn['tab_title'];
                 $section->title = $sectionn['title'];
                 $section->visible = (isset($sectionn['visible']) && $sectionn['visible'] == 'on') ? true : false;
@@ -1172,7 +1174,7 @@ class EventController extends Controller
             }
         }
 
-        if(isset($request->partner_enabled)) {
+        if (isset($request->partner_enabled)) {
             $partner = true;
         } else {
             $partner = false;
@@ -1184,16 +1186,16 @@ class EventController extends Controller
 
         $this->updateEventInfo($event_info, $event->id);
 
-        if($event->status == 0 && $request->old_status == 5) {
+        if ($event->status == 0 && $request->old_status == 5) {
             //SendMaiWaitingList::dispatchAfterResponse($event->id);
             dispatch((new SendMaiWaitingList($event->id))->delay(now()->addSeconds(3)));
         }
 
-        if($request->status == 3) {
-            if(isset($infoData['free_courses']['list'])) {
+        if ($request->status == 3) {
+            if (isset($infoData['free_courses']['list'])) {
                 // todo parse exams
 
-                if(isset($infoData['free_courses']['exams'])) {
+                if (isset($infoData['free_courses']['exams'])) {
                     dispatch((new EnrollStudentsToElearningEvents($event->id, $infoData['free_courses']['list'], true))->delay(now()->addSeconds(3)));
                 } else {
                     dispatch((new EnrollStudentsToElearningEvents($event->id, $infoData['free_courses']['list'], false))->delay(now()->addSeconds(3)));
@@ -1214,7 +1216,7 @@ class EventController extends Controller
         $event = Event::find($id);
         $totalHours = $event->getTotalHours();
 
-        if($request->ajax()) {
+        if ($request->ajax()) {
             return response()->json([
                 'success' => true,
                 'message' => 'Calculate successfully total hours for this event!',
@@ -1239,7 +1241,7 @@ class EventController extends Controller
         $data['course_delivery_text'] = $requestData['delivery_info']['text'];
         $data['course_delivery_title'] = isset($requestData['delivery_info']['title']) ? $requestData['delivery_info']['title'] : '';
 
-        if(isset($requestData['delivery_info']['visible'])) {
+        if (isset($requestData['delivery_info']['visible'])) {
             $visible_loaded_data = $requestData['delivery_info']['visible'];
             $data['course_delivery_visible'] = json_encode($this->prepareVisibleData($visible_loaded_data));
         } else {
@@ -1253,7 +1255,7 @@ class EventController extends Controller
         $data['course_partner'] = $partner;
         $data['course_partner_text'] = $requestData['partner']['text'];
 
-        if(isset($requestData['partner']['visible'])) {
+        if (isset($requestData['partner']['visible'])) {
             $visible_loaded_data = $requestData['partner']['visible'];
             $data['course_partner_visible'] = json_encode($this->prepareVisibleData($visible_loaded_data));
         } else {
@@ -1263,10 +1265,10 @@ class EventController extends Controller
         $data['course_manager'] = ($syllabus != null) ? true : false;
 
         // Delivery Inclass City
-        if($deliveryId == 139) {
+        if ($deliveryId == 139) {
             //////////////////////////
 
-            if(isset($requestData['delivery']['inclass'])) {
+            if (isset($requestData['delivery']['inclass'])) {
                 $data['course_inclass_absences'] = $requestData['delivery']['inclass']['absences'];
                 $data['course_inclass_city'] = ($city) ? $city->name : null;
                 $data['course_inclass_city_icon'] = json_encode($requestData['delivery']['inclass']['city']['icon']);
@@ -1276,18 +1278,18 @@ class EventController extends Controller
                 $times = [];
 
                 // Dates
-                if(isset($requestData['delivery']['inclass']['dates'])) {
+                if (isset($requestData['delivery']['inclass']['dates'])) {
                     $dates['text'] = $requestData['delivery']['inclass']['dates']['text'];
                     $dates['title'] = $requestData['delivery']['inclass']['dates']['title'];
 
-                    if(isset($requestData['delivery']['inclass']['dates']['visible'])) {
+                    if (isset($requestData['delivery']['inclass']['dates']['visible'])) {
                         $visible_loaded_data = $requestData['delivery']['inclass']['dates']['visible'];
                         $dates['visible'] = $this->prepareVisibleData($visible_loaded_data);
                     } else {
                         $dates['visible'] = $this->prepareVisibleData();
                     }
 
-                    if(!isset($requestData['delivery']['inclass']['dates']['icon']['link_status'])) {
+                    if (!isset($requestData['delivery']['inclass']['dates']['icon']['link_status'])) {
                         $requestData['delivery']['inclass']['dates']['icon']['link_status'] = 'off';
                     }
                     $dates['icon'] = $requestData['delivery']['inclass']['dates']['icon'];
@@ -1295,18 +1297,18 @@ class EventController extends Controller
                 $data['course_inclass_dates'] = json_encode($dates);
 
                 // Days
-                if(isset($requestData['delivery']['inclass']['day'])) {
+                if (isset($requestData['delivery']['inclass']['day'])) {
                     $days['text'] = $requestData['delivery']['inclass']['day']['text'];
                     $days['title'] = $requestData['delivery']['inclass']['day']['title'];
 
-                    if(isset($requestData['delivery']['inclass']['day']['visible'])) {
+                    if (isset($requestData['delivery']['inclass']['day']['visible'])) {
                         $visible_loaded_data = $requestData['delivery']['inclass']['day']['visible'];
                         $days['visible'] = $this->prepareVisibleData($visible_loaded_data);
                     } else {
                         $days['visible'] = $this->prepareVisibleData();
                     }
 
-                    if(!isset($requestData['delivery']['inclass']['day']['icon']['link_status'])) {
+                    if (!isset($requestData['delivery']['inclass']['day']['icon']['link_status'])) {
                         $requestData['delivery']['inclass']['day']['icon']['link_status'] = 'off';
                     }
 
@@ -1315,18 +1317,18 @@ class EventController extends Controller
                 $data['course_inclass_days'] = json_encode($days);
 
                 // Times
-                if(isset($requestData['delivery']['inclass']['times'])) {
+                if (isset($requestData['delivery']['inclass']['times'])) {
                     $times['text'] = $requestData['delivery']['inclass']['times']['text'];
                     $times['title'] = $requestData['delivery']['inclass']['times']['title'];
 
-                    if(isset($requestData['delivery']['inclass']['times']['visible'])) {
+                    if (isset($requestData['delivery']['inclass']['times']['visible'])) {
                         $visible_loaded_data = $requestData['delivery']['inclass']['times']['visible'];
                         $times['visible'] = $this->prepareVisibleData($visible_loaded_data);
                     } else {
                         $times['visible'] = $this->prepareVisibleData();
                     }
 
-                    if(!isset($requestData['delivery']['inclass']['times']['icon']['link_status'])) {
+                    if (!isset($requestData['delivery']['inclass']['times']['icon']['link_status'])) {
                         $requestData['delivery']['inclass']['times']['icon']['link_status'] = 'off';
                     }
 
@@ -1334,7 +1336,7 @@ class EventController extends Controller
                 }
                 $data['course_inclass_times'] = json_encode($times);
             }
-        } elseif($deliveryId == 143) {
+        } elseif ($deliveryId == 143) {
             // Video E-learning
             $visible_loaded_data = isset($requestData['delivery']['elearning']['visible']) ? $requestData['delivery']['elearning']['visible'] : null;
             $data['course_elearning_visible'] = json_encode($this->prepareVisibleData($visible_loaded_data));
@@ -1351,7 +1353,7 @@ class EventController extends Controller
             $data['course_elearning_exam_title'] = (isset($requestData['delivery']['elearning']['exam']['title']) && $requestData['delivery']['elearning']['exam']['title'] != null) ? $requestData['delivery']['elearning']['exam']['title'] : null;
             $data['course_elearning_exam_activate_months'] = (isset($requestData['delivery']['elearning']['exam']['activate_months']) && $requestData['delivery']['elearning']['exam']['activate_months'] != null) ? $requestData['delivery']['elearning']['exam']['activate_months'] : null;
 
-            if(isset($requestData['delivery']['inclass'])) {
+            if (isset($requestData['delivery']['inclass'])) {
                 $data['course_inclass_absences'] = null;
                 $data['course_inclass_city'] = null;
                 $data['course_inclass_city_icon'] = json_encode($requestData['delivery']['inclass']['city']['icon']);
@@ -1361,10 +1363,10 @@ class EventController extends Controller
                 $times = [];
 
                 // Dates
-                if(isset($requestData['delivery']['inclass']['dates'])) {
+                if (isset($requestData['delivery']['inclass']['dates'])) {
                     $dates['text'] = null;
 
-                    if(isset($requestData['delivery']['inclass']['dates']['visible'])) {
+                    if (isset($requestData['delivery']['inclass']['dates']['visible'])) {
                         $visible_loaded_data = $requestData['delivery']['inclass']['dates']['visible'];
                         $dates['visible'] = $this->prepareVisibleData($visible_loaded_data);
                     } else {
@@ -1376,10 +1378,10 @@ class EventController extends Controller
                 $data['course_inclass_dates'] = json_encode($dates);
 
                 // Days
-                if(isset($requestData['delivery']['inclass']['day'])) {
+                if (isset($requestData['delivery']['inclass']['day'])) {
                     $days['text'] = null;
 
-                    if(isset($requestData['delivery']['inclass']['day']['visible'])) {
+                    if (isset($requestData['delivery']['inclass']['day']['visible'])) {
                         $visible_loaded_data = $requestData['delivery']['inclass']['day']['visible'];
                         $days['visible'] = $this->prepareVisibleData($visible_loaded_data);
                     } else {
@@ -1391,10 +1393,10 @@ class EventController extends Controller
                 $data['course_inclass_days'] = json_encode($days);
 
                 // Times
-                if(isset($requestData['delivery']['inclass']['times'])) {
+                if (isset($requestData['delivery']['inclass']['times'])) {
                     $times['text'] = null;
 
-                    if(isset($requestData['delivery']['inclass']['times']['visible'])) {
+                    if (isset($requestData['delivery']['inclass']['times']['visible'])) {
                         $visible_loaded_data = $requestData['delivery']['inclass']['times']['visible'];
                         $times['visible'] = $this->prepareVisibleData($visible_loaded_data);
                     } else {
@@ -1405,8 +1407,8 @@ class EventController extends Controller
                 }
                 $data['course_inclass_times'] = json_encode($times);
             }
-        } elseif($deliveryId == 215) {
-            if(isset($requestData['delivery']['inclass'])) {
+        } elseif ($deliveryId == 215) {
+            if (isset($requestData['delivery']['inclass'])) {
                 $data['course_inclass_absences'] = $requestData['delivery']['inclass']['absences'];
                 $data['course_inclass_city'] = null;
                 $data['course_inclass_city_icon'] = json_encode($requestData['delivery']['inclass']['city']['icon']);
@@ -1416,17 +1418,17 @@ class EventController extends Controller
                 $times = [];
 
                 // Dates
-                if(isset($requestData['delivery']['inclass']['dates'])) {
+                if (isset($requestData['delivery']['inclass']['dates'])) {
                     $dates['text'] = $requestData['delivery']['inclass']['dates']['text'];
 
-                    if(isset($requestData['delivery']['inclass']['dates']['visible'])) {
+                    if (isset($requestData['delivery']['inclass']['dates']['visible'])) {
                         $visible_loaded_data = $requestData['delivery']['inclass']['dates']['visible'];
                         $dates['visible'] = $this->prepareVisibleData($visible_loaded_data);
                     } else {
                         $dates['visible'] = $this->prepareVisibleData();
                     }
 
-                    if(!isset($requestData['delivery']['inclass']['dates']['icon']['link_status'])) {
+                    if (!isset($requestData['delivery']['inclass']['dates']['icon']['link_status'])) {
                         $requestData['delivery']['inclass']['dates']['icon']['link_status'] = 'off';
                     }
 
@@ -1435,17 +1437,17 @@ class EventController extends Controller
                 $data['course_inclass_dates'] = json_encode($dates);
 
                 // Days
-                if(isset($requestData['delivery']['inclass']['day'])) {
+                if (isset($requestData['delivery']['inclass']['day'])) {
                     $days['text'] = $requestData['delivery']['inclass']['day']['text'];
 
-                    if(isset($requestData['delivery']['inclass']['day']['visible'])) {
+                    if (isset($requestData['delivery']['inclass']['day']['visible'])) {
                         $visible_loaded_data = $requestData['delivery']['inclass']['day']['visible'];
                         $days['visible'] = $this->prepareVisibleData($visible_loaded_data);
                     } else {
                         $days['visible'] = $this->prepareVisibleData();
                     }
 
-                    if(!isset($requestData['delivery']['inclass']['day']['icon']['link_status'])) {
+                    if (!isset($requestData['delivery']['inclass']['day']['icon']['link_status'])) {
                         $requestData['delivery']['inclass']['day']['icon']['link_status'] = 'off';
                     }
 
@@ -1454,17 +1456,17 @@ class EventController extends Controller
                 $data['course_inclass_days'] = json_encode($days);
 
                 // Times
-                if(isset($requestData['delivery']['inclass']['times'])) {
+                if (isset($requestData['delivery']['inclass']['times'])) {
                     $times['text'] = $requestData['delivery']['inclass']['times']['text'];
 
-                    if(isset($requestData['delivery']['inclass']['times']['visible'])) {
+                    if (isset($requestData['delivery']['inclass']['times']['visible'])) {
                         $visible_loaded_data = $requestData['delivery']['inclass']['times']['visible'];
                         $times['visible'] = $this->prepareVisibleData($visible_loaded_data);
                     } else {
                         $times['visible'] = $this->prepareVisibleData();
                     }
 
-                    if(!isset($requestData['delivery']['inclass']['times']['icon']['link_status'])) {
+                    if (!isset($requestData['delivery']['inclass']['times']['icon']['link_status'])) {
                         $requestData['delivery']['inclass']['times']['icon']['link_status'] = 'off';
                     }
 
@@ -1477,7 +1479,7 @@ class EventController extends Controller
         /////////////
 
         // Course
-        if(isset($requestData['hours']['visible'])) {
+        if (isset($requestData['hours']['visible'])) {
             $visible_loaded_data = $requestData['hours']['visible'];
             $data['course_hours_visible'] = json_encode($this->prepareVisibleData($visible_loaded_data));
         } else {
@@ -1490,7 +1492,7 @@ class EventController extends Controller
         // Language
         $data['course_language'] = $requestData['language']['text'];
         $data['course_language_title'] = isset($requestData['language']['title']) ? $requestData['language']['title'] : '';
-        if(isset($requestData['language']['visible'])) {
+        if (isset($requestData['language']['visible'])) {
             $visible_loaded_data = $requestData['language']['visible'];
             $data['course_language_visible'] = json_encode($this->prepareVisibleData($visible_loaded_data));
         } else {
@@ -1510,14 +1512,14 @@ class EventController extends Controller
 
         //////////////////////////
 
-        if($deliveryId == 143) {
+        if ($deliveryId == 143) {
             // Free E-learning
             $data['course_elearning_access'] = null;
 
             $data['course_elearning_access_icon'] = json_encode($requestData['free_courses']['icon']);
         } else {
             // Free E-learning
-            if(isset($requestData['free_courses']['list'])) {
+            if (isset($requestData['free_courses']['list'])) {
                 $data['course_elearning_access'] = json_encode($requestData['free_courses']['list']);
                 $data['course_elearning_exam'] = isset($requestData['free_courses']['exams']) ? $requestData['free_courses']['exams'] : null;
             } else {
@@ -1529,8 +1531,8 @@ class EventController extends Controller
 
         // Payment
 
-        if(isset($requestData['payment'])) {
-            if(isset($requestData['payment']['paid'])) {
+        if (isset($requestData['payment'])) {
+            if (isset($requestData['payment']['paid'])) {
                 $data['course_payment_method'] = 'paid';
                 $data['course_payment_installments'] = $requestData['payment']['installments'];
             } else {
@@ -1542,16 +1544,16 @@ class EventController extends Controller
             $data['course_payment_installments'] = null;
         }
 
-        if(isset($requestData['payment'])) {
+        if (isset($requestData['payment'])) {
             $data['course_payment_icon'] = json_encode($requestData['payment']['icon']);
         }
 
-        if(isset($requestData['files'])) {
+        if (isset($requestData['files'])) {
             $data['course_files_icon'] = json_encode($requestData['files']['icon']);
         }
 
         // Award
-        if(isset($requestData['awards'])) {
+        if (isset($requestData['awards'])) {
             $data['course_awards'] = true;
             $data['course_awards_text'] = $requestData['awards']['text'];
         } else {
@@ -1562,7 +1564,7 @@ class EventController extends Controller
         $data['course_awards_icon'] = json_encode($requestData['awards']['icon']);
 
         // Certificate
-        if(isset($requestData['certificate'])) {
+        if (isset($requestData['certificate'])) {
             $data['course_certification_completion'] = $requestData['certificate']['completion_text'];
             $data['course_certification_name_success'] = $requestData['certificate']['success_text'];
             //$data['course_certification_name_failure'] = $requestData['certificate']['failure_text'];
@@ -1574,7 +1576,7 @@ class EventController extends Controller
             $data['has_certificate'] = isset($requestData['certificate']['certification']) && $requestData['certificate']['certification'] == 'on';
             $data['has_certificate_exam'] = isset($requestData['certificate']['certification_exam']) && $requestData['certificate']['certification_exam'] == 'on';
 
-            if(isset($requestData['certificate']['visible'])) {
+            if (isset($requestData['certificate']['visible'])) {
                 $visible_loaded_data = $requestData['certificate']['visible'];
                 $data['course_certificate_visible'] = json_encode($this->prepareVisibleData($visible_loaded_data));
             } else {
@@ -1587,12 +1589,12 @@ class EventController extends Controller
         }
 
         // Students
-        if(isset($requestData['students'])) {
+        if (isset($requestData['students'])) {
             $data['course_students_number'] = $requestData['students']['count_start'];
             $data['course_students_text'] = $requestData['students']['text'];
             $data['course_students_title'] = $requestData['students']['title'];
 
-            if(isset($requestData['students']['visible'])) {
+            if (isset($requestData['students']['visible'])) {
                 $visible_loaded_data = $requestData['students']['visible'];
                 $data['course_students_visible'] = json_encode($this->prepareVisibleData($visible_loaded_data));
             } else {
@@ -1607,12 +1609,12 @@ class EventController extends Controller
 
     public function prepareIconLinkStatus($data)
     {
-        if($data) {
-            if(!isset($data['link_status'])) {
+        if ($data) {
+            if (!isset($data['link_status'])) {
                 $data['link_status'] = 'off';
             }
 
-            if(isset($data['link_status']) && $data['link_status'] == 'on') {
+            if (isset($data['link_status']) && $data['link_status'] == 'on') {
                 $data['link'] = str_replace('http://', 'https://', $data['link']);
             }
         }
@@ -1624,12 +1626,12 @@ class EventController extends Controller
     {
         $visible_returned_data = ['landing' => 0, 'home' => 0, 'list' => 0, 'invoice' => 0, 'emails' => 0];
 
-        if(!$data) {
+        if (!$data) {
             return $visible_returned_data;
         }
 
-        foreach($data as $key => $item) {
-            if(in_array($item, $data)) {
+        foreach ($data as $key => $item) {
+            if (in_array($item, $data)) {
                 $visible_returned_data[$key] = 1;
             }
         }
@@ -1642,7 +1644,7 @@ class EventController extends Controller
         $event = Event::find($event_id);
         $info = $event->event_info();
 
-        if($info == null || $info == '[]') {
+        if ($info == null || $info == '[]') {
             $infos = new EventInfo();
             $infos->event_id = $event->id;
         } else {
@@ -1733,7 +1735,7 @@ class EventController extends Controller
         $infos->course_elearning_access = $event_info['course_elearning_access'];
         $infos->course_elearning_access_icon = $event_info['course_elearning_access_icon'];
 
-        if($info == null || $info == '[]') {
+        if ($info == null || $info == '[]') {
             $infos->save();
         } else {
             $infos->update();
@@ -1770,21 +1772,21 @@ class EventController extends Controller
         $ids = [];
         $event = Event::where('title', $request->event)->first();
         $num = $request->page;
-        if($num != 0) {
+        if ($num != 0) {
             $str = $num . '0';
             $num = (int) $str;
         }
 
         $count = 0;
 
-        foreach(array_slice($request->ids, $num) as $key => $item) {
+        foreach (array_slice($request->ids, $num) as $key => $item) {
             $user = User::find($item);
             //$exam = $event->exam_result()->get();
 
             //dd($event->video_seen($user));
             $ids[$count]['id'] = $user['id'];
             $ids[$count]['video_seen'] = $event->video_seen($user);
-            if($count == 9) {
+            if ($count == 9) {
                 break;
             }
             $count++;
@@ -1819,8 +1821,8 @@ class EventController extends Controller
 
             $event->load('category', 'faqs', 'sectionVideos', 'type', 'delivery', 'ticket', 'city', 'sections', 'venues', 'syllabus', 'paymentMethod', 'dropbox', 'event_info1');
 
-            if($event->medias) {
-                if($event->medias->mediable_type == 'App\Model\Event') {
+            if ($event->medias) {
+                if ($event->medias->mediable_type == 'App\Model\Event') {
                     $new_media = $event->medias->replicate();
                     $new_media->mediable_id = $newEvent->id;
                     $new_media->save();
@@ -1828,9 +1830,9 @@ class EventController extends Controller
             }
 
             foreach ($event->getRelations() as $relationName => $values) {
-                if($relationName == 'summary1' || $relationName == 'benefits' || $relationName == 'sections') {
+                if ($relationName == 'summary1' || $relationName == 'benefits' || $relationName == 'sections') {
                     $newValues = [];
-                    foreach($values as $value) {
+                    foreach ($values as $value) {
                         $valuee = $value->replicate();
                         $valuee->push();
 
@@ -1850,21 +1852,21 @@ class EventController extends Controller
                     $newValues = collect($newValues);
                     $newEvent->{$relationName}()->detach();
 
-                    foreach($newValues as $value) {
+                    foreach ($newValues as $value) {
                         $newEvent->{$relationName}()->attach($value);
                     }
-                } elseif($relationName == 'event_info1') {
+                } elseif ($relationName == 'event_info1') {
                     $valuee = $values->replicate();
                     $valuee->course_elearning_access = null;
                     $valuee->push();
                     $newEvent->{$relationName}()->save($valuee);
-                } elseif($relationName != 'medias') {
+                } elseif ($relationName != 'medias') {
                     $newEvent->{$relationName}()->sync($values);
                 }
             }
 
-            foreach($event->lessons as $lesson) {
-                if(!$lesson->pivot) {
+            foreach ($event->lessons as $lesson) {
+                if (!$lesson->pivot) {
                     continue;
                 }
 
@@ -1882,7 +1884,7 @@ class EventController extends Controller
             $newEvent->metable->meta_description = $event->metable ? $event->metable->meta_description . ' (COPY)' : '';
             $newEvent->metable->save();
 
-            foreach($newEvent->ticket as $ticket) {
+            foreach ($newEvent->ticket as $ticket) {
                 $ticket->pivot->active = false;
                 $ticket->pivot->save();
             }
@@ -1903,7 +1905,7 @@ class EventController extends Controller
 
         $detach = $event->sectionVideos()->where('id', $explainerVideo)->detach();
 
-        if($detach) {
+        if ($detach) {
             return response()->json([
                 'success' => true,
                 'message' => 'Removed successfully',
@@ -1918,9 +1920,9 @@ class EventController extends Controller
 
     public function exportStudent(Request $request)
     {
-        if($request->state == 'student_waiting_list') {
+        if ($request->state == 'student_waiting_list') {
             $filename = 'StudentsWaitingListExport.xlsx';
-        } elseif($request->state == 'student_list') {
+        } elseif ($request->state == 'student_list') {
             $filename = 'StudentsListExport.xlsx';
         }
 
