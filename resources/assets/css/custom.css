@@ -469,5 +469,17 @@ footer {
 
 .video-carousel-big .testimonial-box .author-infos{
     margin-top: 0.5rem;
-  }
+}
 
+.text-muted {
+  color: #98a6ad !important;
+}
+
+.heading-small {
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+  font-size: .8rem;
+  letter-spacing: .04em;
+}
+
+#header h1.logo-area{ padding-bottom: 0px; }

@@ -64,32 +64,6 @@
                                     @include('alerts.feedback', ['field' => 'hours'])
                                 </div>
 
-
-                                {{--<div class="form-group">
-                                    <label for="exampleFormControlSelect1">Select Dropbox Folder</label>
-                                    <?php //dd($data['folders']); ?>
-                                    <select class="form-control" name="folder_name" id="folder_name">
-
-                                        @foreach($data['folders'] as $folder)
-
-                                            <?php $found = false; ?>
-                                            @foreach($already_assign as $ass)
-                                                @if(isset($ass) && $ass['folder_name'] == $folder)
-                                                <?php $found = true; ?>
-
-                                                @endif
-                                            @endforeach
-                                            @if($found)
-                                            <?php //dd($folder); ?>
-                                                <option selected value="{{ $folder }}">{{ $folder }}</option>
-                                            @else
-                                                <option value="{{ $folder }}">{{ $folder }}</option>
-                                            @endif
-                                        @endforeach
-                                    </select>
-                                    @include('alerts.feedback', ['field' => 'dropbox'])
-                                </div>--}}
-
                                 <?php //dd($category->show_homepage); ?>
 
                                 <div class="form-group{{ $errors->has('show_homepage') ? ' has-danger' : '' }}">

@@ -10,10 +10,7 @@ $minutes = 0;
 {{--<a href="#" title="Close window" class="close"></a>--}}
 				<div id="exam-container" class="container clearfix">
                     <div class="row">
-
-                        <div class="logo-area col-sm-12 col-md-2 col-lg-2 text-sm-center">
-                            <a href="/" class="logo">Know Crunch</a>
-                        </div>
+                        @include('layouts.headers.logo', ['class' => 'col-sm-12 col-md-2 col-lg-2 text-sm-center'])
                         <div class="title-area col-sm-12 col-md-5 offset-md-1 col-lg-5 offset-lg-1">
                             <h1>{{ $event_title }}</h1>
                         </div>

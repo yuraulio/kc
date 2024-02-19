@@ -21,7 +21,13 @@ class Pages extends Model
     protected $table = 'pages';
 
     protected $fillable = [
-        'title', 'content', 'template', 'name', 'summary', 'published',
+        'title',
+        'content',
+        'template',
+        'name',
+        'summary',
+        'published',
+        'published_at',
     ];
 
     public function medias()

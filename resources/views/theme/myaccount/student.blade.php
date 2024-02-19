@@ -1872,9 +1872,10 @@
 
                 data = url.replace('\\','/')
                 if(data){
-                  let link = `${decodeURI('{{ config('app.url') }}/mycertificateview/share/facebook/' + certificateId + '/' + data.split('mycertificateview/')[1])}`;
+                  let link = `${decodeURI('{{ config('app.url') }}/mycertificateview/share/facebook/' + certificateId + '/' + data.split('/')[1])}`;
+                  console.log('link', link);
 
-                  var fbpopup = window.open(`http://www.facebook.com/sharer.php?u=${link}/${decodeURI(certificateTitle)}`, "pop", "width=600, height=400, scrollbars=no");
+                  var fbpopup = window.open(`http://www.facebook.com/sharer.php?u=${link}`, "pop", "width=600, height=400, scrollbars=no");
                   return false;
                 }
 

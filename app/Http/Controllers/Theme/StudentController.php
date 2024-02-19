@@ -27,6 +27,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Image;
 use Laravel\Cashier\Cashier;
@@ -1146,9 +1147,41 @@ class StudentController extends Controller
                 }
             }
 
+            // Calc the total seen
+            $total_seen = 0;
+            $total_duration = 0;
+            try {
+                foreach ($videos as $video) {
+                    $total_seen += (float) $video['total_seen'];
+                    $total_duration += (float) $video['total_duration'];
+                }
+                $past_total_duration = (float) $user->statistic()->wherePivot('event_id', $request->event)->first()->pivot['total_duration'];
+                $past_total_seen = (float) $user->statistic()->wherePivot('event_id', $request->event)->first()->pivot['total_seen'];
+
+                if ($total_duration == $past_total_duration) {
+                    if ($total_seen < $past_total_seen) {
+                        // Here we have a problem. Create Slack alert.
+                        if ($past_total_seen - $total_seen > 180) {
+                            // If is more than 3 minutes, alert!
+                            $event = Event::find($request->event);
+                            $user->notify(new ErrorSlack('User ' . $user->email . ' is saving course progress for the event ' . $event->title . ' but the total_seen has decrease ' . $past_total_seen . ' -> ' . $total_seen . '. More details in the log.'));
+
+                            Log::channel('daily')->warning('User ' . $user->email . ' is saving course progress for the event ' . $event->title . ' but the total_seen has decrease ' . $past_total_seen . ' -> ' . $total_seen . '. More details in the log.');
+                            Log::channel('daily')->warning($user->statistic()->wherePivot('event_id', $request->event)->first()->pivot['videos']);
+                            Log::channel('daily')->warning(json_encode($user->statistic()->wherePivot('event_id', $videos)));
+                        }
+                    }
+                }
+            } catch(\Exception $e) {
+                $user->notify(new ErrorSlack($e));
+            }
+
             $user->statistic()->wherePivot('event_id', $request->event)->updateExistingPivot($request->event, [
                 'lastVideoSeen' => $request->lastVideoSeen,
                 'videos' => json_encode($videos),
+                'total_seen' => $total_seen,
+                'total_duration' => $total_duration,
+                'last_seen' => date('Y-m-d H:i:s'),
             ], false);
 
             /*if($user->events()->where('event_id',2068)->first() && $user->events()->where('event_id',2068)->first() &&

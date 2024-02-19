@@ -1,0 +1,151 @@
+<?php
+
+namespace App\DataTables\Transactions;
+
+use App\DataTables\AppDataTable;
+use App\DataTables\Extensions\AppEloquentDataTable;
+use App\Helpers\EventHelper;
+use App\Model\Category;
+use App\Model\City;
+use App\Model\Event;
+use App\Model\EventStatistic;
+use App\Model\EventUser;
+use App\Model\PaymentMethod;
+use App\Model\Transaction;
+use App\Model\User;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
+use Yajra\DataTables\Html\Column;
+
+class TransactionParticipantsDataTable extends AppDataTable
+{
+    protected $filters = [];
+
+    protected $tableId = 'transaction-participants';
+
+    /**
+     * Build DataTable class.
+     *
+     * @param mixed $query Results from query() method.
+     * @return \Yajra\DataTables\DataTableAbstract
+     */
+    public function dataTable($query)
+    {
+        $dataTable = AppEloquentDataTable::create($query);
+        $dataTable->filter(function ($query) {
+            return $query;
+        });
+
+        $dataTable->setBeforeProcessResult(function (Collection $data) {
+            $paymentMethods = PaymentMethod::pluck('method_name', 'id');
+            $cities = [];
+            $categories = [];
+            $data->transform(function ($item) use ($paymentMethods, $cities, $categories) {
+                $statistic = EventStatistic::where('user_id', $item['user_id'])->where('event_id', $item['event_id'])->first();
+                $userEvent = EventUser::where('user_id', $item['user_id'])->where('event_id', $item['event_id'])->first();
+
+                if (!isset($categories[$item['event_id']])) {
+                    $categories[$item['event_id']] = Category::whereHas('events', function ($query) use ($item) {
+                        $query->where('events.id', $item['event_id']);
+                    })->first();
+                }
+
+                $category = $categories[$item['event_id']];
+
+                if (!isset($cities[$item['event_id']])) {
+                    $cities[$item['event_id']] = City::whereHas('event', function ($query) use ($item) {
+                        $query->where('events.id', $item['event_id']);
+                    })->first();
+                }
+                $city = $cities[$item['event_id']];
+
+                $item->videos_seen = $statistic ? EventHelper::getVideosSeen(json_decode($statistic->videos, true)) : 0;
+                $item->expiration = $userEvent ? $userEvent->expiration : null;
+                $item->payment_method = $userEvent && isset($paymentMethods[$userEvent->payment_method]) ? $paymentMethods[$userEvent->payment_method] : 'Alpha Bank';
+                $item->category = $category ? $category->name : null;
+                $item->city = $city ? $city->name : null;
+
+                return $item;
+            });
+
+            return $data;
+        });
+
+        return $dataTable
+            ->editColumn('user_id', '<a href="{{ route(\'user.edit\', $user_id) }}">{{$user_name}}</a>')
+            ->editColumn('amount', '€ {{ number_format($amount, 2, ".", "") }}')
+            ->setRowId('row-{!! $id !!}')
+            ->escapeColumns([]);
+    }
+
+    /**
+     * Get query source of dataTable.
+     *
+     * @param Transaction $model
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function query(Transaction $model)
+    {
+        return $model
+            ->newQuery()
+            ->select([
+                DB::Raw('transactions.*'),
+                DB::Raw('events.title as event_name'),
+                DB::Raw('events.id as event_id'),
+                DB::Raw('users.id as user_id'),
+                DB::Raw('CONCAT(users.firstname, " ", users.lastname) as user_name'),
+                DB::Raw('expiration'),
+            ])
+            ->join('transactionables', function ($query) {
+                $query
+                    ->whereColumn('transactionables.transaction_id', '=', 'transactions.id')
+                    ->where('transactionables.transactionable_type', '=', (new Event())->getMorphClass());
+            })
+            ->join('transactionables as transactionables_users', function ($query) {
+                $query
+                    ->whereColumn('transactionables_users.transaction_id', '=', 'transactions.id')
+                    ->where('transactionables_users.transactionable_type', '=', (new User())->getMorphClass());
+            })
+            ->join('events', function ($query) {
+                $query
+                    ->whereColumn('transactionables.transactionable_id', '=', 'events.id')
+                    ->where('transactionables.transactionable_type', '=', (new Event())->getMorphClass());
+            })
+            ->join('users', function ($query) {
+                $query
+                    ->whereColumn('transactionables_users.transactionable_id', '=', 'users.id')
+                    ->where('transactionables_users.transactionable_type', '=', (new User())->getMorphClass());
+            })
+            ->where('transactions.status', 1);
+    }
+
+    /**
+     * Get columns.
+     *
+     * @return array
+     */
+    protected function getColumns()
+    {
+        return [
+            Column::make('user_id')->title(trans('transaction_participants.form.user')),
+            Column::make('event_name')->title(trans('transaction_participants.form.event')),
+            Column::make('type')->title(trans('transaction_participants.form.type')),
+            Column::make('amount')->title(trans('transaction_participants.form.amount')),
+            Column::make('coupon_code')->title(trans('transaction_participants.form.coupon_code'))->orderable(false),
+            Column::make('videos_seen')->title(trans('transaction_participants.form.videos_seen'))->orderable(false),
+            Column::make('created_at')->title(trans('transaction_participants.form.created_at')),
+            Column::make('expiration')->title(trans('transaction_participants.form.expiration'))->orderable(false),
+            Column::make('payment_method')->title(trans('transaction_participants.form.payment_method'))->orderable(false),
+            Column::make('city')->title(trans('transaction_participants.form.city'))->orderable(false),
+            Column::make('category')->title(trans('transaction_participants.form.category'))->orderable(false),
+        ];
+    }
+
+    public function html()
+    {
+        $html = parent::html();
+        $html->orderBy(6, 'desc');
+
+        return $html;
+    }
+}

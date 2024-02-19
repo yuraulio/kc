@@ -2589,32 +2589,6 @@ $show_popup = isset($uri['show_popup']) ? $uri['show_popup'] : 0;
                                             </div>
                                         </div>
 
-                                        {{-- <div class="form-group col-sm-12 col-md-6 col-lg-4">
-                                            <label for="exampleFormControlSelect1">Select Dropbox Folder</label>
-                                            <select class="form-control" name="folder_name" id="folder_name">
-
-                                                @foreach ($folders as $folder)
-
-
-                                                <?php $found = false; ?>
-                                                @foreach ($already_assign as $ass)
-                                                @if (isset($ass) && $ass['folder_name'] == $folder)
-                                                <?php $found = true; ?>
-
-                                                @endif
-                                                @endforeach
-                                                @if ($found)
-                                                <?php //dd($folder);
-                                                ?>
-                                                <option selected value="{{ $folder }}">{{ $folder }}</option>
-                                                @else
-                                                <option value="{{ $folder }}">{{ $folder }}</option>
-                                                @endif
-                                                @endforeach
-                                            </select>
-                                            @include('alerts.feedback', ['field' => 'dropbox'])
-                                        </div> --}}
-
                                         <div class="form-group col-12">
                                             <input type="hidden" id="selectedFiles" name="selectedFiles"
                                                    value="">

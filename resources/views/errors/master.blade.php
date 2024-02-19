@@ -44,9 +44,7 @@
       <div class="page-wrapper">
          <header id="header" >
             <div class="container clearfix">
-               <div class="logo-area">
-                  <a href="/" class="logo">Know Crunch</a>
-               </div>
+              @include('layouts.headers.logo')
                <div class="menu-area">
                   <button class="hamburger hamburger--spin mob-menu-btn" type="button">
                      <span class="hamburger-box">

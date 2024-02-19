@@ -201,7 +201,6 @@ return [
 
         OwenIt\Auditing\AuditingServiceProvider::class,
 
-        msonowal\LaravelTinify\LaravelTinifyServiceProvider::class,
         Yajra\DataTables\DataTablesServiceProvider::class,
     ],
 
@@ -225,6 +224,7 @@ return [
         'Broadcast' => Illuminate\Support\Facades\Broadcast::class,
         'Bus' => Illuminate\Support\Facades\Bus::class,
         'Cache' => Illuminate\Support\Facades\Cache::class,
+        'Carbon' => Illuminate\Support\Carbon::class,
         'Config' => Illuminate\Support\Facades\Config::class,
         'Cookie' => Illuminate\Support\Facades\Cookie::class,
         'Crypt' => Illuminate\Support\Facades\Crypt::class,
@@ -258,7 +258,6 @@ return [
         'PDF' => Barryvdh\DomPDF\Facade::class,
         'Sitemap'   => Watson\Sitemap\Facades\Sitemap::class,
 
-        'Tinify' => msonowal\LaravelTinify\Facades\Tinify::class,
         'DataTables' => Yajra\DataTables\Facades\DataTables::class,
 
         'Bugsnag' => Bugsnag\BugsnagLaravel\Facades\Bugsnag::class,

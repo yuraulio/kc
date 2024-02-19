@@ -15,6 +15,7 @@ mix
     processCssUrls: false,
   })
   .js('resources/js/app.js', 'public/js')
+  .js('resources/js/panel_app/app.js', 'public/js/panel_app.js')
   .js('resources/js/new_cart_app.js', 'public/js')
   .sass('resources/assets/scss/argon.scss', 'public/css')
   .sass('resources/scss/new_cart.scss', 'public/new_cart/css');

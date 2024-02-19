@@ -501,12 +501,12 @@ class CertificateController extends Controller
         <!DOCTYPE html>
         <html>
         <head>
-            <title>Tu Título de Página</title>
+            <title><?= $data['certificate']['event'][0]['title'] ?></title>
             <!-- Etiquetas Open Graph básicas -->
             <meta property="og:title" content="<?= $data['certificate']['event'][0]['title'] ?>" />
             <meta property="og:type" content="website" />
             <meta property="og:url" content="<?= config('app.url') ?>" />
-            <meta property="og:image" content="<?= $image ?>" />
+            <meta property="og:image" content="https://knowcrunch.com/cert/<?= $image ?>" />
             <!-- Especifica la URL de la imagen que se utilizará como vista previa. -->
 
             <meta property="og:description" content="<?= $data['certificate']['event'][0]['xml_description'] ?>" />
@@ -516,7 +516,7 @@ class CertificateController extends Controller
             <!-- Opcional: Nombre de tu sitio o de la empresa. -->
 
             <!-- Etiquetas adicionales de Open Graph para controlar más detalles -->
-            <meta property="og:locale" content="es_ES" />
+            <meta property="og:locale" content="el_GR" />
             <!-- Opcional: Define el idioma y la localización (p.ej., "es_ES" para español de España). -->
 
             <!-- Otros metadatos -->

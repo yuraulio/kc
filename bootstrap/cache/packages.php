@@ -36,6 +36,7 @@
     ),
     'aliases' => 
     array (
+      'Pdf' => 'Barryvdh\\DomPDF\\Facade\\Pdf',
       'PDF' => 'Barryvdh\\DomPDF\\Facade\\Pdf',
     ),
   ),
@@ -79,24 +80,6 @@
     'providers' => 
     array (
       0 => 'Dymantic\\InstagramFeed\\InstagramFeedServiceProvider',
-    ),
-  ),
-  'facade/ignition' => 
-  array (
-    'providers' => 
-    array (
-      0 => 'Facade\\Ignition\\IgnitionServiceProvider',
-    ),
-    'aliases' => 
-    array (
-      'Flare' => 'Facade\\Ignition\\Facades\\Flare',
-    ),
-  ),
-  'fideloper/proxy' => 
-  array (
-    'providers' => 
-    array (
-      0 => 'Fideloper\\Proxy\\TrustedProxyServiceProvider',
     ),
   ),
   'hardevine/shoppingcart' => 
@@ -199,17 +182,6 @@
       'Excel' => 'Maatwebsite\\Excel\\Facades\\Excel',
     ),
   ),
-  'msonowal/laravel-tinify' => 
-  array (
-    'providers' => 
-    array (
-      0 => 'msonowal\\LaravelTinify\\LaravelTinifyServiceProvider',
-    ),
-    'aliases' => 
-    array (
-      'Tinify' => 'msonowal\\LaravelTinify\\Facades\\Tinify',
-    ),
-  ),
   'nesbot/carbon' => 
   array (
     'providers' => 
@@ -224,6 +196,13 @@
       0 => 'NunoMaduro\\Collision\\Adapters\\Laravel\\CollisionServiceProvider',
     ),
   ),
+  'nunomaduro/termwind' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Termwind\\Laravel\\TermwindServiceProvider',
+    ),
+  ),
   'owen-it/laravel-auditing' => 
   array (
     'providers' => 
@@ -236,6 +215,17 @@
     'providers' => 
     array (
       0 => 'Propaganistas\\LaravelPhone\\PhoneServiceProvider',
+    ),
+  ),
+  'spatie/laravel-ignition' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Spatie\\LaravelIgnition\\IgnitionServiceProvider',
+    ),
+    'aliases' => 
+    array (
+      'Flare' => 'Spatie\\LaravelIgnition\\Facades\\Flare',
     ),
   ),
   'teamtnt/laravel-scout-tntsearch-driver' => 
@@ -261,6 +251,20 @@
     'aliases' => 
     array (
       'Sitemap' => 'Watson\\Sitemap\\Facades\\Sitemap',
+    ),
+  ),
+  'yajra/laravel-datatables-buttons' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Yajra\\DataTables\\ButtonsServiceProvider',
+    ),
+  ),
+  'yajra/laravel-datatables-html' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Yajra\\DataTables\\HtmlServiceProvider',
     ),
   ),
   'yajra/laravel-datatables-oracle' => 

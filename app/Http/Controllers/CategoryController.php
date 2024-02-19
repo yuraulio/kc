@@ -49,15 +49,16 @@ class CategoryController extends Controller
      */
     public function create()
     {
+        /** @type \League\Flysystem\Filesystem $li */
         $li = Storage::disk('dropbox');
 
         $data['folders'] = [];
         if($li) {
-            $folders = $li->listContents();
+            $folders = $li->listContents('/');
             //dd($folders);
             //$data['folders'][0] = 'Select Dropbox Folder';
             foreach ($folders as $key => $row) {
-                if($row['type'] == 'dir') :
+                if($row['type'] == 'dir' && isset($row['basename'])) :
                     $data['folders'][$row['basename']] = $row['basename'];
                 endif;
             }
@@ -117,15 +118,16 @@ class CategoryController extends Controller
         //dd($category->dropbox()->get());
 
         $data['slug'] = $category->slugable;
+        /** @type \League\Flysystem\Filesystem $li */
         $li = Storage::disk('dropbox');
 
         if($li) {
-            $folders = $li->listContents();
+            $folders = $li->listContents('/');
             //dd($folders);
             //$data['folders'][0] = 'Select Dropbox Folder';
             foreach ($folders as $key => $row) {
                 //dd($row);
-                if($row['type'] == 'dir') :
+                if($row['type'] == 'dir' && isset($row['basename'])) :
                     $data['folders'][$row['basename']] = $row['basename'];
                 endif;
             }

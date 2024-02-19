@@ -215,7 +215,9 @@ class User extends Authenticatable
 
     public function events_for_user_list()
     {
-        return $this->belongsToMany(Event::class, 'event_user')->with('summary1', 'category', 'slugable', 'dropbox')->withPivot('event_id', 'paid', 'expiration', 'comment', 'payment_method');
+        return $this->belongsToMany(Event::class, 'event_user')
+            ->with('summary1', 'category', 'slugable', 'dropbox')
+            ->withPivot('event_id', 'paid', 'expiration', 'comment', 'payment_method');
     }
 
     public function events_for_user_list1()
@@ -250,12 +252,14 @@ class User extends Authenticatable
 
     public function statistic()
     {
-        return $this->belongsToMany(Event::class, 'event_statistics')->withPivot('id', 'videos', 'user_id', 'lastVideoSeen', 'notes', 'event_id', 'created_at');
+        return $this->belongsToMany(Event::class, 'event_statistics')->withPivot('id', 'videos', 'user_id', 'lastVideoSeen', 'notes', 'event_id', 'created_at', 'total_seen', 'total_duration');
     }
 
     public function statisticGroupByEvent()
     {
-        return $this->belongsToMany(Event::class, 'event_statistics')->select('user_id', 'event_id')->withPivot('id', 'videos', 'lastVideoSeen', 'notes', 'event_id', 'created_at');
+        return $this->belongsToMany(Event::class, 'event_statistics')
+            ->select('user_id', 'event_id')
+            ->withPivot('id', 'videos', 'lastVideoSeen', 'notes', 'event_id', 'created_at', 'total_seen', 'total_duration');
     }
 
     public function transactions()

@@ -13,7 +13,6 @@ use App\Jobs\DeleteMediaFiles;
 use App\Jobs\MoveFile;
 use App\Jobs\RenameFile;
 use App\Jobs\RenameFolder;
-use App\Jobs\TinifyImage;
 use App\Jobs\UploadImageConvertWebp;
 use App\Model\Admin\MediaFile;
 use App\Model\Admin\MediaFolder;
@@ -252,8 +251,6 @@ class MediaController extends Controller
                     $image_width
                 );
                 $files[] = new MediaFileResource($mfile);
-
-                //TinifyImage::dispatch(public_path() . $mfile->full_path, $mfile->id)->delay(now()->addSeconds(5));
             }
 
             $original = MediaFile::find($mfile_original->id);
@@ -389,10 +386,6 @@ class MediaController extends Controller
                 $width,
                 $cropData
             );
-
-            // if ($request->version != 'original') {
-            //     TinifyImage::dispatch(public_path() . $mfile->full_path, $mfile->id)->delay(now()->addSeconds(5));
-            // }
 
             return response()->json(['data' => new MediaFileResource($mfile)], 200);
         } catch (Exception $e) {
