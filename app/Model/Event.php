@@ -874,6 +874,9 @@ class Event extends Model
                 $seen = (float) $video['total_seen'];
                 $seen = $seen > (float) $video['total_duration'] ? (float) $video['total_duration'] : $seen;
 
+                if ((int) $video['seen'] == 1) {
+                    $seen = (float) $video['total_duration'];
+                }
                 $seenTime += $seen;
                 $totalDuration += (float) $video['total_duration'];
             }
