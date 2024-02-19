@@ -159,13 +159,6 @@ class TransactionController extends Controller
                     $ticketType = '-';
                     $ticketName = '-';
                 }
-
-                if ($transaction['coupon_code'] != '') {
-                    $coupon_code = $transaction['coupon_code'];
-                } else {
-                    $coupon_code = '-';
-                }
-
                 if ($ticketType == 'Early Bird') {
                     $earlyCount += 1;
                 }
@@ -210,23 +203,32 @@ class TransactionController extends Controller
 
                     if (!$homepage) {
                         $data['transactions'][] = ['id' => $transaction['id'], 'user_id' => $u['id'], 'name' => $u['firstname'] . ' ' . $u['lastname'],
-                            'event_id' => $transaction->event[0]['id'], 'event_title' => $transaction->event[0]['title'] . ' / ' . date('d-m-Y', strtotime($transaction->event[0]['published_at'])), 'coupon_code' => $coupon_code, 'type' => trim($ticketType), 'ticketName' => $ticketName,
+                            'event_id' => $transaction->event[0]['id'],
+                            'event_title' => $transaction->event[0]['title'] . ' / ' . date('d-m-Y', strtotime($transaction->event[0]['published_at'])),
+                            'type' => trim($ticketType),
+                            'ticketName' => $ticketName,
                             'date' => date_format($transaction['created_at'], 'Y-m-d'), 'amount' => $amount,
                             'is_elearning' => $isElearning,
-                            'coupon_code' => $transaction['coupon_code'],
+                            'coupon_code' => empty($transaction['coupon_code']) ? '-' : $transaction['coupon_code'],
                             'videos_seen' => $this->getVideosSeen($videos),
                             'expiration'=>$expiration,
                             'paymentMethod' => $paymentMethod,
                             'city' => $city,
                             'category' => isset($transaction->event[0]['category'][0]['name']) ? $transaction->event[0]['category'][0]['name'] : ''];
                     } else {
-                        $data['transactions'][] = ['id' => $transaction['id'], 'user_id' => $u['id'], 'name' => $u['firstname'] . ' ' . $u['lastname'],
-                            'event_id' => $transaction->event[0]['id'], 'event_title' => $transaction->event[0]['title'] . ' / ' . date('d-m-Y', strtotime($transaction->event[0]['published_at'])), 'coupon_code' => $coupon_code, 'type' => trim($ticketType), 'ticketName' => $ticketName,
+                        $data['transactions'][] = [
+                            'id' => $transaction['id'],
+                            'user_id' => $u['id'],
+                            'name' => $u['firstname'] . ' ' . $u['lastname'],
+                            'event_id' => $transaction->event[0]['id'], 'event_title' => $transaction->event[0]['title'] . ' / ' . date('d-m-Y', strtotime($transaction->event[0]['published_at'])),
+                            'type' => trim($ticketType),
+                            'ticketName' => $ticketName,
                             'date' => date_format($transaction['created_at'], 'Y-m-d'), 'amount' => $amount,
                             'is_elearning' => $isElearning,
-                            'coupon_code' => $transaction['coupon_code'],
+                            'coupon_code' => empty($transaction['coupon_code']) ? '-' : $transaction['coupon_code'],
                             'city' => $city,
-                            'category' => isset($transaction->event[0]['category'][0]['name']) ? $transaction->event[0]['category'][0]['name'] : ''];
+                            'category' => isset($transaction->event[0]['category'][0]['name']) ? $transaction->event[0]['category'][0]['name'] : '',
+                        ];
                     }
                 }
             }

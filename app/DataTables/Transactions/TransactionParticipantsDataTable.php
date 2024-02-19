@@ -23,6 +23,10 @@ class TransactionParticipantsDataTable extends AppDataTable
 
     protected $tableId = 'transaction-participants';
 
+    protected $searching = true;
+
+    protected $lengthChange = true;
+
     /**
      * Build DataTable class.
      *
@@ -33,6 +37,17 @@ class TransactionParticipantsDataTable extends AppDataTable
     {
         $dataTable = AppEloquentDataTable::create($query);
         $dataTable->filter(function ($query) {
+            $query->when($this->request()->input('search.value'), function ($query, $value) {
+                $query->where(function ($q) use ($value) {
+                    $q->where('events.title', 'like', '%' . escapeLike($value) . '%')
+                        ->orWhere(
+                            DB::Raw('CONCAT(users.firstname, " ", users.lastname)'),
+                            'like',
+                            '%' . escapeLike($value) . '%'
+                        );
+                });
+            });
+
             return $query;
         });
 
@@ -73,7 +88,11 @@ class TransactionParticipantsDataTable extends AppDataTable
 
         return $dataTable
             ->editColumn('user_id', '<a href="{{ route(\'user.edit\', $user_id) }}">{{$user_name}}</a>')
+            ->editColumn('event_name', '{{$event_name}} / {{ FormatHelper::dateYmd($event_published_at) }}')
             ->editColumn('amount', '€ {{ number_format($amount, 2, ".", "") }}')
+            ->editColumn('coupon_code', '{{ empty($coupon_code) ? "-" : $coupon_code }}')
+            ->editColumn('created_at', '{{ FormatHelper::dateYmd($created_at) }}')
+            ->editColumn('expiration', '{{ FormatHelper::dateYmd($expiration) }}')
             ->setRowId('row-{!! $id !!}')
             ->escapeColumns([]);
     }
@@ -90,8 +109,9 @@ class TransactionParticipantsDataTable extends AppDataTable
             ->newQuery()
             ->select([
                 DB::Raw('transactions.*'),
-                DB::Raw('events.title as event_name'),
                 DB::Raw('events.id as event_id'),
+                DB::Raw('events.title as event_name'),
+                DB::Raw('events.published_at as event_published_at'),
                 DB::Raw('users.id as user_id'),
                 DB::Raw('CONCAT(users.firstname, " ", users.lastname) as user_name'),
                 DB::Raw('expiration'),
@@ -147,5 +167,30 @@ class TransactionParticipantsDataTable extends AppDataTable
         $html->orderBy(6, 'desc');
 
         return $html;
+    }
+
+    protected function buttons()
+    {
+        return [
+            'dom' => [
+                'container' => [
+                    'className' => 'dt-buttons',
+                ],
+                'button' => [
+                    'className' => 'btn btn-icon btn-primary',
+                ],
+            ],
+
+            'buttons' => [
+                [
+                    'text' => '<span class="btn-inner--icon"><i class="ni ni-folder-17"></i></span>',
+                    'className' => 'js-invoice-button',
+                ],
+                [
+                    'text' => '<span class="btn-inner--icon"><i class="ni ni-cloud-download-95"></i></span>',
+                    'className' => 'js-excel-button',
+                ],
+            ],
+        ];
     }
 }

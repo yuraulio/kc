@@ -9,6 +9,10 @@ abstract class AppDataTable extends DataTable
 {
     protected $tableId = 'datatable';
 
+    protected $searching = false;
+
+    protected $lengthChange = false;
+
     public function getTableId()
     {
         return $this->tableId;
@@ -23,27 +27,47 @@ abstract class AppDataTable extends DataTable
     {
         return $this->builder()
             ->parameters([
-                'lengthChange' => false,
+                'lengthChange' => $this->lengthChange,
                 'pageLength' => 10,
                 'paging' => true,
-                'searching' => false,
+                'searching' => $this->searching,
                 'pagingType' => 'simple_numbers',
                 'oLanguage' => [
                     'sInfo' => 'Showing page _PAGE_ of _PAGES_',
                     'sSearchPlaceholder' => 'Search...',
                     'sLengthMenu' => 'Results :  _MENU_',
+                    'oPaginate' => [
+                        'sNext' => '&#187;',
+                        'sPrevious'  => '&#171;',
+                    ],
                 ],
+                'buttons' => $this->buttons(),
             ])
             ->setTableId($this->tableId)
             ->columns($this->getColumns())
             ->minifiedAjax()
+            ->selectStyleSingle()
             ->postAjax([
                 'url' => $this->getUrl(),
                 'data' => "function ( d ) {
-                return $.extend( {}, d, getFormData($('.filter_form')) );
-          }",
+                    return $.extend( {}, d, getFormData($('.filter_form')) );
+              }",
             ])
-            ->dom('Bfrtip');
+            /*
+             * l - length changing input control
+             * f - filtering input
+             * t - The table!
+             * i - Table information summary
+             * p - pagination control
+             * r - processing display element
+             * B - buttons
+             */
+            ->dom("<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'fB>><'row'<'col-sm-12'tr>><'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>");
+    }
+
+    protected function buttons()
+    {
+        return [];
     }
 
     protected function getUrl()

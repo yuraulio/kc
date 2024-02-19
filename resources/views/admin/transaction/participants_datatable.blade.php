@@ -40,84 +40,13 @@
                     </div>
 
                     <div class="table-responsive py-4">
-
-
-                <div class="collapse" id="collapseFilters">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-sm-3 filter_col" id="filter_col1" data-column="1">
-                                <label>Event</label>
-                                <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..."  name="Name" class="column_filter" id="col1_filter">
-                                <option selected value> -- All -- </option>
-                                </select>
-                            </div>
-                            <div class="col-sm-3 filter_col" id="filter_col4" data-column="4">
-                                <label>Coupon</label>
-                                <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..." name="Name" class="column_filter" id="col4_filter" placeholder="Coupon">
-                                <option selected value> -- All -- </option>
-                                </select>
-                            </div>
-
-                            <div class="col-sm-3 filter_col" id="filter_col8" data-column="8">
-                                <label>Payment Method</label>
-                                <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..." name="Name" class="column_filter" id="col8_filter" placeholder="Payment Method">
-                                <option selected value> -- All -- </option>
-                                </select>
-                            </div>
-
-
-                            <div class="col-sm-3 filter_col" id="filter_col11" data-column="11">
-                                <label>Delivery</label>
-                                <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..." name="Name" class="column_filter" id="col11_filter" placeholder="Payment Method">
-                                <option selected value> -- All -- </option>
-                                </select>
-                            </div>
-
-                            <div class="col-sm-3 filter_col d-none" id="filter_col12" data-column="12">
-                                <label>City</label>
-                                <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..." name="Name" class="column_filter" id="col12_filter" placeholder="City">
-                                <option selected value> -- All -- </option>
-                                </select>
-                            </div>
-
-                            <div class="col-sm-3 filter_col" id="filter_col13" data-column="13">
-                                <label>Category</label>
-                                <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..." name="Name" class="column_filter" id="col13_filter" placeholder="Category">
-                                <option selected value> -- All -- </option>
-                                </select>
-                            </div>
-
-
-                            <div class="col-sm-3 filter_col">
-                                <div class="form-group">
-                                    <label>From - To</label>
-                                    <input class="select2-css" type="text" autocomplete="off" name="daterange">
-                                </div>
-                            </div>
-                            <!-- <div class="col-sm-3 filter_col">
-                                <div class="form-group">
-                                    <label>From:</label>
-                                    <input class="select2-css" type="text" id="min" name="min">
-                                </div>
-                            </div>
-                            <div class="col-sm-3 filter_col">
-                                <div class="form-group">
-                                    <label>To:</label>
-                                    <input class="select2-css" type="text" id="max" name="max">
-                                </div>
-                            </div> -->
-                            {{--<Button type="button" onclick="ClearFields();" class="btn btn-secondary btn-lg "> Clear Filter</Button>--}}
-                        </div>
+                      @include('admin.transaction.components.participants_filters')
+                      {{$dataTable->table()}}
                     </div>
-                </div>
-                {{$dataTable->table()}}
-
-            </div>
-        </div>
-    </div>
-</div>
-
-        @include('layouts.footers.auth')
+              </div>
+          </div>
+      </div>
+      @include('layouts.footers.auth')
     </div>
 @endsection
 
@@ -149,7 +78,84 @@
   var elid = "{{$dataTable->getTableId()}}";
   $(document).ready(function() {
     $('#participants_info').removeClass('d-none');
+
+    $(document).on('change', '.datatable-filters-form-custom select', function (e) {
+      if (window.LaravelDataTables[elid]) {
+        window.LaravelDataTables[elid].ajax.reload();
+      }
+    });
   });
+</script>
+
+
+<script>
+  // It's a Kind of Magic...
+  let minDate = null;
+  let maxDate = moment().add(1, 'day').endOf('day').format('MM/DD/YYYY');
+  let eventsArray = [];
+
+  $(document).ready(function() {
+    let table = window.LaravelDataTables[elid];
+
+    $(document).on("click",".js-excel-button",function() {
+
+      let min = minDate;
+      let max = maxDate;
+      let city = $('#col12_filter').val()
+      let category = $('#col13_filter').val()
+      let delivery = $('#col11_filter').val()
+
+      //let event = eventsArray[removeSpecial($("#col1_filter").val())];
+
+      let event = [];
+      $.each(eventsArray, function(key, value) {
+        event.push(value);
+      })
+
+      $.ajax({
+        headers: {
+          'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+        },
+        url: "{{route('transaction.export-excel')}}",
+        type: "POST",
+        data:{event:event,fromDate:min,toDate:max, city: city, category: category, delivery: delivery} ,
+        success: function(data) {
+
+          window.location.href = '/tmp/exports/TransactionsExport.xlsx'
+
+        }
+      });
+
+    });
+
+
+    $(document).on("click",".js-invoice-button",function() {
+
+      let city = $('#col12_filter').val()
+      let category = $('#col13_filter').val()
+      let delivery = $('#col11_filter').val()
+
+      let transactionsData = table.column(10,{filter: 'applied'}).data().unique().sort();
+      let transactions = [];
+      $.each(transactionsData, function(key, value){
+        transactions.push(value)
+      })
+
+      $.ajax({
+        headers: {
+          'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+        },
+        url: "{{route('transaction.export-invoice')}}",
+        type: "POST",
+        data:{transactions:transactions, city: city, delivery: delivery, category: category} ,
+        success: function(data) {
+          window.location.href = data.zip
+        }
+      });
+
+    });
+  });
+
 </script>
 
 @endpush

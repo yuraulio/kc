@@ -169,3 +169,11 @@ button#move-lesson {
   }
 }
 
+
+.dataTables_wrapper .dt-buttons {
+  display: inline-block;
+  float: right;
+}
+.dataTables_wrapper .dt-buttons .btn {
+  margin-right: 4px;
+}
