@@ -40,7 +40,7 @@
                     </div>
 
                     <div class="table-responsive py-4">
-                      @include('admin.transaction.components.participants_filters')
+                      @include('admin.transaction.components.participants_filters', ['formId' => $dataTable->getTableId() . '-filters'])
                       {{$dataTable->table()}}
                     </div>
               </div>
@@ -79,7 +79,7 @@
   $(document).ready(function() {
     $('#participants_info').removeClass('d-none');
 
-    $(document).on('change', '.datatable-filters-form-custom select', function (e) {
+    $(document).on('change', '#' + elid + '-filters select', function (e) {
       if (window.LaravelDataTables[elid]) {
         window.LaravelDataTables[elid].ajax.reload();
       }

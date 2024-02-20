@@ -47,6 +47,20 @@ class TransactionParticipantsDataTable extends AppDataTable
                         );
                 });
             });
+            $query->when($this->request()->input('filter.coupons'), function ($query, $value) {
+                $query->whereIn('transactions.coupon_code', is_array($value) ? $value : [$value]);
+            });
+            $query->when($this->request()->input('filter.event'), function ($query, $value) {
+                $query->whereIn('events.id', $value);
+            });
+            $query->when($this->request()->input('filter.pricing'), function ($query, $value) {
+                if ($value === 'free') {
+                    $query->where('transactions.amount', 0);
+
+                    return;
+                }
+                $query->where('transactions.amount', '>', 0);
+            });
 
             return $query;
         });

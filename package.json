@@ -56,6 +56,7 @@
         "plyr": "^3.7.8",
         "prettify": "^0.1.7",
         "process": "^0.11.10",
+        "select2": "^4.1.0-rc.0",
         "sweetalert2": "^11.10.3",
         "tinymce": "^6.3.1",
         "v-viewer": "^1.6.4",

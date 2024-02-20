@@ -38,7 +38,7 @@ abstract class AppDataTable extends DataTable
                     'sLengthMenu' => 'Results :  _MENU_',
                     'oPaginate' => [
                         'sNext' => '&#187;',
-                        'sPrevious'  => '&#171;',
+                        'sPrevious' => '&#171;',
                     ],
                 ],
                 'buttons' => $this->buttons(),
@@ -50,7 +50,7 @@ abstract class AppDataTable extends DataTable
             ->postAjax([
                 'url' => $this->getUrl(),
                 'data' => "function ( d ) {
-                    return $.extend( {}, d, getFormData($('.filter_form')) );
+                    return $.extend( {}, d, getFormData($('#" . $this->tableId . "-filters')) );
               }",
             ])
             /*
@@ -62,7 +62,7 @@ abstract class AppDataTable extends DataTable
              * r - processing display element
              * B - buttons
              */
-            ->dom("<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'fB>><'row'<'col-sm-12'tr>><'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>");
+            ->dom("<'row'<'col - sm - 12 col - md - 6'l><'col - sm - 12 col - md - 6'fB>><'row'<'col - sm - 12'tr>><'row'<'col - sm - 12 col - md - 5'i><'col - sm - 12 col - md - 7'p>>");
     }
 
     protected function buttons()

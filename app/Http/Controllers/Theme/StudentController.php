@@ -1152,9 +1152,9 @@ class StudentController extends Controller
             $total_duration = 0;
             try {
                 foreach ($videos as $video) {
-                    if((int)$video['seen'] == 1){
+                    if ((int) $video['seen'] == 1) {
                         $total_seen += (float) $video['total_duration'];
-                    }else{
+                    } else {
                         $total_seen += (float) $video['total_seen'];
                     }
                     $total_duration += (float) $video['total_duration'];
