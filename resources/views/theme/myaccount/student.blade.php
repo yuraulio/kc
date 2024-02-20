@@ -127,6 +127,9 @@
                                                 </li>
                                                 @if(isset($user['image']))
                                                 <li class="remove-photo delete_media"><a data-dp-media-id="{{ $user['image']['id'] }}" href="javascript:void(0)"><img loading="lazy" src="{{cdn('/theme/assets/images/icons/icon-remove.svg')}}" alt="Remove photo" title="Remove photo" width="10" height="10"/><span>Remove photo</span></a></li>
+
+                                                <li class="crop-photo crop_media"><a data-dp-media-id="{{ $user['image']['id'] }}" href="/myaccount/crop-profile-image/{{ $user['image']['id'] }}"><img loading="lazy" src="{{cdn('/theme/assets/images/icons/icon-edit.svg')}}" alt="Crop photo" title="Crop photo" width="10" height="10"/><span>Crop photo</span></a></li>
+
                                                 @endif
                                             </ul>
                                         </div>

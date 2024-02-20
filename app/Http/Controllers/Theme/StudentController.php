@@ -142,6 +142,16 @@ class StudentController extends Controller
         return view('theme.myaccount.student', $data);
     }
 
+    public function cropProfileImage($id)
+    {
+        $user = Auth::user();
+        $data['user'] = $user;
+        $data['currentuser'] = $user;
+        $data['media'] = Media::find($id);
+
+        return view('theme.myaccount.crop-profile-image', $data);
+    }
+
     public function checkInstructorEvent($event)
     {
         $pass = false;

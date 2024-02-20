@@ -11,7 +11,7 @@
                 {{ __() }}
             @endslot
 
-            <li class="breadcrumb-item"><a href="{{ route('events.index') }}">{{ __('Events Management') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('events.index') }}">{{ __('Crop profile image') }}</a></li>
         @endcomponent
     @endcomponent
     <?php

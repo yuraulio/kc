@@ -588,6 +588,7 @@ Route::get('search/term', ['as' => 'search.term', 'uses' => 'Theme\SearchControl
 Route::group(['middleware' => ['auth', 'logout.devices'], 'prefix' => 'myaccount'], function () {
     Route::group(['middleware' => 'auth.sms'], function () {
         Route::get('/', 'Theme\StudentController@index')->name('myaccount');
+        Route::get('crop-profile-image/{id}', ['as' => 'myaccount.cropProfileImage', 'uses' => 'Theme\StudentController@cropProfileImage']);
         Route::post('/remove-avatar', 'Theme\StudentController@removeProfileImage')->name('remove.avatar');
         Route::post('/upload-profile-image', 'Theme\StudentController@uploadProfileImage')->name('add.profileImage');
         Route::post('/validate-personal-info', 'Theme\StudentController@infoValidation')->name('validate.personalInfo');
