@@ -505,7 +505,7 @@ class CertificateController extends Controller
             <!-- Etiquetas Open Graph básicas -->
             <meta property="og:title" content="<?= $data['certificate']['event'][0]['title'] ?>" />
             <meta property="og:type" content="website" />
-            <meta property="og:url" content="<?= config('app.url') ?>" />
+            <meta property="og:url" content="https://knowcrunch.com/cert/<?= $image ?>" />
             <meta property="og:image" content="https://knowcrunch.com/cert/<?= $image ?>" />
             <!-- Especifica la URL de la imagen que se utilizará como vista previa. -->
 
