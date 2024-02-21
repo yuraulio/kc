@@ -13,6 +13,7 @@ use App\Model\EventUser;
 use App\Model\PaymentMethod;
 use App\Model\Transaction;
 use App\Model\User;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Html\Column;
@@ -61,6 +62,51 @@ class TransactionParticipantsDataTable extends AppDataTable
                 }
                 $query->where('transactions.amount', '>', 0);
             });
+            $query->when($this->request()->input('filter.payment_method'), function ($query, $value) {
+                $query->whereExists(function ($query) use ($value) {
+                    $query->select(DB::raw(1))
+                        ->from((new EventUser)->getTable() . ' as eu')
+                        ->whereRaw(DB::raw('eu.user_id = users.id'))
+                        ->whereRaw(DB::raw('eu.event_id = events.id'))
+                        ->where('eu.payment_method', $value);
+                });
+            });
+
+            $query->when($this->request()->input('filter.delivery'), function ($query, $value) {
+                $query->whereIn('events.id', function ($query) use ($value) {
+                    $query
+                        ->select('event_id')
+                        ->from('event_delivery')
+                        ->where('delivery_id', $value);
+                });
+            });
+
+            $query->when($this->request()->input('filter.city'), function ($query, $value) {
+                $query->whereIn('events.id', function ($query) use ($value) {
+                    $query
+                        ->select('event_id')
+                        ->from('event_city')
+                        ->where('city_id', $value);
+                });
+            });
+
+            $query->when($this->request()->input('filter.category'), function ($query, $value) {
+                $query->whereIn('events.id', function ($query) use ($value) {
+                    $query
+                        ->select('categoryable_id')
+                        ->from('categoryables')
+                        ->where('categoryable_type', (new Event())->getMorphClass())
+                        ->where('category_id', $value);
+                });
+            });
+
+            $query->when($this->request()->input('filter.daterange'), function ($query, $value) {
+                list($from, $to) = explode(' - ', $value);
+                if (!$from || !$to) {
+                    return;
+                }
+                $query->whereBetween('transactions.created_at', [Carbon::parse($from), Carbon::parse($to)]);
+            });
 
             return $query;
         });
@@ -102,6 +148,7 @@ class TransactionParticipantsDataTable extends AppDataTable
 
         return $dataTable
             ->editColumn('user_id', '<a href="{{ route(\'user.edit\', $user_id) }}">{{$user_name}}</a>')
+            ->editColumn('type', '{{ \App\Services\Transactions\TransactionParticipantsService::getValidType($type, $amount, $coupon_code) }}')
             ->editColumn('event_name', '{{$event_name}} / {{ FormatHelper::dateYmd($event_published_at) }}')
             ->editColumn('amount', '€ {{ number_format($amount, 2, ".", "") }}')
             ->editColumn('coupon_code', '{{ empty($coupon_code) ? "-" : $coupon_code }}')

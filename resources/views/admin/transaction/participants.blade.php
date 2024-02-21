@@ -298,11 +298,26 @@ $.fn.dataTable.ext.search.push(
 
 );
 
+var statisticsUsers = {
+  total: @json($total_users),
+  in_class: @json($usersInClassAll),
+  elearning: @json($usersElearningAll),
+}
+
 $(document).ready(function() {
 
     $('input[name="daterange"]').daterangepicker();
 
-    $('input[name="daterange"]').val('')
+    $('input[name="daterange"]').val('');
+
+  ((statistics) => {
+    var rootEl = $('.js-statistics-registrations-total').first();
+    rootEl.find('.js-total-users').text(statistics.total);
+    rootEl.find('.js-total-users-in-class').text(statistics.in_class);
+    rootEl.find('.js-total-users-elearning').text(statistics.elearning);
+    rootEl.find('.loader').hide();
+    rootEl.find('.js-statistics-body').show();
+  })(statisticsUsers);
 
     let sort_events = []
 
@@ -526,8 +541,13 @@ $(document).ready(function() {
 
     function stats_non_elearning(){
 
-        $('.widget .info').addClass('d-none')
-        $('.widget .loader').removeClass('d-none')
+      var rootEl = $('.js-statistics-registrations-income').first(),
+        rootTicketEl = $('.js-statistics-tickets-income').first();
+      [rootEl, rootTicketEl].forEach((root) => {
+        root.find('.js-statistics-body').hide();
+        root.find('.loader').show();
+      })
+
 
         $(`.ticket-choices`).empty();
 
@@ -615,9 +635,10 @@ $(document).ready(function() {
 
         });
 
-        $('.widget .info').removeClass('d-none')
-        $('.widget .loader').addClass('d-none')
-
+      [rootEl, rootTicketEl].forEach((root) => {
+        root.find('.loader').hide();
+        root.find('.js-statistics-body').show();
+      });
 
     }
 
@@ -756,8 +777,12 @@ $(document).ready(function() {
         $('#total_income_by_type').text('€ '+(incomeElearningAll + incomeInclassAll).toLocaleString())
 
 
-        $('.widget .info').removeClass('d-none')
-        $('.widget .loader').addClass('d-none')
+      var rootEl = $('.js-statistics-registrations-income').first(),
+        rootTicketEl = $('.js-statistics-tickets-income').first();
+        [rootEl, rootTicketEl].forEach((root) => {
+          root.find('.loader').hide();
+          root.find('.js-statistics-body').show();
+        });
 
 
         $.each( newTickets, function( key, value ) {

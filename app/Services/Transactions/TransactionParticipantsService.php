@@ -53,4 +53,16 @@ class TransactionParticipantsService
             return Category::whereHas('events')->pluck('name', 'id');
         });
     }
+
+    public static function getValidType($type, $amount, $couponCode)
+    {
+        if ($type && $type != '-' && !is_numeric($type)) {
+            return $type;
+        }
+        if ($amount > 0 || ($couponCode && $couponCode != '-')) {
+            return 'Regular*';
+        }
+
+        return 'Free*';
+    }
 }

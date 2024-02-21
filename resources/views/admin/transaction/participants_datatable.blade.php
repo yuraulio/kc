@@ -76,13 +76,48 @@
 <script>
   var _DATATABLE_OBJ = null;
   var elid = "{{$dataTable->getTableId()}}";
+
+  function manageColumns(visible) {
+    let datatable = window.LaravelDataTables[elid];
+    if (!datatable) {
+      return;
+    }
+    /**
+     * old version of library, names not supported
+     * datatable.columns().names()
+     */
+    const fields = {
+      videos_seen: 5,
+      expiration: 7,
+    }
+    Object.keys(fields).map(x => {
+      let index = fields[x];
+      datatable.column(index).visible(visible);
+    })
+  }
   $(document).ready(function() {
     $('#participants_info').removeClass('d-none');
+    manageColumns(false);
 
-    $(document).on('change', '#' + elid + '-filters select', function (e) {
+    var dr = $('#filter_daterange');
+    dr.daterangepicker();
+    dr.val('')
+
+    function updateDataTable() {
       if (window.LaravelDataTables[elid]) {
         window.LaravelDataTables[elid].ajax.reload();
       }
+    }
+    dr.on('change', updateDataTable);
+
+    $(document).on('change', '#' + elid + '-filters select', updateDataTable);
+    $(document).on('change', '#' + elid + '-filters #filter_event', function() {
+      let v = $(this).val();
+      let visible = false;
+      if(v.search('E-Learning') !== -1) {
+        visible = true;
+      }
+      manageColumns(visible);
     });
   });
 </script>

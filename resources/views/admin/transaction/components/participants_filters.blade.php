@@ -2,13 +2,17 @@
 $service = app(\App\Services\Transactions\TransactionParticipantsService::class);
 $events = $service->getEvents();
 $coupons = $service->getCoupons();
+$paymentMethods = $service->getPaymentMethods();
+$deliveries = $service->getDeliveries();
+$cities = $service->getCities();
+$categories = $service->getCategories();
 @endphp
 <div class="collapse " id="collapseFilters">
   <div class="container">
     <form id="{{$formId}}" action="#" method="POST">
       <div class="row">
         <div class="col-sm-3 filter_col" id="filter_event_row" data-column="1">
-          <label>Event</label>
+          <label for="filter_event">Event</label>
           <select name="filter[event]" id="filter_event"
                   data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..."
                   class="column_filter" >
@@ -19,7 +23,7 @@ $coupons = $service->getCoupons();
           </select>
         </div>
         <div class="col-sm-3 filter_col" id="filter_coupons_row" data-column="4">
-          <label>Coupon</label>
+          <label for="filter_coupons">Coupon</label>
           <select name="filter[coupons]" id="filter_coupons" data-placeholder="Select coupons" multiple="multiple"
                   data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..."
                   class="column_filter">
@@ -30,24 +34,31 @@ $coupons = $service->getCoupons();
           </select>
         </div>
 
-        <div class="col-sm-3 filter_col" id="filter_col8" data-column="8">
-          <label>Payment Method</label>
-          <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..." name="Name"
-                  class="column_filter" id="col8_filter" placeholder="Payment Method">
+        <div class="col-sm-3 filter_col" id="filter_payment_method_row" data-column="8">
+          <label for="filter_payment_method">Payment Method</label>
+          <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..."
+                  id="filter_payment_method" name="filter[payment_method]"
+                  class="column_filter">
             <option selected value> -- All --</option>
+            @foreach($paymentMethods as $k => $v)
+            <option value="{{$k}}">{{$v}}</option>
+            @endforeach
           </select>
         </div>
 
-
-        <div class="col-sm-3 filter_col" id="filter_col11" data-column="11">
-          <label>Delivery</label>
-          <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..." name="Name"
-                  class="column_filter" id="col11_filter" placeholder="Delivery">
+        <div class="col-sm-3 filter_col" id="filter_delivery_row" data-column="11">
+          <label for="filter_delivery">Delivery</label>
+          <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..."
+                  id="filter_delivery" name="filter[delivery]"
+                  class="column_filter">
             <option selected value> -- All --</option>
+            @foreach($deliveries as $k => $v)
+            <option value="{{$k}}">{{$v}}</option>
+            @endforeach
           </select>
         </div>
         <div class="col-sm-3 filter_col" id="filter_pricing_row" data-column="3">
-          <label>Pricing</label>
+          <label for="filter_pricing">Pricing</label>
           <select id="filter_pricing" name="filter[pricing]" data-toggle="select" class="column_filter">
             <option selected value> -- All --</option>
             <option value="free">Free</option>
@@ -55,27 +66,34 @@ $coupons = $service->getCoupons();
           </select>
         </div>
 
-        <div class="col-sm-3 filter_col d-none" id="filter_col12" data-column="12">
-          <label>City</label>
-          <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..." name="Name"
-                  class="column_filter" id="col12_filter" placeholder="City">
+        <div class="col-sm-3 filter_col" id="filter_city_row" data-column="12">
+          <label for="filter_city">City</label>
+          <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..."
+                  name="filter[city]" id="filter_city"
+                  class="column_filter" >
             <option selected value> -- All --</option>
+            @foreach($cities as $k => $v)
+            <option value="{{$k}}">{{$v}}</option>
+            @endforeach
           </select>
         </div>
 
-        <div class="col-sm-3 filter_col" id="filter_col13" data-column="13">
-          <label>Category</label>
-          <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..." name="Name"
-                  class="column_filter" id="col13_filter" placeholder="Category">
+        <div class="col-sm-3 filter_col" id="filter_category_row" data-column="13">
+          <label for="filter_category">Category</label>
+          <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..."
+                  name="filter[category]" id="filter_category"
+                  class="column_filter">
             <option selected value> -- All --</option>
+            @foreach($categories as $k => $v)
+            <option value="{{$k}}">{{$v}}</option>
+            @endforeach
           </select>
         </div>
 
-
-        <div class="col-sm-3 filter_col">
+        <div class="col-sm-3 filter_col" id="filter_daterange_row">
           <div class="form-group">
-            <label>From - To</label>
-            <input class="select2-css" type="text" autocomplete="off" name="daterange">
+            <label for="filter_daterange">From - To</label>
+            <input class="select2-css" type="text" autocomplete="off" id="filter_daterange" name="filter[daterange]" />
           </div>
         </div>
       </div>
