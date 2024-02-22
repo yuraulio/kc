@@ -37,17 +37,18 @@ class StatisticsController extends ApiBaseController
         $total = $this->getBaseQuery($request)->count(DB::raw('DISTINCT users.id'));
         $elearning = $this
             ->getBaseQuery($request)
-            ->select([
-                DB::raw('event_delivery.delivery_id as delivery_id'),
-                DB::raw('COUNT(*) as total'),
-            ])
             ->join('event_delivery', 'events.id', '=', 'event_delivery.event_id')
             ->where('event_delivery.delivery_id', self::DELIVERY_VIDEO_TRAINING_ID)
+            ->count(DB::raw('DISTINCT users.id'));
+        $inClass = $this
+            ->getBaseQuery($request)
+            ->join('event_delivery', 'events.id', '=', 'event_delivery.event_id')
+            ->where('event_delivery.delivery_id', '<>', self::DELIVERY_VIDEO_TRAINING_ID)
             ->count(DB::raw('DISTINCT users.id'));
 
         return [
             'total' => $total,
-            'in_class' => $total - $elearning,
+            'in_class' => $inClass,
             'elearning' => $elearning,
         ];
     }
