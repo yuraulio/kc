@@ -7,6 +7,7 @@ use App\Model\Admin\Category;
 use App\Model\Admin\Comment;
 use App\Model\Admin\Page;
 use App\Model\Admin\Template;
+use App\Model\Passport\Token;
 use App\Model\User;
 use App\Policies\AdminPolicy;
 use App\Policies\CategoryPolicy;
@@ -49,6 +50,7 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerPolicies();
 
 //        Passport::routes();
+        Passport::useTokenModel(Token::class);
         Passport::tokensExpireIn(now()->addDays(15));
         Passport::refreshTokensExpireIn(now()->addDays(30));
         Passport::personalAccessTokensExpireIn(now()->addMonths(1));

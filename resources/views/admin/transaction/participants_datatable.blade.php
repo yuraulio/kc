@@ -76,6 +76,9 @@
 <script>
   var _DATATABLE_OBJ = null;
   var elid = "{{$dataTable->getTableId()}}";
+  const rotues = {
+    'participants_statistics': @json(route('api.v1.transactions.participants_statistics')),
+  };
 
   function manageColumns(visible) {
     let datatable = window.LaravelDataTables[elid];
@@ -95,6 +98,30 @@
       datatable.column(index).visible(visible);
     })
   }
+
+  function updateParticipantsStatistics() {
+    var rootEl = $('.js-statistics-registrations-total').first();
+    rootEl.find('.js-statistics-body').hide();
+    rootEl.find('.loader').show();
+    $.ajax({
+      headers: {
+        'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content'),
+        'Authorization':  'Bearer ' + jQuery('meta[name="api-token"]').attr('content'),
+      },
+      url: rotues.participants_statistics,
+      type: "POST",
+      contentType: "application/json",
+      data: JSON.stringify($.extend( {}, getFormData($('#'+elid+'-filters')) )) ,
+      success: function(data) {
+        rootEl.find('.js-total-users').text(data.total);
+        rootEl.find('.js-total-users-in-class').text(data.in_class);
+        rootEl.find('.js-total-users-elearning').text(data.elearning);
+        rootEl.find('.loader').hide();
+        rootEl.find('.js-statistics-body').show();
+      }
+    });
+  }
+
   $(document).ready(function() {
     $('#participants_info').removeClass('d-none');
     manageColumns(false);
@@ -119,6 +146,7 @@
       }
       manageColumns(visible);
     });
+    updateParticipantsStatistics();
   });
 </script>
 

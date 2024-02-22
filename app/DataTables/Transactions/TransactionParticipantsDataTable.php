@@ -38,77 +38,7 @@ class TransactionParticipantsDataTable extends AppDataTable
     {
         $dataTable = AppEloquentDataTable::create($query);
         $dataTable->filter(function ($query) {
-            $query->when($this->request()->input('search.value'), function ($query, $value) {
-                $query->where(function ($q) use ($value) {
-                    $q->where('events.title', 'like', '%' . escapeLike($value) . '%')
-                        ->orWhere(
-                            DB::Raw('CONCAT(users.firstname, " ", users.lastname)'),
-                            'like',
-                            '%' . escapeLike($value) . '%'
-                        );
-                });
-            });
-            $query->when($this->request()->input('filter.coupons'), function ($query, $value) {
-                $query->whereIn('transactions.coupon_code', is_array($value) ? $value : [$value]);
-            });
-            $query->when($this->request()->input('filter.event'), function ($query, $value) {
-                $query->whereIn('events.id', $value);
-            });
-            $query->when($this->request()->input('filter.pricing'), function ($query, $value) {
-                if ($value === 'free') {
-                    $query->where('transactions.amount', 0);
-
-                    return;
-                }
-                $query->where('transactions.amount', '>', 0);
-            });
-            $query->when($this->request()->input('filter.payment_method'), function ($query, $value) {
-                $query->whereExists(function ($query) use ($value) {
-                    $query->select(DB::raw(1))
-                        ->from((new EventUser)->getTable() . ' as eu')
-                        ->whereRaw(DB::raw('eu.user_id = users.id'))
-                        ->whereRaw(DB::raw('eu.event_id = events.id'))
-                        ->where('eu.payment_method', $value);
-                });
-            });
-
-            $query->when($this->request()->input('filter.delivery'), function ($query, $value) {
-                $query->whereIn('events.id', function ($query) use ($value) {
-                    $query
-                        ->select('event_id')
-                        ->from('event_delivery')
-                        ->where('delivery_id', $value);
-                });
-            });
-
-            $query->when($this->request()->input('filter.city'), function ($query, $value) {
-                $query->whereIn('events.id', function ($query) use ($value) {
-                    $query
-                        ->select('event_id')
-                        ->from('event_city')
-                        ->where('city_id', $value);
-                });
-            });
-
-            $query->when($this->request()->input('filter.category'), function ($query, $value) {
-                $query->whereIn('events.id', function ($query) use ($value) {
-                    $query
-                        ->select('categoryable_id')
-                        ->from('categoryables')
-                        ->where('categoryable_type', (new Event())->getMorphClass())
-                        ->where('category_id', $value);
-                });
-            });
-
-            $query->when($this->request()->input('filter.daterange'), function ($query, $value) {
-                list($from, $to) = explode(' - ', $value);
-                if (!$from || !$to) {
-                    return;
-                }
-                $query->whereBetween('transactions.created_at', [Carbon::parse($from), Carbon::parse($to)]);
-            });
-
-            return $query;
+            return $this->applyFilters($query, $this->request());
         });
 
         $dataTable->setBeforeProcessResult(function (Collection $data) {
@@ -156,6 +86,81 @@ class TransactionParticipantsDataTable extends AppDataTable
             ->editColumn('expiration', '{{ FormatHelper::dateYmd($expiration) }}')
             ->setRowId('row-{!! $id !!}')
             ->escapeColumns([]);
+    }
+
+    public function applyFilters($query, $request)
+    {
+        $query->when($request->input('search.value'), function ($query, $value) {
+            $query->where(function ($q) use ($value) {
+                $q->where('events.title', 'like', '%' . escapeLike($value) . '%')
+                    ->orWhere(
+                        DB::Raw('CONCAT(users.firstname, " ", users.lastname)'),
+                        'like',
+                        '%' . escapeLike($value) . '%'
+                    );
+            });
+        });
+        $query->when($request->input('filter.coupons'), function ($query, $value) {
+            $query->whereIn('transactions.coupon_code', is_array($value) ? $value : [$value]);
+        });
+        $query->when($request->input('filter.event'), function ($query, $value) {
+            $query->whereIn('events.id', $value);
+        });
+        $query->when($request->input('filter.pricing'), function ($query, $value) {
+            if ($value === 'free') {
+                $query->where('transactions.amount', 0);
+
+                return;
+            }
+            $query->where('transactions.amount', '>', 0);
+        });
+        $query->when($request->input('filter.payment_method'), function ($query, $value) {
+            $query->whereExists(function ($query) use ($value) {
+                $query->select(DB::raw(1))
+                    ->from((new EventUser)->getTable() . ' as eu')
+                    ->whereRaw(DB::raw('eu.user_id = users.id'))
+                    ->whereRaw(DB::raw('eu.event_id = events.id'))
+                    ->where('eu.payment_method', $value);
+            });
+        });
+
+        $query->when($request->input('filter.delivery'), function ($query, $value) {
+            $query->whereIn('events.id', function ($query) use ($value) {
+                $query
+                    ->select('event_id')
+                    ->from('event_delivery')
+                    ->where('delivery_id', $value);
+            });
+        });
+
+        $query->when($request->input('filter.city'), function ($query, $value) {
+            $query->whereIn('events.id', function ($query) use ($value) {
+                $query
+                    ->select('event_id')
+                    ->from('event_city')
+                    ->where('city_id', $value);
+            });
+        });
+
+        $query->when($request->input('filter.category'), function ($query, $value) {
+            $query->whereIn('events.id', function ($query) use ($value) {
+                $query
+                    ->select('categoryable_id')
+                    ->from('categoryables')
+                    ->where('categoryable_type', (new Event())->getMorphClass())
+                    ->where('category_id', $value);
+            });
+        });
+
+        $query->when($request->input('filter.daterange'), function ($query, $value) {
+            list($from, $to) = explode(' - ', $value);
+            if (!$from || !$to) {
+                return;
+            }
+            $query->whereBetween('transactions.created_at', [Carbon::parse($from), Carbon::parse($to)]);
+        });
+
+        return $query;
     }
 
     /**

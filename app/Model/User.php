@@ -949,4 +949,14 @@ class User extends Authenticatable
     {
         return 'https://hooks.slack.com/services/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';
     }
+
+    public function getAccessToken()
+    {
+        $token = $this->tokens()->where('revoked', false)->where('expires_at', '>', Carbon::now())->first();
+        if ($token) {
+            return $token->getPersonalAccessTokenResult()->accessToken;
+        }
+
+        return $this->createToken('auth_token')->accessToken;
+    }
 }
