@@ -111,8 +111,8 @@ Route::group(['middleware' => 'auth.aboveauthor', 'prefix' => 'admin'], function
     Route::post('subscription/export-excel', 'SubscriptionController@exportExcel')->name('subscription.export-excel');
 
     //Participants
-    Route::get('transaction/participants/new', TransactionParticipantsReportController::class);
-    Route::get('transaction/participants', 'TransactionController@participants_inside_revenue')->name('transaction.participants');
+    Route::get('transaction/participants', TransactionParticipantsReportController::class)->name('transaction.participants');
+    Route::get('transaction/participants/old', 'TransactionController@participants_inside_revenue');
     Route::get('transaction/revenue', 'TransactionController@participants_inside_revenue_new')->name('transaction.participants_new');
     Route::post('transaction/updateExpirationDate', ['as' => 'transaction.updateExpirationDate', 'uses' => 'TransactionController@updateExpirationDate']);
     Route::post('transaction/export-excel', 'TransactionController@exportExcel')->name('transaction.export-excel');

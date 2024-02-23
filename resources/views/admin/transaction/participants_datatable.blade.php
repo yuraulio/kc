@@ -99,10 +99,17 @@
     })
   }
 
-  function updateParticipantsStatistics() {
-    var rootEl = $('.js-statistics-registrations-total').first();
-    rootEl.find('.js-statistics-body').hide();
-    rootEl.find('.loader').show();
+  function priceFormater(n, c = '€') {
+    return c + ' ' + Number(n).toLocaleString();
+  }
+
+  function updateParticipantsStatistics(all = true) {
+    ['.js-statistics-registrations-total', '.js-statistics-registrations-income', '.js-statistics-tickets-income'].forEach((x) => {
+      var rootEl = $(x).first();
+      rootEl.find('.js-statistics-body').hide();
+      rootEl.find('.loader').show();
+    })
+
     $.ajax({
       headers: {
         'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content'),
@@ -113,11 +120,38 @@
       contentType: "application/json",
       data: JSON.stringify($.extend( {}, getFormData($('#'+elid+'-filters')) )) ,
       success: function(data) {
-        rootEl.find('.js-total-users').text(data.total);
-        rootEl.find('.js-total-users-in-class').text(data.in_class);
-        rootEl.find('.js-total-users-elearning').text(data.elearning);
-        rootEl.find('.loader').hide();
-        rootEl.find('.js-statistics-body').show();
+        if (all) {
+          ((data) => {
+            var rootEl = $('.js-statistics-registrations-total').first();
+            rootEl.find('.js-total-users').text(data.total);
+            rootEl.find('.js-total-users-in-class').text(data.in_class);
+            rootEl.find('.js-total-users-elearning').text(data.elearning);
+            rootEl.find('.loader').hide();
+            rootEl.find('.js-statistics-body').show();
+          })(data.users);
+        }
+        ((data) => {
+          var rootEl = $('.js-statistics-registrations-income').first();
+          rootEl.find('#total_income_by_type').text(priceFormater(data.total));
+          rootEl.find('#incomeInclassAll').text(priceFormater(data.in_class));
+          rootEl.find('#incomeElearningAll').text(priceFormater(data.elearning));
+          rootEl.find('.loader').hide();
+          rootEl.find('.js-statistics-body').show();
+        })(data.income);
+        ((data) => {
+          var rootEl = $('.js-statistics-tickets-income').first();
+          rootEl.find('#total_income').text(priceFormater(data.total));
+
+
+          rootEl.find('#special').text(priceFormater(data.special ?? 0));
+          rootEl.find('#regular').text(priceFormater(data.regular ?? 0));
+          rootEl.find('#alumni').text(priceFormater(data.alumni ?? 0));
+          rootEl.find('#early-bird').text(priceFormater(data.early_bird ?? 0));
+
+          rootEl.find('.loader').hide();
+          rootEl.find('.js-statistics-body').show();
+        })(data.tickets);
+
       }
     });
   }
@@ -134,6 +168,7 @@
       if (window.LaravelDataTables[elid]) {
         window.LaravelDataTables[elid].ajax.reload();
       }
+      updateParticipantsStatistics(false);
     }
     dr.on('change', updateDataTable);
 
@@ -148,32 +183,30 @@
     });
     updateParticipantsStatistics();
   });
+
+  function getOldFilters() {
+    const filters = getFormData($('#'+ elid + '-filters')).filter,
+      data = {
+        ...filters
+      };
+    var min = 0,
+      max = 0;
+    if (data.daterange) {
+      [min, max] = data.daterange.split(' - ');
+    }
+    data.fromDate = min;
+    data.toDate = max;
+    return data;
+  }
 </script>
 
 
 <script>
   // It's a Kind of Magic...
-  let minDate = null;
-  let maxDate = moment().add(1, 'day').endOf('day').format('MM/DD/YYYY');
-  let eventsArray = [];
-
   $(document).ready(function() {
     let table = window.LaravelDataTables[elid];
 
     $(document).on("click",".js-excel-button",function() {
-
-      let min = minDate;
-      let max = maxDate;
-      let city = $('#col12_filter').val()
-      let category = $('#col13_filter').val()
-      let delivery = $('#col11_filter').val()
-
-      //let event = eventsArray[removeSpecial($("#col1_filter").val())];
-
-      let event = [];
-      $.each(eventsArray, function(key, value) {
-        event.push(value);
-      })
 
       $.ajax({
         headers: {
@@ -181,7 +214,7 @@
         },
         url: "{{route('transaction.export-excel')}}",
         type: "POST",
-        data:{event:event,fromDate:min,toDate:max, city: city, category: category, delivery: delivery} ,
+        data: getOldFilters(),
         success: function(data) {
 
           window.location.href = '/tmp/exports/TransactionsExport.xlsx'
@@ -194,25 +227,20 @@
 
     $(document).on("click",".js-invoice-button",function() {
 
-      let city = $('#col12_filter').val()
-      let category = $('#col13_filter').val()
-      let delivery = $('#col11_filter').val()
-
-      let transactionsData = table.column(10,{filter: 'applied'}).data().unique().sort();
-      let transactions = [];
-      $.each(transactionsData, function(key, value){
-        transactions.push(value)
-      })
-
       $.ajax({
         headers: {
           'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
         },
         url: "{{route('transaction.export-invoice')}}",
         type: "POST",
-        data:{transactions:transactions, city: city, delivery: delivery, category: category} ,
+        data: getFormData($('#'+ elid + '-filters')),
         success: function(data) {
           window.location.href = data.zip
+        },
+        error: function(jqXHR, exception) {
+          if (jqXHR.status === 401) {
+            alert('You don\'t have access to this functionality');
+          }
         }
       });
 

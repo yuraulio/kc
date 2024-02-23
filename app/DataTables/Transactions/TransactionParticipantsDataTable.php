@@ -104,7 +104,7 @@ class TransactionParticipantsDataTable extends AppDataTable
             $query->whereIn('transactions.coupon_code', is_array($value) ? $value : [$value]);
         });
         $query->when($request->input('filter.event'), function ($query, $value) {
-            $query->whereIn('events.id', $value);
+            $query->where('events.id', $value);
         });
         $query->when($request->input('filter.pricing'), function ($query, $value) {
             if ($value === 'free') {

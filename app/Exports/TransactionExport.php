@@ -20,6 +20,8 @@ class TransactionExport implements FromArray, WithHeadings, ShouldAutoSize
     public $city;
     public $category;
     public $delivery;
+    public $pricing;
+    public $coupons;
 
     public function __construct($request)
     {
@@ -32,8 +34,15 @@ class TransactionExport implements FromArray, WithHeadings, ShouldAutoSize
         $this->city = $request->city;
         $this->category = $request->category;
         $this->delivery = [];
+        $this->pricing = $request->input('pricing');
+        $this->coupons = $request->input('coupons');
+        if ($this->coupons && !is_array($this->coupons)) {
+            $this->coupons = [$this->coupons];
+        }
 
-        if ($request->delivery == 'in-class') {
+        if (is_numeric($request->delivery)) {
+            $this->delivery = [$request->delivery];
+        } elseif ($request->delivery == 'in-class') {
             $this->delivery = [139, 215];
         } elseif ($request->delivery == 'e-learning') {
             $this->delivery = [143];
@@ -61,6 +70,10 @@ class TransactionExport implements FromArray, WithHeadings, ShouldAutoSize
         if ($this->city != null) {
             $city = $this->city;
             $transactions = $transactions->whereHas('event.city', function ($q) use ($city) {
+                if (is_numeric($city)) {
+                    return $q->where('id', $city);
+                }
+
                 return $q->where('name', $city);
             });
         }
@@ -68,6 +81,10 @@ class TransactionExport implements FromArray, WithHeadings, ShouldAutoSize
         if ($this->category != null) {
             $category = $this->category;
             $transactions = $transactions->whereHas('event.category', function ($q) use ($category) {
+                if (is_numeric($category)) {
+                    return $q->where('id', $category);
+                }
+
                 return $q->where('name', $category);
             });
         }
@@ -78,6 +95,15 @@ class TransactionExport implements FromArray, WithHeadings, ShouldAutoSize
                 return $q->whereIn('course_delivery', $delivery);
             });
         }
+
+        if ($this->pricing) {
+            $transactions->where('amount', $this->pricing === 'paid' ? '<>' : '=', 0);
+        }
+
+        if ($this->coupons) {
+            $transactions->whereIn('coupon_code', $this->coupons);
+        }
+
         $transactions = $transactions->get();
 
         //dd($transactions);
