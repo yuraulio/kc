@@ -54,31 +54,34 @@ class StatisticsController extends ApiBaseController
             ->where('event_delivery.delivery_id', '<>', self::DELIVERY_VIDEO_TRAINING_ID)
             ->first();
 
-        $byType = $this
-            ->getBaseQuery($request)
-            ->select([
-                DB::raw('DISTINCT users.id'),
-                DB::raw('transactions.type as type'),
-                DB::raw('SUM(transactions.amount) as total_amount'),
-            ])
-            ->groupBy('transactions.type')
-            ->get()
-            ->reduce(function ($a, $item) {
-                $k = str_replace(' ', '_', strtolower(trim($item->type)));
-                if ($k === 'special_tickets') {
-                    $k = 'special';
-                } elseif ($k === 'early_birds') {
-                    $k = 'early_bird';
-                }
-                if (!isset($a[$k])) {
-                    $a[$k] = 0;
-                }
-                $a[$k] += $item->total_amount;
+        $byType = ['total' => 0];
+        if ($request->input('type') !== 'revenues') {
+            $byType = $this
+                ->getBaseQuery($request)
+                ->select([
+                    DB::raw('DISTINCT users.id'),
+                    DB::raw('transactions.type as type'),
+                    DB::raw('SUM(transactions.amount) as total_amount'),
+                ])
+                ->groupBy('transactions.type')
+                ->get()
+                ->reduce(function ($a, $item) {
+                    $k = str_replace(' ', '_', strtolower(trim($item->type)));
+                    if ($k === 'special_tickets') {
+                        $k = 'special';
+                    } elseif ($k === 'early_birds') {
+                        $k = 'early_bird';
+                    }
+                    if (!isset($a[$k])) {
+                        $a[$k] = 0;
+                    }
+                    $a[$k] += $item->total_amount;
 
-                return $a;
-            }, []);
+                    return $a;
+                }, []);
 
-        $byType['total'] = $inClass->total_amount + $elearning->total_amount;
+            $byType['total'] = $inClass->total_amount + $elearning->total_amount;
+        }
 
         return [
             'users' => [

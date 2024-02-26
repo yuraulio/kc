@@ -11,17 +11,14 @@
                 {{ __('') }}
             @endslot
             @slot('filter')
-                <!-- <a href="#" class="btn btn-sm btn-neutral">{{ __('Filters') }}</a> -->
-                <a class="btn btn-sm btn-neutral" data-toggle="collapse" href="#collapseFilters" role="button" aria-expanded="false" aria-controls="collapseFilters">{{ __('Filters') }}</a>
-
+                <a class="btn btn-sm btn-neutral" data-toggle="collapse" href="#collapseFilters" role="button"
+                   aria-expanded="false" aria-controls="collapseFilters">{{ __('Filters') }}</a>
             @endslot
-
-            <li class="breadcrumb-item"><a href="{{ route('transaction.participants') }}">{{ __('Registrations List') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('transaction.participants') }}">{{ __('Revenue List') }}</a></li>
             <li class="breadcrumb-item active" aria-current="page">{{ __('List') }}</li>
         @endcomponent
-        @include('admin.transaction.layouts.cards')
+        @include('admin.transaction.layouts.cards', ['type' => 'revenue'])
     @endcomponent
-
     <div class="container-fluid mt--6">
         <div class="row">
             <div class="col">
@@ -29,7 +26,7 @@
                     <div class="card-header">
                         <div class="row align-items-center">
                             <div class="col-8">
-                                <h3 class="mb-0">{{ __('Registration') }}</h3>
+                                <h3 class="mb-0">{{ __('Revenue') }}</h3>
                             </div>
                         </div>
                     </div>
@@ -38,15 +35,15 @@
                         @include('alerts.success')
                         @include('alerts.errors')
                     </div>
+                  <div class="table-responsive py-4">
+                    @include('admin.transaction.components.participants_filters', ['formId' => $dataTable->getTableId() . '-filters', 'type' => 'revenues'])
+                    {{$dataTable->table()}}
+                  </div>
 
-                    <div class="table-responsive py-4">
-                      @include('admin.transaction.components.participants_filters', ['formId' => $dataTable->getTableId() . '-filters', 'type' => 'participants'])
-                      {{$dataTable->table()}}
-                    </div>
               </div>
-          </div>
-      </div>
-      @include('layouts.footers.auth')
+            </div>
+        </div>
+        @include('layouts.footers.auth')
     </div>
 @endsection
 
@@ -54,11 +51,13 @@
     <link rel="stylesheet" href="{{ asset('argon') }}/vendor/datatables.net-bs4/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="{{ asset('argon') }}/vendor/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css">
     <link rel="stylesheet" href="{{ asset('argon') }}/vendor/datatables.net-select-bs4/css/select.bootstrap4.min.css">
-    <link rel="stylesheet" href="{{ asset('argon') }}/vendor/datatables-datetime/datetime.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 @endpush
 
 @push('js')
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>--}}
+
     <script src="{{ asset('argon') }}/vendor/datatables.net/js/jquery.dataTables.min.js"></script>
     <script src="{{ asset('argon') }}/vendor/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
     <script src="{{ asset('argon') }}/vendor/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
@@ -68,7 +67,7 @@
     <script src="{{ asset('argon') }}/vendor/datatables.net-buttons/js/buttons.print.min.js"></script>
     <script src="{{ asset('argon') }}/vendor/datatables.net-select/js/dataTables.select.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="{{ asset('argon') }}/vendor/datatables-datetime/datetime.min.js"></script>
+    <!-- <script src="{{ asset('argon') }}/vendor/datatables-datetime/datetime.min.js"></script> -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
     <script type="text/javascript" src="{{cdn(mix('/js/panel_app.js'))}}"></script>
 
@@ -79,25 +78,6 @@
   const routes = {
     'participants_statistics': @json(route('api.v1.transactions.participants_statistics')),
   };
-
-  function manageColumns(visible) {
-    let datatable = window.LaravelDataTables[elid];
-    if (!datatable) {
-      return;
-    }
-    /**
-     * old version of library, names not supported
-     * datatable.columns().names()
-     */
-    const fields = {
-      videos_seen: 5,
-      expiration: 7,
-    }
-    Object.keys(fields).map(x => {
-      let index = fields[x];
-      datatable.column(index).visible(visible);
-    })
-  }
 
   function priceFormater(n, c = '€') {
     return c + ' ' + Number(n).toLocaleString();
@@ -118,7 +98,7 @@
       url: routes.participants_statistics,
       type: "POST",
       contentType: "application/json",
-      data: JSON.stringify($.extend( {}, getFormData($('#'+elid+'-filters')) )) ,
+      data: JSON.stringify($.extend( {type: 'revenues'}, getFormData($('#'+elid+'-filters')) )) ,
       success: function(data) {
         if (all) {
           ((data) => {
@@ -158,7 +138,6 @@
 
   $(document).ready(function() {
     $('#participants_info').removeClass('d-none');
-    manageColumns(false);
 
     var dr = $('#filter_daterange');
     dr.daterangepicker();
@@ -198,55 +177,6 @@
     data.toDate = max;
     return data;
   }
-</script>
-
-
-<script>
-  // It's a Kind of Magic...
-  $(document).ready(function() {
-    let table = window.LaravelDataTables[elid];
-
-    $(document).on("click",".js-excel-button",function() {
-
-      $.ajax({
-        headers: {
-          'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
-        },
-        url: "{{route('transaction.export-excel')}}",
-        type: "POST",
-        data: getOldFilters(),
-        success: function(data) {
-
-          window.location.href = '/tmp/exports/TransactionsExport.xlsx'
-
-        }
-      });
-
-    });
-
-
-    $(document).on("click",".js-invoice-button",function() {
-
-      $.ajax({
-        headers: {
-          'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
-        },
-        url: "{{route('transaction.export-invoice')}}",
-        type: "POST",
-        data: getFormData($('#'+ elid + '-filters')),
-        success: function(data) {
-          window.location.href = data.zip
-        },
-        error: function(jqXHR, exception) {
-          if (jqXHR.status === 401) {
-            alert('You don\'t have access to this functionality');
-          }
-        }
-      });
-
-    });
-  });
-
 </script>
 
 @endpush

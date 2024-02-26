@@ -216,14 +216,12 @@ class TransactionParticipantsDataTable extends AppDataTable
             Column::make('user_id')->title(trans('transaction_participants.form.user')),
             Column::make('event_name')->title(trans('transaction_participants.form.event')),
             Column::make('type')->title(trans('transaction_participants.form.type')),
-            Column::make('amount')->title(trans('transaction_participants.form.amount')),
+            Column::make('amount')->title(trans('transaction_participants.form.ticket_price')),
             Column::make('coupon_code')->title(trans('transaction_participants.form.coupon_code'))->orderable(false),
             Column::make('videos_seen')->title(trans('transaction_participants.form.videos_seen'))->orderable(false),
-            Column::make('created_at')->title(trans('transaction_participants.form.created_at')),
+            Column::make('created_at')->title(trans('transaction_participants.form.registered_at')),
             Column::make('expiration')->title(trans('transaction_participants.form.expiration'))->orderable(false),
             Column::make('payment_method')->title(trans('transaction_participants.form.payment_method'))->orderable(false),
-            Column::make('city')->title(trans('transaction_participants.form.city'))->orderable(false),
-            Column::make('category')->title(trans('transaction_participants.form.category'))->orderable(false),
         ];
     }
 

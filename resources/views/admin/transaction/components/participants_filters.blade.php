@@ -65,7 +65,7 @@ $categories = $service->getCategories();
             <option value="paid">Paid</option>
           </select>
         </div>
-
+        @if($type !== 'revenues')
         <div class="col-sm-3 filter_col" id="filter_city_row" data-column="12">
           <label for="filter_city">City</label>
           <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..."
@@ -89,6 +89,7 @@ $categories = $service->getCategories();
             @endforeach
           </select>
         </div>
+        @endif
 
         <div class="col-sm-3 filter_col" id="filter_daterange_row">
           <div class="form-group">

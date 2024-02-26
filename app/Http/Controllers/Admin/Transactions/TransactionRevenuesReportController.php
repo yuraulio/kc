@@ -2,17 +2,16 @@
 
 namespace App\Http\Controllers\Admin\Transactions;
 
-use App\DataTables\Transactions\TransactionParticipantsDataTable;
+use App\DataTables\Transactions\TransactionRevenuesDataTable;
 use App\Http\Controllers\Controller;
 use App\Model\Transaction;
 use App\Model\User;
-use Illuminate\Support\Facades\View;
 
-class TransactionParticipantsReportController extends Controller
+class TransactionRevenuesReportController extends Controller
 {
-    protected $datatable = TransactionParticipantsDataTable::class;
+    protected $datatable = TransactionRevenuesDataTable::class;
     protected $views = [
-        'index' => 'admin.transaction.participants_datatable',
+        'index' => 'admin.transaction.revenues_datatable',
     ];
     protected $authorize = [User::class, Transaction::class];
 
