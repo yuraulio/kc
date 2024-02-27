@@ -811,7 +811,7 @@
         },
         {
             "name": "codexshaper/laravel-menu-builder",
-            "version": "dev-fix/laravel-menu-builder-deps-version",
+            "version": "dev-master",
             "dist": {
                 "type": "path",
                 "url": "./local_packages/laravel-menu-builder",
