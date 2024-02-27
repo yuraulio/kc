@@ -30,7 +30,7 @@
         "binshops/laravel-blog": "^9.3",
         "bugsnag/bugsnag-laravel": "^2.26",
         "coderjerk/bird-elephant": "^0.6.1",
-        "codexshaper/laravel-menu-builder": "dev-master",
+        "codexshaper/laravel-menu-builder": "@dev",
         "doctrine/dbal": "^3.8",
         "dompdf/dompdf": "^2.0",
         "dymantic/laravel-instagram-feed": "^3.3",

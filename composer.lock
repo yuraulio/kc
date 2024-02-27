@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4267641c3334c593be3f190fccfd0bfd",
+    "content-hash": "21b0f515510e27b176eada02b13e7edb",
     "packages": [
         {
             "name": "alexusmai/laravel-file-manager",
@@ -811,7 +811,7 @@
         },
         {
             "name": "codexshaper/laravel-menu-builder",
-            "version": "dev-master",
+            "version": "dev-fix/laravel-menu-builder-deps-version",
             "dist": {
                 "type": "path",
                 "url": "./local_packages/laravel-menu-builder",
