@@ -123,8 +123,6 @@
         ((data) => {
           var rootEl = $('.js-statistics-tickets-income').first();
           rootEl.find('#total_income').text(priceFormater(data.total));
-
-
           rootEl.find('#special').text(priceFormater(data.special ?? 0));
           rootEl.find('#regular').text(priceFormater(data.regular ?? 0));
           rootEl.find('#alumni').text(priceFormater(data.alumni ?? 0));
@@ -133,6 +131,14 @@
           rootEl.find('.loader').hide();
           rootEl.find('.js-statistics-body').show();
         })(data.tickets);
+        ((data) => {
+          var rootEl = $('.js-statistics-revenues').first();
+          rootEl.find('#incomeTotal').text(priceFormater(data.total ?? 0));
+          rootEl.find('#incomeInclass').text(priceFormater(data.in_class ?? 0));
+          rootEl.find('#incomeElearning').text(priceFormater(data.elearning ?? 0));
+          rootEl.find('.loader').hide();
+          rootEl.find('.js-statistics-body').show();
+        })(data.income_accurate);
 
       }
     });

@@ -91,7 +91,7 @@
           <div class="row">
             <div class="col">
               <h5 class="card-title text-uppercase text-muted mb-0">ACTUAL ACCRUED REVENUE</h5>
-              <span class="h2 font-weight-bold mb-0"><span class="total"></span></span>
+              <span class="h2 font-weight-bold mb-0"><span id="incomeTotal" class="total"></span></span>
             </div>
 
           </div>
@@ -102,8 +102,8 @@
           <div class="row">
             <div class="col info js-statistics-body" style="display:none">
               <p class="mt-3 mb-0 text-sm">
-                <span class="text-muted mr-3">CLASS: <span class="text-success" id="income_inclass"></span></span>
-                <span class="text-muted mr-3">VIDEO:  <span class="text-success" id="income_elearning"></span></span>
+                <span class="text-muted mr-3">CLASS: <span class="text-success" id="incomeInclass"></span></span>
+                <span class="text-muted mr-3">VIDEO:  <span class="text-success" id="incomeElearning"></span></span>
               </p>
               <p class="mb-0 text-sm">
                 <span class="">All actual and accrued revenue from our paid courses (class or video).</span>
