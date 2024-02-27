@@ -12,10 +12,12 @@ use App\Model\EventStatistic;
 use App\Model\EventUser;
 use App\Model\PaymentMethod;
 use App\Model\Transaction;
+use App\Model\Transactionable;
 use App\Model\User;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Laravel\Cashier\Subscription as Sub;
 use Yajra\DataTables\Html\Column;
 
 class TransactionParticipantsDataTable extends AppDataTable
@@ -202,7 +204,13 @@ class TransactionParticipantsDataTable extends AppDataTable
                     ->whereColumn('transactionables_users.transactionable_id', '=', 'users.id')
                     ->where('transactionables_users.transactionable_type', '=', (new User())->getMorphClass());
             })
-            ->where('transactions.status', 1);
+            ->where('transactions.status', 1)
+            ->whereNotExists(
+                DB::table('transactionables', 'transactionables_subs')
+                    ->select('transactionables_subs.transaction_id')
+                    ->whereColumn('transactionables_subs.transaction_id', '=', 'transactions.id')
+                    ->where('transactionables_subs.transactionable_type', '=', (new Sub())->getMorphClass())
+            );
     }
 
     /**
