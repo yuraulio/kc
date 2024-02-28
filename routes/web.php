@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Admin\Transactions\TransactionParticipantsReportController;
+use App\Http\Controllers\Admin\Transactions\TransactionRegistrationsReportController;
 use App\Http\Controllers\Admin\Transactions\TransactionRevenuesReportController;
 use App\Http\Controllers\NotificationController;
 use App\Model\Admin\Setting;
@@ -112,7 +112,7 @@ Route::group(['middleware' => 'auth.aboveauthor', 'prefix' => 'admin'], function
     Route::post('subscription/export-excel', 'SubscriptionController@exportExcel')->name('subscription.export-excel');
 
     //Participants
-    Route::get('transaction/registrations', TransactionParticipantsReportController::class)->name('transaction.participants');
+    Route::get('transaction/registrations', TransactionRegistrationsReportController::class)->name('transaction.participants');
     Route::get('transaction/revenue', TransactionRevenuesReportController::class)->name('transaction.participants_new');
     Route::get('transaction/registrations/old', 'TransactionController@participants_inside_revenue');
     Route::get('transaction/revenue/old', 'TransactionController@participants_inside_revenue_new');

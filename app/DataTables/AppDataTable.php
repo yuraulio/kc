@@ -33,7 +33,7 @@ abstract class AppDataTable extends DataTable
                 'searching' => $this->searching,
                 'pagingType' => 'simple_numbers',
                 'oLanguage' => [
-                    'sInfo' => 'Showing page _PAGE_ of _PAGES_',
+                    'sInfo' => 'Showing _START_ to _END_ of _TOTAL_ entries',
                     'sSearchPlaceholder' => 'Search...',
                     'sLengthMenu' => 'Results :  _MENU_',
                     'oPaginate' => [

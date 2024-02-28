@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api\v1\Transactions\Participants;
 
-use App\DataTables\Transactions\TransactionParticipantsDataTable;
+use App\DataTables\Transactions\TransactionRegistrationsDataTable;
 use App\Http\Controllers\Api\v1\ApiBaseController;
 use App\Http\Controllers\Controller;
 use App\Model\Event;
@@ -176,7 +176,7 @@ class StatisticsController extends ApiBaseController
             );
 
         if ($request->has('filter')) {
-            $query = (new TransactionParticipantsDataTable)->applyFilters($query, $request);
+            $query = (new TransactionRegistrationsDataTable)->applyFilters($query, $request);
         }
 
         return $query;

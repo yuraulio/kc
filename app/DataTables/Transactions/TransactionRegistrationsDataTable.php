@@ -4,15 +4,10 @@ namespace App\DataTables\Transactions;
 
 use App\DataTables\AppDataTable;
 use App\DataTables\Extensions\AppEloquentDataTable;
-use App\Helpers\EventHelper;
-use App\Model\Category;
-use App\Model\City;
 use App\Model\Event;
-use App\Model\EventStatistic;
 use App\Model\EventUser;
 use App\Model\PaymentMethod;
 use App\Model\Transaction;
-use App\Model\Transactionable;
 use App\Model\User;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
@@ -20,7 +15,7 @@ use Illuminate\Support\Facades\DB;
 use Laravel\Cashier\Subscription as Sub;
 use Yajra\DataTables\Html\Column;
 
-class TransactionParticipantsDataTable extends AppDataTable
+class TransactionRegistrationsDataTable extends AppDataTable
 {
     protected $filters = [];
 
@@ -45,32 +40,11 @@ class TransactionParticipantsDataTable extends AppDataTable
 
         $dataTable->setBeforeProcessResult(function (Collection $data) {
             $paymentMethods = PaymentMethod::pluck('method_name', 'id');
-            $cities = [];
-            $categories = [];
-            $data->transform(function ($item) use ($paymentMethods, $cities, $categories) {
-                $statistic = EventStatistic::where('user_id', $item['user_id'])->where('event_id', $item['event_id'])->first();
+            $data->transform(function ($item) use ($paymentMethods) {
                 $userEvent = EventUser::where('user_id', $item['user_id'])->where('event_id', $item['event_id'])->first();
 
-                if (!isset($categories[$item['event_id']])) {
-                    $categories[$item['event_id']] = Category::whereHas('events', function ($query) use ($item) {
-                        $query->where('events.id', $item['event_id']);
-                    })->first();
-                }
-
-                $category = $categories[$item['event_id']];
-
-                if (!isset($cities[$item['event_id']])) {
-                    $cities[$item['event_id']] = City::whereHas('event', function ($query) use ($item) {
-                        $query->where('events.id', $item['event_id']);
-                    })->first();
-                }
-                $city = $cities[$item['event_id']];
-
-                $item->videos_seen = $statistic ? EventHelper::getVideosSeen(json_decode($statistic->videos, true)) : 0;
                 $item->expiration = $userEvent ? $userEvent->expiration : null;
                 $item->payment_method = $userEvent && isset($paymentMethods[$userEvent->payment_method]) ? $paymentMethods[$userEvent->payment_method] : 'Alpha Bank';
-                $item->category = $category ? $category->name : null;
-                $item->city = $city ? $city->name : null;
 
                 return $item;
             });
@@ -85,7 +59,6 @@ class TransactionParticipantsDataTable extends AppDataTable
             ->editColumn('amount', '€ {{ number_format($amount, 2, ".", "") }}')
             ->editColumn('coupon_code', '{{ empty($coupon_code) ? "-" : $coupon_code }}')
             ->editColumn('created_at', '{{ FormatHelper::dateYmd($created_at) }}')
-            ->editColumn('expiration', '{{ FormatHelper::dateYmd($expiration) }}')
             ->setRowId('row-{!! $id !!}')
             ->escapeColumns([]);
     }
@@ -226,9 +199,7 @@ class TransactionParticipantsDataTable extends AppDataTable
             Column::make('type')->title(trans('transaction_participants.form.type')),
             Column::make('amount')->title(trans('transaction_participants.form.ticket_price')),
             Column::make('coupon_code')->title(trans('transaction_participants.form.coupon_code'))->orderable(false),
-            Column::make('videos_seen')->title(trans('transaction_participants.form.videos_seen'))->orderable(false),
             Column::make('created_at')->title(trans('transaction_participants.form.registered_at')),
-            Column::make('expiration')->title(trans('transaction_participants.form.expiration'))->orderable(false),
             Column::make('payment_method')->title(trans('transaction_participants.form.payment_method'))->orderable(false),
         ];
     }

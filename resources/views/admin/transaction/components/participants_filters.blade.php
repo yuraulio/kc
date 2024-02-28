@@ -1,6 +1,6 @@
 @php
 $service = app(\App\Services\Transactions\TransactionParticipantsService::class);
-$events = $service->getEvents();
+$events = $service->getEvents(true);
 $coupons = $service->getCoupons();
 $paymentMethods = $service->getPaymentMethods();
 $deliveries = $service->getDeliveries();

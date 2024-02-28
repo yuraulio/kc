@@ -9,13 +9,19 @@ use App\Model\Event;
 use App\Model\PaymentMethod;
 use App\Model\Transaction;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 
 class TransactionParticipantsService
 {
-    public function getEvents()
+    public function getEvents($fullTitle = false)
     {
-        return Cache::remember('transactions-events', 10, function () {
-            return Event::orderBy('published_at', 'desc')->pluck('title', 'id');
+        return Cache::remember('transactions-events' . ($fullTitle ? '-full' : ''), 10, function () use ($fullTitle) {
+            return Event::query()
+                ->select([
+                    $fullTitle ? DB::raw("CONCAT(title,' / ', published_at) AS title") : 'title',
+                    'id'
+                ])
+                ->orderBy('published_at', 'desc')->pluck('title', 'id');
         });
     }
 

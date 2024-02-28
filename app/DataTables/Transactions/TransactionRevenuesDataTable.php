@@ -19,7 +19,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Html\Column;
 
-class TransactionRevenuesDataTable extends TransactionParticipantsDataTable
+class TransactionRevenuesDataTable extends TransactionRegistrationsDataTable
 {
     protected $filters = [];
 
@@ -45,10 +45,8 @@ class TransactionRevenuesDataTable extends TransactionParticipantsDataTable
         $dataTable->setBeforeProcessResult(function (Collection $data) {
             $paymentMethods = PaymentMethod::pluck('method_name', 'id');
             $data->transform(function ($item) use ($paymentMethods) {
-                $statistic = EventStatistic::where('user_id', $item['user_id'])->where('event_id', $item['event_id'])->first();
                 $userEvent = EventUser::where('user_id', $item['user_id'])->where('event_id', $item['event_id'])->first();
 
-                $item->videos_seen = $statistic ? EventHelper::getVideosSeen(json_decode($statistic->videos, true)) : 0;
                 $item->expiration = $userEvent ? $userEvent->expiration : null;
                 $item->payment_method = $userEvent && isset($paymentMethods[$userEvent->payment_method]) ? $paymentMethods[$userEvent->payment_method] : 'Alpha Bank';
                 $item->payment_amount = $item->amoount;
@@ -122,7 +120,6 @@ class TransactionRevenuesDataTable extends TransactionParticipantsDataTable
             Column::make('type')->title(trans('transaction_participants.form.type')),
             Column::make('amount')->title(trans('transaction_participants.form.amount')),
             Column::make('coupon_code')->title(trans('transaction_participants.form.coupon_code'))->orderable(false),
-            Column::make('videos_seen')->title(trans('transaction_participants.form.videos_seen'))->orderable(false),
             Column::make('created_at')->title(trans('transaction_participants.form.created_at')),
             Column::make('expiration')->title(trans('transaction_participants.form.expiration'))->orderable(false),
             Column::make('payment_method')->title(trans('transaction_participants.form.payment_method'))->orderable(false),

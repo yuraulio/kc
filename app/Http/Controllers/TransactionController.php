@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\DataTables\Transactions\TransactionParticipantsDataTable;
+use App\DataTables\Transactions\TransactionRegistrationsDataTable;
 use App\Exports\TransactionExport;
 use App\Helpers\EventHelper;
 use App\Model\Event;
@@ -630,7 +630,7 @@ class TransactionController extends Controller
                 $query->whereIn('id', $value);
             })
             ->when($request->has('filter'), function (Builder $query) use ($request) {
-                $dataTable = new TransactionParticipantsDataTable();
+                $dataTable = new TransactionRegistrationsDataTable();
                 $subQuery = $dataTable->applyFilters(
                     $dataTable->query(new Transaction)->select([
                         'transactions.id',

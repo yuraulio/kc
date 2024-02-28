@@ -60,32 +60,7 @@
 <script>
   var _DATATABLE_OBJ = null;
   var elid = "{{$dataTable->getTableId()}}";
-  const routes = {
-    'participants_statistics': @json(route('api.v1.transactions.participants_statistics')),
-  };
-
-  function manageColumns(visible) {
-    let datatable = window.LaravelDataTables[elid];
-    if (!datatable) {
-      return;
-    }
-    /**
-     * old version of library, names not supported
-     * datatable.columns().names()
-     */
-    const fields = {
-      videos_seen: 5,
-      expiration: 7,
-    }
-    Object.keys(fields).map(x => {
-      let index = fields[x];
-      datatable.column(index).visible(visible);
-    })
-  }
-
-  function priceFormater(n, c = '€') {
-    return c + ' ' + Number(n).toLocaleString();
-  }
+  PanelApp.setRoutes(@json(['participants_statistics' => route('api.v1.transactions.participants_statistics')]));
 
   function updateParticipantsStatistics(all = true) {
     ['.js-statistics-registrations-total', '.js-statistics-registrations-income', '.js-statistics-tickets-income'].forEach((x) => {
@@ -94,16 +69,10 @@
       rootEl.find('.loader').show();
     })
 
-    $.ajax({
-      headers: {
-        'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content'),
-        'Authorization':  'Bearer ' + jQuery('meta[name="api-token"]').attr('content'),
-      },
-      url: routes.participants_statistics,
-      type: "POST",
-      contentType: "application/json",
-      data: JSON.stringify($.extend( {}, getFormData($('#'+elid+'-filters')) )) ,
-      success: function(data) {
+    PanelApp.api.post(
+      'participants_statistics',
+      $.extend( {type: 'registations'}, getFormData($('#'+elid+'-filters')) ),
+      function(data) {
         ((data) => {
           var rootEl = $('.js-statistics-registrations-total').first();
           if (all) {
@@ -116,33 +85,29 @@
         })(data.users);
         ((data) => {
           var rootEl = $('.js-statistics-registrations-income').first();
-          rootEl.find('#total_income_by_type').text(priceFormater(data.total));
-          rootEl.find('#incomeInclassAll').text(priceFormater(data.in_class));
-          rootEl.find('#incomeElearningAll').text(priceFormater(data.elearning));
+          rootEl.find('#total_income_by_type').text(PanelApp.formater.price(data.total));
+          rootEl.find('#incomeInclassAll').text(PanelApp.formater.price(data.in_class));
+          rootEl.find('#incomeElearningAll').text(PanelApp.formater.price(data.elearning));
           rootEl.find('.loader').hide();
           rootEl.find('.js-statistics-body').show();
         })(data.income);
         ((data) => {
           var rootEl = $('.js-statistics-tickets-income').first();
-          rootEl.find('#total_income').text(priceFormater(data.total));
-
-
-          rootEl.find('#special').text(priceFormater(data.special ?? 0));
-          rootEl.find('#regular').text(priceFormater(data.regular ?? 0));
-          rootEl.find('#alumni').text(priceFormater(data.alumni ?? 0));
-          rootEl.find('#early-bird').text(priceFormater(data.early_bird ?? 0));
+          rootEl.find('#total_income').text(PanelApp.formater.price(data.total));
+          rootEl.find('#special').text(PanelApp.formater.price(data.special ?? 0));
+          rootEl.find('#regular').text(PanelApp.formater.price(data.regular ?? 0));
+          rootEl.find('#alumni').text(PanelApp.formater.price(data.alumni ?? 0));
+          rootEl.find('#early-bird').text(PanelApp.formater.price(data.early_bird ?? 0));
 
           rootEl.find('.loader').hide();
           rootEl.find('.js-statistics-body').show();
         })(data.tickets);
-
       }
-    });
+    );
   }
 
   $(document).ready(function() {
     $('#participants_info').removeClass('d-none');
-    manageColumns(false);
 
     var dr = $('#filter_daterange');
     dr.daterangepicker();
@@ -157,14 +122,6 @@
     dr.on('change', updateDataTable);
 
     $(document).on('change', '#' + elid + '-filters select', updateDataTable);
-    $(document).on('change', '#' + elid + '-filters #filter_event', function() {
-      let v = $(this).val();
-      let visible = false;
-      if(v.search('E-Learning') !== -1) {
-        visible = true;
-      }
-      manageColumns(visible);
-    });
     updateParticipantsStatistics();
   });
 
