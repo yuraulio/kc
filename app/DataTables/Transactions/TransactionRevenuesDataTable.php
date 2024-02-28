@@ -29,6 +29,8 @@ class TransactionRevenuesDataTable extends TransactionRegistrationsDataTable
 
     protected $lengthChange = true;
 
+    protected $defaultSortColumn = 5;
+
     /**
      * Build DataTable class.
      *
@@ -93,7 +95,6 @@ class TransactionRevenuesDataTable extends TransactionRegistrationsDataTable
                 DB::Raw('events.published_at as event_published_at'),
                 DB::Raw('users.id as user_id'),
                 DB::Raw('CONCAT(users.firstname, " ", users.lastname) as user_name'),
-                DB::Raw('expiration'),
                 DB::Raw('invoices.amount as invoice_amount'),
             ])
             ->leftJoin('invoiceables', function ($query) {
@@ -121,7 +122,6 @@ class TransactionRevenuesDataTable extends TransactionRegistrationsDataTable
             Column::make('amount')->title(trans('transaction_participants.form.amount')),
             Column::make('coupon_code')->title(trans('transaction_participants.form.coupon_code'))->orderable(false),
             Column::make('created_at')->title(trans('transaction_participants.form.created_at')),
-            Column::make('expiration')->title(trans('transaction_participants.form.expiration'))->orderable(false),
             Column::make('payment_method')->title(trans('transaction_participants.form.payment_method'))->orderable(false),
         ];
     }

@@ -19,7 +19,7 @@ class TransactionParticipantsService
             return Event::query()
                 ->select([
                     $fullTitle ? DB::raw("CONCAT(title,' / ', published_at) AS title") : 'title',
-                    'id'
+                    'id',
                 ])
                 ->orderBy('published_at', 'desc')->pluck('title', 'id');
         });

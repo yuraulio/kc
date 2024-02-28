@@ -25,6 +25,8 @@ class TransactionRegistrationsDataTable extends AppDataTable
 
     protected $lengthChange = true;
 
+    protected $defaultSortColumn = 5;
+
     /**
      * Build DataTable class.
      *
@@ -155,7 +157,6 @@ class TransactionRegistrationsDataTable extends AppDataTable
                 DB::Raw('events.published_at as event_published_at'),
                 DB::Raw('users.id as user_id'),
                 DB::Raw('CONCAT(users.firstname, " ", users.lastname) as user_name'),
-                DB::Raw('expiration'),
             ])
             ->join('transactionables', function ($query) {
                 $query
@@ -207,7 +208,7 @@ class TransactionRegistrationsDataTable extends AppDataTable
     public function html()
     {
         $html = parent::html();
-        $html->orderBy(6, 'desc');
+        $html->orderBy($this->defaultSortColumn, 'desc');
 
         return $html;
     }
