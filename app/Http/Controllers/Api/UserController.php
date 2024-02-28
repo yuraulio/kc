@@ -8,13 +8,16 @@ use Apifon\Mookee;
 use Apifon\Resource\SMSResource;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\MediaController;
+use App\Http\Requests\UserImportRequest;
 use App\Http\Requests\UserRequest;
 use App\Model\Activation;
 use App\Model\Instructor;
 use App\Model\Media;
 use App\Model\Role;
 use App\Model\User;
+use App\Services\UserService;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -24,9 +27,14 @@ use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
-    public function __construct()
+
+    private UserService $userService;
+
+    public function __construct(UserService $userService)
     {
         $this->middleware('auth.sms.api')->except('smsVerification', 'getSMSVerification');
+
+        $this->userService = $userService;
     }
 
     /**
@@ -1259,4 +1267,22 @@ class UserController extends Controller
 
         return new JsonResponse([], 204);
     }
+
+    public function import(UserImportRequest $request): JsonResponse
+    {
+        $message = 'File is imported successfully';
+        $code = 200;
+
+        try {
+            $this->userService->importUsersFromUploadedFile($request->file('file'));
+        } catch (Exception $exception) {
+            $message = $exception->getMessage();
+            $code = 422;
+        }
+
+        return new JsonResponse([
+            'message' => $message
+        ], $code);
+    }
+
 }

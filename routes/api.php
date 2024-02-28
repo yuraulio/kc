@@ -31,6 +31,7 @@ Route::middleware('auth:api')->group(function () {
     Route::get('impersonate/{user}', [UserController::class, 'impersonate']);
     Route::post('users/{user}/update-status', [UserController::class, 'updateStatus']);
     Route::delete('users/batch', [UserController::class, 'batchDestroy']);
+    Route::post('users/import', [UserController::class, 'import']);
     Route::apiResource('users', UserController::class);
 
     //
