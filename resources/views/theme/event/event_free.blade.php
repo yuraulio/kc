@@ -54,7 +54,7 @@
                   <a href="#" class="mobile-tabs-menu">Menu</a>
                   <ul class="clearfix tab-controls-list">
                      @if(isset($sections['overview']) && $sections['overview']->first())<li><a href="#overview" class="active">{{$sections['overview']->first()->tab_title}}</a></li>@endif
-                    @if($estatus == 0 || $estatus == 2)
+                    @if($estatus == App\Model\Event::STATUS_OPEN || $estatus == App\Model\Event::STATUS_SOLDOUT)
 
                         @if(isset($sections['benefits'][0]) && $sections['benefits']->first()->visible)<li><a href="#benefits">{{$sections['benefits']->first()->tab_title}}</a></li>@endif
 
@@ -63,7 +63,7 @@
                         @if(isset($sections['testimonials'][0]) && $sections['testimonials']->first()->visible)<li><a href="#testimonials">{{$sections['testimonials']->first()->tab_title}}</a></li>@endif
                         @if(isset($sections['location'][0]) && $sections['location']->first()->visible)<li><a href="#location">{{$sections['location']->first()->tab_title}}</a></li>@endif
                         @if(isset($sections['questions'][0]) && $sections['questions']->first()->visible)<li><a href="#faq">{{$sections['questions']->first()->tab_title}}</a></li>@endif
-                     @elseif($estatus == 3 || $estatus == 1 )
+                     @elseif($estatus == App\Model\Event::STATUS_COMPLETED || $estatus == App\Model\Event::STATUS_CLOSE )
                         @if(isset($sections['topics'][0]) && $sections['topics']->first()->visible)<li><a href="#topics">{{$sections['topics']->first()->tab_title}}</a></li>@endif
                         @if(isset($sections['instructors'][0]) && $sections['instructors']->first()->visible)<li><a href="#instructors">{{$sections['instructors']->first()->tab_title}}</a></li>@endif
                      @endif
@@ -81,7 +81,7 @@
             <div class="tabs-content">
                <div id="overview" class="tab-content-wrapper active-tab">
                   <div class="container">
-                     @if($estatus == 0 || $estatus == 2)
+                     @if($estatus == App\Model\Event::STATUS_OPEN || $estatus == App\Model\Event::STATUS_SOLDOUT)
                      {{--<div class="social-share">
                         <ul class="clearfix">
                            <li class="fb-icon"><a target="_blank" title="Share on facebook" href="http://www.facebook.com/sharer.php?u={{ Request::url() }}" onclick="javascript:window.open(this.href,
@@ -124,9 +124,9 @@
                         ?>
 
                      <?php switch ($estatus) {
-                        case 0:
-                        case 2:
-                        case 5:
+                        case App\Model\Event::STATUS_OPEN:
+                        case App\Model\Event::STATUS_SOLDOUT:
+                        case App\Model\Event::STATUS_WAITING:
                      ?>
 
                      <div class="course-overview clearfix">
@@ -231,8 +231,8 @@
                         <!-- /.course-overview.clearfix -->
                      </div>
                      <?php break;
-                        case 1:
-                        case 3: ?>
+                        case App\Model\Event::STATUS_CLOSE:
+                        case App\Model\Event::STATUS_COMPLETED: ?>
 
                      <div  class="course-overview clearfix padd-bottom">
                         <div class="course-tab-text" itemprop="abstract">
@@ -246,7 +246,7 @@
                      </div>
                      <?php break;
                         } ?>
-                     @if($estatus == 0 || $estatus == 2)
+                     @if($estatus == App\Model\Event::STATUS_OPEN || $estatus == App\Model\Event::STATUS_SOLDOUT)
                      @if(isset($section_fullvideo) && $section_fullvideo->body != '')
                      <div class="video-wrapper">
                         <div class="responsive-fb-video">
@@ -259,7 +259,7 @@
                   </div>
                   <!-- /.tab-content-wrapper -->
                </div>
-               @if($estatus !== 5)
+               @if($estatus !== App\Model\Event::STATUS_WAITING)
                <div id="benefits" class="tab-content-wrapper">
                   <div class="course-benefits-text">
                      <div class="container">

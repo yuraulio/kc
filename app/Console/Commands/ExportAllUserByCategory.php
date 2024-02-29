@@ -97,7 +97,7 @@ class ExportAllUserByCategory extends Command
                     unset($userss[$user->id]);
                 }
 
-                if ($event->category->first()->id == 46 && $event->status == 0) {
+                if ($event->category->first()->id == 46 && $event->status == Event::STATUS_OPEN) {
                     unset($users[$key]);
                     unset($userss[$user->id]);
                 }

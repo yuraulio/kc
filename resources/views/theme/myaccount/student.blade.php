@@ -767,7 +767,7 @@
                                                     <?php  $fa = strtotime(date('Y-m-d',strtotime($event['release_date_files']))) >= strtotime(date('Y-m-d'))?>
                                                     {{--@if(!$instructor && isset($event['category'][0]['dropbox']) && count($event['category'][0]['dropbox']) != 0 &&--}}
                                                     @if(isset($event['dropbox']) && count($event['dropbox']) != 0 &&
-                                                    $event['status'] == 3 &&  $fa)
+                                                    $event['status'] == App\Model\Event::STATUS_COMPLETED &&  $fa)
                                                     <li><a href="#c-files-inner{{$tab}}">Files</a></li>
                                                     @endif
                                                     @if(isset($event['exams']) && count($event['exams']) >0 )
@@ -799,7 +799,7 @@
                                                         @endif
 
                                                     </div>
-                                                    @if($event['status'] == 5)
+                                                    @if($event['status'] == App\Model\Event::STATUS_WAITING)
                                                     <div>
                                                         You are on the waiting list.
                                                     </div>
@@ -813,7 +813,7 @@
                                                         @if($event['hours'])
                                                         <div class="expire-date"><img loading="lazy" class="replace-with-svg resp-img" onerror="this.src='{{cdn('/theme/assets/images/icons/Start-Finish.svg')}}'"  src="{{cdn($event['hours_icon'])}}" width="20" height="20" title="summary_icon" alt="summary_icon">{{$event['hours']}}h</div>
                                                         @endif
-                                                        @if($event['status'] == 5)
+                                                        @if($event['status'] == App\Model\Event::STATUS_WAITING)
                                                         <div>
                                                             You are on the waiting list.
                                                         </div>
@@ -896,10 +896,10 @@
                                                 if(!isset($event['release_date_files'])){
                                                     $display = false;
                                                 }
-                                                else if(!$event['release_date_files'] && $event['status'] == 3){
+                                                else if(!$event['release_date_files'] && $event['status'] == App\Model\Event::STATUS_COMPLETED){
                                                     $display = true;
 
-                                                }else if(strtotime(date('Y-m-d',strtotime($event['release_date_files']))) >= $now1 && $event['status'] == 3){
+                                                }else if(strtotime(date('Y-m-d',strtotime($event['release_date_files']))) >= $now1 && $event['status'] == App\Model\Event::STATUS_COMPLETED){
 
                                                     $display = true;
                                                 }
@@ -1439,16 +1439,16 @@
                                                             @endforeach
                                                             @endforeach
 
-                                                            @if($event['view_tpl'] == 'elearning_free' && $event['status'] == 0 && $event['expiration'] && strtotime($event['expiration']) < strtotime(now()))
+                                                            @if($event['view_tpl'] == 'elearning_free' && $event['status'] == App\Model\Event::STATUS_OPEN && $event['expiration'] && strtotime($event['expiration']) < strtotime(now()))
                                                             <a href="{{ $event['slugable']['slug'] }}" class="btn btn--secondary btn--md">RENROLL FOR FREE</a>
-                                                            @elseif($event['view_tpl'] != 'elearning_free' && $event['status'] == 0 && $event['expiration'] && strtotime($event['expiration']) < strtotime(now()) && (isset($event['video_access']) && !$event['video_access']))
+                                                            @elseif($event['view_tpl'] != 'elearning_free' && $event['status'] == App\Model\Event::STATUS_OPEN && $event['expiration'] && strtotime($event['expiration']) < strtotime(now()) && (isset($event['video_access']) && !$event['video_access']))
                                                             <a href="{{ $event['slugable']['slug'] }}" class="btn btn--primary btn--md">REENROLL</a>
                                                             @endif
 
                                                             @if(isset($event['video_access']) && !$event['video_access'])
                                                             {{--<a style="cursor:not-allowed; opacity: 0.5; pointer-events: none;" href="/myaccount/elearning/{{ $event['title'] }}" class="btn btn--secondary btn--md">@if((isset($event['videos_progress']) && $event['videos_progress'] == 100) || count($event['cert'])>0) WATCH AGAIN @else WATCH NOW @endif</a>--}}
                                                             @else
-                                                            <a href="/myaccount/elearning/{{ $event['title'] }}" <?= isset($event['status']) && $event['status'] == 5 ? 'disabled' : ''; ?> class="btn btn--secondary btn--md">
+                                                            <a href="/myaccount/elearning/{{ $event['title'] }}" <?= isset($event['status']) && $event['status'] == App\Model\Event::STATUS_WAITING ? 'disabled' : ''; ?> class="btn btn--secondary btn--md">
 
                                                                 @if( (isset($event['videos_progress']) && $event['videos_progress'] == 100) )
                                                                 WATCH AGAIN
@@ -1645,7 +1645,7 @@
                                                             @if(!$event['video_access'])
                                                             {{--<a style="cursor:not-allowed; opacity: 0.5; pointer-events: none;" href="/myaccount/elearning/{{ $event['title'] }}" class="btn btn--secondary btn--md">@if( (isset($event['videos_progress']) && $event['videos_progress'] == 100) || count($event['cert'])>0) WATCH AGAIN @else WATCH NOW @endif</a>--}}
                                                             @else
-                                                            <a href="/myaccount/elearning/{{ $event['title'] }}" <?= isset($event['status']) && $event['status'] == 5 ? 'disabled' : ''; ?> class="btn btn--secondary btn--md">@if( isset($event['videos_progress']) && $event['videos_progress'] == 100 >0) WATCH AGAIN @else WATCH NOW @endif</a>
+                                                            <a href="/myaccount/elearning/{{ $event['title'] }}" <?= isset($event['status']) && $event['status'] == App\Model\Event::STATUS_WAITING ? 'disabled' : ''; ?> class="btn btn--secondary btn--md">@if( isset($event['videos_progress']) && $event['videos_progress'] == 100 >0) WATCH AGAIN @else WATCH NOW @endif</a>
                                                             @endif
                                                         </div>
                                                     </div>

@@ -86,29 +86,29 @@
                               </div>
                            </div>
                            <div class="right">
-                              <?php 
-                               if (isset($row['ticket']->where('type','Early Bird')->first()->pivot->price) && 
-                               $row['ticket']->where('type','Early Bird')->first()->pivot->price > 0 && 
+                              <?php
+                               if (isset($row['ticket']->where('type','Early Bird')->first()->pivot->price) &&
+                               $row['ticket']->where('type','Early Bird')->first()->pivot->price > 0 &&
                                   $row['ticket']->where('type','Early Bird')->first()->pivot->quantity > 0 &&
                                   $row['ticket']->where('type','Early Bird')->first()->pivot->active) {
 
                       $price = $row['ticket']->where('type','Early Bird')->first()->pivot->price;
 
-                   }else if(isset($row['ticket']->where('type','Special')->first()->pivot->price) && 
-                                     $row['ticket']->where('type','Special')->first()->pivot->price > 0 && 
+                   }else if(isset($row['ticket']->where('type','Special')->first()->pivot->price) &&
+                                     $row['ticket']->where('type','Special')->first()->pivot->price > 0 &&
                                         $row['ticket']->where('type','Special')->first()->pivot->quantity > 0 &&
                                         $row['ticket']->where('type','Special')->first()->pivot->active){
-                                           
+
                       $price = $row['ticket']->where('type','Special')->first()->pivot->price;
-                   }else if(isset($row['ticket']->where('type','Regular')->first()->pivot->price) && 
-                   $row['ticket']->where('type','Regular')->first()->pivot->price > 0 && 
+                   }else if(isset($row['ticket']->where('type','Regular')->first()->pivot->price) &&
+                   $row['ticket']->where('type','Regular')->first()->pivot->price > 0 &&
                       $row['ticket']->where('type','Regular')->first()->pivot->quantity > 0 &&
                       $row['ticket']->where('type','Regular')->first()->pivot->active){
-                         
+
                      $price = $row['ticket']->where('type','Regular')->first()->pivot->price;
                   }
-                   else { 
-                      $price = 0; 
+                   else {
+                      $price = 0;
                    }
                               ?>
                               @if($row->view_tpl == 'elearning_free')
@@ -117,7 +117,7 @@
                               @elseif($row->view_tpl == 'elearning_pending')
                               <div class="price">Pending</div>
                               <a href="{{ $slug }}" class="btn btn--secondary btn--md">Course Details</a>
-                              @elseif($row['status'] == 5)
+                              @elseif($row['status'] == App\Model\Event::STATUS_WAITING)
                                  <div class="price">Course coming soon</div>
                                  <a href="{{ $slug }}" class="btn btn--secondary btn--md">JOIN WAITING LIST</a>
                               @else
@@ -178,30 +178,30 @@
                                  </div>
                               </div>
                               <div class="right">
-                                 <?php  
-                                 
-                                    if (isset($row['ticket']->where('type','Early Bird')->first()->pivot->price) && 
-                                                $row['ticket']->where('type','Early Bird')->first()->pivot->price > 0 && 
+                                 <?php
+
+                                    if (isset($row['ticket']->where('type','Early Bird')->first()->pivot->price) &&
+                                                $row['ticket']->where('type','Early Bird')->first()->pivot->price > 0 &&
                                                    $row['ticket']->where('type','Early Bird')->first()->pivot->quantity > 0 &&
                                                    $row['ticket']->where('type','Early Bird')->first()->pivot->active) {
 
                                        $price = $row['ticket']->where('type','Early Bird')->first()->pivot->price;
 
-                                    }else if(isset($row['ticket']->where('type','Special')->first()->pivot->price) && 
-                                                      $row['ticket']->where('type','Special')->first()->pivot->price > 0 && 
+                                    }else if(isset($row['ticket']->where('type','Special')->first()->pivot->price) &&
+                                                      $row['ticket']->where('type','Special')->first()->pivot->price > 0 &&
                                                          $row['ticket']->where('type','Special')->first()->pivot->quantity > 0 &&
                                                          $row['ticket']->where('type','Special')->first()->pivot->active){
-                                                            
+
                                        $price = $row['ticket']->where('type','Special')->first()->pivot->price;
-                                    }else if(isset($row['ticket']->where('type','Regular')->first()->pivot->price) && 
-                                    $row['ticket']->where('type','Regular')->first()->pivot->price > 0 && 
+                                    }else if(isset($row['ticket']->where('type','Regular')->first()->pivot->price) &&
+                                    $row['ticket']->where('type','Regular')->first()->pivot->price > 0 &&
                                        $row['ticket']->where('type','Regular')->first()->pivot->quantity > 0 &&
                                        $row['ticket']->where('type','Regular')->first()->pivot->active){
-                                          
+
                                       $price = $row['ticket']->where('type','Regular')->first()->pivot->price;
                                    }
-                                    else { 
-                                       $price = 0; 
+                                    else {
+                                       $price = 0;
                                     }
                                  ?>
                                  <?php $etstatus = 0 ?>
@@ -220,10 +220,10 @@
                                     <div class="price">free</div>
                                     <a href="{{ $slug }}" class="btn btn--secondary btn--md">course details</a>
                                  @else
-                                    @if($etstatus == 0 && $price > 0)
+                                    @if($etstatus == App\Model\Event::STATUS_OPEN && $price > 0)
                                     <div class="price">from €{{$price}}</div>
                                     <a href="{{ $slug }}" class="btn btn--secondary btn--md">Course Details</a>
-                                    @elseif($etstatus == 5)
+                                    @elseif($etstatus == App\Model\Event::STATUS_WAITING)
                                     <div class="price">Course coming soon</div>
                                     <a href="{{ $slug }}" class="btn btn--secondary btn--md">JOIN WAITING LIST</a>
                                     @else
@@ -304,29 +304,29 @@
                                  </div>
                               </div>
                               <div class="right">
-                                 <?php  
-                                 if (isset($row['ticket']->where('type','Early Bird')->first()->pivot->price) && 
-                                 $row['ticket']->where('type','Early Bird')->first()->pivot->price > 0 && 
+                                 <?php
+                                 if (isset($row['ticket']->where('type','Early Bird')->first()->pivot->price) &&
+                                 $row['ticket']->where('type','Early Bird')->first()->pivot->price > 0 &&
                                     $row['ticket']->where('type','Early Bird')->first()->pivot->quantity > 0 &&
                                     $row['ticket']->where('type','Early Bird')->first()->pivot->active) {
 
                         $price = $row['ticket']->where('type','Early Bird')->first()->pivot->price;
 
-                     }else if(isset($row['ticket']->where('type','Special')->first()->pivot->price) && 
-                                       $row['ticket']->where('type','Special')->first()->pivot->price > 0 && 
+                     }else if(isset($row['ticket']->where('type','Special')->first()->pivot->price) &&
+                                       $row['ticket']->where('type','Special')->first()->pivot->price > 0 &&
                                           $row['ticket']->where('type','Special')->first()->pivot->quantity > 0 &&
                                           $row['ticket']->where('type','Special')->first()->pivot->active){
-                                             
+
                         $price = $row['ticket']->where('type','Special')->first()->pivot->price;
-                     }else if(isset($row['ticket']->where('type','Regular')->first()->pivot->price) && 
-                     $row['ticket']->where('type','Regular')->first()->pivot->price > 0 && 
+                     }else if(isset($row['ticket']->where('type','Regular')->first()->pivot->price) &&
+                     $row['ticket']->where('type','Regular')->first()->pivot->price > 0 &&
                         $row['ticket']->where('type','Regular')->first()->pivot->quantity > 0 &&
                         $row['ticket']->where('type','Regular')->first()->pivot->active){
-                           
+
                        $price = $row['ticket']->where('type','Regular')->first()->pivot->price;
                     }
-                     else { 
-                        $price = 0; 
+                     else {
+                        $price = 0;
                      }
                                  ?>
                                  <?php $etstatus = 0 ?>

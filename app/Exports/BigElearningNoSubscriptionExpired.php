@@ -2,6 +2,7 @@
 
 namespace App\Exports;
 
+use App\Model\Event;
 use App\Model\User;
 use Maatwebsite\Excel\Concerns\FromArray;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
@@ -60,7 +61,7 @@ class BigElearningNoSubscriptionExpired implements FromArray, WithHeadings, Shou
                     unset($this->userss[$user->id]);
                 }
 
-                if ($event->category->first()->id == 46 && $event->status == 0) {
+                if ($event->category->first()->id == 46 && $event->status == Event::STATUS_OPEN) {
                     unset($users[$key]);
                     unset($this->userss[$user->id]);
                 }

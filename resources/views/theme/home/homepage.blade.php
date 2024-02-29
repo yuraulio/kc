@@ -130,9 +130,9 @@
                               <span class="date">{{$dateLaunch}} </span>
                            @if(isset($row['slugable']) && $row['slugable']['slug'] != '')
 
-                              @if($row['status'] != 0 && $row['status'] != 5)
+                              @if($row['status'] != App\Model\Event::STATUS_OPEN && $row['status'] != App\Model\Event::STATUS_WAITING)
                               <a href="{{ $row['slugable']['slug'] }}" class="btn btn--sm btn--secondary btn--sold-out">sold out</a>
-                              @elseif($row['status'] == 5)
+                              @elseif($row['status'] == App\Model\Event::STATUS_WAITING)
                               <a href="{{ $row['slugable']['slug'] }}" class="btn btn--sm btn--secondary">JOIN WAITING LIST</a>
                               @else
                               <a href="{{ $row['slugable']['slug'] }}" class="btn btn--sm btn--secondary">course details</a>
@@ -229,9 +229,9 @@
 
                            @if(isset($header_menus['elearning_card']['data']['slugable']) )<a href="{{ $header_menus['elearning_card']['data']['slugable']['slug'] }}" class="location"> VIDEO E-LEARNING COURSES</a>@endif
                            <span class="date"> </span>
-                           @if($row['status'] == 0)
+                           @if($row['status'] == App\Model\Event::STATUS_OPEN)
                            <a href="{{$url}}" class="btn btn--sm btn--secondary">course details</a>
-                           @elseif($row['status'] == 5)
+                           @elseif($row['status'] == App\Model\Event::STATUS_WAITING)
                            <a href="{{$url}}" class="btn btn--sm btn--secondary">JOIN WAITING LIST</a>
                            @endif
 

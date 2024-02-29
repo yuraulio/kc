@@ -78,7 +78,7 @@ class CMS
             $tr_price .= '.00';
         }
 
-        $data['tigran'] = $event->status == 0 ? ['Price' => $tr_price, 'Product_id' => $event->id, 'Product_SKU' => $event->id, 'ProductCategory' => $categoryScript, 'ProductName' => $event->title, 'Event_ID' => 'kc_' . time()] : null;
+        $data['tigran'] = $event->status == Event::STATUS_OPEN ? ['Price' => $tr_price, 'Product_id' => $event->id, 'Product_SKU' => $event->id, 'ProductCategory' => $categoryScript, 'ProductName' => $event->title, 'Event_ID' => 'kc_' . time()] : null;
 
         $hasEvent = [];
         if (Auth::check()) {

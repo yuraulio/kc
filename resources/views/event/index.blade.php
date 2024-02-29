@@ -119,38 +119,38 @@
                                             @endif
                                         </td>
                                         <td data-search="{{ $status[$event->status] }}">
-                                            @if($event->status == 1)
+                                            @if($event->status == App\Model\Event::STATUS_CLOSE)
                                                 <span data-status="{{ $status[$event->status] }}" class="badge badge-dot mr-4">
                                                     <i class="bg-danger"></i>
                                                     <span class="status">{{$status[$event->status]}}</span>
                                                 </span>
 
 
-                                            @elseif($event->status == 0)
+                                            @elseif($event->status == App\Model\Event::STATUS_OPEN)
                                                 <span data-status="{{ $status[$event->status] }}" class="badge badge-dot mr-4">
                                                     <i class="bg-success"></i>
                                                     <span class="status">{{$status[$event->status]}}</span>
                                                 </span>
 
-                                            @elseif($event->status == 3)
+                                            @elseif($event->status == App\Model\Event::STATUS_COMPLETED)
                                                 <span data-status="{{ $status[$event->status] }}" class="badge badge-dot mr-4">
                                                     <i class="bg-danger"></i>
                                                     <span class="status">{{$status[$event->status]}}</span>
                                                 </span>
 
-                                            @elseif($event->status == 2)
+                                            @elseif($event->status == App\Model\Event::STATUS_SOLDOUT)
                                                 <span data-status="{{ $status[$event->status] }}" class="badge badge-dot mr-4">
                                                     <i class="bg-danger"></i>
                                                     <span class="status">{{$status[$event->status]}}</span>
                                                 </span>
 
-                                            @elseif($event->status == 4)
+                                            @elseif($event->status == App\Model\Event::STATUS_MY_ACCOUNT_ONLY)
                                                <span data-status="{{ $status[$event->status] }}" class="badge badge-dot mr-4">
                                                     <i class="bg-secondary"></i>
                                                     <span class="status">{{ $status[$event->status] }}</span>
                                                 </span>
 
-                                            @elseif($event->status == 5)
+                                            @elseif($event->status == App\Model\Event::STATUS_WAITING)
                                                 <span data-status="{{ $status[$event->status] }}" class="badge badge-dot mr-4">
                                                     <i class="bg-info"></i>
                                                     <span class="status">{{ $status[$event->status] }}</span>

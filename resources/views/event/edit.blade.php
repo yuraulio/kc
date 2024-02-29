@@ -319,9 +319,25 @@ $show_popup = isset($uri['show_popup']) ? $uri['show_popup'] : 0;
 
                                     <div class="row">
                                         <div class="form-group col-12">
-                                            <h3 class="mb-0 title" for="input-status">{{ __('Course Status') }}
-                                                (course_status)</h3>
+                                          <h3 class="mb-0 title" for="input-status">{{ __('Course Status') }}
+                                              (course_status)
+                                              <i class="fa fa-question-circle" aria-hidden="true" id="help-status" style="cursor: pointer"></i>
+                                          </h3>
                                         </div>
+                                    </div>
+                                        <div class="row status_explanation" style="display: none; font-size: 14px; margin-top: -20px; margin-bottom: 10px;">
+                                          <div class="col-sm-12">
+                                            <div style="border: 1px #d5d5d5 solid; background: white; padding: 10px; width: fit-content;">
+                                              <div><b>My Account Only</b>: Visible only to already enrolled students.</div>
+                                              <div><b>Soldout</b>: Indicates all tickets have been sold and registration is not allowed.</div>
+                                              <div><b>Completed</b>: Marks this course as completed; registration is not allowed.</div>
+                                              <div><b>Open</b>: Allows students to purchase tickets.</div>
+                                              <div><b>Close</b>: Closes this event and prohibits registration.</div>
+                                              <div><b>Waiting</b>: Allows students to sign up on a waiting list.</div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      <div class="row">
                                         <div
                                                 class="form-group{{ $errors->has('status') ? ' has-danger' : '' }} col-sm-12 col-md-6 col-lg-4">
                                             <input hidden name="old_status" value="{{ $event['status'] }}">
@@ -331,20 +347,19 @@ $show_popup = isset($uri['show_popup']) ? $uri['show_popup'] : 0;
                                                     required>
                                                 <option selected disabled value="">Please select the status of this
                                                     course</option>
-                                                <option <?= $event['status'] == 4 ? 'selected' : '' ?> value="4">
+                                                <option <?= $event['status'] == App\Model\Event::STATUS_MY_ACCOUNT_ONLY ? 'selected' : '' ?> value="4">
                                                     {{ __('My Account Only') }}</option>
-                                                <option <?= $event['status'] == 2 ? 'selected' : '' ?> value="2">
+                                                <option <?= $event['status'] == App\Model\Event::STATUS_SOLDOUT ? 'selected' : '' ?> value="2">
                                                     {{ __('Soldout') }}</option>
-                                                <option <?= $event['status'] == 3 ? 'selected' : '' ?> value="3">
+                                                <option <?= $event['status'] == App\Model\Event::STATUS_COMPLETED ? 'selected' : '' ?> value="3">
                                                     {{ __('Completed') }}</option>
-                                                <option <?= $event['status'] == 0 ? 'selected' : '' ?> value="0">
+                                                <option <?= $event['status'] == App\Model\Event::STATUS_OPEN ? 'selected' : '' ?> value="0">
                                                     {{ __('Open') }}</option>
-                                                <option <?= $event['status'] == 1 ? 'selected' : '' ?> value="1">
+                                                <option <?= $event['status'] == App\Model\Event::STATUS_CLOSE ? 'selected' : '' ?> value="1">
                                                     {{ __('Close') }}</option>
-                                                <option <?= $event['status'] == 5 ? 'selected' : '' ?> value="5">
+                                                <option <?= $event['status'] == App\Model\Event::STATUS_WAITING ? 'selected' : '' ?> value="5">
                                                     {{ __('Waiting') }}</option>
                                             </select>
-
                                             @include('alerts.feedback', ['field' => 'status'])
                                         </div>
                                     </div>
@@ -5656,7 +5671,9 @@ $show_popup = isset($uri['show_popup']) ? $uri['show_popup'] : 0;
         });
 
 
-
+        $('#help-status').on('click', () => {
+          $('.status_explanation').toggle();
+        })
     });
 
     function money(amount){

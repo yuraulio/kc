@@ -1064,7 +1064,7 @@ class EventController extends Controller
         //dd($request->all());
         $event_has_updated = $event->update($request->all());
 
-        if ($event_has_updated && ($request->status == 2 || $request->status == 3 || $request->status == 1) && ($old_status != 2 && $old_status != 3 && $old_status != 1)) {
+        if ($event_has_updated && ($request->status == Event::STATUS_SOLDOUT || $request->status == Event::STATUS_COMPLETED || $request->status == Event::STATUS_CLOSE) && ($old_status != Event::STATUS_SOLDOUT && $old_status != Event::STATUS_COMPLETED && $old_status != Event::STATUS_CLOSE)) {
             $show_popup = true;
             dispatch((new EventSoldOut($event->id))->delay(now()->addSeconds(3)));
         }
@@ -1186,12 +1186,12 @@ class EventController extends Controller
 
         $this->updateEventInfo($event_info, $event->id);
 
-        if ($event->status == 0 && $request->old_status == 5) {
+        if ($event->status == Event::STATUS_OPEN && $request->old_status == Event::STATUS_WAITING) {
             //SendMaiWaitingList::dispatchAfterResponse($event->id);
             dispatch((new SendMaiWaitingList($event->id))->delay(now()->addSeconds(3)));
         }
 
-        if ($request->status == 3) {
+        if ($request->status == Event::STATUS_COMPLETED) {
             if (isset($infoData['free_courses']['list'])) {
                 // todo parse exams
 

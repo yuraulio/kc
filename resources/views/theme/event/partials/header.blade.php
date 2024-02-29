@@ -1,7 +1,7 @@
 <div id="section-header" class="tab-pane active">
    <div class="container" >
       <div class="row">
-         @if($estatus == 0 || $estatus == 2)
+         @if($estatus == App\Modal\Event::STATUS_OPEN || $estatus == App\Modal\Event::STATUS_SOLDOUT)
          @include('theme.event.partials.social')
          @else
          <div class="social-helper"></div>
@@ -9,50 +9,50 @@
          <div class="col-lg-7 col-md-7 col-sm-12 ">
             <?php
                $location = [];
-               
+
                     	if (isset($content->categories) && !empty($content->categories)) :
                    foreach ($content->categories as $category) :
                           if ($category->depth != 0 && $category->parent_id == 9) {
                                $location=$category;
                           }
-               
+
                    endforeach;
                endif;
                ?>
             <div class="post-content clearfix dpContentEntry" data-dp-content-id="{{ $content->id }}">
-               <?php switch ($estatus) {
-                  case 0: ?>
-               {!! $content->body !!}
-               <?php break;
-                  case 1: ?>
-               @if(isset($section_about_closed))
-               <h3 class="single-post-head">{{ $section_about_closed->title }}</h3>
-               {!! $section_about_closed->body !!}
-               <p>Please check all our @if(isset($location->name)) <a href="{{ $location->slug }}">upcoming events in {{ $location->name }}</a> @else upcoming events in this city @endif.</p>
-               @else
-               <h3 class="single-post-head">The event is closed</h3>
-               <p>The best digital &amp; social media diploma with a long track record trusted by top executives, agencies, brands and corporations is closed.</p>
-               <p>Please check all our @if(isset($location->name)) <a href="{{ $location->slug }}">upcoming events in {{ $location->name }}</a> @else upcoming events in this city @endif.</p>
-               @endif
-               <?php break;
-                  case 2: ?>
-               {!! $content->body !!}
-               <?php break;
-                  case 3: ?>
-               @if(isset($section_about_completed))
-               <h3 class="single-post-head">{{ $section_about_completed->title }}</h3>
-               {!! $section_about_completed->body !!}
-               <p>Please check all our @if(isset($location->name)) <a href="{{ $location->slug }}">upcoming events in {{ $location->name }}</a> @else upcoming events in this city @endif.</p>
-               @else
-               <h3 class="single-post-head">The event is completed</h3>
-               <p style="display:none">The best digital &amp; social media diploma with a long track record trusted by top executives, agencies, brands and corporations is completed.</p>
-               <p style="display:none">Please check all our @if(isset($location->name)) <a href="{{ $location->slug }}">upcoming events in {{ $location->name }}</a> @else upcoming events in this city @endif.</p>
-               @endif
-               <?php break;
-                  default: ?>
-               {!! $content->body !!}
-               <?php break;
-                  } ?>
+              @switch ($estatus)
+                @case(App\Modal\Event::STATUS_OPEN)
+                  {!! $content->body !!}
+                  @break;
+                @case(App\Modal\Event::STATUS_CLOSE)
+                  @if(isset($section_about_closed))
+                    <h3 class="single-post-head">{{ $section_about_closed->title }}</h3>
+                    {!! $section_about_closed->body !!}
+                    <p>Please check all our @if(isset($location->name)) <a href="{{ $location->slug }}">upcoming events in {{ $location->name }}</a> @else upcoming events in this city @endif.</p>
+                  @else
+                    <h3 class="single-post-head">The event is closed</h3>
+                    <p>The best digital &amp; social media diploma with a long track record trusted by top executives, agencies, brands and corporations is closed.</p>
+                    <p>Please check all our @if(isset($location->name)) <a href="{{ $location->slug }}">upcoming events in {{ $location->name }}</a> @else upcoming events in this city @endif.</p>
+                  @endif
+                  @break;
+                @case(App\Modal\Event::STATUS_SOLDOUT)
+                  {!! $content->body !!}
+                  @break
+                @case(App\Modal\Event::STATUS_COMPLETED)
+                  @if(isset($section_about_completed))
+                    <h3 class="single-post-head">{{ $section_about_completed->title }}</h3>
+                    {!! $section_about_completed->body !!}
+                    <p>Please check all our @if(isset($location->name)) <a href="{{ $location->slug }}">upcoming events in {{ $location->name }}</a> @else upcoming events in this city @endif.</p>
+                  @else
+                    <h3 class="single-post-head">The event is completed</h3>
+                    <p style="display:none">The best digital &amp; social media diploma with a long track record trusted by top executives, agencies, brands and corporations is completed.</p>
+                    <p style="display:none">Please check all our @if(isset($location->name)) <a href="{{ $location->slug }}">upcoming events in {{ $location->name }}</a> @else upcoming events in this city @endif.</p>
+                  @endif
+                  @break
+                @default
+                  {!! $content->body !!}
+                  @break;
+              @endswitch
             </div>
             <div class='col-lg-12 col-md-12 col-sm-12 mar-top-35 height-100'>
                <div class='col-lg-5 col-md-5 col-sm-12 no-flex is-flex'>

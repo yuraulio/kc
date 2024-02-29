@@ -19,7 +19,7 @@
 ?>
 
 @if ($tickets && !$event->isFree())
-    @if ($estatus == 0 || $estatus == 2 || $estatus == 5)
+    @if ($estatus == App\Model\Event::STATUS_OPEN || $estatus == App\Model\Event::STATUS_SOLDOUT || $estatus == App\Model\Event::STATUS_WAITING)
         <section id="seats" class="section-tickets">
         <div class="container">
                 <h2 class="section-title">{{$title}}</h2>

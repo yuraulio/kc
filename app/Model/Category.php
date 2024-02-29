@@ -235,15 +235,15 @@ class Category extends Model
         $events = $this->events()->orderBy('published_at','desc');
 
         //return $this->morphedByMany(Event::class, 'categoryable')->orderBy('published_at','desc')->first();
-        if($events->first() && $events->first()->status == 0){
+        if($events->first() && $events->first()->status == App\Model\Event::STATUS_OPEN){
             return 'opened';
-        }else if($events->first() && $events->first()->status == 1){
+        }else if($events->first() && $events->first()->status == App\Model\Event::STATUS_CLOSE){
             return 'closed';
         }
-        else if($events->first() && $events->first()->status == 2){
+        else if($events->first() && $events->first()->status == App\Model\Event::STATUS_SOLDOUT){
             return 'soldout';
         }
-        else if($events->first() && $events->first()->status == 3){
+        else if($events->first() && $events->first()->status == App\Model\Event::STATUS_COMPLETED){
             return 'completed';
         }
 
