@@ -255,6 +255,7 @@ class Category extends Model
     {
         $allEvents = $this->events;
 
+        $priority = 0;
         foreach ($allEvents as $event) {
             $allLessons = $event->allLessons->groupBy('id');
 
