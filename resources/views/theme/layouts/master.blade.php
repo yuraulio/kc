@@ -353,13 +353,15 @@ $(document).on('click', '.close-btn', function(e){
   @endif
   <script>
 
-        let url = window.location.href.split('#')
-        if(url[1]){
-            url[1] = url[1].split("?")[0]
-            let target = "#" + url[1];
-            let activeTab = $('.tab-controls .active');
-            let self = $('a[href="#'+ url[1] + '"]');
+    function switchTabsByHash() {
+        let hash = window.location.hash.slice(1);
+        if(hash){
+          hash = hash.split("?")[0]
+          let target = "#" + hash;
+          let activeTab = $('.tab-controls .active');
+          let self = $('a[href="'+ target + '"]');
 
+          if (activeTab.length && self.length && activeTab.get(0) !== self.get(0)) {
             $('.active-tab').removeClass('active-tab');
             activeTab.toggleClass('active');
             self.toggleClass('active');
@@ -367,7 +369,13 @@ $(document).on('click', '.close-btn', function(e){
 
             $(target).addClass('active-tab');
             $(this).addClass('active');
+          }
         }
+    }
+    switchTabsByHash();
+    $(window).on('hashchange',function(){
+      switchTabsByHash();
+    });
   </script>
 
 <script>
