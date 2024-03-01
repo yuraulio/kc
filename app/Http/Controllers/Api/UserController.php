@@ -27,7 +27,6 @@ use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
-
     private UserService $userService;
 
     public function __construct(UserService $userService)
@@ -1281,8 +1280,7 @@ class UserController extends Controller
         }
 
         return new JsonResponse([
-            'message' => $message
+            'message' => $message,
         ], $code);
     }
-
 }
