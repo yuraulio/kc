@@ -51,7 +51,7 @@
                             <ul class="clearfix tab-controls-list">
                                 @if(isset($sections['overview']) && $sections['overview']->first())<li><a href="#overview" class="active">{{$sections['overview']->first()->tab_title}}</a></li>@endif
 
-                                @if ($estatus == 0 || $estatus == 2 || $estatus == 5)
+                                @if ($estatus == App\Model\Event::STATUS_OPEN || $estatus == App\Model\Event::STATUS_SOLDOUT || $estatus == App\Model\Event::STATUS_WAITING)
                                     @foreach ($tabs["tabs"]["tabs"] as $index=>$tab)
                                         @if(checkTabContent($tab, $dynamic_page_data, $tabs))
                                             <li><a href="#{{Illuminate\Support\Str::slug($tab)}}" class="{{$index == 0 ? "active" : "" }}">{{$tab}}</a></li>
@@ -78,17 +78,17 @@
                                         <a href="/myaccount/elearning/{{ $event['title'] }}" class="btn btn--md btn--secondary">WATCH NOW</a>
 
                                     @endif
-                                @elseif($estatus == 0 && !$is_event_paid)
+                                @elseif($estatus == App\Model\Event::STATUS_OPEN && !$is_event_paid)
                                     @if($is_event_paid==0 && $event['view_tpl'] == 'event_free_coupon')
                                         <a href="javascript:void(0)" id="open-code-popup" class="btn btn--lg btn--primary">ENROLL NOW</a>
                                     @else
                                         <a href="#seats" class="btn btn--lg btn--primary go-to-href">ENROLL NOW</a>
                                     @endif
-                                @elseif($estatus == 5 && !$is_joined_waiting_list && !$is_event_paid)
+                                @elseif($estatus == App\Model\Event::STATUS_WAITING && !$is_joined_waiting_list && !$is_event_paid)
                                     <a href="{{ route('cart.add-item', [ $event->id,'waiting', 8 ]) }}" class="btn btn--lg btn--primary go-to-href elearning-free">JOIN WAITING LIST</a>
-                                @elseif($estatus != 3 && $estatus != 5 && $estatus != 1 && !$is_event_paid)
+                                @elseif($estatus != App\Model\Event::STATUS_COMPLETED && $estatus != App\Model\Event::STATUS_WAITING && $estatus != App\Model\Event::STATUS_CLOSE && !$is_event_paid)
                                     <a href="#seats" class="btn btn--lg btn--primary go-to-href go-to-href soldout">SOLD OUT</a>
-                                @elseif($estatus == 0 && $is_event_paid)
+                                @elseif($estatus == App\Model\Event::STATUS_OPEN && $is_event_paid)
                                     @if($is_event_expired == 1)
                                         <a href="#seats" class="btn btn--lg btn--primary go-to-href">REENROLL</a>
                                     @else
@@ -102,7 +102,7 @@
                 </div>
             </div>
 
-            @if ($estatus == 1 || $estatus == 3)
+            @if ($estatus == App\Model\Event::STATUS_CLOSE || $estatus == App\Model\Event::STATUS_COMPLETED)
                 @php
                     array_shift($tabs["tabs"]["tabs"]);
                 @endphp
@@ -120,7 +120,7 @@
                 @endforeach
             </div>
 
-            @if ($estatus == 1 || $estatus == 3)
+            @if ($estatus == App\Model\Event::STATUS_CLOSE || $estatus == App\Model\Event::STATUS_COMPLETED)
                 <div class="container">
                 <div  class="course-overview clearfix mt-5 mb-5">
                     <div class="course-tab-text" itemprop="abstract">

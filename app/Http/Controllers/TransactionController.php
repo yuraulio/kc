@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\DataTables\Transactions\TransactionRegistrationsDataTable;
 use App\Exports\TransactionExport;
 use App\Helpers\EventHelper;
 use App\Model\Event;
@@ -12,6 +13,7 @@ use App\Notifications\WelcomeEmail;
 use Auth;
 use Excel;
 use File;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use ZipArchive;
 
@@ -159,13 +161,6 @@ class TransactionController extends Controller
                     $ticketType = '-';
                     $ticketName = '-';
                 }
-
-                if ($transaction['coupon_code'] != '') {
-                    $coupon_code = $transaction['coupon_code'];
-                } else {
-                    $coupon_code = '-';
-                }
-
                 if ($ticketType == 'Early Bird') {
                     $earlyCount += 1;
                 }
@@ -210,23 +205,32 @@ class TransactionController extends Controller
 
                     if (!$homepage) {
                         $data['transactions'][] = ['id' => $transaction['id'], 'user_id' => $u['id'], 'name' => $u['firstname'] . ' ' . $u['lastname'],
-                            'event_id' => $transaction->event[0]['id'], 'event_title' => $transaction->event[0]['title'] . ' / ' . date('d-m-Y', strtotime($transaction->event[0]['published_at'])), 'coupon_code' => $coupon_code, 'type' => trim($ticketType), 'ticketName' => $ticketName,
+                            'event_id' => $transaction->event[0]['id'],
+                            'event_title' => $transaction->event[0]['title'] . ' / ' . date('d-m-Y', strtotime($transaction->event[0]['published_at'])),
+                            'type' => trim($ticketType),
+                            'ticketName' => $ticketName,
                             'date' => date_format($transaction['created_at'], 'Y-m-d'), 'amount' => $amount,
                             'is_elearning' => $isElearning,
-                            'coupon_code' => $transaction['coupon_code'],
+                            'coupon_code' => empty($transaction['coupon_code']) ? '-' : $transaction['coupon_code'],
                             'videos_seen' => $this->getVideosSeen($videos),
                             'expiration'=>$expiration,
                             'paymentMethod' => $paymentMethod,
                             'city' => $city,
                             'category' => isset($transaction->event[0]['category'][0]['name']) ? $transaction->event[0]['category'][0]['name'] : ''];
                     } else {
-                        $data['transactions'][] = ['id' => $transaction['id'], 'user_id' => $u['id'], 'name' => $u['firstname'] . ' ' . $u['lastname'],
-                            'event_id' => $transaction->event[0]['id'], 'event_title' => $transaction->event[0]['title'] . ' / ' . date('d-m-Y', strtotime($transaction->event[0]['published_at'])), 'coupon_code' => $coupon_code, 'type' => trim($ticketType), 'ticketName' => $ticketName,
+                        $data['transactions'][] = [
+                            'id' => $transaction['id'],
+                            'user_id' => $u['id'],
+                            'name' => $u['firstname'] . ' ' . $u['lastname'],
+                            'event_id' => $transaction->event[0]['id'], 'event_title' => $transaction->event[0]['title'] . ' / ' . date('d-m-Y', strtotime($transaction->event[0]['published_at'])),
+                            'type' => trim($ticketType),
+                            'ticketName' => $ticketName,
                             'date' => date_format($transaction['created_at'], 'Y-m-d'), 'amount' => $amount,
                             'is_elearning' => $isElearning,
-                            'coupon_code' => $transaction['coupon_code'],
+                            'coupon_code' => empty($transaction['coupon_code']) ? '-' : $transaction['coupon_code'],
                             'city' => $city,
-                            'category' => isset($transaction->event[0]['category'][0]['name']) ? $transaction->event[0]['category'][0]['name'] : ''];
+                            'category' => isset($transaction->event[0]['category'][0]['name']) ? $transaction->event[0]['category'][0]['name'] : '',
+                        ];
                     }
                 }
             }
@@ -616,10 +620,27 @@ class TransactionController extends Controller
 
     public function exportInvoices(Request $request)
     {
-        $transactions = Transaction::whereIn('id', $request->transactions)->
-                                with('user.events_for_user_list', 'user.ticket', 'subscription', 'event', 'event.delivery', 'event.category')->get();
-
         $userRole = Auth::user()->role->pluck('id')->toArray();
+        if (in_array(9, $userRole)) {
+            return response()->json(['message' => 'You don\'t have access'], 401);
+        }
+
+        $transactions = Transaction::query()
+            ->when($request->transactions, function (Builder $query, $value) {
+                $query->whereIn('id', $value);
+            })
+            ->when($request->has('filter'), function (Builder $query) use ($request) {
+                $dataTable = new TransactionRegistrationsDataTable();
+                $subQuery = $dataTable->applyFilters(
+                    $dataTable->query(new Transaction)->select([
+                        'transactions.id',
+                    ]),
+                    $request
+                );
+                $query->whereIn('id', $subQuery);
+            })
+            ->with('user.events_for_user_list', 'user.ticket', 'subscription', 'event', 'event.delivery', 'event.category')
+            ->get();
 
         $fileName = 'invoices.zip';
         File::deleteDirectory(public_path('invoices_folder'));
@@ -634,10 +655,6 @@ class TransactionController extends Controller
         $zip = new ZipArchive();
         if ($zip->open(public_path($fileName), ZipArchive::CREATE) === true) {
             foreach ($transactions as $transaction) {
-                if (in_array(9, $userRole)) {
-                    continue;
-                }
-
                 foreach ($transaction->invoice as $invoice) {
                     $invoicesNumber = $invoice->getZipOfInvoices($zip, $planDecription = false, $invoicesNumber);
 

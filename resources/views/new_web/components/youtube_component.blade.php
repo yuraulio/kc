@@ -13,7 +13,7 @@
 @endphp
 
 @if (isset($dynamic_page_data) && $column->template->dynamic)
-    @if($estatus == 0 || $estatus == 2)
+    @if($estatus == App\Model\Event::STATUS_OPEN || $estatus == App\Model\Event::STATUS_SOLDOUT)
         @if(isset($section_fullvideo) && $section_fullvideo->body != '')
             <div class="video-wrapper mb-5 mt-5">
                 <div class="responsive-fb-video">
@@ -24,14 +24,14 @@
     @endif
 @else
     <div class="text-center mb-5 mt-5">
-        <iframe 
+        <iframe
             id="{{ $column->id }}"
-            width="{{ $youtube["youtube_full_width"] ? "100%" : ($youtube["youtube_width"] ? $youtube["youtube_width"] : '100%') }}" 
-            height="{{ $youtube["youtube_height"] ? $youtube["youtube_height"] : '600' }}" 
-            src="" 
-            title="YouTube video player" 
-            frameborder="0" 
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+            width="{{ $youtube["youtube_full_width"] ? "100%" : ($youtube["youtube_width"] ? $youtube["youtube_width"] : '100%') }}"
+            height="{{ $youtube["youtube_height"] ? $youtube["youtube_height"] : '600' }}"
+            src=""
+            title="YouTube video player"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowfullscreen
         ></iframe>
     </div>

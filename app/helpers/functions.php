@@ -1427,3 +1427,10 @@ if (!function_exists('getLessonCategoryByTopic')) {
         return $topicsCategories;
     }
 }
+
+if (!function_exists('escapeLike')) {
+    function escapeLike($val)
+    {
+        return str_replace(['\\', '%', '_'], ['\\\\', '\%', '\_'], $val);
+    }
+}

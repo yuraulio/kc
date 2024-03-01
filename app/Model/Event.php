@@ -55,6 +55,13 @@ class Event extends Model
     use SearchFilter;
     use PaginateTable;
 
+    const STATUS_OPEN = 0;
+    const STATUS_CLOSE = 1;
+    const STATUS_SOLDOUT = 2;
+    const STATUS_COMPLETED = 3;
+    const STATUS_MY_ACCOUNT_ONLY = 4;
+    const STATUS_WAITING = 5;
+
     protected $table = 'events';
 
     public function toSearchableArray()
@@ -459,7 +466,7 @@ class Event extends Model
     private function calcTopics($topicEvent, $lessons, $event_id = null, $cache = false)
     {
         $topics = [];
-        if ($this->status == 5) {
+        if ($this->status == self::STATUS_WAITING) {
             $topicEvent = $topicEvent ? $topicEvent->unique()->groupBy('topic_id') : $this->topic_with_no_instructor->unique()->groupBy('topic_id');
         } else {
             $topicEvent = $topicEvent ? $topicEvent->unique()->groupBy('topic_id') : $this->topic->unique()->groupBy('topic_id');
@@ -831,7 +838,7 @@ class Event extends Model
 
             //parse first transaction has status = completed payment date
             foreach ($transactions as $transaction) {
-                if ($transaction['status'] == 1) {
+                if ($transaction['status'] == self::STATUS_CLOSE) {
                     $transaction1 = $transaction;
                     break;
                 }
@@ -874,6 +881,9 @@ class Event extends Model
                 $seen = (float) $video['total_seen'];
                 $seen = $seen > (float) $video['total_duration'] ? (float) $video['total_duration'] : $seen;
 
+                if ((int) $video['seen'] == 1) {
+                    $seen = (float) $video['total_duration'];
+                }
                 $seenTime += $seen;
                 $totalDuration += (float) $video['total_duration'];
             }

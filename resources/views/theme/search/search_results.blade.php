@@ -155,7 +155,7 @@
                      <div class="price">Pending</div>
                   @elseif($row['view_tpl'] == 'elearning_free')
                      <div class="price">free</div>
-                  @elseif($row['status'] == 0)
+                  @elseif($row['status'] == App\Model\Event::STATUS_OPEN)
                      <div class="price">from €{{$price}}</div>
                   @endif
                   <a href="{{ $row['slugable']['slug'] }}" class="btn btn--secondary btn--md">Course Details</a>
@@ -182,7 +182,7 @@
                      <div class="price">Pending</div>
                   @elseif($row['view_tpl'] == 'elearning_free')
                      <div class="price">free</div>
-                  @elseif($row['status'] == 0)
+                  @elseif($row['status'] == App\Model\Event::STATUS_OPEN)
                      <div class="price">from €{{$price}}</div>
                   @endif
                      <a href="{{ $row['slugable']['slug'] }}" class="btn btn--secondary btn--md">Course Details</a>

@@ -142,6 +142,16 @@ class StudentController extends Controller
         return view('theme.myaccount.student', $data);
     }
 
+    public function cropProfileImage($id)
+    {
+        $user = Auth::user();
+        $data['user'] = $user;
+        $data['currentuser'] = $user;
+        $data['media'] = Media::find($id);
+
+        return view('theme.myaccount.crop-profile-image', $data);
+    }
+
     public function checkInstructorEvent($event)
     {
         $pass = false;
@@ -1152,7 +1162,11 @@ class StudentController extends Controller
             $total_duration = 0;
             try {
                 foreach ($videos as $video) {
-                    $total_seen += (float) $video['total_seen'];
+                    if ((int) $video['seen'] == 1) {
+                        $total_seen += (float) $video['total_duration'];
+                    } else {
+                        $total_seen += (float) $video['total_seen'];
+                    }
                     $total_duration += (float) $video['total_duration'];
                 }
                 $past_total_duration = (float) $user->statistic()->wherePivot('event_id', $request->event)->first()->pivot['total_duration'];

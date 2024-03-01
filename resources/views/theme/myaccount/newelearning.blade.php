@@ -23,6 +23,9 @@
       <link rel="stylesheet" href="{{ cdn(mix('theme/assets/css/new/normalize.css')) }}" />
       <link rel="stylesheet" href="{{ cdn(mix('theme/assets/css/new/core.css')) }}" />
       <title>{{$course}}</title>
+
+      @include('theme.layouts.favicons')
+
       <script src="https://kit.fontawesome.com/84bbd74d3a.js" crossorigin="anonymous"></script>
 
       @if(!env('APP_DEBUG'))

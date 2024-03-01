@@ -102,9 +102,9 @@
                                 @if(isset($event['slugable']) && $event['slugable']['slug'] != '')
                                     @if (isset($event['event_info1']['course_payment_method']) && $event['event_info1']['course_payment_method'] == 'free')
                                         <a href="{{ $event['slugable']['slug'] }}" class="btn btn--sm btn--secondary">enroll for free</a>
-                                    @elseif($event['status'] != 0 && $event['status'] != 5)
+                                    @elseif($event['status'] != 0 && $event['status'] != App\Model\Event::STATUS_WAITING)
                                         <a href="{{ $event['slugable']['slug'] }}" class="btn btn--sm btn--secondary btn--sold-out">sold out</a>
-                                    @elseif($event['status'] == 5)
+                                    @elseif($event['status'] == App\Model\Event::STATUS_WAITING)
                                         <a href="{{ $event['slugable']['slug'] }}" class="btn btn--sm btn--secondary">JOIN WAITING LIST</a>
                                     @else
                                         <a href="{{ $event['slugable']['slug'] }}" class="btn btn--sm btn--primary">ENROLL FOR € {{ $event['ticket'][0]['price'] }} </a>
@@ -206,9 +206,9 @@
                                 @if(isset($event['slugable']) && $event['slugable']['slug'] != '')
                                     @if (isset($event['event_info1']['course_payment_method']) && $event['event_info1']['course_payment_method'] == 'free')
                                         <a href="{{ $event['slugable']['slug'] }}" class="btn btn--sm btn--secondary">enroll for free</a>
-                                    @elseif($event['status'] != 0 && $event['status'] != 5)
+                                    @elseif($event['status'] != App\Model\Event::STATUS_OPEN && $event['status'] != App\Model\Event::STATUS_WAITING)
                                         <a href="{{ $event['slugable']['slug'] }}" class="btn btn--sm btn--secondary btn--sold-out">sold out</a>
-                                    @elseif($event['status'] == 5)
+                                    @elseif($event['status'] == App\Model\Event::STATUS_WAITING)
                                         <a href="{{ $event['slugable']['slug'] }}" class="btn btn--sm btn--secondary">JOIN WAITING LIST</a>
                                     @else
                                         <a href="{{ $event['slugable']['slug'] }}" class="btn btn--sm btn--primary">ENROLL FOR € {{ $event['ticket'][0]['price'] }}</a>

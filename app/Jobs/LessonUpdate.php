@@ -55,6 +55,8 @@ class LessonUpdate implements ShouldQueue
                     $query->where('course_delivery',143);
                 })->get();*/
 
+                $priority = 0;
+
                 foreach ($allEvents as $event) {
                     add_event_statistic_queue($event->id);
 

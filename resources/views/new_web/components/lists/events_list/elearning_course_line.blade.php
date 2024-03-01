@@ -58,7 +58,7 @@
             @elseif($row->view_tpl == 'elearning_pending')
             <div class="price">Pending</div>
             <a href="{{ $slug }}" class="btn btn--secondary btn--md">Course Details</a>
-            @elseif($row['status'] == 5)
+            @elseif($row['status'] == App\Model\Event::STATUS_WAITING)
             <div class="price">Course coming soon</div>
             <a href="{{ $slug }}" class="btn btn--secondary btn--md">JOIN WAITING LIST</a>
             @else

@@ -1,0 +1,57 @@
+name: PHP Laravel Composer
+
+on:
+  push:
+    branches: [ "master", "production" ]
+  pull_request:
+    branches: [ "master", "production" ]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.2.5'
+
+    # - name: Validate composer.json and composer.lock
+    #   run: composer validate --strict
+
+    - name: Cache Composer packages
+      id: composer-cache
+      uses: actions/cache@v3
+      with:
+        path: vendor
+        key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-php-
+
+    # In future, add a test script to composer.json
+
+    # - name: Run test suite
+    #   run: composer run-script test
+    
+    - name: Install dependencies
+      run: |
+        composer install --prefer-dist --no-progress
+        npm install
+        npm run dev --if-present
+        cd resources/admin
+        npm install
+        npm run dev --if-present
+
+    - name: Upload a Build Artifact
+      id: artifact-upload-step
+      uses: actions/upload-artifact@v4.3.1
+      with:
+        name: kc-test-build
+        path: |
+          .
+          !./node_modules
+          !./resources/admin/node_modules

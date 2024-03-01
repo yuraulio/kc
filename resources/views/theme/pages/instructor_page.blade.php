@@ -88,7 +88,7 @@
                                     @if(isset($row))
                                         <?php $estatus = $row['status']; ?>
 
-                                        @if($estatus == 0 || $estatus == 2)
+                                        @if($estatus == App\Model\Event::STATUS_OPEN || $estatus == App\Model\Event::STATUS_SOLDOUT)
 
                                             @if($row['view_tpl'] =='elearning_event' || $row['view_tpl'] =='elearning_greek' || $row['view_tpl'] =='elearning_event' || $row['view_tpl'] =='elearning_free')
 
@@ -114,8 +114,8 @@
 
                                         <?php $estatus = $row['status']; ?>
 
-                                        @if($estatus == 0 || $estatus == 2)
-                                        <?php //dd($row); ?>
+                                        @if($estatus == App\Model\Event::STATUS_OPEN || $estatus == App\Model\Event::STATUS_SOLDOUT)
+
                                             @if($row['view_tpl'] !='elearning_event' && $row['view_tpl'] !='elearning_greek' && $row['view_tpl'] !='elearning_free')
                                             <div class="item">
                                                 <div class="left">

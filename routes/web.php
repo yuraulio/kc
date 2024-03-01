@@ -1,6 +1,7 @@
 <?php
 
-use App\Http\Controllers\Admin\Transactions\TransactionParticipantsReportController;
+use App\Http\Controllers\Admin\Transactions\TransactionRegistrationsReportController;
+use App\Http\Controllers\Admin\Transactions\TransactionRevenuesReportController;
 use App\Http\Controllers\NotificationController;
 use App\Model\Admin\Setting;
 use App\Model\User;
@@ -111,9 +112,10 @@ Route::group(['middleware' => 'auth.aboveauthor', 'prefix' => 'admin1'], functio
     Route::post('subscription/export-excel', 'SubscriptionController@exportExcel')->name('subscription.export-excel');
 
     //Participants
-    Route::get('transaction/participants/new', TransactionParticipantsReportController::class);
-    Route::get('transaction/participants', 'TransactionController@participants_inside_revenue')->name('transaction.participants');
-    Route::get('transaction/revenue', 'TransactionController@participants_inside_revenue_new')->name('transaction.participants_new');
+    Route::get('transaction/registrations', TransactionRegistrationsReportController::class)->name('transaction.participants');
+    Route::get('transaction/revenue', TransactionRevenuesReportController::class)->name('transaction.participants_new');
+    Route::get('transaction/registrations/old', 'TransactionController@participants_inside_revenue');
+    Route::get('transaction/revenue/old', 'TransactionController@participants_inside_revenue_new');
     Route::post('transaction/updateExpirationDate', ['as' => 'transaction.updateExpirationDate', 'uses' => 'TransactionController@updateExpirationDate']);
     Route::post('transaction/export-excel', 'TransactionController@exportExcel')->name('transaction.export-excel');
     Route::post('transaction/export-invoice', 'TransactionController@exportInvoices')->name('transaction.export-invoice');
@@ -588,6 +590,7 @@ Route::get('search/term', ['as' => 'search.term', 'uses' => 'Theme\SearchControl
 Route::group(['middleware' => ['auth', 'logout.devices'], 'prefix' => 'myaccount'], function () {
     Route::group(['middleware' => 'auth.sms'], function () {
         Route::get('/', 'Theme\StudentController@index')->name('myaccount');
+        Route::get('crop-profile-image/{id}', ['as' => 'myaccount.cropProfileImage', 'uses' => 'Theme\StudentController@cropProfileImage']);
         Route::post('/remove-avatar', 'Theme\StudentController@removeProfileImage')->name('remove.avatar');
         Route::post('/upload-profile-image', 'Theme\StudentController@uploadProfileImage')->name('add.profileImage');
         Route::post('/validate-personal-info', 'Theme\StudentController@infoValidation')->name('validate.personalInfo');

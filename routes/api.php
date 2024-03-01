@@ -66,3 +66,8 @@ Route::middleware('auth:api')->group(function () {
 });
 
 Route::post('/myaccount/reset', [ForgotPasswordController::class, 'sendResetLinkEmail']);
+
+Route::group(['middleware' => ['auth:api', 'auth.aboveauthor'], 'prefix' => 'v1', 'as' => 'api.v1.'], function () {
+    Route::post('transactions/participants/statistics', \App\Http\Controllers\Api\v1\Transactions\Participants\StatisticsController::class)
+        ->name('transactions.participants_statistics');
+});
