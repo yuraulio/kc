@@ -63,7 +63,7 @@ jobs:
         id: get-dev-artifact-id
         run: |
           ARTIFACT_ID=$(curl -sH "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-          https://api.github.com/repos/${{ github.repository }}/actions/artifacts | \
+          https://api.github.com/repos/knowcrunch/website/actions/artifacts | \
           jq -r '.artifacts[] | select(.name == "kc-dev-${{ github.sha }}") | .id')
           echo "Dev Artifact ID: $ARTIFACT_ID"
           echo -n "DEV_ARTIFACT_ID=$ARTIFACT_ID" >> "$GITHUB_ENV"
@@ -72,7 +72,7 @@ jobs:
         id: get-dev-artifact-url
         run: |
           ARTIFACT_URL=$(curl -IsH "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-          https://api.github.com/repos/${{ github.repository }}/actions/artifacts/${{ env.DEV_ARTIFACT_ID }}/zip | \
+          https://api.github.com/repos/knowcrunch/website/actions/artifacts/${{ env.DEV_ARTIFACT_ID }}/zip | \
           grep -i '^location:' | \
           awk '{printf "%s", $2}' | \
           tr -d '\r\n')
