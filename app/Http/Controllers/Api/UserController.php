@@ -74,7 +74,7 @@ class UserController extends Controller
                 'ne' => '!=', // not equal
             ];
 
-            $filters = $request->query->get('filter');
+            $filters = $request->query->all('filter');
 
             foreach ($filters as $field => $value) {
                 if (Str::contains($field, '.')) {
