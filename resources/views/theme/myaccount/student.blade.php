@@ -750,13 +750,16 @@
                                 <?php $tab = 0; ?>
                                 <?php //dd($events); ?>
 
-                                @if(isset($events) && count($events) > 0)
+                                @if(!empty($events) && count($events) > 0)
 
                                 @foreach($events as $keyType => $event)
 
                                   @php
-                                  $eventEloquent = App\Model\Event::find($event['id']);
-                                  $allInstallmentsPayed = $eventEloquent->allInstallmentsPayed();
+                                  $allInstallmentsPayed = null;
+                                  if (!empty($event) && !empty($event['id'])) {
+                                    $eventEloquent = App\Model\Event::find($event['id']);
+                                    $allInstallmentsPayed = $eventEloquent->allInstallmentsPayed();
+                                  }
                                   @endphp
                                 {{--@if($event['view_tpl'] != 'elearning_free' && $event['view_tpl'] != 'elearning_event')--}}
                                 @if($event['delivery'] != 143)
