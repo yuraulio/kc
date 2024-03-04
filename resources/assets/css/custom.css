@@ -472,7 +472,7 @@ footer {
 }
 
 .text-muted {
-  color: #98a6ad !important;
+  color: #989b9c !important;
 }
 
 .heading-small {
@@ -484,3 +484,6 @@ footer {
 
 #header h1.logo-area{ padding-bottom: 0px; }
 
+.cms-page-header h1 {
+  margin-bottom: 0;
+}
