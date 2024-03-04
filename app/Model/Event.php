@@ -42,6 +42,7 @@ use App\Traits\SlugTrait;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Laravel\Cashier\Subscription;
 
@@ -796,6 +797,29 @@ class Event extends Model
         $certification = $checkForCetification && count($this->certificatesByUser($user->id)) > 0;
 
         return $periodAfterHasCourse >= $accessMonths && !$certification;
+    }
+
+    public function allInstallmentsPayed()
+    {
+        // Check if it's free
+        $ticket_ids = EventUserTicket::where('user_id', Auth::id())->where('event_id', $this->id)->get()->pluck('ticket_id')->toArray();
+        if (in_array(Ticket::FREE, $ticket_ids)) {
+            return true;
+        }
+        // Check if this user payed all the installments
+        $transaction_ids = Transactionable::where('transactionable_id', Auth::id())->where('transactionable_type', 'App\\Model\\User')->get()->pluck('transaction_id');
+        $transaction_ids = Transactionable::whereIn('transaction_id', $transaction_ids)->where('transactionable_id', $this->id)->where('transactionable_type', 'App\\Model\\Event')->pluck('transaction_id');
+        $invoiceable_ids = Invoiceable::whereIn('invoiceable_id', $transaction_ids)->where('invoiceable_type', 'App\\Model\\Transaction')->pluck('invoice_id');
+        $invoices = Invoice::whereIn('id', $invoiceable_ids)->orderBy('id', 'DESC')->first();
+        if ($invoices) {
+            if ($invoices->instalments_remaining <= 0) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /*public function progress($user)

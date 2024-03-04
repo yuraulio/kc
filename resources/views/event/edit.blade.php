@@ -4118,6 +4118,19 @@ $show_popup = isset($uri['show_popup']) ? $uri['show_popup'] : 0;
 <script>
     $(document).ready(function() {
 
+        $('#input-status').on('change', function(){
+          if($('#input-status').val() === '4'){
+            let feed = $("#input-feed").is(":checked") ? 1 : 0;
+            let index = $("#input-index").is(":checked") ? 1 : 0;
+            if(feed == 1){
+              $('#input-feed').trigger('click')
+            }
+            if(index == 1){
+              $('#input-index').trigger('click')
+            }
+          }
+        });
+
         $.validator.addMethod('checkIfRequired', function(value, element, param) {
             let isValid = false;
             let toggle_btn = $(element).parent().parent();

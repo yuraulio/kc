@@ -1,0 +1,101 @@
+name: Build and Deploy – Prod
+
+# on:
+#   push:
+#     branches: [ "master" ]
+
+on:
+  workflow_dispatch:
+    # inputs:
+    #   environment:
+    #     description: 'Environment to deploy to'
+    #     required: true
+    #     default: 'prod'
+
+permissions:
+  contents: read
+
+jobs:
+  build-prod:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.2.5'
+
+    # - name: Validate composer.json and composer.lock
+    #   run: composer validate --strict
+
+    # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
+    # - name: Run test suite
+    #   run: composer run-script test
+    
+    - name: Install dependencies
+      id: install-prod-deps
+      run: |
+        composer install --prefer-dist --no-progress
+        cd resources/admin
+        npm install
+        npm run prod
+        cd ../..
+        npm install
+        npm run prod
+
+    - name: Upload a Build Artifact
+      id: upload-prod-artifact
+      uses: actions/upload-artifact@v4.3.1
+      with:
+        name: kc-prod-${{ github.sha }}
+        path: |
+          .
+          !./node_modules
+          !./resources/admin/node_modules
+
+  deploy-prod:
+    needs: [build-prod] # This only runs if the build is succesful
+    runs-on: ubuntu-latest
+    environment: prod
+    steps:
+      - name: Get Artifact ID
+        id: get-prod-artifact-id
+        run: |
+          ARTIFACT_ID=$(curl -sH "Authorization: Bearer ${{ secrets.GHUB_ACTIONS_API }}" \
+          https://api.github.com/repos/${{ github.repository }}/actions/artifacts | \
+          jq -r '.artifacts[] | select(.name == "kc-prod-${{ github.sha }}") | .id')
+          echo "Prod Artifact ID: $ARTIFACT_ID"
+          echo -n "PROD_ARTIFACT_ID=$ARTIFACT_ID" >> "$GITHUB_ENV"
+      
+      - name: Get Artifact URL
+        id: get-prod-artifact-url
+        run: |
+          ARTIFACT_URL=$(curl -IsH "Authorization: Bearer ${{ secrets.GHUB_ACTIONS_API }}" \
+          https://api.github.com/repos/${{ github.repository }}/actions/artifacts/${{ env.PROD_ARTIFACT_ID }}/zip | \
+          grep -i '^location:' | \
+          awk '{printf "%s", $2}' | \
+          tr -d '\r\n')
+          echo "Artifact URL: $ARTIFACT_URL"
+          echo -n "PROD_ARTIFACT_URL=$ARTIFACT_URL" >> "$GITHUB_ENV"
+    
+      - name: Deploy to Scaleforce via Archive URL
+        id: deploy-prod-artifact
+        run: |
+          scaleforceres=$(curl --location 'https://app.j.scaleforce.net/1.0/environment/deployment/rest/deployarchive' \
+          --header 'Content-Type: application/x-www-form-urlencoded' \
+          --data-urlencode 'fileName=kc-prod-${{ github.sha }}' \
+          --data-urlencode 'envName=${{ vars.DEPLOY_ENV }}' \
+          --data-urlencode 'session=${{ secrets.SCALEFORCE_DEPLOY_TOKEN }}' \
+          --data-urlencode 'zdt=true' \
+          --data-urlencode 'nodeGroup=cp' \
+          --data-urlencode 'fileUrl=${{ env.PROD_ARTIFACT_URL }}' \
+          --data-urlencode 'hooks={"preDeploy":"cd /var/www/webroot && ln /var/www/webroot/ROOT OLDROOT", "postDeploy":"rsync -av --ignore-existing --exclude=\"node_modules/\" --exclude=\"vendor/\" --exclude=\".git/\" --include=\".*\" /var/www/webroot/OLDROOT/ /var/www/webroot/ROOT/ \&\& cd /var/www/webroot/ROOT \&\& echo $(git rev-parse --short HEAD \&\& git log -1 --format=\"%at\" | xargs -I{} date -d @{} +%Y/%m/%d_%H:%M:%S) > /var/www/webroot/ROOT/storage/app/version-commit.txt \&\& php artisan migrate \&\& php artisan migrate --path=/database/migrations/cms \&\& php artisan migrate --path=/database/migrations/cms-plugins \&\& php artisan view:clear \&\& php artisan cache:clear \&\& php artisan config:clear \&\& php artisan config:cache \&\& rm /var/www/webroot/OLDROOT \&\& echo \"Post Deploy Hook Ended\""}')
+          echo $scaleforceres
+          scaleforceres_result=$(echo "$scaleforceres" | jq '.result')
+          echo "SCALEFORCE_RES=$scaleforceres_result" >> "$GITHUB_ENV"
+
+      - name: Fail if JSON response is not 0
+        id: verify-prod-artifact-deployment
+        if: ${{ env.SCALEFORCE_RES != '0' }}
+        run: echo "JSON response is not 0, failing the job." && exit 1

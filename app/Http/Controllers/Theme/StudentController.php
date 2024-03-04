@@ -234,6 +234,8 @@ class StudentController extends Controller
 
                 $eventSubscriptions[] = $user->eventSubscriptions()->wherePivot('event_id', $event['id'])->orderByPivot('expiration', 'DESC')->first() ?
                 $user->eventSubscriptions()->wherePivot('event_id', $event['id'])->orderByPivot('expiration', 'DESC')->first()['id'] : -1;
+
+                $data['events'][$event['id']]['id'] = $event->id;
             } else {
                 if ($this->checkInstructorEvent($event)) {
                     $data['events'][$event['id']]['topics'] = $event->topicsLessonsInstructors(null, $event['topic'], $event['lessons'], $event['instructors'])['topics'];
@@ -256,6 +258,7 @@ class StudentController extends Controller
 
                     $data['events'][$event['id']]['summaryDate'] = isset($eventInfo['inclass']['dates']['text']) ? $eventInfo['inclass']['dates']['text'] : '';
                     $data['events'][$event['id']]['summaryDate_icon'] = isset($eventInfo['inclass']['dates']['icon']['path']) ? $eventInfo['inclass']['dates']['icon']['path'] : null;
+                    $data['events'][$event['id']]['id'] = $event->id;
                 }
             }
 
@@ -334,6 +337,7 @@ class StudentController extends Controller
                 }
 
                 $data['events'][$event['id']]['video_access'] = $video_access;
+                $data['events'][$event['id']]['id'] = $event->id;
 
             //$this->updateUserStatistic($event,$statistics,$user);
             } else {
@@ -358,6 +362,7 @@ class StudentController extends Controller
 
                     $data['events'][$event['id']]['summaryDate'] = isset($eventInfo['inclass']['dates']['text']) ? $eventInfo['inclass']['dates']['text'] : '';
                     $data['events'][$event['id']]['summaryDate_icon'] = isset($eventInfo['inclass']['dates']['icon']['path']) ? $eventInfo['inclass']['dates']['icon']['path'] : null;
+                    $data['events'][$event['id']]['id'] = $event->id;
                 }
             }
 
@@ -592,6 +597,7 @@ class StudentController extends Controller
                 if ($event->id == 2304 && (($after20Days && ($expiration_event >= $after20Days)) || !$expiration_event)) {
                     $data['masterClassAccess'] = true;
                 }
+                $data['events'][$event->id]['id'] = $event->id;
 
             //$this->updateUserStatistic($event,$statistics,$user);
             } else {
@@ -623,6 +629,7 @@ class StudentController extends Controller
 
                 $data['events'][$event->id]['summaryDate'] = isset($eventInfo['inclass']['dates']['text']) ? $eventInfo['inclass']['dates']['text'] : '';
                 $data['events'][$event->id]['summaryDate_icon'] = isset($eventInfo['inclass']['dates']['icon']['path']) ? $eventInfo['inclass']['dates']['icon']['path'] : null;
+                $data['events'][$event->id]['id'] = $event->id;
 
                 //$data['user']['events'][$event->id]['exam_access'] = $user->examAccess(0.8,$event->id);
             }

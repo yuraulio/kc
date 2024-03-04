@@ -750,10 +750,17 @@
                                 <?php $tab = 0; ?>
                                 <?php //dd($events); ?>
 
-                                @if(isset($events) && count($events) > 0)
+                                @if(!empty($events) && count($events) > 0)
 
                                 @foreach($events as $keyType => $event)
 
+                                  @php
+                                  $allInstallmentsPayed = null;
+                                  if (!empty($event) && !empty($event['id'])) {
+                                    $eventEloquent = App\Model\Event::find($event['id']);
+                                    $allInstallmentsPayed = $eventEloquent->allInstallmentsPayed();
+                                  }
+                                  @endphp
                                 {{--@if($event['view_tpl'] != 'elearning_free' && $event['view_tpl'] != 'elearning_event')--}}
                                 @if($event['delivery'] != 143)
                                 <div class="col12 dynamic-courses-wrapper dynamic-courses-wrapper--style2 @if((isset($event['paid']) && $event['paid'] == 0 && isset($event['transactionPending']) && $event['transactionPending'] == 2) || (isset($event['transactionPendingSepa']) && $event['transactionPendingSepa'] == 1)){{'pendingSepa'}}@elseif(isset($event['paid']) && $event['paid'] == 0 ){{'unpaid'}}@endif">
@@ -1190,6 +1197,14 @@
                                                                 @endif
                                                               @endforeach
                                                             </div>
+
+                                                            @if(!$allInstallmentsPayed)
+                                                            <div style="color: red;">
+                                                              <img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/icon-remove.svg')}}" alt="Pay all the installments" title="Pay all the installments">
+                                                              {{ 'You need to pay all installments before taking the exam' }}
+                                                            </div>
+                                                            @endif
+
                                                             @foreach($event['exams'] as $p)
                                                             <div class="right">
                                                                 <!-- Feedback 8-12 changed -->
@@ -1201,7 +1216,11 @@
                                                                 @elseif($userExam )
                                                                 <a target="_blank" href="{{ url('exam-results/' . $p->id) }}?s=1" title="{{$p['title']}}" class="btn btn--secondary btn--md btn--completed">VIEW RESULT</a>
                                                                 @elseif($p->islive == 1)
-                                                                <a target="_blank" onclick="window.open('{{ route('attempt-exam', [$p->id]) }}', 'newwindow', 'width=1400,height=650'); return false;" title="{{$p['title']}}" class="btn btn--secondary btn--md">TAKE EXAM</a>
+                                                                  @if($allInstallmentsPayed)
+                                                                    <a target="_blank" onclick="window.open('{{ route('attempt-exam', [$p->id]) }}', 'newwindow', 'width=1400,height=650'); return false;" title="{{$p['title']}}" class="btn btn--secondary btn--md">TAKE EXAM</a>
+                                                                  @else
+                                                                    <a target="_blank" title="{{$p['title']}}" class="btn btn--secondary btn--md btn--completed">TAKE EXAM</a>
+                                                                  @endif
                                                                 @elseif($p->isupcom == 1)
                                                                 <a  title="{{$p['title'] }}" class="btn btn--secondary btn--md">{{ date('F j, Y', strtotime($p->publish_time)) }}</a>
                                                                 @endif
@@ -1217,46 +1236,53 @@
                                                 @if(count($event['certs']) > 0)
                                                 <div id="c-cert-inner{{$tab}}" class="in-tab-wrapper">
                                                     <div class="bottom">
-                                                        <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}" title="customer_Access_icon" alt="Access-Files-icon">@if(isset($newlayoutExamsEvent[$keyType]) && count($newlayoutExamsEvent[$keyType])>0)Certificate download after completing your exams. @else Your certification is ready @endif</div>
-                                                        @foreach($event['certs'] as $certificate)
-                                                        <?php
-                                                        $expirationMonth = '';
-                                                        $expirationYear = '';
-                                                        $certUrl = trim(url('/') . '/mycertificate/' . base64_encode(Auth::user()->email."--".$certificate->id));
-                                                        if($certificate->expiration_date){
-                                                            $expirationMonth = date('m',$certificate->expiration_date);
-                                                            $expirationYear = date('Y',$certificate->expiration_date);
-                                                        }
+                                                        @if($allInstallmentsPayed)
+                                                          <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}" title="customer_Access_icon" alt="Access-Files-icon">@if(isset($newlayoutExamsEvent[$keyType]) && count($newlayoutExamsEvent[$keyType])>0)Certificate download after completing your exams. @else Your certification is ready @endif</div>
+                                                          @foreach($event['certs'] as $certificate)
+                                                          <?php
+                                                          $expirationMonth = '';
+                                                          $expirationYear = '';
+                                                          $certUrl = trim(url('/') . '/mycertificate/' . base64_encode(Auth::user()->email."--".$certificate->id));
+                                                          if($certificate->expiration_date){
+                                                              $expirationMonth = date('m',$certificate->expiration_date);
+                                                              $expirationYear = date('Y',$certificate->expiration_date);
+                                                          }
 
-                                                        $certiTitle = preg_replace( "/\r|\n/", " ", $certificate->certificate_title );
+                                                          $certiTitle = preg_replace( "/\r|\n/", " ", $certificate->certificate_title );
 
-                                                        if(strpos($certificate->certificate_title, '</p><p>')){
-                                                            $certiTitle = substr_replace($certificate->certificate_title, ' ', strpos($certificate->certificate_title, '</p>'), 0);
-                                                        }else{
-                                                            $certiTitle = $certificate->certificate_title;
-                                                        }
-                                                        $certiTitle = str_replace('&nbsp;',' ',$certiTitle);
-                                                        $certiTitle = urlencode(htmlspecialchars_decode(strip_tags($certiTitle),ENT_QUOTES));
-                                                        ?>
-                                                        <div class="right">
-                                                            <a  class="btn btn--secondary btn--md" target="_blank" href="/mycertificate/{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" >DOWNLOAD </a>
-                                                            <a class="linkedin-post cert-post 11"  target="_blank" href="https://www.linkedin.com/profile/add?startTask={{$certiTitle}}&name={{$certiTitle}}&organizationId=3152129&issueYear={{date('Y',$certificate->create_date)}}
-                                                        &issueMonth={{date('m',$certificate->create_date)}}&expirationYear={{$expirationYear}}&expirationMonth={{$expirationMonth}}&certUrl={{$certUrl}}&certId={{$certificate->credential}}">
-                                                                <img loading="lazy" class="linkdein-image-add resp-img" width="36" height="36" src="{{cdn('theme/assets/images/icons/social/events/Linkedin.svg')}}"  title="LinkedIn Add to Profile button" alt="LinkedIn Add to Profile button">
-                                                            </a>
-                                                            {{--@if($user->id == 1359)--}}
-                                                            <a class="facebook-post-cert" data-certTitle="{{$certiTitle}}" data-certid="{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" title="Add this certification to your Facebook profile" href="javascript:void(0)">
-                                                                <img loading="lazy" class="linkdein-image-add resp-img" width="36" height="36" src="{{cdn('theme/assets/images/icons/social/events/Facebook.svg')}}" title="Facebook Add to Profile button" alt="Facebook Add to Profile button">
-                                                            </a>
-                                                            {{--<a class="twitter-post-cert" data-certTitle="{{$certiTitle}}" data-certid="{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" title="Add this certification to your Twitter profile" href="javascript:void(0)">
-                                                                <img loading="lazy" class="linkdein-image-add resp-img" width="36" height="36" src="{{cdn('theme/assets/images/icons/social/events/Twitter.svg')}}" title="Twitter Add to Profile button" alt="Twitter Add to Profile button">
-                                                            </a>--}}
-                                                            {{--@endif--}}
+                                                          if(strpos($certificate->certificate_title, '</p><p>')){
+                                                              $certiTitle = substr_replace($certificate->certificate_title, ' ', strpos($certificate->certificate_title, '</p>'), 0);
+                                                          }else{
+                                                              $certiTitle = $certificate->certificate_title;
+                                                          }
+                                                          $certiTitle = str_replace('&nbsp;',' ',$certiTitle);
+                                                          $certiTitle = urlencode(htmlspecialchars_decode(strip_tags($certiTitle),ENT_QUOTES));
+                                                          ?>
+                                                          <div class="right">
+                                                              <a  class="btn btn--secondary btn--md" target="_blank" href="/mycertificate/{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" >DOWNLOAD </a>
+                                                              <a class="linkedin-post cert-post 11"  target="_blank" href="https://www.linkedin.com/profile/add?startTask={{$certiTitle}}&name={{$certiTitle}}&organizationId=3152129&issueYear={{date('Y',$certificate->create_date)}}
+                                                          &issueMonth={{date('m',$certificate->create_date)}}&expirationYear={{$expirationYear}}&expirationMonth={{$expirationMonth}}&certUrl={{$certUrl}}&certId={{$certificate->credential}}">
+                                                                  <img loading="lazy" class="linkdein-image-add resp-img" width="36" height="36" src="{{cdn('theme/assets/images/icons/social/events/Linkedin.svg')}}"  title="LinkedIn Add to Profile button" alt="LinkedIn Add to Profile button">
+                                                              </a>
+                                                              {{--@if($user->id == 1359)--}}
+                                                              <a class="facebook-post-cert" data-certTitle="{{$certiTitle}}" data-certid="{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" title="Add this certification to your Facebook profile" href="javascript:void(0)">
+                                                                  <img loading="lazy" class="linkdein-image-add resp-img" width="36" height="36" src="{{cdn('theme/assets/images/icons/social/events/Facebook.svg')}}" title="Facebook Add to Profile button" alt="Facebook Add to Profile button">
+                                                              </a>
+                                                              {{--<a class="twitter-post-cert" data-certTitle="{{$certiTitle}}" data-certid="{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" title="Add this certification to your Twitter profile" href="javascript:void(0)">
+                                                                  <img loading="lazy" class="linkdein-image-add resp-img" width="36" height="36" src="{{cdn('theme/assets/images/icons/social/events/Twitter.svg')}}" title="Twitter Add to Profile button" alt="Twitter Add to Profile button">
+                                                              </a>--}}
+                                                              {{--@endif--}}
 
-                                                        </div>
+                                                          </div>
 
 
-                                                        @endforeach
+                                                          @endforeach
+                                                        @else
+                                                          <div style="color: red;">
+                                                            <img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/icon-remove.svg')}}" alt="Pay all the installments" title="Pay all the installments">
+                                                            {{ 'You need to pay all installments before getting the certificate' }}
+                                                          </div>
+                                                        @endif
                                                     </div>
                                                 </div>
                                                 @endif
@@ -1483,23 +1509,33 @@
                                                             {{ 'Exams activate automatically after 80% progress' }}
                                                             @endif
                                             </div>
+                                            @if(!$allInstallmentsPayed)
+                                            <div style="color: red;">
+                                              <img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/icon-remove.svg')}}" alt="Pay all the installments" title="Pay all the installments">
+                                              {{ 'You need to pay all installments before taking the exam' }}
+                                            </div>
+                                            @endif
                                                         </div>
                                                         <div class="right">
                                                             <!-- Feedback 8-12 changed -->
                                                             @if($event['exam_access'] && !$userExam)
-                                                            @if($p->islive == 1)
-                                                            <a target="_blank" onclick="window.open('{{ route('attempt-exam', [$p->id]) }}', 'newwindow', 'width=1400,height=650'); return false;" title="{{$p['exam_name']}}" class="btn btn--secondary btn--md">TAKE EXAM</a>
-                                                            @endif
+                                                              @if($p->islive == 1)
+                                                                @if($allInstallmentsPayed)
+                                                                  <a target="_blank" onclick="window.open('{{ route('attempt-exam', [$p->id]) }}', 'newwindow', 'width=1400,height=650'); return false;" title="{{$p['exam_name']}}" class="btn btn--secondary btn--md">TAKE EXAM</a>
+                                                                @else
+                                                                  <a href="javascript:void(0)" title="{{$p['exam_name']}}" class="btn btn--secondary btn--md btn--completed">TAKE EXAM</a>
+                                                                @endif
+                                                              @endif
                                                             @elseif($userExam)
-                                                            @if($nowTime->diffInHours($userExam->end_time) < 48)
-                                                            <a target="_blank" href="{{ url('exam-results/' . $p->id) }}?s=1" title="{{$p['exam_name']}}" class="btn btn--secondary btn--md">VIEW RESULT</a>
+                                                              @if($nowTime->diffInHours($userExam->end_time) < 48)
+                                                                <a target="_blank" href="{{ url('exam-results/' . $p->id) }}?s=1" title="{{$p['exam_name']}}" class="btn btn--secondary btn--md">VIEW RESULT</a>
+                                                              @else
+                                                                <a target="_blank" href="{{ url('exam-results/' . $p->id) }}?s=1" title="{{$p['exam_name']}}" class="btn btn--secondary btn--md btn--completed">VIEW RESULT</a>
+                                                              @endif
                                                             @else
-                                                            <a target="_blank" href="{{ url('exam-results/' . $p->id) }}?s=1" title="{{$p['exam_name']}}" class="btn btn--secondary btn--md btn--completed">VIEW RESULT</a>
-                                                            @endif
-                                                            @else
-                                                            <div class="right">
-                                                                <a href="javascript:void(0)" title="{{$p['exam_name']}}" class="btn btn--secondary btn--md btn--completed">TAKE EXAM</a>
-                                                            </div>
+                                                              <div class="right">
+                                                                  <a href="javascript:void(0)" title="{{$p['exam_name']}}" class="btn btn--secondary btn--md btn--completed">TAKE EXAM</a>
+                                                              </div>
                                                             @endif
                                                         </div>
                                                         @endforeach
@@ -1510,6 +1546,7 @@
                                                 @if(count($event['certs']) > 0)
                                                 <div id="c-cert-inner{{$tab}}" class="in-tab-wrapper">
                                                     <div class="bottom">
+                                                      @if($allInstallmentsPayed)
                                                         <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}" alt="Access-Files-icon" title="Access-Files-icon">@if(isset($newlayoutExamsEvent[$keyType]) && count($newlayoutExamsEvent[$keyType])>0)Certificate download after completing your exams. @else Your certification is ready @endif</div>
                                                         @foreach($event['certs'] as $certificate)
                                                         <?php
@@ -1550,6 +1587,12 @@
                                                         </div>
 
                                                         @endforeach
+                                                      @else
+                                                        <div style="color: red;">
+                                                          <img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/icon-remove.svg')}}" alt="Pay all the installments" title="Pay all the installments">
+                                                          {{ 'You need to pay all installments before getting the certificate' }}
+                                                        </div>
+                                                      @endif
                                                     </div>
                                                 </div>
                                                 @endif
@@ -1651,6 +1694,13 @@
                                                     </div>
                                                 </div>
 
+                                                @if(!$allInstallmentsPayed)
+                                                <div style="color: red;">
+                                                  <img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/icon-remove.svg')}}" alt="Pay all the installments" title="Pay all the installments">
+                                                  {{ 'You need to pay all installments before taking the exam' }}
+                                                </div>
+                                                @endif
+
                                                 @if(isset($event['exams']))
                                                 <?php $nowTime = \Carbon\Carbon::now(); ?>
                                                 <div id="c-exams-inner{{$tab}}" class="in-tab-wrapper">
@@ -1668,7 +1718,11 @@
                                                             <?php $userExam = isset($user['hasExamResults'][$p->id][0]) ? $user['hasExamResults'][$p->id][0] : null ?>
                                                             @if($event['exam_access'] && !$userExam)
                                                             @if($p->islive == 1)
-                                                            <a target="_blank" onclick="window.open('{{ route('attempt-exam', [$p->id]) }}', 'newwindow', 'width=1400,height=650'); return false;" title="{{$p['exam_name']}}" class="btn btn--secondary btn--md">TAKE EXAM</a>
+                                                              @if($allInstallmentsPayed)
+                                                                <a target="_blank" onclick="window.open('{{ route('attempt-exam', [$p->id]) }}', 'newwindow', 'width=1400,height=650'); return false;" title="{{$p['exam_name']}}" class="btn btn--secondary btn--md">TAKE EXAM</a>
+                                                              @else
+                                                                <a target="_blank" title="{{$p['exam_name']}}" class="btn btn--secondary btn--md btn--completed">TAKE EXAM</a>
+                                                              @endif
                                                             @endif
                                                             @elseif($userExam)
                                                             @if($nowTime->diffInHours($userExam->end_time) < 48)
@@ -1690,45 +1744,53 @@
                                                 @if(count($event['certs']) > 0)
                                                 <div id="c-cert-inner{{$tab}}" class="in-tab-wrapper">
                                                     <div class="bottom">
-                                                        <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}" alt="">@if(isset($newlayoutExamsEvent[$keyType]) && count($newlayoutExamsEvent[$keyType])>0)Certificate download after completing your exams. @else Your certification is ready @endif</div>
-                                                        @foreach($event['certs'] as $certificate)
-                                                        <?php
-                                                        $expirationMonth = '';
-                                                        $expirationYear = '';
-                                                        $certUrl = trim(url('/') . '/mycertificate/' . base64_encode(Auth::user()->email."--".$certificate->id));
-                                                        if($certificate->expiration_date){
-                                                            $expirationMonth = date('m',$certificate->expiration_date);
-                                                            $expirationYear = date('Y',$certificate->expiration_date);
-                                                        }
 
-                                                        if(strpos($certificate->certificate_title, '</p><p>')){
-                                                            $certiTitle = substr_replace($certificate->certificate_title, ' ', strpos($certificate->certificate_title, '</p>'), 0);
-                                                        }else{
-                                                            $certiTitle = $certificate->certificate_title;
-                                                        }
-                                                        $certiTitle = str_replace('&nbsp;',' ',$certiTitle);
-                                                        $certiTitle = urlencode(htmlspecialchars_decode(strip_tags($certiTitle),ENT_QUOTES));
+                                                        @if($allInstallmentsPayed)
+                                                          <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}" alt="">@if(isset($newlayoutExamsEvent[$keyType]) && count($newlayoutExamsEvent[$keyType])>0)Certificate download after completing your exams. @else Your certification is ready @endif</div>
+                                                          @foreach($event['certs'] as $certificate)
+                                                          <?php
+                                                          $expirationMonth = '';
+                                                          $expirationYear = '';
+                                                          $certUrl = trim(url('/') . '/mycertificate/' . base64_encode(Auth::user()->email."--".$certificate->id));
+                                                          if($certificate->expiration_date){
+                                                              $expirationMonth = date('m',$certificate->expiration_date);
+                                                              $expirationYear = date('Y',$certificate->expiration_date);
+                                                          }
 
-                                                        ?>
-                                                        <div class="right">
-                                                            <a  class="btn btn--secondary btn--md" target="_blank" href="/mycertificate/{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" >DOWNLOAD </a>
-                                                            <a class="linkedin-post cert-post 33"  target="_blank" href="https://www.linkedin.com/profile/add?startTask={{$certiTitle}}&name={{$certiTitle}}&organizationId=3152129&issueYear={{date('Y',$certificate->create_date)}}
-                                                   &issueMonth={{date('m',$certificate->create_date)}}&expirationYear={{$expirationYear}}&expirationMonth={{$expirationMonth}}&certUrl={{$certUrl}}&certId={{$certificate->credential}}">
-                                                                <img loading="lazy" class="linkdein-image-add resp-img" width="36" height="36" src="{{cdn('theme/assets/images/icons/social/events/Linkedin.svg')}}" alt="LinkedIn Add to Profile button" title="LinkedIn Add to Profile button">
-                                                            </a>
-                                                            {{--@if($user->id == 1359)--}}
-                                                            <a class="facebook-post-cert" data-certTitle="{{$certiTitle}}" data-certid="{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" title="Add this certification to your Facebook profile" href="javascript:void(0)">
-                                                                <img loading="lazy" class="linkdein-image-add resp-img" width="36" height="36" src="{{cdn('theme/assets/images/icons/social/events/Facebook.svg')}}" alt="Facebook Add to Profile button" title="Facebook Add to Profile button">
-                                                            </a>
-                                                            {{--<a class="twitter-post-cert" data-certTitle="{{$certiTitle}}" data-certid="{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" title="Add this certification to your Facebook profile" href="javascript:void(0)">
-                                                                <img loading="lazy" class="linkdein-image-add resp-img" width="36" height="36" src="{{cdn('theme/assets/images/icons/social/events/Twitter.svg')}}" alt="Twitter Add to Profile button" title="Twitter Add to Profile button">
-                                                            </a>--}}
+                                                          if(strpos($certificate->certificate_title, '</p><p>')){
+                                                              $certiTitle = substr_replace($certificate->certificate_title, ' ', strpos($certificate->certificate_title, '</p>'), 0);
+                                                          }else{
+                                                              $certiTitle = $certificate->certificate_title;
+                                                          }
+                                                          $certiTitle = str_replace('&nbsp;',' ',$certiTitle);
+                                                          $certiTitle = urlencode(htmlspecialchars_decode(strip_tags($certiTitle),ENT_QUOTES));
 
-                                                            {{--@endif--}}
-                                                        </div>
+                                                          ?>
+                                                          <div class="right">
+                                                              <a  class="btn btn--secondary btn--md" target="_blank" href="/mycertificate/{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" >DOWNLOAD </a>
+                                                              <a class="linkedin-post cert-post 33"  target="_blank" href="https://www.linkedin.com/profile/add?startTask={{$certiTitle}}&name={{$certiTitle}}&organizationId=3152129&issueYear={{date('Y',$certificate->create_date)}}
+                                                    &issueMonth={{date('m',$certificate->create_date)}}&expirationYear={{$expirationYear}}&expirationMonth={{$expirationMonth}}&certUrl={{$certUrl}}&certId={{$certificate->credential}}">
+                                                                  <img loading="lazy" class="linkdein-image-add resp-img" width="36" height="36" src="{{cdn('theme/assets/images/icons/social/events/Linkedin.svg')}}" alt="LinkedIn Add to Profile button" title="LinkedIn Add to Profile button">
+                                                              </a>
+                                                              {{--@if($user->id == 1359)--}}
+                                                              <a class="facebook-post-cert" data-certTitle="{{$certiTitle}}" data-certid="{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" title="Add this certification to your Facebook profile" href="javascript:void(0)">
+                                                                  <img loading="lazy" class="linkdein-image-add resp-img" width="36" height="36" src="{{cdn('theme/assets/images/icons/social/events/Facebook.svg')}}" alt="Facebook Add to Profile button" title="Facebook Add to Profile button">
+                                                              </a>
+                                                              {{--<a class="twitter-post-cert" data-certTitle="{{$certiTitle}}" data-certid="{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" title="Add this certification to your Facebook profile" href="javascript:void(0)">
+                                                                  <img loading="lazy" class="linkdein-image-add resp-img" width="36" height="36" src="{{cdn('theme/assets/images/icons/social/events/Twitter.svg')}}" alt="Twitter Add to Profile button" title="Twitter Add to Profile button">
+                                                              </a>--}}
+
+                                                              {{--@endif--}}
+                                                          </div>
 
 
-                                                        @endforeach
+                                                          @endforeach
+                                                        @else
+                                                          <div style="color: red;">
+                                                            <img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/icon-remove.svg')}}" alt="Pay all the installments" title="Pay all the installments">
+                                                            {{ 'You need to pay all installments before getting the certificate' }}
+                                                          </div>
+                                                        @endif
                                                     </div>
                                                 </div>
                                                 @endif

@@ -10,6 +10,8 @@ class Ticket extends Model
 {
     use HasFactory;
 
+    public const FREE = 822;
+
     protected $table = 'tickets';
 
     protected $fillable = [
