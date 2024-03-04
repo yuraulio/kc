@@ -475,6 +475,10 @@ footer {
   color: #989b9c !important;
 }
 
+.text-primary {
+  color: #419cff !important;
+}
+
 .heading-small {
   padding-top: 0.25rem;
   padding-bottom: 0.25rem;
