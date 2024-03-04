@@ -367,8 +367,14 @@ $(document).on('click', '.close-btn', function(e){
             self.toggleClass('active');
             self.next('.tab-controls-list').slideToggle(300);
 
-            $(target).addClass('active-tab');
+            let targetEl = $(target).first();
             $(this).addClass('active');
+            if (targetEl.length) {
+              targetEl.addClass('active-tab');
+              $('html, body').animate({
+                scrollTop: targetEl.offset().top - Math.round($('#header').outerHeight()) - 1
+              }, 300);
+            }
           }
         }
     }
