@@ -1880,7 +1880,6 @@ class EventController extends Controller
 
             $newEvent->createMetas();
             $newEvent->metable->meta_title = $event->metable ? $event->metable->meta_title . ' (COPY)' : '';
-            $newEvent->metable->meta_keywords = $event->metable ? $event->metable->meta_keywords : '';
             $newEvent->metable->meta_description = $event->metable ? $event->metable->meta_description . ' (COPY)' : '';
             $newEvent->metable->save();
 
