@@ -128,6 +128,8 @@ $(function () {
 
     messages[`email[${index}]`] = {};
     messages[`email[${index}]`]['required'] = 'Required field, please enter your email address.';
+    messages[`email[${index}]`]['unique'] =
+      'You can not register another participant under the same email. Please use different email for each participant.';
 
     messages[`company[]`] = {};
     messages[`company[]`]['lettersonly'] = 'Please write everything in English.';
