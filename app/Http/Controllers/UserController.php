@@ -39,7 +39,6 @@ use PDF;
 
 class UserController extends Controller
 {
-
     private UserService $userService;
 
     public function __construct(UserService $userService)
@@ -409,7 +408,6 @@ class UserController extends Controller
 
     //     return view('users.index', ['users' => $users, 'data' => $data]);
     // }
-
 
     public function importFromFile(UserImportRequest $request): RedirectResponse
     {

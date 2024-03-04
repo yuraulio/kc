@@ -24,7 +24,6 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class UserService
 {
-
     /**
      * @throws Exception
      */
@@ -394,8 +393,6 @@ class UserService
         $billingDetails = json_decode($user['receipt_details'], true);
         $billingDetails['billing'] = 1;
 
-
-
         $transaction = new Transaction;
         $transaction->placement_date = Carbon::now();
         $transaction->ip_address = \Request::ip();
@@ -586,5 +583,4 @@ class UserService
 
         return false;
     }
-
 }
