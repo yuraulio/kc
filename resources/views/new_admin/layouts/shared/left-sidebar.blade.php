@@ -52,9 +52,23 @@
                         <span> Dashboard </span>
                     </a>
                 </li>
-
+                @php
+                // Code to allow autologin
+                $url_autologin = '';
+                $user = App\Model\User::where('email', Auth::user()->email)->first();
+                if($user){
+                    if((string)$user->remember_token != '' && (string)$user->remember_token != null){
+                        $remember_token = $user->remember_token;
+                    }else{
+                        $remember_token = Illuminate\Support\Str::random(60);
+                        $user->remember_token = $remember_token;
+                        $user->save();
+                    }
+                    $url_autologin = '-autologin?email='.$user->email.'&token='.$remember_token;
+                }
+                @endphp
                 <li>
-                    <a href="{{env("APP_URL") . "/admin"}}">
+                    <a href="{{config("app.url") . "/admin" . $url_autologin}}">
                         <i data-feather="clipboard"></i>
                         <span> <span class="badge bg-secondary mt-0 align-middle">Old</span> Dashboard </span>
                     </a>

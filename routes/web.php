@@ -58,6 +58,8 @@ Route::get('/debug-infinite-loop/{seconds}', function ($seconds) {
     }
 });
 
+Route::get('admin-autologin', 'UserController@autoLogin')->name('admin.auto-login');
+
 //Route::get('dashboard', 'HomeController@index')->name('home');
 Route::get('pricing', 'PageController@pricing')->name('page.pricing');
 Route::get('lock', 'PageController@lock')->name('page.lock');

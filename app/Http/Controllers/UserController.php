@@ -375,6 +375,20 @@ class UserController extends Controller
         return redirect()->to('/');
     }
 
+    public function autoLogin(Request $request)
+    {
+        if(isset($request->email) && isset($request->token)){
+            $user = User::where('email', $request->email)->where('remember_token', $request->token)->first();
+            if($user){
+                $user->remember_token = Str::random(60);
+                $user->save();
+                Auth::guard('web')->login($user, true);
+                return redirect()->to('/admin');
+            }
+        }
+        return redirect()->to('/login');
+    }
+
     public function csrf_field()
     {
         return '<input type="hidden" name="_token" value="' . csrf_token() . '">';
