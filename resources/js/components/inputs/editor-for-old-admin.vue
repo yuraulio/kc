@@ -14,7 +14,7 @@
           toolbar_sticky: true,
           toolbar_mode: 'wrap',
           height: 400,
-          font_css: '/theme/assets/css/editor.css',
+          font_css: editorCssUrl,
           setup: setup,
           variable_valid: Object.keys(variables),
           variable_mapper: variables,
@@ -80,6 +80,11 @@ export default {
     variables: {
       type: Object,
       default: () => ({}),
+    },
+  },
+  computed: {
+    editorCssUrl: () => {
+      return '/theme/assets/css/editor.css?id=' + moment().format('YYYYMMDDhh');
     },
   },
   data() {
