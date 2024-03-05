@@ -62,11 +62,19 @@ jobs:
       - name: Get Artifact ID
         id: get-prod-artifact-id
         run: |
-          ARTIFACT_ID=$(curl -sH "Authorization: Bearer ${{ secrets.GHUB_ACTIONS_API }}" \
-          https://api.github.com/repos/${{ github.repository }}/actions/artifacts | \
-          jq -r '.artifacts[] | select(.name == "kc-prod-${{ github.sha }}") | .id')
+          ARTIFACT_ID_RES=$(curl -sH "Authorization: Bearer ${{ secrets.GHUB_ACTIONS_API }}" \
+          https://api.github.com/repos/${{ github.repository }}/actions/artifacts)
+          
+          ARTIFACT_ID=$(echo "$ARTIFACT_ID_RES" | jq -r '.artifacts[] | select(.name == "kc-prod-${{ github.sha }}") | .id' | head -n 1)
           echo "Prod Artifact ID: $ARTIFACT_ID"
-          echo -n "PROD_ARTIFACT_ID=$ARTIFACT_ID" >> "$GITHUB_ENV"
+          echo "PROD_ARTIFACT_ID=$ARTIFACT_ID" >> "$GITHUB_ENV"
+          
+          OLD_ARTIFACT_IDS=$(echo "$ARTIFACT_ID_RES" |  jq -r '.artifacts[] | select(.name | startswith("kc-prod")) | .id' | tail -n +3)
+          {
+            echo 'OLD_ARTIFACT_IDS<<EOF'
+            echo $OLD_ARTIFACT_IDS
+            echo EOF
+          } >> "$GITHUB_ENV"
       
       - name: Get Artifact URL
         id: get-prod-artifact-url
@@ -77,7 +85,7 @@ jobs:
           awk '{printf "%s", $2}' | \
           tr -d '\r\n')
           echo "Artifact URL: $ARTIFACT_URL"
-          echo -n "PROD_ARTIFACT_URL=$ARTIFACT_URL" >> "$GITHUB_ENV"
+          echo "PROD_ARTIFACT_URL=$ARTIFACT_URL" >> "$GITHUB_ENV"
     
       - name: Deploy to Scaleforce via Archive URL
         id: deploy-prod-artifact
@@ -99,3 +107,12 @@ jobs:
         id: verify-prod-artifact-deployment
         if: ${{ env.SCALEFORCE_RES != '0' }}
         run: echo "JSON response is not 0, failing the job." && exit 1
+
+      - name: Delete Old Prod Artifacts
+        id: delete-old-prod-artifacts
+        run: |
+          # Delete Old Artifacts
+          for artifact_id in ${{ env.OLD_ARTIFACT_IDS }}; do
+            curl -X DELETE -sH "Authorization: Bearer ${{ secrets.GHUB_ACTIONS_API }}" "https://api.github.com/repos/${{ github.repository }}/actions/artifacts/$artifact_id"
+            echo "Deleted artifact with ID: $artifact_id"
+          done
