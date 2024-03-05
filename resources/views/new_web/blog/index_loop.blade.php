@@ -55,12 +55,13 @@
               @endforelse
             </div>
             <div class="duration d-block">
-              @if(Carbon::parse($post->published_at)->add(1, 'minutes')->gte(Carbon::parse($post->updated_at)))
-                Published: {{ Carbon::parse($post->published_at)->format('d M Y') }}
-              @else
-                Last updated: {{ Carbon::parse($post->updated_at)->format('d M Y') }}
-              @endif
+              Published: {{ Carbon::parse($post->created_at)->format('d M Y') }}
             </div>
+            @if(Carbon::parse($page->created_at)->startOfDay()->lt(Carbon::parse($page->updated_at)->startOfDay()))
+            <div class="duration d-block">
+              Last updated: {{ Carbon::parse($post->updated_at)->format('d M Y') }}
+            </div>
+            @endif
         </div>
         <div class="blog-list-title">
             <a href="{{env("NEW_PAGES_LINK") . "/$source/$post->slug"}}"><h2>{!!$title!!}</h2></a>

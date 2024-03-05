@@ -58,7 +58,7 @@ class BlogService
         $blog->with('subcategories');
 
         if ($source == 'Blog') {
-            $blog->orderBy('priority', 'asc');
+            $blog->orderBy('created_at', 'desc');
         }
 
         $blog = $blog->paginate(12);
