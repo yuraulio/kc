@@ -273,7 +273,7 @@ class UserController extends Controller
             return Datatables::of($data)
 
                     ->editColumn('image', function ($row) {
-                        return  \App\Helpers\UserHelper::getUserProfileImage($row, ['width' => 30, 'height' => 30, 'id' => 'user-img-' . $row['id'], 'class' => 'login-image']);
+                        return  \App\Helpers\UserHelper::getUserProfileImage($row, ['width' => 30, 'height' => 30, 'id' => 'user-img-' . $row['id'], 'class' => 'login-image profile_images_panel']);
                     })
                     ->editColumn('firstname', function ($row) {
                         return '<a href=' . route('user.edit', $row->id) . '>' . $row->firstname . '</a>';

@@ -14,7 +14,7 @@
             <div class="hero-message">
                 <div class="account-infos">
                     <div class="account-thumb">
-                        {!! \App\Helpers\UserHelper::getUserProfileImage($user, ['width' => 43, 'height' => 43, 'id' => 'user-img-up' ]) !!}
+                        {!! \App\Helpers\UserHelper::getUserProfileImage($user, ['width' => 43, 'height' => 43, 'id' => 'user-img-up', 'class' => 'profile_images_panel' ]) !!}
                     </div>
                     <div class="account-hero-info">
                         <h2>{{ $currentuser['firstname'] }} {{ $currentuser['lastname'] }}</h2>
@@ -118,7 +118,7 @@
                                 <div class="col4 col-sm-12">
                                     <div class="account-image-actions"  id="logo_dropzone">
                                         <div class="acc-img">
-                                            {!! \App\Helpers\UserHelper::getUserProfileImage($user, ['width' => 230, 'height' => 230, 'id' => 'user-img' ]) !!}
+                                            {!! \App\Helpers\UserHelper::getUserProfileImage($user, ['width' => 230, 'height' => 230, 'id' => 'user-img', 'class' => 'profile_images_panel' ]) !!}
                                         </div>
                                         <div class="actions">
                                             <ul id='user-media'>
@@ -128,8 +128,12 @@
                                                 @if(isset($user['image']))
                                                 <li class="remove-photo delete_media"><a data-dp-media-id="{{ $user['image']['id'] }}" href="javascript:void(0)"><img loading="lazy" src="{{cdn('/theme/assets/images/icons/icon-remove.svg')}}" alt="Remove photo" title="Remove photo" width="10" height="10"/><span>Remove photo</span></a></li>
 
-                                                <li class="crop-photo crop_media"><a data-dp-media-id="{{ $user['image']['id'] }}" href="/myaccount/crop-profile-image/{{ $user['image']['id'] }}"><img loading="lazy" src="{{cdn('/theme/assets/images/icons/icon-edit.svg')}}" alt="Crop photo" title="Crop photo" width="10" height="10"/><span>Crop photo</span></a></li>
-
+                                                <li class="crop-photo crop_media">
+                                                  <a data-dp-media-id="{{ $user['image']['id'] }}" class="crop_image" style="text-decoration: underline; cursor: pointer;">
+                                                    <img loading="lazy" src="{{cdn('/theme/assets/images/icons/icon-edit.svg')}}" alt="Crop photo" title="Crop photo" width="10" height="10"/>
+                                                    <span>Crop photo</span>
+                                                  </a>
+                                                </li>
                                                 @endif
                                             </ul>
                                         </div>
@@ -1916,8 +1920,128 @@
 <script src="{{cdn('theme/assets/js/validation_myaccount/validation.js')}}" type="text/javascript" charset="utf-8" async defer></script>
 <script src="{{ asset('argon') }}/vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
 
-<script>
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css" integrity="sha512-hvNR0F/e2J7zPPfLC9auFe3/SE0yG4aJCOd/qxew74NN7eyiSKjr7xJJMu1Jy2wf7FXITpWS1E/RY8yzuXN7VA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js" integrity="sha512-9KkIqdfN7ipEW6B6k+Aq20PV31bjODg4AA52W+tYtAE0jE0kMx49bjJ3FgvS56wzmyfMUHbQ4Km2b7l9+Y/+Eg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+
+<script src="{{ asset('argon') }}/vendor/sweetalert2/dist/sweetalert2.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.css" integrity="sha512-wJgJNTBBkLit7ymC6vvzM1EcSWeM9mmOu+1USHaRBbHkm6W9EgM0HY27+UtUaprntaYQJF75rc8gjxllKs5OIQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="{{ asset('argon') }}/vendor/sweetalert2/dist/sweetalert2.min.css">
+
+
+<script>
+  let cropper = null;
+  let modal = null;
+  let img = media = @json($user['image']);
+  $(document).ready(() => {
+    // Cropping images
+    $('.crop_image').click(() => {
+
+      modal = $(
+        '<div class="modal fade" id="modalProfileImageCrop" tabindex="-1" role="dialog">' +
+          '<div class="modal-dialog" role="document">' +
+            '<div class="modal-content">' +
+              '<div class="modal-header" style="position: relative">' +
+                '<h5 class="modal-title">Crop profile image</h5>' +
+                '<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="position: absolute; top: 0px; right: 0px; border: 0px; background: transparent">' +
+                  '<svg style="width: 25px; height: 25px; fill: gray;" data-dismiss="modal" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"/></svg>' +
+                '</button>' +
+              '</div>' +
+              '<div class="modal-body">' +
+                '<img src="' + img.path + img.original_name + '" id="profile-image-to-crop">' +
+              '</div>' +
+              '<div class="modal-footer" style="padding-top: 20px">' +
+                '<button type="button" class="btn btn--secondary btn--md" id="crop-image">Save</button>' +
+                '<button type="button" class="btn btn--primary btn--md" style="margin-left: 10px" data-dismiss="modal">Cancel</button>' +
+              '</div>' +
+            '</div>' +
+          '</div>' +
+        '</div>'
+      );
+      $('body').append(modal);
+
+      if(img['name'] != '' && img['details'] != null){
+        image_details = JSON.parse(img['details'].split(','))
+        width = image_details.width
+        height = image_details.height
+        x = image_details.x
+        y = image_details.y
+      }else{
+        width = 800
+        height = 800
+        x = 0;
+        y = 0;
+      }
+
+      cropper = new Cropper(document.getElementById(`profile-image-to-crop`), {
+        aspectRatio: Number((width/height), 4),
+        viewMode: 0,
+        dragMode: "crop",
+        responsive: true,
+        autoCropArea: 0,
+        restore: false,
+        movable: false,
+        rotatable: false,
+        scalable: false,
+        zoomable: false,
+        cropBoxMovable: true,
+        cropBoxResizable: true,
+        minContainerWidth: 300,
+        minContainerHeight: 300,
+        data:{
+          x:parseInt(x),
+          y:parseInt(y),
+          width: parseInt(width),
+          height: parseInt(height)
+        }
+      });
+
+      $('#modalProfileImageCrop').modal('show');
+
+
+      $("#crop-image").click(function(){
+        $.ajax({
+          headers: {
+              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          },
+          type: 'post',
+          url: '/admin/media/crop_profile_image',
+          data: {'media_id': media.id, 'x':cropper.getData({rounded: true}).x, 'y':cropper.getData({rounded: true}).y, 'width':cropper.getData({rounded: true}).width, 'height':cropper.getData({rounded: true}).height},
+          success: function (data) {
+            if(data){
+
+              var imagenes = document.querySelectorAll('.profile_images_panel')
+              for (var i = 0; i < imagenes.length; i++) {
+                  var srcOriginal = imagenes[i].getAttribute('src').split("?")[0];
+                  var newSrc = srcOriginal + "?v=" + new Date().getTime();
+                  imagenes[i].src = newSrc;
+              }
+
+              Swal.fire(
+                'Good job!',
+                'Successfully Cropped!',
+                'success'
+              )
+
+              modal.modal('hide');
+              if (cropper) {
+                cropper.destroy();
+                cropper = null; // Opcional: limpiar la referencia si no vas a reutilizarla
+              }
+              $('#modalProfileImageCrop').remove();
+
+              img['details'] = data.details;
+              media['details'] = data.details;
+            }
+          }
+        });
+
+      });
+
+    });
+  });
 
     {{--@if($user->id == 1359)--}}
     $(document).on('click', '.facebook-post-cert', function() {

@@ -31,7 +31,7 @@
                         @if (Auth::check())
                             <li class="account-menu login-pad">
                                 <a href="javascript:void(0)" title="Go to my account.">
-                                    {!! \App\Helpers\UserHelper::getUserProfileImage(Auth::user(), ['width' => 23, 'height' => 23, 'id' => 'user-img-up', 'class' => 'login-image' ]) !!}
+                                    {!! \App\Helpers\UserHelper::getUserProfileImage(Auth::user(), ['width' => 23, 'height' => 23, 'id' => 'user-img-up', 'class' => 'login-image profile_images_panel' ]) !!}
                                 </a>
                                 <div class="account-submenu">
                                     @yield('account_menu')
