@@ -37,6 +37,7 @@ class Countdown extends Model
     {
         return $this->belongsToMany(Category::class, 'cms_countdown_category', 'countdown_id', 'category_id');
     }
+
     public function deliveries()
     {
         return $this->belongsToMany(Delivery::class, 'cms_countdown_delivery', 'countdown_id', 'delivery_id');
