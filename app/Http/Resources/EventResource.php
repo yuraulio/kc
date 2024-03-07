@@ -18,6 +18,7 @@ class EventResource extends JsonResource
         return [
             'id' => $this->id,
             'title' => $this->title,
+            'delivery_id' => $this->resource->delivery()->first()->id,
             'created_at' => Carbon::parse($this->created_at)->toFormattedDateString(),
         ];
     }

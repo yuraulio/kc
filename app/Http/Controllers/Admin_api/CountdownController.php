@@ -74,6 +74,14 @@ class CountdownController extends Controller
 
             $updated = $countdown->save();
 
+            if ($updated && $request->has('deliveries')) {
+                $countdown->deliveries()->detach();
+                $list = $request->input('deliveries');
+                foreach ($list as $item) {
+                    $countdown->deliveries()->attach($item['id']);
+                }
+            }
+
             $countdown = new CountdownResource($countdown);
 
             if ($updated && !empty($request->event)) {
@@ -145,6 +153,13 @@ class CountdownController extends Controller
             $countdown->button_title = $request->button_title;
 
             $stored = $countdown->save();
+
+            if ($stored && $request->has('deliveries')) {
+                $list = $request->input('deliveries');
+                foreach ($list as $item) {
+                    $countdown->deliveries()->attach($item['id']);
+                }
+            }
 
             $countdown = new CountdownResource($countdown);
 

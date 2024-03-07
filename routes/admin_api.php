@@ -50,7 +50,7 @@ Route::domain(config('app.prefix_new_admin') . config('app.app_domain'))->group(
         // Countdowns
         Route::post('countdown/deleteMultiple', ['App\Http\Controllers\Admin_api\CountdownController', 'deleteMultiple']);
         Route::post('countdown/widgets', [CountdownController::class, 'widgets']);
-        Route::resource('countdown', Admin_api\CountdownController::class)->only([
+        Route::resource('countdown', CountdownController::class)->only([
             'index', 'store', 'update', 'show', 'destroy',
         ]);
         Route::put('countdown/update_published/{id}', ['App\Http\Controllers\Admin_api\CountdownController', 'updatePublished']);
@@ -69,7 +69,7 @@ Route::domain(config('app.prefix_new_admin') . config('app.app_domain'))->group(
         Route::get('getCategories', ['App\Http\Controllers\Admin_api\CategoryEventController', 'getList']);
 
         // Delivery
-        //Route::get('getDeliveries', ['App\Http\Controllers\Admin_api\DeliveryController', 'getList']);
+        Route::get('getDeliveries', ['App\Http\Controllers\Admin_api\DeliveryController', 'getList']);
         // Event
         Route::get('getEventsList', ['App\Http\Controllers\Admin_api\EventController', 'getList']);
         // Event
