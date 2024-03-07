@@ -4,7 +4,6 @@ namespace App\Services\QueryString\Enums;
 
 enum Operator: string
 {
-
     case eq = '='; // equal
     case lt = '<'; // less
     case le = '<='; // less than or equal
@@ -22,5 +21,4 @@ enum Operator: string
 
         return null;
     }
-
 }

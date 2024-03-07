@@ -27,5 +27,4 @@ class Sort
     {
         $this->direction = $direction;
     }
-
 }

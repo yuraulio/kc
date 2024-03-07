@@ -1311,5 +1311,4 @@ class UserController extends Controller
 
         return (new UserExport($query))->download('data.xlsx');
     }
-
 }

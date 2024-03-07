@@ -7,12 +7,12 @@ use Maatwebsite\Excel\Concerns\FromQuery;
 
 class UserExport implements FromQuery
 {
-
     use Exportable;
 
     private $query;
 
-    public function __construct($query) {
+    public function __construct($query)
+    {
         $this->query = $query;
     }
 
@@ -20,5 +20,4 @@ class UserExport implements FromQuery
     {
         return $this->query;
     }
-
 }

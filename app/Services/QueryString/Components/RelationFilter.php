@@ -4,7 +4,6 @@ namespace App\Services\QueryString\Components;
 
 final class RelationFilter extends Filter
 {
-
     private string $relation;
 
     public function getRelation(): string
@@ -16,5 +15,4 @@ final class RelationFilter extends Filter
     {
         $this->relation = $relation;
     }
-
 }

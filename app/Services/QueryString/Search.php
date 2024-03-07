@@ -4,7 +4,6 @@ namespace App\Services\QueryString;
 
 class Search
 {
-
     private string $term;
 
     public function getTerm(): string
@@ -16,5 +15,4 @@ class Search
     {
         $this->term = $term;
     }
-
 }

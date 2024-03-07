@@ -4,7 +4,6 @@ namespace App\Services\QueryString\Components;
 
 abstract class Filter
 {
-
     private string $column;
 
     private string $operator;
@@ -41,12 +40,13 @@ abstract class Filter
         $this->value = $value;
     }
 
-    public function isDateValue(): bool {
+    public function isDateValue(): bool
+    {
         return is_scalar($this->getValue()) && strtotime($this->getValue());
     }
 
-    public function isArrayValue(): bool {
+    public function isArrayValue(): bool
+    {
         return is_array($this->getValue());
     }
-
 }

@@ -8,11 +8,12 @@ use App\Services\QueryString\Enums\Operator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
-class QueryStringDirector {
-
+class QueryStringDirector
+{
     private Request $request;
 
-    public function __construct(Request $request) {
+    public function __construct(Request $request)
+    {
         $this->request = $request;
     }
 
@@ -31,7 +32,8 @@ class QueryStringDirector {
         return null;
     }
 
-    public function getFilters(): array {
+    public function getFilters(): array
+    {
         $filters = [];
 
         if ($this->request->has('filter')) {
@@ -69,7 +71,6 @@ class QueryStringDirector {
                         continue;
                     }
 
-
                     if ($value) {
                         $filter->setValue($this->parseValue($value));
                     } else {
@@ -85,7 +86,8 @@ class QueryStringDirector {
         return $filters;
     }
 
-    public function getSearch(): ?Search {
+    public function getSearch(): ?Search
+    {
         if ($this->request->query->has('search')) {
             $search = $this->request->query->get('search');
 
@@ -108,5 +110,4 @@ class QueryStringDirector {
 
         return array_shift($value);
     }
-
 }
