@@ -7,7 +7,7 @@
     $_SESSION["thankyouData"] = null;
 @endphp
 
-@if(isset($thankyouData['tigran']) && isset($thankyouData['tigran']['Price']) &&$thankyouData['tigran']['Price'] > 0 && !env('APP_DEBUG'))
+@if(isset($thankyouData['tigran']) && isset($thankyouData['tigran']['Price']) &&$thankyouData['tigran']['Price'] > 0 && !config('app.debug'))
 
     <script>
     $(document).ready(function(){
@@ -25,7 +25,7 @@
 
 @endif
 
-@if(isset($thankyouData['customer']) && !env('APP_DEBUG'))
+@if(isset($thankyouData['customer']) && !config('app.debug'))
 
     <script>
     $(document).ready(function(){
@@ -43,7 +43,7 @@
 
 @endif
 
-@if(isset($thankyouData['ecommerce']) && isset($thankyouData['ecommerce']['actionField']['value']) && $thankyouData['ecommerce']['actionField']['value'] > 0 && !env('APP_DEBUG'))
+@if(isset($thankyouData['ecommerce']) && isset($thankyouData['ecommerce']['actionField']['value']) && $thankyouData['ecommerce']['actionField']['value'] > 0 && !config('app.debug'))
 
     <script>
     $(document).ready(function(){
@@ -89,7 +89,7 @@
 @endif
 
 
-@if(isset($thankyouData['new_event']) && isset($thankyouData['new_event']['value']) && count($thankyouData['new_event']['items']) > 0 && !env('APP_DEBUG'))
+@if(isset($thankyouData['new_event']) && isset($thankyouData['new_event']['value']) && count($thankyouData['new_event']['items']) > 0 && !config('app.debug'))
 <script>
    $(document).ready(function(){
       let a = {};
@@ -169,7 +169,7 @@
 </script>
 @endif
 
-@if(isset($tigran) && isset($tigran['Price']) && $tigran['Price'] > 0 && !env('APP_DEBUG'))
+@if(isset($tigran) && isset($tigran['Price']) && $tigran['Price'] > 0 && !config('app.debug'))
     <script>
         $(document).ready(function(){
             @foreach($tigran as $key => $ti)
@@ -185,7 +185,7 @@
     </script>
 @endif
 
-@if(isset($ecommerce) && isset($ecommerce['actionField']['value']) && $ecommerce['actionField']['value'] > 0 && !env('APP_DEBUG'))
+@if(isset($ecommerce) && isset($ecommerce['actionField']['value']) && $ecommerce['actionField']['value'] > 0 && !config('app.debug'))
     <script>
         $(document).ready(function(){
             dataLayer.push({ ecommerce: null });

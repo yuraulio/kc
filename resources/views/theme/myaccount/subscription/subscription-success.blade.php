@@ -11,7 +11,7 @@
                      <?php echo ((isset($info) && isset($info['title'])) ? $info['title'] : 'Info') ?>
 
                      {!! $info['message'] !!}
-                     
+
                      <p>Proceed to <a href="/myaccount" class="dark-bg">your account</a>.</p>
                   </div>
                </div>
@@ -30,8 +30,8 @@
 @stop
 
 @section('scripts')
-   
-@if(isset($tigran) && isset($tigran['Price']) && $tigran['Price'] > 0 && !env('APP_DEBUG'))
+
+@if(isset($tigran) && isset($tigran['Price']) && $tigran['Price'] > 0 && !config('app.debug'))
 
 <script>
 $(document).ready(function(){
@@ -43,7 +43,7 @@ $(document).ready(function(){
 
 @endif
 
-@if(isset($ecommerce) && isset($ecommerce['actionField']['value']) && $ecommerce['actionField']['value'] > 0 && !env('APP_DEBUG'))
+@if(isset($ecommerce) && isset($ecommerce['actionField']['value']) && $ecommerce['actionField']['value'] > 0 && !config('app.debug'))
 
 <script>
    $(document).ready(function(){
@@ -52,23 +52,23 @@ $(document).ready(function(){
    let products = {};
 
    //dataLayer.push({"event": 'purchase'})
-   
+
    @foreach($ecommerce['actionField'] as $key => $ti)
-      
+
       @if($ti != '')
          actionField["{{$key}}"] =  $.parseHTML("{{$ti}}")[0].data
 
       @endif
-  
+
    @endforeach
 
    @foreach($ecommerce['products'] as $key => $ti)
       @if($ti != '')
          products["{{$key}}"] = $.parseHTML("{{$ti}}")[0].data
       @endif
-      
+
    @endforeach
-   
+
    //dataLayer.push({"ecommerce": ecommerce})
 
    // dataLayer.push({
@@ -87,7 +87,7 @@ $(document).ready(function(){
 
 @endif
 
-@if(isset($new_event) && isset($new_event['value']) && count($new_event['items']) > 0 && !env('APP_DEBUG'))
+@if(isset($new_event) && isset($new_event['value']) && count($new_event['items']) > 0 && !config('app.debug'))
 <script>
    $(document).ready(function(){
       dataLayer.push({ });
@@ -95,20 +95,20 @@ $(document).ready(function(){
       let items = {};
 
       @foreach($new_event as $key => $ti)
-      
-      
+
+
          @if($ti != '' && gettype($ti) != 'array')
             a["{{$key}}"] =  $.parseHTML("{{$ti}}")[0].data
 
          @endif
-   
+
       @endforeach
 
       @foreach($new_event['items'] as $key => $ti)
          @if($ti != '')
          items["{{$key}}"] = $.parseHTML("{{$ti}}")[0].data
          @endif
-         
+
       @endforeach
 
       let data = {
@@ -118,12 +118,12 @@ $(document).ready(function(){
 
         data = {...data,...a}
 
-       
+
 
       data.value = Number(data.value)
 
       data['items'].forEach((item, index) => {
-        
+
 
          if(item.price !== undefined){
             data['items'][index].price = Number(item.price)
@@ -132,13 +132,13 @@ $(document).ready(function(){
             data['items'][index].quantity = Number(item.quantity)
          }
 
-         
+
       });
-      
+
 
       dataLayer.push(data);
 
-      
+
    });
 
 </script>

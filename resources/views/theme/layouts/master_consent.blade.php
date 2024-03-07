@@ -17,7 +17,7 @@
 @include('theme.layouts.header_scripts')
 
 
-@if(!env('APP_DEBUG'))
+@if(!config('app.debug'))
 
 <!-- NEW Google Tag Manager -->
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -102,7 +102,7 @@ _iub.csConfiguration = {"askConsentAtCookiePolicyUpdate":true,"consentOnContinue
 </div>
 @endif
 
-@if(!env('APP_DEBUG'))
+@if(!config('app.debug'))
 {{-- Google Tag Manager (noscript) --}}
 {{--<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-ML7649C"
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>--}}

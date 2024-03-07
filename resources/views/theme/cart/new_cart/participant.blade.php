@@ -373,7 +373,7 @@
 @stop
 
 @push('scripts')
-@if(isset($tigran) && !env('APP_DEBUG'))
+@if(isset($tigran) && !config('app.debug'))
 <script>
   $(document).ready(function() {
     dataLayer.push({

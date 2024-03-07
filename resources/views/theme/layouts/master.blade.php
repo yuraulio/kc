@@ -17,7 +17,7 @@
 @yield('header')
 @include('theme.layouts.header_scripts')
 
-@if(env('APP_DEBUG'))
+@if(config('app.debug'))
 {{-- Google Tag Manager --}}
 {{--<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -60,7 +60,7 @@ setTimeout(timer601,601000);
 setTimeout(timer1801,1801000);
 </script>--}}
 
-@if(!env('APP_DEBUG'))
+@if(!config('app.debug'))
 <!-- NEW Google Tag Manager -->
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 	new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -127,7 +127,7 @@ _iub.csConfiguration = {"askConsentAtCookiePolicyUpdate":true,"consentOnContinue
 
 {{--<script src="https://js.stripe.com/v3/"></script>--}}
 
-@if(!env('APP_DEBUG'))
+@if(!config('app.debug'))
 {{--<script id="Cookiebot" src="https://consent.cookiebot.com/uc.js" data-cbid="7c5a111b-df1a-4a4a-bd31-fbee0d6593ba" data-blockingmode="auto" type="text/javascript"></script>--}}
 @endif
 
@@ -137,7 +137,7 @@ _iub.csConfiguration = {"askConsentAtCookiePolicyUpdate":true,"consentOnContinue
 <body>
 @include('theme.layouts.menu_component_myaccount')
 
-@if(!env('APP_DEBUG'))
+@if(!config('app.debug'))
 {{--<script id="CookieDeclaration" src="https://consent.cookiebot.com/7c5a111b-df1a-4a4a-bd31-fbee0d6593ba/cd.js" type="text/javascript" async></script>--}}
 @endif
 
@@ -146,7 +146,7 @@ _iub.csConfiguration = {"askConsentAtCookiePolicyUpdate":true,"consentOnContinue
 @yield('fbchat')
 
 
-@if(!env('APP_DEBUG'))
+@if(!config('app.debug'))
 {{-- Google Tag Manager (noscript) --}}
 {{--<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-ML7649C"
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>--}}
@@ -334,12 +334,12 @@ $(document).on('click', '.close-btn', function(e){
 
 </script>
 
-@if(Auth::user() && !env('APP_DEBUG'))
+@if(Auth::user() && !config('app.debug'))
     <script>
         dataLayer.push({"User_id": "{{Auth::user()->id}}"})
     </script>
 
-@elseif(!env('APP_DEBUG'))
+@elseif(!config('app.debug'))
     <script>
         dataLayer.push({'Visitor_id': "{{session()->getId()}}"});
     </script>
@@ -347,7 +347,7 @@ $(document).on('click', '.close-btn', function(e){
 
 
 
-  @if(isset($tigran) && env('APP_DEBUG'))
+  @if(isset($tigran) && config('app.debug'))
     <script>
         $(document).ready(function(){
            @foreach($tigran as $key => $ti)

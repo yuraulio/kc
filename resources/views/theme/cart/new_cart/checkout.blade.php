@@ -843,7 +843,7 @@ $( document ).ready(function() {
 
 </script>
 
-@if(isset($tigran) && !env('APP_DEBUG'))
+@if(isset($tigran) && !config('app.debug'))
 <script>
 $(document).ready(function(){
 		$("#pay-now").click(function(){

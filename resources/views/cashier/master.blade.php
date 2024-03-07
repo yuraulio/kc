@@ -23,7 +23,7 @@
 <body id="secure3ds">
 
 	<!-- Google Tag Manager (noscript) -->
-  @if(!env('APP_DEBUG'))
+  @if(!config('app.debug'))
 	<noscript>
 		<iframe src="https://www.googletagmanager.com/ns.html?id=GTM-ML7649C"height="0" width="0" style="display:none;visibility:hidden"></iframe>
 	</noscript>

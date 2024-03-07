@@ -260,7 +260,7 @@
 @endsection
 @section('scripts')
 
-@if(!env('APP_DEBUG') && isset($_GET['search_term']))
+@if(!config('app.debug') && isset($_GET['search_term']))
 <script>
 	dataLayer.push({'String_searched': "{{$_GET['search_term']}}"});
 </script>

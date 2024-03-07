@@ -28,7 +28,7 @@
 
       <script src="https://kit.fontawesome.com/84bbd74d3a.js" crossorigin="anonymous"></script>
 
-      @if(!env('APP_DEBUG'))
+      @if(!config('app.debug'))
          {{-- Google Tag Manager --}}
          <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
          new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],

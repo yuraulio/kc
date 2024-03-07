@@ -755,7 +755,7 @@ window.fbAsyncInit = function() {
 @endif--}}
 
 
-@if(isset($tigran) && !env('APP_DEBUG'))
+@if(isset($tigran) && !config('app.debug'))
 
 
 <script>

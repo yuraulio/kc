@@ -9,7 +9,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <!-- Google Tag Manager -->
-        @if(!env('APP_DEBUG'))
+        @if(!config('app.debug'))
           <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
               new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
               j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
@@ -65,7 +65,7 @@
         <!-- Load Facebook SDK for JavaScript -->
         @yield('fbchat')
 
-        @if(!env('APP_DEBUG'))
+        @if(!config('app.debug'))
         {{-- Google Tag Manager (noscript) --}}
         {{--<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-ML7649C"
         height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>--}}
@@ -242,17 +242,17 @@
             })
         </script>
 
-        @if(Auth::user() && !env('APP_DEBUG'))
+        @if(Auth::user() && !config('app.debug'))
             <script>
                 dataLayer.push({"User_id": "{{Auth::user()->id}}"})
             </script>
-        @elseif(!env('APP_DEBUG'))
+        @elseif(!config('app.debug'))
             <script>
                 dataLayer.push({'Visitor_id': "{{session()->getId()}}"});
             </script>
         @endif
 
-        @if(isset($tigran) && env('APP_DEBUG'))
+        @if(isset($tigran) && config('app.debug'))
             <script>
                 $(document).ready(function(){
                         @foreach($tigran as $key => $ti)
