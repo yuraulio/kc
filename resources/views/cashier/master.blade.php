@@ -2,20 +2,20 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">	
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 	<title>Knowcrunch Billing</title>
-	@include('theme.layouts.favicons')	
+	@include('theme.layouts.favicons')
 
-    
+
     <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
 
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.min.js"></script>
     <script src="https://js.stripe.com/v3"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">	
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="{{cdn('new_cart/css/style.css')}}">
 
 
@@ -23,9 +23,14 @@
 <body id="secure3ds">
 
 	<!-- Google Tag Manager (noscript) -->
+  @if(!env('APP_DEBUG'))
 	<noscript>
 		<iframe src="https://www.googletagmanager.com/ns.html?id=GTM-ML7649C"height="0" width="0" style="display:none;visibility:hidden"></iframe>
 	</noscript>
+  @elseif(config('app.env') == "development")
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MLLXRGTK"
+      height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  @endif
 	<!-- End Google Tag Manager (noscript) -->
 
 	<!---------------- header start --------------->
@@ -40,7 +45,7 @@
 						<img src="{{cdn('new_cart/images/ssl.svg')}}" alt="ssl" width="21px" height="21px">
 						<img src="{{cdn('new_cart/images/lock.svg')}}" alt="lock" width="16px" height="20px">
 					</div>
-						<img src="{{cdn('new_cart/images/powered-by-stripe.svg')}}" alt="Powered By Stripe" width="119px" height="28px">					
+						<img src="{{cdn('new_cart/images/powered-by-stripe.svg')}}" alt="Powered By Stripe" width="119px" height="28px">
 				</div>
 			</div>
 		</div>
@@ -49,7 +54,7 @@
 	</header>
 	<!---------------- header end --------------->
 
-	
+
 
     @yield('content')
 
@@ -64,10 +69,10 @@
 		</div>
 		<div class="address text-center">
 			Knowcrunch Inc., 2035 Sunset Lake Road, Delaware, USA.
-		</div>		
+		</div>
 	</footer>
 	<!---------------- footer end--------------->
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 
     @stack('scripts')

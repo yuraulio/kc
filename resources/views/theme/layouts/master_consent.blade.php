@@ -109,6 +109,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-ML7649C"
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 {{-- End Google Tag Manager (noscript) --}}
+@elseif(config('app.env') == "development")
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MLLXRGTK"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 @endif
 <div class="page-wrapper">
 @include('theme.layouts.header_consent')

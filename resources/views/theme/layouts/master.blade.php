@@ -97,10 +97,12 @@ _iub.csConfiguration = {"askConsentAtCookiePolicyUpdate":true,"consentOnContinue
 <script type="text/javascript" src="//cdn.iubenda.com/cs/gpp/stub.js"></script>
 <script type="text/javascript" src="//cdn.iubenda.com/cs/iubenda_cs.js" charset="UTF-8" async></script>--}}
 
+@if(config('app.env') != 'development')
 <!-- Start cookieyes banner -->
 <script id="cookieyes" type="text/javascript" src=https://cdn-cookieyes.com/client_data/2428d5ba225ff1e2703356e8/script.js>
 </script>
 <!-- End cookieyes banner -->
+@endif
 
 @endif
 
@@ -151,6 +153,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-ML7649C"
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 {{-- End Google Tag Manager (noscript) --}}
+@elseif(config('app.env') == "development")
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MLLXRGTK"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 @endif
 
 <div class="page-wrapper non-pointer">
