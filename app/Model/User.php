@@ -16,9 +16,15 @@ use App\Model\OauthAccessToken;
 use App\Model\Plan;
 use App\Model\Role;
 use App\Model\Transaction;
+use App\Services\QueryString\Components\Filter;
+use App\Services\QueryString\Components\RelationFilter;
+use App\Services\QueryString\Components\SimpleFilter;
+use App\Services\QueryString\Search;
+use App\Services\QueryString\Sort;
 use App\Traits\MediaTrait;
 use Carbon\Carbon;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -76,6 +82,53 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = ['password', 'remember_token'];
+
+    public function scopeSort(Builder $builder, Sort $sort): Builder
+    {
+        return $builder->orderBy($sort->getColumn(), $sort->getDirection());
+    }
+
+    public function scopeSearch(Builder $builder, Search $search): Builder
+    {
+        return $builder->where(function (Builder $query) use ($search) {
+            $query->orWhere('firstname', 'LIKE', $search->getTerm())
+                ->orWhere('lastname', 'LIKE', $search->getTerm())
+                ->orWhere('email', 'LIKE', $search->getTerm())
+                ->orWhere('company', 'LIKE', $search->getTerm())
+                ->orWhere('job_title', 'LIKE', $search->getTerm());
+        });
+    }
+
+    public function scopeFilter(Builder $builder, Filter $filter): Builder
+    {
+        if ($filter instanceof RelationFilter) {
+            $builder->whereHas($filter->getRelation(), function (Builder $builder) use ($filter) {
+                if ($filter->isDateValue()) {
+                    return $builder->whereDate($filter->getColumn(), $filter->getOperator(), $filter->getValue());
+                }
+
+                if ($filter->isArrayValue()) {
+                    return $builder->whereIn($filter->getColumn(), $filter->getValue());
+                }
+
+                return $builder->where($filter->getColumn(), $filter->getOperator(), $filter->getValue());
+            });
+        }
+
+        if ($filter instanceof SimpleFilter) {
+            if ($filter->isDateValue()) {
+                return $builder->whereDate($filter->getColumn(), $filter->getOperator(), $filter->getValue());
+            }
+
+            if ($filter->isArrayValue()) {
+                return $builder->whereIn($filter->getColumn(), $filter->getValue());
+            }
+
+            return $builder->where($filter->getColumn(), $filter->getOperator(), $filter->getValue());
+        }
+
+        return $builder;
+    }
 
     public function scopeSearchUsers($query, $search_term)
     {

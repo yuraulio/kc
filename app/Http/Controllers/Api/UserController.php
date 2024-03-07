@@ -6,6 +6,7 @@ use Apifon\Model\MessageContent;
 use Apifon\Model\SmsRequest;
 use Apifon\Mookee;
 use Apifon\Resource\SMSResource;
+use App\Exports\UserExport;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\MediaController;
 use App\Http\Requests\UserImportRequest;
@@ -15,15 +16,18 @@ use App\Model\Instructor;
 use App\Model\Media;
 use App\Model\Role;
 use App\Model\User;
+use App\Services\QueryString\QueryStringDirector;
 use App\Services\UserService;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class UserController extends Controller
 {
@@ -1283,4 +1287,29 @@ class UserController extends Controller
             'message' => $message,
         ], $code);
     }
+
+    public function export(Request $request): Response|BinaryFileResponse
+    {
+        $queryStringDirector = new QueryStringDirector($request);
+        $query = User::query();
+
+        if ($search = $queryStringDirector->getSearch()) {
+            $query->search($search);
+        }
+
+        if ($filters = $queryStringDirector->getFilters()) {
+            foreach ($filters as $filter) {
+                $query->filter($filter);
+            }
+        }
+
+        if ($sort = $queryStringDirector->getSort()) {
+            $query->sort($sort);
+        }
+
+        $query->with(['statusAccount', 'role']);
+
+        return (new UserExport($query))->download('data.xlsx');
+    }
+
 }
