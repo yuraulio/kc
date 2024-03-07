@@ -508,7 +508,7 @@ if (!function_exists('get_menu')) {
 if (!function_exists('update_dropbox_api')) {
     function update_dropbox_api() : void
     {
-        $t = base64_encode(env('DROPBOX_APPKEY') . ':' . env('DROPBOX_SECRET'));
+        $t = base64_encode(config('filesystems.disks.dropbox.appSecret') . ':' . config('filesystems.disks.dropbox.secret'));
 
         $endpoint = 'https://api.dropbox.com/oauth2/token';
         $client = new \GuzzleHttp\Client(['headers' => ['Content-Type'=> 'application/json', 'Authorization' => 'Basic ' . $t]]);
