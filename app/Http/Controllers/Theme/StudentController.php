@@ -15,6 +15,7 @@ use App\Model\Lesson;
 use App\Model\Media;
 use App\Model\PaymentMethod;
 use App\Model\Plan;
+use App\Model\Setting;
 use App\Model\Subscription;
 use App\Model\Summary;
 use App\Model\Topic;
@@ -1377,6 +1378,8 @@ class StudentController extends Controller
         $dropboxPath = $data['dir'];
         $fileName = $data['fname'];
         $accessToken = config('filesystems.disks.dropbox.accessToken');
+        $setting = Setting::where('DROPBOX_TOKEN')->firstOrFail();
+        $accessToken = $setting->value;
         $client = new \Spatie\Dropbox\Client($accessToken);
         try {
             return $client->getTemporaryLink($dropboxPath);
