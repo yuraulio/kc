@@ -20,13 +20,13 @@ const collectiveInputs = [
   {
     type: 'toggle',
     key: 'button_status',
-    label: 'Button Status',
+    label: 'CTA button visibility',
     size: 'col-lg-12',
   },
   {
     type: 'text',
     key: 'button_title',
-    label: 'Button Title',
+    label: 'CTA button text',
     size: 'col-lg-12',
   },
   {
