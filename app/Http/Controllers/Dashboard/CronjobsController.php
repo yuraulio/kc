@@ -281,7 +281,7 @@ class CronjobsController extends Controller
             $eventTitle = $event->xml_title ? htmlspecialchars($event->xml_title) : htmlspecialchars($event->title);
             $summary = htmlspecialchars($event->xml_description);
 
-            $img = url('/') . get_image($event['mediable'], 'header-image');
+            $img = url('/') . get_image($event['mediable'], 'feed-image');
             $img = str_replace(' ', '%20', $img);
 
             $item =
@@ -343,7 +343,7 @@ class CronjobsController extends Controller
             $eventTitle = $event->xml_title ? htmlspecialchars($event->xml_title) : htmlspecialchars($event->title);
             $summary = htmlspecialchars($event->xml_description);
 
-            $img = url('/') . get_image($event['mediable'], 'header-image');
+            $img = url('/') . get_image($event['mediable'], 'feed-image');
             $img = str_replace(' ', '%20', $img);
 
             $item =
@@ -399,7 +399,7 @@ class CronjobsController extends Controller
             $summary = $event->xml_description;
 
             //$img = url('/') . $event['mediable']['path'] . '/' . $event['mediable']['original_name'];
-            $img = url('/') . get_image($event['mediable'], 'header-image');
+            $img = url('/') . get_image($event['mediable'], 'feed-image');
             $img = str_replace(' ', '%20', $img);
             fputcsv($file, [$event->id, $eventTitle, $event->xml_short_description, 'in stock', $amount . ' EUR', url('/') . '/' . $event->slugable->slug, str_replace('\"', '', $img), 'Knowcrunch',  $cat, 'new', trim($summary)]);
         }
@@ -437,7 +437,7 @@ class CronjobsController extends Controller
             }
 
             //$img = url('/') . $event['mediable']['path'] . '/' . $event['mediable']['original_name'];
-            $img = url('/') . get_image($event['mediable'], 'header-image');
+            $img = url('/') . get_image($event['mediable'], 'feed-image');
             $img = str_replace(' ', '%20', $img);
             $eventTitle = $event->xml_title ? $event->xml_title : $event->title;
             $summary = $event->xml_description;

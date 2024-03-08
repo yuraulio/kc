@@ -1378,7 +1378,7 @@ class StudentController extends Controller
         $dropboxPath = $data['dir'];
         $fileName = $data['fname'];
         $accessToken = config('filesystems.disks.dropbox.accessToken');
-        $setting = Setting::where('key','DROPBOX_TOKEN')->firstOrFail();
+        $setting = Setting::where('key', 'DROPBOX_TOKEN')->firstOrFail();
         $accessToken = $setting->value;
         $client = new \Spatie\Dropbox\Client($accessToken);
         try {
