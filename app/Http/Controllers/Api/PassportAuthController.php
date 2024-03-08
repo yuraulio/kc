@@ -28,7 +28,7 @@ class PassportAuthController extends Controller
             return new JsonResponse([
                 'token' => $token->accessToken,
                 'expire' => $token->token->expires_at->diffForHumans(),
-                'sms' => encrypt($user->id . '-' . date('H:i:s'))
+                'sms' => encrypt($user->id . '-' . date('H:i:s')),
             ]);
         }
 
