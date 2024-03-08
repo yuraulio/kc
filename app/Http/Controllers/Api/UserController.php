@@ -20,7 +20,6 @@ use App\Services\QueryString\QueryStringDirector;
 use App\Services\UserService;
 use Carbon\Carbon;
 use Exception;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -48,6 +47,7 @@ class UserController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
+        $queryStringDirector = new QueryStringDirector($request);
         $query = User::query()
             ->with([
                 'image',
@@ -55,78 +55,20 @@ class UserController extends Controller
                 'role',
             ]);
 
-        // Order users by the field.
-        if ($request->query->has('sort')) {
-            $sortBy = $request->query->get('sort');
-
-            $query->orderBy(
-                Str::replaceFirst('-', '', $sortBy),
-                Str::startsWith($sortBy, '-') ? 'desc' : 'asc'
-            );
+        if ($sort = $queryStringDirector->getSort()) {
+            $query->sort($sort);
         }
 
-        // Filter users by relations.
-        if ($request->query->has('filter')) {
-            $dateFormat = 'Y-m-d';
-            $operators = [
-                'eq' => '==', // equal
-                'lt' => '<',  // less
-                'le' => '<=', // less than or equal
-                'gt' => '>',  // greater
-                'ge' => '>=', // greater than or equal
-                'ne' => '!=', // not equal
-            ];
-
-            $filters = $request->query->all('filter');
-
-            foreach ($filters as $field => $value) {
-                if (Str::contains($field, '.')) {
-                    [$relation, $field] = explode('.', $field);
-
-                    // Because of the role relation realisation, we need to hardcode the field name for the role relation.
-                    if ($relation === 'role') {
-                        $field = 'roles.' . $field;
-                    }
-
-                    $query->whereHas($relation, function (Builder $query) use ($field, $value) {
-                        $values = explode(',', $value);
-
-                        if (count($values) === 1) {
-                            $query->where($field, $value);
-                        } else {
-                            $query->whereIn($field, $values);
-                        }
-
-                        return $query;
-                    });
-                } else {
-                    foreach ($value as $operator => $test) {
-                        $operator = $operators[$operator];
-
-                        if (strtotime($test)) {
-                            $query->whereDate($field, $operator, $test);
-                        } else {
-                            $query->where($field, $operator, $test);
-                        }
-                    }
-                }
+        if ($filters = $queryStringDirector->getFilters()) {
+            foreach ($filters as $filter) {
+                $query->filter($filter);
             }
         }
 
-        // Search by user fields.
-        if ($request->query->has('search')) {
-            $keyword = sprintf('%%%s%%', $request->query->get('search'));
-
-            $query->where(function (Builder $query) use ($keyword) {
-                $query->orWhere('firstname', 'LIKE', $keyword)
-                    ->orWhere('lastname', 'LIKE', $keyword)
-                    ->orWhere('email', 'LIKE', $keyword)
-                    ->orWhere('company', 'LIKE', $keyword)
-                    ->orWhere('job_title', 'LIKE', $keyword);
-            });
+        if ($search = $queryStringDirector->getSearch()) {
+            $query->search($search);
         }
 
-        // Get paginated users.
         $users = $query->paginate((int) $request->query->get('per_page', 50))
             ->appends($request->query->all());
 

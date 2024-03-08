@@ -2,37 +2,19 @@
 
 namespace App\Model;
 
-use App\Model\Absence;
-use App\Model\Activation;
 use App\Model\Admin\Comment;
-use App\Model\CartCache;
-use App\Model\CookiesSMS;
-use App\Model\Event;
-use App\Model\ExamResult;
-use App\Model\Instructor;
-use App\Model\Invoice;
-use App\Model\Media;
-use App\Model\OauthAccessToken;
-use App\Model\Plan;
-use App\Model\Role;
-use App\Model\Transaction;
 use App\Services\QueryString\Components\Filter;
 use App\Services\QueryString\Components\RelationFilter;
+use App\Services\QueryString\Components\Search;
 use App\Services\QueryString\Components\SimpleFilter;
-use App\Services\QueryString\Search;
-use App\Services\QueryString\Sort;
+use App\Services\QueryString\Components\Sort;
 use App\Traits\MediaTrait;
 use Carbon\Carbon;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Laravel\Cashier\Billable;
 use Laravel\Cashier\Subscription;
 use Laravel\Passport\HasApiTokens;
@@ -82,6 +64,9 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = ['password', 'remember_token'];
+
+
+
 
     public function scopeSort(Builder $builder, Sort $sort): Builder
     {
@@ -141,6 +126,9 @@ class User extends Authenticatable
 
         return $query->select('id', 'firstname', 'lastname', 'email')->get();
     }
+
+
+
 
     /**
      * Get the role of the user.

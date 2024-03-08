@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\QueryString;
+namespace App\Services\QueryString\Components;
 
 class Search
 {

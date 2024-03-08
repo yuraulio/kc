@@ -3,7 +3,10 @@
 namespace App\Services\QueryString;
 
 use App\Services\QueryString\Components\RelationFilter;
+use App\Services\QueryString\Components\Search;
 use App\Services\QueryString\Components\SimpleFilter;
+use App\Services\QueryString\Components\Sort;
+use App\Services\QueryString\Enums\Direction;
 use App\Services\QueryString\Enums\Operator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -24,7 +27,7 @@ class QueryStringDirector
 
             $sort = new Sort();
             $sort->setColumn(Str::replaceFirst('-', '', $sortBy));
-            $sort->setDirection(Str::startsWith($sortBy, '-') ? 'desc' : 'asc');
+            $sort->setDirection(Str::startsWith($sortBy, '-') ? Direction::DESC : Direction::ASC);
 
             return $sort;
         }
@@ -71,7 +74,7 @@ class QueryStringDirector
                         continue;
                     }
 
-                    if ($value) {
+                    if (is_scalar($value)) {
                         $filter->setValue($this->parseValue($value));
                     } else {
                         // TODO: throw an exception

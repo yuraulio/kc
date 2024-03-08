@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Services\QueryString;
+namespace App\Services\QueryString\Components;
+
+use App\Services\QueryString\Enums\Direction;
 
 class Sort
 {
@@ -23,8 +25,8 @@ class Sort
         return $this->direction;
     }
 
-    public function setDirection(string $direction): void
+    public function setDirection(Direction $direction): void
     {
-        $this->direction = $direction;
+        $this->direction = $direction->value;
     }
 }
