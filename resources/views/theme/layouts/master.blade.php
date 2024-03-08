@@ -60,6 +60,26 @@ setTimeout(timer601,601000);
 setTimeout(timer1801,1801000);
 </script>--}}
 
+
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() {
+      dataLayer.push(arguments);
+  }
+  gtag("consent", "default", {
+      ad_storage: "denied",
+      ad_user_data: "denied",
+      ad_personalization: "denied",
+      analytics_storage: "denied",
+      functionality_storage: "denied",
+      personalization_storage: "denied",
+      security_storage: "granted",
+      wait_for_update: 2000,
+  });
+  gtag("set", "ads_data_redaction", true);
+  gtag("set", "url_passthrough", true);
+</script>
+
 @if(!config('app.debug'))
 <!-- NEW Google Tag Manager -->
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -79,6 +99,8 @@ setTimeout(timer1801,1801000);
 </script>--}}
 @endif
 <!-- End Google Tag Manager -->
+
+<!-- Start cookieyes banner --> <script id="cookieyes" type="text/javascript" src="https://cdn-cookieyes.com/client_data/2428d5ba225ff1e2703356e8/script.js"></script> <!-- End cookieyes banner -->
 
 <!-- OneTrust Cookies Consent Notice (Production CDN, knowcrunch.com, en-GB) start -->
 @if(Agent::isDesktop())
