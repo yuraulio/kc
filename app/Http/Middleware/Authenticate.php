@@ -5,7 +5,6 @@ namespace App\Http\Middleware;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Auth\Middleware\Authenticate as Middleware;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
 class Authenticate extends Middleware
@@ -47,8 +46,10 @@ class Authenticate extends Middleware
             if ($this->auth->guard($guard)->check()) {
                 $this->auth->shouldUse($guard);
 
-                if (!$this->auth->user()->statusAccount || !$this->auth->user()->statusAccount->completed) {
-                    $this->auth->user()->AauthAcessToken()->delete();
+                $user = $this->auth->user()->load('statusAccount');
+
+                if (!$user->statusAccount?->completed) {
+                    $user->AauthAcessToken()->delete();
                     Session::invalidate();
                     Session::regenerateToken();
 
@@ -58,7 +59,7 @@ class Authenticate extends Middleware
                     );
                 }
 
-                return $this->auth->shouldUse($guard);
+                return;
             }
         }
 

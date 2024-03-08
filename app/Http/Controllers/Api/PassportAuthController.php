@@ -4,49 +4,48 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Model\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
+use Symfony\Component\HttpFoundation\Response;
 
 class PassportAuthController extends Controller
 {
     /**
      * Login.
      */
-    public function login(Request $request)
+    public function login(Request $request): JsonResponse
     {
-        $data = [
-            'email' => $request->email,
-            'password' => $request->password,
-        ];
+        if (Auth::attempt($request->only('email', 'password'))) {
+            $user = Auth::user()->load('statusAccount');
 
-        if (auth()->attempt($data)) {
-            //auth()->user()->AauthAcessToken()->delete();
-            //Auth::logoutOtherDevices($request->password);
-            $token_ = auth()->user()->createToken('LaravelAuthApp');
-            $token = $token_->accessToken;
-            $expire = $token_->token->expires_at->diffForHumans();
-
-            return response()->json(['token' => $token, 'expire' => $expire, 'sms'=>encrypt(Auth::user()->id . '-' . date('H:i:s'))], 200);
-        } else {
-            if (!User::where('email', $data['email'])->first()) {
-                return response()->json(['error' => 'Incorrect email, please try again.'], 403);
+            if (!$user->statusAccount?->completed) {
+                return new JsonResponse(['error' => 'Account is not activated.'], Response::HTTP_FORBIDDEN);
             }
 
-            return response()->json(['error' => 'Incorrect password, please try again.'], 403);
+            $token = $user->createToken('LaravelAuthApp');
+
+            return new JsonResponse([
+                'token' => $token->accessToken,
+                'expire' => $token->token->expires_at->diffForHumans(),
+                'sms' => encrypt($user->id . '-' . date('H:i:s'))
+            ]);
         }
+
+        if (User::firstWhere('email', $request->get('email'))) {
+            return new JsonResponse(['error' => 'Incorrect password, please try again.'], Response::HTTP_FORBIDDEN);
+        }
+
+        return new JsonResponse(['error' => 'Incorrect email, please try again.'], Response::HTTP_FORBIDDEN);
     }
 
     /**
      * Logout.
      */
-    public function logout(Request $request)
+    public function logout(Request $request): JsonResponse
     {
         Auth::user()->token()->delete();
 
-        //Auth::logout();
-        return response()->json([
-            'message' => 'Logged out successfully.',
-        ], 200);
+        return response()->json(['message' => 'Logged out successfully.']);
     }
 }
