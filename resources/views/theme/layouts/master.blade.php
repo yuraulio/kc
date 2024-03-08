@@ -97,13 +97,6 @@ _iub.csConfiguration = {"askConsentAtCookiePolicyUpdate":true,"consentOnContinue
 <script type="text/javascript" src="//cdn.iubenda.com/cs/gpp/stub.js"></script>
 <script type="text/javascript" src="//cdn.iubenda.com/cs/iubenda_cs.js" charset="UTF-8" async></script>--}}
 
-@if(config('app.env') != 'development')
-<!-- Start cookieyes banner -->
-<script id="cookieyes" type="text/javascript" src=https://cdn-cookieyes.com/client_data/2428d5ba225ff1e2703356e8/script.js>
-</script>
-<!-- End cookieyes banner -->
-@endif
-
 @endif
 
 {{-- Linkedin Code --}}
