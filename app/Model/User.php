@@ -65,9 +65,6 @@ class User extends Authenticatable
      */
     protected $hidden = ['password', 'remember_token'];
 
-
-
-
     public function scopeSort(Builder $builder, Sort $sort): Builder
     {
         return $builder->orderBy($sort->getColumn(), $sort->getDirection());
@@ -126,9 +123,6 @@ class User extends Authenticatable
 
         return $query->select('id', 'firstname', 'lastname', 'email')->get();
     }
-
-
-
 
     /**
      * Get the role of the user.
