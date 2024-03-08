@@ -491,3 +491,23 @@ footer {
 .cms-page-header h1 {
   margin-bottom: 0;
 }
+
+/** core.css */
+.accordion-wrapper .accordion-item.topic-header .topic-info {
+  line-height: 14px;
+}
+.topic-header .topic-info .topic-info_title {
+  margin: 0;
+  margin-bottom: 0px;
+  color: #fff;
+  font-size: 21px;
+}
+.topic-header .topic-info .topic-info_duration {
+  color: #b3d4fc;
+  font-size: 12px;
+}
+.topic-header .topic-info img.topic-progress{
+  max-width: 12px;
+  vertical-align: middle;
+}
+/** end core.css */
