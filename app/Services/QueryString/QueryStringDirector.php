@@ -11,7 +11,7 @@ use App\Services\QueryString\Enums\Operator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
-class QueryStringDirector
+final class QueryStringDirector
 {
     private Request $request;
 

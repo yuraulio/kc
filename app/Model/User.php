@@ -3,14 +3,11 @@
 namespace App\Model;
 
 use App\Model\Admin\Comment;
-use App\Services\QueryString\Components\Filter;
-use App\Services\QueryString\Components\RelationFilter;
-use App\Services\QueryString\Components\Search;
-use App\Services\QueryString\Components\SimpleFilter;
-use App\Services\QueryString\Components\Sort;
+use App\Services\QueryString\Traits\Filterable;
+use App\Services\QueryString\Traits\Searchable;
+use App\Services\QueryString\Traits\Sortable;
 use App\Traits\MediaTrait;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -21,7 +18,7 @@ use Laravel\Passport\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use Notifiable, HasApiTokens, MediaTrait, Billable, SoftDeletes;
+    use Notifiable, HasApiTokens, MediaTrait, Billable, SoftDeletes, Filterable, Sortable, Searchable;
     /**
      * The attributes that are mass assignable.
      *
@@ -65,56 +62,6 @@ class User extends Authenticatable
      */
     protected $hidden = ['password', 'remember_token'];
 
-
-
-
-    public function scopeSort(Builder $builder, Sort $sort): Builder
-    {
-        return $builder->orderBy($sort->getColumn(), $sort->getDirection());
-    }
-
-    public function scopeSearch(Builder $builder, Search $search): Builder
-    {
-        return $builder->where(function (Builder $query) use ($search) {
-            $query->orWhere('firstname', 'LIKE', $search->getTerm())
-                ->orWhere('lastname', 'LIKE', $search->getTerm())
-                ->orWhere('email', 'LIKE', $search->getTerm())
-                ->orWhere('company', 'LIKE', $search->getTerm())
-                ->orWhere('job_title', 'LIKE', $search->getTerm());
-        });
-    }
-
-    public function scopeFilter(Builder $builder, Filter $filter): Builder
-    {
-        if ($filter instanceof RelationFilter) {
-            $builder->whereHas($filter->getRelation(), function (Builder $builder) use ($filter) {
-                if ($filter->isDateValue()) {
-                    return $builder->whereDate($filter->getColumn(), $filter->getOperator(), $filter->getValue());
-                }
-
-                if ($filter->isArrayValue()) {
-                    return $builder->whereIn($filter->getColumn(), $filter->getValue());
-                }
-
-                return $builder->where($filter->getColumn(), $filter->getOperator(), $filter->getValue());
-            });
-        }
-
-        if ($filter instanceof SimpleFilter) {
-            if ($filter->isDateValue()) {
-                return $builder->whereDate($filter->getColumn(), $filter->getOperator(), $filter->getValue());
-            }
-
-            if ($filter->isArrayValue()) {
-                return $builder->whereIn($filter->getColumn(), $filter->getValue());
-            }
-
-            return $builder->where($filter->getColumn(), $filter->getOperator(), $filter->getValue());
-        }
-
-        return $builder;
-    }
-
     public function scopeSearchUsers($query, $search_term)
     {
         $query->where(function ($query) use ($search_term) {
@@ -126,9 +73,6 @@ class User extends Authenticatable
 
         return $query->select('id', 'firstname', 'lastname', 'email')->get();
     }
-
-
-
 
     /**
      * Get the role of the user.

@@ -4,7 +4,7 @@ namespace App\Services\QueryString\Components;
 
 use App\Services\QueryString\Enums\Direction;
 
-class Sort
+final class Sort
 {
     private string $column;
 

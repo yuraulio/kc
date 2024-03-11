@@ -2,7 +2,7 @@
 
 namespace App\Services\QueryString\Components;
 
-class Search
+final class Search
 {
     private string $term;
 
