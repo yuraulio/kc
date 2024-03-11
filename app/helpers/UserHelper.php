@@ -21,25 +21,29 @@ class UserHelper
     {
         // We check if this image is in CMS File indexed
         $image = $user->image;
-        if($image){
-            $file = MediaFile::where('name', $image->original_name)->first();
-            if(!$file){
-                // The file not exists. Let's create one
-                $path = str_replace('storage/uploads','public/uploads',storage_path($image->path.$image->original_name));
+        if($image && isset($image->original_name)){
+            try{
+                $file = MediaFile::where('name', $image->original_name)->first();
+                if(!$file){
+                    // The file not exists. Let's create one
+                    $path = str_replace('storage/uploads','public/uploads',storage_path($image->path.$image->original_name));
 
-                if(file_exists($path)){
+                    if(file_exists($path)){
 
-                    $file = new \Illuminate\Http\UploadedFile($path, $image->original_name);
+                        $file = new \Illuminate\Http\UploadedFile($path, $image->original_name);
 
-                    $request = new Request();
-                    $request->merge(['alt_text' => $file->getFilename()]);
-                    $request->merge(['link' => $file->getFilename()]);
-                    $request->merge(['directory' => 17]);
-                    $request->merge(['jpg' => $file->getExtension() == 'jpg' ? true : false]);
-                    $request->files->add(['file' => $file]);
+                        $request = new Request();
+                        $request->merge(['alt_text' => $file->getFilename()]);
+                        $request->merge(['link' => $file->getFilename()]);
+                        $request->merge(['directory' => 17]);
+                        $request->merge(['jpg' => $file->getExtension() == 'jpg' ? true : false]);
+                        $request->files->add(['file' => $file]);
 
-                    app('App\Http\Controllers\Admin_api\MediaController')->uploadImage($request);
+                        app('App\Http\Controllers\Admin_api\MediaController')->uploadImage($request);
+                    }
                 }
+            }catch(\Exception $e){
+
             }
         }
 
