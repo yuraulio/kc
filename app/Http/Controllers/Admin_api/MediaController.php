@@ -139,9 +139,8 @@ class MediaController extends Controller
             $folder = $this->getFolder($request);
             $path = '/' . $folder['path'];
             $mediaFolder = $folder['mediaFolder'];
-
-            $image_name1 = $image->getClientOriginalName();
-            $image_name = $image->getClientOriginalName();
+            $image_name1 = $image->getClientOriginalName() ?? $image->getFilename();
+            $image_name = $image->getClientOriginalName() ?? $image->getFilename();
 
             $imgpath_original = $path . '' . $image_name;
 
