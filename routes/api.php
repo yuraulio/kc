@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AbsenceController;
+use App\Http\Controllers\Api\CouponController;
 use App\Http\Controllers\Api\EventController;
 use App\Http\Controllers\Api\ForgotPasswordController;
 use App\Http\Controllers\Api\LessonController;
@@ -8,7 +9,6 @@ use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\PassportAuthController;
 use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\UserController;
-use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,6 +34,9 @@ Route::middleware('auth:api')->group(function () {
     Route::post('users/import', [UserController::class, 'import']);
     Route::get('users/export', [UserController::class, 'export']);
     Route::apiResource('users', UserController::class);
+
+    // Coupons
+    Route::apiResource('coupons', CouponController::class);
 
     //
     Route::post('lesson/save_note', [LessonController::class, 'saveNote']);

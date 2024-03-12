@@ -28,7 +28,7 @@ trait Filterable
         }
 
         if ($filter instanceof SimpleFilter) {
-            return call_user_func($callback);
+            return $callback($builder);
         }
 
         return $builder;
