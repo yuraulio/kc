@@ -1,7 +1,5 @@
 <?php
 
-
-
 namespace App\Services\QueryString\Traits;
 
 use App\Services\QueryString\Components\Search;

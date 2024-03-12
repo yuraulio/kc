@@ -11,5 +11,4 @@ trait Sortable
     {
         return $builder->orderBy($sort->getColumn(), $sort->getDirection());
     }
-
 }
