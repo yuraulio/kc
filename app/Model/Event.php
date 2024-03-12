@@ -3,35 +3,11 @@
 namespace App\Model;
 
 use App\Events\EmailSent;
-use App\Library\CMS;
 use App\Library\PageVariables;
 use App\Model\Admin\Countdown;
-use App\Model\Benefit;
-use App\Model\Category;
-use App\Model\Certificate;
-use App\Model\City;
-use App\Model\Coupon;
-use App\Model\Delivery;
-use App\Model\EventInfo;
-use App\Model\Exam;
-use App\Model\ExamResult;
-use App\Model\Faq;
-use App\Model\Instructor;
-use App\Model\Lesson;
-use App\Model\Media;
-use App\Model\Partner;
-use App\Model\Plan;
-use App\Model\Section;
-use App\Model\Summary;
-use App\Model\Testimonial;
-use App\Model\Ticket;
-use App\Model\Topic;
-use App\Model\Type;
-use App\Model\User;
-use App\Model\Venue;
-use App\Model\Video;
-use App\Model\WaitingList;
 use App\Notifications\CertificateAvaillable;
+use App\Services\QueryString\Traits\Filterable;
+use App\Services\QueryString\Traits\Sortable;
 use App\Traits\BenefitTrait;
 use App\Traits\Invoices;
 use App\Traits\MediaTrait;
@@ -44,17 +20,20 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
-use Laravel\Cashier\Subscription;
 
 class Event extends Model
 {
-    use HasFactory;
-    use SlugTrait;
-    use MetasTrait;
-    use BenefitTrait;
-    use MediaTrait;
-    use SearchFilter;
-    use PaginateTable;
+    use HasFactory,
+        SlugTrait,
+        MetasTrait,
+        BenefitTrait,
+        MediaTrait,
+        SearchFilter,
+        PaginateTable,
+        Filterable,
+        Sortable {
+            Filterable::scopeFilter insteadof PaginateTable;
+        }
 
     const STATUS_OPEN = 0;
     const STATUS_CLOSE = 1;

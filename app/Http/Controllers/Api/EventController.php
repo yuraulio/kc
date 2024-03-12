@@ -4,20 +4,33 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Model\Event;
+use App\Services\QueryString\QueryStringDirector;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+
 
 class EventController extends Controller
 {
-    /**
-     * @return JsonResponse
-     */
-    public function index(): JsonResponse
-    {
-        $events = Event::where('published', true)
-            ->where('status', 0)
-            ->get();
 
-        return new JsonResponse($events);
+    /**
+     * Display a listing of the resource.
+     */
+    public function index(Request $request): JsonResponse
+    {
+        $queryStringDirector = new QueryStringDirector($request);
+        $query = Event::query();
+
+        if ($sort = $queryStringDirector->getSort()) {
+            $query->sort($sort);
+        }
+
+        if ($filters = $queryStringDirector->getFilters()) {
+            foreach ($filters as $filter) {
+                $query->filter($filter);
+            }
+        }
+
+        return new JsonResponse($query->get());
     }
 
     /**
