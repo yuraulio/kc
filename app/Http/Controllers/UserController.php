@@ -260,7 +260,7 @@ class UserController extends Controller
             return Datatables::of($data)
 
                     ->editColumn('image', function ($row) {
-                        return  \App\Helpers\UserHelper::getUserProfileImage($row, ['width' => 30, 'height' => 30, 'id' => 'user-img-' . $row['id'], 'class' => 'login-image']);
+                        return  \App\Helpers\UserHelper::getUserProfileImage($row, ['width' => 30, 'height' => 30, 'id' => 'user-img-' . $row['id'], 'class' => 'login-image profile_images_panel']);
                     })
                     ->editColumn('firstname', function ($row) {
                         return '<a href=' . route('user.edit', $row->id) . '>' . $row->firstname . '</a>';
@@ -360,6 +360,22 @@ class UserController extends Controller
         Auth::login($user);
 
         return redirect()->to('/');
+    }
+
+    public function autoLogin(Request $request)
+    {
+        if (isset($request->email) && isset($request->token)) {
+            $user = User::where('email', $request->email)->where('remember_token', $request->token)->first();
+            if ($user) {
+                $user->remember_token = Str::random(60);
+                $user->save();
+                Auth::guard('web')->login($user, true);
+
+                return redirect()->to('/admin');
+            }
+        }
+
+        return redirect()->to('/login');
     }
 
     public function csrf_field()

@@ -130,13 +130,6 @@
     <small id="blog_meta_desc_help" class="form-text text-muted">Meta description (optional)</small>
 </div>
 
-<div class="form-group">
-    <label for="blog_short_description">Keywords (separate keywords with commas)</label>
-    <textarea class="form-control" id="blog_short_description" aria-describedby="blog_short_description_help"
-              name='short_description'>{{old("short_description",$post_translation->short_description)}}</textarea>
-    <small id="blog_short_description_help" class="form-text text-muted">Keywords (eg. knowcrunch, educational, digital marketing, media)</small>
-</div>
-
 @if(config("binshopsblog.image_upload_enabled",true))
 
     <div class='bg-white pt-4 px-4 pb-0 my-2 mb-4 rounded border'>

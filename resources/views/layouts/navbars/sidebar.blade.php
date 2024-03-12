@@ -44,7 +44,7 @@
                                 }
                                 @endphp
                                 <li class="nav-item">
-                                    <a href="{{ env("ADMIN_URL").'/login'.$url_autologin }}" class="nav-link">
+                                    <a href="{{ config("app.ADMIN_URL").'/login'.$url_autologin }}" class="nav-link">
                                         <span class="badge badge-primary">New</span> &nbsp
                                         {{ __('Dashboard') }}
                                     </a>

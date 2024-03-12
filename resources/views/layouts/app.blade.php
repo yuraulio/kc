@@ -125,6 +125,10 @@
         <!-- <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NKDMSK6"
         height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript> -->
         <!-- End Google Tag Manager (noscript) -->
+
+        @elseif(config('app.env') == "development")
+        <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MLLXRGTK"
+          height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         @endif
         @auth()
             <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">

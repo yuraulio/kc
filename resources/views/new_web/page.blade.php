@@ -84,8 +84,8 @@
 
 @push('components-scripts')
 
-    @if(isset($dynamic_page_data['new_event']) && !env('APP_DEBUG'))
-    
+    @if(isset($dynamic_page_data['new_event']) && !config('app.debug'))
+
 
     <script>
         $(document).ready(function(){
@@ -96,7 +96,7 @@
     @endif
 
 
-    @if(isset($dynamic_page_data['tigran']) && !env('APP_DEBUG'))
+    @if(isset($dynamic_page_data['tigran']) && !config('app.debug'))
         <script>
             $(document).ready(function(){
                 dataLayer.push({'Event_ID':"{{$dynamic_page_data['tigran']['Event_ID']}}v", 'event': 'ViewContent', 'Product_id' : "{{$dynamic_page_data['tigran']['Product_id']}}", 'Price': "{{$dynamic_page_data['tigran']['Price']}}",
@@ -135,7 +135,7 @@
                         'quantity': 1
                     }]
                 });
-                                
+
             })
 
         </script>
@@ -143,7 +143,7 @@
     @endif
 
 
-    {{--@if(isset($thankyouData['tigran']) && isset($thankyouData['tigran']['Price']) &&$thankyouData['tigran']['Price'] > 0 && !env('APP_DEBUG'))
+    {{--@if(isset($thankyouData['tigran']) && isset($thankyouData['tigran']['Price']) &&$thankyouData['tigran']['Price'] > 0 && !config('app.debug'))
         <script>
         $(document).ready(function(){
            @foreach($thankyouData['tigran'] as $key => $ti)
@@ -154,7 +154,7 @@
 
     @endif
 
-    @if(isset($thankyouData['ecommerce']) && isset($thankyouData['ecommerce']['actionField']['value']) && $thankyouData['ecommerce']['actionField']['value'] > 0 && !env('APP_DEBUG'))
+    @if(isset($thankyouData['ecommerce']) && isset($thankyouData['ecommerce']['actionField']['value']) && $thankyouData['ecommerce']['actionField']['value'] > 0 && !config('app.debug'))
 
         <script>
            $(document).ready(function(){
@@ -200,7 +200,7 @@
     @endif--}}
 
 
-    @if(isset($thankyouData['gt3']) && isset($thankyouData['gt3']['gt3']['transactionTotal']) && $thankyouData['gt3']['gt3']['transactionTotal'] > 0 && !env('APP_DEBUG'))
+    @if(isset($thankyouData['gt3']) && isset($thankyouData['gt3']['gt3']['transactionTotal']) && $thankyouData['gt3']['gt3']['transactionTotal'] > 0 && !config('app.debug'))
        {{--<script>
           $(document).ready(function(){
           let gt3 = {};

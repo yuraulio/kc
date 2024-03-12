@@ -1,0 +1,97 @@
+@font-face {
+    font-family: 'Foco';
+	    src: url('/theme/assets/fonts/Foco_W_Lt.eot');
+	    src: url('/theme/assets/fonts/Foco_W_Lt.eot?#iefix') format('embedded-opentype'),
+	        url('/theme/assets/fonts/Foco_W_Lt.woff2') format('woff2'),
+	        url('/theme/assets/fonts/Foco_W_Lt.woff') format('woff');
+	font-weight: 300;
+	font-style: normal;
+}
+
+#tinymce {
+  font-family: 'Foco', serif;
+  font-weight: 300;
+  font-size: 18px;
+  line-height: 1.5;
+  color: #000000;
+  max-width: 667px;
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-shadow: rgba(0,0,0,.01) 0 0 1px;
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  -moz-text-size-adjust: 100%;
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-weight: 300;
+    margin: 0;
+    line-height: 1.2;
+    padding: 0;
+    margin-bottom: 20px;
+  }
+  h1 {
+    font-size: 50px;
+  }
+  h2 {
+    font-size: 44px;
+  }
+  h3 {
+    font-size: 38px;
+  }
+  h4 {
+    font-size: 32px;
+  }
+  h5 {
+    font-size: 26px;
+  }
+  h6 {
+    font-size: 20px;
+  }
+
+  p:not(:last-child) {
+    margin-bottom: 30px;
+  }
+
+  p {
+    margin: 0;
+    padding: 0;
+    font-size: 18px;
+    line-height: 1.5;
+  }
+
+  .variable {
+    cursor: default;
+    background-color: #65b9dd;
+    color: #FFF;
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-weight: bold;
+    font-style: normal;
+    font-size: 10px;
+    display: inline-block;
+    line-height: 12px;
+  }
+
+  a {
+    color: #81be00;
+    transition: 300ms all ease;
+  }
+  a {
+    background-color: transparent;
+  }
+  li {
+    list-style: disc;
+  }
+  ul, li {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+}

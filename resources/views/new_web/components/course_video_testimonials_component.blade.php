@@ -45,17 +45,15 @@
                 <?php
 
                     if(!$video['video_url']){
-                    continue;
+                      continue;
                     }
-                    $urlArr = explode("/",$video['video_url']);
-                    $urlArrNum = count($urlArr);
-
-                    // YouTube video ID
-                    $youtubeVideoId = $urlArr[$urlArrNum - 1];
-                    $youtubeVideoId = explode('v=',$youtubeVideoId);
-                    $youtubeVideoId = isset($youtubeVideoId[1]) ? $youtubeVideoId[1] : $youtubeVideoId[0];
+                    $q = parse_url($video['video_url'], PHP_URL_QUERY);
+                    parse_str($q, $data);
+                    if (empty($data['v'])) {
+                      continue;
+                    }
                     // Generate youtube thumbnail url
-                    $thumbURL = 'https://img.youtube.com/vi/'.$youtubeVideoId.'/mqdefault.jpg';
+                    $thumbURL = 'https://img.youtube.com/vi/'.$data['v'].'/mqdefault.jpg';
                     ?>
                 <div class="slide">
                     <div class="testimonial-box">
@@ -64,8 +62,8 @@
                             <span>{{ $video['title']}}</span>
                         </div>
                     </div>
-                    
-                    
+
+
                 </div>
                 @endforeach
             </div>

@@ -41,7 +41,6 @@
         <title>{{ $meta['meta_title'] ?? "" }}</title>
 
         <meta name="description" content="{{ $meta['meta_description'] ?? "" }}">
-        <meta name="keywords" content="{{ $meta['meta_keyword'] ?? "" }}">
         <meta name="image" content="{{ $meta['meta_image']->url ?? "" }}" alt="{{ $meta['meta_image']->alt_text ?? "" }}">
         <meta name="author" content="{{ $meta['meta_author'] ?? "" }}">
 

@@ -8,21 +8,50 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+              dataLayer.push(arguments);
+          }
+          gtag("consent", "default", {
+              ad_storage: "denied",
+              ad_user_data: "denied",
+              ad_personalization: "denied",
+              analytics_storage: "denied",
+              functionality_storage: "denied",
+              personalization_storage: "denied",
+              security_storage: "granted",
+              wait_for_update: 2000,
+          });
+          gtag("set", "ads_data_redaction", true);
+          gtag("set", "url_passthrough", true);
+        </script>
+
+        <!-- Google Tag Manager -->
+        @if(!config('app.debug'))
+          <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+              new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+              j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+              'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+              })(window,document,'script','dataLayer','GTM-ML7649C');
+          </script>
+        @elseif(config('app.env') == "development")
+          <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+            'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+            })(window,document,'script','dataLayer','GTM-MLLXRGTK');</script>
+        @endif
+
+        <!-- Start cookieyes banner --> <script id="cookieyes" type="text/javascript" src="https://cdn-cookieyes.com/client_data/2428d5ba225ff1e2703356e8/script.js"></script> <!-- End cookieyes banner -->
+
+
         @yield('metas')
         @yield('css')
         @include('theme.layouts.favicons')
         @yield('header')
         @include('new_web.layouts.header_scripts')
 
-        <!-- Google Tag Manager -->
-        @if(!env('APP_DEBUG'))
-            <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-                new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-                j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-                'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-                })(window,document,'script','dataLayer','GTM-ML7649C');
-            </script>
-        @endif
 
         <!-- OneTrust Cookies Consent Notice (Production CDN, knowcrunch.com, en-GB) start -->
         @if(Agent::isDesktop())
@@ -38,10 +67,6 @@
             </script>
             <script type="text/javascript" src="//cdn.iubenda.com/cs/gpp/stub.js"></script>
             <script type="text/javascript" src="//cdn.iubenda.com/cs/iubenda_cs.js" charset="UTF-8" async></script>--}}
-
-            <!-- Start cookieyes banner -->
-            <script id="cookieyes" type="text/javascript" src="https://cdn-cookieyes.com/client_data/2428d5ba225ff1e2703356e8/script.js"></script>
-            <!-- End cookieyes banner -->
         @endif
 
         {{-- Linkedin Code --}}
@@ -56,13 +81,16 @@
         <!-- Load Facebook SDK for JavaScript -->
         @yield('fbchat')
 
-        @if(!env('APP_DEBUG'))
+        @if(!config('app.debug'))
         {{-- Google Tag Manager (noscript) --}}
         {{--<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-ML7649C"
         height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>--}}
         <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-ML7649C"
         height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         {{-- End Google Tag Manager (noscript) --}}
+        @elseif(config('app.env') == "development")
+        <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MLLXRGTK"
+          height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         @endif
 
         <div class="page-wrapper non-pointer">
@@ -230,17 +258,17 @@
             })
         </script>
 
-        @if(Auth::user() && !env('APP_DEBUG'))
+        @if(Auth::user() && !config('app.debug'))
             <script>
                 dataLayer.push({"User_id": "{{Auth::user()->id}}"})
             </script>
-        @elseif(!env('APP_DEBUG'))
+        @elseif(!config('app.debug'))
             <script>
                 dataLayer.push({'Visitor_id': "{{session()->getId()}}"});
             </script>
         @endif
 
-        @if(isset($tigran) && env('APP_DEBUG'))
+        @if(isset($tigran) && config('app.debug'))
             <script>
                 $(document).ready(function(){
                         @foreach($tigran as $key => $ti)

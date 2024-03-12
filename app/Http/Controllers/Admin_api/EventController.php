@@ -25,7 +25,9 @@ class EventController extends Controller
         $this->authorize('viewAny', Event::class, Auth::user());
 
         try {
-            $events = Event::wherePublished(true)->whereStatus(0)->get();
+            $events = Event::wherePublished(true)
+                ->whereStatus(0)
+                ->get();
 
             return EventResource::collection($events);
         } catch (Exception $e) {

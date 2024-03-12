@@ -26,7 +26,6 @@ class Metas extends Model
             '<title>' . $title . '</title>
             <meta name="author" content="Knowcrunch">
             <meta name="description" content="' . $this->meta_description . '">
-            <meta name="keywords" content="' . $this->meta_keywords . '">
             <meta property="fb:app_id" content="961275423898153">' .
             '<meta property="og:title" content="' . $this->meta_title . '">' .
             '<meta property="og:type" content="website">' .

@@ -4,7 +4,6 @@
       <div class="page-title-box">
         <h4 v-if="type != 'new'" class="page-title d-inline-block">Edit countdown</h4>
         <h4 v-else class="page-title d-inline-block">New Countdown</h4>
-
         <button
           v-if="type == 'new'"
           @click="add()"
@@ -26,6 +25,20 @@
         <a href="/countdown" type="button" class="btn btn-soft-secondary waves-effect waves-light me-2 float-end"
           >Cancel</a
         >
+        <div :key="'ck'" class="d-inline-block form-check form-switch mt-1 me-2 float-end" style="cursor: pointer">
+          <input
+            :key="'on'"
+            @click="published = !published"
+            :id="'cinput'"
+            type="checkbox"
+            class="form-check-input"
+            name="color-scheme-mode"
+            value="light"
+            :for="'cinput'"
+            :checked="published"
+          />
+          <label class="form-check-label" for="light-mode-check">Published</label>
+        </div>
       </div>
     </div>
 
@@ -50,25 +63,16 @@
           ref="input"
         >
         </multiput>
-        <div v-if="input.key == 'should_visible'" class="row">
+        <div v-if="input.key == 'deliveries'" class="row">
           <div class="col-12">
             <multidropdown
-              title="Event"
+              title="Chose if you want specific courses below"
               :multi="true"
               @updatevalue="update_event"
               :prop-value="event"
               :fetch="false"
-              route="getEvents"
+              route="getEvents2"
               :data="events"
-            ></multidropdown>
-
-            <multidropdown
-              title="Category"
-              :multi="true"
-              @updatevalue="update_category"
-              :prop-value="category_value"
-              :fetch="false"
-              :data="categories"
             ></multidropdown>
           </div>
         </div>
@@ -92,36 +96,6 @@
         </template>
       </template>
     </div>
-    <div class="col-lg-3 mt-2">
-      <div class="card">
-        <div class="card-body">
-          <!-- <h4 class="mb-2">{{pageTitle}}</h4> -->
-
-          <div class="row">
-            <div class="col-xl-12">
-              <div :key="'ck'" class="form-check form-switch mb-3" style="cursor: pointer">
-                <input
-                  :key="'on'"
-                  @click="published = !published"
-                  :id="'cinput'"
-                  type="checkbox"
-                  class="form-check-input"
-                  name="color-scheme-mode"
-                  value="light"
-                  :for="'cinput'"
-                  :checked="published"
-                />
-                <label class="form-check-label" for="light-mode-check">Published</label>
-              </div>
-            </div>
-            <!-- end col-->
-          </div>
-        </div>
-        <!-- end col-->
-      </div>
-    </div>
-    <!-- end row -->
-
     <div v-if="errors" class="row mt-3">
       <span class="text-danger" v-for="error in errors">{{ error[0] }}</span>
     </div>
@@ -134,6 +108,7 @@ import multidropdown from './inputs/multidropdown.vue';
 import gicon from './gicon.vue';
 import slugify from '@sindresorhus/slugify';
 import Multiput from './inputs/multiput.vue';
+import _ from 'lodash';
 
 export default {
   components: {
@@ -154,7 +129,6 @@ export default {
     // event, category_value einai oi timew toy countdown pou einai assigned
     return {
       event: null,
-      category_value: [],
       errors: null,
       test: null,
       loading: false,
@@ -175,19 +149,14 @@ export default {
     },
     selectAll($event) {
       // data for save
-      this.item.category = null;
       this.item.event = null;
 
       //data for selected render frontend
-      this.category_value = null;
       this.event = null;
 
       if ($event.key == 'event') {
-        this.item.event = this.events;
-        this.event = this.events;
-      } else if ($event.key == 'category') {
-        this.item.category = this.categories;
-        this.category_value = this.categories;
+        this.item.event = Array.from(this.events);
+        this.event = Array.from(this.events);
       }
     },
     update_event(value = []) {
@@ -196,21 +165,8 @@ export default {
       }
 
       this.item.event = value;
-
-      this.selectRadio();
     },
-    update_category(value) {
-      this.item.category = value;
-      // this.subcategory_value = [];
-      this.selectRadio();
-    },
-    // update_published_from(value){
-    //     this.item.published_from = value;
-    // },
-    // update_published_to(value){
-    //     this.item.published_to = value;
-    // },
-    setCategories(data) {
+    setEvent(data) {
       if (typeof data.event !== 'undefined' && data.event.length != 0) {
         let del = [];
 
@@ -218,57 +174,23 @@ export default {
           let obj = {
             id: event.id,
             title: event.title,
+            delivery_id: event.delivery_id,
           };
           del.push(obj);
         });
 
         this.event = del;
       }
-
-      this.category_value = [];
-      if (typeof data.category !== 'undefined' && data.category.length != 0) {
-        let cat = [];
-
-        data.category.forEach(function (category, index) {
-          let obj = {
-            id: category.id,
-            title: category.name,
-          };
-          cat.push(obj);
-        });
-
-        this.category_value = cat;
-      }
-
-      //this.selectRadio()
-    },
-    getCategories() {
-      axios
-        .get('/api/getCategories')
-        .then((response) => {
-          if (response.status == 200) {
-            var data = response.data.data;
-
-            //console.log('data fetch: ', data)
-            this.categories = data;
-
-            this.selectRadio();
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
     },
     getEvents() {
+      const self = this;
       axios
         .get('/api/getEventsList')
         .then((response) => {
           if (response.status == 200) {
             var data = response.data.data;
 
-            this.events = data;
-
-            this.selectRadio();
+            self.events = data;
           }
         })
         .catch((error) => {
@@ -289,6 +211,7 @@ export default {
           published_to: this.item.published_to,
           countdown_to: this.item.countdown_to,
           published: this.published,
+          deliveries: this.item.deliveries,
           event: this.item.event,
           category: this.item.category,
           button_status: this.item.button_status ? this.item.button_status : this.button_status,
@@ -354,7 +277,7 @@ export default {
 
               this.item = data;
 
-              this.setCategories(data);
+              this.setEvent(data);
 
               this.loader = false;
             }
@@ -364,39 +287,59 @@ export default {
           });
       }
     },
-    selectRadio() {
-      if (this.item.category !== undefined || this.event.category !== undefined) {
-        if (this.categories.length != 0 && this.item.category.length == this.categories.length) {
-          this.item['should_visible'] = 'category';
-          this.$refs.input[1].existingValue = 'category';
-        } else if (
-          this.events !== undefined &&
-          this.events.length != 0 &&
-          this.item.event != null &&
-          this.item.event.length == this.events.length
-        ) {
-          this.item['should_visible'] = 'event';
-          this.$refs.input[1].existingValue = 'event';
-        } else {
-          this.$refs.input[1].existingValue = undefined;
-        }
-      }
+  },
+  computed: {
+    deliveries() {
+      return this.item.deliveries;
     },
   },
-  mounted() {
+  created() {
     this.getEvents();
-    this.getCategories();
-
+  },
+  mounted() {
     if (this.data) {
       this.item = this.data;
-      this.setCategories(this.data);
-
+      this.setEvent(this.data);
       this.loader = false;
     } else {
       this.get();
     }
   },
-  watch: {},
+  watch: {
+    deliveries(n, o) {
+      let oi = o ? o.map((x) => x.id) : [];
+      let ni = n ? n.map((x) => x.id) : [];
+      let a = [];
+      ni.forEach((x) => {
+        const index = oi.indexOf(x);
+        if (index > -1) {
+          oi.splice(index, 1);
+        } else {
+          a.push(x);
+        }
+      });
+      const self = this;
+      let events = this.item.event ? Array.from(this.item.event) : [];
+      if (oi?.length) {
+        oi.forEach((deliveryId) => {
+          events = events.filter((x) => x.delivery_id !== deliveryId);
+        });
+      }
+      if (a.length) {
+        a.forEach((deliveryId) => {
+          const list = self.events.filter((x) => x.delivery_id === deliveryId);
+          list.forEach((event) => {
+            const index = events.findIndex((x) => x.id === event.id);
+            if (index < 0) {
+              events.push(event);
+            }
+          });
+        });
+      }
+      this.event = events;
+      this.$set(this.item, 'event', this.event);
+    },
+  },
 };
 </script>
 

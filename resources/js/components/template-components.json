@@ -182,13 +182,6 @@
                 "main": true
             },
             {
-                "type": "text",
-                "key": "meta_keyword",
-                "label": "Meta Keywords",
-                "size": "col-lg-12",
-                "main": true
-            },
-            {
                 "type": "image",
                 "key": "meta_image",
                 "label": "Shareable image",

@@ -11,21 +11,34 @@
 	<link href="{{ cdn(mix('new_cart/css/new_cart.css')) }}" rel="stylesheet" media="all" />
 
 	<!-- Google Tag Manager -->
-	<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-		new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-		j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-		'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-		})(window,document,'script','dataLayer','GTM-ML7649C');
-	</script>
+  @if(!config('app.debug'))
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+      'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+      })(window,document,'script','dataLayer','GTM-ML7649C');
+    </script>
+  @elseif(config('app.env') == "development")
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+      'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+      })(window,document,'script','dataLayer','GTM-MLLXRGTK');</script>
+  @endif
 	<!-- End Google Tag Manager -->
 
 </head>
 <body>
 
 	<!-- Google Tag Manager (noscript) -->
-	<noscript>
-		<iframe src="https://www.googletagmanager.com/ns.html?id=GTM-ML7649C" height="0" width="0" style="display:none;visibility:hidden"></iframe>
-	</noscript>
+  @if(!config('app.debug'))
+    <noscript>
+      <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-ML7649C" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>
+  @elseif(config('app.env') == "development")
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MLLXRGTK"
+      height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  @endif
 	<!-- End Google Tag Manager (noscript) -->
 
 	<!---------------- header start --------------->
@@ -258,7 +271,7 @@ $(document).keyup(function(event){
 @endif
 
 
-@if(isset($tigran) && !env('APP_DEBUG'))
+@if(isset($tigran) && !config('app.debug'))
 
 <script>
 		$(document).ready(function(){

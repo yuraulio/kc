@@ -12,6 +12,7 @@ use App\Model\Media;
 use App\Model\Menu;
 use App\Model\Option;
 use App\Model\PaymentMethod;
+use App\Model\Setting;
 use App\Model\Slug;
 use App\Model\User;
 use App\Notifications\AfterSepaPaymentEmail;
@@ -1320,7 +1321,7 @@ if (!function_exists('update_dropbox_api')) {
     function update_dropbox_api() : void
     {
         try {
-            $t = base64_encode(env('DROPBOX_APPKEY') . ':' . env('DROPBOX_SECRET'));
+            $t = base64_encode(config('filesystems.disks.dropbox.appSecret') . ':' . config('filesystems.disks.dropbox.secret'));
 
             $endpoint = 'https://api.dropbox.com/oauth2/token';
             $client = new \GuzzleHttp\Client(['headers' => ['Content-Type'=> 'application/json', 'Authorization' => 'Basic ' . $t]]);
@@ -1343,7 +1344,9 @@ if (!function_exists('update_dropbox_api')) {
             if (isset($accessToken['access_token']) && $accessToken['access_token']) {
                 //$client = new Client();
                 //$client->setAccessToken($accessToken['access_token']);
-                update_env(['DROPBOX_TOKEN' => $accessToken['access_token']]);
+                $setting = Setting::where('key', 'DROPBOX_TOKEN')->firstOrFail();
+                $setting->value = $accessToken['access_token'];
+                $setting->save();
                 //dd($client);
             }
         } catch(\Exception $e) {
@@ -1352,35 +1355,6 @@ if (!function_exists('update_dropbox_api')) {
                 if (strpos($e->getMessage(), 'app is disabled') === false) {
                     $user->notify(new ErrorSlack('API Dropbox failed. Sometimes happens. Don\'t worry. Error message: ' . $e->getMessage()));
                 }
-            }
-        }
-    }
-}
-
-if (!function_exists('update_env')) {
-    function update_env($data = []) : void
-    {
-        try {
-            if (!isset($data['DROPBOX_TOKEN'])) {
-                return;
-            }
-
-            $newData = ['DROPBOX_TOKEN' => $data['DROPBOX_TOKEN']];
-            $path = base_path('.env');
-
-            if (file_exists($path)) {
-                foreach ($newData as $key => $value) {
-                    file_put_contents($path, str_replace(
-                        $key . '=' . env($key),
-                        $key . '=' . $value,
-                        file_get_contents($path)
-                    ));
-                }
-            }
-        } catch(\Exception $e) {
-            $user = User::first();
-            if ($user) {
-                $user->notify(new ErrorSlack('API Dropbox failed 2. Sometimes happens. Don\'t worry. Error message: ' . $e->getMessage()));
             }
         }
     }

@@ -6,22 +6,6 @@ const collectiveInputs = [
     size: 'col-lg-12',
   },
   {
-    type: 'radio',
-    key: 'should_visible',
-    label: 'This countdown should be visible in:',
-    size: 'col-lg-12',
-    options: {
-      1: {
-        name: 'All courses of this category',
-        key: 'category',
-      },
-      2: {
-        name: 'All courses delivered online or in a class',
-        key: 'event',
-      },
-    },
-  },
-  {
     type: 'text_editor',
     key: 'content',
     label: 'Content',
@@ -36,14 +20,25 @@ const collectiveInputs = [
   {
     type: 'toggle',
     key: 'button_status',
-    label: 'Button Status',
+    label: 'CTA button visibility',
     size: 'col-lg-12',
   },
   {
     type: 'text',
     key: 'button_title',
-    label: 'Button Title',
+    label: 'CTA button text',
     size: 'col-lg-12',
+  },
+  {
+    type: 'multidropdown',
+    key: 'deliveries',
+    label: 'Countdown will be visible in all courses delivered in:',
+    size: 'col-lg-12',
+    route: 'getDeliveries',
+    multi: true,
+    taggable: true,
+    fetch: true,
+    placeholder: 'Start typing to select delivers',
   },
 ];
 

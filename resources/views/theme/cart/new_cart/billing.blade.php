@@ -4,7 +4,7 @@
 
 <!---------------- checkout progress-bar start --------------->
 <div class="checkout-step">
-		<div class="container">		
+		<div class="container">
 			<ul>
 				<li><span class="counter">1.</span><i>Participant(s)</i></li>
 				<li class="active"><span class="counter">2.</span><i>Billing</i></li>
@@ -12,14 +12,14 @@
 			</ul>
 		</div>
 	</div>
-<!---------------- checkout progress-bar end --------------->	
+<!---------------- checkout progress-bar end --------------->
 <div class="form-wrap">
-		<div class="container padding-no">			
-			<h1 class="hidden-xs">Billing</h1>			
+		<div class="container padding-no">
+			<h1 class="hidden-xs">Billing</h1>
 			<div class="row">
 				<!---------------- billing form start--------------->
 				<div class="col-md-6 col-xl-6 selection-order">
-				<h1 class="hidden-lg">Billing</h1>		
+				<h1 class="hidden-lg">Billing</h1>
 					<div class="billing-full-wrap">
 						<form action="billing" method="post" name="billing">
 						@csrf
@@ -36,7 +36,7 @@
 									<label class="input-label">VAT or tax ID @if($pay_methods && ($pay_methods->id == 3 || $pay_methods->id == 4))<span class="checkout-required-data">*</span>@endif</label>
 									<input type="text" name="billafm" value="{{old('billafm',$billafm)}}" class="form-control" placeholder="" aria-describedby="inputGroupPrepend3" @if($pay_methods && ($pay_methods->id == 3 || $pay_methods->id == 4)) required="" @endif>
 									<div class="invalid-feedback">
-										
+
 									</div>
 								</div>
 							</div>
@@ -45,14 +45,14 @@
 									<label class="input-label">Street</label>
 									<input type="text" class="form-control" value="{{old('billaddress',$billaddress)}}" name="billaddress" placeholder="">
 									<div class="valid-feedback">
-										
+
 									</div>
 								</div>
 								<div class="col-md-12 col-xl-4 mb-4 pl-xl-3">
 									<label class="input-label">Street number</label>
 									<input type="text" class="form-control" value="{{old('billaddressnum',$billaddressnum)}}" name="billaddressnum" placeholder="">
 									<div class="valid-feedback">
-										
+
 									</div>
 								</div>
 							</div>
@@ -61,14 +61,14 @@
 									<label class="input-label">Town/city</label>
 									<input type="text" name="billcity" value="{{old('billcity',$billcity)}}" class="form-control" placeholder="">
 									<div class="valid-feedback">
-										
+
 									</div>
 								</div>
 								<div class="col-md-12 col-xl-4 mb-4 pl-xl-3">
 									<label class="input-label">Postcode (ZIP)</label>
 									<input type="text" name="billpostcode" value="{{old('billpostcode',$billpostcode)}}" class="form-control"  placeholder="">
 									<div class="valid-feedback">
-										
+
 									</div>
 								</div>
 							</div>
@@ -77,7 +77,7 @@
 									<label class="input-label">State</label>
 									<input type="text" class="form-control" name="billstate" value="{{old('billstate',$billstate)}}" placeholder="" aria-describedby="inputGroupPrepend3">
 									<div class="invalid-feedback">
-										
+
 									</div>
 								</div>
 							</div>
@@ -86,7 +86,7 @@
 									<label class="input-label">Country</label>
 									<input type="text" class="form-control" name="billcountry" value="{{old('billcountry',$billcountry)}}" placeholder="" aria-describedby="inputGroupPrepend3">
 									<div class="invalid-feedback">
-										
+
 									</div>
 								</div>
 							</div>
@@ -95,7 +95,7 @@
 									<label class="input-label">Please send this receipt to this email address</label>
 									<input type="text" name="billemail" value="{{old('billemail',$billemail)}}" class="form-control" placeholder="" aria-describedby="inputGroupPrepend3">
 									<div class="invalid-feedback">
-										
+
 									</div>
 								</div>
 							</div>
@@ -104,7 +104,7 @@
 									<img src="{{cdn('new_cart/images/arrow-previous-green.svg')}}" width="20px" height="12px" class="without-hover" alt="">
 									<img src="{{cdn('new_cart/images/arrow-previous-green2.svg')}}" width="20px" height="12px" class="with-hover" alt="">
 									<a href="/registration" class="link-color">Previous: Participant(s)</a>
-								</div>	
+								</div>
 								<button id="btn" type="submit" class="btn checkout-button-secondary">Next:Checkout <img src="{{cdn('new_cart/images/arrow-next-red.svg')}}" width="20px" height="12px" class="without-hover" alt=""> <img src="{{cdn('new_cart/images/arrow-next-red2.svg')}}" width="20px" height="12px" class="with-hover" alt=""> </button>
 							</div>
 						</div>
@@ -117,14 +117,14 @@
 				@include('theme.cart.new_cart.selection')
 				<!---------------- My Selection end--------------->
 			</div>
-		</div>						
+		</div>
 	</div>
 @stop
 
 
 @push('scripts')
 
-@if(isset($tigran) && !env('APP_DEBUG'))
+@if(isset($tigran) && !config('app.debug'))
 <script type="text/javascript">
 
 dataLayer.push({
@@ -139,7 +139,7 @@ dataLayer.push({
 		'price': "{{$tigran['Price']}}",
 		'quantity': 1
 	}]
-});	
+});
 	</script>
 @endif
 @endpush

@@ -109,5 +109,5 @@ export default {
   filters: ['dynamic', 'visibility', 'template', 'type', 'category', 'subcategory'],
   perPage: 50,
   addInputs: collectiveInputs.concat([]),
-  sortableRows: window.location.pathname === '/pages_blog',
+  sortableRows: false,
 };

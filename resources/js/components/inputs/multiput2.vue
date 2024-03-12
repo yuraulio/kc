@@ -217,7 +217,7 @@
           toolbar_sticky: true,
           toolbar_mode: 'wrap',
           height: 300,
-          font_css: '/theme/assets/css/editor.css',
+          font_css: editorCssUrl,
         }"
       ></editor>
     </div>
@@ -314,6 +314,11 @@ export default {
     imageVersion: null,
     hideAltText: false,
     imageEdit: false,
+  },
+  computed: {
+    editorCssUrl: () => {
+      return '/theme/assets/css/editor.css?id=' + moment().format('YYYYMMDDhh');
+    },
   },
   data() {
     return {

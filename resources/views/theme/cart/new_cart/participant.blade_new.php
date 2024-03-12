@@ -4,7 +4,7 @@
 
 <!---------------- checkout progress-bar start --------------->
 <div class="checkout-step">
-		<div class="container">		
+		<div class="container">
 			<ul>
 				<li class="active"><span class="counter">1.</span><i>Participant(s)</i></li>
 				<li><span class="counter">2.</span><i>Billing</i></li>
@@ -13,36 +13,36 @@
 		</div>
 	</div>
 
-<!---------------- checkout progress-bar end --------------->	
+<!---------------- checkout progress-bar end --------------->
 <div class="form-wrap">
-		<div class="container">			
-			<h1>Participant(s)</h1>			
+		<div class="container">
+			<h1>Participant(s)</h1>
 			<div class="row">
 				<!---------------- Participant form start--------------->
 				<div class="col-md-6 col-xl-6">
 					<div class="participant-full-wrap">
-					@if(!Auth::check())<p class="login-link">Already have an account? <a href="#" class="link-color">Log in</a></p>@endif								
+					@if(!Auth::check())<p class="login-link">Already have an account? <a href="#" class="link-color">Log in</a></p>@endif
 						<form action="{{route('registration')}}" method="post" id="participant-form" name="participant-form">
                         @csrf
-							<div class="form-wrp box" id="clone-box">												
-								
-								<p class="validation-info">Fields marked with an asterisk <span class="checkout-required-data">(*)</span> are required.</p>	
-								
+							<div class="form-wrp box" id="clone-box">
+
+								<p class="validation-info">Fields marked with an asterisk <span class="checkout-required-data">(*)</span> are required.</p>
+
 								<div class="form-row">
 									<div class="col-md-6 mb-4 pr-md-3">
 										<label class="input-label">My first name is  <span class="checkout-required-data">(*)</span></label>
 										<input type="text" name="firstname[]" class="form-control with-focus-visible" value="{{old('firstname',$firstname[0])}}"  required>
 										<div class="valid-feedback">
-											
+
 										</div>
 									</div>
 									<div class="col-md-6 mb-4 pl-md-3">
 										<label class="input-label">My last name is <span class="checkout-required-data">(*)</span></label>
 										<input type="text" name="lastname[]" class="form-control" value="{{old('lastname',$lastname[0])}}"  required>
 										<div class="valid-feedback">
-											
+
 										</div>
-									</div>					
+									</div>
 							</div>
 								<div class="form-row">
 									<div class="col-md-12 mb-4">
@@ -108,7 +108,7 @@
 												<option value="216" label="Tunisia (+216)">Tunisia</option>
 												<option value="256" label="Uganda (+256)">Uganda</option>
 												<option value="260" label="Zambia (+260)">Zambia</option>
-												<option value="263" label="Zimbabwe (+263)">Zimbabwe</option>										
+												<option value="263" label="Zimbabwe (+263)">Zimbabwe</option>
 												<option value="1264" label="Anguilla (+1264)">Anguilla </option>
 												<option value="595" label="Paraguay (+595)">Paraguay </option>
 												<option value="51" label="Peru (+51)">Peru </option>
@@ -158,7 +158,7 @@
 												<option value="84" label="U.S. Virgin Islands (+84)">U.S. Virgin Islands</option>
 												<option value="1" label="United States (+1)">United States</option>
 												<option value="598" label="Uruguay (+598)">Uruguay</option>
-												<option value="58" label="Venezuela (+58)">Venezuela</option>										
+												<option value="58" label="Venezuela (+58)">Venezuela</option>
 												<option value="374" label="Armenia (+374)">Armenia </option>
 												<option value="994" label="Azerbaijan (+994)">Azerbaijan</option>
 												<option value="973" label="Bahrain (+973)">Bahrain </option>
@@ -205,7 +205,7 @@
 												<option value="971" label="United Arab Emirates (+971)">United Arab Emirates</option>
 												<option value="7" label="Uzbekistan (+7)">Uzbekistan</option>
 												<option value="84" label="Vietnam (+84)">Vietnam</option>
-												<option value="967" label="Yemen (+967)">Yemen</option>									
+												<option value="967" label="Yemen (+967)">Yemen</option>
 												<option value="AL" label="Albania">Albania</option>
 												<option value="376" label="Andorra (+376)">Andorra </option>
 												<option value="43" label="Austria (+43)">Austria </option>
@@ -274,34 +274,34 @@
 												<option value="688" label="Tuvalu (+688)">Tuvalu</option>
 												<option value="678" label="Vanuatu (+678)">Vanuatu</option>
 												<option value="681" label="Wallis and Futuna (+681)">Wallis and Futuna</option>
-											
+
 										</select>
 
                                         <input class="required" id="mobile" onkeyup="checkPhoneNumber(this)" type="number"  name="mobile[]" value="{{old('mobile',$mobile[0])}}"/>
                                         <label id="mobile-error1" style="display:none" class="error error-mobile" for="mobile"></label>
                                         <input type="hidden" name="mobileCheck[]" id="mobileCheck" value="{{old('mobile',$mobile[0])}}">
 									</div>
-								</div>	
+								</div>
 								<div class="form-row">
 									<div class="col-md-12 mb-4">
-										<label class="input-label">Town or city I live in is</label>								
+										<label class="input-label">Town or city I live in is</label>
 										<input type="text" name="city[]" class="form-control" value="{{old('city',$city[0])}}"  aria-describedby="inputGroupPrepend3">
-										<div class="invalid-feedback">										
+										<div class="invalid-feedback">
 										</div>
-									</div>
-								</div>	
-								<div class="form-row">
-									<div class="col-md-12 mb-4">
-										<label class="input-label">My company or employer is</label>													
-										<input name="company[]" value="{{old('company',$company[0])}}" type="text" class="form-control"  aria-describedby="inputGroupPrepend3">			
 									</div>
 								</div>
 								<div class="form-row">
 									<div class="col-md-12 mb-4">
-										<label class="input-label">My occupation or title is</label>													
-										<input type="text" name="jobtitle[]" value="{{old('jobtitle',$job_title[0])}}" class="form-control" placeholder="E.g. Marketing specialist" aria-describedby="inputGroupPrepend3">			
+										<label class="input-label">My company or employer is</label>
+										<input name="company[]" value="{{old('company',$company[0])}}" type="text" class="form-control"  aria-describedby="inputGroupPrepend3">
 									</div>
-								</div>	
+								</div>
+								<div class="form-row">
+									<div class="col-md-12 mb-4">
+										<label class="input-label">My occupation or title is</label>
+										<input type="text" name="jobtitle[]" value="{{old('jobtitle',$job_title[0])}}" class="form-control" placeholder="E.g. Marketing specialist" aria-describedby="inputGroupPrepend3">
+									</div>
+								</div>
 								<div class="form-row">
 									<div class="custom-control custom-checkbox">
 										<input type="checkbox" name="terms_condition" class="custom-control-input" id="customCheck1">
@@ -310,16 +310,16 @@
 									</div>
 								</div>
 							</div>
-							{{--<div class="add-participant-wrap d-flex justify-content-between">												
+							{{--<div class="add-participant-wrap d-flex justify-content-between">
 								<button class="add-participant">
 									<img src="{{cdn('new_cart/images/plus-full-green.svg')}}" class="without-hover" width="44px" height="44px">
 									<img src="{{cdn('new_cart/images/plus-full-green2.svg')}}" class="with-hover"  width="44px" height="44px"> <span>Add another participant</span>
-								</button>							
+								</button>
 							</div>--}}
 							<div class="checkout-btn-wrap form-row mb-4 my-md-5 align-items-center">
 								<button id="btn" type="submit" class="btn registration checkout-button-secondary">Next: Billing <img src="{{cdn('new_cart/images/arrow-next-red.svg')}}" width="20px" height="12px" class="without-hover" alt=""> <img src="{{cdn('new_cart/images/arrow-next-red2.svg')}}" width="20px" height="12px" class="with-hover" alt=""> </button>
 							</div>
-						</form>	
+						</form>
 					</div>
 				</div>
 				<!---------------- Participant form end--------------->
@@ -328,12 +328,12 @@
                 @include('theme.cart.new_cart.selection')
 				<!---------------- My Selection end--------------->
 			</div>
-		</div>						
+		</div>
 	</div>
 @stop
 
 @push('scripts')
-@if(isset($tigran) && !env('APP_DEBUG'))
+@if(isset($tigran) && !config('app.debug'))
 <script>
 	dataLayer.push({'Event_ID':"{{$tigran['Event_ID'].'p'}}", 'event': 'Add To Cart', 'Product_id' : "{{$tigran['Product_id']}}", 'Price': "{{$tigran['Price']}}",'ProductCategory':"{{$tigran['ProductCategory']}}"});
 </script>

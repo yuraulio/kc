@@ -7,7 +7,9 @@ use App\Jobs\SaveImageWebp;
 use App\Jobs\UploadWebpImage;
 use App\Model\Event;
 use App\Model\Media;
+use App\Model\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Intervention\Image\ImageManagerStatic as Image;
 
 class MediaController extends Controller
@@ -212,20 +214,39 @@ class MediaController extends Controller
 
         Media::where('id', $request->media_id)->update(['details' => $details]);
 
-        //dd(public_path($media['path'].$media['original_name'].$media['ext']));
-
         $image = Image::make(public_path($media['path'] . $media['original_name']));
+
+        $ext = $media['ext'];
+        if ($ext == '.webp') {
+            $image->save(public_path($media['path'] . $name[0] . '.png'), 80);
+            $media = Media::where('id', $request->media_id)->first();
+            $media->original_name = $name[0] . '.png';
+            $media->ext = '.png';
+            $media->file_info = 'image/png';
+            $media->save();
+        }
 
         $image->crop($request->width, $request->height, $request->x, $request->y);
         $name = explode('.', $media['original_name']);
         $image->save(public_path($media['path'] . $name[0] . '-crop' . $media['ext']), 80);
-        //dd(public_path($media['path'].$name[0].'-crop'.$media['ext']));
+        $image->save(public_path($media['path'] . $name[0] . '-crop.webp'), 80);
+
+        if ($request->media_id) {
+            $user = User::find(Auth::id());
+            $url_origina_image = $media->path . $media->original_name;
+            if ($ext == '.webp') {
+                $url_origina_image = $media['path'] . $name[0] . '.png';
+            }
+            $user->updateMedia($url_origina_image);
+        }
+        $image->save(public_path($media['path'] . $name[0] . '-instructors-testimonials' . ($media['ext'] == '.webp' ? '.png' : $media['ext'])), 80);
 
         dispatch((new SaveImageWebp($details, $request->all()))->delay(now()->addSeconds(3)));
 
         return response()->json([
             'success' => __('Already image cropped.'),
             'data' => asset($media['path'] . $name[0] . '-crop' . $media['ext']),
+            'details' => Media::find($request->media_id)->details,
         ]);
     }
 

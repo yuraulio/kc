@@ -3,6 +3,7 @@
 namespace App\Model\Admin;
 
 use App\Model\Category;
+use App\Model\Delivery;
 use App\Model\Event;
 use App\Traits\PaginateTable;
 use App\Traits\SearchFilter;
@@ -35,5 +36,10 @@ class Countdown extends Model
     public function category()
     {
         return $this->belongsToMany(Category::class, 'cms_countdown_category', 'countdown_id', 'category_id');
+    }
+
+    public function deliveries()
+    {
+        return $this->belongsToMany(Delivery::class, 'cms_countdown_delivery', 'countdown_id', 'delivery_id');
     }
 }

@@ -17,7 +17,7 @@
 @yield('header')
 @include('theme.layouts.header_scripts')
 
-@if(env('APP_DEBUG'))
+@if(config('app.debug'))
 {{-- Google Tag Manager --}}
 {{--<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -60,7 +60,27 @@ setTimeout(timer601,601000);
 setTimeout(timer1801,1801000);
 </script>--}}
 
-@if(!env('APP_DEBUG'))
+
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() {
+      dataLayer.push(arguments);
+  }
+  gtag("consent", "default", {
+      ad_storage: "denied",
+      ad_user_data: "denied",
+      ad_personalization: "denied",
+      analytics_storage: "denied",
+      functionality_storage: "denied",
+      personalization_storage: "denied",
+      security_storage: "granted",
+      wait_for_update: 2000,
+  });
+  gtag("set", "ads_data_redaction", true);
+  gtag("set", "url_passthrough", true);
+</script>
+
+@if(!config('app.debug'))
 <!-- NEW Google Tag Manager -->
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 	new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -80,6 +100,8 @@ setTimeout(timer1801,1801000);
 @endif
 <!-- End Google Tag Manager -->
 
+<!-- Start cookieyes banner --> <script id="cookieyes" type="text/javascript" src="https://cdn-cookieyes.com/client_data/2428d5ba225ff1e2703356e8/script.js"></script> <!-- End cookieyes banner -->
+
 <!-- OneTrust Cookies Consent Notice (Production CDN, knowcrunch.com, en-GB) start -->
 @if(Agent::isDesktop())
 
@@ -96,11 +118,6 @@ _iub.csConfiguration = {"askConsentAtCookiePolicyUpdate":true,"consentOnContinue
 </script>
 <script type="text/javascript" src="//cdn.iubenda.com/cs/gpp/stub.js"></script>
 <script type="text/javascript" src="//cdn.iubenda.com/cs/iubenda_cs.js" charset="UTF-8" async></script>--}}
-
-<!-- Start cookieyes banner -->
-<script id="cookieyes" type="text/javascript" src=https://cdn-cookieyes.com/client_data/2428d5ba225ff1e2703356e8/script.js>
-</script>
-<!-- End cookieyes banner -->
 
 @endif
 
@@ -125,7 +142,7 @@ _iub.csConfiguration = {"askConsentAtCookiePolicyUpdate":true,"consentOnContinue
 
 {{--<script src="https://js.stripe.com/v3/"></script>--}}
 
-@if(!env('APP_DEBUG'))
+@if(!config('app.debug'))
 {{--<script id="Cookiebot" src="https://consent.cookiebot.com/uc.js" data-cbid="7c5a111b-df1a-4a4a-bd31-fbee0d6593ba" data-blockingmode="auto" type="text/javascript"></script>--}}
 @endif
 
@@ -135,7 +152,7 @@ _iub.csConfiguration = {"askConsentAtCookiePolicyUpdate":true,"consentOnContinue
 <body>
 @include('theme.layouts.menu_component_myaccount')
 
-@if(!env('APP_DEBUG'))
+@if(!config('app.debug'))
 {{--<script id="CookieDeclaration" src="https://consent.cookiebot.com/7c5a111b-df1a-4a4a-bd31-fbee0d6593ba/cd.js" type="text/javascript" async></script>--}}
 @endif
 
@@ -144,13 +161,16 @@ _iub.csConfiguration = {"askConsentAtCookiePolicyUpdate":true,"consentOnContinue
 @yield('fbchat')
 
 
-@if(!env('APP_DEBUG'))
+@if(!config('app.debug'))
 {{-- Google Tag Manager (noscript) --}}
 {{--<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-ML7649C"
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>--}}
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-ML7649C"
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 {{-- End Google Tag Manager (noscript) --}}
+@elseif(config('app.env') == "development")
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MLLXRGTK"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 @endif
 
 <div class="page-wrapper non-pointer">
@@ -329,12 +349,12 @@ $(document).on('click', '.close-btn', function(e){
 
 </script>
 
-@if(Auth::user() && !env('APP_DEBUG'))
+@if(Auth::user() && !config('app.debug'))
     <script>
         dataLayer.push({"User_id": "{{Auth::user()->id}}"})
     </script>
 
-@elseif(!env('APP_DEBUG'))
+@elseif(!config('app.debug'))
     <script>
         dataLayer.push({'Visitor_id': "{{session()->getId()}}"});
     </script>
@@ -342,7 +362,7 @@ $(document).on('click', '.close-btn', function(e){
 
 
 
-  @if(isset($tigran) && env('APP_DEBUG'))
+  @if(isset($tigran) && config('app.debug'))
     <script>
         $(document).ready(function(){
            @foreach($tigran as $key => $ti)
@@ -367,8 +387,14 @@ $(document).on('click', '.close-btn', function(e){
             self.toggleClass('active');
             self.next('.tab-controls-list').slideToggle(300);
 
-            $(target).addClass('active-tab');
+            let targetEl = $(target).first();
             $(this).addClass('active');
+            if (targetEl.length) {
+              targetEl.addClass('active-tab');
+              $('html, body').animate({
+                scrollTop: targetEl.offset().top - Math.round($('#header').outerHeight()) - 1
+              }, 300);
+            }
           }
         }
     }
