@@ -21,15 +21,14 @@ class UserHelper
     {
         // We check if this image is in CMS File indexed
         $image = $user->image;
-        if($image && isset($image->original_name)){
-            try{
+        if ($image && isset($image->original_name)) {
+            try {
                 $file = MediaFile::where('name', $image->original_name)->first();
-                if(!$file){
+                if (!$file) {
                     // The file not exists. Let's create one
-                    $path = str_replace('storage/uploads','public/uploads',storage_path($image->path.$image->original_name));
+                    $path = str_replace('storage/uploads', 'public/uploads', storage_path($image->path . $image->original_name));
 
-                    if(file_exists($path)){
-
+                    if (file_exists($path)) {
                         $file = new \Illuminate\Http\UploadedFile($path, $image->original_name);
 
                         $request = new Request();
@@ -42,8 +41,7 @@ class UserHelper
                         app('App\Http\Controllers\Admin_api\MediaController')->uploadImage($request);
                     }
                 }
-            }catch(\Exception $e){
-
+            } catch(\Exception $e) {
             }
         }
 
