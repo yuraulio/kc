@@ -391,6 +391,13 @@ class Event extends Model
         });
     }
 
+    public function scopeWithDeliveries($query, $deliveryIds)
+    {
+        return $query->whereHas('delivery', function ($query) use ($deliveryIds) {
+            $query->whereIn('delivery_id', $deliveryIds);
+        });
+    }
+
     public function ticket()
     {
         return $this->belongsToMany(Ticket::class, 'event_tickets')

@@ -26,7 +26,7 @@ use App\Model\Ticket;
 use App\Model\Topic;
 use App\Model\Type;
 use App\Model\User;
-use Artisan;
+use App\Services\CreateCertificatesTrainingEventsService;
 use DateTime;
 use Excel;
 use Illuminate\Http\Request;
@@ -34,6 +34,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\ImageManagerStatic as Image;
+use Illuminate\Support\Facades\Artisan;
 
 class EventController extends Controller
 {
@@ -539,7 +540,13 @@ class EventController extends Controller
             $data['lastExam']['averageScore'] = $list[2];
         }
 
+        $data['event'] = $event;
+
         return view('event.edit', $data);
+    }
+
+    public function generateCertificatesManually($eventId){
+        return response()->json(CreateCertificatesTrainingEventsService::generateCertificates($eventId));
     }
 
     public function event_statistics($id, $from_controller = null, $filters = null)

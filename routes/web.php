@@ -102,6 +102,7 @@ Route::group(['middleware' => 'auth.aboveauthor', 'prefix' => 'admin'], function
 
     // Total hours
     Route::get('/events/totalHours/{id}', 'EventController@calculateTotalHours')->name('event.total_hours');
+    Route::get('/events/generate-certificates-manually/{eventId}', 'EventController@generateCertificatesManually')->name('event.generate_certificates_manually');
 
     // Events
     Route::post('/events/export-students', 'EventController@exportStudent')->name('event.export-students');
