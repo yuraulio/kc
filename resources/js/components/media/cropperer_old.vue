@@ -355,8 +355,8 @@ export default {
           description: 'The image of an instructor next to a lesson.',
         },
         {
-          w: 300,
-          h: 300,
+          w: 600,
+          h: 600,
           q: 60,
           fit: 'crop',
           title: 'Advertising image',
