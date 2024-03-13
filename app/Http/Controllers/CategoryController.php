@@ -24,6 +24,7 @@ use App\Model\Dropbox;
 use App\Model\User;
 use Illuminate\Http\Request;
 use Storage;
+use App\Model\Setting;
 
 class CategoryController extends Controller
 {
@@ -50,18 +51,15 @@ class CategoryController extends Controller
     public function create()
     {
         /** @type \League\Flysystem\Filesystem $li */
-        $li = Storage::disk('dropbox');
-
+        $setting = Setting::where('key', 'DROPBOX_TOKEN')->firstOrFail();
+        $authorizationToken = $setting->value;
+        $client = new \Spatie\Dropbox\Client($authorizationToken);
+        $folders0 = $client->listFolder('/');
         $data['folders'] = [];
-        if($li) {
-            $folders = $li->listContents('/');
-            //dd($folders);
-            //$data['folders'][0] = 'Select Dropbox Folder';
-            foreach ($folders as $key => $row) {
-                if($row['type'] == 'dir' && isset($row['basename'])) :
-                    $data['folders'][$row['basename']] = $row['basename'];
-                endif;
-            }
+        foreach ($folders0['entries'] as $key => $row) {
+            if($row['.tag'] == 'folder' && isset($row['name'])) :
+                $data['folders'][$row['name']] = $row['name'];
+            endif;
         }
 
         return view('global_settings.categories.create', $data);
