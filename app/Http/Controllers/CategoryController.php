@@ -50,7 +50,6 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        /** @type \League\Flysystem\Filesystem $li */
         $setting = Setting::where('key', 'DROPBOX_TOKEN')->firstOrFail();
         $authorizationToken = $setting->value;
         $client = new \Spatie\Dropbox\Client($authorizationToken);
@@ -113,28 +112,19 @@ class CategoryController extends Controller
     public function edit(Category $category)
     {
         $data['folders'] = [];
-        //dd($category->dropbox()->get());
 
         $data['slug'] = $category->slugable;
-        /** @type \League\Flysystem\Filesystem $li */
-        $li = Storage::disk('dropbox');
 
-        if($li) {
-            $folders = $li->listContents('/');
-            //dd($folders);
-            //$data['folders'][0] = 'Select Dropbox Folder';
-            foreach ($folders as $key => $row) {
-                //dd($row);
-                if($row['type'] == 'dir' && isset($row['basename'])) :
-                    $data['folders'][$row['basename']] = $row['basename'];
-                endif;
-            }
-            //dd($data['folders']);
-
-            //dd($category->with('dropbox')->get());
-            $already_assign = $category->dropbox;
-            //dd($already_assign);
+        $setting = Setting::where('key', 'DROPBOX_TOKEN')->firstOrFail();
+        $authorizationToken = $setting->value;
+        $client = new \Spatie\Dropbox\Client($authorizationToken);
+        $folders0 = $client->listFolder('/');
+        foreach ($folders0['entries'] as $key => $row) {
+            if($row['.tag'] == 'folder' && isset($row['name'])) :
+                $data['folders'][$row['name']] = $row['name'];
+            endif;
         }
+        $already_assign = $category->dropbox;
 
         return view('global_settings.categories.edit', compact('category', 'data', 'already_assign'));
     }
