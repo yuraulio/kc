@@ -8,10 +8,8 @@ use App\Services\QueryString\QueryStringDirector;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-
 class EventController extends Controller
 {
-
     /**
      * Display a listing of the resource.
      */
