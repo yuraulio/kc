@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AbsenceController;
 use App\Http\Controllers\Api\CouponController;
+use App\Http\Controllers\Api\DeliveryController;
 use App\Http\Controllers\Api\EventController;
 use App\Http\Controllers\Api\ForgotPasswordController;
 use App\Http\Controllers\Api\LessonController;
@@ -36,7 +37,12 @@ Route::middleware('auth:api')->group(function () {
     Route::apiResource('users', UserController::class);
 
     // Coupons
-    Route::apiResource('coupons', CouponController::class);
+    Route::apiResource('coupons', CouponController::class)
+        ->only(['index']);
+
+    // Deliveries
+    Route::apiResource('deliveries', DeliveryController::class)
+        ->only(['index']);
 
     //
     Route::post('lesson/save_note', [LessonController::class, 'saveNote']);
