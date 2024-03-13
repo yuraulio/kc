@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Storage;
+use App\Model\Setting;
 
 class DropboxController extends Controller
 {
@@ -85,7 +86,10 @@ class DropboxController extends Controller
             $data['groupblockcat'] = [];
             //$allbcats = Category::where('type', 0)->where('status', 1)->where('parent_id', 45)->where('admin_tpl', '!=', '0')->where('admin_tpl', '!=', '')->get();
             //$allbcats =
-            $authorizationToken = env('DROPBOX_TOKEN');
+
+            $setting = Setting::where('key', 'DROPBOX_TOKEN')->firstOrFail();
+            $authorizationToken = $setting->value;
+
             //'-z3uZ8uXMqEAAAAAAAG4UbziL-RWKtxNb_-bYu6YlyyA_9t9Tr1wAP45HRMGcVIx';
             $client = new \Spatie\Dropbox\Client($authorizationToken);
             $data['files'] = [];
@@ -195,7 +199,9 @@ class DropboxController extends Controller
         $data['blockcat'] = [];
         $data['groupblockcat'] = [];
 
-        $authorizationToken = env('DROPBOX_TOKEN');
+        $setting = Setting::where('key', 'DROPBOX_TOKEN')->firstOrFail();
+        $authorizationToken = $setting->value;
+
         $client = new \Spatie\Dropbox\Client($authorizationToken);
         $data['files'] = [];
         $data['folders'] = [];

@@ -19,6 +19,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use App\Model\Setting;
 
 class UserController extends Controller
 {
@@ -1050,9 +1051,13 @@ class UserController extends Controller
 
     public function getDropBoxToken()
     {
+
+        $setting = Setting::where('key', 'DROPBOX_TOKEN')->firstOrFail();
+        $authorizationToken = $setting->value;
+
         return response()->json([
             'success' => true,
-            'dropBoxToken' => env('DROPBOX_TOKEN'),
+            'dropBoxToken' => $authorizationToken,
         ]);
     }
 }
