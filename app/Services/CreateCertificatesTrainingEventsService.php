@@ -66,6 +66,7 @@ class CreateCertificatesTrainingEventsService
                             $cert->expiration_date = strtotime(date('Y-m-d', strtotime('+24 months', strtotime(date('Y-m-d')))));
                             $cert->certification_date = date('F') . ' ' . date('Y');
                             $cert->template = $template;
+                            $cert->show_certificate = true;
                             $cert->save();
 
                             $cert->event()->save($event);
