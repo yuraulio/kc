@@ -123,7 +123,7 @@ jobs:
       run: echo "JSON response is not 0, failing the job." && exit 1
 
 
-  cleanup-dev-deploy:
+  clean-dev-deploy:
     needs: [deploy-dev] # This only runs if the deployment is successful
     runs-on: ubuntu-latest
     steps:

@@ -115,7 +115,7 @@ jobs:
         # --data-urlencode 'hooks={"preDeploy":"cd /var/www/webroot && ln /var/www/webroot/ROOT OLDROOT", "postDeploy":"rsync -av --ignore-existing --exclude=\"node_modules/\" --exclude=\"vendor/\" --exclude=\"public/uploads/\" --exclude=\".git/\" --include=\".*\" /var/www/webroot/OLDROOT/ /var/www/webroot/ROOT/ \&\& cd /var/www/webroot/ROOT \&\& echo $(git rev-parse --short HEAD \&\& git log -1 --format=\"%at\" | xargs -I{} date -d @{} +%Y/%m/%d_%H:%M:%S) > /var/www/webroot/ROOT/storage/app/version-commit.txt \&\& php artisan migrate \&\& php artisan migrate --path=/database/migrations/cms \&\& php artisan migrate --path=/database/migrations/cms-plugins \&\& php artisan view:clear \&\& php artisan cache:clear \&\& php artisan config:clear \&\& php artisan config:cache \&\& rm /var/www/webroot/OLDROOT \&\& echo \"Post Deploy Hook Ended\""}')
         # echo $scaleforceres
         # scaleforceres_result=$(echo "$scaleforceres" | jq '.result')
-        scaleforceres_result=$('0')
+        scaleforceres_result='0'
         echo "SCALEFORCE_RES=$scaleforceres_result" >> "$GITHUB_ENV"
 
     - name: Fail if JSON response is not 0
@@ -149,7 +149,8 @@ jobs:
       if: ${{ env.SCALEFORCE_RES != '0' }}
       run: echo "JSON response is not 0, failing the job." && exit 1
 
-  cleanup-prod-deploy:
+
+  clean-prod-deploy:
     needs: [deploy-prod-web, deploy-prod-admin] # This only runs if the deployments are successful
     runs-on: ubuntu-latest
     steps:
