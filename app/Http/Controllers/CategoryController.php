@@ -21,10 +21,10 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CategoryRequest;
 use App\Model\Category;
 use App\Model\Dropbox;
+use App\Model\Setting;
 use App\Model\User;
 use Illuminate\Http\Request;
 use Storage;
-use App\Model\Setting;
 
 class CategoryController extends Controller
 {

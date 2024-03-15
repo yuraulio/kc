@@ -42,6 +42,7 @@
         "jenssegers/agent": "^2.6",
         "laravel/cashier": "^13.17",
         "laravel/framework": "^10",
+        "laravel/horizon": "^5.23",
         "laravel/legacy-factories": "^1.4",
         "laravel/passport": "^11",
         "laravel/scout": "^10.8",

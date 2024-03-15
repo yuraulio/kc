@@ -12,6 +12,7 @@ use App\Model\Category;
 use App\Model\Event;
 use App\Model\Instructor;
 use App\Model\Media;
+use App\Model\Setting;
 use App\Model\Testimonial;
 use App\Model\Topic;
 use App\Model\User;
@@ -19,7 +20,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-use App\Model\Setting;
 
 class UserController extends Controller
 {
@@ -1051,7 +1051,6 @@ class UserController extends Controller
 
     public function getDropBoxToken()
     {
-
         $setting = Setting::where('key', 'DROPBOX_TOKEN')->firstOrFail();
         $authorizationToken = $setting->value;
 

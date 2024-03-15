@@ -28,11 +28,11 @@ docker-compose.yml
 docker-compose-sail.yml
 storage/*.index*
 *.unison*
-/public/js/app.js
-/public/js/argon_vendors.js
-/public/js/new_cart_app.js
-/public/js/new_cart_app.js.LICENSE.txt
-/public/js/panel_app.js
+public/js/app.js
+public/js/argon_vendors.js
+public/js/new_cart_app.js
+public/js/new_cart_app.js.LICENSE.txt
+public/js/panel_app.js
 /public/new_cart/css/new_cart.css
 /public/theme/assets/css/style_ver.css
 /public/theme/assets/css/style_ver.css.map
@@ -44,7 +44,7 @@ storage/*.index*
 /public/theme/assets/js/front.js
 /public/theme/assets/js/front.js.map
 /public/assets/vendor/MediaManager/*
-/public/mix-manifest.json
+public/mix-manifest.json
 supervisord.conf
 /app/overrides/dompdf
 composer.phar

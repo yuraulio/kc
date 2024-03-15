@@ -66,6 +66,7 @@ class Kernel extends HttpKernel
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+        'horizon.auth.basic' => \App\Http\Middleware\HorizonBasicAuthMiddleware::class,
 
         'preview' => \App\Http\Middleware\Preview::class,
         'static_page' => \App\Http\Middleware\StaticPages::class,

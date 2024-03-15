@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Model\Dropbox;
+use App\Model\Setting;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Storage;
-use App\Model\Setting;
 
 class DropboxController extends Controller
 {

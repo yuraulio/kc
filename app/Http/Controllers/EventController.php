@@ -30,11 +30,11 @@ use App\Services\CreateCertificatesTrainingEventsService;
 use DateTime;
 use Excel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\ImageManagerStatic as Image;
-use Illuminate\Support\Facades\Artisan;
 
 class EventController extends Controller
 {
@@ -545,7 +545,8 @@ class EventController extends Controller
         return view('event.edit', $data);
     }
 
-    public function generateCertificatesManually($eventId){
+    public function generateCertificatesManually($eventId)
+    {
         return response()->json(CreateCertificatesTrainingEventsService::generateCertificates($eventId));
     }
 
