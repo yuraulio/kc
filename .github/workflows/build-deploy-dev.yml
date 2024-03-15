@@ -124,7 +124,7 @@ jobs:
 
 
   clean-dev-deploy:
-    needs: [deploy-dev] # This only runs if the deployment is successful
+    needs: [build-dev, deploy-dev] # This only runs if the deployment is successful
     runs-on: ubuntu-latest
     steps:
     - name: Delete Old Dev Artifacts

@@ -151,7 +151,7 @@ jobs:
 
 
   clean-prod-deploy:
-    needs: [deploy-prod-web, deploy-prod-admin] # This only runs if the deployments are successful
+    needs: [build-prod, deploy-prod-web, deploy-prod-admin] # This only runs if the deployments are successful
     runs-on: ubuntu-latest
     steps:
     - name: Delete Old Prod Artifacts
