@@ -10,11 +10,12 @@ const prepareHeaders = (headers) => {
 
 export default {
   post(route, data, success, error) {
+    const isFormData = data instanceof FormData;
     axios
-      .post(router.route(route), JSON.stringify(data), {
+      .post(router.route(route), isFormData ? data : JSON.stringify(data), {
         headers: prepareHeaders({
           Accept: 'application/json',
-          'Content-Type': 'application/json',
+          'Content-Type': isFormData ? 'multipart/form-data' : 'application/json',
         }),
       })
       .then((response) => {

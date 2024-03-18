@@ -110,8 +110,7 @@ Route::domain(config('app.prefix_new_admin') . config('app.app_domain'))->group(
         Route::resource('media_manager', Admin_api\MediaController::class, ['as' => 'admin'])->only([
             'index', 'store', 'update', 'destroy',
         ]);
-        Route::post('media_manager/upload_image', [MediaController::class, 'uploadImage']);
-        Route::post('media_manager/edit_image', [MediaController::class, 'editImage']);
+
         Route::post('media_manager/upload_reg_file', [MediaController::class, 'uploadRegFile']);
         Route::get('media_manager/files', [MediaController::class, 'files']);
         Route::get('media_manager/getFile/{id}', [MediaController::class, 'getFile']);
@@ -148,8 +147,7 @@ Route::group(['middleware' => ['auth.aboveauthor']], function () {
     Route::resource('media_manager', Admin_api\MediaController::class)->only([
         'index', 'store', 'update', 'destroy',
     ]);
-    Route::post('media_manager/upload_image', [MediaController::class, 'uploadImage']);
-    Route::post('media_manager/edit_image', [MediaController::class, 'editImage']);
+
     Route::post('media_manager/upload_reg_file', [MediaController::class, 'uploadRegFile']);
     Route::get('media_manager/files', [MediaController::class, 'files']);
     Route::get('media_manager/getFile/{id}', [MediaController::class, 'getFile']);

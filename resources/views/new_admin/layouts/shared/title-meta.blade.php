@@ -6,3 +6,6 @@
 <meta name="csrf-token" content="{{ csrf_token() }}">
 <!-- App favicon -->
 <link rel="shortcut icon" href="../admin_assets/images/favicon.ico">
+@auth
+<meta name="api-token" content="{{ Auth::user()->getAccessToken() }}">
+@endauth

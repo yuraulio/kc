@@ -776,4 +776,14 @@ class Admin extends Authenticatable implements Auditable
     {
         return "$this->firstname $this->lastname";
     }
+
+    public function getAccessToken()
+    {
+        $token = $this->tokens()->where('revoked', false)->where('expires_at', '>', Carbon::now())->first();
+        if ($token) {
+            return $token->getPersonalAccessTokenResult()->accessToken;
+        }
+
+        return $this->createToken('auth_token')->accessToken;
+    }
 }
