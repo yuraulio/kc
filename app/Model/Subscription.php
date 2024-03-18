@@ -264,7 +264,7 @@ class Subscription extends Model
 
         $this->stripe_status = $subscription->status;
 
-        if($subscription->status == 'active' && $subscription->id == 1682){
+        if ($subscription->status == 'active' && $subscription->id == 1682) {
             $this->status = 1;
         }
 

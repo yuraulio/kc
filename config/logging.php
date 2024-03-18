@@ -58,6 +58,13 @@ return [
             'days' => 14,
         ],
 
+        'invoices_log' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/invoices_log.log'),
+            'level' => 'debug',
+            'days' => 14,
+        ],
+
         'daily_errors_not_existing_pages' => [
             'driver' => 'daily',
             'path' => storage_path('logs/not_existing_pages/laravel.log'),

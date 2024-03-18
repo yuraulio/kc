@@ -114,7 +114,7 @@ class Cashier
         }
 
         return new StripeClient(array_merge([
-            'api_key' => config('services.stripe.key') ?? $options['api_key'] ?? $stripeKey,
+            'api_key' => config('services.stripe.secret') ?? $options['api_key'] ?? $stripeKey,
             'stripe_version' => static::STRIPE_VERSION,
         ], $options));
     }
