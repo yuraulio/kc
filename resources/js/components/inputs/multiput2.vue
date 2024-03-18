@@ -324,7 +324,7 @@ export default {
     return {
       loadstart: {},
       editorData: this.value,
-      tinymce: 'c0ejsfjjn0et2fa1wtjop2uecm8srtc98of66zu5snbxbrux',
+      tinymce: process.env.MIX_PUSHER_TINYMCE,
     };
   },
   methods: {

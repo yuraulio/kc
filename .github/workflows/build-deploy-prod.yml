@@ -48,6 +48,9 @@ jobs:
     
     - name: Install dependencies
       id: install-prod-deps
+      env:
+        MIX_APP_URL: ${{ vars.MIX_APP_URL_PROD }}
+        MIX_PUSHER_TINYMCE: ${{ secrets.MIX_PUSHER_TINYMCE }}
       run: |
         composer install --prefer-dist --no-progress
         cd resources/admin
