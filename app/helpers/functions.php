@@ -1332,7 +1332,7 @@ if (!function_exists('update_dropbox_api')) {
                 [
                     'form_params' => [
                         'grant_type' =>  'refresh_token',
-                        'refresh_token' => env('DROPBOX_REFRESH_TOKEN'),
+                        'refresh_token' => config('filesystems.disks.dropbox.refresh_token'),
                     ],
                 ]
             );

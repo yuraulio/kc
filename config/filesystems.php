@@ -103,6 +103,7 @@ return [
             'accessToken' => env('DROPBOX_TOKEN'),
             'appSecret' => env('DROPBOX_APPKEY'),
             'secret' => env('DROPBOX_SECRET'),
+            'refresh_token' => env('DROPBOX_REFRESH_TOKEN', 'ye2tGeh1iIQAAAAAAAAAAYW21MH3QmUH-PE2ZCfarQpTK2TZ5MKOS5WJccsMPKUq'),
         ],
 
     ],
