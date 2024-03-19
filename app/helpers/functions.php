@@ -1320,12 +1320,13 @@ if (!function_exists('get_menu')) {
 if (!function_exists('update_dropbox_api')) {
     function update_dropbox_api() : void
     {
-        // try {
-            $t = base64_encode(config('filesystems.disks.dropbox.appSecret') . ':' . config('filesystems.disks.dropbox.secret'));
+        $t = base64_encode(config('filesystems.disks.dropbox.appSecret') . ':' . config('filesystems.disks.dropbox.secret'));
 
-            $endpoint = 'https://api.dropbox.com/oauth2/token';
-            $client = new \GuzzleHttp\Client(['headers' => ['Content-Type'=> 'application/json', 'Authorization' => 'Basic ' . $t]]);
+        $endpoint = 'https://api.dropbox.com/oauth2/token';
+        $client = new \GuzzleHttp\Client(['headers' => ['Content-Type'=> 'application/json', 'Authorization' => 'Basic ' . $t]]);
+        dump(config('filesystems.disks.dropbox'));
 
+        try {
             $response = $client->request(
                 'POST',
                 $endpoint,
@@ -1340,24 +1341,25 @@ if (!function_exists('update_dropbox_api')) {
             $statusCode = $response->getStatusCode();
             $content = $response->getBody()->getContents();
             $accessToken = json_decode($content, true);
-
+            // dd($accessToken);
             if (isset($accessToken['access_token']) && $accessToken['access_token']) {
                 //$client = new Client();
                 //$client->setAccessToken($accessToken['access_token']);
                 $setting = Setting::where('key', 'DROPBOX_TOKEN')->firstOrFail();
                 $setting->value = $accessToken['access_token'];
                 $setting->save();
-                //dd($client);
+                // dd($client);
             }
-        // } catch(\Exception $e) {
-        //     $user = User::first();
-        //     if ($user) {
-        //         if (strpos($e->getMessage(), 'app is disabled') === false) {
-        //             $user->notify(new ErrorSlack('API Dropbox failed. Sometimes happens. Don\'t worry. Error message: ' . $e->getMessage()));
-        //             $user->notify(new ErrorSlack($e));
-        //         }
-        //     }
-        // }
+
+        } catch(\Exception $e) {
+            $user = User::first();
+            if ($user) {
+                if (strpos($e->getMessage(), 'app is disabled') === false) {
+                    $user->notify(new ErrorSlack('API Dropbox failed. Sometimes happens. Don\'t worry. Error message: ' . $e->getMessage()));
+                    $user->notify(new ErrorSlack($e));
+                }
+            }
+        }
     }
 }
 
