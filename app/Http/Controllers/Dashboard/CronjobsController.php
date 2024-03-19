@@ -600,7 +600,7 @@ class CronjobsController extends Controller
         $now_date = now();
         $now_date = date_format($now_date, 'Y-m-d');
 
-        if ((strtotime(env('BLACKFRIDAY')) == strtotime($now_date)) || (strtotime(env('CYBERMONDAY')) == strtotime($now_date))) {
+        if ((strtotime(config('services.promotions.BLACKFRIDAY')) == strtotime($now_date)) || (strtotime(config('services.promotions.CYBERMONDAY')) == strtotime($now_date))) {
             $abandoneds = CartCache::where('send_email', '=', 1)->get();
 
             foreach ($abandoneds as $abandoned) {

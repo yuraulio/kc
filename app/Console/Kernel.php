@@ -95,7 +95,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        if (env('IS_DEMO')) {
+        if (config('app.IS_DEMO')) {
             $schedule->command('db:seed')->daily();
         }
 

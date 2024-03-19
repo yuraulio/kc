@@ -52,7 +52,7 @@ class ForgotPasswordController extends Controller
     /*public function sendResetLinkEmail(\Illuminate\Http\Request $request)
     {
         $this->validateEmail($request);
-        if (env('IS_DEMO')){
+        if (config('app.IS_DEMO')){
             return redirect()->back()->withInfo('Emails are not sent in the demo environment.');
         }
 

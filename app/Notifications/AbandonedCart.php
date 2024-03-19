@@ -48,11 +48,11 @@ class AbandonedCart extends Notification
         $now_date = now();
         $now_date = date_format($now_date, 'Y-m-d');
 
-        if (strtotime(env('BLACKFRIDAY')) == strtotime($now_date)) {
+        if (strtotime(config('services.promotions.BLACKFRIDAY')) == strtotime($now_date)) {
             if ($this->second) {
                 $template = 'emails.user.abandoned_blackfriday_email';
             }
-        } elseif (strtotime(env('CYBERMONDAY')) == strtotime($now_date)) {
+        } elseif (strtotime(config('services.promotions.CYBERMONDAY')) == strtotime($now_date)) {
             if ($this->second) {
                 $template = 'emails.user.abandoned_cybermonday_email';
             }

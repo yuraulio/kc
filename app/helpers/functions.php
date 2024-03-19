@@ -651,7 +651,7 @@ if (!function_exists('twitter_get_auth_token_v1')) {
     function twitter_get_auth_token_v1()
     {
         $oauthParams = [
-            'oauth_callback' => env('MIX_APP_URL') . '/myaccount/share-twitter',
+            'oauth_callback' => config('app.MIX_APP_URL') . '/myaccount/share-twitter',
             'oauth_consumer_key' => env('consumer_key'), // consumer key from your twitter app: https://apps.twitter.com
             'oauth_nonce' => md5(uniqid()),
             'oauth_signature_method' => 'HMAC-SHA1',
@@ -746,8 +746,8 @@ if (!function_exists('instagram_posts')) {
     function instagram_posts($limit = 15)
     {
         $post = [];
-        if (env('instagram_profile')) {
-            $post = \Dymantic\InstagramFeed\InstagramFeed::for(env('instagram_profile'), $limit, 'posts');
+        if (config('services.instagram.profile')) {
+            $post = \Dymantic\InstagramFeed\InstagramFeed::for(config('services.instagram.profile'), $limit, 'posts');
         }
 
         return $post;
@@ -759,8 +759,8 @@ if (!function_exists('instagram_stories')) {
     {
         $stories = [];
 
-        if (env('instagram_profile')) {
-            $stories = \Dymantic\InstagramFeed\InstagramFeed::for(env('instagram_profile'), $limit, 'stories');
+        if (config('services.instagram.profile')) {
+            $stories = \Dymantic\InstagramFeed\InstagramFeed::for(config('services.instagram.profile'), $limit, 'stories');
         }
 
         return $stories;
@@ -1348,7 +1348,6 @@ if (!function_exists('update_dropbox_api')) {
             $setting->save();
             // dd($client);
         }
-
     }
 }
 

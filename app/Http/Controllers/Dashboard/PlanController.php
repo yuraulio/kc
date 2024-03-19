@@ -59,7 +59,7 @@ class PlanController extends Controller
     public function store(Request $request)
     {
         //dd($request->all());
-        //$skey = env('STRIPE_SECRET');
+        //$skey = config('services.stripe.secret');
         //$stripe = Stripe::make($skey);
 
         $paymentMethod = PaymentMethod::find(2);
@@ -73,10 +73,10 @@ class PlanController extends Controller
 
                 $eventsAttach[] = $eventId;
 
-                //$secretKey = env('PAYMENT_PRODUCTION') ? $event->paymentMethod->first()->processor_options['secret_key'] : $event->paymentMethod->first()->test_processor_options['secret_key'];
+                //$secretKey = config('app.PAYMENT_PRODUCTION') ? $event->paymentMethod->first()->processor_options['secret_key'] : $event->paymentMethod->first()->test_processor_options['secret_key'];
                 //session()->put('payment_method',$event->paymentMethod->first()->id);
 
-                $secretKey = env('PAYMENT_PRODUCTION') ? $paymentMethod->processor_options['secret_key'] : $paymentMethod->test_processor_options['secret_key'];
+                $secretKey = config('app.PAYMENT_PRODUCTION') ? $paymentMethod->processor_options['secret_key'] : $paymentMethod->test_processor_options['secret_key'];
                 session()->put('payment_method', $paymentMethod->id);
 
                 Stripe::setApiKey($secretKey);
@@ -185,7 +185,7 @@ class PlanController extends Controller
 
     public function removePlan(Request $request)
     {
-        //$skey = env('STRIPE_SECRET');
+        //$skey = config('services.stripe.secret');
         //$stripe = Stripe::make($skey);
 
         $plan = DB::table('plans')->where('id', $request->id)->first();

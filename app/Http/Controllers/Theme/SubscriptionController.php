@@ -36,7 +36,7 @@ class SubscriptionController extends Controller
         $event = Event::where('title', $event)->first();
         session()->put('payment_method', $this->paymentMethod->id);
 
-        $secretKey = env('PAYMENT_PRODUCTION') ? $this->paymentMethod->processor_options['secret_key'] : $this->paymentMethod->test_processor_options['secret_key'];
+        $secretKey = config('app.PAYMENT_PRODUCTION') ? $this->paymentMethod->processor_options['secret_key'] : $this->paymentMethod->test_processor_options['secret_key'];
         Stripe::setApiKey($secretKey);
 
         $user = Auth::user();
@@ -47,7 +47,7 @@ class SubscriptionController extends Controller
         $data['cur_user'] = $user;
         $data['eventFree'] = false;
 
-        $data['stripe_key'] = env('PAYMENT_PRODUCTION') ? $this->paymentMethod->processor_options['key'] :
+        $data['stripe_key'] = config('app.PAYMENT_PRODUCTION') ? $this->paymentMethod->processor_options['key'] :
                                                                 $this->paymentMethod->test_processor_options['key'];
 
         if (Session::has('pay_seats_data')) {
@@ -149,7 +149,7 @@ class SubscriptionController extends Controller
         $event = Event::where('title', $event)->first();
         session()->put('payment_method', $this->paymentMethod->id);
 
-        $secretKey = env('PAYMENT_PRODUCTION') ? $this->paymentMethod->processor_options['secret_key'] : $this->paymentMethod->test_processor_options['secret_key'];
+        $secretKey = config('app.PAYMENT_PRODUCTION') ? $this->paymentMethod->processor_options['secret_key'] : $this->paymentMethod->test_processor_options['secret_key'];
         Stripe::setApiKey($secretKey);
 
         $user->asStripeCustomer();
@@ -159,7 +159,7 @@ class SubscriptionController extends Controller
         $data['cur_user'] = $user;
         $data['eventFree'] = false;
 
-        $data['stripe_key'] = env('PAYMENT_PRODUCTION') ? $this->paymentMethod->processor_options['key'] :
+        $data['stripe_key'] = config('app.PAYMENT_PRODUCTION') ? $this->paymentMethod->processor_options['key'] :
                                                                 $this->paymentMethod->test_processor_options['key'];
 
         if (Session::has('pay_seats_data')) {
@@ -251,7 +251,7 @@ class SubscriptionController extends Controller
         $plan = Plan::where('name', $request->plan)->first();
         $event = Event::where('title', $request->event)->first();
 
-        if (env('PAYMENT_PRODUCTION')) {
+        if (config('app.PAYMENT_PRODUCTION')) {
             Stripe::setApiKey($this->paymentMethod->processor_options['secret_key']);
         } else {
             Stripe::setApiKey($this->paymentMethod->test_processor_options['secret_key']);
@@ -480,7 +480,7 @@ class SubscriptionController extends Controller
         $plan = Plan::where('name', $input['plan'])->first();
         $event = Event::where('title', html_entity_decode($input['event']))->first();
 
-        if (env('PAYMENT_PRODUCTION')) {
+        if (config('app.PAYMENT_PRODUCTION')) {
             Stripe::setApiKey($this->paymentMethod->processor_options['secret_key']);
         } else {
             Stripe::setApiKey($this->paymentMethod->test_processor_options['secret_key']);
@@ -603,7 +603,7 @@ class SubscriptionController extends Controller
         $plan = Plan::where('name', $plan)->first();
         $event = Event::where('title', $event)->first();
 
-        if (env('PAYMENT_PRODUCTION')) {
+        if (config('app.PAYMENT_PRODUCTION')) {
             Stripe::setApiKey($this->paymentMethod->processor_options['secret_key']);
         } else {
             Stripe::setApiKey($this->paymentMethod->test_processor_options['secret_key']);
@@ -889,7 +889,7 @@ class SubscriptionController extends Controller
         $sub_id_stripe = $subscription['stripe_id'];
 
         $paymentMethod = PaymentMethod::find(2);
-        if (env('PAYMENT_PRODUCTION')) {
+        if (config('app.PAYMENT_PRODUCTION')) {
             Stripe::setApiKey($paymentMethod->processor_options['secret_key']);
         } else {
             Stripe::setApiKey($paymentMethod->test_processor_options['secret_key']);

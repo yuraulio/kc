@@ -466,11 +466,11 @@ class CertificateController extends Controller
     public function view_results($id, $title = '')
     {
         $image = $id;
-        $img = env('MIX_APP_URL') . '/cert/' . $image;
+        $img = config('app.MIX_APP_URL') . '/cert/' . $image;
 
         $og_image = explode('.', $image);
 
-        $og_image = env('MIX_APP_URL') . '/cert/' . $og_image[0] . '_og_version.jpg';
+        $og_image = config('app.MIX_APP_URL') . '/cert/' . $og_image[0] . '_og_version.jpg';
 
         return view('exams.results_view', compact('img', 'title', 'og_image'));
     }

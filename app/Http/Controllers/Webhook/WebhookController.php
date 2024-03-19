@@ -310,7 +310,7 @@ class WebhookController extends BaseWebhookController
 
                 $data = $payload['data']['object'];
 
-                if (env('PAYMENT_PRODUCTION')) {
+                if (config('app.PAYMENT_PRODUCTION')) {
                     //Stripe::setApiKey($user->events->where('id',$eventId)->first()->paymentMethod->first()->processor_options['secret_key']);
                     //Stripe::setApiKey(Event::findOrFail($eventId)->paymentMethod->first()->processor_options['secret_key']);
                     Stripe::setApiKey($paymentMethod->processor_options['secret_key']);
@@ -540,7 +540,7 @@ class WebhookController extends BaseWebhookController
 
         $data = $payload['data']['object'];
 
-        if(env('PAYMENT_PRODUCTION')){
+        if(config('app.PAYMENT_PRODUCTION')){
             Stripe::setApiKey($subscription->event->first()->paymentMethod->first()->processor_options['secret_key']);
         }else{
             Stripe::setApiKey($subscription->event->first()->paymentMethod->first()->test_processor_options['secret_key']);
@@ -701,7 +701,7 @@ class WebhookController extends BaseWebhookController
             $subscriptionPaymentMethod = $user->subscriptionEvents()->where('subscription_id', $subscription->id)->first();
             $paymentMethod = PaymentMethod::find($subscriptionPaymentMethod->pivot->payment_method);
             $eventId = $subscription->event->first()->pivot->event_id;
-            if (env('PAYMENT_PRODUCTION')) {
+            if (config('app.PAYMENT_PRODUCTION')) {
                 //Stripe::setApiKey($subscription->event->first()->paymentMethod->first()->processor_options['secret_key']);
                 //Stripe::setApiKey(Event::findOrFail($eventId)->paymentMethod->first()->processor_options['secret_key']);
                 Stripe::setApiKey($paymentMethod->processor_options['secret_key']);
@@ -1074,7 +1074,7 @@ class WebhookController extends BaseWebhookController
             $subscriptionCheckout = 0;
         }
 
-        if (env('PAYMENT_PRODUCTION')) {
+        if (config('app.PAYMENT_PRODUCTION')) {
             //Stripe::setApiKey($user->events->where('id',$eventId)->first()->paymentMethod->first()->processor_options['secret_key']);
             //Stripe::setApiKey(Event::findOrFail($eventId)->paymentMethod->first()->processor_options['secret_key']);
             Stripe::setApiKey($paymentMethod->processor_options['secret_key']);

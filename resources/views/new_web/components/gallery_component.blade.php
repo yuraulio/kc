@@ -110,7 +110,7 @@
             </div>
 
             <div class="view-more">
-                <a href="{{env('NEW_PAGES_LINK') . '/' .  $gallery["gallery_link"] }}">{{ $gallery["gallery_link_text"] }}</a>
+                <a href="{{config('app.NEW_PAGES_LINK') . '/' .  $gallery["gallery_link"] }}">{{ $gallery["gallery_link_text"] }}</a>
             </div>
 
         @endif

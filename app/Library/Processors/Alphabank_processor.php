@@ -32,11 +32,11 @@ class Alphabank_processor
         }
 
         $sbt_data = [];
-        $sbt_data['mid'] = env('PAYMENT_PRODUCTION') ? $data['payment_options']['mid'] : $data['test_payment_options']['mid'];
-        $sbt_data['shared_secret_key'] = env('PAYMENT_PRODUCTION') ? $data['payment_options']['shared_secret_key'] : $data['test_payment_options']['shared_secret_key'];
-        $sbt_data['currency'] = env('PAYMENT_PRODUCTION') ? $data['payment_options']['currency'] : $data['test_payment_options']['currency'];
-        $sbt_data['lang'] = env('PAYMENT_PRODUCTION') ? $data['payment_options']['lang'] : $data['test_payment_options']['lang'];
-        $sbt_data['orderid'] = env('PAYMENT_PRODUCTION') ? 'KCORDTN0' . $data['order_details']['id'] : 'KCORDTN' . $data['order_details']['id']; //KCORDTN0 live
+        $sbt_data['mid'] = config('app.PAYMENT_PRODUCTION') ? $data['payment_options']['mid'] : $data['test_payment_options']['mid'];
+        $sbt_data['shared_secret_key'] = config('app.PAYMENT_PRODUCTION') ? $data['payment_options']['shared_secret_key'] : $data['test_payment_options']['shared_secret_key'];
+        $sbt_data['currency'] = config('app.PAYMENT_PRODUCTION') ? $data['payment_options']['currency'] : $data['test_payment_options']['currency'];
+        $sbt_data['lang'] = config('app.PAYMENT_PRODUCTION') ? $data['payment_options']['lang'] : $data['test_payment_options']['lang'];
+        $sbt_data['orderid'] = config('app.PAYMENT_PRODUCTION') ? 'KCORDTN0' . $data['order_details']['id'] : 'KCORDTN' . $data['order_details']['id']; //KCORDTN0 live
         //$sbt_data['orderid'] = 'KCORDT'. $data['order_details']['id']; //KCORDTN
         $sbt_data['payment_method_id'] = $data['order_details']['payment_method_id'];
 
@@ -230,7 +230,7 @@ class Alphabank_processor
         if (empty($payment_method_details)) {
             //$retdata['error'] = 'the order has been handled correctly by the processor but we cant match this to a payment method on our system';
         } else {
-            $payment_options = env('PAYMENT_PRODUCTION') ? $payment_method_details['processor_options'] : $payment_method_details['test_processor_options'];
+            $payment_options = config('app.PAYMENT_PRODUCTION') ? $payment_method_details['processor_options'] : $payment_method_details['test_processor_options'];
            // dd($payment_options);
             $posted_data = $_POST; // submitted by the paycenter
             $order_id = $transaction_id; //$posted_data['mid'];

@@ -55,7 +55,7 @@
                                             $slug = '';
                                         }
                                     ?>
-                                    <h2><a href="{{env('NEW_PAGES_LINK') . '/' . $slug }}">{{ $row->title}}</a></h2>
+                                    <h2><a href="{{config('app.NEW_PAGES_LINK') . '/' . $slug }}">{{ $row->title}}</a></h2>
                                     <div class="bottom">
 
                                         <?php
@@ -133,7 +133,7 @@
                                             $slug = '';
                                         }
                                     ?>
-                                    <h2><a href="{{env('NEW_PAGES_LINK') . '/' .  $slug }}">{{ $row->title}}</a></h2>
+                                    <h2><a href="{{config('app.NEW_PAGES_LINK') . '/' .  $slug }}">{{ $row->title}}</a></h2>
                                     <div class="bottom">
 
                                         <?php

@@ -77,7 +77,7 @@
                 <li class="menu-title">Knowledge</li>
 
                 <li>
-                    <a href="{{ env("KNOWLEDGE_URL") }}">
+                    <a href="{{ config("app.KNOWLEDGE_URL") }}">
                         <i data-feather="book"></i>
                         <span> Knowledge pages </span>
                     </a>

@@ -18,7 +18,7 @@ class SitemapXmlController extends Controller
      */
     public function index()
     {
-        $appUrl = env('APP_URL');
+        $appUrl = config('app.url');
         if ($appUrl[-1] !== '/') {
             $appUrl .= '/';
         }

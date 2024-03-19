@@ -164,8 +164,8 @@ class UserController extends Controller
         if ($request->hasHeader('auth-sms')) {
             $cookie_value = base64_encode('auth-api-' . decrypt($request->header('auth-sms')));
         }
-        $this->token = env('token');
-        $this->secretId = env('secret_key');
+        $this->token = config('services.sms.token');
+        $this->secretId = config('services.sms.secret_key');
         $cookieSms = $user->cookiesSMS()->where('coockie_value', $cookie_value)->first();
 
         if (!$cookieSms->sms_verification && $user->mobile != '') {

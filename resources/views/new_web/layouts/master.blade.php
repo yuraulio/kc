@@ -210,7 +210,7 @@
         @include('theme.layouts.flash_notifications')
         @yield('scripts')
 
-        @if(strtotime(date('Y-m-d')) == strtotime(env('BLACKFRIDAY')))
+        @if(strtotime(date('Y-m-d')) == strtotime(config('services.promotions.BLACKFRIDAY')))
             <script src="{{cdn('theme/assets/blackfriday/blackfriday.js')}}"> </script>
         @endif
 

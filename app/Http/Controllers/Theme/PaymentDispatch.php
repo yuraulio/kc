@@ -163,7 +163,7 @@ class PaymentDispatch extends Controller
                     //in case of curl connection we will call a library that will handle the specifics for each processor
 
                     $data['payment_config'] = $data['payment_method_details']['processor_config'];
-                    $data['payment_options'] = env('PAYMENT_PRODUCTION') ? $data['payment_method_details']['processor_options'] : $data['payment_method_details']['test_processor_options'];
+                    $data['payment_options'] = config('app.PAYMENT_PRODUCTION') ? $data['payment_method_details']['processor_options'] : $data['payment_method_details']['test_processor_options'];
                     $data['test_payment_config'] = $data['payment_method_details']['processor_config'];
                     $data['test_payment_options'] = $data['payment_method_details']['test_processor_options'];
 
@@ -271,7 +271,7 @@ class PaymentDispatch extends Controller
         if ($data['payment_method_details']) {
             $data['payment_method_details'] = $data['payment_method_details']->toArray();
             $data['payment_config'] = $data['payment_method_details']['processor_config'];
-            $data['payment_options'] = env('PAYMENT_PRODUCTION') ? $data['payment_method_details']['processor_options'] : $data['payment_method_details']['test_processor_options'];
+            $data['payment_options'] = config('app.PAYMENT_PRODUCTION') ? $data['payment_method_details']['processor_options'] : $data['payment_method_details']['test_processor_options'];
 
             return view('admin.payment_methods.processor_submit_tpls.' . $data['payment_config']['submit_tpl'], $data);
         } else {

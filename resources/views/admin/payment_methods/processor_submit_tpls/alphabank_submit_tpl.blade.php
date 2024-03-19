@@ -6,9 +6,9 @@
 	</head>
 	<body>
 		<div style="display: none;">
-		
-			<?php //if ($payment_method_details['status'] == 1) : 
-				if (env('PAYMENT_PRODUCTION') != false) :
+
+			<?php //if ($payment_method_details['status'] == 1) :
+				if (config('app.PAYMENT_PRODUCTION') != false) :
 			?>
 			<form method="post" name="paymentForm" id="paymentForm" action="<?php echo $payment_options['productionURL']; ?>">
 			<?php else : ?>

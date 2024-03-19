@@ -58,7 +58,7 @@ class CartController extends Controller
 
         $delivery = Delivery::find($eventInfo['delivery']);
 
-        $exceptInstallmentsDates = [env('BLACKFRIDAY'), env('CYBERMONDAY')];
+        $exceptInstallmentsDates = [config('services.promotions.BLACKFRIDAY'), config('services.promotions.CYBERMONDAY')];
 
         if (!in_array(date('d-m-Y'), $exceptInstallmentsDates)) {
             if ($delivery['installments'] != null && $delivery['installments'] != 0) {

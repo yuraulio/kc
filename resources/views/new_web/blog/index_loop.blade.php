@@ -36,7 +36,7 @@
     <div class="blogpagex item">
         <div class="">
             <div class='text-center blogpagex-blog-image'>
-                <a href="{{env("NEW_PAGES_LINK") . "/$source/$post->slug"}}">
+                <a href="{{config("app.NEW_PAGES_LINK") . "/$source/$post->slug"}}">
                     {{--<img src="{{$metaData["meta_image"]->url ?? ''}}" alt="{{$metaData["meta_image"]->alt_text ?? ''}}">--}}
 
 
@@ -49,7 +49,7 @@
         <div class="bottom">
             <div class="d-block">
               @forelse($post->subcategories as $category)
-              <a class="me-2" href="{{env("NEW_PAGES_LINK") . "/$source?c=$category->id"}}">{{ $category->title }}</a>
+              <a class="me-2" href="{{config("app.NEW_PAGES_LINK") . "/$source?c=$category->id"}}">{{ $category->title }}</a>
               @empty
               Uncategorized
               @endforelse
@@ -64,7 +64,7 @@
             @endif
         </div>
         <div class="blog-list-title">
-            <a href="{{env("NEW_PAGES_LINK") . "/$source/$post->slug"}}"><h2>{!!$title!!}</h2></a>
+            <a href="{{config("app.NEW_PAGES_LINK") . "/$source/$post->slug"}}"><h2>{!!$title!!}</h2></a>
             {{-- <p>{!! mb_strimwidth($featureData["feature_description"] ?? '', 0, 350, "...") !!}</p> --}}
         </div>
     </div>
@@ -74,7 +74,7 @@
         <div class="row">
             <div class="col-md-6">
                 <div class='text-center blogpagex-blog-image'>
-                    <a href="{{env("NEW_PAGES_LINK") . "/$source/$post->slug"}}">
+                    <a href="{{config("app.NEW_PAGES_LINK") . "/$source/$post->slug"}}">
                         {{--<img src="{{$metaData["meta_image"]->url ?? ''}}" alt="{{$metaData["meta_image"]->alt_text ?? ''}}">--}}
                         <img loading="lazy" width="{{ $metaData["meta_image"] ? $metaData["meta_image"]->width : ''}}" height="{{$metaData["meta_image"]->height}}" class="resp-img" src="{{get_image($metaData["meta_image"]->full_path)}}" alt="{{$metaData["meta_image"]->alt_text ?? ''}}" title="{{$metaData["meta_image"]->alt_text ?? ''}}">
                     </a>
@@ -84,7 +84,7 @@
                 <div class="bottom">
                     <div class="duration">
                         @forelse($post->subcategories as $category)
-                            <a class="me-2" href="{{env("NEW_PAGES_LINK") . "/$source?c=$category->id"}}">{{ $category->title }}</a>
+                            <a class="me-2" href="{{config("app.NEW_PAGES_LINK") . "/$source?c=$category->id"}}">{{ $category->title }}</a>
                         @empty
                             Uncategorized
                         @endforelse
@@ -92,7 +92,7 @@
                     </div>
                 </div>
                 <div class="color-reset">
-                    <a href="{{env("NEW_PAGES_LINK") . "/$source/$post->slug"}}"><h2>{!!$title!!}</h2></a>
+                    <a href="{{config("app.NEW_PAGES_LINK") . "/$source/$post->slug"}}"><h2>{!!$title!!}</h2></a>
                     {{-- <p>{!! mb_strimwidth($featureData["feature_description" ?? ''], 0, 350, "...") !!}</p> --}}
                 </div>
             </div>
@@ -112,7 +112,7 @@
                 <div class="bottom">
                     <div class="duration">
                         @forelse($post->subcategories as $category)
-                            <a class="me-2" href="{{env("NEW_PAGES_LINK") . "/$source?c=$category->id"}}">{{ $category->title }}</a>
+                            <a class="me-2" href="{{config("app.NEW_PAGES_LINK") . "/$source?c=$category->id"}}">{{ $category->title }}</a>
                         @empty
                             Uncategorized
                         @endforelse
@@ -120,7 +120,7 @@
                     </div>
                 </div>
                 <div class="">
-                    <h2 class=''><a href="{{env("NEW_PAGES_LINK") . "/$source/$post->slug"}}">{{$post->title ?? ''}}</a></h2>
+                    <h2 class=''><a href="{{config("app.NEW_PAGES_LINK") . "/$source/$post->slug"}}">{{$post->title ?? ''}}</a></h2>
                     {{-- <p>{!! mb_strimwidth($featureData["feature_description" ?? ''], 0, 350, "...") !!}</p> --}}
                 </div>
             </div>

@@ -52,7 +52,7 @@ class ConvertWebp extends Command
                 $destination = '/' . str_replace($ext, 'webp', $source);
 
                 try {
-                    $a = Image::make(public_path('/awards/') . $source)->stream('webp', env('WEBP_IMAGE_QUALITY'));
+                    $a = Image::make(public_path('/awards/') . $source)->stream('webp', config('app.WEBP_IMAGE_QUALITY'));
                     Storage::disk('awards')->put($destination, $a, 'public');
                 } catch(\Exception $e) {
                 }
@@ -77,7 +77,7 @@ class ConvertWebp extends Command
                     $destination = '/' . str_replace($ext, 'webp', $source);
 
                     try {
-                        $a = Image::make(public_path('/uploads/') . $source)->stream('webp', env('WEBP_IMAGE_QUALITY'));
+                        $a = Image::make(public_path('/uploads/') . $source)->stream('webp', config('app.WEBP_IMAGE_QUALITY'));
                         Storage::disk('public')->put($destination, $a, 'public');
                     } catch(\Exception $e) {
                     }
@@ -101,7 +101,7 @@ class ConvertWebp extends Command
                         $destination = '/' . str_replace($ext, 'webp', $source);
 
                         try {
-                            $a = Image::make(public_path('/uploads/') . $source)->stream('webp', env('WEBP_IMAGE_QUALITY'));
+                            $a = Image::make(public_path('/uploads/') . $source)->stream('webp', config('app.WEBP_IMAGE_QUALITY'));
                             Storage::disk('public')->put($destination, $a, 'public');
                         } catch(\Exception $e) {
                         }
@@ -119,7 +119,7 @@ class ConvertWebp extends Command
                 $destination = '/' . str_replace($ext, 'webp', $source);
 
                 try {
-                    $a = Image::make(public_path('/uploads/') . $source)->stream('webp', env('WEBP_IMAGE_QUALITY'));
+                    $a = Image::make(public_path('/uploads/') . $source)->stream('webp', config('app.WEBP_IMAGE_QUALITY'));
                     Storage::disk('public')->put($destination, $a, 'public');
                 } catch(\Exception $e) {
                 }

@@ -4,7 +4,7 @@ $social_media = get_social_media();
 
 
    <footer id="footer">
-    @if(strtotime(date('Y-m-d')) == strtotime(env('BLACKFRIDAY')))
+    @if(strtotime(date('Y-m-d')) == strtotime(config('services.promotions.BLACKFRIDAY')))
     {{--@include('theme.blackfriday.blackfriday')--}}
     @endif
     <div class="container">

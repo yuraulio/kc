@@ -83,7 +83,7 @@
                                         ?>
 
                                             @if($instructor['status'])
-                                                <a href="{{env('NEW_PAGES_LINK') . '/' .  $instructor['slugable']['slug']}}">
+                                                <a href="{{config('app.NEW_PAGES_LINK') . '/' .  $instructor['slugable']['slug']}}">
                                                     <span class="custom-tooltip">{{ $instructor['title'] }} {{$instructor['subtitle']}}</span>
                                                     <img loading="lazy" alt="{{ $instructor['title']}} {{$instructor['subtitle']}}" title="{{ $instructor['title']}} {{$instructor['subtitle']}}" src="{{ cdn(get_image($instructor['mediable'],'instructors-small')) }}" width="{{ $width }}" height="{{ $height }}"/>
                                                 </a>
