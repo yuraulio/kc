@@ -2852,11 +2852,23 @@ $show_popup = isset($uri['show_popup']) ? $uri['show_popup'] : 0;
                                                            value="{{ old('certificate_icon_link', isset($course_certification_icon) && $course_certification_icon != null && isset($course_certification_icon['link']) ? $course_certification_icon['link'] : '') }}">
                                                 </div>
 
+                                                @if(in_array($info['delivery'],[App\Model\Delivery::CLASSROM_TRAINING, App\Model\Delivery::CORPORATE_TRAINING]))
 
+                                                  @php
+                                                  $disabled = 'disabled';
+                                                  $finishClassDuration = $event->finishClassDuration();
+                                                  $diff = Carbon::now()->diff($finishClassDuration);
+                                                  if ($diff->d < 2 && $diff->y == 0 && $diff->m == 0) {
+                                                    $disabled = '';
+                                                  }
+                                                  @endphp
 
-
-
-
+                                                  <div class="col-1 col-md-auto col-lg-auto align-self-center">
+                                                    <button {{ $disabled }} class="btn btn-info btn-sm" id="generate-certificates" data-days="{{ Carbon::now()->diffInDays($finishClassDuration) }}">Generate Certificates</button>
+                                                  </div>
+                                                @else
+                                                  {{ $info['delivery'] }}
+                                                @endif
 
                                             </div>
                                         </div>
@@ -4766,6 +4778,42 @@ $show_popup = isset($uri['show_popup']) ? $uri['show_popup'] : 0;
             $('#elearning_exams_wrapper').addClass('d-none')
         }
     })
+
+    $(document).on('click', '#generate-certificates', function(event) {
+      event.preventDefault();
+
+      let days = $(this).attr('data-days');
+      let extra_text = '';
+      if(days > 2){
+        extra_text = `There are still ${days} days left until the last lesson ends.`;
+      }
+      if(confirm('Are you sure you want to create certificates? ' + extra_text)){
+        $.ajax({
+          headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          },
+          type: 'GET',
+          url: '/admin/events/generate-certificates-manually/' + "{{ $event->id }}",
+          success: function(data) {
+            if(data.not_ready){
+              window.swal.fire({
+                type: 'info',
+                title: 'Certificates not ready',
+                text: '',
+                footer: ''
+              });
+            }else{
+              window.swal.fire({
+                type: 'info',
+                title: data.total + ' certificates generated',
+                text: '',
+                footer: ''
+              });
+            }
+          }
+        });
+      }
+    });
 
     $(document).on('click', '#calculate-total-hours-btn', function() {
         $.ajax({

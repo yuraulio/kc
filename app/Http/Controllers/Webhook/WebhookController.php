@@ -477,6 +477,8 @@ class WebhookController extends BaseWebhookController
 
                         $invoiceNumber = generate_invoice_number($subscriptionPaymentMethod->pivot->payment_method);
 
+                        Log::channel('invoices_log')->info('New invoice installments method');
+
                         $elearningInvoice = new Invoice;
                         $elearningInvoice->name = json_decode($transaction->billing_details, true)['billname'];
                         $elearningInvoice->amount = round($transaction->amount / $totalinst, 2);
@@ -492,7 +494,11 @@ class WebhookController extends BaseWebhookController
                         //$elearningInvoice->event()->save($user->events()->wherePivot('id',$eventId)->first());
                         $elearningInvoice->transaction()->save($transaction);
 
+                        Log::channel('invoices_log')->info(json_encode($elearningInvoice));
+
                         $pdf = $elearningInvoice->generateInvoice();
+
+                        Log::channel('invoices_log')->info(json_encode($elearningInvoice));
 
                         $billDet = json_decode($transaction['billing_details'], true);
                         $billingEmail = isset($billDet['billemail']) && $billDet['billemail'] != '' ? $billDet['billemail'] : false;
@@ -834,6 +840,9 @@ class WebhookController extends BaseWebhookController
                 $invoiceNumber = sprintf('%04u', $invoiceNumber);
             }*/
             $invoiceNumber = generate_invoice_number($paymentMethod->id);
+
+            Log::channel('invoices_log')->info('New invoice subscription method');
+
             $elearningInvoice = new Invoice;
             $elearningInvoice->name = isset(json_decode($transaction->billing_details, true)['billname']) ?
                 json_decode($transaction->billing_details, true)['billname'] : $user->firstname . ' ' . $user->lastname;
@@ -846,12 +855,16 @@ class WebhookController extends BaseWebhookController
 
             $elearningInvoice->save();
 
+            Log::channel('invoices_log')->info(json_encode($elearningInvoice));
+
             $elearningInvoice->user()->save($user);
             $elearningInvoice->event()->save($subscription->event->first());
             $elearningInvoice->transaction()->save($transaction);
             $elearningInvoice->subscription()->save($subscription);
 
             $pdf = $elearningInvoice->generateInvoice();
+
+            Log::channel('invoices_log')->info(json_encode($elearningInvoice));
 
             $adminemail = 'info@knowcrunch.com';
             $data = [];

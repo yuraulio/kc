@@ -50,8 +50,8 @@ class Page extends Model implements Auditable
         ],
         [
             'feed-image',
-            300,
-            300,
+            600,
+            600,
         ],
         // [
         //     "social-media-sharing",

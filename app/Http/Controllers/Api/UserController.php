@@ -14,6 +14,7 @@ use App\Http\Requests\UserRequest;
 use App\Model\Activation;
 use App\Model\Instructor;
 use App\Model\Media;
+use App\Model\Setting;
 use App\Model\Role;
 use App\Model\User;
 use App\Services\QueryString\QueryStringDirector;
@@ -1060,9 +1061,12 @@ class UserController extends Controller
 
     public function getDropBoxToken()
     {
+        $setting = Setting::where('key', 'DROPBOX_TOKEN')->firstOrFail();
+        $authorizationToken = $setting->value;
+
         return response()->json([
             'success' => true,
-            'dropBoxToken' => env('DROPBOX_TOKEN'),
+            'dropBoxToken' => $authorizationToken,
         ]);
     }
 

@@ -92,12 +92,6 @@
             <input v-model="link" type="text" id="link" class="form-control" />
           </div>
 
-          <div class="mb-3">
-            <label for="jpg" class="form-label">Convert image versions to jpg format. (Reduces size.)</label>
-            <br />
-            <input v-model="jpg" type="checkbox" id="jpg" class="form-check-input" />
-          </div>
-
           <label class="form-label">Pick a folder</label>
 
           <vue-nestable v-model="mediaFolders" class="dd-list mb-3">
@@ -337,70 +331,6 @@
       </div>
     </modal>
 
-    <modal name="upload-file-modal" ref="fmodal" :resizable="true" height="auto" :adaptive="true" :scrollable="true">
-      <div class="row p-4">
-        <div class="d-grid col-lg-12">
-          <div class="mb-3">
-            <label for="example-fileinput" class="form-label">Pick a file</label>
-            <input @change="registerFile" type="file" id="example-fileinput" class="form-control" />
-          </div>
-
-          <label class="form-label">Pick a folder</label>
-
-          <vue-nestable v-model="mediaFolders" class="dd-list mb-3">
-            <vue-nestable-handle :draggable="false" slot-scope="{ item, isChild }" :item="item">
-              <li
-                :key="item.id + uncolapsed.length"
-                v-show="!isChild || uncolapsed.includes(item.id)"
-                class="dd-item"
-                :data-id="item.id"
-              >
-                <button
-                  @click="
-                    collapse(item);
-                    $forceUpdate();
-                  "
-                  v-if="item.children && item.children.length && !uncolapsed.includes(item.children[0].id)"
-                  class="collapse-button"
-                >
-                  <i class="mdi mdi-plus font-18"></i>
-                </button>
-                <button
-                  @click="uncollapse(item)"
-                  v-if="item.children && item.children.length && uncolapsed.includes(item.children[0].id)"
-                  class="collapse-button"
-                >
-                  <i class="mdi mdi-minus font-18"></i>
-                </button>
-                <div
-                  @click="move_file_to = item"
-                  :class="'dd-handle ' + (item == move_file_to ? 'selected-folder ' : ' ')"
-                >
-                  <i class="mdi mdi-folder-outline font-18 align-middle me-"></i>
-                  {{ item.name }}
-                </div>
-              </li>
-            </vue-nestable-handle>
-          </vue-nestable>
-
-          <template v-if="upload_error">
-            <p class="text-danger">{{ upload_error }}</p>
-          </template>
-
-          <button
-            @click="uploadRegFile()"
-            type="button"
-            class="btn btn-success waves-effect waves-light"
-            :disabled="loading"
-          >
-            <i v-if="!loading" class="fe-check-circle me-1"></i>
-            <i v-else class="fas fa-spinner fa-spin"></i>
-            Upload
-          </button>
-        </div>
-      </div>
-    </modal>
-
     <!--
     <modal name="gallery-modal" ref="gmodal" :resizable="true" height="auto" :adaptive="true" :minWidth="1000" :scrollable="true">
         <gallery ref="gals" :images="mediaFiles" :opImage="opImage" :imageExtensions="imageExtensions" :imageVersion="imageVersion"></gallery>
@@ -431,11 +361,6 @@
               >
                 <i class="mdi mdi-plus"></i> <i class="mdi mdi-file me-1"></i>
               </button>
-              <!--
-                        <button class="btn btn-sm btn-primary" @click.prevent="$modal.show('upload-file-modal'); move_file_to = null;">
-                            <i class="mdi mdi-plus"></i> <i class="mdi mdi-upload me-1"></i>
-                        </button>
-                        -->
             </div>
             <div class="mail-list mt-3">
               <a
@@ -633,7 +558,6 @@ export default {
       regFile: null,
       alt_text: '',
       link: '',
-      jpg: false,
       onlyParent: true,
       filesView: false,
       opImage: null,

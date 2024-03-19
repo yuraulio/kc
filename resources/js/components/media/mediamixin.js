@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import api from '../../panel_app/api';
 
 var mediaMixin = {
   data() {
@@ -47,8 +48,8 @@ var mediaMixin = {
           description: 'Applies to : Event -> Topics (syllabus-block)',
         },
         {
-          w: 300,
-          h: 300,
+          w: 600,
+          h: 600,
           q: 60,
           fit: 'crop',
           description: 'feed-image',
@@ -88,39 +89,6 @@ var mediaMixin = {
       this.filesView = false;
       this.selectedFolder = $event;
     },
-    uploadRegFile() {
-      var formData = new FormData();
-      var imagefile = this.regFile;
-      if (imagefile && this.move_file_to) {
-        this.upload_error = null;
-        this.loading = true;
-        formData.append('file', imagefile);
-        formData.append('directory', this.move_file_to.id);
-        axios
-          .post('/api/media_manager/upload_reg_file', formData, {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            },
-          })
-          .then((response) => {
-            //this.selectedFolder = null;
-            this.$toast.success('Uploaded Successfully!');
-            //this.$modal.hide('upload-media-modal');
-            response.data.data.forEach((element) => {
-              this.mediaFiles.push(element);
-            });
-            this.$modal.hide('upload-file-modal');
-            this.loading = false;
-            this.regFile = null;
-          })
-          .catch((error) => {
-            console.log(error);
-            this.loading = false;
-          });
-      } else {
-        this.upload_error = 'Pick file or folder.';
-      }
-    },
     uploadImgFile() {
       var formData = new FormData();
       var imagefile = this.regFile;
@@ -131,27 +99,24 @@ var mediaMixin = {
         formData.append('alt_text', this.alt_text);
         formData.append('link', this.link);
         formData.append('jpg', this.jpg);
-        formData.append('directory', this.move_file_to.id);
-        axios
-          .post('/api/media_manager/upload_image', formData, {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            },
-          })
-          .then((response) => {
+        formData.append('folder_id', this.move_file_to.id);
+        api.post(
+          'media.upload',
+          formData,
+          (data) => {
             this.$toast.success('Uploaded Successfully! Images will be minified in up to two minutes.');
-            response.data.data.forEach((element) => {
+            data.data.forEach((element) => {
               this.mediaFiles.push(element);
             });
             this.$modal.hide('upload-media-modal');
             this.loading = false;
             this.regFile = null;
 
-            this.selectedFile = response.data.data[0];
-            this.getFiles(response.data.data[0].folder_id);
+            this.selectedFile = data.data[0];
+            this.getFiles(data.data[0].folder_id);
             this.warning = true;
 
-            if (imagefile.type == 'image/jpeg' || imagefile.type == 'image/png') {
+            if (imagefile.type === 'image/jpeg' || imagefile.type === 'image/png' || imagefile.type === 'image/webp') {
               this.$modal.show('edit-image-modal');
             } else {
               this.opImage = this.selectedFile;
@@ -161,12 +126,13 @@ var mediaMixin = {
             this.jpg = false;
             this.alt_text = '';
             this.link = '';
-          })
-          .catch((error) => {
+          },
+          (error) => {
             console.log(error);
             this.loading = false;
             this.$toast.error(error.response.data.message);
-          });
+          }
+        );
       } else {
         this.upload_error = 'Pick file or folder.';
       }
@@ -233,66 +199,10 @@ var mediaMixin = {
       }
     },
     imageAdded($event) {
-      //console.log('from function imageAdded in js file')
-
-      this.currentImage = $event;
-      var formData = new FormData();
-      var imagefile = $event;
-      formData.append('imgname', this.$refs.crpr.imgname);
-      formData.append('alttext', this.$refs.crpr.alttext);
-      formData.append('compression', this.$refs.crpr.compression);
-      formData.append('parrent_id', this.$refs.crpr.parrentImage.id ? this.$refs.crpr.parrentImage.id : null);
-      if (this.$refs.crpr.prevalue) {
-        formData.append('edited', this.$refs.crpr.prevalue.id);
-      }
-      //console.log(this)
-      formData.append('original_file', this.$refs.crpr.originalFile);
-      formData.append('directory', this.move_file_to.id);
-      if (imagefile) {
-        this.$refs.crpr.isUploading = true;
-        formData.append('file', imagefile);
-        axios
-          .post('/api/media_manager/upload_image', formData, {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            },
-          })
-          .then((response) => {
-            //this.selectedFolder = null;
-            this.$toast.success('Uploaded Successfully!');
-            //this.$modal.hide('upload-media-modal');
-            response.data.data.forEach((element) => {
-              //this.mediaFiles.push(element);
-              this.$refs.crpr.uploadedVersions.push(element);
-            });
-            response.data.original.forEach((element) => {
-              if (!_.find(this.mediaFiles, { id: element.id })) {
-                this.mediaFiles.unshift(element);
-              }
-            });
-            // console.log(response)
-            this.$refs.crpr.isUploading = false;
-          })
-          .catch((error) => {
-            console.log(error);
-            this.$refs.crpr.isUploading = false;
-          });
-      }
+      this.$toast.error('Upload attachment function does not supported. Please use Document Upload!');
     },
-    async makeRequest(formData) {
-      let res = await axios.post('/api/media_manager/edit_image', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-      return res;
-    },
-    parseRequest(response, value) {
-      //console.log('test test test')
-      //console.log(response)
-      //console.log(value)
-
-      this.$toast.success('Uploaded Successfully!');
+    onImageEditResponse(response, value) {
+      this.$toast.success(`${value?.version} - Uploaded Successfully!`);
 
       if (this.$refs.crpr !== undefined) {
         this.$refs.crpr.isUploading = false;
@@ -300,7 +210,7 @@ var mediaMixin = {
 
       this.imageKey = Math.random().toString().substr(2, 8);
       // this.$modal.hide('edit-image-modal');
-      if (this.$refs.crpr && response.data.data.version == 'original') {
+      if (this.$refs.crpr && response.data.data.version === 'original') {
         var image = response.data.data;
         this.$refs.crpr.imgname = image.name;
         this.$refs.crpr.alttext = image.alt_text;
@@ -389,53 +299,36 @@ var mediaMixin = {
       }
     },
     async imageEdit($event) {
-      let value = $event;
-      var formData = new FormData();
-
+      const self = this,
+        value = $event && $event.imgname ? $event : this.$refs.crpr;
       // edit image version
-      if (value != null && value.imgname) {
-        if (this.$refs.crpr.forUpdate[value.version] === undefined) {
-          //console.log('why: ', value.version)
-          return false;
-        }
-
-        //console.log('inside edit image version')
-
-        formData.append('imgname', value.imgname);
-        formData.append('alttext', value.alttext);
-        formData.append('link', value.link);
-        formData.append('jpg', value.jpg);
-        formData.append('version', value.version);
-        formData.append('parent_id', value.parent_id);
-        formData.append('crop_data', JSON.stringify(value.crop_data));
-        formData.append('width_ratio', value.width_ratio);
-        formData.append('height_ratio', value.height_ratio);
-        formData.append('directory', this.selectedFile.folder_id);
-        formData.append('id', value.id);
-      } else {
-        if (this.$refs.crpr.forUpdate[this.$refs.crpr.version] === undefined) {
-          return false;
-        }
-
-        //Create Image version
-
-        formData.append('imgname', this.$refs.crpr.imgname);
-        formData.append('alttext', this.$refs.crpr.alttext);
-        formData.append('link', this.$refs.crpr.link);
-        formData.append('jpg', this.$refs.crpr.jpg);
-        formData.append('version', this.$refs.crpr.version);
-        formData.append('parent_id', this.$refs.crpr.parrentImage.id);
-        formData.append('crop_data', JSON.stringify(this.$refs.crpr.cropBoxData));
-        formData.append('width_ratio', this.$refs.crpr.width_ratio);
-        formData.append('height_ratio', this.$refs.crpr.height_ratio);
-        formData.append('directory', this.selectedFile.folder_id);
-        formData.append('id', this.$refs.crpr.id);
+      if (this.$refs.crpr.forUpdate[value.version] === undefined) {
+        //console.log('why: ', value.version)
+        return false;
       }
-
       this.$refs.crpr.isUploading = true;
-      let response = await this.makeRequest(formData);
-
-      this.parseRequest(response, value);
+      api.post(
+        'media.edit',
+        {
+          name: value.imgname,
+          alt_text: value.alttext,
+          link: value.link,
+          version: value.version,
+          parent_id: value.parrentImage?.id ?? value.parent_id ?? null,
+          crop_data: value.crop_data ?? value.cropBoxData ?? (value.getCropBoxData ? value.getCropBoxData() : null),
+          width_ratio: value.width_ratio,
+          height_ratio: value.height_ratio,
+          folder_id: this.selectedFile.folder_id,
+          id: value.id,
+        },
+        (data, response) => {
+          self.onImageEditResponse(response, value);
+        },
+        () => {
+          this.$toast.error(`${value.version} - Uploaded Failed!`);
+          this.$refs.crpr.isUploading = false;
+        }
+      );
     },
     addFolder() {
       this.errors = null;

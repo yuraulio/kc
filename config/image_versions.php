@@ -46,8 +46,8 @@ return[
             'description' => 'Applies to : Event -> Topics (syllabus-block)',
         ],
         'feed-image'=>[
-            'w' => 300,
-            'h' => 300,
+            'w' => 600,
+            'h' => 600,
             'q' => 60,
             'fit' => 'crop',
             'description' => 'feed-image',

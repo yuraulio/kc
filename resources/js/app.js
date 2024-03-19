@@ -41,6 +41,7 @@ import VueNestable from 'vue-nestable';
 Vue.use(VueNestable);
 require('datatables.net-bs4');
 require('nestable2');
+require('./components/routes');
 
 Vue.component('royalties', require('./components/royalties.vue').default);
 Vue.component('countdown', require('./components/countdown.vue').default);

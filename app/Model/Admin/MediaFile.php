@@ -7,6 +7,8 @@ use App\Traits\SearchFilter;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use OwenIt\Auditing\Contracts\Auditable;
 
 class MediaFile extends Model implements Auditable
@@ -18,6 +20,23 @@ class MediaFile extends Model implements Auditable
 
     protected $table = 'cms_files';
     public $asYouType = true;
+
+    protected $fillable = [
+        'name',
+        'extension',
+        'path',
+        'full_path',
+        'url',
+        'folder_id',
+        'parent_id',
+        'alt_text',
+        'link',
+        'size',
+        'height',
+        'width',
+        'version',
+        'user_id',
+    ];
 
     /**
      * Get the indexable data array for the model.

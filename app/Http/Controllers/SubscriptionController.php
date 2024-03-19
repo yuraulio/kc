@@ -70,6 +70,7 @@ class SubscriptionController extends Controller
                         }
                     }
                 } elseif ($status == 'active' && $tra['subscription'][0]['status'] == 0 && !$tra['trial']) {
+                    $tra['subscription'][0]->syncStripeStatus(); // We check again the status.
                     $status = 'paid_not_active_user_canceled';
                 } elseif (($status == 'cancelled' || $status == 'cancel' || $status == 'canceled') && !$tra['trial']) {
                     $status = 'paid_and_cancelled';
