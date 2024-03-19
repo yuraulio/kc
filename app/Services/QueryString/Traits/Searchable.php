@@ -10,11 +10,18 @@ trait Searchable
     public function scopeSearch(Builder $builder, Search $search): Builder
     {
         return $builder->where(function (Builder $query) use ($search) {
-            $query->orWhere('firstname', 'LIKE', $search->getTerm())
-                ->orWhere('lastname', 'LIKE', $search->getTerm())
-                ->orWhere('email', 'LIKE', $search->getTerm())
-                ->orWhere('company', 'LIKE', $search->getTerm())
-                ->orWhere('job_title', 'LIKE', $search->getTerm());
+            $searchableFields = [
+                'firstname',
+                'lastname',
+                'email',
+                'company',
+                'job_title',
+                'kc_id',
+            ];
+
+            foreach ($searchableFields as $searchableField) {
+                $query->orWhere($searchableField, 'LIKE', $search->getTerm());
+            }
         });
     }
 }
