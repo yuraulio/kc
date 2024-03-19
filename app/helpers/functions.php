@@ -1324,9 +1324,12 @@ if (!function_exists('update_dropbox_api')) {
 
         $endpoint = 'https://api.dropbox.com/oauth2/token';
         $client = new \GuzzleHttp\Client(['headers' => ['Content-Type'=> 'application/json', 'Authorization' => 'Basic ' . $t]]);
-        dump(config('filesystems.disks.dropbox'));
+        echo "<pre>";
+        print_r(config('filesystems.disks.dropbox'));
+        echo "</pre>";
+        die();
 
-        try {
+        // try {
             $response = $client->request(
                 'POST',
                 $endpoint,
@@ -1351,15 +1354,15 @@ if (!function_exists('update_dropbox_api')) {
                 // dd($client);
             }
 
-        } catch(\Exception $e) {
-            $user = User::first();
-            if ($user) {
-                if (strpos($e->getMessage(), 'app is disabled') === false) {
-                    $user->notify(new ErrorSlack('API Dropbox failed. Sometimes happens. Don\'t worry. Error message: ' . $e->getMessage()));
-                    $user->notify(new ErrorSlack($e));
-                }
-            }
-        }
+        // } catch(\Exception $e) {
+        //     $user = User::first();
+        //     if ($user) {
+        //         if (strpos($e->getMessage(), 'app is disabled') === false) {
+        //             $user->notify(new ErrorSlack('API Dropbox failed. Sometimes happens. Don\'t worry. Error message: ' . $e->getMessage()));
+        //             $user->notify(new ErrorSlack($e));
+        //         }
+        //     }
+        // }
     }
 }
 
