@@ -8,6 +8,7 @@ use App\Services\QueryString\Traits\Searchable;
 use App\Services\QueryString\Traits\Sortable;
 use App\Traits\MediaTrait;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -946,4 +947,10 @@ class User extends Authenticatable
 
         return $this->createToken('auth_token')->accessToken;
     }
+
+    public function shoppingCarts(): HasMany
+    {
+        return $this->hasMany(ShoppingCart::class, 'identifier');
+    }
+
 }
