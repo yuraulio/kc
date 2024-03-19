@@ -952,5 +952,4 @@ class User extends Authenticatable
     {
         return $this->hasMany(ShoppingCart::class, 'identifier');
     }
-
 }
