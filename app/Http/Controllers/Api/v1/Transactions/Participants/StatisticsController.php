@@ -40,20 +40,22 @@ class StatisticsController extends ApiBaseController
         $elearning = $this
             ->getBaseQuery($request)
             ->select([
-                DB::raw('COUNT(DISTINCT users.id) as total_users'),
+                DB::raw('COUNT(users.id) as total_users'),
                 DB::raw('SUM(transactions.amount) as total_amount'),
             ])
             ->join('event_delivery', 'events.id', '=', 'event_delivery.event_id')
             ->where('event_delivery.delivery_id', self::DELIVERY_VIDEO_TRAINING_ID)
+            ->whereIn('transactions.id', $this->getRegistrationTransactionQuery())
             ->first();
         $inClass = $this
             ->getBaseQuery($request)
             ->select([
-                DB::raw('COUNT(DISTINCT users.id) as total_users'),
+                DB::raw('COUNT(users.id) as total_users'),
                 DB::raw('SUM(transactions.amount) as total_amount'),
             ])
             ->join('event_delivery', 'events.id', '=', 'event_delivery.event_id')
             ->where('event_delivery.delivery_id', '<>', self::DELIVERY_VIDEO_TRAINING_ID)
+            ->whereIn('transactions.id', $this->getRegistrationTransactionQuery())
             ->first();
 
         $byType = $this
@@ -67,7 +69,7 @@ class StatisticsController extends ApiBaseController
             ->when($request->input('type') === 'revenues', function (Builder $query) {
                 $query
                     ->select([
-                        DB::raw('DISTINCT users.id'),
+                        DB::raw('users.id'),
                         DB::raw('transactions.type as type'),
                         DB::raw('SUM(CASE WHEN invoices.amount IS NOT NULL THEN invoices.amount ELSE transactions.amount END ) as total_amount'),
                     ])
@@ -126,6 +128,7 @@ class StatisticsController extends ApiBaseController
                 'in_class' => 0 + $inClassAccurate->total_amount,
                 'elearning' => 0 + $elearningAccurate->total_amount,
             ];
+            $byType['total'] = $incomeAccurate['total'];
         }
 
         return [
@@ -142,6 +145,17 @@ class StatisticsController extends ApiBaseController
             'tickets' => $byType,
             'income_accurate' => $incomeAccurate,
         ];
+    }
+
+    protected function getRegistrationTransactionQuery()
+    {
+        return Transaction::select(DB::raw('min(transactions.id)'))
+            ->join('transactionables as transactionables_users', function ($query) {
+                $query
+                    ->whereColumn('transactionables_users.transaction_id', '=', 'transactions.id')
+                    ->where('transactionables_users.transactionable_type', '=', (new User())->getMorphClass());
+            })
+            ->groupBy('transactionables_users.transactionable_id');
     }
 
     protected function getBaseQuery($request)
