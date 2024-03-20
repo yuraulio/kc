@@ -208,6 +208,10 @@
                                         <a href="{{ route('plans') }}" class="nav-link">{{ __('Plans') }}</a>
                                     </li>
 
+                                    <li class="nav-item {{ isset($elementName) and $elementName  == 'giveaways-management' ? 'active' : '' }}">
+                                        <a href="{{ route('giveaway.index') }}" class="nav-link">{{ __('Giveaways') }}</a>
+                                    </li>
+
 
 
 

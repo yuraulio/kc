@@ -86,6 +86,7 @@ Route::group(['middleware' => 'auth.aboveauthor', 'prefix' => 'admin'], function
     Route::resource('faqs', 'FaqController', ['except' => ['show']]);
     Route::resource('career', 'CareerController', ['except' => ['show']]);
     Route::resource('city', 'CityController', ['except' => ['show']]);
+    Route::resource('giveaway', 'GiveawayController')->only(['index']);
     Route::resource('section', 'SectionController', ['except' => ['show', 'index', 'edit', 'create']]);
     Route::resource('ticket', 'TicketController', ['except' => ['show']]);
     Route::resource('summary', 'SummaryController', ['except' => ['show', 'index', 'edit', 'create', 'update']]);
