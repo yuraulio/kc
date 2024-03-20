@@ -1,0 +1,12 @@
+/* ==========================================================================
+   Fonts
+   ========================================================================== */
+@font-face {
+  font-family: 'Foco';
+  src: url("/theme/assets/fonts/Foco_W_Lt.eot?1"),
+  url("/theme/assets/fonts/Foco_W_Lt.eot?1#iefix") format("embedded-opentype"),
+  url("/theme/assets/fonts/Foco_W_Lt.woff2?1") format("woff2"),
+  url("/theme/assets/fonts/Foco_W_Lt.woff?1") format("woff");
+  font-weight: 300;
+  font-style: normal;
+}

@@ -493,20 +493,31 @@ footer {
 }
 
 /** core.css */
-.accordion-wrapper .accordion-item.topic-header .topic-info {
-  line-height: 14px;
+.accordion-wrapper .accordion-item.topic-header {
+    line-height: 1.15;
+    -webkit-text-size-adjust: 100%;
+    --rem: 16;
+    padding: 0;
+    margin: 0;
+    border-bottom: 1px solid #5179af;
+    -webkit-font-smoothing: auto;
 }
-.topic-header .topic-info .topic-info_title {
+.accordion-wrapper .accordion-item.topic-header .topic-info {
+    padding: 14px 24px 14px 45px;
+}
+.topic-content .topic-header .topic-info h3.topic-info_title {
   margin: 0;
-  margin-bottom: 0px;
+  line-height: 1.15;
   color: #fff;
   font-size: 21px;
+
 }
-.topic-header .topic-info .topic-info_duration {
+.topic-content .topic-header .topic-info .topic-info_duration {
   color: #b3d4fc;
   font-size: 12px;
+  padding-top: 2px;
 }
-.topic-header .topic-info img.topic-progress{
+.topic-content .topic-header .topic-info img.topic-progress{
   max-width: 12px;
   vertical-align: middle;
 }

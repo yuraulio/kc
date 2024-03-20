@@ -1,28 +1,3 @@
-/* ==========================================================================
-   Fonts
-   ========================================================================== */
-   @font-face {
-	font-family: 'Foco';
-	    src: url('/theme/assets/fonts/Foco_W_Lt.eot');
-	    src: url('/theme/assets/fonts/Foco_W_Lt.eot?#iefix') format('embedded-opentype'),
-	        url('/theme/assets/fonts/Foco_W_Lt.woff2') format('woff2'),
-	        url('/theme/assets/fonts/Foco_W_Lt.woff') format('woff');
-	font-weight: 300;
-	font-style: normal;
-	}
-
-	/* 	@font-face {
-		font-family: 'Foco';
-			src: url('/theme/assets/fonts/Foco-Light.eot');
-			src: url('/theme/assets/fonts/Foco-Light.eot?#iefix') format('embedded-opentype'),
-				url('/theme/assets/fonts/Foco-Light.woff2') format('woff2'),
-				url('/theme/assets/fonts/Foco-Light.woff') format('woff'),
-				url('/theme/assets/fonts/Foco-Light.svg#Foco-Light') format('svg');
-			font-weight: 300;
-		font-style: normal;
-	}*/
-
-
 
 /* ==========================================================================
 	   Helper classes

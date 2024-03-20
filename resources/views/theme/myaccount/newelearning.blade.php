@@ -171,20 +171,21 @@
                               <img
                                  loading="lazy"
                                  class="topic-open jsTopicOpen"
-                                 src="theme/assets/img/new/arrow-down.svg"
+                                 src="/theme/assets/images/icons/icon-arrow-down-green.svg"
                                  alt="open topic"
-                                 width="32"
-                                 height="32"
+                                 width="21"
+                                 height="21"
                                  title="open topic"
                                  />
                               <img
                                  loading="lazy"
                                  class="topic-close jsTopicClose"
-                                 src="theme/assets/img/new/arrow-up.svg"
+                                 src="/theme/assets/images/icons/icon-arrow-down-green.svg"
                                  alt="close topic"
-                                 width="32"
-                                 height="32"
-                                 title="clos topic"
+                                 width="21"
+                                 height="21"
+                                 title="close topic"
+                                 style='transform: rotate(180deg);'
                                  />
                            </a>
                            <?php
