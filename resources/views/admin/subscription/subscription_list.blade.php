@@ -160,7 +160,7 @@
                         <td class="">{{ $item['created_at'] }}</td>
                         <td class="">
                           <button class="btn btn-icon btn-primary btn-sm" type="button" onclick="update_status({{ $item['subscription_id'] }})">
-                            <span class="btn-inner--icon"><i class="ni ni-cloud-download-95"></i></span>
+                            <span class="btn-inner--icon">Refresh status</span>
                           </button>
                         </td>
                      </tr>
