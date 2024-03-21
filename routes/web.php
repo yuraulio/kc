@@ -130,6 +130,7 @@ Route::group(['middleware' => 'auth.aboveauthor', 'prefix' => 'admin'], function
 
     //Subscriptions
     Route::get('subscriptions', ['as' => 'subscriptions.index', 'uses' => 'SubscriptionController@index']);
+    Route::post('subscriptions/update_status', ['as' => 'subscriptions.update_status', 'uses' => 'SubscriptionController@update_status']);
 
     //Menu item
     Route::get('menu/add_item', ['as' => 'menu.add_item', 'uses' => 'MenuController@add_item']);

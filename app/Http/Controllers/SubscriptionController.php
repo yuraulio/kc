@@ -37,7 +37,9 @@ class SubscriptionController extends Controller
             $events = [];
             // dump($tra['subscription']);
             // dump(count($tra['subscription']));
+            $subscription_id = -1;
             if (count($tra['subscription']) != 0) {
+                $subscription_id = $tra['subscription'][0]['id'];
                 if (!isset($tra['subscription'][0]['event'][0]['title'])) {
                     $subEvId = -1;
                     $titleE = '-';
@@ -101,7 +103,7 @@ class SubscriptionController extends Controller
                 $subscriptions[$tra['user'][0]['id']] = ['user_id' => $tra['user'][0]['id'], 'user' => $name, 'plan_id' => $plId, 'plan_name' => $tra['subscription'][0]['name'],
                     'event_title' => $titleE, 'status' => $status, 'ends_at'=>$tra['ends_at'],
                     'amount' => $amount, 'created_at'=>date('Y-m-d', strtotime($tra['created_at'])), 'id'=>$tra['id'],
-                    'event_id' => $subEvId, 'delivery' => $delivery];
+                    'event_id' => $subEvId, 'delivery' => $delivery, 'subscription_id' => $subscription_id];
             }
         }
 
@@ -138,4 +140,10 @@ class SubscriptionController extends Controller
 
         return Excel::download(new SubscriptionExport($request), 'SubscriptionsExport.xlsx');
     }
+
+    public function update_status(Request $request){
+        $subscription = Subscription::findOrFail($request->id);
+        return $subscription->asStripeSubscription();
+    }
+
 }

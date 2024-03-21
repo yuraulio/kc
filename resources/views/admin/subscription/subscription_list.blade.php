@@ -120,6 +120,7 @@
                         <th scope="col">{{ __('Sub end at') }}</th>
                         <th scope="col">{{ __('Amount') }}</th>
                         <th class="" scope="col">{{ __('Create Date') }}</th>
+                        <th class=""></th>
                      </tr>
                   </thead>
                   <tfoot>
@@ -136,6 +137,7 @@
                         <th scope="col">{{ __('Sub end at') }}</th>
                         <th scope="col">{{ __('Amount') }}</th>
                         <th class="" scope="col">{{ __('Create Date') }}</th>
+                        <th class=""></th>
 
                      </tr>
                   </tfoot>
@@ -156,6 +158,11 @@
                         <td>{{ $item['ends_at'] }}</td>
                         <td>{{ $item['amount'] }}</td>
                         <td class="">{{ $item['created_at'] }}</td>
+                        <td class="">
+                          <button class="btn btn-icon btn-primary btn-sm" type="button" onclick="update_status({{ $item['subscription_id'] }})">
+                            <span class="btn-inner--icon"><i class="ni ni-cloud-download-95"></i></span>
+                          </button>
+                        </td>
                      </tr>
                      @endforeach
                   </tbody>
@@ -188,6 +195,23 @@
 <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 <script>
+
+    function update_status(id){
+      $.ajax({
+        headers: {
+          'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+        },
+        url: "{{ route('subscriptions.update_status') }}",
+        type: "POST",
+        data:{
+          id: id
+        },
+        success: function(data) {
+          console.log('data', data);
+        }
+      });
+    }
+
    let minDate = null, maxDate = null;
    let transactionArray = [];
    let delivery = [];

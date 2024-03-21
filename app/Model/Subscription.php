@@ -260,15 +260,19 @@ class Subscription extends Model
      */
     public function syncStripeStatus()
     {
-        $subscription = $this->asStripeSubscription();
+        try{
+            $subscription = $this->asStripeSubscription();
 
-        $this->stripe_status = $subscription->status;
+            $this->stripe_status = $subscription->status;
 
-        if ($subscription->status == 'active' && $subscription->id == 1682) {
-            $this->status = 1;
+            if ($subscription->status == 'active' && $subscription->id == 1682) {
+                $this->status = 1;
+            }
+
+            $this->save();
+        }catch(\Exception $e){
+            return null;
         }
-
-        $this->save();
     }
 
     /**
