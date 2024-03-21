@@ -142,9 +142,19 @@ class SubscriptionController extends Controller
     }
 
     public function update_status(Request $request){
-        $subscription = Subscription::findOrFail($request->id);
-        $subscription->syncStripeStatus();
-        return $subscription->asStripeSubscription();
+        $request->validate([
+            'id' => 'required|integer',
+        ]);
+
+        try {
+            $subscription = Subscription::findOrFail($request->id);
+            $subscription->syncStripeStatus();
+            $subscription = $subscription->refresh();
+
+            return response()->json($subscription, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'An error occurred while updating the subscription.'], 500);
+        }
     }
 
 }
