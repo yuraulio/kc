@@ -17,7 +17,7 @@
     @endcomponent
 
     <div class="container-fluid mt--6">
-        <div class="row">
+      <div class="row">
             <div class="col">
                 <div class="card">
                     <div class="card-header">
@@ -31,6 +31,24 @@
                     <div class="col-12 mt-2">
                         @include('alerts.success')
                         @include('alerts.errors')
+                    </div>
+
+
+                    <div id="sub_datePicker">
+                      <div class="col">
+                        <label>Filter by date range</label>
+                        <div class="form-group">
+                          <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="ni ni-calendar-grid-58"></i></span>
+                            </div>
+
+                            <input class="form-control select2-css" type="text" name="daterange" autocomplete="off" value="" />
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col"></div>
+                      <div class="col"></div>
                     </div>
 
                     <div class="table-responsive py-4">
@@ -73,6 +91,7 @@
     <link rel="stylesheet" href="{{ asset('argon') }}/vendor/datatables.net-bs4/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="{{ asset('argon') }}/vendor/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css">
     <link rel="stylesheet" href="{{ asset('argon') }}/vendor/datatables.net-select-bs4/css/select.bootstrap4.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 @endpush
 
 @push('js')
@@ -84,6 +103,8 @@
     <script src="{{ asset('argon') }}/vendor/datatables.net-buttons/js/buttons.flash.min.js"></script>
     <script src="{{ asset('argon') }}/vendor/datatables.net-buttons/js/buttons.print.min.js"></script>
     <script src="{{ asset('argon') }}/vendor/datatables.net-select/js/dataTables.select.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
     <script>
         var table = $('#datatable-basic2').DataTable(
           {
@@ -113,5 +134,36 @@
             ]
           }
         );
+
+        $(document).ready(function() {
+
+          $('input[name="daterange"]').daterangepicker();
+          $('input[name="daterange"]').val('')
+
+          var minDate = null;
+          var maxDate = moment().endOf('day').format('MM/DD/YYYY');
+
+          $('input[name="daterange"]').on('apply.daterangepicker', function(ev, picker) {
+            minDate = new Date(picker.startDate.format('MM/DD/YYYY'));
+            maxDate = new Date(picker.endDate.format('MM/DD/YYYY'));
+
+            $.fn.dataTable.ext.search.push(
+                function(settings, data, dataIndex) {
+
+                    var rawDate = data[6];
+                    var dateSplit = rawDate.split('/');
+                    var date = new Date(Number(dateSplit[2]), Number(dateSplit[1]) - 1, Number(dateSplit[0]));
+
+
+                    if (date >= minDate && date <= maxDate) {
+                        return true;
+                    }
+                    return false;
+                }
+            );
+            table.draw();
+          });
+
+        });
     </script>
 @endpush

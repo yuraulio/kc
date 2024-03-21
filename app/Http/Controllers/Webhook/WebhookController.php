@@ -526,10 +526,10 @@ class WebhookController extends BaseWebhookController
                 }
 
                 if ((int) $count >= (int) $totalinst) {
-                    try{
+                    try {
                         $subscription->noProrate()->cancel();
                     } catch (\Exception $ex) {
-                        $user->notify(new ErrorSlack('Error in webhook cancelling subscription. Check subscription of '.$user->email));
+                        $user->notify(new ErrorSlack('Error in webhook cancelling subscription. Check subscription of ' . $user->email));
                     }
                 }
             }
