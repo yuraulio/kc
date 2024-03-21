@@ -109,23 +109,45 @@ class StatisticsController extends ApiBaseController
             $elearningAccurate = $this
                 ->getBaseQuery($request)
                 ->select([
-                    DB::raw('SUM(transactions.amount) as total_amount'),
+                    DB::raw('SUM(CASE WHEN invoices.amount IS NOT NULL THEN invoices.amount ELSE transactions.amount END ) as total_amount'),
                 ])
                 ->join('event_delivery', 'events.id', '=', 'event_delivery.event_id')
+                ->leftJoin('invoiceables', function ($query) {
+                    $query
+                        ->whereColumn('invoiceables.invoiceable_id', '=', 'transactions.id')
+                        ->where('invoiceables.invoiceable_type', '=', (new Transaction())->getMorphClass());
+                })
+                ->leftJoin('invoices', function ($query) {
+                    $query
+                        ->whereColumn('invoiceables.invoice_id', '=', 'invoices.id')
+                        ->whereNotNull('invoices.amount')
+                        ->where('invoices.amount', '>', '0');
+                })
                 ->where('event_delivery.delivery_id', self::DELIVERY_VIDEO_TRAINING_ID)
                 ->first();
             $inClassAccurate = $this
                 ->getBaseQuery($request)
                 ->select([
-                    DB::raw('SUM(transactions.amount) as total_amount'),
+                    DB::raw('SUM(CASE WHEN invoices.amount IS NOT NULL THEN invoices.amount ELSE transactions.amount END ) as total_amount'),
                 ])
                 ->join('event_delivery', 'events.id', '=', 'event_delivery.event_id')
+                ->leftJoin('invoiceables', function ($query) {
+                    $query
+                        ->whereColumn('invoiceables.invoiceable_id', '=', 'transactions.id')
+                        ->where('invoiceables.invoiceable_type', '=', (new Transaction())->getMorphClass());
+                })
+                ->leftJoin('invoices', function ($query) {
+                    $query
+                        ->whereColumn('invoiceables.invoice_id', '=', 'invoices.id')
+                        ->whereNotNull('invoices.amount')
+                        ->where('invoices.amount', '>', '0');
+                })
                 ->where('event_delivery.delivery_id', '<>', self::DELIVERY_VIDEO_TRAINING_ID)
                 ->first();
             $incomeAccurate = [
-                'total' => $inClassAccurate->total_amount + $elearningAccurate->total_amount,
-                'in_class' => 0 + $inClassAccurate->total_amount,
-                'elearning' => 0 + $elearningAccurate->total_amount,
+                'total' => floor($inClassAccurate->total_amount) + floor($elearningAccurate->total_amount),
+                'in_class' => 0 + floor($inClassAccurate->total_amount),
+                'elearning' => 0 + floor($elearningAccurate->total_amount),
             ];
             $byType['total'] = $incomeAccurate['total'];
         }
