@@ -10,6 +10,7 @@ use DateTimeInterface;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use InvalidArgumentException;
 use Laravel\Cashier\Concerns\InteractsWithPaymentBehavior;
 use Laravel\Cashier\Concerns\Prorates;
@@ -265,8 +266,14 @@ class Subscription extends Model
 
             $this->stripe_status = $subscription->status;
 
-            if ($subscription->status == 'active' && $subscription->id == 1682) {
+            if ($subscription->status == 'active') {
                 $this->status = 1;
+                DB::table('subscriptions')
+                    ->where('id', $subscription->id)
+                    ->update([
+                        'status' => 1,
+                        'stripe_status' => 'active'
+                    ]);
             }
 
             $this->save();
