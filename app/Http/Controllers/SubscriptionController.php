@@ -143,6 +143,7 @@ class SubscriptionController extends Controller
 
     public function update_status(Request $request){
         $subscription = Subscription::findOrFail($request->id);
+        $subscription->syncStripeStatus();
         return $subscription->asStripeSubscription();
     }
 

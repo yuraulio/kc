@@ -208,6 +208,8 @@
         },
         success: function(data) {
           console.log('data', data);
+          alert('Status: '  + data.status);
+          window.location.reload();
         }
       });
     }
