@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import api from '../../panel_app/api';
+import { isNewAdmin } from '../routes/helpers';
 
 var mediaMixin = {
   data() {
@@ -288,9 +289,7 @@ var mediaMixin = {
         }
       }
 
-      let baseUrl = location.protocol + '//' + location.host;
-
-      if (!baseUrl.includes('admin')) {
+      if (!isNewAdmin()) {
         if (version != null && version != 'original') {
           if (this.$refs.crpr) {
             delete this.$refs.crpr.versionsForUpdate[version];
@@ -469,12 +468,7 @@ var mediaMixin = {
         });
     },
     userSelectedFiles($event) {
-      let baseUrl = location.protocol + '//' + location.host;
-
-      // console.log('first load data',this.firstLoadedData)
-      // console.log(this)
-
-      if (!baseUrl.includes('admin') && this.withoutImage) {
+      if (!isNewAdmin() && this.withoutImage) {
         this.updatedMediaImage($event);
       }
 
@@ -483,10 +477,10 @@ var mediaMixin = {
       }
       this.warning = false;
 
-      if (this.selectedFile && this.selectedFile.id != $event.id && !baseUrl.includes('admin')) {
+      if (this.selectedFile && this.selectedFile.id != $event.id && !isNewAdmin()) {
         this.updatedMediaImage($event);
         //this.$modal.show('edit-image-modal');
-      } else if (this.selectedFile == null && this.withoutImage && !baseUrl.includes('admin')) {
+      } else if (this.selectedFile == null && this.withoutImage && !isNewAdmin()) {
       } else {
         //alert('not different image')
         this.selectedFile = $event;

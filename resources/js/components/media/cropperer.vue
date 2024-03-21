@@ -271,6 +271,7 @@ import 'cropperjs/dist/cropper.css';
 import uploadImage from '../inputs/upload-image.vue';
 import VueScrollTo from 'vue-scrollto';
 import { validate } from 'json-schema';
+import { isNewAdmin } from '../routes/helpers';
 
 export default {
   props: {
@@ -319,13 +320,13 @@ export default {
       user: {},
       versions: [
         {
-          w: 470,
-          h: 470,
+          w: 2880,
+          h: 1248,
           q: 60,
           fit: 'crop',
-          version: 'instructors-testimonials',
-          title: 'Portrait image',
-          description: 'The half body image of instructors.',
+          version: 'header-image',
+          title: 'Header',
+          description: 'Hero & social sharing version.',
         },
         {
           w: 542,
@@ -333,8 +334,17 @@ export default {
           q: 60,
           fit: 'crop',
           version: 'event-card',
-          title: 'Preview boxes',
-          description: 'The image of courses on our home page.',
+          title: 'Previews',
+          description: 'Courses & blog articles preview version.',
+        },
+        {
+          w: 470,
+          h: 470,
+          q: 60,
+          fit: 'crop',
+          version: 'instructors-testimonials',
+          title: "User's portrait",
+          description: "Upper body version for instructor's & instructors' page.",
         },
         {
           w: 470,
@@ -342,17 +352,8 @@ export default {
           q: 60,
           fit: 'crop',
           version: 'users',
-          title: 'Testimonial image',
-          description: 'The image of a user in testimonials.',
-        },
-        {
-          w: 2880,
-          h: 1248,
-          q: 60,
-          fit: 'crop',
-          version: 'header-image',
-          title: 'Top image & Share image',
-          description: 'The image on top of a page.',
+          title: 'User’s thumbnail - Testimonial',
+          description: 'Head only version for testimonials.',
         },
         {
           w: 90,
@@ -360,17 +361,17 @@ export default {
           q: 60,
           fit: 'crop',
           version: 'instructors-small',
-          title: 'Lessons image',
-          description: 'The image of an instructor next to a lesson.',
+          title: 'User’s thumbnail - Lessons',
+          description: 'Head only version for lessons.',
         },
         {
           w: 600,
           h: 600,
           q: 60,
           fit: 'crop',
-          title: 'Advertising image',
+          title: 'Ads',
           version: 'feed-image',
-          description: 'The image we send to dynamic ad creatives via feed.',
+          description: 'The version automatically sent to ads dynamic feed.',
         },
         // {
         //     w: 1920,
@@ -517,13 +518,12 @@ export default {
       this.user = this.versionData ? this.versionData.user : this.parrentImage.user;
       this.extension = this.versionData ? this.versionData.extension : this.parrentImage.extension;
 
-      let baseUrl = location.protocol + '//' + location.host;
       if (!from_function) {
         let foundVersion = false;
 
         this.uploadedVersions.forEach((value) => {
           if (value.version == this.imageVersion) {
-            if (!baseUrl.includes('admin')) {
+            if (!isNewAdmin()) {
               this.confirmSelection(value);
             } else {
               this.confirmSelection(value);
@@ -534,7 +534,7 @@ export default {
         });
 
         if (!foundVersion) {
-          if (!baseUrl.includes('admin')) {
+          if (!isNewAdmin()) {
             if (this.$parent.$parent.firstLoadedData.id != this.parrentImage.id && value.version == 'original') {
               this.confirmSelection(value);
             }
