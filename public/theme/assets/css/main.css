@@ -1083,7 +1083,7 @@
          .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .course-tab-sidebar .course-details {  padding-left: 0; }
 
          .elearning-page-wrapper .page-content{ margin-bottom: 0; }
-         .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper.active-tab{ padding: 10px 28px 40px; }
+         .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper.active-tab{ padding: 10px 28px 40px; margin-top: 50px; }
 
          .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .course-tab-sidebar .course-details ul li { position: relative; padding-left: 0; padding-top: 30px; text-align: center; }
          .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .course-tab-sidebar .course-details ul li .info-icon { position: absolute; top: 0; left: 50%; transform: translateX(-50%); }
