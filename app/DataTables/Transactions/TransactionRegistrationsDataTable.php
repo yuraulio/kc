@@ -134,7 +134,7 @@ class TransactionRegistrationsDataTable extends AppDataTable
             if (!$from || !$to) {
                 return;
             }
-            $query->whereBetween('transactions.created_at', [Carbon::parse($from), Carbon::parse($to)]);
+            $query->whereBetween('transactions.created_at', [Carbon::parse($from)->startOfDay(), Carbon::parse($to)->endOfDay()]);
         });
 
         return $query;
