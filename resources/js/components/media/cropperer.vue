@@ -365,8 +365,8 @@ export default {
           description: 'Head only version for lessons.',
         },
         {
-          w: 600,
-          h: 600,
+          w: 1080,
+          h: 1080,
           q: 60,
           fit: 'crop',
           title: 'Ads',

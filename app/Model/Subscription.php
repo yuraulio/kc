@@ -261,30 +261,37 @@ class Subscription extends Model
      */
     public function syncStripeStatus()
     {
-        try{
+        try {
             $subscription = $this->asStripeSubscription();
 
             $status = 1;
-            switch($subscription->status){
-                case 'incomplete': $status = 0; break;
-                case 'incomplete_expired': $status = 0; break;
-                case 'trialing': $status = 1; break;
-                case 'active': $status = 1; break;
-                case 'past_due': $status = 0; break;
-                case 'canceled': $status = 0; break;
-                case 'unpaid': $status = 0; break;
-                case 'paused': $status = 0; break;
+            switch($subscription->status) {
+                case 'incomplete': $status = 0;
+                    break;
+                case 'incomplete_expired': $status = 0;
+                    break;
+                case 'trialing': $status = 1;
+                    break;
+                case 'active': $status = 1;
+                    break;
+                case 'past_due': $status = 0;
+                    break;
+                case 'canceled': $status = 0;
+                    break;
+                case 'unpaid': $status = 0;
+                    break;
+                case 'paused': $status = 0;
+                    break;
             }
 
             DB::table('subscriptions')
                 ->where('id', $subscription->id)
                 ->update([
                     'status' => $status,
-                    'stripe_status' => $subscription->status
+                    'stripe_status' => $subscription->status,
                 ]);
-
-        }catch(\Exception $e){
-            return null;
+        } catch(\Exception $e) {
+            return;
         }
     }
 

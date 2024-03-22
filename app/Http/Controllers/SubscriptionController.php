@@ -141,7 +141,8 @@ class SubscriptionController extends Controller
         return Excel::download(new SubscriptionExport($request), 'SubscriptionsExport.xlsx');
     }
 
-    public function update_status(Request $request){
+    public function update_status(Request $request)
+    {
         $request->validate([
             'id' => 'required|integer',
         ]);
@@ -156,5 +157,4 @@ class SubscriptionController extends Controller
             return response()->json(['error' => 'An error occurred while updating the subscription.'], 500);
         }
     }
-
 }
