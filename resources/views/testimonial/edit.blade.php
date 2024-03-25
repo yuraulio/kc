@@ -190,7 +190,7 @@
                                 </form>
                             </div>
                             <div class="tab-pane fade" id="tabs-icons-text-2" role="tabpanel" aria-labelledby="tabs-icons-text-2-tab">
-                            @include('admin.upload.upload', ['event' => ( isset($testimonial) && $testimonial->medias != null) ? $testimonial->medias : null, 'versions' => ['instructors-small']])
+                            @include('admin.upload.upload', ['event' => ( isset($testimonial) && $testimonial->medias != null) ? $testimonial->medias : null, 'versions' => ['users']])
                             @if($testimonial->medias != null && $testimonial->medias['name'] != '')
                                 <div id="version-btn" style="margin-bottom:20px" class="col">
                                     <a href="{{ route('media2.eventImage', $testimonial->medias) }}" target="_blank" class="btn btn-primary">{{ __('Versions') }}</a>
@@ -234,7 +234,7 @@
 
         path = state.element.attributes['path'].value
         name = state.element.attributes['name'].value
-        plus_name = '-instructors-small'
+        plus_name = '-users'
         ext = state.element.attributes['ext'].value
 
         var $state = $(

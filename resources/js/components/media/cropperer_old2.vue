@@ -355,15 +355,6 @@ export default {
           description: 'The image on top of a page.',
         },
         {
-          w: 90,
-          h: 90,
-          q: 60,
-          fit: 'crop',
-          version: 'instructors-small',
-          title: 'Lessons image',
-          description: 'The image of an instructor next to a lesson.',
-        },
-        {
           w: 1080,
           h: 1080,
           q: 60,

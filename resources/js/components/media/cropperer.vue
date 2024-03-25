@@ -352,17 +352,8 @@ export default {
           q: 60,
           fit: 'crop',
           version: 'users',
-          title: 'User’s thumbnail - Testimonial',
+          title: 'User’s thumbnail',
           description: 'Head only version for testimonials.',
-        },
-        {
-          w: 90,
-          h: 90,
-          q: 60,
-          fit: 'crop',
-          version: 'instructors-small',
-          title: 'User’s thumbnail - Lessons',
-          description: 'Head only version for lessons.',
         },
         {
           w: 1080,

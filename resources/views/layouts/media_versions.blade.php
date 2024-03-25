@@ -20,15 +20,15 @@
     if($media['mediable_type'] == 'App\Model\User'){
         $versions = [];
     }else if($media['mediable_type'] == 'App\Model\Event'){
-        $versions = ['social-media-sharing','instructors-testimonials', 'event-card', 'users' ,'header-image', 'instructors-small' ,'feed-image'];
+        $versions = ['social-media-sharing','instructors-testimonials', 'event-card', 'users' ,'header-image','feed-image'];
     }else if($media['mediable_type'] == 'App\Model\Pages' || $media['mediable_type'] == 'App\Model\Logos'){
-        $versions = ['social-media-sharing','instructors-testimonials', 'event-card', 'users' ,'header-image', 'instructors-small' ,'feed-image'];
+        $versions = ['social-media-sharing','instructors-testimonials', 'event-card', 'users' ,'header-image','feed-image'];
     }else if($media['mediable_type'] == 'App\Model\Instructor'){
-        $versions = ['social-media-sharing','instructors-testimonials', 'event-card', 'users' ,'header-image', 'instructors-small' ,'feed-image'];
+        $versions = ['social-media-sharing','instructors-testimonials', 'event-card', 'users' ,'header-image','feed-image'];
     }else if($media['mediable_type'] == 'App\Model\Testimonial'){
-        $versions = ['social-media-sharing','instructors-testimonials', 'event-card', 'users' ,'header-image', 'instructors-small' ,'feed-image'];
+        $versions = ['social-media-sharing','instructors-testimonials', 'event-card', 'users' ,'header-image','feed-image'];
     }else if($media['mediable_type'] == 'App\Model\Partner'){
-        $versions = ['social-media-sharing','instructors-testimonials', 'event-card', 'users' ,'header-image', 'instructors-small' ,'feed-image'];
+        $versions = ['social-media-sharing','instructors-testimonials', 'event-card', 'users' ,'header-image','feed-image'];
     }
 
     ?>

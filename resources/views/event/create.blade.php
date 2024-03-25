@@ -1515,9 +1515,9 @@
 
                                     </div>
 
-                                    
-                                    
-                                        
+
+
+
                                 </div>
 
                                 <div class="form-group col-12">
@@ -1533,7 +1533,7 @@
                                 </div>
 
                                 <div class="form-group col-12">
-                                    
+
                                     <div class="row">
                                         <div class="col-sm-12 col-md-6 completion-text form-group{{ $errors->has('fb_') ? ' has-danger' : '' }}">
                                             <label class="form-control-label" for="input-hours">(course_certification_completion)</label>
@@ -2172,7 +2172,7 @@
 
         path = state.element.attributes['path'].value
         name = state.element.attributes['name'].value
-        plus_name = '-instructors-small'
+        plus_name = '-users'
         ext = state.element.attributes['ext'].value
 
         var $state = $(
@@ -2301,9 +2301,9 @@
 
             $('.success-text').removeClass('d-none')
             $('#has_exam_editors_text').text('Certification the participants gets in PDF')
-            
 
-            
+
+
         }else{
             $('#has_exam_editors_text').text('Certification the participants get in PDF')
             $('.success-text').addClass('d-none')

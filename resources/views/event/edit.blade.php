@@ -3757,7 +3757,7 @@ $show_popup = isset($uri['show_popup']) ? $uri['show_popup'] : 0;
                                                     @include('alerts.feedback', ['field' => 'ext_url'])
 
                                                     {{-- @include('event.image_versions', ['event' => $event->medias,'versions1'=> ['event-card', 'header-image', 'social-media-sharing']]) --}}
-                                                    {{-- @include('event.image_versions_new', ['event' => $event->medias,'versions1'=> ['social-media-sharing','instructors-testimonials', 'event-card', 'users' ,'header-image', 'instructors-small' ,'feed-image']]) --}}
+                                                    {{-- @include('event.image_versions_new', ['event' => $event->medias,'versions1'=> ['social-media-sharing','instructors-testimonials', 'event-card', 'users' ,'header-image', 'feed-image']]) --}}
                                                 </div>
                                                 <div class="tab-pane fade" id="instructors-tab" role="tabpanel"
                                                      aria-labelledby="tabs-icons-text-2-tab">
@@ -4979,7 +4979,7 @@ $show_popup = isset($uri['show_popup']) ? $uri['show_popup'] : 0;
 
                 row = `
                         <span style="display:inline-block" class="avatar avatar-sm rounded-circle">
-                            <img src="${window.location.origin + inst_media.path + inst_media.name + '-instructors-small' + inst_media.ext}" alt="${data.instructor.title+' '+data.instructor.subtitle}" style="max-width: 100px; max-height: 40px; border-radius: 25px" draggable="false">
+                            <img src="${window.location.origin + inst_media.path + inst_media.name + '-users' + inst_media.ext}" alt="${data.instructor.title+' '+data.instructor.subtitle}" style="max-width: 100px; max-height: 40px; border-radius: 25px" draggable="false">
 
                         </span>
                         <div style="display:inline-block">${data.instructor.title+' '+data.instructor.subtitle}</div>
@@ -5341,7 +5341,7 @@ $show_popup = isset($uri['show_popup']) ? $uri['show_popup'] : 0;
 
         path = state.element.attributes['path'].value
         name = state.element.attributes['name'].value
-        plus_name = '-instructors-small'
+        plus_name = '-users'
         ext = state.element.attributes['ext'].value
 
         var $state = $(

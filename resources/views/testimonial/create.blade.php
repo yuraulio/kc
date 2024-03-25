@@ -172,7 +172,7 @@
 
         path = state.element.attributes['path'].value
         name = state.element.attributes['name'].value
-        plus_name = '-instructors-small'
+        plus_name = '-users'
         ext = state.element.attributes['ext'].value
 
         var $state = $(

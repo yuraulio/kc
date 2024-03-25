@@ -38,14 +38,6 @@ var mediaMixin = {
           description: 'Applies to: Event header carousel (Main event page)',
         },
         {
-          w: 90,
-          h: 90,
-          q: 60,
-          fit: 'crop',
-          version: 'instructors-small',
-          description: 'Applies to : Event -> Topics (syllabus-block)',
-        },
-        {
           w: 1080,
           h: 1080,
           q: 60,

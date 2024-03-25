@@ -66,14 +66,14 @@ return [
         'uploads' => [
             'driver' => 'local',
             'root' => public_path('/uploads'),
-            'url' => env('APP_URL'),
+            'url' => env('APP_URL') . '/uploads',
             'visibility' => 'public',
         ],
 
         'awards' => [
             'driver' => 'local',
             'root' => public_path('/awards'),
-            'url' => env('APP_URL'),
+            'url' => env('APP_URL') . '/awards',
             'visibility' => 'public',
         ],
 

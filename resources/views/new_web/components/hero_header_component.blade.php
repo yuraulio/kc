@@ -104,7 +104,7 @@
                             <li style="list-style:none !important;">
                             @if($course_awards_icon != null && $course_awards_icon['path'] != null)
                                 <img class="info-icon-hero" src="{{ cdn($course_awards_icon['path'])}}" alt="{{(isset($course_awards_icon['alt_text']) && $course_awards_icon['alt_text'] != null ) ? $course_awards_icon['alt_text'] : '' }}">
-                                {{--<img class="info-icon-hero" src="{{ cdn('uploads\originals\instructors\aivalis-apostolis-knowcrunch1-instructors-small.png') }}" alt="{{(isset($course_awards_icon['alt_text']) && $course_awards_icon['alt_text'] != null ) ? $course_awards_icon['alt_text'] : '' }}">--}}
+                                {{--<img class="info-icon-hero" src="{{ cdn('uploads\originals\instructors\aivalis-apostolis-knowcrunch1-users.png') }}" alt="{{(isset($course_awards_icon['alt_text']) && $course_awards_icon['alt_text'] != null ) ? $course_awards_icon['alt_text'] : '' }}">--}}
                                 <div class="info-text">
                                     <p class="">{{ $info['course_awards_text'] }}</p>
                                 </div>

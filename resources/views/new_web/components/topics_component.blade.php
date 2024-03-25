@@ -79,15 +79,15 @@
                                         <?php
                                             $instructor = reset($instructors[$lesson['instructor_id']]);
 
-                                            $imageDetails = get_image_version_details('instructors-small');
-                                            $width = $imageDetails['w'];
-                                            $height = $imageDetails['h'];
+                                            $imageDetails = get_image_version_details('users');
+                                            $width = $imageDetails['small']['w'];
+                                            $height = $imageDetails['small']['h'];
                                         ?>
 
                                             @if($instructor['status'])
                                                 <a href="{{config('app.NEW_PAGES_LINK') . '/' .  $instructor['slugable']['slug']}}">
                                                     <span class="custom-tooltip">{{ $instructor['title'] }} {{$instructor['subtitle']}}</span>
-                                                    <img loading="lazy" alt="{{ $instructor['title']}} {{$instructor['subtitle']}}" title="{{ $instructor['title']}} {{$instructor['subtitle']}}" src="{{ cdn(get_image($instructor['mediable'],'instructors-small')) }}" width="{{ $width }}" height="{{ $height }}"/>
+                                                    <img loading="lazy" alt="{{ $instructor['title']}} {{$instructor['subtitle']}}" title="{{ $instructor['title']}} {{$instructor['subtitle']}}" src="{{ cdn(get_image($instructor['mediable'],'users')) }}" width="{{ $width }}" height="{{ $height }}"/>
                                                 </a>
                                             @else
                                                 <a class="non-pointer" href="javascript:void(0)">
