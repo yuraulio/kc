@@ -143,8 +143,7 @@
             dom: 'Bfltip',
             buttons: [
               { extend: 'copy', className: 'btn btn-icon btn-primary btn-sm js-excel-button btn', text: '<i class="ni ni-folder-17"></i> Copy' },
-              { extend: 'excel', className: 'btn btn-icon btn-primary btn-sm js-excel-button btn', text: '<i class="ni ni-cloud-download-95"></i> Excel' },
-              { extend: 'print', className: 'btn btn-icon btn-primary btn-sm js-excel-button btn', text: '<i class="ni ni-single-copy-04"></i> Print' }
+              { extend: 'excel', className: 'btn btn-icon btn-primary btn-sm js-excel-button btn', text: '<i class="ni ni-cloud-download-95"></i> Excel', filename: 'Giveaway participants' }
             ],
             order: [[6, 'desc']],
             columnDefs: [
