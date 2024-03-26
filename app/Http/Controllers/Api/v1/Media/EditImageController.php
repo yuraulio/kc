@@ -47,18 +47,7 @@ class EditImageController extends ApiBaseController
             ->first();
 
         if ($mediaFile) {
-            if (Storage::disk('public')->exists($mediaFile->path)) {
-                Storage::disk('public')->delete($mediaFile->path);
-
-                $n = strrpos($mediaFile->path, '.');
-                $ext = substr($imageName, $n);
-                if ($ext !== 'webp') {
-                    $webpPath = str_replace($ext, 'webp', $mediaFile->path);
-                    if (Storage::disk('public')->exists($webpPath)) {
-                        Storage::disk('public')->delete($webpPath);
-                    }
-                }
-            }
+            $service->deleteVersionFile($mediaFile);
         }
         if (!Storage::disk('public')->exists($originalFile->path)) {
             return $this->response(['message' => 'Original File not found'], Response::HTTP_BAD_REQUEST);

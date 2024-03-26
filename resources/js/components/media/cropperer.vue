@@ -353,7 +353,7 @@ export default {
           fit: 'crop',
           version: 'users',
           title: 'User’s thumbnail',
-          description: 'Head only version for testimonials.',
+          description: 'Head only version for lessons and testimonials.',
         },
         {
           w: 1080,
