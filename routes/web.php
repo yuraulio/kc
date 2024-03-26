@@ -373,6 +373,7 @@ Route::group(['middleware' => 'auth.aboveauthor', 'prefix' => 'admin'], function
     //Transaction Update
     Route::post('transaction/update', 'TransactionController@update');
     Route::get('invoice/{invoice}', 'Theme\InvoiceController@getInvoice');
+    Route::delete('invoice/{invoice}', 'Theme\InvoiceController@destroy')->name('admin.invoice.delete');
 
     //Create Deree KCid
     Route::post('/create-kc-id', 'UserController@createKC')->name('create-kc');
