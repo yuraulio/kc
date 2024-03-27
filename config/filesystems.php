@@ -1,5 +1,7 @@
 <?php
 
+$publicStorageUrl = env('PUBLIC_STORAGE_URL', env('APP_URL'));
+
 return [
 
     /*
@@ -66,27 +68,27 @@ return [
         'uploads' => [
             'driver' => 'local',
             'root' => public_path('/uploads'),
-            'url' => env('APP_URL') . '/uploads',
+            'url' => $publicStorageUrl . '/uploads',
             'visibility' => 'public',
         ],
 
         'awards' => [
             'driver' => 'local',
             'root' => public_path('/awards'),
-            'url' => env('APP_URL') . '/awards',
+            'url' => $publicStorageUrl . '/awards',
             'visibility' => 'public',
         ],
 
         'public' => [
             'driver' => 'local',
             'root' => public_path('/uploads'),
-            'url' => env('APP_URL') . '/uploads',
+            'url' => $publicStorageUrl . '/uploads',
             'visibility' => 'public',
         ],
         'export' => [
             'driver' => 'local',
             'root' => public_path('/tmp/exports'),
-            'url' => env('APP_URL'),
+            'url' => $publicStorageUrl . '/tmp/exports',
             'visibility' => 'public',
         ],
 
