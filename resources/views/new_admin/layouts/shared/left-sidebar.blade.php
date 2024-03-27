@@ -70,7 +70,7 @@
                 <li>
                     <a href="{{config("app.url") . "/admin" . $url_autologin}}">
                         <i data-feather="clipboard"></i>
-                        <span> <span class="badge bg-secondary mt-0 align-middle">Old</span> Dashboard </span>
+                        <span> <span class="badge bg-secondary mt-0 align-middle">Old</span> Laravel Admin </span>
                     </a>
                 </li>
 
