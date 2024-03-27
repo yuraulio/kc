@@ -1022,6 +1022,8 @@ if (!function_exists('get_image')) {
                 $version = false;
             } elseif (isset($media['ext']) && file_exists(public_path('/') . $image . '-' . $version . $media['ext'])) {
                 $image = $image . '-' . $version . $media['ext'];
+            } elseif (isset($media['ext']) && file_exists(public_path('/') . $image . '-' . $version . '.jpg')) {
+                $image = $image . '-' . $version . $media['ext'];
             } elseif ($image != '') {
                 $check_image_url = str_replace('/originals', '', $image) . '-instructors-testimonials' . $media['ext'];
                 if (file_exists(public_path('/') . $check_image_url)) {
