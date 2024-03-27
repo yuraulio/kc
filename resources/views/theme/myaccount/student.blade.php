@@ -679,6 +679,12 @@
 
 
                         @if($showPlan != null && $has_plan && !$masterClassAccess && $subscriptionAccess)
+
+                        @php
+                        $stripe_plans = App\Model\Plan::where('published', 1)->pluck('stripe_plan');
+                        $subscription = Laravel\Cashier\Subscription::where('user_id', $user->id)->where('stripe_status', 'active')->whereIn('stripe_price', $stripe_plans)->first();
+                        @endphp
+                        @if(!$subscription)
                         <div class="subscription-div">
                             <div class="col12 dynamic-courses-wrapper subscription-card">
                                 <div class="item">
@@ -705,6 +711,8 @@
 
                             </div>
                         </div>
+
+                        @endif
 
                         @endif
 
