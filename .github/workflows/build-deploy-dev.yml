@@ -44,6 +44,15 @@ jobs:
     # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
     # - name: Run test suite
     #   run: composer run-script test
+
+    - name: Cache node modules
+      id: npm-cache-dev
+      uses: actions/cache@v3
+      with:
+        path: '~/.npm'
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
     
     - name: Install dependencies
       id: install-dev-deps
