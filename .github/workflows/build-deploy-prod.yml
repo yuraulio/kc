@@ -20,8 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     
     outputs:
-      old_artifact_ids: ${{ steps.get-prod-artifact-id.outputs.OLD_ARTIFACT_IDS }}
-      prod_artifact_url: ${{ steps.get-prod-artifact-url.outputs.PROD_ARTIFACT_URL }}
+      prod_artifact_id: ${{ steps.upload-prod-artifact.outputs.artifact-id }}
 
     steps:
     - uses: actions/checkout@v3
@@ -62,106 +61,108 @@ jobs:
 
     - name: Upload a Build Artifact
       id: upload-prod-artifact
-      uses: actions/upload-artifact@v4.3.1
+      uses: actions/upload-artifact@v4
       with:
         name: kc-prod-${{ github.sha }}
         path: |
           .
           !./node_modules
           !./resources/admin/node_modules
-
-    - name: Get Artifact ID
-      id: get-prod-artifact-id
-      run: |
-        ARTIFACT_ID_RES=$(curl -sH "Authorization: Bearer ${{ secrets.GHUB_ACTIONS_API }}" \
-        https://api.github.com/repos/${{ github.repository }}/actions/artifacts)
-        
-        ARTIFACT_ID=$(echo "$ARTIFACT_ID_RES" | jq -r '.artifacts[] | select(.name == "kc-prod-${{ github.sha }}") | .id' | head -n 1)
-        echo "Prod Artifact ID: $ARTIFACT_ID"
-        echo "PROD_ARTIFACT_ID=$ARTIFACT_ID" >> "$GITHUB_ENV"
-        
-        OLD_ARTIFACT_IDS=$(echo "$ARTIFACT_ID_RES" |  jq -r '.artifacts[] | select(.name | startswith("kc-prod")) | .id' | tail -n +3)
-        {
-          echo 'OLD_ARTIFACT_IDS<<EOF'
-          echo $OLD_ARTIFACT_IDS
-          echo EOF
-        } >> "$GITHUB_OUTPUT"
-      
-    - name: Get Artifact URL
+  
+  
+  deploy-prod-web:
+    needs: [build-prod] # This only runs if the build is succesful
+    runs-on: ubuntu-latest
+    environment:
+      name: prod-web
+      url: https://knowcrunch.com
+    steps:
+    - name: Get Artifact Public URL
       id: get-prod-artifact-url
       run: |
         ARTIFACT_URL=$(curl -IsH "Authorization: Bearer ${{ secrets.GHUB_ACTIONS_API }}" \
-        https://api.github.com/repos/${{ github.repository }}/actions/artifacts/${{ env.PROD_ARTIFACT_ID }}/zip | \
+        https://api.github.com/repos/${{ github.repository }}/actions/artifacts/${{needs.build-prod.outputs.prod_artifact_id}}/zip | \
         grep -i '^location:' | \
         awk '{printf "%s", $2}' | \
         tr -d '\r\n')
         echo "Artifact URL: $ARTIFACT_URL"
         echo "PROD_ARTIFACT_URL=$ARTIFACT_URL" >> "$GITHUB_OUTPUT"
-
-
-  deploy-prod-web:
-    needs: [build-prod] # This only runs if the build is succesful
-    runs-on: ubuntu-latest
-    environment: prod
-    steps:
-    - name: Deploy to Scaleforce via Archive URL
-      id: deploy-prod-artifact
-      run: |
-        # scaleforceres=$(curl --location 'https://app.j.scaleforce.net/1.0/environment/deployment/rest/deployarchive' \
-        # --header 'Content-Type: application/x-www-form-urlencoded' \
-        # --data-urlencode 'fileName=kc-prod-${{ github.sha }}' \
-        # --data-urlencode 'envName=${{ vars.DEPLOY_ENV_WEB }}' \
-        # --data-urlencode 'session=${{ secrets.SCALEFORCE_DEPLOY_TOKEN }}' \
-        # --data-urlencode 'zdt=true' \
-        # --data-urlencode 'nodeGroup=cp' \
-        # --data-urlencode 'fileUrl=${{needs.build-prod.outputs.prod_artifact_url}}' \
-        # --data-urlencode 'hooks={"preDeploy":"cd /var/www/webroot && ln /var/www/webroot/ROOT OLDROOT", "postDeploy":"rsync -av --ignore-existing --exclude=\"node_modules/\" --exclude=\"vendor/\" --exclude=\"public/uploads/\" --exclude=\".git/\" --include=\".*\" /var/www/webroot/OLDROOT/ /var/www/webroot/ROOT/ \&\& cd /var/www/webroot/ROOT \&\& php artisan migrate \&\& php artisan migrate --path=/database/migrations/cms \&\& php artisan migrate --path=/database/migrations/cms-plugins \&\& echo $(git rev-parse --short HEAD \&\& git log -1 --format=\"%at\" | xargs -I{} date -d @{} +%Y/%m/%d_%H:%M:%S) > /var/www/webroot/ROOT/storage/app/version-commit.txt \&\& php artisan config:clear \&\& php artisan cache:clear \&\& php artisan config:cache \&\& php artisan route:cache \&\& php artisan view:cache \&\& rm /var/www/webroot/OLDROOT \&\& echo \"Post Deploy Hook Ended\""}')
-        # echo $scaleforceres
-        # scaleforceres_result=$(echo "$scaleforceres" | jq '.result')
-        scaleforceres_result='0'
-        echo "SCALEFORCE_RES=$scaleforceres_result" >> "$GITHUB_ENV"
-
-    - name: Fail if JSON response is not 0
-      id: verify-prod-artifact-deployment
-      if: ${{ env.SCALEFORCE_RES != '0' }}
-      run: echo "JSON response is not 0, failing the job." && exit 1
-
-  deploy-prod-admin:
-    needs: [build-prod] # This only runs if the build is succesful
-    runs-on: ubuntu-latest
-    environment: prod
-    steps:    
+    
     - name: Deploy to Scaleforce via Archive URL
       id: deploy-prod-artifact
       run: |
         scaleforceres=$(curl --location 'https://app.j.scaleforce.net/1.0/environment/deployment/rest/deployarchive' \
         --header 'Content-Type: application/x-www-form-urlencoded' \
         --data-urlencode 'fileName=kc-prod-${{ github.sha }}' \
-        --data-urlencode 'envName=${{ vars.DEPLOY_ENV_ADMIN }}' \
+        --data-urlencode 'envName=${{ vars.DEPLOY_ENV }}' \
         --data-urlencode 'session=${{ secrets.SCALEFORCE_DEPLOY_TOKEN }}' \
         --data-urlencode 'zdt=true' \
         --data-urlencode 'nodeGroup=cp' \
-        --data-urlencode 'fileUrl=${{needs.build-prod.outputs.prod_artifact_url}}' \
-        --data-urlencode 'hooks={"preDeploy":"cd /var/www/webroot && ln /var/www/webroot/ROOT OLDROOT", "postDeploy":"rsync -av --ignore-existing --exclude=\"node_modules/\" --exclude=\"vendor/\" --exclude=\"public/uploads/\" --exclude=\".git/\" --include=\".*\" /var/www/webroot/OLDROOT/ /var/www/webroot/ROOT/ \&\& cd /var/www/webroot/ROOT \&\& echo $(git rev-parse --short HEAD \&\& git log -1 --format=\"%at\" | xargs -I{} date -d @{} +%Y/%m/%d_%H:%M:%S) > /var/www/webroot/ROOT/storage/app/version-commit.txt \&\& php artisan config:clear \&\& php artisan cache:clear \&\& php artisan config:cache \&\& php artisan route:cache \&\& php artisan view:cache \&\& rm /var/www/webroot/OLDROOT \&\& echo \"Post Deploy Hook Ended\""}')
+        --data-urlencode 'fileUrl=${{steps.get-prod-artifact-url.outputs.PROD_ARTIFACT_URL}}' \
+        --data-urlencode 'hooks={"preDeploy":"cd /var/www/webroot && ln -f /var/www/webroot/ROOT OLDROOT", "postDeploy":"rsync -av --ignore-existing --exclude=\"node_modules/\" --exclude=\"vendor/\" --exclude=\"public/uploads/\" --exclude=\"storage/framework/\" --exclude=\".git/\" --include=\".*\" /var/www/webroot/OLDROOT/ /var/www/webroot/ROOT/ \&\& cd /var/www/webroot/ROOT \&\& php artisan migrate --force \&\& php artisan migrate --force --path=/database/migrations/cms \&\& php artisan migrate --force --path=/database/migrations/cms-plugins \&\& echo $(git rev-parse --short HEAD \&\& git log -1 --format=\"%at\" | xargs -I{} date -d @{} +%Y/%m/%d_%H:%M:%S) > /var/www/webroot/ROOT/storage/app/version-commit.txt \&\& php artisan config:clear \&\& php artisan cache:clear \&\& php artisan config:cache \&\& php artisan route:cache \&\& php artisan view:cache \&\& rm /var/www/webroot/OLDROOT \&\& echo \"Post Deploy Hook Ended\""}')
         echo $scaleforceres
         scaleforceres_result=$(echo "$scaleforceres" | jq '.result')
-        echo "SCALEFORCE_RES=$scaleforceres_result" >> "$GITHUB_ENV"
+        echo "SCALEFORCE_RES=$scaleforceres_result" >> "$GITHUB_OUTPUT"
 
     - name: Fail if JSON response is not 0
       id: verify-prod-artifact-deployment
-      if: ${{ env.SCALEFORCE_RES != '0' }}
+      if: steps.deploy-prod-artifact.outputs.SCALEFORCE_RES != '0'
+      run: echo "JSON response is not 0, failing the job." && exit 1
+
+  deploy-prod-admin:
+    needs: [build-prod] # This only runs if the build is succesful
+    runs-on: ubuntu-latest
+    environment:
+      name: prod-admin
+      url: https://admin.knowcrunch.com
+    steps:
+    - name: Get Artifact Public URL
+      id: get-prod-artifact-url
+      run: |
+        ARTIFACT_URL=$(curl -IsH "Authorization: Bearer ${{ secrets.GHUB_ACTIONS_API }}" \
+        https://api.github.com/repos/${{ github.repository }}/actions/artifacts/${{needs.build-prod.outputs.prod_artifact_id}}/zip | \
+        grep -i '^location:' | \
+        awk '{printf "%s", $2}' | \
+        tr -d '\r\n')
+        echo "Artifact URL: $ARTIFACT_URL"
+        echo "PROD_ARTIFACT_URL=$ARTIFACT_URL" >> "$GITHUB_OUTPUT"
+    
+    - name: Deploy to Scaleforce via Archive URL
+      id: deploy-prod-artifact
+      run: |
+        scaleforceres=$(curl --location 'https://app.j.scaleforce.net/1.0/environment/deployment/rest/deployarchive' \
+        --header 'Content-Type: application/x-www-form-urlencoded' \
+        --data-urlencode 'fileName=kc-prod-${{ github.sha }}' \
+        --data-urlencode 'envName=${{ vars.DEPLOY_ENV }}' \
+        --data-urlencode 'session=${{ secrets.SCALEFORCE_DEPLOY_TOKEN }}' \
+        --data-urlencode 'zdt=true' \
+        --data-urlencode 'nodeGroup=cp' \
+        --data-urlencode 'fileUrl=${{steps.get-prod-artifact-url.outputs.PROD_ARTIFACT_URL}}' \
+        --data-urlencode 'hooks={"preDeploy":"cd /var/www/webroot && ln -f /var/www/webroot/ROOT OLDROOT", "postDeploy":"rsync -av --ignore-existing --exclude=\"node_modules/\" --exclude=\"vendor/\" --exclude=\"public/uploads/\" --exclude=\"storage/framework/\" --exclude=\".git/\" --include=\".*\" /var/www/webroot/OLDROOT/ /var/www/webroot/ROOT/ \&\& cd /var/www/webroot/ROOT \&\& echo $(git rev-parse --short HEAD \&\& git log -1 --format=\"%at\" | xargs -I{} date -d @{} +%Y/%m/%d_%H:%M:%S) > /var/www/webroot/ROOT/storage/app/version-commit.txt \&\& php artisan config:clear \&\& php artisan cache:clear \&\& php artisan config:cache \&\& php artisan route:cache \&\& php artisan view:cache \&\& rm /var/www/webroot/OLDROOT \&\& echo \"Post Deploy Hook Ended\""}')
+        echo $scaleforceres
+        scaleforceres_result=$(echo "$scaleforceres" | jq '.result')
+        echo "SCALEFORCE_RES=$scaleforceres_result" >> "$GITHUB_OUTPUT"
+
+    - name: Fail if JSON response is not 0
+      id: verify-prod-artifact-deployment
+      if: steps.deploy-prod-artifact.outputs.SCALEFORCE_RES != '0'
       run: echo "JSON response is not 0, failing the job." && exit 1
 
 
   clean-prod-deploy:
-    needs: [build-prod, deploy-prod-web, deploy-prod-admin] # This only runs if the deployments are successful
+    needs: [deploy-prod-web, deploy-prod-admin] # This only runs if the deployments are successful
     runs-on: ubuntu-latest
     steps:
     - name: Delete Old Prod Artifacts
       id: delete-old-prod-artifacts
       run: |
+        # Get Old Artifact IDs
+        ARTIFACT_ID_RES=$(curl -sH "Authorization: Bearer ${{ secrets.GHUB_ACTIONS_API }}" \
+        https://api.github.com/repos/${{ github.repository }}/actions/artifacts)
+        OLD_ARTIFACT_IDS=$(echo "$ARTIFACT_ID_RES" |  jq -r '.artifacts[] | select(.name | startswith("kc-prod")) | .id' | tail -n +3)
+      
         # Delete Old Artifacts
-        for artifact_id in ${{needs.build-prod.outputs.old_artifact_ids}}; do
+        for artifact_id in $OLD_ARTIFACT_IDS; do
           curl -X DELETE -sH "Authorization: Bearer ${{ secrets.GHUB_ACTIONS_API }}" "https://api.github.com/repos/${{ github.repository }}/actions/artifacts/$artifact_id"
           echo "Deleted artifact with ID: $artifact_id"
         done

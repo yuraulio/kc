@@ -15,9 +15,9 @@
                                 $alt='';
                                 $width = 0;
                                 $height = 0;
-                                $img = get_image($syllabus[0]['mediable'],'instructors-small');
+                                $img = get_image($syllabus[0]['mediable'],'users');
 
-                                $imageDetails = get_image_version_details('instructors-small');
+                                $imageDetails = get_image_version_details('users');
                                 $width = $imageDetails['w'];
                                 $height = $imageDetails['h'];
                             ?>

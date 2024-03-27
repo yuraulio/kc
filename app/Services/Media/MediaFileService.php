@@ -2,6 +2,7 @@
 
 namespace App\Services\Media;
 
+use App\Jobs\RenameFile;
 use App\Model\Admin\MediaFile;
 use App\Model\Admin\Page;
 use Illuminate\Support\Facades\Auth;
@@ -115,6 +116,12 @@ class MediaFileService
         Storage::disk('public')->put($path, $image, 'public');
     }
 
+    /**
+     * @param MediaFile $mediaFile
+     * @param $alttext
+     * @param $link
+     * @return void
+     */
     public function updateAltTextLink($mediaFile, $alttext, $link)
     {
         // set alttext on all subfiles/siblings
@@ -160,5 +167,55 @@ class MediaFileService
                 }
             }
         }
+    }
+
+    public function deleteVersionFile(MediaFile $mediaFile)
+    {
+        if (Storage::disk('public')->exists($mediaFile->path)) {
+            Storage::disk('public')->delete($mediaFile->path);
+        }
+        $n = strrpos($mediaFile->path, '.');
+        $ext = substr($mediaFile->path, $n);
+        if ($ext !== 'webp') {
+            $webpPath = str_replace($ext, 'webp', $mediaFile->path);
+            if (Storage::disk('public')->exists($webpPath)) {
+                Storage::disk('public')->delete($webpPath);
+            }
+        }
+    }
+
+    public function deleteVersion(MediaFile $mediaFile, $newVersion = null)
+    {
+        $this->deleteVersionFile($mediaFile);
+
+        if ($newVersion && $mediaFile->url && $mediaFile->parent_id) {
+            /** @type MediaFile $newFile */
+            $newFile = MediaFile::where('version', $newVersion)
+                ->where('parent_id', $mediaFile->parent_id)
+                ->first();
+            if (!$newFile) {
+                $newFile = MediaFile::query()
+                    ->where('id', $mediaFile->parent_id)
+                    ->first();
+            }
+            if ($newFile) {
+                if ($mediaFile->pages) {
+                    foreach ($mediaFile->pages as $page) {
+                        $content = $page->content;
+                        $content = str_replace($mediaFile->url, $newFile->url, $content);
+                        $content = str_replace($mediaFile->path, $newFile->path, $content);
+                        $page->content = $content;
+                        $page->save();
+                        if (!$newFile->pages()->where('cms_pages.id', $page->id)->exists()) {
+                            $newFile->pages()->attach($page->id);
+                        }
+                    }
+                }
+                RenameFile::dispatch($mediaFile->url, $newFile->url, $newFile->alt_text, $newFile->link)
+                    ->delay(now()->addSeconds(5));
+            }
+        }
+        $mediaFile->pages()->detach();
+        $mediaFile->delete();
     }
 }

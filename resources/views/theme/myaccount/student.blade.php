@@ -679,6 +679,12 @@
 
 
                         @if($showPlan != null && $has_plan && !$masterClassAccess && $subscriptionAccess)
+
+                        @php
+                        $stripe_plans = App\Model\Plan::where('published', 1)->pluck('stripe_plan');
+                        $subscription = Laravel\Cashier\Subscription::where('user_id', $user->id)->where('stripe_status', 'active')->whereIn('stripe_price', $stripe_plans)->first();
+                        @endphp
+                        @if(!$subscription)
                         <div class="subscription-div">
                             <div class="col12 dynamic-courses-wrapper subscription-card">
                                 <div class="item">
@@ -705,6 +711,8 @@
 
                             </div>
                         </div>
+
+                        @endif
 
                         @endif
 
@@ -874,9 +882,9 @@
                                                                             <a href="{{$instructors[$lesso['instructor_id']][0]['slugable']['slug']}}">
                                                                                 <span class="custom-tooltip"><?= $instructors[$lesso['instructor_id']][0]['title'].' '.$instructors[$lesso['instructor_id']][0]['subtitle']; ?></span>
                                                                                 <?php
-                                                                                $imageDetails = get_image_version_details('instructors-small');
+                                                                                $imageDetails = get_image_version_details('users');
                                                                                 ?>
-                                                                                <img loading="lazy" class="resp-img" src="{{cdn( get_image($instructors[$lesso['instructor_id']][0]['mediable'],'instructors-small') )}}" width="{{ $imageDetails['w'] }}" height="{{ $imageDetails['h'] }}" title="<?= $instructors[$lesso['instructor_id']][0]['title']; $instructors[$lesso['instructor_id']][0]['subtitle']; ?> alt="<?= $instructors[$lesso['instructor_id']][0]['title']; $instructors[$lesso['instructor_id']][0]['subtitle']; ?>"/>
+                                                                                <img loading="lazy" class="resp-img" src="{{cdn( get_image($instructors[$lesso['instructor_id']][0]['mediable'],'users') )}}" width="{{ $imageDetails['w'] }}" height="{{ $imageDetails['h'] }}" title="<?= $instructors[$lesso['instructor_id']][0]['title']; $instructors[$lesso['instructor_id']][0]['subtitle']; ?> alt="<?= $instructors[$lesso['instructor_id']][0]['title']; $instructors[$lesso['instructor_id']][0]['subtitle']; ?>"/>
                                                                             </a>
                                                                         </div>
                                                                         <!-- /.topic-wrapper-big -->

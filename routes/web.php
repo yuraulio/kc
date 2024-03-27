@@ -118,8 +118,6 @@ Route::group(['middleware' => 'auth.aboveauthor', 'prefix' => 'admin'], function
     //Participants
     Route::get('transaction/registrations', TransactionRegistrationsReportController::class)->name('transaction.participants');
     Route::get('transaction/revenue', TransactionRevenuesReportController::class)->name('transaction.participants_new');
-    Route::get('transaction/registrations/old', 'TransactionController@participants_inside_revenue');
-    Route::get('transaction/revenue/old', 'TransactionController@participants_inside_revenue_new');
     Route::post('transaction/updateExpirationDate', ['as' => 'transaction.updateExpirationDate', 'uses' => 'TransactionController@updateExpirationDate']);
     Route::post('transaction/export-excel', 'TransactionController@exportExcel')->name('transaction.export-excel');
     Route::post('transaction/export-invoice', 'TransactionController@exportInvoices')->name('transaction.export-invoice');
@@ -375,6 +373,7 @@ Route::group(['middleware' => 'auth.aboveauthor', 'prefix' => 'admin'], function
     //Transaction Update
     Route::post('transaction/update', 'TransactionController@update');
     Route::get('invoice/{invoice}', 'Theme\InvoiceController@getInvoice');
+    Route::delete('invoice/{invoice}', 'Theme\InvoiceController@destroy')->name('admin.invoice.delete');
 
     //Create Deree KCid
     Route::post('/create-kc-id', 'UserController@createKC')->name('create-kc');

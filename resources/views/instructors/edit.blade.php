@@ -206,7 +206,7 @@
                                 </form>
                             </div>
                             <div class="tab-pane fade" id="tabs-icons-text-2" role="tabpanel" aria-labelledby="tabs-icons-text-2-tab">
-                                @include('admin.upload.upload', ['event' => ( isset($instructor) && $instructor->medias != null) ? $instructor->medias : null,'image_version' => 'null', 'versions' => ['instructors-testimonials', 'instructors-small']])
+                                @include('admin.upload.upload', ['event' => ( isset($instructor) && $instructor->medias != null) ? $instructor->medias : null,'image_version' => 'null', 'versions' => ['instructors-testimonials', 'users']])
 
                                 @if($instructor->medias != null && $instructor->medias['name'] != '')
                                     <div id="version-btn" style="margin-bottom:20px" class="col">
