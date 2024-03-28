@@ -73,6 +73,12 @@
                         <span> <span class="badge bg-secondary mt-0 align-middle">Old</span> Laravel Admin </span>
                     </a>
                 </li>
+              <li>
+                <a href="https://admin-rose-eta.vercel.app/home/">
+                  <i data-feather="clipboard"></i>
+                  <span> <span class="badge bg-secondary mt-0 align-middle">New</span> React Admin </span>
+                </a>
+              </li>
 
                 <li class="menu-title">Knowledge</li>
 
