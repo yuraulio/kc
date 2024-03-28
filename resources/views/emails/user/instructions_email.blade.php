@@ -150,7 +150,7 @@
                                                                                     <li><strong>VIDEOS &amp; FILES: </strong>in your account &gt; my courses</li>
                                                                                     <li><strong>EXAMS:</strong> automatically activate after watching 80% of the videos</li>
                                                                                     <li><strong>CERTIFICATION: </strong>automatically appears in your account &gt; my courses upon successful completion of your exams</li>
-                                                                                    <li><strong>ACCOUNT:</strong> <a href="{{url('/')}}/pdf/elearning/Knowcrunch-How-to-access-our-website-&-account.pdf" target="_blank" style="color: #0092ff; text-decoration: underline;">download a PDF</a> with information about how to use your account</li>
+                                                                                    <li><strong>ACCOUNT:</strong> <a href="{{ config('app.url') }}/pdf/elearning/Knowcrunch-How-to-access-our-website-&-account.pdf" target="_blank" style="color: #0092ff; text-decoration: underline;">download a PDF</a> with information about how to use your account</li>
                                                                                  </ul>
                                                                               </div>
                                                                            </td>

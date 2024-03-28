@@ -46,7 +46,7 @@
 		<div class="container">
 			<div class="header-wrap">
 				<div class="header-logo">
-					<a href="{{url('/')}}"><img src="{{cdn('new_cart/images/kc-logo.svg')}}" alt="KC Logo"></a>
+					<a href="{{ config('app.url') }}"><img src="{{cdn('new_cart/images/kc-logo.svg')}}" alt="KC Logo"></a>
 				</div>
 
 				@if(!$eventFree)

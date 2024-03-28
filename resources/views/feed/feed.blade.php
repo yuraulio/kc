@@ -65,12 +65,12 @@
 
                 <div class="form-group">
 
-                    <a href="javascript:void(0)" data-filename="tiktok_feed.xml" data-path="{{url('/')}}{{'/xml/tiktok/tiktok_feed.xml'}}" class="btn btn-primary xml">Feed for TikTok advertising</a>
+                    <a href="javascript:void(0)" data-filename="tiktok_feed.xml" data-path="{{ config('app.url') }}{{'/xml/tiktok/tiktok_feed.xml'}}" class="btn btn-primary xml">Feed for TikTok advertising</a>
 
                 </div>
                 <div class="form-group">
 
-                    <a href="javascript:void(0)" data-filename="pinterest_feed.xml" data-path="{{url('/')}}{{'/xml/pinterest/pinterest_feed.xml'}}" class="btn btn-primary xml">Feed for Pinterest advertising</a>
+                    <a href="javascript:void(0)" data-filename="pinterest_feed.xml" data-path="{{ config('app.url') }}{{'/xml/pinterest/pinterest_feed.xml'}}" class="btn btn-primary xml">Feed for Pinterest advertising</a>
 
                 </div>
             </div>
