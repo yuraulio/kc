@@ -46,12 +46,12 @@
 
                 <li class="menu-title">Overview</li>
 
-                <li>
-                    <a href="{{route('admin-dashboard')}}">
-                        <i data-feather="clipboard"></i>
-                        <span> Dashboard </span>
-                    </a>
-                </li>
+{{--                <li>--}}
+{{--                    <a href="{{route('admin-dashboard')}}">--}}
+{{--                        <i data-feather="clipboard"></i>--}}
+{{--                        <span> Dashboard </span>--}}
+{{--                    </a>--}}
+{{--                </li>--}}
                 @php
                 // Code to allow autologin
                 $url_autologin = '';
