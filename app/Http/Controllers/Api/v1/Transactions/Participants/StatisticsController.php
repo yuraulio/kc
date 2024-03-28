@@ -57,49 +57,6 @@ class StatisticsController extends ApiBaseController
             ->where('event_delivery.delivery_id', '<>', self::DELIVERY_VIDEO_TRAINING_ID)
             ->first();
 
-        $byType = $this
-            ->getBaseQuery($request)
-            ->select([
-                DB::raw('DISTINCT users.id'),
-                DB::raw('transactions.type as type'),
-                DB::raw('SUM(transactions.amount) as total_amount'),
-            ])
-            ->groupBy('transactions.type')
-            ->when($request->input('type') === 'revenues', function (Builder $query) {
-                $query
-                    ->select([
-                        DB::raw('DISTINCT users.id'),
-                        DB::raw('transactions.type as type'),
-                        DB::raw('SUM(CASE WHEN invoices.amount IS NOT NULL THEN invoices.amount ELSE transactions.amount END ) as total_amount'),
-                    ])
-                    ->leftJoin('invoiceables', function ($query) {
-                        $query
-                            ->whereColumn('invoiceables.invoiceable_id', '=', 'transactions.id')
-                            ->where('invoiceables.invoiceable_type', '=', (new Transaction())->getMorphClass());
-                    })
-                    ->leftJoin('invoices', function ($query) {
-                        $query
-                            ->whereColumn('invoiceables.invoice_id', '=', 'invoices.id');
-                    });
-            })
-            ->get()
-            ->reduce(function ($a, $item) {
-                $k = str_replace(' ', '_', strtolower(trim($item->type)));
-                if ($k === 'special_tickets') {
-                    $k = 'special';
-                } elseif ($k === 'early_birds') {
-                    $k = 'early_bird';
-                }
-                if (!isset($a[$k])) {
-                    $a[$k] = 0;
-                }
-                $a[$k] += $item->total_amount;
-
-                return $a;
-            }, []);
-
-        $byType['total'] = $inClass->total_amount + $elearning->total_amount;
-
         $incomeAccurate = [
             'total' => 0,
             'in_class' => 0,
@@ -149,7 +106,6 @@ class StatisticsController extends ApiBaseController
                 'in_class' => 0 + floor($inClassAccurate->total_amount),
                 'elearning' => 0 + floor($elearningAccurate->total_amount),
             ];
-            $byType['total'] = $incomeAccurate['total'];
         }
 
         return [
@@ -163,7 +119,6 @@ class StatisticsController extends ApiBaseController
                 'in_class' => 0 + $inClass->total_amount,
                 'elearning' => 0 + $elearning->total_amount,
             ],
-            'tickets' => $byType,
             'income_accurate' => $incomeAccurate,
         ];
     }

@@ -53,36 +53,6 @@
             </div>
         </div>
     </div>
-    @if(empty($type) || $type !== 'revenue')
-    <div class="card-body col-xl-4 col-md-6 total-revenue widget">
-        <div class="card">
-            <div class="card-body js-statistics-tickets-income"">
-                <div class="row">
-                  <div class="col">
-                    <h5 class="card-title text-uppercase text-muted mb-0">TICKETS INCOME</h5>
-                        <span class="h2 font-weight-bold mb-0"><span id="total_income"></span></span>
-                    </div>
-                </div>
-              <div class="loader text-center">
-                <img class="img-responsive" src="{{url('/theme/assets/img/ajax-loader-blue.gif')}}" alt="loader">
-              </div>
-                <div class="row">
-                    <div class="col info js-statistics-body" style="display:none">
-                        <p class="mt-3 mb-0 text-sm">
-                            <span class="text-muted mr-3">EARLY: <span class="text-success" id="early-bird"></span></span>
-                            <span class="text-muted mr-3">SPECIAL: <span class="text-success" id="special"></span></span>
-                            <span class="text-muted mr-3">REGULAR: <span class="text-success" id="regular"></span></span>
-                            <span class="text-muted mr-3">ALUMNI: <span class="text-success" id="alumni"></span></span>
-                        </p>
-                        <p class="mb-0 text-sm">
-                            <span class="">All income from our paid courses (class or video) by ticket type.</span>
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    @endif
 
   @if(!empty($type) && $type === 'revenue')
     <div class="card-body col-xl-4 col-md-6 js-statistics-revenues widget">
@@ -107,34 +77,6 @@
               </p>
               <p class="mb-0 text-sm">
                 <span class="">All actual and accrued revenue from our paid courses (class or video).</span>
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="card-body col-xl-4 col-md-6 total-revenue widget">
-      <div class="card">
-        <div class="card-body js-statistics-tickets-income"">
-          <div class="row">
-            <div class="col">
-              <h5 class="card-title text-uppercase text-muted mb-0">TICKETS ACCRUED REVENUE</h5>
-              <span class="h2 font-weight-bold mb-0"><span id="total_income"></span></span>
-            </div>
-          </div>
-          <div class="loader text-center">
-            <img class="img-responsive" src="{{url('/theme/assets/img/ajax-loader-blue.gif')}}" alt="loader">
-          </div>
-          <div class="row">
-            <div class="col info js-statistics-body" style="display:none">
-              <p class="mt-3 mb-0 text-sm">
-                <span class="text-muted mr-3">EARLY: <span class="text-success" id="early-bird"></span></span>
-                <span class="text-muted mr-3">SPECIAL: <span class="text-success" id="special"></span></span>
-                <span class="text-muted mr-3">REGULAR: <span class="text-success" id="regular"></span></span>
-                <span class="text-muted mr-3">ALUMNI: <span class="text-success" id="alumni"></span></span>
-              </p>
-              <p class="mb-0 text-sm">
-                <span class="">All actual and accrued revenue from our paid courses (class or video) by ticket type.</span>
               </p>
             </div>
           </div>
