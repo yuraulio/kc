@@ -1382,13 +1382,17 @@
                                                                 $date = date('d-m-Y',$date_timestamp);
                                                                 ?>
                                                                 @if($date_timestamp > $now_date )
-                                                                @if($event['mySubscription']['status'])
-                                                                <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt="credit-icon" title="credit-icon"><?php echo 'You will be billed the amount of € '.intval($event['mySubscription']['price']).' on '.date('d-m-Y',$event['mySubscription']['must_be_updated']).' unless you deactivate it.'; ?></div>
-                                                                @endif
+                                                                  @if($event['mySubscription']['status'])
+                                                                  <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt="credit-icon" title="credit-icon"><?php echo 'You will be billed the amount of € '.intval($event['mySubscription']['price']).' on '.date('d-m-Y',$event['mySubscription']['must_be_updated']).' unless you deactivate it.'; ?></div>
+                                                                  @endif
                                                                 @else
-                                                                @if($event['mySubscription'])
-                                                                <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt="credit-icon" title="credit-icon"><?php echo 'You will be billed the amount of € '.intval($event['mySubscription']['price']).' on '.date('d-m-Y',$event['mySubscription']['must_be_updated']).' unless you deactivate it.'; ?></div>
-                                                                @endif
+                                                                  @if(isset($event['mySubscription']))
+                                                                    @if($event['mySubscription']['status'])
+                                                                      <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt="credit-icon" title="credit-icon"><?php echo 'You will be billed the amount of € '.intval($event['mySubscription']['price']).' on '.date('d-m-Y',$event['mySubscription']['must_be_updated']).' unless you deactivate it.'; ?></div>
+                                                                    @else
+                                                                      <div class="location" style="display: block;"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt="credit-icon" title="credit-icon"><?php echo 'Your subscription is not active.'; ?></div>
+                                                                    @endif
+                                                                  @endif
                                                                 @endif
                                                                 @endif
                                                                 @if(isset($event['mySubscription']))
@@ -1410,7 +1414,7 @@
                                                                         //row_status = ` style="color:red;" `;
                                                                     }
                                                                     ?>
-                                                                    @if($showToggle)
+                                                                    {{-- @if($showToggle) --}}
                                                                     <div class="status_switch">
                                                                         <div class="onoffswitch" data-status="{{$status}}" data-id="{{$event['mySubscription']['id']}}" id="onoffswitch">
                                                                             <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" tabindex="0" <?php echo $a; ?>>
@@ -1420,7 +1424,7 @@
                                                                             </label>
                                                                         </div>
                                                                     </div>
-                                                                    @endif
+                                                                    {{-- @endif --}}
                                                                 </div>
                                                                 @endif
                                                             </div>
