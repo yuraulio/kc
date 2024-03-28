@@ -37,7 +37,7 @@ class MediaFileService
         $basePath = $mediaFile->mediaFolder->path . '/';
 
 //        $versions = Page::VERSIONS;
-        $versions = config('image_versions');
+        $versions = config('image_versions.versions');
 
         $items = [];
         foreach ($versions as $version => $versionOptions) {
@@ -91,10 +91,10 @@ class MediaFileService
         }
         if ($options['type'] == 'cropR') {
             $w = $options['cropWidth'];
-            $h = $options['cropWidth'] * $options['width'] / $options['height'];
+            $h = intval($options['cropWidth'] * $options['height'] / $options['width']);
             if ($options['cropHeight'] > $options['cropWidth']) {
                 $h = $options['cropHeight'];
-                $w = $options['cropHeight'] * $options['height'] / $options['width'];
+                $w = intval($options['cropHeight'] * $options['width'] / $options['height']);
             }
 
             $image->crop($w, $h, $options['x'], $options['y']);

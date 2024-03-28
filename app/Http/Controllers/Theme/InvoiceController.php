@@ -20,10 +20,12 @@ class InvoiceController extends Controller
         }
     }
 
-    public function destroy($id){
+    public function destroy($id)
+    {
         $invoice = Invoice::findOrFail($id);
         Invoiceable::where('invoice_id', $id)->delete();
         $invoice->delete();
+
         return redirect()->back()->with('success', 'Deleted correctly');
     }
 }
