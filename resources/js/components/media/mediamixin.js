@@ -465,7 +465,7 @@ var mediaMixin = {
       this.warning = false;
 
 
-      if (this.withoutImage) {
+      if (this.mode && this.withoutImage) {
         this.updatedMediaImage($event);
         return;
       }
