@@ -1007,6 +1007,14 @@ if (!function_exists('get_image')) {
             return;
         }
 
+        if (!empty($media['full_path'])) {
+            // compatibility between media and media_files
+            $media['path'] = rtrim($media['full_path'], $media['name']);
+            $media['original_name'] = $media['name'];
+            $media['ext'] = '.' . $media['extension'];
+            $media['name'] = rtrim($media['name'], '.' . $media['extension']);
+        }
+
         // if object image
         if ($version) {
             if (strpos($media['path'], '//')) {
@@ -1044,9 +1052,11 @@ if (!function_exists('get_image')) {
             if (strpos($media['path'], '//')) {
                 $media['path'] = str_replace('//', '/', $media['path']);
             }
-
-            if (file_exists(public_path('/') . $media['path'] . $media['name'] . '.webp') && support_webp()) {
-                return $media['path'] . $media['name'] . '.webp';
+            $image =  $media['path'] . $media['name'];
+            if (file_exists(public_path('/') . $image . '.webp') && support_webp()) {
+                return $image . '.webp';
+            } elseif (file_exists(public_path('/') . $image . $media['ext'])) {
+                return $image . $media['ext'];
             }
 
             return isset($media['original_name']) ? $media['path'] . $media['original_name'] : '';

@@ -256,9 +256,7 @@ var mediaMixin = {
         if (this.$parent.imageVersion && version == this.$parent.imageVersion) {
           // this.$parent.imageVersionResponseData = response.data.data
 
-          let baseUrl = location.protocol + '//' + location.host;
-
-          if (baseUrl.includes('admin')) {
+          if (isNewAdmin()) {
             //this.$refs.crpr.confirmSelection(response.data.data)
           }
         }
@@ -460,14 +458,17 @@ var mediaMixin = {
         });
     },
     userSelectedFiles($event) {
-      if (!isNewAdmin() && this.withoutImage) {
-        this.updatedMediaImage($event);
-      }
 
-      if (this.firstLoadedData.length == 0) {
+      if (!this.firstLoadedData.length) {
         this.firstLoadedData = $event;
       }
       this.warning = false;
+
+
+      if (this.withoutImage) {
+        this.updatedMediaImage($event);
+        return;
+      }
 
       if (this.selectedFile && this.selectedFile.id != $event.id && !isNewAdmin()) {
         this.updatedMediaImage($event);
@@ -494,9 +495,7 @@ var mediaMixin = {
         pagesText = pagesText + 'This is an original image, this action will delete all its subimages that exist.';
       }
 
-      let baseUrl = location.protocol + '//' + location.host;
-
-      if (baseUrl.includes('admin')) {
+      if (isNewAdmin()) {
         Swal.fire({
           title: 'Are you sure?\n ' + pagesText,
           text: "You won't be able to revert this! Delete file?",

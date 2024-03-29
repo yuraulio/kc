@@ -408,7 +408,7 @@ export default {
       this.$emit('inputed', { data: $event, key: this.keyput });
       //this.startingImage = $event
       // if($event.load === undefined){
-      //     this.$refs[ref+'btn'].click()
+          this.$refs[ref+'btn'].click()
       //     this.$set(this.loadstart, ref,  false);
       // }
     },
