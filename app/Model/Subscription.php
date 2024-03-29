@@ -376,7 +376,8 @@ class Subscription extends Model
      */
     public function onTrial()
     {
-        return $this->trial_ends_at && $this->trial_ends_at->isFuture();
+        $trialEndsAt = Carbon::parse($this->trial_ends_at);
+        return $this->trial_ends_at && $trialEndsAt->isFuture();
     }
 
     /**
@@ -408,7 +409,8 @@ class Subscription extends Model
      */
     public function onGracePeriod()
     {
-        return $this->ends_at && $this->ends_at->isFuture();
+        $endsAt = Carbon::parse($this->ends_at);
+        return $this->ends_at && $endsAt->isFuture();
     }
 
     /**
