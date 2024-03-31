@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use Alexusmai\LaravelFileManager\Events\Download;
+use App\CMSFile;
+use App\Jobs\SaveCMSFileWebp;
 use App\Jobs\SaveImageWebp;
+use App\Jobs\UploadImageConvertWebp;
 use App\Jobs\UploadWebpImage;
 use App\Model\Event;
 use App\Model\Media;
@@ -160,93 +163,29 @@ class MediaController extends Controller
 
     public function crop_profile_image(Request $request)
     {
-        //dd($request->all());
-        $media = Media::find($request->media_id);
-        //dd($media);
-        if ($media['details'] != null) {
-            //dd('has details');
-            $arr = json_decode($media['details'], true);
-            //dd($details);
-            $details = [];
-            if ($arr != null || $arr != '') {
-                $details['x'] = $request->x;
-                $details['y'] = $request->y;
-                $details['width'] = $request->width;
-                $details['height'] = $request->height;
-            } else {
-                $details['x'] = $request->x;
-                $details['y'] = $request->y;
-                $details['width'] = $request->width;
-                $details['height'] = $request->height;
-            }
+        $media = CMSFile::findOrFail($request->media_id);
+        $media_parent = CMSFile::findOrFail($media->parent_id);
 
-            //$details = json_encode($details);
-            //dd($details);
+        $details = [];
+        $details['width_offset'] = $request->x;
+        $details['height_offset'] = $request->y;
+        $details['crop_width'] = $request->width;
+        $details['crop_height'] = $request->height;
 
-            //Media::where('id', $request->media_id)->update(['details' => $details]);
+        $media->crop_data = json_encode($details);
+        $media->save();
 
-            //find image with title+prof_image
-            $name = explode('.', $media['original_name']);
-
-            //replace first / from path
-            $name1 = substr_replace($media['path'], '', 0, 1);
-            //dd($name1);
-            //dd($name1.$name[0].'-crop'.$media['ext']);
-            if (file_exists($name1 . $name[0] . '-crop' . $media['ext'])) {
-                unlink($name1 . $name[0] . '-crop' . $media['ext']);
-            }
-            if (file_exists($name1 . $name[0] . '-crop' . 'webp')) {
-                unlink($name1 . $name[0] . '-crop' . 'webp');
-            }
-
-        //save new crop image
-        } else {
-            $details = [];
-            $details['x'] = $request->x;
-            $details['y'] = $request->y;
-            $details['width'] = $request->width;
-            $details['height'] = $request->height;
-
-            //save new image
-        }
-
-        $details = json_encode($details);
-
-        Media::where('id', $request->media_id)->update(['details' => $details]);
-
-        $image = Image::make(public_path($media['path'] . $media['original_name']));
-
-        $ext = $media['ext'];
-        if ($ext == '.webp') {
-            $image->save(public_path($media['path'] . $name[0] . '.png'), 80);
-            $media = Media::where('id', $request->media_id)->first();
-            $media->original_name = $name[0] . '.png';
-            $media->ext = '.png';
-            $media->file_info = 'image/png';
-            $media->save();
-        }
-
+        $image = Image::make(public_path($media_parent->full_path));
         $image->crop($request->width, $request->height, $request->x, $request->y);
-        $name = explode('.', $media['original_name']);
-        $image->save(public_path($media['path'] . $name[0] . '-crop' . $media['ext']), 80);
-        $image->save(public_path($media['path'] . $name[0] . '-crop.webp'), 80);
+        $image->save(public_path($media->full_path), 60);
 
-        if ($request->media_id) {
-            $user = User::find(Auth::id());
-            $url_origina_image = $media->path . $media->original_name;
-            if ($ext == '.webp') {
-                $url_origina_image = $media['path'] . $name[0] . '.png';
-            }
-            $user->updateMedia($url_origina_image);
-        }
-        $image->save(public_path($media['path'] . $name[0] . '-instructors-testimonials' . ($media['ext'] == '.webp' ? '.png' : $media['ext'])), 80);
-
-        dispatch((new SaveImageWebp($details, $request->all()))->delay(now()->addSeconds(3)));
+        dispatch((new SaveCMSFileWebp($media->id))->delay(now()->addSeconds(1)));
 
         return response()->json([
             'success' => __('Already image cropped.'),
-            'data' => asset($media['path'] . $name[0] . '-crop' . $media['ext']),
-            'details' => Media::find($request->media_id)->details,
+            // 'data' => asset($media['path'] . $name[0] . '-crop' . $media['ext']),
+            'profile_image' => CMSFile::findOrFail($request->media_id),
+            'original_profile_image' => CMSFile::findOrFail($media->parent_id),
         ]);
     }
 

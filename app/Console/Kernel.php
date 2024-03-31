@@ -77,6 +77,8 @@ class Kernel extends ConsoleKernel
         Commands\INSERTLESSONS::class,
         Commands\ExportCertificateByEvent::class,
         Commands\ClassroomTrainingCertification::class,
+
+        Commands\MoveAndCompressImages::class,
     ];
 
     protected function bootstrappers()

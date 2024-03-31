@@ -125,16 +125,15 @@
                                                 <li class="change-photo"><a id="logoDropzone" class="custFieldMediaDrop dz-message" href="javascript:void(0)"><img loading="lazy" src="{{cdn('/theme/assets/images/icons/icon-edit.svg')}}" alt="Change photo" title="Change photo" width="16" height="16"/><span>Change photo</span>
                                                     </a>
                                                 </li>
-                                                @if(isset($user['image']))
-                                                <li class="remove-photo delete_media"><a data-dp-media-id="{{ $user['image']['id'] }}" href="javascript:void(0)"><img loading="lazy" src="{{cdn('/theme/assets/images/icons/icon-remove.svg')}}" alt="Remove photo" title="Remove photo" width="10" height="10"/><span>Remove photo</span></a></li>
 
-                                                <li class="crop-photo crop_media">
-                                                  <a data-dp-media-id="{{ $user['image']['id'] }}" class="crop_image" style="text-decoration: underline; cursor: pointer;">
-                                                    <img loading="lazy" src="{{cdn('/theme/assets/images/icons/icon-edit.svg')}}" alt="Crop photo" title="Crop photo" width="10" height="10"/>
+                                                <li class="remove-photo delete_media" @if(!isset($user->profile_image_id)) style="display: none" @endif><a data-dp-media-id="{{ $user->profile_image_id }}" href="javascript:void(0)"><img loading="lazy" src="{{cdn('/theme/assets/images/icons/icon-remove.svg')}}" alt="Remove photo" title="Remove photo" width="10" height="10"/><span>Remove photo</span></a></li>
+
+                                                <li class="crop-photo crop_media" @if(!isset($user->profile_image_id)) style="display: none" @endif>
+                                                  <a data-dp-media-id="{{ $user->profile_image_id }}" class="crop_image" style="text-decoration: underline; cursor: pointer;">
+                                                    <img loading="lazy" src="{{cdn('/theme/assets/images/icons/icon-edit.svg')}}" alt="Crop photo" title="Crop photo" width="20" height="20"/>
                                                     <span>Crop photo</span>
                                                   </a>
                                                 </li>
-                                                @endif
                                             </ul>
                                         </div>
                                     </div>
@@ -1946,11 +1945,22 @@
 <script>
   let cropper = null;
   let modal = null;
-  let img = media = @json($user['image']);
-  $(document).ready(() => {
+  let profile_image = @json($user['profile_image']);
+  let profile_image_original = @json($user->profile_image_original());
+
+
+  if(profile_image){
+    initCropper();
+  }
+
+  function initCropper(){
+    img = media = profile_image;
+    full_path = profile_image_original.full_path;
+    details = profile_image.crop_data;
+
+
     // Cropping images
     $('.crop_image').click(() => {
-
       modal = $(
         '<div class="modal fade" id="modalProfileImageCrop" tabindex="-1" role="dialog">' +
           '<div class="modal-dialog" role="document">' +
@@ -1962,7 +1972,7 @@
                 '</button>' +
               '</div>' +
               '<div class="modal-body">' +
-                '<img src="' + img.path + img.original_name + '" id="profile-image-to-crop">' +
+                '<img src="' + full_path + '" id="profile-image-to-crop">' +
               '</div>' +
               '<div class="modal-footer" style="padding-top: 20px">' +
                 '<button type="button" class="btn btn--secondary btn--md" id="crop-image">Save</button>' +
@@ -1974,18 +1984,16 @@
       );
       $('body').append(modal);
 
-      if(img['name'] != '' && img['details'] != null){
-        image_details = JSON.parse(img['details'].split(','))
-        width = image_details.width
-        height = image_details.height
-        x = image_details.x
-        y = image_details.y
-      }else{
-        width = 800
-        height = 800
-        x = 0;
-        y = 0;
-      }
+      let width = 800
+      let height = 800
+      let x = 0;
+      let y = 0;
+
+      image_details = JSON.parse(profile_image.crop_data.split(','));
+      width = image_details.crop_width;
+      height = image_details.crop_height;
+      x = image_details.width_offset;
+      y = image_details.height_offset;
 
       cropper = new Cropper(document.getElementById(`profile-image-to-crop`), {
         aspectRatio: Number((width/height), 4),
@@ -2019,16 +2027,14 @@
               'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
           },
           type: 'post',
-          url: '/admin/media/crop_profile_image',
-          data: {'media_id': media.id, 'x':cropper.getData({rounded: true}).x, 'y':cropper.getData({rounded: true}).y, 'width':cropper.getData({rounded: true}).width, 'height':cropper.getData({rounded: true}).height},
+          url: '/media/crop_profile_image',
+          data: {'media_id': profile_image.id, 'x':cropper.getData({rounded: true}).x, 'y':cropper.getData({rounded: true}).y, 'width':cropper.getData({rounded: true}).width, 'height':cropper.getData({rounded: true}).height},
           success: function (data) {
             if(data){
 
               var imagenes = document.querySelectorAll('.profile_images_panel')
               for (var i = 0; i < imagenes.length; i++) {
-                  var srcOriginal = imagenes[i].getAttribute('src').split("?")[0];
-                  var newSrc = srcOriginal + "?v=" + new Date().getTime();
-                  imagenes[i].src = newSrc;
+                  imagenes[i].src = data.profile_image.full_path + "?v=" + new Date().getTime();
               }
 
               Swal.fire(
@@ -2044,8 +2050,8 @@
               }
               $('#modalProfileImageCrop').remove();
 
-              img['details'] = data.details;
-              media['details'] = data.details;
+              profile_image = data.profile_image;
+
             }
           }
         });
@@ -2053,7 +2059,7 @@
       });
 
     });
-  });
+  }
 
     {{--@if($user->id == 1359)--}}
     $(document).on('click', '.facebook-post-cert', function() {
@@ -2074,7 +2080,6 @@
                 data = url.replace('\\','/')
                 if(data){
                   let link = `${decodeURI('{{ config('app.url') }}/mycertificateview/share/facebook/' + certificateId + '/' + data.split('/')[1])}`;
-                  console.log('link', link);
 
                   var fbpopup = window.open(`http://www.facebook.com/sharer.php?u=${link}`, "pop", "width=600, height=400, scrollbars=no");
                   return false;
@@ -2235,10 +2240,31 @@
             drop: function(){
             },
             success: function (file, response, load) {
-                $('#user-img').attr('src', response.data)
+                $('#user-img').attr('src', response.data);
                 //    $('#logo_media').val(response.urls.large_thumb);
                 //    $('#logo_media_id').val(response.media_id);
                 renderLogoDropzone(response, true);
+
+                var imagenes = document.querySelectorAll('.profile_images_panel')
+                for (var i = 0; i < imagenes.length; i++) {
+                    var newSrc = response.data + "?v=" + new Date().getTime();
+                    imagenes[i].src = newSrc;
+                }
+
+                Swal.fire(
+                  'Good job!',
+                  'Image profile set correctly!',
+                  'success'
+                );
+
+                details = response.profile_image.crop_data;
+                profile_image = response.profile_image;
+                profile_image_original = response.profile_image_original;
+
+                $('.remove-photo').show();
+                $('.crop-photo').show();
+
+                initCropper();
             }
         });
 

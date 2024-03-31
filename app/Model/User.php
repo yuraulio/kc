@@ -2,6 +2,7 @@
 
 namespace App\Model;
 
+use App\CMSFile;
 use App\Model\Absence;
 use App\Model\Activation;
 use App\Model\Admin\Comment;
@@ -176,6 +177,26 @@ class User extends Authenticatable
     public function image()
     {
         return $this->morphOne(Media::class, 'mediable');
+    }
+
+    /**
+     * Get the user's image.
+     */
+    public function profile_image()
+    {
+        return $this->hasOne(CMSFile::class, 'id', 'profile_image_id');
+    }
+
+    /**
+     * Get the user's image.
+     */
+    public function profile_image_original()
+    {
+        if ($this->profile_image && $this->profile_image->parent) {
+            return $this->profile_image->parent;
+        }
+
+        return null;
     }
 
     /*public function events()

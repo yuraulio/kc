@@ -241,7 +241,6 @@ Route::group(['middleware' => 'auth.aboveauthor', 'prefix' => 'admin'], function
     //Media
     Route::put('media/upload-image/{media}', 'MediaController@uploadVersionImage')->name('upload.versionImage');
     Route::post('media/crop_image', ['as' => 'media.crop_image', 'uses' => 'MediaController@crop_image']);
-    Route::post('media/crop_profile_image', ['as' => 'media.crop_profile_image', 'uses' => 'MediaController@crop_profile_image']);
     Route::post('media/crop_file_manager_image', ['as' => 'media.crop_file_manager_image', 'uses' => 'MediaController@crop_file_manager_image']);
 
     //Route::get('media/createFolder', ['as' => 'media.createFolder', 'uses' => 'MediaController@createFolder']);
@@ -475,6 +474,8 @@ Route::group(['middleware' => 'auth.aboveauthor', 'prefix' => 'admin'], function
     //Get Certifcate Only for Admin
     Route::get('/get-certificate/{certificate}', 'Theme\CertificateController@getCertificateAdmin')->name('admin.get_certificate');
 });
+
+Route::post('media/crop_profile_image', ['as' => 'media.crop_profile_image', 'uses' => 'MediaController@crop_profile_image']);
 
 /*Route::group(['prefix' => 'cart','middleware' => ['web']], function () {
     Route::group(['middleware' => 'free.event' ], function() {
