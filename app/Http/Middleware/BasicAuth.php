@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -21,6 +22,11 @@ class BasicAuth
     {
         // Allow making the requests to the API.
         if ($request->wantsJson()) {
+            return $next($request);
+        }
+
+        // Allow see the images by the direct url.
+        if (Str::startsWith($request->path(), 'uploads/')) {
             return $next($request);
         }
 
