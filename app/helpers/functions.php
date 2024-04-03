@@ -651,7 +651,7 @@ if (!function_exists('twitter_get_auth_token_v1')) {
     function twitter_get_auth_token_v1()
     {
         $oauthParams = [
-            'oauth_callback' => env('MIX_APP_URL') . '/myaccount/share-twitter',
+            'oauth_callback' => config('app.MIX_APP_URL') . '/myaccount/share-twitter',
             'oauth_consumer_key' => env('consumer_key'), // consumer key from your twitter app: https://apps.twitter.com
             'oauth_nonce' => md5(uniqid()),
             'oauth_signature_method' => 'HMAC-SHA1',
@@ -746,8 +746,8 @@ if (!function_exists('instagram_posts')) {
     function instagram_posts($limit = 15)
     {
         $post = [];
-        if (env('instagram_profile')) {
-            $post = \Dymantic\InstagramFeed\InstagramFeed::for(env('instagram_profile'), $limit, 'posts');
+        if (config('services.instagram.profile')) {
+            $post = \Dymantic\InstagramFeed\InstagramFeed::for(config('services.instagram.profile'), $limit, 'posts');
         }
 
         return $post;
@@ -759,8 +759,8 @@ if (!function_exists('instagram_stories')) {
     {
         $stories = [];
 
-        if (env('instagram_profile')) {
-            $stories = \Dymantic\InstagramFeed\InstagramFeed::for(env('instagram_profile'), $limit, 'stories');
+        if (config('services.instagram.profile')) {
+            $stories = \Dymantic\InstagramFeed\InstagramFeed::for(config('services.instagram.profile'), $limit, 'stories');
         }
 
         return $stories;
@@ -1007,6 +1007,14 @@ if (!function_exists('get_image')) {
             return;
         }
 
+        if (!empty($media['full_path'])) {
+            // compatibility between media and media_files
+            $media['path'] = rtrim($media['full_path'], $media['name']);
+            $media['original_name'] = $media['name'];
+            $media['ext'] = '.' . $media['extension'];
+            $media['name'] = rtrim($media['name'], '.' . $media['extension']);
+        }
+
         // if object image
         if ($version) {
             if (strpos($media['path'], '//')) {
@@ -1015,13 +1023,17 @@ if (!function_exists('get_image')) {
 
             $image = isset($media['name']) ? $media['path'] . $media['name'] : '';
 
-            if (file_exists(public_path('/') . $image . '-' . $version . '.webp') && support_webp()) {
+            if ($version === 'feed-image' && file_exists(public_path('/') . $image . '-' . $version . '.jpg')) {
+                $image = $image . '-' . $version . '.jpg';
+            } elseif (file_exists(public_path('/') . $image . '-' . $version . '.webp') && support_webp()) {
                 $image = $image . '-' . $version . '.webp';
             } elseif (!file_exists(public_path('/') . $image . '-' . $version . '.webp') && support_webp() && file_exists(public_path('/') . $image . '.webp')) {
                 //$image = $image . '.webp';
                 $version = false;
             } elseif (isset($media['ext']) && file_exists(public_path('/') . $image . '-' . $version . $media['ext'])) {
                 $image = $image . '-' . $version . $media['ext'];
+            } elseif (file_exists(public_path('/') . $image . '-' . $version . '.jpg')) {
+                $image = $image . '-' . $version . '.jpg';
             } elseif ($image != '') {
                 $check_image_url = str_replace('/originals', '', $image) . '-instructors-testimonials' . $media['ext'];
                 if (file_exists(public_path('/') . $check_image_url)) {
@@ -1040,9 +1052,11 @@ if (!function_exists('get_image')) {
             if (strpos($media['path'], '//')) {
                 $media['path'] = str_replace('//', '/', $media['path']);
             }
-
-            if (file_exists(public_path('/') . $media['path'] . $media['name'] . '.webp') && support_webp()) {
-                return $media['path'] . $media['name'] . '.webp';
+            $image =  $media['path'] . $media['name'];
+            if (file_exists(public_path('/') . $image . '.webp') && support_webp()) {
+                return $image . '.webp';
+            } elseif (file_exists(public_path('/') . $image . $media['ext'])) {
+                return $image . $media['ext'];
             }
 
             return isset($media['original_name']) ? $media['path'] . $media['original_name'] : '';
@@ -1320,42 +1334,33 @@ if (!function_exists('get_menu')) {
 if (!function_exists('update_dropbox_api')) {
     function update_dropbox_api() : void
     {
-        try {
-            $t = base64_encode(config('filesystems.disks.dropbox.appSecret') . ':' . config('filesystems.disks.dropbox.secret'));
+        $t = base64_encode(config('filesystems.disks.dropbox.appSecret') . ':' . config('filesystems.disks.dropbox.secret'));
 
-            $endpoint = 'https://api.dropbox.com/oauth2/token';
-            $client = new \GuzzleHttp\Client(['headers' => ['Content-Type'=> 'application/json', 'Authorization' => 'Basic ' . $t]]);
+        $endpoint = 'https://api.dropbox.com/oauth2/token';
+        $client = new \GuzzleHttp\Client(['headers' => ['Content-Type'=> 'application/json', 'Authorization' => 'Basic ' . $t]]);
 
-            $response = $client->request(
-                'POST',
-                $endpoint,
-                [
-                    'form_params' => [
-                        'grant_type' =>  'refresh_token',
-                        'refresh_token' => env('DROPBOX_REFRESH_TOKEN'),
-                    ],
-                ]
-            );
+        $response = $client->request(
+            'POST',
+            $endpoint,
+            [
+                'form_params' => [
+                    'grant_type' =>  'refresh_token',
+                    'refresh_token' => config('filesystems.disks.dropbox.refresh_token'),
+                ],
+            ]
+        );
 
-            $statusCode = $response->getStatusCode();
-            $content = $response->getBody()->getContents();
-            $accessToken = json_decode($content, true);
-
-            if (isset($accessToken['access_token']) && $accessToken['access_token']) {
-                //$client = new Client();
-                //$client->setAccessToken($accessToken['access_token']);
-                $setting = Setting::where('key', 'DROPBOX_TOKEN')->firstOrFail();
-                $setting->value = $accessToken['access_token'];
-                $setting->save();
-                //dd($client);
-            }
-        } catch(\Exception $e) {
-            $user = User::first();
-            if ($user) {
-                if (strpos($e->getMessage(), 'app is disabled') === false) {
-                    $user->notify(new ErrorSlack('API Dropbox failed. Sometimes happens. Don\'t worry. Error message: ' . $e->getMessage()));
-                }
-            }
+        $statusCode = $response->getStatusCode();
+        $content = $response->getBody()->getContents();
+        $accessToken = json_decode($content, true);
+        // dd($accessToken);
+        if (isset($accessToken['access_token']) && $accessToken['access_token']) {
+            //$client = new Client();
+            //$client->setAccessToken($accessToken['access_token']);
+            $setting = Setting::where('key', 'DROPBOX_TOKEN')->firstOrFail();
+            $setting->value = $accessToken['access_token'];
+            $setting->save();
+            // dd($client);
         }
     }
 }

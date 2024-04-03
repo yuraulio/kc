@@ -44,14 +44,9 @@ class Page extends Model implements Auditable
             1248,
         ],
         [
-            'instructors-small',
-            90,
-            90,
-        ],
-        [
             'feed-image',
-            600,
-            600,
+            1080,
+            1080,
         ],
         // [
         //     "social-media-sharing",

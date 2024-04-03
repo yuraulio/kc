@@ -30,8 +30,8 @@ class CheckForSMSCoockie
     public function __construct()
     {
         //$this->auth = Auth::user();
-        $this->token = env('token');
-        $this->secretId = env('secret_key');
+        $this->token = config('services.sms.token');
+        $this->secretId = config('services.sms.secret_key');
     }
 
     public function handle($request, Closure $next)
@@ -48,7 +48,7 @@ class CheckForSMSCoockie
         require_once '../app/Apifon/Model/SmsRequest.php';
         require_once '../app/Apifon/Model/SubscriberInformation.php';
 
-        if (Auth::guest() || env('APP_DEBUG') == true) {
+        if (Auth::guest() || config('app.debug') == true) {
             return $next($request);
         }
 

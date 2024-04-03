@@ -1,5 +1,7 @@
 <?php
 
+$publicStorageUrl = env('PUBLIC_STORAGE_URL', env('APP_URL'));
+
 return [
 
     /*
@@ -66,27 +68,27 @@ return [
         'uploads' => [
             'driver' => 'local',
             'root' => public_path('/uploads'),
-            'url' => env('APP_URL'),
+            'url' => $publicStorageUrl . '/uploads',
             'visibility' => 'public',
         ],
 
         'awards' => [
             'driver' => 'local',
             'root' => public_path('/awards'),
-            'url' => env('APP_URL'),
+            'url' => $publicStorageUrl . '/awards',
             'visibility' => 'public',
         ],
 
         'public' => [
             'driver' => 'local',
             'root' => public_path('/uploads'),
-            'url' => env('APP_URL') . '/uploads',
+            'url' => $publicStorageUrl . '/uploads',
             'visibility' => 'public',
         ],
         'export' => [
             'driver' => 'local',
             'root' => public_path('/tmp/exports'),
-            'url' => env('APP_URL'),
+            'url' => $publicStorageUrl . '/tmp/exports',
             'visibility' => 'public',
         ],
 
@@ -103,6 +105,7 @@ return [
             'accessToken' => env('DROPBOX_TOKEN'),
             'appSecret' => env('DROPBOX_APPKEY'),
             'secret' => env('DROPBOX_SECRET'),
+            'refresh_token' => env('DROPBOX_REFRESH_TOKEN', 'ye2tGeh1iIQAAAAAAAAAAYW21MH3QmUH-PE2ZCfarQpTK2TZ5MKOS5WJccsMPKUq'),
         ],
 
     ],

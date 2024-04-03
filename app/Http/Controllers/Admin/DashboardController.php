@@ -79,7 +79,7 @@ class DashboardController extends Controller
     public function page(Request $request, $uuid)
     {
         // also check referer
-        // if ($request->p == 'HEW7M9hd8xY2gkRk' && rtrim($request->header('referer'), "/") == env("ADMIN_URL")) {
+        // if ($request->p == 'HEW7M9hd8xY2gkRk' && rtrim($request->header('referer'), "/") == config("app.ADMIN_URL")) {
 
         if ($request->p == 'HEW7M9hd8xY2gkRk') {
             $page = Page::withoutGlobalScopes()->whereUuid($uuid)->with('template')->firstOrFail();

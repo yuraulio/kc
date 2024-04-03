@@ -28,6 +28,10 @@ return[
             'fit' => 'crop',
             'version' => 'users',
             'description' => 'Applies to : Testimonial square image',
+            'small' => [
+                'w' => 90,
+                'h' => 90,
+            ],
         ],
         'header-image'=>[
             'w' => 2880,
@@ -37,17 +41,18 @@ return[
             'version' => 'header-image',
             'description' => 'Applies to: Event header carousel (Main event page)',
         ],
-        'instructors-small'=>[
-            'w' => 90,
-            'h' => 90,
-            'q' => 60,
-            'fit' => 'crop',
-            'version' => 'instructors-small',
-            'description' => 'Applies to : Event -> Topics (syllabus-block)',
-        ],
+        /* instructors-small merged with "users"  */
+        //        'instructors-small'=>[
+        //            'w' => 90,
+        //            'h' => 90,
+        //            'q' => 60,
+        //            'fit' => 'crop',
+        //            'version' => 'instructors-small',
+        //            'description' => 'Applies to : Event -> Topics (syllabus-block)',
+        //        ],
         'feed-image'=>[
-            'w' => 600,
-            'h' => 600,
+            'w' => 1080,
+            'h' => 1080,
             'q' => 60,
             'fit' => 'crop',
             'description' => 'feed-image',

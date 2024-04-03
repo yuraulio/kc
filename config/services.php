@@ -64,4 +64,28 @@ return [
         ],
     ],
 
+    'instagram' => [
+        'profile' => env('instagram_profile'),
+        'business_key' => env('instagram_business_key'),
+        'facebook_access_token' => env('facebook_access_token'),
+    ],
+
+    'vimeo' => [
+        'token' => env('vimeo_token'),
+        'password' => env('video_password'),
+        'id' => env('client_id'),
+        'secret' => env('client_secret'),
+    ],
+
+    'promotions' => [
+        'BLACKFRIDAY' => env('BLACKFRIDAY'),
+        'CYBERMONDAY' => env('CYBERMONDAY'),
+    ],
+
+    'sms' => [
+        'service_id' => env('service_id'),
+        'secret_key' => env('secret_key'),
+        'sender_id' => env('sender_id'),
+        'token' => env('token'),
+    ],
 ];

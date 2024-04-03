@@ -44,7 +44,7 @@ class PageResource extends JsonResource
             'meta_image' => $this->when(
                 $this->metaData(),
                 function () {
-                    return $this->metaData()['meta_image']->url ?? env('PAGE_IMAGE');
+                    return $this->metaData()['meta_image']->url ?? config('app.PAGE_IMAGE');
                 }
             ),
         ];

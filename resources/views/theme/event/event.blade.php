@@ -143,7 +143,7 @@
                                        <div class="author-img">
                                           <?php
                                              $alt='';
-                                             $img = get_image($syllabus[0]['mediable'],'instructors-small'); //$event->mediable->original_name;
+                                             $img = get_image($syllabus[0]['mediable'],'users'); //$event->mediable->original_name;
 
 
                                              ?>
@@ -355,7 +355,7 @@
                                           @if($instructor['status'])
                                              <a href="{{ $instructor['slugable']['slug']}}">
                                              <span class="custom-tooltip">{{ $instructor['title'] }} {{$instructor['subtitle']}}</span>
-                                             <img alt="{{ $instructor['title']}} {{$instructor['subtitle']}}" src="{{ cdn(get_image($instructor['mediable'],'instructors-small')) }}"/>
+                                             <img alt="{{ $instructor['title']}} {{$instructor['subtitle']}}" src="{{ cdn(get_image($instructor['mediable'],'users')) }}"/>
                                              </a>
                                           @else
                                              <a class="non-pointer" href="javascript:void(0)">

@@ -92,9 +92,9 @@ class Instagram
     {
         $url = sprintf(
             self::STORIES_URL_FORMAT,
-            env('instagram_business_key'),
+            config('services.instagram.business_key'),
             self::STORIES_FIELDS,
-            env('facebook_access_token')
+            config('services.instagram.facebook_access_token')
         );
         $response = $this->fetchResponseData($url);
 
@@ -145,9 +145,9 @@ class Instagram
 
         $url = sprintf(
             self::MEDIA_URL_FORMAT1,
-            env('instagram_business_key'),
+            config('services.instagram.business_key'),
             self::MEDIA_FIELDS1,
-            env('facebook_access_token')
+            config('services.instagram.facebook_access_token')
         );
 
 

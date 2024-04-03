@@ -138,7 +138,7 @@
                                           @if(count($syllabus) > 0)
                                           <?php
                                              $alt='';
-                                             $img = get_image($syllabus[0]['mediable'],'instructors-small'); //$event->mediable->original_name;
+                                             $img = get_image($syllabus[0]['mediable'],'users'); //$event->mediable->original_name;
                                              //dd($syllabus);
                                              ?>
                                           <li>

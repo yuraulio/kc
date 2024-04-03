@@ -53,6 +53,12 @@
 
 
 
+            @if(session('error'))
+              <div class="alert alert-danger">{{ session('error') }}</div>
+            @endif
+            @if(session('success'))
+              <div class="alert alert-success">{{ session('success') }}</div>
+            @endif
 <!-- wrappertabs -->
 <div id="nav-wrapper-user" class="nav-wrapper">
     <ul class="nav nav-pills nav-fill flex-column flex-md-row" id="tabs-icons-text" role="tablist">
@@ -818,6 +824,72 @@
 
                         <?php $index += 1; ?>
                     @endforeach
+
+                    @php
+                    $invoice_ids = App\Model\Invoiceable::where('invoiceable_type', 'App\Model\User')->where('invoiceable_id', $user->id)->pluck('invoice_id');
+                    $invoices = App\Model\Invoice::with('event', 'subscription')->whereIn('id',$invoice_ids)->get();
+                    @endphp
+                    <h3>Invoices</h3>
+                    <div class="table-responsive py-4">
+                      <table class="table align-items-center table-flush benefits-table"  id="datatable-basic-invoices">
+                        <thead class="thead-light">
+                          <tr>
+                            <th>Id</th>
+                            <th>Event</th>
+                            <th>Subscription</th>
+                            <th>Name</th>
+                            <th>Installments</th>
+                            <th>Installments remaining</th>
+                            <th>Amount</th>
+                            <th>Invoice</th>
+                            <th>Date</th>
+                            <th>Email Sent</th>
+                            <th>Created at</th>
+                            <th>Updated at</th>
+                            <th>Options</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          @foreach($invoices as $invoice)
+                          <tr>
+                            <td>{{ $invoice->id }}</td>
+                            <td>{{ $invoice->event[0]->title ?? '-' }}</td>
+                            @if(count($invoice->subscription)>0)
+                            <td>{{ $invoice->subscription[0]->name ?? '-' }}</td>
+                            @else
+                            <td>{{ 'No subscription' }}</td>
+                            @endif
+                            <td>{{ $invoice->name }}</td>
+                            <td>{{ $invoice->instalments }}</td>
+                            <td>{{ $invoice->instalments_remaining }}</td>
+                            <td>{{ $invoice->amount }}</td>
+                            <td>{{ $invoice->invoice }}</td>
+                            <td>{{ date('d/m/Y',strtotime($invoice->date)) }}</td>
+                            <td>{{ $invoice->email_sent }}</td>
+                            <td>{{ date('d/m/Y H:i',strtotime($invoice->created_at)) }}</td>
+                            <td>{{ date('d/m/Y H:i',strtotime($invoice->updated_at)) }}</td>
+                            <td>
+                              <form action="{{ route('admin.invoice.delete', $invoice) }}" method="POST" class="delete-invoice">
+                                @csrf
+                                @method('delete')
+                                <input type="submit" value="Delete" class="btn btn-danger btn-sm">
+                              </form>
+                            </td>
+                          </tr>
+                          @endforeach
+                          <script>
+                            document.querySelectorAll('form.delete-invoice').forEach(form => {
+                                form.addEventListener('submit', event => {
+                                    event.preventDefault();
+                                    if (confirm('Are you sure you want to delete this invoice?')) {
+                                        form.submit();
+                                    }
+                                });
+                            });;
+                          </script>
+                        </tbody>
+                      </table>
+                    </div>
                 </div>
             </div>
 

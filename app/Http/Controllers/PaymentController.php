@@ -62,7 +62,7 @@ class PaymentController extends Controller
         $price = $payment->amount();
 
         return view('cashier.payment', [
-            'stripeKey' => env('PAYMENT_PRODUCTION') ? $paymentMethod->processor_options['key'] : $paymentMethod->test_processor_options['key'],
+            'stripeKey' => config('app.PAYMENT_PRODUCTION') ? $paymentMethod->processor_options['key'] : $paymentMethod->test_processor_options['key'],
             'amount' => $payment->amount(),
             'payment' => $payment,
             'price' => $price,
@@ -133,7 +133,7 @@ class PaymentController extends Controller
         $data['event']['linkedin'] = urlencode(url('/') . '/' . $event->slugable->slug . '?utm_source=LinkedIn&utm_medium=Post_Student&utm_campaign=KNOWCRUNCH_BRANDING&title=' . 'Proudly participating in ' . $event->title . ' by Knowcrunch. 💙');
 
         return view('cashier.action_required', [
-            'stripeKey' => env('PAYMENT_PRODUCTION') ? $paymentMethod->processor_options['key'] : $paymentMethod->test_processor_options['key'],
+            'stripeKey' => config('app.PAYMENT_PRODUCTION') ? $paymentMethod->processor_options['key'] : $paymentMethod->test_processor_options['key'],
             'amount' => $payment->amount(),
             'payment' => $payment,
             'paymentIntent' => array_filter($paymentIntent),

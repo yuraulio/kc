@@ -167,8 +167,8 @@ class UserController extends Controller
         if ($request->hasHeader('auth-sms')) {
             $cookie_value = base64_encode('auth-api-' . decrypt($request->header('auth-sms')));
         }
-        $this->token = env('token');
-        $this->secretId = env('secret_key');
+        $this->token = config('services.sms.token');
+        $this->secretId = config('services.sms.secret_key');
         $cookieSms = $user->cookiesSMS()->where('coockie_value', $cookie_value)->first();
 
         if (!$cookieSms->sms_verification && $user->mobile != '') {
@@ -612,7 +612,7 @@ class UserController extends Controller
             }
 
             $inst['name'] = $instructors[$lesson['instructor_id']][0]['title'] . ' ' . $instructors[$lesson['instructor_id']][0]['subtitle'];
-            $inst['media'] = asset(get_image($instructors[$lesson['instructor_id']][0]['medias'], 'instructors-small'));
+            $inst['media'] = asset(get_image($instructors[$lesson['instructor_id']][0]['medias'], 'users'));
 
             $sum = 0;
             $arr_lesson = [];
@@ -750,7 +750,7 @@ class UserController extends Controller
                     //$newArr['calendar'][$topics[$topic->id]['calendar_count']]['date_time'] = date_format(date_create($date_lesson), 'd/m/Y');
                     //$newArr['calendar'][$topics[$topic->id]['calendar_count']]['title'] = $lesson['title'];
                     //$newArr['calendar'][$topics[$topic->id]['calendar_count']]['room'] = $lesson['pivot']['room'];
-                    ////$newArr['calendar'][$topics[$topic->id]['calendar_count']]['instructor_image'] = asset(get_image($instructors[$lesson['instructor_id']][0]->medias, 'instructors-small'));
+                    ////$newArr['calendar'][$topics[$topic->id]['calendar_count']]['instructor_image'] = asset(get_image($instructors[$lesson['instructor_id']][0]->medias, 'users'));
                     ////$newArr['calendar'][$topics[$topic->id]['calendar_count']]['instructor_name'] = $instructors[$lesson['instructor_id']][0]['title'].' '.$instructors[$lesson['instructor_id']][0]['subtitle'];
                     //$newArr['calendar'][$topics[$topic->id]['calendar_count']]['instructor_image'] = $inst['media'];
                     //$newArr['calendar'][$topics[$topic->id]['calendar_count']]['instructor_name'] = $inst['name'];

@@ -86,6 +86,7 @@ Route::group(['middleware' => 'auth.aboveauthor', 'prefix' => 'admin1'], functio
     Route::resource('faqs', 'FaqController', ['except' => ['show']]);
     Route::resource('career', 'CareerController', ['except' => ['show']]);
     Route::resource('city', 'CityController', ['except' => ['show']]);
+    Route::resource('giveaway', 'GiveawayController')->only(['index']);
     Route::resource('section', 'SectionController', ['except' => ['show', 'index', 'edit', 'create']]);
     Route::resource('ticket', 'TicketController', ['except' => ['show']]);
     Route::resource('summary', 'SummaryController', ['except' => ['show', 'index', 'edit', 'create', 'update']]);
@@ -117,8 +118,6 @@ Route::group(['middleware' => 'auth.aboveauthor', 'prefix' => 'admin1'], functio
     //Participants
     Route::get('transaction/registrations', TransactionRegistrationsReportController::class)->name('transaction.participants');
     Route::get('transaction/revenue', TransactionRevenuesReportController::class)->name('transaction.participants_new');
-    Route::get('transaction/registrations/old', 'TransactionController@participants_inside_revenue');
-    Route::get('transaction/revenue/old', 'TransactionController@participants_inside_revenue_new');
     Route::post('transaction/updateExpirationDate', ['as' => 'transaction.updateExpirationDate', 'uses' => 'TransactionController@updateExpirationDate']);
     Route::post('transaction/export-excel', 'TransactionController@exportExcel')->name('transaction.export-excel');
     Route::post('transaction/export-invoice', 'TransactionController@exportInvoices')->name('transaction.export-invoice');
@@ -129,6 +128,7 @@ Route::group(['middleware' => 'auth.aboveauthor', 'prefix' => 'admin1'], functio
 
     //Subscriptions
     Route::get('subscriptions', ['as' => 'subscriptions.index', 'uses' => 'SubscriptionController@index']);
+    Route::post('subscriptions/update_status', ['as' => 'subscriptions.update_status', 'uses' => 'SubscriptionController@update_status']);
 
     //Menu item
     Route::get('menu/add_item', ['as' => 'menu.add_item', 'uses' => 'MenuController@add_item']);
@@ -241,7 +241,6 @@ Route::group(['middleware' => 'auth.aboveauthor', 'prefix' => 'admin1'], functio
     //Media
     Route::put('media/upload-image/{media}', 'MediaController@uploadVersionImage')->name('upload.versionImage');
     Route::post('media/crop_image', ['as' => 'media.crop_image', 'uses' => 'MediaController@crop_image']);
-    Route::post('media/crop_profile_image', ['as' => 'media.crop_profile_image', 'uses' => 'MediaController@crop_profile_image']);
     Route::post('media/crop_file_manager_image', ['as' => 'media.crop_file_manager_image', 'uses' => 'MediaController@crop_file_manager_image']);
 
     //Route::get('media/createFolder', ['as' => 'media.createFolder', 'uses' => 'MediaController@createFolder']);
@@ -373,6 +372,7 @@ Route::group(['middleware' => 'auth.aboveauthor', 'prefix' => 'admin1'], functio
     //Transaction Update
     Route::post('transaction/update', 'TransactionController@update');
     Route::get('invoice/{invoice}', 'Theme\InvoiceController@getInvoice');
+    Route::delete('invoice/{invoice}', 'Theme\InvoiceController@destroy')->name('admin.invoice.delete');
 
     //Create Deree KCid
     Route::post('/create-kc-id', 'UserController@createKC')->name('create-kc');
@@ -474,6 +474,8 @@ Route::group(['middleware' => 'auth.aboveauthor', 'prefix' => 'admin1'], functio
     //Get Certifcate Only for Admin
     Route::get('/get-certificate/{certificate}', 'Theme\CertificateController@getCertificateAdmin')->name('admin.get_certificate');
 });
+
+Route::post('media/crop_profile_image', ['as' => 'media.crop_profile_image', 'uses' => 'MediaController@crop_profile_image']);
 
 /*Route::group(['prefix' => 'cart','middleware' => ['web']], function () {
     Route::group(['middleware' => 'free.event' ], function() {

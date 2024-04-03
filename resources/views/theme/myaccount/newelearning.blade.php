@@ -171,20 +171,21 @@
                               <img
                                  loading="lazy"
                                  class="topic-open jsTopicOpen"
-                                 src="theme/assets/img/new/arrow-down.svg"
+                                 src="/theme/assets/images/icons/icon-arrow-down-green.svg"
                                  alt="open topic"
-                                 width="32"
-                                 height="32"
+                                 width="21"
+                                 height="21"
                                  title="open topic"
                                  />
                               <img
                                  loading="lazy"
                                  class="topic-close jsTopicClose"
-                                 src="theme/assets/img/new/arrow-up.svg"
+                                 src="/theme/assets/images/icons/icon-arrow-down-green.svg"
                                  alt="close topic"
-                                 width="32"
-                                 height="32"
-                                 title="clos topic"
+                                 width="21"
+                                 height="21"
+                                 title="close topic"
+                                 style='transform: rotate(180deg);'
                                  />
                            </a>
                            <?php
@@ -248,12 +249,12 @@
                                  <div style="flex:0; margin:auto;" class="lesson-teacher-wrapper">
                                        <?php
                                         $instructor = $topics['instructors'][$lesson['instructor_id']][0];
-                                        $imageDetails = get_image_version_details('instructors-small');
+                                        $imageDetails = get_image_version_details('users');
                                        ?>
                                        <img
                                           loading="lazy"
                                           class="lesson-teacher"
-                                          src="{{cdn(get_image($instructor['mediable'],'instructors-small'))}}"
+                                          src="{{cdn(get_image($instructor['mediable'],'users'))}}"
                                           alt="{{$instructor['title']}} {{$instructor['subtitle']}}"
                                           title="{{$instructor['title']}} {{$instructor['subtitle']}}"
                                           data-slug="{{$instructor['slugable']['slug']}}"

@@ -26,12 +26,14 @@
                     <div class="accordion-item topic-header">
                       <div class="accordion-title topic-info title-blue-gradient scroll-to-top">
                         <h3 class="topic-info_title"> {!! $key !!}</h3>
-                        <span class="topic-info_duration">
+                        <div class="topic-info_duration">
                            <?php
                            $d = 0;
+                           $showMintues = true;
                            if (!empty($topic['topic_duration'])) {
                              $d = intval($topic['topic_duration']);
                            } elseif (!empty($topic['lessons'])) {
+                             $showMintues = false;
                              foreach ($topic['lessons'] as $lesson) {
                                $text = strtolower($lesson['pivot']['duration']);
                                preg_match('/([0-9]+)h/', $text, $m);
@@ -47,10 +49,10 @@
                            if ($d > 0) {
                              $m = isset($d) ? floor(($d / 60) % 60) : 0;
                              $h = isset($d) ? $hours = floor($d / 3600) : 0;
-                             echo intval($h) . 'h ' . $m . 'm';
+                             echo intval($h) . 'h ' . ($showMintues ? $m . 'm' : '');
                            }
                            ?>
-                         </span>
+                         </div>
                       </div>
 
                         <div class="accordion-content">
@@ -77,15 +79,15 @@
                                         <?php
                                             $instructor = reset($instructors[$lesson['instructor_id']]);
 
-                                            $imageDetails = get_image_version_details('instructors-small');
-                                            $width = $imageDetails['w'];
-                                            $height = $imageDetails['h'];
+                                            $imageDetails = get_image_version_details('users');
+                                            $width = $imageDetails['small']['w'];
+                                            $height = $imageDetails['small']['h'];
                                         ?>
 
                                             @if($instructor['status'])
-                                                <a href="{{env('NEW_PAGES_LINK') . '/' .  $instructor['slugable']['slug']}}">
+                                                <a href="{{config('app.NEW_PAGES_LINK') . '/' .  $instructor['slugable']['slug']}}">
                                                     <span class="custom-tooltip">{{ $instructor['title'] }} {{$instructor['subtitle']}}</span>
-                                                    <img loading="lazy" alt="{{ $instructor['title']}} {{$instructor['subtitle']}}" title="{{ $instructor['title']}} {{$instructor['subtitle']}}" src="{{ cdn(get_image($instructor['mediable'],'instructors-small')) }}" width="{{ $width }}" height="{{ $height }}"/>
+                                                    <img loading="lazy" alt="{{ $instructor['title']}} {{$instructor['subtitle']}}" title="{{ $instructor['title']}} {{$instructor['subtitle']}}" src="{{ cdn(get_image($instructor['mediable'],'users')) }}" width="{{ $width }}" height="{{ $height }}"/>
                                                 </a>
                                             @else
                                                 <a class="non-pointer" href="javascript:void(0)">

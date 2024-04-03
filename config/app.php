@@ -40,6 +40,13 @@ return [
     'vimeo_token' => env('vimeo_token', ''),
     'SLACK_MEMEBER_ID_RESPONSIBLE_OF_ERRORS_MANAGING' => env('SLACK_MEMEBER_ID_RESPONSIBLE_OF_ERRORS_MANAGING', 'D065P3RQX96'),
     'ADMIN_URL' => env('ADMIN_URL', 'https://admin.knowcrunch.com'),
+    'IS_DEMO' => env('IS_DEMO', false),
+    'MIX_APP_URL' => env('MIX_APP_URL', false),
+    'PAGE_IMAGE' => env('PAGE_IMAGE'),
+    'KNOWLEDGE_URL' => env('KNOWLEDGE_URL'),
+    'NEW_PAGES_LINK' => env('NEW_PAGES_LINK'),
+    'THE_TEAM' => env('THE_TEAM', 'Knowcrunch'),
+    'SITE_NAME' => env('SITE_NAME', 'Knowcrunch'),
     /*
     |--------------------------------------------------------------------------
     | Application Debug Mode

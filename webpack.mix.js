@@ -30,6 +30,7 @@ mix
 
 mix.styles(
   [
+    'public/theme/assets/css/fonts.css',
     'public/theme/assets/css/old.css',
     'public/theme/assets/css/normalize.css',
     'public/theme/assets/css/jquery.mCustomScrollbar.css',
@@ -47,6 +48,7 @@ mix.styles(
 
 mix.styles(
   [
+    'public/theme/assets/css/fonts.css',
     'public/theme/assets/css/old.css',
     'public/theme/assets/css/normalize.css',
     'public/theme/assets/css/jquery.mCustomScrollbar.css',

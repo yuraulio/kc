@@ -10,6 +10,7 @@ use DateTimeInterface;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use InvalidArgumentException;
 use Laravel\Cashier\Concerns\InteractsWithPaymentBehavior;
 use Laravel\Cashier\Concerns\Prorates;
@@ -260,15 +261,38 @@ class Subscription extends Model
      */
     public function syncStripeStatus()
     {
-        $subscription = $this->asStripeSubscription();
+        try {
+            $subscription = $this->asStripeSubscription();
 
-        $this->stripe_status = $subscription->status;
+            $status = 1;
+            switch($subscription->status) {
+                case 'incomplete': $status = 0;
+                    break;
+                case 'incomplete_expired': $status = 0;
+                    break;
+                case 'trialing': $status = 1;
+                    break;
+                case 'active': $status = 1;
+                    break;
+                case 'past_due': $status = 0;
+                    break;
+                case 'canceled': $status = 0;
+                    break;
+                case 'unpaid': $status = 0;
+                    break;
+                case 'paused': $status = 0;
+                    break;
+            }
 
-        if ($subscription->status == 'active' && $subscription->id == 1682) {
-            $this->status = 1;
+            DB::table('subscriptions')
+                ->where('id', $subscription->id)
+                ->update([
+                    'status' => $status,
+                    'stripe_status' => $subscription->status,
+                ]);
+        } catch(\Exception $e) {
+            return;
         }
-
-        $this->save();
     }
 
     /**
@@ -352,7 +376,8 @@ class Subscription extends Model
      */
     public function onTrial()
     {
-        return $this->trial_ends_at && $this->trial_ends_at->isFuture();
+        $trialEndsAt = Carbon::parse($this->trial_ends_at);
+        return $this->trial_ends_at && $trialEndsAt->isFuture();
     }
 
     /**
@@ -384,7 +409,8 @@ class Subscription extends Model
      */
     public function onGracePeriod()
     {
-        return $this->ends_at && $this->ends_at->isFuture();
+        $endsAt = Carbon::parse($this->ends_at);
+        return $this->ends_at && $endsAt->isFuture();
     }
 
     /**

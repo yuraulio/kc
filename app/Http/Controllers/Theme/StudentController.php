@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Theme;
 
+use App\CMSFile;
 use App\Events\EmailSent;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Theme\CertificateController;
+use App\Jobs\SaveCMSFileWebp;
 use App\Jobs\UploadImageConvertWebp;
 use App\Model\Activation;
 use App\Model\Event;
@@ -27,8 +29,10 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Image;
 use Laravel\Cashier\Cashier;
@@ -777,23 +781,24 @@ class StudentController extends Controller
 
     public function uploadProfileImage(Request $request)
     {
+        $request->validate([
+            'dp_fileupload' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:10000',
+        ]);
+
         $this->removeProfileImage();
 
         $user = Auth::user();
-        $user_id = $user['id'];
-        $media = $user->image;
-
-        if (!$media) {
-            $media = $user->createMedia();
-        }
 
         $content = $request->file('dp_fileupload');
-        $name1 = explode('.', $content->getClientOriginalName());
 
-        $path_name = $request->dp_fileupload->store('profile_user', 'public');
+        $path_name = $request->dp_fileupload->store('Users', 'uploads');
 
-        $image = Image::make(public_path('/uploads/') . $path_name);
+        $name = array_reverse(explode('/',$path_name))[0];
+        $name_parts = explode('.', $name);
+        $new_name = $name_parts[0].'.webp';
 
+        // Save image in webp format
+        $image = Image::make($request->dp_fileupload->path());
         if ($image->width() > $image->height()) {
             $image->heighten(470)->crop(470, 470);
         } elseif ($image->width() < $image->height()) {
@@ -801,33 +806,55 @@ class StudentController extends Controller
         } else {
             $image->resize(470, 470);
         }
+        $image->save(public_path('/uploads/Users/') . $new_name, 60);
 
-        $image->save(public_path('/uploads/') . $path_name, 60);
+        // Save to new location.
+        $CMSFile = new CMSFile();
+        $CMSFile->name = $new_name;
+        $CMSFile->path = '/Users/' . $new_name;
+        $CMSFile->url = config('app.url') . '/uploads/Users/' . $new_name;
+        $CMSFile->extension = 'webp';
+        $CMSFile->size = $content->getSize();
+        $CMSFile->folder_id = 43;
+        $CMSFile->parent_id = null;
+        $CMSFile->user_id = Auth::id();
+        $CMSFile->full_path = '/uploads/Users/' . $new_name;
+        $CMSFile->alt_text = $new_name;
+        $CMSFile->version = 'original';
+        $CMSFile->link = $new_name;
+        $path = public_path("uploads/Users/{$new_name}");
+        if (File::exists($path)) {
+            $size = getimagesize($path);
+            $CMSFile->height = $size[1];
+            $CMSFile->width = $size[0];
+        }
+        $CMSFile->crop_data = null;
+        $CMSFile->save();
 
-        $name = explode('profile_user/', $path_name);
-        $size = getimagesize('uploads/' . $path_name);
-        $media->name = $name1[0];
-        $media->ext = '.' . $content->guessClientExtension();
-        $media->original_name = $name[1];
-        $media->file_info = $content->getClientMimeType();
-        $string = $path_name;
-        $media->details = null;
+        $name_parts = explode('.',$new_name);
+        $new_name_thumb = $name_parts[0] . '-users.' . $name_parts[1];
+        $image->save(public_path('/uploads/Users/') . $new_name_thumb, 60);
+        $CMSFileThumb = $CMSFile->replicate();
+        $CMSFileThumb->name = $new_name_thumb;
+        $CMSFileThumb->path = '/Users/' . $new_name_thumb;
+        $CMSFileThumb->url = config('app.url') . '/uploads/Users/' . $new_name_thumb;
+        $CMSFileThumb->full_path = '/uploads/Users/' . $new_name_thumb;
+        $CMSFileThumb->alt_text = $new_name_thumb;
+        $CMSFileThumb->version = 'users';
+        $CMSFileThumb->link = $new_name_thumb;
+        $CMSFileThumb->parent_id = $CMSFile->id;
+        $CMSFileThumb->crop_data = '{"crop_height":470,"crop_width":470,"height_offset":0,"width_offset":0}';
+        $CMSFileThumb->save();
 
-        $string = explode('/', $string);
-        array_pop($string);
-        $string = implode('/', $string);
-        $media->path = '/' . 'uploads/' . $string . '/';
-
-        $media->width = $size[0];
-        $media->height = $size[1];
-        $media->save();
-
-        // Convert webp image format
-        dispatch((new UploadImageConvertWebp('profile_user/', $media->original_name, Auth::id()))->delay(now()->addSeconds(300)));
+        $user->profile_image_id = $CMSFileThumb->id;
+        $user->save();
 
         return response()->json([
             'message' => 'Change profile photo successfully!!',
-            'data' => $media->path . $media->original_name,
+            'data' => $CMSFile->full_path,
+            'crop_data' => '{"crop_height":470,"crop_width":470,"height_offset":0,"width_offset":0}',
+            'profile_image' => $user->profile_image,
+            'profile_image_original' => $CMSFile,
         ]);
     }
 

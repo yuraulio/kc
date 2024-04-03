@@ -44,13 +44,13 @@
 
                 <div class="profile-img">
                     @if($inst['status'])
-                        <a href="{{ env('NEW_PAGES_LINK') . '/' . $inst['slugable']['slug']}}"><img loading="lazy" src="{{cdn(get_image($inst['mediable'],'instructors-testimonials'))}}"  title="{{$inst['title']}}" alt="{{$inst['title']}}" width="{{ $imageDetails['w'] }}" height="{{ $imageDetails['h'] }}"></a>
+                        <a href="{{ config('app.NEW_PAGES_LINK') . '/' . $inst['slugable']['slug']}}"><img loading="lazy" src="{{cdn(get_image($inst['mediable'],'instructors-testimonials'))}}"  title="{{$inst['title']}}" alt="{{$inst['title']}}" width="{{ $imageDetails['w'] }}" height="{{ $imageDetails['h'] }}"></a>
                     @else
                         <img loading="lazy" src="{{cdn(get_image($inst['mediable'],'instructors-testimonials'))}}"  title="{{$inst['title']}}" alt="{{$inst['title']}}" width="{{ $imageDetails['w'] }}" height="{{ $imageDetails['h'] }}">
                     @endif
                 </div>
                 @if($inst['status'])
-                    <h3><a style="color:#81be00;" href="{{env('NEW_PAGES_LINK') . '/' . $inst['slugable']['slug']}}">{{$inst['title']}} {{$inst['subtitle']}}</a></h3>
+                    <h3><a style="color:#81be00;" href="{{config('app.NEW_PAGES_LINK') . '/' . $inst['slugable']['slug']}}">{{$inst['title']}} {{$inst['subtitle']}}</a></h3>
                 @else
                     <h3 style="color:#81be00;">{{$inst['title']}} {{$inst['subtitle']}}</h3>
                 @endif

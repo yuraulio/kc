@@ -46,12 +46,12 @@
 
                 <li class="menu-title">Overview</li>
 
-                <li>
-                    <a href="{{route('admin-dashboard')}}">
-                        <i data-feather="clipboard"></i>
-                        <span> Dashboard </span>
-                    </a>
-                </li>
+{{--                <li>--}}
+{{--                    <a href="{{route('admin-dashboard')}}">--}}
+{{--                        <i data-feather="clipboard"></i>--}}
+{{--                        <span> Dashboard </span>--}}
+{{--                    </a>--}}
+{{--                </li>--}}
                 @php
                 // Code to allow autologin
                 $url_autologin = '';
@@ -70,14 +70,20 @@
                 <li>
                     <a href="{{config("app.url") . "/admin" . $url_autologin}}">
                         <i data-feather="clipboard"></i>
-                        <span> <span class="badge bg-secondary mt-0 align-middle">Old</span> Dashboard </span>
+                        <span> <span class="badge bg-secondary mt-0 align-middle">Old</span> Laravel Admin </span>
                     </a>
                 </li>
+              <li>
+                <a href="https://admin-rose-eta.vercel.app/home/">
+                  <i data-feather="clipboard"></i>
+                  <span> <span class="badge bg-secondary mt-0 align-middle">New</span> React Admin </span>
+                </a>
+              </li>
 
                 <li class="menu-title">Knowledge</li>
 
                 <li>
-                    <a href="{{ env("KNOWLEDGE_URL") }}">
+                    <a href="{{ config("app.KNOWLEDGE_URL") }}">
                         <i data-feather="book"></i>
                         <span> Knowledge pages </span>
                     </a>

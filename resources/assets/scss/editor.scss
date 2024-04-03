@@ -1,12 +1,4 @@
-@font-face {
-    font-family: 'Foco';
-	    src: url('/theme/assets/fonts/Foco_W_Lt.eot');
-	    src: url('/theme/assets/fonts/Foco_W_Lt.eot?#iefix') format('embedded-opentype'),
-	        url('/theme/assets/fonts/Foco_W_Lt.woff2') format('woff2'),
-	        url('/theme/assets/fonts/Foco_W_Lt.woff') format('woff');
-	font-weight: 300;
-	font-style: normal;
-}
+@import "fonts";
 
 #tinymce {
   font-family: 'Foco', serif;

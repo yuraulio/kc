@@ -1,8 +1,10 @@
 /* start */
 @font-face {
   font-family: 'Foco';
-  src: url("fonts/Foco_W_Lt.eot");
-  src: url("fonts/Foco_W_Lt.eot?#iefix") format("embedded-opentype"), url("fonts/Foco_W_Lt.woff2") format("woff2"), url("fonts/Foco_W_Lt.woff") format("woff");
+  src: url("/theme/assets/fonts/Foco_W_Lt.eot?1"),
+  url("/theme/assets/fonts/Foco_W_Lt.eot?1#iefix") format("embedded-opentype"),
+  url("/theme/assets/fonts/Foco_W_Lt.woff2?1") format("woff2"),
+  url("/theme/assets/fonts/Foco_W_Lt.woff?1") format("woff");
   font-weight: 300;
   font-style: normal;
 }
@@ -323,7 +325,7 @@ img.topic-progress{
   -ms-flex-align: start;
   -webkit-align-items: flex-start;
   align-items: flex-start;
-  padding: 14px 45px;
+  padding: 14px 24px 14px 45px;
   border-bottom: 1px solid #5179af;
 }
 

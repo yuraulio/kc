@@ -112,7 +112,7 @@ class LessonController extends Controller
         $vimeoVideo = explode('/', $lesson->vimeo_video);
         $duration = 0;
         $client = new Vimeo(config('app.vimeo_client_id'), config('app.vimeo_client_secret'), config('app.vimeo_token'));
-        $response = $client->request('/videos/' . end($vimeoVideo) . '/?password=' . env('video_password'), [], 'GET');
+        $response = $client->request('/videos/' . end($vimeoVideo) . '/?password=' . config('services.vimeo.password'), [], 'GET');
 
         if ($response['status'] === 200) {
             $duration = $response['body']['duration'];
@@ -332,7 +332,7 @@ class LessonController extends Controller
             $duration = 0;
 
             $client = new Vimeo(config('app.vimeo_client_id'), config('app.vimeo_client_secret'), config('app.vimeo_token'));
-            $response = $client->request('/videos/' . end($vimeoVideo) . '/?password=' . env('video_password'), [], 'GET');
+            $response = $client->request('/videos/' . end($vimeoVideo) . '/?password=' . config('services.vimeo.password'), [], 'GET');
 
             if ($response['status'] === 200) {
                 $duration = $response['body']['duration'];

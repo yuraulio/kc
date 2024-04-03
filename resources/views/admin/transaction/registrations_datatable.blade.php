@@ -63,7 +63,7 @@
   PanelApp.setRoutes(@json(['participants_statistics' => route('api.v1.transactions.participants_statistics')]));
 
   function updateParticipantsStatistics(all = true) {
-    ['.js-statistics-registrations-total', '.js-statistics-registrations-income', '.js-statistics-tickets-income'].forEach((x) => {
+    ['.js-statistics-registrations-total', '.js-statistics-registrations-income'].forEach((x) => {
       var rootEl = $(x).first();
       rootEl.find('.js-statistics-body').hide();
       rootEl.find('.loader').show();
@@ -91,17 +91,6 @@
           rootEl.find('.loader').hide();
           rootEl.find('.js-statistics-body').show();
         })(data.income);
-        ((data) => {
-          var rootEl = $('.js-statistics-tickets-income').first();
-          rootEl.find('#total_income').text(PanelApp.formater.price(data.total));
-          rootEl.find('#special').text(PanelApp.formater.price(data.special ?? 0));
-          rootEl.find('#regular').text(PanelApp.formater.price(data.regular ?? 0));
-          rootEl.find('#alumni').text(PanelApp.formater.price(data.alumni ?? 0));
-          rootEl.find('#early-bird').text(PanelApp.formater.price(data.early_bird ?? 0));
-
-          rootEl.find('.loader').hide();
-          rootEl.find('.js-statistics-body').show();
-        })(data.tickets);
       }
     );
   }

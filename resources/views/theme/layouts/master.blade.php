@@ -284,7 +284,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 @yield('scripts')
 
 
-@if(strtotime(date('Y-m-d')) == strtotime(env('BLACKFRIDAY')))
+@if(strtotime(date('Y-m-d')) == strtotime(config('services.promotions.BLACKFRIDAY')))
 <script src="{{cdn('theme/assets/blackfriday/blackfriday.js')}}"> </script>
 @endif
 

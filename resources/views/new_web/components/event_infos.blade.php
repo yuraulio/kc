@@ -19,7 +19,7 @@
 
     @if(isset($row['city']))
         @foreach($row['city'] as $city)
-            <a href="{{ env('NEW_PAGES_LINK') . '/' .  $city->slugable->slug }}" class="city " title="{{ $city->name }}">
+            <a href="{{ config('app.NEW_PAGES_LINK') . '/' .  $city->slugable->slug }}" class="city " title="{{ $city->name }}">
 
             @if(isset($info['inclass']['city']['icon']['path']) && $info['inclass']['city']['icon']['path'])
                 <img loading="lazy" width="20" height="20" class="replace-with-svg resp-img" src="{{ cdn($info['inclass']['city']['icon']['path'])}}" alt="{{(isset($info['inclass']['city']['icon']['alt_text']) && $info['inclass']['city']['icon']['alt_text'] ) ? $info['inclass']['city']['icon']['alt_text'] : '' }}" title="{{(isset($info['inclass']['city']['icon']['alt_text']) && $info['inclass']['city']['icon']['alt_text'] ) ? $info['inclass']['city']['icon']['alt_text'] : '' }}">{{ $city->name }}</a>

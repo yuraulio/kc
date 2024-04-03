@@ -45,14 +45,21 @@
                                 @endphp
                                 <li class="nav-item">
                                     <a href="{{ config("app.ADMIN_URL").'/login'.$url_autologin }}" class="nav-link">
-                                        <span class="badge badge-primary">New</span> &nbsp
-                                        {{ __('Dashboard') }}
+                                        <span class="badge badge-primary">Old</span> &nbsp
+                                        {{ __('Vue JS Admin') }}
                                     </a>
                                 </li>
 
-                                <li class="nav-item {{ isset($elementName) and $elementName  == 'dashboard' ? 'active' : '' }}">
-                                    <a href="{{ route('home') }}" class="nav-link">{{ __('Dashboard') }}</a>
-                                </li>
+                              <li class="nav-item active">
+                                <a class="nav-link active" href="https://admin-rose-eta.vercel.app/home/" target="_blank">
+                                  <span class="badge badge-primary">New</span> &nbsp
+                                  {{ __('React Admin') }}
+                                </a>
+                              </li>
+
+{{--                                <li class="nav-item {{ isset($elementName) and $elementName  == 'dashboard' ? 'active' : '' }}">--}}
+{{--                                    <a href="{{ route('home') }}" class="nav-link">{{ __('Dashboard') }}</a>--}}
+{{--                                </li>--}}
 
                                 <!-- <li class="nav-item {{ isset($elementName) and $elementName  == 'dashboard-alternative' ? 'active' : '' }}">
                                     <a href="{{ route('page.index','dashboard-alternative') }}" class="nav-link">{{ __('Alternative') }}</a>
@@ -206,6 +213,10 @@
 
                                     <li class="nav-item {{ isset($elementName) and $elementName  == 'plans-management' ? 'active' : '' }}">
                                         <a href="{{ route('plans') }}" class="nav-link">{{ __('Plans') }}</a>
+                                    </li>
+
+                                    <li class="nav-item {{ isset($elementName) and $elementName  == 'giveaways-management' ? 'active' : '' }}">
+                                        <a href="{{ route('giveaway.index') }}" class="nav-link">{{ __('Giveaways') }}</a>
                                     </li>
 
 

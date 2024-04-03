@@ -25,9 +25,9 @@ class Profile extends Model
     public function cacheKey($type = 'posts')
     {
         if($type == 'posts'){
-            return static::CACHE_KEY_BASE . ":" . env('instagram_profile');
+            return static::CACHE_KEY_BASE . ":" . config('services.instagram.profile');
         }else{
-            return static::CACHE_KEY_BASE_STORIES . ":" . env('instagram_profile');
+            return static::CACHE_KEY_BASE_STORIES . ":" . config('services.instagram.profile');
         }
         // return static::CACHE_KEY_BASE . ":" . $this->id;
 

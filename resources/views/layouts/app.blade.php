@@ -17,7 +17,7 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
-        @if (env('IS_DEMO'))
+        @if (config('app.IS_DEMO'))
                 <!-- Anti-flicker snippet (recommended)  -->
         <!-- <style>.async-hide { opacity: 0 !important} </style>
         <script>(function(a,s,y,n,c,h,i,d,e){s.className+=' '+y;h.start=1*new Date;
@@ -61,7 +61,7 @@
 
         <title itemprop="name">{{ $metaTitle ?? 'Knowcrunch Admin Dashboard' }}</title>
 
-        @if (env('IS_DEMO'))
+        @if (config('app.IS_DEMO'))
 
         <!-- Canonical SEO -->
         <!-- <link rel="canonical" href="https://www.creative-tim.com/product/argon-dashboard-pro-laravel" /> -->
@@ -120,7 +120,7 @@
         <link type="text/css" href="{{ asset('css') }}/style.css" rel="stylesheet">
     </head>
     <body class="{{ $class ?? '' }}">
-        @if (env('IS_DEMO'))
+        @if (config('app.IS_DEMO'))
         <!-- Google Tag Manager (noscript) -->
         <!-- <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NKDMSK6"
         height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript> -->

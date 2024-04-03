@@ -46,8 +46,8 @@ class UpdateVimeoDuration extends Command
             foreach ($lessons as $lesson) {
                 $vimeoVideo = explode('/', $lesson->vimeo_video);
 
-                $client = new Vimeo(env('client_id'), env('client_secret'), env('vimeo_token'));
-                $response = $client->request('/videos/' . end($vimeoVideo) . '/?password=' . env('video_password'), [], 'GET');
+                $client = new Vimeo(config('services.vimeo.id'), config('services.vimeo.secret'), config('services.vimeo.token'));
+                $response = $client->request('/videos/' . end($vimeoVideo) . '/?password=' . config('services.vimeo.password'), [], 'GET');
 
                 if ($response['status'] === 200) {
                     $duration = $response['body']['duration'];

@@ -15,18 +15,18 @@
                                 $alt='';
                                 $width = 0;
                                 $height = 0;
-                                $img = get_image($syllabus[0]['mediable'],'instructors-small');
+                                $img = get_image($syllabus[0]['mediable'],'users');
 
-                                $imageDetails = get_image_version_details('instructors-small');
+                                $imageDetails = get_image_version_details('users');
                                 $width = $imageDetails['w'];
                                 $height = $imageDetails['h'];
                             ?>
-                            <a id="syllabus-link" href="{{env("NEW_PAGES_LINK") . "/" . $syllabus[0]['slugable']['slug']}}"><img loading="lazy" src="{{cdn($img)}}" alt="{{$alt}}" width="{{ $width }}" height="{{ $height }}" title="{{$alt}}"></a>
+                            <a id="syllabus-link" href="{{config("app.NEW_PAGES_LINK") . "/" . $syllabus[0]['slugable']['slug']}}"><img loading="lazy" src="{{cdn($img)}}" alt="{{$alt}}" width="{{ $width }}" height="{{ $height }}" title="{{$alt}}"></a>
                         </div>
                         <div class="ibox-text">
                             <p>Syllabus Manager<br></p>
                             <p>
-                                <a href="{{env("NEW_PAGES_LINK") . "/" . $syllabus[0]['slugable']['slug']}}">{{ $syllabus[0]['title'] }} {!! $syllabus[0]['subtitle'] !!}</a>
+                                <a href="{{config("app.NEW_PAGES_LINK") . "/" . $syllabus[0]['slugable']['slug']}}">{{ $syllabus[0]['title'] }} {!! $syllabus[0]['subtitle'] !!}</a>
                             </p>
                         </div>
                     </div>

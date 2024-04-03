@@ -38,7 +38,7 @@
 		<div class="container">
 			<div class="header-wrap">
 				<div class="header-logo">
-					<a href="{{url('/')}}"><img src="{{cdn('new_cart/images/kc-logo.svg')}}" alt="KC Logo"></a>
+					<a href="{{ config('app.url') }}"><img src="{{cdn('new_cart/images/kc-logo.svg')}}" alt="KC Logo"></a>
 				</div>
 				<div class="d-flex align-items-center strip-ssl-wrap">
 					<div class="d-flex justify-content-between ssl-lock-wrp">

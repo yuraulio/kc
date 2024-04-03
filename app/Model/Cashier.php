@@ -110,7 +110,7 @@ class Cashier
         $paymentMethod = PaymentMethod::find($paymentMethod);
         $stripeKey = '';
         if ($paymentMethod) {
-            $stripeKey = env('PAYMENT_PRODUCTION') ? $paymentMethod->processor_options['secret_key'] : $paymentMethod->test_processor_options['secret_key'];
+            $stripeKey = config('app.PAYMENT_PRODUCTION') ? $paymentMethod->processor_options['secret_key'] : $paymentMethod->test_processor_options['secret_key'];
         }
 
         return new StripeClient(array_merge([

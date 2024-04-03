@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import api from '../../panel_app/api';
+import { isNewAdmin } from '../routes/helpers';
 
 var mediaMixin = {
   data() {
@@ -40,16 +41,8 @@ var mediaMixin = {
           description: 'Applies to: Event header carousel (Main event page)',
         },
         {
-          w: 90,
-          h: 90,
-          q: 60,
-          fit: 'crop',
-          version: 'instructors-small',
-          description: 'Applies to : Event -> Topics (syllabus-block)',
-        },
-        {
-          w: 600,
-          h: 600,
+          w: 1080,
+          h: 1080,
           q: 60,
           fit: 'crop',
           description: 'feed-image',
@@ -263,9 +256,7 @@ var mediaMixin = {
         if (this.$parent.imageVersion && version == this.$parent.imageVersion) {
           // this.$parent.imageVersionResponseData = response.data.data
 
-          let baseUrl = location.protocol + '//' + location.host;
-
-          if (baseUrl.includes('admin')) {
+          if (isNewAdmin()) {
             //this.$refs.crpr.confirmSelection(response.data.data)
           }
         }
@@ -288,9 +279,7 @@ var mediaMixin = {
         }
       }
 
-      let baseUrl = location.protocol + '//' + location.host;
-
-      if (!baseUrl.includes('admin')) {
+      if (!isNewAdmin()) {
         if (version != null && version != 'original') {
           if (this.$refs.crpr) {
             delete this.$refs.crpr.versionsForUpdate[version];
@@ -469,24 +458,22 @@ var mediaMixin = {
         });
     },
     userSelectedFiles($event) {
-      let baseUrl = location.protocol + '//' + location.host;
 
-      // console.log('first load data',this.firstLoadedData)
-      // console.log(this)
-
-      if (!baseUrl.includes('admin') && this.withoutImage) {
-        this.updatedMediaImage($event);
-      }
-
-      if (this.firstLoadedData.length == 0) {
+      if (!this.firstLoadedData.length) {
         this.firstLoadedData = $event;
       }
       this.warning = false;
 
-      if (this.selectedFile && this.selectedFile.id != $event.id && !baseUrl.includes('admin')) {
+
+      if (this.mode && this.withoutImage) {
+        this.updatedMediaImage($event);
+        return;
+      }
+
+      if (this.selectedFile && this.selectedFile.id != $event.id && !isNewAdmin()) {
         this.updatedMediaImage($event);
         //this.$modal.show('edit-image-modal');
-      } else if (this.selectedFile == null && this.withoutImage && !baseUrl.includes('admin')) {
+      } else if (this.selectedFile == null && this.withoutImage && !isNewAdmin()) {
       } else {
         //alert('not different image')
         this.selectedFile = $event;
@@ -508,9 +495,7 @@ var mediaMixin = {
         pagesText = pagesText + 'This is an original image, this action will delete all its subimages that exist.';
       }
 
-      let baseUrl = location.protocol + '//' + location.host;
-
-      if (baseUrl.includes('admin')) {
+      if (isNewAdmin()) {
         Swal.fire({
           title: 'Are you sure?\n ' + pagesText,
           text: "You won't be able to revert this! Delete file?",

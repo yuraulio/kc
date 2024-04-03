@@ -7,7 +7,7 @@
     $openlist = $data['openlist'];
     $completedlist = $data['completedlist'];
 
-    $diplomas = false; 
+    $diplomas = false;
     $certificates = false;
 @endphp
 
@@ -55,7 +55,7 @@
                                 $slug = '';
                             }
     ?>
-                                    <h2><a href="{{env('NEW_PAGES_LINK') . '/' . $slug }}">{{ $row->title}}</a></h2>
+                                    <h2><a href="{{config('app.NEW_PAGES_LINK') . '/' . $slug }}">{{ $row->title}}</a></h2>
                                     <div class="bottom">
                                         @if ($row->summary1->where('section','date')->first() && $row->summary1->where('section','date')->first()->title)
                                             <div class="duration"><img width="20" src="/theme/assets/images/icons/icon-calendar.svg" alt=""> {{$row->summary1->where('section','date')->first()->title}}  </div>
@@ -98,7 +98,7 @@
                                     @else
                                         <div class="price">from €{{$price}}</div>
                                         <a href="{{ $slug }}" class="btn btn--secondary btn--md">Course Details</a>
-                                    @endif  
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -129,11 +129,11 @@
                         $slug = '';
                     }
     ?>
-                                    <h2><a href="{{env('NEW_PAGES_LINK') . '/' .  $slug }}">{{ $row->title}}</a></h2>
+                                    <h2><a href="{{config('app.NEW_PAGES_LINK') . '/' .  $slug }}">{{ $row->title}}</a></h2>
                                     <div class="bottom">
                                         @if(isset($row['city']))
                                             @foreach($row['city'] as $city)
-                                                <a href="{{ env('NEW_PAGES_LINK') . '/' .  $city->slugable->slug }}" class="city " title="{{ $city->name }}">
+                                                <a href="{{ config('app.NEW_PAGES_LINK') . '/' .  $city->slugable->slug }}" class="city " title="{{ $city->name }}">
                                                 <img width="20" class="replace-with-svg" src="/theme/assets/images/icons/marker.svg" alt="">{{ $city->name }}</a>
                                             @endforeach
                                         @endif

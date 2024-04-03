@@ -6,7 +6,7 @@
         <meta charset="UTF-8">
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
         <script>
           window.dataLayer = window.dataLayer || [];
@@ -210,7 +210,7 @@
         @include('theme.layouts.flash_notifications')
         @yield('scripts')
 
-        @if(strtotime(date('Y-m-d')) == strtotime(env('BLACKFRIDAY')))
+        @if(strtotime(date('Y-m-d')) == strtotime(config('services.promotions.BLACKFRIDAY')))
             <script src="{{cdn('theme/assets/blackfriday/blackfriday.js')}}"> </script>
         @endif
 

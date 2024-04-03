@@ -103,7 +103,7 @@
                                             //dd($instructors[$lesson->id]->first()['mediable'][]);
                                     ?>
                                     <span style="display:inline-block" class="avatar avatar-sm rounded-circle">
-                                        <img src="<?= asset(get_image($instructors[$lesson->id]->first()['mediable'], 'instructors-small')); ?>" alt="{{ $user['firstname'] }}" style="max-width: 100px; max-height: 40px; border-radius: 25px">
+                                        <img src="<?= asset(get_image($instructors[$lesson->id]->first()['mediable'], 'users')); ?>" alt="{{ $user['firstname'] }}" style="max-width: 100px; max-height: 40px; border-radius: 25px">
 
                                     </span>
 

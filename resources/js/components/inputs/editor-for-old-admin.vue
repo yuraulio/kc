@@ -173,7 +173,6 @@ export default {
   },
   mounted() {
     window.test = this;
-    console.error('this', this.variableValid);
     if (this.value) {
       this.editorData = this.editorData;
       $('input[name=' + this.inputname + ']').val(this.editorData);

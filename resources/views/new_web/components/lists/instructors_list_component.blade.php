@@ -76,9 +76,9 @@
                                                         }
                                                     ?>
                                                     <div class="profile-img">
-                                                        <a href="{{env('NEW_PAGES_LINK') . '/' . $lvalue['slugable']['slug']}}"><img loading="lazy" src="{{cdn($img)}}" width="{{ $width }}" height="{{ $height }}"  title="{{$name}}" alt="{{$name}}"></a>
+                                                        <a href="{{config('app.NEW_PAGES_LINK') . '/' . $lvalue['slugable']['slug']}}"><img loading="lazy" src="{{cdn($img)}}" width="{{ $width }}" height="{{ $height }}"  title="{{$name}}" alt="{{$name}}"></a>
                                                     </div>
-                                                    <h3><a style="color:#81be00;" href="{{env('NEW_PAGES_LINK') . '/' . $lvalue['slugable']['slug']}}">{{$name}}</a></h3>
+                                                    <h3><a style="color:#81be00;" href="{{config('app.NEW_PAGES_LINK') . '/' . $lvalue['slugable']['slug']}}">{{$name}}</a></h3>
                                                     <p>{{$field1}}, <a style="color:#81be00;" target="_blank" title="{{$field1}}" @if($ext_url!='') href="{{$ext_url}}"@endif>{{$field2}}</a>.</p>
                                                     <ul class="social-wrapper">
                                                         @if($fb != '')
@@ -170,7 +170,7 @@
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-9">
-                                                                <h3><a href="{{env('NEW_PAGES_LINK') . '/' . $lvalue['slugable']['slug']}}">{{$name}}</a></h3>
+                                                                <h3><a href="{{config('app.NEW_PAGES_LINK') . '/' . $lvalue['slugable']['slug']}}">{{$name}}</a></h3>
                                                                 <p>{{$field1}}, <a target="_blank" title="{{$field1}}" @if($ext_url!='') href="{{$ext_url}}"@endif>{{$field2}}</a>.</p>
                                                                 <ul class="social-wrapper">
                                                                     @if($fb != '')
