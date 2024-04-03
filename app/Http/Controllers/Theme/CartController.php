@@ -2438,6 +2438,8 @@ class CartController extends Controller
                 'customerTotalOrderValue' => '',
                 'customerFirstName' => $user->firstname,
                 'customerLastName' => $user->lastname,
+                'customerMobile' => $user->mobile,
+                'customerStreet' => $user->address,
                 'customerBillingFirstName' => $customerBillingFirstName,
                 'customerBillingLastName' => $customerBillingLastName,
                 'customerBillingCompany' => $user->company,

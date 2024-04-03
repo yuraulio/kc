@@ -151,7 +151,6 @@ class InfoController extends Controller
                     'Encrypted_email' => hash('sha256', $userEmail),
                 ];
 
-                $customerBillingCompany = '';
                 $customerBillingFirstName = '';
                 $customerBillingLastName = '';
                 $customerBillingCompany = '';
@@ -193,6 +192,12 @@ class InfoController extends Controller
                     if (isset($billDet->billemail)) {
                         $customerBillingEmail = $billDet->billemail;
                     }
+                    if (isset($billDet->billmobile)) {
+                        $customerBillingPhone = $billDet->billmobile;
+                    }
+                    if (isset($billDet->billstate)) {
+                        $customerBillingState = $billDet->billstate;
+                    }
                 } catch(\Exception $e) {
                 }
 
@@ -210,6 +215,9 @@ class InfoController extends Controller
                     'customerBillingPostcode' => $customerBillingPostcode,
                     'customerBillingCountry' => $customerBillingCountry,
                     'customerBillingEmail' => $customerBillingEmail,
+                    'customerBillingPhone' => $customerBillingPhone,
+                    'customerBillingStreet' => $customerBillingAddress1,
+                    '$customerBillingState' => $customerBillingState,
                     'customerBillingEmailHash' => hash('sha256', $customerBillingEmail),
                 ];
 
