@@ -160,6 +160,9 @@ class InfoController extends Controller
                 $customerBillingCountry = '';
                 $customerBillingPostcode = '';
                 $customerBillingEmail = '';
+                $customerBillingPhone = '';
+                $customerBillingState = '';
+
                 try {
                     $billDet = json_decode($this->transaction['billing_details']);
                     if (isset($this->transaction['status_history'][0]['pay_seats_data']['names'][0])) {
