@@ -186,7 +186,6 @@ class User extends Authenticatable
             return $this->profile_image->parent;
         }
 
-        return null;
     }
 
     /*public function events()

@@ -793,9 +793,9 @@ class StudentController extends Controller
 
         $path_name = $request->dp_fileupload->store('Users', 'uploads');
 
-        $name = array_reverse(explode('/',$path_name))[0];
+        $name = array_reverse(explode('/', $path_name))[0];
         $name_parts = explode('.', $name);
-        $new_name = $name_parts[0].'.webp';
+        $new_name = $name_parts[0] . '.webp';
 
         // Save image in webp format
         $image = Image::make($request->dp_fileupload->path());
@@ -831,7 +831,7 @@ class StudentController extends Controller
         $CMSFile->crop_data = null;
         $CMSFile->save();
 
-        $name_parts = explode('.',$new_name);
+        $name_parts = explode('.', $new_name);
         $new_name_thumb = $name_parts[0] . '-users.' . $name_parts[1];
         $image->save(public_path('/uploads/Users/') . $new_name_thumb, 60);
         $CMSFileThumb = $CMSFile->replicate();
