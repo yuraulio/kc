@@ -1052,7 +1052,7 @@ if (!function_exists('get_image')) {
             if (strpos($media['path'], '//')) {
                 $media['path'] = str_replace('//', '/', $media['path']);
             }
-            $image =  $media['path'] . $media['name'];
+            $image = $media['path'] . $media['name'];
             if (file_exists(public_path('/') . $image . '.webp') && support_webp()) {
                 return $image . '.webp';
             } elseif (file_exists(public_path('/') . $image . $media['ext'])) {

@@ -40,7 +40,7 @@ class BasicAuth
         $is_not_authenticated = (
             !$has_supplied_credentials ||
             $_SERVER['PHP_AUTH_USER'] != env('BASIC_AUTH_USER') ||
-            $_SERVER['PHP_AUTH_PW']   != env('BASIC_AUTH_PASSWORD')
+            $_SERVER['PHP_AUTH_PW'] != env('BASIC_AUTH_PASSWORD')
         );
 
         if ($is_not_authenticated) {
