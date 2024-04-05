@@ -2,6 +2,8 @@
 
 namespace App\Services\QueryString\Components;
 
+use DateTime;
+
 abstract class Filter
 {
     private string $column;
@@ -42,7 +44,9 @@ abstract class Filter
 
     public function isDateValue(): bool
     {
-        return is_scalar($this->getValue()) && strtotime($this->getValue());
+        $dateTime = DateTime::createFromFormat('Y-m-d', $this->getValue());
+
+        return $dateTime !== false && $dateTime::getLastErrors() === false;
     }
 
     public function isArrayValue(): bool
