@@ -98,6 +98,11 @@ class User extends Authenticatable
         return $this->hasOne(Activation::class);
     }
 
+    public function profileStatus(): HasOne
+    {
+        return $this->hasOne(ProfileStatus::class);
+    }
+
     /**
      * Get the path to the profile picture.
      *

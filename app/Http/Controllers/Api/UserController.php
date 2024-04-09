@@ -53,6 +53,7 @@ class UserController extends Controller
             ->with([
                 'image',
                 'statusAccount',
+                'profileStatus',
                 'role',
             ]);
 
