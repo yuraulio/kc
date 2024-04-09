@@ -151,7 +151,6 @@ class InfoController extends Controller
                     'Encrypted_email' => hash('sha256', $userEmail),
                 ];
 
-                $customerBillingCompany = '';
                 $customerBillingFirstName = '';
                 $customerBillingLastName = '';
                 $customerBillingCompany = '';
@@ -161,6 +160,9 @@ class InfoController extends Controller
                 $customerBillingCountry = '';
                 $customerBillingPostcode = '';
                 $customerBillingEmail = '';
+                $customerBillingPhone = '';
+                $customerBillingState = '';
+
                 try {
                     $billDet = json_decode($this->transaction['billing_details']);
                     if (isset($this->transaction['status_history'][0]['pay_seats_data']['names'][0])) {
@@ -193,6 +195,12 @@ class InfoController extends Controller
                     if (isset($billDet->billemail)) {
                         $customerBillingEmail = $billDet->billemail;
                     }
+                    if (isset($billDet->billmobile)) {
+                        $customerBillingPhone = $billDet->billmobile;
+                    }
+                    if (isset($billDet->billstate)) {
+                        $customerBillingState = $billDet->billstate;
+                    }
                 } catch(\Exception $e) {
                 }
 
@@ -210,6 +218,9 @@ class InfoController extends Controller
                     'customerBillingPostcode' => $customerBillingPostcode,
                     'customerBillingCountry' => $customerBillingCountry,
                     'customerBillingEmail' => $customerBillingEmail,
+                    'customerBillingPhone' => $customerBillingPhone,
+                    'customerBillingStreet' => $customerBillingAddress1,
+                    '$customerBillingState' => $customerBillingState,
                     'customerBillingEmailHash' => hash('sha256', $customerBillingEmail),
                 ];
 
