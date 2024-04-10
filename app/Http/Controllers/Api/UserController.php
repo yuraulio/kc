@@ -51,6 +51,7 @@ class UserController extends Controller
         $billing['billstate'] = isset($billingDetails['billstate']) ? $billingDetails['billstate'] : '';
         $billing['billcountry'] = isset($billingDetails['billcountry']) ? $billingDetails['billcountry'] : '';
         $billing['billemail'] = isset($billingDetails['billemail']) ? $billingDetails['billemail'] : '';
+        $billing['billmobile'] = isset($billingDetails['billmobile']) ? $billingDetails['billmobile'] : '';
 
         //$user['stripe_ids'] = json_decode($user['stripe_ids'],true)  ? $user['stripe_ids'] : [];
 
@@ -946,6 +947,7 @@ class UserController extends Controller
         $receiptDetails['billstate'] = $request->billstate ? $request->billstate : '';
         $receiptDetails['billcountry'] = $request->billcountry ? $request->billcountry : '';
         $receiptDetails['billemail'] = $request->billemail ? $request->billemail : '';
+        $receiptDetails['billmobile'] = $request->billmobile ? $request->billmobile : '';
 
         if ($request->file('photo')) {
             if (!$user1->image) {
@@ -984,6 +986,7 @@ class UserController extends Controller
         $request->request->remove('billstate');
         $request->request->remove('billcountry');
         $request->request->remove('billemail');
+        $request->request->remove('billmobile');
 
         $isUpdateUser = User::where('id', $user1->id)->update(
             $request->merge([
