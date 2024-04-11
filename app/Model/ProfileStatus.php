@@ -11,16 +11,15 @@ class ProfileStatus extends Model
     use HasFactory;
 
     protected $fillable = [
-      'active'
+        'active',
     ];
 
     protected $casts = [
-        'active' => 'boolean'
+        'active' => 'boolean',
     ];
 
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
-
 }
