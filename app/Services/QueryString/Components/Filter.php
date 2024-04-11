@@ -44,6 +44,10 @@ abstract class Filter
 
     public function isDateValue(): bool
     {
+        if (!is_scalar($this->getValue()) && !is_string($this->getValue())) {
+            return false;
+        }
+
         $dateTime = DateTime::createFromFormat('Y-m-d', $this->getValue());
 
         return $dateTime !== false && $dateTime::getLastErrors() === false;
