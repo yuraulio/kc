@@ -57,6 +57,7 @@ Route::middleware('auth:api')->group(function () {
     Route::delete('media-manager/folder/{id}', [MediaController::class, 'deleteFolder']);
     Route::post('media-manager/folder/edit', [MediaController::class, 'editFolder']);
     Route::post('media-manager/file/move', [MediaController::class, 'moveFile']);
+    Route::post('media_manager/change_folder_order', [MediaController::class, 'changeFolderOrder']);
 
     //
     Route::post('lesson/save_note', [LessonController::class, 'saveNote']);
