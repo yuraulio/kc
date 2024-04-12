@@ -2,6 +2,8 @@
 
 namespace App\Services\QueryString;
 
+use App\Services\QueryString\Builders\RelationFilterBuilder;
+use App\Services\QueryString\Builders\SimpleFilterBuilder;
 use App\Services\QueryString\Components\RelationFilter;
 use App\Services\QueryString\Components\Search;
 use App\Services\QueryString\Components\SimpleFilter;
@@ -48,24 +50,9 @@ final class QueryStringDirector
                 }
 
                 foreach ($values as $operator => $value) {
-                    if (Str::contains($key, '.')) {
-                        [$relation, $column] = explode('.', $key);
-
-                        if ($column === 'id') {
-                            $column = $key;
-                        }
-
-                        if ($relation === 'role') {
-                            $column = 'roles.id';
-                        }
-
-                        $filter = new RelationFilter();
-                        $filter->setRelation($relation);
-                        $filter->setColumn($column);
-                    } else {
-                        $filter = new SimpleFilter();
-                        $filter->setColumn($key);
-                    }
+                    $filter = Str::contains($key, '.')
+                        ? RelationFilterBuilder::build($key)
+                        : SimpleFilterBuilder::build($key);
 
                     if ($operator = Operator::byName($operator)) {
                         $filter->setOperator($operator->value);
