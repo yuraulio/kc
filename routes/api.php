@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin_api\MediaController;
 use App\Http\Controllers\Api\AbsenceController;
 use App\Http\Controllers\Api\CouponController;
 use App\Http\Controllers\Api\DeliveryController;
@@ -43,6 +44,19 @@ Route::middleware('auth:api')->group(function () {
     // Deliveries
     Route::apiResource('deliveries', DeliveryController::class)
         ->only(['index']);
+
+    // Media manager
+    Route::resource('media-manager', MediaController::class)->only([
+        'index', 'store', 'update', 'destroy',
+    ]);
+
+    Route::post('media-manager/upload_reg_file', [MediaController::class, 'uploadRegFile']);
+    Route::get('media-manager/files', [MediaController::class, 'files']);
+    Route::get('media-manager/getFile/{id}', [MediaController::class, 'getFile']);
+    Route::delete('media-manager/file/{id}', [MediaController::class, 'deleteFile']);
+    Route::delete('media-manager/folder/{id}', [MediaController::class, 'deleteFolder']);
+    Route::post('media-manager/folder/edit', [MediaController::class, 'editFolder']);
+    Route::post('media-manager/file/move', [MediaController::class, 'moveFile']);
 
     //
     Route::post('lesson/save_note', [LessonController::class, 'saveNote']);
