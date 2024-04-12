@@ -4,7 +4,11 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Model\Admin\Admin;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -19,9 +23,9 @@ class AdminLoginController extends Controller
     protected string $redirectTo = '/admin2';
 
     /**
-     * @return Factory|View|Application
+     * @return Factory|Application|View|RedirectResponse
      */
-    public function showLoginPage(): Factory|View|Application
+    public function showLoginPage(): Factory|Application|View|RedirectResponse
     {
         if (isset(request()->all()['token'])) {
             $token = request()->all()['token'];
