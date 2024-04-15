@@ -49,15 +49,18 @@ Route::middleware('auth:api')->group(function () {
     Route::resource('media-manager', MediaController::class)->only([
         'index', 'store', 'update', 'destroy',
     ]);
-
-    Route::post('media-manager/upload_reg_file', [MediaController::class, 'uploadRegFile']);
-    Route::get('media-manager/files', [MediaController::class, 'files']);
-    Route::get('media-manager/getFile/{id}', [MediaController::class, 'getFile']);
-    Route::delete('media-manager/file/{id}', [MediaController::class, 'deleteFile']);
     Route::delete('media-manager/folder/{id}', [MediaController::class, 'deleteFolder']);
     Route::post('media-manager/folder/edit', [MediaController::class, 'editFolder']);
+    Route::post('media-manager/change_folder_order', [MediaController::class, 'changeFolderOrder']);
+
     Route::post('media-manager/file/move', [MediaController::class, 'moveFile']);
-    Route::post('media_manager/change_folder_order', [MediaController::class, 'changeFolderOrder']);
+    Route::post('media-manager/files/move', [MediaController::class, 'moveFiles']);
+    Route::delete('media-manager/file/{id}', [MediaController::class, 'deleteFile']);
+    Route::post('media-manager/deleteFiles', [MediaController::class, 'deleteFiles']);
+    Route::get('media-manager/files', [MediaController::class, 'files']);
+    Route::get('media-manager/getFile/{id}', [MediaController::class, 'getFile']);
+    Route::get('media-manager/download/{mediaFile}', [MediaController::class, 'download']);
+    Route::post('media-manager/upload_reg_file', [MediaController::class, 'uploadRegFile']);
 
     //
     Route::post('lesson/save_note', [LessonController::class, 'saveNote']);

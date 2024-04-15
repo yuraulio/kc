@@ -4,9 +4,7 @@ namespace App\Services\QueryString;
 
 use App\Services\QueryString\Builders\RelationFilterBuilder;
 use App\Services\QueryString\Builders\SimpleFilterBuilder;
-use App\Services\QueryString\Components\RelationFilter;
 use App\Services\QueryString\Components\Search;
-use App\Services\QueryString\Components\SimpleFilter;
 use App\Services\QueryString\Components\Sort;
 use App\Services\QueryString\Enums\Direction;
 use App\Services\QueryString\Enums\Operator;

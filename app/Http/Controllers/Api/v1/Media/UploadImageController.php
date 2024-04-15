@@ -51,6 +51,7 @@ class UploadImageController extends ApiBaseController
 
         $mediaFile = MediaFile::create([
             'name' => $imageName,
+            'admin_label' => $request->input('admin_label'),
             'extension' => $fileExt,
             'path' => $path,
             'full_path' => '/uploads' . $path,

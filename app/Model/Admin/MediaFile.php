@@ -23,6 +23,7 @@ class MediaFile extends Model implements Auditable
 
     protected $fillable = [
         'name',
+        'admin_label',
         'extension',
         'path',
         'full_path',

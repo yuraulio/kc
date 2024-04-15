@@ -21,6 +21,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class MediaController extends Controller
 {
@@ -49,10 +51,8 @@ class MediaController extends Controller
 
     public function files(Request $request)
     {
-        //$this->authorize('viewAny', Page::class, Auth::user());
-
         try {
-            $files = MediaFile::lookForOriginal($request->filter)
+            $query = MediaFile::lookForOriginal($request->filter)
                 ->when($request->parent != false && $request->parent != 'false', function ($q) {
                     return $q->whereNull('parent_id');
                 })
@@ -60,8 +60,25 @@ class MediaController extends Controller
                 ->withCount('pages')
                 ->when($request->folder_id != null, function ($q) use ($request) {
                     return $q->where('folder_id', $request->folder_id);
-                })
-                ->orderBy('created_at', 'desc')->paginate(20);
+                });
+
+            // Filter files by the date of creation.
+            if ($request->query->has('created_at')) {
+                $createdAtFilter = $request->query->all('created_at');
+
+                if (isset($createdAtFilter['from'])) {
+                    $query->whereDate('created_at', '>=', $createdAtFilter['from']);
+                }
+
+                if (isset($createdAtFilter['to'])) {
+                    $query->whereDate('created_at', '<=', $createdAtFilter['to']);
+                }
+            }
+
+            $files = $query
+                ->orderBy('created_at', 'desc')
+                ->paginate(50);
+
             if ($request->parent != false && $request->parent != 'false') {
                 $files->load('subfiles');
             }
@@ -264,4 +281,17 @@ class MediaController extends Controller
 
         return response()->json('success', 200);
     }
+
+    /**
+     * @throws \Throwable
+     */
+    public function download(MediaFile $mediaFile): BinaryFileResponse
+    {
+        $file = public_path(implode('/', ['uploads', $mediaFile->path]));
+
+        throw_if(!file_exists($file), new NotFoundHttpException(sprintf('File "%s" does not exist.', $file)));
+
+        return response()->download($file);
+    }
+
 }
