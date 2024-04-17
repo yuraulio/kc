@@ -69,8 +69,10 @@
                   </ul>
 
                   @if($estatus == App\Model\Event::STATUS_OPEN && !$is_event_paid)
-                  <a href="#seats" class="btn btn--lg btn--primary go-to-href">ENROLL NOW</a>
-
+{{--                  <a href="#seats" class="btn btn--lg btn--primary go-to-href">ENROLL NOW</a>--}}
+                   <button class="btn btn--lg btn--primary go-to-href" onclick="document.getElementById('seats').scrollIntoView({behavior: 'smooth'});">
+                     ENROLL NOW
+                   </button>
                   @elseif($estatus == App\Model\Event::STATUS_WAITING && !$is_joined_waiting_list && !$is_event_paid)
                   <a href="{{ route('cart.add-item', [ $event->id,'waiting', 8 ]) }}" class="btn btn--lg btn--primary go-to-href elearning-free">JOIN WAITING LIST</a>
 
