@@ -788,16 +788,9 @@
                                                     $event['status'] == App\Model\Event::STATUS_COMPLETED &&  $fa)
                                                     <li><a href="#c-files-inner{{$tab}}">Files</a></li>
                                                     @endif
-{{--                                                    @if(isset($event['exams']) && count($event['exams']) >0 )--}}
-{{--                                                    <li><a href="#c-exams-inner{{$tab}}">Exams</a></li>--}}
-{{--                                                    @endif--}}
-                                                  @if(isset($event['exams']) && count($event['exams']) > 0)
-                                                    <li>
-                                                      <button onclick="document.getElementById('c-exams-inner{{$tab}}').scrollIntoView({behavior: 'smooth'});">
-                                                        Exams
-                                                      </button>
-                                                    </li>
-                                                  @endif
+                                                    @if(isset($event['exams']) && count($event['exams']) >0 )
+                                                    <li><a href="#c-exams-inner{{$tab}}">Exams</a></li>
+                                                    @endif
 
                                                     @if(count($event['certs']) > 0)
                                                     <li><a href="#c-cert-inner{{$tab}}">Certificate</a></li>
@@ -1331,16 +1324,10 @@
                                                     <li class="active"><a href="#c-watch-inner{{$tab}}">Watch</a></li>
 
 
-{{--                                                    @if(isset($event['exams']) && count($event['exams']) >0 )--}}
-{{--                                                    <li><a href="#c-exams-inner{{$tab}}">Exams</a></li>--}}
-{{--                                                    @endif--}}
-                                                  @if(isset($event['exams']) && count($event['exams']) > 0)
-                                                    <li>
-                                                      <button onclick="document.getElementById('c-exams-inner{{$tab}}').scrollIntoView({behavior: 'smooth'});">
-                                                        Exams
-                                                      </button>
-                                                    </li>
-                                                  @endif
+                                                    @if(isset($event['exams']) && count($event['exams']) >0 )
+                                                    <li><a href="#c-exams-inner{{$tab}}">Exams</a></li>
+                                                    @endif
+                                                  
                                                     @if(count($event['certs']) > 0)
                                                     <li><a href="#c-cert-inner{{$tab}}">Certificate</a></li>
                                                     @endif
