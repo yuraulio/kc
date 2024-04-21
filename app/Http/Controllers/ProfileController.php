@@ -71,6 +71,7 @@ class ProfileController extends Controller
             $receipt['billcountry'] = $request->billcountry;
             $receipt['billemail'] = $request->billemail;
             $receipt['billafm'] = $request->billafm;
+            $receipt['billmobile'] = $request->billmobile;
         } else {
             $receipt['billing'] = 1;
             $receipt['billname'] = $request->billname;
@@ -83,6 +84,7 @@ class ProfileController extends Controller
             $receipt['billcountry'] = $request->billcountry;
             $receipt['billemail'] = $request->billemail;
             $receipt['billafm'] = $request->billafm;
+            $receipt['billmobile'] = $request->billmobile;
         }
 
         if ($user['invoice_details'] != null) {

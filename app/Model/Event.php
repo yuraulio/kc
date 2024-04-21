@@ -397,7 +397,8 @@ class Event extends Model
 
     public function career()
     {
-        return $this->morphedByMany(Career::class, 'careerpathables');
+        return $this->morphedByMany(Career::class, 'careerpathable', 'careerpathables', 'event_id', 'careerpathable_id')
+            ->withPivot('careerpath_type');
     }
 
     public function sections()

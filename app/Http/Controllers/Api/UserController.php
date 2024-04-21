@@ -993,6 +993,7 @@ class UserController extends Controller
         $receiptDetails['billstate'] = $request->billstate ? $request->billstate : '';
         $receiptDetails['billcountry'] = $request->billcountry ? $request->billcountry : '';
         $receiptDetails['billemail'] = $request->billemail ? $request->billemail : '';
+        $receiptDetails['billmobile'] = $request->billmobile ? $request->billmobile : '';
 
         if ($request->file('photo')) {
             if (!$user1->image) {
@@ -1025,6 +1026,7 @@ class UserController extends Controller
         $request->request->remove('billstate');
         $request->request->remove('billcountry');
         $request->request->remove('billemail');
+        $request->request->remove('billmobile');
 
         $isUpdateUser = User::where('id', $user1->id)->update(
             $request->merge([

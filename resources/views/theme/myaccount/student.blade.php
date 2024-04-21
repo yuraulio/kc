@@ -791,6 +791,7 @@
                                                     @if(isset($event['exams']) && count($event['exams']) >0 )
                                                     <li><a href="#c-exams-inner{{$tab}}">Exams</a></li>
                                                     @endif
+
                                                     @if(count($event['certs']) > 0)
                                                     <li><a href="#c-cert-inner{{$tab}}">Certificate</a></li>
                                                     @endif
@@ -1326,6 +1327,7 @@
                                                     @if(isset($event['exams']) && count($event['exams']) >0 )
                                                     <li><a href="#c-exams-inner{{$tab}}">Exams</a></li>
                                                     @endif
+                                                  
                                                     @if(count($event['certs']) > 0)
                                                     <li><a href="#c-cert-inner{{$tab}}">Certificate</a></li>
                                                     @endif
@@ -1480,10 +1482,10 @@
                                                             @endforeach
                                                             @endforeach
 
-                                                            @if($event['view_tpl'] == 'elearning_free' && $event['status'] == App\Model\Event::STATUS_OPEN && $event['expiration'] && strtotime($event['expiration']) < strtotime(now()))
-                                                            <a href="{{ $event['slugable']['slug'] }}" class="btn btn--secondary btn--md">RENROLL FOR FREE</a>
-                                                            @elseif($event['view_tpl'] != 'elearning_free' && $event['status'] == App\Model\Event::STATUS_OPEN && $event['expiration'] && strtotime($event['expiration']) < strtotime(now()) && (isset($event['video_access']) && !$event['video_access']))
-                                                            <a href="{{ $event['slugable']['slug'] }}" class="btn btn--primary btn--md">REENROLL</a>
+                                                            @if($event['view_tpl'] == 'elearning_free' && $event['status'] == App\Model\Event::STATUS_OPEN && isset($event['expiration']) && strtotime($event['expiration']) < strtotime(now()))
+                                                              <a href="{{ $event['slugable']['slug'] }}" class="btn btn--secondary btn--md">RENROLL FOR FREE</a>
+                                                            @elseif($event['view_tpl'] != 'elearning_free' && $event['status'] == App\Model\Event::STATUS_OPEN && isset($event['expiration'])  &&strtotime($event['expiration']) < strtotime(now()) && (isset($event['video_access']) && !$event['video_access']))
+                                                              <a href="{{ $event['slugable']['slug'] }}" class="btn btn--primary btn--md">REENROLL</a>
                                                             @endif
 
                                                             @if(isset($event['video_access']) && !$event['video_access'])
