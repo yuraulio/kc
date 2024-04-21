@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Model\Role;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class RoleSeeder extends Seeder
 {
@@ -12,13 +12,36 @@ class RoleSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
-        DB::table('roles')->insert([
-            'id' => 1,
-            'name' => 'Administrator',
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
+        $roles = [
+          [
+              'name' => 'Administrator',
+              'permissions' => [
+                  'sudo' => true,
+                  'admin' => true,
+              ],
+              'level' => 100,
+          ],
+            [
+                'name' => 'Instructor',
+                'permissions' => [
+                    'instructor' => true,
+                ],
+                'level' => 9,
+            ]
+        ];
+
+        foreach ($roles as $role) {
+            Role::updateOrCreate(
+                [
+                    'name' => $role['name']
+                ],
+                [
+                    'permissions' => json_encode($role['permissions']),
+                    'level' => $role['level'],
+                ]
+            );
+        }
     }
 }
