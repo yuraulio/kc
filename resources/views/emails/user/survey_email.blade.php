@@ -99,7 +99,7 @@
                                                                         <tr>
                                                                            <td align="left" valign="top" class="r15-i nl2go-default-textstyle" style="color: #3b3f44; font-family: arial,helvetica,sans-serif; font-size: 16px; line-height: 1.5; text-align: left;">
                                                                               <div>
-                                                                                 <p style="margin: 0;">Thank you for the time you spent with us. We hope it was a constructive and enjoyable journey. Now, please take a few minutes to rate our course!</p>
+                                                                                 <p style="margin: 0;">Thank you for dedicating your time to our course. We trust that your experience was both enriching and enjoyable. We would greatly appreciate it if you could spare a few moments to provide feedback on our course.</p>
                                                                               </div>
                                                                            </td>
                                                                         </tr>
@@ -111,41 +111,17 @@
                                                                </tr>
                                                                <tr>
                                                                   <td class="r12-c" align="left">
-                                                                     <table cellspacing="0" cellpadding="0" border="0" role="presentation" width="290" class="r16-o" style="table-layout: fixed; width: 290px;">
+                                                                     <table cellspacing="0" cellpadding="0" border="0" role="presentation" width="290" class="r16-o" style="table-layout: fixed; width: 390px;">
                                                                         <tr class="nl2go-responsive-hide">
                                                                            <td height="15" style="font-size: 15px; line-height: 15px;">­</td>
                                                                         </tr>
-                                                                        <tr>
-                                                                           <td height="18" align="center" valign="top" class="r17-i nl2go-default-textstyle" style="color: #3b3f44; font-family: arial,helvetica,sans-serif; font-size: 16px; line-height: 1.5;">
-                                                                              @if($fbTestimonial)
-                                                                              <a href="{{$fbTestimonial}}/?utm_source=Knowcrunch.com&utm_medium=Rating_Email" class="r18-r default-button" target="_blank" data-btn="1" style="font-style: normal; font-weight: normal; line-height: 1.15; text-decoration: none; border-style: solid; display: inline-block; -webkit-text-size-adjust: none; mso-hide: all; background-color: #c8d151; border-color: #c8d151; border-radius: 4px; border-width: 0px; color: #ffffff; font-family: arial,helvetica,sans-serif; font-size: 16px; height: 18px; padding-bottom: 12px; padding-left: 5px; padding-right: 5px; padding-top: 12px; width: 280px;">
-                                                                                 <p style="margin: 0;"><span style="color: #000000;"><strong>Leave a testimonial</strong></span></p>
-                                                                              </a>
-                                                                              @endif
-                                                                             
-                                                                           </td>
-                                                                        </tr>
-                                                                        <tr class="nl2go-responsive-hide">
-                                                                           <td height="15" style="font-size: 15px; line-height: 15px;">­</td>
-                                                                        </tr>
-                                                                     </table>
-                                                                  </td>
-                                                               </tr>
-                                                               <tr>
-                                                                  <td class="r12-c" align="left">
-                                                                     <table cellspacing="0" cellpadding="0" border="0" role="presentation" width="290" class="r16-o" style="table-layout: fixed; width: 290px;">
-                                                                        <tr class="nl2go-responsive-hide">
-                                                                           <td height="15" style="font-size: 15px; line-height: 15px;">­</td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                           <td height="18" align="center" valign="top" class="r17-i nl2go-default-textstyle" style="color: #3b3f44; font-family: arial,helvetica,sans-serif; font-size: 16px; line-height: 1.5;">
-                                                                             
-                                                                              <a href="https://www.facebook.com/KnowCrunch/reviews" class="r18-r default-button" target="_blank" data-btn="2" style="font-style: normal; font-weight: normal; line-height: 1.15; text-decoration: none; border-style: solid; display: inline-block; -webkit-text-size-adjust: none; mso-hide: all; background-color: #c8d151; border-color: #c8d151; border-radius: 4px; border-width: 0px; color: #ffffff; font-family: arial,helvetica,sans-serif; font-size: 16px; height: 18px; padding-bottom: 12px; padding-left: 5px; padding-right: 5px; padding-top: 12px; width: 280px;">
-                                                                                 <p style="margin: 0;"><span style="color: #000000;"><strong>Leave review on Facebook</strong></span></p>
-                                                                              </a>
-                                                                              
-                                                                           </td>
-                                                                        </tr>
+                                                                       <tr>
+                                                                         <td align="left" valign="top" class="r15-i nl2go-default-textstyle" style="color: #3b3f44; font-family: arial,helvetica,sans-serif; font-size: 16px; line-height: 1.5; text-align: left;">
+                                                                           <div>
+                                                                             <p style="margin: 0;">   1. Please consider leaving a review on  <a href="https://www.trustpilot.com/review/knowcrunch.com" target="_blank">Trustpilot</a></p>
+                                                                           </div>
+                                                                         </td>
+                                                                       </tr>
                                                                         <tr class="nl2go-responsive-hide">
                                                                            <td height="15" style="font-size: 15px; line-height: 15px;">­</td>
                                                                         </tr>
@@ -154,25 +130,61 @@
                                                                </tr>
                                                                <tr>
                                                                   <td class="r12-c" align="left">
-                                                                     <table cellspacing="0" cellpadding="0" border="0" role="presentation" width="290" class="r16-o" style="table-layout: fixed; width: 290px;">
+                                                                     <table cellspacing="0" cellpadding="0" border="0" role="presentation" width="290" class="r16-o" style="table-layout: fixed; width: 390px;">
                                                                         <tr class="nl2go-responsive-hide">
                                                                            <td height="15" style="font-size: 15px; line-height: 15px;">­</td>
                                                                         </tr>
-                                                                        <tr>
-                                                                           <td height="18" align="center" valign="top" class="r17-i nl2go-default-textstyle" style="color: #3b3f44; font-family: arial,helvetica,sans-serif; font-size: 16px; line-height: 1.5;">
-                                                                 
-                                                                              <a href="{{$evaluateInstructors}}/?utm_source=Knowcrunch.com&utm_medium=Rating_Email" class="r18-r default-button" target="_blank" data-btn="3" style="font-style: normal; font-weight: normal; line-height: 1.15; text-decoration: none; border-style: solid; display: inline-block; -webkit-text-size-adjust: none; mso-hide: all; background-color: #c8d151; border-color: #c8d151; border-radius: 4px; border-width: 0px; color: #ffffff; font-family: arial,helvetica,sans-serif; font-size: 16px; height: 18px; padding-bottom: 12px; padding-left: 5px; padding-right: 5px; padding-top: 12px; width: 280px;">
-                                                                                 <p style="margin: 0;"><span style="color: #000000;"><strong>Rate our instructors</strong></span></p>
-                                                                              </a>
-                                                                          
-                                                                           </td>
-                                                                        </tr>
+                                                                       <tr>
+                                                                         <td align="left" valign="top" class="r15-i nl2go-default-textstyle" style="color: #3b3f44; font-family: arial,helvetica,sans-serif; font-size: 16px; line-height: 1.5; text-align: left;">
+                                                                           <div>
+                                                                             <p style="margin: 0;">   2. Drop a review on our  <a href="https://www.facebook.com/Knowcrunch/reviews" target="_blank">Facebook page</a></p>
+                                                                           </div>
+                                                                         </td>
+                                                                       </tr>
                                                                         <tr class="nl2go-responsive-hide">
                                                                            <td height="15" style="font-size: 15px; line-height: 15px;">­</td>
                                                                         </tr>
                                                                      </table>
                                                                   </td>
                                                                </tr>
+                                                               <tr>
+                                                                  <td class="r12-c" align="left">
+                                                                     <table cellspacing="0" cellpadding="0" border="0" role="presentation" width="290" class="r16-o" style="table-layout: fixed; width: 390px;">
+                                                                        <tr class="nl2go-responsive-hide">
+                                                                           <td height="15" style="font-size: 15px; line-height: 15px;">­</td>
+                                                                        </tr>
+                                                                       <tr>
+                                                                         <td align="left" valign="top" class="r15-i nl2go-default-textstyle" style="color: #3b3f44; font-family: arial,helvetica,sans-serif; font-size: 16px; line-height: 1.5; text-align: left;">
+                                                                           <div>
+                                                                             <p style="margin: 0;">   3. <a href="{{$evaluateInstructors}}/?utm_source=Knowcrunch.com&utm_medium=Rating_Email" target="_blank">Rate</a> our instructors' performance. </p>
+                                                                           </div>
+                                                                         </td>
+                                                                       </tr>
+                                                                        <tr class="nl2go-responsive-hide">
+                                                                           <td height="15" style="font-size: 15px; line-height: 15px;">­</td>
+                                                                        </tr>
+                                                                     </table>
+                                                                  </td>
+                                                               </tr>
+                                                              <tr>
+                                                                <td class="r12-c" align="left">
+                                                                  <table cellspacing="0" cellpadding="0" border="0" role="presentation" width="100%" class="r13-o" style="table-layout: fixed; width: 100%;">
+                                                                    <tr class="nl2go-responsive-hide">
+                                                                      <td height="15" style="font-size: 15px; line-height: 15px;">­</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                      <td align="left" valign="top" class="r15-i nl2go-default-textstyle" style="color: #3b3f44; font-family: arial,helvetica,sans-serif; font-size: 16px; line-height: 1.5; text-align: left;">
+                                                                        <div>
+                                                                          <p style="margin: 0;">Thank you once again for choosing us. We wish you continued success and hope that the skills you've acquired here will significantly enhance your career.</p>
+                                                                        </div>
+                                                                      </td>
+                                                                    </tr>
+                                                                    <tr class="nl2go-responsive-hide">
+                                                                      <td height="15" style="font-size: 15px; line-height: 15px;">­</td>
+                                                                    </tr>
+                                                                  </table>
+                                                                </td>
+                                                              </tr>
                                                             </table>
                                                          </td>
                                                          <td class="nl2go-responsive-hide" width="10" style="font-size: 0px; line-height: 1px;">­ </td>
