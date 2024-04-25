@@ -9,7 +9,7 @@
                             TICKETS
                             <i class="fas fa-ticket-alt"></i>
                         </h5>
-                        <span class="h2 font-weight-bold mb-0"><span id="students_total_tickets"></span></span>
+                        <span class="h2 font-weight-bold mb-0"><span id="students_total"></span></span>
                     </div>
                 </div>
                 <div class="loader text-center">
