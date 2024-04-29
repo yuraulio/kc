@@ -44,11 +44,12 @@ class MediaFile extends Model implements Auditable
      *
      * @return array
      */
-    public function toSearchableArray()
+    public function toSearchableArray(): array
     {
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'admin_label' => $this->admin_label,
         ];
     }
 

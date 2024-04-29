@@ -77,7 +77,8 @@ class MediaController extends Controller
 
             $files = $query
                 ->orderBy('created_at', 'desc')
-                ->paginate(50);
+                ->paginate((int) $request->query->get('per_page', 50))
+                ->appends($request->query->all());
 
             if ($request->parent != false && $request->parent != 'false') {
                 $files->load('subfiles');
