@@ -15,27 +15,27 @@ class RoleSeeder extends Seeder
     public function run(): void
     {
         $roles = [
-          [
-              'name' => 'Administrator',
-              'permissions' => [
-                  'sudo' => true,
-                  'admin' => true,
-              ],
-              'level' => 100,
-          ],
+            [
+                'name' => 'Administrator',
+                'permissions' => [
+                    'sudo' => true,
+                    'admin' => true,
+                ],
+                'level' => 100,
+            ],
             [
                 'name' => 'Instructor',
                 'permissions' => [
                     'instructor' => true,
                 ],
                 'level' => 9,
-            ]
+            ],
         ];
 
         foreach ($roles as $role) {
             Role::updateOrCreate(
                 [
-                    'name' => $role['name']
+                    'name' => $role['name'],
                 ],
                 [
                     'permissions' => json_encode($role['permissions']),

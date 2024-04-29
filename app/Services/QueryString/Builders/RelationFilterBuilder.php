@@ -7,7 +7,6 @@ use Illuminate\Support\Str;
 
 class RelationFilterBuilder
 {
-
     public static function build(string $columnName): RelationFilter
     {
         $column = Str::afterLast($columnName, '.');
@@ -27,5 +26,4 @@ class RelationFilterBuilder
 
         return $filter;
     }
-
 }
