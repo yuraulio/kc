@@ -183,9 +183,13 @@ class MediaController extends Controller
         return response()->json('success', 200);
     }
 
-    public function deleteFiles(Request $request)
+    public function deleteFiles(Request $request): void
     {
-        $selected = json_decode($request->selected);
+        $selected = $request->get('selected');
+        $selected = is_string($selected)
+            ? json_decode($selected, true)
+            : $selected;
+
         DeleteMediaFiles::dispatch($selected);
     }
 
