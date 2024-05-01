@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin_api\MediaController;
+use App\Http\Controllers\Admin_api\PagesController;
 use App\Http\Controllers\Api\AbsenceController;
 use App\Http\Controllers\Api\CouponController;
 use App\Http\Controllers\Api\DeliveryController;
@@ -61,6 +62,11 @@ Route::middleware('auth:api')->group(function () {
     Route::get('media-manager/getFile/{id}', [MediaController::class, 'getFile']);
     Route::get('media-manager/download/{mediaFile}', [MediaController::class, 'download']);
     Route::post('media-manager/upload_reg_file', [MediaController::class, 'uploadRegFile']);
+
+    // Page manager
+    Route::resource('pages', PagesController::class, ['as' => 'admin'])->only([
+        'index', 'store', 'update', 'show', 'destroy',
+    ]);
 
     //
     Route::post('lesson/save_note', [LessonController::class, 'saveNote']);

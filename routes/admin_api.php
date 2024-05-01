@@ -79,9 +79,9 @@ Route::domain(config('app.app_domain'))->group(function () {
         Route::post('pages/deleteMultiple', [PagesController::class, 'deleteMultiple']);
         Route::post('pages/priorities', [PagesController::class, 'priorities']);
         Route::post('pages/widgets', [PagesController::class, 'widgets']);
-        Route::resource('pages', Admin_api\PagesController::class, ['as' => 'admin'])->only([
-            'index', 'store', 'update', 'show', 'destroy',
-        ]);
+//        Route::resource('pages', Admin_api\PagesController::class, ['as' => 'admin'])->only([
+//            'index', 'store', 'update', 'show', 'destroy',
+//        ]);
 
         // comments
         Route::post('comments/deleteMultiple', [CommentsController::class, 'deleteMultiple']);
