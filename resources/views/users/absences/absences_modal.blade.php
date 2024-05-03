@@ -112,8 +112,8 @@
 
     $(document).on('click','.absence-edit',function(event){
         event.stopPropagation();  // Prevent event bubbling
-
-        $("#absences-table input").attr("readonly", true);
+      event.stopImmediatePropagation();
+      $("#absences-table input").attr("readonly", true);
         $(".absence-border").removeClass('absence-border')
         $(".absence-update").addClass('hidden');
 
