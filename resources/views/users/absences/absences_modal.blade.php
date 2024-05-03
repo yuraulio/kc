@@ -112,17 +112,15 @@
 
     $(document).on('click','.absence-edit',function(event){
         event.stopPropagation();  // Prevent event bubbling
-      event.stopImmediatePropagation();
-      $("#absences-table input").attr("readonly", true);
+
+        $("#absences-table input").attr("readonly", true);
         $(".absence-border").removeClass('absence-border')
-        $(".absence-update").addClass('hidden');
 
         let id = $(this).data('absence-id');
 
         totalHours = ($(`#absence-input-${id}`).val()).split('/')[1];
         $(`#absence-input-${id}`).attr("readonly", false);
         $(`#absence-input-${id}`).addClass('absence-border');
-        $(`#absence-update-${id}`).removeClass("hidden");
 
     })
 
