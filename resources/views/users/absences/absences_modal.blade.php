@@ -129,7 +129,7 @@
 
     $(document).on('click','.absence-update',function(event){
         event.stopPropagation();  // Prevent event bubbling
-      console.log("Edit button clicked, not intended to trigger AJAX."); // Debug: Verify this gets logged
+      console.log("Update button clicked, intended to trigger AJAX."); // Debug: Verify this gets logged
         let id = $(this).data('absence-id');
 
         let updatePresenceHours = $(`#absence-input-${id}`).val();
