@@ -110,8 +110,9 @@
     })
 
 
-    $(document).on('click','.absence-edit',function(){
-
+    $(document).on('click','.absence-edit',function(event){
+        event.stopPropagation();  // Prevent event bubbling
+      console.log("Edit button clicked, not intended to trigger AJAX."); // Debug: Verify this gets logged
 
         $("#absences-table input").attr("readonly", true);
         $(".absence-border").removeClass('absence-border')
@@ -126,8 +127,9 @@
 
     })
 
-    $(document).on('click','.absence-update',function(){
-
+    $(document).on('click','.absence-update',function(event){
+        event.stopPropagation();  // Prevent event bubbling
+      console.log("Update button clicked, intended to trigger AJAX."); // Debug: Verify this gets logged
         let id = $(this).data('absence-id');
 
         let updatePresenceHours = $(`#absence-input-${id}`).val();
@@ -227,7 +229,7 @@
                             totalUserHours > 0 ? `<i class="ni ni-check-bold"></i>` : '',
                             `<input id="absence-input-${value1['id']}" value=${totalUserHours + '/' +  totalEventHours} readonly>`,
                             (totalEventHours - totalUserHours) + '/' +  totalEventHours,
-                            `<button class="btn btn-info btn-sm absence-edit" data-absence-id=${value1['id']} > Edit </button>`,
+                            `<button id="absence-edit" class="btn btn-info btn-sm absence-edit" data-absence-id=${value1['id']} > Edit </button>`,
                             `<button id="absence-update-${value1['id']}" class="btn btn-info btn-sm absence-update hidden" data-absence-id=${value1['id']} data-event-id=${data.data.event_id}> Update </button>`,
                         ]).draw()
 

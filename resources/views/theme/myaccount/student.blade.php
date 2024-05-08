@@ -1327,7 +1327,7 @@
                                                     @if(isset($event['exams']) && count($event['exams']) >0 )
                                                     <li><a href="#c-exams-inner{{$tab}}">Exams</a></li>
                                                     @endif
-                                                  
+
                                                     @if(count($event['certs']) > 0)
                                                     <li><a href="#c-cert-inner{{$tab}}">Certificate</a></li>
                                                     @endif
@@ -1521,7 +1521,7 @@
                                             <div>
                                             <img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Customer_Access.svg')}}" alt="Customer_Access_icon" title="Customer_Access_icon">
                                                             @if(isset($event['exam_activate_months']) && $event['exam_activate_months'] != null)
-                                                            {{ 'Exams activate automatically after' }} {{ $event['exam_activate_months'] }} {{'months' }}
+                                                            {{ 'Exams activate automatically after' }} {{ $event['exam_activate_months'] }} {{'months after your enrollment' }}
                                                             @else
                                                             {{ 'Exams activate automatically after 80% progress' }}
                                                             @endif
@@ -1725,7 +1725,7 @@
                                                         @foreach($event['exams'] as $p)
                                                         <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Customer_Access.svg')}}" alt="Customer_Access_icon" title="Customer_Access_icon">
                                                             @if(isset($event['exam_activate_months']) && $event['exam_activate_months'] != null)
-                                                            {{ 'Exams activate automatically after' }} {{ $event['exam_activate_months'] }} {{ 'months' }}
+                                                            {{ 'Exams activate automatically after' }} {{ $event['exam_activate_months'] }} {{ 'months after your enrollment' }}
                                                             @else
                                                             {{ 'Exams activate automatically after 80% progress' }}
                                                             @endif
