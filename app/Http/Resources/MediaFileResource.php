@@ -30,10 +30,12 @@ class MediaFileResource extends JsonResource
                 $this->user,
                 function () {
                     return [
+                        'id'        => $this->user->id,
                         'firstname' => $this->user->firstname,
-                        'lastname' => $this->user->lastname,
+                        'lastname'  => $this->user->lastname,
                     ];
-                }
+                },
+                null,
             ),
             'created_at' => Carbon::parse($this->created_at)->toFormattedDateString(),
             'alt_text' => $this->alt_text,
