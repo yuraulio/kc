@@ -3,14 +3,13 @@
 namespace App\Model;
 
 use App\CMSFile;
-use App\Model\Absence;
-use App\Model\Activation;
 use App\Model\Admin\Comment;
 use App\Services\QueryString\Traits\Filterable;
 use App\Services\QueryString\Traits\Searchable;
 use App\Services\QueryString\Traits\Sortable;
 use App\Traits\MediaTrait;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -81,9 +80,19 @@ class User extends Authenticatable
     /**
      * Get the role of the user.
      *
+     * @deprecated Use the roles() method.
+     *
      * @return \App\Model\Role
      */
     public function role()
+    {
+        return $this->belongsToMany(Role::class, 'role_users');
+    }
+
+    /**
+     * @return BelongsToMany
+     */
+    public function roles(): BelongsToMany
     {
         return $this->belongsToMany(Role::class, 'role_users');
     }
@@ -124,25 +133,11 @@ class User extends Authenticatable
      */
     public function isAdmin()
     {
-        /*dd($this->role);
-        //dd($this->id);
-        $role = DB::table('role_users')->where('user_id', $this->id)->first();
-        //dd($role->role_id);
-        $role = Role::where('id', $role->role_id)->first();
-        return $role['id'] == 1;*/
-
         return $this->role->where('id', 1)->first() ? true : false;
     }
 
     public function isAdministrator()
     {
-        /*dd($this->role);
-        //dd($this->id);
-        $role = DB::table('role_users')->where('user_id', $this->id)->first();
-        //dd($role->role_id);
-        $role = Role::where('id', $role->role_id)->first();
-        return $role['id'] == 1;*/
-
         return $this->role->where('id', 2)->first() ? true : false;
     }
 
@@ -191,12 +186,6 @@ class User extends Authenticatable
             return $this->profile_image->parent;
         }
     }
-
-    /*public function events()
-    {
-        return $this->belongsToMany(Event::class, 'event_user')->withPivot('paid', 'expiration', 'comment', 'payment_method')
-            ->with('summary1', 'category', 'slugable', 'dropbox')->wherePivot('paid', true);
-    }*/
 
     public function events()
     {
@@ -279,86 +268,10 @@ class User extends Authenticatable
         return $this->morphToMany(Transaction::class, 'transactionable');
     }
 
-    /*
-     public function transactionss(){
-            return $this->morphToMany(Transaction::class,'transactionable')->doesntHave('subscription')->with('subscription','event','event.delivery')->orderBy('created_at','desc');
-        }
-    */
-
-    /*public function examAccess($successPer = 0.8, $event){
-        $seenPercent =  $this->videosSeenPercent($event);
-        $studentsEx = [1353,1866,1753,1882,1913,1923];
-
-        if(in_array($this->user_id, $studentsEx)){
-            return true;
-        }
-
-        //$event = EventStudent::where('student_id',$this->user_id)->where('event_id',$this->event_id)->first()->created_at;
-        $event = $this->events->where('id',$event)->first();
-        if(!$event->created_at || $event->comment == 'enroll' || $event->view_tpl == 'elearning_free'){
-             return false;
-        }
-
-
-        return $seenPercent >=  $successPer;
-
-    }
-
-    public function videosSeen($event){
-        if(!($videos = $this->statistic->where('id',$event)->first())){
-            return 0;
-        }
-
-        $videos = json_decode($videos->pivot->videos,true);
-        $sumSeen = 0;
-
-        if(count($videos) == 0 ){
-            return 0;
-        }
-
-        foreach($videos as $video){
-            if($video['seen']){
-                $sumSeen += 1;
-            }
-
-        }
-
-        return $sumSeen .' / '. count($videos);
-    }
-
-    public function videosSeenPercent($event){
-
-        if(!($videos = $this->statistic->where('id',$event)->first())){
-            return 0;
-        }
-
-        $videos = json_decode($videos->pivot->videos,true);
-        $sumSeen = 0;
-
-        if(count($videos) == 0 ){
-            return 0;
-        }
-
-        foreach($videos as $video){
-            if($video['seen']){
-                $sumSeen += 1;
-            }
-
-        }
-
-        return round ($sumSeen / count($videos),2) * 100 ;
-
-    }*/
-
     public function invoices()
     {
         return $this->morphToMany(Invoice::class, 'invoiceable');
-        //return $this->morphToMany(Invoice::class, 'invoiceable')->whereHasMorph('event',[Event::class]);
     }
-
-    /*public function subscriptions(){
-        return $this->belongsToMany(Subscription::class,'subscription_user_event');
-    }*/
 
     public function eventSubscriptions()
     {
@@ -372,7 +285,6 @@ class User extends Authenticatable
 
     public function checkUserSubscriptionByEvent($events = null)
     {
-        //dd($events);
         $eventsData = $events ? $events : $this->events;
 
         $plans = Plan::has('events')->with('events', 'categories')->get();
@@ -911,18 +823,7 @@ class User extends Authenticatable
             $absencesByDate[$key] = ['id'=>$ab->id, 'user_minutes' => $userM, 'event_minutes' => $eventM];
         }
 
-        //$userAbsencesPercent = 100 - ( ( $userMinutes / $eventMinutes ) * 100 );
         $userAbsencesPercent = ($userMinutesAbsences / $eventMinutes) * 100;
-
-        /*return response()->json([
-
-            'absences_by_date' => $absencesByDate,
-            'total_user_minutes' => $userMinutes,
-            'total_event_minutes' => $eventMinutes,
-            'user_minutes_absences' => $userMinutesAbsences,
-            'user_absences_percent' => $userAbsencesPercent
-
-        ]);*/
 
         $class = '';
 
