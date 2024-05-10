@@ -15,6 +15,7 @@ use App\Jobs\RenameFolder;
 use App\Model\Admin\MediaFile;
 use App\Model\Admin\MediaFolder;
 use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Auth;
@@ -240,26 +241,38 @@ class MediaController extends Controller
         }
     }
 
-    public function moveFile(MoveMediaFileRequest $request)
+    public function moveFile(MoveMediaFileRequest $request): JsonResponse
     {
-        $folder = json_decode($request->folder);
-        $file = json_decode($request->file);
+        $folder = json_decode($request->get('folder'), true);
+        $file = json_decode($request->get('file'), true);
 
-        MoveFile::dispatch($file->id, $folder->id);
+        $folderId = is_array($folder)
+            ? $folder['id']
+            : $folder;
 
-        return response()->json('success', 200);
+        $fileId = is_array($file)
+            ? $file['id']
+            : $file;
+
+        MoveFile::dispatch($folderId, $fileId);
+
+        return response()->json('success');
     }
 
-    public function moveFiles(MoveMediaFileRequest $request)
+    public function moveFiles(MoveMediaFileRequest $request): JsonResponse
     {
-        $folder = json_decode($request->folder);
-        $files = json_decode($request->file);
+        $folder = json_decode($request->get('folder'), true);
+        $files = json_decode($request->get('file'), true);
+
+        $folderId = is_array($folder)
+            ? $folder['id']
+            : $folder;
 
         foreach ($files as $file) {
-            MoveFile::dispatch($file, $folder->id);
+            MoveFile::dispatch($file, $folderId);
         }
 
-        return response()->json('success', 200);
+        return response()->json('success');
     }
 
     public function changeFolderOrder(Request $request)
