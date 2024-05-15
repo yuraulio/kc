@@ -1592,6 +1592,7 @@ class UserController extends Controller
             $terms = json_decode($terms->content, true)[5]['columns'][0]['template']['inputs'][0]['value'];
         }
         $terms = mb_convert_encoding($terms, 'HTML-ENTITIES', 'UTF-8');
+        
         $pdf = PDF::loadView('users.consent_pdf', compact('user', 'terms', 'privacy'));
 
         return $pdf->download($user->firstname . '_' . $user->lastname . '.pdf');
