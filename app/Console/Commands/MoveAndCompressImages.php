@@ -81,7 +81,12 @@ class MoveAndCompressImages extends Command
                     $CMSFileThumb->version = 'users';
                     $CMSFileThumb->link = $new_name_thumb;
                     $CMSFileThumb->parent_id = $CMSFile->id;
-                    $CMSFileThumb->crop_data = '{"crop_height":' . $size[1] . ',"crop_width":' . $size[0] . ',"height_offset":0,"width_offset":0}';
+                    $CMSFileThumb->crop_data = [
+                        'crop_height' => $size[1],
+                        'crop_width' => $size[0],
+                        'height_offset' => 0,
+                        'width_offset' => 0,
+                    ];
                     $CMSFileThumb->save();
 
                     $user->profile_image_id = $CMSFileThumb->id;

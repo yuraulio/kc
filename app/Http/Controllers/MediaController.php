@@ -166,13 +166,12 @@ class MediaController extends Controller
         $media = CMSFile::findOrFail($request->media_id);
         $media_parent = CMSFile::findOrFail($media->parent_id);
 
-        $details = [];
-        $details['width_offset'] = $request->x;
-        $details['height_offset'] = $request->y;
-        $details['crop_width'] = $request->width;
-        $details['crop_height'] = $request->height;
-
-        $media->crop_data = json_encode($details);
+        $media->crop_data = [
+            'width_offset' => $request->x,
+            'height_offset' => $request->y,
+            'crop_width' => $request->width,
+            'crop_height' => $request->height,
+        ];
         $media->save();
 
         $image = Image::make(public_path($media_parent->full_path));
@@ -193,7 +192,7 @@ class MediaController extends Controller
     {
         $media = Media::find($request->media_id);
         if ($media['details'] != null) {
-            $details = json_decode($media['details'], true);
+            $details = $media['details'];
 
             $found = false;
             if (isset($details['img_align'])) {

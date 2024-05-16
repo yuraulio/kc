@@ -47,7 +47,7 @@ class MediaFileResource extends JsonResource
             'selected' => false,
             'height' => $this->height,
             'width' => $this->width,
-            'crop_data' => $this->crop_data ? json_decode($this->crop_data) : [],
+            'crop_data' => $this->crop_data,
         ];
     }
 }

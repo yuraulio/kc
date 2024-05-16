@@ -129,7 +129,7 @@ class EditImageController extends ApiBaseController
                 'size' => Storage::disk('public')->size($path),
                 'height' => $imageWebP->height(),
                 'width' => $imageWebP->width(),
-                'crop_data' => $cropData ? json_encode($cropData) : null,
+                'crop_data' => $cropData,
                 'version' => $version,
                 'user_id' => Auth::user()->id,
             ])
