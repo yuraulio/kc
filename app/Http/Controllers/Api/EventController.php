@@ -28,7 +28,10 @@ class EventController extends Controller
             }
         }
 
-        return new JsonResponse($query->get());
+        $events = $query->paginate((int) $request->query->get('per_page', 50))
+            ->appends($request->query->all());
+
+        return new JsonResponse($events);
     }
 
     /**
@@ -38,6 +41,10 @@ class EventController extends Controller
      */
     public function show(Event $event): JsonResponse
     {
-        return new JsonResponse($event);
+        return new JsonResponse($event->load([
+            'category',
+            'type',
+            'delivery',
+        ]));
     }
 }
