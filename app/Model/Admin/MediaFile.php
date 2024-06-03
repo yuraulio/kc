@@ -25,17 +25,23 @@ class MediaFile extends Model implements Auditable
         'name',
         'extension',
         'path',
-        'full_path',
         'url',
+        'extension',
+        'size',
         'folder_id',
         'parent_id',
+        'user_id',
+        'full_path',
         'alt_text',
+        'version',
         'link',
-        'size',
         'height',
         'width',
-        'version',
-        'user_id',
+        'crop_data'
+    ];
+
+    protected $casts = [
+      'crop_data' => 'array',
     ];
 
     /**
