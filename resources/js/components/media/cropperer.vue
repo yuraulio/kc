@@ -772,18 +772,10 @@ export default {
           if (typeof data.crop_data === 'string') {
             data.crop_data = JSON.parse(data.crop_data);
           }
-          this.$set(this.cropBoxData, 'width', data.crop_data.crop_width * this.width_ratio);
-          this.$set(this.cropBoxData, 'height', data.crop_data.crop_height * this.height_ratio);
-          this.$set(
-            this.cropBoxData,
-            'left',
-            (container_width - canvas_width) / 2 + data.crop_data.width_offset * this.width_ratio
-          );
-          this.$set(
-            this.cropBoxData,
-            'top',
-            (container_height - canvas_height) / 2 + data.crop_data.height_offset * this.width_ratio
-          );
+          this.$set(this.cropBoxData, 'width', data.crop_data.width);
+          this.$set(this.cropBoxData, 'height', data.crop_data.height);
+          this.$set(this.cropBoxData, 'left', (container_width - canvas_width) / 2 + data.crop_data.left);
+          this.$set(this.cropBoxData, 'top', (container_height - canvas_height) / 2 + data.crop_data.top);
         } else {
           this.$set(this.cropBoxData, 'width', this.selectedVersion.w * this.width_ratio);
           this.$set(this.cropBoxData, 'height', this.selectedVersion.h * this.height_ratio);

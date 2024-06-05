@@ -458,12 +458,10 @@ var mediaMixin = {
         });
     },
     userSelectedFiles($event) {
-
       if (!this.firstLoadedData.length) {
         this.firstLoadedData = $event;
       }
       this.warning = false;
-
 
       if (this.mode && this.withoutImage) {
         this.updatedMediaImage($event);

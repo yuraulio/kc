@@ -8,7 +8,6 @@ use App\Model\Certificate;
 use App\Model\CookiesSMS;
 use App\Model\Event;
 use App\Model\Exam;
-use App\Model\Media;
 use App\Model\Menu;
 use App\Model\Option;
 use App\Model\PaymentMethod;
@@ -16,17 +15,13 @@ use App\Model\Setting;
 use App\Model\Slug;
 use App\Model\User;
 use App\Notifications\AfterSepaPaymentEmail;
-use App\Notifications\ErrorSlack;
 use Bugsnag\BugsnagLaravel\Facades\Bugsnag;
 use Carbon\Carbon;
 use Coderjerk\BirdElephant\BirdElephant;
 use CodexShaper\Menu\Models\Menu as NewMenu;
-use Illuminate\Notifications\Messages\SlackMessage;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
-use Spatie\Dropbox\Client;
 
 if (!function_exists('failedPaymentEmail')) {
     function failedPaymentEmail($payload, $event, $user)
@@ -978,68 +973,82 @@ if (!function_exists('cdnPath')) {
     }
 }*/
 
-if (!function_exists('support_webp')) {
-    function support_webp()
+if (!function_exists('is_webp_acceptable')) {
+    function is_webp_acceptable(): bool
     {
-        return isset($_SERVER['HTTP_ACCEPT']) &&
-            strpos($_SERVER['HTTP_ACCEPT'], 'image/webp') !== false;
+        $browser = new Browser();
+
+        // Safari starts to support the WebP format from the 14 version (full
+        // support from the 16 version) so we should allow Safari users to see
+        // images in the WebP format.
+        if ($browser->getBrowser() === Browser::BROWSER_SAFARI) {
+            $browserVersion = $browser->getVersion();
+
+            if ($dotPosition = strpos($browserVersion, '.')) {
+                $browserVersion = substr($browserVersion, 0, $dotPosition);
+            }
+
+            if (is_numeric($browserVersion) && $browserVersion >= 14) {
+                return true;
+            }
+        }
+
+        // Check if the client's browser supports WebP format.
+        $httpAccept = request()->server('HTTP_ACCEPT');
+
+        if ($httpAccept) {
+            return str_contains($httpAccept, 'image/webp');
+        }
+
+        return false;
     }
 }
 
 if (!function_exists('get_image')) {
-    function get_image($media, $version = null)
+    function get_image($media, $version = null): ?string
     {
-        // if string(path) image
-        if (gettype($media) == 'string') {
-            $path = $media;
+        $isFileExist = fn(string $fileName) => file_exists(public_path($fileName));
 
-            if (file_exists(public_path($media))) {
-                $ext = explode('.', $path)[count(explode('.', $path)) - 1];
+        if (is_scalar($media)) {
+            $extension = pathinfo($media, PATHINFO_EXTENSION);
+            $new_webp_path = str_replace($extension, 'webp', $media);
 
-                $new_webp_path = str_replace($ext, 'webp', $path);
-                if (file_exists(public_path($new_webp_path)) && support_webp()) {
-                    return $new_webp_path;
-                } else {
-                    return $path;
-                }
+            if ($isFileExist($new_webp_path) && is_webp_acceptable()) {
+                return $new_webp_path;
+            } else {
+                return $media;
             }
-
-            return;
         }
 
         if (!empty($media['full_path'])) {
             // compatibility between media and media_files
             $media['path'] = rtrim($media['full_path'], $media['name']);
             $media['original_name'] = $media['name'];
-            $media['ext'] = '.' . $media['extension'];
-            $media['name'] = rtrim($media['name'], '.' . $media['extension']);
+            $media['ext'] = '.'.$media['extension'];
+            $media['name'] = rtrim($media['name'], '.'.$media['extension']);
         }
 
-        // if object image
+        $media['path'] = str_replace('//', '/', $media['path']);
+
         if ($version) {
-            if (strpos($media['path'], '//')) {
-                $media['path'] = str_replace('//', '/', $media['path']);
-            }
+            $image = isset($media['name']) ? $media['path'].$media['name'] : '';
 
-            $image = isset($media['name']) ? $media['path'] . $media['name'] : '';
-
-            if ($version === 'feed-image' && file_exists(public_path('/') . $image . '-' . $version . '.jpg')) {
+            if ($version === 'feed-image' && $isFileExist($image . '-' . $version . '.jpg')) {
                 $image = $image . '-' . $version . '.jpg';
-            } elseif (file_exists(public_path('/') . $image . '-' . $version . '.webp') && support_webp()) {
+            } elseif ($isFileExist($image . '-' . $version . '.webp') && is_webp_acceptable()) {
                 $image = $image . '-' . $version . '.webp';
-            } elseif (!file_exists(public_path('/') . $image . '-' . $version . '.webp') && support_webp() && file_exists(public_path('/') . $image . '.webp')) {
-                //$image = $image . '.webp';
+            } elseif (!$isFileExist($image . '-' . $version . '.webp') && is_webp_acceptable() && $isFileExist($image . '.webp')) {
                 $version = false;
-            } elseif (isset($media['ext']) && file_exists(public_path('/') . $image . '-' . $version . $media['ext'])) {
+            } elseif (isset($media['ext']) && $isFileExist($image . '-' . $version . $media['ext'])) {
                 $image = $image . '-' . $version . $media['ext'];
-            } elseif (file_exists(public_path('/') . $image . '-' . $version . '.jpg')) {
+            } elseif ($isFileExist($image . '-' . $version . '.jpg')) {
                 $image = $image . '-' . $version . '.jpg';
             } elseif ($image != '') {
                 $check_image_url = str_replace('/originals', '', $image) . '-instructors-testimonials' . $media['ext'];
-                if (file_exists(public_path('/') . $check_image_url)) {
+                if ($isFileExist($check_image_url)) {
                     $image = $check_image_url;
                 } else {
-                    if (file_exists(public_path('/') . str_replace('/originals', '', $image) . $media['ext'])) {
+                    if ($isFileExist(str_replace('/originals', '', $image) . $media['ext'])) {
                         $image = str_replace('/originals', '', $image . $media['ext']);
                     } else {
                         $image = $image . $media['ext'];
@@ -1049,13 +1058,13 @@ if (!function_exists('get_image')) {
         }
 
         if (!$version) {
-            if (strpos($media['path'], '//')) {
-                $media['path'] = str_replace('//', '/', $media['path']);
-            }
             $image =  $media['path'] . $media['name'];
-            if (file_exists(public_path('/') . $image . '.webp') && support_webp()) {
+
+            if ($isFileExist($image . '.webp') && is_webp_acceptable()) {
                 return $image . '.webp';
-            } elseif (file_exists(public_path('/') . $image . $media['ext'])) {
+            }
+
+            if ($isFileExist($image . $media['ext'])) {
                 return $image . $media['ext'];
             }
 
@@ -1076,16 +1085,16 @@ if (!function_exists('get_profile_image')) {
             $webp_path_crop = ltrim($media['path'] . $name[0] . '-crop.' . 'webp', $media['path'][0]);
             $webp_path = ltrim($media['path'] . $name[0] . '.webp', $media['path'][0]);
 
-            if (file_exists($webp_path_crop) && support_webp()) {
+            if (file_exists($webp_path_crop) && is_webp_acceptable()) {
                 return $media['path'] . $name[0] . '-crop.' . 'webp';
-            } elseif (file_exists($webp_path) && support_webp()) {
+            } elseif (file_exists($webp_path) && is_webp_acceptable()) {
                 return $media['path'] . $name[0] . '.webp';
             } elseif (file_exists($path)) {
                 return $media['path'] . $name[0] . '-crop.' . $name[1];
             } else {
                 $name = explode('.', $media['original_name']);
 
-                if (file_exists($media['path'] . $name[0] . '.webp') && support_webp()) {
+                if (file_exists($media['path'] . $name[0] . '.webp') && is_webp_acceptable()) {
                     return $media['path'] . $media['name'] . '.webp';
                 }
 
