@@ -359,7 +359,7 @@ class UserController extends Controller
         $user = User::findOrFail($id);
         Auth::login($user);
 
-        return redirect()->to('/');
+        return redirect()->to('/myaccount');
     }
 
     public function autoLogin(Request $request)

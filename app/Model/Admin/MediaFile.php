@@ -37,11 +37,11 @@ class MediaFile extends Model implements Auditable
         'link',
         'height',
         'width',
-        'crop_data',
+        'crop_data'
     ];
 
     protected $casts = [
-        'crop_data' => 'array',
+      'crop_data' => 'array',
     ];
 
     /**

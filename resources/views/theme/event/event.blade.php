@@ -58,13 +58,23 @@
 
                         @if(isset($sections['benefits'][0]) && $sections['benefits']->first()->visible)<li><a href="#benefits">{{$sections['benefits']->first()->tab_title}}</a></li>@endif
 
-                        @if(isset($sections['topics'][0]) && $sections['topics']->first()->visible)<li><a href="#topics">{{$sections['topics']->first()->tab_title}}</a></li>@endif
+                        @if(isset($sections['topics'][0]) && $sections['topics']->first()->visible)<li>
+{{--                            <a href="#topics">{{$sections['topics']->first()->tab_title}}</a>--}}
+                            <button onclick="document.getElementById('topics').scrollIntoView({behavior: 'smooth'});">
+                              {{$sections['topics']->first()->tab_title}}
+                            </button>
+                          </li>@endif
                         @if(isset($sections['instructors'][0]) && $sections['instructors']->first()->visible)<li><a href="#instructors">{{$sections['instructors']->first()->tab_title}}</a></li>@endif
                         @if(isset($sections['testimonials'][0]) && $sections['testimonials']->first()->visible)<li><a href="#testimonials">{{$sections['testimonials']->first()->tab_title}}</a></li>@endif
                         @if(isset($sections['location'][0]) && $sections['location']->first()->visible)<li><a href="#location">{{$sections['location']->first()->tab_title}}</a></li>@endif
                         @if(isset($sections['questions'][0]) && $sections['questions']->first()->visible)<li><a href="#faq">{{$sections['questions']->first()->tab_title}}</a></li>@endif
                      @elseif($estatus == App\Model\Event::STATUS_COMPLETED || $estatus == App\Model\Event::STATUS_CLOSE )
-                        @if(isset($sections['topics'][0]) && $sections['topics']->first()->visible)<li><a href="#topics">{{$sections['topics']->first()->tab_title}}</a></li>@endif
+                        @if(isset($sections['topics'][0]) && $sections['topics']->first()->visible)<li>
+{{--                           <a href="#topics">{{$sections['topics']->first()->tab_title}}</a>--}}
+                           <button onclick="document.getElementById('topics').scrollIntoView({behavior: 'smooth'});">
+                             {{$sections['topics']->first()->tab_title}}
+                           </button>
+                         </li>@endif
                         @if(isset($sections['instructors'][0]) && $sections['instructors']->first()->visible)<li><a href="#instructors">{{$sections['instructors']->first()->tab_title}}</a></li>@endif
                      @endif
                   </ul>
