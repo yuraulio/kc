@@ -3,11 +3,6 @@
 
 @section('blog-custom-css')
     <link type="text/css" href="{{ asset('binshops-blog.css') }}" rel="stylesheet">
-    <style>
-      .title-container {
-        margin-top: 60px; /* Adjust this value based on your menu height */
-      }
-    </style>
 @endsection
 
 @section("content")
@@ -38,7 +33,7 @@
                             @include("global.social", ['summary' => 'summary', 'title' => 'summary'])
                         </div>
                     @elseif($column->template->key == "blog_header_component")
-                        <div class="container blogx-container title-container">
+                        <div class="container blogx-container">
                             @if($input->key == "blog_header_title")
                             <h1 class='blog_title' style="margin-top: 20px;">{{$input->value}}</h1>
                             @elseif($input->key == "blog_header_subtitle")
