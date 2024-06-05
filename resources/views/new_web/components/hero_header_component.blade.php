@@ -130,7 +130,7 @@
 
 @push('components-scripts')
     <script>
-        document.getElementById('header').classList.add('header-transparent');
+        // document.getElementById('header').classList.add('header-transparent');
         var main = document.getElementById('main-area');
         main.id = "main";
     </script>

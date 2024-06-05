@@ -85,11 +85,11 @@
 
 </header>
 
-{{--@if(Request::is('/') )--}}
-{{--    <script>--}}
-{{--        document.getElementById('header').classList.add('header-transparent');--}}
-{{--    </script>--}}
-{{--@endif--}}
+@if(Request::is('/') )
+    <script>
+        document.getElementById('header').classList.add('header-transparent');
+    </script>
+@endif
 
 <script>
 
