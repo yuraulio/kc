@@ -1143,11 +1143,10 @@ class Event extends Model
             foreach ($this->lessons as $lesson) {
                 $timeStarts = false;
                 $timeEnds = false;
-
                 $timeStarts = strtotime($lesson->pivot->time_starts);
                 $timeEnds = strtotime($lesson->pivot->time_ends);
                 if ($timeStarts && $timeEnds) {
-                    $hours += ($timeEnds - $timeStarts) / 60;
+                    $hours += ($timeEnds - $timeStarts) / 3600; // Convert seconds to hours
                 }
             }
         } else {
@@ -1162,7 +1161,7 @@ class Event extends Model
         }
 
         //dd($lesson->pivot->time_starts);
-        return $hours;
+        return round($hours, 2);
     }
 
     public function getXmlDescriptionAttribute($value)
