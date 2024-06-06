@@ -1007,7 +1007,7 @@ if (!function_exists('is_webp_acceptable')) {
 if (!function_exists('get_image')) {
     function get_image($media, $version = null): ?string
     {
-        $isFileExist = fn(string $fileName) => file_exists(public_path($fileName));
+        $isFileExist = fn (string $fileName) => file_exists(public_path($fileName));
 
         if (is_scalar($media)) {
             $extension = pathinfo($media, PATHINFO_EXTENSION);
@@ -1024,14 +1024,14 @@ if (!function_exists('get_image')) {
             // compatibility between media and media_files
             $media['path'] = rtrim($media['full_path'], $media['name']);
             $media['original_name'] = $media['name'];
-            $media['ext'] = '.'.$media['extension'];
-            $media['name'] = rtrim($media['name'], '.'.$media['extension']);
+            $media['ext'] = '.' . $media['extension'];
+            $media['name'] = rtrim($media['name'], '.' . $media['extension']);
         }
 
         $media['path'] = str_replace('//', '/', $media['path']);
 
         if ($version) {
-            $image = isset($media['name']) ? $media['path'].$media['name'] : '';
+            $image = isset($media['name']) ? $media['path'] . $media['name'] : '';
 
             if ($version === 'feed-image' && $isFileExist($image . '-' . $version . '.jpg')) {
                 $image = $image . '-' . $version . '.jpg';
@@ -1058,7 +1058,7 @@ if (!function_exists('get_image')) {
         }
 
         if (!$version) {
-            $image =  $media['path'] . $media['name'];
+            $image = $media['path'] . $media['name'];
 
             if ($isFileExist($image . '.webp') && is_webp_acceptable()) {
                 return $image . '.webp';
