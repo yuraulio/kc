@@ -12,6 +12,11 @@ use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\PassportAuthController;
 use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\v1\CategoryController;
+use App\Http\Controllers\Api\v1\Media\EditImageController;
+use App\Http\Controllers\Api\v1\Media\UploadImageController;
+use App\Http\Controllers\Api\v1\Transactions\Participants\StatisticsController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -102,16 +107,20 @@ Route::middleware('auth:api')->group(function () {
 Route::post('/myaccount/reset', [ForgotPasswordController::class, 'sendResetLinkEmail']);
 
 Route::group(['middleware' => ['auth:api', 'auth.aboveauthor'], 'prefix' => 'v1', 'as' => 'api.v1.'], function () {
-    Route::post('transactions/participants/statistics', \App\Http\Controllers\Api\v1\Transactions\Participants\StatisticsController::class)
+    Route::post('transactions/participants/statistics', StatisticsController::class)
         ->name('transactions.participants_statistics');
 
-    Route::post('medias/edit-image', \App\Http\Controllers\Api\v1\Media\EditImageController::class);
-    Route::post('medias/upload-image', \App\Http\Controllers\Api\v1\Media\UploadImageController::class);
+    Route::post('medias/edit-image', EditImageController::class);
+    Route::post('medias/upload-image', UploadImageController::class);
+
+    // Categories
+    Route::apiResource('categories', CategoryController::class)
+        ->only(['index']);
 });
 
 Route::domain(config('app.prefix_new_admin') . config('app.app_domain'))->group(function () {
     Route::group(['middleware' => ['auth:admin_api_api'], 'prefix' => 'v1', 'as' => 'api.v1.'], function () {
-        Route::post('medias/upload-image', \App\Http\Controllers\Api\v1\Media\UploadImageController::class);
-        Route::post('medias/edit-image', \App\Http\Controllers\Api\v1\Media\EditImageController::class);
+        Route::post('medias/upload-image', UploadImageController::class);
+        Route::post('medias/edit-image', EditImageController::class);
     });
 });

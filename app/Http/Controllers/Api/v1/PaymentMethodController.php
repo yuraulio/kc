@@ -1,20 +1,26 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+declare(strict_types=1);
 
-use App\Http\Controllers\Controller;
-use App\Model\Delivery;
+namespace App\Http\Controllers\Api\v1;
+
+use App\Model\PaymentMethod;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-class DeliveryController extends Controller
+class PaymentMethodController extends ApiBaseController
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
-        return new JsonResponse(Delivery::all());
+        $query = $this->applyRequestParametersToQuery($request, PaymentMethod::query());
+
+        $paymentMethods = $query->paginate((int) $request->query->get('per_page', 50))
+            ->appends($request->query->all());
+
+        return new JsonResponse($paymentMethods);
     }
 
     /**
