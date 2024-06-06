@@ -34,5 +34,4 @@ class ApiBaseController extends Controller
 
         return $query;
     }
-
 }
