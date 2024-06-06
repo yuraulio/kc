@@ -4,7 +4,6 @@ use App\Http\Controllers\Admin_api\MediaController;
 use App\Http\Controllers\Admin_api\PagesController;
 use App\Http\Controllers\Api\AbsenceController;
 use App\Http\Controllers\Api\CouponController;
-use App\Http\Controllers\Api\DeliveryController;
 use App\Http\Controllers\Api\EventController;
 use App\Http\Controllers\Api\ForgotPasswordController;
 use App\Http\Controllers\Api\LessonController;
@@ -13,9 +12,14 @@ use App\Http\Controllers\Api\PassportAuthController;
 use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\v1\CategoryController;
+use App\Http\Controllers\Api\v1\CityController;
+use App\Http\Controllers\Api\v1\DeliveryController;
 use App\Http\Controllers\Api\v1\Media\EditImageController;
 use App\Http\Controllers\Api\v1\Media\UploadImageController;
+use App\Http\Controllers\Api\v1\PartnerController;
+use App\Http\Controllers\Api\v1\PaymentMethodController;
 use App\Http\Controllers\Api\v1\Transactions\Participants\StatisticsController;
+use App\Http\Controllers\Api\v1\TypeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -45,10 +49,6 @@ Route::middleware('auth:api')->group(function () {
 
     // Coupons
     Route::apiResource('coupons', CouponController::class)
-        ->only(['index']);
-
-    // Deliveries
-    Route::apiResource('deliveries', DeliveryController::class)
         ->only(['index']);
 
     // Media manager
@@ -115,6 +115,26 @@ Route::group(['middleware' => ['auth:api', 'auth.aboveauthor'], 'prefix' => 'v1'
 
     // Categories
     Route::apiResource('categories', CategoryController::class)
+        ->only(['index']);
+
+    // Cities
+    Route::apiResource('cities', CityController::class)
+        ->only(['index']);
+
+    // Partners
+    Route::apiResource('partners', PartnerController::class)
+        ->only(['index']);
+
+    // Payment methods
+    Route::apiResource('payment-methods', PaymentMethodController::class)
+        ->only(['index']);
+
+    // Types
+    Route::apiResource('types', TypeController::class)
+        ->only(['index']);
+
+    // Deliveries
+    Route::apiResource('deliveries', DeliveryController::class)
         ->only(['index']);
 });
 
