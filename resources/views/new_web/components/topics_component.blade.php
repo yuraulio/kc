@@ -48,8 +48,12 @@
                            }
                            if ($d > 0) {
                              $m = isset($d) ? floor(($d / 60) % 60) : 0;
-                             $h = isset($d) ? $hours = floor($d / 3600) : 0;
-                             echo intval($h) . 'h ' . ($showMintues ? $m . 'm' : '');
+                             $h = isset($d) ? floor($d / 3600) : 0;
+                             if ($h > 0 || $showMintues) {
+                               echo intval($h) . 'h ' . ($m > 0 ? $m . 'm' : '');
+                             } else {
+                               echo $m . 'm';
+                             }
                            }
                            ?>
                          </div>
