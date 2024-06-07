@@ -62,7 +62,7 @@ class FixEventInfoTable extends Command
             $visible = ['landing' => 'on', 'emails' => 'on'];
             $visibleHours2 = ['landing' => 'on', 'list' => 'on', 'emails' => 'on'];
 
-            $eventHour = $event->getTotalHours();
+            $eventHour = $event->getTotalHours() / 60;
 
             if ($event->view_tpl == 'elearning_event') {
                 $keys = ['hours', 'd', 'language', 'certificate', 'online_exam', 'students'];

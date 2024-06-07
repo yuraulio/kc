@@ -1136,12 +1136,17 @@ class Event extends Model
     {
         $hours = 0;
         //In class
+        $timeStarts = false;
+        $timeEnds = false;
         if ($this->is_inclass_course()) {
             foreach ($this->lessons as $lesson) {
+                $timeStarts = false;
+                $timeEnds = false;
+
                 $timeStarts = strtotime($lesson->pivot->time_starts);
                 $timeEnds = strtotime($lesson->pivot->time_ends);
                 if ($timeStarts && $timeEnds) {
-                    $hours += ($timeEnds - $timeStarts); //seconds
+                    $hours += ($timeEnds - $timeStarts) / 60;
                 }
             }
         } else {
