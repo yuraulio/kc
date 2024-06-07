@@ -1146,7 +1146,7 @@ class Event extends Model
                 $timeStarts = strtotime($lesson->pivot->time_starts);
                 $timeEnds = strtotime($lesson->pivot->time_ends);
                 if ($timeStarts && $timeEnds) {
-                    $hours += ($timeEnds - $timeStarts) / 3600; // Convert seconds to hours
+                    $hours += ($timeEnds - $timeStarts) / 60; // Convert seconds to hours
                 }
             }
         } else {
