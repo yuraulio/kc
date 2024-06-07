@@ -4831,7 +4831,7 @@ $show_popup = isset($uri['show_popup']) ? $uri['show_popup'] : 0;
 
 
                     //$('#input-hours').val(Math.ceil(data.data/60)+'hr')
-                    $('#input-hours').val(Math.ceil(data.data / 60))
+                    $('#input-hours').val(Math.data.data / 60)
 
                     setTimeout(function() {
                         $(".close-message").click();
