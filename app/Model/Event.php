@@ -1136,9 +1136,10 @@ class Event extends Model
     {
         $hours = 0;
         //In class
-        $timeStarts = false;
-        $timeEnds = false;
         if ($this->is_inclass_course()) {
+            $timeStarts = false;
+            $timeEnds = false;
+
             foreach ($this->lessons as $lesson) {
                 $timeStarts = false;
                 $timeEnds = false;
