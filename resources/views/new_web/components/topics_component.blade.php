@@ -28,29 +28,33 @@
                         <h3 class="topic-info_title"> {!! $key !!}</h3>
                         <div class="topic-info_duration">
                            <?php
-                           $d = 0;
-                           $showMintues = true;
-                           if (!empty($topic['topic_duration'])) {
-                             $d = intval($topic['topic_duration']);
-                           } elseif (!empty($topic['lessons'])) {
-                             $showMintues = false;
-                             foreach ($topic['lessons'] as $lesson) {
-                               $text = strtolower($lesson['pivot']['duration']);
-                               preg_match('/([0-9]+)h/', $text, $m);
-                               if ($m && !empty($m[1])) {
-                                 $d += $m[1] * 60 * 60;
-                               }
-                               preg_match('/([0-9]+)m/', $text, $m);
-                               if ($m && !empty($m[1])) {
-                                 $d += $m[1]* 60;
-                               }
-                             }
-                           }
-                           if ($d > 0) {
-                             $m = isset($d) ? floor(($d / 60) % 60) : 0;
-                             $h = isset($d) ? $hours = floor($d / 3600) : 0;
-                             echo intval($h) . 'h ' . ($showMintues ? $m . 'm' : '');
-                           }
+                            $d = 0;
+                            $showMinutes = true;
+                            if (!empty($topic['topic_duration'])) {
+                              $d = intval($topic['topic_duration']);
+                            } elseif (!empty($topic['lessons'])) {
+                              $showMinutes = false;
+                              foreach ($topic['lessons'] as $lesson) {
+                                $text = strtolower($lesson['pivot']['duration']);
+                                preg_match('/([0-9]+)h/', $text, $m);
+                                if ($m && !empty($m[1])) {
+                                  $d += $m[1] * 60 * 60;
+                                }
+                                preg_match('/([0-9]+)m/', $text, $m);
+                                if ($m && !empty($m[1])) {
+                                  $d += $m[1] * 60;
+                                }
+                              }
+                            }
+                            if ($d > 0) {
+                              $h = floor($d / 3600);
+                              $m = floor(($d % 3600) / 60);
+                              if ($h > 0 || $showMinutes) {
+                                echo intval($h) . 'h ' . ($m > 0 ? $m . 'm' : '');
+                              } else {
+                                echo $m . 'm';
+                              }
+                            }
                            ?>
                          </div>
                       </div>

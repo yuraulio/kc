@@ -962,10 +962,10 @@ class CronjobsController extends Controller
 
         $date1 = date('Y-m-d', strtotime('+7 days'));
         //$date2 =  date("Y-m-d", strtotime("+20 days"));
-        $date3 = date('Y-m-d', strtotime('+1 days'));
+        //$date3 = date('Y-m-d', strtotime('+1 days'));
         //$date4 =  date("Y-m-d", strtotime("+30 days"));
 
-        $dates = [$date1, $date3];
+        $dates = [$date1];//, $date3];
 
         //dd($dates);
 
