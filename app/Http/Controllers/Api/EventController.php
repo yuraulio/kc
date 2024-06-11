@@ -42,6 +42,7 @@ class EventController extends ApiBaseController
             'coupons',
             'sections',
             'medias',
+            'ticket',
         ]));
     }
 }
