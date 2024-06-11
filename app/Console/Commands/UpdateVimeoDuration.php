@@ -6,6 +6,7 @@ use App\Model\Event;
 use App\Model\Lesson;
 use Bugsnag\BugsnagLaravel\Facades\Bugsnag;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 use RuntimeException;
 use Vimeo\Vimeo;
 
@@ -42,6 +43,7 @@ class UpdateVimeoDuration extends Command
      */
     public function handle()
     {
+        Log::info('UpdateVimeoDuration');
         Lesson::where('vimeo_video', '!=', '')->chunk(10, function ($lessons) {
             foreach ($lessons as $lesson) {
                 $vimeoVideo = explode('/', $lesson->vimeo_video);
@@ -62,7 +64,7 @@ class UpdateVimeoDuration extends Command
 
         foreach ($events as $event) {
             $duration = app('App\Http\Controllers\EventController')->calculateTotalHours($request, $event->id);
-            $hours = $duration / 60;
+            $hours = number_format($duration / 60, 1);
 
             $info = $event->event_info1;
             $info->course_hours = $hours;
