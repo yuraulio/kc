@@ -785,14 +785,14 @@
                                                     <?php  $fa = strtotime(date('Y-m-d',strtotime($event['release_date_files']))) >= strtotime(date('Y-m-d'))?>
                                                     {{--@if(!$instructor && isset($event['category'][0]['dropbox']) && count($event['category'][0]['dropbox']) != 0 &&--}}
                                                     @if(isset($event['dropbox']) && count($event['dropbox']) != 0 &&
-                                                    $event['status'] == App\Model\Event::STATUS_COMPLETED &&  $fa)
+                                                    $event['status'] == App\Model\Event::STATUS_COMPLETED && $fa)
                                                     <li><a href="#c-files-inner{{$tab}}">Files</a></li>
                                                     @endif
                                                     @if(isset($event['exams']) && count($event['exams']) >0 )
                                                     <li><a href="#c-exams-inner{{$tab}}">Exams</a></li>
                                                     @endif
 
-                                                    @if(count($event['certs']) > 0)
+                                                    @if(count($event['certs']) > 0 && !$fa)
                                                     <li><a href="#c-cert-inner{{$tab}}">Certificate</a></li>
                                                     @endif
                                                     {{--
@@ -1209,7 +1209,7 @@
                                                                 @endif
                                                               @endforeach
                                                             </div>
-
+                                                           
                                                             @if(!$allInstallmentsPayed)
                                                             <div style="color: red;">
                                                               <img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/icon-remove.svg')}}" alt="Pay all the installments" title="Pay all the installments">
