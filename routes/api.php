@@ -18,6 +18,7 @@ use App\Http\Controllers\Api\v1\Media\EditImageController;
 use App\Http\Controllers\Api\v1\Media\UploadImageController;
 use App\Http\Controllers\Api\v1\PartnerController;
 use App\Http\Controllers\Api\v1\PaymentMethodController;
+use App\Http\Controllers\Api\v1\TicketController;
 use App\Http\Controllers\Api\v1\Transactions\Participants\StatisticsController;
 use App\Http\Controllers\Api\v1\TypeController;
 use Illuminate\Support\Facades\Route;
@@ -135,6 +136,10 @@ Route::group(['middleware' => ['auth:api', 'auth.aboveauthor'], 'prefix' => 'v1'
 
     // Deliveries
     Route::apiResource('deliveries', DeliveryController::class)
+        ->only(['index']);
+
+    // Tickets
+    Route::apiResource('tickets', TicketController::class)
         ->only(['index']);
 });
 

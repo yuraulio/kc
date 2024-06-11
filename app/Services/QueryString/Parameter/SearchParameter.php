@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Services\QueryString\Components;
+declare(strict_types=1);
 
-final class Search
+namespace App\Services\QueryString\Parameter;
+
+final class SearchParameter
 {
     private string $term;
 

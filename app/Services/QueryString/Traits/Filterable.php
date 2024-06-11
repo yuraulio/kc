@@ -2,9 +2,9 @@
 
 namespace App\Services\QueryString\Traits;
 
-use App\Services\QueryString\Components\Filter;
-use App\Services\QueryString\Components\RelationFilter;
-use App\Services\QueryString\Components\SimpleFilter;
+use App\Services\QueryString\Parameter\Filter;
+use App\Services\QueryString\Parameter\RelationFilterParameter;
+use App\Services\QueryString\Parameter\SimpleFilterParameter;
 use Illuminate\Database\Eloquent\Builder;
 
 trait Filterable
@@ -23,11 +23,11 @@ trait Filterable
             return $builder->where($filter->getColumn(), $filter->getOperator(), $filter->getValue());
         };
 
-        if ($filter instanceof RelationFilter) {
+        if ($filter instanceof RelationFilterParameter) {
             return $builder->whereHas($filter->getRelation(), $callback);
         }
 
-        if ($filter instanceof SimpleFilter) {
+        if ($filter instanceof SimpleFilterParameter) {
             return $callback($builder);
         }
 

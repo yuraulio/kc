@@ -1,10 +1,12 @@
 <?php
 
-namespace App\Services\QueryString\Components;
+declare(strict_types=1);
+
+namespace App\Services\QueryString\Parameter;
 
 use App\Services\QueryString\Enums\Direction;
 
-final class Sort
+final class SortParameter
 {
     private string $column;
 

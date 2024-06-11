@@ -2,13 +2,13 @@
 
 namespace App\Services\QueryString\Builders;
 
-use App\Services\QueryString\Components\SimpleFilter;
+use App\Services\QueryString\Parameter\SimpleFilterParameter;
 
 class SimpleFilterBuilder
 {
-    public static function build(string $columnName): SimpleFilter
+    public static function build(string $columnName): SimpleFilterParameter
     {
-        $filter = new SimpleFilter();
+        $filter = new SimpleFilterParameter();
         $filter->setColumn($columnName);
 
         return $filter;

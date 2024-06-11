@@ -4,8 +4,8 @@ namespace App\Services\QueryString;
 
 use App\Services\QueryString\Builders\RelationFilterBuilder;
 use App\Services\QueryString\Builders\SimpleFilterBuilder;
-use App\Services\QueryString\Components\Search;
-use App\Services\QueryString\Components\Sort;
+use App\Services\QueryString\Parameter\SearchParameter;
+use App\Services\QueryString\Parameter\SortParameter;
 use App\Services\QueryString\Enums\Direction;
 use App\Services\QueryString\Enums\Operator;
 use Illuminate\Http\Request;
@@ -20,72 +20,97 @@ final class QueryStringDirector
         $this->request = $request;
     }
 
-    public function getSort(): ?Sort
+    public function hasSortParameter(): bool
     {
-        if ($this->request->query->has('sort')) {
-            $sortBy = $this->request->query->get('sort');
+        return $this->request->has('sort');
+    }
 
-            $sort = new Sort();
-            $sort->setColumn(Str::replaceFirst('-', '', $sortBy));
-            $sort->setDirection(Str::startsWith($sortBy, '-') ? Direction::DESC : Direction::ASC);
+    public function getSort(): ?SortParameter
+    {
+        $sortBy = $this->request->query->get('sort');
 
-            return $sort;
+        if (empty($sortBy)) {
+            return null;
         }
 
-        return null;
+        $sort = new SortParameter();
+        $sort->setColumn(Str::replaceFirst('-', '', $sortBy));
+        $sort->setDirection(Str::startsWith($sortBy, '-') ? Direction::DESC : Direction::ASC);
+
+        return $sort;
+    }
+
+    public function hasFilterParameter(): bool
+    {
+        return $this->request->has('filter');
     }
 
     public function getFilters(): array
     {
         $filters = [];
 
-        if ($this->request->has('filter')) {
-            foreach ($this->request->query->all('filter') as $key => $values) {
-                if (!is_array($values)) {
-                    $values = [
-                        Operator::eq->name => $values,
-                    ];
+        foreach ($this->request->query->all('filter') as $key => $values) {
+            if (!is_array($values)) {
+                $values = [
+                    Operator::eq->name => $values,
+                ];
+            }
+
+            foreach ($values as $operator => $value) {
+                $filter = Str::contains($key, '.')
+                    ? RelationFilterBuilder::build($key)
+                    : SimpleFilterBuilder::build($key);
+
+                if ($operator = Operator::byName($operator)) {
+                    $filter->setOperator($operator->value);
+                } else {
+                    // TODO: throw an exception
+                    continue;
                 }
 
-                foreach ($values as $operator => $value) {
-                    $filter = Str::contains($key, '.')
-                        ? RelationFilterBuilder::build($key)
-                        : SimpleFilterBuilder::build($key);
-
-                    if ($operator = Operator::byName($operator)) {
-                        $filter->setOperator($operator->value);
-                    } else {
-                        // TODO: throw an exception
-                        continue;
-                    }
-
-                    if (is_scalar($value)) {
-                        $filter->setValue($this->parseValue($value));
-                    } else {
-                        // TODO: throw an exception
-                        continue;
-                    }
-
-                    $filters[] = $filter;
+                if (is_scalar($value)) {
+                    $filter->setValue($this->parseValue($value));
+                } else {
+                    // TODO: throw an exception
+                    continue;
                 }
+
+                $filters[] = $filter;
             }
         }
 
         return $filters;
     }
 
-    public function getSearch(): ?Search
+    public function hasSearchParameter(): bool
     {
-        if ($this->request->query->has('search')) {
-            $search = $this->request->query->get('search');
+        return  $this->request->has('search');
+    }
 
-            $newSearch = new Search();
-            $newSearch->setTerm(sprintf('%%%s%%', $search));
+    public function getSearch(): ?SearchParameter
+    {
+        $search = $this->request->query->get('search');
 
-            return $newSearch;
+        if (empty($search)) {
+            return null;
         }
 
-        return null;
+        $newSearch = new SearchParameter();
+        $newSearch->setTerm(sprintf('%%%s%%', $search));
+
+        return $newSearch;
+    }
+
+    public function hasIncludeParameter(): bool
+    {
+        return $this->request->has('include');
+    }
+
+    public function getInclude(): array
+    {
+        $includes = $this->request->query->get('include');
+
+        return explode(',', $includes);
     }
 
     private function parseValue(string $value): string|array

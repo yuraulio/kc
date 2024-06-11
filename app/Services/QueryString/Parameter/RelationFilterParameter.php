@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Services\QueryString\Components;
+declare(strict_types=1);
 
-final class RelationFilter extends Filter
+namespace App\Services\QueryString\Parameter;
+
+final class RelationFilterParameter extends Filter
 {
     private string $relation;
 

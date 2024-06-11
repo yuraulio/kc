@@ -18,18 +18,22 @@ class ApiBaseController extends Controller
     {
         $queryStringDirector = new QueryStringDirector($request);
 
-        if ($filters = $queryStringDirector->getFilters()) {
-            foreach ($filters as $filter) {
+        if ($queryStringDirector->hasFilterParameter()) {
+            foreach ($queryStringDirector->getFilters() as $filter) {
                 $query->filter($filter);
             }
         }
 
-        if ($sort = $queryStringDirector->getSort()) {
-            $query->sort($sort);
+        if ($queryStringDirector->hasSortParameter()) {
+            $query->sort($queryStringDirector->getSort());
         }
 
-        if ($search = $queryStringDirector->getSearch()) {
-            $query->search($search);
+        if ($queryStringDirector->hasSearchParameter()) {
+            $query->search($queryStringDirector->getSearch());
+        }
+
+        if ($queryStringDirector->hasIncludeParameter()) {
+            $query->with($queryStringDirector->getInclude());
         }
 
         return $query;
