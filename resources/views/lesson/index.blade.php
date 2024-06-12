@@ -30,9 +30,17 @@
                             <div class="col-8">
                                 <h3 class="mb-0">{{ __('Lessons') }}</h3>
                             </div>
-                                <div class="col-4 text-right">
-                                    <a href="{{ route('lessons.create') }}" class="btn btn-sm btn-primary">{{ __('Add Lesson') }}</a>
-                                </div>
+                              <div class="col-4 text-right">
+
+
+                                <form hidden id="submit-file" action="{{ route('lessons.import') }}" method="post" enctype="multipart/form-data">
+                                    @csrf
+                                    <input id="file-input" name="file" type="file" class="btn btn-sm btn-primary"  accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" style="display: none;">
+                                </form>
+                                <a href="/resources/sample-lessons-import.xlsx" class="btn btn-sm btn-primary">{{ __('Sample File') }}</a>
+                                <a id="import-from-file" href="javascript:void(0)" class="btn btn-sm btn-primary">{{ __('Import Lessons From file') }}</a>
+                                <a href="{{ route('lessons.create') }}" class="btn btn-sm btn-primary">{{ __('Add Lesson') }}</a>
+                              </div>
                         </div>
                     </div>
 
@@ -186,6 +194,20 @@
     <script src="{{ asset('argon') }}/vendor/datatables.net-buttons/js/buttons.flash.min.js"></script>
     <script src="{{ asset('argon') }}/vendor/datatables.net-buttons/js/buttons.print.min.js"></script>
     <script src="{{ asset('argon') }}/vendor/datatables.net-select/js/dataTables.select.min.js"></script>
+    <script>
+        $(document).ready(() => {
+            $('#import-from-file').on('click', function (event) {
+                event.preventDefault();
+                $("#file-input").trigger('click');
+            });
+
+        });
+
+        $("#file-input").change(function(){
+            $("#submit-file").submit();
+        })
+
+    </script>
     <script>
 
         var categories = @json($categories);
@@ -485,7 +507,7 @@
         if(count != 0){
             $("#col1_filter").val("-- All --").change();
         }
-        
+
         $("#col2_filter").data('categoryy',$("option:selected", this).data('categoryy'))
 
         if(count != 0){
