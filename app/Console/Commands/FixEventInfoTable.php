@@ -7,6 +7,7 @@ use App\Model\Delivery;
 use App\Model\Event;
 use App\Model\EventInfo;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 
 class FixEventInfoTable extends Command
 {
@@ -42,6 +43,7 @@ class FixEventInfoTable extends Command
     public function handle()
     {
         $events = Event::all();
+        Log::info('FixEventInfo');
 
         foreach ($events as $event) {
             $requestData = [];
@@ -62,7 +64,7 @@ class FixEventInfoTable extends Command
             $visible = ['landing' => 'on', 'emails' => 'on'];
             $visibleHours2 = ['landing' => 'on', 'list' => 'on', 'emails' => 'on'];
 
-            $eventHour = round($event->getTotalHours() / 60, 1);
+            $eventHour = number_format($event->getTotalHours() / 60, 1);
 
             if ($event->view_tpl == 'elearning_event') {
                 $keys = ['hours', 'd', 'language', 'certificate', 'online_exam', 'students'];
