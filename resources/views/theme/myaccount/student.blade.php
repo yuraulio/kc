@@ -792,7 +792,7 @@
                                                     <li><a href="#c-exams-inner{{$tab}}">Exams</a></li>
                                                     @endif
 
-                                                    @if(count($event['certs']) > 0 && !$fa)
+                                                    @if(count($event['certs']) > 0)
                                                     <li><a href="#c-cert-inner{{$tab}}">Certificate</a></li>
                                                     @endif
                                                     {{--
@@ -1209,7 +1209,7 @@
                                                                 @endif
                                                               @endforeach
                                                             </div>
-                                                           
+
                                                             @if(!$allInstallmentsPayed)
                                                             <div style="color: red;">
                                                               <img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/icon-remove.svg')}}" alt="Pay all the installments" title="Pay all the installments">
