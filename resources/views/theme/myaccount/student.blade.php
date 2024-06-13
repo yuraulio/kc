@@ -19,12 +19,12 @@
                     <div class="account-hero-info">
                         <h2>{{ $currentuser['firstname'] }} {{ $currentuser['lastname'] }}</h2>
                         <ul>
-                            @if($currentuser['kc_id'] != '')
+                          @if(isset($currentuser['kc_id']) && $currentuser['kc_id'] != '')
                             <li>{{ $currentuser['kc_id'] }}</li>
-                            @endif
-                            @if($currentuser['partner_id'])
+                          @endif
+                          @if(isset($currentuser['partner_id']) && $currentuser['partner_id'] != '')
                             <li>, DR-{{ $currentuser['partner_id'] }}</li>
-                            @endif
+                          @endif
                         </ul>
                     </div>
                 </div>
