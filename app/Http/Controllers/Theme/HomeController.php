@@ -268,26 +268,26 @@ class HomeController extends Controller
 
         if (isset($eventInfo['delivery']) && $eventInfo['delivery'] == 143) {
             $data['duration'] = isset($eventInfo['elearning']['visible']['emails']) && isset($eventInfo['elearning']['expiration']) &&
-            $eventInfo['elearning']['visible']['emails'] && isset($eventInfo['elearning']['text']) ?
+                $eventInfo['elearning']['visible']['emails'] && isset($eventInfo['elearning']['text']) ?
                 $eventInfo['elearning']['expiration'] . ' ' . $eventInfo['elearning']['text'] : '';
         } elseif (isset($eventInfo['delivery']) && $eventInfo['delivery'] == 139) {
             $data['duration'] = isset($eventInfo['inclass']['dates']['visible']['emails']) && isset($eventInfo['inclass']['dates']['text']) &&
-            $eventInfo['inclass']['dates']['visible']['emails'] ? $eventInfo['inclass']['dates']['text'] : '';
+                $eventInfo['inclass']['dates']['visible']['emails'] ? $eventInfo['inclass']['dates']['text'] : '';
         }
 
         $data['hours'] = isset($eventInfo['hours']['visible']['emails']) && $eventInfo['hours']['visible']['emails'] && isset($eventInfo['hours']['hour']) &&
-        isset($eventInfo['hours']['text']) ? $eventInfo['hours']['hour'] . ' ' . $eventInfo['hours']['text'] : '';
+            isset($eventInfo['hours']['text']) ? $eventInfo['hours']['hour'] . ' ' . $eventInfo['hours']['text'] : '';
 
         $data['language'] = isset($eventInfo['language']['visible']['emails']) && $eventInfo['language']['visible']['emails'] && isset($eventInfo['language']['text']) ? $eventInfo['language']['text'] : '';
 
         $data['certificate_type'] = isset($eventInfo['certificate']['visible']['emails']) && $eventInfo['certificate']['visible']['emails'] &&
-        isset($eventInfo['certificate']['type']) ? $eventInfo['certificate']['type'] : '';
+            isset($eventInfo['certificate']['type']) ? $eventInfo['certificate']['type'] : '';
 
         $eventStudents = get_sum_students_course($content->category->first());
         $data['students_number'] = isset($eventInfo['students']['number']) ? $eventInfo['students']['number'] : $eventStudents + 1;
 
         $data['students'] = isset($eventInfo['students']['visible']['emails']) && $eventInfo['students']['visible']['emails'] &&
-        isset($eventInfo['students']['text']) && $data['students_number'] >= $eventStudents ? $eventInfo['students']['text'] : '';
+            isset($eventInfo['students']['text']) && $data['students_number'] >= $eventStudents ? $eventInfo['students']['text'] : '';
 
         $data['firstName'] = $user->firstname;
 
@@ -330,10 +330,12 @@ class HomeController extends Controller
             if ($transaction) {
                 // set transaction id in session
 
-                $pay_seats_data = ['names' => [$user->first_name], 'surnames' => [$user->last_name], 'emails' => [$user->email],
+                $pay_seats_data = [
+                    'names' => [$user->first_name], 'surnames' => [$user->last_name], 'emails' => [$user->email],
                     'mobiles' => [$user->mobile], 'addresses' => [$user->address], 'addressnums' => [$user->address_num],
                     'postcodes' => [$user->postcode], 'cities' => [$user->city], 'jobtitles' => [$user->job_title],
-                    'companies' => [$user->company], 'students' => [''], 'afms' => [$user->afm]];
+                    'companies' => [$user->company], 'students' => [''], 'afms' => [$user->afm],
+                ];
 
                 $deree_user_data = [$user->email => $user->partner_id];
                 $cart_data = ['manualtransaction' => ['rowId' => 'manualtransaction', 'id' => 'free', 'name' => $content->title, 'qty' => '1', 'price' => $amount, 'options' => ['type' => '8', 'event' => $content->id], 'tax' => 0, 'subtotal' => $amount]];
@@ -512,26 +514,26 @@ class HomeController extends Controller
 
         if (isset($eventInfo['delivery']) && $eventInfo['delivery'] == 143) {
             $data['duration'] = isset($eventInfo['elearning']['visible']['emails']) && isset($eventInfo['elearning']['expiration']) &&
-            $eventInfo['elearning']['visible']['emails'] && isset($eventInfo['elearning']['text']) ?
+                $eventInfo['elearning']['visible']['emails'] && isset($eventInfo['elearning']['text']) ?
                 $eventInfo['elearning']['expiration'] . ' ' . $eventInfo['elearning']['text'] : '';
         } elseif (isset($eventInfo['delivery']) && $eventInfo['delivery'] == 139) {
             $data['duration'] = isset($eventInfo['inclass']['dates']['visible']['emails']) && isset($eventInfo['inclass']['dates']['text']) &&
-            $eventInfo['inclass']['dates']['visible']['emails'] ? $eventInfo['inclass']['dates']['text'] : '';
+                $eventInfo['inclass']['dates']['visible']['emails'] ? $eventInfo['inclass']['dates']['text'] : '';
         }
 
         $data['hours'] = isset($eventInfo['hours']['visible']['emails']) && $eventInfo['hours']['visible']['emails'] && isset($eventInfo['hours']['hour']) &&
-        isset($eventInfo['hours']['text']) ? $eventInfo['hours']['hour'] . ' ' . $eventInfo['hours']['text'] : '';
+            isset($eventInfo['hours']['text']) ? $eventInfo['hours']['hour'] . ' ' . $eventInfo['hours']['text'] : '';
 
         $data['language'] = isset($eventInfo['language']['visible']['emails']) && $eventInfo['language']['visible']['emails'] && isset($eventInfo['language']['text']) ? $eventInfo['language']['text'] : '';
 
         $data['certificate_type'] = isset($eventInfo['certificate']['visible']['emails']) && $eventInfo['certificate']['visible']['emails'] &&
-        isset($eventInfo['certificate']['type']) ? $eventInfo['certificate']['type'] : '';
+            isset($eventInfo['certificate']['type']) ? $eventInfo['certificate']['type'] : '';
 
         $eventStudents = get_sum_students_course($content->category->first());
         $data['students_number'] = isset($eventInfo['students']['number']) ? $eventInfo['students']['number'] : $eventStudents + 1;
 
         $data['students'] = isset($eventInfo['students']['visible']['emails']) && $eventInfo['students']['visible']['emails'] &&
-        isset($eventInfo['students']['text']) && $data['students_number'] >= $eventStudents ? $eventInfo['students']['text'] : '';
+            isset($eventInfo['students']['text']) && $data['students_number'] >= $eventStudents ? $eventInfo['students']['text'] : '';
 
         $data['firstName'] = $user->firstname;
 
@@ -588,7 +590,6 @@ class HomeController extends Controller
         $data['event']['linkedin'] = urlencode(url('/') . '/' . $content->slugable->slug . '?utm_source=LinkedIn&utm_medium=Post_Student&utm_campaign=KNOWCRUNCH_BRANDING&title=' . 'Proudly participating in ' . $content->title . ' by Knowcrunch. 💙');
 
         Session::put('thankyouData', $data);
-        $_SESSION['thankyouData'] = $data;
 
         return redirect('/thankyou');
         //return view('theme.cart.new_cart.thank_you_free',$data);

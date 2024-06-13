@@ -19,6 +19,7 @@ use Auth;
 use Bugsnag\BugsnagLaravel\Facades\Bugsnag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 
 class MainController extends Controller
@@ -196,12 +197,8 @@ class MainController extends Controller
         // thank you page exception
         $thankyouData = null;
         if ($slug == 'thankyou') {
-            try {
-                session_start();
-                $thankyouData = $_SESSION['thankyouData'] ?? null;
-            } catch(\Exception $ex) {
-                Bugsnag::notifyException($ex);
-            }
+            $thankyouData = Session::get('thankyouData');
+
             if (!$thankyouData) {
                 return redirect('/');
             }
