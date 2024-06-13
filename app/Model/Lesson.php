@@ -19,6 +19,11 @@ class Lesson extends Model
         'priority', 'status', 'links', 'title', 'htmlTitle', 'subtitle', 'header', 'summary', 'body', 'vimeo_video', 'vimeo_duration', 'author_id', 'creator_id', 'bold',
     ];
 
+    protected $casts = [
+        // TODO: Implement a JSON cast for the links attribute so that we can remove any json encoding and decoding we're doing throughout the app
+        // 'links' => 'json',
+    ];
+
     public function topic()
     {
         return $this->belongsToMany(Topic::class, 'categories_topics_lesson')->withPivot('category_id', 'lesson_id', 'topic_id', 'priority')->orderBy('priority', 'asc');
@@ -57,42 +62,4 @@ class Lesson extends Model
         $this->topic()->detach();
         $this->delete();
     }
-
-    /*public function getLessonDurationToSec(){
-
-        if(!$this->vimeo_duration){
-            return 0;
-        }
-
-        $totalDuration = 0;
-
-        $duration = explode(" ",$this->vimeo_duration);
-        if(count($duration) == 2){
-
-            $seconds = (float)preg_replace('/[^0-9.]+/', '', $duration[0]) * 60;
-            $seconds += (float)preg_replace('/[^0-9.]+/', '', $duration[1]);
-
-            $totalDuration += $seconds;
-
-        }else{
-            $isMinutes = strpos($duration[0], '');
-
-            if(!$isMinutes){
-                $seconds = (float)preg_replace('/[^0-9.]+/', '', $duration[0]);
-                $totalDuration += $seconds;
-            }else{
-
-                dd($duration[0]);
-
-                $seconds = (float)preg_replace('/[^0-9.]+/', '', $duration[0]) * 60;
-                $totalDuration += $seconds;
-            }
-
-
-
-        }
-
-        return $totalDuration;
-
-    }*/
 }

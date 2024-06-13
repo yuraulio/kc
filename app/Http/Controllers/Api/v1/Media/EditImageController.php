@@ -120,7 +120,6 @@ class EditImageController extends ApiBaseController
             ];
         }
 
-
         if (!$mediaFile) {
             $mediaFile = new MediaFile();
         }

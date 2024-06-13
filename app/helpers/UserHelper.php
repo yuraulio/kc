@@ -39,9 +39,9 @@ class UserHelper
             'class' => '',
         ], $options);
         $default = cdn('/theme/assets/images/icons/user-circle-placeholder.svg');
-        $imageUrl = cdn('/theme/assets/images/icons/user-circle-placeholder.svg');;
+        $imageUrl = cdn('/theme/assets/images/icons/user-circle-placeholder.svg');
 
-        if(isset($user->profile_image)){
+        if (isset($user->profile_image)) {
             $imageUrl = $user->profile_image->url;
         }
 
@@ -50,13 +50,13 @@ class UserHelper
             'title="' . $user['firstname'] . '' . $user['lastname'] . '" alt="' . $user['firstname'] . '' . $user['lastname'] . '" ' .
             'src="' . $imageUrl . '" onerror="this.src=\'' . $default . '\'"/>';
 
-        if(!isset($imageUrl)){
+        if (!isset($imageUrl)) {
             if (!empty($user['image'])) {
                 $imageUrl = get_profile_image($user['image']);
-                if(isset($user->profile_image)){
-                    if(isset($user->profile_image->images)){
-                        foreach($user->profile_image->images as $image){
-                            if($image->version == 'instructors-small'){
+                if (isset($user->profile_image)) {
+                    if (isset($user->profile_image->images)) {
+                        foreach ($user->profile_image->images as $image) {
+                            if ($image->version == 'instructors-small') {
                                 $imageUrl = $image->full_path;
                             }
                         }
