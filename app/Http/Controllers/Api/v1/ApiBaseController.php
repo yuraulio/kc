@@ -7,14 +7,15 @@ namespace App\Http\Controllers\Api\v1;
 use App\Http\Controllers\Controller;
 use App\Services\QueryString\QueryStringDirector;
 use App\Traits\JsonResponseTrait;
-use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Contracts\Database\Eloquent\Builder as BuilderContract;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 
 class ApiBaseController extends Controller
 {
     use JsonResponseTrait;
 
-    protected function applyRequestParametersToQuery(Request $request, Builder $query): Builder
+    protected function applyRequestParametersToQuery(Request $request, BuilderContract $query): BuilderContract
     {
         $queryStringDirector = new QueryStringDirector($request);
 
@@ -38,4 +39,16 @@ class ApiBaseController extends Controller
 
         return $query;
     }
+
+    protected function applyRequestParametersToModel(Request $request, Model $model): Model
+    {
+        $queryStringDirector = new QueryStringDirector($request);
+
+        if ($queryStringDirector->hasIncludeParameter()) {
+            $model->load($queryStringDirector->getInclude());
+        }
+
+        return $model;
+    }
+
 }

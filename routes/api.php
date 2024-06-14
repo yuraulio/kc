@@ -14,11 +14,17 @@ use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\v1\CategoryController;
 use App\Http\Controllers\Api\v1\CityController;
 use App\Http\Controllers\Api\v1\DeliveryController;
+use App\Http\Controllers\Api\v1\Event\EventFaqController;
+use App\Http\Controllers\Api\v1\Event\EventInstructorController;
+use App\Http\Controllers\Api\v1\Event\EventStudentController;
+use App\Http\Controllers\Api\v1\Event\EventTicketController;
+use App\Http\Controllers\Api\v1\Event\EventTopicController;
 use App\Http\Controllers\Api\v1\Media\EditImageController;
 use App\Http\Controllers\Api\v1\Media\UploadImageController;
 use App\Http\Controllers\Api\v1\PartnerController;
 use App\Http\Controllers\Api\v1\PaymentMethodController;
 use App\Http\Controllers\Api\v1\TicketController;
+use App\Http\Controllers\Api\v1\TopicController;
 use App\Http\Controllers\Api\v1\Transactions\Participants\StatisticsController;
 use App\Http\Controllers\Api\v1\TypeController;
 use Illuminate\Support\Facades\Route;
@@ -140,6 +146,22 @@ Route::group(['middleware' => ['auth:api', 'auth.aboveauthor'], 'prefix' => 'v1'
 
     // Tickets
     Route::apiResource('tickets', TicketController::class)
+        ->only(['index']);
+
+    // Topics
+    Route::apiResource('topics', TopicController::class)
+        ->only(['index']);
+
+    // Nested resources of events.
+    Route::apiResource('events.faqs', EventFaqController::class)
+        ->only(['index']);
+    Route::apiResource('events.topics', EventTopicController::class)
+        ->only(['index']);
+    Route::apiResource('events.tickets', EventTicketController::class)
+        ->only(['index']);
+    Route::apiResource('events.instructors', EventInstructorController::class)
+        ->only(['index']);
+    Route::apiResource('events.students', EventStudentController::class)
         ->only(['index']);
 });
 

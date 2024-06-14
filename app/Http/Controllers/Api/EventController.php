@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 class EventController extends ApiBaseController
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of the events.
      */
     public function index(Request $request): JsonResponse
     {
@@ -23,26 +23,18 @@ class EventController extends ApiBaseController
     }
 
     /**
-     * @param Event $event
+     * Display the event.
+     *
+     * @param  Request  $request
+     * @param  Event  $event
      *
      * @return JsonResponse
      */
-    public function show(Event $event): JsonResponse
+    public function show(Request $request, Event $event): JsonResponse
     {
-        // TODO: discuss which relations are needed to load
-        return new JsonResponse($event->load([
-            'category',
-            'event_info1',
-            //            'lessons',
-            //            'instructors',
-            'delivery',
-            'slugable',
-            'metable',
-            //            'faqs',
-            'coupons',
-            'sections',
-            'medias',
-            'ticket',
-        ]));
+        $event = $this->applyRequestParametersToModel($request, $event);
+
+        return new JsonResponse($event);
     }
+
 }
