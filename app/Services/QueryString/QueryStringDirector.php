@@ -4,10 +4,10 @@ namespace App\Services\QueryString;
 
 use App\Services\QueryString\Builders\RelationFilterBuilder;
 use App\Services\QueryString\Builders\SimpleFilterBuilder;
-use App\Services\QueryString\Parameter\SearchParameter;
-use App\Services\QueryString\Parameter\SortParameter;
 use App\Services\QueryString\Enums\Direction;
 use App\Services\QueryString\Enums\Operator;
+use App\Services\QueryString\Parameter\SearchParameter;
+use App\Services\QueryString\Parameter\SortParameter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
