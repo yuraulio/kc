@@ -52,7 +52,7 @@ class MediaFileService
                     'height' => $versionOptions['h'],
                     'type' => 'fill',
                 ]);
-                $this->storeImage($path, $imageWebP, $fileExt);
+                $this->storeImage($path, $imageWebP, $fileExt, $versionOptions['q']);
 
                 $items[] = MediaFile::create([
                     'name' => $imageName,
@@ -107,10 +107,10 @@ class MediaFileService
         });
     }
 
-    protected function storeImage($path, $image, $fileExt)
+    protected function storeImage($path, $image, $fileExt, $quality)
     {
         if ($fileExt === 'jpg') {
-            $image->encode('jpg', 60);
+            $image->encode('jpg', $quality);
         }
         $image->stream();
         Storage::disk('public')->put($path, $image, 'public');

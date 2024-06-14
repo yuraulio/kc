@@ -84,7 +84,7 @@ class EditImageController extends ApiBaseController
                         'cropWidth' => $imgWidth,
                         'cropHeight' => $imgHeight,
                     ]);
-                    $this->storeImage($path, $imageWebP, $fileExt);
+                    $this->storeImage($path, $imageWebP, $fileExt, $versionOptions['q']);
                 } catch (\Exception $e) {
                     Log::error('FileVersion generating failed . ' . $e->getMessage());
 
@@ -149,10 +149,10 @@ class EditImageController extends ApiBaseController
         return $this->response($data, Response::HTTP_BAD_REQUEST);
     }
 
-    protected function storeImage($path, $image, $fileExt)
+    protected function storeImage($path, $image, $fileExt, $quality)
     {
         if ($fileExt === 'jpg') {
-            $image->encode('jpg', 60);
+            $image->encode('jpg', $quality);
         }
         $image->stream();
         Storage::disk('public')->put($path, $image, 'public');
