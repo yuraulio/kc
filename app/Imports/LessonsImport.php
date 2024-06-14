@@ -9,11 +9,12 @@ use App\Model\Lesson;
 use App\Model\Topic;
 use App\Model\Type;
 use Maatwebsite\Excel\Concerns\OnEachRow;
+use Maatwebsite\Excel\Concerns\SkipsEmptyRows;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithValidation;
 use Maatwebsite\Excel\Row;
 
-class LessonsImport implements OnEachRow, WithHeadingRow, WithValidation
+class LessonsImport implements OnEachRow, WithHeadingRow, WithValidation, SkipsEmptyRows
 {
     public function __construct(protected array $defaultLessonAttributes = [])
     {

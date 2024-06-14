@@ -1493,7 +1493,9 @@
                                                             @else
                                                             <a href="/myaccount/elearning/{{ $event['title'] }}" <?= isset($event['status']) && $event['status'] == App\Model\Event::STATUS_WAITING ? 'disabled' : ''; ?> class="btn btn--secondary btn--md">
 
-                                                                @if( (isset($event['videos_progress']) && $event['videos_progress'] == 100) )
+                                                                @if(isset($event['status']) && $event['status'] == App\Model\Event::STATUS_WAITING)
+                                                                WAITING LIST
+                                                                @elseif( (isset($event['videos_progress']) && $event['videos_progress'] == 100) )
                                                                 WATCH AGAIN
                                                                 @else
                                                                 WATCH NOW
@@ -1705,7 +1707,15 @@
                                                             @if(!$event['video_access'])
                                                             {{--<a style="cursor:not-allowed; opacity: 0.5; pointer-events: none;" href="/myaccount/elearning/{{ $event['title'] }}" class="btn btn--secondary btn--md">@if( (isset($event['videos_progress']) && $event['videos_progress'] == 100) || count($event['cert'])>0) WATCH AGAIN @else WATCH NOW @endif</a>--}}
                                                             @else
-                                                            <a href="/myaccount/elearning/{{ $event['title'] }}" <?= isset($event['status']) && $event['status'] == App\Model\Event::STATUS_WAITING ? 'disabled' : ''; ?> class="btn btn--secondary btn--md">@if( isset($event['videos_progress']) && $event['videos_progress'] == 100 >0) WATCH AGAIN @else WATCH NOW @endif</a>
+                                                            <a href="/myaccount/elearning/{{ $event['title'] }}" <?= isset($event['status']) && $event['status'] == App\Model\Event::STATUS_WAITING ? 'disabled' : ''; ?> class="btn btn--secondary btn--md">
+                                                              @if(isset($event['status']) && $event['status'] == App\Model\Event::STATUS_WAITING)
+                                                              WAITING LIST
+                                                              @elseif( (isset($event['videos_progress']) && $event['videos_progress'] == 100) )
+                                                              WATCH AGAIN
+                                                              @else
+                                                              WATCH NOW
+                                                              @endif
+                                                            </a>
                                                             @endif
                                                         </div>
                                                     </div>

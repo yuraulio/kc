@@ -195,7 +195,6 @@ class User extends Authenticatable
         if ($this->profile_image && $this->profile_image->parent) {
             return $this->profile_image->parent;
         }
-
     }
 
     /*public function events()
