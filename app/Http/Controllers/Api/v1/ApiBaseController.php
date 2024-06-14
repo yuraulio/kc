@@ -50,5 +50,4 @@ class ApiBaseController extends Controller
 
         return $model;
     }
-
 }

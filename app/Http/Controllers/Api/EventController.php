@@ -36,5 +36,4 @@ class EventController extends ApiBaseController
 
         return new JsonResponse($event);
     }
-
 }
