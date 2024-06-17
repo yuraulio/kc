@@ -190,7 +190,8 @@ class User extends Authenticatable
     public function events()
     {
         return $this->belongsToMany(Event::class, 'event_user')->withPivot('paid', 'expiration', 'comment', 'payment_method')
-            ->with(['summary1',
+            ->with([
+                'summary1',
                 'category',
                 'slugable',
                 'dropbox',
@@ -211,7 +212,7 @@ class User extends Authenticatable
     public function eventsUnPaid()
     {
         return $this->belongsToMany(Event::class, 'event_user')->withPivot('paid', 'comment')
-           ->wherePivot('paid', false);
+            ->wherePivot('paid', false);
     }
 
     public function events_for_user_list()
@@ -390,8 +391,8 @@ class User extends Authenticatable
         }
 
         /************
-        * NEWW
-        *************/
+         * NEWW
+         *************/
         foreach ($plans as $key1 => $plan) {
             $index = 0;
 
@@ -497,8 +498,8 @@ class User extends Authenticatable
         }
 
         /************
-        * NEWW
-        *************/
+         * NEWW
+         *************/
         foreach ($plans as $key => $plan) {
             $index = 0;
 
@@ -599,8 +600,8 @@ class User extends Authenticatable
         }
 
         /************
-        * NEWW
-        *************/
+         * NEWW
+         *************/
         foreach ($plans as $key => $plan) {
             $index = 0;
 
@@ -699,7 +700,7 @@ class User extends Authenticatable
                     $change += 1;
                     $videos[$vimeo_id] = [
                         'seen' => 0,
-                        'tab' =>$tab . $vimeo_id,
+                        'tab' => $tab . $vimeo_id,
                         'lesson_id' => $lesson['id'],
                         'stop_time' => 0,
                         'total_seen' => 0,
@@ -720,7 +721,7 @@ class User extends Authenticatable
 
                     $videos[$vimeo_id] = [
                         'seen' => $seenn,
-                        'tab' =>$tab . $vimeo_id,
+                        'tab' => $tab . $vimeo_id,
                         'lesson_id' => $lesson['id'],
                         'stop_time' => $stopTimee,
                         'total_seen' => $totalSeenn,
@@ -752,8 +753,10 @@ class User extends Authenticatable
             }
         }
 
-        $newStatistics = ['videos'=>json_encode($videos), 'notes' => json_encode($notes), 'lastVideoSeen' => $lastVideoSeen,
-            'created_at' => $createdAt, 'updated_at' => $updatedAt, 'event_id' => $event['id'], 'user_id' => $this->id];
+        $newStatistics = [
+            'videos' => json_encode($videos), 'notes' => json_encode($notes), 'lastVideoSeen' => $lastVideoSeen,
+            'created_at' => $createdAt, 'updated_at' => $updatedAt, 'event_id' => $event['id'], 'user_id' => $this->id,
+        ];
 
         return $newStatistics;
     }
@@ -820,7 +823,7 @@ class User extends Authenticatable
                 $eventM += $ab->total_minutes;
             }
 
-            $absencesByDate[$key] = ['id'=>$ab->id, 'user_minutes' => $userM, 'event_minutes' => $eventM];
+            $absencesByDate[$key] = ['id' => $ab->id, 'user_minutes' => $userM, 'event_minutes' => $eventM];
         }
 
         $userAbsencesPercent = ($userMinutesAbsences / $eventMinutes) * 100;
@@ -868,6 +871,7 @@ class User extends Authenticatable
     public function getAccessToken()
     {
         $token = $this->tokens()->where('revoked', false)->where('expires_at', '>', Carbon::now())->first();
+
         if ($token) {
             return $token->getPersonalAccessTokenResult()->accessToken;
         }

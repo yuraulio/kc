@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Cashier\Cashier;
 use View;
+use Vimeo\Vimeo;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -31,8 +32,8 @@ class AppServiceProvider extends ServiceProvider
 
         Validator::extend('uniqueNameAndParent', function ($attribute, $value, $parameters, $validator) {
             $count = DB::table('cms_folders')->where('name', $value)
-                                        ->where('parent_id', $parameters[0])
-                                        ->count();
+                ->where('parent_id', $parameters[0])
+                ->count();
 
             return $count === 0;
         });
@@ -63,5 +64,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        // Configure our Vimeo client with credentials
+        $this->app->bind(Vimeo::class, function () {
+            return new Vimeo(
+                config('app.vimeo_client_id'),
+                config('app.vimeo_client_secret'),
+                config('app.vimeo_token')
+            );
+        });
     }
 }

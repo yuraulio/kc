@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Model\Lesson;
 use App\Model\Topic;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -19,12 +20,12 @@ class LessonUpdate implements ShouldQueue
      *
      * @return void
      */
-    private $request;
+    private $data;
     private $lesson;
 
-    public function __construct($request, $lesson)
+    public function __construct(array $data, Lesson $lesson)
     {
-        $this->request = $request;
+        $this->data = $data;
         $this->lesson = $lesson;
     }
 
@@ -35,12 +36,12 @@ class LessonUpdate implements ShouldQueue
      */
     public function handle()
     {
-        foreach ($this->request['topic_id'] as $topic) {
+        foreach ($this->data['topic_id'] as $topic) {
             $catsIds = [];
             $topic = Topic::with('category')->find($topic);
 
             foreach ($topic->category as $cat) {
-                if ($cat->id != $this->request['category']) {
+                if ($cat->id != $this->data['category']) {
                     continue;
                 }
 
@@ -92,21 +93,22 @@ class LessonUpdate implements ShouldQueue
                     $event->allLessons()->detach($this->lesson['id']);
                     $event->changeOrder($priority);
 
-                    $event->topic()->attach($topic['id'], ['lesson_id' => $this->lesson['id'], 'date'=>$date, 'time_starts'=>$time_starts,
-                        'time_ends'=>$time_ends, 'duration' => $duration, 'room' => $room, 'instructor_id' => $instructor_id, 'priority' => $priority,
-                        'automate_mail' => $automate_mail, 'send_automate_mail'=>$send_automate_mail,
+                    $event->topic()->attach($topic['id'], [
+                        'lesson_id' => $this->lesson['id'], 'date' => $date, 'time_starts' => $time_starts,
+                        'time_ends' => $time_ends, 'duration' => $duration, 'room' => $room, 'instructor_id' => $instructor_id, 'priority' => $priority,
+                        'automate_mail' => $automate_mail, 'send_automate_mail' => $send_automate_mail,
                     ]);
                     $event->fixOrder();
 
-                    $this->lesson->topic()->wherePivot('category_id', $this->request['category'])->detach();
+                    $this->lesson->topic()->wherePivot('category_id', $this->data['category'])->detach();
                     $cat->changeOrder($priority);
-                    $cat->topic()->attach($topic, ['lesson_id' => $this->lesson->id, 'priority'=>$priority]);
+                    $cat->topic()->attach($topic, ['lesson_id' => $this->lesson->id, 'priority' => $priority]);
                     $cat->fixOrder();
 
                     $event->resetCache();
                 }
 
-                //$this->lesson->topic()->wherePivot('category_id',$this->request['category'])->detach();
+                //$this->lesson->topic()->wherePivot('category_id',$this->data['category'])->detach();
                 //$cat->changeOrder($priority);
                 //$cat->topic()->attach($topic, ['lesson_id' => $this->lesson->id,'priority'=>$priority]);
                 //$cat->fixOrder();

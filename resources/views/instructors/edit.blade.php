@@ -55,7 +55,7 @@
 
                                             <label class="custom-toggle custom-published">
                                                 <input type="checkbox" name="status" id="input-status" @if($instructor['status'] == '1') checked @endif>
-                                                <span class="custom-toggle-slider rounded-circle" data-label-off="unpublished" data-label-on="published"></span>
+                                                <span class="custom-toggle-slider rounded-circle" data-label-off="inactive" data-label-on="active"></span>
                                             </label>
                                                 @include('alerts.feedback', ['field' => 'status'])
 

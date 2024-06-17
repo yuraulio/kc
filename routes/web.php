@@ -80,6 +80,7 @@ Route::group(['middleware' => 'auth.aboveauthor', 'prefix' => 'admin1'], functio
     Route::resource('instructors', 'InstructorController', ['except' => ['show']]);
     Route::resource('topics', 'TopicController', ['except' => ['show']]);
     Route::resource('lessons', 'LessonController', ['except' => ['show']]);
+    Route::post('lessons/import', 'LessonImportController')->name('lessons.import');
     Route::resource('events', 'EventController', ['except' => ['show']]);
     Route::resource('types', 'TypeController', ['except' => ['show']]);
     Route::resource('testimonials', 'TestimonialController', ['except' => ['show']]);

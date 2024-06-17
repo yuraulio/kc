@@ -19,12 +19,12 @@
                     <div class="account-hero-info">
                         <h2>{{ $currentuser['firstname'] }} {{ $currentuser['lastname'] }}</h2>
                         <ul>
-                            @if($currentuser['kc_id'] != '')
+                          @if(isset($currentuser['kc_id']) && $currentuser['kc_id'] != '')
                             <li>{{ $currentuser['kc_id'] }}</li>
-                            @endif
-                            @if($currentuser['partner_id'])
+                          @endif
+                          @if(isset($currentuser['partner_id']) && $currentuser['partner_id'] != '')
                             <li>, DR-{{ $currentuser['partner_id'] }}</li>
-                            @endif
+                          @endif
                         </ul>
                     </div>
                 </div>
@@ -792,7 +792,7 @@
                                                     <li><a href="#c-exams-inner{{$tab}}">Exams</a></li>
                                                     @endif
 
-                                                    @if(count($event['certs']) > 0 && !$fa)
+                                                    @if(count($event['certs']) > 0)
                                                     <li><a href="#c-cert-inner{{$tab}}">Certificate</a></li>
                                                     @endif
                                                     {{--
@@ -1209,7 +1209,7 @@
                                                                 @endif
                                                               @endforeach
                                                             </div>
-                                                           
+
                                                             @if(!$allInstallmentsPayed)
                                                             <div style="color: red;">
                                                               <img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/icon-remove.svg')}}" alt="Pay all the installments" title="Pay all the installments">
@@ -1493,7 +1493,9 @@
                                                             @else
                                                             <a href="/myaccount/elearning/{{ $event['title'] }}" <?= isset($event['status']) && $event['status'] == App\Model\Event::STATUS_WAITING ? 'disabled' : ''; ?> class="btn btn--secondary btn--md">
 
-                                                                @if( (isset($event['videos_progress']) && $event['videos_progress'] == 100) )
+                                                                @if(isset($event['status']) && $event['status'] == App\Model\Event::STATUS_WAITING)
+                                                                WAITING LIST
+                                                                @elseif( (isset($event['videos_progress']) && $event['videos_progress'] == 100) )
                                                                 WATCH AGAIN
                                                                 @else
                                                                 WATCH NOW
@@ -1705,7 +1707,15 @@
                                                             @if(!$event['video_access'])
                                                             {{--<a style="cursor:not-allowed; opacity: 0.5; pointer-events: none;" href="/myaccount/elearning/{{ $event['title'] }}" class="btn btn--secondary btn--md">@if( (isset($event['videos_progress']) && $event['videos_progress'] == 100) || count($event['cert'])>0) WATCH AGAIN @else WATCH NOW @endif</a>--}}
                                                             @else
-                                                            <a href="/myaccount/elearning/{{ $event['title'] }}" <?= isset($event['status']) && $event['status'] == App\Model\Event::STATUS_WAITING ? 'disabled' : ''; ?> class="btn btn--secondary btn--md">@if( isset($event['videos_progress']) && $event['videos_progress'] == 100 >0) WATCH AGAIN @else WATCH NOW @endif</a>
+                                                            <a href="/myaccount/elearning/{{ $event['title'] }}" <?= isset($event['status']) && $event['status'] == App\Model\Event::STATUS_WAITING ? 'disabled' : ''; ?> class="btn btn--secondary btn--md">
+                                                              @if(isset($event['status']) && $event['status'] == App\Model\Event::STATUS_WAITING)
+                                                              WAITING LIST
+                                                              @elseif( (isset($event['videos_progress']) && $event['videos_progress'] == 100) )
+                                                              WATCH AGAIN
+                                                              @else
+                                                              WATCH NOW
+                                                              @endif
+                                                            </a>
                                                             @endif
                                                         </div>
                                                     </div>

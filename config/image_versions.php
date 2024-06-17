@@ -53,7 +53,7 @@ return[
         'feed-image'=>[
             'w' => 1080,
             'h' => 1080,
-            'q' => 60,
+            'q' => 30,
             'fit' => 'crop',
             'description' => 'feed-image',
             'version' => 'feed-image',
