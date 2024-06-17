@@ -56,7 +56,7 @@ class Instructor extends Model
     ];
 
     protected $casts = [
-        'social_media' => 'array'
+        'social_media' => 'array',
     ];
 
     public function lesson()
