@@ -415,12 +415,11 @@
                            @foreach($instructor as $inst)
                            <?php
 
-                              $socialMedia = json_decode($inst['social_media'],true);
-                              $fb = isset($socialMedia['facebook']) ? $socialMedia['facebook'] : '';
-                              $twitter = isset($socialMedia['twitter']) ? $socialMedia['twitter'] : '';
-                              $instagram = isset($socialMedia['instagram']) ? $socialMedia['instagram'] : '';
-                              $linkedIn = isset($socialMedia['linkedin']) ? $socialMedia['linkedin']: '';
-                              $yt = isset($socialMedia['youtube']) ? $socialMedia['youtube'] : '';
+                              $fb = $inst['social_media']['facebook'] ?? '';
+                              $twitter = $inst['social_media']['twitter'] ?? '';
+                              $instagram = $inst['social_media']['instagram'] ?? '';
+                              $linkedIn = $inst['social_media']['linkedin'] ?? '';
+                              $yt = $inst['social_media']['youtube'] ?? '';
 
                               $field2 = $inst['company'];
                               /*if(isset($inst['ext_url'])){

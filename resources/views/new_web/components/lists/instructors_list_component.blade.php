@@ -53,26 +53,24 @@
                                                             $field1 =  $lvalue['header'];
                                                         }
 
-                                                        $socialMedia = json_decode($lvalue['social_media'],true);
-
-                                                        if(isset($socialMedia['facebook'])){
-                                                            $fb = $socialMedia['facebook'];
+                                                        if(isset($lvalue['social_media']['facebook'])){
+                                                            $fb = $lvalue['social_media']['facebook'];
                                                         }
 
-                                                        if(isset($socialMedia['twitter'])){
-                                                            $twitter = $socialMedia['twitter'];
+                                                        if(isset($lvalue['social_media']['twitter'])){
+                                                            $twitter = $lvalue['social_media']['twitter'];
                                                         }
 
-                                                        if(isset($socialMedia['instagram'])){
-                                                            $inst = $socialMedia['instagram'];
+                                                        if(isset($lvalue['social_media']['instagram'])){
+                                                            $inst = $lvalue['social_media']['instagram'];
                                                         }
 
-                                                        if(isset($socialMedia['linkedin'])){
-                                                            $linkedIn = $socialMedia['linkedin'];
+                                                        if(isset($lvalue['social_media']['linkedin'])){
+                                                            $linkedIn = $lvalue['social_media']['linkedin'];
                                                         }
 
-                                                        if(isset($socialMedia['youtube'])){
-                                                            $yt = $socialMedia['youtube'];
+                                                        if(isset($lvalue['social_media']['youtube'])){
+                                                            $yt = $lvalue['social_media']['youtube'];
                                                         }
                                                     ?>
                                                     <div class="profile-img">
@@ -139,26 +137,24 @@
                                                             $field1 =  $lvalue['header'];
                                                         }
 
-                                                        $socialMedia = json_decode($lvalue['social_media'],true);
-
-                                                        if(isset($socialMedia['facebook'])){
-                                                            $fb = $socialMedia['facebook'];
+                                                        if(isset($lvalue['social_media']['facebook'])){
+                                                            $fb = $lvalue['social_media']['facebook'];
                                                         }
 
-                                                        if(isset($socialMedia['twitter'])){
-                                                            $twitter = $socialMedia['twitter'];
+                                                        if(isset($lvalue['social_media']['twitter'])){
+                                                            $twitter = $lvalue['social_media']['twitter'];
                                                         }
 
-                                                        if(isset($socialMedia['instagram'])){
-                                                            $inst = $socialMedia['instagram'];
+                                                        if(isset($lvalue['social_media']['instagram'])){
+                                                            $inst = $lvalue['social_media']['instagram'];
                                                         }
 
-                                                        if(isset($socialMedia['linkedin'])){
-                                                            $linkedIn = $socialMedia['linkedin'];
+                                                        if(isset($lvalue['social_media']['linkedin'])){
+                                                            $linkedIn = $lvalue['social_media']['linkedin'];
                                                         }
 
-                                                        if(isset($socialMedia['youtube'])){
-                                                            $yt = $socialMedia['youtube'];
+                                                        if(isset($lvalue['social_media']['youtube'])){
+                                                            $yt = $lvalue['social_media']['youtube'];
                                                         }
                                                     ?>
 

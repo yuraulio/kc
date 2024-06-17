@@ -37,7 +37,26 @@ class Instructor extends Model
     }
 
     protected $fillable = [
-        'priority', 'status', 'comment_status', 'title', 'short_title', 'subtitle', 'header', 'summary', 'mobile', 'body', 'ext_url', 'social_media', 'author_id', 'creator_id', 'company', 'cache_income',
+        'priority',
+        'status',
+        'comment_status',
+        'title',
+        'short_title',
+        'subtitle',
+        'header',
+        'summary',
+        'mobile',
+        'body',
+        'ext_url',
+        'social_media',
+        'author_id',
+        'creator_id',
+        'company',
+        'cache_income',
+    ];
+
+    protected $casts = [
+        'social_media' => 'array'
     ];
 
     public function lesson()

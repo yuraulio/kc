@@ -59,32 +59,30 @@
                                             $field2 = $lvalue['ext_url'];
                                             $field2 = str_replace ( "https://www.", "", $field2 );
                                             $field2 = str_replace ( "https://.", "", $field2 );
-                                            $field2 = str_replace ( "http://www.", "", $field2 );  
+                                            $field2 = str_replace ( "http://www.", "", $field2 );
                                             $field2 = str_replace ( "https:", "", $field2 );
                                             $field2 = str_replace ( "http:", "", $field2 );
                                             $field2 = str_replace ( "/", "", $field2 );
-                                         
+
                                        }*/
-                                       $socialMedia = json_decode($lvalue['social_media'],true);
-
-                                       if(isset($socialMedia['facebook'])){
-                                          $fb = $socialMedia['facebook'];
+                                       if(isset($lvalue['social_media']['facebook'])){
+                                          $fb = $lvalue['social_media']['facebook'];
                                        }
 
-                                       if(isset($socialMedia['twitter'])){
-                                          $twitter = $socialMedia['twitter'];
+                                       if(isset($lvalue['social_media']['twitter'])){
+                                          $twitter = $lvalue['social_media']['twitter'];
                                        }
 
-                                       if(isset($socialMedia['instagram'])){
-                                          $inst = $socialMedia['instagram'];
+                                       if(isset($lvalue['social_media']['instagram'])){
+                                          $inst = $lvalue['social_media']['instagram'];
                                        }
 
-                                       if(isset($socialMedia['linkedin'])){
-                                          $linkedIn = $socialMedia['linkedin'];
+                                       if(isset($lvalue['social_media']['linkedin'])){
+                                          $linkedIn = $lvalue['social_media']['linkedin'];
                                        }
 
-                                       if(isset($socialMedia['youtube'])){
-                                          $yt = $socialMedia['youtube'];
+                                       if(isset($lvalue['social_media']['youtube'])){
+                                          $yt = $lvalue['social_media']['youtube'];
                                        }
 
                                        //dd($inst_url);

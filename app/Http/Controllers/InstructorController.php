@@ -165,8 +165,6 @@ class InstructorController extends Controller
             $social_media['youtube'] = $request->youtube;
         }
 
-        $social_media = json_encode($social_media);
-
         if ($request->status == 'on') {
             $status = 1;
         } else {
