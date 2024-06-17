@@ -9,7 +9,6 @@ use App\Notifications\CertificateAvaillable;
 use App\Services\QueryString\Traits\Filterable;
 use App\Services\QueryString\Traits\Sortable;
 use App\Traits\BenefitTrait;
-use App\Traits\Invoices;
 use App\Traits\MediaTrait;
 use App\Traits\MetasTrait;
 use App\Traits\PaginateTable;
@@ -18,6 +17,11 @@ use App\Traits\SlugTrait;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 
@@ -192,94 +196,130 @@ class Event extends Model
         return $schema;
     }
 
-    public function category()
+    public function category(): MorphToMany
     {
-        return $this->morphToMany(Category::class, 'categoryable')->with('faqs', 'testimonials', 'dropbox');
+        return $this->morphToMany(Category::class, 'categoryable')
+            ->with('faqs', 'testimonials', 'dropbox');
     }
 
-    public function faqs()
+    public function faqs(): MorphToMany
     {
-        return $this->morphToMany(Faq::class, 'faqable')->with('category')->withPivot('priority')->orderBy('faqables.priority', 'asc');
+        return $this->morphToMany(Faq::class, 'faqable')
+            ->with('category')
+            ->withPivot('priority')
+            ->orderBy('faqables.priority');
     }
 
-    public function sectionVideos()
+    public function sectionVideos(): BelongsToMany
     {
         return $this->belongsToMany(Video::class, 'event_video', 'event_id', 'video_id');
     }
 
-    public function exam()
+    public function exam(): MorphToMany
     {
         return $this->morphToMany(Exam::class, 'examable');
     }
 
-    public function exam_result()
+    public function exam_result(): BelongsToMany
     {
         return $this->belongsToMany(ExamResult::class, 'exam_results', 'user_id', 'exam_id')->withPivot('total_score');
     }
 
-    public function type()
+    public function type(): MorphToMany
     {
         return $this->morphToMany(Type::class, 'typeable');
     }
 
-    public function topic()
+    public function topic(): BelongsToMany
     {
         if ($this->delivery->first() && $this->delivery->first()->id == 143) {
-            return $this->belongsToMany(Topic::class, 'event_topic_lesson_instructor')->select('topics.*', 'topic_id', 'instructor_id')->where('instructor_id', '!=', null)->where('instructor_id', '!=', 0)
-            ->withPivot('event_id', 'topic_id', 'lesson_id', 'instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room', 'priority', 'automate_mail', 'send_automate_mail')->with('lessons.instructor')->orderBy('event_topic_lesson_instructor.priority', 'asc');
+            return $this->belongsToMany(Topic::class, 'event_topic_lesson_instructor')
+                ->select('topics.*', 'topic_id', 'instructor_id')
+                ->where('instructor_id', '!=', null)
+                ->where('instructor_id', '!=', 0)
+                ->withPivot('event_id', 'topic_id', 'lesson_id', 'instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room', 'priority', 'automate_mail', 'send_automate_mail')
+                ->with('lessons.instructor')
+                ->orderBy('event_topic_lesson_instructor.priority');
         } else {
-            return $this->belongsToMany(Topic::class, 'event_topic_lesson_instructor')->select('topics.*', 'topic_id', 'instructor_id')->where('instructor_id', '!=', null)->where('instructor_id', '!=', 0)
-            ->withPivot('event_id', 'topic_id', 'lesson_id', 'instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room', 'priority', 'automate_mail', 'send_automate_mail')->with('lessons.instructor')->orderBy('event_topic_lesson_instructor.time_starts', 'asc');
+            return $this->belongsToMany(Topic::class, 'event_topic_lesson_instructor')
+                ->select('topics.*', 'topic_id', 'instructor_id')
+                ->where('instructor_id', '!=', null)
+                ->where('instructor_id', '!=', 0)
+                ->withPivot('event_id', 'topic_id', 'lesson_id', 'instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room', 'priority', 'automate_mail', 'send_automate_mail')
+                ->with('lessons.instructor')
+                ->orderBy('event_topic_lesson_instructor.time_starts', 'asc');
         }
     }
 
-    public function topic_with_no_instructor()
+    public function topic_with_no_instructor(): BelongsToMany
     {
         if ($this->delivery->first() && $this->delivery->first()->id == 143) {
-            return $this->belongsToMany(Topic::class, 'event_topic_lesson_instructor')->select('topics.*', 'topic_id', 'instructor_id')
-            ->withPivot('event_id', 'topic_id', 'lesson_id', 'instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room', 'priority', 'automate_mail', 'send_automate_mail')->with('lessons.instructor')->orderBy('event_topic_lesson_instructor.priority', 'asc');
+            return $this->belongsToMany(Topic::class, 'event_topic_lesson_instructor')
+                ->select('topics.*', 'topic_id', 'instructor_id')
+                ->withPivot('event_id', 'topic_id', 'lesson_id', 'instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room', 'priority', 'automate_mail', 'send_automate_mail')
+                ->with('lessons.instructor')
+                ->orderBy('event_topic_lesson_instructor.priority', 'asc');
         } else {
-            return $this->belongsToMany(Topic::class, 'event_topic_lesson_instructor')->select('topics.*', 'topic_id', 'instructor_id')
-            ->withPivot('event_id', 'topic_id', 'lesson_id', 'instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room', 'priority', 'automate_mail', 'send_automate_mail')->with('lessons.instructor')->orderBy('event_topic_lesson_instructor.time_starts', 'asc');
+            return $this->belongsToMany(Topic::class, 'event_topic_lesson_instructor')
+                ->select('topics.*', 'topic_id', 'instructor_id')
+                ->withPivot('event_id', 'topic_id', 'lesson_id', 'instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room', 'priority', 'automate_mail', 'send_automate_mail')
+                ->with('lessons.instructor')
+                ->orderBy('event_topic_lesson_instructor.time_starts');
         }
     }
 
     //forEventEdit
-    public function allTopics()
+    public function allTopics(): BelongsToMany
     {
+        $query = $this->belongsToMany(Topic::class, 'event_topic_lesson_instructor')
+            ->withPivot('event_id', 'topic_id', 'lesson_id', 'instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room', 'priority', 'automate_mail', 'send_automate_mail')
+            ->select('topics.*', 'topic_id', 'instructor_id');
+
         if ($this->delivery->first() && $this->delivery->first()->id == 143) {
-            return $this->belongsToMany(Topic::class, 'event_topic_lesson_instructor')->select('topics.*', 'topic_id', 'instructor_id')
-            ->withPivot('event_id', 'topic_id', 'lesson_id', 'instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room', 'priority', 'automate_mail', 'send_automate_mail')->with('lessons.instructor')->orderBy('event_topic_lesson_instructor.priority', 'asc');
+            $query->orderBy('event_topic_lesson_instructor.priority');
         } else {
-            return $this->belongsToMany(Topic::class, 'event_topic_lesson_instructor')->select('topics.*', 'topic_id', 'instructor_id')
-            ->withPivot('event_id', 'topic_id', 'lesson_id', 'instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room', 'priority', 'automate_mail', 'send_automate_mail')->with('lessons.instructor')->with('lessons.instructor')->orderBy('event_topic_lesson_instructor.time_starts', 'asc');
+            $query->orderBy('event_topic_lesson_instructor.time_starts');
         }
+
+        return $query
+            ->groupBy('topic_id');
     }
 
-    public function topic_edit_instructor()
+    public function topic_edit_instructor(): BelongsToMany
     {
-        return $this->belongsToMany(Topic::class, 'event_topic_lesson_instructor')->select('topics.*', 'topic_id')
+        return $this->belongsToMany(Topic::class, 'event_topic_lesson_instructor')
+            ->select('topics.*', 'topic_id')
             ->withPivot('event_id', 'topic_id', 'lesson_id', 'instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room', 'priority', 'location_url', 'automate_mail', 'send_automate_mail');
     }
 
-    public function coupons()
+    public function coupons(): BelongsToMany
     {
         return $this->belongsToMany(Coupon::class, 'event_coupons');
     }
 
-    public function allLessons()
+    public function allLessons(): BelongsToMany
     {
-        return $this->belongsToMany(Lesson::class, 'event_topic_lesson_instructor')->select('lessons.*')->withPivot('id', 'event_id', 'topic_id', 'lesson_id', 'instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room', 'priority', 'location_url', 'automate_mail', 'send_automate_mail');
+        return $this->belongsToMany(Lesson::class, 'event_topic_lesson_instructor')
+            ->select('lessons.*')
+            ->withPivot('id', 'event_id', 'topic_id', 'lesson_id', 'instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room', 'priority', 'location_url', 'automate_mail', 'send_automate_mail');
     }
 
-    public function lessons()
+    public function lessons(): BelongsToMany
     {
         if (!$this->is_inclass_course()) {
-            return $this->belongsToMany(Lesson::class, 'event_topic_lesson_instructor')->where('status', true)->select('lessons.*', 'topic_id', 'event_id', 'lesson_id', 'instructor_id')
-            ->withPivot('event_id', 'topic_id', 'lesson_id', 'instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room', 'priority', 'location_url', 'automate_mail', 'send_automate_mail')->orderBy('event_topic_lesson_instructor.priority', 'asc')->with('type'); //priority
+            return $this->belongsToMany(Lesson::class, 'event_topic_lesson_instructor')
+                ->where('status', true)
+                ->select('lessons.*', 'topic_id', 'event_id', 'lesson_id', 'instructor_id')
+                ->withPivot('event_id', 'topic_id', 'lesson_id', 'instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room', 'priority', 'location_url', 'automate_mail', 'send_automate_mail')
+                ->orderBy('event_topic_lesson_instructor.priority')
+                ->with('type'); //priority
         } else {
-            return $this->belongsToMany(Lesson::class, 'event_topic_lesson_instructor')->where('status', true)->select('lessons.*', 'topic_id', 'event_id', 'lesson_id', 'instructor_id')
-            ->withPivot('event_id', 'topic_id', 'lesson_id', 'instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room', 'priority', 'location_url', 'automate_mail', 'send_automate_mail')->orderBy('event_topic_lesson_instructor.time_starts', 'asc')->with('type'); //priority
+            return $this->belongsToMany(Lesson::class, 'event_topic_lesson_instructor')
+                ->where('status', true)
+                ->select('lessons.*', 'topic_id', 'event_id', 'lesson_id', 'instructor_id')
+                ->withPivot('event_id', 'topic_id', 'lesson_id', 'instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room', 'priority', 'location_url', 'automate_mail', 'send_automate_mail')
+                ->orderBy('event_topic_lesson_instructor.time_starts')
+                ->with('type'); //priority
         }
     }
 
@@ -295,27 +335,36 @@ class Event extends Model
         return $lastTimestamp;
     }
 
-    public function lessonsForApp()
+    public function lessonsForApp(): BelongsToMany
     {
-        return $this->belongsToMany(Lesson::class, 'event_topic_lesson_instructor')->where('status', true)
+        return $this->belongsToMany(Lesson::class, 'event_topic_lesson_instructor')
+            ->where('status', true)
             ->select('lessons.*', 'topic_id', 'event_id', 'lesson_id', 'instructor_id', 'event_topic_lesson_instructor.priority', 'event_topic_lesson_instructor.time_starts')
-            ->withPivot('event_id', 'topic_id', 'lesson_id', 'instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room', 'location_url', 'priority', 'automate_mail', 'send_automate_mail')->with('type');
+            ->withPivot('event_id', 'topic_id', 'lesson_id', 'instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room', 'location_url', 'priority', 'automate_mail', 'send_automate_mail')
+            ->with('type');
     }
 
-    public function plans()
+    public function plans(): BelongsToMany
     {
-        return $this->belongsToMany(Plan::class, 'plan_events')->where('published', true);
+        return $this->belongsToMany(Plan::class, 'plan_events')
+            ->where('published', true);
     }
 
-    public function instructors()
+    public function instructors(): BelongsToMany
     {
-        return $this->belongsToMany(Instructor::class, 'event_topic_lesson_instructor')->with('mediable')->select('instructors.*', 'lesson_id', 'instructor_id', 'event_id')
-            ->withPivot('lesson_id', 'instructor_id')->orderBy('subtitle', 'asc')->with('slugable');
+        return $this->belongsToMany(Instructor::class, 'event_topic_lesson_instructor')
+            ->with('mediable')
+            ->select('instructors.*', 'lesson_id', 'instructor_id', 'event_id')
+            ->withPivot('lesson_id', 'instructor_id')
+            ->orderBy('subtitle')
+            ->with('slugable');
     }
 
-    public function summary1()
+    public function summary1(): BelongsToMany
     {
-        return $this->belongsToMany(Summary::class, 'events_summaryevent', 'event_id', 'summary_event_id')->orderBy('priority')->with('mediable');
+        return $this->belongsToMany(Summary::class, 'events_summaryevent', 'event_id', 'summary_event_id')
+            ->orderBy('priority')
+            ->with('mediable');
     }
 
     public function is_inclass_course()
@@ -358,7 +407,7 @@ class Event extends Model
         // }
     }
 
-    public function delivery()
+    public function delivery(): BelongsToMany
     {
         return $this->belongsToMany(Delivery::class, 'event_delivery', 'event_id', 'delivery_id');
     }
@@ -377,7 +426,7 @@ class Event extends Model
         });
     }
 
-    public function ticket()
+    public function ticket(): BelongsToMany
     {
         return $this->belongsToMany(Ticket::class, 'event_tickets')
             ->select('tickets.*', 'event_tickets.ticket_id', 'event_tickets.price')
@@ -385,68 +434,75 @@ class Event extends Model
             ->orderBy('pivot_priority');
     }
 
-    public function tickets()
+    public function tickets(): BelongsToMany
     {
         return $this->belongsToMany(Ticket::class, 'event_user_ticket');
     }
 
-    public function city()
+    public function city(): BelongsToMany
     {
         return $this->belongsToMany(City::class, 'event_city')->with('slugable');
     }
 
-    public function career()
+    public function career(): MorphToMany
     {
         return $this->morphedByMany(Career::class, 'careerpathable', 'careerpathables', 'event_id', 'careerpathable_id')
             ->withPivot('careerpath_type');
     }
 
-    public function sections()
+    public function sections(): BelongsToMany
     {
         return $this->belongsToMany(Section::class, 'sectionTitles_event', 'event_id', 'section_title_id');
     }
 
-    public function venues()
+    public function venues(): BelongsToMany
     {
         return $this->belongsToMany(Venue::class, 'event_venue');
     }
 
-    public function users()
+    public function users(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'event_user')->withPivot('expiration', 'expiration_email', 'payment_method', 'comment', 'paid');
+        return $this->belongsToMany(User::class, 'event_user')
+            ->withPivot('expiration', 'expiration_email', 'payment_method', 'comment', 'paid');
     }
 
-    public function users_with_transactions()
+    public function users_with_transactions(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'event_user')->select('event_user.user_id as id', 'firstname', 'lastname', 'email', 'mobile')->with('transactions')->withPivot('expiration', 'payment_method', 'paid', 'comment');
+        return $this->belongsToMany(User::class, 'event_user')
+            ->select('event_user.user_id as id', 'firstname', 'lastname', 'email', 'mobile')
+            ->with('transactions')
+            ->withPivot('expiration', 'payment_method', 'paid', 'comment');
     }
 
-    public function usersPaid()
+    public function usersPaid(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'event_user')->withPivot('expiration', 'payment_method', 'paid')->wherePivot('paid', true);
+        return $this->belongsToMany(User::class, 'event_user')
+            ->withPivot('expiration', 'payment_method', 'paid')
+            ->wherePivot('paid', true);
     }
 
-    public function partners()
+    public function partners(): BelongsToMany
     {
         return $this->belongsToMany(Partner::class, 'event_partner')->with('mediable');
     }
 
-    public function syllabus()
+    public function syllabus(): BelongsToMany
     {
-        return $this->belongsToMany(Instructor::class, 'event_syllabus_manager')->with('mediable', 'slugable');
+        return $this->belongsToMany(Instructor::class, 'event_syllabus_manager')
+            ->with('mediable', 'slugable');
     }
 
-    public function paymentMethod()
+    public function paymentMethod(): BelongsToMany
     {
         return $this->belongsToMany(PaymentMethod::class, 'paymentmethod_event');
     }
 
-    public function dropbox()
+    public function dropbox(): MorphToMany
     {
         return $this->morphToMany(Dropbox::class, 'dropboxcacheable')->withPivot('selectedFolders');
     }
 
-    public function medias()
+    public function medias(): MorphOne
     {
         return $this->morphOne(Media::class, 'mediable');
     }
@@ -742,12 +798,12 @@ class Event extends Model
         //return $faqs;
     }
 
-    public function statistic()
+    public function statistic(): BelongsToMany
     {
         return $this->belongsToMany(Event::class, 'event_statistics')->withPivot('videos', 'lastVideoSeen', 'notes', 'event_id', 'user_id');
     }
 
-    public function waitingList()
+    public function waitingList(): HasMany
     {
         return $this->hasMany(WaitingList::class);
     }
@@ -934,12 +990,12 @@ class Event extends Model
         //return '0 of 0';
     }
 
-    public function invoices()
+    public function invoices(): MorphToMany
     {
         return $this->morphToMany(Invoice::class, 'invoiceable', 'invoiceables');
     }
 
-    public function transactions()
+    public function transactions(): MorphToMany
     {
         return $this->morphToMany(Transaction::class, 'transactionable')->with('user.ticket', 'isSubscription');
     }
@@ -1016,7 +1072,7 @@ class Event extends Model
         return $examsArray;
     }
 
-    public function certificates()
+    public function certificates(): MorphToMany
     {
         return $this->morphToMany(Certificate::class, 'certificatable');
     }
@@ -1152,7 +1208,7 @@ class Event extends Model
         return $value;
     }
 
-    public function event_info1()
+    public function event_info1(): HasOne
     {
         return $this->hasOne(EventInfo::class);
     }
@@ -1382,7 +1438,7 @@ class Event extends Model
         return $accessMonths;
     }
 
-    public function countdown()
+    public function countdown(): BelongsToMany
     {
         return $this->belongsToMany(Countdown::class, 'cms_countdown_event');
     }
