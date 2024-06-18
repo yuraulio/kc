@@ -357,7 +357,8 @@ class Event extends Model
             ->select('instructors.*', 'lesson_id', 'instructor_id', 'event_id')
             ->withPivot('lesson_id', 'instructor_id')
             ->orderBy('subtitle')
-            ->with('slugable');
+            ->with('slugable')
+            ->groupBy('instructor_id');
     }
 
     public function summary1(): BelongsToMany
