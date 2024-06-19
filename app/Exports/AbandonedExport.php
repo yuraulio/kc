@@ -83,7 +83,8 @@ class AbandonedExport implements FromArray
         foreach($list as $user_id => $ucart) :
 
             if($abcart[$user_id]->user->first() != null) {
-                $fn = $abcart[$user_id]->user->first()['firstname'] . ' ' . $abcart[$user_id]->user->first()['lastname'];
+                $fn1 = $abcart[$user_id]->user->first()['firstname'];
+                $fn2 = $abcart[$user_id]->user->first()['lastname'];
 
                 $evdate = 'No Date';
                 if(isset($events[$ucart->options['event']]['customFields'])) {
@@ -102,7 +103,9 @@ class AbandonedExport implements FromArray
                 }
                 $subs[] = [
                     $abcart[$user_id]->user->first()['email'],
-                    $fn,
+                    $fn1,
+                    $fn2,
+                    $abcart[$user_id]->user->first()['mobile'],
                     $events[$ucart->options['event']]->title . ' - ' . $evdate,
                     $ticket_title,
                     $ucart->qty,
