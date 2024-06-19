@@ -120,7 +120,7 @@ class AbandonedExport implements FromArray
         if(count($subs) > 0) {
             return $subs;
         } else {
-            return redirect()->route('abandoned.index');
+            return [];
         }
     }
 
