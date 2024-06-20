@@ -2,31 +2,19 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Api\v1\ApiBaseController;
 use App\Model\Coupon;
-use App\Services\QueryString\QueryStringDirector;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-class CouponController extends Controller
+class CouponController extends ApiBaseController
 {
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request): JsonResponse
     {
-        $queryStringDirector = new QueryStringDirector($request);
-        $query = Coupon::query();
-
-        if ($sort = $queryStringDirector->getSort()) {
-            $query->sort($sort);
-        }
-
-        if ($filters = $queryStringDirector->getFilters()) {
-            foreach ($filters as $filter) {
-                $query->filter($filter);
-            }
-        }
+        $query = $this->applyRequestParametersToQuery(Coupon::query(), $request);
 
         return new JsonResponse($query->get());
     }

@@ -14,7 +14,7 @@ class EventVenueController extends ApiBaseController
      */
     public function index(Request $request, Event $event): JsonResponse
     {
-        $query = $this->applyRequestParametersToQuery($request, $event->venues());
+        $query = $this->applyRequestParametersToQuery($event->venues(), $request);
 
         $topics = $query->paginate((int) $request->query->get('per_page', 50))
             ->appends($request->query->all());

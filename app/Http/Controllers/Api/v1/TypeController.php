@@ -16,7 +16,7 @@ class TypeController extends ApiBaseController
      */
     public function index(Request $request): JsonResponse
     {
-        $query = $this->applyRequestParametersToQuery($request, Type::query());
+        $query = $this->applyRequestParametersToQuery(Type::query(), $request);
 
         $types = $query->paginate((int) $request->query->get('per_page', 50))
             ->appends($request->query->all());

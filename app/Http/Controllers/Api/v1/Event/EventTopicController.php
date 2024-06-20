@@ -14,12 +14,11 @@ class EventTopicController extends ApiBaseController
      */
     public function index(Request $request, Event $event): JsonResponse
     {
-        $query = $this->applyRequestParametersToQuery($request, $event->allTopics());
+        $query = $this->applyRequestParametersToQuery($event->allTopics(), $request);
 
-        $topics = $query->paginate((int) $request->query->get('per_page', 50))
-            ->appends($request->query->all());
-
-        return new JsonResponse($topics);
+        return new JsonResponse(
+            $this->paginateByRequestParameters($query, $request)
+        );
     }
 
     /**

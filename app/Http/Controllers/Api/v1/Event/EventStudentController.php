@@ -14,7 +14,7 @@ class EventStudentController extends ApiBaseController
      */
     public function index(Request $request, Event $event): JsonResponse
     {
-        $query = $this->applyRequestParametersToQuery($request, $event->users());
+        $query = $this->applyRequestParametersToQuery($event->users(), $request);
 
         $students = $query->paginate((int) $request->query->get('per_page', 50))
             ->appends($request->query->all());

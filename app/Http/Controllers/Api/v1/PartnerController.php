@@ -15,7 +15,7 @@ class PartnerController extends ApiBaseController
      */
     public function index(Request $request): JsonResponse
     {
-        $query = $this->applyRequestParametersToQuery($request, Partner::query());
+        $query = $this->applyRequestParametersToQuery(Partner::query(), $request);
 
         $partners = $query->paginate((int) $request->query->get('per_page', 50))
             ->appends($request->query->all());

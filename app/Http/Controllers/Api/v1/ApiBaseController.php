@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Services\QueryString\QueryStringDirector;
 use App\Traits\JsonResponseTrait;
 use Illuminate\Contracts\Database\Eloquent\Builder as BuilderContract;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 
@@ -15,7 +16,9 @@ class ApiBaseController extends Controller
 {
     use JsonResponseTrait;
 
-    protected function applyRequestParametersToQuery(Request $request, BuilderContract $query): BuilderContract
+    const PER_PAGE = 50;
+
+    protected function applyRequestParametersToQuery(BuilderContract $query, Request $request): BuilderContract
     {
         $queryStringDirector = new QueryStringDirector($request);
 
@@ -40,7 +43,7 @@ class ApiBaseController extends Controller
         return $query;
     }
 
-    protected function applyRequestParametersToModel(Request $request, Model $model): Model
+    protected function applyRequestParametersToModel(Model $model, Request $request): Model
     {
         $queryStringDirector = new QueryStringDirector($request);
 
@@ -50,4 +53,11 @@ class ApiBaseController extends Controller
 
         return $model;
     }
+
+    protected function paginateByRequestParameters(BuilderContract $query, Request $request): LengthAwarePaginator
+    {
+        return $query->paginate((int) $request->query->get('per_page', self::PER_PAGE))
+            ->appends($request->query->all());
+    }
+
 }

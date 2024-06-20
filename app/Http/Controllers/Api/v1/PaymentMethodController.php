@@ -15,7 +15,7 @@ class PaymentMethodController extends ApiBaseController
      */
     public function index(Request $request): JsonResponse
     {
-        $query = $this->applyRequestParametersToQuery($request, PaymentMethod::query());
+        $query = $this->applyRequestParametersToQuery(PaymentMethod::query(), $request);
 
         $paymentMethods = $query->paginate((int) $request->query->get('per_page', 50))
             ->appends($request->query->all());

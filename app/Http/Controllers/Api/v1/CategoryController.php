@@ -15,7 +15,7 @@ class CategoryController extends ApiBaseController
      */
     public function index(Request $request): JsonResponse
     {
-        $query = $this->applyRequestParametersToQuery($request, Category::query());
+        $query = $this->applyRequestParametersToQuery(Category::query(), $request);
 
         $categories = $query->paginate((int) $request->query->get('per_page', 50))
             ->appends($request->query->all());

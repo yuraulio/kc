@@ -14,7 +14,7 @@ class EventTicketController extends ApiBaseController
      */
     public function index(Request $request, Event $event): JsonResponse
     {
-        $query = $this->applyRequestParametersToQuery($request, $event->ticket());
+        $query = $this->applyRequestParametersToQuery($event->ticket(), $request);
 
         $tickets = $query->paginate((int) $request->query->get('per_page', 50))
             ->appends($request->query->all());

@@ -14,7 +14,7 @@ class TopicController extends ApiBaseController
      */
     public function index(Request $request): JsonResponse
     {
-        $query = $this->applyRequestParametersToQuery($request, Topic::query());
+        $query = $this->applyRequestParametersToQuery(Topic::query(), $request);
 
         $topics = $query->paginate((int) $request->query->get('per_page', 50))
             ->appends($request->query->all());

@@ -14,7 +14,7 @@ class EventController extends ApiBaseController
      */
     public function index(Request $request): JsonResponse
     {
-        $query = $this->applyRequestParametersToQuery($request, Event::query());
+        $query = $this->applyRequestParametersToQuery(Event::query(), $request);
 
         $events = $query->paginate((int) $request->query->get('per_page', 50))
             ->appends($request->query->all());
@@ -32,7 +32,7 @@ class EventController extends ApiBaseController
      */
     public function show(Request $request, Event $event): JsonResponse
     {
-        $event = $this->applyRequestParametersToModel($request, $event);
+        $event = $this->applyRequestParametersToModel($event, $request);
 
         return new JsonResponse($event);
     }

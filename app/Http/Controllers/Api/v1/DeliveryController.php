@@ -15,7 +15,7 @@ class DeliveryController extends ApiBaseController
      */
     public function index(Request $request): JsonResponse
     {
-        $query = $this->applyRequestParametersToQuery($request, Delivery::query());
+        $query = $this->applyRequestParametersToQuery(Delivery::query(), $request);
 
         $deliveries = $query->paginate((int) $request->query->get('per_page', 50))
             ->appends($request->query->all());
