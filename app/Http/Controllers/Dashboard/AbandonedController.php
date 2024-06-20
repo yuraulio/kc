@@ -81,7 +81,7 @@ class AbandonedController extends Controller
             return redirect()->route('abandoned.index');
         }
         Excel::store($export, 'AbandonedCart.xlsx', 'export');
+
         return Excel::download($export, 'AbandonedCart.xlsx');
-        
     }
 }
