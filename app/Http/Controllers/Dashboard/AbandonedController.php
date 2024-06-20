@@ -75,10 +75,13 @@ class AbandonedController extends Controller
 
     public function exportCsv(Request $request)
     {
-        Excel::store(new AbandonedExport($request->events, $request->fromDate, $request->toDate), 'AbandonedCart.xlsx', 'export');
-
-        return Excel::download(new AbandonedExport($request->events, $request->fromDate, $request->toDate), 'AbandonedCart.xlsx');
-
-        return redirect()->route('abandoned.index');
+        $export = new AbandonedExport($request->events, $request->fromDate, $request->toDate);
+        $data = $export->array();
+        if (empty($data)) {
+            return redirect()->route('abandoned.index');
+        }
+        Excel::store($export, 'AbandonedCart.xlsx', 'export');
+        return Excel::download($export, 'AbandonedCart.xlsx');
+        
     }
 }
