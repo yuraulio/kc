@@ -19,6 +19,7 @@ use App\Http\Controllers\Api\v1\Event\EventInstructorController;
 use App\Http\Controllers\Api\v1\Event\EventStudentController;
 use App\Http\Controllers\Api\v1\Event\EventTicketController;
 use App\Http\Controllers\Api\v1\Event\EventTopicController;
+use App\Http\Controllers\Api\v1\Event\EventVenueController;
 use App\Http\Controllers\Api\v1\Media\EditImageController;
 use App\Http\Controllers\Api\v1\Media\UploadImageController;
 use App\Http\Controllers\Api\v1\PartnerController;
@@ -162,6 +163,8 @@ Route::group(['middleware' => ['auth:api', 'auth.aboveauthor'], 'prefix' => 'v1'
     Route::apiResource('events.instructors', EventInstructorController::class)
         ->only(['index']);
     Route::apiResource('events.students', EventStudentController::class)
+        ->only(['index']);
+    Route::apiResource('events.venues', EventVenueController::class)
         ->only(['index']);
 });
 
