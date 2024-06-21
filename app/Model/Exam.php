@@ -38,12 +38,12 @@ class Exam extends Model
         'examMethods',
         'repeat_exam',
         'repeat_exam_in',
-        'questions'
+        'questions',
     ];
 
     // This field was hidden temporarily. It can be unhide at any time.
     protected $hidden = [
-        'questions'
+        'questions',
     ];
 
     public function event(): MorphToMany

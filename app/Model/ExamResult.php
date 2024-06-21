@@ -27,7 +27,7 @@ class ExamResult extends Model
 
     // This field was hidden temporarily. It can be unhide at any time.
     protected $hidden = [
-        'answers'
+        'answers',
     ];
 
     public function user(): BelongsTo
