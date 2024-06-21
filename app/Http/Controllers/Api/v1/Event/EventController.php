@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\v1\Event;
 
 use App\Http\Controllers\Api\v1\ApiBaseController;
 use App\Model\Event;
@@ -16,10 +16,9 @@ class EventController extends ApiBaseController
     {
         $query = $this->applyRequestParametersToQuery(Event::query(), $request);
 
-        $events = $query->paginate((int) $request->query->get('per_page', 50))
-            ->appends($request->query->all());
-
-        return new JsonResponse($events);
+        return new JsonResponse(
+            $this->paginateByRequestParameters($query, $request)
+        );
     }
 
     /**
@@ -32,8 +31,8 @@ class EventController extends ApiBaseController
      */
     public function show(Request $request, Event $event): JsonResponse
     {
-        $event = $this->applyRequestParametersToModel($event, $request);
-
-        return new JsonResponse($event);
+        return new JsonResponse(
+            $this->applyRequestParametersToModel($event, $request)
+        );
     }
 }

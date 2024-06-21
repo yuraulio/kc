@@ -2,11 +2,11 @@
 
 namespace App\Model;
 
-use App\Model\User;
-use Auth;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Auth;
 
 class ExamResult extends Model
 {
@@ -25,21 +25,22 @@ class ExamResult extends Model
         'answers',
     ];
 
-    /*public function certificate(){
-        return $this->hasOne('PostRider\Certificate');
-    }*/
+    // This field was hidden temporarily. It can be unhide at any time.
+    protected $hidden = [
+        'answers'
+    ];
 
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public function examSettings()
+    public function examSettings(): BelongsTo
     {
         return $this->belongsTo(Exam::class, 'exam_id')->with('event');
     }
 
-    public function getResults($user_id)
+    public function getResults($user_id): array
     {
         $examSettings = $this->examSettings->toArray();
         $examResult = $this->where('exam_id', $this->exam_id)->where('user_id', $user_id)->first();

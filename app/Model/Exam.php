@@ -2,12 +2,20 @@
 
 namespace App\Model;
 
+use App\Services\QueryString\Traits\Filterable;
+use App\Services\QueryString\Traits\Searchable;
+use App\Services\QueryString\Traits\Sortable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 class Exam extends Model
 {
-    use HasFactory;
+    use HasFactory,
+        Sortable,
+        Filterable,
+        Searchable;
 
     protected $table = 'exams';
 
@@ -30,19 +38,25 @@ class Exam extends Model
         'examMethods',
         'repeat_exam',
         'repeat_exam_in',
+        'questions'
     ];
 
-    public function event()
+    // This field was hidden temporarily. It can be unhide at any time.
+    protected $hidden = [
+        'questions'
+    ];
+
+    public function event(): MorphToMany
     {
         return $this->morphedByMany(Event::class, 'examable');
     }
 
-    public function results()
+    public function results(): HasMany
     {
         return $this->hasMany(ExamResult::class);
     }
 
-    public function getResults()
+    public function getResults(): array
     {
         $results = [];
         $count = 0;

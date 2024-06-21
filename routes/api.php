@@ -4,7 +4,6 @@ use App\Http\Controllers\Admin_api\MediaController;
 use App\Http\Controllers\Admin_api\PagesController;
 use App\Http\Controllers\Api\AbsenceController;
 use App\Http\Controllers\Api\CouponController;
-use App\Http\Controllers\Api\EventController;
 use App\Http\Controllers\Api\ForgotPasswordController;
 use App\Http\Controllers\Api\LessonController;
 use App\Http\Controllers\Api\NotificationController;
@@ -14,12 +13,16 @@ use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\v1\CategoryController;
 use App\Http\Controllers\Api\v1\CityController;
 use App\Http\Controllers\Api\v1\DeliveryController;
+use App\Http\Controllers\Api\v1\Event\EventController;
+use App\Http\Controllers\Api\v1\Event\EventExamController;
 use App\Http\Controllers\Api\v1\Event\EventFaqController;
 use App\Http\Controllers\Api\v1\Event\EventInstructorController;
 use App\Http\Controllers\Api\v1\Event\EventStudentController;
 use App\Http\Controllers\Api\v1\Event\EventTicketController;
 use App\Http\Controllers\Api\v1\Event\EventTopicController;
 use App\Http\Controllers\Api\v1\Event\EventVenueController;
+use App\Http\Controllers\Api\v1\Exam\ExamController;
+use App\Http\Controllers\Api\v1\Exam\ExamResultController;
 use App\Http\Controllers\Api\v1\Media\EditImageController;
 use App\Http\Controllers\Api\v1\Media\UploadImageController;
 use App\Http\Controllers\Api\v1\PartnerController;
@@ -165,6 +168,14 @@ Route::group(['middleware' => ['auth:api', 'auth.aboveauthor'], 'prefix' => 'v1'
     Route::apiResource('events.students', EventStudentController::class)
         ->only(['index']);
     Route::apiResource('events.venues', EventVenueController::class)
+        ->only(['index']);
+    Route::apiResource('events.exams', EventExamController::class)
+        ->only(['index', 'show']);
+
+    // Exams
+    Route::apiResource('exams', ExamController::class)
+        ->only(['index', 'show']);
+    Route::apiResource('exams.results', ExamResultController::class)
         ->only(['index']);
 });
 
