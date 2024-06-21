@@ -59,5 +59,4 @@ class ApiBaseController extends Controller
         return $query->paginate((int) $request->query->get('per_page', self::PER_PAGE))
             ->appends($request->query->all());
     }
-
 }
