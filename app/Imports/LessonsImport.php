@@ -45,7 +45,7 @@ class LessonsImport implements OnEachRow, WithHeadingRow, WithValidation, SkipsE
         dispatch(new LessonUpdate($row, $lesson));
 
         if ($row['type']) {
-            $lesson->type()->attach([Type::whereName($row['type'])->first()]);
+            $lesson->type()->attach(Type::whereName($row['type'])->first());
         }
 
         return $lesson;
