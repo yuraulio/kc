@@ -22,7 +22,7 @@ button.close.text-dark {
   border-color: #28a745;
 }
 .actions-width {
-  min-width: 85px;
+  min-width: 110px;
 }
 </style>
 
@@ -662,6 +662,7 @@ button.close.text-dark {
               <a @click="remove(props.rowData.id, props.rowData.title)" href="javascript:void(0);" class="action-icon">
                 <i class="mdi mdi-delete"></i>
               </a>
+              <a v-if="config.clone" @click="clone(props.rowData.id)" href="#" class="action-icon"><i class="mdi mdi-content-duplicate"></i></a>
             </div>
           </template>
         </vuetable>
@@ -937,6 +938,35 @@ export default {
         if (result.isConfirmed) {
           Swal.fire('Deleted!', 'Item has been deleted.', 'success');
         }
+      });
+    },
+    clone(id) {
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "Confirming will create an unpublished copy of this page.",
+        icon: 'info',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, clone it!',
+        showLoaderOnConfirm: true,
+        buttonsStyling: false,
+        customClass: {
+          cancelButton: 'btn btn-soft-secondary',
+          confirmButton: 'btn ',
+        },
+        preConfirm: () => {
+          return axios
+            .post(this.config.apiUrl + this.config.cloneLink.replace('{id}', id))
+            .then((response) => {
+              if (response.status == 201) {
+              console.log(response);
+                window.location = "/page/" + response.data.data.id
+              }
+            })
+            .catch((error) => {
+              Swal.showValidationMessage(`Request failed: ${error}`);
+            });
+        },
+        allowOutsideClick: () => !Swal.isLoading(),
       });
     },
     showMultiselectActions() {

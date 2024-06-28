@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin_api\AdminController;
 use App\Http\Controllers\Admin_api\CategoriesController;
+use App\Http\Controllers\Admin_api\ClonePageController;
 use App\Http\Controllers\Admin_api\CommentsController;
 use App\Http\Controllers\Admin_api\CountdownController;
 use App\Http\Controllers\Admin_api\DashboardController;
@@ -82,6 +83,7 @@ Route::domain(config('app.prefix_new_admin') . config('app.app_domain'))->group(
         Route::resource('pages', Admin_api\PagesController::class, ['as' => 'admin'])->only([
             'index', 'store', 'update', 'show', 'destroy',
         ]);
+        Route::post('pages/{page}/clone', ClonePageController::class);
 
         // comments
         Route::post('comments/deleteMultiple', [CommentsController::class, 'deleteMultiple']);
