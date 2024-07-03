@@ -105,6 +105,8 @@ export default {
   edit: true,
   editLink: '/page/',
   editInputs: collectiveInputs,
+  clone: true,
+  cloneLink: '/{id}/clone',
   showFilters: true,
   filters: ['dynamic', 'visibility', 'template', 'type', 'category', 'subcategory'],
   perPage: 50,

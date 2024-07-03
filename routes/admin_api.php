@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin_api\AdminController;
 use App\Http\Controllers\Admin_api\CategoriesController;
+use App\Http\Controllers\Admin_api\ClonePageController;
 use App\Http\Controllers\Admin_api\CommentsController;
 use App\Http\Controllers\Admin_api\CountdownController;
 use App\Http\Controllers\Admin_api\DashboardController;
@@ -79,9 +80,10 @@ Route::domain(config('app.app_domain'))->group(function () {
         Route::post('pages/deleteMultiple', [PagesController::class, 'deleteMultiple']);
         Route::post('pages/priorities', [PagesController::class, 'priorities']);
         Route::post('pages/widgets', [PagesController::class, 'widgets']);
-//        Route::resource('pages', Admin_api\PagesController::class, ['as' => 'admin'])->only([
-//            'index', 'store', 'update', 'show', 'destroy',
-//        ]);
+        Route::resource('pages', Admin_api\PagesController::class, ['as' => 'admin'])->only([
+            'index', 'store', 'update', 'show', 'destroy',
+        ]);
+        Route::post('pages/{page}/clone', ClonePageController::class);
 
         // comments
         Route::post('comments/deleteMultiple', [CommentsController::class, 'deleteMultiple']);
