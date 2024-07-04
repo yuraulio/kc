@@ -38,11 +38,33 @@
                         @include('alerts.errors')
                     </div>
 
-                    <div class="table-responsive py-4">
-                        <table class="table align-items-center table-flush"  id="datatable-basic2">
+                    <div class="table-responsive py-4 dataTables_wrapper">
+
+                      <div class="row">
+                        <div class="col-sm-12 col-md-6">
+                          <div class="dataTables_length" id="datatable-basic99_length">
+                            <label>Show <select onchange="updatePerPage(this)"  class="custom-select custom-select-sm form-control form-control-sm">
+                                @foreach([10, 25, 50, 100] as $perPage)
+                                    <option value="{{ $perPage }}" {{ $perPage == request()->perPage ? 'selected' : '' }}>{{ $perPage }}</option>
+                                @endforeach
+                              </select> entries</label>
+                          </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                          <div id="datatable-basic99_filter" class="dataTables_filter">
+                            <form method="GET">
+                              <input type="hidden" name="perPage" value="{{ request()->perPage }}"/>
+                            <label>Search:<input type="search" name="search" value="{{ request()->search }}" class="form-control form-control-sm" placeholder="" aria-controls="datatable-basic99"></label>
+                            </form>
+                          </div>
+                        </div>
+                      </div>
+
+                      <table class="table align-items-center table-flush"  id="datatable-basic2">
                             <thead class="thead-light">
                                 <tr>
                                     <th scope="col">{{ __('Name') }}</th>
+                                    <th scope="col">{{ __('Country') }}</th>
                                     <th scope="col">{{ __('Created at') }}</th>
                                     <th scope="col"></th>
                                 </tr>
@@ -51,6 +73,7 @@
                                 @foreach ($cities as $city)
                                     <tr>
                                         <td><a href="{{ route('city.edit_main', $city) }}">{{ $city->name }}</a></td>
+                                         <td>{{ $city->country->name }}</td>
                                         <td>{{ date_format($city->created_at, 'Y-m-d' ) }}</td>
                                         <td class="text-right">
                                         <div class="dropdown">
@@ -66,10 +89,28 @@
                                 @endforeach
                             </tbody>
                         </table>
+
+                    </div>
+                    <!-- Simple Pagination -->
+                    <div class="row py-2">
+                      <div class="col-sm-12 col-md-5">
+                        <div class="text-sm pl-4" id="" role="status" aria-live="polite">Showing {{ $cities->firstItem()  }} to
+                          {{ $cities->lastItem() }} of {{ $cities->total() }} entries</div>
+                      </div>
+                      <div class="col-sm-12 col-md-7">
+                        <div class="dataTables_paginate paging_simple_numbers" id="datatable-basic99_paginate">
+                          {{ $cities->withQueryString()->links() }}
+                        </div>
+                      </div>
                     </div>
                 </div>
+
             </div>
+
         </div>
+
+
+
 
         @include('layouts.footers.auth')
     </div>
@@ -82,22 +123,12 @@
 @endpush
 
 @push('js')
-    <script src="{{ asset('argon') }}/vendor/datatables.net/js/jquery.dataTables.min.js"></script>
-    <script src="{{ asset('argon') }}/vendor/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
-    <script src="{{ asset('argon') }}/vendor/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
-    <script src="{{ asset('argon') }}/vendor/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js"></script>
-    <script src="{{ asset('argon') }}/vendor/datatables.net-buttons/js/buttons.html5.min.js"></script>
-    <script src="{{ asset('argon') }}/vendor/datatables.net-buttons/js/buttons.flash.min.js"></script>
-    <script src="{{ asset('argon') }}/vendor/datatables.net-buttons/js/buttons.print.min.js"></script>
-    <script src="{{ asset('argon') }}/vendor/datatables.net-select/js/dataTables.select.min.js"></script>
-    <script>
-         var table = $('#datatable-basic2').DataTable({
-        language: {
-            paginate: {
-            next: '&#187;', // or '→'
-            previous: '&#171;' // or '←'
-            }
-        }
-    });
-    </script>
+  <script>
+    function updatePerPage(selectElement) {
+      const perPage = selectElement.value;
+      const currentUrl = new URL(window.location.href);
+      currentUrl.searchParams.set('perPage', perPage);
+      window.location.href = currentUrl.toString();
+    }
+  </script>
 @endpush

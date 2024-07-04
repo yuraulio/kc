@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CityRequest;
 use App\Model\City;
+use App\Model\Country;
 use App\Model\Event;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -21,13 +22,15 @@ class CityController extends Controller
     //     return view('city.index', ['user' => $user,'cities' => $cities]);
     // }
 
-    public function index_main(City $model)
+    public function index_main(Request $request)
     {
         $this->authorize('manage-users', User::class);
 
         $user = Auth::user();
 
-        $cities = $model->with('event')->get();
+        $cities = City::with('country')->when($request->search, function ($query) {
+            $query->where('name', 'like', '%' . request('search') . '%');
+        })->paginate($request->perPage ?: 10);
 
         return view('admin.city.main.index', ['user' => $user, 'cities' => $cities]);
     }
@@ -43,7 +46,10 @@ class CityController extends Controller
     {
         $user = Auth::user();
 
-        return view('admin.city.main.create', ['user' => $user]);
+        return view('admin.city.main.create', [
+            'user' => $user,
+            'countries' => Country::orderBy('name')->get(),
+        ]);
     }
 
     public function store(Request $request, City $city)
@@ -64,11 +70,14 @@ class CityController extends Controller
         ]);
     }
 
-    public function store_main(CityRequest $request, City $model)
+    public function store_main(CityRequest $request)
     {
-        $city = $model->create($request->all());
+        $request->validate([
+            'name' => 'required',
+            'country_id' => 'required|exists:countries,id',
+        ]);
 
-        $city->createSlug($request->slug);
+        $city = City::create($request->all());
 
         return redirect()->route('city.index_main')->withStatus(__('City successfully created.'));
     }
@@ -86,11 +95,19 @@ class CityController extends Controller
 
     public function edit_main(City $city)
     {
-        return view('admin.city.main.edit', compact('city'));
+        return view('admin.city.main.edit', [
+            'city' => $city,
+            'countries' => Country::orderBy('name')->get(),
+        ]);
     }
 
     public function update(Request $request, City $city)
     {
+        $request->validate([
+            'name' => 'required',
+            'country_id' => 'required|exists:countries,id',
+        ]);
+
         $city->update($request->all());
 
         return response()->json([
