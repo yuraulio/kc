@@ -15,10 +15,4 @@ class Career extends Model
     protected $fillable = [
         'name', 'priority',
     ];
-
-    public function events()
-    {
-        return $this->morphToMany(Event::class, 'careerpathable', 'careerpathables', 'careerpathable_id', 'event_id')
-            ->withPivot('careerpath_type');
-    }
 }

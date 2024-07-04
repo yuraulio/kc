@@ -43,7 +43,6 @@
                             <thead class="thead-light">
                                 <tr>
                                     <th scope="col">{{ __('Name') }}</th>
-                                    <th scope="col">{{ __('Assigned') }}</th>
                                     <th scope="col">{{ __('Created at') }}</th>
                                     @can('manage-users', App\Model\User::class)
                                         <th scope="col"></th>
@@ -55,11 +54,7 @@
                                 @foreach ($careers as $career)
                                     <tr>
                                         <td>{{ $career->name }}</td>
-                                        <td>
-                                        @foreach($career->events as $event)
-                                            {{ $event->title }}
-                                        @endforeach
-                                        </td>
+
                                         <td>{{ date_format($career->created_at, 'Y-m-d' ) }}</td>
 					                        <td class="text-right">
                                                 <div class="dropdown">
@@ -72,7 +67,7 @@
                                                             @csrf
                                                             @method('delete')
 
-                                                            <button type="button" class="dropdown-item" onclick="confirm('{{ __("Are you sure you want to delete this user?") }}') ? this.parentElement.submit() : ''">
+                                                            <button type="button" class="dropdown-item" onclick="confirm('{{ __("Are you sure you want to delete this career path?") }}') ? this.parentElement.submit() : ''">
                                                                 {{ __('Delete') }}
                                                             </button>
                                                         </form>
