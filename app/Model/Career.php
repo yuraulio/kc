@@ -2,9 +2,9 @@
 
 namespace App\Model;
 
-use App\Model\Event;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 class Career extends Model
 {
@@ -16,7 +16,7 @@ class Career extends Model
         'name', 'priority',
     ];
 
-    public function events()
+    public function events(): MorphToMany
     {
         return $this->morphToMany(Event::class, 'careerpathable', 'careerpathables', 'careerpathable_id', 'event_id')
             ->withPivot('careerpath_type');

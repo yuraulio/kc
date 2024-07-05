@@ -37,43 +37,28 @@ class PaymentMethod extends Model
 
     ];
 
-    public function getProcessorOptionsAttribute($value)
+    public function getProcessorOptionsAttribute($value): array
     {
-        if ($value) {
-            return json_decode(decrypt($value), true);
-        //return json_decode($value, true);
-        } else {
-            return [];
-        }
+        return $this->decryptAndDecodeValue($value);
     }
 
-    public function getProcessorConfigAttribute($value)
+    public function getProcessorConfigAttribute($value): array
     {
-        if ($value) {
-            return json_decode(decrypt($value), true);
-        //return json_decode($value, true);
-        } else {
-            return [];
-        }
+        return $this->decryptAndDecodeValue($value);
     }
 
-    public function getTestProcessorOptionsAttribute($value)
+    public function getTestProcessorOptionsAttribute($value): array
     {
-        if ($value) {
-            return json_decode(decrypt($value), true);
-        //return json_decode($value, true);
-        } else {
-            return [];
-        }
+        return $this->decryptAndDecodeValue($value);
     }
 
-    public function getTestProcessorConfigAttribute($value)
+    public function getTestProcessorConfigAttribute($value): array
     {
-        if ($value) {
-            return json_decode(decrypt($value), true);
-        //return json_decode($value, true);
-        } else {
-            return [];
-        }
+        return $this->decryptAndDecodeValue($value);
+    }
+
+    private function decryptAndDecodeValue(?string $value): array
+    {
+        return json_decode(decrypt($value), true);
     }
 }

@@ -48,14 +48,37 @@ class Event extends Model
 
     protected $table = 'events';
 
-    public function toSearchableArray()
-    {
-        return $this->toArray();
-    }
-
     protected $fillable = [
-        'published', 'published_at', 'release_date_files', 'expiration', 'status', 'title', 'htmlTitle', 'subtitle', 'header', 'summary', 'body', 'hours', 'author_id', 'creator_id', 'view_tpl', 'view_counter',
-        'launch_date', 'certificate_title', 'fb_group', 'evaluate_topics', 'evaluate_instructors', 'fb_testimonial', 'absences_limit', 'xml_title', 'xml_description', 'xml_short_description', 'index', 'feed',
+        'priority',
+        'status',
+        'published',
+        'release_date_files',
+        'expiration',
+        'title',
+        'htmlTitle',
+        'subtitle',
+        'header',
+        'summary',
+        'body',
+        'hours',
+        'absences_limit',
+        'enroll',
+        'index',
+        'feed',
+        'certificate_title',
+        'fb_group',
+        'evaluate_topics',
+        'evaluate_instructors',
+        'fb_testimonial',
+        'author_id',
+        'creator_id',
+        'view_tpl',
+        'view_counter',
+        'published_at',
+        'launch_date',
+        'xml_title',
+        'xml_description',
+        'xml_short_description',
     ];
 
     public function schemadata()
@@ -194,6 +217,11 @@ class Event extends Model
 
         // dd($this);
         return $schema;
+    }
+
+    public function toSearchableArray()
+    {
+        return $this->toArray();
     }
 
     public function category(): MorphToMany
@@ -801,7 +829,8 @@ class Event extends Model
 
     public function statistic(): BelongsToMany
     {
-        return $this->belongsToMany(Event::class, 'event_statistics')->withPivot('videos', 'lastVideoSeen', 'notes', 'event_id', 'user_id');
+        return $this->belongsToMany(Event::class, 'event_statistics')
+            ->withPivot('videos', 'lastVideoSeen', 'notes', 'event_id', 'user_id', 'last_seen');
     }
 
     public function waitingList(): HasMany
