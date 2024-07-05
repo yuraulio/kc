@@ -16,10 +16,16 @@ class City extends Model
 
     protected $fillable = [
         'name',
+        'country_id',
     ];
 
     public function event()
     {
         return $this->belongsToMany(Event::class, 'event_city');
+    }
+
+    public function country()
+    {
+        return $this->belongsTo(Country::class);
     }
 }

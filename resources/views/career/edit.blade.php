@@ -46,29 +46,6 @@
                                     @include('alerts.feedback', ['field' => 'name'])
                                 </div>
 
-                                <div class="form-group{{ $errors->has('event_id') ? ' has-danger' : '' }}">
-                                    <label class="form-control-label" for="input-event_id">{{ __('Event') }}</label>
-                                    <select multiple name="event_id[]" id="input-event_id" class="form-control events" placeholder="{{ __('Topic') }}" required>
-                                        <option value="">-</option>
-                                        @foreach ($events as $event)
-                                            <?php $selected = false; ?>
-                                            @foreach($career->events as $selected_event)
-                                                @if($event->id == $selected_event['id'])
-                                                    {{$selected = true}}
-                                                @endif
-
-                                            @endforeach
-
-
-                                            <option <?php if($selected === true){echo 'selected';} ?> data-event="{{ $event->category[0]->id }}" value="{{ $event->id }}" > {{ $event->title }}</option>
-                                        @endforeach
-                                    </select>
-
-                                    @include('alerts.feedback', ['field' => 'event_id'])
-                                </div>
-
-
-
 
                                 <div class="text-center">
                                     <button type="submit" class="btn btn-success mt-4">{{ __('Save') }}</button>
