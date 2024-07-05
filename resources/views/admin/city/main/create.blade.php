@@ -42,7 +42,12 @@
 
                                     @include('alerts.feedback', ['field' => 'name'])
                                 </div>
-                                @include('admin.slug.slug',['slug' => isset($slug) ? $slug : null])
+                              <label class="form-control-label" for="input-name">{{ __('Country') }}</label>
+                              <select name="country_id">
+                                @foreach($countries as $country)
+                                  <option value="{{ $country->id }}">{{ $country->name }}</option>
+                                @endforeach
+                              </select>
 
                                 <div class="text-center">
                                     <button type="submit" class="btn btn-success mt-4">{{ __('Save') }}</button>

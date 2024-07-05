@@ -45,17 +45,6 @@
                                     @include('alerts.feedback', ['field' => 'name'])
                                 </div>
 
-                                <div class="form-group{{ $errors->has('event_id') ? ' has-danger' : '' }}">
-                                    <label class="form-control-label" for="input-event_id">{{ __('Event') }}</label>
-                                    <select multiple name="event_id[]" id="input-event_id" class="form-control" placeholder="{{ __('Event') }}" >
-                                        <option value="">-</option>
-                                        @foreach ($events as $event)
-                                            <option value="{{ $event->id }}">{{ $event->title }}</option>
-                                        @endforeach
-                                    </select>
-
-                                    @include('alerts.feedback', ['field' => 'event_id'])
-                                </div>
 
                                 <div class="text-center">
                                     <button type="submit" class="btn btn-success mt-4">{{ __('Save') }}</button>

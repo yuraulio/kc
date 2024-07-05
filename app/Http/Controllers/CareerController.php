@@ -10,13 +10,13 @@ use Illuminate\Support\Facades\Auth;
 
 class CareerController extends Controller
 {
-    public function index(Career $model)
+    public function index()
     {
         $this->authorize('manage-users', User::class);
 
         $user = Auth::user();
 
-        $careers = $model->with('events')->get();
+        $careers = Career::paginate();
 
         return view('career.index', ['user' => $user, 'careers' => $careers]);
     }
@@ -24,21 +24,17 @@ class CareerController extends Controller
     public function create()
     {
         $user = Auth::user();
-        $events = Event::all();
-        //dd($events);
 
-        return view('career.create', ['user' => $user, 'events' => $events]);
+        return view('career.create', ['user' => $user]);
     }
 
-    public function store(CareerRequest $request, Career $model)
+    public function store(CareerRequest $request)
     {
-        $career = $model->create($request->all());
-        if ($request->event_id != null) {
-            foreach ($request->event_id as $event) {
-                $event = Event::find($event);
-                $event->career()->attach($career->id);
-            }
-        }
+        $data = $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+
+        Career::create($data);
 
         return redirect()->route('career.index')->withStatus(__('Career Path successfully created.'));
     }
@@ -46,12 +42,10 @@ class CareerController extends Controller
     public function edit(Career $career)
     {
         $id = $career['id'];
-        $career = $career->with('events')->find($id);
 
-        $events = Event::all();
         //$event = $event->with('category')->first();
 
-        return view('career.edit', compact('events', 'career'));
+        return view('career.edit', compact('career'));
     }
 
     public function update(Request $request, Career $career)
@@ -76,9 +70,9 @@ class CareerController extends Controller
 
     public function destroy(Career $career)
     {
-        if (!$career->events->isEmpty()) {
-            return redirect()->route('career.index')->withErrors(__('This career has items attached and can\'t be deleted.'));
-        }
+//        if (!$career->users->isEmpty()) {
+//            return redirect()->route('career.index')->withErrors(__('This career has items attached and can\'t be deleted.'));
+//        }
 
         $career->delete();
 

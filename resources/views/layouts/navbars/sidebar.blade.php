@@ -171,6 +171,9 @@
                                     <li class="nav-item {{ isset($elementName) and $elementName  == 'events-management' ? 'active' : '' }}">
                                         <a href="{{ route('events.index') }}" class="nav-link">{{ __('Events') }}</a>
                                     </li>
+                                    <li class="nav-item {{ isset($elementName) and $elementName  == 'skills-management' ? 'active' : '' }}">
+                                      <a href="{{ route('skill.index') }}" class="nav-link">{{ __('Skills') }}</a>
+                                    </li>
                                     <li class="nav-item {{ isset($elementName) and $elementName  == 'instructors-management' ? 'active' : '' }}">
                                         <a href="{{ route('instructors.index') }}" class="nav-link">{{ __('Instructors') }}</a>
                                     </li>
