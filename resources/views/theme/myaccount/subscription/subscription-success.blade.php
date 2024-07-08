@@ -69,17 +69,17 @@ $(document).ready(function(){
 
    @endforeach
 
-   //dataLayer.push({"ecommerce": ecommerce})
+   dataLayer.push({"ecommerce": ecommerce})
 
-   // dataLayer.push({
-   //    'event': 'purchase',
-   //    'ecommerce': {
-   //       'purchase': {
-   //          'actionField': actionField,
-   //          'products': [products]
-   //       }
-   //    }
-   // });
+   dataLayer.push({
+      'event': 'purchase',
+      'ecommerce': {
+         'purchase': {
+            'actionField': actionField,
+            'products': [products]
+         }
+      }
+   });
 
    })
 </script>

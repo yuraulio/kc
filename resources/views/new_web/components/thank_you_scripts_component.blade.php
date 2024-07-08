@@ -75,15 +75,15 @@
             @endif
         @endforeach
 
-        // dataLayer.push({
-        //     'event': 'purchase',
-        //     'ecommerce': {
-        //         'purchase': {
-        //         'actionField': actionField,
-        //         'products': [products]
-        //         }
-        //     }
-        // });
+        dataLayer.push({
+            'event': 'purchase',
+            'ecommerce': {
+                'purchase': {
+                'actionField': actionField,
+                'products': [products]
+                }
+            }
+        });
     })
     </script>
 @endif
@@ -216,18 +216,18 @@
                 @endif
             @endforeach
 
-            console.log('test 23: ')
+            //console.log('test 23: ')
            console.log(dataLayer)
 
-            // dataLayer.push({
-            //     'event': 'purchase',
-            //     'ecommerce': {
-            //         'purchase': {
-            //         'actionField': actionField,
-            //         'products': [products]
-            //         }
-            //     }
-            // });
+            dataLayer.push({
+                'event': 'purchase',
+                'ecommerce': {
+                    'purchase': {
+                    'actionField': actionField,
+                    'products': [products]
+                    }
+                }
+            });
         })
     </script>
 
