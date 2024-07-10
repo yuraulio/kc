@@ -61,6 +61,8 @@ class Topic extends Model
             ->select('lessons.*', 'event_id')
             ->where('status', true)
             ->withPivot('event_id', 'lesson_id', 'instructor_id', 'date', 'priority', 'time_starts', 'time_ends', 'duration', 'room')
-            ->with('instructor');
+            ->with('instructor')
+            ->orderBy('event_topic_lesson_instructor.priority')
+            ->groupBy('id');
     }
 }
