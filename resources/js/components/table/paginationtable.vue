@@ -662,7 +662,9 @@ button.close.text-dark {
               <a @click="remove(props.rowData.id, props.rowData.title)" href="javascript:void(0);" class="action-icon">
                 <i class="mdi mdi-delete"></i>
               </a>
-              <a v-if="config.clone" @click="clone(props.rowData.id)" href="#" class="action-icon"><i class="mdi mdi-content-duplicate"></i></a>
+              <a v-if="config.clone" @click="clone(props.rowData.id)" href="#" class="action-icon"
+                ><i class="mdi mdi-content-duplicate"></i
+              ></a>
             </div>
           </template>
         </vuetable>
@@ -943,7 +945,7 @@ export default {
     clone(id) {
       Swal.fire({
         title: 'Are you sure?',
-        text: "Confirming will create an unpublished copy of this page.",
+        text: 'Confirming will create an unpublished copy of this page.',
         icon: 'info',
         showCancelButton: true,
         confirmButtonText: 'Yes, clone it!',
@@ -958,8 +960,8 @@ export default {
             .post(this.config.apiUrl + this.config.cloneLink.replace('{id}', id))
             .then((response) => {
               if (response.status == 201) {
-              console.log(response);
-                window.location = "/page/" + response.data.data.id
+                console.log(response);
+                window.location = '/page/' + response.data.data.id;
               }
             })
             .catch((error) => {
