@@ -16,6 +16,7 @@ use App\Http\Controllers\Api\v1\DeliveryController;
 use App\Http\Controllers\Api\v1\Event\EventController;
 use App\Http\Controllers\Api\v1\Event\EventExamController;
 use App\Http\Controllers\Api\v1\Event\EventFaqController;
+use App\Http\Controllers\Api\v1\Event\EventFileController;
 use App\Http\Controllers\Api\v1\Event\EventInstructorController;
 use App\Http\Controllers\Api\v1\Event\EventStudentController;
 use App\Http\Controllers\Api\v1\Event\EventTicketController;
@@ -171,6 +172,8 @@ Route::group(['middleware' => ['auth:api', 'auth.aboveauthor'], 'prefix' => 'v1'
         ->only(['index']);
     Route::apiResource('events.exams', EventExamController::class)
         ->only(['index', 'show']);
+    Route::apiResource('events.files', EventFileController::class)
+        ->only(['index']);
 
     // Exams
     Route::apiResource('exams', ExamController::class)
