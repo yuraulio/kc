@@ -1,14 +1,12 @@
 <script>
   console.log('Stating dataLayer process purchase');
 </script>
-
 @php
-    $thankyouData = $_SESSION["thankyouData"] ?? null;
+    $thankyouData = $_SESSION["thankyouData"] ?? ($thankyouData ?? null);
     $_SESSION["thankyouData"] = null;
 @endphp
 
 @if(isset($thankyouData['tigran']) && isset($thankyouData['tigran']['Price']) &&$thankyouData['tigran']['Price'] > 0 && !config('app.debug'))
-
     <script>
     $(document).ready(function(){
         @foreach($thankyouData['tigran'] as $key => $ti)

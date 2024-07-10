@@ -208,8 +208,11 @@
 
         @include('theme.layouts.footer_scripts')
         @include('theme.layouts.flash_notifications')
+        <!-- YIELD SCRIPTS HERE -->
         @yield('scripts')
-
+        <!-- END YIELD SCRIPTS HERE -->
+        {{-- Including this here becuase @push('scripts') is not working, and need a workaround to get events pushed to the dataLayer for the thank-you page --}}
+        @include('new_web.components.thank_you_scripts_component')
         @if(strtotime(date('Y-m-d')) == strtotime(config('services.promotions.BLACKFRIDAY')))
             <script src="{{cdn('theme/assets/blackfriday/blackfriday.js')}}"> </script>
         @endif
