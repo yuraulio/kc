@@ -5,20 +5,44 @@ namespace App\Http\Controllers\Api\v1\Event;
 use App\Http\Controllers\Api\v1\ApiBaseController;
 use App\Model\Dropbox;
 use App\Model\Event;
+use App\Services\Event\EventFileService;
+use Illuminate\Database\Eloquent\Casts\Json;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class EventFileController extends ApiBaseController
 {
+
+    /**
+     * Service class that provides logic for working with the files for the event.
+     *
+     * @var \App\Services\Event\EventFileService
+     */
+    private EventFileService $eventFileService;
+
+    /**
+     * @param  \App\Services\Event\EventFileService  $eventFileService
+     */
+    public function __construct(EventFileService $eventFileService) {
+        $this->eventFileService = $eventFileService;
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index(Event $event): JsonResponse
     {
-        $files = Dropbox::all();
+        $selectedFiles = $event->dropbox
+            ->map(function($dropbox) {
+                $selectedFolders = Json::decode($dropbox->pivot->selectedFolders);
+
+                return $selectedFolders['selectedFolders'];
+            })
+            ->collapse();
 
         return new JsonResponse([
-            'data' => $files,
+            'data' => $this->eventFileService
+                ->associateSelectedFilesWithDropboxFiles(Dropbox::all(), $selectedFiles),
         ]);
     }
 
