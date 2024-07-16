@@ -45,7 +45,7 @@
 
                         <?php
                         $certificate_visible = (isset($info['course_certification_visible']) && $info['course_certification_visible'] != null) ? json_decode($info['course_certification_visible'],true) : null;
-                        $hours_visible = (isset($info['course_hours_visible']) && $info['course_hours_visible'] != null) ? json_decode($info['course_hours_visible'],true) : null;
+                        $hours_visible = (isset($info['course_hours_visible']) && $info['course_hours_visible'] != null) ? $info['course_hours_visible'] : null;
                         $students_visible = (isset($info['course_students_visible']) && $info['course_students_visible'] != null) ? json_decode($info['course_students_visible'],true) : null;
                         $course_enable = (isset($info['course_awards']) && $info['course_awards']) ? $info['course_awards'] : false;
 

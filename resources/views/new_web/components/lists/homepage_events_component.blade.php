@@ -66,7 +66,7 @@
                                     if($event['event_info1'] != null ){
                                         $sumStudents = 0;
 
-                                        $hours_visible = isset($event['event_info1']['course_hours_visible']) ? json_decode($event['event_info1']['course_hours_visible'], true) : null;
+                                        $hours_visible = $event['event_info1']['course_hours_visible'] ?? null;
                                         //$language_visible = isset($event['event_info1']['course_language_visible']) ? json_decode($event['event_info1']['course_language_visible'], true) : null;
 
                                         //$inclass_dates = isset($event['event_info1']['course_inclass_dates']) ? json_decode($event['event_info1']['course_inclass_dates'], true) : null;
@@ -171,7 +171,7 @@
                                 if($event['event_info1'] != null ){
                                     $sumStudents = 0;
 
-                                    $hours_visible = isset($event['event_info1']['course_hours_visible']) ? json_decode($event['event_info1']['course_hours_visible'], true) : null;
+                                    $hours_visible = $event['event_info1']['course_hours_visible'] ?? null;
                                     //$language_visible = isset($event['event_info1']['course_language_visible']) ? json_decode($event['event_info1']['course_language_visible'], true) : null;
 
                                     //$certificate_visible = isset($event['event_info1']['course_certification_visible']) ? json_decode($event['event_info1']['course_certification_visible'], true) : null;

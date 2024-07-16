@@ -385,9 +385,9 @@ class FixEventInfoTable extends Command
 
         if (isset($requestData['hours']['visible'])) {
             $visible_loaded_data = $requestData['hours']['visible'];
-            $data['course_hours_visible'] = json_encode($this->prepareVisibleData($visible_loaded_data));
+            $data['course_hours_visible'] = $this->prepareVisibleData($visible_loaded_data);
         } else {
-            $data['course_hours_visible'] = json_encode($this->prepareVisibleData());
+            $data['course_hours_visible'] = $this->prepareVisibleData();
         }
 
         //Hour Icons

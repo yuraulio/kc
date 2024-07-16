@@ -5,6 +5,7 @@ namespace App\Model;
 use App\Model\Event;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class EventInfo extends Model
 {
@@ -77,7 +78,11 @@ class EventInfo extends Model
         'course_students_icon',
     ];
 
-    public function event()
+    protected $casts = [
+        'course_hours_visible' => 'array',
+    ];
+
+    public function event(): HasOne
     {
         return $this->hasOne(Event::class, 'id', 'event_id');
     }

@@ -1257,7 +1257,7 @@ class Event extends Model
             $data['hours']['text'] = $infos['course_hours_text'];
             $data['hours']['title'] = $infos['course_hours_title'];
             $data['hours']['icon'] = $infos['course_hours_icon'] != null ? json_decode($infos['course_hours_icon'], true) : null;
-            $data['hours']['visible'] = $infos['course_hours_visible'] != null ? json_decode($infos['course_hours_visible'], true) : null;
+            $data['hours']['visible'] = $infos['course_hours_visible'] != null ? $infos['course_hours_visible'] : null;
 
             $data['language']['text'] = $infos['course_language'];
             $data['language']['title'] = $infos['course_language_title'];

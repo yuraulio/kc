@@ -1489,9 +1489,9 @@ class EventController extends Controller
         // Course
         if (isset($requestData['hours']['visible'])) {
             $visible_loaded_data = $requestData['hours']['visible'];
-            $data['course_hours_visible'] = json_encode($this->prepareVisibleData($visible_loaded_data));
+            $data['course_hours_visible'] = $this->prepareVisibleData($visible_loaded_data);
         } else {
-            $data['course_hours_visible'] = json_encode($this->prepareVisibleData());
+            $data['course_hours_visible'] = $this->prepareVisibleData();
         }
 
         $data['course_hours_icon'] = $this->prepareIconLinkStatus($requestData['hours']['icon']);
