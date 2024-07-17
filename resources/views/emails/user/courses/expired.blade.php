@@ -91,6 +91,10 @@
                                                         </a>
                                                         <span style="font-family: Tahoma, geneva, sans-serif;"> to this course for <strong>12 more months</strong> for € <strong>{{$subscription_price}}</strong>. You can do this anytime you want from now on. </span>
                                                       </p>
+                                                      <p style="margin: 0;"> <span style="font-family: Tahoma, geneva, sans-serif;">For detailed information watch the </span>
+                                                        <a href="https://vimeo.com/792560938/5185ffafa4?share=copy" target="_blank" style="color: #0092ff; text-decoration: underline;">
+                                                          <span style="font-family: Tahoma, geneva, sans-serif;">video</span>
+                                                        </a> </p>
                                                     </div>
                                                   </td>
                                                 </tr>
