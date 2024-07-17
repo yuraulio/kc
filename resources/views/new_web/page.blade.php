@@ -11,11 +11,6 @@
     <link type="text/css" href="{{ asset('binshops-blog.css') }}" rel="stylesheet">
 
     <style>
-        #chatbase-bubble-button{
-            bottom: 0.5rem !important;
-            right: 4rem !important;
-        }
-
         .fb_dialog_content iframe {
             margin-right: 3rem !important;
             margin-bottom: -1rem !important;
@@ -47,37 +42,10 @@
 
 @if(isset($renderFbChat) && $renderFbChat)
 @section('fbchat')
-<script>
-  window.chatbaseConfig = {
-    chatbotId: "XsnNyFmqIh9qjjBBG7JUp",
-  }
-</script>
-<script
-  src="https://www.chatbase.co/embed.min.js"
-  id="XsnNyFmqIh9qjjBBG7JUp"
-  defer>
-</script>
-        {{--<div id="fb-root"></div>
-        <script>
-            window.fbAsyncInit = function() {
-            FB.init({
-                xfbml            : true,
-                version          : 'v5.0'
-            });
-            };
-            (function(d, s, id) {
-            var js, fjs = d.getElementsByTagName(s)[0];
-            if (d.getElementById(id)) return;
-            js = d.createElement(s); js.id = id;
-            js.src = 'https://connect.facebook.net/en_US/sdk/xfbml.customerchat.js';
-            fjs.parentNode.insertBefore(js, fjs);
-            }(document, 'script', 'facebook-jssdk'));
-        </script>
-        <!-- Your customer chat code -->
-        <div class="fb-customerchat"
-        attribution=install_email
-        page_id="486868751386439">
-        </div>--}}
+  <script
+    src="https://www.chat-data.com/embed.min.js?chatbotId=666eb5bded57e1d00e753760"
+    defer>
+  </script>
 @endsection
 @endif
 
