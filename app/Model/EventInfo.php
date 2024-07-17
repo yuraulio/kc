@@ -79,6 +79,20 @@ class EventInfo extends Model
     ];
 
     protected $casts = [
+        'course_hours_icon' => 'array',
+        'course_files_icon' => 'array',
+        'course_payment_icon' => 'array',
+        'course_language_icon' => 'array',
+        'course_delivery_icon' => 'array',
+        'course_elearning_icon' => 'array',
+        'course_partner_icon' => 'array',
+        'course_manager_icon' => 'array',
+        'course_awards_icon' => 'array',
+        'course_students_icon' => 'array',
+        'course_elearning_access_icon' => 'array',
+        'course_elearning_exam_icon' => 'array',
+        'course_certification_icon' => 'array',
+        'course_inclass_city_icon' => 'array',
         'course_hours_visible' => 'array',
     ];
 

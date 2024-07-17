@@ -1279,7 +1279,7 @@ class EventController extends Controller
             if (isset($requestData['delivery']['inclass'])) {
                 $data['course_inclass_absences'] = $requestData['delivery']['inclass']['absences'];
                 $data['course_inclass_city'] = ($city) ? $city->name : null;
-                $data['course_inclass_city_icon'] = json_encode($requestData['delivery']['inclass']['city']['icon']);
+                $data['course_inclass_city_icon'] = $requestData['delivery']['inclass']['city']['icon'];
 
                 $dates = [];
                 $days = [];
@@ -1364,7 +1364,7 @@ class EventController extends Controller
             if (isset($requestData['delivery']['inclass'])) {
                 $data['course_inclass_absences'] = null;
                 $data['course_inclass_city'] = null;
-                $data['course_inclass_city_icon'] = json_encode($requestData['delivery']['inclass']['city']['icon']);
+                $data['course_inclass_city_icon'] = $requestData['delivery']['inclass']['city']['icon'];
 
                 $dates = [];
                 $days = [];
@@ -1419,7 +1419,7 @@ class EventController extends Controller
             if (isset($requestData['delivery']['inclass'])) {
                 $data['course_inclass_absences'] = $requestData['delivery']['inclass']['absences'];
                 $data['course_inclass_city'] = null;
-                $data['course_inclass_city_icon'] = json_encode($requestData['delivery']['inclass']['city']['icon']);
+                $data['course_inclass_city_icon'] = $requestData['delivery']['inclass']['city']['icon'];
 
                 $dates = [];
                 $days = [];
@@ -1516,7 +1516,7 @@ class EventController extends Controller
 
         // Manager
 
-        $data['course_manager_icon'] = json_encode($requestData['manager']['icon']);
+        $data['course_manager_icon'] = $requestData['manager']['icon'];
 
         //////////////////////////
 
@@ -1524,7 +1524,7 @@ class EventController extends Controller
             // Free E-learning
             $data['course_elearning_access'] = null;
 
-            $data['course_elearning_access_icon'] = json_encode($requestData['free_courses']['icon']);
+            $data['course_elearning_access_icon'] = $requestData['free_courses']['icon'];
         } else {
             // Free E-learning
             if (isset($requestData['free_courses']['list'])) {
@@ -1534,7 +1534,7 @@ class EventController extends Controller
                 $data['course_elearning_access'] = null;
             }
 
-            $data['course_elearning_access_icon'] = json_encode($requestData['free_courses']['icon']);
+            $data['course_elearning_access_icon'] = $requestData['free_courses']['icon'];
         }
 
         // Payment
@@ -1553,11 +1553,11 @@ class EventController extends Controller
         }
 
         if (isset($requestData['payment'])) {
-            $data['course_payment_icon'] = json_encode($requestData['payment']['icon']);
+            $data['course_payment_icon'] = $requestData['payment']['icon'];
         }
 
         if (isset($requestData['files'])) {
-            $data['course_files_icon'] = json_encode($requestData['files']['icon']);
+            $data['course_files_icon'] = $requestData['files']['icon'];
         }
 
         // Award
@@ -1569,7 +1569,7 @@ class EventController extends Controller
             $data['course_awards_text'] = null;
         }
 
-        $data['course_awards_icon'] = json_encode($requestData['awards']['icon']);
+        $data['course_awards_icon'] = $requestData['awards']['icon'];
 
         // Certificate
         if (isset($requestData['certificate'])) {
@@ -1627,7 +1627,7 @@ class EventController extends Controller
             }
         }
 
-        return json_encode($data);
+        return $data;
     }
 
     public function prepareVisibleData($data = false)
