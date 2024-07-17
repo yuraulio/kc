@@ -93,6 +93,13 @@ class EventInfo extends Model
         'course_elearning_exam_icon' => 'array',
         'course_certification_icon' => 'array',
         'course_inclass_city_icon' => 'array',
+        'course_language_visible' => 'array',
+        'course_delivery_visible' => 'array',
+        'course_elearning_visible' => 'array',
+        'course_elearning_exam_visible' => 'array',
+        'course_partner_visible' => 'array',
+        'course_certification_visible' => 'array',
+        'course_students_visible' => 'array',
         'course_hours_visible' => 'array',
     ];
 

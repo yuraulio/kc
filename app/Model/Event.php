@@ -1262,13 +1262,13 @@ class Event extends Model
             $data['language']['text'] = $infos['course_language'];
             $data['language']['title'] = $infos['course_language_title'];
             $data['language']['icon'] = $infos['course_language_icon'] != null ? $infos['course_language_icon'] : null;
-            $data['language']['visible'] = $infos['course_language_visible'] != null ? json_decode($infos['course_language_visible'], true) : null;
+            $data['language']['visible'] = $infos['course_language_visible'] != null ? $infos['course_language_visible'] : null;
 
             $data['delivery'] = $infos['course_delivery'];
             $data['delivery_icon'] = $infos['course_delivery_icon'] != null ? $infos['course_delivery_icon'] : null;
             $data['delivery_info']['text'] = $infos['course_delivery_text'];
             $data['delivery_info']['title'] = $infos['course_delivery_title'];
-            $data['delivery_info']['visible'] = $infos['course_delivery_visible'] != null ? json_decode($infos['course_delivery_visible'], true) : null;
+            $data['delivery_info']['visible'] = $infos['course_delivery_visible'] != null ? $infos['course_delivery_visible'] : null;
 
             if ($data['delivery'] == 139) {
                 //dd($infos['course_inclass_city']);
@@ -1284,13 +1284,13 @@ class Event extends Model
                 $data['inclass']['elearning_access_icon'] = ($infos['course_elearning_access_icon'] != null) ? $infos['course_elearning_access_icon'] : null;
                 $data['inclass']['elearning_exam'] = ($infos['course_elearning_exam']) ? true : false;
             } elseif ($data['delivery'] == 143) {
-                $data['elearning']['visible'] = $infos['course_elearning_visible'] != null ? json_decode($infos['course_elearning_visible'], true) : null;
+                $data['elearning']['visible'] = $infos['course_elearning_visible'] != null ? $infos['course_elearning_visible'] : null;
                 $data['elearning']['icon'] = $infos['course_elearning_icon'] != null ? $infos['course_elearning_icon'] : null;
                 $data['elearning']['expiration'] = $infos['course_elearning_expiration'] != null ? $infos['course_elearning_expiration'] : null;
                 $data['elearning']['text'] = $infos['course_elearning_text'] != null ? $infos['course_elearning_text'] : null;
                 $data['elearning']['title'] = $infos['course_elearning_expiration_title'] != null ? $infos['course_elearning_expiration_title'] : null;
 
-                $data['elearning']['exam']['visible'] = $infos['course_elearning_exam_visible'] != null ? json_decode($infos['course_elearning_exam_visible'], true) : null;
+                $data['elearning']['exam']['visible'] = $infos['course_elearning_exam_visible'] != null ? $infos['course_elearning_exam_visible'] : null;
                 $data['elearning']['exam']['icon'] = $infos['course_elearning_exam_icon'] != null ? $infos['course_elearning_exam_icon'] : null;
                 $data['elearning']['exam']['text'] = $infos['course_elearning_exam_text'] != null ? $infos['course_elearning_exam_text'] : null;
                 $data['elearning']['exam']['title'] = $infos['course_elearning_exam_title'] != null ? $infos['course_elearning_exam_title'] : null;
@@ -1317,7 +1317,7 @@ class Event extends Model
             $data['partner']['status'] = $infos['course_partner'];
             $data['partner']['text'] = $infos['course_partner_text'];
             $data['partner']['icon'] = $infos['course_partner_icon'] != null ? $infos['course_partner_icon'] : null;
-            $data['partner']['visible'] = $infos['course_partner_visible'] != null ? json_decode($infos['course_partner_visible'], true) : null;
+            $data['partner']['visible'] = $infos['course_partner_visible'] != null ? $infos['course_partner_visible'] : null;
 
             $data['manager']['status'] = $infos['course_manager'];
             $data['manager']['icon'] = $infos['course_manager_icon'] != null ? $infos['course_manager_icon'] : null;
@@ -1330,7 +1330,7 @@ class Event extends Model
             $data['certificate']['title'] = $infos['course_certification_title'];
             $data['certificate']['text'] = $infos['course_certification_text'];
             //$data['certificate']['attendance_title'] = $infos['course_certification_attendance_title'];
-            $data['certificate']['visible'] = $infos['course_certification_visible'] != null ? json_decode($infos['course_certification_visible'], true) : null;
+            $data['certificate']['visible'] = $infos['course_certification_visible'] != null ? $infos['course_certification_visible'] : null;
             $data['certificate']['icon'] = $infos['course_certification_icon'] != null ? $infos['course_certification_icon'] : null;
             $data['certificate']['has_certificate'] = $infos['has_certificate'];
             $data['certificate']['has_certificate_exam'] = $infos['has_certificate_exam'];
@@ -1338,7 +1338,7 @@ class Event extends Model
             $data['students']['number'] = (int) $infos['course_students_number'];
             $data['students']['text'] = $infos['course_students_text'];
             $data['students']['title'] = $infos['course_students_title'];
-            $data['students']['visible'] = $infos['course_students_visible'] != null ? json_decode($infos['course_students_visible'], true) : null;
+            $data['students']['visible'] = $infos['course_students_visible'] != null ? $infos['course_students_visible'] : null;
             $data['students']['icon'] = $infos['course_students_icon'] != null ? $infos['course_students_icon'] : null;
         }
 
