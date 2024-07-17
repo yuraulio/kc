@@ -7,7 +7,6 @@ use Illuminate\Support\Collection;
 
 class EventFileService
 {
-
     /**
      * @param  \Illuminate\Support\Collection  $dropboxFiles
      * @param  \Illuminate\Support\Collection  $selectedFiles
@@ -16,7 +15,7 @@ class EventFileService
      */
     public function associateSelectedFilesWithDropboxFiles(Collection $dropboxFiles, Collection $selectedFiles): Collection
     {
-        return $dropboxFiles->map(function(Dropbox $item) use ($selectedFiles) {
+        return $dropboxFiles->map(function (Dropbox $item) use ($selectedFiles) {
             $item = $item->toArray();
 
             foreach ($item['files'] as &$files) {
@@ -30,5 +29,4 @@ class EventFileService
             return $item;
         });
     }
-
 }

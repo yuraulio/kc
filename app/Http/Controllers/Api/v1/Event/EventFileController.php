@@ -12,7 +12,6 @@ use Illuminate\Http\Request;
 
 class EventFileController extends ApiBaseController
 {
-
     /**
      * Service class that provides logic for working with the files for the event.
      *
@@ -23,7 +22,8 @@ class EventFileController extends ApiBaseController
     /**
      * @param  \App\Services\Event\EventFileService  $eventFileService
      */
-    public function __construct(EventFileService $eventFileService) {
+    public function __construct(EventFileService $eventFileService)
+    {
         $this->eventFileService = $eventFileService;
     }
 
@@ -33,7 +33,7 @@ class EventFileController extends ApiBaseController
     public function index(Event $event): JsonResponse
     {
         $selectedFiles = $event->dropbox
-            ->map(function($dropbox) {
+            ->map(function ($dropbox) {
                 $selectedFolders = Json::decode($dropbox->pivot->selectedFolders);
 
                 return $selectedFolders['selectedFolders'];
