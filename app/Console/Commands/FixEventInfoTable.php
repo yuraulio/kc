@@ -422,7 +422,7 @@ class FixEventInfoTable extends Command
                     $dates['visible'] = $this->prepareVisibleData();
                 }
             }
-            $data['course_inclass_dates'] = json_encode($dates);
+            $data['course_inclass_dates'] = $dates;
 
             // Days
             if (isset($requestData['delivery']['inclass']['day'])) {
@@ -435,7 +435,7 @@ class FixEventInfoTable extends Command
                     $days['visible'] = $this->prepareVisibleData();
                 }
             }
-            $data['course_inclass_days'] = json_encode($days);
+            $data['course_inclass_days'] = $days;
 
             // Times
             if (isset($requestData['delivery']['inclass']['times'])) {
@@ -448,7 +448,7 @@ class FixEventInfoTable extends Command
                     $times['visible'] = $this->prepareVisibleData();
                 }
             }
-            $data['course_inclass_times'] = json_encode($times);
+            $data['course_inclass_times'] = $times;
         }
 
         // Free E-learning

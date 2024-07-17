@@ -1302,7 +1302,7 @@ class EventController extends Controller
                     }
                     $dates['icon'] = $requestData['delivery']['inclass']['dates']['icon'];
                 }
-                $data['course_inclass_dates'] = json_encode($dates);
+                $data['course_inclass_dates'] = $dates;
 
                 // Days
                 if (isset($requestData['delivery']['inclass']['day'])) {
@@ -1322,7 +1322,7 @@ class EventController extends Controller
 
                     $days['icon'] = $requestData['delivery']['inclass']['day']['icon'];
                 }
-                $data['course_inclass_days'] = json_encode($days);
+                $data['course_inclass_days'] = $days;
 
                 // Times
                 if (isset($requestData['delivery']['inclass']['times'])) {
@@ -1342,7 +1342,7 @@ class EventController extends Controller
 
                     $times['icon'] = $requestData['delivery']['inclass']['times']['icon'];
                 }
-                $data['course_inclass_times'] = json_encode($times);
+                $data['course_inclass_times'] = $times;
             }
         } elseif ($deliveryId == 143) {
             // Video E-learning
@@ -1383,7 +1383,7 @@ class EventController extends Controller
 
                     $dates['icon'] = $requestData['delivery']['inclass']['dates']['icon'];
                 }
-                $data['course_inclass_dates'] = json_encode($dates);
+                $data['course_inclass_dates'] = $dates;
 
                 // Days
                 if (isset($requestData['delivery']['inclass']['day'])) {
@@ -1398,7 +1398,7 @@ class EventController extends Controller
 
                     $days['icon'] = $requestData['delivery']['inclass']['day']['icon'];
                 }
-                $data['course_inclass_days'] = json_encode($days);
+                $data['course_inclass_days'] = $days;
 
                 // Times
                 if (isset($requestData['delivery']['inclass']['times'])) {
@@ -1413,7 +1413,7 @@ class EventController extends Controller
 
                     $times['icon'] = $requestData['delivery']['inclass']['times']['icon'];
                 }
-                $data['course_inclass_times'] = json_encode($times);
+                $data['course_inclass_times'] = $times;
             }
         } elseif ($deliveryId == 215) {
             if (isset($requestData['delivery']['inclass'])) {
@@ -1442,7 +1442,7 @@ class EventController extends Controller
 
                     $dates['icon'] = $requestData['delivery']['inclass']['dates']['icon'];
                 }
-                $data['course_inclass_dates'] = json_encode($dates);
+                $data['course_inclass_dates'] = $dates;
 
                 // Days
                 if (isset($requestData['delivery']['inclass']['day'])) {
@@ -1461,7 +1461,7 @@ class EventController extends Controller
 
                     $days['icon'] = $requestData['delivery']['inclass']['day']['icon'];
                 }
-                $data['course_inclass_days'] = json_encode($days);
+                $data['course_inclass_days'] = $days;
 
                 // Times
                 if (isset($requestData['delivery']['inclass']['times'])) {
@@ -1480,7 +1480,7 @@ class EventController extends Controller
 
                     $times['icon'] = $requestData['delivery']['inclass']['times']['icon'];
                 }
-                $data['course_inclass_times'] = json_encode($times);
+                $data['course_inclass_times'] = $times;
             }
         }
 

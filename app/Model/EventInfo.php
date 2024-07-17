@@ -101,6 +101,9 @@ class EventInfo extends Model
         'course_certification_visible' => 'array',
         'course_students_visible' => 'array',
         'course_hours_visible' => 'array',
+        'course_inclass_dates' => 'array',
+        'course_inclass_days' => 'array',
+        'course_inclass_times' => 'array',
     ];
 
     public function event(): HasOne
