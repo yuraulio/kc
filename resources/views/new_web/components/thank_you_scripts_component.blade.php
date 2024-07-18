@@ -41,50 +41,54 @@
 
 @endif
 
-@if(isset($thankyouData['ecommerce']) && isset($thankyouData['ecommerce']['actionField']['value']) && $thankyouData['ecommerce']['actionField']['value'] > 0 && !config('app.debug'))
+{{--
+Removed this to fix the double "purchase" event triggered on the thankyou page
+TODO: Delete this once confirmed that this event is reported to be missing in other situations
+--}}
+{{--@if(isset($thankyouData['ecommerce']) && isset($thankyouData['ecommerce']['actionField']['value']) && $thankyouData['ecommerce']['actionField']['value'] > 0 && !config('app.debug'))--}}
 
-    <script>
-    $(document).ready(function(){
-        dataLayer.push({ ecommerce: null });
-        let actionField = {};
-        let products = {};
+{{--    <script>--}}
+{{--    $(document).ready(function(){--}}
+{{--        dataLayer.push({ ecommerce: null });--}}
+{{--        let actionField = {};--}}
+{{--        let products = {};--}}
 
-        @foreach($thankyouData['ecommerce']['actionField'] as $key => $ti)
-            @if($ti != '')
-              try{
-                actionField["{{$key}}"] =  $.parseHTML("{{$ti}}")[0].data
-              }catch(e){
-                console.log('We have an error here3');
-                console.log("{{$key}}");
-                console.log(e);
-              }
-            @endif
-        @endforeach
+{{--        @foreach($thankyouData['ecommerce']['actionField'] as $key => $ti)--}}
+{{--            @if($ti != '')--}}
+{{--              try{--}}
+{{--                actionField["{{$key}}"] =  $.parseHTML("{{$ti}}")[0].data--}}
+{{--              }catch(e){--}}
+{{--                console.log('We have an error here3');--}}
+{{--                console.log("{{$key}}");--}}
+{{--                console.log(e);--}}
+{{--              }--}}
+{{--            @endif--}}
+{{--        @endforeach--}}
 
-        @foreach($thankyouData['ecommerce']['products'] as $key => $ti)
-            @if($ti != '')
-              try{
-                products["{{$key}}"] = $.parseHTML("{{$ti}}")[0].data
-              }catch(e){
-                console.log('We have an error here4');
-                console.log("{{$key}}");
-                console.log(e);
-              }
-            @endif
-        @endforeach
+{{--        @foreach($thankyouData['ecommerce']['products'] as $key => $ti)--}}
+{{--            @if($ti != '')--}}
+{{--              try{--}}
+{{--                products["{{$key}}"] = $.parseHTML("{{$ti}}")[0].data--}}
+{{--              }catch(e){--}}
+{{--                console.log('We have an error here4');--}}
+{{--                console.log("{{$key}}");--}}
+{{--                console.log(e);--}}
+{{--              }--}}
+{{--            @endif--}}
+{{--        @endforeach--}}
 
-        dataLayer.push({
-            'event': 'purchase',
-            'ecommerce': {
-                'purchase': {
-                'actionField': actionField,
-                'products': [products]
-                }
-            }
-        });
-    })
-    </script>
-@endif
+{{--        dataLayer.push({--}}
+{{--            'event': 'purchase',--}}
+{{--            'ecommerce': {--}}
+{{--                'purchase': {--}}
+{{--                'actionField': actionField,--}}
+{{--                'products': [products]--}}
+{{--                }--}}
+{{--            }--}}
+{{--        });--}}
+{{--    })--}}
+{{--    </script>--}}
+{{--@endif--}}
 
 
 @if(isset($thankyouData['new_event']) && isset($thankyouData['new_event']['value']) && count($thankyouData['new_event']['items']) > 0 && !config('app.debug'))
