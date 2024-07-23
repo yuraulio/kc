@@ -2,9 +2,9 @@
 
 namespace App\Model;
 
-use App\Model\Media;
-use App\Model\Topic;
-use App\Model\User;
+use App\Services\QueryString\Traits\Filterable;
+use App\Services\QueryString\Traits\Searchable;
+use App\Services\QueryString\Traits\Sortable;
 use App\Traits\MediaTrait;
 use App\Traits\MetasTrait;
 use App\Traits\PaginateTable;
@@ -16,13 +16,17 @@ use Illuminate\Notifications\Notifiable;
 
 class Instructor extends Model
 {
+    use Searchable;
+    use Sortable;
     use HasFactory;
     use SlugTrait;
     use MetasTrait;
     use MediaTrait;
     use Notifiable;
     use SearchFilter;
-    use PaginateTable;
+    use Filterable, PaginateTable {
+        Filterable::scopeFilter insteadof PaginateTable;
+    }
 
     protected $table = 'instructors';
 

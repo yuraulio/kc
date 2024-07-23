@@ -24,6 +24,7 @@ use App\Http\Controllers\Api\v1\Event\EventTopicController;
 use App\Http\Controllers\Api\v1\Event\EventVenueController;
 use App\Http\Controllers\Api\v1\Exam\ExamController;
 use App\Http\Controllers\Api\v1\Exam\ExamResultController;
+use App\Http\Controllers\Api\v1\InstructorController;
 use App\Http\Controllers\Api\v1\Media\EditImageController;
 use App\Http\Controllers\Api\v1\Media\UploadImageController;
 use App\Http\Controllers\Api\v1\PartnerController;
@@ -179,6 +180,10 @@ Route::group(['middleware' => ['auth:api', 'auth.aboveauthor'], 'prefix' => 'v1'
     Route::apiResource('exams', ExamController::class)
         ->only(['index', 'show']);
     Route::apiResource('exams.results', ExamResultController::class)
+        ->only(['index']);
+
+    // Instructor
+    Route::apiResource('instructors', InstructorController::class)
         ->only(['index']);
 });
 
