@@ -106,7 +106,7 @@ class EventFileService
     public function addUuidToEachElement(Collection|array $files): Collection|array
     {
         foreach ($files as $index => $file) {
-            $file['uuid'] = Str::uuid();
+            $file = ['uuid' => Str::uuid()] + $file;
 
             if (isset($file['children'])) {
                 $file['children'] = $this->addUuidToEachElement($file['children']);
