@@ -9,7 +9,6 @@ use Illuminate\Support\Str;
 
 class EventFileService
 {
-
     /**
      * Builds the files tree for use on the front end.
      *
@@ -29,7 +28,7 @@ class EventFileService
             // Put files into folders.
             foreach ($folders as &$folder) {
                 $folder['children'] = array_values(
-                    Arr::where($files, fn(array $file): bool => pathinfo($file['dirname'], PATHINFO_DIRNAME) === $folder['dirname'])
+                    Arr::where($files, fn (array $file): bool => pathinfo($file['dirname'], PATHINFO_DIRNAME) === $folder['dirname'])
                 );
             }
 
@@ -38,11 +37,11 @@ class EventFileService
             // As the bonus folders have the parent ID it means that we can use
             // it to identify bonus folders and get all of them.
             $bonusFolders = array_values(
-                Arr::where($folders, fn(array $folder): bool => isset($folder['parent']))
+                Arr::where($folders, fn (array $folder): bool => isset($folder['parent']))
             );
             // Remove all bonus folders from the main array with the folders.
             $folders = array_values(
-                Arr::where($folders, fn(array $folder): bool => !isset($folder['parent']))
+                Arr::where($folders, fn (array $folder): bool => !isset($folder['parent']))
             );
 
             // Put the bonus folders in their place in the main array of folders.
