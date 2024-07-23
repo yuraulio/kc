@@ -84,8 +84,9 @@
                     <td id="price-{{$ticket->id}}">{{ $ticket->pivot->price }}</td>
 
                     {{--<td>{{ date_format($ticket->created_at, 'Y-m-d' ) }}</td>--}}
-                    <td class="d-none" id="options-{{ $ticket->id }}" >{{ $ticket->pivot->options }}</td>
-                    <td class="d-none" id="features-{{ $ticket->id }}" >{{ $ticket->pivot->features }}</td>
+
+                    <td class="d-none" id="options-{{ $ticket->id }}" >{{ json_encode($ticket->pivot->options ?? []) }}</td>
+                    <td class="d-none" id="features-{{ $ticket->id }}" >{{ json_encode($ticket->pivot->features  ?? []) }}</td>
 
                     <td class="text-right">
                         <div class="dropdown">

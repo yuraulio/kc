@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api\v1\Event;
 
 use App\Http\Controllers\Api\v1\ApiBaseController;
-use App\Model\Dropbox;
 use App\Model\Event;
 use App\Services\Event\EventFileService;
 use Illuminate\Database\Eloquent\Casts\Json;
@@ -40,9 +39,15 @@ class EventFileController extends ApiBaseController
             })
             ->collapse();
 
+        $filesTree = $this->eventFileService
+            ->markSelectedFiles(
+                $this->eventFileService->buildFileTree(),
+                $selectedFiles
+            );
+
         return new JsonResponse([
             'data' => $this->eventFileService
-                ->associateSelectedFilesWithDropboxFiles(Dropbox::all(), $selectedFiles),
+                ->addUuidToEachElement($filesTree),
         ]);
     }
 
