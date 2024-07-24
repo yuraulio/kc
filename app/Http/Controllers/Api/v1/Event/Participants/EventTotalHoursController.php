@@ -8,7 +8,6 @@ use Illuminate\Http\JsonResponse;
 
 class EventTotalHoursController extends ApiBaseController
 {
-
     /**
      * Returns the duration (in hours) of the certain course.
      */
@@ -20,5 +19,4 @@ class EventTotalHoursController extends ApiBaseController
             ],
         ]);
     }
-
 }
