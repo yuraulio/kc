@@ -792,7 +792,7 @@
                                                     <li><a href="#c-exams-inner{{$tab}}">Exams</a></li>
                                                     @endif
 
-                                                    @if(count($event['certs']) > 0)
+                                                    @if(count($event['certs']) > 0 && ($event['title'] != "CSL - Professional Corporate Training"))
                                                     <li><a href="#c-cert-inner{{$tab}}">Certificate</a></li>
                                                     @endif
                                                     {{--
