@@ -1197,36 +1197,26 @@ class Event extends Model
         return $hours;
     }*/
 
-    public function getTotalHours()
+    public function getTotalHours(): float|int
     {
         $hours = 0;
-        //In class
+
         if ($this->is_inclass_course()) {
-            $timeStarts = false;
-            $timeEnds = false;
-
             foreach ($this->lessons as $lesson) {
-                $timeStarts = false;
-                $timeEnds = false;
-
                 $timeStarts = strtotime($lesson->pivot->time_starts);
                 $timeEnds = strtotime($lesson->pivot->time_ends);
+
                 if ($timeStarts && $timeEnds) {
                     $hours += ($timeEnds - $timeStarts) / 60;
                 }
             }
         } else {
-            // E-learning
-
-            // Return sec
-
             $lessons = $this->lessons->groupBy('topic_id');
-            //dd($this->lessons);
             $totalVimeoSeconds = $this->getSumLessonHours($lessons);
+
             $hours = $totalVimeoSeconds;
         }
 
-        //dd($lesson->pivot->time_starts);
         return $hours;
     }
 
