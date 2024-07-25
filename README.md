@@ -35,6 +35,8 @@ Locally (assuming the app is set to be served from knowcrunch.test)
 
 Servers are managed using ScaleForce, we currently have a production and a development server hosting this application.
 
+The project on the production server is found in `/var/www/webroot/ROOT`
+
 ## Admin panels
 
 ### Vue Admin panel
@@ -53,3 +55,19 @@ Servers are managed using ScaleForce, we currently have a production and a devel
 - Deploy to production (currently deployed from master branch)
 
 
+# Testing Payments
+
+Stripe payments can be tested locally, some configuration is required:
+
+1. Grab a key and secret key from Knowcrunch's Stripe dashboard: https://dashboard.stripe.com/test/apikeys
+2. Update the `STRIPE_KEY` and `STRIPE_SECRET` in your `.env` file
+3. The keys are also stored in the database, here's something you can paste into `php artisan tinker` to configure them:
+
+```php
+PaymentMethod::query()->update([
+    'test_processor_options' => encrypt(json_encode([
+        'key' => env('STRIPE_KEY'),
+        'secret_key' => env('STRIPE_SECRET'),
+    ]))
+]);
+```
