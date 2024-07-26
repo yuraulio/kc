@@ -7,15 +7,18 @@ use Illuminate\Http\Request;
 
 class CityAutocompleteController
 {
-    // TODO: Hook up to API endpoint and adjust for the autocomplete
     public function __invoke(Request $request)
     {
         $data = $request->validate([
-            'search' => 'required|string',
+            'term' => 'string',
         ]);
 
-        return City::with('country')->when($request->search, function ($query) {
-            $query->where('name', 'like', '%' . request('search') . '%');
-        })->limit(10);
+        return City::with('country')
+            ->when($request->term, function ($query) use ($data) {
+                $query->where('name', 'like', $data['term'] . '%');
+            })
+            // Favour showing cities from Greece first
+            ->orderByRaw("IF(country_id = (SELECT id FROM countries WHERE name = 'Greece'), 0, 1)")
+            ->orderBy('name')->paginate($request->page);
     }
 }

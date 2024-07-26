@@ -9,7 +9,7 @@
     $footerMenu2Mobile = get_menu(3 );
     $footerMenu3Desktop = get_menu(4 );
     $footerMenu3Mobile = get_menu(4 );
-    
+
     $accountMenu = get_menu(8 );
 @endphp
 

@@ -602,6 +602,7 @@ Route::group(['middleware' => ['auth', 'logout.devices'], 'prefix' => 'myaccount
         Route::post('/upload-profile-image', 'Theme\StudentController@uploadProfileImage')->name('add.profileImage');
         Route::post('/validate-personal-info', 'Theme\StudentController@infoValidation')->name('validate.personalInfo');
         Route::post('/update-personal-info', 'Theme\StudentController@updatePersonalInfo')->name('update.personalInfo');
+        Route::put('/update-public-profile', 'Theme\MyPublicProfileController@update')->name('update.publicProfile');
         Route::post('/updinvbill', ['as' => 'updinvbill', 'uses' => 'Theme\StudentController@updateInvoiceBilling']);
         Route::post('/updrecbill', ['as' => 'updrecbill', 'uses' => 'Theme\StudentController@updateReceiptBilling']);
         Route::get('/mydata', ['as' => 'festudent.mydata', 'uses' => 'Theme\StudentController@downloadMyData']);
@@ -839,6 +840,8 @@ Route::group(['middleware' => ['web'], 'namespace' => '\BinshopsBlog\Controllers
         });
     });
 });
+
+Route::get('/profile/{user:slug}', 'PublicProfileController@show')->name('public-profile');
 
 //must be at the end of file
 Route::group(['middleware' => ['preview', 'web', 'auth.sms']], function () {

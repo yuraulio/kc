@@ -3,6 +3,7 @@
 namespace App\Model;
 
 use App\CMSFile;
+use App\Enums\WorkExperience;
 use App\Model\Absence;
 use App\Model\Activation;
 use App\Model\Admin\Comment;
@@ -30,10 +31,12 @@ use Illuminate\Support\Facades\DB;
 use Laravel\Cashier\Billable;
 use Laravel\Cashier\Subscription;
 use Laravel\Passport\HasApiTokens;
+use Spatie\Sluggable\HasSlug;
+use Spatie\Sluggable\SlugOptions;
 
 class User extends Authenticatable
 {
-    use Notifiable, HasApiTokens, MediaTrait, Billable, SoftDeletes;
+    use Notifiable, HasApiTokens, MediaTrait, Billable, SoftDeletes, HasSlug;
     /**
      * The attributes that are mass assignable.
      *
@@ -67,6 +70,14 @@ class User extends Authenticatable
         'oexams',
         'country_code',
         'stripe_ids',
+        'social_links',
+        'biography',
+        'is_employee',
+        'is_freelancer',
+        'will_work_remote',
+        'will_work_in_person',
+        'work_experience',
+        'is_public_profile_enabled',
     ];
 
     /**
@@ -75,6 +86,26 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = ['password', 'remember_token'];
+
+    protected $casts = [
+        'social_links' => 'json',
+        'is_employee' => 'boolean',
+        'is_freelancer' => 'boolean',
+        'will_work_remote' => 'boolean',
+        'will_work_in_person' => 'boolean',
+        'work_experience' => WorkExperience::class,
+        'is_public_profile_enabled' => 'boolean',
+    ];
+
+    /**
+     * Get the options for generating the slug.
+     */
+    public function getSlugOptions() : SlugOptions
+    {
+        return SlugOptions::create()
+            ->generateSlugsFrom(['firstname', 'lastname'])
+            ->saveSlugsTo('slug');
+    }
 
     public function scopeSearchUsers($query, $search_term)
     {
@@ -106,6 +137,21 @@ class User extends Authenticatable
     public function statusAccount()
     {
         return $this->hasOne(Activation::class);
+    }
+
+    public function skills()
+    {
+        return $this->belongsToMany(Skill::class)->withTimestamps();
+    }
+
+    public function careerPaths()
+    {
+        return $this->belongsToMany(Career::class, 'career_path_user', 'user_id', 'career_path_id')->withTimestamps();
+    }
+
+    public function cities()
+    {
+        return $this->belongsToMany(City::class)->withTimestamps();
     }
 
     /**
@@ -381,7 +427,7 @@ class User extends Authenticatable
         //dd($events);
         $eventsData = $events ? $events : $this->events;
 
-        $plans = Plan::has('events')->with('events', 'categories')->get();
+        $plans = Plan::has('events')->with('events', 'categories', 'noEvents.categories')->get();
         $eventPlans = [];
         $categoryPlans = [];
         $nonEventPlans = [];

@@ -9,6 +9,7 @@ use App\Http\Controllers\Theme\CertificateController;
 use App\Jobs\SaveCMSFileWebp;
 use App\Jobs\UploadImageConvertWebp;
 use App\Model\Activation;
+use App\Model\Career;
 use App\Model\Event;
 use App\Model\ExamResult;
 use App\Model\Instructor;
@@ -18,6 +19,7 @@ use App\Model\Media;
 use App\Model\PaymentMethod;
 use App\Model\Plan;
 use App\Model\Setting;
+use App\Model\Skill;
 use App\Model\Subscription;
 use App\Model\Summary;
 use App\Model\Topic;
@@ -34,6 +36,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 use Image;
 use Laravel\Cashier\Cashier;
 use Mail;
@@ -117,7 +120,7 @@ class StudentController extends Controller
 
     public function index()
     {
-        $user = Auth::user();
+        $user = Auth::user()->load('skills', 'cities.country');
 
         $instructor = count($user->instructor) > 0;
 
@@ -143,6 +146,9 @@ class StudentController extends Controller
 
         $data['instructor'] = $instructor;
         $data['user']['hasExamResults'] = $user->hasExamResults();
+
+        $data['skills'] = Skill::pluck('name', 'id')->toArray();
+        $data['careerPaths'] = Career::pluck('name', 'id')->toArray();
 
         return view('theme.myaccount.student', $data);
     }
@@ -499,7 +505,7 @@ class StudentController extends Controller
         $data['subscriptionAccess'] = [];
         $data['mySubscriptions'] = [];
 
-        $data['user'] = User::find($user->id);
+        $data['user'] = $user;
         $statistics = $data['user']['statistic']->groupBy('id'); //$user->statistic()->get()->groupBy('id');
         [$subscriptionAccess, $subscriptionEvents] = $user->checkUserSubscriptionByEvent($data['user']['events']);
 
@@ -578,7 +584,7 @@ class StudentController extends Controller
                 }
                 //$data['user']['events'][$event->id]['exam_results'] = $user->examAccess(0.8,$event->id);
 
-                $eventSubscriptions[] = $user->eventSubscriptions()->wherePivot('event_id', $event['id'])->orderByPivot('expiration', 'DESC')->first() ?
+                $eventSubscriptions[] = $result = $user->eventSubscriptions()->wherePivot('event_id', $event['id'])->orderByPivot('expiration', 'DESC')->first() ?
                                             $user->eventSubscriptions()->wherePivot('event_id', $event['id'])->orderByPivot('expiration', 'DESC')->first()->id : -1;
 
                 //$eventSubscriptions[] =  array_values($user->eventSubscriptions()->wherePivot('event_id',$event['id'])->pluck('id')->toArray());
@@ -867,31 +873,24 @@ class StudentController extends Controller
     {
         $user = Auth::user();
 
-        if ($user->email !== $request->email && !$request->has('password')) {
-            $this->validate($request, [
-                'firstname' => ['required', 'min:3'],
-                'lastname' => ['required', 'min:3'],
-                'email' => [
-                    'required', 'email', 'unique:users,email',
-                ],
-            ]);
-        } elseif (!$request->has('password')) {
-            $this->validate($request, [
-                'firstname' => ['required', 'min:3'],
-                'lastname' => ['required', 'min:3'],
-                'email' => [
-                    'required', 'email',
-                ],
-            ]);
+        // Define the base validation rules
+        $rules = [
+            'firstname' => ['required', 'min:3'],
+            'lastname' => ['required', 'min:3'],
+            'email' => ['required', 'email', Rule::unique('users', 'email')->ignore($user->id)],
+        ];
+
+        $this->validate($request, $rules);
+
+        // Handle the password update if present
+        $data = $request->all();
+        if ($request->filled('password')) {
+            $data['password'] = Hash::make($request->get('password'));
+        } else {
+            unset($data['password']);
         }
 
-        $hasPassword = $request->get('password');
-
-        $user->update($request->merge([
-            'password' => Hash::make($request->get('password')),
-        ])->except([$hasPassword ? '' : 'password']));
-
-        //dd($user);
+        $user->update($data);
 
         return redirect('/myaccount');
     }

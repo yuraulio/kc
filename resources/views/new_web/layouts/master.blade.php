@@ -97,7 +97,6 @@
             @include('new_web.layouts.tickers')
             @include('new_web.layouts.header')
             @include('new_web.layouts.mobile_menu')
-
             @if (!Auth::check())
                 <div  class="login-popup-wrapper">
                     <div id="login-popup" class="login-popup">
