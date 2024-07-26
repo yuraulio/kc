@@ -16,7 +16,7 @@ class SkillController extends ApiBaseController
         $query = $this->applyRequestParametersToQuery(Skill::query(), $request);
 
         return new JsonResponse(
-          $this->paginateByRequestParameters($query, $request),
+            $this->paginateByRequestParameters($query, $request),
         );
     }
 
