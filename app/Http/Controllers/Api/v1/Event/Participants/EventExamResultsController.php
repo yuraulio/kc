@@ -9,7 +9,6 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class EventExamResultsController extends ApiBaseController
 {
-
     /**
      * Returns the stats about the course exams.
      */
@@ -28,9 +27,8 @@ class EventExamResultsController extends ApiBaseController
         return new JsonResponse([
             'data' => [
                 'average_percentage' => $averagePercentage,
-                'average_time' => $averageTime
-            ]
+                'average_time' => $averageTime,
+            ],
         ]);
     }
-
 }
