@@ -80,7 +80,7 @@
                       </a>
                       <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
                         <a class="dropdown-item" href="{{ route('skill.edit', $skill) }}">{{ __('Edit') }}</a>
-                        <form action="{{ route('skill.destroy', $skillgss) }}" method="post">
+                        <form action="{{ route('skill.destroy', $skill) }}" method="post">
                           @csrf
                           @method('delete')
 
