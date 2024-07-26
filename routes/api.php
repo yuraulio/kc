@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\PassportAuthController;
 use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\v1\CareerController;
 use App\Http\Controllers\Api\v1\CategoryController;
 use App\Http\Controllers\Api\v1\CityController;
 use App\Http\Controllers\Api\v1\DeliveryController;
@@ -188,6 +189,10 @@ Route::group(['middleware' => ['auth:api', 'auth.aboveauthor'], 'prefix' => 'v1'
 
     // Instructor
     Route::apiResource('instructors', InstructorController::class)
+        ->only(['index']);
+
+    // Career
+    Route::apiResource('careers', CareerController::class)
         ->only(['index']);
 });
 
