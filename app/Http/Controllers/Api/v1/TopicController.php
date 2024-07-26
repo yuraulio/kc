@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Api\v1;
 
-use App\Http\Controllers\Controller;
 use App\Model\Topic;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -16,10 +15,9 @@ class TopicController extends ApiBaseController
     {
         $query = $this->applyRequestParametersToQuery(Topic::query(), $request);
 
-        $topics = $query->paginate((int) $request->query->get('per_page', 50))
-            ->appends($request->query->all());
-
-        return new JsonResponse($topics);
+        return new JsonResponse(
+            $this->paginateByRequestParameters($query, $request)
+        );
     }
 
     /**

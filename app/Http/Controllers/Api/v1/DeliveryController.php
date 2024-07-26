@@ -17,10 +17,9 @@ class DeliveryController extends ApiBaseController
     {
         $query = $this->applyRequestParametersToQuery(Delivery::query(), $request);
 
-        $deliveries = $query->paginate((int) $request->query->get('per_page', 50))
-            ->appends($request->query->all());
-
-        return new JsonResponse($deliveries);
+        return new JsonResponse(
+            $this->paginateByRequestParameters($query, $request)
+        );
     }
 
     /**

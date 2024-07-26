@@ -16,10 +16,9 @@ class EventInstructorController extends ApiBaseController
     {
         $query = $this->applyRequestParametersToQuery($event->instructors(), $request);
 
-        $instructors = $query->paginate((int) $request->query->get('per_page', 50))
-            ->appends($request->query->all());
-
-        return new JsonResponse($instructors);
+        return new JsonResponse(
+            $this->paginateByRequestParameters($query, $request)
+        );
     }
 
     /**

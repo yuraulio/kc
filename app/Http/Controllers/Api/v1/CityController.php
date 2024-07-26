@@ -17,10 +17,9 @@ class CityController extends ApiBaseController
     {
         $query = $this->applyRequestParametersToQuery(City::query(), $request);
 
-        $cities = $query->paginate((int) $request->query->get('per_page', 50))
-            ->appends($request->query->all());
-
-        return new JsonResponse($cities);
+        return new JsonResponse(
+            $this->paginateByRequestParameters($query, $request),
+        );
     }
 
     /**

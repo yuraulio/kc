@@ -4,16 +4,12 @@ namespace App\Http\Controllers\Api\v1\Transactions\Participants;
 
 use App\DataTables\Transactions\TransactionRegistrationsDataTable;
 use App\Http\Controllers\Api\v1\ApiBaseController;
-use App\Http\Controllers\Controller;
 use App\Model\Event;
 use App\Model\Transaction;
-use App\Model\Transactionable;
 use App\Model\User;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\View;
 use Laravel\Cashier\Subscription as Sub;
 
 class StatisticsController extends ApiBaseController

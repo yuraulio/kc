@@ -15,10 +15,9 @@ class TicketController extends ApiBaseController
     {
         $query = $this->applyRequestParametersToQuery(Ticket::query(), $request);
 
-        $types = $query->paginate((int) $request->query->get('per_page', 50))
-            ->appends($request->query->all());
-
-        return new JsonResponse($types);
+        return new JsonResponse(
+            $this->paginateByRequestParameters($query, $request)
+        );
     }
 
     /**
