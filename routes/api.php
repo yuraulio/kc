@@ -32,6 +32,7 @@ use App\Http\Controllers\Api\v1\Media\EditImageController;
 use App\Http\Controllers\Api\v1\Media\UploadImageController;
 use App\Http\Controllers\Api\v1\PartnerController;
 use App\Http\Controllers\Api\v1\PaymentMethodController;
+use App\Http\Controllers\Api\v1\SkillController;
 use App\Http\Controllers\Api\v1\TicketController;
 use App\Http\Controllers\Api\v1\TopicController;
 use App\Http\Controllers\Api\v1\Transactions\Participants\StatisticsController;
@@ -193,6 +194,10 @@ Route::group(['middleware' => ['auth:api', 'auth.aboveauthor'], 'prefix' => 'v1'
 
     // Career
     Route::apiResource('careers', CareerController::class)
+        ->only(['index']);
+
+    // Skill
+    Route::apiResource('skills', SkillController::class)
         ->only(['index']);
 });
 
