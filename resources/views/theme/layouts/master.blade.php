@@ -150,6 +150,7 @@ _iub.csConfiguration = {"askConsentAtCookiePolicyUpdate":true,"consentOnContinue
 
 </head>
 <body>
+
 @include('theme.layouts.menu_component_myaccount')
 
 @if(!config('app.debug'))

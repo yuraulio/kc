@@ -19,7 +19,6 @@
         $footerMenu3Mobile,
         $accountMenu
     ) = App\Model\Menu::getMenuElementsToDisplayInFront($column->template->inputs);
-    
 @endphp
 
 {{-- main menu --}}

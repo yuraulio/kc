@@ -7,6 +7,8 @@
 
     $event = $dynamic_page_data["event"] ?? null;
     $instructor = $dynamic_page_data["instructor"] ?? null;
+    /** @var \App\Model\User $publicProfileUser */
+    $publicProfileUser = $dynamic_page_data["user"] ?? null;
 @endphp
 
 @if($event)
@@ -35,6 +37,22 @@
 
             @endif
     @endsection
+@elseif ($publicProfileUser)
+  {{-- Meta to show for the user's public profile page /profile/{user}--}}
+  <title>{{ $publicProfileUser->name }}</title>
+  <meta name="author" content="Knowcrunch">
+  <meta name="description" content="' . $this->meta_description . '">
+  <meta property="fb:app_id" content="961275423898153">
+  <meta property="og:title" content="{{ $publicProfileUser->name }}">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="{{ route('public-profile', $publicProfileUser) }}">
+  <meta property="og:image" content="{{ $publicProfileUser?->profile_image?->url }}">
+  <meta property="og:site_name" content="' . $this->meta_title . '">
+  <meta property="og:description" content="{{ $publicProfileUser->biography }}">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{ $publicProfileUser->name }}">
+  <meta name="twitter:description" content="{{ $publicProfileUser->biography }}">
+  <meta name="twitter:image" content="{{ $publicProfileUser?->profile_image?->url }}">
 @else
     @section('header')
 

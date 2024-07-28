@@ -64,9 +64,9 @@ class WelcomeEmail extends Notification
         $subject = !isset($this->data['subject']) ? 'Knowcrunch - Welcome to our course ' . $this->user->firstname : 'Knowcrunch – Welcome to our course ' . $this->data['subject'];
 
         if (isset($this->data['user']['createAccount'])) {
-            $this->data['slug'] = $this->data['user']['createAccount'] ? url('/') . '/create-your-password/' . $slug : url('/') . '/myaccount';
+            $this->data['slug'] = $this->data['user']['createAccount'] ? url(config('app.url')) . '/create-your-password/' . $slug : url('/') . '/myaccount';
         } else {
-            $this->data['slug'] = url('/') . '/myaccount';
+            $this->data['slug'] = url(config('app.url')) . '/myaccount';
         }
 
         if ($this->user->statusAccount) {

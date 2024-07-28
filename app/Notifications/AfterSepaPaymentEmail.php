@@ -61,7 +61,7 @@ class AfterSepaPaymentEmail extends Notification
         // $subject = !isset($this->data['subject']) ? 'Knowcrunch - Welcome ' .  $this->user->firstname . '. Activate your account​ now' : 'Knowcrunch - Welcome ' . $this->data['subject'];
         $subject = !isset($this->data['subject']) ? 'Knowcrunch - Welcome to our course ' . $this->user->firstname : 'Knowcrunch – Welcome to our course ' . $this->data['subject'];
 
-        $this->data['slug'] = url('/') . '/myaccount';
+        $this->data['slug'] = url(config('app.url')) . '/myaccount';
 
         return (new MailMessage)
                     ->from('info@knowcrunch.com', 'Knowcrunch')

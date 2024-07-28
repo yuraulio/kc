@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\CityAutocompleteController;
 use App\Http\Controllers\Api\LessonController;
 use App\Http\Controllers\Api\PassportAuthController;
 use App\Http\Controllers\Api\UserController;
@@ -42,6 +43,8 @@ Route::middleware('auth:api')->group(function () {
 
     //GetDropboxToken
     Route::get('get-dropbox-token', [UserController::class, 'getDropBoxToken']);
+
+    Route::get('cities', CityAutocompleteController::class);
 });
 
 Route::post('/myaccount/reset', 'Api\ForgotPasswordController@sendResetLinkEmail');
