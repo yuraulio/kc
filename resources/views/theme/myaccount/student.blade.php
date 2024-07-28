@@ -1676,8 +1676,12 @@
 
                                                             @if($event['view_tpl'] == 'elearning_free' && $event['status'] == App\Model\Event::STATUS_OPEN && isset($event['expiration']) && strtotime($event['expiration']) < strtotime(now()))
                                                               <a href="{{ $event['slugable']['slug'] }}" class="btn btn--secondary btn--md">RENROLL FOR FREE</a>
-                                                            @elseif($event['view_tpl'] != 'elearning_free' && $event['status'] == App\Model\Event::STATUS_OPEN && isset($event['expiration'])  &&strtotime($event['expiration']) < strtotime(now()) && (isset($event['video_access']) && !$event['video_access']))
+                                                            @elseif($event['id'] != 2304 && $event['view_tpl'] != 'elearning_free' && $event['status'] == App\Model\Event::STATUS_OPEN && isset($event['expiration'])  &&strtotime($event['expiration']) < strtotime(now()) && (isset($event['video_access']) && !$event['video_access']))
                                                               <a href="{{ $event['slugable']['slug'] }}" class="btn btn--primary btn--md">REENROLL</a>
+                                                            @elseif($event['id'] == 2304 && $event['view_tpl'] != 'elearning_free' && $event['status'] == App\Model\Event::STATUS_OPEN && isset($event['expiration'])  &&strtotime($event['expiration']) < strtotime(now()) && (isset($event['video_access']) && !$event['video_access']))
+                                                              @foreach($plans as $key => $plan)
+                                                                <a href="/myaccount/subscription/{{$showPlan['title']}}/{{ $plan->name }}" class="btn btn--primary btn--lg">ANNUAL ACCESS</a>
+                                                              @endforeach
                                                             @endif
 
                                                             @if(isset($event['video_access']) && !$event['video_access'])
