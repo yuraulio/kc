@@ -1017,7 +1017,7 @@ class CronjobsController extends Controller
                 if ($user->statusAccount && $user->statusAccount->completed) {
                     $data['activateAccount'] = false;
                     $data['button_text'] = 'Access your account';
-                    $data['slug'] = url('/') . '/myaccount';
+                    $data['slug'] = url(config('app.url')) . '/myaccount';
                 }
 
                 $user->notify(new InClassReminder($data));
