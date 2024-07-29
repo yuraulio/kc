@@ -2858,7 +2858,7 @@ $show_popup = isset($uri['show_popup']) ? $uri['show_popup'] : 0;
                                                   $disabled = 'disabled';
                                                   $finishClassDuration = $event->finishClassDuration();
                                                   $diff = Carbon::now()->diff($finishClassDuration);
-                                                  if ($diff->d < 1 && $diff->y == 0 && $diff->m == 0) {
+                                                  if ($diff->d < 2 && $diff->y == 0 && $diff->m == 0) {
                                                     $disabled = '';
                                                   }
                                                   @endphp
