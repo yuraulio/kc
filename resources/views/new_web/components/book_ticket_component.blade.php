@@ -30,7 +30,7 @@
 
                     foreach($tickets as $key => $ticket) {
 
-                        $options = json_decode($ticket['pivot']['options'],true);
+                        $options = $ticket['pivot']['options'];
                         if($ticket['type'] == 'Early Bird' && $ticket['pivot']['quantity'] > 0){
                             $early = true;
                         }else if($ticket['type'] == 'Early Bird'){
@@ -64,7 +64,7 @@
                     ?>
                     @foreach($tickets as $key => $ticket)
                         <?php
-                            $options = json_decode($ticket['pivot']['options'],true);
+                            $options = $ticket['pivot']['options'];
                             if($ticket['type'] == 'Early Bird' && $ticket['pivot']['quantity'] > 0){
                                 $early = true;
                             }else if($ticket['type'] == 'Early Bird'){
@@ -101,7 +101,7 @@
                                     <h3 class="@if($ticket['type'] != 'Alumni') special-ticket @endif">{{ empty($ticket['public_title']) ?  $ticket['type'] : $ticket['public_title'] }} <span> €{{$ticket['pivot']['price']}} </span></h3>
                                     <div class="ticket-box-content">
                                         <ul class="seat-features">
-                                            @foreach((array) json_decode($ticket['pivot']['features']) as $feature)
+                                            @foreach($ticket['pivot']['features'] as $feature)
                                             <li>{{ $feature }}</li>
                                             @endforeach
                                         </ul>

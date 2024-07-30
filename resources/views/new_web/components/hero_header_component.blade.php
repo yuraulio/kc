@@ -44,9 +44,9 @@
                     <div class="row">
 
                         <?php
-                        $certificate_visible = (isset($info['course_certification_visible']) && $info['course_certification_visible'] != null) ? json_decode($info['course_certification_visible'],true) : null;
+                        $certificate_visible = (isset($info['course_certification_visible']) && $info['course_certification_visible'] != null) ? $info['course_certification_visible'] : null;
                         $hours_visible = (isset($info['course_hours_visible']) && $info['course_hours_visible'] != null) ? $info['course_hours_visible'] : null;
-                        $students_visible = (isset($info['course_students_visible']) && $info['course_students_visible'] != null) ? json_decode($info['course_students_visible'],true) : null;
+                        $students_visible = (isset($info['course_students_visible']) && $info['course_students_visible'] != null) ? $info['course_students_visible'] : null;
                         $course_enable = (isset($info['course_awards']) && $info['course_awards']) ? $info['course_awards'] : false;
 
                         ?>
@@ -95,7 +95,7 @@
                     @if($course_enable && isset($info['course_awards_text']) && $info['course_awards_text'])
                     <div class="col-12 col-md-2 @if($hasStudentColumn) offset-md-6 @else offset-md-10 @endif  awards">
                         <?php
-                        $course_awards_icon = (isset($info['course_awards_icon']) && $info['course_awards_icon']) ? json_decode($info['course_awards_icon'], true) : null;
+                        $course_awards_icon = (isset($info['course_awards_icon']) && $info['course_awards_icon']) ? $info['course_awards_icon'] : null;
                         ?>
 
                         <div class="awards-landing-container">
