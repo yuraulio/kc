@@ -118,11 +118,11 @@
                                                                         </tr>
                                                                         <tr>
                                                                            <td height="19" align="center" valign="top" class="r17-i nl2go-default-textstyle" style="color: #3b3f44; font-family: arial,helvetica,sans-serif; font-size: 16px; line-height: 1.5;">
-                                                                            
-                                                                              <a href="{{ URL::to("myaccount/activate/{$code}") }}?utm_source=Knowcrunch.com&utm_medium=Registration_Email" class="r18-r default-button" target="_blank" data-btn="1" style="line-height: 1.15; text-decoration: none; border-style: solid; display: inline-block; -webkit-text-size-adjust: none; mso-hide: all; background-color: #c8d151; border-color: #c8d151; border-radius: 4px; border-width: 0px; color: #ffffff; font-family: arial,helvetica,sans-serif; font-size: 16px; height: 19px; padding-bottom: 12px; padding-left: 5px; padding-right: 5px; padding-top: 12px; width: 280px;">
+
+                                                                              <a href="{{ URL::to(config('app.url') . "/myaccount/activate/{$code}") }}?utm_source=Knowcrunch.com&utm_medium=Registration_Email" class="r18-r default-button" target="_blank" data-btn="1" style="line-height: 1.15; text-decoration: none; border-style: solid; display: inline-block; -webkit-text-size-adjust: none; mso-hide: all; background-color: #c8d151; border-color: #c8d151; border-radius: 4px; border-width: 0px; color: #ffffff; font-family: arial,helvetica,sans-serif; font-size: 16px; height: 19px; padding-bottom: 12px; padding-left: 5px; padding-right: 5px; padding-top: 12px; width: 280px;">
                                                                                  <p style="margin: 0px;"><span style="color: #030000; font-family: Tahoma, geneva, sans-serif;"><strong>Access your account</strong></span></p>
                                                                               </a>
-                                                                              
+
                                                                            </td>
                                                                         </tr>
                                                                         <tr class="nl2go-responsive-hide">
@@ -158,4 +158,3 @@
 
 
 
-        

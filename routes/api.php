@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin_api\PagesController;
 use App\Http\Controllers\Api\AbsenceController;
 use App\Http\Controllers\Api\CouponController;
 use App\Http\Controllers\Api\ForgotPasswordController;
+use App\Http\Controllers\Api\CityAutocompleteController;
 use App\Http\Controllers\Api\LessonController;
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\PassportAuthController;
@@ -107,6 +108,8 @@ Route::middleware('auth:api')->group(function () {
 
     //GetDropboxToken
     Route::get('get-dropbox-token', [UserController::class, 'getDropBoxToken']);
+
+    Route::get('cities', CityAutocompleteController::class);
 
     // Events
     Route::resource('events', EventController::class)

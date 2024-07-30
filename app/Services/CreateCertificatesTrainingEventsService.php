@@ -34,7 +34,7 @@ class CreateCertificatesTrainingEventsService
         foreach ($classroomTrainingEvents as $event) {
             $finishClassDuration = $event->finishClassDuration();
             $diff = Carbon::now()->diff($finishClassDuration);
-            if ($diff->d < 2 && $diff->y == 0 && $diff->m == 0) {
+            if ($diff->d < 1 && $diff->y == 0 && $diff->m == 0) {
                 $report_users = [];
                 // It finished less than two days ago, we can create certificates.
                 foreach ($event->users as $user) {

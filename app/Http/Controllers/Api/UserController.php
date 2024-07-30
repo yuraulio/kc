@@ -79,6 +79,16 @@ class UserController extends Controller
 
             unset($user['image']);
 
+            foreach ($user->getAttributes() as $key => $attribute) {
+                if ($key == 'terms' || $key == 'work_experience') {
+                    continue;
+                }
+
+                if (!$attribute) {
+                    $user[$key] = '';
+                }
+            }
+
             return $user;
         });
 

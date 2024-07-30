@@ -18,7 +18,7 @@ class UserHelper
      * @param $user
      * @return string
      */
-    public static function getUserProfileImage($user, $options)
+    public static function getUserProfileImage($user, $options): string
     {
         return self::prepareFileImage($user, $options);
     }
@@ -27,10 +27,9 @@ class UserHelper
      * Prepare user image.
      * @param $user
      * @param array $options
-     * @param bool $returnImage
      * @return string
      */
-    private static function prepareFileImage($user, $options = [], $returnImage = true)
+    private static function prepareFileImage($user, array $options = [])
     {
         $options = array_merge([
             'id' => null,
@@ -45,58 +44,10 @@ class UserHelper
             $imageUrl = $user->profile_image->url;
         }
 
-        return '<img loading="lazy" ' . ($options['id'] ? ' id="' . $options['id'] . '"' : '') .
-            '" width="' . $options['width'] . '" height="' . $options['height'] . '" class="' . $options['class'] . '"' .
-            'title="' . $user['firstname'] . '' . $user['lastname'] . '" alt="' . $user['firstname'] . '' . $user['lastname'] . '" ' .
-            'src="' . $imageUrl . '" onerror="this.src=\'' . $default . '\'"/>';
-
-        if (!isset($imageUrl)) {
-            if (!empty($user['image'])) {
-                $imageUrl = get_profile_image($user['image']);
-                if (isset($user->profile_image)) {
-                    if (isset($user->profile_image->images)) {
-                        foreach ($user->profile_image->images as $image) {
-                            if ($image->version == 'instructors-small') {
-                                $imageUrl = $image->full_path;
-                            }
-                        }
-                    }
-                }
-
-                if ($imageUrl) {
-                    if ($returnImage) {
-                        return '<img loading="lazy" ' . ($options['id'] ? ' id="' . $options['id'] . '"' : '') .
-                            '" width="' . $options['width'] . '" height="' . $options['height'] . '" class="' . $options['class'] . '"' .
-                            'title="' . $user['firstname'] . '' . $user['lastname'] . '" alt="' . $user['firstname'] . '' . $user['lastname'] . '" ' .
-                            'src="' . $imageUrl . '" onerror="this.src=\'' . $default . '\'"/>';
-                    }
-
-                    return $imageUrl;
-                }
-            }
-        }
-        if (!empty($user['email'])) {
-            $image = md5(strtolower($user['email']));
-
-            $imageUrl = 'https://www.gravatar.com/avatar/' . $image . '?s=' . ($options['width'] < 64 ? 64 : $options['width']) . '&d=' .
-                urlencode(cdn('/theme/assets/images/icons/user-circle-placeholder.png'));
-
-            if ($returnImage) {
-                return '<img loading="lazy" ' . ($options['id'] ? ' id="' . $options['id'] . '"' : '') .
-                    '" width="' . $options['width'] . '" height="' . $options['height'] . '" class="' . $options['class'] . '"' .
-                    'title="' . $user['firstname'] . '' . $user['lastname'] . '" alt="' . $user['firstname'] . '' . $user['lastname'] . '" ' .
-                    'src="' . $imageUrl . '" onerror="this.src=\'' . $default . '\'"/>';
-            }
-
-            return $imageUrl;
-        }
-
-        if ($returnImage) {
-            return '<img' . ($options['id'] ? ' id="' . $options['id'] . '"' : '') .
-                '" width="' . $options['width'] . '" height="' . $options['height'] . '" class="' . $options['class'] . '"' .
-                'src="' . $default . '" />';
-        }
-
-        return $default;
+        return '<img loading="lazy"' .
+            ($options['id'] ? ' id="' . $options['id'] . '"' : '') .
+            ' width="' . $options['width'] . '" height="' . $options['height'] . '" class="' . $options['class'] . '"' .
+            ' title="' . $user['firstname'] . ' ' . $user['lastname'] . '" alt="' . $user['firstname'] . ' ' . $user['lastname'] . '" ' .
+            ' src="' . $imageUrl . '" onerror="this.src=\'' . $default . '\'"/>';
     }
 }

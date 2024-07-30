@@ -1466,3 +1466,31 @@
    .inline-myaccount-text p:first-of-type {
       display: inline;
    }
+
+#user-profile .col12 {
+  margin-bottom: 30px;
+}
+
+.text-sm {
+  font-size: 14px;
+}
+
+.hidden {
+  display: none;
+}
+
+span.validation {
+  color: #ff0000;
+}
+
+span.validation.text-sm {
+  font-size: 16px;
+}
+
+.badge.bg-gray {
+  background-color: #ededed;
+}
+
+.badge.cursor-auto {
+  cursor: auto;
+}

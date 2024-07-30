@@ -1139,6 +1139,17 @@
         "mobile": true,
         "inputs": []
     },
+    "public_profile": {
+        "version": 2,
+        "title": "Public profile",
+        "icon": "dripicons-user",
+        "key": "public_profile_component",
+        "tab": "Content",
+        "width": "content",
+        "simple_view": false,
+        "mobile": true,
+        "inputs": []
+    },
     "instructor_courses": {
         "version": 2,
         "title": "Instructor's lessons",
