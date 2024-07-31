@@ -3,9 +3,9 @@
 use App\Http\Controllers\Admin_api\MediaController;
 use App\Http\Controllers\Admin_api\PagesController;
 use App\Http\Controllers\Api\AbsenceController;
+use App\Http\Controllers\Api\CityAutocompleteController;
 use App\Http\Controllers\Api\CouponController;
 use App\Http\Controllers\Api\ForgotPasswordController;
-use App\Http\Controllers\Api\CityAutocompleteController;
 use App\Http\Controllers\Api\LessonController;
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\PassportAuthController;
