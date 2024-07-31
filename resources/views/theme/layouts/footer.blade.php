@@ -14,7 +14,7 @@ $social_media = get_social_media();
                 <div class="mobile-toggle">
                     <div class="row clearfix footer-award-menu">
                         <div class="col4 col-sm-12 award-div">
-                            <div><img alt_text="social media award" width="158" height="37" src="{{cdn('/awards/knowcrunch-awards-2024.png')}}"></div>
+                            <div><img alt_text="social media award" width="800" height="137" src="{{cdn('/awards/knowcrunch-awards-2024.png')}}"></div>
 {{--                            <p> Best Digital Marketing E-learning--}}
 {{--                                Award by <span class="text-highlight2"> Education Leaders </span> </p>--}}
                         </div>
