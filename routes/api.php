@@ -25,6 +25,7 @@ use App\Http\Controllers\Api\v1\Event\EventTicketController;
 use App\Http\Controllers\Api\v1\Event\EventTopicController;
 use App\Http\Controllers\Api\v1\Event\EventVenueController;
 use App\Http\Controllers\Api\v1\Event\Participants\EventExamResultsController;
+use App\Http\Controllers\Api\v1\Event\Participants\EventActiveStudentsController;
 use App\Http\Controllers\Api\v1\Event\Participants\EventTotalHoursController;
 use App\Http\Controllers\Api\v1\Exam\ExamController;
 use App\Http\Controllers\Api\v1\Exam\ExamResultController;
@@ -184,6 +185,7 @@ Route::group(['middleware' => ['auth:api', 'auth.aboveauthor'], 'prefix' => 'v1'
         ->only(['index']);
     Route::get('events/{event}/participants/total-hours', EventTotalHoursController::class);
     Route::get('events/{event}/participants/exam-results', EventExamResultsController::class);
+    Route::get('events/{event}/participants/active-students', EventActiveStudentsController::class);
 
     // Exams
     Route::apiResource('exams', ExamController::class)

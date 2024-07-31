@@ -5628,7 +5628,7 @@ $show_popup = isset($uri['show_popup']) ? $uri['show_popup'] : 0;
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             type: 'GET',
-            url: '/admin/events/statistics/' + event,
+            url: '/admin1/events/statistics/' + event,
             success: function(data) {
 
                 let stats = data.data;
