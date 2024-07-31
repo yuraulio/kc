@@ -10,7 +10,6 @@ use Illuminate\Support\Carbon;
 
 class EventActiveStudentsController extends ApiBaseController
 {
-
     /**
      * Returns the stats about the course students.
      */
@@ -22,7 +21,7 @@ class EventActiveStudentsController extends ApiBaseController
             'in_class' => 0,
         ];
 
-        $event->users->each(function (User $user) use(&$data): void {
+        $event->users->each(function (User $user) use (&$data): void {
             if ($user->pivot->expiration && $user->pivot->paid == 1) {
                 $expiration = Carbon::parse($user->pivot->expiration);
 
