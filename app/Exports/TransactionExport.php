@@ -71,7 +71,7 @@ class TransactionExport implements FromArray, WithHeadings, ShouldAutoSize
             $city = $this->city;
             $transactions = $transactions->whereHas('event.city', function ($q) use ($city) {
                 if (is_numeric($city)) {
-                    return $q->where('id', $city);
+                    return $q->where('cities.id', $city);
                 }
 
                 return $q->where('name', $city);
@@ -82,7 +82,7 @@ class TransactionExport implements FromArray, WithHeadings, ShouldAutoSize
             $category = $this->category;
             $transactions = $transactions->whereHas('event.category', function ($q) use ($category) {
                 if (is_numeric($category)) {
-                    return $q->where('id', $category);
+                    return $q->where('categories.id', $category);
                 }
 
                 return $q->where('name', $category);

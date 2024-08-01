@@ -49,7 +49,8 @@ class TransactionParticipantsService
     public function getCities()
     {
         return Cache::remember('transactions-cities', 10, function () {
-            return City::pluck('name', 'id');
+            // Hardcoded to the initial 3 cities, so that we don't crash the /admin/transaction/registrations page
+            return City::limit(3)->oldest()->pluck('name', 'id');
         });
     }
 
