@@ -4828,10 +4828,8 @@ $show_popup = isset($uri['show_popup']) ? $uri['show_popup'] : 0;
                     $(".success-message p").html(data.message);
                     $(".success-message").show();
 
-
-
-                    //$('#input-hours').val(Math.ceil(data.data/60)+'hr')
-                    $('#input-hours').val(Math.data.data / 60)
+                    let hours = (data.data/60).toFixed(1);
+                    $('#input-hours').val(hours);
 
                     setTimeout(function() {
                         $(".close-message").click();
