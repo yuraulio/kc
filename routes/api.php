@@ -112,10 +112,6 @@ Route::middleware('auth:api')->group(function () {
 
     Route::get('cities', CityAutocompleteController::class);
 
-    // Events
-    Route::resource('events', EventController::class)
-        ->only(['index', 'show']);
-
     // Notifications
     Route::resource('notifications', NotificationController::class)
         ->only(['index', 'update']);
@@ -166,6 +162,8 @@ Route::group(['middleware' => ['auth:api', 'auth.aboveauthor'], 'prefix' => 'v1'
     Route::apiResource('topics', TopicController::class)
         ->only(['index']);
 
+    // Events
+    Route::apiResource('events', EventController::class);
     // Nested resources of events.
     Route::apiResource('events.faqs', EventFaqController::class)
         ->only(['index']);
