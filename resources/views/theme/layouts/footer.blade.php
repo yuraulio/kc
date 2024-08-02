@@ -14,7 +14,7 @@ $social_media = get_social_media();
                 <div class="mobile-toggle">
                     <div class="row clearfix footer-award-menu">
 
-                            <div><img alt_text="awards" width="100%" height="100%" src="{{cdn('/awards/knowcrunch-awards-2024.png')}}"></div>
+                            <img alt_text="awards" width="100%" height="100%" src="{{cdn('/awards/knowcrunch-awards-2024.png')}}">
 
                     </div>
                 </div>
