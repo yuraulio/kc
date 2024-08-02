@@ -240,7 +240,8 @@ class EventController extends Controller
         $types = Type::all();
         $delivery = Delivery::all();
         $instructors = Instructor::with('medias')->where('status', 1)->get()->groupBy('id');
-        $cities = City::all();
+        // Hardcoded to the initial 3 cities, so that we don't crash the /admin/events/{event}/edit page
+        $cities = City::limit(3)->oldest()->get();
         $partners = Partner::all();
 
         //if elearning course (id = 143)
@@ -457,7 +458,8 @@ class EventController extends Controller
         $data['event'] = $event;
         //dd($event['topic']);
         $data['categories'] = $categories;
-        $data['cities'] = City::all();
+        // Hardcoded to the initial 3 cities, so that we don't crash the /admin/events/{event}/create page
+        $data['cities'] = City::limit(3)->oldest()->get();
         $data['partners'] = Partner::all();
         $data['types'] = $types;
         $data['user'] = $user;
@@ -466,7 +468,6 @@ class EventController extends Controller
         //dd($allTopicsByCategory1);
         $data['instructors'] = $instructors;
         $data['topics'] = $topics;
-
         $data['slug'] = $event['slugable'];
         $data['metas'] = $event['metable'];
 
