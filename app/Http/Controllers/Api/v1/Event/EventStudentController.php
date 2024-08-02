@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\v1\Event;
 
 use App\Http\Controllers\Api\v1\ApiBaseController;
 use App\Model\Event;
+use App\Model\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -15,10 +16,17 @@ class EventStudentController extends ApiBaseController
     public function index(Request $request, Event $event): JsonResponse
     {
         $query = $this->applyRequestParametersToQuery($event->users(), $request);
+        $students = $this->paginateByRequestParameters($query, $request);
 
-        return new JsonResponse(
-            $this->paginateByRequestParameters($query, $request)
-        );
+        // Add the data about users progress.
+        $students->through(function (User $user) use ($event): User {
+            $user->setAttribute('progress', round($event->progress($user), 2));
+            $user->setAttribute('videos_seen', $event->video_seen($user));
+
+            return $user;
+        });
+
+        return new JsonResponse($students);
     }
 
     /**
