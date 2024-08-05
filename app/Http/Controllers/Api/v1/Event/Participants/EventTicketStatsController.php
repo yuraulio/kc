@@ -10,9 +10,8 @@ class EventTicketStatsController extends ApiBaseController
 {
     public function __invoke(Event $event): JsonResponse
     {
-
         return new JsonResponse([
-            'data' => []
+            'data' => [],
         ]);
     }
 }

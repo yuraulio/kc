@@ -11,9 +11,7 @@ class EventSaleStatsController extends ApiBaseController
     public function __invoke(Event $event): JsonResponse
     {
         return new JsonResponse([
-            'data' => []
+            'data' => [],
         ]);
-
     }
-
 }
