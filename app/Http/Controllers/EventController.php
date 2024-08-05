@@ -1021,6 +1021,8 @@ class EventController extends Controller
         $data['income']['total'] = array_sum($income);
         //dd($count);
 
+        $s = 0;
+
         return response()->json([
             'success' => __('Event Statistic successfully fetched.'),
             'data' => $data,

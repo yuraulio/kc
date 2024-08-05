@@ -953,7 +953,7 @@ class Event extends Model
         return $months;
     }
 
-    public function progress($user, $videos = false)
+    public function progress($user, $videos = false): float|int
     {
         if ($videos == 'no_videos') {
             return 0;
@@ -964,10 +964,10 @@ class Event extends Model
         }
 
         $videos = $videos->pivot['videos'];
-        $totalDuration = 0;
 
-        //dd($videos);
+        $totalDuration = 0;
         $seenTime = 0;
+
         if ($videos != '') {
             $videos = json_decode($videos, true);
             foreach ($videos as $video) {
@@ -981,6 +981,7 @@ class Event extends Model
                 if ((int) $video['seen'] == 1) {
                     $seen = (float) $video['total_duration'];
                 }
+
                 $seenTime += $seen;
                 $totalDuration += (float) $video['total_duration'];
             }
@@ -989,26 +990,23 @@ class Event extends Model
         return $totalDuration > 0 ? $seenTime / $totalDuration * 100 : 0;
     }
 
-    public function video_seen($user, $videos = false)
+    public function video_seen($user, $videos = false): int|string
     {
-        if ($videos == 'no_videos') {
+        if ($videos === 'no_videos') {
             return 0;
         }
 
         if (!$videos && !$videos = $user->statistic()->wherePivot('event_id', $this['id'])->first()) {
-            return '0 of ' . count($this->lessons);
+            return '0 of ' . $this->lessons()->count();
         }
 
-        $videos = $videos->pivot['videos'];
-        $videos = json_decode($videos, true);
-        //dd($videos);
-        //dd($user->statistic()->wherePivot('event_id',$this['id'])->first());
+        $videos = json_decode($videos->pivot['videos'], true);
+
         if ($videos) {
-            //$videos = json_decode($videos, true);
-            //dd($videos);
             $sum = 0;
+
             foreach ($videos as $video) {
-                if ($video['seen'] == 1 || $video['seen'] == '1') {
+                if ($video['seen'] == 1) {
                     $sum++;
                 }
             }
@@ -1016,8 +1014,7 @@ class Event extends Model
             return $sum . ' of ' . count($videos);
         }
 
-        return'0 of ' . count($this->lessons);
-        //return '0 of 0';
+        return'0 of ' . $this->lessons()->count();
     }
 
     public function invoices(): MorphToMany

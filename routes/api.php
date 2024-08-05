@@ -26,6 +26,9 @@ use App\Http\Controllers\Api\v1\Event\EventTopicController;
 use App\Http\Controllers\Api\v1\Event\EventVenueController;
 use App\Http\Controllers\Api\v1\Event\Participants\EventActiveStudentsController;
 use App\Http\Controllers\Api\v1\Event\Participants\EventExamResultsController;
+use App\Http\Controllers\Api\v1\Event\Participants\EventRevenueStatsController;
+use App\Http\Controllers\Api\v1\Event\Participants\EventSaleStatsController;
+use App\Http\Controllers\Api\v1\Event\Participants\EventTicketStatsController;
 use App\Http\Controllers\Api\v1\Event\Participants\EventTotalHoursController;
 use App\Http\Controllers\Api\v1\Exam\ExamController;
 use App\Http\Controllers\Api\v1\Exam\ExamResultController;
@@ -184,6 +187,9 @@ Route::group(['middleware' => ['auth:api', 'auth.aboveauthor'], 'prefix' => 'v1'
     Route::get('events/{event}/participants/total-hours', EventTotalHoursController::class);
     Route::get('events/{event}/participants/exam-results', EventExamResultsController::class);
     Route::get('events/{event}/participants/active-students', EventActiveStudentsController::class);
+    Route::get('events/{event}/participants/ticket-stats', EventTicketStatsController::class);
+    Route::get('events/{event}/participants/sale-stats', EventSaleStatsController::class);
+    Route::get('events/{event}/participants/revenue-stats', EventRevenueStatsController::class);
 
     // Exams
     Route::apiResource('exams', ExamController::class)
