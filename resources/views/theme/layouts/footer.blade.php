@@ -13,9 +13,9 @@ $social_media = get_social_media();
                 <h4 class="footer-title award-title">Our awards</h4>
                 <div class="mobile-toggle">
                     <div class="row clearfix footer-award-menu">
-                        <div class="col4 col-sm-12 award-div">
-                            <div><img alt_text="awards" width="300%" height="100%" src="{{cdn('/awards/knowcrunch-awards-2024.png')}}"></div>
-                        </div>
+
+                            <img alt_text="awards" width="100%" height="100%" src="{{cdn('/awards/knowcrunch-awards-2024.png')}}">
+
                     </div>
                 </div>
         </div>
