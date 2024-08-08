@@ -184,5 +184,5 @@ if(isset($event)){
 @endphp
 
 @if($show_awards)
-<div class="background-blue_gradient"><div class="container-fluid"><div class="row"><div class="col-md-12"><img width="100%" height="100%" src="{{cdn('/awards/knowcrunch-awards-2024.png')}}" alt="Knowcrunch awards" class="center"></div></div></div></div>
+<div class="background-blue_gradient"><div class="container-fluid"><div class="row"><div class="col-md-12"><img width="75%" height="100%" src="{{cdn('/awards/knowcrunch-awards-2024.png')}}" alt="Knowcrunch awards" class="center"></div></div></div></div>
 @endif
