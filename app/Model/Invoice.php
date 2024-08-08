@@ -18,7 +18,7 @@ class Invoice extends Model
 
     public function user()
     {
-        return $this->morphedByMany(User::class, 'invoiceable');
+        return $this->morphedByMany(User::class, 'invoiceable')->withPivot(['invoiceable_id']);
     }
 
     public function event()

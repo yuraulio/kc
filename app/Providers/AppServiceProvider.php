@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Contracts\Api\v1\Event\IEventStatistic;
 use App\Model\Cashier as newCashier;
 use App\Model\Event;
 use App\Model\Item;
@@ -9,6 +10,7 @@ use App\Model\User;
 use App\Observers\EventObserver;
 use App\Observers\ItemObserver;
 use App\Observers\UserObserver;
+use App\Services\Event\EventStatisticService;
 use Auth;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\DB;
@@ -71,6 +73,10 @@ class AppServiceProvider extends ServiceProvider
                 config('app.vimeo_client_secret'),
                 config('app.vimeo_token')
             );
+        });
+
+        $this->app->bind(IEventStatistic::class, function ($app) {
+            return new EventStatisticService();
         });
     }
 }
