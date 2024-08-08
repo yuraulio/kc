@@ -15,8 +15,9 @@ class EventStatsController extends ApiBaseController
         return response()->json([
             'data' => $eventStatisticService->calculateEventStatistics(
                 $event,
-                $request->only(['calculateSubscription'],
-            ),
-        )]);
+                $request->only(
+                    ['calculateSubscription'],
+                ),
+            )]);
     }
 }

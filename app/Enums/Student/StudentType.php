@@ -11,7 +11,7 @@ enum StudentType: string
 
     public static function fromType(string $type): ?self
     {
-        return match($type) {
+        return match ($type) {
             '0' => self::OTHER,
             '1' => self::UNEMPLOYED,
             '2' => self::STUDENTS,

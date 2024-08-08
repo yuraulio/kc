@@ -9,9 +9,9 @@ use App\Model\Invoice;
 use App\Model\Invoiceable;
 use App\Model\Transaction;
 use App\Model\User;
+use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
-use Carbon\Carbon;
 
 class EventStatisticService implements IEventStatistic
 {
@@ -162,7 +162,7 @@ class EventStatisticService implements IEventStatistic
 
     private function checkInvoiceAmount(float $totalAmountInvoice, float $expectedAmount, int $userId): void
     {
-        if ((int)$totalAmountInvoice > (int)$expectedAmount) {
+        if ((int) $totalAmountInvoice > (int) $expectedAmount) {
             $user = User::find($userId);
 
             if ($user) {
@@ -256,6 +256,7 @@ class EventStatisticService implements IEventStatistic
         return $results->groupBy('transaction_id')->map(function ($group) {
             $first = $group->first();
             $first->user_ids = $group->pluck('user_id')->all();
+
             return $first;
         })->values()->all();
     }
@@ -263,8 +264,7 @@ class EventStatisticService implements IEventStatistic
     private function calculateUsers(
         Event $event,
         $filters
-    ): array
-    {
+    ): array {
         $arr = [];
         $countUsersU = [];
         $count = $this->initializeCount();
@@ -379,6 +379,7 @@ class EventStatisticService implements IEventStatistic
     private function calculateAmount(Transaction $transaction): float
     {
         $countUsers = count($transaction->user);
+
         return $transaction->amount != null ? round($transaction->amount / $countUsers) : 0;
     }
 
@@ -396,6 +397,7 @@ class EventStatisticService implements IEventStatistic
     private function hasNoEnrollFromOtherEvent(User $user, Event $event): bool
     {
         $enrollFromOtherEventPivot = $user->events_for_user_list1()->wherePivot('event_id', $event->id)->first();
+
         return $enrollFromOtherEventPivot && !str_contains($enrollFromOtherEventPivot->pivot->comment, 'enroll from');
     }
 
@@ -444,20 +446,20 @@ class EventStatisticService implements IEventStatistic
     {
         return DB::table('event_user_ticket')
             ->join('tickets', 'tickets.id', '=', 'event_user_ticket.ticket_id')
-            ->join('event_user', function($join) {
+            ->join('event_user', function ($join) {
                 $join->on('event_user.event_id', '=', 'event_user_ticket.event_id')
                     ->on('event_user.user_id', '=', 'event_user_ticket.user_id');
             })
-            ->join('transactionables as t1', function($join) {
+            ->join('transactionables as t1', function ($join) {
                 $join->on('t1.transactionable_id', '=', 'event_user.user_id')
                     ->where('t1.transactionable_type', 'App\Model\User');
             })
-            ->join('transactionables as t2', function($join) use ($id) {
+            ->join('transactionables as t2', function ($join) use ($id) {
                 $join->on('t2.transaction_id', '=', 't1.transaction_id')
                     ->where('t2.transactionable_type', 'App\Model\Event')
                     ->where('t2.transactionable_id', $id);
             })
-            ->leftJoin('transactionables as t3', function($join) use ($id) {
+            ->leftJoin('transactionables as t3', function ($join) use ($id) {
                 $join->on('t2.transaction_id', '=', 't1.transaction_id')
                     ->where('t3.transactionable_type', 'Laravel\Cashier\Subscription')
                     ->where('t3.transactionable_id', $id);
