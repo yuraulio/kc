@@ -93,6 +93,7 @@ class EventStatisticService implements IEventStatistic
             'other' => 0,
             'students' => 0,
             'unemployed' => 0,
+            'group' => 0,
             'subscription' => 0,
             'total' => 0,
         ];
