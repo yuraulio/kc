@@ -12,7 +12,7 @@ class EventReviewsController extends ApiBaseController
     public function __invoke(Event $event): AnonymousResourceCollection
     {
         $data = collect([
-            (object)[
+            (object) [
                 'id' => 1,
                 'kc_id' => 'kc_id',
                 'firstname' => 'Matt',
