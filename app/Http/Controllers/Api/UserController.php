@@ -1164,7 +1164,7 @@ class UserController extends Controller
         unset($user['invoice_details']);
 
         foreach ($user->getAttributes() as $key => $attribute) {
-            if ($key == 'terms') {
+            if ($key == 'terms' || $key == 'work_experience') {
                 continue;
             }
 
