@@ -893,7 +893,7 @@ class InfoController extends Controller
         $data['fbGroup'] = $extrainfo[7];
         $data['duration'] = ''; //$extrainfo[3];
 
-        $data['eventSlug'] = $transaction->event->first() ? url('https://knowcrunch.com') . '/' . $transaction->event->first()->getSlug() : url('/');
+        $data['eventSlug'] = $transaction->event->first() ? url('/') . '/' . $transaction->event->first()->getSlug() : url('/');
 
         $eventInfo = $transaction->event->first() ? $transaction->event->first()->event_info() : [];
 
