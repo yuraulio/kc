@@ -508,7 +508,7 @@ class HomeController extends Controller
         //$data['template'] = 'join_activation';
         $data['template'] = 'waiting_list_welcome';
         $data['subject'] = 'Knowcrunch - Welcome ' . $user->firstname;
-        $data['eventSlug'] = url('/') . '/' . $content->getSlug();
+        $data['eventSlug'] = url('https://knowcrunch.com') . '/' . $content->getSlug();
 
         $eventInfo = $content ? $content->event_info() : [];
 
