@@ -7,6 +7,7 @@ use App\Model\Topic;
 
 interface ITopicService
 {
-    function create(TopicDto $dto);
-    function update(Topic $topic, TopicDto $dto): Topic;
+    public function create(TopicDto $dto);
+
+    public function update(Topic $topic, TopicDto $dto): Topic;
 }

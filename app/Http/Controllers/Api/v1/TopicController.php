@@ -42,6 +42,7 @@ class TopicController extends ApiBaseController
     public function destroy(Topic $topic): Response
     {
         $topic->delete();
+
         return response()->noContent();
     }
 }

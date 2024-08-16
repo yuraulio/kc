@@ -16,6 +16,7 @@ class TopicService implements ITopicService
     public function update(Topic $topic, TopicDto $dto): Topic
     {
         $topic->update($dto->getData());
+
         return $topic;
     }
 }

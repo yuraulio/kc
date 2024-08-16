@@ -17,8 +17,7 @@ final readonly class TopicDto
         array $data,
         private int $creatorId,
         private int $authorId,
-    )
-    {
+    ) {
         $this->status = $data['status'];
         $this->title = $data['title'];
         $this->shortTitle = $data['short_title'];
