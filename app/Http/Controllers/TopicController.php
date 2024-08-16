@@ -146,7 +146,6 @@ class TopicController extends Controller
     {
         $categories = Category::all();
         $fromCategory = request()->get('selectedCategory') ?: request()->get('selectedCategory');
-        //$topic = $topic->with('category')->first();
 
         return view('topics.edit', compact('topic', 'categories', 'fromCategory'));
     }

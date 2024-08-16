@@ -41,7 +41,10 @@ class Lesson extends Model
 
     public function instructor()
     {
-        return $this->belongsToMany(Instructor::class, 'event_topic_lesson_instructor')->select('instructors.*')->with('medias', 'slugable');
+        return $this->belongsToMany(Instructor::class, 'event_topic_lesson_instructor')
+            ->select('instructors.*')
+            ->distinct('instructors.id')
+            ->with('medias', 'slugable');
     }
 
     public function event()

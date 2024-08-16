@@ -22,6 +22,7 @@ class ReviewResource extends JsonResource
             'published' => $this->resource->published,
             'event_id' => $this->resource->event_id,
             'student_id' => $this->resource->student_id,
+            'profileImage' => $this->resource->student_id,
         ];
     }
 }

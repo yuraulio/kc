@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\v1\Event;
 
 use App\Http\Controllers\Api\v1\ApiBaseController;
+use App\Http\Resources\Api\v1\Event\Topics\TopicResource;
 use App\Model\Event;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -12,13 +13,12 @@ class EventTopicController extends ApiBaseController
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request, Event $event): JsonResponse
+    public function index(Request $request, Event $event)
     {
         $query = $this->applyRequestParametersToQuery($event->allTopics(), $request);
+        $topics = $this->paginateByRequestParameters($query, $request);
 
-        return new JsonResponse(
-            $this->paginateByRequestParameters($query, $request)
-        );
+        return TopicResource::collection($topics)->response()->getData(true);
     }
 
     /**

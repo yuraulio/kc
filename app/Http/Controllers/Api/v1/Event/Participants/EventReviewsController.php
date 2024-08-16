@@ -25,6 +25,7 @@ class EventReviewsController extends ApiBaseController
                 'published' => true,
                 'event_id' => $event->id,
                 'student_id' => 1,
+                'profile_image' => '',
             ],
         ]);
 

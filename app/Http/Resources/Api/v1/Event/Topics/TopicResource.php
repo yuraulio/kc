@@ -1,0 +1,32 @@
+<?php
+
+namespace App\Http\Resources\Api\v1\Event\Topics;
+
+use App\Http\Resources\Api\v1\Event\Lesson\LessonResource;
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
+
+class TopicResource extends JsonResource
+{
+    public function toArray(Request $request): array
+    {
+        return [
+            'id' => $this->resource->id,
+            'title' => $this->resource->title,
+            'pivot' => $this->resource->pivot ? [
+                'automate_mail' => $this->resource->pivot->automate_mail ?? 0,
+                'topic_id' => $this->resource->pivot?->topic_id,
+                'event_id' => $this->resource->pivot?->event_id,
+            ] : [],
+            'event_lesson' => LessonResource::collection($this->whenLoaded('event_lesson')),
+            'status' => $this->resource->status,
+            'created_at' => $this->resource->created_at,
+            'short_title' => $this->resource->short_title,
+            'subtitle' => $this->resource->subtitle,
+            'header' => $this->resource->header,
+            'summary' => $this->resource->summary,
+            'body' => $this->resource->body,
+            'email_template' => $this->resource->email_template,
+        ];
+    }
+}

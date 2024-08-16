@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Illuminate\Database\Query\Builder;
 
 class Topic extends Model
 {
@@ -16,12 +17,23 @@ class Topic extends Model
     protected $table = 'topics';
 
     protected $fillable = [
-        'priority', 'status', 'comment_status', 'title', 'short_title', 'subtitle', 'header', 'summary', 'body', 'author_id', 'creator_id', 'email_template',
+        'priority',
+        'status',
+        'comment_status',
+        'title',
+        'short_title',
+        'subtitle',
+        'header',
+        'summary',
+        'body',
+        'author_id',
+        'creator_id',
+        'email_template',
     ];
 
     public function category(): MorphToMany
     {
-        return $this->morphToMany(Category::class, 'categoryable');
+        return $this->morphToMany(Category::class, 'categoryable')->withPivot('priority');
     }
 
     public function topic(): MorphToMany
@@ -64,5 +76,12 @@ class Topic extends Model
             ->with('instructor')
             ->orderBy('event_topic_lesson_instructor.priority')
             ->groupBy('id');
+    }
+
+    public function scopeForCategory(Builder $query, int $categoryId): Builder
+    {
+        return $query->whereHas('category', function ($query) use ($categoryId) {
+            $query->where('id', $categoryId);
+        });
     }
 }

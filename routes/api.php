@@ -164,8 +164,12 @@ Route::group(['middleware' => ['auth:api', 'auth.aboveauthor'], 'prefix' => 'v1'
         ->only(['index']);
 
     // Topics
-    Route::apiResource('topics', TopicController::class)
-        ->only(['index']);
+    Route::prefix('topics')->group(function () {
+        Route::get('/', [TopicController::class, 'index']);
+        Route::post('/', [TopicController::class, 'store']);
+        Route::put('/{topic}', [TopicController::class, 'update']);
+        Route::delete('/{topic}', [TopicController::class, 'destroy']);
+    });
 
     // Events
     Route::apiResource('events', EventController::class);
