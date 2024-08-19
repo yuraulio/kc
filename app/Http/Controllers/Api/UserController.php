@@ -37,7 +37,7 @@ class UserController extends Controller
     {
         $user1 = Auth::user();
 
-        $user = User::with('image')->find($user1->id);
+        $user = User::with('profile_image')->find($user1->id);
         $billingDetails = $user['receipt_details'];
         $billingDetails = json_decode($billingDetails, true);
 
@@ -55,8 +55,8 @@ class UserController extends Controller
 
         //$user['stripe_ids'] = json_decode($user['stripe_ids'],true)  ? $user['stripe_ids'] : [];
 
-        if (isset($user['image']) && get_profile_image($user['image'])) {
-            $user['profileImage'] = get_profile_image($user['image']);
+        if ($user->profile_image) {
+            $user['profileImage'] = $user->profile_image->url;
         } else {
             $user['profileImage'] = '/theme/assets/images/icons/user-profile-placeholder-image.png';
         }
