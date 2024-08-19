@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Contracts\Api\v1\Event\IEventStatistic;
+use App\Contracts\Api\v1\Lesson\ILessonService;
 use App\Contracts\Api\v1\Topic\ITopicService;
 use App\Model\Cashier as newCashier;
 use App\Model\Event;
@@ -12,6 +13,7 @@ use App\Observers\EventObserver;
 use App\Observers\ItemObserver;
 use App\Observers\UserObserver;
 use App\Services\Event\EventStatisticService;
+use App\Services\Lesson\LessonService;
 use App\Services\Topic\TopicService;
 use Auth;
 use Illuminate\Pagination\Paginator;
@@ -83,6 +85,10 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->bind(ITopicService::class, function ($app) {
             return new TopicService();
+        });
+
+        $this->app->bind(ILessonService::class, function ($app) {
+            return new LessonService();
         });
     }
 }

@@ -171,6 +171,13 @@ Route::group(['middleware' => ['auth:api', 'auth.aboveauthor'], 'prefix' => 'v1'
         Route::delete('/{topic}', [TopicController::class, 'destroy']);
     });
 
+    Route::prefix('lessons')->group(function () {
+        Route::get('/', [LessonController::class, 'index']);
+        Route::post('/', [LessonController::class, 'store']);
+        Route::put('/{lesson}', [LessonController::class, 'update']);
+        Route::delete('/{lesson}', [LessonController::class, 'destroy']);
+    });
+
     // Events
     Route::apiResource('events', EventController::class);
     // Nested resources of events.

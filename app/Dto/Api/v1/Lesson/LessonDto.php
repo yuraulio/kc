@@ -1,38 +1,35 @@
 <?php
 
-namespace App\Dto\Api\v1\Topic;
+namespace App\Dto\Api\v1\Lesson;
 
 use App\Contracts\Api\v1\Dto\IDto;
 
-final readonly class TopicDto implements IDto
+final readonly class LessonDto implements IDto
 {
     private int $status;
+    private string $htmlTitle;
     private string $title;
-    private string $shortTitle;
     private string $subtitle;
     private string $header;
     private string $summary;
     private string $body;
-    private ?string $emailTemplate;
+    private ?string $vimeoVideo;
+    private ?string $vimeoDuration;
 
     public function __construct(
         array $data,
         private int $creatorId,
         private int $authorId,
     ) {
-        $this->status = $data['status'];
+        $this->status = $data['status'] ?? 1;
+        $this->htmlTitle = $data['htmlTitle'];
         $this->title = $data['title'];
-        $this->shortTitle = $data['short_title'];
         $this->subtitle = $data['subtitle'];
-        $this->body = $data['body'];
         $this->header = $data['header'];
         $this->summary = $data['summary'];
-        $this->emailTemplate = $data['email_template'] ?? null;
-    }
-
-    public function getTitle(): string
-    {
-        return $this->title;
+        $this->body = $data['body'];
+        $this->vimeoVideo = $data['vimeo_video'] ?? null;
+        $this->vimeoDuration = $data['vimeo_duration'] ?? null;
     }
 
     public function getStatus(): int
@@ -40,9 +37,14 @@ final readonly class TopicDto implements IDto
         return $this->status;
     }
 
-    public function getShortTitle(): string
+    public function getTitle(): string
     {
-        return $this->shortTitle;
+        return $this->title;
+    }
+
+    public function getHtmlTitle(): string
+    {
+        return $this->htmlTitle;
     }
 
     public function getSubtitle(): string
@@ -55,11 +57,6 @@ final readonly class TopicDto implements IDto
         return $this->body;
     }
 
-    public function getEmailTemplate(): ?string
-    {
-        return $this->emailTemplate;
-    }
-
     public function getHeader(): string
     {
         return $this->header;
@@ -68,6 +65,16 @@ final readonly class TopicDto implements IDto
     public function getSummary(): string
     {
         return $this->summary;
+    }
+
+    public function getVimeoVideo(): ?string
+    {
+        return $this->vimeoVideo;
+    }
+
+    public function getVimeoDuration(): ?string
+    {
+        return $this->vimeoDuration;
     }
 
     public function getCreatorId(): int
@@ -84,13 +91,14 @@ final readonly class TopicDto implements IDto
     {
         return [
             'status' => $this->getStatus(),
+            'htmlTitle' => $this->getHtmlTitle(),
             'title' => $this->getTitle(),
-            'short_title' => $this->getShortTitle(),
             'subtitle' => $this->getSubtitle(),
             'header' => $this->getHeader(),
             'summary' => $this->getSummary(),
             'body' => $this->getBody(),
-            'email_template' => $this->getEmailTemplate(),
+            'vimeo_video' => $this->getVimeoVideo(),
+            'vimeo_duration' => $this->getVimeoDuration(),
             'creator_id' => $this->getCreatorId(),
             'author_id' => $this->getAuthorId(),
         ];

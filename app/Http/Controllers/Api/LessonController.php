@@ -2,13 +2,48 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
+use App\Contracts\Api\v1\Lesson\ILessonService;
+use App\Http\Controllers\Api\v1\ApiBaseController;
+use App\Http\Requests\Api\v1\Lesson\LessonRequest;
+use App\Http\Resources\Api\v1\Event\Lesson\LessonResource;
+use App\Model\Lesson;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
-class LessonController extends Controller
+class LessonController extends ApiBaseController
 {
+    public function index(Request $request)
+    {
+        $query = $this->applyRequestParametersToQuery(Lesson::query(), $request);
+
+        return LessonResource::collection(
+            $this->paginateByRequestParameters($query, $request)
+        )->response()->getData(true);
+    }
+
+    public function store(LessonRequest $request, ILessonService $lessonService): LessonResource
+    {
+        return LessonResource::make(
+            $lessonService->create($request->toDto()),
+        );
+    }
+
+    public function update(LessonRequest $request, Lesson $lesson, ILessonService $lessonService): LessonResource
+    {
+        return LessonResource::make(
+            $lessonService->update($lesson, $request->toDto()),
+        );
+    }
+
+    public function destroy(Lesson $lesson): Response
+    {
+        $lesson->delete();
+
+        return response()->noContent();
+    }
+
     public function saveNote(Request $request)
     {
         $user = Auth::user();

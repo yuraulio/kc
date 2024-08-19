@@ -12,16 +12,21 @@ class LessonResource extends JsonResource
     {
         return [
             'id' => $this->resource->id,
+            'htmlTitle' => $this->resource->htmlTitle,
             'title' => $this->resource->title,
+            'subtitle' => $this->resource->subtitle,
+            'header' => $this->resource->header,
+            'summary' => $this->resource->summary,
+            'body' => $this->resource->body,
             'instructor' => InstructorResource::collection($this->whenLoaded('instructor')),
             'vimeo_video' => $this->resource->vimeo_video,
             'vimeo_duration' => $this->resource->vimeo_duration,
-            'pivot' => [
+            'pivot' => $this->resource->pivot ? [
                 'date' => $this->resource->pivot->date,
                 'room' => $this->resource->pivot->room,
                 'time_ends' => $this->resource->pivot->time_ends,
                 'time_starts' => $this->resource->pivot->time_starts,
-            ],
+            ] : [],
         ];
     }
 }

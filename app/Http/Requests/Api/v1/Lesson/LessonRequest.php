@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Http\Requests\Api\v1\Topic;
+namespace App\Http\Requests\Api\v1\Lesson;
 
 use App\Contracts\Api\v1\Dto\IDtoRequest;
-use App\Dto\Api\v1\Topic\TopicDto;
+use App\Dto\Api\v1\Lesson\LessonDto;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 
-class TopicRequest extends FormRequest implements IDtoRequest
+class LessonRequest extends FormRequest implements IDtoRequest
 {
-    public function authorize(): bool
+    public function authorize(): true
     {
         return true;
     }
@@ -17,20 +17,20 @@ class TopicRequest extends FormRequest implements IDtoRequest
     public function rules(): array
     {
         return [
-            'status' => ['required', 'numeric'],
-            'title' => ['required', 'min:3'],
-            'short_title' => ['required', 'string'],
+            'htmlTitle' => ['required', 'string', 'min:3'],
+            'title' => ['required', 'string', 'min:3'],
             'subtitle' => ['required', 'string'],
             'header' => ['required', 'string'],
             'summary' => ['required', 'string'],
             'body' => ['required', 'string'],
-            'email_template' => ['nullable', 'string'],
+            'vimeo_video' => ['nullable', 'string'],
+            'vimeo_duration' => ['nullable', 'string'],
         ];
     }
 
-    public function toDto(): TopicDto
+    public function toDto(): LessonDto
     {
-        return new TopicDto(
+        return new LessonDto(
             $this->validated(),
             Auth::id(),
             Auth::id(),
