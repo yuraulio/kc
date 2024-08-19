@@ -804,7 +804,7 @@ class StudentController extends Controller
         $new_name = $name_parts[0] . '.webp';
 
         // Save image in webp format
-        $image = Image::make($request->dp_fileupload->path());
+        $image = Image::make($request->dp_fileupload->path())->orientate();
         if ($image->width() > $image->height()) {
             $image->heighten(470)->crop(470, 470);
         } elseif ($image->width() < $image->height()) {
