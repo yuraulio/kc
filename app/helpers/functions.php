@@ -981,7 +981,10 @@ if (!function_exists('is_webp_acceptable')) {
         // Safari starts to support the WebP format from the 14 version (full
         // support from the 16 version) so we should allow Safari users to see
         // images in the WebP format.
-        if ($browser->getBrowser() === Browser::BROWSER_SAFARI) {
+
+        // the safari browser on the iphone supports the webp since the same version as desktop version of safari
+        // https://caniuse.com/webp
+        if ($browser->getBrowser() === Browser::BROWSER_SAFARI || $browser->getBrowser() === Browser::BROWSER_IPHONE) {
             $browserVersion = $browser->getVersion();
 
             if ($dotPosition = strpos($browserVersion, '.')) {
