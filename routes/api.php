@@ -32,6 +32,7 @@ use App\Http\Controllers\Api\v1\Event\Participants\EventSaleStatsController;
 use App\Http\Controllers\Api\v1\Event\Participants\EventStatsController;
 use App\Http\Controllers\Api\v1\Event\Participants\EventTicketStatsController;
 use App\Http\Controllers\Api\v1\Event\Participants\EventTotalHoursController;
+use App\Http\Controllers\Api\v1\Exam\ExamCategoryController;
 use App\Http\Controllers\Api\v1\Exam\ExamController;
 use App\Http\Controllers\Api\v1\Exam\ExamResultController;
 use App\Http\Controllers\Api\v1\InstructorController;
@@ -209,6 +210,7 @@ Route::group(['middleware' => ['auth:api', 'auth.aboveauthor'], 'prefix' => 'v1'
     // Exams
     Route::apiResource('exams', ExamController::class)
         ->only(['index', 'show']);
+    Route::apiResource('exam-categories', ExamCategoryController::class);
     Route::apiResource('exams.results', ExamResultController::class)
         ->only(['index']);
 
