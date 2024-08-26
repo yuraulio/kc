@@ -734,55 +734,81 @@ class StudentController extends Controller
         return $data;
     }
 
-    public function removeProfileImage()
+    public function removeProfileImage(): void
     {
-        //dd('from remove');
         $user = Auth::user();
-        $user_id = $user->id;
         $media = $user->image;
-        if (!$media) {
-            return;
+        $mediaNew = $user->profile_image;
+
+        if ($media) {
+            $path_crop = explode('.', $media['original_name']);
+            $path_crop = $media['path'] . $path_crop[0] . '-crop' . $media['ext'];
+            $path_crop = substr_replace($path_crop, '', 0, 1);
+            $path_crop_webp = str_replace($media['ext'], '.webp', $path_crop);
+
+            $path = $media['path'] . $media['original_name'];
+            $path = substr_replace($path, '', 0, 1);
+            $path_webp = str_replace($media['ext'], '.webp', $path);
+
+            if (file_exists($path_crop)) {
+                //unlink crop image
+                unlink($path_crop);
+            }
+
+            if (file_exists($path)) {
+                //unlink crop image
+                unlink($path);
+            }
+
+            if (file_exists($path_webp)) {
+                //unlink crop image
+                unlink($path_webp);
+            }
+
+            if (file_exists($path_crop_webp)) {
+                //unlink crop image
+                unlink($path_crop_webp);
+            }
+
+            //null db image
+            $media->original_name = null;
+            $media->name = null;
+            $media->path = null;
+            $media->ext = null;
+            $media->file_info = null;
+            $media->height = null;
+            $media->width = null;
+            $media->details = null;
+
+            $media->save();
         }
-        $path_crop = explode('.', $media['original_name']);
-        $path_crop = $media['path'] . $path_crop[0] . '-crop' . $media['ext'];
-        $path_crop = substr_replace($path_crop, '', 0, 1);
-        $path_crop_webp = str_replace($media['ext'], '.webp', $path_crop);
 
-        $path = $media['path'] . $media['original_name'];
-        $path = substr_replace($path, '', 0, 1);
-        $path_webp = str_replace($media['ext'], '.webp', $path);
+        if ($mediaNew) {
+            DB::beginTransaction();
+            try {
+                $original = $mediaNew->parent;
 
-        if (file_exists($path_crop)) {
-            //unlink crop image
-            unlink($path_crop);
+                if ($original) {
+                    if (file_exists(public_path($original->full_path))) {
+                        unlink(public_path($original->full_path));
+                    }
+                }
+
+                if (file_exists(public_path($mediaNew->full_path))) {
+                    unlink(public_path($mediaNew->full_path));
+                }
+
+                $user->profile_image_id = null;
+                $user->save();
+
+                $original->delete();
+                $mediaNew->delete();
+            } catch (\Throwable $throwable) {
+                DB::rollBack();
+                throw $throwable;
+            }
+            DB::commit();
         }
-
-        if (file_exists($path)) {
-            //unlink crop image
-            unlink($path);
-        }
-
-        if (file_exists($path_webp)) {
-            //unlink crop image
-            unlink($path_webp);
-        }
-
-        if (file_exists($path_crop_webp)) {
-            //unlink crop image
-            unlink($path_crop_webp);
-        }
-
-        //null db image
-        $media->original_name = null;
-        $media->name = null;
-        $media->path = null;
-        $media->ext = null;
-        $media->file_info = null;
-        $media->height = null;
-        $media->width = null;
-        $media->details = null;
-
-        $media->save();
     }
 
     public function uploadProfileImage(Request $request)
@@ -864,7 +890,7 @@ class StudentController extends Controller
             'message' => 'Change profile photo successfully!!',
             'data' => $CMSFile->full_path,
             'crop_data' => '{"crop_height":470,"crop_width":470,"height_offset":0,"width_offset":0}',
-            'profile_image' => $user->profile_image,
+            'profile_image' => $CMSFileThumb,
             'profile_image_original' => $CMSFile,
         ]);
     }

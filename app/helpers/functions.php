@@ -974,7 +974,8 @@ if (!function_exists('cdnPath')) {
 }*/
 
 if (!function_exists('is_webp_acceptable')) {
-    function getIOSVersion(string $userAgent): int | null {
+    function getIOSVersion(string $userAgent): int | null
+    {
         // Regular expression to match the iOS version in the user agent string
         if (preg_match('/iPhone OS (\d+)_?(\d+)?_?(\d+)?/', $userAgent, $matches)) {
             // Extract the major and minor version numbers
