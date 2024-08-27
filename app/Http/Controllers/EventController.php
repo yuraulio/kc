@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\Student\StudentExportType;
 use App\Exports\ExportStudentResults;
 use App\Exports\StudentExport;
 use App\Http\Requests\EventRequest;
 use App\Jobs\EnrollStudentsToElearningEvents;
 use App\Jobs\EventSoldOut;
 use App\Jobs\SendMaiWaitingList;
-use App\Model\CategoriesFaqs;
 use App\Model\Category;
 use App\Model\City;
 use App\Model\Coupon;
@@ -18,7 +18,6 @@ use App\Model\Event;
 use App\Model\EventInfo;
 use App\Model\Exam;
 use App\Model\Instructor;
-use App\Model\Media;
 use App\Model\Partner;
 use App\Model\PaymentMethod;
 use App\Model\Section;
@@ -27,14 +26,14 @@ use App\Model\Topic;
 use App\Model\Type;
 use App\Model\User;
 use App\Services\CreateCertificatesTrainingEventsService;
-use DateTime;
-use Excel;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-use Intervention\Image\ImageManagerStatic as Image;
+use Illuminate\Validation\Rule;
+use Maatwebsite\Excel\Facades\Excel;
+use Symfony\Component\HttpClient\Exception\InvalidArgumentException;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class EventController extends Controller
 {
@@ -1021,8 +1020,6 @@ class EventController extends Controller
         $data['income']['total'] = array_sum($income);
         //dd($count);
 
-        $s = 0;
-
         return response()->json([
             'success' => __('Event Statistic successfully fetched.'),
             'data' => $data,
@@ -1928,17 +1925,26 @@ class EventController extends Controller
         }
     }
 
-    public function exportStudent(Request $request)
+    public function exportStudent(Request $request): BinaryFileResponse
     {
-        if ($request->state == 'student_waiting_list') {
-            $filename = 'StudentsWaitingListExport.xlsx';
-        } elseif ($request->state == 'student_list') {
-            $filename = 'StudentsListExport.xlsx';
-        }
+        $request->validate([
+            'id' => 'required',
+            'state' => ['required', Rule::enum(StudentExportType::class)],
+        ]);
 
-        Excel::store(new StudentExport($request), $filename, 'export');
+        $event = Event::findOrFail($request->get('id'));
+        $exportType = StudentExportType::tryFrom($request->get('state'));
 
-        return Excel::download(new StudentExport($request), $filename);
+        Excel::store(
+            new StudentExport($event, $exportType),
+            $exportType->getExportFileName(),
+            'export'
+        );
+
+        return Excel::download(
+            new StudentExport($event, $exportType),
+            $exportType->getExportFileName()
+        );
     }
 
     public function exportStudentExams(Request $request)

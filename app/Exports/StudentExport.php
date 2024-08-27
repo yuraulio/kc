@@ -2,46 +2,73 @@
 
 namespace App\Exports;
 
+use App\Enums\Student\StudentExportType;
 use App\Model\Event;
-use App\Model\User;
-use Auth;
+use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\FromArray;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 
 class StudentExport implements FromArray, WithHeadings, ShouldAutoSize
 {
-    /**
-     * @return \Illuminate\Support\Collection
-     */
-    public $event;
-    public $state;
+    use Exportable;
 
-    public function __construct($request)
+    private Event $event;
+
+    private StudentExportType $exportType;
+
+    public function __construct(Event $event, StudentExportType $exportType)
     {
-        $event_id = $request->id;
-        $this->state = $request->state;
+        $this->event = $event;
+        $this->exportType = $exportType;
 
         $this->createDir(base_path('public/tmp/exports/'));
-        $this->event = Event::find($event_id);
     }
 
-    /**
-     * @return \Illuminate\Support\Collection
-     */
+    public function headings(): array
+    {
+        return [
+            'Event',
+            'Name',
+            'Surname',
+            'Email',
+            'Mobile',
+            'Job Title',
+            'Επωνυμία/Company',
+            'Δραστηριότητα',
+            'ΑΦΜ',
+            'ΔΟΥ',
+            'Διεύθυνση/Address',
+            'Τ.Κ./PostCode',
+            'Πόλη',
+            'Company',
+            'Knowcrunch Id',
+            'DereeId',
+            'Amount',
+            'Invoice',
+            'Ticket Type',
+            '# of Seats',
+            'Date Placed',
+            'Status',
+            'Bank Details',
+        ];
+    }
+
     public function array(): array
     {
         $data = [];
 
-        if ($this->state == 'student_list') {
+        if ($this->exportType === StudentExportType::LIST) {
             $students = $this->event->users;
-        } elseif ($this->state == 'student_waiting_list') {
+        }
+
+        if ($this->exportType === StudentExportType::WAITING_LIST) {
             $students = $this->event->waitingList()->with('user')->get();
             $new_students = [];
 
             foreach ($students as $waiting) {
                 if (isset($waiting['user'])) {
-                    array_push($new_students, $waiting['user']);
+                    $new_students[] = $waiting['user'];
                 }
             }
 
@@ -57,8 +84,6 @@ class StudentExport implements FromArray, WithHeadings, ShouldAutoSize
             $companyaddress = '';
             $companyaddressnum = '';
             $companypostcode = '';
-            $companycity = '';
-            $companyemail = '';
             $city = '';
             $bankDetails = '';
             $company = '';
@@ -79,12 +104,13 @@ class StudentExport implements FromArray, WithHeadings, ShouldAutoSize
             if ($transaction != null) {
                 $tickets = $transaction->user->first()['ticket']->groupBy('event_id');
                 $ticketType = isset($tickets[$transaction->event->first()->id]) ? $tickets[$transaction->event->first()->id]->first()->type : '-';
-                $statusHistory = $transaction != null ? $transaction->status_history : null;
+                $statusHistory = $transaction->status_history;
 
-                $seats = isset($statusHistory[0]['pay_seats_data']['name']) ? count(isset($statusHistory[0]['pay_seats_data']['companies'])) : 1;
+                $seats = isset($statusHistory[0]['pay_seats_data']['companies']) ? count($statusHistory[0]['pay_seats_data']['companies']) : 1;
                 $datePlaced = isset($transaction->placement_date) ? date('d-m-Y', strtotime($transaction->placement_date)) : '';
-                $amount = round(($transaction->amount / count($transaction->user)), 2);
+                $amount = round(($transaction->amount / $transaction->user->count()), 2);
                 $bankDetails = '-';
+
                 if (isset($statusHistory[0]['cardtype'])) {
                     if ($statusHistory[0]['cardtype'] == 2 && (isset($statusHistory[0]['installments']))) {
                         $bankDetails = 'Credit Card ' . $statusHistory[0]['installments'] . ' installments';
@@ -97,53 +123,50 @@ class StudentExport implements FromArray, WithHeadings, ShouldAutoSize
                     }
                 }
 
-                $status = 'CANCELLED / REFUSED';
-                if ($transaction->status == 1) {
-                    $status = 'APPROVED';
-                } elseif ($transaction->status == 2) {
-                    $status = 'ABANDONDED';
-                }
+                $status = match ($transaction->status) {
+                    1 => 'APPROVED',
+                    2 => 'ABANDONDED',
+                    default => 'CANCELLED / REFUSED',
+                };
 
                 $billingDetails = json_decode($transaction->billing_details, true);
 
-                if (isset($billingDetails['billing']) && $billingDetails['billing'] == 2) {
-                    if (!isset($billingDetails['companyname'])) {
-                        $billingDetails = json_decode($transaction->user->first()->invoice_details, true);
-                    }
+                if (!empty($billingDetails['billing'])) {
+                    if ($billingDetails['billing'] == 1) {
+                        if (!isset($billingDetails['billcity'])) {
+                            $billingDetails = json_decode($transaction->user->first()->receipt_details, true);
+                        }
 
-                    $invoice = 'YES';
-                    $companyName = isset($billingDetails['companyname']) ? $billingDetails['companyname'] : '';
-                    $companyProfession = isset($billingDetails['companyprofession']) ? $billingDetails['companyprofession'] : '';
-                    $companyafm = isset($billingDetails['companyafm']) ? $billingDetails['companyafm'] : '';
-                    $companydoy = isset($billingDetails['companydoy']) ? $billingDetails['companydoy'] : '';
-                    $companyaddress = isset($billingDetails['companyaddress']) ? $billingDetails['companyaddress'] : '';
-                    $companyaddressnum = isset($billingDetails['companyaddressnum']) ? $billingDetails['companyaddressnum'] : '';
-                    $companypostcode = isset($billingDetails['companypostcode']) ? $billingDetails['companypostcode'] : '';
-                    $companycity = isset($billingDetails['companycity']) ? $billingDetails['companycity'] : '';
-                    $email = isset($billingDetails['companyemail']) ? $billingDetails['companyemail'] : $email;
-                } elseif (isset($billingDetails['billing']) && $billingDetails['billing'] == 1) {
-                    if (!isset($billingDetails['billcity'])) {
-                        $billingDetails = json_decode($transaction->user->first()->receipt_details, true);
-                    }
+                        $city = $billingDetails['billcity'] ?? '';
+                        $companyafm = $billingDetails['billafm'] ?? '';
+                        $companypostcode = $billingDetails['billpostcode'] ?? '';
+                        $companyaddress = $billingDetails['billaddress'] ?? '';
+                        $companyaddressnum = $billingDetails['billaddressnum'] ?? '';
+                    } elseif ($billingDetails['billing'] == 2) {
+                        if (!isset($billingDetails['companyname'])) {
+                            $billingDetails = json_decode($transaction->user->first()->invoice_details, true);
+                        }
 
-                    $city = isset($billingDetails['billcity']) ? $billingDetails['billcity'] : '';
-                    $companyafm = isset($billingDetails['billafm']) ? $billingDetails['billafm'] : '';
-                    $companypostcode = isset($billingDetails['billpostcode']) ? $billingDetails['billpostcode'] : '';
-                    $companyaddress = isset($billingDetails['billaddress']) ? $billingDetails['billaddress'] : '';
-                    $companyaddressnum = isset($billingDetails['billaddressnum']) ? $billingDetails['billaddressnum'] : '';
+                        $invoice = 'YES';
+                        $companyName = $billingDetails['companyname'] ?? '';
+                        $companyProfession = $billingDetails['companyprofession'] ?? '';
+                        $companyafm = $billingDetails['companyafm'] ?? '';
+                        $companydoy = $billingDetails['companydoy'] ?? '';
+                        $companyaddress = $billingDetails['companyaddress'] ?? '';
+                        $companyaddressnum = $billingDetails['companyaddressnum'] ?? '';
+                        $companypostcode = $billingDetails['companypostcode'] ?? '';
+                        $email = $billingDetails['companyemail'] ?? $email;
+                    }
                 }
             }
 
-            $kcId = $user->kc_id;
-            $partnerId = $user->partner_id;
-
-            $rowdata = [
+            $data[] = [
                 $this->event->title,
                 $user->firstname,
                 $user->lastname,
                 $user->email,
-                isset($user->mobile) ? $user->mobile : '',
-                isset($user->job_title) ? $user->job_title : '',
+                $user->mobile ?? '',
+                $user->job_title ?? '',
                 $companyName,
                 $companyProfession,
                 $companyafm,
@@ -152,8 +175,8 @@ class StudentExport implements FromArray, WithHeadings, ShouldAutoSize
                 $companypostcode,
                 $city,
                 $company,
-                $kcId,
-                $partnerId,
+                $user->kc_id,
+                $user->partner_id,
                 $amount,
                 $invoice,
                 $ticketType,
@@ -162,25 +185,13 @@ class StudentExport implements FromArray, WithHeadings, ShouldAutoSize
                 $status,
                 $bankDetails,
             ];
-
-            array_push($data, $rowdata);
         }
 
         return $data;
     }
 
-    public function headings(): array
+    private function createDir($dir, $permission = 0777, $recursive = true): bool
     {
-        return ['Event', 'Name', 'Surname', 'Email', 'Mobile', 'Job Title', 'Επωνυμία/Company', 'Δραστηριότητα', 'ΑΦΜ', 'ΔΟΥ', 'Διεύθυνση/Address', 'Τ.Κ./PostCode',
-            'Πόλη', 'Company', 'Knowcrunch Id', 'DereeId', 'Amount', 'Invoice', 'Ticket Type', '# of Seats', 'Date Placed', 'Status', 'Bank Details'];
-    }
-
-    public function createDir($dir, $permision = 0777, $recursive = true)
-    {
-        if (!is_dir($dir)) {
-            return mkdir($dir, $permision, $recursive);
-        } else {
-            return true;
-        }
+        return is_dir($dir) || mkdir($dir, $permission, $recursive);
     }
 }
