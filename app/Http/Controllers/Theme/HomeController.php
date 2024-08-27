@@ -13,54 +13,41 @@ use App\Model\Delivery;
 use App\Model\Event;
 use App\Model\GiveAway;
 use App\Model\Instructor;
-use App\Model\Invoice;
 use App\Model\Logos;
-use App\Model\Media;
-use App\Model\Menu;
 use App\Model\Option;
 use App\Model\Pages;
 use App\Model\Slug;
-use App\Model\Topic;
 use App\Model\Transaction;
 use App\Model\Type;
 use App\Model\User;
 use App\Model\WaitingList;
 use App\Notifications\WelcomeEmail;
+use App\Services\Event\EventSyllabusService;
 use App\Services\FBPixelService;
 use Bugsnag\BugsnagLaravel\Facades\Bugsnag;
 use Carbon\Carbon;
-use Cart as Cart;
+use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
-use Laravel\Cashier\Cashier;
-use Mail;
-use PDF;
-use Session;
-use Validator;
-use View;
 
 class HomeController extends Controller
 {
     private $fbp;
 
-    public function __construct(FBPixelService $fbp)
+    private EventSyllabusService $eventSyllabusService;
+
+    public function __construct(FBPixelService $fbp, EventSyllabusService $eventSyllabusService)
     {
         $this->fbp = $fbp;
+        $this->eventSyllabusService = $eventSyllabusService;
         $this->middleware('auth.sms')->except('getSMSVerification', 'smsVerification');
         $this->middleware('instructor-terms');
         $fbp->sendPageViewEvent();
-
-        /*$this->middleware(function ($request, $next) {
-            if(Auth::user()){
-                $content['User_id'] = Auth::user()->id;
-            }else{
-                $content['Visitor_id'] = 'fsdf';
-            }
-
-            return $next($request);
-        });*/
     }
 
     /*public function homePage(){
@@ -774,48 +761,20 @@ class HomeController extends Controller
 
     public function printSyllabusBySlug($slug = '')
     {
-        //Request $request
-        $data = [];
-
         // If someone tries not existing slug we should redirect them to the 404 page
         $slug = Slug::where('slug', $slug)->firstOrFail();
-        $data['content'] = $slug->slugable;
+
         if ($slug->slugable_type == 'App\Model\Event') {
-            $data['content'] = Event::with('category', 'city', 'topic')->find($data['content']['id']);
-            $data['eventtopics'] = $data['content']->topicsLessonsInstructors()['topics'];
-            $topicDescription = [];
+            $event = Event::find($slug->slugable->id);
 
-            foreach ($data['eventtopics'] as $key => $topic) {
-                //dd($topic);
-                //dd($key);
-                $topic = Topic::where('title', $key)->first();
-                $topicDescription[$key] = $topic['summary'];
+            if ($event) {
+                return $this->eventSyllabusService
+                    ->getSyllabusFileForEvent($event)
+                    ->stream($slug->slugable->title . '.pdf');
             }
-            if (!$data['content']->is_inclass_course()) {
-                array_multisort(array_column($data['eventtopics'], 'priority'), SORT_ASC, $data['eventtopics']);
-                //uasort($data['eventtopics'], fn($a, $b) => strcmp($a['priority'], $b['priority']));
-            }
-
-            $data['eventorganisers'] = [];
-            if (count($data['content']['city']) != 0) {
-                $data['location'] = $data['content']['city'][0];
-            }
-
-            $data['etax'] = $data['content']['topic'];
-
-            $data['instructors'] = $data['content']->topicsLessonsInstructors()['instructors'];
-            //dd($data['instructors']);
-
-            $data['is_event_paid'] = 1;
-            $data['desc'] = $topicDescription;
-
-            $pdf = PDF::loadView('theme.event.syllabus_print', $data)->setPaper('a4', 'landscape');
-            $fn = $slug->slugable->title . '.pdf';
-
-            return $pdf->stream($fn);
-        } else {
-            return view('errors.custom', ['message' => 'This event not exists. Are you sure the url is correct?']);
         }
+
+        return view('errors.custom', ['message' => 'This event not exists. Are you sure the url is correct?']);
     }
 
     public function getSMSVerification($slug)

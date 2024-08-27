@@ -1585,9 +1585,9 @@ class EventController extends Controller
 
             if (isset($requestData['certificate']['visible'])) {
                 $visible_loaded_data = $requestData['certificate']['visible'];
-                $data['course_certificate_visible'] = json_encode($this->prepareVisibleData($visible_loaded_data));
+                $data['course_certificate_visible'] = $this->prepareVisibleData($visible_loaded_data);
             } else {
-                $data['course_certificate_visible'] = json_encode($this->prepareVisibleData());
+                $data['course_certificate_visible'] = $this->prepareVisibleData();
             }
 
             //dd($requestData['certificate']);

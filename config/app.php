@@ -265,7 +265,7 @@ return [
 
         'Cart' => Gloudemans\ShoppingCart\Facades\Cart::class,
         'Image' => Intervention\Image\Facades\Image::class,
-        'PDF' => Barryvdh\DomPDF\Facade::class,
+        'PDF' => Barryvdh\DomPDF\Facade\Pdf::class,
         'Sitemap'   => Watson\Sitemap\Facades\Sitemap::class,
 
         'DataTables' => Yajra\DataTables\Facades\DataTables::class,

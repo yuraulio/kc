@@ -25,6 +25,7 @@ use App\Http\Controllers\Api\v1\Event\EventTicketController;
 use App\Http\Controllers\Api\v1\Event\EventTopicController;
 use App\Http\Controllers\Api\v1\Event\EventVenueController;
 use App\Http\Controllers\Api\v1\Event\Participants\EventActiveStudentsController;
+use App\Http\Controllers\Api\v1\Event\Participants\EventDownloadSyllabusController;
 use App\Http\Controllers\Api\v1\Event\Participants\EventDownloadStudentsController;
 use App\Http\Controllers\Api\v1\Event\Participants\EventDownloadExamResultsController;
 use App\Http\Controllers\Api\v1\Event\Participants\EventExamResultsController;
@@ -210,6 +211,7 @@ Route::group(['middleware' => ['auth:api', 'auth.aboveauthor'], 'prefix' => 'v1'
     Route::get('events/{event}/participants/reviews', EventReviewsController::class);
     Route::get('events/{event}/participants/download-students', EventDownloadStudentsController::class);
     Route::get('events/{event}/participants/download-exam-results', EventDownloadExamResultsController::class);
+    Route::get('events/{event}/participants/download-syllabus', EventDownloadSyllabusController::class);
 
     // Exams
     Route::apiResource('exams', ExamController::class)
