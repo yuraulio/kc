@@ -30,10 +30,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Illuminate\Validation\Rule;
 use Maatwebsite\Excel\Facades\Excel;
-use Symfony\Component\HttpClient\Exception\InvalidArgumentException;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class EventController extends Controller
 {
@@ -1947,12 +1946,15 @@ class EventController extends Controller
         );
     }
 
-    public function exportStudentExams(Request $request)
+    public function exportStudentExams(Request $request): BinaryFileResponse
     {
+        $request->validate(['id' => 'required']);
+
+        $event = Event::findOrFail($request->get('id'));
         $filename = 'StudentsExamsResultsExport.xlsx';
 
-        Excel::store(new ExportStudentResults($request), $filename, 'export');
+        Excel::store(new ExportStudentResults($event), $filename, 'export');
 
-        return Excel::download(new ExportStudentResults($request), $filename);
+        return Excel::download(new ExportStudentResults($event), $filename);
     }
 }

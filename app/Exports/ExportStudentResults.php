@@ -3,72 +3,64 @@
 namespace App\Exports;
 
 use App\Model\Event;
-use App\Model\Exam;
-use App\Model\User;
-use Auth;
+use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\FromArray;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 
 class ExportStudentResults implements FromArray, WithHeadings, ShouldAutoSize
 {
-    public $event;
+    use Exportable;
 
-    public function __construct($request)
+    private Event $event;
+
+    public function __construct(Event $event)
     {
-        $event_id = $request->id;
-
+        $this->event = $event;
         $this->createDir(base_path('public/tmp/exports/'));
-        $this->event = Event::find($event_id);
-        $this->results = [];
-        //dd(empty($this->event->getExams()));
+    }
 
-        if (!empty($this->event->getExams())) {
-            $exam = $this->event->getExams()[0];
-            $examInstance = Exam::find($exam['id']);
-
-            $results_data = $examInstance->getResults();
-            if (isset($results_data[0])) {
-                $this->results = $results_data[0];
-            }
-        }
+    public function headings(): array
+    {
+        return [
+            'Name',
+            'Score',
+            'Percentage',
+            'Start Time',
+            'End Time',
+            'Total Time',
+        ];
     }
 
     public function array(): array
     {
         $data = [];
 
-        //dd($this->results);
+        $exams = $this->event->getExams();
 
-        if (!empty($this->results)) {
-            foreach ($this->results as $key => $result) {
-                $rowdata = [
-                    $result['first_name'] . ' ' . $result['last_name'],
-                    $result['score'],
-                    $result['scorePerc'],
-                    $result['start_time'],
-                    $result['end_time'],
-                    $result['total_time'],
-                ];
+        if (!empty($exams)) {
+            $exam = $exams[0];
+            $results = $exam->getResults();
 
-                array_push($data, $rowdata);
+            if (!empty($results[0])) {
+                foreach ($results[0] as $result) {
+                    $data[] = [
+                        $result['first_name'] . ' ' . $result['last_name'],
+                        $result['score'],
+                        $result['scorePerc'],
+                        $result['start_time'],
+                        $result['end_time'],
+                        $result['total_time'],
+                    ];
+                }
             }
         }
 
         return $data;
     }
 
-    public function headings(): array
+    private function createDir($dir, $permission = 0777, $recursive = true): bool
     {
-        return ['Name', 'Score', 'Percentage', 'Start Time', 'End Time', 'Total Time'];
-    }
-
-    public function createDir($dir, $permision = 0777, $recursive = true)
-    {
-        if (!is_dir($dir)) {
-            return mkdir($dir, $permision, $recursive);
-        } else {
-            return true;
-        }
+        return is_dir($dir) || mkdir($dir, $permission, $recursive);
     }
 }

@@ -1070,19 +1070,18 @@ class Event extends Model
         });*/
     }
 
-    public function getExams()
+    public function getExams(): array
     {
         $curr_date_time = date('Y-m-d G:i:00');
         $curr_date = date('Y-m-d');
         $examsArray = [];
         $exams = $this->exam->where('status', true);
-        //return $examsArray;
+
         foreach ($exams as $exam) {
             if ($exam->publish_time > $curr_date_time) {
                 $exam->exstatus = 0;
                 $exam->islive = 0;
                 $exam->isupcom = 1;
-            //}else if($exam->publish_time <  $curr_date && $this->view_tpl != 'elearning_event'){
             } elseif ($exam->publish_time < $curr_date && !$this->is_elearning_course()) {
                 $exam->exstatus = 0;
                 $exam->islive = 0;
