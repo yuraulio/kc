@@ -84,10 +84,12 @@ class ELearningService
                 ]);
 
                 if (isset($_COOKIE['examMessage-' . $eventStatistic])) {
-                    $user->notify(new ErrorSlack('[user_id: ' . $user->id . ', event_id: ' . $event->id . '] User finished the course but user has examMessage-' . $eventStatistic . ' in their browser. So the certification won\'t be generated.'));
+                    Log::channel('daily')
+                        ->info('[user_id: ' . $user->id . ', event_id: ' . $event->id . '] User finished the course but user has examMessage-' . $eventStatistic . ' in their browser. So the certification won\'t be generated.');
                     $examAccess = false;
                 } elseif ($event && count($event->getExams()) > 0) {
-                    $user->notify(new ErrorSlack('[user_id: ' . $user->id . ', event_id: ' . $event->id . '] User finished the course but exams count is more than 0. So the certification won\'t be generated.'));
+                    Log::channel('daily')
+                        ->info('[user_id: ' . $user->id . ', event_id: ' . $event->id . '] User finished the course but exams count is more than 0. So the certification won\'t be generated.');
 //                    $examAccess = false; //$event->examAccess($user);
 //
 //                    if ($examAccess) {
