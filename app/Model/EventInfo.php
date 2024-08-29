@@ -7,6 +7,26 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
+/**
+ * @property $course_payment_method
+ * @property $has_certificate
+ * @property $has_certificate_exam
+ * @property null|int $language_id
+ * @property Language|null $language
+ * @property int $course_delivery
+ * @property Delivery $delivery
+ * @property string|null $course_certification_completion
+ * @property string|null $diploma_title
+ * @property string|null $cta_course_page
+ * @property string|null $cta_course_page_re_enroll
+ * @property string|null $cta_home_page
+ * @property string|null $cta_lists
+ * @property bool $cta_price_visible_on_button
+ * @property bool $cta_discount_price_visible
+ * @property string|null $course_satisfaction_url
+ * @property string|null $instructors_url
+ * @property int|null $send_after_days
+ */
 class EventInfo extends Model
 {
     use HasFactory;
@@ -23,6 +43,7 @@ class EventInfo extends Model
         'course_hours_icon',
         'course_language',
         'course_language_title',
+        'language_id',
         'course_language_visible',
         'course_language_icon',
         'course_delivery',
@@ -66,6 +87,7 @@ class EventInfo extends Model
         'course_certification_title',
         'course_certification_text',
         'course_certification_completion',
+        'diploma_title',
         'course_certification_attendance_title',
         'course_certification_type',
         'course_certification_icon',
@@ -76,6 +98,12 @@ class EventInfo extends Model
         'course_students_text',
         'course_students_visible',
         'course_students_icon',
+        'cta_course_page',
+        'cta_course_page_re_enroll',
+        'cta_home_page',
+        'cta_lists',
+        'cta_price_visible_on_button',
+        'cta_discount_price_visible',
     ];
 
     protected $casts = [
@@ -104,10 +132,22 @@ class EventInfo extends Model
         'course_inclass_dates' => 'array',
         'course_inclass_days' => 'array',
         'course_inclass_times' => 'array',
+        'cta_price_visible_on_button' => 'bool',
+        'cta_discount_price_visible' => 'bool',
     ];
 
     public function event(): HasOne
     {
         return $this->hasOne(Event::class, 'id', 'event_id');
+    }
+
+    public function language(): HasOne
+    {
+        return $this->hasOne(Language::class, 'id', 'language_id');
+    }
+
+    public function delivery(): HasOne
+    {
+        return $this->hasOne(Delivery::class, 'id', 'course_delivery');
     }
 }

@@ -5,6 +5,10 @@ namespace App\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property string $meta_title
+ * @property string $meta_description
+ */
 class Metas extends Model
 {
     use HasFactory;

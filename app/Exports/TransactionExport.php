@@ -91,7 +91,7 @@ class TransactionExport implements FromArray, WithHeadings, ShouldAutoSize
 
         if ($this->delivery != null) {
             $delivery = $this->delivery;
-            $transactions = $transactions->whereHas('event.event_info1', function ($q) use ($delivery) {
+            $transactions = $transactions->whereHas('event.eventInfo', function ($q) use ($delivery) {
                 return $q->whereIn('course_delivery', $delivery);
             });
         }

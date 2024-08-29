@@ -3,7 +3,8 @@
 namespace App\Http\Controllers\Api\v1;
 
 use App\Contracts\Api\v1\Topic\ITopicService;
-use App\Http\Requests\Api\v1\Topic\TopicRequest;
+use App\Http\Requests\Api\v1\Topic\CreateTopicRequest;
+use App\Http\Requests\Api\v1\Topic\UpdateTopicRequest;
 use App\Http\Resources\Api\v1\Event\Topics\TopicResource;
 use App\Model\Topic;
 use Illuminate\Http\Request;
@@ -20,7 +21,7 @@ class TopicController extends ApiBaseController
         )->response()->getData(true);
     }
 
-    public function store(TopicRequest $request, ITopicService $topicService): TopicResource
+    public function store(CreateTopicRequest $request, ITopicService $topicService): TopicResource
     {
         return TopicResource::make(
             $topicService->create($request->toDto()),
@@ -32,7 +33,7 @@ class TopicController extends ApiBaseController
         //
     }
 
-    public function update(TopicRequest $request, Topic $topic, ITopicService $topicService): TopicResource
+    public function update(UpdateTopicRequest $request, Topic $topic, ITopicService $topicService): TopicResource
     {
         return TopicResource::make(
             $topicService->update($topic, $request->toDto()),

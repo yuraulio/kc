@@ -7,7 +7,7 @@ use App\Dto\Api\v1\Topic\TopicDto;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 
-class TopicRequest extends FormRequest implements IDtoRequest
+class CreateTopicRequest extends FormRequest implements IDtoRequest
 {
     public function authorize(): bool
     {

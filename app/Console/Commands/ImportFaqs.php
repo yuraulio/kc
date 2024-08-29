@@ -86,7 +86,7 @@ class ImportFaqs extends Command
                     $categories = Category::whereHas('events')->get();
                 } else {
                     $categories = Category::whereHas('events', function ($event) use ($del) {
-                        return $event->whereHas('event_info1', function ($query) use ($del) {
+                        return $event->whereHas('eventInfo', function ($query) use ($del) {
                             $query->whereIn('course_delivery', $del);
                         });
                     })->get();
@@ -102,7 +102,7 @@ class ImportFaqs extends Command
                     $categories = Category::whereHas('events')->pluck('id')->toArray();
                 } else {
                     $categories = Category::whereHas('events', function ($event) use ($del) {
-                        return $event->whereHas('event_info1', function ($query) use ($del) {
+                        return $event->whereHas('eventInfo', function ($query) use ($del) {
                             $query->whereIn('course_delivery', $del);
                         });
                     })->pluck('id')->toArray();

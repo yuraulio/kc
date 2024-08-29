@@ -380,10 +380,6 @@ class LessonController extends Controller
         if ($category) {
             $allEvents = $category->events;
             foreach ($allEvents as $event) {
-                //$allEvents = $category->events()->whereHas('event_info1',function($query){
-                //    $query->where('course_delivery',143);
-                //})->get();
-
                 $allLessons = $event->allLessons->groupBy('id');
                 $priorityLesson = $event->allLessons()->wherePivot('topic_id', $toTopic)->orderBy('priority')->get();
                 $priority = isset($priorityLesson->last()['pivot']['priority']) ? $priorityLesson->last()['pivot']['priority'] + 1 : count($allLessons) + 1;

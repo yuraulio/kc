@@ -259,7 +259,7 @@ class UserController extends Controller
             unset($data[$key]['event']['dropbox']);
             unset($data[$key]['event']['venues']);
             unset($data[$key]['event']['event_info']);
-            unset($data[$key]['event']['event_info1']);
+            unset($data[$key]['event']['eventInfo']);
             unset($data[$key]['event']['absences_limit']);
             unset($data[$key]['event']['plans']);
         }

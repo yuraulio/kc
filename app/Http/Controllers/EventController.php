@@ -30,9 +30,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Illuminate\Validation\Rule;
 use Maatwebsite\Excel\Facades\Excel;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class EventController extends Controller
 {
@@ -66,11 +66,11 @@ class EventController extends Controller
 
         $data['all'] = Event::all()->count();
 
-        $data['inclass'] = Event::where('status', 0)->whereHas('event_info1', function ($q) {
+        $data['inclass'] = Event::where('status', 0)->whereHas('eventInfo', function ($q) {
             return $q->where('event_info.course_delivery', '<a>', 143);
         })->count();
 
-        $data['elearning'] = Event::where('status', 0)->whereHas('event_info1', function ($q) {
+        $data['elearning'] = Event::where('status', 0)->whereHas('eventInfo', function ($q) {
             return $q->where('event_info.course_delivery', 143);
         })->count();
 
@@ -1826,7 +1826,7 @@ class EventController extends Controller
             $newEvent->createMedia();
             $newEvent->createSlug($newEvent->title);
 
-            $event->load('category', 'faqs', 'sectionVideos', 'type', 'delivery', 'ticket', 'city', 'sections', 'venues', 'syllabus', 'paymentMethod', 'dropbox', 'event_info1');
+            $event->load('category', 'faqs', 'sectionVideos', 'type', 'delivery', 'ticket', 'city', 'sections', 'venues', 'syllabus', 'paymentMethod', 'dropbox', 'eventInfo');
 
             if ($event->medias) {
                 if ($event->medias->mediable_type == 'App\Model\Event') {
@@ -1862,7 +1862,7 @@ class EventController extends Controller
                     foreach ($newValues as $value) {
                         $newEvent->{$relationName}()->attach($value);
                     }
-                } elseif ($relationName == 'event_info1') {
+                } elseif ($relationName == 'eventInfo') {
                     $valuee = $values->replicate();
                     $valuee->course_elearning_access = null;
                     $valuee->push();

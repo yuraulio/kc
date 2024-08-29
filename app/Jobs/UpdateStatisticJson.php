@@ -83,7 +83,7 @@ class UpdateStatisticJson implements ShouldQueue
             $eventId = $this->event->id;
             $this->users = User::whereId($this->userId)->whereHas('events', function ($event) use ($eventId) {
                 return $event->where('event_id', $eventId)
-                    ->whereHas('event_info1', function ($query) {
+                    ->whereHas('eventInfo', function ($query) {
                         $query->whereCourseDelivery(143);
                     });
             })
@@ -98,7 +98,7 @@ class UpdateStatisticJson implements ShouldQueue
 
             $this->users = User::whereHas('events', function ($event) use ($eventId) {
                 return $event->where('event_id', $eventId)
-                    ->whereHas('event_info1', function ($query) {
+                    ->whereHas('eventInfo', function ($query) {
                         $query->whereCourseDelivery(143);
                     });
             })

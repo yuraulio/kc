@@ -361,7 +361,7 @@ class UserService
 
         $user->ticket()->attach($ticketId, ['event_id' => $event->id]);
 
-        $data['event'] = $event->load('delivery', 'ticket', 'event_info1');
+        $data['event'] = $event->load('delivery', 'ticket', 'eventInfo');
         foreach ($data['event']->ticket as $ticket) {
             if ($ticket->pivot->ticket_id == $ticketId) {
                 $data['event']['ticket_title'] = $ticket['title'];

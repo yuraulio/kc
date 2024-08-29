@@ -729,7 +729,7 @@ class CronjobsController extends Controller
 
         $events = Event::has('transactions')->where('published', true)->with('users')
 
-        ->whereHas('event_info1', function ($query) {
+        ->whereHas('eventInfo', function ($query) {
             $query->whereCourseDelivery(143);
         })
         ->get();
@@ -767,11 +767,7 @@ class CronjobsController extends Controller
         }
 
         //$events = Event::has('transactions')->where('published',true)->with('users')->where('view_tpl','event')->get();
-        $events = []; /*Event::has('transactions')->where('published',true)->whereIn('status',[0,3])->with('users')
-        ->whereHas('event_info1',function($query){
-            $query->where('course_delivery','!=',143);
-        })
-        ->get();*/
+        $events = [];
 
         $today = date_create(date('Y/m/d'));
         $today1 = date('Y-m-d');
@@ -973,7 +969,7 @@ class CronjobsController extends Controller
             where('published', true)
             ->whereIn('status', [0, 2])
             ->whereIn('launch_date', $dates)
-            ->whereHas('event_info1', function ($query) {
+            ->whereHas('eventInfo', function ($query) {
                 $query->where('course_delivery', '!=', 143);
             })
             ->with('users')
@@ -1120,7 +1116,7 @@ class CronjobsController extends Controller
 
         $events = Event::where('published', true)
             ->whereIn('status', [0, 3])
-            ->whereHas('event_info1', function ($query) {
+            ->whereHas('eventInfo', function ($query) {
                 $query->where('course_delivery', '=', 139);
             })
             ->whereHas('lessons', function ($lessonQ) use ($date) {
@@ -1190,7 +1186,7 @@ class CronjobsController extends Controller
         $events = Event::
             where('published', true)
             ->whereIn('status', [/*0,2,*/3])
-            ->whereHas('event_info1', function ($query) {
+            ->whereHas('eventInfo', function ($query) {
                 $query->where('course_delivery', '!=', 143);
             })
             ->whereHas('lessons', function ($query) use ($dates) {

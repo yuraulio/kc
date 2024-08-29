@@ -7,7 +7,7 @@
 
     if ($column->template->dynamic) {
         $event = $dynamic_page_data["event"] ?? null;
-        $info = $event['event_info1'];
+        $info = $event['eventInfo'];
 
         $image = cdn(get_image($event->mediable,'header-image')) ?? "";
         $title = $event->title ?? "";

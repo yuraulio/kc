@@ -4,7 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Contracts\Api\v1\Lesson\ILessonService;
 use App\Http\Controllers\Api\v1\ApiBaseController;
-use App\Http\Requests\Api\v1\Lesson\LessonRequest;
+use App\Http\Requests\Api\v1\Lesson\CreateLessonRequest;
+use App\Http\Requests\Api\v1\Lesson\UpdateLessonRequest;
 use App\Http\Resources\Api\v1\Event\Lesson\LessonResource;
 use App\Model\Lesson;
 use Illuminate\Http\JsonResponse;
@@ -23,14 +24,14 @@ class LessonController extends ApiBaseController
         )->response()->getData(true);
     }
 
-    public function store(LessonRequest $request, ILessonService $lessonService): LessonResource
+    public function store(CreateLessonRequest $request, ILessonService $lessonService): LessonResource
     {
         return LessonResource::make(
             $lessonService->create($request->toDto()),
         );
     }
 
-    public function update(LessonRequest $request, Lesson $lesson, ILessonService $lessonService): LessonResource
+    public function update(UpdateLessonRequest $request, Lesson $lesson, ILessonService $lessonService): LessonResource
     {
         return LessonResource::make(
             $lessonService->update($lesson, $request->toDto()),

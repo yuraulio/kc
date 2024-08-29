@@ -56,7 +56,7 @@ class ExamCheck
                     $event = $user->subscriptionEvents->where('id', $eventId)->last();
                 }
                 //return$event->examAccess($user,0.8,false,false);
-                $event_infos = $event->event_info1;
+                $event_infos = $event->eventInfo;
 
                 if (isset($event_infos['course_elearning_exam_activate_months']) && $event_infos['course_elearning_exam_activate_months'] != null) {
                     return $event->examAccess($user, $event_infos['course_elearning_exam_activate_months'], false);

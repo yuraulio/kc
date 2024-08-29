@@ -15,16 +15,42 @@ use App\Traits\PaginateTable;
 use App\Traits\SearchFilter;
 use App\Traits\SlugTrait;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 
+/**
+ * @property int $id
+ * @property EventInfo $eventInfo
+ * @property Collection<Coupon> $coupons
+ * @property Collection<City> $city
+ * @property Collection<Career> $career
+ * @property Collection<Skill> $skills
+ * @property Collection<Partner> $partners
+ * @property Metas $metable
+ * @property Carbon $created_at
+ * @property string $title
+ * @property string|null $admin_title
+ * @property string|null $fb_group
+ * @property int $absences_limit
+ * @property float $absences_start_hours
+ * @property int|null $access_duration
+ * @property Carbon|null $files_access_till
+ * @property DynamicAds|null $dynamicAds
+ * @property Collection<PaymentMethod> $paymentMethod
+ * @property Collection<PaymentOption> $paymentOptions
+ * @property Collection<Exam> $exam
+ * @property Collection<Event> $bonusCourse
+ * @property Collection<Dropbox> $dropbox
+ */
 class Event extends Model
 {
     use HasFactory,
@@ -55,6 +81,7 @@ class Event extends Model
         'release_date_files',
         'expiration',
         'title',
+        'admin_title',
         'htmlTitle',
         'subtitle',
         'header',
@@ -62,6 +89,9 @@ class Event extends Model
         'body',
         'hours',
         'absences_limit',
+        'absences_start_hours',
+        'access_duration',
+        'files_access_till',
         'enroll',
         'index',
         'feed',
@@ -79,6 +109,10 @@ class Event extends Model
         'xml_title',
         'xml_description',
         'xml_short_description',
+    ];
+
+    protected $casts = [
+        'files_access_till' => 'date',
     ];
 
     public function schemadata()
@@ -135,7 +169,7 @@ class Event extends Model
             if (isset($this->published_at)) {
                 $schema['datePublished'] = Carbon::create($this->published_at)->format('Y-m-d');
             }
-            if ($this->relationLoaded('event_info1') && isset($this->event_info1->course_delivery)) {
+            if ($this->relationLoaded('eventInfo') && isset($this->eventInfo->course_delivery)) {
                 // dd($this->topic[0]->lessons);
                 $instructors = [];
                 if ($this->relationLoaded('instructors') && isset($this->instructors)) {
@@ -164,14 +198,14 @@ class Event extends Model
                 if (isset($this->course_hours)) {
                     $courseWorkload = 'PT' . $this->course_hours . 'H';
                 }
-                switch($this->event_info1->course_delivery) {
+                switch($this->eventInfo->course_delivery) {
                     case 139: // Classroom training
                         $schema['hasCourseInstance'] = [
                             [
                                 // Blended, instructor-led course meeting 3 hours per day in July.
                                 '@type' => 'CourseInstance',
                                 'courseMode' => 'onsite',
-                                'location' => $this->event_info1->course_inclass_city ?? '',
+                                'location' => $this->eventInfo->course_inclass_city ?? '',
                                 'instructor' => $instructors,
                                 'courseWorkload' => $courseWorkload,
                             ],
@@ -219,7 +253,7 @@ class Event extends Model
         return $schema;
     }
 
-    public function toSearchableArray()
+    public function toSearchableArray(): array
     {
         return $this->toArray();
     }
@@ -228,6 +262,17 @@ class Event extends Model
     {
         return $this->morphToMany(Category::class, 'categoryable')
             ->with('faqs', 'testimonials', 'dropbox');
+    }
+
+    public function dynamicAds(): HasOne
+    {
+        return $this->hasOne(DynamicAds::class);
+    }
+
+    public function paymentOptions(): BelongsToMany
+    {
+        return $this->belongsToMany(PaymentOption::class, 'event_payment_options', 'event_id', 'option_id')
+            ->withPivot(['active', 'installments_allowed', 'monthly_installments_limit']);
     }
 
     public function faqs(): MorphToMany
@@ -243,9 +288,16 @@ class Event extends Model
         return $this->belongsToMany(Video::class, 'event_video', 'event_id', 'video_id');
     }
 
+    public function bonusCourse(): BelongsToMany
+    {
+        return $this->belongsToMany(Event::class, 'event_bonuses', 'event_id', 'bonus_id')
+            ->withPivot('exams_required');
+    }
+
     public function exam(): MorphToMany
     {
-        return $this->morphToMany(Exam::class, 'examable');
+        return $this->morphToMany(Exam::class, 'examable')
+            ->withPivot(['exam_accessibility_type', 'exam_accessibility_value', 'exam_repeat_delay']);
     }
 
     public function exam_result(): BelongsToMany
@@ -473,10 +525,14 @@ class Event extends Model
         return $this->belongsToMany(City::class, 'event_city')->with('slugable');
     }
 
-    public function career(): MorphToMany
+    public function career(): BelongsToMany
     {
-        return $this->morphedByMany(Career::class, 'careerpathable', 'careerpathables', 'event_id', 'careerpathable_id')
-            ->withPivot('careerpath_type');
+        return $this->belongsToMany(Career::class, 'event_career_paths', 'event_id', 'career_path_id');
+    }
+
+    public function skills(): BelongsToMany
+    {
+        return $this->belongsToMany(Skill::class, 'event_skills', 'event_id', 'skill_id');
     }
 
     public function sections(): BelongsToMany
@@ -895,33 +951,6 @@ class Event extends Model
         return true;
     }
 
-    /*public function progress($user)
-    {
-        //dd($user->statistic()->wherePivot('event_id',$this['id'])->first()->pivot['videos']);
-
-        if(!$videos = $user->statistic()->wherePivot('event_id',$this['id'])->first()){
-            return 0 * 100;
-        }
-
-        $videos = $videos->pivot['videos'];
-
-
-        //dd($videos);
-        $sum = 0;
-        if($videos != ''){
-            $videos = json_decode($videos, true);
-            foreach($videos as $video){
-                if($video['seen'] == 1 || $video['seen'] == '1'){
-                    $sum++;
-                }
-
-            }
-            return count($videos) > 0 ? ($sum/count($videos)) * 100 : 0;
-        }
-
-        return 0 * 100;
-    }*/
-
     public function period($user)
     {
         $transaction1 = null;
@@ -1053,10 +1082,6 @@ class Event extends Model
         return $this->transactions()->has('subscription')->with('invoice', 'user')->whereHas('user', function ($query) use ($user) {
             $query->where('id', $user);
         });
-
-        /*return $this->transactions()->whereHas('user', function ($query) use($user) {
-            $query->where('id', $user);
-        });*/
     }
 
     public function transactionsByUser($user)
@@ -1064,10 +1089,6 @@ class Event extends Model
         return $this->transactions()->doesntHave('subscription')->with('invoice', 'user')->whereHas('user', function ($query) use ($user) {
             $query->where('id', $user);
         });
-
-        /*return $this->transactions()->whereHas('user', function ($query) use($user) {
-            $query->where('id', $user);
-        });*/
     }
 
     public function getExams(): array
@@ -1105,10 +1126,6 @@ class Event extends Model
 
     public function certificatesByUser($user)
     {
-        /*return $this->certificates()->whereHas('user', function ($query) use($user) {
-            $query->where('id', $user);
-        })->withPivot('certificatable_id','certificatable_type')->get();*/
-
         return $this->certificates()->where('show_certificate', true)->whereHas('user', function ($query) use ($user) {
             $query->where('id', $user);
         })->withPivot('certificatable_id', 'certificatable_type')->get();
@@ -1160,39 +1177,6 @@ class Event extends Model
         }
     }
 
-    /*public function getTotalHours(){
-
-        $hours = 0;
-        //In class
-        if($this->is_inclass_course()){
-            $timeStarts = false;
-            $timeEnds = false;
-
-            foreach($this->lessons as $lesson){
-                $timeStarts = false;
-                $timeEnds = false;
-
-                $timeStarts = (int) date('H', strtotime($lesson->pivot->time_starts));
-                $timeEnds = (int) date('H', strtotime($lesson->pivot->time_ends));
-                if($timeStarts && $timeEnds){
-                    $hours += ($timeEnds - $timeStarts) * 60;
-                }
-
-            }
-        }else{
-            // E-learning
-
-            // Return sec
-
-            $lessons = $this->lessons->groupBy('topic_id');
-            //dd($this->lessons);
-            $totalVimeoSeconds = $this->getSumLessonHours($lessons);
-            $hours = $totalVimeoSeconds;
-        }
-
-        return $hours;
-    }*/
-
     public function getTotalHours(): float|int
     {
         $hours = 0;
@@ -1224,16 +1208,14 @@ class Event extends Model
         return $value;
     }
 
-    public function event_info1(): HasOne
+    public function eventInfo(): HasOne
     {
         return $this->hasOne(EventInfo::class);
     }
 
     public function event_info()
     {
-        //return $this->hasOne(EventInfo::class);
-
-        $infos = $this->event_info1; //$this->hasOne(EventInfo::class)->first();
+        $infos = $this->eventInfo;
         $data = [];
 
         if ($infos != null) {
@@ -1331,40 +1313,19 @@ class Event extends Model
         return $data;
     }
 
-    public function isFree()
+    public function isFree(): bool
     {
-        $free = true;
-        $infos = $this->event_info();
-
-        if (isset($infos['payment_method']) && $infos['payment_method'] != 'free') {
-            $free = false;
-        }
-
-        return $free;
+        return $this->eventInfo?->course_payment_method == 'free';
     }
 
-    public function hasCertificate()
+    public function hasCertificate(): bool
     {
-        $hasCertificate = false;
-        $infos = $this->event_info();
-
-        if (isset($infos['certificate']['has_certificate']) && $infos['certificate']['has_certificate']) {
-            $hasCertificate = true;
-        }
-
-        return $hasCertificate;
+        return (bool) $this->eventInfo?->has_certificate;
     }
 
-    public function hasCertificateExam()
+    public function hasCertificateExam(): bool
     {
-        $hasCertificateExam = false;
-        $infos = $this->event_info();
-
-        if (isset($infos['certificate']['has_certificate_exam']) && $infos['certificate']['has_certificate_exam']) {
-            $hasCertificateExam = true;
-        }
-
-        return $hasCertificateExam;
+        return (bool) $this->eventInfo?->has_certificate_exam;
     }
 
     // Return seconds
@@ -1448,7 +1409,7 @@ class Event extends Model
 
     public function getAccessInMonths()
     {
-        $eventInfo = $this->event_info1;
+        $eventInfo = $this->eventInfo;
         $accessMonths = isset($eventInfo['course_elearning_expiration']) ? $eventInfo['course_elearning_expiration'] : 0;
 
         return $accessMonths;

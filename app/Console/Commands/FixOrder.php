@@ -68,14 +68,7 @@ class FixOrder extends Command
 
     public function handle()
     {
-        /*$events = Event::
-        whereHas('event_info1',function($query){
-            $query->where('course_delivery',143);
-        })
-        ->get();*/
-
-        $events = Event::where('id', 4632)
-        ->get();
+        $events = Event::where('id', 4632)->get();
 
         foreach ($events as $event) {
             $event->fixOrder();

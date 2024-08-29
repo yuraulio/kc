@@ -1537,7 +1537,7 @@ class StudentController extends Controller
         $userEvents = isset($data['events']) ? array_keys($data['events']) : [];
         $userWaitingEvents = Auth::user()->waitingList()->whereNotIn('event_id', $userEvents)->pluck('event_id')->toArray();
 
-        $events = Event::whereIn('id', $userWaitingEvents)->with('event_info1', 'slugable', 'category')->get();
+        $events = Event::whereIn('id', $userWaitingEvents)->with('eventInfo', 'slugable', 'category')->get();
 
         foreach ($events as $event) {
             $eventInfo = $event->event_info();

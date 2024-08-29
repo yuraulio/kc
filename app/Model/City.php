@@ -7,6 +7,9 @@ use App\Traits\SlugTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property $id
+ */
 class City extends Model
 {
     use HasFactory;

@@ -2,11 +2,14 @@
 
 namespace App\Model;
 
-use App\Model\Event;
+use App\Enums\Event\DeliveryTypeEnum;
 use App\Traits\SlugTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property DeliveryTypeEnum $delivery_type
+ */
 class Delivery extends Model
 {
     use HasFactory;
@@ -20,7 +23,11 @@ class Delivery extends Model
     protected $table = 'deliveries';
 
     protected $fillable = [
-        'name', 'installments',
+        'delivery_type', 'name', 'installments',
+    ];
+
+    protected $casts = [
+        'delivery_type' => DeliveryTypeEnum::class,
     ];
 
     public function event()

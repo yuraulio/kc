@@ -7,7 +7,7 @@ use App\Dto\Api\v1\Lesson\LessonDto;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 
-class LessonRequest extends FormRequest implements IDtoRequest
+class CreateLessonRequest extends FormRequest implements IDtoRequest
 {
     public function authorize(): true
     {

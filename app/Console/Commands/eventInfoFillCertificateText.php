@@ -41,7 +41,7 @@ class eventInfoFillCertificateText extends Command
         $events = Event::all();
 
         foreach ($events as $event) {
-            $info = $event->event_info1;
+            $info = $event->eventInfo;
 
             if ($info->course_certification_type != null) {
                 $info->course_certification_text = $info->course_certification_type;

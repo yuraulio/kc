@@ -52,9 +52,6 @@ class LessonUpdate implements ShouldQueue
                 $catsIds[] = $cat->id;
 
                 $allEvents = $cat->events;
-                /*$allEvents = $cat->events()->whereHas('event_info1',function($query){
-                    $query->where('course_delivery',143);
-                })->get();*/
 
                 $priority = 0;
 

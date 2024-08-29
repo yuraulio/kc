@@ -265,12 +265,12 @@ class ExportAllUserByCategory extends Command
     private function queryForUsesHasOnlyFreeEvents()
     {
         $users = User::whereHas('events_for_user_list', function ($event) {
-            return $event->whereHas('event_info1', function ($eventInfo) {
+            return $event->whereHas('eventInfo', function ($eventInfo) {
                 return $eventInfo->where('course_payment_method', 'free');
             });
         })
         ->whereDoesntHave('events_for_user_list', function ($event) {
-            return $event->whereHas('event_info1', function ($eventInfo) {
+            return $event->whereHas('eventInfo', function ($eventInfo) {
                 return $eventInfo->where('course_payment_method', '<>', 'free');
             });
         })
@@ -291,7 +291,7 @@ class ExportAllUserByCategory extends Command
     private function queryForUsesHasSmallElearning()
     {
         $users = User::whereHas('events_for_user_list', function ($event) {
-            return $event->whereHas('event_info1', function ($eventInfo) {
+            return $event->whereHas('eventInfo', function ($eventInfo) {
                 return $eventInfo->where('course_payment_method', '<>', 'free')->where('course_delivery', 143);
             });
         })->get();
@@ -373,7 +373,7 @@ class ExportAllUserByCategory extends Command
 
         $users = User::whereHas('transactions', function ($transaction) use ($date, $toDate) {
             $transaction->whereBetween('created_at', [$date, $toDate])->whereHas('event', function ($event) {
-                $event->whereHas('event_info1', function ($eventInfo) {
+                $event->whereHas('eventInfo', function ($eventInfo) {
                     return $eventInfo->where('course_payment_method', '<>', 'free');
                 });
             });
@@ -381,7 +381,7 @@ class ExportAllUserByCategory extends Command
 
         ->with([
             'events_for_user_list' => function ($event) {
-                return $event->wherePivot('paid', true)->whereHas('event_info1', function ($eventInfo) {
+                return $event->wherePivot('paid', true)->whereHas('eventInfo', function ($eventInfo) {
                     return $eventInfo->where('course_payment_method', '<>', 'free');
                 });
             },

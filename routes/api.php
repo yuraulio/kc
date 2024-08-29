@@ -25,13 +25,14 @@ use App\Http\Controllers\Api\v1\Event\EventTicketController;
 use App\Http\Controllers\Api\v1\Event\EventTopicController;
 use App\Http\Controllers\Api\v1\Event\EventVenueController;
 use App\Http\Controllers\Api\v1\Event\Participants\EventActiveStudentsController;
-use App\Http\Controllers\Api\v1\Event\Participants\EventDownloadSyllabusController;
-use App\Http\Controllers\Api\v1\Event\Participants\EventDownloadStudentsController;
 use App\Http\Controllers\Api\v1\Event\Participants\EventDownloadExamResultsController;
+use App\Http\Controllers\Api\v1\Event\Participants\EventDownloadStudentsController;
+use App\Http\Controllers\Api\v1\Event\Participants\EventDownloadSyllabusController;
 use App\Http\Controllers\Api\v1\Event\Participants\EventExamResultsController;
 use App\Http\Controllers\Api\v1\Event\Participants\EventRevenueStatsController;
 use App\Http\Controllers\Api\v1\Event\Participants\EventReviewsController;
 use App\Http\Controllers\Api\v1\Event\Participants\EventSaleStatsController;
+use App\Http\Controllers\Api\v1\Event\Participants\EventSettingsController;
 use App\Http\Controllers\Api\v1\Event\Participants\EventStatsController;
 use App\Http\Controllers\Api\v1\Event\Participants\EventTicketStatsController;
 use App\Http\Controllers\Api\v1\Event\Participants\EventTotalHoursController;
@@ -212,6 +213,7 @@ Route::group(['middleware' => ['auth:api', 'auth.aboveauthor'], 'prefix' => 'v1'
     Route::get('events/{event}/participants/download-students', EventDownloadStudentsController::class);
     Route::get('events/{event}/participants/download-exam-results', EventDownloadExamResultsController::class);
     Route::get('events/{event}/participants/download-syllabus', EventDownloadSyllabusController::class);
+    Route::get('events/{event}/participants/settings', EventSettingsController::class);
 
     // Exams
     Route::apiResource('exams', ExamController::class)

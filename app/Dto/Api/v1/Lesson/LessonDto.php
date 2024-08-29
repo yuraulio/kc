@@ -6,13 +6,13 @@ use App\Contracts\Api\v1\Dto\IDto;
 
 final readonly class LessonDto implements IDto
 {
-    private int $status;
-    private string $htmlTitle;
-    private string $title;
-    private string $subtitle;
-    private string $header;
-    private string $summary;
-    private string $body;
+    private ?int $status;
+    private ?string $htmlTitle;
+    private ?string $title;
+    private ?string $subtitle;
+    private ?string $header;
+    private ?string $summary;
+    private ?string $body;
     private ?string $vimeoVideo;
     private ?string $vimeoDuration;
 
@@ -22,47 +22,47 @@ final readonly class LessonDto implements IDto
         private int $authorId,
     ) {
         $this->status = $data['status'] ?? 1;
-        $this->htmlTitle = $data['htmlTitle'];
-        $this->title = $data['title'];
-        $this->subtitle = $data['subtitle'];
-        $this->header = $data['header'];
-        $this->summary = $data['summary'];
-        $this->body = $data['body'];
+        $this->htmlTitle = $data['htmlTitle'] ?? null;
+        $this->title = $data['title'] ?? null;
+        $this->subtitle = $data['subtitle'] ?? null;
+        $this->header = $data['header'] ?? null;
+        $this->summary = $data['summary'] ?? null;
+        $this->body = $data['body'] ?? null;
         $this->vimeoVideo = $data['vimeo_video'] ?? null;
         $this->vimeoDuration = $data['vimeo_duration'] ?? null;
     }
 
-    public function getStatus(): int
+    public function getStatus(): ?int
     {
         return $this->status;
     }
 
-    public function getTitle(): string
+    public function getTitle(): ?string
     {
         return $this->title;
     }
 
-    public function getHtmlTitle(): string
+    public function getHtmlTitle(): ?string
     {
         return $this->htmlTitle;
     }
 
-    public function getSubtitle(): string
+    public function getSubtitle(): ?string
     {
         return $this->subtitle;
     }
 
-    public function getBody(): string
+    public function getBody(): ?string
     {
         return $this->body;
     }
 
-    public function getHeader(): string
+    public function getHeader(): ?string
     {
         return $this->header;
     }
 
-    public function getSummary(): string
+    public function getSummary(): ?string
     {
         return $this->summary;
     }
@@ -77,19 +77,19 @@ final readonly class LessonDto implements IDto
         return $this->vimeoDuration;
     }
 
-    public function getCreatorId(): int
+    public function getCreatorId(): ?int
     {
         return $this->creatorId;
     }
 
-    public function getAuthorId(): int
+    public function getAuthorId(): ?int
     {
         return $this->authorId;
     }
 
     public function getData(): array
     {
-        return [
+        $data = [
             'status' => $this->getStatus(),
             'htmlTitle' => $this->getHtmlTitle(),
             'title' => $this->getTitle(),
@@ -102,5 +102,9 @@ final readonly class LessonDto implements IDto
             'creator_id' => $this->getCreatorId(),
             'author_id' => $this->getAuthorId(),
         ];
+
+        return array_filter($data, function ($item) {
+            return $item !== null;
+        });
     }
 }

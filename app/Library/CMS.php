@@ -201,7 +201,7 @@ class CMS
             ->where('published', true)
             ->whereIn('status', [0, 5])
             ->when($isVideoList, function ($query) {
-                $query->whereHas('event_info1', function ($query) {
+                $query->whereHas('eventInfo', function ($query) {
                     return $query->where('course_payment_method', 'free');
                 });
                 $query->orderBy('created_at', 'desc');
@@ -215,7 +215,7 @@ class CMS
             ->where('published', true)
             ->when($isVideoList, function ($query) {
                 $query->whereIn('status', [0, 5]);
-                $query->whereHas('event_info1', function ($query) {
+                $query->whereHas('eventInfo', function ($query) {
                     return $query->where('course_payment_method', '<>', 'free');
                 });
                 $query->orderBy('created_at', 'desc');
@@ -272,7 +272,7 @@ class CMS
             'events.city',
             'events',
             'events.mediable',
-            'events.event_info1',
+            'events.eventInfo',
             'events.ticket' => function ($q) {
                 $q->where('type', 'regular');
             },

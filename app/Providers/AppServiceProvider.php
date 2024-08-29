@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Contracts\Api\v1\Event\IEventSettingsService;
 use App\Contracts\Api\v1\Event\IEventStatistic;
 use App\Contracts\Api\v1\Lesson\ILessonService;
 use App\Contracts\Api\v1\Topic\ITopicService;
@@ -12,6 +13,7 @@ use App\Model\User;
 use App\Observers\EventObserver;
 use App\Observers\ItemObserver;
 use App\Observers\UserObserver;
+use App\Services\Event\EventSettingsService;
 use App\Services\Event\EventStatisticService;
 use App\Services\Lesson\LessonService;
 use App\Services\Topic\TopicService;
@@ -81,6 +83,10 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->bind(IEventStatistic::class, function ($app) {
             return new EventStatisticService();
+        });
+
+        $this->app->bind(IEventSettingsService::class, function ($app) {
+            return new EventSettingsService();
         });
 
         $this->app->bind(ITopicService::class, function ($app) {

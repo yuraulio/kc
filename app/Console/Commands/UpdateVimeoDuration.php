@@ -66,7 +66,7 @@ class UpdateVimeoDuration extends Command
             $duration = app('App\Http\Controllers\EventController')->calculateTotalHours($request, $event->id);
             $hours = number_format($duration / 60, 1);
 
-            $info = $event->event_info1;
+            $info = $event->eventInfo;
             $info->course_hours = $hours;
             $info->save();
         }
