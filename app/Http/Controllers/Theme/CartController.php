@@ -1252,9 +1252,6 @@ class CartController extends Controller
                 }
 
                 try {
-                    $ev->users()->wherePivot('user_id', $dpuser->id)->detach();
-                    $ev->users()->save($dpuser, ['paid'=>false, 'payment_method'=>$payment_method_id]);
-
                     $charge = $dpuser->newSubscription($name, $plan->id)->noProrate()->create(
                         $input['payment_method'],
                         ['email' => $dpuser->email],
@@ -1264,6 +1261,10 @@ class CartController extends Controller
                     $charge->metadata = json_encode(['installments_paid' => 0, 'installments' => $installments]);
                     $charge->price = $instamount;
                     $charge->save();
+
+                    // assign user to the event only if payment is complete.
+                    $ev->users()->wherePivot('user_id', $dpuser->id)->detach();
+                    $ev->users()->save($dpuser, ['paid'=>false, 'payment_method'=>$payment_method_id]);
                 } catch(\Laravel\Cashier\Exceptions\IncompletePayment $exception) {
                     $payment_method_id = -1;
                     if ($ev->paymentMethod->first()) {
