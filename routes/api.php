@@ -173,6 +173,7 @@ Route::group(['middleware' => ['auth:api', 'auth.aboveauthor'], 'prefix' => 'v1'
         Route::get('/', [TopicController::class, 'index']);
         Route::post('/', [TopicController::class, 'store']);
         Route::put('/{topic}', [TopicController::class, 'update']);
+        Route::get('/with-event', [TopicController::class, 'topicWithEvent']);
         Route::delete('/{topic}', [TopicController::class, 'destroy']);
     });
 
@@ -216,8 +217,10 @@ Route::group(['middleware' => ['auth:api', 'auth.aboveauthor'], 'prefix' => 'v1'
     Route::get('events/{event}/participants/settings', EventSettingsController::class);
 
     // Exams
-    Route::apiResource('exams', ExamController::class)
-        ->only(['index', 'show']);
+    Route::apiResource('exams', ExamController::class);
+    Route::post('exams/{exam}/duplicate', [ExamController::class, 'duplicateExam'])->name('exam.clone');
+    Route::post('exams/{exam}/update-questions', [ExamController::class, 'updateQuestions'])->name('exam.update-questions');
+    Route::get('exams/{exam}/live-results', [ExamResultController::class, 'getLiveResults']);
     Route::apiResource('exam-categories', ExamCategoryController::class);
     Route::apiResource('exams.results', ExamResultController::class)
         ->only(['index']);

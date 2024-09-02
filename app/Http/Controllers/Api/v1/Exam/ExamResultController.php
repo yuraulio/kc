@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api\v1\Exam;
 
 use App\Http\Controllers\Api\v1\ApiBaseController;
 use App\Model\Exam;
+use App\Model\ExamSyncData;
+use App\Services\Exam\ExamResultService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -51,5 +53,12 @@ class ExamResultController extends ApiBaseController
     public function destroy(string $id)
     {
         //
+    }
+
+    public function getLiveResults(Exam $exam, ExamResultService $resultService)
+    {
+        return response()->json([
+            'data' => $resultService->fetchLiveResults($exam),
+        ]);
     }
 }

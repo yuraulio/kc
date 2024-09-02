@@ -19,4 +19,13 @@ class TopicService implements ITopicService
 
         return $topic;
     }
+
+    public function getAllTopicWithEvents()
+    {
+        return Topic::with(['events' => function ($q) {
+            $q->where('status', 1);
+        }])->whereHas('events', function ($q) {
+            $q->where('status', 1);
+        })->where('status', 1)->groupBy(['id'])->limit(10)->get();
+    }
 }

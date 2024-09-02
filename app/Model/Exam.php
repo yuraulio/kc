@@ -38,6 +38,10 @@ class Exam extends Model
         'examMethods',
         'repeat_exam',
         'repeat_exam_in',
+        'repeat_exam_in_failure',
+        'course_elearning_exam_activate_months',
+        'minutes_after_completion',
+        'exam_activation_datetime',
         'questions',
     ];
 
@@ -49,6 +53,16 @@ class Exam extends Model
     public function event(): MorphToMany
     {
         return $this->morphedByMany(Event::class, 'examable');
+    }
+
+    public function topic(): MorphToMany
+    {
+        return $this->morphedByMany(Topic::class, 'examable');
+    }
+
+    public function career_path(): MorphToMany
+    {
+        return $this->morphedByMany(Career::class, 'examable');
     }
 
     public function results(): HasMany

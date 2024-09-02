@@ -61,6 +61,12 @@ class Topic extends Model
             ->groupBy('id');
     }
 
+    public function events(): BelongsToMany
+    {
+        return $this->belongsToMany(Event::class, 'event_topic_lesson_instructor')
+            ->withPivot('id', 'event_id', 'lesson_id', 'instructor_id', 'date', 'priority', 'time_starts', 'time_ends', 'duration', 'room');
+    }
+
     public function event_topic(): BelongsToMany
     {
         return $this->belongsToMany(Topic::class, 'event_topic_lesson_instructor')

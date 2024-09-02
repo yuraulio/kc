@@ -2890,7 +2890,7 @@ $show_popup = isset($uri['show_popup']) ? $uri['show_popup'] : 0;
                                         <?php
 
                                         $visible_certification = isset($info['certificate']['visible']) && $info['certificate']['visible'] != null ? $info['certificate']['visible'] : null;
-
+                                        
                                         ?>
 
 

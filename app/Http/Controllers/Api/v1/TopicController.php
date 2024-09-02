@@ -6,6 +6,7 @@ use App\Contracts\Api\v1\Topic\ITopicService;
 use App\Http\Requests\Api\v1\Topic\CreateTopicRequest;
 use App\Http\Requests\Api\v1\Topic\UpdateTopicRequest;
 use App\Http\Resources\Api\v1\Event\Topics\TopicResource;
+use App\Model\Event;
 use App\Model\Topic;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -19,6 +20,14 @@ class TopicController extends ApiBaseController
         return TopicResource::collection(
             $this->paginateByRequestParameters($query, $request)
         )->response()->getData(true);
+    }
+
+    /**
+     * Display a listing of the resource with course.
+     */
+    public function topicWithEvent(Request $request, ITopicService $topicService)
+    {
+        return TopicResource::addEventsInfo($topicService->getAllTopicWithEvents());
     }
 
     public function store(CreateTopicRequest $request, ITopicService $topicService): TopicResource

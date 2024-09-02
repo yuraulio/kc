@@ -29,4 +29,25 @@ class TopicResource extends JsonResource
             'email_template' => $this->resource->email_template,
         ];
     }
+
+    public static function addEventInfo($topics)
+    {
+        $uniqueEventTopics = [];
+        foreach ($topics as $topic) {
+            $loopEventId = [];
+            foreach ($topic['events'] as $event) {
+                if (!in_array($event['id'], $loopEventId)) {
+                    $topicClone = $topic->toArray();
+                    $topicClone['event_name'] = $event['title'];
+                    $topicClone['event_id'] = $event['id'];
+                    $topicClone['pivot_topic_id'] = $event['pivot']['id'];
+
+                    $uniqueEventTopics[] = $topicClone;
+                    $loopEventId[] = $event['id'];
+                }
+            }
+        }
+
+        return ['data'=>$uniqueEventTopics];
+    }
 }

@@ -30,7 +30,7 @@ class ExamCategoryController extends ApiBaseController
     public function store(Request $request, ExamCategoryService $examCategoryService): ExamCategoryResource
     {
         return ExamCategoryResource::make(
-            $examCategoryService->create($request),
+            $examCategoryService->createOrUpdate($request),
         );
     }
 

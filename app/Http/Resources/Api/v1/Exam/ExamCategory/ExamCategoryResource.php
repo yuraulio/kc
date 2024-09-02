@@ -2,7 +2,6 @@
 
 namespace App\Http\Resources\Api\v1\Exam\ExamCategory;
 
-use App\Http\Resources\Api\v1\Event\Instructor\InstructorResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 

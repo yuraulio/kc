@@ -9,9 +9,12 @@ use Illuminate\Http\Request;
 
 class ExamCategoryService
 {
-    public function create(Request $request)
+    public function createOrUpdate(Request $request)
     {
-        return ExamCategory::create(['title' => $request->title, 'description' => $request->description]);
+        return ExamCategory::updateOrCreate(
+            ['id'=>$request->id],
+            ['title' => $request->title, 'description' => $request->description]
+        );
     }
 
     public function delete(ExamCategory $examCategory)
