@@ -22,14 +22,6 @@ class TopicController extends ApiBaseController
         )->response()->getData(true);
     }
 
-    /**
-     * Display a listing of the resource with course.
-     */
-    public function topicWithEvent(Request $request, ITopicService $topicService)
-    {
-        return TopicResource::addEventsInfo($topicService->getAllTopicWithEvents());
-    }
-
     public function store(CreateTopicRequest $request, ITopicService $topicService): TopicResource
     {
         return TopicResource::make(

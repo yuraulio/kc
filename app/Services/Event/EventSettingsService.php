@@ -3,6 +3,7 @@
 namespace App\Services\Event;
 
 use App\Contracts\Api\v1\Event\IEventSettingsService;
+use App\Dto\Api\v1\Event\Participants\SettingsDto;
 use App\Model\Career;
 use App\Model\City;
 use App\Model\Dropbox;
@@ -41,6 +42,145 @@ class EventSettingsService implements IEventSettingsService
             'surveys' => $this->prepareEventSurveySettings($event),
             'call_to_action_buttons' => $this->prepareEventCTASettings($event),
         ];
+    }
+
+    public function updateSettings(Event $event, SettingsDto $settingsDto): void
+    {
+        $data = $settingsDto->getData();
+
+        $this->updateEventData($event, $data['event'] ?? []);
+        $this->updateEventInfoData($event, $data['eventInfo'] ?? []);
+        $this->updateEventInfoDeliveryData($event, $data['eventInfoDelivery'] ?? []);
+        $this->updateEventDynamicAdsData($event, $data['dynamicAds'] ?? []);
+        $this->updateEventBonusCourseData($event, $data['bonusCourse'] ?? []);
+        $this->updateEventMetaData($event, $data['metable'] ?? []);
+        $this->updateEventSkillsData($event, $data['skills'] ?? null);
+        $this->updateEventPathsData($event, $data['paths'] ?? null);
+        $this->updateEventCityData($event, $data['city'] ?? null);
+        $this->updateEventPartnersData($event, $data['partners'] ?? null);
+        $this->updateEventPaymentGatewaysData($event, $data['paymentMethods'] ?? null);
+        $this->updateEventPaymentOptionsData($event, $data['paymentOptions'] ?? null);
+        $this->updateEventExamsData($event, $data['exams'] ?? null);
+        $this->updateEventFilesData($event, $data['files'] ?? null);
+    }
+
+    private function updateEventData(Event $event, array $data): void
+    {
+        if ($data) {
+            $event->update($data);
+
+            if (isset($data['slug'])) {
+                $event->slugable()->update(['slug' => $data['slug']]);
+            }
+        }
+    }
+
+    private function updateEventInfoData(Event $event, array $data): void
+    {
+        if ($data) {
+            $event->eventInfo()->update($data);
+        }
+    }
+
+    private function updateEventInfoDeliveryData(Event $event, array $data): void
+    {
+        if ($data) {
+            $eventInfo = $event->eventInfo()->first();
+            $eventInfo?->delivery()?->update($data);
+        }
+    }
+
+    private function updateEventDynamicAdsData(Event $event, array $data): void
+    {
+        if ($data) {
+            $event->dynamicAds()->exists()
+                ? $event->dynamicAds()->update($data)
+                : $event->dynamicAds()->create($data);
+        }
+    }
+
+    private function updateEventBonusCourseData(Event $event, array $data): void
+    {
+        if ($data && isset($data['ids'])) {
+            $pivotData = [];
+
+            foreach ($data['ids'] as $id) {
+                $pivotData[$id] = ['exams_required' => $data['exams_required'] ?? false];
+            }
+
+            $event->bonusCourse()->sync($pivotData);
+        }
+    }
+
+    private function updateEventMetaData(Event $event, array $data): void
+    {
+        if ($data) {
+            $event->metable()->exists()
+                ? $event->metable()->update($data)
+                : $event->metable()->create($data);
+        }
+    }
+
+    private function updateEventSkillsData(Event $event, ?array $data = null): void
+    {
+        if (is_array($data)) {
+            $event->skills()->sync($data);
+        }
+    }
+
+    private function updateEventPathsData(Event $event, ?array $data = null): void
+    {
+        if (is_array($data)) {
+            $event->career()->sync($data);
+        }
+    }
+
+    private function updateEventCityData(Event $event, ?array $data = null): void
+    {
+        if (is_array($data)) {
+            $event->city()->sync($data);
+        }
+    }
+
+    private function updateEventPartnersData(Event $event, ?array $data = null): void
+    {
+        if (is_array($data)) {
+            $event->partners()->sync($data);
+        }
+    }
+
+    private function updateEventPaymentGatewaysData(Event $event, ?array $data = null): void
+    {
+        if (is_array($data)) {
+            $event->paymentMethod()->sync($data);
+        }
+    }
+
+    private function updateEventPaymentOptionsData(Event $event, ?array $data = null): void
+    {
+        if (is_array($data)) {
+            $event->paymentOptions()->sync($data);
+        }
+    }
+
+    private function updateEventExamsData(Event $event, ?array $data = null): void
+    {
+        if (is_array($data)) {
+            $event->exam()->sync($data);
+        }
+    }
+
+    private function updateEventFilesData(Event $event, ?array $data = null): void
+    {
+        if (is_array($data)) {
+            $dataToSync = [];
+            $folders = $event->dropbox()->first();
+
+            if ($folders) {
+                $dataToSync[$folders->id] = ['selectedFolders' => json_encode($data['selectedFolders'])];
+                $event->dropbox()->sync($dataToSync);
+            }
+        }
     }
 
     private function prepareEventAbsencesSettings(Event $event): array
@@ -111,7 +251,7 @@ class EventSettingsService implements IEventSettingsService
 
         return [
             'course_delivery' => $event->eventInfo?->delivery?->delivery_type,
-            'course_city' => $event->city->first()->id,
+            'course_city' => $event->city->first()?->id,
             'cities_list' => City::with('country')->get(),
         ];
     }
@@ -202,7 +342,7 @@ class EventSettingsService implements IEventSettingsService
         $event->loadMissing('metable');
 
         return [
-            'slug' => $event->slug ?? $this->generateEventSlug($event),
+            'slug' => $event->getSlug() ?? $this->generateEventSlug($event),
             'meta_title' => $event->metable?->meta_title,
             'meta_description' => $event->metable?->meta_description,
         ];

@@ -11,7 +11,7 @@ class PaymentsSettingsResource extends JsonResource
     {
         return [
             'is_free' => $this->resource['is_free'] ?? null,
-            'selected_gateway' => $this->resource['selected_gateways'] ?? null,
+            'selected_gateway' => $this->resource['selected_gateway'] ?? null,
             'gateways' => PaymentsGatewaysResource::collection($this->resource['gateways'] ?? collect([])),
             'selected_payment_options' => SelectedPaymentsOptionsResource::collection($this->resource['selected_payment_options'] ?? collect([])),
             'options' => PaymentsOptionsResource::collection($this->resource['options'] ?? collect([])),

@@ -214,7 +214,8 @@ Route::group(['middleware' => ['auth:api', 'auth.aboveauthor'], 'prefix' => 'v1'
     Route::get('events/{event}/participants/download-students', EventDownloadStudentsController::class);
     Route::get('events/{event}/participants/download-exam-results', EventDownloadExamResultsController::class);
     Route::get('events/{event}/participants/download-syllabus', EventDownloadSyllabusController::class);
-    Route::get('events/{event}/participants/settings', EventSettingsController::class);
+    Route::get('events/{event}/participants/settings', [EventSettingsController::class, 'getSettings']);
+    Route::put('events/{event}/participants/settings', [EventSettingsController::class, 'updateSettings']);
 
     // Exams
     Route::apiResource('exams', ExamController::class);

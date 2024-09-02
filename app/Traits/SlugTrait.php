@@ -16,9 +16,6 @@ trait SlugTrait
         $this->slugable()->save($slug);
     }
 
-    /**
-     * @return string
-     */
     public function slugable()
     {
         return $this->morphOne(Slug::class, 'slugable');
