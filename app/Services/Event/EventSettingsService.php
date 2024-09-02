@@ -15,11 +15,17 @@ use App\Model\Partner;
 use App\Model\PaymentMethod;
 use App\Model\PaymentOption;
 use App\Model\Skill;
+use Illuminate\Database\Eloquent\Casts\Json;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Str;
 
 class EventSettingsService implements IEventSettingsService
 {
+    public function __construct(private EventFileService $eventFileService)
+    {
+    }
+
     public function getEventSettings(Event $event): array
     {
         return [
@@ -176,7 +182,7 @@ class EventSettingsService implements IEventSettingsService
             $dataToSync = [];
             $folders = $event->dropbox()->first();
 
-            if ($folders) {
+            if ($folders && isset($data['selectedFolders'])) {
                 $dataToSync[$folders->id] = ['selectedFolders' => json_encode($data['selectedFolders'])];
                 $event->dropbox()->sync($dataToSync);
             }
@@ -252,7 +258,7 @@ class EventSettingsService implements IEventSettingsService
         return [
             'course_delivery' => $event->eventInfo?->delivery?->delivery_type,
             'course_city' => $event->city->first()?->id,
-            'cities_list' => City::with('country')->get(),
+            //            'cities_list' => City::with('country')->get(),
         ];
     }
 
@@ -285,11 +291,23 @@ class EventSettingsService implements IEventSettingsService
     {
         $event->loadMissing('dropbox');
 
-        $folders = $event->dropbox->first();
+        $selectedFiles = $event->dropbox
+            ->map(function ($dropbox) {
+                $selectedFolders = Json::decode($dropbox->pivot->selectedFolders);
+
+                return $selectedFolders['selectedFolders'];
+            })
+            ->collapse();
+
+        $filesTree = $this->eventFileService
+            ->markSelectedFiles(
+                $this->eventFileService->buildFileTree(),
+                $selectedFiles
+            );
 
         return [
-            'attached_files' => $folders ? json_decode($folders->pivot?->selectedFolders) : null,
-            'available_files' => Dropbox::all(),
+            'attached_files' => $this->eventFileService->addUuidToEachElement($filesTree),
+            //            'available_files' => Dropbox::all(),
         ];
     }
 
