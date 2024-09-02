@@ -14,6 +14,7 @@ use App\Model\Event;
 use App\Model\Instructor;
 use App\Model\Logos;
 use App\Model\Slug;
+use App\Services\Event\EventSyllabusService;
 use App\Services\FBPixelService;
 use Auth;
 use Bugsnag\BugsnagLaravel\Facades\Bugsnag;
@@ -97,7 +98,7 @@ class MainController extends Controller
         }
 
         if (!$page) {
-            return (new HomeController($this->fbp))->homePage();
+            return (new HomeController($this->fbp, app(EventSyllabusService::class)))->homePage();
         }
 
         $this->fbp->sendPageViewEvent();
@@ -177,7 +178,7 @@ class MainController extends Controller
 
             $slugModel = Slug::whereSlug($slug)->firstOrCreate();
 
-            return (new HomeController($this->fbp))->index($slugModel);
+            return (new HomeController($this->fbp, app(EventSyllabusService::class)))->index($slugModel);
         }
 
         if ($slug == 'in-the-media' || $slug == 'brands-trained') {
