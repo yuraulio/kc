@@ -13,6 +13,6 @@ class GetUserData extends Command
 
     public function handle()
     {
-        $this->info(User::find($this->argument('user')));
+        $this->info(User::withTrashed()->find($this->argument('user')));
     }
 }
