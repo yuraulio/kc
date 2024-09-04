@@ -3,11 +3,11 @@
     <div class="text-editor-input">
       <label v-if="label" :for="keyput" class="form-label">{{ label }}</label>
 
-      <editor
+      <Editor
         :height="400"
         :id="keyput"
         v-model="editorData"
-        :api-key="tinymce"
+        tinymce-script-src="/tinymce/js/tinymce/tinymce.min.js"
         :init="{
           plugins: plugins,
           toolbar: toolbar,
@@ -19,7 +19,7 @@
           variable_valid: Object.keys(variables),
           variable_mapper: variables,
         }"
-      ></editor>
+      ></Editor>
     </div>
   </div>
 </template>
@@ -70,7 +70,7 @@ export default {
     plugins: {
       type: String,
       default:
-        'preview importcss searchreplace autolink autosave save directionality code visualblocks visualchars fullscreen image link media template codesample table charmap pagebreak nonbreaking anchor insertdatetime advlist lists wordcount help charmap quickbars emoticons variable',
+        'preview importcss searchreplace autolink autosave save directionality code visualblocks visualchars fullscreen image link media template codesample table charmap pagebreak nonbreaking anchor insertdatetime advlist lists wordcount help charmap quickbars emoticons',
     },
     toolbar: {
       type: String,
@@ -91,7 +91,6 @@ export default {
     return {
       loadstart: {},
       editorData: this.value,
-      tinymce: process.env.MIX_PUSHER_TINYMCE,
     };
   },
   methods: {

@@ -27,6 +27,7 @@ use App\Model\User;
 use App\Notifications\ErrorSlack;
 use App\Notifications\ExamActive;
 use App\Notifications\SendTopicAutomateMail;
+use App\Services\ELearningService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -47,8 +48,9 @@ use Validator;
 
 class StudentController extends Controller
 {
-    public function __construct()
-    {
+    public function __construct(
+        private readonly ELearningService $eLearningService
+    ) {
         $this->middleware('event.check')->only('elearning');
     }
 
@@ -734,55 +736,81 @@ class StudentController extends Controller
         return $data;
     }
 
-    public function removeProfileImage()
+    public function removeProfileImage(): void
     {
-        //dd('from remove');
         $user = Auth::user();
-        $user_id = $user->id;
         $media = $user->image;
-        if (!$media) {
-            return;
+        $mediaNew = $user->profile_image;
+
+        if ($media) {
+            $path_crop = explode('.', $media['original_name']);
+            $path_crop = $media['path'] . $path_crop[0] . '-crop' . $media['ext'];
+            $path_crop = substr_replace($path_crop, '', 0, 1);
+            $path_crop_webp = str_replace($media['ext'], '.webp', $path_crop);
+
+            $path = $media['path'] . $media['original_name'];
+            $path = substr_replace($path, '', 0, 1);
+            $path_webp = str_replace($media['ext'], '.webp', $path);
+
+            if (file_exists($path_crop)) {
+                //unlink crop image
+                unlink($path_crop);
+            }
+
+            if (file_exists($path)) {
+                //unlink crop image
+                unlink($path);
+            }
+
+            if (file_exists($path_webp)) {
+                //unlink crop image
+                unlink($path_webp);
+            }
+
+            if (file_exists($path_crop_webp)) {
+                //unlink crop image
+                unlink($path_crop_webp);
+            }
+
+            //null db image
+            $media->original_name = null;
+            $media->name = null;
+            $media->path = null;
+            $media->ext = null;
+            $media->file_info = null;
+            $media->height = null;
+            $media->width = null;
+            $media->details = null;
+
+            $media->save();
         }
-        $path_crop = explode('.', $media['original_name']);
-        $path_crop = $media['path'] . $path_crop[0] . '-crop' . $media['ext'];
-        $path_crop = substr_replace($path_crop, '', 0, 1);
-        $path_crop_webp = str_replace($media['ext'], '.webp', $path_crop);
 
-        $path = $media['path'] . $media['original_name'];
-        $path = substr_replace($path, '', 0, 1);
-        $path_webp = str_replace($media['ext'], '.webp', $path);
+        if ($mediaNew) {
+            DB::beginTransaction();
+            try {
+                $original = $mediaNew->parent;
 
-        if (file_exists($path_crop)) {
-            //unlink crop image
-            unlink($path_crop);
+                if ($original) {
+                    if (file_exists(public_path($original->full_path))) {
+                        unlink(public_path($original->full_path));
+                    }
+                }
+
+                if (file_exists(public_path($mediaNew->full_path))) {
+                    unlink(public_path($mediaNew->full_path));
+                }
+
+                $user->profile_image_id = null;
+                $user->save();
+
+                $original->delete();
+                $mediaNew->delete();
+            } catch (\Throwable $throwable) {
+                DB::rollBack();
+                throw $throwable;
+            }
+            DB::commit();
         }
-
-        if (file_exists($path)) {
-            //unlink crop image
-            unlink($path);
-        }
-
-        if (file_exists($path_webp)) {
-            //unlink crop image
-            unlink($path_webp);
-        }
-
-        if (file_exists($path_crop_webp)) {
-            //unlink crop image
-            unlink($path_crop_webp);
-        }
-
-        //null db image
-        $media->original_name = null;
-        $media->name = null;
-        $media->path = null;
-        $media->ext = null;
-        $media->file_info = null;
-        $media->height = null;
-        $media->width = null;
-        $media->details = null;
-
-        $media->save();
     }
 
     public function uploadProfileImage(Request $request)
@@ -804,7 +832,7 @@ class StudentController extends Controller
         $new_name = $name_parts[0] . '.webp';
 
         // Save image in webp format
-        $image = Image::make($request->dp_fileupload->path());
+        $image = Image::make($request->dp_fileupload->path())->orientate();
         if ($image->width() > $image->height()) {
             $image->heighten(470)->crop(470, 470);
         } elseif ($image->width() < $image->height()) {
@@ -864,7 +892,7 @@ class StudentController extends Controller
             'message' => 'Change profile photo successfully!!',
             'data' => $CMSFile->full_path,
             'crop_data' => '{"crop_height":470,"crop_width":470,"height_offset":0,"width_offset":0}',
-            'profile_image' => $user->profile_image,
+            'profile_image' => $CMSFileThumb,
             'profile_image_original' => $CMSFile,
         ]);
     }
@@ -1166,214 +1194,28 @@ class StudentController extends Controller
     public function saveElearning(Request $request)
     {
         $user = Auth::user();
-        $user = User::find($user['id']);
 
-        $examAccess = false;
+        //TODO: move to DTO
+        $eventId = $request->event;
+        $videos = $request->videos;
+        $eventStatistic = $request->event_statistic;
+        $lastVideoSeen = $request->lastVideoSeen;
 
-        if ($user->statistic()->wherePivot('event_id', $request->event)->first()) {
-            $videos = $user->statistic()->wherePivot('event_id', $request->event)->first()->pivot['videos'];
-            $videos = json_decode($videos, true);
-            foreach ($request->videos as $key => $video) {
-                if (!isset($videos[$key])) {
-                    continue;
-                }
-
-                //$videos[$key]['seen'] = isset($video['seen']) ? $video['seen'] : 0;
-                $videos[$key]['stop_time'] = isset($video['stop_time']) ? $video['stop_time'] : 0;
-                $videos[$key]['percentMinutes'] = isset($video['stop_time']) ? ($video['percentMinutes'] ?? 0) : 0;
-                $videos[$key]['is_new'] = isset($video['is_new']) ? $video['is_new'] : 0;
-
-                if (isset($video['seen']) && isset($videos[$key]['seen'])) {
-                    if ((int) $video['seen'] == 1 && (int) $videos[$key]['seen'] == 0) {
-                        $videos[$key]['seen'] = (int) $video['seen'];
-                    }
-                }
-
-                if (isset($video['stop_time']) && isset($video['total_seen'])) {
-                    if ((float) $video['stop_time'] > (float) $videos[$key]['total_seen']) {
-                        $videos[$key]['total_seen'] = $video['stop_time'];
-                    }
-                }
-            }
-
-            // Calc the total seen
-            $total_seen = 0;
-            $total_duration = 0;
-            try {
-                foreach ($videos as $video) {
-                    if ((int) $video['seen'] == 1) {
-                        $total_seen += (float) $video['total_duration'];
-                    } else {
-                        $total_seen += (float) $video['total_seen'];
-                    }
-                    $total_duration += (float) $video['total_duration'];
-                }
-                $past_total_duration = (float) $user->statistic()->wherePivot('event_id', $request->event)->first()->pivot['total_duration'];
-                $past_total_seen = (float) $user->statistic()->wherePivot('event_id', $request->event)->first()->pivot['total_seen'];
-
-                if ($total_duration == $past_total_duration) {
-                    if ($total_seen < $past_total_seen) {
-                        // Here we have a problem. Create Slack alert.
-                        if ($past_total_seen - $total_seen > 180) {
-                            // If is more than 3 minutes, alert!
-                            $event = Event::find($request->event);
-                            $user->notify(new ErrorSlack('User ' . $user->email . ' is saving course progress for the event ' . $event->title . ' but the total_seen has decrease ' . $past_total_seen . ' -> ' . $total_seen . '. More details in the log.'));
-
-                            Log::channel('daily')->warning('User ' . $user->email . ' is saving course progress for the event ' . $event->title . ' but the total_seen has decrease ' . $past_total_seen . ' -> ' . $total_seen . '. More details in the log.');
-                            Log::channel('daily')->warning($user->statistic()->wherePivot('event_id', $request->event)->first()->pivot['videos']);
-                            Log::channel('daily')->warning(json_encode($user->statistic()->wherePivot('event_id', $videos)));
-                        }
-                    }
-                }
-            } catch(\Exception $e) {
-                $user->notify(new ErrorSlack($e));
-            }
-
-            $user->statistic()->wherePivot('event_id', $request->event)->updateExistingPivot($request->event, [
-                'lastVideoSeen' => $request->lastVideoSeen,
-                'videos' => json_encode($videos),
-                'total_seen' => $total_seen,
-                'total_duration' => $total_duration,
-                'last_seen' => date('Y-m-d H:i:s'),
-            ], false);
-
-            /*if($user->events()->where('event_id',2068)->first() && $user->events()->where('event_id',2068)->first() &&
-                $user->events()->where('event_id',2068)->first()->tickets()->wherePivot('user_id',$user->id)->first()){
-
-                    $user->events()->where('event_id',2068)->first()->certification($user);
-
-            }*/
-
-            $event = $user->events()->where('event_id', $request->event)->first();
-
-            if (isset($_COOKIE['examMessage-' . $request->event_statistic])) {
-                $examAccess = false;
-            } elseif ($event && count($event->getExams()) > 0) {
-                $examAccess = false; //$event->examAccess($user);
-
-                if ($examAccess) {
-                    $adminemail = 'info@knowcrunch.com';
-
-                    $data['firstName'] = $user->firstname;
-                    $data['eventTitle'] = $event->title;
-                    $data['fbGroup'] = $event->fb_group;
-                    $data['subject'] = 'Knowcrunch - ' . $data['firstName'] . '  you exams are active now';
-                    $data['template'] = 'emails.user.exam_activate';
-
-                    //$user->notify(new ExamActive($data));
-
-                    /*$muser['name'] = $user->firstname . ' ' . $user->lastname;
-                    $muser['first'] = $user->firstname;
-                    $muser['eventTitle'] =  $event->title;
-                    $muser['email'] = $user->email;
-
-                    $data['firstName'] = $user->firstname;
-                    $data['eventTitle'] = $event->title;
-
-                    $sent = Mail::send('emails.student.exam_activate', $data, function ($m) use ($adminemail, $muser) {
-
-                        $fullname = $muser['name'];
-                        $first = $muser['first'];
-                        $sub =  $first . ' – Your exams on the ' . $muser['eventTitle'] . ' have been activated!';
-                        $m->from($adminemail, 'Knowcrunch');
-                        $m->to($muser['email'], $fullname);
-                        //$m->cc($adminemail);
-                        $m->subject($sub);
-
-                    });*/
-                }
-
-            //}else if( $event /*&& $event->view_tpl != 'elearning_free'*/ && !$event->isFree() && $event->hasCertificate()){
-            } elseif ($event && $event->hasCertificate()) {
-                $event->certification($user);
-            }
-
-            $request->videos = $this->checkSendEmailTopic($request->lastVideoSeen, $request->event, $user, $videos);
-        }
+        $videos = $this->eLearningService->saveELearning(
+            user: $user,
+            eventId: $eventId,
+            userVideos: $videos,
+            eventStatistic: $eventStatistic,
+            lastVideoSeen: $lastVideoSeen
+        );
 
         return response()->json([
             'success' => true,
-            'videos' => $request->videos,
+            'videos' => $videos,
             'loged_in' => true,
             'exam_access' => false, //$examAccess,
             // 'progress' => $progress
         ]);
-    }
-
-    private function checkSendEmailTopic($videoId, $eventId, $user, $video)
-    {
-        $event = Event::find($eventId);
-        $subject = null;
-
-        $topicId = null;
-        $isAutomateEmailEnable = 0;
-        //$alreadySend = 1;
-
-        if (!$event) {
-            return false;
-        }
-
-        $lessonForUpdate = [];
-        if (isset($video[$videoId])) {
-            $checkDbValueSendAutomateEmail = (int) $video[$videoId]['send_automate_email'];
-        } else {
-            $checkDbValueSendAutomateEmail = 1;
-        }
-
-        // dd($video[$videoId]);
-        // dd($videoId.'//'.$checkDbValueSendAutomateEmail);
-
-        // find topic
-        foreach ($event->lessons as $lesson) {
-            if (str_contains($lesson->vimeo_video, $videoId)) {
-                $topicId = $lesson->pivot->topic_id;
-                $isAutomateEmailEnable = $lesson->pivot->automate_mail;
-            }
-        }
-
-        if ($isAutomateEmailEnable == 1) {
-            $topic = Topic::find($topicId);
-
-            // dd($checkDbValueSendAutomateEmail);
-
-            if ($topic && $topic->email_template != '' && $checkDbValueSendAutomateEmail == 0) {
-                if ($topic->email_template == 'activate_social_media_account_email') {
-                    $subject = 'activate your social media accounts!';
-                } elseif ($topic->email_template == 'activate_advertising_account_email') {
-                    $subject = 'activate your personal advertising accounts!';
-                } elseif ($topic->email_template == 'activate_content_production_account_email') {
-                    $subject = 'activate your content production accounts!';
-                }
-
-                if ($subject) {
-                    $data['firstname'] = $user->firstname;
-                    $data['subject'] = 'Knowcrunch | ' . $user->firstname . ', ' . $subject;
-                    $data['email_template'] = $topic->email_template;
-
-                    $user->notify(new SendTopicAutomateMail($data));
-                    event(new EmailSent($user->email, 'SendTopicAutomateMail'));
-
-                    // find all topic lessons for update
-                    foreach ($event->lessons()->wherePivot('topic_id', $topic->id)->get() as $lesson) {
-                        $lessonForUpdate[] = str_replace('https://vimeo.com/', '', $lesson->vimeo_video);
-                        // $lesson->pivot->send_automate_mail = true;
-                        // $lesson->pivot->save();
-                    }
-                }
-            }
-
-            if (!empty($lessonForUpdate)) {
-                foreach ($lessonForUpdate as $vimeoId) {
-                    $video[$vimeoId]['send_automate_email'] = 1;
-                }
-
-                $user->statistic()->wherePivot('event_id', $eventId)->updateExistingPivot($eventId, [
-                    'videos' => json_encode($video),
-                ], false);
-            }
-        }
-
-        return $video;
     }
 
     public function activate($code)

@@ -27,7 +27,12 @@ class UploadImageController extends ApiBaseController
         $path = $mediaFolder->path . '/' . $imageName;
         $n = strrpos($imageName, '.');
         $fileBaseName = substr($imageName, 0, $n);
-        $fileExt = 'webp';
+
+        if ($image->getMimeType() === 'image/svg+xml') {
+            $fileExt = 'svg';
+        } else {
+            $fileExt = 'webp';
+        }
 
         $imageName = $fileBaseName . '.' . $fileExt;
         $i = 1;
@@ -40,9 +45,21 @@ class UploadImageController extends ApiBaseController
         }
 
         try {
-            $imageWebP = Image::make($image)->encode('webp', config('app.WEBP_IMAGE_QUALITY'));
-            $imageWebP->stream();
-            Storage::disk('public')->put($path, $imageWebP, 'public');
+            $width = 0;
+            $height = 0;
+            if ($image->getMimeType() === 'image/svg+xml') {
+                preg_match("#viewbox=[\"']\d* \d* (\d*) (\d*)#i", $image->getContent(), $d);
+                $width = $d[1];
+                $height = $d[2];
+                Storage::disk('public')->put($path, $image->getContent(), 'public');
+            } else {
+                $imageWebP = Image::make($image)->encode('webp', config('app.WEBP_IMAGE_QUALITY'));
+                $imageWebP->stream();
+                Storage::disk('public')->put($path, $imageWebP, 'public');
+
+                $width = $imageWebP->width();
+                $height = $imageWebP->height();
+            }
         } catch (\Exception $e) {
             Log::error('File uploading failed . ' . $e->getMessage());
 
@@ -61,8 +78,8 @@ class UploadImageController extends ApiBaseController
             'alt_text' => $request->input('alt_text'),
             'link' => $request->input('link'),
             'size' => Storage::disk('public')->size($path),
-            'height' => $imageWebP->height(),
-            'width' => $imageWebP->width(),
+            'height' => $height,
+            'width' => $width,
             'version' => 'original',
             'user_id' => Auth::user()->id,
         ]);

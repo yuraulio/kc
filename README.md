@@ -71,3 +71,9 @@ PaymentMethod::query()->update([
     ]))
 ]);
 ```
+# Tiny MCE
+
+Tiny MCE is used as a WYSIWYG editor. We use the self-hosted version as it's free - and host it by simply downloading the
+latest version from the Tiny MCE website and placing it in the public directory.
+
+Currently we use Tiny MCE version 6, though 7 has been released. 

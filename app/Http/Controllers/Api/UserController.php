@@ -51,7 +51,7 @@ class UserController extends Controller
         $queryStringDirector = new QueryStringDirector($request);
         $query = User::query()
             ->with([
-                'image',
+                'profile_image',
                 'statusAccount',
                 'profileStatus',
                 'role',
@@ -75,7 +75,11 @@ class UserController extends Controller
             ->appends($request->query->all());
 
         $users->through(function ($user) {
-            $user['profileImage'] = get_profile_image($user['image']);
+            if ($user->profile_image) {
+                $user['profileImage'] = $user->profile_image->url;
+            } else {
+                $user['profileImage'] = '/theme/assets/images/icons/user-profile-placeholder-image.png';
+            }
 
             unset($user['image']);
 

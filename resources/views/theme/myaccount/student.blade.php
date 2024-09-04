@@ -2157,14 +2157,24 @@
     initCropper();
   }
 
+  function getFullPath() {
+    return profile_image_original.full_path;
+  }
+
   function initCropper(){
     img = media = profile_image;
     full_path = profile_image_original.full_path;
     details = profile_image.crop_data;
 
-
     // Cropping images
-    $('.crop_image').click(() => {
+    $('.crop_image').off('click').on('click', () => {
+      if (cropper) {
+        cropper.destroy();
+        cropper = null;
+        $('#modalProfileImageCrop').remove();
+        modal = null;
+      }
+
       modal = $(
         '<div class="modal fade" id="modalProfileImageCrop" tabindex="-1" role="dialog">' +
           '<div class="modal-dialog" role="document">' +
@@ -2175,7 +2185,7 @@
                   '<svg style="width: 25px; height: 25px; fill: gray;" data-dismiss="modal" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"/></svg>' +
                 '</button>' +
               '</div>' +
-              '<div class="modal-body">' +
+              '<div class="modal-body" id="cropper-modal-body">' +
                 '<img src="' + full_path + '" id="profile-image-to-crop">' +
               '</div>' +
               '<div class="modal-footer" style="padding-top: 20px">' +
@@ -2186,6 +2196,7 @@
           '</div>' +
         '</div>'
       );
+
       $('body').append(modal);
 
       let width = 800
@@ -2193,34 +2204,39 @@
       let x = 0;
       let y = 0;
 
-      image_details = JSON.parse(profile_image.crop_data.split(','));
+      const cropDataIsString = profile_image.hasOwnProperty('crop_data') && typeof profile_image.crop_data === 'string';
+
+      image_details = cropDataIsString ? JSON.parse(profile_image.crop_data.split(',')) : profile_image.crop_data;
       width = image_details.crop_width;
       height = image_details.crop_height;
       x = image_details.width_offset;
       y = image_details.height_offset;
 
-      cropper = new Cropper(document.getElementById(`profile-image-to-crop`), {
-        aspectRatio: Number((width/height), 4),
-        viewMode: 0,
-        dragMode: "crop",
-        responsive: true,
-        autoCropArea: 0,
-        restore: false,
-        movable: false,
-        rotatable: false,
-        scalable: false,
-        zoomable: false,
-        cropBoxMovable: true,
-        cropBoxResizable: true,
-        minContainerWidth: 300,
-        minContainerHeight: 300,
-        data:{
-          x:parseInt(x),
-          y:parseInt(y),
-          width: parseInt(width),
-          height: parseInt(height)
-        }
-      });
+      // add cropper creation to the end of event loop queue
+      setTimeout(() => {
+        cropper = new Cropper(document.getElementById(`profile-image-to-crop`), {
+          aspectRatio: Number((width/height), 4),
+          viewMode: 0,
+          dragMode: "crop",
+          responsive: true,
+          autoCropArea: 0,
+          restore: false,
+          movable: false,
+          rotatable: false,
+          scalable: false,
+          zoomable: false,
+          cropBoxMovable: true,
+          cropBoxResizable: true,
+          minContainerWidth: 300,
+          minContainerHeight: 300,
+          data:{
+            x:parseInt(x),
+            y:parseInt(y),
+            width: parseInt(width),
+            height: parseInt(height)
+          }
+        });
+      }, 0);
 
       $('#modalProfileImageCrop').modal('show');
 
@@ -2465,6 +2481,8 @@
                 profile_image = response.profile_image;
                 profile_image_original = response.profile_image_original;
 
+                console.log(profile_image);
+
                 $('.remove-photo').show();
                 $('.crop-photo').show();
 
@@ -2622,14 +2640,11 @@
             data: {'media':media_id},
             success: function(data) {
 
-                if (Number(data.status) === 1) {
+              document.getElementById('user-img').setAttribute('src','/theme/assets/images/icons/user-circle-placeholder.svg')
+              document.getElementById('user-img-up').setAttribute('src','/theme/assets/images/icons/user-circle-placeholder.svg')
 
-
-                    document.getElementById('user-img').setAttribute('src','/theme/assets/images/icons/user-circle-placeholder.svg')
-                    document.getElementById('user-img-up').setAttribute('src','/theme/assets/images/icons/user-circle-placeholder.svg')
-
-                    $('.delete_media').hide();
-                }
+              $('.delete_media').hide();
+              $('.crop_media').hide();
             }
         });
 

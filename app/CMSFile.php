@@ -12,6 +12,10 @@ class CMSFile extends Model
 
     protected $table = 'cms_files';
 
+    protected $casts = [
+        'crop_data' => 'json',
+    ];
+
     /**
      * Get the comments for the blog post.
      */

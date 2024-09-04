@@ -26,6 +26,8 @@ use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
+use Laravel\Cashier\Subscription;
 
 /**
  * @property int $id
@@ -1144,6 +1146,9 @@ class Event extends Model
         $infos = $this->event_info();
 
         if ($this->examAccess($user, $successPer) && !$certification) {
+            Log::channel('daily')
+                ->info('[user_id: ' . $user->id . ', event_id: ' . $this->id . '] User has enough progress of the course to generate certificate. Trying to generate certificate.');
+
             $cert = new Certificate;
             $cert->success = true;
             $cert->create_date = strtotime(date('Y-m-d'));
@@ -1163,8 +1168,11 @@ class Event extends Model
 
             $cert->save();
 
-            $cert->event()->save($this);
-            $cert->user()->save($user);
+            $cert->event()->attach($this->id);
+            $cert->user()->attach($user->id);
+
+            Log::channel('daily')
+                ->info('[user_id: ' . $user->id . ', event_id: ' . $this->id . '] Certificate created. Trying to send email.');
 
             $data['firstName'] = $user->firstname;
             $data['eventTitle'] = $this->title;
@@ -1173,6 +1181,10 @@ class Event extends Model
             $data['template'] = 'emails.user.certificate';
             $data['certUrl'] = trim(url('/') . '/mycertificate/' . base64_encode($user->email . '--' . $cert->id));
             $user->notify(new CertificateAvaillable($data));
+
+            Log::channel('daily')
+                ->info('[user_id: ' . $user->id . ', event_id: ' . $this->id . '] The email about a new certificate is sent.');
+
             event(new EmailSent($user->email, 'CertificateAvaillable'));
         }
     }

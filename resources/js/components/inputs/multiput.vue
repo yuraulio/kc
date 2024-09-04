@@ -251,7 +251,7 @@
         :height="300"
         :id="keyput"
         v-model="editorData"
-        :api-key="tinymce"
+        tinymce-script-src="/tinymce/js/tinymce/tinymce.min.js"
         :init="{
           plugins:
             'preview importcss searchreplace autolink autosave save directionality code visualblocks visualchars fullscreen image link media template codesample table charmap pagebreak nonbreaking anchor insertdatetime advlist lists wordcount help charmap quickbars emoticons',
@@ -388,7 +388,6 @@ export default {
     return {
       loadstart: {},
       editorData: this.value,
-      tinymce: process.env.MIX_PUSHER_TINYMCE,
       startingImage: null,
       updatedImage: null,
     };

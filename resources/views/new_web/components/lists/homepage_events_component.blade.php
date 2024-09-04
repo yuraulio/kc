@@ -128,7 +128,7 @@
                         @if ( isset($event['mediable']) && isset($event['slugable']))
                         <a href="{{ $event['slugable']['slug'] }}">
 
-                            <img loading="lazy" class="resp-img" src="{{ cdn(get_image($event['mediable'],'event-card')) }}" alt="{{ $until}}" width="{{ get_image_version_details('event-card')['w'] }}" height="{{ get_image_version_details('event-card')['h']}}" /></a>
+                            <img loading="lazy" class="resp-img" src="{{ cdn(get_image($event['mediable'],'event-card')) }}" alt="{{ $until }}" width="{{ get_image_version_details('event-card')['w'] }}" height="{{ get_image_version_details('event-card')['h']}}" /></a>
                         @endif
                         <div class="box-text box-text-orange">
                             <?php
