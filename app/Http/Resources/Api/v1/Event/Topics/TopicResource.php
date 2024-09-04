@@ -30,7 +30,7 @@ class TopicResource extends JsonResource
         ];
     }
 
-    public static function addEventInfo($topics)
+    public static function addEventsInfo($topics)
     {
         $uniqueEventTopics = [];
         foreach ($topics as $topic) {

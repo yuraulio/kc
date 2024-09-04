@@ -39,6 +39,7 @@ class Exam extends Model
         'repeat_exam',
         'repeat_exam_in',
         'repeat_exam_in_failure',
+        'result_duration',
         'course_elearning_exam_activate_months',
         'minutes_after_completion',
         'exam_activation_datetime',
