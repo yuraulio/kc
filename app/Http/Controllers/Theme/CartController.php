@@ -1264,7 +1264,7 @@ class CartController extends Controller
 
                     // assign user to the event only if payment is complete.
                     $ev->users()->wherePivot('user_id', $dpuser->id)->detach();
-                    $ev->users()->save($dpuser, ['paid'=>false, 'payment_method'=>$payment_method_id]);
+//                    $ev->users()->save($dpuser, ['paid'=>false, 'payment_method'=>$payment_method_id]);
                 } catch(\Laravel\Cashier\Exceptions\IncompletePayment $exception) {
                     $payment_method_id = -1;
                     if ($ev->paymentMethod->first()) {
@@ -1272,7 +1272,7 @@ class CartController extends Controller
                     }
 
                     $ev->users()->wherePivot('user_id', $dpuser->id)->detach();
-                    $ev->users()->save($dpuser, ['paid'=>false, 'payment_method'=>$payment_method_id]);
+//                    $ev->users()->save($dpuser, ['paid'=>false, 'payment_method'=>$payment_method_id]);
 
                     $input['paymentMethod'] = $payment_method_id;
                     $input['amount'] = $instamount;
@@ -1328,7 +1328,7 @@ class CartController extends Controller
                     }
 
                     $ev->users()->wherePivot('user_id', $dpuser->id)->detach();
-                    $ev->users()->save($dpuser, ['paid'=>false, 'payment_method'=>$payment_method_id]);
+//                    $ev->users()->save($dpuser, ['paid'=>false, 'payment_method'=>$payment_method_id]);
 
                     $input['paymentMethod'] = $payment_method_id;
                     $input['amount'] = $namount;
@@ -1340,10 +1340,13 @@ class CartController extends Controller
                     //return 'stripe/payment/' . $exception->payment->id . '/' . $input;
                     return 'summary/' . $exception->payment->id . '/' . $input;
                     //return '/stripe/payment/'.$exception->payment->id;
+                } catch (\Exception $e) {
+                    Log::error($e);
                 }
             }
 
-            if ((is_array($charge) && $charge['status'] == 'succeeded') || (isset($charge) && $charge->status == 'succeeded')) {
+            if ((isset($charge) && is_array($charge) && $charge['status'] == 'succeeded') || (isset($charge) && $charge->status == 'succeeded')) {
+                $ev->users()->save($dpuser, ['paid' => true, 'payment_method' => $ev->paymentMethod->first()?->id]);
                 /**
                  * Write Here Your Database insert logic.
                  */
