@@ -21,9 +21,9 @@ class EventFileService
 
         foreach (Dropbox::cursor() as $dropbox) {
             // Combine folders with the bonus folders.
-            $folders = Arr::collapse($dropbox->folders);
+            $folders = Arr::collapse($dropbox->folders ?? []);
             // Combine files with the bonus files.
-            $files = Arr::collapse($dropbox->files);
+            $files = Arr::collapse($dropbox->files ?? []);
 
             // Put files into folders.
             foreach ($folders as &$folder) {

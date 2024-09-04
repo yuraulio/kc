@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers\Api\v1\Event;
 
+use App\Contracts\Api\v1\Event\IEventSettingsService;
 use App\Http\Controllers\Api\v1\ApiBaseController;
+use App\Http\Requests\Api\v1\Event\UpdateEventRequest;
+use App\Http\Resources\Api\v1\Event\Settings\CourseSettingsResource;
 use App\Model\Event;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -33,18 +36,24 @@ class EventController extends ApiBaseController
     /**
      * Display the event.
      */
-    public function show(Request $request, Event $event): JsonResponse
+    public function show(Request $request, Event $event, IEventSettingsService $settingsService): JsonResponse
     {
-        return new JsonResponse(
-            $this->applyRequestParametersToModel($event, $request)
-        );
+        $event = $this->applyRequestParametersToModel($event, $request);
+        $event->settings = CourseSettingsResource::make($settingsService->getEventSettings($event));
+
+        return new JsonResponse($event);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Event $event): JsonResponse
+    public function update(UpdateEventRequest $request, Event $event, IEventSettingsService $settingsService): JsonResponse
     {
+        // update other fields
+        // ...
+        // update settings tab
+        $settingsService->updateSettings($event, $request->toDto());
+
         return new JsonResponse([]);
     }
 

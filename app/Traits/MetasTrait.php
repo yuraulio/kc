@@ -15,9 +15,6 @@ trait MetasTrait
         $this->metable()->save($metas);
     }
 
-    /**
-     * @return string
-     */
     public function metable()
     {
         return $this->morphOne(Metas::class, 'metable');

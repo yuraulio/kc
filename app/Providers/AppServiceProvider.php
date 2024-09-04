@@ -13,6 +13,7 @@ use App\Model\User;
 use App\Observers\EventObserver;
 use App\Observers\ItemObserver;
 use App\Observers\UserObserver;
+use App\Services\Event\EventFileService;
 use App\Services\Event\EventSettingsService;
 use App\Services\Event\EventStatisticService;
 use App\Services\Lesson\LessonService;
@@ -86,7 +87,7 @@ class AppServiceProvider extends ServiceProvider
         });
 
         $this->app->bind(IEventSettingsService::class, function ($app) {
-            return new EventSettingsService();
+            return new EventSettingsService(new EventFileService());
         });
 
         $this->app->bind(ITopicService::class, function ($app) {
