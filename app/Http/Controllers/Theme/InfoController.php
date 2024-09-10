@@ -1029,12 +1029,16 @@ class InfoController extends Controller
             $transdata['extrainfo'] = $extrainfo;
             $transdata['helperdetails'] = $helperdetails;
 
-            $sentadmin = Mail::send('emails.admin.admin_info_new_registration', $transdata, function ($m) use ($adminemail) {
-                $m->from('info@knowcrunch.com', 'Knowcrunch');
-                $m->to('info@knowcrunch.com', 'Knowcrunch');
+            try {
+                $sentadmin = Mail::send('emails.admin.admin_info_new_registration', $transdata, function ($m) use ($adminemail) {
+                    $m->from('info@knowcrunch.com', 'Knowcrunch');
+                    $m->to('info@knowcrunch.com', 'Knowcrunch');
 
-                $m->subject('Knowcrunch - New Registration');
-            });
+                    $m->subject('Knowcrunch - New Registration');
+                });
+            } catch (\Exception $e) {
+                Log::error($e->getMessage());
+            }
         }
     }
 
