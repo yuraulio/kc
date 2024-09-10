@@ -291,7 +291,7 @@
               'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
           },
           type: 'delete',
-          url: `/admin1/logos/delete/${logo}`,
+          url: `/admin/logos/delete/${logo}`,
 
           success: function (data) {
             if(data['success']){
@@ -314,7 +314,7 @@ if (confirm('Are you sure you want to delete this {{strtolower($title)}}?')){
            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
        },
        type: 'delete',
-       url: `/admin1/logos/delete/${logo}`,
+       url: `/admin/logos/delete/${logo}`,
 
        success: function (data) {
          if(data['success']){

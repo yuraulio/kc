@@ -7,7 +7,7 @@
 </style>
 
 <div id="content_list_cont">
-	<!-- <a href="/admin1/transaction/create">New</a> -->
+	<!-- <a href="/admin/transaction/create">New</a> -->
     <div class="dp_filters_cont">
 
 

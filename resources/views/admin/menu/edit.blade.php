@@ -169,7 +169,7 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 type: 'post',
-                url: '/admin1/menu/fetchAllMenu',
+                url: '/admin/menu/fetchAllMenu',
                 data:{'name': menu_name},
                 success: function (data) {
                     let categories = data.data.categories

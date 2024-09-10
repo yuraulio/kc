@@ -106,7 +106,7 @@ $.ajax({
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
               },
           type: 'post',
-          url: '/admin1/subscription/saveSubs',
+          url: '/admin/subscription/saveSubs',
           data:{'data':array},
           success: function(data) {
                 if(data){

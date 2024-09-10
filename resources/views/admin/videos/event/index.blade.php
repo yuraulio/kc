@@ -108,7 +108,7 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             type: 'DELETE',
-            url: '/admin1/delete-explainer-video/'+eventId+'/'+videoId,
+            url: '/admin/delete-explainer-video/'+eventId+'/'+videoId,
             success: function (data) {
 
                 if(data.success){
@@ -173,7 +173,7 @@
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },
         type: 'get',
-        url: '/admin1/video/fetchAllVideos',
+        url: '/admin/video/fetchAllVideos',
         success: function (data) {
             let videos = data.data
 

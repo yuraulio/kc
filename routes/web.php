@@ -66,7 +66,7 @@ Route::get('lock', 'PageController@lock')->name('page.lock');
 Route::get('mycertificateview/share/facebook/{certificate}/{image}', 'Theme\CertificateController@share_facebook')->name('certificate.image');
 Route::get('mycertificateview/{id}/{title}', 'Theme\CertificateController@view_results')->name('certificate.results');
 
-Route::group(['middleware' => 'auth.aboveauthor', 'prefix' => 'admin1'], function () {
+Route::group(['middleware' => 'auth.aboveauthor', 'prefix' => 'admin'], function () {
     Route::get('/refresh-cache', 'UtilController@refreshCache')->name('admin.refresh-cache');
 
     Route::get('/', 'HomeController@index')->name('home');

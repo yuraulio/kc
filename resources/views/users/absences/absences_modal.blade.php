@@ -68,7 +68,7 @@
     $(document).on('click','.absences',function(){
 
 
-        let url =`/admin1/user/absences/${$(this).data('user_id')}/${$(this).data('event_id')}`
+        let url =`/admin/user/absences/${$(this).data('user_id')}/${$(this).data('event_id')}`
 
 
         $.ajax({

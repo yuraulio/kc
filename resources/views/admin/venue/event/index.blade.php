@@ -163,7 +163,7 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             type: 'post',
-            url: '/admin1/venue/fetchAllVenues',
+            url: '/admin/venue/fetchAllVenues',
             data: {'model_type':modelType,'model_id':modelId},
             success: function (data) {
                 let venue = data.data.venues

@@ -64,7 +64,7 @@ if (isset($helperdetails[$user['email']])) {
 <!-- <strong>MOBILE PHONE:</strong> -<br /><br /> -->
 <strong>INVOICE:</strong> -<br /><br />
 
-<a target="_blank" href="http://www.knowcrunch.com/admin1/transaction/edit/{{ $trans->id }}">Check the registration details online</a>.<br /><br />
+<a target="_blank" href="http://www.knowcrunch.com/admin/transaction/edit/{{ $trans->id }}">Check the registration details online</a>.<br /><br />
 
  Bank Payment Ref: {{ $res['paymentRef'] }}<br />
  Transaction Id: {{ $res['txId'] }}<br />

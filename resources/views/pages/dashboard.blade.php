@@ -972,7 +972,7 @@
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
                     type: 'post',
-                    url: '/admin1/home/fetchDashboardData',
+                    url: '/admin/home/fetchDashboardData',
                     data: {'start': start_date, 'end':end_date},
                     success: function (data) {
                         let data1 = data.data
@@ -1013,7 +1013,7 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 type: 'GET',
-                url: '/admin1/home/fetchDashboardStudentStatistics',
+                url: '/admin/home/fetchDashboardStudentStatistics',
                 success: function (data) {
                     let stats = data.data
 
@@ -1033,7 +1033,7 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 type: 'GET',
-                url: '/admin1/home/fetchDashboardStudentAllStatistics',
+                url: '/admin/home/fetchDashboardStudentAllStatistics',
                 success: function (data) {
 
                     let stats = data.data
@@ -1053,7 +1053,7 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 type: 'GET',
-                url: '/admin1/home/fetchDashboardInstructorStatistics',
+                url: '/admin/home/fetchDashboardInstructorStatistics',
                 success: function (data) {
                     let stats = data.data
 

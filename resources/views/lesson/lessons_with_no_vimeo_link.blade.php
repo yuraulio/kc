@@ -34,7 +34,7 @@
 
                                     <tr class="lesson-list">
                                         <td>{{$lesson->id}}</td>
-                                        <td><a href="{{ config('app.url') }}/admin1/lessons/{{$lesson->id}}/edit">{{$lesson->title}}</a></td>
+                                        <td><a href="{{ config('app.url') }}/admin/lessons/{{$lesson->id}}/edit">{{$lesson->title}}</a></td>
                                     </tr>
 
 

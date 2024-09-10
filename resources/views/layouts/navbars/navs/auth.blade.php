@@ -118,7 +118,7 @@
         $.ajax({
 
         type: 'get',
-        url: '/admin1/dropbox/update',
+        url: '/admin/dropbox/update',
 
         success: function (data) {
             if(data){
@@ -178,7 +178,7 @@
             $.ajax({
 
    			    type: 'get',
-   			    url: '/admin1/search-user/' + $(this).val(),
+   			    url: '/admin/search-user/' + $(this).val(),
 
    			    success: function (data) {
                     let searchList = '';

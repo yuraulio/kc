@@ -376,7 +376,7 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 type: 'post',
-                url: '/admin1/ticket/fetchAllTickets',
+                url: '/admin/ticket/fetchAllTickets',
                 data: {'modelType':modelType, 'modelId':modelId},
                 success: function (data) {
                     let ticket = data.data.tickets
@@ -593,7 +593,7 @@
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             type: 'put',
-            url: '/admin1/ticket/' + $ticketId,
+            url: '/admin/ticket/' + $ticketId,
             data: {'option1':$('#option1_edit').val(),'option2':$('#option2_edit').val(),'option3':$('#option3_edit').val(),
                     'features':features,'price':$('#edit-price').val(),'public_title':$('#edit-public_title').val(),'quantity':$('#edit-quantity1').val(),
                     'model_type':modelType,'model_id':modelId, 'seats_visible':$("#input-show-seats").is(':checked')},
@@ -701,7 +701,7 @@
          'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
          },
          Accept: 'application/json',
-         url: "/admin1/ticket-active/" + event + "/" + ticket + "/" + active,
+         url: "/admin/ticket-active/" + event + "/" + ticket + "/" + active,
          success: function(data) {
 
             $('.ticket-span' + data.ticket).html(data.text);
@@ -725,7 +725,7 @@
          'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
          },
          Accept: 'application/json',
-         url: "/admin1/ticket-active/" + event + "/" + ticket + "/" + active,
+         url: "/admin/ticket-active/" + event + "/" + ticket + "/" + active,
          success: function(data) {
 
             $('.ticket-span' + data.ticket).html(data.text);

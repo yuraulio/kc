@@ -154,7 +154,7 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             type: 'get',
-            url: '/admin1/city/fetchAllCities',
+            url: '/admin/city/fetchAllCities',
             success: function (data) {
                 let city = data.cities
 

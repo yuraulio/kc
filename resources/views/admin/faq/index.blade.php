@@ -155,7 +155,7 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 type: 'post',
-                url: '/admin1/faqs/fetchAllFaqs',
+                url: '/admin/faqs/fetchAllFaqs',
                 data:{'model_type':modelType,'model_id':modelId},
                 success: function (data) {
                     let faq = data.faqs
@@ -223,7 +223,7 @@
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
                         type: 'get',
-                        url: '/admin1/faqs/assign-event/' + "{{$event->id}}" +'/' + $(this).data('faq'),
+                        url: '/admin/faqs/assign-event/' + "{{$event->id}}" +'/' + $(this).data('faq'),
                         success: function (data) {
 
                             let faq = data.allFaqs
@@ -296,7 +296,7 @@
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
                         type: 'get',
-                        url: '/admin1/faqs/unsign-event/' + "{{$event->id}}" +'/' + $(this).data('faq'),
+                        url: '/admin/faqs/unsign-event/' + "{{$event->id}}" +'/' + $(this).data('faq'),
                         success: function (data) {
                             let faq = data.allFaqs
                             let assignedFaqs = data.eventFaqs;

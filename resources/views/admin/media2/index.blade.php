@@ -442,11 +442,11 @@
                     headers: {
                         'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
                     },
-                    url: "/admin1/media2_image",
+                    url: "/admin/media2_image",
                     data: {name: $('#properties-name').text()},
                     success: function(data) {
 
-                        window.location = '/admin1/media2/' + data.data;
+                        window.location = '/admin/media2/' + data.data;
 
 
                     }
@@ -496,7 +496,7 @@
                     headers: {
                         'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
                     },
-                    url: "/admin1/media/crop_file_manager_image",
+                    url: "/admin/media/crop_file_manager_image",
                     data: data,
                     success: function(data) {
 
@@ -802,7 +802,7 @@
                                     },
                                     contentType: "application/json; charset=utf-8",
                                     dataType: "json",
-                                    url: "/admin1/media2_image",
+                                    url: "/admin/media2_image",
                                     data: {name: details[1]},
                                     success: function(data) {
                                         if(data.data === null){

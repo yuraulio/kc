@@ -489,7 +489,7 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 type: 'post',
-                url: '/admin1/events/fetchElearningInfos',
+                url: '/admin/events/fetchElearningInfos',
                 data: {'ids': ids, 'event': event, 'page': page},
                 success: function (data) {
                     data = JSON.parse(data)

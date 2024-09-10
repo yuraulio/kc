@@ -3,6 +3,4 @@ Disallow: /
 Disallow: /__preview/
 Disallow: /login/
 Disallow: /admin/
-Disallow: /admin1/
-Disallow: /admin2/
 Disallow: /mycertificate/

@@ -20,7 +20,7 @@ class AdminLoginController extends Controller
     /**
      * @var string
      */
-    protected string $redirectTo = '/admin2';
+    protected string $redirectTo = '/';
 
     /**
      * @return Factory|Application|View|RedirectResponse

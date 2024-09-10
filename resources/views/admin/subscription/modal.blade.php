@@ -253,7 +253,7 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
             type: 'post',
-            url: '/admin1/plan/edit',
+            url: '/admin/plan/edit',
             data:{'plan_id':plan_id,'name':name, 'cost':cost, 'period':period},
             success: function(data) {
                     if(data){
@@ -303,7 +303,7 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
             type: 'post',
-            url: '/admin1/plan/add',
+            url: '/admin/plan/add',
             data:{'event_id':event_id,'name1':$('#name1').val(), 'cost1':$('#cost1').val(), 'period1':$("#period1:checked").val(),'trial1':$('#trial1').val(),'name2':$('#name2').val(), 'cost2':$('#cost2').val(),'trial2':$('#trial2').val(), 'period2':$("#period2:checked").val()},
             success: function(data) {
                     if(data){
@@ -368,7 +368,7 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
               },
           type: 'post',
-          url: '/admin1/plan/remove',
+          url: '/admin/plan/remove',
           data:{'id':id},
           success: function(data) {
                 if(data){

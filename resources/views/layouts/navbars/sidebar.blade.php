@@ -44,7 +44,7 @@
                                 }
                                 @endphp
                                 <li class="nav-item">
-                                    <a href="{{ config("app.ADMIN_URL").'/login'.$url_autologin }}" class="nav-link">
+                                    <a href="{{ route('admin-login').$url_autologin }}" class="nav-link">
                                         <span class="badge badge-primary">Old</span> &nbsp
                                         {{ __('Vue JS Admin') }}
                                     </a>

@@ -269,7 +269,7 @@
               'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             type: 'put',
-            url: '/admin1/benefit/' + benefitId,
+            url: '/admin/benefit/' + benefitId,
             data: {'name':$('#edit-name').val(),'description':CKEDITOR.instances['edit-description1'].getData(),'svg': $('#image_svg_upload-benefit').val()},
             success: function (data) {
                 let benefit = data.benefit;

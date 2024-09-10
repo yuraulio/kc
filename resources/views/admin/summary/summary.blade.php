@@ -213,7 +213,7 @@
               'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
            },
    	        type: 'post',
-   	        url: '/admin1/summary/update/' + summaryId,
+   	        url: '/admin/summary/update/' + summaryId,
             data: {'title':$('#edit-title').val(),'description':CKEDITOR.instances['edit-description2'].getData(), 'section': $('#editModalSummary #edit_section_sum').val(),'svg': $('#image_svg_upload-summary').val()},
    	    success: function (data) {
 
