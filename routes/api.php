@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\ForgotPasswordController;
 use App\Http\Controllers\Api\LessonController;
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\PassportAuthController;
+use App\Http\Controllers\Api\PlanController;
 use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\v1\CareerController;
@@ -44,6 +45,7 @@ use App\Http\Controllers\Api\v1\Media\EditImageController;
 use App\Http\Controllers\Api\v1\Media\UploadImageController;
 use App\Http\Controllers\Api\v1\PartnerController;
 use App\Http\Controllers\Api\v1\PaymentMethodController;
+use App\Http\Controllers\Api\v1\Report\ReportController;
 use App\Http\Controllers\Api\v1\SkillController;
 use App\Http\Controllers\Api\v1\TicketController;
 use App\Http\Controllers\Api\v1\TopicController;
@@ -78,6 +80,10 @@ Route::middleware('auth:api')->group(function () {
 
     // Coupons
     Route::apiResource('coupons', CouponController::class)
+        ->only(['index']);
+
+    // Plans
+    Route::apiResource('plans', PlanController::class)
         ->only(['index']);
 
     // Media manager
@@ -223,6 +229,12 @@ Route::group(['middleware' => ['auth:api', 'auth.aboveauthor'], 'prefix' => 'v1'
     Route::post('exams/{exam}/update-questions', [ExamController::class, 'updateQuestions'])->name('exam.update-questions');
     Route::get('exams/{exam}/live-results', [ExamResultController::class, 'getLiveResults']);
     Route::apiResource('exam-categories', ExamCategoryController::class);
+
+    //Reports
+    Route::apiResource('reports', ReportController::class);
+    Route::post('reports/{report}/export', [ReportController::class, 'exportReportResults']);
+    Route::post('reports/{report}/calculate', [ReportController::class, 'fetchReportResults']);
+
     Route::apiResource('exams.results', ExamResultController::class)
         ->only(['index']);
 

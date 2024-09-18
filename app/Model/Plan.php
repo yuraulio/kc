@@ -4,12 +4,14 @@ namespace App\Model;
 
 use App\Model\Category;
 use App\Model\Event;
+use App\Services\QueryString\Traits\Filterable;
+use App\Services\QueryString\Traits\Sortable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Plan extends Model
 {
-    use HasFactory;
+    use HasFactory, Filterable, Sortable;
 
     protected $table = 'plans';
 
