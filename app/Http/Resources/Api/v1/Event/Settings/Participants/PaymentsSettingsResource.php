@@ -13,7 +13,7 @@ class PaymentsSettingsResource extends JsonResource
             'is_free' => $this->resource['is_free'] ?? null,
             'selected_gateway' => $this->resource['selected_gateway'] ?? null,
             'gateways' => PaymentsGatewaysResource::collection($this->resource['gateways'] ?? collect([])),
-            'selected_payment_options' => SelectedPaymentsOptionsResource::collection($this->resource['selected_payment_options'] ?? collect([])),
+            'selected_payment_options' => SelectedPaymentsOptionsResource::collection($this->resource['selected_payment_options'] ?? collect()),
             'options' => PaymentsOptionsResource::collection($this->resource['options'] ?? collect([])),
         ];
     }

@@ -2,6 +2,7 @@
 
 namespace App\Model;
 
+use App\Audience;
 use App\Events\EmailSent;
 use App\Library\PageVariables;
 use App\Model\Admin\Countdown;
@@ -37,6 +38,9 @@ use Laravel\Cashier\Subscription;
  * @property Collection<Career> $career
  * @property Collection<Skill> $skills
  * @property Collection<Partner> $partners
+ * @property Collection<Audience> $audiences
+ * @property Collection<Event> $relatedCourses
+ * @property Collection<Tag> $tags
  * @property Metas $metable
  * @property Carbon $created_at
  * @property string $title
@@ -293,18 +297,33 @@ class Event extends Model
     public function bonusCourse(): BelongsToMany
     {
         return $this->belongsToMany(Event::class, 'event_bonuses', 'event_id', 'bonus_id')
-            ->withPivot('exams_required');
+            ->withPivot('exams_required', 'access_period');
     }
 
     public function exam(): MorphToMany
     {
         return $this->morphToMany(Exam::class, 'examable')
-            ->withPivot(['exam_accessibility_type', 'exam_accessibility_value', 'exam_repeat_delay']);
+            ->withPivot(['exam_accessibility_type', 'exam_accessibility_value', 'exam_repeat_delay', 'whole_amount_should_be_paid']);
     }
 
     public function exam_result(): BelongsToMany
     {
         return $this->belongsToMany(ExamResult::class, 'exam_results', 'user_id', 'exam_id')->withPivot('total_score');
+    }
+
+    public function audiences(): BelongsToMany
+    {
+        return $this->belongsToMany(Audience::class, 'event_audiences', 'event_id', 'audience_id');
+    }
+
+    public function relatedCourses(): BelongsToMany
+    {
+        return $this->belongsToMany(Event::class, 'related_courses', 'event_id', 'related_id');
+    }
+
+    public function tags(): BelongsToMany
+    {
+        return $this->belongsToMany(Tag::class, 'event_tags', 'event_id', 'tag_id');
     }
 
     public function type(): MorphToMany

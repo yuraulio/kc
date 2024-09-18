@@ -10,9 +10,8 @@ class LearningBonusResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'selected_course' => $this->resource['selected_course'] ?? null,
+            'selected_courses' => SelectedBonusCourseResource::collection($this->resource['selected_courses'] ?? collect()),
             'available_courses' => BonusCourseResource::collection($this->resource['available_courses'] ?? collect([])),
-            'exams_required' => $this->resource['exams_required'] ?? null,
         ];
     }
 }

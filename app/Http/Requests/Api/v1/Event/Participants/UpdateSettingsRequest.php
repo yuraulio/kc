@@ -47,9 +47,10 @@ class UpdateSettingsRequest extends FormRequest implements IDtoRequest
             'short_description' => 'nullable|string',
             'long_description' => 'nullable|string',
             // bonus course
-            'selected_course' => 'nullable|array',
-            'selected_course.*' => 'nullable|numeric',
-            'exams_required' => 'nullable|boolean',
+            'bonus_courses' => 'nullable|array',
+            'bonus_courses.*.id' => 'required|numeric',
+            'bonus_courses.*.access_period' => 'nullable|numeric',
+            'bonus_courses.*.exams_required' => 'nullable|boolean',
             // files
             'attached_files'  => 'nullable|array',
             // meta
@@ -62,14 +63,29 @@ class UpdateSettingsRequest extends FormRequest implements IDtoRequest
             'selected_paths.*' => 'nullable|numeric',
             'course_city' => 'nullable|array',
             'course_city.*' => 'nullable|numeric',
-            'selected_partner' => 'nullable|array',
-            'selected_partner.*' => 'nullable|numeric',
-            'selected_gateway' => 'nullable|array',
-            'selected_gateway.*' => 'nullable|numeric',
+            'selected_partner' => 'nullable|numeric',
+            'selected_gateway' => 'nullable|numeric',
             'selected_payment_options' => 'nullable|array',
-            'selected_payment_options.*' => 'nullable|numeric',
-            'selected_exams' => 'nullable|array',
-            'selected_exams.*' => 'nullable|numeric',
+            'selected_payment_options.*' => 'nullable',
+            'selected_payment_options.*.option_id' => 'required|numeric',
+            'selected_payment_options.*.active' => 'required|boolean',
+            'selected_payment_options.*.installments_allowed' => 'required|boolean',
+            'selected_payment_options.*.monthly_installments_limit' => 'nullable|numeric',
+            'exam' => 'nullable|array',
+            'exam.selected_exam' => 'required|numeric',
+            'exam.exam_accessibility_type' => 'required|in:by_period_after,by_progress_percentage',
+            'exam.exam_accessibility_value' => 'required|numeric',
+            'exam.exam_repeat_delay' => 'nullable|numeric',
+            'exam.whole_amount_should_be_paid' => 'nullable|boolean',
+            // audience
+            'selected_audiences' => 'nullable|array',
+            'selected_audiences.*' => 'nullable|numeric',
+            // related courses
+            'related_courses' => 'nullable|array',
+            'related_courses.*' => 'nullable|numeric',
+            // tags
+            'tags' => 'nullable|array',
+            'tags.*' => 'nullable|numeric',
         ];
     }
 

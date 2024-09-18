@@ -14,6 +14,7 @@ class SelectedExamResource extends JsonResource
             'exam_accessibility_type' => $this->resource->pivot?->exam_accessibility_type,
             'exam_accessibility_value' => $this->resource->pivot?->exam_accessibility_value,
             'exam_repeat_delay' => $this->resource->pivot?->exam_repeat_delay,
+            'whole_amount_should_be_paid' => (bool) $this->resource->pivot?->whole_amount_should_be_paid,
         ];
     }
 }

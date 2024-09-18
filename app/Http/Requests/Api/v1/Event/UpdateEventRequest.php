@@ -48,9 +48,10 @@ class UpdateEventRequest extends FormRequest implements IDtoRequest
             'settings.short_description' => 'nullable|string',
             'settings.long_description' => 'nullable|string',
             // bonus course
-            'settings.selected_course' => 'nullable|array',
-            'settings.selected_course.*' => 'nullable|numeric',
-            'settings.exams_required' => 'nullable|boolean',
+            'settings.bonus_courses' => 'nullable|array',
+            'settings.bonus_courses.*.id' => 'required|numeric',
+            'settings.bonus_courses.*.access_period' => 'nullable|numeric',
+            'settings.bonus_courses.*.exams_required' => 'nullable|boolean',
             // files
             'settings.attached_files'  => 'nullable|array',
             // meta
@@ -63,14 +64,29 @@ class UpdateEventRequest extends FormRequest implements IDtoRequest
             'settings.selected_paths.*' => 'nullable|numeric',
             'settings.course_city' => 'nullable|array',
             'settings.course_city.*' => 'nullable|numeric',
-            'settings.selected_partner' => 'nullable|array',
-            'settings.selected_partner.*' => 'nullable|numeric',
-            'settings.selected_gateway' => 'nullable|array',
-            'settings.selected_gateway.*' => 'nullable|numeric',
+            'settings.selected_partner' => 'nullable|numeric',
+            'settings.selected_gateway' => 'nullable|numeric',
             'settings.selected_payment_options' => 'nullable|array',
-            'settings.selected_payment_options.*' => 'nullable|numeric',
-            'settings.selected_exams' => 'nullable|array',
-            'settings.selected_exams.*' => 'nullable|numeric',
+            'settings.selected_payment_options.*' => 'nullable',
+            'settings.selected_payment_options.*.option_id' => 'required|numeric',
+            'settings.selected_payment_options.*.active' => 'required|boolean',
+            'settings.selected_payment_options.*.installments_allowed' => 'required|boolean',
+            'settings.selected_payment_options.*.monthly_installments_limit' => 'nullable|numeric',
+            'settings.exam' => 'nullable|array',
+            'settings.exam.selected_exam' => 'required|numeric',
+            'settings.exam.exam_accessibility_type' => 'required|in:by_period_after,by_progress_percentage',
+            'settings.exam.exam_accessibility_value' => 'required|numeric',
+            'settings.exam.exam_repeat_delay' => 'nullable|numeric',
+            'settings.exam.whole_amount_should_be_paid' => 'nullable|boolean',
+            // audience
+            'settings.selected_audiences' => 'nullable|array',
+            'settings.selected_audiences.*' => 'nullable|numeric',
+            // related courses
+            'settings.related_courses' => 'nullable|array',
+            'settings.related_courses.*' => 'nullable|numeric',
+            // tags
+            'settings.tags' => 'nullable|array',
+            'settings.tags.*' => 'nullable|numeric',
         ];
     }
 

@@ -6,7 +6,12 @@ use App\Contracts\Api\v1\Event\IEventSettingsService;
 use App\Http\Controllers\Api\v1\ApiBaseController;
 use App\Http\Requests\Api\v1\Event\Participants\UpdateSettingsRequest;
 use App\Http\Resources\Api\v1\Event\Settings\CourseSettingsResource;
+use App\Http\Resources\Api\v1\Event\Settings\Participants\DeliveryCitiesResource;
+use App\Http\Resources\Api\v1\Event\Settings\Participants\DeliveryTypeResource;
 use App\Model\Event;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class EventSettingsController extends ApiBaseController
 {

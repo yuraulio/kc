@@ -10,7 +10,8 @@ class ExamSettingsResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'selected_exams' => SelectedExamResource::collection($this->resource['selected_exams'] ?? collect([])),
+            'has_exam' => $this->resource['has_exam'] ?? false,
+            'selected_exam' => isset($this->resource['selected_exam']) ? SelectedExamResource::make($this->resource['selected_exam']) : null,
             'exams' => ExamResource::collection($this->resource['exams'] ?? collect([])),
         ];
     }

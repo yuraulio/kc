@@ -11,16 +11,19 @@ readonly class SettingsDto implements IDto
     private array $eventInfo;
     private array $eventDeliveryType;
     private array $dynamicAds;
-    private array $bonusCourse;
+    private array $bonusCourses;
     private array $files;
     private array $meta;
     private ?array $skills;
     private ?array $paths;
     private ?array $city;
-    private ?array $partners;
-    private ?array $paymentMethods;
+    private ?int $partner;
+    private ?int $paymentMethod;
     private ?array $paymentOptions;
-    private ?array $exams;
+    private ?array $exam;
+    private ?array $audiences;
+    private ?array $relatedCourses;
+    private ?array $tags;
 
     public function __construct(array $data)
     {
@@ -55,10 +58,7 @@ readonly class SettingsDto implements IDto
             'short_description' => $data['short_description'] ?? null,
             'long_description' => $data['long_description'] ?? null,
         ];
-        $this->bonusCourse = [
-            'ids' => isset($data['selected_course']) ? Arr::wrap($data['selected_course']) : null,
-            'exams_required' => $data['exams_required'] ?? null,
-        ];
+        $this->bonusCourses = $data['bonus_courses'] ?? null;
         $this->files = [
             'selectedFolders' => $data['attached_files'] ?? null,
         ];
@@ -69,10 +69,13 @@ readonly class SettingsDto implements IDto
         $this->skills = $data['selected_skills'] ?? null;
         $this->paths = $data['selected_paths'] ?? null;
         $this->city = $data['course_city'] ?? null;
-        $this->partners = $data['selected_partner'] ?? null;
-        $this->paymentMethods = $data['selected_gateway'] ?? null;
+        $this->partner = $data['selected_partner'] ?? null;
+        $this->paymentMethod = $data['selected_gateway'] ?? null;
         $this->paymentOptions = $data['selected_payment_options'] ?? null;
-        $this->exams = $data['selected_exams'] ?? null;
+        $this->exam = $data['exam'] ?? null;
+        $this->audiences = $data['selected_audiences'] ?? null;
+        $this->relatedCourses = $data['related_courses'] ?? null;
+        $this->tags = $data['tags'] ?? null;
     }
 
     public function getData(): array
@@ -82,7 +85,6 @@ readonly class SettingsDto implements IDto
             'eventInfo' => $this->filterNullable($this->eventInfo),
             'eventInfoDelivery' => $this->filterNullable($this->eventDeliveryType),
             'dynamicAds' => $this->filterNullable($this->dynamicAds),
-            'bonusCourse' => $this->filterNullable($this->bonusCourse),
             'files' => $this->filterNullable($this->files),
             'metable' => $this->filterNullable($this->meta),
         ];
@@ -99,20 +101,36 @@ readonly class SettingsDto implements IDto
             $data['city'] = $this->city;
         }
 
-        if (is_array($this->partners)) {
-            $data['partners'] = $this->partners;
+        if ($this->partner) {
+            $data['partner'] = $this->partner;
         }
 
-        if (is_array($this->paymentMethods)) {
-            $data['paymentMethods'] = $this->paymentMethods;
+        if ($this->paymentMethod) {
+            $data['paymentMethod'] = $this->paymentMethod;
         }
 
-        if (is_array($this->paymentOptions)) {
+        if ($this->paymentOptions) {
             $data['paymentOptions'] = $this->paymentOptions;
         }
 
-        if (is_array($this->exams)) {
-            $data['exams'] = $this->exams;
+        if ($this->exam) {
+            $data['exam'] = $this->exam;
+        }
+
+        if ($this->audiences) {
+            $data['audiences'] = $this->audiences;
+        }
+
+        if ($this->relatedCourses) {
+            $data['related_courses'] = $this->relatedCourses;
+        }
+
+        if ($this->tags) {
+            $data['tags'] = $this->tags;
+        }
+
+        if ($this->bonusCourses) {
+            $data['bonus_courses'] = $this->bonusCourses;
         }
 
         return $data;
