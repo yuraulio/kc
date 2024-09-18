@@ -325,12 +325,29 @@ class EventSettingsService implements IEventSettingsService
 
     private function prepareEventCertificationSettings(Event $event): array
     {
-        $event->loadMissing('eventInfo');
+        $event->loadMissing(['eventInfo']);
 
         return [
             'has_certification' => $event->hasCertificate(),
             'completion_title' => $event->eventInfo->course_certification_completion,
             'diploma_title' => $event->eventInfo->diploma_title,
+            'preview_route' => route('certificate-preview', ['template' => '#TEMPLATE#']),
+            'certificate_templates' => [
+                'certificate',
+                'certificate_facebook_marketing',
+                'kc_attendance',
+                'kc_attendance_2022a',
+                'kc_attendance_2022b',
+                'kc_deree_attendance',
+                'kc_deree_attendance_2022',
+                'kc_deree_diploma',
+                'kc_deree_diploma_2022',
+                'kc_diploma',
+                'kc_diploma_2022a',
+                'kc_diploma_2022b',
+                'new_kc_certificate',
+                'new_kc_deree_certificate',
+            ],
         ];
     }
 
@@ -340,7 +357,7 @@ class EventSettingsService implements IEventSettingsService
 
         return [
             'course_delivery' => $event->eventInfo?->delivery?->delivery_type,
-            'course_city' => $event->city->first()?->id,
+            'course_city' => $event->city?->first()?->id,
             //            'cities_list' => City::with('country')->get(),
         ];
     }
@@ -412,7 +429,7 @@ class EventSettingsService implements IEventSettingsService
         $event->loadMissing('partners');
 
         return [
-            'selected_partner' => $event->partners?->first()->id,
+            'selected_partner' => $event->partners?->first()?->id,
             'available_partners' => Partner::all(),
         ];
     }
@@ -423,7 +440,7 @@ class EventSettingsService implements IEventSettingsService
 
         return [
             'is_free' => $event->isFree(),
-            'selected_gateway' => $event->paymentMethod->first()->id,
+            'selected_gateway' => $event->paymentMethod?->first()?->id,
             'gateways' => PaymentMethod::all(),
             'selected_payment_options' => $event->paymentOptions,
             'options' => PaymentOption::all(),

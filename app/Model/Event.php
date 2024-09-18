@@ -41,6 +41,7 @@ use Laravel\Cashier\Subscription;
  * @property Collection<Audience> $audiences
  * @property Collection<Event> $relatedCourses
  * @property Collection<Tag> $tags
+ * @property Collection<Certificate> $certificates
  * @property Metas $metable
  * @property Carbon $created_at
  * @property string $title

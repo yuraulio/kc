@@ -13,6 +13,8 @@ class CertificationResource extends JsonResource
             'has_certification' => $this->resource['has_certification'] ?? null,
             'completion_title' => $this->resource['completion_title'] ?? null,
             'diploma_title' => $this->resource['diploma_title'] ?? null,
+            'preview_route' => $this->resource['preview_route'] ?? null,
+            'certificate_templates' => $this->resource['certificate_templates'] ?? [],
         ];
     }
 }
