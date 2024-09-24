@@ -148,7 +148,6 @@ class SubscriptionController extends Controller
         $plan = Plan::where('name', $plan)->first();
         $event = Event::where('title', $event)->first();
         session()->put('payment_method', $this->paymentMethod->id);
-
         $secretKey = config('app.PAYMENT_PRODUCTION') ? $this->paymentMethod->processor_options['secret_key'] : $this->paymentMethod->test_processor_options['secret_key'];
         Stripe::setApiKey($secretKey);
 
@@ -161,7 +160,6 @@ class SubscriptionController extends Controller
 
         $data['stripe_key'] = config('app.PAYMENT_PRODUCTION') ? $this->paymentMethod->processor_options['key'] :
                                                                 $this->paymentMethod->test_processor_options['key'];
-
         if (Session::has('pay_seats_data')) {
             $data['pay_seats_data'] = Session::get('pay_seats_data');
         } else {

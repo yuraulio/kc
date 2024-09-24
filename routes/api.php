@@ -43,6 +43,9 @@ use App\Http\Controllers\Api\v1\Exam\ExamResultController;
 use App\Http\Controllers\Api\v1\InstructorController;
 use App\Http\Controllers\Api\v1\Media\EditImageController;
 use App\Http\Controllers\Api\v1\Media\UploadImageController;
+use App\Http\Controllers\Api\v1\Messaging\EmailController;
+use App\Http\Controllers\Api\v1\Messaging\MobileNotificationController;
+use App\Http\Controllers\Api\v1\Messaging\WebNotificationController;
 use App\Http\Controllers\Api\v1\PartnerController;
 use App\Http\Controllers\Api\v1\PaymentMethodController;
 use App\Http\Controllers\Api\v1\Report\ReportController;
@@ -229,6 +232,17 @@ Route::group(['middleware' => ['auth:api', 'auth.aboveauthor'], 'prefix' => 'v1'
     Route::post('exams/{exam}/update-questions', [ExamController::class, 'updateQuestions'])->name('exam.update-questions');
     Route::get('exams/{exam}/live-results', [ExamResultController::class, 'getLiveResults']);
     Route::apiResource('exam-categories', ExamCategoryController::class);
+
+    // Messaging
+
+    // Email
+    Route::apiResource('messaging/emails', EmailController::class);
+    Route::get('messaging/emails-templates', [EmailController::class, 'getTemplates']);
+    Route::get('messaging/emails-triggers', [EmailController::class, 'getEmailTriggers']);
+    // Mobile Notification
+    Route::apiResource('messaging/mobile-notifications', WebNotificationController::class);
+    // Web Notification
+    Route::apiResource('messaging/web-notifications', MobileNotificationController::class);
 
     //Reports
     Route::apiResource('reports', ReportController::class);

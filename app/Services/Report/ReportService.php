@@ -2,8 +2,6 @@
 
 namespace App\Services\Report;
 
-use App\Contracts\Api\v1\Lesson\ILessonService;
-use App\Dto\Api\v1\ExamCategory\LessonDto;
 use App\Enums\Report\ReportEnum;
 use App\Exports\ReportExport;
 use App\Model\Report;

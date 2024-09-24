@@ -389,7 +389,7 @@
     	);
 
     	if (error) {
-    	    // Display "error.message" to the user...
+			// Display "error.message" to the user...
             $('<p id="card-error">Enter valid data.</p>').insertAfter('.card-input')
             $("#pay-now").prop('disabled',false);
     	} else {
@@ -448,7 +448,7 @@
 	async function apiRequest(url, payment_method){
 		$("#card-error").remove();
 		let a;
-
+		
 		$.ajax({
 			headers: {
 					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -466,7 +466,7 @@
 				window.location = data
 			},
 			error: function(data){
-
+				
 				location.reload()
 
 			}
