@@ -5,6 +5,7 @@ namespace App\Services\Report;
 use App\Enums\Report\ReportEnum;
 use App\Exports\ReportExport;
 use App\Model\Report;
+use App\Services\Report\CustomReportService;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use Storage;
@@ -23,9 +24,17 @@ class ReportService
     public function createOrUpdate(Request $request)
     {
         return Report::updateOrCreate(
-            ['id'=>$request->id],
-            ['title' => $request->title, 'file_export_criteria' => $request->file_export_criteria, 'date_range'=>$request->date_range, 'description' => $request->description,
-                'creator_id' => $request->creator_id, 'filter_criteria' => $request->filter_criteria]
+            [
+                'id'=>$request->id,
+            ],
+            [
+                'title' => $request->title,
+                'file_export_criteria' => $request->file_export_criteria,
+                'date_range'=>$request->date_range,
+                'description' => $request->description,
+                'creator_id' => $request->creator_id,
+                'filter_criteria' => $request->filter_criteria,
+            ]
         );
     }
 
@@ -42,7 +51,20 @@ class ReportService
         $filterCriteria = $report->filter_criteria;
         $fileExportSettings = $report->file_export_criteria;
         $date_filter = ($report->date_range) ? explode(' - ', $report->date_range) : [];
-        $sql = $this->generateQuery($filterCriteria, $date_filter);
+        $filterCriteriaGroups = [];
+        $sql = '';
+        foreach ($filterCriteria as $singleCriteria) {
+            if (isset($singleCriteria['primary_operator']) && $singleCriteria['primary_operator'] === 'group_and') {
+                $sql .= $this->generateQuery($filterCriteriaGroups, $date_filter) . ' INTERSECT ';
+                $filterCriteriaGroups = [$singleCriteria];
+            } elseif (isset($singleCriteria['primary_operator']) && $singleCriteria['primary_operator'] === 'group_or') {
+                $sql .= $this->generateQuery($filterCriteriaGroups, $date_filter) . ' UNION ';
+                $filterCriteriaGroups = [$singleCriteria];
+            } else {
+                $filterCriteriaGroups[] = $singleCriteria;
+            }
+        }
+        $sql .= $this->generateQuery($filterCriteriaGroups, $date_filter);
 
         return $this->runQueryAndReturnArray($sql, $fileExportSettings, $report);
     }
@@ -80,6 +102,13 @@ class ReportService
                 break;
             case 'UserRole':
                 $this->joins[] = ' JOIN `role_users` ON `role_users`.user_id = `users`.id ';
+                break;
+            case 'CourseDurationStatus':
+                $this->joins[] = ' JOIN `event_user` ON `event_user`.user_id = `users`.id ';
+                $this->joins[] = ' JOIN `events` ON `event_user`.event_id = `events`.id ';
+                break;
+            case 'ContestStatus':
+                $this->joins[] = ' LEFT JOIN `give_aways` ON `users`.email = `give_aways`.email ';
                 break;
             case 'UserActivity':
                 $this->joins[] = ' JOIN `activations` ON `activations`.user_id = `users`.id ';
@@ -124,21 +153,46 @@ class ReportService
     private function buildWhereClause($filter)
     {
         $table = $filter['key']['label'];
-        $operator = $filter['operator'];
-        $values = array_map(function ($value) {
-            return is_string($value['id']) ? "'" . $value['id'] . "'" : $value['id'];
-        }, $filter['values']);
-        $where = ReportEnum::getFilterSQL($table) . ' ' . ($operator == 'are' ? 'IN' : 'NOT IN') . ' (';
-        $where .= implode(',', $values);
-        $where .= ')';
+        //Course Duration Case
+        if (ReportEnum::getFilterKey($table) === 'CourseDurationStatus') {
+            foreach ($filter['values'] as $val) {
+                if ($val['id'] == 1) {
+                    return " ( `event_user`.expiration > now()  OR `event_user`.expiration IS NULL OR `event_user`.expiration = '' ) ";
+                } else {
+                    return ' `event_user`.expiration < now() ';
+                }
+            }
+        } //Contest Participation Status Case
+        if (ReportEnum::getFilterKey($table) === 'ContestStatus') {
+            foreach ($filter['values'] as $val) {
+                if ($val['id'] == 1) {
+                    return ' `give_aways`.email IS NOT NULL ';
+                } else {
+                    return ' `give_aways`.email IS NULL ';
+                }
+            }
+        } else { //Other Cases
+            $operator = $filter['operator'];
+            $values = array_map(function ($value) {
+                return is_string($value['id']) ? "'" . $value['id'] . "'" : $value['id'];
+            }, $filter['values']);
 
-        return $where;
+            $operator = ($operator == 'are' ? 'IN' : 'NOT IN');
+
+            $where = ReportEnum::getFilterSQL($table) . ' ' . $operator . ' (';
+            $where .= implode(',', $values);
+            $where .= ')';
+
+            return $where;
+        }
     }
 
     private function runQueryAndReturnArray($sql, $fileExportSettings, $report)
     {
+        $sql = CustomReportService::getCustomReport($sql, $report);
         list($sql, $columnNames) = $this->reportResultColumns($sql, $fileExportSettings);
         $data = \DB::select($sql);
+
         $csvName = ($fileExportSettings['fileType'] === 'xls') ? "report-{$report->id}.xlsx" : "report-{$report->id}.csv";
         $path = 'reports';
         $exportData[] = $columnNames;
