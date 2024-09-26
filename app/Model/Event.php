@@ -41,6 +41,7 @@ use Laravel\Cashier\Subscription;
  * @property Collection<Audience> $audiences
  * @property Collection<Event> $relatedCourses
  * @property Collection<Tag> $tags
+ * @property Collection<Delivery> $deliveries
  * @property Collection<Certificate> $certificates
  * @property Metas $metable
  * @property Carbon $created_at
@@ -1455,5 +1456,10 @@ class Event extends Model
     public function resetCache()
     {
         Cache::forget('topics-event-status-' . $this->id);
+    }
+
+    public function deliveries(): BelongsToMany
+    {
+        return $this->belongsToMany(Delivery::class, 'course_deliveries', 'event_id', 'delivery_id');
     }
 }

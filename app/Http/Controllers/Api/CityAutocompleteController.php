@@ -12,13 +12,16 @@ class CityAutocompleteController
         $data = $request->validate([
             'term' => 'string',
         ]);
+        dd(123);
 
-        return City::with('country')
+        return City::with('country', function ($query) {
+            $query->where('name', 'Greece');
+        })
             ->when($request->term, function ($query) use ($data) {
                 $query->where('name', 'like', $data['term'] . '%');
             })
             // Favour showing cities from Greece first
             ->orderByRaw("IF(country_id = (SELECT id FROM countries WHERE name = 'Greece'), 0, 1)")
-            ->orderBy('name')->paginate($request->page);
+            ->orderBy('name')->get();
     }
 }

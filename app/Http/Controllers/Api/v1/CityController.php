@@ -15,10 +15,13 @@ class CityController extends ApiBaseController
      */
     public function index(Request $request): JsonResponse
     {
-        $query = $this->applyRequestParametersToQuery(City::query(), $request);
+        $query = City::query()->with('country', function ($query) {
+            $query->where('name', 'Greece');
+        });
+        $query = $this->applyRequestParametersToQuery($query, $request);
 
         return new JsonResponse(
-            $this->paginateByRequestParameters($query, $request),
+            $query->get(),
         );
     }
 

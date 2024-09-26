@@ -50,9 +50,7 @@ readonly class SettingsDto implements IDto
             'cta_price_visible_on_button' => $data['is_price_visible_on_button'] ?? null,
             'cta_discount_price_visible' => $data['is_discount_price_visible'] ?? null,
         ];
-        $this->eventDeliveryType = [
-            'delivery_type' => $data['course_delivery'] ?? null,
-        ];
+        $this->eventDeliveryType = $data['course_delivery'] ?? null;
         $this->dynamicAds = [
             'headline' => $data['headline'] ?? null,
             'short_description' => $data['short_description'] ?? null,
@@ -69,10 +67,10 @@ readonly class SettingsDto implements IDto
         $this->skills = $data['selected_skills'] ?? null;
         $this->paths = $data['selected_paths'] ?? null;
         $this->city = $data['course_city'] ?? null;
-        $this->partner = $data['selected_partner'] ?? null;
+        $this->partner = isset($data['course_in_collaboration']) && $data['course_in_collaboration'] ? ($data['selected_partner'] ?? null) : null;
         $this->paymentMethod = $data['selected_gateway'] ?? null;
         $this->paymentOptions = $data['selected_payment_options'] ?? null;
-        $this->exam = $data['exam'] ?? null;
+        $this->exam = $data['exams'] ?? null;
         $this->audiences = $data['selected_audiences'] ?? null;
         $this->relatedCourses = $data['related_courses'] ?? null;
         $this->tags = $data['tags'] ?? null;
@@ -83,7 +81,6 @@ readonly class SettingsDto implements IDto
         $data = [
             'event' => $this->filterNullable($this->event),
             'eventInfo' => $this->filterNullable($this->eventInfo),
-            'eventInfoDelivery' => $this->filterNullable($this->eventDeliveryType),
             'dynamicAds' => $this->filterNullable($this->dynamicAds),
             'files' => $this->filterNullable($this->files),
             'metable' => $this->filterNullable($this->meta),
@@ -101,9 +98,8 @@ readonly class SettingsDto implements IDto
             $data['city'] = $this->city;
         }
 
-        if ($this->partner) {
-            $data['partner'] = $this->partner;
-        }
+        $data['partner'] = $this->partner;
+        $data['eventDelivery'] = $this->eventDeliveryType;
 
         if ($this->paymentMethod) {
             $data['paymentMethod'] = $this->paymentMethod;

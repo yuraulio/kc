@@ -6,6 +6,7 @@ use App\Audience;
 use App\Contracts\Api\v1\Event\IEventSettingsService;
 use App\Dto\Api\v1\Event\Participants\SettingsDto;
 use App\Model\Career;
+use App\Model\Delivery;
 use App\Model\DynamicAds;
 use App\Model\Event;
 use App\Model\Exam;
@@ -59,7 +60,7 @@ class EventSettingsService implements IEventSettingsService
 
         $this->updateEventData($event, $data['event'] ?? []);
         $this->updateEventInfoData($event, $data['eventInfo'] ?? []);
-        $this->updateEventInfoDeliveryData($event, $data['eventInfoDelivery'] ?? []);
+        $this->updateEventDeliveryData($event, $data['eventDelivery'] ?? []);
         $this->updateEventDynamicAdsData($event, $data['dynamicAds'] ?? []);
         $this->updateEventBonusCoursesData($event, $data['bonus_courses'] ?? []);
         $this->updateEventMetaData($event, $data['metable'] ?? []);
@@ -94,12 +95,9 @@ class EventSettingsService implements IEventSettingsService
         }
     }
 
-    private function updateEventInfoDeliveryData(Event $event, array $data): void
+    private function updateEventDeliveryData(Event $event, array $data): void
     {
-        if ($data) {
-            $eventInfo = $event->eventInfo()->first();
-            $eventInfo?->delivery()?->update($data);
-        }
+        $event->deliveries()->sync($data);
     }
 
     private function updateEventDynamicAdsData(Event $event, array $data): void
@@ -116,11 +114,13 @@ class EventSettingsService implements IEventSettingsService
         if ($data) {
             $syncData = [];
 
-            foreach ($data as $bonus) {
-                $syncData[$bonus['id']] = [
-                    'access_period' => $bonus['access_period'] ?? null,
-                    'exams_required' => $bonus['exams_required'] ?? false,
-                ];
+            if (isset($data['offer_bonus_course']) && $data['offer_bonus_course']) {
+                foreach ($data['selected_courses'] as $selected) {
+                    $syncData[$selected] = [
+                        'access_period' => $data['access_period'] ?? null,
+                        'exams_required' => $data['exams_required'] ?? false,
+                    ];
+                }
             }
 
             $event->bonusCourse()->sync($syncData);
@@ -159,9 +159,7 @@ class EventSettingsService implements IEventSettingsService
 
     private function updateEventPartnersData(Event $event, ?int $data = null): void
     {
-        if ($data) {
-            $event->partners()->sync(Arr::wrap($data));
-        }
+        $event->partners()->sync($data ? Arr::wrap($data) : []);
     }
 
     private function updateEventPaymentGatewaysData(Event $event, ?int $data = null): void
@@ -177,8 +175,8 @@ class EventSettingsService implements IEventSettingsService
             $syncData = [];
 
             foreach ($data as $option) {
-                if (isset($option['option_id']) && ($option['active'] ?? false)) {
-                    $syncData[$option['option_id']] = [
+                if (isset($option['id']) && ($option['active'] ?? false)) {
+                    $syncData[$option['id']] = [
                         'active' => $option['active'] ?? false,
                         'installments_allowed' => $option['installments_allowed'] ?? null,
                         'monthly_installments_limit' => $option['monthly_installments_limit'] ?? null,
@@ -353,12 +351,12 @@ class EventSettingsService implements IEventSettingsService
 
     private function prepareEventDeliverySettings(Event $event): array
     {
-        $event->loadMissing(['eventInfo.delivery', 'city']);
+        $event->loadMissing(['deliveries', 'city']);
 
         return [
-            'course_delivery' => $event->eventInfo?->delivery?->delivery_type,
+            'course_delivery' => $event->deliveries?->pluck('id')->toArray(),
             'course_city' => $event->city?->first()?->id,
-            //            'cities_list' => City::with('country')->get(),
+            'available_deliveries' => Delivery::all(),
         ];
     }
 
@@ -381,7 +379,9 @@ class EventSettingsService implements IEventSettingsService
         $event->loadMissing('bonusCourse');
 
         return [
-            'selected_courses' => $event->bonusCourse,
+            'selected_courses' => $event->bonusCourse?->pluck('id')->toArray(),
+            'exams_required' => $event->bonusCourse?->first()?->pivot?->exams_required ?? false,
+            'access_period' => $event->bonusCourse?->first()?->pivot?->access_period ?? null,
             'available_courses' => Event::query()->whereIn('status', [
                 Event::STATUS_OPEN,
                 Event::STATUS_COMPLETED,
@@ -410,7 +410,6 @@ class EventSettingsService implements IEventSettingsService
 
         return [
             'attached_files' => $this->eventFileService->addUuidToEachElement($filesTree),
-            //            'available_files' => Dropbox::all(),
         ];
     }
 
@@ -451,9 +450,15 @@ class EventSettingsService implements IEventSettingsService
     {
         $event->loadMissing('exam');
 
+        $exam = $event->exam->first();
+
         return [
             'has_exam' => $event->exam()->exists(),
-            'selected_exam' => $event->exam->first(),
+            'selected_exam' => $exam?->id,
+            'exam_accessibility_type' => $exam?->pivot?->exam_accessibility_type,
+            'exam_accessibility_value' => $exam?->pivot?->exam_accessibility_value,
+            'exam_repeat_delay' => $exam?->pivot?->exam_repeat_delay,
+            'whole_amount_should_be_paid' => (bool) $exam?->pivot?->whole_amount_should_be_paid,
             'exams' => Exam::all(),
         ];
     }

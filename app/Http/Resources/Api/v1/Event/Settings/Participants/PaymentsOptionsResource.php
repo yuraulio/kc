@@ -12,6 +12,9 @@ class PaymentsOptionsResource extends JsonResource
         return [
             'id' => $this->resource->id,
             'title' => $this->resource->title,
+            'active' => false,
+            'installments_allowed' => false,
+            'monthly_installments_limit' => '',
         ];
     }
 }
