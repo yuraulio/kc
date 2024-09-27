@@ -12,11 +12,11 @@ class CityAutocompleteController
         $data = $request->validate([
             'term' => 'string',
         ]);
-        dd(123);
 
         return City::with('country', function ($query) {
             $query->where('name', 'Greece');
         })
+            ->whereHas('country')
             ->when($request->term, function ($query) use ($data) {
                 $query->where('name', 'like', $data['term'] . '%');
             })
