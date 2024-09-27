@@ -13,10 +13,7 @@ class CityAutocompleteController
             'term' => 'string',
         ]);
 
-        return City::with('country', function ($query) {
-            $query->where('name', 'Greece');
-        })
-            ->whereHas('country')
+        return City::where('country_id', 86)
             ->when($request->term, function ($query) use ($data) {
                 $query->where('name', 'like', $data['term'] . '%');
             })
