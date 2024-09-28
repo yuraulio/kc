@@ -11,6 +11,7 @@ use Illuminate\Contracts\Database\Eloquent\Builder as BuilderContract;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 
 class ApiBaseController extends Controller
 {
@@ -54,9 +55,14 @@ class ApiBaseController extends Controller
         return $model;
     }
 
-    protected function paginateByRequestParameters(BuilderContract $query, Request $request): LengthAwarePaginator
+    protected function paginateByRequestParameters(BuilderContract $query, Request $request): LengthAwarePaginator|Collection
     {
-        return $query->paginate((int) $request->query->get('per_page', self::PER_PAGE))
-            ->appends($request->query->all());
+        $perPage = $request->query->get('per_page', self::PER_PAGE);
+
+        if ($perPage !== 'all') {
+            return $query->paginate((int) $perPage)->appends($request->query->all());
+        }
+
+        return $query->get();
     }
 }

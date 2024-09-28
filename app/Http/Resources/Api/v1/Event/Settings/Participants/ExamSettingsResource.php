@@ -16,6 +16,7 @@ class ExamSettingsResource extends JsonResource
             'exam_accessibility_value' => $this->resource['exam_accessibility_value'] ?? null,
             'exam_repeat_delay' => $this->resource['exam_repeat_delay'] ?? null,
             'whole_amount_should_be_paid' => (bool) ($this->resource['whole_amount_should_be_paid'] ?? false),
+            'exam_repeated' => (bool) ($this->resource['exam_repeated'] ?? false),
             'exams' => ExamResource::collection($this->resource['exams'] ?? collect([])),
         ];
     }

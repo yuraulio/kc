@@ -15,11 +15,37 @@ class TopicController extends ApiBaseController
 {
     public function index(Request $request)
     {
-        $query = $this->applyRequestParametersToQuery(Topic::query(), $request);
+        $query = Topic::query()->with('lessons.event')->withCount(['lessons', 'exam']);
+        $query = $this->applyRequestParametersToQuery($query, $request);
 
-        return TopicResource::collection(
-            $this->paginateByRequestParameters($query, $request)
-        )->response()->getData(true);
+        if ($delivery = $request->query->get('delivery')) {
+            $query->whereHas('lessons', function ($query) use ($delivery) {
+                $query->whereHas('event', function ($query) use ($delivery) {
+                    $query->whereHas('deliveries', function ($query) use ($delivery) {
+                        $query->where('deliveries.id', $delivery);
+                    });
+                });
+            });
+        }
+
+        if ($course = $request->query->get('course')) {
+            $query->whereHas('lessons', function ($query) use ($course) {
+                $query->whereHas('event', function ($query) use ($course) {
+                    $query->where('events.id', $course);
+                });
+            });
+        }
+
+        $query->latest();
+
+        $topicsData = $this->paginateByRequestParameters($query, $request);
+
+        $topicsData->each(function ($topic) {
+            $coursesIds = $topic->lessons?->pluck('event.id')->toArray() ?? [];
+            $topic->courses_count = count(array_unique($coursesIds));
+        });
+
+        return TopicResource::collection($topicsData)->response()->getData(true);
     }
 
     /**
@@ -35,6 +61,15 @@ class TopicController extends ApiBaseController
         return TopicResource::make(
             $topicService->create($request->toDto()),
         );
+    }
+
+    public function clone(Topic $topic)
+    {
+        $newTopic = $topic->replicate();
+        $newTopic->title = $topic->title . ' (Copy)';
+        $newTopic->save();
+
+        return TopicResource::make($newTopic);
     }
 
     public function show(string $id)

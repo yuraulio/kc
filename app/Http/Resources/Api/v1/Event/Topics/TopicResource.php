@@ -27,6 +27,9 @@ class TopicResource extends JsonResource
             'summary' => $this->resource->summary,
             'body' => $this->resource->body,
             'email_template' => $this->resource->email_template,
+            'lessons_count' => $this->resource->lessons_count,
+            'courses_count' => $this->resource->courses_count,
+            'has_exams' => $this->resource->exam_count > 0,
         ];
     }
 

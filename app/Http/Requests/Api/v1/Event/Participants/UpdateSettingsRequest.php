@@ -79,6 +79,7 @@ class UpdateSettingsRequest extends FormRequest implements IDtoRequest
             'exams.selected_exam' => 'required|numeric',
             'exams.exam_accessibility_type' => 'required|in:by_period_after,by_progress_percentage',
             'exams.exam_accessibility_value' => 'required|numeric',
+            'exams.exam_repeated' => 'required|boolean',
             'exams.exam_repeat_delay' => 'nullable|numeric',
             'exams.whole_amount_should_be_paid' => 'nullable|boolean',
             // audience

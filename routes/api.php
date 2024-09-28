@@ -181,6 +181,7 @@ Route::group(['middleware' => ['auth:api', 'auth.aboveauthor'], 'prefix' => 'v1'
     Route::prefix('topics')->group(function () {
         Route::get('/', [TopicController::class, 'index']);
         Route::post('/', [TopicController::class, 'store']);
+        Route::post('/{topic}/clone', [TopicController::class, 'clone']);
         Route::put('/{topic}', [TopicController::class, 'update']);
         Route::get('/with-event', [TopicController::class, 'topicWithEvent']);
         Route::delete('/{topic}', [TopicController::class, 'destroy']);
@@ -213,6 +214,7 @@ Route::group(['middleware' => ['auth:api', 'auth.aboveauthor'], 'prefix' => 'v1'
     Route::apiResource('events.files', EventFileController::class)
         ->only(['index']);
     Route::get('events/{event}/general-stats', EventStatsController::class);
+    Route::get('events/{event}/check-slug', [EventController::class, 'checkSlugAvailability']);
     Route::get('events/{event}/participants/total-hours', EventTotalHoursController::class);
     Route::get('events/{event}/participants/exam-results', EventExamResultsController::class);
     Route::get('events/{event}/participants/active-students', EventActiveStudentsController::class);

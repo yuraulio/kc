@@ -33,6 +33,7 @@ return [
      */
     'prefix_new_admin' => env('PREFIX_NEW_ADMIN_DOMAIN_URL', 'admin.'),
     'app_domain' => env('APP_DOMAIN', 'knowcrunch.com'),
+    'frontend_url' => env('FRONTEND_URL', 'https://admin-rose-eta.vercel.app'),
     'PAYMENT_PRODUCTION' => env('PAYMENT_PRODUCTION', true),
     'WEBP_IMAGE_QUALITY' => env('WEBP_IMAGE_QUALITY', 100),
     'vimeo_client_id' => env('client_id', ''),

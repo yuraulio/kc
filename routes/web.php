@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\v1\Event\EventController;
 use App\Model\User;
 use App\Notifications\ErrorSlack;
 use Bugsnag\BugsnagLaravel\Facades\Bugsnag;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -474,7 +475,7 @@ Route::group(['middleware' => 'auth.aboveauthor', 'prefix' => 'admin'], function
 
     //Get Certifcate Only for Admin
     Route::get('/get-certificate/{certificate}', 'Theme\CertificateController@getCertificateAdmin')->name('admin.get_certificate');
-    Route::get('/certificate-preview/{template}', [EventController::class, 'certificatePreview'])->name('certificate-preview');
+    Route::middleware('frameHeaders')->get('/certificate-preview/{template}', [EventController::class, 'certificatePreview'])->name('certificate-preview');
 });
 
 Route::post('media/crop_profile_image', ['as' => 'media.crop_profile_image', 'uses' => 'MediaController@crop_profile_image']);

@@ -194,7 +194,7 @@ class EventSettingsService implements IEventSettingsService
             $syncData[$data['selected_exam']] = [
                 'exam_accessibility_type' => $data['exam_accessibility_type'] ?? null,
                 'exam_accessibility_value' => $data['exam_accessibility_value'] ?? null,
-                'exam_repeat_delay' => $data['exam_repeat_delay'] ?? null,
+                'exam_repeat_delay' => isset($data['exam_repeated']) && $data['exam_repeated'] ? ($data['exam_repeat_delay'] ?? null) : null,
                 'whole_amount_should_be_paid' => $data['whole_amount_should_be_paid'] ?? null,
             ];
 
@@ -459,6 +459,7 @@ class EventSettingsService implements IEventSettingsService
             'exam_accessibility_value' => $exam?->pivot?->exam_accessibility_value,
             'exam_repeat_delay' => $exam?->pivot?->exam_repeat_delay,
             'whole_amount_should_be_paid' => (bool) $exam?->pivot?->whole_amount_should_be_paid,
+            'exam_repeated' => (bool) $exam?->pivot?->exam_repeat_delay,
             'exams' => Exam::all(),
         ];
     }

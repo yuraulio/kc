@@ -2,9 +2,8 @@
 
 namespace App\Model;
 
-use App\Model\Category;
-use App\Model\Event;
-use App\Model\Lesson;
+use App\Services\QueryString\Parameter\SearchParameter;
+use App\Services\QueryString\Traits\Filterable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -13,7 +12,8 @@ use Illuminate\Database\Query\Builder;
 
 class Topic extends Model
 {
-    use HasFactory;
+    use HasFactory, Filterable;
+
     protected $table = 'topics';
 
     protected $fillable = [
@@ -88,6 +88,25 @@ class Topic extends Model
     {
         return $query->whereHas('category', function ($query) use ($categoryId) {
             $query->where('id', $categoryId);
+        });
+    }
+
+    public function exam(): MorphToMany
+    {
+        return $this->morphToMany(Exam::class, 'examable')
+            ->withPivot(['exam_accessibility_type', 'exam_accessibility_value', 'exam_repeat_delay', 'whole_amount_should_be_paid']);
+    }
+
+    public function scopeSearch(\Illuminate\Database\Eloquent\Builder $builder, SearchParameter $search): \Illuminate\Database\Eloquent\Builder
+    {
+        return $builder->where(function ($query) use ($search) {
+            $searchableFields = [
+                'title',
+            ];
+
+            foreach ($searchableFields as $searchableField) {
+                $query->orWhere($searchableField, 'LIKE', $search->getTerm());
+            }
         });
     }
 }

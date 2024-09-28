@@ -89,6 +89,7 @@ class Kernel extends HttpKernel
         'instructor-terms' => \App\Http\Middleware\CheckInstructorTermsPage::class,
 
         'logout.devices' => \App\Http\Middleware\ClearOldSessionsMiddleware::class,
+        'frameHeaders' => \App\Http\Middleware\FrameHeadersMiddleware::class,
     ];
 
     /**
