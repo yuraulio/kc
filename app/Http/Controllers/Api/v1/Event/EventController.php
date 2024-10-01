@@ -109,15 +109,23 @@ class EventController extends ApiBaseController
     /**
      * @throws Throwable
      */
-    public function checkSlugAvailability(Event $event, Request $request): \Illuminate\Http\Response
+    public function checkSlugAvailability(Event $event, Request $request): JsonResponse
     {
         $inUse = Event::query()->whereHas('slugable', function ($query) use ($event, $request) {
             $query->where('slug', $request->input('slug'));
             $query->where('slugable_id', '!=', $event->id);
         })->exists();
 
-        throw_if($inUse, new ConflictHttpException());
+        if ($inUse) {
+            return response()->json(['message' => 'This slug is already in use', 'usage' => 'used_for_another_course'], 409);
+        }
 
-        return response()->noContent();
+        $slug = $event->slugable()->first();
+
+        if ($slug->slug == $request->input('slug')) {
+            return response()->json(['message' => 'This slug is already in use for this course', 'usage' => 'used_for_this_course']);
+        }
+
+        return response()->json(['message' => 'This slug is available for using', 'usage' => 'available_for_using']);
     }
 }
