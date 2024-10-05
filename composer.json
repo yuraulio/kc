@@ -32,7 +32,6 @@
         "bugsnag/bugsnag-laravel": "^2.26",
         "cbschuld/browser.php": "^1.9",
         "coderjerk/bird-elephant": "^0.6.1",
-        "codexshaper/laravel-menu-builder": "dev-master",
         "doctrine/dbal": "^3.8",
         "dompdf/dompdf": "^2.0",
         "dymantic/laravel-instagram-feed": "^3.3",
@@ -72,7 +71,7 @@
         "yajra/laravel-datatables-oracle": "^10"
     },
     "require-dev": {
-        "barryvdh/laravel-debugbar": "^3.7",
+        "barryvdh/laravel-debugbar": "^3.10",
         "beyondcode/laravel-dump-server": "^1.9",
         "filp/whoops": "^2.15",
         "fzaninotto/faker": "^1.9",

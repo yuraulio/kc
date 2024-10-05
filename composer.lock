@@ -4,63 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "48dec3bd760c7f4b4a378c2c888065b9",
+    "content-hash": "c08deac271fc64ed5a6c112213fea324",
     "packages": [
-        {
-            "name": "mailchimp/marketing",
-            "version": "3.0.80",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/mailchimp/mailchimp-marketing-php.git",
-                "reference": "c1a38f7248d8de7de412418fed8dae759b9e4b97"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/mailchimp/mailchimp-marketing-php/zipball/c1a38f7248d8de7de412418fed8dae759b9e4b97",
-                "reference": "c1a38f7248d8de7de412418fed8dae759b9e4b97",
-                "shasum": ""
-            },
-            "require": {
-                "ext-curl": "*",
-                "ext-json": "*",
-                "ext-mbstring": "*",
-                "guzzlehttp/guzzle": "^6.4 || ^7.2",
-                "guzzlehttp/psr7": "^1.7 || ^2.0",
-                "php": ">=7.2"
-            },
-            "require-dev": {
-                "friendsofphp/php-cs-fixer": "~2.12",
-                "phpunit/phpunit": "^7",
-                "squizlabs/php_codesniffer": "~2.6"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "MailchimpMarketing\\": "lib/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "proprietary"
-            ],
-            "authors": [
-                {
-                    "name": "Mailchimp",
-                    "homepage": "https://github.com/mailchimp/mailchimp-marketing-php"
-                }
-            ],
-            "homepage": "http://swagger.io",
-            "keywords": [
-                "api",
-                "php",
-                "sdk",
-                "swagger"
-            ],
-            "support": {
-                "source": "https://github.com/mailchimp/mailchimp-marketing-php/tree/v3.0.80"
-            },
-            "time": "2022-11-02T19:19:48+00:00"
-        },
         {
             "name": "alexusmai/laravel-file-manager",
             "version": "v3.1.1",
@@ -918,65 +863,6 @@
                 }
             ],
             "time": "2023-01-09T15:04:03+00:00"
-        },
-        {
-            "name": "codexshaper/laravel-menu-builder",
-            "version": "dev-master",
-            "dist": {
-                "type": "path",
-                "url": "./local_packages/laravel-menu-builder",
-                "reference": "dd744ec3945692139632899f1ddc56f475dab7e8"
-            },
-            "require": {
-                "illuminate/support": "^8.0|^9.0|^10.0",
-                "php": "^8.2|^8.3"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "CodexShaper\\Menu\\MenuServiceProvider"
-                    ],
-                    "aliases": {
-                        "MenuBuilder": "CodexShaper\\Menu\\Facades\\Menu"
-                    }
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "CodexShaper\\Menu\\": "src/"
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Md Abu Ahsan Basir",
-                    "email": "maab.career@gmail.com"
-                }
-            ],
-            "description": "Laravel Drag and Drop Menu Builder",
-            "homepage": "https://github.com/Codexshaper/laravel-menu-builder",
-            "keywords": [
-                "drag",
-                "draggable",
-                "drop",
-                "jquery",
-                "laravel",
-                "menu",
-                "menubuilder",
-                "nestable",
-                "vuejs2"
-            ],
-            "support": {
-                "issues": "https://github.com/Codexshaper/laravel-menu-builder/issues",
-                "source": "https://github.com/Codexshaper/laravel-menu-builder"
-            },
-            "transport-options": {
-                "symlink": true,
-                "relative": true
-            }
         },
         {
             "name": "composer/ca-bundle",
@@ -5721,6 +5607,61 @@
                 }
             ],
             "time": "2023-06-21T14:59:35+00:00"
+        },
+        {
+            "name": "mailchimp/marketing",
+            "version": "3.0.80",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mailchimp/mailchimp-marketing-php.git",
+                "reference": "c1a38f7248d8de7de412418fed8dae759b9e4b97"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mailchimp/mailchimp-marketing-php/zipball/c1a38f7248d8de7de412418fed8dae759b9e4b97",
+                "reference": "c1a38f7248d8de7de412418fed8dae759b9e4b97",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-json": "*",
+                "ext-mbstring": "*",
+                "guzzlehttp/guzzle": "^6.4 || ^7.2",
+                "guzzlehttp/psr7": "^1.7 || ^2.0",
+                "php": ">=7.2"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "~2.12",
+                "phpunit/phpunit": "^7",
+                "squizlabs/php_codesniffer": "~2.6"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "MailchimpMarketing\\": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "proprietary"
+            ],
+            "authors": [
+                {
+                    "name": "Mailchimp",
+                    "homepage": "https://github.com/mailchimp/mailchimp-marketing-php"
+                }
+            ],
+            "homepage": "http://swagger.io",
+            "keywords": [
+                "api",
+                "php",
+                "sdk",
+                "swagger"
+            ],
+            "support": {
+                "source": "https://github.com/mailchimp/mailchimp-marketing-php/tree/v3.0.80"
+            },
+            "time": "2022-11-02T19:19:48+00:00"
         },
         {
             "name": "markbaker/complex",
@@ -13292,16 +13233,16 @@
     "packages-dev": [
         {
             "name": "barryvdh/laravel-debugbar",
-            "version": "v3.10.5",
+            "version": "v3.10.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/barryvdh/laravel-debugbar.git",
-                "reference": "d1a48965f2b25a6cec2eea07d719b568a37c9a88"
+                "reference": "1fcb37307ebb32207dce16fa160a92b14d8b671f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/barryvdh/laravel-debugbar/zipball/d1a48965f2b25a6cec2eea07d719b568a37c9a88",
-                "reference": "d1a48965f2b25a6cec2eea07d719b568a37c9a88",
+                "url": "https://api.github.com/repos/barryvdh/laravel-debugbar/zipball/1fcb37307ebb32207dce16fa160a92b14d8b671f",
+                "reference": "1fcb37307ebb32207dce16fa160a92b14d8b671f",
                 "shasum": ""
             },
             "require": {
@@ -13315,7 +13256,7 @@
             "require-dev": {
                 "mockery/mockery": "^1.3.3",
                 "orchestra/testbench-dusk": "^5|^6|^7|^8|^9",
-                "phpunit/phpunit": "^8.5.30|^9.0",
+                "phpunit/phpunit": "^9.6|^10.5",
                 "squizlabs/php_codesniffer": "^3.5"
             },
             "type": "library",
@@ -13360,7 +13301,7 @@
             ],
             "support": {
                 "issues": "https://github.com/barryvdh/laravel-debugbar/issues",
-                "source": "https://github.com/barryvdh/laravel-debugbar/tree/v3.10.5"
+                "source": "https://github.com/barryvdh/laravel-debugbar/tree/v3.10.6"
             },
             "funding": [
                 {
@@ -13372,7 +13313,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-02-15T10:45:45+00:00"
+            "time": "2024-03-01T14:41:13+00:00"
         },
         {
             "name": "beyondcode/laravel-dump-server",
@@ -15980,9 +15921,7 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": {
-        "codexshaper/laravel-menu-builder": 20
-    },
+    "stability-flags": [],
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
