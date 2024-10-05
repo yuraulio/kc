@@ -32,6 +32,7 @@
         "bugsnag/bugsnag-laravel": "^2.26",
         "cbschuld/browser.php": "^1.9",
         "coderjerk/bird-elephant": "^0.6.1",
+        "codexshaper/laravel-menu-builder": "dev-master",
         "doctrine/dbal": "^3.8",
         "dompdf/dompdf": "^2.0",
         "dymantic/laravel-instagram-feed": "^3.3",
