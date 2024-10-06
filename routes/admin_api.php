@@ -13,8 +13,8 @@ use App\Http\Controllers\Admin_api\TemplatesController;
 use App\Http\Controllers\Admin_api\TickerController;
 use Illuminate\Support\Facades\Route;
 
-//Route::domain('admin.' . config('app.app_domain'))->group(function () {
-Route::domain(config('app.app_domain'))->group(function () {
+Route::pattern('domain', '(' . implode('|', explode(',', config('app.app_domain'))) . ')');
+Route::group(['domain' => '{domain}'], function () {
     Route::group(['middleware' => ['auth:admin_web']], function () {
         Route::prefix('get_widget_data')->group(function () {
             Route::get('users', [DashboardController::class, 'get_widget_data_users']);
