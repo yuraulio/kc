@@ -30,6 +30,12 @@ class TopicResource extends JsonResource
             'lessons_count' => $this->resource->lessons_count,
             'courses_count' => $this->resource->courses_count,
             'has_exams' => $this->resource->exam_count > 0,
+            'classroom_courses' => $this->resource->classroom_courses ?? [],
+            'video_courses' => $this->resource->video_courses ?? [],
+            'live_streaming_courses' => $this->resource->live_streaming_courses ?? [],
+            'exams' => $this->resource->exams ?? [],
+            'messages' => $this->resource->messages ?? [],
+            'messages_rules' => $this->resource->messages_rules ?? null,
         ];
     }
 

@@ -10,12 +10,28 @@ class LessonService implements ILessonService
 {
     public function create(LessonDto $dto)
     {
-        return Lesson::create($dto->getData());
+        $lesson = Lesson::create($dto->getData());
+
+        $lesson->category()->sync($dto->getCategories());
+
+        $courses = $dto->getCourses();
+        if (is_array($courses)) {
+            $lesson->event()->sync($courses);
+        }
+
+        return $lesson;
     }
 
     public function update(Lesson $lesson, LessonDto $dto): Lesson
     {
         $lesson->update($dto->getData());
+
+        $lesson->category()->sync($dto->getCategories());
+
+        $courses = $dto->getCourses();
+        if (is_array($courses)) {
+            $lesson->event()->sync($courses);
+        }
 
         return $lesson;
     }

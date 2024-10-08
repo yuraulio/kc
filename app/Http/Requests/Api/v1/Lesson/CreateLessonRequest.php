@@ -17,14 +17,20 @@ class CreateLessonRequest extends FormRequest implements IDtoRequest
     public function rules(): array
     {
         return [
-            'htmlTitle' => ['required', 'string', 'min:3'],
             'title' => ['required', 'string', 'min:3'],
+            'status' => ['required', 'boolean'],
             'subtitle' => ['required', 'string'],
-            'header' => ['required', 'string'],
-            'summary' => ['required', 'string'],
-            'body' => ['required', 'string'],
             'vimeo_video' => ['nullable', 'string'],
             'vimeo_duration' => ['nullable', 'string'],
+            'classroom_courses' => ['nullable', 'array'],
+            'classroom_courses.*' => ['nullable', 'numeric'],
+            'video_courses' => ['nullable', 'array'],
+            'video_courses.*' => ['nullable', 'numeric'],
+            'live_streaming_courses' => ['nullable', 'array'],
+            'live_streaming_courses.*' => ['nullable', 'numeric'],
+            'categories' => ['nullable', 'array'],
+            'categories.*' => ['nullable', 'numeric'],
+            'created_at' => ['nullable', 'date'],
         ];
     }
 

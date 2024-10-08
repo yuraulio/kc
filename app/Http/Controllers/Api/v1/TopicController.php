@@ -6,8 +6,10 @@ use App\Contracts\Api\v1\Topic\ITopicService;
 use App\Http\Requests\Api\v1\Topic\CreateTopicRequest;
 use App\Http\Requests\Api\v1\Topic\UpdateTopicRequest;
 use App\Http\Resources\Api\v1\Event\Topics\TopicResource;
+use App\Model\Delivery;
 use App\Model\Event;
 use App\Model\Topic;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -48,6 +50,36 @@ class TopicController extends ApiBaseController
         return TopicResource::collection($topicsData)->response()->getData(true);
     }
 
+    public function show(Topic $topic): TopicResource
+    {
+        $this->attachAdditionalFields($topic);
+
+        return TopicResource::make($topic);
+    }
+
+    public function attachAdditionalFields(Topic $topic): void
+    {
+        $events = $topic->events()->with('delivery')->get();
+
+        $topic->classroom_courses = $this->eventWithDelivery($events, Delivery::CLASSROM_TRAINING);
+        $topic->video_courses = $this->eventWithDelivery($events, Delivery::VIDEO_TRAINING);
+        $topic->live_streaming_courses = $this->eventWithDelivery($events, Delivery::VIRTUAL_CLASS_TRAINING);
+        $topic->exams = $topic->exam()->get()?->pluck('id')->toArray() ?? [];
+        $topic->messages = [];
+        $topic->messages_rules = '';
+    }
+
+    public function eventWithDelivery(Collection $events, int $type): array
+    {
+        return $events->where(function ($event) use ($type) {
+            if ($event->delivery->where('id', $type)->count() > 0) {
+                return true;
+            }
+
+            return false;
+        })->pluck('id')->toArray();
+    }
+
     /**
      * Display a listing of the resource with course.
      */
@@ -63,25 +95,22 @@ class TopicController extends ApiBaseController
         );
     }
 
-    public function clone(Topic $topic)
+    public function clone(Topic $topic): TopicResource
     {
         $newTopic = $topic->replicate();
         $newTopic->title = $topic->title . ' (Copy)';
+        $newTopic->status = 0;
         $newTopic->save();
 
         return TopicResource::make($newTopic);
     }
 
-    public function show(string $id)
-    {
-        //
-    }
-
     public function update(UpdateTopicRequest $request, Topic $topic, ITopicService $topicService): TopicResource
     {
-        return TopicResource::make(
-            $topicService->update($topic, $request->toDto()),
-        );
+        $topicService->update($topic, $request->toDto());
+        $this->attachAdditionalFields($topic);
+
+        return TopicResource::make($topic);
     }
 
     public function destroy(Topic $topic): Response

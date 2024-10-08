@@ -12,14 +12,20 @@ class UpdateLessonRequest extends CreateLessonRequest implements IDtoRequest
     public function rules(): array
     {
         return [
-            'htmlTitle' => ['nullable', 'string', 'min:3'],
             'title' => ['nullable', 'string', 'min:3'],
+            'status' => ['required', 'boolean'],
             'subtitle' => ['nullable', 'string'],
-            'header' => ['nullable', 'string'],
-            'summary' => ['nullable', 'string'],
-            'body' => ['nullable', 'string'],
             'vimeo_video' => ['nullable', 'string'],
             'vimeo_duration' => ['nullable', 'string'],
+            'classroom_courses' => ['nullable', 'array'],
+            'classroom_courses.*' => ['nullable', 'numeric'],
+            'video_courses' => ['nullable', 'array'],
+            'video_courses.*' => ['nullable', 'numeric'],
+            'live_streaming_courses' => ['nullable', 'array'],
+            'live_streaming_courses.*' => ['nullable', 'numeric'],
+            'categories' => ['nullable', 'array'],
+            'categories.*' => ['nullable', 'numeric'],
+            'created_at' => ['nullable', 'date'],
         ];
     }
 }

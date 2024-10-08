@@ -15,13 +15,16 @@ final readonly class LessonDto implements IDto
     private ?string $body;
     private ?string $vimeoVideo;
     private ?string $vimeoDuration;
+    private ?array $courses;
+    private ?array $categories;
+    private ?string $created;
 
     public function __construct(
         array $data,
         private int $creatorId,
         private int $authorId,
     ) {
-        $this->status = $data['status'] ?? 1;
+        $this->status = $data['status'] ?? 0;
         $this->htmlTitle = $data['htmlTitle'] ?? null;
         $this->title = $data['title'] ?? null;
         $this->subtitle = $data['subtitle'] ?? null;
@@ -30,6 +33,13 @@ final readonly class LessonDto implements IDto
         $this->body = $data['body'] ?? null;
         $this->vimeoVideo = $data['vimeo_video'] ?? null;
         $this->vimeoDuration = $data['vimeo_duration'] ?? null;
+        $this->courses = array_unique(array_merge(
+            ($data['classroom_courses'] ?? []),
+            ($data['video_courses'] ?? []),
+            ($data['live_streaming_courses'] ?? [])
+        ));
+        $this->categories = $data['categories'] ?? [];
+        $this->created = $data['created_at'] ?? now()->toDateTimeString();
     }
 
     public function getStatus(): ?int
@@ -101,10 +111,26 @@ final readonly class LessonDto implements IDto
             'vimeo_duration' => $this->getVimeoDuration(),
             'creator_id' => $this->getCreatorId(),
             'author_id' => $this->getAuthorId(),
+            'created_at' => $this->getCreated(),
         ];
 
         return array_filter($data, function ($item) {
             return $item !== null;
         });
+    }
+
+    public function getCourses(): ?array
+    {
+        return $this->courses;
+    }
+
+    public function getCategories(): ?array
+    {
+        return $this->categories;
+    }
+
+    public function getCreated(): ?string
+    {
+        return $this->created;
     }
 }

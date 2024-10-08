@@ -7,7 +7,9 @@ use App\Http\Controllers\Api\v1\ApiBaseController;
 use App\Http\Requests\Api\v1\Lesson\CreateLessonRequest;
 use App\Http\Requests\Api\v1\Lesson\UpdateLessonRequest;
 use App\Http\Resources\Api\v1\Event\Lesson\LessonResource;
+use App\Model\Delivery;
 use App\Model\Lesson;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -17,11 +19,60 @@ class LessonController extends ApiBaseController
 {
     public function index(Request $request)
     {
-        $query = $this->applyRequestParametersToQuery(Lesson::query(), $request);
+        $query = Lesson::query()->with('category')->withCount(['event', 'topic']);
+        $query = $this->applyRequestParametersToQuery($query, $request);
 
-        return LessonResource::collection(
-            $this->paginateByRequestParameters($query, $request)
-        )->response()->getData(true);
+        if ($delivery = $request->query->get('delivery')) {
+            $query->whereHas('event', function ($query) use ($delivery) {
+                $query->whereHas('deliveries', function ($query) use ($delivery) {
+                    $query->where('deliveries.id', $delivery);
+                });
+            });
+        }
+
+        if ($course = $request->query->get('course')) {
+            $query->whereHas('event', function ($query) use ($course) {
+                $query->where('events.id', $course);
+            });
+        }
+
+        if ($topic = $request->query->get('topic')) {
+            $query->whereHas('topic', function ($query) use ($topic) {
+                $query->where('topics.id', $topic);
+            });
+        }
+
+        $lessons = $this->paginateByRequestParameters($query, $request);
+
+        return LessonResource::collection($lessons)->response()->getData(true);
+    }
+
+    public function show(Lesson $lesson): LessonResource
+    {
+        $lesson->load(['category']);
+        $this->attachAdditionalFields($lesson);
+
+        return LessonResource::make($lesson);
+    }
+
+    public function attachAdditionalFields(Lesson $lesson): void
+    {
+        $events = $lesson->event()->with('delivery')->get();
+
+        $lesson->classroom_courses = $this->eventWithDelivery($events, Delivery::CLASSROM_TRAINING);
+        $lesson->video_courses = $this->eventWithDelivery($events, Delivery::VIDEO_TRAINING);
+        $lesson->live_streaming_courses = $this->eventWithDelivery($events, Delivery::VIRTUAL_CLASS_TRAINING);
+    }
+
+    public function eventWithDelivery(Collection $events, int $type): array
+    {
+        return $events->where(function ($event) use ($type) {
+            if ($event->delivery->where('id', $type)->count() > 0) {
+                return true;
+            }
+
+            return false;
+        })->pluck('id')->toArray();
     }
 
     public function store(CreateLessonRequest $request, ILessonService $lessonService): LessonResource

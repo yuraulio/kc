@@ -17,6 +17,16 @@ class TopicService implements ITopicService
     {
         $topic->update($dto->getData());
 
+        $exams = $dto->getExams();
+        if (is_array($exams)) {
+            $topic->exam()->sync($exams);
+        }
+
+        $courses = $dto->getCourses();
+        if (is_array($courses)) {
+            $topic->events()->sync($courses);
+        }
+
         return $topic;
     }
 

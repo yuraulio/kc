@@ -7,11 +7,9 @@ use App\Http\Controllers\Api\v1\ApiBaseController;
 use App\Http\Requests\Api\v1\Event\UpdateEventRequest;
 use App\Http\Resources\Api\v1\Event\Settings\CourseSettingsResource;
 use App\Model\Event;
-use Cassandra\Exception\AlreadyExistsException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 

@@ -19,12 +19,20 @@ class CreateTopicRequest extends FormRequest implements IDtoRequest
         return [
             'status' => ['required', 'numeric'],
             'title' => ['required', 'min:3'],
-            'short_title' => ['required', 'string'],
             'subtitle' => ['required', 'string'],
-            'header' => ['required', 'string'],
-            'summary' => ['required', 'string'],
-            'body' => ['required', 'string'],
             'email_template' => ['nullable', 'string'],
+            'exams' => ['nullable', 'array'],
+            'exams.*' => ['nullable', 'numeric'],
+            'exams_assigned' => ['required', 'boolean'],
+            'classroom_courses' => ['nullable', 'array'],
+            'classroom_courses.*' => ['nullable', 'numeric'],
+            'video_courses' => ['nullable', 'array'],
+            'video_courses.*' => ['nullable', 'numeric'],
+            'live_streaming_courses' => ['nullable', 'array'],
+            'live_streaming_courses.*' => ['nullable', 'numeric'],
+            'messages' => ['nullable', 'array'],
+            'messages.*' => ['nullable', 'numeric'],
+            'messages_rules' => ['nullable', 'string'],
         ];
     }
 

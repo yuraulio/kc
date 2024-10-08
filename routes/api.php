@@ -180,6 +180,7 @@ Route::group(['middleware' => ['auth:api', 'auth.aboveauthor'], 'prefix' => 'v1'
     // Topics
     Route::prefix('topics')->group(function () {
         Route::get('/', [TopicController::class, 'index']);
+        Route::get('/{topic}', [TopicController::class, 'show']);
         Route::post('/', [TopicController::class, 'store']);
         Route::post('/{topic}/clone', [TopicController::class, 'clone']);
         Route::put('/{topic}', [TopicController::class, 'update']);
@@ -189,6 +190,7 @@ Route::group(['middleware' => ['auth:api', 'auth.aboveauthor'], 'prefix' => 'v1'
 
     Route::prefix('lessons')->group(function () {
         Route::get('/', [LessonController::class, 'index']);
+        Route::get('/{lesson}', [LessonController::class, 'show']);
         Route::post('/', [LessonController::class, 'store']);
         Route::put('/{lesson}', [LessonController::class, 'update']);
         Route::delete('/{lesson}', [LessonController::class, 'destroy']);
@@ -268,7 +270,7 @@ Route::group(['middleware' => ['auth:api', 'auth.aboveauthor'], 'prefix' => 'v1'
 });
 
 Route::pattern('domain', '(' . implode('|', explode(',', config('app.app_domain'))) . ')');
-Route::group(['domain' => config('app.prefix_new_admin').'{domain}'], function () {
+Route::group(['domain' => config('app.prefix_new_admin') . '{domain}'], function () {
     Route::group(['middleware' => ['auth:admin_api_api'], 'prefix' => 'v1', 'as' => 'api.v1.'], function () {
         Route::post('medias/upload-image', UploadImageController::class);
         Route::post('medias/edit-image', EditImageController::class);

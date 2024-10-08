@@ -6,12 +6,15 @@ use App\Model\Category;
 use App\Model\Slug;
 use App\Model\Topic;
 use App\Model\Type;
+use App\Services\QueryString\Parameter\SearchParameter;
+use App\Services\QueryString\Traits\Filterable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Lesson extends Model
 {
-    use HasFactory;
+    use HasFactory, Filterable;
 
     protected $table = 'lessons';
 
@@ -64,5 +67,21 @@ class Lesson extends Model
         $this->event()->detach();
         $this->topic()->detach();
         $this->delete();
+    }
+
+    public function scopeSearch(Builder $builder, SearchParameter $search): Builder
+    {
+        return $builder->where(function ($query) use ($search) {
+            $searchableFields = [
+                'title',
+                'htmlTitle',
+                'subtitle',
+                'header',
+            ];
+
+            foreach ($searchableFields as $searchableField) {
+                $query->orWhere($searchableField, 'LIKE', $search->getTerm());
+            }
+        });
     }
 }

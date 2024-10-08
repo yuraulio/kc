@@ -97,7 +97,7 @@ class EventSettingsService implements IEventSettingsService
 
     private function updateEventDeliveryData(Event $event, array $data): void
     {
-        $event->deliveries()->sync($data);
+        $event->delivery()->sync($data);
     }
 
     private function updateEventDynamicAdsData(Event $event, array $data): void
@@ -351,10 +351,10 @@ class EventSettingsService implements IEventSettingsService
 
     private function prepareEventDeliverySettings(Event $event): array
     {
-        $event->loadMissing(['deliveries', 'city']);
+        $event->loadMissing(['delivery', 'city']);
 
         return [
-            'course_delivery' => $event->deliveries?->pluck('id')->toArray(),
+            'course_delivery' => $event->delivery?->pluck('id')->toArray(),
             'course_city' => $event->city?->first()?->id,
             'available_deliveries' => Delivery::all(),
         ];
