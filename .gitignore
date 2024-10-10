@@ -73,3 +73,5 @@ storage/app/version-commit.txt
 /.idea
 /.docksal
 *.sql
+
+bootstrap/cache/*
