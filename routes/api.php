@@ -278,8 +278,7 @@ Route::group(['middleware' => ['auth:api', 'auth.aboveauthor'], 'prefix' => 'v1'
         ->only(['index']);
 });
 
-Route::pattern('domain', '(' . implode('|', explode(',', config('app.app_domain'))) . ')');
-Route::group(['domain' => config('app.prefix_new_admin') . '{domain}'], function () {
+Route::domain(config('app.app_domain'))->group(function () {
     Route::group(['middleware' => ['auth:admin_api_api'], 'prefix' => 'v1', 'as' => 'api.v1.'], function () {
         Route::post('medias/upload-image', UploadImageController::class);
         Route::post('medias/edit-image', EditImageController::class);

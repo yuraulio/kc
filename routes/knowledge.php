@@ -4,8 +4,7 @@ use App\Http\Controllers\Admin\KnowledgeController;
 use App\Http\Controllers\Auth\AdminLoginController;
 use Illuminate\Support\Facades\Route;
 
-Route::pattern('domain', '(' . implode('|', explode(',', config('app.app_domain'))) . ')');
-Route::group(['domain' => 'knowledge.' . '{domain}'], function () {
+Route::domain(config('app.app_domain'))->group(function () {
     Route::get('/login', [AdminLoginController::class, 'showLoginPage'])->name('knowledge-login');
     Route::post('/authenticate', [AdminLoginController::class, 'authenticate'])->name('knowledge-authenticate');
 
