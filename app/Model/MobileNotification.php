@@ -28,5 +28,6 @@ class MobileNotification extends Model
 
     protected $casts = [
         'filter_criteria' => 'array',
+        'location' => 'array',
     ];
 }

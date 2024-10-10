@@ -46,6 +46,7 @@ use App\Http\Controllers\Api\v1\Media\UploadImageController;
 use App\Http\Controllers\Api\v1\Messaging\EmailController;
 use App\Http\Controllers\Api\v1\Messaging\MobileNotificationController;
 use App\Http\Controllers\Api\v1\Messaging\WebNotificationController;
+use App\Http\Controllers\Api\v1\MessagingActivityController;
 use App\Http\Controllers\Api\v1\PartnerController;
 use App\Http\Controllers\Api\v1\PaymentMethodController;
 use App\Http\Controllers\Api\v1\Report\ReportController;
@@ -141,6 +142,7 @@ Route::middleware('auth:api')->group(function () {
 });
 
 Route::post('/myaccount/reset', [ForgotPasswordController::class, 'sendResetLinkEmail']);
+Route::post('/webhook/mailchimp', [MessagingActivityController::class, 'store']);
 
 Route::group(['middleware' => ['auth:api', 'auth.aboveauthor'], 'prefix' => 'v1', 'as' => 'api.v1.'], function () {
     Route::post('transactions/participants/statistics', StatisticsController::class)
@@ -244,9 +246,16 @@ Route::group(['middleware' => ['auth:api', 'auth.aboveauthor'], 'prefix' => 'v1'
     Route::get('messaging/emails-templates', [EmailController::class, 'getTemplates']);
     Route::get('messaging/emails-triggers', [EmailController::class, 'getEmailTriggers']);
     // Mobile Notification
-    Route::apiResource('messaging/mobile-notifications', WebNotificationController::class);
+    Route::apiResource('messaging/mobile-notifications', MobileNotificationController::class);
     // Web Notification
-    Route::apiResource('messaging/web-notifications', MobileNotificationController::class);
+    Route::apiResource('messaging/web-notifications', WebNotificationController::class);
+
+    // Messaging Activity
+    Route::get('messaging-activity/by-user/{id}', [MessagingActivityController::class, 'showByUser']);
+    Route::get('messaging-activity/by-event/{id}', [MessagingActivityController::class, 'showByEvent']);
+    Route::delete('messaging-activity/{id}', [MessagingActivityController::class, 'destroy']);
+    Route::post('messaging-activity/send-again', [MessagingActivityController::class, 'sendAgain']);
+    Route::get('messaging-activity/email-criteria/{id}', [MessagingActivityController::class, 'getEmail']);
 
     //Reports
     Route::apiResource('reports', ReportController::class);

@@ -4,6 +4,7 @@ namespace App\Services\Messaging;
 
 use App\Model\Email;
 use Illuminate\Http\Request;
+use MailchimpTransactional;
 use Storage;
 
 class EmailService
@@ -29,5 +30,13 @@ class EmailService
     public function delete(Email $email)
     {
         return $email->delete();
+    }
+
+    public function getMailchimpTransactionalTemplates() :array
+    {
+        $mailchimp = new MailchimpTransactional\ApiClient();
+        $mailchimp->setApiKey(env('MAILCHIMP_TRANSACTIONAL_API_KEY'));
+
+        return (array) $mailchimp->templates->list(null, null, 1000);
     }
 }

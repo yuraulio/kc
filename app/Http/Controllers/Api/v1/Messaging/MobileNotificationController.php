@@ -37,17 +37,17 @@ class MobileNotificationController extends ApiBaseController
     /**
      * Display the specified resource.
      */
-    public function show(Request $request, MobileNotification $email): JsonResponse
+    public function show(Request $request, MobileNotification $mobileNotification): JsonResponse
     {
         return new JsonResponse(
-            $this->applyRequestParametersToModel($email, $request)
+            $this->applyRequestParametersToModel($mobileNotification, $request)
         );
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(MobileNotification $email, MobileNotificationService $MobileNotificationService): Response
+    public function destroy(MobileNotification $mobileNotification, MobileNotificationService $MobileNotificationService): Response
     {
         $MobileNotificationService->delete($mobileNotification);
 

@@ -2,6 +2,8 @@
 
 namespace App\Notifications;
 
+use App\Jobs\SendEmail;
+use App\Notifications\SendMailchimpMail;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Bus\Queueable;
@@ -33,7 +35,26 @@ class userChangePassword extends Notification
      */
     public function via($notifiable)
     {
-        return ['mail', 'database'];
+        return SendMailchimpMail::class;
+    }
+
+    public function toMailchimp(object $notifiable)
+    {
+        $token = Str::random(64);
+
+        DB::table('password_resets')->insert([
+            'email' => $this->user->email,
+            'token' => $token,
+            'created_at' => Carbon::now(),
+        ]);
+        $subject = 'Knowcrunch - ' . $this->user->firstname . ' change your password';
+        $fullName = $this->user->firstname . ' ' . $this->user->lastname;
+
+        SendEmail::dispatch('userChangePassword', $this->user, $subject, [
+            'FNAME'=> $this->user->firstname, 'LINK' => \URL::to("myaccount/reset/{$this->user->id}/{$token}"),
+        ]);
+
+        return true;
     }
 
     /**

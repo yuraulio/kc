@@ -56,18 +56,9 @@ class EmailController extends ApiBaseController
         return response()->noContent();
     }
 
-    public function getTemplates()
+    public function getTemplates(EmailService $emailService)
     {
-        $client = new MailchimpMarketing\ApiClient();
-
-        $client->setConfig([
-            'apiKey' => env('MAILCHIMP_API_KEY'),
-            'server' => env('MAILCHIMP_SERVER'),
-        ]);
-
-        $response = $client->templates->list(null, null, 1000);
-
-        return (array) $response;
+        return ['templates' => $emailService->getMailchimpTransactionalTemplates()];
     }
 
     public function getEmailTriggers()

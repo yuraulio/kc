@@ -436,7 +436,6 @@
 	})();
 
 	paymentRequest.on('paymentmethod', async (ev) => {
-		
 
 		//await apiRequest('/walletPaySubscription/', ev.paymentMethod.id)
 		await apiRequest(`/walletPaySubscription`, ev.paymentMethod.id)

@@ -21,6 +21,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Dashboard\CouponController;
 use App\Http\Requests\UserImportRequest;
 use App\Http\Requests\UserRequest;
+use App\Jobs\SendEmail;
 use App\Model\Admin\Page;
 use App\Model\Event;
 use App\Model\Option;
@@ -553,8 +554,6 @@ class UserController extends Controller
     public function edit(User $user, Role $model)
     {
         $data['events'] = Event::has('ticket')->whereIn('status', [0, 2, 3])->get();
-
-        //dd($data['events']);
         $data['user'] = User::with('ticket', 'role', 'events_for_user_list', 'image', 'transactions')->find($user['id']);
 
         $data['transactions'] = [];

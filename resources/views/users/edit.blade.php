@@ -961,10 +961,6 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {{--<tr>
-                                <td>Email the user informing about his current status.</td>
-                                <td><a href="javascript:void(0);" data-id="{{$user['id']}}" class="btn btn-sm btn-primary email_user_status">Email Account Status</a></td>
-                            </tr>--}}
                             <tr>
                                 <td>Email the user a link to create/change password .</td>
                                 <td><a href="javascript:void(0);" data-id="{{$user['id']}}" class="btn btn-sm btn-primary email_user_change_password">Email Reset Password Link</a></td>
