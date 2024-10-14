@@ -2,7 +2,10 @@
 
 namespace App\Notifications;
 
+use App\Jobs\SendEmail;
 use App\Model\User;
+use App\Notifications\SendMailchimpMail;
+use DB;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -23,15 +26,28 @@ class userStatusChange extends Notification
         $this->user = $user;
     }
 
-    /**
-     * Get the notification's delivery channels.
-     *
-     * @param  mixed  $notifiable
-     * @return array
-     */
     public function via($notifiable)
     {
-        return ['mail', 'database'];
+        return SendMailchimpMail::class;
+    }
+
+    public function toMailchimp(object $notifiable)
+    {
+        //send the user
+        if ($this->user->statusAccount['completed'] == 1) {
+            $loadForm = 'userStatusActivate';
+        } else {
+            $loadForm = 'userStatusDeactivate';
+        }
+
+        $subject = 'User Status Change';
+        $fullName = $this->user->firstname . ' ' . $this->user->lastname;
+
+        SendEmail::dispatch($loadForm, $this->user, $subject, [
+            'FNAME'=> $this->user->firstname,
+        ], []);
+
+        return true;
     }
 
     /**

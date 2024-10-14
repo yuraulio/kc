@@ -170,24 +170,9 @@ class RegisterController extends Controller
                     $dpuser->save();
                 }
 
-                // Send the activation email
-                /*$sent = Mail::send('activation.emails.activate', compact('user', 'code'), function ($m) use ($user) {
-                    $m->to($user->email)->subject('Activate Your Account');
-                });*/
-
-                // Was the email successfully sent?
-                /*if ($sent === 0) {
-                    return redirect(route('/cart'))->withErrors(
-                        'Failed to send activation email.'
-                    );
-                }*/
-
                 $dpuser->notify(new userActivationLink($dpuser, 'activate'));
                 event(new EmailSent($dpuser->email, 'userActivationLink'));
 
-                /*return redirect(route('user.login'))->withSuccess(
-                    'Your accout was successfully created. Please check your email to activate your account.'
-                );*/
                 Session::forget('create_tab');
 
                 return redirect('/cart')->with(

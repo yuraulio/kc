@@ -66,7 +66,6 @@ class CronjobsController extends Controller
         $date = date('Y-m-d');
 
         $invoiceUsers = Invoice::doesntHave('subscription')->where('date', '<', $date)->where('date', '!=', '-')->where('instalments_remaining', '>', 0)->where('email_sent', 0)->get();
-        //dd($invoiceUsers);
 
         foreach ($invoiceUsers as $invoiceUser) {
             if (!$invoiceUser->user->first() || !$invoiceUser->event->first()) {
@@ -80,23 +79,9 @@ class CronjobsController extends Controller
             $data['amount'] = round($invoiceUser->amount, 2);
             $data['template'] = 'emails.user.failed_payment';
             $data['userLink'] = url('/') . '/admin/user/' . $invoiceUser->user->first()->id . '/edit';
-            //$data['installments'] =
 
             $invoiceUser->user->first()->notify(new FailedPayment($data));
             event(new EmailSent($invoiceUser->user->first()->email, 'FailedPayment'));
-
-            /*$adminemail = $invoiceUser->event->first()->paymentMethod->first() && $invoiceUser->event->first()->paymentMethod->first()->payment_email ?
-            $invoiceUser->event->first()->paymentMethod->first()->payment_email : 'info@knowcrunch.com';
-
-            $data['subject'] = 'Knowcrunch - All payments failed';
-            $sent = Mail::send('emails.admin.failed_stripe_payment', $data, function ($m) use ($adminemail,$data) {
-
-                $sub =  $data['subject'];
-                $m->from('info@knowcrunch.com', 'Knowcrunch');
-                $m->to($adminemail, $data['firstName']);
-                $m->subject($sub);
-
-            });*/
 
             $invoiceUser->email_sent = true;
             $invoiceUser->save();
@@ -132,18 +117,6 @@ class CronjobsController extends Controller
 
             $user->first()->notify(new FailedPayment($data));
             event(new EmailSent($user->first()->email, 'FailedPayment'));
-
-            /*$sent = Mail::send('emails.student.subscription.subscription_payment_declined', $data, function ($m) use ($adminemail, $muser) {
-
-                $fullname = $muser['name'];
-                $first = $muser['first'];
-                $sub = 'Knowcrunch |' . $first . ' - Subscription Payment Declined';
-                $m->from($adminemail, 'Knowcrunch');
-                $m->to($muser['email'], $fullname);
-                //$m->cc($adminemail);
-                $m->subject($sub);
-
-            });*/
         }
     }
 
@@ -204,42 +177,6 @@ class CronjobsController extends Controller
                 }
             }
         }
-
-        /*
-        foreach($events as $sub){
-
-            $data = [];
-
-
-            $event = $sub['event']->first();
-
-            if(!$event){
-                continue;
-            }
-
-            $subscription_expiration_email = $event['expiration_email'];
-
-            $status = 999;
-            if($subscription_expiration_email == 0){
-                //expired NOW
-                $status = 0;
-                $data['template'] = '';
-
-
-            }else if($subscription_expiration_email == 1){
-                // expired 6 MOMTHS
-                $status = 1;
-                $data['template'] = '';
-
-            }else if($subscription_expiration_email == 2){
-                // expired 12 MONTHS
-                $status = 2;
-                $data['template'] = '';
-            }
-
-            $sub->user->notify(new SubscriptionExpireReminder($status, $data));
-        }
-        */
     }
 
     public function generateXMLForPinterest()
@@ -477,22 +414,6 @@ class CronjobsController extends Controller
                     $muser['eventTitle'] = $subscription->event->first()->title;
                     $muser['email'] = $subscription->user->email;
 
-                    /*$data['firstName'] = $subscription->user->firstname;
-                    $data['eventTitle'] = $subscription->event->first()->title;
-                    $data['expirationDate'] = date('d/m/Y',strtotime($subscription->event->first()->pivot->expiration));
-
-                    $sent = Mail::send('emails.student.subscription.subscription_date_reminder', $data, function ($m) use ($adminemail, $muser) {
-
-                        $fullname = $muser['name'];
-                        $first = $muser['first'];
-                        $sub = $first . ' - A reminder about the Subscription expiration date';
-                        $m->from($adminemail, 'Knowcrunch');
-                        $m->to($muser['email'], $fullname);
-                        //$m->cc($adminemail);
-                        $m->subject($sub);
-
-                    });*/
-
                     $data['subject'] = 'Knowcrunch - ' . $subscription->user->firstname . ' your subscription will be renewed soon';
                     $data['firstName'] = $subscription->user->firstname;
                     $data['eventTitle'] = $subscription->event->first()->title;
@@ -724,8 +645,6 @@ class CronjobsController extends Controller
     public function sendHalfPeriod()
     {
         $adminemail = 'info@knowcrunch.com';
-
-        //$events = Event::has('transactions')->with('users')->where('view_tpl','elearning_event')->get();
 
         $events = Event::has('transactions')->where('published', true)->with('users')
 
@@ -1168,19 +1087,8 @@ class CronjobsController extends Controller
 
     public function sendAutomateMailBasedOnTopic()
     {
-        //$date1 =  date("Y-m-d", strtotime("+7 days"));
-        //$date2 =  date("Y-m-d", strtotime("+20 days"));
-        //$date3 =  date("Y-m-d", strtotime("+1 days"));
-        //$date4 =  date("Y-m-d", strtotime("+30 days"));
-        //$date1 = '2023-01-23';
-        //$date1 = '2023-02-20';
-
-        //$date1 = date("Y-m-d");
-
-        //$date1 = date("Y-m-d");
         $date1 = date('Y-m-d', strtotime('+1 days'));
 
-        //$dates = [$date1,$date2,$date3,$date4];
         $dates = [$date1];
 
         $events = Event::

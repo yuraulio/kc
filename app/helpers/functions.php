@@ -159,10 +159,6 @@ if (!function_exists('sendAfterSuccessPaymentSepa')) {
 
                 $user->notify(new AfterSepaPaymentEmail($user, $data));
                 event(new EmailSent($user->email, 'AfterSepaPaymentEmail'));
-
-                /*if($elearning){
-                    $user->notify(new InstructionMail($data));
-                }*/
             }
         }
     }
@@ -171,7 +167,6 @@ if (!function_exists('sendAfterSuccessPaymentSepa')) {
 if (!function_exists('loadSendEmailsData')) {
     function loadSendEmailsData($transaction)
     {
-        //Log::info(var_export($transaction, true));
         $data = [];
 
         $pay_seats_data = $transaction['status_history'][0]['pay_seats_data'];

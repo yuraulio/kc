@@ -26,7 +26,8 @@ class SendEmail implements ShouldQueue
         private readonly string $event,
         private readonly User $to,
         private readonly string $subject,
-        private readonly array $data = []
+        private readonly array $data = [],
+        private readonly array $metaData = []
     ) {
     }
 
@@ -36,6 +37,6 @@ class SendEmail implements ShouldQueue
     public function handle(EmailSendService $service): void
     {
         // Send email
-        $service->sendEmail($this->event, $this->to, $this->subject, $this->data);
+        $service->sendEmail($this->event, $this->to, $this->subject, $this->data, $this->metaData);
     }
 }

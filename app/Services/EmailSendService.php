@@ -25,7 +25,7 @@ class EmailSendService
         return $mergeFields;
     }
 
-    public function sendEmail(string $event, User $to, string $subject, array $payload)
+    public function sendEmail(string $event, User $to, string $subject, array $payload, array $metaData)
     {
         $email = Email::where(['predefined_trigger'=>$event, 'status' => 1])->first();
         $mergeFields = $this->convertPayloadToMergeFields($payload);
@@ -49,9 +49,7 @@ class EmailSendService
                         'from_name' => env('MAIL_FROM_NAME'),
                         'subject' => $subject,
                         'global_merge_vars' => $mergeFields,
-                        'metadata'=>[
-                            'event_id' => 96,
-                        ],
+                        'metadata'=>$metaData,
                     ],
                 ]);
             } catch (\GuzzleHttp\Exception\ClientException $e) {

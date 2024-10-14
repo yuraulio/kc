@@ -57,7 +57,6 @@ class StudentController extends Controller
         $user_id = $request->input('content_id');
 
         $notification = new NotificationController;
-        //dd($notification->userActivationLink($user_id));
 
         if ($notification->userActivationLink($user_id)) {
             return [

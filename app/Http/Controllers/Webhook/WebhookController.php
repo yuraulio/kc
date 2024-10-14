@@ -829,20 +829,8 @@ class WebhookController extends BaseWebhookController
             // TODO
             $user->notify(new AfterSepaPaymentEmail($user, $datamail));
             event(new EmailSent($user->email, 'AfterSepaPaymentEmail'));
-            //sendAfterSuccessPaymentSepa1($datamail['transaction'], $datamail['emailsCollector'], $datamail['extrainfo'], $datamail['helperdetails'], $datamail['elearning'], $datamail['eventslug'], $datamail['stripe'],$datamail['billingEmail'],$datamail['paymentMethod'], $sepa = true);
         }
-
-        //$invoiceNumber = Invoice::has('event')->latest()->first()->invoice;
         if ($sub['amount'] / 100 > 0) {
-            /*if(!Invoice::latest()->has('subscription')->first()){
-                $invoiceNumber = sprintf('%04u', 1);
-            }else{
-
-                $invoiceNumber = Invoice::latest()->has('subscription')->first()->invoice;
-                $invoiceNumber = preg_replace('/[^0-9.]+/', '', $invoiceNumber);
-                $invoiceNumber = (int) $invoiceNumber + 1;
-                $invoiceNumber = sprintf('%04u', $invoiceNumber);
-            }*/
             $invoiceNumber = generate_invoice_number($paymentMethod->id);
 
             Log::channel('invoices_log')->info('New invoice subscription method');
@@ -851,7 +839,6 @@ class WebhookController extends BaseWebhookController
             $elearningInvoice->name = isset(json_decode($transaction->billing_details, true)['billname']) ?
                 json_decode($transaction->billing_details, true)['billname'] : $user->firstname . ' ' . $user->lastname;
             $elearningInvoice->amount = $transaction->amount;
-            //$elearningInvoice->invoice = 'S' . $invoiceNumber;
             $elearningInvoice->invoice = $invoiceNumber;
             $elearningInvoice->date = Carbon::today()->toDateString();
             $elearningInvoice->instalments_remaining = 1;
@@ -982,7 +969,6 @@ class WebhookController extends BaseWebhookController
     {
         $adminemail = ($paymentMethod && $paymentMethod->payment_email) ? $paymentMethod->payment_email : 'info@knowcrunch.com';
 
-        //$pdf = $transaction->elearningInvoice()->first()->generateInvoice();
         $pdf = $pdf->output();
 
         $data = [];
@@ -996,18 +982,6 @@ class WebhookController extends BaseWebhookController
         $muser['event_title'] = $elearningInvoice->event->first()->title;
         $data['firstName'] = $elearningInvoice->user->first()->firstname;
         $data['eventTitle'] = $elearningInvoice->event->first()->title;
-
-        /*$sent = Mail::send('emails.admin.elearning_invoice', $data, function ($m) use ($adminemail, $muser,$pdf) {
-
-            $fullname = $muser['name'];
-            $first = $muser['first'];
-            $sub = 'Knowcrunch |' . $first . ' – Payment Successful in ' . $muser['event_title'];;
-            $m->from($adminemail, 'Knowcrunch');
-            $m->to($muser['email'], $fullname);
-            $m->subject($sub);
-            $m->attachData($pdf, "invoice.pdf");
-
-        });*/
 
         $invoiceFileName = date('Y.m.d');
 
@@ -1027,9 +1001,7 @@ class WebhookController extends BaseWebhookController
                 $sub = 'Knowcrunch | ' . $first . ' – download your receipt';
                 $m->from('info@knowcrunch.com', 'Knowcrunch');
                 $m->to($billingEmail, $fullname);
-                //$m->to('moulopoulos@lioncode.gr', $fullname);
                 $m->subject($sub);
-                //$m->attachData($pdf, $fn);
             });
             event(new EmailSent($billingEmail, 'download your receipt'));
         } else {
@@ -1043,9 +1015,7 @@ class WebhookController extends BaseWebhookController
             $sub = 'Knowcrunch | ' . $first . ' – download your receipt';
             $m->from('info@knowcrunch.com', 'Knowcrunch');
             $m->to($adminemail, $fullname);
-            //$m->to('moulopoulos@lioncode.gr', $fullname);
             $m->subject($sub);
-            //$m->attachData($pdf, $fn);
         });
         event(new EmailSent($adminemail, 'elearning_invoice billingEmail ' . $billingEmail));
     }

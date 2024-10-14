@@ -90,41 +90,6 @@ class ELearningService
                 } elseif ($event && count($event->getExams()) > 0) {
                     Log::channel('daily')
                         ->info('[user_id: ' . $user->id . ', event_id: ' . $event->id . '] User finished the course but exams count is more than 0. So the certification won\'t be generated.');
-//                    $examAccess = false; //$event->examAccess($user);
-//
-//                    if ($examAccess) {
-//                        $adminemail = 'info@knowcrunch.com';
-//
-//                        $data['firstName'] = $user->firstname;
-//                        $data['eventTitle'] = $event->title;
-//                        $data['fbGroup'] = $event->fb_group;
-//                        $data['subject'] = 'Knowcrunch - ' . $data['firstName'] . '  you exams are active now';
-//                        $data['template'] = 'emails.user.exam_activate';
-//
-//                        //$user->notify(new ExamActive($data));
-//
-//                        /*$muser['name'] = $user->firstname . ' ' . $user->lastname;
-//                        $muser['first'] = $user->firstname;
-//                        $muser['eventTitle'] =  $event->title;
-//                        $muser['email'] = $user->email;
-//
-//                        $data['firstName'] = $user->firstname;
-//                        $data['eventTitle'] = $event->title;
-//
-//                        $sent = Mail::send('emails.student.exam_activate', $data, function ($m) use ($adminemail, $muser) {
-//
-//                            $fullname = $muser['name'];
-//                            $first = $muser['first'];
-//                            $sub =  $first . ' – Your exams on the ' . $muser['eventTitle'] . ' have been activated!';
-//                            $m->from($adminemail, 'Knowcrunch');
-//                            $m->to($muser['email'], $fullname);
-//                            //$m->cc($adminemail);
-//                            $m->subject($sub);
-//
-//                        });*/
-//                    }
-//
-//                    //}else if( $event /*&& $event->view_tpl != 'elearning_free'*/ && !$event->isFree() && $event->hasCertificate()){
                 } elseif ($event && $event->hasCertificate()) {
                     $event->certification($user);
                 }

@@ -397,24 +397,11 @@ class SubscriptionController extends Controller
                 $data['subject'] = 'Knowcrunch - ' . $data['firstName'] . ' to our annual subscription';
                 $data['template'] = 'emails.user.subscription_welcome';
                 $data['subscriptionEnds'] = $subEnds;
-                /*$data['sub_type'] = $plan->name;
-                $data['sub_price'] = $plan->cost;
-                $data['sub_period'] = $plan->period();*/
 
                 $user->notify(new SubscriptionWelcome($data));
                 event(new EmailSent($user->email, 'SubscriptionWelcome'));
 
                 $adminemail = 'info@knowcrunch.com';
-
-                /*$sent = Mail::send('emails.admin.admin_info_subscription_registration', $data, function ($m) use ($adminemail) {
-
-
-                    $sub = 'Knowcrunch - New subscription';
-                    $m->from($adminemail, 'Knowcrunch');
-                    $m->to($adminemail, 'Knowcrunch');
-                    $m->subject($sub);
-
-                });*/
 
                 Session::forget('pay_seats_data');
                 Session::forget('transaction_id');
@@ -742,24 +729,11 @@ class SubscriptionController extends Controller
                 $data['subject'] = 'Knowcrunch - ' . $data['firstName'] . ' to our annual subscription';
                 $data['template'] = 'emails.user.subscription_welcome';
                 $data['subscriptionEnds'] = $subEnds;
-                /*$data['sub_type'] = $plan->name;
-                $data['sub_price'] = $plan->cost;
-                $data['sub_period'] = $plan->period();*/
 
                 $user->notify(new SubscriptionWelcome($data));
                 event(new EmailSent($user->email, 'SubscriptionWelcome'));
 
                 $adminemail = 'info@knowcrunch.com';
-
-                /*$sent = Mail::send('emails.admin.admin_info_subscription_registration', $data, function ($m) use ($adminemail) {
-
-
-                    $sub = 'Knowcrunch - New subscription';
-                    $m->from($adminemail, 'Knowcrunch');
-                    $m->to($adminemail, 'Knowcrunch');
-                    $m->subject($sub);
-
-                });*/
 
                 Session::forget('pay_seats_data');
                 Session::forget('transaction_id');

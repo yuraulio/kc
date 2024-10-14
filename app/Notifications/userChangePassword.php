@@ -52,7 +52,7 @@ class userChangePassword extends Notification
 
         SendEmail::dispatch('userChangePassword', $this->user, $subject, [
             'FNAME'=> $this->user->firstname, 'LINK' => \URL::to("myaccount/reset/{$this->user->id}/{$token}"),
-        ]);
+        ], []);
 
         return true;
     }

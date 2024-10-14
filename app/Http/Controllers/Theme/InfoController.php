@@ -15,7 +15,6 @@ use App\Model\ShoppingCart;
 use App\Model\Transaction;
 use App\Model\User;
 use App\Notifications\CourseInvoice;
-use App\Notifications\InstructionMail;
 use App\Notifications\SubscriptionWelcome;
 use App\Notifications\WelcomeEmail;
 use App\Services\FBPixelService;
@@ -751,7 +750,6 @@ class InfoController extends Controller
             $user->consent = json_encode($consent);
             $user->save();
             $transaction->user()->save($user);
-            //if($elearning){
             if ($thisevent->paymentMethod->first() && $thisevent->paymentMethod->first()->id !== 1) {
                 $invoice = $transaction->invoice()->first();
                 if ($invoice) {
@@ -759,18 +757,7 @@ class InfoController extends Controller
                 }
             }
 
-            // Send the activation email
-            /*$sent = Mail::send('activation.emails.activate_groupof2+', compact('user', 'code'), function ($m) use ($user) {
-                $m->to($user->email)->subject('Activate Your Account');
-            });*/
-
             $helperdetails[$user->email] = ['kcid' => $user->kc_id, 'deid' => $user->partner_id, 'stid' => $user->student_type_id, 'jobtitle' => $user->job_title, 'company' => $user->company, 'mobile' => $user->mobile];
-
-            //Associate first user with transaction
-            /*if ($key == 0) {
-                $transaction->user_id = $user->id;
-                $transaction->save();
-        	}*/
 
             //Save taxonomy Event_student
             if ($evid && $evid > 0) {
@@ -874,19 +861,12 @@ class InfoController extends Controller
 
                 $user->notify(new WelcomeEmail($user, $data));
                 event(new EmailSent($user->email, 'WelcomeEmail'));
-
-                /*if($elearning){
-                    $user->notify(new InstructionMail($data));
-                }*/
             }
         }
     }
 
     public function sendEmails($transaction, $emailsCollector, $extrainfo, $helperdetails, $elearning, $eventslug, $stripe, $billingEmail, $paymentMethod = null, $sepa = false)
     {
-        // dd($elearning);
-        // 5 email, admin, user, 2 deree, darkpony
-        //$generalInfo = \Config::get('dpoptions.website_details.settings');
         $adminemail = ($paymentMethod && $paymentMethod->payment_email) ? $paymentMethod->payment_email : 'info@knowcrunch.com';
 
         $data = [];
@@ -952,10 +932,6 @@ class InfoController extends Controller
                     $user->notify(new WelcomeEmail($user, $data));
                     event(new EmailSent($user->email, 'WelcomeEmail'));
                 }
-
-                /*if($elearning){
-                    $user->notify(new InstructionMail($data));
-                }*/
             }
         }
 
@@ -1007,7 +983,6 @@ class InfoController extends Controller
                         $sub = 'Knowcrunch | ' . $first . ' – download your receipt';
                         $m->from('info@knowcrunch.com', 'Knowcrunch');
                         $m->to($billingEmail, $fullname);
-                        //$m->to('moulopoulos@lioncode.gr', $fullname);
                         $m->subject($sub);
                     });
                     event(new EmailSent($billingEmail, 'download your receipt'));
@@ -1033,7 +1008,6 @@ class InfoController extends Controller
                 $sentadmin = Mail::send('emails.admin.admin_info_new_registration', $transdata, function ($m) use ($adminemail) {
                     $m->from('info@knowcrunch.com', 'Knowcrunch');
                     $m->to('info@knowcrunch.com', 'Knowcrunch');
-
                     $m->subject('Knowcrunch - New Registration');
                 });
             } catch (\Exception $e) {

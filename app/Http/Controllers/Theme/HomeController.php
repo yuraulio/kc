@@ -858,11 +858,9 @@ class HomeController extends Controller
             $adminemail = $request->recipient ?? 'info@knowcrunch.com';
             $subject = 'Knowcrunch - Giveaway participant';
 
-            //$emails = ['socratous12@gmail.com', 'info@darkpony.com'];
             $m->subject($subject);
             $m->from($adminemail, 'Knowcrunch');
             $m->replyTo($data['cemail'], $fullname);
-            // $m->to('nathanailidis@lioncode.gr', 'Chysafis');
             $m->to($adminemail, 'Knowcrunch');
         });
 

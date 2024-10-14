@@ -539,8 +539,6 @@ class UserController extends Controller
         $user->consent = json_encode($consent);
         $user->save();
 
-        //$user->notify(new userActivationLink($user,'activate'));
-
         return redirect()->route('user.edit', $user->id)->withStatus(__('User successfully created.'));
     }
 

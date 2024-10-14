@@ -69,12 +69,6 @@ class StripeRequiredAction extends Notification
     {
         $url = route('payment.required', ['id' => $this->paymentId, 'event'=>$this->event, 'paymentMethod' => encrypt($this->paymentMethod), 'subscriptionCheckout' => $this->subscriptionCheckout]);
 
-        /*return (new MailMessage)
-            ->subject(__('Confirm Payment'))
-            ->greeting(__('Confirm your :amount paymenttt', ['amount' => $this->amount]))
-            ->line(__('Extra confirmation is needed to process your payment. Please continue to the payment page by clicking on the button below.'))
-            ->action(__('Confirm Payment'), $url);*/
-
         $data = [];
         $data['url'] = $url;
         $data['firstName'] = $this->user['firstname'];

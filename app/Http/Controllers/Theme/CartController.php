@@ -2497,7 +2497,7 @@ class CartController extends Controller
         $data['extrainfo'] = $extrainfo;
         $data['helperdetails'] = $helperdetails;
         $data['eventSlug'] = url('/') . '/' . $content->getSlug();
-        $data['duration'] = ''; //$content->summary1->where('section','date')->first() ? $content->summary1->where('section','date')->first()->title : '';
+        $data['duration'] = '';
 
         $eventInfo = $content ? $content->event_info() : [];
 

@@ -550,9 +550,7 @@ class UserService
                 $sub = 'Knowcrunch |' . $first . ' – Payment Successful in ' . $muser['event_title'];
                 $m->from('info@knowcrunch.com', 'Knowcrunch');
                 $m->to($adminemail, $fullname);
-                //$m->to('moulopoulos@lioncode.gr', $fullname);
                 $m->subject($sub);
-                //$m->attachData($pdf, $fn);
             });
 
             event(new EmailSent($adminemail, 'elearning_invoice'));

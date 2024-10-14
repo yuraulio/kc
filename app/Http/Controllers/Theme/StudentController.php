@@ -25,7 +25,6 @@ use App\Model\Summary;
 use App\Model\Topic;
 use App\Model\User;
 use App\Notifications\ErrorSlack;
-use App\Notifications\ExamActive;
 use App\Notifications\SendTopicAutomateMail;
 use App\Services\ELearningService;
 use Carbon\Carbon;
