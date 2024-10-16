@@ -1,66 +1,58 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\v1\Role\FilterRequest;
+use App\Http\Requests\Api\v1\Role\StoreRequest;
+use App\Http\Requests\Api\v1\Role\UpdateRequest;
 use App\Http\Resources\RoleResource;
 use App\Model\Role;
+use App\Services\v1\RoleService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Symfony\Component\HttpFoundation\Response;
 
 class RoleController extends Controller
 {
-    /**
-     * Display a listing of the roles.
-     */
-    public function index(): AnonymousResourceCollection
+    public function __construct(private RoleService $service)
     {
-        return RoleResource::collection(Role::withCount('users')->get());
     }
 
-    /**
-     * Store a newly created role in storage.
-     *
-     * @param  Request  $request
-     * @return JsonResponse
-     */
-    public function store(Request $request): JsonResponse
+    public function index(FilterRequest $request): AnonymousResourceCollection
     {
-        return new JsonResponse();
+        $this->authorize('viewAny', Role::class);
+
+        return RoleResource::collection($this->service->filter($request->validated()));
     }
 
-    /**
-     * Display the specified role.
-     *
-     * @param  Role  $role
-     * @return JsonResponse
-     */
-    public function show(Role $role): JsonResponse
+    public function show(Role $role): RoleResource
     {
-        return new JsonResponse();
+        $this->authorize('view', $role);
+
+        return new RoleResource($role->load($this->service->getRelations()));
     }
 
-    /**
-     * Update the specified role in storage.
-     *
-     * @param Request $request
-     * @param Role $role
-     * @return JsonResponse
-     */
-    public function update(Request $request, Role $role): JsonResponse
+    public function store(StoreRequest $request): RoleResource
     {
-        return new JsonResponse();
+        $this->authorize('create', Role::class);
+
+        return new RoleResource($this->service->store($request->validated()));
     }
 
-    /**
-     * Remove the specified role from storage.
-     *
-     * @param int $id
-     * @return JsonResponse
-     */
-    public function destroy(int $id): JsonResponse
+    public function update(UpdateRequest $request, Role $role): RoleResource
     {
-        return new JsonResponse();
+        $this->authorize('update', $role);
+
+        return new RoleResource($this->service->update($role, $request->validated()));
+    }
+
+    public function destroy(Role $role): JsonResponse
+    {
+        $this->authorize('delete', $role);
+
+        return response()->json(['success' => $role->delete()], Response::HTTP_OK);
     }
 }

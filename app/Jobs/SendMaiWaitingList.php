@@ -2,11 +2,13 @@
 
 namespace App\Jobs;
 
+use App\Enums\ActivityEventEnum;
+use App\Events\ActivityEvent;
 use App\Events\EmailSent;
 use App\Model\Event;
 use App\Notifications\SendWaitingListEmail;
+use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -39,6 +41,7 @@ class SendMaiWaitingList implements ShouldQueue
             foreach ($this->event->waitingList()->where('mail_sent', false)->get() as $list) {
                 $list->user->notify(new SendWaitingListEmail($list->user_id, $list->event_id));
                 event(new EmailSent($list->user->email, 'SendWaitingListEmail'));
+                event(new ActivityEvent($list->user, ActivityEventEnum::EmailSent->value, 'Knowcrunch - Hi ' . $list->user->firstname . '. Course is available, ' . Carbon::now()->format('d F Y')));
                 $list->mail_sent = true;
                 $list->save();
             }

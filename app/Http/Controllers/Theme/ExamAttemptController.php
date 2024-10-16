@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Theme;
 
+use App\Enums\ActivityEventEnum;
+use App\Events\ActivityEvent;
 use App\Events\EmailSent;
 use App\Http\Controllers\Controller;
 use App\Model\Certificate;
@@ -29,8 +31,10 @@ class ExamAttemptController extends Controller
         $exam = Exam::find($ex_id);
         $event = $exam->event->first();
 
-        return view('exams.exam_instructions', ['event' => $event, 'exam' => $exam, 'event_title' => $event->title,
-            'first_name' => Auth::user()->firstname, 'last_name'=>Auth::user()->lastname]);
+        return view('exams.exam_instructions', [
+            'event'      => $event, 'exam' => $exam, 'event_title' => $event->title,
+            'first_name' => Auth::user()->firstname, 'last_name' => Auth::user()->lastname,
+        ]);
     }
 
     public function examStart(Exam $exam)
@@ -93,8 +97,10 @@ class ExamAttemptController extends Controller
                 array_push($options, $opt1, $opt2, $opt3, $opt4);
             }
 
-            $ex_contents[] = ['id'=> $key, 'answers_keys' => $options, 'mark_status' => 0, 'question_title' => $ex_content['question'], 'question_description' => '',
-                'question-type' => $ex_content['question-type'], 'given_ans'=>'', 'q_id' => $exam_key];
+            $ex_contents[] = [
+                'id'            => $key, 'answers_keys' => $options, 'mark_status' => 0, 'question_title' => $ex_content['question'], 'question_description' => '',
+                'question-type' => $ex_content['question-type'], 'given_ans' => '', 'q_id' => $exam_key,
+            ];
         }
         $redata = 0;
 
@@ -111,13 +117,17 @@ class ExamAttemptController extends Controller
             $examResultData = ExamResult::where('exam_id', $exam->id)->where('user_id', $st_id)->first();
 
             if ($fndata != '0000-00-00 00:00:00' || $examResultData) {
-                return view('exams.exam_end', ['event' => $event, 'user_id' => $st_id, 'ex_contents' => $ex_contents, 'exam' => $exam, 'redata' => $redata,
-                    'event_title' => $event->title, 'first_name' => Auth::user()->firstname, 'last_name'=>Auth::user()->lastname]);
+                return view('exams.exam_end', [
+                    'event'       => $event, 'user_id' => $st_id, 'ex_contents' => $ex_contents, 'exam' => $exam, 'redata' => $redata,
+                    'event_title' => $event->title, 'first_name' => Auth::user()->firstname, 'last_name' => Auth::user()->lastname,
+                ]);
             }
         }
 
-        return view('exams.exam_start', ['event' => $event, 'user_id' => $st_id, 'ex_contents' => $ex_contents, 'exam' => $exam, 'redata' => $redata,
-            'event_title' => $event->title, 'first_name' => Auth::user()->firstname, 'last_name'=>Auth::user()->lastname]);
+        return view('exams.exam_start', [
+            'event'       => $event, 'user_id' => $st_id, 'ex_contents' => $ex_contents, 'exam' => $exam, 'redata' => $redata,
+            'event_title' => $event->title, 'first_name' => Auth::user()->firstname, 'last_name' => Auth::user()->lastname,
+        ]);
     }
 
     public function syncData(Request $request)
@@ -136,11 +146,10 @@ class ExamAttemptController extends Controller
 
             if (isset($getSyncData) && !empty($getSyncData)) {
                 $examSyncData = ExamSyncData::where('id', $getSyncData)
-
                     ->update([
-                        'exam_id' => $exam_id,
-                        'user_id' => $st_id,
-                        'data' => $examJson,
+                        'exam_id'    => $exam_id,
+                        'user_id'    => $st_id,
+                        'data'       => $examJson,
                         'started_at' => $start_time,
                         'finish_at'  => '0000-00-00 00:00:00',
 
@@ -148,9 +157,9 @@ class ExamAttemptController extends Controller
             } else {
                 $examSyncData = ExamSyncData::create([
 
-                    'exam_id' => $exam_id,
-                    'user_id' => $st_id,
-                    'data' => $examJson,
+                    'exam_id'    => $exam_id,
+                    'user_id'    => $st_id,
+                    'data'       => $examJson,
                     'started_at' => $start_time,
                     'finish_at'  => '0000-00-00 00:00:00',
 
@@ -190,19 +199,18 @@ class ExamAttemptController extends Controller
 
             if (isset($getSyncData) && !empty($getSyncData)) {
                 $examSyncData = ExamSyncData::where('id', $getSyncData)
-
                     ->update([
-                        'exam_id' => $exam_id,
-                        'user_id' => $st_id,
-                        'data' => $examJson,
+                        'exam_id'    => $exam_id,
+                        'user_id'    => $st_id,
+                        'data'       => $examJson,
                         'started_at' => $start_time,
                         'finish_at'  => $finish,
                     ]);
             } else {
                 $examSyncData = ExamSyncData::create([
-                    'exam_id' => $exam_id,
-                    'user_id' => $st_id,
-                    'data' => $examJson,
+                    'exam_id'    => $exam_id,
+                    'user_id'    => $st_id,
+                    'data'       => $examJson,
                     'started_at' => $start_time,
                     'finish_at'  => $finish,
                 ]);
@@ -308,15 +316,15 @@ class ExamAttemptController extends Controller
                 } else {
                     $examResultData = ExamResult::create([
 
-                        'user_id' => $st_id,
-                        'exam_id' => $ex_id,
-                        'first_name' => $student->firstname,
-                        'last_name'=>  $student->lastname,
-                        'score' => $total_credit,
-                        'answers' => json_encode($answers),
-                        'start_time' => $start_time,
-                        'end_time' => $finish,
-                        'total_time' => $total_time,
+                        'user_id'     => $st_id,
+                        'exam_id'     => $ex_id,
+                        'first_name'  => $student->firstname,
+                        'last_name'   => $student->lastname,
+                        'score'       => $total_credit,
+                        'answers'     => json_encode($answers),
+                        'start_time'  => $start_time,
+                        'end_time'    => $finish,
+                        'total_time'  => $total_time,
                         'total_score' => $totalQues, //$totalCredits,
 
                     ]);
@@ -390,6 +398,7 @@ class ExamAttemptController extends Controller
                 $data['certUrl'] = trim(url('/') . '/mycertificate/' . base64_encode($student->email . '--' . $cert->id));
                 $student->notify(new CertificateAvaillable($data, $student));
                 event(new EmailSent($student->email, 'CertificateAvaillable'));
+                event(new ActivityEvent($student, ActivityEventEnum::EmailSent->value, $data['subject'] . ', ' . Carbon::now()->format('d F Y')));
 
                 if ($examResultData) {
                     echo '<script>alert("woo!")</script>';

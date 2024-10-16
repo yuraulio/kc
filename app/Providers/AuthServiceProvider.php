@@ -6,8 +6,11 @@ use App\Model\Admin\Admin;
 use App\Model\Admin\Category;
 use App\Model\Admin\Comment;
 use App\Model\Admin\Page;
+use App\Model\Admin\Setting;
 use App\Model\Admin\Template;
 use App\Model\Passport\Token;
+use App\Model\Role;
+use App\Model\Tag;
 use App\Model\User;
 use App\Policies\AdminPolicy;
 use App\Policies\CategoryPolicy;
@@ -31,13 +34,15 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        User::class => UserPolicy::class,
+        User::class     => UserPolicy::class,
         Category::class => CategoryPolicy::class,
         Template::class => TemplatePolicy::class,
-        Page::class => PagePolicy::class,
-        Comment::class => CommentPolicy::class,
-        Admin::class => AdminPolicy::class,
-        Setting::class => SettingPolicy::class,
+        Page::class     => PagePolicy::class,
+        Comment::class  => CommentPolicy::class,
+        Admin::class    => AdminPolicy::class,
+        Setting::class  => SettingPolicy::class,
+        Role::class     => RolePolicy::class,
+        Tag::class      => TagPolicy::class,
     ];
 
     /**

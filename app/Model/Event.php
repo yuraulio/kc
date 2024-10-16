@@ -3,6 +3,8 @@
 namespace App\Model;
 
 use App\Audience;
+use App\Enums\ActivityEventEnum;
+use App\Events\ActivityEvent;
 use App\Events\EmailSent;
 use App\Library\PageVariables;
 use App\Model\Admin\Countdown;
@@ -22,7 +24,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Facades\Auth;
@@ -31,33 +32,33 @@ use Illuminate\Support\Facades\Log;
 use Laravel\Cashier\Subscription;
 
 /**
- * @property int $id
- * @property EventInfo $eventInfo
- * @property Collection<Coupon> $coupons
- * @property Collection<City> $city
- * @property Collection<Career> $career
- * @property Collection<Skill> $skills
- * @property Collection<Partner> $partners
- * @property Collection<Audience> $audiences
- * @property Collection<Event> $relatedCourses
- * @property Collection<Tag> $tags
- * @property Collection<Delivery> $deliveries
- * @property Collection<Certificate> $certificates
- * @property Metas $metable
- * @property Carbon $created_at
- * @property string $title
- * @property string|null $admin_title
- * @property string|null $fb_group
- * @property int $absences_limit
- * @property float $absences_start_hours
- * @property int|null $access_duration
- * @property Carbon|null $files_access_till
- * @property DynamicAds|null $dynamicAds
+ * @property int                       $id
+ * @property EventInfo                 $eventInfo
+ * @property Collection<Coupon>        $coupons
+ * @property Collection<City>          $city
+ * @property Collection<Career>        $career
+ * @property Collection<Skill>         $skills
+ * @property Collection<Partner>       $partners
+ * @property Collection<Audience>      $audiences
+ * @property Collection<Event>         $relatedCourses
+ * @property Collection<Tag>           $tags
+ * @property Collection<Delivery>      $deliveries
+ * @property Collection<Certificate>   $certificates
+ * @property Metas                     $metable
+ * @property Carbon                    $created_at
+ * @property string                    $title
+ * @property string|null               $admin_title
+ * @property string|null               $fb_group
+ * @property int                       $absences_limit
+ * @property float                     $absences_start_hours
+ * @property int|null                  $access_duration
+ * @property Carbon|null               $files_access_till
+ * @property DynamicAds|null           $dynamicAds
  * @property Collection<PaymentMethod> $paymentMethod
  * @property Collection<PaymentOption> $paymentOptions
- * @property Collection<Exam> $exam
- * @property Collection<Event> $bonusCourse
- * @property Collection<Dropbox> $dropbox
+ * @property Collection<Exam>          $exam
+ * @property Collection<Event>         $bonusCourse
+ * @property Collection<Dropbox>       $dropbox
  */
 class Event extends Model
 {
@@ -128,34 +129,34 @@ class Event extends Model
         $schema = Cache::remember('schemadata-event-' . $this->id, 10, function () {
             $dynamicPageData = [
                 'event' => $this,
-                'info' => $this->event_info(),
+                'info'  => $this->event_info(),
             ];
             $schema =
-            [
-                '@context' => 'https://schema.org/',
-                '@type' => 'Course',
-                'name' => PageVariables::parseText($this->title, null, $dynamicPageData),
-                'description' => PageVariables::parseText($this->summary, null, $dynamicPageData),
-                'provider' => [
-                    '@type' => 'Organization',
-                    'name' => 'Know Crunch',
-                    'url' => 'https://knowcrunch.com/',
-                ],
-                'author' => [
-                    '@type' => 'Person',
-                    'name' => 'Tolis Aivalis',
-                ],
-                'inLanguage' => 'Greek/Ellinika',
-                'offers' => [
-                    [
-                        '@type' => 'Offer',
-                        'category' => 'Free',
-                        'priceCurrency' => 'EUR',
-                        'price' => 0,
+                [
+                    '@context'                     => 'https://schema.org/',
+                    '@type'                        => 'Course',
+                    'name'                         => PageVariables::parseText($this->title, null, $dynamicPageData),
+                    'description'                  => PageVariables::parseText($this->summary, null, $dynamicPageData),
+                    'provider'                     => [
+                        '@type' => 'Organization',
+                        'name'  => 'Know Crunch',
+                        'url'   => 'https://knowcrunch.com/',
                     ],
-                ],
-                'educationalCredentialAwarded' => 'EQF 5+ level',
-            ];
+                    'author'                       => [
+                        '@type' => 'Person',
+                        'name'  => 'Tolis Aivalis',
+                    ],
+                    'inLanguage'                   => 'Greek/Ellinika',
+                    'offers'                       => [
+                        [
+                            '@type'         => 'Offer',
+                            'category'      => 'Free',
+                            'priceCurrency' => 'EUR',
+                            'price'         => 0,
+                        ],
+                    ],
+                    'educationalCredentialAwarded' => 'EQF 5+ level',
+                ];
             if (isset($this->mediable)) {
                 $schema['image'] = [
                     cdn(get_image($this->mediable, 'event-card')),
@@ -167,10 +168,10 @@ class Event extends Model
             if ($this->relationLoaded('ticket') && isset($this->ticket[0]->price)) {
                 $schema['offers'] = [
                     [
-                        '@type' => 'Offer',
-                        'category' => 'Paid',
+                        '@type'         => 'Offer',
+                        'category'      => 'Paid',
                         'priceCurrency' => 'EUR',
-                        'price' => $this->ticket[0]->price,
+                        'price'         => $this->ticket[0]->price,
                     ],
                 ];
             }
@@ -183,8 +184,8 @@ class Event extends Model
                 if ($this->relationLoaded('instructors') && isset($this->instructors)) {
                     foreach ($this->instructors as $instr) {
                         $instructor = [
-                            '@type' => 'Person',
-                            'name' => $instr->title . ' ' . $instr->subtitle,
+                            '@type'       => 'Person',
+                            'name'        => $instr->title . ' ' . $instr->subtitle,
                             'description' => $instr->header,
                         ];
                         if (isset($instr->mediable) && $instr->mediable->count() > 0) {
@@ -206,15 +207,15 @@ class Event extends Model
                 if (isset($this->course_hours)) {
                     $courseWorkload = 'PT' . $this->course_hours . 'H';
                 }
-                switch($this->eventInfo->course_delivery) {
+                switch ($this->eventInfo->course_delivery) {
                     case 139: // Classroom training
                         $schema['hasCourseInstance'] = [
                             [
                                 // Blended, instructor-led course meeting 3 hours per day in July.
-                                '@type' => 'CourseInstance',
-                                'courseMode' => 'onsite',
-                                'location' => $this->eventInfo->course_inclass_city ?? '',
-                                'instructor' => $instructors,
+                                '@type'          => 'CourseInstance',
+                                'courseMode'     => 'onsite',
+                                'location'       => $this->eventInfo->course_inclass_city ?? '',
+                                'instructor'     => $instructors,
                                 'courseWorkload' => $courseWorkload,
                             ],
                         ];
@@ -223,8 +224,8 @@ class Event extends Model
                         $schema['hasCourseInstance'] = [
                             [
                                 // Online self-paced course that takes 2 days to complete.
-                                '@type' => 'CourseInstance',
-                                'courseMode' => 'online',
+                                '@type'          => 'CourseInstance',
+                                'courseMode'     => 'online',
                                 'courseWorkload' => $courseWorkload,
                             ],
                         ];
@@ -233,8 +234,8 @@ class Event extends Model
                         $schema['hasCourseInstance'] = [
                             [
                                 // Online self-paced course that takes 2 days to complete.
-                                '@type' => 'CourseInstance',
-                                'courseMode' => 'online',
+                                '@type'          => 'CourseInstance',
+                                'courseMode'     => 'online',
                                 'courseWorkload' => $courseWorkload,
                             ],
                         ];
@@ -243,10 +244,10 @@ class Event extends Model
                         $schema['hasCourseInstance'] = [
                             [
                                 // Blended, instructor-led course meeting 3 hours per day in July.
-                                '@type' => 'CourseInstance',
-                                'courseMode' => 'onsite',
-                                'location' => $this->course_inclass_city ?? '',
-                                'instructor' => $instructors,
+                                '@type'          => 'CourseInstance',
+                                'courseMode'     => 'onsite',
+                                'location'       => $this->course_inclass_city ?? '',
+                                'instructor'     => $instructors,
                                 'courseWorkload' => $courseWorkload,
                             ],
                         ];
@@ -816,7 +817,7 @@ class Event extends Model
                 continue;
             }
 
-            $faqs[$faq['category']['0']['name']][] = ['question' =>$faq['title'], 'answer' => $faq['answer']];
+            $faqs[$faq['category']['0']['name']][] = ['question' => $faq['title'], 'answer' => $faq['answer']];
         }
 
         // dd($faqs);
@@ -885,7 +886,7 @@ class Event extends Model
         $categoryFaqs = $this->getFaqsByType();
         foreach ($categoryFaqs as $faq) {
             foreach ($faq->category as $categoryFaq) {
-                $faqs[$categoryFaq['name']][] = ['id' => $faq['id'], 'question' =>  $faq['title']];
+                $faqs[$categoryFaq['name']][] = ['id' => $faq['id'], 'question' => $faq['title']];
             }
         }
 
@@ -1066,7 +1067,7 @@ class Event extends Model
             return $sum . ' of ' . count($videos);
         }
 
-        return'0 of ' . $this->lessons()->count();
+        return '0 of ' . $this->lessons()->count();
     }
 
     public function invoices(): MorphToMany
@@ -1208,6 +1209,7 @@ class Event extends Model
                 ->info('[user_id: ' . $user->id . ', event_id: ' . $this->id . '] The email about a new certificate is sent.');
 
             event(new EmailSent($user->email, 'CertificateAvaillable'));
+            event(new ActivityEvent($user, ActivityEventEnum::EmailSent->value, $data['subject'] . ', ' . Carbon::now()->format('d F Y')));
         }
     }
 
@@ -1385,25 +1387,25 @@ class Event extends Model
     {
         $or = [];
 
-        foreach ($this->allLessons()->wherePivot('priority', '>=', $from)->get() as  $pLesson) {
+        foreach ($this->allLessons()->wherePivot('priority', '>=', $from)->get() as $pLesson) {
             $newPriorityLesson = $pLesson->pivot->priority + 1;
             //$pLesson->pivot->priority = $newPriorityLesson;
             //$pLesson->pivot->save();
 
             $or[$pLesson->pivot->lesson_id] = [
-                'topic_id'=>$pLesson->pivot->topic_id,
-                'lesson_id'=>$pLesson->pivot->lesson_id,
-                'event_id' => $pLesson->pivot->event_id,
-                'instructor_id' => $pLesson->pivot->instructor_id,
-                'date' => $pLesson->pivot->date,
-                'time_starts' => $pLesson->pivot->time_starts,
-                'time_ends' => $pLesson->pivot->time_ends,
-                'duration' => $pLesson->pivot->duration,
-                'room' => $pLesson->pivot->room,
-                'location_url'=> $pLesson->pivot->location_url,
-                'automate_mail'=>$pLesson->pivot->automate_mail,
-                'send_automate_mail'=>$pLesson->pivot->send_automate_mail,
-                'priority' => $newPriorityLesson,
+                'topic_id'           => $pLesson->pivot->topic_id,
+                'lesson_id'          => $pLesson->pivot->lesson_id,
+                'event_id'           => $pLesson->pivot->event_id,
+                'instructor_id'      => $pLesson->pivot->instructor_id,
+                'date'               => $pLesson->pivot->date,
+                'time_starts'        => $pLesson->pivot->time_starts,
+                'time_ends'          => $pLesson->pivot->time_ends,
+                'duration'           => $pLesson->pivot->duration,
+                'room'               => $pLesson->pivot->room,
+                'location_url'       => $pLesson->pivot->location_url,
+                'automate_mail'      => $pLesson->pivot->automate_mail,
+                'send_automate_mail' => $pLesson->pivot->send_automate_mail,
+                'priority'           => $newPriorityLesson,
             ];
         }
 
@@ -1415,24 +1417,24 @@ class Event extends Model
     {
         $newPriorityLesson = 1;
         $or = [];
-        foreach ($this->allLessons()->orderBy('priority')->get() as  $pLesson) {
+        foreach ($this->allLessons()->orderBy('priority')->get() as $pLesson) {
             //$pLesson->pivot->priority = $newPriorityLesson;
             //$pLesson->pivot->save();
 
             $or[$pLesson->pivot->lesson_id] = [
-                'topic_id'=>$pLesson->pivot->topic_id,
-                'lesson_id'=>$pLesson->pivot->lesson_id,
-                'event_id' => $pLesson->pivot->event_id,
-                'instructor_id' => $pLesson->pivot->instructor_id,
-                'date' => $pLesson->pivot->date,
-                'time_starts' => $pLesson->pivot->time_starts,
-                'time_ends' => $pLesson->pivot->time_ends,
-                'duration' => $pLesson->pivot->duration,
-                'room' => $pLesson->pivot->room,
-                'location_url'=> $pLesson->pivot->location_url,
-                'automate_mail'=>$pLesson->pivot->automate_mail,
-                'send_automate_mail'=>$pLesson->pivot->send_automate_mail,
-                'priority' => $newPriorityLesson,
+                'topic_id'           => $pLesson->pivot->topic_id,
+                'lesson_id'          => $pLesson->pivot->lesson_id,
+                'event_id'           => $pLesson->pivot->event_id,
+                'instructor_id'      => $pLesson->pivot->instructor_id,
+                'date'               => $pLesson->pivot->date,
+                'time_starts'        => $pLesson->pivot->time_starts,
+                'time_ends'          => $pLesson->pivot->time_ends,
+                'duration'           => $pLesson->pivot->duration,
+                'room'               => $pLesson->pivot->room,
+                'location_url'       => $pLesson->pivot->location_url,
+                'automate_mail'      => $pLesson->pivot->automate_mail,
+                'send_automate_mail' => $pLesson->pivot->send_automate_mail,
+                'priority'           => $newPriorityLesson,
             ];
             $newPriorityLesson += 1;
         }

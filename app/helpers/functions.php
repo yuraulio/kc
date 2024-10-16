@@ -1,5 +1,7 @@
 <?php
 
+use App\Enums\ActivityEventEnum;
+use App\Events\ActivityEvent;
 use App\Events\EmailSent;
 use App\Jobs\SendEmail;
 use App\Model\Admin\Page;
@@ -31,7 +33,7 @@ if (!function_exists('failedPaymentEmail')) {
         Log::info(var_export($payload, true));
 
         $adminemail = $event->paymentMethod->first() && $event->paymentMethod->first()->payment_email ?
-                                                                        $event->paymentMethod->first()->payment_email : 'info@knowcrunch.com';
+            $event->paymentMethod->first()->payment_email : 'info@knowcrunch.com';
 
         $data['subject'] = 'Knowcrunch - All payments failed';
         $data['name'] = $user->firstname . ' ' . $user->lastname;
@@ -67,21 +69,21 @@ if (!function_exists('updateStripeCustomer')) {
         try {
             $dpuser->updateStripeCustomer([
 
-                'name' => $st_name,
-                'email' => $dpuser->email,
+                'name'     => $st_name,
+                'email'    => $dpuser->email,
                 'metadata' => $temp,
                 //'description' => $st_desc,
 
                 //'tax_info' => ['tax_id' => $st_tax_id, 'type' => 'vat'],
                 'shipping' => ['name' => $st_name, 'address' => $address],
-                'address' => $address,
+                'address'  => $address,
 
             ]);
-        } catch(\Stripe\Exception\InvalidRequestException $e) {
+        } catch (\Stripe\Exception\InvalidRequestException $e) {
             Bugsnag::notifyException($e);
 
             $dpuser = User::where('id', $userId)->update([
-                'stripe_id' => null,
+                'stripe_id'  => null,
                 'stripe_ids' => null,
             ]);
 
@@ -125,28 +127,28 @@ if (!function_exists('sendAfterSuccessPaymentSepa')) {
 
         if (isset($eventInfo['delivery']) && $eventInfo['delivery'] == 143) {
             $data['duration'] = isset($eventInfo['elearning']['visible']['emails']) && isset($eventInfo['elearning']['expiration']) &&
-                                $eventInfo['elearning']['visible']['emails'] && isset($eventInfo['elearning']['text']) ?
-                                            $eventInfo['elearning']['expiration'] . ' ' . $eventInfo['elearning']['text'] : '';
+            $eventInfo['elearning']['visible']['emails'] && isset($eventInfo['elearning']['text']) ?
+                $eventInfo['elearning']['expiration'] . ' ' . $eventInfo['elearning']['text'] : '';
         } elseif (isset($eventInfo['delivery']) && $eventInfo['delivery'] == 139) {
             $data['duration'] = isset($eventInfo['inclass']['dates']['visible']['emails']) && isset($eventInfo['inclass']['dates']['text']) &&
-                                    $eventInfo['inclass']['dates']['visible']['emails'] ? $eventInfo['inclass']['dates']['text'] : '';
+            $eventInfo['inclass']['dates']['visible']['emails'] ? $eventInfo['inclass']['dates']['text'] : '';
 
             $data['duration'] = strip_tags($data['duration']);
         }
 
         $data['hours'] = isset($eventInfo['hours']['visible']['emails']) && $eventInfo['hours']['visible']['emails'] && isset($eventInfo['hours']['hour']) &&
-                        isset($eventInfo['hours']['text']) ? $eventInfo['hours']['hour'] . ' ' . $eventInfo['hours']['text'] : '';
+        isset($eventInfo['hours']['text']) ? $eventInfo['hours']['hour'] . ' ' . $eventInfo['hours']['text'] : '';
 
         $data['language'] = isset($eventInfo['language']['visible']['emails']) && $eventInfo['language']['visible']['emails'] && isset($eventInfo['language']['text']) ? $eventInfo['language']['text'] : '';
 
         $data['certificate_type'] = isset($eventInfo['certificate']['visible']['emails']) && $eventInfo['certificate']['visible']['emails'] &&
-                    isset($eventInfo['certificate']['type']) ? $eventInfo['certificate']['type'] : '';
+        isset($eventInfo['certificate']['type']) ? $eventInfo['certificate']['type'] : '';
 
         $eventStudents = get_sum_students_course($transaction->event->first()->category->first());
         $data['students_number'] = isset($eventInfo['students']['number']) ? $eventInfo['students']['number'] : $eventStudents + 1;
 
         $data['students'] = isset($eventInfo['students']['visible']['emails']) && $eventInfo['students']['visible']['emails'] &&
-                        isset($eventInfo['students']['text']) && $data['students_number'] >= $eventStudents ? $eventInfo['students']['text'] : '';
+        isset($eventInfo['students']['text']) && $data['students_number'] >= $eventStudents ? $eventInfo['students']['text'] : '';
 
         foreach ($emailsCollector as $key => $muser) {
             $data['user'] = $muser;
@@ -163,12 +165,13 @@ if (!function_exists('sendAfterSuccessPaymentSepa')) {
                 }
 
                 $data['template'] = $transaction->event->first() && $user->waitingList()->where('event_id', $transaction->event->first()->id)->first()
-                                        ? 'waiting_list_welcome' : 'welcome';
+                    ? 'waiting_list_welcome' : 'welcome';
 
                 $data['firstName'] = $user->firstname;
 
                 $user->notify(new AfterSepaPaymentEmail($user, $data));
                 event(new EmailSent($user->email, 'AfterSepaPaymentEmail'));
+                event(new ActivityEvent($user, ActivityEventEnum::EmailSent->value, 'Knowcrunch - Welcome to our course ' . $user->firstname . ', ' . Carbon::now()->format('d F Y')));
             }
         }
     }
@@ -368,14 +371,17 @@ if (!function_exists('loadSendEmailsData')) {
                     $coockie->save();
                 }
 
-                $emailsCollector[] = ['email' => $checkemailuser->email, 'name' => $fullname, 'first' => $firstname, 'id' => $checkemailuser->id,
-                    'mobile' => $checkemailuser->mobile, 'company' => $checkemailuser->company, 'jobTitle' => $checkemailuser->job_title, 'createAccount'=>$creatAccount];
+                $emailsCollector[] = [
+                    'email'  => $checkemailuser->email, 'name' => $fullname, 'first' => $firstname, 'id' => $checkemailuser->id,
+                    'mobile' => $checkemailuser->mobile, 'company' => $checkemailuser->company, 'jobTitle' => $checkemailuser->job_title, 'createAccount' => $creatAccount,
+                ];
             } else {
                 $newmembersdetails[] = $thismember;
                 $fullname = $thismember['firstname'] . ' ' . $thismember['lastname'];
                 $firstname = $thismember['firstname'];
-                $emailsCollector[] = ['id' => null, 'email' => $thismember['email'], 'name' => $fullname, 'first' => $firstname, 'company' => $thismember['company'],
-                    'mobile' => $thismember['mobile'], 'jobTitle' => $thismember['job_title'], 'createAccount'=>true,
+                $emailsCollector[] = [
+                    'id'     => null, 'email' => $thismember['email'], 'name' => $fullname, 'first' => $firstname, 'company' => $thismember['company'],
+                    'mobile' => $thismember['mobile'], 'jobTitle' => $thismember['job_title'], 'createAccount' => true,
                 ];
             }
         }
@@ -424,17 +430,17 @@ if (!function_exists('loadSendEmailsDataSubscription')) {
 
         if (isset($eventInfo['delivery']) && $eventInfo['delivery'] == 143) {
             $data['duration'] = isset($eventInfo['elearning']['visible']['emails']) && isset($eventInfo['elearning']['expiration']) &&
-                                $eventInfo['elearning']['visible']['emails'] && isset($eventInfo['elearning']['text']) ?
-                                            $eventInfo['elearning']['expiration'] . ' ' . $eventInfo['elearning']['text'] : '';
+            $eventInfo['elearning']['visible']['emails'] && isset($eventInfo['elearning']['text']) ?
+                $eventInfo['elearning']['expiration'] . ' ' . $eventInfo['elearning']['text'] : '';
         } elseif (isset($eventInfo['delivery']) && $eventInfo['delivery'] == 139) {
             $data['duration'] = isset($eventInfo['inclass']['dates']['visible']['emails']) && isset($eventInfo['inclass']['dates']['text']) &&
-                                    $eventInfo['inclass']['dates']['visible']['emails'] ? $eventInfo['inclass']['dates']['text'] : '';
+            $eventInfo['inclass']['dates']['visible']['emails'] ? $eventInfo['inclass']['dates']['text'] : '';
 
             $data['duration'] = strip_tags($data['duration']);
         }
 
         $data['hours'] = isset($eventInfo['hours']['visible']['emails']) && $eventInfo['hours']['visible']['emails'] && isset($eventInfo['hours']['hour']) &&
-                        isset($eventInfo['hours']['text']) ? $eventInfo['hours']['hour'] . ' ' . $eventInfo['hours']['text'] : '';
+        isset($eventInfo['hours']['text']) ? $eventInfo['hours']['hour'] . ' ' . $eventInfo['hours']['text'] : '';
 
         $data['firstName'] = $user['firstname'];
         $data['slug'] = 'asd';
@@ -578,10 +584,10 @@ if (!function_exists('sendRequest')) {
         Log::info($header);
 
         $options = [
-            CURLOPT_HTTPHEADER => $header,
-            CURLOPT_HEADER => false,
-            CURLOPT_URL => $baseURI,
-            CURLOPT_POST => true,
+            CURLOPT_HTTPHEADER     => $header,
+            CURLOPT_HEADER         => false,
+            CURLOPT_URL            => $baseURI,
+            CURLOPT_POST           => true,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_SSL_VERIFYPEER => false,
         ];
@@ -609,9 +615,9 @@ if (!function_exists('sendRequest')) {
             Log::info(curl_errno($ch));
 
             return [
-                'success' => false,
-                'message' => curl_error($ch),
-                'code' => curl_errno($ch),
+                'success'   => false,
+                'message'   => curl_error($ch),
+                'code'      => curl_errno($ch),
                 'http_info' => (object) $httpInfo,
             ];
         }
@@ -619,10 +625,10 @@ if (!function_exists('sendRequest')) {
         $parts = explode('&', $response);
 
         return [
-            'success' => true,
-            'message' => false,
-            'code' => false,
-            'oauth_token' => explode('=', $parts[0])[1],
+            'success'      => true,
+            'message'      => false,
+            'code'         => false,
+            'oauth_token'  => explode('=', $parts[0])[1],
             'oauth_secret' => explode('=', $parts[1])[1],
         ];
     }
@@ -653,12 +659,12 @@ if (!function_exists('twitter_get_auth_token_v1')) {
     function twitter_get_auth_token_v1()
     {
         $oauthParams = [
-            'oauth_callback' => config('app.MIX_APP_URL') . '/myaccount/share-twitter',
-            'oauth_consumer_key' => env('consumer_key'), // consumer key from your twitter app: https://apps.twitter.com
-            'oauth_nonce' => md5(uniqid()),
+            'oauth_callback'         => config('app.MIX_APP_URL') . '/myaccount/share-twitter',
+            'oauth_consumer_key'     => env('consumer_key'), // consumer key from your twitter app: https://apps.twitter.com
+            'oauth_nonce'            => md5(uniqid()),
             'oauth_signature_method' => 'HMAC-SHA1',
-            'oauth_timestamp' => time(),
-            'oauth_version' => '1.0',
+            'oauth_timestamp'        => time(),
+            'oauth_version'          => '1.0',
         ];
 
         $baseURI = 'https://api.twitter.com/oauth/request_token';
@@ -688,8 +694,8 @@ if (!function_exists('twitter_upload_image')) {
     {
         $credentials = [
             //these are values that you can obtain from developer portal:
-            'consumer_key' => env('consumer_key'), // identifies your app, always needed
-            'consumer_secret' => env('consumer_secret'), // app secret, always needed
+            'consumer_key'     => env('consumer_key'), // identifies your app, always needed
+            'consumer_secret'  => env('consumer_secret'), // app secret, always needed
             //'bearer_token' => $code, // OAuth 2.0 Bearer Token requests
 
             //this is a value created duting an OAuth 2.0 with PKCE authentication flow:
@@ -697,7 +703,7 @@ if (!function_exists('twitter_upload_image')) {
 
             //these are values created during an OAuth 1.0a authentication flow to act ob behalf of other users, but these can also be obtained for your app from the developer portal in order to act on behalf of your app.
             'token_identifier' => $oauth_token, // OAuth 1.0a User Context requests
-            'token_secret' => $oauth_token_secret, // OAuth 1.0a User Context requests
+            'token_secret'     => $oauth_token_secret, // OAuth 1.0a User Context requests
         ];
 
         $twitter = new BirdElephant($credentials);
@@ -734,7 +740,7 @@ if (!function_exists('add_event_statistic_queue')) {
                     ->where('event_id', $eventId)
                     ->insert(
                         [
-                            'event_id' => $eventId,
+                            'event_id'   => $eventId,
                             'created_at' => date('Y-m-d H:i:s'),
                             'updated_at' => date('Y-m-d H:i:s'),
                         ]
@@ -793,12 +799,12 @@ if (!function_exists('get_countdowns')) {
     {
         //$countdowns = $event->delivery->first()->countdown()->where('published_from', '>=', date('Y-m-d'))->where('published_to', '=', date('Y-m-d'))->where('countdown_from', '>=', date('Y-m-d H:s'))->where('countdown_to', '<=', date('Y-m-d H:s'))->get();
         $countdowns = $event->countdown()->first() ? $event->countdown()
-                        ->where('published', true)
-                        // ->where('published_from', '<=', date('Y-m-d'))
-                        // ->where('published_to', '>=', date('Y-m-d'))
-                        ->where('countdown_to', '>=', date('Y-m-d H:s'))
-                        ->get()
-                        ->toArray() : [];
+            ->where('published', true)
+            // ->where('published_from', '<=', date('Y-m-d'))
+            // ->where('published_to', '>=', date('Y-m-d'))
+            ->where('countdown_to', '>=', date('Y-m-d H:s'))
+            ->get()
+            ->toArray() : [];
 
         if (empty($countdowns)) {
             $countdowns = $event->category->first() ? $event->category->first()->countdown()
@@ -960,12 +966,12 @@ if (!function_exists('cdnPath')) {
         $parseRes = parse_url($asset);
         if ($parseRes) {
             if (isset($parseRes['query'])) {
-                return  '//' . rtrim($cdn, '/') . '/' . ltrim($parseRes['path'] . '?' . $parseRes['query'], '/');
+                return '//' . rtrim($cdn, '/') . '/' . ltrim($parseRes['path'] . '?' . $parseRes['query'], '/');
             } else {
-                return  '//' . rtrim($cdn, '/') . '/' . ltrim($parseRes['path'], '/');
+                return '//' . rtrim($cdn, '/') . '/' . ltrim($parseRes['path'], '/');
             }
         } else {
-            return  '//' . rtrim($cdn, '/') . '/' . ltrim($asset, '/');
+            return '//' . rtrim($cdn, '/') . '/' . ltrim($asset, '/');
         }
     }
 }
@@ -981,7 +987,7 @@ if (!function_exists('cdnPath')) {
 }*/
 
 if (!function_exists('is_webp_acceptable')) {
-    function getIOSVersion(string $userAgent): int | null
+    function getIOSVersion(string $userAgent): int|null
     {
         // Regular expression to match the iOS version in the user agent string
         if (preg_match('/iPhone OS (\d+)_?(\d+)?_?(\d+)?/', $userAgent, $matches)) {
@@ -1373,26 +1379,26 @@ if (!function_exists('get_menu')) {
         $menu = NewMenu::find($id);
 
         return [
-            'name' => $menu->name ?? '',
+            'name'  => $menu->name ?? '',
             'title' => $menu->custom_class ?? '',
         ];
     }
 }
 
 if (!function_exists('update_dropbox_api')) {
-    function update_dropbox_api() : void
+    function update_dropbox_api(): void
     {
         $t = base64_encode(config('filesystems.disks.dropbox.appSecret') . ':' . config('filesystems.disks.dropbox.secret'));
 
         $endpoint = 'https://api.dropbox.com/oauth2/token';
-        $client = new \GuzzleHttp\Client(['headers' => ['Content-Type'=> 'application/json', 'Authorization' => 'Basic ' . $t]]);
+        $client = new \GuzzleHttp\Client(['headers' => ['Content-Type' => 'application/json', 'Authorization' => 'Basic ' . $t]]);
 
         $response = $client->request(
             'POST',
             $endpoint,
             [
                 'form_params' => [
-                    'grant_type' =>  'refresh_token',
+                    'grant_type'    => 'refresh_token',
                     'refresh_token' => config('filesystems.disks.dropbox.refresh_token'),
                 ],
             ]
@@ -1414,7 +1420,7 @@ if (!function_exists('update_dropbox_api')) {
 }
 
 if (!function_exists('update_env_general')) {
-    function update_env_general($data = []) : void
+    function update_env_general($data = []): void
     {
         $newData = [$data['key'] => $data['value']];
         $path = base_path('.env');

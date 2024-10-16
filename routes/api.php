@@ -11,10 +11,12 @@ use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\PassportAuthController;
 use App\Http\Controllers\Api\PlanController;
 use App\Http\Controllers\Api\RoleController;
+use App\Http\Controllers\Api\TagController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\v1\CareerController;
 use App\Http\Controllers\Api\v1\CategoryController;
 use App\Http\Controllers\Api\v1\CityController;
+use App\Http\Controllers\Api\v1\DashboardController;
 use App\Http\Controllers\Api\v1\DeliveryController;
 use App\Http\Controllers\Api\v1\Event\EventController;
 use App\Http\Controllers\Api\v1\Event\EventExamController;
@@ -55,6 +57,7 @@ use App\Http\Controllers\Api\v1\TicketController;
 use App\Http\Controllers\Api\v1\TopicController;
 use App\Http\Controllers\Api\v1\Transactions\Participants\StatisticsController;
 use App\Http\Controllers\Api\v1\TypeController;
+use App\Http\Controllers\Api\v1\UserController as V1UserControllerAlias;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -136,9 +139,45 @@ Route::middleware('auth:api')->group(function () {
     Route::resource('notifications', NotificationController::class)
         ->only(['index', 'update']);
 
-    // Roles
-    Route::resource('roles', RoleController::class)
-        ->only('index');
+    Route::prefix('roles')->group(function () {
+        Route::get('', [RoleController::class, 'index']);
+        Route::get('{role}', [RoleController::class, 'show']);
+        Route::post('', [RoleController::class, 'store']);
+        Route::put('{role}', [RoleController::class, 'update']);
+        Route::delete('{role}', [RoleController::class, 'destroy']);
+    });
+
+    Route::prefix('tags')->group(function () {
+        Route::get('', [TagController::class, 'index']);
+        Route::get('{tag}', [TagController::class, 'show']);
+        Route::post('', [TagController::class, 'store']);
+        Route::delete('{tag}', [TagController::class, 'destroy']);
+    });
+
+    Route::prefix('skills')->group(function () {
+        Route::get('', [SkillController::class, 'index']);
+        Route::get('{skill}', [SkillController::class, 'show']);
+        Route::post('', [SkillController::class, 'store']);
+        Route::put('{skill}', [SkillController::class, 'update']);
+        Route::delete('{skill}', [SkillController::class, 'destroy']);
+    });
+
+    Route::prefix('dashboard')->group(function () {
+        Route::get('statistic', [DashboardController::class, 'statistic']);
+    });
+
+    Route::prefix('v1')->group(function () {
+        Route::prefix('users')->group(function () {
+            Route::post('login-as/{user}', [V1UserControllerAlias::class, 'loginAs']);
+            Route::get('counts', [V1UserControllerAlias::class, 'userCounts']);
+
+            Route::get('', [V1UserControllerAlias::class, 'index']);
+            Route::get('{user}', [V1UserControllerAlias::class, 'show']);
+            Route::post('', [V1UserControllerAlias::class, 'store']);
+            Route::put('{user}', [V1UserControllerAlias::class, 'update']);
+            Route::delete('{user}', [V1UserControllerAlias::class, 'destroy']);
+        });
+    });
 });
 
 Route::post('/myaccount/reset', [ForgotPasswordController::class, 'sendResetLinkEmail']);
@@ -271,10 +310,6 @@ Route::group(['middleware' => ['auth:api', 'auth.aboveauthor'], 'prefix' => 'v1'
 
     // Career
     Route::apiResource('careers', CareerController::class)
-        ->only(['index']);
-
-    // Skill
-    Route::apiResource('skills', SkillController::class)
         ->only(['index']);
 });
 

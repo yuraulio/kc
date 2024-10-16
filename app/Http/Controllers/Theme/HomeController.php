@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Theme;
 
+use App\Enums\ActivityEventEnum;
+use App\Events\ActivityEvent;
 use App\Events\EmailSent;
 use App\Http\Controllers\Controller;
 use App\Jobs\SendEmail;
@@ -200,8 +202,8 @@ class HomeController extends Controller
             $user = User::create($input);
 
             $code = Activation::create([
-                'user_id' => $user->id,
-                'code' => Str::random(40),
+                'user_id'   => $user->id,
+                'code'      => Str::random(40),
                 'completed' => true,
             ]);
             $user->role()->attach(7);
@@ -258,31 +260,32 @@ class HomeController extends Controller
 
         if (isset($eventInfo['delivery']) && $eventInfo['delivery'] == 143) {
             $data['duration'] = isset($eventInfo['elearning']['visible']['emails']) && isset($eventInfo['elearning']['expiration']) &&
-                $eventInfo['elearning']['visible']['emails'] && isset($eventInfo['elearning']['text']) ?
+            $eventInfo['elearning']['visible']['emails'] && isset($eventInfo['elearning']['text']) ?
                 $eventInfo['elearning']['expiration'] . ' ' . $eventInfo['elearning']['text'] : '';
         } elseif (isset($eventInfo['delivery']) && $eventInfo['delivery'] == 139) {
             $data['duration'] = isset($eventInfo['inclass']['dates']['visible']['emails']) && isset($eventInfo['inclass']['dates']['text']) &&
-                $eventInfo['inclass']['dates']['visible']['emails'] ? $eventInfo['inclass']['dates']['text'] : '';
+            $eventInfo['inclass']['dates']['visible']['emails'] ? $eventInfo['inclass']['dates']['text'] : '';
         }
 
         $data['hours'] = isset($eventInfo['hours']['visible']['emails']) && $eventInfo['hours']['visible']['emails'] && isset($eventInfo['hours']['hour']) &&
-            isset($eventInfo['hours']['text']) ? $eventInfo['hours']['hour'] . ' ' . $eventInfo['hours']['text'] : '';
+        isset($eventInfo['hours']['text']) ? $eventInfo['hours']['hour'] . ' ' . $eventInfo['hours']['text'] : '';
 
         $data['language'] = isset($eventInfo['language']['visible']['emails']) && $eventInfo['language']['visible']['emails'] && isset($eventInfo['language']['text']) ? $eventInfo['language']['text'] : '';
 
         $data['certificate_type'] = isset($eventInfo['certificate']['visible']['emails']) && $eventInfo['certificate']['visible']['emails'] &&
-            isset($eventInfo['certificate']['type']) ? $eventInfo['certificate']['type'] : '';
+        isset($eventInfo['certificate']['type']) ? $eventInfo['certificate']['type'] : '';
 
         $eventStudents = get_sum_students_course($content->category->first());
         $data['students_number'] = isset($eventInfo['students']['number']) ? $eventInfo['students']['number'] : $eventStudents + 1;
 
         $data['students'] = isset($eventInfo['students']['visible']['emails']) && $eventInfo['students']['visible']['emails'] &&
-            isset($eventInfo['students']['text']) && $data['students_number'] >= $eventStudents ? $eventInfo['students']['text'] : '';
+        isset($eventInfo['students']['text']) && $data['students_number'] >= $eventStudents ? $eventInfo['students']['text'] : '';
 
         $data['firstName'] = $user->firstname;
 
         $user->notify(new WelcomeEmail($user, $data));
         event(new EmailSent($user->email, 'WelcomeEmail'));
+        event(new ActivityEvent($user, ActivityEventEnum::EmailSent->value, 'Knowcrunch - Welcome to our course ' . $user->firstname . ', ' . Carbon::now()->format('d F Y')));
 
         $student = $user->events->where('id', $content->id)->first();
 
@@ -297,20 +300,20 @@ class HomeController extends Controller
             $transaction_arr = [
 
                 'payment_method_id' => $payment_method_id,
-                'account_id' => 17,
-                'payment_status' => 2,
-                'billing_details' => json_encode([]), //serialize($billing_details),
-                'placement_date' => Carbon::now()->toDateTimeString(),
-                'ip_address' => '127.0.0.1',
-                'type' => $payment_cardtype, //((Sentinel::inRole('super_admin') || Sentinel::inRole('know-crunch')) ? 1 : 0),
-                'status' => 1, //2 PENDING, 0 FAILED, 1 COMPLETED
-                'is_bonus' => 0, //$input['is_bonus'],
-                'order_vat' => 0, //$input['credit'] - ($input['credit'] / (1 + Config::get('dpoptions.order_vat.value') / 100)),
-                'surcharge_amount' => 0,
-                'discount_amount' => 0,
-                'amount' => $namount, //$input['credit'],
-                'total_amount' => $namount,
-                'trial' => false,
+                'account_id'        => 17,
+                'payment_status'    => 2,
+                'billing_details'   => json_encode([]), //serialize($billing_details),
+                'placement_date'    => Carbon::now()->toDateTimeString(),
+                'ip_address'        => '127.0.0.1',
+                'type'              => $payment_cardtype, //((Sentinel::inRole('super_admin') || Sentinel::inRole('know-crunch')) ? 1 : 0),
+                'status'            => 1, //2 PENDING, 0 FAILED, 1 COMPLETED
+                'is_bonus'          => 0, //$input['is_bonus'],
+                'order_vat'         => 0, //$input['credit'] - ($input['credit'] / (1 + Config::get('dpoptions.order_vat.value') / 100)),
+                'surcharge_amount'  => 0,
+                'discount_amount'   => 0,
+                'amount'            => $namount, //$input['credit'],
+                'total_amount'      => $namount,
+                'trial'             => false,
             ];
 
             $transaction = Transaction::create($transaction_arr);
@@ -319,8 +322,8 @@ class HomeController extends Controller
                 // set transaction id in session
 
                 $pay_seats_data = [
-                    'names' => [$user->first_name], 'surnames' => [$user->last_name], 'emails' => [$user->email],
-                    'mobiles' => [$user->mobile], 'addresses' => [$user->address], 'addressnums' => [$user->address_num],
+                    'names'     => [$user->first_name], 'surnames' => [$user->last_name], 'emails' => [$user->email],
+                    'mobiles'   => [$user->mobile], 'addresses' => [$user->address], 'addressnums' => [$user->address_num],
                     'postcodes' => [$user->postcode], 'cities' => [$user->city], 'jobtitles' => [$user->job_title],
                     'companies' => [$user->company], 'students' => [''], 'afms' => [$user->afm],
                 ];
@@ -329,18 +332,18 @@ class HomeController extends Controller
                 $cart_data = ['manualtransaction' => ['rowId' => 'manualtransaction', 'id' => 'free', 'name' => $content->title, 'qty' => '1', 'price' => $amount, 'options' => ['type' => '8', 'event' => $content->id], 'tax' => 0, 'subtotal' => $amount]];
 
                 $status_history[] = [
-                    'datetime' => Carbon::now()->toDateTimeString(),
-                    'status' => 1,
-                    'user' => [
-                        'id' => $user->id, //0, $this->current_user->id,
+                    'datetime'        => Carbon::now()->toDateTimeString(),
+                    'status'          => 1,
+                    'user'            => [
+                        'id'    => $user->id, //0, $this->current_user->id,
                         'email' => $user->email, //$this->current_user->email
                     ],
-                    'pay_seats_data' => $pay_seats_data, //$data['pay_seats_data'],
-                    'pay_bill_data' => [],
-                    'cardtype' => 8,
-                    'installments' => 1,
+                    'pay_seats_data'  => $pay_seats_data, //$data['pay_seats_data'],
+                    'pay_bill_data'   => [],
+                    'cardtype'        => 8,
+                    'installments'    => 1,
                     'deree_user_data' => $deree_user_data, //$data['deree_user_data'],
-                    'cart_data' => $cart_data, //$cart
+                    'cart_data'       => $cart_data, //$cart
                 ];
 
                 $transaction->update(['status_history' => json_encode($status_history)/*, 'billing_details' => $tbd*/]);
@@ -358,7 +361,7 @@ class HomeController extends Controller
                 } else {
                     $content->users()->updateExistingPivot($user, [
                         'expiration' => $expiration_date,
-                        'paid' => true,
+                        'paid'       => true,
                     ]);
                 }
 
@@ -445,8 +448,8 @@ class HomeController extends Controller
             $user = User::create($input);
 
             $code = Activation::create([
-                'user_id' => $user->id,
-                'code' => Str::random(40),
+                'user_id'   => $user->id,
+                'code'      => Str::random(40),
                 'completed' => true,
             ]);
             $user->role()->attach(7);
@@ -500,26 +503,26 @@ class HomeController extends Controller
 
         if (isset($eventInfo['delivery']) && $eventInfo['delivery'] == 143) {
             $data['duration'] = isset($eventInfo['elearning']['visible']['emails']) && isset($eventInfo['elearning']['expiration']) &&
-                $eventInfo['elearning']['visible']['emails'] && isset($eventInfo['elearning']['text']) ?
+            $eventInfo['elearning']['visible']['emails'] && isset($eventInfo['elearning']['text']) ?
                 $eventInfo['elearning']['expiration'] . ' ' . $eventInfo['elearning']['text'] : '';
         } elseif (isset($eventInfo['delivery']) && $eventInfo['delivery'] == 139) {
             $data['duration'] = isset($eventInfo['inclass']['dates']['visible']['emails']) && isset($eventInfo['inclass']['dates']['text']) &&
-                $eventInfo['inclass']['dates']['visible']['emails'] ? $eventInfo['inclass']['dates']['text'] : '';
+            $eventInfo['inclass']['dates']['visible']['emails'] ? $eventInfo['inclass']['dates']['text'] : '';
         }
 
         $data['hours'] = isset($eventInfo['hours']['visible']['emails']) && $eventInfo['hours']['visible']['emails'] && isset($eventInfo['hours']['hour']) &&
-            isset($eventInfo['hours']['text']) ? $eventInfo['hours']['hour'] . ' ' . $eventInfo['hours']['text'] : '';
+        isset($eventInfo['hours']['text']) ? $eventInfo['hours']['hour'] . ' ' . $eventInfo['hours']['text'] : '';
 
         $data['language'] = isset($eventInfo['language']['visible']['emails']) && $eventInfo['language']['visible']['emails'] && isset($eventInfo['language']['text']) ? $eventInfo['language']['text'] : '';
 
         $data['certificate_type'] = isset($eventInfo['certificate']['visible']['emails']) && $eventInfo['certificate']['visible']['emails'] &&
-            isset($eventInfo['certificate']['type']) ? $eventInfo['certificate']['type'] : '';
+        isset($eventInfo['certificate']['type']) ? $eventInfo['certificate']['type'] : '';
 
         $eventStudents = get_sum_students_course($content->category->first());
         $data['students_number'] = isset($eventInfo['students']['number']) ? $eventInfo['students']['number'] : $eventStudents + 1;
 
         $data['students'] = isset($eventInfo['students']['visible']['emails']) && $eventInfo['students']['visible']['emails'] &&
-            isset($eventInfo['students']['text']) && $data['students_number'] >= $eventStudents ? $eventInfo['students']['text'] : '';
+        isset($eventInfo['students']['text']) && $data['students_number'] >= $eventStudents ? $eventInfo['students']['text'] : '';
 
         $data['firstName'] = $user->firstname;
 
@@ -851,16 +854,16 @@ class HomeController extends Controller
     public function giveAway(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'cname' => 'required',
+            'cname'    => 'required',
             'csurname' => 'required',
-            'ctel' => 'required',
+            'ctel'     => 'required',
             //'cemail' => 'required|email|unique:give_aways,email'
         ]);
 
         if ($validator->fails()) {
             return [
-                'status' => 0,
-                'errors' => $validator->errors(),
+                'status'  => 0,
+                'errors'  => $validator->errors(),
                 'message' => '',
             ];
         }
@@ -890,7 +893,7 @@ class HomeController extends Controller
 
         return [
             'success' => true,
-            'status' => 1,
+            'status'  => 1,
             'message' => 'Τhank you for your participation',
         ];
     }

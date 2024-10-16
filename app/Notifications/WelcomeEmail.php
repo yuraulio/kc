@@ -2,6 +2,8 @@
 
 namespace App\Notifications;
 
+use App\Enums\ActivityEventEnum;
+use App\Events\ActivityEvent;
 use App\Jobs\SendEmail;
 use App\Model\Activation;
 use App\Model\User;
@@ -9,7 +11,6 @@ use App\Notifications\SendMailchimpMail;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Str;
@@ -35,7 +36,8 @@ class WelcomeEmail extends Notification
     /**
      * Get the notification's delivery channels.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
+     *
      * @return array
      */
     public function via($notifiable)
@@ -81,5 +83,7 @@ class WelcomeEmail extends Notification
             'DurationDescription'=>$this->data['duration'],
             'LINK'=>$this->data['slug'],
         ], ['event_id'=>$this->data['eventId']]);
+
+        event(new ActivityEvent($this->user, ActivityEventEnum::EmailSent->value, $subject . ', ' . Carbon::now()->format('d F Y')));
     }
 }

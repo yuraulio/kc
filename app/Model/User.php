@@ -3,18 +3,19 @@
 namespace App\Model;
 
 use App\CMSFile;
+use App\Enums\RoleEnum;
 use App\Enums\WorkExperience;
-use App\Model\Absence;
-use App\Model\Activation;
 use App\Model\Admin\Comment;
 use App\Services\QueryString\Traits\Filterable;
 use App\Services\QueryString\Traits\Searchable;
 use App\Services\QueryString\Traits\Sortable;
 use App\Traits\MediaTrait;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -27,12 +28,14 @@ use Spatie\Sluggable\SlugOptions;
 class User extends Authenticatable
 {
     use Notifiable, HasApiTokens, MediaTrait, Billable, SoftDeletes, Filterable, Sortable, Searchable, HasSlug;
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
+        'slug',
         'email',
         'password',
         'company',
@@ -69,6 +72,9 @@ class User extends Authenticatable
         'will_work_in_person',
         'work_experience',
         'is_public_profile_enabled',
+        'notes',
+        'profile_status',
+        'account_status',
     ];
 
     /**
@@ -79,19 +85,21 @@ class User extends Authenticatable
     protected $hidden = ['password', 'remember_token'];
 
     protected $casts = [
-        'social_links' => 'json',
-        'is_employee' => 'boolean',
-        'is_freelancer' => 'boolean',
-        'will_work_remote' => 'boolean',
-        'will_work_in_person' => 'boolean',
-        'work_experience' => WorkExperience::class,
+        'social_links'              => 'json',
+        'invoice_details'           => 'json',
+        'receipt_details'           => 'json',
+        'is_employee'               => 'boolean',
+        'is_freelancer'             => 'boolean',
+        'will_work_remote'          => 'boolean',
+        'will_work_in_person'       => 'boolean',
+        'work_experience'           => WorkExperience::class,
         'is_public_profile_enabled' => 'boolean',
     ];
 
     /**
      * Get the options for generating the slug.
      */
-    public function getSlugOptions() : SlugOptions
+    public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()
             ->generateSlugsFrom(['firstname', 'lastname'])
@@ -110,12 +118,18 @@ class User extends Authenticatable
         return $query->select('id', 'firstname', 'lastname', 'email')->get();
     }
 
+    public function scopeRole(Builder $query, RoleEnum $role): Builder
+    {
+        return $query->whereHas('roles', function ($q) use ($role) {
+            $q->where('roles.id', $role);
+        });
+    }
+
     /**
      * Get the role of the user.
      *
-     * @deprecated Use the roles() method.
-     *
      * @return \App\Model\Role
+     * @deprecated Use the roles() method.
      */
     public function role()
     {
@@ -181,12 +195,7 @@ class User extends Authenticatable
      */
     public function isAdmin()
     {
-        return $this->role->where('id', 1)->first() ? true : false;
-    }
-
-    public function isAdministrator()
-    {
-        return $this->role->where('id', 2)->first() ? true : false;
+        return $this->role->whereIn('id', [1, 2])->first() ? true : false;
     }
 
     /**
@@ -325,6 +334,11 @@ class User extends Authenticatable
     public function eventSubscriptions()
     {
         return $this->belongsToMany(Subscription::class, 'subscription_user_event')->with('event')->withPivot('expiration');
+    }
+
+    public function subscriptions(): HasMany
+    {
+        return $this->hasMany(Subscription::class);
     }
 
     public function cookiesSMS()
@@ -747,14 +761,14 @@ class User extends Authenticatable
                 if (!isset($videos[$vimeo_id])) {
                     $change += 1;
                     $videos[$vimeo_id] = [
-                        'seen' => 0,
-                        'tab' => $tab . $vimeo_id,
-                        'lesson_id' => $lesson['id'],
-                        'stop_time' => 0,
-                        'total_seen' => 0,
-                        'percentMinutes' => 0,
-                        'total_duration' => getLessonDurationToSec($lesson['vimeo_duration']),
-                        'is_new' => $is_new,
+                        'seen'                => 0,
+                        'tab'                 => $tab . $vimeo_id,
+                        'lesson_id'           => $lesson['id'],
+                        'stop_time'           => 0,
+                        'total_seen'          => 0,
+                        'percentMinutes'      => 0,
+                        'total_duration'      => getLessonDurationToSec($lesson['vimeo_duration']),
+                        'is_new'              => $is_new,
                         'send_automate_email' => isset($videos[$vimeo_id]['send_automate_email']) ? $videos[$vimeo_id]['send_automate_email'] : 0,
                     ];
                     $notes[$vimeo_id] = '';
@@ -768,14 +782,14 @@ class User extends Authenticatable
                     $isNeww = isset($videos[$vimeo_id]['is_new']) ? $videos[$vimeo_id]['is_new'] : 0;
 
                     $videos[$vimeo_id] = [
-                        'seen' => $seenn,
-                        'tab' => $tab . $vimeo_id,
-                        'lesson_id' => $lesson['id'],
-                        'stop_time' => $stopTimee,
-                        'total_seen' => $totalSeenn,
-                        'percentMinutes' => $percentMinutess,
-                        'total_duration' => getLessonDurationToSec($lesson['vimeo_duration']),
-                        'is_new' => $isNeww,
+                        'seen'                => $seenn,
+                        'tab'                 => $tab . $vimeo_id,
+                        'lesson_id'           => $lesson['id'],
+                        'stop_time'           => $stopTimee,
+                        'total_seen'          => $totalSeenn,
+                        'percentMinutes'      => $percentMinutess,
+                        'total_duration'      => getLessonDurationToSec($lesson['vimeo_duration']),
+                        'is_new'              => $isNeww,
                         'send_automate_email' => isset($videos[$vimeo_id]['send_automate_email']) ? $videos[$vimeo_id]['send_automate_email'] : 0,
                     ];
 
@@ -802,7 +816,7 @@ class User extends Authenticatable
         }
 
         $newStatistics = [
-            'videos' => json_encode($videos), 'notes' => json_encode($notes), 'lastVideoSeen' => $lastVideoSeen,
+            'videos'     => json_encode($videos), 'notes' => json_encode($notes), 'lastVideoSeen' => $lastVideoSeen,
             'created_at' => $createdAt, 'updated_at' => $updatedAt, 'event_id' => $event['id'], 'user_id' => $this->id,
         ];
 
@@ -908,7 +922,8 @@ class User extends Authenticatable
     /**
      * Route notifications for the Slack channel.
      *
-     * @param  \Illuminate\Notifications\Notification  $notification
+     * @param \Illuminate\Notifications\Notification $notification
+     *
      * @return string
      */
     public function routeNotificationForSlack($notification)
@@ -930,5 +945,15 @@ class User extends Authenticatable
     public function shoppingCarts(): HasMany
     {
         return $this->hasMany(ShoppingCart::class, 'identifier');
+    }
+
+    public function tags(): MorphToMany
+    {
+        return $this->morphToMany(Tag::class, 'entity', 'taggables');
+    }
+
+    public function activities(): HasMany
+    {
+        return $this->hasMany(UserActivity::class);
     }
 }

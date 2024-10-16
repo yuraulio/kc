@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\Enums\ActivityEventEnum;
+use App\Events\ActivityEvent;
 use App\Events\EmailSent;
 use App\Model\Event;
 use App\Model\EventStatistic;
@@ -9,6 +11,7 @@ use App\Model\Topic;
 use App\Model\User;
 use App\Notifications\ErrorSlack;
 use App\Notifications\SendTopicAutomateMail;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 
 class ELearningService
@@ -76,11 +79,11 @@ class ELearningService
                 }
 
                 $eventStatisticModel->update([
-                    'lastVideoSeen' => $lastVideoSeen,
-                    'videos' => json_encode($videos),
-                    'total_seen' => $total_seen,
+                    'lastVideoSeen'  => $lastVideoSeen,
+                    'videos'         => json_encode($videos),
+                    'total_seen'     => $total_seen,
                     'total_duration' => $total_duration,
-                    'last_seen' => date('Y-m-d H:i:s'),
+                    'last_seen'      => date('Y-m-d H:i:s'),
                 ]);
 
                 if (isset($_COOKIE['examMessage-' . $eventStatistic])) {
@@ -138,6 +141,7 @@ class ELearningService
 
                 $user->notify(new SendTopicAutomateMail($data, $user));
                 event(new EmailSent($user->email, 'SendTopicAutomateMail'));
+                event(new ActivityEvent($user, ActivityEventEnum::EmailSent->value, $data['subject'] . ', ' . Carbon::now()->format('d F Y')));
 
                 // find all topic lessons for update
                 foreach ($event->lessons()->wherePivot('topic_id', $topic->id)->get() as $lesson) {

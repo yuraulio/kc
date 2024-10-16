@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Webhook;
 
+use App\Enums\ActivityEventEnum;
+use App\Events\ActivityEvent;
 use App\Events\EmailSent;
 use App\Http\Controllers\Controller;
 use App\Jobs\SendEmail;
@@ -15,10 +17,8 @@ use App\Notifications\AfterSepaPaymentEmail;
 use App\Notifications\CourseInvoice;
 use App\Notifications\ErrorSlack;
 use App\Notifications\SubscriptionWelcome;
-use App\Notifications\WelcomeEmail;
 use App\Services\FBPixelService;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Laravel\Cashier\Cashier;
@@ -174,7 +174,7 @@ class WebhookController extends BaseWebhookController
 
             foreach ($transaction['user'] as $user) {
                 $user->events_for_user_list1()->wherePivot('event_id', $event->id)->updateExistingPivot($event->id, [
-                    'paid' => 0,
+                    'paid'       => 0,
                     'expiration' => date('Y-m-d'),
                 ], false);
             }
@@ -202,7 +202,7 @@ class WebhookController extends BaseWebhookController
                     //Log::info('paid 0 for a user');
 
                     $user->events_for_user_list1()->wherePivot('event_id', $event->id)->updateExistingPivot($event->id, [
-                        'paid' => 0,
+                        'paid'       => 0,
                         'expiration' => date('Y-m-d'),
                     ], false);
                 }
@@ -282,12 +282,12 @@ class WebhookController extends BaseWebhookController
                     if ($event) {
                         DB::table('event_user')
                             ->insert([
-                                'event_id' => $event->id,
-                                'user_id' => $user->id,
-                                'paid' => 1,
+                                'event_id'         => $event->id,
+                                'user_id'          => $user->id,
+                                'paid'             => 1,
                                 'expiration_email' => 0,
-                                'comment' => 'automatically added from webhook',
-                                'payment_method' => PaymentMethod::DEFAULT_PAYMENT_METHOD,
+                                'comment'          => 'automatically added from webhook',
+                                'payment_method'   => PaymentMethod::DEFAULT_PAYMENT_METHOD,
                             ]);
                         $user = User::first();
                         $user->notify(new ErrorSlack('The user ' . $user->firstname . ' ' . $user->lastname . ' ' . $user->email . ', didn\'t have event_user register for the event ' . $event->title . '. We have automatically inserted this register, but we have to check why it happens.'));
@@ -399,25 +399,27 @@ class WebhookController extends BaseWebhookController
                                 $charge['payment_intent'] = $payment_intent;
                             }
 
-                            $pay_seats_data = ['names' => [$user->firstname], 'surnames' => [$user->lastname], 'emails' => [$user->email],
-                                'mobiles' => [$user->mobile], 'addresses' => [$user->address], 'addressnums' => [$user->address_num],
+                            $pay_seats_data = [
+                                'names'     => [$user->firstname], 'surnames' => [$user->lastname], 'emails' => [$user->email],
+                                'mobiles'   => [$user->mobile], 'addresses' => [$user->address], 'addressnums' => [$user->address_num],
                                 'postcodes' => [$user->postcode], 'cities' => [$user->city], 'jobtitles' => [$user->job_title],
-                                'companies' => [$user->company], 'students' => [''], 'afms' => [$user->afm]];
+                                'companies' => [$user->company], 'students' => [''], 'afms' => [$user->afm],
+                            ];
 
                             $status_history = [];
                             //$payment_cardtype = intval($input["cardtype"]);
                             $status_history[] = [
-                                'datetime' => Carbon::now()->toDateTimeString(),
-                                'status' => 1,
-                                'user' => [
-                                    'id' => $user->id,
+                                'datetime'        => Carbon::now()->toDateTimeString(),
+                                'status'          => 1,
+                                'user'            => [
+                                    'id'    => $user->id,
                                     'email' => $user->email,
                                 ],
-                                'pay_seats_data' => $pay_seats_data,
-                                'pay_bill_data' => $user->receipt_details,
+                                'pay_seats_data'  => $pay_seats_data,
+                                'pay_bill_data'   => $user->receipt_details,
                                 'deree_user_data' => [$user->email => ''],
                                 //'cardtype' => $payment_cardtype,
-                                'installments' => $totalinst,
+                                'installments'    => $totalinst,
 
                             ];
 
@@ -426,22 +428,22 @@ class WebhookController extends BaseWebhookController
                             $transaction_arr = [
 
                                 'payment_method_id' => 100, //$input['payment_method_id'],
-                                'account_id' => 17,
-                                'payment_status' => 2,
-                                'billing_details' => $user->receipt_details,
-                                'status_history' => json_encode($status_history),
-                                'placement_date' => Carbon::now()->toDateTimeString(),
-                                'ip_address' => \Request::ip(),
-                                'status' => 1, //2 PENDING, 0 FAILED, 1 COMPLETED
-                                'is_bonus' => 0,
-                                'order_vat' => 0,
-                                'payment_response' => json_encode($charge),
-                                'surcharge_amount' => 0,
-                                'discount_amount' => 0,
-                                'coupon_code' => '',
-                                'amount' => ceil($subscription->price * $totalinst),
-                                'total_amount' => ceil($subscription->price * $totalinst),
-                                'trial' => false,
+                                'account_id'        => 17,
+                                'payment_status'    => 2,
+                                'billing_details'   => $user->receipt_details,
+                                'status_history'    => json_encode($status_history),
+                                'placement_date'    => Carbon::now()->toDateTimeString(),
+                                'ip_address'        => \Request::ip(),
+                                'status'            => 1, //2 PENDING, 0 FAILED, 1 COMPLETED
+                                'is_bonus'          => 0,
+                                'order_vat'         => 0,
+                                'payment_response'  => json_encode($charge),
+                                'surcharge_amount'  => 0,
+                                'discount_amount'   => 0,
+                                'coupon_code'       => '',
+                                'amount'            => ceil($subscription->price * $totalinst),
+                                'total_amount'      => ceil($subscription->price * $totalinst),
+                                'trial'             => false,
                             ];
 
                             $transaction = Transaction::create($transaction_arr);
@@ -462,7 +464,7 @@ class WebhookController extends BaseWebhookController
 
                                 $transaction->update([
                                     'payment_response' => json_encode($tranRespArray),
-                                    'status' => 1,
+                                    'status'           => 1,
                                 ]);
                             }
                         }
@@ -587,13 +589,13 @@ class WebhookController extends BaseWebhookController
 
         $status_history = [];
         $status_history[] = [
-            'datetime' => Carbon::now()->toDateTimeString(),
-            'status' => 1,
-            'user' => [
-                'id' => $user->id,
+            'datetime'        => Carbon::now()->toDateTimeString(),
+            'status'          => 1,
+            'user'            => [
+                'id'    => $user->id,
                 'email' => $user->email,
             ],
-            'pay_bill_data' => $user->invoice_details,
+            'pay_bill_data'   => $user->invoice_details,
             'deree_user_data' => [$user->email => ''],
 
         ];
@@ -601,23 +603,23 @@ class WebhookController extends BaseWebhookController
         $transaction_arr = [
 
             'payment_method_id' => 100, //$input['payment_method_id'],
-            'account_id' => 17,
-            'payment_status' => 2,
-            'billing_details' => $user->receipt_details,
-            'status_history' => json_encode($status_history),
-            'placement_date' => Carbon::now()->toDateTimeString(),
-            'ip_address' => \Request::ip(),
-            'status' => 1, //2 PENDING, 0 FAILED, 1 COMPLETED
-            'is_bonus' => 0,
-            'order_vat' => 0,
-            'payment_response' => json_encode($charge),
-            'surcharge_amount' => 0,
-            'discount_amount' => 0,
+            'account_id'        => 17,
+            'payment_status'    => 2,
+            'billing_details'   => $user->receipt_details,
+            'status_history'    => json_encode($status_history),
+            'placement_date'    => Carbon::now()->toDateTimeString(),
+            'ip_address'        => \Request::ip(),
+            'status'            => 1, //2 PENDING, 0 FAILED, 1 COMPLETED
+            'is_bonus'          => 0,
+            'order_vat'         => 0,
+            'payment_response'  => json_encode($charge),
+            'surcharge_amount'  => 0,
+            'discount_amount'   => 0,
 
-            'amount' => $sub['amount'] / 100,
+            'amount'       => $sub['amount'] / 100,
             'total_amount' => $sub['amount'] / 100,
-            'trial' => $sub['amount'] / 100 <= 0 ? true : false,
-            'ends_at' => date('Y-m-d H:i:s', $ends_at),
+            'trial'        => $sub['amount'] / 100 <= 0 ? true : false,
+            'ends_at'      => date('Y-m-d H:i:s', $ends_at),
         ];
 
         $subscription->event->first()->pivot->expiration = date('Y-m-d', $ends_at);
@@ -669,6 +671,7 @@ class WebhookController extends BaseWebhookController
             // TODO
             $user->notify(new AfterSepaPaymentEmail($user, $datamail));
             event(new EmailSent($user->email, 'AfterSepaPaymentEmail'));
+            event(new ActivityEvent($user, ActivityEventEnum::EmailSent->value, 'Knowcrunch - Welcome to our course ' . $user->firstname . ', ' . Carbon::now()->format('d F Y')));
         }
         if ($sub['amount'] / 100 > 0) {
             $invoiceNumber = generate_invoice_number($paymentMethod->id);
@@ -735,10 +738,11 @@ class WebhookController extends BaseWebhookController
                 $tr_price .= '.00';
             }
 
-            $data['tigran'] = ['OrderSuccess_id' => $transaction->id, 'OrderSuccess_total' => $tr_price, 'Price' => $tr_price,
-                'Product_id' => $subscription->event->first()->id, 'Product_SKU' => $subscription->event->first()->id,
-                'Product_SKU' => $subscription->event->first()->id, 'ProductCategory' => 'Video e-learning courses',
-                'ProductName' => $subscription->event->first()->title, 'Quantity' => 1, 'TicketType' => 'Subscription', 'Event_ID' => 'kc_' . time(),
+            $data['tigran'] = [
+                'OrderSuccess_id' => $transaction->id, 'OrderSuccess_total' => $tr_price, 'Price' => $tr_price,
+                'Product_id'      => $subscription->event->first()->id, 'Product_SKU' => $subscription->event->first()->id,
+                'Product_SKU'     => $subscription->event->first()->id, 'ProductCategory' => 'Video e-learning courses',
+                'ProductName'     => $subscription->event->first()->title, 'Quantity' => 1, 'TicketType' => 'Subscription', 'Event_ID' => 'kc_' . time(),
                 //'Encrypted_email' => hash('sha256', $user->email)
             ];
 
@@ -811,6 +815,7 @@ class WebhookController extends BaseWebhookController
         // help
         $user->notify(new SubscriptionWelcome($data, $user));
         event(new EmailSent($user->email, 'SubscriptionWelcome'));
+        event(new ActivityEvent($user, ActivityEventEnum::EmailSent->value, $data['subject'] . ', ' . Carbon::now()->format('d F Y')));
     }
 
     private function sendEmail($elearningInvoice, $pdf, $paymentMethod = null, $planSubscription = false, $billingEmail = false)
@@ -857,6 +862,7 @@ class WebhookController extends BaseWebhookController
         } else {
             $user->notify(new CourseInvoice($data));
             event(new EmailSent($user->first()->email, 'CourseInvoice'));
+            event(new ActivityEvent($user, ActivityEventEnum::EmailSent->value, 'Knowcrunch | ' . $user->firstName . ' - download your receipt' . ', ' . Carbon::now()->format('d F Y')));
         }
 
         //system-user-admin-all-courses-payment-receipt

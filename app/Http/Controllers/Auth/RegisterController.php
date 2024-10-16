@@ -18,9 +18,10 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Enums\ActivityEventEnum;
+use App\Events\ActivityEvent;
 use App\Events\EmailSent;
 use App\Http\Controllers\Controller;
-use App\Model\Activation;
 use App\Model\User;
 use App\Notifications\userActivationLink;
 use Carbon\Carbon;
@@ -28,7 +29,6 @@ use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
 use Mail;
 use Propaganistas\LaravelPhone\PhoneNumber;
 use Session;
@@ -68,31 +68,33 @@ class RegisterController extends Controller
     /**
      * Get a validator for an incoming registration request.
      *
-     * @param  array  $data
+     * @param array $data
+     *
      * @return \Illuminate\Contracts\Validation\Validator
      */
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'name'      => ['required', 'string', 'max:255'],
+            'email'     => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'user_type' => ['required'],
-            'password' => ['required', 'string', 'min:6', 'confirmed'],
+            'password'  => ['required', 'string', 'min:6', 'confirmed'],
         ]);
     }
 
     /**
      * Create a new user instance after a valid registration.
      *
-     * @param  array  $data
+     * @param array $data
+     *
      * @return \App\Model\User
      */
     protected function create(array $data)
     {
         return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'role_id' => $data['user_type'],
+            'name'     => $data['name'],
+            'email'    => $data['email'],
+            'role_id'  => $data['user_type'],
             'password' => Hash::make($data['password']),
         ]);
     }
@@ -113,10 +115,10 @@ class RegisterController extends Controller
 
             $this->validate($request, [
 
-                'email' => 'required|email|unique:users',
-                'password' => 'required',
+                'email'            => 'required|email|unique:users',
+                'password'         => 'required',
                 'password_confirm' => 'required|same:password',
-                'mobileCheck' => 'phone:AUTO',
+                'mobileCheck'      => 'phone:AUTO',
 
             ]);
 
@@ -125,12 +127,12 @@ class RegisterController extends Controller
             // Register the user
 
             $user = User::create([
-                'firstname' => $request->first_name,
-                'lastname' => $request->last_name,
-                'email' => $request->email,
-                'mobile' => $input['mobile'],
+                'firstname'    => $request->first_name,
+                'lastname'     => $request->last_name,
+                'email'        => $request->email,
+                'mobile'       => $input['mobile'],
                 'country_code' => $request->countryCode,
-                'password' => Hash::make($request->password),
+                'password'     => Hash::make($request->password),
             ]);
 
             if ($user) {
@@ -172,6 +174,7 @@ class RegisterController extends Controller
 
                 $dpuser->notify(new userActivationLink($dpuser, 'activate'));
                 event(new EmailSent($dpuser->email, 'userActivationLink'));
+                event(new ActivityEvent($dpuser, ActivityEventEnum::EmailSent->value, 'Knowcrunch - ' . $dpuser->firstname . ' your account​ is active' . ', ' . Carbon::now()->format('d F Y')));
 
                 Session::forget('create_tab');
 

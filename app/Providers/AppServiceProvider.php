@@ -6,10 +6,12 @@ use App\Contracts\Api\v1\Event\IEventSettingsService;
 use App\Contracts\Api\v1\Event\IEventStatistic;
 use App\Contracts\Api\v1\Lesson\ILessonService;
 use App\Contracts\Api\v1\Topic\ITopicService;
+use App\Model\Activation;
 use App\Model\Cashier as newCashier;
 use App\Model\Event;
 use App\Model\Item;
 use App\Model\User;
+use App\Observers\ActionObserver;
 use App\Observers\EventObserver;
 use App\Observers\ItemObserver;
 use App\Observers\UserObserver;
@@ -62,6 +64,7 @@ class AppServiceProvider extends ServiceProvider
         Item::observe(ItemObserver::class);
         User::observe(UserObserver::class);
         Event::observe(EventObserver::class);
+        Activation::observe(ActionObserver::class);
         Cashier::useCustomerModel(User::class);
         Paginator::useBootstrap();
     }

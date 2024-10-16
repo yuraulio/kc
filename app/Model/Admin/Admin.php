@@ -161,18 +161,6 @@ class Admin extends Authenticatable implements Auditable
         return $this->role->where('id', 1)->first() ? true : false;
     }
 
-    public function isAdministrator()
-    {
-        /*dd($this->role);
-        //dd($this->id);
-        $role = DB::table('role_users')->where('user_id', $this->id)->first();
-        //dd($role->role_id);
-        $role = Role::where('id', $role->role_id)->first();
-        return $role['id'] == 1;*/
-
-        return $this->role->where('id', 2)->first() ? true : false;
-    }
-
     /**
      * Check if the user has creator role.
      *

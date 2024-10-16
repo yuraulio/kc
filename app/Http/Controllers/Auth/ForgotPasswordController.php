@@ -18,14 +18,16 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Enums\ActivityEventEnum;
+use App\Events\ActivityEvent;
 use App\Events\EmailSent;
 use App\Http\Controllers\Controller;
 use App\Model\User;
 use App\Notifications\userChangePassword;
+use Carbon\Carbon;
 use DB;
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Validator;
 
 class ForgotPasswordController extends Controller
@@ -56,7 +58,8 @@ class ForgotPasswordController extends Controller
     /**
      * Send a reset link to the given user.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\JsonResponse
      */
     /*public function sendResetLinkEmail(\Illuminate\Http\Request $request)
@@ -86,6 +89,7 @@ class ForgotPasswordController extends Controller
         if ($user) {
             $user->notify(new userChangePassword($user));
             event(new EmailSent($user->email, 'userChangePassword'));
+            event(new ActivityEvent($user, ActivityEventEnum::EmailSent->value, 'Knowcrunch - ' . $user->firstname . ' change your password' . ', ' . Carbon::now()->format('d F Y')));
 
             if ($request->ajax()) {
                 return response()->json([
@@ -123,10 +127,10 @@ class ForgotPasswordController extends Controller
         if (!$user = User::find($id)) {
             return response()->json([
 
-                'success' => false,
+                'success'      => false,
                 'pass_confirm' => true,
-                'message' => 'The user no longer exists.',
-                'redirect' =>'/',
+                'message'      => 'The user no longer exists.',
+                'redirect'     => '/',
 
             ]);
         }
@@ -138,37 +142,37 @@ class ForgotPasswordController extends Controller
 
         if ($val->fails()) {
             return response()->json([
-                'success' => false,
+                'success'      => false,
                 'pass_confirm' => false,
-                'message' => $val->errors()->first(),
+                'message'      => $val->errors()->first(),
             ]);
         }
 
         $updatePassword = DB::table('password_resets')
-        ->where([
-            'email' => $user->email,
-            'token' => $code,
-        ])
-        ->first();
+            ->where([
+                'email' => $user->email,
+                'token' => $code,
+            ])
+            ->first();
 
         if (!$updatePassword) {
             return response()->json([
-                'success' => false,
+                'success'      => false,
                 'pass_confirm' => false,
-                'message' => 'Invalid token!',
+                'message'      => 'Invalid token!',
             ]);
         }
 
         $user->password = Hash::make($request->password);
         $user->save();
-        DB::table('password_resets')->where(['email'=> $user->email])->delete();
+        DB::table('password_resets')->where(['email' => $user->email])->delete();
 
         return response()->json([
 
-            'success' => true,
+            'success'      => true,
             'pass_confirm' => true,
-            'message' => 'Password was successfully resetted.',
-            'redirect' =>'/',
+            'message'      => 'Password was successfully resetted.',
+            'redirect'     => '/',
 
         ]);
     }

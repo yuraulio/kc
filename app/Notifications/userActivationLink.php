@@ -24,8 +24,7 @@ class userActivationLink extends Notification
     public function __construct(
         private readonly User $user,
         private readonly string $template
-    )
-    {
+    ) {
     }
 
     /**

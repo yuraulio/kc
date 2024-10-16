@@ -12,7 +12,11 @@ class Role extends Model
      *
      * @var array
      */
-    protected $fillable = ['name', 'permissions'];
+    protected $fillable = ['name', 'permissions', 'level'];
+
+    protected $casts = [
+        'permissions' => 'json',
+    ];
 
     /**
      * @return BelongsToMany

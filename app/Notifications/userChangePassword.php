@@ -8,14 +8,14 @@ use App\Notifications\SendMailchimpMail;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Str;
 
 class userChangePassword extends Notification
 {
     use Queueable;
+
+    private $user;
 
     /**
      * Create a new notification instance.
@@ -30,7 +30,8 @@ class userChangePassword extends Notification
     /**
      * Get the notification's delivery channels.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
+     *
      * @return array
      */
     public function via($notifiable)
@@ -44,8 +45,8 @@ class userChangePassword extends Notification
         $token = Str::random(64);
 
         DB::table('password_resets')->insert([
-            'email' => $this->user->email,
-            'token' => $token,
+            'email'      => $this->user->email,
+            'token'      => $token,
             'created_at' => Carbon::now(),
         ]);
         $subject = 'Knowcrunch - ' . $this->user->firstname . ' change your password';

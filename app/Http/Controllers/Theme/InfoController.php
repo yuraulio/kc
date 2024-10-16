@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Theme;
 
+use App\Enums\ActivityEventEnum;
+use App\Events\ActivityEvent;
 use App\Events\EmailSent;
 use App\Http\Controllers\Controller;
 use App\Jobs\EventSoldOut;
@@ -11,7 +13,6 @@ use App\Model\CookiesSMS;
 use App\Model\Event;
 use App\Model\Option;
 use App\Model\PaymentMethod;
-use App\Model\Role;
 use App\Model\ShoppingCart;
 use App\Model\Transaction;
 use App\Model\User;
@@ -146,8 +147,9 @@ class InfoController extends Controller
                 $userEmail = isset($this->transaction['status_history'][0]['pay_seats_data']['emails'][0]) ? $this->transaction['status_history'][0]['pay_seats_data']['emails'][0] : null;
 
                 //hash('sha256', $userEmail)
-                $data['tigran'] = ['OrderSuccess_id' => $this->transaction['id'], 'OrderSuccess_total' => $tr_price, 'Price' =>$tr_price, 'Product_id' => $thisevent->id, 'Product_SKU' => $thisevent->id,
-                    'Product_SKU' => $thisevent->id, 'ProductCategory' => $categoryScript, 'ProductName' =>  $thisevent->title, 'Quantity' => $item->qty, 'TicketType'=>$stockHelper->type, 'Event_ID' => 'kc_' . time(),
+                $data['tigran'] = [
+                    'OrderSuccess_id' => $this->transaction['id'], 'OrderSuccess_total' => $tr_price, 'Price' => $tr_price, 'Product_id' => $thisevent->id, 'Product_SKU' => $thisevent->id,
+                    'Product_SKU'     => $thisevent->id, 'ProductCategory' => $categoryScript, 'ProductName' => $thisevent->title, 'Quantity' => $item->qty, 'TicketType' => $stockHelper->type, 'Event_ID' => 'kc_' . time(),
                     'Encrypted_email' => hash('sha256', $userEmail),
                 ];
 
@@ -201,26 +203,26 @@ class InfoController extends Controller
                     if (isset($billDet->billstate)) {
                         $customerBillingState = $billDet->billstate;
                     }
-                } catch(\Exception $e) {
+                } catch (\Exception $e) {
                 }
 
                 $data['customer'] = [
-                    'customerTotalOrders' => $item->qty,
-                    'customerTotalOrderValue' => $tr_price,
-                    'customerFirstName' => $customerBillingFirstName,
-                    'customerLastName' => $customerBillingLastName,
+                    'customerTotalOrders'      => $item->qty,
+                    'customerTotalOrderValue'  => $tr_price,
+                    'customerFirstName'        => $customerBillingFirstName,
+                    'customerLastName'         => $customerBillingLastName,
                     'customerBillingFirstName' => $customerBillingFirstName,
-                    'customerBillingLastName' => $customerBillingLastName,
-                    'customerBillingCompany' => $customerBillingCompany,
-                    'customerBillingAddress1' => $customerBillingAddress1,
-                    'customerBillingAddress2' => $customerBillingAddress2,
-                    'customerBillingCity' => $customerBillingCity,
-                    'customerBillingPostcode' => $customerBillingPostcode,
-                    'customerBillingCountry' => $customerBillingCountry,
-                    'customerBillingEmail' => $customerBillingEmail,
-                    'customerBillingPhone' => $customerBillingPhone,
-                    'customerBillingStreet' => $customerBillingAddress1,
-                    '$customerBillingState' => $customerBillingState,
+                    'customerBillingLastName'  => $customerBillingLastName,
+                    'customerBillingCompany'   => $customerBillingCompany,
+                    'customerBillingAddress1'  => $customerBillingAddress1,
+                    'customerBillingAddress2'  => $customerBillingAddress2,
+                    'customerBillingCity'      => $customerBillingCity,
+                    'customerBillingPostcode'  => $customerBillingPostcode,
+                    'customerBillingCountry'   => $customerBillingCountry,
+                    'customerBillingEmail'     => $customerBillingEmail,
+                    'customerBillingPhone'     => $customerBillingPhone,
+                    'customerBillingStreet'    => $customerBillingAddress1,
+                    '$customerBillingState'    => $customerBillingState,
                     'customerBillingEmailHash' => hash('sha256', $customerBillingEmail),
                 ];
 
@@ -229,28 +231,32 @@ class InfoController extends Controller
 
                 $data['ecommerce'] = [
                     'actionField' => ['id' => $this->transaction['id'], 'value' => $tr_price, 'currency' => 'EUR', 'coupon' => $transaction->coupon_code],
-                    'products' => ['name' => $thisevent->title, 'id' => $thisevent->id, 'brand'=>'Knowcrunch', 'price' => $tr_price,
-                        'category' => $categoryScript, 'coupon' => $transaction->coupon_code, 'quantity' => Cart::content()->count()],
+                    'products'    => [
+                        'name'     => $thisevent->title, 'id' => $thisevent->id, 'brand' => 'Knowcrunch', 'price' => $tr_price,
+                        'category' => $categoryScript, 'coupon' => $transaction->coupon_code, 'quantity' => Cart::content()->count(),
+                    ],
 
                 ];
 
                 $data['new_event'] = [
-                    'transaction_id'=> $transaction['id'],
-                    'value' => $tr_price,
-                    'currency' => 'EUR',
-                    'coupon' => $transaction->coupon_code,
-                    'items' => [
-                        'item_id' => $thisevent->id,
-                        'item_name' => $thisevent->title,
-                        'item_brand' => 'Knowcrunch',
+                    'transaction_id' => $transaction['id'],
+                    'value'          => $tr_price,
+                    'currency'       => 'EUR',
+                    'coupon'         => $transaction->coupon_code,
+                    'items'          => [
+                        'item_id'       => $thisevent->id,
+                        'item_name'     => $thisevent->title,
+                        'item_brand'    => 'Knowcrunch',
                         'item_category' => $categoryScript,
-                        'price' => $tr_price,
-                        'quantity' => 1,
+                        'price'         => $tr_price,
+                        'quantity'      => 1,
                     ],
                 ];
 
-                $data['gt3'] = ['gt3' => ['transactionId' => $this->transaction['id'], 'transactionTotal' => $tr_price],
-                    'transactionProducts' => ['name' => $thisevent->title, 'sku' => $thisevent->id, 'price' => $tr_price, 'quantity' => 1, '' =>  $categoryScript]];
+                $data['gt3'] = [
+                    'gt3'                 => ['transactionId' => $this->transaction['id'], 'transactionTotal' => $tr_price],
+                    'transactionProducts' => ['name' => $thisevent->title, 'sku' => $thisevent->id, 'price' => $tr_price, 'quantity' => 1, '' => $categoryScript],
+                ];
             }
 
             if ($transaction) {
@@ -292,7 +298,7 @@ class InfoController extends Controller
             try {
                 session_start();
                 $_SESSION['thankyouData'] = $data;
-            } catch(\Exception $ex) {
+            } catch (\Exception $ex) {
                 Bugsnag::notifyException($ex);
             }
 
@@ -569,13 +575,13 @@ class InfoController extends Controller
                     $thisevent->users()->wherePivot('user_id', $checkemailuser->id)->detach();
                     if ($tickettypedrop == 7) {
                         //$tmp = EventStudent::firstOrCreate(['event_id' => $evid, 'student_id' => $checkemailuser->id, 'trans_id' => $transaction->id,'comment'=>'unilever']);
-                        $thisevent->users()->save($checkemailuser, ['comment'=>'unilever', 'expiration'=>$expiration_date, 'paid'=>!$sepa, 'payment_method'=>$paymentMethodId]);
+                        $thisevent->users()->save($checkemailuser, ['comment' => 'unilever', 'expiration' => $expiration_date, 'paid' => !$sepa, 'payment_method' => $paymentMethodId]);
                     } else {
                         if ($transaction->coupon_code != '') {
                             //$tmp = EventStudent::firstOrCreate(['event_id' => $evid, 'student_id' => $checkemailuser->id, 'trans_id' => $transaction->id,'comment'=>'coupon']);
-                            $thisevent->users()->save($checkemailuser, ['comment'=>'coupon', 'expiration'=>$expiration_date, 'paid'=>!$sepa, 'payment_method'=>$paymentMethodId]);
+                            $thisevent->users()->save($checkemailuser, ['comment' => 'coupon', 'expiration' => $expiration_date, 'paid' => !$sepa, 'payment_method' => $paymentMethodId]);
                         } else {
-                            $thisevent->users()->save($checkemailuser, ['expiration'=>$expiration_date, 'paid'=>!$sepa, 'payment_method'=>$paymentMethodId]);
+                            $thisevent->users()->save($checkemailuser, ['expiration' => $expiration_date, 'paid' => !$sepa, 'payment_method' => $paymentMethodId]);
                         }
                     }
                     $thisevent->tickets()->save($thisticket, ['user_id' => $checkemailuser->id]);
@@ -656,14 +662,17 @@ class InfoController extends Controller
                     $coockie->save();
                 }
 
-                $emailsCollector[] = ['email' => $checkemailuser->email, 'name' => $fullname, 'first' => $firstname, 'id' => $checkemailuser->id,
-                    'mobile' => $checkemailuser->mobile, 'company' => $checkemailuser->company, 'jobTitle' => $checkemailuser->job_title, 'createAccount'=>$creatAccount];
+                $emailsCollector[] = [
+                    'email'  => $checkemailuser->email, 'name' => $fullname, 'first' => $firstname, 'id' => $checkemailuser->id,
+                    'mobile' => $checkemailuser->mobile, 'company' => $checkemailuser->company, 'jobTitle' => $checkemailuser->job_title, 'createAccount' => $creatAccount,
+                ];
             } else {
                 $newmembersdetails[] = $thismember;
                 $fullname = $thismember['firstname'] . ' ' . $thismember['lastname'];
                 $firstname = $thismember['firstname'];
-                $emailsCollector[] = ['id' => null, 'email' => $thismember['email'], 'name' => $fullname, 'first' => $firstname, 'company' => $thismember['company'],
-                    'mobile' => $thismember['mobile'], 'jobTitle' => $thismember['job_title'], 'createAccount'=>true,
+                $emailsCollector[] = [
+                    'id'     => null, 'email' => $thismember['email'], 'name' => $fullname, 'first' => $firstname, 'company' => $thismember['company'],
+                    'mobile' => $thismember['mobile'], 'jobTitle' => $thismember['job_title'], 'createAccount' => true,
                 ];
             }
         }
@@ -685,8 +694,8 @@ class InfoController extends Controller
             $user = User::create($member);
 
             $code = Activation::create([
-                'user_id' => $user->id,
-                'code' => Str::random(40),
+                'user_id'   => $user->id,
+                'code'      => Str::random(40),
                 'completed' => true,
             ])->code;
             //$role = Role::findRoleBySlug('know-crunch');
@@ -753,12 +762,12 @@ class InfoController extends Controller
                 }
 
                 if ($tickettypedrop == 7) {
-                    $thisevent->users()->save($user, ['comment'=>'unilever', 'expiration'=>$expiration_date, 'paid'=>!$sepa, 'payment_method'=>$paymentMethodId]);
+                    $thisevent->users()->save($user, ['comment' => 'unilever', 'expiration' => $expiration_date, 'paid' => !$sepa, 'payment_method' => $paymentMethodId]);
                 } else {
                     if ($transaction->coupon_code != '') {
-                        $thisevent->users()->save($user, ['comment'=>'coupon', 'expiration'=>$expiration_date, 'paid'=>!$sepa, 'payment_method'=>$paymentMethodId]);
+                        $thisevent->users()->save($user, ['comment' => 'coupon', 'expiration' => $expiration_date, 'paid' => !$sepa, 'payment_method' => $paymentMethodId]);
                     } else {
-                        $thisevent->users()->save($user, ['expiration'=>$expiration_date, 'paid'=>!$sepa, 'payment_method'=>$paymentMethodId]);
+                        $thisevent->users()->save($user, ['expiration' => $expiration_date, 'paid' => !$sepa, 'payment_method' => $paymentMethodId]);
                     }
                 }
                 $thisevent->tickets()->save($thisticket, ['user_id' => $user->id]);
@@ -799,28 +808,28 @@ class InfoController extends Controller
 
         if (isset($eventInfo['delivery']) && $eventInfo['delivery'] == 143) {
             $data['duration'] = isset($eventInfo['elearning']['visible']['emails']) && isset($eventInfo['elearning']['expiration']) &&
-                                $eventInfo['elearning']['visible']['emails'] && isset($eventInfo['elearning']['text']) ?
-                                            $eventInfo['elearning']['expiration'] . ' ' . $eventInfo['elearning']['text'] : '';
+            $eventInfo['elearning']['visible']['emails'] && isset($eventInfo['elearning']['text']) ?
+                $eventInfo['elearning']['expiration'] . ' ' . $eventInfo['elearning']['text'] : '';
         } elseif (isset($eventInfo['delivery']) && $eventInfo['delivery'] == 139) {
             $data['duration'] = isset($eventInfo['inclass']['dates']['visible']['emails']) && isset($eventInfo['inclass']['dates']['text']) &&
-                                    $eventInfo['inclass']['dates']['visible']['emails'] ? $eventInfo['inclass']['dates']['text'] : '';
+            $eventInfo['inclass']['dates']['visible']['emails'] ? $eventInfo['inclass']['dates']['text'] : '';
 
             $data['duration'] = strip_tags($data['duration']);
         }
 
         $data['hours'] = isset($eventInfo['hours']['visible']['emails']) && $eventInfo['hours']['visible']['emails'] && isset($eventInfo['hours']['hour']) &&
-                        isset($eventInfo['hours']['text']) ? $eventInfo['hours']['hour'] . ' ' . $eventInfo['hours']['text'] : '';
+        isset($eventInfo['hours']['text']) ? $eventInfo['hours']['hour'] . ' ' . $eventInfo['hours']['text'] : '';
 
         $data['language'] = isset($eventInfo['language']['visible']['emails']) && $eventInfo['language']['visible']['emails'] && isset($eventInfo['language']['text']) ? $eventInfo['language']['text'] : '';
 
         $data['certificate_type'] = isset($eventInfo['certificate']['visible']['emails']) && $eventInfo['certificate']['visible']['emails'] &&
-                    isset($eventInfo['certificate']['type']) ? $eventInfo['certificate']['type'] : '';
+        isset($eventInfo['certificate']['type']) ? $eventInfo['certificate']['type'] : '';
 
         $eventStudents = get_sum_students_course($transaction->event->first()->category->first());
         $data['students_number'] = isset($eventInfo['students']['number']) ? $eventInfo['students']['number'] : $eventStudents + 1;
 
         $data['students'] = isset($eventInfo['students']['visible']['emails']) && $eventInfo['students']['visible']['emails'] &&
-                        isset($eventInfo['students']['text']) && $data['students_number'] >= $eventStudents ? $eventInfo['students']['text'] : '';
+        isset($eventInfo['students']['text']) && $data['students_number'] >= $eventStudents ? $eventInfo['students']['text'] : '';
 
         foreach ($emailsCollector as $key => $muser) {
             $data['user'] = $muser;
@@ -837,7 +846,7 @@ class InfoController extends Controller
                 }
 
                 $data['template'] = $transaction->event->first() && $user->waitingList()->where('event_id', $transaction->event->first()->id)->first()
-                                        ? 'waiting_list_welcome' : 'welcome';
+                    ? 'waiting_list_welcome' : 'welcome';
 
                 $data['firstName'] = $user->firstname;
 
@@ -864,28 +873,28 @@ class InfoController extends Controller
 
         if (isset($eventInfo['delivery']) && $eventInfo['delivery'] == 143) {
             $data['duration'] = isset($eventInfo['elearning']['visible']['emails']) && isset($eventInfo['elearning']['expiration']) &&
-                                $eventInfo['elearning']['visible']['emails'] && isset($eventInfo['elearning']['text']) ?
-                                            $eventInfo['elearning']['expiration'] . ' ' . $eventInfo['elearning']['text'] : '';
+            $eventInfo['elearning']['visible']['emails'] && isset($eventInfo['elearning']['text']) ?
+                $eventInfo['elearning']['expiration'] . ' ' . $eventInfo['elearning']['text'] : '';
         } elseif (isset($eventInfo['delivery']) && $eventInfo['delivery'] == 139) {
             $data['duration'] = isset($eventInfo['inclass']['dates']['visible']['emails']) && isset($eventInfo['inclass']['dates']['text']) &&
-                                    $eventInfo['inclass']['dates']['visible']['emails'] ? $eventInfo['inclass']['dates']['text'] : '';
+            $eventInfo['inclass']['dates']['visible']['emails'] ? $eventInfo['inclass']['dates']['text'] : '';
 
             $data['duration'] = strip_tags($data['duration']);
         }
 
         $data['hours'] = isset($eventInfo['hours']['visible']['emails']) && $eventInfo['hours']['visible']['emails'] && isset($eventInfo['hours']['hour']) &&
-                        isset($eventInfo['hours']['text']) ? $eventInfo['hours']['hour'] . ' ' . $eventInfo['hours']['text'] : '';
+        isset($eventInfo['hours']['text']) ? $eventInfo['hours']['hour'] . ' ' . $eventInfo['hours']['text'] : '';
 
         $data['language'] = isset($eventInfo['language']['visible']['emails']) && $eventInfo['language']['visible']['emails'] && isset($eventInfo['language']['text']) ? $eventInfo['language']['text'] : '';
 
         $data['certificate_type'] = isset($eventInfo['certificate']['visible']['emails']) && $eventInfo['certificate']['visible']['emails'] &&
-                    isset($eventInfo['certificate']['type']) ? $eventInfo['certificate']['type'] : '';
+        isset($eventInfo['certificate']['type']) ? $eventInfo['certificate']['type'] : '';
 
         $eventStudents = get_sum_students_course($transaction->event->first()->category->first());
         $data['students_number'] = isset($eventInfo['students']['number']) ? $eventInfo['students']['number'] : $eventStudents + 1;
 
         $data['students'] = isset($eventInfo['students']['visible']['emails']) && $eventInfo['students']['visible']['emails'] &&
-                        isset($eventInfo['students']['text']) && $data['students_number'] >= $eventStudents ? $eventInfo['students']['text'] : '';
+        isset($eventInfo['students']['text']) && $data['students_number'] >= $eventStudents ? $eventInfo['students']['text'] : '';
 
         foreach ($emailsCollector as $key => $muser) {
             $data['user'] = $muser;
@@ -902,7 +911,7 @@ class InfoController extends Controller
                 }
 
                 $data['template'] = $transaction->event->first() && $user->waitingList()->where('event_id', $transaction->event->first()->id)->first()
-                                        ? 'waiting_list_welcome' : 'welcome';
+                    ? 'waiting_list_welcome' : 'welcome';
 
                 $data['firstName'] = $user->firstname;
 
@@ -978,6 +987,7 @@ class InfoController extends Controller
                 } else {
                     $data['user']->notify(new CourseInvoice($data));
                     event(new EmailSent($data['user']->email, 'CourseInvoice'));
+                    event(new ActivityEvent($data['user'], ActivityEventEnum::EmailSent->value, $email_data['subject'] . ', ' . Carbon::now()->format('d F Y')));
                 }
             }
         }
@@ -1092,5 +1102,6 @@ class InfoController extends Controller
 
         $user->notify(new SubscriptionWelcome($data, $user));
         event(new EmailSent($user->email, 'SubscriptionWelcome'));
+        event(new ActivityEvent($user, ActivityEventEnum::EmailSent->value, $data['subject'] . ', ' . Carbon::now()->format('d F Y')));
     }
 }

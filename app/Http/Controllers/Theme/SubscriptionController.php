@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Theme;
 
+use App\Enums\ActivityEventEnum;
+use App\Events\ActivityEvent;
 use App\Events\EmailSent;
 use App\Http\Controllers\Controller;
 use App\Model\Event;
 use App\Model\PaymentMethod;
 use App\Model\Plan;
-use App\Model\User;
 use App\Notifications\SubscriptionWelcome;
 use App\Notifications\WelcomeEmail;
 use App\Services\FBPixelService;
@@ -48,7 +49,7 @@ class SubscriptionController extends Controller
         $data['eventFree'] = false;
 
         $data['stripe_key'] = config('app.PAYMENT_PRODUCTION') ? $this->paymentMethod->processor_options['key'] :
-                                                                $this->paymentMethod->test_processor_options['key'];
+            $this->paymentMethod->test_processor_options['key'];
 
         if (Session::has('pay_seats_data')) {
             $data['pay_seats_data'] = Session::get('pay_seats_data');
@@ -159,7 +160,7 @@ class SubscriptionController extends Controller
         $data['eventFree'] = false;
 
         $data['stripe_key'] = config('app.PAYMENT_PRODUCTION') ? $this->paymentMethod->processor_options['key'] :
-                                                                $this->paymentMethod->test_processor_options['key'];
+            $this->paymentMethod->test_processor_options['key'];
         if (Session::has('pay_seats_data')) {
             $data['pay_seats_data'] = Session::get('pay_seats_data');
         } else {
@@ -274,7 +275,7 @@ class SubscriptionController extends Controller
                 $st_line1 = $temp['billaddress'] . ' ' . $temp['billaddressnum'];
                 $st_postal_code = $temp['billpostcode'];
                 $st_city = $temp['billcity'];
-           //     $st_phone = $temp['billmobile'];
+                //     $st_phone = $temp['billmobile'];
             } else {
                 $temp['billing'] = 'Invoice requested';
 
@@ -318,10 +319,10 @@ class SubscriptionController extends Controller
         //$anchor = $anchor->startOfMonth();
         try {
             $charge = $user->newSubscription($plan->name, $plan->stripe_plan)
-            //->anchorBillingCycleOn($anchor->startOfDay())
-            ->noProrate()
-            //->trialDays($plan->trial_days)
-            ->create($request->payment_method, ['email' => $user->email]);
+                //->anchorBillingCycleOn($anchor->startOfDay())
+                ->noProrate()
+                //->trialDays($plan->trial_days)
+                ->create($request->payment_method, ['email' => $user->email]);
 
             $charge->price = $plan->cost;
             $charge->save();
@@ -336,7 +337,7 @@ class SubscriptionController extends Controller
                     $user->events()->attach($event->id);
                 }*/
 
-                $user->subscriptionEvents()->attach($event->id, ['subscription_id'=>$charge['id'], 'payment_method'=>$this->paymentMethod->id]);
+                $user->subscriptionEvents()->attach($event->id, ['subscription_id' => $charge['id'], 'payment_method' => $this->paymentMethod->id]);
 
                 $data = [];
                 /*$muser = [];
@@ -401,6 +402,7 @@ class SubscriptionController extends Controller
 
                 $user->notify(new SubscriptionWelcome($data, $user));
                 event(new EmailSent($user->email, 'SubscriptionWelcome'));
+                event(new ActivityEvent($subscription->user, ActivityEventEnum::EmailSent->value, $data['subject'] . ', ' . Carbon::now()->format('d F Y')));
 
                 $adminemail = 'info@knowcrunch.com';
 
@@ -419,33 +421,33 @@ class SubscriptionController extends Controller
             } else {
                 return 'have error';
             }
-        } catch(\Cartalyst\Stripe\Exception\CardErrorException $e) {
+        } catch (\Cartalyst\Stripe\Exception\CardErrorException $e) {
             //dd('edwww3');
             \Session::put('dperror', $e->getMessage());
 
             return response()->json([], 404);
             //return redirect('/info/order_error');
-        } catch(\Cartalyst\Stripe\Exception\MissingParameterException $e) {
+        } catch (\Cartalyst\Stripe\Exception\MissingParameterException $e) {
             //dd($e);
             \Session::put('dperror', $e->getMessage());
 
             //return redirect('/info/order_error');
             return response()->json([], 404);
-        } catch(\Cartalyst\Stripe\Api\Exception\ServerErrorException $e) {
+        } catch (\Cartalyst\Stripe\Api\Exception\ServerErrorException $e) {
             //dd($e);
             \Session::put('dperror', $e->getMessage());
 
             //return redirect('/info/order_error');
             return response()->json([], 404);
-        } catch(\Stripe\Exception\CardException $e) {
+        } catch (\Stripe\Exception\CardException $e) {
             \Session::put('dperror', $e->getMessage());
 
             return response()->json([], 404);
-        } catch(\Stripe\Exception\InvalidRequestException $e) {
+        } catch (\Stripe\Exception\InvalidRequestException $e) {
             \Session::put('dperror', $e->getMessage());
 
             return response()->json([], 404);
-        } catch(\Laravel\Cashier\Exceptions\IncompletePayment $e) {
+        } catch (\Laravel\Cashier\Exceptions\IncompletePayment $e) {
             \Session::put('dperror', 'Your card or bank account has insufficient funds or a limit. Please contact your bank and try again later.');
 
             return response()->json([], 404);
@@ -491,7 +493,7 @@ class SubscriptionController extends Controller
                 $st_line1 = $temp['billaddress'] . ' ' . $temp['billaddressnum'];
                 $st_postal_code = $temp['billpostcode'];
                 $st_city = $temp['billcity'];
-           //     $st_phone = $temp['billmobile'];
+                //     $st_phone = $temp['billmobile'];
 
                 $address = [];
                 $address['country'] = 'GR';
@@ -543,30 +545,31 @@ class SubscriptionController extends Controller
         //$anchor = $anchor->startOfMonth();
         try {
             $charge = $user->newSubscription($plan->name, $plan->stripe_plan)
-            //->anchorBillingCycleOn($anchor->startOfDay())
-            ->noProrate()
-            //->trialDays($plan->trial_days)
-            ->create($input['payment_method'], ['email' => $user->email]);
-        } catch(\Laravel\Cashier\Exceptions\IncompletePayment $exception) {
+                //->anchorBillingCycleOn($anchor->startOfDay())
+                ->noProrate()
+                //->trialDays($plan->trial_days)
+                ->create($input['payment_method'], ['email' => $user->email]);
+        } catch (\Laravel\Cashier\Exceptions\IncompletePayment $exception) {
             $sub = $user->subscriptions()->where('user_id', $user->id)->first();
 
             $user->subscriptions()->find($sub->id)->update([
-                'price' => $plan->cost,
+                'price'    => $plan->cost,
                 'metadata' => json_encode(['payment_method' => 'sepa']),
             ]);
 
-            $user->subscriptionEvents()->attach($event->id, ['subscription_id'=>$sub->id, 'payment_method'=>$this->paymentMethod->id]);
+            $user->subscriptionEvents()->attach($event->id, ['subscription_id' => $sub->id, 'payment_method' => $this->paymentMethod->id]);
 
             $output = [
                 'clientSecret' => $exception->payment->client_secret,
-                'return_url' => '/myaccount/subscription-success',
-                'status' => '',
+                'return_url'   => '/myaccount/subscription-success',
+                'status'       => '',
             ];
 
             $data1 = loadSendEmailsDataSubscription($sub, $user);
 
             $user->notify(new WelcomeEmail($user, $data1));
             event(new EmailSent($user->email, 'WelcomeEmail'));
+            event(new ActivityEvent($user, ActivityEventEnum::EmailSent->value, $data['firstName'] . ' - do you need help with your enrollment' . ', ' . Carbon::now()->format('d F Y')));
 
             Session::forget('pay_seats_data');
             Session::forget('transaction_id');
@@ -667,10 +670,10 @@ class SubscriptionController extends Controller
 
         try {
             $charge = $user->newSubscription($plan->name, $plan->stripe_plan)
-            //->anchorBillingCycleOn($anchor->startOfDay())
-            ->noProrate()
-            //->trialDays($plan->trial_days)
-            ->create($request->payment_method, ['email' => $user->email]);
+                //->anchorBillingCycleOn($anchor->startOfDay())
+                ->noProrate()
+                //->trialDays($plan->trial_days)
+                ->create($request->payment_method, ['email' => $user->email]);
 
             $charge->price = $plan->cost;
             $charge->save();
@@ -685,7 +688,7 @@ class SubscriptionController extends Controller
                     $user->events()->attach($event->id);
                 }*/
 
-                $user->subscriptionEvents()->attach($event->id, ['subscription_id'=>$charge['id'], 'payment_method'=>$this->paymentMethod->id]);
+                $user->subscriptionEvents()->attach($event->id, ['subscription_id' => $charge['id'], 'payment_method' => $this->paymentMethod->id]);
 
                 $data = [];
                 /*$muser = [];
@@ -734,6 +737,7 @@ class SubscriptionController extends Controller
 
                 $user->notify(new SubscriptionWelcome($data, $user));
                 event(new EmailSent($user->email, 'SubscriptionWelcome'));
+                event(new ActivityEvent($user, ActivityEventEnum::EmailSent->value, $data['subject'] . ', ' . Carbon::now()->format('d F Y')));
 
                 $adminemail = 'info@knowcrunch.com';
 
@@ -752,33 +756,33 @@ class SubscriptionController extends Controller
             } else {
                 return 'have error';
             }
-        } catch(\Cartalyst\Stripe\Exception\CardErrorException $e) {
+        } catch (\Cartalyst\Stripe\Exception\CardErrorException $e) {
             //dd('edwww3');
             \Session::put('dperror', $e->getMessage());
 
             return back();
             //return redirect('/info/order_error');
-        } catch(\Cartalyst\Stripe\Exception\MissingParameterException $e) {
+        } catch (\Cartalyst\Stripe\Exception\MissingParameterException $e) {
             //dd($e);
             \Session::put('dperror', $e->getMessage());
 
             //return redirect('/info/order_error');
             return back();
-        } catch(\Cartalyst\Stripe\Api\Exception\ServerErrorException $e) {
+        } catch (\Cartalyst\Stripe\Api\Exception\ServerErrorException $e) {
             //dd($e);
             \Session::put('dperror', $e->getMessage());
 
             //return redirect('/info/order_error');
             return back();
-        } catch(\Stripe\Exception\CardException $e) {
+        } catch (\Stripe\Exception\CardException $e) {
             \Session::put('dperror', $e->getMessage());
 
             return back();
-        } catch(\Stripe\Exception\InvalidRequestException $e) {
+        } catch (\Stripe\Exception\InvalidRequestException $e) {
             \Session::put('dperror', $e->getMessage());
 
             return back();
-        } catch(\Laravel\Cashier\Exceptions\IncompletePayment $e) {
+        } catch (\Laravel\Cashier\Exceptions\IncompletePayment $e) {
             \Session::put('dperror', 'Your card or bank account has insufficient funds or a limit. Please contact your bank and try again later.');
 
             return back();
@@ -809,30 +813,33 @@ class SubscriptionController extends Controller
             }
 
             $userEmail = isset($transaction['status_history'][0]['pay_seats_data']['emails'][0]) ? $transaction['status_history'][0]['pay_seats_data']['emails'][0] : null;
-            $data['tigran'] = ['OrderSuccess_id' => $transaction['id'], 'OrderSuccess_total' => $tr_price, 'Price' =>$tr_price, 'Product_id' => $thisevent->id, 'Product_SKU' => $thisevent->id,
-                'Product_SKU' => $thisevent->id, 'ProductCategory' => $categoryScript, 'ProductName' =>  $thisevent->title, 'Quantity' => 1, 'TicketType'=>'subscription',
-                'Event_ID' => 'kc_' . time(), 'Encrypted_email' => hash('sha256', $userEmail),
+            $data['tigran'] = [
+                'OrderSuccess_id' => $transaction['id'], 'OrderSuccess_total' => $tr_price, 'Price' => $tr_price, 'Product_id' => $thisevent->id, 'Product_SKU' => $thisevent->id,
+                'Product_SKU'     => $thisevent->id, 'ProductCategory' => $categoryScript, 'ProductName' => $thisevent->title, 'Quantity' => 1, 'TicketType' => 'subscription',
+                'Event_ID'        => 'kc_' . time(), 'Encrypted_email' => hash('sha256', $userEmail),
             ];
 
             $data['ecommerce'] = [
                 'actionField' => ['id' => $transaction['id'], 'value' => $tr_price, 'currency' => 'EUR', 'coupon' => $transaction->coupon_code],
-                'products' => ['name' => $thisevent->title, 'id' => $thisevent->id, 'brand'=>'Knowcrunch', 'price' => $tr_price,
-                    'category' => $categoryScript, 'coupon' => $transaction->coupon_code, 'quantity' => 1],
+                'products'    => [
+                    'name'     => $thisevent->title, 'id' => $thisevent->id, 'brand' => 'Knowcrunch', 'price' => $tr_price,
+                    'category' => $categoryScript, 'coupon' => $transaction->coupon_code, 'quantity' => 1,
+                ],
 
             ];
 
             $data['new_event'] = [
-                'transaction_id'=> $transaction['id'],
-                'value' => $tr_price,
-                'currency' => 'EUR',
-                'coupon' => $transaction->coupon_code,
-                'items' => [
-                    'item_id' => $thisevent->id,
-                    'item_name' => $thisevent->title,
-                    'item_brand' => 'Knowcrunch',
+                'transaction_id' => $transaction['id'],
+                'value'          => $tr_price,
+                'currency'       => 'EUR',
+                'coupon'         => $transaction->coupon_code,
+                'items'          => [
+                    'item_id'       => $thisevent->id,
+                    'item_name'     => $thisevent->title,
+                    'item_brand'    => 'Knowcrunch',
                     'item_category' => $categoryScript,
-                    'price' => $tr_price,
-                    'quantity' => 1,
+                    'price'         => $tr_price,
+                    'quantity'      => 1,
                 ],
             ];
 
@@ -882,7 +889,7 @@ class SubscriptionController extends Controller
                 $subscription->save();
                 $subscription = $subscription->resume();
             }
-        } catch(\Stripe\Exception\InvalidArgumentException $e) {
+        } catch (\Stripe\Exception\InvalidArgumentException $e) {
             //dd($subscription);
             //$subscription->status = false;
             //$subscription->save();

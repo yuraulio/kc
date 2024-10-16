@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\Enums\ActivityEventEnum;
+use App\Events\ActivityEvent;
 use App\Events\EmailSent;
 use App\Http\Controllers\ChunkReadFilter;
 use App\Jobs\SendEmail;
@@ -95,16 +97,16 @@ class UserService
                 $user->city = $importData['Q'] ?? null;
                 $user->afm = isset($importData['R']) ? intval($importData['R']) : null;
                 $user->receipt_details = json_encode([
-                    'billing' => $importData['S'] ?? null,
-                    'billname' => $importData['T'] ?? null,
-                    'billemail' => $importData['U'] ?? null,
-                    'billaddress' => $importData['V'] ?? null,
+                    'billing'        => $importData['S'] ?? null,
+                    'billname'       => $importData['T'] ?? null,
+                    'billemail'      => $importData['U'] ?? null,
+                    'billaddress'    => $importData['V'] ?? null,
                     'billaddressnum' => $importData['W'] ?? null,
-                    'billpostcode' => $importData['X'] ?? null,
-                    'billcity' => $importData['Y'] ?? null,
-                    'billcountry' => $importData['Z'] ?? null,
-                    'billstate' => $importData['AA'] ?? null,
-                    'billafm' => $importData['AB'] ?? null,
+                    'billpostcode'   => $importData['X'] ?? null,
+                    'billcity'       => $importData['Y'] ?? null,
+                    'billcountry'    => $importData['Z'] ?? null,
+                    'billstate'      => $importData['AA'] ?? null,
+                    'billafm'        => $importData['AB'] ?? null,
                 ]);
                 $user->country_code = $importData['AC'] ?? null;
                 $user->notes = $importData['AD'] ?? null;
@@ -134,7 +136,7 @@ class UserService
                     $ticket_price = $new_user['ticket_price'];
                     if ($new_user->password == null || strlen($new_user->password) < 6) {
                         $userFailedImport[] = $new_user;
-                        $validationErrors[] = ['password'=>['Password required for new user']];
+                        $validationErrors[] = ['password' => ['Password required for new user']];
                         continue;
                     }
                     $new_user->password = bcrypt($new_user->password);
@@ -299,19 +301,19 @@ class UserService
     public function validateUser(array $userData): array
     {
         $validator = Validator::make($userData, [
-            'firstname'     => 'min:3',
-            'lastname'      => 'min:3',
-            'email'         => 'required|email',
-            'mobile'        => 'nullable|digits:10',
-            'telephone'     => 'nullable|digits:10',
-            'address'       => 'nullable|min:3',
-            'address_num'   => 'nullable|numeric',
-            'country_code'  => 'nullable|digits:2',
-            'ticket_type'   => 'required|min:3',
-            'ticket_price'  => 'nullable|digits_between:-10000000,10000000',
-            'afm'           => 'nullable|digits:8',
-            'birthday'      => 'nullable|date_format:d-m-Y',
-            'event_id'      => 'required|numeric',
+            'firstname'    => 'min:3',
+            'lastname'     => 'min:3',
+            'email'        => 'required|email',
+            'mobile'       => 'nullable|digits:10',
+            'telephone'    => 'nullable|digits:10',
+            'address'      => 'nullable|min:3',
+            'address_num'  => 'nullable|numeric',
+            'country_code' => 'nullable|digits:2',
+            'ticket_type'  => 'required|min:3',
+            'ticket_price' => 'nullable|digits_between:-10000000,10000000',
+            'afm'          => 'nullable|digits:8',
+            'birthday'     => 'nullable|date_format:d-m-Y',
+            'event_id'     => 'required|numeric',
 
         ]);
 
@@ -404,23 +406,25 @@ class UserService
         $transaction->status = 1;
         $transaction->trial = 0;
 
-        $cart_data = ['manualtransaction' => [
-            'rowId' => 'manualtransaction',
-            'name' => $data['event']['title'], 'qty' => '1',
-            'price' => ($customPrice != null) ? $customPrice : $price,
-            'tax' => 0, 'subtotal' => ($customPrice != null) ? $customPrice : $price,
-        ]];
+        $cart_data = [
+            'manualtransaction' => [
+                'rowId' => 'manualtransaction',
+                'name'  => $data['event']['title'], 'qty' => '1',
+                'price' => ($customPrice != null) ? $customPrice : $price,
+                'tax'   => 0, 'subtotal' => ($customPrice != null) ? $customPrice : $price,
+            ],
+        ];
 
         $status_history[] = [
-            'datetime' => Carbon::now()->toDateTimeString(),
-            'status' => 1,
-            'user' => [
-                'id' => $user->id,
+            'datetime'      => Carbon::now()->toDateTimeString(),
+            'status'        => 1,
+            'user'          => [
+                'id'    => $user->id,
                 'email' => $user->email,
             ],
             'pay_bill_data' => [],
-            'cardtype' => null,
-            'cart_data' => $cart_data,
+            'cardtype'      => null,
+            'cart_data'     => $cart_data,
         ];
         $transaction->status_history = json_encode($status_history);
 
@@ -461,13 +465,13 @@ class UserService
 
         return [
             'user_id' => $user->id,
-            'ticket' => [
-                'event' => $data['event']['title'],
+            'ticket'  => [
+                'event'        => $data['event']['title'],
                 'ticket_title' => $ticket['title'],
-                'exp' => $exp_date,
-                'event_id' => $data['event']['id'],
-                'ticket_id' => $ticket['id'],
-                'type' => $ticket['type'],
+                'exp'          => $exp_date,
+                'event_id'     => $data['event']['id'],
+                'ticket_id'    => $ticket['id'],
+                'type'         => $ticket['type'],
             ],
         ];
     }
@@ -539,6 +543,10 @@ class UserService
             $data['slugInvoice'] = encrypt($user->id . '-' . $elearningInvoice->id);
 
             $user->notify(new CourseInvoice($data));
+
+            $subject = 'Knowcrunch | ' . $data['firstName'] . ' - download your receipt';
+            event(new ActivityEvent($user, ActivityEventEnum::EmailSent->value, $subject . ', ' . Carbon::now()->format('d F Y')));
+
             event(new EmailSent($user->email, 'CourseInvoice'));
             $invoiceFileName = date('Y.m.d');
             if ($paymentMethod) {
@@ -557,6 +565,7 @@ class UserService
                 ], ['event_id'=>$data['eventId']]);
 
             event(new EmailSent($adminemail, 'elearning_invoice'));
+            event(new ActivityEvent($user, ActivityEventEnum::EmailSent->value, 'Knowcrunch |' . $muser['name'] . ' – Payment Successful in ' . $muser['event_title'] . ', ' . Carbon::now()->format('d F Y')));
         }
     }
 

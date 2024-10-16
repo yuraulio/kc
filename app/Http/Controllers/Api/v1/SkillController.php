@@ -2,15 +2,21 @@
 
 namespace App\Http\Controllers\Api\v1;
 
+use App\Http\Requests\Api\v1\Skill\StoreRequest;
+use App\Http\Requests\Api\v1\Skill\UpdateRequest;
+use App\Http\Resources\SkillResource;
 use App\Model\Skill;
+use App\Services\v1\SkillService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class SkillController extends ApiBaseController
 {
-    /**
-     * Display a listing of the resource.
-     */
+    public function __construct(private SkillService $service)
+    {
+    }
+
     public function index(Request $request): JsonResponse
     {
         $query = $this->applyRequestParametersToQuery(Skill::query(), $request);
@@ -20,35 +26,31 @@ class SkillController extends ApiBaseController
         );
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function show(Skill $skill): SkillResource
     {
-        //
+        $this->authorize('view', $skill);
+
+        return new SkillResource($skill->load($this->service->getRelations()));
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function store(StoreRequest $request): SkillResource
     {
-        //
+        $this->authorize('create', Skill::class);
+
+        return new SkillResource($this->service->store($request->validated()));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function update(UpdateRequest $request, Skill $skill): SkillResource
     {
-        //
+        $this->authorize('update', $skill);
+
+        return new SkillResource($this->service->update($skill, $request->validated()));
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function destroy(Skill $skill): JsonResponse
     {
-        //
+        $this->authorize('delete', $skill);
+
+        return response()->json(['success' => $skill->delete()], Response::HTTP_OK);
     }
 }
