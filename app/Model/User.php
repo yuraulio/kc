@@ -86,8 +86,6 @@ class User extends Authenticatable
 
     protected $casts = [
         'social_links'              => 'json',
-        'invoice_details'           => 'json',
-        'receipt_details'           => 'json',
         'is_employee'               => 'boolean',
         'is_freelancer'             => 'boolean',
         'will_work_remote'          => 'boolean',
