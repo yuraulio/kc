@@ -417,7 +417,7 @@ class SubscriptionController extends Controller
                 Session::put('subscription-user', $charge['id']);
 
                 return response()->json('/myaccount/subscription-success', 200);
-            //return redirect('/myaccount');
+                //return redirect('/myaccount');
             } else {
                 return 'have error';
             }
@@ -752,7 +752,7 @@ class SubscriptionController extends Controller
                 Session::put('subscription-user', $charge['id']);
 
                 return redirect('/myaccount/subscription-success');
-            //return redirect('/myaccount');
+                //return redirect('/myaccount');
             } else {
                 return 'have error';
             }

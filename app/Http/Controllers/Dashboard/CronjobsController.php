@@ -981,9 +981,9 @@ class CronjobsController extends Controller
                 $lessonHour = date('H', strtotime($lesson->pivot->time_starts));
 
                 if (!$timeStarts) {
-                    $timeStarts = (int) date('H', strtotime($lesson->pivot->time_starts));
+                    $timeStarts = (int)date('H', strtotime($lesson->pivot->time_starts));
                 }
-                $timeEnds = (int) date('H', strtotime($lesson->pivot->time_ends));
+                $timeEnds = (int)date('H', strtotime($lesson->pivot->time_ends));
             }
 
             if ($timeStarts && $timeEnds) {

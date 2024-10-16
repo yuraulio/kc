@@ -296,7 +296,7 @@ class HomeController extends Controller
             $payment_method_id = 1;
             $payment_cardtype = 8;
             $amount = 0;
-            $namount = (float) $amount;
+            $namount = (float)$amount;
             $transaction_arr = [
 
                 'payment_method_id' => $payment_method_id,
@@ -753,7 +753,7 @@ class HomeController extends Controller
         }
 
         if ($price <= 0) {
-            $price = (float) 0;
+            $price = (float)0;
         }
         $categoryScript = $event->delivery->first() && $event->delivery->first()->id == 143 ? 'Video e-learning courses' : 'In-class courses'; //$event->category->first() ? 'Event > ' . $event->category->first()->name : '';
 

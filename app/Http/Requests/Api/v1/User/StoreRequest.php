@@ -18,7 +18,7 @@ class StoreRequest extends FormRequest
             'slug'                => ['sometimes', 'min:3'],
             'firstname'           => ['required', 'min:3'],
             'lastname'            => ['required', 'min:3'],
-            'email'               => ['required', 'email', 'unique:users,email'],
+            'email'               => ['required', 'email', 'unique:users,email',],
             'password'            => ['required', 'confirmed', 'min:6'],
             'birthday'            => ['sometimes', 'date_format:d-m-Y'],
             'mobile'              => ['sometimes', 'regex:/^\+?\d+$/'],

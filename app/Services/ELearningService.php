@@ -36,13 +36,13 @@ class ELearningService
                     $videos[$key]['is_new'] = $video['is_new'] ?? 0;
 
                     if (isset($video['seen']) && isset($videos[$key]['seen'])) {
-                        if ((int) $video['seen'] == 1 && (int) $videos[$key]['seen'] == 0) {
-                            $videos[$key]['seen'] = (int) $video['seen'];
+                        if ((int)$video['seen'] == 1 && (int)$videos[$key]['seen'] == 0) {
+                            $videos[$key]['seen'] = (int)$video['seen'];
                         }
                     }
 
                     if (isset($video['stop_time']) && isset($video['total_seen'])) {
-                        if ((float) $video['stop_time'] > (float) $videos[$key]['total_seen']) {
+                        if ((float)$video['stop_time'] > (float)$videos[$key]['total_seen']) {
                             $videos[$key]['total_seen'] = $video['stop_time'];
                         }
                     }
@@ -53,15 +53,15 @@ class ELearningService
                 $total_duration = 0;
 
                 foreach ($videos as $video) {
-                    if ((int) $video['seen'] == 1) {
-                        $total_seen += (float) $video['total_duration'];
+                    if ((int)$video['seen'] == 1) {
+                        $total_seen += (float)$video['total_duration'];
                     } else {
-                        $total_seen += (float) $video['total_seen'];
+                        $total_seen += (float)$video['total_seen'];
                     }
-                    $total_duration += (float) $video['total_duration'];
+                    $total_duration += (float)$video['total_duration'];
                 }
-                $past_total_duration = (float) $eventStatisticModel['total_duration'];
-                $past_total_seen = (float) $eventStatisticModel['total_seen'];
+                $past_total_duration = (float)$eventStatisticModel['total_duration'];
+                $past_total_seen = (float)$eventStatisticModel['total_seen'];
 
                 if ($total_duration == $past_total_duration) {
                     if ($total_seen < $past_total_seen) {
@@ -116,7 +116,7 @@ class ELearningService
 
         $lessonForUpdate = [];
         if (isset($video[$videoId])) {
-            $checkDbValueSendAutomateEmail = (int) $video[$videoId]['send_automate_email'];
+            $checkDbValueSendAutomateEmail = (int)$video[$videoId]['send_automate_email'];
         } else {
             $checkDbValueSendAutomateEmail = 1;
         }

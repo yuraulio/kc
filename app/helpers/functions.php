@@ -618,7 +618,7 @@ if (!function_exists('sendRequest')) {
                 'success'   => false,
                 'message'   => curl_error($ch),
                 'code'      => curl_errno($ch),
-                'http_info' => (object) $httpInfo,
+                'http_info' => (object)$httpInfo,
             ];
         }
 
@@ -1052,7 +1052,7 @@ if (!function_exists('is_webp_acceptable')) {
 if (!function_exists('get_image')) {
     function get_image($media, $version = null): ?string
     {
-        $isFileExist = fn (string $fileName) => file_exists(public_path($fileName));
+        $isFileExist = fn(string $fileName) => file_exists(public_path($fileName));
 
         if (is_scalar($media)) {
             $extension = pathinfo($media, PATHINFO_EXTENSION);
@@ -1353,18 +1353,18 @@ if (!function_exists('getLessonDurationToSec')) {
 
         $duration = explode(' ', $vimeoDuration);
         if (count($duration) == 2) {
-            $seconds = (float) preg_replace('/[^0-9.]+/', '', $duration[0]) * 60;
-            $seconds += (float) preg_replace('/[^0-9.]+/', '', $duration[1]);
+            $seconds = (float)preg_replace('/[^0-9.]+/', '', $duration[0]) * 60;
+            $seconds += (float)preg_replace('/[^0-9.]+/', '', $duration[1]);
 
             $totalDuration += $seconds;
         } else {
             $isMinutes = strpos($duration[0], 'm');
 
             if (!$isMinutes) {
-                $seconds = (float) preg_replace('/[^0-9.]+/', '', $duration[0]);
+                $seconds = (float)preg_replace('/[^0-9.]+/', '', $duration[0]);
                 $totalDuration += $seconds;
             } else {
-                $seconds = (float) preg_replace('/[^0-9.]+/', '', $duration[0]) * 60;
+                $seconds = (float)preg_replace('/[^0-9.]+/', '', $duration[0]) * 60;
                 $totalDuration += $seconds;
             }
         }

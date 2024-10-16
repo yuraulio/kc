@@ -524,7 +524,7 @@ class WebhookController extends BaseWebhookController
                     $enrollFromEvent->pivot->save();
                 }
 
-                if ((int) $count >= (int) $totalinst) {
+                if ((int)$count >= (int)$totalinst) {
                     try {
                         $subscription->noProrate()->cancel();
                     } catch (\Exception $ex) {

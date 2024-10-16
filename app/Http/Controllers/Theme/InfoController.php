@@ -303,7 +303,7 @@ class InfoController extends Controller
             }
 
             return redirect('/thankyou');
-        //return view('theme.cart.new_cart.thank_you', $data);
+            //return view('theme.cart.new_cart.thank_you', $data);
         } else {
             return Redirect::to('/');
         }
@@ -353,7 +353,7 @@ class InfoController extends Controller
             } else {
                 $this->transaction = [];
             }
-        //dd($transaction);
+            //dd($transaction);
         } else {
             $this->transaction = ['payment_response' => 'Card is not valid'];
         }
