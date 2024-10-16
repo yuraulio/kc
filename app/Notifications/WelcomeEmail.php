@@ -2,8 +2,12 @@
 
 namespace App\Notifications;
 
+use App\Jobs\SendEmail;
 use App\Model\Activation;
+use App\Model\User;
+use App\Notifications\SendMailchimpMail;
 use Carbon\Carbon;
+use DB;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -14,19 +18,15 @@ class WelcomeEmail extends Notification
 {
     use Queueable;
 
-    public $user;
-    public $data;
-
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($user, $data)
-    {
-        $this->user = $user;
-        $this->data = $data;
-
+    public function __construct(
+        private readonly User $user,
+        private readonly array $data
+    ) {
         if (isset($data['duration'])) {
             $this->data['duration'] = strip_tags($data['duration']);
         }
@@ -40,17 +40,12 @@ class WelcomeEmail extends Notification
      */
     public function via($notifiable)
     {
-        return ['mail'];
+        return SendMailchimpMail::class;
     }
 
-    /**
-     * Get the mail representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
-     */
-    public function toMail($notifiable)
+    public function toMailchimp(object $notifiable)
     {
+        //system-user-all-courses-welcome-email
         $slug = [];
         $slug['id'] = $this->user->id;
         $slug['email'] = $this->user->email;
@@ -58,9 +53,6 @@ class WelcomeEmail extends Notification
 
         $slug = encrypt($slug);
 
-        $template = isset($this->data['template']) ? 'emails.user.' . $this->data['template'] : 'emails.user.welcome';
-
-        // $subject = !isset($this->data['subject']) ? 'Knowcrunch - Welcome ' .  $this->user->firstname . '. Activate your account​ now' : 'Knowcrunch - Welcome ' . $this->data['subject'];
         $subject = !isset($this->data['subject']) ? 'Knowcrunch - Welcome to our course ' . $this->user->firstname : 'Knowcrunch – Welcome to our course ' . $this->data['subject'];
 
         if (isset($this->data['user']['createAccount'])) {
@@ -83,22 +75,11 @@ class WelcomeEmail extends Notification
             }
         }
 
-        return (new MailMessage)
-                    ->from('info@knowcrunch.com', 'Knowcrunch')
-                    ->subject($subject)
-                    ->view($template, $this->data);
-    }
-
-    /**
-     * Get the array representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return array
-     */
-    public function toArray($notifiable)
-    {
-        return [
-            //
-        ];
+        SendEmail::dispatch('WelcomeEmail', $this->user->toArray(), $subject, [
+            'FNAME'=> $this->user->firstname,
+            'CourseName'=>$this->data['eventTitle'],
+            'DurationDescription'=>$this->data['duration'],
+            'LINK'=>$this->data['slug'],
+        ], ['event_id'=>$this->data['eventId']]);
     }
 }

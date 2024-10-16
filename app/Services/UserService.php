@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Events\EmailSent;
 use App\Http\Controllers\ChunkReadFilter;
+use App\Jobs\SendEmail;
 use App\Model\Event;
 use App\Model\Invoice;
 use App\Model\Option;
@@ -486,11 +487,13 @@ class UserService
         $muser['event_title'] = $transaction->event->first()->title;
         $data['firstName'] = $transaction->user->first()->firstname;
         $data['eventTitle'] = $transaction->event->first()->title;
+        $data['eventId'] = $transaction->event->first()->id;
 
         $data['fbGroup'] = $transaction->event->first()->fb_group;
         $data['duration'] = '';
         $data['eventSlug'] = $transaction->event->first() ? url('/') . '/' . $transaction->event->first()->getSlug() : url('/');
         $data['user']['createAccount'] = false;
+        $data['user'] = $transaction->user->first();
         $data['user']['name'] = $transaction->user->first()->firstname;
 
         if ($isNewUser) {
@@ -544,14 +547,14 @@ class UserService
             $invoiceFileName .= '_' . $elearningInvoice->invoice . '.pdf';
             $fn = $invoiceFileName;
 
-            Mail::send('emails.admin.elearning_invoice', $data, function ($m) use ($adminemail, $muser, $pdf, $fn) {
-                $fullname = $muser['name'];
-                $first = $muser['first'];
-                $sub = 'Knowcrunch |' . $first . ' – Payment Successful in ' . $muser['event_title'];
-                $m->from('info@knowcrunch.com', 'Knowcrunch');
-                $m->to($adminemail, $fullname);
-                $m->subject($sub);
-            });
+            //system-user-admin-all-courses-payment-receipt
+            SendEmail::dispatch('CourseInvoice', ['email'=>$adminemail,
+                'firstname'=>$user->firstname,
+                'lastname'=>$user->lastname], 'Knowcrunch | ' . $user->firstname . ' – download your receipt', [
+                    'FNAME'=> $user->firstname,
+                    'CourseName'=>$data['eventTitle'],
+                    'LINK'=>$this->data['slugInvoice'],
+                ], ['event_id'=>$data['eventId']]);
 
             event(new EmailSent($adminemail, 'elearning_invoice'));
         }

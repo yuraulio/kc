@@ -2,6 +2,8 @@
 
 namespace App\Notifications;
 
+use App\Jobs\SendEmail;
+use App\Notifications\SendMailchimpMail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -10,16 +12,16 @@ use Illuminate\Notifications\Notification;
 class ElearningFQ extends Notification
 {
     use Queueable;
-    public $data;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($data)
-    {
-        $this->data = $data;
+    public function __construct(
+        private readonly array $data,
+        private readonly array $user
+    ) {
     }
 
     /**
@@ -30,7 +32,7 @@ class ElearningFQ extends Notification
      */
     public function via($notifiable)
     {
-        return ['mail'];
+        return SendMailchimpMail::class;
     }
 
     /**
@@ -39,24 +41,13 @@ class ElearningFQ extends Notification
      * @param  mixed  $notifiable
      * @return \Illuminate\Notifications\Messages\MailMessage
      */
-    public function toMail($notifiable)
+    public function toMailchimp($notifiable)
     {
-        return (new MailMessage)
-                    ->from('info@knowcrunch.com', 'Knowcrunch')
-                    ->subject($this->data['subject'])
-                    ->view($this->data['template'], $this->data);
-    }
-
-    /**
-     * Get the array representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return array
-     */
-    public function toArray($notifiable)
-    {
-        return [
-            //
-        ];
+        SendEmail::dispatch('ElearningFQ', $this->user, $this->data['subject'], [
+            'FNAME'=> $this->data['firstName'],
+            'CourseName'=>$this->data['eventTitle'],
+            'CourseExpiration'=>$this->data['expirationDate'],
+            'LINK'=>$this->data['elearningSlug'],
+        ], ['event_id'=>$this->data['eventId']]);
     }
 }

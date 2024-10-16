@@ -2,8 +2,10 @@
 
 namespace App\Notifications;
 
+use App\Jobs\SendEmail;
 use App\Model\Activation;
 use App\Model\User;
+use App\Notifications\SendMailchimpMail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -13,18 +15,17 @@ use Illuminate\Support\Str;
 class userActivationLink extends Notification
 {
     use Queueable;
-    private $user;
-    private $template;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($user, $template)
+    public function __construct(
+        private readonly User $user,
+        private readonly string $template
+    )
     {
-        $this->user = $user;
-        $this->template = $template;
     }
 
     /**
@@ -35,7 +36,7 @@ class userActivationLink extends Notification
      */
     public function via($notifiable)
     {
-        return ['mail', 'database'];
+        return SendMailchimpMail::class;
     }
 
     /**
@@ -44,16 +45,8 @@ class userActivationLink extends Notification
      * @param  mixed  $notifiable
      * @return \Illuminate\Notifications\Messages\MailMessage
      */
-    public function toMail($notifiable)
+    public function toMailchimp($notifiable)
     {
-        //$loadForm = 'sentinel.emails.re-activate';
-
-        //$code = Activation::firstOrCreate($user)->code;
-        //$activation = Activation::exists($user) ?: Activation::create($user);
-
-        //$code = $activation->code;
-        $loadForm = 'activation.emails.' . $this->template;
-
         $activation = Activation::firstOrCreate(['user_id' => $this->user['id']]);
 
         $email = $this->user['email'];
@@ -65,26 +58,14 @@ class userActivationLink extends Notification
             $activation->save();
         }
 
-        //dd(Activation::exists(array('id' => $this->user['id'])));
         $code = $activation->code;
+        $url = url('/') . 'myaccount/activate/' . $code;
 
         //send the user
-
-        return (new MailMessage)
-                    ->subject('Knowcrunch - ' . $firstName . ' your account​ is active')
-                    ->view($loadForm, ['code' => $code, 'email'=>$email, 'firstName'=>$firstName]);
-    }
-
-    /**
-     * Get the array representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return array
-     */
-    public function toArray($notifiable)
-    {
-        return [
-            'user_id' => $this->user,
-        ];
+        SendEmail::dispatch('userActivationLink', $this->user->toArray(), 'Knowcrunch - ' . $firstName . ' your account​ is active', [
+            'FNAME'=> $firstName,
+            'email'=>$email,
+            'LINK'=> $url,
+        ], []);
     }
 }

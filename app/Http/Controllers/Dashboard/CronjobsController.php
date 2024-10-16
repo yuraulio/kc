@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Dashboard;
 use App\Events\EmailSent;
 use App\Http\Controllers\Admin_api\RoyaltiesController;
 use App\Http\Controllers\Controller;
+use App\Jobs\SendEmail;
 use App\Model\Absence;
 use App\Model\CartCache;
 use App\Model\Event;
@@ -75,12 +76,13 @@ class CronjobsController extends Controller
             $data['name'] = $invoiceUser->user->first()->firstname . ' ' . $invoiceUser->user->first()->lastname;
             $data['firstName'] = $invoiceUser->user->first()->firstname;
             $data['eventTitle'] = $invoiceUser->event->first()->title;
+            $data['eventId'] = $invoiceUser->event->first()->id;
             $data['subject'] = 'Knowcrunch - ' . $data['firstName'] . ' your payment failed';
             $data['amount'] = round($invoiceUser->amount, 2);
             $data['template'] = 'emails.user.failed_payment';
             $data['userLink'] = url('/') . '/admin/user/' . $invoiceUser->user->first()->id . '/edit';
 
-            $invoiceUser->user->first()->notify(new FailedPayment($data));
+            $invoiceUser->user->first()->notify(new FailedPayment($data, $invoiceUser->user->first()));
             event(new EmailSent($invoiceUser->user->first()->email, 'FailedPayment'));
 
             $invoiceUser->email_sent = true;
@@ -110,12 +112,13 @@ class CronjobsController extends Controller
 
             $data['firstName'] = $user->firstname;
             $data['eventTitle'] = $event->title;
+            $data['eventId'] = $event->id;
             $data['subject'] = 'Knowcrunch |' . $data['firstName'] . ' - Subscription Payment Declined';
             $data['expirationDate'] = $event->pivot->expiration;
             $data['template'] = 'emails.user.subscription_non_payment';
             $data['amount'] = round($subscription->price, 2);
 
-            $user->first()->notify(new FailedPayment($data));
+            $user->first()->notify(new FailedPayment($data, $user));
             event(new EmailSent($user->first()->email, 'FailedPayment'));
         }
     }
@@ -167,9 +170,10 @@ class CronjobsController extends Controller
                 if ($expiration_status < 3 && isset($data['template'])) {
                     $data['firstname'] = $user['firstname'];
                     $data['event_name'] = $event['title'];
+                    $data['eventId'] = $event['id'];
                     $data['subscription_price'] = $event['plans'][0]['cost'];
 
-                    $user->notify(new SubscriptionExpireReminder($data));
+                    $user->notify(new SubscriptionExpireReminder($data, $user));
                     event(new EmailSent($user->email, 'SubscriptionExpireReminder'));
 
                     // Update Pivot Table
@@ -417,10 +421,11 @@ class CronjobsController extends Controller
                     $data['subject'] = 'Knowcrunch - ' . $subscription->user->firstname . ' your subscription will be renewed soon';
                     $data['firstName'] = $subscription->user->firstname;
                     $data['eventTitle'] = $subscription->event->first()->title;
-                    $data['expirationDate'] = date('d/m/Y', strtotime($subscription->event->first()->pivot->expiration));
-                    $data['subscription_price'] = $subscription->event->first()->plans[0]['cost'];
+                    $data['eventId'] = $subscription->event->first()->id;
+                    $data['ExpirationDate'] = date('d/m/Y', strtotime($subscription->event->first()->pivot->expiration));
+                    $data['SubscriptionPrice'] = $subscription->event->first()->plans[0]['cost'];
                     $data['template'] = 'emails.user.subscription_reminder';
-                    $subscription->user->notify(new SubscriptionReminder($data));
+                    $subscription->user->notify(new SubscriptionReminder($data, $subscription->user));
                     event(new EmailSent($subscription->user->email, 'SubscriptionReminder'));
                 }
             }
@@ -501,11 +506,12 @@ class CronjobsController extends Controller
 
             $data['firstName'] = $user->firstname;
             $data['eventTitle'] = $event->title;
+            $data['eventId'] = $event->id;
             $data['faqs'] = url('/') . '/' . $event->slugable->slug . '/#faq';
             $data['slug'] = url('/') . '/registration?cart=' . $abandoned->slug;
 
             if (filter_var($user->email, FILTER_VALIDATE_EMAIL)) {
-                $user->notify(new AbandonedCart($data));
+                $user->notify(new AbandonedCart($data, $user));
                 event(new EmailSent($user->email, 'AbandonedCart'));
                 $abandoned->send_email = 1;
                 $abandoned->save();
@@ -548,10 +554,11 @@ class CronjobsController extends Controller
 
                 $data['firstName'] = $user->firstname;
                 $data['eventTitle'] = $event->title;
+                $data['eventId'] = $event->id;
                 $data['faqs'] = url('/') . '/' . $event->slugable->slug . '/#faq';
                 $data['slug'] = url('/') . '/registration?cart=' . $abandoned->slug;
 
-                $user->notify(new AbandonedCart($data, true));
+                $user->notify(new AbandonedCart($data, $user, true));
                 event(new EmailSent($user->email, 'AbandonedCart'));
                 $abandoned->send_email = 2;
                 $abandoned->save();
@@ -580,6 +587,8 @@ class CronjobsController extends Controller
                 if ($event->id == 2304 && ($date->y == 0 && $date->m == 0 && $date->d == 7)) {
                     $data['firstName'] = $user->firstname;
                     $data['eventTitle'] = $event->title;
+                    $data['eventId'] = $event->id;
+
                     $data['expirationDate'] = date('d-m-Y', strtotime($user->pivot->expiration));
 
                     $page = Pages::find(4752);
@@ -589,17 +598,19 @@ class CronjobsController extends Controller
                     $data['subject'] = 'Knowcrunch | ' . $data['firstName'] . ' your course expires soon';
                     $data['subscription_price'] = $event->plans[0]['cost'];
 
-                    $user->notify(new ExpirationMails($data));
+                    $user->notify(new ExpirationMails($data, $user));
                     event(new EmailSent($user->email, 'ExpirationMails'));
                 } elseif ($event->id !== 2304 && ($date->y == 0 && $date->m == 0 && $date->d == 7)) {
                     $data['firstName'] = $user->firstname;
                     $data['eventTitle'] = $event->title;
+                    $data['eventId'] = $event->id;
+
                     $data['expirationDate'] = date('d-m-Y', strtotime($user->pivot->expiration));
 
                     $data['template'] = 'emails.user.courses.week_expiration';
                     $data['subject'] = 'Knowcrunch | ' . $data['firstName'] . ' your course expires soon';
 
-                    $user->notify(new ExpirationMails($data));
+                    $user->notify(new ExpirationMails($data, $user));
                     event(new EmailSent($user->email, 'ExpirationMails'));
                 }
             }
@@ -622,7 +633,6 @@ class CronjobsController extends Controller
                 continue;
             }
 
-            //dd($invoiceUser);
             $date = date_create($invoiceUser->date);
             $today = date_create(date('Y/m/d'));
             $date = date_diff($date, $today);
@@ -631,12 +641,12 @@ class CronjobsController extends Controller
                 $data = [];
                 $data['firstName'] = $invoiceUser->user->first()->firstname;
                 $data['eventTitle'] = $invoiceUser->event->first()->title;
+                $data['eventId'] = $invoiceUser->event->first()->id;
                 $data['subject'] = 'Knowcrunch - ' . $data['firstName'] . ' a payment is coming';
                 $data['paymentDate'] = date('d-m-Y', strtotime($invoiceUser->date));
                 $data['template'] = 'emails.user.payment_reminder';
-                //$data['installments'] =
 
-                $invoiceUser->user->first()->notify(new PaymentReminder($data));
+                $invoiceUser->user->first()->notify(new PaymentReminder($data, $invoiceUser->user->first()));
                 event(new EmailSent($invoiceUser->user->first()->email, 'PaymentReminder'));
             }
         }
@@ -653,11 +663,8 @@ class CronjobsController extends Controller
         })
         ->get();
 
-        //$events = Event::has('transactions')->where('published','true')->with('users')->get();
-
         $today = date_create(date('Y/m/d'));
         $today1 = date('Y-m-d');
-
         foreach ($events as $event) {
             $eventInfo = $event->event_info();
             $expiration = isset($eventInfo['elearning']['expiration']) ? $eventInfo['elearning']['expiration'] : '';
@@ -666,26 +673,23 @@ class CronjobsController extends Controller
                 if (!($user->pivot->expiration >= $today1) || !$user->pivot->expiration || !$expiration) {
                     continue;
                 }
-
                 $date = date_create($user->pivot->expiration);
                 $date = date_diff($date, $today);
 
                 if ($date->y == 0 && $date->m == ($expiration / 2) && $date->d == 0) {
-                    // dd('edww');
-
                     $data['firstName'] = $user->firstname;
                     $data['eventTitle'] = $event->title;
+                    $data['eventId'] = $event->id;
                     $data['fbGroup'] = $event->fb_group;
                     $data['subject'] = 'Knowcrunch - ' . $data['firstName'] . ' you are almost there';
                     $data['template'] = 'emails.user.half_period';
 
-                    $user->notify(new HalfPeriod($data));
+                    $user->notify(new HalfPeriod($data, $user));
                     event(new EmailSent($user->email, 'HalfPeriod'));
                 }
             }
         }
 
-        //$events = Event::has('transactions')->where('published',true)->with('users')->where('view_tpl','event')->get();
         $events = [];
 
         $today = date_create(date('Y/m/d'));
@@ -693,8 +697,6 @@ class CronjobsController extends Controller
 
         foreach ($events as $event) {
             $eventInfo = $event->event_info();
-            //$eventDate = isset($eventInfo['inclass']['dates']['text']) ? $eventInfo['inclass']['dates']['text'] : '';
-            //$expiration = isset($eventInfo['elearning']['expiration']) ? $eventInfo['elearning']['expiration'] : '';
 
             foreach ($event['users'] as $user) {
                 $eventDate = isset($eventInfo['inclass']['dates']['text']) ? $eventInfo['inclass']['dates']['text'] : '';
@@ -720,17 +722,15 @@ class CronjobsController extends Controller
                 $expiration = date_diff($date, $startDate);
                 $date = date_diff($date, $today);
 
-                //if( $date->y==0 && $date->m == ($expiration->m/2)  && $date->d == 0){
                 if ($date->y == 0 && $date->m == ($expiration->m / 2) && $date->d == 0 && $expiration->y == 0 && $expiration->d == 0) {
-                    // dd('edww');
-
                     $data['firstName'] = $user->firstname;
                     $data['eventTitle'] = $event->title;
+                    $data['eventId'] = $event->id;
                     $data['fbGroup'] = $event->fb_group;
                     $data['subject'] = 'Knowcrunch - ' . $data['firstName'] . ' you are almost there';
                     $data['template'] = 'emails.user.half_period';
 
-                    $user->notify(new HalfPeriod($data));
+                    $user->notify(new HalfPeriod($data, $user));
                     event(new EmailSent($user->email, 'HalfPeriod'));
                 }
             }
@@ -749,7 +749,6 @@ class CronjobsController extends Controller
                                 $query->whereViewTpl('elearning_event');
                             });
                         })->get();
-
         foreach ($transactions as $transaction) {
             if (!($event = $transaction->event->first())) {
                 continue;
@@ -760,7 +759,6 @@ class CronjobsController extends Controller
             }
 
             foreach ($transaction['user'] as $user) {
-                //dd($event);
                 $expiration = $event->users()->wherePivot('user_id', $user->id)->first();
                 if (!$expiration) {
                     continue;
@@ -768,12 +766,13 @@ class CronjobsController extends Controller
 
                 $data['firstName'] = $user->firstname;
                 $data['eventTitle'] = $event->title;
+                $data['eventId'] = $event->id;
                 $data['subject'] = 'Knowcrunch - ' . $data['firstName'] . ' enjoying ' . $event->title . '?';
                 $data['elearningSlug'] = url('/') . '/myaccount/elearning/' . $event->title;
                 $data['expirationDate'] = date('d-m-Y', strtotime($expiration->pivot->expiration));
                 $data['template'] = 'emails.user.elearning_f&qemail';
 
-                $user->notify(new ElearningFQ($data));
+                $user->notify(new ElearningFQ($data, $user));
                 event(new EmailSent($user->email, 'ElearningFQ'));
             }
         }
@@ -782,7 +781,6 @@ class CronjobsController extends Controller
     public function sendSurveyMail()
     {
         $events = Event::has('transactions')->with('users')->where('view_tpl', 'elearning_event')->get();
-        //$events = Event::has('transactions')->where('published','true')->with('users')->get();
 
         $today = date('Y/m/d');
         $today = date('Y-m-d', strtotime('-1 day', strtotime($today)));
@@ -803,13 +801,13 @@ class CronjobsController extends Controller
                 $data['firstName'] = $user->firstname;
                 $data['subject'] = 'Knowcrunch - ' . $data['firstName'] . ' please take our survey';
                 $data['template'] = 'emails.user.survey_email';
-                $data['fb_group'] = $event->fb_group;
+                $data['eventTitle'] = $event->title;
+                $data['eventId'] = $event->id;
                 $data['evaluateTopics'] = $event->evaluate_topics;
                 $data['evaluateInstructors'] = $event->evaluate_instructors;
-                $data['fbTestimonial'] = $event->fb_testimonial;
 
                 if ($sendEmail) {
-                    $user->notify(new SurveyEmail($data));
+                    $user->notify(new SurveyEmail($data, $user));
                     event(new EmailSent($user->email, 'SurveyEmail'));
                 }
             }
@@ -819,20 +817,8 @@ class CronjobsController extends Controller
 
         foreach ($events as $event) {
             $sendEmail = false;
-            //$lessons = $event->topicsLessonsInstructors();
             $lessons = $event->lessons;
             foreach ($event['users'] as $user) {
-                /*if(!isset($lessons['topics'])){
-                    continue;
-                }
-
-                $lesson = end($lessons['topics']);
-
-                if(!isset($lesson['lessons'])){
-                    continue;
-                }
-
-                $lesson = end($lesson['lessons']);*/
                 $lesson = $lessons->last();
 
                 if (!isset($lesson['pivot']['time_ends'])) {
@@ -856,13 +842,13 @@ class CronjobsController extends Controller
                 $data['firstName'] = $user->firstname;
                 $data['subject'] = 'Knowcrunch - ' . $data['firstName'] . ' please take our survey';
                 $data['template'] = 'emails.user.survey_email';
-                $data['fb_group'] = $event->fb_group;
                 $data['evaluateTopics'] = $event->evaluate_topics;
                 $data['evaluateInstructors'] = $event->evaluate_instructors;
-                $data['fbTestimonial'] = $event->fb_testimonial;
+                $data['eventTitle'] = $event->title;
+                $data['eventId'] = $event->id;
 
                 if ($sendEmail) {
-                    $user->notify(new SurveyEmail($data));
+                    $user->notify(new SurveyEmail($data, $user));
                     event(new EmailSent($user->email, 'SurveyEmail'));
                 }
             }
@@ -912,6 +898,7 @@ class CronjobsController extends Controller
             $data['faq'] = url('/') . '/' . $event->slugable->slug . '/#faq?utm_source=Knowcrunch.com&utm_medium=Registration_Email';
             $data['fb_group'] = $event->fb_group;
             $data['eventTitle'] = $event->title;
+            $data['eventId'] = $event->id;
 
             foreach ($event->users as $user) {
                 $data['button_text'] = 'Activate your account';
@@ -935,7 +922,7 @@ class CronjobsController extends Controller
                     $data['slug'] = url(config('app.url')) . '/myaccount';
                 }
 
-                $user->notify(new InClassReminder($data));
+                $user->notify(new InClassReminder($data, $user));
                 event(new EmailSent($user->email, 'InClassReminder'));
             }
         }
@@ -1080,7 +1067,7 @@ class CronjobsController extends Controller
             $email_data['date'] = isset($lesson->pivot->time_starts) ? date('d-m-Y H:s', strtotime($lesson->pivot->time_starts)) : '';
             $email_data['title'] = isset($lesson) ? $lesson->title : '';
 
-            $instructor['user'][0]->notify(new InstructorsMail($email_data));
+            $instructor['user'][0]->notify(new InstructorsMail($email_data, $instructor['user'][0]));
             event(new EmailSent($instructor['user'][0]->email, 'InstructorsMail'));
         }
     }
@@ -1123,6 +1110,7 @@ class CronjobsController extends Controller
             $data['faq'] = url('/') . '/' . $event->slugable->slug . '/#faq?utm_source=Knowcrunch.com&utm_medium=Registration_Email';
             $data['fb_group'] = $event->fb_group;
             $data['eventTitle'] = $event->title;
+            $data['eventId'] = $event->id;
 
             foreach ($event['topic'] as $topic) {
                 if (in_array($topic->id, $checkForDoubleTopics)) {
@@ -1134,22 +1122,12 @@ class CronjobsController extends Controller
                     continue;
                 }
 
-                $subject = '';
-
-                if ($topic->email_template == 'activate_social_media_account_email') {
-                    $subject = 'activate your social media accounts!';
-                } elseif ($topic->email_template == 'activate_advertising_account_email') {
-                    $subject = 'activate your personal advertising accounts!';
-                } elseif ($topic->email_template == 'activate_production_content_account_email') {
-                    $subject = 'activate your content production accounts!';
-                }
-
                 $data['email_template'] = $topic->email_template;
                 foreach ($event->users as $user) {
                     $data['firstname'] = $user->firstname;
-                    $data['subject'] = 'Knowcrunch | ' . $user->firstname . ', ' . $subject;
+                    $data['subject'] = 'Knowcrunch | ' . $user->firstname . ', ';
 
-                    $user->notify(new SendTopicAutomateMail($data));
+                    $user->notify(new SendTopicAutomateMail($data, $user));
                     event(new EmailSent($user->email, 'SendTopicAutomateMail'));
                 }
 

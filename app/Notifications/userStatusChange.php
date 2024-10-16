@@ -3,7 +3,9 @@
 namespace App\Notifications;
 
 use App\Jobs\SendEmail;
+use App\Jobs\SendEmail;
 use App\Model\User;
+use App\Notifications\SendMailchimpMail;
 use App\Notifications\SendMailchimpMail;
 use DB;
 use Illuminate\Bus\Queueable;
@@ -14,16 +16,15 @@ use Illuminate\Notifications\Notification;
 class userStatusChange extends Notification
 {
     use Queueable;
-    private $user;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($user)
-    {
-        $this->user = $user;
+    public function __construct(
+        private readonly User $user
+    ) {
     }
 
     public function via($notifiable)
@@ -43,43 +44,10 @@ class userStatusChange extends Notification
         $subject = 'User Status Change';
         $fullName = $this->user->firstname . ' ' . $this->user->lastname;
 
-        SendEmail::dispatch($loadForm, $this->user, $subject, [
+        SendEmail::dispatch($loadForm, $this->user->toArray(), $subject, [
             'FNAME'=> $this->user->firstname,
         ], []);
 
         return true;
-    }
-
-    /**
-     * Get the mail representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
-     */
-    public function toMail($notifiable)
-    {
-        //send the user
-        if ($this->user->statusAccount['completed'] == 1) {
-            $loadForm = 'emails.user.account_activated';
-        } else {
-            $loadForm = 'emails.user.account_deactivated';
-        }
-
-        return (new MailMessage)
-            ->subject('User Status Change')
-            ->view($loadForm, ['user' => $this->user]);
-    }
-
-    /**
-     * Get the array representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return array
-     */
-    public function toArray($notifiable)
-    {
-        return [
-            'user_id' => $this->user,
-        ];
     }
 }

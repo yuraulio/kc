@@ -2,6 +2,9 @@
 
 namespace App\Notifications;
 
+use App\Jobs\SendEmail;
+use App\Model\User;
+use App\Notifications\SendMailchimpMail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -16,11 +19,10 @@ class SendTopicAutomateMail extends Notification
      *
      * @return void
      */
-    private $data;
-
-    public function __construct($data)
-    {
-        $this->data = $data;
+    public function __construct(
+        private readonly array $data,
+        private readonly User $user
+    ) {
     }
 
     /**
@@ -31,7 +33,7 @@ class SendTopicAutomateMail extends Notification
      */
     public function via($notifiable)
     {
-        return ['mail'];
+        return SendMailchimpMail::class;
     }
 
     /**
@@ -40,27 +42,26 @@ class SendTopicAutomateMail extends Notification
      * @param  mixed  $notifiable
      * @return \Illuminate\Notifications\Messages\MailMessage
      */
-    public function toMail($notifiable)
+    public function toMailchimp($notifiable)
     {
-        $data = $this->data;
-        $template = 'emails.topic.' . $this->data['email_template'];
-
-        return (new MailMessage)
-                    ->from('info@knowcrunch.com', 'Knowcrunch')
-                    ->subject($this->data['subject'])
-                    ->view($template, $data);
-    }
-
-    /**
-     * Get the array representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return array
-     */
-    public function toArray($notifiable)
-    {
-        return [
-            //
-        ];
+        //system-activate-content-production-account-email
+        //system-activate-social-media-platforms
+        //system-all-courses-setup-advertising-accounts
+        $subject = '';
+        $emailEvent = '';
+        if ($this->data['email_template'] == 'activate_social_media_account_email') {
+            $subject = 'activate your social media accounts!';
+            $emailEvent = 'SendTopicAutomateMailSocialAccount';
+        } elseif ($this->data['email_template'] == 'activate_advertising_account_email') {
+            $subject = 'activate your personal advertising accounts!';
+            $emailEvent = 'SendTopicAutomateMailAdAccount';
+        } elseif ($this->data['email_template'] == 'activate_production_content_account_email') {
+            $subject = 'activate your content production accounts!';
+            $emailEvent = 'SendTopicAutomateMailContentAccount';
+        }
+        SendEmail::dispatch($emailEvent, $this->user->toArray(), $this->data['subject'] . $subject, [
+            'FNAME'=> $this->data['firstname'],
+            'CourseName'=>$this->data['eventTitle'],
+        ], ['event_id'=>$this->data['eventId']]);
     }
 }

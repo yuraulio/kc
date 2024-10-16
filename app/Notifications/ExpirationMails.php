@@ -2,6 +2,9 @@
 
 namespace App\Notifications;
 
+use App\Jobs\SendEmail;
+use App\Model\User;
+use App\Notifications\SendMailchimpMail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -16,11 +19,10 @@ class ExpirationMails extends Notification
      *
      * @return void
      */
-    private $data;
-
-    public function __construct($data)
-    {
-        $this->data = $data;
+    public function __construct(
+        private readonly array $data,
+        private readonly User $user
+    ) {
     }
 
     /**
@@ -31,7 +33,7 @@ class ExpirationMails extends Notification
      */
     public function via($notifiable)
     {
-        return ['mail'];
+        return SendMailchimpMail::class;
     }
 
     /**
@@ -40,24 +42,19 @@ class ExpirationMails extends Notification
      * @param  mixed  $notifiable
      * @return \Illuminate\Notifications\Messages\MailMessage
      */
-    public function toMail($notifiable)
+    public function toMailchimp($notifiable)
     {
-        return (new MailMessage)
-                    ->from('info@knowcrunch.com', 'Knowcrunch')
-                    ->subject($this->data['subject'])
-                    ->view($this->data['template'], $this->data);
-    }
-
-    /**
-     * Get the array representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return array
-     */
-    public function toArray($notifiable)
-    {
-        return [
-            //
-        ];
+        //system-user-big-el-subscription-expire-reminder
+        //system-user-el-courses-no-sub-expire-reminder
+        $emailEvent = 'ExpirationMailsInWeek';
+        if ($this->data['template'] === 'emails.user.courses.masterclass_expiration') {
+            $emailEvent = 'ExpirationMailsMasterClass';
+        }
+        SendEmail::dispatch($emailEvent, $this->user->toArray(), $this->data['subject'], [
+            'FNAME'=> $this->data['firstName'],
+            'CourseName'=>$this->data['eventTitle'],
+            'ExpirationDate'=>$this->data['expirationDate'],
+            'SubscriptionPrice'=>isset($this->data['subscription_price']) ? $this->data['subscription_price'] : 0,
+        ], ['event_id'=>$this->data['eventId']]);
     }
 }

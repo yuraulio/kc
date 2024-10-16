@@ -2,6 +2,9 @@
 
 namespace App\Notifications;
 
+use App\Jobs\SendEmail;
+use App\Model\User;
+use App\Notifications\SendMailchimpMail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -11,16 +14,15 @@ class SubscriptionReminder extends Notification
 {
     use Queueable;
 
-    public $data;
-
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($data)
-    {
-        $this->data = $data;
+    public function __construct(
+        private readonly array $data,
+        private readonly User $user
+    ) {
     }
 
     /**
@@ -31,7 +33,7 @@ class SubscriptionReminder extends Notification
      */
     public function via($notifiable)
     {
-        return ['mail'];
+        return SendMailchimpMail::class;
     }
 
     /**
@@ -40,24 +42,14 @@ class SubscriptionReminder extends Notification
      * @param  mixed  $notifiable
      * @return \Illuminate\Notifications\Messages\MailMessage
      */
-    public function toMail($notifiable)
+    public function toMailchimp($notifiable)
     {
-        return (new MailMessage)
-                    ->from('info@knowcrunch.com', 'Knowcrunch')
-                    ->subject($this->data['subject'])
-                    ->view($this->data['template'], $this->data);
-    }
-
-    /**
-     * Get the array representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return array
-     */
-    public function toArray($notifiable)
-    {
-        return [
-            //
-        ];
+        //system-user-big-el-subscript-renewal-reminder
+        SendEmail::dispatch('SubscriptionReminder', $this->user->toArray(), $this->data['subject'], [
+            'FNAME'=> $this->data['firstName'],
+            'CourseName'=>$this->data['eventTitle'],
+            'ExpirationDate'=>$this->data['ExpirationDate'],
+            'SubscriptionPrice'=>$this->data['SubscriptionPrice'],
+        ], ['event_id'=>$this->data['eventId']]);
     }
 }

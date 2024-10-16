@@ -659,13 +659,6 @@ $( document ).ready(function() {
    
 </script>
 @endif
-@else
-<script type="text/javascript">
-   // setTimeout(function(){
-   //   		fbq('track', 'FailedPayment');
-   //   	}, 1000);
-     
-</script>
 @endif
 @endif
 <style>

@@ -25,7 +25,7 @@ class EmailSendService
         return $mergeFields;
     }
 
-    public function sendEmail(string $event, User $to, string $subject, array $payload, array $metaData)
+    public function sendEmail(string $event, array $to, string $subject, array $payload, array $metaData)
     {
         $email = Email::where(['predefined_trigger'=>$event, 'status' => 1])->first();
         $mergeFields = $this->convertPayloadToMergeFields($payload);
@@ -41,8 +41,8 @@ class EmailSendService
                         'track_opens'=>true,
                         'track_clicks'=>true,
                         'to' => [[
-                            'email' => $to->email,
-                            'name' => $to->firstname . ' ' . $to->lastname,
+                            'email' => $to['email'],
+                            'name' => $to['firstname'] . ' ' . $to['lastname'],
                             'type' => 'to',
                         ]],
                         'from_email' => env('MAIL_FROM_ADDRESS'),

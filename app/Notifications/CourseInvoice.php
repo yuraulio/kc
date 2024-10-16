@@ -2,6 +2,8 @@
 
 namespace App\Notifications;
 
+use App\Jobs\SendEmail;
+use App\Notifications\SendMailchimpMail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -10,16 +12,14 @@ use Illuminate\Notifications\Notification;
 class CourseInvoice extends Notification
 {
     use Queueable;
-    public $data;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($data)
+    public function __construct(private readonly array $data)
     {
-        $this->data = $data;
     }
 
     /**
@@ -30,7 +30,7 @@ class CourseInvoice extends Notification
      */
     public function via($notifiable)
     {
-        return ['mail'];
+        return SendMailchimpMail::class;
     }
 
     /**
@@ -39,24 +39,14 @@ class CourseInvoice extends Notification
      * @param  mixed  $notifiable
      * @return \Illuminate\Notifications\Messages\MailMessage
      */
-    public function toMail($notifiable)
+    public function toMailchimp($notifiable)
     {
-        return (new MailMessage)
-                    ->from('info@knowcrunch.com', 'Knowcrunch')
-                    ->subject('Knowcrunch | ' . $this->data['firstName'] . ' - download your receipt')
-                    ->view('emails.user.invoice', $this->data);
-    }
-
-    /**
-     * Get the array representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return array
-     */
-    public function toArray($notifiable)
-    {
-        return [
-            //
-        ];
+        //system-user-admin-all-courses-payment-receipt
+        $subject = 'Knowcrunch | ' . $this->data['firstName'] . ' - download your receipt';
+        SendEmail::dispatch('CourseInvoice', $this->data['user'], $subject, [
+            'FNAME'=> $this->data['firstName'],
+            'CourseName'=>$this->data['eventTitle'],
+            'LINK'=>$this->data['slugInvoice'],
+        ], ['event_id'=>$this->data['eventId']]);
     }
 }

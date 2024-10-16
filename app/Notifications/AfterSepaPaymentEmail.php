@@ -2,6 +2,9 @@
 
 namespace App\Notifications;
 
+use App\Jobs\SendEmail;
+use App\Model\User;
+use App\Notifications\SendMailchimpMail;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -12,19 +15,15 @@ class AfterSepaPaymentEmail extends Notification
 {
     use Queueable;
 
-    public $user;
-    public $data;
-
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($user, $data)
-    {
-        $this->user = $user;
-        $this->data = $data;
-
+    public function __construct(
+        private readonly User $user,
+        private readonly array $data
+    ) {
         if (isset($data['duration'])) {
             $this->data['duration'] = strip_tags($data['duration']);
         }
@@ -38,17 +37,12 @@ class AfterSepaPaymentEmail extends Notification
      */
     public function via($notifiable)
     {
-        return ['mail'];
+        return SendMailchimpMail::class;
     }
 
-    /**
-     * Get the mail representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
-     */
-    public function toMail($notifiable)
+    public function toMailchimp(object $notifiable)
     {
+        //system-user-all-courses-sepa-payment
         $slug = [];
         $slug['id'] = $this->user->id;
         $slug['email'] = $this->user->email;
@@ -56,29 +50,15 @@ class AfterSepaPaymentEmail extends Notification
 
         $slug = encrypt($slug);
 
-        $template = 'emails.user.after_sepa_payment';
-
-        // $subject = !isset($this->data['subject']) ? 'Knowcrunch - Welcome ' .  $this->user->firstname . '. Activate your account​ now' : 'Knowcrunch - Welcome ' . $this->data['subject'];
         $subject = !isset($this->data['subject']) ? 'Knowcrunch - Welcome to our course ' . $this->user->firstname : 'Knowcrunch – Welcome to our course ' . $this->data['subject'];
 
         $this->data['slug'] = url(config('app.url')) . '/myaccount';
 
-        return (new MailMessage)
-                    ->from('info@knowcrunch.com', 'Knowcrunch')
-                    ->subject($subject)
-                    ->view($template, $this->data);
-    }
-
-    /**
-     * Get the array representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return array
-     */
-    public function toArray($notifiable)
-    {
-        return [
-            //
-        ];
+        SendEmail::dispatch('AfterSepaPaymentEmail', $this->user->toArray(), $subject, [
+            'FNAME'=> $this->user->firstname,
+            'CourseName'=>$this->data['eventTitle'],
+            'DurationDescription'=>$this->data['duration'],
+            'LINK'=>$this->data['slug'],
+        ], ['event_id'=>$this->data['eventId']]);
     }
 }

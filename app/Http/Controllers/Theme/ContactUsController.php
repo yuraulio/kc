@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Theme;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\SendEmail;
 use App\Services\FBPixelService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;

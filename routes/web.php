@@ -748,8 +748,6 @@ Route::get('/sendNonpaymentEmail', 'Dashboard\CronjobsController@sendNonPayment'
 Route::get('/sendSubscriptionNonPayment', 'Dashboard\CronjobsController@sendSubscriptionNonPayment');
 Route::get('/sendReminderAfterExpirationSubscription', 'Dashboard\CronjobsController@sendReminderForExpiredSubscription');
 
-//Route::get('/sendWarningElearning', 'Dashboard\CronjobsController@sendElearningWarning');//out
-//Route::get('/sendHalfPeriodElearning', 'Dashboard\CronjobsController@sendElearningHalfPeriod');//out
 Route::get('/fb-google-csv', 'Dashboard\CronjobsController@fbGoogleCsv');
 Route::get('/sendSubscriptionRemind', 'Dashboard\CronjobsController@sendSubscriptionRemind');
 Route::get('/update-status-field', 'Dashboard\CronjobsController@updateStatusField');

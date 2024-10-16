@@ -130,26 +130,18 @@ class ELearningService
             $topic = Topic::find($topicId);
 
             if ($topic && $topic->email_template != '' && $checkDbValueSendAutomateEmail == 0) {
-                if ($topic->email_template == 'activate_social_media_account_email') {
-                    $subject = 'activate your social media accounts!';
-                } elseif ($topic->email_template == 'activate_advertising_account_email') {
-                    $subject = 'activate your personal advertising accounts!';
-                } elseif ($topic->email_template == 'activate_content_production_account_email') {
-                    $subject = 'activate your content production accounts!';
-                }
+                $data['firstname'] = $user->firstname;
+                $data['subject'] = 'Knowcrunch | ' . $user->firstname . ', ';
+                $data['email_template'] = $topic->email_template;
+                $data['eventTitle'] = $event->title;
+                $data['eventId'] = $event->id;
 
-                if ($subject) {
-                    $data['firstname'] = $user->firstname;
-                    $data['subject'] = 'Knowcrunch | ' . $user->firstname . ', ' . $subject;
-                    $data['email_template'] = $topic->email_template;
+                $user->notify(new SendTopicAutomateMail($data, $user));
+                event(new EmailSent($user->email, 'SendTopicAutomateMail'));
 
-                    $user->notify(new SendTopicAutomateMail($data));
-                    event(new EmailSent($user->email, 'SendTopicAutomateMail'));
-
-                    // find all topic lessons for update
-                    foreach ($event->lessons()->wherePivot('topic_id', $topic->id)->get() as $lesson) {
-                        $lessonForUpdate[] = str_replace('https://vimeo.com/', '', $lesson->vimeo_video);
-                    }
+                // find all topic lessons for update
+                foreach ($event->lessons()->wherePivot('topic_id', $topic->id)->get() as $lesson) {
+                    $lessonForUpdate[] = str_replace('https://vimeo.com/', '', $lesson->vimeo_video);
                 }
             }
 

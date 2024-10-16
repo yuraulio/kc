@@ -2467,8 +2467,6 @@ class CartController extends Controller
         }
 
         return redirect('/thankyou');
-
-        //return view('theme.cart.new_cart.thank_you',$data);
     }
 
     public function sendEmails($transaction, $content, $user)
@@ -2498,6 +2496,8 @@ class CartController extends Controller
         $data['helperdetails'] = $helperdetails;
         $data['eventSlug'] = url('/') . '/' . $content->getSlug();
         $data['duration'] = '';
+        $data['eventTitle'] = $content->title;
+        $data['eventId'] = $content->id;
 
         $eventInfo = $content ? $content->event_info() : [];
 
@@ -2534,11 +2534,34 @@ class CartController extends Controller
         $transdata['helperdetails'] = $helperdetails;
         $transdata['coupon'] = $transaction->coupon_code;
 
-        $sentadmin = Mail::send('emails.admin.admin_info_new_registration', $transdata, function ($m) use ($adminemail) {
-            $m->from($adminemail, 'Knowcrunch');
-            $m->to($adminemail, 'Knowcrunch');
-            $m->subject('Knowcrunch - New Registration');
-        });
+        //system-admin-all-courses-new-subscription
+        $link = "http://www.knowcrunch.com/admin/user/{$user['id']}/edit";
+        if (isset($helperdetails[$user['email']])) {
+            $mob = $helperdetails[$user['email']]['mobile'] ? $helperdetails[$user['email']]['mobile'] : '';
+            $com = $helperdetails[$user['email']]['company'] ? $helperdetails[$user['email']]['company'] : '';
+            $job = $helperdetails[$user['email']]['jobtitle'] ? $helperdetails[$user['email']]['jobtitle'] : '';
+        } else {
+            $mob = isset($user['mobile']) ? $user['mobile'] : '-';
+            $com = isset($user['company']) ? $user['company'] : '-';
+            $job = isset($user['jobTitle']) ? $user['jobTitle'] : '-';
+        }
+        $amount = ($trans->total_amount == 0) ? 'Free' : round($transaction->total_amount / $installments, 2);
+
+        SendEmail::dispatch('AdminInfoNewRegistration', [
+            'email'=>'info@knowcrunch.com',
+            'firstname'=>$user->first_name,
+            'lastname'=>$user->last_name,
+        ], 'Knowcrunch - New Registration', [
+            'Name'=> $user->first_name,
+            'Lastname'=> $user->last_name,
+            'ParticipantEmail'=>$user->email,
+            'ParticipantPhone'=>$mob,
+            'ParticipantPosition'=>$job,
+            'ParticipantCompany'=>$com,
+            'SubscriptionAmountPaid'=>$amount,
+            'CourseName'=>$data['eventTitle'],
+            'LINK'=>$link,
+        ], ['event_id'=>$data['eventId']]);
 
         if (!$user->statusAccount->completed) {
             $data['user']['createAccount'] = true;

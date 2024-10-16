@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Webhook;
 
 use App\Events\EmailSent;
 use App\Http\Controllers\Controller;
+use App\Jobs\SendEmail;
 use App\Model\Event;
 use App\Model\Invoice;
 use App\Model\PaymentMethod;
@@ -230,15 +231,11 @@ class WebhookController extends BaseWebhookController
 
     public function handleInvoicePaymentSucceeded(array $payload)
     {
-        //Log::info('invoice trigger');
-
         if ($user = $this->getUserByStripeId($payload['data']['object']['customer'])) {
             $sub = $payload['data']['object']['lines']['data'][0];
             if (isset($sub['metadata']['installments'])) {
-                //Log::info('installments');
                 $this->installments($payload, $sub, $user);
             } else {
-                //Log::info('subscription');
                 $this->subscription($payload, $user, $sub);
             }
         }
@@ -536,132 +533,6 @@ class WebhookController extends BaseWebhookController
         }
     }
 
-    /*private function subscription($payload,$user,$sub){
-        $subscription = $user->eventSubscriptions()->where('stripe_id',$payload['data']['object']['subscription'])->first();
-        //$subscription = $user->subscriptions()->where('stripe_status',1)->where('stripe_price',$payload['data']['object']['lines']['data'][0]['plan']['id'])->first();
-        $eventId = $subscription->event->first()->pivot->event_id;
-        $ends_at = isset($sub['period']) ? $sub['period']['end'] : null;
-
-        $data = $payload['data']['object'];
-
-        if(config('app.PAYMENT_PRODUCTION')){
-            Stripe::setApiKey($subscription->event->first()->paymentMethod->first()->processor_options['secret_key']);
-        }else{
-            Stripe::setApiKey($subscription->event->first()->paymentMethod->first()->test_processor_options['secret_key']);
-        }
-        session()->put('payment_method',$subscription->event->first()->paymentMethod->first()->id);
-
-        //$invoices = $subscription->event->first()->subscriptionInvoicesByUser($user->id)->get();
-
-
-
-            //$transaction = $user->events->where('id',$eventId)->first()->subscriptionΤransactionsByUser($user->id)->first();
-
-
-            $charge['status'] = 'succeeded';
-            $status_history = [];
-            $status_history[] = [
-                     'datetime' => Carbon::now()->toDateTimeString(),
-                     'status' => 1,
-                     'user' => [
-                         'id' => $user->id,
-                         'email' => $user->email
-                     ],
-                     //'pay_seats_data' => $pay_seats_data,
-                     'pay_bill_data' => $user->invoice_details,
-                     'deree_user_data' => [$user->email => ''],
-                  //   'cardtype' => $payment_cardtype,
-                     //'installments' => $installments,
-                     //'cart_data' => $cart
-
-                 ];
-
-            $transaction_arr = [
-
-                "payment_method_id" => 100,//$input['payment_method_id'],
-                "account_id" => 17,
-                "payment_status" => 2,
-                "billing_details" => $user->receipt_details,
-                "status_history" => json_encode($status_history),
-                "placement_date" => Carbon::now()->toDateTimeString(),
-                "ip_address" => \Request::ip(),
-                "status" => 1, //2 PENDING, 0 FAILED, 1 COMPLETED
-                "is_bonus" => 0,
-                "order_vat" => 0,
-                "payment_response" => json_encode($charge),
-                "surcharge_amount" => 0,
-                "discount_amount" => 0,
-
-                "amount" => $sub['amount']/100,
-                "total_amount" => $sub['amount']/100,
-                'trial' => $sub['amount']/100 <= 0 ? true : false,
-                'ends_at' => date('Y-m-d H:i:s', $ends_at),
-            ];
-
-
-
-            $subscription->event->first()->pivot->expiration  = date('Y-m-d', $ends_at);
-            $subscription->event->first()->pivot->save();
-
-            $subscription->must_be_updated = $ends_at;
-            $subscription->email_send = false;
-            $subscription->status = true;
-            //$subscription->stripe_status = 'active';
-
-            $subscription->ends_at = date('Y-m-d H:i:s', $ends_at);
-            $subscription->save();
-
-            if($user->events()->wherePivot('event_id',$eventId)->first()){
-
-                $user->events()->updateExistingPivot($eventId,['expiration' => date('Y-m-d', $ends_at)]);
-                //$user->events()->where('event_id',$eventId)->first()->pivot->expiration  = date('Y-m-d', $ends_at);
-                //$user->events()->where('event_id',$eventId)->first()->pivot->comment  = 'hello';
-                //$user->events()->where('event_id',$eventId)->first()->pivot->save();
-            }
-
-
-            $transaction = Transaction::create($transaction_arr);
-            $transaction->subscription()->save($subscription);
-            $transaction->user()->save($user);
-            $transaction->event()->save($subscription->event->first());
-            //$invoiceNumber = Invoice::has('event')->latest()->first()->invoice;
-            if($sub['amount']/100 > 0){
-
-                if(!Invoice::latest()->has('subscription')->first()){
-                    $invoiceNumber = sprintf('%04u', 1);
-                }else{
-
-                    $invoiceNumber = Invoice::latest()->has('subscription')->first()->invoice;
-                    $invoiceNumber = preg_replace('/[^0-9.]+/', '', $invoiceNumber);
-                    $invoiceNumber = (int) $invoiceNumber + 1;
-                    $invoiceNumber = sprintf('%04u', $invoiceNumber);
-                }
-
-                $elearningInvoice = new Invoice;
-                $elearningInvoice->name = json_decode($transaction->billing_details,true)['billname'];
-                $elearningInvoice->amount = $transaction->amount ;
-                $elearningInvoice->invoice = 'S' . $invoiceNumber;
-                $elearningInvoice->date = Carbon::today()->toDateString();
-                $elearningInvoice->instalments_remaining =1 ;
-                $elearningInvoice->instalments = 1;
-
-                $elearningInvoice->save();
-
-                $elearningInvoice->user()->save($user);
-                $elearningInvoice->event()->save($subscription->event->first());
-                $elearningInvoice->transaction()->save($transaction);
-                $elearningInvoice->subscription()->save($subscription);
-
-                $pdf = $elearningInvoice->generateInvoice();
-
-
-
-                $this->sendEmail($elearningInvoice,$pdf);
-            }
-
-
-    }*/
-
     private function subscription($payload, $user, $sub)
     {
         $subscription = $user->eventSubscriptions()->where('stripe_id', $payload['data']['object']['subscription'])->orderByPivot('expiration', 'DESC')->first();
@@ -670,8 +541,6 @@ class WebhookController extends BaseWebhookController
         $data = $payload['data']['object'];
 
         if (!$subscription) {
-            //if($user->)
-
             $planName = Plan::where('stripe_plan', $sub['plan']['id'])->first() ?
                 Plan::where('stripe_plan', $sub['plan']['id'])->first()->name : '';
 
@@ -706,25 +575,12 @@ class WebhookController extends BaseWebhookController
             $paymentMethod = PaymentMethod::find($subscriptionPaymentMethod->pivot->payment_method);
             $eventId = $subscription->event->first()->pivot->event_id;
             if (config('app.PAYMENT_PRODUCTION')) {
-                //Stripe::setApiKey($subscription->event->first()->paymentMethod->first()->processor_options['secret_key']);
-                //Stripe::setApiKey(Event::findOrFail($eventId)->paymentMethod->first()->processor_options['secret_key']);
                 Stripe::setApiKey($paymentMethod->processor_options['secret_key']);
             } else {
-                //Stripe::setApiKey($subscription->event->first()->paymentMethod->first()->test_processor_options['secret_key']);
-                //Stripe::setApiKey(Event::findOrFail($eventId)->paymentMethod->first()->test_processor_options['secret_key']);
                 Stripe::setApiKey($paymentMethod->test_processor_options['secret_key']);
             }
-            //session()->put('payment_method',$subscription->event->first()->paymentMethod->first()->id);
-            //session()->put('payment_method',Event::findOrFail($eventId)->paymentMethod->first()->id);
             session()->put('payment_method', $subscription->pivot->payment_method);
         }
-
-        //$invoices = $subscription->event->first()->subscriptionInvoicesByUser($user->id)->get();
-
-        //$transaction = $user->events->where('id',$eventId)->first()->subscriptionΤransactionsByUser($user->id)->first();
-
-        //Log::info('has atest');
-        //Log::info(var_export($data['payment_intent'], true));
 
         $charge['payment_intent'] = $data['payment_intent'];
         $charge['status'] = 'succeeded';
@@ -737,12 +593,8 @@ class WebhookController extends BaseWebhookController
                 'id' => $user->id,
                 'email' => $user->email,
             ],
-            //'pay_seats_data' => $pay_seats_data,
             'pay_bill_data' => $user->invoice_details,
             'deree_user_data' => [$user->email => ''],
-            //   'cardtype' => $payment_cardtype,
-            //'installments' => $installments,
-            //'cart_data' => $cart
 
         ];
 
@@ -774,12 +626,10 @@ class WebhookController extends BaseWebhookController
         $subscription->must_be_updated = $ends_at;
         $subscription->email_send = false;
         $subscription->status = true;
-        //$subscription->stripe_status = 'active';
 
         $subscription->ends_at = date('Y-m-d H:i:s', $ends_at);
         $subscription->save();
 
-        //if($exp = $user->events()->wherePivot('event_id',$eventId)->first()){
         if ($exp = $user->events_for_user_list()->wherePivot('event_id', $eventId)->first()) {
             $exp = $exp->pivot->expiration;
             $exp = strtotime($exp);
@@ -796,23 +646,13 @@ class WebhookController extends BaseWebhookController
                 $ends_at = date('Y-m-d', strtotime($ends_at . ' + ' . $days->d . ' days'));
             }
 
-            //$user->events()->updateExistingPivot($eventId,['expiration' => $ends_at]);
             $user->events_for_user_list()->updateExistingPivot($eventId, ['expiration' => $ends_at, 'comment' => null, 'payment_method' => 2]);
-
-            //$user->events()->where('event_id',$eventId)->first()->pivot->expiration  = date('Y-m-d', $ends_at);
-            //$user->events()->where('event_id',$eventId)->first()->pivot->comment  = 'hello';
-            //$user->events()->where('event_id',$eventId)->first()->pivot->save();
         }
 
-        //info('test');
-        //Log::info(var_export($subscription,true));
         $fromSepaPayment = false;
         if ($subscription['metadata'] != null) {
             $metadata = json_decode($subscription['metadata'], true);
             if ($metadata['payment_method'] && $metadata['payment_method'] == 'sepa') {
-                //Log::info('from sepa payment INSIDE METADATA');
-
-                //Log::info('from sepa payment INSIDE METADATA SEPA');
                 $fromSepaPayment = true;
             }
         }
@@ -861,21 +701,31 @@ class WebhookController extends BaseWebhookController
             $data = [];
 
             $data['firstName'] = $user->firstname;
-            $data['name'] = $user->firstname . ' ' . $user->lastname;
-            $data['email'] = $user->email;
-            $data['amount'] = $transaction->amount;
-            $data['position'] = $user->job_title;
-            $data['company'] = $user->company;
-            $data['mobile'] = $user->mobile;
-            $data['userLink'] = url('/') . '/admin/user/' . $user['id'] . '/edit';
             $data['eventTitle'] = $subscription->event->first()->title;
+            $data['eventId'] = $subscription->event->first()->id;
 
-            $sent = Mail::send('emails.admin.admin_info_subscription_registration', $data, function ($m) use ($adminemail) {
-                $sub = 'Knowcrunch - New subscription';
-                $m->from($adminemail, 'Knowcrunch');
-                $m->to($adminemail, 'Knowcrunch');
-                $m->subject($sub);
-            });
+            //system-admin-all-courses-new-subscription
+            $link = "http://www.knowcrunch.com/admin/user/{$user->id}/edit";
+            $mob = isset($user['mobile']) ? $user['mobile'] : '-';
+            $com = isset($user['company']) ? $user['company'] : '-';
+            $job = isset($user['job_title']) ? $user['job_title'] : '-';
+            $amount = $transaction->amount;
+
+            SendEmail::dispatch('AdminInfoNewRegistration', [
+                'email' =>$adminemail,
+                'firstname'=>$user->firstname,
+                'lastname'=>$user->lastname,
+            ], 'Knowcrunch - New Registration', [
+                'Name'=> $user->firstname,
+                'Lastname'=> $user->lastname,
+                'ParticipantEmail'=>$user->email,
+                'ParticipantPhone'=>$mob,
+                'ParticipantPosition'=>$job,
+                'ParticipantCompany'=>$com,
+                'SubscriptionAmountPaid'=>$amount,
+                'CourseName'=>$data['eventTitle'],
+                'LINK'=>$link,
+            ], ['event_id'=>$data['eventId']]);
 
             if ($transaction['amount'] - floor($transaction['amount']) > 0) {
                 $tr_price = number_format($transaction['amount'], 2, '.', '');
@@ -951,17 +801,15 @@ class WebhookController extends BaseWebhookController
         $data['userLink'] = url('/') . '/admin/user/' . $user['id'] . '/edit';
 
         $data['eventTitle'] = $event->title;
+        $data['eventId'] = $event->id;
         $data['eventFaq'] = url('/') . '/' . $event->getSlug() . '#faq';
         $data['eventSlug'] = url('/') . '/myaccount/elearning/' . $event->title;
         $data['subject'] = 'Knowcrunch - ' . $data['firstName'] . ' to our annual subscription';
         $data['template'] = 'emails.user.subscription_welcome';
         $data['subscriptionEnds'] = $subEnds;
-        /*$data['sub_type'] = $plan->name;
-        $data['sub_price'] = $plan->cost;
-        $data['sub_period'] = $plan->period();*/
 
         // help
-        $user->notify(new SubscriptionWelcome($data));
+        $user->notify(new SubscriptionWelcome($data, $user));
         event(new EmailSent($user->email, 'SubscriptionWelcome'));
     }
 
@@ -982,6 +830,8 @@ class WebhookController extends BaseWebhookController
         $muser['event_title'] = $elearningInvoice->event->first()->title;
         $data['firstName'] = $elearningInvoice->user->first()->firstname;
         $data['eventTitle'] = $elearningInvoice->event->first()->title;
+        $data['eventId'] = $elearningInvoice->event->first()->id;
+        $data['user'] = $user;
 
         $invoiceFileName = date('Y.m.d');
 
@@ -995,28 +845,28 @@ class WebhookController extends BaseWebhookController
         $fn = $invoiceFileName;
 
         if ($billingEmail) {
-            $sent = Mail::send('emails.user.invoice', $data, function ($m) use ($adminemail, $muser, $pdf, $fn, $billingEmail) {
-                $fullname = $muser['name'];
-                $first = $muser['first'];
-                $sub = 'Knowcrunch | ' . $first . ' – download your receipt';
-                $m->from('info@knowcrunch.com', 'Knowcrunch');
-                $m->to($billingEmail, $fullname);
-                $m->subject($sub);
-            });
+            //system-user-admin-all-courses-payment-receipt
+            SendEmail::dispatch('CourseInvoice', ['email'=>$billingEmail,
+                'firstname'=>$elearningInvoice->user->first()->firstname,
+                'lastname'=>$elearningInvoice->user->first()->lastname], 'Knowcrunch | ' . $muser['first'] . ' – download your receipt', [
+                    'FNAME'=> $muser['first'],
+                    'CourseName'=>$data['eventTitle'],
+                    'LINK'=>$this->data['slugInvoice'],
+                ], ['event_id'=>$data['eventId']]);
             event(new EmailSent($billingEmail, 'download your receipt'));
         } else {
             $user->notify(new CourseInvoice($data));
             event(new EmailSent($user->first()->email, 'CourseInvoice'));
         }
 
-        $sent = Mail::send('emails.admin.elearning_invoice', $data, function ($m) use ($adminemail, $muser, $pdf, $fn) {
-            $fullname = $muser['name'];
-            $first = $muser['first'];
-            $sub = 'Knowcrunch | ' . $first . ' – download your receipt';
-            $m->from('info@knowcrunch.com', 'Knowcrunch');
-            $m->to($adminemail, $fullname);
-            $m->subject($sub);
-        });
+        //system-user-admin-all-courses-payment-receipt
+        SendEmail::dispatch('CourseInvoice', ['email'=>$adminemail,
+            'firstname'=>$elearningInvoice->user->first()->firstname,
+            'lastname'=>$elearningInvoice->user->first()->lastname], 'Knowcrunch | ' . $muser['first'] . ' – download your receipt', [
+                'FNAME'=> $muser['first'],
+                'CourseName'=>$data['eventTitle'],
+                'LINK'=>$this->data['slugInvoice'],
+            ], ['event_id'=>$data['eventId']]);
         event(new EmailSent($adminemail, 'elearning_invoice billingEmail ' . $billingEmail));
     }
 
@@ -1096,6 +946,7 @@ class WebhookController extends BaseWebhookController
                     $data['name'] = $user->firstname . ' ' . $user->lastname;
                     $data['firstName'] = $user->firstname;
                     $data['eventTitle'] = $event->title;
+                    $data['eventId'] = $event->id;
 
                     $amount = $payload['data']['object']['lines']['data'][0]['amount'] / 100;
                     $data['amount'] = round($amount, 2);
@@ -1109,6 +960,11 @@ class WebhookController extends BaseWebhookController
                         $m->to($adminemail, $data['firstName']);
                         $m->subject($sub);
                     });
+                    // SendEmail::dispatch('FailedPayment', ['email'=>$adminemail,'firstname'=>$user->firstname, 'lastname'=>$user->lastname], $sub, [
+                    //     'FNAME'=> $this->data['firstName'],
+                    //     'CourseName'=>$this->data['eventTitle'],
+                    //     'Amount'=>$this->data['amount'],
+                    // ], ['event_id'=>$this->data['eventId']]);
 
                     $user->events_for_user_list()->wherePivot('event_id', $eventId)->updateExistingPivot($eventId, [
                         'paid' => 0,

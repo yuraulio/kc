@@ -392,13 +392,14 @@ class SubscriptionController extends Controller
                 $data['userLink'] = url('/') . '/admin/user/' . $user['id'] . '/edit';
 
                 $data['eventTitle'] = $event->title;
+                $data['eventId'] = $event->id;
                 $data['eventFaq'] = url('/') . '/' . $event->getSlug() . '#faq';
                 $data['eventSlug'] = url('/') . '/myaccount/elearning/' . $event->title;
                 $data['subject'] = 'Knowcrunch - ' . $data['firstName'] . ' to our annual subscription';
                 $data['template'] = 'emails.user.subscription_welcome';
                 $data['subscriptionEnds'] = $subEnds;
 
-                $user->notify(new SubscriptionWelcome($data));
+                $user->notify(new SubscriptionWelcome($data, $user));
                 event(new EmailSent($user->email, 'SubscriptionWelcome'));
 
                 $adminemail = 'info@knowcrunch.com';
@@ -724,13 +725,14 @@ class SubscriptionController extends Controller
                 $data['userLink'] = url('/') . '/admin/user/' . $user['id'] . '/edit';
 
                 $data['eventTitle'] = $event->title;
+                $data['eventId'] = $event->id;
                 $data['eventFaq'] = url('/') . '/' . $event->getSlug() . '#faq';
                 $data['eventSlug'] = url('/') . '/myaccount/elearning/' . $event->title;
                 $data['subject'] = 'Knowcrunch - ' . $data['firstName'] . ' to our annual subscription';
                 $data['template'] = 'emails.user.subscription_welcome';
                 $data['subscriptionEnds'] = $subEnds;
 
-                $user->notify(new SubscriptionWelcome($data));
+                $user->notify(new SubscriptionWelcome($data, $user));
                 event(new EmailSent($user->email, 'SubscriptionWelcome'));
 
                 $adminemail = 'info@knowcrunch.com';

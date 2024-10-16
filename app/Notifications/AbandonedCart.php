@@ -2,6 +2,9 @@
 
 namespace App\Notifications;
 
+use App\Jobs\SendEmail;
+use App\Model\User;
+use App\Notifications\SendMailchimpMail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -11,17 +14,16 @@ class AbandonedCart extends Notification
 {
     use Queueable;
 
-    private $data;
-
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($data, $second = false)
-    {
-        $this->data = $data;
-        $this->second = $second;
+    public function __construct(
+        private readonly array $data,
+        private readonly User $user,
+        private readonly bool $second = false
+    ) {
     }
 
     /**
@@ -32,7 +34,7 @@ class AbandonedCart extends Notification
      */
     public function via($notifiable)
     {
-        return ['mail'];
+        return SendMailchimpMail::class;
     }
 
     /**
@@ -41,39 +43,15 @@ class AbandonedCart extends Notification
      * @param  mixed  $notifiable
      * @return \Illuminate\Notifications\Messages\MailMessage
      */
-    public function toMail($notifiable)
+    public function toMailchimp($notifiable)
     {
-        $template = 'emails.user.abandoned_email';
-
-        $now_date = now();
-        $now_date = date_format($now_date, 'Y-m-d');
-
-        if (strtotime(config('services.promotions.BLACKFRIDAY')) == strtotime($now_date)) {
-            if ($this->second) {
-                $template = 'emails.user.abandoned_blackfriday_email';
-            }
-        } elseif (strtotime(config('services.promotions.CYBERMONDAY')) == strtotime($now_date)) {
-            if ($this->second) {
-                $template = 'emails.user.abandoned_cybermonday_email';
-            }
-        }
-
-        return (new MailMessage)
-                    ->from('info@knowcrunch.com', 'Knowcrunch')
-                    ->subject($this->data['firstName'] . ' - do you need help with your enrollment')
-                    ->view($template, $this->data);
-    }
-
-    /**
-     * Get the array representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return array
-     */
-    public function toArray($notifiable)
-    {
-        return [
-            //
-        ];
+        //system-user-abandoned-cart-general
+        $subject = $this->data['firstName'] . ' - do you need help with your enrollment';
+        SendEmail::dispatch('AbandonedCart', $this->user->toArray(), $subject, [
+            'FNAME'=> $this->data['firstName'],
+            'CourseName'=>$this->data['eventTitle'],
+            'FAQ_LINK'=>$this->data['faqs'],
+            'LINK'=>$this->data['slug'],
+        ], ['event_id'=>$this->data['eventId']]);
     }
 }

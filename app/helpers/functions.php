@@ -1,6 +1,7 @@
 <?php
 
 use App\Events\EmailSent;
+use App\Jobs\SendEmail;
 use App\Model\Admin\Page;
 use App\Model\Admin\Ticker;
 use App\Model\Category;
@@ -36,12 +37,19 @@ if (!function_exists('failedPaymentEmail')) {
         $data['name'] = $user->firstname . ' ' . $user->lastname;
         $data['firstName'] = $user->firstname;
         $data['eventTitle'] = $event->title;
+        $data['eventId'] = $event->id;
 
         $amount = $payload['data']['object']['amount'] / 100;
         $data['amount'] = round($amount, 2);
 
         $data['template'] = 'emails.user.failed_payment';
         $data['userLink'] = url('/') . '/admin/user/' . $user->id . '/edit';
+
+        // SendEmail::dispatch('FailedPayment', ['email'=>$adminemail,'firstname'=>$user->firstname, 'lastname'=>$user->lastname], $sub, [
+        //     'FNAME'=> $this->data['firstName'],
+        //     'CourseName'=>$this->data['eventTitle'],
+        //     'Amount'=>$this->data['amount'],
+        // ], ['event_id'=>$this->data['eventId']]);
 
         $sent = Mail::send('emails.admin.failed_stripe_payment', $data, function ($m) use ($adminemail, $data) {
             $sub = $data['subject'];
@@ -110,6 +118,8 @@ if (!function_exists('sendAfterSuccessPaymentSepa')) {
         $data['duration'] = ''; //$extrainfo[3];
 
         $data['eventSlug'] = $transaction->event->first() ? url('/') . '/' . $transaction->event->first()->getSlug() : url('/');
+        $data['eventTitle'] = $transaction->event->first()->title;
+        $data['eventId'] = $transaction->event->first()->id;
 
         $eventInfo = $transaction->event->first() ? $transaction->event->first()->event_info() : [];
 
@@ -436,6 +446,8 @@ if (!function_exists('loadSendEmailsDataSubscription')) {
         // $data['extrainfo'] = ['test1', 'test2', 'teasd'];
         // $data['slug'] = 'asd';
         // $data['eventSlug'] = 'asd';
+        $data['eventTitle'] = $subscription->event->first()->title;
+        $data['eventId'] = $subscription->event->first()->id;
 
         return $data;
     }

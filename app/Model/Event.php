@@ -1197,11 +1197,12 @@ class Event extends Model
 
             $data['firstName'] = $user->firstname;
             $data['eventTitle'] = $this->title;
+            $data['eventId'] = $this->id;
             $data['fbGroup'] = $this->fb_group;
             $data['subject'] = 'Knowcrunch - ' . $data['firstName'] . ' you certification is ready';
             $data['template'] = 'emails.user.certificate';
             $data['certUrl'] = trim(url('/') . '/mycertificate/' . base64_encode($user->email . '--' . $cert->id));
-            $user->notify(new CertificateAvaillable($data));
+            $user->notify(new CertificateAvaillable($data, $user));
 
             Log::channel('daily')
                 ->info('[user_id: ' . $user->id . ', event_id: ' . $this->id . '] The email about a new certificate is sent.');

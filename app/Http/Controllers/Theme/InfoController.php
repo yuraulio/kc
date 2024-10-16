@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Theme;
 use App\Events\EmailSent;
 use App\Http\Controllers\Controller;
 use App\Jobs\EventSoldOut;
+use App\Jobs\SendEmail;
 use App\Model\Activation;
 use App\Model\CookiesSMS;
 use App\Model\Event;
@@ -259,8 +260,6 @@ class InfoController extends Controller
             }
         }
 
-        //$this->sendEmails($trans_id);
-
         //DELETE SAVED CART IF USER LOGGED
         if ($user = Auth::user()) {
             $existingcheck = ShoppingCart::where('identifier', $user->id)->first();
@@ -490,15 +489,8 @@ class InfoController extends Controller
                     $eventslug = $thisevent->slug;
                 } else {
                 }
-                //  dd($eventslug);
                 $eventname = $thisevent->title;
-                $eventcity = ''; //$thisevent->categories->where('parent_id',9)->first()->name;
-                //$eventdate = $thisevent->summary1->where('section','date')->first() ? $thisevent->summary1->where('section','date')->first()->title : '';
-
-                /*$visibleDates = isset($eventInfo['inclass']['dates']['visible']['emails']) ? $eventInfo['inclass']['dates']['visible']['emails'] : null;
-                if($visibleDates){
-                    $eventdate = isset($eventInfo['inclass']['dates']['text']) ? $eventInfo['inclass']['dates']['text'] : null;
-                }*/
+                $eventcity = '';
 
                 if ($thisevent->city->first() != null) {
                     $eventcity = $thisevent->city->first()->name;
@@ -511,7 +503,6 @@ class InfoController extends Controller
             }
         }
 
-        //if(!$elearning){
         if ($thisevent->paymentMethod->first() && $thisevent->paymentMethod->first()->id == 1) {
             $transaction->event()->save($thisevent);
         }
@@ -618,7 +609,6 @@ class InfoController extends Controller
                     $knowcrunch_id = $KC . $YY . $MM . $next_kc_id;
                     $checkemailuser->kc_id = $knowcrunch_id;
                     $checkemailuser->save();
-                    //$thismember['password'] =  $knowcrunch_id;
 
                     if ($next == 9999) {
                         $next = 1;
@@ -677,13 +667,6 @@ class InfoController extends Controller
                 ];
             }
         }
-
-        /*$groupEmailLink = '';
-        if ($evid && $evid == 2068) {
-            $groupEmailLink = 'https://www.facebook.com/groups/846949352547091';
-        }else{
-            $groupEmailLink = 'https://www.facebook.com/groups/elearningdigital/';
-        }*/
 
         $groupEmailLink = $thisevent && $thisevent->fb_group ? $thisevent->fb_group : '';
 
@@ -802,9 +785,7 @@ class InfoController extends Controller
 
     public function sendWelcomeEmailsSepa($transaction, $emailsCollector, $extrainfo, $helperdetails, $elearning, $eventslug, $stripe, $billingEmail, $paymentMethod = null)
     {
-        // dd($elearning);
         // 5 email, admin, user, 2 deree, darkpony
-        //$generalInfo = \Config::get('dpoptions.website_details.settings');
         $adminemail = ($paymentMethod && $paymentMethod->payment_email) ? $paymentMethod->payment_email : 'info@knowcrunch.com';
 
         $data = [];
@@ -812,7 +793,8 @@ class InfoController extends Controller
         $data['duration'] = ''; //$extrainfo[3];
 
         $data['eventSlug'] = $transaction->event->first() ? url('/') . '/' . $transaction->event->first()->getSlug() : url('/');
-
+        $data['eventTitle'] = $transaction->event->first()->title;
+        $data['eventId'] = $transaction->event->first()->id;
         $eventInfo = $transaction->event->first() ? $transaction->event->first()->event_info() : [];
 
         if (isset($eventInfo['delivery']) && $eventInfo['delivery'] == 143) {
@@ -871,11 +853,14 @@ class InfoController extends Controller
 
         $data = [];
         $data['fbGroup'] = $extrainfo[7];
-        $data['duration'] = ''; //$extrainfo[3];
+        $data['duration'] = '';
 
         $data['eventSlug'] = $transaction->event->first() ? url('/') . '/' . $transaction->event->first()->getSlug() : url('/');
 
         $eventInfo = $transaction->event->first() ? $transaction->event->first()->event_info() : [];
+
+        $data['eventTitle'] = $transaction->event->first()->title;
+        $data['eventId'] = $transaction->event->first()->id;
 
         if (isset($eventInfo['delivery']) && $eventInfo['delivery'] == 143) {
             $data['duration'] = isset($eventInfo['elearning']['visible']['emails']) && isset($eventInfo['elearning']['expiration']) &&
@@ -946,9 +931,7 @@ class InfoController extends Controller
 
             $data['firstName'] = $muser['name'];
             $data['eventTitle'] = $muser['event_title'];
-
-            //Log::info('info controller transaction');
-            //Log::info(var_export($transaction->invoice->first(), true));
+            $data['eventId'] = $transaction->event->first()->id;
 
             if ((Session::has('installments') && Session::get('installments') <= 1) || $sepa) {
                 $data['slugInvoice'] = encrypt($muser['id'] . '-' . $transaction->invoice->first()->id);
@@ -963,28 +946,34 @@ class InfoController extends Controller
                 $fn = $invoiceFileName;
 
                 $pdf = $pdf->output();
-                $sent = Mail::send('emails.admin.elearning_invoice', $data, function ($m) use ($adminemail, $muser, $pdf, $billingEmail, $fn) {
-                    $fullname = $muser['name'];
-                    $first = $muser['first'];
-                    $sub = 'Knowcrunch | ' . $first . ' – download your receipt';
-                    $m->from('info@knowcrunch.com', 'Knowcrunch');
-                    $m->to($adminemail, $fullname);
-                    //$m->to('moulopoulos@lioncode.gr', $fullname);
-                    $m->subject($sub);
-                });
+                //system-user-admin-all-courses-payment-receipt
+                $first = $muser['first'];
+                SendEmail::dispatch('CourseInvoice', ['email'=>$adminemail,
+                    'firstname'=>$transaction->user->first()->firstname,
+                    'lastname'=>$transaction->user->first()->lastname], 'Knowcrunch | ' . $first . ' – download your receipt', [
+                        'FNAME'=> $first,
+                        'CourseName'=>$data['eventTitle'],
+                        'LINK'=>$this->data['slugInvoice'],
+                    ], ['event_id'=>$data['eventId']]);
                 event(new EmailSent($adminemail, 'elearning_invoice billingEmail ' . $billingEmail));
 
                 $data['user'] = $transaction->user->first();
 
                 if ($billingEmail) {
-                    $sent = Mail::send('emails.user.invoice', $data, function ($m) use ($adminemail, $muser, $pdf, $billingEmail, $fn) {
-                        $fullname = $muser['name'];
-                        $first = $muser['first'];
-                        $sub = 'Knowcrunch | ' . $first . ' – download your receipt';
-                        $m->from('info@knowcrunch.com', 'Knowcrunch');
-                        $m->to($billingEmail, $fullname);
-                        $m->subject($sub);
-                    });
+                    //system-user-admin-all-courses-payment-receipt
+                    SendEmail::dispatch(
+                        'CourseInvoice',
+                        ['email'=>$billingEmail,
+                            'firstname'=>$transaction->user->first()->firstname,
+                            'lastname'=>$transaction->user->first()->lastname],
+                        'Knowcrunch | ' . $first . ' – download your receipt',
+                        [
+                            'FNAME'=> $first,
+                            'CourseName'=>$data['eventTitle'],
+                            'LINK'=>$this->data['slugInvoice'],
+                        ],
+                        ['event_id'=>$data['eventId']]
+                    );
                     event(new EmailSent($billingEmail, 'download your receipt'));
                 } else {
                     $data['user']->notify(new CourseInvoice($data));
@@ -1005,11 +994,42 @@ class InfoController extends Controller
             $transdata['helperdetails'] = $helperdetails;
 
             try {
-                $sentadmin = Mail::send('emails.admin.admin_info_new_registration', $transdata, function ($m) use ($adminemail) {
-                    $m->from('info@knowcrunch.com', 'Knowcrunch');
-                    $m->to('info@knowcrunch.com', 'Knowcrunch');
-                    $m->subject('Knowcrunch - New Registration');
-                });
+                if (($user = User::where('email', $muser['email'])->first())) {
+                    //system-admin-all-courses-new-subscription
+                    $link = "http://www.knowcrunch.com/admin/user/{$user['id']}/edit";
+                    if (isset($helperdetails[$user['email']])) {
+                        $mob = $helperdetails[$user['email']]['mobile'] ? $helperdetails[$user['email']]['mobile'] : '';
+                        $com = $helperdetails[$user['email']]['company'] ? $helperdetails[$user['email']]['company'] : '';
+                        $job = $helperdetails[$user['email']]['jobtitle'] ? $helperdetails[$user['email']]['jobtitle'] : '';
+                    } else {
+                        $mob = isset($user['mobile']) ? $user['mobile'] : '-';
+                        $com = isset($user['company']) ? $user['company'] : '-';
+                        $job = isset($user['jobTitle']) ? $user['jobTitle'] : '-';
+                    }
+                    $amount = ($trans->total_amount == 0) ? 'Free' : round($transaction->total_amount / $installments, 2);
+
+                    SendEmail::dispatch(
+                        'AdminInfoNewRegistration',
+                        [
+                            'email'=>'info@knowcrunch.com',
+                            'firstname'=>$user->firstname,
+                            'lastname'=>$user->lastname,
+                        ],
+                        'Knowcrunch - New Registration',
+                        [
+                            'Name'=> $user->firstname,
+                            'Lastname'=> $user->lastname,
+                            'ParticipantEmail'=>$user->email,
+                            'ParticipantPhone'=>$mob,
+                            'ParticipantPosition'=>$job,
+                            'ParticipantCompany'=>$com,
+                            'SubscriptionAmountPaid'=>$amount,
+                            'CourseName'=>$data['eventTitle'],
+                            'LINK'=>$link,
+                        ],
+                        ['event_id'=>$data['eventId']]
+                    );
+                }
             } catch (\Exception $e) {
                 Log::error($e->getMessage());
             }
@@ -1063,16 +1083,14 @@ class InfoController extends Controller
         $data['userLink'] = url('/') . '/admin/user/' . $user['id'] . '/edit';
 
         $data['eventTitle'] = $event->title;
+        $data['eventId'] = $event->id;
         $data['eventFaq'] = url('/') . '/' . $event->getSlug() . '#faq';
         $data['eventSlug'] = url('/') . '/myaccount/elearning/' . $event->title;
         $data['subject'] = 'Knowcrunch - ' . $data['firstName'] . ' to our annual subscription';
         $data['template'] = 'emails.user.subscription_welcome';
         $data['subscriptionEnds'] = $subEnds;
-        /*$data['sub_type'] = $plan->name;
-        $data['sub_price'] = $plan->cost;
-        $data['sub_period'] = $plan->period();*/
 
-        $user->notify(new SubscriptionWelcome($data));
+        $user->notify(new SubscriptionWelcome($data, $user));
         event(new EmailSent($user->email, 'SubscriptionWelcome'));
     }
 }

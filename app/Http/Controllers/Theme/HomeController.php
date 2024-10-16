@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Theme;
 
 use App\Events\EmailSent;
 use App\Http\Controllers\Controller;
+use App\Jobs\SendEmail;
 use App\Library\CMS;
 use App\Model\Activation;
 use App\Model\Category;
@@ -252,6 +253,8 @@ class HomeController extends Controller
         $data['eventSlug'] = url('/') . '/' . $content->getSlug();
 
         $eventInfo = $content ? $content->event_info() : [];
+        $data['eventTitle'] = $content->title;
+        $data['eventId'] = $content->id;
 
         if (isset($eventInfo['delivery']) && $eventInfo['delivery'] == 143) {
             $data['duration'] = isset($eventInfo['elearning']['visible']['emails']) && isset($eventInfo['elearning']['expiration']) &&
@@ -283,14 +286,12 @@ class HomeController extends Controller
 
         $student = $user->events->where('id', $content->id)->first();
 
-        //dd(($student && strtotime(now()) > strtotime($student->pivot->expiration)) || !$student);
-        // if (!$student) {
         if (($student && strtotime(now()) > strtotime($student->pivot->expiration)) || !$student) {
             //ticket
             $eventticket = 'free';
 
-            $payment_method_id = 1; //intval($input["payment_method_id"]);
-            $payment_cardtype = 8; //free;
+            $payment_method_id = 1;
+            $payment_cardtype = 8;
             $amount = 0;
             $namount = (float) $amount;
             $transaction_arr = [
@@ -401,7 +402,6 @@ class HomeController extends Controller
         }
 
         return redirect('/thankyou');
-        //return view('theme.cart.new_cart.thank_you_free',$data);
     }
 
     public function enrollToWaitingList(Event $content)
@@ -414,7 +414,6 @@ class HomeController extends Controller
             Session::forget('transaction_id');
             Session::forget('cardtype');
             Session::forget('installments');
-            //Session::forget('pay_invoice_data');
             Session::forget('pay_bill_data');
             Session::forget('deree_user_data');
             Session::forget('user_id');
@@ -531,10 +530,13 @@ class HomeController extends Controller
 
         $muser = [];
         $muser['name'] = $user->firstname . ' ' . $user->lastname;
-        $muser['first'] = $user->firstname;
+        $muser['firstname'] = $user->firstname;
+        $muser['lastname'] = $user->lastname;
         $muser['email'] = $user->email;
         $muser['id'] = $user->id;
         $muser['event_title'] = $content->title;
+        $data['eventTitle'] = $content->title;
+        $data['eventId'] = $content->id;
 
         $helperdetails[$user->email] = ['kcid' => $user->kc_id, 'deid' => $user->partner_id, 'stid' => $user->student_type_id, 'jobtitle' => $user->job_title, 'company' => $user->company, 'mobile' => $user->mobile];
 
@@ -542,12 +544,34 @@ class HomeController extends Controller
         $transdata['helperdetails'] = $helperdetails;
         $transdata['status'] = 5;
 
-        $sentadmin = Mail::send('emails.admin.admin_info_new_registration', $transdata, function ($m) {
-            $m->from('info@knowcrunch.com', 'Knowcrunch');
-            $m->to('info@knowcrunch.com', 'Knowcrunch');
+        //system-admin-all-courses-new-subscription
+        $link = "http://www.knowcrunch.com/admin/user/{$user['id']}/edit";
+        if (isset($helperdetails[$user['email']])) {
+            $mob = $helperdetails[$user['email']]['mobile'] ? $helperdetails[$user['email']]['mobile'] : '';
+            $com = $helperdetails[$user['email']]['company'] ? $helperdetails[$user['email']]['company'] : '';
+            $job = $helperdetails[$user['email']]['jobtitle'] ? $helperdetails[$user['email']]['jobtitle'] : '';
+        } else {
+            $mob = isset($user['mobile']) ? $user['mobile'] : '-';
+            $com = isset($user['company']) ? $user['company'] : '-';
+            $job = isset($user['jobTitle']) ? $user['jobTitle'] : '-';
+        }
+        $amount = 'Waiting list';
 
-            $m->subject('Knowcrunch - New Registration Waiting List');
-        });
+        SendEmail::dispatch('AdminInfoNewRegistration', [
+            'email'=>'info@knowcrunch.com',
+            'firstname'=>$user->firstname,
+            'lastname'=>$user->lastname,
+        ], 'Knowcrunch - New Registration', [
+            'Name'=> $user->firstname,
+            'Lastname'=> $user->lastname,
+            'ParticipantEmail'=>$user->email,
+            'ParticipantPhone'=>$mob,
+            'ParticipantPosition'=>$job,
+            'ParticipantCompany'=>$com,
+            'SubscriptionAmountPaid'=>$amount,
+            'CourseName'=>$data['eventTitle'],
+            'LINK'=>$link,
+        ], ['event_id'=>$data['eventId']]);
 
         $user->notify(new WelcomeEmail($user, $data));
         event(new EmailSent($user->email, 'WelcomeEmail'));

@@ -2,6 +2,9 @@
 
 namespace App\Notifications;
 
+use App\Jobs\SendEmail;
+use App\Model\User;
+use App\Notifications\SendMailchimpMail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -11,16 +14,15 @@ class SubscriptionExpireReminder extends Notification
 {
     use Queueable;
 
-    public $data;
-
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($data)
-    {
-        $this->data = $data;
+    public function __construct(
+        private readonly array $data,
+        private readonly User $user
+    ) {
     }
 
     /**
@@ -31,7 +33,7 @@ class SubscriptionExpireReminder extends Notification
      */
     public function via($notifiable)
     {
-        return ['mail'];
+        return SendMailchimpMail::class;
     }
 
     /**
@@ -40,24 +42,26 @@ class SubscriptionExpireReminder extends Notification
      * @param  mixed  $notifiable
      * @return \Illuminate\Notifications\Messages\MailMessage
      */
-    public function toMail($notifiable)
+    public function toMailchimp($notifiable)
     {
-        return (new MailMessage)
-            ->from('info@knowcrunch.com', 'Knowcrunch')
-            ->subject($this->data['subject'])
-            ->view($this->data['template'], $this->data);
-    }
+        //system-user-subscription-1-year-after-end-el
+        //system-user-subscription-after-the-end-of-el
+        //system-user-subscription-6-months-after-end-el
+        $emailEvent = '';
+        $link = 'https://knowcrunch.com/knowcrunch-elite?utm_source=Knowcrunch&utm_medium=Email%20&utm_content=Promo&utm_campaign=SUBSCRIPTION';
+        if ($this->data['template'] === 'emails.user.courses.expired') {
+            $emailEvent = 'SubscriptionExpireReminder';
+        } elseif ($this->data['template'] === 'emails.user.courses.expired_after_six_months') {
+            $emailEvent = 'SubscriptionExpireReminder6Months';
+        } elseif ($this->data['template'] === 'emails.user.courses.expired_after_one_year') {
+            $emailEvent = 'SubscriptionExpireReminder1Year';
+        }
 
-    /**
-     * Get the array representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return array
-     */
-    public function toArray($notifiable)
-    {
-        return [
-            //
-        ];
+        SendEmail::dispatch($emailEvent, $this->user->toArray(), $this->data['subject'], [
+            'FNAME'=> $this->data['firstname'],
+            'CourseName'=>$this->data['event_name'],
+            'LINK'=>$link,
+            'SubscriptionPrice'=>$this->data['subscription_price'],
+        ], ['event_id'=>$this->data['eventId']]);
     }
 }

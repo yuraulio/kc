@@ -14,17 +14,12 @@ class SendEmail implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    // private $data;
-    // private $event;
-    // private $to;
-    // private $subject;
-
     /**
      * Create a new job instance.
      */
     public function __construct(
         private readonly string $event,
-        private readonly User $to,
+        private readonly array $to,
         private readonly string $subject,
         private readonly array $data = [],
         private readonly array $metaData = []

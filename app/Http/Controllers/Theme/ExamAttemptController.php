@@ -383,11 +383,12 @@ class ExamAttemptController extends Controller
 
                 $data['firstName'] = $student->firstname;
                 $data['eventTitle'] = $eventType->title;
+                $data['eventId'] = $eventType->id;
                 $data['fbGroup'] = $eventType->fb_group;
                 $data['subject'] = 'Knowcrunch - ' . $data['firstName'] . ' you certification is ready';
                 $data['template'] = 'emails.user.certificate';
                 $data['certUrl'] = trim(url('/') . '/mycertificate/' . base64_encode($student->email . '--' . $cert->id));
-                $student->notify(new CertificateAvaillable($data));
+                $student->notify(new CertificateAvaillable($data, $student));
                 event(new EmailSent($student->email, 'CertificateAvaillable'));
 
                 if ($examResultData) {
