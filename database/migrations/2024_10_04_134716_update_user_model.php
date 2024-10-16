@@ -16,7 +16,6 @@ return new class extends Migration {
         Schema::table('users', function (Blueprint $table) {
             $table->tinyInteger('profile_status')->default(ProfileStatusEnum::NotActive);
             $table->tinyInteger('account_status')->default(AccountStatusEnum::NotActive);
-            $table->tinyInteger('work_experience')->nullable();
         });
     }
 
