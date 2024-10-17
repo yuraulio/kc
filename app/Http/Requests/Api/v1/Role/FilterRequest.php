@@ -15,6 +15,7 @@ class FilterRequest extends FormRequest
             'query'      => ['sometimes', 'min:1'],
             'order_by'   => ['sometimes', Rule::in(['name', 'id', 'created_at'])],
             'order_type' => ['sometimes', Rule::in(['asc', 'desc'])],
+            'per_page'   => ['sometimes', 'integer'],
         ];
     }
 }

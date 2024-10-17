@@ -21,6 +21,7 @@ class FilterRequest extends FormRequest
             'tags.*'     => ['sometimes', 'integer', Rule::exists('tags', 'id')],
             'order_by'   => ['sometimes', Rule::in(['id', 'firstname', 'status', 'created_at', 'role'])],
             'order_type' => ['sometimes', Rule::in(['asc', 'desc'])],
+            'per_page'   => ['sometimes', 'integer'],
         ];
 
         if ($this->filled('from') && $this->filled('to')) {
