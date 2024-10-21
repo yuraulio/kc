@@ -1230,7 +1230,7 @@ class UserController extends Controller
 
         User::query()->whereIn('id', $request->users)->delete();
 
-        return new JsonResponse([], 204);
+        return new JsonResponse(['success' => true], \Symfony\Component\HttpFoundation\Response::HTTP_OK);
     }
 
     public function import(UserImportRequest $request): JsonResponse
