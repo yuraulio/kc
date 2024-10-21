@@ -13,30 +13,6 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        //Commands\MakePhotoVersions::class,
-        //Commands\InitPages::class,
-        //Commands\AddOption::class,
-        //Commands\AttachEvent::class,
-        //Commands\OrderInclassLessons::class,
-        //Commands\FixTestimonials::class,
-        //Commands\SyllabusManager::class,
-        //Commands\CompressImages::class,
-        //Commands\ClearTopics::class,
-        //Commands\OrderTopicsLessons::class,
-        //Commands\RemoveTopics::class,
-        //Commands\InsertExams::class,
-        //Commands\GetPaymentDetailsFromTransactions::class,
-        //Commands\AttachBenefitsSummaryMedia::class,
-        //Commands\AttachTransactionSpecial::class,
-        //Commands\GetLessonType::class,
-        //Commands\TopicStatus::class,
-        //Commands\AttachInvoices::class,
-        //Commands\StopAccessFilesDiplomas::class,
-        //Commands\AttachTopicCategory::class,
-        //Commands\GetOldLessonInstrunctor::class,
-        //Commands\FixExams::class,
-        //Commands\SeperateRelationships::class,
-        //Commands\ExportEvents::class,
         Commands\AttachCertificatesToOldStudents::class,
         Commands\InitCertificate::class,
         Commands\SyncBillingData::class,
@@ -57,7 +33,6 @@ class Kernel extends ConsoleKernel
         Commands\NewAdminMediaManager::class,
         Commands\ComponentsRefresh::class,
         Commands\PublishCheck::class,
-
         Commands\ImportFaqs::class,
         Commands\AttachFilesToEvents::class,
         Commands\FixOrder::class,
@@ -77,7 +52,6 @@ class Kernel extends ConsoleKernel
         Commands\INSERTLESSONS::class,
         Commands\ExportCertificateByEvent::class,
         Commands\ClassroomTrainingCertification::class,
-
         Commands\MoveAndCompressImages::class,
     ];
 

@@ -7,7 +7,7 @@ namespace App\Enums\Traits;
 trait EnumConvertTrait
 {
     /**
-     * Get only enum values
+     * Get only enum values.
      *
      * @return array
      */
@@ -17,7 +17,7 @@ trait EnumConvertTrait
     }
 
     /**
-     * Get only enum names
+     * Get only enum names.
      *
      * @return array
      */
@@ -27,7 +27,7 @@ trait EnumConvertTrait
     }
 
     /**
-     * Get enum values and names as array
+     * Get enum values and names as array.
      *
      * @return array
      */

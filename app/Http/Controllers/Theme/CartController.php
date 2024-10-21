@@ -2019,7 +2019,6 @@ class CartController extends Controller
                 $desc = $installments . ' installments';
                 $planid = 'plan_' . $dpuser->id . '_E_' . $ev->id . '_T_' . $ticket_id . '_x' . $installments . '_' . date('his');
                 $name = $ev_title . ' ' . $ev_date_help . ' | ' . $desc;
-                //dd(str_replace('.','',$instamount) . '00');
 
                 $plan = Plan::create([
                     'id'                   => $planid,
@@ -2030,44 +2029,15 @@ class CartController extends Controller
                     'amount'               => $planAmount,
                     'currency'             => 'eur',
                     'interval'             => 'month',
-                    //'statement_descriptor' => $desc,
 
                 ]);
-
-                /*$sub = $dpuser
-                    ->subscription()
-                    ->onPlan($planid)
-                    ->create(['metadata' => ['installments_paid' => 0, 'installments' => $installments]])
-                ;*/
 
                 $payment_method_id = -1;
                 if ($ev->paymentMethod->first()) {
                     $payment_method_id = $ev->paymentMethod->first()->id;
                 }
 
-                //dd($client_secret);
-
                 try {
-                    //header('Content-Type: application/json');
-
-                    //Create a PaymentIntent with amount and currency
-                    // $paymentIntent = \Stripe\PaymentIntent::create([
-                    //     'description' => 'Subscription creation',
-                    //     'amount' => $planAmount,
-                    //     'currency' => 'eur',
-                    //     'customer' => $dpuser->stripe_id,
-                    //     'payment_method_types' => ['sepa_debit'],
-                    //     'metadata' => ['integration_check' => 'sepa_debit_accept_a_payment'],
-                    //     'confirm' => false
-                    // ]);
-
-                    // $paymentIntent = \Stripe\SetupIntent::create([
-                    //     'payment_method_types' => ['sepa_debit'],
-                    //     'customer' => $dpuser->stripe_id,
-                    //   ]);
-
-                    Log::info('try');
-
                     $ev->users()->wherePivot('user_id', $dpuser->id)->detach();
                     $ev->users()->save($dpuser, ['paid'=>false, 'payment_method'=>$payment_method_id]);
 

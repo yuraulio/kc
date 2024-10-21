@@ -3,9 +3,7 @@
 namespace App\Notifications;
 
 use App\Jobs\SendEmail;
-use App\Jobs\SendEmail;
 use App\Model\User;
-use App\Notifications\SendMailchimpMail;
 use App\Notifications\SendMailchimpMail;
 use DB;
 use Illuminate\Bus\Queueable;

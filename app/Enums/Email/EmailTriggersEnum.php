@@ -7,7 +7,6 @@ enum EmailTriggersEnum: string
     public static function getEmailTriggers(): array
     {
         return [
-            ['key' => '', 'label' => ''],
             ['key' => 'WelcomeEmail', 'label' => 'User registration - Welcome email'],
             ['key' => 'SurveyEmail', 'label' => 'Course feedback survey'],
             ['key' => 'userChangePassword', 'label' => 'User forgot password'],
@@ -43,7 +42,6 @@ enum EmailTriggersEnum: string
             ['key' => 'AdminInstructor', 'label' => 'Admin email notification about new instructor query on website'],
             ['key' => 'AdminCorporate', 'label' => 'Admin email notification about new corporate training on website'],
             ['key' => 'AdminDeree', 'label' => 'Admin email for Deree IDs'],
-
         ];
     }
 }

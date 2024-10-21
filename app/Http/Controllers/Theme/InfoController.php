@@ -303,7 +303,7 @@ class InfoController extends Controller
             }
 
             return redirect('/thankyou');
-            //return view('theme.cart.new_cart.thank_you', $data);
+        //return view('theme.cart.new_cart.thank_you', $data);
         } else {
             return Redirect::to('/');
         }
@@ -353,7 +353,7 @@ class InfoController extends Controller
             } else {
                 $this->transaction = [];
             }
-            //dd($transaction);
+        //dd($transaction);
         } else {
             $this->transaction = ['payment_response' => 'Card is not valid'];
         }
@@ -698,7 +698,6 @@ class InfoController extends Controller
                 'code'      => Str::random(40),
                 'completed' => true,
             ])->code;
-            //$role = Role::findRoleBySlug('know-crunch');
             $user->role()->attach(7);
 
             //CHECK FOR NON REQUIRED FIELDS
@@ -1056,11 +1055,6 @@ class InfoController extends Controller
         $plan = $event['plans'][0];
 
         $data = [];
-        /*$muser = [];
-        $muser['name'] = $user->firstname;
-        $muser['first'] = $user->firstname;
-        $muser['email'] = $user->email;*/
-        //$muser['event_title'] = $sub->eventable->event->title;
 
         //$subEnds = $plan->trial_days && $plan->trial_days > 0 ? $plan->trial_days : $plan->getDays();
         $subEnds = $plan->getDays();

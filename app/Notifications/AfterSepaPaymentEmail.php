@@ -43,6 +43,7 @@ class AfterSepaPaymentEmail extends Notification
     public function toMailchimp(object $notifiable)
     {
         //system-user-all-courses-sepa-payment
+        //system-user-waiting-list-welcome-email
         $slug = [];
         $slug['id'] = $this->user->id;
         $slug['email'] = $this->user->email;

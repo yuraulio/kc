@@ -111,10 +111,6 @@ if (!function_exists('updateStripeCustomer')) {
 if (!function_exists('sendAfterSuccessPaymentSepa')) {
     function sendAfterSuccessPaymentSepa($transaction, $emailsCollector, $extrainfo, $helperdetails, $elearning, $eventslug, $stripe, $billingEmail, $paymentMethod = null, $sepa = false)
     {
-        // dd($elearning);
-        // 5 email, admin, user, 2 deree, darkpony
-        //$generalInfo = \Config::get('dpoptions.website_details.settings');
-
         $data = [];
         $data['fbGroup'] = $extrainfo[7];
         $data['duration'] = ''; //$extrainfo[3];
@@ -281,7 +277,6 @@ if (!function_exists('loadSendEmailsData')) {
 
         //Collect all users from seats
         $newmembersdetails = [];
-        //dd($pay_seats_data['emails']);
         foreach ($pay_seats_data['emails'] as $key => $value) {
             $thismember = [];
             $thismember['firstname'] = $pay_seats_data['names'][$key];
@@ -319,16 +314,8 @@ if (!function_exists('loadSendEmailsData')) {
             $checkemailuser = User::where('email', '=', $thismember['email'])->first();
             $expiration_date = '';
             if ($checkemailuser) {
-                //if(!$elearning){
-                //$transaction->user()->save($checkemailuser);
-                //}
-
-                //if($elearning){
                 $invoice = $transaction->invoice()->first();
-                if ($invoice) {
-                    //$invoice->user()->save($checkemailuser);
-                }
-                //}
+
                 //SHOULD but back used deree id?
 
                 $fullname = $checkemailuser->firstname . ' ' . $checkemailuser->lastname;
@@ -352,7 +339,6 @@ if (!function_exists('loadSendEmailsData')) {
                     $checkemailuser->partner_id = $deree_user_data[$value];
                 }
 
-                //$checkemailuser->save();
                 $creatAccount = false;
 
                 if ($checkemailuser->statusAccount && !$checkemailuser->statusAccount->completed) {
@@ -618,7 +604,7 @@ if (!function_exists('sendRequest')) {
                 'success'   => false,
                 'message'   => curl_error($ch),
                 'code'      => curl_errno($ch),
-                'http_info' => (object)$httpInfo,
+                'http_info' => (object) $httpInfo,
             ];
         }
 
@@ -1052,7 +1038,7 @@ if (!function_exists('is_webp_acceptable')) {
 if (!function_exists('get_image')) {
     function get_image($media, $version = null): ?string
     {
-        $isFileExist = fn(string $fileName) => file_exists(public_path($fileName));
+        $isFileExist = fn (string $fileName) => file_exists(public_path($fileName));
 
         if (is_scalar($media)) {
             $extension = pathinfo($media, PATHINFO_EXTENSION);
@@ -1353,18 +1339,18 @@ if (!function_exists('getLessonDurationToSec')) {
 
         $duration = explode(' ', $vimeoDuration);
         if (count($duration) == 2) {
-            $seconds = (float)preg_replace('/[^0-9.]+/', '', $duration[0]) * 60;
-            $seconds += (float)preg_replace('/[^0-9.]+/', '', $duration[1]);
+            $seconds = (float) preg_replace('/[^0-9.]+/', '', $duration[0]) * 60;
+            $seconds += (float) preg_replace('/[^0-9.]+/', '', $duration[1]);
 
             $totalDuration += $seconds;
         } else {
             $isMinutes = strpos($duration[0], 'm');
 
             if (!$isMinutes) {
-                $seconds = (float)preg_replace('/[^0-9.]+/', '', $duration[0]);
+                $seconds = (float) preg_replace('/[^0-9.]+/', '', $duration[0]);
                 $totalDuration += $seconds;
             } else {
-                $seconds = (float)preg_replace('/[^0-9.]+/', '', $duration[0]) * 60;
+                $seconds = (float) preg_replace('/[^0-9.]+/', '', $duration[0]) * 60;
                 $totalDuration += $seconds;
             }
         }

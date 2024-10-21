@@ -36,6 +36,7 @@ class RolePolicy
         if ($isInUse) {
             return $this->deny("You can't remove role which have some user.");
         }
+
         return $user->isAdmin() || $user->isCreator();
     }
 }

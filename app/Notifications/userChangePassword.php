@@ -15,8 +15,6 @@ class userChangePassword extends Notification
 {
     use Queueable;
 
-    private $user;
-
     /**
      * Create a new notification instance.
      *

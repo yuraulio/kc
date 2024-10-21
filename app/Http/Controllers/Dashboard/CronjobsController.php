@@ -133,10 +133,6 @@ class CronjobsController extends Controller
     {
         $now = Carbon::now();
 
-        // $events = User::with('events_for_user_list1')->whereHas('events_for_user_list1', function($query){
-        //     return $query->where('expiration', '<=', date('Y-m-d H:s:i'));
-        // })->get();
-
         $users = User::with('events_for_user_list1_expired')->get();
 
         foreach ($users as $user) {
@@ -147,8 +143,6 @@ class CronjobsController extends Controller
                 $expiration_status = $event->pivot->expiration_email;
 
                 $diffInMonths = $expiration->diffInMonths($now);
-
-                //dd($diffInMonths);
 
                 if ($expiration_status == 0 && $diffInMonths == 0) {
                     //expired NOW
@@ -418,7 +412,6 @@ class CronjobsController extends Controller
                 $date = date_create($subscription->event->first()->pivot->expiration);
                 $date = date_diff($date, $today);
 
-                //if( $date->y==0 && ( ($date->m == 1 &&  $date->d == 0) || ($date->m ==  0 && $date->d == 7))){
                 if (($date->y == 0 && $date->m == 0 && ($date->d == 7 || $date->d == 1)) || ($date->y == 0 && $date->m == 1 && $date->d == 0)) {
                     $muser['name'] = $subscription->user->firstname . ' ' . $subscription->user->lastname;
                     $muser['first'] = $subscription->user->firstname;
@@ -547,7 +540,6 @@ class CronjobsController extends Controller
                     continue;
                 }
 
-                //dd('fdgsfd');
                 if ($abandoned->updated_at >= now()->subMinutes(60)) {
                     continue;
                 }
@@ -597,7 +589,6 @@ class CronjobsController extends Controller
                 $date = date_create($user->pivot->expiration);
                 $date = date_diff($date, $today);
 
-                //if( $event->id == 2304 && ($date->y == 0 && $date->m ==  11 && $date->d == 23 )){
                 if ($event->id == 2304 && ($date->y == 0 && $date->m == 0 && $date->d == 7)) {
                     $data['firstName'] = $user->firstname;
                     $data['eventTitle'] = $event->title;
@@ -638,7 +629,6 @@ class CronjobsController extends Controller
         $today = date('Y-m-d');
 
         $invoiceUsers = Invoice::doesntHave('subscription')->where('date', '!=', '-')->where('instalments_remaining', '>', 0)->get();
-        //dd($invoiceUsers);
 
         foreach ($invoiceUsers as $invoiceUser) {
             $user = $invoiceUser->user->first();
@@ -707,53 +697,6 @@ class CronjobsController extends Controller
                 }
             }
         }
-
-        $events = [];
-
-        $today = date_create(date('Y/m/d'));
-        $today1 = date('Y-m-d');
-
-        foreach ($events as $event) {
-            $eventInfo = $event->event_info();
-
-            foreach ($event['users'] as $user) {
-                $eventDate = isset($eventInfo['inclass']['dates']['text']) ? $eventInfo['inclass']['dates']['text'] : '';
-                if (!$eventDate) {
-                    continue;
-                }
-
-                $eventDate = explode('-', $eventDate);
-
-                if (!isset($eventDate[1])) {
-                    continue;
-                }
-
-                $year = explode(',', $eventDate[1]);
-                $year = isset($year[1]) ? trim($year[1]) : date('Y');
-
-                $startDate = date('Y-m-d', strtotime($eventDate[0] . ', ' . $year));
-                $startDate = date_create($startDate);
-
-                $eventDate = date('Y-m-d', strtotime($eventDate[1]));
-                $date = date_create($eventDate);
-
-                $expiration = date_diff($date, $startDate);
-                $date = date_diff($date, $today);
-
-                if ($date->y == 0 && $date->m == ($expiration->m / 2) && $date->d == 0 && $expiration->y == 0 && $expiration->d == 0) {
-                    $data['firstName'] = $user->firstname;
-                    $data['eventTitle'] = $event->title;
-                    $data['eventId'] = $event->id;
-                    $data['fbGroup'] = $event->fb_group;
-                    $data['subject'] = 'Knowcrunch - ' . $data['firstName'] . ' you are almost there';
-                    $data['template'] = 'emails.user.half_period';
-
-                    $user->notify(new HalfPeriod($data, $user));
-                    event(new EmailSent($user->email, 'HalfPeriod'));
-                    event(new ActivityEvent($user, ActivityEventEnum::EmailSent->value, $data['subject'] . ', ' . Carbon::now()->format('d F Y')));
-                }
-            }
-        }
     }
 
     public function sendElearningFQ()
@@ -802,7 +745,6 @@ class CronjobsController extends Controller
     public function sendSurveyMail()
     {
         $events = Event::has('transactions')->with('users')->where('view_tpl', 'elearning_event')->get();
-
         $today = date('Y/m/d');
         $today = date('Y-m-d', strtotime('-1 day', strtotime($today)));
         foreach ($events as $event) {
@@ -880,18 +822,8 @@ class CronjobsController extends Controller
 
     public function sendInClassReminder()
     {
-        //$date = '2022-09-07';
-        //$date1 = date("Y-m-d", strtotime($date . "+7 days"));
-        //$date2 = date("Y-m-d", strtotime($date . "+20 days"));
-
         $date1 = date('Y-m-d', strtotime('+7 days'));
-        //$date2 =  date("Y-m-d", strtotime("+20 days"));
-        //$date3 = date('Y-m-d', strtotime('+1 days'));
-        //$date4 =  date("Y-m-d", strtotime("+30 days"));
-
-        $dates = [$date1]; //, $date3];
-
-        //dd($dates);
+        $dates = [$date1];
 
         $events = Event::
         where('published', true)
@@ -981,9 +913,9 @@ class CronjobsController extends Controller
                 $lessonHour = date('H', strtotime($lesson->pivot->time_starts));
 
                 if (!$timeStarts) {
-                    $timeStarts = (int)date('H', strtotime($lesson->pivot->time_starts));
+                    $timeStarts = (int) date('H', strtotime($lesson->pivot->time_starts));
                 }
-                $timeEnds = (int)date('H', strtotime($lesson->pivot->time_ends));
+                $timeEnds = (int) date('H', strtotime($lesson->pivot->time_ends));
             }
 
             if ($timeStarts && $timeEnds) {
@@ -1019,8 +951,6 @@ class CronjobsController extends Controller
 
         foreach ($lessons as $key => $lesson) {
             $lesson = $lesson[0];
-
-            //dd(strtotime($lesson->pivot->time_starts));
 
             if (isset($lesson->pivot->time_starts)) {
                 if ($time == null) {

@@ -315,14 +315,10 @@ class SubscriptionController extends Controller
             $user->save();
         }
 
-        //$anchor = Carbon::now()->addDays(16);;
-        //$anchor = $anchor->startOfMonth();
         try {
             $charge = $user->newSubscription($plan->name, $plan->stripe_plan)
-                //->anchorBillingCycleOn($anchor->startOfDay())
-                ->noProrate()
-                //->trialDays($plan->trial_days)
-                ->create($request->payment_method, ['email' => $user->email]);
+            ->noProrate()
+            ->create($request->payment_method, ['email' => $user->email]);
 
             $charge->price = $plan->cost;
             $charge->save();
@@ -332,25 +328,13 @@ class SubscriptionController extends Controller
 
             if ($charge) {
                 $subscription = $user->subscriptions()->where('id', $charge['id'])->first();
-                //dd($user->events()->where('event_id',$event->id)->first());
-                /*if(!$user->events()->where('event_id',$event)->first()){
-                    $user->events()->attach($event->id);
-                }*/
 
                 $user->subscriptionEvents()->attach($event->id, ['subscription_id' => $charge['id'], 'payment_method' => $this->paymentMethod->id]);
 
                 $data = [];
-                /*$muser = [];
-                $muser['name'] = $user->firstname;
-                $muser['first'] = $user->firstname;
-                $muser['email'] = $user->email;*/
-                //$muser['event_title'] = $sub->eventable->event->title;
-
-                //$subEnds = $plan->trial_days && $plan->trial_days > 0 ? $plan->trial_days : $plan->getDays();
                 $subEnds = $plan->getDays();
                 $subEnds = date('d-m-Y', strtotime("+$subEnds days"));
 
-                //if($exp = $user->events()->wherePivot('event_id',$event->id)->first()){
                 if ($exp = $user->events_for_user_list()->wherePivot('event_id', $event->id)->first()) {
                     $exp = $exp->pivot->expiration;
                     $exp = strtotime($exp);
@@ -366,7 +350,6 @@ class SubscriptionController extends Controller
                     }
                 }
 
-                //if($exp = $user->events()->wherePivot('event_id',$event->id)->first()){
                 if ($exp = $user->events_for_user_list()->wherePivot('event_id', $event->id)->first()) {
                     $exp = $exp->pivot->expiration;
                     $exp = strtotime($exp);
@@ -410,14 +393,13 @@ class SubscriptionController extends Controller
                 Session::forget('transaction_id');
                 Session::forget('cardtype');
                 Session::forget('installments');
-                //Session::forget('pay_invoice_data');
                 Session::forget('pay_bill_data');
                 Session::forget('deree_user_data');
 
                 Session::put('subscription-user', $charge['id']);
 
                 return response()->json('/myaccount/subscription-success', 200);
-                //return redirect('/myaccount');
+            //return redirect('/myaccount');
             } else {
                 return 'have error';
             }
@@ -752,7 +734,7 @@ class SubscriptionController extends Controller
                 Session::put('subscription-user', $charge['id']);
 
                 return redirect('/myaccount/subscription-success');
-                //return redirect('/myaccount');
+            //return redirect('/myaccount');
             } else {
                 return 'have error';
             }

@@ -21,8 +21,7 @@ class ActivityEvent
         public string $title,
         public string $description,
         public ?User $who = null
-    )
-    {
+    ) {
         //
     }
 }

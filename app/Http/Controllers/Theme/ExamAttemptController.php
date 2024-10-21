@@ -238,11 +238,7 @@ class ExamAttemptController extends Controller
 
                     $totalCredits += $getDB[$q_id]['answer-credit'];
 
-                    //if($given_ans!='') {
-                    //foreach($getDBContents as $getDB) {
-
                     $dbAns = $getDB[$q_id]['correct_answer'];
-                    //dd($getDB[$q_id]['correct_answer']);
 
                     $answers[] = ['question' => $getDB[$q_id]['question'], 'correct_answer' => $getDB[$q_id]['correct_answer'], 'given_answer' => $given_ans];
 
@@ -253,8 +249,6 @@ class ExamAttemptController extends Controller
                             $credit = $getDB['answer-credit'];
                         }
                     } elseif ($q_type_id == 'radio buttons') { //For Multiple Choice
-                        //$opSer = unserialize($getDB->answer_keys);
-
                         $cAns = $dbAns;
 
                         if (htmlspecialchars_decode($given_ans, ENT_QUOTES) == htmlspecialchars_decode($cAns[0], ENT_QUOTES)) {
@@ -289,15 +283,10 @@ class ExamAttemptController extends Controller
                     }
 
                     $total_credit += $credit;
-
-                    //}
                 }
-
-                //getting user data
 
                 $student = User::find($st_id);
 
-                //$totalQues = count(Examcontent::where('exam_id',$ex_id)->get());
                 $totalQues = $totalCredits; //Exam::where('exam_id',$ex_id)->sum('answer_credit');
                 $examResultData = ExamResult::where('exam_id', $ex_id)->where('user_id', $st_id)->first();
                 if ($examResultData) {
@@ -347,7 +336,6 @@ class ExamAttemptController extends Controller
                 }
 
                 $certificateTitle = $eventType->title;
-                //dd($certificate->event->first()->event_info()['certificate']);
                 if ($eventType && isset($eventType->event_info()['certificate']['messages'])) {
                     if ($success && isset($eventType->event_info()['certificate']['messages']['success'])) {
                         $certificateTitle = $eventType->event_info()['certificate']['messages']['success'];
@@ -359,10 +347,7 @@ class ExamAttemptController extends Controller
                 if (($cert = $eventType->userHasCertificate($student->id)->first())) {
                     $cert->success = $success;
                     $cert->certificate_title = $certificateTitle;
-                    //$createDate = strtotime(date('Y-m-d'));
-                    ///$cert->create_date = $createDate;
                     $cert->expiration_date = strtotime(date('Y-m-d', strtotime('+24 months', strtotime(date('Y-m-d')))));
-                    //$cert->template = $success ? 'kc_diploma' : 'kc_attendance';
                     $cert->template = $template;
                     $cert->show_certificate = true;
                     $cert->save();
@@ -379,7 +364,6 @@ class ExamAttemptController extends Controller
                     $cert->create_date = $createDate;
                     $cert->expiration_date = strtotime(date('Y-m-d', strtotime('+24 months', strtotime(date('Y-m-d')))));
                     $cert->certification_date = date('F') . ' ' . date('Y');
-                    //$cert->template = $success ? 'kc_diploma' : 'kc_attendance';
                     $cert->template = $template;
                     $cert->show_certificate = true;
                     $cert->save();

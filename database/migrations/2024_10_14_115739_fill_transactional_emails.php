@@ -112,7 +112,7 @@ return new class extends Migration {
             'title' => $trigger['label'],
             'status' => 1,
             'predefined_trigger' => $trigger['key'],
-            'template' => $mailChimpKeyValues['system-user-waiting-list-welcome-email'],
+            'template' => $mailChimpKeyValues['system-user-waiting-list-open-notification-emai'],
             'description' => $trigger['label'],
             'creator_id' => 1,
             'filter_criteria' => '[]',

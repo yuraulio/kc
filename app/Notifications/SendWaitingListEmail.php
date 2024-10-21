@@ -48,7 +48,7 @@ class SendWaitingListEmail extends Notification
      */
     public function toMailchimp($notifiable)
     {
-        //system-user-waiting-list-welcome-email
+        //system-user-waiting-list-open-notification-emai
         $data['urlEnrol'] = url('/') . '/' . $this->event->getSlug() . '?lo=' . encrypt($this->user->email);
         $data['eventTitle'] = $this->event->title;
         $data['eventId'] = $this->event->id;

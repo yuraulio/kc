@@ -33,11 +33,8 @@ class WebhookController extends BaseWebhookController
 {
     public function handleChargeFailed(array $payload)
     {
-        //Log::info('failed');
-        //Log::info(var_export($payload, true));
         if (isset($payload['data']['object']['metadata']['integration_check']) && $payload['data']['object']['metadata']['integration_check'] == 'sepa_debit_accept_a_payment' && $payload['data']['object']['paid'] === false && $payload['data']['object']['failure_code'] != null) {
             $paymentIntent = $payload['data']['object']['payment_intent'];
-            //Log::info('failed 123');
             $transaction = Transaction::with('user')->where('payment_response', 'LIKE', '%' . $paymentIntent . '%')->first();
             $event = $transaction->event()->first();
 
@@ -524,7 +521,7 @@ class WebhookController extends BaseWebhookController
                     $enrollFromEvent->pivot->save();
                 }
 
-                if ((int)$count >= (int)$totalinst) {
+                if ((int) $count >= (int) $totalinst) {
                     try {
                         $subscription->noProrate()->cancel();
                     } catch (\Exception $ex) {
@@ -595,28 +592,26 @@ class WebhookController extends BaseWebhookController
                 'id'    => $user->id,
                 'email' => $user->email,
             ],
-            'pay_bill_data'   => $user->invoice_details,
+            'pay_bill_data' => $user->invoice_details,
             'deree_user_data' => [$user->email => ''],
 
         ];
 
         $transaction_arr = [
-
             'payment_method_id' => 100, //$input['payment_method_id'],
-            'account_id'        => 17,
-            'payment_status'    => 2,
-            'billing_details'   => $user->receipt_details,
-            'status_history'    => json_encode($status_history),
-            'placement_date'    => Carbon::now()->toDateTimeString(),
-            'ip_address'        => \Request::ip(),
-            'status'            => 1, //2 PENDING, 0 FAILED, 1 COMPLETED
-            'is_bonus'          => 0,
-            'order_vat'         => 0,
-            'payment_response'  => json_encode($charge),
-            'surcharge_amount'  => 0,
-            'discount_amount'   => 0,
-
-            'amount'       => $sub['amount'] / 100,
+            'account_id' => 17,
+            'payment_status' => 2,
+            'billing_details' => $user->receipt_details,
+            'status_history' => json_encode($status_history),
+            'placement_date' => Carbon::now()->toDateTimeString(),
+            'ip_address' => \Request::ip(),
+            'status' => 1, //2 PENDING, 0 FAILED, 1 COMPLETED
+            'is_bonus' => 0,
+            'order_vat' => 0,
+            'payment_response' => json_encode($charge),
+            'surcharge_amount' => 0,
+            'discount_amount' => 0,
+            'amount' => $sub['amount'] / 100,
             'total_amount' => $sub['amount'] / 100,
             'trial'        => $sub['amount'] / 100 <= 0 ? true : false,
             'ends_at'      => date('Y-m-d H:i:s', $ends_at),
@@ -769,13 +764,6 @@ class WebhookController extends BaseWebhookController
         $event = $subscription->event->first();
         $plan = $event->plans->first();
         $data = [];
-        /*$muser = [];
-        $muser['name'] = $user->firstname;
-        $muser['first'] = $user->firstname;
-        $muser['email'] = $user->email;*/
-        //$muser['event_title'] = $sub->eventable->event->title;
-
-        //$subEnds = $plan->trial_days && $plan->trial_days > 0 ? $plan->trial_days : $plan->getDays();
         $subEnds = $plan->getDays();
         $subEnds = date('d-m-Y', strtotime("+$subEnds days"));
 

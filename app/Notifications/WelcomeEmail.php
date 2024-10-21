@@ -48,6 +48,7 @@ class WelcomeEmail extends Notification
     public function toMailchimp(object $notifiable)
     {
         //system-user-all-courses-welcome-email
+        //system-user-waiting-list-welcome-email
         $slug = [];
         $slug['id'] = $this->user->id;
         $slug['email'] = $this->user->email;
