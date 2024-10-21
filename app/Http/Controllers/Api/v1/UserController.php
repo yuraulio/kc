@@ -10,6 +10,7 @@ use App\Http\Controllers\MediaController;
 use App\Http\Requests\Api\v1\User\FilterRequest;
 use App\Http\Requests\Api\v1\User\StoreRequest;
 use App\Http\Requests\Api\v1\User\UpdateRequest;
+use App\Http\Requests\UserImportRequest;
 use App\Http\Resources\Api\v1\User\UserResource;
 use App\Model\User;
 use App\Services\v1\UserService;
@@ -89,5 +90,10 @@ class UserController extends Controller
     public function userCounts(): JsonResponse
     {
         return \response()->json($this->service->userCounts(), Response::HTTP_OK);
+    }
+
+    public function importUsers(UserImportRequest $request): JsonResponse
+    {
+        return \response()->json($this->service->importUsersFromFile($request->file('file')), Response::HTTP_OK);
     }
 }
