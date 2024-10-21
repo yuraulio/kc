@@ -146,10 +146,7 @@ class UserService
             'image',
             'roles',
             'tags',
-            'events',
             'activities',
-            'subscriptions',
-            'invoices',
         ];
     }
 
