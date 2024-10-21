@@ -16,6 +16,7 @@ use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\v1\CareerController;
 use App\Http\Controllers\Api\v1\CategoryController;
 use App\Http\Controllers\Api\v1\CityController;
+use App\Http\Controllers\Api\v1\CountryController;
 use App\Http\Controllers\Api\v1\DashboardController;
 use App\Http\Controllers\Api\v1\DeliveryController;
 use App\Http\Controllers\Api\v1\Event\EventController;
@@ -197,6 +198,8 @@ Route::group(['middleware' => ['auth:api', 'auth.aboveauthor'], 'prefix' => 'v1'
 
     // Cities
     Route::apiResource('cities', CityController::class)
+        ->only(['index']);
+    Route::apiResource('countries', CountryController::class)
         ->only(['index']);
 
     // Partners

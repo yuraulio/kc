@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Api\v1;
 
-use App\Http\Requests\Api\v1\City\FilterRequest;
+use App\Http\Requests\Api\v1\Country\FilterRequest;
 use App\Model\City;
+use App\Model\Country;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-class CityController extends ApiBaseController
+class CountryController extends ApiBaseController
 {
     /**
      * Display a listing of the resource.
@@ -18,16 +19,15 @@ class CityController extends ApiBaseController
     {
         $data = $request->validated();
 
-        $cities = City::query()->where('country_id', $request->country_id)
+        $countries = Country::query()
             ->when(array_key_exists('query', $data), function ($q) use ($data) {
                 $q->where(function ($q) use ($data) {
-                    $q->where('cities.name', 'like', '%' . $data['query'] . '%');
+                    $q->where('countries.name', 'like', '%' . $data['query'] . '%');
                 });
             })
             ->orderBy($data['order_by'] ?? 'id', $data['order_type'] ?? 'desc')
-            ->paginate($data['per_page'] ?? 25);
-
-        return new JsonResponse($cities,);
+            ->paginate($data['per_page'] ?? 25);;
+        return new JsonResponse($countries);
     }
 
     /**
