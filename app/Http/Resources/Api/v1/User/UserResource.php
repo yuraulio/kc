@@ -59,9 +59,6 @@ class UserResource extends JsonResource
             'activities'          => $this->activities,
             'image'               => $this->image,
             'paymentMethods'      => $paymentMethods,
-            'events'              => $this->events,
-            'subscriptions'       => $this->subscriptions,
-            'transactions'        => $this->transactions,
         ];
     }
 }
