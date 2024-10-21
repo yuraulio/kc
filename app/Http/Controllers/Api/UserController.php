@@ -1225,11 +1225,10 @@ class UserController extends Controller
     public function batchDestroy(Request $request): JsonResponse
     {
         $request->validate([
-            'users' => 'required|array',
+            'users' => 'required|array|exists:users,id',
         ]);
 
-        User::find($request->get('users'))
-            ->each(fn (User $user) => $user->delete());
+        User::query()->whereIn('id', $request->users)->delete();
 
         return new JsonResponse([], 204);
     }
