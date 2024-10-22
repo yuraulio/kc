@@ -19,6 +19,7 @@ class UserService
 {
     public function filter(array $data): LengthAwarePaginator
     {
+        //TODO event_id filter
         return User::query()
             ->with($this->getRelations())
             ->when(array_key_exists('date_from', $data), function ($q) use ($data) {

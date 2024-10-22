@@ -27,7 +27,7 @@ class CityController extends ApiBaseController
             ->orderBy($data['order_by'] ?? 'id', $data['order_type'] ?? 'desc')
             ->paginate($data['per_page'] ?? 25);
 
-        return new JsonResponse($cities,);
+        return new JsonResponse($cities);
     }
 
     /**

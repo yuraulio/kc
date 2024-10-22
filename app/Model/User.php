@@ -50,6 +50,7 @@ class User extends Authenticatable
         'address_num',
         'postcode',
         'city',
+        'country',
         'job_title',
         'partner_id',
         'kc_id',

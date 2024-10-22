@@ -29,6 +29,7 @@ class UpdateRequest extends FormRequest
             'mobile'              => ['sometimes', 'regex:/^\+?\d+$/'],
             'notes'               => ['sometimes'],
             'city'                => ['sometimes'],
+            'country'             => ['sometimes'],
             'country_code'        => ['sometimes', 'integer'],
             'job_title'           => ['sometimes'],
             'company'             => ['sometimes'],
