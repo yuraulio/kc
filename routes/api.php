@@ -169,6 +169,8 @@ Route::middleware('auth:api')->group(function () {
 
     Route::prefix('v1')->group(function () {
         Route::prefix('users')->group(function () {
+            Route::post('delete-batch', [UserController::class, 'batchDestroy']);
+
             Route::post('login-as/{user}', [V1UserControllerAlias::class, 'loginAs']);
             Route::get('counts', [V1UserControllerAlias::class, 'userCounts']);
             Route::post('import', [V1UserControllerAlias::class, 'importUsers']);
